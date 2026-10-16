@@ -101,12 +101,12 @@ const props = defineProps<{
           description: "评分、市场、竞争、成本和风险五项质量门均已通过，只等你最终采纳。",
         },
         rule_candidates: {
-          title: `${props.total} 个规则命中候选`,
-          description: "已达到规则来源门槛，系统继续完成五项质量门校验。",
+          title: `${props.total} 个选品候选`,
+          description: "已识别 Amazon 主品，系统继续补齐五项质量门所需的证据。",
         },
         evidence_pending: {
           title: `${props.total} 个商品仍在采集`,
-          description: "尚未达到规则来源门槛，系统会继续监控和采集。",
+          description: "尚未取得可确认身份的 Amazon 主品证据，系统会继续采集。",
         },
         all: {
           title: `全部 ${props.total} 个机会`,
@@ -145,20 +145,19 @@ const opportunityStatus = (value: string) =>
       hour12: false,
     }).format(new Date(value)),
   sourceLabel = (item: Opportunity) =>
-    item.matched_rule_count > 0
-      ? "规则发现"
+    item.source_type === "trend_topic"
+      ? "情报发现"
       : item.source_type === "manual"
         ? "手工添加"
         : "其他线索",
   scoreLabel = (value: number | null) =>
     value == null ? "—" : Number.isInteger(value) ? String(value) : value.toFixed(1),
-  selectionStage = (item: Opportunity) =>
-    item.selection_stage ?? (item.matched_rule_count > 0 ? "rule_candidate" : "not_eligible"),
+  selectionStage = (item: Opportunity) => item.selection_stage ?? "not_eligible",
   recommendationLabel = (item: Opportunity) =>
     selectionStage(item) === "recommended"
       ? "建议采纳"
       : selectionStage(item) === "rule_candidate"
-        ? "规则命中候选"
+        ? "选品候选"
         : opportunityStatus(item.decision_status),
   qualityGateKeys = ["score", "market", "competition", "cost", "risk"] as const,
   qualityGateLabels = {

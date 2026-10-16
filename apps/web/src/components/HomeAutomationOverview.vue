@@ -25,7 +25,7 @@ const date = (value: string | null) => (value ? new Date(value).toLocaleString("
       </RouterLink>
       <RouterLink to="/opportunities?view=rule_candidates">
         <strong>{{ selection.rule_candidate_count ?? 0 }}</strong>
-        <span>规则命中候选</span>
+        <span>选品候选</span>
       </RouterLink>
       <RouterLink to="/opportunities?view=evidence_pending">
         <strong>{{ selection.awaiting_evidence_count }}</strong>
@@ -47,10 +47,17 @@ const date = (value: string | null) => (value ? new Date(value).toLocaleString("
           <h3>系统正在做什么</h3>
         </header>
         <ol>
-          <li :data-done="selection.enabled_rule_count > 0">
+          <li :data-done="selection.state === 'running'">
             <i>1</i>
             <div>
-              <b>监控平台</b><span>{{ selection.enabled_rule_count }} 条规则运行中</span>
+              <b>采集情报</b
+              ><span>{{
+                selection.state === "running"
+                  ? "采集流程运行中"
+                  : selection.state === "attention"
+                    ? "采集流程需检查"
+                    : "等待采集来源"
+              }}</span>
             </div>
           </li>
           <li :data-done="selection.candidate_count > 0">
@@ -83,7 +90,7 @@ const date = (value: string | null) => (value ? new Date(value).toLocaleString("
             <dd>{{ date(selection.next_collection_at) }}</dd>
           </div>
           <div>
-            <dt>规则候选</dt>
+            <dt>发现商品</dt>
             <dd>{{ selection.candidate_count }} 条</dd>
           </div>
           <div>

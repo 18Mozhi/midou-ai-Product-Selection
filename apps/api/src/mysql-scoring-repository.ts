@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { selectionCandidateSql } from "@scoutops/database";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
   calculateScoreProjection,
@@ -555,11 +556,7 @@ export class MySqlScoringRepository implements ScoringRepository {
         "(opportunity_id,organization_id,workspace_id,status,attempt_count,available_at,created_at,updated_at) " +
         "SELECT o.id,o.organization_id,o.workspace_id,'queued',0,?,?,? FROM opportunities o WHERE " +
         "o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending' " +
-        "AND EXISTS (SELECT 1 FROM opportunity_rule_matches m JOIN trend_monitoring_rules r ON " +
-        "r.id=m.monitoring_rule_id AND r.organization_id=m.organization_id AND " +
-        "r.workspace_id=m.workspace_id WHERE m.opportunity_id=o.id AND " +
-        "m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id AND " +
-        "r.status='enabled' AND o.source_count>=r.recommendation_min_source_count) " +
+        `AND ${selectionCandidateSql} ` +
         "ON DUPLICATE KEY UPDATE " +
         "status=IF(status='leased',status,'queued'),available_at=IF(status='leased',available_at,VALUES(available_at))," +
         "last_error_code=IF(status='leased',last_error_code,NULL),updated_at=VALUES(updated_at)",

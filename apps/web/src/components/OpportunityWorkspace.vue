@@ -684,7 +684,7 @@ useOpportunityWorkspaceLifecycle({
             selectionView === "recommended"
               ? "待我采纳"
               : selectionView === "rule_candidates"
-                ? "规则命中候选"
+                ? "选品候选"
                 : selectionView === "evidence_pending"
                   ? "采集中"
                   : "全部机会"

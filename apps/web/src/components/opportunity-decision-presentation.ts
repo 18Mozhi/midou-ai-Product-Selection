@@ -33,5 +33,5 @@ export const opportunityDecisionCopy = (
   canAdopt
     ? "五项质量门全部通过，最终采纳仍由你决定。"
     : selectionStage === "rule_candidate"
-      ? "已进入规则命中候选，系统会继续补齐未通过的质量门。"
-      : "尚未达到规则来源门槛，或当前机会不属于自动选品规则，暂不能采纳。";
+      ? "已进入选品候选，系统会继续补齐未通过的质量门。"
+      : "尚未取得真实 Amazon 主品证据，或当前商品已结束决策，暂不能采纳。";

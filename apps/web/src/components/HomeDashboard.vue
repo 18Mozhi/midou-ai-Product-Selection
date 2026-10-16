@@ -177,14 +177,6 @@ async function load(options: { keepMutationFeedback?: boolean; background?: bool
       rulesError.value =
         error instanceof ApiClientError ? error.actionHint : "规则暂时无法读取，请稍后重试。";
     }
-    if (
-      !options.background &&
-      rulesState.value === "ready" &&
-      canManageRules.value &&
-      selection.value?.state === "not_configured" &&
-      !rules.value.length
-    )
-      setupOpen.value = true;
   } catch (error) {
     if (controller.signal.aborted || generation !== loadGeneration) return;
     if (error instanceof ApiClientError) {
@@ -393,12 +385,8 @@ onBeforeUnmount(deactivate);
 
       <section v-if="selection?.state === 'not_configured'" class="home-setup-callout">
         <div>
-          <b>{{ pausedRules.length ? "自动选品当前已暂停" : "先告诉系统要找什么" }}</b
-          ><span>{{
-            pausedRules.length
-              ? "恢复已有规则后，系统会继续采集；达到来源门槛先进入候选，五项质量门全部通过后才推荐。"
-              : "设置市场、关键词和来源门槛后，系统会持续发现候选；五项质量门全部通过后才推荐。"
-          }}</span>
+          <b>等待采集来源就绪</b>
+          <span>可用来源开始采集后，系统会自动分析情报并寻找商品；关键词监控可按需设置。</span>
         </div>
         <button
           v-if="rulesState === 'ready' && pausedRules.length && canManageRules"
@@ -406,7 +394,7 @@ onBeforeUnmount(deactivate);
           :disabled="setupBusy"
           @click="resumeRule(pausedRules[0])"
         >
-          {{ setupBusy ? "正在恢复…" : "恢复自动选品" }}
+          {{ setupBusy ? "正在恢复…" : "恢复关键词监控" }}
         </button>
         <button
           v-else-if="rulesState === 'ready' && canManageRules"
@@ -414,7 +402,7 @@ onBeforeUnmount(deactivate);
           :disabled="setupBusy"
           @click="setupOpen = !setupOpen"
         >
-          {{ setupOpen ? "收起设置" : "开始设置" }}
+          {{ setupOpen ? "收起设置" : "设置关键词监控" }}
         </button>
         <span v-else-if="rulesState === 'loading'">正在核对现有规则…</span>
         <button v-else-if="canManageRules" type="button" @click="load()">重新读取规则</button>
@@ -435,8 +423,8 @@ onBeforeUnmount(deactivate);
       >
         <header>
           <div>
-            <span>首次设置</span>
-            <h3>创建自动选品规则</h3>
+            <span>可选监控</span>
+            <h3>添加关键词监控</h3>
           </div>
         </header>
         <div class="home-rule-fields">
@@ -477,17 +465,6 @@ onBeforeUnmount(deactivate);
             </select>
           </label>
           <label>
-            <span>形成候选的来源门槛</span>
-            <select
-              v-model.number="setupForm.recommendation_min_source_count"
-              :disabled="setupBusy"
-            >
-              <option :value="1">命中 1 个真实来源</option>
-              <option :value="2">至少 2 个独立来源</option>
-              <option :value="3">至少 3 个独立来源</option>
-            </select>
-          </label>
-          <label>
             <span>排除词（可选）</span>
             <input
               v-model="setupForm.negative_keywords"
@@ -517,7 +494,7 @@ onBeforeUnmount(deactivate);
             />
           </label>
           <button type="submit" :disabled="setupBusy">
-            {{ setupBusy ? "正在启用…" : "保存并开始自动选品" }}
+            {{ setupBusy ? "正在保存…" : "保存关键词监控" }}
           </button>
         </footer>
       </form>
@@ -555,7 +532,7 @@ onBeforeUnmount(deactivate);
               <b>当前没有待人工采纳的推荐</b
               ><span>{{
                 selection.rule_candidate_count > 0
-                  ? `${selection.rule_candidate_count} 条规则命中候选正在完成五项质量门校验。`
+                  ? `${selection.rule_candidate_count} 条选品候选正在完成五项质量门校验。`
                   : selection.awaiting_evidence_count > 0
                     ? `${selection.awaiting_evidence_count} 条商品仍在采集。`
                     : "系统会在五项质量门全部通过后自动加入这里。"

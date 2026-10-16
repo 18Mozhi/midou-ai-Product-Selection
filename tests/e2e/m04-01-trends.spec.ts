@@ -307,7 +307,7 @@ test("M04-01.A08/A09 monitoring rule and empty/forbidden states are explicit", a
   await page.getByLabel("规则名称").fill("新的监控");
   await page.getByLabel("包含关键词（逗号分隔）").fill("desk lamp");
   await page.getByRole("button", { name: "创建并启用" }).click();
-  await expect(page.getByText("监控规则已启用；命中来源门槛只会形成规则命中候选。")).toBeVisible();
+  await expect(page.getByText("关键词监控已启用；系统会继续采集相关情报。")).toBeVisible();
 });
 
 test("monitoring-rule deep links open the rule view and keep the legacy alias working", async ({

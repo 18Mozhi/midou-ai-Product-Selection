@@ -17,7 +17,7 @@ import {
   evaluateOpportunitySelection,
   opportunityQualityGateSql,
   opportunityRecommendedSql,
-  opportunityRuleCandidateSql,
+  opportunityCandidateSql,
   opportunitySelectionProjectionSql,
   opportunityPrimaryAsinSql,
 } from "./opportunity-selection-policy.js";
@@ -125,23 +125,15 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     const where = ["o.organization_id=?", "o.workspace_id=?"],
       values: unknown[] = [input.organizationId, input.workspaceId];
     if (input.selectionView === "recommended") {
-      where.push(
-        "EXISTS (SELECT 1 FROM opportunity_rule_matches orm_view WHERE orm_view.opportunity_id=o.id AND orm_view.organization_id=o.organization_id AND orm_view.workspace_id=o.workspace_id)",
-        "o.decision_status='pending'",
-        opportunityRecommendedSql,
-      );
+      where.push("o.decision_status='pending'", opportunityRecommendedSql);
     } else if (input.selectionView === "rule_candidates") {
       where.push(
         "o.decision_status='pending'",
-        opportunityRuleCandidateSql,
+        opportunityCandidateSql,
         `NOT ${opportunityQualityGateSql}`,
       );
     } else if (input.selectionView === "evidence_pending") {
-      where.push(
-        "EXISTS (SELECT 1 FROM opportunity_rule_matches orm_view WHERE orm_view.opportunity_id=o.id AND orm_view.organization_id=o.organization_id AND orm_view.workspace_id=o.workspace_id)",
-        "o.decision_status='pending'",
-        `NOT ${opportunityRuleCandidateSql}`,
-      );
+      where.push("o.decision_status='pending'", `NOT ${opportunityCandidateSql}`);
     } else if (input.selectionView !== "all" && input.scope !== "all")
       where.push(
         sqlText(
@@ -621,36 +613,26 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       ),
       [input.opportunityId, input.organizationId, input.workspaceId],
     );
-    const [[evidenceTasks], [scoreJobs], [recommendationRuleRows], [automaticEvaluations]] =
-      await Promise.all([
-        this.pool.query<RowDataPacket[]>(
-          "SELECT id,status,progress_percent,assignee_id,due_at,completed_at,created_at,updated_at " +
-            "FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
-            "source_type='evidence_completion' AND source_ref_id=? AND deleted_at IS NULL " +
-            "ORDER BY created_at DESC,id DESC LIMIT 1",
-          [input.organizationId, input.workspaceId, input.opportunityId],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT id,status,trigger_task_id,last_error_code,created_at,updated_at FROM opportunity_score_jobs " +
-            "WHERE organization_id=? AND workspace_id=? AND opportunity_id=? " +
-            "ORDER BY created_at DESC,id DESC LIMIT 1",
-          [input.organizationId, input.workspaceId, input.opportunityId],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT COUNT(DISTINCT m.monitoring_rule_id) matched_rule_count," +
-            "COUNT(DISTINCT CASE WHEN r.status='enabled' THEN m.monitoring_rule_id END) enabled_rule_count," +
-            "MIN(CASE WHEN r.status='enabled' THEN r.recommendation_min_source_count END) minimum_source_count " +
-            "FROM opportunity_rule_matches m JOIN trend_monitoring_rules r ON r.id=m.monitoring_rule_id " +
-            "AND r.organization_id=m.organization_id AND r.workspace_id=m.workspace_id WHERE " +
-            "m.opportunity_id=? AND m.organization_id=? AND m.workspace_id=?",
-          [input.opportunityId, input.organizationId, input.workspaceId],
-        ),
-        this.pool.query<RowDataPacket[]>(
-          "SELECT status,last_error_code,result_json,evaluated_at FROM automatic_selection_evaluations " +
-            "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? LIMIT 1",
-          [input.opportunityId, input.organizationId, input.workspaceId],
-        ),
-      ]);
+    const [[evidenceTasks], [scoreJobs], [automaticEvaluations]] = await Promise.all([
+      this.pool.query<RowDataPacket[]>(
+        "SELECT id,status,progress_percent,assignee_id,due_at,completed_at,created_at,updated_at " +
+          "FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
+          "source_type='evidence_completion' AND source_ref_id=? AND deleted_at IS NULL " +
+          "ORDER BY created_at DESC,id DESC LIMIT 1",
+        [input.organizationId, input.workspaceId, input.opportunityId],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT id,status,trigger_task_id,last_error_code,created_at,updated_at FROM opportunity_score_jobs " +
+          "WHERE organization_id=? AND workspace_id=? AND opportunity_id=? " +
+          "ORDER BY created_at DESC,id DESC LIMIT 1",
+        [input.organizationId, input.workspaceId, input.opportunityId],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT status,last_error_code,result_json,evaluated_at FROM automatic_selection_evaluations " +
+          "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? LIMIT 1",
+        [input.opportunityId, input.organizationId, input.workspaceId],
+      ),
+    ]);
     let scoreRun: RowDataPacket | undefined,
       components: RowDataPacket[] = [];
     try {
@@ -685,7 +667,6 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         ),
       evidenceTask = evidenceTasks[0],
       scoreJob = scoreJobs[0],
-      recommendationRule = recommendationRuleRows[0],
       automaticEvaluation = automaticEvaluations[0],
       automaticResult = automaticEvaluation
         ? parse<Record<string, unknown>>(automaticEvaluation.result_json ?? "{}")
@@ -762,22 +743,14 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
               (!qualityRegressionBlocked &&
               !scoreInProgress &&
               selection.selection_stage === "rule_candidate"
-                ? `已进入规则命中候选；${missingQualityGates.join("、")}质量门全部通过后才会显示“建议采纳”。`
+                ? `已进入选品候选；${missingQualityGates.join("、")}质量门全部通过后才会显示“建议采纳”。`
                 : recommendationGuidance({
                     qualityRegressionBlocked,
                     scoreInProgress: Boolean(scoreInProgress),
                     scoreRuleVersion:
                       row.score_rule_version == null ? null : String(row.score_rule_version),
                     latestScoreStatus: scoreRun?.status == null ? null : String(scoreRun.status),
-                    matchedRuleCount: Number(
-                      recommendationRule?.matched_rule_count ?? row.matched_rule_count ?? 0,
-                    ),
-                    enabledRuleCount: Number(recommendationRule?.enabled_rule_count ?? 0),
-                    minimumSourceCount:
-                      recommendationRule?.minimum_source_count == null
-                        ? null
-                        : Number(recommendationRule.minimum_source_count),
-                    sourceCount: Number(row.source_count ?? 0),
+                    primaryIdentified: row.main_asin != null,
                   })))
             : "推荐结论阻断已解除。",
           task_id: evidenceTask ? String(evidenceTask.id) : null,

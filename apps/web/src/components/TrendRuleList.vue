@@ -34,7 +34,7 @@ function freshness(value: string) {
         <p>规则列表</p>
         <h3>趋势监控规则</h3>
         <span v-if="canManage"
-          >来源门槛只生成规则命中候选；五项质量门全部通过后才显示建议采纳。通知仅支持站内；邮件服务未确认。</span
+          >关键词规则用于补充监控，不是商品评分的前置条件。通知仅支持站内；邮件服务未确认。</span
         ><span v-else>当前为只读权限；可查看规则与结果，不能创建、暂停或恢复规则。</span>
       </div>
       <button v-if="canManage" type="button" @click="emit('create')">＋ 创建规则</button>

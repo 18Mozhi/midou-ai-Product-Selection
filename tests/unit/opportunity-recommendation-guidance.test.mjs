@@ -8,10 +8,7 @@ const base = {
   scoreInProgress: false,
   scoreRuleVersion: null,
   latestScoreStatus: null,
-  matchedRuleCount: 0,
-  enabledRuleCount: 0,
-  minimumSourceCount: null,
-  sourceCount: 0,
+  primaryIdentified: false,
 };
 
 test("recommendation guidance prioritizes persisted quality and score states", () => {
@@ -33,36 +30,19 @@ test("recommendation guidance prioritizes persisted quality and score states", (
   );
 });
 
-test("recommendation guidance reports the exact automatic-rule source threshold", () => {
+test("recommendation guidance follows product identity without requiring monitoring subscriptions", () => {
   assert.equal(
     recommendationGuidance({
       ...base,
-      matchedRuleCount: 2,
-      enabledRuleCount: 2,
-      minimumSourceCount: 3,
-      sourceCount: 1,
+      primaryIdentified: true,
     }),
-    "已命中 2 条运行规则；当前 1 个独立来源，达到 3 个后进入规则命中候选。系统会继续自动采集。",
+    "已识别 Amazon 主品，系统正在补齐评分、市场、竞品、成本与风险证据。",
   );
   assert.equal(
     recommendationGuidance({
       ...base,
-      matchedRuleCount: 1,
-      enabledRuleCount: 1,
-      minimumSourceCount: 2,
-      sourceCount: 2,
+      primaryIdentified: false,
     }),
-    "运行规则的独立来源门槛已满足，当前为规则命中候选；系统正在完成五项质量门校验。",
-  );
-});
-
-test("recommendation guidance distinguishes paused and unmatched rules", () => {
-  assert.equal(
-    recommendationGuidance({ ...base, matchedRuleCount: 1 }),
-    "候选关联的自动选品规则已暂停；恢复规则后系统会重新评估。",
-  );
-  assert.equal(
-    recommendationGuidance(base),
-    "当前候选尚未命中运行中的自动选品规则；在首页设置匹配关键词后，系统会继续采集并重新判断。",
+    "尚未取得可确认身份的 Amazon 主品证据，系统会继续采集；新闻或关键词本身不能代替商品。",
   );
 });

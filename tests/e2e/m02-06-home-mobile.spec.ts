@@ -173,14 +173,14 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   await expect(page.getByText("竞品来源延迟")).toBeVisible();
   await expect(page.getByRole("heading", { name: "推荐清单" })).toBeVisible();
   await expect(page.locator(".home-status-facts")).toContainText("4待你采纳");
-  await expect(page.locator(".home-status-facts")).toContainText("5规则命中候选");
+  await expect(page.locator(".home-status-facts")).toContainText("5选品候选");
   await expect(page.locator(".home-status-facts")).toContainText("8采集中");
   await expect(page.locator(".home-status-facts")).toContainText("3运行规则");
   await expect(page.getByRole("link", { name: "4 待你采纳" })).toHaveAttribute(
     "href",
     "/opportunities?view=recommended",
   );
-  await expect(page.getByRole("link", { name: "5 规则命中候选" })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: "5 选品候选" })).toHaveAttribute(
     "href",
     "/opportunities?view=rule_candidates",
   );
@@ -195,7 +195,7 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   await expect(page.getByRole("heading", { name: "系统正在做什么" })).toBeHidden();
   await page.getByText("运行详情", { exact: true }).click();
   await expect(page.getByRole("heading", { name: "系统正在做什么" })).toBeVisible();
-  await expect(page.locator(".home-runtime-panel")).toContainText("规则候选12 条");
+  await expect(page.locator(".home-runtime-panel")).toContainText("发现商品12 条");
   await expect(page.locator(".home-runtime-panel")).toContainText("人工已采纳2 条");
   await expect(page.locator(".home-runtime-panel li").first()).toHaveAttribute("data-done", "true");
   await expect(page.getByText("推荐需人工采纳")).toBeHidden();
@@ -279,7 +279,7 @@ test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 con
   await expect(page.getByRole("heading", { name: "移动端真实机会" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "待判断", level: 3 })).toBeVisible();
   await expect(
-    page.getByText("尚未达到规则来源门槛，或当前机会不属于自动选品规则，暂不能采纳。"),
+    page.getByText("尚未取得真实 Amazon 主品证据，或当前商品已结束决策，暂不能采纳。"),
   ).toBeVisible();
   await expect(page.getByRole("navigation", { name: "机会详情返回路径" })).toContainText(
     "机会详情",
@@ -363,8 +363,10 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
   await page.goto("/home");
   await expect(page.getByRole("heading", { name: "选品控制台" })).toBeVisible();
   await expect(page.getByText("自动选品未配置")).toBeVisible();
-  await expect(page.getByText("先告诉系统要找什么")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeVisible();
+  await expect(page.getByText("等待采集来源就绪")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "添加关键词监控" })).toBeHidden();
+  await page.getByRole("button", { name: "设置关键词监控", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "添加关键词监控" })).toBeVisible();
   await page.getByText("运行详情", { exact: true }).click();
   await expect(page.locator(".home-runtime-panel li").first()).toHaveAttribute(
     "data-done",
@@ -377,10 +379,10 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
     await expectAboveMobileNavigation(page, emptyRecommendation);
   }
   await page.getByLabel("想找的商品关键词").fill("egg washer, egg brush");
-  await page.getByLabel("形成候选的来源门槛").selectOption("2");
+  await expect(page.getByLabel("形成候选的来源门槛")).toHaveCount(0);
   failRefreshAfterCreate = true;
-  await page.getByRole("button", { name: "保存并开始自动选品" }).click();
-  await expect.poll(() => createdRuleBody?.recommendation_min_source_count).toBe(2);
+  await page.getByRole("button", { name: "保存关键词监控" }).click();
+  await expect.poll(() => createdRuleBody?.recommendation_min_source_count).toBe(1);
   await expect.poll(() => createdRuleBody?.include_keywords).toEqual(["egg washer", "egg brush"]);
   await expect(
     page.getByText("规则创建请求已受理。实际采集进度以首页运行状态为准。"),
@@ -429,8 +431,8 @@ test("M02-06.A10/A12 missing selection and failed rule read remain unknown and n
   await expect(page.getByText("自动选品状态暂不可用")).toBeVisible();
   await expect(page.getByText("自动选品数据暂不可用")).toBeVisible();
   await expect(page.getByText(/选品规则读取失败，请重试/)).toBeVisible();
-  await expect(page.getByText("先告诉系统要找什么")).toBeHidden();
-  await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeHidden();
+  await expect(page.getByText("等待采集来源就绪")).toBeHidden();
+  await expect(page.getByRole("heading", { name: "添加关键词监控" })).toBeHidden();
   await expect(page.locator(".home-status-facts")).toHaveCount(0);
 });
 
@@ -533,20 +535,11 @@ test("home continuously reads new results and stops when cached off route", asyn
   await expect(page.getByText("最新结果 1", { exact: true })).toBeVisible();
   await page.clock.runFor(5100);
   await expect(page.getByText("最新结果 2", { exact: true })).toBeVisible();
-  await page.route("**/api/v1/notifications**", (route) =>
+  await page.route("**/api/v1/opportunities?**", (route) =>
     route.fulfill({ json: envelope({ items: [], total: 0 }) }),
   );
-  if (testInfo.project.name === "mobile-390")
-    await page.getByRole("button", { name: "打开导航菜单", exact: true }).click();
-  await page
-    .locator(
-      testInfo.project.name === "mobile-390"
-        ? ".role-navigation-frame"
-        : ".role-desktop-navigation",
-    )
-    .getByRole("link", { name: "通知中心", exact: true })
-    .click();
-  await expect(page).toHaveURL(/notifications/);
+  await page.getByRole("link", { name: "查看推荐清单", exact: true }).click();
+  await expect(page).toHaveURL(/opportunities/);
   const paused = reads;
   await page.clock.runFor(16000);
   expect(reads).toBe(paused);
@@ -642,7 +635,9 @@ test("home polling keeps a closed setup and unsaved keyword draft without overla
     await route.fulfill({ json: envelope(summary) });
   });
   await page.goto("/home");
-  await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "添加关键词监控" })).toBeHidden();
+  await page.getByRole("button", { name: "设置关键词监控", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "添加关键词监控" })).toBeVisible();
   await page
     .getByRole("textbox", { name: "想找的商品关键词 多个关键词用逗号分隔。", exact: true })
     .fill("保留未提交的关键词");
@@ -653,8 +648,8 @@ test("home polling keeps a closed setup and unsaved keyword draft without overla
   expect(reads).toBe(2);
   release?.();
   await expect(page.getByRole("button", { name: "刷新", exact: true })).toBeEnabled();
-  await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeHidden();
-  await page.getByRole("button", { name: "开始设置", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "添加关键词监控" })).toBeHidden();
+  await page.getByRole("button", { name: "设置关键词监控", exact: true }).click();
   await expect(
     page.getByRole("textbox", { name: "想找的商品关键词 多个关键词用逗号分隔。", exact: true }),
   ).toHaveValue("保留未提交的关键词");

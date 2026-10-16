@@ -19,7 +19,7 @@ const complete = {
   id: "00000000-0000-4000-8000-000000000424",
   version: 3,
   decision_status: "pending",
-  rule_candidate_ready: 1,
+  candidate_ready: 1,
   recommendation_status: "recommend",
   overall_score: 82,
   score_rule_version: "score-v1",
@@ -103,7 +103,7 @@ for (const [name, row] of [
   ["risk", { ...complete, risk_gate_passed: 0 }],
   ["five independent competitors", { ...complete, competition_gate_passed: 0 }],
   ["coverage", { ...complete, coverage_status: "partial" }],
-  ["enabled rule threshold", { ...complete, rule_candidate_ready: 0 }],
+  ["primary identity", { ...complete, candidate_ready: 0 }],
   ["already decided", { ...complete, decision_status: "adopted" }],
 ]) {
   test("journey adopt rejects " + name + " before any write", async () => {
@@ -125,7 +125,7 @@ test("journey adopt locks the scoped current opportunity and preserves assessed 
   await h.repository.decide(context);
   const lookup = h.statements.find(({ sql }) => sql.includes("FROM opportunities"));
   assert.match(lookup.sql, /FOR UPDATE/);
-  assert.match(lookup.sql, /rule_candidate_ready/);
+  assert.match(lookup.sql, /candidate_ready/);
   assert.match(lookup.sql, /risk_gate_passed/);
   assert.deepEqual(lookup.values, [context.organizationId, context.workspaceId, "topic-A"]);
   assert.equal(
@@ -254,7 +254,7 @@ test("candidate read model uses the same scoped opportunity policy and fails clo
     /LEFT JOIN opportunities o ON o.organization_id=j.organization_id AND o.workspace_id=j.workspace_id/,
   );
   assert.match(lookup.sql, /o.source_type='trend_topic' AND o.source_ref_id=s.topic_id/);
-  assert.match(lookup.sql, /rule_candidate_ready/);
+  assert.match(lookup.sql, /candidate_ready/);
   assert.match(lookup.sql, /risk_gate_passed/);
   assert.deepEqual(lookup.values, [context.journeyId, context.organizationId, context.workspaceId]);
 });

@@ -17,7 +17,7 @@ const opportunityLabels: Record<string, string> = {
   measured: "已测量",
   recommend: "建议采纳",
   recommended: "建议采纳",
-  rule_candidate: "规则命中候选",
+  rule_candidate: "选品候选",
   not_eligible: "采集中",
   not_recommend: "不建议采纳",
   succeeded: "已完成",

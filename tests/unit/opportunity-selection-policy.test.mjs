@@ -5,11 +5,13 @@ import {
   evaluateOpportunitySelection,
   opportunityRecommendedSql,
   competitorDetailEvidenceSql,
+  opportunityCandidateSql,
 } from "../../apps/api/dist/opportunity-selection-policy.js";
+import { selectionCandidateSql } from "../../packages/database/dist/index.js";
 
 const complete = {
   decision_status: "pending",
-  rule_candidate_ready: 1,
+  candidate_ready: 1,
   recommendation_status: "recommend",
   overall_score: 82,
   score_rule_version: "score-v1",
@@ -55,7 +57,7 @@ test("competition provenance fails closed and must bind detail task, product and
     assert.ok(sql.includes(evidence), evidence);
 });
 
-test("a threshold match remains a rule candidate when any one quality gate is missing", () => {
+test("an identified primary remains a candidate when any one quality gate is missing", () => {
   for (const [field, value] of [
     ["overall_score", null],
     ["trend_score", null],
@@ -70,9 +72,35 @@ test("a threshold match remains a rule candidate when any one quality gate is mi
   }
 });
 
-test("a collected item below the enabled rule source threshold is not yet a rule candidate", () => {
+test("an item without verified primary identity is not yet a candidate", () => {
   assert.equal(
-    evaluateOpportunitySelection({ ...complete, rule_candidate_ready: 0 }).selection_stage,
+    evaluateOpportunitySelection({ ...complete, candidate_ready: 0 }).selection_stage,
+    "not_eligible",
+  );
+});
+
+test("API and worker share a scoped Amazon identity prerequisite instead of a monitoring threshold", () => {
+  assert.equal(opportunityCandidateSql, selectionCandidateSql);
+  assert.doesNotMatch(
+    selectionCandidateSql,
+    /trend_monitoring_rules|opportunity_rule_matches|recommendation_min_source_count/,
+  );
+  for (const fact of [
+    "n_primary.organization_id=l_primary.organization_id",
+    "n_primary.workspace_id=l_primary.workspace_id",
+    "l_primary.opportunity_id=o.id",
+    "n_primary.status='active'",
+    "p_primary.code='amazon_product'",
+    "$.canonical_url",
+    "(dp|gp/product)",
+  ])
+    assert.ok(selectionCandidateSql.includes(fact), fact);
+  assert.equal(
+    evaluateOpportunitySelection({
+      ...complete,
+      candidate_ready: undefined,
+      rule_candidate_ready: 1,
+    }).selection_stage,
     "not_eligible",
   );
 });

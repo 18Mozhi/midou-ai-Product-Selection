@@ -4,7 +4,7 @@ import type { HomeDashboardRepository } from "./home-dashboard-service.js";
 import {
   opportunityQualityGateSql,
   opportunityRecommendedSql,
-  opportunityRuleCandidateSql,
+  opportunityCandidateSql,
 } from "./opportunity-selection-policy.js";
 export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
   constructor(private readonly pool: Pool) {}
@@ -24,27 +24,19 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
          (SELECT MIN(r.next_collection_at) FROM trend_monitoring_rules r
           WHERE r.organization_id=? AND r.workspace_id=? AND r.status='enabled') next_collection_at,
          (SELECT COUNT(DISTINCT o.id) FROM opportunities o
-          JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
-            AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
          WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
             AND o.lifecycle_status<>'archived') candidate_count,
          (SELECT COUNT(*) FROM opportunities o
           WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
-            AND o.lifecycle_status<>'archived' AND ${opportunityRuleCandidateSql}
+            AND o.lifecycle_status<>'archived' AND ${opportunityCandidateSql}
             AND NOT ${opportunityQualityGateSql}) rule_candidate_count,
          (SELECT COUNT(DISTINCT o.id) FROM opportunities o
-          JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
-            AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
           WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
             AND ${opportunityRecommendedSql} AND o.lifecycle_status<>'archived') recommended_count,
          (SELECT COUNT(DISTINCT o.id) FROM opportunities o
-          JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
-            AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
           WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
-            AND NOT ${opportunityRuleCandidateSql} AND o.lifecycle_status<>'archived') awaiting_evidence_count,
+            AND NOT ${opportunityCandidateSql} AND o.lifecycle_status<>'archived') awaiting_evidence_count,
          (SELECT COUNT(DISTINCT o.id) FROM opportunities o
-          JOIN opportunity_rule_matches m ON m.opportunity_id=o.id
-            AND m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id
           WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='adopted') adopted_count`,
       [
         input.organizationId,
@@ -67,15 +59,41 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
         input.workspaceId,
       ],
     );
+    const [schedules] = await this.pool.query<RowDataPacket[]>(
+      "SELECT s.last_task_id,s.last_scheduled_at,s.next_scheduled_at,t.blocked_subquery_count,t.failed_subquery_count,t.status task_status," +
+        "EXISTS (SELECT 1 FROM providers WHERE status='enabled' AND terms_review_status='approved' " +
+        "AND terms_version IS NOT NULL AND (terms_permanent=1 OR terms_expires_at>NOW(3)) " +
+        "AND parser_version IN ('google-news-fixed-rss-v1','syndication-feed-v1','structured-public-page-v1')) source_available " +
+        "FROM automatic_source_schedules s LEFT JOIN collection_tasks t ON t.id=s.last_task_id " +
+        "AND t.organization_id=s.organization_id AND t.workspace_id=s.workspace_id " +
+        "WHERE s.organization_id=? AND s.workspace_id=? LIMIT 1",
+      [input.organizationId, input.workspaceId],
+    );
     const row = rows[0] ?? ({} as RowDataPacket),
+      schedule = schedules[0],
+      fullConfigured = Boolean(schedule?.last_task_id || Number(schedule?.source_available)),
+      fullProblem =
+        fullConfigured &&
+        (!Number(schedule?.source_available) ||
+          Number(schedule?.blocked_subquery_count ?? 0) > 0 ||
+          Number(schedule?.failed_subquery_count ?? 0) > 0 ||
+          ["dead_letter", "blocked_robots", "blocked_login", "failed", "blocked"].includes(
+            String(schedule?.task_status),
+          )),
       enabled = Number(row.enabled_rule_count ?? 0),
-      last = row.last_collection_at == null ? null : new Date(row.last_collection_at).toISOString(),
-      next = row.next_collection_at == null ? null : new Date(row.next_collection_at).toISOString();
+      lastDates = [row.last_collection_at, schedule?.last_scheduled_at]
+        .filter((value) => value != null)
+        .map((value) => new Date(value).getTime()),
+      nextDates = [row.next_collection_at, fullConfigured ? schedule?.next_scheduled_at : null]
+        .filter((value) => value != null)
+        .map((value) => new Date(value).getTime()),
+      last = lastDates.length ? new Date(Math.max(...lastDates)).toISOString() : null,
+      next = nextDates.length ? new Date(Math.min(...nextDates)).toISOString() : null;
     return {
       state:
-        enabled === 0
+        enabled === 0 && !fullConfigured
           ? ("not_configured" as const)
-          : next && Number(row.last_task_problem_count ?? 0) === 0
+          : next && Number(row.last_task_problem_count ?? 0) === 0 && !fullProblem
             ? ("running" as const)
             : ("attention" as const),
       enabled_rule_count: enabled,

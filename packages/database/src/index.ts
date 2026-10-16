@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import mysql, { type Pool, type PoolConnection } from "mysql2/promise";
 import type { RuntimeConfig } from "@scoutops/config";
+export { selectionCandidateSql, selectionPrimaryAsinSql } from "./selection-candidate-sql.js";
 
 export type MySqlResilienceState = "ready" | "warning" | "blocked";
 export type MySqlRecoveryStatus = "verified" | "stale" | "blocked" | "empty";

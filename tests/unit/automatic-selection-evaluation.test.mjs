@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { MySqlAutomaticSelectionEvaluationWorker } from "../../apps/worker/dist/automatic-selection-evaluation-worker.js";
 
 import {
   calculateAutomaticScoreFacts,
@@ -15,6 +16,34 @@ const supply = (id, title, price) => ({
   observedAt: new Date("2026-09-05T00:00:00Z"),
   evidenceId: `00000000-0000-4000-8000-${String(id).padStart(12, "0")}`,
   externalId: String(1000 + id),
+});
+
+test("historical repair only revives exact legacy rule skips and leaves leased or failed work untouched", async () => {
+  const calls = [];
+  const worker = new MySqlAutomaticSelectionEvaluationWorker(
+    {
+      query: async (sql, params) => {
+        calls.push({ sql, params });
+        return [[]];
+      },
+    },
+    "worker",
+    "actor",
+    120,
+  );
+  await worker.enqueueEligibleCandidates();
+  assert.match(calls[0].sql, /INSERT IGNORE[\s\S]*e.opportunity_id IS NULL/);
+  assert.match(
+    calls[1].sql,
+    /WHERE e.status='succeeded'[\s\S]*\$\.skipped'\)\)='not_rule_candidate'/,
+  );
+  assert.match(calls[1].sql, /result_json=NULL/);
+  for (const { sql } of calls) {
+    assert.match(sql, /o.decision_status='pending'/);
+    assert.match(sql, /o.lifecycle_status NOT IN \('archived','deleted'\)/);
+    assert.match(sql, /LIMIT 100/);
+    assert.doesNotMatch(sql, /trend_monitoring_rules|recommendation_min_source_count/);
+  }
 });
 
 test("automatic selection only matches the same phone family, model and compatible variant", () => {
@@ -117,18 +146,16 @@ test("automatic worker preserves human costs and clears a stale recommendation o
   assert.match(source, /profit: currentCostEvidenceIds/);
 });
 
-test("bulk automatic reevaluation only queues enabled-rule candidates above their source threshold", async () => {
+test("bulk automatic reevaluation uses the same primary identity policy as the worker", async () => {
   const paths = [
       "apps/api/src/mysql-profit-repository.ts",
       "apps/api/src/mysql-scoring-repository.ts",
-      "apps/worker/src/trend-projection-persistence.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
     ],
     sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
   for (const source of sources) {
     assert.match(source, /automatic_selection_evaluations/);
-    assert.match(source, /opportunity_rule_matches/);
-    assert.match(source, /trend_monitoring_rules/);
-    assert.match(source, /r\.status='enabled'/);
-    assert.match(source, /o\.source_count>=r\.recommendation_min_source_count/);
+    assert.match(source, /selectionCandidateSql/);
+    assert.doesNotMatch(source, /o\.source_count>=r\.recommendation_min_source_count/);
   }
 });

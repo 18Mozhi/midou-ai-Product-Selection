@@ -101,17 +101,10 @@ function submit() {
           <option :value="1440">每天</option>
         </select></label
       >
-      <label
-        >候选来源门槛<select v-model.number="form.recommendation_min_source_count">
-          <option :value="1">命中 1 个真实来源后形成候选</option>
-          <option :value="2">至少 2 个独立来源后形成候选</option>
-          <option :value="3">至少 3 个独立来源后形成候选</option>
-        </select></label
-      >
       <aside>
         <strong>候选不等于建议采纳</strong
         ><span
-          >达到来源门槛只显示“规则命中候选”；五项质量门全部通过后才显示“建议采纳”，最终仍由你采纳。</span
+          >关键词规则用于补充监控。商品确认主品身份后进入选品候选；五项质量门全部通过后才显示“建议采纳”。</span
         >
       </aside>
       <aside><strong>通知渠道</strong><span>站内通知。邮件服务尚未确认，不能选择。</span></aside>

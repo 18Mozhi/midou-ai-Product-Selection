@@ -23,10 +23,11 @@ async function statementsFor(selectionView) {
   return statements;
 }
 
-test("recommended view requires the rule threshold and all five quality gates", async () => {
+test("recommended view requires a real primary and all five quality gates without monitoring rules", async () => {
   const statements = await statementsFor("recommended");
   for (const { sql } of statements) {
-    assert.match(sql, /opportunity_rule_matches orm_gate/);
+    assert.match(sql, /n_primary.payload_json/);
+    assert.doesNotMatch(sql, /orm_gate|orm_view/);
     assert.match(sql, /o\.decision_status='pending'/);
     assert.match(sql, /o\.recommendation_status='recommend'/);
     assert.match(sql, /o\.trend_score IS NOT NULL/);
@@ -36,21 +37,21 @@ test("recommended view requires the rule threshold and all five quality gates", 
   }
 });
 
-test("rule-candidate view contains threshold matches that have not passed every quality gate", async () => {
+test("candidate view contains identified products that have not passed every quality gate", async () => {
   const statements = await statementsFor("rule_candidates");
   for (const { sql } of statements) {
-    assert.match(sql, /opportunity_rule_matches orm_gate/);
+    assert.match(sql, /n_primary.payload_json/);
     assert.match(sql, /o\.decision_status='pending'/);
     assert.match(sql, /NOT \(o\.recommendation_status='recommend'/);
   }
 });
 
-test("evidence-pending view contains rule matches still below the source threshold", async () => {
+test("evidence-pending view retains products without a verified primary identity", async () => {
   const statements = await statementsFor("evidence_pending");
   for (const { sql } of statements) {
-    assert.match(sql, /EXISTS \(SELECT 1 FROM opportunity_rule_matches orm_view/);
+    assert.doesNotMatch(sql, /orm_view/);
     assert.match(sql, /o\.decision_status='pending'/);
-    assert.match(sql, /NOT EXISTS \(SELECT 1 FROM opportunity_rule_matches orm_gate/);
+    assert.match(sql, /NOT \(\(SELECT UPPER/);
   }
 });
 

@@ -219,8 +219,7 @@ async function ready(
               code: "recommendation_insufficient",
               status: "blocked",
               progress_percent: null,
-              next_action:
-                "运行规则的独立来源门槛已满足，当前为规则命中候选；系统正在完成五项质量门校验。",
+              next_action: "已识别 Amazon 主品，系统正在补齐评分、市场、竞品、成本与风险证据。",
               task_id: null,
               task_status: null,
               score_job_status: null,
@@ -744,10 +743,9 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
     "评分待完成市场待完成竞争待完成成本待完成风险待完成",
   );
   await expect(
-    page.getByText(
-      "运行规则的独立来源门槛已满足，当前为规则命中候选；系统正在完成五项质量门校验。",
-      { exact: true },
-    ),
+    page.getByText("已识别 Amazon 主品，系统正在补齐评分、市场、竞品、成本与风险证据。", {
+      exact: true,
+    }),
   ).toBeVisible();
   await page.getByRole("button", { name: "业务血缘" }).click();
   await expect(page.getByRole("heading", { name: "业务血缘追踪" })).toBeVisible();
@@ -2778,7 +2776,7 @@ test("selection views send explicit truthful recommendation filters", async ({ p
   );
   await page.goto("/opportunities");
   await recommended;
-  await expect(page.getByRole("button", { name: "待我采纳" })).toHaveAttribute(
+  await expect(page.getByRole("button", { name: "推荐商品" })).toHaveAttribute(
     "aria-current",
     "page",
   );
@@ -2804,10 +2802,10 @@ test("selection views send explicit truthful recommendation filters", async ({ p
   const ruleCandidates = page.waitForRequest((request) =>
     request.url().includes("selection_view=rule_candidates"),
   );
-  await page.getByRole("button", { name: "规则命中候选" }).click();
+  await page.getByRole("button", { name: "候选商品" }).click();
   await ruleCandidates;
   await expect(page).toHaveURL(/view=rule_candidates/);
-  await expect(page.getByRole("heading", { name: "规则命中候选", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "选品候选", level: 2 })).toBeVisible();
 
   const evidencePending = page.waitForRequest((request) =>
     request.url().includes("selection_view=evidence_pending"),
@@ -2818,7 +2816,7 @@ test("selection views send explicit truthful recommendation filters", async ({ p
   await expect(page.getByRole("heading", { name: "采集中", level: 2 })).toBeVisible();
 
   const all = page.waitForRequest((request) => request.url().includes("selection_view=all"));
-  await page.getByRole("button", { name: "全部机会" }).click();
+  await page.getByRole("button", { name: "全部商品" }).click();
   await all;
   await expect(page).toHaveURL(/view=all/);
   await expect(page.getByRole("button", { name: "手工添加", exact: true })).toBeVisible();

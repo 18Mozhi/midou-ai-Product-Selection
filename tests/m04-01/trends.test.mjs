@@ -596,7 +596,7 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(persistence, /class TrendProjectionPersistence[\s\S]*beginTransaction/);
   assert.match(alerts, /class TrendProjectionAlerts[\s\S]*trend_outbox/);
   assert.match(worker, /class MySqlTrendProjectionWorker[\s\S]*this\.persistence\.project\(job\)/);
-  assert.match(openapi, /商品型自动热点频道[\s\S]*待评估选品/);
+  assert.match(openapi, /情报分析从实际 Amazon 结果选择主品并保留原情报证据/);
   assert.match(feature, /automaticProductDiscovery/);
   assert.match(architecture, /商品型热点频道[\s\S]*待评估选品/);
   assert.match(runbook, /自动发现选品[\s\S]*回滚/);

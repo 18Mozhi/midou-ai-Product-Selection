@@ -184,6 +184,35 @@ html[data-design="commerce"] #app .home-monitoring-rail {
   gap: 16px;
   align-content: start;
 }
+html[data-design="commerce"]
+  #app
+  .home-monitoring-rail
+  :is(.home-runtime-panel, .home-runtime-panel ol, .home-runtime-panel dl) {
+  grid-template-columns: minmax(0, 1fr);
+}
+html[data-design="commerce"] #app .home-monitoring-rail .home-runtime-panel dd {
+  overflow-wrap: anywhere;
+}
+html[data-design="commerce"] #app .home-monitoring-rail .home-operations-strip {
+  min-width: 0;
+  margin-top: 0;
+  padding: 16px;
+}
+html[data-design="commerce"] #app .home-monitoring-rail .home-operations-strip > div:last-child {
+  grid-template-columns: minmax(0, 1fr);
+}
+html[data-design="commerce"] #app .home-monitoring-rail .home-operations-strip a {
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 8px;
+  padding: 10px;
+}
+html[data-design="commerce"] #app .home-monitoring-rail .home-operations-strip a > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+html[data-design="commerce"] #app .home-monitoring-rail .home-operations-strip a em {
+  grid-column: 2;
+}
 html[data-design="commerce"] #app .home-discovery-layout:has(> aside:empty) {
   grid-template-columns: minmax(0, 1fr);
 }

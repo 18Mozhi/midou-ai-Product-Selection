@@ -1,5 +1,6 @@
 import type { RowDataPacket } from "mysql2/promise";
 import { MINIMUM_SELECTION_COMPETITORS } from "@scoutops/contracts";
+import { selectionCandidateSql, selectionPrimaryAsinSql } from "@scoutops/database";
 
 export type OpportunitySelectionStage = "rule_candidate" | "recommended" | "not_eligible";
 
@@ -12,12 +13,7 @@ export interface OpportunityQualityGates {
   all_passed: boolean;
 }
 
-export const opportunityRuleCandidateSql =
-  "EXISTS (SELECT 1 FROM opportunity_rule_matches orm_gate JOIN trend_monitoring_rules r_gate " +
-  "ON r_gate.id=orm_gate.monitoring_rule_id AND r_gate.organization_id=orm_gate.organization_id " +
-  "AND r_gate.workspace_id=orm_gate.workspace_id WHERE orm_gate.opportunity_id=o.id AND " +
-  "orm_gate.organization_id=o.organization_id AND orm_gate.workspace_id=o.workspace_id AND " +
-  "r_gate.status='enabled' AND o.source_count>=r_gate.recommendation_min_source_count)";
+export const opportunityCandidateSql = selectionCandidateSql;
 
 export const opportunityRiskGateSql =
   "EXISTS (SELECT 1 FROM opportunity_score_runs sr_gate " +
@@ -27,15 +23,7 @@ export const opportunityRiskGateSql =
   "sr_latest.workspace_id=o.workspace_id ORDER BY sr_latest.scored_at DESC,sr_latest.id DESC LIMIT 1) " +
   "AND sc_gate.dimension_code='risk' AND sc_gate.input_score IS NOT NULL)";
 
-export const opportunityPrimaryAsinSql =
-  "(SELECT JSON_UNQUOTE(JSON_EXTRACT(n_primary.payload_json,'$.asin')) " +
-  "FROM opportunity_evidence_links l_primary JOIN normalized_records n_primary " +
-  "ON n_primary.raw_evidence_id=l_primary.raw_evidence_id AND n_primary.organization_id=l_primary.organization_id " +
-  "AND n_primary.workspace_id=l_primary.workspace_id AND n_primary.status='active' " +
-  "JOIN providers p_primary ON p_primary.id=n_primary.provider_id AND p_primary.code='amazon_product' " +
-  "WHERE l_primary.opportunity_id=o.id AND l_primary.organization_id=o.organization_id " +
-  "AND l_primary.workspace_id=o.workspace_id AND JSON_UNQUOTE(JSON_EXTRACT(n_primary.payload_json,'$.asin')) REGEXP '^[A-Z0-9]{10}$' " +
-  "ORDER BY l_primary.created_at,n_primary.created_at DESC LIMIT 1)";
+export const opportunityPrimaryAsinSql = selectionPrimaryAsinSql;
 
 export const competitorDetailEvidenceSql = (snapshot: "s" | "s_sample") =>
   "EXISTS (SELECT 1 FROM collection_subqueries q_detail JOIN collection_task_evidence_links l_detail " +
@@ -73,9 +61,9 @@ export const opportunityQualityGateSql =
   `o.trend_score IS NOT NULL AND o.competition_score IS NOT NULL AND ` +
   `o.profit_status='calculated' AND ${opportunityRiskGateSql} AND ${opportunityCompetitionGateSql})`;
 
-export const opportunityRecommendedSql = `(${opportunityRuleCandidateSql} AND ${opportunityQualityGateSql})`;
+export const opportunityRecommendedSql = `(${opportunityCandidateSql} AND ${opportunityQualityGateSql})`;
 
-export const opportunitySelectionProjectionSql = `${opportunityRuleCandidateSql} rule_candidate_ready,${opportunityRiskGateSql} risk_gate_passed,${opportunityCompetitionGateSql} competition_gate_passed,${opportunityPrimaryAsinSql} main_asin`;
+export const opportunitySelectionProjectionSql = `${opportunityCandidateSql} candidate_ready,${opportunityRiskGateSql} risk_gate_passed,${opportunityCompetitionGateSql} competition_gate_passed,${opportunityPrimaryAsinSql} main_asin`;
 
 const sqlBoolean = (value: unknown) => value === true || Number(value ?? 0) === 1;
 
@@ -95,13 +83,13 @@ export function evaluateOpportunitySelection(row: RowDataPacket | Record<string,
       risk: sqlBoolean(row.risk_gate_passed),
     },
     allPassed = Object.values(qualityGates).every(Boolean),
-    ruleCandidate = sqlBoolean(row.rule_candidate_ready),
+    candidate = sqlBoolean(row.candidate_ready),
     pending = row.decision_status === "pending";
   return {
     selection_stage:
-      pending && ruleCandidate && allPassed
+      pending && candidate && allPassed
         ? "recommended"
-        : pending && ruleCandidate
+        : pending && candidate
           ? "rule_candidate"
           : "not_eligible",
     quality_gates: { ...qualityGates, all_passed: allPassed },

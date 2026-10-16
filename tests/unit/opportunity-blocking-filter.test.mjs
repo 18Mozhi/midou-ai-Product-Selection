@@ -119,7 +119,7 @@ test("opportunity detail centralizes persisted blocker release progress", async 
   assert.equal(detail.redecision_ready, false);
 });
 
-test("opportunity detail explains the persisted rule source threshold", async () => {
+test("opportunity detail requests primary evidence instead of old rule source thresholds", async () => {
   const ruleRow = {
     matched_rule_count: 2,
     enabled_rule_count: 2,
@@ -140,6 +140,6 @@ test("opportunity detail explains the persisted rule source threshold", async ()
   });
   assert.equal(
     detail.adoption_blockers[1].next_action,
-    "已命中 2 条运行规则；当前 1 个独立来源，达到 3 个后进入规则命中候选。系统会继续自动采集。",
+    "尚未取得可确认身份的 Amazon 主品证据，系统会继续采集；新闻或关键词本身不能代替商品。",
   );
 });

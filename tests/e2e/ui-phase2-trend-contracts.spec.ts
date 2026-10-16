@@ -1123,7 +1123,7 @@ test("UI2-TR04 rule cancel resets defaults and creation sends the exact form con
   await expect(modal.getByLabel("市场", { exact: true })).toHaveValue("US");
   await expect(modal.getByLabel("语言", { exact: true })).toHaveValue("en-US");
   await expect(modal.getByLabel("自动采集周期")).toHaveValue("60");
-  await expect(modal.getByLabel("候选来源门槛")).toHaveValue("1");
+  await expect(modal.getByLabel("候选来源门槛")).toHaveCount(0);
   await modal.getByRole("button", { name: "创建并启用" }).click();
   expect(data.writes).toHaveLength(0);
   await expect(modal.getByLabel("规则名称", { exact: true })).toBeFocused();
@@ -1131,10 +1131,9 @@ test("UI2-TR04 rule cancel resets defaults and creation sends the exact form con
   await modal.getByLabel("包含关键词（逗号分隔）").fill(" Desk Lamp， reading , ");
   await modal.getByLabel("排除关键词（可选）").fill(" medical，used ");
   await modal.getByLabel("自动采集周期").selectOption("180");
-  await modal.getByLabel("候选来源门槛").selectOption("3");
   await modal.getByRole("button", { name: "创建并启用" }).click();
   await expect(modal).toBeHidden();
-  await expect(page.locator(".trend-message")).toContainText("监控规则已启用");
+  await expect(page.locator(".trend-message")).toContainText("关键词监控已启用");
   expect(data.writes).toHaveLength(1);
   assertWrite(data.writes[0], "POST", "/trends/monitoring-rules", {
     name: "独立规则",
@@ -1145,7 +1144,7 @@ test("UI2-TR04 rule cancel resets defaults and creation sends the exact form con
     category: null,
     notification_channel: "in_app",
     collection_interval_minutes: 180,
-    recommendation_min_source_count: 3,
+    recommendation_min_source_count: 1,
   });
 });
 

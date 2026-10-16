@@ -577,7 +577,7 @@ onActivated(() => {
       :description="
         activeRule
           ? `当前启用 ${activeRule.version_code}；完整自动推荐还需要竞品监控和费用规则同时生效。`
-          : '当前没有已启用评分规则，所有规则命中商品只能停留在候选队列。'
+          : '当前没有已启用评分规则，所有商品只能停留在候选队列。'
       "
       :status="scoringSetupReady ? '评分配置已覆盖' : '评分配置未就绪'"
       :ready="scoringSetupReady"

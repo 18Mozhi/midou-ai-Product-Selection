@@ -1855,7 +1855,7 @@ paths:
   /opportunities:
     get:
       summary: List workspace-scoped opportunities without fabricated scores
-      description: 商品型自动热点频道会建立带真实趋势证据的待评估选品，并自动排队 Amazon 竞品快照与 DHgate/Made-in-China/EC21 公开供应商搜索；Amazon 使用 page_url 商品页目标，供应商按 supplier-keywords-v2 从原商品标题提取通用品类关键词且最多 120 字符，并兼容宝塔受限代理返回空 Response.url，单一供应商来源失败不会阻断后续公开来源。selection_view=recommended 只返回达到启用规则来源门槛且评分、市场、竞争、成本、风险五项质量门全部通过的待人工采纳商品；rule_candidates 返回达到规则来源门槛但质量门尚未全部通过的候选；evidence_pending 返回已精确命中规则但仍低于来源门槛的采集中商品；all 返回完整机会库。未传 selection_view 时保留既有 scope 行为。最终采纳始终由人工完成。
+      description: 情报分析从实际 Amazon 结果选择主品并保留原情报证据，后续自动采集主品详情、独立竞品并匹配 1688 货源。候选要求当前组织、工作区的有效 Amazon 证据中 ASIN 与商品 URL 一致，不再要求命中关键词监控规则。selection_view=recommended 返回主品已确认且评分、市场、竞争、成本、风险五项质量门全部通过的待人工采纳商品；历史参数名 rule_candidates 现表示主品已确认但质量门尚未全部通过的选品候选；evidence_pending 表示缺少有效主品身份的待采集记录；all 返回完整机会库。未传 selection_view 时保留既有 scope 行为。最终采纳始终由人工完成。
       security: [{ HttpOnlySession: [] }]
       parameters:
         - $ref: "#/components/parameters/Page"
@@ -7182,7 +7182,7 @@ components:
         selection_stage:
           type: string
           enum: [rule_candidate, recommended, not_eligible]
-          description: Current scoped opportunity policy projection; missing opportunities are not_eligible.
+          description: Current scoped opportunity policy projection. Legacy value rule_candidate now means a verified Amazon primary awaiting quality gates, without a monitoring-rule prerequisite; missing opportunities are not_eligible.
         quality_gates:
           type: object
           additionalProperties: false
@@ -8017,7 +8017,7 @@ components:
               {
                 type: integer,
                 minimum: 0,
-                description: Pending opportunities at the enabled rule source threshold but not yet through all five quality gates,
+                description: Legacy field name for pending opportunities with a verified Amazon primary that have not passed all five quality gates; independent of monitoring subscriptions,
               }
             recommended_count: { type: integer, minimum: 0 }
             awaiting_evidence_count: { type: integer, minimum: 0 }
@@ -10510,7 +10510,7 @@ components:
             type: integer,
             minimum: 1,
             maximum: 10,
-            description: Minimum distinct persisted evidence providers required before a rule-matched opportunity becomes a rule candidate; all five quality gates are still required for recommendation,
+            description: Historical monitoring-rule field retained for request compatibility. No longer gates product candidacy or scoring. Current keyword forms retain the existing default of one and do not expose this obsolete control,
           }
     TrendMonitoringRule:
       allOf:

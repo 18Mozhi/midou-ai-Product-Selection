@@ -1,4 +1,33 @@
 {
+  "selectionPrimaryCandidacy20261017": {
+    "status": "implemented",
+    "statusDetail": "local_delivery_requires_production_deployment_and_daily_acceptance",
+    "requirements": "docs/selection-primary-candidacy.md",
+    "sourceFiles": [
+      "packages/database/src/selection-candidate-sql.ts",
+      "apps/api/src/opportunity-selection-policy.ts",
+      "apps/api/src/mysql-home-dashboard-repository.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/worker/src/core-collection-projection-worker.ts",
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/commerce-workspace.css"
+    ],
+    "apiRoutes": [
+      "/api/v1/opportunities",
+      "/api/v1/opportunities/{id}",
+      "/api/v1/me/home-dashboard"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-selection-policy.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/unit/competitor-discovery-policy.test.mjs",
+      "tests/m02-06/home-discovery-health.test.mjs",
+      "tests/e2e/m02-06-home-mobile.spec.ts",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "contract": "Verified scoped Amazon primary identity replaces keyword monitoring thresholds; existing rule_candidate field/enum names retain compatibility with new candidacy semantics. Five recommendation gates and human adoption remain required.",
+    "verification": "MySQL 5.7 read-only EXPLAIN for four SELECTs and five derived-table identity cases passed; no production writes."
+  },
   "intelligenceProductAssociation20261017": {
     "status": "implemented",
     "statusDetail": "local_pipeline_and_live_model_smoke_requires_production_acceptance",
@@ -19,7 +48,6 @@
     "testFiles": ["tests/unit/intelligence-product-association.test.mjs"],
     "verification": "Three real LAN model synthetic checks and four read-only MySQL 5.7 SELECT EXPLAIN checks passed. No production write, restart or deployment.",
     "pendingScope": [
-      "replace legacy monitoring-rule recommendation prerequisite",
       "general category score and costs",
       "historical replay",
       "live source and sustained daily acceptance"

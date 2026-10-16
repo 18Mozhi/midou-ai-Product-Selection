@@ -38,6 +38,55 @@ test("ASIN identity must agree with the actual Amazon product URL", () => {
   assert.equal(amazonAsin(facts(1), `https://www.amazon.com/s?k=${asin(1)}`), null);
 });
 
+test("new details, competitor discovery and opportunity sourcing wake the same scoped evaluator", async () => {
+  for (const projectionType of [
+    "opportunity_competitors",
+    "competitor_snapshot",
+    "sourcing_search",
+  ]) {
+    const calls = [];
+    const worker = new CoreCollectionProjectionWorker({}, "worker");
+    await worker.requeueEvaluation(
+      {
+        query: async (sql, params) => {
+          calls.push({ sql, params });
+          return [[{ opportunity_id: "opportunity", input_ref: "opportunity" }]];
+        },
+      },
+      {
+        projectionType,
+        resourceId: projectionType === "opportunity_competitors" ? "opportunity" : "resource",
+        organizationId: "org",
+        workspaceId: "workspace",
+      },
+      new Date(),
+    );
+    const queued = calls.find(({ sql }) =>
+      sql.startsWith("INSERT INTO automatic_selection_evaluations"),
+    );
+    assert.deepEqual(queued.params.slice(0, 3), ["opportunity", "org", "workspace"]);
+    assert.match(queued.sql, /status=IF\(status='leased',status,'queued'\)/);
+  }
+  let writes = 0;
+  const worker = new CoreCollectionProjectionWorker({}, "worker");
+  await worker.requeueEvaluation(
+    {
+      query: async (sql) => {
+        if (sql.startsWith("INSERT")) writes += 1;
+        return [[]];
+      },
+    },
+    {
+      projectionType: "sourcing_search",
+      resourceId: "image-search",
+      organizationId: "org",
+      workspaceId: "workspace",
+    },
+    new Date(),
+  );
+  assert.equal(writes, 0);
+});
+
 test("disabled providers preserve historical detail facts without claiming an enabled current source", async () => {
   for (const provider_status of ["enabled", "disabled"]) {
     const repository = new MySqlCompetitorRepository({

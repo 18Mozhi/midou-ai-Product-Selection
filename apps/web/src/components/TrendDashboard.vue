@@ -442,7 +442,7 @@ async function createRule(form: TrendRuleDraft) {
   if (result) {
     showRule.value = false;
     await load();
-    message.value = "监控规则已启用；命中来源门槛只会形成规则命中候选。";
+    message.value = "关键词监控已启用；系统会继续采集相关情报。";
     await setTab("rules");
   }
 }

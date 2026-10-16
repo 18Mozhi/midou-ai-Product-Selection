@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
 import {
   amazonAsin,
   COMPETITOR_DISCOVERY_MINIMUM,
@@ -171,6 +172,7 @@ export class CoreCollectionProjectionWorker {
       else if (job.projectionType === "competitor_snapshot")
         count = await this.projectCompetitorSnapshot(c, job, records, now);
       else count = await this.projectSourcing(c, job, records, now);
+      if (count > 0) await this.requeueEvaluation(c, job, now);
       await c.commit();
       return count;
     } catch (error) {
@@ -179,6 +181,31 @@ export class CoreCollectionProjectionWorker {
     } finally {
       c.release();
     }
+  }
+
+  private async requeueEvaluation(c: PoolConnection, job: Job, now: Date) {
+    let opportunityId: string | null =
+      job.projectionType === "opportunity_competitors" ? job.resourceId : null;
+    if (job.projectionType === "competitor_snapshot") {
+      const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT opportunity_id FROM competitors WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL",
+        [job.resourceId, job.organizationId, job.workspaceId],
+      );
+      opportunityId = rows[0]?.opportunity_id ? String(rows[0].opportunity_id) : null;
+    } else if (job.projectionType === "sourcing_search") {
+      const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT input_ref FROM sourcing_searches WHERE id=? AND organization_id=? AND workspace_id=? AND input_type='opportunity' AND deleted_at IS NULL",
+        [job.resourceId, job.organizationId, job.workspaceId],
+      );
+      opportunityId = rows[0]?.input_ref ? String(rows[0].input_ref) : null;
+    }
+    if (opportunityId)
+      await queueAutomaticSelectionEvaluation(c, {
+        opportunityId,
+        organizationId: job.organizationId,
+        workspaceId: job.workspaceId,
+        now,
+      });
   }
 
   private async projectCompetitorDiscovery(

@@ -295,7 +295,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(service, /OpportunitySelectionView[\s\S]*evidence_pending/);
   assert.match(
     repository,
-    /selectionView === "recommended"[\s\S]*opportunityRecommendedSql[\s\S]*selectionView === "rule_candidates"[\s\S]*opportunityRuleCandidateSql/,
+    /selectionView === "recommended"[\s\S]*opportunityRecommendedSql[\s\S]*selectionView === "rule_candidates"[\s\S]*opportunityCandidateSql/,
   );
   assert.match(routes, /coverage_status[\s\S]*blocking_reason/);
   assert.match(routes, /selection_view/);
@@ -310,8 +310,8 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(webContract, new RegExp(state));
   assert.match(webContract, /证据完整度[\s\S]*阻断原因[\s\S]*缺少可采纳证据/);
-  assert.match(webContract, /待我采纳[\s\S]*规则命中候选[\s\S]*采集中[\s\S]*全部机会/);
-  assert.match(listWeb, /已达到规则来源门槛，系统继续完成五项质量门校验/);
+  assert.match(webContract, /待我采纳[\s\S]*选品候选[\s\S]*采集中[\s\S]*全部机会/);
+  assert.match(listWeb, /已识别 Amazon 主品，系统继续补齐五项质量门所需的证据/);
   assert.doesNotMatch(listWeb, /完成评分且结论为推荐/);
   assert.match(readinessWeb, /下一步：[\s\S]*查看五项配置状态/);
   assert.match(decisionWeb, /采纳建议[\s\S]*当前无需你处理[\s\S]*提前人工处理/);
@@ -319,7 +319,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.doesNotMatch(decisionWeb, /采纳前还缺/);
   assert.match(
     trendRuleDialogWeb,
-    /达到来源门槛只显示“规则命中候选”[\s\S]*五项质量门全部通过后才显示“建议采纳”/,
+    /商品确认主品身份后进入选品候选[\s\S]*五项质量门全部通过后才显示“建议采纳”/,
   );
   assert.doesNotMatch(detailInsightsWeb, /达到来源门槛即可进入推荐/);
   assert.match(evidenceWeb, /证据新鲜度：观测于/);

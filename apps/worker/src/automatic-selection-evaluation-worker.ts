@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { amazonAsin } from "./competitor-discovery-policy.js";
+import { selectionCandidateSql } from "@scoutops/database";
 import {
   AUTOMATIC_SELECTION_FORMULA_VERSION,
   calculateAutomaticScoreFacts,
@@ -91,6 +92,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
   ) {}
 
   async processOnce() {
+    await this.enqueueEligibleCandidates();
     const job = await this.claim();
     if (!job) return { status: "idle" as const };
     try {
@@ -112,6 +114,25 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       await this.finishFailure(job, status, wrapped.code);
       return { status, opportunity_id: job.opportunityId, error_code: wrapped.code };
     }
+  }
+
+  private async enqueueEligibleCandidates() {
+    const now = this.now();
+    await this.pool.query(
+      "INSERT IGNORE INTO automatic_selection_evaluations (opportunity_id,organization_id,workspace_id,status,attempt_count,available_at,created_at,updated_at) " +
+        "SELECT o.id,o.organization_id,o.workspace_id,'queued',0,?,?,? FROM opportunities o " +
+        "LEFT JOIN automatic_selection_evaluations e ON e.opportunity_id=o.id " +
+        `WHERE e.opportunity_id IS NULL AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted') AND ${selectionCandidateSql} LIMIT 100`,
+      [now, now, now],
+    );
+    await this.pool.query(
+      "UPDATE automatic_selection_evaluations e SET status='queued',attempt_count=0,available_at=?,result_json=NULL,last_error_code=NULL,updated_at=? " +
+        "WHERE e.status='succeeded' AND JSON_UNQUOTE(JSON_EXTRACT(e.result_json,'$.skipped'))='not_rule_candidate' " +
+        "AND EXISTS (SELECT 1 FROM opportunities o WHERE o.id=e.opportunity_id AND o.organization_id=e.organization_id " +
+        "AND o.workspace_id=e.workspace_id AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted') " +
+        `AND ${selectionCandidateSql}) LIMIT 100`,
+      [now, now],
+    );
   }
 
   private async claim(): Promise<EvaluationJob | null> {
@@ -160,11 +181,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       await connection.beginTransaction();
       const [opportunities] = await connection.query<RowDataPacket[]>(
         "SELECT o.* FROM opportunities o WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? " +
-          "AND o.decision_status='pending' AND EXISTS (SELECT 1 FROM opportunity_rule_matches m " +
-          "JOIN trend_monitoring_rules r ON r.id=m.monitoring_rule_id AND r.organization_id=m.organization_id " +
-          "AND r.workspace_id=m.workspace_id WHERE m.opportunity_id=o.id AND " +
-          "m.organization_id=o.organization_id AND m.workspace_id=o.workspace_id AND r.status='enabled' " +
-          "AND o.source_count>=r.recommendation_min_source_count) FOR UPDATE",
+          `AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted') AND ${selectionCandidateSql} FOR UPDATE`,
         [job.opportunityId, job.organizationId, job.workspaceId],
       );
       const opportunity = opportunities[0];
@@ -174,11 +191,14 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           job,
           "succeeded",
           null,
-          { skipped: "not_rule_candidate" },
+          { skipped: "primary_product_missing_or_not_pending" },
           now,
         );
         await connection.commit();
-        return { status: "succeeded" as const, payload: { skipped: "not_rule_candidate" } };
+        return {
+          status: "succeeded" as const,
+          payload: { skipped: "primary_product_missing_or_not_pending" },
+        };
       }
       const [scoreRules] = await connection.query<RowDataPacket[]>(
           "SELECT id,version_code,dimensions_json FROM score_rules WHERE organization_id=? AND " +
