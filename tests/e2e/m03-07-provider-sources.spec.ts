@@ -236,7 +236,7 @@ test("enabled Amazon and 1688 sources are shown as automatic instead of stale ca
   const back = page.getByRole("button", { name: "返回来源目录" });
   if (await back.isVisible()) await back.click();
   await openMobileSourceDetails(page, "1688 搜索");
-  await expect(page.getByText(/系统按选品规则每 30 分钟采集 1688 公开商品/)).toBeVisible();
+  await expect(page.getByText(/已启用局域网图片找货/)).toBeVisible();
 });
 
 test("source catalog paginates the real-size directory and preserves filter state in the URL", async ({
@@ -693,7 +693,7 @@ test("closing the fixed-sample dialog aborts its in-flight sample list read", as
     await page.goto("/platform-admin/providers/sources");
     await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill(source.name);
     await openMobileSourceDetails(page, source.name);
-    await page.getByRole("button", { name: "固定样本回放" }).first().click();
+    await page.getByRole("button", { name: "浏览器历史样本" }).first().click();
     const dialog = page.getByRole("dialog", { name: /固定样本回放/ });
     await expect(dialog).toBeVisible();
     await readStarted;
@@ -1722,7 +1722,7 @@ test("fixed parser sample keeps an immutable second-person approval conclusion",
   );
   await page.goto("/platform-admin/providers/sources");
   await openMobileSourceDetails(page);
-  const samplesTrigger = page.getByRole("button", { name: "固定样本回放" }).first();
+  const samplesTrigger = page.getByRole("button", { name: "浏览器历史样本" }).first();
   await samplesTrigger.click();
   const samplesDialog = page.getByRole("dialog", { name: /固定样本回放/ });
   await expect(samplesDialog.getByRole("heading", { name: /固定样本回放/ })).toBeFocused();

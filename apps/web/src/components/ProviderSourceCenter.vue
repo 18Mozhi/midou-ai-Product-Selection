@@ -185,24 +185,28 @@ const statusText = (item: SourceItem) => {
   return "手工来源";
 };
 const policyText = (item: SourceItem) => {
+  if (item.code === "1688_search")
+    return item.provisioned?.status === "enabled"
+      ? "已启用局域网图片找货；系统使用主品图片请求 1688 服务，缺少图片或服务失败时保留真实受阻状态。"
+      : "使用六台局域网图搜服务；在宝塔配置授权并启用来源后，按 Amazon 主品图片自动找货，无需在此配置网页登录。";
   if (effectiveAvailability(item) !== "automatic") return item.policy_note;
   const interval = item.provisioned?.schedule_minutes ?? item.schedule_minutes;
   if (item.code === "amazon_product")
     return `系统按选品规则每 ${interval} 分钟抓取公开 Amazon 商品页；不使用官方 API，价格、评分和评论只保留页面真实披露值。`;
-  if (item.code === "1688_search")
-    return `已完成网页登录和来源验收；系统按选品规则每 ${interval} 分钟采集 1688 公开商品与供应商信息。`;
   return item.policy_note;
 };
-const modeText = (value: string) =>
-  (
-    ({
-      public_rss: "公开 RSS/Atom 爬虫",
-      public_page: "公开页面爬虫",
-      authenticated_browser: "网页登录爬虫",
-      import: "文件导入",
-      manual: "人工录入",
-    }) as Record<string, string>
-  )[value] ?? value;
+const modeText = (value: string, code?: string) =>
+  code === "1688_search"
+    ? "局域网图片找货"
+    : ((
+        {
+          public_rss: "公开 RSS/Atom 爬虫",
+          public_page: "公开页面爬虫",
+          authenticated_browser: "网页登录爬虫",
+          import: "文件导入",
+          manual: "人工录入",
+        } as Record<string, string>
+      )[value] ?? value);
 const successText = (item: SourceItem) => {
   const success = item.provisioned?.last_success;
   if (!success) return "尚无成功任务";

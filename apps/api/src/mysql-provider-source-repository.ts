@@ -14,11 +14,14 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
   private readonly sampleReviews: MySqlProviderSourceSampleReviewRepository;
   private readonly versions: MySqlProviderSourceVersionRepository;
 
-  constructor(private readonly pool: Pool) {
+  constructor(
+    private readonly pool: Pool,
+    lan1688Configured = false,
+  ) {
     this.catalog = new MySqlProviderSourceCatalogRepository(pool);
     this.samples = new MySqlProviderSourceSampleRepository(pool);
     this.sampleReviews = new MySqlProviderSourceSampleReviewRepository(pool);
-    this.versions = new MySqlProviderSourceVersionRepository(pool);
+    this.versions = new MySqlProviderSourceVersionRepository(pool, lan1688Configured);
   }
 
   listProvisioned(codes: string[]) {

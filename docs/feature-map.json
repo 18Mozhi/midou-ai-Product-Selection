@@ -1,4 +1,25 @@
 {
+  "selectionLanSourceEnablement20261017": {
+    "status": "implemented",
+    "statusDetail": "local_113_tests_and_four_browser_cases_passed_not_deployed",
+    "requirements": "docs/selection-lan-source-enablement.md",
+    "sourceFiles": [
+      "apps/api/src/mysql-provider-source-version-repository.ts",
+      "apps/api/src/mysql-provider-source-repository.ts",
+      "apps/api/src/server.ts",
+      "apps/worker/src/provider-source-executor.ts",
+      "apps/worker/src/automatic-source-scheduler.ts",
+      "apps/web/src/components/ProviderSourceCenter.vue",
+      "apps/web/src/components/ProviderSourceDirectory.vue"
+    ],
+    "testFiles": [
+      "tests/unit/lan-1688-source-enablement.test.mjs",
+      "tests/unit/lan-1688-image-search.test.mjs",
+      "tests/unit/trend-rule-scheduler.test.mjs",
+      "tests/e2e/m03-07-provider-sources.spec.ts"
+    ],
+    "contract": "1688 source enablement and rollback require server LAN authorization configuration rather than browser profile/DOM acceptance. Existing permission, origin, idempotency, version and audit boundaries remain. No token or readiness flag is returned. Normal image sourcing cannot silently use a browser when image_url is absent; explicit historical browser probes stay separate. Keyword intelligence scheduling excludes 1688; primary-image sourcing remains downstream. Configured/enabled is not proof of live health or continuous production collection."
+  },
   "selectionEvidenceScoring20261017": {
     "status": "implemented",
     "statusDetail": "evidence_scores_decoupled_local_113_tests_passed_requires_production_acceptance",

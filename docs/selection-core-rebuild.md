@@ -26,7 +26,7 @@
 
 在宝塔受限 `product_scout.env` 中设置 `LAN_1688_TOKEN` 为用户提供的固定授权值；示例文件保持空白，密钥不得提交、回显或进入浏览器。`LAN_1688_TIMEOUT_MS=45000` 是单节点请求超时，可在 1000–60000 毫秒调整。六个地址及 POST 路径固定，翻页 1、page_size 60、result_limit 10 沿用用户示例。
 
-需要启用既有 `1688_search` 来源并配置有效运行环境。配置在进程启动时读取；部署后由宝塔重启唯一 Node 项目 `ai选品`，命令 `/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py nodejs ai选品`。无需新服务、依赖、数据库迁移或 Python 重启。当前尚未部署，不代表线上已经采用新界面或新通道。
+需要启用既有 `1688_search` 来源并配置有效运行环境。启用与启用状态回滚检查服务端 LAN 授权配置，不再要求旧 Cookie/DOM 验收；旧浏览器诊断仍独立保留。关键词情报调度不再向 1688 派发无图搜索，正常找货缺图不回退浏览器。见 `docs/selection-lan-source-enablement.md`。配置在进程启动时读取；部署后由宝塔重启唯一 Node 项目 `ai选品`，命令 `/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py nodejs ai选品`。无需新服务、依赖、数据库迁移或 Python 重启。当前尚未部署，不代表线上已经采用新界面或新通道。
 
 ## 必须继续完成，不能签收
 

@@ -36,7 +36,7 @@ test("rule scheduler queries the manual keyword crawler and completes all source
       if (sql.includes("SELECT id FROM users WHERE id=?")) return [[{ id: values[0] }], []];
       if (sql.includes("SELECT id,code,markets_json FROM providers"))
         return [
-          Array.from({ length: 17 }, (_, index) => ({
+          Array.from({ length: 18 }, (_, index) => ({
             id: `provider-${index}`,
             code:
               index === 0
@@ -72,7 +72,11 @@ test("rule scheduler queries the manual keyword crawler and completes all source
       (sql) => sql.includes("google-news-rss-v1") && sql.includes("google-news-fixed-rss-v1"),
     ),
   );
-  assert.ok(statements.some((sql) => sql.includes("1688-browser-contract-v3")));
+  assert.ok(statements.some((sql) => sql.includes("code<>'1688_search'")));
+  assert.equal(
+    statements.some((sql) => sql.includes("1688-browser-contract-v3")),
+    false,
+  );
   assert.ok(
     statements.some(
       (sql) =>
@@ -105,7 +109,7 @@ test("rule scheduler queries the manual keyword crawler and completes all source
   );
   assert.equal(
     targets.filter((target) => target.projection_type === "rule_product_discovery").length,
-    2,
+    1,
   );
 });
 

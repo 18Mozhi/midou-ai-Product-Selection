@@ -70,3 +70,7 @@ API 仓储按同一业务边界拆分：`mysql-provider-source-repository.ts` �
 `AUTOMATIC_SOURCE_SCHEDULER_POLL_MS` 控制 Worker 检查到期组织的周期，`AUTOMATIC_SOURCE_BATCH_SIZE` 控制单批来源数，`AUTOMATIC_SOURCE_TENANT_ACTIVE_TASK_BUDGET` 限制单组织活动自动任务，`AUTOMATIC_SOURCE_QUEUE_BACKLOG_LIMIT` 在全局积压达到门限时停止新增自动任务，`AUTOMATIC_SOURCE_SYSTEM_ACTOR_ID` 必须指向已创建并激活的专用系统用户。任一值修改后都需要通过宝塔重启统一后端“ai选品”。通用采集仍复用 `COLLECTION_TASK_*`、`PROVIDER_ADAPTER_*`、`PROVIDER_PROXY_*` 和 `EVIDENCE_*`。
 
 生产由宝塔管理 Node 后端项目“ai选品”和 Python 3.12 采集项目“ai选品-python”。API/Worker 由 Node 统一后端拉起，Worker 领取业务任务并排队登录型作业；Python 项目领取浏览器作业、维持作业/档案/全局 Crawler 租约并桥接 Playwright，结果仍由 Worker 解析和持久化。当前 1688 字段提取未验收，来源保持停用。不新增独立 Worker、候选后端、面板外服务、负载均衡或多节点能力。
+
+## 2026-10-17 LAN 图片找货接管
+
+1688 自动图片找货按 `docs/selection-lan-source-enablement.md` 执行，覆盖本文旧的网页登录启用前提。配置 `LAN_1688_TOKEN` 后由宝塔重启统一 Node 后端，再在来源设置启用；不新增 Cookie、浏览器档案、DOM 验收或外部服务。旧浏览器检查只证明其自身历史事实，不能证明 LAN 服务健康。无新环境变量或迁移。

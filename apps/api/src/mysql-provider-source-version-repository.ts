@@ -51,7 +51,10 @@ const requireCurrentPublicSmokeTest = async (
 };
 
 export class MySqlProviderSourceVersionRepository {
-  constructor(private readonly pool: Pool) {}
+  constructor(
+    private readonly pool: Pool,
+    private readonly lan1688Configured = false,
+  ) {}
   async configurationVersions(providerId: string): Promise<ProviderConfigurationHistory> {
     const [[provider], [versions]] = await Promise.all([
       this.pool.query<RowDataPacket[]>("SELECT id,version FROM providers WHERE id=? LIMIT 1", [
@@ -108,28 +111,17 @@ export class MySqlProviderSourceVersionRepository {
         current = rows[0];
       if (!current)
         throw new ProviderSourceServiceError("provider_not_found", 404, "刷新来源目录后重试。");
-      if (String(current.code) === "1688_search" && input.status === "enabled") {
-        const [acceptance] = await c.query<RowDataPacket[]>(
-          [
-            "SELECT COUNT(*) count FROM provider_parser_samples s WHERE s.provider_id=? AND ",
-            "s.status='active' AND s.review_status='approved' AND s.last_replay_status='passed' AND EXISTS (SELECT 1 FROM ",
-            "provider_parser_sample_replay_runs r WHERE r.sample_id=s.id AND r.parser_version=? AND ",
-            "r.status='passed' AND r.created_at=s.last_replay_at) AND EXISTS (SELECT 1 FROM crawler_profiles cp ",
-            "JOIN credential_assets ca ON ca.id=cp.credential_asset_id AND ca.provider_id=cp.provider_id ",
-            "JOIN crawler_browser_runs br ON br.crawler_profile_id=cp.id AND br.provider_id=cp.provider_id ",
-            "WHERE cp.provider_id=s.provider_id AND cp.status='active' AND ca.status='active' AND ",
-            "(ca.expires_at IS NULL OR ca.expires_at>NOW(3)) AND br.status IN ('succeeded','succeeded_empty') AND ",
-            "br.finished_at>=GREATEST(cp.updated_at,ca.updated_at))",
-          ].join(""),
-          [input.providerId, current.parser_version],
+      if (
+        String(current.code) === "1688_search" &&
+        input.status === "enabled" &&
+        !this.lan1688Configured
+      )
+        throw new ProviderSourceServiceError(
+          "provider_source_setup_required",
+          409,
+          "先在宝塔受限运行配置中设置 LAN_1688_TOKEN 并重启 Node 服务，再启用 1688 图片找货。",
         );
-        if (Number(acceptance[0]?.count ?? 0) < 1)
-          throw new ProviderSourceServiceError(
-            "provider_source_setup_required",
-            409,
-            "先在 1688 验收页通过登录态、验证码与当前解析器固定样本验收；当前来源只能保持停用。",
-          );
-      }
+
       if (
         input.status === "enabled" &&
         ["public_page", "public_rss"].includes(String(current.access_mode)) &&
@@ -321,28 +313,17 @@ export class MySqlProviderSourceVersionRepository {
           409,
           "历史版本的采集设置已不符合当前合同，不能回滚。",
         );
-      if (target.status === "enabled" && String(current.code) === "1688_search") {
-        const [acceptance] = await c.query<RowDataPacket[]>(
-          [
-            "SELECT COUNT(*) count FROM provider_parser_samples s WHERE s.provider_id=? AND ",
-            "s.status='active' AND s.review_status='approved' AND s.last_replay_status='passed' AND EXISTS (SELECT 1 FROM ",
-            "provider_parser_sample_replay_runs r WHERE r.sample_id=s.id AND r.parser_version=? AND ",
-            "r.status='passed' AND r.created_at=s.last_replay_at) AND EXISTS (SELECT 1 FROM crawler_profiles cp ",
-            "JOIN credential_assets ca ON ca.id=cp.credential_asset_id AND ca.provider_id=cp.provider_id ",
-            "JOIN crawler_browser_runs br ON br.crawler_profile_id=cp.id AND br.provider_id=cp.provider_id ",
-            "WHERE cp.provider_id=s.provider_id AND cp.status='active' AND ca.status='active' AND ",
-            "(ca.expires_at IS NULL OR ca.expires_at>NOW(3)) AND br.status IN ('succeeded','succeeded_empty') AND ",
-            "br.finished_at>=GREATEST(cp.updated_at,ca.updated_at))",
-          ].join(""),
-          [input.providerId, current.parser_version],
+      if (
+        String(current.code) === "1688_search" &&
+        target.status === "enabled" &&
+        !this.lan1688Configured
+      )
+        throw new ProviderSourceServiceError(
+          "provider_source_setup_required",
+          409,
+          "先在宝塔受限运行配置中设置 LAN_1688_TOKEN 并重启 Node 服务，再启用 1688 图片找货。",
         );
-        if (Number(acceptance[0]?.count ?? 0) < 1)
-          throw new ProviderSourceServiceError(
-            "provider_source_setup_required",
-            409,
-            "历史版本要求启用 1688，但当前登录态、验证码或解析验收未通过，不能回滚。",
-          );
-      }
+
       if (
         target.status === "enabled" &&
         ["public_page", "public_rss"].includes(String(current.access_mode)) &&

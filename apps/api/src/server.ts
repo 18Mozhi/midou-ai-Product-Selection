@@ -255,7 +255,9 @@ for (const adapter of createBuiltinSourceAdapters(
   createProviderSourceFetch(config.providerAdapters.proxy, {}, AUTOMATIC_PROVIDER_SOURCE_HOSTS),
 ))
   providerAdapterRegistry.register(adapter);
-const providerSourceService = new ProviderSourceService(new MySqlProviderSourceRepository(pool));
+const providerSourceService = new ProviderSourceService(
+  new MySqlProviderSourceRepository(pool, Boolean(config.providerAdapters.lan1688Token)),
+);
 const app = buildApp({
   logger: true,
   version: config.app.version,

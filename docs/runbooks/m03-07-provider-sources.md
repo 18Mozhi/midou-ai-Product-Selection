@@ -62,3 +62,7 @@
 - 登录型来源可先“打开登录页”，再上传 Playwright `storageState` JSON、浏览器 Cookie JSON、Netscape `cookies.txt` 或完整 `.tar.gz` 浏览器档案。
 - 也可由浏览器助手在用户点击后按目标域名读取当前浏览器 Cookie。扩展桥接只接受 `midouai.medouai.com` 与本地开发来源，Cookie 进入 API 后规范化、加密且不再返回。
 - 完整档案与 Cookie 文件是不同格式；不允许把 Cookie JSON 当作 tar.gz 解压。
+
+## 2026-10-17 LAN 图片找货接管
+
+1688 自动图片找货按 `docs/selection-lan-source-enablement.md` 执行，覆盖本文旧的网页登录启用前提。配置 `LAN_1688_TOKEN` 后由宝塔重启统一 Node 后端，再在来源设置启用；不新增 Cookie、浏览器档案、DOM 验收或外部服务。旧浏览器检查只证明其自身历史事实，不能证明 LAN 服务健康。无新环境变量或迁移。

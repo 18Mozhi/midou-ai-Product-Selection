@@ -3733,8 +3733,8 @@ paths:
         "503": { $ref: "#/components/responses/Error" }
   /platform/provider-sources/1688-acceptance:
     get:
-      summary: Read 1688 source enablement conditions
-      description: Requires platform:superadmin. Returns only the configured owner, source status, current login/captcha/parser gate results, evidence times, latest sanitized browser-run status and explicit pending reasons. A successful login-state run proves the current run was not captcha-blocked; credentials, cookies, profile identifiers, payloads and lease data are excluded. This secondary diagnostic endpoint is not exposed to ordinary platform operators.
+      summary: Read historical 1688 browser acceptance facts
+      description: Requires platform:superadmin. Returns only the configured owner, source status, current login/captcha/parser gate results, evidence times, latest sanitized browser-run status and explicit pending reasons. A successful login-state run proves the current run was not captcha-blocked; credentials, cookies, profile identifiers, payloads and lease data are excluded. This secondary diagnostic endpoint is not exposed to ordinary platform operators. These browser facts do not gate LAN image-service enablement and do not prove LAN health.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: platform:superadmin
       responses:
@@ -3825,7 +3825,7 @@ paths:
   /platform/provider-sources/{providerId}/configuration:
     put:
       summary: Update an admitted source collection configuration
-      description: Requires provider:configure, same-origin Origin and Idempotency-Key. Updates schedule, timeout, retry limit and enabled state with optimistic version control and a mandatory audited reason; startup catalog sync preserves these administrator-owned fields. A disabled public_page or public_rss source can be enabled only after its currently persisted timeout configuration has produced a ready real-page adapter health check. The UI stages changed settings as disabled, runs that smoke test, and submits a second version-locked enable request. Direct or rollback requests cannot bypass this gate.
+      description: Requires provider:configure, same-origin Origin and Idempotency-Key. Updates schedule, timeout, retry limit and enabled state with optimistic version control and a mandatory audited reason; startup catalog sync preserves these administrator-owned fields. A disabled public_page or public_rss source can be enabled only after its currently persisted timeout configuration has produced a ready real-page adapter health check. The UI stages changed settings as disabled, runs that smoke test, and submits a second version-locked enable request. Direct or rollback requests cannot bypass this public-source gate. For 1688 image sourcing, enabling requires LAN authorization configured on the server; browser profile and DOM sample acceptance are not prerequisites. This check does not contact the six nodes or assert healthy runtime collection, and no credential value is returned.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -3874,7 +3874,7 @@ paths:
   /platform/provider-sources/{providerId}/configuration/rollbacks:
     post:
       summary: Restore a historical source configuration as a new version
-      description: Requires provider:configure, same-origin Origin and Idempotency-Key. Restores only schedule, timeout, retry and status from an immutable older snapshot, rechecks current version, public-source terms and logged-in parser acceptance, then appends a new version and audit event without rewriting history.
+      description: Requires provider:configure, same-origin Origin and Idempotency-Key. Restores only schedule, timeout, retry and status from an immutable older snapshot, rechecks current version, public-source terms and smoke readiness, or server LAN authorization for 1688 image sourcing, then appends a new version and audit event without rewriting history.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }

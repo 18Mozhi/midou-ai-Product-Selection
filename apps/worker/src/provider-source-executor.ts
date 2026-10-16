@@ -285,6 +285,13 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       };
     let robotsDecision: RobotsPolicyDecision | undefined;
     try {
+      if (
+        provider.code === "1688_search" &&
+        this.lan1688 &&
+        !query.target.image_url &&
+        !acceptanceRun
+      )
+        throw new ProviderAdapterFailure("invalid_payload", false);
       if (["public_page", "public_rss"].includes(provider.accessMode)) {
         if (
           row.terms_review_status !== "approved" ||

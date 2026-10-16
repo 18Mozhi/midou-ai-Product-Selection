@@ -20,7 +20,7 @@ const props = defineProps<{
   categoryText: (item: ProviderSourceItem["category"]) => string;
   statusText: (item: ProviderSourceItem) => string;
   policyText: (item: ProviderSourceItem) => string;
-  modeText: (item: ProviderSourceItem["access_mode"]) => string;
+  modeText: (item: ProviderSourceItem["access_mode"], code?: string) => string;
   slaText: (item: ProviderSourceItem) => string;
   successText: (item: ProviderSourceItem) => string;
   effectiveAvailability: (item: ProviderSourceItem) => ProviderSourceItem["availability"];
@@ -100,7 +100,7 @@ async function closeDetail() {
           <dl class="source-record-summary" aria-label="来源摘要">
             <div>
               <dt>采集方式</dt>
-              <dd>{{ props.modeText(item.access_mode) }}</dd>
+              <dd>{{ props.modeText(item.access_mode, item.code) }}</dd>
             </div>
             <div>
               <dt>最近成功</dt>
@@ -134,7 +134,7 @@ async function closeDetail() {
             <dl class="source-record-facts">
               <div>
                 <dt>采集方式</dt>
-                <dd>{{ props.modeText(item.access_mode) }}</dd>
+                <dd>{{ props.modeText(item.access_mode, item.code) }}</dd>
               </div>
               <div>
                 <dt>频率</dt>
@@ -198,7 +198,7 @@ async function closeDetail() {
                 版本与回滚
               </button>
               <RouterLink
-                v-if="item.access_mode === 'authenticated_browser'"
+                v-if="item.access_mode === 'authenticated_browser' && item.code !== '1688_search'"
                 :to="`/platform-admin/credentials?provider_code=${encodeURIComponent(item.code)}&mode=login`"
                 >配置网页登录</RouterLink
               >
@@ -207,12 +207,12 @@ async function closeDetail() {
                 type="button"
                 @click="emit('samples', item)"
               >
-                固定样本回放
+                浏览器历史样本
               </button>
               <RouterLink
                 v-if="item.code === '1688_search'"
                 to="/platform-admin/providers/sources/1688-acceptance"
-                >登录准备状态</RouterLink
+                >浏览器历史检查</RouterLink
               >
               <span v-if="!item.provisioned && item.access_mode !== 'authenticated_browser'"
                 >等待系统登记</span
