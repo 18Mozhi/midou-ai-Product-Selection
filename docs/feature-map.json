@@ -1,4 +1,21 @@
 {
+  "selectionProductPriceEvidence20261017": {
+    "status": "implemented",
+    "statusDetail": "68_related_tests_and_8_browser_cases_passed_not_deployed",
+    "requirements": "docs/selection-product-price-evidence.md",
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/api/src/mysql-profit-repository.ts",
+      "apps/web/src/components/OpportunityProfitPanel.vue"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-evidence-scoring.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "apiRoutes": ["/api/v1/opportunities/{id}/profit-analysis"],
+    "contract": "Persist source sale and eligible matched procurement prices before category-specific fee gates. Preserve existing match rules, human-review protection and idempotency. Missing fees keep profit unknown and never queue profit. Existing current_inputs response and consumer remain unchanged."
+  },
   "selectionMarketIntelligenceLayout20261017": {
     "status": "implemented",
     "statusDetail": "market_layout_66_tests_18_browser_cases_plus_copy_retest_passed_not_deployed",

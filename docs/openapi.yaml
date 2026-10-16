@@ -11048,7 +11048,10 @@ components:
           required: [latest_run, current_inputs, cost_input_reviews]
           properties:
             latest_run: { type: object, nullable: true, additionalProperties: true }
-            current_inputs: { type: array, items: { type: object, additionalProperties: true } }
+            current_inputs:
+              type: array
+              description: Existing sourced or human-reviewed price inputs remain available even when no applicable fee rule or profit run exists. They are not a complete landed cost or a calculated profit.
+              items: { type: object, additionalProperties: true }
             cost_input_reviews:
               type: array
               items:

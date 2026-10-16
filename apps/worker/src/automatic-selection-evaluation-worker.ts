@@ -404,20 +404,6 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           now,
         );
       };
-      if (!costRules[0])
-        return await waitForCost("automatic_rules_not_active", {
-          score_rule: true,
-          cost_rule: false,
-        });
-      const automaticScope = parse<{ product_family?: string }>(
-        costRules[0].automatic_scope_json,
-        {},
-      );
-      if (automaticScope.product_family !== "phone_case" || !isPhoneCase(amazonTitle))
-        return await waitForCost("automatic_cost_scope_mismatch", {
-          configured_product_family: automaticScope.product_family ?? null,
-        });
-
       const [supplyRows] = await connection.query<RowDataPacket[]>(automaticSupplyEvidenceSql, [
         job.opportunityId,
         job.organizationId,
@@ -446,6 +432,51 @@ export class MySqlAutomaticSelectionEvaluationWorker {
             : [];
         }),
         supplyMatch = selectConservativeSupplyMatch(amazonTitle, supplies);
+
+      // Product prices are source facts; category-specific fees only gate profit calculation.
+      const saleChanged = await this.upsertCostInput(connection, {
+          job,
+          platform: "amazon",
+          type: "sale_price",
+          amount: amazonPrice,
+          currency: amazonCurrency,
+          sourceRef: `amazon:${String(amazon.raw_evidence_id)}`,
+          evidenceId: String(amazon.raw_evidence_id),
+          observedAt: date(amazon.observed_at),
+          requestId,
+          traceId,
+          now,
+        }),
+        purchaseChanged = supplyMatch
+          ? await this.upsertCostInput(connection, {
+              job,
+              platform: "amazon",
+              type: "purchase_price",
+              amount: supplyMatch.conservativePrice,
+              currency: supplyMatch.item.currency,
+              sourceRef: `1688:${supplyMatch.item.externalId}:p75:${supplyMatch.sampleCount}`,
+              evidenceId: supplyMatch.item.evidenceId,
+              observedAt: supplyMatch.item.observedAt,
+              requestId,
+              traceId,
+              now,
+            })
+          : false;
+
+      if (!costRules[0])
+        return await waitForCost("automatic_rules_not_active", {
+          score_rule: true,
+          cost_rule: false,
+        });
+      const automaticScope = parse<{ product_family?: string }>(
+        costRules[0].automatic_scope_json,
+        {},
+      );
+      if (automaticScope.product_family !== "phone_case" || !isPhoneCase(amazonTitle))
+        return await waitForCost("automatic_cost_scope_mismatch", {
+          configured_product_family: automaticScope.product_family ?? null,
+        });
+
       if (!supplyMatch)
         return await waitForCost("high_confidence_1688_match_missing", {
           evaluated_supply_records: supplies.length,
@@ -470,33 +501,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           conversion_configured: conversionConfigured,
         });
 
-      const saleChanged = await this.upsertCostInput(connection, {
-          job,
-          platform: "amazon",
-          type: "sale_price",
-          amount: amazonPrice,
-          currency: amazonCurrency,
-          sourceRef: `amazon:${String(amazon.raw_evidence_id)}`,
-          evidenceId: String(amazon.raw_evidence_id),
-          observedAt: date(amazon.observed_at),
-          requestId,
-          traceId,
-          now,
-        }),
-        purchaseChanged = await this.upsertCostInput(connection, {
-          job,
-          platform: "amazon",
-          type: "purchase_price",
-          amount: supplyMatch.conservativePrice,
-          currency: supplyMatch.item.currency,
-          sourceRef: `1688:${supplyMatch.item.externalId}:p75:${supplyMatch.sampleCount}`,
-          evidenceId: supplyMatch.item.evidenceId,
-          observedAt: supplyMatch.item.observedAt,
-          requestId,
-          traceId,
-          now,
-        }),
-        [currentCostRows] = await connection.query<RowDataPacket[]>(
+      const [currentCostRows] = await connection.query<RowDataPacket[]>(
           "SELECT id,input_type,evidence_id,input_version,confirmation_mode,created_at FROM " +
             "opportunity_cost_inputs WHERE opportunity_id=? AND organization_id=? AND workspace_id=? " +
             "AND platform='amazon' AND input_type IN ('sale_price','purchase_price') AND is_current=1",

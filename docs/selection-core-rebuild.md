@@ -34,7 +34,7 @@
 1. 情报关联假设、Amazon 实际搜索结果主品选择及原新闻证据关联已接入现有任务链，见 `docs/intelligence-product-association.md`；独立竞品调度、详情采集、去重和对比见 `docs/selection-competitor-discovery.md`。旧关键词规则推荐门槛已替换为真实主品证据条件，见 `docs/selection-primary-candidacy.md`；历史情报回填和真实自动采集验收仍待完成。
 2. 购买提示下限、评价数、类目排名和已观察广告标记已接入证据及对比表，见 `docs/amazon-public-signals.md`；公开评价节选已接入主品/竞品对比，见 `docs/amazon-public-review-samples.md`；全量评价、广告历史与真实持续采集仍待完成。非公开指标如精确竞品广告花费和真实成交量不可编造，现有数据不能证明免费渠道可取得全部指标。
 3. 真实证据评分已与费用范围解耦，费用不适用时仍计算可用维度、利润保持未知，见 `docs/selection-evidence-scoring.md`。通用品类成本闭环仍待完成；不能把测试夹具权重当成用户规则，也不能把手机壳专用费用估值外推全部品类。
-4. 当前主品及关联任务货源取证、独立链接去重与新人价排除已修复，见 `docs/selection-cost-evidence.md`。通用品类有事实依据的采购成本和费用分析仍需继续完成；不将手机壳物流估值外推其他品类。
+4. 当前主品及关联任务货源取证、独立链接去重与新人价排除已修复，见 `docs/selection-cost-evidence.md`。价格输入已与手机壳费用范围解耦，符合既有匹配条件的通用品可记录采购价，见 `docs/selection-product-price-evidence.md`。真实跨语言同款和通用品类费用分析仍需继续完成；不将手机壳物流估值外推其他品类。
 5. 历史缺失找货任务已补接主品图片与 1688，持续繁忙时每 20 个投影任务给补偿执行轮次；自动分流旧供应商来源已删除，见 `docs/selection-sourcing-recovery.md`。无图任务获取主图、六节点状态及跨进程并发协调仍待完善。当前单节点并发约束仅在一个 Worker 进程内，符合现有固定单 Worker 拓扑。
 6. 用户端独立报表与导出已删除运行组件和专用样式，旧链接转至选品库，后台 API 与历史数据不删除，见 `docs/selection-retired-member-reports.md`。其他旧用户模块及残余入口继续按真实依赖清理；当前不能宣称全部模块均已删除。
 7. 全页面视觉与详情重制、后台保留回归，真实部署验收，持续运行及每日至少 100 个有效商品的计数证据。

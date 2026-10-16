@@ -2700,3 +2700,52 @@ test("opportunity evidence uses progressive batches instead of rendering every r
   await evidencePanel.getByRole("button", { name: "收起到最新 20 条" }).click();
   await expect(evidencePanel.locator(":scope > a")).toHaveCount(20);
 });
+
+test("source prices remain visible when generic product profit has not been calculated", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
+    route.fulfill({
+      json: envelope({
+        latest_run: null,
+        cost_input_reviews: [],
+        current_inputs: [
+          {
+            input_type: "sale_price",
+            amount_value: 25,
+            currency: "USD",
+            platform: "amazon",
+            source_type: "automatic_crawler_evidence",
+            source_ref_id: "amazon:fixture-price",
+            evidence_id: topicId,
+            observed_at: "2026-10-17T00:00:00.000Z",
+            input_version: 1,
+            confirmation_mode: "automatic_evidence",
+          },
+          {
+            input_type: "purchase_price",
+            amount_value: 5,
+            currency: "CNY",
+            platform: "amazon",
+            source_type: "automatic_crawler_evidence",
+            source_ref_id: "1688:fixture-offer:p75:3",
+            evidence_id: topicId,
+            observed_at: "2026-10-17T00:00:00.000Z",
+            input_version: 1,
+            confirmation_mode: "automatic_evidence",
+          },
+        ],
+      }),
+    }),
+  );
+  await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+  const panel = page.locator(".opportunity-profit");
+  await expect(panel.getByText("数据不足，不能生成可靠 ROI", { exact: true })).toBeVisible();
+  const prices = panel.locator(".profit-current-inputs");
+  await expect(prices.getByText("25 USD · amazon", { exact: true })).toBeVisible();
+  await expect(prices.getByText("5 CNY · amazon", { exact: true })).toBeVisible();
+  await expect(prices.getByText("采购价", { exact: true })).toBeVisible();
+  await expect(prices.getByText(/1688:fixture-offer:p75:3/)).toBeVisible();
+  await expect(panel.locator(".profit-summary")).toHaveCount(0);
+});

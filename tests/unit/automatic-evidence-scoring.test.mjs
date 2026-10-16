@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { MySqlProfitRepository } from "../../apps/api/dist/mysql-profit-repository.js";
 import { calculateScoreProjection } from "../../packages/contracts/dist/index.js";
 import { MySqlAutomaticSelectionEvaluationWorker } from "../../apps/worker/dist/automatic-selection-evaluation-worker.js";
 import {
@@ -33,14 +34,16 @@ const dimensions = ["market_demand", "competition", "profit", "risk", "data_qual
 function fixture(options = {}) {
   const calls = [],
     inputs = new Map();
-  const humanCosts = ["sale_price", "purchase_price"].map((input_type) => ({
-    id: input_type,
-    input_type,
-    evidence_id: `human-${input_type}`,
-    input_version: 1,
-    confirmation_mode: "human_review",
-    created_at: now,
-  }));
+  const humanCosts = (options.noHumanCosts ? [] : ["sale_price", "purchase_price"]).map(
+    (input_type) => ({
+      id: input_type,
+      input_type,
+      evidence_id: `human-${input_type}`,
+      input_version: 1,
+      confirmation_mode: "human_review",
+      created_at: now,
+    }),
+  );
   let commits = 0,
     rollbacks = 0;
   const connection = {
@@ -65,7 +68,7 @@ function fixture(options = {}) {
                 {
                   id: "phone-cost",
                   automatic_scope_json: { product_family: "phone_case" },
-                  fee_lines_json: [{ type: "logistics" }],
+                  fee_lines_json: options.noFeePolicy ? [] : [{ type: "logistics" }],
                   conversion_rates_json: [
                     { base_currency: "CNY", quote_currency: "USD", effective_on: "2026-01-01" },
                   ],
@@ -113,12 +116,28 @@ function fixture(options = {}) {
             created_at: now,
             payload_json: {
               external_id: String(id),
-              title: "苹果 17 Pro Max 手机壳",
-              price: 5,
+              title: options.supplyTitle ?? "苹果 17 Pro Max 手机壳",
+              price: options.supplyPrice === undefined ? 5 : options.supplyPrice,
+              price_description: options.priceDescription ?? null,
               currency: "CNY",
             },
           })),
         ];
+      if (options.failPriceWrite && sql.startsWith("INSERT INTO opportunity_cost_inputs"))
+        throw new Error("price write unavailable");
+      if (sql.startsWith("INSERT INTO opportunity_cost_inputs")) {
+        humanCosts.push({
+          id: params[0],
+          input_type: params[5],
+          amount_value: params[6],
+          currency: params[7],
+          evidence_id: params[10],
+          source_ref_id: params[9],
+          input_version: params[12],
+          confirmation_mode: "automatic_evidence",
+          created_at: params[16],
+        });
+      }
       if (sql.startsWith("SELECT * FROM opportunity_cost_inputs"))
         return [[humanCosts.find((row) => row.input_type === params[4])]];
       if (sql.startsWith("SELECT id,input_type,evidence_id,input_version")) return [humanCosts];
@@ -155,7 +174,7 @@ function fixture(options = {}) {
     120,
     () => now,
   );
-  return { worker, calls, inputs, counts: () => ({ commits, rollbacks }) };
+  return { worker, calls, inputs, prices: humanCosts, counts: () => ({ commits, rollbacks }) };
 }
 
 for (const noCostRule of [false, true]) {
@@ -319,4 +338,149 @@ test("production score projection displays partial coverage without recommending
   assert.ok(
     projection.missing_fields.includes("automatic_evaluation.profit.automatic_cost_scope_mismatch"),
   );
+});
+
+for (const noCostRule of [false, true]) {
+  test(`generic matched procurement price persists with ${noCostRule ? "no fee rule" : "phone-only fee rule"} while profit stays unknown`, async () => {
+    const f = fixture({
+      noCostRule,
+      noHumanCosts: true,
+      supplyTitle: "Stainless steel kitchen storage rack",
+    });
+    const result = await f.worker.evaluate(job);
+    assert.equal(result.status, "waiting_evidence");
+    assert.equal(
+      result.payload.error_code,
+      noCostRule ? "automatic_rules_not_active" : "automatic_cost_scope_mismatch",
+    );
+    assert.deepEqual(
+      f.prices.map((item) => [item.input_type, item.amount_value, item.currency]),
+      [
+        ["sale_price", 25, "USD"],
+        ["purchase_price", 5, "CNY"],
+      ],
+    );
+    const purchase = f.prices.find((item) => item.input_type === "purchase_price");
+    assert.equal(purchase.confirmation_mode, "automatic_evidence");
+    assert.match(purchase.source_ref_id, /^1688:[123]:p75:3$/);
+    assert.match(purchase.evidence_id, /^supply-[123]$/);
+    for (const write of f.calls.filter((call) =>
+      call.sql.startsWith("INSERT INTO opportunity_cost_inputs"),
+    )) {
+      assert.deepEqual(write.params.slice(1, 5), [
+        job.organizationId,
+        job.workspaceId,
+        job.opportunityId,
+        "amazon",
+      ]);
+    }
+    assert.equal(f.inputs.get("profit").score_value, null);
+    assert.equal(
+      f.calls.some((call) => call.sql.includes("INSERT INTO opportunity_profit_jobs")),
+      false,
+    );
+    assert.deepEqual(f.counts(), { commits: 1, rollbacks: 0 });
+    f.calls.length = 0;
+    await f.worker.evaluate(job);
+    assert.equal(
+      f.calls.some((call) => call.sql.startsWith("INSERT INTO opportunity_cost_inputs")),
+      false,
+      "same source price is idempotent",
+    );
+  });
+}
+
+for (const priceOptions of [
+  { supplyTitle: "unrelated phone case" },
+  { supplyPrice: null },
+  { priceDescription: "新人价" },
+]) {
+  test(`generic missing or conditional offer never becomes purchase cost: ${JSON.stringify(priceOptions)}`, async () => {
+    const f = fixture({
+      noCostRule: true,
+      noHumanCosts: true,
+      supplyTitle: "Stainless steel kitchen storage rack",
+      ...priceOptions,
+    });
+    await f.worker.evaluate(job);
+    assert.deepEqual(
+      f.prices.map((item) => item.input_type),
+      ["sale_price"],
+    );
+    assert.equal(f.inputs.get("profit").score_value, null);
+  });
+}
+
+test("phone product records source prices without fee policy but never queues estimated profit", async () => {
+  const f = fixture({ phone: true, noFeePolicy: true, noHumanCosts: true });
+  const result = await f.worker.evaluate(job);
+  assert.equal(result.payload.error_code, "automatic_cost_policy_incomplete");
+  assert.equal(f.prices.length, 2);
+  assert.equal(
+    f.calls.some((call) => call.sql.startsWith("INSERT INTO opportunity_profit_jobs")),
+    false,
+  );
+  assert.equal(f.inputs.get("profit").score_value, null);
+});
+
+test("price write failure rolls back before completing a waiting evaluation", async () => {
+  const f = fixture({ noHumanCosts: true, noCostRule: true, failPriceWrite: true });
+  await assert.rejects(f.worker.evaluate(job), /price write unavailable/);
+  assert.deepEqual(f.counts(), { commits: 0, rollbacks: 1 });
+  assert.equal(
+    f.calls.some((call) => call.sql.startsWith("UPDATE automatic_selection_evaluations")),
+    false,
+  );
+});
+
+test("profit API returns sourced prices even without a profit run or fee rule", async () => {
+  const f = fixture({
+    noHumanCosts: true,
+    noCostRule: true,
+    supplyTitle: "Stainless steel kitchen storage rack",
+  });
+  await f.worker.evaluate(job);
+  const reads = [];
+  const repo = new MySqlProfitRepository({
+    query: async (sql, params) => {
+      reads.push({ sql, params });
+      if (sql.startsWith("SELECT id FROM opportunities")) return [[{ id: job.opportunityId }]];
+      if (sql.includes("FROM opportunity_cost_inputs WHERE"))
+        return [
+          f.prices.map((item) => ({
+            ...item,
+            platform: "amazon",
+            source_type: "automatic_crawler_evidence",
+            observed_at: now,
+          })),
+        ];
+      if (
+        sql.includes("FROM opportunity_profit_runs") ||
+        sql.includes("FROM opportunity_cost_input_reviews")
+      )
+        return [[]];
+      throw new Error("unexpected analysis read");
+    },
+  });
+  const result = await repo.getAnalysis({ ...job, actorId: "actor" });
+  assert.equal(result.latest_run, null);
+  assert.deepEqual(
+    result.current_inputs.map((item) => [item.input_type, item.amount_value, item.currency]),
+    [
+      ["sale_price", 25, "USD"],
+      ["purchase_price", 5, "CNY"],
+    ],
+  );
+  assert.equal(
+    result.current_inputs.every(
+      (item) => item.evidence_id && item.observed_at === now.toISOString(),
+    ),
+    true,
+  );
+  assert.equal(
+    reads.some((item) => item.sql.includes("FROM cost_rules")),
+    false,
+  );
+  for (const read of reads)
+    assert.deepEqual(read.params, [job.opportunityId, job.organizationId, job.workspaceId]);
 });

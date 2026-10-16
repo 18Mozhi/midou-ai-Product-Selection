@@ -257,10 +257,14 @@ test("automatic evaluation binds primary identity and supply tasks to the curren
   assert.ok(automaticPrimaryEvidenceSql.includes(selectionPrimaryAsinSql));
   assert.match(automaticSupplyEvidenceSql, /ss.input_type='opportunity' AND ss.input_ref=\?/);
   assert.match(automaticSupplyEvidenceSql, /n.raw_evidence_id=l.raw_evidence_id/);
-  assert.doesNotMatch(
-    calls.map((call) => call.sql).join("\n"),
-    /INSERT INTO opportunity_cost_inputs/,
+  const priceWrites = calls.filter((call) =>
+    call.sql.startsWith("INSERT INTO opportunity_cost_inputs"),
   );
+  assert.deepEqual(
+    priceWrites.map((call) => call.params[5]),
+    ["sale_price"],
+  );
+  assert.equal(priceWrites[0].params[10], "main-evidence");
   const invalidation = calls.find((call) => call.sql.startsWith("UPDATE opportunities o"));
   assert.ok(invalidation);
   assert.match(invalidation.sql, /ci.confirmation_mode='automatic_evidence'/);
