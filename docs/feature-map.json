@@ -1,4 +1,30 @@
 {
+  "selectionCompetitors20261017": {
+    "status": "implemented",
+    "statusDetail": "local_implementation_requires_live_collection_acceptance",
+    "requirements": "docs/selection-competitor-discovery.md",
+    "sourceFiles": [
+      "packages/contracts/src/selection-core.ts",
+      "apps/worker/src/competitor-discovery-policy.ts",
+      "apps/worker/src/core-collection-projection-worker.ts",
+      "apps/worker/src/trend-projection-persistence.ts",
+      "apps/api/src/opportunity-selection-policy.ts",
+      "apps/web/src/components/SelectionProductComparison.vue"
+    ],
+    "apiRoutes": [
+      "/api/v1/opportunities",
+      "/api/v1/opportunities/{id}",
+      "/api/v1/opportunities/{id}/competitor-discovery",
+      "/api/v1/competitors"
+    ],
+    "testFiles": [
+      "tests/unit/competitor-discovery-policy.test.mjs",
+      "tests/unit/opportunity-selection-policy.test.mjs",
+      "tests/unit/selection-journey-adoption-gates.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "verification": "MySQL 5.7.44 read-only EXPLAIN for current projection and detail-evidence queries passed; no production writes or restart."
+  },
   "selectionCoreRebuild20261016": {
     "status": "planned",
     "statusDetail": "in_progress_partial_delivery",

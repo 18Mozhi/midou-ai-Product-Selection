@@ -641,6 +641,31 @@ export class TrendProjectionPersistence {
             providerId: providers.amazon,
             required: true,
             target: {
+              query: title.slice(0, 300),
+              projection_type: "opportunity_competitors",
+              opportunity_id: opportunityId,
+              main_asin: asin,
+            },
+          },
+        ],
+        "competitor.discovery.auto_scheduled",
+        now,
+      );
+      await this.scheduleCoreCollection(
+        c,
+        {
+          organizationId: job.organizationId,
+          workspaceId: job.workspaceId,
+          actorId: job.actorId,
+          requestId: job.requestId,
+          traceId: job.traceId,
+        },
+        randomUUID(),
+        [
+          {
+            providerId: providers.amazon,
+            required: true,
+            target: {
               page_url: canonicalUrl,
               asin,
               projection_type: "competitor_snapshot",

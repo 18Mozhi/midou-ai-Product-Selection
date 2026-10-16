@@ -557,6 +557,83 @@ test("a late create success does not close or navigate away from a reopened crea
   await expect(dialog.getByRole("button", { name: "创建机会", exact: true })).toBeEnabled();
 });
 
+for (const [competitorCount, detailCollected, sourceEnabled] of [
+  [4, true, true],
+  [5, true, true],
+  [5, false, true],
+  [5, true, false],
+] as const) {
+  test(`selection comparison separates the primary from ${competitorCount} independent competitors (details ${detailCollected}, source ${sourceEnabled})`, async ({
+    page,
+  }, testInfo) => {
+    const mainAsin = "B000000000";
+    await ready(page, evidence, { main_asin: mainAsin }, [
+      "task:read",
+      "trend:read",
+      "opportunity:read",
+      "opportunity:decide",
+      "competitor:read",
+    ]);
+    const product = (index: number) => ({
+      id: `product-${index}`,
+      opportunity_id: opportunityId,
+      market: "US",
+      source_site: index % 2 ? "Amazon" : "amazon",
+      external_id: `B0${String(index).padStart(8, "0")}`,
+      title: index === 0 ? "主要商品示例" : `竞品示例 ${index}`,
+      snapshot_count: 1,
+      latest_snapshot: {
+        current_price: 19.99 + index,
+        currency: "USD",
+        review_count: 100 + index,
+        rating_value: 4.5,
+        captured_at: "2026-10-17T00:00:00Z",
+        freshness: "fresh",
+        source_status: "healthy",
+        detail_collected: detailCollected,
+        source_enabled: sourceEnabled,
+      },
+    });
+    await page.route("**/api/v1/competitors", (route) =>
+      route.fulfill({
+        json: envelope([
+          product(0),
+          ...Array.from({ length: competitorCount }, (_, index) => product(index + 1)),
+          product(1),
+        ]),
+      }),
+    );
+    await page.goto(`/opportunities/${opportunityId}?tab=competition`);
+    const comparison = page.getByRole("region", { name: "Amazon 主品与竞品" });
+    await expect(comparison.getByRole("heading", { name: "主要商品示例" })).toBeVisible();
+    await expect(comparison.locator("tbody tr")).toHaveCount(competitorCount);
+    await expect(
+      comparison.getByText(
+        `有效快照 ${detailCollected && sourceEnabled ? competitorCount : 0} / 至少 5 个`,
+        {
+          exact: true,
+        },
+      ),
+    ).toBeVisible();
+    await expect(comparison.locator("tbody").getByText("主要商品示例")).toHaveCount(0);
+    if (competitorCount === 4 || !detailCollected || !sourceEnabled)
+      await expect(
+        comparison.getByText("竞品数据尚不完整，继续采集后再判断竞争情况。"),
+      ).toBeVisible();
+    else await expect(comparison.locator('[data-ready="true"]')).toBeVisible();
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+      .toBe(true);
+    if (competitorCount === 5 && detailCollected && sourceEnabled)
+      await comparison.screenshot({ path: testInfo.outputPath("selection-comparison.png") });
+    if ((page.viewportSize()?.width ?? 0) <= 760)
+      await page.locator(".opportunity-detail-directory-mobile > summary").click();
+    await page.getByRole("button", { name: "结论", exact: true }).click();
+    await expect(page.getByText(`${competitorCount} 个关联竞品`, { exact: true })).toBeVisible();
+    await expect(page.getByText(`${competitorCount}个快照`, { exact: true })).toBeVisible();
+  });
+}
+
 test("commerce catalogue switches layouts and keeps product navigation and missing images", async ({
   page,
 }, testInfo) => {
@@ -2320,7 +2397,7 @@ test("late competitor data stays scoped to the opportunity that requested it", a
       opportunity_id: opportunityId,
       market: "US",
       source_site: "amazon",
-      external_id: "OLD-ASIN",
+      external_id: "B000000441",
       title: "旧机会关联竞品",
       snapshot_count: 0,
       latest_snapshot: null,
@@ -2329,7 +2406,7 @@ test("late competitor data stays scoped to the opportunity that requested it", a
       ...oldCompetitor,
       id: "current-competitor",
       opportunity_id: nextOpportunityId,
-      external_id: "CURRENT-ASIN",
+      external_id: "B000000442",
       title: "当前机会关联竞品",
     };
   await ready(page);

@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   evaluateOpportunitySelection,
   opportunityRecommendedSql,
+  competitorDetailEvidenceSql,
 } from "../../apps/api/dist/opportunity-selection-policy.js";
 
 const complete = {
@@ -17,6 +18,7 @@ const complete = {
   competition_score: 76,
   profit_status: "calculated",
   risk_gate_passed: 1,
+  competition_gate_passed: 1,
 };
 
 test("five passed quality gates expose a recommendation while keeping adoption human", () => {
@@ -33,11 +35,32 @@ test("five passed quality gates expose a recommendation while keeping adoption h
   });
 });
 
+test("competition provenance fails closed and must bind detail task, product and exact evidence", () => {
+  for (const competition_gate_passed of [undefined, null, false, 0])
+    assert.equal(
+      evaluateOpportunitySelection({ ...complete, competition_gate_passed }).quality_gates
+        .competition,
+      false,
+    );
+  const sql = competitorDetailEvidenceSql("s");
+  for (const evidence of [
+    "l_detail.raw_evidence_id=s.evidence_id",
+    "l_detail.normalized_record_id",
+    "s.competitor_id",
+    "q_detail.organization_id=s.organization_id",
+    "q_detail.workspace_id=s.workspace_id",
+    "'competitor_snapshot'",
+    "(dp|gp/product)",
+  ])
+    assert.ok(sql.includes(evidence), evidence);
+});
+
 test("a threshold match remains a rule candidate when any one quality gate is missing", () => {
   for (const [field, value] of [
     ["overall_score", null],
     ["trend_score", null],
     ["competition_score", null],
+    ["competition_gate_passed", 0],
     ["profit_status", "insufficient_data"],
     ["risk_gate_passed", 0],
   ]) {
@@ -61,7 +84,10 @@ test("recommended SQL names the same five persisted quality gates and stays MySQ
     "competition_score IS NOT NULL",
     "profit_status='calculated'",
     "dimension_code='risk'",
+    "COUNT(DISTINCT UPPER(c_sample.external_id))",
+    ">=5",
+    "p_sample.status='enabled'",
   ])
-    assert.match(opportunityRecommendedSql, new RegExp(fact));
+    assert.ok(opportunityRecommendedSql.includes(fact), fact);
   assert.doesNotMatch(opportunityRecommendedSql, /WITH\s+|JSON_TABLE|QUALIFY/i);
 });

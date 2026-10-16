@@ -28,6 +28,7 @@ const complete = {
   competition_score: 76,
   profit_status: "calculated",
   risk_gate_passed: 1,
+  competition_gate_passed: 1,
 };
 function harness(opportunity, { replay = false, blocked = false } = {}) {
   const statements = [];
@@ -100,6 +101,7 @@ for (const [name, row] of [
   ["competition", { ...complete, competition_score: null }],
   ["cost", { ...complete, profit_status: "insufficient_data" }],
   ["risk", { ...complete, risk_gate_passed: 0 }],
+  ["five independent competitors", { ...complete, competition_gate_passed: 0 }],
   ["coverage", { ...complete, coverage_status: "partial" }],
   ["enabled rule threshold", { ...complete, rule_candidate_ready: 0 }],
   ["already decided", { ...complete, decision_status: "adopted" }],

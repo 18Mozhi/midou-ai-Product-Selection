@@ -1,6 +1,10 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
+  competitorDetailEvidenceSql,
+  opportunityPrimaryAsinSql,
+} from "./opportunity-selection-policy.js";
+import {
   CompetitorServiceError,
   type CompetitorRepository,
   type CompetitorWriteContext,
@@ -12,10 +16,11 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
   constructor(private readonly pool: Pool) {}
   async list(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT c.*,s.current_price,s.currency,s.rank_value,s.review_count,s.rating_value," +
+      "SELECT c.*,p_snapshot.status provider_status,s.current_price,s.currency,s.rank_value,s.review_count,s.rating_value," +
         "s.availability,s.captured_at,s.freshness,s.source_status,s.source_ref_id," +
-        "s.evidence_id,(SELECT COUNT(*) FROM competitor_snapshots history WHERE history.competitor_id=c.id) " +
+        `s.evidence_id,${competitorDetailEvidenceSql("s")} detail_collected,(SELECT COUNT(*) FROM competitor_snapshots history WHERE history.competitor_id=c.id) ` +
         "snapshot_count FROM competitors c LEFT JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id " +
+        "LEFT JOIN providers p_snapshot ON p_snapshot.id=c.provider_id " +
         "WHERE c.organization_id=? AND c.workspace_id=? AND c.deleted_at IS NULL ORDER BY c.updated_at " +
         "DESC,c.id DESC",
       [i.organizationId, i.workspaceId],
@@ -24,10 +29,11 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
   }
   async get(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT c.*,s.current_price,s.currency,s.rank_value,s.review_count,s.rating_value," +
+      "SELECT c.*,p_snapshot.status provider_status,s.current_price,s.currency,s.rank_value,s.review_count,s.rating_value," +
         "s.availability,s.captured_at,s.freshness,s.source_status,s.source_ref_id," +
-        "s.evidence_id,(SELECT COUNT(*) FROM competitor_snapshots history WHERE history.competitor_id=c.id) " +
+        `s.evidence_id,${competitorDetailEvidenceSql("s")} detail_collected,(SELECT COUNT(*) FROM competitor_snapshots history WHERE history.competitor_id=c.id) ` +
         "snapshot_count FROM competitors c LEFT JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id " +
+        "LEFT JOIN providers p_snapshot ON p_snapshot.id=c.provider_id " +
         "WHERE c.id=? AND c.organization_id=? AND c.workspace_id=? AND c.deleted_at IS NULL",
       [i.competitorId, i.organizationId, i.workspaceId],
     );
@@ -357,7 +363,7 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT name FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
+        `SELECT o.name,${opportunityPrimaryAsinSql} main_asin FROM opportunities o WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? FOR UPDATE`,
         [i.opportunityId, i.organizationId, i.workspaceId],
       );
       if (!rows[0])
@@ -371,6 +377,7 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
           query: String(rows[0].name),
           projection_type: "opportunity_competitors",
           opportunity_id: i.opportunityId,
+          ...(rows[0].main_asin ? { main_asin: String(rows[0].main_asin) } : {}),
         },
         now,
       );
@@ -579,6 +586,8 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
       snapshot_count: Number(r.snapshot_count ?? 0),
       latest_snapshot: r.latest_snapshot_id
         ? {
+            detail_collected: Boolean(Number(r.detail_collected)),
+            source_enabled: r.provider_status === "enabled",
             id: String(r.latest_snapshot_id),
             current_price: r.current_price == null ? null : Number(r.current_price),
             currency: r.currency == null ? null : String(r.currency),

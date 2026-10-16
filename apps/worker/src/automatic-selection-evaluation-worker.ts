@@ -1,5 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { amazonAsin } from "./competitor-discovery-policy.js";
 import {
   AUTOMATIC_SELECTION_FORMULA_VERSION,
   calculateAutomaticScoreFacts,
@@ -245,8 +246,14 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       const [competitors] = await connection.query<RowDataPacket[]>(
         "SELECT s.* FROM competitors c JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id " +
           "WHERE c.opportunity_id=? AND c.organization_id=? AND c.workspace_id=? AND c.status='active' " +
+          "AND c.source_site='Amazon' AND c.external_id=? AND c.deleted_at IS NULL " +
           "ORDER BY s.captured_at DESC,s.id DESC LIMIT 1",
-        [job.opportunityId, job.organizationId, job.workspaceId],
+        [
+          job.opportunityId,
+          job.organizationId,
+          job.workspaceId,
+          amazonAsin(fields, text(fields.canonical_url ?? fields.source_url)) ?? "",
+        ],
       );
       const competitor = competitors[0];
       if (!competitor)
@@ -419,7 +426,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           price: amazonPrice,
           currency: amazonCurrency,
           reviewCount: number(fields.review_count ?? competitor.review_count),
-          rating: number(fields.rating ?? competitor.rating_value),
+          rating: number(fields.rating_value ?? fields.rating ?? competitor.rating_value),
           availability: competitor.availability,
           observedAt: date(amazon.observed_at),
           evidenceId: String(amazon.raw_evidence_id),

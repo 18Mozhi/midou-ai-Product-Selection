@@ -1,5 +1,10 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import {
+  amazonAsin,
+  COMPETITOR_DISCOVERY_MINIMUM,
+  selectIndependentCompetitors,
+} from "./competitor-discovery-policy.js";
 
 type ProjectionType = "opportunity_competitors" | "competitor_snapshot" | "sourcing_search";
 type Job = {
@@ -12,6 +17,7 @@ type Job = {
   requestId: string;
   traceId: string;
   actorId: string;
+  primaryAsin: string | null;
 };
 type RecordRow = RowDataPacket & {
   id: string;
@@ -30,10 +36,6 @@ const optionalNumber = (value: unknown) => {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 };
-const asinFrom = (fields: Record<string, unknown>, url: string) =>
-  optionalText(fields.asin, 10)?.toUpperCase() ??
-  /\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:[/?]|$)/i.exec(url)?.[1]?.toUpperCase() ??
-  null;
 
 export class CoreCollectionProjectionWorker {
   constructor(
@@ -47,15 +49,26 @@ export class CoreCollectionProjectionWorker {
     if (!job) return { status: "idle" as const };
     try {
       const count = await this.project(job);
+      const incomplete =
+        job.projectionType === "opportunity_competitors" && count < COMPETITOR_DISCOVERY_MINIMUM;
       await this.pool.query(
-        "UPDATE core_collection_projection_runs SET status=?,item_count=?,finished_at=? WHERE id=? AND status='processing'",
-        [count ? "succeeded" : "succeeded_empty", count, this.now(), job.runId],
+        "UPDATE core_collection_projection_runs SET status=?,item_count=?,error_code=?,finished_at=? WHERE id=? AND status='processing'",
+        [
+          count ? "succeeded" : "succeeded_empty",
+          count,
+          incomplete ? "competitor_count_below_minimum" : null,
+          this.now(),
+          job.runId,
+        ],
       );
       return {
         status: count ? ("succeeded" as const) : ("succeeded_empty" as const),
         task_id: job.taskId,
         projection_type: job.projectionType,
         item_count: count,
+        ...(job.projectionType === "opportunity_competitors"
+          ? { discovery_status: incomplete ? "insufficient" : "minimum_met" }
+          : {}),
       };
     } catch (error) {
       const code = String((error as { code?: string }).code ?? "projection_failed")
@@ -120,6 +133,10 @@ export class CoreCollectionProjectionWorker {
         requestId: String(row.request_id),
         traceId: String(row.trace_id),
         actorId: String(row.created_by),
+        primaryAsin:
+          typeof target.main_asin === "string" && /^[A-Z0-9]{10}$/i.test(target.main_asin)
+            ? target.main_asin.toUpperCase()
+            : null,
       };
     } catch (error) {
       await c.rollback();
@@ -176,11 +193,19 @@ export class CoreCollectionProjectionWorker {
     );
     if (!opportunities[0]) throw new Error("opportunity_not_found");
     let count = 0;
-    for (const record of records) {
+    const selected = selectIndependentCompetitors(
+      records,
+      (record) => {
+        const fields = parse<Record<string, unknown>>(record.payload_json);
+        return { fields, canonicalUrl: String(fields.canonical_url ?? fields.source_url ?? "") };
+      },
+      job.primaryAsin,
+    );
+    for (const record of selected) {
       const fields = parse<Record<string, unknown>>(record.payload_json),
         url = optionalText(fields.canonical_url ?? fields.source_url),
         title = optionalText(fields.title, 500),
-        asin = url ? asinFrom(fields, url) : null;
+        asin = url ? amazonAsin(fields, url) : null;
       if (!url || !title || !asin) continue;
       const competitorId = randomUUID();
       const [insert] = await c.query<any>(
@@ -201,18 +226,106 @@ export class CoreCollectionProjectionWorker {
         ],
       );
       const [competitors] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM competitors WHERE organization_id=? AND workspace_id=? AND market=? AND source_site='Amazon' AND external_id=? AND deleted_at IS NULL LIMIT 1",
+        "SELECT id,opportunity_id FROM competitors WHERE organization_id=? AND workspace_id=? AND market=? AND source_site='Amazon' AND external_id=? AND deleted_at IS NULL LIMIT 1",
         [job.organizationId, job.workspaceId, String(opportunities[0].market), asin],
       );
+      if (
+        competitors[0]?.opportunity_id &&
+        String(competitors[0].opportunity_id) !== job.resourceId
+      )
+        continue;
       const persistedId = String(competitors[0]?.id ?? competitorId);
       if (await this.insertSnapshot(c, job, persistedId, record, fields, now, false)) count += 1;
       else if (Number(insert.affectedRows ?? 0)) count += 1;
+      await this.scheduleCompetitorDetail(c, job, persistedId, record.provider_id, url, now);
     }
     await c.query(
       "UPDATE opportunities SET updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
       [now, job.resourceId, job.organizationId, job.workspaceId],
     );
     return count;
+  }
+
+  private async scheduleCompetitorDetail(
+    c: PoolConnection,
+    job: Job,
+    competitorId: string,
+    providerId: string,
+    pageUrl: string,
+    now: Date,
+  ) {
+    const taskId = randomUUID();
+    await c.query(
+      "INSERT INTO collection_tasks(id,organization_id,workspace_id,status,coverage_status,priority,scheduled_at,available_at,attempt_count,successful_subquery_count,failed_subquery_count,blocked_subquery_count,available_result_count,missing_fields_json,request_id,trace_id,version,created_by,created_at,updated_at) VALUES(?,?,?,'scheduled',NULL,'high',?,?,0,0,0,0,0,'[]',?,?,1,?,?,?)",
+      [
+        taskId,
+        job.organizationId,
+        job.workspaceId,
+        now,
+        now,
+        job.requestId,
+        job.traceId,
+        job.actorId,
+        now,
+        now,
+      ],
+    );
+    await c.query(
+      "INSERT INTO collection_subqueries(id,task_id,organization_id,workspace_id,provider_id,ordinal,target_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,version,created_at,updated_at) VALUES(?,?,?,?,?,1,?,1,'pending',0,'[]',NULL,0,1,?,?)",
+      [
+        randomUUID(),
+        taskId,
+        job.organizationId,
+        job.workspaceId,
+        providerId,
+        JSON.stringify({
+          page_url: pageUrl,
+          projection_type: "competitor_snapshot",
+          competitor_id: competitorId,
+        }),
+        now,
+        now,
+      ],
+    );
+    await c.query(
+      "INSERT INTO collection_task_events(id,task_id,organization_id,workspace_id,event_type,from_status,to_status,actor_type,actor_id,request_id,trace_id,metadata_json,occurred_at) VALUES(?,?,?,?,'competitor.detail.auto_scheduled',NULL,'scheduled','worker',?,?,?,?,?)",
+      [
+        randomUUID(),
+        taskId,
+        job.organizationId,
+        job.workspaceId,
+        this.workerId,
+        job.requestId,
+        job.traceId,
+        JSON.stringify({ opportunity_id: job.resourceId, competitor_id: competitorId }),
+        now,
+      ],
+    );
+    const eventId = randomUUID();
+    const payload = JSON.stringify({
+      task_id: taskId,
+      competitor_id: competitorId,
+      opportunity_id: job.resourceId,
+      automatic: true,
+    });
+    await c.query(
+      "INSERT INTO competitor_events(id,organization_id,workspace_id,competitor_id,event_type,actor_id,payload_json,request_id,trace_id,created_at) VALUES(?,?,?,?,'competitor.collection.scheduled',?,?,?,?,?)",
+      [
+        eventId,
+        job.organizationId,
+        job.workspaceId,
+        competitorId,
+        job.actorId,
+        payload,
+        job.requestId,
+        job.traceId,
+        now,
+      ],
+    );
+    await c.query(
+      "INSERT INTO competitor_outbox(id,organization_id,workspace_id,aggregate_id,event_type,payload_json,status,available_at,created_at) VALUES(?,?,?,?,'competitor.collection.scheduled',?,'pending',?,?)",
+      [eventId, job.organizationId, job.workspaceId, competitorId, payload, now, now],
+    );
   }
 
   private async projectCompetitorSnapshot(
@@ -222,12 +335,17 @@ export class CoreCollectionProjectionWorker {
     now: Date,
   ) {
     const [competitors] = await c.query<RowDataPacket[]>(
-      "SELECT id FROM competitors WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",
+      "SELECT id,external_id,product_url FROM competitors WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",
       [job.resourceId, job.organizationId, job.workspaceId],
     );
     if (!competitors[0]) throw new Error("competitor_not_found");
     for (const record of records) {
       const fields = parse<Record<string, unknown>>(record.payload_json);
+      const actualAsin = amazonAsin(
+        fields,
+        String(fields.canonical_url ?? fields.source_url ?? ""),
+      );
+      if (!actualAsin || actualAsin !== String(competitors[0].external_id).toUpperCase()) continue;
       if (await this.insertSnapshot(c, job, job.resourceId, record, fields, now, true)) return 1;
     }
     return 0;

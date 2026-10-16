@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: ScoutOps Internal API
   version: 0.1.0
-  description: Commerce rebuild adds backend-only LAN 1688 image transport to existing sourcing searches without changing HTTP fields, methods or RBAC. Production UI copy cleanup (2026-10-16) changes no endpoint, request, response or permission contract. Glass Atlas (2026-10-16) changes only client presentation and lazy-loading feedback; API payloads, theme IDs and authorization remain unchanged. P00 foundation, P01 identity/tenancy/RBAC, and P02 scoped UI preference contracts. Organization-visible endpoints require server-side authorization.
+  description: ScoutOps selection workflow and administration API. Automatic recommendations require an identified primary product and at least five independently verified Amazon competitor detail snapshots. Existing sourcing searches support backend-only LAN 1688 image transport. Read-only evidence fields never replace source facts or human adoption. Organization-visible endpoints require scoped server-side authorization.
 servers:
   - url: /api/v1
 x-scoutops-verification:
@@ -7611,7 +7611,19 @@ components:
         status: { type: string, enum: [active, paused] }
         revision: { type: integer, minimum: 1 }
         latest_snapshot:
-          { allOf: [{ $ref: "#/components/schemas/CompetitorSnapshotInput" }], nullable: true }
+          allOf:
+            - $ref: "#/components/schemas/CompetitorSnapshotInput"
+            - type: object
+              properties:
+                detail_collected:
+                  type: boolean
+                  readOnly: true
+                  description: Server-verified scoped Amazon detail-page task provenance; search-page snapshots do not qualify.
+                source_enabled:
+                  type: boolean
+                  readOnly: true
+                  description: Current provider enabled state; preserved historical snapshot health alone does not make a disabled source eligible.
+          nullable: true
         latest_collection:
           allOf: [{ $ref: "#/components/schemas/CompetitorCollectionAttempt" }]
           nullable: true
@@ -11032,6 +11044,12 @@ components:
       properties:
         id: { type: string, format: uuid }
         name: { type: string, maxLength: 200 }
+        main_asin:
+          type: string
+          nullable: true
+          pattern: "^[A-Z0-9]{10}$"
+          readOnly: true
+          description: Primary Amazon product identity from scoped persisted source evidence; null when unidentified.
         market: { type: string }
         category: { type: string, nullable: true }
         source_type: { type: string, enum: [manual, trend_topic] }
@@ -11091,7 +11109,9 @@ components:
           properties:
             score: { type: boolean }
             market: { type: boolean }
-            competition: { type: boolean }
+            competition:
+              type: boolean
+              description: Requires the competition score and at least five independent fresh healthy Amazon detail snapshots from an enabled provider with price, currency, review count and rating, excluding the identified primary product.
             cost: { type: boolean }
             risk: { type: boolean }
             all_passed: { type: boolean }

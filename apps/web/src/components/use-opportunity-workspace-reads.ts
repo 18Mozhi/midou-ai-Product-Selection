@@ -208,10 +208,22 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
               (item) => item.opportunity_id === currentOpportunityId,
             );
             competitorItems.value = competitors;
+            const independent = [
+              ...new Map(
+                competitors
+                  .filter(
+                    (item) =>
+                      item.source_site.toLowerCase() === "amazon" &&
+                      /^[A-Z0-9]{10}$/i.test(item.external_id) &&
+                      item.external_id.toUpperCase() !== detail.value?.main_asin?.toUpperCase(),
+                  )
+                  .map((item) => [item.external_id.toUpperCase(), item] as const),
+              ).values(),
+            ];
             downstream.value = {
               ...downstream.value,
-              competitors: competitors.length,
-              snapshots: competitors.reduce(
+              competitors: independent.length,
+              snapshots: independent.reduce(
                 (sum, item) => sum + Number(item.snapshot_count ?? 0),
                 0,
               ),

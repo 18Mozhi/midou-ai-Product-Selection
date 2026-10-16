@@ -19,6 +19,7 @@ import {
   opportunityRecommendedSql,
   opportunityRuleCandidateSql,
   opportunitySelectionProjectionSql,
+  opportunityPrimaryAsinSql,
 } from "./opportunity-selection-policy.js";
 
 const iso = (value: unknown) =>
@@ -50,8 +51,8 @@ const opportunityImageSql = sqlText(
   "ORDER BY s.captured_at DESC LIMIT 1))",
 );
 const opportunityCountsSql = sqlText(
-  "(SELECT COUNT(*) FROM competitors c",
-  "WHERE c.opportunity_id=o.id AND c.deleted_at IS NULL) competitor_count,",
+  "(SELECT COUNT(DISTINCT UPPER(c.external_id)) FROM competitors c",
+  `WHERE c.opportunity_id=o.id AND c.organization_id=o.organization_id AND c.workspace_id=o.workspace_id AND c.deleted_at IS NULL AND c.source_site='Amazon' AND c.external_id REGEXP '^[A-Za-z0-9]{10}$' AND BINARY UPPER(c.external_id)<>BINARY COALESCE(${opportunityPrimaryAsinSql},'')) competitor_count,`,
   "(SELECT COUNT(*) FROM sourcing_candidates sc",
   "JOIN sourcing_searches ss ON ss.id=sc.search_id",
   "WHERE ss.input_type='opportunity' AND ss.input_ref=o.id AND ss.deleted_at IS NULL)",
@@ -66,6 +67,7 @@ const summary = (row: RowDataPacket): OpportunitySummary => ({
   id: String(row.id),
   name: String(row.name),
   image_url: row.image_url ? String(row.image_url) : null,
+  main_asin: row.main_asin ? String(row.main_asin) : null,
   market: String(row.market),
   category: row.category == null ? null : String(row.category),
   source_type: row.source_type,

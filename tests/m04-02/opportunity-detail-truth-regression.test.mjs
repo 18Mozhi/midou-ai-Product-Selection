@@ -16,7 +16,11 @@ test("opportunity detail keeps partial dependency failures distinct from real em
   );
   assert.match(reads, /aiLoadState\.value = "error"/);
   assert.doesNotMatch(reads, /catch\s*\{\s*aiAnalyses\.value = \[\]/);
-  assert.match(insights, /暂不能判定为零/);
+  assert.match(
+    insights,
+    /downstreamState\.competitors === 'error'[\s\S]*竞品数据暂不可用[\s\S]*retryDownstream/,
+  );
+  assert.match(insights, /downstreamState\.sourcing === 'error'[\s\S]*供应链数据暂不可用/);
   assert.match(ai, /不能据此判定记录为空/);
   assert.match(insights, /retryDownstream/);
   assert.match(ai, /\$emit\('retry'\)/);
@@ -31,7 +35,10 @@ test("opportunity detail renders persisted status and competitor facts without r
   ]);
 
   assert.match(presentation, /recommend: "建议采纳"/);
-  assert.match(insights, /候选数为已关联搜索的 candidate_count/);
+  assert.match(
+    insights,
+    /downstream\.searches[\s\S]*downstream\.suppliers[\s\S]*候选数量按关联搜索汇总，未去重/,
+  );
   assert.doesNotMatch(insights, /三类未齐全时不能自动推荐/);
   assert.match(presentation, /measured: "已测量"/);
   assert.match(presentation, /ai_provider_timeout: "模型服务超时"/);

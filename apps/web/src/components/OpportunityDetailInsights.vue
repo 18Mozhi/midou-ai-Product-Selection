@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SelectionProductComparison from "./SelectionProductComparison.vue";
 import type {
   OpportunityCompetitorSummary,
   OpportunityDetail,
@@ -327,59 +328,7 @@ const emit = defineEmits<{
         </div>
       </template>
       <template v-else>
-        <p class="opportunity-insight-support">
-          当前机会关联 {{ downstream.competitors }} 个竞品、累计 {{ downstream.snapshots }}个快照
-        </p>
-        <div v-if="competitorItems.length" class="opportunity-competitor-list">
-          <article
-            v-for="item in competitorItems"
-            :key="item.id"
-            class="opportunity-competitor-card"
-          >
-            <header>
-              <span class="opportunity-insight-badge"
-                >{{ item.source_site }} · {{ item.market }}</span
-              >
-              <small>当前机会关联记录</small>
-            </header>
-            <h4>{{ item.title }}</h4>
-            <dl v-if="item.latest_snapshot" class="opportunity-competitor-snapshot">
-              <div>
-                <dt>快照价格</dt>
-                <dd>
-                  {{
-                    item.latest_snapshot.current_price === null
-                      ? "未提供"
-                      : `${item.latest_snapshot.currency ?? ""} ${item.latest_snapshot.current_price}`
-                  }}
-                </dd>
-              </div>
-              <div>
-                <dt>评分</dt>
-                <dd>{{ item.latest_snapshot.rating_value ?? "未提供" }}</dd>
-              </div>
-              <div>
-                <dt>评论数</dt>
-                <dd>{{ item.latest_snapshot.review_count ?? "未提供" }}</dd>
-              </div>
-            </dl>
-            <p v-else class="opportunity-insight-support">
-              尚无竞品快照，不展示价格、评分或评论数。
-            </p>
-            <p v-if="item.latest_snapshot" class="opportunity-insight-support">
-              采集于 {{ formatOpportunityTime(item.latest_snapshot.captured_at) }} · 新鲜度
-              {{ opportunityStatusLabel(item.latest_snapshot.freshness) }}
-            </p>
-            <details class="opportunity-technical-details">
-              <summary>展开记录标识</summary>
-              <small>外部标识 {{ item.external_id }}</small>
-            </details>
-          </article>
-        </div>
-        <div v-else class="opportunity-insight-state">
-          <strong>当前机会没有已关联竞品</strong>
-          <span>暂无关联竞品。</span>
-        </div>
+        <SelectionProductComparison :main-asin="detail.main_asin" :items="competitorItems" />
       </template>
       <div class="opportunity-insight-actions">
         <button

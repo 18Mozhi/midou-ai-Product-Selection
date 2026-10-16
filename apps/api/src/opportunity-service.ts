@@ -30,6 +30,7 @@ export interface OpportunitySummary {
   id: string;
   name: string;
   image_url: string | null;
+  main_asin?: string | null;
   market: string;
   category: string | null;
   source_type: "manual" | "trend_topic";
