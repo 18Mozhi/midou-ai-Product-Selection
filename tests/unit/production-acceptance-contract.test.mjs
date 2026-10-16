@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
+import vm from "node:vm";
+import ts from "typescript";
 
 const read = (path) => readFile(path, "utf8");
 
@@ -189,4 +191,60 @@ test("production QA expects organization members at the workbench and preserves 
   );
   for (const key of ["platform_operations_admin", "platform_super_admin"])
     assert.equal(roles.find((item) => item.key === key).landingPath, "/platform-admin", key);
+});
+
+test("production logout traverses a cataloged account route and confirms server revocation", async () => {
+  const source = await read("scripts/verify-production-product.mjs");
+  const ast = ts.createSourceFile("production.mjs", source, ts.ScriptTarget.Latest, true);
+  const declaration = ast.statements.find(
+    (node) => ts.isFunctionDeclaration(node) && node.name?.text === "verifySessionLogout",
+  );
+  assert.ok(declaration);
+  const catalog = JSON.parse(await read("config/route-catalog.json"));
+  const paths = new Set(catalog.routes.map((item) => item.path));
+  const events = [];
+  const sandbox = { baseUrl: "https://app.example", assert };
+  vm.runInNewContext(declaration.getText(ast) + "\nthis.verify = verifySessionLogout;", sandbox);
+  const result = await sandbox.verify(
+    { key: "member" },
+    {
+      page: {
+        goto: async (url) => {
+          assert.ok(paths.has(new URL(url).pathname), url);
+          events.push("account");
+        },
+        waitForResponse: async (predicate) => {
+          const response = {
+            url: () => "https://app.example/api/v1/auth/logout",
+            request: () => ({ method: () => "POST" }),
+            status: () => 204,
+          };
+          assert.ok(predicate(response));
+          return response;
+        },
+        getByRole: () => ({
+          waitFor: async () => {},
+          click: async () => {
+            events.push("logout");
+          },
+        }),
+        waitForURL: async (predicate) => {
+          assert.ok(predicate(new URL("https://app.example/login")));
+        },
+        getByLabel: () => ({ waitFor: async () => {} }),
+      },
+      context: {
+        request: {
+          get: async (url) => {
+            assert.equal(new URL(url).pathname, "/api/v1/me/sessions");
+            events.push("revocation");
+            return { status: () => 401 };
+          },
+        },
+      },
+    },
+  );
+  assert.deepEqual(events, ["account", "logout", "revocation"]);
+  assert.equal(result.logout_status, 204);
+  assert.equal(result.protected_read_status, 401);
 });

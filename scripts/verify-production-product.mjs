@@ -152,12 +152,13 @@ async function createRoleSession(profile, loginPath = "/login") {
 }
 
 async function verifySessionLogout(profile, session) {
-  await session.page.goto(`${baseUrl}/account`, { waitUntil: "networkidle" });
+  await session.page.goto(`${baseUrl}/me`, { waitUntil: "networkidle" });
+  const logoutButton = session.page.getByRole("button", { name: "退出登录", exact: true });
+  await logoutButton.waitFor();
   const response = session.page.waitForResponse(
     (item) => item.url() === `${baseUrl}/api/v1/auth/logout` && item.request().method() === "POST",
   );
-  await session.page.getByRole("button", { name: "退出登录", exact: true }).click();
-  const logoutResponse = await response;
+  const [logoutResponse] = await Promise.all([response, logoutButton.click()]);
   assert(logoutResponse.status() === 204, `${profile.key} logout was not accepted`);
   await session.page.waitForURL((url) => url.pathname === "/login");
   await session.page.getByLabel("账号（邮箱或用户名）").waitFor();

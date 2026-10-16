@@ -1030,7 +1030,7 @@ export const publishedPresentationRevisions = Object.freeze({
     before: "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c",
   },
   "scripts/verify-production-product.mjs": {
-    current: "b0d4503bf6466afaa5c1d8cb2859a4bc8472837f126b8e33f386fe092f0d65dd",
+    current: "7c289f231c2cf03bffc07d8a34f56d46ab138e55c530b41da719c847ec3ac114",
     before: "6e1a15ebcc7b14240891818ad391d63bcfaa539ab46cce5f3ae6f7284303ebd1",
   },
 });
