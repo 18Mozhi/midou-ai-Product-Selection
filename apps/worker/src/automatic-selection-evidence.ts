@@ -1,0 +1,27 @@
+import { selectionPrimaryAsinSql } from "@scoutops/database";
+
+/** Resolve the same primary used by the catalogue, rather than the latest linked competitor. */
+export const automaticPrimaryEvidenceSql =
+  "SELECT n.raw_evidence_id,l.observed_at,n.payload_json,p.status provider_status " +
+  "FROM opportunities o JOIN opportunity_evidence_links l ON l.opportunity_id=o.id " +
+  "AND l.organization_id=o.organization_id AND l.workspace_id=o.workspace_id " +
+  "JOIN normalized_records n ON n.raw_evidence_id=l.raw_evidence_id " +
+  "AND n.organization_id=l.organization_id AND n.workspace_id=l.workspace_id AND n.status='active' " +
+  "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
+  "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? " +
+  `AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY ${selectionPrimaryAsinSql} ` +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.canonical_url')) REGEXP " +
+  "CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')),'([/?#]|$)') " +
+  "ORDER BY n.created_at DESC,n.id DESC LIMIT 1";
+
+/** Only records produced by this opportunity's sourcing tasks can establish its purchase cost. */
+export const automaticSupplyEvidenceSql =
+  "SELECT n.raw_evidence_id,n.payload_json,n.created_at FROM sourcing_searches ss " +
+  "JOIN collection_task_evidence_links l ON l.collection_task_id=ss.collection_task_id " +
+  "AND l.organization_id=ss.organization_id AND l.workspace_id=ss.workspace_id " +
+  "JOIN normalized_records n ON n.id=l.normalized_record_id AND n.raw_evidence_id=l.raw_evidence_id " +
+  "AND n.organization_id=l.organization_id AND n.workspace_id=l.workspace_id " +
+  "JOIN providers p ON p.id=n.provider_id " +
+  "WHERE ss.input_type='opportunity' AND ss.input_ref=? AND ss.organization_id=? AND ss.workspace_id=? " +
+  "AND ss.deleted_at IS NULL AND n.status='active' AND p.code='1688_search' " +
+  "ORDER BY n.created_at DESC,n.id DESC LIMIT 500";

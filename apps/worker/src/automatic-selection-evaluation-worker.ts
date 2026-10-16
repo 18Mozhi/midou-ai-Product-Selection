@@ -3,6 +3,10 @@ import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { amazonAsin } from "./competitor-discovery-policy.js";
 import { selectionCandidateSql } from "@scoutops/database";
 import {
+  automaticPrimaryEvidenceSql,
+  automaticSupplyEvidenceSql,
+} from "./automatic-selection-evidence.js";
+import {
   AUTOMATIC_SELECTION_FORMULA_VERSION,
   calculateAutomaticScoreFacts,
   isPhoneCase,
@@ -220,15 +224,11 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           now,
         );
 
-      const [amazonRows] = await connection.query<RowDataPacket[]>(
-        "SELECT ts.raw_evidence_id,ts.observed_at,n.payload_json,p.status provider_status FROM " +
-          "opportunity_evidence_links l JOIN trend_signals ts ON ts.id=l.evidence_id " +
-          "JOIN normalized_records n ON n.id=ts.normalized_record_id AND n.status='active' " +
-          "JOIN providers p ON p.id=ts.provider_id WHERE l.opportunity_id=? AND " +
-          "l.organization_id=? AND l.workspace_id=? AND p.code='amazon_product' " +
-          "ORDER BY ts.observed_at DESC,ts.id DESC LIMIT 1",
-        [job.opportunityId, job.organizationId, job.workspaceId],
-      );
+      const [amazonRows] = await connection.query<RowDataPacket[]>(automaticPrimaryEvidenceSql, [
+        job.opportunityId,
+        job.organizationId,
+        job.workspaceId,
+      ]);
       const amazon = amazonRows[0];
       if (!amazon)
         return await this.waiting(connection, job, "amazon_product_evidence_missing", {}, now);
@@ -279,12 +279,11 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       if (!competitor)
         return await this.waiting(connection, job, "amazon_competitor_snapshot_missing", {}, now);
 
-      const [supplyRows] = await connection.query<RowDataPacket[]>(
-        "SELECT n.raw_evidence_id,n.payload_json,n.created_at FROM normalized_records n JOIN " +
-          "providers p ON p.id=n.provider_id WHERE n.organization_id=? AND n.workspace_id=? " +
-          "AND n.status='active' AND p.code='1688_search' ORDER BY n.created_at DESC,n.id DESC LIMIT 500",
-        [job.organizationId, job.workspaceId],
-      );
+      const [supplyRows] = await connection.query<RowDataPacket[]>(automaticSupplyEvidenceSql, [
+        job.opportunityId,
+        job.organizationId,
+        job.workspaceId,
+      ]);
       const supplies: SupplyFacts[] = supplyRows.flatMap((row) => {
           const item = normalizedProductFields(parse(row.payload_json, {})),
             price = number(item.price),
@@ -292,15 +291,17 @@ export class MySqlAutomaticSelectionEvaluationWorker {
             currency = text(item.currency).toUpperCase(),
             evidenceId = String(row.raw_evidence_id),
             externalId = text(item.external_id);
-          return title && price != null && currency && externalId
+          // Keep unusable newer observations through deduplication so an old quote cannot revive.
+          return externalId
             ? [
                 {
                   title,
-                  price,
+                  price: price ?? Number.NaN,
                   currency,
                   observedAt: date(item.observed_at ?? row.created_at),
                   evidenceId,
                   externalId,
+                  priceDescription: text(item.price_description) || null,
                 },
               ]
             : [];
@@ -566,6 +567,16 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     payload: Record<string, unknown>,
     now: Date,
   ) {
+    if (code === "high_confidence_1688_match_missing")
+      await connection.query(
+        "UPDATE opportunities o SET o.recommendation_status='insufficient_data',o.version=o.version+1,o.updated_at=? " +
+          "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending' " +
+          "AND o.recommendation_status='recommend' AND EXISTS (SELECT 1 FROM opportunity_cost_inputs ci " +
+          "WHERE ci.opportunity_id=o.id AND ci.organization_id=o.organization_id AND ci.workspace_id=o.workspace_id " +
+          "AND ci.platform='amazon' AND ci.input_type='purchase_price' AND ci.is_current=1 " +
+          "AND ci.confirmation_mode='automatic_evidence')",
+        [now, job.opportunityId, job.organizationId, job.workspaceId],
+      );
     await this.complete(
       connection,
       job,

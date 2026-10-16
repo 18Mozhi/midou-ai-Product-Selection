@@ -1,4 +1,16 @@
 {
+  "selectionCostEvidence20261017": {
+    "status": "implemented",
+    "statusDetail": "local_delivery_requires_production_deployment_and_live_cost_acceptance",
+    "requirements": "docs/selection-cost-evidence.md",
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-evidence.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/worker/src/automatic-selection-evaluation.ts"
+    ],
+    "testFiles": ["tests/unit/automatic-selection-evaluation.test.mjs"],
+    "contract": "Use the catalogue primary ASIN and only its scoped opportunity sourcing task evidence. Count distinct latest 1688 offer identities, exclude observed newcomer prices, preserve human cost inputs. Withdraw pending stale recommendations backed by automatic purchase inputs when valid supply evidence is missing. No new API, schema, environment or fee rules."
+  },
   "amazonPublicSignals20261017": {
     "status": "implemented",
     "statusDetail": "local_delivery_and_actual_browser_structure_verified_requires_live_crawler_acceptance",

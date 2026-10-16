@@ -20,6 +20,7 @@ export interface SupplyFacts {
   observedAt: Date;
   evidenceId: string;
   externalId: string;
+  priceDescription?: string | null;
 }
 
 export interface SupplyMatch {
@@ -161,12 +162,21 @@ export function selectConservativeSupplyMatch(
   minimumConfidence = 80,
   minimumSamples = 3,
 ): SupplyMatch | null {
-  const matches = supplies
+  // Repeated collections of one offer are observations, not independent supplier samples.
+  const latestOffers = new Map<string, SupplyFacts>();
+  for (const item of supplies) {
+    if (!item.externalId.trim() || !Number.isFinite(item.observedAt.getTime())) continue;
+    const current = latestOffers.get(item.externalId);
+    if (!current || item.observedAt.getTime() > current.observedAt.getTime())
+      latestOffers.set(item.externalId, item);
+  }
+  const matches = [...latestOffers.values()]
     .filter(
       (item) =>
         item.currency === "CNY" &&
         Number.isFinite(item.price) &&
         item.price > 0 &&
+        !item.priceDescription?.includes("新人价") &&
         item.evidenceId.length > 0,
     )
     .map((item) => ({ item, confidence: productIdentityConfidence(productTitle, item.title) }))
