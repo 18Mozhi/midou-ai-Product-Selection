@@ -48,7 +48,13 @@ export function registerCompetitorRoutes(app: FastifyInstance, o: CompetitorRout
     };
   };
   app.get("/api/v1/competitors", async (r) =>
-    envelope(await o.service.list(await scope(r, "competitor:read")), r),
+    envelope(
+      await o.service.list({
+        ...(await scope(r, "competitor:read")),
+        opportunityId: (r.query as Record<string, unknown>).opportunity_id,
+      }),
+      r,
+    ),
   );
   app.get("/api/v1/competitors/:id", async (r) =>
     envelope(

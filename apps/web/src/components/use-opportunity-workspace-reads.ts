@@ -152,7 +152,7 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
         try {
           if (source === "competitors") {
             const response = await request<OpportunityTypes.OpportunityCompetitorSummary[]>(
-              "/competitors",
+              `/competitors?opportunity_id=${encodeURIComponent(currentOpportunityId)}`,
               { signal },
             );
             if (!ownsRead()) return;

@@ -125,7 +125,11 @@ export function validateRule(v: any) {
   };
 }
 export interface CompetitorRepository {
-  list(i: { organizationId: string; workspaceId: string }): Promise<unknown>;
+  list(i: {
+    organizationId: string;
+    workspaceId: string;
+    opportunityId?: string;
+  }): Promise<unknown>;
   get(i: { organizationId: string; workspaceId: string; competitorId: string }): Promise<unknown>;
   listRules(i: { organizationId: string; workspaceId: string }): Promise<unknown>;
   create(
@@ -166,8 +170,14 @@ export interface CompetitorRepository {
 }
 export class CompetitorService {
   constructor(private readonly repo: CompetitorRepository) {}
-  list(i: { organizationId: string; workspaceId: string }) {
-    return this.repo.list(i);
+  list(i: { organizationId: string; workspaceId: string; opportunityId?: unknown }) {
+    const { opportunityId, ...scope } = i;
+    return this.repo.list({
+      ...scope,
+      ...(opportunityId === undefined
+        ? {}
+        : { opportunityId: uuid(opportunityId, "opportunity_id") }),
+    });
   }
   get(i: { organizationId: string; workspaceId: string; competitorId: string }) {
     return this.repo.get({ ...i, competitorId: uuid(i.competitorId, "competitor_id") });

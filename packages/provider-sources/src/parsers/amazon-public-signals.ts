@@ -1,9 +1,10 @@
-export const AMAZON_PUBLIC_PRODUCT_PARSER_VERSION = "amazon-public-product-v3";
+export const AMAZON_PUBLIC_PRODUCT_PARSER_VERSION = "amazon-public-product-v4";
 export function amazonPublicSignalPaths(detail: boolean) {
   const badge = detail
     ? "amazon.html.centerCol.span#social-proofing-faceout-title-tk_bought"
     : "amazon.html.search_result.span.a-color-secondary.sales_badge";
   return {
+    review_samples_json: "amazon.html.ul#localTopReviewsList.div[data-hook=review]",
     sales_badge_text: badge,
     sales_badge_quantity_lower_bound: badge,
     sales_badge_period: badge,
@@ -27,9 +28,13 @@ const count = (value: string) => {
 };
 
 /** Extract one div, stopping at its own closing tag, never at the next product. */
-function tagContent(html: string, contentStart: number, tag: "div" | "span") {
+function tagContent(
+  html: string,
+  contentStart: number,
+  tag: "div" | "span" | "ul" | "h5" | "i" | "a",
+) {
   const tags =
-    /<!--[\s\S]*?-->|<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>|<\/?(?:div|span)\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi;
+    /<!--[\s\S]*?-->|<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>|<\/?(?:div|span|ul|h5|i|a)\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi;
   const relevant = new RegExp(`^<\\/?${tag}\\b`, "i");
   tags.lastIndex = contentStart;
   let depth = 1,
@@ -41,6 +46,8 @@ function tagContent(html: string, contentStart: number, tag: "div" | "span") {
   }
   return null;
 }
+export const amazonTagContent = tagContent;
+
 export const amazonDivContent = (html: string, contentStart: number) =>
   tagContent(html, contentStart, "div");
 

@@ -1,3 +1,5 @@
+> 当前版本为 `amazon-public-product-v4` / `amazon-public-product-adapter-v6`，在下述公开指标基础上增加有限评价节选；旧版本说明为历史记录。详见 [公开评价样本](amazon-public-review-samples.md)。
+
 # Amazon 免费公开信号
 
 2026-10-17 继续落实用户要求的商品、销售、评价与广告数据。当前交付只读取页面已经公开展示的信号，不把页面购买提示当成精确成交量，不从公开标记推断广告花费、曝光或点击。
@@ -34,7 +36,7 @@ JSON-LD 与 HTML 合并时，原始证据包同时保存原 JSON-LD 商品对象
 
 `/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py nodejs ai选品`
 
-Python 不因本项重启。当前未部署、未启用生产来源、未修改生产数据或配置。评分权重、利润公式和质量门不因新增字段自动改变；通用品类费用、公开评价明细、广告历史、实际持续采集及每日百品仍需继续完成。
+Python 不因本项重启。当前未部署、未启用生产来源、未修改生产数据或配置。评分权重、利润公式和质量门不因新增字段自动改变；有限公开评价节选已补充，见 `docs/amazon-public-review-samples.md`；通用品类费用、全量评价、广告历史、实际持续采集及每日百品仍需继续完成。
 
 ## 验证
 

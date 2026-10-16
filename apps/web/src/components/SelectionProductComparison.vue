@@ -25,6 +25,11 @@ const competitors = computed(() => {
     })
     .slice(0, MAXIMUM_SELECTION_COMPETITORS);
 });
+const reviewItems = computed(() =>
+  (main.value ? [main.value, ...competitors.value] : competitors.value).filter(
+    (item) => item.latest_snapshot?.public_signals?.review_samples?.length,
+  ),
+);
 const analyzed = computed(
   () =>
     competitors.value.filter((item) => {
@@ -175,6 +180,37 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
     </div>
     <p v-else>正在等待相关商品的采集结果。</p>
     <p>购买提示为页面展示的数量下限；精确销量、广告花费未采集。</p>
+    <section class="selection-review-samples" aria-label="公开评价样本">
+      <h4>评价样本</h4>
+      <p>以下为商品页公开的部分评价节选，可能包含不同款式，不代表全部评价。</p>
+      <p v-if="!reviewItems.length">尚未采集评价明细。</p>
+      <details v-for="item in reviewItems" :key="item.id">
+        <summary>
+          {{ item.title }} ·
+          {{ item.latest_snapshot?.public_signals?.review_samples?.length }} 条样本
+        </summary>
+        <article
+          v-for="review in item.latest_snapshot?.public_signals?.review_samples"
+          :key="review.review_id"
+        >
+          <header>
+            <strong>{{ review.title }}</strong
+            ><span>{{ review.rating == null ? "星级未展示" : `${review.rating} / 5` }}</span>
+          </header>
+          <p class="selection-review-meta">
+            {{ review.date_text ?? "日期未展示"
+            }}<span v-if="review.variation_text"> · {{ review.variation_text }}</span>
+          </p>
+          <p>{{ review.text }}</p>
+          <footer>
+            <span>{{ review.verified_purchase === true ? "页面标记已购" : "未展示购买认证" }}</span
+            ><span>{{
+              review.helpful_votes == null ? "有用票数未展示" : `${review.helpful_votes} 人认为有用`
+            }}</span>
+          </footer>
+        </article>
+      </details>
+    </section>
   </section>
 </template>
 
@@ -286,5 +322,68 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
   .selection-comparison-heading {
     flex-wrap: wrap;
   }
+}
+
+.selection-review-samples {
+  padding: 18px 20px;
+  border-top: 1px solid var(--so-border);
+}
+.selection-comparison .selection-review-samples > p {
+  font-weight: 400;
+  letter-spacing: normal;
+  margin: 8px 0 14px;
+  color: var(--so-text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.selection-review-samples details {
+  border-top: 1px solid var(--so-border);
+}
+.selection-review-samples summary {
+  padding: 14px 0;
+  cursor: pointer;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.selection-review-samples article {
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 4px;
+}
+.selection-review-samples article header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+}
+.selection-review-samples article header strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+.selection-review-samples article header > span {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.selection-comparison .selection-review-samples article p {
+  color: var(--so-text);
+  font-weight: 400;
+  letter-spacing: normal;
+  margin: 8px 0;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.selection-comparison .selection-review-samples .selection-review-meta,
+.selection-review-samples footer {
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.selection-review-samples footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 </style>

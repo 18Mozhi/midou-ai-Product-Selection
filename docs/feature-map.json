@@ -184,8 +184,8 @@
       "apps/api/src/mysql-competitor-repository.ts",
       "apps/web/src/components/SelectionProductComparison.vue"
     ],
-    "parserVersion": "amazon-public-product-v3",
-    "adapterVersion": "amazon-public-product-adapter-v5",
+    "parserVersion": "amazon-public-product-v4",
+    "adapterVersion": "amazon-public-product-adapter-v6",
     "apiRoutes": ["/api/v1/competitors", "/api/v1/competitors/{id}"],
     "testFiles": [
       "tests/unit/amazon-public-signals.test.mjs",
@@ -1755,7 +1755,7 @@
         "authenticated-browser or fixed-public-page platform entries without official API dependency",
         "google_news_search manual keyword RSS",
         "manual_product_supply_csv explicit import",
-        "amazon_product enabled public search and product-page crawler whose code-owned catalog definition also boots fresh databases as enabled/manual on amazon-public-product-adapter-v5 with amazon-public-product-v3 and scoped public purchase/BSR/sponsored signals, with native HTTPS direct transport, governed Provider proxy fallback bounded at 5 MiB to match the existing adapter response limit, Schema.org Product JSON-LD primary parsing, semantic HTML fallback, response-derived price currency, and one same-signal retry before confirmed source_changed fails closed",
+        "amazon_product enabled public search and product-page crawler whose code-owned catalog definition also boots fresh databases as enabled/manual on amazon-public-product-adapter-v6 with amazon-public-product-v4 and scoped public purchase/BSR/sponsored signals, with native HTTPS direct transport, governed Provider proxy fallback bounded at 5 MiB to match the existing adapter response limit, Schema.org Product JSON-LD primary parsing, semantic HTML fallback, response-derived price currency, and one same-signal retry before confirmed source_changed fails closed",
         "made_in_china_search public supplier product crawler",
         "ec21_supplier_search independent public supplier fallback crawler",
         "dhgate_supplier_search robots-allowed public wholesale supplier crawler",
@@ -4641,5 +4641,28 @@
   "uiPhase2OrgProfileSaveReceipt": "OrganizationAdminCenter now reports organization-profile PATCH acceptance separately from its automatic reread: pending, reread-confirmed, and reread-failed receipts retain distinct write/read request IDs in an accessible disclosure. Failed rereads preserve the existing disabled-form safety gate; explicit refresh retries only GET and never repeats PATCH. Route/organization changes, KeepAlive deactivation, and unmount invalidate stale receipt ownership. Actual Vue Playwright passes desktop Chromium and mobile-390 for pending/success, failed reread, and explicit read recovery; no API, payload, permission, persistence, or database contract changed. Local fixtures are not production data/RBAC acceptance. See ORG-SAVE-FEEDBACK-ACTUAL-VUE-REVIEW.md.",
   "statusDetail": "P00_P08_product_functionally_verified_single_server",
   "statusEnum": ["planned", "implemented", "verified", "blocked", "deprecated"],
-  "routeCatalogSource": "../config/route-catalog.json"
+  "routeCatalogSource": "../config/route-catalog.json",
+  "amazonPublicReviewSamples20261017": {
+    "status": "implemented",
+    "statusDetail": "local_and_single_anonymous_page_verified_not_production_or_continuous_acceptance",
+    "requirements": "docs/amazon-public-review-samples.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/parsers/amazon-public-reviews.ts",
+      "packages/provider-sources/src/parsers/index.ts",
+      "packages/contracts/src/amazon-public-signals.ts",
+      "apps/api/src/amazon-public-signals.ts",
+      "apps/api/src/competitor-service.ts",
+      "apps/api/src/competitor-routes.ts",
+      "apps/api/src/mysql-competitor-repository.ts",
+      "apps/web/src/components/use-opportunity-workspace-reads.ts",
+      "apps/web/src/components/SelectionProductComparison.vue"
+    ],
+    "apiRoutes": ["/api/v1/competitors", "/api/v1/competitors/{id}"],
+    "testFiles": [
+      "tests/unit/amazon-public-reviews.test.mjs",
+      "tests/unit/competitor-review-scope.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "contract": "Up to 10 public product-page review excerpts with raw evidence. GET competitors accepts optional validated opportunity_id under existing session tenant scope; only scoped list/detail includes excerpts. No all-review, precise-sales or private-ad-metrics claim. No schema, dependency, environment or scoring-rule change."
+  }
 }

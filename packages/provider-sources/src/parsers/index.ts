@@ -1,3 +1,4 @@
+import { amazonPublicReviewFields } from "./amazon-public-reviews.js";
 import { createHash } from "node:crypto";
 import { ProviderAdapterFailure, type ProviderRawRecord } from "@scoutops/provider-adapters";
 import {
@@ -621,6 +622,7 @@ export function parseAmazonProductPage(
       ?.toUpperCase(),
     primaryColumn = directAsin ? amazonPrimaryColumn(html) : null,
     rank = directAsin ? amazonBestSellerRankFields(html) : null,
+    reviewSamples = directAsin ? amazonPublicReviewFields(html) : null,
     sourceBlocks = directAsin ? [{ asin: directAsin, html: primaryColumn ?? html }] : blocks;
   const structuredRecords = amazonStructuredRecords(html, pageUrl, limit).filter(
     (record) => !directAsin || record.externalId === directAsin,
@@ -633,6 +635,8 @@ export function parseAmazonProductPage(
           directAsin === asin ? primaryColumn : blocks.find((block) => block.asin === asin)?.html,
         extra = {
           ...amazonPublicSignalFields(scope ?? "", directAsin === asin),
+          review_samples_json:
+            directAsin === asin ? (reviewSamples?.review_samples_json ?? null) : null,
           ...(directAsin === asin && rank
             ? {
                 best_seller_rank: rank.best_seller_rank,
@@ -645,15 +649,18 @@ export function parseAmazonProductPage(
         payload: {
           ...payload,
           raw_content:
-            scope != null || (directAsin === asin && rank?.rank_html)
+            scope != null ||
+            (directAsin === asin && (rank?.rank_html || reviewSamples?.reviews_html))
               ? JSON.stringify({
                   structured_product: JSON.parse(payload.raw_content),
                   product_html: scope ?? null,
                   rank_html: directAsin === asin ? (rank?.rank_html ?? null) : null,
+                  reviews_html: directAsin === asin ? reviewSamples?.reviews_html || null : null,
                 })
               : payload.raw_content,
           content_type:
-            scope != null || (directAsin === asin && rank?.rank_html)
+            scope != null ||
+            (directAsin === asin && (rank?.rank_html || reviewSamples?.reviews_html))
               ? "application/json"
               : payload.content_type,
           fields: { ...payload.fields, ...extra },
@@ -716,6 +723,7 @@ export function parseAmazonProductPage(
         source_url: sourceUrl,
         publisher: "Amazon",
         observed_at: observedAt,
+        review_samples_json: reviewSamples?.review_samples_json ?? null,
         ...amazonPublicSignalFields(
           directAsin ? (primaryColumn ?? "") : item.html,
           Boolean(directAsin),
@@ -728,7 +736,9 @@ export function parseAmazonProductPage(
           : {}),
       },
       payload: SourceEvidencePayload = {
-        raw_content: item.html + (directAsin ? (rank?.rank_html ?? "") : ""),
+        raw_content:
+          item.html +
+          (directAsin ? (rank?.rank_html ?? "") + (reviewSamples?.reviews_html ?? "") : ""),
         content_type: "text/html",
         canonical_url: sourceUrl,
         fields,

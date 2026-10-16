@@ -264,7 +264,7 @@ export class MySqlAutomaticSourceScheduler {
         "AND terms_review_status='approved' ",
         "AND terms_version IS NOT NULL AND (terms_permanent=1 OR terms_expires_at>NOW(3)) ",
         "AND parser_version IN ('google-news-rss-v1','google-news-fixed-rss-v1',",
-        "'syndication-feed-v1','structured-public-page-v1','amazon-public-product-v3') ORDER BY code",
+        "'syndication-feed-v1','structured-public-page-v1','amazon-public-product-v4') ORDER BY code",
       ),
     );
     const market = String(rule.market).toUpperCase();

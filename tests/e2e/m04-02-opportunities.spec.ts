@@ -522,7 +522,7 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
 ] as const) {
   test(`selection comparison separates the primary from ${competitorCount} independent competitors (details ${detailCollected}, source ${sourceEnabled})`, async ({
     page,
-  }, testInfo) => {
+  }) => {
     const mainAsin = "B000000000";
     await ready(page, evidence, { main_asin: mainAsin }, [
       "task:read",
@@ -559,6 +559,18 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
                 },
                 best_seller_rank: { rank: 222, text: "#222 in Home & Kitchen" },
                 sponsored: null,
+                review_samples: [
+                  {
+                    review_id: "RMAINEXAMPLE",
+                    title: "续航评价节选",
+                    text: "Fixture review excerpt about battery life.",
+                    rating: 5,
+                    date_text: "Reviewed in the United States on October 5, 2026",
+                    variation_text: "Color: Pink",
+                    verified_purchase: true,
+                    helpful_votes: 11,
+                  },
+                ],
               }
             : index === 1
               ? {
@@ -569,11 +581,23 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
                   },
                   best_seller_rank: null,
                   sponsored: true,
+                  review_samples: [
+                    {
+                      review_id: "RCOMPETITOREXAMPLE",
+                      title: "竞品评价节选",
+                      text: "Fixture review excerpt with undisclosed optional fields.",
+                      rating: null,
+                      date_text: null,
+                      variation_text: null,
+                      verified_purchase: null,
+                      helpful_votes: null,
+                    },
+                  ],
                 }
               : null,
       },
     });
-    await page.route("**/api/v1/competitors", (route) =>
+    await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) =>
       route.fulfill({
         json: envelope([
           product(0),
@@ -582,6 +606,10 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
         ]),
       }),
     );
+    const reads: string[] = [];
+    page.on("request", (request) => {
+      if (new URL(request.url()).pathname === "/api/v1/competitors") reads.push(request.url());
+    });
     await page.goto(`/opportunities/${opportunityId}?tab=competition`);
     const comparison = page.getByRole("region", { name: "Amazon 主品与竞品" });
     await expect(comparison.getByRole("heading", { name: "主要商品示例" })).toBeVisible();
@@ -628,8 +656,27 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
       .toBe(true);
+    const reviewRegion = comparison.getByRole("region", { name: "公开评价样本" });
+    await expect(reviewRegion.locator("details")).toHaveCount(2);
+    expect(reads.length).toBeGreaterThan(0);
+    expect(
+      reads.every((url) => new URL(url).searchParams.get("opportunity_id") === opportunityId),
+    ).toBe(true);
+    const beforeExpand = reads.length;
+    await reviewRegion.locator("summary").first().click();
+    await expect(
+      reviewRegion.getByText("Fixture review excerpt about battery life."),
+    ).toBeVisible();
+    await expect(reviewRegion.getByText(/Color: Pink/)).toBeVisible();
+    await expect(reviewRegion.getByText("页面标记已购", { exact: true })).toBeVisible();
+    await expect(reviewRegion.getByText("11 人认为有用", { exact: true })).toBeVisible();
+    await reviewRegion.locator("summary").nth(1).click();
+    await expect(reviewRegion.getByText("未展示购买认证", { exact: true })).toBeVisible();
+    await expect(reviewRegion.getByText("有用票数未展示", { exact: true })).toBeVisible();
+    await expect(reviewRegion.getByText("星级未展示", { exact: true })).toBeVisible();
+    expect(reads.length).toBe(beforeExpand);
     if (competitorCount === 5 && detailCollected && sourceEnabled)
-      await comparison.screenshot({ path: testInfo.outputPath("selection-comparison.png") });
+      await expect(reviewRegion).toHaveScreenshot("selection-public-review-samples.png");
     await page.getByRole("button", { name: "商品与评分", exact: true }).click();
     await expect(page.getByText(`${competitorCount} 个关联竞品`, { exact: true })).toBeVisible();
     await expect(page.getByText(`${competitorCount}个快照`, { exact: true })).toBeVisible();
@@ -1242,7 +1289,7 @@ test("P18 insight reads fail and recover independently without hiding competitor
   let competitorReads = 0;
   let sourcingReads = 0;
   let allowSourcingRecovery = false;
-  await page.route("**/api/v1/competitors", (route) => {
+  await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) => {
     competitorReads += 1;
     return route.fulfill({ json: envelope([competitor]) });
   });
@@ -1299,7 +1346,7 @@ test("P18 sourcing facts survive competitor read failure and competitor retry st
   let competitorReads = 0;
   let sourcingReads = 0;
   let allowCompetitorRecovery = false;
-  await page.route("**/api/v1/competitors", (route) => {
+  await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) => {
     competitorReads += 1;
     return route.fulfill(
       !allowCompetitorRecovery
@@ -1339,7 +1386,7 @@ test("P18 insight sections distinguish unavailable permissions from empty facts"
   await ready(page);
   let competitorReads = 0;
   let sourcingReads = 0;
-  await page.route("**/api/v1/competitors", (route) => {
+  await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) => {
     competitorReads += 1;
     return route.fulfill({ json: envelope([]) });
   });
@@ -1390,7 +1437,9 @@ test("P18 discovery actions require their matching manage capabilities", async (
     }),
   );
   let discoveryWrites = 0;
-  await page.route("**/api/v1/competitors", (route) => route.fulfill({ json: envelope([]) }));
+  await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) =>
+    route.fulfill({ json: envelope([]) }),
+  );
   await page.route("**/api/v1/sourcing/searches*", (route) => {
     if (route.request().method() === "POST") discoveryWrites += 1;
     return route.fulfill({ json: envelope([]) });
@@ -1434,7 +1483,9 @@ test("P18 competitor and supplier discovery keep separate request contracts and 
   );
   const competitorBodies: Record<string, unknown>[] = [];
   const sourcingBodies: Record<string, unknown>[] = [];
-  await page.route("**/api/v1/competitors", (route) => route.fulfill({ json: envelope([]) }));
+  await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) =>
+    route.fulfill({ json: envelope([]) }),
+  );
   await page.route("**/api/v1/opportunities/*/competitor-discovery", async (route) => {
     if (route.request().method() !== "POST") return route.fallback();
     competitorBodies.push(route.request().postDataJSON() as Record<string, unknown>);
@@ -1504,7 +1555,9 @@ test("P18 delayed discovery receipts stay scoped to their originating opportunit
     await sourcingGate;
     await route.fulfill({ status: 202, json: envelope({ task_id: "late-supplier-task" }) });
   });
-  await page.route("**/api/v1/competitors", (route) => route.fulfill({ json: envelope([]) }));
+  await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) =>
+    route.fulfill({ json: envelope([]) }),
+  );
   await page.route(`**/api/v1/opportunities/${nextOpportunityId}`, (route) => {
     nextDetailReads += 1;
     return route.fallback();
@@ -1584,7 +1637,9 @@ test("P18 overview links match the exact read capabilities required by their des
       }),
     }),
   );
-  await page.route("**/api/v1/competitors", (route) => route.fulfill({ json: envelope([]) }));
+  await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) =>
+    route.fulfill({ json: envelope([]) }),
+  );
   await page.route("**/api/v1/sourcing/searches*", (route) =>
     route.fulfill({ json: envelope([]) }),
   );
@@ -2264,7 +2319,7 @@ test("late competitor data stays scoped to the opportunity that requested it", a
   const oldCompetitorsStarted = new Promise<void>(
     (resolve) => (markOldCompetitorsStarted = resolve),
   );
-  await page.route("**/api/v1/competitors", async (route) => {
+  await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, async (route) => {
     competitorReadCount += 1;
     if (competitorReadCount === 1) {
       markOldCompetitorsStarted();

@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import {
   amazonPublicSignalJoinSql,
   amazonPublicSignalSelectSql,
+  amazonPublicSignalsWithReviewsSelectSql,
   readAmazonPublicSignals,
 } from "./amazon-public-signals.js";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
@@ -22,22 +23,24 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
   async list(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT c.*,p_snapshot.status provider_status,s.current_price,s.currency,s.rank_value,s.review_count,s.rating_value," +
-        amazonPublicSignalSelectSql +
+        (i.opportunityId ? amazonPublicSignalsWithReviewsSelectSql : amazonPublicSignalSelectSql) +
         "s.availability,s.captured_at,s.freshness,s.source_status,s.source_ref_id," +
         `s.evidence_id,${competitorDetailEvidenceSql("s")} detail_collected,(SELECT COUNT(*) FROM competitor_snapshots history WHERE history.competitor_id=c.id) ` +
         "snapshot_count FROM competitors c LEFT JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id " +
         "LEFT JOIN providers p_snapshot ON p_snapshot.id=c.provider_id " +
         amazonPublicSignalJoinSql +
-        "WHERE c.organization_id=? AND c.workspace_id=? AND c.deleted_at IS NULL ORDER BY c.updated_at " +
+        "WHERE c.organization_id=? AND c.workspace_id=? AND c.deleted_at IS NULL " +
+        (i.opportunityId ? "AND c.opportunity_id=? " : "") +
+        "ORDER BY c.updated_at " +
         "DESC,c.id DESC",
-      [i.organizationId, i.workspaceId],
+      [i.organizationId, i.workspaceId, ...(i.opportunityId ? [i.opportunityId] : [])],
     );
     return rows.map((r) => this.dto(r));
   }
   async get(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT c.*,p_snapshot.status provider_status,s.current_price,s.currency,s.rank_value,s.review_count,s.rating_value," +
-        amazonPublicSignalSelectSql +
+        amazonPublicSignalsWithReviewsSelectSql +
         "s.availability,s.captured_at,s.freshness,s.source_status,s.source_ref_id," +
         `s.evidence_id,${competitorDetailEvidenceSql("s")} detail_collected,(SELECT COUNT(*) FROM competitor_snapshots history WHERE history.competitor_id=c.id) ` +
         "snapshot_count FROM competitors c LEFT JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id " +

@@ -2424,6 +2424,12 @@ paths:
   /competitors:
     get:
       summary: List workspace-scoped competitors with latest source snapshot
+      description: Without opportunity_id the list omits review excerpts. A scoped opportunity list and individual competitor detail may include public review samples. Tenant scope always comes from the authenticated session.
+      parameters:
+        - in: query
+          name: opportunity_id
+          required: false
+          schema: { type: string, format: uuid }
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:read
       responses:
@@ -7554,6 +7560,11 @@ components:
           enum: [true]
           nullable: true
           description: True only when a Sponsored badge was observed in this product card. Null is unknown, not proof that advertising is absent. No spend, impressions or clicks are inferred.
+        review_samples:
+          type: array
+          maxItems: 10
+          description: Optional public product-page excerpts; not all reviews and may contain other variations. No reviewer identities or raw HTML are exposed.
+          items: { $ref: "#/components/schemas/AmazonPublicReviewSample" }
         best_seller_rank:
           type: object
           nullable: true
@@ -7562,6 +7573,20 @@ components:
           properties:
             rank: { type: integer, minimum: 1 }
             text: { type: string, maxLength: 500 }
+    AmazonPublicReviewSample:
+      type: object
+      readOnly: true
+      additionalProperties: false
+      required: [review_id, title, text, rating, date_text, variation_text, verified_purchase, helpful_votes]
+      properties:
+        review_id: { type: string, maxLength: 80, pattern: "^R[A-Z0-9]+$" }
+        title: { type: string, maxLength: 300 }
+        text: { type: string, maxLength: 2000 }
+        rating: { type: integer, minimum: 1, maximum: 5, nullable: true }
+        date_text: { type: string, maxLength: 200, nullable: true }
+        variation_text: { type: string, maxLength: 200, nullable: true }
+        verified_purchase: { type: boolean, enum: [true], nullable: true }
+        helpful_votes: { type: integer, minimum: 1, nullable: true }
     CompetitorSnapshotInput:
       type: object
       required:

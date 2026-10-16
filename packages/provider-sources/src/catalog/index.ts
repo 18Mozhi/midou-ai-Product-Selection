@@ -689,6 +689,7 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
             "sponsored",
             "best_seller_rank",
             "best_seller_rank_text",
+            "review_samples_json",
           ]
         : ["title", "observed_at", "source_url"],
   schedule_minutes: 30,
