@@ -180,7 +180,7 @@ html[data-design="commerce"] #app .catalog-display button[aria-pressed="true"] {
 }
 .catalog-products {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 .catalog-product {
@@ -188,7 +188,7 @@ html[data-design="commerce"] #app .catalog-display button[aria-pressed="true"] {
   min-width: 0;
   overflow: hidden;
   border: 1px solid var(--so-border);
-  border-radius: 7px;
+  border-radius: 4px;
   background: var(--commerce-color-0);
 }
 .catalog-product:hover {
@@ -206,7 +206,7 @@ html[data-design="commerce"] #app .catalog-product .opportunity-picture {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 210px;
+  height: 180px;
   box-sizing: border-box;
   background: var(--commerce-color-5);
   border: 0;
@@ -224,10 +224,16 @@ html[data-design="commerce"] #app .catalog-product .opportunity-picture {
   color: var(--commerce-color-7);
   font-size: 13px;
 }
+html[data-design="commerce"] #app .catalog-product .opportunity-picture.is-placeholder {
+  height: 64px;
+  padding: 8px 12px 8px 54px;
+  background: var(--so-panel);
+  color: var(--so-text-muted);
+}
 .catalog-product-identity {
   display: grid;
-  gap: 7px;
-  padding: 14px 14px 10px;
+  gap: 4px;
+  padding: 12px 14px 10px;
 }
 html[data-design="commerce"] #app .catalog-product-identity > strong {
   font-size: 13px;
@@ -247,7 +253,7 @@ html[data-design="commerce"] #app .catalog-product-identity > strong {
 .catalog-product-metrics {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px 8px;
+  gap: 8px;
   margin: 0;
   padding: 10px 14px;
 }
@@ -318,6 +324,9 @@ html[data-design="commerce"] #app .product-catalog[data-display="list"] .opportu
   border: 0;
 }
 @media (max-width: 1100px) {
+  .catalog-products {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
   .role-workspace-identity > a,
   .role-workspace-identity > span {
     display: none;

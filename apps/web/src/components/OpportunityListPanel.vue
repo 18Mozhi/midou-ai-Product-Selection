@@ -210,7 +210,10 @@ const opportunityStatus = (value: string) =>
     if (props.selectionView === "rule_candidates")
       return [
         { label: "质量门", value: `${passedGateCount(item)}/5` },
-        { label: "证据", value: `${item.evidence_count} 条 · ${item.source_count} 源` },
+        {
+          label: "证据",
+          value: `${item.evidence_count} 条 · ${item.source_count} 源`,
+        },
         { label: "下一项", value: nextMissingGate(item) },
       ];
     if (props.selectionView === "evidence_pending")
@@ -224,7 +227,10 @@ const opportunityStatus = (value: string) =>
         ? [{ label: "当前结论", value: recommendationLabel(item) }]
         : []),
       { label: "综合评分", value: scoreLabel(item.overall_score) },
-      { label: "证据", value: `${item.evidence_count} 条 · ${item.source_count} 源` },
+      {
+        label: "证据",
+        value: `${item.evidence_count} 条 · ${item.source_count} 源`,
+      },
       { label: "风险", value: opportunityStatus(item.risk_level) },
     ];
   },
@@ -443,9 +449,14 @@ watch(imageFailureResetSources, (items) => {
             "
           />
         </label>
-        <RouterLink :to="{ path: `/opportunities/${item.id}`, query: { from: route.fullPath } }"
+        <RouterLink
+          :to="{
+            path: `/opportunities/${item.id}`,
+            query: { from: route.fullPath },
+          }"
           ><span
             class="opportunity-picture"
+            :class="{ 'is-placeholder': !hasUsableImage(item) }"
             :role="imageFallbackLabel(item) ? 'img' : undefined"
             :aria-label="imageFallbackLabel(item)"
             ><img
@@ -455,7 +466,7 @@ watch(imageFailureResetSources, (items) => {
               loading="lazy"
               referrerpolicy="no-referrer"
               @error="onImageError(item)"
-            /><span v-else aria-hidden="true">图</span></span
+            /><span v-else aria-hidden="true">{{ imageFallbackLabel(item) }}</span></span
           ><span class="catalog-product-identity"
             ><strong>{{ item.name }}</strong
             ><small v-if="item.main_asin"

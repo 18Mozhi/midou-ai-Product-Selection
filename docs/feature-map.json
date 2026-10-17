@@ -1,4 +1,14 @@
 {
+  "selectionCatalogueDensity20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-catalogue-density.md",
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/commerce-workspace.css"
+    ],
+    "verification": ["npm run typecheck:web", "npm run build:web"],
+    "acceptance": "Pending rendered desktop/mobile verification; daily full-chain target remains unverified."
+  },
   "selectionAmazonObservationLineage20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-search-detail-observations.md",
