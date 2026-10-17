@@ -190,6 +190,13 @@ const automaticSelectionEvaluation = new MySqlAutomaticSelectionEvaluationWorker
   config.identity.workerId,
   config.automaticSources.systemActorId,
   config.automaticSelection.leaseSeconds,
+  undefined,
+  new OpenAiIntelligenceProductClassifier(
+    config.ai.model,
+    config.ai.baseUrl,
+    config.ai.apiKey,
+    Math.min(config.ai.timeoutMs, config.automaticSelection.leaseSeconds * 500),
+  ),
 );
 const coreCollectionProjection = new CoreCollectionProjectionWorker(pool, config.identity.workerId);
 const pollers = new WorkerPollers();

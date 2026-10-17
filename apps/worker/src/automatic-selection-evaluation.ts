@@ -1,3 +1,7 @@
+import {
+  validateSupplyTitleClassifications,
+  type SupplyTitleContext,
+} from "./supply-title-classification.js";
 export const AUTOMATIC_SELECTION_FORMULA_VERSION = "crawler-evidence-v1";
 
 export interface ProductFacts {
@@ -25,9 +29,10 @@ export interface SupplyFacts {
 
 export interface SupplyMatch {
   item: SupplyFacts;
-  confidence: number;
+  confidence: number | null;
   sampleCount: number;
   conservativePrice: number;
+  classification?: SupplyTitleContext;
 }
 
 export interface AutomaticScoreFacts {
@@ -116,9 +121,49 @@ const variants = (value: string) => {
   return new Set(found);
 };
 
-export const isPhoneCase = (value: string) =>
-  /\b(?:phone\s+)?case\b|手机壳|保护壳|保护套|机壳/i.test(value);
+export const isPhoneCase = (value: string) => {
+  if (/手机壳|手机套|手机保护壳|手机保护套|\b(?:cell\s*)?phone\s*(?:case|cover)\b/i.test(value))
+    return true;
+  return (
+    family(value) !== null &&
+    models(value).size > 0 &&
+    /\b(?:iphone|apple|pixel|samsung(?:\s+galaxy)?|galaxy)\s+(?:\d{1,2}|s\d{2}|a\d{2}|z\d)\b/.test(
+      normalizedIdentityText(value),
+    ) &&
+    /\b(?:case|cover)\b|保护壳|保护套|机壳/i.test(value)
+  );
+};
 const intersects = <T>(left: Set<T>, right: Set<T>) => [...left].filter((item) => right.has(item));
+const materialPatterns: Array<[string, RegExp]> = [
+  ["nylon", /\bnylon\b|尼龙|锦纶/i],
+  ["silicone", /\bsilicone\b|硅胶/i],
+  ["leather", /\bleather\b|真皮|皮革/i],
+  ["polyester", /\bpolyester\b|涤纶|聚酯/i],
+  ["cotton", /\bcotton\b|纯棉|棉布/i],
+  ["stainless_steel", /\bstainless\s+steel\b|不锈钢/i],
+  ["plastic", /\bplastic\b|塑料/i],
+  ["glass", /\bglass\b|玻璃/i],
+  ["wood", /\bwood(?:en)?\b|实木|木质/i],
+  ["aluminium", /\balumin(?:um|ium)\b|铝合金|铝制/i],
+];
+const explicitMaterials = (value: string) => {
+  const title = value.normalize("NFKC");
+  return materialPatterns.flatMap(([material, pattern]) => (pattern.test(title) ? [material] : []));
+};
+const numericTitleSpecifications = (title: string) =>
+  new Set(title.normalize("NFKC").match(/\d+(?:[.,]\d+)?/g) ?? []);
+const genericTitleFactsCompatible = (productTitle: string, supplyTitle: string) => {
+  const product = explicitMaterials(productTitle),
+    supply = explicitMaterials(supplyTitle),
+    productNumbers = numericTitleSpecifications(productTitle),
+    supplyNumbers = numericTitleSpecifications(supplyTitle);
+  return (
+    product.length === supply.length &&
+    product.every((item) => supply.includes(item)) &&
+    productNumbers.size === supplyNumbers.size &&
+    [...productNumbers].every((item) => supplyNumbers.has(item))
+  );
+};
 
 export function productIdentityConfidence(productTitle: string, supplyTitle: string): number {
   const productTokens = tokens(productTitle),
@@ -150,7 +195,7 @@ export function productIdentityConfidence(productTitle: string, supplyTitle: str
     return clamp(75 + variantScore + tokenScore);
   }
 
-  if (sharedTokens.length < 3) return 0;
+  if (!genericTitleFactsCompatible(productTitle, supplyTitle) || sharedTokens.length < 3) return 0;
   const union = new Set([...productTokens, ...supplyTokens]).size,
     jaccard = union ? sharedTokens.length / union : 0;
   return clamp(70 + Math.min(30, sharedTokens.length * 4 + jaccard * 20));
@@ -199,6 +244,67 @@ export function selectConservativeSupplyMatch(
     sampleCount: cohort.length,
     conservativePrice,
   };
+}
+
+/** A classification can identify a quoted source, never create a price or similarity percentage. */
+export function selectClassifiedSupplyQuote(
+  productRef: string,
+  productTitle: string,
+  supplies: SupplyFacts[],
+  context?: SupplyTitleContext,
+): SupplyMatch | null {
+  if (
+    !context ||
+    isPhoneCase(productTitle) ||
+    context.input.product_ref !== productRef ||
+    context.input.product_title !== productTitle
+  )
+    return null;
+  let classifications;
+  try {
+    classifications = validateSupplyTitleClassifications(
+      { classifications: context.classifications },
+      context.input,
+    );
+  } catch {
+    return null;
+  }
+  const latestOffers = new Map<string, SupplyFacts>();
+  for (const item of supplies) {
+    if (!item.externalId.trim() || !Number.isFinite(item.observedAt.getTime())) continue;
+    const current = latestOffers.get(item.externalId);
+    if (!current || item.observedAt > current.observedAt) latestOffers.set(item.externalId, item);
+  }
+  const candidates = new Map(context.input.candidates.map((item) => [item.source_ref, item.title]));
+  for (const candidate of context.input.candidates) {
+    const classification = classifications.find(
+      (item) => item.source_ref === candidate.source_ref && item.relation === "compatible",
+    );
+    if (!classification) continue;
+    const item = [...latestOffers.values()].find(
+      (offer) => `${offer.externalId}:${offer.evidenceId}` === classification.source_ref,
+    );
+    if (
+      !item ||
+      candidates.get(classification.source_ref) !== item.title ||
+      !genericTitleFactsCompatible(productTitle, item.title) ||
+      isPhoneCase(item.title) ||
+      item.currency !== "CNY" ||
+      !Number.isFinite(item.price) ||
+      item.price <= 0 ||
+      !item.evidenceId ||
+      item.priceDescription?.includes("新人价")
+    )
+      continue;
+    return {
+      item,
+      confidence: null,
+      sampleCount: 1,
+      conservativePrice: item.price,
+      classification: { input: context.input, classifications: [classification] },
+    };
+  }
+  return null;
 }
 
 export function calculateAutomaticScoreFacts(input: {

@@ -1,3 +1,5 @@
+> 2026-10-17 通用品中英文货源：新增标题属性分类备用路径，逐项保留原文与证据，只记录真实报价，不制造同款相似度或通用品利润；普通 case 不再套用手机壳费用。见 `docs/selection-cross-language-supply.md`，本地实现，真实匹配与发布仍待验收。
+
 > 2026-10-17 每日目标确认：100 个完成整条流程的商品，含低分与不推荐。completed_count 改按首次核验完成的独立 ASIN，原发现/合格数单独保留。见 `docs/selection-daily-production.md`，未部署。
 
 > 2026-10-17 组织后台标题重制：九页共用紧凑白底操作栏，删除重复大蓝标题规则，20 项桌面/手机检查通过；业务表单与审计不变。见 `docs/selection-organization-toolbar.md`，未部署。

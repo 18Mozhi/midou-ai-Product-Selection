@@ -58,7 +58,15 @@ function fixture(options = {}) {
     release() {},
     async query(sql, params) {
       calls.push({ sql, params });
+      if (
+        options.failSupplyAudit &&
+        sql.startsWith("INSERT INTO opportunity_events") &&
+        params[3] === "opportunity.supply_title_classified"
+      )
+        throw new Error("supply audit unavailable");
       if (sql.startsWith("SELECT o.*")) return [[{ market: "US", score_rule_version: "v1" }]];
+      if (sql.startsWith("SELECT opportunity_id FROM automatic_selection_evaluations"))
+        return [[{ opportunity_id: "item" }]];
       if (sql.startsWith("SELECT id,version_code,dimensions_json"))
         return [options.noScoreRule ? [] : [{ id: "score-rule", dimensions_json: dimensions }]];
       if (sql.startsWith("SELECT id,version_code,fee_lines_json"))
@@ -173,14 +181,123 @@ function fixture(options = {}) {
     },
   };
   const worker = new MySqlAutomaticSelectionEvaluationWorker(
-    { getConnection: async () => connection },
+    { getConnection: async () => connection, query: (...args) => connection.query(...args) },
     "worker",
     "actor",
     120,
     () => now,
+    options.supplyClassifier,
   );
   return { worker, calls, inputs, prices: humanCosts, counts: () => ({ commits, rollbacks }) };
 }
+
+const bilingualOptions = {
+  noHumanCosts: true,
+  fields: { title: "Waterproof nylon makeup case with zipper" },
+  supplyTitle: "防水尼龙化妆包拉链收纳",
+  supplyClassifier: {
+    async classifySupplies(input) {
+      return input.candidates.map((candidate) => ({
+        source_ref: candidate.source_ref,
+        relation: "compatible",
+        rationale: "Type and explicit material/function agree; SKU unverified.",
+        attributes: [
+          { kind: "product_type", product_excerpt: "makeup case", supply_excerpt: "化妆包" },
+          { kind: "material", product_excerpt: "nylon", supply_excerpt: "尼龙" },
+          { kind: "function", product_excerpt: "Waterproof", supply_excerpt: "防水" },
+        ],
+      }));
+    },
+  },
+};
+
+test("classified source writes its exact original quote and evidence audit without phone fees or profit", async () => {
+  const f = fixture(bilingualOptions);
+  const classification = await f.worker.classifySupplyTitles(job);
+  const result = await f.worker.evaluate(job, classification);
+  assert.equal(result.status, "waiting_evidence");
+  const purchase = f.prices.find((item) => item.input_type === "purchase_price");
+  assert.equal(purchase.amount_value, 5);
+  assert.equal(purchase.evidence_id, "supply-1");
+  assert.equal(purchase.source_ref_id, "1688:1:classified-title:v1");
+  const audit = f.calls.find(
+    (call) =>
+      call.sql.startsWith("INSERT INTO opportunity_events") &&
+      call.params[3] === "opportunity.supply_title_classified",
+  );
+  const payload = JSON.parse(audit.params[8]);
+  assert.equal(payload.purchase_evidence_id, "supply-1");
+  assert.equal(payload.similarity_percent, null);
+  assert.deepEqual(
+    payload.classifications[0].attributes,
+    classification.classifications[0].attributes,
+  );
+  assert.equal(
+    f.calls.some((call) => call.sql.startsWith("INSERT INTO opportunity_profit_jobs")),
+    false,
+  );
+  assert.deepEqual(f.counts(), { commits: 1, rollbacks: 0 });
+});
+
+test("classified source cannot replace manually reviewed purchase prices", async () => {
+  const f = fixture({ ...bilingualOptions, noHumanCosts: false });
+  await f.worker.evaluate(job, await f.worker.classifySupplyTitles(job));
+  assert.equal(f.prices.length, 2);
+  assert.equal(
+    f.calls.some((call) => call.sql.startsWith("INSERT INTO opportunity_cost_inputs")),
+    false,
+  );
+  assert.equal(
+    f.calls.some((call) => call.params?.[3] === "opportunity.supply_title_classified"),
+    false,
+  );
+});
+
+test("stale classified main evidence cannot write purchase price", async () => {
+  const f = fixture(bilingualOptions);
+  const context = await f.worker.classifySupplyTitles(job);
+  context.input.product_ref = "amazon:old-main-evidence";
+  await f.worker.evaluate(job, context);
+  assert.equal(
+    f.prices.some((item) => item.input_type === "purchase_price"),
+    false,
+  );
+});
+
+test("classified quote and its source audit share one rollback boundary", async () => {
+  const f = fixture({ ...bilingualOptions, failSupplyAudit: true });
+  const classification = await f.worker.classifySupplyTitles(job);
+  await assert.rejects(f.worker.evaluate(job, classification), /supply audit unavailable/);
+  assert.deepEqual(f.counts(), { commits: 0, rollbacks: 1 });
+  assert.equal(
+    f.calls.some((call) => call.sql.startsWith("UPDATE automatic_selection_evaluations")),
+    false,
+  );
+});
+
+test("model timeout preserves factual sale and non-profit scoring without inventing a purchase quote", async () => {
+  const f = fixture({
+    ...bilingualOptions,
+    supplyClassifier: {
+      async classifySupplies() {
+        throw Object.assign(new Error("timeout"), { code: "intelligence_model_timeout" });
+      },
+    },
+  });
+  f.worker.enqueueEligibleCandidates = async () => {};
+  f.worker.claim = async () => job;
+  const result = await f.worker.processOnce();
+  assert.equal(result.status, "waiting_evidence");
+  assert.equal(result.supply_title_classification_error, "intelligence_model_timeout");
+  assert.equal(f.prices.find((item) => item.input_type === "sale_price").amount_value, 25);
+  assert.equal(
+    f.prices.some((item) => item.input_type === "purchase_price"),
+    false,
+  );
+  assert.ok(f.inputs.has("market_demand"));
+  assert.equal(f.inputs.get("profit").score_value, null);
+  assert.deepEqual(f.counts(), { commits: 1, rollbacks: 0 });
+});
 
 for (const noCostRule of [false, true]) {
   test(`generic product publishes factual scores with ${noCostRule ? "no cost rule" : "phone-only costs"}`, async () => {

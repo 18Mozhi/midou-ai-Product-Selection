@@ -5,6 +5,15 @@ info:
   description: ScoutOps selection workflow and administration API. Backend intelligence classification can schedule evidence-linked Amazon searches and select a real primary record; model associations remain hypotheses, never sales facts or recommendations. Automatic recommendations require an identified primary product and at least five independently verified Amazon competitor detail snapshots. Existing sourcing searches support backend-only LAN 1688 image transport. Automatic sourcing and missing-task recovery use enabled 1688 and the primary product image, without automatic fallback to other supplier sites. Missing images remain explicitly missing. Read-only evidence fields never replace source facts or human adoption. Organization-visible endpoints require scoped server-side authorization.
 servers:
   - url: /api/v1
+x-worker-event-contracts:
+  opportunity.supply_title_classified:
+    contract: supply-title-v1
+    description: Internal scoped audit committed with an original 1688 quote after title-attribute classification. Classification is not exact SKU verification, similarity measurement, purchase approval, or profit evidence. No new HTTP fields.
+    resource_type: opportunity
+    payload_fields:
+      [contract, input, classifications, purchase_evidence_id, matching_method, similarity_percent]
+    matching_method: cross_language_title_attributes
+    similarity_percent: null
 x-scoutops-verification:
   runtimeApiExposed: false
   reason: Software completion commands execute only in local, CI, or Baota-controlled tasks and do not require disk, capacity-load, PVE, or production-resource evidence.

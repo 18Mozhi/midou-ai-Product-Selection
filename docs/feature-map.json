@@ -1,4 +1,21 @@
 {
+  "selectionCrossLanguageSupply20261017": {
+    "status": "implemented",
+    "statusDetail": "local_contracts_pending_live_matching_acceptance_not_deployed",
+    "requirements": "docs/selection-cross-language-supply.md",
+    "sourceFiles": [
+      "apps/worker/src/supply-title-classification.ts",
+      "apps/worker/src/automatic-selection-evaluation.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/worker/src/intelligence-product-association.ts",
+      "apps/worker/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/supply-title-classification.test.mjs",
+      "tests/unit/automatic-evidence-scoring.test.mjs"
+    ],
+    "events": ["opportunity.supply_title_classified"]
+  },
   "selectionOrganizationToolbar20261017": {
     "status": "implemented",
     "statusDetail": "20_browser_cases_passed_not_deployed",

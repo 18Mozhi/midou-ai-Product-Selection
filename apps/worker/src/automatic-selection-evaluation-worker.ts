@@ -2,6 +2,7 @@ import { recordSelectionPipelineCompletion } from "./selection-pipeline-completi
 import { createHash, randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { amazonAsin } from "./competitor-discovery-policy.js";
+import type { SupplyTitleClassifier, SupplyTitleContext } from "./supply-title-classification.js";
 import {
   selectionCandidateSql,
   automaticEvaluationPendingSql,
@@ -18,6 +19,7 @@ import {
   isPhoneCase,
   normalizedProductFields,
   selectConservativeSupplyMatch,
+  selectClassifiedSupplyQuote,
   type ProductFacts,
   type SupplyFacts,
 } from "./automatic-selection-evaluation.js";
@@ -66,6 +68,28 @@ const number = (value: unknown) => {
 const text = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 const fingerprint = (value: unknown) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
+const primaryEvidence = (linked?: RowDataPacket, detail?: RowDataPacket) =>
+  detail && (!linked || date(detail.observed_at).getTime() >= date(linked.observed_at).getTime())
+    ? detail
+    : linked;
+const supplyFacts = (rows: RowDataPacket[]): SupplyFacts[] =>
+  rows.flatMap((row) => {
+    const item = normalizedProductFields(parse(row.payload_json, {})),
+      externalId = text(item.external_id);
+    return externalId
+      ? [
+          {
+            title: text(item.title),
+            price: number(item.price) ?? Number.NaN,
+            currency: text(item.currency).toUpperCase(),
+            observedAt: date(item.observed_at ?? row.created_at),
+            evidenceId: String(row.raw_evidence_id),
+            externalId,
+            priceDescription: text(item.price_description) || null,
+          },
+        ]
+      : [];
+  });
 
 export class AutomaticSelectionEvaluationError extends Error {
   constructor(
@@ -97,6 +121,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     private readonly systemActorId: string,
     private readonly leaseSeconds: number,
     private readonly now: () => Date = () => new Date(),
+    private readonly supplyClassifier?: SupplyTitleClassifier,
   ) {}
 
   async processOnce() {
@@ -104,7 +129,16 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     const job = await this.claim();
     if (!job) return { status: "idle" as const };
     try {
-      const result = await this.evaluate(job);
+      let classification: SupplyTitleContext | undefined, classificationError: string | undefined;
+      try {
+        classification = await this.classifySupplyTitles(job);
+      } catch (error) {
+        const code = String((error as { code?: unknown }).code ?? "");
+        classificationError = /^intelligence_[a-z_]{1,64}$/.test(code)
+          ? code
+          : "supply_title_classification_failed";
+      }
+      const result = await this.evaluate(job, classification, classificationError);
       return { status: result.status, opportunity_id: job.opportunityId, ...result.payload };
     } catch (error) {
       const wrapped =
@@ -181,7 +215,59 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     }
   }
 
-  private async evaluate(job: EvaluationJob) {
+  private async classifySupplyTitles(job: EvaluationJob): Promise<SupplyTitleContext | undefined> {
+    if (!this.supplyClassifier) return undefined;
+    const params = [job.opportunityId, job.organizationId, job.workspaceId];
+    const [[linked], [details], [rows]] = await Promise.all([
+      this.pool.query<RowDataPacket[]>(automaticPrimaryEvidenceSql, params),
+      this.pool.query<RowDataPacket[]>(automaticPrimaryDetailEvidenceSql, params),
+      this.pool.query<RowDataPacket[]>(automaticSupplyEvidenceSql, params),
+    ]);
+    const primary = primaryEvidence(linked[0], details[0]);
+    if (!primary) return undefined;
+    const title = text(normalizedProductFields(parse(primary.payload_json, {})).title),
+      supplies = supplyFacts(rows);
+    if (
+      !title ||
+      title.length > 1000 ||
+      isPhoneCase(title) ||
+      selectConservativeSupplyMatch(title, supplies)
+    )
+      return undefined;
+    const latest = new Map<string, SupplyFacts>();
+    for (const item of supplies) {
+      if (!Number.isFinite(item.observedAt.getTime())) continue;
+      const current = latest.get(item.externalId);
+      if (!current || item.observedAt > current.observedAt) latest.set(item.externalId, item);
+    }
+    const candidates = [...latest.values()]
+      .filter(
+        (item) =>
+          item.title &&
+          item.title.length <= 1000 &&
+          item.currency === "CNY" &&
+          Number.isFinite(item.price) &&
+          item.price > 0 &&
+          item.evidenceId &&
+          !item.priceDescription?.includes("新人价") &&
+          !isPhoneCase(item.title),
+      )
+      .slice(0, 10)
+      .map((item) => ({ source_ref: `${item.externalId}:${item.evidenceId}`, title: item.title }));
+    if (!candidates.length) return undefined;
+    const input = {
+      product_ref: `amazon:${String(primary.raw_evidence_id)}`,
+      product_title: title,
+      candidates,
+    };
+    return { input, classifications: await this.supplyClassifier.classifySupplies(input) };
+  }
+
+  private async evaluate(
+    job: EvaluationJob,
+    classification?: SupplyTitleContext,
+    classificationError?: string,
+  ) {
     const connection = await this.pool.getConnection(),
       now = this.now(),
       requestId = `automatic-selection:${randomUUID()}`,
@@ -193,6 +279,15 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           `AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted') AND ${selectionCandidateSql} FOR UPDATE`,
         [job.opportunityId, job.organizationId, job.workspaceId],
       );
+      if (classification || this.supplyClassifier) {
+        const [leases] = await connection.query<RowDataPacket[]>(
+          "SELECT opportunity_id FROM automatic_selection_evaluations WHERE opportunity_id=? AND organization_id=? AND workspace_id=? " +
+            "AND status='leased' AND lease_owner=? AND lease_expires_at>? FOR UPDATE",
+          [job.opportunityId, job.organizationId, job.workspaceId, this.workerId, now],
+        );
+        if (!leases[0])
+          throw new AutomaticSelectionEvaluationError("automatic_selection_lease_expired", true);
+      }
       const opportunity = opportunities[0];
       if (!opportunity) {
         await this.complete(
@@ -239,13 +334,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         automaticPrimaryDetailEvidenceSql,
         [job.opportunityId, job.organizationId, job.workspaceId],
       );
-      const linked = amazonRows[0],
-        detail = detailRows[0],
-        amazon =
-          detail &&
-          (!linked || date(detail.observed_at).getTime() >= date(linked.observed_at).getTime())
-            ? detail
-            : linked;
+      const amazon = primaryEvidence(amazonRows[0], detailRows[0]);
       if (!amazon)
         return await this.waiting(connection, job, "amazon_product_evidence_missing", {}, now);
       const fields = normalizedProductFields(parse(amazon.payload_json, {})),
@@ -414,6 +503,9 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           code,
           {
             ...payload,
+            ...(classificationError
+              ? { supply_title_classification_error: classificationError }
+              : {}),
             score_inputs_changed: result.scoreInputsChanged,
           },
           now,
@@ -424,29 +516,15 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         job.organizationId,
         job.workspaceId,
       ]);
-      const supplies: SupplyFacts[] = supplyRows.flatMap((row) => {
-          const item = normalizedProductFields(parse(row.payload_json, {})),
-            price = number(item.price),
-            title = text(item.title),
-            currency = text(item.currency).toUpperCase(),
-            evidenceId = String(row.raw_evidence_id),
-            externalId = text(item.external_id);
-          // Keep unusable newer observations through deduplication so an old quote cannot revive.
-          return externalId
-            ? [
-                {
-                  title,
-                  price: price ?? Number.NaN,
-                  currency,
-                  observedAt: date(item.observed_at ?? row.created_at),
-                  evidenceId,
-                  externalId,
-                  priceDescription: text(item.price_description) || null,
-                },
-              ]
-            : [];
-        }),
-        supplyMatch = selectConservativeSupplyMatch(amazonTitle, supplies);
+      const supplies = supplyFacts(supplyRows),
+        supplyMatch =
+          selectConservativeSupplyMatch(amazonTitle, supplies) ??
+          selectClassifiedSupplyQuote(
+            `amazon:${String(amazon.raw_evidence_id)}`,
+            amazonTitle,
+            supplies,
+            classification,
+          );
 
       // Product prices are source facts; category-specific fees only gate profit calculation.
       const saleChanged = await this.upsertCostInput(connection, {
@@ -469,7 +547,9 @@ export class MySqlAutomaticSelectionEvaluationWorker {
               type: "purchase_price",
               amount: supplyMatch.conservativePrice,
               currency: supplyMatch.item.currency,
-              sourceRef: `1688:${supplyMatch.item.externalId}:p75:${supplyMatch.sampleCount}`,
+              sourceRef: supplyMatch.classification
+                ? `1688:${supplyMatch.item.externalId}:classified-title:v1`
+                : `1688:${supplyMatch.item.externalId}:p75:${supplyMatch.sampleCount}`,
               evidenceId: supplyMatch.item.evidenceId,
               observedAt: supplyMatch.item.observedAt,
               requestId,
@@ -477,6 +557,23 @@ export class MySqlAutomaticSelectionEvaluationWorker {
               now,
             })
           : false;
+
+      if (purchaseChanged && supplyMatch?.classification)
+        await this.event(
+          connection,
+          job,
+          "opportunity.supply_title_classified",
+          {
+            contract: "supply-title-v1",
+            ...supplyMatch.classification,
+            purchase_evidence_id: supplyMatch.item.evidenceId,
+            matching_method: "cross_language_title_attributes",
+            similarity_percent: null,
+          },
+          requestId,
+          traceId,
+          now,
+        );
 
       if (!costRules[0])
         return await waitForCost("automatic_rules_not_active", {
