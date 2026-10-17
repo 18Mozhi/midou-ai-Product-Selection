@@ -7,6 +7,7 @@ import {
   type TrendProjectionJob,
 } from "./trend-projection-calculation.js";
 import { TrendProjectionPersistence } from "./trend-projection-persistence.js";
+import { IntelligenceSourceRecovery } from "./intelligence-source-recovery.js";
 import { amazonAsin } from "./competitor-discovery-policy.js";
 import {
   intelligenceInput,
@@ -47,6 +48,7 @@ const intelligenceFirstOrderSql =
 
 export class MySqlTrendProjectionWorker {
   private readonly persistence: TrendProjectionPersistence;
+  private readonly sourceRecovery: IntelligenceSourceRecovery;
   private claimedSinceRepair = 0;
 
   constructor(
@@ -58,6 +60,7 @@ export class MySqlTrendProjectionWorker {
     refreshIntervalSeconds = 3600,
     queueBacklogLimit = 1000,
   ) {
+    this.sourceRecovery = new IntelligenceSourceRecovery(pool, workerId, now, queueBacklogLimit);
     this.persistence = new TrendProjectionPersistence(
       pool,
       workerId,
@@ -68,6 +71,15 @@ export class MySqlTrendProjectionWorker {
   }
 
   async processOnce(): Promise<TrendProjectionResult> {
+    try {
+      await this.sourceRecovery.processOnce();
+    } catch (error) {
+      const code = (error as { code?: unknown })?.code;
+      console.warn(
+        "intelligence_source_recovery_failed",
+        typeof code === "string" && /^[A-Z0-9_]{1,80}$/.test(code) ? code : "unknown",
+      );
+    }
     await this.enqueueMissing();
     // A permanently busy projection queue must not starve historical sourcing.
     // Match the recovery batch bound, while still serving fresh work first.

@@ -89,6 +89,7 @@ function createPool(job, loseCandidate = false) {
 test("projection locks only the selected scoped ID and rechecks eligibility", async () => {
   const { pool, statements } = createPool({ ...jobScope, id: "job-1", attempt_count: 0 });
   const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.sourceRecovery.processOnce = async () => 0;
   worker.persistence.project = async () => "topic-1";
   worker.persistence.enqueueMissingAutomaticDownstream = async () => {};
   await worker.processOnce();
@@ -107,6 +108,7 @@ test("projection locks only the selected scoped ID and rechecks eligibility", as
 test("losing the candidate race never projects or overwrites another lease", async () => {
   const { pool, calls } = createPool({ ...jobScope, id: "job-1", attempt_count: 0 }, true);
   const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.sourceRecovery.processOnce = async () => 0;
   worker.persistence.project = async () => {
     throw new Error("lost lease must not project");
   };
@@ -127,6 +129,7 @@ test("legacy supplier projections drain before a real job without running suppli
   ];
   const { pool, calls, statements } = createPool(jobs);
   const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.sourceRecovery.processOnce = async () => 0;
   worker.persistence.project = async () => "topic-1";
   worker.persistence.enqueueMissingAutomaticDownstream = async () => {};
   assert.deepEqual(await worker.processOnce(), {
@@ -147,6 +150,7 @@ test("legacy supplier cleanup is bounded to twenty durable jobs per polling turn
   }));
   const { pool, calls } = createPool(jobs);
   const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.sourceRecovery.processOnce = async () => 0;
   worker.persistence.enqueueMissingAutomaticDownstream = async () => {};
   worker.persistence.project = async () => {
     throw new Error("supplier must not project");
@@ -165,6 +169,7 @@ test("projection worker serves a queued job before running downstream repair", a
     attempt_count: 0,
   });
   const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.sourceRecovery.processOnce = async () => 0;
   worker.persistence.enqueueMissingAutomaticDownstream = async () => calls.push("repair");
   worker.persistence.project = async () => {
     calls.push("project");
@@ -182,6 +187,7 @@ test("projection worker serves a queued job before running downstream repair", a
 test("projection worker also repairs immediately when the queue is idle", async () => {
   const { pool, calls } = createPool(null);
   const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.sourceRecovery.processOnce = async () => 0;
   worker.persistence.enqueueMissingAutomaticDownstream = async () => calls.push("repair");
 
   const result = await worker.processOnce();
@@ -199,6 +205,7 @@ test("a continuously busy projection queue gives historical repair a bounded tur
     attempt_count: 0,
   });
   const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.sourceRecovery.processOnce = async () => 0;
   worker.persistence.enqueueMissingAutomaticDownstream = async () => calls.push("repair");
   worker.persistence.project = async () => {
     calls.push("project");
@@ -221,6 +228,7 @@ test("failed bounded repair does not permanently block fresh projection work", a
     attempt_count: 0,
   });
   const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.sourceRecovery.processOnce = async () => 0;
   worker.persistence.project = async () => "topic-1";
   worker.persistence.enqueueMissingAutomaticDownstream = async () => {
     throw new Error("repair failed");

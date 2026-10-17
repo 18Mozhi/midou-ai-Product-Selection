@@ -1,5 +1,7 @@
 # M03-05 采集任务状态机运维手册
 
+> 2026-10-18 自动情报来源恢复可按审计停用区间创建一次关联补采，原failed_terminal终态不改，手工死信回放权限不扩大。每30秒最多20个并遵守现有全局积压预算，失败只回滚补偿批次。见 `docs/intelligence-source-recovery.md`；发布后重启唯一Node项目ai选品，无数据库迁移。
+
 ## 宝塔配置与启动
 
 生产继续使用宝塔面板中的 Node API、Node Worker、Python Crawler、MySQL 5.7 与 Redis，不新增 systemd、独立 PM2、宿主机 crontab 或屏外 Docker 服务。

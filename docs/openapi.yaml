@@ -9539,7 +9539,11 @@ components:
         available_result_count: { type: integer, minimum: 0 }
         missing_fields: { type: array, items: { type: string } }
         last_error_code: { type: string, nullable: true }
-        replay_of_task_id: { type: string, format: uuid, nullable: true }
+        replay_of_task_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Links an existing replay or a once-only audited intelligence source-outage replacement to its original task. Source-outage recovery preserves the original failed_terminal history; the manual replay endpoint remains limited to dead_letter tasks.
         replay_reason: { type: string, nullable: true }
         request_id: { type: string }
         trace_id: { type: string }

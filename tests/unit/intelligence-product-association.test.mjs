@@ -481,6 +481,7 @@ test("no-match and model failure preserve distinct terminal or retry queue recei
       120,
       () => now,
     );
+    worker.sourceRecovery.processOnce = async () => 0;
     worker.enqueueMissing = async () => {};
     worker.claim = async () => ({ ...baseJob });
     worker.prepareIntelligence = async () => {
