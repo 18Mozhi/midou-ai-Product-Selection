@@ -2,7 +2,6 @@
 import { computed, ref, watch } from "vue";
 import { useModalDialog } from "../use-modal-dialog";
 import { containDialogTab } from "../ui/contain-dialog-tab";
-import OpportunityErpImportDialog from "./OpportunityErpImportDialog.vue";
 
 type DecisionAction = "adopt" | "observe" | "reject";
 type CreateFeedback =
@@ -24,13 +23,9 @@ const props = defineProps<{
   emit = defineEmits<{
     create: [];
     decide: [];
-    importBrowser: [];
-    importFile: [event: Event];
   }>(),
-  erpImportOpen = defineModel<boolean>("erpImportOpen", { required: true }),
   createOpen = defineModel<boolean>("createOpen", { required: true }),
   decisionOpen = defineModel<boolean>("decisionOpen", { required: true }),
-  erpImportLimit = defineModel<number>("erpImportLimit", { required: true }),
   decisionReason = defineModel<string>("decisionReason", { required: true }),
   decisionReasonValidationAttempted = ref(false),
   { dialogElement: createDialog, handleCancel: cancelCreate } = useModalDialog(
@@ -72,14 +67,6 @@ const decisionLabel = {
 </script>
 
 <template>
-  <OpportunityErpImportDialog
-    v-model:open="erpImportOpen"
-    v-model:import-limit="erpImportLimit"
-    :busy="busy"
-    @import-browser="emit('importBrowser')"
-    @import-file="emit('importFile', $event)"
-  />
-
   <dialog
     v-if="createOpen"
     ref="createDialog"

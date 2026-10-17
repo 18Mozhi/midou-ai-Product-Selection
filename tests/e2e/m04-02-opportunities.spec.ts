@@ -2040,12 +2040,7 @@ test("changing between the opportunity list and detail closes open list dialogs"
   await expect(createDialog).toHaveCount(0);
   await returnToList();
 
-  await page.getByRole("button", { name: "从 ERP 导入", exact: true }).click();
-  const erpDialog = page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" });
-  await expect(erpDialog).toBeVisible();
-  await switchToDetail();
-  await expect(erpDialog).toHaveCount(0);
-  await returnToList();
+  await expect(page.getByRole("button", { name: "从 ERP 导入", exact: true })).toHaveCount(0);
 
   await page.getByRole("checkbox", { name: `选择机会：${recommendedBase.name}` }).check();
   await page.getByRole("button", { name: "批量归档", exact: true }).click();

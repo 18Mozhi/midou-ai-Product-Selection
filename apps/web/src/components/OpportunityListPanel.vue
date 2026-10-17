@@ -111,7 +111,7 @@ const props = defineProps<{
         },
         all: {
           title: `全部 ${props.total} 个机会`,
-          description: "查看自动发现、ERP 导入和手工添加的全部机会。",
+          description: "查看自动发现的商品与已有历史机会。",
         },
       })[props.selectionView],
   );

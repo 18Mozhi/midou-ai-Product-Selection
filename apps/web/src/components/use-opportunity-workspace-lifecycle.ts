@@ -7,14 +7,12 @@ interface OpportunityWorkspaceLifecycleOptions {
   route: Pick<RouteLocationNormalizedLoaded, "fullPath" | "path" | "query">;
   opportunityId: () => string | undefined;
   showCreate: Ref<boolean>;
-  showErpImport: Ref<boolean>;
   showBatch: Ref<boolean>;
   showDecision: Ref<boolean>;
   decisionAction: Ref<"adopt" | "observe" | "reject">;
   decisionReason: Ref<string>;
   selectedOpportunityIds: Ref<string[]>;
   createFeedback: Ref<OpportunityWorkspaceCreateFeedback>;
-  erpBridgeBusy: Ref<boolean>;
   busy: Ref<boolean>;
   detail: Ref<OpportunityTypes.OpportunityDetail | null>;
   profit: Ref<OpportunityTypes.OpportunityProfitAnalysis | null>;
@@ -31,8 +29,6 @@ interface OpportunityWorkspaceLifecycleOptions {
   closeTransientDialogs: () => void;
   advanceCreateDialog: () => void;
   advanceDecisionDialog: () => void;
-  advanceErpDialog: () => void;
-  advanceErpBridge: () => void;
   advanceBatchDialog: () => void;
   advanceBatchIntent: () => void;
   advanceBatchSelection: () => void;
@@ -44,14 +40,12 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     route,
     opportunityId,
     showCreate,
-    showErpImport,
     showBatch,
     showDecision,
     decisionAction,
     decisionReason,
     selectedOpportunityIds,
     createFeedback,
-    erpBridgeBusy,
     busy,
     detail,
     profit,
@@ -68,8 +62,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     closeTransientDialogs,
     advanceCreateDialog,
     advanceDecisionDialog,
-    advanceErpDialog,
-    advanceErpBridge,
     advanceBatchDialog,
     advanceBatchIntent,
     advanceBatchSelection,
@@ -96,7 +88,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     { flush: "sync" },
   );
   watch(showDecision, advanceDecisionDialog, { flush: "sync" });
-  watch(showErpImport, advanceErpDialog, { flush: "sync" });
   watch(() => [showBatch.value, route.fullPath, opportunityId()], advanceBatchDialog, {
     flush: "sync",
   });
@@ -122,8 +113,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     closeTransientDialogs();
 
     invalidateReads();
-    advanceErpBridge();
-    erpBridgeBusy.value = false;
 
     advanceWriteScope();
     busy.value = false;
@@ -153,8 +142,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
         closeTransientDialogs();
       }
       invalidateReads();
-      advanceErpBridge();
-      erpBridgeBusy.value = false;
 
       advanceWriteScope();
       busy.value = pendingWriteCount() > 0;
@@ -199,8 +186,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
 
   onBeforeUnmount(() => {
     invalidateReads();
-    advanceErpBridge();
-    erpBridgeBusy.value = false;
     advanceWriteScope();
   });
 }

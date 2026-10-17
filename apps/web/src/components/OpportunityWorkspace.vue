@@ -36,7 +36,6 @@ import {
 } from "./use-opportunity-workspace-reads";
 import { useOpportunityWorkspaceNavigation } from "./use-opportunity-workspace-navigation";
 import { useOpportunityWorkspaceAccess } from "./use-opportunity-workspace-access";
-import { useOpportunityWorkspaceErpImport } from "./use-opportunity-workspace-erp-import";
 import { useOpportunityWorkspaceDecisionFocus } from "./use-opportunity-workspace-decision-focus";
 import { useOpportunityWorkspaceLifecycle } from "./use-opportunity-workspace-lifecycle";
 import { useOpportunityWorkspaceWriteScopes } from "./use-opportunity-workspace-write-scopes";
@@ -76,7 +75,6 @@ const props = defineProps<{
   page = ref(1),
   requestId = ref(""),
   message = ref(""),
-  erpBridgeBusy = ref(false),
   automationReadiness = ref<AutomaticSelectionReadiness | null>(null),
   busy = ref(false),
   selectionView = ref<"recommended" | "rule_candidates" | "evidence_pending" | "all">(
@@ -85,8 +83,6 @@ const props = defineProps<{
   downstream = ref({ competitors: 0, snapshots: 0, searches: 0, suppliers: 0 }),
   tab = ref<OpportunityTypes.OpportunityTab>("overview"),
   showCreate = ref(false),
-  showErpImport = ref(false),
-  erpImportLimit = ref(200),
   showDecision = ref(false),
   showBatch = ref(false),
   batchAction = ref<"assign" | "archive" | "review">("assign"),
@@ -107,8 +103,6 @@ let batchDialogGeneration = 0;
 let batchIntentGeneration = 0;
 let batchSelectionGeneration = 0;
 let decisionDialogGeneration = 0;
-let erpDialogGeneration = 0;
-let erpBridgeGeneration = 0;
 let writeScopeGeneration = 0;
 const { writeScopeKey, beginScopedWrite, finishScopedWrite, pendingWriteCount } =
   useOpportunityWorkspaceWriteScopes({
@@ -210,21 +204,6 @@ const {
   tab,
   showCreate,
   load,
-});
-const { importFromErpBrowser, importErpFile } = useOpportunityWorkspaceErpImport({
-  route,
-  opportunityId: () => props.opportunityId,
-  busy,
-  bridgeBusy: erpBridgeBusy,
-  importLimit: erpImportLimit,
-  showImport: showErpImport,
-  currentDialogGeneration: () => erpDialogGeneration,
-  currentWriteScopeGeneration: () => writeScopeGeneration,
-  beginBridgeIntent: () => ++erpBridgeGeneration,
-  currentBridgeGeneration: () => erpBridgeGeneration,
-  write,
-  load,
-  message,
 });
 const { discoverCompetitors, discoverSuppliers } = useOpportunityWorkspaceCollectionActions({
   detail,
@@ -461,7 +440,6 @@ async function queueProfit() {
 }
 function closeTransientDialogs() {
   showCreate.value = false;
-  showErpImport.value = false;
   showBatch.value = false;
   showDecision.value = false;
   decisionAction.value = "observe";
@@ -471,14 +449,12 @@ useOpportunityWorkspaceLifecycle({
   route,
   opportunityId: () => props.opportunityId,
   showCreate,
-  showErpImport,
   showBatch,
   showDecision,
   decisionAction,
   decisionReason,
   selectedOpportunityIds,
   createFeedback,
-  erpBridgeBusy,
   busy,
   detail,
   profit,
@@ -500,12 +476,6 @@ useOpportunityWorkspaceLifecycle({
   },
   advanceDecisionDialog: () => {
     decisionDialogGeneration += 1;
-  },
-  advanceErpDialog: () => {
-    erpDialogGeneration += 1;
-  },
-  advanceErpBridge: () => {
-    erpBridgeGeneration += 1;
   },
   advanceBatchDialog: () => {
     batchDialogGeneration += 1;
@@ -540,13 +510,6 @@ useOpportunityWorkspaceLifecycle({
       <div v-if="canDecide" class="catalogue-toolbar-actions">
         <RouterLink class="secondary so-action-secondary" to="/trends?section=rules"
           >管理选品规则</RouterLink
-        ><button
-          v-if="selectionView === 'all'"
-          type="button"
-          class="ghost secondary so-action-secondary"
-          @click="showErpImport = true"
-        >
-          从 ERP 导入</button
         ><button
           v-if="selectionView === 'all'"
           type="button"
@@ -711,20 +674,16 @@ useOpportunityWorkspaceLifecycle({
     >
     <OpportunityWorkspaceDialogs
       v-if="canDecide"
-      v-model:erp-import-open="showErpImport"
       v-model:create-open="showCreate"
       v-model:decision-open="showDecision"
-      v-model:erp-import-limit="erpImportLimit"
       v-model:decision-reason="decisionReason"
-      :busy="busy || erpBridgeBusy"
+      :busy="busy"
       :form="form"
       :create-feedback="createFeedback"
       :decision-action="decisionAction"
       :has-detail="Boolean(detail)"
       @create="create"
       @decide="decide"
-      @import-browser="importFromErpBrowser"
-      @import-file="importErpFile"
     />
     <dialog
       v-if="canDecide"

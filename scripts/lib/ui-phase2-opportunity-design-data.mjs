@@ -35,6 +35,11 @@ export async function buildOpportunityDesignData(repo) {
     );
     return context.exports;
   }
+  const currentWorkspace = await source("apps/web/src/components/OpportunityWorkspace.vue");
+  assert.ok(
+    currentWorkspace.includes("useOpportunityWorkspaceErpImport"),
+    "erp_import_surface_retired: historical proposal cannot validate the current product",
+  );
   const main = await source("apps/web/src/components/OpportunityWorkspace.vue"),
     list = await source("apps/web/src/components/OpportunityListPanel.vue"),
     ui2 = await source("tests/e2e/ui-phase2-opportunity-contracts.spec.ts"),

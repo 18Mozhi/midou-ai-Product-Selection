@@ -554,22 +554,6 @@
   color: var(--so-text);
   background: transparent;
 }
-.erp-import-guide {
-  display: grid;
-  gap: 5px;
-}
-.erp-import-guide strong {
-  color: var(--so-text);
-}
-.erp-file-fallback {
-  padding: 13px;
-  border: 1px dashed var(--so-border);
-  border-radius: 11px;
-  background: var(--so-panel-soft);
-}
-.erp-file-fallback small {
-  color: var(--so-text-muted);
-}
 .opportunity-modal footer > a {
   align-self: center;
   margin-right: auto;

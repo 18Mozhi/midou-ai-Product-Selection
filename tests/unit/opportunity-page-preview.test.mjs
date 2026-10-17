@@ -24,3 +24,11 @@ test("selection preview verifies the current Vue route instead of injecting hist
   );
   await assert.rejects(access("scripts/lib/opportunity-page-preview.mjs"), { code: "ENOENT" });
 });
+
+test("retired ERP proposal refuses current source before browser or output creation", async () => {
+  const { buildOpportunityDesignData } =
+    await import("../../scripts/lib/ui-phase2-opportunity-design-data.mjs");
+  await assert.rejects(buildOpportunityDesignData(process.cwd()), /erp_import_surface_retired/);
+  for (const file of ["OpportunityErpImportDialog.vue", "use-opportunity-workspace-erp-import.ts"])
+    await assert.rejects(access(`apps/web/src/components/${file}`), { code: "ENOENT" });
+});
