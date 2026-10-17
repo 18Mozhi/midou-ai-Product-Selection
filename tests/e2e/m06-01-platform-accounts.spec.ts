@@ -724,17 +724,37 @@ test("permission catalog timeout exposes a retry action instead of an endless lo
   page,
 }) => {
   await setup(page);
-  await page.route("**/api/v1/platform/roles", async (route: any) => {
-    await new Promise((resolve) => setTimeout(resolve, 13_000));
+  await page.clock.install();
+  await page.clock.pauseAt(new Date(Date.now() + 60_000));
+  let release: (() => void) | undefined;
+  let requests = 0;
+  await page.route("**/api/v1/platform/roles", async (route) => {
+    requests += 1;
+    if (requests === 1)
+      await new Promise<void>((resolve) => {
+        release = resolve;
+      });
     await route.fulfill({ json: env(platformRoles) }).catch(() => undefined);
   });
-  await page.goto("/platform-admin/permissions");
-  await expect(page.getByText("角色目录读取超过 12 秒，请稍后重试。", { exact: true })).toBeVisible(
-    {
-      timeout: 15_000,
-    },
-  );
-  await expect(page.getByRole("button", { name: "重新加载" })).toBeEnabled();
+  try {
+    await page.goto("/platform-admin/permissions");
+    await expect.poll(() => Boolean(release)).toBe(true);
+    await page.clock.fastForward(11_999);
+    await expect(page.getByText("正在读取真实平台角色目录…", { exact: true })).toBeVisible();
+    await page.clock.fastForward(2);
+    release?.();
+    await expect(
+      page.getByText("角色目录读取超过 12 秒，请稍后重试。", { exact: true }),
+    ).toBeVisible();
+    const retry = page.getByRole("button", { name: "重新加载", exact: true });
+    await expect(retry).toBeEnabled();
+    expect(requests).toBe(1);
+    await retry.click();
+    await expect(page.getByRole("heading", { name: "角色权限差异" })).toBeVisible();
+    expect(requests).toBe(2);
+  } finally {
+    release?.();
+  }
 });
 
 test("M06-01.A07/A08/A15 novice platform account center separates organizations users and admins", async ({
@@ -1070,6 +1090,11 @@ test("platform organization list, create and detail are independently deep-linka
   await setup(page);
   await page.goto("/platform-admin/organizations/new");
   await expect(page).toHaveURL(/\/platform-admin\/organizations\/new$/);
+  await expect(
+    page
+      .locator(".platform-page-header")
+      .getByRole("heading", { name: "新建组织", includeHidden: true }),
+  ).toBeVisible();
   const wizard = page.getByRole("dialog", { name: "新建组织" });
   await expect(wizard.getByRole("heading", { name: "新建组织" })).toBeVisible();
   await wizard.getByRole("button", { name: "取消" }).click();
@@ -1078,6 +1103,11 @@ test("platform organization list, create and detail are independently deep-linka
   await page.goto(`/platform-admin/organizations/${org}`);
   const detail = page.getByRole("dialog", { name: "米豆选品团队" });
   await expect(detail).toBeVisible();
+  await expect(
+    page
+      .locator(".platform-page-header")
+      .getByRole("heading", { name: "组织详情", includeHidden: true }),
+  ).toBeVisible();
   await detail.getByRole("button", { name: "关闭组织详情" }).click();
   await expect(page).toHaveURL(/\/platform-admin\/organizations$/);
 });
@@ -1296,6 +1326,13 @@ test("M06-01.A06/A09 creates organization with audited idempotent request", asyn
   await expect(dialog).not.toBeVisible();
   await expect(createOrganizationButton).toBeFocused();
   await createOrganizationButton.click();
+  await expect(dialog.locator("aside")).toHaveCount(0);
+  const [identityBox, contentBox] = await Promise.all([
+    dialog.locator(".organization-wizard__identity").boundingBox(),
+    dialog.locator(".organization-wizard__content").boundingBox(),
+  ]);
+  expect(contentBox!.y).toBeGreaterThanOrEqual(identityBox!.y + identityBox!.height);
+  await expect.poll(() => dialog.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
   const progress = dialog.getByRole("list", { name: "创建组织步骤" });
   await expect(progress.locator('[aria-current="step"]')).toContainText("组织资料");
   await dialog.getByRole("button", { name: "下一步：选择管理员" }).click();
@@ -1320,7 +1357,16 @@ test("M06-01.A06/A09 creates organization with audited idempotent request", asyn
   const detail = page.getByRole("dialog").filter({
     has: page.getByRole("heading", { name: "新团队" }),
   });
-  await expect(detail.getByText("资料与设置", { exact: true })).toBeVisible();
+  await expect(detail.getByRole("heading", { name: "组织资料与状态" })).toBeVisible();
+  await expect(detail.locator("aside")).toHaveCount(0);
+  const [organizationIdentityBox, workBox] = await Promise.all([
+    detail.locator(".p42-identity").boundingBox(),
+    detail.locator(".p42-work").boundingBox(),
+  ]);
+  expect(workBox!.y).toBeGreaterThanOrEqual(
+    organizationIdentityBox!.y + organizationIdentityBox!.height,
+  );
+  await expect.poll(() => detail.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
   await expect(detail.getByRole("button", { name: "保存组织资料" })).toBeVisible();
 });
 
@@ -1550,9 +1596,8 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
       mainY: mainBox.y,
     };
   });
-  if ((page.viewportSize()?.width ?? 0) <= 760)
-    expect(composition.mainY).toBeGreaterThan(composition.identityY);
-  else expect(composition.mainX).toBeGreaterThan(composition.identityX);
+  expect(composition.mainY).toBeGreaterThan(composition.identityY);
+  await expect(accountDetail.locator("aside")).toHaveCount(0);
   await expect(accountDetail.getByRole("button", { name: "关闭详情" })).toBeVisible();
   await expect
     .poll(() => accountDetail.evaluate((element) => element.scrollWidth <= element.clientWidth))

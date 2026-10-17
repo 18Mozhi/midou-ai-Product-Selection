@@ -51,7 +51,7 @@ function close() {
   >
     <form ref="formElement" @submit.prevent="$emit('submit')">
       <div class="organization-wizard__layout">
-        <aside class="organization-wizard__identity">
+        <header class="organization-wizard__identity">
           <small>组织创建</small>
           <h3>新建组织</h3>
           <p>建立组织及默认工作区。</p>
@@ -59,7 +59,7 @@ function close() {
             <li :aria-current="step === 1 ? 'step' : undefined"><span>1</span>组织资料</li>
             <li :aria-current="step === 2 ? 'step' : undefined"><span>2</span>管理员与确认</li>
           </ol>
-        </aside>
+        </header>
         <section class="organization-wizard__content">
           <section v-if="step === 1" class="organization-wizard__step">
             <p>先填写团队名称和用于系统识别的英文标识。</p>
@@ -170,292 +170,207 @@ function close() {
 </template>
 
 <style scoped>
-@import "../design/organization-wizard-tokens.css";
-
-.organization-wizard {
+#app .organization-wizard {
   position: fixed;
   inset: 0;
   z-index: 10;
-  width: min(900px, calc(100% - 32px));
-  max-height: min(720px, calc(100dvh - 32px));
+  width: min(640px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
   overflow: auto;
   margin: auto;
   padding: 0;
-  border: 1px solid var(--ow-border);
-  border-radius: 14px;
-  color: var(--ow-ink);
-  background: var(--ow-surface);
-  box-shadow: 0 28px 90px var(--ow-shadow);
+  border: 1px solid var(--so-border-strong);
+  border-radius: 10px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  box-shadow: var(--so-shadow-dialog);
 }
-.organization-wizard::backdrop {
-  background: var(--ow-backdrop);
-  backdrop-filter: blur(5px);
+#app .organization-wizard::backdrop {
+  background: var(--so-scrim);
+  backdrop-filter: none;
 }
-.organization-wizard form {
+#app .organization-wizard form {
   min-width: 0;
   margin: 0;
+  padding: 0;
+  gap: 0;
 }
 .organization-wizard__layout {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  min-height: 420px;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
 }
 .organization-wizard__identity {
-  padding: 28px 24px;
-  color: var(--ow-on-blue);
-  background: var(--ow-blue);
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--so-border);
+  background: var(--so-panel);
 }
 .organization-wizard__identity > small {
-  color: var(--ow-blue-muted);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  display: none;
 }
 .organization-wizard__identity h3 {
-  margin: 12px 0 6px;
-  color: var(--ow-on-blue);
-  font-size: 26px;
-  line-height: 1.25;
+  margin: 0;
+  font-size: 18px;
 }
 .organization-wizard__identity > p {
-  margin: 0;
-  color: var(--ow-blue-subtle);
-  font-size: 14px;
-  line-height: 1.55;
+  margin: 6px 0 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
 }
 .organization-wizard__progress {
-  margin: 28px 0 0;
-  padding: 0;
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 0;
   list-style: none;
 }
 .organization-wizard__progress li {
-  min-height: 56px;
-  padding: 12px 4px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid var(--ow-divider);
-  color: var(--ow-copy-muted);
-  font-size: 14px;
+  gap: 8px;
+  padding-block: 8px;
+  border-bottom: 2px solid var(--so-border);
+  color: var(--so-text-muted);
+  font-size: 13px;
 }
 .organization-wizard__progress li[aria-current="step"] {
-  color: var(--ow-on-blue);
-  font-weight: 800;
+  border-color: var(--so-primary);
+  color: var(--so-primary);
+  font-weight: 600;
 }
 .organization-wizard__progress span {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
   display: grid;
   place-items: center;
-  flex: 0 0 auto;
-  border: 1px solid var(--ow-outline);
+  flex-shrink: 0;
+  border: 1px solid currentColor;
   border-radius: 50%;
-  color: var(--ow-on-blue);
-  font-size: 13px;
-  font-weight: 800;
-}
-.organization-wizard__progress li[aria-current="step"] span {
-  border-color: var(--ow-surface);
-  background: var(--ow-surface);
-  color: var(--ow-blue);
+  font-size: 12px;
 }
 .organization-wizard__content {
-  min-width: 0;
-  padding: 30px;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  min-width: 0;
+  gap: 16px;
+  padding: 16px 20px 0;
 }
 .organization-wizard__step {
-  align-content: start;
   display: grid;
-  gap: 20px;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
 }
 .organization-wizard__step > p {
   margin: 0;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--ow-line);
-  color: var(--ow-secondary-ink);
-  font-size: 17px;
-  line-height: 1.55;
+  color: var(--so-text-muted);
+  font-size: 13px;
+  line-height: 1.6;
 }
 .organization-wizard__step label {
   display: grid;
-  gap: 7px;
-  color: var(--ow-secondary-ink);
-  font-size: 14px;
-  font-weight: 750;
+  min-width: 0;
+  gap: 6px;
+  font-size: 13px;
 }
-.organization-wizard__step input,
-.organization-wizard__step select {
+#app .organization-wizard__step :is(input, select) {
   width: 100%;
-  min-height: 48px;
-  padding: 11px 13px;
-  border: 1px solid var(--ow-control-border);
-  border-radius: 7px;
-  color: var(--ow-ink);
-  background: var(--ow-surface);
+  min-width: 0;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 6px;
+  background: var(--so-panel);
+  color: var(--so-text);
   font: inherit;
-  font-size: 16px;
-}
-.organization-wizard__step input::placeholder {
-  color: var(--ow-muted);
 }
 .organization-wizard__step small {
-  color: var(--ow-secondary-muted);
-  font-size: 13px;
-  font-weight: 400;
+  color: var(--so-text-muted);
+  font-size: 12px;
   line-height: 1.5;
 }
 .organization-wizard__error {
-  padding: 12px 14px;
   display: grid;
   gap: 4px;
-  border: 1px solid var(--ow-error-border);
-  border-left: 4px solid var(--ow-danger);
-  border-radius: 7px;
-  color: var(--ow-error-ink);
-  background: var(--ow-error-surface);
-}
-.organization-wizard__error strong {
-  color: var(--ow-danger-muted);
+  padding: 12px;
+  border: 1px solid var(--so-danger-border);
+  border-radius: 6px;
+  background: var(--so-danger-soft);
+  color: var(--so-danger);
 }
 .organization-wizard__summary {
   margin: 0;
-  padding: 14px 16px;
-  display: grid;
-  gap: 0;
-  border: 1px solid var(--ow-line);
-  border-radius: 8px;
-  background: var(--ow-soft-surface);
+  padding: 4px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 6px;
+  background: var(--so-panel-soft);
 }
 .organization-wizard__summary div {
-  padding: 10px 0;
   display: grid;
-  grid-template-columns: 104px minmax(0, 1fr);
+  grid-template-columns: 80px minmax(0, 1fr);
   gap: 12px;
-  border-bottom: 1px solid var(--ow-line);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--so-border);
 }
 .organization-wizard__summary div:last-child {
-  border-bottom: 0;
+  border: 0;
 }
 .organization-wizard__summary dt {
-  color: var(--ow-secondary-muted);
+  color: var(--so-text-muted);
   font-size: 13px;
 }
 .organization-wizard__summary dd {
   margin: 0;
-  color: var(--ow-ink);
   overflow-wrap: anywhere;
 }
-.organization-wizard__actions {
-  margin: 24px -30px -30px;
-  padding: 16px 30px;
+#app .organization-wizard .organization-wizard__actions {
+  position: sticky;
+  bottom: 0;
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
   flex-wrap: wrap;
-  border-top: 1px solid var(--ow-line);
-  background: var(--ow-surface);
+  gap: 8px;
+  margin-inline: -20px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--so-border);
+  background: var(--so-panel);
 }
-.organization-wizard__actions button {
-  min-height: 46px;
-  padding: 10px 16px;
-  border: 1px solid var(--ow-control-border);
-  border-radius: 7px;
-  color: var(--ow-paper);
-  background: var(--ow-surface);
+#app .organization-wizard__actions button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 6px;
+  background: var(--so-panel);
+  color: var(--so-text);
   font: inherit;
-  font-size: 15px;
-  font-weight: 750;
-  cursor: pointer;
 }
-.organization-wizard__actions .organization-wizard__primary {
-  border-color: var(--ow-blue);
-  color: var(--ow-on-blue);
-  background: var(--ow-blue);
+#app .organization-wizard__actions .organization-wizard__primary {
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-on-primary);
 }
-.organization-wizard__actions button:hover:not(:disabled) {
-  border-color: var(--ow-blue);
-  color: var(--ow-primary);
-  background: var(--ow-primary-soft);
-}
-.organization-wizard__actions .organization-wizard__primary:hover:not(:disabled) {
-  color: var(--ow-on-blue);
-  background: var(--ow-primary-hover);
-}
-.organization-wizard__actions button:active:not(:disabled) {
-  transform: translateY(1px);
-}
-.organization-wizard__actions button:disabled {
-  border-color: var(--ow-disabled-border);
-  color: var(--ow-disabled-ink);
-  background: var(--ow-disabled-surface);
+#app .organization-wizard__actions button:disabled {
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
   cursor: not-allowed;
 }
-.organization-wizard :is(input, select, button):focus-visible {
-  outline: 3px solid var(--ow-focus);
-  outline-offset: 3px;
+#app .organization-wizard :is(input, select, button):focus-visible {
+  outline: 3px solid var(--so-focus);
+  outline-offset: 2px;
 }
-@media (max-width: 700px) {
-  .organization-wizard {
-    width: calc(100% - 24px);
-    max-height: calc(100dvh - 24px);
-  }
-  .organization-wizard__layout {
-    display: block;
-    min-height: 0;
-  }
+@media (max-width: 640px) {
   .organization-wizard__identity {
-    padding: 20px 20px 14px;
-  }
-  .organization-wizard__identity h3 {
-    margin: 7px 0 3px;
-    font-size: 24px;
-  }
-  .organization-wizard__identity > p {
-    font-size: 13px;
-  }
-  .organization-wizard__progress {
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-top: 12px;
-  }
-  .organization-wizard__progress li {
-    min-height: 42px;
-    padding: 7px 0;
-    font-size: 13px;
-  }
-  .organization-wizard__progress span {
-    width: 26px;
-    height: 26px;
+    padding: 14px 16px;
   }
   .organization-wizard__content {
-    padding: 20px 20px 0;
-    grid-template-rows: auto auto;
+    padding-inline: 16px;
   }
-  .organization-wizard__step {
-    gap: 18px;
+  #app .organization-wizard .organization-wizard__actions {
+    margin-inline: -16px;
+    padding-inline: 16px;
   }
-  .organization-wizard__step > p {
-    font-size: 16px;
-  }
-  .organization-wizard__summary div {
-    grid-template-columns: 78px minmax(0, 1fr);
+  .organization-wizard__progress {
     gap: 8px;
-  }
-  .organization-wizard__actions {
-    position: sticky;
-    bottom: 0;
-    margin: 20px -20px 0;
-    padding: 12px 20px;
-    justify-content: flex-end;
-    background: var(--ow-surface);
-    box-shadow: 0 -8px 20px var(--ow-sticky-shadow);
-  }
-  .organization-wizard__actions button {
-    min-height: 44px;
-    padding-inline: 13px;
   }
 }
 </style>

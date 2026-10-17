@@ -458,20 +458,6 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       );
       continue;
     }
-    if (paths[index] === "apps/web/src/design/organization-wizard-tokens.css") {
-      assert.match(
-        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html:has\(body #app \.organization-wizard\)\s*\{(?:\s*--ow-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));)+\s*\}$/,
-      );
-      continue;
-    }
-    if (paths[index] === "apps/web/src/design/account-center-tokens.css") {
-      const palette = source.replace(/\/\*[\s\S]*?\*\//g, "").trim();
-      assert.doesNotMatch(palette, /--account-review-|--account-users-|--p39-/);
-      assert.match(palette, /html:has\(body #app \.account-center--organization-review\)/);
-      assert.match(palette, /--account-org-surface:/);
-      continue;
-    }
     if (paths[index] === "apps/web/src/design/account-permissions-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

@@ -35,10 +35,10 @@ const { dialogElement, handleCancel } = useModalDialog(
     @cancel="handleCancel"
   >
     <section v-if="missing" class="organization-detail-state" role="alert">
-      <aside class="p42-missing-identity">
+      <header class="p42-missing-identity">
         <small>平台组织 / 组织详情</small>
         <h3>当前列表未找到该组织</h3>
-      </aside>
+      </header>
       <div class="p42-missing-work">
         <p>
           本次组织列表没有返回这个目标。此结果不能单独说明组织已删除，或当前账号已失去访问权限。
@@ -60,7 +60,7 @@ const { dialogElement, handleCancel } = useModalDialog(
       </div>
     </section>
     <form v-else-if="organization" class="p42-detail-form" @submit.prevent="$emit('save')">
-      <aside class="p42-identity">
+      <section class="p42-identity">
         <header class="p42-identity-head">
           <small>平台组织 / 组织详情</small>
           <h3>{{ organization.name }}</h3>
@@ -84,7 +84,7 @@ const { dialogElement, handleCancel } = useModalDialog(
             }}</strong>
           </article>
         </div>
-      </aside>
+      </section>
       <div class="p42-work">
         <header class="p42-work-head">
           <div>
@@ -199,217 +199,196 @@ const { dialogElement, handleCancel } = useModalDialog(
 </template>
 
 <style scoped>
-@import "../design/account-center-tokens.css";
-
-.organization-detail-dialog {
+#app .organization-detail-dialog {
   position: fixed;
   inset: 0;
   z-index: 10;
-  width: min(960px, calc(100% - 32px));
+  width: min(760px, calc(100% - 32px));
   max-height: calc(100dvh - 32px);
   overflow: auto;
   margin: auto;
   padding: 0;
-  border: 1px solid var(--account-org-line);
-  border-radius: 12px;
-  color: var(--account-org-ink);
-  background: var(--account-org-surface);
-  box-shadow: 0 20px 60px var(--account-org-dialog-shadow);
+  border: 1px solid var(--so-border-strong);
+  border-radius: 10px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  box-shadow: var(--so-shadow-dialog);
 }
-.organization-detail-dialog::backdrop {
-  background: var(--account-org-dialog-scrim);
-  backdrop-filter: blur(3px);
+#app .organization-detail-dialog::backdrop {
+  background: var(--so-scrim);
+  backdrop-filter: none;
 }
-.p42-detail-form {
+#app .organization-detail-dialog .p42-detail-form {
   display: grid;
-  grid-template-columns: 250px minmax(0, 1fr);
-  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
-}
-.p42-identity {
   min-width: 0;
-  padding: 28px 24px;
-  color: var(--account-org-on-blue);
-  background: var(--account-org-blue);
+  margin: 0;
+  padding: 0;
 }
-.p42-identity-head {
-  display: block;
-  margin-bottom: 28px;
+.p42-identity,
+.p42-missing-identity {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--so-border);
+  background: var(--so-panel);
 }
-.p42-identity-head h3 {
-  margin: 12px 0 0;
-  color: var(--account-org-on-blue);
-  font-size: 24px;
-  line-height: 1.5;
+.p42-identity-head small,
+.p42-missing-identity small {
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.p42-identity h3,
+.p42-missing-identity h3 {
+  margin: 5px 0 0;
+  font-size: 18px;
   overflow-wrap: anywhere;
-}
-.p42-identity-head small {
-  color: var(--account-org-dialog-subtle);
 }
 .detail-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
 }
 .detail-grid article {
-  padding: 18px 0;
+  min-width: 0;
+  padding: 0 12px 0 0;
+  border-right: 1px solid var(--so-border);
+}
+.detail-grid article:last-child {
   border: 0;
-  border-top: 1px solid var(--account-org-dialog-divider);
-  border-radius: 0;
-  background: transparent;
 }
 .detail-grid small,
 .detail-grid strong {
   display: block;
-  color: var(--account-org-on-blue);
-}
-.detail-grid strong {
-  margin-top: 6px;
-  font-size: 20px;
-  line-height: 1.4;
   overflow-wrap: anywhere;
 }
-.p42-work {
+.detail-grid small {
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.detail-grid strong {
+  margin-top: 5px;
+  font-size: 16px;
+}
+.p42-work,
+.p42-missing-work {
   display: grid;
+  gap: 16px;
   min-width: 0;
-  align-content: start;
-  gap: 22px;
-  padding: 26px 28px 0;
+  padding: 16px 20px 0;
 }
 .p42-work-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
 }
-.p42-work-head small,
-.p42-missing-identity small {
-  color: var(--account-org-muted);
+.p42-work-head small {
+  display: none;
 }
 .p42-work-head h3 {
-  margin: 4px 0 0;
-  font-size: 24px;
+  margin: 0;
+  font-size: 14px;
 }
 .organization-profile {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 .organization-profile h4 {
   grid-column: 1 / -1;
   margin: 0;
-  font-size: 18px;
+  font-size: 14px;
 }
 .organization-profile label {
   display: grid;
   min-width: 0;
-  gap: 8px;
-  font-size: 15px;
-  font-weight: 700;
+  gap: 6px;
+  font-size: 13px;
 }
 .organization-profile label:first-of-type {
   grid-column: 1 / -1;
 }
-.organization-profile input {
+#app .organization-profile input {
   width: 100%;
   min-width: 0;
-  min-height: 48px;
-  padding: 10px 12px;
-  border: 1px solid var(--account-org-control-hover);
-  border-radius: 8px;
-  color: var(--account-org-ink);
-  background: var(--account-org-surface);
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 6px;
+  background: var(--so-panel);
+  color: var(--so-text);
   font: inherit;
-  font-size: 16px;
 }
 .field-help {
-  color: var(--account-org-muted);
-  font-size: 13px;
-  font-weight: 400;
+  color: var(--so-text-muted);
+  font-size: 12px;
   line-height: 1.5;
 }
-.p42-work-head button,
-.p42-missing-work button,
-.p42-work button,
-.p42-technical summary {
+#app .organization-detail-dialog button {
   min-height: 44px;
-  min-width: 44px;
-  padding: 10px 14px;
-  border-radius: 8px;
+  padding: 9px 14px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 6px;
+  background: var(--so-panel);
+  color: var(--so-text);
   font: inherit;
-  font-size: 15px;
 }
-.p42-work button,
-.p42-missing-work button {
-  border: 1px solid var(--account-org-line);
-  color: var(--account-org-ink);
-  background: var(--account-org-surface);
-  cursor: pointer;
-}
-.p42-work .p42-save {
-  border-color: var(--account-org-blue);
-  color: var(--account-org-on-blue);
-  background: var(--account-org-blue);
+#app .organization-detail-dialog .p42-save {
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-on-primary);
 }
 .p42-status-zone {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
-  padding: 18px;
-  border: 1px solid var(--account-org-line);
-  border-radius: 8px;
-  background: var(--account-org-status-surface);
-}
-.p42-status-zone h4,
-.p42-status-zone p {
-  margin: 0;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 6px;
+  background: var(--so-panel-soft);
 }
 .p42-status-zone h4 {
-  margin-bottom: 8px;
-  font-size: 16px;
+  margin: 0 0 5px;
+  font-size: 13px;
 }
 .p42-status-zone p {
-  color: var(--account-org-muted);
+  margin: 0;
+  color: var(--so-text-muted);
   font-size: 13px;
-  line-height: 1.5;
 }
-.p42-work .p42-status-action {
-  flex-shrink: 0;
-  color: var(--account-org-blue);
-  border-color: var(--account-org-blue);
-}
-.p42-work .p42-status-action[data-danger="true"] {
-  color: var(--account-org-danger);
-  border-color: var(--account-org-danger-border);
-  background: var(--account-org-danger-surface);
+#app .organization-detail-dialog .p42-status-action[data-danger="true"] {
+  border-color: var(--so-danger-border);
+  color: var(--so-danger);
+  background: var(--so-danger-soft);
 }
 .p42-technical {
-  border-block: 1px solid var(--account-org-line);
+  border-block: 1px solid var(--so-border);
 }
 .p42-technical summary {
-  display: flex;
-  align-items: center;
-  padding-inline: 0;
-  color: var(--account-org-ink);
+  min-height: 44px;
+  display: list-item;
+  padding-block: 12px;
   cursor: pointer;
+  font-size: 13px;
 }
 .p42-technical dl {
   display: grid;
   gap: 8px;
-  padding: 0 0 14px;
   margin: 0;
+  padding: 0 0 14px;
 }
 .p42-technical dl div {
   display: grid;
-  grid-template-columns: 100px minmax(0, 1fr);
+  grid-template-columns: 90px minmax(0, 1fr);
   gap: 10px;
 }
 .p42-technical dt {
-  color: var(--account-org-muted);
+  color: var(--so-text-muted);
 }
 .p42-technical dd {
-  min-width: 0;
   margin: 0;
   overflow-wrap: anywhere;
 }
@@ -417,154 +396,92 @@ const { dialogElement, handleCancel } = useModalDialog(
   display: grid;
   gap: 4px;
   margin: 0;
-  padding: 14px;
-  border: 1px solid;
-  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 6px;
   overflow-wrap: anywhere;
+  font-size: 13px;
 }
 .organization-feedback.is-error {
-  border-color: var(--account-org-danger-border);
-  color: var(--account-org-danger);
-  background: var(--account-org-danger-soft);
+  border-color: var(--so-danger-border);
+  background: var(--so-danger-soft);
+  color: var(--so-danger);
 }
 .organization-feedback.is-success {
-  border-color: var(--account-org-success-border);
-  color: var(--account-org-success);
-  background: var(--account-org-success-soft);
+  border-color: var(--so-success-border);
+  background: var(--so-success-soft);
+  color: var(--so-success);
 }
 .organization-feedback.is-warning {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
-  border-color: var(--account-org-warning-border);
-  color: var(--account-org-warning);
-  background: var(--account-org-warning-soft);
+  border-color: var(--so-warning-border);
+  background: var(--so-warning-soft);
+  color: var(--so-warning);
 }
 .organization-feedback > div {
   display: grid;
   gap: 4px;
 }
-.organization-feedback.is-warning button {
-  white-space: nowrap;
-}
-.p42-actions {
+#app .organization-detail-dialog .p42-actions {
+  position: sticky;
+  bottom: 0;
   display: flex;
   justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 18px 0;
-  border-top: 1px solid var(--account-org-line);
-  background: var(--account-org-surface);
-}
-.p42-actions button {
-  min-height: 46px;
-}
-.p42-missing-identity {
-  padding: 28px 24px;
-  color: var(--account-org-on-blue);
-  background: var(--account-org-blue);
-}
-.p42-missing-identity small {
-  color: var(--account-org-dialog-subtle);
-}
-.p42-missing-identity h3 {
-  margin: 12px 0 0;
-  color: var(--account-org-on-blue);
-  font-size: 24px;
-}
-.p42-missing-work {
-  display: grid;
-  gap: 20px;
-  padding: 28px;
-}
-.p42-missing-work > p {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.7;
-}
-.p42-missing-work footer {
-  display: flex;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding-top: 18px;
-  border-top: 1px solid var(--account-org-line);
-}
-.organization-detail-dialog :is(button, input, summary):focus-visible {
-  outline: 3px solid var(--account-org-blue);
-  outline-offset: 3px;
-}
-.organization-detail-dialog button:disabled {
-  border-color: var(--account-org-line);
-  color: var(--account-org-muted);
-  background: var(--account-org-soft);
-  opacity: 1;
-  cursor: not-allowed;
+  gap: 8px;
+  margin: 0 -20px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--so-border);
+  background: var(--so-panel);
 }
 .organization-detail-state {
   display: grid;
   min-width: 0;
-  grid-template-columns: 250px minmax(0, 1fr);
 }
-@media (max-width: 700px) {
-  .organization-detail-dialog {
-    width: calc(100% - 32px);
-    max-height: calc(100dvh - 24px);
+.p42-missing-work {
+  padding-bottom: 16px;
+}
+.p42-missing-work > p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.p42-missing-work footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+#app .organization-detail-dialog :is(button, input, summary):focus-visible {
+  outline: 3px solid var(--so-focus);
+  outline-offset: 2px;
+}
+#app .organization-detail-dialog button:disabled {
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+  cursor: not-allowed;
+  opacity: 1;
+}
+@media (max-width: 640px) {
+  .organization-profile,
+  .organization-feedback.is-warning {
+    grid-template-columns: minmax(0, 1fr);
   }
-  .p42-detail-form,
-  .organization-detail-state {
-    grid-template-columns: 1fr;
-  }
-  .p42-identity {
-    padding: 20px;
-  }
-  .p42-identity-head {
-    margin-bottom: 18px;
-  }
-  .p42-identity .detail-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-  }
-  .p42-identity .detail-grid article {
-    min-width: 0;
-    padding: 12px 0 0;
-  }
-  .p42-identity .detail-grid strong {
-    font-size: 16px;
-  }
-  .p42-work {
-    gap: 18px;
-    padding: 20px 20px 0;
-  }
-  .organization-profile {
-    grid-template-columns: 1fr;
-  }
-  .organization-profile h4,
   .organization-profile label:first-of-type {
     grid-column: auto;
   }
-  .p42-work .p42-actions {
-    position: sticky;
-    bottom: 0;
-    z-index: 1;
-    margin: 0 -20px;
-    padding: 12px 20px max(12px, env(safe-area-inset-bottom));
-    box-shadow: 0 -8px 20px var(--account-org-mobile-action-shadow);
-  }
-  .p42-work .p42-actions button {
-    min-height: 48px;
-  }
-  .p42-status-zone {
-    display: grid;
-  }
-  .organization-feedback.is-warning {
-    grid-template-columns: 1fr;
-  }
-  .organization-feedback.is-warning button {
-    width: 100%;
-  }
+  .p42-work,
   .p42-missing-work {
-    padding: 20px;
+    padding-inline: 16px;
+  }
+  .p42-identity,
+  .p42-missing-identity {
+    padding-inline: 16px;
+  }
+  #app .organization-detail-dialog .p42-actions {
+    margin-inline: -16px;
+    padding-inline: 16px;
   }
 }
 </style>

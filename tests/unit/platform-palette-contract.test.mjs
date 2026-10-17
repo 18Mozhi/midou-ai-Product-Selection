@@ -1292,76 +1292,22 @@ test("P73 not-found colors resolve from its route-scoped palette", async () => {
   assert.doesNotMatch(component, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("organization creation wizard colors resolve from the dialog-scoped palette", async () => {
-  const [tokens, component] = await Promise.all([
-    readFile("apps/web/src/design/organization-wizard-tokens.css", "utf8"),
-    readFile("apps/web/src/components/OrganizationCreationWizard.vue", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(
-      /(--ow-[a-z-]+):\s*(?:(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\))|rgba?\([^;]+\));/gi,
-    ),
+test("account dialogs and wizard use shared semantic colors without legacy scoped palettes", async () => {
+  const paths = [
+    "PlatformAccountCenter.css",
+    "PlatformAccountCenterAdmin.css",
+    "PlatformAccountDialogs.css",
+    "PlatformAccountUsersC.css",
+    "PlatformOrganizationDetailDialog.vue",
+    "PlatformUserDetailDialog.vue",
+    "OrganizationCreationWizard.vue",
   ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set(
-    [...component.matchAll(/var\((--ow-[a-z-]+)\)/g)].map((match) => match[1]),
-  );
-
-  assert.equal(names.size, 32);
-  assert.equal(declarations.length, names.size, "no duplicate organization wizard declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.organization-wizard\)\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(component.includes('@import "../design/organization-wizard-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(component, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
-});
-
-test("platform account center palettes stay scoped to their distinct account pages", async () => {
-  const [tokens, css, adminCss, dialogsCss, usersCss, organizationDialog, userDialog] =
-    await Promise.all([
-      readFile("apps/web/src/design/account-center-tokens.css", "utf8"),
-      readFile("apps/web/src/components/PlatformAccountCenter.css", "utf8"),
-      readFile("apps/web/src/components/PlatformAccountCenterAdmin.css", "utf8"),
-      readFile("apps/web/src/components/PlatformAccountDialogs.css", "utf8"),
-      readFile("apps/web/src/components/PlatformAccountUsersC.css", "utf8"),
-      readFile("apps/web/src/components/PlatformOrganizationDetailDialog.vue", "utf8"),
-      readFile("apps/web/src/components/PlatformUserDetailDialog.vue", "utf8"),
-    ]);
-  const declarations = [
-    ...tokens.matchAll(
-      /(--(?:account-review|account-org|account-users)-[a-z-]+):\s*(?:#[0-9a-f]{3,8}|var\(--glass-[a-z-]+\)|rgba?\([^;]+\));/gi,
-    ),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set(
-    [
-      ...`${css}\n${adminCss}\n${dialogsCss}\n${usersCss}\n${organizationDialog}\n${userDialog}`.matchAll(
-        /var\((--(?:account-review|account-org|account-users)-[a-z-]+)\)/g,
-      ),
-    ].map((match) => match[1]),
-  );
-
-  assert.equal(names.size, 34);
-  assert.equal(declarations.length, names.size, "no duplicate account center palette declarations");
-  assert.doesNotMatch(tokens, /--account-review-|--account-users-|--p39-/);
-  assert.match(tokens, /html:has\(body #app \.account-center--organization-review\)/);
-  assert.match(tokens, /html:has\(body #app \.account-center--user-admin-c\)/);
-  assert.match(tokens, /html:has\(body #app \.account-center--admins-c\)/);
-  assert.ok(css.startsWith('@import "../design/account-center-tokens.css";'));
-  assert.doesNotMatch(adminCss, /@import/);
-  assert.doesNotMatch(dialogsCss, /@import/);
-  assert.doesNotMatch(usersCss, /@import/);
-  assert.ok(organizationDialog.includes('@import "../design/account-center-tokens.css";'));
-  assert.ok(userDialog.includes('@import "../design/account-center-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
-  assert.doesNotMatch(adminCss, /#[0-9a-f]{3,8}\b|rgba?\(/i);
-  assert.doesNotMatch(dialogsCss, /#[0-9a-f]{3,8}\b|rgba?\(/i);
-  assert.doesNotMatch(usersCss, /#[0-9a-f]{3,8}\b|rgba?\(/i);
-  assert.doesNotMatch(organizationDialog, /#[0-9a-f]{3,8}\b|rgba?\(/i);
-  assert.doesNotMatch(userDialog, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+  for (const path of paths) {
+    const source = await readFile("apps/web/src/components/" + path, "utf8");
+    assert.doesNotMatch(source, /--account-org-|--ow-|@import/);
+    assert.doesNotMatch(source, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+    if (path !== "PlatformAccountUsersC.css") assert.match(source, /var\(--so-/);
+  }
 });
 
 test("P48 provider compatibility colors resolve from the modal-scoped palette", async () => {

@@ -48,7 +48,7 @@ function scrollToSection(section: "memberships" | "roles" | "security") {
     @cancel="handleCancel"
   >
     <section v-if="detail" class="user-detail-shell">
-      <aside class="user-detail-identity">
+      <header class="user-detail-identity">
         <div>
           <small>账号身份</small>
           <h3>{{ detail.user.email }}</h3>
@@ -59,7 +59,7 @@ function scrollToSection(section: "memberships" | "roles" | "security") {
           <button type="button" @click="scrollToSection('roles')">平台权限</button>
           <button type="button" @click="scrollToSection('security')">登录安全</button>
         </nav>
-      </aside>
+      </header>
       <div class="user-detail-main">
         <header class="user-detail-toolbar">
           <small>账号详情</small>
@@ -229,179 +229,150 @@ function scrollToSection(section: "memberships" | "roles" | "security") {
 </template>
 
 <style scoped>
-@import "../design/account-center-tokens.css";
-
-.detail-dialog {
+#app .detail-dialog {
   position: fixed;
   inset: 0;
   z-index: 10;
-  display: none;
-  width: min(1120px, calc(100% - 40px));
-  max-height: min(90dvh, 900px);
+  width: min(920px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
   overflow: hidden;
   margin: auto;
   padding: 0;
-  border: 1px solid var(--account-org-line);
-  border-radius: 14px;
-  color: var(--account-org-ink);
-  background: var(--account-org-surface);
-  box-shadow: 0 24px 80px var(--account-org-user-dialog-shadow);
+  border: 1px solid var(--so-border-strong);
+  border-radius: 10px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  box-shadow: var(--so-shadow-dialog);
 }
-.detail-dialog[open] {
-  display: block;
-}
-dialog::backdrop {
-  background: var(--account-org-user-dialog-scrim);
+#app .detail-dialog::backdrop {
+  background: var(--so-scrim);
+  backdrop-filter: none;
 }
 .user-detail-shell {
   display: grid;
-  grid-template-columns: minmax(220px, 270px) minmax(0, 1fr);
-  min-height: min(580px, 85dvh);
-  max-height: min(90dvh, 900px);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  height: min(760px, calc(100dvh - 34px));
+  min-height: 0;
 }
 .user-detail-identity {
   display: flex;
-  flex-direction: column;
-  gap: 26px;
-  padding: 28px 22px;
-  color: var(--account-org-on-blue);
-  background: var(--account-org-blue);
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--so-border);
+  background: var(--so-panel);
 }
-.user-detail-identity small,
-.user-detail-identity p {
-  color: var(--account-org-dialog-subtle);
+.user-detail-identity small {
+  color: var(--so-text-muted);
+  font-size: 12px;
 }
 .user-detail-identity h3 {
+  margin: 4px 0;
+  max-width: 100%;
   overflow-wrap: anywhere;
-  margin: 8px 0 12px;
-  color: var(--account-org-on-blue);
-  font-size: 18px;
-  line-height: 1.35;
+  font-size: 16px;
+}
+.user-detail-identity > div {
+  min-width: 0;
 }
 .user-detail-status {
-  display: inline-flex;
-  padding: 5px 9px;
-  border: 1px solid var(--account-org-user-outline);
-  border-radius: 999px;
-  color: var(--account-org-on-blue);
-  background: var(--account-org-user-overlay);
+  color: var(--so-text-muted);
   font-size: 13px;
 }
 .user-detail-identity nav {
-  display: grid;
-  gap: 7px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
 }
-.user-detail-identity nav button {
+#app .detail-dialog button {
   min-height: 44px;
-  padding: 10px 12px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  color: var(--account-org-on-blue);
-  background: transparent;
-  text-align: left;
+  padding: 9px 12px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 6px;
+  background: var(--so-panel);
+  color: var(--so-text);
   font: inherit;
   cursor: pointer;
 }
-.user-detail-identity nav button:hover,
-.user-detail-identity nav button:focus-visible {
-  border-color: var(--account-org-on-blue);
-  color: var(--account-org-blue-deep);
-  background: var(--account-org-surface);
-}
-.user-detail-context {
-  margin-top: auto;
-  font-size: 13px;
-  line-height: 1.55;
+#app .detail-dialog .user-detail-identity nav button {
+  border-color: transparent;
+  color: var(--so-primary);
 }
 .user-detail-main {
-  display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   min-height: 0;
-  max-height: min(90dvh, 900px);
-  background: var(--account-org-surface);
+  overflow: hidden;
 }
 .user-detail-toolbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--account-org-line);
-  color: var(--account-org-muted);
+  padding: 8px 20px;
+  border-bottom: 1px solid var(--so-border);
 }
-.user-detail-toolbar button,
-.user-detail-actions button,
-.user-detail-section button {
-  min-height: 44px;
-  padding: 9px 13px;
-  border: 1px solid var(--account-org-dialog-border);
-  border-radius: 8px;
-  color: var(--account-org-blue);
-  background: var(--account-org-surface);
-  font: inherit;
-  cursor: pointer;
-}
-.user-detail-toolbar button {
-  color: var(--account-org-ink);
+.user-detail-toolbar small {
+  color: var(--so-text-muted);
 }
 .user-detail-scroll {
+  flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
   overscroll-behavior: contain;
-  scroll-behavior: smooth;
-}
-.user-detail-main > .detail-feedback {
-  margin: 12px 22px 0;
 }
 .user-detail-section {
-  scroll-margin-top: 12px;
-  padding: 22px 26px;
-  border-bottom: 1px solid var(--account-org-line);
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--so-border);
+  scroll-margin-top: 8px;
 }
 .user-detail-section > header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 18px;
+  align-items: start;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 .user-detail-section > header h4 {
   margin: 0;
-  color: var(--account-org-ink);
-  font-size: 21px;
+  font-size: 14px;
 }
 .user-detail-section > header p {
-  margin: 6px 0 0;
-  color: var(--account-org-muted);
-  font-size: 14px;
+  margin: 5px 0 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
   line-height: 1.5;
 }
 .user-detail-section > header > strong {
-  flex: 0 0 auto;
-  color: var(--account-org-blue);
-  font-size: 14px;
+  flex-shrink: 0;
+  font-size: 13px;
 }
 .user-detail-facts {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 .user-detail-facts article {
   display: grid;
-  gap: 5px;
-  padding: 12px 14px;
-  border-left: 3px solid var(--account-org-blue);
-  background: var(--account-org-user-surface-soft);
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 6px;
+  background: var(--so-panel-soft);
+  overflow-wrap: anywhere;
 }
 .user-detail-facts small,
 .user-detail-list small {
-  color: var(--account-org-muted);
+  color: var(--so-text-muted);
 }
 .user-detail-list {
   display: grid;
   gap: 8px;
+  margin: 12px 0;
   padding: 0;
   list-style: none;
 }
@@ -410,9 +381,10 @@ dialog::backdrop {
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
-  padding: 12px 14px;
-  border: 1px solid var(--account-org-line);
-  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 6px;
+  overflow-wrap: anywhere;
 }
 .user-detail-list li strong,
 .user-detail-list li small {
@@ -421,70 +393,65 @@ dialog::backdrop {
 .user-detail-list li small {
   margin-top: 4px;
 }
-.user-detail-list li button {
-  min-width: 86px;
-}
-.user-detail-empty,
-.user-detail-boundary {
-  margin: 12px 0;
-  padding: 12px 14px;
-  color: var(--account-org-muted);
-  background: var(--account-org-user-surface-soft);
-  line-height: 1.5;
-}
-.user-detail-boundary {
-  border-left: 3px solid var(--account-org-blue);
-}
 .user-role-list > li {
   grid-template-columns: minmax(0, 1fr) auto;
 }
 .user-session-list > li {
   grid-template-columns: minmax(0, 1fr) auto auto;
 }
-.detail-dialog .button-danger {
-  border-color: var(--account-org-user-danger-border);
-  color: var(--account-org-danger);
-  background: var(--account-org-surface);
+.user-detail-empty,
+.user-detail-boundary {
+  margin: 12px 0;
+  padding: 10px 12px;
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+  font-size: 13px;
+  line-height: 1.5;
 }
-.user-detail-actions {
-  position: sticky;
-  bottom: 0;
-  z-index: 1;
+#app .detail-dialog .button-danger {
+  border-color: var(--so-danger-border);
+  color: var(--so-danger);
+}
+#app .detail-dialog .user-detail-actions {
+  flex: 0 0 auto;
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
   gap: 8px;
-  padding: 14px 20px;
-  border-top: 1px solid var(--account-org-line);
-  background: var(--account-org-surface);
+  padding: 12px 20px;
+  border-top: 1px solid var(--so-border);
+  background: var(--so-panel);
 }
-.detail-dialog button:disabled {
+#app .detail-dialog button:disabled {
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
   cursor: not-allowed;
-  color: var(--account-org-user-disabled-ink);
-  background: var(--account-org-soft);
   opacity: 1;
 }
-.detail-dialog :is(button, input, select, textarea):focus-visible {
-  outline: 3px solid var(--account-org-user-focus);
+#app .detail-dialog :is(button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--so-focus);
   outline-offset: 2px;
 }
 .detail-feedback {
-  margin: 12px 0 0;
-  padding: 11px 13px;
-  border-radius: 9px;
+  flex: 0 0 auto;
+  margin: 10px 20px 0;
+  padding: 10px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 6px;
+  font-size: 13px;
 }
 .detail-feedback--error {
-  border: 1px solid color-mix(in srgb, var(--so-danger) 45%, var(--so-border));
-  color: var(--so-danger);
+  border-color: var(--so-danger-border);
   background: var(--so-danger-soft);
+  color: var(--so-danger);
 }
 .detail-feedback--success {
-  border: 1px solid color-mix(in srgb, var(--so-success) 45%, var(--so-border));
+  border-color: var(--so-success-border);
+  background: var(--so-success-soft);
   color: var(--so-success);
-  background: color-mix(in srgb, var(--so-success) 12%, var(--so-panel));
 }
 .account-state {
-  padding: 18px;
-  text-align: center;
+  padding: 20px;
 }
 .account-state--error {
   display: grid;
@@ -495,73 +462,34 @@ dialog::backdrop {
 }
 .account-state--error div {
   display: flex;
-  justify-content: center;
   gap: 8px;
 }
-@media (max-width: 700px) {
-  .detail-dialog {
-    width: calc(100% - 20px);
-    max-height: min(92dvh, 900px);
-    border-radius: 12px;
-  }
-  .user-detail-shell {
-    grid-template-columns: minmax(0, 1fr);
-    min-height: 0;
-    max-height: min(92dvh, 900px);
-  }
-  .user-detail-identity {
-    gap: 14px;
-    padding: 16px 18px 12px;
-  }
-  .user-detail-identity h3 {
-    margin: 4px 0 8px;
-    font-size: 16px;
-  }
-  .user-detail-identity nav {
-    display: flex;
-    gap: 5px;
-    overflow-x: auto;
-  }
-  .user-detail-identity nav button {
-    flex: 0 0 auto;
-    padding-inline: 10px;
-  }
-  .user-detail-context {
-    margin: 0;
-  }
-  .user-detail-main {
-    max-height: min(92dvh, 900px);
+@media (max-width: 640px) {
+  .user-detail-identity,
+  .user-detail-section {
+    padding: 12px 16px;
   }
   .user-detail-toolbar {
-    padding: 10px 16px;
+    padding: 8px 16px;
   }
-  .user-detail-section {
-    padding: 18px 16px;
+  .user-detail-identity {
+    display: grid;
   }
-  .user-detail-section > header h4 {
-    font-size: 19px;
+  .user-detail-identity nav {
+    flex-wrap: nowrap;
   }
-  .user-detail-actions {
+  #app .detail-dialog .user-detail-actions {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+    padding: 10px 12px;
   }
-  .user-detail-actions button {
+  #app .detail-dialog .user-detail-actions button {
     min-width: 0;
-    padding-inline: 8px;
   }
   .user-detail-list > li,
   .user-role-list > li,
   .user-session-list > li {
-    grid-template-columns: 1fr;
-  }
-  .user-detail-facts {
-    grid-template-columns: 1fr;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .user-detail-scroll {
-    scroll-behavior: auto;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 </style>

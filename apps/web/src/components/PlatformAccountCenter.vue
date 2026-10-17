@@ -647,11 +647,15 @@ onMounted(load);
           ? '组织与用户'
           : permissionsRoute
             ? '角色权限'
-            : organizationListRoute
-              ? '组织管理'
-              : adminListRoute
-                ? '平台管理员'
-                : '平台用户'
+            : props.routePath === '/platform-admin/organizations/new'
+              ? '新建组织'
+              : props.organizationId
+                ? '组织详情'
+                : organizationListRoute
+                  ? '组织管理'
+                  : adminListRoute
+                    ? '平台管理员'
+                    : '平台用户'
       "
     >
       <template v-if="permissionsRoute">

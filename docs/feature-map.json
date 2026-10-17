@@ -1,4 +1,33 @@
 {
+  "selectionAccountDetails20261017": {
+    "status": "implemented",
+    "statusDetail": "106_account_browser_10_targeted_4_clock_deeplink_95_related_node_checks_web_build_and_gates_passed_not_deployed",
+    "requirements": "docs/selection-account-details.md",
+    "routes": [
+      "/platform-admin/organizations/:organizationId",
+      "/platform-admin/organizations/new",
+      "/platform-admin/users",
+      "/platform-admin/admins"
+    ],
+    "sourceFiles": [
+      "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+      "apps/web/src/components/PlatformUserDetailDialog.vue",
+      "apps/web/src/components/OrganizationCreationWizard.vue",
+      "apps/web/src/components/PlatformAccountCenter.css",
+      "apps/web/src/components/PlatformAccountCenter.vue"
+    ],
+    "retiredFiles": [
+      "apps/web/src/design/account-center-tokens.css",
+      "apps/web/src/design/organization-wizard-tokens.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m06-01-platform-accounts.spec.ts",
+      "tests/unit/platform-palette-contract.test.mjs",
+      "tests/unit/theme-and-icon-completion.test.mjs",
+      "tests/unit/ui-phase2-organization-detail-production-composition.test.mjs"
+    ],
+    "contract": "Top identity and full-width organization/user details and two-step organization wizard. Retain all scripts and 33 native control openings, scroll anchors, errors, writes, defaults, audit and modal focus. Use shared theme directly; retire two unused palettes and 66 aliases. No API/schema/env/permission/dependency/Python changes. Frontend static update only. Correct existing organization create/detail route page headers; routes and requests unchanged."
+  },
   "selectionAccountDialogs20261017": {
     "status": "implemented",
     "statusDetail": "106_account_browser_2_final_backdrop_72_related_node_checks_web_build_and_gates_passed_not_deployed",
@@ -11,8 +40,7 @@
     ],
     "sourceFiles": [
       "apps/web/src/components/PlatformAccountDialogs.vue",
-      "apps/web/src/components/PlatformAccountDialogs.css",
-      "apps/web/src/design/account-center-tokens.css"
+      "apps/web/src/components/PlatformAccountDialogs.css"
     ],
     "testFiles": [
       "tests/e2e/m06-01-platform-accounts.spec.ts",
@@ -20,7 +48,7 @@
       "tests/unit/platform-palette-contract.test.mjs",
       "tests/unit/ui-phase2-admin-create-preview.test.mjs"
     ],
-    "contract": "Compact single-column account creation, password reset and audit reason dialogs. Remove blue admin side rail; retain original forms, validations, payloads, defaults, writes, errors and modal focus. Shared theme colors; remove four unused account aliases. No API/schema/env/dependency/permission change. Frontend static release only."
+    "contract": "Compact single-column account creation, password reset and audit reason dialogs. Remove blue admin side rail; retain original forms, validations, payloads, defaults, writes, errors and modal focus. Shared theme colors; remove four unused account aliases. No API/schema/env/dependency/permission change. Frontend static release only. Remaining account palette later retired by selectionAccountDetails20261017."
   },
   "selectionPermissionLayout20261017": {
     "status": "implemented",
@@ -59,7 +87,6 @@
       "apps/web/src/components/PlatformAdminComparisonMobile.css",
       "apps/web/src/components/PlatformAdminDirectoryMobile.css",
       "apps/web/src/components/ResponsiveFilterDrawer.vue",
-      "apps/web/src/design/account-center-tokens.css",
       "apps/web/src/design/platform-dashboard-tokens.css",
       "apps/web/src/design/platform-status-center-tokens.css",
       "apps/web/src/design/provider-source-tokens.css"
@@ -70,7 +97,7 @@
       "tests/unit/platform-palette-contract.test.mjs",
       "tests/unit/responsive-filter-drawer.test.mjs"
     ],
-    "contract": "Four account directories use one top summary and full-width records, with original fields, filters, dialogs, writes, audit and permissions. Replace old sidebar CSS, remove 57 unused tokens and use the existing settings icon for filter adjustment. Historical captured-style tests use exact pre-rebuild input; current source and browser checks verify the rebuilt interface. No API, schema, environment or dependency change; frontend static rebuild only."
+    "contract": "Four account directories use one top summary and full-width records, with original fields, filters, dialogs, writes, audit and permissions. Replace old sidebar CSS, remove 57 unused tokens and use the existing settings icon for filter adjustment. Historical captured-style tests use exact pre-rebuild input; current source and browser checks verify the rebuilt interface. No API, schema, environment or dependency change; frontend static rebuild only. Remaining account palette later retired by selectionAccountDetails20261017."
   },
   "selectionCompetitorRelevance20261017": {
     "status": "implemented",
