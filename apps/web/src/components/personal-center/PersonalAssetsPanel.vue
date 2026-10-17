@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PersonalSectionReadStatus from "./PersonalSectionReadStatus.vue";
-import { decisionName, formatPersonalDate, statusName } from "./formatters";
+import { decisionName, formatPersonalDate } from "./formatters";
 import type { PersonalAssets, SectionResource } from "./types";
 
 const props = defineProps<{ resource: SectionResource<PersonalAssets> }>();
@@ -49,23 +49,6 @@ const emit = defineEmits<{ retry: [] }>();
           class="p11-muted"
         >
           暂无人工决策。
-        </p>
-      </article>
-      <article class="p11-panel p11-wide">
-        <p class="p11-kicker">当前待办</p>
-        <h3>我的任务</h3>
-        <div v-for="item in props.resource.data.tasks" :key="item.id" class="p11-row">
-          <RouterLink to="/tasks">{{ item.title }}</RouterLink>
-          <small>
-            {{ statusName(item.status) }} · {{ statusName(item.priority) }} ·
-            {{ formatPersonalDate(item.due_at) }}
-          </small>
-        </div>
-        <p
-          v-if="props.resource.status === 'ready' && !props.resource.data.tasks.length"
-          class="p11-muted"
-        >
-          暂无本人任务。
         </p>
       </article>
     </section>

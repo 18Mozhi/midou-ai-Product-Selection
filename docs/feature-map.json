@@ -5541,6 +5541,7 @@
     "verification": "Full organization browser suite: desktop 75 passed; mobile 74 passed, 1 original desktop-only timeout skip. Historical helper targeted 38 passed. No production or daily-100 acceptance claim."
   },
   "selectionPersonalWorkspace20261017": {
+    "selectionAssetsSimplification": "PersonalAssetsPanel now displays followed intelligence and selection decisions only; the standalone task panel and its task-directory entry are removed. Existing assets API response, task detail actions and organization approvals remain unchanged. The actual Vue preview verifies both retained headings and absence of task entry at desktop/mobile widths. See docs/selection-personal-assets-simplification.md. Frontend publication and refresh only; no server restart or new configuration.",
     "status": "implemented",
     "statusDetail": "local_requires_release_and_remaining_goal_acceptance",
     "requirements": "docs/selection-personal-workspace.md",

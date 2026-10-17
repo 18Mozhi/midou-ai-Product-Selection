@@ -44,7 +44,29 @@ for (const section of ["profile", "permissions", "security", "notifications", "a
       sessions: [
         { id: "session-layout", device_label: "浏览器设备", status: "active", last_seen_at: null },
       ],
-      assets: { followed_trends: [], decisions: [], tasks: [] },
+      assets: {
+        followed_trends: [
+          { id: "trend-assets", title: "关注的商品情报", market: "US", created_at: null },
+        ],
+        decisions: [
+          {
+            id: "decision-assets",
+            opportunity_id: "product-assets",
+            opportunity_name: "已分析商品",
+            action: "reject",
+            created_at: null,
+          },
+        ],
+        tasks: [
+          {
+            id: "legacy-task",
+            title: "历史任务仍在响应中",
+            status: "open",
+            priority: "high",
+            due_at: null,
+          },
+        ],
+      },
       "notification-preferences": {
         version: 7,
         in_app_enabled: true,
@@ -71,6 +93,21 @@ for (const section of ["profile", "permissions", "security", "notifications", "a
     );
     expect((await page.locator(".p11-page-heading").boundingBox())!.height).toBeLessThan(80);
     const center = page.locator(".personal-center");
+    if (section === "assets") {
+      await expect(center.getByRole("heading", { name: "关注热点", exact: true })).toBeVisible();
+      await expect(center.getByRole("heading", { name: "我的决策", exact: true })).toBeVisible();
+      await expect(center.getByRole("link", { name: "关注的商品情报" })).toHaveAttribute(
+        "href",
+        "/trends?topic=trend-assets",
+      );
+      await expect(center.getByRole("link", { name: "已分析商品" })).toHaveAttribute(
+        "href",
+        "/opportunities/product-assets",
+      );
+      await expect(center.getByRole("heading", { name: "我的任务", exact: true })).toHaveCount(0);
+      await expect(center.getByText("历史任务仍在响应中")).toHaveCount(0);
+      await expect(center.locator('a[href="/tasks"]')).toHaveCount(0);
+    }
     await expect(center).toHaveCSS("font-size", "13px");
     const panels = center.locator(".p11-panel");
     await expect(panels.first()).toBeVisible();

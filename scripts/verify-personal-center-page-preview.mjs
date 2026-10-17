@@ -213,9 +213,9 @@ try {
           .getByRole("heading", { name: "可保存的账号资料", exact: true })
           .waitFor({ timeout: 8000 });
         check(
-          await root.getByText("邮箱只读，不会写入资料更新请求。", { exact: true }).count(),
-          1,
-          "profile write boundary visible",
+          await root.getByLabel("邮箱", { exact: true }).isDisabled(),
+          true,
+          "profile email remains read-only",
         );
         const save = root.getByRole("button", { name: "保存资料", exact: true });
         await save.focus();
@@ -249,7 +249,7 @@ try {
         for (const [section, heading] of [
           ["permissions", "可执行动作"],
           ["security", "设备会话"],
-          ["assets", "我的任务"],
+          ["assets", "我的决策"],
           ["notifications", "五项可保存开关"],
         ]) {
           await root
