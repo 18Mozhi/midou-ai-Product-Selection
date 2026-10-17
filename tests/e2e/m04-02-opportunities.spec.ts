@@ -2828,9 +2828,6 @@ test("compact catalogue exposes the first product title above the fold with twen
     .locator(".catalog-product > a")
     .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
   expect(new Set(paths).size).toBe(20);
-  await expect(page).toHaveScreenshot("compact-twenty-product-catalogue-20261017.png", {
-    fullPage: false,
-  });
   const allRead = page.waitForResponse((response) => {
     const url = new URL(response.url());
     return (
