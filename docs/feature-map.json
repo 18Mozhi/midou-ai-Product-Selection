@@ -2078,6 +2078,7 @@
       "encryption": "AES-256-GCM with random nonce, authentication tag, asset/type/key-version AAD and Baota-only master key",
       "loggingBoundary": "credential mutation responses are no-store; API repositories receive only sealed payloads; BaoTa Python crawler events recursively redact cookie credential token authorization secret and master-key fields",
       "responseBoundary": "masked fingerprint and metadata only; no decrypt, export, ciphertext, nonce or auth-tag API",
+      "browserHelperArchiveReproducibility": "scripts/browser-helper-archive.mjs canonicalizes the three allowlisted UTF-8 source files from CRLF to LF for both packaging and strict source validation; identical Git text produces identical ZIP bytes; non-newline content changes remain rejected; see docs/selection-release-helper-reproducibility.md",
       "permission": "authenticated platform key_rotation:manage; same-origin and Idempotency-Key for writes",
       "temporaryMaterialization": "authorized Worker/Crawler callback under CREDENTIAL_TEMP_ROOT with finally buffer clearing and exact directory deletion",
       "masterKeyRotation": "resumable Baota one-time re-encryption of current active versions; immutable history becomes unreadable after old-key revocation; switch resident configuration only after zero remaining active old-version assets",

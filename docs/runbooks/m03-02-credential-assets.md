@@ -1,5 +1,7 @@
 # M03-02 平台凭证资产运维说明
 
+2026-10-17 浏览器助手构建一致性：现有Web构建将固定3份UTF-8助手文本的CRLF归一化为LF，再生成及验证ZIP，消除跨检出环境的压缩包变动。下载路径、权限和协议不变。发布当前前端下载文件后刷新生效，单独此项无需Node/Python重启；见 `../selection-release-helper-reproducibility.md`。
+
 ## 宝塔部署
 
 1. 在宝塔备份 `product_scout`，使用业务账号按顺序执行 `0016b_credential_assets_m03_02.up.sql` 与 `0049_credential_renewal_auto_replay.up.sql`；已存在 M03-02 表时只执行未应用的 0049。

@@ -1,8 +1,50 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
-import { assertBrowserHelperArchive } from "../../scripts/browser-helper-archive.mjs";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { join, resolve } from "node:path";
+import { tmpdir } from "node:os";
+import {
+  assertBrowserHelperArchive,
+  browserHelperDirectory,
+  buildBrowserHelperArchive,
+} from "../../scripts/browser-helper-archive.mjs";
+
+test("browser helper packaging is identical across LF and CRLF and still rejects changed source", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "scoutops-helper-eol-"));
+  t.diagnostic(`temporary_root=${root}`);
+  try {
+    const fixtures = {
+      "content-bridge.js": "// bridge fixture\nglobalThis.bridge = true;\n",
+      "manifest.json": '{\n  "manifest_version": 3,\n  "name": "line-ending fixture"\n}\n',
+      "service-worker.js": "// worker fixture\nglobalThis.worker = true;\n",
+    };
+    const archives = [];
+    for (const variant of ["lf", "crlf"]) {
+      const source = join(root, variant, "browser-helper", browserHelperDirectory);
+      await mkdir(source, { recursive: true });
+      for (const [name, text] of Object.entries(fixtures))
+        await writeFile(
+          join(source, name),
+          variant === "lf" ? text : text.replaceAll("\n", "\r\n"),
+        );
+      archives.push(await buildBrowserHelperArchive(join(root, variant)));
+    }
+    assert.deepEqual(await readFile(archives[0]), await readFile(archives[1]));
+    await assertBrowserHelperArchive(archives[0], join(root, "crlf"));
+    await assertBrowserHelperArchive(archives[1], join(root, "lf"));
+    await writeFile(
+      join(root, "crlf", "browser-helper", browserHelperDirectory, "service-worker.js"),
+      "globalThis.worker = false;\r\n",
+    );
+    await assert.rejects(
+      () => assertBrowserHelperArchive(archives[0], join(root, "crlf")),
+      /browser_helper_zip_source_mismatch/,
+    );
+  } finally {
+    await rm(root, { recursive: true, force: true });
+    t.diagnostic(`temporary_root_deleted=${root}`);
+  }
+});
 
 test("browser helper is restricted to ai选品 origins and never returns ERP token", async () => {
   const manifest = JSON.parse(

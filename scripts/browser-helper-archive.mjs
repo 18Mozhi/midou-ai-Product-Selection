@@ -128,7 +128,7 @@ export async function browserHelperSourceEntries(root = process.cwd()) {
   return Promise.all(
     browserHelperFiles.map(async (file) => ({
       name: `${browserHelperDirectory}/${file}`,
-      content: await readFile(join(source, file)),
+      content: Buffer.from((await readFile(join(source, file), "utf8")).replaceAll("\r\n", "\n")),
     })),
   );
 }
