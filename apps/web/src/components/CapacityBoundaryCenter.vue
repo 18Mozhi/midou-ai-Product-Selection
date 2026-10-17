@@ -4,7 +4,7 @@ import { ApiClientError, createApiClient } from "../api-client";
 import CapacityBoundaryEvidence from "./CapacityBoundaryEvidence.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import TechnicalDetails from "./TechnicalDetails.vue";
-import "../capacity-boundary.css";
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 type State =
   | "loading"
   | "ready"
@@ -224,30 +224,25 @@ onMounted(() => void load());
 </script>
 <template>
   <section class="capacity-boundary capacity-boundary--c" :data-state="state">
-    <header class="capacity-boundary__hero">
-      <div>
-        <p>ScoutOps / 容量边界</p>
-        <h1>容量边界核验</h1>
-      </div>
-      <div>
-        <button
-          type="button"
-          :disabled="refreshing || saving"
-          :aria-busy="refreshing"
-          @click="() => load()"
-        >
-          {{ refreshing ? "刷新中…" : "刷新实测事实" }}</button
-        ><button
-          class="danger"
-          type="button"
-          :disabled="saving || refreshing"
-          :aria-busy="saving"
-          @click="confirming = true"
-        >
-          {{ saving ? "签认中…" : "签认恢复演练" }}
-        </button>
-      </div>
-    </header>
+    <PlatformPageHeader title="容量边界核验" :heading-level="1"
+      ><button
+        type="button"
+        :disabled="refreshing || saving"
+        :aria-busy="refreshing"
+        @click="() => load()"
+      >
+        {{ refreshing ? "刷新中…" : "刷新实测事实" }}
+      </button>
+      <button
+        class="danger"
+        type="button"
+        :disabled="saving || refreshing"
+        :aria-busy="saving"
+        @click="confirming = true"
+      >
+        {{ saving ? "签认中…" : "签认恢复演练" }}
+      </button></PlatformPageHeader
+    >
 
     <section
       v-if="data && refreshFailure"

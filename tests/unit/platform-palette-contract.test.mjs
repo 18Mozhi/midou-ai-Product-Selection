@@ -216,34 +216,14 @@ test("historical automation rules palette resolves its captured color references
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("capacity boundary palette resolves the page and scoped shell color references", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/capacity-boundary-tokens.css", "utf8"),
-    readFile("apps/web/src/capacity-boundary-c.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(
-      /(--so-capacity-c-[a-z-]+):\s*(?:(?:#[0-9a-f]{6}|var\(--glass-[a-z-]+\))|rgb\([^;]+\));/gi,
-    ),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set(
-    [...css.matchAll(/var\((--so-capacity-c-[a-z-]+)\)/g)].map((match) => match[1]),
+test("capacity boundary uses shared semantic colors without shell overrides", async () => {
+  const css = await readFile("apps/web/src/capacity-boundary-c.css", "utf8");
+  assert.ok(css.startsWith('@import "./runtime-observation-workspace.css";'));
+  assert.doesNotMatch(
+    css,
+    /body:has|role-shell|role-sidebar|--topology-|--p70-|--p71-|--so-capacity-c-|#[0-9a-f]{3,8}\b|rgba?\(/i,
   );
-
-  assert.equal(names.size, 35);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html body:has\(#app \.capacity-boundary--c\),\s*\.capacity-boundary--c\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(
-    css.startsWith(
-      '/* P71 route-scoped C layout; inherited shell composition is isolated to this page. */\n@import "./design/capacity-boundary-tokens.css";',
-    ),
-  );
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+  assert.match(css, /var\(--so-/);
 });
 
 test("collection task palette resolves the reviewed workspace colors", async () => {
@@ -326,28 +306,14 @@ test("crawler runtime palette keeps approved P53 colors scoped to its review pag
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("crawler scheduler palette resolves the approved P70 page and shell colors", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/crawler-scheduler-tokens.css", "utf8"),
-    readFile("apps/web/src/crawler-scheduler-c.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(
-      /(--p70-[a-z-]+):\s*(?:(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\))|rgb\([^;]+\));/gi,
-    ),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p70-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 36);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html body:has\(#app \.crawler-scheduler--c\),\s*\.crawler-scheduler--c\s*\{[\s\S]*\}$/,
+test("crawler scheduler uses shared semantic colors without shell overrides", async () => {
+  const css = await readFile("apps/web/src/crawler-scheduler-c.css", "utf8");
+  assert.ok(css.startsWith('@import "./runtime-observation-workspace.css";'));
+  assert.doesNotMatch(
+    css,
+    /body:has|role-shell|role-sidebar|--topology-|--p70-|--p71-|--so-capacity-c-|#[0-9a-f]{3,8}\b|rgba?\(/i,
   );
-  assert.ok(css.startsWith('@import "./design/crawler-scheduler-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+  assert.match(css, /var\(--so-/);
 });
 
 test("platform account permissions use their route-scoped palette", async () => {
@@ -734,30 +700,14 @@ test("archived report palette resolves its approved colors only on its historica
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("runtime topology palette resolves the P68 route shell and state colors", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/runtime-topology-tokens.css", "utf8"),
-    readFile("apps/web/src/runtime-topology-c.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(
-      /(--topology-[a-z-]+):\s*(?:(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\))|rgb\([^;]+\));/gi,
-    ),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set(
-    [...css.matchAll(/var\((--topology-[a-z-]+)\)/g)].map((match) => match[1]),
+test("runtime topology uses shared semantic colors without shell overrides", async () => {
+  const css = await readFile("apps/web/src/runtime-topology-c.css", "utf8");
+  assert.ok(css.startsWith('@import "./runtime-observation-workspace.css";'));
+  assert.doesNotMatch(
+    css,
+    /body:has|role-shell|role-sidebar|--topology-|--p70-|--p71-|--so-capacity-c-|#[0-9a-f]{3,8}\b|rgba?\(/i,
   );
-
-  assert.equal(names.size, 31);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.topology-center--c\)\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "./design/runtime-topology-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+  assert.match(css, /var\(--so-/);
 });
 
 test("P17 scoring palette resolves the reviewed console and modal colors in route scope", async () => {

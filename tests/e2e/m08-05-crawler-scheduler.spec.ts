@@ -107,8 +107,14 @@ test("M08-05.A07/A08/A15 desktop and 390 single-host scheduler truth", async ({ 
   await expect(page.getByText(/关联 1 个采集任务/)).toBeVisible();
   await page.getByRole("button", { name: "取消" }).click();
 
+  await expect(page.locator(".crawler-scheduler--c .platform-page-header")).toContainText(
+    "采集调度核验",
+  );
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
+  await expect(page.locator(".crawler-scheduler--c .platform-page-header")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await expect(
     page.getByText("Worker 与 Python Crawler 各一个实例；来源有效并发固定为1。", { exact: true }),
   ).toHaveCount(0);

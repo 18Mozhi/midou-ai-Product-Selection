@@ -328,7 +328,9 @@ test("M08-01.A07/A08/A15 desktop and 390 single-server truth", async ({ page }) 
     route.fulfill({ json: envelope(base) }),
   );
   await page.goto("/platform-admin/topology");
-  await expect(page.getByRole("heading", { name: "服务拓扑", exact: true })).toBeVisible();
+  await expect(
+    page.locator(".platform-page-header").getByRole("heading", { name: "服务拓扑", exact: true }),
+  ).toBeVisible();
   await expect(page.getByRole("navigation", { name: "服务拓扑页内导航" })).toBeVisible();
   await expect(page.getByRole("link", { name: "节点与进程" })).toHaveAttribute(
     "href",
@@ -364,6 +366,12 @@ test("M08-01.A07/A08/A15 desktop and 390 single-server truth", async ({ page }) 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );
+  const scope = page.getByRole("region", { name: "单机运行范围" });
+  const content = page.locator(".p66-content");
+  const scopeBox = await scope.boundingBox(),
+    contentBox = await content.boundingBox();
+  expect(scopeBox && contentBox && scopeBox.y + scopeBox.height <= contentBox.y).toBeTruthy();
+  expect(Math.abs(scopeBox!.width - contentBox!.width)).toBeLessThan(2);
   await expect(page).toHaveScreenshot("m08-01-single-server-desktop.png", { fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();

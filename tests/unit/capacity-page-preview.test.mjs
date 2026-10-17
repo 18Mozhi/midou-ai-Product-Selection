@@ -11,7 +11,7 @@ const evidence = readFileSync("apps/web/src/components/CapacityBoundaryEvidence.
 
 test("P71 C review preserves production script and original attestation dialog", () => {
   assert.equal(preview.scriptSetup.content, original.scriptSetup.content);
-  assert.match(preview.template.content, /<h1>容量边界核验<\/h1>/);
+  assert.match(preview.template.content, /<PlatformPageHeader title="容量边界核验"/);
   assert.match(preview.template.content, /<CapacityBoundaryEvidence/);
   assert.equal((preview.template.content.match(/<ConfirmDialog/g) ?? []).length, 1);
 });
@@ -36,8 +36,8 @@ test("P71 C review distinguishes returned stop facts from absolute resources", (
 
 test("P71 C review gives keyboard focus a visible shared treatment", () => {
   const css = readFileSync("apps/web/src/capacity-boundary-c.css", "utf8");
-  const tokens = readFileSync("apps/web/src/design/capacity-boundary-tokens.css", "utf8");
-  assert.match(css, /capacity-boundary--c :is\(button,\s*summary\):focus-visible/);
-  assert.match(css, /outline:\s*3px solid var\(--so-capacity-c-focus\)/);
-  assert.match(tokens, /--so-capacity-c-focus:\s*var\(--glass-focus\)/);
+  const shared = readFileSync("apps/web/src/runtime-observation-workspace.css", "utf8");
+  assert.ok(css.startsWith('@import "./runtime-observation-workspace.css";'));
+  assert.match(shared, /:focus-visible/);
+  assert.match(shared, /outline: 3px solid var\(--so-focus\)/);
 });

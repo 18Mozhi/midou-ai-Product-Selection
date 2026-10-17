@@ -1,4 +1,36 @@
 {
+  "selectionRuntimeControls20261017": {
+    "status": "implemented",
+    "statusDetail": "46_full_browser_10_final_layout_79_node_web_build_and_gates_passed_not_deployed",
+    "requirements": "docs/selection-runtime-controls.md",
+    "routes": [
+      "/platform-admin/topology",
+      "/platform-admin/crawler-scheduler",
+      "/platform-admin/capacity"
+    ],
+    "sourceFiles": [
+      "apps/web/src/components/RuntimeTopologyCenter.vue",
+      "apps/web/src/components/CrawlerSchedulerCenter.vue",
+      "apps/web/src/components/CapacityBoundaryCenter.vue",
+      "apps/web/src/runtime-observation-workspace.css",
+      "apps/web/src/runtime-topology-c.css",
+      "apps/web/src/crawler-scheduler-c.css",
+      "apps/web/src/capacity-boundary-c.css"
+    ],
+    "retiredFiles": [
+      "apps/web/src/runtime-topology.css",
+      "apps/web/src/crawler-scheduler.css",
+      "apps/web/src/capacity-boundary.css",
+      "apps/web/src/design/runtime-topology-tokens.css",
+      "apps/web/src/design/crawler-scheduler-tokens.css",
+      "apps/web/src/design/capacity-boundary-tokens.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m08-01-single-server.spec.ts",
+      "tests/e2e/m08-05-crawler-scheduler.spec.ts",
+      "tests/e2e/m08-06-capacity-boundary.spec.ts"
+    ]
+  },
   "selectionStorageRecovery20261017": {
     "status": "implemented",
     "statusDetail": "45_full_runtime_browser_pass_1_desktop_skip_7_targeted_pass_1_skip_72_node_web_build_and_gates_passed_not_deployed",

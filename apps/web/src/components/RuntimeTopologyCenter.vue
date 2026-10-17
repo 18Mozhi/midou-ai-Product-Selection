@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import TechnicalDetails from "./TechnicalDetails.vue";
-import "../runtime-topology.css";
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import "../runtime-topology-c.css";
 
 type ViewState =
@@ -407,11 +407,8 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="topology-center topology-center--c" :data-state="state">
-    <header class="topology-hero">
-      <div>
-        <h1>服务拓扑</h1>
-      </div>
-      <button
+    <PlatformPageHeader title="服务拓扑" :heading-level="1"
+      ><button
         ref="refreshButton"
         class="topology-read-action"
         type="button"
@@ -420,11 +417,11 @@ onBeforeUnmount(() => {
         @click="load"
       >
         {{ refreshing ? "正在刷新…" : "刷新运行事实" }}
-      </button>
-    </header>
+      </button></PlatformPageHeader
+    >
 
     <div class="p66-layout">
-      <aside class="p66-directory">
+      <section class="p66-directory" aria-label="单机运行范围">
         <h2>阅读运行证据</h2>
         <p>惠州单主机 · 固定单后端</p>
         <nav v-if="data" aria-label="服务拓扑页内导航">
@@ -466,7 +463,7 @@ onBeforeUnmount(() => {
           </dl>
           <p>容量尚未验证；无高可用或备用服务器承诺。</p>
         </div>
-      </aside>
+      </section>
       <div class="p66-content">
         <section
           v-if="data && refreshFailure"

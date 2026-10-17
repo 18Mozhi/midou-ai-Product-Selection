@@ -234,13 +234,6 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       );
       continue;
     }
-    if (paths[index] === "apps/web/src/design/capacity-boundary-tokens.css") {
-      assert.match(
-        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html body:has\(#app \.capacity-boundary--c\),\s*\.capacity-boundary--c\s*\{(?:\s*--so-capacity-c-[a-z-]+:\s*(?:#[0-9a-f]{6}|rgb\([^;]+\));)+\s*\}$/,
-      );
-      continue;
-    }
     if (paths[index] === "apps/web/src/design/collection-task-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -259,13 +252,6 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         /^\.crawler-center--review\s*\{(?:\s*--so-crawler-c-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
-      );
-      continue;
-    }
-    if (paths[index] === "apps/web/src/design/crawler-scheduler-tokens.css") {
-      assert.match(
-        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html body:has\(#app \.crawler-scheduler--c\),\s*\.crawler-scheduler--c\s*\{(?:\s*--p70-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
       );
       continue;
     }
@@ -490,13 +476,6 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         /^html:has\(body #app \.report-center--review\)\s*\{(?:\s*--report-review-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
-      );
-      continue;
-    }
-    if (paths[index] === "apps/web/src/design/runtime-topology-tokens.css") {
-      assert.match(
-        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html:has\(body #app \.topology-center--c\)\s*\{(?:\s*--topology-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
       );
       continue;
     }

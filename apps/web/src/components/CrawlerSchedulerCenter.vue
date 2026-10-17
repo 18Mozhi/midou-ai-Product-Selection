@@ -5,7 +5,7 @@ import { statusLabel } from "../ui/status-labels";
 import ConfirmDialog from "./ConfirmDialog.vue";
 import CrawlerSchedulerEvidence from "./CrawlerSchedulerEvidence.vue";
 import TechnicalDetails from "./TechnicalDetails.vue";
-import "../crawler-scheduler.css";
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 
 type State =
   | "loading"
@@ -426,24 +426,19 @@ onBeforeUnmount(suspendRead);
 
 <template>
   <section class="crawler-scheduler crawler-scheduler--c" :data-state="state">
-    <header class="crawler-scheduler__hero">
-      <div>
-        <p>ScoutOps / 采集调度</p>
-        <h1>采集调度核验</h1>
-      </div>
-      <div>
-        <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="() => load()">
-          {{ refreshing ? "正在刷新…" : "刷新运行事实" }}</button
-        ><button
-          class="danger"
-          type="button"
-          :disabled="saving || refreshing"
-          @click="confirming = true"
-        >
-          回收过期租约
-        </button>
-      </div>
-    </header>
+    <PlatformPageHeader title="采集调度核验" :heading-level="1"
+      ><button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="() => load()">
+        {{ refreshing ? "正在刷新…" : "刷新运行事实" }}
+      </button>
+      <button
+        class="danger"
+        type="button"
+        :disabled="saving || refreshing"
+        @click="confirming = true"
+      >
+        回收过期租约
+      </button></PlatformPageHeader
+    >
 
     <section
       v-if="data && refreshFailure"

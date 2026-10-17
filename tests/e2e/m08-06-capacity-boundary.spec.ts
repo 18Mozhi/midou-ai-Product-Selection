@@ -116,8 +116,14 @@ test("M08-06.A07/A08/A15 desktop and 390 measured single-host capacity truth", a
   await expect(page.getByText("当前单机容量门满足")).toBeVisible();
   await expect(page.getByText("单机有限实测")).toBeVisible();
   await expect(page.getByText("规划测量上限已完成；仍仅限当前单机实测")).toBeVisible();
+  await expect(page.locator(".capacity-boundary--c .platform-page-header")).toContainText(
+    "容量边界核验",
+  );
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
+  await expect(page.locator(".capacity-boundary--c .platform-page-header")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await expect(
     page.getByText(
       "只展示惠州当前单机实测结论；规划 100 用户不等于并发承诺，不启用负载均衡、备用服务器或多节点。",

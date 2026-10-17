@@ -23,7 +23,8 @@ test("P66 actual C Vue template compiles without new runtime imports", () => {
   );
 });
 test("P66 four named evidence workspaces replace metrics cards and nested topology pile", () => {
-  assert.equal((template.match(/<h1>/g) ?? []).length, 1);
+  assert.match(template, /<PlatformPageHeader title="服务拓扑"/);
+  assert.match(template, /<section class="p66-directory" aria-label="单机运行范围">/);
   for (const id of ["nodes", "health", "queues", "alerts"]) {
     assert.equal(template.split(`id="p66-${id}"`).length, 2);
     assert.equal(template.split(`href="#p66-${id}"`).length, 2);
