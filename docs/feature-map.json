@@ -1,4 +1,17 @@
 {
+  "selectionPrimaryVersionResolution20261018": {
+    "status": "implemented",
+    "requirements": "docs/primary-evidence-version-resolution.md",
+    "sourceFiles": [
+      "packages/database/src/selection-candidate-sql.ts",
+      "apps/worker/src/automatic-selection-evidence.ts"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-selection-policy.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs"
+    ],
+    "contract": "Original scoped primary link keeps identity across supersession only with an active same-provider/key/ASIN successor. Worker reads current scoped facts and returns their actual evidence/time. No history rewrite, schema, API, env, dependency or permission change."
+  },
   "selectionSourceTransportHealth20261018": {
     "status": "implemented",
     "requirements": "docs/source-transport-health.md",

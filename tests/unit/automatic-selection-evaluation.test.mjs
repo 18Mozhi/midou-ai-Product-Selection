@@ -6,9 +6,33 @@ import {
   automaticPrimaryEvidenceSql,
   automaticPrimaryDetailEvidenceSql,
   automaticSupplyEvidenceSql,
+  automaticPrimaryTitleSql,
+  automaticPrimaryImageSql,
 } from "../../apps/worker/dist/automatic-selection-evidence.js";
 import { selectionPrimaryAsinSql } from "../../packages/database/dist/index.js";
 import { parseLan1688Result } from "../../apps/worker/dist/lan-1688-image-search.js";
+
+test("primary refresh reads current scoped facts without losing the original linked identity", () => {
+  for (const [sql, record] of [
+    [automaticPrimaryEvidenceSql, "n"],
+    [automaticPrimaryTitleSql, "n_title"],
+    [automaticPrimaryImageSql, "n_image"],
+  ]) {
+    for (const boundary of [
+      `${record}_seed.status IN ('active','superseded')`,
+      `${record}.record_key=${record}_seed.record_key`,
+      `${record}.organization_id=${record}_seed.organization_id`,
+      `${record}.workspace_id=${record}_seed.workspace_id`,
+      `${record}.provider_id=${record}_seed.provider_id`,
+      `${record}.status='active'`,
+      `BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(${record}.payload_json,'$.asin')))=BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(${record}_seed.payload_json,'$.asin')))`,
+    ])
+      assert.ok(sql.includes(boundary), boundary);
+  }
+  assert.ok(
+    automaticPrimaryEvidenceSql.startsWith("SELECT n.raw_evidence_id,n.created_at observed_at"),
+  );
+});
 
 import {
   calculateAutomaticScoreFacts,

@@ -1,11 +1,20 @@
 import { selectionPrimaryAsinSql } from "@scoutops/database";
 
+/** Keep the original scoped link as identity, but read facts from its active record version. */
+const currentLinkedProduct = (link: string, record: string) =>
+  `JOIN normalized_records ${record}_seed ON ${record}_seed.raw_evidence_id=${link}.raw_evidence_id ` +
+  `AND ${record}_seed.organization_id=${link}.organization_id AND ${record}_seed.workspace_id=${link}.workspace_id ` +
+  `AND ${record}_seed.status IN ('active','superseded') ` +
+  `JOIN normalized_records ${record} ON ${record}.organization_id=${record}_seed.organization_id ` +
+  `AND ${record}.workspace_id=${record}_seed.workspace_id AND ${record}.provider_id=${record}_seed.provider_id ` +
+  `AND ${record}.record_key=${record}_seed.record_key AND ${record}.status='active' ` +
+  `AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(${record}.payload_json,'$.asin')))=BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(${record}_seed.payload_json,'$.asin'))) `;
+
 /** Search from actual primary facts, never an editable opportunity label. */
 export const automaticPrimaryTitleSql =
   "(SELECT JSON_UNQUOTE(JSON_EXTRACT(n_title.payload_json,'$.title')) " +
-  "FROM opportunity_evidence_links l_title JOIN normalized_records n_title " +
-  "ON n_title.raw_evidence_id=l_title.raw_evidence_id AND n_title.organization_id=l_title.organization_id " +
-  "AND n_title.workspace_id=l_title.workspace_id AND n_title.status='active' " +
+  "FROM opportunity_evidence_links l_title " +
+  currentLinkedProduct("l_title", "n_title") +
   "JOIN providers p_title ON p_title.id=n_title.provider_id AND p_title.code='amazon_product' " +
   "WHERE l_title.opportunity_id=o.id AND l_title.organization_id=o.organization_id " +
   "AND l_title.workspace_id=o.workspace_id " +
@@ -19,9 +28,8 @@ export const automaticPrimaryTitleSql =
 /** Correlated to materialized opportunity alias o with its resolved primary_asin. */
 export const automaticPrimaryImageSql =
   "COALESCE((SELECT JSON_UNQUOTE(JSON_EXTRACT(n_image.payload_json,'$.image_url')) " +
-  "FROM opportunity_evidence_links l_image JOIN normalized_records n_image " +
-  "ON n_image.raw_evidence_id=l_image.raw_evidence_id AND n_image.organization_id=l_image.organization_id " +
-  "AND n_image.workspace_id=l_image.workspace_id AND n_image.status='active' " +
+  "FROM opportunity_evidence_links l_image " +
+  currentLinkedProduct("l_image", "n_image") +
   "JOIN providers p_image ON p_image.id=n_image.provider_id AND p_image.code='amazon_product' " +
   "WHERE l_image.opportunity_id=o.id AND l_image.organization_id=o.organization_id " +
   "AND l_image.workspace_id=o.workspace_id " +
@@ -49,11 +57,10 @@ export const automaticPrimaryImageSql =
 
 /** Resolve the same primary used by the catalogue, rather than the latest linked competitor. */
 export const automaticPrimaryEvidenceSql =
-  "SELECT n.raw_evidence_id,l.observed_at,n.payload_json,p.status provider_status " +
+  "SELECT n.raw_evidence_id,n.created_at observed_at,n.payload_json,p.status provider_status " +
   "FROM opportunities o JOIN opportunity_evidence_links l ON l.opportunity_id=o.id " +
   "AND l.organization_id=o.organization_id AND l.workspace_id=o.workspace_id " +
-  "JOIN normalized_records n ON n.raw_evidence_id=l.raw_evidence_id " +
-  "AND n.organization_id=l.organization_id AND n.workspace_id=l.workspace_id AND n.status='active' " +
+  currentLinkedProduct("l", "n") +
   "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
   "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? " +
   `AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY ${selectionPrimaryAsinSql} ` +
