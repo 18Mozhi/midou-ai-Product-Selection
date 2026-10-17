@@ -12,6 +12,7 @@ import { selectionPrimaryAsinSql, selectionCompetitionGateSql } from "@scoutops/
 import {
   buildSupplierSearchQuery,
   calculateTrendProjection,
+  isAutomaticProductDiscoveryProvider,
   TrendProjectionError,
   type TrendProjectionJob,
 } from "./trend-projection-calculation.js";
@@ -189,7 +190,10 @@ export class TrendProjectionPersistence {
           }
         }
         if (
-          (matchedRuleIds.length || job.primarySelectionRationale) &&
+          (matchedRuleIds.length ||
+            job.primarySelectionRationale ||
+            (job.providerCode !== "1688_search" &&
+              isAutomaticProductDiscoveryProvider(job.providerCode))) &&
           amazonAsin(job.payload, canonicalUrl)
         ) {
           stage = "automatic_product_discovery";

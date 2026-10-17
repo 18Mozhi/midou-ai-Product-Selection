@@ -5670,5 +5670,22 @@
       "tests/e2e/ui-phase2-discovery-shell-contracts.spec.ts"
     ],
     "contract": "Search-only overlay removes unreachable quick-create HTTP reads, recent action state, templates and CSS. Parent mode prop removed, hook accepts search only. Search requests, scope, read ownership, modal keyboard/focus and error correlation retained. Historical backend quick-actions API preserved; no schema/config/dependency change. UI not deployed; readonly production snapshot shows 476 successful and 100 warning-ended collection tasks but zero new opportunities in last 24h; not daily-product acceptance."
+  },
+  "selectionAutomaticChannelAdmission20261017": {
+    "status": "implemented",
+    "statusDetail": "targeted_verification_passed_not_deployed",
+    "requirements": "docs/selection-automatic-channel-admission.md",
+    "sourceFiles": [
+      "apps/worker/src/trend-projection-persistence.ts",
+      "apps/worker/src/trend-projection-calculation.ts",
+      "apps/worker/src/competitor-discovery-policy.ts"
+    ],
+    "testFiles": [
+      "tests/unit/intelligence-product-association.test.mjs",
+      "tests/unit/automatic-selection-rule-match.test.mjs",
+      "tests/unit/automatic-selection-readiness.test.mjs",
+      "tests/unit/selection-pipeline-completion.test.mjs"
+    ],
+    "contract": "Automatic product channels with a strictly validated actual Amazon ASIN may enter existing analysis without a manual monitoring subscription; 1688 is excluded. Preserve selected-primary lineage and rule-specific paths, leases, scoped topic idempotence, provider enablement, quality gates and completion proofs. Do not fabricate rule matches, intelligence, scores or completion. No API/event field/schema/config change and no history replay. Not deployed or daily-100 accepted."
   }
 }

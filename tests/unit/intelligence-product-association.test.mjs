@@ -500,3 +500,138 @@ test("no-match and model failure preserve distinct terminal or retry queue recei
     );
   }
 });
+
+function automaticChannelProjection(enabled = true) {
+  const calls = [];
+  const connection = {
+    beginTransaction: async () => {},
+    commit: async () => {},
+    rollback: async () => {},
+    release() {},
+    query: async (sql, params) => {
+      calls.push([sql, params]);
+      if (sql.startsWith("SELECT id FROM trend_projection_jobs")) return [[{ id: "job" }]];
+      if (sql.startsWith("SELECT id,code FROM providers"))
+        return [
+          enabled
+            ? [
+                { id: "amazon", code: "amazon_product" },
+                { id: "alibaba", code: "1688_search" },
+              ]
+            : [],
+        ];
+      if (sql.startsWith("SELECT ")) return [[]];
+      return [{ affectedRows: 1 }];
+    },
+  };
+  return {
+    calls,
+    persistence: new TrendProjectionPersistence(
+      { getConnection: async () => connection },
+      "worker",
+      () => now,
+    ),
+  };
+}
+const channelProduct = {
+  asin: "B000000001",
+  title: "Portable Fan",
+  canonical_url: "https://www.amazon.com/dp/B000000001",
+  image_url: "https://m.media-amazon.com/images/I/fan.jpg",
+};
+test("an actual Amazon product from an automatic product channel enters analysis without a monitoring subscription", async () => {
+  const f = automaticChannelProjection();
+  await f.persistence.project({
+    ...baseJob,
+    providerCode: "page_amazon_bestsellers_us",
+    payload: { ...baseJob.payload, ...channelProduct },
+  });
+  const insert = f.calls.find(([sql]) => sql.startsWith("INSERT IGNORE INTO opportunities"));
+  assert.ok(insert);
+  assert.deepEqual(insert[1].slice(1, 3), ["org", "ws"]);
+  assert.equal(
+    f.calls.some(([sql]) => sql.startsWith("INSERT IGNORE INTO opportunity_rule_matches")),
+    false,
+  );
+  const event = f.calls.find(
+    ([sql]) =>
+      sql.startsWith("INSERT INTO opportunity_events") &&
+      sql.includes("'opportunity.candidate.discovered'"),
+  );
+  const payload = JSON.parse(event[1].at(-2));
+  assert.deepEqual(payload.matched_rule_ids, []);
+  assert.equal(payload.recommendation_status, "insufficient_data");
+  const targets = f.calls
+    .filter(([sql]) => sql.startsWith("INSERT INTO collection_subqueries"))
+    .map(([, params]) => JSON.parse(params[6]));
+  assert.deepEqual(
+    targets.map((t) => t.projection_type),
+    ["sourcing_search", "opportunity_competitors", "competitor_snapshot"],
+  );
+  assert.equal(targets[1].main_asin, channelProduct.asin);
+  assert.equal(targets[1].opportunity_id, insert[1][0]);
+  assert.equal(
+    f.calls.some(([sql]) => sql.startsWith("INSERT INTO automatic_selection_evaluations")),
+    true,
+  );
+  assert.equal(
+    f.calls.some(([, params]) =>
+      params?.some(
+        (v) => typeof v === "string" && v === "opportunity.selection_pipeline_completed",
+      ),
+    ),
+    false,
+  );
+});
+for (const [name, providerCode, product] of [
+  ["unselected Amazon search result", "amazon_product", channelProduct],
+  ["ordinary news source", "feed_bbc_business", channelProduct],
+  ["supplier evidence", "1688_search", channelProduct],
+  ["inconsistent ASIN", "page_amazon_bestsellers_us", { ...channelProduct, asin: "B000000002" }],
+  [
+    "foreign host",
+    "page_amazon_bestsellers_us",
+    { ...channelProduct, canonical_url: "https://www.amazon.com.evil.example/dp/B000000001" },
+  ],
+  [
+    "channel homepage",
+    "page_amazon_bestsellers_us",
+    { ...channelProduct, canonical_url: "https://www.amazon.com/Best-Sellers/zgbs" },
+  ],
+]) {
+  test(`automatic admission does not treat ${name} as a selected primary`, async () => {
+    const f = automaticChannelProjection();
+    await f.persistence.project({
+      ...baseJob,
+      providerCode,
+      payload: { ...baseJob.payload, ...product },
+    });
+    assert.equal(
+      f.calls.some(([sql]) => sql.startsWith("INSERT IGNORE INTO opportunities")),
+      false,
+    );
+    assert.equal(
+      f.calls.some(([sql]) => sql.startsWith("INSERT INTO collection_subqueries")),
+      false,
+    );
+  });
+}
+
+test("automatic channel admission does not bypass disabled downstream providers", async () => {
+  const f = automaticChannelProjection(false);
+  await f.persistence.project({
+    ...baseJob,
+    providerCode: "page_amazon_bestsellers_us",
+    payload: { ...baseJob.payload, ...channelProduct },
+  });
+  assert.ok(f.calls.some(([sql]) => sql.startsWith("INSERT IGNORE INTO opportunities")));
+  assert.equal(
+    f.calls.some(([sql]) => sql.startsWith("INSERT INTO collection_subqueries")),
+    false,
+  );
+  assert.ok(
+    f.calls.some(([sql]) =>
+      sql.includes("code IN ('amazon_product','1688_search') AND status='enabled'"),
+    ),
+  );
+});

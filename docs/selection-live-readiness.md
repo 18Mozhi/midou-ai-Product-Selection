@@ -44,3 +44,8 @@
 公开版本再次确认c26e2b522bc616cbc2a67b01185d832f93789174。MySQL5.7.44以product_scout业务身份在只读事务核对并回滚：最近24小时collection_tasks为476 succeeded、100 completed_with_warnings，opportunities新增0。Amazon榜单子任务576 succeeded/1 failed；eBay优惠145 succeeded/432 succeeded_empty；动态GoogleNews100 blocked。它们是任务/子任务次数，不是独立商品数量，也不是整链完成数。
 
 Amazon商品仍disabled/amazon-structured-product-v2，1688仍disabled/1688-browser-contract-v3，二者已审批、未到期。六个新闻RSS仍enabled但pending。按当前MySqlAutomaticSourceScheduler固定来源条件，符合的仅page_amazon_bestsellers_us及page_ebay_deals_us。这证明部分旧版采集在持续产生结果，但没有产生最近24小时新机会；未单独证明其唯一根因，也未启用来源、更改审批、触发回放或部署。之前仅列新闻来源的观察不能替代本次完整调度条件核对。
+
+
+## 投影到候选的旧规则门核对
+
+进一步只读确认近24小时12254投影成功、678新主题、0新机会，监控规则匹配事件0。最近100条Amazon榜单记录经当前ASIN函数全部校验通过，但仅20个不同ASIN。旧线上与当前代码都要求直接商品先命中手工监控规则，已在当前实现中改为自动商品渠道真实ASIN可以进入分析；见 `selection-automatic-channel-admission.md`。普通新闻仍走分类及主品选择，完成计数仍要求原情报证明，未用榜单采集次数替代百品。未部署或回放历史投影，下游来源开关不绕过。
