@@ -5,7 +5,6 @@ const emit = defineEmits<{ reload: [] }>();
 
 <template>
   <section class="org-approval-first-failure-c" aria-label="审批模板读取失败">
-    <div class="org-approval-failure-symbol" aria-hidden="true">!</div>
     <p class="org-approval-failure-kicker">本次读取未完成</p>
     <h3>{{ title || "组织后台暂不可用" }}</h3>
     <p class="org-approval-failure-copy">

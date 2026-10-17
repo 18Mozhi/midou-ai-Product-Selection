@@ -1,6 +1,9 @@
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
-import { preSelectionRebuildRevision } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+import {
+  preSelectionRebuildRevision,
+  readPreSelectionRebuild,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { beforeP34OwnerPath } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -59,7 +62,7 @@ test("P34 historical rate-limit delta excludes subsequent audit and owner-path f
     "apps/web/src/design/approval-read-failure-tokens.css",
   ])
     assert.equal(
-      beforePublishedPresentation(file, readFileSync(file, "utf8")),
+      beforePublishedPresentation(file, readPreSelectionRebuild(file)),
       original(file).replaceAll("\r\n", "\n"),
     );
 });

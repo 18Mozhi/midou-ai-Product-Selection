@@ -118,3 +118,4 @@
 - 组织令牌正文重制为紧凑摘要、全宽生命周期与创建表单，增加原生页内定位，删除214个旧选择器；scope、轮换/撤销和明文归属合同保留。见 `docs/selection-organization-token-layout.md`；未部署，其余页面及真实连续百品仍需继续。
 
 - 组织审计正文重制为紧凑统计、原生日志列表和全宽详情，修复等价query对象清空未提交草稿，旧CSS由800行缩至370行。见 `docs/selection-organization-audit-layout.md`；未部署，其他界面收尾及真实连续百品仍需继续。
+- 组织后台加载、首次读取失败及保留快照的刷新失败统一为紧凑全宽状态，移除桌面遗留提示和重复CSS；完整双端组织回归149项通过、1项原规则跳过。见 `docs/selection-organization-read-states.md`；未部署，不代表每日百品真实验收。

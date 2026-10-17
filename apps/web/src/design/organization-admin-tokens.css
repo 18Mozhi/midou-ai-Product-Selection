@@ -10,5 +10,4 @@ html:has(body #app .org-admin-center) {
   --oa-secondary: #c7d0dc;
   --oa-disabled-ink: #7a8999;
   --oa-disabled-bg: #e8edf3;
-  --oa-blue-wash: var(--glass-primary-soft);
 }

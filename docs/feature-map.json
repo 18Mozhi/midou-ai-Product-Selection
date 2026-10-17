@@ -5512,5 +5512,25 @@
     ],
     "contract": "Four component scripts and native event/model bindings unchanged. Members precede invitation management; workspace/team lists and selected details span full width. Native page-fragment links only; team list uses ul/li/button. Original tenant, permission, idempotency, version and audited-write contracts remain. No backend, schema, HTTP, environment or dependency change.",
     "verification": "28 desktop/mobile business cases and 6 layout/navigation/draft-retention cases passed; Web typecheck/build and static/budget/style/realism gates passed. First full Node run: 3138 tests, 3119 pass/19 fail; all failing files fixed and retested: 75 pass. Retired review packets use explicit historical inputs; current guard entry points remain strict. No production acceptance or deployment claim."
+  },
+  "selectionOrganizationReadStates": {
+    "status": "implemented",
+    "statusDetail": "local_verified_not_deployed",
+    "documentation": "docs/selection-organization-read-states.md",
+    "implementationFiles": [
+      "apps/web/src/organization-read-state.css",
+      "apps/web/src/organization-admin.css",
+      "apps/web/src/approval-read-failure.css",
+      "apps/web/src/approval-read-feedback.css",
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/components/OrganizationApprovalFirstFailure.vue"
+    ],
+    "testFiles": [
+      "tests/e2e/m06-01-organization-admin.spec.ts",
+      "tests/unit/platform-palette-contract.test.mjs",
+      "tests/unit/ui-phase2-org-approvals-rate-limit-vue.test.mjs"
+    ],
+    "contract": "Compact full-width loading and read failure states at all widths. Original scripts, event/model bindings, GET recovery, permission and retained-snapshot behavior unchanged. No HTTP, schema, config, dependency or runtime consumer change. Frontend publish and refresh only.",
+    "verification": "Full organization browser suite: desktop 75 passed; mobile 74 passed, 1 original desktop-only timeout skip. Historical helper targeted 38 passed. No production or daily-100 acceptance claim."
   }
 }

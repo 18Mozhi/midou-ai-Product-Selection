@@ -1,6 +1,6 @@
-@import "./design/approval-read-feedback-tokens.css";
+@import "./organization-read-state.css";
 
-.org-admin-center[data-approval-read-feedback="true"] > .org-admin-notice {
+#app .org-admin-center[data-approval-read-feedback="true"] > .org-admin-notice {
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -8,124 +8,6 @@
   color: inherit;
   box-shadow: none;
 }
-
-.org-admin-center[data-approval-read-feedback="true"] > .org-admin-state {
+#app .org-admin-center[data-approval-read-feedback="true"] > .org-admin-state {
   display: none;
-}
-
-.org-approval-read-feedback-c {
-  display: grid;
-  gap: 16px;
-  width: 100%;
-  max-width: 960px;
-  padding: 28px 32px;
-  border: 1px solid var(--so-approval-feedback-line);
-  border-radius: 4px;
-  background: var(--so-approval-feedback-paper);
-  color: var(--so-approval-feedback-ink);
-  font:
-    16px/1.65 "Microsoft YaHei",
-    sans-serif;
-  overflow-wrap: anywhere;
-}
-
-.org-approval-read-feedback-c--retained {
-  border-left: 3px solid var(--so-approval-feedback-blue);
-  background: var(--so-approval-feedback-soft);
-}
-
-.org-approval-read-feedback-c :is(p, h3) {
-  margin: 0;
-  font-family: inherit;
-  letter-spacing: normal;
-}
-
-.org-approval-read-feedback-c__kicker {
-  color: var(--so-approval-feedback-blue);
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.org-approval-read-feedback-c h3 {
-  color: var(--so-approval-feedback-ink);
-  font:
-    700 28px/1.4 "Microsoft YaHei",
-    sans-serif;
-}
-
-.org-approval-read-feedback-c__copy {
-  color: var(--so-approval-feedback-ink);
-}
-
-.org-approval-read-feedback-c__boundary {
-  padding: 14px 16px;
-  border-left: 3px solid var(--so-approval-feedback-blue);
-  background: var(--so-approval-feedback-soft);
-  color: var(--so-approval-feedback-muted);
-  font-size: 14px;
-}
-
-.org-approval-read-feedback-c__details {
-  border-top: 1px solid var(--so-approval-feedback-line);
-  border-bottom: 1px solid var(--so-approval-feedback-line);
-  padding: 8px 0;
-  color: var(--so-approval-feedback-muted);
-}
-
-.org-approval-read-feedback-c__details summary {
-  min-height: 44px;
-  padding: 10px 4px;
-  color: var(--so-approval-feedback-blue);
-  cursor: pointer;
-}
-
-.org-approval-read-feedback-c__details :is(p, code) {
-  display: block;
-  padding: 8px 4px;
-  color: var(--so-approval-feedback-muted);
-  overflow-wrap: anywhere;
-  font-size: 14px;
-}
-
-.org-approval-read-feedback-c button {
-  justify-self: start;
-  min-height: 44px;
-  padding: 10px 24px;
-  border: 1px solid var(--so-approval-feedback-blue);
-  border-radius: 4px;
-  background: var(--so-approval-feedback-blue);
-  color: var(--so-approval-feedback-paper);
-  font:
-    700 16px/1.5 "Microsoft YaHei",
-    sans-serif;
-  cursor: pointer;
-}
-
-.org-approval-read-feedback-c button:hover {
-  background: var(--so-approval-feedback-deep);
-}
-
-.org-approval-read-feedback-c :is(button, summary):focus-visible {
-  outline: 3px solid var(--so-approval-feedback-focus);
-  outline-offset: 3px;
-}
-
-.org-admin-center[data-approval-read-feedback="true"] :is(button, summary):focus-visible {
-  scroll-margin-block: 100px;
-}
-
-@media (max-width: 760px) {
-  .org-approval-read-feedback-c {
-    gap: 18px;
-    padding: 24px 20px;
-  }
-
-  .org-approval-read-feedback-c h3 {
-    font-size: 24px;
-  }
-
-  .org-approval-read-feedback-c button {
-    justify-self: stretch;
-    width: 100%;
-  }
 }

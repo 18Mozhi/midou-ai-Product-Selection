@@ -1307,9 +1307,6 @@ onMounted(() => void load());
           :request-id="requestId"
           @reload="load()"
         />
-        <span class="org-approval-first-failure-legacy">
-          {{ notice }} <code v-if="requestId">{{ requestId }}</code>
-        </span>
       </template>
       <template
         v-else-if="
@@ -1322,9 +1319,6 @@ onMounted(() => void load());
           :request-id="requestId"
           @reload="load()"
         />
-        <span class="org-approval-first-failure-legacy">
-          {{ notice }} <code v-if="requestId">{{ requestId }}</code>
-        </span>
       </template>
       <template v-else-if="approvalReadFeedbackMode">
         <OrganizationApprovalReadFeedback

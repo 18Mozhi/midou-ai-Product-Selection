@@ -1326,7 +1326,7 @@ test("organization member choices replace raw ids and approval ids stay technica
   await expect(resourceId).toBeVisible();
 });
 
-test("organization approvals use the C first-load panel and retain the generic busy contract", async ({
+test("organization approvals use a compact first-load panel and retain the busy contract", async ({
   page,
 }) => {
   let release!: () => void;
@@ -1378,7 +1378,7 @@ test("organization approvals use the C first-load panel and retain the generic b
     expect(layout).toMatchObject({
       background: "rgb(255, 255, 255)",
       minHeight: "0px",
-      columns: page.viewportSize()!.width <= 760 ? 1 : 2,
+      columns: 1,
     });
     expect(writes).toEqual([]);
 
@@ -2862,3 +2862,60 @@ test("organization audit workspace keeps full-width native records and readonly 
   expect(writes).toBe(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
+
+for (const firstFailureStatus of [500, 429]) {
+  test(`organization first-read state is compact and recoverable at every width: ${firstFailureStatus}`, async ({
+    page,
+  }) => {
+    await setup(page);
+    let failing = true,
+      reads = 0;
+    await page.route("**/api/v1/org/admin/approvals", (route) => {
+      reads += 1;
+      if (!failing) return route.fallback();
+      return route.fulfill({
+        status: firstFailureStatus,
+        json: {
+          error: {
+            code: "isolated_read_failure",
+            message: "隔离读取失败",
+            action_hint: "检查后重试",
+          },
+          request_id: `state-read-${firstFailureStatus}`,
+          trace_id: `state-trace-${firstFailureStatus}`,
+        },
+      });
+    });
+    await page.goto("/org-admin/approvals");
+    const center = page.locator(".org-admin-center"),
+      failureCard = page.locator(".org-approval-first-failure-c");
+    await expect(center).toHaveAttribute("data-approval-first-failure", "true");
+    await expect(failureCard).toBeVisible();
+    await expect(
+      failureCard.getByRole("heading", {
+        name: firstFailureStatus === 429 ? "请求过于频繁" : "组织后台暂不可用",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(page.locator(".org-approval-first-failure-legacy")).toHaveCount(0);
+    await expect(center.locator(":scope > .org-admin-state")).toBeHidden();
+    await expect(failureCard).toHaveCSS("background-image", "none");
+    await expect(failureCard).toHaveCSS("min-height", "0px");
+    await expect(failureCard.getByRole("button", { name: "重新加载", exact: true })).toHaveCSS(
+      "min-height",
+      "44px",
+    );
+    const beforeDetails = reads;
+    await failureCard.locator("summary").click();
+    await expect(failureCard.locator("code")).toHaveText(`state-read-${firstFailureStatus}`);
+    expect(reads).toBe(beforeDetails);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+    failing = false;
+    await failureCard.getByRole("button", { name: "重新加载", exact: true }).click();
+    await expect(center).toHaveAttribute("data-state", "ready");
+    await expect(failureCard).toHaveCount(0);
+    expect(reads).toBe(beforeDetails + 1);
+  });
+}
