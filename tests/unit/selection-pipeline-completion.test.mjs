@@ -257,8 +257,13 @@ test("completion write failure propagates to the parent transaction without comm
   );
 });
 
-for (const failCompletion of [false, true])
-  test(`scoring warning result and unknown-profit completion share the parent transaction, failure=${failCompletion}`, async () => {
+for (const [profitWeight, failCompletion] of [
+  [20, false],
+  [20, true],
+  [30, false],
+  [30, true],
+])
+  test(`scoring warning result and unknown-profit completion share the parent transaction, profitWeight=${profitWeight}, failure=${failCompletion}`, async () => {
     const missing = ["profit.fee_policy"],
       p = {
         ...proof,
@@ -275,7 +280,12 @@ for (const failCompletion of [false, true])
         (code) => ({
           code,
           required: true,
-          weight: 20,
+          weight:
+            profitWeight === 20
+              ? 20
+              : { market_demand: 25, competition: 20, profit: 30, risk: 15, data_quality: 10 }[
+                  code
+                ],
           evidence_group:
             code === "profit"
               ? "cost"
@@ -356,6 +366,7 @@ for (const failCompletion of [false, true])
       const result = await worker.calculate(job);
       assert.equal(result.complete, false);
       assert.equal(result.coverage, 80);
+      assert.equal([...f.events.values()][0].score_coverage_percent, 80);
       assert.equal([...f.events.values()][0].profit_status, "unknown");
       assert.equal(commits, 1);
       assert.equal(rollbacks, 0);

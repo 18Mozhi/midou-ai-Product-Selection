@@ -2799,11 +2799,19 @@ test("compact catalogue exposes the first product title above the fold with twen
       public_signals: null,
     },
   }));
-  await page.route("**/api/v1/opportunities?*", (route) =>
-    route.fulfill({
-      json: envelope(products, { page: 1, page_size: 20, total: 20 }),
-    }),
-  );
+  const longName =
+    "Clear Magnetic Case for iPhone 17 Pro Max with Screen Protector, Military Grade Drop Protection, Anti-Yellowing Transparent Bumper and Non-Slip Grip";
+  await page.route("**/api/v1/opportunities?*", (route) => {
+    const all = new URL(route.request().url()).searchParams.get("selection_view") === "all";
+    return route.fulfill({
+      json: envelope(
+        products.map((product, index) =>
+          all && index === 0 ? { ...product, name: longName } : product,
+        ),
+        { page: 1, page_size: 20, total: 20 },
+      ),
+    });
+  });
   await page.goto("/opportunities");
   await expect(page.locator(".catalog-product")).toHaveCount(20);
   await expect(page.locator(".catalogue-readiness")).toHaveCount(0);
@@ -2833,9 +2841,30 @@ test("compact catalogue exposes the first product title above the fold with twen
   await allRead;
   await expect(page.locator(".catalog-product")).toHaveCount(20);
   await expect(page.getByRole("navigation", { name: "机会批量操作", exact: true })).toHaveCount(0);
+  await expect(firstTitle).toHaveText(longName);
+  const firstCard = page.locator(".catalog-product").first();
+  const selectBox = await firstCard.locator(".opportunity-row-select").boundingBox();
+  const pictureBox = await firstCard.locator(".opportunity-picture").boundingBox();
+  expect(selectBox!.height).toBe(44);
+  expect(selectBox!.width).toBe(44);
+  expect(selectBox!.y + selectBox!.height).toBeLessThanOrEqual(pictureBox!.y + pictureBox!.height);
+  const titleLayout = await firstTitle.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const hit = document.elementFromPoint(rect.left + 8, rect.top + 8);
+    return {
+      height: rect.height,
+      lineHeight: Number.parseFloat(getComputedStyle(element).lineHeight),
+      unobscured: Boolean(hit?.closest(".catalog-product-identity")),
+    };
+  });
+  expect(titleLayout.height).toBeLessThanOrEqual(titleLayout.lineHeight * 2 + 1);
+  expect(titleLayout.unobscured).toBe(true);
+  await expect(page).toHaveScreenshot("compact-all-catalogue-long-title-20261018.png", {
+    fullPage: false,
+  });
   const allBox = await firstTitle.boundingBox();
   expect(allBox!.y + allBox!.height).toBeLessThan(page.viewportSize()!.height - bottomReserve);
-  await page.getByRole("checkbox", { name: "选择机会：目录演示商品 01", exact: true }).check();
+  await page.getByRole("checkbox", { name: `选择机会：${longName}`, exact: true }).check();
   await expect(page.getByRole("navigation", { name: "机会批量操作", exact: true })).toBeVisible();
 });
 

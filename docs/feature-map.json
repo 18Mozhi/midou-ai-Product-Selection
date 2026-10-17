@@ -1,4 +1,16 @@
 {
+  "selectionAutonomousProduction20261018": {
+    "status": "in_progress",
+    "requirements": "docs/selection-production-release-20261018.md",
+    "initialProductionBuild": "30daaba611507af26dd7b4f47d155a9a49fe5c9d",
+    "sourceFiles": ["apps/web/src/commerce-workspace.css"],
+    "testFiles": [
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/unit/selection-pipeline-completion.test.mjs"
+    ],
+    "contract": "Owner delegated review and release. Main synchronized and official BaoTa deployment passed; existing services used to enable LAN1688 and smoke-tested Amazon. Ars public RSS internally reviewed and smoke-tested; robots blocks and unverified sources retained. Actual card checkbox inherited bottom:0 and covered product text; bound it to 44px within the image and restore two-line title precedence. Preserve selection, filters, API, scoring and evidence semantics. No new environment, schema, dependency or Python contract. Daily100 and whole-product acceptance still unproven.",
+    "verification": "Card/detail full browser suites: desktop89 and mobile89 passed with screenshot updates disabled. Related65 Node checks and Web build/gates passed. Two dated baselines reviewed, old PNGs retained. Core deployment30daaba6 confirmed live; subsequent card patch release recorded separately. No daily100 acceptance claim."
+  },
   "selectionScoringRuleWorkbench20261017": {
     "status": "implemented",
     "statusDetail": "77_related_checks_104_browser_cases_covered_final4_passed_web_build_and_gates_passed_not_deployed",

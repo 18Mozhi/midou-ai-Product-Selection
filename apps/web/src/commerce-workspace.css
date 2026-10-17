@@ -229,7 +229,7 @@ html[data-design="commerce"] #app .catalog-product .opportunity-picture {
   gap: 7px;
   padding: 14px 14px 10px;
 }
-.catalog-product-identity > strong {
+html[data-design="commerce"] #app .catalog-product-identity > strong {
   font-size: 13px;
   line-height: 1.65;
   min-height: 43px;
@@ -282,8 +282,8 @@ html[data-design="commerce"] #app .catalog-product .opportunity-picture {
 }
 html[data-design="commerce"] #app .catalog-product > .opportunity-row-select {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  inset: 10px auto auto 10px;
+  height: 44px;
   z-index: 1;
   padding: 3px;
   background: var(--commerce-color-0);
