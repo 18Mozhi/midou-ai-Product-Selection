@@ -1,4 +1,21 @@
 {
+  "selectionCatalogueFirstScreen20261017": {
+    "status": "implemented",
+    "statusDetail": "89_related_node_api_180_browser_cases_covered_final6_passed_web_build_and_gates_passed_not_deployed",
+    "requirements": "docs/selection-catalogue-first-screen.md",
+    "routes": ["/opportunities"],
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/selection-catalogue.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/e2e/ui-phase2-opportunity-contracts.spec.ts",
+      "tests/e2e/m04-10-selection-http.spec.ts"
+    ],
+    "contract": "Compact product-first catalogue: visible name search, existing all-width advanced filter dialog, no completed readiness card or duplicate rule-management toolbar action. Preserve every filter parameter, workspace scope, query cancellation, batching and decision gates. Empty configured catalogue refreshes instead of implying missing setup; only actual missing rule configuration prompts setup. No API, database, environment, dependency or shared drawer implementation changes."
+  },
   "selectionManualProductCreationRetirement20261017": {
     "status": "implemented",
     "statusDetail": "129_related_node_172_browser_cases_covered_final10_passed_web_build_and_gates_passed_not_deployed",

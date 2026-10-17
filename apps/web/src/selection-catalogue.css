@@ -4,9 +4,9 @@ html[data-design="commerce"] #app .catalogue-toolbar {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   padding: 0;
-  min-height: 40px;
+  min-height: 32px;
   border: 0;
   background: transparent;
   color: var(--so-text);
@@ -18,35 +18,11 @@ html[data-design="commerce"] #app .catalogue-toolbar h2 {
   line-height: 1.4;
   color: var(--so-text);
 }
-.catalogue-toolbar-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-html[data-design="commerce"] #app .catalogue-toolbar-actions > :is(a, button) {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 36px;
-  padding: 7px 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 4px;
-  background: var(--so-panel);
-  color: var(--so-text);
-  text-decoration: none;
-  font-size: 13px;
-}
-html[data-design="commerce"] #app .catalogue-toolbar-actions > .primary {
-  color: var(--commerce-color-0);
-  background: var(--so-primary);
-  border-color: var(--so-primary);
-}
 html[data-design="commerce"] #app .catalogue-controls {
   display: grid;
-  gap: 14px;
+  gap: 10px;
   margin: 0;
-  padding: 14px 16px;
+  padding: 10px 12px;
   border: 1px solid var(--so-border);
   border-radius: 4px;
   background: var(--so-panel);
@@ -59,7 +35,7 @@ html[data-design="commerce"] #app .catalogue-controls {
 }
 html[data-design="commerce"] #app .catalogue-controls > nav button {
   padding: 10px 16px;
-  min-height: 40px;
+  min-height: 44px;
   border: 0;
   border-bottom: 2px solid transparent;
   border-radius: 0;
@@ -72,34 +48,63 @@ html[data-design="commerce"] #app .catalogue-controls > nav button[aria-current=
   color: var(--so-primary);
   font-weight: 600;
 }
-html[data-design="commerce"] #app .catalogue-controls .opportunity-filters {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+html[data-design="commerce"] #app .catalogue-querybar {
+  display: flex;
+  align-items: center;
   gap: 12px;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
 }
-html[data-design="commerce"] #app .catalogue-controls .opportunity-filters :is(input, select) {
-  min-height: 34px;
-  padding: 7px 10px;
+html[data-design="commerce"] #app .catalogue-search {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  max-width: 440px;
+  min-width: 0;
+}
+html[data-design="commerce"] #app .catalogue-search label {
+  flex: 1;
+  min-width: 0;
+}
+html[data-design="commerce"] #app .catalogue-search input {
+  width: 100%;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 1px solid var(--so-border);
   border-radius: 4px;
   background: var(--so-panel);
   font-size: 13px;
 }
-html[data-design="commerce"] #app .catalogue-controls .opportunity-filter-actions {
+html[data-design="commerce"] #app .catalogue-search button {
+  min-height: 44px;
+  padding: 9px 14px;
+  white-space: nowrap;
+}
+html[data-design="commerce"] #app .catalogue-querybar .responsive-filter-drawer {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+html[data-design="commerce"] #app .catalogue-querybar .responsive-filter-drawer__trigger {
+  width: auto;
+  min-height: 44px;
+  gap: 8px;
+}
+html[data-design="commerce"] .catalogue-advanced-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+html[data-design="commerce"] .catalogue-advanced-filters .opportunity-filter-actions {
   display: flex;
   gap: 8px;
-  align-items: end;
-  grid-column: auto;
-  padding: 0;
+  grid-column: 1 / -1;
 }
-html[data-design="commerce"] #app .catalogue-controls .opportunity-filter-actions button {
+html[data-design="commerce"] .catalogue-advanced-filters .opportunity-filter-actions button {
   flex: 1;
-  min-height: 34px;
-  padding: 7px 12px;
+  min-height: 44px;
 }
 html[data-design="commerce"] #app .catalogue-readiness {
   margin: 12px 0 0;
@@ -152,11 +157,6 @@ html[data-design="commerce"] #app .catalogue-readiness .automatic-selection-read
   margin-top: 8px;
   padding-top: 8px;
 }
-@media (max-width: 1100px) {
-  html[data-design="commerce"] #app .catalogue-controls .opportunity-filters {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 @media (max-width: 640px) {
   html[data-design="commerce"] #app .catalogue-toolbar {
     align-items: start;
@@ -180,7 +180,19 @@ html[data-design="commerce"] #app .catalogue-readiness .automatic-selection-read
     font-size: 13px;
     white-space: nowrap;
   }
-  html[data-design="commerce"] #app .catalogue-controls .opportunity-filters {
+  html[data-design="commerce"] #app .catalogue-querybar {
+    gap: 8px;
+  }
+  html[data-design="commerce"] #app .catalogue-search {
+    gap: 6px;
+  }
+  html[data-design="commerce"] #app .catalogue-search button {
+    padding: 9px 10px;
+  }
+  html[data-design="commerce"] #app .catalogue-querybar .responsive-filter-drawer__trigger {
+    padding: 9px 8px;
+  }
+  html[data-design="commerce"] .catalogue-advanced-filters {
     grid-template-columns: 1fr;
   }
 }

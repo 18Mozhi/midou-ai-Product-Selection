@@ -85,8 +85,14 @@ const props = defineProps<{
   ),
   draftFilterCount = computed(() => Object.values(props.filters).filter(Boolean).length),
   hasFiltersToClear = computed(() => activeFilterCount.value > 0 || draftFilterCount.value > 0),
-  showAutomationReadiness = computed(() =>
-    ["recommended", "rule_candidates"].includes(props.selectionView),
+  needsRuleSetup = computed(
+    () => props.automationReadiness?.available === true && !props.automationReadiness.allReady,
+  ),
+  showAutomationReadiness = computed(
+    () =>
+      ["recommended", "rule_candidates"].includes(props.selectionView) &&
+      props.automationReadiness != null &&
+      !props.automationReadiness.allReady,
   ),
   nextSetupPath = computed(
     () =>
@@ -249,59 +255,80 @@ watch(imageFailureResetSources, (items) => {
         {{ option.label }}
       </button>
     </nav>
-    <ResponsiveFilterDrawer label="高级筛选" :active-count="activeFilterCount">
-      <form class="opportunity-filters" @submit.prevent="emit('apply')">
-        <label>市场<input v-model="filters.market" maxlength="40" placeholder="全部市场" /></label
-        ><label v-if="selectionView === 'all'"
-          >决策状态<select v-model="filters.decision_status">
-            <option value="">全部状态</option>
-            <option value="pending">待决策</option>
-            <option value="adopted">已采纳</option>
-            <option value="observing">继续观察</option>
-            <option value="rejected">已驳回</option>
-          </select></label
-        ><label
-          >证据完整度<select v-model="filters.coverage_status">
-            <option value="">全部完整度</option>
-            <option value="insufficient">不完整</option>
-            <option value="partial">部分完整</option>
-            <option value="complete">完整</option>
-          </select></label
-        ><label
-          >阻断原因<select v-model="filters.blocking_reason">
-            <option value="">全部原因</option>
-            <option value="evidence_insufficient">缺少可采纳证据</option>
-            <option value="recommendation_insufficient">尚无可靠推荐结论</option>
-          </select></label
-        ><label
-          >阶段<select v-model="filters.lifecycle_status">
-            <option value="">全部阶段</option>
-            <option value="candidate">候选</option>
-            <option value="validating">验证中</option>
-            <option value="ready">可决策</option>
-            <option value="adopted">已采纳</option>
-            <option value="observing">观察中</option>
-            <option value="rejected">已驳回</option>
-            <option value="archived">已归档</option>
-          </select></label
-        ><label
-          >负责人<select v-model="filters.owner_id">
-            <option value="">全部负责人</option>
-            <option v-for="member in memberOptions" :key="member.id" :value="member.id">
-              {{ member.label }}
-            </option>
-          </select></label
-        ><label>机会名称<input v-model="filters.q" maxlength="200" placeholder="搜索机会" /></label>
-        <footer class="opportunity-filter-actions">
-          <button class="filter-apply-action secondary so-action-secondary" type="submit">
-            筛选
-          </button>
-          <button class="secondary so-action-secondary" type="button" @click="emit('reset')">
-            重置
-          </button>
-        </footer>
+    <div class="catalogue-querybar">
+      <form
+        class="catalogue-search"
+        role="search"
+        aria-label="搜索商品"
+        @submit.prevent="emit('apply')"
+      >
+        <label>
+          <input
+            v-model="filters.q"
+            aria-label="商品名称"
+            maxlength="200"
+            placeholder="搜索商品名称"
+          />
+        </label>
+        <button class="so-action-secondary" type="submit">搜索</button>
       </form>
-    </ResponsiveFilterDrawer>
+      <ResponsiveFilterDrawer mode="dialog" label="高级筛选" :active-count="activeFilterCount">
+        <form
+          class="opportunity-filters catalogue-advanced-filters"
+          @submit.prevent="emit('apply')"
+        >
+          <label>市场<input v-model="filters.market" maxlength="40" placeholder="全部市场" /></label
+          ><label v-if="selectionView === 'all'"
+            >决策状态<select v-model="filters.decision_status">
+              <option value="">全部状态</option>
+              <option value="pending">待决策</option>
+              <option value="adopted">已采纳</option>
+              <option value="observing">继续观察</option>
+              <option value="rejected">已驳回</option>
+            </select></label
+          ><label
+            >证据完整度<select v-model="filters.coverage_status">
+              <option value="">全部完整度</option>
+              <option value="insufficient">不完整</option>
+              <option value="partial">部分完整</option>
+              <option value="complete">完整</option>
+            </select></label
+          ><label
+            >阻断原因<select v-model="filters.blocking_reason">
+              <option value="">全部原因</option>
+              <option value="evidence_insufficient">缺少可采纳证据</option>
+              <option value="recommendation_insufficient">尚无可靠推荐结论</option>
+            </select></label
+          ><label
+            >阶段<select v-model="filters.lifecycle_status">
+              <option value="">全部阶段</option>
+              <option value="candidate">候选</option>
+              <option value="validating">验证中</option>
+              <option value="ready">可决策</option>
+              <option value="adopted">已采纳</option>
+              <option value="observing">观察中</option>
+              <option value="rejected">已驳回</option>
+              <option value="archived">已归档</option>
+            </select></label
+          ><label
+            >负责人<select v-model="filters.owner_id">
+              <option value="">全部负责人</option>
+              <option v-for="member in memberOptions" :key="member.id" :value="member.id">
+                {{ member.label }}
+              </option>
+            </select></label
+          >
+          <footer class="opportunity-filter-actions">
+            <button class="filter-apply-action secondary so-action-secondary" type="submit">
+              筛选
+            </button>
+            <button class="secondary so-action-secondary" type="button" @click="emit('reset')">
+              重置
+            </button>
+          </footer>
+        </form>
+      </ResponsiveFilterDrawer>
+    </div>
   </section>
   <AutomaticSelectionReadinessPanel
     class="catalogue-readiness"
@@ -312,9 +339,18 @@ watch(imageFailureResetSources, (items) => {
     v-if="state !== 'ready'"
     :kind="state"
     :request-id="requestId"
-    :primary-label="
-      state === 'empty' ? (selectionView === 'all' ? '刷新列表' : '完善自动推荐配置') : ''
+    :title="state === 'empty' ? '暂无选品结果' : ''"
+    :description="
+      state === 'empty' ? '没有符合当前条件的商品。可以调整筛选、稍后刷新，或查看全部商品。' : ''
     "
+    :primary-label="
+      state === 'empty'
+        ? selectionView !== 'all' && needsRuleSetup
+          ? '完善自动推荐配置'
+          : '刷新列表'
+        : ''
+    "
+    :hide-secondary="state === 'empty' && selectionView === 'all' && !hasFiltersToClear"
     :secondary-label="
       state === 'empty'
         ? hasFiltersToClear
@@ -325,7 +361,7 @@ watch(imageFailureResetSources, (items) => {
         : '返回机会列表'
     "
     @primary="
-      state === 'empty' && selectionView !== 'all'
+      state === 'empty' && selectionView !== 'all' && needsRuleSetup
         ? emit('manageSetup', nextSetupPath)
         : emit('apply')
     "

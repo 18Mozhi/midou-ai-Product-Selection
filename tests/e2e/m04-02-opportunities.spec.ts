@@ -366,22 +366,14 @@ test("M04-02.A07/A08/A15 automatic opportunity list ignores retired creation and
   await expect(page.getByRole("heading", { name: "1 个商品建议采纳" })).toBeVisible();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(0);
   await expect(page.getByRole("dialog", { name: "创建机会候选" })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "自动推荐配置已就绪" })).toBeVisible();
-  await expect(page.getByRole("progressbar", { name: "自动推荐规则配置进度" })).toHaveAttribute(
-    "aria-valuenow",
-    "5",
-  );
-  await page.getByText("查看五项配置状态", { exact: true }).click();
-  await expect(page.locator(".automatic-selection-readiness__details li")).toHaveCount(5);
+  await expect(page.locator(".catalogue-readiness")).toHaveCount(0);
+  await expect(page.getByRole("search", { name: "搜索商品" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "管理选品规则" })).toHaveCount(0);
   await expect(page.locator('a[href="/opportunities/start"]')).toHaveCount(0);
-  const manageSelectionRules = page.getByRole("link", { name: "管理选品规则" });
-  await expect(manageSelectionRules).toHaveAttribute("href", "/trends?section=rules");
-  if ((page.viewportSize()?.width ?? 0) <= 760)
-    await page.getByRole("button", { name: "高级筛选" }).click();
+  await page.getByRole("button", { name: "高级筛选", exact: true }).click();
   await page.getByLabel("证据完整度").selectOption("partial");
   const filterButton = page.getByRole("button", { name: "筛选", exact: true });
-  if ((page.viewportSize()?.width ?? 0) > 760)
-    await expect(filterButton).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  expect((await filterButton.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   const filtered = page.waitForRequest(
     (request) =>
       request.url().includes("/api/v1/opportunities?") &&
@@ -389,13 +381,11 @@ test("M04-02.A07/A08/A15 automatic opportunity list ignores retired creation and
   );
   await filterButton.click();
   await filtered;
-  await expect(manageSelectionRules).toHaveCSS("background-color", "rgb(255, 255, 255)");
-  await expect(manageSelectionRules).toHaveCSS("background-image", "none");
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("manual-journey-retired-list-20261017.png", {
+  await expect(page).toHaveScreenshot("compact-catalogue-first-screen-20261017.png", {
     fullPage: true,
   });
   await page.getByRole("button", { name: "全部商品" }).click();
@@ -1776,17 +1766,10 @@ test("opportunity list aborts an older read after a newer filter read", async ({
 
   await page.goto("/opportunities");
   await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
-  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
-  const openFilters = async () => {
-    if (mobile) await page.getByRole("button", { name: "高级筛选" }).click();
-    return mobile
-      ? page.getByRole("dialog", { name: "高级筛选" })
-      : page.locator(".opportunity-filters");
-  };
   const applyQuery = async (value: string) => {
-    const filters = await openFilters();
-    await filters.getByLabel("机会名称").fill(value);
-    await filters.getByRole("button", { name: "筛选", exact: true }).click();
+    const search = page.getByRole("search", { name: "搜索商品" });
+    await search.getByLabel("商品名称").fill(value);
+    await search.getByRole("button", { name: "搜索", exact: true }).click();
   };
 
   const olderAbort = page.waitForEvent("requestfailed", (request) =>
@@ -1824,13 +1807,9 @@ test("P15 aborts its active list read when the cached workspace is deactivated",
 
   await page.goto("/opportunities");
   await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
-  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
-  if (mobile) await page.getByRole("button", { name: "高级筛选" }).click();
-  const filters = mobile
-    ? page.getByRole("dialog", { name: "高级筛选" })
-    : page.locator(".opportunity-filters");
-  await filters.getByLabel("机会名称").fill("deactivate-read");
-  await filters.getByRole("button", { name: "筛选", exact: true }).click();
+  const search = page.getByRole("search", { name: "搜索商品" });
+  await search.getByLabel("商品名称").fill("deactivate-read");
+  await search.getByRole("button", { name: "搜索", exact: true }).click();
   await readStarted;
 
   const abortedRead = page.waitForEvent(
@@ -1839,8 +1818,8 @@ test("P15 aborts its active list read when the cached workspace is deactivated",
       request.url().includes("q=deactivate-read") &&
       request.failure()?.errorText.includes("ERR_ABORTED"),
   );
-  await page.getByRole("link", { name: "管理选品规则" }).click();
-  await expect(page).toHaveURL(/\/trends\?section=rules$/u);
+  await page.getByRole("link", { name: "市场情报", exact: true }).click();
+  await expect(page).toHaveURL(/\/trends$/u);
   const failedRequest = await abortedRead;
   expect(failedRequest.failure()?.errorText).toContain("ERR_ABORTED");
   releaseRead();
@@ -2587,7 +2566,12 @@ test("mobile opportunity filters preserve selected adoption blocker inside the d
   await expect(drawer).toHaveCSS("box-shadow", "none");
   const actionDock = drawer.locator(".opportunity-filter-actions");
   await expect(actionDock).toHaveCSS("position", "fixed");
-  await expect(actionDock).toHaveCSS("display", "grid");
+  await expect(actionDock).toHaveCSS("display", "flex");
+  for (const button of await actionDock.getByRole("button").all()) {
+    const box = await button.boundingBox();
+    expect(box!.height).toBeGreaterThanOrEqual(44);
+    expect(box!.width).toBeGreaterThanOrEqual(44);
+  }
   await expect
     .poll(() => actionDock.evaluate((element) => element.getBoundingClientRect().bottom))
     .toBe(844);
@@ -2665,14 +2649,19 @@ test("opportunity URL state and source return path survive list-detail navigatio
 }) => {
   await ready(page);
   await page.goto("/opportunities?q=AI&coverage_status=partial");
-  await expect(page.getByLabel("机会名称")).toHaveValue("AI");
+  await expect(page.getByLabel("商品名称")).toHaveValue("AI");
+  await page.getByRole("button", { name: /高级筛选/ }).click();
   await expect(page.getByLabel("证据完整度")).toHaveValue("partial");
+  await page
+    .getByRole("dialog", { name: "高级筛选" })
+    .getByRole("button", { name: "关闭筛选条件", exact: true })
+    .click();
   const result = page.locator("a").filter({ hasText: base.name });
   await result.click();
   await expect(page).toHaveURL(new RegExp(`/opportunities/${opportunityId}\\?from=`));
   await page.getByRole("link", { name: "← 返回来源列表" }).click();
   await expect(page).toHaveURL(/\/opportunities\?q=AI&coverage_status=partial$/);
-  await expect(page.getByLabel("机会名称")).toHaveValue("AI");
+  await expect(page.getByLabel("商品名称")).toHaveValue("AI");
 });
 
 test("opportunity detail tab supports a direct URL", async ({ page }) => {
@@ -2789,3 +2778,129 @@ test("unknown current profit stays explicit even when a historical calculated ru
   await expect(panel.locator(".profit-summary")).toHaveCount(0);
   await expect(panel).not.toContainText("12.34");
 });
+
+// Actual Vue with twenty isolated rows; not real inventory or a production collection result.
+test("compact catalogue exposes the first product title above the fold with twenty rows", async ({
+  page,
+}) => {
+  await ready(page);
+  const products = Array.from({ length: 20 }, (_, index) => ({
+    ...recommendedBase,
+    id: `00000000-0000-4000-8000-${String(800 + index).padStart(12, "0")}`,
+    name: `目录演示商品 ${String(index + 1).padStart(2, "0")}`,
+    main_asin: `B0FIX${String(index + 1).padStart(5, "0")}`,
+    image_url: null,
+    primary_product: {
+      price: 19.99 + index,
+      currency: "USD",
+      rating_value: 4.5,
+      review_count: 120 + index,
+      captured_at: "2026-10-17T00:00:00Z",
+      public_signals: null,
+    },
+  }));
+  await page.route("**/api/v1/opportunities?*", (route) =>
+    route.fulfill({
+      json: envelope(products, { page: 1, page_size: 20, total: 20 }),
+    }),
+  );
+  await page.goto("/opportunities");
+  await expect(page.locator(".catalog-product")).toHaveCount(20);
+  await expect(page.locator(".catalogue-readiness")).toHaveCount(0);
+  const firstTitle = page.locator(".catalog-product-identity > strong").first();
+  await expect(firstTitle).toHaveText("目录演示商品 01");
+  const box = await firstTitle.boundingBox();
+  const bottomReserve = page.viewportSize()!.width <= 760 ? 80 : 24;
+  expect(box!.y).toBeGreaterThan(0);
+  expect(box!.y + box!.height).toBeLessThan(page.viewportSize()!.height - bottomReserve);
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
+  const paths = await page
+    .locator(".catalog-product > a")
+    .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
+  expect(new Set(paths).size).toBe(20);
+  await expect(page).toHaveScreenshot("compact-twenty-product-catalogue-20261017.png", {
+    fullPage: false,
+  });
+  const allRead = page.waitForResponse((response) => {
+    const url = new URL(response.url());
+    return (
+      url.pathname === "/api/v1/opportunities" && url.searchParams.get("selection_view") === "all"
+    );
+  });
+  await page.getByRole("button", { name: "全部商品", exact: true }).click();
+  await allRead;
+  await expect(page.locator(".catalog-product")).toHaveCount(20);
+  await expect(page.getByRole("navigation", { name: "机会批量操作", exact: true })).toHaveCount(0);
+  const allBox = await firstTitle.boundingBox();
+  expect(allBox!.y + allBox!.height).toBeLessThan(page.viewportSize()!.height - bottomReserve);
+  await page.getByRole("checkbox", { name: "选择机会：目录演示商品 01", exact: true }).check();
+  await expect(page.getByRole("navigation", { name: "机会批量操作", exact: true })).toBeVisible();
+});
+
+test("catalogue advanced filters trap focus and cancel without changing the applied URL", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.goto("/opportunities");
+  const trigger = page.getByRole("button", { name: "高级筛选", exact: true });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "高级筛选" });
+  const close = dialog.getByRole("button", { name: "关闭筛选条件", exact: true });
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(dialog.getByRole("button", { name: "重置", exact: true })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  await dialog.getByLabel("市场", { exact: true }).fill("CA");
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await expect(page).toHaveURL(/\/opportunities$/);
+});
+
+for (const configured of [true, false]) {
+  test(`empty recommended catalogue offers ${configured ? "refresh without setup" : "the missing score configuration"}`, async ({
+    page,
+  }) => {
+    await ready(page);
+    if (!configured)
+      await page.route("**/api/v1/opportunity-score-rules", (route) =>
+        route.fulfill({ json: envelope([]) }),
+      );
+    let reads = 0;
+    await page.route("**/api/v1/opportunities?*", (route) => {
+      reads += 1;
+      return route.fulfill({ json: envelope([], { page: 1, page_size: 20, total: 0 }) });
+    });
+    const configs = Promise.all([
+      page.waitForResponse(
+        (response) => new URL(response.url()).pathname === "/api/v1/opportunity-score-rules",
+      ),
+      page.waitForResponse((response) => new URL(response.url()).pathname === "/api/v1/cost-rules"),
+    ]);
+    await page.goto("/opportunities");
+    await configs;
+    await expect(page.getByRole("heading", { name: "暂无选品结果" })).toBeVisible();
+    if (configured) {
+      await expect(page.locator(".catalogue-readiness")).toHaveCount(0);
+      await expect(page.getByRole("button", { name: "完善自动推荐配置", exact: true })).toHaveCount(
+        0,
+      );
+      const before = reads;
+      await page.getByRole("button", { name: "刷新列表", exact: true }).click();
+      await expect.poll(() => reads).toBeGreaterThan(before);
+      await expect(page).toHaveURL(/\/opportunities$/);
+    } else {
+      await expect(page.locator(".catalogue-readiness")).toBeVisible();
+      await expect(page.getByRole("link", { name: "设置评分规则", exact: true })).toHaveAttribute(
+        "href",
+        "/opportunities/scoring-rules",
+      );
+      await expect(
+        page.getByRole("button", { name: "完善自动推荐配置", exact: true }),
+      ).toBeVisible();
+    }
+  });
+}

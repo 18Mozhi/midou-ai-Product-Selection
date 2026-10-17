@@ -111,7 +111,7 @@ function harness(input = {}, matches = false) {
   };
 }
 
-test("default member/collection filters retain responsive mode", async () => {
+test("catalogue uses an explicit dialog while trend and collection filters retain responsive mode", async () => {
   const [drawer, trends, trendFilters, opportunities, collection] = await Promise.all(
     [
       "apps/web/src/components/ResponsiveFilterDrawer.vue",
@@ -133,8 +133,9 @@ test("default member/collection filters retain responsive mode", async () => {
   assert.match(drawer, /var\(--so-touch-target\)/);
   assert.doesNotMatch(drawer, /alwaysDrawer|border-radius|box-shadow|!important|#[0-9a-f]{3,8}\b/i);
   assert.match(trends, /TrendFilterPanel/);
-  for (const source of [trendFilters, opportunities, collection])
+  for (const source of [trendFilters, collection])
     assert.deepEqual(callerModes(source), ["responsive"]);
+  assert.deepEqual(callerModes(opportunities), ["dialog"]);
   for (const source of [trendFilters, opportunities])
     assert.match(source, /filter-apply-action secondary/);
   assert.doesNotMatch(opportunities, /always-drawer/);

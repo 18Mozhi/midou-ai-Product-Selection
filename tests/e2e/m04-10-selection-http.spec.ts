@@ -39,17 +39,13 @@ async function catalogue(page: Page) {
 }
 
 async function filter(page: Page, query: string) {
-  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
-  if (mobile) await page.getByRole("button", { name: "高级筛选" }).click();
-  const form = mobile
-    ? page.getByRole("dialog", { name: "高级筛选" })
-    : page.locator(".opportunity-filters");
-  await form.getByLabel("机会名称").fill(query);
+  const form = page.getByRole("search", { name: "搜索商品" });
+  await form.getByLabel("商品名称").fill(query);
   const read = page.waitForResponse((response) => {
     const url = new URL(response.url());
     return url.pathname === "/api/v1/opportunities" && url.searchParams.get("q") === query;
   });
-  await form.getByRole("button", { name: "筛选", exact: true }).click();
+  await form.getByRole("button", { name: "搜索", exact: true }).click();
   const response = await read;
   expect(response.status()).toBe(200);
   return response.json();
@@ -196,5 +192,38 @@ test("[real-api] insufficient member capability denies the page and actual busin
   const denied = await page.request.get("/api/v1/opportunities?selection_view=all");
   expect(denied.status()).toBe(403);
   await expect(page.getByText("HTTP 验证耳机收纳盒", { exact: true })).toHaveCount(0);
+  png(await page.screenshot({ fullPage: true }), page);
+});
+
+test("[real-api] compact catalogue exposes identity and preserves market when searching by name", async ({
+  page,
+}) => {
+  await login(page);
+  await catalogue(page);
+  const firstTitle = page.locator(".catalog-product-identity > strong").first();
+  await expect(firstTitle).toHaveText("HTTP 验证耳机收纳盒");
+  const box = await firstTitle.boundingBox();
+  const reserve = page.viewportSize()!.width <= 760 ? 80 : 24;
+  expect(box!.y + box!.height).toBeLessThan(page.viewportSize()!.height - reserve);
+  await page.getByRole("button", { name: "高级筛选", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "高级筛选" });
+  await dialog.getByLabel("市场", { exact: true }).fill("DE");
+  const filtered = page.waitForResponse((response) => {
+    const url = new URL(response.url());
+    return url.pathname === "/api/v1/opportunities" && url.searchParams.get("market") === "DE";
+  });
+  await dialog.getByRole("button", { name: "筛选", exact: true }).click();
+  const response = await filtered;
+  expect(response.status()).toBe(200);
+  const body = await response.json();
+  expect(body.meta.total).toBe(1);
+  expect(body.data.map((item: { market: string }) => item.market)).toEqual(["DE"]);
+  await expect(dialog).toBeHidden();
+  await expect(page.getByText("HTTP 验证旅行收纳袋", { exact: true })).toBeVisible();
+  await expect(page.getByText("HTTP 验证耳机收纳盒", { exact: true })).toHaveCount(0);
+  const named = await filter(page, "旅行");
+  expect(named.meta.total).toBe(1);
+  await expect(page).toHaveURL(/market=DE/);
+  await expect(page).toHaveURL(/q=/);
   png(await page.screenshot({ fullPage: true }), page);
 });

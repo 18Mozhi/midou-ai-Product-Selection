@@ -272,14 +272,10 @@ test("UI2-OP04 filtered selections disclose the exact current-result batch scope
   await page.goto("/opportunities?view=all");
   await page.getByRole("checkbox", { name: `选择机会：${first.name}`, exact: true }).check();
 
-  const advancedFilterTrigger = page.getByRole("button", { name: /高级筛选/ });
-  if (await advancedFilterTrigger.count()) await advancedFilterTrigger.click();
-  const search = page.getByPlaceholder("搜索机会", { exact: true });
-  await search.fill(second.name);
-  await page.getByRole("button", { name: "筛选", exact: true }).click();
+  const search = page.getByRole("search", { name: "搜索商品" });
+  await search.getByLabel("商品名称").fill(second.name);
+  await search.getByRole("button", { name: "搜索", exact: true }).click();
   await expect(page).toHaveURL(/q=/);
-  const closeFilter = page.getByRole("button", { name: "关闭筛选条件", exact: true });
-  if (await closeFilter.isVisible()) await closeFilter.click();
 
   const batchBar = page.getByRole("navigation", { name: "机会批量操作", exact: true });
   await expect(batchBar).toContainText("已选 1 项");

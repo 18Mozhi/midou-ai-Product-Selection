@@ -5,10 +5,10 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
-    "apps/web/src/components/OpportunityWorkspace.vue": "d9972b6836b0e004445a18c4ec20cd8a6c3933ac4d7cdea33d6d99561c7031c6",
+    "apps/web/src/components/OpportunityWorkspace.vue": "0fd19b63245f8213599aedf7b5c3aa6c7ed2d0de35b081afcf3272819c5f1d3a",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "00db98cafc22106b1ada561ced0fe3d80ee96b15b04e52c4a7a092770ac47550",
     "apps/web/src/components/OpportunityErpImportDialog.vue": "c934cbf407e0ec0e075d6cfbe939000a8d262bf221d3e018bb70292c7a560b33",
-    "apps/web/src/components/OpportunityListPanel.vue": "ccc18c9eda4dea6be4cda3e2f99d323f1dece091be92a39fd8c0806f55b1bda7",
+    "apps/web/src/components/OpportunityListPanel.vue": "1f0587963013c521dbf6ae6e80da5a7c4e9ddcf62d45937a54527d109883b831",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
   },
   "dialogs": {
@@ -2320,10 +2320,10 @@
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpportunityWorkspace.vue": "d9972b6836b0e004445a18c4ec20cd8a6c3933ac4d7cdea33d6d99561c7031c6",
+      "apps/web/src/components/OpportunityWorkspace.vue": "0fd19b63245f8213599aedf7b5c3aa6c7ed2d0de35b081afcf3272819c5f1d3a",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "00db98cafc22106b1ada561ced0fe3d80ee96b15b04e52c4a7a092770ac47550",
       "apps/web/src/components/OpportunityErpImportDialog.vue": "c934cbf407e0ec0e075d6cfbe939000a8d262bf221d3e018bb70292c7a560b33",
-      "apps/web/src/components/OpportunityListPanel.vue": "ccc18c9eda4dea6be4cda3e2f99d323f1dece091be92a39fd8c0806f55b1bda7",
+      "apps/web/src/components/OpportunityListPanel.vue": "1f0587963013c521dbf6ae6e80da5a7c4e9ddcf62d45937a54527d109883b831",
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
       "apps/web/src/components/UiStatePanel.vue": "2969566dd1069b24e474fc729eeef7c06907dc6a06c398af12cc9b1c8b6e705c",

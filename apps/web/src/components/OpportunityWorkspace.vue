@@ -456,12 +456,7 @@ useOpportunityWorkspaceLifecycle({
           }}
         </h2>
       </div>
-      <div v-if="canDecide" class="catalogue-toolbar-actions">
-        <RouterLink class="secondary so-action-secondary" to="/trends?section=rules"
-          >管理选品规则</RouterLink
-        >
-      </div>
-      <span v-else>当前为只读权限。</span>
+      <span v-if="!canDecide">当前为只读权限。</span>
     </header>
     <nav v-else class="opportunity-detail-return" aria-label="机会详情返回路径">
       <RouterLink :to="returnPath">← 返回来源列表</RouterLink>
