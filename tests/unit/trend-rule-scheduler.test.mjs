@@ -177,6 +177,11 @@ test("automatic source scheduler writes one approved 16-source batch and advance
   assert.equal(result.workspaceId, "00000000-0000-4000-8000-000000004503");
   assert.equal(result.sourceCount, 16);
   assert.equal(subqueries.length, 16);
+  assert.ok(
+    statements.some(
+      (sql) => sql.startsWith("INSERT INTO collection_tasks") && sql.includes("NULL,'high'"),
+    ),
+  );
   assert.ok(subqueries.every((values) => values[1] === result.taskId));
   assert.equal(events.length, 1);
   assert.equal(events[0][4], "hotspot.automatic.scheduled");

@@ -129,7 +129,7 @@ export class MySqlAutomaticSourceScheduler {
           "available_at,attempt_count,successful_subquery_count,failed_subquery_count,",
           "blocked_subquery_count,available_result_count,missing_fields_json,request_id,",
           "trace_id,version,created_by,created_at,updated_at) ",
-          "VALUES (?,?,?,'scheduled',NULL,'normal',?,?,0,0,0,0,0,'[]',?,?,1,?,?,?)",
+          "VALUES (?,?,?,'scheduled',NULL,'high',?,?,0,0,0,0,0,'[]',?,?,1,?,?,?)",
         ),
         [
           taskId,

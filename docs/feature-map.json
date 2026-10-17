@@ -12,7 +12,7 @@
       "tests/unit/automatic-source-fairness.test.mjs",
       "tests/unit/trend-rule-scheduler.test.mjs"
     ],
-    "contract": "Full-source tenant budget counts its own active tasks proven by same-scope system scheduling events. Global backlog remains shared; rule budget unchanged. Original explicit priority first, intake before enrichment within each tier, FIFO within groups, existing running leases retained. No API/schema/event/dependency/Python changes. Existing budget config docs updated; BaoTa Node restart required.",
+    "contract": "Full-source tenant budget counts its own active tasks proven by same-scope system scheduling events. Global backlog remains shared; rule budget unchanged. Intake is high priority; old audited normal intake is promoted at claim without rewriting history. Critical and explicit low priorities retained, intake before enrichment within each tier, FIFO within groups, running leases retained. No API/schema/event/dependency/Python changes. Existing budget config docs updated; BaoTa Node restart required.",
     "verification": "Three red tests reproduced the old policy; related93 passed after build. Existing scheduler manifest test now follows the CSS actually imported by the retained page. Compiled policy SQL verified using read-only MySQL5.7 derived fixtures and production EXPLAIN. Actual ongoing intake and daily100 still require runtime evidence."
   },
   "selectionAutonomousProduction20261018": {

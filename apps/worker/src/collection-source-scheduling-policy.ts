@@ -7,8 +7,10 @@ export const automaticIntelligenceTaskSql = (taskAlias: "ct" | "collection_tasks
   "AND source_event.event_type='hotspot.automatic.scheduled' " +
   "AND source_event.actor_type='system')";
 
-/** Keep explicit priority first and FIFO within each intake/enrichment group. */
+/** Intake uses high priority; old normal intake is promoted without rewriting history. */
 export const collectionReadyOrderSql =
-  " ORDER BY FIELD(priority,'critical','high','normal','low'),CASE WHEN " +
+  " ORDER BY FIELD(CASE WHEN " +
+  automaticIntelligenceTaskSql("collection_tasks") +
+  " AND priority='normal' THEN 'high' ELSE priority END,'critical','high','normal','low'),CASE WHEN " +
   automaticIntelligenceTaskSql("collection_tasks") +
   " THEN 0 ELSE 1 END,available_at,id LIMIT 1 FOR UPDATE";

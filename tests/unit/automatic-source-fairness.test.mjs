@@ -49,7 +49,7 @@ for (const method of ["queueReady", "claim"]) {
     const selection = statements.find((sql) => sql.startsWith("SELECT * FROM collection_tasks"));
     assert.match(
       selection,
-      /ORDER BY FIELD\(priority,'critical','high','normal','low'\),CASE WHEN EXISTS/,
+      /ORDER BY FIELD\(CASE WHEN .* AND priority='normal' THEN 'high' ELSE priority END,'critical','high','normal','low'\),CASE WHEN EXISTS/,
     );
     assert.match(selection, /source_event\.task_id=collection_tasks\.id/);
     assert.match(selection, /source_event\.actor_type='system'/);
