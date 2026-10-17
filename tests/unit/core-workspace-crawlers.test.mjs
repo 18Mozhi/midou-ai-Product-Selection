@@ -30,7 +30,7 @@ test("core workspace public crawlers are enabled without official API credential
   assert.equal(amazon?.access_mode, "public_page");
   assert.equal(amazon?.status, "enabled");
   assert.equal(amazon?.availability, "manual");
-  assert.equal(amazon?.parser_version, "amazon-public-product-v4");
+  assert.equal(amazon?.parser_version, "amazon-public-product-v5");
   assert.ok(amazon?.fields.includes("rating_value"));
   assert.equal(supplier?.access_mode, "public_page");
   assert.equal(supplier?.availability, "manual");
@@ -193,7 +193,7 @@ test("Amazon product parser preserves the response currency instead of forcing U
   assert.equal(record.payload.fields.currency, "CNY");
 });
 
-test("Amazon adapter keeps injected transports for deterministic replay and reports v5", async () => {
+test("Amazon adapter keeps injected transports for deterministic replay and reports v7", async () => {
   let requestedUrl = "";
   const adapter = new AmazonProductSearchAdapter(async (url) => {
     requestedUrl = String(url);
@@ -207,13 +207,13 @@ test("Amazon adapter keeps injected transports for deterministic replay and repo
   });
   const result = await adapter.collect(
     {
-      provider: { parserVersion: "amazon-public-product-v4" },
+      provider: { parserVersion: "amazon-public-product-v5" },
       target: { query: "storage box" },
       limit: 1,
     },
     AbortSignal.timeout(1000),
   );
-  assert.equal(adapter.version, "amazon-public-product-adapter-v6");
+  assert.equal(adapter.version, "amazon-public-product-adapter-v7");
   assert.match(requestedUrl, /^https:\/\/www\.amazon\.com\/s\?k=storage%20box$/);
   assert.equal(result.records.length, 1);
 });
@@ -234,7 +234,7 @@ test("Amazon adapter confirms a transient source change once before failing clos
     }),
     recoveredResult = await recovered.collect(
       {
-        provider: { parserVersion: "amazon-public-product-v4" },
+        provider: { parserVersion: "amazon-public-product-v5" },
         target: { query: "storage box" },
         limit: 1,
       },
@@ -252,7 +252,7 @@ test("Amazon adapter confirms a transient source change once before failing clos
     () =>
       failed.collect(
         {
-          provider: { parserVersion: "amazon-public-product-v4" },
+          provider: { parserVersion: "amazon-public-product-v5" },
           target: { query: "storage box" },
           limit: 1,
         },
@@ -271,7 +271,7 @@ test("Amazon product links that no longer exist close as empty results instead o
     () =>
       adapter.collect(
         {
-          provider: { parserVersion: "amazon-public-product-v4" },
+          provider: { parserVersion: "amazon-public-product-v5" },
           target: { page_url: "https://www.amazon.com/dp/B000000000" },
           limit: 1,
         },

@@ -1,3 +1,9 @@
+import {
+  amazonDetailFacts,
+  amazonMoney,
+  amazonImageUrl,
+  amazonSearchImage,
+} from "./amazon-product-facts.js";
 import { amazonPublicReviewFields } from "./amazon-public-reviews.js";
 import { createHash } from "node:crypto";
 import { ProviderAdapterFailure, type ProviderRawRecord } from "@scoutops/provider-adapters";
@@ -486,7 +492,7 @@ const priceCurrency = (value: string | undefined) => {
   return null;
 };
 const countValue = (value: string | undefined) => {
-  if (!value) return null;
+  if (!value || !/[0-9]/.test(value)) return null;
   const parsed = Number(value.replace(/[^0-9]/g, ""));
   return Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : null;
 };
@@ -545,9 +551,12 @@ const amazonStructuredRecords = (html: string, pageUrl: string, limit: number) =
               (image as Record<string, unknown>).contentUrl)
             : image,
         sourceUrl = `https://www.amazon.com/dp/${asin}`,
-        price = money(String(offer?.price ?? offer?.lowPrice ?? "")),
+        price = amazonMoney(String(offer?.price ?? offer?.lowPrice ?? "")),
         currencyValue = String(offer?.priceCurrency ?? "").toUpperCase(),
-        rating = Number(aggregateRating?.ratingValue),
+        rating =
+          aggregateRating?.ratingValue == null || String(aggregateRating.ratingValue).trim() === ""
+            ? NaN
+            : Number(aggregateRating.ratingValue),
         reviews = countValue(
           String(aggregateRating?.reviewCount ?? aggregateRating?.ratingCount ?? ""),
         ),
@@ -563,7 +572,7 @@ const amazonStructuredRecords = (html: string, pageUrl: string, limit: number) =
           availability: availabilityValue
             ? (availabilityValue.split(/[\/#]/).filter(Boolean).at(-1)?.toLowerCase() ?? "unknown")
             : "unknown",
-          image_url: absoluteUrl(imageValue, pageUrl) || null,
+          image_url: amazonImageUrl(imageValue),
           source_url: sourceUrl,
           publisher: "Amazon",
           observed_at: observedAt,
@@ -621,6 +630,7 @@ export function parseAmazonProductPage(
       .exec(pageUrl)?.[1]
       ?.toUpperCase(),
     primaryColumn = directAsin ? amazonPrimaryColumn(html) : null,
+    detailFacts = directAsin ? amazonDetailFacts(html, primaryColumn, directAsin) : null,
     rank = directAsin ? amazonBestSellerRankFields(html) : null,
     reviewSamples = directAsin ? amazonPublicReviewFields(html) : null,
     sourceBlocks = directAsin ? [{ asin: directAsin, html: primaryColumn ?? html }] : blocks;
@@ -635,6 +645,17 @@ export function parseAmazonProductPage(
           directAsin === asin ? primaryColumn : blocks.find((block) => block.asin === asin)?.html,
         extra = {
           ...amazonPublicSignalFields(scope ?? "", directAsin === asin),
+          ...(directAsin === asin && detailFacts
+            ? {
+                ...(payload.fields.price == null && detailFacts.priceText
+                  ? {
+                      price: amazonMoney(detailFacts.priceText),
+                      currency: priceCurrency(detailFacts.priceText),
+                    }
+                  : {}),
+                ...(payload.fields.image_url == null ? { image_url: detailFacts.imageUrl } : {}),
+              }
+            : {}),
           review_samples_json:
             directAsin === asin ? (reviewSamples?.review_samples_json ?? null) : null,
           ...(directAsin === asin && rank
@@ -650,16 +671,20 @@ export function parseAmazonProductPage(
           ...payload,
           raw_content:
             scope != null ||
+            (directAsin === asin && Boolean(detailFacts?.imageHtml || detailFacts?.priceHtml)) ||
             (directAsin === asin && (rank?.rank_html || reviewSamples?.reviews_html))
               ? JSON.stringify({
                   structured_product: JSON.parse(payload.raw_content),
                   product_html: scope ?? null,
+                  image_html: directAsin === asin ? detailFacts?.imageHtml || null : null,
+                  price_html: directAsin === asin ? detailFacts?.priceHtml || null : null,
                   rank_html: directAsin === asin ? (rank?.rank_html ?? null) : null,
                   reviews_html: directAsin === asin ? reviewSamples?.reviews_html || null : null,
                 })
               : payload.raw_content,
           content_type:
             scope != null ||
+            (directAsin === asin && Boolean(detailFacts?.imageHtml || detailFacts?.priceHtml)) ||
             (directAsin === asin && (rank?.rank_html || reviewSamples?.reviews_html))
               ? "application/json"
               : payload.content_type,
@@ -667,6 +692,21 @@ export function parseAmazonProductPage(
           source_paths: {
             ...payload.source_paths,
             ...amazonPublicSignalPaths(directAsin === asin),
+            ...(directAsin === asin &&
+            detailFacts &&
+            payload.fields.price == null &&
+            detailFacts.priceText
+              ? {
+                  price: "amazon.html.primary_offer.a-price.a-offscreen",
+                  currency: "amazon.html.primary_offer.a-price.a-offscreen",
+                }
+              : {}),
+            ...(directAsin === asin &&
+            detailFacts &&
+            payload.fields.image_url == null &&
+            detailFacts.imageUrl
+              ? { image_url: "amazon.html.leftCol.img#landingImage" }
+              : {}),
           },
         },
       };
@@ -694,18 +734,10 @@ export function parseAmazonProductPage(
         item.html.match(/id=["']acrCustomerReviewText["'][^>]*>([^<]+)</i)?.[1] ??
         item.html.match(/aria-label=["']([0-9,.]+)\s+(?:ratings|reviews)["']/i)?.[1] ??
         item.html.match(/class=["'][^"']*s-underline-text[^"']*["'][^>]*>([0-9,.]+)</i)?.[1],
-      imageUrl =
-        absoluteUrl(
-          item.html.match(
-            /<img\b[^>]*class=["'][^"']*s-image[^"']*["'][^>]*(?:src|data-src)=["']([^"']+)/i,
-          )?.[1] ??
-            item.html.match(
-              /id=["']landingImage["'][^>]*(?:src|data-old-hires)=["']([^"']+)/i,
-            )?.[1],
-          pageUrl,
-        ) || null,
-      price = money(priceText),
-      currency = price == null ? null : priceCurrency(priceText),
+      imageUrl = directAsin ? (detailFacts?.imageUrl ?? null) : amazonSearchImage(item.html),
+      price = amazonMoney(directAsin ? detailFacts?.priceText : priceText),
+      currency =
+        price == null ? null : priceCurrency(directAsin ? detailFacts?.priceText : priceText),
       rating = ratingText ? Number(ratingText) : null,
       reviews = countValue(reviewText);
     if (!title || !sourceUrl) continue;
@@ -738,6 +770,8 @@ export function parseAmazonProductPage(
       payload: SourceEvidencePayload = {
         raw_content:
           item.html +
+          (detailFacts?.imageHtml ?? "") +
+          (detailFacts?.priceHtml ?? "") +
           (directAsin ? (rank?.rank_html ?? "") + (reviewSamples?.reviews_html ?? "") : ""),
         content_type: "text/html",
         canonical_url: sourceUrl,
@@ -746,7 +780,17 @@ export function parseAmazonProductPage(
           Object.keys(fields).map((key) => [key, `amazon.html.${key}`]),
         ),
       };
-    Object.assign(payload.source_paths, amazonPublicSignalPaths(Boolean(directAsin)));
+    Object.assign(
+      payload.source_paths,
+      amazonPublicSignalPaths(Boolean(directAsin)),
+      directAsin
+        ? {
+            price: "amazon.html.primary_offer.a-price.a-offscreen",
+            currency: "amazon.html.primary_offer.a-price.a-offscreen",
+            image_url: "amazon.html.leftCol.img#landingImage",
+          }
+        : {},
+    );
     records.push({
       externalId: item.asin,
       observedAt,

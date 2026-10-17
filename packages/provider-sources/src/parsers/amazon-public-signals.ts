@@ -1,4 +1,4 @@
-export const AMAZON_PUBLIC_PRODUCT_PARSER_VERSION = "amazon-public-product-v4";
+export const AMAZON_PUBLIC_PRODUCT_PARSER_VERSION = "amazon-public-product-v5";
 export function amazonPublicSignalPaths(detail: boolean) {
   const badge = detail
     ? "amazon.html.centerCol.span#social-proofing-faceout-title-tk_bought"

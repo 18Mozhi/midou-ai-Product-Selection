@@ -127,15 +127,15 @@ test("review fields and provenance survive adapter normalization without widenin
   )[0];
   const adapter = new AmazonProductSearchAdapter();
   const normalized = adapter.normalize(record, {
-    provider: { id: "provider-test", parserVersion: "amazon-public-product-v4" },
+    provider: { id: "provider-test", parserVersion: "amazon-public-product-v5" },
   });
   assert.equal(normalized.fields.review_samples_json, record.payload.fields.review_samples_json);
   assert.equal(
     readAmazonPublicSignals(normalized.fields).review_samples[0].title,
     "Example & useful title",
   );
-  assert.equal(normalized.provenance.parser_version, "amazon-public-product-v4");
-  assert.equal(normalized.provenance.adapter_version, "amazon-public-product-adapter-v6");
+  assert.equal(normalized.provenance.parser_version, "amazon-public-product-v5");
+  assert.equal(normalized.provenance.adapter_version, "amazon-public-product-adapter-v7");
   assert.throws(
     () => adapter.normalize(record, { provider: { parserVersion: "amazon-public-product-v3" } }),
     /source_configuration_invalid/,

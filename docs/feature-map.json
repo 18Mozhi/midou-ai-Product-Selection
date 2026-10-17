@@ -1,4 +1,23 @@
 {
+  "selectionAmazonDetailFacts20261017": {
+    "status": "implemented",
+    "statusDetail": "80_targeted_tests_real_primary_plus_five_details_and_1688_candidates_passed_not_deployed",
+    "requirements": "docs/amazon-detail-facts.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/parsers/amazon-product-facts.ts",
+      "packages/provider-sources/src/parsers/index.ts",
+      "packages/provider-sources/src/parsers/amazon-public-signals.ts",
+      "packages/provider-sources/src/adapters/index.ts",
+      "apps/worker/src/automatic-source-scheduler.ts"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-detail-facts.test.mjs",
+      "tests/unit/amazon-public-signals.test.mjs",
+      "tests/unit/amazon-public-reviews.test.mjs",
+      "tests/unit/core-workspace-crawlers.test.mjs"
+    ],
+    "contract": "Parser amazon-public-product-v5 / adapter v7. Missing price and image stay null; primary-offer ASIN required outside centerCol; primary image from leftCol regardless of attribute order. Preserve raw HTML and field provenance, actual currency, original JSON-LD facts. No API/schema/env/dependency change; Node restart after fixed BaoTa release."
+  },
   "selectionCollectionToolbar20261017": {
     "status": "implemented",
     "statusDetail": "12_layout_and_36_business_browser_checks_passed_not_deployed",

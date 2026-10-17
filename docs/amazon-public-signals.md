@@ -1,3 +1,5 @@
+> 最新版本为 `amazon-public-product-v5` / `amazon-public-product-adapter-v7`，修复真实详情报价与主图读取。下文版本说明为历史记录，详见 `amazon-detail-facts.md`。
+
 > 当前版本为 `amazon-public-product-v4` / `amazon-public-product-adapter-v6`，在下述公开指标基础上增加有限评价节选；旧版本说明为历史记录。详见 [公开评价样本](amazon-public-review-samples.md)。
 
 # Amazon 免费公开信号
