@@ -28,7 +28,6 @@
 .task-list small {
   color: var(--so-text-muted);
 }
-.task-title button,
 .task-workspace button {
   padding: 10px 14px;
   border: 1px solid var(--so-border);
@@ -36,7 +35,6 @@
   color: var(--so-text);
   background: var(--so-panel-soft);
 }
-.task-title > button,
 .task-workspace dialog form > div button:last-child {
   border-color: transparent;
   color: var(--so-on-primary);

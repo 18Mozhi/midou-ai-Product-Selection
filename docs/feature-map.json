@@ -1,12 +1,14 @@
 {
   "selectionMemberTaskCreationRetirement20261017": {
     "status": "implemented",
-    "statusDetail": "88_related_node_112_browser_web_build_and_gates_passed_not_deployed",
+    "statusDetail": "prior_88_node_112_browser_current_11_dead_css_selectors_ast_verified_not_deployed",
     "requirements": "docs/selection-member-task-creation-retirement.md",
     "routes": ["/work", "/tasks", "/tasks/:taskId"],
     "sourceFiles": [
       "apps/web/src/components/TaskWorkspace.vue",
-      "apps/web/src/components/TaskListPanel.vue"
+      "apps/web/src/components/TaskListPanel.vue",
+      "apps/web/src/task-workspace.css",
+      "apps/web/src/task-workspace-enhancements.css"
     ],
     "testFiles": [
       "tests/e2e/m05-01-business-tasks.spec.ts",

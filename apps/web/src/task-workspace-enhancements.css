@@ -290,14 +290,12 @@
   outline-offset: 3px;
 }
 
-.task-workspace--review .task-title button,
 .task-workspace--review .task-detail .primary,
 .task-workspace--review .task-detail button:not(.danger) {
   background: var(--review-blue);
   color: var(--tw-white);
 }
 
-.task-workspace--review .task-title button:hover:not(:disabled),
 .task-workspace--review .task-detail .primary:hover:not(:disabled),
 .task-workspace--review .task-detail button:not(.danger):hover:not(:disabled) {
   background: var(--review-blue-strong);
@@ -544,10 +542,6 @@
     padding: 25px 19px;
   }
 
-  .task-workspace--review .task-title > button {
-    width: 100%;
-  }
-
   .task-workspace--review .task-focus-strip {
     margin: 0;
     border-right: 0;
@@ -638,10 +632,6 @@
   max-width: 58ch;
   line-height: 1.55;
   text-wrap: pretty;
-}
-.task-title > button {
-  min-height: 44px;
-  box-shadow: none;
 }
 .task-focus-strip {
   display: grid;
@@ -933,9 +923,6 @@
     align-items: stretch;
     padding-bottom: 14px;
   }
-  .task-title > button {
-    width: 100%;
-  }
   .task-focus-strip {
     grid-template-columns: 4px minmax(0, 1fr);
     padding: 14px;
@@ -1151,7 +1138,6 @@
   outline-offset: 3px;
 }
 
-.task-workspace--review:not(.task-detail-route) .task-title > button,
 .task-workspace--review:not(.task-detail-route) .task-filter button[type="submit"],
 .task-workspace--review:not(.task-detail-route) .task-state button {
   background: var(--review-blue);
@@ -1325,10 +1311,6 @@
   .task-workspace--review:not(.task-detail-route) .task-title {
     min-height: 0;
     padding: 25px 19px;
-  }
-
-  .task-workspace--review:not(.task-detail-route) .task-title > button {
-    width: 100%;
   }
 
   .task-workspace--review:not(.task-detail-route) .task-focus-strip {
@@ -2152,13 +2134,6 @@
 .task-workspace--today:not(.task-detail-route) .task-title h2 {
   font-size: clamp(28px, 3.4vw, 42px);
 }
-.task-workspace--today:not(.task-detail-route) .task-title > button {
-  min-height: 44px;
-  border: 1px solid var(--so-on-primary);
-  border-radius: 4px;
-  color: var(--today-blue);
-  background: var(--so-panel);
-}
 .task-workspace--today:not(.task-detail-route) .task-notice,
 .task-workspace--today:not(.task-detail-route) .task-readonly-note,
 .task-workspace--today:not(.task-detail-route) .task-focus-strip,
@@ -2305,9 +2280,6 @@
   .task-workspace--today:not(.task-detail-route) .task-title {
     min-height: 0;
     padding: 24px 18px;
-  }
-  .task-workspace--today:not(.task-detail-route) .task-title > button {
-    width: 100%;
   }
   .task-workspace--today:not(.task-detail-route) .task-focus-strip {
     grid-template-columns: 4px minmax(0, 1fr);
