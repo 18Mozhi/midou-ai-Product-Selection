@@ -1,4 +1,21 @@
 {
+  "selectionCostRuleWorkbench20261017": {
+    "status": "implemented",
+    "statusDetail": "70_related_checks_58_browser_web_build_passed_not_deployed",
+    "requirements": "docs/selection-cost-rule-workbench.md",
+    "routes": ["/sourcing/cost-rules"],
+    "sourceFiles": [
+      "apps/web/src/components/CostRuleConsole.vue",
+      "apps/web/src/profit.css",
+      "apps/web/src/design/cost-rule-tokens.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-04-profit.spec.ts",
+      "tests/m04-04/profit.test.mjs",
+      "tests/unit/platform-palette-contract.test.mjs"
+    ],
+    "contract": "Compact fee table and version list replace hero, expanded readiness cards and fee tiles. Native mobile selector reuses current-page selectRule and URL state. Existing seven setup checks remain collapsed after the workspace. Original business script, payloads and permissions remain, apart from the presentation selection adapter. Dedicated dialog markup and rules retained. No API, configuration, schema, dependency or runtime service change."
+  },
   "selectionProductSupplyDetail20261017": {
     "status": "implemented",
     "statusDetail": "71_related_checks_208_browser_cases_covered_final24_passed_web_build_and_gates_passed_not_deployed",
@@ -2918,7 +2935,6 @@
         "../apps/worker/src/opportunity-profit-worker.ts",
         "../apps/worker/src/automatic-selection-evaluation-worker.ts",
         "../apps/web/src/components/CostRuleConsole.vue",
-        "../apps/web/src/components/shared/QualityGateSetupSummary.vue",
         "../apps/web/src/components/OpportunityWorkspace.vue",
         "../apps/web/src/components/opportunity-workspace-forms.ts",
         "../apps/web/src/components/OpportunityProfitPanel.vue",

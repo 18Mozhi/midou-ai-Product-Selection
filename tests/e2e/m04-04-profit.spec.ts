@@ -225,8 +225,12 @@ test("M04-04.A07/A08/A09/A15 cost rule console exposes explicit fees and dual ap
     return route.fulfill({ json: envelope(rule()) });
   });
   await page.goto("/sourcing/cost-rules");
-  await expect(page.getByRole("heading", { name: "成本质量门", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "费用规则", level: 1 })).toBeVisible();
+  const setup = page.locator(".cost-setup-check");
+  await expect(setup).not.toHaveAttribute("open", "");
+  await setup.locator("summary").click();
   await expect(page.getByRole("heading", { name: "成本规则准备度" })).toBeVisible();
+  await setup.locator("summary").click();
   await expect(page.getByText("成本质量门未就绪", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "美国站标准费用", level: 3 })).toBeVisible();
   await expect(
@@ -238,7 +242,9 @@ test("M04-04.A07/A08/A09/A15 cost rule console exposes explicit fees and dual ap
       () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
     ),
   ).toBe(true);
-  await expect(page).toHaveScreenshot("current-cost-rules-20261017.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("compact-cost-rules-workbench-20261017.png", {
+    fullPage: true,
+  });
   await page.getByRole("button", { name: "提交审批" }).click();
   await expect(page.getByRole("dialog", { name: "提交费用规则审批" })).toBeVisible();
   await page.getByLabel("操作原因（至少 2 个字）").fill("提交美国站费用规则审批");
@@ -627,16 +633,22 @@ test("M04-04 cost rule console exposes audited reject and rollback", async ({ pa
   await page.goto("/sourcing/cost-rules");
   await page.getByRole("searchbox", { name: "搜索规则" }).fill("历史");
   await expect(page.getByRole("button", { name: /当前费用规则/ })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: /历史费用规则/ })).toBeVisible();
+  if (page.viewportSize()!.width <= 820)
+    await expect(page.getByLabel("当前费用规则版本").locator("option")).toHaveCount(1);
+  else await expect(page.getByRole("button", { name: /历史费用规则/ })).toBeVisible();
   await page.getByRole("button", { name: "重置" }).click();
   await page.getByRole("combobox", { name: "状态" }).selectOption("retired");
   await expect(page.getByText("共 1 条", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "重置" }).click();
-  await page.getByRole("button", { name: /历史费用规则/ }).click();
+  if (page.viewportSize()!.width <= 820)
+    await page.getByLabel("当前费用规则版本").selectOption(retiredId);
+  else await page.getByRole("button", { name: /历史费用规则/ }).click();
   await expect(page).toHaveURL(new RegExp(`rule=${retiredId}`));
   await page.reload();
   await expect(page.getByRole("heading", { name: "历史费用规则", level: 3 })).toBeVisible();
-  await page.getByRole("button", { name: /当前费用规则/ }).click();
+  if (page.viewportSize()!.width <= 820)
+    await page.getByLabel("当前费用规则版本").selectOption(ruleId);
+  else await page.getByRole("button", { name: /当前费用规则/ }).click();
   await page.getByRole("button", { name: "回滚到历史版本" }).click();
   await expect(page.getByLabel("恢复目标")).toContainText("历史费用规则 · v1 · 已停用");
   await page.getByLabel("操作原因（至少 2 个字）").fill("恢复已验证的上一版本");
@@ -1495,4 +1507,41 @@ test("a late reviewer-directory failure cannot replace the current opportunity r
   await expect(page.getByLabel("指定复核人")).toContainText("当前机会复核人");
   await expect(page.getByText("旧机会复核人读取失败", { exact: true })).toHaveCount(0);
   expect(reviewerReadCount).toBe(2);
+});
+
+test("compact cost workbench keeps fee facts above the fold with ten archived versions", async ({
+  page,
+}) => {
+  await navigation(page, { roles: ["auditor"], capabilities: ["opportunity:read"] });
+  const versions = Array.from({ length: 12 }, (_, index) => ({
+    ...phase2CostRule("retired"),
+    id: `00000000-0000-4000-8000-${String(800 + index).padStart(12, "0")}`,
+    name: `归档费用 ${index + 1}`,
+    version_code: `cost-${index + 1}`,
+  }));
+  await page.route("**/api/v1/cost-rules", (route) => route.fulfill({ json: envelope(versions) }));
+  await page.goto("/sourcing/cost-rules");
+  await expect(page.getByRole("heading", { name: "归档费用 1", exact: true })).toBeVisible();
+  const price = page.locator(".cost-fees tbody tr").first().locator("td").first();
+  await expect(price).toHaveText("10%");
+  const box = await price.boundingBox();
+  expect(box!.y + box!.height).toBeLessThan(
+    page.viewportSize()!.height - (page.viewportSize()!.width <= 820 ? 80 : 24),
+  );
+  await expect(page.locator(".cost-setup-check")).not.toHaveAttribute("open", "");
+  if (page.viewportSize()!.width <= 820) {
+    await expect(page.getByLabel("当前费用规则版本").locator("option")).toHaveCount(10);
+    await page.getByLabel("当前费用规则版本").selectOption(versions[9].id);
+  } else await page.getByRole("button", { name: /归档费用 10 / }).click();
+  await expect(page.getByRole("heading", { name: "归档费用 10", exact: true })).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`rule=${versions[9].id}`));
+  await page.getByRole("button", { name: "下一页", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "归档费用 11", exact: true })).toBeVisible();
+  const second = await price.boundingBox();
+  expect(second!.y + second!.height).toBeLessThan(
+    page.viewportSize()!.height - (page.viewportSize()!.width <= 820 ? 80 : 24),
+  );
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
 });

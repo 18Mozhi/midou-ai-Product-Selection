@@ -585,7 +585,7 @@ test("P61 platform status uses semantic workspace colors without shell overrides
   assert.match(css, /var\(--so-/);
 });
 
-test("P22 cost rule palette resolves its approved workbench colors in route scope", async () => {
+test("P22 cost rule palette resolves all remaining live dialog colors in route scope", async () => {
   const [tokens, css] = await Promise.all([
     readFile("apps/web/src/design/cost-rule-tokens.css", "utf8"),
     readFile("apps/web/src/profit.css", "utf8"),
@@ -598,7 +598,7 @@ test("P22 cost rule palette resolves its approved workbench colors in route scop
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set([...css.matchAll(/var\((--p22-[a-z-]+)\)/g)].map((match) => match[1]));
 
-  assert.equal(names.size, 15);
+  assert.equal(names.size, 12);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

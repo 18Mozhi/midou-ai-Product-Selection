@@ -3,7 +3,6 @@ import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
-import QualityGateSetupSummary from "./shared/QualityGateSetupSummary.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../profit.css";
 
@@ -506,6 +505,10 @@ function handleStatePrimary() {
   if (state.value === "empty" && canManage.value) openCreate();
   else void load();
 }
+function selectRuleById(value: string) {
+  const rule = pagedRules.value.find((item) => item.id === value);
+  if (rule) selectRule(rule);
+}
 function hasApproval(role: ApprovalRole) {
   return selected.value?.approvals.includes(role) ?? false;
 }
@@ -558,17 +561,19 @@ onMounted(load);
   <section class="cost-console cost-console--review" aria-labelledby="cost-rule-title">
     <header>
       <div>
-        <p>自动推荐 · 成本与利润</p>
-        <h1 id="cost-rule-title" ref="pageHeading" tabindex="-1">成本质量门</h1>
+        <h1 id="cost-rule-title" ref="pageHeading" tabindex="-1">费用规则</h1>
+        <p>管理费用版本、换算依据与审批记录</p>
       </div>
       <div class="cost-head-actions">
         <RouterLink :to="returnPath">返回当前找货记录</RouterLink>
-        <button
-          v-if="canManage && (state !== 'ready' || activeCostRule)"
-          type="button"
-          @click="openCreate"
-        >
-          新建规则版本
+        <button v-if="canManage" type="button" @click="openCreate">
+          {{
+            state !== "ready" || activeCostRule
+              ? "新建规则版本"
+              : nextCostRule
+                ? "创建后续版本"
+                : "创建首个规则"
+          }}
         </button>
       </div>
     </header>
@@ -594,24 +599,9 @@ onMounted(load);
       @primary="handleStatePrimary"
       @secondary="router.push(returnPath)"
     />
-    <QualityGateSetupSummary
-      v-if="state === 'ready'"
-      title="成本规则准备度"
-      :description="costSetupDescription"
-      :status="activeCostRule ? '成本规则已生效' : '成本质量门未就绪'"
-      :ready="Boolean(activeCostRule)"
-      :items="costSetupItems"
-    >
-      <button
-        v-if="canManage && !activeCostRule"
-        class="quality-gate-next"
-        type="button"
-        @click="openCreate"
-      >
-        {{ nextCostRule ? "创建后续版本" : "创建首个规则" }}
-      </button>
-      <RouterLink :to="returnPath">返回供应商与成本补全</RouterLink>
-    </QualityGateSetupSummary>
+    <p v-if="state === 'ready'" class="cost-setup-status" :data-ready="Boolean(activeCostRule)">
+      {{ activeCostRule ? "成本规则已生效" : "成本质量门未就绪" }}
+    </p>
     <div v-if="state === 'ready'" class="cost-layout">
       <section class="cost-rule-browser" aria-label="费用规则浏览器">
         <form class="cost-rule-filters" role="search" @submit.prevent>
@@ -631,6 +621,18 @@ onMounted(load);
           </button>
           <output>共 {{ filteredRules.length }} 条</output>
         </form>
+        <label v-if="pagedRules.length" class="cost-mobile-version"
+          >当前费用规则版本
+          <select
+            :value="selected?.id ?? ''"
+            @change="selectRuleById(($event.target as HTMLSelectElement).value)"
+          >
+            <option v-for="rule in pagedRules" :key="rule.id" :value="rule.id">
+              {{ rule.name }} · {{ rule.version_code }} ·
+              {{ statusLabels[rule.status] ?? rule.status }}
+            </option>
+          </select>
+        </label>
         <section class="cost-rule-list" aria-label="费用规则版本">
           <button
             v-for="rule in pagedRules"
@@ -670,15 +672,30 @@ onMounted(load);
             statusLabels[selected.status] ?? selected.status
           }}</b>
         </header>
-        <div class="cost-fees">
-          <article v-for="fee in selected.fee_lines" :key="fee.type">
-            <small>{{ feeLabels[fee.type] }}</small
-            ><strong
-              >{{ fee.value
-              }}{{ fee.mode === "percentage_of_sale" ? "%" : ` ${fee.currency}` }}</strong
-            ><span>{{ modeLabels[fee.mode] }}</span>
-          </article>
-        </div>
+        <table class="cost-fees">
+          <caption>
+            费用明细
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">费用项目</th>
+              <th scope="col">费率 / 金额</th>
+              <th scope="col">计费方式</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="fee in selected.fee_lines" :key="fee.type">
+              <th scope="row">{{ feeLabels[fee.type] }}</th>
+              <td>
+                {{ fee.value }}{{ fee.mode === "percentage_of_sale" ? "%" : ` ${fee.currency}` }}
+              </td>
+              <td>{{ modeLabels[fee.mode] }}</td>
+            </tr>
+            <tr v-if="!selected.fee_lines.length">
+              <td colspan="3">此版本暂无费用明细。</td>
+            </tr>
+          </tbody>
+        </table>
         <section v-if="selected.conversion_rates.length">
           <h4>跨币种换算依据</h4>
           <p
@@ -770,6 +787,26 @@ onMounted(load);
         </footer>
       </article>
     </div>
+    <details v-if="state === 'ready'" class="cost-setup-check">
+      <summary>
+        配置检查
+        <span
+          >{{ costSetupItems.filter((item) => item.ready).length }} /
+          {{ costSetupItems.length }} 项已满足</span
+        >
+      </summary>
+      <div>
+        <h3>成本规则准备度</h3>
+        <p>{{ costSetupDescription }}</p>
+        <ul>
+          <li v-for="item in costSetupItems" :key="item.label" :data-ready="item.ready">
+            <b>{{ item.label }}</b
+            ><span>{{ item.detail }}</span
+            ><em>{{ item.ready ? "已满足" : "待完成" }}</em>
+          </li>
+        </ul>
+      </div>
+    </details>
     <dialog
       v-if="showCreate"
       ref="createDialogElement"

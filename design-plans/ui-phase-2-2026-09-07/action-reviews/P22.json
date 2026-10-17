@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CostRuleConsole.vue": "f132630134363996555dcefba50158704eb5c427ab98c55719af59311fb6a1f5"
+    "apps/web/src/components/CostRuleConsole.vue": "d024b0853480880f8c9a0b7044cc4eedd6605947277285333369e55e47ebf7cd"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -1176,7 +1176,7 @@
       "apps/web/src/components/CostRuleConsole.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/CostRuleConsole.vue": "f132630134363996555dcefba50158704eb5c427ab98c55719af59311fb6a1f5",
+      "apps/web/src/components/CostRuleConsole.vue": "d024b0853480880f8c9a0b7044cc4eedd6605947277285333369e55e47ebf7cd",
       "apps/web/src/components/UiStatePanel.vue": "2969566dd1069b24e474fc729eeef7c06907dc6a06c398af12cc9b1c8b6e705c",
       "apps/web/src/ui/state-contract.ts": "913cf51719f372302e1900ac99c4b46c1baaa3632d7bcca7e234700f483d2ac8",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",

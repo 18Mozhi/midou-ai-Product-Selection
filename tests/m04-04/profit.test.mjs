@@ -252,7 +252,10 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
   assert.match(opportunityShell, /OpportunityProfitPanel[\s\S]*:profit="profit"/);
   assert.match(profitPanel, /提交成本复核[\s\S]*重新计算/);
   assert.match(`${profitPanel}\n${costReviewQueue}`, /成本复核队列[\s\S]*指定复核人/);
-  assert.match(consoleUi, /成本质量门[\s\S]*costSetupItems[\s\S]*成本规则已生效/);
+  assert.match(consoleUi, /costSetupItems/);
+  assert.match(consoleUi, /成本质量门未就绪/);
+  assert.match(consoleUi, /成本规则已生效/);
+  assert.match(consoleUi, /cost-setup-check[\s\S]*配置检查/);
   assert.match(qualityGateSetupUi, /自动推荐配置[\s\S]*已满足[\s\S]*待完成/);
   assert.ok(opportunityShell.split(/\r?\n/).length < 1000);
   assert.ok(profitPanel.split(/\r?\n/).length < 300);
