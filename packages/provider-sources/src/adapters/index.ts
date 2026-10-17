@@ -11,6 +11,7 @@ import {
 } from "@scoutops/provider-adapters";
 import { request as httpsRequest } from "node:https";
 import { BUILTIN_PROVIDER_SOURCES } from "../catalog/index.js";
+import { assertPublicCollectionPolicy } from "../public-collection-policy.js";
 import { AMAZON_PUBLIC_PRODUCT_PARSER_VERSION } from "../parsers/amazon-public-signals.js";
 import {
   parseAmazonProductPage,
@@ -431,10 +432,18 @@ export class FixedStructuredPublicPageAdapter extends SourceAdapter {
   }
 }
 
+const AMAZON_HEALTH_SEARCH_URL = "https://www.amazon.com/s?k=storage+box";
+
+export class AmazonTargetPageParseFailure extends ProviderAdapterFailure {
+  constructor() {
+    super("parse_failed", false);
+  }
+}
+
 export class AmazonProductSearchAdapter extends SourceAdapter {
   readonly key = "amazon_product";
   readonly accessMode = "public_page" as const;
-  readonly version = "amazon-public-product-adapter-v7";
+  readonly version = "amazon-public-product-adapter-v8";
   constructor(private readonly fetcher?: typeof fetch) {
     super();
   }
@@ -490,6 +499,26 @@ export class AmazonProductSearchAdapter extends SourceAdapter {
           firstDrift = error;
           continue;
         }
+        const target = new URL(url);
+        const isControl =
+          target.pathname === "/s" && target.searchParams.get("k") === "storage box";
+        if (
+          error instanceof ProviderAdapterFailure &&
+          error.code === "source_changed" &&
+          !isControl
+        ) {
+          signal.throwIfAborted();
+          await assertPublicCollectionPolicy({
+            providerTargetUrl: AMAZON_HEALTH_SEARCH_URL,
+            fetcher: this.fetcher ?? fetch,
+            timeoutMs: 10000,
+          });
+          signal.throwIfAborted();
+          const control = await this.response(AMAZON_HEALTH_SEARCH_URL, signal);
+          parseAmazonProductPage(await control.text(), AMAZON_HEALTH_SEARCH_URL, 1);
+          // The control confirms provider health only; it is never a target result.
+          throw new AmazonTargetPageParseFailure();
+        }
         throw error;
       }
     }
@@ -505,7 +534,7 @@ export class AmazonProductSearchAdapter extends SourceAdapter {
   }
   async healthCheck(context: AdapterHealthContext, signal: AbortSignal) {
     const started = Date.now(),
-      url = "https://www.amazon.com/s?k=storage+box";
+      url = AMAZON_HEALTH_SEARCH_URL;
     try {
       this.requireParser(context.provider);
       await this.records(url, signal, 1);

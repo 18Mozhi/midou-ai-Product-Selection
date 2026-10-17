@@ -1,5 +1,7 @@
 # M03-07 自动热点来源运维与回滚
 
+> Amazon适配器v8将有健康标准页证明的单目标解析失败保留为parse_failed，目标仍无事实；真实结构变化继续停用。既有停用来源须先完成健康检查并由配置服务启用，见 `docs/amazon-target-drift-isolation.md`。不要用健康控制页商品补齐失败目标。
+
 > Google Trends目录使用google-trends-rss-v1专用解析，普通RSS不变。共享链接不能作为唯一词条身份，新闻上下文和变更证据保留。发布后重启唯一Node项目，再核对具体来源的策略、健康、内部审批与熔断恢复；不要批量批准其他国家。见 `docs/google-trends-rss-contract.md`。
 
 ## 宝塔发布

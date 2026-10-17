@@ -1,7 +1,20 @@
 {
+  "selectionAmazonTargetDrift20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-target-drift-isolation.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/adapters/index.ts",
+      "apps/worker/src/provider-source-executor.ts"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-target-drift.test.mjs",
+      "tests/unit/core-workspace-crawlers.test.mjs"
+    ],
+    "contract": "After existing target drift retry, one policy-approved fixed control probe can prove provider health; target still fails parse_failed with no facts and no global circuit penalty only for Amazon. Unhealthy control retains structural pause or its actual blocked/rate/error classification. No result substitution or startup auto-enable. Existing scoped audited recovery and replay required. Adapterv8/parserv5, no external API/schema/env/Python change."
+  },
   "selectionGoogleTrendsRss20261018": {
     "status": "implemented",
-    "statusDetail": "targeted_and_live_input_replay_passed_production_pending",
+    "statusDetail": "implementation_and_live_input_replay_passed_admission_tracked_in_runtime_receipts",
     "requirements": "docs/google-trends-rss-contract.md",
     "sourceFiles": [
       "packages/provider-sources/src/parsers/index.ts",

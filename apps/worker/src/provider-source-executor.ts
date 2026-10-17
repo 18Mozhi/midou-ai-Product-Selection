@@ -11,6 +11,7 @@ import {
   publicCollectionPolicyDecision,
   sourceEvidencePayload,
   GOOGLE_TRENDS_RSS_PARSER_VERSION,
+  AmazonTargetPageParseFailure,
   type RobotsPolicyDecision,
 } from "@scoutops/provider-sources";
 import type {
@@ -509,7 +510,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         throw new ProviderCollectionExecutionError("validation_failed", undefined, robotsDecision);
       const failure = classifyProviderAdapterFailure(error),
         mapped = isEvidenceValidationError(error) ? "validation_failed" : code(failure.code),
-        policyDecision = robotsDecision ?? publicCollectionPolicyDecision(error) ?? undefined,
+        policyDecision = publicCollectionPolicyDecision(error) ?? robotsDecision ?? undefined,
         blocked = [
           "login_required",
           "session_expired",
@@ -539,7 +540,9 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       await this.recordProviderRuntimeResult(
         provider.id,
         Number(row.circuit_failure_threshold),
-        mapped,
+        provider.code === "amazon_product" && error instanceof AmazonTargetPageParseFailure
+          ? null
+          : mapped,
       );
       if (mapped === "source_changed")
         await this.pauseProviderForParserDrift(task, provider, String(row.created_by), failure);
