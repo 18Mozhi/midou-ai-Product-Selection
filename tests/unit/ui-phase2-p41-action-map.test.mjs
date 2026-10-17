@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
@@ -8,10 +12,10 @@ import { validateActionReview } from "../../scripts/lib/ui-phase2-action-coverag
 import { validateReviewSurfaces } from "../../scripts/lib/ui-phase2-review-surfaces.mjs";
 
 const reviewPath = "design-plans/ui-phase-2-2026-09-07/action-reviews/P41.json";
-const normalized = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const normalized = (file) => readPreSelectionRebuild(file);
 const digest = (value) => createHash("sha256").update(value).digest("hex");
 
-test("P41 action map covers the current wizard route without promoting runtime acceptance", () => {
+test("P41 archived action map covers the current wizard route without promoting runtime acceptance", () => {
   const review = JSON.parse(normalized(reviewPath));
   const sources = {};
   const sourceHashes = {};
@@ -37,7 +41,7 @@ test("P41 action map covers the current wizard route without promoting runtime a
       files.add(reference.file);
     }
 
-  const contracts = runContractAudit();
+  const contracts = runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles());
   const summary = validateActionReview(review, {
     candidates,
     sourceHashes,

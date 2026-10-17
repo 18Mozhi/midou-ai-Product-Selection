@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import test from "node:test";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
@@ -10,8 +12,8 @@ const evidence = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
 const sourceFile = "apps/web/src/components/OrganizationDataPanel.vue";
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 
-test("P35 all 10 real child actions map exactly once; extra controls remain proposals", () => {
-  const candidates = scanSource(readFileSync(sourceFile, "utf8"), sourceFile).candidates;
+test("Archived P35 all 10 real child actions map exactly once; extra controls remain proposals", () => {
+  const candidates = scanSource(readPreSelectionRebuild(sourceFile), sourceFile).candidates;
   assert.equal(candidates.length, 10);
   const signatures = candidates.map((c) => c.candidateId.split("#")[1]).sort();
   assert.deepEqual(evidence.sourceSignatures, signatures);
@@ -41,7 +43,7 @@ test("P35 all 10 real child actions map exactly once; extra controls remain prop
     assert.deepEqual(c.signatures, []);
 });
 
-test("P35 every control/state/viewport has native evidence and exactly one retained image", () => {
+test("Archived P35 every control/state/viewport has native evidence and exactly one retained image", () => {
   assert.equal(evidence.controls.length, 25);
   assert.equal(evidence.checks.length, 188);
   assert.equal(evidence.interactions.length, 44);
@@ -77,7 +79,7 @@ test("P35 every control/state/viewport has native evidence and exactly one retai
   );
 });
 
-test("P35 read-only controls do not invent busy/disabled business rules or promote approval", () => {
+test("Archived P35 read-only controls do not invent busy/disabled business rules or promote approval", () => {
   assert.equal(evidence.status, "pending-user-review");
   assert.match(evidence.scope, /not-mounted-Vue-API-SQL-or-production/);
   for (const key of ["businessDialogs", "businessWrites", "externalRequests", "pageErrors"])
@@ -105,9 +107,9 @@ test("P35 read-only controls do not invent busy/disabled business rules or promo
     assert.deepEqual(c.states, ["default", "hover", "focus", "pressed"]);
 });
 
-test("P35 verifier binds current source and new images without overwriting the original 94 images", () => {
+test("Archived P35 verifier binds current source and new images without overwriting the original 94 images", () => {
   for (const [f, sha] of Object.entries(evidence.sourceHashes))
-    assertCaptureSource(f, readFileSync(f, "utf8"), sha);
+    assertCaptureSource(f, readPreSelectionRebuild(f), sha);
   for (const s of evidence.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   const base = "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c";

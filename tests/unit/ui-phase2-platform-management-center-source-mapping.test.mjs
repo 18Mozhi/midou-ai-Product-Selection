@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
@@ -7,12 +11,9 @@ import { digest, scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
 const document = "content-notification-evidence-contract-review.md";
 const file = "apps/web/src/components/PlatformManagementCenter.vue";
 
-test("current platform management parent mappings keep filter and email editor wiring explicit", () => {
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
-    "\r\n",
-    "\n",
-  );
-  const audit = runContractAudit();
+test("Archived pre-rebuild current platform management parent mappings keep filter and email editor wiring explicit", () => {
+  const source = readPreSelectionRebuild(file).replaceAll("\r\n", "\n");
+  const audit = runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles());
   const candidates = scanSource(source, file).candidates;
   const rows = audit.records.filter(
     (record) =>

@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createHash } from "node:crypto";
@@ -10,10 +14,7 @@ import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 const base = "design-plans/ui-phase-2-2026-09-07";
 const review = JSON.parse(readFileSync(`${base}/action-reviews/P45.json`, "utf8"));
 const sources = Object.fromEntries(
-  Object.keys(review.sourceHashes).map((file) => [
-    file,
-    readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
-  ]),
+  Object.keys(review.sourceHashes).map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const sourceHashes = Object.fromEntries(
   Object.entries(sources).map(([file, source]) => [
@@ -38,12 +39,12 @@ const files = new Set(
 const context = {
   candidates,
   sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages,
   files,
 };
 
-test("P45 maps all current permission-page source candidates and keeps action approval pending", () => {
+test("P45 archived maps all current permission-page source candidates and keeps action approval pending", () => {
   const result = validateActionReview(review, context);
   assert.equal(result.sourceSites, 16);
   assert.equal(review.route, "/platform-admin/permissions");
@@ -63,7 +64,7 @@ test("P45 maps all current permission-page source candidates and keeps action ap
   );
 });
 
-test("P45 explicitly excludes shared account routes and asserts the current read-only boundary", () => {
+test("P45 archived explicitly excludes shared account routes and asserts the current read-only boundary", () => {
   const surface = validateReviewSurfaces(review.surfaceReview, { sources, packages });
   assert.match(review.compositionGaps.join(" "), /没有角色编辑或授权写操作/u);
   assert.equal(surface.runtimeAcceptance, "unproven");

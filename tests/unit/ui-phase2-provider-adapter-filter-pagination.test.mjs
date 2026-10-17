@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { spawnSync } from "node:child_process";
 import { gunzipSync } from "node:zlib";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
@@ -16,12 +18,12 @@ import { previewCurrentAdapterFilterPagination as previewAdapterFilterPagination
 import { readErrorRevision } from "../../scripts/lib/ui-phase2-adapter-read-error-baseline.mjs";
 import { p47HistoricalSource } from "../../scripts/lib/ui-phase2-adapter-historical-source.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
+const read = (file) => readPreSelectionRebuild(file).replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   component = "apps/web/src/components/ProviderAdapterCenter.vue",
   root = "output/playwright/p47-filter-pagination-current-review";
 
-test("P47 filter/page proposal compiles and preserves original six-model and request script", () => {
+test("Archived P47 filter/page proposal compiles and preserves original six-model and request script", () => {
   const original = read(component),
     review = previewAdapterFilterPagination(original),
     before = parse(original),
@@ -63,7 +65,7 @@ test("P47 filter/page proposal compiles and preserves original six-model and req
   );
 });
 
-test("P47 historical page-turn proposal focuses status when its trigger becomes disabled", async () => {
+test("Archived P47 historical page-turn proposal focuses status when its trigger becomes disabled", async () => {
   for (const scene of ["enabled", "disabled", "missing"]) {
     let focusCount = 0,
       options;
@@ -91,7 +93,7 @@ test("P47 historical page-turn proposal focuses status when its trigger becomes 
   }
 });
 
-test("P47 filter/page CSS remains isolated to review P47 controls", () => {
+test("Archived P47 filter/page CSS remains isolated to review P47 controls", () => {
   const css = postcss.parse(
     read(
       "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-filter-pagination-preview.css",
@@ -115,7 +117,7 @@ test("P47 filter/page CSS remains isolated to review P47 controls", () => {
   });
 });
 
-test("P47 approved independent replay preserves original provenance, incident records and successor images", () => {
+test("Archived P47 approved independent replay preserves original provenance, incident records and successor images", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
   assert.equal(e.reviewOnly, true);
   assert.equal(e.kind, "P47-FILTER-PAGINATION-CURRENT-REVIEW-r1");
@@ -259,7 +261,7 @@ test("P47 approved independent replay preserves original provenance, incident re
   }
 });
 
-test("P47 approved historical replay rejects capture before starting services or changing evidence", () => {
+test("Archived P47 approved historical replay rejects capture before starting services or changing evidence", () => {
   const folder = "design-plans/ui-phase-2-2026-09-07/evidence/p47-historical-recovery-r2";
   const before = hash(readFileSync(`${folder}/evidence.json`));
   const result = spawnSync(

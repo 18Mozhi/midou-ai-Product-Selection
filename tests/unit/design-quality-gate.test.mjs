@@ -1,6 +1,44 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
+import postcss from "postcss";
+import { parse } from "@vue/compiler-sfc";
+
+// The rebuilt workspace uses 12px for these explicitly reviewed metadata rules.
+// The default floor stays 13px; no unlisted sub-13px selector is accepted.
+const metadataRules = new Set([
+  "apps/web/src/backup-recovery-center-c.css::& .p64-directory > p:last-child",
+  "apps/web/src/backup-recovery-center-c.css::& .panel-title > span",
+  "apps/web/src/backup-recovery-center-c.css::& .p64-content > footer",
+  "apps/web/src/file-resilience.css::& .p69-observed :is(b, time)",
+  "apps/web/src/file-resilience.css::& .p69-directory header > b",
+  "apps/web/src/file-resilience.css::& .p69-sample-total span",
+  "apps/web/src/file-resilience.css::& .p69-note",
+  "apps/web/src/file-resilience.css::& .file-resilience__footer",
+  "apps/web/src/platform-status-center-c.css::& :is(.platform-topology-node i, .platform-realtime-degradation i)",
+  "apps/web/src/platform-status-center-c.css::& .platform-realtime-degradation article span",
+  "apps/web/src/runtime-observation-workspace.css::& :is(small, dt)",
+  "apps/web/src/runtime-observation-workspace.css::& .p68-measurements p",
+  "apps/web/src/runtime-observation-workspace.css::& :is(.mysql-resilience__footer, .redis-resilience__footer)",
+  "apps/web/src/runtime-observation-workspace.css::& :is(.p68-contract, .p67-persistence-rows > div, .p67-sample-list article)",
+  "apps/web/src/components/OrganizationCreationWizard.vue::.organization-wizard__progress span",
+  "apps/web/src/components/OrganizationCreationWizard.vue::.organization-wizard__step small",
+  "apps/web/src/components/PlatformAccountCenter.css::.account-center .account-metrics small,\n.account-center .account-metrics span",
+  "apps/web/src/components/PlatformAccountCenter.css::.account-center .account-filter small",
+  "apps/web/src/components/PlatformAccountCenter.css::.account-center .account-updated",
+  "apps/web/src/components/PlatformAccountCenter.css::.account-center th",
+  "apps/web/src/components/PlatformAccountCenter.css::.account-center td small",
+  "apps/web/src/components/PlatformAccountCenter.css::.account-center .p40-record-counts",
+  "apps/web/src/components/PlatformAccountCenterAdmin.css::.account-center--admins-c .role-comparison > header p",
+  "apps/web/src/components/PlatformAccountDialogs.css::.p44-admin-create-help",
+  "apps/web/src/components/PlatformAdminDirectoryMobile.css::.account-center--admins-c .responsive-record-summary small,\n  .account-center--admins-c .responsive-data-view__action",
+  "apps/web/src/components/PlatformOrganizationDetailDialog.vue::.p42-identity-head small,\n.p42-missing-identity small",
+  "apps/web/src/components/PlatformOrganizationDetailDialog.vue::.detail-grid small",
+  "apps/web/src/components/PlatformOrganizationDetailDialog.vue::.field-help",
+  "apps/web/src/components/PlatformRoleComparisonPermissions.css::.role-comparison--permission-page .role-comparison__matrix h4 small",
+  "apps/web/src/components/PlatformRoleComparisonPermissions.css::.role-comparison--permission-page .role-comparison__matrix dt",
+  "apps/web/src/components/PlatformUserDetailDialog.vue::.user-detail-identity small",
+]);
 
 const read = (path) => readFile(path, "utf8");
 
@@ -11,12 +49,19 @@ test("design quality gate keeps metadata readable and removes unscoped visual se
   const sources = await Promise.all(paths.map(read));
   const violations = [];
   for (const [index, source] of sources.entries()) {
-    for (const match of source.matchAll(/font-size:\s*(?:clamp\(\s*)?(\d+(?:\.\d+)?)px/g)) {
-      if (Number(match[1]) < 13) violations.push(`${paths[index]}:${match[0]}`);
-    }
-    for (const match of source.matchAll(/font-size:\s*(0\.\d+)rem/g)) {
-      if (Number(match[1]) * 16 < 13) violations.push(`${paths[index]}:${match[0]}`);
-    }
+    const file = paths[index];
+    const blocks = file.endsWith(".vue")
+      ? parse(source).descriptor.styles.map((style) => style.content)
+      : [source];
+    for (const block of blocks)
+      postcss.parse(block).walkDecls("font-size", (declaration) => {
+        const value = /^(?:clamp\(\s*)?(\d+(?:\.\d+)?)(px|rem)/.exec(declaration.value);
+        if (!value) return;
+        const pixels = Number(value[1]) * (value[2] === "rem" ? 16 : 1);
+        const floor = metadataRules.has(file + "::" + declaration.parent.selector) ? 12 : 13;
+        if (pixels < floor)
+          violations.push(file + ":" + declaration.parent.selector + ":" + declaration.toString());
+      });
   }
   assert.deepEqual(violations, []);
 

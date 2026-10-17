@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -19,13 +21,13 @@ import {
   focusWrapper,
 } from "../../scripts/lib/ui-phase2-adapter-empty-preview.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) => readPreSelectionRebuild(file).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const component = "apps/web/src/components/ProviderAdapterCenter.vue";
 const historicalRoot = "output/playwright/p47-empty-review";
 const stageRead = (file, stage = "pre-mobile") => p47HistoricalSource(file, read(file), stage);
 
-test("P47 historical empty proposal stays exactly reversible against its pre-focus source", () => {
+test("Archived P47 historical empty proposal stays exactly reversible against its pre-focus source", () => {
   const original = beforeAdapterEmptyFocus(stageRead(component, "pre-refresh")),
     review = previewAdapterEmpty(original);
   const parsed = parse(review),
@@ -65,7 +67,7 @@ test("P47 historical empty proposal stays exactly reversible against its pre-foc
   assert.ok(!original.includes("resetEmptyFilters"));
 });
 
-test("P47 actual and preview reset focus respect disconnected inputs, inert dialogs and newer focus", async () => {
+test("Archived P47 actual and preview reset focus respect disconnected inputs, inert dialogs and newer focus", async () => {
   const script = parse(read(component)).descriptor.scriptSetup.content;
   const ast = ts.createSourceFile("adapter.ts", script, ts.ScriptTarget.Latest, true);
   const actual = ast.statements.filter(
@@ -114,7 +116,7 @@ test("P47 actual and preview reset focus respect disconnected inputs, inert dial
   }
 });
 
-test("P47 empty styling is restricted to its review body and empty region", () => {
+test("Archived P47 empty styling is restricted to its review body and empty region", () => {
   const css = postcss.parse(
     read("design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-empty-preview.css"),
   );
@@ -204,7 +206,7 @@ for (const [root, kind, archive] of [
     }
   });
 
-test("P47 empty focus stage remains exact before the verified refresh-only repair", () => {
+test("Archived P47 empty focus stage remains exact before the verified refresh-only repair", () => {
   const source = stageRead(component, "pre-refresh");
   assert.equal(hash(source), adapterEmptyFocusRevision.after);
   assert.equal(hash(beforeAdapterEmptyFocus(source)), adapterEmptyFocusRevision.before);
@@ -216,7 +218,7 @@ test("P47 empty focus stage remains exact before the verified refresh-only repai
   assert.equal((source.match(/@click="resetEmptyFilters"/g) ?? []).length, 1);
 });
 
-test("P47 pre-mobile empty preview changes only six presentation slots and preserves both focus handlers", () => {
+test("Archived P47 pre-mobile empty preview changes only six presentation slots and preserves both focus handlers", () => {
   const source = stageRead(component),
     result = previewCurrentAdapterEmpty(source);
   const before = parse(source).descriptor,
@@ -259,7 +261,7 @@ test("P47 pre-mobile empty preview changes only six presentation slots and prese
   assert.equal(previewCurrentAdapterEmpty(source.replaceAll("\n", "\r\n")), result);
 });
 
-test("P47 original empty review retains its negative focus evidence and all approved-region images", () => {
+test("Archived P47 original empty review retains its negative focus evidence and all approved-region images", () => {
   assert.equal(
     hash(read(`${historicalRoot}/evidence.json`)),
     "487b0e1bd664b5d2e5bf0daec40f99dfe71f8dd69c8c8320c24881ccedc65576",

@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -10,7 +12,7 @@ import { assertP46CapturedSources } from "./ui-phase2-p46-capture-source.mjs";
 
 // Approved assembly is immutable historical evidence; the keyboard suite binds raw current sources.
 const read = (f) =>
-  historicalProviderKeyboardSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
+  historicalProviderKeyboardSource(f, historicalAdapterCSource(f, readPreSelectionRebuild(f)));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const folder = "output/playwright/p46-route-assembly-review";
 const e = JSON.parse(read(folder + "/evidence.json"));
@@ -18,7 +20,7 @@ const widths = [390, 760, 761, 840, 841, 1440];
 const registry = read("apps/web/src/components/ProviderRegistry.vue");
 const runner = read("scripts/verify-ui-phase2-provider-route-assembly.mjs");
 
-test("P46 approved full-route evidence binds exact pre-keyboard entry and sources", () => {
+test("Archived P46 approved full-route evidence binds exact pre-keyboard entry and sources", () => {
   assert.equal(e.kind, "P46-REAL-ROUTE-C-ASSEMBLY-r1");
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 168);
@@ -46,7 +48,7 @@ test("P46 approved full-route evidence binds exact pre-keyboard entry and source
   assert.doesNotMatch(read("apps/web/src/main.ts"), /provider-route-assembly|p46-route-review/);
 });
 
-test("P46 104 formal pictures have exact inventory, dimensions and fingerprints", () => {
+test("Archived P46 104 formal pictures have exact inventory, dimensions and fingerprints", () => {
   assert.equal(e.screenshots.length, 104);
   assert.equal(e.checks.length, 232);
   assert.deepEqual(
@@ -79,7 +81,7 @@ test("P46 104 formal pictures have exact inventory, dimensions and fingerprints"
   }
 });
 
-test("P46 real router return preserves cache and query, all writes are rejected fixtures", () => {
+test("Archived P46 real router return preserves cache and query, all writes are rejected fixtures", () => {
   let gets = 0,
     puts = 0;
   for (const width of widths) {
@@ -117,7 +119,7 @@ test("P46 real router return preserves cache and query, all writes are rejected 
   assert.equal(puts, 6);
 });
 
-test("P46 preserves unresolved Tab escape observation, not complete modal acceptance", () => {
+test("Archived P46 preserves unresolved Tab escape observation, not complete modal acceptance", () => {
   for (const width of widths) {
     const o = e.observations.find((o) => o.width === width && o.case === "network-and-focus");
     assert.equal(o.focus.length, 1);

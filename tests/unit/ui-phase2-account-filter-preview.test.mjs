@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { accountHistoricalCapture } from "../../scripts/lib/ui-phase2-account-historical-capture.mjs";
 import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
@@ -17,7 +19,7 @@ const capture = accountHistoricalCapture("filter");
 const read = (file) =>
   historicalAdminResultsSource(
     file,
-    historicalOrganizationActionSource(file, readFileSync(file, "utf8")),
+    historicalOrganizationActionSource(file, readPreSelectionRebuild(file)),
   );
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const source = read(component),
@@ -40,7 +42,7 @@ function directives(template) {
   visit(baseParse(template));
   return result;
 }
-test("P39 preview preserves the entire script, native directives and production template outside the form", () => {
+test("Archived P39 preview preserves the entire script, native directives and production template outside the form", () => {
   assert.equal(
     parse(preview.source).descriptor.scriptSetup.content,
     parse(source).descriptor.scriptSetup.content,
@@ -52,7 +54,7 @@ test("P39 preview preserves the entire script, native directives and production 
   assert.match(preview.form, /aria-labelledby="p39-query-label"/);
   assert.match(preview.form, /id="p39-query-label">关键词/);
 });
-test("P39 review refuses changed source markup instead of silently rendering an obsolete form", () => {
+test("Archived P39 review refuses changed source markup instead of silently rendering an obsolete form", () => {
   assert.throws(() =>
     accountFilterPreview(source.replace('class="account-filter"', 'class="changed"')),
   );
@@ -62,8 +64,8 @@ test("P39 review refuses changed source markup instead of silently rendering an 
     ),
   );
 });
-test("P39 current extracted directory keeps its actual Vue composition untransformed", () => {
-  const current = readFileSync(component, "utf8").replaceAll("\r\n", "\n"),
+test("Archived P39 current extracted directory keeps its actual Vue composition untransformed", () => {
+  const current = readPreSelectionRebuild(component).replaceAll("\r\n", "\n"),
     preview = accountFilterPreview(current);
   assert.equal(preview.source, current);
   assert.equal(preview.original, "");
@@ -72,7 +74,7 @@ test("P39 current extracted directory keeps its actual Vue composition untransfo
   assert.match(current, /@apply-filters="applyFilters"/u);
   assert.match(current, /@reset-filters="resetFilters"/u);
 });
-test("P39 evidence has captured source revisions, exact images and explicit fixture boundaries", () => {
+test("Archived P39 evidence has captured source revisions, exact images and explicit fixture boundaries", () => {
   const e = JSON.parse(read(`${output}/evidence.json`));
   assert.equal(e.approval, "pending");
   assert.match(e.scope, /Not unchanged production template/);
@@ -109,7 +111,7 @@ test("P39 evidence has captured source revisions, exact images and explicit fixt
     assert.equal(s.sourceSha, hash(JSON.stringify(e.sourceHashes)));
   }
 });
-test("P39 original 86-image proposal and production parent remain unchanged at this review boundary", () => {
+test("Archived P39 original 86-image proposal and production parent remain unchanged at this review boundary", () => {
   const baseline = "54ec4736";
   const folder = "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c";
   const old = JSON.parse(

@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -14,14 +16,14 @@ import { assertP46CapturedSources } from "./ui-phase2-p46-capture-source.mjs";
 
 // Preserve the keyboard-only capture; the structure suite binds raw current sources.
 const read = (f) =>
-  historicalProviderStructureSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
+  historicalProviderStructureSource(f, historicalAdapterCSource(f, readPreSelectionRebuild(f)));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = "apps/web/src/components/ProviderRegistry.vue";
 const current = read(file);
 const folder = "output/playwright/p46-editor-keyboard-implementation";
 const e = JSON.parse(read(folder + "/evidence.json"));
 
-test("P46 keyboard patch changes only local Tab handler, event and fallback tabindex", () => {
+test("Archived P46 keyboard patch changes only local Tab handler, event and fallback tabindex", () => {
   const a = parse(current).descriptor,
     b = parse(historicalProviderKeyboardSource(file, current)).descriptor;
   const script = a.scriptSetup.content;
@@ -56,7 +58,7 @@ test("P46 keyboard patch changes only local Tab handler, event and fallback tabi
     assert.ok(handler.includes(fragment), fragment);
 });
 
-test("P46 exact historical adapter rejects unknown drift and preserves approved evidence", () => {
+test("Archived P46 exact historical adapter rejects unknown drift and preserves approved evidence", () => {
   for (const r of providerKeyboardRevisions) {
     const source = read(r.file);
     assert.equal(hash(source), r.after);
@@ -76,7 +78,7 @@ test("P46 exact historical adapter rejects unknown drift and preserves approved 
   );
 });
 
-test("P46 current keyboard capture binds raw sources and separate 104-image manifest", () => {
+test("Archived P46 current keyboard capture binds raw sources and separate 104-image manifest", () => {
   assert.equal(e.kind, "P46-EDITOR-KEYBOARD-IMPLEMENTATION-r1");
   assert.equal(e.processesClosed, true);
   assert.equal(e.checks.length, 388);
@@ -96,7 +98,7 @@ test("P46 current keyboard capture binds raw sources and separate 104-image mani
   }
 });
 
-test("P46 Tab cycles in both directions in all steps, pending and error states; Escape returns", () => {
+test("Archived P46 Tab cycles in both directions in all steps, pending and error states; Escape returns", () => {
   for (const width of [390, 760, 761, 840, 841, 1440]) {
     const value = (name) => e.checks.find((c) => c.width === width && c.name === name)?.actual;
     for (const label of [

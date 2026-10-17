@@ -15,7 +15,7 @@ const transformed = previewOpenPage(page);
 
 test("P60 production C page exposes one route-owned title and three accessible task views", () => {
   assert.match(page, /class="open-platform open-platform--c"/);
-  assert.match(page, /<h1>开放平台<\/h1>/);
+  assert.match(page, /<PlatformPageHeader title="开放平台" :heading-level="1"/);
   for (const view of ["clients", "webhooks", "deliveries"]) {
     assert.match(page, new RegExp(`data-view="${view}"`));
     assert.match(

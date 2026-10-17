@@ -942,12 +942,14 @@
       "intelligence.product_search.auto_scheduled"
     ],
     "testFiles": ["tests/unit/intelligence-product-association.test.mjs"],
-    "verification": "Three real LAN model synthetic checks and four read-only MySQL 5.7 SELECT EXPLAIN checks passed. No production write, restart or deployment.",
+    "verification": "3142 full Node checks passed; final prompt refinement passed 54 targeted checks and Worker rebuild. Final real RSS classification 851/1062ms; 10 existing scoped Amazon candidates selected in 1390ms. Six RSS feeds read through configured proxy; Google News blocked by robots. No production writes, restart or deployment. See docs/selection-live-readiness.md.",
     "pendingScope": [
       "general category score and costs",
       "historical replay",
       "live source and sustained daily acceptance"
-    ]
+    ],
+    "contract": "Model returns only relation/rationale/queries; code binds an unchanged original title or summary excerpt under the existing four-field event contract. Known Qwen 3.5 classification tasks use non-thinking mode; all other model transports and downstream evidence gates retain their contracts.",
+    "operations": "docs/selection-live-readiness.md"
   },
   "selectionCompetitors20261017": {
     "status": "implemented",

@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import { userLifecycleReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-user-lifecycle-review-historical-capture.mjs";
@@ -12,7 +14,7 @@ import {
 import { userPagePreview } from "../../scripts/lib/ui-phase2-user-page-preview.mjs";
 import { userPasswordPreview } from "../../scripts/lib/ui-phase2-user-password-preview.mjs";
 const read = (file) =>
-  historicalAdminResultsSource(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
+  historicalAdminResultsSource(file, readPreSelectionRebuild(file).replaceAll("\r\n", "\n"));
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 test("password ownership preserves exact before/after Vue sources and 80 diagnostic/regression images", () => {
   for (const mode of ["baseline", "current"]) {

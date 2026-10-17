@@ -17,12 +17,13 @@ const accountDialogs = readFileSync(
 ).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 
-test("P43 create dialog resets the global create-alias palette bleed", () => {
+test("P43 current create dialog uses scoped semantic panel tokens despite legacy global create selectors", () => {
   assert.match(signalLedger, /\[class\*="-create"\]/);
   assert.match(
     accountDialogs,
-    /html\[data-design="commerce"\] body dialog\.p43-create-user-dialog,[\s\S]*?background-color: var\(--account-org-surface\)/,
+    /#app dialog:is\(\.p43-account-dialog, \.p42-reason-dialog\)[\s\S]*?background: var\(--so-panel\)/,
   );
+  assert.doesNotMatch(accountDialogs, /--account-org-/);
 });
 
 for (const [folder, kind, checks, images, palette] of [

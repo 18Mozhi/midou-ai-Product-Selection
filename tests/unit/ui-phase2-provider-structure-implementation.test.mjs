@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import { providerHistoricalCapture } from "../../scripts/lib/ui-phase2-provider-historical-capture.mjs";
 import test from "node:test";
@@ -13,7 +15,7 @@ import {
 
 // This suite binds the immutable structure-only capture before field semantics.
 const read = (f) =>
-  historicalProviderFieldSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
+  historicalProviderFieldSource(f, historicalAdapterCSource(f, readPreSelectionRebuild(f)));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = "apps/web/src/components/ProviderRegistry.vue";
 const original = providerHistoricalCapture("structure-current");
@@ -24,7 +26,7 @@ const folder = "output/playwright/p46-approved-structure-implementation";
 const captured = (mode) => providerHistoricalCapture(`structure-${mode}`);
 const evidence = (mode) => captured(mode).evidence;
 
-test("P46 structure adds only one stylesheet; template, script and contracts remain byte-identical", () => {
+test("Archived P46 structure adds only one stylesheet; template, script and contracts remain byte-identical", () => {
   assert.equal(current.split(styleImport).length, 2);
   assert.equal(current.replace(styleImport, ""), historicalProviderStructureSource(file, current));
   for (const r of providerStructureRevisions) {
@@ -38,7 +40,7 @@ test("P46 structure adds only one stylesheet; template, script and contracts rem
   }
 });
 
-test("P46 structural CSS is gated by mounted Registry; mobile editor only, no preview/error/detail imports", () => {
+test("Archived P46 structural CSS is gated by mounted Registry; mobile editor only, no preview/error/detail imports", () => {
   const importedPalette = '@import "../design/provider-registry-tokens.css";\n\n';
   assert.ok(read(style).startsWith(importedPalette));
   const css = read(style).replace(importedPalette, ""),
@@ -74,7 +76,7 @@ test("P46 structural CSS is gated by mounted Registry; mobile editor only, no pr
   assert.doesNotMatch(css, /--so-(?:primary|bg|panel|text|success|warning|danger):/);
 });
 
-test("P46 original before and implemented entry captures bind historical raw sources and PNG inventory", () => {
+test("Archived P46 original before and implemented entry captures bind historical raw sources and PNG inventory", () => {
   for (const mode of ["baseline", "current"]) {
     const e = evidence(mode),
       dir = folder + "/" + mode;
@@ -113,7 +115,7 @@ test("P46 original before and implemented entry captures bind historical raw sou
   }
 });
 
-test("P46 removes original overflow without hiding historical failures; current keyboard and theme gates pass", () => {
+test("Archived P46 removes original overflow without hiding historical failures; current keyboard and theme gates pass", () => {
   const a = evidence("baseline"),
     b = evidence("current");
   const overflow = a.observations.filter(
@@ -149,7 +151,7 @@ test("P46 removes original overflow without hiding historical failures; current 
   );
 });
 
-test("P46 loaded stylesheet stops matching P47; original palette, layout and screenshots restore", () => {
+test("Archived P46 loaded stylesheet stops matching P47; original palette, layout and screenshots restore", () => {
   const a = evidence("baseline"),
     b = evidence("current");
   // Closed/offscreen SVGs can retain deferred computed values; compare painted SVGs here.

@@ -1,3 +1,8 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readEvidenceSourceBytes } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
@@ -20,17 +25,17 @@ import {
   validatePlatformReview,
 } from "../../scripts/build-ui-phase2-platform-overview-review.mjs";
 
-const inputs = readPlatformReviewInputs();
+const inputs = readPlatformReviewInputs(readPreSelectionRebuild);
 const build = () => buildPlatformReview(inputs);
 const context = {
   candidates: sourceFiles.flatMap((f) => scanSource(inputs.sources[f], f).candidates),
   sourceHashes: build().sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages: inputs.packages,
   files: new Set(["scripts/verify-ui-phase2-platform-overview-c.mjs"]),
 };
 
-test("P38 exact30 sites map to19 interactions and one dialog definition without approval", () => {
+test("Archived P38 exact30 sites map to19 interactions and one dialog definition without approval", () => {
   const result = validateActionReview(build(), context);
   assert.equal(result.sourceSites, 30);
   assert.equal(result.semanticGroups, 20);
@@ -67,7 +72,7 @@ test("P38 exact30 sites map to19 interactions and one dialog definition without 
   assert.throws(() => validateActionReview(duplicate, context), /mapped twice/);
 });
 
-test("P38 density is retained as a model even though scanner has no explicit event candidate", () => {
+test("Archived P38 density is retained as a model even though scanner has no explicit event candidate", () => {
   assert.deepEqual(validateReviewSurfaces(build().surfaceReview, inputs), {
     callerFiles: 4,
     localModelBindings: 2,
@@ -92,7 +97,7 @@ test("P38 density is retained as a model even though scanner has no explicit eve
   assert.throws(() => validateReviewSurfaces(extra.surfaceReview, inputs), /container omissions/);
 });
 
-test("P38 shared preview definition forwards only to explicit local interactions", () => {
+test("Archived P38 shared preview definition forwards only to explicit local interactions", () => {
   const action = build().actions.find((a) => a.kind === "wiring");
   assert.deepEqual(action.forwardsTo, ["PA38-PREVIEW-OPEN", "PA38-PREVIEW-CLOSE"]);
   assert.deepEqual(action.forwardBindings, []);
@@ -109,7 +114,7 @@ test("P38 shared preview definition forwards only to explicit local interactions
   );
 });
 
-test("P38 real surfaceProps forwards only API base and unchanged capabilities array", () => {
+test("Archived P38 real surfaceProps forwards only API base and unchanged capabilities array", () => {
   const box = { exports: {} };
   vm.runInNewContext(
     ts.transpileModule(inputs.sources[parentFiles[1]], {
@@ -138,7 +143,7 @@ test("P38 real surfaceProps forwards only API base and unchanged capabilities ar
   }
 });
 
-test("P38 source wiring rejects wrong dispatcher, capabilities, component props or route surface", () => {
+test("Archived P38 source wiring rejects wrong dispatcher, capabilities, component props or route surface", () => {
   assert.deepEqual(validatePlatformReview(build(), inputs), {
     sourceSites: 30,
     semanticGroups: 20,
@@ -173,7 +178,7 @@ test("P38 source wiring rejects wrong dispatcher, capabilities, component props 
   }
 });
 
-test("P38 eight actual entry compositions bind exact pixels and52 fixture router clicks, not RBAC", () => {
+test("Archived P38 eight actual entry compositions bind exact pixels and52 fixture router clicks, not RBAC", () => {
   validatePlatformReview(build(), inputs);
   assert.equal(build().actualEntryEvidence.sourceCandidateIds.length, 13);
   assert.equal(new Set(build().actualEntryEvidence.sourceCandidateIds).size, 13);
@@ -200,7 +205,7 @@ test("P38 eight actual entry compositions bind exact pixels and52 fixture router
   assert.ok(inputs.evidence.navigation.every((n) => n.scope.includes("router-destination-only")));
 });
 
-test("P38 source hash and semantic edits cannot silently pass registry validation", () => {
+test("Archived P38 source hash and semantic edits cannot silently pass registry validation", () => {
   const changed = build();
   changed.actions[0].handler = "unreviewed mutation";
   assert.throws(() => validatePlatformReview(changed, inputs), /registry drift/);

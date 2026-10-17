@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createHash } from "node:crypto";
@@ -10,10 +14,7 @@ import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 const base = "design-plans/ui-phase-2-2026-09-07";
 const review = JSON.parse(readFileSync(`${base}/action-reviews/P46.json`, "utf8"));
 const sources = Object.fromEntries(
-  Object.keys(review.sourceHashes).map((file) => [
-    file,
-    readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
-  ]),
+  Object.keys(review.sourceHashes).map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const sourceHashes = Object.fromEntries(
   Object.entries(sources).map(([file, source]) => [
@@ -36,12 +37,12 @@ const files = new Set(
 const context = {
   candidates,
   sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages,
   files,
 };
 
-test("P46 maps current provider-registry source candidates and keeps action approval pending", () => {
+test("P46 archived maps current provider-registry source candidates and keeps action approval pending", () => {
   const result = validateActionReview(review, context);
   assert.equal(result.sourceSites, 38);
   assert.equal(
@@ -65,7 +66,7 @@ test("P46 maps current provider-registry source candidates and keeps action appr
   );
 });
 
-test("P46 retains listed modal and shared-control scope without claiming runtime acceptance", () => {
+test("P46 archived retains listed modal and shared-control scope without claiming runtime acceptance", () => {
   const surface = validateReviewSurfaces(review.surfaceReview, { sources, packages });
   assert.equal(surface.runtimeAcceptance, "unproven");
   assert.equal(review.dialogs.kind, "local-callers-and-listed-shared-only");

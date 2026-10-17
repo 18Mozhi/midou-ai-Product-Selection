@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -15,7 +17,7 @@ import {
   historicalAdapterCSource,
 } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) => readPreSelectionRebuild(file).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const file = "apps/web/src/components/ProviderAdapterCenter.vue";
 const currentSource = read(file);
@@ -56,7 +58,7 @@ function contract(text) {
   return { actions: actions.sort(), models: models.sort(), conditions: conditions.sort(), facts };
 }
 
-test("P47 C preserves prior runtime outside the independently verified empty-focus repair", () => {
+test("Archived P47 C preserves prior runtime outside the independently verified empty-focus repair", () => {
   for (const revision of adapterCRevisions) {
     const raw = read(revision.file);
     const current =
@@ -98,7 +100,7 @@ test("P47 C preserves prior runtime outside the independently verified empty-foc
   assert.equal(definitions(read(e2eFile)), definitions(capturedE2eSource));
 });
 
-test("P47 C template retains original actions, all six models, conditions and displayed facts", () => {
+test("Archived P47 C template retains original actions, all six models, conditions and displayed facts", () => {
   const old = contract(baseline),
     current = contract(source);
   assert.deepEqual(current.actions, old.actions);
@@ -119,7 +121,7 @@ test("P47 C template retains original actions, all six models, conditions and di
   assert.ok(!source.includes("Preview"));
 });
 
-test("P47 historical C styles preserve their captured composition separately from the current workspace", () => {
+test("Archived P47 historical C styles preserve their captured composition separately from the current workspace", () => {
   const palette = postcss.parse(
     beforePublishedPresentation(
       "apps/web/src/design/provider-adapter-tokens.css",
@@ -225,7 +227,7 @@ test("P47 historical C styles preserve their captured composition separately fro
   }
 });
 
-test("P47 C pre-refresh browser pack binds original captured runtime and all20 images without preview injection", () => {
+test("Archived P47 C pre-refresh browser pack binds original captured runtime and all20 images without preview injection", () => {
   const e = evidence();
   assert.equal(
     hash(read(`${root}/evidence.json`)),
@@ -278,7 +280,7 @@ test("P47 C pre-refresh browser pack binds original captured runtime and all20 i
   }
 });
 
-test("P47 C runtime keeps initial read/explicit recovery, cache locks, focus and neighboring style isolation", () => {
+test("Archived P47 C runtime keeps initial read/explicit recovery, cache locks, focus and neighboring style isolation", () => {
   for (const run of evidence().runs) {
     const value = (name) => {
       const matches = run.checks.filter((check) => check.name === name);

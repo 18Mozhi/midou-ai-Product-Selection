@@ -1,10 +1,12 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 
 const file = "tests/e2e/m06-01-organization-admin.spec.ts";
-const source = readFileSync(file, "utf8");
+const source = readPreSelectionRebuild(file);
 const before = "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef";
 const after = "5e04bf6dab3ab40677e0baeeb2af069809d72b99172126cc5cfd9107d59708ea";
 

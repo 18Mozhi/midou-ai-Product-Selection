@@ -23,7 +23,8 @@ test("P40 keeps organization-specific filtering and record actions", () => {
 });
 
 test("P40 emphasizes the organization query and results workbench", () => {
-  assert.match(styles, /\.account-center--organization-review \.account-filter/);
-  assert.match(styles, /border-top: 3px solid var\(--account-review-blue\)/);
-  assert.match(styles, /\.account-center--organization-review \.account-table-wrap/);
+  assert.match(styles, /\.account-center \.account-filter/);
+  assert.match(styles, /background: var\(--so-panel\)/);
+  assert.match(styles, /\.account-center \.account-table-wrap/);
+  assert.doesNotMatch(styles, /--account-review-/);
 });

@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import { providerHistoricalCapture } from "../../scripts/lib/ui-phase2-provider-historical-capture.mjs";
 import test from "node:test";
@@ -18,7 +20,7 @@ import {
 const read = (file) =>
   historicalProviderKeyboardSource(
     file,
-    historicalAdapterCSource(file, readFileSync(file, "utf8")),
+    historicalAdapterCSource(file, readPreSelectionRebuild(file)),
   );
 const hash = (data) => createHash("sha256").update(data).digest("hex");
 const file = "apps/web/src/components/ProviderRegistry.vue";
@@ -29,7 +31,7 @@ const folder = "output/playwright/p46-provider-feedback-implementation";
 const captured = (mode) => providerHistoricalCapture(`feedback-${mode}`);
 const evidence = (mode) => captured(mode).evidence;
 
-test("P46 approved feedback changes no script, event, model, text or business rule", () => {
+test("Archived P46 approved feedback changes no script, event, model, text or business rule", () => {
   const feedbackCurrent = captured("current").source(file),
     feedbackBefore = historicalProviderFeedbackSource(file, feedbackCurrent),
     a = parse(feedbackCurrent).descriptor,
@@ -62,7 +64,7 @@ test("P46 approved feedback changes no script, event, model, text or business ru
   );
 });
 
-test("P46 CSS is limited to approved mobile attributes, no preview layout or focus override", () => {
+test("Archived P46 CSS is limited to approved mobile attributes, no preview layout or focus override", () => {
   const importedPalette = '@import "../design/provider-registry-tokens.css";\n\n';
   assert.ok(read(style).startsWith(importedPalette));
   const values = new Map(
@@ -91,7 +93,7 @@ test("P46 CSS is limited to approved mobile attributes, no preview layout or foc
     assert.ok(css.includes(value));
 });
 
-test("P46 feedback history and two user-approved PNGs remain exact, unknown drift fails closed", () => {
+test("Archived P46 feedback history and two user-approved PNGs remain exact, unknown drift fails closed", () => {
   for (const r of providerFeedbackRevisions) {
     const s = captured("current").source(r.file);
     assert.equal(hash(s), r.after);
@@ -117,7 +119,7 @@ test("P46 feedback history and two user-approved PNGs remain exact, unknown drif
     );
 });
 
-test("P46 original feedback80 Vue pictures bind captured sources, baseline, network and closed processes", () => {
+test("Archived P46 original feedback80 Vue pictures bind captured sources, baseline, network and closed processes", () => {
   for (const mode of ["baseline", "current"]) {
     const e = evidence(mode),
       dir = folder + "/" + mode;
@@ -155,7 +157,7 @@ test("P46 original feedback80 Vue pictures bind captured sources, baseline, netw
   assert.ok(requests.filter((r) => r.method !== "GET").every((r) => r.idempotencyPresent));
 });
 
-test("P46 mobile feedback appearances match review reference; desktop and other states keep computed styling", () => {
+test("Archived P46 mobile feedback appearances match review reference; desktop and other states keep computed styling", () => {
   const b = evidence("baseline"),
     c = evidence("current");
   const same = (a, z) =>
@@ -197,7 +199,7 @@ test("P46 mobile feedback appearances match review reference; desktop and other 
   }
 });
 
-test("P46 unaffected screenshots stay pixel-identical apart from three measured raster-edge deltas", () => {
+test("Archived P46 unaffected screenshots stay pixel-identical apart from three measured raster-edge deltas", () => {
   const require = createRequire(import.meta.url);
   const { PNG } = require(
     path.join(path.dirname(require.resolve("playwright-core/package.json")), "lib/utilsBundle.js"),

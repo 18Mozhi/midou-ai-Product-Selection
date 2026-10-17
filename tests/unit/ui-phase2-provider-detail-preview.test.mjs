@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -9,7 +11,7 @@ import { historicalProviderFocusSource } from "../../scripts/lib/ui-phase2-provi
 import { assertP46CapturedSources } from "./ui-phase2-p46-capture-source.mjs";
 
 const read = (f) =>
-  historicalProviderFocusSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
+  historicalProviderFocusSource(f, historicalAdapterCSource(f, readPreSelectionRebuild(f)));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p46-provider-detail-vue-preview";
 const source = "apps/web/src/components/ProviderRegistry.vue";
@@ -27,7 +29,7 @@ const variants = [
   "long",
 ];
 
-test("P46 historical detail slot and script keep their original Vue association", () => {
+test("Archived P46 historical detail slot and script keep their original Vue association", () => {
   const original = read(source),
     transformed = providerPagePreview(original);
   const slot = (s) => s.match(/<template #detail="[^"]*">[\s\S]*?<\/template>/g);
@@ -40,7 +42,7 @@ test("P46 historical detail slot and script keep their original Vue association"
   assert.ok(evidence().sourceHashes["apps/web/src/components/ResponsiveDataView.vue"]);
 });
 
-test("P46 detail historical source and exact68 image inventory are pinned", () => {
+test("Archived P46 detail historical source and exact68 image inventory are pinned", () => {
   const e = evidence();
   assert.equal(e.kind, "P46-PROVIDER-DETAIL-VUE-PREVIEW-r1");
   assert.equal(e.approval, "pending-user-review");
@@ -66,7 +68,7 @@ test("P46 detail historical source and exact68 image inventory are pinned", () =
   }
 });
 
-test("P46 detail10 supplied variants preserve9+5 facts and limited focus checks with no writes", () => {
+test("Archived P46 detail10 supplied variants preserve9+5 facts and limited focus checks with no writes", () => {
   const e = evidence(),
     requests = e.observations.filter((o) => o.requests);
   assert.deepEqual(
@@ -132,7 +134,7 @@ test("P46 detail10 supplied variants preserve9+5 facts and limited focus checks 
   }
 });
 
-test("P46 historical detail CSS is isolated and BODY focus evidence is not rewritten", () => {
+test("Archived P46 historical detail CSS is isolated and BODY focus evidence is not rewritten", () => {
   assert.doesNotMatch(read("apps/web/src/main.ts"), /provider-detail-preview/);
   assert.match(
     read("design-plans/ui-phase-2-2026-09-07/implementation/provider-detail-preview.css"),

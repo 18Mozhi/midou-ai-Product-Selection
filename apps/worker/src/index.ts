@@ -9,7 +9,7 @@ import {
 } from "@scoutops/provider-sources";
 import { createRedisConnection, ScopedRedisStore } from "@scoutops/redis";
 import { MySqlAiAnalysisWorker, OpenAiCompatibleAnalysisAdapter } from "./ai-analysis-worker.js";
-import { OpenAiIntelligenceProductClassifier } from "./intelligence-product-association.js";
+import { createIntelligenceProductClassifier } from "./intelligence-product-association.js";
 import { MySqlCompetitorTitleClassification } from "./competitor-title-classification.js";
 import { ApprovalEscalationWorker } from "./approval-escalation-worker.js";
 import {
@@ -85,10 +85,8 @@ const executor = new ProviderSourceExecutor(
   ),
   new MySqlCompetitorTitleClassification(
     pool,
-    new OpenAiIntelligenceProductClassifier(
-      config.ai.model,
-      config.ai.baseUrl,
-      config.ai.apiKey,
+    createIntelligenceProductClassifier(
+      config.ai,
       Math.min(config.ai.timeoutMs, config.collectionTasks.leaseSeconds * 500, 60_000),
     ),
     config.identity.workerId,
@@ -99,12 +97,7 @@ const trendProjection = new MySqlTrendProjectionWorker(
   config.identity.workerId,
   Math.max(config.trends.projectionLeaseSeconds, Math.ceil(config.ai.timeoutMs / 1000) + 30),
   () => new Date(),
-  new OpenAiIntelligenceProductClassifier(
-    config.ai.model,
-    config.ai.baseUrl,
-    config.ai.apiKey,
-    config.ai.timeoutMs,
-  ),
+  createIntelligenceProductClassifier(config.ai, config.ai.timeoutMs),
   config.competitorMonitor.refreshIntervalSeconds,
   config.automaticSources.queueBacklogLimit,
 );
@@ -202,10 +195,8 @@ const automaticSelectionEvaluation = new MySqlAutomaticSelectionEvaluationWorker
   config.automaticSources.systemActorId,
   config.automaticSelection.leaseSeconds,
   undefined,
-  new OpenAiIntelligenceProductClassifier(
-    config.ai.model,
-    config.ai.baseUrl,
-    config.ai.apiKey,
+  createIntelligenceProductClassifier(
+    config.ai,
     Math.min(config.ai.timeoutMs, config.automaticSelection.leaseSeconds * 500),
   ),
 );

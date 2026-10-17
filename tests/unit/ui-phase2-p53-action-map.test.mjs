@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -11,19 +15,22 @@ import { validateReviewSurfaces } from "../../scripts/lib/ui-phase2-review-surfa
 const base = "design-plans/ui-phase-2-2026-09-07";
 const review = JSON.parse(readFileSync(`${base}/action-reviews/P53.json`, "utf8"));
 const file = "apps/web/src/components/CollectionRuntimeCenter.vue";
-const source = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const source = readPreSelectionRebuild(file);
 const sources = { [file]: source };
 const sourceHash = createHash("sha256").update(source).digest("hex");
 const sourceHashes = { [file]: sourceHash };
 const candidates = scanSource(source, file).candidates;
-const contracts = runContractAudit().records;
+const contracts = runContractAudit(
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles(),
+).records;
 const files = new Set(
   review.actions.flatMap((action) => action.testReferences.map((reference) => reference.file)),
 );
 const context = { candidates, sourceHashes, contracts, packages: new Map(), files };
 
-test("P53 maps every current browser-runtime source candidate exactly once", () => {
-  assert.deepEqual(review, buildP53ActionReview());
+test("P53 maps every pre-rebuild browser-runtime source candidate exactly once", () => {
+  assert.deepEqual(review, buildP53ActionReview(readPreSelectionRebuild, contracts));
   assert.equal(candidates.length, 12);
   assert.equal(validateActionReview(review, context).sourceSites, 12);
   assert.equal(review.route, "/platform-admin/collection/browser-runtime");

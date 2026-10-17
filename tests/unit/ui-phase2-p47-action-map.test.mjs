@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createHash } from "node:crypto";
@@ -10,10 +14,7 @@ import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 const base = "design-plans/ui-phase-2-2026-09-07";
 const review = JSON.parse(readFileSync(`${base}/action-reviews/P47.json`, "utf8"));
 const sources = Object.fromEntries(
-  Object.keys(review.sourceHashes).map((file) => [
-    file,
-    readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
-  ]),
+  Object.keys(review.sourceHashes).map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const sourceHashes = Object.fromEntries(
   Object.entries(sources).map(([file, source]) => [
@@ -30,7 +31,7 @@ const files = new Set(
 const context = {
   candidates,
   sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages: new Map([
     [
       "provider-adapters-direction-c",
@@ -42,7 +43,7 @@ const context = {
   files,
 };
 
-test("P47 maps current page and listed shared candidates without approving actions", () => {
+test("P47 archived maps current page and listed shared candidates without approving actions", () => {
   const result = validateActionReview(review, context);
   assert.equal(result.sourceSites, 33);
   assert.equal(review.route, "/platform-admin/providers/adapters");
@@ -62,7 +63,7 @@ test("P47 maps current page and listed shared candidates without approving actio
   assert.match(review.actions.find((action) => action.actionId === "PR47-PROBE").handler, /POST/u);
 });
 
-test("P47 keeps external probe and runtime acceptance boundaries explicit", () => {
+test("P47 archived keeps external probe and runtime acceptance boundaries explicit", () => {
   assert.match(review.compositionGaps.join(" "), /同标签页在途锁/u);
   assert.match(review.compositionGaps.join(" "), /真实RBAC/u);
   assert.match(review.compositionGaps.join(" "), /M07-03生产验收/u);

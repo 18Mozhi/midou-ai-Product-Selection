@@ -211,11 +211,11 @@ const definitions = [
     ["copy_success", "copy_failed"],
   ],
 ];
-export function readPlatformReviewInputs() {
+export function readPlatformReviewInputs(readSource = read) {
   return {
-    sources: Object.fromEntries([...sourceFiles, ...parentFiles].map((f) => [f, read(f)])),
-    evidence: JSON.parse(read(evidenceFile)),
-    packages: new Map([[pkg, JSON.parse(read(`${base}/design/${pkg}/evidence.json`))]]),
+    sources: Object.fromEntries([...sourceFiles, ...parentFiles].map((f) => [f, readSource(f)])),
+    evidence: JSON.parse(readSource(evidenceFile)),
+    packages: new Map([[pkg, JSON.parse(readSource(`${base}/design/${pkg}/evidence.json`))]]),
   };
 }
 export function buildPlatformReview(inputs) {

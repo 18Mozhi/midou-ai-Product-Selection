@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import {
   historicalAdminResultsSource,
@@ -27,7 +29,7 @@ import {
   readCaptureSourceRevision,
 } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 const read = (f) =>
-  historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
+  historicalAdminResultsSource(f, readPreSelectionRebuild(f).replaceAll("\r\n", "\n"));
 const evidence = (mode) =>
   JSON.parse(read(`output/playwright/p42-write-ownership-r2/${mode}/evidence.json`));
 test("current and baseline Vue runs retain exact source and PNG fingerprints without relabeling old defects", () => {

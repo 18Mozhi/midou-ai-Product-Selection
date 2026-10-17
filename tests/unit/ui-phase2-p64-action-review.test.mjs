@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -15,7 +19,7 @@ const sourceFiles = [
   "apps/web/src/components/BackupRecoveryDirectory.vue",
 ];
 const sources = Object.fromEntries(
-  sourceFiles.map((file) => [file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")]),
+  sourceFiles.map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const sourceHashes = Object.fromEntries(
   Object.entries(sources).map(([file, source]) => [
@@ -26,19 +30,34 @@ const sourceHashes = Object.fromEntries(
 const candidates = Object.entries(sources).flatMap(
   ([file, source]) => scanSource(source, file).candidates,
 );
-const contracts = runContractAudit().records;
+const contracts = runContractAudit(
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles(),
+).records;
 const files = new Set(
   review.actions.flatMap((action) => action.testReferences.map((ref) => ref.file)),
 );
 const context = { candidates, sourceHashes, contracts, packages: new Map(), files };
 
-test("P64 maps all ten current page-owned candidates exactly once", () => {
-  assert.deepEqual(review, buildP64ActionReview());
+test("P64 maps all ten pre-rebuild page-owned candidates exactly once", () => {
+  assert.deepEqual(review, buildP64ActionReview(readPreSelectionRebuild, contracts));
   assert.equal(candidates.length, 10);
   assert.equal(validateActionReview(review, context).sourceSites, 10);
   assert.equal(review.route, "/platform-admin/operations");
   assert.equal(review.visualApproval, "user-approved-remaining-pages-auto");
   assert.equal(review.actionApproval, "pending-user-review");
+});
+
+test("P64 current review builder cannot silently borrow the archived approval input", () => {
+  const actual = readFileSync(sourceFiles[0], "utf8").replaceAll("\r\n", "\n");
+  assert.notEqual(createHash("sha256").update(actual).digest("hex"), sourceHashes[sourceFiles[0]]);
+  const current = buildP64ActionReview();
+  assert.equal(
+    current.sourceHashes[sourceFiles[0]],
+    createHash("sha256").update(actual).digest("hex"),
+  );
+  assert.notDeepEqual(current.sourceHashes, review.sourceHashes);
+  assert.equal(current.actionApproval, "pending-user-review");
 });
 
 test("P64 keeps refresh, login and page-local disclosures within read-only contracts", () => {

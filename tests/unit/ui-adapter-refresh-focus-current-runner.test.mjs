@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -45,14 +46,14 @@ test("current refresh-focus runner retains every interaction, request assertion 
   );
 });
 
-test("current refresh-focus runner validates actual mobile lineage without modifying render source", () => {
+test("refresh-focus runner validates archived pre-rebuild mobile lineage without modifying render source", () => {
   const runner = buildAdapterRefreshFocusCurrentRunner(source);
   assert.ok(
     runner.includes(
       "beforeAdapterRefreshFocus(beforeAdapterEmptyMobile(beforeAdapterPaginationFocus(beforeAdapterTableTools(beforeAdapterReadError(source)))))",
     ),
   );
-  const actual = readFileSync("apps/web/src/components/ProviderAdapterCenter.vue", "utf8");
+  const actual = readPreSelectionRebuild("apps/web/src/components/ProviderAdapterCenter.vue");
   const previous = beforeAdapterPaginationFocus(
     beforeAdapterTableTools(beforeAdapterReadError(actual)),
   );

@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -10,7 +12,7 @@ import {
   filterResetRevision,
   historicalFilterResetSource,
 } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) => readPreSelectionRebuild(f).replaceAll("\r\n", "\n");
 const capturedRevision = "01af02620bdbb751cc846e6a02081d4a0b735784";
 const captured = (f, revision = capturedRevision) =>
   execFileSync("git", ["show", `${revision}:${f}`], { encoding: "utf8" }).replaceAll("\r\n", "\n");

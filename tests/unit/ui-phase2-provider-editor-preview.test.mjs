@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -9,13 +11,13 @@ import { historicalProviderFocusSource } from "../../scripts/lib/ui-phase2-provi
 import { assertP46CapturedSources } from "./ui-phase2-p46-capture-source.mjs";
 
 const read = (f) =>
-  historicalProviderFocusSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
+  historicalProviderFocusSource(f, historicalAdapterCSource(f, readPreSelectionRebuild(f)));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p46-provider-editor-vue-preview";
 const source = "apps/web/src/components/ProviderRegistry.vue";
 const evidence = () => JSON.parse(read(folder + "/evidence.json"));
 
-test("P46 historical editor template, all23 field models and script keep exact associations", () => {
+test("Archived P46 historical editor template, all23 field models and script keep exact associations", () => {
   const original = read(source),
     transformed = providerPagePreview(original);
   const marker = '    <div\n      v-if="editorOpen"';
@@ -38,7 +40,7 @@ test("P46 historical editor template, all23 field models and script keep exact a
   );
 });
 
-test("P46 editor historical source and134 image inventory remain pinned", () => {
+test("Archived P46 editor historical source and134 image inventory remain pinned", () => {
   const e = evidence();
   assert.equal(e.kind, "P46-PROVIDER-EDITOR-VUE-PREVIEW-r1");
   assert.equal(e.approval, "pending-user-review");
@@ -64,7 +66,7 @@ test("P46 editor historical source and134 image inventory remain pinned", () => 
   }
 });
 
-test("P46 actual fields, errors, templates and rejected requests preserve known runtime edges", () => {
+test("Archived P46 actual fields, errors, templates and rejected requests preserve known runtime edges", () => {
   const e = evidence();
   assert.deepEqual(
     e.observations.map((o) => o.width),
@@ -119,7 +121,7 @@ test("P46 actual fields, errors, templates and rejected requests preserve known 
   }
 });
 
-test("P46 editor CSS stays review-only and production/lifecycle acceptance is not implied", () => {
+test("Archived P46 editor CSS stays review-only and production/lifecycle acceptance is not implied", () => {
   assert.doesNotMatch(read("apps/web/src/main.ts"), /provider-editor-preview/);
   const css = read("design-plans/ui-phase-2-2026-09-07/implementation/provider-editor-preview.css");
   assert.match(css, /body\.p46-editor-review/);

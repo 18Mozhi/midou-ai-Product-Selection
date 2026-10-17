@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -15,11 +17,11 @@ const preview =
   "design-plans/ui-phase-2-2026-09-07/implementation/provider-desktop-editor-preview.css";
 const registry = "apps/web/src/components/ProviderRegistry.vue";
 const read = (f) =>
-  historicalProviderSummarySource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
+  historicalProviderSummarySource(f, historicalAdapterCSource(f, readPreSelectionRebuild(f)));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const evidence = (mode) => JSON.parse(read(`${root}/${mode}/evidence.json`));
 
-test("P46 desktop review has no production import and every CSS rule is desktop and editor scoped", () => {
+test("Archived P46 desktop review has no production import and every CSS rule is desktop and editor scoped", () => {
   assert.equal(
     hash(read(registry)),
     "b217ac9898675371d6a6b0406a2574784a7321fac93c233347299991289b0f8e",
@@ -43,7 +45,7 @@ test("P46 desktop review has no production import and every CSS rule is desktop 
   }
 });
 
-test("P46 actual route evidence binds current raw source, all fields and every formal image", () => {
+test("Archived P46 actual route evidence binds current raw source, all fields and every formal image", () => {
   for (const mode of ["baseline", "current"]) {
     const e = evidence(mode),
       dir = `${root}/${mode}`;
@@ -74,7 +76,7 @@ test("P46 actual route evidence binds current raw source, all fields and every f
   }
 });
 
-test("P46 visual review preserves field behavior, read-only fixtures and mobile screenshots", () => {
+test("Archived P46 visual review preserves field behavior, read-only fixtures and mobile screenshots", () => {
   const a = evidence("baseline"),
     b = evidence("current");
   assert.deepEqual(a.observations, b.observations);

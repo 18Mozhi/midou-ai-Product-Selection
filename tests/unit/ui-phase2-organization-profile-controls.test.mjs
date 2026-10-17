@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import test from "node:test";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
@@ -10,18 +12,18 @@ import { buildOrganizationProfileDesignData } from "../../scripts/lib/ui-phase2-
 const base = "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c";
 const evidence = JSON.parse(readFileSync(`${base}/evidence.json`, "utf8"));
 const sourceFile = "apps/web/src/components/OrganizationAdminCenter.vue";
-const source = readFileSync(sourceFile, "utf8").replaceAll("\r\n", "\n");
+const source = readPreSelectionRebuild(sourceFile).replaceAll("\r\n", "\n");
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 
-test("P29 controls stay linked to current source and exact parent data/controller", () => {
+test("Archived P29 controls stay linked to current source and exact parent data/controller", () => {
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assertCaptureSource(file, readFileSync(file, "utf8"), expected);
+    assertCaptureSource(file, readPreSelectionRebuild(file), expected);
   const html = readFileSync(`${base}/index.html`, "utf8");
   for (const file of ["data.js", "profile.js", "profile.css"])
     assert.ok(html.includes(`../organization-profile-direction-c/${file}`));
   assert.equal(evidence.scope, "offline-proposal-not-runtime-or-user-accepted");
 });
-test("P29 records 162 states plus eight feedback contexts at both widths", () => {
+test("Archived P29 records 162 states plus eight feedback contexts at both widths", () => {
   assert.equal(evidence.screenshots.length, 170);
   assert.equal(evidence.checks.length, 162);
   assert.equal(evidence.interactions.length, 38);
@@ -43,7 +45,7 @@ test("P29 records 162 states plus eight feedback contexts at both widths", () =>
       );
   }
 });
-test("P29 business source controls remain three actions, not 22 invented actions", () => {
+test("Archived P29 business source controls remain three actions, not 22 invented actions", () => {
   const refs = Object.values(evidence.controlReferences);
   const business = refs.filter((r) => r.scope === "source-action-representative-or-variant");
   assert.deepEqual([...new Set(business.map((r) => r.actionId))].sort(), [
@@ -70,7 +72,7 @@ test("P29 business source controls remain three actions, not 22 invented actions
   assert.match(source, /@invalid="validateHttps"/);
   assert.match(source, /@input="clearFieldValidity"/);
 });
-test("P29 retry does not invent disabled states or a login bypass", () => {
+test("Archived P29 retry does not invent disabled states or a login bypass", () => {
   const retries = Object.values(evidence.controlReferences).filter(
     (r) => r.actionId === "OG-RETRY",
   );
@@ -81,7 +83,7 @@ test("P29 retry does not invent disabled states or a login bypass", () => {
   assert.ok(retries.some((r) => r.sourceScene === "forbidden"));
   assert.ok(retries.some((r) => r.sourceScene === "expired"));
 });
-test("P29 navigation selection, disclosure and unresolved-save protection are proposals", () => {
+test("Archived P29 navigation selection, disclosure and unresolved-save protection are proposals", () => {
   const refs = Object.values(evidence.controlReferences);
   assert.equal(refs.filter((r) => r.actionId === "PROPOSAL-NAV").length, 6);
   assert.equal(refs.filter((r) => r.actionId === "PROPOSAL-TECH").length, 3);
@@ -96,7 +98,7 @@ test("P29 navigation selection, disclosure and unresolved-save protection are pr
   assert.ok(evidence.controlReferences.save.states.pending);
   assert.ok(evidence.controlReferences.refresh.states.pending);
 });
-test("P29 reuses source-function and validator checks without claiming real transactions", async () => {
+test("Archived P29 reuses source-function and validator checks without claiming real transactions", async () => {
   const data = await buildOrganizationProfileDesignData(path.resolve("."));
   assert.equal(data.sourceChecks.length, 6);
   assert.ok(data.sourceChecks.some((v) => v.includes("write/read IDs")));

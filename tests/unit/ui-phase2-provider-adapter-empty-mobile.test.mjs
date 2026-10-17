@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
@@ -12,12 +14,12 @@ import {
   p47PaletteRevisions,
 } from "../../scripts/lib/ui-phase2-adapter-historical-source.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) => readPreSelectionRebuild(file).replaceAll("\r\n", "\n");
 const file = "apps/web/src/components/ProviderAdapterCenter.vue";
 const stylesheet = "apps/web/src/provider-adapters-empty-mobile.css";
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 
-test("P47 approved mobile empty implementation preserves prior runtime outside exact pagination changes", () => {
+test("Archived P47 approved mobile empty implementation preserves prior runtime outside exact pagination changes", () => {
   const raw = read(file),
     source = beforeAdapterPaginationFocus(beforeAdapterP47ReadAndTableTools(raw)),
     before = beforeAdapterEmptyMobile(source),
@@ -65,7 +67,7 @@ test("P47 approved mobile empty implementation preserves prior runtime outside e
   assert.equal(read(file), raw);
 });
 
-test("P47 pre-pagination mobile capture binds exact sources and original mobile/wide/neighbor comparisons", () => {
+test("Archived P47 pre-pagination mobile capture binds exact sources and original mobile/wide/neighbor comparisons", () => {
   const root = "output/playwright/p47-empty-mobile-implementation",
     e = JSON.parse(read(`${root}/evidence.json`));
   assert.equal(
@@ -151,7 +153,7 @@ test("P47 pre-pagination mobile capture binds exact sources and original mobile/
   }
 });
 
-test("P47 empty CSS is mobile-scoped and reproduces the exact approved five rule declaration sets", () => {
+test("Archived P47 empty CSS is mobile-scoped and reproduces the exact approved five rule declaration sets", () => {
   const css = postcss.parse(read(stylesheet));
   assert.equal(css.nodes.filter((n) => n.type === "atrule").length, 2);
   assert.equal(

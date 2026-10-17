@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -7,7 +9,7 @@ import ts from "typescript";
 import postcss from "postcss";
 import { parse } from "@vue/compiler-sfc";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) => readPreSelectionRebuild(file).replaceAll("\r\n", "\n");
 const file = "apps/web/src/components/ProviderAdapterCenter.vue";
 const source = read(file);
 const { descriptor } = parse(source);
@@ -28,7 +30,7 @@ function handler(name, box) {
   return box.run;
 }
 
-test("P47 reviewed interaction states preserve provider APIs and the production focus wrappers", () => {
+test("Archived P47 reviewed interaction states preserve provider APIs and the production focus wrappers", () => {
   const originalStatements = ast.statements
     .filter((node) => !ts.isFunctionDeclaration(node) || !wrappers.includes(node.name?.text))
     .map((node) => node.getText(ast))
@@ -129,7 +131,7 @@ for (const scene of ["removed-trigger", "new-focus", "detached", "disabled", "in
 const palette = postcss.parse(read("apps/web/src/design/provider-adapter-tokens.css"));
 const colors = new Map();
 palette.walkDecls((node) => colors.set(node.prop, node.value));
-test("P47 palette stays local and all four callers resolve their colors", () => {
+test("Archived P47 palette stays local and all four callers resolve their colors", () => {
   const nodes = palette.nodes.filter((node) => node.type !== "comment");
   assert.equal(nodes.length, 1);
   assert.equal(nodes[0].selector, "html:has(body #app .adapter-center--c)");

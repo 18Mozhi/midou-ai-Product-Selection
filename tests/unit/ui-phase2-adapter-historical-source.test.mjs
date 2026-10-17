@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import {
   beforePublishedPresentation,
   publishedPresentationRevisions,
@@ -20,10 +22,10 @@ import {
   beforeAdapterTableTools,
   tableToolsRevision,
 } from "../../scripts/lib/ui-phase2-adapter-table-tools-baseline.mjs";
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = (f) => readPreSelectionRebuild(f).replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 
-test("P47 read-error inverse removes only its exact approved current presentation change", () => {
+test("Archived P47 read-error inverse removes only its exact approved current presentation change", () => {
   const latest = read(files.component);
   assert.equal(hash(latest), publishedPresentationRevisions[files.component].current);
   assert.equal(
@@ -50,7 +52,7 @@ test("P47 read-error inverse removes only its exact approved current presentatio
   }
 });
 
-test("P47 table-tools history inverse removes only its exact route stylesheet import", () => {
+test("Archived P47 table-tools history inverse removes only its exact route stylesheet import", () => {
   const source = beforeAdapterReadError(read(files.component));
   assert.equal(hash(source), tableToolsRevision.current);
   const previous = beforeAdapterTableTools(source);
@@ -62,7 +64,7 @@ test("P47 table-tools history inverse removes only its exact route stylesheet im
   );
 });
 
-test("P47 archive resolver recovers only the two complete verified capture revisions", () => {
+test("Archived P47 archive resolver recovers only the two complete verified capture revisions", () => {
   const source = read(files.component);
   assert.equal(
     hash(p47HistoricalSource(files.component, source, "pre-mobile")),
@@ -75,7 +77,7 @@ test("P47 archive resolver recovers only the two complete verified capture revis
   assert.ok(source.includes("adapter-empty--approved-mobile"));
   assert.ok(source.includes("function refreshFromButton"));
 });
-test("P47 archive resolver restores the exact 37-role palette without accepting unknown colors", () => {
+test("Archived P47 archive resolver restores the exact 37-role palette without accepting unknown colors", () => {
   const source = read(files.palette);
   assert.equal(hash(source), publishedPresentationRevisions[files.palette].current);
   assert.equal(
@@ -101,7 +103,7 @@ test("P47 archive resolver restores the exact 37-role palette without accepting 
       assert.throws(() => p47HistoricalSource(files.palette, changed, stage));
   }
 });
-test("P47 archive resolver rejects runtime, focus, mobile markup drift and unknown stages", () => {
+test("Archived P47 archive resolver rejects runtime, focus, mobile markup drift and unknown stages", () => {
   const source = read(files.component);
   for (const changed of [
     source + "\n// drift",
@@ -114,7 +116,7 @@ test("P47 archive resolver rejects runtime, focus, mobile markup drift and unkno
       assert.throws(() => p47HistoricalSource(files.component, changed, stage));
   assert.throws(() => p47HistoricalSource(files.component, source, "unknown"));
 });
-test("P47 archive resolver cannot substitute unrelated source files or mutate current reads", () => {
+test("Archived P47 archive resolver cannot substitute unrelated source files or mutate current reads", () => {
   const source = read(files.component);
   assert.equal(p47HistoricalSource("unrelated.vue", source, "pre-mobile"), source);
   assert.equal(p47HistoricalSource("unrelated.css", "unknown\r\n", "pre-refresh"), "unknown\n");
@@ -122,7 +124,7 @@ test("P47 archive resolver cannot substitute unrelated source files or mutate cu
   assert.equal(read(files.component), source);
 });
 
-test("P47 historical resolution preserves pre-pagination input support and current pagination source", async () => {
+test("Archived P47 historical resolution preserves pre-pagination input support and current pagination source", async () => {
   const { beforeAdapterPaginationFocus } =
     await import("../../scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs");
   const source = read(files.component);

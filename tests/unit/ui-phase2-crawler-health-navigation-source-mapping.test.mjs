@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
@@ -9,14 +13,11 @@ const file = "apps/web/src/components/CrawlerSchedulerCenter.vue";
 const targetFile = "apps/web/src/components/ProviderAdapterCenter.vue";
 const routeCatalog = "config/route-catalog.json";
 
-test("scheduler health link is navigation-only and target query is not currently consumed", () => {
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
-    "\r\n",
-    "\n",
-  );
+test("Archived pre-rebuild scheduler health link is navigation-only and target query is not currently consumed", () => {
+  const source = readPreSelectionRebuild(file).replaceAll("\r\n", "\n");
   const target = readFileSync(new URL(`../../${targetFile}`, import.meta.url), "utf8");
   const routes = readFileSync(new URL(`../../${routeCatalog}`, import.meta.url), "utf8");
-  const audit = runContractAudit();
+  const audit = runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles());
   const candidates = scanSource(source, file).candidates;
   const [record] = audit.records.filter(
     (item) =>

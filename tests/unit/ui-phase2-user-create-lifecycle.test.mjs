@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import test from "node:test";
 import { userLifecycleReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-user-lifecycle-review-historical-capture.mjs";
@@ -13,7 +15,7 @@ import {
   userCreationRevisions,
 } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
 const read = (file) =>
-  historicalAdminResultsSource(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
+  historicalAdminResultsSource(file, readPreSelectionRebuild(file).replaceAll("\r\n", "\n"));
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 
 test("creation regression retains distinct exact baseline/current Vue sources and 64 images", () => {

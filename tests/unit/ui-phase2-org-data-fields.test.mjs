@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import test from "node:test";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
@@ -9,9 +11,9 @@ import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-cop
 const output = "output/playwright/p35-fields-review";
 const e = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
-const text = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const text = (f) => readPreSelectionRebuild(f).replaceAll("\r\n", "\n");
 
-test("P35 eight actual fields are mapped once with no new required/maxlength/error policy", () => {
+test("Archived P35 eight actual fields are mapped once with no new required/maxlength/error policy", () => {
   const child = text("apps/web/src/components/OrganizationDataPanel.vue");
   assert.deepEqual(
     e.fields.map((f) => f.model),
@@ -30,7 +32,7 @@ test("P35 eight actual fields are mapped once with no new required/maxlength/err
   }
 });
 
-test("P35 field state images cover both widths, all options, input edges and eight compositions", () => {
+test("Archived P35 field state images cover both widths, all options, input edges and eight compositions", () => {
   assert.equal(e.checks.length, 140);
   assert.equal(e.screenshots.length, 140);
   const child = text("apps/web/src/components/OrganizationDataPanel.vue");
@@ -64,7 +66,7 @@ test("P35 field state images cover both widths, all options, input edges and eig
     assert.deepEqual(c.ids, []);
 });
 
-test("P35 keyboard/reset flows and approval boundary are explicit", () => {
+test("Archived P35 keyboard/reset flows and approval boundary are explicit", () => {
   assert.equal(e.interactions.length, 8);
   for (const width of [1440, 390])
     for (const kind of ["workspace", "export"]) {
@@ -80,7 +82,7 @@ test("P35 keyboard/reset flows and approval boundary are explicit", () => {
   assert.equal(Object.hasOwn(e, "approved"), false);
 });
 
-test("P35 new source and image hashes are current and 310 previous PNGs are retained", () => {
+test("Archived P35 new source and image hashes are current and 310 previous PNGs are retained", () => {
   for (const [f, sha] of Object.entries(e.sourceHashes)) {
     if (f === "tests/e2e/m06-01-organization-admin.spec.ts") assertCaptureSource(f, text(f), sha);
     else assert.equal(capturedExportDetailHash(f, text(f)), sha, f);

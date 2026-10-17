@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -23,7 +25,7 @@ import {
 import { pageTurnHandler } from "../../scripts/lib/ui-phase2-adapter-filter-pagination-preview.mjs";
 import { beforeAdapterP47ReadAndTableTools } from "../../scripts/lib/ui-phase2-adapter-historical-source.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = (file) => readPreSelectionRebuild(file).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const source = read("apps/web/src/components/ProviderAdapterCenter.vue");
 const beforeLaterPresentation = beforeAdapterP47ReadAndTableTools(source);
@@ -160,7 +162,7 @@ for (const [state, preview, digest, count] of [
   });
 }
 
-test("P47 pagination inverse accepts only exact current/before snapshots, never unknown changes", () => {
+test("Archived P47 pagination inverse accepts only exact current/before snapshots, never unknown changes", () => {
   assert.equal(hash(previous), paginationFocusRevision.before);
   assert.equal(hash(beforeLaterPresentation), paginationFocusRevision.current);
   assert.equal(beforeAdapterPaginationFocus(previous), previous);

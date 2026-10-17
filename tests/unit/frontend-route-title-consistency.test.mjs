@@ -66,7 +66,7 @@ test("crawler scheduler menu, page heading and content heading have distinct con
     "采集调度",
   );
   assert.match(routeState, /label: "采集调度"/);
-  assert.match(page, /<h1>采集调度核验<\/h1>/);
+  assert.match(page, /<PlatformPageHeader title="采集调度核验" :heading-level="1"/);
   assert.match(page, /<h2>单机运行与租约<\/h2>/);
   assert.doesNotMatch(page, /<h1>采集调度<\/h1>/);
 });

@@ -32,7 +32,10 @@ test("P67 C Vue template compiles", () => {
 test("P67 replaces old metrics and persistence cards with named observed/target/sample workspaces", () => {
   for (const id of ["conclusion", "findings", "resources", "persistence", "policy", "sampling"])
     assert.equal(template.split(`id="p67-${id}-title"`).length, 2);
-  assert.equal((template.match(/<h1>/g) ?? []).length, 1);
+  assert.equal(
+    (template.match(/<PlatformPageHeader title="Redis 运行核验" :heading-level="1"/g) ?? []).length,
+    1,
+  );
   assert.doesNotMatch(
     template,
     /redis-resilience__metrics|redis-resilience__persistence-grid|<svg/,

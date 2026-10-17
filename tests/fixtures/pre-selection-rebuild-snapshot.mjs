@@ -20,6 +20,7 @@ function loadSnapshot() {
       preSelectionRebuildRevision,
       "--",
       "apps/web/src",
+      "tests/e2e",
       "config",
       "design-plans/ui-phase-2-2026-09-07",
     ],
@@ -30,6 +31,7 @@ function loadSnapshot() {
     .filter(
       (file) =>
         (file.startsWith("apps/web/src/") && /\.(vue|ts|css|json|js|mjs)$/.test(file)) ||
+        (file.startsWith("tests/e2e/") && file.endsWith(".ts")) ||
         file === "config/route-catalog.json" ||
         /^design-plans\/ui-phase-2-2026-09-07\/(?:[^/]+\.md|(?:baseline|actions|dialogs|source-scope-review|source-scope-revalidation)\.json|page-specs\/P\d+\.md)$/.test(
           file,

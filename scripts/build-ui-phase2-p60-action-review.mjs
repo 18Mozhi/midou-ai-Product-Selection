@@ -211,8 +211,8 @@ const definitions = [
   ],
 ];
 
-function readSource() {
-  return readFileSync(sourceFile, "utf8").replaceAll("\r\n", "\n");
+function readSource(file) {
+  return readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 }
 function contractClaim(record) {
   return record.claim
@@ -222,11 +222,11 @@ function contractClaim(record) {
     .at(-1);
 }
 
-export function buildP60ActionReview() {
-  const source = readSource();
+export function buildP60ActionReview(read = readSource, auditRecords = runContractAudit().records) {
+  const source = read(sourceFile);
   const sourceHashes = { [sourceFile]: createHash("sha256").update(source).digest("hex") };
   const candidates = scanSource(source, sourceFile).candidates;
-  const records = runContractAudit().records.filter(
+  const records = auditRecords.filter(
     (record) =>
       record.document === contract &&
       record.sourceFile === sourceFile &&

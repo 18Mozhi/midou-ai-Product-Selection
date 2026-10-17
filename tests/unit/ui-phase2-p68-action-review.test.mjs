@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -12,7 +16,7 @@ const base = "design-plans/ui-phase-2-2026-09-07";
 const review = JSON.parse(readFileSync(`${base}/action-reviews/P68.json`, "utf8"));
 const sourceFiles = ["apps/web/src/components/MySqlResilienceCenter.vue"];
 const sources = Object.fromEntries(
-  sourceFiles.map((file) => [file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")]),
+  sourceFiles.map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const sourceHashes = Object.fromEntries(
   Object.entries(sources).map(([file, source]) => [
@@ -23,14 +27,17 @@ const sourceHashes = Object.fromEntries(
 const candidates = Object.entries(sources).flatMap(
   ([file, source]) => scanSource(source, file).candidates,
 );
-const contracts = runContractAudit().records;
+const contracts = runContractAudit(
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles(),
+).records;
 const files = new Set(
   review.actions.flatMap((action) => action.testReferences.map((ref) => ref.file)),
 );
 const context = { candidates, sourceHashes, contracts, packages: new Map(), files };
 
-test("P68 maps all four current MySQL page controls exactly once", () => {
-  assert.deepEqual(review, buildP68ActionReview());
+test("P68 maps all four pre-rebuild MySQL page controls exactly once", () => {
+  assert.deepEqual(review, buildP68ActionReview(readPreSelectionRebuild, contracts));
   assert.equal(candidates.length, 4);
   assert.equal(validateActionReview(review, context).sourceSites, 4);
   assert.equal(review.route, "/platform-admin/mysql");

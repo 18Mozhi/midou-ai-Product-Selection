@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -14,7 +16,7 @@ import {
 } from "../../scripts/lib/ui-phase2-provider-async-baseline.mjs";
 
 const read = (f) =>
-  historicalProviderFeedbackSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
+  historicalProviderFeedbackSource(f, historicalAdapterCSource(f, readPreSelectionRebuild(f)));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = "apps/web/src/components/ProviderRegistry.vue",
   current = read(file),
@@ -30,7 +32,7 @@ function sourceFunction(s, name) {
   return { node: nodes[0], tree };
 }
 
-test("P46 async implementation preserves request serialization, business helpers,23 models and prior focus", () => {
+test("Archived P46 async implementation preserves request serialization, business helpers,23 models and prior focus", () => {
   const r = providerAsyncRevisions.find((r) => r.file === file);
   assert.equal(hash(current), r.after);
   assert.equal(hash(old), r.before);
@@ -80,7 +82,7 @@ test("P46 async implementation preserves request serialization, business helpers
   assert.match(current, /等待上一项保存/);
 });
 
-test("P46 historical mapping recognizes only exact known changes and keeps earlier evidence immutable", () => {
+test("Archived P46 historical mapping recognizes only exact known changes and keeps earlier evidence immutable", () => {
   for (const r of providerAsyncRevisions) {
     const s = read(r.file);
     assert.equal(hash(s), r.after);
@@ -97,7 +99,7 @@ test("P46 historical mapping recognizes only exact known changes and keeps earli
   );
 });
 
-test("P46 historical async Vue120 formal pictures and source hashes match exact captured files", () => {
+test("Archived P46 historical async Vue120 formal pictures and source hashes match exact captured files", () => {
   const sourceRequests = ["baseline", "current"].flatMap((mode) =>
     Object.keys(evidence(mode).sourceHashes).map((sourcePath) => {
       const revision = mode === "baseline" && sourcePath === file ? "af60b101" : "b055029b";
@@ -144,7 +146,7 @@ test("P46 historical async Vue120 formal pictures and source hashes match exact 
   }
 });
 
-test("P46 async evidence proves serial writes, stale isolation, refresh truth and unchanged payloads", () => {
+test("Archived P46 async evidence proves serial writes, stale isolation, refresh truth and unchanged payloads", () => {
   const baseline = evidence("baseline"),
     e = evidence("current");
   const cases = [

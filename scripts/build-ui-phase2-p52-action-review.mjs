@@ -259,8 +259,8 @@ function readSource(file) {
   return readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 }
 
-export function buildP52ActionReview() {
-  const sourceText = Object.fromEntries(sourceFiles.map((file) => [file, readSource(file)]));
+export function buildP52ActionReview(read = readSource, auditRecords = runContractAudit().records) {
+  const sourceText = Object.fromEntries(sourceFiles.map((file) => [file, read(file)]));
   const sourceHashes = Object.fromEntries(
     Object.entries(sourceText).map(([file, source]) => [
       file,
@@ -271,7 +271,7 @@ export function buildP52ActionReview() {
     ([file, source]) => scanSource(source, file).candidates,
   );
   const candidateById = new Map(candidates.map((candidate) => [candidate.candidateId, candidate]));
-  const records = runContractAudit().records.filter(
+  const records = auditRecords.filter(
     (record) =>
       record.document === contract &&
       sourceFiles.includes(record.sourceFile) &&

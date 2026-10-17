@@ -1,3 +1,4 @@
+import type { RuntimeConfig } from "@scoutops/config";
 import {
   validateSupplyTitleClassifications,
   type SupplyTitleClassifier,
@@ -64,6 +65,22 @@ export function validateProductAssociation(value: unknown, input: IntelligenceIn
   };
 }
 
+/** Bind evidence in code: models may rewrite punctuation even when asked to quote verbatim. */
+export function validateIntelligenceModelOutput(value: unknown, input: IntelligenceInput) {
+  if (
+    !value ||
+    typeof value !== "object" ||
+    Array.isArray(value) ||
+    Object.keys(value).some((key) => !["relation", "rationale", "queries"].includes(key))
+  )
+    throw invalid();
+  const original = input.title.trim() ? input.title : input.summary;
+  let excerpt = original.slice(0, 500);
+  // Do not split a Unicode surrogate pair at the evidence field's existing limit.
+  if (/[\uD800-\uDBFF]$/.test(excerpt)) excerpt = excerpt.slice(0, -1);
+  return validateProductAssociation({ ...value, excerpt }, input);
+}
+
 export function intelligenceInput(
   sourceRef: string,
   payload: Record<string, unknown>,
@@ -73,6 +90,13 @@ export function intelligenceInput(
     title: typeof payload.title === "string" ? payload.title.slice(0, 1000) : "",
     summary: typeof payload.summary === "string" ? payload.summary.slice(0, 2000) : "",
   };
+}
+
+export function createIntelligenceProductClassifier(
+  ai: RuntimeConfig["ai"],
+  timeoutMs = ai.timeoutMs,
+) {
+  return new OpenAiIntelligenceProductClassifier(ai.model, ai.baseUrl, ai.apiKey, timeoutMs);
 }
 
 /** Classifies hypotheses only. Original evidence and downstream scoring remain authoritative. */
@@ -91,13 +115,15 @@ export class OpenAiIntelligenceProductClassifier
     const output = await this.request(
       "Classify whether supplied intelligence explicitly describes a physical consumer product " +
         "(direct_product), plausibly creates demand for a physical product (demand_driver), or is unrelated. " +
-        "Return exactly {relation,rationale,excerpt,queries}. Explain the causal hypothesis without asserting " +
-        "actual sales uplift. excerpt must be a verbatim nonempty substring of title or summary. " +
+        "Return exactly {relation,rationale,queries}. Explain the causal hypothesis without asserting " +
+        "actual sales uplift. Do not return evidence excerpts; original source text is bound by the caller. " +
         "queries are at most 3 short English Amazon US product search phrases, no URLs, instructions or " +
-        "unsupported specific brands. Unrelated means queries=[]. Do not force products onto unrelated news.",
+        "unsupported specific brands. Search for physical goods, not recipes or services. " +
+        "Unrelated means queries=[]. Do not force products onto unrelated news.",
       input,
+      true,
     );
-    return validateProductAssociation(output, input);
+    return validateIntelligenceModelOutput(output, input);
   }
 
   async selectPrimary(query: string, candidates: ProductCandidate[]) {
@@ -107,6 +133,7 @@ export class OpenAiIntelligenceProductClassifier
         "or null when no candidate is a relevant physical product. Compare titles for relevance only; " +
         "do not infer sales, quality, price, profit, advertising metrics, or a purchase decision.",
       { query, candidates },
+      true,
     )) as { source_ref: string | null; rationale: string };
     if (
       !value ||

@@ -226,7 +226,7 @@ test("model supplies only classifications through the existing bounded OpenAI co
     await assert.rejects(api.classifySupplies({ ...input, candidates }), /input_invalid/);
 });
 
-test("only Qwen 3.5 supply classification uses the documented non-thinking parameter", async () => {
+test("Qwen 3.5 supply and intelligence classification use the documented non-thinking parameter", async () => {
   for (const model of ["Qwen3.5-9B-AWQ-4bit", "Qwen/Qwen3.5-9B"]) {
     const bodies = [];
     const api = new OpenAiIntelligenceProductClassifier(
@@ -242,7 +242,6 @@ test("only Qwen 3.5 supply classification uses the documented non-thinking param
           : {
               relation: "unrelated",
               rationale: "No physical product demand.",
-              excerpt: "test",
               queries: [],
             };
         return new Response(
@@ -253,7 +252,7 @@ test("only Qwen 3.5 supply classification uses the documented non-thinking param
     await api.classifySupplies(input);
     await api.associate({ source_ref: "news", title: "test", summary: "test" });
     assert.deepEqual(bodies[0].chat_template_kwargs, { enable_thinking: false });
-    assert.equal(bodies[1].chat_template_kwargs, undefined);
+    assert.deepEqual(bodies[1].chat_template_kwargs, { enable_thinking: false });
   }
 });
 

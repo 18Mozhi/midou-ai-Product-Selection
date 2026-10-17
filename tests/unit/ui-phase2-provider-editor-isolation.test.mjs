@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -13,7 +15,7 @@ import {
 import { assertP46CapturedSources } from "./ui-phase2-p46-capture-source.mjs";
 
 const read = (f) =>
-  historicalProviderSummarySource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
+  historicalProviderSummarySource(f, historicalAdapterCSource(f, readPreSelectionRebuild(f)));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = providerIsolationRevision.file,
   source = read(file),
@@ -22,7 +24,7 @@ const hook = "apps/web/src/use-provider-editor-isolation.ts",
   root = "output/playwright/p46-editor-isolation";
 const evidence = (mode) => JSON.parse(read(`${root}/${mode}/evidence.json`));
 
-test("P46 isolation connects two script lines only; model/template/styles/save/focus functions unchanged", () => {
+test("Archived P46 isolation connects two script lines only; model/template/styles/save/focus functions unchanged", () => {
   assert.equal(hash(source), providerIsolationRevision.after);
   assert.equal(hash(old), providerIsolationRevision.before);
   const importLine =
@@ -37,7 +39,7 @@ test("P46 isolation connects two script lines only; model/template/styles/save/f
   );
 });
 
-test("P46 actual App captures bind raw sources, mock network and all 80 formal PNGs", () => {
+test("Archived P46 actual App captures bind raw sources, mock network and all 80 formal PNGs", () => {
   for (const mode of ["baseline", "current"]) {
     const e = evidence(mode),
       dir = `${root}/${mode}`;
@@ -71,7 +73,7 @@ test("P46 actual App captures bind raw sources, mock network and all 80 formal P
   }
 });
 
-test("P46 open/pending/conflict/cached return reject background focus and restore previous state on close/leave", () => {
+test("Archived P46 open/pending/conflict/cached return reject background focus and restore previous state on close/leave", () => {
   const a = evidence("baseline"),
     b = evidence("current");
   assert.deepEqual(a.network, b.network);
@@ -248,7 +250,7 @@ function lifecycleHarness() {
   };
 }
 
-test("P46 hook callbacks clean up on deactivate/unmount, reinstate on activate and disconnect observers", () => {
+test("Archived P46 hook callbacks clean up on deactivate/unmount, reinstate on activate and disconnect observers", () => {
   const h = lifecycleHarness();
   h.background.setAttribute("inert", "before");
   h.style.setProperty("overflow", "auto", "important");
@@ -271,7 +273,7 @@ test("P46 hook callbacks clean up on deactivate/unmount, reinstate on activate a
   assert.equal(h.style.getPropertyValue("overflow"), "auto");
 });
 
-test("P46 hook restores moved nodes, tracks new siblings and preserves a different later overflow declaration", () => {
+test("Archived P46 hook restores moved nodes, tracks new siblings and preserves a different later overflow declaration", () => {
   const h = lifecycleHarness();
   h.setOpen(true);
   h.panel.append(h.outside);

@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   OpenAiIntelligenceProductClassifier,
   validateProductAssociation,
+  validateIntelligenceModelOutput,
   intelligenceInput,
 } from "../../apps/worker/dist/intelligence-product-association.js";
 import { MySqlTrendProjectionWorker } from "../../apps/worker/dist/trend-projection-worker.js";
@@ -19,6 +20,7 @@ const association = {
   excerpt: "extreme heat",
   queries: ["portable fan"],
 };
+const { excerpt: _excerpt, ...modelAssociation } = association;
 const client = (fetcher) =>
   new OpenAiIntelligenceProductClassifier("local-model", "http://model.test/v1", "", 1000, fetcher);
 const response = (value) =>
@@ -59,9 +61,76 @@ test("model transport uses configured backend endpoint and a separate hypothesis
     assert.match(body.messages[0].content, /untrusted evidence/);
     assert.match(body.messages[0].content, /without asserting actual sales uplift/);
     assert.deepEqual(JSON.parse(body.messages[1].content), input);
-    return response(association);
+    assert.match(body.messages[0].content, /exactly \{relation,rationale,queries\}/);
+    assert.equal(body.chat_template_kwargs, undefined);
+    return response(modelAssociation);
   });
-  assert.deepEqual(await api.associate(input), association);
+  assert.deepEqual(await api.associate(input), { ...association, excerpt: input.title });
+});
+
+test("model output binds original Unicode source text and rejects model-provided evidence or facts", () => {
+  const original = {
+    ...input,
+    title: "They’re discussing a product’s demand — not measured sales.",
+  };
+  assert.equal(validateIntelligenceModelOutput(modelAssociation, original).excerpt, original.title);
+  assert.equal(
+    validateIntelligenceModelOutput(modelAssociation, { ...input, title: " ", summary: "原始摘要" })
+      .excerpt,
+    "原始摘要",
+  );
+  const bounded = validateIntelligenceModelOutput(modelAssociation, {
+    ...input,
+    title: "a".repeat(499) + "😀" + "b".repeat(500),
+  });
+  assert.equal(bounded.excerpt, "a".repeat(499));
+  for (const value of [
+    null,
+    [],
+    {},
+    { ...modelAssociation, excerpt: "invented or reformatted quote" },
+    { ...modelAssociation, price: 10 },
+    { ...modelAssociation, source_ref: "other" },
+    { ...modelAssociation, queries: [] },
+    { ...modelAssociation, relation: "unrelated" },
+  ])
+    assert.throws(
+      () => validateIntelligenceModelOutput(value, input),
+      /intelligence_output_invalid/,
+    );
+  assert.throws(
+    () => validateIntelligenceModelOutput(modelAssociation, { ...input, title: "", summary: "" }),
+    /intelligence_output_invalid/,
+  );
+});
+
+test("Qwen 3.5 association and primary selection reuse classification-only non-thinking transport", async () => {
+  const candidates = [{ source_ref: "p1", asin: "B000000001", title: "Portable fan" }];
+  for (const model of ["Qwen3.5-9B-AWQ-4bit", "Qwen/Qwen3.5-9B", "local-model"]) {
+    const bodies = [];
+    const api = new OpenAiIntelligenceProductClassifier(
+      model,
+      "http://model.test/v1",
+      "",
+      1000,
+      async (_url, options) => {
+        const body = JSON.parse(options.body);
+        bodies.push(body);
+        return response(
+          bodies.length === 1
+            ? modelAssociation
+            : { source_ref: "p1", rationale: "Same product type." },
+        );
+      },
+    );
+    await api.associate(input);
+    await api.selectPrimary("portable fan", candidates);
+    for (const body of bodies)
+      assert.deepEqual(
+        body.chat_template_kwargs,
+        model === "local-model" ? undefined : { enable_thinking: false },
+      );
+  }
 });
 
 test("primary selection accepts only real supplied source references including an explicit no-match", async () => {

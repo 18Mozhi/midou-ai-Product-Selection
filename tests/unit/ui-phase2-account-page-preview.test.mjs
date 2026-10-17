@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import { accountHistoricalCapture } from "../../scripts/lib/ui-phase2-account-historical-capture.mjs";
 import { historicalAdminResultsSource } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 import { historicalOrganizationActionSource } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
@@ -14,7 +16,10 @@ const output = "output/playwright/p39-page-composed";
 const capture = accountHistoricalCapture("page");
 // Frozen visual/diagnostic captures use their exact pre-repair source, not current acceptance.
 const read = (f) =>
-  historicalAdminResultsSource(f, historicalOrganizationActionSource(f, readFileSync(f, "utf8")));
+  historicalAdminResultsSource(
+    f,
+    historicalOrganizationActionSource(f, readPreSelectionRebuild(f)),
+  );
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const original = read(component),
   transformed = accountPagePreview(original);
@@ -38,7 +43,7 @@ function bindings(source) {
   visit(baseParse(parse(source).descriptor.template.content));
   return result.sort();
 }
-test("P39 composed template preserves complete original script and every native directive", () => {
+test("Archived P39 composed template preserves complete original script and every native directive", () => {
   assert.equal(parse(transformed).errors.length, 0);
   assert.equal(
     parse(transformed).descriptor.scriptSetup.content,
@@ -55,7 +60,7 @@ test("P39 composed template preserves complete original script and every native 
     accountPagePreview(original.replace('class="account-metrics"', 'class="different"')),
   );
 });
-test("P39 whole-page captures have six normal breakpoints, exact files and captured source revisions", () => {
+test("Archived P39 whole-page captures have six normal breakpoints, exact files and captured source revisions", () => {
   const e = JSON.parse(read(`${output}/evidence.json`));
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
@@ -92,8 +97,10 @@ test("original P39 code and previously presented146 images/styles are not rewrit
     "design-plans/ui-phase-2-2026-09-07/implementation/account-create-preview.css",
   ])
     assert.equal(
-      readFileSync(f, "utf8").replaceAll("\r\n", "\n"),
-      execFileSync("git", ["show", `HEAD:${f}`], { encoding: "utf8" }).replaceAll("\r\n", "\n"),
+      readPreSelectionRebuild(f).replaceAll("\r\n", "\n"),
+      execFileSync("git", ["show", `c26e2b522bc616cbc2a67b01185d832f93789174:${f}`], {
+        encoding: "utf8",
+      }).replaceAll("\r\n", "\n"),
       f,
     );
   let count = 0;

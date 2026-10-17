@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
@@ -55,10 +56,9 @@ for (const [name, transform] of [
   });
 }
 
-test("P57 proposal preserves section handlers and moves rail after the only page heading", async () => {
-  const production = await readFile(
+test("P57 archived proposal preserves section handlers and moves rail after the only page heading", async () => {
+  const production = readPreSelectionRebuild(
     "apps/web/src/components/PlatformNotificationCenter.vue",
-    "utf8",
   );
   const original = production
     .replace("platform-notifications platform-notifications--review", "platform-notifications")

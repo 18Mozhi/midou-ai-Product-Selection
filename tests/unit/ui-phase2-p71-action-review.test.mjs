@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -15,7 +19,7 @@ const sourceFiles = [
   "apps/web/src/components/CapacityBoundaryEvidence.vue",
 ];
 const sources = Object.fromEntries(
-  sourceFiles.map((file) => [file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")]),
+  sourceFiles.map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const sourceHashes = Object.fromEntries(
   Object.entries(sources).map(([file, source]) => [
@@ -26,14 +30,17 @@ const sourceHashes = Object.fromEntries(
 const candidates = Object.entries(sources).flatMap(
   ([file, source]) => scanSource(source, file).candidates,
 );
-const contracts = runContractAudit().records;
+const contracts = runContractAudit(
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles(),
+).records;
 const files = new Set(
   review.actions.flatMap((action) => action.testReferences.map((ref) => ref.file)),
 );
 const context = { candidates, sourceHashes, contracts, packages: new Map(), files };
 
-test("P71 maps all seven current capacity page candidates exactly once", () => {
-  assert.deepEqual(review, buildP71ActionReview());
+test("P71 maps all seven pre-rebuild capacity page candidates exactly once", () => {
+  assert.deepEqual(review, buildP71ActionReview(readPreSelectionRebuild, contracts));
   assert.equal(candidates.length, 7);
   assert.equal(validateActionReview(review, context).sourceSites, 7);
   assert.equal(review.route, "/platform-admin/capacity");

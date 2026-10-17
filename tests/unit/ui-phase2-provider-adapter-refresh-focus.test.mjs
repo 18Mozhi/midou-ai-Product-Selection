@@ -1,3 +1,5 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+// Archived pre-rebuild inputs only; current UI acceptance is verified separately.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -12,11 +14,10 @@ import {
   refreshFocusBeforeSha,
 } from "../../scripts/lib/ui-phase2-adapter-refresh-focus-baseline.mjs";
 
-const source = readFileSync("apps/web/src/components/ProviderAdapterCenter.vue", "utf8").replaceAll(
-  "\r\n",
-  "\n",
-);
-test("P47 historical refresh focus patch changes only the wrapper, native handler and persistent tabindex", () => {
+const source = readPreSelectionRebuild(
+  "apps/web/src/components/ProviderAdapterCenter.vue",
+).replaceAll("\r\n", "\n");
+test("Archived P47 historical refresh focus patch changes only the wrapper, native handler and persistent tabindex", () => {
   const stage = p47HistoricalSource(
     "apps/web/src/components/ProviderAdapterCenter.vue",
     source,
@@ -84,7 +85,7 @@ for (const scene of ["owned", "other-focus", "disconnected", "inert", "missing",
   });
 }
 
-test("P47 pre-mobile refresh focus packet binds exact captured sources, imported styles and eight review images", () => {
+test("Archived P47 pre-mobile refresh focus packet binds exact captured sources, imported styles and eight review images", () => {
   const root = "output/playwright/p47-refresh-focus";
   const e = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
   const hash = (value) => createHash("sha256").update(value).digest("hex");
@@ -120,7 +121,7 @@ test("P47 pre-mobile refresh focus packet binds exact captured sources, imported
     assert.match(sha, /^[a-f0-9]{64}$/, `captured source fingerprint: ${file}`);
     if (file === "apps/web/src/components/ProviderAdapterCenter.vue")
       assert.equal(
-        hash(p47HistoricalSource(file, readFileSync(file, "utf8"), "pre-mobile")),
+        hash(p47HistoricalSource(file, readPreSelectionRebuild(file), "pre-mobile")),
         sha,
         file,
       );

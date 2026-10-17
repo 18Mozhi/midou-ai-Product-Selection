@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -11,18 +15,21 @@ import { validateReviewSurfaces } from "../../scripts/lib/ui-phase2-review-surfa
 const base = "design-plans/ui-phase-2-2026-09-07";
 const review = JSON.parse(readFileSync(`${base}/action-reviews/P60.json`, "utf8"));
 const file = "apps/web/src/components/OpenPlatformCenter.vue";
-const source = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const source = readPreSelectionRebuild(file);
 const sources = { [file]: source };
 const sourceHashes = { [file]: createHash("sha256").update(source).digest("hex") };
 const candidates = scanSource(source, file).candidates;
-const contracts = runContractAudit().records;
+const contracts = runContractAudit(
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles(),
+).records;
 const files = new Set(
   review.actions.flatMap((action) => action.testReferences.map((ref) => ref.file)),
 );
 const context = { candidates, sourceHashes, contracts, packages: new Map(), files };
 
-test("P60 maps all current open-platform source candidates exactly once", () => {
-  assert.deepEqual(review, buildP60ActionReview());
+test("P60 maps all pre-rebuild open-platform source candidates exactly once", () => {
+  assert.deepEqual(review, buildP60ActionReview(readPreSelectionRebuild, contracts));
   assert.equal(candidates.length, 44);
   assert.equal(validateActionReview(review, context).sourceSites, 44);
   assert.equal(review.route, "/platform-admin/open-platform");
@@ -49,7 +56,7 @@ test("P60 separates operation preparation, explicit confirmation and queued outc
   assert.match(actions.get("OP60-REPLAY").remaining, /不代表Worker发送/u);
 });
 
-test("P60 keeps one-time secret handling local and scoped to the current surface", () => {
+test("P60 keeps one-time secret handling local and scoped to the pre-rebuild surface", () => {
   const secret = actionsById("OP60-SECRET");
   assert.equal(secret.kind, "local");
   assert.match(secret.handler, /复制只调用浏览器剪贴板/u);

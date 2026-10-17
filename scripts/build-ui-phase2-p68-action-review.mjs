@@ -55,8 +55,8 @@ function contractClaim(record) {
     .at(-1);
 }
 
-export function buildP68ActionReview() {
-  const sourceText = Object.fromEntries(sourceFiles.map((file) => [file, readSource(file)]));
+export function buildP68ActionReview(read = readSource, auditRecords = runContractAudit().records) {
+  const sourceText = Object.fromEntries(sourceFiles.map((file) => [file, read(file)]));
   const sourceHashes = Object.fromEntries(
     Object.entries(sourceText).map(([file, source]) => [
       file,
@@ -66,7 +66,7 @@ export function buildP68ActionReview() {
   const candidates = Object.entries(sourceText).flatMap(
     ([file, source]) => scanSource(source, file).candidates,
   );
-  const records = runContractAudit().records.filter(
+  const records = auditRecords.filter(
     (record) =>
       sourceFiles.includes(record.sourceFile) &&
       record.document === contract &&
