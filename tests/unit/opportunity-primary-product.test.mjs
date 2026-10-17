@@ -6,6 +6,7 @@ import {
   opportunityPrimaryRecordsSql,
 } from "../../apps/api/dist/opportunity-primary-product.js";
 import { MySqlOpportunityRepository } from "../../apps/api/dist/mysql-opportunity-repository.js";
+import { competitorDetailEvidenceSql } from "../../packages/database/dist/index.js";
 const at = "2026-10-17T00:00:00.000000Z";
 
 test("local SQL DATETIME facts become UTC once, including seasonal offsets", () => {
@@ -54,13 +55,20 @@ test("primary list facts whitelist numeric and public signals without review bod
   assert.equal(JSON.stringify(r).includes("private"), false);
   assert.equal(r.facts.public_signals.review_samples, undefined);
 });
-test("latest actual capture wins, with detail on ties and no stale field borrowing", () => {
+test("newer real quotes win but discovery blanks cannot erase verified detail", () => {
   assert.equal(
     readOpportunityPrimaryProduct(
       record({ price: 35, captured_at: "2026-10-18T00:00:00Z" }),
       record(),
     ).facts.price,
     35,
+  );
+  assert.equal(
+    readOpportunityPrimaryProduct(
+      record({ price: null, captured_at: "2026-10-18T00:00:00Z" }),
+      record(),
+    ).facts.price,
+    29,
   );
   assert.equal(
     readOpportunityPrimaryProduct(record({ price: 35 }), record({ price: null })).facts.price,
@@ -113,7 +121,7 @@ test("record SQL binds evidence, snapshots, primary identity and tenants", () =>
     "l.workspace_id=o.workspace_id",
     "s.organization_id=c.organization_id",
     "s.workspace_id=c.workspace_id",
-    "n_seed.raw_evidence_id=s.evidence_id",
+    "n.raw_evidence_id=s.evidence_id",
     "c.organization_id=o.organization_id",
     "c.workspace_id=o.workspace_id",
     "c.deleted_at IS NULL",
@@ -122,7 +130,8 @@ test("record SQL binds evidence, snapshots, primary identity and tenants", () =>
     "ORDER BY s.captured_at DESC",
   ])
     assert.ok(sql.includes(fragment), fragment);
-  assert.doesNotMatch(sql, /review_samples_json|RIGHT\(s.source_ref_id/);
+  assert.doesNotMatch(sql, /review_samples_json/);
+  assert.ok(sql.includes(competitorDetailEvidenceSql("s")));
 });
 test("list repository exposes only selected primary facts and keeps counts", async () => {
   const calls = [];

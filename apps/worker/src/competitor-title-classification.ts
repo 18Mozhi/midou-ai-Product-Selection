@@ -3,6 +3,7 @@ import type { Pool, RowDataPacket } from "mysql2/promise";
 import {
   automaticPrimaryEvidenceSql,
   automaticPrimaryDetailEvidenceSql,
+  primaryProductEvidence,
 } from "./automatic-selection-evidence.js";
 import { amazonAsin, selectIndependentCompetitors } from "./competitor-discovery-policy.js";
 import { normalizedProductFields } from "./automatic-selection-evaluation.js";
@@ -140,12 +141,7 @@ export async function readCompetitorClassificationContext(
       [scope.taskId, scope.subqueryId, scope.organizationId, scope.workspaceId],
     ),
   ]);
-  const primary =
-    details[0] &&
-    (!linked[0] ||
-      new Date(details[0].observed_at).getTime() >= new Date(linked[0].observed_at).getTime())
-      ? details[0]
-      : linked[0];
+  const primary = primaryProductEvidence(linked[0], details[0]);
   if (!primary || primary.provider_status !== "enabled") return fail("competitor_primary_missing");
   const fields = normalizedProductFields(parse(primary.payload_json));
   if (

@@ -296,7 +296,7 @@ test("automatic evaluation binds primary identity and supply tasks to the curren
   );
   assert.match(
     automaticPrimaryDetailEvidenceSql,
-    /n\.organization_id=s\.organization_id AND n\.workspace_id=s\.workspace_id AND n\.status='active'/,
+    /n\.organization_id=s\.organization_id AND n\.workspace_id=s\.workspace_id AND n\.status IN \('active','superseded'\)/,
   );
   assert.match(
     automaticPrimaryDetailEvidenceSql,

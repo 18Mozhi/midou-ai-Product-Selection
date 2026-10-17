@@ -8,7 +8,7 @@ Worker 的主品事实、标题和图片从原关联的记录键读取同范围�
 
 生产只读 MySQL 5.7 预检：原先缺失的 B0G3HC7PB6、B0FHVLKH6M、B079C99FXK 均恢复原身份，并读到各自新的实际证据，单机会身份及事实查询共 4–9ms。此为查询验证，不是分类、竞品数量或整链完成验收。
 
-API 商品列表的关联事实和详情快照也通过 packages/database 的 currentProductVersionJoinSql 读取当前版本，与 Worker 共用组织、工作区、provider、record_key、ASIN 边界。保留原证据及记录键索引，页面时间取当前记录创建时间，不把旧关联时间用于新事实。详情快照本身不改写。
+API 商品列表的发现关联继续通过 packages/database 的 currentProductVersionJoinSql 读取当前版本，与 Worker 共用组织、工作区、provider、record_key、ASIN 边界。2026-10-18 后续真实观测发现搜索会覆盖详情，因此详情改为读取其原始不可变证据；有效的新搜索报价继续保留，缺失搜索报价不能覆盖详情，具体规则见 amazon-search-detail-observations.md。保留原证据及记录键索引，不把新搜索时间用于旧详情，详情快照本身不改写。
 
 SQL 内部 JSON 的 DATETIME 不再直接附加 Z：由 Node 按既有 mysql2 本地时间规则解析后再输出 UTC ISO。生产只读比较发现原方式把实际 22:38 UTC 错标为 18:38 UTC；此修复不改变 MySQL、进程或全局时区，测试包含冬夏偏移。
 

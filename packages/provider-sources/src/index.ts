@@ -6,3 +6,4 @@ export * from "./public-collection-policy.js";
 export * from "./catalog/index.js";
 export * from "./parsers/index.js";
 export * from "./adapters/index.js";
+export { selectPrimaryObservation, type PrimaryObservation } from "./primary-observation.js";

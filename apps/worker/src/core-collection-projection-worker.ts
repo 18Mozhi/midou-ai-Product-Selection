@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { competitorDetailEvidenceSql } from "@scoutops/database";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
 import {
@@ -477,11 +478,22 @@ export class CoreCollectionProjectionWorker {
         ],
       );
     } else {
-      await c.query("UPDATE competitors SET latest_snapshot_id=?,updated_at=? WHERE id=?", [
-        snapshotId,
-        now,
-        competitorId,
-      ]);
+      const [current] = await c.query<RowDataPacket[]>(
+        "SELECT latest_snapshot_id FROM competitors WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
+        [competitorId, job.organizationId, job.workspaceId],
+      );
+      const [latest] = current[0]?.latest_snapshot_id
+        ? await c.query<RowDataPacket[]>(
+            `SELECT ${competitorDetailEvidenceSql("s")} detail_verified FROM competitor_snapshots s ` +
+              "WHERE s.id=? AND s.organization_id=? AND s.workspace_id=?",
+            [current[0].latest_snapshot_id, job.organizationId, job.workspaceId],
+          )
+        : [[]];
+      if (!Number(latest[0]?.detail_verified ?? 0))
+        await c.query(
+          "UPDATE competitors SET latest_snapshot_id=?,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+          [snapshotId, now, competitorId, job.organizationId, job.workspaceId],
+        );
     }
     return true;
   }

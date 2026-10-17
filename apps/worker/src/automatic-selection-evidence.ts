@@ -1,4 +1,35 @@
-import { selectionPrimaryAsinSql, currentProductVersionJoinSql } from "@scoutops/database";
+import {
+  selectionPrimaryAsinSql,
+  currentProductVersionJoinSql,
+  competitorDetailEvidenceSql,
+} from "@scoutops/database";
+import { selectPrimaryObservation } from "@scoutops/provider-sources";
+import { normalizedProductFields } from "./automatic-selection-evaluation.js";
+
+/** Both rows remain atomic facts with their original evidence/time. */
+export const primaryProductEvidence = <T extends Record<string, unknown>>(
+  linked?: T,
+  detail?: T,
+): T | undefined => {
+  const observation = (row: T | undefined) => {
+    if (!row) return undefined;
+    let payload: unknown;
+    try {
+      payload =
+        typeof row.payload_json === "string" ? JSON.parse(row.payload_json) : row.payload_json;
+    } catch {
+      payload = {};
+    }
+    const fields = normalizedProductFields(payload);
+    return {
+      value: row,
+      observedAt: row.observed_at,
+      price: fields.price,
+      currency: fields.currency,
+    };
+  };
+  return selectPrimaryObservation(observation(linked), observation(detail));
+};
 
 /** Search from actual primary facts, never an editable opportunity label. */
 export const automaticPrimaryTitleSql =
@@ -67,13 +98,14 @@ export const automaticPrimaryDetailEvidenceSql =
   "JOIN competitor_snapshots s ON s.competitor_id=c.id " +
   "AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id " +
   "JOIN normalized_records n ON n.raw_evidence_id=s.evidence_id " +
-  "AND n.organization_id=s.organization_id AND n.workspace_id=s.workspace_id AND n.status='active' " +
+  "AND n.organization_id=s.organization_id AND n.workspace_id=s.workspace_id AND n.status IN ('active','superseded') " +
   "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
   "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? " +
   `AND BINARY UPPER(c.external_id)=BINARY ${selectionPrimaryAsinSql} ` +
   "AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY UPPER(c.external_id) " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.canonical_url')) REGEXP " +
   "CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')),'([/?#]|$)') " +
+  `AND ${competitorDetailEvidenceSql("s")} ` +
   "ORDER BY s.captured_at DESC,s.id DESC,n.created_at DESC,n.id DESC LIMIT 1";
 
 /** Only records produced by this opportunity's sourcing tasks can establish its purchase cost. */

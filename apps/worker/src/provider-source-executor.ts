@@ -27,6 +27,7 @@ import {
 import { EvidencePersistenceError, MySqlEvidencePersistence } from "./evidence-persistence.js";
 import type { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
 import { LAN_1688_PARSER_VERSION, type Lan1688ImageSearch } from "./lan-1688-image-search.js";
+import { amazonAsin } from "./competitor-discovery-policy.js";
 import {
   CompetitorClassificationError,
   type MySqlCompetitorTitleClassification,
@@ -39,11 +40,35 @@ const VERSIONED_PRODUCT_SOURCES = new Set([
   "made_in_china_search",
   "ec21_supplier_search",
 ]);
+
+/** Search observations belong to a task; product details have their own version lineage. */
+export function providerEvidenceRecordKey(
+  provider: Pick<ProviderRuntimeDefinition, "code">,
+  externalId: string,
+  taskId: string,
+  target: Record<string, unknown>,
+) {
+  if (provider.code !== "amazon_product" || !/^[A-Z0-9]{10}$/i.test(externalId)) return externalId;
+  const asin = externalId.toUpperCase();
+  if (typeof target.page_url === "string" && target.page_url) {
+    let url: URL;
+    try {
+      url = new URL(target.page_url);
+    } catch {
+      throw new ProviderAdapterFailure("invalid_payload", false);
+    }
+    if (url.username || url.password || amazonAsin({ asin }, target.page_url) !== asin)
+      throw new ProviderAdapterFailure("invalid_payload", false);
+    return `amazon:detail:${asin}`;
+  }
+  return `amazon:search:${taskId}:${asin}`;
+}
 export function providerEvidenceDedupeKey(
   provider: Pick<ProviderRuntimeDefinition, "code" | "parserVersion">,
   externalId: string,
   taskId: string,
   rawContent: string,
+  recordKey?: string,
 ) {
   if (provider.parserVersion === GOOGLE_TRENDS_RSS_PARSER_VERSION)
     return sha({
@@ -57,6 +82,7 @@ export function providerEvidenceDedupeKey(
         external_id: externalId,
         parser_version: provider.parserVersion,
         content_sha256: createHash("sha256").update(rawContent).digest("hex"),
+        ...(provider.code === "amazon_product" && recordKey ? { record_key: recordKey } : {}),
       })
     : externalId;
 }
@@ -397,6 +423,12 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       for (const raw of batch.records) {
         const normalized = this.registry.normalize(provider.code, raw, context),
           source = sourceEvidencePayload(raw),
+          recordKey = providerEvidenceRecordKey(
+            provider,
+            normalized.external_id,
+            task.id,
+            query.target,
+          ),
           provenance = Object.entries(source.source_paths).map(([fieldPath, sourcePath]) => ({
             fieldPath,
             sourcePath,
@@ -418,6 +450,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
                 normalized.external_id,
                 task.id,
                 source.raw_content,
+                recordKey,
               ),
               contentType: source.content_type,
               content: Buffer.from(source.raw_content),
@@ -426,7 +459,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
               adapterVersion: lanCollection
                 ? LAN_1688_PARSER_VERSION
                 : normalized.provenance.adapter_version,
-              recordKey: normalized.external_id,
+              recordKey,
               recordSchemaVersion: "provider-source-v1",
               normalizedPayload: {
                 ...normalized.fields,

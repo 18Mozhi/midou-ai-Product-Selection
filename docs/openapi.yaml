@@ -11147,7 +11147,7 @@ components:
       type: object
       readOnly: true
       required: [price, currency, rating_value, review_count, captured_at, public_signals]
-      description: Lightweight facts from the latest scoped primary Amazon record. No raw HTML, review bodies or inferred private advertising metrics.
+      description: Lightweight scoped primary Amazon facts. A newer discovery observation with a real nonnegative numeric price and currency remains authoritative; discovery without a valid quote cannot erase the latest verified detail. Each selected observation retains its own captured_at and fields, without borrowing missing values. Superseded immutable detail evidence remains valid unless quarantined. No raw HTML, review bodies or inferred private advertising metrics.
       properties:
         price: { type: number, minimum: 0, nullable: true }
         currency: { type: string, pattern: "^[A-Z]{3}$", nullable: true }

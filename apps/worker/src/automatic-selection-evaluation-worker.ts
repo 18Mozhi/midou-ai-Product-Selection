@@ -10,6 +10,7 @@ import {
 import { LAN_1688_RESULT_LIMIT } from "./lan-1688-image-search.js";
 import {
   selectionCandidateSql,
+  latestCompetitorDetailSnapshotSql,
   automaticEvaluationCompleteSql,
   automaticEvaluationFailureSql,
   automaticEvaluationEnqueueUpdateSql,
@@ -18,6 +19,7 @@ import {
   automaticPrimaryEvidenceSql,
   automaticPrimaryDetailEvidenceSql,
   automaticSupplyEvidenceSql,
+  primaryProductEvidence as primaryEvidence,
 } from "./automatic-selection-evidence.js";
 import {
   AUTOMATIC_SELECTION_FORMULA_VERSION,
@@ -74,10 +76,6 @@ const number = (value: unknown) => {
 const text = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 const fingerprint = (value: unknown) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
-const primaryEvidence = (linked?: RowDataPacket, detail?: RowDataPacket) =>
-  detail && (!linked || date(detail.observed_at).getTime() >= date(linked.observed_at).getTime())
-    ? detail
-    : linked;
 const supplyFacts = (rows: RowDataPacket[]): SupplyFacts[] =>
   rows.flatMap((row) => {
     const item = normalizedProductFields(parse(row.payload_json, {})),
@@ -389,7 +387,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           now,
         );
       const [competitors] = await connection.query<RowDataPacket[]>(
-        "SELECT s.* FROM competitors c JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id " +
+        `SELECT s.* FROM competitors c JOIN competitor_snapshots s ON s.id=${latestCompetitorDetailSnapshotSql("c")} ` +
           "WHERE c.opportunity_id=? AND c.organization_id=? AND c.workspace_id=? AND c.status='active' " +
           "AND c.source_site='Amazon' AND c.external_id=? AND c.deleted_at IS NULL " +
           "ORDER BY s.captured_at DESC,s.id DESC LIMIT 1",

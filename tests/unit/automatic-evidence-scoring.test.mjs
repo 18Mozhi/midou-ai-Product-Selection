@@ -695,7 +695,7 @@ for (const [label, linkedAt, noLinked, expectedEvidence, expectedPrice] of [
   ["newer detail", new Date(now.getTime() - 60000), false, "detail-evidence", 29],
   ["same-time detail", now, false, "detail-evidence", 29],
   ["detail without trend link", now, true, "detail-evidence", 29],
-  ["newer search", new Date(now.getTime() + 60000), false, "amazon-evidence", 25],
+  ["newer valid search", new Date(now.getTime() + 60000), false, "amazon-evidence", 25],
 ]) {
   test(`automatic scoring and sale input use ${label} with original provenance`, async () => {
     const f = fixture({

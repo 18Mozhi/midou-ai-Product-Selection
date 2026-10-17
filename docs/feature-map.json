@@ -1,4 +1,28 @@
 {
+  "selectionAmazonObservationLineage20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-search-detail-observations.md",
+    "sourceFiles": [
+      "apps/worker/src/provider-source-executor.ts",
+      "packages/provider-sources/src/primary-observation.ts",
+      "packages/provider-sources/src/index.ts",
+      "apps/worker/src/automatic-selection-evidence.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/worker/src/competitor-title-classification.ts",
+      "apps/worker/src/core-collection-projection-worker.ts",
+      "apps/api/src/opportunity-primary-product.ts",
+      "packages/database/src/selection-completion-policy.ts",
+      "packages/database/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-observation-lineage.test.mjs",
+      "tests/unit/opportunity-primary-product.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/unit/core-workspace-crawlers.test.mjs",
+      "tests/unit/competitor-relevance-gate.test.mjs"
+    ],
+    "contract": "Amazon detail records use a product detail lineage; discovery records are scoped per task/product. API and Worker share selectPrimaryObservation: valid newer discovery quotes remain authoritative, blank quotes cannot erase verified detail. Detail completeness uses latest actual detail, excluding quarantine, rather than a search-overwritten pointer. Search snapshots remain stored but cannot replace verified detail pointers. No field borrowing, history rewrite, schema, API field, env, dependency or permission change."
+  },
   "selectionProjectedCompetitorDetailScheduling20261018": {
     "status": "implemented",
     "requirements": "docs/selection-completion-scheduling.md",

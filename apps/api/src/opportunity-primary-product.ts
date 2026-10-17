@@ -1,5 +1,6 @@
 import type { SelectionPrimaryProductFacts } from "@scoutops/contracts";
-import { currentProductVersionJoinSql } from "@scoutops/database";
+import { currentProductVersionJoinSql, competitorDetailEvidenceSql } from "@scoutops/database";
+import { selectPrimaryObservation } from "@scoutops/provider-sources";
 import { readAmazonPublicSignals } from "./amazon-public-signals.js";
 const opportunityPrimaryAsinSql = "o.primary_fact_asin";
 const keys = [
@@ -30,11 +31,13 @@ export const opportunityPrimaryRecordsSql =
   "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' WHERE l.opportunity_id=o.id AND l.organization_id=o.organization_id AND l.workspace_id=o.workspace_id " +
   identity +
   "ORDER BY l.observed_at DESC,n.created_at DESC,n.id DESC LIMIT 1) primary_linked_record," +
-  `(SELECT ${projection("n.created_at")} FROM competitors c JOIN competitor_snapshots s ON s.competitor_id=c.id AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id ` +
-  currentProductVersionJoinSql("s", "n", "evidence_id") +
+  `(SELECT ${projection("s.captured_at")} FROM competitors c JOIN competitor_snapshots s ON s.competitor_id=c.id AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id ` +
+  "STRAIGHT_JOIN normalized_records n FORCE INDEX (idx_normalized_evidence) ON n.raw_evidence_id=s.evidence_id " +
+  "AND n.organization_id=s.organization_id AND n.workspace_id=s.workspace_id AND n.status IN ('active','superseded') " +
   "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' WHERE c.opportunity_id=o.id AND c.organization_id=o.organization_id AND c.workspace_id=o.workspace_id AND c.deleted_at IS NULL AND c.source_site='Amazon' " +
   `AND BINARY UPPER(c.external_id)=BINARY ${opportunityPrimaryAsinSql} ` +
   identity +
+  `AND ${competitorDetailEvidenceSql("s")} ` +
   "ORDER BY s.captured_at DESC,s.id DESC,n.created_at DESC,n.id DESC LIMIT 1) primary_detail_record";
 const record = (raw: unknown): Record<string, unknown> | null => {
   try {
@@ -58,8 +61,10 @@ export function readOpportunityPrimaryProduct(
 ): { facts: SelectionPrimaryProductFacts | null; imageUrl: string | null } {
   const a = record(linked),
     b = record(detail),
-    value =
-      b && (!a || Date.parse(String(b.captured_at)) >= Date.parse(String(a.captured_at))) ? b : a;
+    value = selectPrimaryObservation(
+      a ? { value: a, observedAt: a.captured_at, price: a.price, currency: a.currency } : undefined,
+      b ? { value: b, observedAt: b.captured_at, price: b.price, currency: b.currency } : undefined,
+    );
   if (!value) return { facts: null, imageUrl: null };
   let imageUrl: string | null = null;
   try {

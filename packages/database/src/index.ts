@@ -8,6 +8,7 @@ export {
   selectionCompetitionGateSql,
   selectionCompetitorRelevanceSql,
   competitorDetailEvidenceSql,
+  latestCompetitorDetailSnapshotSql,
   selectionCompletedCompetitorsSql,
   selectionPipelineCompletionProofSql,
 } from "./selection-completion-policy.js";

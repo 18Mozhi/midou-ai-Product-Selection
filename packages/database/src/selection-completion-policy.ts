@@ -15,6 +15,7 @@ export const competitorDetailEvidenceSql = (snapshot: "s" | "s_sample") =>
   "ON l_detail.collection_task_id=q_detail.task_id AND l_detail.organization_id=q_detail.organization_id " +
   "AND l_detail.workspace_id=q_detail.workspace_id " +
   "JOIN normalized_records n_detail ON n_detail.id=l_detail.normalized_record_id " +
+  "AND n_detail.raw_evidence_id=l_detail.raw_evidence_id AND n_detail.status IN ('active','superseded') " +
   "AND n_detail.organization_id=l_detail.organization_id AND n_detail.workspace_id=l_detail.workspace_id " +
   "JOIN competitors c_detail ON c_detail.id=CONVERT(JSON_UNQUOTE(JSON_EXTRACT(q_detail.target_json,'$.competitor_id')) USING ascii) " +
   "AND c_detail.organization_id=q_detail.organization_id AND c_detail.workspace_id=q_detail.workspace_id " +
@@ -25,6 +26,13 @@ export const competitorDetailEvidenceSql = (snapshot: "s" | "s_sample") =>
   "AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n_detail.payload_json,'$.asin')))=BINARY UPPER(c_detail.external_id) " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(q_detail.target_json,'$.projection_type'))='competitor_snapshot' " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(q_detail.target_json,'$.page_url')) REGEXP '^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/[A-Za-z0-9]{10}([/?#]|$)')";
+
+/** Choose the latest actual detail, including legacy evidence superseded by discovery pages. */
+export const latestCompetitorDetailSnapshotSql = (competitor: "c" | "c_sample") =>
+  "(SELECT s.id FROM competitor_snapshots s " +
+  `WHERE s.competitor_id=${competitor}.id AND s.organization_id=${competitor}.organization_id ` +
+  `AND s.workspace_id=${competitor}.workspace_id AND ${competitorDetailEvidenceSql("s")} ` +
+  "ORDER BY s.captured_at DESC,s.id DESC LIMIT 1)";
 
 // The producer stores the full original titles. Keep relatedness separate from detail collection:
 // an old/manual snapshot is still readable, but cannot prove an independent substitute.
@@ -97,7 +105,7 @@ export const selectionCompetitorRelevanceSql =
 export const detailedSelectionCompetitorsFromSql =
   "FROM competitors c_sample " +
   "JOIN providers p_sample ON p_sample.id=c_sample.provider_id AND p_sample.code='amazon_product' AND p_sample.status='enabled' " +
-  "JOIN competitor_snapshots s_sample ON s_sample.id=c_sample.latest_snapshot_id " +
+  `JOIN competitor_snapshots s_sample ON s_sample.id=${latestCompetitorDetailSnapshotSql("c_sample")} ` +
   "AND s_sample.organization_id=c_sample.organization_id AND s_sample.workspace_id=c_sample.workspace_id " +
   "WHERE c_sample.opportunity_id=o.id AND c_sample.organization_id=o.organization_id " +
   "AND c_sample.workspace_id=o.workspace_id AND c_sample.source_site='Amazon' AND c_sample.status='active' " +

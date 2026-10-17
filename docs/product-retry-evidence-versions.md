@@ -4,6 +4,8 @@
 
 版本化商品来源的去重键改为 task_id、external_id、parser_version、原始内容 SHA256 的联合摘要。相同任务、商品、解析版本和字节仍幂等；页面变化或解析版本变化产生新证据，并通过原 record_key、record_version、supersedes_record_id 流程形成不可变版本。不同任务仍不能共用任务证据。
 
+Amazon 的 record_key 另按 amazon-search-detail-observations.md 区分任务搜索和商品详情，避免二者相互覆盖；其原始内容摘要也带入该观测键，以免同样字节与旧未分型原始证据唯一键冲突。其他来源继续使用本页规则。
+
 仅影响既有 VERSIONED_PRODUCT_SOURCES：Amazon、1688、DHgate、Made-in-China、EC21。普通 RSS 及 Google Trends 的现有身份规则不变。保留 evidence_dedupe_conflict 校验，不删除、改写或回填旧键和旧证据；旧任务下一次合法重试首次使用新键可能新增一次相同页面证据，不重复计算整链产出。每任务仍受原采集条数和最多四次尝试约束。
 
 没有数据库结构、API 字段、环境变量、依赖或权限变化。更新 Feature Map 和对应身份测试；相关采集、证据持久化、分类、评分与完成门共同验证。正式部署后通过宝塔重启唯一 Node 项目 ai选品，使 Worker 加载新的内部去重规则。前端、Python 及外部服务协议无需调整。
