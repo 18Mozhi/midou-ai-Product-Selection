@@ -1,4 +1,18 @@
 {
+  "collectionRequiredSourceHold20261018": {
+    "status": "implemented",
+    "requirements": "docs/collection-required-source-hold.md",
+    "sourceFiles": [
+      "apps/worker/src/collection-source-scheduling-policy.ts",
+      "apps/worker/src/collection-task-state-machine.ts"
+    ],
+    "tests": [
+      "tests/unit/collection-completion-scheduling.test.mjs",
+      "tests/m03-05/collection-task-state-machine.test.mjs",
+      "tests/m03-05/collection-empty-outcome.test.mjs"
+    ],
+    "acceptance": "Pending live runtime verification; daily complete-chain target unverified."
+  },
   "selectionCatalogueDensity20261018": {
     "status": "implemented",
     "requirements": "docs/selection-catalogue-density.md",

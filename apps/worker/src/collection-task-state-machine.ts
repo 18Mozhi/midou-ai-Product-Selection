@@ -11,7 +11,10 @@ import {
   type ClaimedCollectionTask,
 } from "./collection-task-contracts.js";
 import { completeCollectionTask } from "./collection-task-evidence.js";
-import { collectionReadyOrderSql } from "./collection-source-scheduling-policy.js";
+import {
+  collectionReadyOrderSql,
+  collectionRequiredSourcesReadySql,
+} from "./collection-source-scheduling-policy.js";
 import {
   failCollectionTask,
   recoverExpiredCollectionTasks,
@@ -134,6 +137,7 @@ export class MySqlCollectionTaskWorkerRepository {
       const sql =
           "SELECT * FROM collection_tasks WHERE status='queued' AND attempt_count<4" +
           (this.taskId ? " AND id=?" : "") +
+          collectionRequiredSourcesReadySql +
           this.readyOrder(),
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [this.taskId] : []);
       const candidate = rows[0];
@@ -143,7 +147,9 @@ export class MySqlCollectionTaskWorkerRepository {
       }
       const [locked] = await c.query<RowDataPacket[]>(
         "SELECT * FROM collection_tasks WHERE id=? AND organization_id=? AND workspace_id=? " +
-          "AND status='queued' AND attempt_count<4 FOR UPDATE",
+          "AND status='queued' AND attempt_count<4" +
+          collectionRequiredSourcesReadySql +
+          " FOR UPDATE",
         [candidate.id, candidate.organization_id, candidate.workspace_id],
       );
       const row = locked[0];

@@ -1,7 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { MySqlCollectionTaskWorkerRepository } from "../../apps/worker/dist/collection-task-state-machine.js";
-import { automaticCompletionTaskSql } from "../../apps/worker/dist/collection-source-scheduling-policy.js";
+import {
+  automaticCompletionTaskSql,
+  collectionRequiredSourcesReadySql,
+} from "../../apps/worker/dist/collection-source-scheduling-policy.js";
 
 test("projected competitor detail tasks use their actual Worker producer in the completion lane", () => {
   assert.ok(
@@ -45,7 +48,13 @@ function setup(options = {}) {
       if (sql.startsWith("SELECT slot_key"))
         return [options.activeLease ? [{ slot_key: "single-host" }] : []];
       if (sql.startsWith("SELECT * FROM collection_tasks"))
-        return [options.noCandidate || (sql.endsWith("FOR UPDATE") && options.lost) ? [] : [row]];
+        return [
+          options.noCandidate ||
+          (sql.includes(collectionRequiredSourcesReadySql) && options.sourceOpen) ||
+          (sql.endsWith("FOR UPDATE") && (options.lost || options.sourceOpenedAfterSelection))
+            ? []
+            : [row],
+        ];
       if (sql.startsWith("SELECT id,provider_id"))
         return [
           [
@@ -87,7 +96,11 @@ for (const method of ["queueReady", "claim"]) {
     if (method === "queueReady") {
       assert.match(selections[1][0], /status IN .*available_at<=\? FOR UPDATE$/);
       assert.equal(selections[1][1][3], now);
-    } else assert.match(selections[1][0], /status='queued' AND attempt_count<4 FOR UPDATE$/);
+    } else {
+      for (const [sql] of selections) assert.ok(sql.includes(collectionRequiredSourcesReadySql));
+      assert.match(selections[1][0], /status='queued' AND attempt_count<4/);
+      assert.match(selections[1][0], / FOR UPDATE$/);
+    }
   });
   for (const options of [{ lost: true }, { noCandidate: true }]) {
     test(`${method} does not overwrite a missing or changed candidate: ${JSON.stringify(options)}`, async () => {
@@ -149,4 +162,39 @@ test("targeted verification keeps its explicit task restriction before scoped lo
   );
   assert.deepEqual(candidates[0][1], [now, "task"]);
   assert.deepEqual(candidates[1][1], ["task"]);
+});
+
+for (const options of [{ sourceOpen: true }, { sourceOpenedAfterSelection: true }]) {
+  test(`required-source hold creates no attempt, lease, event or fairness advance: ${JSON.stringify(options)}`, async () => {
+    const { repository, calls } = setup(options);
+    assert.equal(await repository.claim("worker", now, 120), null);
+    assert.equal(repository.successfulClaims, 0);
+    assert.ok(!calls.some(([sql]) => /^(INSERT|UPDATE)/.test(sql)));
+    assert.ok(calls.some(([sql]) => sql === "commit"));
+    assert.ok(calls.some(([sql]) => sql === "release"));
+  });
+}
+
+test("source hold is scoped to required queries and retains only the existing typed LAN acceptance exception", () => {
+  for (const [left, right] of [
+    ["task_id", "id"],
+    ["organization_id", "organization_id"],
+    ["workspace_id", "workspace_id"],
+  ])
+    assert.ok(
+      collectionRequiredSourcesReadySql.includes(
+        `required_source_query.${left}=collection_tasks.${right}`,
+      ),
+    );
+  for (const fragment of [
+    "required_source_query.is_required=1",
+    "required_source_circuit.state='open'",
+    "required_source_provider.code='1688_search'",
+    "COALESCE(JSON_TYPE(",
+    "='BOOLEAN'",
+    "COALESCE(JSON_UNQUOTE(",
+    "='true'",
+  ])
+    assert.ok(collectionRequiredSourcesReadySql.includes(fragment));
+  assert.doesNotMatch(collectionRequiredSourcesReadySql, /request_id|UPDATE|DELETE|INSERT/);
 });

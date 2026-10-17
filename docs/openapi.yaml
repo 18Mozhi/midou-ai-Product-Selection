@@ -9535,7 +9535,11 @@ components:
           description: Explicit tiers remain ordered. Within a tier, audited full-source intake keeps precedence; proven Worker product-detail, competitor and sourcing tasks receive bounded preference, with one original FIFO turn after every twenty committed claims in the live Worker process.
         scheduled_at: { type: string, format: date-time }
         available_at: { type: string, format: date-time }
-        attempt_count: { type: integer, minimum: 0, maximum: 4 }
+        attempt_count:
+          type: integer
+          minimum: 0
+          maximum: 4
+          description: Increments on actual lease acquisition. Queued tasks with an open required-source circuit remain unleased without consuming attempts; existing typed LAN acceptance runs retain their executor exception.
         successful_subquery_count: { type: integer, minimum: 0 }
         failed_subquery_count: { type: integer, minimum: 0 }
         blocked_subquery_count: { type: integer, minimum: 0 }
