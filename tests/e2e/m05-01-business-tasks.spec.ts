@@ -2,6 +2,28 @@ import { test, expect, type Page } from "@playwright/test";
 import { setupBusinessTasks as setup, taskId, actor, env, task } from "./helpers/business-tasks";
 import { saveP23PaginationReviewImage } from "./helpers/p23-pagination-review-images";
 
+async function expectCompactTaskHeader(page: Page) {
+  const header = page.locator(".task-title");
+  await expect(header).toBeVisible();
+  const metrics = await header.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      height: element.getBoundingClientRect().height,
+      background: style.backgroundColor,
+      image: style.backgroundImage,
+      fontSize: getComputedStyle(element.querySelector("h2")!).fontSize,
+      overflow: element.scrollWidth > element.clientWidth,
+      returnHeight: element.querySelector("a")?.getBoundingClientRect().height ?? null,
+    };
+  });
+  expect(metrics.height).toBeLessThanOrEqual(88);
+  expect(metrics.background).toBe("rgb(255, 255, 255)");
+  expect(metrics.image).toBe("none");
+  expect(metrics.fontSize).toBe("18px");
+  expect(metrics.overflow).toBe(false);
+  if (metrics.returnHeight != null) expect(metrics.returnHeight).toBeGreaterThanOrEqual(44);
+}
+
 for (const valid of [true, false]) {
   test(`evidence task return ${valid ? "preserves its product" : "rejects a non-product route"}`, async ({
     page,
@@ -34,8 +56,9 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
   await expect(page).toHaveURL(new RegExp(`/tasks/${taskId}\\?from=`));
   await expect(page.getByRole("link", { name: "关闭任务详情" })).toHaveAttribute("href", /\/work/);
   await expect(page.getByRole("heading", { name: "任务活动与评论" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "查看事实，再决定下一项操作" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "任务详情", level: 2 })).toBeVisible();
   await expect(page.locator(".task-dossier")).toBeVisible();
+  await expectCompactTaskHeader(page);
   await expect(page.getByText("报价证据已核验，等待确认交期。")).toBeVisible();
   await expect(page.getByText("下一步：在期限前完成当前阶段")).toBeVisible();
   const blockingContext = page.getByLabel("阻塞与下一负责人");
@@ -63,7 +86,7 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
   await page.getByText("更多任务操作", { exact: true }).click();
   await expect(page.locator(".task-detail-more")).not.toHaveAttribute("open", "");
   await expect(secondaryActions).toBeHidden();
-  await expect(page).toHaveScreenshot("retired-task-create-detail-20261017.png", {
+  await expect(page).toHaveScreenshot("compact-task-header-detail-20261017.png", {
     animations: "disabled",
     fullPage: true,
   });
@@ -826,6 +849,7 @@ for (const path of ["/work", "/tasks"]) {
         ).toBeVisible();
       else await expect(page.locator(".task-list")).toBeVisible();
       await expect(page.getByRole("dialog")).toHaveCount(0);
+      await expectCompactTaskHeader(page);
       await expect(page.getByRole("button", { name: /新建任务/ })).toHaveCount(0);
       expect(observed.createRequests).toBe(0);
     });

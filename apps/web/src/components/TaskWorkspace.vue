@@ -790,12 +790,9 @@ watch(
   >
     <header class="task-title">
       <div>
-        <p>{{ taskId ? "TASK DOSSIER / 任务详情" : mode === "today" ? "今日行动" : "工作队列" }}</p>
         <h2>
-          {{ taskId ? "查看事实，再决定下一项操作" : mode === "today" ? "今日工作" : "任务中心" }}
+          {{ taskId ? "任务详情" : mode === "today" ? "今日工作" : "任务中心" }}
         </h2>
-        <span v-if="taskId"></span>
-        <span v-else></span>
       </div>
       <RouterLink v-if="taskId" :to="returnPath" class="task-detail-return">返回目录</RouterLink>
     </header>

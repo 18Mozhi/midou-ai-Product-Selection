@@ -1,4 +1,22 @@
 {
+  "selectionTaskHeaderLayout20261017": {
+    "status": "implemented",
+    "statusDetail": "10_related_node_112_browser_web_build_and_gates_passed_not_deployed",
+    "requirements": "docs/selection-task-header-layout.md",
+    "routes": ["/work", "/tasks", "/tasks/:taskId"],
+    "sourceFiles": [
+      "apps/web/src/components/TaskWorkspace.vue",
+      "apps/web/src/components/task-page-header.css",
+      "apps/web/src/task-workspace.css",
+      "apps/web/src/task-workspace-enhancements.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m05-01-business-tasks.spec.ts",
+      "tests/unit/task-detail-page-preview.test.mjs",
+      "tests/unit/ui-phase2-task-shared-action-map.test.mjs"
+    ],
+    "contract": "One compact white task header replaces 40 legacy selector branches. ScriptSetup is byte-identical; only header labels, empty markup and presentation change. No API, permissions, schema, environment or task behavior change; not deployed."
+  },
   "selectionMemberTaskCreationRetirement20261017": {
     "status": "implemented",
     "statusDetail": "prior_88_node_112_browser_current_11_dead_css_selectors_ast_verified_not_deployed",

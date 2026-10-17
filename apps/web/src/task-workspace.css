@@ -1,30 +1,10 @@
+@import "./components/task-page-header.css";
+
 .task-workspace {
   display: grid;
   gap: 16px;
   color: var(--so-text);
 }
-.task-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  padding: 22px;
-  border: 1px solid var(--so-border);
-  border-radius: 20px;
-  background:
-    radial-gradient(circle at 82% 18%, var(--so-glow), transparent 34%),
-    linear-gradient(120deg, var(--so-panel), var(--so-bg-elevated));
-  box-shadow: var(--so-shadow);
-}
-.task-title p {
-  color: var(--so-primary);
-  font: 700 11px/1.4 var(--so-font-ui);
-  letter-spacing: 0.12em;
-}
-.task-title h2 {
-  margin: 8px 0;
-  font-size: 30px;
-}
-.task-title span,
 .task-list small {
   color: var(--so-text-muted);
 }
@@ -388,10 +368,6 @@
   gap: 8px;
 }
 @media (max-width: 700px) {
-  .task-title {
-    display: grid;
-    gap: 16px;
-  }
   .task-metrics {
     grid-template-columns: repeat(2, 1fr);
   }

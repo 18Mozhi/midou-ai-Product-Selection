@@ -225,43 +225,6 @@
     sans-serif;
 }
 
-.task-workspace--review .task-title {
-  min-height: 136px;
-  margin: 0 0 16px;
-  padding: 33px 38px;
-  border: 0;
-  border-radius: 0;
-  background: var(--review-blue);
-  color: var(--tw-white);
-}
-
-.task-workspace--review .task-title p,
-.task-workspace--review .task-title h1,
-.task-workspace--review .task-title h2,
-.task-workspace--review .task-title span {
-  color: var(--tw-white);
-}
-
-.task-workspace--review .task-title > div:first-child {
-  display: grid;
-  gap: 6px;
-}
-
-.task-workspace--review .task-title p {
-  margin: 0;
-  color: var(--tw-on-primary-muted);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.task-workspace--review .task-title h2 {
-  margin: 0;
-  font-size: clamp(28px, 3vw, 34px);
-  line-height: 1.1;
-}
-
 .task-workspace--review button,
 .task-workspace--review a {
   min-height: 44px;
@@ -537,11 +500,6 @@
 }
 
 @media (max-width: 760px) {
-  .task-workspace--review .task-title {
-    min-height: 0;
-    padding: 25px 19px;
-  }
-
   .task-workspace--review .task-focus-strip {
     margin: 0;
     border-right: 0;
@@ -608,30 +566,6 @@
   max-width: 1440px;
   margin: 0 auto;
   gap: 14px;
-}
-.task-title {
-  align-items: center;
-  padding: 2px 0 18px;
-  border: 0;
-  border-bottom: 1px solid var(--so-border);
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-.task-title p {
-  margin: 0;
-}
-.task-title h2 {
-  margin: 4px 0 5px;
-  font-size: 28px;
-  letter-spacing: -0.025em;
-  text-wrap: balance;
-}
-.task-title > div > span {
-  display: block;
-  max-width: 58ch;
-  line-height: 1.55;
-  text-wrap: pretty;
 }
 .task-focus-strip {
   display: grid;
@@ -919,10 +853,6 @@
 }
 
 @media (max-width: 760px) {
-  .task-title {
-    align-items: stretch;
-    padding-bottom: 14px;
-  }
   .task-focus-strip {
     grid-template-columns: 4px minmax(0, 1fr);
     padding: 14px;
@@ -1079,36 +1009,6 @@
   --review-line: var(--tw-border);
   --review-pale: var(--tw-info);
   color: var(--review-ink);
-}
-
-.task-workspace--review:not(.task-detail-route) .task-title {
-  min-height: 136px;
-  padding: 33px 38px;
-  border: 0;
-  border-radius: 0;
-  background: var(--review-blue);
-  color: var(--tw-white);
-}
-
-.task-workspace--review:not(.task-detail-route) .task-title p,
-.task-workspace--review:not(.task-detail-route) .task-title h2,
-.task-workspace--review:not(.task-detail-route) .task-title span {
-  color: var(--tw-white);
-}
-
-.task-workspace--review:not(.task-detail-route) .task-title p {
-  margin: 0;
-  color: var(--tw-on-primary-muted);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.task-workspace--review:not(.task-detail-route) .task-title h2 {
-  margin: 0;
-  font-size: clamp(28px, 3vw, 34px);
-  line-height: 1.1;
 }
 
 .task-workspace--review:not(.task-detail-route) button,
@@ -1308,11 +1208,6 @@
 }
 
 @media (max-width: 760px) {
-  .task-workspace--review:not(.task-detail-route) .task-title {
-    min-height: 0;
-    padding: 25px 19px;
-  }
-
   .task-workspace--review:not(.task-detail-route) .task-focus-strip {
     margin: 0;
     border-right: 0;
@@ -2116,24 +2011,6 @@
   outline: 3px solid var(--tw-focus-vivid);
   outline-offset: 2px;
 }
-.task-workspace--today:not(.task-detail-route) .task-title {
-  min-height: 160px;
-  padding: 26px 30px;
-  border: 0;
-  border-radius: 0;
-  background: var(--today-blue);
-  color: var(--so-on-primary);
-}
-.task-workspace--today:not(.task-detail-route) .task-title :is(p, h2, span) {
-  color: var(--so-on-primary);
-}
-.task-workspace--today:not(.task-detail-route) .task-title p {
-  opacity: 0.82;
-  letter-spacing: 0.14em;
-}
-.task-workspace--today:not(.task-detail-route) .task-title h2 {
-  font-size: clamp(28px, 3.4vw, 42px);
-}
 .task-workspace--today:not(.task-detail-route) .task-notice,
 .task-workspace--today:not(.task-detail-route) .task-readonly-note,
 .task-workspace--today:not(.task-detail-route) .task-focus-strip,
@@ -2277,10 +2154,6 @@
   border-radius: 4px;
 }
 @media (max-width: 760px) {
-  .task-workspace--today:not(.task-detail-route) .task-title {
-    min-height: 0;
-    padding: 24px 18px;
-  }
   .task-workspace--today:not(.task-detail-route) .task-focus-strip {
     grid-template-columns: 4px minmax(0, 1fr);
     border-right: 0;
@@ -2563,61 +2436,6 @@ body:has(.task-workspace.task-detail-route) .role-context-drawer {
   display: grid;
   gap: 16px;
   padding-bottom: 24px;
-}
-
-.task-detail-route .task-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  min-height: 144px;
-  margin: 0;
-  padding: 28px 32px;
-  background: var(--review-blue, var(--tw-primary));
-  color: var(--tw-white);
-}
-
-.task-detail-route .task-title :is(p, h2, span) {
-  color: var(--tw-white);
-}
-
-.task-detail-route .task-title p {
-  margin: 0;
-  color: var(--tw-on-primary-muted);
-  font-size: 14px;
-  font-weight: 750;
-  letter-spacing: 0.06em;
-}
-
-.task-detail-route .task-title h2 {
-  margin: 5px 0;
-  font-size: clamp(26px, 3vw, 34px);
-  line-height: 1.2;
-}
-
-.task-detail-route .task-title span {
-  display: block;
-  max-width: 720px;
-  color: var(--tw-blue-soft);
-  font-size: 16px;
-}
-
-.task-detail-route .task-title .task-detail-return {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  min-width: 120px;
-  padding: 0 16px;
-  border: 1px solid var(--tw-white-border);
-  background: transparent;
-  color: var(--tw-white);
-  text-decoration: none;
-}
-
-.task-detail-route .task-title .task-detail-return:hover {
-  background: var(--tw-white-wash);
-  color: var(--tw-white);
 }
 
 .task-detail-route .task-notice {
@@ -2930,18 +2748,6 @@ body:has(.task-workspace.task-detail-route) .role-context-drawer {
 }
 
 @media (max-width: 760px) {
-  .task-detail-route .task-title {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 16px;
-    min-height: 0;
-    padding: 22px 18px;
-  }
-
-  .task-detail-route .task-title .task-detail-return {
-    width: 100%;
-  }
-
   .task-detail-route .task-dossier-heading,
   .task-detail-route .task-dossier-record,
   .task-detail-route .task-dossier-actions,
