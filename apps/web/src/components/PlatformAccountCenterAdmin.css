@@ -10,73 +10,6 @@
   color: var(--account-review-ink);
 }
 
-.account-center--admins-c .account-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
-  gap: 24px;
-  padding: 0 0 24px;
-  border: 0;
-  border-bottom: 1px solid var(--account-org-admin-border);
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  color: var(--account-review-ink);
-}
-
-.account-center--admins-c .account-hero > div:first-child {
-  min-width: 0;
-  padding: 0;
-}
-
-.account-center--admins-c .account-hero p {
-  color: var(--account-review-blue);
-  font-size: 13px;
-  letter-spacing: 0.04em;
-}
-
-.account-center--admins-c .account-hero h2 {
-  margin: 8px 0;
-  color: var(--account-review-ink);
-  font-size: clamp(24px, 2.1vw, 30px);
-  line-height: 1.35;
-}
-
-.account-center--admins-c .account-hero span {
-  max-width: 760px;
-  color: var(--account-review-muted);
-  line-height: 1.7;
-}
-
-.account-center--admins-c .hero-actions {
-  justify-content: flex-end;
-  padding: 0;
-  background: transparent;
-}
-
-.account-center--admins-c .hero-actions button,
-.account-center--admins-c .hero-actions a {
-  min-height: 44px;
-  padding: 10px 14px;
-  border: 1px solid var(--account-org-admin-control);
-  border-radius: 8px;
-  background: var(--account-org-surface);
-  color: var(--account-review-blue-deep);
-  font-weight: 700;
-}
-
-.account-center--admins-c .hero-actions button:nth-child(2) {
-  border-color: var(--account-review-blue);
-  background: var(--account-review-blue);
-  color: var(--account-org-on-blue);
-}
-
-.account-center--admins-c .hero-actions button:last-child {
-  border-color: var(--account-org-admin-control);
-  background: var(--account-org-surface);
-  color: var(--account-review-blue-deep);
-}
-
 .account-center .account-page-layout:not(.account-page-layout--admins),
 .account-center .account-page-layout:not(.account-page-layout--admins) .account-page-main {
   display: contents;
@@ -427,17 +360,6 @@
   }
 }
 
-@media (max-width: 940px) {
-  .account-center--admins-c .account-hero {
-    grid-template-columns: minmax(0, 1fr);
-    align-items: start;
-  }
-
-  .account-center--admins-c .hero-actions {
-    justify-content: flex-start;
-  }
-}
-
 @media (max-width: 900px) {
   .account-center .account-filter--admins-c {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -449,31 +371,6 @@
 }
 
 @media (max-width: 760px) {
-  .account-center--admins-c .account-hero {
-    gap: 14px;
-    padding-bottom: 18px;
-  }
-
-  .account-center--admins-c .account-hero h2 {
-    font-size: 23px;
-  }
-
-  .account-center--admins-c .hero-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 100%;
-    gap: 8px;
-  }
-
-  .account-center--admins-c .hero-actions > * {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .account-center--admins-c .hero-actions button:last-child {
-    grid-column: 1 / -1;
-  }
-
   .account-center .account-page-rail {
     display: block;
     padding: 18px;

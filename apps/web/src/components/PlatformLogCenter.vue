@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, createApiResponseClient } from "../api-client";
@@ -343,33 +344,28 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="platform-log-center platform-log-center--c" aria-live="polite">
-    <header>
-      <div>
-        <h1>链路日志</h1>
-      </div>
-      <div class="platform-log-header-actions">
-        <button
-          class="platform-log-export"
-          type="button"
-          :disabled="refreshing && !exporting"
-          :aria-disabled="exporting || refreshing"
-          :aria-busy="exporting"
-          @click="exportCsv"
-        >
-          {{ exporting ? "正在导出…" : "导出当前筛选" }}
-        </button>
-        <button
-          ref="refreshButton"
-          class="platform-log-reload"
-          type="button"
-          :aria-disabled="refreshing"
-          :aria-busy="refreshing"
-          @click="load"
-        >
-          {{ refreshing ? "正在刷新…" : "刷新日志" }}
-        </button>
-      </div>
-    </header>
+    <PlatformPageHeader title="链路日志" :heading-level="1">
+      <button
+        class="platform-log-export"
+        type="button"
+        :disabled="refreshing && !exporting"
+        :aria-disabled="exporting || refreshing"
+        :aria-busy="exporting"
+        @click="exportCsv"
+      >
+        {{ exporting ? "正在导出…" : "导出当前筛选" }}
+      </button>
+      <button
+        ref="refreshButton"
+        class="platform-log-reload"
+        type="button"
+        :aria-disabled="refreshing"
+        :aria-busy="refreshing"
+        @click="load"
+      >
+        {{ refreshing ? "正在刷新…" : "刷新日志" }}
+      </button>
+    </PlatformPageHeader>
 
     <p class="p62-boundary-note">
       本次结果最多返回 200 条，可能只包含部分调用链；事件与关联对象均以已返回记录为准。
@@ -749,12 +745,6 @@ onBeforeUnmount(() => {
   display: block;
   margin-top: 8px;
 }
-.platform-log-center > header {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  align-items: end;
-}
 .platform-log-center h2 {
   margin: 4px 0;
 }
@@ -773,11 +763,6 @@ onBeforeUnmount(() => {
   border-color: var(--line);
   opacity: 0.6;
   cursor: not-allowed;
-}
-.platform-log-header-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
 }
 .platform-log-filter {
   display: grid;
@@ -911,13 +896,6 @@ onBeforeUnmount(() => {
   white-space: normal;
 }
 @media (max-width: 768px) {
-  .platform-log-center > header {
-    align-items: stretch;
-    flex-direction: column;
-  }
-  .platform-log-header-actions button {
-    flex: 1 1 140px;
-  }
   .platform-log-filter {
     grid-template-columns: 1fr;
   }

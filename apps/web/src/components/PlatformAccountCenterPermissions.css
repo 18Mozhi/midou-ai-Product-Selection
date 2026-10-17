@@ -7,67 +7,6 @@
   color: var(--account-permission-ink);
 }
 
-.account-center--permissions-c .account-hero {
-  display: flex;
-  align-items: center;
-  overflow: visible;
-  padding: 0 0 22px;
-  border: 0;
-  border-bottom: 1px solid var(--account-permission-divider);
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.account-center--permissions-c .account-hero > div:first-child {
-  padding: 0;
-}
-
-.account-center--permissions-c .account-hero p {
-  color: var(--account-permission-blue);
-  font-size: 14px;
-}
-
-.account-center--permissions-c .account-hero h2 {
-  margin: 8px 0;
-  color: var(--account-permission-ink);
-  font-size: 28px;
-}
-
-.account-center--permissions-c .account-hero span {
-  max-width: 72ch;
-  color: var(--account-permission-muted);
-  font-size: 14px;
-  line-height: 1.65;
-}
-
-.account-center--permissions-c .hero-actions {
-  flex-shrink: 0;
-  gap: 12px;
-  padding: 0;
-  background: transparent;
-}
-
-.account-center--permissions-c .hero-actions a.secondary,
-.account-center--permissions-c .hero-actions button.secondary {
-  min-height: 44px;
-  padding: 10px 14px;
-  border: 1px solid var(--account-permission-control);
-  border-radius: 6px;
-  background: var(--account-permission-surface);
-  color: var(--account-permission-blue);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.account-center--permissions-c .hero-actions button:disabled {
-  border-color: var(--account-permission-line);
-  background: var(--account-permission-disabled-bg);
-  color: var(--account-permission-disabled-ink);
-  opacity: 1;
-  cursor: not-allowed;
-}
-
 .account-center--permissions-c .permission-metrics {
   display: flex;
   flex-wrap: wrap;
@@ -162,38 +101,7 @@
   min-width: 0;
 }
 
-@media (max-width: 1100px) {
-  .account-center--permissions-c .account-hero {
-    display: grid;
-    align-items: start;
-  }
-
-  .account-center--permissions-c .hero-actions {
-    justify-content: flex-start;
-  }
-}
-
 @media (max-width: 760px) {
-  .account-center--permissions-c .account-hero {
-    gap: 16px;
-    padding-bottom: 18px;
-  }
-
-  .account-center--permissions-c .account-hero h2 {
-    font-size: 24px;
-  }
-
-  .account-center--permissions-c .hero-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 100%;
-  }
-
-  .account-center--permissions-c .hero-actions > * {
-    width: 100%;
-    justify-content: center;
-  }
-
   .account-center--permissions-c .permission-metrics {
     display: grid;
     gap: 12px;

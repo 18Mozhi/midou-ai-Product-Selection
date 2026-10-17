@@ -23,8 +23,8 @@
   --content-blue-soft: color-mix(in srgb, var(--so-primary) 8%, var(--so-panel));
   min-width: 0;
   display: grid;
-  grid-template-columns: 226px minmax(0, 1fr);
-  border: 1px solid var(--so-border);
+  grid-template-columns: minmax(0, 1fr);
+  border: 0;
   color: var(--so-text);
   background: var(--so-bg);
   font-family: var(--so-font-ui);
@@ -41,45 +41,9 @@
   color: var(--so-content-review-ink);
 }
 
-.platform-content--review .platform-content__rail {
-  border: 0;
-  background: var(--so-content-review-primary);
-  color: var(--so-content-surface);
-}
-
-.platform-content--review .platform-content__rail :is(small, strong, span, p, li) {
-  color: var(--so-content-surface);
-}
-
 .platform-content--review .platform-content__surface {
-  padding: 0 36px 32px;
+  padding: 0;
   background: var(--so-content-canvas);
-}
-
-.platform-content--review .platform-content__hero {
-  margin: 0 -36px;
-  padding: 31px 36px;
-  border: 0;
-  background: var(--so-content-review-primary);
-}
-
-.platform-content--review .platform-content__hero :is(p, h1, span) {
-  color: var(--so-content-surface);
-}
-
-.platform-content--review .platform-content__hero h1 {
-  margin: 4px 0 8px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
-}
-
-.platform-content--review .platform-content__hero button {
-  border-color: var(--so-content-surface);
-  border-radius: 0;
-  color: var(--so-content-review-primary);
-  background: var(--so-content-surface);
-  font-weight: 800;
 }
 
 .platform-content--review .platform-content__summary {
@@ -159,23 +123,6 @@ html[data-design="commerce"] body .platform-content-review h3 {
   display: block;
 }
 
-.platform-content__rail {
-  min-width: 0;
-  padding: 26px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  color: var(--so-on-primary);
-  background: var(--content-rail);
-}
-
-.platform-content__rail > div {
-  display: grid;
-  gap: 5px;
-}
-
-.platform-content__rail small,
-.platform-content__hero p,
 .platform-content__ledger > header p,
 .platform-content-review header small {
   margin: 0;
@@ -185,90 +132,14 @@ html[data-design="commerce"] body .platform-content-review h3 {
   letter-spacing: 0.13em;
 }
 
-.platform-content__rail small {
-  color: color-mix(in srgb, var(--so-on-primary) 70%, transparent);
-}
-
-.platform-content__rail strong {
-  font-size: 25px;
-  letter-spacing: -0.03em;
-}
-
-.platform-content__rail > div span,
-.platform-content__rail > p {
-  color: color-mix(in srgb, var(--so-on-primary) 75%, transparent);
-  font-size: 13px;
-  line-height: 1.65;
-}
-
-.platform-content__rail ol {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 8px;
-  list-style: none;
-}
-
-.platform-content__rail li {
-  min-height: 50px;
-  padding: 10px 11px;
-  display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
-  align-items: center;
-  gap: 8px;
-  border-left: 2px solid transparent;
-  color: color-mix(in srgb, var(--so-on-primary) 76%, transparent);
-}
-
-.platform-content__rail li[aria-current="page"] {
-  border-left-color: var(--so-on-primary);
-  color: var(--so-on-primary);
-  background: color-mix(in srgb, var(--so-on-primary) 10%, transparent);
-}
-
-.platform-content__rail li b {
-  font-variant-numeric: tabular-nums;
-  font-size: 13px;
-}
-
-.platform-content__rail > p {
-  margin: auto 0 0;
-  padding-top: 18px;
-  border-top: 1px solid color-mix(in srgb, var(--so-on-primary) 22%, transparent);
-}
-
 .platform-content__surface {
   min-width: 0;
-  padding: 28px clamp(20px, 3vw, 42px) 32px;
+  padding: 0;
   display: grid;
   align-content: start;
   gap: 18px;
 }
 
-.platform-content__hero {
-  min-width: 0;
-  padding-top: 22px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  border-top: 5px solid var(--so-primary);
-}
-
-.platform-content__hero > div {
-  min-width: 0;
-  display: grid;
-  gap: 4px;
-}
-
-.platform-content__hero h2 {
-  margin: 8px 0 0;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
-}
-
-.platform-content__hero span,
 .platform-content__ledger > header span,
 .platform-content__scope-note,
 .platform-content__review-note,
@@ -277,7 +148,6 @@ html[data-design="commerce"] body .platform-content-review h3 {
   line-height: 1.6;
 }
 
-.platform-content__hero button,
 .platform-content__empty button,
 .platform-content__first-state button {
   min-height: 42px;
@@ -765,7 +635,7 @@ html[data-design="commerce"] body .platform-content-review h3 {
 
 @media (max-width: 900px) {
   .platform-content {
-    grid-template-columns: 190px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .platform-content__summary {
@@ -789,81 +659,13 @@ html[data-design="commerce"] body .platform-content-review h3 {
     border-left: 0;
   }
 
-  .platform-content__rail {
-    padding: 18px 16px;
-    gap: 15px;
-  }
-
-  .platform-content__rail > div {
-    grid-template-columns: auto 1fr;
-    align-items: baseline;
-    gap: 5px 10px;
-  }
-
-  .platform-content__rail > div small,
-  .platform-content__rail > div span,
-  .platform-content__rail > p {
-    display: none;
-  }
-
-  .platform-content__rail strong {
-    font-size: 19px;
-  }
-
-  .platform-content__rail ol {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 4px;
-  }
-
-  .platform-content__rail li {
-    min-height: 44px;
-    padding: 8px;
-    grid-template-columns: auto;
-    justify-items: start;
-    gap: 2px;
-    border-left: 0;
-    border-bottom: 2px solid transparent;
-  }
-
-  .platform-content__rail li[aria-current="page"] {
-    border-bottom-color: var(--so-on-primary);
-  }
-
-  .platform-content__rail li b {
-    display: none;
-  }
-
-  .platform-content__rail li span {
-    font-size: 13px;
-  }
-
   .platform-content__surface {
-    padding: 20px 16px 28px;
+    padding: 0;
     gap: 15px;
   }
 
   .platform-content--review .platform-content__surface {
-    padding: 0 16px 28px;
-  }
-
-  .platform-content--review .platform-content__hero {
-    margin: 0 -16px;
-    padding: 25px 19px;
-  }
-
-  .platform-content__hero {
-    padding-top: 18px;
-    display: grid;
-    gap: 16px;
-  }
-
-  .platform-content__hero h2 {
-    font-size: 30px;
-  }
-
-  .platform-content__hero button {
-    width: 100%;
-    min-height: 44px;
+    padding: 0;
   }
 
   .platform-content__summary {

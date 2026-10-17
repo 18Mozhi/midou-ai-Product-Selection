@@ -9,48 +9,6 @@
     16px/1.7 "Microsoft YaHei",
     sans-serif;
 }
-.platform-management--status-c .platform-management-hero {
-  align-items: flex-start;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-.platform-management--status-c .platform-management-hero p {
-  margin: 0;
-  color: var(--p61-blue);
-  font: inherit;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-.platform-management--status-c .platform-management-hero h1 {
-  margin: 4px 0 8px;
-  color: var(--p61-navy);
-  font-size: 32px;
-  line-height: 1.35;
-}
-.platform-management--status-c .platform-management-hero span {
-  color: var(--p61-muted);
-  font-size: 15px;
-}
-.platform-management--status-c .hero-actions button {
-  min-height: 44px;
-  padding: 10px 16px;
-  border: 1px solid var(--p61-blue);
-  border-radius: 5px;
-  background: var(--p61-blue);
-  color: var(--p61-paper);
-  font: inherit;
-  font-weight: 700;
-}
-.platform-management--status-c .hero-actions button:disabled {
-  border-color: var(--p61-line);
-  background: var(--p61-disabled-bg);
-  color: var(--p61-disabled-ink);
-  opacity: 1;
-  cursor: not-allowed;
-}
 .platform-management--status-c :is(button, a, summary):focus-visible {
   outline: 3px solid var(--p61-focus);
   outline-offset: 3px;
@@ -371,17 +329,6 @@
 @media (max-width: 760px) {
   .platform-management--status-c {
     gap: 16px;
-  }
-  .platform-management--status-c .platform-management-hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 12px;
-  }
-  .platform-management--status-c .platform-management-hero h1 {
-    font-size: 28px;
-  }
-  .platform-management--status-c .platform-management-hero span {
-    font-size: 14px;
   }
   .platform-management--status-c .p61-workspace {
     gap: 16px;

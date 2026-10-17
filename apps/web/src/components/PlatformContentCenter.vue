@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed } from "vue";
 import PlatformContentPagination from "./PlatformContentPagination.vue";
 import PlatformManagementFilter from "./PlatformManagementFilter.vue";
@@ -68,30 +69,12 @@ const scopeChanged = computed(
     aria-live="polite"
     :aria-busy="refreshing"
   >
-    <aside class="platform-content__rail" aria-label="内容治理说明">
-      <div>
-        <small>CONTENT OPERATIONS</small>
-        <strong>内容治理</strong>
-        <span>跨组织热点事实目录</span>
-      </div>
-      <ol>
-        <li aria-current="page"><b>01</b><span>核对热点事实</span></li>
-        <li><b>02</b><span>判断展示状态</span></li>
-        <li><b>03</b><span>记录审核依据</span></li>
-      </ol>
-      <p>不修改标题、正文、热度与来源；只处理现有展示状态。</p>
-    </aside>
-
     <div class="platform-content__surface">
-      <header class="platform-content__hero">
-        <div>
-          <h1>内容管理</h1>
-          <span>核对热点事实，再决定如何展示。</span>
-        </div>
+      <PlatformPageHeader title="内容管理" description="热点记录与展示状态" :heading-level="1">
         <button type="button" :disabled="refreshing" @click="emit('refresh')">
           {{ refreshing ? "读取中…" : "刷新内容" }}
         </button>
-      </header>
+      </PlatformPageHeader>
 
       <section v-if="!hasSnapshot" class="platform-content__first-state">
         <span aria-hidden="true">{{ state === "loading" ? "···" : "!" }}</span>

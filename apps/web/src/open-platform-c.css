@@ -55,53 +55,17 @@
   outline-offset: 3px;
 }
 
-.open-platform--c .open-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: stretch;
-  gap: 18px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-}
-
-.open-platform--c .open-hero p {
-  margin: 0;
-  color: var(--p60-primary);
-  font: inherit;
-  letter-spacing: 0;
-}
-
-.open-platform--c .open-hero h1 {
-  margin: 6px 0 8px;
-  font-size: 30px;
-  line-height: 1.35;
-}
-
-.open-platform--c .open-hero span,
 .open-platform--c .open-workspace header p,
 .open-platform--c .open-platform small {
   color: var(--p60-muted);
 }
 
-.open-platform--c .open-org-filter {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
-  gap: 12px;
-  padding: 18px;
-  border: 1px solid var(--p60-border);
-  background: var(--p60-white);
-}
-
-.open-platform--c .open-org-filter label,
 .open-platform--c .open-toolbar,
 .open-platform--c .open-form-grid label {
   display: grid;
   gap: 6px;
 }
 
-.open-platform--c .open-org-filter input,
 .open-platform--c .open-toolbar input,
 .open-platform--c .open-toolbar select,
 .open-platform--c .open-form-grid input:not([type="checkbox"]) {
@@ -443,7 +407,6 @@
     scroll-snap-align: start;
   }
 
-  .open-platform--c .open-org-filter,
   .open-platform--c .open-form-grid,
   .open-platform--c .open-toolbar {
     grid-template-columns: 1fr;

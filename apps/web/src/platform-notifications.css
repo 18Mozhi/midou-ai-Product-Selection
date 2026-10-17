@@ -74,7 +74,6 @@
 }
 
 .platform-notifications__identity small,
-.platform-notifications__hero p,
 .message-workbench > header p,
 .notification-delivery-toolbar p,
 .notification-facts > header p,
@@ -157,35 +156,12 @@
   gap: 16px;
 }
 
-.platform-notifications__hero {
-  padding-top: 20px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  border-top: 5px solid var(--so-primary);
-}
-
-.platform-notifications__hero > div:first-child {
-  display: grid;
-  gap: 4px;
-}
-
-.platform-notifications__hero p,
 .message-workbench > header p,
 .notification-delivery-toolbar p,
 .notification-facts > header p {
   color: var(--so-primary);
 }
 
-.platform-notifications__hero h2 {
-  margin: 7px 0 0;
-  font-size: clamp(29px, 3vw, 39px);
-  line-height: 1.05;
-  letter-spacing: -0.045em;
-}
-
-.platform-notifications__hero span,
 .message-workbench > header span,
 .notification-delivery-toolbar span,
 .notification-facts > header span {
@@ -193,7 +169,6 @@
   line-height: 1.6;
 }
 
-.platform-notifications__hero > div:last-child,
 .message-reader footer {
   display: flex;
   flex-wrap: wrap;
@@ -831,7 +806,6 @@
     padding: 22px 16px 28px;
   }
 
-  .platform-notifications__hero,
   .message-workbench > header,
   .notification-delivery-toolbar,
   .notification-facts > header,
@@ -839,15 +813,6 @@
   .platform-notifications__footer {
     align-items: stretch;
     flex-direction: column;
-  }
-
-  .platform-notifications__hero > div:last-child {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .platform-notifications__hero button {
-    min-height: 48px;
   }
 
   .platform-notifications__summary {
@@ -998,19 +963,6 @@
   gap: 18px;
 }
 
-.platform-notifications--review .platform-notifications__hero {
-  padding-top: 0;
-  border-top: 0;
-}
-
-.platform-notifications--review .platform-notifications__hero h1 {
-  margin: 6px 0;
-  font:
-    700 30px/1.4 "Microsoft YaHei",
-    sans-serif;
-  letter-spacing: 0;
-}
-
 .platform-notifications--review .platform-notifications__rail {
   display: block;
   padding: 0;
@@ -1080,15 +1032,6 @@
 }
 
 @media (max-width: 840px) {
-  .platform-notifications--review .platform-notifications__hero {
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .platform-notifications--review .platform-notifications__hero h1 {
-    font-size: 27px;
-  }
-
   .platform-notifications--review .platform-notifications__rail nav button {
     display: block;
     min-width: 0;

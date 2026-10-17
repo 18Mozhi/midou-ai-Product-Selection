@@ -5,62 +5,6 @@
   color: var(--account-users-ink);
 }
 
-.account-center--users-c .account-hero {
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 16px;
-  border: 1px solid var(--account-users-blue-deep);
-  border-radius: 12px;
-  background: var(--account-users-blue);
-  box-shadow: none;
-}
-
-.account-center--users-c .account-hero > div:first-child {
-  padding: 20px 24px;
-}
-
-.account-center--users-c .account-hero p {
-  color: var(--account-users-hero-muted);
-  font-size: 16px;
-}
-
-.account-center--users-c .account-hero h2 {
-  margin: 7px 0;
-  font-size: clamp(24px, 2.4vw, 30px);
-  line-height: 1.2;
-}
-
-.account-center--users-c .account-hero span {
-  color: var(--account-users-hero-subtle);
-  font-size: 16px;
-}
-
-.account-center--users-c .hero-actions {
-  justify-content: flex-end;
-  padding: 18px 20px;
-  background: var(--account-users-overlay);
-}
-
-.account-center--users-c .hero-actions button {
-  min-height: 44px;
-  border: 1px solid var(--account-users-outline);
-  border-radius: 8px;
-  background: var(--account-users-surface);
-  color: var(--account-users-blue-deep);
-}
-
-.account-center--users-c .hero-actions button:nth-child(2) {
-  border-color: var(--account-users-on-blue);
-  background: var(--account-users-surface);
-  color: var(--account-users-blue-deep);
-}
-
-.account-center--users-c .hero-actions button:last-child {
-  border-color: var(--account-users-outline);
-  background: transparent;
-  color: var(--account-users-on-blue);
-}
-
 .account-center--users-c .account-page-layout.account-page-layout--users .account-page-main {
   display: grid;
   align-content: start;
@@ -288,36 +232,6 @@
 }
 
 @media (max-width: 760px) {
-  .account-center--users-c .account-hero {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-  }
-
-  .account-center--users-c .account-hero > div:first-child {
-    padding: 18px 18px 12px;
-  }
-
-  .account-center--users-c .account-hero h2 {
-    font-size: 24px;
-  }
-
-  .account-center--users-c .hero-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    justify-content: stretch;
-    padding: 12px 16px 16px;
-    background: transparent;
-  }
-
-  .account-center--users-c .hero-actions > * {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .account-center--users-c .hero-actions button:last-child {
-    grid-column: 1 / -1;
-  }
-
   .account-center--users-c .account-page-layout--users {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

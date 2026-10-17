@@ -17,6 +17,7 @@ const organizationRecords = await readFile(
 );
 const accountSurface = `${panel}\n${workspace}\n${filters}`;
 const styles = await readFile("apps/web/src/components/PlatformAccountCenter.css", "utf8");
+const header = await readFile("apps/web/src/components/PlatformPageHeader.vue", "utf8");
 
 test("P39 production account center opts into the scoped C composition", () => {
   assert.match(panel, /class="account-center account-center--review"/);
@@ -36,10 +37,11 @@ test("P39 keeps the account facts, tabs, filters and records on the real page", 
   assert.match(accountSurface, /PlatformAdminRecords/);
 });
 
-test("P39 C composition has desktop rail, responsive collapse and focus treatment", () => {
-  assert.match(styles, /\.account-center--review \.account-hero/);
-  assert.match(styles, /grid-template-columns: minmax\(0, 1fr\) minmax\(330px, 0\.7fr\)/);
-  assert.match(styles, /@media \(max-width: 940px\)/);
+test("platform accounts use the shared compact header while preserving responsive records and focus", () => {
+  assert.match(panel, /<PlatformPageHeader/);
+  assert.doesNotMatch(styles, /account-hero|hero-actions/);
+  assert.match(header, /@media \(max-width: 640px\)/);
+  assert.match(header, /min-height: 44px/);
   assert.match(styles, /@media \(max-width: 700px\)/);
   assert.match(
     styles,

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import {
   computed,
   defineAsyncComponent,
@@ -455,11 +456,7 @@ onActivated(() => {
 
 <template>
   <section class="platform-data" aria-labelledby="platform-data-title">
-    <header class="platform-data-hero">
-      <div>
-        <p>平台管理 / 数据中心</p>
-        <h2 id="platform-data-title">数据中心</h2>
-      </div>
+    <PlatformPageHeader title="数据中心" title-id="platform-data-title">
       <nav aria-label="平台数据视图">
         <button
           :aria-current="tab === 'records' ? 'page' : undefined"
@@ -476,7 +473,7 @@ onActivated(() => {
           证据与质量
         </button>
       </nav>
-    </header>
+    </PlatformPageHeader>
 
     <div v-show="tab === 'records'" class="platform-data-layout">
       <aside class="platform-data-rail">
@@ -792,37 +789,6 @@ onActivated(() => {
   min-width: 0;
   color: var(--so-text);
 }
-.platform-data-hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 24px 26px;
-  border: 1px solid var(--so-border);
-  border-radius: 14px;
-  background: var(--so-panel);
-}
-.platform-data-hero p {
-  margin: 0;
-  color: var(--so-text-muted);
-  font-size: 13px;
-  font-weight: 700;
-}
-.platform-data-hero h2 {
-  margin: 6px 0 5px;
-  color: var(--so-text);
-  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-  font-size: clamp(26px, 3vw, 34px);
-  line-height: 1.25;
-}
-.platform-data-hero span {
-  color: var(--so-text-muted);
-  font-size: 14px;
-}
-.platform-data-hero nav {
-  display: flex;
-  gap: 8px;
-}
 .platform-data button,
 .platform-data input,
 .platform-data select {
@@ -846,7 +812,6 @@ onActivated(() => {
   outline: 3px solid var(--so-focus, var(--so-data-focus-fallback));
   outline-offset: 2px;
 }
-.platform-data-hero button[aria-current="page"],
 .platform-data-filter button:first-of-type,
 .platform-data-export {
   background: var(--so-primary-strong);
@@ -1151,18 +1116,6 @@ onActivated(() => {
 @media (max-width: 760px) {
   .platform-data {
     gap: 12px;
-  }
-  .platform-data-hero {
-    align-items: stretch;
-    flex-direction: column;
-    padding: 18px 16px;
-  }
-  .platform-data-hero nav {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  .platform-data-hero nav button {
-    width: 100%;
   }
   .platform-data-layout {
     display: block;

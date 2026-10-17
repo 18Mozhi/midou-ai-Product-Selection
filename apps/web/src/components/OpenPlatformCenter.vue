@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import {
   computed,
   nextTick,
@@ -639,10 +640,7 @@ onMounted(() => window.addEventListener("popstate", handlePopState));
 
 <template>
   <section class="open-platform open-platform--c">
-    <header class="open-hero">
-      <div>
-        <h1>开放平台</h1>
-      </div>
+    <PlatformPageHeader title="开放平台" :heading-level="1">
       <form class="open-org-filter" @submit.prevent="applyFilters">
         <label
           >组织内部编号<input
@@ -653,7 +651,7 @@ onMounted(() => window.addEventListener("popstate", handlePopState));
         /></label>
         <button type="submit" :disabled="refreshing">{{ refreshing ? "读取中…" : "读取" }}</button>
       </form>
-    </header>
+    </PlatformPageHeader>
 
     <aside v-if="snapshotIsStale" class="open-notice open-stale-snapshot" role="status">
       <strong>当前条件尚未读取</strong>

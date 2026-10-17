@@ -110,10 +110,10 @@ export async function capturePhase2Evidence(
               ? { selector: ".message-reader-dialog", offset: 0 }
               : state === "publish-success"
                 ? { selector: ".platform-notifications__message", offset: 70 }
-                : { selector: ".platform-notifications__hero", offset: 58 }
+                : { selector: ".platform-page-header", offset: 58 }
             : pageId === "P56"
               ? state === "content-default"
-                ? { selector: ".platform-content__hero", offset: 58 }
+                ? { selector: ".platform-page-header", offset: 58 }
                 : state === "content-records"
                   ? { selector: ".responsive-data-view__mobile", offset: 138 }
                   : state === "content-filtered-empty"
@@ -125,7 +125,7 @@ export async function capturePhase2Evidence(
                 ? state === "governance-directory"
                   ? { selector: ".governance-directory", offset: 58 }
                   : state === "governance-default"
-                    ? { selector: ".governance-hero", offset: 58 }
+                    ? { selector: ".platform-page-header", offset: 58 }
                     : state === "governance-forbidden"
                       ? { selector: ".governance-state", offset: 58 }
                       : { selector: ".governance-context", offset: 58 }
@@ -137,7 +137,7 @@ export async function capturePhase2Evidence(
                       : { selector: ".quality-task", offset: 58 }
                   : state.includes("unknown")
                     ? { selector: ".platform-data-feedback", offset: 110 }
-                    : { selector: ".platform-data-hero", offset: 58 },
+                    : { selector: ".platform-page-header", offset: 58 },
         );
       else await page.evaluate(() => window.scrollTo(0, 0));
     }

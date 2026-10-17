@@ -609,7 +609,9 @@ test("platform permission page reads only the real role catalog and preserves co
   });
   await page.goto("/platform-admin/permissions");
   await expect(page).toHaveTitle("角色权限 · 智能选品");
-  await expect(page.getByRole("heading", { name: "核对角色与能力边界" })).toBeVisible();
+  await expect(
+    page.locator(".platform-page-header").getByRole("heading", { name: "角色权限" }),
+  ).toBeVisible();
   await expect(page.getByText("roles + role_capabilities", { exact: true })).toBeVisible();
   await expect(page.getByRole("table")).toHaveCount(0);
   expect(accountRequests).toBe(0);
@@ -724,7 +726,7 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
 }) => {
   await setup(page);
   await page.goto("/platform-admin/accounts");
-  await expect(page.getByRole("heading", { name: "查看平台账号使用概况" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "组织与用户" })).toBeVisible();
   const accountTabs = page.getByRole("navigation", { name: "账号与组织二级导航" });
   await expect(accountTabs.getByRole("link", { name: "组织管理", exact: true })).toBeVisible();
   await expect(accountTabs.getByRole("link", { name: "用户管理", exact: true })).toBeVisible();
@@ -990,7 +992,7 @@ test("organization list uses organization-specific filters and a recoverable emp
   });
   await page.goto("/platform-admin/organizations");
   await expect(
-    page.locator(".account-hero").getByRole("heading", { name: "组织管理" }),
+    page.locator(".platform-page-header").getByRole("heading", { name: "组织管理" }),
   ).toBeVisible();
   const organizationLayout = page.locator(".account-page-layout--organizations");
   await expect(organizationLayout.getByRole("complementary")).toBeVisible();
@@ -1000,7 +1002,9 @@ test("organization list uses organization-specific filters and a recoverable emp
   const results = organizationLayout.locator(".account-page-main");
   await expect(results.getByRole("heading", { name: "组织记录" })).toBeVisible();
   await expect(results.getByRole("button", { name: "刷新数据" })).toBeVisible();
-  await expect(page.locator(".account-hero").getByRole("button", { name: /刷新/ })).toHaveCount(0);
+  await expect(
+    page.locator(".platform-page-header").getByRole("button", { name: /刷新/ }),
+  ).toHaveCount(0);
   const mobile = (page.viewportSize()?.width ?? 0) <= 760;
   if (mobile) await page.getByRole("button", { name: "组织筛选" }).click();
   const filters = mobile ? page.getByRole("dialog", { name: "组织筛选" }) : page;
@@ -1548,7 +1552,7 @@ test("administrator list persists filters and exposes a desktop and mobile empty
     return route.fulfill({ json: env(query ? { ...overview, admins: [] } : overview) });
   });
   await page.goto("/platform-admin/admins");
-  await expect(page.getByRole("heading", { name: "授权、会话与登录状态，一处管理" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "平台管理员" })).toBeVisible();
   const mobile = (page.viewportSize()?.width ?? 0) <= 760;
   if (mobile) await page.getByRole("button", { name: "管理员筛选" }).click();
   const filters = mobile ? page.getByRole("dialog", { name: "管理员筛选" }) : page;

@@ -24,10 +24,14 @@
   min-width: 0;
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
+  gap: 16px 20px;
   color: var(--so-text);
   background: var(--so-bg);
-  border: 1px solid var(--so-border);
+  border: 0;
   font-family: var(--so-font-ui);
+}
+.platform-governance > .governance-page-header {
+  grid-column: 1 / -1;
 }
 
 /* P55 C composition is now the production governance surface. The marker
@@ -73,34 +77,8 @@
 }
 
 .platform-governance--review .governance-main {
-  padding: 0 36px 32px;
+  padding: 0;
   background: var(--so-governance-canvas);
-}
-
-.platform-governance--review .governance-hero {
-  margin: 0 -36px 20px;
-  padding: 31px 36px;
-  background: var(--so-governance-review-primary);
-}
-
-.platform-governance--review .governance-hero :is(p, h1, span) {
-  color: var(--so-governance-surface);
-}
-
-.platform-governance--review .governance-hero h1 {
-  margin: 4px 0 8px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
-}
-
-.platform-governance--review .governance-header-actions :is(button, a) {
-  min-height: 42px;
-  border-color: var(--so-governance-surface);
-  border-radius: 0;
-  color: var(--so-governance-review-primary);
-  background: var(--so-governance-surface);
-  font-weight: 800;
 }
 
 .platform-governance--review
@@ -346,16 +324,6 @@ html[data-design="commerce"] body .platform-governance :is(h1, h2, h3) {
   gap: 20px;
 }
 
-.governance-hero {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-}
-
-.governance-hero p,
-.governance-hero h2,
-.governance-hero span,
 .governance-context p,
 .governance-notice,
 .governance-state p,
@@ -364,30 +332,6 @@ html[data-design="commerce"] body .platform-governance :is(h1, h2, h3) {
   margin: 0;
 }
 
-.governance-hero p {
-  color: var(--so-primary);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-}
-
-.governance-hero h2 {
-  margin-top: 6px;
-  font-size: clamp(24px, 2.4vw, 32px);
-  line-height: 1.16;
-  letter-spacing: -0.035em;
-  text-wrap: balance;
-  font-family: var(--so-font-ui);
-}
-
-.governance-hero > div:first-child > span {
-  display: block;
-  margin-top: 8px;
-  color: var(--so-text-muted);
-  line-height: 1.55;
-}
-
-.governance-header-actions,
 .governance-filter-actions,
 .governance-row-actions,
 .governance-pagination nav,
@@ -397,12 +341,6 @@ html[data-design="commerce"] body .platform-governance :is(h1, h2, h3) {
   gap: 8px;
 }
 
-.governance-header-actions {
-  flex: 0 0 auto;
-}
-
-.governance-header-actions button,
-.governance-header-actions a,
 .governance-filter-actions button,
 .governance-row-actions button,
 .governance-row-actions a,
@@ -426,7 +364,6 @@ html[data-design="commerce"] body .platform-governance :is(h1, h2, h3) {
     transform 120ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.governance-header-actions button:hover:not(:disabled),
 .governance-filter-actions button:hover:not(:disabled),
 .governance-row-actions button:hover:not(:disabled),
 .governance-row-actions a:hover,
@@ -435,7 +372,6 @@ html[data-design="commerce"] body .platform-governance :is(h1, h2, h3) {
   background: var(--governance-blue-soft);
 }
 
-.governance-header-actions a.governance-primary-action,
 .governance-filter-actions button[type="submit"],
 .governance-filter-actions button[type="submit"]:hover:not(:disabled),
 .governance-detail-action,
@@ -971,16 +907,6 @@ html[data-design="commerce"] body .platform-governance :is(h1, h2, h3) {
     padding: 0 16px 28px;
   }
 
-  .platform-governance--review .governance-hero {
-    margin: 0 -16px 16px;
-    padding: 25px 19px;
-  }
-
-  .platform-governance--review .governance-header-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
   .platform-governance--review .governance-context {
     border-top: 5px solid var(--so-governance-review-primary);
     border-left: 0;
@@ -999,23 +925,12 @@ html[data-design="commerce"] body .platform-governance :is(h1, h2, h3) {
     margin-inline: 16px;
   }
 
-  .governance-hero {
-    display: grid;
-    gap: 14px;
-  }
-
-  .governance-hero h2 {
-    font-size: 24px;
-  }
-
-  .governance-header-actions,
   .governance-filter-actions,
   .governance-pagination nav,
   .governance-detail footer {
     width: 100%;
   }
 
-  .governance-header-actions > *,
   .governance-filter-actions > *,
   .governance-pagination nav > button,
   .governance-detail footer > * {
@@ -1043,9 +958,7 @@ html[data-design="commerce"] body .platform-governance :is(h1, h2, h3) {
     margin-top: auto;
   }
 
-  .governance-filter-actions button,
-  .governance-header-actions button,
-  .governance-header-actions a {
+  .governance-filter-actions button {
     min-height: 44px;
   }
 

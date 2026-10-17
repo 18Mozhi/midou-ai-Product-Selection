@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed, defineAsyncComponent, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import type { RoleCapabilitySummary } from "@scoutops/contracts";
@@ -640,58 +641,49 @@ onMounted(load);
       'account-center--permissions-c': permissionsRoute,
     }"
   >
-    <header class="account-hero">
-      <div>
-        <p>
-          {{
-            accountOverviewRoute
-              ? "组织与用户"
-              : permissionsRoute
-                ? "平台权限"
-                : organizationListRoute
-                  ? "组织管理"
-                  : adminListRoute
-                    ? "平台管理员"
-                    : "平台用户"
-          }}
-        </p>
-        <h2>
-          {{
-            accountOverviewRoute
-              ? "查看平台账号使用概况"
-              : permissionsRoute
-                ? "核对角色与能力边界"
-                : organizationListRoute
-                  ? "组织管理"
-                  : adminListRoute
-                    ? "授权、会话与登录状态，一处管理"
-                    : "查看用户归属与登录状态"
-          }}
-        </h2>
-      </div>
-      <div class="hero-actions">
-        <template v-if="permissionsRoute">
-          <RouterLink class="secondary" to="/platform-admin/admins">管理管理员</RouterLink>
-          <button class="secondary" :disabled="rolesLoading" @click="load">
-            {{ rolesLoading ? "正在刷新…" : "刷新角色目录" }}
-          </button>
-        </template>
-        <template v-else>
-          <button ref="createOrganizationButton" @click="openOrganizationWizard">
-            <AppIcon name="plus" /> 新建组织</button
-          ><button @click="openCreateUser(tab === 'admins')">
-            <AppIcon name="plus" /> {{ tab === "admins" ? "新建管理员" : "新建用户" }}</button
-          ><button
-            v-if="!organizationListRoute"
-            class="secondary"
-            :disabled="refreshing || Boolean(busy)"
-            @click="load"
-          >
-            {{ refreshing ? "正在刷新…" : "刷新数据" }}
-          </button>
-        </template>
-      </div>
-    </header>
+    <PlatformPageHeader
+      :title="
+        accountOverviewRoute
+          ? '组织与用户'
+          : permissionsRoute
+            ? '角色权限'
+            : organizationListRoute
+              ? '组织管理'
+              : adminListRoute
+                ? '平台管理员'
+                : '平台用户'
+      "
+    >
+      <template v-if="permissionsRoute">
+        <RouterLink class="secondary" to="/platform-admin/admins">管理管理员</RouterLink>
+        <button class="secondary" :disabled="rolesLoading" @click="load">
+          {{ rolesLoading ? "正在刷新…" : "刷新角色目录" }}
+        </button>
+      </template>
+      <template v-else>
+        <button
+          ref="createOrganizationButton"
+          type="button"
+          :class="{ 'is-primary': organizationListRoute || accountOverviewRoute }"
+          @click="openOrganizationWizard"
+        >
+          <AppIcon name="plus" /> 新建组织</button
+        ><button
+          type="button"
+          :class="{ 'is-primary': !organizationListRoute && !accountOverviewRoute }"
+          @click="openCreateUser(tab === 'admins')"
+        >
+          <AppIcon name="plus" /> {{ tab === "admins" ? "新建管理员" : "新建用户" }}</button
+        ><button
+          v-if="!organizationListRoute"
+          class="secondary"
+          :disabled="refreshing || Boolean(busy)"
+          @click="load"
+        >
+          {{ refreshing ? "正在刷新…" : "刷新数据" }}
+        </button>
+      </template>
+    </PlatformPageHeader>
     <template v-if="permissionsRoute">
       <div v-if="platformRoles.length" class="account-metrics permission-metrics">
         <article>

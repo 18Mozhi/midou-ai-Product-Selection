@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
@@ -361,6 +362,18 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="platform-governance platform-governance--review" :aria-busy="refreshing">
+    <PlatformPageHeader
+      class="governance-page-header"
+      title="规则、工作流与自动化"
+      :heading-level="1"
+    >
+      <button type="button" :disabled="refreshing" @click="load()">
+        {{ refreshing ? "刷新中…" : "刷新事实" }}
+      </button>
+      <RouterLink v-if="current.href" class="is-primary" :to="current.href">
+        {{ current.action }}
+      </RouterLink>
+    </PlatformPageHeader>
     <aside class="governance-directory">
       <div class="governance-directory__intro">
         <p>平台治理</p>
@@ -402,21 +415,6 @@ onBeforeUnmount(() => {
     </aside>
 
     <div class="governance-main">
-      <header class="governance-hero">
-        <div>
-          <p>版本清楚，操作有归属</p>
-          <h1>规则、工作流与自动化</h1>
-        </div>
-        <div class="governance-header-actions">
-          <button type="button" :disabled="refreshing" @click="load()">
-            {{ refreshing ? "刷新中…" : "刷新事实" }}
-          </button>
-          <RouterLink v-if="current.href" class="governance-primary-action" :to="current.href">
-            {{ current.action }}
-          </RouterLink>
-        </div>
-      </header>
-
       <ResponsiveFilterDrawer
         label="筛选治理记录"
         :active-count="activeFilterCount"

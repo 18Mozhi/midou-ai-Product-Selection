@@ -655,7 +655,7 @@ test("UI2-DG55 C directory exposes factual counts and complete automation detail
     "font-family",
     governanceFont,
   );
-  await expectGovernancePrimary(page.locator(".governance-primary-action"));
+  await expectGovernancePrimary(page.locator(".platform-page-header .is-primary"));
   if (mobile) await page.getByRole("button", { name: "筛选治理记录", exact: true }).click();
   await expectGovernancePrimary(page.getByRole("button", { name: "应用筛选", exact: true }));
   if (mobile)

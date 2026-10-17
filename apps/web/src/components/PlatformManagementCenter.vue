@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import {
   computed,
   defineAsyncComponent,
@@ -440,21 +441,18 @@ onUnmounted(() => {
       @review="beginReview"
     />
     <PlatformNotificationCenter v-else-if="domain === 'notifications'" :request="request" />
-    <header
+    <PlatformPageHeader
       v-if="domain !== 'content' && domain !== 'notifications'"
-      class="platform-management-hero"
+      :title="titles[domain][0]"
+      :heading-level="domain === 'status' ? 1 : 2"
     >
-      <div>
-        <h1 v-if="domain === 'status'">系统状态</h1>
-        <h2 v-else>{{ titles[domain][0] }}</h2>
-      </div>
-      <div class="hero-actions">
-        <button v-if="domain === 'email'" type="button" @click="openMessage()">发送邮件</button>
-        <button type="button" :disabled="refreshing" @click="load">
-          {{ refreshing ? "刷新中…" : "刷新数据" }}
-        </button>
-      </div>
-    </header>
+      <button v-if="domain === 'email'" type="button" class="is-primary" @click="openMessage()">
+        发送邮件
+      </button>
+      <button type="button" :disabled="refreshing" @click="load">
+        {{ refreshing ? "刷新中…" : "刷新数据" }}
+      </button>
+    </PlatformPageHeader>
     <PlatformManagementFilter
       v-if="domain !== 'status' && domain !== 'content' && domain !== 'notifications'"
       v-model:query="query"
@@ -589,40 +587,6 @@ onUnmounted(() => {
   gap: 18px;
   color: var(--so-text);
 }
-.platform-management-hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 24px;
-  border: 1px solid var(--so-border);
-  border-radius: 17px;
-  background: linear-gradient(135deg, var(--so-panel-soft), var(--so-bg-elevated));
-}
-.platform-management-hero p {
-  margin: 0;
-  color: var(--so-primary);
-  font: 700 11px monospace;
-  letter-spacing: 0.14em;
-}
-.platform-management-hero h2 {
-  margin: 6px 0;
-  font-size: 28px;
-}
-.platform-management-hero span {
-  color: var(--so-text-muted);
-}
-.hero-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.hero-actions button:first-child {
-  border-color: var(--so-primary);
-  background: var(--so-primary);
-  color: var(--so-on-primary);
-  font-weight: 800;
-}
 .platform-management button,
 .platform-management select,
 .platform-management input,
@@ -642,7 +606,6 @@ onUnmounted(() => {
   cursor: not-allowed;
   opacity: 0.55;
 }
-.platform-management-hero button,
 .platform-management-filter button,
 dialog footer button:last-child {
   border-color: var(--so-primary);
@@ -960,10 +923,6 @@ dialog footer {
   gap: 8px;
 }
 @media (max-width: 700px) {
-  .platform-management-hero {
-    align-items: flex-start;
-    flex-direction: column;
-  }
   .platform-management-filter {
     flex-direction: column;
   }

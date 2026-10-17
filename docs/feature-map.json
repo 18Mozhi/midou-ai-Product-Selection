@@ -1,4 +1,45 @@
 {
+  "selectionPlatformToolbar20261017": {
+    "status": "implemented",
+    "statusDetail": "targeted_browser_and_build_checks_passed_not_deployed_full_site_pending",
+    "requirements": "docs/selection-platform-toolbar.md",
+    "routes": [
+      "/platform-admin",
+      "/platform-admin/accounts",
+      "/platform-admin/organizations",
+      "/platform-admin/users",
+      "/platform-admin/admins",
+      "/platform-admin/permissions",
+      "/platform-admin/data",
+      "/platform-admin/governance",
+      "/platform-admin/content",
+      "/platform-admin/notifications",
+      "/platform-admin/status",
+      "/platform-admin/api-coverage",
+      "/platform-admin/logs",
+      "/platform-admin/open-platform"
+    ],
+    "sourceFiles": [
+      "apps/web/src/components/PlatformPageHeader.vue",
+      "apps/web/src/components/PlatformDashboard.vue",
+      "apps/web/src/components/PlatformAccountCenter.vue",
+      "apps/web/src/components/PlatformManagementCenter.vue",
+      "apps/web/src/components/PlatformContentCenter.vue",
+      "apps/web/src/components/PlatformNotificationCenter.vue",
+      "apps/web/src/components/PlatformGovernanceCenter.vue",
+      "apps/web/src/components/PlatformDataCenter.vue",
+      "apps/web/src/components/PlatformLogCenter.vue",
+      "apps/web/src/components/OpenPlatformCenter.vue"
+    ],
+    "testFiles": [
+      "tests/e2e/platform-page-header.spec.ts",
+      "tests/e2e/m06-01-platform-accounts.spec.ts",
+      "tests/e2e/m06-02-platform-dashboard.spec.ts",
+      "tests/e2e/m06-05-open-platform.spec.ts",
+      "tests/e2e/m02-03-navigation-shell.spec.ts"
+    ],
+    "contract": "Shared compact commerce toolbar; full-width platform overview and content workbench. Preserve existing forms, HTTP, permissions and audit. No API/schema/config/dependency change. Frontend rebuild only; not full-site or production acceptance."
+  },
   "selectionCrossLanguageSupply20261017": {
     "status": "implemented",
     "statusDetail": "local_contracts_pending_live_matching_acceptance_not_deployed",

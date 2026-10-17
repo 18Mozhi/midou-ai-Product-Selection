@@ -199,40 +199,6 @@ const countRatio = (value: number, total: number) => `${value} / ${total}`;
 :global(.role-shell:has(.api-coverage--c) .platform-management) {
   gap: 16px;
 }
-:global(.role-shell:has(.api-coverage--c) .platform-management-hero) {
-  min-width: 0;
-  padding: 18px 20px;
-  border: 1px solid var(--p63-line);
-  border-left: 4px solid var(--p63-blue);
-  border-radius: 0;
-  background: var(--p63-panel);
-  box-shadow: none;
-}
-:global(.role-shell:has(.api-coverage--c) .platform-management-hero p) {
-  color: var(--p63-blue);
-  font:
-    700 12px/1.5 "Microsoft YaHei",
-    sans-serif;
-  letter-spacing: 0.04em;
-}
-:global(.role-shell:has(.api-coverage--c) .platform-management-hero h2) {
-  margin: 4px 0;
-  color: var(--p63-ink);
-  font:
-    700 22px/1.4 "Microsoft YaHei",
-    sans-serif;
-}
-:global(.role-shell:has(.api-coverage--c) .platform-management-hero span) {
-  color: var(--p63-muted);
-}
-:global(.role-shell:has(.api-coverage--c) .platform-management-hero button) {
-  min-height: 44px;
-  border: 1px solid var(--p63-blue);
-  border-radius: 0;
-  background: var(--p63-blue);
-  color: var(--p63-on-blue);
-  box-shadow: none;
-}
 :global(
   .role-shell:has(.api-coverage--c)
     .responsive-filter-drawer--overlay

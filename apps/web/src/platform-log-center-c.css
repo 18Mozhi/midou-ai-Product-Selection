@@ -73,39 +73,6 @@
   margin: 0;
 }
 
-.platform-log-center--c > header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.platform-log-center--c > header > div:first-child {
-  display: grid;
-  gap: 6px;
-}
-
-.platform-log-center--c > header p {
-  color: var(--p62-primary);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.platform-log-center--c > header h1 {
-  color: var(--p62-primary-strong);
-  font-size: 32px;
-  line-height: 1.35;
-}
-
-.platform-log-center--c > header span {
-  color: var(--p62-muted);
-}
-
 .platform-log-center--c button {
   min-height: 44px;
   padding: 10px 16px;
@@ -135,12 +102,6 @@
 .platform-log-center--c :is(a, button, input, select, summary):focus-visible {
   outline: 3px solid var(--p62-focus);
   outline-offset: 3px;
-}
-
-.platform-log-center--c .platform-log-header-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 .platform-log-center--c .p62-boundary-note {
@@ -702,19 +663,6 @@ body:has(.platform-log-center--c)
 @media (max-width: 760px) {
   .platform-log-center--c {
     gap: 16px;
-  }
-
-  .platform-log-center--c > header {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .platform-log-center--c > header h1 {
-    font-size: 28px;
-  }
-
-  .platform-log-center--c .platform-log-header-actions button {
-    flex: 1 1 140px;
   }
 
   .platform-log-center--c .platform-log-filter {

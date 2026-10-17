@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed, onActivated, onDeactivated, onMounted, onUnmounted, shallowRef } from "vue";
 import PlatformMessageEditor from "./PlatformMessageEditor.vue";
 import PlatformNotificationActionDialog from "./PlatformNotificationActionDialog.vue";
@@ -115,17 +116,12 @@ onUnmounted(stop);
     :aria-busy="refreshing"
   >
     <div class="platform-notifications__surface">
-      <header class="platform-notifications__hero">
-        <div>
-          <h1>通知管理</h1>
-        </div>
-        <div>
-          <button type="button" class="is-primary" @click="editor.begin()">新建草稿</button>
-          <button type="button" :disabled="refreshing" @click="reload">
-            {{ refreshing ? "读取中…" : "刷新快照" }}
-          </button>
-        </div>
-      </header>
+      <PlatformPageHeader title="通知管理" :heading-level="1">
+        <button type="button" class="is-primary" @click="editor.begin()">新建草稿</button>
+        <button type="button" :disabled="refreshing" @click="reload">
+          {{ refreshing ? "读取中…" : "刷新快照" }}
+        </button>
+      </PlatformPageHeader>
 
       <aside class="platform-notifications__rail" aria-label="通知运营分区">
         <div class="platform-notifications__identity">

@@ -5,56 +5,6 @@
   gap: 20px;
   color: var(--so-text);
 }
-.platform-dashboard-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 22px;
-  border: 1px solid var(--so-border-strong);
-  background: linear-gradient(105deg, var(--so-bg-elevated), var(--so-panel-soft));
-  border-radius: 16px;
-}
-.platform-dashboard-toolbar > div {
-  flex: 1;
-}
-.platform-dashboard-toolbar p {
-  margin: 0;
-  color: var(--so-success);
-  font: 700 13px/1.4 var(--so-font-ui);
-  letter-spacing: 0.14em;
-}
-.platform-dashboard-toolbar h2 {
-  margin: 6px 0;
-  font-size: 24px;
-}
-.platform-dashboard-toolbar span,
-.platform-dashboard-toolbar label {
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.platform-dashboard-toolbar label {
-  display: grid;
-  gap: 5px;
-}
-.platform-dashboard-toolbar select,
-.platform-dashboard-toolbar button {
-  min-height: var(--so-touch-target);
-  border: 1px solid var(--so-border-strong);
-  background: var(--so-bg-elevated);
-  color: var(--so-text);
-  border-radius: 8px;
-  padding: 9px 12px;
-}
-.platform-dashboard-toolbar button {
-  cursor: pointer;
-}
-.platform-dashboard-toolbar select:disabled,
-.platform-dashboard-toolbar button:disabled {
-  cursor: wait;
-  opacity: 0.64;
-}
-.platform-dashboard-toolbar select:focus-visible,
-.platform-dashboard-toolbar button:focus-visible,
 .platform-dashboard a:focus-visible {
   outline: 2px solid var(--so-primary);
   outline-offset: 3px;
@@ -329,16 +279,8 @@
   }
 }
 @media (max-width: 700px) {
-  .platform-dashboard-toolbar {
-    align-items: stretch;
-    flex-direction: column;
-  }
   .platform-kpis {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .platform-dashboard-toolbar button,
-  .platform-dashboard-toolbar select {
-    width: 100%;
   }
   .platform-refresh-feedback,
   .platform-facts > header {
@@ -448,65 +390,14 @@
   }
 }
 
-/* P38 C composition: a blue operating rail with a white factual workbench. */
+/* Shared platform header above the full-width factual workbench. */
 .platform-dashboard--review {
   max-width: 1280px;
-  grid-template-columns: minmax(220px, 240px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 14px 24px;
   padding: 0;
   color: var(--pd-ink);
   background: var(--pd-canvas);
-}
-
-.platform-dashboard--review > :not(.platform-dashboard-toolbar):not(.platform-dashboard-state) {
-  grid-column: 2;
-}
-
-.platform-dashboard--review .platform-dashboard-toolbar {
-  grid-column: 1;
-  grid-row: 1 / span 12;
-  position: sticky;
-  top: 16px;
-  min-height: 0;
-  box-sizing: border-box;
-  align-items: stretch;
-  flex-direction: column;
-  padding: 22px 20px;
-  border: 0;
-  border-radius: 0;
-  color: var(--pd-on-rail);
-  background: var(--pd-rail);
-  box-shadow: none;
-}
-
-.platform-dashboard--review .platform-dashboard-toolbar > div {
-  flex: 0 0 auto;
-}
-
-.platform-dashboard--review .platform-dashboard-toolbar :is(p, h2, span, label) {
-  color: var(--pd-on-rail);
-}
-
-.platform-dashboard--review .platform-dashboard-toolbar h2 {
-  margin: 8px 0 12px;
-  font-size: 28px;
-  line-height: 1.2;
-}
-
-.platform-dashboard--review .platform-dashboard-toolbar label {
-  margin-top: 24px;
-}
-
-.platform-dashboard--review .platform-dashboard-toolbar :is(select, button) {
-  width: 100%;
-  border-radius: 0;
-  border-color: var(--pd-rail-control-border);
-  color: var(--pd-ink);
-  background: var(--pd-panel);
-}
-
-.platform-dashboard--review .platform-dashboard-toolbar button {
-  margin-top: 12px;
 }
 
 .platform-dashboard--review .platform-refresh-feedback,
@@ -608,27 +499,13 @@
 
 @media (max-width: 1100px) {
   .platform-dashboard--review {
-    grid-template-columns: 1fr;
-  }
-
-  .platform-dashboard--review > :not(.platform-dashboard-toolbar):not(.platform-dashboard-state) {
-    grid-column: 1;
-  }
-
-  .platform-dashboard--review .platform-dashboard-toolbar {
-    grid-column: 1;
-    grid-row: auto;
-    position: static;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
 @media (max-width: 700px) {
   .platform-dashboard--review {
     margin: 12px -8px 70px;
-  }
-
-  .platform-dashboard--review .platform-dashboard-toolbar {
-    padding: 20px;
   }
 
   .platform-dashboard--review .platform-action-summary {

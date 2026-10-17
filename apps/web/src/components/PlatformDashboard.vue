@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
@@ -234,11 +235,7 @@ onUnmounted(() => {
     aria-live="polite"
     :aria-busy="pending"
   >
-    <div class="platform-dashboard-toolbar">
-      <div>
-        <p>管理员首页</p>
-        <h2>平台运行概览</h2>
-      </div>
+    <PlatformPageHeader title="平台运行概览">
       <label
         >查看范围<select v-model="windowCode" :disabled="pending" @change="changeWindow">
           <option value="15m">最近 15 分钟</option>
@@ -249,7 +246,7 @@ onUnmounted(() => {
       ><button type="button" :disabled="pending" @click="load">
         {{ pending ? "刷新中…" : "刷新" }}
       </button>
-    </div>
+    </PlatformPageHeader>
     <section v-if="state !== 'ready'" class="platform-dashboard-state" :data-kind="state">
       <span>{{ state === "loading" ? "···" : "!" }}</span>
       <h3>{{ stateText[0] }}</h3>
