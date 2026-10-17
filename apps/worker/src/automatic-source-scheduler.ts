@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { automaticIntelligenceTaskSql } from "./collection-source-scheduling-policy.js";
 
 export interface AutomaticSourceScheduleResult {
   status: "idle" | "scheduled" | "backpressure";
@@ -75,7 +76,9 @@ export class MySqlAutomaticSourceScheduler {
         statement(
           "SELECT s.* FROM automatic_source_schedules s WHERE s.next_scheduled_at<=? ",
           "AND (SELECT COUNT(*) FROM collection_tasks ct ",
-          "WHERE ct.organization_id=s.organization_id AND ct.status IN ",
+          "WHERE ct.organization_id=s.organization_id AND ",
+          automaticIntelligenceTaskSql("ct"),
+          " AND ct.status IN ",
           "('scheduled','queued','leased','running','parsing','validating',",
           "'retry_scheduled','rate_limited'))<? ",
           "ORDER BY s.next_scheduled_at,COALESCE(s.last_scheduled_at,'1000-01-01'),",

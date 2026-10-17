@@ -12,7 +12,7 @@ const required = [
   "apps/api/src/crawler-scheduler-routes.ts",
   "apps/worker/src/single-host-resource-probe.ts",
   "apps/web/src/components/CrawlerSchedulerCenter.vue",
-  "apps/web/src/crawler-scheduler.css",
+  "apps/web/src/crawler-scheduler-c.css",
   "infra/baota/crawler-single-host-scheduler-manifest.json",
   "verification/crawler-scheduler-production-evidence.schema.json",
   "scripts/verify-crawler-scheduler-production.mjs",

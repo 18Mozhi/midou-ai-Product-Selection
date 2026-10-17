@@ -1,6 +1,23 @@
 {
+  "selectionIntelligenceIntakeFairness20261018": {
+    "status": "implemented",
+    "statusDetail": "local_checks_passed_runtime_intake_and_daily100_unverified",
+    "requirements": "docs/selection-intelligence-intake-fairness.md",
+    "sourceFiles": [
+      "apps/worker/src/collection-source-scheduling-policy.ts",
+      "apps/worker/src/automatic-source-scheduler.ts",
+      "apps/worker/src/collection-task-state-machine.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-source-fairness.test.mjs",
+      "tests/unit/trend-rule-scheduler.test.mjs"
+    ],
+    "contract": "Full-source tenant budget counts its own active tasks proven by same-scope system scheduling events. Global backlog remains shared; rule budget unchanged. Original explicit priority first, intake before enrichment within each tier, FIFO within groups, existing running leases retained. No API/schema/event/dependency/Python changes. Existing budget config docs updated; BaoTa Node restart required.",
+    "verification": "Three red tests reproduced the old policy; related93 passed after build. Existing scheduler manifest test now follows the CSS actually imported by the retained page. Compiled policy SQL verified using read-only MySQL5.7 derived fixtures and production EXPLAIN. Actual ongoing intake and daily100 still require runtime evidence."
+  },
   "selectionAutonomousProduction20261018": {
-    "status": "in_progress",
+    "status": "implemented",
+    "statusDetail": "released_446ef8cb_whole_product_and_daily100_unverified",
     "requirements": "docs/selection-production-release-20261018.md",
     "initialProductionBuild": "30daaba611507af26dd7b4f47d155a9a49fe5c9d",
     "sourceFiles": ["apps/web/src/commerce-workspace.css"],

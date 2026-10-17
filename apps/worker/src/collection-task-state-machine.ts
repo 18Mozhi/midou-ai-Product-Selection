@@ -11,6 +11,7 @@ import {
   type ClaimedCollectionTask,
 } from "./collection-task-contracts.js";
 import { completeCollectionTask } from "./collection-task-evidence.js";
+import { collectionReadyOrderSql } from "./collection-source-scheduling-policy.js";
 import {
   failCollectionTask,
   recoverExpiredCollectionTasks,
@@ -70,7 +71,7 @@ export class MySqlCollectionTaskWorkerRepository {
       const sql =
           "SELECT * FROM collection_tasks WHERE status IN ('scheduled','retry_scheduled','rate_limited') AND available_at<=?" +
           (this.taskId ? " AND id=?" : "") +
-          " ORDER BY FIELD(priority,'critical','high','normal','low'),available_at,id LIMIT 1 FOR UPDATE",
+          collectionReadyOrderSql,
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [now, this.taskId] : [now]);
       const row = rows[0];
       if (!row) {
@@ -119,7 +120,7 @@ export class MySqlCollectionTaskWorkerRepository {
       const sql =
           "SELECT * FROM collection_tasks WHERE status='queued' AND attempt_count<4" +
           (this.taskId ? " AND id=?" : "") +
-          " ORDER BY FIELD(priority,'critical','high','normal','low'),available_at,id LIMIT 1 FOR UPDATE",
+          collectionReadyOrderSql,
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [this.taskId] : []);
       const row = rows[0];
       if (!row) {

@@ -67,7 +67,7 @@ API 仓储按同一业务边界拆分：`mysql-provider-source-repository.ts` �
 
 ## 配置与运行边界
 
-`AUTOMATIC_SOURCE_SCHEDULER_POLL_MS` 控制 Worker 检查到期组织的周期，`AUTOMATIC_SOURCE_BATCH_SIZE` 控制单批来源数，`AUTOMATIC_SOURCE_TENANT_ACTIVE_TASK_BUDGET` 限制单组织活动自动任务，`AUTOMATIC_SOURCE_QUEUE_BACKLOG_LIMIT` 在全局积压达到门限时停止新增自动任务，`AUTOMATIC_SOURCE_SYSTEM_ACTOR_ID` 必须指向已创建并激活的专用系统用户。任一值修改后都需要通过宝塔重启统一后端“ai选品”。通用采集仍复用 `COLLECTION_TASK_*`、`PROVIDER_ADAPTER_*`、`PROVIDER_PROXY_*` 和 `EVIDENCE_*`。
+`AUTOMATIC_SOURCE_SCHEDULER_POLL_MS` 控制 Worker 检查到期组织的周期，`AUTOMATIC_SOURCE_BATCH_SIZE` 控制单批来源数，`AUTOMATIC_SOURCE_TENANT_ACTIVE_TASK_BUDGET` 限制单组织活动任务：全量情报按其自身带有同组织/工作区 `hotspot.automatic.scheduled` 系统事件的活动任务计数；规则采集仍计入全部活动任务。全量情报因此拥有独立摄取容量，不被商品找货积压占满。`AUTOMATIC_SOURCE_QUEUE_BACKLOG_LIMIT` 仍在全部采集任务的全局积压达到门限时停止新增自动任务。领取与入队保持原显式优先级，同档优先有上述系统事件的全量情报，各组内保留时间/ID 顺序，不信任调用方请求 ID，不改变执行中的单机租约。`AUTOMATIC_SOURCE_SYSTEM_ACTOR_ID` 必须指向已创建并激活的专用系统用户。任一值修改后都需要通过宝塔重启统一后端“ai选品”。通用采集仍复用 `COLLECTION_TASK_*`、`PROVIDER_ADAPTER_*`、`PROVIDER_PROXY_*` 和 `EVIDENCE_*`。
 
 生产由宝塔管理 Node 后端项目“ai选品”和 Python 3.12 采集项目“ai选品-python”。API/Worker 由 Node 统一后端拉起，Worker 领取业务任务并排队登录型作业；Python 项目领取浏览器作业、维持作业/档案/全局 Crawler 租约并桥接 Playwright，结果仍由 Worker 解析和持久化。当前 1688 字段提取未验收，来源保持停用。不新增独立 Worker、候选后端、面板外服务、负载均衡或多节点能力。
 
