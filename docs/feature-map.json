@@ -18,10 +18,14 @@
     "requirements": "docs/selection-catalogue-density.md",
     "sourceFiles": [
       "apps/web/src/components/OpportunityListPanel.vue",
-      "apps/web/src/commerce-workspace.css"
+      "apps/web/src/commerce-workspace.css",
+      "apps/web/src/opportunities.css",
+      "apps/web/src/automatic-selection.css",
+      "apps/web/src/member-workspace-polish.css"
     ],
     "verification": ["npm run typecheck:web", "npm run build:web"],
-    "acceptance": "Pending rendered desktop/mobile verification; daily full-chain target remains unverified."
+    "acceptance": "Pending rendered desktop/mobile verification; daily full-chain target remains unverified.",
+    "legacyBoundary": "Product catalogue no longer mounts retired opportunity-list class; 78 unused list/image selectors removed, shared detail selectors retained."
   },
   "selectionAmazonObservationLineage20261018": {
     "status": "implemented",

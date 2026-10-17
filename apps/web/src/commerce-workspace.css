@@ -200,6 +200,8 @@ html[data-design="commerce"] #app .catalog-display button[aria-pressed="true"] {
   height: 100%;
   color: var(--so-text);
   text-decoration: none;
+  font-size: 13px;
+  line-height: 1.5;
 }
 html[data-design="commerce"] #app .catalog-product .opportunity-picture {
   display: flex;
@@ -223,6 +225,7 @@ html[data-design="commerce"] #app .catalog-product .opportunity-picture {
 .catalog-product .opportunity-picture > span {
   color: var(--commerce-color-7);
   font-size: 13px;
+  font-weight: 400;
 }
 html[data-design="commerce"] #app .catalog-product .opportunity-picture.is-placeholder {
   height: 64px;
@@ -376,6 +379,17 @@ html[data-design="commerce"] #app .product-catalog[data-display="list"] .opportu
   .catalog-display > span,
   .product-catalog > header small {
     display: none;
+  }
+  html[data-design="commerce"] #app .product-catalog > header {
+    padding-top: 0;
+    gap: 10px;
+  }
+  html[data-design="commerce"] #app .product-catalog > header > div:first-child {
+    min-width: 0;
+  }
+  html[data-design="commerce"] #app .catalog-display button {
+    min-height: 44px;
+    padding: 8px 10px;
   }
   .catalog-product-identity,
   .catalog-product-metrics {

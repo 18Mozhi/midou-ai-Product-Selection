@@ -373,7 +373,7 @@ watch(imageFailureResetSources, (items) => {
     "
     @secondary="state === 'empty' ? clearOrShowAll() : emit('reset')"
   />
-  <section v-else class="opportunity-list product-catalog" :data-display="displayMode">
+  <section v-else class="product-catalog" :data-display="displayMode">
     <header>
       <div>
         <h3>{{ viewCopy.title }}</h3>

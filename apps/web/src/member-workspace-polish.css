@@ -240,30 +240,6 @@
   color: var(--so-bg);
   background: var(--so-primary);
 }
-.role-shell[data-shell="member"] .opportunity-list > a {
-  grid-template-columns: 74px minmax(190px, 1.2fr) minmax(430px, 2fr) auto;
-}
-.opportunity-picture {
-  width: 64px;
-  height: 64px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--so-border);
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--so-panel-soft);
-}
-.opportunity-picture img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.opportunity-picture i {
-  color: var(--so-text-muted);
-  font-size: 13px;
-  text-align: center;
-  font-style: normal;
-}
 .opportunity-next-steps {
   margin-bottom: 14px;
   display: flex;
@@ -335,12 +311,6 @@
   .home-overview > div {
     grid-template-columns: 1fr 1fr;
   }
-  .role-shell[data-shell="member"] .opportunity-list > a {
-    grid-template-columns: 64px 1fr;
-  }
-  .opportunity-list > a dl {
-    grid-column: 1/-1;
-  }
   .role-theme-menu {
     position: fixed;
     top: 70px;
@@ -361,10 +331,6 @@
   .home-overview > header {
     align-items: flex-start;
     flex-direction: column;
-  }
-  .opportunity-picture {
-    width: 54px;
-    height: 54px;
   }
 }
 .role-shell[data-shell="member"] > .role-theme-menu {
