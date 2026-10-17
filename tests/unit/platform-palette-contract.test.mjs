@@ -151,7 +151,7 @@ test("approval workspace review colors resolve from its page-scoped semantic pal
     [...css.matchAll(/var\((--so-approval-review-[a-z-]+)\)/g)].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 14);
+  assert.equal(names.size, 13);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -436,7 +436,7 @@ test("notification inbox palette resolves approved P26 colors in its review scop
     [...css.matchAll(/var\((--review-[a-z-]+)\)/g)].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 16);
+  assert.equal(names.size, 14);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.ok(names.has("--review-danger-text"));
   assert.match(

@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/NotificationCenter.vue": "855d144c307cf290d55a66c4df86e933efb3afa4550be6ee553e1218c2c40f32"
+    "apps/web/src/components/NotificationCenter.vue": "eb0ea0166d28b0980b577cbd62a6bd517c1ee89aec507ecb96ae17997420e3f7"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -346,7 +346,7 @@
           "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "855d144c307cf290d55a66c4df86e933efb3afa4550be6ee553e1218c2c40f32"
+          "apps/web/src/components/NotificationCenter.vue": "eb0ea0166d28b0980b577cbd62a6bd517c1ee89aec507ecb96ae17997420e3f7"
         }
       },
       "visualStateReferences": {
@@ -624,7 +624,7 @@
           "apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "855d144c307cf290d55a66c4df86e933efb3afa4550be6ee553e1218c2c40f32"
+          "apps/web/src/components/NotificationCenter.vue": "eb0ea0166d28b0980b577cbd62a6bd517c1ee89aec507ecb96ae17997420e3f7"
         }
       }
     },
@@ -764,7 +764,7 @@
           "apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "855d144c307cf290d55a66c4df86e933efb3afa4550be6ee553e1218c2c40f32"
+          "apps/web/src/components/NotificationCenter.vue": "eb0ea0166d28b0980b577cbd62a6bd517c1ee89aec507ecb96ae17997420e3f7"
         }
       }
     },
@@ -983,7 +983,7 @@
           "apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "855d144c307cf290d55a66c4df86e933efb3afa4550be6ee553e1218c2c40f32"
+          "apps/web/src/components/NotificationCenter.vue": "eb0ea0166d28b0980b577cbd62a6bd517c1ee89aec507ecb96ae17997420e3f7"
         }
       }
     },
@@ -1224,7 +1224,7 @@
           "apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "855d144c307cf290d55a66c4df86e933efb3afa4550be6ee553e1218c2c40f32"
+          "apps/web/src/components/NotificationCenter.vue": "eb0ea0166d28b0980b577cbd62a6bd517c1ee89aec507ecb96ae17997420e3f7"
         }
       }
     },
@@ -2170,7 +2170,7 @@
           "apps/web/src/components/NotificationCenter.vue#8cb2961885ab7113.2"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "855d144c307cf290d55a66c4df86e933efb3afa4550be6ee553e1218c2c40f32"
+          "apps/web/src/components/NotificationCenter.vue": "eb0ea0166d28b0980b577cbd62a6bd517c1ee89aec507ecb96ae17997420e3f7"
         }
       }
     },
@@ -2452,7 +2452,7 @@
       "apps/web/src/components/NotificationCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/NotificationCenter.vue": "855d144c307cf290d55a66c4df86e933efb3afa4550be6ee553e1218c2c40f32",
+      "apps/web/src/components/NotificationCenter.vue": "eb0ea0166d28b0980b577cbd62a6bd517c1ee89aec507ecb96ae17997420e3f7",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
     },
     "includeStructuralContainers": true,

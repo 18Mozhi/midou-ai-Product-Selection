@@ -523,7 +523,6 @@ watch(
   <section class="approval-workspace approval-workspace--review">
     <header class="approval-header">
       <div>
-        <p>人工决策</p>
         <h1>审批中心</h1>
       </div>
       <div v-if="canManage" class="approval-header-actions">
@@ -543,7 +542,6 @@ watch(
       </details>
     </div>
     <section class="approval-focus-strip" :data-tone="focusSummary.tone" aria-label="当前审批重点">
-      <span class="approval-focus-signal" aria-hidden="true"></span>
       <div>
         <small>{{ focusSummary.eyebrow }}</small>
         <strong>{{ focusSummary.title }}</strong>

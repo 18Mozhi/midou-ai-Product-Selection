@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/ApprovalWorkspace.vue": "82378c6727991e5ef950bddff7ddede2a5a10651345c29348c28a1b378102fa1",
+    "apps/web/src/components/ApprovalWorkspace.vue": "36b3e416680ef4f891ddb8b6f8063d115276f3ec83ab9265046ca096e43c7335",
     "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075"
   },
   "dialogs": {
@@ -132,7 +132,7 @@
           "apps/web/src/components/ApprovalQueuePanel.vue#3f91c4917c0bca2a.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/ApprovalWorkspace.vue": "82378c6727991e5ef950bddff7ddede2a5a10651345c29348c28a1b378102fa1",
+          "apps/web/src/components/ApprovalWorkspace.vue": "36b3e416680ef4f891ddb8b6f8063d115276f3ec83ab9265046ca096e43c7335",
           "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075"
         }
       },
@@ -290,7 +290,7 @@
           "apps/web/src/components/ApprovalQueuePanel.vue#64616041c6d5fc5e.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/ApprovalWorkspace.vue": "82378c6727991e5ef950bddff7ddede2a5a10651345c29348c28a1b378102fa1",
+          "apps/web/src/components/ApprovalWorkspace.vue": "36b3e416680ef4f891ddb8b6f8063d115276f3ec83ab9265046ca096e43c7335",
           "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075"
         }
       },
@@ -416,7 +416,7 @@
           "apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/ApprovalWorkspace.vue": "82378c6727991e5ef950bddff7ddede2a5a10651345c29348c28a1b378102fa1"
+          "apps/web/src/components/ApprovalWorkspace.vue": "36b3e416680ef4f891ddb8b6f8063d115276f3ec83ab9265046ca096e43c7335"
         }
       },
       "visualStates": {
@@ -602,7 +602,7 @@
           "apps/web/src/components/ApprovalWorkspace.vue#fa9213ee10c4bdaa.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/ApprovalWorkspace.vue": "82378c6727991e5ef950bddff7ddede2a5a10651345c29348c28a1b378102fa1"
+          "apps/web/src/components/ApprovalWorkspace.vue": "36b3e416680ef4f891ddb8b6f8063d115276f3ec83ab9265046ca096e43c7335"
         }
       },
       "visualStates": {
@@ -775,7 +775,7 @@
           "apps/web/src/components/ApprovalWorkspace.vue#59336a98bd70e13c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/ApprovalWorkspace.vue": "82378c6727991e5ef950bddff7ddede2a5a10651345c29348c28a1b378102fa1"
+          "apps/web/src/components/ApprovalWorkspace.vue": "36b3e416680ef4f891ddb8b6f8063d115276f3ec83ab9265046ca096e43c7335"
         }
       },
       "visualStates": {
@@ -1787,7 +1787,7 @@
           "apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.2"
         ],
         "sourceHashes": {
-          "apps/web/src/components/ApprovalWorkspace.vue": "82378c6727991e5ef950bddff7ddede2a5a10651345c29348c28a1b378102fa1"
+          "apps/web/src/components/ApprovalWorkspace.vue": "36b3e416680ef4f891ddb8b6f8063d115276f3ec83ab9265046ca096e43c7335"
         }
       },
       "visualStates": {
@@ -2228,7 +2228,7 @@
           "apps/web/src/components/ApprovalWorkspace.vue#c02233bb6662b1ab.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/ApprovalWorkspace.vue": "82378c6727991e5ef950bddff7ddede2a5a10651345c29348c28a1b378102fa1"
+          "apps/web/src/components/ApprovalWorkspace.vue": "36b3e416680ef4f891ddb8b6f8063d115276f3ec83ab9265046ca096e43c7335"
         }
       },
       "visualStates": {
@@ -3636,7 +3636,7 @@
       "apps/web/src/components/ApprovalQueuePanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/ApprovalWorkspace.vue": "82378c6727991e5ef950bddff7ddede2a5a10651345c29348c28a1b378102fa1",
+      "apps/web/src/components/ApprovalWorkspace.vue": "36b3e416680ef4f891ddb8b6f8063d115276f3ec83ab9265046ca096e43c7335",
       "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075",
       "apps/web/src/components/approval-workspace-types.ts": "85f49803b54e30f8543d7256ce27630001c943aea86baac8a84d45591f9f9792",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",

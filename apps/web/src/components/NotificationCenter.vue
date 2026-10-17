@@ -533,7 +533,6 @@ watch(
   <section class="notification-center notification-center--review">
     <header>
       <div>
-        <p>协作中心</p>
         <h1>通知中心</h1>
       </div>
       <div>

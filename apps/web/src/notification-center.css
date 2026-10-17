@@ -73,26 +73,6 @@
   overflow-wrap: anywhere;
   color: var(--so-text-muted);
 }
-.notification-summary {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-.notification-summary article {
-  background: var(--so-panel-strong);
-  border: 1px solid var(--so-border-strong);
-  border-radius: 12px;
-  padding: 17px;
-}
-.notification-summary span {
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.notification-summary b {
-  display: block;
-  font-size: 28px;
-  margin-top: 8px;
-}
 .notification-center nav {
   display: flex;
   align-items: center;
@@ -336,9 +316,6 @@
   .notification-center header button {
     flex: 1;
   }
-  .notification-summary {
-    grid-template-columns: 1fr 1fr;
-  }
   .notification-list > button {
     grid-template-columns: 38px minmax(0, 1fr);
   }
@@ -376,46 +353,6 @@
     sans-serif;
 }
 
-.notification-center--review > header {
-  min-height: 136px;
-  margin: 0 0 16px;
-  padding: 31px 36px;
-  border: 0;
-  border-radius: 0;
-  background: var(--review-blue);
-  color: var(--review-white);
-}
-
-.notification-center--review > header p,
-.notification-center--review > header span,
-.notification-center--review > header h1 {
-  color: var(--review-white);
-}
-
-.notification-center--review > header > div:first-child {
-  display: grid;
-  gap: 6px;
-}
-
-.notification-center--review > header p {
-  margin: 0;
-  color: var(--review-light-blue);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.notification-center--review > header h1 {
-  margin: 0;
-  font-size: clamp(28px, 3vw, 34px);
-  line-height: 1.1;
-}
-
-.notification-center--review > header > div:last-child {
-  align-self: center;
-}
-
 .notification-center--review button,
 .notification-center--review .notification-detail a {
   min-height: 44px;
@@ -443,39 +380,21 @@
   outline-offset: 3px;
 }
 
-.notification-center--review > header button:not(.secondary),
 .notification-center--review .notification-preferences button:not(.secondary),
 .notification-center--review .notification-state button {
   background: var(--review-blue);
   color: var(--review-white);
 }
 
-.notification-center--review > header button:not(.secondary):hover:not(:disabled),
 .notification-center--review .notification-preferences button:not(.secondary):hover:not(:disabled),
 .notification-center--review .notification-state button:hover:not(:disabled) {
   background: var(--review-blue-strong);
   color: var(--review-white);
 }
 
-.notification-center--review .realtime-badge {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  padding: 0 10px;
-  border: 1px solid var(--review-badge-border);
-  border-radius: 0;
-  color: var(--review-light-blue);
-  font-weight: 700;
-}
-
-.notification-center--review .realtime-badge[data-state="reconnecting"] {
-  color: var(--review-warning);
-}
-
 .notification-center--review .notification-notice,
 .notification-center--review .notification-state,
-.notification-center--review .notification-list,
-.notification-center--review .notification-summary {
+.notification-center--review .notification-list {
   border: 1px solid var(--review-line);
   border-radius: 0;
   background: var(--review-white);
@@ -485,30 +404,6 @@
 .notification-center--review .notification-notice {
   margin-bottom: 16px;
   color: var(--review-ink);
-}
-
-.notification-center--review .notification-summary {
-  gap: 0;
-  overflow: hidden;
-}
-
-.notification-center--review .notification-summary article {
-  border: 0;
-  border-right: 1px solid var(--review-line);
-  border-radius: 0;
-  background: var(--review-white);
-}
-
-.notification-center--review .notification-summary article:last-child {
-  border-right: 0;
-}
-
-.notification-center--review .notification-summary span {
-  color: var(--review-muted);
-}
-
-.notification-center--review .notification-summary b {
-  color: var(--review-blue);
 }
 
 .notification-center--review > nav {
@@ -678,36 +573,25 @@
 }
 
 @media (max-width: 760px) {
-  .notification-center--review > header {
-    align-items: stretch;
-    min-height: 0;
-    padding: 25px 19px;
-  }
-
-  .notification-center--review > header > div:last-child {
-    align-items: stretch;
-    width: 100%;
-  }
-
-  .notification-center--review > header > div:last-child > button {
-    flex: 1;
-  }
-
-  .notification-center--review .notification-summary {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .notification-center--review .notification-summary article:nth-child(2) {
-    border-right: 0;
-  }
-
   .notification-center--review > nav {
-    overflow-x: auto;
+    flex-wrap: wrap;
+    overflow: visible;
     padding: 0;
   }
 
   .notification-center--review > nav button {
-    flex: 0 0 auto;
+    flex: 1 0 auto;
+  }
+
+  .notification-center--review > nav > label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 12px;
+    border-top: 1px solid var(--review-line);
   }
 
   .notification-center--review .notification-list {
@@ -723,5 +607,108 @@
     width: calc(100vw - 24px);
     max-height: calc(100dvh - 24px);
     overflow: auto;
+  }
+}
+
+/* Compact inbox header and inline facts; workflow/detail dialogs retain their rules. */
+.notification-center--review > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  margin: 0 0 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--review-ink);
+}
+.notification-center--review > header h1 {
+  margin: 0;
+  font: 650 21px/1.35 var(--so-font-ui);
+}
+.notification-center--review > header > div:last-child {
+  width: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.notification-center--review > header button {
+  flex: none;
+  min-height: 44px;
+  border-radius: 4px;
+  font: 600 13px/1.4 var(--so-font-ui);
+}
+.notification-center--review > header button:not(.secondary) {
+  background: var(--review-blue);
+  color: var(--review-white);
+}
+.notification-center--review > header button:not(.secondary):hover:not(:disabled) {
+  background: var(--review-blue-strong);
+}
+.notification-center--review .realtime-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--review-badge-border);
+  border-radius: 4px;
+  color: var(--review-muted);
+  font: 500 13px/1.4 var(--so-font-ui);
+}
+.notification-center--review .realtime-badge[data-state="connected"] {
+  color: var(--so-success);
+}
+.notification-center--review .realtime-badge[data-state="reconnecting"] {
+  color: var(--so-warning);
+}
+.notification-center--review .notification-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid var(--review-line);
+  border-radius: 4px;
+  background: var(--review-white);
+}
+.notification-center--review .notification-summary article {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  padding: 10px 14px;
+  border-right: 1px solid var(--review-line);
+}
+.notification-center--review .notification-summary article:last-child {
+  border-right: 0;
+}
+.notification-center--review .notification-summary span {
+  color: var(--review-muted);
+  font-size: 13px;
+}
+.notification-center--review .notification-summary b {
+  margin: 0;
+  color: var(--review-ink);
+  font-size: 16px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 760px) {
+  .notification-center--review > header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .notification-center--review .notification-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .notification-center--review .notification-summary article {
+    padding: 8px 10px;
+  }
+  .notification-center--review .notification-summary article:nth-child(2n) {
+    border-right: 0;
+  }
+  .notification-center--review .notification-summary article:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--review-line);
   }
 }

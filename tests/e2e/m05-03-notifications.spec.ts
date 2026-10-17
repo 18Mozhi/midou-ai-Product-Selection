@@ -494,6 +494,23 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
   await expect(page.getByRole("heading", { name: "通知中心", level: 1 }).first()).toBeVisible();
   await expect(page.getByText("审批状态更新")).toBeVisible();
   await expect(page.getByText(/已合并 3 条同根因通知/)).toBeVisible();
+  const firstRecord = page.getByRole("button", { name: /审批状态更新/ });
+  const recordBox = await firstRecord.boundingBox();
+  const headerBox = await page.locator(".notification-center > header").boundingBox();
+  const viewport = page.viewportSize()!;
+  const unreadBox = await page.getByLabel("仅未读").boundingBox();
+  expect(unreadBox).not.toBeNull();
+  expect(unreadBox!.x).toBeGreaterThanOrEqual(0);
+  expect(unreadBox!.x + unreadBox!.width).toBeLessThanOrEqual(viewport.width);
+  expect(recordBox).not.toBeNull();
+  expect(headerBox).not.toBeNull();
+  expect(headerBox!.height).toBeLessThan(viewport.width < 760 ? 130 : 65);
+  expect(recordBox!.y + recordBox!.height).toBeLessThan(
+    viewport.height - (viewport.width < 760 ? 80 : 24),
+  );
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+    viewport.width,
+  );
   await page.getByRole("button", { name: /审批状态更新/ }).click();
   await expect(page.getByRole("dialog", { name: "消息详情" })).toBeVisible();
   await expect(page.getByText(/站内消息来自事务消息/)).toHaveCount(0);

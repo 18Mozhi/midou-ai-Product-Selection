@@ -307,6 +307,19 @@ test("M05-02.A07/A08/A09/A15 renders approval inbox timeline and mandatory reaso
     "true",
   );
   await expect(page.getByText("便携净水杯采纳决策复核")).toBeVisible();
+  const firstRecord = page.getByRole("button", { name: /便携净水杯采纳决策复核/ });
+  const recordBox = await firstRecord.boundingBox();
+  const headerBox = await page.locator(".approval-header").boundingBox();
+  const viewport = page.viewportSize()!;
+  expect(recordBox).not.toBeNull();
+  expect(headerBox).not.toBeNull();
+  expect(headerBox!.height).toBeLessThan(viewport.width < 760 ? 130 : 65);
+  expect(recordBox!.y + recordBox!.height).toBeLessThan(
+    viewport.height - (viewport.width < 760 ? 80 : 24),
+  );
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+    viewport.width,
+  );
   await page.getByRole("button", { name: /便携净水杯采纳决策复核/ }).click();
   await expect(page).toHaveURL(new RegExp(`approval=${approvalId}`));
   await expect(page.getByLabel("审批依据与影响范围")).toContainText("机会决策");
@@ -341,10 +354,13 @@ test("M05-02.A07/A08/A09/A15 renders approval inbox timeline and mandatory reaso
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
-  await expect(page).toHaveScreenshot("m05-02-approval-workflow.png", {
+  await expect(page).toHaveScreenshot("compact-approval-workbench-20261017.png", {
     animations: "disabled",
     fullPage: true,
   });
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(firstRecord).toBeVisible();
 });
 
 test("approval inbox hides write entries and decision actions without task:assign", async ({
@@ -417,7 +433,7 @@ test("UI2-AN05 approval list re-reads on KeepAlive return and ignores the old re
   await olderRequest;
   await page.locator('a[href="/home"]').first().click();
   await expect(page).toHaveURL(/\/home$/);
-  await page.getByRole("link", { name: "审批中心" }).first().click();
+  await page.goBack();
   await expect(page).toHaveURL(/\/tasks\/approvals$/);
   await expect(page.getByRole("button", { name: /返回后的最新结果/ })).toBeVisible();
   await expect.poll(() => listRequests).toBe(2);
@@ -863,15 +879,18 @@ for (const width of [1440, 1024, 768, 390]) {
     await expect(page.locator(".approval-workspace")).toBeVisible();
     const compact = width <= 840;
     if (compact) await page.getByRole("button", { name: "打开导航菜单" }).click();
-    const navigation = page.locator(
-      compact ? ".role-navigation-frame" : ".role-desktop-navigation",
-    );
+    const navigation = page.locator(compact ? ".role-navigation-frame" : ".commerce-sidebar");
     await expect(navigation).toBeVisible();
     const box = await navigation.boundingBox();
     expect(box!.x).toBeGreaterThanOrEqual(0);
     expect(box!.x + box!.width).toBeLessThanOrEqual(width);
     await expect(navigation).toHaveCSS("transform", "none");
-    await navigation.getByRole("link", { name: "今日行动", exact: true }).click();
+    const homeLink = navigation.locator('a[href="/home"]').first();
+    if (compact && !(await homeLink.isVisible())) {
+      await homeLink.locator("xpath=ancestor::details").locator("summary").click();
+    }
+    await expect(homeLink).toHaveText("选品工作台");
+    await homeLink.click();
     await expect(page).toHaveURL(/\/home$/);
     if (compact) await page.getByRole("button", { name: "打开导航菜单" }).click();
     await expect(navigation).toBeVisible();

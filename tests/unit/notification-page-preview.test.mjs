@@ -13,3 +13,10 @@ test("P26 keeps notification read and workflow contracts", async () => {
   assert.match(s, /:aria-describedby="preferencesError \?/);
   assert.equal((s.match(/\{ trapFocus: true \}/g) ?? []).length, 2);
 });
+
+test("current page preview verifies Vue without historical CSS injection", async () => {
+  const cli = await readFile("scripts/verify-notification-page-preview.mjs", "utf8");
+  assert.match(cli, /@playwright\/test\/cli/);
+  assert.match(cli, /m05-03-notifications/);
+  assert.doesNotMatch(cli, /PagePlugin|createServer|addStyleTag|implementation\//);
+});
