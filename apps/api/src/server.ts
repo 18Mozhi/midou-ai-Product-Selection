@@ -248,11 +248,18 @@ const tenancyService = new TenancyService(new MySqlTenancyRepository(pool));
 const audit = new AuditQueryService(new MySqlAuditRepository(pool));
 const providerAdapterRegistry = new ProviderAdapterRegistry({
   healthTimeoutMs: config.providerAdapters.healthTimeoutMs,
+  healthTimeoutMsByAdapter: { "1688_search": config.providerAdapters.lan1688TimeoutMs },
   maxResponseBytes: config.providerAdapters.maxResponseBytes,
   maxItemsPerBatch: config.providerAdapters.maxItemsPerBatch,
 });
 for (const adapter of createBuiltinSourceAdapters(
   createProviderSourceFetch(config.providerAdapters.proxy, {}, AUTOMATIC_PROVIDER_SOURCE_HOSTS),
+  {
+    lan1688: {
+      token: config.providerAdapters.lan1688Token,
+      timeoutMs: config.providerAdapters.lan1688TimeoutMs,
+    },
+  },
 ))
   providerAdapterRegistry.register(adapter);
 const providerSourceService = new ProviderSourceService(

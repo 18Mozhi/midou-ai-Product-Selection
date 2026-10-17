@@ -1,5 +1,7 @@
 # M03-07 自动热点来源运维与回滚
 
+> Amazon v10 使用与robots一致的公开爬虫身份；配置LAN的1688改用真实图搜健康检查，健康样本不落商品库。LAN健康期限沿用LAN_1688_TIMEOUT_MS并受来源期限约束，其他来源不变。先健康再审计恢复，不能直接清空熔断，见 `docs/source-transport-health.md`。共享客户端迁移不改变六节点及字段合同。
+
 > Amazon适配器v9对已观察到的head refresh/bm-verify验证页使用permission_denied，不跟随验证URL、不解析商品事实，原访问熔断保留。见 `docs/amazon-verification-classification.md`。v8新增的目标与结构变化隔离规则继续适用；原failed_terminal任务不直接改成死信回放。
 
 > Amazon适配器v8将有健康标准页证明的单目标解析失败保留为parse_failed，目标仍无事实；真实结构变化继续停用。既有停用来源须先完成健康检查并由配置服务启用，见 `docs/amazon-target-drift-isolation.md`。不要用健康控制页商品补齐失败目标。

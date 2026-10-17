@@ -79,6 +79,7 @@ export interface ProviderAdapterLimits {
   maxItemsPerBatch: number;
   maxResponseBytes: number;
   healthTimeoutMs: number;
+  healthTimeoutMsByAdapter?: Readonly<Record<string, number>>;
 }
 
 export class ProviderAdapterFailure extends Error {
@@ -144,6 +145,7 @@ export function classifyProviderAdapterFailure(error: unknown): ClassifiedAdapte
 }
 
 export class ProviderAdapterRegistry {
+  private readonly healthTimeouts = new Map<string, number>();
   private readonly adapters = new Map<string, ProviderAdapter>();
 
   constructor(readonly limits: ProviderAdapterLimits) {
@@ -165,6 +167,19 @@ export class ProviderAdapterRegistry {
       limits.healthTimeoutMs > 120_000
     )
       throw new ProviderAdapterFailure("adapter_limit_invalid", false);
+    if (limits.healthTimeoutMsByAdapter !== undefined) {
+      if (
+        !limits.healthTimeoutMsByAdapter ||
+        typeof limits.healthTimeoutMsByAdapter !== "object" ||
+        Array.isArray(limits.healthTimeoutMsByAdapter)
+      )
+        throw new ProviderAdapterFailure("adapter_limit_invalid", false);
+      for (const [key, timeout] of Object.entries(limits.healthTimeoutMsByAdapter)) {
+        if (!identifier(key) || !Number.isSafeInteger(timeout) || timeout < 100 || timeout > 120000)
+          throw new ProviderAdapterFailure("adapter_limit_invalid", false);
+        this.healthTimeouts.set(key, timeout);
+      }
+    }
   }
 
   register(adapter: ProviderAdapter): this {
@@ -280,7 +295,10 @@ export class ProviderAdapterRegistry {
   healthCheck(context: AdapterHealthContext): Promise<AdapterHealthSignal> {
     const adapter = this.resolve(context.provider);
     return this.withTimeout(
-      Math.min(context.provider.timeoutMs, this.limits.healthTimeoutMs),
+      Math.min(
+        context.provider.timeoutMs,
+        this.healthTimeouts.get(context.provider.code) ?? this.limits.healthTimeoutMs,
+      ),
       async (signal) => {
         const result = await adapter.healthCheck(context, signal);
         if (

@@ -5,6 +5,7 @@ const CRAWLER_AGENT = "ScoutOpsPublicCrawler",
   MAX_ROBOTS_BYTES = 512_000,
   cache = new Map<string, { body: string; status: number; expiresAt: number }>();
 export const ROBOTS_DECISION_VERSION = "scoutops-robots-policy-v1";
+export const PUBLIC_CRAWLER_USER_AGENT = `${CRAWLER_AGENT}/1.0`;
 
 export interface RobotsPolicyDecision {
   decision_version: typeof ROBOTS_DECISION_VERSION;
@@ -159,7 +160,7 @@ export async function assertPublicCollectionPolicy(input: {
         redirect: "error",
         headers: {
           accept: "text/plain",
-          "user-agent": `${CRAWLER_AGENT}/1.0`,
+          "user-agent": PUBLIC_CRAWLER_USER_AGENT,
         },
       });
     } catch (error) {

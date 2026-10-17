@@ -3731,7 +3731,7 @@ paths:
   /platform/provider-adapters/{providerId}/health-check:
     post:
       summary: Run a bounded healthCheck through the registered Provider adapter
-      description: Unregistered adapters fail closed as blocked/adapter_not_registered. A ready result newer than an open runtime circuit satisfies the existing recovery gate but does not itself close the circuit; recovery remains an explicit audited crawler-scheduler action. The endpoint never guesses a Provider request contract. When the optional project-scoped HTTP CONNECT proxy is configured, only the fixed news.google.com adapter request uses it; proxy configuration is never returned by this API.
+      description: Unregistered adapters fail closed as blocked/adapter_not_registered. A ready result newer than an open runtime circuit satisfies the existing recovery gate but does not itself close the circuit; recovery remains an explicit audited crawler-scheduler action. The endpoint never guesses a Provider request contract. The optional project-scoped HTTP CONNECT proxy applies only to the existing fixed automatic-provider host allowlist; proxy configuration is never returned. Amazon uses the same declared public crawler identity as its robots check. With LAN 1688 configured, its health adapter performs a fixed-image request using the shared six-node client and validates the response without returning or persisting offers. Its deadline uses the existing LAN timeout capped by the provider timeout; other provider health deadlines are unchanged. Without LAN configuration the existing browser-verification gate remains.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }

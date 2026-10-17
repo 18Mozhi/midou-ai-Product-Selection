@@ -11,7 +11,11 @@ import {
 } from "@scoutops/provider-adapters";
 import { request as httpsRequest } from "node:https";
 import { BUILTIN_PROVIDER_SOURCES } from "../catalog/index.js";
-import { assertPublicCollectionPolicy } from "../public-collection-policy.js";
+import {
+  assertPublicCollectionPolicy,
+  PUBLIC_CRAWLER_USER_AGENT,
+} from "../public-collection-policy.js";
+import { Lan1688HealthAdapter } from "../lan-1688-health-adapter.js";
 import { AMAZON_PUBLIC_PRODUCT_PARSER_VERSION } from "../parsers/amazon-public-signals.js";
 import {
   parseAmazonProductPage,
@@ -443,7 +447,7 @@ export class AmazonTargetPageParseFailure extends ProviderAdapterFailure {
 export class AmazonProductSearchAdapter extends SourceAdapter {
   readonly key = "amazon_product";
   readonly accessMode = "public_page" as const;
-  readonly version = "amazon-public-product-adapter-v9";
+  readonly version = "amazon-public-product-adapter-v10";
   constructor(private readonly fetcher?: typeof fetch) {
     super();
   }
@@ -470,8 +474,7 @@ export class AmazonProductSearchAdapter extends SourceAdapter {
     const headers = {
         accept: "text/html,application/xhtml+xml",
         "accept-language": "en-US,en;q=0.9",
-        "user-agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136 Safari/537.36",
+        "user-agent": PUBLIC_CRAWLER_USER_AGENT,
       },
       response = this.fetcher
         ? await this.fetcher(url, { signal, redirect: "error", headers })
@@ -798,7 +801,10 @@ const normalizeUnquotedHrefFetcher =
       headers: response.headers,
     });
   };
-export function createBuiltinSourceAdapters(fetcher: typeof fetch = fetch) {
+export function createBuiltinSourceAdapters(
+  fetcher: typeof fetch = fetch,
+  options: { lan1688?: { token: string; timeoutMs: number; fetcher?: typeof fetch } } = {},
+) {
   return [
     new GoogleNewsRssAdapter(fetcher),
     ...BUILTIN_PROVIDER_SOURCES.filter((item) => item.availability === "automatic").map((item) =>
@@ -822,6 +828,8 @@ export function createBuiltinSourceAdapters(fetcher: typeof fetch = fetch) {
     new Ec21SupplierSearchAdapter(fetcher),
     new DhgateSupplierSearchAdapter(fetcher),
     new ManualProductSupplyCsvAdapter(),
-    new Alibaba1688BrowserAdapter(),
+    options.lan1688?.token
+      ? new Lan1688HealthAdapter(new Alibaba1688BrowserAdapter(), options.lan1688)
+      : new Alibaba1688BrowserAdapter(),
   ];
 }

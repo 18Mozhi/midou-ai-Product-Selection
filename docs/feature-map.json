@@ -1,4 +1,22 @@
 {
+  "selectionSourceTransportHealth20261018": {
+    "status": "implemented",
+    "requirements": "docs/source-transport-health.md",
+    "sourceFiles": [
+      "packages/provider-adapters/src/index.ts",
+      "packages/provider-sources/src/public-collection-policy.ts",
+      "packages/provider-sources/src/adapters/index.ts",
+      "packages/provider-sources/src/lan-1688-image-search.ts",
+      "packages/provider-sources/src/lan-1688-health-adapter.ts",
+      "apps/worker/src/lan-1688-image-search.ts",
+      "apps/api/src/server.ts"
+    ],
+    "testFiles": [
+      "tests/unit/source-transport-health.test.mjs",
+      "tests/unit/lan-1688-image-search.test.mjs"
+    ],
+    "contract": "Amazon v10 uses the same declared crawler identity as robots. Canonical shared LAN client, Worker compatibility export and configured API health decorator perform real fixed-sample schema checks without persisting offers. LAN health uses existing LAN deadline capped by provider timeout; other adapters retain original health deadline. No secret exposure, schema/new HTTP field/env/Python/dependency change; audited recovery remains required."
+  },
   "selectionCompletionScheduling20261018": {
     "status": "implemented",
     "requirements": "docs/selection-completion-scheduling.md",
