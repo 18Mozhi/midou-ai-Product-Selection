@@ -171,10 +171,15 @@ const formScenes = [
   "timezone_invalid",
   "name_invalid",
 ];
-export function buildOrganizationProfileReview(source, evidence, fieldEvidence) {
+export function buildOrganizationProfileReview(
+  source,
+  evidence,
+  fieldEvidence,
+  read = (file) => readFileSync(file, "utf8"),
+) {
   const sha = createHash("sha256").update(source.replaceAll("\r\n", "\n")).digest("hex");
   const currentSource = createHash("sha256")
-    .update(readFileSync(sourceFile, "utf8").replaceAll("\r\n", "\n"))
+    .update(read(sourceFile).replaceAll("\r\n", "\n"))
     .digest("hex");
   assert.equal(sha, currentSource, "current proposal source drift");
   for (const [label, packageEvidence] of [

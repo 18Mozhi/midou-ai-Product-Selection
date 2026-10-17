@@ -568,7 +568,7 @@ test("organization overview keeps facts visible during refresh and retains audit
   });
   await page.getByRole("button", { name: "刷新数据" }).click();
   await expect(page.locator(".org-admin-center")).toHaveAttribute("aria-busy", "true");
-  await expect(page.locator(".org-admin-metrics article")).toHaveCount(6);
+  await expect(page.locator(".organization-profile-metrics article")).toHaveCount(6);
   await expect(page.getByRole("button", { name: "正在刷新…" })).toBeDisabled();
   releaseRefresh();
   await expect(page.locator(".org-admin-center")).toHaveAttribute("aria-busy", "false");
@@ -627,7 +627,7 @@ test("organization profile reports accepted save and completed reread separately
   await expect(receipt).toContainText("资料已保存，正在更新页面");
   await expect(receipt).toContainText("m06-01-profile-write-receipt");
   await expect(receipt).not.toContainText("m06-01-profile-read-receipt");
-  await expect(page.locator(".org-admin-profile h3")).toHaveText(profile.name);
+  await expect(page.locator(".organization-profile-facts h3")).toHaveText(profile.name);
   await expect(page.getByRole("button", { name: "正在保存…" })).toBeDisabled();
 
   releaseRead();
@@ -635,7 +635,7 @@ test("organization profile reports accepted save and completed reread separately
   await expect(receipt).toContainText("资料已保存，页面已更新");
   await expect(receipt).toContainText("m06-01-profile-write-receipt");
   await expect(receipt).toContainText("m06-01-profile-read-receipt");
-  await expect(page.locator(".org-admin-profile h3")).toHaveText("保存后的组织");
+  await expect(page.locator(".organization-profile-facts h3")).toHaveText("保存后的组织");
   await receipt.locator("summary").focus();
   await page.keyboard.press("Enter");
   await expect(receipt.locator("details")).toHaveAttribute("open", "");
@@ -733,7 +733,7 @@ test("organization profile keeps an accepted save distinct from a failed refresh
   await page.getByRole("button", { name: "刷新数据" }).click();
   await expect(receipt).toHaveAttribute("data-phase", "pending");
   releaseManualRead();
-  await expect(page.locator(".org-admin-profile h3")).toHaveText("更新后的组织");
+  await expect(page.locator(".organization-profile-facts h3")).toHaveText("更新后的组织");
   await expect(receipt).toHaveAttribute("data-phase", "ready");
   await expect(receipt).toContainText("m06-01-profile-read-recovered");
   await expect(page.getByRole("alert")).toHaveCount(0);
@@ -811,14 +811,14 @@ test("organization overview shows an explicit blocked state and recovers with re
   await page.goto("/org-admin");
   await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "blocked");
   await expect(page.getByRole("heading", { name: "组织数据暂不可用" })).toBeVisible();
-  await expect(page.locator(".org-admin-metrics article")).toHaveCount(0);
+  await expect(page.locator(".organization-profile-metrics article")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "保存" })).toHaveCount(0);
   await expect(page.getByText("m06-01-blocked")).toBeVisible();
 
   await page.unroute("**/api/v1/org/admin/**", blockedHandler);
   await page.getByRole("button", { name: "重新加载" }).click();
   await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
-  await expect(page.locator(".org-admin-metrics article")).toHaveCount(6);
+  await expect(page.locator(".organization-profile-metrics article")).toHaveCount(6);
 });
 
 test("organization workspaces expose truthful governance controls and audited writes", async ({
@@ -2442,8 +2442,52 @@ for (const route of [
     await expect(hero.locator("h1,h2")).not.toHaveCSS("color", "rgb(255, 255, 255)");
     await expect(hero.getByRole("button", { name: "刷新数据", exact: true })).toBeVisible();
     expect(await hero.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+    if ((page.viewportSize()?.width ?? 1440) <= 840) {
+      for (const label of await page.locator(".role-mobile-nav span").all()) {
+        await expect(label).toHaveCSS("font-size", "13px");
+        expect(
+          await label.evaluate((el) => {
+            const own = el.getBoundingClientRect(),
+              parent = el.parentElement!.getBoundingClientRect();
+            return own.left >= parent.left && own.right <= parent.right;
+          }),
+        ).toBe(true);
+      }
+    }
+
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );
   });
 }
+
+test("organization profile uses a full-width facts and editing workspace", async ({
+  page,
+}, testInfo) => {
+  await setup(page);
+  await page.goto("/org-admin");
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+  const facts = page.locator(".organization-profile-facts");
+  const metrics = page.locator(".organization-profile-metrics");
+  const editor = page.locator(".organization-profile-editor");
+  await expect(facts.locator("h3")).toHaveText(profile.name);
+  await expect(facts.locator("dl > div")).toHaveCount(4);
+  await expect(metrics.locator("article")).toHaveCount(6);
+  for (const region of [facts, metrics, editor]) {
+    await expect(region).toHaveCSS("background-image", "none");
+    await expect(region).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  }
+  const boxes = await Promise.all([facts, metrics, editor].map((region) => region.boundingBox()));
+  expect(boxes.every(Boolean)).toBe(true);
+  expect(boxes[0]!.y + boxes[0]!.height).toBeLessThanOrEqual(boxes[1]!.y);
+  expect(boxes[1]!.y + boxes[1]!.height).toBeLessThanOrEqual(boxes[2]!.y);
+  expect(Math.abs(boxes[0]!.width - boxes[2]!.width)).toBeLessThanOrEqual(1);
+  for (const control of await editor.locator("input, select, textarea, button").all()) {
+    expect((await control.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  }
+  await expect(editor.getByRole("button", { name: "保存", exact: true })).toHaveCSS(
+    "color",
+    "rgb(255, 255, 255)",
+  );
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});

@@ -5367,5 +5367,27 @@
       "tests/e2e/m04-02-opportunities.spec.ts"
     ],
     "contract": "Up to 10 public product-page review excerpts with raw evidence. GET competitors accepts optional validated opportunity_id under existing session tenant scope; only scoped list/detail includes excerpts. No all-review, precise-sales or private-ad-metrics claim. No schema, dependency, environment or scoring-rule change."
+  },
+  "selectionOrganizationProfileLayout20261017": {
+    "status": "implemented",
+    "statusDetail": "local_layout_requires_release_and_remaining_organization_pages",
+    "requirements": "docs/selection-organization-profile-layout.md",
+    "routes": ["/org-admin"],
+    "sourceFiles": [
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/organization-admin.css",
+      "apps/web/src/organization-profile-workspace.css",
+      "scripts/build-ui-phase2-organization-profile-review.mjs"
+    ],
+    "testFiles": [
+      "tests/e2e/m06-01-organization-admin.spec.ts",
+      "tests/unit/organization-profile-page-preview.test.mjs",
+      "tests/unit/ui-phase2-organization-profile-review.test.mjs",
+      "tests/unit/ui-phase2-org-profile-form-preview.test.mjs",
+      "tests/e2e/m02-03-navigation-shell.spec.ts",
+      "tests/unit/ui-phase2-org-approvals-shared-history.test.mjs"
+    ],
+    "contract": "Original script and native model/event bindings unchanged. Organization identity and facts precede compact metrics and full-width profile editing. Organization-only mobile labels stay bounded; other shells, backend, API, authorization and audited save/read contracts retain their behavior.",
+    "verification": "206 related Node checks passed across final affected-suite reruns; script and native bindings preserved. Desktop/mobile profile save, read recovery, validation and full-width layout passed; nine organization toolbar/mobile-label bounds passed. Web typecheck/build, static analysis, bundle budget and screenshot-realism gates passed. Two Windows visual baselines recaptured and final desktop/mobile comparison plus layout (4 cases) passed; Linux comparison pending. No deployment or production writes."
   }
 }

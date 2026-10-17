@@ -509,16 +509,6 @@
   float: none;
   overflow-wrap: anywhere;
 }
-.org-admin-center--profile-review > .org-profile-receipt {
-  margin-top: 14px;
-  padding: 20px 24px;
-  border: 1px solid var(--oa-section);
-  border-left: 4px solid var(--oa-blue);
-  border-radius: 0;
-  color: var(--oa-ink);
-  background: var(--oa-white);
-  font-family: var(--so-font-ui, "Microsoft YaHei", sans-serif);
-}
 .org-profile-receipt h3 {
   margin: 6px 0 10px;
   font-size: 20px;
@@ -565,31 +555,6 @@
 }
 .org-profile-receipt code {
   font-size: 13px;
-}
-.org-admin-metrics {
-  margin-top: 16px;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
-}
-.org-admin-metrics article {
-  min-height: 116px;
-  padding: 17px;
-  border: 1px solid var(--so-border);
-  border-radius: 16px;
-  background: linear-gradient(145deg, var(--so-panel), var(--so-bg-elevated));
-}
-.org-admin-metrics span,
-.org-admin-metrics small {
-  display: block;
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.org-admin-metrics b {
-  display: block;
-  margin: 10px 0 8px;
-  font-size: 28px;
-  color: var(--so-text);
 }
 .org-admin-grid {
   margin-top: 16px;
@@ -695,35 +660,9 @@
   color: var(--so-warning);
   background: var(--so-warning-soft);
 }
-.org-admin-profile dl {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-.org-admin-profile dl div {
-  padding: 15px;
-  border-radius: 12px;
-  background: var(--so-panel-strong);
-}
-.org-admin-profile dt {
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.org-admin-profile dd {
-  margin: 7px 0 0;
-  word-break: break-all;
-}
 .org-admin-card form,
 .org-admin-card label {
   display: grid;
-}
-.org-admin-profile-save-fields {
-  display: grid;
-  gap: 15px;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
 }
 .org-admin-card label {
   margin: 10px 0;
@@ -3815,9 +3754,6 @@
 }
 
 @media (max-width: 980px) {
-  .org-admin-metrics {
-    grid-template-columns: repeat(3, 1fr);
-  }
   .org-admin-role-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -3892,9 +3828,6 @@
   .org-admin-refresh small {
     order: 2;
   }
-  .org-admin-metrics {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .org-admin-grid,
   .org-admin-role-grid {
     grid-template-columns: 1fr;
@@ -3910,9 +3843,6 @@
   }
   .org-admin-wide {
     grid-column: auto;
-  }
-  .org-admin-profile dl {
-    grid-template-columns: 1fr;
   }
   .org-admin-summary-row {
     grid-template-columns: repeat(2, 1fr);
@@ -4247,121 +4177,6 @@
   }
 }
 
-/* P29 C composition: organization identity, facts and versioned profile editing. */
-.org-admin-center--profile-review {
-  container-type: inline-size;
-  max-width: 1160px;
-  margin: 0 auto;
-  padding-bottom: 28px;
-  color: var(--oa-ink);
-  background: var(--oa-soft);
-}
-
-.org-admin-center--profile-review .org-admin-metrics {
-  gap: 0;
-  border: 1px solid var(--oa-section);
-}
-
-.org-admin-center--profile-review .org-admin-metrics article {
-  border: 0;
-  border-right: 1px solid var(--oa-section);
-  border-radius: 0;
-  background: var(--oa-white);
-  box-shadow: none;
-}
-
-.org-admin-center--profile-review .org-admin-metrics article:last-child {
-  border-right: 0;
-}
-
-.org-admin-center--profile-review .org-admin-metrics b {
-  color: var(--oa-blue);
-}
-
-.org-admin-center--profile-review .org-admin-grid {
-  grid-template-columns: minmax(300px, 0.8fr) minmax(520px, 1.5fr);
-  gap: 16px;
-}
-
-/* The fixed sidebar reduces usable space before the viewport reaches mobile width. */
-@container (max-width: 836px) {
-  .org-admin-center--profile-review .org-admin-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.org-admin-center--profile-review .org-admin-card {
-  border-color: var(--oa-section);
-  border-radius: 0;
-  background: var(--oa-white);
-  box-shadow: none;
-}
-
-.org-admin-center--profile-review .org-admin-profile {
-  border-top: 1px solid var(--oa-section);
-}
-
-.org-admin-center--profile-review .org-admin-profile i {
-  border-radius: 999px;
-  color: var(--oa-blue);
-  background: var(--oa-highlight);
-}
-
-.org-admin-center--profile-review .org-admin-card form,
-.org-admin-center--profile-review form.org-admin-card {
-  gap: 15px;
-}
-
-.org-admin-center--profile-review .org-admin-card :is(input, select, textarea) {
-  min-height: 44px;
-  border-color: var(--oa-outline);
-  border-radius: 0;
-  color: var(--oa-ink);
-  background: var(--oa-white);
-}
-
-.org-admin-center--profile-review .org-admin-card :is(input, select, textarea):focus-visible,
-.org-admin-center--profile-review :is(button, a, summary):focus-visible {
-  border-color: var(--oa-blue);
-  outline: 3px solid var(--oa-focus-soft);
-  outline-offset: 2px;
-}
-
-.org-admin-center--profile-review .org-admin-profile dl > div {
-  border: 1px solid var(--oa-section);
-  border-radius: 0;
-  background: var(--oa-pale);
-}
-
-.org-admin-center--profile-review :is(.org-admin-notice, .org-admin-state) {
-  border-color: var(--oa-section);
-  border-radius: 0;
-  background: var(--oa-white);
-}
-
-.org-admin-center--profile-review .org-admin-notice {
-  border-left: 4px solid var(--oa-blue);
-}
-
-@media (max-width: 760px) {
-  .org-admin-center--profile-review {
-    margin: 12px -8px 70px;
-    padding-bottom: 16px;
-  }
-
-  .org-admin-center--profile-review .org-admin-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .org-admin-center--profile-review .org-admin-metrics article:nth-child(2n) {
-    border-right: 0;
-  }
-
-  .org-admin-center--profile-review .org-admin-card {
-    padding: 18px;
-  }
-}
-
 /* P31 C composition: role identity, capability matrix and resource grants. */
 .org-admin-center--role-review {
   max-width: 1160px;
@@ -4595,27 +4410,6 @@
   background: var(--oa-soft);
 }
 
-.org-admin-center--member-review .org-admin-metrics {
-  gap: 0;
-  border: 1px solid var(--oa-section);
-}
-
-.org-admin-center--member-review .org-admin-metrics article {
-  border: 0;
-  border-right: 1px solid var(--oa-section);
-  border-radius: 0;
-  background: var(--oa-white);
-  box-shadow: none;
-}
-
-.org-admin-center--member-review .org-admin-metrics article:last-child {
-  border-right: 0;
-}
-
-.org-admin-center--member-review .org-admin-metrics b {
-  color: var(--oa-blue);
-}
-
 .org-admin-center--member-review .org-admin-grid {
   grid-template-columns: minmax(310px, 0.8fr) minmax(520px, 1.45fr);
   gap: 16px;
@@ -4726,14 +4520,6 @@
   .org-admin-center--member-review {
     margin: 12px -8px 70px;
     padding-bottom: 16px;
-  }
-
-  .org-admin-center--member-review .org-admin-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .org-admin-center--member-review .org-admin-metrics article:nth-child(2n) {
-    border-right: 0;
   }
 
   .org-admin-center--member-review .org-admin-grid {

@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -12,7 +16,7 @@ import {
   buildOrganizationProfileReview as buildProfileReview,
 } from "../../scripts/build-ui-phase2-organization-profile-review.mjs";
 
-const source = readFileSync(sourceFile, "utf8").replaceAll("\r\n", "\n");
+const source = readPreSelectionRebuild(sourceFile);
 const sourceHashes = { [sourceFile]: createHash("sha256").update(source).digest("hex") };
 const packages = new Map(
   [
@@ -22,11 +26,16 @@ const packages = new Map(
   ].map((name) => [name, JSON.parse(readFileSync(`${base}/design/${name}/evidence.json`, "utf8"))]),
 );
 const buildOrganizationProfileReview = (source, evidence) =>
-  buildProfileReview(source, evidence, packages.get("organization-profile-fields-direction-c"));
+  buildProfileReview(
+    source,
+    evidence,
+    packages.get("organization-profile-fields-direction-c"),
+    readPreSelectionRebuild,
+  );
 const context = {
   candidates: scanSource(source, sourceFile).candidates,
   sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages,
   files: new Set([
     "scripts/verify-ui-phase2-organization-profile-c.mjs",
@@ -37,7 +46,7 @@ const context = {
 };
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P29.json`, "utf8"));
 
-test("P29 maps all fifteen parent sites to current actions and five explicit exclusions", () => {
+test("P29 archived pre-rebuild maps all fifteen parent sites to current actions and five explicit exclusions", () => {
   assert.equal(review().visualApproval, "user-approved-remaining-pages-auto");
   const r = validateActionReview(review(), context);
   assert.equal(r.sourceSites, 15);
@@ -52,7 +61,7 @@ test("P29 maps all fifteen parent sites to current actions and five explicit exc
     2,
   );
 });
-test("P29 keeps six models, one inline form and the shared reason caller distinct", () => {
+test("P29 archived pre-rebuild keeps six models, one inline form and the shared reason caller distinct", () => {
   const value = review();
   const result = validateReviewSurfaces(value.surfaceReview, {
     sources: { [sourceFile]: source },
@@ -67,7 +76,7 @@ test("P29 keeps six models, one inline form and the shared reason caller distinc
   assert.match(reason.exclusionReason, /初始.*跨缓存/);
   assert.match(value.dialogs.remaining, /共享原因组件仍在父模板/);
 });
-test("P29 only binds business states; directory/disclosure/recheck remain proposals", () => {
+test("P29 archived pre-rebuild only binds business states; directory/disclosure/recheck remain proposals", () => {
   const r = review(),
     e = packages.get("organization-profile-controls-direction-c");
   assert.equal(
@@ -90,7 +99,7 @@ test("P29 only binds business states; directory/disclosure/recheck remain propos
   assert.deepEqual(r, buildOrganizationProfileReview(source, e));
   assert.ok(!r.actions.some((a) => a.actionId.startsWith("PROPOSAL-")));
 });
-test("P29 refuses source omissions, nonexistent approval and stale source", () => {
+test("P29 archived pre-rebuild refuses source omissions, nonexistent approval and stale source", () => {
   const r = review();
   r.actions = r.actions.filter((a) => a.actionId !== "OG-PROFILE-LOGO");
   assert.throws(() => validateActionReview(r, context), /unmapped candidates/);
@@ -109,7 +118,7 @@ test("P29 refuses source omissions, nonexistent approval and stale source", () =
     /current proposal source drift/,
   );
 });
-test("P29 refuses invented fields and a missing shared reason component", () => {
+test("P29 archived pre-rebuild refuses invented fields and a missing shared reason component", () => {
   const value = review();
   value.surfaceReview.inputs.push({
     file: sourceFile,
@@ -133,7 +142,7 @@ test("P29 refuses invented fields and a missing shared reason component", () => 
     /container omissions/,
   );
 });
-test("P29 rejects selector borrowing or missing exact mobile variant evidence", () => {
+test("P29 archived pre-rebuild rejects selector borrowing or missing exact mobile variant evidence", () => {
   const wrong = review();
   wrong.actions.find((a) => a.actionId === "OG-RETRY").additionalControlVariants[0].selector =
     "#save-profile";
@@ -151,7 +160,7 @@ test("P29 rejects selector borrowing or missing exact mobile variant evidence", 
   delete absent.actionVisualReferences["OG-PROFILE-SAVE"];
   assert.throws(() => buildOrganizationProfileReview(source, absent), /missing business control/);
 });
-test("P29 exclusion conditions stay bound to exact child branches and source reason origins", () => {
+test("P29 archived pre-rebuild exclusion conditions stay bound to exact child branches and source reason origins", () => {
   const find = (id) => context.candidates.find((c) => c.candidateId === `${sourceFile}#${id}`);
   assert.ok(
     find("6a563eeaa67fea90.1").conditions.some((c) => c.expression === "view === 'members'"),
@@ -168,4 +177,16 @@ test("P29 exclusion conditions stay bound to exact child branches and source rea
   assert.ok(submit.length > 100);
   assert.doesNotMatch(submit, /askAuditedReason|await auditedReason/);
   assert.match(source, /:open="auditedReasonOpen"/);
+});
+
+test("P29 builder default reader rejects substituting archived inputs for current source", () => {
+  assert.throws(
+    () =>
+      buildProfileReview(
+        source,
+        packages.get("organization-profile-controls-direction-c"),
+        packages.get("organization-profile-fields-direction-c"),
+      ),
+    /current proposal source drift/,
+  );
 });

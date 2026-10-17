@@ -1403,40 +1403,14 @@ onMounted(() => void load());
       <button @click="load()">重新加载</button>
     </section>
     <template v-else>
-      <section v-if="view === 'summary'" class="org-admin-metrics">
-        <article>
-          <span>活动成员</span><b>{{ summary?.members?.active ?? 0 }}</b
-          ><small>共 {{ summary?.members?.total ?? 0 }}</small>
-        </article>
-        <article>
-          <span>活动工作区</span><b>{{ summary?.workspaces?.active ?? 0 }}</b
-          ><small>共 {{ summary?.workspaces?.total ?? 0 }}</small>
-        </article>
-        <article>
-          <span>团队</span><b>{{ summary?.teams?.active ?? 0 }}</b
-          ><small>共 {{ summary?.teams?.total ?? 0 }}</small>
-        </article>
-        <article>
-          <span>待处理审批</span><b>{{ summary?.pending_approvals ?? 0 }}</b
-          ><small>实时汇总</small>
-        </article>
-        <article>
-          <span>有效令牌</span><b>{{ summary?.active_tokens ?? 0 }}</b
-          ><small>不展示明文</small>
-        </article>
-        <article>
-          <span>近 7 日审计</span><b>{{ summary?.recent_audit_events ?? 0 }}</b
-          ><small>组织范围</small>
-        </article>
-      </section>
-      <section v-if="view === 'summary'" class="org-admin-grid">
-        <article class="org-admin-card org-admin-profile">
+      <section v-if="view === 'summary'" class="organization-profile-workspace">
+        <article class="organization-profile-facts">
           <header>
             <div>
               <p>组织基本资料</p>
               <h3>{{ data?.name }}</h3>
             </div>
-            <i>{{ statusText(data?.status) }}</i>
+            <i :data-status="data?.status">{{ statusText(data?.status) }}</i>
           </header>
           <dl>
             <div>
@@ -1457,24 +1431,51 @@ onMounted(() => void load());
             </div>
           </dl>
         </article>
+        <section class="organization-profile-metrics" aria-label="组织运行摘要">
+          <article>
+            <span>活动成员</span><b>{{ summary?.members?.active ?? 0 }}</b
+            ><small>共 {{ summary?.members?.total ?? 0 }}</small>
+          </article>
+          <article>
+            <span>活动工作区</span><b>{{ summary?.workspaces?.active ?? 0 }}</b
+            ><small>共 {{ summary?.workspaces?.total ?? 0 }}</small>
+          </article>
+          <article>
+            <span>团队</span><b>{{ summary?.teams?.active ?? 0 }}</b
+            ><small>共 {{ summary?.teams?.total ?? 0 }}</small>
+          </article>
+          <article>
+            <span>待处理审批</span><b>{{ summary?.pending_approvals ?? 0 }}</b
+            ><small>实时汇总</small>
+          </article>
+          <article>
+            <span>有效令牌</span><b>{{ summary?.active_tokens ?? 0 }}</b
+            ><small>不展示明文</small>
+          </article>
+          <article>
+            <span>近 7 日审计</span><b>{{ summary?.recent_audit_events ?? 0 }}</b
+            ><small>组织范围</small>
+          </article>
+        </section>
         <form
-          class="org-admin-card"
+          class="organization-profile-editor"
           @submit.prevent="
             submit('/org/admin/profile', { ...form, expected_version: data.version }, 'PATCH')
           "
         >
           <h3>更新组织资料</h3>
-          <fieldset
-            :disabled="Boolean(profileSaveReadFailure)"
-            class="org-admin-profile-save-fields"
-          >
+          <fieldset :disabled="Boolean(profileSaveReadFailure)" class="organization-profile-fields">
             <label
-              >名称<input
-                v-model="form.name"
-                :placeholder="data?.name"
+              >名称<input v-model="form.name" :placeholder="data?.name" required maxlength="120"
+            /></label>
+            <label
+              >时区<input
+                v-model="form.timezone"
+                :placeholder="data?.timezone"
                 required
-                maxlength="120" /></label
-            ><label
+                maxlength="64"
+            /></label>
+            <label
               >Logo HTTPS 地址<input
                 v-model="form.logo_url"
                 type="url"
@@ -1486,21 +1487,17 @@ onMounted(() => void load());
                 @input="clearFieldValidity"
               />
               <small>仅支持 HTTPS；留空表示暂不设置 Logo。</small></label
-            ><label
-              >时区<input
-                v-model="form.timezone"
-                :placeholder="data?.timezone"
-                required
-                maxlength="64" /></label
-            ><label
+            >
+            <label
               >数据保留天数<input
                 v-model.number="form.data_retention_days"
                 type="number"
                 min="30"
                 max="3650"
                 required
-                :placeholder="String(data?.data_retention_days)" /></label
-            ><label
+                :placeholder="String(data?.data_retention_days)"
+            /></label>
+            <label
               >默认工作区<select v-model="form.default_workspace_id" required>
                 <option disabled value="">请选择工作区</option>
                 <option
@@ -1511,7 +1508,8 @@ onMounted(() => void load());
                   {{ workspace.name }}
                 </option>
               </select></label
-            ><label
+            >
+            <label
               >变更原因<textarea v-model="form.reason" required maxlength="500"></textarea></label
             ><button :disabled="busy">{{ busy ? "正在保存…" : "保存" }}</button>
           </fieldset>
@@ -1668,3 +1666,5 @@ onMounted(() => void load());
     />
   </section>
 </template>
+
+<style src="../organization-profile-workspace.css"></style>

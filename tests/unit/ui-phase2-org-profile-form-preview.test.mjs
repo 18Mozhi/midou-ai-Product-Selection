@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { readFile } from "node:fs/promises";
@@ -14,9 +15,9 @@ import {
   buildProfileConflictFixture,
 } from "../../scripts/lib/ui-phase2-org-profile-form-preview.mjs";
 
-test("profile preview preserves original script and every native field constraint and binding", async () => {
-  const source = (
-    await readFile("apps/web/src/components/OrganizationAdminCenter.vue", "utf8")
+test("archived profile preview preserves original script and every native field constraint and binding", async () => {
+  const source = readPreSelectionRebuild(
+    "apps/web/src/components/OrganizationAdminCenter.vue",
   ).replaceAll("\r\n", "\n");
   const previous = previewOrgReadState(source),
     proposed = previewOrgProfileForm(source);

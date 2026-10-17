@@ -1,4 +1,5 @@
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { assertP34HistoricalPacket } from "../../scripts/lib/ui-phase2-p34-packet-history.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -68,7 +69,7 @@ test("mutated shared sources cannot borrow legacy hashes from another Git revisi
   }
 });
 
-test("unrelated files are not altered and existing P34 ownership inverse remains bounded", () => {
+test("unrelated files are not altered and archived pre-rebuild P34 ownership inverse remains bounded", () => {
   assert.equal(beforeP34SharedChanges("unknown.css", "abc\r\n"), "abc\n");
   assertP34LegacySourceHash("unknown.css", "abc", hash("abc"));
   assert.throws(() => assertP34LegacySourceHash("unknown.css", "abcd", hash("abc")));
@@ -76,5 +77,5 @@ test("unrelated files are not altered and existing P34 ownership inverse remains
     "apps/web/src/components/OrganizationAdminCenter.vue",
     "apps/web/src/components/OrganizationApprovalPanel.vue",
   ])
-    assertP34LegacySourceHash(file, read(file), evidence.sourceHashes[file]);
+    assertP34LegacySourceHash(file, readPreSelectionRebuild(file), evidence.sourceHashes[file]);
 });

@@ -708,7 +708,7 @@ test("commerce organization overview fits phone tablet and desktop widths", asyn
         }),
       )
       .toEqual([]);
-    const form = page.locator("form.org-admin-card");
+    const form = page.locator("form.organization-profile-editor");
     const box = await form.boundingBox();
     expect(box).not.toBeNull();
     expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(width);
