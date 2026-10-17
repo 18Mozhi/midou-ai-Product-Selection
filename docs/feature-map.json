@@ -5654,5 +5654,21 @@
     ],
     "contract": "Remove manual journey runtime component and styles, retire start route to selection library with empty query/hash and target read permission. Fixed Git bytes are offline historical input only. No backend/API/schema/environment change; admin and organization approvals retained. Not full member cleanup or daily-100 production acceptance.",
     "verification": "Retired-route desktop/mobile 6 cases, retained search/shell 72 cases and affected member-page/theme 10 cases passed; four dated Windows baselines retained and four update-disabled replays passed. Web typecheck/build, static/budget/style/docs gates passed. Expanded unit run: 3113 records, 3110 passed and 3 file-level initialization failures; all three affected files passed 41 cases on rerun. No all-suite clean rerun claim. Production and full goal remain unaccepted."
+  },
+  "selectionSearchOnly20261017": {
+    "status": "implemented",
+    "requirements": "docs/selection-search-only-cleanup.md",
+    "sourceFiles": [
+      "apps/web/src/components/DiscoveryOverlay.vue",
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/use-navigation-discovery.ts",
+      "apps/web/src/styles/navigation-discovery-c.css"
+    ],
+    "testFiles": [
+      "tests/m02-05/discovery-domain.test.mjs",
+      "tests/e2e/m02-05-discovery.spec.ts",
+      "tests/e2e/ui-phase2-discovery-shell-contracts.spec.ts"
+    ],
+    "contract": "Search-only overlay removes unreachable quick-create HTTP reads, recent action state, templates and CSS. Parent mode prop removed, hook accepts search only. Search requests, scope, read ownership, modal keyboard/focus and error correlation retained. Historical backend quick-actions API preserved; no schema/config/dependency change. UI not deployed; readonly production snapshot shows 476 successful and 100 warning-ended collection tasks but zero new opportunities in last 24h; not daily-product acceptance."
   }
 }

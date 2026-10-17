@@ -37,3 +37,10 @@
 `/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py nodejs ai选品`
 
 本次未部署、未启用来源、未回放历史任务、未修改 Python 或前端运行代码。需继续完成发布核对、来源审批与实际恢复、跨主品竞品关系决策，以及持续整链产出验证。
+
+
+## 2026-10-17 再次只读核对：采集量不等于商品产出
+
+公开版本再次确认c26e2b522bc616cbc2a67b01185d832f93789174。MySQL5.7.44以product_scout业务身份在只读事务核对并回滚：最近24小时collection_tasks为476 succeeded、100 completed_with_warnings，opportunities新增0。Amazon榜单子任务576 succeeded/1 failed；eBay优惠145 succeeded/432 succeeded_empty；动态GoogleNews100 blocked。它们是任务/子任务次数，不是独立商品数量，也不是整链完成数。
+
+Amazon商品仍disabled/amazon-structured-product-v2，1688仍disabled/1688-browser-contract-v3，二者已审批、未到期。六个新闻RSS仍enabled但pending。按当前MySqlAutomaticSourceScheduler固定来源条件，符合的仅page_amazon_bestsellers_us及page_ebay_deals_us。这证明部分旧版采集在持续产生结果，但没有产生最近24小时新机会；未单独证明其唯一根因，也未启用来源、更改审批、触发回放或部署。之前仅列新闻来源的观察不能替代本次完整调度条件核对。

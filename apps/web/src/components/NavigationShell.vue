@@ -591,7 +591,6 @@ onUnmounted(() => {
     </p>
     <DiscoveryOverlay
       :open="Boolean(discoveryMode)"
-      :mode="discoveryMode || 'search'"
       :shell="shell"
       :api-base-url="apiBaseUrl"
       :organization-name="guard?.organization_name ?? null"

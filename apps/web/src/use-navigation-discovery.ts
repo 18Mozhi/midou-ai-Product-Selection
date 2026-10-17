@@ -2,8 +2,8 @@ import { ref } from "vue";
 import type { NavigationShellKind } from "./navigation-shell-route-state";
 
 export function useNavigationDiscovery(shell: () => NavigationShellKind) {
-  const discoveryMode = ref<"search" | "create" | null>(null);
-  const openDiscovery = (mode: "search" | "create") => (discoveryMode.value = mode);
+  const discoveryMode = ref<"search" | null>(null);
+  const openDiscovery = (mode: "search") => (discoveryMode.value = mode);
   const closeDiscovery = () => (discoveryMode.value = null);
   const handleDiscoveryShortcut = (event: KeyboardEvent) => {
     if (

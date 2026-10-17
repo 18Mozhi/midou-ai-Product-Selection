@@ -249,7 +249,10 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(overlay, /createApiClient/);
   assert.match(overlay, /任务[\s\S]*机会[\s\S]*证据[\s\S]*采集任务/);
   assert.match(overlay, /对象类型[\s\S]*状态[\s\S]*负责人/);
-  assert.match(overlay, /recentActionIds[\s\S]*discovery-c-recent[\s\S]*最近/);
+  assert.doesNotMatch(
+    overlay,
+    /recentActionIds|discovery-c-recent|loadActions|\/me\/quick-actions/,
+  );
   assert.doesNotMatch(overlay, /\{\{ item\.required_capability \}\}/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   for (const state of ["loading", "empty", "expired", "forbidden", "blocked"])

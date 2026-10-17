@@ -129,6 +129,19 @@ test("retired quick-create entry is absent from member navigation", async ({ pag
       .getByRole("dialog", { name: "工作台导航" })
       .getByRole("button", { name: "创建选品", exact: true }),
   ).toHaveCount(0);
+  await page.keyboard.press("Escape");
+  await page.route("**/api/v1/me/global-search?**", (route) =>
+    route.fulfill({
+      json: { data: { items: [] }, request_id: "search-only", trace_id: "search-only" },
+    }),
+  );
+  await page.keyboard.press("Control+K");
+  const search = page.getByRole("dialog", { name: "全局搜索", exact: true });
+  await expect(search).toBeVisible();
+  await search.getByRole("textbox", { name: "搜索关键词" }).fill("搜索商品");
+  await search.getByRole("textbox", { name: "搜索关键词" }).press("Enter");
+  await expect(search.locator(".ui-state-panel")).toHaveAttribute("data-kind", "empty");
+  await expect(page.getByRole("dialog", { name: "快捷创建", exact: true })).toHaveCount(0);
   expect(calls).toEqual([]);
 });
 

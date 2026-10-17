@@ -4,7 +4,7 @@ import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-cli
 import { useModalDialog } from "../use-modal-dialog";
 import "../styles/navigation-discovery-c.css";
 import UiStatePanel from "./UiStatePanel.vue";
-type Mode = "search" | "create";
+
 type Shell = "member" | "organization_admin" | "platform_admin";
 type State = "idle" | "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Result {
@@ -18,13 +18,6 @@ interface Result {
   assignee_name: string | null;
   route: string;
   updated_at: string;
-}
-interface Action {
-  id: string;
-  label: string;
-  description: string;
-  route: string;
-  required_capability: string;
 }
 const resourceLabel = (value: string) =>
   ({
@@ -85,7 +78,6 @@ const STATUS_OPTIONS: Record<string, Array<{ value: string; label: string }>> = 
 };
 const props = defineProps<{
     open: boolean;
-    mode: Mode;
     shell: Shell;
     apiBaseUrl: string;
     organizationName: string | null;
@@ -100,12 +92,10 @@ const query = ref(""),
   assignee = ref(""),
   state = ref<State>("idle"),
   results = ref<Result[]>([]),
-  actions = ref<Action[]>([]),
   requestId = ref(""),
   traceId = ref(""),
   actionHint = ref(""),
   input = ref<HTMLInputElement | null>(null),
-  recentActionIds = ref<string[]>([]),
   statusOptions = computed(() => STATUS_OPTIONS[resourceType.value] ?? []),
   assigneeApplicable = computed(() => ["task", "opportunity"].includes(resourceType.value)),
   organizationLabel = computed(() => props.organizationName?.trim() || "当前组织"),
@@ -123,8 +113,8 @@ function invalidateRead() {
 }
 onUnmounted(invalidateRead);
 watch(
-  () => [props.open, props.mode, props.shell] as const,
-  async ([open, mode]) => {
+  () => [props.open, props.shell] as const,
+  async ([open]) => {
     const opening = invalidateRead();
     if (!open) return;
     state.value = "idle";
@@ -133,11 +123,9 @@ watch(
     actionHint.value = "";
     queryError.value = "";
     results.value = [];
-    actions.value = [];
     await nextTick();
     if (opening !== readSequence || !props.open) return;
-    if (mode === "search") input.value?.focus();
-    else await loadActions();
+    input.value?.focus();
   },
   { immediate: true },
 );
@@ -201,24 +189,7 @@ async function search() {
     state.value = results.value.length ? "ready" : "empty";
   });
 }
-async function loadActions() {
-  await get<Action[]>(`/me/quick-actions?shell=${props.shell}`, (data) => {
-    actions.value = [...data].sort((left, right) => {
-      const leftRecent = recentActionIds.value.indexOf(left.id),
-        rightRecent = recentActionIds.value.indexOf(right.id);
-      if (leftRecent === rightRecent) return 0;
-      if (leftRecent < 0) return 1;
-      if (rightRecent < 0) return -1;
-      return leftRecent - rightRecent;
-    });
-    state.value = actions.value.length ? "ready" : "empty";
-  });
-}
-function rememberAction(id: string) {
-  recentActionIds.value = [id, ...recentActionIds.value.filter((item) => item !== id)].slice(0, 5);
-}
-function navigateAway(event: MouseEvent, actionId?: string) {
-  if (actionId) rememberAction(actionId);
+function navigateAway(event: MouseEvent) {
   if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
     return;
   emit("close");
@@ -255,7 +226,7 @@ watch(resourceType, () => {
       v-if="open"
       ref="dialogElement"
       class="discovery-c-backdrop"
-      :aria-label="mode === 'search' ? '全局搜索' : '快捷创建'"
+      aria-label="全局搜索"
       @cancel="handleCancel"
       @mousedown.self.prevent="emit('close')"
       @keydown="handleTab"
@@ -263,8 +234,8 @@ watch(resourceType, () => {
       <section class="discovery-c-dialog">
         <header class="discovery-c-header">
           <div>
-            <p>{{ mode === "search" ? "GLOBAL SEARCH" : "QUICK CREATE" }}</p>
-            <h2>{{ mode === "search" ? "搜索当前工作区" : "选择已授权入口" }}</h2>
+            <p>GLOBAL SEARCH</p>
+            <h2>搜索当前工作区</h2>
           </div>
           <button type="button" aria-label="关闭" @click="emit('close')">
             关闭 <span aria-hidden="true">×</span>
@@ -277,12 +248,7 @@ watch(resourceType, () => {
               <h3>{{ organizationLabel }}</h3>
               <p class="discovery-c-workspace-label">{{ workspaceLabel }}</p>
               <p class="discovery-c-scope-note">范围由当前会话决定，不跨组织或工作区。</p>
-              <form
-                v-if="mode === 'search'"
-                class="discovery-c-form"
-                novalidate
-                @submit.prevent="search"
-              >
+              <form class="discovery-c-form" novalidate @submit.prevent="search">
                 <label for="discovery-c-query">搜索关键词</label>
                 <input
                   id="discovery-c-query"
@@ -329,14 +295,11 @@ watch(resourceType, () => {
                 />
                 <button class="discovery-c-submit" type="submit">搜索</button>
               </form>
-              <div v-else class="discovery-c-create-note">
-                <p><strong>先选择入口</strong><br />再完成目标表单</p>
-              </div>
             </aside>
             <section class="discovery-c-results-pane" aria-label="结果区">
               <header class="discovery-c-surface-heading">
-                <h3>{{ mode === "search" ? "搜索结果" : "可用入口" }}</h3>
-                <span>{{ mode === "search" ? "最多显示 10 项" : "由服务端返回" }}</span>
+                <h3>搜索结果</h3>
+                <span>最多显示 10 项</span>
               </header>
               <div class="discovery-c-content" aria-live="polite">
                 <p v-if="state === 'idle'" class="discovery-c-idle">
@@ -366,7 +329,7 @@ watch(resourceType, () => {
                   :action-hint="actionHint"
                   primary-label="重新加载"
                   secondary-label="关闭"
-                  @primary="mode === 'search' ? search() : loadActions()"
+                  @primary="search"
                   @secondary="emit('close')"
                 />
                 <div v-else class="discovery-c-results">
@@ -393,34 +356,13 @@ watch(resourceType, () => {
                     </span>
                     <span class="discovery-c-result-arrow" aria-hidden="true">→</span>
                   </RouterLink>
-                  <RouterLink
-                    v-for="(item, index) in actions"
-                    :key="item.id"
-                    class="discovery-c-action"
-                    :to="item.route"
-                    @click="navigateAway($event, item.id)"
-                  >
-                    <span class="discovery-c-action-index">{{
-                      String(index + 1).padStart(2, "0")
-                    }}</span>
-                    <span class="discovery-c-action-main">
-                      <strong>{{ item.label }}</strong>
-                      <small>{{ item.description }}</small>
-                    </span>
-                    <span v-if="recentActionIds.includes(item.id)" class="discovery-c-recent"
-                      >最近</span
-                    >
-                    <span class="discovery-c-result-arrow" aria-hidden="true">→</span>
-                  </RouterLink>
                 </div>
               </div>
             </section>
           </div>
         </div>
         <footer class="discovery-c-footer">
-          <span>{{
-            mode === "search" ? "搜索不跨组织或工作区" : "这里只提供入口，不提前创建业务对象"
-          }}</span>
+          <span>搜索不跨组织或工作区</span>
           <RouterLink v-if="shell === 'member'" to="/notifications" @click="navigateAway"
             >查看通知 <span aria-hidden="true">→</span></RouterLink
           >
