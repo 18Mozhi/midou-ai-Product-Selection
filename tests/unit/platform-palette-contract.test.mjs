@@ -1343,7 +1343,7 @@ test("platform account center palettes stay scoped to their distinct account pag
     ].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 38);
+  assert.equal(names.size, 34);
   assert.equal(declarations.length, names.size, "no duplicate account center palette declarations");
   assert.doesNotMatch(tokens, /--account-review-|--account-users-|--p39-/);
   assert.match(tokens, /html:has\(body #app \.account-center--organization-review\)/);
@@ -1351,7 +1351,7 @@ test("platform account center palettes stay scoped to their distinct account pag
   assert.match(tokens, /html:has\(body #app \.account-center--admins-c\)/);
   assert.ok(css.startsWith('@import "../design/account-center-tokens.css";'));
   assert.doesNotMatch(adminCss, /@import/);
-  assert.ok(dialogsCss.startsWith('@import "../design/account-center-tokens.css";'));
+  assert.doesNotMatch(dialogsCss, /@import/);
   assert.doesNotMatch(usersCss, /@import/);
   assert.ok(organizationDialog.includes('@import "../design/account-center-tokens.css";'));
   assert.ok(userDialog.includes('@import "../design/account-center-tokens.css";'));

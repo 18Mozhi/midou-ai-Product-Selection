@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import { adminReviewHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-review-historical-capture.mjs";
 import assert from "node:assert/strict";
@@ -8,7 +9,12 @@ import { baseParse } from "@vue/compiler-dom";
 import { adminCreatePreview } from "../../scripts/lib/ui-phase2-admin-create-preview.mjs";
 import { adminPageAssemblyPreview } from "../../scripts/lib/ui-phase2-admin-page-assembly-preview.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+// Archived preview contracts use their original source; the rebuilt dialog has separate browser coverage.
+const read = (f) =>
+  (f.startsWith("apps/web/src/") ? readPreSelectionRebuild(f) : readFileSync(f, "utf8")).replaceAll(
+    "\r\n",
+    "\n",
+  );
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const child = "apps/web/src/components/PlatformAccountDialogs.vue";
 const parent = "apps/web/src/components/PlatformAccountCenter.vue";

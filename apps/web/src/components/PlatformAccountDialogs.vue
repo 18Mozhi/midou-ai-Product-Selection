@@ -66,11 +66,10 @@ const { dialogElement: createUserDialogElement, handleCancel: handleCreateUserCa
     @cancel="handleCreateUserCancel"
   >
     <div class="p44-admin-create-layout" :class="{ 'is-admin-create': tab === 'admins' }">
-      <aside v-if="tab === 'admins'" class="p44-admin-create-rail">
-        <small>平台管理 / 新建账号</small>
+      <header v-if="tab === 'admins'" class="p44-admin-create-rail">
         <h3>新建平台管理员</h3>
         <p>账号立即可用；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。</p>
-      </aside>
+      </header>
       <form
         :class="{ 'p44-admin-create-form': tab === 'admins' }"
         @submit.prevent="emit('createUser')"

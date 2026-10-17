@@ -1,382 +1,178 @@
-@import "../design/account-center-tokens.css";
-
-dialog {
+#app dialog:is(.p43-account-dialog, .p42-reason-dialog) {
   position: fixed;
-  z-index: 10;
   inset: 0;
-  width: min(560px, calc(100% - 32px));
-  max-height: calc(100vh - 48px);
+  z-index: 10;
+  width: min(640px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
   margin: auto;
+  padding: 0;
   overflow: auto;
-  color: var(--so-text);
-  background: var(--so-bg-elevated);
   border: 1px solid var(--so-border-strong);
-  border-radius: 12px;
-  box-shadow: var(--so-shadow-dialog);
+  border-radius: 10px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  box-shadow: 0 16px 48px color-mix(in srgb, var(--so-shadow-color) 24%, transparent);
 }
-dialog::backdrop {
+#app dialog::backdrop {
+  backdrop-filter: none;
   background: var(--so-scrim);
-  backdrop-filter: blur(4px);
+}
+.p44-admin-create-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
 }
 form,
+form section,
 label {
   display: grid;
+  min-width: 0;
 }
-form {
-  gap: 14px;
-  min-width: 340px;
-  padding: 10px;
+#app dialog form {
+  gap: 16px;
+  min-width: 0;
+  margin: 0;
+  padding: 20px;
+  background: var(--so-panel);
+}
+form section {
+  gap: 12px;
 }
 label {
   gap: 6px;
-}
-input,
-select,
-textarea {
-  padding: 10px;
   color: var(--so-text);
-  background: var(--so-panel-soft);
-  border: 1px solid var(--so-border-strong);
-  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
 }
-textarea {
-  min-height: 90px;
+#app dialog :is(input, select, textarea) {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 6px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  font: inherit;
+}
+#app dialog textarea {
+  min-height: 120px;
   resize: vertical;
 }
-footer {
+:is(.p43-account-dialog-head, .p42-reason-head, .p44-admin-create-rail) {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--so-border);
+  background: var(--so-panel);
+  color: var(--so-text);
+}
+:is(.p43-account-dialog-head, .p42-reason-head) {
+  margin: -20px -20px 0;
+}
+:is(.p43-account-dialog-head, .p42-reason-head, .p44-admin-create-rail) h3 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+:is(.p43-account-dialog-head, .p42-reason-head, .p44-admin-create-rail) p {
+  margin: 6px 0 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+#app dialog footer {
+  position: sticky;
+  bottom: -20px;
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+  margin: 0 -20px -20px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--so-border);
+  background: var(--so-panel);
 }
-button {
+#app dialog footer button {
   min-height: 44px;
-  padding: 10px 14px;
+  padding: 9px 16px;
+  border: 1px solid var(--so-border-strong);
+  border-radius: 6px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  font: inherit;
+}
+#app dialog footer button:last-child {
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-on-primary);
+}
+#app .p42-reason-dialog[aria-label="停用组织"] footer button:last-child {
+  border-color: var(--so-danger);
+  background: var(--so-danger);
+}
+#app dialog button:disabled {
+  border-color: var(--so-border);
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+  cursor: not-allowed;
+  opacity: 1;
+}
+#app dialog :is(button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--so-focus);
+  outline-offset: 2px;
 }
 .dialog-feedback {
   margin: 0;
-  padding: 11px 13px;
-  border-radius: 9px;
+  padding: 10px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 6px;
+  font-size: 13px;
 }
 .dialog-feedback--error {
-  color: var(--so-danger);
+  border-color: var(--so-danger-border);
   background: var(--so-danger-soft);
-  border: 1px solid var(--so-danger-border);
-}
-@media (max-width: 640px) {
-  dialog {
-    width: calc(100% - 28px);
-  }
-  form {
-    min-width: 0;
-  }
-}
-.p42-reason-dialog {
-  width: min(580px, calc(100% - 32px));
-  max-height: calc(100dvh - 24px);
-  padding: 0;
-  border-color: var(--account-org-line);
-  border-radius: 12px;
-  color: var(--account-org-ink);
-  background: var(--account-org-surface);
-}
-.p42-reason-dialog form {
-  display: grid;
-  min-width: 0;
-  gap: 0;
-  padding: 0;
-}
-.p42-reason-head {
-  padding: 24px;
-  color: var(--account-org-on-blue);
-  background: var(--account-org-blue);
-}
-.p42-reason-head h3 {
-  margin: 0 0 12px;
-  color: var(--account-org-on-blue);
-  font-size: 24px;
-}
-.p42-reason-head p {
-  margin: 0;
-  color: var(--account-org-dialog-subtle);
-  font-size: 14px;
-}
-.p42-reason-dialog label {
-  gap: 10px;
-  padding: 24px;
-}
-.p42-reason-dialog textarea {
-  min-height: 140px;
-  border-color: var(--account-org-control-hover);
-  color: var(--account-org-ink);
-  background: var(--account-org-surface);
-  font: inherit;
-  font-size: 16px;
-}
-.p42-reason-dialog footer {
-  gap: 10px;
-  padding: 18px 24px;
-  border-top: 1px solid var(--account-org-line);
-}
-.p42-reason-dialog footer button {
-  min-height: 44px;
-  border: 1px solid var(--account-org-line);
-  border-radius: 8px;
-  color: var(--account-org-ink);
-  background: var(--account-org-surface);
-  font: inherit;
-  font-size: 15px;
-}
-.p42-reason-dialog footer button:last-child {
-  border-color: var(--account-org-blue);
-  color: var(--account-org-on-blue);
-  background: var(--account-org-blue);
-}
-.p42-reason-dialog[aria-label="停用组织"] footer button:last-child {
-  border-color: var(--account-org-danger);
-  background: var(--account-org-danger);
-}
-.p42-reason-dialog :is(textarea, button):focus-visible {
-  outline: 3px solid var(--account-org-blue);
-  outline-offset: 3px;
-}
-.p42-reason-dialog button:disabled {
-  border-color: var(--account-org-line);
-  background: var(--account-org-soft);
-  color: var(--account-org-muted);
-  opacity: 1;
-}
-.p43-account-dialog {
-  width: min(620px, calc(100% - 28px));
-  max-height: min(92dvh, 900px);
-  padding: 0;
-  border-color: var(--account-org-line);
-  border-radius: 12px;
-  color: var(--account-org-ink);
-  background: var(--account-org-surface);
-}
-.p43-account-dialog form {
-  gap: 14px;
-  min-width: 0;
-  padding: 0 22px 20px;
-}
-.p43-account-dialog-head {
-  margin: 0 -22px;
-  padding: 20px 22px;
-  color: var(--account-org-on-blue);
-  background: var(--account-org-blue);
-}
-.p43-account-dialog-head h3 {
-  margin: 0;
-  color: var(--account-org-on-blue);
-  font-size: 21px;
-}
-.p43-account-dialog-head p {
-  margin: 8px 0 0;
-  color: var(--account-org-dialog-subtle);
-  line-height: 1.5;
-}
-.p43-account-dialog label {
-  gap: 7px;
-  color: var(--account-org-ink);
-  font-weight: 650;
-}
-.p43-account-dialog input,
-.p43-account-dialog select {
-  min-height: 46px;
-  border-color: var(--account-org-field-border);
-  color: var(--account-org-ink);
-  background: var(--account-org-surface);
-  font: inherit;
-  font-size: 16px;
-}
-.p43-account-dialog footer {
-  position: sticky;
-  bottom: 0;
-  padding-top: 12px;
-  background: var(--account-org-surface);
-}
-.p43-account-dialog footer button {
-  min-height: 44px;
-  padding: 9px 14px;
-  border: 1px solid var(--account-org-dialog-border);
-  border-radius: 8px;
-  color: var(--account-org-ink);
-  background: var(--account-org-surface);
-  font: inherit;
-}
-.p43-account-dialog footer button:last-child {
-  border-color: var(--account-org-blue);
-  color: var(--account-org-on-blue);
-  background: var(--account-org-blue);
-}
-.p43-account-dialog :is(button, input, select):focus-visible {
-  outline: 3px solid var(--account-org-focus);
-  outline-offset: 2px;
-}
-.p43-account-dialog button:disabled {
-  border-color: var(--account-org-line);
-  color: var(--account-org-muted);
-  background: var(--account-org-soft);
-  opacity: 1;
-}
-html[data-design="commerce"] body dialog.p43-create-user-dialog,
-html[data-design="commerce"] body dialog.p43-create-user-dialog:hover {
-  border-color: var(--account-org-dialog-border);
-  color: var(--account-org-ink);
-  background-color: var(--account-org-surface);
-  font-weight: 400;
-}
-.p44-admin-create-dialog {
-  width: min(980px, calc(100% - 32px));
-  max-height: min(92dvh, 900px);
-  overflow: auto;
-}
-.p44-admin-create-layout.is-admin-create {
-  display: grid;
-  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
-  min-width: 0;
-}
-.p44-admin-create-rail {
-  align-self: stretch;
-  padding: 26px 22px;
-  color: var(--account-org-on-blue);
-  background: var(--account-org-blue);
-}
-.p44-admin-create-rail small {
-  color: var(--account-org-hero-muted);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-}
-.p44-admin-create-rail h3 {
-  margin: 12px 0 10px;
-  color: var(--account-org-on-blue);
-  font-size: 23px;
-  line-height: 1.4;
-}
-.p44-admin-create-rail p {
-  margin: 0;
-  color: var(--account-org-dialog-subtle);
-  font-size: 14px;
-  line-height: 1.75;
-}
-.p44-admin-create-form {
-  align-content: start;
-  min-height: 100%;
-  padding: 24px;
-  background: var(--account-org-surface);
-}
-html[data-design="commerce"] body form.p44-admin-create-form,
-html[data-design="commerce"] body form.p44-admin-create-form:hover {
-  border-color: var(--account-org-admin-border);
-  color: var(--account-org-ink);
-  background-color: var(--account-org-surface);
-  font-weight: 400;
-}
-html[data-design="commerce"] body dialog.p44-admin-create-dialog,
-html[data-design="commerce"] body dialog.p44-admin-create-dialog:hover {
-  border-color: var(--account-org-dialog-border);
-  color: var(--account-org-ink);
-  background-color: var(--account-org-surface);
-  font-weight: 400;
-}
-html[data-design="commerce"] body .p44-admin-create-layout,
-html[data-design="commerce"] body .p44-admin-create-layout:hover,
-html[data-design="commerce"] body .p44-admin-create-group,
-html[data-design="commerce"] body .p44-admin-create-group:hover,
-html[data-design="commerce"] body .p44-admin-create-group-head,
-html[data-design="commerce"] body .p44-admin-create-group-head:hover {
-  border-color: var(--account-org-line);
-  color: var(--account-org-ink);
-  background-color: transparent;
-  font-weight: 400;
-}
-html[data-design="commerce"] body aside.p44-admin-create-rail,
-html[data-design="commerce"] body aside.p44-admin-create-rail:hover {
-  border-color: var(--account-org-blue);
-  color: var(--account-org-on-blue);
-  background-color: var(--account-org-blue);
-  font-weight: 400;
-}
-html[data-design="commerce"] body small.p44-admin-create-help,
-html[data-design="commerce"] body small.p44-admin-create-help:hover {
-  border-color: transparent;
-  color: var(--account-org-muted);
-  background-color: transparent;
-  font-weight: 400;
-}
-.p44-admin-create-group {
-  display: grid;
-  gap: 14px;
-  min-width: 0;
+  color: var(--so-danger);
 }
 .p44-admin-create-group + .p44-admin-create-group {
-  padding-top: 20px;
-  border-top: 1px solid var(--account-org-line);
+  padding-top: 16px;
+  border-top: 1px solid var(--so-border);
 }
 .p44-admin-create-group-head h4 {
-  margin: 0 0 5px;
-  color: var(--account-org-ink);
-  font-size: 17px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
 }
 .p44-admin-create-group-head p {
-  margin: 0;
-  color: var(--account-org-muted);
-  font-size: 14px;
+  margin: 5px 0 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
   line-height: 1.6;
 }
 .p44-admin-create-help {
-  margin-top: -8px;
-  color: var(--account-org-muted);
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.55;
-}
-.p44-admin-create-form footer {
-  position: static;
-  padding: 14px 0 0;
-  border-top: 1px solid var(--account-org-line);
-}
-:global(
-  body dialog.p43-account-dialog.p44-admin-create-dialog :is(button, input, select):focus-visible
-) {
-  outline: 3px solid var(--account-org-blue);
-  outline-offset: 3px;
+  margin-top: -6px;
+  color: var(--so-text-muted);
+  font-size: 12px;
+  line-height: 1.5;
 }
 @media (max-width: 640px) {
-  .p43-account-dialog form {
-    padding: 0 16px 16px;
-  }
-  .p43-account-dialog-head {
-    margin-inline: -16px;
-    padding: 18px 16px;
-  }
-  .p43-account-dialog footer {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-}
-@media (max-width: 760px) {
-  .p44-admin-create-dialog {
-    width: calc(100% - 28px);
+  #app dialog:is(.p43-account-dialog, .p42-reason-dialog) {
+    width: calc(100% - 24px);
     max-height: calc(100dvh - 24px);
   }
-  .p44-admin-create-layout.is-admin-create {
-    grid-template-columns: minmax(0, 1fr);
+  #app dialog form {
+    padding: 16px;
+    gap: 14px;
   }
-  .p44-admin-create-rail {
-    padding: 20px 18px;
+  :is(.p43-account-dialog-head, .p42-reason-head) {
+    margin: -16px -16px 0;
   }
-  .p44-admin-create-rail h3 {
-    margin: 7px 0 5px;
-    font-size: 20px;
+  :is(.p43-account-dialog-head, .p42-reason-head, .p44-admin-create-rail) {
+    padding: 14px 16px;
   }
-  .p44-admin-create-form {
-    padding: 20px 18px;
-  }
-  .p44-admin-create-form input,
-  .p44-admin-create-form select,
-  .p44-admin-create-form footer button {
-    min-height: 48px;
+  #app dialog footer {
+    bottom: -16px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0 -16px -16px;
+    padding: 12px 16px;
   }
 }

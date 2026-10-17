@@ -1663,10 +1663,17 @@ test("P44 admin creation surfaces keep the current commerce palette across hover
   const email = dialog.getByLabel("邮箱", { exact: true });
   const password = dialog.getByLabel("临时密码", { exact: true });
 
-  await expect(rail).toHaveCSS("background-color", "rgb(36, 104, 212)");
+  await expect(rail).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await expect(form).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(dialog.locator("aside")).toHaveCount(0);
+  expect(await dialog.evaluate((el) => getComputedStyle(el, "::backdrop").backdropFilter)).toBe(
+    "none",
+  );
+  await expect.poll(() => dialog.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+  const [headingBox, formBox] = await Promise.all([rail.boundingBox(), form.boundingBox()]);
+  expect(formBox!.y).toBeGreaterThanOrEqual(headingBox!.y + headingBox!.height);
   await rail.hover();
-  await expect(rail).toHaveCSS("background-color", "rgb(36, 104, 212)");
+  await expect(rail).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await form.hover();
   await expect(form).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await email.focus();
@@ -1730,11 +1737,9 @@ test("administrator write failures stay inside their active dialogs", async ({ p
   const formBox = await createForm.boundingBox();
   expect(railBox).not.toBeNull();
   expect(formBox).not.toBeNull();
-  if ((page.viewportSize()?.width ?? 0) <= 760) {
-    expect(formBox!.y).toBeGreaterThanOrEqual(railBox!.y + railBox!.height);
-  } else {
-    expect(formBox!.x).toBeGreaterThanOrEqual(railBox!.x + railBox!.width);
-  }
+  expect(formBox!.y).toBeGreaterThanOrEqual(railBox!.y + railBox!.height);
+  expect(Math.abs(formBox!.width - railBox!.width)).toBeLessThanOrEqual(1);
+  await expect(createDialog.locator("aside")).toHaveCount(0);
   await expect(
     createDialog.getByText("从管理员页打开时默认运营管理员；选择普通用户则不授予平台角色。"),
   ).toBeVisible();

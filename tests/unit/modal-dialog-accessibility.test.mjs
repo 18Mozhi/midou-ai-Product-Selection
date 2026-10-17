@@ -79,7 +79,10 @@ test("native business dialogs share modal top-layer and focus-return behavior", 
     ].map((path) => readFile(path, "utf8")),
   );
   for (const source of opaqueDialogStyles)
-    assert.match(source, /dialog(?:\[open\])?\s*\{[^}]*background:\s*var\(--so-bg-elevated\)/s);
+    assert.match(
+      source,
+      /dialog(?:\[open\]|:is\([^)]*\))?\s*\{[^}]*background:\s*var\(--so-(?:bg-elevated|panel)\)/s,
+    );
 });
 
 test("custom confirmation and mobile filter surfaces trap and restore focus", async () => {
