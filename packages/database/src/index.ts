@@ -238,5 +238,7 @@ export async function applyMigration(
 
 export {
   automaticEvaluationPendingSql,
+  automaticEvaluationCompleteSql,
+  automaticEvaluationFailureSql,
   automaticEvaluationEnqueueUpdateSql,
 } from "./automatic-evaluation-queue-sql.js";

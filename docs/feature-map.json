@@ -663,7 +663,7 @@
       "tests/unit/automatic-evidence-scoring.test.mjs",
       "tests/unit/automatic-selection-evaluation.test.mjs"
     ],
-    "contract": "Coalesce one internal leased evaluation wakeup in existing result_json, consume on claim, preserve on completion/failure via queued without lease takeover. All three producers share policy. No external API/schema/config change. No production writes or deployment."
+    "contract": "Coalesce one internal leased evaluation wakeup in existing result_json, consume on claim, preserve on completion/failure via queued without lease takeover. All three producers share policy. Complete fixed terminal SQL statements are exported by database and called with 9/7 bound values; no direct Worker query template interpolation. Statement bytes, leases, wakeups and retry behavior are unchanged. No external API/schema/config change. No production writes or deployment."
   },
   "selectionSourcingLayout20261017": {
     "status": "implemented",
@@ -5546,7 +5546,8 @@
     "testFiles": [
       "tests/e2e/ui-phase2-account-contracts.spec.ts",
       "tests/unit/personal-center.test.mjs",
-      "tests/unit/personal-center-page-preview.test.mjs"
+      "tests/unit/personal-center-page-preview.test.mjs",
+      "tests/unit/ui-phase2-account-app-lifecycle.test.mjs"
     ],
     "contract": "Compact account header and wrapping section tabs; full-width permission, security and asset panels. Original account script, links, events, profile version/idempotency, section failure and five preference booleans unchanged. No backend, API, schema, config, permission or dependency change. Frontend publish and refresh only."
   },

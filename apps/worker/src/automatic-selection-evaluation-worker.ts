@@ -10,7 +10,8 @@ import {
 import { LAN_1688_RESULT_LIMIT } from "./lan-1688-image-search.js";
 import {
   selectionCandidateSql,
-  automaticEvaluationPendingSql,
+  automaticEvaluationCompleteSql,
+  automaticEvaluationFailureSql,
   automaticEvaluationEnqueueUpdateSql,
 } from "@scoutops/database";
 import {
@@ -1051,23 +1052,17 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     result: Record<string, unknown>,
     now: Date,
   ) {
-    await connection.query(
-      `UPDATE automatic_selection_evaluations SET status=IF(${automaticEvaluationPendingSql},'queued',?),attempt_count=0,lease_owner=NULL,` +
-        `available_at=IF(${automaticEvaluationPendingSql},?,available_at),` +
-        `lease_expires_at=NULL,last_error_code=IF(${automaticEvaluationPendingSql},NULL,?),evidence_fingerprint=?,result_json=?,evaluated_at=?,` +
-        "updated_at=? WHERE opportunity_id=? AND lease_owner=?",
-      [
-        status,
-        now,
-        typeof result.error_code === "string" ? result.error_code : null,
-        evidenceFingerprint,
-        JSON.stringify(result),
-        now,
-        now,
-        job.opportunityId,
-        this.workerId,
-      ],
-    );
+    await connection.query(automaticEvaluationCompleteSql, [
+      status,
+      now,
+      typeof result.error_code === "string" ? result.error_code : null,
+      evidenceFingerprint,
+      JSON.stringify(result),
+      now,
+      now,
+      job.opportunityId,
+      this.workerId,
+    ]);
   }
 
   private async finishFailure(job: EvaluationJob, status: EvaluationStatus, code: string) {
@@ -1078,13 +1073,15 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         status === "scheduled"
           ? new Date(now.getTime() + delays[Math.min(job.attemptCount - 1, 2)]!)
           : now;
-    await this.pool.query(
-      `UPDATE automatic_selection_evaluations SET status=IF(${automaticEvaluationPendingSql},'queued',?),` +
-        `available_at=IF(${automaticEvaluationPendingSql},?,?),attempt_count=IF(${automaticEvaluationPendingSql},0,attempt_count),lease_owner=NULL,` +
-        `lease_expires_at=NULL,last_error_code=IF(${automaticEvaluationPendingSql},NULL,?),updated_at=?,` +
-        "result_json=JSON_REMOVE(result_json,'$.requeue_requested') WHERE opportunity_id=? AND lease_owner=?",
-      [stored, now, available, code, now, job.opportunityId, this.workerId],
-    );
+    await this.pool.query(automaticEvaluationFailureSql, [
+      stored,
+      now,
+      available,
+      code,
+      now,
+      job.opportunityId,
+      this.workerId,
+    ]);
   }
 
   private async event(

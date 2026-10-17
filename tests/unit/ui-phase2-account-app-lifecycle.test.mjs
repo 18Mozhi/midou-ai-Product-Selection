@@ -1,5 +1,4 @@
 import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
-import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -148,11 +147,6 @@ test("r8 App inventory preserves capture-time router/KeepAlive sources separatel
   assert.equal(Object.keys(evidence.sourceHashes).length, 142);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
     assertCaptureSourceRevision(file, readPreSelectionRebuild(file), expected);
-  assertCaptureSource(
-    "apps/web/src/components/AccountShell.vue",
-    read("apps/web/src/components/AccountShell.vue"),
-    evidence.sourceHashes["apps/web/src/components/AccountShell.vue"],
-  );
   for (const shot of evidence.screenshots) {
     const png = readFileSync(`${currentRoot}/${shot.file}`);
     assert.equal(hash(png), shot.sha256);
@@ -185,4 +179,14 @@ test("r8 capture duplicate is rejected before starting a browser or server", () 
   assert.match(result.stderr, /EEXIST/);
   assert.ok(!result.stdout.includes("P43 actual App lifecycle http"));
   assert.equal(hash(readFileSync(`${currentRoot}/evidence.json`)), hash(bytes));
+});
+
+test("current account presentation preserves the captured identity and lifecycle script", () => {
+  const file = "apps/web/src/components/AccountShell.vue";
+  const script = (source) => {
+    const match = source.match(/<script setup lang="ts">([\s\S]*?)<\/script>/);
+    assert.ok(match, "account script must exist");
+    return match[1];
+  };
+  assert.equal(script(read(file)), script(readPreSelectionRebuild(file)));
 });

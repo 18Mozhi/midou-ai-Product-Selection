@@ -3,6 +3,8 @@ import test from "node:test";
 import {
   automaticEvaluationEnqueueUpdateSql,
   automaticEvaluationPendingSql,
+  automaticEvaluationCompleteSql,
+  automaticEvaluationFailureSql,
 } from "../../packages/database/dist/index.js";
 import {
   queueAutomaticSelectionEvaluation,
@@ -114,4 +116,32 @@ test("claim consumes an older wakeup only when it actually leases the row", asyn
   const empty = fixture();
   assert.equal(await empty.worker.claim(), null);
   assert.equal(empty.calls.length, 1);
+});
+
+test("terminal statements keep hostile-looking job values in bound parameters", async () => {
+  const f = fixture();
+  const value = "x'); DROP TABLE automatic_selection_evaluations; --";
+  const hostileJob = { ...job, opportunityId: value };
+  await f.worker.complete(
+    f.connection,
+    hostileJob,
+    "waiting_evidence",
+    value,
+    { error_code: value },
+    now,
+  );
+  await f.worker.finishFailure(hostileJob, "scheduled", value);
+  for (const [index, expected] of [
+    automaticEvaluationCompleteSql,
+    automaticEvaluationFailureSql,
+  ].entries()) {
+    const { sql, params } = f.calls[index];
+    assert.equal(sql, expected);
+    assert.equal(sql.includes(value), false);
+    assert.equal((sql.match(/\?/g) ?? []).length, params.length);
+    assert.equal(params.length, index === 0 ? 9 : 7);
+    assert.equal(params.at(-2), value);
+    assert.equal(params.at(-1), "worker");
+    assert.equal(params[index === 0 ? 2 : 3], value);
+  }
 });
