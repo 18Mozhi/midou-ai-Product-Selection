@@ -227,11 +227,10 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | 84b53a278d412127.1 | 12 | event-binding | PC-ASSET-CURRENT-READ / 呈现本人资产读取状态并转发重试 |
 | add62a6dcbcd3e91.1 | 26 | control | PC-ASSET-CURRENT-FOLLOW / 依据关注记录ID进入对应热点视图 |
 | fb93a6197d1c0346.1 | 42 | control | PC-ASSET-CURRENT-DECISION / 依据决策关联的机会ID进入机会详情 |
-| ee2568a050e8c314.1 | 58 | control | PC-ASSET-CURRENT-TASK / 进入通用任务列表，不附加详情或本人筛选 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/personal-center/PersonalAssetsPanel.vue | 0da62518600762a5906b8e326800ea1a9d1a3f856bbf98178a3cb68a9198c7ef |
+| apps/web/src/components/personal-center/PersonalAssetsPanel.vue | 2d0dfeb19b819aec45ff52ea46157c5f7ec9d66ad4d2f21c3a6a0518a8ea3960 |
 
 此映射仅确认静态路由目标与读取事件；不改变本人资产查询范围或推断被链接页面的数据授权结果。
 

@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/task-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TaskWorkspace.vue": "5d5eb4c4fda461aecfd9dd5beaf4481d6ba1c41cb6d9b510379be6c936f84045",
+    "apps/web/src/components/TaskWorkspace.vue": "265c0150f278f543b6ad1c279abbe6d3b962b8021dc9360071ef4a9fae93d6a9",
     "apps/web/src/components/TaskDetailPanel.vue": "4ee570c9b73c56e5e6adb651e095319bedbdc231624214f5212b235e345f16db",
     "apps/web/src/components/TaskActionDialog.vue": "42c2054cacb579a7d29855fc23b09eb71d5980025d54235b9410ebae3472b9f2"
   },
@@ -1661,7 +1661,7 @@
       "apps/web/src/components/TaskActionDialog.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TaskWorkspace.vue": "5d5eb4c4fda461aecfd9dd5beaf4481d6ba1c41cb6d9b510379be6c936f84045",
+      "apps/web/src/components/TaskWorkspace.vue": "265c0150f278f543b6ad1c279abbe6d3b962b8021dc9360071ef4a9fae93d6a9",
       "apps/web/src/components/TaskDetailPanel.vue": "4ee570c9b73c56e5e6adb651e095319bedbdc231624214f5212b235e345f16db",
       "apps/web/src/components/TaskActionDialog.vue": "42c2054cacb579a7d29855fc23b09eb71d5980025d54235b9410ebae3472b9f2"
     },

@@ -1184,7 +1184,12 @@ test("current P11 assets panel map binds retries and the exact destinations for 
       record.currentLine !== null &&
       record.claim.includes("PC-ASSET-CURRENT-"),
   );
-  assert.equal(candidates.length, 4);
+  assert.equal(candidates.length, 3);
+  assert.equal(
+    candidates.some((candidate) => candidate.candidateId.endsWith("#ee2568a050e8c314.1")),
+    false,
+  );
+  assert.doesNotMatch(source, /\/tasks|我的任务/);
   assert.deepEqual(
     [...new Set(currentRows.map((record) => record.candidateId))].sort(),
     candidates.map((candidate) => candidate.candidateId).sort(),
