@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -14,7 +15,7 @@ const file = "apps/web/src/components/OrganizationAuditPanel.vue",
   folder = "output/playwright/p37-page-vue-preview";
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex");
-const original = read(file),
+const original = readPreSelectionRebuild(file),
   transformed = auditPagePreview(original),
   evidence = JSON.parse(read(`${folder}/evidence.json`));
 const normalize = (value) =>
@@ -39,7 +40,7 @@ function structure(source) {
     interpolations: interpolations.sort(),
   };
 }
-test("P37 audit C composition retains complete script, directives, fields and native controls apart from two explicit copy labels", () => {
+test("Archived P37 audit C composition retains complete script, directives, fields and native controls apart from two explicit copy labels", () => {
   assert.equal(parse(transformed).errors.length, 0);
   assert.equal(
     parse(original).descriptor.scriptSetup.content,
@@ -53,7 +54,7 @@ test("P37 audit C composition retains complete script, directives, fields and na
     auditPagePreview(original.replace('class="org-audit-filter-grid"', 'class="unexpected"')),
   );
 });
-test("P37 mounted page evidence pins39 capture-time sources and76 exact four-width images", () => {
+test("Archived P37 mounted page evidence pins39 capture-time sources and76 exact four-width images", () => {
   assert.equal(evidence.kind, "P37-PAGE-VUE-PREVIEW-r1");
   assert.equal(evidence.approval, "pending-user-review");
   assert.equal(evidence.processesClosed, true);
@@ -96,7 +97,7 @@ test("P37 mounted page evidence pins39 capture-time sources and76 exact four-wid
   for (const shot of evidence.screenshots)
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);
 });
-test("P37 uses only eight audit GETs per width, exact queries and separate system fixtures", () => {
+test("Archived P37 uses only eight audit GETs per width, exact queries and separate system fixtures", () => {
   for (const run of evidence.runs) {
     assert.equal(run.requests.length, 8);
     assert.ok(
@@ -153,7 +154,7 @@ test("P37 uses only eight audit GETs per width, exact queries and separate syste
   assert.match(evidence.scope, /never concatenated/);
   assert.match(evidence.scope, /does not implement server date semantics/);
 });
-test("P37 remains review-only with current protection code preserved and explicit unverified accessibility boundary", () => {
+test("Archived P37 remains review-only with current protection code preserved and explicit unverified accessibility boundary", () => {
   for (const source of [
     file,
     "apps/web/src/components/OrganizationAdminCenter.vue",

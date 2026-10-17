@@ -560,28 +560,11 @@ test("P08 tenancy palette resolves its original C direction colors in page scope
   assert.doesNotMatch(p08Overrides, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("organization audit palette resolves its original C direction colors in route scope", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/organization-audit-tokens.css", "utf8"),
-    readFile("apps/web/src/organization-audit.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--org-audit-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set(
-    [...css.matchAll(/var\((--org-audit-[a-z-]+)\)/g)].map((match) => match[1]),
-  );
-
-  assert.equal(names.size, 10);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.org-admin-center \.org-audit-panel\)\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "./design/organization-audit-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+test("organization audit workspace uses shared semantic colors in its own scope", async () => {
+  const css = await readFile("apps/web/src/organization-audit.css", "utf8");
+  assert.match(css, /#app \.org-admin-center \.org-audit-panel/);
+  assert.match(css, /var\(--so-/);
+  assert.doesNotMatch(css, /--org-audit-|@import|#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
 test("P62 platform log uses semantic workspace colors without shell overrides", async () => {

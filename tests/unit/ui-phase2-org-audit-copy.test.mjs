@@ -58,7 +58,7 @@ function mount() {
   scope.run(() =>
     vm.runInNewContext(
       ts.transpileModule(
-        body + "\nglobalThis.result={copy,choose,copyState,selectedEvent,loadedQuery};",
+        body + "\nglobalThis.result={copy,choose,copyState,selectedEvent,loadedQuery,form};",
         { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } },
       ).outputText,
       sandbox,
@@ -198,4 +198,17 @@ test("P37 unmount suppresses both pending feedback and further clipboard calls",
     assert.equal(h.copyState.value, "");
     await h.copy("request-1", "request");
     assert.equal(h.pending.length, 1);
+  }));
+
+test("equivalent query objects keep unsubmitted filters while real query changes restore state", () =>
+  run(async (h) => {
+    h.form.value.action = "unsubmitted-filter";
+    h.route.query = { ...h.route.query };
+    await nextTick();
+    assert.equal(h.form.value.action, "unsubmitted-filter");
+    h.route.query = { org_audit_query: "request-2" };
+    await nextTick();
+    assert.equal(h.form.value.action, "");
+    assert.equal(h.loadedQuery.value, "request-2");
+    assert.equal(h.selectedEvent.value.request_id, "request-2");
   }));

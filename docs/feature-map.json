@@ -4598,6 +4598,24 @@
       ],
       "contract": "Original script/event/model bindings and token security lifecycle preserved. Full-width ledger before creation; native #org-token-create fragment only, drafts and selection retained. No API/schema/dependency/permission/runtime-config change.",
       "verification": "8 desktop/mobile cases and 238 related/supplementary/shared Node cases passed; Web typecheck/build and static/budget/style/realism/docs passed. No production acceptance or deployment claim."
+    },
+    "selectionOrganizationAudit20261017": {
+      "status": "implemented",
+      "statusDetail": "local_ui_verified_requires_release",
+      "requirements": "docs/selection-organization-audit-layout.md",
+      "routes": ["/org-admin/audit"],
+      "sourceFiles": [
+        "apps/web/src/components/OrganizationAuditPanel.vue",
+        "apps/web/src/organization-audit.css"
+      ],
+      "testFiles": [
+        "tests/e2e/m06-01-organization-admin.spec.ts",
+        "tests/e2e/m06-01-organization-audit-history.spec.ts",
+        "tests/unit/ui-phase2-org-audit-copy.test.mjs",
+        "tests/unit/ui-phase2-org-audit-production-composition.test.mjs"
+      ],
+      "contract": "Original readonly query/cursor, permissions, redaction and copy lifecycle preserved. Native ul/li/button list and full-width details with fragment link. Compare route query by existing value fingerprint to preserve drafts on equivalent query objects; real history query changes still restore. No API/schema/environment/dependency change.",
+      "verification": "15 desktop/mobile passes, one existing desktop-only timeout skip; 184 related/supplementary Node passes. Web typecheck/build and static/budget/style/realism/docs passed. No deployment or production acceptance claim."
     }
   },
   "phaseVerification": {

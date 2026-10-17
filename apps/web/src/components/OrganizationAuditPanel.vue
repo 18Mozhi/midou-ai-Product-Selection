@@ -135,7 +135,7 @@ let routeRestorePending = false,
   routeRestoreGeneration = 0;
 const pendingOwnQueryWrites = new Set<string>();
 watch(
-  [() => route.path, () => route.query],
+  [() => route.path, () => queryFingerprint(route.query)],
   () => {
     if (route.path !== copyOwnerPath) {
       routeRestoreGeneration++;
@@ -414,6 +414,25 @@ async function copy(value: string, field: string) {
       </aside>
     </header>
 
+    <div class="org-audit-metrics" aria-label="当前已加载审计汇总">
+      <article>
+        <span>当前已加载</span><b>{{ events.length }}</b
+        ><small>不是全库总数</small>
+      </article>
+      <article data-tone="success">
+        <span>成功</span><b>{{ loadedCounts.succeeded }}</b
+        ><small>已加载范围</small>
+      </article>
+      <article data-tone="danger">
+        <span>失败</span><b>{{ loadedCounts.failed }}</b
+        ><small>已加载范围</small>
+      </article>
+      <article data-tone="warning">
+        <span>已阻止</span><b>{{ loadedCounts.blocked }}</b
+        ><small>已加载范围</small>
+      </article>
+    </div>
+
     <form
       class="org-audit-filters"
       aria-label="组织审计筛选"
@@ -490,25 +509,6 @@ async function copy(value: string, field: string) {
       </footer>
     </form>
 
-    <div class="org-audit-metrics" aria-label="当前已加载审计汇总">
-      <article>
-        <span>当前已加载</span><b>{{ events.length }}</b
-        ><small>不是全库总数</small>
-      </article>
-      <article data-tone="success">
-        <span>成功</span><b>{{ loadedCounts.succeeded }}</b
-        ><small>已加载范围</small>
-      </article>
-      <article data-tone="danger">
-        <span>失败</span><b>{{ loadedCounts.failed }}</b
-        ><small>已加载范围</small>
-      </article>
-      <article data-tone="warning">
-        <span>已阻止</span><b>{{ loadedCounts.blocked }}</b
-        ><small>已加载范围</small>
-      </article>
-    </div>
-
     <section class="org-audit-ledger" aria-label="组织审计记录">
       <header>
         <div>
@@ -519,9 +519,10 @@ async function copy(value: string, field: string) {
           <span v-else>已加载 {{ events.length }} 条</span>
         </div>
         <small>{{ nextCursor ? "仍有后续记录" : "已到当前结果末尾" }}</small>
+        <a v-if="selectedEvent" href="#org-audit-selected">定位记录详情</a>
       </header>
       <div class="org-audit-browser">
-        <div class="org-audit-list" role="list" aria-label="组织审计列表">
+        <div class="org-audit-list">
           <button
             v-if="hiddenSystemEventCount && !loadedQuery.trim() && !filters.action.trim()"
             type="button"
@@ -535,29 +536,27 @@ async function copy(value: string, field: string) {
             </span>
             <b>{{ systemEventsExpanded ? "收起" : "展开" }}</b>
           </button>
-          <button
-            v-for="event in visibleEvents"
-            :key="event.id"
-            type="button"
-            role="listitem"
-            class="org-audit-row"
-            :class="{ selected: selectedEvent?.id === event.id }"
-            :aria-pressed="selectedEvent?.id === event.id"
-            @click="choose(event)"
-          >
-            <span class="org-audit-row-icon" aria-hidden="true">{{
-              outcomeLabel(event.outcome)[0]
-            }}</span>
-            <span>
-              <strong>{{ actionLabel(event.action) }}</strong>
-              <small
-                >{{ resourceLabel(event.resource_type) }} ·
-                {{ formatTime(event.occurred_at) }}</small
+          <ul class="org-audit-entries" aria-label="组织审计列表">
+            <li v-for="event in visibleEvents" :key="event.id">
+              <button
+                type="button"
+                class="org-audit-row"
+                :class="{ selected: selectedEvent?.id === event.id }"
+                :aria-pressed="selectedEvent?.id === event.id"
+                @click="choose(event)"
               >
-              <code>{{ event.action }}</code>
-            </span>
-            <em :data-outcome="event.outcome">{{ outcomeLabel(event.outcome) }}</em>
-          </button>
+                <span>
+                  <strong>{{ actionLabel(event.action) }}</strong>
+                  <small
+                    >{{ resourceLabel(event.resource_type) }} ·
+                    {{ formatTime(event.occurred_at) }}</small
+                  >
+                  <code>{{ event.action }}</code>
+                </span>
+                <em :data-outcome="event.outcome">{{ outcomeLabel(event.outcome) }}</em>
+              </button>
+            </li>
+          </ul>
           <div v-if="!visibleEvents.length" class="org-audit-empty">
             <b>{{
               events.length
@@ -585,7 +584,12 @@ async function copy(value: string, field: string) {
           </button>
         </div>
 
-        <aside v-if="selectedEvent" class="org-audit-detail" aria-label="审计记录详情">
+        <aside
+          v-if="selectedEvent"
+          id="org-audit-selected"
+          class="org-audit-detail"
+          aria-label="审计记录详情"
+        >
           <header>
             <div>
               <span>记录详情</span>

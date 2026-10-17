@@ -2010,7 +2010,7 @@ test("organization audit auditor can open only the read-only capability route", 
   });
 
   await page.goto("/org-admin/audit");
-  await expect(page.getByRole("region", { name: "上下文" })).toContainText("审计员");
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
   await expect(page.getByRole("heading", { name: "组织审计账本" })).toBeVisible();
   await expect(page.locator(".role-nav-groups a")).toHaveCount(1);
   await expect(page.getByRole("link", { name: "邀请成员" })).toHaveCount(0);
@@ -2815,6 +2815,50 @@ test("organization token workspace keeps full-width ledger and unsubmitted creat
   await expect(tokenRoot.locator(".org-token-create")).toHaveCSS("background-image", "none");
   expect(await tokenIdentity!.evaluate((element) => element.isConnected)).toBe(true);
   await tokenIdentity!.dispose();
+  expect(writes).toBe(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("organization audit workspace keeps full-width native records and readonly detail navigation", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/org-admin/audit");
+  const auditRoot = page.locator(".org-audit-panel");
+  await expect(auditRoot).toBeVisible();
+  const list = page.getByLabel("组织审计列表", { exact: true });
+  await expect(list).toHaveJSProperty("tagName", "UL");
+  const choice = list.locator("li").nth(1).getByRole("button");
+  await choice.click();
+  await expect(choice).toHaveAttribute("aria-pressed", "true");
+  const chosenHeading = await auditRoot.locator(".org-audit-detail h3").innerText();
+  await page.getByLabel("操作代码（精确）").fill("尚未提交的筛选草稿");
+  const auditIdentity = await auditRoot.elementHandle();
+  let writes = 0;
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.includes("/audit-events") && request.method() !== "GET")
+      writes += 1;
+  });
+  await auditRoot.getByRole("link", { name: "定位记录详情", exact: true }).click();
+  await expect(page).toHaveURL(/#org-audit-selected$/);
+  await expect(auditRoot.locator(".org-audit-detail h3")).toHaveText(chosenHeading);
+  await expect(page.getByLabel("操作代码（精确）")).toHaveValue("尚未提交的筛选草稿");
+  const a = await auditRoot.locator(".org-audit-list").boundingBox(),
+    b = await auditRoot.locator(".org-audit-detail").boundingBox();
+  expect(Math.abs(a!.width - b!.width)).toBeLessThanOrEqual(1);
+  expect(a!.y + a!.height).toBeLessThanOrEqual(b!.y);
+  const countBounds = await auditRoot.locator(".org-audit-metrics").boundingBox(),
+    filterBounds = await auditRoot.locator(".org-audit-filters").boundingBox();
+  expect(countBounds!.y + countBounds!.height).toBeLessThanOrEqual(filterBounds!.y);
+  await expect
+    .poll(async () => {
+      const box = await auditRoot.locator(".org-audit-detail h3").boundingBox();
+      return Boolean(box && box.y >= 60 && box.y < (page.viewportSize()?.height ?? 900) - 44);
+    })
+    .toBe(true);
+  await expect(auditRoot.locator(".org-audit-detail")).toHaveCSS("background-image", "none");
+  expect(await auditIdentity!.evaluate((element) => element.isConnected)).toBe(true);
+  await auditIdentity!.dispose();
   expect(writes).toBe(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
