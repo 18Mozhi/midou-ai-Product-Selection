@@ -599,7 +599,7 @@ test("crawler completion replay with the original lease digest is idempotent", a
   assert.deepEqual(calls.slice(-2), ["commit", "release"]);
 });
 
-test("1688 cannot be enabled before real logged-in fixed-sample replay is accepted", async () => {
+test("1688 LAN sourcing cannot be enabled without server authorization", async () => {
   let queryIndex = 0;
   const sqlStatements = [];
   const connection = {
@@ -652,9 +652,16 @@ test("1688 cannot be enabled before real logged-in fixed-sample replay is accept
       error.code === "provider_source_setup_required" &&
       error.statusCode === 409,
   );
-  const acceptanceSql = sqlStatements.find((sql) => sql.includes("last_replay_status"));
-  assert.match(acceptanceSql, /last_replay_status='passed'/);
-  assert.match(acceptanceSql, /r\.created_at=s\.last_replay_at/);
+  assert.equal(
+    sqlStatements.some((sql) =>
+      /last_replay_status|crawler_profiles|crawler_browser_runs/.test(sql),
+    ),
+    false,
+  );
+  assert.equal(
+    sqlStatements.some((sql) => sql.startsWith("UPDATE providers")),
+    false,
+  );
 });
 
 test("real browser snapshots can be fixed and replayed against the current 1688 parser", async () => {

@@ -28,7 +28,9 @@ export const responsiveFocusRevision = Object.freeze({
   tableControlsFile: "apps/web/src/components/TableViewControls.vue",
   tableControlsAfter: "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
   reasonFile: "apps/web/src/components/AuditedReasonDialog.vue",
-  reasonAfter: "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
+  // Async first-mount focus fix; desktop/mobile account regressions recorded in
+  // docs/selection-backend-preservation.md. Original capture stays immutable.
+  reasonAfter: "431e13431dcfbaff643d17d7c708edb4c5e2c5e6cddc743b76144f0fd94ccd24",
   currentDependencyHashes: Object.freeze({
     "scripts/verify-responsive-data-view-focus.mjs":
       "f891a55fde3c5732f05e19266a4396a25280308d322cdbd3aba5bf2bfd6ae2ef",
@@ -39,7 +41,7 @@ export const responsiveFocusRevision = Object.freeze({
     "apps/web/src/components/ConfirmDialog.vue":
       "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
     "apps/web/src/components/AuditedReasonDialog.vue":
-      "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
+      "431e13431dcfbaff643d17d7c708edb4c5e2c5e6cddc743b76144f0fd94ccd24",
     "apps/web/src/use-modal-dialog.ts":
       "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
     "apps/web/src/ui/state-contract.ts":
@@ -63,7 +65,8 @@ export const responsiveFocusRevision = Object.freeze({
     "apps/web/src/responsive-baselines.css":
       "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
     "apps/web/src/signal-ledger.css":
-      "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276",
+      // Home redesign removed unused member ledger overrides in 24305189.
+      "7df2acad1794e6a04d7475c5e285fd67f37886e3a470fcaabedb6555f631f11c",
   }),
 });
 const hash = (value) => createHash("sha256").update(value).digest("hex");

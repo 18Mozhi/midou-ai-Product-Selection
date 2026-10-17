@@ -101,8 +101,8 @@ const sections: Array<{
   {
     value: "automation_rules",
     label: "自动化规则",
-    action: "进入自动化规则",
-    href: "/automations",
+    action: "",
+    href: "",
   },
   {
     value: "releases",
@@ -231,10 +231,7 @@ const typeName = (value: unknown) =>
       releases: "发布版本",
     }) as Record<string, string>
   )[String(value)] ?? String(value ?? "—");
-const editHref = (item: any) =>
-  recordSection.value === "automation_rules"
-    ? `/automations?rule=${item.id}&action=edit`
-    : recordType.value.href;
+const editHref = () => recordType.value.href || "/platform-admin/governance";
 const versionText = (item: any) => {
   if (recordSection.value === "releases") return item.name ? `版本 ${item.name}` : "未记录版本";
   if (recordSection.value === "approval_templates")
@@ -414,7 +411,7 @@ onBeforeUnmount(() => {
           <button type="button" :disabled="refreshing" @click="load()">
             {{ refreshing ? "刷新中…" : "刷新事实" }}
           </button>
-          <RouterLink class="governance-primary-action" :to="current.href">
+          <RouterLink v-if="current.href" class="governance-primary-action" :to="current.href">
             {{ current.action }}
           </RouterLink>
         </div>
@@ -575,8 +572,8 @@ onBeforeUnmount(() => {
                     <td>
                       <div class="governance-row-actions">
                         <button type="button" @click="selected = item">查看详情</button>
-                        <RouterLink :to="editHref(item)">
-                          {{ recordSection === "automation_rules" ? "编辑规则" : "进入工作台" }}
+                        <RouterLink v-if="recordSection !== 'automation_rules'" :to="editHref()">
+                          进入工作台
                         </RouterLink>
                       </div>
                       <details>
@@ -664,8 +661,12 @@ onBeforeUnmount(() => {
                     </div>
                   </dl>
                 </details>
-                <RouterLink class="governance-detail-action" :to="editHref(row)">
-                  {{ recordSection === "automation_rules" ? "进入规则编辑" : "进入所属工作台" }}
+                <RouterLink
+                  v-if="recordSection !== 'automation_rules'"
+                  class="governance-detail-action"
+                  :to="editHref()"
+                >
+                  进入所属工作台
                 </RouterLink>
               </div>
             </template>
@@ -802,9 +803,12 @@ onBeforeUnmount(() => {
         </details>
         <footer>
           <button @click="selected = null">关闭</button
-          ><RouterLink class="governance-detail-action" :to="editHref(selected)">{{
-            recordSection === "automation_rules" ? "进入规则编辑" : "进入所属工作台"
-          }}</RouterLink>
+          ><RouterLink
+            v-if="recordSection !== 'automation_rules'"
+            class="governance-detail-action"
+            :to="editHref()"
+            >进入所属工作台</RouterLink
+          >
         </footer>
       </section>
     </dialog>

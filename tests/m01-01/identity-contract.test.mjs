@@ -180,7 +180,7 @@ test("M01-01 login waits for a real MFA code and explains the 30-day session", a
     ui,
     /security_setup\?\.required[\s\S]*?mode\.value\s*=\s*["']security-setup["'][\s\S]*?return;/,
   );
-  assert.match(ui, /登录状态最长保留 30 天/);
+  assert.match(ui, /登录状态最多保留 30 天/);
   assert.doesNotMatch(ui, /会话关闭浏览器后失效/);
 });
 

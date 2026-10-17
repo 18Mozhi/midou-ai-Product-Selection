@@ -1,4 +1,5 @@
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
@@ -19,6 +20,8 @@ import {
 
 const inputs = readOrgTokenReviewInputs(),
   build = () => buildOrgTokenReview(inputs);
+// Capture-era shared reason input; actual parent/child sources remain current.
+inputs.sources[reasonFile] = readPreSelectionRebuild(reasonFile);
 const context = {
   candidates: dependencies.flatMap((f) => scanSource(inputs.sources[f], f).candidates),
   sourceHashes: build().sourceHashes,

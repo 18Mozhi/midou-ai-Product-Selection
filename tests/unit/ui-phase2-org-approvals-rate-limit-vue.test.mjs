@@ -1,7 +1,7 @@
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
+import { preSelectionRebuildRevision } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { beforeP34OwnerPath } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
-import { assertP34LegacySourceHash } from "../../scripts/lib/ui-phase2-org-approvals-shared-history.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -64,14 +64,23 @@ test("P34 historical rate-limit delta excludes subsequent audit and owner-path f
     );
 });
 
-test("P34 live429 proof binds176 checks,52 unchanged images and8 new screenshots", () => {
+test("P34 captured429 proof binds176 checks,52 unchanged images and8 new screenshots", () => {
+  assert.deepEqual(
+    e,
+    JSON.parse(
+      execFileSync("git", ["show", `${preSelectionRebuildRevision}:${output}/evidence.json`], {
+        encoding: "utf8",
+      }),
+    ),
+    "capture manifest remains bound to its immutable pre-rebuild packet",
+  );
   assert.equal(e.baselineCommit, rateLimitBaseline);
   assert.equal(e.checks.length, 176);
   assert.equal(e.checks.filter((c) => c.name.endsWith("pixels unchanged")).length, 52);
   assert.equal(e.screenshots.length, 8);
   assert.deepEqual([...new Set(e.checks.map((c) => c.width))], [390, 760, 761, 1440]);
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    assertP34LegacySourceHash(f, readFileSync(f, "utf8"), sha);
+    assert.equal(hash(readCaptureSourceRevision(f, sha)), sha, f);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   for (const width of [390, 760, 761, 1440]) {

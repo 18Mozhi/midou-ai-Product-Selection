@@ -1,3 +1,8 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+import { readArchivedAutomationSource } from "../../scripts/lib/retired-automation-surface.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -9,7 +14,7 @@ import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 
 const base = "design-plans/ui-phase-2-2026-09-07";
 const file = "apps/web/src/components/AutomationRuleCenter.vue";
-const source = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const source = readArchivedAutomationSource(file).replaceAll("\r\n", "\n");
 const sourceHashes = { [file]: createHash("sha256").update(source).digest("hex") };
 const packages = new Map([
   [
@@ -24,7 +29,7 @@ packages.set(
 const context = {
   candidates: scanSource(source, file).candidates,
   sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages,
   files: new Set([
     "scripts/verify-ui-phase2-automation-c.mjs",

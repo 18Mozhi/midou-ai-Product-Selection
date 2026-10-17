@@ -1,5 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 
 const mappingFile = "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md";
@@ -8,7 +12,7 @@ const railFile = "apps/web/src/components/PlatformAccountGlobalRail.vue";
 const filterFile = "apps/web/src/components/PlatformAccountDirectoryFilters.vue";
 
 test("P39 directory source candidates have exact current semantic references and source hash", () => {
-  const audit = runContractAudit();
+  const audit = runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles());
   const sourceReferences = audit.records.filter(
     (record) =>
       record.document === mappingFile &&

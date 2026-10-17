@@ -89,9 +89,12 @@ test("P47 review style is marker and mounted-page scoped and never imported by p
     for (const d of rule.nodes.filter((n) => n.type === "decl"))
       assert.equal(d.important, undefined);
   });
-  for (const f of Object.keys(e.sourceHashes).filter((f) => f.startsWith("apps/"))) {
-    assert.ok(!read(f).includes("provider-adapters-vue-preview"), f);
-    assert.ok(!read(f).includes("ProviderAdapterCenterPreview"), f);
+  for (const name of readdirSync("apps/web/src", { recursive: true }).filter((name) =>
+    /\.(vue|ts|css)$/.test(name),
+  )) {
+    const f = "apps/web/src/" + name.replaceAll("\\", "/");
+    assert.ok(!readFileSync(f, "utf8").includes("provider-adapters-vue-preview"), f);
+    assert.ok(!readFileSync(f, "utf8").includes("ProviderAdapterCenterPreview"), f);
   }
 });
 

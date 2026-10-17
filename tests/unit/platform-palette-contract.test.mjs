@@ -1,3 +1,4 @@
+import { readArchivedAutomationSource } from "../../scripts/lib/retired-automation-surface.mjs";
 import { readArchivedReportSource } from "../../scripts/lib/retired-report-surface.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -181,7 +182,7 @@ test("opportunity queue and detail colors resolve from their route-scoped palett
     ].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 23);
+  assert.equal(names.size, 22);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -192,10 +193,10 @@ test("opportunity queue and detail colors resolve from their route-scoped palett
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|!important/i);
 });
 
-test("automation rules palette resolves every page-local color reference", async () => {
+test("historical automation rules palette resolves its captured color references", async () => {
   const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/automation-rule-tokens.css", "utf8"),
-    readFile("apps/web/src/automation-rules.css", "utf8"),
+    Promise.resolve(readArchivedAutomationSource("apps/web/src/design/automation-rule-tokens.css")),
+    Promise.resolve(readArchivedAutomationSource("apps/web/src/automation-rules.css")),
   ]);
   const declarations = [
     ...tokens.matchAll(

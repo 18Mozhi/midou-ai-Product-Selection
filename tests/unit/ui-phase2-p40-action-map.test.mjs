@@ -2,6 +2,10 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
 import { validateActionReview } from "../../scripts/lib/ui-phase2-action-coverage.mjs";
@@ -18,7 +22,7 @@ test("P40 action map exactly covers its reviewed Vue sources without granting ac
   const candidates = [];
   const sourceHashes = {};
   for (const file of Object.keys(review.sourceHashes)) {
-    sources[file] = normalized(file);
+    sources[file] = readPreSelectionRebuild(file);
     sourceHashes[file] = digest(sources[file]);
     candidates.push(...scanSource(sources[file], file).candidates);
   }
@@ -38,7 +42,7 @@ test("P40 action map exactly covers its reviewed Vue sources without granting ac
       files.add(reference.file);
     }
 
-  const contractAudit = runContractAudit();
+  const contractAudit = runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles());
   const summary = validateActionReview(review, {
     candidates,
     sourceHashes,

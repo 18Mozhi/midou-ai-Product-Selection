@@ -1,7 +1,9 @@
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import {
   teamsHistoricalCapture,
@@ -35,7 +37,13 @@ test("P33 immutable historical packets stay in Git while current packets bind th
     }
     const current = JSON.parse(read(`${base}/design/${name}/evidence.json`));
     for (const [file, sha] of Object.entries(current.sourceHashes)) {
-      assertCaptureSource(file, readFileSync(file, "utf8"), sha);
+      assertCaptureSource(
+        file,
+        file === "tests/e2e/m06-01-organization-admin.spec.ts"
+          ? readCaptureSourceRevision(file, sha)
+          : readPreSelectionRebuild(file),
+        sha,
+      );
       currentSources++;
     }
     for (const shot of current.screenshots) {

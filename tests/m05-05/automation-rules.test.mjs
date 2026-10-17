@@ -1,3 +1,4 @@
+import { readArchivedAutomationSource } from "../../scripts/lib/retired-automation-surface.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
@@ -37,7 +38,7 @@ test("M05-05.A01/A02/A04/A12 validates safe versioned rule boundaries", () => {
     (e) => e instanceof AutomationServiceError,
   );
 });
-test("M05-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
+test("M05-05 backend delivery and archived member UI evidence remain available", async () => {
   const files = [
       "database/migrations/0018e_automation_rules_m05_05.up.sql",
       "apps/api/src/mysql-automation-repository.ts",
@@ -51,7 +52,13 @@ test("M05-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
       "config/env.example",
       "verification/modules/M05-05.json",
     ],
-    v = await Promise.all(files.map((x) => readFile(x, "utf8")));
+    v = await Promise.all(
+      files.map((x) =>
+        x.endsWith("/AutomationRuleCenter.vue")
+          ? readArchivedAutomationSource(x)
+          : readFile(x, "utf8"),
+      ),
+    );
   assert.match(v[0], /automation_rules[\s\S]*automation_executions[\s\S]*automation_operations/);
   assert.match(v[2], /team:manage/);
   assert.match(v[3], /rate_limited[\s\S]*dead_letter/);
@@ -75,13 +82,17 @@ test("later task extensions preserve the automation source contract", async () =
       "database/migrations/0045_operational_task_links.up.sql",
       "database/migrations/0066_automation_task_source_restore.up.sql",
       "apps/worker/src/automation-worker.ts",
-    ].map((path) => readFile(path, "utf8")),
+    ].map((path) =>
+      path.endsWith("/AutomationRuleCenter.vue")
+        ? readArchivedAutomationSource(path)
+        : readFile(path, "utf8"),
+    ),
   );
   assert.doesNotMatch(operationalTaskMigration, /'automation'/);
   assert.match(compatibilityMigration, /MODIFY `source_type`[\s\S]*'automation'/);
   assert.match(worker, /source_type[\s\S]*'automation'/);
 });
-test("automation detail can enter an audited full edit flow", async () => {
+test("automation backend preserves audited updates independently of archived member UI", async () => {
   const { AutomationService } = await import("../../apps/api/dist/automation-service.js");
   let input;
   const service = new AutomationService({
@@ -110,7 +121,11 @@ test("automation detail can enter an audited full edit flow", async () => {
       "apps/api/src/automation-routes.ts",
       "apps/web/src/components/AutomationRuleCenter.vue",
       "docs/openapi.yaml",
-    ].map((path) => readFile(path, "utf8")),
+    ].map((path) =>
+      path.endsWith("/AutomationRuleCenter.vue")
+        ? readArchivedAutomationSource(path)
+        : readFile(path, "utf8"),
+    ),
   );
   assert.match(route, /app\.patch/);
   assert.match(web, /编辑自动化规则/);

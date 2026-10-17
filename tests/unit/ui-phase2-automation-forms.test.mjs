@@ -1,3 +1,4 @@
+import { readArchivedAutomationSource } from "../../scripts/lib/retired-automation-surface.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -13,7 +14,7 @@ runInNewContext(readFileSync(`${base}/design/automation-forms-direction-c/fields
   window,
 });
 const fields = JSON.parse(JSON.stringify(window.AUTOMATION_FORM_FIELDS));
-const source = readFileSync("apps/web/src/components/AutomationRuleCenter.vue", "utf8");
+const source = readArchivedAutomationSource("apps/web/src/components/AutomationRuleCenter.vue");
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P27.json`, "utf8"));
 const evidence = () =>
   JSON.parse(readFileSync(`${base}/design/automation-forms-direction-c/evidence.json`, "utf8"));

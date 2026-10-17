@@ -43,6 +43,7 @@ watch(
     await nextTick();
     inputElement.value?.focus();
   },
+  { immediate: true },
 );
 
 function submit() {

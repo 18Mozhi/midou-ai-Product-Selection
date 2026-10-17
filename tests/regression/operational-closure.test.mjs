@@ -22,13 +22,16 @@ test("Feature Map routes are unique and Vue Router owns reactive lazy navigation
     registry,
     /const componentModules[\s\S]*"\.\/SecurityOperationsCenter\.vue": \(\) => import\("\.\/SecurityOperationsCenter\.vue"\)/,
   );
-  assert.match(
-    registry,
-    /const lazy = \(name: string\) => \{[\s\S]*return defineAsyncComponent\(loader\)/,
-  );
+  assert.match(registry, /const lazy = \(name: string\) => \{[\s\S]*return asyncSurface\(loader\)/);
   assert.match(
     registry,
     /const surfaceComponents[\s\S]*"platform-account-center": lazy\("PlatformAccountCenter"\)/,
+  );
+  const asyncSurface = await read("apps/web/src/ui/async-surface.ts");
+  assert.match(registry, /import \{ asyncSurface \} from/);
+  assert.match(
+    asyncSurface,
+    /return defineAsyncComponent\(\{[\s\S]*loader,[\s\S]*loadingComponent:[\s\S]*errorComponent:/,
   );
   assert.doesNotMatch(shell, /import\.meta\.glob/);
   assert.match(shell, /KeepAlive/);

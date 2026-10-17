@@ -430,6 +430,8 @@ watch(imageFailureResetSources, (items) => {
             /><span v-else aria-hidden="true">图</span></span
           ><span class="catalog-product-identity"
             ><strong>{{ item.name }}</strong
+            ><small v-if="item.main_asin"
+              >ASIN <span>{{ item.main_asin }}</span></small
             ><small
               >{{ item.market }} · {{ item.category || "未分类" }} ·
               {{ freshness(item.updated_at) }}</small

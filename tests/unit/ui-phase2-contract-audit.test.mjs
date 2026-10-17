@@ -8,6 +8,7 @@ import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
+import { verifyResponsiveFocusDependencies } from "../../scripts/lib/ui-phase2-responsive-focus-contract.mjs";
 import { digest, scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
 import {
   parseContract,
@@ -532,13 +533,15 @@ test("pre-rebuild shared shell role and state contract binds every current sourc
   assert.equal(report.denominatorFrozen, false, "Source completeness must not approve runtime");
 });
 
-test("audited reason source bindings retain every current site and all consumer hash claims", () => {
+test("audited reason retains current sites while captured consumer claims stay bound to their inputs", () => {
   const file = "apps/web/src/components/AuditedReasonDialog.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
-    "\r\n",
-    "\n",
+  const source = readPreSelectionRebuild(file);
+  verifyResponsiveFocusDependencies();
+  assert.deepEqual(
+    scanSource(readFileSync(file, "utf8"), file).candidates.map((c) => c.candidateId),
+    scanSource(source, file).candidates.map((c) => c.candidateId),
   );
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const records = report.records.filter(
     (record) => record.sourceFile === file && record.temporalScope !== "historical",

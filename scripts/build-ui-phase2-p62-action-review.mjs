@@ -176,8 +176,11 @@ function contractClaim(record) {
     .at(-1);
 }
 
-export function buildP62ActionReview() {
-  const sourceText = Object.fromEntries(sourceFiles.map((file) => [file, readSource(file)]));
+// Archive tests supply immutable inputs; the CLI retains live-source defaults.
+export function buildP62ActionReview(read = readSource, inventory) {
+  const sourceText = Object.fromEntries(
+    sourceFiles.map((file) => [file, read(file).replaceAll("\r\n", "\n")]),
+  );
   const sourceHashes = Object.fromEntries(
     Object.entries(sourceText).map(([file, source]) => [
       file,
@@ -187,7 +190,7 @@ export function buildP62ActionReview() {
   const candidates = Object.entries(sourceText).flatMap(
     ([file, source]) => scanSource(source, file).candidates,
   );
-  const records = runContractAudit().records.filter(
+  const records = runContractAudit(read, inventory).records.filter(
     (record) =>
       sourceFiles.includes(record.sourceFile) &&
       record.document === contract &&

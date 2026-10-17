@@ -14,11 +14,12 @@ const manifests = Object.freeze({
 });
 const dialog = "apps/web/src/components/AuditedReasonDialog.vue";
 const currentSourceHashes = Object.freeze({
-  [dialog]: "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
+  // Current async first-mount focus; capture-time hashes remain in the packets.
+  [dialog]: "431e13431dcfbaff643d17d7c708edb4c5e2c5e6cddc743b76144f0fd94ccd24",
   "apps/web/src/use-audited-reason.ts":
     "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
   "tests/e2e/m06-01-organization-admin.spec.ts":
-    "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef",
+    "8431ff1e834a2871faff75a156dbcdbe7523e490343dca2d3d0284f7e48f4c1b",
   "scripts/lib/ui-phase2-teams-design-data.mjs":
     "a688df5e899deb362efbea2e8633327e6a3ce1559c89bb9db83746033434adbc",
   "apps/web/src/components/OrganizationAdminCenter.vue":

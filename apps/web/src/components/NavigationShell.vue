@@ -385,15 +385,25 @@ onUnmounted(() => {
         <RouterLink
           v-if="shell === 'member' && guard?.roles?.includes('organization_admin')"
           to="/org-admin"
+          aria-label="进入组织管理后台"
           >组织后台</RouterLink
         >
-        <RouterLink v-if="shell === 'member' && guard?.platform_roles?.length" to="/platform-admin"
+        <RouterLink
+          v-if="shell === 'member' && guard?.platform_roles?.length"
+          to="/platform-admin"
+          aria-label="进入管理后台"
           >平台后台</RouterLink
         >
-        <RouterLink v-if="shell === 'organization_admin'" :to="memberReturnPath()"
+        <RouterLink
+          v-if="shell === 'organization_admin'"
+          :to="memberReturnPath()"
+          aria-label="返回成员工作台"
           >返回选品工作台</RouterLink
         >
-        <RouterLink v-if="shell === 'platform_admin'" :to="contextSwitchTarget"
+        <RouterLink
+          v-if="shell === 'platform_admin'"
+          :to="contextSwitchTarget"
+          aria-label="选择组织与工作区后进入用户工作台"
           >返回选品工作台</RouterLink
         >
       </footer>

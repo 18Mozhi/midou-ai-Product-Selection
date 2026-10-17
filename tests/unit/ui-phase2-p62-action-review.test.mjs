@@ -2,6 +2,10 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { buildP62ActionReview } from "../../scripts/build-ui-phase2-p62-action-review.mjs";
 import { validateActionReview } from "../../scripts/lib/ui-phase2-action-coverage.mjs";
 import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
@@ -16,7 +20,7 @@ const sourceFiles = [
   "apps/web/src/components/AuditedReasonDialog.vue",
 ];
 const sources = Object.fromEntries(
-  sourceFiles.map((file) => [file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")]),
+  sourceFiles.map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const sourceHashes = Object.fromEntries(
   Object.entries(sources).map(([file, source]) => [
@@ -27,14 +31,20 @@ const sourceHashes = Object.fromEntries(
 const candidates = Object.entries(sources).flatMap(
   ([file, source]) => scanSource(source, file).candidates,
 );
-const contracts = runContractAudit().records;
+const contracts = runContractAudit(
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles(),
+).records;
 const files = new Set(
   review.actions.flatMap((action) => action.testReferences.map((ref) => ref.file)),
 );
 const context = { candidates, sourceHashes, contracts, packages: new Map(), files };
 
 test("P62 maps every current local log/filter/reason-dialog candidate exactly once", () => {
-  assert.deepEqual(review, buildP62ActionReview());
+  assert.deepEqual(
+    review,
+    buildP62ActionReview(readPreSelectionRebuild, preSelectionRebuildSourceFiles()),
+  );
   assert.equal(candidates.length, 33);
   assert.equal(validateActionReview(review, context).sourceSites, 33);
   assert.equal(review.route, "/platform-admin/logs");

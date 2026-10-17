@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -90,7 +91,7 @@ test("route evidence binds24actual history/cache cases and old matrices", () => 
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 159);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertCaptureSourceRevision(file, read(file), expected);
+    assertCaptureSourceRevision(file, readPreSelectionRebuild(file), expected);
   const parent = "apps/web/src/components/OrganizationAdminCenter.vue",
     panel = "apps/web/src/components/OrganizationApprovalPanel.vue";
   assert.deepEqual(

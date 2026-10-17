@@ -265,8 +265,8 @@ for (const item of [
       await expect(toggle).toBeFocused();
       await toggle.evaluate((element: HTMLButtonElement) => element.blur());
     } else {
-      await expect(page.locator(".role-desktop-navigation")).toBeVisible();
-      await expect(page.locator(".role-page-tabs a").first()).toBeVisible();
+      await expect(page.locator(".commerce-sidebar")).toBeVisible();
+      await expect(page.locator(".role-desktop-navigation, .role-page-tabs")).toHaveCount(0);
       await expect(page.locator(".role-navigation-frame")).toBeHidden();
     }
     await expect(
@@ -292,12 +292,12 @@ test("platform navigation exposes grouped menus on desktop and searchable mobile
     await sidebar.getByRole("searchbox", { name: "搜索导航菜单" }).fill("不存在的菜单");
     await expect(sidebar.getByText("没有匹配的菜单或分组。")).toBeVisible();
   } else {
-    const desktop = page.locator(".role-desktop-navigation");
-    await desktop.getByRole("button", { name: "高级运维", exact: true }).click();
+    const desktop = page.locator(".commerce-sidebar");
+    await expect(desktop.getByRole("heading", { name: "高级运维", exact: true })).toBeVisible();
     await expect(desktop.getByRole("link", { name: "系统运维" })).toBeVisible();
-    await desktop.getByRole("button", { name: "业务运营", exact: true }).click();
+    await expect(desktop.getByRole("heading", { name: "业务运营", exact: true })).toBeVisible();
     await expect(desktop.getByRole("link", { name: "组织管理" })).toBeVisible();
-    await expect(desktop.getByRole("link", { name: "系统运维" })).toHaveCount(0);
+    await expect(desktop.getByRole("link", { name: "系统运维" })).toBeVisible();
   }
 });
 
@@ -314,7 +314,7 @@ test("M02-03.A08 mobile drawer is keyboard operable", async ({ page }) => {
   await expect(dialog).toBeVisible();
   await expect(dialog).toHaveJSProperty("open", true);
   await expect(dialog.locator(".role-navigation-close")).toBeFocused();
-  await expect(drawer.getByRole("link", { name: "今日工作" })).toBeVisible();
+  await expect(drawer.getByRole("link", { name: "选品工作台" })).toBeVisible();
   await page.keyboard.press("Shift+Tab");
   const lastControl = dialog
     .locator("a[href]:visible, button:visible, input:visible, summary:visible, [tabindex]:visible")
@@ -337,7 +337,7 @@ test("mobile navigation closes and restores focus when crossing to desktop", asy
   await page.setViewportSize({ width: 1000, height: 900 });
   await expect(page.locator(".role-navigation-frame")).toBeHidden();
   await expect(page.locator(".role-navigation-frame")).toHaveJSProperty("open", false);
-  await expect(page.locator(".role-desktop-navigation")).toBeVisible();
+  await expect(page.locator(".commerce-sidebar")).toBeVisible();
   await expect(toggle).toBeHidden();
   await expect(page.getByRole("link", { name: "SCOUTOPS 智能选品" })).toBeFocused();
 });
@@ -470,13 +470,10 @@ test("M02-03 platform shell exposes management navigation without member-only sh
   await allow(page, "platform_admin");
   await page.goto("/platform-admin");
   const sidebar = page.locator(
-    (page.viewportSize()?.width ?? 1000) <= 840 ? ".role-sidebar" : ".role-desktop-navigation",
+    (page.viewportSize()?.width ?? 1000) <= 840 ? ".role-sidebar" : ".commerce-sidebar",
   );
   if ((page.viewportSize()?.width ?? 1000) <= 840)
     await page.getByRole("button", { name: "更多" }).click();
-  else {
-    await sidebar.getByRole("button", { name: "业务运营", exact: true }).click();
-  }
   await expect(page.getByRole("button", { name: /搜索/ })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "通知中心" })).toHaveCount(0);
   await expect(sidebar.getByRole("link", { name: /通知运营/ })).toHaveAttribute(
@@ -518,10 +515,10 @@ test("M02-03 explicit routes keep internal navigation reactive and unknown route
     (page.viewportSize()?.width ?? 1000) <= 840
       ? page
           .getByRole("navigation", { name: "移动快捷导航" })
-          .getByRole("link", { name: "今日工作" })
-      : page.locator(".role-desktop-navigation").getByRole("link", { name: "今日工作" });
+          .getByRole("link", { name: "选品库", exact: true })
+      : page.locator(".commerce-sidebar").getByRole("link", { name: "选品库", exact: true });
   await routeLink.click();
-  await expect(page).toHaveURL(/\/work$/);
+  await expect(page).toHaveURL(/\/opportunities$/);
   expect(await page.evaluate(() => (window as any).__scoutopsRouteMarker)).toBe("kept");
 
   await page.goto("/route-that-does-not-exist");
@@ -687,15 +684,30 @@ test("M02-03 personal center uses an account shell without the organization navi
   await expect(page.getByRole("heading", { name: "选品成员" })).toBeVisible();
 });
 
-test("Glass Atlas organization overview fits phone tablet and desktop widths", async ({ page }) => {
+test("commerce organization overview fits phone tablet and desktop widths", async ({ page }) => {
   await allow(page, "organization_admin");
   for (const width of [390, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/org-admin");
     await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
     await expect
-      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
-      .toBe(true);
+      .poll(() =>
+        page.evaluate(() => {
+          if (document.documentElement.scrollWidth <= innerWidth) return [];
+          return Array.from(document.querySelectorAll("#app *"))
+            .filter((el) => {
+              const r = el.getBoundingClientRect();
+              return r.width > 0 && r.right > innerWidth + 1;
+            })
+            .slice(0, 8)
+            .map((el) => ({
+              element: el.tagName + "." + el.className,
+              width: Math.round(el.getBoundingClientRect().width),
+              viewport: innerWidth,
+            }));
+        }),
+      )
+      .toEqual([]);
     const form = page.locator("form.org-admin-card");
     const box = await form.boundingBox();
     expect(box).not.toBeNull();

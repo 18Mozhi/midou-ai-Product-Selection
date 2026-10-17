@@ -1475,9 +1475,12 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
     await page.getByRole("button", { name: "打开导航菜单" }).click();
   await expect(switchLink).toHaveAttribute("href", /\/select-context\?/);
   await expect(switchLink).toHaveAttribute("href", /return_to=%2Fhome/);
-  if ((page.viewportSize()?.width ?? 0) <= 760)
+  if ((page.viewportSize()?.width ?? 0) <= 760) {
+    await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("href", "/me");
     await page.getByRole("button", { name: "关闭导航菜单" }).click();
-  await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("title", "个人中心");
+  } else {
+    await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("title", "个人中心");
+  }
   await page.getByRole("button", { name: "新建用户" }).click();
   const createDialog = page.getByRole("dialog").filter({
     has: page.getByRole("heading", { name: "新建用户或平台管理员" }),
@@ -1628,7 +1631,7 @@ test("P44 admin workspace composes the approved C directory and read-only compar
   );
 });
 
-test("P44 admin creation surfaces retain the approved colors across hover and keyboard focus", async ({
+test("P44 admin creation surfaces keep the current commerce palette across hover and keyboard focus", async ({
   page,
 }) => {
   await setup(page);
@@ -1641,10 +1644,10 @@ test("P44 admin creation surfaces retain the approved colors across hover and ke
   const email = dialog.getByLabel("邮箱", { exact: true });
   const password = dialog.getByLabel("临时密码", { exact: true });
 
-  await expect(rail).toHaveCSS("background-color", "rgb(9, 108, 85)");
+  await expect(rail).toHaveCSS("background-color", "rgb(36, 104, 212)");
   await expect(form).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await rail.hover();
-  await expect(rail).toHaveCSS("background-color", "rgb(9, 108, 85)");
+  await expect(rail).toHaveCSS("background-color", "rgb(36, 104, 212)");
   await form.hover();
   await expect(form).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await email.focus();
@@ -1652,7 +1655,7 @@ test("P44 admin creation surfaces retain the approved colors across hover and ke
   await expect(password).toBeFocused();
   await expect(password).toHaveCSS("outline-width", "3px");
   await expect(password).toHaveCSS("outline-style", "solid");
-  await expect(password).toHaveCSS("outline-color", "rgb(7, 134, 106)");
+  await expect(password).toHaveCSS("outline-color", "rgb(72, 120, 233)");
 });
 
 test("administrator write failures stay inside their active dialogs", async ({ page }) => {

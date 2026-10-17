@@ -550,22 +550,23 @@
     {
       "path": "/automations",
       "name": "automations",
-      "title": "自动化规则",
-      "breadcrumb": ["运营工具", "自动化规则"],
+      "title": "选品库",
+      "breadcrumb": ["选品库"],
       "shell": "member",
       "view": null,
-      "capabilities": ["team:manage"],
+      "capabilities": ["opportunity:read"],
       "notFound": false,
-      "surface": "automation-rule-center",
-      "cachePolicy": "reset_on_scope",
+      "surface": "",
+      "cachePolicy": "none",
       "acceptance": "protected",
       "featureMap": {
         "path": "/automations",
-        "view": "AutomationRuleCenter",
+        "view": "OpportunityWorkspace",
         "domain": "automation-rules",
-        "status": "verified",
-        "statusDetail": "M05-05_module_verified"
-      }
+        "status": "implemented",
+        "statusDetail": "retired_member_automations_redirect_to_selection_library"
+      },
+      "redirect": "/opportunities"
     },
     {
       "path": "/reports",

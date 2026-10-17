@@ -1,3 +1,9 @@
+> 2026-10-17 组织后台标题重制：九页共用紧凑白底操作栏，删除重复大蓝标题规则，20 项桌面/手机检查通过；业务表单与审计不变。见 `docs/selection-organization-toolbar.md`，未部署。
+
+> 2026-10-17 成员精简：独立自动化规则页及 1,648 行组件/样式已删除，旧链接转选品库；平台治理保留事实并移除退役编辑入口。后端调度与自动选品不变。见 `docs/selection-retired-member-automations.md`，未部署。
+
+> 2026-10-17 后台保留回归：修复组织资料窄内容区溢出、原因弹窗首次挂载焦点、手机账号筛选样式和侧栏返回标签；详见 `docs/selection-backend-preservation.md`。真实性门禁已通过，整体发布仍等待全量与真实采集验收，见 `docs/selection-release-verification.md`，未部署。
+
 > 2026-10-17 选品库布局重制：移除大蓝横幅与旧渐变标题，采用紧凑工具栏、商品视图与筛选分区、实际配置摘要，删除旧标题/视图栏 CSS 和两个废弃样式文件。见 `docs/selection-catalogue-layout.md`，本地未部署。
 
 > 2026-10-17 选品库主品资料：图卡/列表展示真实售价、评价、购买下限、排名和采集时间；图片与资料限定同租户同主品，缺失不推测。见 `docs/selection-catalogue-product-facts.md`，本地实现未部署。

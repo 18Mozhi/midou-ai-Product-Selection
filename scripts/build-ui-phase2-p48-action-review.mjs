@@ -301,9 +301,11 @@ const groupOrder = [
   "SC48-DETAIL-CLOSE",
 ];
 
-export function buildP48ActionReview() {
+// Explicit readers let archive tests reproduce their original packet without
+// rewriting current sources. The command-line generator still reads live files.
+export function buildP48ActionReview(read = (file) => readFileSync(file, "utf8"), inventory) {
   const sourceText = Object.fromEntries(
-    sourceFiles.map((file) => [file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")]),
+    sourceFiles.map((file) => [file, read(file).replaceAll("\r\n", "\n")]),
   );
   const sourceHashes = Object.fromEntries(
     Object.entries(sourceText).map(([file, source]) => [
@@ -319,7 +321,7 @@ export function buildP48ActionReview() {
     ["目录本地详情展开；无API或持久化副作用", "SC48-DETAIL-OPEN"],
     ["目录本地详情收起并返回触发点", "SC48-DETAIL-CLOSE"],
   ]);
-  const rawP48Records = runContractAudit().records.filter(
+  const rawP48Records = runContractAudit(read, inventory).records.filter(
     (record) =>
       record.document === contract &&
       sourceFiles.includes(record.sourceFile) &&

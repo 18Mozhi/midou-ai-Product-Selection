@@ -182,7 +182,8 @@ test("M06-06.A07/A08/A13 presents the quota-only boundary truthfully", async () 
   const center = await readFile("apps/web/src/components/CommercialOperationsCenter.vue", "utf8");
   const navigation = await readFile("apps/web/src/route-catalog.generated.json", "utf8");
   assert.match(center, /组织配额与用量/);
-  assert.match(center, /当前不包含计费、价格或支付/);
+  assert.doesNotMatch(center, /(?:fetch|api)\([^\n]*(?:billing|payment|checkout)/);
+  assert.match(center, /读取组织、分配与用量/);
   assert.match(center, /配额变更影响范围/);
   assert.match(center, /assignment_count/);
   assert.match(center, /新周期用量将在变更后重新统计/);

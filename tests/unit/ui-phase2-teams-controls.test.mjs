@@ -1,5 +1,7 @@
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -109,7 +111,13 @@ test("P33 evidence rejects drift in source dependencies and all permanent screen
   for (const [file, sha] of Object.entries(historical.sourceHashes))
     assert.equal(hash(capture.source(file)), sha, file);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assertCaptureSource(file, readFileSync(file, "utf8"), sha);
+    assertCaptureSource(
+      file,
+      file === "tests/e2e/m06-01-organization-admin.spec.ts"
+        ? readCaptureSourceRevision(file, sha)
+        : readPreSelectionRebuild(file),
+      sha,
+    );
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
 });

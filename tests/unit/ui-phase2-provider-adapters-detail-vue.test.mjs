@@ -99,7 +99,10 @@ test("P47 detail changes only the original detail slot and isolates shared drawe
     for (const d of rule.nodes.filter((n) => n.type === "decl"))
       assert.equal(d.important, undefined);
   });
-  for (const f of Object.keys(e.sourceHashes).filter((f) => f.startsWith("apps/"))) {
+  for (const name of readdirSync("apps/web/src", { recursive: true }).filter((name) =>
+    /\.(vue|ts|css)$/.test(name),
+  )) {
+    const f = "apps/web/src/" + name.replaceAll("\\", "/");
     assert.ok(!read(f).includes("provider-adapters-detail-preview"));
     assert.ok(!read(f).includes("ProviderAdapterDetailPreview"));
   }

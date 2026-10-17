@@ -1,3 +1,4 @@
+import { readArchivedAutomationSource } from "./retired-automation-surface.mjs";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -5,7 +6,14 @@ import vm from "node:vm";
 import ts from "typescript";
 const plain = (v) => JSON.parse(JSON.stringify(v));
 export async function buildAutomationDesignData(repo) {
-  const read = async (f) => (await readFile(path.join(repo, f), "utf8")).replaceAll("\r\n", "\n");
+  const read = async (f) =>
+    ([
+      "apps/web/src/components/AutomationRuleCenter.vue",
+      "tests/e2e/m05-05-automation-rules.spec.ts",
+    ].includes(f)
+      ? readArchivedAutomationSource(f, repo)
+      : await readFile(path.join(repo, f), "utf8")
+    ).replaceAll("\r\n", "\n");
   function extract(source, name, kind = "variable") {
     const ast = ts.createSourceFile("source.ts", source, ts.ScriptTarget.Latest, true),
       found = [];

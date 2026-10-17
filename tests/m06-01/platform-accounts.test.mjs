@@ -432,7 +432,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   );
   assert.match(accountDirectory, /没有符合当前条件的组织/);
   assert.match(accountShell, /organizationListRoute[\s\S]*"组织状态"/);
-  assert.match(accountFilters, /仅筛选组织状态，不代表成员账号状态/);
+  assert.match(accountFilters, /“已停用”和“已停用组织”是不同的筛选值。/);
   assert.match(accountShell, /搜索组织名称或标识/);
   assert.match(accountShell, /organizationEmptyState/);
   assert.match(accountDirectory, /清除筛选/);
@@ -464,7 +464,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(detailDialog, /:disabled="busy"/);
   assert.match(membershipForm, /加入其他组织/);
   assert.match(membershipForm, /organizationRoleCodes/);
-  assert.match(web, /不以页面按钮推测权限/);
+  assert.match(comparison, /const left = new Set\(comparedRoles\.value\.left\?\.capabilities/);
+  assert.match(comparison, /const right = new Set\(comparedRoles\.value\.right\?\.capabilities/);
   for (const capability of CAPABILITIES)
     assert.match(web, new RegExp(capability.replace(":", "\\:")));
   assert.ok(accountShell.split(/\r?\n/).length < 850);

@@ -49,7 +49,7 @@
   align-items: center;
   gap: 7px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-system-state i {
   width: 6px;
@@ -75,7 +75,7 @@
   align-items: center;
   gap: 8px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-dashboard
   :is(
@@ -186,7 +186,7 @@
   font-weight: 500;
 }
 .home-runtime-details summary small {
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-runtime-panel {
   display: grid;
@@ -197,7 +197,7 @@
 }
 .home-runtime-panel header > span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-runtime-panel h3 {
   font-size: 15px;
@@ -208,7 +208,7 @@
   gap: 12px;
 }
 .home-runtime-panel dt {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--so-text-muted);
 }
 .home-runtime-panel dd {
@@ -218,7 +218,7 @@
 .home-runtime-panel > p {
   grid-column: 2;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-daily-production {
   margin-top: 16px;
@@ -240,7 +240,7 @@
 .home-daily-production > header > span,
 .home-daily-production > small {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-daily-production dl {
   display: flex;
@@ -249,7 +249,7 @@
 }
 .home-daily-production dt {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-daily-production dd {
   margin: 3px 0 0;
@@ -259,7 +259,7 @@
 }
 .home-daily-production dd small {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
 }
 .home-daily-production progress {
@@ -271,7 +271,7 @@
 .home-daily-production > p,
 .home-daily-production > small {
   grid-column: 1 / -1;
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-daily-production > p {
   color: var(--so-text-muted);
@@ -309,7 +309,7 @@
 .home-review-queue > header span,
 .home-operations-strip > header span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-review-queue h3,
 .home-operations-strip h3 {
@@ -345,7 +345,7 @@
   display: block;
   margin-top: 5px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   overflow-wrap: anywhere;
 }
 .home-review-row > span {
@@ -419,12 +419,12 @@
 }
 .home-operations-strip small {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   margin-top: 4px;
 }
 .home-operations-strip em {
   grid-column: 2;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--home-accent);
   font-style: normal;
 }
@@ -457,7 +457,7 @@
 .home-setup-callout span,
 .home-read-alert > span {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-setup-callout > div {
   min-width: 0;
@@ -487,7 +487,7 @@
 .home-rule-setup header span,
 .home-rule-setup small {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-rule-fields {
   display: grid;
@@ -529,7 +529,7 @@
 .home-truth-unknown {
   margin-top: 16px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-truth summary {
   display: inline-flex;
@@ -615,7 +615,7 @@
   }
   .home-review-row > span {
     grid-column: 1;
-    font-size: 12px;
+    font-size: 13px;
   }
   .home-review-row > b {
     grid-column: 2;

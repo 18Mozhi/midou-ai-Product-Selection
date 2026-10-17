@@ -2417,3 +2417,33 @@ for (const timing of ["completed", "late-response", "dismiss-during-refresh"] as
     }
   });
 }
+
+for (const route of [
+  "/org-admin",
+  "/org-admin/members",
+  "/org-admin/roles",
+  "/org-admin/workspaces",
+  "/org-admin/teams",
+  "/org-admin/approvals",
+  "/org-admin/data",
+  "/org-admin/tokens",
+  "/org-admin/audit",
+]) {
+  test(`organization compact toolbar preserves readable actions: ${route}`, async ({ page }) => {
+    await setup(page);
+    await page.goto(route);
+    await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+    const hero = page.locator(".org-admin-hero");
+    await expect(hero).toBeVisible();
+    await expect(hero).toHaveCSS("background-image", "none");
+    await expect(hero).toHaveCSS("flex-direction", "row");
+    await expect(hero).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    await expect(hero.locator("h1,h2")).toHaveCSS("font-size", "22px");
+    await expect(hero.locator("h1,h2")).not.toHaveCSS("color", "rgb(255, 255, 255)");
+    await expect(hero.getByRole("button", { name: "刷新数据", exact: true })).toBeVisible();
+    expect(await hero.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  });
+}

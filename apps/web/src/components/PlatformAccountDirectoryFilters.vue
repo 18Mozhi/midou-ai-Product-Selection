@@ -122,3 +122,51 @@ const emit = defineEmits<{
     </form>
   </ResponsiveFilterDrawer>
 </template>
+
+<style scoped>
+/* The mobile drawer teleports out of the account page; controls must style themselves. */
+.account-filter {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+.account-filter label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  color: var(--so-text);
+}
+.account-filter :is(input, select, button) {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1.5;
+  background: var(--so-panel);
+  color: var(--so-text);
+}
+.account-filter > div {
+  display: flex;
+  gap: 8px;
+}
+.account-filter button {
+  background: var(--so-primary);
+  border-color: var(--so-primary);
+  color: var(--so-on-primary);
+}
+.account-filter button.secondary {
+  background: var(--so-panel);
+  color: var(--so-text);
+  border-color: var(--so-border);
+}
+.account-filter button:disabled {
+  opacity: 0.6;
+}
+.account-filter :is(input, select, button):focus-visible {
+  outline: 3px solid var(--so-focus);
+  outline-offset: 2px;
+}
+</style>

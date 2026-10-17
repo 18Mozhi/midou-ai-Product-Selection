@@ -1,3 +1,4 @@
+import { readArchivedAutomationSource } from "../../scripts/lib/retired-automation-surface.mjs";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -11,7 +12,9 @@ const a = data.list[0];
 const b = { ...a, id: "00000000-0000-4000-8000-000000000902", name: "合成规则B" };
 const plain = (v) => JSON.parse(JSON.stringify(v));
 const env = (data, request_id = "current") => ({ data, request_id });
-const source = (await readFile("apps/web/src/components/AutomationRuleCenter.vue", "utf8"))
+const source = (
+  await readArchivedAutomationSource("apps/web/src/components/AutomationRuleCenter.vue")
+)
   .split('<script setup lang="ts">')[1]
   .split("</script>")[0];
 const ast = ts.createSourceFile("automation.ts", source, ts.ScriptTarget.Latest, true);

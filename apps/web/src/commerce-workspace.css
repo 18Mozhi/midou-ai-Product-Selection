@@ -393,7 +393,7 @@ html[data-design="commerce"] #app .catalog-public-facts dl {
 }
 .catalog-public-facts dt {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .catalog-public-facts dd {
   margin: 3px 0 0;
@@ -409,7 +409,7 @@ html[data-design="commerce"] #app .catalog-public-facts dl {
   flex-wrap: wrap;
   margin: 10px 0 0;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .catalog-public-facts > p:first-child {
   margin: 0;
@@ -418,7 +418,7 @@ html[data-design="commerce"] #app .catalog-public-facts dl {
   display: block;
   margin-top: 6px;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .product-catalog[data-display="list"] .catalog-product-identity {
   grid-column: 2;

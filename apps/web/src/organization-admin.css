@@ -14,24 +14,6 @@
   background: var(--oa-soft);
 }
 
-.org-admin-center--token-review .org-admin-hero {
-  padding: 31px 36px;
-  border: 0;
-  border-radius: 0;
-  background: var(--oa-blue);
-}
-
-.org-admin-center--token-review .org-admin-hero :is(p, h1, h2, span) {
-  color: var(--oa-white);
-}
-
-.org-admin-center--token-review .org-admin-hero :is(h1, h2) {
-  margin: 4px 0 8px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
-}
-
 .org-admin-center--token-review :is(button, a) {
   border-radius: 0;
 }
@@ -217,10 +199,6 @@
     margin: 12px -8px 70px;
   }
 
-  .org-admin-center--token-review .org-admin-hero {
-    padding: 20px;
-  }
-
   .org-admin-center--token-review .org-token-overview {
     padding: 20px;
   }
@@ -305,24 +283,6 @@
   margin: 0 auto;
   color: var(--oa-ink);
   background: var(--oa-soft);
-}
-
-.org-admin-center--review .org-admin-hero {
-  padding: 31px 36px;
-  border: 0;
-  border-radius: 0;
-  background: var(--oa-blue);
-}
-
-.org-admin-center--review .org-admin-hero :is(p, h1, h2, span) {
-  color: var(--oa-white);
-}
-
-.org-admin-center--review .org-admin-hero h1 {
-  margin: 4px 0 8px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
 }
 
 .org-admin-center--review :is(button, a) {
@@ -446,19 +406,36 @@
   outline-offset: 3px;
 }
 
-.org-admin-hero {
-  min-height: 146px;
-  padding: 25px 28px;
+.org-admin-center .org-admin-hero {
+  min-height: 84px;
+  padding: 18px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  border: 1px solid var(--so-primary-border);
-  border-radius: 22px;
-  background:
-    radial-gradient(circle at 76% 10%, var(--so-glow), transparent 28%),
-    linear-gradient(135deg, var(--so-bg-elevated), var(--so-bg));
-  box-shadow: var(--so-shadow-card);
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  color: var(--so-text);
+  background: var(--oa-white);
+  box-shadow: none;
+}
+.org-admin-center .org-admin-hero :is(h1, h2) {
+  margin: 0;
+  color: var(--so-text);
+  font-size: 22px;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+.org-admin-center .org-admin-hero p {
+  margin: 0 0 4px;
+  color: var(--so-text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.org-admin-center .org-admin-hero span {
+  color: var(--so-text-muted);
 }
 .org-admin-hero p,
 .org-admin-card > p:first-child {
@@ -492,7 +469,7 @@
   border: 0;
   border-radius: 10px;
   color: var(--so-on-primary);
-  background: linear-gradient(110deg, var(--so-primary), var(--so-primary-strong));
+  background: var(--so-primary);
   font-weight: 750;
 }
 .org-admin-hero button:disabled,
@@ -3902,21 +3879,18 @@
   .org-admin-center {
     margin: 12px -8px 70px;
   }
-  .org-admin-hero {
-    min-height: 180px;
-    padding: 20px;
-    align-items: flex-start;
-    flex-direction: column;
+  .org-admin-center .org-admin-hero {
+    min-height: 84px;
+    padding: 14px 16px;
+    align-items: center;
+    flex-direction: row;
   }
   .org-admin-refresh {
-    width: 100%;
-    justify-items: stretch;
+    width: auto;
+    justify-items: end;
   }
   .org-admin-refresh small {
     order: 2;
-  }
-  .org-admin-hero h2 {
-    font-size: 27px;
   }
   .org-admin-metrics {
     grid-template-columns: repeat(2, 1fr);
@@ -4275,29 +4249,12 @@
 
 /* P29 C composition: organization identity, facts and versioned profile editing. */
 .org-admin-center--profile-review {
+  container-type: inline-size;
   max-width: 1160px;
   margin: 0 auto;
   padding-bottom: 28px;
   color: var(--oa-ink);
   background: var(--oa-soft);
-}
-
-.org-admin-center--profile-review .org-admin-hero {
-  padding: 31px 36px;
-  border: 0;
-  border-radius: 0;
-  background: var(--oa-blue);
-}
-
-.org-admin-center--profile-review .org-admin-hero :is(p, h1, h2, span) {
-  color: var(--oa-white);
-}
-
-.org-admin-center--profile-review .org-admin-hero h1 {
-  margin: 4px 0 8px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
 }
 
 .org-admin-center--profile-review .org-admin-metrics {
@@ -4326,6 +4283,13 @@
   gap: 16px;
 }
 
+/* The fixed sidebar reduces usable space before the viewport reaches mobile width. */
+@container (max-width: 836px) {
+  .org-admin-center--profile-review .org-admin-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .org-admin-center--profile-review .org-admin-card {
   border-color: var(--oa-section);
   border-radius: 0;
@@ -4334,7 +4298,7 @@
 }
 
 .org-admin-center--profile-review .org-admin-profile {
-  border-top: 5px solid var(--oa-blue);
+  border-top: 1px solid var(--oa-section);
 }
 
 .org-admin-center--profile-review .org-admin-profile i {
@@ -4385,20 +4349,12 @@
     padding-bottom: 16px;
   }
 
-  .org-admin-center--profile-review .org-admin-hero {
-    padding: 25px 19px;
-  }
-
   .org-admin-center--profile-review .org-admin-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .org-admin-center--profile-review .org-admin-metrics article:nth-child(2n) {
     border-right: 0;
-  }
-
-  .org-admin-center--profile-review .org-admin-grid {
-    grid-template-columns: 1fr;
   }
 
   .org-admin-center--profile-review .org-admin-card {
@@ -4413,24 +4369,6 @@
   padding-bottom: 28px;
   color: var(--oa-ink);
   background: var(--oa-soft);
-}
-
-.org-admin-center--role-review .org-admin-hero {
-  padding: 31px 36px;
-  border: 0;
-  border-radius: 0;
-  background: var(--oa-blue);
-}
-
-.org-admin-center--role-review .org-admin-hero :is(p, h1, h2, span) {
-  color: var(--oa-white);
-}
-
-.org-admin-center--role-review .org-admin-hero h1 {
-  margin: 4px 0 8px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
 }
 
 .org-admin-center--role-review .org-role-summary {
@@ -4613,10 +4551,6 @@
     padding-bottom: 16px;
   }
 
-  .org-admin-center--role-review .org-admin-hero {
-    padding: 25px 19px;
-  }
-
   .org-admin-center--role-review .org-role-summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -4659,24 +4593,6 @@
   padding-bottom: 28px;
   color: var(--oa-ink);
   background: var(--oa-soft);
-}
-
-.org-admin-center--member-review .org-admin-hero {
-  padding: 31px 36px;
-  border: 0;
-  border-radius: 0;
-  background: var(--oa-blue);
-}
-
-.org-admin-center--member-review .org-admin-hero :is(p, h1, h2, span) {
-  color: var(--oa-white);
-}
-
-.org-admin-center--member-review .org-admin-hero h1 {
-  margin: 4px 0 8px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
 }
 
 .org-admin-center--member-review .org-admin-metrics {
@@ -4812,10 +4728,6 @@
     padding-bottom: 16px;
   }
 
-  .org-admin-center--member-review .org-admin-hero {
-    padding: 25px 19px;
-  }
-
   .org-admin-center--member-review .org-admin-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -4853,24 +4765,6 @@
   padding-bottom: 28px;
   color: var(--oa-ink);
   background: var(--oa-soft);
-}
-
-.org-admin-center--workspace-review .org-admin-hero {
-  padding: 31px 36px;
-  border: 0;
-  border-radius: 0;
-  background: var(--oa-blue);
-}
-
-.org-admin-center--workspace-review .org-admin-hero :is(p, h1, h2, span) {
-  color: var(--oa-white);
-}
-
-.org-admin-center--workspace-review .org-admin-hero h1 {
-  margin: 4px 0 8px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
 }
 
 .org-admin-center--workspace-review .org-workspace-panel {
@@ -5115,10 +5009,6 @@
     padding-bottom: 16px;
   }
 
-  .org-admin-center--workspace-review .org-admin-hero {
-    padding: 22px 20px;
-  }
-
   .org-admin-center--workspace-review .org-workspace-overview {
     padding: 22px 20px;
   }
@@ -5219,10 +5109,6 @@
 }
 
 @media (max-width: 760px) {
-  .org-admin-center--review .org-admin-hero {
-    padding: 25px 19px;
-  }
-
   .org-admin-center--review .org-data-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -5252,24 +5138,6 @@
   padding-bottom: 28px;
   color: var(--oa-ink);
   background: var(--oa-soft);
-}
-
-.org-admin-center--team-review .org-admin-hero {
-  padding: 31px 36px;
-  border: 0;
-  border-radius: 0;
-  background: var(--oa-blue);
-}
-
-.org-admin-center--team-review .org-admin-hero :is(p, h1, h2, span) {
-  color: var(--oa-white);
-}
-
-.org-admin-center--team-review .org-admin-hero h1 {
-  margin: 4px 0 8px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
 }
 
 .org-admin-center--team-review .org-team-panel {
@@ -5507,10 +5375,6 @@
     padding-bottom: 16px;
   }
 
-  .org-admin-center--team-review .org-admin-hero {
-    padding: 25px 19px;
-  }
-
   .org-admin-center--team-review .org-team-overview {
     align-items: stretch;
     padding: 22px 18px;
@@ -5595,24 +5459,6 @@
   padding-bottom: 28px;
   color: var(--oa-ink);
   background: var(--oa-soft);
-}
-
-.org-admin-center:has(.org-approval-governance) .org-admin-hero {
-  padding: 31px 36px;
-  border: 0;
-  border-radius: 0;
-  background: var(--oa-blue);
-}
-
-.org-admin-center:has(.org-approval-governance) .org-admin-hero :is(p, h1, h2, span) {
-  color: var(--oa-white);
-}
-
-.org-admin-center:has(.org-approval-governance) .org-admin-hero :is(h1, h2) {
-  margin: 4px 0 8px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-governance {
@@ -5957,10 +5803,6 @@
   .org-admin-center:has(.org-approval-governance) {
     margin: 12px -8px 70px;
     padding-bottom: 16px;
-  }
-
-  .org-admin-center:has(.org-approval-governance) .org-admin-hero {
-    padding: 25px 19px;
   }
 
   .org-admin-center:has(.org-approval-governance) .org-approval-overview {

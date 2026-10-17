@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -146,7 +147,7 @@ test("r8 App inventory preserves capture-time router/KeepAlive sources separatel
   assert.equal(evidence.screenshots.length, 48);
   assert.equal(Object.keys(evidence.sourceHashes).length, 142);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assertCaptureSourceRevision(file, read(file), expected);
+    assertCaptureSourceRevision(file, readPreSelectionRebuild(file), expected);
   assertCaptureSource(
     "apps/web/src/components/AccountShell.vue",
     read("apps/web/src/components/AccountShell.vue"),

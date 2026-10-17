@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -227,7 +228,7 @@ test("P58 focus evidence binds unchanged visual pairs, current sources, every co
   ])
     assert.ok(e.sourceHashes[file], file);
   for (const [file, digest] of Object.entries(e.sourceHashes))
-    assertCaptureSourceRevision(file, read(file), digest);
+    assertCaptureSourceRevision(file, readPreSelectionRebuild(file), digest);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

@@ -84,7 +84,13 @@ test("M01-05.A07/A08/A15 UI contains complete responsive states and safe lifecyc
   ]);
   for (const state of ["loading", "ready", "empty", "error", "forbidden", "expired", "blocked"])
     assert.match(ui, new RegExp(`["']${state}["']`));
-  for (const copy of ["同组织活动成员", "最长 30 天", "延长授权", "撤销授权", "实际访问"])
+  for (const copy of [
+    "同组织活动成员",
+    "最长 30 天",
+    "延长授权",
+    "撤销授权",
+    "仅可授权同组织成员访问指定资源",
+  ])
     assert.match(ui, new RegExp(copy));
   assert.match(styles, /\.grant-page/);
   assert.match(styles, /@media\s*\(\s*max-width:\s*720px\s*\)/);

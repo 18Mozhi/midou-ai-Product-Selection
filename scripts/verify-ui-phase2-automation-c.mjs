@@ -1,3 +1,5 @@
+import { assertAutomationSurfaceActive } from "./lib/retired-automation-surface.mjs";
+assertAutomationSurfaceActive();
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, writeFile, readdir } from "node:fs/promises";

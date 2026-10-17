@@ -1,4 +1,5 @@
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -22,7 +23,12 @@ import {
 } from "../../scripts/build-ui-phase2-members-review.mjs";
 
 const sources = Object.fromEntries(
-  dependencies.map((file) => [file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")]),
+  dependencies.map((file) => [
+    file,
+    file.endsWith("/AuditedReasonDialog.vue")
+      ? readPreSelectionRebuild(file)
+      : readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
+  ]),
 );
 const captureRevisions = new Map([
   [parentFile, "df4b7263b1684e94e4ecc8d46c856c202fd9ee7b"],

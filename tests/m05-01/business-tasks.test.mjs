@@ -146,7 +146,7 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(taskUi, /assigneeLabel[\s\S]*负责人目录暂不可用/);
   assert.match(taskUi, /canUpdate[\s\S]*canAssign[\s\S]*busy/);
   assert.match(taskUi, /任务不存在或已删除[\s\S]*重新加载/);
-  assert.match(taskUi, /当前角色仅可查看任务事实与活动记录/);
+  assert.match(taskUi, /v-if="!canUpdate"[\s\S]*当前为只读权限/);
   assert.match(taskUi, /TaskListPanel[\s\S]*TaskBatchActions[\s\S]*TaskDetailPanel/);
   assert.match(
     taskUi,

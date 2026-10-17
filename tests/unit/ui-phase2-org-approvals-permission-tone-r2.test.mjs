@@ -1,5 +1,7 @@
 import test from "node:test";
-import { assertP34LegacySourceHash } from "../../scripts/lib/ui-phase2-org-approvals-shared-history.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import { preSelectionRebuildRevision } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+import { execFileSync } from "node:child_process";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -8,11 +10,20 @@ test("P34 permission r2 changes only four copy slots and retains both r1 review 
   const output = "output/playwright/p34-permission-tone-r2";
   const base = "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c";
   const e = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
+  assert.deepEqual(
+    e,
+    JSON.parse(
+      execFileSync("git", ["show", `${preSelectionRebuildRevision}:${output}/evidence.json`], {
+        encoding: "utf8",
+      }),
+    ),
+    "permission capture manifest remains bound to its immutable pre-rebuild packet",
+  );
   const hash = (v) => createHash("sha256").update(v).digest("hex");
   assert.equal(e.checks.length, 38);
   assert.equal(e.screenshots.length, 12);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assertP34LegacySourceHash(file, readFileSync(file, "utf8"), sha);
+    assert.equal(hash(readCaptureSourceRevision(file, sha)), sha, file);
   for (const [file, sha] of Object.entries(e.retainedImages))
     assert.equal(hash(readFileSync(`${base}/${file}`)), sha, file);
   for (const s of e.screenshots)

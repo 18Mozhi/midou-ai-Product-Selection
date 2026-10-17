@@ -1,8 +1,7 @@
-import {
-  assertCurrentSourceRevision,
-  assertCaptureSourceRevision,
-} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+import { verifyResponsiveFocusDependencies } from "../../scripts/lib/ui-phase2-responsive-focus-contract.mjs";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -23,7 +22,12 @@ import {
 } from "../../scripts/build-ui-phase2-roles-review.mjs";
 
 const sources = Object.fromEntries(
-  dependencies.map((f) => [f, readFileSync(f, "utf8").replaceAll("\r\n", "\n")]),
+  dependencies.map((f) => [
+    f,
+    f.endsWith("/AuditedReasonDialog.vue")
+      ? readPreSelectionRebuild(f)
+      : readFileSync(f, "utf8").replaceAll("\r\n", "\n"),
+  ]),
 );
 const evidence = JSON.parse(readFileSync(`${base}/design/roles-direction-c/evidence.json`, "utf8"));
 const controlsEvidence = JSON.parse(
@@ -35,7 +39,7 @@ const fieldEvidence = JSON.parse(
 const buildRolesReview = (sources, evidence) =>
   buildReview(sources, evidence, controlsEvidence, fieldEvidence);
 test(
-  "P31 preserved controls and extension evidence bind twenty-two Vue screenshots separately from production acceptance",
+  "P31 captured controls and extension evidence bind twenty-two Vue screenshots separately from production acceptance",
   { skip: !existsSync("output/playwright/p31-approved-controls-review/evidence.json") },
   () => {
     const entry = buildRolesReview(sources, evidence).actualVueControlEvidence;
@@ -43,10 +47,11 @@ test(
     assert.equal(proof.checks.length, 54);
     assert.equal(proof.screenshots.length, 22);
     assert.match(entry.scope, /actual Vue and production acceptance remain pending/);
+    // Current focus dependencies have their own exact binding. Historical role
+    // screenshots cannot attest the later organization-profile CSS fix.
+    verifyResponsiveFocusDependencies();
     for (const [file, expected] of Object.entries(proof.sourceHashes)) {
-      const current = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
-      assertCurrentSourceRevision(file, current);
-      assertCaptureSourceRevision(file, current, expected);
+      assertCaptureSourceRevision(file, readPreSelectionRebuild(file), expected);
     }
     const directory = entry.evidence.slice(0, -"evidence.json".length);
     const scenes = [

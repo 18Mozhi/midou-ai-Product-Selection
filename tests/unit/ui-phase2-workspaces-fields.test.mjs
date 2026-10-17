@@ -1,4 +1,6 @@
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -68,7 +70,13 @@ test("P32 fields cover exact 34 states plus 8 dual-viewport compositions", () =>
 });
 test("P32 field evidence is source-bound and every permanent PNG matches", () => {
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assertCaptureSource(file, readFileSync(file, "utf8"), sha);
+    assertCaptureSource(
+      file,
+      file === "tests/e2e/m06-01-organization-admin.spec.ts"
+        ? readCaptureSourceRevision(file, sha)
+        : readPreSelectionRebuild(file),
+      sha,
+    );
   for (const s of evidence.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
   assert.equal(

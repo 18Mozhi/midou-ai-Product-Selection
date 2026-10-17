@@ -306,7 +306,7 @@ test("M03-01.A03/A06-A10/A13/A15-A17 delivery contracts are complete and platfor
   assert.match(web, /基本信息[\s\S]*范围与字段[\s\S]*执行策略[\s\S]*合规与发布/);
   assert.match(web, /应用技术模板/);
   assert.match(web, /visibleItems\.length && !editorOpen/);
-  assert.match(web, /“定义已启用”不等于采集已经运行或成功/);
+  assert.match(web, /“已启用”只描述来源定义[\s\S]*最终采集结果请到“采集管理”核验/);
   assert.match(web, /执行受阻/);
   assert.match(web, /pageSize = 20/);
   assert.match(web, /provider_registry_timeout/);

@@ -509,13 +509,6 @@
   background: var(--org-audit-soft);
 }
 
-.org-admin-center--audit-review .org-admin-hero {
-  border: 0;
-  border-radius: 0;
-  background: var(--org-audit-soft);
-  box-shadow: none;
-}
-
 .org-admin-center--audit-review .org-audit-panel {
   grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
   grid-template-areas:

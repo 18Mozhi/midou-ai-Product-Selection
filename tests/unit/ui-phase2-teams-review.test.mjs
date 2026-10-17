@@ -1,4 +1,5 @@
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { parse } from "@vue/compiler-sfc";
@@ -23,7 +24,14 @@ import {
 } from "../../scripts/build-ui-phase2-teams-review.mjs";
 
 for (const name of packageNames) assertTeamsCurrentSources(name);
-const sources = Object.fromEntries(dependencies.map((f) => [f, readFileSync(f, "utf8")]));
+// Only the retired packet's shared-dialog dependency uses its capture-era input.
+// Parent/child behavioral checks continue to execute current component sources.
+const sources = Object.fromEntries(
+  dependencies.map((f) => [
+    f,
+    f.endsWith("/AuditedReasonDialog.vue") ? readPreSelectionRebuild(f) : readFileSync(f, "utf8"),
+  ]),
+);
 const packages = new Map(
   packageNames.map((p) => [
     p,

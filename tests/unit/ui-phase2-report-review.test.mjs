@@ -1,4 +1,9 @@
 import test from "node:test";
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+import { assertReportSurfaceActive } from "../../scripts/lib/retired-report-surface.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -6,13 +11,10 @@ import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
 import { validateActionReview } from "../../scripts/lib/ui-phase2-action-coverage.mjs";
 import { validateReviewSurfaces } from "../../scripts/lib/ui-phase2-review-surfaces.mjs";
 import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
-import {
-  base,
-  sourceFile,
-  buildReportReview,
-} from "../../scripts/build-ui-phase2-report-review.mjs";
+import { base, sourceFile } from "../../scripts/build-ui-phase2-report-review.mjs";
 
-const source = readFileSync(sourceFile, "utf8").replaceAll("\r\n", "\n");
+// P28 is immutable historical evidence, not acceptance of the replacement library.
+const source = readPreSelectionRebuild(sourceFile);
 const sourceHashes = { [sourceFile]: createHash("sha256").update(source).digest("hex") };
 const packages = new Map(
   ["report-direction-c", "report-controls-direction-c"].map((name) => [
@@ -23,7 +25,7 @@ const packages = new Map(
 const context = {
   candidates: scanSource(source, sourceFile).candidates,
   sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages,
   files: new Set([
     "scripts/verify-ui-phase2-report-c.mjs",
@@ -84,7 +86,16 @@ test("P28 208 screenshots bind 48 representative states and 14 additional varian
   assert.equal(value.approval, "pending-user-review");
   assert.equal(value.visualApproval, "user-approved-remaining-pages-auto");
   assert.match(value.limits[0], /视觉方向.*不等于整页、动作\/弹窗/);
-  assert.deepEqual(value, buildReportReview(source, evidence));
+  assert.equal(value.sourceHashes[sourceFile], sourceHashes[sourceFile]);
+  for (const shot of evidence.screenshots) {
+    assert.equal(
+      createHash("sha256")
+        .update(readFileSync(`${base}/design/report-controls-direction-c/${shot.file}`))
+        .digest("hex"),
+      shot.sha256,
+      shot.file,
+    );
+  }
 });
 test("P28 refuses to omit the page technical control or a detail regeneration source", () => {
   const omitted = review();
@@ -133,10 +144,7 @@ test("P28 source drift and fabricated approval fail closed", () => {
   const stale = review();
   stale.sourceHashes[sourceFile] = "stale";
   assert.throws(() => validateActionReview(stale, context), /reviewed source drift/);
-  assert.throws(
-    () => buildReportReview(source + "\n// drift", packages.get("report-controls-direction-c")),
-    /current proposal source drift/,
-  );
+  assert.throws(() => assertReportSurfaceActive(), /report_surface_retired/);
   const approved = review();
   approved.approval = "approved";
   assert.throws(() => validateActionReview(approved, context), /cannot grant action approval/);

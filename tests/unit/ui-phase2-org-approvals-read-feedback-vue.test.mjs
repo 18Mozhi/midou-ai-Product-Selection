@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -194,7 +195,7 @@ test("read-feedback r3 packet replays the complete matrix against capture-time s
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 151);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertCaptureSourceRevision(file, read(file), expected);
+    assertCaptureSourceRevision(file, readPreSelectionRebuild(file), expected);
   assert.equal(e.checks.length, 1606);
   assert.equal(e.screenshots.length, 160);
   assert.deepEqual(e.requestCounts, [

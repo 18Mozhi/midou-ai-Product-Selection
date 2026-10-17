@@ -70,7 +70,6 @@ test("native business dialogs share modal top-layer and focus-return behavior", 
   const opaqueDialogStyles = await Promise.all(
     [
       "apps/web/src/approval-workspace.css",
-      "apps/web/src/automation-rules.css",
       "apps/web/src/notification-center.css",
       "apps/web/src/task-workspace.css",
       "apps/web/src/components/CommercialOperationsCenter.vue",

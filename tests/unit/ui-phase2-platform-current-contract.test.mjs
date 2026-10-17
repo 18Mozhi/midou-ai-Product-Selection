@@ -1,6 +1,6 @@
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { relative } from "node:path";
 import { verifyPlatformAccountContract } from "../../scripts/verify-ui-phase2-platform-account-contract.mjs";
 
@@ -11,7 +11,8 @@ const responsive = `${folder}responsive-detail-focus-contract-review.md`;
 const component = (name) => `apps/web/src/components/${name}.vue`;
 const cache = new Map();
 function read(file) {
-  if (!cache.has(file)) cache.set(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"));
+  // "Current" in this 2026-09-07 packet is its capture stage, not the rebuilt UI.
+  if (!cache.has(file)) cache.set(file, readPreSelectionRebuild(file));
   return cache.get(file);
 }
 function replaced(source, before, after) {
@@ -36,7 +37,7 @@ function rejectsChange(file, mutate, pattern) {
   assert(used, `missing negative read: ${file}`);
 }
 
-test("platform current contract separates its historical inventory from all 41 current sources", () => {
+test("platform captured-stage contract separates its earlier inventory from all 41 packet sources", () => {
   const result = verifyPlatformAccountContract(read);
   assert.deepEqual(
     { ...result, links: undefined },

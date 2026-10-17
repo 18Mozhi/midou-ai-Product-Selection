@@ -9,7 +9,10 @@ import {
   beforeP34SharedChanges,
   assertP34LegacySourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-shared-history.mjs";
-import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  readCaptureSourceRevision,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (text) => createHash("sha256").update(text).digest("hex");
@@ -47,7 +50,11 @@ test("P34 legacy and current shared sources remain exact Git-history revisions",
     const source = read(file);
     assertCaptureSourceRevision(file, source, evidence.sourceHashes[file]);
     assertCaptureSourceRevision(file, source, current.sourceHashes[file]);
-    assertP34LegacySourceHash(file, source, evidence.sourceHashes[file]);
+    // Exact committed packet inputs remain independently verifiable after redesign.
+    assert.equal(
+      hash(readCaptureSourceRevision(file, evidence.sourceHashes[file])),
+      evidence.sourceHashes[file],
+    );
     assert.notEqual(evidence.sourceHashes[file], current.sourceHashes[file]);
   }
 });

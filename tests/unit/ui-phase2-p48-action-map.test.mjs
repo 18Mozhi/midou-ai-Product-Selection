@@ -1,5 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { buildP48ActionReview } from "../../scripts/build-ui-phase2-p48-action-review.mjs";
@@ -11,10 +15,7 @@ import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 const base = "design-plans/ui-phase-2-2026-09-07";
 const review = JSON.parse(readFileSync(`${base}/action-reviews/P48.json`, "utf8"));
 const sources = Object.fromEntries(
-  Object.keys(review.sourceHashes).map((file) => [
-    file,
-    readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
-  ]),
+  Object.keys(review.sourceHashes).map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const sourceHashes = Object.fromEntries(
   Object.entries(sources).map(([file, source]) => [
@@ -31,13 +32,16 @@ const files = new Set(
 const context = {
   candidates,
   sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages: new Map(),
   files,
 };
 
-test("P48 maps all current local source candidates to existing SC48 semantics", () => {
-  assert.deepEqual(review, buildP48ActionReview());
+test("P48 maps all captured local source candidates to their SC48 semantics", () => {
+  assert.deepEqual(
+    review,
+    buildP48ActionReview(readPreSelectionRebuild, preSelectionRebuildSourceFiles()),
+  );
   const result = validateActionReview(review, context);
   assert.equal(result.sourceSites, 83);
   assert.equal(review.route, "/platform-admin/providers/sources");

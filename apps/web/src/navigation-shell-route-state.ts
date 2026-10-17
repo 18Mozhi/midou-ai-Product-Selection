@@ -16,7 +16,6 @@ export const platformOperationsNavigation = [
 const breadcrumbRoutes: Record<string, string> = {
   工作台: "/home",
   洞察与选品: "/opportunities",
-  运营工具: "/automations",
   选品机会: "/opportunities",
   全部任务: "/tasks",
   供应链与利润: "/sourcing",

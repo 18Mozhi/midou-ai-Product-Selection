@@ -1,4 +1,5 @@
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
@@ -53,7 +54,7 @@ test("P37 exact copy-only change preserves template, filters and every unrelated
     /Unreviewed P37 source delta/,
   );
 });
-test("P37 actual current parent/child/browser evidence binds62 checks and exact16 PNG", () => {
+test("P37 captured parent/child/browser evidence binds62 checks and exact16 PNG", () => {
   assert.equal(e.kind, "P37-CURRENT-COPY-OWNERSHIP-VUE-r3");
   assert.equal(e.acceptanceComplete, false);
   assert.equal(e.browserAndServerClosed, true);
@@ -62,8 +63,7 @@ test("P37 actual current parent/child/browser evidence binds62 checks and exact1
   const captureTransform = (file, source) =>
     capturedExportDetailHash(file, historicalTokenCopySource(file, source));
   for (const [f, sha] of Object.entries(e.sourceHashes)) {
-    if (f === "tests/e2e/m06-01-organization-admin.spec.ts") assertCaptureSource(f, text(f), sha);
-    else assertCaptureSource(f, text(f), sha);
+    assertCaptureSource(f, readPreSelectionRebuild(f), sha);
   }
   for (const s of e.screenshots) {
     assert.equal(hash(readFileSync(dir + s.file)), s.sha256);

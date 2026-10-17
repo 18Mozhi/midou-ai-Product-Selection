@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -55,7 +56,7 @@ const readCapturedSource = (file) => {
         "\r\n",
         "\n",
       )
-    : beforePublishedPresentation(file, read(file));
+    : beforePublishedPresentation(file, readPreSelectionRebuild(file));
 };
 function neutralImports(source) {
   const ast = ts.createSourceFile("driver.mjs", source, ts.ScriptTarget.Latest, true);
@@ -140,7 +141,7 @@ test("C lifecycle capture retains every original result plus strict desktop navi
   for (const [file, sha] of Object.entries(evidence.sourceHashes)) {
     if (capturedSources.has(file))
       assert.equal(hash(readCapturedSource(file)), sha, `Captured source drift: ${file}`);
-    else assertCaptureSourceRevision(file, read(file), sha);
+    else assertCaptureSourceRevision(file, readPreSelectionRebuild(file), sha);
   }
   for (const shot of evidence.screenshots) {
     assert.match(shot.file, /^[a-z0-9-]+\.png$/);

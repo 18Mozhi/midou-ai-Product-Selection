@@ -378,7 +378,7 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
 .selection-comparison .selection-review-samples .selection-review-meta,
 .selection-review-samples footer {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .selection-review-samples footer {
   display: flex;

@@ -66,8 +66,8 @@ test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and tru
   for (const state of ["rate_limited", "blocked", "expired"])
     assert.match(identity, new RegExp(state));
   assert.match(identity, /请求标识/);
-  assert.match(identity, /SECURE ACCESS/);
-  assert.match(identity, /安全身份入口/);
+  assert.match(identity, /id="p02-login-title">安全登录/);
+  assert.match(identity, /id="p02-challenge-title">验证你的身份/);
   assert.doesNotMatch(identity, /AI SELECTION ACCOUNT|SECURITY CENTER/);
   assert.match(styles, /p02-login-brand[\s\S]*min-height:\s*44px/);
   assert.match(

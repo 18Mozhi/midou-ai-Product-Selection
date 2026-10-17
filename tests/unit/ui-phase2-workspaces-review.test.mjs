@@ -1,4 +1,6 @@
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -20,7 +22,12 @@ import {
 } from "../../scripts/build-ui-phase2-workspaces-review.mjs";
 
 const sources = Object.fromEntries(
-  dependencies.map((f) => [f, readFileSync(f, "utf8").replaceAll("\r\n", "\n")]),
+  dependencies.map((f) => [
+    f,
+    f.endsWith("/AuditedReasonDialog.vue")
+      ? readPreSelectionRebuild(f)
+      : readFileSync(f, "utf8").replaceAll("\r\n", "\n"),
+  ]),
 );
 const evidence = JSON.parse(
   readFileSync(`${base}/design/workspaces-direction-c/evidence.json`, "utf8"),
@@ -66,7 +73,13 @@ test("P32 control evidence has exact dual-viewport bindings and current image/so
     ],
   );
   for (const [file, sha] of Object.entries(controlsEvidence.sourceHashes))
-    assertCaptureSource(file, readFileSync(file, "utf8"), sha);
+    assertCaptureSource(
+      file,
+      file === "tests/e2e/m06-01-organization-admin.spec.ts"
+        ? readCaptureSourceRevision(file, sha)
+        : readPreSelectionRebuild(file),
+      sha,
+    );
   for (const shot of controlsEvidence.screenshots)
     assert.equal(
       createHash("sha256")

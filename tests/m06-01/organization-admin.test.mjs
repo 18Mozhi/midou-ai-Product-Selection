@@ -181,13 +181,13 @@ test("M06-01 organization pages use novice labels and keep UUIDs in technical de
     "团队治理台",
     "团队成员关系",
     "组织只读访问凭据",
-    "固定只读 scope",
+    "允许读取的内容",
     "未选择时不会静默添加默认权限",
     "令牌生命周期",
     "轮换密钥",
     "撤销访问",
     "组织审计账本",
-    "服务端权限校验",
+    "仅当前组织",
     "页内搜索",
     "高级追踪与时间筛选",
     "脱敏上下文",
@@ -270,7 +270,7 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
     "角色模板与能力",
     "成员数据范围预览",
     "指定资源授权",
-    "创建并写入审计",
+    "原因将写入组织审计",
     "延长授权",
     "撤销授权",
     "资源授权分页",
@@ -282,12 +282,12 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
     "搜索工作区",
     "工作区状态",
     "工作区分页",
-    "创建并写入审计",
+    "原因将写入组织审计",
     "归档会发生什么",
     "搜索团队",
     "团队状态",
     "团队分页",
-    "当前可治理边界",
+    "协作边界",
   ])
     assert.match(web, new RegExp(copy));
   assert.match(center, /value: \{ workspaces: response\.data \}/);
@@ -302,11 +302,11 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
   assert.match(teams, /maxlength="120"/);
   assert.match(teams, /maxlength="80"/);
   assert.match(teams, /pageSize = 8/);
-  assert.match(teams, /当前接口只返回团队成员数量/);
+  assert.match(teams, /selectedTeam\.member_count/);
   assert.match(center, /value: \{ teams: teams\.data, members: members\.data\.items \?\? \[\] \}/);
   for (const copy of [
     "跨工作区审批态势",
-    "只读边界",
+    "org-approval-title",
     "审批总量",
     "已取消",
     "当前接口最多返回最近 100 条",

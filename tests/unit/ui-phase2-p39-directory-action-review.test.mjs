@@ -1,5 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
@@ -10,10 +14,7 @@ import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 const base = "design-plans/ui-phase-2-2026-09-07";
 const review = JSON.parse(readFileSync(`${base}/action-reviews/P39.json`, "utf8"));
 const sources = Object.fromEntries(
-  Object.keys(review.sourceHashes).map((file) => [
-    file,
-    readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
-  ]),
+  Object.keys(review.sourceHashes).map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const sourceHashes = Object.fromEntries(
   Object.entries(sources).map(([file, source]) => [
@@ -36,7 +37,7 @@ const testFiles = new Set(
 const context = {
   candidates,
   sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages,
   files: testFiles,
 };

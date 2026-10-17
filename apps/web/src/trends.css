@@ -878,7 +878,7 @@
   align-self: start;
   padding-top: 3px;
   color: var(--trend-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 .trend-dashboard--review .trend-tabs {

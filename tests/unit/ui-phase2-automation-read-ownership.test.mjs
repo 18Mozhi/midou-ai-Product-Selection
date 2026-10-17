@@ -1,3 +1,4 @@
+import { readArchivedAutomationSource } from "../../scripts/lib/retired-automation-surface.mjs";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -7,7 +8,9 @@ import { ref, watch as vueWatch } from "vue";
 import { buildAutomationDesignData } from "../../scripts/lib/ui-phase2-automation-design-data.mjs";
 
 // Real setup and Vue ref/watch. Requests, router and lifetime are controlled adapters, not a server.
-const source = (await readFile("apps/web/src/components/AutomationRuleCenter.vue", "utf8"))
+const source = (
+  await readArchivedAutomationSource("apps/web/src/components/AutomationRuleCenter.vue")
+)
   .split('<script setup lang="ts">')[1]
   .split("</script>")[0];
 const ast = ts.createSourceFile("automation.ts", source, ts.ScriptTarget.Latest, true);

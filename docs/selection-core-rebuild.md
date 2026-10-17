@@ -1,3 +1,5 @@
+> 2026-10-17 后台保留回归：修复组织资料窄内容区溢出、原因弹窗首次挂载焦点、手机账号筛选样式和侧栏返回标签；详见 `docs/selection-backend-preservation.md`。核心页面新增小字提升至 13px，48 项相关浏览器检查通过；历史审计与现行运行检查分离。真实性门禁已通过，整体发布仍等待全量与真实采集验收，见 `docs/selection-release-verification.md`，未部署。
+
 > 2026-10-17 选品库布局重制：移除大蓝横幅与旧渐变标题，采用紧凑工具栏、商品视图与筛选分区、实际配置摘要，删除旧标题/视图栏 CSS 和两个废弃样式文件。见 `docs/selection-catalogue-layout.md`，本地未部署。
 
 > 2026-10-17 选品库主品资料：图卡/列表展示真实售价、评价、购买下限、排名和采集时间；图片与资料限定同租户同主品，缺失不推测。见 `docs/selection-catalogue-product-facts.md`，本地实现未部署。
@@ -16,6 +18,8 @@
 - 1688 附件为真实字段依据；221–226 均已对同一图片逐台执行真实 POST，HTTP 200、各 10 条、total 700，全部通过当前解析器。明细与单次验证边界见 `docs/selection-lan-1688-validation.md`；不代表生产任务已运行或六台长期稳定。
 
 ## 当前已实现范围
+
+成员独立自动化规则页及专用样式已删除，`/automations` 转选品库；平台治理保留事实，移除通往退役编辑器的入口。连续选品后端保留。范围与验收边界见 `docs/selection-retired-member-automations.md`；其他成员功能精简和完整目标仍未完成。
 
 - 独立竞品监控和告警规则成员 UI 已删除，旧链接转选品库，竞品对比与采集留在当前商品详情；见 `docs/selection-retired-member-competitors.md`。
 
@@ -66,3 +70,5 @@
 - 运行准备实测：用户给定 1688 授权已写入生产受限配置并从主机验证六节点图搜；模型列表及合成合同探测可用。来源仍停用、代码未部署，历史死信未重放。见 `docs/selection-runtime-preparation.md`。
 
 - 发布启动一致性已修复：不变来源不再推进烟测时间门，Worker 在 API 完成目录同步并就绪后启动。见 `docs/selection-startup-consistency.md`；未做宝塔真实重启验收。
+
+- 组织后台九页标题合并为紧凑白底工具栏，移除八套大蓝标题样式；表单、权限、审计不变。见 `docs/selection-organization-toolbar.md`，20 项浏览器检查通过，未部署。

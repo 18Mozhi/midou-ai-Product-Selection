@@ -1,4 +1,5 @@
 import { buildApp } from "../apps/api/dist/app.js";
+import { createSelectionHttpStack } from "../tests/fixtures/selection-http-stack.mjs";
 
 const port = Number(process.env.PLAYWRIGHT_API_PORT ?? process.env.APP_PORT ?? 4101);
 if (!Number.isInteger(port) || port < 1024 || port > 65535) {
@@ -10,6 +11,9 @@ const available = (name) => ({
   check: async () => "available",
 });
 const app = buildApp({
+  ...(await createSelectionHttpStack(
+    `http://127.0.0.1:${process.env.PLAYWRIGHT_WEB_PORT ?? 5173}`,
+  )),
   version: "playwright-e2e",
   buildSha: "0123456789abcdef0123456789abcdef01234567",
   configFingerprint: "a".repeat(64),

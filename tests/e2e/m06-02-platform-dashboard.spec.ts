@@ -568,10 +568,8 @@ test("UI2-DG55 retained governance records keep their original workbench and ver
     exact: true,
   });
   await expect(detail.getByText("第 3 版", { exact: true })).toBeVisible();
-  await expect(detail.getByRole("link", { name: "进入规则编辑" })).toHaveAttribute(
-    "href",
-    "/automations?rule=auto-55&action=edit",
-  );
+  await expect(detail.getByRole("link", { name: "进入规则编辑" })).toHaveCount(0);
+  await expect(page.locator('a[href^="/automations"]')).toHaveCount(0);
   expect(autoReads).toBe(2);
 });
 
@@ -681,16 +679,13 @@ test("UI2-DG55 C directory exposes factual counts and complete automation detail
   await expect(detail.getByText("通知负责人", { exact: true })).toBeVisible();
   await expect(detail.getByText("竞品价格变化：通知负责人", { exact: true })).toBeVisible();
   await expect(detail.getByText("0 次 / 60 分钟", { exact: true })).toBeVisible();
-  await expect(detail.getByRole("link", { name: "进入规则编辑" })).toHaveAttribute(
-    "href",
-    "/automations?rule=automation-c-55&action=edit",
-  );
+  await expect(detail.getByRole("link", { name: "进入规则编辑" })).toHaveCount(0);
+  await expect(page.locator('a[href^="/automations"]')).toHaveCount(0);
   await capturePhase2Evidence(page, testInfo, "P55", "governance-automation-detail", [
     "自动化详情在桌面与手机均展示触发、动作和频控",
     "0 次频控按原始事实显示而不隐藏",
-    "编辑入口绑定当前自动化规则 ID",
+    "已退役的成员规则编辑入口不再展示",
   ]);
-  await expectGovernancePrimary(detail.getByRole("link", { name: "进入规则编辑" }));
 });
 
 test("UI2-DG55 C directory distinguishes a filtered empty result from global counts", async ({

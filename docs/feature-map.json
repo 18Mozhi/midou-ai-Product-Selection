@@ -1,4 +1,102 @@
 {
+  "selectionOrganizationToolbar20261017": {
+    "status": "implemented",
+    "statusDetail": "20_browser_cases_passed_not_deployed",
+    "requirements": "docs/selection-organization-toolbar.md",
+    "routes": [
+      "/org-admin",
+      "/org-admin/members",
+      "/org-admin/roles",
+      "/org-admin/workspaces",
+      "/org-admin/teams",
+      "/org-admin/approvals",
+      "/org-admin/data",
+      "/org-admin/tokens",
+      "/org-admin/audit"
+    ],
+    "sourceFiles": ["apps/web/src/organization-admin.css", "apps/web/src/organization-audit.css"],
+    "testFiles": [
+      "tests/e2e/m06-01-organization-admin.spec.ts",
+      "tests/e2e/m02-03-navigation-shell.spec.ts"
+    ],
+    "contract": "Replace duplicated blue organization hero styling with a compact shared white toolbar. Preserve all forms, permissions, audit and HTTP contracts. No new configuration or backend restart requirement."
+  },
+  "selectionHttpIntegration20261017": {
+    "status": "implemented",
+    "statusDetail": "local_http_business_browser_checks_passed_global_verification_pending_not_deployed",
+    "requirements": "docs/selection-http-integration.md",
+    "routes": ["/home", "/opportunities", "/opportunities/{opportunityId}"],
+    "sourceFiles": [
+      "scripts/run-playwright-api-test-server.mjs",
+      "tests/fixtures/selection-http-stack.mjs",
+      "apps/web/src/components/OpportunityListPanel.vue"
+    ],
+    "testFiles": [
+      "tests/unit/selection-http-stack.test.mjs",
+      "tests/e2e/m04-10-selection-http.spec.ts"
+    ],
+    "contract": "Exercise actual HTTP auth, authorization and business routes with isolated synthetic memory repositories. Show existing primary ASIN in catalogue cards and list. Coverage does not attest real MySQL, provider data, persistence across restart or daily production. No production API, database, dependency or environment contract change."
+  },
+  "selectionRetiredMemberAutomations20261017": {
+    "status": "implemented",
+    "statusDetail": "16_targeted_browser_cases_passed_not_deployed_global_verification_pending",
+    "requirements": "docs/selection-retired-member-automations.md",
+    "routes": ["/automations", "/opportunities", "/platform-admin/governance"],
+    "sourceFiles": [
+      "config/route-catalog.json",
+      "apps/web/src/components/navigation-surface-registry.ts",
+      "apps/web/src/components/PlatformGovernanceCenter.vue"
+    ],
+    "removedFiles": [
+      "apps/web/src/components/AutomationRuleCenter.vue",
+      "apps/web/src/automation-rules.css",
+      "apps/web/src/design/automation-rule-tokens.css"
+    ],
+    "testFiles": [
+      "tests/unit/retired-automation-surface.test.mjs",
+      "tests/e2e/m05-05-automation-rules.spec.ts",
+      "tests/e2e/m06-02-platform-dashboard.spec.ts"
+    ],
+    "contract": "Retire the member event-rule editor, discard legacy query/hash, retain selection permissions and admin facts, and remove obsolete edit links. Backend automation APIs, Worker, continuous selection, persistent data and authorization are unchanged. Historical capture inputs never enter the product."
+  },
+  "selectionReadability20261017": {
+    "status": "implemented",
+    "statusDetail": "48_targeted_browser_checks_passed_global_release_gate_not_passed_not_deployed",
+    "requirements": "docs/selection-release-verification.md",
+    "sourceFiles": [
+      "apps/web/src/commerce-workspace.css",
+      "apps/web/src/home-dashboard.css",
+      "apps/web/src/trends.css",
+      "apps/web/src/sourcing.css",
+      "apps/web/src/components/SelectionProductComparison.vue"
+    ],
+    "testFiles": [
+      "tests/unit/design-quality-gate.test.mjs",
+      "tests/e2e/m02-06-home-mobile.spec.ts",
+      "tests/e2e/m04-01-trends.spec.ts",
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/e2e/m04-06-sourcing.spec.ts"
+    ],
+    "contract": "Raise new metadata text to the existing 13px minimum. Preserve business data, routes, API, permissions and runtime configuration. Historical capture verification does not attest the replacement UI."
+  },
+  "selectionBackendPreservation20261017": {
+    "status": "implemented",
+    "statusDetail": "targeted_backend_checks_passed_release_verification_failed_not_deployed",
+    "requirements": "docs/selection-backend-preservation.md",
+    "sourceFiles": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/AuditedReasonDialog.vue",
+      "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+      "apps/web/src/design/opportunity-review-tokens.css",
+      "apps/web/src/organization-admin.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m02-03-navigation-shell.spec.ts",
+      "tests/e2e/m06-01-platform-accounts.spec.ts",
+      "tests/e2e/m06-02-platform-dashboard.spec.ts"
+    ],
+    "contract": "Retain admin permissions and business workflows in the rebuilt shell. Match fixed-sidebar labels, size organization profile grid by actual content width, and initialize reason focus on async first mount. No API/schema/config or production mutation."
+  },
   "selectionCatalogueLayout20261017": {
     "status": "implemented",
     "statusDetail": "19_related_checks_and_126_browser_cases_passed_not_deployed",
@@ -2600,6 +2698,7 @@
       "statusDetail": "module_verified"
     },
     "automationRules": {
+      "memberSurfaceRetired20261017": "The member editor and runtime styles were deleted; /automations redirects to the selection library. Earlier UI evidence below is historical. Backend rules, APIs, Worker and admin facts are retained. See docs/selection-retired-member-automations.md.",
       "uiPhase2AutomationBusyDialogLifecycle": "P27 AutomationRuleCenter refuses editor close and native Escape while create/edit writes are pending; successful responses still close the submitting editor. Deep-linked detail/edit dialogs without an opener return focus to the page h1. Shared useModalDialog adds an opt-in trapFocus option; only P27 enables it, so other pages with custom traps retain existing behavior. P27 detail/create/edit actual-Vue regression verifies both Tab boundaries, first-invalid required-field focus, trigger return, and native error prevention on desktop Chromium and 390px mobile. Full M05-05 passes 24/24 across both projects; scoped unit/source review and production gate are the release evidence. Pending-field edit policy, route-away write settlement, backend/RBAC/Worker and production acceptance remain open.",
       "uiPhase2AutomationWriteOwnership": "2026-09-10 AutomationRuleCenter.vue scopes create/edit/status acknowledgements to their initiating view generation and fullPath; obsolete success/error cannot mutate diagnostics, close newer windows, navigate or start refresh. Existing busy and unmount guards now apply at both write entrypoints. Current save closes its submitting editor synchronously before query navigation; internal load(false) refreshes facts without replaying the old editor route, so a later window survives navigation completion.23 source tests plus30 real mounted Vue/router dual-viewport mock-HTTP cases pass with unchanged request bodies/idempotency and no real business writes. See P27-WRITE-OWNERSHIP-REVIEW.md and scripts/verify-ui-phase2-automation-write-ownership.mjs (temporary strict5175 verifier-only entry, finally closed). Parent122/controls208/fields114 proposals revalidated; no template/CSS/API/OpenAPI/DB/env/dependency/Worker/Python changes. Policy for edits made during an in-flight successful create is explicitly awaiting user choice and remains unimplemented, as do complete cross-scope/KeepAlive lifetime, modal accessibility, C implementation and concrete approvals. No deployment/migration/production restart; future local frontend build and normal BaoTa release required.",
       "uiPhase2AutomationReadOwnership": "2026-09-10 AutomationRuleCenter.vue now scopes list/member metadata and errors to a shared read generation, invalidated immediately at first failure; detail reads bind view generation/path, and opening/editing/closing/query clearing/unmount invalidate old details. Current list facts still apply, but route replay cannot reset a view or draft changed during the read; initial query changes before route readiness still open the latest deep link. Unmount prevents later list/detail/preview updates and new reads.22 actual-setup tests and18 mounted Vue/router dual-viewport cases; temporary strict Vite5175 /__p27_read_ownership/ host is verifier-only and finally closes. See P27-READ-OWNERSHIP-REVIEW.md and scripts/verify-ui-phase2-automation-read-ownership.mjs. Parent122/controls208/fields114 proposals reverified; original template/CSS, API/OpenAPI/body/idempotency/permissions/env/dependencies/DB/Worker/Python unchanged. Writes do not gain this owner contract: old write acknowledgements, refresh-after-write, reentrancy, cross-scope cache and full visual approval remain pending. No deployment or production restart; future local frontend rebuild and normal BaoTa deployment/browser refresh, not a zero-downtime guarantee.",
@@ -2613,7 +2712,6 @@
         "../apps/api/src/mysql-automation-repository.ts",
         "../apps/api/src/automation-routes.ts",
         "../apps/worker/src/automation-worker.ts",
-        "../apps/web/src/components/AutomationRuleCenter.vue",
         "../database/migrations/0066_automation_task_source_restore.up.sql"
       ],
       "routes": [
@@ -4250,10 +4348,10 @@
     },
     {
       "path": "/automations",
-      "view": "AutomationRuleCenter",
+      "view": "OpportunityWorkspace",
       "domain": "automation-rules",
-      "status": "verified",
-      "statusDetail": "M05-05_module_verified"
+      "status": "implemented",
+      "statusDetail": "retired_member_automations_redirect_to_selection_library"
     },
     {
       "path": "/reports",

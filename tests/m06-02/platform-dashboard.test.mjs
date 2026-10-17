@@ -201,7 +201,7 @@ test("M06-02 platform overview gives administrators clear next actions", async (
   for (const copy of [
     "平台运行概览",
     "待办与常用入口",
-    "系统会自动获取热点",
+    "系统仍会继续自动获取热点",
     "管理组织和用户",
     "查看热点来源",
     "查看采集进度",
