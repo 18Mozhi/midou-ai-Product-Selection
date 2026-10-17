@@ -5571,5 +5571,28 @@
       "tests/unit/platform-palette-contract.test.mjs"
     ],
     "contract": "Shared compact single-column identity workspaces use existing semantic tokens. LocalIdentity component unchanged: original fields, requests, MFA secret cleanup, authentication and security setup contracts preserved. No API, database, permission, config or dependency change. Frontend publish and refresh only."
+  },
+  "selectionEntryWorkspace20261017": {
+    "status": "implemented",
+    "statusDetail": "local_requires_release_and_remaining_goal_acceptance",
+    "requirements": "docs/selection-entry-workspace.md",
+    "verification": "163 related Node checks, 58 complete desktop/mobile browser cases and 8 independent strict replays passed. Four dated permanent snapshots preserve old baselines. Component scripts/templates unchanged. Web typecheck/build, static/budget/style/realism/docs passed. No production or daily-100 acceptance claim.",
+    "routes": ["/select-context", "/onboarding"],
+    "implementationFiles": [
+      "apps/web/src/styles/tenancy-workspace.css",
+      "apps/web/src/styles.css",
+      "apps/web/src/signal-ledger.css",
+      "apps/web/src/components/onboarding-page-c.css",
+      "apps/web/src/components/onboarding-guide/steps.ts"
+    ],
+    "testFiles": [
+      "tests/e2e/m01-03-tenancy.spec.ts",
+      "tests/e2e/m02-02-auth-onboarding.spec.ts",
+      "tests/unit/onboarding-page-implementation.test.mjs",
+      "tests/unit/platform-palette-contract.test.mjs",
+      "tests/unit/design-quality-gate.test.mjs",
+      "tests/unit/responsive-detail-palette-contract.test.mjs"
+    ],
+    "contract": "Top scope steps and full-width organization/workspace lists; three-step introduction now follows intelligence, main product plus 5-10 related competitors and scoring, then specific 1688 sourcing/library. Component scripts/templates unchanged. Original isolation, archived-workspace disabling, context writes, personal-space creation, safe return and local-only onboarding state preserved. No backend, API, schema, permission, config or dependency change."
   }
 }

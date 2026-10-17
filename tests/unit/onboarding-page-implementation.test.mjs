@@ -15,6 +15,9 @@ test("P09 evidence mounts the production page, child panel, step data, and scope
   assert.match(steps.toString(), /Math\.max\(1/);
   assert.match(css.toString(), /\.onboarding-page--c/);
   assert.doesNotMatch(css.toString(), /(?:radial|linear)-gradient/);
-  assert.doesNotMatch(css.toString(), /border-radius:\s*(?:\d+px|50%)/);
+  assert.match(css.toString(), /border-radius: 8px/);
+  assert.match(steps.toString(), /5–10个竞品/);
+  assert.match(steps.toString(), /1688/);
+  assert.doesNotMatch(steps.toString(), /团队任务|评论、审批/);
   assert.doesNotMatch(page.toString() + panel.toString(), /fetch\(|localStorage|sessionStorage/);
 });

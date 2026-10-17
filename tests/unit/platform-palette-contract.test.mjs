@@ -525,39 +525,14 @@ test("organization admin palette resolves its approved C page colors in route sc
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("P08 tenancy palette resolves its original C direction colors in page scope", async () => {
-  const [tokens, css, globalShellCss, tenancyCss] = await Promise.all([
-    readFile("apps/web/src/design/tenancy-tokens.css", "utf8"),
-    readFile("apps/web/src/styles.css", "utf8"),
-    readFile("apps/web/src/signal-ledger.css", "utf8"),
-    readFile("apps/web/src/styles/tenancy-workspace.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--p08-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const p08OverridesStart = globalShellCss.indexOf(
-    "/* P08's approved C entry screen deliberately uses a cool workspace canvas and soft corners. */",
-  );
-  assert.notEqual(
-    p08OverridesStart,
-    -1,
-    "P08 overrides remain explicitly scoped in the shared shell stylesheet",
-  );
-  const p08Overrides = globalShellCss.slice(p08OverridesStart);
-  const references = new Set(
-    [...`${css}\n${globalShellCss}\n${tenancyCss}`.matchAll(/var\((--p08-[a-z-]+)\)/g)].map(
-      (match) => match[1],
-    ),
-  );
-
-  assert.equal(names.size, 24);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(), /^\.tenancy-page\s*\{[\s\S]*\}$/);
-  assert.ok(css.startsWith('@import "./design/tenancy-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
-  assert.doesNotMatch(p08Overrides, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+test("tenancy workspace retires dedicated palette imports and uses semantic colors", async () => {
+  const css = await readFile("apps/web/src/styles/tenancy-workspace.css", "utf8");
+  const global = await readFile("apps/web/src/styles.css", "utf8");
+  assert.match(css, /var\(--so-primary\)/);
+  assert.match(css, /var\(--so-danger\)/);
+  assert.match(css, /var\(--so-focus\)/);
+  assert.doesNotMatch(css, /--p08-|gradient|box-shadow/);
+  assert.doesNotMatch(global, /tenancy-tokens\.css|var\(--p08-/);
 });
 
 test("organization audit workspace uses shared semantic colors in its own scope", async () => {

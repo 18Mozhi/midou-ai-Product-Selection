@@ -233,17 +233,6 @@ html[data-design="signal-ledger"]
 }
 
 /* Identity, context selection and appearance are editorial entry sheets. */
-html[data-design="signal-ledger"] :where(.identity-page, .tenancy-page, .theme-page) {
-  min-height: 100vh;
-  color: var(--so-text);
-  background: var(--so-bg);
-}
-
-html[data-design="signal-ledger"] :where(.identity-header, .tenancy-header) {
-  min-height: 58px;
-  border-bottom: 2px solid var(--so-text);
-  background: var(--so-bg-elevated);
-}
 
 html[data-design="signal-ledger"] :where(.identity-brand, .theme-brand) {
   color: var(--so-text);
@@ -272,7 +261,6 @@ html[data-design="signal-ledger"] .identity-story {
 }
 
 html[data-design="signal-ledger"] .identity-story h1,
-html[data-design="signal-ledger"] .tenancy-intro h1,
 html[data-design="signal-ledger"] .theme-header h1 {
   font: 800 clamp(46px, 7vw, 90px)/0.96 var(--so-font-display);
   letter-spacing: -0.07em;
@@ -290,7 +278,6 @@ html[data-design="signal-ledger"] .identity-card {
 }
 
 html[data-design="signal-ledger"] .identity-card__head > p,
-html[data-design="signal-ledger"] .tenancy-intro > p,
 html[data-design="signal-ledger"] .theme-header > div > p,
 html[data-design="signal-ledger"] .section-heading p {
   color: var(--so-primary);
@@ -299,14 +286,9 @@ html[data-design="signal-ledger"] .section-heading p {
 }
 
 html[data-design="signal-ledger"] .identity-card form :where(input, textarea),
-html[data-design="signal-ledger"] .tenancy-page :where(input, select),
 html[data-design="signal-ledger"] .theme-page :where(input, select) {
   border-color: var(--so-text);
   background: var(--so-bg-elevated);
-}
-
-html[data-design="signal-ledger"] .tenancy-shell {
-  width: min(1240px, 100%);
 }
 
 html[data-design="signal-ledger"] :where(.tenancy-card, .workspace-card) {
@@ -530,7 +512,6 @@ html[data-design="signal-ledger"] .role-theme-menu button[aria-pressed="true"] {
   }
 
   html[data-design="signal-ledger"] .identity-story h1,
-  html[data-design="signal-ledger"] .tenancy-intro h1,
   html[data-design="signal-ledger"] .theme-header h1 {
     font-size: clamp(42px, 14vw, 64px);
   }
@@ -595,38 +576,4 @@ html[data-design="signal-ledger"] .role-theme-menu button[aria-pressed="true"] {
     animation-iteration-count: 1;
     transition-duration: 0.01ms;
   }
-}
-
-/* P08's approved C entry screen deliberately uses a cool workspace canvas and soft corners. */
-html[data-design="signal-ledger"] body .tenancy-page {
-  background: var(--p08-tenancy-canvas);
-}
-html[data-design="signal-ledger"] body .p08-scope,
-html[data-design="signal-ledger"] body .p08-workspace {
-  border-radius: 20px;
-}
-html[data-design="signal-ledger"] body .p08-brand-mark {
-  border-radius: 11px;
-}
-html[data-design="signal-ledger"] body .p08-empty-mark {
-  border-radius: 16px;
-}
-html[data-design="signal-ledger"] body .p08-steps li > span {
-  border-radius: 50%;
-}
-html[data-design="signal-ledger"] body .tenancy-page .p08-primary,
-html[data-design="signal-ledger"] body .tenancy-page .p08-secondary,
-html[data-design="signal-ledger"] body .tenancy-page .p08-primary-link {
-  border-radius: 8px;
-}
-html[data-design="signal-ledger"] body .p08-scope h1,
-html[data-design="signal-ledger"] body .p08-hero h2 {
-  font-family: var(--so-font-ui);
-  letter-spacing: 0;
-}
-html[data-design="signal-ledger"] body .p08-scope h1 {
-  color: var(--p08-white);
-}
-html[data-design="signal-ledger"] body .p08-hero h2 {
-  color: var(--p08-ink);
 }

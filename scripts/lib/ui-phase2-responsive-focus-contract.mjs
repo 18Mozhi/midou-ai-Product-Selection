@@ -49,7 +49,7 @@ export const responsiveFocusRevision = Object.freeze({
     // Current entrypoint from c42a0996: commerce styling and its default density.
     // Capture-time source hashes above remain bound to their original Git revision.
     "apps/web/src/main.ts": "e45e9dafaa6d839ad40b2d2d00ae3bb664d3a2a05c3444eb1c17614f7d08b3ab",
-    "apps/web/src/styles.css": "c881ac3d5e718bcd59272210d703991150556406ad09a90cd7d9c35742d97586",
+    "apps/web/src/styles.css": "e6ba0f5c4b3c06fa231cfb825ea08f3dc99a41ce8670c9e4f5bfb266480c6a43",
     "apps/web/src/styles/access-governance.css":
       "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
     "apps/web/src/styles/onboarding-navigation.css":
@@ -65,8 +65,8 @@ export const responsiveFocusRevision = Object.freeze({
     "apps/web/src/responsive-baselines.css":
       "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
     "apps/web/src/signal-ledger.css":
-      // Home redesign removed unused member ledger overrides in 24305189.
-      "7df2acad1794e6a04d7475c5e285fd67f37886e3a470fcaabedb6555f631f11c",
+      // Entry workspace removed retired tenancy overrides; see docs/selection-entry-workspace.md.
+      "0ee6004a181ee0a70ded70807059b828ed46a374b11026dd37fb51ddc6143ac5",
   }),
 });
 const hash = (value) => createHash("sha256").update(value).digest("hex");

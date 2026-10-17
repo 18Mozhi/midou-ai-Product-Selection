@@ -251,7 +251,7 @@ test("M02-02.A07/A08/A15 login uses the real contract and continues to tenancy b
   await expect(page.getByRole("heading", { name: "选择组织" })).toBeVisible();
   await expect(page.getByText("暂无可用组织")).toBeVisible();
   if (process.platform === "win32")
-    await expect(page).toHaveScreenshot("identity-workspace-context-empty-20261017.png", {
+    await expect(page).toHaveScreenshot("entry-workspace-context-empty-20261017.png", {
       fullPage: true,
       maxDiffPixels: 140,
     });
@@ -638,12 +638,12 @@ test("M02-02.A07/A08/A15 tenancy hands off to all three onboarding steps at desk
   await page.getByRole("button", { name: /华南增长中心/ }).click();
   await page.getByRole("button", { name: /新品决策工作区/ }).click();
   await page.getByRole("link", { name: "继续快速引导" }).click();
-  await expect(page.getByRole("heading", { name: "把市场变化，变成今天的行动" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "从最新情报发现相关商品" })).toBeVisible();
   await page.getByRole("button", { name: "下一步" }).focus();
   await page.keyboard.press("Enter");
-  await expect(page.getByRole("heading", { name: "让协作围绕同一份证据展开" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "围绕一个主品比较5–10个竞品" })).toBeVisible();
   await page.keyboard.press("Enter");
-  await expect(page.getByRole("heading", { name: "先看事实，再做可解释的决定" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "核对1688货源与选品结果" })).toBeVisible();
   const finish = page.getByRole("link", { name: "进入智能选品" });
   await expect(finish).toBeFocused();
   await expect(finish).toBeVisible();
@@ -653,8 +653,9 @@ test("M02-02.A07/A08/A15 tenancy hands off to all three onboarding steps at desk
     .all())
     expect((await step.boundingBox())?.height).toBeGreaterThanOrEqual(44);
   await finish.evaluate((element) => element.blur());
+  expect((await page.locator(".p09-header").boundingBox())!.y).toBeGreaterThanOrEqual(0);
   if (process.platform === "win32")
-    await expect(page).toHaveScreenshot("identity-workspace-onboarding-20261017.png", {
+    await expect(page).toHaveScreenshot("entry-workspace-onboarding-20261017.png", {
       fullPage: true,
       maxDiffPixels: 140,
     });
@@ -672,14 +673,14 @@ test("M02-02 P09 onboarding clamps query state, does not persist progress, and k
   });
 
   for (const [query, title] of [
-    ["", "把市场变化，变成今天的行动"],
-    ["?step=1", "把市场变化，变成今天的行动"],
-    ["?step=2", "让协作围绕同一份证据展开"],
-    ["?step=3", "先看事实，再做可解释的决定"],
-    ["?step=0", "把市场变化，变成今天的行动"],
-    ["?step=99", "先看事实，再做可解释的决定"],
-    ["?step=1.5", "把市场变化，变成今天的行动"],
-    ["?step=invalid", "把市场变化，变成今天的行动"],
+    ["", "从最新情报发现相关商品"],
+    ["?step=1", "从最新情报发现相关商品"],
+    ["?step=2", "围绕一个主品比较5–10个竞品"],
+    ["?step=3", "核对1688货源与选品结果"],
+    ["?step=0", "从最新情报发现相关商品"],
+    ["?step=99", "核对1688货源与选品结果"],
+    ["?step=1.5", "从最新情报发现相关商品"],
+    ["?step=invalid", "从最新情报发现相关商品"],
   ]) {
     await page.goto(`/onboarding${query}`);
     await expect(page.getByRole("heading", { name: title })).toBeVisible();
@@ -693,7 +694,16 @@ test("M02-02 P09 onboarding clamps query state, does not persist progress, and k
   await expect(page.getByRole("link", { name: "进入智能选品" })).toBeInViewport();
   await page.goto("/onboarding?step=2");
   await page.reload();
-  await expect(page.getByRole("heading", { name: "让协作围绕同一份证据展开" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "围绕一个主品比较5–10个竞品" })).toBeVisible();
+  await expect(
+    page.getByText("私有销量和广告数据无法获取时标为未知", { exact: true }),
+  ).toBeVisible();
+  await expect(page.locator(".onboarding-page")).toHaveCSS("font-size", "13px");
+  await expect(page.locator(".p09-panel")).toHaveCSS("border-radius", "8px");
+  await expect(page.locator(".p09-panel__intro")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await page.getByRole("button", { name: "下一步", exact: true }).click();
+  await expect(page.getByText("相似图片不代表规格已经匹配", { exact: true })).toBeVisible();
+  await expect(page.getByText("区分完整链路、推荐结果和利润未知", { exact: true })).toBeVisible();
   expect(apiRequests).toEqual([]);
   await page.getByRole("link", { name: "跳过引导" }).click();
   await expect(page).toHaveURL(/\/$/);
