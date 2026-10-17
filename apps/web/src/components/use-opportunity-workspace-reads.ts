@@ -5,6 +5,7 @@ import {
   type AutomaticSelectionReadiness,
 } from "../automatic-selection-readiness";
 import { createOpportunityWorkspaceForms } from "./opportunity-workspace-forms";
+import type { SourcingSearch } from "./sourcing-workspace-types";
 import type * as OpportunityTypes from "./opportunity-workspace-types";
 
 export type OpportunityDownstreamSource = "competitors" | "sourcing";
@@ -37,6 +38,7 @@ interface OpportunityWorkspaceReadOptions {
   profitRequestId: Ref<string>;
   downstreamLoadState: Ref<OpportunityDownstreamStates>;
   competitorItems: Ref<OpportunityTypes.OpportunityCompetitorSummary[]>;
+  sourcingSearches: Ref<SourcingSearch[]>;
   total: Ref<number>;
   page: Ref<number>;
   requestId: Ref<string>;
@@ -71,6 +73,7 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
     profitRequestId,
     downstreamLoadState,
     competitorItems,
+    sourcingSearches,
     total,
     page,
     requestId,
@@ -135,6 +138,7 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
         competitorItems.value = [];
         downstream.value = { ...downstream.value, competitors: 0, snapshots: 0 };
       } else {
+        sourcingSearches.value = [];
         downstream.value = { ...downstream.value, searches: 0, suppliers: 0 };
       }
     }
@@ -181,19 +185,17 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
               ),
             };
           } else {
-            const response = await request<any[]>("/sourcing/searches", { signal });
+            const response = await request<SourcingSearch[]>("/sourcing/searches", { signal });
             if (!ownsRead()) return;
             const searches = response.data.filter(
-              (item: any) =>
+              (item) =>
                 item.input_type === "opportunity" && item.input_ref === currentOpportunityId,
             );
+            sourcingSearches.value = searches;
             downstream.value = {
               ...downstream.value,
               searches: searches.length,
-              suppliers: searches.reduce(
-                (sum: number, item: any) => sum + Number(item.candidate_count ?? 0),
-                0,
-              ),
+              suppliers: searches.reduce((sum, item) => sum + Number(item.candidate_count ?? 0), 0),
             };
           }
           downstreamLoadState.value = { ...downstreamLoadState.value, [source]: "ready" };

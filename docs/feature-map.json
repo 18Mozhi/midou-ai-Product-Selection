@@ -1,4 +1,18 @@
 {
+  "selectionProductSupplyDetail20261017": {
+    "status": "implemented",
+    "statusDetail": "71_related_checks_208_browser_cases_covered_final24_passed_web_build_and_gates_passed_not_deployed",
+    "requirements": "docs/selection-product-supply-detail.md",
+    "routes": ["/opportunities/:id"],
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/use-opportunity-workspace-reads.ts",
+      "apps/web/src/components/OpportunitySupplyPanel.vue"
+    ],
+    "apiRoutes": ["/api/v1/sourcing/searches", "/api/v1/sourcing/searches/{id}"],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts", "tests/e2e/m04-04-profit.spec.ts"],
+    "contract": "Read-only linked supply quotes inside the profit section, using existing scoped sourcing GET contracts. One selected search at a time, no prefetch. Validate detail identity, preserve zero/null/raw currency and source descriptions, expose evidence, cancel obsolete reads and keep profit independent. No procurement, API, schema, configuration, dependency or permission change."
+  },
   "selectionDetailFactualStates20261017": {
     "status": "implemented",
     "statusDetail": "31_related_node_142_browser_web_build_and_gates_passed_not_deployed",

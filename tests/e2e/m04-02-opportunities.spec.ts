@@ -2952,3 +2952,236 @@ test("empty competitor detail reports absent records without claiming a collecto
   await expect(page.getByText("暂无相关竞品记录，请核对采集结果。", { exact: true })).toBeVisible();
   await expect(page.getByText("正在等待相关商品的采集结果。", { exact: true })).toHaveCount(0);
 });
+
+const supplySearch = (id: string, inputRef = opportunityId) => ({
+  id,
+  input_type: "opportunity",
+  input_ref: inputRef,
+  status: "completed",
+  candidate_count: 1,
+  missing_fields: [],
+  created_at: "2026-08-08T00:00:00.000Z",
+  updated_at: "2026-08-08T00:00:00.000Z",
+});
+const supplyCandidate = {
+  id: "supply-candidate",
+  supplier_name: "示例1688工厂",
+  product_title: "示例便携风扇",
+  specification: "4000mAh / 5档",
+  moq: 0,
+  quoted_price: 0,
+  source_price_description: "按规格报价 ¥8–15",
+  currency: "CNY",
+  lead_time_days: null,
+  location: null,
+  original_url: "https://detail.1688.com/offer/123456789012.html",
+  observed_at: "2026-08-08T00:00:00.000Z",
+  evidence_id: "supply-evidence",
+  confidence_value: null,
+  status: "candidate",
+  missing_fields: ["lead_time_days"],
+  quote: null,
+};
+const supplyCapabilities = ["opportunity:read", "sourcing:read"];
+
+test("product supply quotes load on demand, retain raw facts and switch only related searches", async ({
+  page,
+}) => {
+  await ready(
+    page,
+    evidence,
+    { name: "便携充电风扇（界面示例）", category: "户外" },
+    supplyCapabilities,
+  );
+  const reads: string[] = [];
+  await page.route("**/api/v1/sourcing/searches", (route) =>
+    route.fulfill({
+      json: envelope([
+        supplySearch("supply-first"),
+        supplySearch("foreign-search", nextOpportunityId),
+        supplySearch("supply-second"),
+      ]),
+    }),
+  );
+  await page.route("**/api/v1/sourcing/searches/*", (route) => {
+    const id = new URL(route.request().url()).pathname.split("/").at(-1)!;
+    reads.push(id);
+    return route.fulfill({
+      json: envelope({
+        ...supplySearch(id),
+        candidates: [
+          {
+            ...supplyCandidate,
+            supplier_name: id === "supply-first" ? "示例1688工厂" : "第二家工厂",
+            currency: id === "supply-first" ? "CNY" : "USD",
+            quoted_price: id === "supply-first" ? 0 : 12,
+          },
+        ],
+      }),
+    });
+  });
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: "评分与采集进度" })).toBeVisible();
+  expect(reads).toEqual([]);
+  await page.getByRole("button", { name: "货源与利润", exact: true }).click();
+  const panel = page.getByRole("region", { name: "当前商品货源报价" });
+  await expect(panel.getByText("示例1688工厂", { exact: true })).toBeVisible();
+  await expect(panel).toContainText("CNY 0");
+  const quoteBox = await panel.getByText("CNY 0", { exact: true }).boundingBox();
+  expect(quoteBox!.x).toBeGreaterThanOrEqual(0);
+  expect(quoteBox!.x + quoteBox!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+  await expect(panel.getByLabel("找货记录").locator("option").first()).toContainText("记录 1");
+  await expect(panel.getByLabel("找货记录").locator("option").last()).toContainText("记录 2");
+  await expect(panel).toContainText("原始报价：按规格报价 ¥8–15");
+  await expect(panel).toContainText("4000mAh / 5档");
+  await expect(panel).toContainText("交期未提供");
+  await expect(panel).toContainText("地点未提供");
+  await expect(panel.getByRole("link", { name: "查看原始货源 ↗" })).toHaveAttribute(
+    "href",
+    supplyCandidate.original_url,
+  );
+  await expect(panel.getByLabel("找货记录").locator("option")).toHaveCount(2);
+  await panel.getByText("报价依据", { exact: true }).click();
+  await expect(panel).toContainText("采集证据 supply-evidence");
+  await panel.getByLabel("找货记录").selectOption("supply-second");
+  await expect(panel.getByText("第二家工厂", { exact: true })).toBeVisible();
+  await expect(panel.getByText("示例1688工厂", { exact: true })).toHaveCount(0);
+  await expect(panel).toContainText("USD 12");
+  expect(reads).toEqual(["supply-first", "supply-second"]);
+  await expect(page.locator(".opportunity-profit")).toContainText("利润未知");
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
+});
+
+test("product supply detail rejects foreign identity and retries without hiding profit", async ({
+  page,
+}) => {
+  await ready(page, evidence, {}, supplyCapabilities);
+  await page.route("**/api/v1/sourcing/searches", (route) =>
+    route.fulfill({ json: envelope([supplySearch("supply-first")]) }),
+  );
+  let mismatch = true;
+  await page.route("**/api/v1/sourcing/searches/supply-first", (route) =>
+    route.fulfill({
+      json: envelope({
+        ...supplySearch("supply-first", mismatch ? nextOpportunityId : opportunityId),
+        candidates: [supplyCandidate],
+      }),
+    }),
+  );
+  await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+  const panel = page.getByRole("region", { name: "当前商品货源报价" });
+  await expect(panel).toContainText("货源报价暂不可用");
+  await expect(panel.getByText("示例1688工厂", { exact: true })).toHaveCount(0);
+  await expect(page.locator(".opportunity-profit")).toContainText("利润未知");
+  mismatch = false;
+  await panel.getByRole("button", { name: "重试读取货源报价" }).click();
+  await expect(panel.getByText("示例1688工厂", { exact: true })).toBeVisible();
+});
+
+test("product supply permissions hide records and prevent quote reads", async ({ page }) => {
+  await ready(page);
+  let reads = 0;
+  await page.route("**/api/v1/sourcing/searches*", (route) => {
+    reads++;
+    return route.fulfill({ json: envelope([]) });
+  });
+  await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+  const panel = page.getByRole("region", { name: "当前商品货源报价" });
+  await expect(panel).toContainText("暂无供应链查看权限。");
+  await expect(panel.getByLabel("找货记录")).toHaveCount(0);
+  expect(reads).toBe(0);
+});
+
+test("product supply cancels a pending quote when leaving the profit section", async ({ page }) => {
+  await ready(page, evidence, {}, supplyCapabilities);
+  await page.route("**/api/v1/sourcing/searches", (route) =>
+    route.fulfill({ json: envelope([supplySearch("supply-first")]) }),
+  );
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/api/v1/sourcing/searches/supply-first", async (route) => {
+    await gate;
+    await route
+      .fulfill({
+        json: envelope({ ...supplySearch("supply-first"), candidates: [supplyCandidate] }),
+      })
+      .catch(() => {});
+  });
+  const read = page.waitForRequest("**/api/v1/sourcing/searches/supply-first");
+  await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+  await read;
+  await expect(page.getByText("正在读取货源报价…", { exact: true })).toBeVisible();
+  const aborted = page.waitForEvent(
+    "requestfailed",
+    (request) =>
+      request.url().endsWith("/sourcing/searches/supply-first") &&
+      /ERR_ABORTED/.test(request.failure()?.errorText ?? ""),
+  );
+  await page.getByRole("button", { name: "商品与评分", exact: true }).click();
+  await aborted;
+  release();
+  await expect(page.getByRole("heading", { name: "评分与采集进度" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "当前商品货源报价" })).toHaveCount(0);
+});
+
+test("product supply ignores a superseded quote response after another search is selected", async ({
+  page,
+}) => {
+  await ready(page, evidence, {}, supplyCapabilities);
+  await page.route("**/api/v1/sourcing/searches", (route) =>
+    route.fulfill({
+      json: envelope([supplySearch("supply-first"), supplySearch("supply-second")]),
+    }),
+  );
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/api/v1/sourcing/searches/supply-first", async (route) => {
+    await gate;
+    await route
+      .fulfill({
+        json: envelope({ ...supplySearch("supply-first"), candidates: [supplyCandidate] }),
+      })
+      .catch(() => {});
+  });
+  await page.route("**/api/v1/sourcing/searches/supply-second", (route) =>
+    route.fulfill({
+      json: envelope({
+        ...supplySearch("supply-second"),
+        candidates: [
+          {
+            ...supplyCandidate,
+            supplier_name: "当前选中工厂",
+            original_url: "javascript:alert(1)",
+            quote: {
+              id: "saved-quote",
+              version: 2,
+              stability_status: "unknown",
+              risk_level: "unknown",
+              observed_at: supplyCandidate.observed_at,
+              evidence_id: "saved-quote-evidence",
+            },
+          },
+        ],
+      }),
+    }),
+  );
+  const read = page.waitForRequest("**/api/v1/sourcing/searches/supply-first");
+  await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+  await read;
+  const panel = page.getByRole("region", { name: "当前商品货源报价" });
+  await panel.getByLabel("找货记录").selectOption("supply-second");
+  await expect(panel.getByText("当前选中工厂", { exact: true })).toBeVisible();
+  release();
+  await expect(panel).toContainText("已保存报价 v2");
+  await expect(panel.getByRole("link")).toHaveCount(0);
+  await expect(panel).toContainText("原始链接不可用");
+  await panel.getByText("报价依据", { exact: true }).click();
+  await expect(panel).toContainText("报价证据 saved-quote-evidence");
+  await expect(panel.getByText("示例1688工厂", { exact: true })).toHaveCount(0);
+});

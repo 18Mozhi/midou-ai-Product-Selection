@@ -6,6 +6,7 @@ const OpportunityListPanel = defineAsyncComponent(() => import("./OpportunityLis
 const OpportunityDecisionPanel = defineAsyncComponent(
   () => import("./OpportunityDecisionPanel.vue"),
 );
+const OpportunitySupplyPanel = defineAsyncComponent(() => import("./OpportunitySupplyPanel.vue"));
 const OpportunityProfitPanel = defineAsyncComponent(() => import("./OpportunityProfitPanel.vue"));
 const OpportunityEvidencePanel = defineAsyncComponent(
   () => import("./OpportunityEvidencePanel.vue"),
@@ -29,6 +30,7 @@ import {
   opportunityStatusLabel,
   opportunityTabs as detailTabs,
 } from "./opportunity-workspace-presentation";
+import type { SourcingSearch } from "./sourcing-workspace-types";
 import type * as OpportunityTypes from "./opportunity-workspace-types";
 import {
   useOpportunityWorkspaceReads,
@@ -71,6 +73,7 @@ const props = defineProps<{
     sourcing: "loading",
   }),
   competitorItems = ref<OpportunityTypes.OpportunityCompetitorSummary[]>([]),
+  sourcingSearches = ref<SourcingSearch[]>([]),
   total = ref(0),
   page = ref(1),
   requestId = ref(""),
@@ -164,6 +167,7 @@ const {
   profitRequestId,
   downstreamLoadState,
   competitorItems,
+  sourcingSearches,
   total,
   page,
   requestId,
@@ -558,26 +562,35 @@ useOpportunityWorkspaceLifecycle({
                 @retry-downstream="retryDownstream($event)"
                 @select-tab="setTab"
               />
-              <OpportunityProfitPanel
-                v-else-if="tab === 'profit'"
-                :profit="profit"
-                :profit-status="detail.profit_status"
-                :profit-load-state="profitLoadState"
-                :profit-error-message="profitErrorMessage"
-                :profit-request-id="profitRequestId"
-                :cost-form="costForm"
-                :reviewer-options="costReviewerOptions"
-                :reviewer-load-state="costReviewerLoadState"
-                :reviewer-error-message="costReviewerErrorMessage"
-                :reviewer-request-id="costReviewerRequestId"
-                :can-confirm-cost="canConfirmCost"
-                :busy="busy"
-                @confirm-cost="confirmCost"
-                @retry-reviewers="retryCostReviewers"
-                @retry-profit="retryProfitAnalysis"
-                @review-cost="reviewCost"
-                @queue-profit="queueProfit"
-              />
+              <template v-else-if="tab === 'profit'">
+                <OpportunitySupplyPanel
+                  :api-base-url="apiBaseUrl"
+                  :opportunity-id="detail.id"
+                  :searches="sourcingSearches"
+                  :list-state="downstreamLoadState.sourcing"
+                  :can-read="canReadSourcing"
+                  @retry-list="retryDownstream('sourcing')"
+                />
+                <OpportunityProfitPanel
+                  :profit="profit"
+                  :profit-status="detail.profit_status"
+                  :profit-load-state="profitLoadState"
+                  :profit-error-message="profitErrorMessage"
+                  :profit-request-id="profitRequestId"
+                  :cost-form="costForm"
+                  :reviewer-options="costReviewerOptions"
+                  :reviewer-load-state="costReviewerLoadState"
+                  :reviewer-error-message="costReviewerErrorMessage"
+                  :reviewer-request-id="costReviewerRequestId"
+                  :can-confirm-cost="canConfirmCost"
+                  :busy="busy"
+                  @confirm-cost="confirmCost"
+                  @retry-reviewers="retryCostReviewers"
+                  @retry-profit="retryProfitAnalysis"
+                  @review-cost="reviewCost"
+                  @queue-profit="queueProfit"
+                />
+              </template>
               <OpportunityEvidencePanel
                 v-else-if="tab === 'evidence'"
                 :evidence="detail.evidence"

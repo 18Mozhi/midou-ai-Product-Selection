@@ -35,15 +35,10 @@ async function navigation(
 }
 
 async function openProfitSection(page: Page) {
-  const mobileDirectory = page.locator(".opportunity-detail-directory-mobile");
-  if ((page.viewportSize()?.width ?? 0) <= 900) {
-    if (!(await mobileDirectory.evaluate((element) => (element as HTMLDetailsElement).open))) {
-      await mobileDirectory.locator("summary").click();
-    }
-    await mobileDirectory.getByRole("button", { name: "利润与成本" }).click();
-    return;
-  }
-  await page.getByRole("button", { name: "利润与成本" }).click();
+  await page
+    .getByRole("navigation", { name: "选品详情分区" })
+    .getByRole("button", { name: "货源与利润", exact: true })
+    .click();
 }
 
 const phase2CostRule = (status = "active") => ({
@@ -243,7 +238,7 @@ test("M04-04.A07/A08/A09/A15 cost rule console exposes explicit fees and dual ap
       () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
     ),
   ).toBe(true);
-  await expect(page).toHaveScreenshot("m04-04-cost-rules.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("current-cost-rules-20261017.png", { fullPage: true });
   await page.getByRole("button", { name: "提交审批" }).click();
   await expect(page.getByRole("dialog", { name: "提交费用规则审批" })).toBeVisible();
   await page.getByLabel("操作原因（至少 2 个字）").fill("提交美国站费用规则审批");
