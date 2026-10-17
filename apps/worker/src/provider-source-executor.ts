@@ -25,6 +25,10 @@ import {
 import { EvidencePersistenceError, MySqlEvidencePersistence } from "./evidence-persistence.js";
 import type { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
 import { LAN_1688_PARSER_VERSION, type Lan1688ImageSearch } from "./lan-1688-image-search.js";
+import {
+  CompetitorClassificationError,
+  type MySqlCompetitorTitleClassification,
+} from "./competitor-title-classification.js";
 const sha = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const VERSIONED_PRODUCT_SOURCES = new Set([
   "1688_search",
@@ -98,6 +102,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
     private readonly browserJobs?: MySqlAuthenticatedBrowserJobClient,
     private readonly publicPolicyFetch?: typeof fetch,
     private readonly lan1688?: Lan1688ImageSearch,
+    private readonly competitorClassification?: MySqlCompetitorTitleClassification,
   ) {}
   async execute(task: ClaimedCollectionTask, heartbeat: () => Promise<void>, signal?: AbortSignal) {
     await this.pool.query(
@@ -441,6 +446,20 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           ...(robotsDecision ? { robotsDecision } : {}),
         };
       }
+      if (
+        provider.code === "amazon_product" &&
+        query.target.projection_type === "opportunity_competitors"
+      ) {
+        if (!this.competitorClassification)
+          throw new CompetitorClassificationError("competitor_model_unavailable");
+        try {
+          await this.competitorClassification.classify(task, query, heartbeat, signal);
+        } catch (error) {
+          throw error instanceof CompetitorClassificationError
+            ? error
+            : new CompetitorClassificationError("competitor_classification_persist_failed");
+        }
+      }
       await this.recordProviderRuntimeResult(
         provider.id,
         Number(row.circuit_failure_threshold),
@@ -466,6 +485,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         ...(robotsDecision ? { robotsDecision } : {}),
       };
     } catch (error) {
+      if (error instanceof CompetitorClassificationError)
+        throw new ProviderCollectionExecutionError("validation_failed", undefined, robotsDecision);
       const failure = classifyProviderAdapterFailure(error),
         mapped = isEvidenceValidationError(error) ? "validation_failed" : code(failure.code),
         policyDecision = robotsDecision ?? publicCollectionPolicyDecision(error) ?? undefined,

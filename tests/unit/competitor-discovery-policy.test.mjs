@@ -1,3 +1,4 @@
+import { readCompetitorClassificationContext } from "../../apps/worker/dist/competitor-title-classification.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -114,7 +115,12 @@ test("disabled providers preserve historical detail facts without claiming an en
 const opportunity = "00000000-0000-4000-8000-000000000001";
 async function project(
   values,
-  { conflict = false, projectionType = "opportunity_competitors" } = {},
+  {
+    conflict = false,
+    projectionType = "opportunity_competitors",
+    proof = true,
+    rejectRefs = [],
+  } = {},
 ) {
   const calls = [];
   const query = async (sql, args = []) => {
@@ -124,6 +130,7 @@ async function project(
         [
           {
             id: "task",
+            classification_subquery_id: "subquery",
             organization_id: "org",
             workspace_id: "workspace",
             created_by: "actor",
@@ -138,6 +145,50 @@ async function project(
           },
         ],
       ];
+    if (sql.startsWith("SELECT payload_json FROM opportunity_events")) {
+      if (!proof) return [[]];
+      const context = await readCompetitorClassificationContext(
+        { query },
+        {
+          taskId: "task",
+          subqueryId: "subquery",
+          organizationId: "org",
+          workspaceId: "workspace",
+          opportunityId: opportunity,
+          mainAsin: asin(0),
+        },
+      );
+      return [
+        [
+          {
+            payload_json: {
+              version: "competitor-title-v1",
+              model_fingerprint: "f".repeat(64),
+              input_fingerprint: context.fingerprint,
+              classifications: context.input.candidates.map((c) => ({
+                source_ref: c.source_ref,
+                relation: rejectRefs.includes(c.source_ref) ? "different_use" : "substitute",
+                primary_excerpt: context.input.primary.title,
+                candidate_excerpt: c.title,
+                rationale: "Synthetic relation fixture",
+              })),
+            },
+          },
+        ],
+      ];
+    }
+    if (sql.includes("FROM opportunities o JOIN opportunity_evidence_links"))
+      return [
+        [
+          {
+            raw_evidence_id: "main-evidence",
+            payload_json: facts(0),
+            provider_status: "enabled",
+            observed_at: new Date(),
+          },
+        ],
+      ];
+    if (sql.includes("FROM opportunities o JOIN competitors c")) return [[]];
     if (sql.startsWith("SELECT n.id"))
       return [
         values.map((fields, index) => ({
@@ -230,4 +281,28 @@ test("detail projection rejects a different ASIN instead of updating the target 
     correct.calls.filter((c) => c.sql.includes("INSERT INTO competitor_snapshot_jobs")).length,
     1,
   );
+});
+
+test("unclassified discovery never falls back to the first ten search hits", async () => {
+  const missing = await project([facts(1), facts(2)], { proof: false });
+  assert.equal(missing.result.item_count, 0);
+  assert.equal(
+    missing.calls.filter((c) => c.sql.startsWith("INSERT IGNORE INTO competitors")).length,
+    0,
+  );
+  const filtered = await project([facts(1), facts(2), facts(3)], { rejectRefs: ["record-1"] });
+  assert.equal(filtered.result.item_count, 2);
+  const titles = filtered.calls
+    .filter((c) => c.sql.startsWith("INSERT IGNORE INTO competitors"))
+    .map((c) => c.args[8]);
+  assert.deepEqual(titles, ["Product 1", "Product 3"]);
+});
+
+test("classification considers twenty candidates before the final ten-item cap", async () => {
+  const values = Array.from({ length: 15 }, (_, i) => facts(i + 1));
+  const r = await project(values, {
+    rejectRefs: Array.from({ length: 10 }, (_, i) => `record-${i}`),
+  });
+  assert.equal(r.result.item_count, 5);
+  assert.equal(r.result.discovery_status, "minimum_met");
 });

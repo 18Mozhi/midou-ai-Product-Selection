@@ -10,6 +10,7 @@ import {
 import { createRedisConnection, ScopedRedisStore } from "@scoutops/redis";
 import { MySqlAiAnalysisWorker, OpenAiCompatibleAnalysisAdapter } from "./ai-analysis-worker.js";
 import { OpenAiIntelligenceProductClassifier } from "./intelligence-product-association.js";
+import { MySqlCompetitorTitleClassification } from "./competitor-title-classification.js";
 import { ApprovalEscalationWorker } from "./approval-escalation-worker.js";
 import {
   PendingMailProvider,
@@ -81,6 +82,16 @@ const executor = new ProviderSourceExecutor(
   new Lan1688ImageSearch(
     config.providerAdapters.lan1688Token,
     config.providerAdapters.lan1688TimeoutMs,
+  ),
+  new MySqlCompetitorTitleClassification(
+    pool,
+    new OpenAiIntelligenceProductClassifier(
+      config.ai.model,
+      config.ai.baseUrl,
+      config.ai.apiKey,
+      Math.min(config.ai.timeoutMs, config.collectionTasks.leaseSeconds * 500, 60_000),
+    ),
+    config.identity.workerId,
   ),
 );
 const trendProjection = new MySqlTrendProjectionWorker(

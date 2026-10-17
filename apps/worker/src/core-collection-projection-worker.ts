@@ -2,6 +2,10 @@ import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
 import {
+  readCompetitorClassificationContext,
+  validateCompetitorTitleRelations,
+} from "./competitor-title-classification.js";
+import {
   amazonAsin,
   COMPETITOR_DISCOVERY_MINIMUM,
   selectIndependentCompetitors,
@@ -19,6 +23,7 @@ type Job = {
   traceId: string;
   actorId: string;
   primaryAsin: string | null;
+  subqueryId: string;
 };
 type RecordRow = RowDataPacket & {
   id: string;
@@ -94,7 +99,7 @@ export class CoreCollectionProjectionWorker {
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        `SELECT t.id,t.organization_id,t.workspace_id,t.request_id,t.trace_id,t.created_by,s.target_json
+        `SELECT t.id,t.organization_id,t.workspace_id,t.request_id,t.trace_id,t.created_by,s.target_json,s.id classification_subquery_id
          FROM collection_tasks t
          JOIN collection_subqueries s ON s.task_id=t.id
          LEFT JOIN core_collection_projection_runs r ON r.collection_task_id=t.id
@@ -134,6 +139,7 @@ export class CoreCollectionProjectionWorker {
         requestId: String(row.request_id),
         traceId: String(row.trace_id),
         actorId: String(row.created_by),
+        subqueryId: String(row.classification_subquery_id),
         primaryAsin:
           typeof target.main_asin === "string" && /^[A-Z0-9]{10}$/i.test(target.main_asin)
             ? target.main_asin.toUpperCase()
@@ -219,9 +225,47 @@ export class CoreCollectionProjectionWorker {
       [job.resourceId, job.organizationId, job.workspaceId],
     );
     if (!opportunities[0]) throw new Error("opportunity_not_found");
+    if (!job.primaryAsin) return 0;
+    const [proofs] = await c.query<RowDataPacket[]>(
+      "SELECT payload_json FROM opportunity_events WHERE organization_id=? AND workspace_id=? AND resource_id=? AND resource_type='opportunity' AND event_type='opportunity.competitors_classified' AND JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.task_id'))=? AND JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.subquery_id'))=? ORDER BY occurred_at DESC,id DESC LIMIT 1",
+      [job.organizationId, job.workspaceId, job.resourceId, job.taskId, job.subqueryId],
+    );
+    if (!proofs[0]) return 0;
+    let related: Set<string>;
+    try {
+      const proof = parse<Record<string, unknown>>(proofs[0].payload_json);
+      const context = await readCompetitorClassificationContext(c, {
+        taskId: job.taskId,
+        subqueryId: job.subqueryId,
+        organizationId: job.organizationId,
+        workspaceId: job.workspaceId,
+        opportunityId: job.resourceId,
+        mainAsin: job.primaryAsin,
+      });
+      if (
+        proof.version !== "competitor-title-v1" ||
+        typeof proof.model_fingerprint !== "string" ||
+        !/^[a-f0-9]{64}$/.test(proof.model_fingerprint) ||
+        proof.input_fingerprint !== context.fingerprint
+      )
+        return 0;
+      related = new Set(
+        validateCompetitorTitleRelations({ classifications: proof.classifications }, context.input)
+          .filter((r) => r.relation === "substitute")
+          .map((r) => r.source_ref),
+      );
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        (error.name === "SyntaxError" ||
+          ("code" in error && String(error.code).startsWith("competitor_")))
+      )
+        return 0;
+      throw error;
+    }
     let count = 0;
     const selected = selectIndependentCompetitors(
-      records,
+      records.filter((record) => related.has(String(record.id))),
       (record) => {
         const fields = parse<Record<string, unknown>>(record.payload_json);
         return { fields, canonicalUrl: String(fields.canonical_url ?? fields.source_url ?? "") };

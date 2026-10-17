@@ -23,7 +23,10 @@ export function selectIndependentCompetitors<T>(
   records: T[],
   facts: (record: T) => { fields: Record<string, unknown>; canonicalUrl: string },
   primaryAsin: string | null,
+  limit = COMPETITOR_DISCOVERY_MAXIMUM,
 ): T[] {
+  if (!Number.isInteger(limit) || limit < 1 || limit > 20)
+    throw new Error("competitor_limit_invalid");
   const seen = new Set<string>(primaryAsin ? [primaryAsin.toUpperCase()] : []);
   const result: T[] = [];
   for (const record of records) {
@@ -33,7 +36,7 @@ export function selectIndependentCompetitors<T>(
       continue;
     seen.add(asin);
     result.push(record);
-    if (result.length === COMPETITOR_DISCOVERY_MAXIMUM) break;
+    if (result.length === limit) break;
   }
   return result;
 }

@@ -6,6 +6,22 @@ info:
 servers:
   - url: /api/v1
 x-worker-event-contracts:
+  opportunity.competitors_classified:
+    contract: competitor-title-v1
+    resource_type: opportunity
+    description: Backend-only classification of at most twenty evidence-backed independent Amazon search candidates. Code binds original titles; model returns relation and rationale only. Projection requires a matching current evidence fingerprint and accepts at most ten substitutes. Classification is not metric generation, purchase approval, historical backfill, or exact-SKU evidence. Model names and endpoints are not included.
+    payload_fields:
+      [
+        version,
+        task_id,
+        subquery_id,
+        model_fingerprint,
+        input,
+        scope,
+        input_fingerprint,
+        classifications,
+      ]
+    relations: [substitute, different_use, accessory, uncertain]
   opportunity.selection_pipeline_completed:
     contract: selection-pipeline-v2
     previous_contracts: [selection-pipeline-v1]

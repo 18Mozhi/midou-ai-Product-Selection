@@ -1,4 +1,23 @@
 {
+  "selectionCompetitorRelevance20261017": {
+    "status": "implemented",
+    "statusDetail": "138_related_tests_22_workspace_build_real_model_and_mysql57_explain_passed_not_deployed",
+    "requirements": "docs/selection-competitor-relevance.md",
+    "sourceFiles": [
+      "apps/worker/src/competitor-title-classification.ts",
+      "apps/worker/src/intelligence-product-association.ts",
+      "apps/worker/src/provider-source-executor.ts",
+      "apps/worker/src/core-collection-projection-worker.ts",
+      "apps/worker/src/competitor-discovery-policy.ts",
+      "apps/worker/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/competitor-title-classification.test.mjs",
+      "tests/unit/competitor-discovery-policy.test.mjs"
+    ],
+    "events": ["opportunity.competitors_classified"],
+    "contract": "Classify at most twenty independent evidence-backed candidates within existing leased collection tasks. Preserve raw facts, scoped audit and original titles. Model failures retry without opening provider circuits. Projection requires a current matching proof, never defaults to first ten results. Existing cross-opportunity ASIN ownership and historical data unchanged pending user decision."
+  },
   "selectionAmazonDetailFacts20261017": {
     "status": "implemented",
     "statusDetail": "80_targeted_tests_real_primary_plus_five_details_and_1688_candidates_passed_not_deployed",
