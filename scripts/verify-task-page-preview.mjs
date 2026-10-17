@@ -6,6 +6,9 @@ import path from "node:path";
 import { chromium } from "playwright";
 import { createServer } from "vite";
 import { taskPagePlugin, taskReviewCss } from "./lib/task-page-preview.mjs";
+import { assertLegacyTaskCreatePreviewActive } from "./lib/task-page-preview.mjs";
+assertLegacyTaskCreatePreviewActive();
+
 const args = process.argv.slice(2);
 assert.ok(
   args.length === 0 ||

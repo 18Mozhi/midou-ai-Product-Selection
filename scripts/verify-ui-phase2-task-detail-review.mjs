@@ -233,19 +233,14 @@ export async function verifyTaskDetailReview() {
 
   const editForm = { title: "事实复核", description: "已有说明", priority: "high", due_at: "" };
   let editorClosed = 0,
-    detailReloads = 0,
-    quickQueryCleared = 0;
-  await run("create", {
+    detailReloads = 0;
+  await run("saveTask", {
     ...bindings,
-    canCreate: ref(false),
     editing: ref(task),
     editorFeedback: ref(null),
     form: ref({ ...editForm }),
     closeTaskEditor: () => {
       editorClosed += 1;
-    },
-    clearQuickCreate: async () => {
-      quickQueryCleared += 1;
     },
     load: async () => {
       detailReloads += 1;
@@ -262,9 +257,9 @@ export async function verifyTaskDetailReview() {
       reason: "更新任务内容",
     },
   });
-  assert.deepEqual([editorClosed, detailReloads, quickQueryCleared], [1, 1, 1]);
+  assert.deepEqual([editorClosed, detailReloads], [1, 1]);
   checks.push(
-    "Edit uses update capability without create, PATCH preserves assignee/version/reason, empty due becomes null; successful close/query cleanup/refresh invoked with inert boundaries",
+    "Edit uses update capability without create, PATCH preserves assignee/version/reason, empty due becomes null; successful close and refresh invoked with inert boundaries",
   );
 
   const comment = ref("  保留评论原文  ");

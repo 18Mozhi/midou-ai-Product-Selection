@@ -148,10 +148,9 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(taskUi, /任务不存在或已删除[\s\S]*重新加载/);
   assert.match(taskUi, /v-if="!canUpdate"[\s\S]*当前为只读权限/);
   assert.match(taskUi, /TaskListPanel[\s\S]*TaskBatchActions[\s\S]*TaskDetailPanel/);
-  assert.match(
-    taskUi,
-    /capabilities\?: string\[\][\s\S]*canCreate[\s\S]*canUpdate[\s\S]*canAssign/,
-  );
+  assert.match(taskUi, /capabilities\?: string\[\][\s\S]*canUpdate[\s\S]*canAssign/);
+  assert.doesNotMatch(taskUi, /canCreate|新建任务|创建任务|async function create\(/);
+  assert.match(taskUi, /async function saveTask[\s\S]*method: "PATCH"/);
   assert.match(taskUi, /搜索标题或说明/);
   assert.match(taskUi, /最近更新/);
   assert.match(taskUi, /已取消/);

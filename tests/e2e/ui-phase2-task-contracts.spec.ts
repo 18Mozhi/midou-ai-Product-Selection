@@ -294,14 +294,14 @@ test("UI2-T05 work filters preserve mine and return restores the exact list URL"
   }
 });
 
-test("UI2-T06 quick-create cancel clears only its query and never writes", async ({ page }) => {
+test("UI2-T06 retired quick-create query leaves filters and performs no write", async ({
+  page,
+}) => {
   const observed = await setup(page);
   await page.goto("/tasks?status=paused&create=1&title=补充报价&description=说明");
-  const dialog = page.getByRole("dialog", { name: "新建任务", exact: true });
-  await expect(dialog.getByLabel(/标题/)).toHaveValue("补充报价");
-  await dialog.getByRole("button", { name: "取消", exact: true }).click();
-  await expect(dialog).toBeHidden();
-  await expect.poll(() => new URL(page.url()).search).toBe("?status=paused");
+  await expect(page.getByRole("heading", { name: "任务中心", exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "新建任务", exact: true })).toHaveCount(0);
+  expect(new URL(page.url()).searchParams.get("status")).toBe("paused");
   expect(observed.createRequests).toBe(0);
 });
 

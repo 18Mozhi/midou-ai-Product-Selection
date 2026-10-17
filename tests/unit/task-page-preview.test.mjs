@@ -1,10 +1,20 @@
+import { execFileSync } from "node:child_process";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { previewTaskWorkspace } from "../../scripts/lib/task-page-preview.mjs";
 
-test("P13 review preserves the today task scope and original write controls", async () => {
-  const source = await readFile("apps/web/src/components/TaskWorkspace.vue", "utf8"),
+test("P13 historical preview preserves archived controls and rejects current retired creation", async () => {
+  const current = await readFile("apps/web/src/components/TaskWorkspace.vue", "utf8");
+  assert.throws(() => previewTaskWorkspace(current), /manual_task_creation_retired/);
+  const source = execFileSync(
+      "git",
+      [
+        "show",
+        "16b949ff811886b0e0b03238603218da932148d6:apps/web/src/components/TaskWorkspace.vue",
+      ],
+      { encoding: "utf8" },
+    ),
     preview = previewTaskWorkspace(source);
   assert.match(preview, /params\.set\("mine", "true"\)/);
   assert.match(preview, /\/tasks\/summary/);

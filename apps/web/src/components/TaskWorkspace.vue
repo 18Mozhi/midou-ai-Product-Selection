@@ -71,7 +71,7 @@ const props = defineProps<{
   notice = ref(""),
   requestId = ref(""),
   busy = ref(false),
-  showCreate = ref(false),
+  showEditor = ref(false),
   deleting = ref<Task | null>(null),
   deleteReason = ref(""),
   editing = ref<Task | null>(null),
@@ -131,17 +131,16 @@ const taskActionEditor = ref<TaskActionEditor | null>(null),
     progress_note: "",
   });
 const closeTaskEditor = () => {
-    showCreate.value = false;
+    showEditor.value = false;
     editing.value = null;
     editorFeedback.value = null;
-    void clearQuickCreate();
   },
   closeDeleteDialog = () => {
     deleting.value = null;
     deleteReason.value = "";
   },
-  { dialogElement: createDialogElement, handleCancel: handleCreateCancel } = useModalDialog(
-    () => showCreate.value,
+  { dialogElement: editDialogElement, handleCancel: handleEditCancel } = useModalDialog(
+    () => showEditor.value,
     () => {
       if (!busy.value) closeTaskEditor();
     },
@@ -153,7 +152,6 @@ const closeTaskEditor = () => {
     },
   );
 const pageSize = 10,
-  canCreate = computed(() => props.capabilities?.includes("task:create") ?? false),
   canUpdate = computed(() => props.capabilities?.includes("task:update") ?? false),
   canAssign = computed(() => props.capabilities?.includes("task:assign") ?? false),
   canReadExports = computed(() => props.capabilities?.includes("report:read") ?? false),
@@ -184,7 +182,7 @@ const pageSize = 10,
       tone: "quiet",
       eyebrow: "当前清空",
       title: "没有待处理任务",
-      detail: canCreate.value ? "需要人工跟进时再创建任务。" : "当前工作区没有分配给你的行动项。",
+      detail: "当前工作区没有分配给你的行动项。",
     };
   }),
   label = (v: string) =>
@@ -489,31 +487,24 @@ async function setPage(value: number) {
     },
   });
 }
-async function create() {
-  if (busy.value || (!editing.value && !canCreate.value) || (editing.value && !canUpdate.value))
-    return;
+async function saveTask() {
+  if (busy.value || !editing.value || !canUpdate.value) return;
   busy.value = true;
   editorFeedback.value = null;
   try {
-    const wasEditing = Boolean(editing.value);
-    await api(editing.value ? `/tasks/${editing.value.id}` : "/tasks", {
-      method: editing.value ? "PATCH" : "POST",
+    await api(`/tasks/${editing.value.id}`, {
+      method: "PATCH",
       body: {
         ...form.value,
-        ...(editing.value
-          ? {
-              assignee_id: editing.value.assignee_id,
-              expected_version: editing.value.version,
-              reason: "更新任务内容",
-            }
-          : {}),
+        assignee_id: editing.value.assignee_id,
+        expected_version: editing.value.version,
+        reason: "更新任务内容",
         due_at: form.value.due_at ? new Date(form.value.due_at).toISOString() : null,
       },
     });
     closeTaskEditor();
     form.value = { title: "", description: "", priority: "normal", due_at: "" };
-    notice.value = wasEditing ? "任务已更新。" : "任务已创建，可以立即开始并持续更新进度。";
-    await clearQuickCreate();
+    notice.value = "任务已更新。";
     await load();
   } catch (error) {
     if (error instanceof ApiClientError) {
@@ -533,7 +524,7 @@ function editTask() {
     priority: selected.value.priority,
     due_at: toLocalDateTime(selected.value.due_at),
   };
-  showCreate.value = true;
+  showEditor.value = true;
 }
 function openActionEditor(name: TaskActionEditor) {
   if (!selected.value || busy.value || (name === "transfer" ? !canAssign.value : !canUpdate.value))
@@ -721,13 +712,6 @@ function closeBatch() {
   showBatchImpact.value = false;
   batchExecutionTargets.value = null;
 }
-async function clearQuickCreate() {
-  if (!("create" in route.query) && !("title" in route.query) && !("description" in route.query))
-    return;
-  await router.replace({
-    query: { ...route.query, create: undefined, title: undefined, description: undefined },
-  });
-}
 async function addComment() {
   if (busy.value || !canUpdate.value || !selected.value || !comment.value.trim()) return;
   busy.value = true;
@@ -746,12 +730,6 @@ async function addComment() {
   }
 }
 onMounted(() => {
-  const query = new URLSearchParams(window.location.search);
-  showCreate.value = !props.taskId && canCreate.value && query.get("create") === "1";
-  if (showCreate.value) {
-    form.value.title = query.get("title")?.slice(0, 200) ?? "";
-    form.value.description = query.get("description")?.slice(0, 5000) ?? "";
-  }
   mounted.value = true;
 });
 onActivated(() => {
@@ -792,7 +770,7 @@ watch(
       !props.taskId && props.mode === "all" && nextView === "exports" ? "exports" : "business";
     selectedIds.value = [];
     if (props.taskId) {
-      showCreate.value = false;
+      showEditor.value = false;
     } else {
       selected.value = null;
     }
@@ -820,7 +798,6 @@ watch(
         <span v-else></span>
       </div>
       <RouterLink v-if="taskId" :to="returnPath" class="task-detail-return">返回目录</RouterLink>
-      <button v-else-if="canCreate" @click="showCreate = true">＋ 新建任务</button>
     </header>
     <div v-if="notice" class="task-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
@@ -916,7 +893,6 @@ watch(
         :status="status"
         :query="query"
         :sort="sort"
-        :can-create="canCreate"
         :can-update="canUpdate"
         :route-full-path="route.fullPath"
         :label="label"
@@ -926,7 +902,6 @@ watch(
         @status="setStatus"
         @apply-filters="applyFilters"
         @reset-filters="resetFilters"
-        @create="showCreate = true"
         @remove="askRemove"
     /></template>
     <TaskExportJobsPanel v-else :items="exportTasks" :format-time="time" />
@@ -940,16 +915,16 @@ watch(
       <button :disabled="page >= pageCount" @click="setPage(page + 1)">下一页</button>
     </nav>
     <dialog
-      ref="createDialogElement"
+      ref="editDialogElement"
       class="task-create-edit-dialog"
-      :aria-label="editing ? '编辑任务' : '新建任务'"
-      @cancel="handleCreateCancel"
+      aria-label="编辑任务"
+      @cancel="handleEditCancel"
     >
-      <form @submit.prevent="create">
+      <form @submit.prevent="saveTask">
         <header class="task-editor-header">
           <div>
             <span>任务内容</span>
-            <h3>{{ editing ? "编辑任务" : "新建任务" }}</h3>
+            <h3>编辑任务</h3>
           </div>
           <button
             type="button"
@@ -966,7 +941,7 @@ watch(
           <div class="task-kind-guide">
             <b>这是什么任务？</b>
             <span>
-              可以创建“复核热点”“分析亚马逊竞品”“查找货源”“确认利润”等具体工作。创建后点击任务详情，再点击开始运行。
+              任务记录用于跟进已有事项；商品采集、竞品分析、评分与找货由自动选品流程持续运行。
             </span>
           </div>
           <section class="task-editor-fields" aria-label="任务内容字段">
@@ -992,7 +967,7 @@ watch(
               <input v-model="form.due_at" type="datetime-local" />
             </label>
           </section>
-          <p class="task-editor-note">未指定负责人时分配给当前用户；期限为空时明确显示“未设置”。</p>
+          <p class="task-editor-note">保存时保留当前负责人；期限为空时明确显示“未设置”。</p>
           <div v-if="editorFeedback" class="task-editor-error" role="alert" aria-live="assertive">
             <p>{{ editorFeedback.message }}</p>
             <small v-if="editorFeedback.requestId">请求编号：{{ editorFeedback.requestId }}</small>
@@ -1003,7 +978,7 @@ watch(
           <div>
             <button type="button" :disabled="busy" @click="closeTaskEditor">取消</button>
             <button class="task-editor-submit" :disabled="busy">
-              {{ busy ? "正在提交…" : editing ? "保存修改" : "创建任务" }}
+              {{ busy ? "正在提交…" : "保存修改" }}
             </button>
           </div>
         </footer>

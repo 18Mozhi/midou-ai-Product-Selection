@@ -1,4 +1,20 @@
 {
+  "selectionMemberTaskCreationRetirement20261017": {
+    "status": "implemented",
+    "statusDetail": "88_related_node_112_browser_web_build_and_gates_passed_not_deployed",
+    "requirements": "docs/selection-member-task-creation-retirement.md",
+    "routes": ["/work", "/tasks", "/tasks/:taskId"],
+    "sourceFiles": [
+      "apps/web/src/components/TaskWorkspace.vue",
+      "apps/web/src/components/TaskListPanel.vue"
+    ],
+    "testFiles": [
+      "tests/e2e/m05-01-business-tasks.spec.ts",
+      "tests/e2e/ui-phase2-task-contracts.spec.ts",
+      "tests/m05-01/business-tasks.test.mjs"
+    ],
+    "contract": "Member task-create buttons, empty-list create event, quick-create query consumption and POST /tasks branch are removed. Existing task editing keeps scoped PATCH, version, assignee and busy/error/focus protections; history, progress, comments, approvals and admin remain. No backend API, schema, permission or environment change; not deployed."
+  },
   "selectionRetiredAcceptanceTools20261017": {
     "status": "implemented",
     "statusDetail": "64_related_node_tests_passed_not_deployed",

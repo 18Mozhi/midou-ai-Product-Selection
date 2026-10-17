@@ -1,5 +1,15 @@
 import assert from "node:assert/strict";
 import path from "node:path";
+import { readFileSync } from "node:fs";
+
+export function assertLegacyTaskCreatePreviewActive(
+  source = readFileSync("apps/web/src/components/TaskWorkspace.vue", "utf8"),
+) {
+  if (!source.includes("async function create()") || !source.includes("canCreate"))
+    throw new Error(
+      "manual_task_creation_retired: historical task-create previews cannot be captured as current selection UI",
+    );
+}
 
 export const taskReviewCss =
   "design-plans/ui-phase-2-2026-09-07/implementation/task-page-preview.css";
@@ -12,6 +22,7 @@ const replaceTemplate = (source, template, label) => {
 };
 
 export function previewTaskWorkspace(source) {
+  assertLegacyTaskCreatePreviewActive(source);
   return replaceTemplate(
     source,
     `<template><section class="task-workspace p13-workspace"><section v-if="state==='loading'" class="p13-state" role="status"><b>正在读取我的工作队列</b><span>任务、汇总和成员目录会按当前工作区分别读取。</span></section><section v-else-if="['error','not_found','forbidden','expired','rate_limited'].includes(state)" class="p13-state" aria-live="assertive"><b>{{state==='expired'?'登录已失效':state==='forbidden'?'当前没有任务访问权限':state==='rate_limited'?'请求过于频繁':'任务服务暂不可用'}}</b><span>{{notice||'请重新读取当前工作区任务。'}}</span><code v-if="requestId">` +

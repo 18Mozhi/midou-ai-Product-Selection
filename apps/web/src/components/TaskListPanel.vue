@@ -9,7 +9,6 @@ const props = defineProps<{
   status: string;
   query: string;
   sort: string;
-  canCreate: boolean;
   canUpdate: boolean;
   routeFullPath: string;
   label: (value: string) => string;
@@ -22,7 +21,6 @@ const emit = defineEmits<{
   status: [value: string];
   applyFilters: [value: { query: string; sort: string }];
   resetFilters: [];
-  create: [];
   remove: [task: Task];
 }>();
 
@@ -139,11 +137,10 @@ const toggle = (id: string, checked: boolean, selectedIds: string[]) =>
       {{
         query || status
           ? "调整筛选条件后重试，或重置查看全部任务。"
-          : "创建任务后，任务状态与处理进度会显示在这里。"
+          : "自动流程产生的任务记录会显示在这里。"
       }}
     </p>
     <button v-if="query || status" type="button" @click="$emit('resetFilters')">重置筛选</button>
-    <button v-else-if="canCreate" type="button" @click="$emit('create')">新建任务</button>
   </section>
   <div v-else class="task-list" :class="{ 'task-list-readonly': !canUpdate }">
     <article v-for="task in tasks" :key="task.id">

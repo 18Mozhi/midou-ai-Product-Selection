@@ -9,6 +9,9 @@ import { createServer } from "vite";
 import ts from "typescript";
 import { checkPrototypeMetrics } from "./lib/ui-phase2-prototype-metrics.mjs";
 
+import { assertLegacyTaskCreatePreviewActive } from "./lib/task-page-preview.mjs";
+assertLegacyTaskCreatePreviewActive();
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const proposal = process.argv.includes("--proposal");
 if (process.argv.slice(2).some((argument) => argument !== "--proposal"))

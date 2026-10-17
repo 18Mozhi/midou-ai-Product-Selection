@@ -63,7 +63,7 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
   await page.getByText("更多任务操作", { exact: true }).click();
   await expect(page.locator(".task-detail-more")).not.toHaveAttribute("open", "");
   await expect(secondaryActions).toBeHidden();
-  await expect(page).toHaveScreenshot("m05-01-business-tasks.png", {
+  await expect(page).toHaveScreenshot("retired-task-create-detail-20261017.png", {
     animations: "disabled",
     fullPage: true,
   });
@@ -809,35 +809,53 @@ test("P23 export view empty state clearly returns to reports", async ({ page }) 
   );
 });
 
-test("M05-01 quick create route opens the task form", async ({ page }) => {
-  await setup(page);
-  await page.goto("/tasks?create=1");
-  await expect(page.getByRole("dialog")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "新建任务" })).toBeVisible();
-});
+for (const path of ["/work", "/tasks"]) {
+  for (const empty of [false, true]) {
+    test(`retired task quick-create ${path} empty=${empty} cannot open an editor or create work`, async ({
+      page,
+    }) => {
+      const observed = await setup(page);
+      if (empty)
+        await page.route("**/api/v1/tasks?*", (route) =>
+          route.fulfill({ json: { ...env([]), meta: { page: 1, page_size: 10, total: 0 } } }),
+        );
+      await page.goto(`${path}?create=1&title=旧链接&description=不应读取`);
+      if (empty)
+        await expect(
+          page.getByRole("heading", { name: "当前没有任务", exact: true }),
+        ).toBeVisible();
+      else await expect(page.locator(".task-list")).toBeVisible();
+      await expect(page.getByRole("dialog")).toHaveCount(0);
+      await expect(page.getByRole("button", { name: /新建任务/ })).toHaveCount(0);
+      expect(observed.createRequests).toBe(0);
+    });
+  }
+}
 
-test("member workspace shows Chinese context theme switch and task progress without internal guard copy", async ({
+test("member workspace binds Chinese context and preserves theme switch and task progress", async ({
   page,
 }) => {
   await setup(page);
   await page.goto("/work");
-  await expect(page.getByText("米豆智能选品").filter({ visible: true })).toHaveCount(1);
-  await expect(page.getByText("跨境新品工作区").filter({ visible: true })).toHaveCount(1);
+  await expect(page.locator(".role-workspace-identity")).toContainText("米豆智能选品");
+  await expect(page.locator(".role-workspace-identity")).toContainText("跨境新品工作区");
+  if ((page.viewportSize()?.width ?? 1280) > 700) {
+    await expect(page.getByText("米豆智能选品").filter({ visible: true })).toHaveCount(1);
+    await expect(page.getByText("跨境新品工作区").filter({ visible: true })).toHaveCount(1);
+  }
   await expect(
     page.getByText(/navigation_member_allowed|权限由服务端裁决|前端菜单不是安全边界/),
   ).toHaveCount(0);
-  const beforeTheme = await page.locator(".task-focus-strip").evaluate((element) => {
-    const style = getComputedStyle(element);
-    return `${style.backgroundColor}|${style.borderColor}`;
-  });
+  const beforeTheme = await page
+    .locator("html")
+    .evaluate((element) => getComputedStyle(element).getPropertyValue("--so-primary").trim());
   await page.getByRole("button", { name: "切换界面主题" }).click();
-  await page.getByRole("button", { name: /暮砂/ }).click();
+  await page.getByRole("button", { name: /石墨/ }).click();
   await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe("aurora-purple");
   await expect(page.getByText("主题已应用到全部模块。")).toBeVisible();
-  const afterTheme = await page.locator(".task-focus-strip").evaluate((element) => {
-    const style = getComputedStyle(element);
-    return `${style.backgroundColor}|${style.borderColor}`;
-  });
+  const afterTheme = await page
+    .locator("html")
+    .evaluate((element) => getComputedStyle(element).getPropertyValue("--so-primary").trim());
   expect(afterTheme).not.toBe(beforeTheme);
   await page.locator(".task-row-main").filter({ hasText: "核验便携净水杯供应商报价" }).click();
   await expect(page.getByText("执行中 · 35%", { exact: true })).toBeVisible();
@@ -914,9 +932,7 @@ test("P23 pagination preserves applied filters, clears page selection and expose
   });
   expect(firstPageStyle.scrollWidth).toBeLessThanOrEqual(firstPageStyle.width);
   expect(
-    firstPageStyle.buttons.every(
-      (button) => button.height >= 44 && parseFloat(button.radius) >= 10,
-    ),
+    firstPageStyle.buttons.every((button) => button.height >= 44 && parseFloat(button.radius) <= 4),
   ).toBe(true);
   await saveP23PaginationReviewImage(page, viewport.width, "first", testInfo);
 
@@ -1013,43 +1029,9 @@ test("task update role keeps lifecycle batch controls but not assignment or expo
   await expect(page.getByRole("button", { name: "导出任务" })).toHaveCount(0);
 });
 
-test("P23 create and edit dialog keeps the primary action reachable and returns focus", async ({
-  page,
-}) => {
+test("P24 existing-task editor remains reachable and returns focus", async ({ page }) => {
   await setup(page);
   await page.goto("/tasks");
-  const openButton = page.getByRole("button", { name: "＋ 新建任务" });
-  await openButton.click();
-
-  const dialog = page.getByRole("dialog", { name: "新建任务", exact: true });
-  await expect(dialog.getByRole("heading", { name: "新建任务", level: 3 })).toBeVisible();
-  await expect(dialog.getByText("必填", { exact: true })).toBeVisible();
-  await expect(dialog.getByText("选填", { exact: true })).toHaveCount(3);
-  await expect(dialog.getByRole("button", { name: "关闭任务编辑窗口" })).toBeVisible();
-
-  const footer = dialog.locator(".task-editor-footer");
-  await expect(footer.getByRole("button", { name: "创建任务", exact: true })).toBeVisible();
-  const layout = await dialog.evaluate((element) => {
-    const bounds = element.getBoundingClientRect();
-    const footerBounds = element.querySelector(".task-editor-footer")!.getBoundingClientRect();
-    const controls = [...element.querySelectorAll("input, textarea, select, button")]
-      .filter((control) => (control as HTMLElement).getClientRects().length > 0)
-      .map((control) => Math.round(control.getBoundingClientRect().height));
-    return {
-      dialogBottom: bounds.bottom,
-      footerBottom: footerBounds.bottom,
-      viewportHeight: window.innerHeight,
-      controls,
-    };
-  });
-  expect(layout.dialogBottom).toBeLessThanOrEqual(layout.viewportHeight);
-  expect(layout.footerBottom).toBeLessThanOrEqual(layout.viewportHeight);
-  expect(layout.controls.every((height) => height >= 44)).toBe(true);
-
-  await dialog.getByRole("button", { name: "关闭任务编辑窗口" }).click();
-  await expect(dialog).toBeHidden();
-  await expect(openButton).toBeFocused();
-
   await page.locator(".task-row-main").filter({ hasText: "核验便携净水杯供应商报价" }).click();
   await page.getByText("更多任务操作", { exact: true }).click();
   const editTrigger = page.getByRole("button", { name: "编辑任务", exact: true });
@@ -1062,14 +1044,14 @@ test("P23 create and edit dialog keeps the primary action reachable and returns 
   await expect(editTrigger).toBeFocused();
 });
 
-test("P23 create API failure remains inside the editor and retry preserves the form contract", async ({
+test("P24 edit API failure remains inside the editor and retry preserves the form contract", async ({
   page,
 }) => {
   await setup(page);
   let attempts = 0;
   let submittedBody: Record<string, unknown> | null = null;
-  await page.route("**/api/v1/tasks", async (route) => {
-    if (route.request().method() !== "POST") return route.fallback();
+  await page.route(`**/api/v1/tasks/${taskId}`, async (route) => {
+    if (route.request().method() !== "PATCH") return route.fallback();
     attempts += 1;
     submittedBody = route.request().postDataJSON() as Record<string, unknown>;
     if (attempts === 1) {
@@ -1078,80 +1060,93 @@ test("P23 create API failure remains inside the editor and retry preserves the f
         json: {
           error: {
             code: "service_unavailable",
-            message: "任务暂时无法创建。",
+            message: "任务暂时无法保存。",
             action_hint: "任务服务暂不可用，请稍后重试。",
           },
-          request_id: "m05-01-create-retry",
-          trace_id: "m05-01-create-retry",
+          request_id: "m05-01-edit-retry",
+          trace_id: "m05-01-edit-retry",
         },
       });
     }
-    return route.fulfill({ status: 201, json: { data: { id: "created-task" }, request_id: "ok" } });
+    return route.fulfill({ status: 200, json: { data: { ...task }, request_id: "ok" } });
   });
 
-  await page.goto("/tasks");
-  await page.getByRole("button", { name: "＋ 新建任务" }).click();
-  const dialog = page.getByRole("dialog", { name: "新建任务", exact: true });
+  await page.goto(`/tasks/${taskId}`);
+  await page.getByText("更多任务操作", { exact: true }).click();
+  await page.getByRole("button", { name: "编辑任务", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "编辑任务", exact: true });
   await dialog.getByLabel("标题").fill("核验上新资料");
-  await dialog.getByRole("button", { name: "创建任务", exact: true }).click();
+  await dialog.getByRole("button", { name: "保存修改", exact: true }).click();
   const error = dialog.getByRole("alert");
   await expect(error).toContainText("任务服务暂不可用，请稍后重试。");
-  await expect(error).toContainText("m05-01-create-retry");
+  await expect(error).toContainText("m05-01-edit-retry");
   await expect(dialog.getByLabel("标题")).toHaveValue("核验上新资料");
-  await expect(dialog.getByRole("button", { name: "创建任务", exact: true })).toBeEnabled();
+  await expect(dialog.getByRole("button", { name: "保存修改", exact: true })).toBeEnabled();
 
-  await dialog.getByRole("button", { name: "创建任务", exact: true }).click();
+  await dialog.getByRole("button", { name: "保存修改", exact: true }).click();
   await expect(dialog).toBeHidden();
   expect(attempts).toBe(2);
   expect(submittedBody).toEqual({
     title: "核验上新资料",
-    description: "",
-    priority: "normal",
-    due_at: null,
+    description: task.description,
+    priority: task.priority,
+    due_at: task.due_at,
+    assignee_id: task.assignee_id,
+    expected_version: task.version,
+    reason: "更新任务内容",
   });
 });
 
-test("task create disables duplicate submission while the real request is pending", async ({
+test("task edit disables duplicate submission while the real request is pending", async ({
   page,
 }) => {
-  const observed = await setup(page);
-  await page.goto("/tasks");
-  await page.getByRole("button", { name: "＋ 新建任务" }).click();
-  await page.getByLabel("标题").fill("重复提交保护");
-  await page.getByRole("button", { name: "创建任务" }).dblclick();
-  await expect(page.getByText("任务已创建，可以立即开始并持续更新进度。")).toBeVisible();
-  expect(observed.createRequests).toBe(1);
+  await setup(page);
+  let attempts = 0;
+  await page.route(`**/api/v1/tasks/${taskId}`, async (route) => {
+    if (route.request().method() !== "PATCH") return route.fallback();
+    attempts += 1;
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    await route.fulfill({ json: env(task) });
+  });
+  await page.goto(`/tasks/${taskId}`);
+  await page.getByText("更多任务操作", { exact: true }).click();
+  await page.getByRole("button", { name: "编辑任务", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "编辑任务", exact: true });
+  await dialog.getByLabel("标题").fill("重复提交保护");
+  await dialog.locator("form").evaluate((form) => {
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  });
+  await expect(dialog).toBeHidden();
+  expect(attempts).toBe(1);
 });
 
-test("task create and delete dialogs stay open when Escape is pressed during a pending write", async ({
+test("task edit and delete dialogs stay open when Escape is pressed during a pending write", async ({
   page,
 }) => {
-  const observed = await setup(page);
+  await setup(page);
   let releaseCreate!: () => void, signalCreate!: () => void;
   const createPending = new Promise<void>((resolve) => (releaseCreate = resolve));
   const createStarted = new Promise<void>((resolve) => (signalCreate = resolve));
-  await page.route("**/api/v1/tasks", async (route) => {
-    if (route.request().method() !== "POST") return route.fallback();
+  await page.route(`**/api/v1/tasks/${taskId}`, async (route) => {
+    if (route.request().method() !== "PATCH") return route.fallback();
     signalCreate();
     await createPending;
-    await route.fallback();
+    await route.fulfill({ json: env(task) });
   });
 
-  await page.goto("/work");
-  await page
-    .getByRole("button", { name: /新建任务/ })
-    .first()
-    .click();
-  const createDialog = page.getByRole("dialog", { name: "新建任务", exact: true });
-  await createDialog.getByLabel("标题").fill("等待中的新建任务");
-  await createDialog.getByRole("button", { name: "创建任务", exact: true }).click();
+  await page.goto(`/tasks/${taskId}`);
+  await page.getByText("更多任务操作", { exact: true }).click();
+  await page.getByRole("button", { name: "编辑任务", exact: true }).click();
+  const createDialog = page.getByRole("dialog", { name: "编辑任务", exact: true });
+  await createDialog.getByLabel("标题").fill("等待中的任务修改");
+  await createDialog.getByRole("button", { name: "保存修改", exact: true }).click();
   await createStarted;
   await page.keyboard.press("Escape");
   await expect(createDialog).toBeVisible();
-  await expect(createDialog.getByLabel("标题")).toHaveValue("等待中的新建任务");
+  await expect(createDialog.getByLabel("标题")).toHaveValue("等待中的任务修改");
   releaseCreate();
   await expect(createDialog).toBeHidden();
-  expect(observed.createRequests).toBe(1);
 
   let releaseDelete!: () => void, signalDelete!: () => void;
   const deletePending = new Promise<void>((resolve) => (releaseDelete = resolve));
