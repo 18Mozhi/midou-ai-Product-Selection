@@ -1,4 +1,8 @@
-import { dailySelectionWindow, dailySelectionProductionSql } from "./home-daily-selection.js";
+import {
+  dailySelectionWindow,
+  dailySelectionProductionSql,
+  dailySelectionCompletedSql,
+} from "./home-daily-selection.js";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { HomeDashboardItem } from "@scoutops/contracts";
 import type { HomeDashboardRepository } from "./home-dashboard-service.js";
@@ -84,6 +88,13 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
       input.workspaceId,
       window.start,
     ]);
+    const [completedRows] = await this.pool.query<RowDataPacket[]>(dailySelectionCompletedSql, [
+      input.organizationId,
+      input.workspaceId,
+      window.start,
+      window.end,
+    ]);
+    const completed = completedRows[0]?.completed_count;
     const production = productionRows[0] ?? ({} as RowDataPacket);
     const row = rows[0] ?? ({} as RowDataPacket),
       schedule = schedules[0],
@@ -109,6 +120,7 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
       daily_production: {
         date: window.date,
         timezone: "Asia/Shanghai" as const,
+        completed_count: completed == null ? null : Number(completed),
         discovered_count: Number(production.discovered_count ?? 0),
         qualified_count: Number(production.qualified_count ?? 0),
         target_minimum: 100 as const,

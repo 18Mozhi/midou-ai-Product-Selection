@@ -235,7 +235,7 @@
   },
   "selectionDailyProduction20261017": {
     "status": "implemented",
-    "statusDetail": "55_related_tests_24_browser_cases_and_display_retest_passed_not_deployed",
+    "statusDetail": "85_related_tests_42_browser_cases_22_builds_readonly_mysql57_passed_not_deployed",
     "requirements": "docs/selection-daily-production.md",
     "sourceFiles": [
       "apps/api/src/home-daily-selection.ts",
@@ -244,7 +244,11 @@
       "packages/contracts/src/index.ts",
       "apps/web/src/components/HomeDashboard.vue",
       "apps/web/src/components/HomeAutomationOverview.vue",
-      "apps/web/src/home-dashboard.css"
+      "apps/web/src/home-dashboard.css",
+      "packages/database/src/selection-completion-policy.ts",
+      "apps/worker/src/selection-pipeline-completion.ts",
+      "apps/worker/src/opportunity-scoring-worker.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts"
     ],
     "apiRoutes": ["/api/v1/me/home-dashboard"],
     "routes": ["/home"],
@@ -252,9 +256,12 @@
       "tests/unit/home-daily-selection.test.mjs",
       "tests/m02-06/home-dashboard.test.mjs",
       "tests/m02-06/home-discovery-health.test.mjs",
-      "tests/e2e/m02-06-home-mobile.spec.ts"
+      "tests/e2e/m02-06-home-mobile.spec.ts",
+      "tests/unit/selection-pipeline-completion.test.mjs",
+      "tests/e2e/m04-10-selection-http.spec.ts"
     ],
-    "contract": "Beijing-day current-workspace distinct new Amazon primary ASINs, excluding currently resolvable earlier identities. Qualified count reuses all existing gates. Optional daily_production distinguishes unknown from zero; fixed user target 100. Snapshot is not historical completion or continuous-runtime proof. No production write or schema change."
+    "contract": "Confirmed target: 100 distinct workspace ASINs first verified through intelligence, primary, 5-10 detailed competitors, complete numeric scoring and 1688 purchase evidence; low scores and non-recommendations count. Record scoped immutable completion facts in existing opportunity_events within parent worker transactions. Daily completed_count groups first event per ASIN in Beijing time; repeated scoring never counts again. Preserve discovery/qualified snapshot fields and recommendation gates. Missing completed_count is unknown, never inferred. No schema, dependency, environment or Python contract change; not deployed or daily-production acceptance.",
+    "events": ["opportunity.selection_pipeline_completed"]
   },
   "selectionEvaluationWakeup20261017": {
     "status": "implemented",

@@ -361,6 +361,7 @@ export async function createSelectionHttpStack(webOrigin) {
           daily_production: {
             date: new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai" }).format(now),
             timezone: "Asia/Shanghai",
+            completed_count: 0,
             discovered_count: inScope(input) ? 2 : 0,
             qualified_count: 0,
             target_minimum: 100,

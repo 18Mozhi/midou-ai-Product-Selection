@@ -245,7 +245,12 @@
 .home-daily-production dl {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.home-daily-production dl > div {
+  flex: 1 1 90px;
+  min-width: 0;
 }
 .home-daily-production dt {
   color: var(--so-text-muted);

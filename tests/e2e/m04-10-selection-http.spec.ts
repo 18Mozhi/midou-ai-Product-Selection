@@ -66,6 +66,7 @@ test("[real-api] workspace shows distinct discovered count without inventing qua
   const response = await read;
   expect(response.status()).toBe(200);
   expect((await response.json()).data.automatic_selection.daily_production).toMatchObject({
+    completed_count: 0,
     discovered_count: 2,
     qualified_count: 0,
     target_minimum: 100,

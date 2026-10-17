@@ -676,8 +676,8 @@ test("home polling keeps a closed setup and unsaved keyword draft without overla
 
 test.describe("daily snapshots retain Beijing time in overseas browsers", () => {
   test.use({ timezoneId: "America/Los_Angeles" });
-  for (const qualified of [0, 87, 125, null]) {
-    test(`daily product production separates measured progress from missing data: ${qualified}`, async ({
+  for (const completed of [0, 87, 125, null, undefined]) {
+    test(`daily product production separates measured progress from missing data: ${completed}`, async ({
       page,
     }) => {
       await nav(page);
@@ -702,13 +702,15 @@ test.describe("daily snapshots retain Beijing time in overseas browsers", () => 
               last_collection_at: at,
               next_collection_at: at,
               daily_production:
-                qualified === null
+                completed === null
                   ? null
                   : {
                       date: "2026-10-17",
                       timezone: "Asia/Shanghai",
                       discovered_count: 150,
-                      qualified_count: qualified,
+                      completed_count: completed,
+                      qualified_count:
+                        typeof completed === "number" ? Math.max(0, completed - 10) : 87,
                       target_minimum: 100,
                       measured_at: "2026-10-17T00:00:00Z",
                     },
@@ -719,23 +721,29 @@ test.describe("daily snapshots retain Beijing time in overseas browsers", () => 
       await page.goto("/home");
       const daily = page.getByRole("region", { name: "每日选品产出" });
       await expect(page.getByText("采集调度已配置", { exact: true }).first()).toBeVisible();
-      if (qualified === null) {
+      if (completed === null) {
         await expect(
           daily.getByText("每日产出尚未读取，暂不显示数量或目标达成状态。", { exact: true }),
         ).toBeVisible();
         await expect(daily.locator("progress")).toHaveCount(0);
+      } else if (completed === undefined) {
+        await expect(
+          daily.getByText("完成流程数尚未读取，不使用新增数或推荐数代替。", { exact: true }),
+        ).toBeVisible();
+        await expect(daily.locator("progress")).toHaveCount(0);
+        await expect(daily).toContainText("87");
       } else {
         await expect(daily.getByText("150", { exact: true })).toBeVisible();
-        await expect(daily.locator("progress")).toHaveAttribute("value", String(qualified));
+        await expect(daily.locator("progress")).toHaveAttribute("value", String(completed));
         await expect(daily.locator("progress")).toHaveAttribute("max", "100");
         await expect(daily.getByText(/当前快照不能证明全天不间断运行/)).toBeVisible();
         await expect(daily).toContainText("统计时间 2026/10/17 08:00:00");
-        await expect(daily.locator("dd").nth(1)).toHaveText(`${qualified} / 100 目标`);
+        await expect(daily.locator("dd").nth(0)).toHaveText(`${completed} / 100 目标`);
       }
       await expect
         .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
         .toBe(true);
-      if (qualified === 87) {
+      if (completed === 87) {
         await daily.evaluate((element) => element.scrollIntoView({ block: "center" }));
         if (test.info().project.name === "mobile-390") {
           await markOcclusionProbe(daily);

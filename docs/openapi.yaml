@@ -8082,12 +8082,17 @@ components:
               type: object
               nullable: true
               additionalProperties: false
-              description: Current snapshot for newly created workspace primary ASINs on the Beijing calendar date; deduplicated across records and excludes identities resolvable from earlier opportunities. Qualified count reuses all existing quality gates. Missing measurement is null or absent, never a measured zero. This is not a historical completion ledger or continuous-runtime acceptance.
+              description: Daily completed_count uses the first recorded full-pipeline completion of each workspace ASIN and is the 100-product target. discovered_count and qualified_count retain their existing newly-created-ASIN snapshot semantics. Missing measurements are null or absent, never inferred zeros. Completion recording begins with this version and does not certify continuous runtime or backfill historical completions.
               required:
                 [date, timezone, discovered_count, qualified_count, target_minimum, measured_at]
               properties:
                 date: { type: string, format: date }
                 timezone: { type: string, enum: [Asia/Shanghai] }
+                completed_count:
+                  type: integer
+                  minimum: 0
+                  nullable: true
+                  description: First verified full-pipeline workspace ASIN completions on this Beijing date, including low scores and non-recommendations. Recorded evidence covers intelligence, primary, 5-10 detailed competitors, complete scoring and a verified 1688 purchase quote. Repeated refreshes and duplicate opportunities do not count again. Absent or null is unmeasured, never inferred from other counts.
                 discovered_count: { type: integer, minimum: 0 }
                 qualified_count: { type: integer, minimum: 0 }
                 target_minimum: { type: integer, enum: [100] }

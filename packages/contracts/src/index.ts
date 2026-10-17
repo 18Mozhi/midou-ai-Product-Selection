@@ -337,6 +337,7 @@ export interface HomeDashboardItem {
   source_version: number;
 }
 export interface DailySelectionProduction {
+  completed_count?: number | null;
   date: string;
   timezone: "Asia/Shanghai";
   discovered_count: number;

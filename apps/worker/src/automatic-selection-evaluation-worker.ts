@@ -1,3 +1,4 @@
+import { recordSelectionPipelineCompletion } from "./selection-pipeline-completion.js";
 import { createHash, randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { amazonAsin } from "./competitor-discovery-policy.js";
@@ -614,6 +615,13 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         traceId,
         now,
       );
+      if (!scoreInputsChanged)
+        await recordSelectionPipelineCompletion(
+          connection,
+          { ...job, requestId, traceId },
+          this.workerId,
+          now,
+        );
       await connection.commit();
       return {
         status: "succeeded" as const,

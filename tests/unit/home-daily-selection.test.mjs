@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   dailySelectionWindow,
   dailySelectionProductionSql,
+  dailySelectionCompletedSql,
 } from "../../apps/api/dist/home-daily-selection.js";
 import { MySqlHomeDashboardRepository } from "../../apps/api/dist/mysql-home-dashboard-repository.js";
 import {
@@ -58,6 +59,7 @@ test("repository binds current tenant and UTC boundaries and forwards measured c
     {
       query: async (sql, params) => {
         calls.push({ sql, params });
+        if (sql === dailySelectionCompletedSql) return [[{ completed_count: "93" }]];
         if (sql === dailySelectionProductionSql)
           return [[{ discovered_count: "120", qualified_count: "87" }]];
         if (sql.includes("FROM automatic_source_schedules s")) return [[]];
@@ -73,6 +75,7 @@ test("repository binds current tenant and UTC boundaries and forwards measured c
   assert.deepEqual(result.daily_production, {
     date: "2026-10-17",
     timezone: "Asia/Shanghai",
+    completed_count: 93,
     discovered_count: 120,
     qualified_count: 87,
     target_minimum: 100,
@@ -88,5 +91,31 @@ test("repository binds current tenant and UTC boundaries and forwards measured c
     "workspace",
     new Date("2026-10-16T16:00:00Z"),
   ]);
-  assert.equal(calls.length, 3);
+  const completedRead = calls.find((call) => call.sql === dailySelectionCompletedSql);
+  assert.deepEqual(completedRead.params, [
+    "org",
+    "workspace",
+    new Date("2026-10-16T16:00:00Z"),
+    new Date("2026-10-17T16:00:00Z"),
+  ]);
+  assert.equal(calls.length, 4);
+});
+
+test("missing completion measurement remains unknown instead of using discovery or recommendation counts", async () => {
+  const repository = new MySqlHomeDashboardRepository(
+    {
+      query: async (sql) =>
+        sql === dailySelectionProductionSql
+          ? [[{ discovered_count: 120, qualified_count: 87 }]]
+          : [[]],
+    },
+    () => new Date("2026-10-17T00:00:00Z"),
+  );
+  const result = await repository.automaticSelection({
+    organizationId: "org",
+    workspaceId: "workspace",
+  });
+  assert.equal(result.daily_production.completed_count, null);
+  assert.equal(result.daily_production.discovered_count, 120);
+  assert.equal(result.daily_production.qualified_count, 87);
 });

@@ -389,7 +389,7 @@ onBeforeUnmount(deactivate);
       <HomeAutomationOverview v-if="selection" :selection="selection" />
       <section class="home-daily-production" aria-label="每日选品产出">
         <header>
-          <h3>今日新增商品</h3>
+          <h3>今日选品产出</h3>
           <span
             >{{ selection?.daily_production?.date ?? "日期未读取" }} · 北京时间 · 当前工作区</span
           >
@@ -397,23 +397,30 @@ onBeforeUnmount(deactivate);
         <template v-if="selection?.daily_production">
           <dl>
             <div>
+              <dt>完成整条流程</dt>
+              <dd v-if="selection.daily_production.completed_count != null">
+                {{ selection.daily_production.completed_count }}
+                <small>/ {{ selection.daily_production.target_minimum }} 目标</small>
+              </dd>
+              <dd v-else>未读取</dd>
+            </div>
+            <div>
               <dt>新增主品 ASIN</dt>
               <dd>{{ selection.daily_production.discovered_count }}</dd>
             </div>
             <div>
-              <dt>当前通过质量门</dt>
-              <dd>
-                {{ selection.daily_production.qualified_count }}
-                <small>/ {{ selection.daily_production.target_minimum }} 目标</small>
-              </dd>
+              <dt>新增合格推荐</dt>
+              <dd>{{ selection.daily_production.qualified_count }}</dd>
             </div>
           </dl>
           <progress
-            :value="selection.daily_production.qualified_count"
+            v-if="selection.daily_production.completed_count != null"
+            :value="selection.daily_production.completed_count"
             :max="selection.daily_production.target_minimum"
-            aria-label="今日新增合格商品目标进度"
+            aria-label="今日完成整条选品流程目标进度"
           ></progress>
-          <p>按主品 ASIN 去重，历史已有商品不算新增；缺数据或未通过质量门不计入目标。</p>
+          <p v-else>完成流程数尚未读取，不使用新增数或推荐数代替。</p>
+          <p>目标包含低分、不推荐商品；按首次核验完成的主品 ASIN 去重，重复刷新不重复计数。</p>
           <small
             >统计时间
             {{

@@ -29,3 +29,15 @@ export const dailySelectionProductionSql = dailySelectionCountSql(
     opportunityPrimaryAsinSql +
     " main_asin FROM opportunities o WHERE o.organization_id=? AND o.workspace_id=? AND o.created_at<?",
 );
+
+/** First verified full-pipeline completion per workspace ASIN; repeated refreshes never create a new day. */
+export const dailySelectionCompletedSql =
+  "SELECT COUNT(*) completed_count FROM (SELECT " +
+  "UPPER(JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.main_asin'))) main_asin," +
+  "MIN(occurred_at) completed_at FROM opportunity_events " +
+  "WHERE organization_id=? AND workspace_id=? AND resource_type='selection_pipeline' " +
+  "AND event_type='opportunity.selection_pipeline_completed' AND actor_type='worker' " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.contract'))='selection-pipeline-v1' " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.main_asin')) REGEXP '^[A-Za-z0-9]{10}$' " +
+  "GROUP BY UPPER(JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.main_asin')))) completed " +
+  "WHERE completed.completed_at>=? AND completed.completed_at<?";

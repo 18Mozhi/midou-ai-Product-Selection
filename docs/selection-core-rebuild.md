@@ -72,3 +72,5 @@
 - 发布启动一致性已修复：不变来源不再推进烟测时间门，Worker 在 API 完成目录同步并就绪后启动。见 `docs/selection-startup-consistency.md`；未做宝塔真实重启验收。
 
 - 组织后台九页标题合并为紧凑白底工具栏，移除八套大蓝标题样式；表单、权限、审计不变。见 `docs/selection-organization-toolbar.md`，20 项浏览器检查通过，未部署。
+
+- 用户已确认每日目标为 100 个完成整条流程的商品，含低分与不推荐。首次完成事件及 completed_count 已接入 Worker、API 与首页，原发现/合格数保留，详情见 `docs/selection-daily-production.md`。19 项定向、另 66 项回归、42 项浏览器与生产只读 SQL 检查通过；交付门禁进行中，未部署或签收百品。
