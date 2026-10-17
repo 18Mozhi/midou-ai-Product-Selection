@@ -2,6 +2,26 @@ import { test, expect, type Page } from "@playwright/test";
 import { setupBusinessTasks as setup, taskId, actor, env, task } from "./helpers/business-tasks";
 import { saveP23PaginationReviewImage } from "./helpers/p23-pagination-review-images";
 
+for (const valid of [true, false]) {
+  test(`evidence task return ${valid ? "preserves its product" : "rejects a non-product route"}`, async ({
+    page,
+  }) => {
+    const observed = await setup(page, false, ["task:read", "opportunity:read"]);
+    const source = valid
+      ? "/opportunities/00000000-0000-4000-8000-000000000424?tab=evidence"
+      : "/opportunities/00000000-0000-4000-8000-000000000424/extra";
+    await page.goto(`/tasks/${taskId}?from=${encodeURIComponent(source)}`);
+    await expect(page.getByRole("heading", { name: task.title, level: 3 })).toBeVisible();
+    await expect(page.getByRole("link", { name: "关闭任务详情" })).toHaveAttribute(
+      "href",
+      valid ? source : "/tasks",
+    );
+    expect(observed.detailRequests).toBe(1);
+    expect(observed.listRequests).toBe(0);
+    expect(observed.summaryRequests).toBe(0);
+  });
+}
+
 test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on desktop and 390", async ({
   page,
 }) => {

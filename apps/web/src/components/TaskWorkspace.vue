@@ -252,7 +252,10 @@ const pageSize = 10,
     return value === "/work" ||
       value.startsWith("/work?") ||
       value === "/tasks" ||
-      value.startsWith("/tasks?")
+      value.startsWith("/tasks?") ||
+      /^\/opportunities\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(?:[?#].*)?$/i.test(
+        value,
+      )
       ? value
       : "/tasks";
   }),

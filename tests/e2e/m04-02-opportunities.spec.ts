@@ -260,6 +260,29 @@ const blockedEvidence = {
   score_job_status: null,
 };
 
+test("existing evidence task links open the exact task and retain the product context", async ({
+  page,
+}) => {
+  const taskId = "00000000-0000-4000-8000-000000000434";
+  await ready(page, evidence, { adoption_blockers: [{ ...blockedEvidence, task_id: taskId }] });
+  const source = `/opportunities/${opportunityId}?tab=evidence`;
+  await page.goto(source);
+  const summary = page.getByRole("link", { name: "查看补采任务", exact: true });
+  await expect(summary).toHaveAttribute("href", new RegExp(`^/tasks/${taskId}\\?from=`));
+  const target = new URL((await summary.getAttribute("href"))!, "http://localhost");
+  expect(target.pathname).toBe(`/tasks/${taskId}`);
+  expect(target.searchParams.get("from")).toBe(source);
+  await page.getByText("查看判断条件与补证进度", { exact: true }).click();
+  await expect(page.getByRole("link", { name: "查看任务", exact: true })).toHaveAttribute(
+    "href",
+    target.pathname + target.search,
+  );
+  await summary.click();
+  await page.waitForURL(
+    (url) => url.pathname === `/tasks/${taskId}` && url.searchParams.get("from") === source,
+  );
+});
+
 for (const created of [true, false]) {
   test(`P18 evidence completion task navigates to the ${created ? "new" : "reused"} task once`, async ({
     page,
