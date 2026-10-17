@@ -638,7 +638,9 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     await expect(reviewRegion.getByText("星级未展示", { exact: true })).toBeVisible();
     expect(reads.length).toBe(beforeExpand);
     if (competitorCount === 5 && detailCollected && sourceEnabled)
-      await expect(reviewRegion).toHaveScreenshot("selection-public-review-samples.png");
+      await expect(reviewRegion).toHaveScreenshot(
+        "compact-recommendation-review-samples-20261017.png",
+      );
     await page.getByRole("button", { name: "商品与评分", exact: true }).click();
     await expect(page.getByText(`${competitorCount} 个关联竞品`, { exact: true })).toBeVisible();
     await expect(page.getByText(`${competitorCount}个快照`, { exact: true })).toBeVisible();
@@ -856,6 +858,17 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   const decisionSurface = page.locator(".opportunity-decision-summary");
   await expect(decisionSurface).toHaveCSS("border-radius", "0px");
   await expect(decisionSurface).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  expect((await decisionSurface.boundingBox())!.height).toBeLessThan(
+    page.viewportSize()!.width < 760 ? 520 : 360,
+  );
+  await expect(decisionSurface.locator(".opportunity-decision-summary__lead h3")).toHaveCSS(
+    "font-size",
+    "18px",
+  );
+  await expect(decisionSurface.locator(".opportunity-decision-gap")).toHaveCSS(
+    "background-color",
+    "rgba(0, 0, 0, 0)",
+  );
   await expect(page.locator(".selection-detail-navigation > button")).toHaveText([
     "商品与评分",
     "竞品对比",
@@ -958,7 +971,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("automatic-evidence-detail-20261017.png", {
+  await expect(page).toHaveScreenshot("compact-recommendation-detail-20261017.png", {
     fullPage: true,
   });
   if ((page.viewportSize()?.width ?? 0) <= 640) {

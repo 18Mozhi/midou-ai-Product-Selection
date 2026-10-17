@@ -855,6 +855,8 @@
       "apps/web/src/components/OpportunityDetailInsights.vue",
       "apps/web/src/components/OpportunityDecisionPanel.vue",
       "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/opportunity-decision-panel.css",
+      "apps/web/src/opportunities.css",
       "apps/web/src/automatic-selection.css"
     ],
     "routes": ["/opportunities/:id"],
@@ -5541,6 +5543,8 @@
     "verification": "Full organization browser suite: desktop 75 passed; mobile 74 passed, 1 original desktop-only timeout skip. Historical helper targeted 38 passed. No production or daily-100 acceptance claim."
   },
   "selectionAutomaticEvidenceStatus20261017": {
+    "recommendationLayout": "docs/selection-recommendation-layout.md moves recommendation, gate progress and blockers to one compact component stylesheet and removes 86 legacy rules. Component script/template exactly match 5c69110f. Desktop side-by-side and 390px single-column layout retain all actions, gates and historical links. No backend/API/config/dependency change; this style-only change requires frontend publish/refresh. Earlier cumulative backend release requirements remain.",
+    "recommendationLayoutVerification": "Related Node 82 and final full desktop/mobile browser 128 passed, including strict replay of four dated layout-context baselines. Old images/approvals and comparison thresholds preserved. Web build, static, bundle, docs, runtime docs and realism passed; no production or daily-100 acceptance claim.",
     "status": "implemented",
     "statusDetail": "local_requires_release_and_remaining_goal_acceptance",
     "requirements": "docs/selection-automatic-evidence-status.md",
@@ -5549,6 +5553,8 @@
       "apps/api/src/mysql-opportunity-repository.ts",
       "apps/web/src/components/OpportunityDecisionPanel.vue",
       "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/opportunity-decision-panel.css",
+      "apps/web/src/opportunities.css",
       "apps/web/src/automatic-selection.css"
     ],
     "testFiles": [

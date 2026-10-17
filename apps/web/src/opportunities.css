@@ -321,81 +321,6 @@
 .opportunity-detail > header > div:last-child small {
   color: var(--so-text-muted);
 }
-.opportunity-redecision-ready,
-.opportunity-blocker-summary {
-  margin-top: 12px;
-  padding: 15px;
-  border: 1px solid var(--so-border);
-  border-radius: 14px;
-  background: var(--so-panel-soft);
-}
-.opportunity-redecision-ready {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  border-color: color-mix(in srgb, var(--so-success) 55%, var(--so-border));
-}
-.opportunity-redecision-ready strong,
-.opportunity-redecision-ready span {
-  display: block;
-}
-.opportunity-redecision-ready span,
-.opportunity-blocker-summary article span,
-.opportunity-blocker-summary article small {
-  margin-top: 4px;
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.opportunity-redecision-ready a,
-.opportunity-blocker-summary a,
-.opportunity-blocker-summary button {
-  padding: 9px 11px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  color: var(--so-primary);
-  background: var(--so-panel);
-  font-size: 13px;
-  font-weight: 750;
-  text-decoration: none;
-  white-space: nowrap;
-}
-.opportunity-blocker-summary > header,
-.opportunity-blocker-summary article {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-}
-.opportunity-blocker-summary > header p,
-.opportunity-blocker-summary > header h4 {
-  margin: 0;
-}
-.opportunity-blocker-summary > header p {
-  color: var(--so-primary);
-  font-size: 13px;
-  font-weight: 800;
-}
-.opportunity-blocker-summary > header strong {
-  color: var(--so-warning);
-  font-size: 13px;
-}
-.opportunity-blocker-summary article {
-  margin-top: 10px;
-  padding: 11px;
-  border: 1px solid var(--so-border);
-  border-left: 3px solid var(--so-warning);
-  border-radius: 10px;
-  background: var(--so-panel);
-}
-.opportunity-blocker-summary article[data-status="cleared"] {
-  border-left-color: var(--so-success);
-}
-.opportunity-blocker-summary article strong,
-.opportunity-blocker-summary article span,
-.opportunity-blocker-summary article small {
-  display: block;
-}
 .opportunity-tabs {
   margin: 14px 0;
   padding: 5px;
@@ -740,18 +665,6 @@
   .opportunity-detail > header {
     display: grid;
     gap: 12px;
-  }
-  .opportunity-redecision-ready,
-  .opportunity-blocker-summary > header,
-  .opportunity-blocker-summary article {
-    align-items: stretch;
-    flex-direction: column;
-  }
-  .opportunity-redecision-ready a,
-  .opportunity-blocker-summary a,
-  .opportunity-blocker-summary button {
-    width: 100%;
-    text-align: center;
   }
   .opportunity-tabs {
     margin-left: -5px;

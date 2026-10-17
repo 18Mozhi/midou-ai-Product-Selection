@@ -154,3 +154,5 @@ const recommendationCopy = computed(() =>
     </details>
   </section>
 </template>
+
+<style src="./opportunity-decision-panel.css"></style>
