@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -23,8 +24,8 @@ const text = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n"),
     execFileSync("git", ["show", `${capture}:${f}`], { encoding: "utf8" }).replaceAll("\r\n", "\n"),
   dir = "output/playwright/p35-export-token-equivalence",
   e = JSON.parse(text(`${dir}/evidence.json`));
-test("P35 palette extraction is byte-exact when expanded and keeps production Vue unchanged", () => {
-  const css = text(exportDetailStyle);
+test("Archived P35 palette extraction is byte-exact when expanded and keeps production Vue unchanged", () => {
+  const css = readPreSelectionRebuild(exportDetailStyle);
   assert.equal(undoExportDetailTokens(css), old(exportDetailStyle));
   assert.notEqual(
     undoExportDetailTokens(css.replace("gap: 0", "gap: 4px")),

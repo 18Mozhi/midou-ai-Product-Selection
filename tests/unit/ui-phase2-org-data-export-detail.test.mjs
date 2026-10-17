@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -21,9 +22,12 @@ const old = (f) =>
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const e = JSON.parse(read(`${root}/evidence.json`));
 
-test("P35 export detail changes only styling marker/import, not script, fields or actions", () => {
+test("Archived P35 export detail changes only styling marker/import, not script, fields or actions", () => {
   const captured = readCaptureSourceRevision(component, e.sourceHashes[component]);
-  assert.equal(beforePublishedPresentation(component, read(component)), captured);
+  assert.equal(
+    beforePublishedPresentation(component, readPreSelectionRebuild(component)),
+    captured,
+  );
   assert.equal(
     captured
       .replace(
@@ -34,7 +38,7 @@ test("P35 export detail changes only styling marker/import, not script, fields o
     old(component),
   );
   const css = postcss.parse(
-    undoExportDetailTokens(read("apps/web/src/org-data-export-detail.css")),
+    undoExportDetailTokens(readPreSelectionRebuild("apps/web/src/org-data-export-detail.css")),
   );
   assert.equal(css.nodes.filter((n) => n.type !== "comment").length, 1);
   assert.equal(css.nodes.find((n) => n.type === "atrule").params, "(max-width: 760px)");

@@ -4559,6 +4559,25 @@
       ],
       "contract": "Original script, event/model bindings, readonly GET lifecycle, query restoration and pager focus preserved. Full-width requests/template directory/detail, native fragment link only. No dependency, API, schema, permission or runtime configuration change.",
       "verification": "16 desktop/mobile checks passed; 234 related Node checks passed; typecheck/build and static/budget/style/realism/docs passed. Historical packets do not attest rebuilt UI; no deployment or production acceptance claim."
+    },
+    "selectionOrganizationData20261017": {
+      "status": "implemented",
+      "statusDetail": "local_ui_verified_requires_release",
+      "requirements": "docs/selection-organization-data-layout.md",
+      "routes": ["/org-admin/data"],
+      "sourceFiles": [
+        "apps/web/src/components/OrganizationDataPanel.vue",
+        "apps/web/src/org-data-export-detail.css",
+        "apps/web/src/organization-admin.css"
+      ],
+      "testFiles": [
+        "tests/e2e/m06-01-organization-admin.spec.ts",
+        "tests/unit/organization-data-page-preview.test.mjs",
+        "tests/unit/ui-phase2-org-data-export-detail.test.mjs",
+        "tests/unit/ui-phase2-export-detail-tokens.test.mjs"
+      ],
+      "contract": "Original script/event/model bindings, readonly GET, query restoration and record values preserved. Full-width comparison table with internal mobile scroll and export rows. No dependency/API/schema/permission/runtime configuration change.",
+      "verification": "10 desktop/mobile checks and 165 related/supplementary Node checks passed; Web typecheck/build and static/budget/style/realism/docs passed. No production acceptance or deployment claim."
     }
   },
   "phaseVerification": {

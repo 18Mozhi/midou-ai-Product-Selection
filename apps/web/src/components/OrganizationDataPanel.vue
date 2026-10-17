@@ -301,7 +301,6 @@ function resetExports() {
     </div>
 
     <aside class="org-data-truth" aria-label="数据质量说明">
-      <span aria-hidden="true">≠</span>
       <div>
         <b>数量不等于数据质量</b>
         <p>数据质量检查请前往数据中心。</p>

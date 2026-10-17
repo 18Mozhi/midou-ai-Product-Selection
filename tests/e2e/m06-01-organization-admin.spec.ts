@@ -2724,3 +2724,52 @@ for (const approvalSection of ["requests", "templates"] as const) {
     );
   });
 }
+
+for (const dataView of ["workspaces", "exports"] as const) {
+  test(`organization data workspace keeps full-width readonly records: ${dataView}`, async ({
+    page,
+  }) => {
+    await setup(page);
+    await page.goto("/org-admin/data");
+    const dataRoot = page.locator(".org-data-panel");
+    await expect(dataRoot).toBeVisible();
+    let writes = 0;
+    page.on("request", (request) => {
+      if (
+        new URL(request.url()).pathname.startsWith("/api/v1/org/admin/") &&
+        !["GET", "HEAD"].includes(request.method())
+      )
+        writes += 1;
+    });
+    await expect(dataRoot.locator(".org-data-metrics")).toHaveCSS("background-image", "none");
+    if (dataView === "workspaces") {
+      const tableScroll = dataRoot.locator(".org-data-table-scroll");
+      const a = await dataRoot.boundingBox(),
+        b = await tableScroll.boundingBox();
+      expect(Math.abs(a!.width - b!.width)).toBeLessThanOrEqual(1);
+      if ((page.viewportSize()?.width ?? 1440) < 760) {
+        expect(
+          await tableScroll.evaluate((element) => {
+            element.scrollLeft = 150;
+            return element.scrollWidth > element.clientWidth && element.scrollLeft > 0;
+          }),
+        ).toBe(true);
+      }
+    } else {
+      await page.getByRole("button", { name: /导出履历/ }).click();
+      const exportRows = dataRoot.locator(".org-data-export-list");
+      const a = await dataRoot.boundingBox(),
+        b = await exportRows.boundingBox();
+      expect(Math.abs(a!.width - b!.width)).toBeLessThanOrEqual(1);
+      const firstEntry = exportRows.locator("article").first();
+      await firstEntry.locator("summary").click();
+      await expect(firstEntry.locator("code")).toBeVisible();
+      expect((await firstEntry.boundingBox())!.width).toBeCloseTo(b!.width - 2, 0);
+      await expect(firstEntry).toHaveCSS("background-image", "none");
+    }
+    expect(writes).toBe(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  });
+}

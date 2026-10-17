@@ -1,184 +1,351 @@
-/* P35 approved mobile export-detail composition; all other regions retain their styles. */
-@import "./design/export-detail-tokens.css";
-
-@media (max-width: 760px) {
-  #app [data-export-detail-c] .org-data-export-list {
-    --export-detail-ink: var(--so-export-detail-ink);
-    --export-detail-muted: var(--so-export-detail-muted);
-    --export-detail-blue: var(--so-export-detail-blue);
-    --export-detail-line: var(--so-export-detail-line);
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-    background: var(--so-export-detail-paper);
-    color: var(--export-detail-ink);
-    font-family: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-  }
-  #app [data-export-detail-c] .org-data-export-list article {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: auto auto auto auto auto;
-    column-gap: 16px;
-    row-gap: 4px;
+#app .org-admin-center .org-data-panel {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  margin: 0;
+  color: var(--so-text);
+  font-size: 13px;
+  container-type: inline-size;
+  & :is(div, article, header, footer, aside, label, section) {
     min-width: 0;
-    padding: 24px 0;
-    border: 0;
-    border-top: 1px solid var(--export-detail-line);
-    border-radius: 0;
-    background: var(--so-export-detail-paper);
-    box-shadow: none;
   }
-  #app [data-export-detail-c] .org-data-export-list article > header,
-  #app [data-export-detail-c] .org-data-export-list article > dl {
-    display: contents;
-  }
-  #app [data-export-detail-c] .org-data-export-list article > header > span {
-    grid-column: 1;
-    grid-row: 1;
-    color: var(--export-detail-muted);
-    font: inherit;
-    font-size: 13px;
-    letter-spacing: 0;
-  }
-  #app [data-export-detail-c] .org-data-export-list h5 {
-    grid-column: 1;
-    grid-row: 2;
-    min-width: 0;
+  & :is(h3, h4, h5, p, dl, dd) {
     margin: 0;
-    color: var(--export-detail-ink);
-    font:
-      700 18px/1.6 "Microsoft YaHei UI",
-      "Microsoft YaHei",
-      sans-serif;
+  }
+  & :is(h3, h4, h5) {
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+  & :is(p, small, dt) {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--so-text-muted);
+  }
+  & :is(b, span, small, p, dd, code) {
     overflow-wrap: anywhere;
   }
-  #app [data-export-detail-c] .org-data-export-list i {
-    grid-column: 1;
-    grid-row: 3;
-    justify-self: start;
-    margin-top: 4px;
-    padding: 1px 4px;
+  & :is(header, footer, .org-data-truth) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  & .org-data-overview aside {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    color: var(--so-text-muted);
+  }
+  & .org-data-overview aside b {
+    font-weight: 500;
+  }
+  & .org-data-overview aside span {
+    font-size: 12px;
+  }
+  & .org-data-metrics {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
+  }
+  & .org-data-metrics article {
+    display: grid;
+    align-content: start;
+    gap: 5px;
+    padding: 14px 16px;
+  }
+  & .org-data-metrics article + article {
+    border-left: 1px solid var(--so-border);
+  }
+  & .org-data-metrics span {
+    color: var(--so-text-muted);
+  }
+  & .org-data-metrics b {
+    font-size: 20px;
+    line-height: 1.3;
+    font-variant-numeric: tabular-nums;
+  }
+  & .org-data-truth {
+    padding: 12px 16px;
+    border: 1px solid var(--so-border);
+    border-radius: 6px;
+    background: var(--so-panel);
+  }
+  & .org-data-truth b {
+    font-weight: 500;
+  }
+  & a {
+    padding: 12px 0;
+    min-height: 44px;
+    color: var(--so-primary);
+  }
+  & button {
+    min-height: 44px;
+    padding: 9px 14px;
+    border: 1px solid var(--so-border-strong);
+    border-radius: 6px;
+    background: var(--so-panel);
+    color: var(--so-text);
+    font: inherit;
+    cursor: pointer;
+  }
+  & button:hover:enabled {
+    border-color: var(--so-primary);
+    color: var(--so-primary);
+  }
+  & button:disabled {
+    border-color: var(--so-border);
+    background: var(--so-panel-soft);
+    color: var(--so-text-muted);
+    cursor: not-allowed;
+    opacity: 1;
+  }
+  & :is(button, input, select, a, summary):focus-visible {
+    outline: 3px solid var(--so-focus);
+    outline-offset: 3px;
+  }
+  & .org-data-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--so-border);
+  }
+  & .org-data-tabs button {
     border: 0;
-    border-radius: 3px;
-    color: var(--export-detail-muted);
-    background: var(--so-export-detail-neutral);
-    font:
-      normal 13px/1.6 "Microsoft YaHei UI",
-      "Microsoft YaHei",
-      sans-serif;
-    overflow-wrap: anywhere;
-  }
-  #app [data-export-detail-c] .org-data-export-list i[data-status="succeeded"] {
-    color: var(--so-export-detail-success-ink);
-    background: var(--so-export-detail-success-bg);
-  }
-  #app
-    [data-export-detail-c]
-    .org-data-export-list
-    i:is([data-status="queued"], [data-status="leased"], [data-status="retry_scheduled"]) {
-    color: var(--export-detail-blue);
-    background: var(--so-export-detail-info-bg);
-  }
-  #app [data-export-detail-c] .org-data-export-list i[data-status="dead_letter"] {
-    color: var(--so-export-detail-danger-ink);
-    background: var(--so-export-detail-danger-bg);
-  }
-  #app [data-export-detail-c] .org-data-export-list dl > div {
-    min-width: 0;
-    padding: 0;
-    border: 0;
+    border-bottom: 2px solid transparent;
     border-radius: 0;
     background: transparent;
   }
-  #app [data-export-detail-c] .org-data-export-list dl > div:first-child {
-    grid-column: 2;
-    grid-row: 1 / 4;
-    justify-self: end;
-    min-width: min(100%, 96px);
-    width: max-content;
-    max-width: 100%;
+  & .org-data-tabs button[aria-pressed="true"] {
+    border-bottom-color: var(--so-primary);
+    color: var(--so-primary);
+    font-weight: 600;
   }
-  #app [data-export-detail-c] .org-data-export-list dl > div:nth-child(2) {
-    grid-column: 1;
-    grid-row: 4;
-    margin-top: 14px;
+  & .org-data-tabs span {
+    margin-left: 6px;
   }
-  #app [data-export-detail-c] .org-data-export-list dl > div:nth-child(3) {
-    grid-column: 2;
-    grid-row: 4;
-    margin-top: 14px;
+  & .org-data-section {
+    display: grid;
+    gap: 16px;
   }
-  #app [data-export-detail-c] .org-data-export-list dt {
-    color: var(--export-detail-muted);
+  & .org-data-section-heading > span {
+    color: var(--so-text-muted);
+  }
+  & .org-data-section-heading p {
+    margin-bottom: 4px;
+  }
+  & .org-data-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
+  }
+  & .org-data-toolbar label {
+    display: grid;
+    flex: 1 1 140px;
+    gap: 6px;
     font-size: 13px;
-    line-height: 1.6;
   }
-  #app [data-export-detail-c] .org-data-export-list dd {
-    margin: 4px 0 0;
-    color: var(--export-detail-ink);
-    font-size: 16px;
-    line-height: 1.6;
-    font-variant-numeric: tabular-nums;
-    white-space: normal;
-    overflow-wrap: anywhere;
+  & .org-data-toolbar .org-data-search {
+    flex: 2 1 220px;
   }
-  #app [data-export-detail-c] .org-data-export-list dl > div:first-child dd {
-    font-size: 20px;
-  }
-  #app [data-export-detail-c] .org-data-export-list details {
-    grid-column: 1 / -1;
-    grid-row: 5;
+  & :is(input, select) {
+    width: 100%;
     min-width: 0;
-    margin: 12px 0 0;
-    font-size: 16px;
-    color: var(--export-detail-ink);
+    min-height: 44px;
+    padding: 9px 10px;
+    border: 1px solid var(--so-border-strong);
+    border-radius: 6px;
+    background: var(--so-panel);
+    color: var(--so-text);
+    font: inherit;
   }
-  #app [data-export-detail-c] .org-data-export-list summary {
+  & .org-data-table-scroll {
+    overflow: auto;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
+  }
+  & .org-data-table {
+    min-width: 720px;
+  }
+  & .org-data-table [role="row"] {
+    display: grid;
+    grid-template-columns: minmax(240px, 2fr) repeat(5, minmax(90px, 1fr));
+    align-items: center;
+    min-height: 56px;
+  }
+  & .org-data-table [role="row"] + [role="row"] {
+    border-top: 1px solid var(--so-border);
+  }
+  & .org-data-table :is([role="cell"], [role="columnheader"]) {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  & .org-data-table-head {
+    background: var(--so-panel-soft);
+  }
+  & .org-data-table [role="columnheader"] {
+    font-weight: 600;
+  }
+  & .org-data-table [role="cell"]:first-child b {
+    display: block;
+    font-weight: 600;
+  }
+  & .org-data-table small {
+    display: block;
+    margin-top: 5px;
+  }
+  & i[data-status] {
+    display: inline-block;
+    width: fit-content;
+    padding: 3px 8px;
+    border: 1px solid var(--so-border);
+    border-radius: 4px;
+    background: var(--so-panel-soft);
+    color: var(--so-text-muted);
+    font-size: 12px;
+    font-style: normal;
+    white-space: nowrap;
+  }
+  & i:is([data-status="active"], [data-status="succeeded"]) {
+    border-color: var(--so-success-border);
+    background: var(--so-success-soft);
+    color: var(--so-success);
+  }
+  & i:is([data-status="queued"], [data-status="leased"], [data-status="retry_scheduled"]) {
+    border-color: var(--so-warning-border);
+    background: var(--so-warning-soft);
+    color: var(--so-warning);
+  }
+  & i[data-status="dead_letter"] {
+    border-color: var(--so-danger-border);
+    background: var(--so-danger-soft);
+    color: var(--so-danger);
+  }
+  & .org-data-export-list {
+    display: grid;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
+    overflow: hidden;
+  }
+  & .org-data-export-list article {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr);
+    gap: 12px 24px;
+    padding: 16px 20px;
+  }
+  & .org-data-export-list article + article {
+    border-top: 1px solid var(--so-border);
+  }
+  & .org-data-export-list header {
+    grid-column: 1;
+  }
+  & .org-data-export-list h5 {
+    grid-column: 1;
+  }
+  & .org-data-export-list dl {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  & .org-data-export-list dd {
+    margin-top: 6px;
+    line-height: 1.6;
+  }
+  & .org-data-export-list details {
+    grid-column: 1 / -1;
+    padding-top: 8px;
+    border-top: 1px solid var(--so-border);
+  }
+  & summary {
+    min-height: 44px;
+    padding: 12px 0;
+    color: var(--so-primary);
+    cursor: pointer;
+  }
+  & code {
+    display: block;
+    margin-top: 6px;
+    color: var(--so-text-muted);
+    font-size: 12px;
+  }
+  & .org-data-pagination {
+    color: var(--so-text-muted);
+  }
+  & .org-data-pagination > div {
+    display: flex;
+    gap: 8px;
+  }
+  & .org-data-empty {
     display: flex;
     align-items: center;
-    gap: 10px;
-    width: 100%;
-    min-height: 44px;
-    padding: 8px 10px;
-    border: 0;
-    border-radius: 0;
-    color: var(--export-detail-blue);
-    font: inherit;
-    cursor: pointer;
-    list-style: none;
+    gap: 16px;
+    padding: 24px;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
   }
-  #app [data-export-detail-c] .org-data-export-list summary::-webkit-details-marker {
-    display: none;
+  & .org-data-empty > span {
+    font-size: 20px;
+    color: var(--so-text-muted);
   }
-  #app [data-export-detail-c] .org-data-export-list summary::before {
-    content: "＋";
+}
+@container (max-width:1000px) {
+  #app .org-admin-center .org-data-panel {
+    & .org-data-metrics {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    & .org-data-metrics article:nth-child(4) {
+      border-left: 0;
+    }
+    & .org-data-metrics article:nth-child(n + 4) {
+      border-top: 1px solid var(--so-border);
+    }
+    & .org-data-export-list article {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    & .org-data-export-list dl {
+      grid-column: 1;
+      grid-row: auto;
+    }
   }
-  #app [data-export-detail-c] .org-data-export-list details[open] > summary::before {
-    content: "−";
-  }
-  #app [data-export-detail-c] .org-data-export-list summary:hover {
-    background: var(--so-export-detail-info-bg);
-  }
-  #app [data-export-detail-c] .org-data-export-list summary:active {
-    background: var(--so-export-detail-pressed);
-  }
-  #app [data-export-detail-c] .org-data-export-list summary:focus-visible {
-    outline: 3px solid var(--so-export-detail-focus);
-    outline-offset: 3px;
-  }
-  #app [data-export-detail-c] .org-data-export-list code {
-    margin: 0;
-    padding: 10px;
-    border: 0;
-    border-radius: 0;
-    background: var(--so-export-detail-technical);
-    color: var(--export-detail-ink);
-    font:
-      16px/1.7 "Microsoft YaHei UI",
-      "Microsoft YaHei",
-      sans-serif;
-    white-space: normal;
-    overflow-wrap: anywhere;
+}
+@container (max-width:540px) {
+  #app .org-admin-center .org-data-panel {
+    & .org-data-metrics {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    & .org-data-metrics article:nth-child(n) {
+      border-left: 0;
+      border-top: 0;
+    }
+    & .org-data-metrics article:nth-child(even) {
+      border-left: 1px solid var(--so-border);
+    }
+    & .org-data-metrics article:nth-child(n + 3) {
+      border-top: 1px solid var(--so-border);
+    }
+    & .org-data-toolbar label {
+      flex-basis: 100%;
+    }
+    & .org-data-toolbar .org-data-search {
+      flex-basis: 100%;
+    }
+    & .org-data-export-list article {
+      padding: 16px;
+    }
+    & .org-data-export-list dl {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 }
