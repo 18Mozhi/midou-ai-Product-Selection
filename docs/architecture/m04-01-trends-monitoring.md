@@ -1,5 +1,7 @@
 # M04-01 热点与监控架构
 
+> 2026-10-18 当前1688只提供找货报价，不进入趋势投影和商品发现。新报价不再排入趋势队列；旧无效投影按租约空完成，每轮最多20个，保留历史证据。见 `docs/selection-supply-intelligence-separation.md`。下文旧供应商趋势描述不再适用。
+
 > 2026-10-17 自动找货已收敛到主品图片与 1688；旧多站找货、旧规则前置条件只描述历史状态，不能限制当前重制。情报关联见 `docs/intelligence-product-association.md`，首次及历史补偿、事务与 MySQL 5.7 取证见 `docs/selection-sourcing-recovery.md`。
 
 ## 范围与非目标

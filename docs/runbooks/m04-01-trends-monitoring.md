@@ -1,5 +1,7 @@
 # M04-01 热点与监控运行、故障与回滚
 
+> 2026-10-18 1688是找货报价而非趋势来源，不再生成趋势投影；旧无效任务按原租约空完成，每轮最多20个，不删除历史数据。无需手工清队列。发布后由宝塔重启唯一Node项目ai选品，见 `docs/selection-supply-intelligence-separation.md`。
+
 > 当前自动找货以 `docs/selection-sourcing-recovery.md` 为准：首次及补偿只向已启用 1688 排队，使用主品图片；不再自动分流其他供应商。无新增配置或迁移，需通过固定部署脚本发布并由宝塔重启唯一 Node 项目 `ai选品`，Python 不变。下文独立 Worker 部署步骤为历史说明。
 
 ## 宝塔部署顺序
@@ -32,9 +34,9 @@ M04-01 生产探针只读预检全部趋势迁移表，缺表即停止，不会�
 - 自动频道采集成功但没有热点：检查 `trend_projection_jobs.last_error_code` 和 Provider code；`gnews_<市场>_<主题>` 应进入投影，只有非趋势来源才是 `succeeded_empty`。
 - 商品型频道有热点但没有自动发现选品：先检查主题是否命中至少一条已启用规则，再检查同组织、工作区、趋势主题对应的 `opportunities`、`opportunity_rule_matches`、`opportunity_evidence_links` 和 `opportunity.candidate.discovered`。未命中规则不生成候选是正确状态；命中后应保存全部精确规则关联。
 - Amazon 规则没有创建公开页任务：检查 Provider 是否启用、平台条款审核是否有效、解析器是否为 `amazon-structured-product-v2`，并确认规则任务的 `collection_subqueries.target_json` 含 `projection_type=rule_product_discovery` 和规则关键词 `query`。这条链只读取 Amazon 公开 `/s` 和商品页，不使用商品 API。
-- 1688 规则没有创建登录浏览器任务：检查 Provider 是否已完成固定样本回放、第二人审批和负责人显式启用，平台条款审核是否有效、解析器是否为 `1688-browser-contract-v3`，并确认规则任务的 `collection_subqueries.target_json` 含 `projection_type=rule_product_discovery`、规则编号和关键词 `query`。规则结果只有规范 `https://detail.1688.com/offer/{offerId}.html` 商品证据进入选品机会，供应商名称映射为趋势信号发布方；Cookie、账号和授权材料不得写入任务目标或日志。
+- 1688报价未出现：检查主品图片、已启用来源及现有LAN图搜任务。当前不创建1688规则商品发现，也不把供应商映射为新闻发布方；报价仅供找货匹配和进货成本使用。不得通过趋势任务补建货源或手工删除历史任务。
 - 自动候选没有推荐：先检查命中规则的 `status`、`recommendation_min_source_count` 与机会 `source_count`；达到任一启用规则门槛只应显示“规则命中候选”，不得直接写入 `recommend`。随后检查 `opportunity_score_jobs`、真实评分输入、市场分、竞争分、利润成本计算和风险输入；五项质量门全部通过后才显示“建议采纳”，并且仍只能由人工执行最终采纳。
-- 1688 未运行：检查已认证浏览器档案、登录健康和双人样本批准。当前合同仅允许已认证浏览器爬虫，不接入 OneBound 或其他商品 API；未完成前必须保持“待配置”，不得伪装为实时运行。
+- 1688未运行：当前自动链使用六个既有LAN图搜节点；检查网络、受限鉴权配置、来源开关及真实失败原因，沿用重试和证据合同，不以旧浏览器档案要求覆盖当前LAN流程。
 - 已有商品机会但图片、竞品快照或供应商仍为空：检查 `collection_subqueries.target_json` 中对应的 `competitor_snapshot` / `sourcing_search`，以及事件 `competitor.collection.auto_scheduled` / `sourcing.collection.auto_scheduled`。Amazon 详情目标必须包含 `page_url`；供应商目标必须包含 `query_contract=supplier-keywords-v2` 和 1–300 字符的 `query`，实际自动关键词不超过 120 字符。旧版字段错误、完整长标题查询或代理响应 URL 丢失会自动补建一次正确任务；Made-in-China 失败后仍应继续 EC21。其他已有失败或死信任务不会自动无限重放，应在采集控制台查看错误和证据后人工处理。
 
 日志不得输出 Cookie、Token、数据库密码、主密钥或原始证据正文。

@@ -127,14 +127,6 @@ export function projectedTrendProviderContext(providerCode: string): ProjectedTr
       language: "en-US",
       category: "ecommerce",
     };
-  if (providerCode === "1688_search")
-    return {
-      accepted: true,
-      automatic: true,
-      market: "GLOBAL",
-      language: "und",
-      category: "ecommerce",
-    };
   const source = automaticSources.get(providerCode);
   if (source) {
     const market =
@@ -160,9 +152,7 @@ export function isAutomaticProductDiscoveryProvider(providerCode: string) {
   return (
     context.accepted &&
     context.automatic &&
-    (providerCode === "1688_search" ||
-      source?.category === "ecommerce" ||
-      Boolean(match && automaticProductTopics.has(match[1]!)))
+    (source?.category === "ecommerce" || Boolean(match && automaticProductTopics.has(match[1]!)))
   );
 }
 
@@ -278,12 +268,7 @@ const http = (value: unknown) => {
 export function calculateTrendProjection(job: TrendProjectionJob) {
   const title = text(job.payload.title, "trend_title_invalid", 1000),
     normalizedTitle = normalizeProjectedTrendTitle(title),
-    publisher = text(
-      job.payload.publisher ??
-        (job.providerCode === "1688_search" ? job.payload.supplier_name : null),
-      "trend_publisher_invalid",
-      300,
-    ),
+    publisher = text(job.payload.publisher, "trend_publisher_invalid", 300),
     canonicalUrl = http(job.payload.canonical_url),
     publishedAt = date(
       job.payload.published_at ?? job.payload.observed_at,

@@ -2,11 +2,22 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { MySqlTrendProjectionWorker } from "../../apps/worker/dist/trend-projection-worker.js";
+import {
+  projectedTrendProviderContext,
+  isAutomaticProductDiscoveryProvider,
+} from "../../apps/worker/dist/trend-projection-calculation.js";
 
 const now = new Date("2026-09-04T05:30:00.000Z");
+const jobScope = {
+  organization_id: "organization-1",
+  workspace_id: "workspace-1",
+  normalized_record_id: "record-1",
+};
 
 function createPool(job) {
   const calls = [];
+  const statements = [];
+  let claimed;
   const connection = {
     beginTransaction: async () => calls.push("begin"),
     commit: async () => calls.push("commit"),
@@ -15,7 +26,8 @@ function createPool(job) {
     query: async (sql) => {
       if (sql.startsWith("SELECT * FROM trend_projection_jobs")) {
         calls.push("claim");
-        return [job ? [job] : [], []];
+        claimed = Array.isArray(job) ? job.shift() : job;
+        return [claimed ? [claimed] : [], []];
       }
       if (sql.startsWith("UPDATE trend_projection_jobs SET status='leased'")) {
         calls.push("lease");
@@ -29,7 +41,7 @@ function createPool(job) {
               organization_id: "organization-1",
               workspace_id: "workspace-1",
               provider_id: "provider-1",
-              provider_code: "amazon_product",
+              provider_code: claimed?.providerCode ?? "amazon_product",
               raw_evidence_id: "evidence-1",
               collection_task_id: "collection-task-1",
               target_json: JSON.stringify({
@@ -51,16 +63,62 @@ function createPool(job) {
   };
   return {
     calls,
+    statements,
     pool: {
       query: async (sql) => {
-        assert.match(sql, /^INSERT IGNORE INTO trend_projection_jobs/);
-        calls.push("enqueue");
+        statements.push(sql);
+        if (sql.startsWith("UPDATE trend_projection_jobs SET status=?")) calls.push("finish");
+        else {
+          assert.match(sql, /^INSERT IGNORE INTO trend_projection_jobs/);
+          calls.push("enqueue");
+        }
         return [[], []];
       },
       getConnection: async () => connection,
     },
   };
 }
+
+test("1688 sourcing evidence cannot become intelligence or trigger product discovery", () => {
+  assert.deepEqual(projectedTrendProviderContext("1688_search"), { accepted: false });
+  assert.equal(isAutomaticProductDiscoveryProvider("1688_search"), false);
+});
+
+test("legacy supplier projections drain before a real job without running supplier intelligence", async () => {
+  const jobs = [
+    { ...jobScope, id: "legacy", providerCode: "1688_search", attempt_count: 0 },
+    { ...jobScope, id: "news", providerCode: "amazon_product", attempt_count: 0 },
+  ];
+  const { pool, calls, statements } = createPool(jobs);
+  const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.persistence.project = async () => "topic-1";
+  worker.persistence.enqueueMissingAutomaticDownstream = async () => {};
+  assert.deepEqual(await worker.processOnce(), {
+    status: "succeeded",
+    job_id: "news",
+    topic_id: "topic-1",
+  });
+  assert.equal(calls.filter((call) => call === "finish").length, 1);
+  assert.match(statements[0], /p\.code NOT IN \('1688_search','amazon_product'/);
+});
+
+test("legacy supplier cleanup is bounded to twenty durable jobs per polling turn", async () => {
+  const jobs = Array.from({ length: 21 }, (_, index) => ({
+    ...jobScope,
+    id: `legacy-${index}`,
+    providerCode: "1688_search",
+    attempt_count: 0,
+  }));
+  const { pool, calls } = createPool(jobs);
+  const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.persistence.enqueueMissingAutomaticDownstream = async () => {};
+  worker.persistence.project = async () => {
+    throw new Error("supplier must not project");
+  };
+  assert.deepEqual(await worker.processOnce(), { status: "succeeded_empty", job_id: "legacy-19" });
+  assert.equal(calls.filter((call) => call === "finish").length, 20);
+  assert.equal(jobs.length, 1);
+});
 
 test("projection worker serves a queued job before running downstream repair", async () => {
   const { pool, calls } = createPool({

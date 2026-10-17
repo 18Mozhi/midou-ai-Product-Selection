@@ -63,17 +63,22 @@ export class MySqlTrendProjectionWorker {
       await this.persistence.enqueueMissingAutomaticDownstream();
       repaired = true;
     }
-    const job = await this.claim();
+    let job = await this.claim();
+    let skipped = 0;
+    // Retire old non-intelligence work through the normal lease/finish contract.
+    // A supply batch must not cost one complete scheduler turn per offer.
+    while (job && !projectedTrendProviderContext(job.providerCode).accepted) {
+      this.claimedSinceRepair += 1;
+      await this.finish(job, "succeeded_empty", null);
+      if (++skipped === 20) return { status: "succeeded_empty", job_id: job.id };
+      job = await this.claim();
+    }
     if (!job) {
       this.claimedSinceRepair = 0;
       if (!repaired) await this.persistence.enqueueMissingAutomaticDownstream();
       return { status: "idle" };
     }
     this.claimedSinceRepair += 1;
-    if (!projectedTrendProviderContext(job.providerCode).accepted) {
-      await this.finish(job, "succeeded_empty", null);
-      return { status: "succeeded_empty", job_id: job.id };
-    }
     try {
       if (!(await this.prepareIntelligence(job))) {
         await this.finish(job, "succeeded_empty", "intelligence_no_relevant_product");
@@ -122,7 +127,7 @@ export class MySqlTrendProjectionWorker {
         "updated_at) SELECT UUID(),n.organization_id,n.workspace_id,n.id,'scheduled',0,?,NULL,NULL,NULL,n.request_id,",
         "n.trace_id,?,? FROM normalized_records n JOIN providers p ON p.id=n.provider_id JOIN raw_evidence e ON e.id=n.raw_evidence_id LEFT JOIN ",
         "trend_projection_jobs j ON j.normalized_record_id=n.id WHERE n.status='active' AND j.id IS NULL AND ",
-        "(p.code NOT IN ('amazon_product','dhgate_supplier_search','made_in_china_search','ec21_supplier_search') ",
+        "(p.code NOT IN ('1688_search','amazon_product','dhgate_supplier_search','made_in_china_search','ec21_supplier_search') ",
         "OR (p.code='amazon_product' AND EXISTS (SELECT 1 FROM collection_subqueries cs ",
         "WHERE cs.id=e.collection_subquery_id AND JSON_UNQUOTE(JSON_EXTRACT(cs.target_json,'$.projection_type'))='rule_product_discovery'))) ",
         "ORDER BY n.created_at LIMIT 100",
@@ -205,7 +210,6 @@ export class MySqlTrendProjectionWorker {
       job.primarySelectionRationale = selected.rationale;
     } else if (
       job.providerCode !== "amazon_product" &&
-      job.providerCode !== "1688_search" &&
       !amazonAsin(job.payload, String(job.payload.canonical_url ?? ""))
     ) {
       job.intelligenceAssociation = await this.intelligence.associate(

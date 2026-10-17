@@ -1,4 +1,19 @@
 {
+  "selectionSupplyIntelligenceSeparation20261018": {
+    "status": "implemented",
+    "statusDetail": "local_minimum_passed_runtime_and_daily100_unverified",
+    "requirements": "docs/selection-supply-intelligence-separation.md",
+    "sourceFiles": [
+      "apps/worker/src/trend-projection-worker.ts",
+      "apps/worker/src/trend-projection-calculation.ts",
+      "apps/worker/src/trend-projection-persistence.ts"
+    ],
+    "testFiles": [
+      "tests/unit/trend-projection-worker-scheduling.test.mjs",
+      "tests/unit/intelligence-product-association.test.mjs"
+    ],
+    "contract": "1688 is sourcing only: no trend context, automatic discovery or supplier-to-publisher mapping; no new supplier trend jobs. Unsupported old jobs retire via original lease/empty completion, maximum20 per poll; accepted work continues in the same poll. No deletion or API/schema/config/Python changes. Sourcing/scoring retained. BaoTa Node restart required."
+  },
   "selectionIntelligenceIntakeFairness20261018": {
     "status": "implemented",
     "statusDetail": "local_checks_passed_runtime_intake_and_daily100_unverified",

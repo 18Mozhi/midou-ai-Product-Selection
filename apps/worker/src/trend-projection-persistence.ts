@@ -192,8 +192,7 @@ export class TrendProjectionPersistence {
         if (
           (matchedRuleIds.length ||
             job.primarySelectionRationale ||
-            (job.providerCode !== "1688_search" &&
-              isAutomaticProductDiscoveryProvider(job.providerCode))) &&
+            isAutomaticProductDiscoveryProvider(job.providerCode)) &&
           amazonAsin(job.payload, canonicalUrl)
         ) {
           stage = "automatic_product_discovery";

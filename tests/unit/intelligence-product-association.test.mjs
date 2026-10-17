@@ -601,11 +601,15 @@ for (const [name, providerCode, product] of [
 ]) {
   test(`automatic admission does not treat ${name} as a selected primary`, async () => {
     const f = automaticChannelProjection();
-    await f.persistence.project({
-      ...baseJob,
-      providerCode,
-      payload: { ...baseJob.payload, ...product },
-    });
+    const project = () =>
+      f.persistence.project({
+        ...baseJob,
+        providerCode,
+        payload: { ...baseJob.payload, ...product },
+      });
+    if (providerCode === "1688_search")
+      await assert.rejects(project, { code: "trend_provider_unsupported" });
+    else await project();
     assert.equal(
       f.calls.some(([sql]) => sql.startsWith("INSERT IGNORE INTO opportunities")),
       false,
