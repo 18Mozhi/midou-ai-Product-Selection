@@ -4539,6 +4539,26 @@
       ],
       "contract": "Original script and event/model bindings preserved. Full-width role/grant workspaces, actual role-count matrix columns, current-session/member facts before scope definitions. Native fragment navigation only. No backend/schema/permission/API/environment/dependency change.",
       "verification": "16 desktop/mobile business/layout cases passed; final dynamic-column/navigation 6 cases passed. Related Node suites: 114 pass plus 86 pass; Web typecheck/build and static/budget/realism/docs gates passed. Historical packets do not attest rebuilt UI. No production acceptance or deployment claim."
+    },
+    "selectionOrganizationApprovals20261017": {
+      "status": "implemented",
+      "statusDetail": "local_ui_verified_requires_release",
+      "requirements": "docs/selection-organization-approval-layout.md",
+      "routes": ["/org-admin/approvals"],
+      "sourceFiles": [
+        "apps/web/src/components/OrganizationApprovalPanel.vue",
+        "apps/web/src/organization-approval-workspace.css",
+        "apps/web/src/organization-admin.css",
+        "apps/web/src/design/organization-admin-tokens.css"
+      ],
+      "testFiles": [
+        "tests/e2e/m06-01-organization-admin.spec.ts",
+        "tests/unit/ui-phase2-org-approvals-pagination-focus.test.mjs",
+        "tests/unit/ui-phase2-contract-audit.test.mjs",
+        "tests/unit/ui-phase2-org-approvals-vue-preview.test.mjs"
+      ],
+      "contract": "Original script, event/model bindings, readonly GET lifecycle, query restoration and pager focus preserved. Full-width requests/template directory/detail, native fragment link only. No dependency, API, schema, permission or runtime configuration change.",
+      "verification": "16 desktop/mobile checks passed; 234 related Node checks passed; typecheck/build and static/budget/style/realism/docs passed. Historical packets do not attest rebuilt UI; no deployment or production acceptance claim."
     }
   },
   "phaseVerification": {

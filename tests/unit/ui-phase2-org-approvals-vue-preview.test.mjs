@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import { assertP34EvidenceSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
@@ -17,7 +18,10 @@ import {
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 // This preview is archived; current approval behavior has separate browser coverage.
-const original = beforePublishedPresentation(approvalsVueFile, read(approvalsVueFile)),
+const original = beforePublishedPresentation(
+    approvalsVueFile,
+    readPreSelectionRebuild(approvalsVueFile),
+  ),
   revised = previewApprovalsVue(original);
 const before = parse(original).descriptor,
   after = parse(revised).descriptor;

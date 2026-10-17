@@ -656,6 +656,12 @@ function turnPage(view: Section, direction: -1 | 1, event: MouseEvent) {
         <button type="button" @click="resetTemplates">重置</button>
       </div>
 
+      <a
+        v-if="selectedTemplate && filteredTemplates.length"
+        class="org-approval-detail-link"
+        href="#org-approval-template-selected"
+        >定位模板详情</a
+      >
       <div v-if="filteredTemplates.length" class="org-approval-template-browser">
         <div class="org-approval-template-directory">
           <button
@@ -691,7 +697,11 @@ function turnPage(view: Section, direction: -1 | 1, event: MouseEvent) {
           </footer>
         </div>
 
-        <article v-if="selectedTemplate" class="org-approval-template-detail">
+        <article
+          v-if="selectedTemplate"
+          id="org-approval-template-selected"
+          class="org-approval-template-detail"
+        >
           <header>
             <div>
               <span>{{ selectedTemplate.workspace_name }}</span>
@@ -728,7 +738,6 @@ function turnPage(view: Section, direction: -1 | 1, event: MouseEvent) {
           <section class="org-approval-version-diff">
             <header>
               <div>
-                <span>VERSION DIFF</span>
                 <h6>版本变化</h6>
               </div>
               <b>{{ selectedTemplate.version_diff.change_count }} 个节点变化</b>
@@ -818,129 +827,4 @@ function turnPage(view: Section, direction: -1 | 1, event: MouseEvent) {
   </section>
 </template>
 
-<style src="../design/approval-filter-tokens.css"></style>
-
-<style scoped>
-.org-approval-pagination > span:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--so-primary) 72%, var(--so-text));
-  outline-offset: 2px;
-}
-
-.org-template-filter-help {
-  display: none;
-}
-
-.org-template-empty-count,
-.org-template-empty-clear {
-  display: none;
-}
-
-@media (max-width: 760px) {
-  .org-template-empty-c {
-    display: block;
-    padding: 0;
-    min-height: 0;
-    background: var(--so-approval-filter-paper);
-    text-align: left;
-    font-family: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
-    line-height: 1.6;
-  }
-
-  .org-template-empty-c > span {
-    display: none;
-  }
-
-  .org-template-empty-c > .org-template-empty-count {
-    display: block;
-    margin: 0;
-    padding: 12px 0;
-    border-top: 1px solid var(--so-approval-filter-line);
-    font-size: 13px;
-    color: var(--so-approval-filter-muted);
-  }
-
-  .org-template-empty-c > div {
-    padding: 36px 18px;
-    border-radius: 5px;
-    background: var(--so-approval-filter-empty);
-  }
-
-  .org-template-empty-c h5 {
-    margin: 0;
-    color: var(--so-approval-filter-ink);
-    font-size: 19px;
-    line-height: 1.6;
-  }
-
-  .org-template-empty-c > div > p {
-    margin: 8px 0 0;
-    color: var(--so-approval-filter-muted);
-    font-size: 16px;
-    line-height: 1.6;
-  }
-
-  .org-template-empty-c .org-template-empty-clear {
-    display: inline-block;
-    min-height: 44px;
-    margin-top: 18px;
-    padding: 8px 15px;
-    border: 1px solid var(--so-approval-filter-border);
-    border-radius: 5px;
-    background: var(--so-approval-filter-paper);
-    color: var(--so-approval-filter-blue);
-    font: inherit;
-    font-size: 16px;
-  }
-
-  .org-approval-template-filters-c {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 18px;
-    padding: 16px;
-    background: var(--so-approval-filter-paper);
-    font-family: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
-    line-height: 1.6;
-  }
-
-  .org-approval-template-filters-c label {
-    min-width: 0;
-    gap: 7px;
-  }
-
-  .org-approval-template-filters-c .org-approval-search {
-    grid-column: auto;
-  }
-
-  .org-approval-template-filters-c label > span {
-    color: var(--so-approval-filter-ink);
-    font-size: 14px;
-  }
-
-  .org-approval-template-filters-c input,
-  .org-approval-template-filters-c select,
-  .org-approval-template-filters-c > button {
-    width: 100%;
-    height: 44px;
-    min-height: 44px;
-    border: 1px solid var(--so-approval-filter-border);
-    border-radius: 4px;
-    padding: 8px 10px;
-    background: var(--so-approval-filter-paper);
-    color: var(--so-approval-filter-ink);
-    font: inherit;
-    font-size: 16px;
-  }
-
-  .org-approval-template-filters-c > button {
-    color: var(--so-approval-filter-blue);
-  }
-
-  .org-approval-template-filters-c .org-template-filter-help {
-    display: block;
-    color: var(--so-approval-filter-muted);
-    font-size: 13px;
-    line-height: 1.6;
-    overflow-wrap: anywhere;
-    font-variant-numeric: tabular-nums;
-  }
-}
-</style>
+<style src="../organization-approval-workspace.css"></style>

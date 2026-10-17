@@ -2146,6 +2146,14 @@ test("organization tokens stay readable without mobile overflow", async ({ page 
 });
 
 async function navigateOrganization(page: Page, path: string) {
+  const desktopLink = page
+    .getByRole("complementary", { name: "工作区导航", exact: true })
+    .locator(`a[href="${path}"]`);
+  if (await desktopLink.isVisible()) {
+    await desktopLink.click();
+    await expect(page).toHaveURL(new RegExp(`${path}$`));
+    return;
+  }
   const navigation = page.getByRole("navigation", { name: "组织管理后台导航", exact: true });
   const menuTrigger = page.getByRole("button", { name: "打开导航菜单" });
   if (
@@ -2643,6 +2651,74 @@ for (const section of ["roles", "scopes", "grants"] as const) {
       await expect(card).toHaveCSS("background-image", "none");
       await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
     }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  });
+}
+
+for (const approvalSection of ["requests", "templates"] as const) {
+  test(`organization approval workspace preserves readonly full-width navigation: ${approvalSection}`, async ({
+    page,
+  }) => {
+    await setup(page);
+    await page.goto("/org-admin/approvals");
+    const root = page.locator(".org-approval-governance");
+    await expect(root).toBeVisible();
+    let writes = 0;
+    page.on("request", (request) => {
+      if (
+        new URL(request.url()).pathname.startsWith("/api/v1/org/admin/") &&
+        !["GET", "HEAD"].includes(request.method())
+      )
+        writes += 1;
+    });
+    const identity = await root.elementHandle();
+    if (approvalSection === "templates") {
+      await page.getByRole("button", { name: /模板版本/ }).click();
+      await page.getByLabel("搜索模板", { exact: true }).fill("模板");
+      await expect(page).toHaveURL(/approval_template_query=/);
+      const directory = root.locator(".org-approval-template-directory");
+      const choices = directory.locator(":scope > button");
+      if ((await choices.count()) > 1) await choices.nth(1).click();
+      const chosenName = await root.locator(".org-approval-template-detail h5").innerText();
+      await root.getByRole("link", { name: "定位模板详情", exact: true }).click();
+      await expect(page).toHaveURL(/#org-approval-template-selected$/);
+      await expect(root.locator(".org-approval-template-detail h5")).toHaveText(chosenName);
+      await expect(page.getByLabel("搜索模板", { exact: true })).toHaveValue("模板");
+      const a = await directory.boundingBox(),
+        b = await root.locator(".org-approval-template-detail").boundingBox();
+      expect(Math.abs(a!.width - b!.width)).toBeLessThanOrEqual(1);
+      expect(a!.y + a!.height).toBeLessThanOrEqual(b!.y);
+      await expect
+        .poll(async () => {
+          const box = await root.locator(".org-approval-template-detail h5").boundingBox();
+          return Boolean(box && box.y >= 60 && box.y < (page.viewportSize()?.height ?? 900) - 44);
+        })
+        .toBe(true);
+    } else {
+      const nextPageButton = root.getByRole("button", { name: "下一页", exact: true });
+      await nextPageButton.focus();
+      await nextPageButton.press("Enter");
+      const pagerStatus = root.locator(".org-approval-pagination > span");
+      await expect(pagerStatus).toContainText("当前第 2 / 2 页");
+      await expect(pagerStatus).toBeFocused();
+      await expect(pagerStatus).toHaveCSS("outline-style", "solid");
+      await expect(pagerStatus).toHaveCSS("outline-width", "3px");
+      await page.getByLabel("搜索审批", { exact: true }).fill("厨房收纳");
+      await expect(root.locator(".org-approval-request-list > article")).toHaveCount(1);
+      await expect(root.locator(".org-approval-request-list")).toContainText("厨房收纳机会复核");
+      await root.getByText("技术详情", { exact: true }).click();
+      await expect(root.getByText(/审批记录 ID：/)).toBeVisible();
+      const a = await root.boundingBox(),
+        b = await root.locator(".org-approval-request-list").boundingBox();
+      expect(Math.abs(a!.width - b!.width)).toBeLessThanOrEqual(1);
+      await expect(root.locator(".org-approval-overview")).toHaveCSS("background-image", "none");
+    }
+    expect(await identity!.evaluate((element) => element.isConnected)).toBe(true);
+    await identity!.dispose();
+    expect(writes).toBe(0);
+    expect(await page.evaluate(() => performance.getEntriesByType("navigation").length)).toBe(1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );

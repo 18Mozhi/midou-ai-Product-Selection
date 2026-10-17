@@ -1,6 +1,17 @@
-import { readFile } from "node:fs/promises";
+import assert from "node:assert/strict";
+import { readFile, mkdir } from "node:fs/promises";
 import { approvalsParentBase } from "./lib/ui-phase2-org-approvals-parent-current-driver.mjs";
-import { routeLifecycleVueDriver } from "./lib/ui-phase2-org-approvals-route-lifecycle-driver.mjs";
+import {
+  routeLifecycleVueDriver,
+  routeLifecycleOutput,
+} from "./lib/ui-phase2-org-approvals-route-lifecycle-driver.mjs";
+
+const args = process.argv.slice(2);
+assert.ok(
+  args.every((arg) => ["--capture", "--smoke"].includes(arg)) &&
+    !(args.includes("--capture") && args.includes("--smoke")),
+);
+if (args.includes("--capture")) await mkdir(routeLifecycleOutput);
 
 try {
   await import(

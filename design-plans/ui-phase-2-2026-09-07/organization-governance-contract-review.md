@@ -219,17 +219,26 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 
 ## 7. P34 OrganizationApprovalPanel 当前分页源码归属（2026-09-24）
 
-当前组件扫描到14个静态源码候选：既有表中的当前身份继续按签名追踪，四个未映射候选是审批记录与模板目录各自的上一页/下一页按钮。它们只更新当前视图的本地页码；到达边界时将焦点转移至本地页状态说明，并仅在焦点仍由该说明持有且可视区域被遮挡时滚动到视口内，不读写URL、不调用API、不改变审批或模板。
+当前组件扫描到15个静态源码候选（含第8节新增的本页详情定位）：既有表中的当前身份继续按签名追踪，四个未映射候选是审批记录与模板目录各自的上一页/下一页按钮。它们只更新当前视图的本地页码；到达边界时将焦点转移至本地页状态说明，并仅在焦点仍由该说明持有且可视区域被遮挡时滚动到视口内，不读写URL、不调用API、不改变审批或模板。
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
 | apps/web/src/components/OrganizationApprovalPanel.vue#95030381fd924d2b.1 | 541 | control | OG-A-CURRENT-PAGINATION / 审批记录上一页及边界焦点交接 |
 | apps/web/src/components/OrganizationApprovalPanel.vue#87f27ee40744d069.1 | 544 | control | OG-A-CURRENT-PAGINATION / 审批记录下一页及边界焦点交接 |
-| apps/web/src/components/OrganizationApprovalPanel.vue#25d2be8fec5c35cd.1 | 681 | control | OG-A-CURRENT-PAGINATION / 模板目录上一页及边界焦点交接 |
-| apps/web/src/components/OrganizationApprovalPanel.vue#62fcf758cc715685.1 | 684 | control | OG-A-CURRENT-PAGINATION / 模板目录下一页及边界焦点交接 |
+| apps/web/src/components/OrganizationApprovalPanel.vue#25d2be8fec5c35cd.1 | 687 | control | OG-A-CURRENT-PAGINATION / 模板目录上一页及边界焦点交接 |
+| apps/web/src/components/OrganizationApprovalPanel.vue#62fcf758cc715685.1 | 690 | control | OG-A-CURRENT-PAGINATION / 模板目录下一页及边界焦点交接 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/OrganizationApprovalPanel.vue | `16736108ab97e26b4a37e59b68a04648f8a6f1412b4d3e52f21052e33f03f004` |
+| apps/web/src/components/OrganizationApprovalPanel.vue | `37c7e104f3598de09edf6738de629b83ab8ce989864466a90169bb22c31de584` |
 
 映射仅记录当前静态位置及可见焦点行为；不证明父级保活、多实例路由生命周期、读屏体验、真实API/权限或生产验收。旧指纹在第6节单独保留为历史，避免覆盖当前哈希绑定。
+
+
+## 8. 2026-10-17 重制页面的本地详情定位
+
+第7节的四个分页处理器保持不变。本轮新增一个原生页面片段链接，当前组件静态候选为15个；没有新增审批写操作。这里只登记新入口，旧截图、历史审批和原指纹不变。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/OrganizationApprovalPanel.vue#9fe9de107b2b0f35.1 | 659 | control | OG-A-TEMPLATE-LOCAL-NAV / 仅在有筛选结果和所选模板时定位本页模板详情；href为#org-approval-template-selected，无事件处理器，不提交或重载页面，保留筛选和选择 |

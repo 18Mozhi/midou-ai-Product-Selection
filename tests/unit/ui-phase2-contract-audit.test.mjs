@@ -2572,7 +2572,18 @@ test("current P34 organization approvals map both pagers and isolate the histori
     "0b242741fe22e1a9.1",
     "0ab42724896b9cf9.1",
   ].map((signature) => `${file}#${signature}`);
-  assert.equal(candidates.length, 14);
+  assert.equal(candidates.length, 15);
+  const localDetail = candidates.find((candidate) => candidate.label === "定位模板详情");
+  assert.equal(localDetail?.attributes.href, "#org-approval-template-selected");
+  assert.deepEqual(localDetail?.events, {});
+  assert.ok(
+    report.records.some(
+      (record) =>
+        record.candidateId === localDetail?.candidateId &&
+        record.claim.includes("OG-A-TEMPLATE-LOCAL-NAV") &&
+        record.status === "identity-current",
+    ),
+  );
   assert.deepEqual(
     [...new Set(currentRows.map((record) => record.candidateId))].sort(),
     expectedIds.sort(),

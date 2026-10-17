@@ -1,14 +1,16 @@
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import ts from "typescript";
 import { buildTemplateKeyboardRunner } from "../../scripts/lib/ui-phase2-org-approvals-template-keyboard.mjs";
 
-const source = readFileSync("scripts/verify-ui-phase2-org-approvals-vue-c.mjs", "utf8").replaceAll(
-  "\r\n",
-  "\n",
+// Retired exact driver; current capture entry points remain strict.
+const source = readCaptureSourceRevision(
+  "scripts/verify-ui-phase2-org-approvals-vue-c.mjs",
+  "01db5a52a7073d15d9964b0fad8b451f9da44bf1725a51bfea84e3d677666907",
 );
-test("P34 template keyboard extension retains original and pagination checks, fixtures and cleanup", () => {
+test("Archived P34 template keyboard extension retains original and pagination checks, fixtures and cleanup", () => {
   const runner = buildTemplateKeyboardRunner(source);
   for (const [, name] of source.matchAll(/check\(\s*"([^"\n]+)"/g))
     assert.ok(runner.includes(JSON.stringify(name)), name);
@@ -28,13 +30,13 @@ test("P34 template keyboard extension retains original and pagination checks, fi
     [],
   );
 });
-test("P34 template keyboard extension fails closed when original read-only contract changes", () => {
+test("Archived P34 template keyboard extension fails closed when original read-only contract changes", () => {
   assert.throws(
     () => buildTemplateKeyboardRunner(source.replace('r.key.startsWith("GET ")', "true")),
     /original P34 App driver drift/,
   );
 });
-test("P34 technical focus assertions precede screenshots and preserve real keyboard traversal", () => {
+test("Archived P34 technical focus assertions precede screenshots and preserve real keyboard traversal", () => {
   const helper = readFileSync("scripts/lib/ui-phase2-org-approvals-template-keyboard.mjs", "utf8");
   const ast = ts.createSourceFile(
     "helper.mjs",

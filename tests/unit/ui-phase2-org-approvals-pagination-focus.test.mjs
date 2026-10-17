@@ -163,7 +163,7 @@ test("P34 template binds both real pagers without changing disabled bounds or pa
   );
   assert.match(descriptor.scriptSetup.content, /requestPageSize = 8,\s*templatePageSize = 6/);
   assert.match(
-    descriptor.styles.find((s) => s.scoped).content,
+    readFileSync("apps/web/src/organization-approval-workspace.css", "utf8"),
     /\.org-approval-pagination > span:focus-visible/,
   );
   const reviewCss = readFileSync(

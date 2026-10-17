@@ -1,14 +1,16 @@
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import ts from "typescript";
 import { buildApprovalsAppPaginationRunner } from "../../scripts/lib/ui-phase2-org-approvals-app-pagination.mjs";
 
-const source = readFileSync("scripts/verify-ui-phase2-org-approvals-vue-c.mjs", "utf8").replaceAll(
-  "\r\n",
-  "\n",
+// Retired exact driver; current capture entry points remain strict.
+const source = readCaptureSourceRevision(
+  "scripts/verify-ui-phase2-org-approvals-vue-c.mjs",
+  "01db5a52a7073d15d9964b0fad8b451f9da44bf1725a51bfea84e3d677666907",
 );
-test("P34 App pagination extends the exact driver without replacing existing checks or fixture requests", () => {
+test("Archived P34 App pagination extends the exact driver without replacing existing checks or fixture requests", () => {
   const runner = buildApprovalsAppPaginationRunner(source);
   for (const [, name] of source.matchAll(/check\(\s*"([^"\n]+)"/g))
     assert.ok(runner.includes(JSON.stringify(name)), name);
@@ -24,7 +26,7 @@ test("P34 App pagination extends the exact driver without replacing existing che
     [],
   );
 });
-test("P34 App original-driver contract rejects fixture, assertion and output drift", () => {
+test("Archived P34 App original-driver contract rejects fixture, assertion and output drift", () => {
   for (const [before, after] of [
     ['requests.every((r) => r.key.startsWith("GET ") && r.body === null)', "true"],
     ['"p34-synthetic-template-"', '"different-fixture-"'],
@@ -37,7 +39,7 @@ test("P34 App original-driver contract rejects fixture, assertion and output dri
     );
   }
 });
-test("P34 App validates on-screen ownership before screenshot framing and keeps cleanup in original finally", () => {
+test("Archived P34 App validates on-screen ownership before screenshot framing and keeps cleanup in original finally", () => {
   const helper = readFileSync("scripts/lib/ui-phase2-org-approvals-app-pagination.mjs", "utf8");
   const ast = ts.createSourceFile(
     "helper.mjs",

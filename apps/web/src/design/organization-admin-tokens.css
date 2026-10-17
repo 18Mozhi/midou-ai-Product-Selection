@@ -9,12 +9,10 @@ html:has(body #app .org-admin-center) {
   --oa-highlight: #edf4ff;
   --oa-focus: var(--glass-focus);
   --oa-section: #d6e0ec;
-  --oa-outline: #c7d4e4;
   --oa-focus-soft: #a9c5f5;
   --oa-muted: var(--glass-text-muted);
   --oa-secondary: #c7d0dc;
   --oa-disabled-ink: #7a8999;
   --oa-disabled-bg: #e8edf3;
-  --oa-blue-light: var(--glass-primary-soft);
   --oa-blue-wash: var(--glass-primary-soft);
 }
