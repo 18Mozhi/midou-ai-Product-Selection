@@ -817,6 +817,7 @@ onMounted(load);
   </section>
 </template>
 <style src="./PlatformAccountCenter.css"></style>
+<style src="../design/account-permissions-tokens.css"></style>
 <style scoped src="./PlatformAccountCenterPermissions.css"></style>
 <style src="./PlatformAccountCenterAdmin.css"></style>
 <style src="./PlatformAdminComparisonMobile.css"></style>

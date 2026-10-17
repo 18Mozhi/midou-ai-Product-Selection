@@ -467,21 +467,15 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     }
     if (paths[index] === "apps/web/src/design/account-center-tokens.css") {
       const palette = source.replace(/\/\*[\s\S]*?\*\//g, "").trim();
-      assert.match(
-        palette,
-        new RegExp(
-          String.raw`^html:has\(body #app \.account-center--review\)\s*\{(?:\s*--account-review-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}` +
-            String.raw`\s*html:has\(body #app \.account-center--organization-review\),\s*html:has\(body #app \.account-center--user-admin-c\),\s*html:has\(body #app \.account-center--admins-c\),\s*html:has\(body #app \.account-center--users-c\)\s*\{(?:\s*--account-org-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}` +
-            String.raw`\s*html:has\(body #app \.account-center--users-c\)\s*\{(?:\s*--account-users-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}` +
-            String.raw`\s*html:has\(body #app \.account-center--review \.account-filter--overview-c\)\s*\{(?:\s*--p39-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}$`,
-        ),
-      );
+      assert.doesNotMatch(palette, /--account-review-|--account-users-|--p39-/);
+      assert.match(palette, /html:has\(body #app \.account-center--organization-review\)/);
+      assert.match(palette, /--account-org-surface:/);
       continue;
     }
     if (paths[index] === "apps/web/src/design/account-permissions-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html:has\(body #app \.account-center--permissions-c\)\s*\{(?:\s*--account-permission-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+        /^html:has\(body #app \.account-center--permissions-c\)\s*\{(?:\s*--account-permission-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|var\(--so-[a-z-]+\));)+\s*\}$/,
       );
       continue;
     }

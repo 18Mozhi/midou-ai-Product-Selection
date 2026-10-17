@@ -630,7 +630,7 @@ test("platform permission page reads only the real role catalog and preserves co
   await expect(page.getByPlaceholder("搜索权限名称")).toHaveValue("平台角色");
 });
 
-test("P45 permission C page keeps a desktop comparison rail and stacks at 760px", async ({
+test("permission comparison uses top role selectors and full-width results at every width", async ({
   page,
 }) => {
   await setup(page);
@@ -641,27 +641,43 @@ test("P45 permission C page keeps a desktop comparison rail and stacks at 760px"
   const comparison = shell.locator(".role-comparison--permission-page");
   const context = comparison.locator(".role-comparison__context");
   const reading = comparison.locator(".role-comparison__reading");
-  const assertColumns = async (sideBySide: boolean) => {
+  const assertColumns = async () => {
     const [left, right] = await Promise.all([context.boundingBox(), reading.boundingBox()]);
     expect(left).not.toBeNull();
     expect(right).not.toBeNull();
-    if (sideBySide) expect(right!.x).toBeGreaterThanOrEqual(left!.x + left!.width - 1);
-    else expect(right!.y).toBeGreaterThanOrEqual(left!.y + left!.height - 1);
+    expect(right!.y).toBeGreaterThanOrEqual(left!.y + left!.height - 1);
+    expect(Math.abs(right!.width - left!.width)).toBeLessThanOrEqual(1);
+    const checkbox = await comparison.getByRole("checkbox").boundingBox();
+    expect(checkbox?.width).toBe(18);
+    expect(checkbox?.height).toBe(18);
+    const toggle = await comparison.locator(".role-comparison__toggle").boundingBox();
+    expect(toggle!.height).toBeGreaterThanOrEqual(44);
+    await expect
+      .poll(() =>
+        context.evaluate((el) => {
+          const style = getComputedStyle(el);
+          return (
+            style.getPropertyValue("--account-permission-surface").trim().length > 0 &&
+            style.backgroundColor !== "rgba(0, 0, 0, 0)"
+          );
+        }),
+      )
+      .toBe(true);
   };
 
   await expect(comparison.getByRole("complementary")).toBeVisible();
   await expect(context.locator(".role-comparison__selectors select")).toHaveCount(2);
   await expect(context.locator(".role-comparison__summaries article")).toHaveCount(2);
   await expect(reading.locator(".role-comparison__matrix article")).toHaveCount(6);
-  await assertColumns(true);
+  await assertColumns();
 
   for (const width of [1100, 1024, 761]) {
     await page.setViewportSize({ width, height: 1000 });
-    await assertColumns(true);
+    await assertColumns();
   }
   for (const width of [760, 390]) {
     await page.setViewportSize({ width, height: 900 });
-    await assertColumns(false);
+    await assertColumns();
     await expect
       .poll(() => shell.evaluate((element) => element.scrollWidth <= element.clientWidth))
       .toBe(true);

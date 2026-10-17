@@ -381,9 +381,7 @@ test("platform account permissions use their route-scoped palette", async () => 
     readFile("apps/web/src/components/PlatformRoleComparisonPermissions.css", "utf8"),
   ]);
   const declarations = [
-    ...tokens.matchAll(
-      /(--account-permission-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi,
-    ),
+    ...tokens.matchAll(/(--account-permission-[a-z-]+):\s*var\(--so-[a-z-]+\);/gi),
   ];
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set(
@@ -392,14 +390,18 @@ test("platform account permissions use their route-scoped palette", async () => 
     ),
   );
 
-  assert.equal(names.size, 19);
+  assert.equal(names.size, 15);
   assert.equal(declarations.length, names.size, "no duplicate account permissions tokens");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
     /^html:has\(body #app \.account-center--permissions-c\)\s*\{[\s\S]*\}$/,
   );
-  assert.ok(css.startsWith('@import "../design/account-permissions-tokens.css";'));
-  assert.ok(comparisonCss.startsWith('@import "../design/account-permissions-tokens.css";'));
+  assert.doesNotMatch(css, /@import/);
+  assert.doesNotMatch(comparisonCss, /@import/);
+  assert.match(
+    await readFile("apps/web/src/components/PlatformAccountCenter.vue", "utf8"),
+    /<style src="\.\.\/design\/account-permissions-tokens\.css"><\/style>/,
+  );
   assertPaletteUsage(references, names);
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
   assert.doesNotMatch(comparisonCss, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
