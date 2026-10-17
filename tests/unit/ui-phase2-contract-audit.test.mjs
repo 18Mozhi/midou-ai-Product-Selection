@@ -16,6 +16,9 @@ import {
   auditPageSpecs,
 } from "../../scripts/lib/ui-phase2-contract-audit.mjs";
 
+const readPreRebuildFile = (file) =>
+  readPreSelectionRebuild(file instanceof URL ? fileURLToPath(file) : file);
+
 const runPreRebuildAudit = () =>
   runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles());
 
@@ -579,10 +582,10 @@ test("audited reason retains current sites while captured consumer claims stay b
   assert.equal(report.unreferenced.filter((item) => item.file === file).length, 0);
 });
 
-test("current P48/P50 source maps cover each live candidate and fingerprint", () => {
-  const report = runContractAudit();
+test("pre-rebuild current P48/P50 source maps cover each live candidate and fingerprint", () => {
+  const report = runPreRebuildAudit();
   const document = "source-channel-credential-contract-review.md";
-  const documentLines = readFileSync(
+  const documentLines = readPreRebuildFile(
     new URL(`../../design-plans/ui-phase-2-2026-09-07/${document}`, import.meta.url),
     "utf8",
   ).split(/\r?\n/);
@@ -642,7 +645,7 @@ test("current P48/P50 source maps cover each live candidate and fingerprint", ()
     ["ProviderCompatibilityMatrixDialog.vue", 326],
   ]) {
     const file = `apps/web/src/components/${name}`;
-    const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+    const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
       "\r\n",
       "\n",
     );
@@ -669,13 +672,13 @@ test("current P48/P50 source maps cover each live candidate and fingerprint", ()
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current collection operations map covers all live candidates and isolates the old snapshot", () => {
+test("pre-rebuild current collection operations map covers all live candidates and isolates the old snapshot", () => {
   const file = "apps/web/src/components/CollectionOperationsConsole.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const records = report.records.filter(
     (record) =>
@@ -780,14 +783,14 @@ test("current platform message workbench map covers every live source and isolat
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current platform notification center map covers its parent actions and child boundaries", () => {
+test("pre-rebuild current platform notification center map covers its parent actions and child boundaries", () => {
   const file = "apps/web/src/components/PlatformNotificationCenter.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "content-notification-evidence-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const records = report.records.filter(
     (record) =>
@@ -815,14 +818,14 @@ test("current platform notification center map covers its parent actions and chi
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current platform user detail map covers all live sites without trusting stale signatures", () => {
+test("pre-rebuild current platform user detail map covers all live sites without trusting stale signatures", () => {
   const file = "apps/web/src/components/PlatformUserDetailDialog.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "platform-user-design-contract.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -1276,14 +1279,14 @@ test("current P11 shared read status maps the conditional retry affordance and c
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current open platform map binds live operations and keeps old hash history isolated", () => {
+test("pre-rebuild current open platform map binds live operations and keeps old hash history isolated", () => {
   const file = "apps/web/src/components/OpenPlatformCenter.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "commercial-security-open-platform-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRecords = report.records.filter(
     (record) =>
@@ -1338,14 +1341,14 @@ test("current open platform map binds live operations and keeps old hash history
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current P53 runtime center reconciles all candidates and retains stale identities", () => {
+test("pre-rebuild current P53 runtime center reconciles all candidates and retains stale identities", () => {
   const file = "apps/web/src/components/CollectionRuntimeCenter.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "collection-runtime-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -1432,14 +1435,14 @@ test("current P60 shared reason dialog maps native modal, field, submit, cancel 
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current P62 log center maps remaining controls and isolates the superseded source hash", () => {
+test("pre-rebuild current P62 log center maps remaining controls and isolates the superseded source hash", () => {
   const file = "apps/web/src/components/PlatformLogCenter.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "log-backup-release-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -1481,8 +1484,8 @@ test("current P62 log center maps remaining controls and isolates the superseded
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("P62/P64/P65 superseded controls are historical while current replacements remain mapped", () => {
-  const report = runContractAudit();
+test("pre-rebuild P62/P64/P65 superseded controls are historical while current replacements remain mapped", () => {
+  const report = runPreRebuildAudit();
   const document = "log-backup-release-contract-review.md";
   const historicalIds = [
     "apps/web/src/components/PlatformLogCenter.vue#a4a224d771806ee7.1",
@@ -1551,14 +1554,14 @@ test("P62/P64/P65 superseded controls are historical while current replacements 
   }
 });
 
-test("current P42 organization detail dialog reconciles every candidate and current hash", () => {
+test("pre-rebuild current P42 organization detail dialog reconciles every candidate and current hash", () => {
   const file = "apps/web/src/components/PlatformOrganizationDetailDialog.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "platform-account-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -1665,14 +1668,14 @@ test("current P49 acceptance execution maps every controlled field, action and t
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current P47 adapter center reconciles all candidates and isolates its superseded fingerprint", () => {
+test("pre-rebuild current P47 adapter center reconciles all candidates and isolates its superseded fingerprint", () => {
   const file = "apps/web/src/components/ProviderAdapterCenter.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "provider-definition-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -1764,14 +1767,14 @@ test("current P47 adapter center reconciles all candidates and isolates its supe
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current P66 topology center maps all controls and isolates the old source inventory", () => {
+test("pre-rebuild current P66 topology center maps all controls and isolates the old source inventory", () => {
   const file = "apps/web/src/components/RuntimeTopologyCenter.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "runtime-resilience-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -2138,14 +2141,14 @@ test("current P57 notification action dialog maps reason and close versus cancel
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current P51 task center maps missing state recovery and detail shell candidates", () => {
+test("pre-rebuild current P51 task center maps missing state recovery and detail shell candidates", () => {
   const file = "apps/web/src/components/CollectionTaskCenter.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "collection-runtime-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -2453,14 +2456,14 @@ test("current P61 status view maps its five navigation candidates and current ha
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current P61 status workspace maps its local section switch without persistence claims", () => {
+test("pre-rebuild current P61 status workspace maps its local section switch without persistence claims", () => {
   const file = "apps/web/src/components/PlatformStatusWorkspace.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "status-center-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -2491,14 +2494,14 @@ test("current P61 status workspace maps its local section switch without persist
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current P64 recovery center maps refresh actions and isolates the original fingerprint", () => {
+test("pre-rebuild current P64 recovery center maps refresh actions and isolates the original fingerprint", () => {
   const file = "apps/web/src/components/BackupRecoveryCenter.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "log-backup-release-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -2644,14 +2647,14 @@ test("current P16 decision form map refreshes its line while isolating the super
   );
 });
 
-test("current P41 organization wizard maps its form submission and three field owners", () => {
+test("pre-rebuild current P41 organization wizard maps its form submission and three field owners", () => {
   const file = "apps/web/src/components/OrganizationCreationWizard.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "platform-account-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -2786,14 +2789,14 @@ test("P01 pre-split retry signature remains historical beside current parent-chi
   }
 });
 
-test("current P39 account center maps refresh control and parent-owned load wiring", () => {
+test("pre-rebuild current P39 account center maps refresh control and parent-owned load wiring", () => {
   const file = "apps/web/src/components/PlatformAccountCenter.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "platform-account-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -2941,14 +2944,14 @@ test("current P57 notification management maps its four child event boundaries",
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current P64 recovery directory maps all three same-page anchor links", () => {
+test("pre-rebuild current P64 recovery directory maps all three same-page anchor links", () => {
   const file = "apps/web/src/components/BackupRecoveryDirectory.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "log-backup-release-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -3019,14 +3022,14 @@ test("current P49 acceptance operations map two parent-owned destinations and lo
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current P67 Redis center maps refresh and retry controls without promoting runtime evidence", () => {
+test("pre-rebuild current P67 Redis center maps refresh and retry controls without promoting runtime evidence", () => {
   const file = "apps/web/src/components/RedisResilienceCenter.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+  const source = readPreRebuildFile(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
     "\n",
   );
   const document = "runtime-resilience-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -3146,4 +3149,24 @@ test("shared contract input inventory is separate from static actions and preser
   const before = readFileSync(coveragePath, "utf8");
   runContractAudit();
   assert.equal(readFileSync(coveragePath, "utf8"), before);
+});
+
+test("live audit retains remade status-workspace drift instead of borrowing captured source", () => {
+  const file = "apps/web/src/components/PlatformStatusWorkspace.vue";
+  const actual = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+  const audit = runContractAudit();
+  const candidates = scanSource(actual, file).candidates;
+  const claims = audit.sourceClaims.filter(
+    (claim) => claim.file === file && claim.temporalScope !== "historical",
+  );
+  assert.ok(claims.length);
+  assert.ok(claims.every((claim) => claim.status === "hash-drift"));
+  for (const row of audit.records.filter(
+    (row) => row.sourceFile === file && row.temporalScope !== "historical",
+  )) {
+    const candidate = candidates.find((item) => item.candidateId === row.candidateId);
+    assert.ok(candidate);
+    assert.equal(row.currentLine, candidate.line);
+    assert.equal(row.sourceBinding, "hash-drift");
+  }
 });

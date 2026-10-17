@@ -1273,3 +1273,5 @@ M08-05 的实现合同固定为惠州单机一个名为“ai选品”的宝塔�
 - 竞品数量条件现同时要求可追溯的同类型/用途相关性与真实详情，推荐和每日完成共用检查；未分类历史记录不填数量，不改已确认的低分、不推荐与明确利润未知口径。见 `docs/selection-competitor-quality-proof.md`，未部署。
 
 - 不足竞品发现与到期详情刷新在原单 Worker 补偿轮次内轮换，沿用 COMPETITOR_REFRESH_INTERVAL_SECONDS 的冷却及原积压限制；见 `docs/selection-competitor-rediscovery.md`。未部署，无新生产服务或数据库结构。
+
+- 系统状态和链路日志正文已重制为顶部控制及全宽证据，移除旧侧栏、内嵌样式和 29 个颜色变量；原网络、筛选、导出和本地切换逻辑不变。156 项相关检查、十项双端浏览器检查通过，历史捕获与现行验收分离，见 `docs/selection-status-log-layout.md`。未部署，其他页面与真实持续百品仍待继续。

@@ -1912,8 +1912,18 @@ test("system status aggregates real operations observations and management links
       statusReads += 1;
   });
   await page.goto("/platform-admin/status");
-  await expect(page.getByRole("heading", { name: "系统状态", level: 1 })).toBeVisible();
+  await expect(
+    page
+      .locator(".platform-management--status-c .platform-page-header")
+      .getByRole("heading", { name: "系统状态", level: 1 }),
+  ).toBeVisible();
   await expect(page.locator(".role-page-title")).toHaveCount(0);
+  const statusScope = page.getByRole("region", { name: "运行观测范围" });
+  const scopeBox = await statusScope.boundingBox(),
+    panelBox = await page.locator(".p61-panel:visible").boundingBox();
+  expect(scopeBox && panelBox && scopeBox.y + scopeBox.height <= panelBox.y).toBeTruthy();
+  expect(Math.abs(scopeBox!.width - panelBox!.width)).toBeLessThan(2);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const sectionGroup = page.getByRole("group", { name: "系统状态分区" });
   await expect(sectionGroup.getByRole("button")).toHaveCount(4);
   await expect(sectionGroup.locator('[data-status-view="attention"]')).toHaveAttribute(
@@ -2062,6 +2072,13 @@ test("chain logs group trace events and deep-link exceptional task and source fa
   );
   await page.goto("/platform-admin/logs");
   await expect(page.getByText("调用链 2 条", { exact: true })).toBeVisible();
+  const directoryBox = await page.getByRole("region", { name: "调用链目录" }).boundingBox();
+  const eventBox = await page.locator(".p62-events:visible").boundingBox();
+  expect(
+    directoryBox && eventBox && directoryBox.y + directoryBox.height <= eventBox.y,
+  ).toBeTruthy();
+  expect(Math.abs(directoryBox!.width - eventBox!.width)).toBeLessThan(2);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   const sharedChain = page.locator(".platform-log-chain").filter({ hasText: "trace-shared" });
   await expect(sharedChain).toContainText("2 个事件 · 1 个异常");
   const workerChain = page.locator(".platform-log-chain").filter({ hasText: "trace-worker" });
@@ -2110,6 +2127,10 @@ test("chain logs group trace events and deep-link exceptional task and source fa
   if (!(await logQuery.isVisible())) {
     await page.getByRole("button", { name: "筛选链路日志" }).click();
   }
+  await expect(logQuery).toHaveCSS("min-height", "44px");
+  expect(await logQuery.evaluate((el) => getComputedStyle(el.closest("form")!).display)).toBe(
+    "grid",
+  );
   await logQuery.fill("trace-shared");
   await page.getByLabel("运行面").selectOption("crawler");
   const mobileFilter = page.getByRole("dialog", { name: "筛选链路日志" });
@@ -2142,4 +2163,37 @@ test("chain logs group trace events and deep-link exceptional task and source fa
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
+});
+
+test("chain directory keeps two hundred returned traces bounded and keyboard reachable", async ({
+  page,
+}) => {
+  await nav(page);
+  const { logReviewFixtures } = await import("../../scripts/lib/log-review-fixtures.mjs");
+  const { fixture } = await logReviewFixtures();
+  const items = Array.from({ length: 200 }, (_, index) => ({
+    ...fixture.items[0],
+    id: `volume-${index}`,
+    trace_id: `trace-volume-${String(index).padStart(3, "0")}`,
+  }));
+  await page.route("**/api/v1/platform/management?**", (route) =>
+    route.fulfill({ json: env({ ...fixture, items }) }),
+  );
+  await page.goto("/platform-admin/logs");
+  const directory = page.getByRole("navigation", { name: "选择日志调用链" });
+  const buttons = directory.getByRole("button");
+  await expect(buttons).toHaveCount(200);
+  const bounds = await directory.evaluate((el) => ({
+    height: el.clientHeight,
+    content: el.scrollHeight,
+  }));
+  expect(bounds.height).toBeLessThanOrEqual(270);
+  expect(bounds.content).toBeGreaterThan(bounds.height);
+  const last = buttons.last();
+  await last.focus();
+  await last.press("Enter");
+  await expect(last).toHaveAttribute("aria-pressed", "true");
+  const target = await last.getAttribute("aria-controls");
+  await expect(page.locator(`#${target}`)).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

@@ -584,26 +584,14 @@ test("organization audit palette resolves its original C direction colors in rou
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("P62 platform log palette keeps the reviewed color contract route-scoped", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/platform-log-center-tokens.css", "utf8"),
-    readFile("apps/web/src/platform-log-center-c.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--p62-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p62-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 16);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.platform-log-center--c\)\s*\{[\s\S]*\}$/,
+test("P62 platform log uses semantic workspace colors without shell overrides", async () => {
+  const css = await readFile("apps/web/src/platform-log-center-c.css", "utf8");
+  assert.ok(css.startsWith('@import "./runtime-observation-workspace.css";'));
+  assert.doesNotMatch(
+    css,
+    /--p61-|--p62-|body:has|role-shell|role-sidebar|#[0-9a-f]{3,8}\b|rgba?\(/i,
   );
-  assert.ok(css.startsWith('@import "./design/platform-log-center-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+  assert.match(css, /var\(--so-/);
 });
 
 test("provider source filter palette resolves its local controls without broadening scope", async () => {
@@ -628,26 +616,14 @@ test("provider source filter palette resolves its local controls without broaden
   assert.match(css, /#app \.source-filter \.source-filter-toggle/);
 });
 
-test("P61 platform status palette resolves its shell and feedback colors in route scope", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/platform-status-center-tokens.css", "utf8"),
-    readFile("apps/web/src/platform-status-center-c.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--p61-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p61-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 13);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.platform-management--status-c\)\s*\{[\s\S]*\}$/,
+test("P61 platform status uses semantic workspace colors without shell overrides", async () => {
+  const css = await readFile("apps/web/src/platform-status-center-c.css", "utf8");
+  assert.ok(css.startsWith('@import "./runtime-observation-workspace.css";'));
+  assert.doesNotMatch(
+    css,
+    /--p61-|--p62-|body:has|role-shell|role-sidebar|#[0-9a-f]{3,8}\b|rgba?\(/i,
   );
-  assert.ok(css.startsWith('@import "./design/platform-status-center-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(|\bwhite\b/i);
+  assert.match(css, /var\(--so-/);
 });
 
 test("P22 cost rule palette resolves its approved workbench colors in route scope", async () => {

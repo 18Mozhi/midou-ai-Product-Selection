@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
@@ -28,14 +32,11 @@ const cases = [
   },
 ];
 
-test("remaining log, provider and preference controls bind to their current narrow semantics", () => {
-  const audit = runContractAudit();
+test("archived log, provider and preference controls retain their recorded narrow semantics", () => {
+  const audit = runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles());
 
   for (const mapping of cases) {
-    const source = readFileSync(
-      new URL(`../../${mapping.file}`, import.meta.url),
-      "utf8",
-    ).replaceAll("\r\n", "\n");
+    const source = readPreSelectionRebuild(mapping.file);
     const candidates = scanSource(source, mapping.file).candidates;
     const [record] = audit.records.filter(
       (item) =>
@@ -65,14 +66,8 @@ test("remaining log, provider and preference controls bind to their current narr
     assert.equal(audit.unreferenced.filter((item) => item.file === mapping.file).length, 0);
   }
 
-  const logs = readFileSync(
-    new URL("../../apps/web/src/components/PlatformLogWorkspace.vue", import.meta.url),
-    "utf8",
-  );
-  const registry = readFileSync(
-    new URL("../../apps/web/src/components/ProviderRegistry.vue", import.meta.url),
-    "utf8",
-  );
+  const logs = readPreSelectionRebuild("apps/web/src/components/PlatformLogWorkspace.vue");
+  const registry = readPreSelectionRebuild("apps/web/src/components/ProviderRegistry.vue");
   const preferences = readFileSync(
     new URL("../../apps/web/src/components/theme-studio/PreferenceRadioGroup.vue", import.meta.url),
     "utf8",

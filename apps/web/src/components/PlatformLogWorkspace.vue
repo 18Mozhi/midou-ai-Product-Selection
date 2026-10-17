@@ -19,9 +19,14 @@ const sourceName = (source: string) =>
 
 <template>
   <div class="p62-workspace">
-    <aside class="p62-directory" aria-labelledby="p62-directory-title">
-      <h2 id="p62-directory-title">调用链目录</h2>
-      <p>仅包含本次返回事件，不代表完整调用链。</p>
+    <section class="p62-directory" aria-labelledby="p62-directory-title">
+      <header>
+        <div>
+          <h2 id="p62-directory-title">调用链目录</h2>
+          <p>仅包含本次返回事件，不代表完整调用链。</p>
+        </div>
+        <span>{{ chains.length }} 条调用链</span>
+      </header>
       <nav aria-label="选择日志调用链">
         <button
           v-for="(chain, index) in chains"
@@ -37,7 +42,7 @@ const sourceName = (source: string) =>
           <small>{{ chain.sources.map(sourceName).join(" / ") }}</small>
         </button>
       </nav>
-    </aside>
+    </section>
     <section
       v-for="(chain, index) in chains"
       :id="`p62-chain-${index}`"

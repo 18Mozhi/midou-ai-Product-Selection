@@ -35,7 +35,7 @@ test("P62 review composes the actual production page without changing its busine
     parse(pageSource).descriptor.scriptSetup.content,
   );
   assert.match(review, /platform-log-center--c platform-log-center--review/);
-  assert.match(review, /<h1>链路日志<\/h1>/);
+  assert.match(review, /<PlatformPageHeader title="链路日志"/);
   assert.doesNotMatch(review, /尚未部署|本地合成日志/);
 });
 

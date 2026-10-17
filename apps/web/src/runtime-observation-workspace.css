@@ -6,7 +6,9 @@
     .backup-center--c,
     .topology-center--c,
     .crawler-scheduler--c,
-    .capacity-boundary--c
+    .capacity-boundary--c,
+    .platform-management--status-c,
+    .platform-log-center--c
   ) {
   display: grid;
   gap: 16px;
@@ -348,7 +350,9 @@
       .backup-center--c,
       .topology-center--c,
       .crawler-scheduler--c,
-      .capacity-boundary--c
+      .capacity-boundary--c,
+      .platform-management--status-c,
+      .platform-log-center--c
     ) {
     & .p68-runtime {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -372,7 +376,9 @@
       .backup-center--c,
       .topology-center--c,
       .crawler-scheduler--c,
-      .capacity-boundary--c
+      .capacity-boundary--c,
+      .platform-management--status-c,
+      .platform-log-center--c
     ) {
     & :is(.p68-resource-grid, .p67-resource-grid) {
       grid-template-columns: minmax(0, 1fr);

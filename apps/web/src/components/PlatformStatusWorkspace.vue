@@ -38,10 +38,14 @@ const active = ref<ViewKey>("attention");
 
 <template>
   <div class="p61-workspace">
-    <aside class="p61-directory" aria-labelledby="p61-directory-title">
-      <p>观测范围</p>
-      <h2 id="p61-directory-title">系统状态</h2>
-      <strong>需核查依赖 {{ warningCount }} 项</strong>
+    <section class="p61-directory" aria-labelledby="p61-directory-title">
+      <header>
+        <div>
+          <h2 id="p61-directory-title">运行观测范围</h2>
+          <strong>需核查依赖 {{ warningCount }} 项</strong>
+        </div>
+        <small>数据观测时间 {{ observedAt }}</small>
+      </header>
       <div class="p61-section-switcher" role="group" aria-label="系统状态分区">
         <button
           v-for="view in views"
@@ -55,8 +59,7 @@ const active = ref<ViewKey>("attention");
           {{ view.label }}
         </button>
       </div>
-      <small>数据观测时间<br />{{ observedAt }}</small>
-    </aside>
+    </section>
     <section
       v-for="view in views"
       :id="`p61-panel-${view.key}`"

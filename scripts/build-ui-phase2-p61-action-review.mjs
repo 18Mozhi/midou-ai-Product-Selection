@@ -98,8 +98,8 @@ function contractClaim(record) {
     .at(-1);
 }
 
-export function buildP61ActionReview() {
-  const sourceText = Object.fromEntries(sourceFiles.map((file) => [file, readSource(file)]));
+export function buildP61ActionReview(read = readSource, auditRecords = runContractAudit().records) {
+  const sourceText = Object.fromEntries(sourceFiles.map((file) => [file, read(file)]));
   const sourceHashes = Object.fromEntries(
     Object.entries(sourceText).map(([file, source]) => [
       file,
@@ -109,7 +109,7 @@ export function buildP61ActionReview() {
   const candidates = Object.entries(sourceText).flatMap(
     ([file, source]) => scanSource(source, file).candidates,
   );
-  const records = runContractAudit().records.filter(
+  const records = auditRecords.filter(
     (record) =>
       sourceFiles.includes(record.sourceFile) &&
       record.document === contract &&
@@ -175,7 +175,7 @@ export function buildP61ActionReview() {
     if (scanned.length) inputs[file] = scanned.map((item) => item.binding);
   }
 
-  const parentCandidates = scanSource(readSource(parentSourceFile), parentSourceFile).candidates;
+  const parentCandidates = scanSource(read(parentSourceFile), parentSourceFile).candidates;
   const sharedSignatures = ["62c28f83dd77541b.1", "79f3cfdde95076be.1", "1c008f867673db60.1"];
   const exclusions = parentCandidates
     .filter(
@@ -190,9 +190,7 @@ export function buildP61ActionReview() {
       return { candidateId: candidate.candidateId, reason: definition[1] };
     });
   assert.equal(exclusions.length, parentCandidates.length - sharedSignatures.length);
-  const parentRecords = runContractAudit().records.filter(
-    (record) => record.sourceFile === parentSourceFile,
-  );
+  const parentRecords = auditRecords.filter((record) => record.sourceFile === parentSourceFile);
   const sharedParentCandidates = sharedSignatures.map((signature) => {
     const candidate = parentCandidates.find((item) => item.candidateId.endsWith(`#${signature}`));
     assert.ok(candidate, `missing shared P61 parent candidate ${signature}`);
@@ -204,7 +202,7 @@ export function buildP61ActionReview() {
     assert.ok(record && ["identity-current", "line-moved"].includes(record.status));
     return { candidateId: candidate.candidateId, sourceContract: contractClaim(record) };
   });
-  const parentHash = createHash("sha256").update(readSource(parentSourceFile)).digest("hex");
+  const parentHash = createHash("sha256").update(read(parentSourceFile)).digest("hex");
   return {
     schemaVersion: 1,
     pageId: "P61",

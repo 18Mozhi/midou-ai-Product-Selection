@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -15,7 +19,7 @@ const sourceFiles = [
   "apps/web/src/components/PlatformStatusWorkspace.vue",
 ];
 const sources = Object.fromEntries(
-  sourceFiles.map((file) => [file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")]),
+  sourceFiles.map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const sourceHashes = Object.fromEntries(
   Object.entries(sources).map(([file, source]) => [
@@ -26,14 +30,17 @@ const sourceHashes = Object.fromEntries(
 const candidates = Object.entries(sources).flatMap(
   ([file, source]) => scanSource(source, file).candidates,
 );
-const contracts = runContractAudit().records;
+const contracts = runContractAudit(
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles(),
+).records;
 const files = new Set(
   review.actions.flatMap((action) => action.testReferences.map((ref) => ref.file)),
 );
 const context = { candidates, sourceHashes, contracts, packages: new Map(), files };
 
-test("P61 maps every current status-view/workspace candidate exactly once", () => {
-  assert.deepEqual(review, buildP61ActionReview());
+test("P61 archived review maps every captured status-view/workspace candidate exactly once", () => {
+  assert.deepEqual(review, buildP61ActionReview(readPreSelectionRebuild, contracts));
   assert.equal(candidates.length, 6);
   assert.equal(validateActionReview(review, context).sourceSites, 6);
   assert.equal(review.route, "/platform-admin/status");

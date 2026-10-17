@@ -36,7 +36,7 @@ test("P61 review mounts production Vue without changing the page script", () => 
   );
   assert.match(reviewSource, /'platform-management--status-review': domain === 'status'/);
   assert.match(reviewSource, /PlatformStatusCenterView/);
-  assert.match(reviewSource, /<h1 v-if="domain === 'status'">系统状态<\/h1>/);
+  assert.match(reviewSource, /<PlatformPageHeader/);
 });
 
 test("P61 production page composes the four factual work areas and preserves all destinations", () => {

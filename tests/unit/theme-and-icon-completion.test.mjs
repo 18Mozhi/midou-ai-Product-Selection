@@ -444,24 +444,10 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       );
       continue;
     }
-    if (paths[index] === "apps/web/src/design/platform-log-center-tokens.css") {
-      assert.match(
-        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html:has\(body #app \.platform-log-center--c\)\s*\{(?:\s*--p62-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
-      );
-      continue;
-    }
     if (paths[index] === "apps/web/src/design/provider-source-filters-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         /^\.source-filter\s*\{(?:\s*--source-filter-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
-      );
-      continue;
-    }
-    if (paths[index] === "apps/web/src/design/platform-status-center-tokens.css") {
-      assert.match(
-        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html:has\(body #app \.platform-management--status-c\)\s*\{(?:\s*--p61-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
       );
       continue;
     }
