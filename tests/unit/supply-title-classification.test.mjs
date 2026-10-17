@@ -310,6 +310,145 @@ test("preflight model call holds no SQL transaction and reads only the scoped ma
   for (const read of reads) assert.deepEqual(read.params, ["item", "org", "ws"]);
 });
 
+function batchHarness(
+  count,
+  classify,
+  { leaseValid = true, productTitle = title, supplyTitles } = {},
+) {
+  const calls = [],
+    renewals = [];
+  let clock = Date.parse("2026-10-17T00:00:00Z");
+  const supplies = Array.from({ length: count }, (_, index) => ({
+    ...offer,
+    externalId: String(index + 1),
+    evidenceId: `raw-${index + 1}`,
+    title: supplyTitles?.(index) ?? offer.title,
+  }));
+  const pool = {
+    getConnection() {
+      throw new Error("model must not hold a SQL transaction");
+    },
+    async query(sql, params) {
+      if (sql === automaticPrimaryEvidenceSql)
+        return [
+          [
+            {
+              raw_evidence_id: "main-1",
+              observed_at: offer.observedAt,
+              payload_json: { title: productTitle },
+            },
+          ],
+        ];
+      if (sql === automaticPrimaryDetailEvidenceSql) return [[]];
+      if (sql === automaticSupplyEvidenceSql)
+        return [
+          supplies.map((item) => ({
+            raw_evidence_id: item.evidenceId,
+            created_at: item.observedAt,
+            payload_json: { ...item, external_id: item.externalId },
+          })),
+        ];
+      assert.match(
+        sql,
+        /^UPDATE automatic_selection_evaluations SET lease_expires_at=\?,updated_at=\?/,
+      );
+      assert.match(
+        sql,
+        /organization_id=\? AND workspace_id=\? AND status='leased' AND lease_owner=\? AND lease_expires_at>\?/,
+      );
+      assert.doesNotMatch(sql, /result_json|available_at|attempt_count/);
+      renewals.push({ sql, params });
+      return [{ affectedRows: leaseValid ? 1 : 0 }];
+    },
+  };
+  const worker = new MySqlAutomaticSelectionEvaluationWorker(
+    pool,
+    "worker",
+    "actor",
+    120,
+    () => new Date(clock),
+    {
+      async classifySupplies(value) {
+        calls.push(structuredClone(value));
+        clock += 20_000;
+        return classify(value, calls.length);
+      },
+    },
+  );
+  const job = { opportunityId: "item", organizationId: "org", workspaceId: "ws" };
+  return {
+    worker,
+    calls,
+    renewals,
+    supplies,
+    productTitle,
+    run: () => worker.classifySupplyTitles(job),
+  };
+}
+
+test("a compatible quote after the first ten is found without classifying later batches", async () => {
+  const h = batchHarness(60, (value, batch) =>
+    batch === 2 ? [{ ...result, source_ref: value.candidates[2].source_ref }] : [],
+  );
+  const value = await h.run();
+  assert.deepEqual(
+    h.calls.map((call) => call.candidates.length),
+    [10, 10],
+  );
+  assert.equal(value.input.candidates.length, 20);
+  const match = selectClassifiedSupplyQuote(input.product_ref, title, h.supplies, value);
+  assert.equal(match.item.externalId, "13");
+  assert.equal(match.conservativePrice, offer.price);
+  assert.equal(h.renewals.length, 1);
+  assert.deepEqual(h.renewals[0].params.slice(2, 6), ["item", "org", "ws", "worker"]);
+  assert.equal(h.renewals[0].params[0].getTime() - h.renewals[0].params[1].getTime(), 120_000);
+});
+
+test("classification covers at most sixty offers in ten-title batches with bounded lease renewal", async () => {
+  const h = batchHarness(70, () => []);
+  const value = await h.run();
+  assert.equal(h.calls.length, 6);
+  assert.equal(h.renewals.length, 5);
+  assert.equal(value.input.candidates.length, 60);
+  assert.deepEqual(value.classifications, []);
+  assert.equal(
+    new Set(h.calls.flatMap((call) => call.candidates.map((item) => item.source_ref))).size,
+    60,
+  );
+});
+
+test("a model false positive with conflicting dimensions does not stop later supply matching", async () => {
+  const h = batchHarness(
+    11,
+    (value) => [{ ...result, source_ref: value.candidates[0].source_ref }],
+    {
+      productTitle: `${title} 20cm`,
+      supplyTitles: (index) => `${offer.title} ${index < 10 ? "30cm" : "20cm"}`,
+    },
+  );
+  const value = await h.run();
+  assert.equal(h.calls.length, 2);
+  assert.equal(
+    selectClassifiedSupplyQuote(input.product_ref, h.productTitle, h.supplies, value).item
+      .externalId,
+    "11",
+  );
+});
+
+test("an expired or stolen lease prevents the next batch from calling the model", async () => {
+  const h = batchHarness(20, () => [], { leaseValid: false });
+  await assert.rejects(h.run(), /automatic_selection_lease_expired/);
+  assert.equal(h.calls.length, 1);
+});
+
+test("a later model batch cannot classify a reference from a different batch", async () => {
+  const h = batchHarness(30, (_value, batch) =>
+    batch === 2 ? [{ ...result, source_ref: "1:raw-1" }] : [],
+  );
+  await assert.rejects(h.run(), /supply_title_classification_invalid/);
+  assert.equal(h.calls.length, 2);
+});
+
 for (const withContext of [false, true])
   test(`expired classification lease rolls back before price writes with context=${withContext}`, async () => {
     const statements = [];

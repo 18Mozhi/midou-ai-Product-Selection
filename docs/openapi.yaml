@@ -32,7 +32,7 @@ x-worker-event-contracts:
     additional_payload_fields: [score_coverage_percent, score_missing_fields, profit_missing_fields]
   opportunity.supply_title_classified:
     contract: supply-title-v1
-    description: Internal scoped audit committed with an original 1688 quote after title-attribute classification. Classification is not exact SKU verification, similarity measurement, purchase approval, or profit evidence. No new HTTP fields.
+    description: Internal scoped audit committed with an original 1688 quote after title-attribute classification. Up to sixty eligible evidence-backed candidates are processed sequentially in batches of at most ten; input retains the candidates actually submitted before a code-validated match, and each additional batch requires renewal of a current owned scoped lease. Classification is not exact SKU verification, similarity measurement, purchase approval, or profit evidence. No new HTTP or event fields.
     resource_type: opportunity
     payload_fields:
       [contract, input, classifications, purchase_evidence_id, matching_method, similarity_percent]

@@ -5608,5 +5608,19 @@
     ],
     "contract": "Same four LAN POST fields; first page, page_size 60, result_limit increased from 10 to verified capacity 60. Single-page bound, fixed endpoints, per-node busy protection, cancellation, auth failure, redirect rejection and 2MiB bound preserved. All 60 records persist through the existing executor. Provenance paths now resolve against each stored offer JSON rather than the absent page envelope; observed fields bind actual keys and derived/missing fields bind row context. No historical rewrite; unchanged evidence schema/parser and sourcing consumers. Existing identity, newcomer-price exclusion and completion gates remain. No API field, config, dependency, schema or Python change. BaoTa Node restart required after approved release.",
     "verification": "102 related checks and Worker/Backend builds passed; current compiled client independently reached each of six appliances once, returning 60 records with 60 within-appliance distinct IDs. Real fixed parser sample: 60 offers, 1680 source paths resolved with zero missing paths. No cross-appliance uniqueness, exact SKU match, production source activation or daily-100 claim."
+  },
+  "selectionSupplyBatching20261017": {
+    "status": "implemented",
+    "statusDetail": "local_verified_not_deployed",
+    "requirements": "docs/selection-supply-batching.md",
+    "sourceFiles": ["apps/worker/src/automatic-selection-evaluation-worker.ts"],
+    "testFiles": [
+      "tests/unit/supply-title-classification.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/unit/selection-pipeline-completion.test.mjs"
+    ],
+    "events": ["opportunity.supply_title_classified"],
+    "contract": "Up to 60 latest eligible unique supply quotes, sequential batches of at most 10 model titles. Validate each batch independently, retain submitted input only, stop on a code-validated quote. Before each additional batch conditionally renew the current owned unexpired scoped lease; preserve requeue markers and final transactional checks. No new API/event field, schema, dependency or Python change. Existing timeout and lease config unchanged; BaoTa Node restart after release.",
+    "verification": "24 targeted classification checks and 107 related checks passed; Worker/Backend builds and static/runtime docs passed. Real MySQL5.7 read-only SELECT predicate EXPLAIN only; UPDATE explain/prepare rejected by read-only transaction, no production renewal executed. No live SKU-match or daily-100 acceptance claim."
   }
 }

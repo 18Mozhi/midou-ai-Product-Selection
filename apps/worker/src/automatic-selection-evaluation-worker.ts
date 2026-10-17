@@ -1,8 +1,13 @@
 import { recordSelectionPipelineCompletion } from "./selection-pipeline-completion.js";
 import { createHash, randomUUID } from "node:crypto";
-import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import type { Pool, PoolConnection, RowDataPacket, ResultSetHeader } from "mysql2/promise";
 import { amazonAsin } from "./competitor-discovery-policy.js";
-import type { SupplyTitleClassifier, SupplyTitleContext } from "./supply-title-classification.js";
+import {
+  validateSupplyTitleClassifications,
+  type SupplyTitleClassifier,
+  type SupplyTitleContext,
+} from "./supply-title-classification.js";
+import { LAN_1688_RESULT_LIMIT } from "./lan-1688-image-search.js";
 import {
   selectionCandidateSql,
   automaticEvaluationPendingSql,
@@ -252,15 +257,42 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           !item.priceDescription?.includes("新人价") &&
           !isPhoneCase(item.title),
       )
-      .slice(0, 10)
+      .slice(0, LAN_1688_RESULT_LIMIT)
       .map((item) => ({ source_ref: `${item.externalId}:${item.evidenceId}`, title: item.title }));
     if (!candidates.length) return undefined;
-    const input = {
-      product_ref: `amazon:${String(primary.raw_evidence_id)}`,
-      product_title: title,
-      candidates,
+    const context: SupplyTitleContext = {
+      input: {
+        product_ref: `amazon:${String(primary.raw_evidence_id)}`,
+        product_title: title,
+        candidates: [],
+      },
+      classifications: [],
     };
-    return { input, classifications: await this.supplyClassifier.classifySupplies(input) };
+    for (let offset = 0; offset < candidates.length; offset += 10) {
+      if (offset > 0) await this.renewClassificationLease(job);
+      const input = { ...context.input, candidates: candidates.slice(offset, offset + 10) },
+        classifications = validateSupplyTitleClassifications(
+          { classifications: await this.supplyClassifier.classifySupplies(input) },
+          input,
+        );
+      context.input.candidates.push(...input.candidates);
+      context.classifications.push(...classifications);
+      if (selectClassifiedSupplyQuote(context.input.product_ref, title, supplies, context)) break;
+    }
+    return context;
+  }
+
+  private async renewClassificationLease(job: EvaluationJob) {
+    const now = this.now(),
+      expires = new Date(now.getTime() + this.leaseSeconds * 1000);
+    const [result] = await this.pool.query<ResultSetHeader>(
+      "UPDATE automatic_selection_evaluations SET lease_expires_at=?,updated_at=? " +
+        "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? AND status='leased' " +
+        "AND lease_owner=? AND lease_expires_at>?",
+      [expires, now, job.opportunityId, job.organizationId, job.workspaceId, this.workerId, now],
+    );
+    if (result.affectedRows !== 1)
+      throw new AutomaticSelectionEvaluationError("automatic_selection_lease_expired", true);
   }
 
   private async evaluate(
