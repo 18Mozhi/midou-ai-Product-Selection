@@ -645,7 +645,7 @@ test("runtime topology uses shared semantic colors without shell overrides", asy
   assert.match(css, /var\(--so-/);
 });
 
-test("P17 scoring palette resolves the reviewed console and modal colors in route scope", async () => {
+test("P17 scoring palette resolves the remaining live modal colors in route scope", async () => {
   const [tokens, css] = await Promise.all([
     readFile("apps/web/src/design/scoring-tokens.css", "utf8"),
     readFile("apps/web/src/scoring.css", "utf8"),
@@ -658,7 +658,7 @@ test("P17 scoring palette resolves the reviewed console and modal colors in rout
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set([...css.matchAll(/var\((--p17-[a-z-]+)\)/g)].map((match) => match[1]));
 
-  assert.equal(names.size, 21);
+  assert.equal(names.size, 12);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

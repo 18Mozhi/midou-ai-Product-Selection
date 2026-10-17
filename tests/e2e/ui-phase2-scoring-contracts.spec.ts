@@ -1,6 +1,6 @@
 import { test, expect, type Locator, type Page } from "@playwright/test";
 
-// Same reviewed facts as m04-03-scoring, isolated here so its capture source stays unchanged.
+// Synthetic scoring contracts rendered through the current Vue workbench.
 const ruleId = "00000000-0000-4000-8000-000000000435";
 const targetId = "00000000-0000-4000-8000-000000000436";
 const envelope = (data: unknown) => ({ data, request_id: "ui2-score", trace_id: "ui2-score" });
@@ -196,7 +196,7 @@ test("UI2-S02 create validates weights, preserves cancelled draft, sends only en
     }),
   );
   await page.goto("/opportunities/scoring-rules");
-  const trigger = page.getByRole("button", { name: "创建新版本补齐配置" });
+  const trigger = page.getByRole("button", { name: "新建规则版本" });
   await trigger.click();
   const dialog = page.getByRole("dialog", { name: "新建评分规则草稿" });
   const save = dialog.getByRole("button", { name: "保存草稿", exact: true });
@@ -275,7 +275,7 @@ test("late create success refreshes rules without closing or clearing a newer dr
   });
 
   await page.goto("/opportunities/scoring-rules");
-  const trigger = page.getByRole("button", { name: "创建新版本补齐配置" });
+  const trigger = page.getByRole("button", { name: "新建规则版本" });
   await trigger.click();
   const dialog = page.getByRole("dialog", { name: "新建评分规则草稿" });
   await fillValidCreateDraft(dialog, "org-v3", "原始提交");
@@ -322,7 +322,7 @@ test("late create failure does not replace errors or request details in a newer 
   });
 
   await page.goto("/opportunities/scoring-rules");
-  const trigger = page.getByRole("button", { name: "创建新版本补齐配置" });
+  const trigger = page.getByRole("button", { name: "新建规则版本" });
   await trigger.click();
   const dialog = page.getByRole("dialog", { name: "新建评分规则草稿" });
   await fillValidCreateDraft(dialog, "org-v3", "旧提交");
@@ -661,7 +661,7 @@ for (const capability of ["read", "decide", "approve"]) {
     await page.goto("/opportunities/scoring-rules");
     const surface = page.locator(".score-rules");
     await expect(surface.locator(".score-rule-list > article")).toHaveCount(7);
-    await expect(surface.getByRole("button", { name: "创建新版本补齐配置" })).toHaveCount(
+    await expect(surface.getByRole("button", { name: "新建规则版本" })).toHaveCount(
       capability === "decide" ? 1 : 0,
     );
     await expect(surface.getByRole("button", { name: "提交", exact: true })).toHaveCount(

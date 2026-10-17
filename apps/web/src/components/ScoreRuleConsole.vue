@@ -10,7 +10,6 @@ import {
 } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
-import QualityGateSetupSummary from "./shared/QualityGateSetupSummary.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../opportunities.css";
 import "../scoring.css";
@@ -544,14 +543,12 @@ onActivated(() => {
 </script>
 <template>
   <section class="score-rules score-rules--review">
-    <header class="score-rules-hero">
+    <header class="score-rules-toolbar">
       <div>
-        <p>自动推荐 · 评分与证据</p>
-        <h2>评分与质量门</h2>
+        <h2>评分规则</h2>
+        <p>查看版本、权重、阈值与评分预览</p>
       </div>
-      <button v-if="canDecide && state !== 'ready'" type="button" @click="openCreate">
-        新建规则版本
-      </button>
+      <button v-if="canDecide" type="button" @click="openCreate">新建规则版本</button>
       <span v-else-if="!canDecide" class="score-rule-readonly-note">当前身份仅可查看规则。</span>
     </header>
     <p v-if="message" class="opportunity-message" role="status">
@@ -566,27 +563,13 @@ onActivated(() => {
     />
     <section v-else-if="state === 'empty'" class="score-empty">
       <strong>尚无评分规则</strong><span>请创建、审批并启用首个规则。</span
-      ><button v-if="canDecide" type="button" @click="openCreate">创建首个草稿</button
-      ><span v-else class="score-rule-readonly-note"
+      ><span v-if="!canDecide" class="score-rule-readonly-note"
         >请联系具备规则提交权限的成员创建首个草稿。</span
       >
     </section>
-    <QualityGateSetupSummary
-      v-else
-      title="评分规则覆盖"
-      :description="
-        activeRule
-          ? `当前启用 ${activeRule.version_code}；完整自动推荐还需要竞品监控和费用规则同时生效。`
-          : '当前没有已启用评分规则，所有商品只能停留在候选队列。'
-      "
-      :status="scoringSetupReady ? '评分配置已覆盖' : '评分配置未就绪'"
-      :ready="scoringSetupReady"
-      :items="scoringSetupItems"
-    >
-      <button v-if="canDecide" class="quality-gate-next" type="button" @click="openCreate">
-        创建新版本补齐配置
-      </button>
-    </QualityGateSetupSummary>
+    <p v-else class="score-setup-status" :data-ready="scoringSetupReady">
+      {{ scoringSetupReady ? "评分配置已覆盖" : "评分配置未就绪" }}
+    </p>
     <section v-if="state === 'ready'" class="score-rule-list">
       <header>
         <span>版本</span><span>阈值</span><span>维度与权重</span><span>状态</span><span>操作</span>
@@ -603,8 +586,7 @@ onActivated(() => {
         </div>
         <div class="score-weight-list">
           <span v-for="item in rule.dimensions" :key="item.code"
-            ><i :style="{ width: `${item.weight}%` }"></i
-            ><em>{{ item.label }} {{ item.weight }}%</em></span
+            >{{ item.label }} <b>{{ item.weight }}%</b></span
           >
         </div>
         <div>
@@ -644,6 +626,32 @@ onActivated(() => {
         </nav>
       </article>
     </section>
+    <details v-if="state === 'ready'" class="score-setup-check">
+      <summary>
+        配置检查
+        <span
+          >{{ scoringSetupItems.filter((item) => item.ready).length }} /
+          {{ scoringSetupItems.length }} 项已满足</span
+        >
+      </summary>
+      <div>
+        <h3>评分规则覆盖</h3>
+        <p>
+          {{
+            activeRule
+              ? `当前启用 ${activeRule.version_code}；单品推荐仍需满足真实商品、竞品、货源与风险证据要求。`
+              : "当前未启用评分规则，自动评分尚缺规则依据。"
+          }}
+        </p>
+        <ul>
+          <li v-for="item in scoringSetupItems" :key="item.label" :data-ready="item.ready">
+            <b>{{ item.label }}</b
+            ><span>{{ item.detail }}</span
+            ><em>{{ item.ready ? "已满足" : "待完成" }}</em>
+          </li>
+        </ul>
+      </div>
+    </details>
     <dialog
       v-if="showCreate"
       ref="createDialogElement"

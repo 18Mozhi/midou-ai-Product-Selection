@@ -1,4 +1,27 @@
 {
+  "selectionScoringRuleWorkbench20261017": {
+    "status": "implemented",
+    "statusDetail": "77_related_checks_104_browser_cases_covered_final4_passed_web_build_and_gates_passed_not_deployed",
+    "requirements": "docs/selection-scoring-rule-workbench.md",
+    "routes": ["/opportunities/scoring-rules", "/sourcing/cost-rules"],
+    "sourceFiles": [
+      "apps/web/src/components/ScoreRuleConsole.vue",
+      "apps/web/src/scoring.css",
+      "apps/web/src/design/scoring-tokens.css",
+      "scripts/verify-scoring-page-preview.mjs",
+      "scripts/verify-cost-rule-page-preview.mjs",
+      "scripts/verify-ui-phase2-scoring-c.mjs",
+      "scripts/verify-ui-phase2-cost-rules-c.mjs"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-03-scoring.spec.ts",
+      "tests/e2e/ui-phase2-scoring-contracts.spec.ts",
+      "tests/unit/scoring-page-preview.test.mjs",
+      "tests/m04-03/scoring.test.mjs",
+      "tests/m04-04/profit.test.mjs"
+    ],
+    "contract": "Compact current Vue scoring rules, raw thresholds and dimension weights, five setup facts collapsed after versions. Business script unchanged except obsolete import removal; dedicated dialog markup and 105 selector bodies retained. Retire unused shared setup component and both historical stylesheet injectors. Current rule preview commands run actual Vue tests; old prototype capture commands exit 2 without side effects. No score, API, schema, configuration, dependency or permission change."
+  },
   "selectionCostRuleWorkbench20261017": {
     "status": "implemented",
     "statusDetail": "70_related_checks_58_browser_web_build_passed_not_deployed",
@@ -1608,7 +1631,7 @@
       "uiPhase2TaskCaptureCommand": "node scripts/capture-ui-phase2-tasks.mjs",
       "uiPhase2WorkCProposal": "design-plans/ui-phase-2-2026-09-07/design/work-direction-c/README.md delivers pending-review WORK-C-r1 for P13: 33 dual-viewport scenes, 66 PNGs including two non-business control-board images. Independent personal-status directory and task queue, seven dialogs, read/capability/member failures and explicitly synthetic terminal/pagination samples. Actual fixture setup callbacks preserve the list-total-2 versus summary-total-7 mismatch; no coherent database snapshot is claimed. scripts/lib/ui-phase2-work-design-data.mjs executes source Vue route/create/delete/batch functions and eligibility plus repository SQL construction through an inert pool. scripts/verify-ui-phase2-work-c.mjs verifies source/image hashes, seven bodies and input-retaining failures, query drafts, page selection clearing, from and quick-create, keyboard/touch/disabled states and responsive representatives with zero HTTP/storage. No real Vue/API/MySQL/RBAC/idempotency/production proof, runtime config/dependency change, page approval or global coverage completion. Partial outcomes, conflicts, late responses, themes/density and full runtime acceptance remain pending.",
       "uiPhase2RolesCProposal": "design-plans/ui-phase-2-2026-09-07/design/roles-direction-c/README.md provides ROLE-C-r1 for P31, 24 scenarios at 1440/390 (48 images). Role templates and matrix stay read-only; member scopes and resource grants remain separate, with inline create/expiry forms and one revoke-reason dialog. Reviewed M06-01 fixture subset and explicit 2026-08-28 18:00 Asia/Shanghai design clock are not live authorization data. node scripts/verify-ui-phase2-roles-c.mjs --capture retains images/evidence; no flag checks source/image hashes, filters/empty independence, four action allowlists, UUID/expiry, busy state, reason/focus and zero HTTP/storage. No Vue/API/OpenAPI/RBAC/schema/dependency/runtime configuration or user approval changes; full-page and production acceptance remain pending.",
-      "uiPhase2ScoringCProposal": "design-plans/ui-phase-2-2026-09-07/design/scoring-direction-c/README.md provides SCORE-C-r1 for P17: 24 scenarios at 1440/390 (48 images), version/quality coverage, partitioned eight-dimension create editor, read-only preview and five lifecycle forms. Manually reviewed M04-03 and UI2-S01 fixture subsets stay separate; a missing preview sample never borrows another version's result. node scripts/verify-ui-phase2-scoring-c.mjs --capture retains permanent images/evidence; no flag checks hashes and local field/validation/capability/focus/preview/zero-network contracts. This is HTML proposal evidence, not Vue/API/RBAC/production or page approval. Earlier images, generated coverage, permissions, business thresholds and runtime configuration remain unchanged.",
+      "uiPhase2ScoringCProposal": "Historical SCORE-C-r1 HTML proposal evidence only. Prototype capture is retired and exits 2; use node scripts/verify-scoring-page-preview.mjs for current Vue validation. Previous images and evidence are retained, not rewritten or treated as current approval. See docs/selection-scoring-rule-workbench.md.",
       "uiPhase2TaskCForms": "design-plans/ui-phase-2-2026-09-07/design/task-direction-c-forms/README.md delivers TASK-C-forms-r2: 13 real task form variants, two progress submission states, six read states and one review-only board at 1440/390 (44 images including two non-product board images). Independent sources and evidence preserve TASK-C-r1. node scripts/verify-ui-phase2-task-c-forms.mjs --capture writes permanent images/evidence; no flag validates hashes, fields, eligibility, keyboard, input validation and zero HTTP/storage. Single unchanged in-progress fixture correctly makes batch resume ineligible. Read/error/busy states are explicit design simulations, not backend or production evidence. No Vue/API/schema/permission/dependency/runtime configuration change; page approvals and global denominators remain pending.",
       "uiPhase2TaskProposalCommand": "node scripts/capture-ui-phase2-tasks.mjs --proposal",
       "uiPhase2TaskDirections": "../design-plans/ui-phase-2-2026-09-07/design/task-directions.html",
@@ -2894,7 +2917,6 @@
         "../apps/worker/src/automatic-selection-evaluation.ts",
         "../apps/worker/src/automatic-selection-evaluation-worker.ts",
         "../apps/web/src/components/ScoreRuleConsole.vue",
-        "../apps/web/src/components/shared/QualityGateSetupSummary.vue",
         "../apps/web/src/components/OpportunityWorkspace.vue"
       ],
       "routes": [
@@ -2959,7 +2981,7 @@
       "truthBoundary": "platform payment tax and fulfillment fees are explicit and optional fixed inbound logistics is explicit; a manually submitted cost input remains inactive until its distinct assigned cost:confirm reviewer approves it, while the automatic path only activates immutable Amazon sale and high-confidence multi-offer 1688 purchase facts and records confirmation_mode=automatic_evidence; cross-currency calculation requires either an approved exchange quote or a dated HTTPS conversion basis inside the dual-approved cost-rule version; missing required inputs or conversion basis stays insufficient_data and never emits numeric ROI",
       "costReviewBoundary": "submission creates a 24-hour pending review and schedules a reviewer reminder four hours before expiry plus an overdue escalation to the reviewer and organization administrators; scheduled delivery rechecks pending state and never auto-approves; approval atomically supersedes the prior current input and queues profit recalculation",
       "setupPresentationBoundary": "the cost-rule surface presents the active version and explicit fee lines as a compact automatic-recommendation checklist, accepts an optional fixed inbound-logistics line and dated HTTPS conversion basis, and distinguishes manually reviewed from automatic crawler-evidence cost facts",
-      "uiPhase2CostRulesC": "design-plans/ui-phase-2-2026-09-07/design/cost-rules-direction-c/README.md: COST-RULES-C-r1 P22 version directory, fee basis and approval proposal; create and seven action variants. Nine actual setup isolated groups check zero/optional fields, role gates, exact revision/role/target payloads, busy/cancel and reproduce UNFIXED late GET overwrite. node scripts/verify-ui-phase2-cost-rules-c.mjs checks offline DOM and hashes; --capture regenerates only this package; source-only via verify-ui-phase2-cost-rules-source.mjs. No HTTP or real SQL/approval/publish/rollback. Vue/API/OpenAPI/config/dependency/permissions/production unchanged; no restart. Full states/themes/lifecycle and concrete approval/deployment pending.",
+      "uiPhase2CostRulesC": "Historical COST-RULES-C-r1 proposal only. Old prototype capture is retired and exits 2; use node scripts/verify-cost-rule-page-preview.mjs for the current Vue workbench. Historical prototype findings and captures remain historical; dedicated source-only business checks remain available. See docs/selection-scoring-rule-workbench.md.",
       "uiPhase2ContractReview": "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md and sourcing-cost-contract-review.md map rule drafts and lifecycle actions separately from supplier quotes and second-person input review. CostRuleConsole retains an opportunity:approve-gated new-version entry when an active rule exists; it creates only a draft through the existing API, with no default fees or automatic approval. UI2-SC01-SC03 in m04-04-profit.spec.ts cover the reproduced active-entry omission, explicit zero fees, cancellation and reset, read-only visibility, safe return and revision-conflict reason retention. Full accessibility, asynchronous ownership, real backend, approved design and production acceptance remain pending.",
       "apiClientBoundary": "cost-rule reads and lifecycle writes use the shared frontend API client without browser-side ROI calculation or inferred fee values; OpportunityProfitPanel keeps calculation and input presentation while OpportunityCostReviewQueue owns only the pending review interaction and emits decisions to its parent",
       "permission": "opportunity:read for rules and profit analysis; cost:confirm for rates inputs and reruns; opportunity:approve for rule creation approval publish reject and rollback",

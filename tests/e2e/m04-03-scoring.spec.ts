@@ -134,10 +134,16 @@ test("M04-03.A07/A08/A09/A15 score rule versions support audited responsive work
     }),
   );
   await page.goto("/opportunities/scoring-rules");
-  await expect(page.getByRole("heading", { name: "评分与质量门" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "评分规则", exact: true, level: 2 }),
+  ).toBeVisible();
+  const setup = page.locator(".score-setup-check");
+  await expect(setup).not.toHaveAttribute("open", "");
+  await setup.locator("summary").click();
   await expect(page.getByRole("heading", { name: "评分规则覆盖" })).toBeVisible();
   await expect(page.getByText("评分配置未就绪", { exact: true })).toBeVisible();
   await expect(page.getByText("风险维度", { exact: true })).toBeVisible();
+  await setup.locator("summary").click();
   await expect(page.getByText("当前身份仅可查看规则。", { exact: true })).toBeHidden();
   await expect(page.getByText("当前生产评分规则")).toBeVisible();
   expect(
@@ -145,12 +151,12 @@ test("M04-03.A07/A08/A09/A15 score rule versions support audited responsive work
       () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
     ),
   ).toBe(true);
-  await expect(page).toHaveScreenshot("m04-03-score-rules.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("compact-scoring-rules-20261017.png", { fullPage: true });
   await capturePhase2Evidence(page, testInfo, "P17", "versions", [
     "active-and-draft-visible",
     "missing-risk-dimension-not-ready",
   ]);
-  await page.getByRole("button", { name: "创建新版本补齐配置" }).click();
+  await page.getByRole("button", { name: "新建规则版本" }).click();
   const createDialog = page.getByRole("dialog", { name: "新建评分规则草稿" });
   await expect(createDialog).toBeVisible();
   await expect(createDialog.getByLabel("推荐阈值", { exact: true })).toHaveValue("");
@@ -160,7 +166,7 @@ test("M04-03.A07/A08/A09/A15 score rule versions support audited responsive work
     "create-modal-opens",
   ]);
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("button", { name: "创建新版本补齐配置" })).toBeFocused();
+  await expect(page.getByRole("button", { name: "新建规则版本" })).toBeFocused();
   await page.getByRole("button", { name: "预览影响" }).click();
   const previewDialog = page.getByRole("dialog", { name: /发布影响预览/ });
   await expect(previewDialog).toBeVisible();
@@ -237,7 +243,7 @@ test("P17 score-rule create errors are linked to the affected fields without cha
   });
 
   await page.goto("/opportunities/scoring-rules");
-  await page.getByRole("button", { name: "创建首个草稿" }).click();
+  await page.getByRole("button", { name: "新建规则版本", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "新建评分规则草稿" });
   const versionCode = dialog.getByLabel("版本代码");
   await versionCode.focus();
@@ -486,7 +492,62 @@ test("M04-03.A07/A08/A15 opportunity score explanation exposes inputs evidence m
   await expect(page.getByRole("heading", { name: "便携式智能净水杯机会" })).toBeVisible();
   await expect(page.getByText("规则 org-v1", { exact: true })).toBeVisible();
   await expect(page.getByText(/覆盖 100%/)).toBeVisible();
-  await expect(page.getByText("market_demand · 40%")).toBeVisible();
+  const scoreTable = page.getByRole("table", { name: "评分维度明细" });
+  const demandRow = scoreTable
+    .getByRole("row")
+    .filter({ has: page.getByRole("rowheader", { name: "市场需求", exact: true }) });
+  await expect(demandRow.getByRole("cell")).toHaveText(["40%", "82", "32.8", "1 条证据"]);
+  const competitionRow = scoreTable
+    .getByRole("row")
+    .filter({ has: page.getByRole("rowheader", { name: "竞争", exact: true }) });
+  await expect(competitionRow.getByRole("cell")).toHaveText(["30%", "70", "21", "1 条证据"]);
   await expect(page.getByRole("link", { name: "规则版本" })).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
+});
+
+test("compact scoring rules show thresholds and weights before configuration help", async ({
+  page,
+}) => {
+  await navigation(page);
+  const active = {
+    status: "active",
+    dimensions,
+    thresholds: { recommend_min: 75, observe_min: 55 },
+    revision: 4,
+    submitted_at: "2026-08-07T10:00:00.000Z",
+    approved_at: "2026-08-07T10:10:00.000Z",
+    activated_at: "2026-08-07T10:20:00.000Z",
+    updated_at: "2026-08-07T10:20:00.000Z",
+  };
+  const versions = Array.from({ length: 20 }, (_, index) => ({
+    ...active,
+    id: `00000000-0000-4000-8000-${String(700 + index).padStart(12, "0")}`,
+    name: `评分示例 ${index + 1}`,
+    version_code: `compact-${index + 1}`,
+  }));
+  await page.route("**/api/v1/opportunity-score-rules", (route) =>
+    route.fulfill({ json: envelope(versions) }),
+  );
+  await page.goto("/opportunities/scoring-rules");
+  const first = page.locator(".score-rule-list > article").first();
+  await expect(first).toContainText("评分示例 1");
+  await expect(page.locator(".score-rule-list > article")).toHaveCount(20);
+  await expect(
+    first.getByText(`推荐 ≥ ${active.thresholds.recommend_min}`, { exact: true }),
+  ).toBeVisible();
+  const box = await first
+    .getByText(`推荐 ≥ ${active.thresholds.recommend_min}`, { exact: true })
+    .boundingBox();
+  expect(box!.y + box!.height).toBeLessThan(
+    page.viewportSize()!.height - (page.viewportSize()!.width <= 640 ? 80 : 24),
+  );
+  const weight = await first.locator(".score-weight-list span").first().boundingBox();
+  expect(weight!.y + weight!.height).toBeLessThan(
+    page.viewportSize()!.height - (page.viewportSize()!.width <= 640 ? 80 : 24),
+  );
+  await expect(page.locator(".score-setup-check")).not.toHaveAttribute("open", "");
+  await expect(page.locator(".score-weight-list i")).toHaveCount(0);
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
 });
