@@ -876,7 +876,7 @@ paths:
   /me/quick-actions:
     get:
       summary: List capability-filtered quick-create entry points
-      description: Returns navigation-only entries in validated shell role priority. The browser may temporarily promote recently used entries in the current SPA without persistent tracking.
+      description: Legacy navigation-only entries filtered by capability and validated shell role priority. Retired manual task creation is never returned, including for task:create holders. Organization and platform entries remain available. The current search-only browser overlay does not request this endpoint.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {

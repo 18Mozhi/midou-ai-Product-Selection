@@ -1,3 +1,5 @@
+> 2026-10-17 当前搜索界面不再读取快捷创建接口；历史接口已移除task创建项。API/Backend发布后需宝塔重启Node项目ai选品，Python无需重启。旧手动创建说明仅作历史记录，见 `../selection-retired-task-quick-action.md`。
+
 # M02-05 宝塔发布、验证与回滚
 
 ## 发布

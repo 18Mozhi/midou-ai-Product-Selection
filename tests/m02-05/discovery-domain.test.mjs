@@ -56,11 +56,7 @@ test("M02-05.A01/A02/A04/A12 trims and validates scoped search inputs", async ()
 
 test("M02-05.A04/A08/A09/A12 quick entries expose routes only after capability filtering", () => {
   const service = new DiscoveryService({ search: async () => ({ items: [], nextCursor: null }) });
-  assert.deepEqual(
-    service.quickActions(["task:create"]).map((item) => item.id),
-    ["task"],
-  );
-  assert.equal(service.quickActions(["task:create"])[0].route, "/tasks?create=1");
+  assert.deepEqual(service.quickActions(["task:create"]), []);
   assert.deepEqual(
     service.quickActions(["membership:manage", "workspace:manage"]).map((item) => item.id),
     ["member", "workspace"],
@@ -70,13 +66,91 @@ test("M02-05.A04/A08/A09/A12 quick entries expose routes only after capability f
     service
       .quickActions(["task:create", "membership:manage", "workspace:manage"], "organization_admin")
       .map((item) => item.id),
-    ["member", "workspace", "task"],
+    ["member", "workspace"],
   );
   assert.ok(
     service
-      .quickActions(["task:create"])
+      .quickActions(["membership:manage"])
       .every((item) => item.route.startsWith("/") && !("method" in item) && !("payload" in item)),
   );
+});
+
+test("retired manual task creation is absent in every shell while retained actions keep capability and priority contracts", () => {
+  const service = new DiscoveryService({ search: async () => ({ items: [], nextCursor: null }) });
+  const capabilities = [
+    "task:create",
+    "sourcing:read",
+    "membership:manage",
+    "workspace:manage",
+    "provider:configure",
+  ];
+  for (const [shell, expected] of [
+    ["member", ["sourcing", "member", "workspace", "provider"]],
+    ["organization_admin", ["member", "workspace", "sourcing", "provider"]],
+    ["platform_admin", ["provider", "workspace", "member", "sourcing"]],
+  ]) {
+    const result = service.quickActions(capabilities, shell);
+    assert.deepEqual(
+      result.map((item) => item.id),
+      expected,
+    );
+    assert.equal(
+      result.some((item) => item.route.startsWith("/tasks")),
+      false,
+    );
+    assert.deepEqual(service.quickActions(["task:create"], shell), []);
+    assert.deepEqual(service.quickActions([], shell), []);
+  }
+});
+
+test("quick-action API with the real service excludes retired task creation for all shell roles", async () => {
+  let capabilities = ["task:create"];
+  const service = new DiscoveryService({
+    search: async () => {
+      throw new Error("quick actions must not query search data");
+    },
+  });
+  const authorization = {
+    guardNavigationShell: async () => ({ capabilities, platform_capabilities: capabilities }),
+  };
+  const auth = { authenticate: async () => ({ user: { id: actor }, session: { id: session } }) };
+  const app = buildApp({ discovery: { service, authorization, auth, secureCookie: false } });
+  try {
+    for (const shell of ["member", "organization_admin", "platform_admin"]) {
+      for (const includeManagement of [false, true]) {
+        capabilities = includeManagement
+          ? ["task:create", "membership:manage", "provider:configure"]
+          : ["task:create"];
+        const response = await app.inject({
+          method: "GET",
+          url: `/api/v1/me/quick-actions?shell=${shell}`,
+          headers: {
+            cookie: "scoutops_session=test",
+            "x-request-id": "retired-task-action",
+            "x-trace-id": "retired-task-action-trace",
+          },
+        });
+        assert.equal(response.statusCode, 200);
+        assert.equal(response.headers["cache-control"], "private, no-store");
+        assert.equal(response.json().request_id, "retired-task-action");
+        const actions = response.json().data;
+        assert.equal(
+          actions.some((item) => item.id === "task" || item.route.startsWith("/tasks")),
+          false,
+        );
+        assert.deepEqual(
+          actions.map((item) => item.id),
+          includeManagement
+            ? shell === "platform_admin"
+              ? ["provider", "member"]
+              : ["member", "provider"]
+            : [],
+        );
+      }
+    }
+  } finally {
+    await app.close();
+  }
 });
 
 test("M02-05.A06/A09/A11/A13 API preserves authenticated scope and correlation envelope", async () => {

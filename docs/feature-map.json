@@ -1,4 +1,13 @@
 {
+  "selectionRetiredTaskQuickAction20261017": {
+    "status": "implemented",
+    "statusDetail": "14_related_node_api_backend_build_and_docs_passed_not_deployed",
+    "requirements": "docs/selection-retired-task-quick-action.md",
+    "apiRoutes": ["/api/v1/me/quick-actions"],
+    "sourceFiles": ["apps/api/src/discovery-service.ts"],
+    "testFiles": ["tests/m02-05/discovery-domain.test.mjs"],
+    "contract": "Retired task creation is removed from the legacy quick-action list for all three shells, including task:create holders. Other actions retain capability filtering and role ordering. DTO, session authorization, no-store and correlation envelope unchanged; current search-only browser does not call this endpoint. Node restart required after publication; not deployed."
+  },
   "selectionTaskHeaderLayout20261017": {
     "status": "implemented",
     "statusDetail": "10_related_node_112_browser_web_build_and_gates_passed_not_deployed",
@@ -1967,7 +1976,7 @@
       "routes": ["/api/v1/me/global-search", "/api/v1/me/quick-actions", "/notifications"],
       "scope": "global search uses the server-resolved organization/workspace; quick actions use the explicitly guarded member, organization_admin or platform_admin shell",
       "searchProjection": "MySQL 5.7 synchronous read model combines compatible search_documents with live scoped task opportunity evidence and collection-task facts, normalizes every UNION text slot plus nested ascii UUIDs and error codes to the table utf8mb4_unicode_ci collation before evaluation, deduplicates by resource type and id, retains stable cursor and literal wildcard escaping, filters exact resource type and status plus task assignee or opportunity owner name or id, and emits internal detail routes only",
-      "quickCreate": "authorized navigation entries are ordered by validated shell role priority and open the owning page's real create state via create=1; the SPA temporarily promotes up to five recently used entries without persistent tracking, and the discovery endpoint performs no business mutation or optimistic success",
+      "quickCreate": "Historical navigation-only API retains capability filtering and shell priority for sourcing, member, workspace and provider entries; retired task creation is never returned. Current search-only SPA does not request this endpoint or track recent quick actions. No business mutation; see docs/selection-retired-task-quick-action.md",
       "apiClientBoundary": "global search and quick actions use the shared frontend API client and surface the server request_id, trace_id and action_hint without changing the endpoint contract",
       "async": "not applicable; core task opportunity evidence and collection results are read directly so no missing index writer can make them undiscoverable",
       "configuration": "no new environment values; existing VITE_API_BASE_URL only",

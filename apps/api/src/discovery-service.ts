@@ -24,13 +24,6 @@ export interface DiscoveryRepository {
 }
 const ACTIONS: QuickActionSummary[] = [
   {
-    id: "task",
-    label: "创建任务",
-    description: "进入任务创建页",
-    route: "/tasks?create=1",
-    required_capability: "task:create",
-  },
-  {
     id: "sourcing",
     label: "发起找货",
     description: "进入供应链搜索",
@@ -60,9 +53,9 @@ const ACTIONS: QuickActionSummary[] = [
   },
 ];
 const SHELL_ACTION_PRIORITY = {
-  member: ["task", "sourcing", "member", "workspace", "provider"],
-  organization_admin: ["member", "workspace", "task", "sourcing", "provider"],
-  platform_admin: ["provider", "workspace", "member", "task", "sourcing"],
+  member: ["sourcing", "member", "workspace", "provider"],
+  organization_admin: ["member", "workspace", "sourcing", "provider"],
+  platform_admin: ["provider", "workspace", "member", "sourcing"],
 } as const;
 export class DiscoveryService {
   constructor(private readonly repository: DiscoveryRepository) {}
