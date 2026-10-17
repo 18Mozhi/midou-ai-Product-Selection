@@ -24,6 +24,10 @@ const token = () => randomUUID() + randomUUID();
 const statement = (...parts: string[]) => parts.join("");
 
 export class MySqlCollectionTaskWorkerRepository {
+  private successfulClaims = 0;
+  private readyOrder() {
+    return collectionReadyOrderSql(this.successfulClaims % 21 !== 20);
+  }
   constructor(
     readonly pool: Pool,
     readonly random: () => number = Math.random,
@@ -71,9 +75,19 @@ export class MySqlCollectionTaskWorkerRepository {
       const sql =
           "SELECT * FROM collection_tasks WHERE status IN ('scheduled','retry_scheduled','rate_limited') AND available_at<=?" +
           (this.taskId ? " AND id=?" : "") +
-          collectionReadyOrderSql,
+          this.readyOrder(),
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [now, this.taskId] : [now]);
-      const row = rows[0];
+      const candidate = rows[0];
+      if (!candidate) {
+        await c.commit();
+        return null;
+      }
+      const [locked] = await c.query<RowDataPacket[]>(
+        "SELECT * FROM collection_tasks WHERE id=? AND organization_id=? AND workspace_id=? " +
+          "AND status IN ('scheduled','retry_scheduled','rate_limited') AND available_at<=? FOR UPDATE",
+        [candidate.id, candidate.organization_id, candidate.workspace_id, now],
+      );
+      const row = locked[0];
       if (!row) {
         await c.commit();
         return null;
@@ -120,9 +134,19 @@ export class MySqlCollectionTaskWorkerRepository {
       const sql =
           "SELECT * FROM collection_tasks WHERE status='queued' AND attempt_count<4" +
           (this.taskId ? " AND id=?" : "") +
-          collectionReadyOrderSql,
+          this.readyOrder(),
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [this.taskId] : []);
-      const row = rows[0];
+      const candidate = rows[0];
+      if (!candidate) {
+        await c.commit();
+        return null;
+      }
+      const [locked] = await c.query<RowDataPacket[]>(
+        "SELECT * FROM collection_tasks WHERE id=? AND organization_id=? AND workspace_id=? " +
+          "AND status='queued' AND attempt_count<4 FOR UPDATE",
+        [candidate.id, candidate.organization_id, candidate.workspace_id],
+      );
+      const row = locked[0];
       if (!row) {
         await c.commit();
         return null;
@@ -214,6 +238,7 @@ export class MySqlCollectionTaskWorkerRepository {
           ],
         );
       await c.commit();
+      this.successfulClaims += 1;
       return {
         id: String(row.id),
         organizationId: String(row.organization_id),

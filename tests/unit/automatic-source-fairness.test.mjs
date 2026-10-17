@@ -53,7 +53,11 @@ for (const method of ["queueReady", "claim"]) {
     );
     assert.match(selection, /source_event\.task_id=collection_tasks\.id/);
     assert.match(selection, /source_event\.actor_type='system'/);
-    assert.match(selection, /THEN 0 ELSE 1 END,available_at,id LIMIT 1 FOR UPDATE$/);
+    assert.match(selection, /THEN 0 WHEN EXISTS/);
+    assert.match(selection, /completion_event\.actor_type='worker'/);
+    assert.match(selection, /completion_query\.organization_id=completion_event\.organization_id/);
+    assert.match(selection, /ELSE 2 END,available_at,id LIMIT 1$/);
+    assert.doesNotMatch(selection, /FOR UPDATE/);
     assert.doesNotMatch(selection, /request_id LIKE/);
   });
 }

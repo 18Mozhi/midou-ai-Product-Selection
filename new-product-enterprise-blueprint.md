@@ -1,3 +1,5 @@
+> 2026-10-18 已发现商品的详情、竞品和找货在同优先级内有界优先，20次领取后保留一次原FIFO轮次；排序不持行锁，选中后按同范围主键复核，原租约不变。见 `docs/selection-completion-scheduling.md`，整链与日百品未验收。
+
 > 2026-10-18 自动情报搜索可对审计确认的来源停用区间补采一次，保留旧终态与原权限，严格核验来源记录、主题关联和搜索词，受现有积压预算限制。见 `docs/intelligence-source-recovery.md`；实际采集和日百品仍需真实验收。
 
 > 2026-10-18 Amazon已观察到的refresh验证页明确归类访问拒绝，避免误判结构变化；不跟随验证URL、不保存商品事实，原熔断与真正结构停用保留。见 `docs/amazon-verification-classification.md`，日百品未验收。

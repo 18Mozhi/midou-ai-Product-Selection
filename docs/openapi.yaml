@@ -9529,7 +9529,10 @@ components:
         status: { $ref: "#/components/schemas/TaskStatus" }
         coverage_status:
           { allOf: [{ $ref: "#/components/schemas/CoverageStatus" }], nullable: true }
-        priority: { type: string, enum: [low, normal, high, critical] }
+        priority:
+          type: string
+          enum: [low, normal, high, critical]
+          description: Explicit tiers remain ordered. Within a tier, audited full-source intake keeps precedence; proven Worker product-detail, competitor and sourcing tasks receive bounded preference, with one original FIFO turn after every twenty committed claims in the live Worker process.
         scheduled_at: { type: string, format: date-time }
         available_at: { type: string, format: date-time }
         attempt_count: { type: integer, minimum: 0, maximum: 4 }

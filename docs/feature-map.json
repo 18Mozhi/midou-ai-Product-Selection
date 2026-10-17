@@ -1,4 +1,17 @@
 {
+  "selectionCompletionScheduling20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-completion-scheduling.md",
+    "sourceFiles": [
+      "apps/worker/src/collection-source-scheduling-policy.ts",
+      "apps/worker/src/collection-task-state-machine.ts"
+    ],
+    "testFiles": [
+      "tests/unit/collection-completion-scheduling.test.mjs",
+      "tests/unit/automatic-source-fairness.test.mjs"
+    ],
+    "contract": "Keep explicit priority, intake precedence and leases. Prefer proven scoped Worker downstream targets inside each tier for 20 committed claims, then one original FIFO turn. Shared queue/claim phase; nonlocking candidate order followed by scoped PK lock and eligibility recheck. No schema/field/config/dependency change. Real chain and daily100 remain unverified."
+  },
   "selectionIntelligenceSourceRecovery20261018": {
     "status": "implemented",
     "requirements": "docs/intelligence-source-recovery.md",
