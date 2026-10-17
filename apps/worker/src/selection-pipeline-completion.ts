@@ -82,8 +82,43 @@ export async function recordSelectionPipelineCompletion(
   const price = Number(proof.purchase_price);
   if (!Number.isFinite(price) || price <= 0 || !Number.isFinite(Number(proof.overall_score)))
     return false;
+  const parseMissing = (value: unknown): string[] | null => {
+    try {
+      const result = typeof value === "string" ? JSON.parse(value) : value;
+      return Array.isArray(result) && result.every((item) => typeof item === "string")
+        ? result
+        : null;
+    } catch {
+      return null;
+    }
+  };
+  const profitState = String(proof.profit_state),
+    missingFields = parseMissing(proof.score_missing_fields_json),
+    profitMissingFields = parseMissing(proof.profit_missing_fields_json),
+    coverage = Number(proof.score_coverage_percent);
+  if (
+    !["calculated", "unknown"].includes(profitState) ||
+    !missingFields ||
+    !profitMissingFields ||
+    !Number.isFinite(coverage) ||
+    coverage < 0 ||
+    coverage > 100 ||
+    (profitState === "unknown" &&
+      (!profitMissingFields.length ||
+        !profitMissingFields.every((item) => missingFields.includes(item)) ||
+        coverage < 80 ||
+        !["insufficient_data", "observe", "not_recommend"].includes(
+          String(proof.recommendation_status),
+        )))
+  )
+    return false;
   const payload = {
-    contract: "selection-pipeline-v1",
+    contract: "selection-pipeline-v2",
+    analysis_status: profitState === "unknown" ? "complete_with_unknown_profit" : "complete",
+    profit_status: profitState,
+    score_coverage_percent: coverage,
+    score_missing_fields: missingFields,
+    profit_missing_fields: profitMissingFields,
     main_asin: String(proof.main_asin),
     opportunity_id: scope.opportunityId,
     score_run_id: String(proof.score_run_id),

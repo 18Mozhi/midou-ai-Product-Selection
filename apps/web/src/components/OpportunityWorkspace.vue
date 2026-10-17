@@ -678,6 +678,7 @@ useOpportunityWorkspaceLifecycle({
               <OpportunityProfitPanel
                 v-else-if="tab === 'profit'"
                 :profit="profit"
+                :profit-status="detail.profit_status"
                 :profit-load-state="profitLoadState"
                 :profit-error-message="profitErrorMessage"
                 :profit-request-id="profitRequestId"

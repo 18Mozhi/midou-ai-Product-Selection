@@ -6,6 +6,14 @@ info:
 servers:
   - url: /api/v1
 x-worker-event-contracts:
+  opportunity.selection_pipeline_completed:
+    contract: selection-pipeline-v2
+    previous_contracts: [selection-pipeline-v1]
+    description: First scoped analyzed-product completion. Profit may be explicitly unknown with stored reasons; intelligence, primary, 5-10 real detailed competitors, all non-profit scoring and a verified 1688 quote remain required. This is not recommendation or continuous-runtime acceptance. Historical v1 facts remain unchanged and both versions count by first ASIN completion.
+    resource_type: selection_pipeline
+    analysis_status: [complete, complete_with_unknown_profit]
+    profit_status: [calculated, unknown]
+    additional_payload_fields: [score_coverage_percent, score_missing_fields, profit_missing_fields]
   opportunity.supply_title_classified:
     contract: supply-title-v1
     description: Internal scoped audit committed with an original 1688 quote after title-attribute classification. Classification is not exact SKU verification, similarity measurement, purchase approval, or profit evidence. No new HTTP fields.
@@ -8101,7 +8109,7 @@ components:
                   type: integer
                   minimum: 0
                   nullable: true
-                  description: First verified full-pipeline workspace ASIN completions on this Beijing date, including low scores and non-recommendations. Recorded evidence covers intelligence, primary, 5-10 detailed competitors, complete scoring and a verified 1688 purchase quote. Repeated refreshes and duplicate opportunities do not count again. Absent or null is unmeasured, never inferred from other counts.
+                  description: First verified analyzed-product workspace ASIN completions on this Beijing date, including low scores, non-recommendations and explicitly unknown profit. Intelligence, primary, 5-10 detailed competitors, all non-profit scoring and a verified 1688 purchase quote remain required. Unknown profit retains reasons and is never replaced with zero or treated as a recommendation. Historical v1 and current v2 completion facts share first-ASIN deduplication. Repeated refreshes and duplicate opportunities do not count again. Absent or null is unmeasured, never inferred from other counts.
                 discovered_count: { type: integer, minimum: 0 }
                 qualified_count: { type: integer, minimum: 0 }
                 target_minimum: { type: integer, enum: [100] }

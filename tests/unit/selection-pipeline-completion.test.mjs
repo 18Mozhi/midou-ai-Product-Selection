@@ -6,6 +6,7 @@ import {
   selectionCompletedCompetitorsSql,
 } from "../../packages/database/dist/index.js";
 import { dailySelectionCompletedSql } from "../../apps/api/dist/home-daily-selection.js";
+import { MySqlOpportunityScoringWorker } from "../../apps/worker/dist/opportunity-scoring-worker.js";
 const scope = {
   opportunityId: "op",
   organizationId: "org",
@@ -19,6 +20,10 @@ const proof = {
   score_run_id: "score",
   overall_score: 0,
   recommendation_status: "reject",
+  profit_state: "calculated",
+  score_coverage_percent: 100,
+  score_missing_fields_json: [],
+  profit_missing_fields_json: [],
   intelligence_record_id: "news",
   intelligence_evidence_id: "news-raw",
   purchase_input_id: "cost",
@@ -83,12 +88,54 @@ test("low score and reject outcome still record a fully evidenced pipeline", asy
   assert.equal(await recordSelectionPipelineCompletion(f.connection, scope, "worker", now), true);
   const e = [...f.events.values()][0];
   assert.equal(e.overall_score, 0);
+  assert.equal(e.contract, "selection-pipeline-v2");
+  assert.equal(e.profit_status, "calculated");
   assert.equal(e.recommendation_status, "reject");
   assert.equal(e.purchase_price, 9.5);
   assert.equal(e.competitors.length, 5);
   assert.equal(e.completed_at, now.toISOString());
   assert.equal(e.intelligence_evidence_id, "news-raw");
   assert.equal(e.supply_evidence_id, "supply-raw");
+});
+
+test("analyzed unknown-profit product records actual partial score, missing reasons and explicit unknown state", async () => {
+  const f = fixture({
+    ...proof,
+    overall_score: 68.5,
+    recommendation_status: "insufficient_data",
+    profit_state: "unknown",
+    score_coverage_percent: 80,
+    score_missing_fields_json: '["automatic_evaluation.profit.automatic_cost_scope_mismatch"]',
+    profit_missing_fields_json: '["automatic_evaluation.profit.automatic_cost_scope_mismatch"]',
+  });
+  assert.equal(await recordSelectionPipelineCompletion(f.connection, scope, "worker", now), true);
+  const e = [...f.events.values()][0];
+  assert.equal(e.analysis_status, "complete_with_unknown_profit");
+  assert.equal(e.profit_status, "unknown");
+  assert.equal(e.overall_score, 68.5);
+  assert.equal(e.score_coverage_percent, 80);
+  assert.deepEqual(e.profit_missing_fields, [
+    "automatic_evaluation.profit.automatic_cost_scope_mismatch",
+  ]);
+  assert.equal(e.purchase_price, 9.5);
+});
+
+test("actual zero-score non-recommended analysis counts with profit unknown instead of fabricated zero profit", async () => {
+  const f = fixture({
+    ...proof,
+    overall_score: 0,
+    recommendation_status: "not_recommend",
+    profit_state: "unknown",
+    score_coverage_percent: 80,
+    score_missing_fields_json: ["profit.fees"],
+    profit_missing_fields_json: ["profit.fees"],
+  });
+  assert.equal(await recordSelectionPipelineCompletion(f.connection, scope, "worker", now), true);
+  const event = [...f.events.values()][0];
+  assert.equal(event.overall_score, 0);
+  assert.equal(event.profit_status, "unknown");
+  assert.equal(event.recommendation_status, "not_recommend");
+  assert.equal("net_profit" in event, false);
 });
 
 test("refresh or retry never overwrites the first completion time", async () => {
@@ -110,6 +157,19 @@ test("refresh or retry never overwrites the first completion time", async () => 
 for (const [name, p, rows] of [
   ["missing pipeline proof", null, competitors],
   ["missing numeric score", { ...proof, overall_score: null }, competitors],
+  ["unlabelled unknown profit", { ...proof, profit_state: "unknown" }, competitors],
+  [
+    "unknown profit cannot be recommended",
+    {
+      ...proof,
+      profit_state: "unknown",
+      recommendation_status: "recommend",
+      score_missing_fields_json: ["missing fee"],
+      profit_missing_fields_json: ["missing fee"],
+    },
+    competitors,
+  ],
+  ["malformed missing reasons", { ...proof, score_missing_fields_json: "not-json" }, competitors],
   ["missing news proof", { ...proof, intelligence_evidence_id: "" }, competitors],
   ["invalid purchase price", { ...proof, purchase_price: "invalid" }, competitors],
   ["four competitors", proof, competitors.slice(0, 4)],
@@ -156,6 +216,22 @@ test("completion counts first event per scoped ASIN, not a recommendation thresh
   assert.match(selectionPipelineCompletionProofSql, /intelligence_source_record_id/);
   assert.match(selectionPipelineCompletionProofSql, /ss.input_ref=o.id/);
   assert.match(selectionPipelineCompletionProofSql, /cost_score.evidence_ids_json/);
+  assert.match(
+    selectionPipelineCompletionProofSql,
+    /cost_score.input_score IS NULL[\s\S]*profit_status='insufficient_data'/,
+  );
+  assert.match(
+    selectionPipelineCompletionProofSql,
+    /'market_demand','competition','risk','data_quality'/,
+  );
+  assert.match(
+    selectionPipelineCompletionProofSql,
+    /incomplete_component.dimension_code<>'profit'/,
+  );
+  assert.match(
+    dailySelectionCompletedSql,
+    /IN \('selection-pipeline-v1','selection-pipeline-v2'\)/,
+  );
   assert.doesNotMatch(
     selectionPipelineCompletionProofSql,
     /recommendation_status='recommend'|risk_level='low'/,
@@ -180,3 +256,108 @@ test("completion write failure propagates to the parent transaction without comm
     false,
   );
 });
+
+for (const failCompletion of [false, true])
+  test(`scoring warning result and unknown-profit completion share the parent transaction, failure=${failCompletion}`, async () => {
+    const missing = ["profit.fee_policy"],
+      p = {
+        ...proof,
+        overall_score: 75,
+        recommendation_status: "insufficient_data",
+        profit_state: "unknown",
+        score_coverage_percent: 80,
+        score_missing_fields_json: missing,
+        profit_missing_fields_json: missing,
+      },
+      f = fixture(p),
+      sourceQuery = f.connection.query,
+      dimensions = ["market_demand", "competition", "profit", "risk", "data_quality"].map(
+        (code) => ({
+          code,
+          required: true,
+          weight: 20,
+          evidence_group:
+            code === "profit"
+              ? "cost"
+              : code === "market_demand"
+                ? "market"
+                : code === "competition"
+                  ? "competition"
+                  : "other",
+        }),
+      );
+    let commits = 0,
+      rollbacks = 0;
+    const c = {
+      ...f.connection,
+      async beginTransaction() {},
+      async commit() {
+        commits++;
+      },
+      async rollback() {
+        rollbacks++;
+      },
+      release() {},
+      async query(sql, params) {
+        if (sql.startsWith("SELECT version_code,dimensions_json"))
+          return [
+            [
+              {
+                version_code: "confirmed",
+                dimensions_json: dimensions,
+                thresholds_json: { recommend_min: 70, observe_min: 50 },
+              },
+            ],
+          ];
+        if (sql.startsWith("SELECT id,owner_id FROM opportunities"))
+          return [[{ id: "op", owner_id: null }]];
+        if (sql.startsWith("SELECT * FROM opportunity_score_inputs"))
+          return [
+            dimensions.map((d) => ({
+              id: d.code,
+              input_version: 1,
+              dimension_code: d.code,
+              evidence_group: d.evidence_group,
+              score_value: d.code === "profit" ? null : 75,
+              evidence_ids_json: [d.code + "-raw"],
+              missing_fields_json: d.code === "profit" ? missing : [],
+            })),
+          ];
+        if (sql.includes("reconciliation_status") && sql.includes("FROM raw_evidence")) return [[]];
+        if (
+          sql === selectionPipelineCompletionProofSql ||
+          sql === selectionCompletedCompetitorsSql ||
+          sql.startsWith("SELECT id FROM opportunity_events")
+        )
+          return sourceQuery(sql, params);
+        if (
+          sql.startsWith("INSERT INTO opportunity_events") &&
+          params[3] === "opportunity.selection_pipeline_completed"
+        ) {
+          if (failCompletion) throw new Error("completion-write-failed");
+          return sourceQuery(sql, params);
+        }
+        if (sql.startsWith("SELECT")) throw new Error("Unexpected read: " + sql);
+        return [{ affectedRows: 1 }];
+      },
+    };
+    const worker = new MySqlOpportunityScoringWorker(
+      { getConnection: async () => c },
+      "worker",
+      120,
+      () => now,
+    );
+    const job = { ...scope, id: "job", ruleId: "rule", triggerTaskId: null, attemptCount: 1 };
+    if (failCompletion) {
+      await assert.rejects(worker.calculate(job), /completion-write-failed/);
+      assert.equal(commits, 0);
+      assert.equal(rollbacks, 1);
+    } else {
+      const result = await worker.calculate(job);
+      assert.equal(result.complete, false);
+      assert.equal(result.coverage, 80);
+      assert.equal([...f.events.values()][0].profit_status, "unknown");
+      assert.equal(commits, 1);
+      assert.equal(rollbacks, 0);
+    }
+  });

@@ -37,7 +37,7 @@ export const dailySelectionCompletedSql =
   "MIN(occurred_at) completed_at FROM opportunity_events " +
   "WHERE organization_id=? AND workspace_id=? AND resource_type='selection_pipeline' " +
   "AND event_type='opportunity.selection_pipeline_completed' AND actor_type='worker' " +
-  "AND JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.contract'))='selection-pipeline-v1' " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.contract')) IN ('selection-pipeline-v1','selection-pipeline-v2') " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.main_asin')) REGEXP '^[A-Za-z0-9]{10}$' " +
   "GROUP BY UPPER(JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.main_asin')))) completed " +
   "WHERE completed.completed_at>=? AND completed.completed_at<?";

@@ -252,7 +252,7 @@
   },
   "selectionDailyProduction20261017": {
     "status": "implemented",
-    "statusDetail": "85_related_tests_42_browser_cases_22_builds_readonly_mysql57_passed_not_deployed",
+    "statusDetail": "121_related_tests_38_browser_cases_12_readonly_mysql57_cases_22_builds_passed_not_deployed",
     "requirements": "docs/selection-daily-production.md",
     "sourceFiles": [
       "apps/api/src/home-daily-selection.ts",
@@ -263,21 +263,29 @@
       "apps/web/src/components/HomeAutomationOverview.vue",
       "apps/web/src/home-dashboard.css",
       "packages/database/src/selection-completion-policy.ts",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/components/SelectionProductHeader.vue",
+      "apps/web/src/components/OpportunityDetailInsights.vue",
+      "apps/web/src/components/OpportunityProfitPanel.vue",
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/opportunity-workspace-presentation.ts",
       "apps/worker/src/selection-pipeline-completion.ts",
       "apps/worker/src/opportunity-scoring-worker.ts",
       "apps/worker/src/automatic-selection-evaluation-worker.ts"
     ],
     "apiRoutes": ["/api/v1/me/home-dashboard"],
-    "routes": ["/home"],
+    "routes": ["/home", "/opportunities", "/opportunities/:id"],
     "testFiles": [
       "tests/unit/home-daily-selection.test.mjs",
       "tests/m02-06/home-dashboard.test.mjs",
       "tests/m02-06/home-discovery-health.test.mjs",
       "tests/e2e/m02-06-home-mobile.spec.ts",
       "tests/unit/selection-pipeline-completion.test.mjs",
+      "tests/unit/automatic-evidence-scoring.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts",
       "tests/e2e/m04-10-selection-http.spec.ts"
     ],
-    "contract": "Confirmed target: 100 distinct workspace ASINs first verified through intelligence, primary, 5-10 detailed competitors, complete numeric scoring and 1688 purchase evidence; low scores and non-recommendations count. Record scoped immutable completion facts in existing opportunity_events within parent worker transactions. Daily completed_count groups first event per ASIN in Beijing time; repeated scoring never counts again. Preserve discovery/qualified snapshot fields and recommendation gates. Missing completed_count is unknown, never inferred. No schema, dependency, environment or Python contract change; not deployed or daily-production acceptance.",
+    "contract": "Confirmed target: 100 distinct workspace ASINs first verified through intelligence, primary, 5-10 detailed competitors, numeric factual scoring and 1688 purchase evidence; low scores, non-recommendations and explicitly unknown profit count. Unknown-profit completion still requires all four non-profit dimensions and 5-10 detailed competitors, remains non-recommendable and stores missing reasons in v2 completion facts. Preserve historical v1 facts and count both versions. Record scoped immutable completion facts in existing opportunity_events within parent worker transactions. Daily completed_count groups first event per ASIN in Beijing time; repeated scoring never counts again. Preserve discovery/qualified snapshot fields and recommendation gates. Missing completed_count is unknown, never inferred. No schema, dependency, environment or Python contract change; not deployed or daily-production acceptance.",
     "events": ["opportunity.selection_pipeline_completed"]
   },
   "selectionEvaluationWakeup20261017": {

@@ -923,7 +923,9 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
     }),
   ).toBeVisible();
   await page.getByRole("button", { name: "货源与利润" }).click();
-  await expect(page.getByText("数据不足，不能生成可靠 ROI")).toBeVisible();
+  await expect(
+    page.locator(".opportunity-profit").getByText("利润未知", { exact: true }),
+  ).toBeVisible();
   await page.getByRole("button", { name: "情报证据", exact: true }).click();
   await expect(page.getByText("Example News")).toBeVisible();
   const decisionWrites: string[] = [];
@@ -2324,7 +2326,7 @@ test("profit analysis failure stays local and retries only the profit read", asy
 
   profitUnavailable = false;
   await panel.getByRole("button", { name: "重新读取利润数据", exact: true }).click();
-  await expect(panel).toContainText("数据不足，不能生成可靠 ROI");
+  await expect(panel).toContainText("利润未知");
   expect(profitReads).toBe(profitReadsBeforeRetry + 1);
   expect(detailReads).toBe(detailReadsBeforeRetry);
 });
@@ -2824,11 +2826,43 @@ test("source prices remain visible when generic product profit has not been calc
   );
   await page.goto(`/opportunities/${opportunityId}?tab=profit`);
   const panel = page.locator(".opportunity-profit");
-  await expect(panel.getByText("数据不足，不能生成可靠 ROI", { exact: true })).toBeVisible();
+  await expect(panel.getByText("利润未知", { exact: true })).toBeVisible();
   const prices = panel.locator(".profit-current-inputs");
   await expect(prices.getByText("25 USD · amazon", { exact: true })).toBeVisible();
   await expect(prices.getByText("5 CNY · amazon", { exact: true })).toBeVisible();
   await expect(prices.getByText("采购价", { exact: true })).toBeVisible();
   await expect(prices.getByText(/1688:fixture-offer:p75:3/)).toBeVisible();
   await expect(panel.locator(".profit-summary")).toHaveCount(0);
+});
+
+test("unknown current profit stays explicit even when a historical calculated run exists", async ({
+  page,
+}) => {
+  await ready(page, undefined, { profit_status: "insufficient_data" });
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
+    route.fulfill({
+      json: envelope({
+        latest_run: {
+          status: "calculated",
+          rule_version_code: "historical-phone-cost",
+          sale_price: 25,
+          total_cost: 12.66,
+          net_profit: 12.34,
+          net_margin_percent: 49.36,
+          currency: "USD",
+          components: [],
+          missing_fields: [],
+        },
+        current_inputs: [],
+        cost_input_reviews: [],
+      }),
+    }),
+  );
+  await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+  const panel = page.locator(".opportunity-profit");
+  await expect(page.locator(".selection-product-header")).toContainText("利润未知");
+  await expect(panel.getByText("利润未知", { exact: true })).toBeVisible();
+  await expect(panel).toContainText("下方保留上次计算明细，不作为当前利润");
+  await expect(panel.locator(".profit-summary")).toHaveCount(0);
+  await expect(panel).not.toContainText("12.34");
 });

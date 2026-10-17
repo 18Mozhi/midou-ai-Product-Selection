@@ -9,6 +9,7 @@ import {
 withDefaults(
   defineProps<{
     profit: ProfitAnalysis | null;
+    profitStatus?: string | null;
     profitLoadState?: "loading" | "ready" | "error";
     profitErrorMessage?: string;
     profitRequestId?: string;
@@ -33,6 +34,7 @@ withDefaults(
   }>(),
   {
     canConfirmCost: true,
+    profitStatus: null,
     reviewerLoadState: "unknown",
     reviewerErrorMessage: "",
     reviewerRequestId: "",
@@ -84,7 +86,7 @@ const inputLabel = (value: string) =>
       <button type="button" :disabled="busy" @click="$emit('retryProfit')">重新读取利润数据</button>
     </aside>
     <div
-      v-if="profit?.latest_run?.status === 'calculated'"
+      v-if="profit?.latest_run?.status === 'calculated' && profitStatus !== 'insufficient_data'"
       class="profit-summary"
       :data-status="profit.latest_run.status"
     >
@@ -114,12 +116,20 @@ const inputLabel = (value: string) =>
     <aside
       v-if="
         profitLoadState === 'ready' &&
-        (!profit?.latest_run || profit.latest_run.status === 'insufficient_data')
+        (profitStatus === 'insufficient_data' ||
+          !profit?.latest_run ||
+          profit.latest_run.status === 'insufficient_data')
       "
       class="profit-missing"
     >
-      <strong>数据不足，不能生成可靠 ROI</strong
-      ><span>缺失：{{ profit?.latest_run?.missing_fields.join("、") || "尚无利润计算运行" }}</span>
+      <strong>利润未知</strong>
+      <span
+        v-if="profitStatus === 'insufficient_data' && profit?.latest_run?.status === 'calculated'"
+        >当前利润尚不能确认；下方保留上次计算明细，不作为当前利润。</span
+      >
+      <span v-else
+        >缺失：{{ profit?.latest_run?.missing_fields.join("、") || "尚无利润计算运行" }}</span
+      >
     </aside>
     <div v-if="profit?.latest_run" class="profit-components">
       <article

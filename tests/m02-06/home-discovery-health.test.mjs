@@ -1,4 +1,7 @@
-import { dailySelectionProductionSql } from "../../apps/api/dist/home-daily-selection.js";
+import {
+  dailySelectionProductionSql,
+  dailySelectionCompletedSql,
+} from "../../apps/api/dist/home-daily-selection.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { MySqlHomeDashboardRepository } from "../../apps/api/dist/mysql-home-dashboard-repository.js";
@@ -14,6 +17,7 @@ for (const [problems, expected] of [
       query: async (sql, parameters) => {
         if (sql === dailySelectionProductionSql)
           return [[{ discovered_count: 0, qualified_count: 0 }]];
+        if (sql === dailySelectionCompletedSql) return [[{ completed_count: 0 }]];
         if (sql.includes("FROM automatic_source_schedules s")) return [[], []];
         captured = { sql, parameters };
         return [
@@ -55,6 +59,7 @@ for (const [source_available, task_status, expected] of [
       query: async (sql, parameters) => {
         if (sql === dailySelectionProductionSql)
           return [[{ discovered_count: 0, qualified_count: 0 }]];
+        if (sql === dailySelectionCompletedSql) return [[{ completed_count: 0 }]];
         if (sql.includes("FROM automatic_source_schedules s")) {
           assert.deepEqual(parameters, ["org", "workspace"]);
           return [

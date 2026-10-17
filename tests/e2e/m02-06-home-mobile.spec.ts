@@ -739,6 +739,7 @@ test.describe("daily snapshots retain Beijing time in overseas browsers", () => 
         await expect(daily.getByText(/当前快照不能证明全天不间断运行/)).toBeVisible();
         await expect(daily).toContainText("统计时间 2026/10/17 08:00:00");
         await expect(daily.locator("dd").nth(0)).toHaveText(`${completed} / 100 目标`);
+        await expect(daily).toContainText("明确标注利润未知的已分析商品");
       }
       await expect
         .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))

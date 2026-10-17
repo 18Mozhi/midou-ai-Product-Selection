@@ -4,6 +4,7 @@ import type { OpportunityDetail } from "./opportunity-workspace-types";
 import {
   formatOpportunityTime,
   opportunityStatusLabel,
+  opportunityProfitStatusLabel,
 } from "./opportunity-workspace-presentation";
 
 const props = defineProps<{ detail: OpportunityDetail }>();
@@ -68,7 +69,7 @@ const asin = computed(() =>
       </div>
       <div>
         <dt>利润状态</dt>
-        <dd>{{ opportunityStatusLabel(detail.profit_status) }}</dd>
+        <dd>{{ opportunityProfitStatusLabel(detail.profit_status) }}</dd>
       </div>
       <div>
         <dt>证据覆盖</dt>

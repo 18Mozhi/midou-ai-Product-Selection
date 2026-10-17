@@ -276,7 +276,7 @@ export class MySqlOpportunityScoringWorker {
         },
         now,
       );
-      if (complete) await recordSelectionPipelineCompletion(c, job, this.workerId, now);
+      await recordSelectionPipelineCompletion(c, job, this.workerId, now);
       if (job.triggerTaskId) {
         const [tasks] = await c.query<RowDataPacket[]>(
             "SELECT assignee_id FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? " +

@@ -459,10 +459,11 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           await this.queueScore(connection, job, String(scoreRule.id), requestId, traceId, now);
         await connection.query(
           "UPDATE opportunities SET risk_level=?,recommendation_status=IF(?,'insufficient_data'," +
-            "recommendation_status),version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+            "recommendation_status),profit_status=IF(?,'insufficient_data',profit_status),version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
           [
             facts.riskLevel,
             qualityBlocked || Boolean(missingProfitReason),
+            Boolean(missingProfitReason),
             now,
             job.opportunityId,
             job.organizationId,
@@ -497,6 +498,13 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           }),
           code,
         );
+        if (!result.scoreInputsChanged)
+          await recordSelectionPipelineCompletion(
+            connection,
+            { ...job, requestId, traceId },
+            this.workerId,
+            now,
+          );
         return this.waiting(
           connection,
           job,

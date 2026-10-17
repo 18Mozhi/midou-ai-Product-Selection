@@ -337,6 +337,7 @@ export interface HomeDashboardItem {
   source_version: number;
 }
 export interface DailySelectionProduction {
+  /** First analyzed ASIN completion; explicitly unknown profit is allowed only with all other workflow evidence. */
   completed_count?: number | null;
   date: string;
   timezone: "Asia/Shanghai";

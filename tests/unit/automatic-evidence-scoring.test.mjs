@@ -8,6 +8,10 @@ import {
   automaticPrimaryDetailEvidenceSql,
   automaticSupplyEvidenceSql,
 } from "../../apps/worker/dist/automatic-selection-evidence.js";
+import {
+  selectionPipelineCompletionProofSql,
+  selectionCompletedCompetitorsSql,
+} from "../../packages/database/dist/index.js";
 
 const now = new Date("2026-10-17T00:00:00Z");
 const job = {
@@ -58,6 +62,18 @@ function fixture(options = {}) {
     release() {},
     async query(sql, params) {
       calls.push({ sql, params });
+      if (sql === selectionPipelineCompletionProofSql)
+        return [options.completionProof ? [options.completionProof] : []];
+      if (sql === selectionCompletedCompetitorsSql)
+        return [
+          Array.from({ length: 5 }, (_, index) => ({
+            asin: `B0COUNT${String(index + 1).padStart(3, "0")}`,
+            competitor_id: `competitor-${index}`,
+            snapshot_id: `snapshot-${index}`,
+            evidence_id: `detail-${index}`,
+          })),
+        ];
+      if (sql.startsWith("SELECT id FROM opportunity_events")) return [[]];
       if (
         options.failSupplyAudit &&
         sql.startsWith("INSERT INTO opportunity_events") &&
@@ -299,6 +315,53 @@ test("model timeout preserves factual sale and non-profit scoring without invent
   assert.deepEqual(f.counts(), { commits: 1, rollbacks: 0 });
 });
 
+test("an unchanged unknown-profit analysis can finish when the final competitor evidence becomes available", async () => {
+  const options = { noHumanCosts: true, supplyTitle: "Stainless steel kitchen storage rack" };
+  const f = fixture(options);
+  await f.worker.evaluate(job);
+  const projection = calculateScoreProjection(
+    dimensions,
+    { recommend_min: 70, observe_min: 50 },
+    dimensions.map((dimension) => ({
+      dimension_code: dimension.code,
+      evidence_group: dimension.evidence_group,
+      score_value: f.inputs.get(dimension.code).score_value,
+      evidence_ids: JSON.parse(f.inputs.get(dimension.code).evidence_ids_json),
+      missing_fields: JSON.parse(f.inputs.get(dimension.code).missing_fields_json),
+    })),
+  );
+  assert.equal(projection.complete_core_evidence, false);
+  assert.notEqual(projection.recommendation_status, "recommend");
+  const purchase = f.prices.find((item) => item.input_type === "purchase_price");
+  options.completionProof = {
+    main_asin: "B000000001",
+    score_run_id: "partial-score",
+    overall_score: projection.overall_score,
+    recommendation_status: projection.recommendation_status,
+    profit_state: "unknown",
+    score_coverage_percent: projection.coverage_percent,
+    score_missing_fields_json: projection.missing_fields,
+    profit_missing_fields_json: JSON.parse(f.inputs.get("profit").missing_fields_json),
+    intelligence_record_id: "news",
+    intelligence_evidence_id: "news-raw",
+    purchase_input_id: purchase.id,
+    purchase_price: purchase.amount_value,
+    purchase_currency: purchase.currency,
+    supply_record_id: "supply-record",
+    supply_evidence_id: purchase.evidence_id,
+    supply_offer_id: "1",
+  };
+  await f.worker.evaluate(job);
+  const completion = f.calls.find(
+    (call) =>
+      call.sql.startsWith("INSERT INTO opportunity_events") &&
+      call.params[3] === "opportunity.selection_pipeline_completed",
+  );
+  assert.ok(completion);
+  assert.equal(JSON.parse(completion.params[9]).profit_status, "unknown");
+  assert.equal(JSON.parse(completion.params[9]).overall_score, projection.overall_score);
+});
+
 for (const noCostRule of [false, true]) {
   test(`generic product publishes factual scores with ${noCostRule ? "no cost rule" : "phone-only costs"}`, async () => {
     const f = fixture({ noCostRule });
@@ -327,7 +390,12 @@ for (const noCostRule of [false, true]) {
     );
     const risk = f.calls.find(({ sql }) => sql.startsWith("UPDATE opportunities SET risk_level"));
     assert.equal(risk.params[1], true, "missing profit immediately withdraws stale recommendation");
-    assert.deepEqual(risk.params.slice(3), [
+    assert.equal(
+      risk.params[2],
+      true,
+      "missing profit invalidates the current calculated-profit status",
+    );
+    assert.deepEqual(risk.params.slice(4), [
       job.opportunityId,
       job.organizationId,
       job.workspaceId,

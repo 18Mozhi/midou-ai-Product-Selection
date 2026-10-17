@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { opportunityProfitStatusLabel } from "./opportunity-workspace-presentation";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import AutomaticSelectionReadinessPanel from "./AutomaticSelectionReadinessPanel.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
@@ -477,7 +478,7 @@ watch(imageFailureResetSources, (items) => {
             <span
               >货源 <strong>{{ item.supplier_candidate_count }}</strong></span
             >
-            <span>{{ opportunityStatus(item.profit_status) }}</span>
+            <span>{{ opportunityProfitStatusLabel(item.profit_status) }}</span>
           </div>
           <b :data-status="item.decision_status"
             >{{ selectionStage(item) === "recommended" ? "审阅并采纳" : "查看进度" }} →</b

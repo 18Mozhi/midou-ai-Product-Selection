@@ -86,6 +86,7 @@ test("[real-api] catalogue renders returned primary identity and public facts", 
   await expect(page.getByText("B0HTTP0000", { exact: true })).toBeVisible();
   await expect(page.getByText("USD 19.95", { exact: true })).toBeVisible();
   await expect(page.getByText("HTTP 验证旅行收纳袋", { exact: true })).toBeVisible();
+  await expect(page.locator(".catalog-product-coverage").first()).toContainText("利润未知");
   png(await page.screenshot({ fullPage: true }), page);
 });
 
@@ -133,6 +134,10 @@ test("[real-api] detail comparison reads five independent competitors from its s
   const read = page.waitForResponse(
     (response) => new URL(response.url()).pathname === "/api/v1/competitors",
   );
+  const profitRead = page.waitForResponse(
+    (response) =>
+      new URL(response.url()).pathname === `/api/v1/opportunities/${ids.product}/profit-analysis`,
+  );
   await page.goto(`/opportunities/${ids.product}?tab=competition`);
   const response = await read;
   expect(response.status()).toBe(200);
@@ -146,7 +151,13 @@ test("[real-api] detail comparison reads five independent competitors from its s
   const comparison = page.getByRole("region", { name: "Amazon 主品与竞品" });
   await expect(comparison.locator("tbody tr")).toHaveCount(5);
   await expect(comparison).toContainText("HTTP 验证独立竞品 5");
+  await expect(page.locator(".selection-product-header")).toContainText("利润未知");
   png(await page.screenshot({ fullPage: true }), page);
+  await page.getByRole("button", { name: "货源与利润", exact: true }).click();
+  expect((await profitRead).status()).toBe(200);
+  await expect(
+    page.locator(".opportunity-profit").getByText("利润未知", { exact: true }),
+  ).toBeVisible();
 });
 
 test("[real-api] observed decision saves through HTTP and survives reopening", async ({ page }) => {

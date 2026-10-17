@@ -60,12 +60,16 @@ export const selectionPipelineCompletionProofSql =
   selectionPrimaryAsinSql +
   " main_asin," +
   "sr.id score_run_id,sr.overall_score,sr.recommendation_status," +
+  "sr.coverage_percent score_coverage_percent,sr.missing_fields_json score_missing_fields_json," +
+  "CASE WHEN cost_score.input_score IS NULL THEN 'unknown' ELSE 'calculated' END profit_state," +
+  "cost_score.missing_fields_json profit_missing_fields_json," +
   "news.id intelligence_record_id,news.raw_evidence_id intelligence_evidence_id," +
   "ci.id purchase_input_id,ci.amount_value purchase_price,ci.currency purchase_currency," +
   "supply.id supply_record_id,supply.raw_evidence_id supply_evidence_id," +
   "JSON_UNQUOTE(JSON_EXTRACT(supply.payload_json,'$.external_id')) supply_offer_id " +
   "FROM opportunities o JOIN opportunity_score_runs sr ON sr.opportunity_id=o.id " +
   "AND sr.organization_id=o.organization_id AND sr.workspace_id=o.workspace_id " +
+  "JOIN opportunity_score_components cost_score ON cost_score.score_run_id=sr.id AND cost_score.dimension_code='profit' " +
   "JOIN opportunity_cost_inputs ci ON ci.opportunity_id=o.id AND ci.organization_id=o.organization_id " +
   "AND ci.workspace_id=o.workspace_id AND ci.input_type='purchase_price' AND ci.is_current=1 " +
   "AND ci.amount_value>0 AND ci.currency='CNY' " +
@@ -89,11 +93,19 @@ export const selectionPipelineCompletionProofSql =
   "ORDER BY latest.scored_at DESC,latest.id DESC LIMIT 1) " +
   "AND sr.status='calculated' AND sr.overall_score IS NOT NULL AND o.score_rule_version IS NOT NULL " +
   "AND sr.overall_score=o.overall_score AND sr.rule_version_code=o.score_rule_version AND sr.scored_at=o.scored_at " +
-  "AND EXISTS (SELECT 1 FROM opportunity_score_components cost_score WHERE cost_score.score_run_id=sr.id " +
-  "AND cost_score.dimension_code='profit' AND cost_score.input_score IS NOT NULL " +
-  "AND JSON_CONTAINS(cost_score.evidence_ids_json,JSON_QUOTE(ci.evidence_id))) " +
-  "AND o.coverage_status='complete' AND o.trend_score IS NOT NULL AND o.competition_score IS NOT NULL " +
-  "AND o.profit_status='calculated' AND " +
+  "AND ((cost_score.input_score IS NOT NULL AND o.coverage_status='complete' AND o.profit_status='calculated' " +
+  "AND JSON_CONTAINS(cost_score.evidence_ids_json,JSON_QUOTE(ci.evidence_id))) OR " +
+  "(cost_score.input_score IS NULL AND JSON_LENGTH(cost_score.missing_fields_json)>0 " +
+  "AND o.profit_status='insufficient_data' AND sr.recommendation_status IN ('insufficient_data','observe','not_recommend') " +
+  "AND o.recommendation_status<>'recommend' " +
+  "AND o.coverage_status='partial' AND sr.coverage_percent>=80 " +
+  "AND (SELECT COUNT(DISTINCT analysis_component.dimension_code) FROM opportunity_score_components analysis_component " +
+  "WHERE analysis_component.score_run_id=sr.id AND analysis_component.dimension_code IN ('market_demand','competition','risk','data_quality') " +
+  "AND analysis_component.input_score BETWEEN 0 AND 100 AND JSON_LENGTH(analysis_component.evidence_ids_json)>0)=4 " +
+  "AND NOT EXISTS (SELECT 1 FROM opportunity_score_components incomplete_component WHERE incomplete_component.score_run_id=sr.id " +
+  "AND incomplete_component.dimension_code<>'profit' AND (incomplete_component.input_score IS NULL " +
+  "OR JSON_LENGTH(incomplete_component.missing_fields_json)>0)))) " +
+  "AND o.trend_score IS NOT NULL AND o.competition_score IS NOT NULL AND " +
   selectionRiskGateSql +
   " AND JSON_UNQUOTE(JSON_EXTRACT(supply.payload_json,'$.external_id')) REGEXP '^[0-9]{1,40}$' " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(supply.payload_json,'$.canonical_url'))=" +

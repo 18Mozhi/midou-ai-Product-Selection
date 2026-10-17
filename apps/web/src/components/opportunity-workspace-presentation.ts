@@ -36,6 +36,8 @@ const opportunityLabels: Record<string, string> = {
 
 export const opportunityStatusLabel = (value: string | null | undefined) =>
   value ? (opportunityLabels[value] ?? value) : "未提供";
+export const opportunityProfitStatusLabel = (value: string | null | undefined) =>
+  value === "insufficient_data" || value === "unknown" ? "利润未知" : opportunityStatusLabel(value);
 
 const scoreDimensionLabels: Record<string, string> = {
   market_demand: "市场需求",

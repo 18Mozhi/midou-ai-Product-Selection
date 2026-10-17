@@ -11,6 +11,7 @@ import {
   formatOpportunityTime,
   opportunityScoreDimensionLabel,
   opportunityStatusLabel,
+  opportunityProfitStatusLabel,
 } from "./opportunity-workspace-presentation";
 
 type DownstreamState = {
@@ -254,7 +255,7 @@ const emit = defineEmits<{
         <dl class="opportunity-status-pair">
           <div>
             <dt>利润</dt>
-            <dd>{{ opportunityStatusLabel(detail.profit_status) }}</dd>
+            <dd>{{ opportunityProfitStatusLabel(detail.profit_status) }}</dd>
           </div>
           <div>
             <dt>已保存风险等级</dt>
