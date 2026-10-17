@@ -1,4 +1,14 @@
 {
+  "selectionSharedStateLayout20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-shared-state-layout.md",
+    "sourceFiles": [
+      "apps/web/src/styles/onboarding-navigation.css",
+      "apps/web/src/styles/platform-operations.css"
+    ],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "contract": "Replace legacy shared state visual rules with compact full-width solid surfaces. Preserve all state kinds, copy, actions, identifiers, permissions and HTTP mapping. No API/schema/config/Python change; provider adapter page-specific overrides remain separate."
+  },
   "selectionAmazonTargetDrift20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-target-drift-isolation.md",

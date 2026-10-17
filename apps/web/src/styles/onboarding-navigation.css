@@ -959,30 +959,36 @@
 .ui-state-panel {
   position: relative;
   z-index: 2;
-  width: min(570px, 92%);
-  min-height: 390px;
-  padding: clamp(28px, 4vw, 48px);
+  width: 100%;
+  min-height: 220px;
+  padding: 28px 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   text-align: center;
   border: 1px solid var(--so-border);
-  border-radius: 24px;
-  background: color-mix(in srgb, var(--so-bg-elevated) 92%, transparent);
-  box-shadow: 0 28px 80px color-mix(in srgb, var(--so-bg) 28%, transparent);
+  border-radius: 4px;
+  background: var(--so-bg-elevated);
+  box-shadow: none;
+  gap: 10px;
+}
+.ui-state-panel.is-compact {
+  min-height: 160px;
+  padding: 20px 16px;
 }
 .ui-state-symbol {
   display: grid;
   place-items: center;
-  min-width: 72px;
-  height: 72px;
-  padding: 0 12px;
-  border-radius: 22px;
-  color: var(--so-primary);
-  background: color-mix(in srgb, var(--so-primary) 11%, transparent);
-  font-size: 26px;
-  font-weight: 850;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 6px;
+  border: 1px solid var(--so-border);
+  border-radius: 4px;
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+  font-size: 20px;
+  font-weight: 600;
 }
 .ui-state-panel[data-kind="error"] .ui-state-symbol,
 .ui-state-panel[data-kind="forbidden"] .ui-state-symbol {
@@ -998,31 +1004,29 @@
   color: var(--so-success);
   background: color-mix(in srgb, var(--so-success) 11%, transparent);
 }
-.ui-state-panel > p {
-  margin: 19px 0 8px;
-  color: var(--so-primary);
-  font-size: 13px;
-  font-weight: 850;
-  letter-spacing: 0.18em;
-}
 .ui-state-panel h2 {
-  font-size: clamp(27px, 3vw, 38px);
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 600;
 }
 .ui-state-panel > div:not(.ui-state-skeleton) {
-  max-width: 470px;
-  margin-top: 10px;
+  max-width: 600px;
+  margin: 0;
   color: var(--so-text-muted);
   line-height: 1.7;
+  font-size: 13px;
+  overflow-wrap: anywhere;
 }
 .ui-state-panel dl {
-  width: 100%;
-  margin: 20px 0 0;
-  padding: 12px;
+  width: min(100%, 600px);
+  margin: 4px 0 0;
+  padding: 10px 12px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 8px;
   border: 1px solid var(--so-border);
-  border-radius: 11px;
+  border-radius: 4px;
   background: var(--so-panel-soft);
 }
 .ui-state-panel dl div {
@@ -1039,45 +1043,41 @@
   font-size: 13px;
 }
 .ui-state-panel footer {
-  margin-top: 22px;
+  margin-top: 6px;
   display: flex;
   justify-content: center;
   gap: 9px;
+  flex-wrap: wrap;
 }
 .ui-state-panel footer button {
-  padding: 11px 16px;
+  min-height: 44px;
+  padding: 8px 16px;
   border: 1px solid var(--so-border);
-  border-radius: 10px;
-  color: var(--so-text-muted);
-  background: transparent;
+  border-radius: 4px;
+  color: var(--so-text);
+  background: var(--so-bg-elevated);
 }
 .ui-state-panel footer .primary {
   color: var(--so-on-primary);
-  border-color: transparent;
-  background: linear-gradient(120deg, var(--so-primary-strong), var(--so-primary));
+  border-color: var(--so-primary);
+  background: var(--so-primary);
 }
 .ui-state-skeleton {
-  width: 100%;
+  width: min(100%, 380px);
   display: grid;
-  gap: 13px;
+  gap: 10px;
 }
 .ui-state-skeleton i {
-  height: 18px;
-  border-radius: 8px;
-  background: linear-gradient(
-    90deg,
-    var(--so-panel-soft),
-    color-mix(in srgb, var(--so-primary) 15%, var(--so-panel-soft)),
-    var(--so-panel-soft)
-  );
-  background-size: 200% 100%;
-  animation: skeleton 1.4s infinite;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--so-panel-soft);
+  animation: state-loading-pulse 1.4s ease-in-out infinite;
 }
 .ui-state-skeleton i:first-child {
-  width: 42%;
-  height: 72px;
+  width: 36px;
+  height: 36px;
   margin: auto;
-  border-radius: 22px;
+  border-radius: 4px;
 }
 .ui-state-skeleton i:nth-child(2) {
   width: 72%;
@@ -1206,9 +1206,9 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
-@keyframes skeleton {
-  to {
-    background-position: -200% 0;
+@keyframes state-loading-pulse {
+  50% {
+    opacity: 0.45;
   }
 }
 @media (prefers-reduced-motion: reduce) {

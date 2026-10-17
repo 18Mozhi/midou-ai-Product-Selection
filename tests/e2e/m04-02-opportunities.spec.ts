@@ -393,6 +393,56 @@ test("M04-02.A07/A08/A15 automatic opportunity list ignores retired creation and
   await expect(page.getByRole("button", { name: "手工添加", exact: true })).toHaveCount(0);
 });
 
+for (const kind of ["empty", "error"] as const) {
+  test(`catalogue ${kind} state stays compact and preserves a usable retry`, async ({ page }) => {
+    await ready(page);
+    let reads = 0;
+    await page.route("**/api/v1/opportunities?*", (route) => {
+      reads += 1;
+      return route.fulfill(
+        kind === "empty"
+          ? { json: envelope([], { total: 0, page: 1, page_size: 20 }) }
+          : {
+              status: 500,
+              json: {
+                error: { code: "internal_error", action_hint: "稍后重新读取选品结果。" },
+                request_id: "catalogue-state-read",
+                trace_id: "catalogue-state-trace",
+              },
+            },
+      );
+    });
+    await page.goto("/opportunities?view=all");
+    const panel = page.locator(`.ui-state-panel[data-kind="${kind}"]`);
+    await expect(panel).toBeVisible();
+    const layout = await panel.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const button = element.querySelector("footer .primary")!;
+      return {
+        radius: parseFloat(style.borderRadius),
+        shadow: style.boxShadow,
+        minHeight: parseFloat(style.minHeight),
+        titleSize: parseFloat(getComputedStyle(element.querySelector("h2")!).fontSize),
+        buttonBackground: getComputedStyle(button).backgroundImage,
+        buttonHeight: button.getBoundingClientRect().height,
+      };
+    });
+    expect(layout.radius).toBeLessThanOrEqual(4);
+    expect(layout.shadow).toBe("none");
+    expect(layout.minHeight).toBeLessThanOrEqual(220);
+    expect(layout.titleSize).toBe(16);
+    expect(layout.buttonBackground).toBe("none");
+    expect(layout.buttonHeight).toBeGreaterThanOrEqual(44);
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+      .toBe(true);
+    const previousReads = reads;
+    await panel.locator("footer .primary").click();
+    await expect.poll(() => reads).toBeGreaterThan(previousReads);
+    if (kind === "error") await expect(panel).toContainText("catalogue-state-read");
+  });
+}
+
 test("empty all-products view refreshes without exposing manual creation", async ({ page }) => {
   await ready(page);
   let reads = 0;

@@ -38,8 +38,8 @@
   }
   .ui-state-panel {
     width: 100%;
-    min-height: 420px;
-    padding: 26px 18px;
+    min-height: 220px;
+    padding: 24px 16px;
   }
   .ui-state-panel dl {
     grid-template-columns: 1fr;
