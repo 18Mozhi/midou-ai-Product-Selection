@@ -137,17 +137,6 @@ const canManageTrends = computed(() => props.capabilities.includes("trend:manage
       (left, right) => right.heat.value - left.heat.value || right.source_count - left.source_count,
     );
   });
-const opportunityRoute = computed(() => {
-  const topic = selected.value;
-  if (!topic) return "/opportunities";
-  return (
-    "/opportunities" +
-    `?source_topic_id=${encodeURIComponent(topic.id)}` +
-    `&name=${encodeURIComponent(topic.title)}` +
-    `&market=${encodeURIComponent(topic.market)}` +
-    `&category=${encodeURIComponent(topic.category || "")}`
-  );
-});
 async function read<T = any>(
   path: string,
   isCurrent: () => boolean = () => true,
@@ -722,7 +711,6 @@ onBeforeUnmount(() => {
           :detail="selected"
           :busy="busy"
           :quality-issue-ids="qualityIssueIds"
-          :opportunity-route="opportunityRoute"
           :can-manage="canManageTrends"
           @back="returnToTopicList"
           @follow="follow"

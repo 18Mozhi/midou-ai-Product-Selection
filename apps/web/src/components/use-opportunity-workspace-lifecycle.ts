@@ -1,18 +1,15 @@
 import { onActivated, onBeforeUnmount, onDeactivated, onMounted, watch, type Ref } from "vue";
 import type { RouteLocationNormalizedLoaded } from "vue-router";
 import type * as OpportunityTypes from "./opportunity-workspace-types";
-import type { OpportunityWorkspaceCreateFeedback } from "./use-opportunity-workspace-list-state";
 
 interface OpportunityWorkspaceLifecycleOptions {
   route: Pick<RouteLocationNormalizedLoaded, "fullPath" | "path" | "query">;
   opportunityId: () => string | undefined;
-  showCreate: Ref<boolean>;
   showBatch: Ref<boolean>;
   showDecision: Ref<boolean>;
   decisionAction: Ref<"adopt" | "observe" | "reject">;
   decisionReason: Ref<string>;
   selectedOpportunityIds: Ref<string[]>;
-  createFeedback: Ref<OpportunityWorkspaceCreateFeedback>;
   busy: Ref<boolean>;
   detail: Ref<OpportunityTypes.OpportunityDetail | null>;
   profit: Ref<OpportunityTypes.OpportunityProfitAnalysis | null>;
@@ -23,11 +20,9 @@ interface OpportunityWorkspaceLifecycleOptions {
   pendingWriteCount: () => number;
   syncTabFromRoute: () => void;
   syncListRoute: () => void;
-  syncCreateRouteIntent: () => void;
   load: () => Promise<void>;
   setWorkspaceActive: (active: boolean) => void;
   closeTransientDialogs: () => void;
-  advanceCreateDialog: () => void;
   advanceDecisionDialog: () => void;
   advanceBatchDialog: () => void;
   advanceBatchIntent: () => void;
@@ -39,13 +34,11 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
   const {
     route,
     opportunityId,
-    showCreate,
     showBatch,
     showDecision,
     decisionAction,
     decisionReason,
     selectedOpportunityIds,
-    createFeedback,
     busy,
     detail,
     profit,
@@ -56,11 +49,9 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     pendingWriteCount,
     syncTabFromRoute,
     syncListRoute,
-    syncCreateRouteIntent,
     load,
     setWorkspaceActive,
     closeTransientDialogs,
-    advanceCreateDialog,
     advanceDecisionDialog,
     advanceBatchDialog,
     advanceBatchIntent,
@@ -79,14 +70,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     });
   }
 
-  watch(
-    showCreate,
-    () => {
-      advanceCreateDialog();
-      createFeedback.value = null;
-    },
-    { flush: "sync" },
-  );
   watch(showDecision, advanceDecisionDialog, { flush: "sync" });
   watch(() => [showBatch.value, route.fullPath, opportunityId()], advanceBatchDialog, {
     flush: "sync",
@@ -99,15 +82,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     { flush: "sync" },
   );
   watch(selectedOpportunityIds, advanceBatchSelection, { deep: true, flush: "sync" });
-  watch(
-    () => [route.fullPath, opportunityId()],
-    () => {
-      advanceCreateDialog();
-      createFeedback.value = null;
-    },
-    { flush: "sync" },
-  );
-
   onDeactivated(() => {
     setWorkspaceActive(false);
     closeTransientDialogs();
@@ -124,14 +98,12 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     busy.value = pendingWriteCount() > 0;
     if (!wasDeactivated) return;
     wasDeactivated = false;
-    syncCreateRouteIntent();
     queueLoad();
   });
 
   onMounted(() => {
     syncTabFromRoute();
     syncListRoute();
-    syncCreateRouteIntent();
     void load();
   });
 

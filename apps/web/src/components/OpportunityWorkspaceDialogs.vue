@@ -4,49 +4,21 @@ import { useModalDialog } from "../use-modal-dialog";
 import { containDialogTab } from "../ui/contain-dialog-tab";
 
 type DecisionAction = "adopt" | "observe" | "reject";
-type CreateFeedback =
-  | { type: "error"; message: string }
-  | {
-      type: "created";
-      id: string;
-      name: string;
-      submitted: { name: string; market: string; category: string; source_topic_id: string };
-    };
-
 const props = defineProps<{
     busy: boolean;
-    form: { name: string; market: string; category: string; source_topic_id: string };
-    createFeedback: CreateFeedback | null;
     decisionAction: DecisionAction;
     hasDetail: boolean;
   }>(),
   emit = defineEmits<{
-    create: [];
     decide: [];
   }>(),
-  createOpen = defineModel<boolean>("createOpen", { required: true }),
   decisionOpen = defineModel<boolean>("decisionOpen", { required: true }),
   decisionReason = defineModel<string>("decisionReason", { required: true }),
   decisionReasonValidationAttempted = ref(false),
-  { dialogElement: createDialog, handleCancel: cancelCreate } = useModalDialog(
-    () => createOpen.value,
-    () => (createOpen.value = false),
-  ),
   { dialogElement: decisionDialog, handleCancel: cancelDecision } = useModalDialog(
     () => decisionOpen.value && props.hasDetail,
     () => (decisionOpen.value = false),
   );
-const createFeedbackMatchesForm = computed(() => {
-  const feedback = props.createFeedback;
-  return (
-    feedback?.type === "created" &&
-    props.form.name.trim() === feedback.submitted.name.trim() &&
-    props.form.market.trim().toUpperCase() === feedback.submitted.market.trim().toUpperCase() &&
-    props.form.category.trim() === feedback.submitted.category.trim() &&
-    props.form.source_topic_id.trim().toLowerCase() ===
-      feedback.submitted.source_topic_id.trim().toLowerCase()
-  );
-});
 const decisionReasonInvalid = computed(
   () => decisionReasonValidationAttempted.value && decisionReason.value.length === 0,
 );
@@ -67,57 +39,6 @@ const decisionLabel = {
 </script>
 
 <template>
-  <dialog
-    v-if="createOpen"
-    ref="createDialog"
-    class="opportunity-modal"
-    aria-labelledby="opportunity-create-title"
-    @cancel="cancelCreate"
-    @keydown="containDialogTab($event, createDialog)"
-  >
-    <form class="so-dialog-manifest" @submit.prevent="emit('create')">
-      <header>
-        <div>
-          <p>新候选项</p>
-          <h3 id="opportunity-create-title">创建机会候选</h3>
-        </div>
-        <button class="so-action-quiet" type="button" aria-label="关闭" @click="createOpen = false">
-          ×
-        </button>
-      </header>
-      <label>机会名称<input v-model="form.name" required maxlength="200" /></label>
-      <div>
-        <label>市场<input v-model="form.market" required maxlength="40" /></label>
-        <label>分类（可选）<input v-model="form.category" maxlength="80" /></label>
-      </div>
-      <label
-        >来源趋势 ID（可选，只接受当前工作区主题）<input
-          v-model="form.source_topic_id"
-          maxlength="36"
-      /></label>
-      <aside v-if="createFeedback?.type === 'created'" role="status">
-        机会“{{ createFeedback.name }}”已创建。当前草稿已保留；内容相同时暂不允许重复提交。
-        <a :href="`/opportunities/${createFeedback.id}`">查看已创建机会</a>
-      </aside>
-      <p v-else-if="createFeedback?.type === 'error'" class="opportunity-message" role="alert">
-        {{ createFeedback.message }}
-      </p>
-      <aside>创建后可查看证据与分析状态。</aside>
-      <footer>
-        <button class="so-action-secondary" type="button" @click="createOpen = false">取消</button>
-        <button
-          class="so-action-primary"
-          type="submit"
-          :disabled="busy || createFeedbackMatchesForm"
-        >
-          {{
-            busy ? "创建中…" : createFeedbackMatchesForm ? "内容已创建，请修改后再提交" : "创建机会"
-          }}
-        </button>
-      </footer>
-    </form>
-  </dialog>
-
   <dialog
     v-if="decisionOpen && hasDetail"
     ref="decisionDialog"

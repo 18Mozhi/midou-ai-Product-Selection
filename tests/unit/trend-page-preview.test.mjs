@@ -36,3 +36,11 @@ test("market intelligence uses actual Vue and preserves evidence and workflow bi
   assert.match(cli, /tests\/e2e\/m04-01-trends.spec.ts/);
   assert.doesNotMatch(cli, /transform\(|trendPagePlugin|previewTrendDashboard|createServer/);
 });
+
+test("historical trend proposal refuses the retired manual opportunity entry", async () => {
+  const { buildTrendDesignData } =
+    await import("../../scripts/lib/ui-phase2-trend-design-data.mjs");
+  await assert.rejects(buildTrendDesignData(process.cwd()), /manual_opportunity_creation_retired/);
+  const detail = await readFile("apps/web/src/components/TrendDetailPanel.vue", "utf8");
+  assert.doesNotMatch(detail, /opportunityRoute|转为机会/);
+});

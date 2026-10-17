@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 import { statusLabel } from "../ui/status-labels";
 import TrendEvidenceTimeline from "./TrendEvidenceTimeline.vue";
 import type { TrendDetail } from "./trend-workspace-types";
@@ -8,7 +7,6 @@ defineProps<{
   detail: TrendDetail;
   busy: string;
   qualityIssueIds: Record<string, string>;
-  opportunityRoute: string;
   canManage: boolean;
 }>();
 const emit = defineEmits<{
@@ -57,7 +55,6 @@ const freshness = (value: string) =>
         @click="emit('createRule')"
       >
         创建监控</button
-      ><RouterLink class="so-action-secondary" :to="opportunityRoute">转为机会</RouterLink
       ><button
         v-if="canManage && detail.status !== 'irrelevant'"
         class="quiet so-action-quiet"

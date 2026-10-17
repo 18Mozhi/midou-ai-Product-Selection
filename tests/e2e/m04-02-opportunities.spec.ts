@@ -357,7 +357,7 @@ async function switchOpportunityInPlace(page: Page, id: string, query = "") {
   );
 }
 
-test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthful", async ({
+test("M04-02.A07/A08/A15 automatic opportunity list ignores retired creation and stays responsive", async ({
   page,
 }) => {
   await ready(page);
@@ -365,16 +365,7 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await expect(page.getByRole("heading", { name: "待我采纳", level: 2 })).toBeVisible();
   await expect(page.getByRole("heading", { name: "1 个商品建议采纳" })).toBeVisible();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(0);
-  const dialog = page.getByRole("dialog", { name: "创建机会候选" });
-  await expect(dialog).toBeVisible();
-  const createClose = dialog.getByRole("button", { name: "关闭" });
-  const createSubmit = dialog.getByRole("button", { name: "创建机会", exact: true });
-  await expect(createClose).toBeFocused();
-  await page.keyboard.press("Shift+Tab");
-  await expect(createSubmit).toBeFocused();
-  await page.keyboard.press("Tab");
-  await expect(createClose).toBeFocused();
-  await dialog.getByRole("button", { name: "关闭" }).click();
+  await expect(page.getByRole("dialog", { name: "创建机会候选" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "自动推荐配置已就绪" })).toBeVisible();
   await expect(page.getByRole("progressbar", { name: "自动推荐规则配置进度" })).toHaveAttribute(
     "aria-valuenow",
@@ -409,71 +400,32 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   });
   await page.getByRole("button", { name: "全部商品" }).click();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(1);
-  const createButton = page.getByRole("button", { name: "手工添加", exact: true });
-  await createButton.click();
-  await expect(dialog).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(dialog).toBeHidden();
-  await expect(createButton).toBeFocused();
-  await createButton.click();
-  await expect(dialog).toBeVisible();
-  await dialog.getByLabel("机会名称").fill("手工验证机会");
-  await dialog.getByRole("button", { name: "创建机会", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "AI 驱动的个性化护肤机会" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "手工添加", exact: true })).toHaveCount(0);
 });
 
-test("a late create success does not close or navigate away from a reopened create dialog", async ({
-  page,
-}) => {
+test("empty all-products view refreshes without exposing manual creation", async ({ page }) => {
   await ready(page);
-  let releaseCreate!: () => void;
-  let markCreateStarted!: () => void;
-  const createStarted = new Promise<void>((resolve) => {
-    markCreateStarted = resolve;
+  let reads = 0;
+  let writes = 0;
+  await page.route("**/api/v1/opportunities**", (route) => {
+    const request = route.request();
+    if (new URL(request.url()).pathname !== "/api/v1/opportunities") return route.fallback();
+    if (request.method() !== "GET") {
+      writes += 1;
+      return route.abort();
+    }
+    reads += 1;
+    return route.fulfill({ json: envelope([], { total: 0, page: 1, page_size: 20 }) });
   });
-  const createGate = new Promise<void>((resolve) => {
-    releaseCreate = resolve;
-  });
-  const createdId = "00000000-0000-4000-8000-000000000432";
-  await page.route("**/api/v1/opportunities", async (route) => {
-    if (route.request().method() !== "POST") return route.fallback();
-    markCreateStarted();
-    await createGate;
-    return route.fulfill({
-      status: 201,
-      contentType: "application/json",
-      body: JSON.stringify(envelope({ ...base, id: createdId, name: "第一个草稿" })),
-    });
-  });
-
   await page.goto("/opportunities?view=all&create=1");
-  const dialog = page.getByRole("dialog", { name: "创建机会候选" });
-  await expect(dialog).toBeVisible();
-  await dialog.getByLabel("机会名称").fill("第一个草稿");
-  await dialog.getByRole("button", { name: "创建机会", exact: true }).click();
-  await createStarted;
-
-  await dialog.getByRole("button", { name: "关闭" }).click();
-  await expect(dialog).toBeHidden();
-  await page.getByRole("button", { name: "手工添加", exact: true }).click();
-  await expect(dialog).toBeVisible();
-  await dialog.getByLabel("机会名称").fill("第二个草稿");
-
-  releaseCreate();
-
-  await expect(dialog).toBeVisible();
-  await expect(page).toHaveURL(/\/opportunities\?view=all&create=1$/u);
-  await expect(dialog.getByLabel("机会名称")).toHaveValue("第二个草稿");
-  await expect(dialog.getByRole("link", { name: "查看已创建机会" })).toHaveAttribute(
-    "href",
-    `/opportunities/${createdId}`,
-  );
-  await dialog.getByLabel("机会名称").fill("第一个草稿");
-  await expect(
-    dialog.getByRole("button", { name: "内容已创建，请修改后再提交", exact: true }),
-  ).toBeDisabled();
-  await dialog.getByLabel("机会名称").fill("第二个草稿");
-  await expect(dialog.getByRole("button", { name: "创建机会", exact: true })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "手工添加机会", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "创建机会候选" })).toHaveCount(0);
+  const refresh = page.getByRole("button", { name: "刷新列表", exact: true }).first();
+  await expect(refresh).toBeVisible();
+  const previousReads = reads;
+  await refresh.click();
+  await expect.poll(() => reads).toBeGreaterThan(previousReads);
+  expect(writes).toBe(0);
 });
 
 for (const [competitorCount, detailCollected, sourceEnabled] of [
@@ -2033,13 +1985,7 @@ test("changing between the opportunity list and detail closes open list dialogs"
     await expect(page.getByRole("heading", { name: "全部机会", level: 2 })).toBeVisible();
   };
 
-  await page.getByRole("button", { name: "手工添加", exact: true }).click();
-  const createDialog = page.getByRole("dialog", { name: "创建机会候选" });
-  await expect(createDialog).toBeVisible();
-  await switchToDetail();
-  await expect(createDialog).toHaveCount(0);
-  await returnToList();
-
+  await expect(page.getByRole("button", { name: "手工添加", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "从 ERP 导入", exact: true })).toHaveCount(0);
 
   await page.getByRole("checkbox", { name: `选择机会：${recommendedBase.name}` }).check();
@@ -2711,7 +2657,7 @@ test("selection views send explicit truthful recommendation filters", async ({ p
   await page.getByRole("button", { name: "全部商品" }).click();
   await all;
   await expect(page).toHaveURL(/view=all/);
-  await expect(page.getByRole("button", { name: "手工添加", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "手工添加", exact: true })).toHaveCount(0);
 });
 
 test("opportunity URL state and source return path survive list-detail navigation", async ({

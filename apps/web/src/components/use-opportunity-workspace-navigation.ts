@@ -10,16 +10,12 @@ type OpportunityWorkspaceForms = ReturnType<typeof createOpportunityWorkspaceFor
 interface OpportunityWorkspaceNavigationOptions {
   route: Pick<RouteLocationNormalizedLoaded, "fullPath" | "path" | "query">;
   router: Pick<Router, "push" | "replace">;
-  opportunityId: () => string | undefined;
-  canDecide: ComputedRef<boolean>;
   filters: OpportunityWorkspaceForms["filters"];
-  form: OpportunityWorkspaceForms["form"];
   selectionView: Ref<OpportunitySelectionView>;
   selectedOpportunityIds: Ref<string[]>;
   page: Ref<number>;
   pageCount: ComputedRef<number>;
   tab: Ref<OpportunityTypes.OpportunityTab>;
-  showCreate: Ref<boolean>;
   load: () => Promise<void>;
 }
 
@@ -27,16 +23,12 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
   const {
     route,
     router,
-    opportunityId,
-    canDecide,
     filters,
-    form,
     selectionView,
     selectedOpportunityIds,
     page,
     pageCount,
     tab,
-    showCreate,
     load,
   } = options;
 
@@ -125,22 +117,6 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
       });
   }
 
-  function syncCreateRouteIntent() {
-    if (
-      opportunityId() ||
-      route.path !== "/opportunities" ||
-      !canDecide.value ||
-      (route.query.create !== "1" && !route.query.source_topic_id)
-    )
-      return;
-    form.source_topic_id =
-      typeof route.query.source_topic_id === "string" ? route.query.source_topic_id : "";
-    form.name = typeof route.query.name === "string" ? route.query.name : "";
-    form.market = typeof route.query.market === "string" ? route.query.market : "US";
-    form.category = typeof route.query.category === "string" ? route.query.category : "";
-    showCreate.value = true;
-  }
-
   return {
     syncListRoute,
     applyListFilters,
@@ -149,6 +125,5 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
     goListPage,
     setTab,
     syncTabFromRoute,
-    syncCreateRouteIntent,
   };
 }

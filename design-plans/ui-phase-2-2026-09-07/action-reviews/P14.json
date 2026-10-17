@@ -5,12 +5,12 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TrendDashboard.vue": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc",
+    "apps/web/src/components/TrendDashboard.vue": "cac64bcd6a6455fde1e81b6045e3c7a9dd8081d73a63e5b08febc39a5886d411",
     "apps/web/src/components/TrendEvidenceDialogs.vue": "627689473dfc6efb55e4edc619b8c59c4bf02a1a15141083b11a32c377b8345f",
     "apps/web/src/components/TrendRuleList.vue": "f9065e6935b569ddacb24a61fedc7297d3d654974fb9e518e3ccc93c4f53f4fb",
     "apps/web/src/components/TrendMetricExplainer.vue": "07cf4bed20da4050327bc0911369ea5e42b08ebae8374dc2492d02f96d486d05",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
-    "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
+    "apps/web/src/components/TrendDetailPanel.vue": "1f3988a1e74f130317447f96cab5a3926899a5512d97b6026f1e1f5a07857f37",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
     "apps/web/src/components/TrendRuleDialog.vue": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500",
     "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f"
@@ -3026,12 +3026,12 @@
       "apps/web/src/components/TrendChangeQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TrendDashboard.vue": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc",
+      "apps/web/src/components/TrendDashboard.vue": "cac64bcd6a6455fde1e81b6045e3c7a9dd8081d73a63e5b08febc39a5886d411",
       "apps/web/src/components/TrendEvidenceDialogs.vue": "627689473dfc6efb55e4edc619b8c59c4bf02a1a15141083b11a32c377b8345f",
       "apps/web/src/components/TrendRuleList.vue": "f9065e6935b569ddacb24a61fedc7297d3d654974fb9e518e3ccc93c4f53f4fb",
       "apps/web/src/components/TrendMetricExplainer.vue": "07cf4bed20da4050327bc0911369ea5e42b08ebae8374dc2492d02f96d486d05",
       "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
-      "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
+      "apps/web/src/components/TrendDetailPanel.vue": "1f3988a1e74f130317447f96cab5a3926899a5512d97b6026f1e1f5a07857f37",
       "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
       "apps/web/src/components/TrendRuleDialog.vue": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500",
       "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",

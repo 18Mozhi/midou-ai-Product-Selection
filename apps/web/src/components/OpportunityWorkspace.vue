@@ -82,7 +82,6 @@ const props = defineProps<{
   ),
   downstream = ref({ competitors: 0, snapshots: 0, searches: 0, suppliers: 0 }),
   tab = ref<OpportunityTypes.OpportunityTab>("overview"),
-  showCreate = ref(false),
   showDecision = ref(false),
   showBatch = ref(false),
   batchAction = ref<"assign" | "archive" | "review">("assign"),
@@ -96,9 +95,8 @@ const { pendingDecisionFocus, captureDecisionFocus, restoreDecisionFocus } =
     opportunityId: () => props.opportunityId,
     workspaceActive: () => workspaceActive,
   });
-const { createFeedback, pageCount, currentPageSelectedItems, outsideCurrentPageSelectedCount } =
+const { pageCount, currentPageSelectedItems, outsideCurrentPageSelectedCount } =
   useOpportunityWorkspaceListState({ items, selectedOpportunityIds, total });
-let createDialogGeneration = 0;
 let batchDialogGeneration = 0;
 let batchIntentGeneration = 0;
 let batchSelectionGeneration = 0;
@@ -110,7 +108,7 @@ const { writeScopeKey, beginScopedWrite, finishScopedWrite, pendingWriteCount } 
     workspaceActive: () => workspaceActive,
     busy,
   });
-const { filters, form, costForm } = createOpportunityWorkspaceForms();
+const { filters, costForm } = createOpportunityWorkspaceForms();
 const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
   () => showBatch.value,
   () => (showBatch.value = false),
@@ -189,20 +187,15 @@ const {
   goListPage,
   setTab,
   syncTabFromRoute,
-  syncCreateRouteIntent,
 } = useOpportunityWorkspaceNavigation({
   route,
   router,
-  opportunityId: () => props.opportunityId,
-  canDecide,
   filters,
-  form,
   selectionView,
   selectedOpportunityIds,
   page,
   pageCount,
   tab,
-  showCreate,
   load,
 });
 const { discoverCompetitors, discoverSuppliers } = useOpportunityWorkspaceCollectionActions({
@@ -251,43 +244,6 @@ async function write(path: string, body: unknown) {
   } finally {
     finishScopedWrite(scopeKey);
   }
-}
-async function create() {
-  if (busy.value) return;
-  const submitted = { ...form },
-    dialogGeneration = createDialogGeneration,
-    routePath = route.fullPath,
-    opportunityId = props.opportunityId;
-  const result = await write("/opportunities", {
-    name: submitted.name,
-    market: submitted.market,
-    category: submitted.category || null,
-    source_topic_id: submitted.source_topic_id || null,
-  });
-  const sameRoute = route.fullPath === routePath && props.opportunityId === opportunityId;
-  if (!result) {
-    if (sameRoute && showCreate.value)
-      createFeedback.value = {
-        type: "error",
-        message: message.value || "本次创建未能确认；请核对反馈后再重试。",
-      };
-    return;
-  }
-  if (sameRoute && showCreate.value && dialogGeneration === createDialogGeneration) {
-    createFeedback.value = null;
-    showCreate.value = false;
-    await router.push(`/opportunities/${result.id}`);
-    return;
-  }
-  const staleSuccess = {
-    type: "created" as const,
-    id: String(result.id),
-    name: submitted.name,
-    submitted,
-  };
-  if (!sameRoute) return;
-  if (showCreate.value) createFeedback.value = staleSuccess;
-  else message.value = `机会“${submitted.name}”已创建；当前列表未跳转，请在列表中查看。`;
 }
 function startDecision(action: "adopt" | "observe" | "reject") {
   decisionAction.value = action;
@@ -439,7 +395,6 @@ async function queueProfit() {
   }
 }
 function closeTransientDialogs() {
-  showCreate.value = false;
   showBatch.value = false;
   showDecision.value = false;
   decisionAction.value = "observe";
@@ -448,13 +403,11 @@ function closeTransientDialogs() {
 useOpportunityWorkspaceLifecycle({
   route,
   opportunityId: () => props.opportunityId,
-  showCreate,
   showBatch,
   showDecision,
   decisionAction,
   decisionReason,
   selectedOpportunityIds,
-  createFeedback,
   busy,
   detail,
   profit,
@@ -465,15 +418,11 @@ useOpportunityWorkspaceLifecycle({
   pendingWriteCount,
   syncTabFromRoute,
   syncListRoute,
-  syncCreateRouteIntent,
   load,
   setWorkspaceActive: (active) => {
     workspaceActive = active;
   },
   closeTransientDialogs,
-  advanceCreateDialog: () => {
-    createDialogGeneration += 1;
-  },
   advanceDecisionDialog: () => {
     decisionDialogGeneration += 1;
   },
@@ -510,14 +459,7 @@ useOpportunityWorkspaceLifecycle({
       <div v-if="canDecide" class="catalogue-toolbar-actions">
         <RouterLink class="secondary so-action-secondary" to="/trends?section=rules"
           >管理选品规则</RouterLink
-        ><button
-          v-if="selectionView === 'all'"
-          type="button"
-          class="ghost secondary so-action-secondary"
-          @click="showCreate = true"
         >
-          手工添加
-        </button>
       </div>
       <span v-else>当前为只读权限。</span>
     </header>
@@ -544,7 +486,6 @@ useOpportunityWorkspaceLifecycle({
       :automation-readiness="automationReadiness"
       @apply="applyListFilters"
       @batch="openBatch"
-      @create="showCreate = true"
       @manage-setup="router.push($event)"
       @page="goListPage"
       @reset="resetListFilters"
@@ -674,15 +615,11 @@ useOpportunityWorkspaceLifecycle({
     >
     <OpportunityWorkspaceDialogs
       v-if="canDecide"
-      v-model:create-open="showCreate"
       v-model:decision-open="showDecision"
       v-model:decision-reason="decisionReason"
       :busy="busy"
-      :form="form"
-      :create-feedback="createFeedback"
       :decision-action="decisionAction"
       :has-detail="Boolean(detail)"
-      @create="create"
       @decide="decide"
     />
     <dialog

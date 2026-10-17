@@ -5,10 +5,10 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
-    "apps/web/src/components/OpportunityWorkspace.vue": "c51baa24600901da9bce5386fca3197db2e738939f0738cb6ce5d3cb406be60b",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "d71246ec6894ba4346d332a0073ab758a884c85dc1596a1141d9c8b33d614bdb",
+    "apps/web/src/components/OpportunityWorkspace.vue": "d9972b6836b0e004445a18c4ec20cd8a6c3933ac4d7cdea33d6d99561c7031c6",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "00db98cafc22106b1ada561ced0fe3d80ee96b15b04e52c4a7a092770ac47550",
     "apps/web/src/components/OpportunityErpImportDialog.vue": "c934cbf407e0ec0e075d6cfbe939000a8d262bf221d3e018bb70292c7a560b33",
-    "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
+    "apps/web/src/components/OpportunityListPanel.vue": "ccc18c9eda4dea6be4cda3e2f99d323f1dece091be92a39fd8c0806f55b1bda7",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
   },
   "dialogs": {
@@ -2320,15 +2320,15 @@
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpportunityWorkspace.vue": "c51baa24600901da9bce5386fca3197db2e738939f0738cb6ce5d3cb406be60b",
-      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "d71246ec6894ba4346d332a0073ab758a884c85dc1596a1141d9c8b33d614bdb",
+      "apps/web/src/components/OpportunityWorkspace.vue": "d9972b6836b0e004445a18c4ec20cd8a6c3933ac4d7cdea33d6d99561c7031c6",
+      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "00db98cafc22106b1ada561ced0fe3d80ee96b15b04e52c4a7a092770ac47550",
       "apps/web/src/components/OpportunityErpImportDialog.vue": "c934cbf407e0ec0e075d6cfbe939000a8d262bf221d3e018bb70292c7a560b33",
-      "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
+      "apps/web/src/components/OpportunityListPanel.vue": "ccc18c9eda4dea6be4cda3e2f99d323f1dece091be92a39fd8c0806f55b1bda7",
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
       "apps/web/src/components/UiStatePanel.vue": "2969566dd1069b24e474fc729eeef7c06907dc6a06c398af12cc9b1c8b6e705c",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
-      "apps/web/src/components/opportunity-workspace-forms.ts": "d6b4d5fb34e2e28458551cf0042657e1ab5fd7a543c33a35f92d3bc2b9c94088",
+      "apps/web/src/components/opportunity-workspace-forms.ts": "a2e0c0236668f95c7fcb5b9fbcd116c8db3fb42cf698c023d93e12785eb1e59b",
       "apps/web/src/automatic-selection-readiness.ts": "b00655a7eb3533a0776fe564e1ca9ed20fa5463444ee0090babbc62dc92169b5",
       "apps/web/src/ui/state-contract.ts": "913cf51719f372302e1900ac99c4b46c1baaa3632d7bcca7e234700f483d2ac8",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"

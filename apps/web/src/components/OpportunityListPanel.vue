@@ -71,7 +71,6 @@ const props = defineProps<{
     view: [value: SelectionView];
     "update:selectedIds": [value: string[]];
     batch: [value: "assign" | "archive" | "review"];
-    create: [];
     manageSetup: [path: string];
     reset: [];
   }>(),
@@ -314,13 +313,7 @@ watch(imageFailureResetSources, (items) => {
     :kind="state"
     :request-id="requestId"
     :primary-label="
-      state === 'empty'
-        ? selectionView === 'all'
-          ? canDecide
-            ? '手工添加机会'
-            : '刷新列表'
-          : '完善自动推荐配置'
-        : ''
+      state === 'empty' ? (selectionView === 'all' ? '刷新列表' : '完善自动推荐配置') : ''
     "
     :secondary-label="
       state === 'empty'
@@ -334,9 +327,7 @@ watch(imageFailureResetSources, (items) => {
     @primary="
       state === 'empty' && selectionView !== 'all'
         ? emit('manageSetup', nextSetupPath)
-        : state === 'empty' && canDecide
-          ? emit('create')
-          : emit('apply')
+        : emit('apply')
     "
     @secondary="state === 'empty' ? clearOrShowAll() : emit('reset')"
   />

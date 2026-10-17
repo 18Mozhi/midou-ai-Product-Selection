@@ -259,10 +259,7 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await expect(evidence.getByRole("button", { name: "已建质量工单" })).toBeDisabled();
   await expect(page.locator(".trend-workbench + .trend-explainer")).toBeVisible();
   await expect(page.locator(".trend-explainer")).not.toHaveAttribute("open");
-  await expect(page.getByRole("link", { name: "转为机会" })).toHaveAttribute(
-    "href",
-    new RegExp(`source_topic_id=${topicId}`),
-  );
+  await expect(page.getByRole("link", { name: "转为机会" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "创建监控", exact: true })).toBeVisible();
   await page.getByLabel("来源筛选").selectOption({ label: "Example News" });
   await expect(page.locator(".timeline-bars")).toHaveAttribute(
@@ -278,7 +275,9 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   // Both viewports capture fixed navigation at a deliberate scroll position.
   await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
-  await expect(page).toHaveScreenshot("m04-01-trends.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("manual-product-create-retired-trends-20261017.png", {
+    fullPage: true,
+  });
 });
 
 test("long trend timelines scroll inside the detail card without widening the page", async ({

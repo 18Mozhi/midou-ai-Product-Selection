@@ -1,5 +1,7 @@
 # M04-02 机会工作台架构
 
+2026-10-17 成员创建入口退休：选品库手工添加/创建窗/空状态创建，以及趋势“转为机会”入口与旧查询参数触发逻辑已删除；全部商品空状态改为刷新。历史API与商品保留，自动发现、评分、决策及批量流程不变。此孤立变更只更新前端并刷新，无需独立重启Node/Python；未部署。见 `../selection-manual-product-creation-retirement.md`。
+
 2026-10-17 自动补证入口精简：用户详情不再创建人工补采任务；原阻断字段按真实自动评估、评分及历史任务状态展示，已完成历史任务不算活动处理。兼容后端路由、历史任务引用及组织审批保留。见 `../selection-automatic-evidence-status.md`。
 
 机会是当前组织与工作区内的候选决策资源。API 从服务端会话解析范围，`opportunity:read` 保护列表与详情，既有 `opportunity:decide` 保护创建和人工决策；浏览器写入还要求同源 `Origin`、`Idempotency-Key` 和乐观 `version`。

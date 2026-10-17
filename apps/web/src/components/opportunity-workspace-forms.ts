@@ -13,7 +13,6 @@ export function createOpportunityWorkspaceForms() {
       lifecycle_status: "",
       owner_id: "",
     }),
-    form: reactive({ name: "", market: "US", category: "", source_topic_id: "" }),
     costForm: reactive({
       platform: "amazon",
       input_type: "sale_price" as "sale_price" | "purchase_price" | "logistics",

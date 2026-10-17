@@ -37,6 +37,11 @@ export async function buildTrendDesignData(repo) {
     assert.equal(matches.length, 1, name);
     return matches[0];
   }
+  const currentWorkspace = await read("apps/web/src/components/TrendDashboard.vue");
+  assert.ok(
+    currentWorkspace.script.includes("const opportunityRoute ="),
+    "manual_opportunity_creation_retired: historical trend proposal cannot validate the current product",
+  );
   const main = await read("apps/web/src/components/TrendDashboard.vue"),
     rule = await read("apps/web/src/components/TrendRuleDialog.vue"),
     queue = await read("apps/web/src/components/TrendChangeQueue.vue"),
