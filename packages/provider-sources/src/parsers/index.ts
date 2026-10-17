@@ -190,6 +190,42 @@ export function parseSyndicationFeed(
   });
 }
 
+export const GOOGLE_TRENDS_RSS_PARSER_VERSION = "google-trends-rss-v1";
+
+/** Trends has one shared link for different terms; link-only identity loses records. */
+export function parseGoogleTrendsRss(xml: string, sourceName: string, limit = 20) {
+  const observedAt = new Date().toISOString();
+  const records = parseSyndicationFeed(xml, sourceName, limit).map((record) => {
+    const payload = record.payload as SourceEvidencePayload;
+    if (!tag(payload.raw_content, "pubDate"))
+      throw new ProviderAdapterFailure("source_changed", false);
+    const headlines = [
+      ...payload.raw_content.matchAll(/<ht:news_item(?:\s[^>]*)?>([\s\S]*?)<\/ht:news_item>/gi),
+    ]
+      .map((block) => stripHtml(tag(block[1]!, "ht:news_item_title")))
+      .filter(Boolean);
+    if (headlines.length) {
+      payload.fields.summary = headlines.join("\n").slice(0, 2000);
+      payload.source_paths.summary = "rss.item.ht:news_item[].ht:news_item_title";
+    }
+    const identity = sha(
+      JSON.stringify([
+        GOOGLE_TRENDS_RSS_PARSER_VERSION,
+        payload.canonical_url,
+        payload.fields.title,
+        payload.fields.published_at,
+      ]),
+    );
+    return {
+      ...record,
+      observedAt,
+      externalId: identity,
+      evidenceRef: `google-trends-rss:${identity}`,
+    };
+  });
+  return [...new Map(records.map((record) => [record.externalId, record])).values()];
+}
+
 const jsonLdBlocks = (html: string) =>
   [...html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)]
     .map((match) => match[1]?.trim())

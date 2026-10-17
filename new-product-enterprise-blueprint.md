@@ -1,3 +1,5 @@
+> 2026-10-18 Google Trends RSS使用专用词条身份和原始新闻上下文，修复多个词条共享link导致的去重覆盖；同内容复用、变更内容保存新证据，旧数据不重算。见 `docs/google-trends-rss-contract.md`；来源放行及日百品仍须真实运行验收。
+
 > 2026-10-18 1688仅作为找货报价证据，不再进入趋势情报和自动商品发现；历史无效投影按原租约空完成、每轮最多20个，不删除报价或主题。见 `docs/selection-supply-intelligence-separation.md`；整链日百品尚未验收。
 
 > 2026-10-18 全量情报调度从找货积压中保留摄取容量，同优先级优先领取真实系统调度的情报任务；保留全局积压、显式优先级与单机租约。见 `docs/selection-intelligence-intake-fairness.md`；真实整链与日百品尚未验收。

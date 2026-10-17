@@ -1,4 +1,24 @@
 {
+  "selectionGoogleTrendsRss20261018": {
+    "status": "implemented",
+    "statusDetail": "targeted_and_live_input_replay_passed_production_pending",
+    "requirements": "docs/google-trends-rss-contract.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/parsers/index.ts",
+      "packages/provider-sources/src/adapters/index.ts",
+      "packages/provider-sources/src/catalog/index.ts",
+      "apps/worker/src/provider-source-executor.ts",
+      "apps/worker/src/automatic-source-scheduler.ts",
+      "apps/api/src/mysql-provider-source-repository.ts",
+      "apps/api/src/mysql-home-dashboard-repository.ts",
+      "scripts/verify-automatic-hotspots-live.mjs"
+    ],
+    "testFiles": [
+      "tests/unit/google-trends-rss.test.mjs",
+      "tests/unit/google-trends-evidence-identity.test.mjs"
+    ],
+    "contract": "Dedicated Trends RSS identity by version/link/term/published time; original news headlines as context. Actual observation time separate from publication. Content-addressed immutable evidence; stable record key; ordinary RSS and product task snapshots unchanged. All intake/health/readiness consumers updated. No new external API/schema/env/dependency/Python contract. Source admission remains per-provider; no blanket terms or circuit reset."
+  },
   "selectionSupplyIntelligenceSeparation20261018": {
     "status": "implemented",
     "statusDetail": "supply_exclusion_released_single_row_intelligence_priority_runtime_unverified",

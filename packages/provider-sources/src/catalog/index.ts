@@ -1,5 +1,6 @@
 import { ALIBABA_1688_BROWSER_PARSER_VERSION } from "../1688-browser-contract.js";
 import { AMAZON_PUBLIC_PRODUCT_PARSER_VERSION } from "../parsers/amazon-public-signals.js";
+import { GOOGLE_TRENDS_RSS_PARSER_VERSION } from "../parsers/index.js";
 
 export type SourceCategory = "news" | "ecommerce" | "data" | "community" | "product_supply";
 export type SourceAvailability = "automatic" | "setup_required" | "manual";
@@ -491,7 +492,11 @@ const syndicationChannel = (feed: (typeof syndicationFeeds)[number]): BuiltinSou
       "parse_failed",
       "empty_result",
     ],
-    parser_version: pageOverride ? "structured-public-page-v1" : "syndication-feed-v1",
+    parser_version: pageOverride
+      ? "structured-public-page-v1"
+      : feed.code.startsWith("google_trends_")
+        ? GOOGLE_TRENDS_RSS_PARSER_VERSION
+        : "syndication-feed-v1",
     healthcheck_url: pageOverride?.url ?? feed.url,
     owner_label: pageOverride?.owner ?? "平台热点中心",
     status: "enabled",

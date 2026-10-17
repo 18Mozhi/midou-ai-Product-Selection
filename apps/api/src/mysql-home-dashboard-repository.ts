@@ -71,7 +71,7 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
       "SELECT s.last_task_id,s.last_scheduled_at,s.next_scheduled_at,t.blocked_subquery_count,t.failed_subquery_count,t.status task_status," +
         "EXISTS (SELECT 1 FROM providers WHERE status='enabled' AND terms_review_status='approved' " +
         "AND terms_version IS NOT NULL AND (terms_permanent=1 OR terms_expires_at>NOW(3)) " +
-        "AND parser_version IN ('google-news-fixed-rss-v1','syndication-feed-v1','structured-public-page-v1')) source_available " +
+        "AND parser_version IN ('google-news-fixed-rss-v1','syndication-feed-v1','google-trends-rss-v1','structured-public-page-v1')) source_available " +
         "FROM automatic_source_schedules s LEFT JOIN collection_tasks t ON t.id=s.last_task_id " +
         "AND t.organization_id=s.organization_id AND t.workspace_id=s.workspace_id " +
         "WHERE s.organization_id=? AND s.workspace_id=? LIMIT 1",

@@ -10,6 +10,7 @@ import {
   assertPublicCollectionPolicy,
   publicCollectionPolicyDecision,
   sourceEvidencePayload,
+  GOOGLE_TRENDS_RSS_PARSER_VERSION,
   type RobotsPolicyDecision,
 } from "@scoutops/provider-sources";
 import type {
@@ -37,6 +38,22 @@ const VERSIONED_PRODUCT_SOURCES = new Set([
   "made_in_china_search",
   "ec21_supplier_search",
 ]);
+export function providerEvidenceDedupeKey(
+  provider: Pick<ProviderRuntimeDefinition, "code" | "parserVersion">,
+  externalId: string,
+  taskId: string,
+  rawContent: string,
+) {
+  if (provider.parserVersion === GOOGLE_TRENDS_RSS_PARSER_VERSION)
+    return sha({
+      parser_version: GOOGLE_TRENDS_RSS_PARSER_VERSION,
+      external_id: externalId,
+      content_sha256: createHash("sha256").update(rawContent).digest("hex"),
+    });
+  return VERSIONED_PRODUCT_SOURCES.has(provider.code)
+    ? sha({ task_id: taskId, external_id: externalId })
+    : externalId;
+}
 const codes = new Set<CollectionErrorCode>([
   "network_error",
   "timeout",
@@ -390,9 +407,12 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
               providerId: provider.id,
               sourceUrl: source.canonical_url,
               canonicalUrl: normalized.canonical_url ?? source.canonical_url,
-              dedupeKey: VERSIONED_PRODUCT_SOURCES.has(provider.code)
-                ? sha({ task_id: task.id, external_id: normalized.external_id })
-                : normalized.external_id,
+              dedupeKey: providerEvidenceDedupeKey(
+                provider,
+                normalized.external_id,
+                task.id,
+                source.raw_content,
+              ),
               contentType: source.content_type,
               content: Buffer.from(source.raw_content),
               capturedAt: new Date(normalized.observed_at),

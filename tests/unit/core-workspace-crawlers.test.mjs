@@ -447,7 +447,8 @@ test("dynamic product crawls use task-scoped evidence keys and auditable record 
   ]);
   assert.match(executor, /VERSIONED_PRODUCT_SOURCES[\s\S]*amazon_product/);
   assert.match(executor, /VERSIONED_PRODUCT_SOURCES[\s\S]*1688_search/);
-  assert.match(executor, /task_id: task\.id, external_id: normalized\.external_id/);
+  assert.match(executor, /task_id: taskId, external_id: externalId/);
+  assert.match(executor, /dedupeKey: providerEvidenceDedupeKey\(/);
   assert.match(persistence, /findExistingRecord\(connection, value\)/);
   assert.match(persistence, /SET status='superseded'/);
   assert.match(persistence, /previousRecord \? Number\(previousRecord\.record_version\) \+ 1 : 1/);

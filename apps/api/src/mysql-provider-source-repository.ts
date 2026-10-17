@@ -324,7 +324,7 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
         [
           "SELECT id,code FROM providers WHERE status='enabled' AND terms_review_status='approved' ",
           "AND terms_version IS NOT NULL AND (terms_permanent=1 OR terms_expires_at>NOW(3)) AND parser_version IN ",
-          "('google-news-fixed-rss-v1','syndication-feed-v1','structured-public-page-v1') ORDER BY updated_at ",
+          "('google-news-fixed-rss-v1','syndication-feed-v1','google-trends-rss-v1','structured-public-page-v1') ORDER BY updated_at ",
           "DESC,code LIMIT 100 FOR UPDATE",
         ].join(""),
       );

@@ -17,6 +17,8 @@ import {
   parseDhgateSupplierSearchPage,
   parseEc21SupplierSearchPage,
   parseGoogleNewsRss,
+  parseGoogleTrendsRss,
+  GOOGLE_TRENDS_RSS_PARSER_VERSION,
   parseMadeInChinaSearchPage,
   parseProductSupplyCsv,
   parseStructuredCatalogPage,
@@ -285,7 +287,11 @@ export class FixedGoogleNewsRssAdapter extends SourceAdapter {
 }
 export class FixedSyndicationFeedAdapter extends SourceAdapter {
   readonly accessMode = "public_rss" as const;
-  readonly version = "syndication-feed-adapter-v1";
+  readonly version: string = "syndication-feed-adapter-v1";
+  protected readonly healthSampleLimit: number = 1;
+  protected parseFeed(xml: string, sourceName: string, limit: number) {
+    return parseSyndicationFeed(xml, sourceName, limit);
+  }
   constructor(
     readonly key: string,
     private readonly configuredUrl: string,
@@ -319,11 +325,7 @@ export class FixedSyndicationFeedAdapter extends SourceAdapter {
   async collect(request: ProviderCollectRequest, signal: AbortSignal) {
     const response = await this.response(request.provider.targetUrl, signal);
     return {
-      records: parseSyndicationFeed(
-        await response.text(),
-        this.sourceName,
-        Math.min(request.limit, 20),
-      ),
+      records: this.parseFeed(await response.text(), this.sourceName, Math.min(request.limit, 20)),
       nextCursor: null,
     };
   }
@@ -334,7 +336,7 @@ export class FixedSyndicationFeedAdapter extends SourceAdapter {
     const started = Date.now();
     try {
       const response = await this.response(context.provider.targetUrl, signal);
-      parseSyndicationFeed(await response.text(), this.sourceName, 1);
+      this.parseFeed(await response.text(), this.sourceName, this.healthSampleLimit);
       return {
         status: "ready",
         latencyMs: Date.now() - started,
@@ -347,6 +349,14 @@ export class FixedSyndicationFeedAdapter extends SourceAdapter {
     }
   }
 }
+export class GoogleTrendsRssAdapter extends FixedSyndicationFeedAdapter {
+  readonly version = "google-trends-rss-adapter-v1";
+  protected readonly healthSampleLimit = 20;
+  protected parseFeed(xml: string, sourceName: string, limit: number) {
+    return parseGoogleTrendsRss(xml, sourceName, limit);
+  }
+}
+
 export class FixedStructuredPublicPageAdapter extends SourceAdapter {
   readonly accessMode = "public_page" as const;
   readonly version = "structured-public-page-adapter-v1";
@@ -763,16 +773,20 @@ export function createBuiltinSourceAdapters(fetcher: typeof fetch = fetch) {
   return [
     new GoogleNewsRssAdapter(fetcher),
     ...BUILTIN_PROVIDER_SOURCES.filter((item) => item.availability === "automatic").map((item) =>
-      item.parser_version === "syndication-feed-v1"
-        ? new FixedSyndicationFeedAdapter(item.code, item.target_url, item.name, fetcher)
-        : item.parser_version === "structured-public-page-v1"
-          ? new FixedStructuredPublicPageAdapter(
-              item.code,
-              item.target_url,
-              item.name,
-              item.code === "page_ebay_deals_us" ? normalizeUnquotedHrefFetcher(fetcher) : fetcher,
-            )
-          : new FixedGoogleNewsRssAdapter(item.code, item.target_url, fetcher),
+      item.parser_version === GOOGLE_TRENDS_RSS_PARSER_VERSION
+        ? new GoogleTrendsRssAdapter(item.code, item.target_url, item.name, fetcher)
+        : item.parser_version === "syndication-feed-v1"
+          ? new FixedSyndicationFeedAdapter(item.code, item.target_url, item.name, fetcher)
+          : item.parser_version === "structured-public-page-v1"
+            ? new FixedStructuredPublicPageAdapter(
+                item.code,
+                item.target_url,
+                item.name,
+                item.code === "page_ebay_deals_us"
+                  ? normalizeUnquotedHrefFetcher(fetcher)
+                  : fetcher,
+              )
+            : new FixedGoogleNewsRssAdapter(item.code, item.target_url, fetcher),
     ),
     new AmazonProductSearchAdapter(fetcher === fetch ? undefined : fetcher),
     new MadeInChinaSearchAdapter(fetcher),
