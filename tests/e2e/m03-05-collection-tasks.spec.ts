@@ -170,7 +170,12 @@ test("M03-05.A07/A08/A15 task monitor is responsive and visual", async ({ page }
     await expect(page.getByText(ids.task, { exact: true })).toBeVisible();
     await page.getByRole("button", { name: "关闭详情" }).last().click();
   } else await expect(page.getByText("缺 supplier.moq", { exact: true })).toBeVisible();
-  await expect(page).toHaveScreenshot("m03-05-collection-tasks.png", { fullPage: true });
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  // Capture the actual mobile viewport so fixed navigation stays at the viewport edge.
+  await expect(page).toHaveScreenshot("m03-05-collection-tasks.png", {
+    fullPage: (page.viewportSize()?.width ?? 1000) > 760,
+  });
 });
 test("M03-05.A08/A09/A16 dead letter detail requires an explicit confirmed replay reason", async ({
   page,

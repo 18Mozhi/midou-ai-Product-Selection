@@ -222,7 +222,6 @@ html body:has(#app .provider-registry) #app .provider-empty p {
   color: var(--p46-muted);
 }
 html body:has(#app .provider-registry) #app .provider-empty > button,
-html body:has(#app .provider-registry) #app .provider-registry > .provider-hero > button,
 html body:has(#app .provider-registry) #app .ui-state-panel footer button.primary {
   border-color: var(--p46-accent);
   color: var(--p46-panel);

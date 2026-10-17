@@ -2,52 +2,6 @@
   display: grid;
   gap: 16px;
 }
-.source-guide {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 24px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, var(--so-panel-soft), var(--so-bg-elevated));
-  color: var(--so-text);
-}
-.source-guide p {
-  color: var(--so-primary);
-  font-weight: 800;
-  margin: 0;
-}
-.source-guide h2 {
-  font-size: 28px;
-  margin: 6px 0;
-}
-.source-guide span {
-  opacity: 0.8;
-}
-.source-guide-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.source-guide-actions small {
-  color: var(--so-text-muted);
-}
-.source-guide a,
-.source-guide button {
-  white-space: nowrap;
-  color: var(--so-on-primary);
-  background: var(--so-primary);
-  padding: 11px 16px;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  font-weight: 800;
-  text-decoration: none;
-}
-.source-guide button:disabled {
-  cursor: wait;
-  opacity: 0.65;
-}
 .source-metrics {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -273,15 +227,6 @@
 @media (max-width: 760px) {
   .novice {
     padding-bottom: 76px;
-  }
-  .source-guide {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .source-guide-actions {
-    width: 100%;
-    justify-content: flex-start;
   }
   .source-metrics {
     grid-template-columns: 1fr 1fr;

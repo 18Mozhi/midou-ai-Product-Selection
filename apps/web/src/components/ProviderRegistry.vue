@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import {
   computed,
   nextTick,
@@ -491,7 +492,9 @@ function closeEditor() {
             .find(available)
         : null;
       const emptyCreate = root.querySelector<HTMLButtonElement>(".provider-empty > button"),
-        headerCreate = root.querySelector<HTMLButtonElement>(".provider-hero > button"),
+        headerCreate = root.querySelector<HTMLButtonElement>(
+          ".provider-hero .platform-page-header__actions > button",
+        ),
         target = [trigger, rowButton ?? null, emptyCreate, headerCreate].find(available);
       target?.focus();
       editorTrigger.value = null;
@@ -642,13 +645,9 @@ onActivated(() => {
 </script>
 <template>
   <section ref="registryRoot" class="provider-registry">
-    <header class="provider-hero">
-      <div class="provider-hero-copy">
-        <p>来源设置</p>
-        <h2>来源注册中心</h2>
-      </div>
-      <button type="button" @click="edit(undefined, $event)">＋ 新建来源</button>
-    </header>
+    <PlatformPageHeader class="provider-hero" title="来源注册中心">
+      <button type="button" class="is-primary" @click="edit(undefined, $event)">＋ 新建来源</button>
+    </PlatformPageHeader>
     <section v-if="items.length" class="provider-overview" aria-label="来源定义概览">
       <article>
         <span>来源定义</span><strong>{{ items.length }}</strong>

@@ -10,88 +10,6 @@
   font-family: "Microsoft YaHei", sans-serif;
 }
 
-.source-center--p48 > .source-guide {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
-  gap: 24px;
-  min-width: 0;
-  padding: 26px 28px;
-  border: 0;
-  border-radius: 7px;
-  color: var(--p48-source-surface);
-  background: var(--p48-source-blue);
-  box-shadow: none;
-}
-
-.source-center--p48 > .source-guide > div:first-child > p {
-  margin: 0;
-  color: var(--p48-source-hero-muted);
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.source-center--p48 > .source-guide h2 {
-  margin: 6px 0 8px;
-  color: var(--p48-source-surface);
-  font-size: 28px;
-  line-height: 1.35;
-}
-
-.source-center--p48 > .source-guide h2:focus-visible {
-  outline: 3px solid var(--p48-source-surface);
-  outline-offset: 5px;
-}
-
-.source-center--p48 > .source-guide span {
-  display: block;
-  max-width: 60ch;
-  color: var(--p48-source-hero-subtle);
-  font-size: 14px;
-  line-height: 1.75;
-  opacity: 1;
-}
-
-.source-center--p48 .source-guide-actions {
-  display: grid;
-  grid-template-columns: repeat(2, max-content);
-  justify-content: end;
-  gap: 8px;
-}
-
-.source-center--p48 .source-guide-actions small {
-  grid-column: 1 / -1;
-  color: var(--p48-source-hero-muted);
-  font-size: 13px;
-  text-align: right;
-}
-
-.source-center--p48 .source-guide-actions :is(a, button) {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 10px 14px;
-  border: 1px solid var(--p48-source-outline);
-  border-radius: 5px;
-  color: var(--p48-source-surface);
-  background: transparent;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.source-center--p48 .source-guide-actions :is(a, button):focus-visible {
-  outline: 3px solid var(--p48-source-surface);
-  outline-offset: 2px;
-}
-
-.source-center--p48 .source-guide-actions button:disabled {
-  cursor: wait;
-  opacity: 0.65;
-}
-
 .source-center--p48 > .source-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -135,8 +53,20 @@
   padding: 15px 20px;
   border: 1px solid var(--p48-source-line);
   border-radius: 7px;
-  background: var(--p48-source-soft);
+  background: var(--p48-source-surface);
   color: var(--p48-source-ink);
+}
+.source-help > summary {
+  min-height: 44px;
+  display: list-item;
+  line-height: 44px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+.source-help > summary:focus-visible {
+  outline: 2px solid var(--so-primary);
+  outline-offset: 2px;
 }
 
 .source-center--p48 > .source-help ol {
@@ -345,25 +275,6 @@
   .source-center--p48 {
     gap: 14px;
     padding-bottom: 28px;
-  }
-  .source-center--p48 > .source-guide {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 14px;
-    padding: 20px;
-  }
-  .source-center--p48 > .source-guide h2 {
-    font-size: 23px;
-  }
-  .source-center--p48 .source-guide-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    justify-content: stretch;
-  }
-  .source-center--p48 .source-guide-actions small {
-    text-align: left;
-  }
-  .source-center--p48 .source-guide-actions :is(a, button) {
-    width: 100%;
-    white-space: normal;
   }
   .source-center--p48 > .source-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -15,6 +15,12 @@ const routes = [
   ["/platform-admin/api-coverage", "接口覆盖证据", "light"],
   ["/platform-admin/logs", "链路日志", "glass"],
   ["/platform-admin/open-platform", "开放平台", "light"],
+  ["/platform-admin/providers", "来源注册中心", "light"],
+  ["/platform-admin/providers/sources", "来源频道", "glass"],
+  ["/platform-admin/providers/adapters", "采集诊断目录", "dark"],
+  ["/platform-admin/collection/overview", "来源与采集控制台", "light"],
+  ["/platform-admin/collection", "采集任务监控", "glass"],
+  ["/platform-admin/collection/browser-runtime", "采集运行监控", "dark"],
 ] as const;
 
 // Deliberately failed reads exercise the real Vue boundary without fabricating platform facts.

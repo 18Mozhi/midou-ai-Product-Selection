@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
@@ -407,26 +408,25 @@ onActivated(() => {
     :aria-busy="refreshing || saving"
     :inert="confirming"
   >
-    <header class="crawler-title">
-      <div>
-        <p>网页采集运行中心</p>
-        <h1 id="crawler-title">采集运行监控</h1>
-      </div>
-      <div class="crawler-title-actions">
-        <button type="button" class="secondary" :disabled="refreshing || saving" @click="load()">
-          {{ refreshing ? "刷新中…" : "刷新数据" }}
-        </button>
-        <button
-          type="button"
-          :disabled="saving || refreshing || recoveryUnknown || expiredLeaseRisks.length === 0"
-          aria-describedby="crawler-recovery-help"
-          @click="confirming = true"
-        >
-          {{ saving ? "回收中…" : "回收过期运行" }}
-        </button>
-        <small id="crawler-recovery-help">{{ recoveryHelp }}</small>
-      </div>
-    </header>
+    <PlatformPageHeader
+      class="crawler-title"
+      title="采集运行监控"
+      :heading-level="1"
+      title-id="crawler-title"
+    >
+      <button type="button" class="secondary" :disabled="refreshing || saving" @click="load()">
+        {{ refreshing ? "刷新中…" : "刷新数据" }}
+      </button>
+      <button
+        type="button"
+        :disabled="saving || refreshing || recoveryUnknown || expiredLeaseRisks.length === 0"
+        aria-describedby="crawler-recovery-help"
+        @click="confirming = true"
+      >
+        {{ saving ? "回收中…" : "回收过期运行" }}
+      </button>
+      <small id="crawler-recovery-help">{{ recoveryHelp }}</small>
+    </PlatformPageHeader>
     <p class="crawler-notice" role="status" aria-live="polite">{{ recoveryNotice }}</p>
     <p class="crawler-notice" role="status" aria-live="polite">{{ readNotice }}</p>
     <UiStatePanel

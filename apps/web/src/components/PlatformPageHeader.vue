@@ -5,6 +5,7 @@ withDefaults(
     description?: string;
     headingLevel?: 1 | 2;
     titleId?: string;
+    titleTabindex?: number;
   }>(),
   { description: "", headingLevel: 2, titleId: undefined },
 );
@@ -16,6 +17,7 @@ withDefaults(
       <component
         :is="headingLevel === 1 ? 'h1' : 'h2'"
         :id="titleId"
+        :tabindex="titleTabindex"
         class="platform-page-header__title"
         >{{ title }}</component
       >
@@ -40,6 +42,11 @@ withDefaults(
 }
 .platform-page-header__identity {
   min-width: 0;
+}
+.platform-page-header:focus-visible,
+.platform-page-header__title:focus-visible {
+  outline: 2px solid var(--so-primary);
+  outline-offset: 2px;
 }
 .platform-page-header__title {
   margin: 0;

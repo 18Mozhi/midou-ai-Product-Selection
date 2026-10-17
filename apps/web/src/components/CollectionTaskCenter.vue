@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import {
   computed,
   nextTick,
@@ -587,18 +588,17 @@ onActivated(() => {
     class="collection-task-center collection-task-center--review"
     aria-labelledby="collection-task-title"
   >
-    <header class="collection-task-title">
-      <div>
-        <p>平台采集任务中心</p>
-        <h1 id="collection-task-title">采集任务监控</h1>
-      </div>
-      <div class="collection-task-title-actions">
-        <button type="button" :disabled="listLoading" @click="load({ preserve: true })">
-          {{ listLoading ? "正在刷新…" : "刷新任务" }}
-        </button>
-        <RouterLink to="/platform-admin/collection/browser-runtime">浏览器运行时</RouterLink>
-      </div>
-    </header>
+    <PlatformPageHeader
+      class="collection-task-title"
+      title="采集任务监控"
+      :heading-level="1"
+      title-id="collection-task-title"
+    >
+      <button type="button" :disabled="listLoading" @click="load({ preserve: true })">
+        {{ listLoading ? "正在刷新…" : "刷新任务" }}
+      </button>
+      <RouterLink to="/platform-admin/collection/browser-runtime">浏览器运行时</RouterLink>
+    </PlatformPageHeader>
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"

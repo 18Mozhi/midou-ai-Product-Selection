@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import {
   computed,
   defineAsyncComponent,
@@ -696,19 +697,13 @@ onMounted(load);
 
 <template>
   <section class="source-center source-center--p48 novice">
-    <header class="source-guide">
-      <div>
-        <p>热点来源</p>
-        <h2 tabindex="-1">多平台、多国家来源已自动登记</h2>
-      </div>
-      <div class="source-guide-actions">
-        <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>
-        <button type="button" :disabled="refreshing" @click="handleSourceRefresh">
-          {{ refreshing ? "刷新中…" : "刷新来源" }}
-        </button>
-        <RouterLink to="/platform-admin/providers">管理来源规则</RouterLink>
-      </div>
-    </header>
+    <PlatformPageHeader class="source-guide" title="来源频道" :title-tabindex="-1">
+      <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>
+      <button type="button" :disabled="refreshing" @click="handleSourceRefresh">
+        {{ refreshing ? "刷新中…" : "刷新来源" }}
+      </button>
+      <RouterLink to="/platform-admin/providers">管理来源规则</RouterLink>
+    </PlatformPageHeader>
     <div class="source-metrics">
       <article>
         <small>全部来源</small><strong>{{ counts.all }}</strong
@@ -727,14 +722,14 @@ onMounted(load);
         ><span>国家与全球市场</span>
       </article>
     </div>
-    <aside class="source-help">
-      <strong>已经替你配置好的部分</strong>
+    <details class="source-help">
+      <summary>来源采集说明</summary>
       <ol>
         <li>公开订阅与页面支持免密钥采集；需先完成来源准入与运行检查。</li>
         <li>频率、超时、重试、启停可直接在本页修改。</li>
         <li>网页登录型平台需要先完成网页登录配置。</li>
       </ol>
-    </aside>
+    </details>
     <ProviderSourceFilters
       v-if="state === 'ready'"
       :query="query"

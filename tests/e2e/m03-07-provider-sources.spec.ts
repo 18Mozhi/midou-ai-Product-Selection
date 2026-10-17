@@ -151,9 +151,13 @@ test("M03-07.A07/A08/A15 novice catalog shows 100+ automatic setup and manual ch
   await nav(page, "platform_admin");
   await catalog(page);
   await page.goto("/platform-admin/providers/sources");
-  await expect(page.getByRole("heading", { name: "多平台、多国家来源已自动登记" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "来源频道", exact: true })).toBeVisible();
   await expect(page.getByText("138", { exact: true }).first()).toBeVisible();
-  await expect(page.getByText("已经替你配置好的部分")).toBeVisible();
+  const collectionHelp = page.locator("details.source-help");
+  await expect(collectionHelp).not.toHaveAttribute("open", "");
+  await collectionHelp.getByText("来源采集说明", { exact: true }).click();
+  await expect(collectionHelp).toContainText("频率、超时、重试、启停可直接在本页修改");
+  await collectionHelp.getByText("来源采集说明", { exact: true }).click();
   await expect(page.getByRole("heading", { name: "市场热点与消费者信号" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "商品与竞品观察" })).toBeVisible();
   await openMobileFilters(page);

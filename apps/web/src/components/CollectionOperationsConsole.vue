@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import {
   computed,
   nextTick,
@@ -570,16 +571,12 @@ async function confirmBatchReplay() {
     :aria-busy="refreshing || batchBusy"
     :inert="batchPreview"
   >
-    <header>
-      <div class="collection-ops-heading">
-        <div>
-          <p>采集运行管理</p>
-          <h1>来源与采集控制台</h1>
-        </div>
-        <button type="button" :disabled="refreshing || batchBusy" @click="load()">
-          {{ refreshing ? "正在刷新" : "刷新数据" }}
-        </button>
-      </div>
+    <PlatformPageHeader title="来源与采集控制台" :heading-level="1">
+      <button type="button" :disabled="refreshing || batchBusy" @click="load()">
+        {{ refreshing ? "正在刷新" : "刷新数据" }}
+      </button>
+    </PlatformPageHeader>
+    <section class="collection-scope" aria-label="采集范围与时间">
       <ResponsiveFilterDrawer label="采集范围与时间" :active-count="scopeFilterCount">
         <form @submit.prevent="applyScope">
           <label class="collection-filter-field"
@@ -632,7 +629,7 @@ async function confirmBatchReplay() {
           </div>
         </form>
       </ResponsiveFilterDrawer>
-    </header>
+    </section>
     <p v-if="refreshNotice" class="collection-refresh-notice" role="alert">
       {{ refreshNotice }}
       <button type="button" :disabled="refreshing || batchBusy" @click="load()">重试</button>

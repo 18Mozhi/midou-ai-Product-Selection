@@ -2,10 +2,7 @@
 
 /* Local C identity tokens; existing theme IDs/preferences and non-P46 palettes remain unchanged. */
 /* P46 approved frame + mobile editor structure. No preview host, detail or error-state styling. */
-html
-  body:has(#app .provider-registry)
-  #app
-  :is(.provider-hero > button, .provider-list-heading > button, .provider-reset) {
+html body:has(#app .provider-registry) #app :is(.provider-list-heading > button, .provider-reset) {
   min-height: 44px;
   padding: 10px 14px;
   border: 1px solid var(--p46-border-strong);
@@ -13,11 +10,6 @@ html
   color: var(--p46-accent);
   background: var(--p46-panel);
   font-size: 14px;
-}
-html body:has(#app .provider-registry) #app .provider-hero > button {
-  color: var(--p46-panel);
-  background: var(--p46-accent);
-  border-color: var(--p46-accent);
 }
 html body:has(#app .provider-registry) #app .provider-filters :is(input, select) {
   min-height: 48px;
@@ -31,7 +23,7 @@ html body:has(#app .provider-registry) #app .provider-filters :is(input, select)
 html
   body:has(#app .provider-registry)
   #app
-  :is(.provider-hero, .provider-list-tools)
+  :is(.provider-list-tools)
   :is(button, input, select):focus-visible {
   outline: 3px solid var(--p46-focus);
   outline-offset: 3px;
@@ -96,33 +88,6 @@ html body:has(#app .provider-registry) #app .provider-runtime-tabs a:focus-visib
 html body:has(#app .provider-registry) #app .provider-registry {
   margin: 0;
   min-width: 0;
-}
-html body:has(#app .provider-registry) #app .provider-hero {
-  padding: 0 0 24px;
-  background: none;
-  border: 0;
-  border-bottom: 1px solid var(--p46-divider);
-  border-radius: 0;
-  box-shadow: none;
-}
-html body:has(#app .provider-registry) #app .provider-hero h2 {
-  margin: 8px 0;
-  color: var(--p46-ink);
-  font-size: 28px;
-}
-html body:has(#app .provider-registry) #app .provider-hero p {
-  color: var(--p46-accent);
-  letter-spacing: 0;
-  font-size: 14px;
-}
-html body:has(#app .provider-registry) #app .provider-hero span {
-  font-size: 14px;
-  color: var(--p46-muted);
-}
-html body:has(#app .provider-registry) #app .provider-hero > button {
-  background: var(--p46-accent);
-  color: var(--p46-panel);
-  border-color: var(--p46-accent);
 }
 html body:has(#app .provider-registry) #app .provider-overview {
   gap: 0;
@@ -225,13 +190,6 @@ html body:has(#app .provider-registry) #app .responsive-data-view {
   }
   html body:has(#app .provider-registry) #app .provider-runtime-tabs a:last-child {
     grid-column: 1/-1;
-  }
-  html body:has(#app .provider-registry) #app .provider-hero {
-    display: grid;
-    gap: 20px;
-  }
-  html body:has(#app .provider-registry) #app .provider-hero > button {
-    justify-self: start;
   }
   html body:has(#app .provider-registry) #app .provider-overview {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
@@ -332,20 +333,18 @@ onMounted(load);
 </script>
 <template>
   <section class="adapter-center adapter-center--c">
-    <header class="adapter-heading" tabindex="-1">
-      <div>
-        <p>来源适配器运行状态</p>
-        <h2>采集诊断目录</h2>
-        <span>健康检查不改变来源启停状态；采集结果请查看任务。</span>
-      </div>
-      <div class="adapter-heading-actions">
-        <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>
-        <button type="button" :disabled="refreshing" @click="refreshFromButton">
-          {{ refreshing ? "刷新中…" : "刷新状态" }}
-        </button>
-        <RouterLink to="/platform-admin/providers">返回来源定义</RouterLink>
-      </div>
-    </header>
+    <PlatformPageHeader
+      class="adapter-heading"
+      tabindex="-1"
+      title="采集诊断目录"
+      description="健康检查不改变来源启停状态；采集结果请查看任务。"
+    >
+      <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>
+      <button type="button" :disabled="refreshing" @click="refreshFromButton">
+        {{ refreshing ? "刷新中…" : "刷新状态" }}
+      </button>
+      <RouterLink to="/platform-admin/providers">返回来源定义</RouterLink>
+    </PlatformPageHeader>
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"

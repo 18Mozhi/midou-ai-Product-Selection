@@ -1,4 +1,36 @@
 {
+  "selectionCollectionToolbar20261017": {
+    "status": "implemented",
+    "statusDetail": "12_layout_and_36_business_browser_checks_passed_not_deployed",
+    "requirements": "docs/selection-collection-toolbar.md",
+    "routes": [
+      "/platform-admin/providers",
+      "/platform-admin/providers/sources",
+      "/platform-admin/providers/adapters",
+      "/platform-admin/collection/overview",
+      "/platform-admin/collection",
+      "/platform-admin/collection/browser-runtime"
+    ],
+    "sourceFiles": [
+      "apps/web/src/components/PlatformPageHeader.vue",
+      "apps/web/src/components/ProviderRegistry.vue",
+      "apps/web/src/components/ProviderSourceCenter.vue",
+      "apps/web/src/components/ProviderAdapterCenter.vue",
+      "apps/web/src/components/CollectionOperationsConsole.vue",
+      "apps/web/src/components/CollectionTaskCenter.vue",
+      "apps/web/src/components/CollectionRuntimeCenter.vue"
+    ],
+    "testFiles": [
+      "tests/e2e/platform-page-header.spec.ts",
+      "tests/e2e/m03-01-provider-registry.spec.ts",
+      "tests/e2e/m03-03-provider-adapter.spec.ts",
+      "tests/e2e/m03-04-playwright-crawler.spec.ts",
+      "tests/e2e/m03-05-collection-tasks.spec.ts",
+      "tests/e2e/m03-07-provider-sources.spec.ts",
+      "tests/e2e/m06-03-collection-console.spec.ts"
+    ],
+    "contract": "Compact shared source and collection headers, separate scope filters, collapsible source help; preserve actual forms, focus restoration, source enablement, recovery, replay, API, permissions and audit. No schema/config/dependency change. Frontend static deployment only; real source throughput not accepted."
+  },
   "selectionPlatformToolbar20261017": {
     "status": "implemented",
     "statusDetail": "targeted_browser_and_build_checks_passed_not_deployed_full_site_pending",

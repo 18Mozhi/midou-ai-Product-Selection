@@ -11,9 +11,6 @@
   border-radius: 20px;
   background: linear-gradient(140deg, var(--so-panel), var(--so-bg-elevated));
 }
-.provider-hero-copy {
-  max-width: 720px;
-}
 .provider-registry > header p,
 .provider-editor header p {
   margin: 0 0 7px;

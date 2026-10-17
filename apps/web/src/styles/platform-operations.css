@@ -81,43 +81,6 @@
   background: var(--p52-canvas);
 }
 
-.collection-ops--review > header {
-  gap: 0;
-}
-
-.collection-ops--review .collection-ops-heading {
-  margin: 0;
-  padding: 31px 36px;
-  background: var(--p52-blue);
-}
-
-.collection-ops--review .collection-ops-heading :is(p, h1, span) {
-  color: var(--p52-on-blue);
-}
-
-.collection-ops--review .collection-ops-heading h1 {
-  margin: 4px 0 8px;
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.08;
-  letter-spacing: -0.045em;
-}
-
-.collection-ops--review .collection-ops-heading button {
-  border-color: var(--p52-blue);
-  border-radius: 0;
-  color: var(--p52-blue);
-  background: var(--p52-panel);
-  font-weight: 800;
-}
-
-.collection-ops--review > header > .responsive-filter-drawer {
-  margin: 0;
-  border: 1px solid var(--p52-border);
-  border-top: 0;
-  border-radius: 0;
-  background: var(--p52-panel);
-}
-
 .collection-ops--review .collection-ops-links {
   gap: 0;
   margin: 24px 0;
@@ -188,31 +151,14 @@
   outline: 3px solid var(--p52-focus);
   outline-offset: 3px;
 }
-.collection-ops > header {
-  display: grid;
-  gap: 18px;
-}
-.collection-ops > header p {
-  color: var(--so-success);
-  font: 700 11px monospace;
-}
-.collection-ops > header h2 {
-  margin: 4px 0;
-}
-.collection-ops > header span {
-  color: var(--text-muted);
-}
-.collection-ops > header .collection-ops-heading,
+
 .collection-ops .collection-section-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
 }
-.collection-ops-heading > div {
-  min-width: 0;
-}
-.collection-ops-heading > button,
+
 .collection-pagination button,
 .collection-refresh-notice button {
   min-height: var(--so-touch-target);
@@ -223,7 +169,7 @@
   color: var(--so-text);
   background: var(--so-bg-elevated);
 }
-.collection-ops-heading > button:disabled,
+
 .collection-pagination button:disabled,
 .collection-refresh-notice button:disabled {
   cursor: wait;
@@ -481,15 +427,6 @@
   }
 }
 @media (max-width: 800px) {
-  .collection-ops--review .collection-ops-heading {
-    padding: 25px 19px;
-  }
-
-  .collection-ops--review .collection-ops-heading {
-    display: grid;
-    gap: 16px;
-  }
-
   .collection-ops--review .collection-ops-links {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -513,13 +450,10 @@
   .collection-ops form {
     grid-template-columns: 1fr;
   }
-  .collection-ops-heading,
+
   .collection-refresh-notice {
     align-items: stretch;
     flex-direction: column;
-  }
-  .collection-ops-heading > button {
-    width: 100%;
   }
   .collection-ops-grid {
     grid-template-columns: 1fr;
@@ -1140,4 +1074,11 @@
   z-index: 40;
   max-height: calc(100dvh - 28px);
   overflow: auto;
+}
+.collection-scope {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  background: var(--so-panel);
 }
