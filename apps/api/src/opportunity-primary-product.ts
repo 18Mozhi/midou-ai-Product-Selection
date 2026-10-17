@@ -1,4 +1,5 @@
 import type { SelectionPrimaryProductFacts } from "@scoutops/contracts";
+import { currentProductVersionJoinSql } from "@scoutops/database";
 import { readAmazonPublicSignals } from "./amazon-public-signals.js";
 const opportunityPrimaryAsinSql = "o.primary_fact_asin";
 const keys = [
@@ -17,18 +18,20 @@ const keys = [
 const projection = (time: string) =>
   "JSON_OBJECT(" +
   keys.map((k) => `'${k}',JSON_EXTRACT(n.payload_json,'$.${k}')`).join(",") +
-  `,'captured_at',DATE_FORMAT(${time},'%Y-%m-%dT%H:%i:%s.%fZ'))`;
+  // MySQL DATETIME uses the same local interpretation as the existing mysql2 pool.
+  // Add UTC only after Date parsing; appending Z here would shift non-UTC hosts.
+  `,'captured_at',DATE_FORMAT(${time},'%Y-%m-%dT%H:%i:%s.%f'))`;
 const identity =
   ` AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY ${opportunityPrimaryAsinSql} ` +
   "AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.canonical_url')) REGEXP CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')),'([/?#]|$)') ";
 export const opportunityPrimaryRecordsSql =
-  `(SELECT ${projection("l.observed_at")} FROM opportunity_evidence_links l STRAIGHT_JOIN normalized_records n FORCE INDEX (idx_normalized_evidence) ` +
-  "ON n.raw_evidence_id=l.raw_evidence_id AND n.organization_id=l.organization_id AND n.workspace_id=l.workspace_id AND n.status='active' " +
+  `(SELECT ${projection("n.created_at")} FROM opportunity_evidence_links l ` +
+  currentProductVersionJoinSql("l", "n") +
   "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' WHERE l.opportunity_id=o.id AND l.organization_id=o.organization_id AND l.workspace_id=o.workspace_id " +
   identity +
   "ORDER BY l.observed_at DESC,n.created_at DESC,n.id DESC LIMIT 1) primary_linked_record," +
-  `(SELECT ${projection("s.captured_at")} FROM competitors c JOIN competitor_snapshots s ON s.competitor_id=c.id AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id ` +
-  "STRAIGHT_JOIN normalized_records n FORCE INDEX (idx_normalized_evidence) ON n.raw_evidence_id=s.evidence_id AND n.organization_id=s.organization_id AND n.workspace_id=s.workspace_id AND n.status='active' " +
+  `(SELECT ${projection("n.created_at")} FROM competitors c JOIN competitor_snapshots s ON s.competitor_id=c.id AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id ` +
+  currentProductVersionJoinSql("s", "n", "evidence_id") +
   "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' WHERE c.opportunity_id=o.id AND c.organization_id=o.organization_id AND c.workspace_id=o.workspace_id AND c.deleted_at IS NULL AND c.source_site='Amazon' " +
   `AND BINARY UPPER(c.external_id)=BINARY ${opportunityPrimaryAsinSql} ` +
   identity +

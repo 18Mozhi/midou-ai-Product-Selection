@@ -1,11 +1,26 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { execFileSync } from "node:child_process";
 import {
   readOpportunityPrimaryProduct,
   opportunityPrimaryRecordsSql,
 } from "../../apps/api/dist/opportunity-primary-product.js";
 import { MySqlOpportunityRepository } from "../../apps/api/dist/mysql-opportunity-repository.js";
 const at = "2026-10-17T00:00:00.000000Z";
+
+test("local SQL DATETIME facts become UTC once, including seasonal offsets", () => {
+  assert.doesNotMatch(opportunityPrimaryRecordsSql, /%fZ/);
+  const module = new URL("../../apps/api/dist/opportunity-primary-product.js", import.meta.url)
+    .href;
+  const code = `import {readOpportunityPrimaryProduct} from ${JSON.stringify(module)};console.log(JSON.stringify(['2026-10-17T18:38:13.720000','2026-01-17T18:38:13.720000'].map(captured_at=>readOpportunityPrimaryProduct({captured_at},null).facts.captured_at)));`;
+  const values = JSON.parse(
+    execFileSync(process.execPath, ["--input-type=module", "-e", code], {
+      encoding: "utf8",
+      env: { ...process.env, TZ: "America/New_York" },
+    }),
+  );
+  assert.deepEqual(values, ["2026-10-17T22:38:13.720Z", "2026-01-17T23:38:13.720Z"]);
+});
 const record = (extra = {}) => ({
   captured_at: at,
   price: 29,
@@ -86,13 +101,19 @@ test("only known Amazon image hosts can supply the selected primary image", () =
 test("record SQL binds evidence, snapshots, primary identity and tenants", () => {
   const sql = opportunityPrimaryRecordsSql;
   for (const fragment of [
-    "n.organization_id=l.organization_id",
-    "n.workspace_id=l.workspace_id",
+    "n_seed.organization_id=l.organization_id",
+    "n_seed.workspace_id=l.workspace_id",
+    "n.organization_id=n_seed.organization_id",
+    "n.workspace_id=n_seed.workspace_id",
+    "n.provider_id=n_seed.provider_id",
+    "n.record_key=n_seed.record_key",
+    "n.status='active'",
+    "n_seed.status IN ('active','superseded')",
     "l.organization_id=o.organization_id",
     "l.workspace_id=o.workspace_id",
     "s.organization_id=c.organization_id",
     "s.workspace_id=c.workspace_id",
-    "n.raw_evidence_id=s.evidence_id",
+    "n_seed.raw_evidence_id=s.evidence_id",
     "c.organization_id=o.organization_id",
     "c.workspace_id=o.workspace_id",
     "c.deleted_at IS NULL",

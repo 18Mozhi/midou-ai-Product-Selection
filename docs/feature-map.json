@@ -4,13 +4,17 @@
     "requirements": "docs/primary-evidence-version-resolution.md",
     "sourceFiles": [
       "packages/database/src/selection-candidate-sql.ts",
+      "packages/database/src/current-product-version-sql.ts",
+      "packages/database/src/index.ts",
+      "apps/api/src/opportunity-primary-product.ts",
       "apps/worker/src/automatic-selection-evidence.ts"
     ],
     "testFiles": [
       "tests/unit/opportunity-selection-policy.test.mjs",
+      "tests/unit/opportunity-primary-product.test.mjs",
       "tests/unit/automatic-selection-evaluation.test.mjs"
     ],
-    "contract": "Original scoped primary link keeps identity across supersession only with an active same-provider/key/ASIN successor. Worker reads current scoped facts and returns their actual evidence/time. No history rewrite, schema, API, env, dependency or permission change."
+    "contract": "Original scoped primary link keeps identity across supersession only with an active same-provider/key/ASIN successor. API and Worker share current-version resolution; facts use actual current evidence/time, with local SQL DATETIME converted to UTC once. No history rewrite, schema, API field, env, dependency or permission change."
   },
   "selectionSourceTransportHealth20261018": {
     "status": "implemented",
