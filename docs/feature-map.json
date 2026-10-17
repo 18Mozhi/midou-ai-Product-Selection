@@ -1,4 +1,14 @@
 {
+  "selectionProductRetryEvidence20261018": {
+    "status": "implemented",
+    "requirements": "docs/product-retry-evidence-versions.md",
+    "sourceFiles": ["apps/worker/src/provider-source-executor.ts"],
+    "testFiles": [
+      "tests/unit/google-trends-evidence-identity.test.mjs",
+      "tests/unit/core-workspace-crawlers.test.mjs"
+    ],
+    "contract": "Task-scoped product evidence additionally binds parser version and raw content hash. Identical content stays idempotent; changed retry pages create immutable record versions. Original conflicts and history remain; RSS rules and external contracts unchanged."
+  },
   "selectionPrimaryVersionResolution20261018": {
     "status": "implemented",
     "requirements": "docs/primary-evidence-version-resolution.md",

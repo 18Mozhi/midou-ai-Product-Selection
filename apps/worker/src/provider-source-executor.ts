@@ -52,7 +52,12 @@ export function providerEvidenceDedupeKey(
       content_sha256: createHash("sha256").update(rawContent).digest("hex"),
     });
   return VERSIONED_PRODUCT_SOURCES.has(provider.code)
-    ? sha({ task_id: taskId, external_id: externalId })
+    ? sha({
+        task_id: taskId,
+        external_id: externalId,
+        parser_version: provider.parserVersion,
+        content_sha256: createHash("sha256").update(rawContent).digest("hex"),
+      })
     : externalId;
 }
 const codes = new Set<CollectionErrorCode>([

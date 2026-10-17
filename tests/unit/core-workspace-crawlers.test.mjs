@@ -388,7 +388,7 @@ test("opportunity summaries reuse crawled Amazon images and real downstream coun
   assert.match(repository, /opportunityPrimaryRecordsSql/);
   const primary = await readFile("apps/api/src/opportunity-primary-product.ts", "utf8");
   assert.match(primary, /"image_url"/);
-  assert.match(primary, /n\.raw_evidence_id=s\.evidence_id/);
+  assert.match(primary, /currentProductVersionJoinSql\("s", "n", "evidence_id"\)/);
   assert.match(repository, /competitor_count/);
   assert.match(repository, /supplier_candidate_count/);
 });
@@ -447,7 +447,10 @@ test("dynamic product crawls use task-scoped evidence keys and auditable record 
   ]);
   assert.match(executor, /VERSIONED_PRODUCT_SOURCES[\s\S]*amazon_product/);
   assert.match(executor, /VERSIONED_PRODUCT_SOURCES[\s\S]*1688_search/);
-  assert.match(executor, /task_id: taskId, external_id: externalId/);
+  assert.match(
+    executor,
+    /task_id: taskId,\s+external_id: externalId,\s+parser_version: provider.parserVersion,\s+content_sha256:/,
+  );
   assert.match(executor, /dedupeKey: providerEvidenceDedupeKey\(/);
   assert.match(persistence, /findExistingRecord\(connection, value\)/);
   assert.match(persistence, /SET status='superseded'/);
