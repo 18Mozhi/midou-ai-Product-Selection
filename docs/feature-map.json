@@ -1,4 +1,17 @@
 {
+  "selectionAmazonVerification20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-verification-classification.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/parsers/index.ts",
+      "packages/provider-sources/src/adapters/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-verification-page.test.mjs",
+      "tests/unit/amazon-target-drift.test.mjs"
+    ],
+    "contract": "Observed head refresh to bm-verify is permission_denied, never followed or parsed as facts. Existing access circuit penalties and structural-drift pause remain. Adapter v9/parser v5. No API/config/schema/permission change; failed_terminal replay is not expanded."
+  },
   "selectionSharedStateLayout20261018": {
     "status": "implemented",
     "requirements": "docs/selection-shared-state-layout.md",

@@ -1,3 +1,5 @@
+> 2026-10-18 Amazon已观察到的refresh验证页明确归类访问拒绝，避免误判结构变化；不跟随验证URL、不保存商品事实，原熔断与真正结构停用保留。见 `docs/amazon-verification-classification.md`，日百品未验收。
+
 > 2026-10-18 共用状态面板去除旧大标题、渐变、阴影及手机420px高度，改为紧凑实色布局；保留按钮、权限及编号合同，见 `docs/selection-shared-state-layout.md`。发布与业务验收分别记录。
 
 > 2026-10-18 Amazon单目标解析失败通过标准检查页确认来源健康后保持局部失败，不用控制页替代商品；真实来源结构变化继续停用审计。见 `docs/amazon-target-drift-isolation.md`；既有停用和受影响任务须按业务流程受控恢复。

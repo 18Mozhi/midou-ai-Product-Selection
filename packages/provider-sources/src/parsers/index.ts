@@ -652,6 +652,20 @@ export function parseAmazonProductPage(
 ): ProviderRawRecord[] {
   if (typeof html !== "string" || Buffer.byteLength(html) > 5_000_000 || !/<html\b/i.test(html))
     throw new ProviderAdapterFailure("invalid_payload", false);
+  // Observed verification interstitial: access denial, not parser drift.
+  // Do not follow or retain its challenge URL, even if the body includes product-like markup.
+  const head = (/<head\b[^>]*>([\s\S]*?)<\/head>/i.exec(html)?.[1] ?? "").replace(
+    /<!--[\s\S]*?-->|<script\b[^>]*>[\s\S]*?<\/script>/gi,
+    "",
+  );
+  for (const match of head.matchAll(/<meta\b[^>]*>/gi)) {
+    const metaAttribute = (name: string) =>
+      entity(new RegExp(`\\s${name}\\s*=\\s*(["'])([\\s\\S]*?)\\1`, "i").exec(match[0])?.[2] ?? "");
+    if (metaAttribute("http-equiv").toLowerCase() !== "refresh") continue;
+    const content = metaAttribute("content");
+    if (/^\s*\d+(?:\.\d+)?\s*;\s*url\s*=\s*['"]?[^\s]*[?&]bm-verify=/i.test(content))
+      throw new ProviderAdapterFailure("permission_denied", false);
+  }
   const observedAt = new Date().toISOString(),
     resultBlockPattern = new RegExp(
       "<div\\b(?=[^>]*data-component-type=[\"']s-search-result[\"'])" +

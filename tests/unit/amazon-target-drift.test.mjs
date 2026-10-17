@@ -81,87 +81,101 @@ test("control rate limit is retained and does not produce target facts", async (
   );
 });
 
-test("a proven healthy control keeps the source circuit healthy while its required target still fails", async () => {
-  const f = fetcherFor(good),
-    adapter = new AmazonProductSearchAdapter(f.fetcher),
-    statements = [];
-  const provider = {
-    id: "55555555-5555-4555-8555-555555555554",
-    code: "amazon_product",
-    access_mode: "public_page",
-    target_url: "https://www.amazon.com/s",
-    parser_version: "amazon-public-product-v5",
-    timeout_ms: 20000,
-    fields_json: ["title"],
-    status: "enabled",
-    terms_review_status: "approved",
-    terms_version: "test-only",
-    terms_expires_at: "2099-08-31T00:00:00Z",
-    circuit_failure_threshold: 5,
-    created_by: "66666666-6666-4666-8666-666666666666",
-    version: 1,
-  };
-  const c = {
-    beginTransaction: async () => {},
-    commit: async () => {},
-    rollback: async () => {},
-    release() {},
-    query: async (sql, values) => {
-      statements.push([sql, values]);
-      if (sql.startsWith("SELECT * FROM providers")) return [[provider]];
-      if (sql.startsWith("SELECT state,")) return [[], []];
-      return [{ affectedRows: 1 }];
-    },
-  };
-  const executor = new ProviderSourceExecutor(
-    {
-      getConnection: async () => c,
-      query: async (sql) =>
-        sql.includes("FROM providers p") ? [[provider]] : [{ affectedRows: 1 }],
-    },
-    { collect: async (req) => adapter.collect(req, AbortSignal.timeout(1000)) },
-    {
-      persist: async () => {
-        throw new Error("target facts must not be persisted");
-      },
-    },
-    "worker-test",
-    undefined,
-    async () => new Response("User-agent: *\nAllow: /"),
-  );
-  await assert.rejects(
-    () =>
-      executor.execute(
-        {
-          id: "33333333-3333-4333-8333-333333333335",
-          organizationId: "11111111-1111-4111-8111-111111111111",
-          workspaceId: "22222222-2222-4222-8222-222222222222",
-          attemptCount: 1,
-          requestId: "target-test",
-          traceId: "target-test",
-          leaseToken: "unused",
-          subqueries: [
-            {
-              id: "44444444-4444-4444-8444-444444444444",
-              providerId: provider.id,
-              ordinal: 0,
-              required: true,
-              target: request.target,
-            },
-          ],
+for (const denied of [false, true]) {
+  test(
+    denied
+      ? "verification access denial records a failure but never pauses for parser drift"
+      : "a proven healthy control keeps the source circuit healthy while its required target still fails",
+    async () => {
+      const f = denied
+          ? {
+              fetcher: async () =>
+                new Response(
+                  '<html><head><meta http-equiv="refresh" content="5; URL=/s?bm-verify=synthetic-test-only"></head></html>',
+                ),
+            }
+          : fetcherFor(good),
+        adapter = new AmazonProductSearchAdapter(f.fetcher),
+        statements = [];
+      const provider = {
+        id: "55555555-5555-4555-8555-555555555554",
+        code: "amazon_product",
+        access_mode: "public_page",
+        target_url: "https://www.amazon.com/s",
+        parser_version: "amazon-public-product-v5",
+        timeout_ms: 20000,
+        fields_json: ["title"],
+        status: "enabled",
+        terms_review_status: "approved",
+        terms_version: "test-only",
+        terms_expires_at: "2099-08-31T00:00:00Z",
+        circuit_failure_threshold: 5,
+        created_by: "66666666-6666-4666-8666-666666666666",
+        version: 1,
+      };
+      const c = {
+        beginTransaction: async () => {},
+        commit: async () => {},
+        rollback: async () => {},
+        release() {},
+        query: async (sql, values) => {
+          statements.push([sql, values]);
+          if (sql.startsWith("SELECT * FROM providers")) return [[provider]];
+          if (sql.startsWith("SELECT state,")) return [[], []];
+          return [{ affectedRows: 1 }];
         },
-        async () => {},
-      ),
-    { code: "parse_failed" },
+      };
+      const executor = new ProviderSourceExecutor(
+        {
+          getConnection: async () => c,
+          query: async (sql) =>
+            sql.includes("FROM providers p") ? [[provider]] : [{ affectedRows: 1 }],
+        },
+        { collect: async (req) => adapter.collect(req, AbortSignal.timeout(1000)) },
+        {
+          persist: async () => {
+            throw new Error("target facts must not be persisted");
+          },
+        },
+        "worker-test",
+        undefined,
+        async () => new Response("User-agent: *\nAllow: /"),
+      );
+      await assert.rejects(
+        () =>
+          executor.execute(
+            {
+              id: "33333333-3333-4333-8333-333333333335",
+              organizationId: "11111111-1111-4111-8111-111111111111",
+              workspaceId: "22222222-2222-4222-8222-222222222222",
+              attemptCount: 1,
+              requestId: "target-test",
+              traceId: "target-test",
+              leaseToken: "unused",
+              subqueries: [
+                {
+                  id: "44444444-4444-4444-8444-444444444444",
+                  providerId: provider.id,
+                  ordinal: 0,
+                  required: true,
+                  target: request.target,
+                },
+              ],
+            },
+            async () => {},
+          ),
+        { code: denied ? "permission_denied" : "parse_failed" },
+      );
+      const runtime = statements.find(([sql]) =>
+        sql.startsWith("INSERT INTO provider_runtime_circuits"),
+      );
+      assert.equal(runtime[1][1], "closed");
+      assert.equal(runtime[1][2], denied ? 1 : 0);
+      assert.equal(runtime[1][4], denied ? "permission_denied" : null);
+      assert.equal(
+        statements.some(([sql]) => sql.includes("SET status='disabled'")),
+        false,
+      );
+    },
   );
-  const runtime = statements.find(([sql]) =>
-    sql.startsWith("INSERT INTO provider_runtime_circuits"),
-  );
-  assert.equal(runtime[1][1], "closed");
-  assert.equal(runtime[1][2], 0);
-  assert.equal(runtime[1][4], null);
-  assert.equal(
-    statements.some(([sql]) => sql.includes("SET status='disabled'")),
-    false,
-  );
-});
+}
