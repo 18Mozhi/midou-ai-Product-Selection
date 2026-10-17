@@ -303,10 +303,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(routes, /opportunities\/batch[\s\S]*evidence-completion-tasks/);
   assert.match(routes, /opportunity:decide/);
   const webContract = `${web}\n${listWeb}\n${decisionWeb}`;
-  assert.match(
-    web,
-    /<RouterLink\b(?=[^>]*class="[^"]*\bprimary\b[^"]*")(?=[^>]*to="\/opportunities\/start")[^>]*>[\s\S]*?创建选品/,
-  );
+  assert.doesNotMatch(web, /to="\/opportunities\/start"/);
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(webContract, new RegExp(state));
   assert.match(webContract, /证据完整度[\s\S]*阻断原因[\s\S]*缺少可采纳证据/);
@@ -324,8 +321,8 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.doesNotMatch(detailInsightsWeb, /达到来源门槛即可进入推荐/);
   assert.match(evidenceWeb, /证据新鲜度：观测于/);
   assert.match(webContract, /阶段[\s\S]*负责人[\s\S]*批量指派[\s\S]*批量复核[\s\S]*批量归档/);
-  assert.match(webContract, /创建补采任务/);
-  assert.match(web, /evidence-completion-tasks/);
+  assert.doesNotMatch(webContract, /创建补采任务/);
+  assert.doesNotMatch(web, /evidence-completion-tasks/);
   assert.match(access, /route\.query\.from/);
   assert.match(navigation, /route\.query\.tab[\s\S]*applyListFilters/);
   assert.match(selectionCss, /opportunity-decision-actions[\s\S]*display:\s*flex/);

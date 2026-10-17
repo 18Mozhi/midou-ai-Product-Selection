@@ -10,6 +10,10 @@ export async function buildOpportunityDetailDesignData(repo) {
   const main = (await read("apps/web/src/components/OpportunityWorkspace.vue"))
     .split('<script setup lang="ts">')[1]
     .split("</script>")[0];
+  assert.ok(
+    /function createEvidenceTask\(/.test(main),
+    "manual_evidence_task_surface_retired: this historical P18 data builder is not current product acceptance",
+  );
   const fixture = await read("tests/e2e/ui-phase2-opportunity-contracts.spec.ts"),
     older = await read("tests/e2e/m04-02-opportunities.spec.ts"),
     presentation = await read("apps/web/src/components/opportunity-workspace-presentation.ts"),

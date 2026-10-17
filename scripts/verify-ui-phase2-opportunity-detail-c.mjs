@@ -14,6 +14,10 @@ const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
   hash = (v) => createHash("sha256").update(v).digest("hex");
 assert.ok(process.argv.slice(2).every((v) => v === "--capture"));
 const capture = process.argv.includes("--capture");
+assert.ok(
+  !capture,
+  "manual_evidence_task_surface_retired: historical P18 prototypes cannot be recaptured as current product UI",
+);
 const sources = ["index.html", "data.js", "detail.js", "detail.css"]
   .map((f) => `${relative}/${f}`)
   .concat([

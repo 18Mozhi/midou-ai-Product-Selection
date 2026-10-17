@@ -283,95 +283,38 @@ test("existing evidence task links open the exact task and retain the product co
   );
 });
 
-for (const created of [true, false]) {
-  test(`P18 evidence completion task navigates to the ${created ? "new" : "reused"} task once`, async ({
+for (const status of ["blocked", "in_progress"]) {
+  test(`automatic evidence ${status} is read-only and never creates a manual task`, async ({
     page,
   }) => {
-    const taskId = created
-      ? "00000000-0000-4000-8000-000000000434"
-      : "00000000-0000-4000-8000-000000000435";
-    const bodies: Record<string, unknown>[] = [];
-    let releaseResponse!: () => void;
-    let markRequestStarted!: () => void;
-    const responseGate = new Promise<void>((resolve) => (releaseResponse = resolve));
-    const requestStarted = new Promise<void>((resolve) => (markRequestStarted = resolve));
-    await ready(page, evidence, { adoption_blockers: [blockedEvidence] });
+    const nextAction =
+      status === "in_progress"
+        ? "已进入自动分析队列，可稍后刷新查看证据状态。"
+        : "证据尚未齐备；请检查采集来源和自动分析状态。";
+    await ready(page, evidence, {
+      adoption_blockers: [{ ...blockedEvidence, status, next_action: nextAction }],
+    });
+    let taskWrites = 0;
     await page.route(
       `**/api/v1/opportunities/${opportunityId}/evidence-completion-tasks`,
-      async (route) => {
-        bodies.push(route.request().postDataJSON() as Record<string, unknown>);
-        markRequestStarted();
-        await responseGate;
-        return route.fulfill({
-          status: created ? 201 : 200,
-          json: envelope({ created, task_id: taskId }),
-        });
+      (route) => {
+        taskWrites++;
+        return route.abort();
       },
     );
-
     await page.goto(`/opportunities/${opportunityId}`);
-    const trigger = page.getByRole("button", { name: "创建补采任务", exact: true });
-    await trigger.evaluate((button) => {
-      (button as HTMLButtonElement).click();
-      (button as HTMLButtonElement).click();
-    });
-    await requestStarted;
-    await expect(trigger).toBeDisabled();
-    expect(bodies).toEqual([{ expected_version: base.version }]);
-
-    const response = page.waitForResponse(
-      (candidate) =>
-        candidate
-          .url()
-          .includes(`/api/v1/opportunities/${opportunityId}/evidence-completion-tasks`) &&
-        candidate.request().method() === "POST",
+    await expect(page.locator(".opportunity-decision-gap")).toContainText(nextAction);
+    await expect(page.getByRole("button", { name: "创建补采任务", exact: true })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "查看补采任务", exact: true })).toHaveCount(0);
+    await page.getByText("查看判断条件与补证进度", { exact: true }).click();
+    await expect(page.locator(".opportunity-blocker-details article")).toHaveAttribute(
+      "data-status",
+      status,
     );
-    releaseResponse();
-    await response;
-    await page.waitForURL(
-      (url) =>
-        url.pathname === `/tasks/${taskId}` &&
-        url.searchParams.get("from") === `/opportunities/${opportunityId}`,
-    );
-    expect(bodies).toHaveLength(1);
+    expect(taskWrites).toBe(0);
+    expect(new URL(page.url()).pathname).toBe(`/opportunities/${opportunityId}`);
   });
 }
-
-test("P18 evidence completion task conflict stays on the opportunity and surfaces the hint", async ({
-  page,
-}) => {
-  const bodies: Record<string, unknown>[] = [];
-  await ready(page, evidence, { adoption_blockers: [blockedEvidence] });
-  await page.route(
-    `**/api/v1/opportunities/${opportunityId}/evidence-completion-tasks`,
-    async (route) => {
-      bodies.push(route.request().postDataJSON() as Record<string, unknown>);
-      return route.fulfill({
-        status: 409,
-        json: {
-          error: {
-            code: "version_conflict",
-            message: "机会版本已变化。",
-            action_hint: "机会已变化，请刷新后重新尝试创建补采任务。",
-          },
-          request_id: "p18-evidence-task-conflict",
-          trace_id: "p18-evidence-task-conflict-trace",
-        },
-      });
-    },
-  );
-
-  await page.goto(`/opportunities/${opportunityId}`);
-  const trigger = page.getByRole("button", { name: "创建补采任务", exact: true });
-  await trigger.click();
-  await expect(page.locator(".opportunity-message")).toContainText(
-    "机会已变化，请刷新后重新尝试创建补采任务。",
-  );
-  await expect(page.locator(".opportunity-message")).toContainText("p18-evidence-task-conflict");
-  await expect(trigger).toBeEnabled();
-  expect(bodies).toEqual([{ expected_version: base.version }]);
-  expect(new URL(page.url()).pathname).toBe(`/opportunities/${opportunityId}`);
-});
 
 const nextOpportunityId = "00000000-0000-4000-8000-000000000432";
 const nextOpportunity = {
@@ -1015,7 +958,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("manual-journey-retired-detail-20261017.png", {
+  await expect(page).toHaveScreenshot("automatic-evidence-detail-20261017.png", {
     fullPage: true,
   });
   if ((page.viewportSize()?.width ?? 0) <= 640) {

@@ -12,5 +12,5 @@ test("P18 keeps human adoption behind all five actual quality gates", async () =
   assert.match(source, /opportunityQualityGatesPassed\(qualityGates\.value\)/);
   assert.match(source, /提前人工处理/);
   assert.match(source, /查看每项判断/);
-  assert.match(source, /创建补采任务/);
+  assert.doesNotMatch(source, /createEvidenceTask|创建补采任务/);
 });

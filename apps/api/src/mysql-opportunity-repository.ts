@@ -699,7 +699,10 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           String(automaticEvaluation.status),
         ),
       evidenceInProgress =
-        evidenceBlocked && evidenceTask && !["cancelled"].includes(String(evidenceTask.status)),
+        evidenceBlocked &&
+        (automaticInProgress ||
+          scoreInProgress ||
+          (evidenceTask && !["cancelled", "completed"].includes(String(evidenceTask.status)))),
       redecisionReady = Boolean(
         evidenceTask &&
         String(evidenceTask.status) === "completed" &&
@@ -717,11 +720,14 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           status: evidenceBlocked ? (evidenceInProgress ? "in_progress" : "blocked") : "cleared",
           progress_percent: evidenceTask ? Number(evidenceTask.progress_percent ?? 0) : null,
           next_action: evidenceBlocked
-            ? evidenceTask
-              ? String(evidenceTask.status) === "completed"
-                ? "补采任务已完成，等待评分结果。"
-                : "继续完成补采任务。"
-              : "创建补采任务并补齐真实证据。"
+            ? (automaticGuidance ??
+              (automaticInProgress || scoreInProgress
+                ? "已进入自动分析队列，可稍后刷新查看证据状态。"
+                : evidenceTask
+                  ? String(evidenceTask.status) === "completed"
+                    ? "补采任务已完成，等待评分结果。"
+                    : "历史补采任务尚未完成，可查看任务记录。"
+                  : "证据尚未齐备；请检查采集来源和自动分析状态。"))
             : "证据覆盖阻断已解除。",
           task_id: evidenceTask ? String(evidenceTask.id) : null,
           task_status: evidenceTask ? String(evidenceTask.status) : null,

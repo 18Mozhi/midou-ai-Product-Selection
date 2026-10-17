@@ -11584,7 +11584,9 @@ components:
                         { type: string, enum: [evidence_insufficient, recommendation_insufficient] }
                       status: { type: string, enum: [blocked, in_progress, cleared] }
                       progress_percent: { type: integer, minimum: 0, maximum: 100, nullable: true }
-                      next_action: { type: string }
+                      next_action:
+                        type: string
+                        description: 当前补证或推荐阻断的真实处理指引；自动分析状态和已知失败原因优先，不要求用户创建人工补采任务。历史任务引用仅在已有记录时返回。
                       task_id: { type: string, format: uuid, nullable: true }
                       task_status: { type: string, nullable: true }
                       score_job_status: { type: string, nullable: true }

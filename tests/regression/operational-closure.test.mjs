@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { readArchivedJourneySource } from "../../scripts/lib/retired-journey-surface.mjs";
 
 const read = (path) => readFile(path, "utf8");
 
@@ -82,7 +83,8 @@ test("business operations expose blocking context, safe batch preview and verifi
     notification,
     migrations,
   ] = await Promise.all([
-    read("apps/web/src/components/SelectionJourney.vue"),
+    // Historical journey input only; the current product surface remains retired.
+    readArchivedJourneySource("apps/web/src/components/SelectionJourney.vue"),
     read("apps/web/src/components/TaskWorkspace.vue"),
     read("apps/web/src/components/TaskDetailPanel.vue"),
     read("apps/web/src/components/TaskBatchActions.vue"),
@@ -102,10 +104,8 @@ test("business operations expose blocking context, safe batch preview and verifi
   assert.match(journey, /blocked_owner[\s\S]*blocked_next_step[\s\S]*timeline/);
   for (const token of ["previewBatch", "collection_task_id", "pause", "resume"])
     assert.match(`${task}\n${taskDetail}\n${taskBatch}\n${taskTypes}`, new RegExp(token));
-  assert.match(
-    `${opportunity}\n${opportunityDecision}`,
-    /补证阻断项[\s\S]*emit\('createEvidenceTask'\)[\s\S]*创建补采任务/,
-  );
+  assert.match(opportunityDecision, /补证阻断项/);
+  assert.doesNotMatch(`${opportunity}\n${opportunityDecision}`, /createEvidenceTask|创建补采任务/);
   assert.match(opportunityRepository, /selection_verification[\s\S]*verification_task_id/);
   for (const token of ["evidence_complete", "evidence_total", "rule_version", "basis"])
     assert.match(`${approval}\n${approvalTypes}`, new RegExp(token));

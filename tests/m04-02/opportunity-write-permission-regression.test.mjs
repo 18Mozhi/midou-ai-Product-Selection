@@ -33,7 +33,7 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(workspace, /@reset="resetListFilters"/);
   assert.match(decision, /v-if="canDecide && canAdopt"[\s\S]*aria-label="机会决策操作"/);
   assert.match(decision, /v-else-if="canDecide"[\s\S]*opportunity-decision-waiting/);
-  assert.match(decision, /v-else-if="canDecide"[\s\S]*emit\('createEvidenceTask'\)/);
+  assert.doesNotMatch(decision, /createEvidenceTask|创建补采任务/);
   assert.match(
     styles,
     /@media \(max-width: 1100px\)[\s\S]*\.opportunity-filters[\s\S]*repeat\(2, minmax\(0, 1fr\)\)/,

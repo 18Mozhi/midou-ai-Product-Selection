@@ -5540,6 +5540,25 @@
     "contract": "Compact full-width loading and read failure states at all widths. Original scripts, event/model bindings, GET recovery, permission and retained-snapshot behavior unchanged. No HTTP, schema, config, dependency or runtime consumer change. Frontend publish and refresh only.",
     "verification": "Full organization browser suite: desktop 75 passed; mobile 74 passed, 1 original desktop-only timeout skip. Historical helper targeted 38 passed. No production or daily-100 acceptance claim."
   },
+  "selectionAutomaticEvidenceStatus20261017": {
+    "status": "implemented",
+    "statusDetail": "local_requires_release_and_remaining_goal_acceptance",
+    "requirements": "docs/selection-automatic-evidence-status.md",
+    "routes": ["/opportunities/:opportunityId"],
+    "implementationFiles": [
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/web/src/components/OpportunityDecisionPanel.vue",
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/automatic-selection.css"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-blocking-filter.test.mjs",
+      "tests/unit/retired-evidence-task-entry.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "contract": "Manual evidence-task creation retired from product detail. Existing blocker fields reflect real automatic/score work and preserve failure reasons; completed historical work alone is not active. Historical task links, compatibility endpoint, organization approvals and quality gates remain. OpenAPI next_action synchronized. Frontend and Backend publish plus BaoTa Node restart; no environment/schema/Python/dependency changes.",
+    "verification": "Related Node 82 and full desktop/mobile browser 128 passed with two new permanent dated baselines. API/Backend/Web build and static/budget/docs/realism passed. No production or daily-100 acceptance claim."
+  },
   "selectionPersonalWorkspace20261017": {
     "fullUnitVerification": "docs/selection-full-unit-verification.md records the initial 3156/3159 run, two corrected current audit mappings and a browser launch timeout; targeted 80 checks passed, then a full 3159/3159 run passed with concurrency=4 and zero skips. Existing review approvals and historical images preserved. Six production-network RSS endpoints were fetched and parsed read-only; source approvals remain pending. No application/runtime contract changed or production deployment performed.",
     "evidenceTaskNavigation": "Existing opportunity blocker task links use /tasks/:taskId with the product fullPath in from; task detail accepts strict UUID opportunity detail returns including query/hash and rejects extra nested paths. Existing create/reuse/conflict and task read permission behavior remain. See docs/selection-evidence-task-navigation.md. Frontend only; no new API/schema/config or Node/Python restart.",

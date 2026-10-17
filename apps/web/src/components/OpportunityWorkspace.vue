@@ -352,19 +352,6 @@ async function queueScore() {
     message.value = queueReceipt;
   }
 }
-async function createEvidenceTask() {
-  if (!detail.value) return;
-  const result = await write(`/opportunities/${detail.value.id}/evidence-completion-tasks`, {
-    expected_version: detail.value.version,
-  });
-  if (result) {
-    await load();
-    message.value = result.created
-      ? "补数任务已创建；完成任务后系统会自动重新评分。"
-      : "该机会已有补数任务，已保留原任务与审计链。";
-    await router.push({ path: `/tasks/${result.task_id}`, query: { from: route.fullPath } });
-  }
-}
 function openBatch(action: "assign" | "archive" | "review") {
   if (!currentPageSelectedItems.value.length) return;
   batchAction.value = action;
@@ -622,7 +609,6 @@ useOpportunityWorkspaceLifecycle({
               :busy="busy"
               :can-decide="canDecide"
               @decide="startDecision"
-              @create-evidence-task="createEvidenceTask"
             />
             <section
               v-if="detail.selection_stage !== 'recommended'"

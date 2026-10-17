@@ -20,7 +20,6 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{
   decide: [action: "adopt" | "observe" | "reject"];
-  createEvidenceTask: [];
 }>();
 const route = useRoute();
 const unresolvedBlockers = computed(() =>
@@ -104,7 +103,7 @@ const recommendationCopy = computed(() =>
     >
       <span>
         <b>当前无需你处理</b>
-        <small>系统会继续采集和计算；只有显示“建议采纳”后才进入你的最终采纳队列。</small>
+        <small>证据齐备并通过评分后，会更新选品建议；当前处理状态见下方。</small>
       </span>
       <details>
         <summary>提前人工处理</summary>
@@ -126,14 +125,7 @@ const recommendationCopy = computed(() =>
         v-if="unresolvedBlockers[0]?.task_id"
         :to="{ path: `/tasks/${unresolvedBlockers[0].task_id}`, query: { from: route.fullPath } }"
         >查看补采任务</RouterLink
-      ><button
-        v-else-if="canDecide"
-        type="button"
-        :disabled="busy"
-        @click="emit('createEvidenceTask')"
       >
-        创建补采任务
-      </button>
     </section>
     <details v-if="detail.adoption_blockers?.length" class="opportunity-blocker-details">
       <summary>查看判断条件与补证进度</summary>

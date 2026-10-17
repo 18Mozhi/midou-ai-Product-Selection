@@ -42,6 +42,104 @@ const row = {
   updated_at: "2026-08-20T00:00:00.000Z",
 };
 
+for (const status of [
+  "queued",
+  "leased",
+  "retry_scheduled",
+  "waiting_profit",
+  "failed_terminal",
+  "succeeded",
+]) {
+  test(`evidence blocker reflects automatic evaluation ${status} without a human task`, async () => {
+    const statements = [];
+    const repository = new MySqlOpportunityRepository({
+      query: async (sql) => {
+        statements.push(sql);
+        if (sql.includes("FROM opportunities o")) return [[row], []];
+        if (sql.includes("FROM automatic_selection_evaluations"))
+          return [[{ status, result_json: "{}" }], []];
+        return [[], []];
+      },
+    });
+    const detail = await repository.get({ ...scope, opportunityId: row.id });
+    const active = ["queued", "leased", "retry_scheduled", "waiting_profit"].includes(status);
+    assert.equal(detail.adoption_blockers[0].status, active ? "in_progress" : "blocked");
+    assert.equal(detail.adoption_blockers[0].task_id, null);
+    assert.equal(detail.adoption_blockers[0].progress_percent, null);
+    assert.equal(
+      detail.adoption_blockers[0].next_action,
+      active
+        ? "已进入自动分析队列，可稍后刷新查看证据状态。"
+        : "证据尚未齐备；请检查采集来源和自动分析状态。",
+    );
+    assert.ok(statements.every((sql) => sql.startsWith("SELECT")));
+  });
+}
+
+test("evidence blocker keeps the actual automatic failure reason instead of asking for manual task creation", async () => {
+  const repository = new MySqlOpportunityRepository({
+    query: async (sql) => {
+      if (sql.includes("FROM opportunities o")) return [[row], []];
+      if (sql.includes("FROM automatic_selection_evaluations"))
+        return [
+          [
+            {
+              status: "retry_scheduled",
+              last_error_code: "amazon_product_evidence_missing",
+              result_json: "{}",
+            },
+          ],
+          [],
+        ];
+      return [[], []];
+    },
+  });
+  const detail = await repository.get({ ...scope, opportunityId: row.id });
+  assert.equal(detail.adoption_blockers[0].next_action, "等待 Amazon 商品页证据。");
+  assert.equal(detail.adoption_blockers[0].status, "in_progress");
+});
+
+test("completed historical work is not an active evidence job without pending analysis", async () => {
+  const repository = new MySqlOpportunityRepository({
+    query: async (sql) => {
+      if (sql.includes("FROM opportunities o")) return [[row], []];
+      if (sql.includes("FROM tasks WHERE"))
+        return [
+          [
+            {
+              id: "00000000-0000-4000-8000-000000000425",
+              status: "completed",
+              progress_percent: 100,
+            },
+          ],
+          [],
+        ];
+      return [[], []];
+    },
+  });
+  const detail = await repository.get({ ...scope, opportunityId: row.id });
+  assert.equal(detail.adoption_blockers[0].status, "blocked");
+  assert.equal(detail.adoption_blockers[0].task_id, "00000000-0000-4000-8000-000000000425");
+  assert.equal(detail.adoption_blockers[0].progress_percent, 100);
+  assert.equal(detail.redecision_ready, false);
+});
+
+test("existing evidence releases its blocker independently of the automatic queue state", async () => {
+  const repository = new MySqlOpportunityRepository({
+    query: async (sql) => {
+      if (sql.includes("FROM opportunities o"))
+        return [[{ ...row, evidence_count: 2, coverage_status: "partial" }], []];
+      if (sql.includes("FROM automatic_selection_evaluations"))
+        return [[{ status: "queued", result_json: "{}" }], []];
+      return [[], []];
+    },
+  });
+  const detail = await repository.get({ ...scope, opportunityId: row.id });
+  assert.equal(detail.adoption_blockers[0].status, "cleared");
+  assert.equal(detail.adoption_blockers[0].next_action, "证据覆盖阻断已解除。");
+  assert.equal(detail.adoption_blockers[1].status, "in_progress");
+});
+
 test("opportunity blocker filters reuse the persisted adoption guard facts", async () => {
   const statements = [];
   const repository = new MySqlOpportunityRepository({

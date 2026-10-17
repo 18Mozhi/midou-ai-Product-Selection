@@ -57,7 +57,6 @@
 .opportunity-workspace--review
   :is(
     .opportunity-decision-summary button,
-    .opportunity-decision-gap button,
     .opportunity-tabs button,
     .opportunity-overview button,
     .opportunity-section button,
@@ -374,7 +373,7 @@
     flex-direction: column;
   }
   .opportunity-workspace--review .opportunity-decision-actions button,
-  .opportunity-workspace--review .opportunity-decision-gap :is(button, a) {
+  .opportunity-workspace--review .opportunity-decision-gap a {
     width: 100%;
   }
   .opportunity-workspace--review .opportunity-tabs {
@@ -880,8 +879,7 @@
   border-top: 1px solid var(--selection-line);
 }
 
-.opportunity-workspace .opportunity-decision-gap a,
-.opportunity-workspace .opportunity-decision-gap button {
+.opportunity-workspace .opportunity-decision-gap a {
   min-height: 38px;
   padding: 0 13px;
   border: 1px solid var(--selection-line);
@@ -1214,8 +1212,7 @@
     align-items: stretch;
     flex-direction: column;
   }
-  .opportunity-workspace .opportunity-decision-gap a,
-  .opportunity-workspace .opportunity-decision-gap button {
+  .opportunity-workspace .opportunity-decision-gap a {
     width: 100%;
     text-align: center;
   }
