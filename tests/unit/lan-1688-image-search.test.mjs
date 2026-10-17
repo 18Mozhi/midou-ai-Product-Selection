@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   Lan1688ImageSearch,
   LAN_1688_ENDPOINTS,
+  LAN_1688_RESULT_LIMIT,
   parseLan1688Result,
 } from "../../apps/worker/dist/lan-1688-image-search.js";
 import { MySqlSourcingProjectionWorker } from "../../apps/worker/dist/sourcing-projection-worker.js";
@@ -26,6 +27,41 @@ const result = {
     },
   ],
 };
+const fullPage = {
+  ...result,
+  items: Array.from({ length: 60 }, (_, index) => ({
+    ...result.items[0],
+    offerId: String(835520608338 + index),
+  })),
+};
+
+test("1688 retains a full verified page and rejects an over-limit response", async () => {
+  const client = new Lan1688ImageSearch("test-only", 1000, async (_url, options) => {
+    assert.equal(JSON.parse(options.body).result_limit, 60);
+    return Response.json(fullPage);
+  });
+  const collected = await client.collect(image, async () => {});
+  assert.equal(LAN_1688_RESULT_LIMIT, 60);
+  assert.equal(collected.records.length, 60);
+  assert.equal(new Set(collected.records.map((record) => record.externalId)).size, 60);
+  assert.equal(collected.records[59].payload.fields.monthly_sales, null);
+  assert.equal(collected.records[59].payload.fields.price_description, "新人价");
+  const last = collected.records[59].payload,
+    raw = JSON.parse(last.raw_content);
+  assert.equal(last.source_paths.title, "$.title");
+  assert.equal(last.source_paths.quoted_price, "$.price");
+  assert.equal(last.source_paths.external_id, "$.offerId");
+  assert.equal(raw[last.source_paths.title.slice(2)], last.fields.title);
+  assert.equal(Number(raw[last.source_paths.quoted_price.slice(2)]), last.fields.quoted_price);
+  assert.equal(last.source_paths.currency, "$", "fixed currency is derived from the offer context");
+  assert.equal(last.source_paths.sku_id, "$", "absent fields must not claim a raw key exists");
+  assert.throws(() =>
+    parseLan1688Result(
+      { ...fullPage, items: [...fullPage.items, fullPage.items[0]] },
+      "2026-10-17",
+    ),
+  );
+});
 test("1688 keeps actual quote qualifications and unknown fields", () => {
   const [record] = parseLan1688Result(result, "2026-10-16T00:00:00.000Z");
   assert.equal(record.payload.fields.quoted_price, 3.8);
@@ -37,7 +73,7 @@ test("1688 keeps actual quote qualifications and unknown fields", () => {
   assert.throws(() => parseLan1688Result({ success: false, items: [] }, "2026-10-16"));
   assert.throws(() => parseLan1688Result({ success: true, items: [{}] }, "2026-10-16"));
 });
-test("1688 rotates nodes and fails over without changing the request contract", async () => {
+test("1688 rotates nodes and fails over with the same four request fields", async () => {
   const calls = [];
   let heartbeats = 0;
   const client = new Lan1688ImageSearch("test-only", 1000, async (url, options) => {
@@ -62,7 +98,7 @@ test("1688 rotates nodes and fails over without changing the request contract", 
     image_url: image,
     begin_page: 1,
     page_size: 60,
-    result_limit: 10,
+    result_limit: 60,
   });
   assert.equal(heartbeats, 3);
 });
@@ -209,7 +245,7 @@ test("LAN JSON evidence is never labelled as a browser DOM capture", async () =>
       },
     }),
   };
-  const client = new Lan1688ImageSearch("test-only", 1000, async () => Response.json(result));
+  const client = new Lan1688ImageSearch("test-only", 1000, async () => Response.json(fullPage));
   const executor = new ProviderSourceExecutor(
     pool,
     registry,
@@ -237,11 +273,20 @@ test("LAN JSON evidence is never labelled as a browser DOM capture", async () =>
     },
     async () => {},
   );
-  assert.equal(stored.length, 1);
+  assert.equal(stored.length, 60);
   assert.equal(stored[0].parserVersion, "1688-lan-image-v1");
   assert.equal(stored[0].adapterVersion, "1688-lan-image-v1");
   assert.equal(stored[0].contentType, "application/json");
   assert.match(stored[0].content.toString(), /新人价/);
+  for (const evidence of stored) {
+    const price = evidence.provenance.find((item) => item.fieldPath === "quoted_price");
+    assert.equal(price.sourcePath, "$.price");
+    assert.equal(price.transformVersion, "1688-lan-image-v1");
+    assert.equal(
+      Number(JSON.parse(evidence.content).price),
+      evidence.normalizedPayload.quoted_price,
+    );
+  }
 });
 test("image searches dispatch only to enabled 1688 and never silently substitute another supplier", async () => {
   const calls = [];

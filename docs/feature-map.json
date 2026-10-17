@@ -5594,5 +5594,19 @@
       "tests/unit/responsive-detail-palette-contract.test.mjs"
     ],
     "contract": "Top scope steps and full-width organization/workspace lists; three-step introduction now follows intelligence, main product plus 5-10 related competitors and scoring, then specific 1688 sourcing/library. Component scripts/templates unchanged. Original isolation, archived-workspace disabling, context writes, personal-space creation, safe return and local-only onboarding state preserved. No backend, API, schema, permission, config or dependency change."
+  },
+  "selectionLanCandidateCoverage20261017": {
+    "status": "implemented",
+    "statusDetail": "six_real_appliances_verified_not_deployed",
+    "requirements": "docs/selection-lan-candidate-coverage.md",
+    "implementationFiles": ["apps/worker/src/lan-1688-image-search.ts"],
+    "testFiles": [
+      "tests/unit/lan-1688-image-search.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/unit/supply-title-classification.test.mjs",
+      "tests/unit/selection-pipeline-completion.test.mjs"
+    ],
+    "contract": "Same four LAN POST fields; first page, page_size 60, result_limit increased from 10 to verified capacity 60. Single-page bound, fixed endpoints, per-node busy protection, cancellation, auth failure, redirect rejection and 2MiB bound preserved. All 60 records persist through the existing executor. Provenance paths now resolve against each stored offer JSON rather than the absent page envelope; observed fields bind actual keys and derived/missing fields bind row context. No historical rewrite; unchanged evidence schema/parser and sourcing consumers. Existing identity, newcomer-price exclusion and completion gates remain. No API field, config, dependency, schema or Python change. BaoTa Node restart required after approved release.",
+    "verification": "102 related checks and Worker/Backend builds passed; current compiled client independently reached each of six appliances once, returning 60 records with 60 within-appliance distinct IDs. Real fixed parser sample: 60 offers, 1680 source paths resolved with zero missing paths. No cross-appliance uniqueness, exact SKU match, production source activation or daily-100 claim."
   }
 }

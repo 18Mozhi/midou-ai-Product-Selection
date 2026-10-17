@@ -28,6 +28,10 @@
 
 ## 使用与部署
 
+后续LAN候选覆盖实测：当前编译客户端以result_limit 60逐台访问221–226，每台60条、台内60个不同货源、无故障切换，耗时1292–6282ms，见 `docs/selection-lan-candidate-coverage.md`。这只证明单页传输、解析和有界容量；来源开关未改，规格匹配、生产任务及持续每日百品仍未验收。
+
+本轮再次读取公开版本接口，线上build_sha仍为 `c26e2b522bc616cbc2a67b01185d832f93789174`。字段路径修复后另取真实60条验证，1680个路径均可定位；只读探针已结束，不代表生产运行包已更新。
+
 没有新增环境变量、依赖、数据库迁移或 HTTP 字段；现有 `AI_TIMEOUT_MS`、模型受限配置、来源开关/审批、采集限速和既有重试继续生效。AI 地址、名称和密钥不会发送到浏览器。需要按项目发布门禁从本地构建上传运行包，之后由宝塔重启 Node 项目 `ai选品`：
 
 `/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py nodejs ai选品`

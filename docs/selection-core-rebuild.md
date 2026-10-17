@@ -41,7 +41,7 @@
 
 ## 使用与运行
 
-在宝塔受限 `product_scout.env` 中设置 `LAN_1688_TOKEN` 为用户提供的固定授权值；示例文件保持空白，密钥不得提交、回显或进入浏览器。`LAN_1688_TIMEOUT_MS=45000` 是单节点请求超时，可在 1000–60000 毫秒调整。六个地址及 POST 路径固定，翻页 1、page_size 60、result_limit 10 沿用用户示例。
+在宝塔受限 `product_scout.env` 中设置 `LAN_1688_TOKEN` 为用户提供的固定授权值；示例文件保持空白，密钥不得提交、回显或进入浏览器。`LAN_1688_TIMEOUT_MS=45000` 是单节点请求超时，可在 1000–60000 毫秒调整。六个地址及 POST 路径固定，翻页1、page_size 60；result_limit经实际服务验证由10扩大为60，保持四字段请求和单次有界采集。见 `docs/selection-lan-candidate-coverage.md`。
 
 需要启用既有 `1688_search` 来源并配置有效运行环境。启用与启用状态回滚检查服务端 LAN 授权配置，不再要求旧 Cookie/DOM 验收；旧浏览器诊断仍独立保留。关键词情报调度不再向 1688 派发无图搜索，正常找货缺图不回退浏览器。见 `docs/selection-lan-source-enablement.md`。配置在进程启动时读取；部署后由宝塔重启唯一 Node 项目 `ai选品`，命令 `/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py nodejs ai选品`。无需新服务、依赖、数据库迁移或 Python 重启。当前尚未部署，不代表线上已经采用新界面或新通道。
 
@@ -122,3 +122,4 @@
 - 个人中心移除旧色块横幅与六宫格导航，改为紧凑页头、分区标签和全宽权限/设备/资产正文；资料、通知、会话及账号隔离合同保留。见 `docs/selection-personal-workspace.md`；未部署，全站与真实百品验收仍需继续。
 - 登录、注册、邮箱验证、密码找回/重置及MFA改为共享紧凑单列工作区，六套旧样式退役；认证组件及请求、安全步骤不变。见 `docs/selection-identity-workspace.md`；未部署，组织选择/引导及真实持续百品仍需继续。
 - 组织选择改为顶部步骤及全宽目录，删除共享CSS中70个旧选择器；三步引导改讲情报、主品/5–10竞品评分及1688/选品库，移除旧团队任务教学。见 `docs/selection-entry-workspace.md`；未部署，全站收尾与真实持续百品仍需继续。
+- 当前LAN客户端单页候选由10扩大至60，六台实际逐次验证均返回60个台内不同货源；修复单条原始JSON仍引用整页的字段路径，真实60条的1680个路径均可定位，报价资格和匹配门槛保留。见 `docs/selection-lan-candidate-coverage.md`；未部署，不等于跨设备360个不同货源或真实每日百品达标。

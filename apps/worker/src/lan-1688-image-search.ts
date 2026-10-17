@@ -5,6 +5,8 @@ export const LAN_1688_ENDPOINTS = Object.freeze(
   Array.from({ length: 6 }, (_, index) => `http://192.168.1.${221 + index}:8880/1688/image-search`),
 );
 export const LAN_1688_PARSER_VERSION = "1688-lan-image-v1";
+// Verified service page capacity; retain one bounded request per collection.
+export const LAN_1688_RESULT_LIMIT = 60;
 const object = (value: unknown): Record<string, unknown> => {
   if (!value || typeof value !== "object" || Array.isArray(value))
     throw new ProviderAdapterFailure("invalid_payload", false);
@@ -19,9 +21,13 @@ const numeric = (value: unknown) => {
 
 export function parseLan1688Result(payload: unknown, observedAt: string): ProviderRawRecord[] {
   const response = object(payload);
-  if (response.success !== true || !Array.isArray(response.items) || response.items.length > 60)
+  if (
+    response.success !== true ||
+    !Array.isArray(response.items) ||
+    response.items.length > LAN_1688_RESULT_LIMIT
+  )
     throw new ProviderAdapterFailure("invalid_payload", false);
-  return response.items.map((raw, index) => {
+  return response.items.map((raw) => {
     const item = object(raw),
       id = string(item.offerId),
       title = string(item.title);
@@ -59,7 +65,22 @@ export function parseLan1688Result(payload: unknown, observedAt: string): Provid
       observed_at: observedAt,
     };
     const rawContent = JSON.stringify(item);
-    const paths = Object.fromEntries(Object.keys(fields).map((key) => [key, `$.items[${index}]`]));
+    // raw_content stores this offer, not the whole response envelope. Derived
+    // values bind to the row context; observed fields bind to their actual key.
+    const rawKeys: Record<string, string> = {
+      external_id: "offerId",
+      supplier_name: "shop_name",
+      quoted_price: "price",
+      moq: "min_order_quantity",
+      canonical_url: "offerId",
+    };
+    const derived = new Set(["record_type", "supplier_id", "currency", "location", "observed_at"]);
+    const paths = Object.fromEntries(
+      Object.keys(fields).map((key) => {
+        const rawKey = rawKeys[key] ?? key;
+        return [key, !derived.has(key) && Object.hasOwn(item, rawKey) ? `$.${rawKey}` : "$"];
+      }),
+    );
     return {
       externalId: `1688-search:${id}`,
       observedAt,
@@ -122,7 +143,7 @@ export class Lan1688ImageSearch {
             image_url: url.toString(),
             begin_page: 1,
             page_size: 60,
-            result_limit: 10,
+            result_limit: LAN_1688_RESULT_LIMIT,
           }),
         });
         if (response.status === 401 || response.status === 403) {
