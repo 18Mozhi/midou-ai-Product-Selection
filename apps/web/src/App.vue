@@ -7,12 +7,24 @@ import { publicConfig } from "./config";
 const VerificationFramework = import.meta.env.DEV
   ? defineAsyncComponent(() => import("./components/VerificationFramework.vue"))
   : null;
-const ConfigBoundary = asyncSurface(() => import("./components/ConfigBoundary.vue"));
-const RedisFoundation = asyncSurface(() => import("./components/RedisFoundation.vue"));
-const MySqlFoundation = asyncSurface(() => import("./components/MySqlFoundation.vue"));
-const ApiFoundation = asyncSurface(() => import("./components/ApiFoundation.vue"));
-const FileAuditFoundation = asyncSurface(() => import("./components/FileAuditFoundation.vue"));
-const DeploymentFoundation = asyncSurface(() => import("./components/DeploymentFoundation.vue"));
+const ConfigBoundary = import.meta.env.DEV
+  ? asyncSurface(() => import("./components/ConfigBoundary.vue"))
+  : null;
+const RedisFoundation = import.meta.env.DEV
+  ? asyncSurface(() => import("./components/RedisFoundation.vue"))
+  : null;
+const MySqlFoundation = import.meta.env.DEV
+  ? asyncSurface(() => import("./components/MySqlFoundation.vue"))
+  : null;
+const ApiFoundation = import.meta.env.DEV
+  ? asyncSurface(() => import("./components/ApiFoundation.vue"))
+  : null;
+const FileAuditFoundation = import.meta.env.DEV
+  ? asyncSurface(() => import("./components/FileAuditFoundation.vue"))
+  : null;
+const DeploymentFoundation = import.meta.env.DEV
+  ? asyncSurface(() => import("./components/DeploymentFoundation.vue"))
+  : null;
 const LocalIdentity = asyncSurface(() => import("./components/LocalIdentity.vue"));
 const TenancyChooser = asyncSurface(() => import("./components/TenancyChooser.vue"));
 const AuthorizationCenter = asyncSurface(() => import("./components/AuthorizationCenter.vue"));
@@ -83,12 +95,27 @@ const isNotFoundRoute = computed(
     :is="VerificationFramework"
     v-else-if="VerificationFramework && selectedView === 'verification'"
   />
-  <ConfigBoundary v-else-if="selectedView === 'config'" :api-base-url="apiBase" />
-  <RedisFoundation v-else-if="selectedView === 'redis'" />
-  <MySqlFoundation v-else-if="selectedView === 'mysql'" />
-  <ApiFoundation v-else-if="selectedView === 'api'" :api-base-url="apiBase" />
-  <FileAuditFoundation v-else-if="selectedView === 'file-audit'" />
-  <DeploymentFoundation v-else-if="selectedView === 'deployment'" :api-base-url="apiBase" />
+  <component
+    :is="ConfigBoundary"
+    v-else-if="ConfigBoundary && selectedView === 'config'"
+    :api-base-url="apiBase"
+  />
+  <component :is="RedisFoundation" v-else-if="RedisFoundation && selectedView === 'redis'" />
+  <component :is="MySqlFoundation" v-else-if="MySqlFoundation && selectedView === 'mysql'" />
+  <component
+    :is="ApiFoundation"
+    v-else-if="ApiFoundation && selectedView === 'api'"
+    :api-base-url="apiBase"
+  />
+  <component
+    :is="FileAuditFoundation"
+    v-else-if="FileAuditFoundation && selectedView === 'file-audit'"
+  />
+  <component
+    :is="DeploymentFoundation"
+    v-else-if="DeploymentFoundation && selectedView === 'deployment'"
+    :api-base-url="apiBase"
+  />
   <NavigationShell v-else-if="navigationShell" :shell="navigationShell" :api-base-url="apiBase" />
   <AccountShell v-else-if="selectedView === 'account'" :api-base-url="apiBase" />
   <component :is="UiStateShowcase" v-else-if="UiStateShowcase && isUiStatesView" />

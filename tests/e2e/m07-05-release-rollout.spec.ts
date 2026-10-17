@@ -114,14 +114,14 @@ test("M07-05.A07/A08/A15 desktop and 390 rollout truth", async ({ page }) => {
   await expect(page.getByText("发布门已通过")).toBeVisible();
   await expect(page.locator('.platform-secondary-nav a[aria-current="page"]')).toHaveCSS(
     "color",
-    "rgb(9, 108, 85)",
+    "rgb(36, 104, 212)",
   );
   await expect(page.locator('.platform-secondary-nav a[aria-current="page"]')).toHaveCSS(
     "background-color",
     await page.evaluate(() => {
       const probe = document.createElement("i");
-      probe.style.backgroundColor = "var(--so-primary-soft)";
-      document.body.append(probe);
+      probe.style.backgroundColor = "var(--p65-blue-panel)";
+      document.querySelector(".role-shell")!.append(probe);
       const value = getComputedStyle(probe).backgroundColor;
       probe.remove();
       return value;
@@ -129,7 +129,7 @@ test("M07-05.A07/A08/A15 desktop and 390 rollout truth", async ({ page }) => {
   );
   if ((page.viewportSize()?.width ?? 0) > 840) {
     await expect(page.locator(".role-shell")).toHaveCSS("display", "grid");
-    const rail = await page.locator(".role-navigation-frame").boundingBox();
+    const rail = await page.locator(".commerce-sidebar").boundingBox();
     const content = await page.locator(".role-content").boundingBox();
     expect(rail?.width).toBeGreaterThanOrEqual(200);
     expect((rail?.x ?? 0) + (rail?.width ?? 0)).toBeLessThanOrEqual(content?.x ?? 0);
@@ -137,13 +137,19 @@ test("M07-05.A07/A08/A15 desktop and 390 rollout truth", async ({ page }) => {
   }
   await expect(page.locator("#p65-actions").getByText("1.3 秒", { exact: true })).toBeVisible();
   await expect(page.locator("#p65-actions").getByText("2.5 秒", { exact: true })).toBeVisible();
-  await expect(page).toHaveScreenshot("m07-05-release-rollout-desktop.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("m07-05-release-rollout-commerce-20261018-desktop.png", {
+    fullPage: true,
+  });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.locator(".role-shell")).toHaveCSS("display", "block");
   await expect(page.locator(".role-sidebar")).toBeHidden();
-  await expect(page.locator(".role-context-rail")).toHaveCSS("display", "none");
-  await expect(page.locator(".role-context-drawer")).toHaveCSS("display", "block");
+  await expect(page.locator(".role-context-rail")).toHaveCount(0);
+  await expect(page.locator(".role-context-drawer")).toHaveCount(0);
+  await expect(page.locator(".commerce-sidebar")).toBeHidden();
+  await expect(page.getByRole("button", { name: "打开导航菜单" })).toBeVisible();
+  const compactHero = await page.locator(".release-center--c .hero").boundingBox();
+  expect(compactHero?.height).toBeLessThan(180);
   await expect(page.locator(".role-mobile-nav")).toHaveCSS("position", "fixed");
   await expect(page.getByRole("heading", { name: "历史观察门指标" })).toBeVisible();
   await page.getByRole("button", { name: /^5% · 已通过/ }).click();
@@ -153,7 +159,9 @@ test("M07-05.A07/A08/A15 desktop and 390 rollout truth", async ({ page }) => {
   await expect(dialog.getByText("gate-5", { exact: true })).toBeVisible();
   await dialog.getByRole("button", { name: "关闭详情" }).click();
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("m07-05-release-rollout-mobile-390.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("m07-05-release-rollout-commerce-20261018-mobile-390.png", {
+    fullPage: true,
+  });
 });
 test("M07-05.A08/A16 empty blocked stale stopped rolled back forbidden expired", async ({
   page,

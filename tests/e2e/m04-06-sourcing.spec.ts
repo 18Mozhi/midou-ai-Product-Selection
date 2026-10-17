@@ -1353,5 +1353,7 @@ test("sourcing workspace uses compact catalogue layout and read-only refresh", a
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);
-  await expect(page).toHaveScreenshot("sourcing-workspace-layout.png", { fullPage: false });
+  await expect(page).toHaveScreenshot("sourcing-workspace-layout-commerce-20261018.png", {
+    fullPage: false,
+  });
 });

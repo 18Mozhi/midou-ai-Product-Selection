@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/ReleaseRolloutCenter.vue": "6a4ddb8162142712f5eebad9421da1b811fa73fef5b02d0db5c1db98d850ce27"
+    "apps/web/src/components/ReleaseRolloutCenter.vue": "4906a373ba76ce762f6f3ff1f5805777e6740a6d847844c7ab83dd38710c2c3c"
   },
   "inputs": {},
   "actions": [
@@ -285,7 +285,7 @@
       "apps/web/src/components/ReleaseRolloutCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/ReleaseRolloutCenter.vue": "6a4ddb8162142712f5eebad9421da1b811fa73fef5b02d0db5c1db98d850ce27"
+      "apps/web/src/components/ReleaseRolloutCenter.vue": "4906a373ba76ce762f6f3ff1f5805777e6740a6d847844c7ab83dd38710c2c3c"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

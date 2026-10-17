@@ -1401,5 +1401,8 @@ footer details span {
   .release-center--c .hero {
     padding: 0;
   }
+  .release-center--c .hero > div {
+    flex: 0 1 auto;
+  }
 }
 </style>

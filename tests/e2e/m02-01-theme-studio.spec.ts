@@ -37,7 +37,7 @@ test("M02-01 theme studio previews and saves theme without changing semantics", 
   await ready(page);
   await page.goto("/settings/theme");
   await expect(page.getByRole("heading", { name: "界面外观" })).toBeVisible();
-  const aurora = page.getByRole("radio", { name: /暮砂/ });
+  const aurora = page.getByRole("radio", { name: /石墨/ });
   await aurora.focus();
   await page.keyboard.press("Enter");
   await expect(aurora).toHaveAttribute("aria-checked", "true");
@@ -72,9 +72,9 @@ test("M02-01 radio groups support arrow and Home/End keyboard navigation", async
   await ready(page);
   await page.goto("/settings/theme");
   const themes = page.getByRole("radiogroup", { name: "界面主题" });
-  const signal = themes.getByRole("radio", { name: /雾林/ });
-  const archive = themes.getByRole("radio", { name: /暮砂/ });
-  const white = themes.getByRole("radio", { name: /晨雾/ });
+  const signal = themes.getByRole("radio", { name: /商务蓝/ });
+  const archive = themes.getByRole("radio", { name: /石墨/ });
+  const white = themes.getByRole("radio", { name: /青蓝/ });
   await signal.focus();
   await page.keyboard.press("ArrowRight");
   await expect(archive).toBeFocused();
@@ -116,11 +116,11 @@ test("M02-01 save locks theme and density choices until the request settles", as
     });
   });
   await page.goto("/settings/theme");
-  await page.getByRole("radio", { name: /晨雾/ }).click();
+  await page.getByRole("radio", { name: /青蓝/ }).click();
   await page.getByRole("button", { name: "保存主题偏好" }).click();
   await expect(page.getByRole("button", { name: "正在保存…" })).toBeDisabled();
   await expect(page.getByRole("button", { name: "撤销主题预览" })).toBeDisabled();
-  await expect(page.getByRole("radio", { name: /暮砂/ })).toBeDisabled();
+  await expect(page.getByRole("radio", { name: /石墨/ })).toBeDisabled();
   await expect(page.getByRole("radiogroup", { name: "页面密度" }).getByRole("radio")).toHaveCount(
     2,
   );

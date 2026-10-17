@@ -103,12 +103,15 @@ const credentialCacheEvictionRoutes = [
   "/platform-admin/providers/sources",
   "/platform-admin/collection/overview",
   "/platform-admin/data",
-  "/platform-admin/governance",
   "/platform-admin/content",
   "/platform-admin/notifications",
   "/platform-admin/commercial",
   "/platform-admin/security",
   "/platform-admin/open-platform",
+  // Account tabs share one cache identity; visit three distinct operations surfaces too.
+  "/platform-admin/status",
+  "/platform-admin/releases",
+  "/platform-admin/topology",
 ];
 async function evictCredentialSurface(page: any) {
   for (const path of credentialCacheEvictionRoutes) await navigatePlatform(page, path);
@@ -174,7 +177,7 @@ test("M03-02.A07/A08/A15 masked credential vault is responsive and visual", asyn
     pageHeader = page.locator(".credential-center > header");
   await expect
     .poll(() => pageHeader.evaluate((element) => getComputedStyle(element).backgroundColor))
-    .toBe("rgb(9, 108, 85)");
+    .toBe("rgb(36, 104, 212)");
   const loginButton = page.getByRole("button", { name: "配置网页登录" });
   await loginButton.click();
   const loginEditor = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" }),
