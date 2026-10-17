@@ -1,3 +1,5 @@
+import { readArchivedTokenVisualInput } from "../fixtures/archived-token-visual-input.mjs";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-organization-reason-contract.mjs";
@@ -14,7 +16,7 @@ const hash = (v) => createHash("sha256").update(v).digest("hex");
 
 test("P36 maps all12 captured child source sites exactly once without counting convenience controls", () => {
   const candidates = scanSource(
-    beforePublishedPresentation(file, readFileSync(file, "utf8")),
+    beforePublishedPresentation(file, readPreSelectionRebuild(file)),
     file,
   ).candidates;
   const signatures = candidates.map((c) => c.candidateId.split("#")[1]).sort();
@@ -131,7 +133,7 @@ test("P36 selection, pressing, busy and approval remain distinct without OS cred
 
 test("P36 capture-time sources and354 images are pinned while original112 images remain unchanged", () => {
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    assertCaptureSourceRevision(f, readFileSync(f, "utf8"), sha);
+    assertCaptureSourceRevision(f, readArchivedTokenVisualInput(f), sha);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   assert.deepEqual(

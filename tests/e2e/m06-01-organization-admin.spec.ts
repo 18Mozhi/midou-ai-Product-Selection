@@ -2773,3 +2773,48 @@ for (const dataView of ["workspaces", "exports"] as const) {
     );
   });
 }
+
+test("organization token workspace keeps full-width ledger and unsubmitted creation draft", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/org-admin/tokens");
+  const tokenRoot = page.locator(".org-token-panel");
+  await expect(tokenRoot).toBeVisible();
+  const tokenIdentity = await tokenRoot.elementHandle();
+  let writes = 0;
+  page.on("request", (request) => {
+    if (
+      new URL(request.url()).pathname.startsWith("/api/v1/org/admin/") &&
+      !["GET", "HEAD"].includes(request.method())
+    )
+      writes += 1;
+  });
+  await page.getByLabel("令牌名称").fill("未提交的只读接入草稿");
+  await page.getByLabel("创建原因").fill("尚未提交的接入原因");
+  const scopeChoice = tokenRoot.locator(".org-token-scope-field input[type=checkbox]").first();
+  await scopeChoice.check();
+  await page.getByLabel("搜索令牌", { exact: true }).fill("月度经营");
+  await expect(page).toHaveURL(/org_token_query=/);
+  await tokenRoot.getByRole("link", { name: "定位创建表单", exact: true }).click();
+  await expect(page).toHaveURL(/#org-token-create$/);
+  await expect(page.getByLabel("令牌名称")).toHaveValue("未提交的只读接入草稿");
+  await expect(page.getByLabel("创建原因")).toHaveValue("尚未提交的接入原因");
+  await expect(scopeChoice).toBeChecked();
+  await expect(page.getByLabel("搜索令牌", { exact: true })).toHaveValue("月度经营");
+  const a = await tokenRoot.locator(".org-token-ledger").boundingBox(),
+    b = await tokenRoot.locator(".org-token-create").boundingBox();
+  expect(Math.abs(a!.width - b!.width)).toBeLessThanOrEqual(1);
+  expect(a!.y + a!.height).toBeLessThanOrEqual(b!.y);
+  await expect
+    .poll(async () => {
+      const box = await tokenRoot.locator(".org-token-create h4").boundingBox();
+      return Boolean(box && box.y >= 60 && box.y < (page.viewportSize()?.height ?? 900) - 44);
+    })
+    .toBe(true);
+  await expect(tokenRoot.locator(".org-token-create")).toHaveCSS("background-image", "none");
+  expect(await tokenIdentity!.evaluate((element) => element.isConnected)).toBe(true);
+  await tokenIdentity!.dispose();
+  expect(writes).toBe(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});

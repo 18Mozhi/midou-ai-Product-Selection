@@ -166,7 +166,7 @@ test("Archived P36 every control/field/composition/implementation image is bound
   assert.deepEqual(build().approvalRecords, ["P36-MOBILE-FILTER-COMPOSITION-APPROVAL.md"]);
 });
 test("Archived P36 historical inert source handler checks preserve original bodies and defect diagnosis", async () => {
-  const data = await buildOrgTokenDesignData(process.cwd());
+  const data = await buildOrgTokenDesignData(process.cwd(), readPreSelectionRebuild);
   assert.deepEqual(Object.keys(data.createBody).sort(), ["name", "reason", "scopes", "ttl_days"]);
   assert.equal(data.actionBodies.length, 2);
   assert.ok(data.sourceChecks.some((v) => v.includes("OG-G05 reproduced")));

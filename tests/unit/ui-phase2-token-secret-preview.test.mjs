@@ -1,3 +1,4 @@
+import { readArchivedTokenVisualInput } from "../fixtures/archived-token-visual-input.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -9,7 +10,7 @@ import { tokenSecretPreview } from "../../scripts/lib/ui-phase2-token-secret-pre
 
 const component = "apps/web/src/components/OrganizationTokenPanel.vue";
 const folder = "output/playwright/p36-secret-vue-preview";
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = readArchivedTokenVisualInput;
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const original = read(component),
   transformed = tokenSecretPreview(original);
@@ -35,7 +36,7 @@ function controls(source) {
   walk(baseParse(parse(source).descriptor.template.content));
   return result.sort();
 }
-test("P36 secret preview preserves complete script, original directives and native actions", () => {
+test("Archived P36 secret preview preserves complete script, original directives and native actions", () => {
   assert.equal(
     parse(original).descriptor.scriptSetup.content,
     parse(transformed).descriptor.scriptSetup.content,
@@ -48,7 +49,7 @@ test("P36 secret preview preserves complete script, original directives and nati
     tokenSecretPreview(original.replace('class="org-token-secret"', 'class="unknown"')),
   );
 });
-test("P36 secret evidence binds current originals and review template, without relabeling approval", () => {
+test("Archived P36 secret evidence binds current originals and review template, without relabeling approval", () => {
   assert.equal(evidence.approval, "pending-user-review");
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.checks.length, 160);
@@ -82,7 +83,7 @@ test("P36 secret evidence binds current originals and review template, without r
   for (const shot of evidence.screenshots)
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);
 });
-test("P36 actual parent creation, clipboard states and dismissal retain bounded contracts", () => {
+test("Archived P36 actual parent creation, clipboard states and dismissal retain bounded contracts", () => {
   for (const run of evidence.runs) {
     const names = evidence.checks
       .filter((check) => check.width === run.width)
@@ -129,7 +130,7 @@ test("P36 actual parent creation, clipboard states and dismissal retain bounded 
     );
   }
 });
-test("P36 existing approved filters, previous source and production imports remain untouched", () => {
+test("Archived P36 existing approved filters, previous source and production imports remain untouched", () => {
   assert.equal(
     hash(readFileSync("output/playwright/p36-fields-review/composition-filters-default-390.png")),
     "1bdc3c39fdc4f85483db1ca9a6d8fb2f24d8000321a118e976515029c9eb154b",

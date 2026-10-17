@@ -1,3 +1,4 @@
+import { readArchivedTokenVisualInput } from "../fixtures/archived-token-visual-input.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -9,7 +10,7 @@ import { tokenListPreview } from "../../scripts/lib/ui-phase2-token-list-preview
 
 const file = "apps/web/src/components/OrganizationTokenPanel.vue";
 const folder = "output/playwright/p36-list-vue-preview";
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = readArchivedTokenVisualInput;
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const original = read(file),
   transformed = tokenListPreview(original),
@@ -44,7 +45,7 @@ function structure(source) {
     filters,
   };
 }
-test("P36 list preview preserves entire script, exact filters, native controls and all directives", () => {
+test("Archived P36 list preview preserves entire script, exact filters, native controls and all directives", () => {
   assert.equal(
     parse(original).descriptor.scriptSetup.content,
     parse(transformed).descriptor.scriptSetup.content,
@@ -57,7 +58,7 @@ test("P36 list preview preserves entire script, exact filters, native controls a
     tokenListPreview(original.replace('class="org-token-ledger"', 'class="unexpected"')),
   );
 });
-test("P36 list capture pins raw current source, transformed template and60 exact screenshots", () => {
+test("Archived P36 list capture pins raw current source, transformed template and60 exact screenshots", () => {
   assert.equal(evidence.kind, "P36-LIST-VUE-PREVIEW-r1");
   assert.equal(evidence.approval, "pending-user-review");
   assert.equal(evidence.processesClosed, true);
@@ -94,7 +95,7 @@ test("P36 list capture pins raw current source, transformed template and60 exact
   for (const shot of evidence.screenshots)
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);
 });
-test("P36 actual pagination and reason-cancel flows stay GET-only with explicit synthetic edge states", () => {
+test("Archived P36 actual pagination and reason-cancel flows stay GET-only with explicit synthetic edge states", () => {
   assert.equal(evidence.fixtureRows.length, 8);
   assert.equal(evidence.fixedTime, "2026-08-26T10:00:00.000Z");
   assert.deepEqual(evidence.supplemental, [
@@ -146,7 +147,7 @@ test("P36 actual pagination and reason-cancel flows stay GET-only with explicit 
     /\.p36-list-preview \.org-token-create \{\s*position: static;/,
   );
 });
-test("P36 approved filter image and production source remain unchanged", () => {
+test("Archived P36 approved filter image and production source remain unchanged", () => {
   assert.equal(
     hash(readFileSync("output/playwright/p36-fields-review/composition-filters-default-390.png")),
     "1bdc3c39fdc4f85483db1ca9a6d8fb2f24d8000321a118e976515029c9eb154b",

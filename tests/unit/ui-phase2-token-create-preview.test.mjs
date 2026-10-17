@@ -1,3 +1,4 @@
+import { readArchivedTokenVisualInput } from "../fixtures/archived-token-visual-input.mjs";
 import test from "node:test";
 import {
   assertCaptureSourceRevision,
@@ -12,7 +13,7 @@ import { tokenCreatePreview } from "../../scripts/lib/ui-phase2-token-create-pre
 
 const component = "apps/web/src/components/OrganizationTokenPanel.vue";
 const folder = "output/playwright/p36-create-vue-preview";
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = readArchivedTokenVisualInput;
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const original = read(component),
   transformed = tokenCreatePreview(original);
@@ -30,7 +31,7 @@ function fields(source) {
   walk(baseParse(parse(source).descriptor.template.content));
   return result.sort();
 }
-test("P36 creation preview preserves complete scripts, native controls and all directives", () => {
+test("Archived P36 creation preview preserves complete scripts, native controls and all directives", () => {
   assert.equal(
     parse(original).descriptor.scriptSetup.content,
     parse(transformed).descriptor.scriptSetup.content,
@@ -47,7 +48,7 @@ test("P36 creation preview preserves complete scripts, native controls and all d
     tokenCreatePreview(original.replace('class="org-token-create"', 'class="unexpected"')),
   );
 });
-test("P36 existing preview binds capture-time originals and transformed template without relabeling approval", () => {
+test("Archived P36 existing preview binds capture-time originals and transformed template without relabeling approval", () => {
   assert.equal(evidence.approval, "pending-user-review");
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.checks.length, 152);
@@ -67,7 +68,7 @@ test("P36 existing preview binds capture-time originals and transformed template
   for (const shot of evidence.screenshots)
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);
 });
-test("P36 creation flows retain exact post contracts, real pending edits and native validation", () => {
+test("Archived P36 creation flows retain exact post contracts, real pending edits and native validation", () => {
   for (const run of evidence.runs) {
     const checks = evidence.checks
       .filter((check) => check.width === run.width)
@@ -98,7 +99,7 @@ test("P36 creation flows retain exact post contracts, real pending edits and nat
     assert.equal(run.requests.filter((request) => request.method === "GET").length, 4);
   }
 });
-test("P36 approved mobile filter image and application imports are untouched", () => {
+test("Archived P36 approved mobile filter image and application imports are untouched", () => {
   assert.equal(
     hash(readFileSync("output/playwright/p36-fields-review/composition-filters-default-390.png")),
     "1bdc3c39fdc4f85483db1ca9a6d8fb2f24d8000321a118e976515029c9eb154b",

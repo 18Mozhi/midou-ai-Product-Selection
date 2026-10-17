@@ -1,3 +1,4 @@
+import { readArchivedTokenVisualInput } from "../fixtures/archived-token-visual-input.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -5,10 +6,10 @@ import { createHash } from "node:crypto";
 import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const folder = "output/playwright/p36-reason-vue-preview";
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = readArchivedTokenVisualInput;
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const evidence = JSON.parse(read(`${folder}/evidence.json`));
-test("P36 reason review pins current untransformed sources and complete80 image manifest", () => {
+test("Archived P36 reason review pins current untransformed sources and complete80 image manifest", () => {
   assert.equal(evidence.kind, "P36-REASON-VUE-PREVIEW-r1");
   assert.equal(evidence.approval, "pending-user-review");
   assert.equal(evidence.processesClosed, true);
@@ -44,7 +45,7 @@ test("P36 reason review pins current untransformed sources and complete80 image 
   for (const shot of evidence.screenshots)
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);
 });
-test("P36 reason constraints, focus, close and short-screen checks use real parent dialogs without writes", () => {
+test("Archived P36 reason constraints, focus, close and short-screen checks use real parent dialogs without writes", () => {
   for (const run of evidence.runs) {
     assert.equal(run.requests.length, 4);
     assert.ok(
@@ -94,7 +95,7 @@ test("P36 reason constraints, focus, close and short-screen checks use real pare
   assert.match(evidence.scope, /no submission/);
   assert.match(evidence.scope, /do not define backend length policy/);
 });
-test("P36 reason preview is CSS-only and leaves production and approved filter evidence untouched", () => {
+test("Archived P36 reason preview is CSS-only and leaves production and approved filter evidence untouched", () => {
   for (const file of [
     "apps/web/src/main.ts",
     "apps/web/src/components/OrganizationAdminCenter.vue",

@@ -5,8 +5,9 @@ import vm from "node:vm";
 import ts from "typescript";
 import { historicalTokenCopySource } from "./ui-phase2-token-copy-baseline.mjs";
 const plain = (v) => JSON.parse(JSON.stringify(v));
-export async function buildOrgTokenDesignData(repo) {
-  const read = (p) => readFile(path.join(repo, p), "utf8"),
+export async function buildOrgTokenDesignData(repo, readOverride) {
+  assert.ok(readOverride === undefined || typeof readOverride === "function");
+  const read = readOverride ?? ((p) => readFile(path.join(repo, p), "utf8")),
     parse = (s) => ts.createSourceFile("source.ts", s, ts.ScriptTarget.Latest, true);
   function find(ast, predicate) {
     const out = [];

@@ -2,14 +2,16 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
-import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
-import { capturedExportDetailSource } from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
+import {
+  assertCaptureSourceRevision,
+  readCaptureSourceRevision,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const output = "output/playwright/p36-parent-read-vue-r2";
 const manifest = JSON.parse(await readFile(`${output}/evidence.json`, "utf8"));
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 
-test("P36 parent read captures source-backed parent, child, client and imported styles", async () => {
+test("Archived P36 parent read captures source-backed parent, child, client and imported styles", async () => {
   for (const file of [
     "apps/web/src/components/OrganizationAdminCenter.vue",
     "apps/web/src/components/OrganizationTokenPanel.vue",
@@ -19,9 +21,7 @@ test("P36 parent read captures source-backed parent, child, client and imported 
   ])
     assert.ok(manifest.sourceHashes[file], `missing ${file}`);
   for (const [file, sha] of Object.entries(manifest.sourceHashes))
-    assertCaptureSourceRevision(file, await readFile(file, "utf8"), sha, (source) =>
-      capturedExportDetailSource(file, source),
-    );
+    assertCaptureSourceRevision(file, readCaptureSourceRevision(file, sha), sha);
   assert.equal(manifest.kind, "P36-PARENT-READ-VUE");
   assert.equal(manifest.acceptanceComplete, false);
   assert.equal(manifest.browserAndServerClosed, true);

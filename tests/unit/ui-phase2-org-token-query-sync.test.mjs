@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -92,7 +93,7 @@ function mount(t, query = {}, deferred = false) {
 }
 
 test("P36 historical query change is an exact bounded script delta; runtime tests use current source", () => {
-  const queryRevision = historicalTokenCopySource(file, current);
+  const queryRevision = historicalTokenCopySource(file, readPreSelectionRebuild(file));
   const baseline = execFileSync("git", ["show", `c380b995:${file}`], {
     encoding: "utf8",
   }).replaceAll("\r\n", "\n");

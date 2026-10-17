@@ -1,3 +1,4 @@
+import { readArchivedTokenVisualInput } from "../fixtures/archived-token-visual-input.mjs";
 import test from "node:test";
 import {
   assertCaptureSourceRevision,
@@ -13,7 +14,7 @@ import {
   tokenComponent,
 } from "../../scripts/lib/ui-phase2-token-filter-delta.mjs";
 
-const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
+const read = readArchivedTokenVisualInput;
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const baseline = (f) =>
   execFileSync("git", ["show", `${tokenFilterBaseline}:${f}`], {
@@ -26,7 +27,7 @@ const current = historicalTokenCopySource(tokenComponent, read(tokenComponent)),
 const output = "output/playwright/p36-mobile-filters-vue",
   e = JSON.parse(read(`${output}/evidence.json`));
 
-test("P36 historical filter implementation permits exact presentation and query delta", () => {
+test("Archived P36 historical filter implementation permits exact presentation and query delta", () => {
   assert.equal(assertTokenFilterDelta(current, old), true);
   for (const mutation of [
     current.replace('tokenQuery.value = "";', 'tokenQuery.value = "other";'),
@@ -38,7 +39,7 @@ test("P36 historical filter implementation permits exact presentation and query 
   ])
     assert.throws(() => assertTokenFilterDelta(mutation, old));
 });
-test("P36 real-child evidence covers four widths and all non-target pixel exclusions", () => {
+test("Archived P36 real-child evidence covers four widths and all non-target pixel exclusions", () => {
   assert.equal(e.baselineCommit, tokenFilterBaseline);
   assert.equal(e.baselineSha256, hash(old));
   assert.equal(e.checks.length, 290);
@@ -56,7 +57,7 @@ test("P36 real-child evidence covers four widths and all non-target pixel exclus
   assert.match(e.boundary, /no parent\/API\/MySQL\/RBAC\/OS clipboard or production proof/);
   for (const s of e.screenshots) assert.match(s.scope, /not-parent-API-or-production-acceptance/);
 });
-test("P36 original reset, filtering, URL and write boundaries stay covered", () => {
+test("Archived P36 original reset, filtering, URL and write boundaries stay covered", () => {
   for (const name of [
     "default reset does not force page one",
     "changed filters reset page one",
@@ -80,7 +81,7 @@ test("P36 original reset, filtering, URL and write boundaries stay covered", () 
   assert.equal(e.checks.filter((c) => c.name.startsWith("full sorting ")).length, 40);
   assert.equal(e.checks.filter((c) => c.name.startsWith("status ")).length, 28);
 });
-test("P36 capture-time source and image hashes retain only permanent delivery files", () => {
+test("Archived P36 capture-time source and image hashes retain only permanent delivery files", () => {
   for (const [f, sha] of Object.entries(e.sourceHashes))
     assertCaptureSourceRevision(f, read(f), sha);
   for (const s of e.screenshots)
@@ -90,7 +91,7 @@ test("P36 capture-time source and image hashes retain only permanent delivery fi
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),
   );
 });
-test("P36 proposal source association never rewrites original662 images or approvals", () => {
+test("Archived P36 proposal source association never rewrites original662 images or approvals", () => {
   const dirs = [
     "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c",
     "output/playwright/p36-controls-review",
@@ -108,9 +109,21 @@ test("P36 proposal source association never rewrites original662 images or appro
     for (const s of now.screenshots) assert.equal(hash(readFileSync(`${dir}/${s.file}`)), s.sha256);
   }
   const result = JSON.parse(
-    execFileSync(process.execPath, ["scripts/refresh-ui-phase2-token-filter-bindings.mjs"], {
-      encoding: "utf8",
-    }),
+    execFileSync(
+      process.execPath,
+      [
+        "--input-type=module",
+        "--eval",
+        'import { readArchivedTokenVisualInput } from "./tests/fixtures/archived-token-visual-input.mjs";\n' +
+          read("scripts/refresh-ui-phase2-token-filter-bindings.mjs")
+            .replaceAll('from "./lib/', 'from "./scripts/lib/')
+            .replace(
+              "historicalTokenCopySource(f, readBeforeAuditPage(f))",
+              'historicalTokenCopySource(f, (f.startsWith("apps/web/src/") || f === "scripts/lib/ui-phase2-org-token-design-data.mjs") ? readArchivedTokenVisualInput(f) : readBeforeAuditPage(f))',
+            ),
+      ],
+      { encoding: "utf8" },
+    ),
   );
   assert.deepEqual(result, {
     manifests: 3,

@@ -372,6 +372,7 @@ async function copySecret() {
             <h4 id="org-token-ledger-title">令牌生命周期</h4>
           </div>
           <span>共 {{ filteredTokens.length }} 条匹配记录</span>
+          <a href="#org-token-create">定位创建表单</a>
         </header>
 
         <div class="org-token-toolbar org-token-filters-c">
@@ -538,10 +539,9 @@ async function copySecret() {
         </footer>
       </section>
 
-      <form class="org-token-create" @submit.prevent="submitCreate">
+      <form id="org-token-create" class="org-token-create" @submit.prevent="submitCreate">
         <header>
           <div>
-            <p>CREATE · 最小权限</p>
             <h4>创建组织令牌</h4>
           </div>
           <span>明文只显示一次</span>
@@ -558,6 +558,26 @@ async function copySecret() {
           />
           <small>使用系统或用途命名，不要填写密钥、密码或个人隐私。</small>
         </label>
+
+        <div class="org-token-duration">
+          <label class="org-token-field">
+            <span>有效天数</span>
+            <input v-model.number="createForm.ttl_days" type="number" min="1" max="365" required />
+            <small>预计到期：{{ expiryPreview }}</small>
+          </label>
+          <div aria-label="常用有效期">
+            <button
+              v-for="days in [30, 90, 180, 365]"
+              :key="days"
+              type="button"
+              class="org-admin-secondary"
+              :aria-pressed="createForm.ttl_days === days"
+              @click="createForm.ttl_days = days"
+            >
+              {{ days }} 天
+            </button>
+          </div>
+        </div>
 
         <fieldset
           class="org-token-scope-field"
@@ -584,26 +604,6 @@ async function copySecret() {
           </div>
           <strong v-if="scopeError" id="token-scope-error" role="alert">{{ scopeError }}</strong>
         </fieldset>
-
-        <div class="org-token-duration">
-          <label class="org-token-field">
-            <span>有效天数</span>
-            <input v-model.number="createForm.ttl_days" type="number" min="1" max="365" required />
-            <small>预计到期：{{ expiryPreview }}</small>
-          </label>
-          <div aria-label="常用有效期">
-            <button
-              v-for="days in [30, 90, 180, 365]"
-              :key="days"
-              type="button"
-              class="org-admin-secondary"
-              :aria-pressed="createForm.ttl_days === days"
-              @click="createForm.ttl_days = days"
-            >
-              {{ days }} 天
-            </button>
-          </div>
-        </div>
 
         <label class="org-token-field">
           <span>创建原因</span>
@@ -647,75 +647,4 @@ async function copySecret() {
   </section>
 </template>
 
-<style src="../design/token-filter-tokens.css"></style>
-
-<style scoped>
-.org-token-filter-help {
-  display: none;
-}
-
-@media (max-width: 760px) {
-  .org-token-filters-c {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    background: var(--so-token-filter-paper);
-    font-family: "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
-    line-height: 1.6;
-  }
-
-  .org-token-filters-c label {
-    min-width: 0;
-    gap: 7px;
-  }
-
-  .org-token-filters-c .org-token-search {
-    grid-column: auto;
-  }
-
-  .org-token-filters-c label > span {
-    color: var(--so-token-filter-ink);
-    font-size: 16px;
-    font-weight: 400;
-  }
-
-  .org-token-filters-c input,
-  .org-token-filters-c select,
-  .org-token-filters-c > button.org-admin-secondary {
-    width: 100%;
-    min-width: 0;
-    min-height: 46px;
-    height: 46px;
-    padding: 8px 10px;
-    border: 1px solid var(--so-token-filter-border);
-    border-radius: 4px;
-    background: var(--so-token-filter-paper);
-    color: var(--so-token-filter-ink);
-    font: inherit;
-    font-size: 16px;
-  }
-
-  .org-token-filters-c > button.org-admin-secondary {
-    min-height: 44px;
-    height: 44px;
-    margin-top: -8px;
-    color: var(--so-token-filter-blue);
-  }
-
-  .org-token-filters-c .org-token-filter-help {
-    display: block;
-    margin: 0;
-    color: var(--so-token-filter-muted);
-    font-size: 13px;
-    line-height: 1.6;
-    overflow-wrap: anywhere;
-  }
-
-  .org-token-filters-c .org-token-reset-help {
-    padding-top: 16px;
-    border-top: 1px solid var(--so-token-filter-line);
-  }
-}
-</style>
+<style src="../organization-token-workspace.css"></style>

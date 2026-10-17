@@ -66,8 +66,14 @@ test("P36 historical proof allows only exact reviewed revisions and rejects unkn
     assert.equal(hash(historicalTokenCopySource(file, captured)), pair.before);
     const current = read(file);
     if (![pair.after, pair.before].includes(hash(current))) {
-      assert.equal(hash(current), publishedPresentationRevisions[file]?.current);
-      assert.equal(hash(historicalTokenCopySource(file, current)), pair.before);
+      if (hash(current) === publishedPresentationRevisions[file]?.current)
+        assert.equal(hash(historicalTokenCopySource(file, current)), pair.before);
+      else
+        // Rebuilt UI/test readers are outside the retired capture's exact revisions.
+        assert.throws(
+          () => historicalTokenCopySource(file, current),
+          /Unreviewed token copy source/,
+        );
     }
     assert.throws(
       () => historicalTokenCopySource(file, current + "\n// unknown current change"),

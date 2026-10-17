@@ -2,7 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
-import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  readCaptureSourceRevision,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const output = "output/playwright/p36-read-states-review";
 const design = "design-plans/ui-phase-2-2026-09-07/design/org-token-read-states";
@@ -11,9 +14,9 @@ const text = async (f) => (await readFile(f, "utf8")).replaceAll("\r\n", "\n");
 const e = JSON.parse(await text(`${output}/evidence.json`));
 const kinds = ["loading", "error", "forbidden", "expired", "conflict", "rate_limited", "blocked"];
 
-test("P36 read-state source and original726 images are preserved", async () => {
+test("Archived P36 read-state source and original726 images are preserved", async () => {
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assertCaptureSourceRevision(file, await text(file), sha);
+    assertCaptureSourceRevision(file, readCaptureSourceRevision(file, sha), sha);
   let count = 0;
   for (const [dir, old] of Object.entries(e.retained)) {
     const raw = await text(`${dir}/evidence.json`);

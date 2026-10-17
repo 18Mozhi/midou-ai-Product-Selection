@@ -1,3 +1,4 @@
+import { readArchivedTokenVisualInput } from "../fixtures/archived-token-visual-input.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -10,7 +11,7 @@ import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-cop
 
 const file = "apps/web/src/components/OrganizationTokenPanel.vue";
 const folder = "output/playwright/p36-page-vue-preview";
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const read = readArchivedTokenVisualInput;
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const original = beforePublishedPresentation(file, read(file)),
   transformed = tokenPagePreview(original);
@@ -47,7 +48,7 @@ function structure(source) {
     filters,
   };
 }
-test("P36 whole-page composition retains original script, controls, filter markup, directives and field expressions", () => {
+test("Archived P36 whole-page composition retains original script, controls, filter markup, directives and field expressions", () => {
   assert.equal(parse(transformed).errors.length, 0);
   assert.equal(
     parse(original).descriptor.scriptSetup.content,
@@ -68,7 +69,7 @@ test("P36 whole-page composition retains original script, controls, filter marku
     tokenPagePreview(original.replace('class="org-token-workbench"', 'class="unexpected"')),
   );
 });
-test("P36 page capture binds current source and44 exact four-width rendered states", () => {
+test("Archived P36 page capture binds current source and44 exact four-width rendered states", () => {
   assert.equal(evidence.kind, "P36-PAGE-VUE-PREVIEW-r1");
   assert.equal(evidence.approval, "pending-user-review");
   assert.equal(evidence.processesClosed, true);
@@ -100,7 +101,7 @@ test("P36 page capture binds current source and44 exact four-width rendered stat
   for (const shot of evidence.screenshots)
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);
 });
-test("P36 integrated filters, creation, reread, secret clear and original modal cancellation remain scoped to fixtures", () => {
+test("Archived P36 integrated filters, creation, reread, secret clear and original modal cancellation remain scoped to fixtures", () => {
   for (const run of evidence.runs) {
     assert.equal(run.requests.length, 7);
     const posts = run.requests.filter((req) => req.method === "POST");
@@ -141,7 +142,7 @@ test("P36 integrated filters, creation, reread, secret clear and original modal 
   assert.match(evidence.scope, /not App shell/);
   assert.match(evidence.scope, /policies remain pending/);
 });
-test("P36 approved mobile filter capture and production imports unchanged; new desktop filter styles only live in review CSS", () => {
+test("Archived P36 approved mobile filter capture and production imports unchanged; new desktop filter styles only live in review CSS", () => {
   assert.equal(
     hash(readFileSync("output/playwright/p36-fields-review/composition-filters-default-390.png")),
     "1bdc3c39fdc4f85483db1ca9a6d8fb2f24d8000321a118e976515029c9eb154b",

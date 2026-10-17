@@ -1,3 +1,4 @@
+import { readArchivedTokenVisualInput } from "../fixtures/archived-token-visual-input.mjs";
 import test from "node:test";
 import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-organization-reason-contract.mjs";
 import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
@@ -109,7 +110,7 @@ test("P36 each of78 field states has both widths,20 compositions and exact field
 
 test("P36 historical source and image fingerprints retain exact captures", () => {
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    assertCaptureSourceRevision(f, readFileSync(f, "utf8"), sha);
+    assertCaptureSourceRevision(f, readArchivedTokenVisualInput(f), sha);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   assert.deepEqual(

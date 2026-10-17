@@ -4578,6 +4578,26 @@
       ],
       "contract": "Original script/event/model bindings, readonly GET, query restoration and record values preserved. Full-width comparison table with internal mobile scroll and export rows. No dependency/API/schema/permission/runtime configuration change.",
       "verification": "10 desktop/mobile checks and 165 related/supplementary Node checks passed; Web typecheck/build and static/budget/style/realism/docs passed. No production acceptance or deployment claim."
+    },
+    "selectionOrganizationTokens20261017": {
+      "status": "implemented",
+      "statusDetail": "local_ui_verified_requires_release",
+      "requirements": "docs/selection-organization-token-layout.md",
+      "routes": ["/org-admin/tokens"],
+      "sourceFiles": [
+        "apps/web/src/components/OrganizationTokenPanel.vue",
+        "apps/web/src/organization-token-workspace.css",
+        "apps/web/src/organization-admin.css",
+        "apps/web/src/design/organization-admin-tokens.css"
+      ],
+      "testFiles": [
+        "tests/e2e/m06-01-organization-admin.spec.ts",
+        "tests/unit/organization-token-copy-ownership.test.mjs",
+        "tests/unit/ui-phase2-org-token-query-sync.test.mjs",
+        "tests/fixtures/archived-token-visual-input.mjs"
+      ],
+      "contract": "Original script/event/model bindings and token security lifecycle preserved. Full-width ledger before creation; native #org-token-create fragment only, drafts and selection retained. No API/schema/dependency/permission/runtime-config change.",
+      "verification": "8 desktop/mobile cases and 238 related/supplementary/shared Node cases passed; Web typecheck/build and static/budget/style/realism/docs passed. No production acceptance or deployment claim."
     }
   },
   "phaseVerification": {
