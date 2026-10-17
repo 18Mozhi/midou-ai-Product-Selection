@@ -31,6 +31,20 @@ export type TrendProjectionResult =
       diagnostic?: string;
     };
 
+const intelligenceFirstOrderSql =
+  " ORDER BY CASE WHEN EXISTS (SELECT 1 FROM normalized_records n_intelligence " +
+  "JOIN providers p_intelligence ON p_intelligence.id=n_intelligence.provider_id " +
+  "JOIN raw_evidence e_intelligence ON e_intelligence.id=n_intelligence.raw_evidence_id " +
+  "AND e_intelligence.organization_id=n_intelligence.organization_id AND e_intelligence.workspace_id=n_intelligence.workspace_id " +
+  "LEFT JOIN collection_subqueries q_intelligence ON q_intelligence.id=e_intelligence.collection_subquery_id " +
+  "AND q_intelligence.organization_id=n_intelligence.organization_id AND q_intelligence.workspace_id=n_intelligence.workspace_id " +
+  "WHERE n_intelligence.id=trend_projection_jobs.normalized_record_id " +
+  "AND n_intelligence.organization_id=trend_projection_jobs.organization_id " +
+  "AND n_intelligence.workspace_id=trend_projection_jobs.workspace_id " +
+  "AND (p_intelligence.access_mode='public_rss' OR (p_intelligence.code='amazon_product' " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(q_intelligence.target_json,'$.projection_type'))='intelligence_product_discovery'))) " +
+  "THEN 0 ELSE 1 END,available_at,id LIMIT 1";
+
 export class MySqlTrendProjectionWorker {
   private readonly persistence: TrendProjectionPersistence;
   private claimedSinceRepair = 0;
@@ -225,9 +239,22 @@ export class MySqlTrendProjectionWorker {
       expires = new Date(now.getTime() + this.leaseSeconds * 1000);
     try {
       await c.beginTransaction();
-      const [jobs] = await c.query<RowDataPacket[]>(
-        "SELECT * FROM trend_projection_jobs WHERE (status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?) ORDER BY available_at,id LIMIT 1 FOR UPDATE",
+      const [candidates] = await c.query<RowDataPacket[]>(
+        "SELECT id,organization_id,workspace_id FROM trend_projection_jobs WHERE ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?))" +
+          intelligenceFirstOrderSql,
         [now, now],
+      );
+      const candidate = candidates[0];
+      if (!candidate) {
+        await c.commit();
+        return null;
+      }
+      // Range scans with FOR UPDATE lock competing inserts across the backlog.
+      // Recheck under a single-row current read if another owner won the race.
+      const [jobs] = await c.query<RowDataPacket[]>(
+        "SELECT * FROM trend_projection_jobs WHERE id=? AND organization_id=? AND workspace_id=? " +
+          "AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) FOR UPDATE",
+        [candidate.id, candidate.organization_id, candidate.workspace_id, now, now],
       );
       if (!jobs[0]) {
         await c.commit();

@@ -1,8 +1,9 @@
 {
   "selectionSupplyIntelligenceSeparation20261018": {
     "status": "implemented",
-    "statusDetail": "local_minimum_passed_runtime_and_daily100_unverified",
+    "statusDetail": "supply_exclusion_released_single_row_intelligence_priority_runtime_unverified",
     "requirements": "docs/selection-supply-intelligence-separation.md",
+    "projectionClaim": "Nonlocking candidate selection prioritizes scoped RSS and intelligence-linked Amazon evidence; recheck eligibility under scoped primary-key row lock. Losing a lease race returns idle without overwriting. Related179 checks and MySQL5.7 PRIMARY const1 EXPLAIN passed; ongoing deadlock behavior and daily100 unverified.",
     "sourceFiles": [
       "apps/worker/src/trend-projection-worker.ts",
       "apps/worker/src/trend-projection-calculation.ts",

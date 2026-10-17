@@ -14,7 +14,7 @@ const jobScope = {
   normalized_record_id: "record-1",
 };
 
-function createPool(job) {
+function createPool(job, loseCandidate = false) {
   const calls = [];
   const statements = [];
   let claimed;
@@ -24,10 +24,17 @@ function createPool(job) {
     rollback: async () => calls.push("rollback"),
     release: () => calls.push("release"),
     query: async (sql) => {
+      statements.push(sql);
       if (sql.startsWith("SELECT * FROM trend_projection_jobs")) {
         calls.push("claim");
+        if (loseCandidate) return [[], []];
         claimed = Array.isArray(job) ? job.shift() : job;
         return [claimed ? [claimed] : [], []];
+      }
+      if (sql.startsWith("SELECT id,organization_id,workspace_id FROM trend_projection_jobs")) {
+        calls.push("candidate");
+        const candidate = Array.isArray(job) ? job[0] : job;
+        return [candidate ? [candidate] : [], []];
       }
       if (sql.startsWith("UPDATE trend_projection_jobs SET status='leased'")) {
         calls.push("lease");
@@ -78,6 +85,35 @@ function createPool(job) {
     },
   };
 }
+
+test("projection locks only the selected scoped ID and rechecks eligibility", async () => {
+  const { pool, statements } = createPool({ ...jobScope, id: "job-1", attempt_count: 0 });
+  const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.persistence.project = async () => "topic-1";
+  worker.persistence.enqueueMissingAutomaticDownstream = async () => {};
+  await worker.processOnce();
+  const locks = statements.filter((sql) => sql.endsWith("FOR UPDATE"));
+  assert.equal(locks.length, 1);
+  assert.match(locks[0], /WHERE id=\? AND organization_id=\? AND workspace_id=\?/);
+  assert.match(locks[0], /status='scheduled'.*status='leased'/);
+  assert.doesNotMatch(locks[0], /ORDER BY/);
+  const candidate = statements.find((sql) => sql.startsWith("SELECT id,organization_id"));
+  assert.doesNotMatch(candidate, /FOR UPDATE/);
+  assert.match(candidate, /p_intelligence.access_mode='public_rss'/);
+  assert.match(candidate, /projection_type.*intelligence_product_discovery/);
+  assert.match(candidate, /n_intelligence.organization_id=trend_projection_jobs.organization_id/);
+});
+
+test("losing the candidate race never projects or overwrites another lease", async () => {
+  const { pool, calls } = createPool({ ...jobScope, id: "job-1", attempt_count: 0 }, true);
+  const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.persistence.project = async () => {
+    throw new Error("lost lease must not project");
+  };
+  worker.persistence.enqueueMissingAutomaticDownstream = async () => {};
+  assert.deepEqual(await worker.processOnce(), { status: "idle" });
+  assert.equal(calls.includes("lease"), false);
+});
 
 test("1688 sourcing evidence cannot become intelligence or trigger product discovery", () => {
   assert.deepEqual(projectedTrendProviderContext("1688_search"), { accepted: false });
