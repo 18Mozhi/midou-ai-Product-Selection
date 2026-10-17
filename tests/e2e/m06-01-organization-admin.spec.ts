@@ -2574,3 +2574,77 @@ for (const route of ["members", "workspaces", "teams"] as const) {
     );
   });
 }
+
+for (const section of ["roles", "scopes", "grants"] as const) {
+  test(`organization role workspace keeps full-width sections and local drafts: ${section}`, async ({
+    page,
+  }) => {
+    await setup(page);
+    await page.goto("/org-admin/roles");
+    await expect(page.getByRole("table", { name: "角色能力矩阵" })).toBeVisible();
+    const root = page.locator(".org-role-page");
+    const identity = await root.elementHandle();
+    let writes = 0;
+    page.on("request", (request) => {
+      if (
+        new URL(request.url()).pathname.startsWith("/api/v1/org/") &&
+        !["GET", "HEAD"].includes(request.method())
+      )
+        writes += 1;
+    });
+    if (section === "roles") {
+      const matrixHeader = page
+        .getByRole("table", { name: "角色能力矩阵" })
+        .getByRole("row")
+        .first();
+      expect(
+        await matrixHeader.evaluate(
+          (element) => getComputedStyle(element).gridTemplateColumns.split(" ").length,
+        ),
+      ).toBe(await matrixHeader.getByRole("columnheader").count());
+      const list = page.locator(".org-role-list");
+      await list.getByRole("button").nth(1).click();
+      const selected = await page.locator("#org-role-selected h3").innerText();
+      await page.getByLabel("搜索能力", { exact: true }).fill("组织");
+      await page.getByRole("link", { name: "定位角色详情", exact: true }).click();
+      await expect(page).toHaveURL(/#org-role-selected$/);
+      await expect(page.locator("#org-role-selected h3")).toHaveText(selected);
+      await expect(page.getByLabel("搜索能力", { exact: true })).toHaveValue("组织");
+      const a = await list.boundingBox(),
+        b = await page.locator("#org-role-selected").boundingBox();
+      expect(Math.abs(a!.width - b!.width)).toBeLessThanOrEqual(1);
+      expect(a!.y + a!.height).toBeLessThanOrEqual(b!.y);
+      await expect(list.locator("button > span:first-child")).toHaveCount(0);
+    } else if (section === "scopes") {
+      await page.getByRole("button", { name: "数据范围", exact: true }).click();
+      const memberBounds = await page.locator(".org-scope-members").boundingBox(),
+        definitions = await page.locator(".org-scope-definitions").boundingBox();
+      expect(memberBounds!.y + memberBounds!.height).toBeLessThanOrEqual(definitions!.y);
+      await page.getByLabel("搜索成员", { exact: true }).fill("陈采购");
+      await expect(page.getByText("陈采购", { exact: true })).toBeVisible();
+    } else {
+      await page.getByRole("button", { name: /指定资源授权 1/ }).click();
+      await page.getByRole("button", { name: "创建授权", exact: true }).click();
+      await page.getByLabel("业务原因", { exact: true }).fill("未提交的资源授权草稿");
+      await page.getByRole("link", { name: "定位授权详情", exact: true }).click();
+      await expect(page).toHaveURL(/#org-grant-selected$/);
+      await expect(page.getByLabel("业务原因", { exact: true })).toHaveValue(
+        "未提交的资源授权草稿",
+      );
+      const a = await page.locator(".org-grant-list").boundingBox(),
+        b = await page.locator("#org-grant-selected").boundingBox();
+      expect(Math.abs(a!.width - b!.width)).toBeLessThanOrEqual(1);
+      expect(a!.y + a!.height).toBeLessThanOrEqual(b!.y);
+    }
+    expect(await identity!.evaluate((element) => element.isConnected)).toBe(true);
+    await identity!.dispose();
+    expect(writes).toBe(0);
+    for (const card of await root.locator(".org-admin-card").all()) {
+      await expect(card).toHaveCSS("background-image", "none");
+      await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  });
+}

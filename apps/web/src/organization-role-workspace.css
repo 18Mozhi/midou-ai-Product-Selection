@@ -1,0 +1,500 @@
+#app .org-admin-center .org-role-page {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  color: var(--so-text);
+  font-size: 13px;
+  container-type: inline-size;
+  & :is(article, section, form, header, div, label) {
+    min-width: 0;
+  }
+  & :is(h3, h4, p, dl, dd) {
+    margin: 0;
+  }
+  & :is(h3, h4) {
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+  & :is(small, dt) {
+    color: var(--so-text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  & :is(strong, b, p, small, dd, code, span) {
+    overflow-wrap: anywhere;
+  }
+  & .org-admin-card {
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
+    box-shadow: none;
+  }
+  & :is(header, .org-grant-intro) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  & p {
+    font-size: 13px;
+    line-height: 1.6;
+    font-weight: 400;
+    color: var(--so-text-muted);
+  }
+  & header p {
+    color: var(--so-text-muted);
+    margin-bottom: 4px;
+  }
+  & label {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    font-size: 13px;
+  }
+  & :is(input, select, textarea) {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid var(--so-border-strong);
+    border-radius: 6px;
+    color: var(--so-text);
+    background: var(--so-panel);
+    font: inherit;
+  }
+  & input[type="checkbox"] {
+    width: 18px;
+    min-height: 18px;
+    height: 18px;
+    padding: 0;
+  }
+  & textarea {
+    min-height: 92px;
+    resize: vertical;
+  }
+  & button {
+    min-height: 44px;
+    padding: 9px 14px;
+    border: 1px solid var(--so-border-strong);
+    border-radius: 6px;
+    color: var(--so-text);
+    background: var(--so-panel);
+    font: inherit;
+    cursor: pointer;
+  }
+  & button:hover:enabled {
+    border-color: var(--so-primary);
+    color: var(--so-primary);
+  }
+  & :is(input, textarea, select, button, summary, a):focus-visible {
+    outline: 3px solid var(--so-roles-focus);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 2px var(--so-roles-focus-gap);
+  }
+  & button:disabled {
+    opacity: 1;
+    color: var(--so-roles-disabled-text);
+    background: var(--so-roles-disabled-bg);
+    border-color: var(--so-roles-disabled-border);
+    cursor: not-allowed;
+  }
+  & .org-role-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
+    & article {
+      display: grid;
+      align-content: start;
+      gap: 5px;
+      padding: 14px 16px;
+    }
+    & article + article {
+      border-left: 1px solid var(--so-border);
+    }
+    & span {
+      color: var(--so-text-muted);
+    }
+    & b {
+      font-size: 20px;
+      line-height: 1.3;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+  & .org-role-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border-bottom: 1px solid var(--so-border);
+    & button {
+      border: 0;
+      border-bottom: 2px solid transparent;
+      border-radius: 0;
+      background: transparent;
+    }
+    & button[aria-pressed="true"] {
+      border-bottom-color: var(--so-primary);
+      color: var(--so-primary);
+      font-weight: 600;
+    }
+  }
+  & :is(.org-role-toolbar, .org-grant-toolbar, .org-role-matrix-filters) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 12px;
+    & label {
+      flex: 1 1 240px;
+    }
+    & > span {
+      padding: 12px 0;
+      color: var(--so-text-muted);
+    }
+  }
+  & .org-role-detail-link {
+    justify-self: start;
+    padding: 12px 0;
+    color: var(--so-primary);
+    line-height: 20px;
+  }
+  & :is(.org-role-browser, .org-grant-browser) {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  & :is(.org-role-list, .org-grant-list) {
+    display: grid;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
+    overflow: hidden;
+    & > button {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      min-height: 64px;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 0;
+      text-align: left;
+      & strong {
+        display: block;
+        font-weight: 600;
+      }
+      & small {
+        display: block;
+        margin-top: 4px;
+      }
+      & em {
+        font-style: normal;
+        color: var(--so-text-muted);
+      }
+    }
+    & > button + button {
+      border-top: 1px solid var(--so-border);
+    }
+    & > button.selected {
+      box-shadow: inset 3px 0 var(--so-primary);
+      background: var(--so-primary-soft);
+    }
+    & > button:focus-visible {
+      outline-offset: -3px;
+    }
+  }
+  & :is(#org-role-selected, #org-grant-selected) {
+    scroll-margin-block-start: 96px;
+  }
+  & .org-role-group {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--so-border);
+  }
+  & .org-role-group > b {
+    font-weight: 500;
+    color: var(--so-text-muted);
+  }
+  & .org-admin-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  & .org-admin-chips span {
+    padding: 4px 8px;
+    border: 1px solid var(--so-border);
+    border-radius: 4px;
+    background: var(--so-panel);
+    font-size: 13px;
+  }
+  & details {
+    padding-top: 12px;
+    border-top: 1px solid var(--so-border);
+  }
+  & summary {
+    min-height: 44px;
+    padding: 12px 0;
+    color: var(--so-primary);
+    cursor: pointer;
+  }
+  & code {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+  }
+  & .org-role-matrix-scroll {
+    overflow: auto;
+    border: 1px solid var(--so-border);
+    border-radius: 6px;
+  }
+  & .org-role-matrix-scroll [role="table"] {
+    min-width: 760px;
+  }
+  & .org-role-matrix-scroll [role="row"] {
+    display: grid;
+    grid-template-columns: minmax(190px, 1.35fr) repeat(var(--org-role-columns), minmax(102px, 1fr));
+    min-height: 48px;
+  }
+  & .org-role-matrix-scroll [role="row"] + [role="row"] {
+    border-top: 1px solid var(--so-border);
+  }
+  & .org-role-matrix-scroll :is([role="cell"], [role="columnheader"]) {
+    padding: 12px;
+  }
+  & .org-role-matrix-scroll [role="columnheader"] {
+    background: var(--so-panel-soft);
+    font-weight: 600;
+  }
+  & .org-role-matrix-scroll [role="cell"] :is(strong, small) {
+    display: block;
+  }
+  & .org-role-matrix-scroll [role="cell"] > b {
+    color: var(--so-success);
+  }
+  & .org-role-matrix-scroll i {
+    font-style: normal;
+    color: var(--so-text-muted);
+  }
+  & .org-role-empty {
+    padding: 20px;
+    color: var(--so-text-muted);
+    text-align: center;
+  }
+  & .org-scope-current {
+    gap: 12px;
+  }
+  & .org-scope-members .org-admin-line {
+    display: grid;
+    grid-template-columns: minmax(160px, 1fr) minmax(0, 2fr);
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid var(--so-border);
+  }
+  & .org-scope-members .org-admin-line small {
+    display: block;
+  }
+  & .org-scope-member-facts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    color: var(--so-text-muted);
+  }
+  & .org-scope-definitions {
+    display: grid;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
+  }
+  & .org-scope-definitions article {
+    display: grid;
+    grid-template-columns: 120px 120px minmax(0, 1fr);
+    gap: 12px;
+    padding: 14px 20px;
+    border: 0;
+    border-radius: 0;
+  }
+  & .org-scope-definitions article + article {
+    border-top: 1px solid var(--so-border);
+  }
+  & .org-scope-definitions b {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  & .org-grant-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  & .org-grant-form > :is(header, fieldset, button, .org-grant-field--wide) {
+    grid-column: 1 / -1;
+  }
+  & .org-grant-field {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+  }
+  & .org-grant-form fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid var(--so-border);
+    border-radius: 6px;
+  }
+  & .org-grant-form fieldset label {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    gap: 8px;
+  }
+  & .org-grant-form fieldset :is(.org-grant-field-help, .org-grant-field-error) {
+    flex-basis: 100%;
+  }
+  & .org-grant-field-help {
+    margin: 0;
+    color: var(--so-text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  & .org-grant-field-error {
+    margin: 0;
+    color: var(--so-danger);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  & .org-grant-field-error:empty {
+    display: none;
+  }
+  & :is(input, select, textarea)[aria-invalid="true"] {
+    border: 2px solid var(--so-danger);
+  }
+  & .org-grant-toolbar > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  & .org-grant-toolbar button[aria-pressed="true"] {
+    border-color: var(--so-primary);
+    color: var(--so-primary);
+    background: var(--so-primary-soft);
+  }
+  & .org-grant-toolbar button[aria-pressed="true"]:disabled {
+    border: 2px solid var(--so-roles-disabled-selected-border);
+    color: var(--so-roles-disabled-text);
+    background: var(--so-roles-disabled-bg);
+  }
+  & .org-grant-list > button {
+    grid-template-columns: 80px minmax(0, 1fr) minmax(120px, 0.7fr) minmax(150px, 0.8fr);
+  }
+  & i[data-status] {
+    width: fit-content;
+    padding: 3px 8px;
+    border: 1px solid var(--so-success-border);
+    border-radius: 4px;
+    color: var(--so-success);
+    background: var(--so-success-soft);
+    font-size: 13px;
+    font-style: normal;
+  }
+  & i:is([data-status="expired"], [data-status="revoked"]) {
+    border-color: var(--so-danger-border);
+    color: var(--so-danger);
+    background: var(--so-danger-soft);
+  }
+  & .org-grant-detail dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  & .org-grant-detail dl > div {
+    display: grid;
+    gap: 6px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--so-border);
+  }
+  & .org-grant-detail dt {
+    color: var(--so-text-muted);
+  }
+  & .org-grant-mutation {
+    display: grid;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--so-border);
+    background: var(--so-panel);
+  }
+  & .org-grant-mutation :is(label, p, input, button) {
+    font-size: 13px;
+  }
+  & .org-grant-mutation .danger {
+    color: var(--so-danger);
+    border-color: var(--so-danger-border);
+  }
+  & :is(.org-grant-form > button, .org-grant-intro > button):enabled {
+    background: var(--so-primary);
+    border-color: var(--so-primary);
+    color: var(--so-on-primary);
+  }
+  & .org-grant-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+  }
+}
+@container (max-width: 820px) {
+  #app .org-admin-center .org-role-page {
+    & .org-grant-list > button {
+      grid-template-columns: 80px minmax(0, 1fr);
+    }
+    & .org-scope-definitions article {
+      grid-template-columns: 100px minmax(0, 1fr);
+    }
+    & .org-scope-definitions small {
+      grid-column: 1 / -1;
+    }
+  }
+}
+@container (max-width: 540px) {
+  #app .org-admin-center .org-role-page {
+    & .org-admin-card {
+      padding: 16px;
+    }
+    & .org-role-summary {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    & .org-role-summary article:nth-child(3) {
+      border-left: 0;
+    }
+    & .org-role-summary article:nth-child(n + 3) {
+      border-top: 1px solid var(--so-border);
+    }
+    &
+      :is(
+        .org-role-group,
+        .org-grant-form,
+        .org-grant-detail dl,
+        .org-scope-members .org-admin-line
+      ) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    & .org-role-tabs button {
+      flex: 1 1 auto;
+      padding-inline: 8px;
+    }
+    & .org-scope-definitions article {
+      padding: 12px 16px;
+    }
+  }
+}

@@ -351,6 +351,9 @@ watch(
             placeholder="例如：审批、审计或供应链"
         /></label>
         <span>{{ filteredRoles.length }} / {{ roles.length }} 个角色</span>
+        <a v-if="selectedRole" class="org-role-detail-link" href="#org-role-selected"
+          >定位角色详情</a
+        >
       </section>
       <section v-if="roles.length" class="org-role-browser">
         <div class="org-role-list" aria-label="角色模板">
@@ -361,7 +364,6 @@ watch(
             :class="{ selected: selectedRole?.code === role.code }"
             @click="selectedRoleCode = role.code"
           >
-            <span>{{ role.name.slice(0, 1) }}</span>
             <div>
               <strong>{{ role.name }}</strong>
               <small>{{ role.description }}</small>
@@ -370,7 +372,7 @@ watch(
           </button>
           <p v-if="!filteredRoles.length" class="org-role-empty">没有匹配的角色或能力。</p>
         </div>
-        <article v-if="selectedRole" class="org-admin-card org-role-detail">
+        <article v-if="selectedRole" id="org-role-selected" class="org-admin-card org-role-detail">
           <p>固定角色模板</p>
           <h3>{{ selectedRole.name }}</h3>
           <span>{{ selectedRole.description }}</span>
@@ -431,7 +433,11 @@ watch(
           </button>
         </div>
         <div class="org-role-matrix-scroll">
-          <div role="table" aria-label="角色能力矩阵">
+          <div
+            role="table"
+            aria-label="角色能力矩阵"
+            :style="{ '--org-role-columns': roles.length }"
+          >
             <div role="row" class="org-admin-matrix-head">
               <b role="columnheader">业务能力</b
               ><b v-for="role in roles" :key="role.code" role="columnheader">{{ role.name }}</b>
@@ -452,12 +458,6 @@ watch(
     </template>
 
     <template v-else-if="activeSection === 'scopes'">
-      <section class="org-scope-definitions">
-        <article v-for="scope in scopeDefinitions" :key="scope.code" class="org-admin-card">
-          <span>{{ scope.title }}</span
-          ><b>{{ scopeCounts[scope.code] ?? 0 }} 名成员</b><small>{{ scope.description }}</small>
-        </article>
-      </section>
       <article class="org-admin-card org-scope-current">
         <div>
           <p>当前会话</p>
@@ -518,6 +518,12 @@ watch(
         </div>
         <p v-if="!filteredScopeMembers.length" class="org-role-empty">当前筛选没有成员。</p>
       </article>
+      <section class="org-scope-definitions">
+        <article v-for="scope in scopeDefinitions" :key="scope.code" class="org-admin-card">
+          <span>{{ scope.title }}</span
+          ><b>{{ scopeCounts[scope.code] ?? 0 }} 名成员</b><small>{{ scope.description }}</small>
+        </article>
+      </section>
     </template>
 
     <template v-else>
@@ -711,6 +717,9 @@ watch(
         /></label>
       </section>
 
+      <a v-if="selectedGrant" class="org-role-detail-link" href="#org-grant-selected"
+        >定位授权详情</a
+      >
       <section v-if="grants.length" class="org-grant-browser">
         <div class="org-grant-list" aria-label="指定资源授权列表">
           <button
@@ -732,7 +741,11 @@ watch(
           </button>
           <p v-if="!filteredGrants.length" class="org-role-empty">当前筛选没有资源授权。</p>
         </div>
-        <article v-if="selectedGrant" class="org-admin-card org-grant-detail">
+        <article
+          v-if="selectedGrant"
+          id="org-grant-selected"
+          class="org-admin-card org-grant-detail"
+        >
           <p>指定资源授权</p>
           <header>
             <div>
@@ -864,55 +877,4 @@ watch(
   </section>
 </template>
 
-<style scoped>
-.org-grant-form {
-  gap: 18px 22px;
-}
-
-.org-grant-field {
-  display: grid;
-  gap: 8px;
-  min-width: 0;
-}
-
-.org-grant-field--wide {
-  grid-column: 1 / -1;
-}
-
-.org-grant-field > label,
-.org-grant-field-help,
-.org-grant-field-error {
-  margin: 0;
-  font-size: 17px;
-}
-
-.org-grant-field > label {
-  color: var(--oa-ink);
-  font-weight: 650;
-}
-
-.org-grant-form :is(input, select, textarea)[aria-invalid="true"] {
-  border: 2px solid var(--oa-danger);
-}
-
-.org-grant-field-help {
-  color: var(--oa-muted);
-}
-
-.org-grant-field-error {
-  color: var(--oa-danger);
-}
-
-.org-grant-field-error:empty {
-  display: none;
-}
-
-.org-grant-form fieldset {
-  border-color: var(--oa-section);
-  border-radius: 0;
-}
-
-.org-grant-form fieldset :is(.org-grant-field-help, .org-grant-field-error) {
-  flex-basis: 100%;
-}
-</style>
+<style src="../organization-role-workspace.css"></style>

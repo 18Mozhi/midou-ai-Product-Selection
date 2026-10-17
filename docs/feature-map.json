@@ -4519,6 +4519,26 @@
       "truthBoundary": "only evidence-backed results are passed; production deployment, real mail delivery, real Amazon and 1688 login-risk-control lifecycles, destructive dependency fault injection and unmeasured peak capacity remain blocked or unverified",
       "status": "verified",
       "statusDetail": "sixteen_enterprise_audit_deliverables_present_with_per_route_records_dependency_matrix_risks_gaps_and_explicit_blockers"
+    },
+    "selectionOrganizationRoles20261017": {
+      "status": "implemented",
+      "statusDetail": "local_ui_verified_requires_release",
+      "requirements": "docs/selection-organization-role-layout.md",
+      "routes": ["/org-admin/roles"],
+      "sourceFiles": [
+        "apps/web/src/components/OrganizationRolePanel.vue",
+        "apps/web/src/organization-role-workspace.css",
+        "apps/web/src/organization-admin.css",
+        "apps/web/src/design/organization-admin-tokens.css"
+      ],
+      "testFiles": [
+        "tests/e2e/m06-01-organization-admin.spec.ts",
+        "tests/unit/platform-palette-contract.test.mjs",
+        "tests/unit/role-page-preview.test.mjs",
+        "tests/unit/ui-phase2-roles-review.test.mjs"
+      ],
+      "contract": "Original script and event/model bindings preserved. Full-width role/grant workspaces, actual role-count matrix columns, current-session/member facts before scope definitions. Native fragment navigation only. No backend/schema/permission/API/environment/dependency change.",
+      "verification": "16 desktop/mobile business/layout cases passed; final dynamic-column/navigation 6 cases passed. Related Node suites: 114 pass plus 86 pass; Web typecheck/build and static/budget/realism/docs gates passed. Historical packets do not attest rebuilt UI. No production acceptance or deployment claim."
     }
   },
   "phaseVerification": {
