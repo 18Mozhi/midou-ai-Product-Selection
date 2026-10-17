@@ -7,7 +7,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformDashboard.vue": "dd3fee43d66fe14bbd83c66bd3b1b4f369468ef15f4da66210faa526c9742d3a",
+    "apps/web/src/components/PlatformDashboard.vue": "61e627f42db7440d392caf764a14dded01209cbf85061c816a6ea94b6427f7b9",
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
     "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d"
@@ -803,7 +803,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/PlatformDashboard.vue": "dd3fee43d66fe14bbd83c66bd3b1b4f369468ef15f4da66210faa526c9742d3a",
+      "apps/web/src/components/PlatformDashboard.vue": "61e627f42db7440d392caf764a14dded01209cbf85061c816a6ea94b6427f7b9",
       "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
       "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
       "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d"

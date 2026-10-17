@@ -2,7 +2,9 @@ import { test, expect } from "@playwright/test";
 test("M02-04.A07/A15 state library is visually stable", async ({ page }) => {
   await page.goto("/ui-states");
   await expect(page.getByRole("heading", { name: "这里还没有内容" })).toBeVisible();
-  await expect(page).toHaveScreenshot("m02-04-state-library.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("m02-04-state-library-commerce-20261017.png", {
+    fullPage: true,
+  });
 });
 test("M02-04.A08/A16 blocked state recovers through an explicit action", async ({ page }) => {
   await page.goto("/ui-states");
@@ -97,7 +99,9 @@ test("M02-04.A08/A15 high-impact confirmation is keyboard safe and fail-closed",
   await page.getByRole("checkbox").check();
   await page.getByPlaceholder("确认撤销").fill("确认撤销");
   await expect(submit).toBeEnabled();
-  await expect(page).toHaveScreenshot("m02-04-confirm-dialog.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("m02-04-confirm-dialog-commerce-20261017.png", {
+    fullPage: true,
+  });
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();

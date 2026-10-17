@@ -5923,5 +5923,6 @@
     ],
     "contract": "Automatic product channels with a strictly validated actual Amazon ASIN may enter existing analysis without a manual monitoring subscription; 1688 is excluded. Preserve selected-primary lineage and rule-specific paths, leases, scoped topic idempotence, provider enablement, quality gates and completion proofs. Do not fabricate rule matches, intelligence, scores or completion. No API/event field/schema/config change and no history replay. Not deployed or daily-100 accepted."
   },
-  "selectionApprovalInboxRebuild20261017": "审批 /tasks/approvals 与通知 /notifications 使用紧凑标题工具栏和内联事实计数，移除136px蓝色页头、装饰标语、审批信号条及未使用色值。手机通知类别与仅未读筛选换行完整展示；保留所有接口、权限、计数、实时连接、审批和通知工作流及原生弹窗。预览命令改为真实Vue Playwright流程，删除旧注入器与重复CSS；历史设计记录保留。参见 docs/selection-approval-inbox-workbench.md。未部署，不代表每日100条整链或生产验收通过。"
+  "selectionApprovalInboxRebuild20261017": "审批 /tasks/approvals 与通知 /notifications 使用紧凑标题工具栏和内联事实计数，移除136px蓝色页头、装饰标语、审批信号条及未使用色值。手机通知类别与仅未读筛选换行完整展示；保留所有接口、权限、计数、实时连接、审批和通知工作流及原生弹窗。预览命令改为真实Vue Playwright流程，删除旧注入器与重复CSS；历史设计记录保留。参见 docs/selection-approval-inbox-workbench.md。未部署，不代表每日100条整链或生产验收通过。",
+  "selectionBrowserShellRegression20261018": "扩展浏览器范围每端902项限错探针暴露旧配色/16px要求/旧图基线，按当前商务配色、2px焦点实线和13px下限对齐，44px点击、重试和键盘权限断言保留。平台概览空状态不再无事实声称继续自动采集，改为检查来源与任务提示；P38仅刷新源码哈希。8个文件关闭截图更新桌面50/50、手机50/50通过，75项Node检查与Web构建通过。整套每端902项、生产和每日100条仍未签收；见 docs/selection-browser-shell-rebaseline.md。无API/配置/数据库/依赖变更。"
 }

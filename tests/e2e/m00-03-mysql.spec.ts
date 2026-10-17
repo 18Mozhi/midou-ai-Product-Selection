@@ -3,7 +3,7 @@ test("M00-03.A07/A15 MySQL foundation is visually stable", async ({ page }) => {
   await page.goto("/?view=mysql");
   await expect(page.getByRole("heading", { name: "数据库 5.7 基座", exact: true })).toBeVisible();
   await expect(page.getByText("契约状态预览 · 非实时监控")).toBeVisible();
-  await expect(page).toHaveScreenshot("m00-03-mysql.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("m00-03-mysql-commerce-20261017.png", { fullPage: true });
 });
 test("M00-03.A08/A16 blocked and rollback states are explicit at 390px", async ({ page }) => {
   await page.goto("/?view=mysql&state=blocked");
@@ -11,5 +11,7 @@ test("M00-03.A08/A16 blocked and rollback states are explicit at 390px", async (
   await page.getByRole("button", { name: "回滚中" }).click();
   await expect(page.getByText("回滚 · 逆序恢复")).toBeVisible();
   if (page.viewportSize()?.width === 390)
-    await expect(page).toHaveScreenshot("m00-03-mysql-390.png", { fullPage: true });
+    await expect(page).toHaveScreenshot("m00-03-mysql-390-commerce-20261017.png", {
+      fullPage: true,
+    });
 });

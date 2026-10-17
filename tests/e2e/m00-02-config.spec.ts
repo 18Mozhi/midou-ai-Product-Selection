@@ -3,12 +3,14 @@ test("M00-02.A15 configuration boundary is visually stable", async ({ page }) =>
   await page.goto("/?view=config");
   await expect(page.getByRole("heading", { name: "配置边界" })).toBeVisible();
   await expect(page.getByTestId("public-config")).toContainText("/api/v1");
-  await expect(page).toHaveScreenshot("m00-02-config.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("m00-02-config-commerce-20261017.png", { fullPage: true });
 });
 test("M00-02.A07 390px keeps rejected and restart states readable", async ({ page }) => {
   await page.goto("/?view=config");
   if (page.viewportSize()?.width === 390) {
     await expect(page.getByText("拒绝启动")).toBeVisible();
-    await expect(page).toHaveScreenshot("m00-02-config-390.png", { fullPage: true });
+    await expect(page).toHaveScreenshot("m00-02-config-390-commerce-20261017.png", {
+      fullPage: true,
+    });
   }
 });

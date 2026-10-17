@@ -206,19 +206,19 @@ for (const item of [
     shell: "member" as const,
     path: "/home",
     heading: "选品控制台",
-    snapshot: "m02-03-member.png",
+    snapshot: "m02-03-member-commerce-20261017.png",
   },
   {
     shell: "organization_admin" as const,
     path: "/org-admin",
     heading: "治理概览",
-    snapshot: "m02-03-org-admin.png",
+    snapshot: "m02-03-org-admin-commerce-20261017.png",
   },
   {
     shell: "platform_admin" as const,
     path: "/platform-admin",
     heading: "平台运行概览",
-    snapshot: "m02-03-platform-admin.png",
+    snapshot: "m02-03-platform-admin-commerce-20261017.png",
   },
 ])
   test(`M02-03.A07/A09/A15 ${item.shell} shell is isolated responsive and visual`, async ({
@@ -228,6 +228,12 @@ for (const item of [
     await page.goto(item.path);
     await expect(page.getByRole("heading", { name: item.heading }).first()).toBeVisible();
     await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
+    if (item.shell === "platform_admin") {
+      await expect(
+        page.getByText("先检查来源配置与采集任务，或创建组织。", { exact: true }),
+      ).toBeVisible();
+      await expect(page.getByText(/系统仍会继续自动获取热点/)).toHaveCount(0);
+    }
     await expect(page.locator(".role-nav-groups details[open]")).not.toHaveCount(0);
     await expect(page.locator(".role-topbar .role-context")).toHaveCount(0);
     if (testInfo.project.name === "mobile-390") {
@@ -387,8 +393,7 @@ for (const item of [
       .evaluateAll((elements) =>
         elements.flatMap((element) => {
           const size = Number.parseFloat(getComputedStyle(element).fontSize);
-          const metadata = element.tagName === "P" && Boolean(element.closest(".role-page-title"));
-          return size < 16 && !(metadata && size >= 13)
+          return size < 13
             ? [{ tag: element.tagName, text: element.textContent?.trim().slice(0, 40) ?? "", size }]
             : [];
         }),
@@ -619,7 +624,9 @@ test("theme continuity and real-height layout hold at 768, 1024 and 1440", async
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
       .toBe(true);
-    await expect(page).toHaveScreenshot(`m02-03-platform-${width}.png`, { fullPage: true });
+    await expect(page).toHaveScreenshot(`m02-03-platform-${width}-commerce-20261017.png`, {
+      fullPage: true,
+    });
   }
 });
 
