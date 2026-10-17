@@ -5,6 +5,7 @@ export { selectionCandidateSql, selectionPrimaryAsinSql } from "./selection-cand
 export {
   selectionRiskGateSql,
   selectionCompetitionGateSql,
+  selectionCompetitorRelevanceSql,
   competitorDetailEvidenceSql,
   selectionCompletedCompetitorsSql,
   selectionPipelineCompletionProofSql,

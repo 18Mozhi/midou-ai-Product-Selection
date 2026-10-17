@@ -52,3 +52,5 @@ GET /api/v1/me/home-dashboard 的 automatic_selection.daily_production 增加可
 ```powershell
 Remove-Item -LiteralPath 'C:\Users\23136\AppData\Local\Temp\scoutops-profit-unknown-1792202715004' -Recurse -Force
 ```
+
+- 竞品数量条件现同时要求可追溯的同类型/用途相关性与真实详情，推荐和每日完成共用检查；未分类历史记录不填数量，不改已确认的低分、不推荐与明确利润未知口径。见 `docs/selection-competitor-quality-proof.md`，未部署。

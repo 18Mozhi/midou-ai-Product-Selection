@@ -26,6 +26,74 @@ export const competitorDetailEvidenceSql = (snapshot: "s" | "s_sample") =>
   "AND JSON_UNQUOTE(JSON_EXTRACT(q_detail.target_json,'$.projection_type'))='competitor_snapshot' " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(q_detail.target_json,'$.page_url')) REGEXP '^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/[A-Za-z0-9]{10}([/?#]|$)')";
 
+// The producer stores the full original titles. Keep relatedness separate from detail collection:
+// an old/manual snapshot is still readable, but cannot prove an independent substitute.
+const relevanceFieldsSql =
+  "IF(JSON_TYPE(JSON_EXTRACT(n_relation.payload_json,'$.fields'))='OBJECT'," +
+  "JSON_EXTRACT(n_relation.payload_json,'$.fields'),n_relation.payload_json)";
+const relevanceTitleSql = `JSON_UNQUOTE(JSON_EXTRACT(${relevanceFieldsSql},'$.title'))`;
+const relevanceAsinSql = `JSON_UNQUOTE(JSON_EXTRACT(${relevanceFieldsSql},'$.asin'))`;
+const relevanceUrlSql =
+  `COALESCE(JSON_UNQUOTE(JSON_EXTRACT(${relevanceFieldsSql},'$.canonical_url')),` +
+  `JSON_UNQUOTE(JSON_EXTRACT(${relevanceFieldsSql},'$.source_url')))`;
+
+export const selectionCompetitorRelevanceSql =
+  "EXISTS (SELECT 1 FROM collection_subqueries q_relation " +
+  "JOIN collection_task_evidence_links l_relation ON l_relation.collection_subquery_id=q_relation.id " +
+  "AND l_relation.collection_task_id=q_relation.task_id AND l_relation.organization_id=q_relation.organization_id " +
+  "AND l_relation.workspace_id=q_relation.workspace_id " +
+  "JOIN normalized_records n_relation ON n_relation.id=l_relation.normalized_record_id " +
+  "AND n_relation.raw_evidence_id=l_relation.raw_evidence_id AND n_relation.organization_id=l_relation.organization_id " +
+  "AND n_relation.workspace_id=l_relation.workspace_id AND n_relation.provider_id=q_relation.provider_id " +
+  "AND n_relation.status='active' " +
+  "JOIN opportunity_events e_relation ON e_relation.organization_id=q_relation.organization_id " +
+  "AND e_relation.workspace_id=q_relation.workspace_id " +
+  "AND e_relation.resource_type='opportunity' AND e_relation.event_type='opportunity.competitors_classified' " +
+  "WHERE e_relation.resource_id=o.id AND q_relation.organization_id=o.organization_id AND q_relation.workspace_id=o.workspace_id " +
+  "AND q_relation.provider_id=c_sample.provider_id " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(q_relation.target_json,'$.projection_type'))='opportunity_competitors' " +
+  "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(q_relation.target_json,'$.opportunity_id'))=BINARY o.id " +
+  `AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(q_relation.target_json,'$.main_asin')))=BINARY ${selectionPrimaryAsinSql} ` +
+  `AND (${relevanceAsinSql} IS NULL OR BINARY UPPER(${relevanceAsinSql})=BINARY UPPER(c_sample.external_id)) ` +
+  `AND CONVERT(${relevanceUrlSql} USING utf8mb4) COLLATE utf8mb4_general_ci REGEXP ` +
+  "CONVERT(CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',c_sample.external_id,'([/?#]|$)') USING utf8mb4) COLLATE utf8mb4_general_ci " +
+  `AND LENGTH(TRIM(${relevanceTitleSql}))>0 ` +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.version'))='competitor-title-v1' " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.model_fingerprint')) REGEXP '^[a-f0-9]{64}$' " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.input_fingerprint')) REGEXP '^[a-f0-9]{64}$' " +
+  "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.task_id'))=BINARY q_relation.task_id " +
+  "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.subquery_id'))=BINARY q_relation.id " +
+  "AND JSON_CONTAINS(JSON_EXTRACT(e_relation.payload_json,'$.scope')," +
+  "JSON_OBJECT('taskId',q_relation.task_id,'subqueryId',q_relation.id,'organizationId',o.organization_id," +
+  "'workspaceId',o.workspace_id,'opportunityId',o.id,'mainAsin'," +
+  "UPPER(JSON_UNQUOTE(JSON_EXTRACT(q_relation.target_json,'$.main_asin')))))=1 " +
+  "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.input.primary.asin'))=" +
+  "BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(q_relation.target_json,'$.main_asin'))) " +
+  "AND LENGTH(TRIM(JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.input.primary.title'))))>0 " +
+  "AND JSON_CONTAINS(JSON_EXTRACT(e_relation.payload_json,'$.input.candidates')," +
+  `JSON_OBJECT('source_ref',n_relation.id,'asin',UPPER(c_sample.external_id),'title',${relevanceTitleSql}))=1 ` +
+  "AND JSON_CONTAINS(JSON_EXTRACT(e_relation.payload_json,'$.classifications')," +
+  "JSON_OBJECT('source_ref',n_relation.id,'relation','substitute'," +
+  `'candidate_excerpt',${relevanceTitleSql},` +
+  "'primary_excerpt',JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.input.primary.title'))))=1 " +
+  "AND e_relation.id=(SELECT latest_relation.id FROM opportunity_events latest_relation " +
+  "WHERE latest_relation.organization_id=e_relation.organization_id AND latest_relation.workspace_id=e_relation.workspace_id " +
+  "AND latest_relation.resource_id=e_relation.resource_id AND latest_relation.resource_type='opportunity' " +
+  "AND latest_relation.event_type='opportunity.competitors_classified' " +
+  "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(latest_relation.payload_json,'$.task_id'))=BINARY q_relation.task_id " +
+  "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(latest_relation.payload_json,'$.subquery_id'))=BINARY q_relation.id " +
+  "ORDER BY latest_relation.occurred_at DESC,latest_relation.id DESC LIMIT 1) " +
+  "AND NOT EXISTS (SELECT 1 FROM opportunity_events newer_relation " +
+  "WHERE newer_relation.organization_id=e_relation.organization_id " +
+  "AND newer_relation.workspace_id=e_relation.workspace_id AND newer_relation.resource_id=e_relation.resource_id " +
+  "AND newer_relation.resource_type='opportunity' AND newer_relation.event_type='opportunity.competitors_classified' " +
+  "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(newer_relation.payload_json,'$.input.primary.asin'))=" +
+  "BINARY JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.input.primary.asin')) " +
+  "AND JSON_CONTAINS(JSON_EXTRACT(newer_relation.payload_json,'$.input.candidates')," +
+  "JSON_OBJECT('asin',UPPER(c_sample.external_id)))=1 " +
+  "AND (newer_relation.occurred_at>e_relation.occurred_at OR " +
+  "(newer_relation.occurred_at=e_relation.occurred_at AND newer_relation.id>e_relation.id))))";
+
 export const detailedSelectionCompetitorsFromSql =
   "FROM competitors c_sample " +
   "JOIN providers p_sample ON p_sample.id=c_sample.provider_id AND p_sample.code='amazon_product' AND p_sample.status='enabled' " +
@@ -37,7 +105,7 @@ export const detailedSelectionCompetitorsFromSql =
   "AND c_sample.deleted_at IS NULL AND s_sample.freshness='fresh' AND s_sample.source_status='healthy' " +
   "AND s_sample.current_price IS NOT NULL AND s_sample.currency IS NOT NULL " +
   "AND s_sample.review_count IS NOT NULL AND s_sample.rating_value IS NOT NULL " +
-  `AND ${competitorDetailEvidenceSql("s_sample")} ` +
+  `AND ${competitorDetailEvidenceSql("s_sample")} AND ${selectionCompetitorRelevanceSql} ` +
   `AND BINARY UPPER(c_sample.external_id)<>BINARY COALESCE(${opportunityPrimaryAsinSql},'')`;
 
 export function selectionCompetitionGateSql(minimumCompetitors: number) {
