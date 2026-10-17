@@ -5549,5 +5549,27 @@
       "tests/unit/personal-center-page-preview.test.mjs"
     ],
     "contract": "Compact account header and wrapping section tabs; full-width permission, security and asset panels. Original account script, links, events, profile version/idempotency, section failure and five preference booleans unchanged. No backend, API, schema, config, permission or dependency change. Frontend publish and refresh only."
+  },
+  "selectionIdentityWorkspace20261017": {
+    "status": "implemented",
+    "statusDetail": "local_requires_release_and_remaining_goal_acceptance",
+    "requirements": "docs/selection-identity-workspace.md",
+    "verification": "164 related Node checks and 74 full desktop/mobile browser cases passed; six independent screenshot replays passed with updates disabled. Six dated permanent baselines preserve old images. Web typecheck/build, static/budget/style/realism/docs passed. No production or daily-100 acceptance claim.",
+    "implementationFiles": [
+      "apps/web/src/components/identity-workspace.css",
+      "apps/web/src/components/local-identity-login.css",
+      "apps/web/src/components/local-identity-registration.css",
+      "apps/web/src/components/local-identity-recovery.css",
+      "apps/web/src/components/local-identity-verification.css",
+      "apps/web/src/components/local-identity-reset.css",
+      "apps/web/src/components/local-identity-mfa.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m02-02-auth-onboarding.spec.ts",
+      "tests/e2e/m01-02-mfa.spec.ts",
+      "tests/e2e/m01-01-local-identity.spec.ts",
+      "tests/unit/platform-palette-contract.test.mjs"
+    ],
+    "contract": "Shared compact single-column identity workspaces use existing semantic tokens. LocalIdentity component unchanged: original fields, requests, MFA secret cleanup, authentication and security setup contracts preserved. No API, database, permission, config or dependency change. Frontend publish and refresh only."
   }
 }

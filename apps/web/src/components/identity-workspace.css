@@ -1,0 +1,330 @@
+#app
+  :is(
+    .p02-login-page,
+    .p03-registration-page,
+    .p04-recovery-page,
+    .p05-verification-page,
+    .p06-reset-page,
+    .p07-mfa-page
+  ) {
+  box-sizing: border-box;
+  width: min(720px, calc(100% - 32px));
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding: 24px 0 40px;
+  color: var(--so-text);
+  background: var(--so-bg);
+  font-family: var(--so-font-ui);
+  font-size: 13px;
+  line-height: 1.6;
+  & *,
+  & *::before,
+  & *::after {
+    box-sizing: border-box;
+  }
+  & :is(h1, h2, h3, p) {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  & h1 {
+    font-size: 22px;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+  & h2 {
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+  & :is(button, input, a):focus-visible {
+    outline: 3px solid var(--so-focus);
+    outline-offset: 3px;
+  }
+  &
+    :is(
+      .p02-login-top,
+      .p03-registration-top,
+      .p04-recovery-top,
+      .p05-verification-top,
+      .p06-reset-top,
+      .p07-mfa-top
+    ) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    min-height: 56px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--so-border);
+    & a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      color: var(--so-primary);
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    & :is(strong, span) {
+      color: var(--so-text-muted);
+      font-size: 13px;
+      font-weight: 400;
+    }
+    & small {
+      color: var(--so-text-muted);
+      margin-left: auto;
+      font-size: 12px;
+    }
+  }
+  & :is(.p02-login-shell, .p04-recovery-shell) {
+    display: block;
+    min-width: 0;
+  }
+  & :is(.p03-registration-hero, .p05-verification-hero, .p06-reset-hero, .p07-mfa-hero) {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 20px;
+    padding: 0;
+    min-height: 0;
+    color: var(--so-text);
+    background: transparent;
+    & span {
+      color: var(--so-text-muted);
+    }
+  }
+  &
+    :is(
+      .p02-login-workspace,
+      .p03-registration-workspace,
+      .p04-recovery-workspace,
+      .p05-verification-workspace,
+      .p06-reset-workspace,
+      .p07-mfa-workspace
+    ) {
+    display: grid;
+    align-content: start;
+    gap: 20px;
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
+    & > header {
+      display: grid;
+      gap: 6px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--so-border);
+    }
+    & > header :is(p, span) {
+      color: var(--so-text-muted);
+    }
+  }
+  &
+    :is(
+      form,
+      .p02-login-security,
+      .p02-login-complete,
+      .p05-verification-next,
+      .p06-reset-next,
+      .p07-mfa-recovery,
+      .p07-mfa-danger,
+      .p07-mfa-enabled
+    ) {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+  }
+  & label {
+    display: grid;
+    gap: 6px;
+    font-weight: 500;
+  }
+  & small {
+    font-size: 12px;
+  }
+  & label small {
+    color: var(--so-text-muted);
+    font-weight: 400;
+  }
+  & input {
+    min-width: 0;
+    width: 100%;
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid var(--so-border);
+    border-radius: 6px;
+    color: var(--so-text);
+    background: var(--so-panel);
+    font: inherit;
+    font-size: 16px;
+  }
+  & button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 9px 14px;
+    border: 1px solid var(--so-border);
+    border-radius: 6px;
+    color: var(--so-text);
+    background: var(--so-panel);
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  & button:hover:not(:disabled) {
+    border-color: var(--so-primary);
+  }
+  &
+    :is(
+      .p02-login-primary,
+      .p03-registration-primary,
+      .p04-recovery-primary,
+      .p05-verification-primary,
+      .p06-reset-primary,
+      .p07-mfa-primary
+    ) {
+    color: var(--so-on-primary);
+    background: var(--so-primary);
+    border-color: var(--so-primary);
+  }
+  & .p07-mfa-danger-button {
+    color: var(--so-danger);
+    border-color: var(--so-danger);
+  }
+  & button:disabled {
+    color: var(--so-text-muted);
+    border-color: var(--so-border);
+    background: var(--so-panel-soft);
+    cursor: not-allowed;
+  }
+  &
+    :is(
+      .p02-login-notice,
+      .p03-registration-notice,
+      .p04-recovery-notice,
+      .p05-verification-notice,
+      .p06-reset-notice,
+      .p07-mfa-notice
+    ) {
+    display: grid;
+    gap: 6px;
+    padding: 12px 16px;
+    border-left: 3px solid var(--so-primary);
+    background: var(--so-panel-soft);
+    overflow-wrap: anywhere;
+  }
+  &
+    :is(
+      .p02-login-error,
+      .p03-registration-error,
+      .p04-recovery-error,
+      .p05-verification-error,
+      .p06-reset-error,
+      .p07-mfa-error
+    ) {
+    border-left-color: var(--so-danger);
+    background: var(--so-danger-soft);
+  }
+  & :is(.p02-login-warning, .p06-reset-warning) {
+    border-left-color: var(--so-warning);
+  }
+  & :is(.p04-recovery-success, .p05-verification-success, .p06-reset-success, .p07-mfa-success) {
+    border-left-color: var(--so-success);
+    background: var(--so-success-soft);
+  }
+  &
+    :is(
+      .p02-login-form-row,
+      .p02-login-actions,
+      .p03-registration-footer,
+      .p04-recovery-footer,
+      .p07-mfa-footer
+    ) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    & :is(button, a) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      min-width: 44px;
+      padding: 8px 4px;
+      border: 0;
+      background: transparent;
+      color: var(--so-primary);
+      text-decoration: none;
+      font: inherit;
+    }
+  }
+  & :is(.p02-login-actions, .p03-registration-footer, .p04-recovery-footer, .p07-mfa-footer) {
+    padding-top: 12px;
+    border-top: 1px solid var(--so-border);
+  }
+  & .p02-login-form-row {
+    justify-content: space-between;
+    color: var(--so-text-muted);
+  }
+  & :is(.p07-mfa-step, .p07-mfa-danger, .p07-mfa-recovery) {
+    padding-top: 16px;
+    border-top: 1px solid var(--so-border);
+  }
+  & .p07-mfa-step {
+    display: grid;
+    gap: 12px;
+  }
+  & :is(.p07-mfa-help, .p02-login-step) {
+    color: var(--so-text-muted);
+  }
+  & code {
+    padding: 10px 12px;
+    color: var(--so-text);
+    background: var(--so-panel-soft);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+  & .p07-mfa-disabled {
+    display: grid;
+    gap: 12px;
+  }
+  & a {
+    color: var(--so-primary);
+  }
+}
+#app :is(.p02-login-page, .p04-recovery-page, .p06-reset-page) {
+  max-width: 480px;
+}
+#app .p03-registration-page {
+  max-width: 560px;
+}
+@media (max-width: 540px) {
+  #app
+    :is(
+      .p02-login-page,
+      .p03-registration-page,
+      .p04-recovery-page,
+      .p05-verification-page,
+      .p06-reset-page,
+      .p07-mfa-page
+    ) {
+    padding-top: 12px;
+    &
+      :is(
+        .p02-login-workspace,
+        .p03-registration-workspace,
+        .p04-recovery-workspace,
+        .p05-verification-workspace,
+        .p06-reset-workspace,
+        .p07-mfa-workspace
+      ) {
+      padding: 20px 16px;
+    }
+    & :is(.p02-login-actions, .p03-registration-footer, .p04-recovery-footer, .p07-mfa-footer) {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+}

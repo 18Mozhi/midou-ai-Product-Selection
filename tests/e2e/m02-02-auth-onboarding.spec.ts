@@ -6,6 +6,67 @@ const envelope = (data: unknown) => ({
   request_id: "onboarding-e2e-request",
   trace_id: "onboarding-e2e-trace",
 });
+async function identityColor(page: Page, token: string) {
+  return page.evaluate((name) => {
+    const probe = document.createElement("span");
+    probe.style.color = `var(${name})`;
+    document.body.append(probe);
+    const value = getComputedStyle(probe).color;
+    probe.remove();
+    return value;
+  }, token);
+}
+
+for (const [path, root] of [
+  ["/login", ".p02-login-page"],
+  ["/register", ".p03-registration-page"],
+  ["/forgot-password", ".p04-recovery-page"],
+  ["/verify-email", ".p05-verification-page"],
+  ["/reset-password?token=layout-only", ".p06-reset-page"],
+  ["/security/mfa", ".p07-mfa-page"],
+]) {
+  test(`identity workspace uses compact single-column forms without read-only writes: ${path}`, async ({
+    page,
+  }) => {
+    let writes = 0;
+    await page.route("**/api/v1/**", (route) => {
+      if (route.request().method() !== "GET") writes += 1;
+      const data = route.request().url().includes("session-status")
+        ? { authenticated: true }
+        : { totp_enabled: false };
+      return route.fulfill({ json: envelope(data) });
+    });
+    await page.goto(path);
+    const surface = page.locator(root);
+    await expect(surface).toBeVisible();
+    await expect(surface).toHaveCSS("font-size", "13px");
+    const workspace = surface.locator('[class$="-workspace"]');
+    await expect(workspace).toHaveCount(1);
+    await expect(workspace).toHaveCSS("border-radius", "8px");
+    const widths = await surface.evaluate((element) => ({
+      root: element.getBoundingClientRect().width,
+      workspace: element.querySelector('[class$="-workspace"]')!.getBoundingClientRect().width,
+    }));
+    expect(Math.abs(widths.root - widths.workspace)).toBeLessThan(2);
+    expect(widths.root).toBeLessThanOrEqual(720);
+    const controls = await surface.locator("input, button").evaluateAll((items) =>
+      items.map((item) => ({
+        height: item.getBoundingClientRect().height,
+        input: item.tagName === "INPUT",
+        font: parseFloat(getComputedStyle(item).fontSize),
+      })),
+    );
+    for (const control of controls) {
+      expect(control.height).toBeGreaterThanOrEqual(44);
+      if (control.input) expect(control.font).toBeGreaterThanOrEqual(16);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+    expect(writes).toBe(0);
+  });
+}
+
 test("P03 registration ignores synchronous duplicate submit while the request is pending", async ({
   page,
 }) => {
@@ -190,7 +251,7 @@ test("M02-02.A07/A08/A15 login uses the real contract and continues to tenancy b
   await expect(page.getByRole("heading", { name: "选择组织" })).toBeVisible();
   await expect(page.getByText("暂无可用组织")).toBeVisible();
   if (process.platform === "win32")
-    await expect(page).toHaveScreenshot("m02-02-select-context-empty.png", {
+    await expect(page).toHaveScreenshot("identity-workspace-context-empty-20261017.png", {
       fullPage: true,
       maxDiffPixels: 140,
     });
@@ -234,7 +295,7 @@ test("M02-02.A07/A08 registration and email confirmation preserve single-use tru
     { method: "POST", body: { email: "new@example.test", password: "Long-enough-password-123!" } },
   ]);
   expect(await page.locator(".p03-registration-primary").count()).toBe(0);
-  await expect(page).toHaveScreenshot("m02-02-register-verify.png", {
+  await expect(page).toHaveScreenshot("identity-workspace-register-verify-20261017.png", {
     fullPage: true,
     maxDiffPixels: 140,
   });
@@ -297,7 +358,7 @@ test("P05 verification uses one token-gated confirmation and explicit return", a
   await expect(returnButton).toBeVisible();
   expect((await returnButton.boundingBox())?.height).toBeGreaterThanOrEqual(44);
   expect(await returnButton.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe(
-    "rgb(9, 108, 85)",
+    await identityColor(page, "--so-primary"),
   );
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
@@ -370,7 +431,7 @@ test("P04 recovery validates the email and submits one generic reset request", a
   );
   expect(writes).toEqual([{ method: "POST", body: { email: "member@example.test" } }]);
   await page.mouse.move(8, 8);
-  await expect(submit).toHaveCSS("background-color", "rgb(9, 108, 85)");
+  await expect(submit).toHaveCSS("background-color", await identityColor(page, "--so-primary"));
   expect((await submit.boundingBox())?.height).toBeGreaterThanOrEqual(44);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
@@ -593,7 +654,7 @@ test("M02-02.A07/A08/A15 tenancy hands off to all three onboarding steps at desk
     expect((await step.boundingBox())?.height).toBeGreaterThanOrEqual(44);
   await finish.evaluate((element) => element.blur());
   if (process.platform === "win32")
-    await expect(page).toHaveScreenshot("m02-02-onboarding.png", {
+    await expect(page).toHaveScreenshot("identity-workspace-onboarding-20261017.png", {
       fullPage: true,
       maxDiffPixels: 140,
     });
@@ -638,7 +699,7 @@ test("M02-02 P09 onboarding clamps query state, does not persist progress, and k
   await expect(page).toHaveURL(/\/$/);
 });
 
-test("Glass Atlas shows actual lazy loading and honors reduced motion", async ({ page }) => {
+test("Identity workspace shows actual lazy loading and honors reduced motion", async ({ page }) => {
   let release!: () => void;
   const pending = new Promise<void>((resolve) => {
     release = resolve;
@@ -656,11 +717,11 @@ test("Glass Atlas shows actual lazy loading and honors reduced motion", async ({
   release();
   await expect(page.getByRole("heading", { name: "安全登录", exact: true })).toBeVisible();
   await expect(loading).toHaveCount(0);
-  await expect(page.locator(".p02-login-shell")).toHaveCSS("border-radius", /2[4-9]px|30px/);
+  await expect(page.locator(".p02-login-workspace")).toHaveCSS("border-radius", "8px");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-test("Glass Atlas failed page chunk offers a working reload", async ({ page }) => {
+test("Identity workspace failed page chunk offers a working reload", async ({ page }) => {
   await page.route("**/src/components/LocalIdentity.vue*", (route) => route.abort(), { times: 1 });
   await page.goto("/login");
   await expect(page.getByRole("heading", { name: "页面资源未能加载" })).toBeVisible();

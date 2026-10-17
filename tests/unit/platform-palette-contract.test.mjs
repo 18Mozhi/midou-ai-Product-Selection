@@ -968,137 +968,18 @@ test("P01 landing redirect colors resolve from its route-scoped palette", async 
   assert.doesNotMatch(component, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("P02 login colors resolve from its route-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/local-identity-login-tokens.css", "utf8"),
-    readFile("apps/web/src/components/local-identity-login.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--p02-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p02-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 29);
-  assert.equal(declarations.length, names.size, "no duplicate login palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.p02-login-page\)\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "../design/local-identity-login-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
-});
-
-test("P07 MFA colors resolve from its route-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/identity-mfa-tokens.css", "utf8"),
-    readFile("apps/web/src/components/local-identity-mfa.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--p07-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p07-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 26);
-  assert.equal(declarations.length, names.size, "no duplicate MFA palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.p07-mfa-page\)\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "../design/identity-mfa-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
-});
-
-test("P04 recovery colors resolve from its route-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/identity-recovery-tokens.css", "utf8"),
-    readFile("apps/web/src/components/local-identity-recovery.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--p04-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p04-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 21);
-  assert.equal(declarations.length, names.size, "no duplicate identity recovery declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.p04-recovery-page\)\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "../design/identity-recovery-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
-});
-
-test("P03 registration colors resolve from its route-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/identity-registration-tokens.css", "utf8"),
-    readFile("apps/web/src/components/local-identity-registration.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--p03-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p03-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 19);
-  assert.equal(declarations.length, names.size, "no duplicate registration palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.p03-registration-page\)\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "../design/identity-registration-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
-});
-
-test("P06 password reset colors resolve from its route-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/identity-reset-tokens.css", "utf8"),
-    readFile("apps/web/src/components/local-identity-reset.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--p06-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p06-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 22);
-  assert.equal(declarations.length, names.size, "no duplicate password reset declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.p06-reset-page\)\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "../design/identity-reset-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
-});
-
-test("P05 verification colors resolve from its route-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/identity-verification-tokens.css", "utf8"),
-    readFile("apps/web/src/components/local-identity-verification.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--p05-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p05-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 17);
-  assert.equal(declarations.length, names.size, "no duplicate verification palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.p05-verification-page\)\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "../design/identity-verification-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
-});
+for (const suffix of ["login", "mfa", "recovery", "registration", "reset", "verification"]) {
+  test(`identity ${suffix} uses the shared semantic workspace palette`, async () => {
+    const css = await readFile(`apps/web/src/components/local-identity-${suffix}.css`, "utf8");
+    const shared = await readFile("apps/web/src/components/identity-workspace.css", "utf8");
+    assert.equal(css.trim(), '@import "./identity-workspace.css";');
+    assert.match(shared, /var\(--so-primary\)/);
+    assert.match(shared, /var\(--so-danger\)/);
+    assert.match(shared, /var\(--so-focus\)/);
+    assert.doesNotMatch(shared, /var\(--(?:p0[2-7]|glass)-|#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+    assert.doesNotMatch(shared, /gradient|box-shadow|690px|p02-login-context/);
+  });
+}
 
 test("P73 not-found colors resolve from its route-scoped palette", async () => {
   const [tokens, component] = await Promise.all([

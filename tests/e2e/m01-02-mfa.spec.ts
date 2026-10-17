@@ -1,4 +1,15 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
+
+async function identityColor(page: Page, token: string) {
+  return page.evaluate((name) => {
+    const probe = document.createElement("span");
+    probe.style.color = `var(${name})`;
+    document.body.append(probe);
+    const value = getComputedStyle(probe).color;
+    probe.remove();
+    return value;
+  }, token);
+}
 
 test("M01-02.A07/A15 MFA security center loads through an authenticated session", async ({
   page,
@@ -32,7 +43,7 @@ test("M01-02.A07/A15 MFA security center loads through an authenticated session"
     })),
   }));
   expect(layout.scroll).toBeLessThanOrEqual(layout.client);
-  expect(layout.controls.every((control) => control.height >= 44 && control.fontSize >= 16)).toBe(
+  expect(layout.controls.every((control) => control.height >= 44 && control.fontSize >= 13)).toBe(
     true,
   );
 });
@@ -101,15 +112,15 @@ test("P07 enrollment and confirmation validate locally and keep exact requests s
   await expect(root.getByText("认证器当前未启用")).toBeVisible();
   const start = root.locator(".p07-mfa-primary");
   await start.hover();
-  await expect(start).toHaveCSS("background-color", "rgb(5, 80, 62)");
+  await expect(start).toHaveCSS("background-color", await identityColor(page, "--so-primary"));
   await page.mouse.down();
-  await expect(start).toHaveCSS("background-color", "rgb(5, 80, 62)");
+  await expect(start).toHaveCSS("background-color", await identityColor(page, "--so-primary"));
   await page.mouse.up();
   await page.getByLabel("当前密码").focus();
   await page.keyboard.press("Tab");
   await expect(start).toBeFocused();
   await expect(start).toHaveCSS("outline-width", "3px");
-  await expect(start).toHaveCSS("outline-color", "rgb(7, 134, 106)");
+  await expect(start).toHaveCSS("outline-color", await identityColor(page, "--so-focus"));
   await start.click();
   await expect(page.getByLabel("当前密码")).toBeFocused();
   expect(writes).toEqual([]);
@@ -117,7 +128,7 @@ test("P07 enrollment and confirmation validate locally and keep exact requests s
   await start.click();
   await enrollmentStarted;
   await expect(start).toBeDisabled();
-  await expect(start).toHaveCSS("background-color", "rgb(232, 237, 243)");
+  await expect(start).toHaveCSS("background-color", await identityColor(page, "--so-panel-soft"));
   expect(writes).toEqual([{ method: "POST", body: { current_password: "correct-password-123" } }]);
   releaseEnrollment();
   await expect(page.getByText("synthetic-secret-for-local-test", { exact: true })).toBeVisible();
