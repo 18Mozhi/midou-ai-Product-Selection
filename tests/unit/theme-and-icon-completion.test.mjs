@@ -234,13 +234,6 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       );
       continue;
     }
-    if (paths[index] === "apps/web/src/design/backup-recovery-tokens.css") {
-      assert.match(
-        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html body:has\(\.backup-center--c\),\s*\.backup-center\.backup-center--c\s*\{(?:\s*--so-backup-c-[a-z-]+:\s*#[0-9a-f]{6};)+\s*\}$/,
-      );
-      continue;
-    }
     if (paths[index] === "apps/web/src/design/capacity-boundary-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -280,13 +273,6 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         /^html body:has\(#app \.credential-center\)\s*\{(?:\s*--p50-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
-      );
-      continue;
-    }
-    if (paths[index] === "apps/web/src/design/file-resilience-tokens.css") {
-      assert.match(
-        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^\.file-resilience--c\s*\{(?:\s*--file-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
       );
       continue;
     }

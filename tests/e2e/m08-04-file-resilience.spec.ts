@@ -183,6 +183,10 @@ test("M08-04.A07/A08/A15 desktop and 390 local-file truth", async ({ page }) => 
   await expect(page.getByText("20 / 20")).toBeVisible();
   await expect(page.getByText("临时目录", { exact: true })).toBeVisible();
   await expect(page.getByText("不建立持久索引", { exact: true })).toBeVisible();
+  await expect(page.locator(".platform-page-header")).toHaveCount(1);
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(

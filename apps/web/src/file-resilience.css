@@ -1,494 +1,191 @@
-@import "./design/file-resilience-tokens.css";
-
-.file-resilience--c {
-  display: grid;
-  gap: 18px;
-  color: var(--file-ink);
-  font:
-    16px/1.6 "Noto Sans SC",
-    "Microsoft YaHei",
-    system-ui,
-    sans-serif;
-}
-
-.file-resilience--c * {
-  box-sizing: border-box;
-}
-
-.file-resilience--c :is(h1, h2, h3, p, dl, dd) {
-  margin: 0;
-}
-
-.file-resilience--c h1 {
-  font-size: 30px;
-  line-height: 1.35;
-}
-
-.file-resilience--c h2 {
-  font-size: 21px;
-  line-height: 1.45;
-}
-
-.file-resilience--c h3 {
-  font-size: 17px;
-  line-height: 1.5;
-}
-
-.file-resilience--c :is(button, a, summary) {
-  min-height: 44px;
-  font: inherit;
-}
-
-.file-resilience--c button {
-  padding: 9px 16px;
-  border: 1px solid var(--file-blue);
-  border-radius: 4px;
-  background: var(--file-blue);
-  color: var(--file-white);
-  cursor: pointer;
-}
-
-.file-resilience--c button:hover:not(:disabled) {
-  background: var(--file-blue-strong);
-}
-
-.file-resilience--c button:disabled {
-  cursor: wait;
-  opacity: 0.62;
-}
-
-#app .file-resilience--c :is(button, a, summary):focus-visible {
-  outline: 3px solid var(--file-focus);
-  outline-offset: 3px;
-}
-
-.file-resilience--c .file-resilience__hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 22px 28px;
-  background: var(--file-blue);
-  color: var(--file-white);
-}
-
-.file-resilience--c .file-resilience__hero > div {
-  display: grid;
-  gap: 5px;
-}
-
-.file-resilience--c .file-resilience__hero p {
-  color: var(--file-hero-subtext);
-}
-
-.file-resilience--c .file-resilience__hero span {
-  color: var(--file-hero-secondary);
-}
-
-.file-resilience--c .file-resilience__hero button {
-  flex: 0 0 auto;
-  border-color: var(--file-white);
-  background: var(--file-white);
-  color: var(--file-blue);
-}
-
-.file-resilience--c .p69-boundary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  padding: 12px 16px;
-  border-left: 3px solid var(--file-blue);
-  background: var(--file-blue-soft);
-}
-
-.file-resilience--c .p69-boundary span {
-  color: var(--file-muted);
-}
-
-.file-resilience--c .file-resilience__refresh-notice,
-.file-resilience--c .file-resilience__state {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 18px;
-  border: 1px solid var(--file-line);
-  background: var(--file-white);
-}
-
-.file-resilience--c .file-resilience__refresh-notice {
-  border-left: 4px solid var(--file-warning);
-}
-
-.file-resilience--c .file-resilience__refresh-notice[data-kind="unavailable"] {
-  border-left-color: var(--file-danger);
-}
-
-.file-resilience--c .file-resilience__refresh-notice p,
-.file-resilience--c .file-resilience__state p {
-  margin-top: 4px;
-  color: var(--file-muted);
-}
-
-.file-resilience--c .file-resilience__state {
-  justify-content: flex-start;
-  min-height: 112px;
-}
-
-.file-resilience--c .file-resilience__state--danger {
-  border-left: 4px solid var(--file-danger);
-}
-
-.file-resilience--c .file-resilience__state--danger > strong {
-  color: var(--file-danger);
-  font-size: 22px;
-}
-
-.file-resilience--c .file-resilience__state a {
-  display: inline-flex;
-  align-items: center;
-  color: var(--file-blue);
-}
-
-.file-resilience--c .p69-paper {
-  border: 1px solid var(--file-line);
-  background: var(--file-white);
-}
-
-.file-resilience--c .p69-conclusion {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 22px 28px;
-  border-bottom: 1px solid var(--file-line);
-  background: var(--file-conclusion-bg);
-}
-
-.file-resilience--c .p69-conclusion h2 {
-  margin-top: 5px;
-  font-size: 25px;
-}
-
-.file-resilience--c .p69-conclusion p,
-.file-resilience--c .p69-conclusion small {
-  color: var(--file-muted);
-}
-
-.file-resilience--c .p69-observed {
-  flex: 0 0 auto;
-  text-align: right;
-}
-
-.file-resilience--c .p69-observed time {
-  display: block;
-  margin-top: 5px;
-}
-
-.file-resilience--c .p69-findings,
-.file-resilience--c .p69-directories,
-.file-resilience--c .p69-integrity,
-.file-resilience--c .p69-recovery {
-  padding: 22px 28px;
-}
-
-.file-resilience--c .p69-findings {
-  border-bottom: 1px solid var(--file-line);
-}
-
-.file-resilience--c .p69-findings > header,
-.file-resilience--c .p69-directories > header,
-.file-resilience--c .p69-integrity > header,
-.file-resilience--c .p69-recovery > header {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.file-resilience--c .p69-findings > header small,
-.file-resilience--c .p69-directories > header p,
-.file-resilience--c .p69-integrity > header p,
-.file-resilience--c .p69-recovery > header p,
-.file-resilience--c .p69-directory > header p,
-.file-resilience--c .p69-root-evidence small,
-.file-resilience--c .p69-sample-total span,
-.file-resilience--c dt {
-  color: var(--file-muted);
-  font-size: 14px;
-}
-
-.file-resilience--c .p69-findings article {
-  display: grid;
-  grid-template-columns: 72px minmax(160px, 240px) minmax(0, 1fr);
-  gap: 12px;
-  align-items: start;
-  margin: 12px 0;
-  padding: 14px 16px;
-  border-left: 3px solid var(--file-danger);
-  background: var(--file-danger-bg);
-}
-
-.file-resilience--c .p69-findings article[data-severity="warning"] {
-  border-color: var(--file-warning);
-  background: var(--file-warning-bg);
-}
-
-.file-resilience--c .p69-findings code {
-  color: var(--file-muted);
-  overflow-wrap: anywhere;
-}
-
-.file-resilience--c .p69-findings article p,
-.file-resilience--c .p69-findings > small {
-  color: var(--file-muted);
-}
-
-.file-resilience--c .p69-directories > header p,
-.file-resilience--c .p69-integrity > header p,
-.file-resilience--c .p69-recovery > header p {
-  margin-top: 4px;
-}
-
-.file-resilience--c .p69-directory {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 2px solid var(--file-comparison-border);
-}
-
-.file-resilience--c .p69-directory > header {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.file-resilience--c .p69-directory > header p {
-  margin-top: 4px;
-}
-
-.file-resilience--c .p69-root-evidence {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-  gap: 24px;
-  margin-top: 16px;
-}
-
-.file-resilience--c .p69-root-evidence strong {
-  display: block;
-  margin: 7px 0 4px;
-  font:
-    700 28px/1.4 Consolas,
-    monospace;
-}
-
-.file-resilience--c .p69-root-evidence p {
-  margin: 4px 0;
-}
-
-.file-resilience--c .p69-root-evidence progress {
-  appearance: none;
-  width: 100%;
-  height: 10px;
-  margin: 8px 0;
-  border: 0;
-  background: var(--file-progress-track);
-}
-
-.file-resilience--c .p69-root-evidence progress::-webkit-progress-bar {
-  background: var(--file-progress-track);
-}
-
-.file-resilience--c .p69-root-evidence progress::-webkit-progress-value {
-  background: var(--file-blue);
-}
-
-.file-resilience--c .p69-index {
-  padding-left: 20px;
-  border-left: 1px solid var(--file-line);
-}
-
-.file-resilience--c .p69-index b {
-  display: block;
-  margin: 7px 0 4px;
-  font-size: 20px;
-}
-
-.file-resilience--c .p69-note {
-  margin-top: 14px;
-  padding: 12px 14px;
-  border-left: 3px solid var(--file-note-border);
-  background: var(--file-note-bg);
-  color: var(--file-muted);
-}
-
-.file-resilience--c .p69-evidence {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-  border-top: 1px solid var(--file-line);
-}
-
-.file-resilience--c .p69-integrity {
-  border-right: 1px solid var(--file-line);
-}
-
-.file-resilience--c .p69-sample-total {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 20px;
-  margin: 18px 0;
-  padding: 15px 0;
-  border-block: 1px solid var(--file-line);
-}
-
-.file-resilience--c .p69-sample-total b {
-  font:
-    700 30px/1.3 Consolas,
-    monospace;
-}
-
-.file-resilience--c .p69-integrity dl {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.file-resilience--c .p69-integrity dl > div,
-.file-resilience--c .p69-recovery dl > div {
-  padding: 11px 0;
-  border-bottom: 1px solid var(--file-line);
-}
-
-.file-resilience--c dd {
-  margin-top: 4px;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.file-resilience--c .p69-recovery {
-  background: var(--file-evidence-bg);
-}
-
-.file-resilience--c .p69-recovery-state {
-  display: block;
-  margin: 16px 0;
-  color: var(--file-blue);
-  font-size: 21px;
-}
-
-.file-resilience--c .p69-recovery dl > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.file-resilience--c .p69-recovery dd {
-  text-align: right;
-}
-
-.file-resilience--c .p69-recovery dd small {
-  display: block;
-  color: var(--file-muted);
-}
-
-.file-resilience--c .file-resilience__footer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 6px 20px;
-  color: var(--file-muted);
-  text-align: left;
-}
-
-.file-resilience--c .file-resilience__footer strong {
-  color: var(--file-muted);
-}
-
-@media (max-width: 900px) {
-  .file-resilience--c .p69-evidence {
-    grid-template-columns: 1fr;
+@import "./runtime-observation-workspace.css";
+#app .file-resilience--c {
+  & .p69-paper {
+    display: grid;
+    gap: 16px;
+    min-width: 0;
   }
-
-  .file-resilience--c .p69-integrity {
-    border-right: 0;
-    border-bottom: 1px solid var(--file-line);
+  &
+    :is(
+      .p69-conclusion,
+      .p69-findings,
+      .p69-directories,
+      .p69-integrity,
+      .p69-recovery,
+      .file-resilience__state,
+      .file-resilience__refresh-notice
+    ) {
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
   }
-}
-
-@media (max-width: 760px) {
-  .file-resilience--c {
-    gap: 14px;
+  & .p69-conclusion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-left: 3px solid var(--so-success);
   }
-
-  .file-resilience--c .file-resilience__hero,
-  .file-resilience--c .p69-conclusion,
-  .file-resilience--c .p69-boundary,
-  .file-resilience--c .p69-directory > header,
-  .file-resilience--c .file-resilience__refresh-notice {
-    align-items: stretch;
-    flex-direction: column;
+  & .p69-conclusion[data-verdict="warning"] {
+    border-left-color: var(--so-warning);
+  }
+  & .p69-conclusion[data-verdict="blocked"] {
+    border-left-color: var(--so-danger);
+  }
+  & .p69-conclusion h2 {
+    margin-block: 4px;
+    font-size: 16px;
+  }
+  & .p69-observed :is(b, time) {
+    display: block;
+    font-size: 12px;
+  }
+  & :is(.p69-findings, .p69-directories, .p69-integrity, .p69-recovery) > header,
+  & .p69-directory > header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  & .p69-findings article {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 6px 12px;
+    padding: 12px 0;
+    border-top: 1px solid var(--so-border);
+  }
+  & .p69-findings article p {
+    grid-column: 1 / -1;
+  }
+  & .p69-findings article[data-severity="blocked"] > b {
+    color: var(--so-danger);
+  }
+  & .p69-findings article[data-severity="warning"] > b {
+    color: var(--so-warning);
+  }
+  & .p69-directory {
+    padding-block: 14px;
+    border-top: 1px solid var(--so-border);
+    min-width: 0;
+  }
+  & .p69-directory header > b {
+    color: var(--so-text-muted);
+    font-size: 12px;
+  }
+  & .p69-root-evidence {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
-
-  .file-resilience--c .file-resilience__hero {
-    padding: 20px 18px;
+  & .p69-root-evidence > section {
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--so-border);
+    border-radius: 6px;
+    background: var(--so-panel);
   }
-
-  .file-resilience--c .file-resilience__hero button {
+  & .p69-root-evidence :is(strong, b) {
+    display: block;
+    margin-top: 6px;
+    font-size: 20px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  & .p69-root-evidence p {
+    margin-top: 6px;
+  }
+  & .p69-root-evidence progress {
+    display: block;
     width: 100%;
+    height: 6px;
+    margin-top: 10px;
+    border: 0;
+    accent-color: var(--so-primary);
   }
-
-  .file-resilience--c h1 {
-    font-size: 26px;
+  & .p69-root-evidence progress::-webkit-progress-bar {
+    border-radius: 3px;
+    background: var(--so-panel-soft);
   }
-
-  .file-resilience--c .p69-conclusion {
-    padding: 20px 18px;
+  & .p69-root-evidence progress::-webkit-progress-value {
+    border-radius: 3px;
+    background: var(--so-primary);
   }
-
-  .file-resilience--c .p69-observed {
-    padding-top: 12px;
-    border-top: 1px solid var(--file-conclusion-border);
-    text-align: left;
-  }
-
-  .file-resilience--c :is(.p69-findings, .p69-directories, .p69-integrity, .p69-recovery) {
-    padding: 20px 18px;
-  }
-
-  .file-resilience--c .p69-root-evidence {
-    grid-template-columns: 1fr;
-  }
-
-  .file-resilience--c .p69-index {
-    padding: 14px 0 0;
-    border-top: 1px solid var(--file-line);
-    border-left: 0;
-  }
-
-  .file-resilience--c .p69-findings article {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 5px;
-  }
-
-  .file-resilience--c .p69-findings > header {
-    align-items: flex-start;
-  }
-
-  .file-resilience--c .p69-sample-total {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .file-resilience--c .file-resilience__footer {
+  & .p69-evidence {
     display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  & :is(.p69-integrity, .p69-recovery) dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+  & :is(.p69-integrity, .p69-recovery) dd {
+    margin-top: 5px;
+    font-size: 16px;
+  }
+  & .p69-sample-total {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  & .p69-sample-total b {
+    font-size: 20px;
+  }
+  & .p69-sample-total span {
+    color: var(--so-text-muted);
+    font-size: 12px;
+  }
+  & .p69-recovery-state {
+    display: block;
+    margin-top: 12px;
+  }
+  & .p69-note {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--so-border);
+    border-radius: 6px;
+    background: var(--so-panel-soft);
+    color: var(--so-text-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  & :is(.file-resilience__state, .file-resilience__refresh-notice) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  & .file-resilience__refresh-notice {
+    border-left: 3px solid var(--so-warning);
+  }
+  & .file-resilience__refresh-notice[data-kind="unavailable"] {
+    border-left-color: var(--so-danger);
+  }
+  & .file-resilience__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--so-border);
+    color: var(--so-text-muted);
+    font-size: 12px;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  html body:has(#app .file-resilience--c) #app .file-resilience--c * {
-    scroll-behavior: auto;
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
-    transition-duration: 0.01ms;
+@media (max-width: 640px) {
+  #app .file-resilience--c :is(.p69-root-evidence, .p69-evidence) {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

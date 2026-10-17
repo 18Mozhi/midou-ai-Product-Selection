@@ -33,15 +33,13 @@ test("P64 uses opt-in native column labels without changing other table controls
   assert.match(original, /column-labels/);
 });
 
-test("P64 production styles are route-scoped and retain review controls", () => {
+test("backup workspace keeps column menus visible without page-specific drawer overrides", () => {
   const css = readFileSync("apps/web/src/backup-recovery-center-c.css", "utf8");
-  assert.match(css, /\.backup-center--c \.responsive-data-view__desktop\s*\{\s*overflow: visible;/);
-  assert.match(css, /\.backup-center\.backup-center--c \.p64-assets\s*\{\s*overflow: visible;/);
-  assert.match(
-    css,
-    /\.backup-center--c \.table-view-controls__toolbar fieldset\s*\{\s*left: 0;\s*right: auto;/,
-  );
-  assert.match(css, /body:has\(\.backup-center--c\) \.responsive-data-view__drawer/);
+  assert.match(css, /#app \.backup-center--c/);
+  assert.match(css, /:is\(\.p64-assets, \.responsive-data-view__desktop\)/);
+  assert.match(css, /overflow: visible/);
+  assert.match(css, /fieldset\s*\{\s*left: 0;\s*right: auto;/);
+  assert.doesNotMatch(css, /body:has|responsive-data-view__drawer/);
 });
 
 test("P64 reading and retained-refresh regions retain named headings and busy semantics", () => {

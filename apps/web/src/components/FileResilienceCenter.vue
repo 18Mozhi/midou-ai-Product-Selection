@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref } from "vue";
 import type { FileResilienceDto } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
@@ -146,15 +147,11 @@ onBeforeUnmount(suspendRead);
 </script>
 <template>
   <section class="file-resilience file-resilience--c" :data-state="state">
-    <header class="file-resilience__hero">
-      <div>
-        <p>ScoutOps / 文件运行</p>
-        <h1>文件存储核验</h1>
-      </div>
+    <PlatformPageHeader title="文件存储核验" :heading-level="1">
       <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
         {{ refreshing ? "正在刷新…" : "刷新文件事实" }}
       </button>
-    </header>
+    </PlatformPageHeader>
 
     <section
       v-if="data && refreshFailure"

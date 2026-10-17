@@ -216,30 +216,6 @@ test("historical automation rules palette resolves its captured color references
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("backup recovery palette resolves page and portal colors without broadening scope", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/backup-recovery-tokens.css", "utf8"),
-    readFile("apps/web/src/backup-recovery-center-c.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--so-backup-c-[a-z-]+):\s*(?:#[0-9a-f]{6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set(
-    [...css.matchAll(/var\((--so-backup-c-[a-z-]+)\)/g)].map((match) => match[1]),
-  );
-
-  assert.equal(names.size, 11);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html body:has\(\.backup-center--c\),\s*\.backup-center\.backup-center--c\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "./design/backup-recovery-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
-});
-
 test("capacity boundary palette resolves the page and scoped shell color references", async () => {
   const [tokens, css] = await Promise.all([
     readFile("apps/web/src/design/capacity-boundary-tokens.css", "utf8"),
@@ -436,34 +412,6 @@ test("credential asset palette resolves P50 component, modal and status colors i
   assert.doesNotMatch(pageCss, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("file resilience palette preserves P69 status colors and a page-scoped reduced-motion override", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/file-resilience-tokens.css", "utf8"),
-    readFile("apps/web/src/file-resilience.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--file-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set(
-    [...css.matchAll(/var\((--file-[a-z-]+)\)/g)].map((match) => match[1]),
-  );
-
-  assert.equal(names.size, 21);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^\.file-resilience--c\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "./design/file-resilience-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.match(
-    css,
-    /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{\s*html body:has\(#app \.file-resilience--c\) #app \.file-resilience--c \*\s*\{/,
-  );
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(|!important/i);
-});
-
 test("home dashboard palette uses semantic names for its approved white and attention accents", async () => {
   const [tokens, css] = await Promise.all([
     readFile("apps/web/src/design/home-dashboard-tokens.css", "utf8"),
@@ -485,9 +433,15 @@ test("home dashboard palette uses semantic names for its approved white and atte
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("database runtime pages use one semantic workspace without shell overrides", async () => {
+test("runtime observation pages use one semantic workspace without shell overrides", async () => {
   const css = await readFile("apps/web/src/runtime-observation-workspace.css", "utf8");
-  assert.match(css, /#app :is\(\.mysql-resilience--c, \.redis-resilience--c\)/);
+  for (const root of [
+    "mysql-resilience--c",
+    "redis-resilience--c",
+    "file-resilience--c",
+    "backup-center--c",
+  ])
+    assert.ok(css.includes("." + root));
   assert.doesNotMatch(
     css,
     /--p68-|--rr-|role-shell|role-top-actions|platform-secondary-nav|#[0-9a-f]{3,8}\b|rgba?\(/i,
@@ -1360,5 +1314,14 @@ test("page glass aliases resolve to the shared theme and never self-reference", 
       assert.ok(defined.has(name), `${file}: unresolved semantic color ${name}`);
     for (const [, name, value] of source.matchAll(/(--[a-z0-9-]+):\s*([^;]+);/g))
       assert.ok(!value.includes(`var(${name})`), `${file}: self-referencing ${name}`);
+  }
+});
+
+test("file and backup observations use scoped semantic colors with native table tools", async () => {
+  for (const file of ["file-resilience.css", "backup-recovery-center-c.css"]) {
+    const css = await readFile("apps/web/src/" + file, "utf8");
+    assert.ok(css.startsWith('@import "./runtime-observation-workspace.css";'));
+    assert.doesNotMatch(css, /--file-|--so-backup-c-|body:has|#[0-9a-f]{3,8}\b|rgba?\(/i);
+    assert.match(css, /var\(--so-/);
   }
 });

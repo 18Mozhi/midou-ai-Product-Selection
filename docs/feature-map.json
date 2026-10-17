@@ -1,4 +1,30 @@
 {
+  "selectionStorageRecovery20261017": {
+    "status": "implemented",
+    "statusDetail": "45_full_runtime_browser_pass_1_desktop_skip_7_targeted_pass_1_skip_72_node_web_build_and_gates_passed_not_deployed",
+    "requirements": "docs/selection-storage-recovery.md",
+    "routes": ["/platform-admin/files", "/platform-admin/operations"],
+    "sourceFiles": [
+      "apps/web/src/components/FileResilienceCenter.vue",
+      "apps/web/src/components/BackupRecoveryCenter.vue",
+      "apps/web/src/components/BackupRecoveryDirectory.vue",
+      "apps/web/src/runtime-observation-workspace.css",
+      "apps/web/src/file-resilience.css",
+      "apps/web/src/backup-recovery-center-c.css"
+    ],
+    "retiredFiles": [
+      "apps/web/src/design/file-resilience-tokens.css",
+      "apps/web/src/design/backup-recovery-tokens.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m07-04-backup-recovery.spec.ts",
+      "tests/e2e/m08-04-file-resilience.spec.ts",
+      "tests/unit/backup-page-preview.test.mjs",
+      "tests/unit/file-page-preview.test.mjs",
+      "tests/unit/platform-palette-contract.test.mjs"
+    ],
+    "contract": "Compact header, top same-host boundary/navigation, full-width file, integrity, recovery and backup assets. Remove old scoped and C layers and two palettes. Retain GETs, modal focus, column-menu overflow handling, observation and drill semantics; no backup/restore execution added. No API/schema/env/permissions/dependencies/Python changes. Frontend static update only."
+  },
   "selectionDatabaseRuntime20261017": {
     "status": "implemented",
     "statusDetail": "22_full_browser_4_final_layout_2_baseline_checks_68_node_web_build_and_gates_passed_linux_baselines_not_recaptured_not_deployed",

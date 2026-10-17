@@ -86,10 +86,24 @@ test("M07-04.A07/A08/A15 desktop and 390 recovery truth", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "备份与恢复控制台" })).toBeVisible();
   await expect(page.getByText("恢复链路受阻")).toBeVisible();
   await expect(page.getByText("同机副本未核验")).toBeVisible();
+  await expect(page.locator(".platform-page-header")).toHaveCount(1);
+  await expect(page.getByRole("region", { name: "本机恢复范围" })).toBeVisible();
+  const [boundaryBox, contentBox] = await Promise.all([
+    page.locator(".p64-directory").boundingBox(),
+    page.locator(".p64-content").boundingBox(),
+  ]);
+  expect(contentBox!.y).toBeGreaterThanOrEqual(boundaryBox!.y + boundaryBox!.height);
+  expect(Math.abs(contentBox!.width - boundaryBox!.width)).toBeLessThanOrEqual(1);
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByText("恢复副本尚未核验")).toBeVisible();
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
   await page.getByRole("button", { name: /数据库完整备份/ }).click();
   const dialog = page.getByRole("dialog", { name: "数据库完整备份" });
   await expect(dialog).toBeVisible();
