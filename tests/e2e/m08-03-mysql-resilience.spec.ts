@@ -49,12 +49,26 @@ test("M08-03.A07/A08/A15 desktop and 390 single-primary truth", async ({ page })
     route.fulfill({ json: envelope(base) }),
   );
   await page.goto("/platform-admin/mysql");
+  const assertLayout = async () => {
+    await expect(page.locator(".platform-page-header")).toHaveCount(1);
+    const [runtime, recovery] = await Promise.all([
+      page.locator(".p68-runtime").boundingBox(),
+      page.locator(".p68-recovery").boundingBox(),
+    ]);
+    expect(recovery!.y).toBeGreaterThanOrEqual(runtime!.y + runtime!.height);
+    expect(Math.abs(runtime!.width - recovery!.width)).toBeLessThanOrEqual(1);
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+      .toBe(true);
+  };
+  await assertLayout();
   await expect(page.getByRole("heading", { name: "MySQL 运行核验" })).toBeVisible();
   await expect(page.getByText("当前单主韧性门满足")).toBeVisible();
   await expect(page.getByRole("heading", { name: "速率、累计与瞬时" })).toBeVisible();
   await expect(page.getByText("实例启动后未记录行锁等待")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
+  await assertLayout();
   await expect(
     page.getByText("固定单主；不新增读副本、负载均衡或备用服务器。", {
       exact: true,

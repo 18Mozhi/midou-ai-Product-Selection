@@ -297,13 +297,6 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       );
       continue;
     }
-    if (paths[index] === "apps/web/src/design/mysql-resilience-tokens.css") {
-      assert.match(
-        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html body:has\(#app \.mysql-resilience--c\),\s*\.mysql-resilience--c\s*\{(?:\s*--p68-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
-      );
-      continue;
-    }
     if (paths[index] === "apps/web/src/design/notification-inbox-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -504,13 +497,6 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         /^html:has\(body #app \.cost-console--review\)\s*\{(?:\s*--p22-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
-      );
-      continue;
-    }
-    if (paths[index] === "apps/web/src/design/redis-resilience-tokens.css") {
-      assert.match(
-        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html:has\(body #app \.redis-resilience--c\)\s*\{(?:\s*--rr-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
       );
       continue;
     }

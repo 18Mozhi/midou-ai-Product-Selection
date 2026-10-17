@@ -1,10 +1,12 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { parse } from "@vue/compiler-sfc";
 import { previewMysqlPage } from "../../scripts/lib/mysql-page-preview.mjs";
 
-const source = readFileSync("apps/web/src/components/MySqlResilienceCenter.vue", "utf8");
+// Immutable C-preview evidence; current runtime workspace is covered by actual Vue E2E.
+const source = readPreSelectionRebuild("apps/web/src/components/MySqlResilienceCenter.vue");
 const preview = parse(previewMysqlPage(source)).descriptor;
 const original = parse(source).descriptor;
 

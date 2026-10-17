@@ -485,28 +485,19 @@ test("home dashboard palette uses semantic names for its approved white and atte
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("mysql resilience palette keeps P68 shell and evidence colors route-scoped", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/mysql-resilience-tokens.css", "utf8"),
-    readFile("apps/web/src/mysql-resilience-c.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(
-      /(--p68-[a-z-]+):\s*(?:(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\))|rgb\([^;]+\));/gi,
-    ),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p68-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 35);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html body:has\(#app \.mysql-resilience--c\),\s*\.mysql-resilience--c\s*\{[\s\S]*\}$/,
+test("database runtime pages use one semantic workspace without shell overrides", async () => {
+  const css = await readFile("apps/web/src/runtime-observation-workspace.css", "utf8");
+  assert.match(css, /#app :is\(\.mysql-resilience--c, \.redis-resilience--c\)/);
+  assert.doesNotMatch(
+    css,
+    /--p68-|--rr-|role-shell|role-top-actions|platform-secondary-nav|#[0-9a-f]{3,8}\b|rgba?\(/i,
   );
-  assert.ok(css.startsWith('@import "./design/mysql-resilience-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+  for (const path of ["mysql-resilience-c.css", "redis-resilience.css"]) {
+    assert.equal(
+      (await readFile("apps/web/src/" + path, "utf8")).trim(),
+      '@import "./runtime-observation-workspace.css";',
+    );
+  }
 });
 
 test("notification inbox palette resolves approved P26 colors in its review scope", async () => {
@@ -759,28 +750,6 @@ test("P22 cost rule palette resolves its approved workbench colors in route scop
     /^html:has\(body #app \.cost-console--review\)\s*\{[\s\S]*\}$/,
   );
   assert.ok(css.startsWith('@import "./design/cost-rule-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
-});
-
-test("P67 Redis palette resolves route colors from one page-scoped source", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/redis-resilience-tokens.css", "utf8"),
-    readFile("apps/web/src/redis-resilience.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--rr-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--rr-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 22);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.redis-resilience--c\)\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "./design/redis-resilience-tokens.css";'));
   assertPaletteUsage(references, names);
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });

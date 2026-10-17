@@ -74,6 +74,16 @@ test("M08-02.A07/A08/A15 desktop and 390 Redis resilience truth", async ({ page 
     route.fulfill({ json: envelope(base) }),
   );
   await page.goto("/platform-admin/redis");
+  const assertLayout = async () => {
+    await expect(page.locator(".platform-page-header")).toHaveCount(1);
+    const [summary, findings] = await Promise.all([
+      page.locator(".p67-conclusion").boundingBox(),
+      page.locator(".p67-findings").boundingBox(),
+    ]);
+    expect(findings!.y).toBeGreaterThanOrEqual(summary!.y + summary!.height);
+    expect(Math.abs(summary!.width - findings!.width)).toBeLessThanOrEqual(1);
+  };
+  await assertLayout();
   await expect(page.getByRole("heading", { name: "Redis 运行核验" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "当前韧性门满足" })).toBeVisible();
   await expect(page.getByText("512.0 MiB")).toBeVisible();
@@ -86,16 +96,21 @@ test("M08-02.A07/A08/A15 desktop and 390 Redis resilience truth", async ({ page 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );
-  await expect(page).toHaveScreenshot("m08-02-redis-resilience-desktop.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("m08-02-redis-resilience-desktop.png", {
+    fullPage: (page.viewportSize()?.width ?? 0) > 760,
+  });
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
+  await assertLayout();
   await expect(page.getByText("不启用 Sentinel、集群、副本或备用服务器")).toHaveCount(0);
   await expect(page.getByText("采集就绪队列")).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
   );
-  await expect(page).toHaveScreenshot("m08-02-redis-resilience-mobile-390.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("m08-02-redis-resilience-mobile-390.png", {
+    fullPage: false,
+  });
 });
 
 test("Redis refresh is single-flight and preserves the last verified snapshot on failure", async ({

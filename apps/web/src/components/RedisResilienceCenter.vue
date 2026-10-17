@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref } from "vue";
 import type { RedisResilienceDto } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
@@ -238,10 +239,7 @@ onBeforeUnmount(suspendRead);
 
 <template>
   <section class="redis-resilience redis-resilience--c" :data-state="state">
-    <header class="redis-resilience__hero">
-      <div>
-        <h1>Redis 运行核验</h1>
-      </div>
+    <PlatformPageHeader title="Redis 运行核验" :heading-level="1">
       <button
         ref="refreshButton"
         class="redis-read-action"
@@ -252,7 +250,7 @@ onBeforeUnmount(suspendRead);
       >
         {{ refreshing ? "正在刷新…" : "刷新运行事实" }}
       </button>
-    </header>
+    </PlatformPageHeader>
 
     <section
       v-if="data && refreshFailure"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref } from "vue";
 import type { MySqlResilienceDto } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
@@ -172,15 +173,11 @@ onBeforeUnmount(suspendRead);
 </script>
 <template>
   <section class="mysql-resilience mysql-resilience--c" :data-state="state">
-    <header class="mysql-resilience__hero">
-      <div>
-        <p>ScoutOps / 数据库运行</p>
-        <h1>MySQL 运行核验</h1>
-      </div>
+    <PlatformPageHeader title="MySQL 运行核验" :heading-level="1">
       <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
         {{ refreshing ? "正在刷新…" : "刷新运行事实" }}
       </button>
-    </header>
+    </PlatformPageHeader>
 
     <section
       v-if="data && refreshFailure"

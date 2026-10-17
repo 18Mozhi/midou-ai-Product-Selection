@@ -36,8 +36,8 @@ test("P67 state headings retain native retry controls and valid Vue compilation"
   assert.match(template, /ref="refreshButton"[\s\S]*:aria-disabled="refreshing"/);
   assert.match(template, /ref="retryButton" type="button" :disabled="refreshing" @click="load"/);
   assert.match(
-    readFileSync("apps/web/src/redis-resilience.css", "utf8"),
-    /\.redis-resilience__state h3/,
+    readFileSync("apps/web/src/runtime-observation-workspace.css", "utf8"),
+    /\.redis-resilience__state\) h3/,
   );
   assert.doesNotThrow(() => parse(source));
 });
