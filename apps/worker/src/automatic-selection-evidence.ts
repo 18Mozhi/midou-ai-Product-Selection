@@ -1,5 +1,21 @@
 import { selectionPrimaryAsinSql } from "@scoutops/database";
 
+/** Search from actual primary facts, never an editable opportunity label. */
+export const automaticPrimaryTitleSql =
+  "(SELECT JSON_UNQUOTE(JSON_EXTRACT(n_title.payload_json,'$.title')) " +
+  "FROM opportunity_evidence_links l_title JOIN normalized_records n_title " +
+  "ON n_title.raw_evidence_id=l_title.raw_evidence_id AND n_title.organization_id=l_title.organization_id " +
+  "AND n_title.workspace_id=l_title.workspace_id AND n_title.status='active' " +
+  "JOIN providers p_title ON p_title.id=n_title.provider_id AND p_title.code='amazon_product' " +
+  "WHERE l_title.opportunity_id=o.id AND l_title.organization_id=o.organization_id " +
+  "AND l_title.workspace_id=o.workspace_id " +
+  "AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n_title.payload_json,'$.asin')))=BINARY o.primary_asin " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(n_title.payload_json,'$.canonical_url')) REGEXP " +
+  "CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',JSON_UNQUOTE(JSON_EXTRACT(n_title.payload_json,'$.asin')),'([/?#]|$)') " +
+  "AND JSON_TYPE(JSON_EXTRACT(n_title.payload_json,'$.title'))='STRING' " +
+  "AND LENGTH(TRIM(JSON_UNQUOTE(JSON_EXTRACT(n_title.payload_json,'$.title'))))>0 " +
+  "ORDER BY n_title.created_at DESC,n_title.id DESC LIMIT 1)";
+
 /** Correlated to materialized opportunity alias o with its resolved primary_asin. */
 export const automaticPrimaryImageSql =
   "COALESCE((SELECT JSON_UNQUOTE(JSON_EXTRACT(n_image.payload_json,'$.image_url')) " +

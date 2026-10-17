@@ -1,4 +1,22 @@
 {
+  "selectionCompetitorRediscovery20261017": {
+    "status": "implemented",
+    "statusDetail": "113_node_actual_mysql57_readonly_query_22_workspace_build_and_gates_passed_not_deployed",
+    "requirements": "docs/selection-competitor-rediscovery.md",
+    "sourceFiles": [
+      "apps/worker/src/trend-projection-persistence.ts",
+      "apps/worker/src/automatic-selection-evidence.ts",
+      "packages/database/src/selection-completion-policy.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-sourcing-recovery.test.mjs",
+      "tests/unit/trend-projection-worker-scheduling.test.mjs",
+      "tests/unit/competitor-relevance-gate.test.mjs"
+    ],
+    "configFiles": ["config/env.example", "config/schema.json"],
+    "configKeys": ["COMPETITOR_REFRESH_INTERVAL_SECONDS", "AUTOMATIC_SOURCE_QUEUE_BACKLOG_LIMIT"],
+    "contracts": ["docs/openapi.yaml"]
+  },
   "selectionCompetitorQualityProof20261017": {
     "status": "implemented",
     "statusDetail": "91_node_37_mysql57_readonly_cases_8_actual_query_explains_22_workspace_build_passed_not_deployed",

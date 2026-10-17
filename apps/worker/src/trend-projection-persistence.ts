@@ -4,8 +4,11 @@ import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluat
 import { refreshRuleRecommendation } from "./rule-recommendation.js";
 import { TrendProjectionAlerts } from "./trend-projection-alerts.js";
 import { amazonAsin } from "./competitor-discovery-policy.js";
-import { automaticPrimaryImageSql } from "./automatic-selection-evidence.js";
-import { selectionPrimaryAsinSql } from "@scoutops/database";
+import {
+  automaticPrimaryImageSql,
+  automaticPrimaryTitleSql,
+} from "./automatic-selection-evidence.js";
+import { selectionPrimaryAsinSql, selectionCompetitionGateSql } from "@scoutops/database";
 import {
   buildSupplierSearchQuery,
   calculateTrendProjection,
@@ -14,6 +17,8 @@ import {
 } from "./trend-projection-calculation.js";
 
 export class TrendProjectionPersistence {
+  private preferCompetitorDiscovery = false;
+  private nextCompetitorDiscoveryScanAt = 0;
   private readonly alerts: TrendProjectionAlerts;
 
   constructor(
@@ -383,9 +388,30 @@ export class TrendProjectionPersistence {
           scheduledSearches.add(searchKey);
         }
       }
-      if (!rows.length && providers.amazon)
-        await this.enqueueDueCompetitorRefresh(c, providers.amazon, now);
+      let periodic: "discovery" | "detail" | null = null;
+      let discoveryScanned = false;
+      if (!rows.length && providers.amazon) {
+        const order: Array<"discovery" | "detail"> = this.preferCompetitorDiscovery
+          ? ["discovery", "detail"]
+          : ["detail", "discovery"];
+        for (const kind of order) {
+          // Missing-work repair keeps its original cadence; only the broader
+          // discovery scan is bounded to one read per minute in this Worker.
+          if (kind === "discovery" && now.getTime() < this.nextCompetitorDiscoveryScanAt) continue;
+          const scheduled =
+            kind === "discovery"
+              ? await this.enqueueDueCompetitorDiscovery(c, providers.amazon, now)
+              : await this.enqueueDueCompetitorRefresh(c, providers.amazon, now);
+          if (kind === "discovery") discoveryScanned = true;
+          if (scheduled) {
+            periodic = kind;
+            break;
+          }
+        }
+      }
       await c.commit();
+      if (periodic) this.preferCompetitorDiscovery = periodic === "detail";
+      if (discoveryScanned) this.nextCompetitorDiscoveryScanAt = now.getTime() + 60_000;
     } catch (error) {
       await c.rollback();
       throw error;
@@ -424,7 +450,7 @@ export class TrendProjectionPersistence {
       [before, before, this.queueBacklogLimit],
     );
     const row = rows[0];
-    if (!row || !amazonAsin({ asin: row.external_id }, String(row.product_url))) return;
+    if (!row || !amazonAsin({ asin: row.external_id }, String(row.product_url))) return false;
     await this.scheduleCoreCollection(
       c,
       {
@@ -450,6 +476,81 @@ export class TrendProjectionPersistence {
       "competitor.collection.auto_scheduled",
       now,
     );
+    return true;
+  }
+
+  private async enqueueDueCompetitorDiscovery(c: PoolConnection, providerId: string, now: Date) {
+    const before = new Date(now.getTime() - this.refreshIntervalSeconds * 1000);
+    const [rows] = await c.query<RowDataPacket[]>(
+      `SELECT o.id discovery_opportunity_id,o.organization_id,o.workspace_id,o.created_by,o.primary_asin,
+         ${automaticPrimaryTitleSql} discovery_query
+       FROM (SELECT o.*,${selectionPrimaryAsinSql} primary_asin FROM opportunities o
+         JOIN (SELECT DISTINCT l_identified.opportunity_id,l_identified.organization_id,l_identified.workspace_id
+           FROM normalized_records n_identified
+           JOIN providers p_identified ON p_identified.id=n_identified.provider_id AND p_identified.code='amazon_product'
+           JOIN opportunity_evidence_links l_identified ON l_identified.raw_evidence_id=n_identified.raw_evidence_id
+             AND l_identified.organization_id=n_identified.organization_id AND l_identified.workspace_id=n_identified.workspace_id
+           WHERE n_identified.status='active'
+             AND JSON_UNQUOTE(JSON_EXTRACT(n_identified.payload_json,'$.asin')) REGEXP '^[A-Za-z0-9]{10}$') identified
+           ON identified.opportunity_id=o.id AND identified.organization_id=o.organization_id AND identified.workspace_id=o.workspace_id
+         WHERE o.source_type='trend_topic' AND o.lifecycle_status NOT IN ('archived','deleted')
+         HAVING primary_asin REGEXP '^[A-Z0-9]{10}$'
+         LIMIT 18446744073709551615) o
+       JOIN opportunities locked_opportunity ON locked_opportunity.id=o.id
+         AND locked_opportunity.organization_id=o.organization_id AND locked_opportunity.workspace_id=o.workspace_id
+       JOIN organizations active_org ON active_org.id=o.organization_id AND active_org.status='active'
+       JOIN workspaces active_workspace ON active_workspace.id=o.workspace_id
+         AND active_workspace.organization_id=o.organization_id AND active_workspace.status='active'
+       LEFT JOIN (SELECT organization_id,COUNT(*) active_count FROM collection_tasks
+         WHERE status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')
+         GROUP BY organization_id) busy ON busy.organization_id=o.organization_id
+       LEFT JOIN (SELECT q.organization_id,q.workspace_id,
+         JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.opportunity_id')) opportunity_id,MAX(q.created_at) last_discovery_at
+         FROM collection_subqueries q
+         WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='opportunity_competitors'
+         GROUP BY q.organization_id,q.workspace_id,opportunity_id) recent
+         ON recent.organization_id=o.organization_id AND recent.workspace_id=o.workspace_id
+         AND recent.opportunity_id=CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_bin
+       WHERE o.primary_asin REGEXP '^[A-Z0-9]{10}$'
+         AND locked_opportunity.lifecycle_status NOT IN ('archived','deleted')
+         AND (recent.last_discovery_at IS NULL OR recent.last_discovery_at<=?)
+         AND busy.active_count IS NULL
+         AND (SELECT COUNT(*) FROM collection_tasks backlog WHERE backlog.status IN
+           ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'))<?
+         AND NOT ${selectionCompetitionGateSql(5, "materialized")}
+       HAVING LENGTH(TRIM(discovery_query))>0
+       ORDER BY COALESCE(recent.last_discovery_at,o.created_at),o.id LIMIT 1 FOR UPDATE`,
+      [before, this.queueBacklogLimit],
+    );
+    const row = rows[0],
+      title = typeof row?.discovery_query === "string" ? row.discovery_query.trim() : "";
+    if (!row || !/^[A-Z0-9]{10}$/.test(String(row.primary_asin)) || !title) return false;
+    await this.scheduleCoreCollection(
+      c,
+      {
+        organizationId: String(row.organization_id),
+        workspaceId: String(row.workspace_id),
+        actorId: String(row.created_by),
+        requestId: `auto-competitors-${randomUUID()}`,
+        traceId: `auto-competitors-${String(row.discovery_opportunity_id)}`,
+      },
+      randomUUID(),
+      [
+        {
+          providerId,
+          required: true,
+          target: {
+            query: title.slice(0, 300),
+            projection_type: "opportunity_competitors",
+            opportunity_id: String(row.discovery_opportunity_id),
+            main_asin: String(row.primary_asin),
+          },
+        },
+      ],
+      "competitor.discovery.auto_scheduled",
+      now,
+    );
+    return true;
   }
 
   private async downstreamProviders(c: PoolConnection) {

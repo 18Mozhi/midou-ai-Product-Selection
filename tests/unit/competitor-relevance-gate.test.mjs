@@ -4,6 +4,7 @@ import {
   selectionCompetitionGateSql,
   selectionCompletedCompetitorsSql,
   selectionCompetitorRelevanceSql,
+  selectionPrimaryAsinSql,
   competitorDetailEvidenceSql,
 } from "../../packages/database/dist/index.js";
 import { competitorRelevanceCases } from "../fixtures/competitor-relevance-sql.mjs";
@@ -41,4 +42,15 @@ test("read-only MySQL cases cover positive, foreign-scope, cross-array and histo
     assert.ok(c.sql.startsWith("SELECT EXISTS"), c.name);
     assert.doesNotMatch(c.sql, /\b(?:INSERT|UPDATE|DELETE|CREATE|DROP|ALTER|TRUNCATE)\b/i);
   }
+});
+
+test("materialized scheduler identity changes only the repeated primary lookup", () => {
+  const linked = selectionCompetitionGateSql(5),
+    cached = selectionCompetitionGateSql(5, "materialized");
+  assert.match(cached, /o[.]primary_asin/);
+  assert.doesNotMatch(cached, /n_primary[.]payload_json/);
+  assert.equal(
+    cached.replaceAll("o.primary_asin", "PRIMARY"),
+    linked.replaceAll(selectionPrimaryAsinSql, "PRIMARY"),
+  );
 });

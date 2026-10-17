@@ -1271,3 +1271,5 @@ M08-05 的实现合同固定为惠州单机一个名为“ai选品”的宝塔�
 - 服务拓扑、采集调度和容量边界正文已按紧凑工具栏、顶部范围及全宽证据重制，三份旧基础样式、三套颜色文件及 102 个变量删除；读取和恢复/签认合同保留。详见 `docs/selection-runtime-controls.md`。其他页面、全站一致性和真实持续采集仍需继续，未部署。
 
 - 竞品数量条件现同时要求可追溯的同类型/用途相关性与真实详情，推荐和每日完成共用检查；未分类历史记录不填数量，不改已确认的低分、不推荐与明确利润未知口径。见 `docs/selection-competitor-quality-proof.md`，未部署。
+
+- 不足竞品发现与到期详情刷新在原单 Worker 补偿轮次内轮换，沿用 COMPETITOR_REFRESH_INTERVAL_SECONDS 的冷却及原积压限制；见 `docs/selection-competitor-rediscovery.md`。未部署，无新生产服务或数据库结构。

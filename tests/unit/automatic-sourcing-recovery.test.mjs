@@ -15,7 +15,12 @@ const row = {
   primary_image_url: image,
 };
 
-function setup(rows, providers = [{ id: "lan", code: "1688_search" }], refreshRows = []) {
+function setup(
+  rows,
+  providers = [{ id: "lan", code: "1688_search" }],
+  refreshRows = [],
+  discoveryRows = [],
+) {
   const calls = [],
     tasks = [];
   const connection = {
@@ -28,6 +33,7 @@ function setup(rows, providers = [{ id: "lan", code: "1688_search" }], refreshRo
       if (sql.startsWith("SELECT id,code FROM providers")) return [providers];
       if (sql.startsWith("SELECT o.id opportunity_id")) return [rows];
       if (sql.startsWith("SELECT c.id,c.organization_id")) return [refreshRows];
+      if (sql.startsWith("SELECT o.id discovery_opportunity_id")) return [discoveryRows];
       if (sql.startsWith("UPDATE sourcing_searches")) return [{ affectedRows: 1 }];
       throw new Error(`unexpected query: ${sql}`);
     },
@@ -259,4 +265,164 @@ test("refresh defensively rejects a different Amazon product identity", async ()
   );
   await worker.enqueueMissingAutomaticDownstream();
   assert.equal(tasks.length, 0);
+});
+
+const discoveryRow = {
+  discovery_opportunity_id: "opportunity-1",
+  organization_id: "org-1",
+  workspace_id: "workspace-1",
+  created_by: "user-1",
+  name: "Editable unrelated label",
+  discovery_query: "Handheld portable fan",
+  primary_asin: "B000000001",
+};
+
+test("insufficient or unclassified competitors get a cooled-down discovery through the existing queue", async () => {
+  const { worker, calls, tasks } = setup(
+    [],
+    [{ id: "amazon", code: "amazon_product" }],
+    [],
+    [discoveryRow],
+  );
+  await worker.enqueueMissingAutomaticDownstream();
+  assert.equal(tasks.length, 1);
+  assert.equal(tasks[0].event, "competitor.discovery.auto_scheduled");
+  assert.deepEqual(tasks[0].queries, [
+    {
+      providerId: "amazon",
+      required: true,
+      target: {
+        query: discoveryRow.discovery_query,
+        projection_type: "opportunity_competitors",
+        opportunity_id: discoveryRow.discovery_opportunity_id,
+        main_asin: discoveryRow.primary_asin,
+      },
+    },
+  ]);
+  assert.equal(tasks[0].context.organizationId, discoveryRow.organization_id);
+  assert.equal(tasks[0].context.workspaceId, discoveryRow.workspace_id);
+  const [sql, values] = calls.find(([sql]) =>
+    String(sql).startsWith("SELECT o.id discovery_opportunity_id"),
+  );
+  assert.deepEqual(values, [new Date("2026-10-16T23:00:00Z"), 1000]);
+  for (const term of [
+    "recent.organization_id=o.organization_id",
+    "recent.workspace_id=o.workspace_id",
+    "busy.active_count IS NULL",
+    "recent.last_discovery_at<=?",
+    "competitors_classified",
+    "COUNT(DISTINCT UPPER(c_sample.external_id))",
+    "active_org.status='active'",
+    "active_workspace.status='active'",
+    "JOIN opportunities locked_opportunity",
+    "n_title.payload_json",
+    "HAVING LENGTH(TRIM(discovery_query))>0",
+    "LIMIT 1 FOR UPDATE",
+  ])
+    assert.ok(sql.includes(term), term);
+  assert.deepEqual(calls.slice(-2), [["commit"], ["release"]]);
+});
+
+test("periodic details and incomplete discovery alternate without scheduling both in one transaction", async () => {
+  const { worker, tasks } = setup(
+    [],
+    [{ id: "amazon", code: "amazon_product" }],
+    [refreshRow],
+    [discoveryRow],
+  );
+  let tick = Date.parse("2026-10-17T00:00:00Z");
+  worker.now = () => new Date(tick);
+  for (let i = 0; i < 4; i++) {
+    await worker.enqueueMissingAutomaticDownstream();
+    tick += 60_000;
+  }
+  assert.deepEqual(
+    tasks.map((t) => t.queries[0].target.projection_type),
+    [
+      "competitor_snapshot",
+      "opportunity_competitors",
+      "competitor_snapshot",
+      "opportunity_competitors",
+    ],
+  );
+});
+
+for (const invalid of [
+  { ...discoveryRow, primary_asin: "invalid" },
+  { ...discoveryRow, discovery_query: " " },
+]) {
+  test(
+    "discovery rejects invalid primary or empty query before enqueuing: " +
+      invalid.primary_asin +
+      invalid.name,
+    async () => {
+      const { worker, tasks } = setup(
+        [],
+        [{ id: "amazon", code: "amazon_product" }],
+        [],
+        [invalid],
+      );
+      await worker.enqueueMissingAutomaticDownstream();
+      assert.equal(tasks.length, 0);
+    },
+  );
+}
+
+test("discovery task failure rolls back and does not consume the detail turn", async () => {
+  const details = [],
+    { worker, calls, tasks } = setup([], [{ id: "amazon", code: "amazon_product" }], details, [
+      discoveryRow,
+    ]);
+  const schedule = worker.scheduleCoreCollection;
+  worker.scheduleCoreCollection = async () => {
+    throw Error("discovery queue unavailable");
+  };
+  await assert.rejects(worker.enqueueMissingAutomaticDownstream(), /discovery queue unavailable/);
+  assert.deepEqual(calls.slice(-2), [["rollback"], ["release"]]);
+  details.push(refreshRow);
+  worker.scheduleCoreCollection = schedule;
+  await worker.enqueueMissingAutomaticDownstream();
+  assert.equal(tasks.length, 1);
+  assert.equal(tasks[0].queries[0].target.projection_type, "competitor_snapshot");
+});
+
+test("initial missing work keeps precedence over both periodic chains", async () => {
+  const { worker, calls } = setup(
+    [row],
+    [
+      { id: "amazon", code: "amazon_product" },
+      { id: "lan", code: "1688_search" },
+    ],
+    [refreshRow],
+    [discoveryRow],
+  );
+  await worker.enqueueMissingAutomaticDownstream();
+  assert.equal(
+    calls.some(([sql]) => String(sql).startsWith("SELECT o.id discovery_opportunity_id")),
+    false,
+  );
+});
+
+test("empty discovery scans are bounded to one minute without stopping existing repair or detail reads", async () => {
+  const { worker, calls } = setup([], [{ id: "amazon", code: "amazon_product" }]);
+  let tick = Date.parse("2026-10-17T00:00:00Z");
+  worker.now = () => new Date(tick);
+  await worker.enqueueMissingAutomaticDownstream();
+  await worker.enqueueMissingAutomaticDownstream();
+  tick += 59_999;
+  await worker.enqueueMissingAutomaticDownstream();
+  assert.equal(
+    calls.filter(([sql]) => String(sql).startsWith("SELECT o.id discovery_opportunity_id")).length,
+    1,
+  );
+  assert.equal(
+    calls.filter(([sql]) => String(sql).startsWith("SELECT c.id,c.organization_id")).length,
+    3,
+  );
+  tick += 1;
+  await worker.enqueueMissingAutomaticDownstream();
+  assert.equal(
+    calls.filter(([sql]) => String(sql).startsWith("SELECT o.id discovery_opportunity_id")).length,
+    2,
+  );
 });

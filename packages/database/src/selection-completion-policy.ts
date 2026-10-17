@@ -108,10 +108,18 @@ export const detailedSelectionCompetitorsFromSql =
   `AND ${competitorDetailEvidenceSql("s_sample")} AND ${selectionCompetitorRelevanceSql} ` +
   `AND BINARY UPPER(c_sample.external_id)<>BINARY COALESCE(${opportunityPrimaryAsinSql},'')`;
 
-export function selectionCompetitionGateSql(minimumCompetitors: number) {
+export function selectionCompetitionGateSql(
+  minimumCompetitors: number,
+  identity: "linked" | "materialized" = "linked",
+) {
   if (!Number.isInteger(minimumCompetitors) || minimumCompetitors < 1 || minimumCompetitors > 10)
     throw new Error("selection_competitor_minimum_invalid");
-  return `(${opportunityPrimaryAsinSql} IS NOT NULL AND (SELECT COUNT(DISTINCT UPPER(c_sample.external_id)) ${detailedSelectionCompetitorsFromSql})>=${minimumCompetitors})`;
+  const predicate = `(${opportunityPrimaryAsinSql} IS NOT NULL AND (SELECT COUNT(DISTINCT UPPER(c_sample.external_id)) ${detailedSelectionCompetitorsFromSql})>=${minimumCompetitors})`;
+  // Only the scheduler's materialized opportunity query owns this verified cache.
+  // Replacement is of our fixed SQL fragment, never a caller-provided expression.
+  return identity === "materialized"
+    ? predicate.replaceAll(selectionPrimaryAsinSql, "o.primary_asin")
+    : predicate;
 }
 
 /** Scope is bound separately. The rows use the same actual detail proof as recommendation gates. */
