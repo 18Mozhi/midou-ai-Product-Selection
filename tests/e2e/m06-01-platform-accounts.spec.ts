@@ -792,9 +792,7 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
   }
   await accountTabs.getByRole("link", { name: "用户管理", exact: true }).click();
   const userWorkspace = page.locator(".account-page-layout--users");
-  await expect(
-    userWorkspace.getByRole("complementary", { name: "全平台汇总与管理入口" }),
-  ).toBeVisible();
+  await expect(userWorkspace.getByRole("region", { name: "全平台汇总与管理入口" })).toBeVisible();
   await expect(userWorkspace.getByRole("heading", { name: "用户目录" })).toBeVisible();
   await expect(
     userWorkspace.getByRole("navigation", { name: "账号与组织二级导航" }).getByRole("link", {
@@ -995,7 +993,9 @@ test("organization list uses organization-specific filters and a recoverable emp
     page.locator(".platform-page-header").getByRole("heading", { name: "组织管理" }),
   ).toBeVisible();
   const organizationLayout = page.locator(".account-page-layout--organizations");
-  await expect(organizationLayout.getByRole("complementary")).toBeVisible();
+  await expect(
+    organizationLayout.getByRole("region", { name: "平台汇总与账号管理入口" }),
+  ).toBeVisible();
   await expect(
     organizationLayout.getByRole("navigation", { name: "账号与组织二级导航" }),
   ).toBeVisible();
@@ -1577,27 +1577,26 @@ test("administrator list persists filters and exposes a desktop and mobile empty
   ).toBeVisible();
 });
 
-test("P44 admin workspace composes the approved C directory and read-only comparison", async ({
+test("admin directory uses a full-width summary and preserves read-only comparison", async ({
   page,
 }) => {
   await setup(page);
   await page.goto("/platform-admin/admins");
 
   const shell = page.locator(".account-center--admins-c");
-  const rail = shell.locator(".account-page-rail");
+  const rail = shell.locator(".account-summary");
   const main = shell.locator(".account-page-main");
-  const assertColumns = async (wide: boolean) => {
+  const assertColumns = async (_wide: boolean) => {
     const boxes = await Promise.all([rail.boundingBox(), main.boundingBox()]);
     expect(boxes[0]).not.toBeNull();
     expect(boxes[1]).not.toBeNull();
-    if (wide) expect(boxes[0]!.x + boxes[0]!.width).toBeLessThanOrEqual(boxes[1]!.x + 1);
-    else expect(boxes[1]!.y).toBeGreaterThanOrEqual(boxes[0]!.y + boxes[0]!.height - 1);
+    expect(Math.abs(boxes[0]!.width - boxes[1]!.width)).toBeLessThanOrEqual(1);
+    expect(boxes[1]!.y).toBeGreaterThanOrEqual(boxes[0]!.y + boxes[0]!.height - 1);
   };
 
-  await expect(shell.getByRole("heading", { name: "账号与组织" })).toBeVisible();
+  await expect(shell.getByRole("heading", { name: "平台汇总" })).toBeVisible();
   const directoryHeading = shell.getByRole("heading", { name: "可授权账号" });
-  if ((page.viewportSize()?.width ?? 0) <= 760) await expect(directoryHeading).toBeVisible();
-  else await expect(directoryHeading).not.toBeVisible();
+  await expect(directoryHeading).toBeVisible();
   await expect(rail.locator(".account-metrics article")).toHaveCount(3);
   await expect(rail.locator(".account-metrics article:last-child strong")).toHaveText("2");
   await expect(main.locator(".platform-admin-role-comparison")).toBeVisible();
@@ -1605,9 +1604,9 @@ test("P44 admin workspace composes the approved C directory and read-only compar
 
   await page.setViewportSize({ width: 1200, height: 900 });
   await assertColumns(false);
-  await expect(directoryHeading).not.toBeVisible();
+  await expect(directoryHeading).toBeVisible();
   await page.setViewportSize({ width: 761, height: 900 });
-  await expect(directoryHeading).not.toBeVisible();
+  await expect(directoryHeading).toBeVisible();
   await page.setViewportSize({ width: 760, height: 900 });
   await expect(directoryHeading).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
@@ -1756,4 +1755,33 @@ test("administrator write failures stay inside their active dialogs", async ({ p
     .click();
   await expect(detail.getByRole("alert")).toContainText("请由另一位超级管理员执行");
   await expect(detail).toBeVisible();
+});
+
+test("platform account directories share a top summary and full-width records", async ({
+  page,
+}) => {
+  await setup(page);
+  for (const path of ["accounts", "organizations", "users", "admins"]) {
+    await page.goto(`/platform-admin/${path}`);
+    const summary = page.locator(".account-summary"),
+      main = page.locator(".account-page-main");
+    await expect(summary.locator(".account-metrics article")).toHaveCount(3);
+    await expect(page.locator(".account-page-rail, .p39-directory")).toHaveCount(0);
+    const [a, b] = await Promise.all([summary.boundingBox(), main.boundingBox()]);
+    expect(a).not.toBeNull();
+    expect(b).not.toBeNull();
+    expect(Math.abs(a!.width - b!.width)).toBeLessThanOrEqual(1);
+    expect(b!.y).toBeGreaterThanOrEqual(a!.y + a!.height);
+    const cards = await summary.locator(".account-metrics article").evaluateAll((nodes) =>
+      nodes.map((n) => ({
+        x: n.getBoundingClientRect().x,
+        y: n.getBoundingClientRect().y,
+        bg: getComputedStyle(n).backgroundColor,
+      })),
+    );
+    expect(cards.every((c) => Math.abs(c.y - cards[0].y) < 1)).toBe(true);
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+      .toBe(true);
+  }
 });

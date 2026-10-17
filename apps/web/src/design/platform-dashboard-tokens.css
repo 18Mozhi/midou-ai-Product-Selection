@@ -2,8 +2,6 @@ html:has(body #app .platform-dashboard--review) {
   --pd-ink: var(--glass-text);
   --pd-canvas: var(--glass-bg);
   --pd-rail: var(--glass-primary-strong);
-  --pd-on-rail: #fff;
-  --pd-rail-control-border: var(--glass-border);
   --pd-border: var(--glass-border);
   --pd-warning: #b57900;
   --pd-panel: #fff;

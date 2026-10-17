@@ -116,7 +116,7 @@ test("mobile heading stays within its breakpoint and directory replay remains re
   }
 });
 
-test("historical directory captures stay immutable and current P44 composition stays explicit", () => {
+test("historical captures stay immutable and current admin directory uses the shared summary", () => {
   const source = [
     read("apps/web/src/components/PlatformAccountCenter.vue"),
     read("apps/web/src/components/PlatformAccountDirectoryWorkspace.vue"),
@@ -125,11 +125,8 @@ test("historical directory captures stay immutable and current P44 composition s
   assert.ok(source.includes('class="account-page-layout"'));
   assert.ok(source.includes('class="admin-directory-heading"'));
   const mobileCss = read("apps/web/src/components/PlatformAdminDirectoryMobile.css");
-  assert.match(
-    mobileCss,
-    /\.account-page-layout--admins \.account-page-main \.admin-directory-heading/,
-  );
-  assert.match(mobileCss, /\.account-page-layout--admins \.account-page-main \.account-table-wrap/);
+  assert.match(mobileCss, /\.account-center--admins-c \.account-table-wrap/);
+  assert.match(mobileCss, /\.account-center--admins-c \.responsive-data-view__mobile/);
   assert.match(mobileCss, /@media \(max-width: 760px\)/);
   assert.ok(read("apps/web/src/components/PlatformAccountCenterAdmin.css").length > 0);
   assert.equal(

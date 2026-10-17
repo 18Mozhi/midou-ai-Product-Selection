@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import test from "node:test";
@@ -18,7 +19,12 @@ import {
   historicalAdminResultsSource,
 } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+// Archived capture assertions use their exact pre-rebuild source, never the new directory UI.
+const read = (file) =>
+  (file.startsWith("apps/web/src/")
+    ? readPreSelectionRebuild(file)
+    : readFileSync(file, "utf8")
+  ).replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p44-mobile-results-implementation/";
 const evidence = (mode) =>

@@ -10,13 +10,12 @@ const props = defineProps<{
 </script>
 
 <template>
-  <aside
-    class="account-page-rail"
+  <section
+    class="account-summary"
     :aria-label="props.organizationListRoute ? '平台汇总与账号管理入口' : '全平台汇总与管理入口'"
   >
-    <header class="account-page-rail__intro">
-      <small>平台全局</small>
-      <h3>账号与组织</h3>
+    <header class="account-summary__heading">
+      <h3>平台汇总</h3>
       <p>
         {{
           props.organizationListRoute
@@ -61,5 +60,5 @@ const props = defineProps<{
         >管理员管理</RouterLink
       >
     </nav>
-  </aside>
+  </section>
 </template>

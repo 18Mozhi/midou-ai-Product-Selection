@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppIcon from "./AppIcon.vue";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 
 const props = withDefaults(
@@ -112,7 +113,9 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
     >
       <span>{{ label }}</span>
       <b v-if="activeCount">{{ activeCount }} 项已选</b>
-      <i aria-hidden="true">调</i>
+      <span class="responsive-filter-drawer__icon" aria-hidden="true"
+        ><AppIcon name="settings"
+      /></span>
     </button>
     <Teleport to="body" :disabled="!overlay">
       <div
@@ -223,7 +226,7 @@ onBeforeUnmount(() => mediaQuery?.removeEventListener("change", syncViewport));
   font-size: var(--so-font-meta);
 }
 
-.responsive-filter-drawer--overlay .responsive-filter-drawer__trigger i {
+.responsive-filter-drawer--overlay .responsive-filter-drawer__icon {
   width: 32px;
   height: 32px;
   display: grid;

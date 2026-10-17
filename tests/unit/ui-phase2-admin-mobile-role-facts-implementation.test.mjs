@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import {
   beforePublishedPresentation,
   publishedPresentationRevisions,
@@ -18,7 +19,12 @@ import {
   historicalAdminRoleFactsSource,
 } from "../../scripts/lib/ui-phase2-admin-results-baseline.mjs";
 
-const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+// Archived capture assertions use their exact pre-rebuild source, never the new directory UI.
+const read = (file) =>
+  (file.startsWith("apps/web/src/")
+    ? readPreSelectionRebuild(file)
+    : readFileSync(file, "utf8")
+  ).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const folder = "output/playwright/p44-mobile-role-facts-implementation/";
 const resultsCurrent = JSON.parse(

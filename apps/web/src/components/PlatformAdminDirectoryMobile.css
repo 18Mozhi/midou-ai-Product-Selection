@@ -1,69 +1,36 @@
 @import "../design/platform-admin-mobile-tokens.css";
-
-/* Approved P44 mobile directory only; other routes, desktop and dialogs stay unchanged. */
-.account-center--admins-c .admin-directory-heading {
-  display: none;
-}
 @media (max-width: 760px) {
-  html[data-design="commerce"]
-    #app
-    .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"]) {
-    .account-page-layout--admins .account-page-main .admin-directory-heading {
-      display: block;
-      margin: 0 16px;
-      font-family: "Microsoft YaHei", sans-serif;
-      color: var(--so-admin-mobile-text);
-      h3 {
-        margin: 0 0 6px;
-        font-family: "Microsoft YaHei", sans-serif;
-        font-size: 22px;
-        font-weight: 700;
-        color: var(--so-admin-mobile-text);
-      }
-      p {
-        margin: 0;
-        font-size: 14px;
-        line-height: 1.8;
-        color: var(--so-admin-mobile-text-muted);
-      }
-    }
-    .account-page-layout--admins .account-page-main .account-table-wrap {
-      margin: 0 16px;
-      border: 1px solid var(--so-admin-mobile-border);
-      border-radius: 10px;
-      background: var(--so-admin-mobile-surface);
-      color: var(--so-admin-mobile-text);
-      font-family: "Microsoft YaHei", sans-serif;
-      .responsive-data-view__mobile {
-        gap: 0;
-      }
-      .responsive-data-view__mobile article {
-        border: 0;
-        border-bottom: 1px solid var(--so-admin-mobile-border);
-        border-radius: 0;
-        background: var(--so-admin-mobile-surface);
-      }
-      .responsive-data-view__mobile article:last-child {
-        border-bottom: 0;
-      }
-      .responsive-data-view__mobile article > button {
-        padding: 20px 16px;
-        min-height: 44px;
-        color: var(--so-admin-mobile-text);
-        background: var(--so-admin-mobile-surface);
-      }
-      .responsive-record-summary strong {
-        font-family: Bahnschrift, "Microsoft YaHei", sans-serif;
-        font-size: 14px;
-        overflow-wrap: anywhere;
-      }
-      .responsive-record-summary small,
-      .responsive-data-view__action {
-        color: var(--so-admin-mobile-text-muted);
-      }
-      .responsive-record-summary small {
-        font-size: 13px;
-      }
-    }
+  .account-center--admins-c .account-table-wrap {
+    margin: 0;
+    border-color: var(--so-admin-mobile-border);
+    background: var(--so-admin-mobile-surface);
+    color: var(--so-admin-mobile-text);
+  }
+  .account-center--admins-c .responsive-data-view__mobile {
+    gap: 0;
+  }
+  .account-center--admins-c .responsive-data-view__mobile article {
+    border: 0;
+    border-bottom: 1px solid var(--so-admin-mobile-border);
+    border-radius: 0;
+    background: var(--so-admin-mobile-surface);
+  }
+  .account-center--admins-c .responsive-data-view__mobile article:last-child {
+    border-bottom: 0;
+  }
+  .account-center--admins-c .responsive-data-view__mobile article > button {
+    min-height: 44px;
+    padding: 14px 16px;
+    background: var(--so-admin-mobile-surface);
+    color: var(--so-admin-mobile-text);
+  }
+  .account-center--admins-c .responsive-record-summary strong {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+  .account-center--admins-c .responsive-record-summary small,
+  .account-center--admins-c .responsive-data-view__action {
+    color: var(--so-admin-mobile-text-muted);
+    font-size: 12px;
   }
 }

@@ -6,8 +6,6 @@ html:has(body #app .platform-management--status-c) {
   --p61-line: var(--glass-border);
   --p61-blue: var(--glass-primary);
   --p61-navy: #102a63;
-  --p61-disabled-bg: #e9eef5;
-  --p61-disabled-ink: #64748b;
   --p61-focus: var(--glass-focus);
   --p61-pale-blue: var(--glass-primary-soft);
   --p61-blue-muted: var(--glass-primary-soft);

@@ -726,7 +726,7 @@ test("P61 platform status palette resolves its shell and feedback colors in rout
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set([...css.matchAll(/var\((--p61-[a-z-]+)\)/g)].map((match) => match[1]));
 
-  assert.equal(names.size, 15);
+  assert.equal(names.size, 13);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -985,7 +985,7 @@ test("P38 platform dashboard colors resolve from its route-scoped palette", asyn
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set([...css.matchAll(/var\((--pd-[a-z-]+)\)/g)].map((match) => match[1]));
 
-  assert.equal(names.size, 10);
+  assert.equal(names.size, 8);
   assert.equal(
     declarations.length,
     names.size,
@@ -1341,16 +1341,16 @@ test("platform account center palettes stay scoped to their distinct account pag
     ].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 79);
+  assert.equal(names.size, 38);
   assert.equal(declarations.length, names.size, "no duplicate account center palette declarations");
-  assert.match(tokens, /html:has\(body #app \.account-center--review\)/);
+  assert.doesNotMatch(tokens, /--account-review-|--account-users-|--p39-/);
   assert.match(tokens, /html:has\(body #app \.account-center--organization-review\)/);
   assert.match(tokens, /html:has\(body #app \.account-center--user-admin-c\)/);
   assert.match(tokens, /html:has\(body #app \.account-center--admins-c\)/);
   assert.ok(css.startsWith('@import "../design/account-center-tokens.css";'));
-  assert.ok(adminCss.startsWith('@import "../design/account-center-tokens.css";'));
+  assert.doesNotMatch(adminCss, /@import/);
   assert.ok(dialogsCss.startsWith('@import "../design/account-center-tokens.css";'));
-  assert.ok(usersCss.startsWith('@import "../design/account-center-tokens.css";'));
+  assert.doesNotMatch(usersCss, /@import/);
   assert.ok(organizationDialog.includes('@import "../design/account-center-tokens.css";'));
   assert.ok(userDialog.includes('@import "../design/account-center-tokens.css";'));
   assertPaletteUsage(references, names);
@@ -1424,7 +1424,7 @@ test("P48 provider source page colors resolve from its page-scoped palette", asy
     ),
   );
 
-  assert.equal(names.size, 52);
+  assert.equal(names.size, 49);
   assert.equal(declarations.length, names.size, "no duplicate P48 source palette declarations");
   assert.match(tokens, /^\.source-center--p48\s*\{/);
   assert.ok(stylesheets[0].startsWith('@import "../design/provider-source-tokens.css";'));

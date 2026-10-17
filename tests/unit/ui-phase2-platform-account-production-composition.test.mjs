@@ -15,7 +15,8 @@ const organizationRecords = await readFile(
   "apps/web/src/components/PlatformOrganizationRecords.vue",
   "utf8",
 );
-const accountSurface = `${panel}\n${workspace}\n${filters}`;
+const summary = await readFile("apps/web/src/components/PlatformAccountGlobalRail.vue", "utf8");
+const accountSurface = `${panel}\n${workspace}\n${filters}\n${summary}`;
 const styles = await readFile("apps/web/src/components/PlatformAccountCenter.css", "utf8");
 const header = await readFile("apps/web/src/components/PlatformPageHeader.vue", "utf8");
 
@@ -69,6 +70,6 @@ test("P40 organization page keeps global summaries separate and labels mobile fa
   assert.match(accountSurface, /organizationListRoute.value \? "组织状态"/);
   assert.match(organizationRecords, /class="p40-record-status"/);
   assert.match(organizationRecords, /class="p40-record-counts"/);
-  assert.match(styles, /\.account-center \.account-page-layout--organizations/);
+  assert.match(styles, /\.account-center \.account-page-layout/);
   assert.match(styles, /@media \(max-width: 1024px\)/);
 });

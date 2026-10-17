@@ -10,8 +10,6 @@
   --p48-source-warning: #a97016;
   --p48-source-return-border: var(--glass-border);
   --p48-source-line: var(--glass-border);
-  --p48-source-hero-muted: #dce6ff;
-  --p48-source-hero-subtle: #edf2ff;
   --p48-source-canvas: var(--glass-bg);
   --p48-source-info-panel: #f6f9ff;
   --p48-source-soft: #f8fbff;
@@ -19,7 +17,6 @@
   --p48-source-surface: #fff;
   --p48-source-danger-panel: #fffafa;
   --p48-source-warning-panel: #fffdf8;
-  --p48-source-outline: rgb(255 255 255 / 55%);
   --p48-source-modal-overlay: rgb(15 23 42 / 72%);
   --p48-source-modal-shadow: rgb(15 23 42 / 28%);
   --p48-source-modal-line: var(--glass-border);

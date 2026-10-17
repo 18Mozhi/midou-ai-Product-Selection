@@ -32,7 +32,6 @@ const props = defineProps<{
 
 const query = defineModel<string>("query", { required: true });
 const status = defineModel<string>("status", { required: true });
-const isCurrentTab = (target: AccountTab) => props.tab === target;
 const emit = defineEmits<{
   (event: "apply-filters"): void;
   (event: "reset-filters"): void;
@@ -54,71 +53,11 @@ const emit = defineEmits<{
     }"
   >
     <PlatformAccountGlobalRail
-      v-if="props.adminListRoute || props.organizationListRoute || props.tab === 'users'"
       :data="props.data"
       :tab="props.tab"
       :organization-list-route="props.organizationListRoute"
     />
-    <div
-      class="account-page-main"
-      :class="{
-        'p39-page-grid':
-          !props.adminListRoute && !props.organizationListRoute && props.tab === 'organizations',
-      }"
-    >
-      <component
-        v-if="!props.adminListRoute && !props.organizationListRoute && props.tab !== 'users'"
-        :is="props.tab === 'organizations' ? 'aside' : 'div'"
-        :class="{
-          'p39-directory':
-            !props.adminListRoute && !props.organizationListRoute && props.tab === 'organizations',
-        }"
-      >
-        <header
-          v-if="
-            !props.adminListRoute && !props.organizationListRoute && props.tab === 'organizations'
-          "
-        >
-          <h3>平台全局</h3>
-          <p>汇总不随组织列表筛选变化</p>
-        </header>
-        <div v-if="props.data" class="account-metrics">
-          <article>
-            <small>组织</small
-            ><strong
-              >{{ props.data.summary.active_organizations }} /
-              {{ props.data.summary.organizations }}</strong
-            ><span>正常 / 全部</span>
-          </article>
-          <article>
-            <small>用户</small
-            ><strong>{{ props.data.summary.active_users }} / {{ props.data.summary.users }}</strong
-            ><span>可登录 / 全部</span>
-          </article>
-          <article>
-            <small>平台管理员</small><strong>{{ props.data.summary.platform_admins }}</strong
-            ><span>拥有平台后台权限</span>
-          </article>
-        </div>
-        <nav class="account-tabs" aria-label="账号与组织二级导航">
-          <RouterLink
-            to="/platform-admin/organizations"
-            :class="{ on: props.tab === 'organizations' }"
-            :aria-current="props.tab === 'organizations' ? 'page' : undefined"
-            >组织管理</RouterLink
-          ><RouterLink
-            to="/platform-admin/users"
-            :class="{ on: isCurrentTab('users') }"
-            :aria-current="isCurrentTab('users') ? 'page' : undefined"
-            >用户管理</RouterLink
-          ><RouterLink
-            to="/platform-admin/admins"
-            :class="{ on: props.tab === 'admins' }"
-            :aria-current="props.tab === 'admins' ? 'page' : undefined"
-            >管理员管理</RouterLink
-          >
-        </nav>
-      </component>
+    <div class="account-page-main">
       <component
         :is="
           !props.adminListRoute && !props.organizationListRoute && props.tab === 'organizations'
@@ -140,9 +79,6 @@ const emit = defineEmits<{
             <h3>组织记录</h3>
             <p>组织名称、成员、工作区与状态</p>
           </div>
-          <button type="button" :disabled="props.refreshing || props.busy" @click="emit('load')">
-            {{ props.refreshing ? "正在刷新…" : "刷新数据" }}
-          </button>
         </header>
         <header v-if="props.adminListRoute" class="admin-directory-heading">
           <h3>可授权账号</h3>
