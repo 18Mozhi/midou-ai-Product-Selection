@@ -178,7 +178,7 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
         </tbody>
       </table>
     </div>
-    <p v-else>正在等待相关商品的采集结果。</p>
+    <p v-else>暂无相关竞品记录，请核对采集结果。</p>
     <p>购买提示为页面展示的数量下限；精确销量、广告花费未采集。</p>
     <section class="selection-review-samples" aria-label="公开评价样本">
       <h4>评价样本</h4>

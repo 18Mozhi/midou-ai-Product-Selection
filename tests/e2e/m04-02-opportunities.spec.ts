@@ -2904,3 +2904,51 @@ for (const configured of [true, false]) {
     }
   });
 }
+
+for (const coverage of ["covered", "insufficient_data"]) {
+  test(`risk detail renders ${coverage} coverage without inferring it from the saved level`, async ({
+    page,
+  }) => {
+    await ready(page, evidence, {
+      risk_level: coverage === "covered" ? "high" : "low",
+      section_status: {
+        market: "covered",
+        competition: "covered",
+        profit: "insufficient_data",
+        risk: coverage,
+        execution: "not_available",
+      },
+    });
+    await page.goto(`/opportunities/${opportunityId}?tab=risk`);
+    const risk = page.locator(".opportunity-risk-facts");
+    await expect(risk).toContainText(coverage === "covered" ? "高" : "低");
+    if (coverage === "covered") {
+      await expect(page.getByText("风险评估资料不完整", { exact: true })).toHaveCount(0);
+      await expect(
+        page.getByText("当前风险资料已覆盖，请结合原始证据核对已保存的风险等级。", { exact: true }),
+      ).toBeVisible();
+    } else {
+      await expect(page.getByText("风险评估资料不完整", { exact: true })).toBeVisible();
+      await expect(
+        page.getByText("当前风险资料已覆盖，请结合原始证据核对已保存的风险等级。", { exact: true }),
+      ).toHaveCount(0);
+    }
+    await page.getByText("补证异常时手动处理", { exact: true }).click();
+    await expect(
+      page.getByText("补证状态以当前记录为准；需要立即重试时可使用下面的操作。", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("系统会持续自动补证；只有需要立即重试时才使用下面的操作。", { exact: true }),
+    ).toHaveCount(0);
+  });
+}
+
+test("empty competitor detail reports absent records without claiming a collector is running", async ({
+  page,
+}) => {
+  await ready(page, evidence, {}, ["opportunity:read", "competitor:read"]);
+  await page.route("**/api/v1/competitors?*", (route) => route.fulfill({ json: envelope([]) }));
+  await page.goto(`/opportunities/${opportunityId}?tab=competition`);
+  await expect(page.getByText("暂无相关竞品记录，请核对采集结果。", { exact: true })).toBeVisible();
+  await expect(page.getByText("正在等待相关商品的采集结果。", { exact: true })).toHaveCount(0);
+});

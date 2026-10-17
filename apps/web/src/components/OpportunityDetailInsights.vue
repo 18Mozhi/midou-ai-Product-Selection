@@ -340,10 +340,16 @@ const emit = defineEmits<{
           <strong>{{ opportunityStatusLabel(detail.section_status.risk) }}</strong>
         </section>
       </div>
-      <div class="opportunity-insight-callout opportunity-insight-callout--caution">
+      <div
+        v-if="detail.section_status.risk !== 'covered'"
+        class="opportunity-insight-callout opportunity-insight-callout--caution"
+      >
         <strong>风险评估资料不完整</strong>
         <span>请核对相关证据后再作决定。</span>
       </div>
+      <p v-else class="opportunity-insight-note">
+        当前风险资料已覆盖，请结合原始证据核对已保存的风险等级。
+      </p>
 
       <div class="opportunity-insight-actions">
         <button

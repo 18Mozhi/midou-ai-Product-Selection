@@ -1,4 +1,17 @@
 {
+  "selectionDetailFactualStates20261017": {
+    "status": "implemented",
+    "statusDetail": "31_related_node_142_browser_web_build_and_gates_passed_not_deployed",
+    "requirements": "docs/selection-detail-factual-states.md",
+    "routes": ["/opportunities/:id"],
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityDetailInsights.vue",
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/SelectionProductComparison.vue"
+    ],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "contract": "Risk coverage follows the existing section_status.risk field independently from saved risk level. Successful empty competitor records and manual retry copy do not claim a collector is running. No collection, API, configuration, database or permission change."
+  },
   "selectionCatalogueFirstScreen20261017": {
     "status": "implemented",
     "statusDetail": "89_related_node_api_180_browser_cases_covered_final6_passed_web_build_and_gates_passed_not_deployed",

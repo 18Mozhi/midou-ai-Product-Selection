@@ -515,7 +515,7 @@ useOpportunityWorkspaceLifecycle({
             >
               <details>
                 <summary>补证异常时手动处理</summary>
-                <p>系统会持续自动补证；只有需要立即重试时才使用下面的操作。</p>
+                <p>补证状态以当前记录为准；需要立即重试时可使用下面的操作。</p>
                 <div>
                   <button
                     v-if="canManageCompetitors"
