@@ -1,6 +1,23 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { MySqlCollectionTaskWorkerRepository } from "../../apps/worker/dist/collection-task-state-machine.js";
+import { automaticCompletionTaskSql } from "../../apps/worker/dist/collection-source-scheduling-policy.js";
+
+test("projected competitor detail tasks use their actual Worker producer in the completion lane", () => {
+  assert.ok(
+    automaticCompletionTaskSql.includes(
+      "event_type IN ('competitor.collection.auto_scheduled','competitor.detail.auto_scheduled')",
+    ),
+  );
+  assert.match(automaticCompletionTaskSql, /completion_provider.code='amazon_product'/);
+  assert.match(automaticCompletionTaskSql, /projection_type'\)\)='competitor_snapshot'/);
+  for (const field of ["task_id", "organization_id", "workspace_id"])
+    assert.ok(
+      automaticCompletionTaskSql.includes(
+        `completion_event.${field}=collection_tasks.${field === "task_id" ? "id" : field}`,
+      ),
+    );
+});
 
 const now = new Date("2026-10-18T00:00:00Z");
 const row = {

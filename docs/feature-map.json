@@ -1,4 +1,14 @@
 {
+  "selectionProjectedCompetitorDetailScheduling20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-completion-scheduling.md",
+    "sourceFiles": [
+      "apps/worker/src/collection-source-scheduling-policy.ts",
+      "apps/worker/src/core-collection-projection-worker.ts"
+    ],
+    "testFiles": ["tests/unit/collection-completion-scheduling.test.mjs"],
+    "contract": "Include the actual competitor.detail.auto_scheduled Worker producer with matching scoped Amazon competitor_snapshot queries in the existing completion lane. Priority, intake, 20-claim FIFO fairness, leases and retries unchanged."
+  },
   "selectionProductRetryEvidence20261018": {
     "status": "implemented",
     "requirements": "docs/product-retry-evidence-versions.md",

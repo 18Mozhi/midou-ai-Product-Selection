@@ -18,7 +18,7 @@ export const automaticCompletionTaskSql =
   "AND completion_event.organization_id=collection_tasks.organization_id " +
   "AND completion_event.workspace_id=collection_tasks.workspace_id AND completion_event.actor_type='worker' " +
   "AND ((completion_provider.code='amazon_product' AND " +
-  "((completion_event.event_type='competitor.collection.auto_scheduled' " +
+  "((completion_event.event_type IN ('competitor.collection.auto_scheduled','competitor.detail.auto_scheduled') " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(completion_query.target_json,'$.projection_type'))='competitor_snapshot') " +
   "OR (completion_event.event_type='competitor.discovery.auto_scheduled' " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(completion_query.target_json,'$.projection_type'))='opportunity_competitors'))) " +
