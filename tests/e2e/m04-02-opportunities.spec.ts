@@ -861,6 +861,11 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   expect((await decisionSurface.boundingBox())!.height).toBeLessThan(
     page.viewportSize()!.width < 760 ? 520 : 360,
   );
+  const gateFontSize = await decisionSurface
+    .locator(".opportunity-quality-gates li")
+    .first()
+    .evaluate((element) => parseFloat(getComputedStyle(element).fontSize));
+  expect(gateFontSize).toBeGreaterThanOrEqual(13);
   await expect(decisionSurface.locator(".opportunity-decision-summary__lead h3")).toHaveCSS(
     "font-size",
     "18px",
@@ -971,7 +976,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("compact-recommendation-detail-20261017.png", {
+  await expect(page).toHaveScreenshot("legible-recommendation-detail-20261017.png", {
     fullPage: true,
   });
   if ((page.viewportSize()?.width ?? 0) <= 640) {

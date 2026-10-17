@@ -163,10 +163,11 @@ test("approval workspace review colors resolve from its page-scoped semantic pal
 });
 
 test("opportunity queue and detail colors resolve from their route-scoped palette", async () => {
-  const [tokens, css, detailNavigation] = await Promise.all([
+  const [tokens, css, detailNavigation, detailInsights] = await Promise.all([
     readFile("apps/web/src/design/opportunity-review-tokens.css", "utf8"),
     readFile("apps/web/src/automatic-selection.css", "utf8"),
     readFile("apps/web/src/components/OpportunityDetailNavigation.vue", "utf8"),
+    readFile("apps/web/src/components/OpportunityDetailInsights.vue", "utf8"),
   ]);
   const declarations = [
     ...tokens.matchAll(
@@ -176,7 +177,7 @@ test("opportunity queue and detail colors resolve from their route-scoped palett
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set(
     [
-      ...`${css}\n${detailNavigation}`.matchAll(
+      ...`${css}\n${detailNavigation}\n${detailInsights}`.matchAll(
         /var\((--so-opportunity(?:-review|-list)-[a-z-]+)\)/g,
       ),
     ].map((match) => match[1]),
@@ -746,7 +747,7 @@ test("P13/P23/P24 task workspace colors resolve from one route-scoped palette", 
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set([...css.matchAll(/var\((--tw-[a-z-]+)\)/g)].map((match) => match[1]));
 
-  assert.equal(names.size, 47);
+  assert.equal(names.size, 43);
   assert.equal(declarations.length, names.size, "no duplicate task palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

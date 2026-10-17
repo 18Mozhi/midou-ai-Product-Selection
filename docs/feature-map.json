@@ -1,4 +1,20 @@
 {
+  "selectionReleaseReadabilityPalette20261017": {
+    "status": "implemented",
+    "statusDetail": "64_targeted_node_3180_full_unit_162_browser_web_build_and_gates_passed_not_deployed",
+    "requirements": "docs/selection-release-readability-palette.md",
+    "sourceFiles": [
+      "apps/web/src/components/opportunity-decision-panel.css",
+      "apps/web/src/components/OpportunityDetailInsights.vue",
+      "apps/web/src/design/task-workspace-tokens.css"
+    ],
+    "testFiles": [
+      "tests/unit/design-quality-gate.test.mjs",
+      "tests/unit/platform-palette-contract.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "contract": "Restore the existing 13px readability floor, remove four unused task colors and include the extracted opportunity insight component in exact palette validation. Undefined warning colors use existing shared semantic aliases. No API, decision, permission or schema change. Original-worktree full unit validation passes with existing historical review packets; clean c867271e candidate remains validation_failed and is not reused."
+  },
   "selectionRetiredTaskQuickAction20261017": {
     "status": "implemented",
     "statusDetail": "14_related_node_api_backend_build_and_docs_passed_not_deployed",

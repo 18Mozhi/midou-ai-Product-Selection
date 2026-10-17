@@ -6,7 +6,6 @@ html:has(body #app .task-workspace--review) {
   --tw-border: var(--glass-border);
   --tw-info: #edf4ff;
   --tw-white: #fff;
-  --tw-on-primary-muted: #d8e5ff;
   --tw-highlight: #f3f7ff;
   --tw-focus: var(--glass-focus);
   --tw-blue-surface: #f8fbff;
@@ -41,9 +40,6 @@ html:has(body #app .task-workspace--review) {
   --tw-secondary-border: var(--glass-border);
   --tw-danger-action: #a32626;
   --tw-focus-outline: #2f6fe4;
-  --tw-blue-soft: var(--glass-primary-soft);
-  --tw-white-border: rgb(255 255 255 / 70%);
-  --tw-white-wash: rgb(255 255 255 / 12%);
   --tw-surface-calm: #f8fafd;
   --tw-success-accent: #287553;
 }

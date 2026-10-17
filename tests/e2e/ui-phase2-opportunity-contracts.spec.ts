@@ -164,7 +164,7 @@ async function openOpportunitySection(page: Page, label: string) {
   const mobileDirectory = page.locator(".opportunity-detail-directory-mobile");
   if (await mobileDirectory.isVisible()) await mobileDirectory.locator("summary").click();
   await page
-    .getByRole("navigation", { name: "机会详情分区" })
+    .getByRole("navigation", { name: "选品详情分区" })
     .getByRole("button", { name: label, exact: true })
     .click();
 }
@@ -605,40 +605,33 @@ for (const [action, label] of [
     expect(data.writes[0].headers()["idempotency-key"]).not.toBe(
       data.writes[1].headers()["idempotency-key"],
     );
-    await openOpportunitySection(page, "决策历史");
+    await openOpportunitySection(page, "决策记录");
     await expect(page.locator(".opportunity-detail")).toContainText(reason.trim());
   });
 }
 
-test("UI2-OP04 read-only AI failure stays distinct from empty and retries without writes", async ({
+test("UI2-OP04 retired AI tab falls back to product facts without analysis reads or writes", async ({
   page,
 }) => {
   const data = await ready(page, false);
-  let unavailable = true,
-    reads = 0;
+  let reads = 0;
   await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, (route) => {
     reads += 1;
-    return unavailable
-      ? route.fulfill({
-          status: 503,
-          json: {
-            error: { code: "service_unavailable", message: "暂不可用", action_hint: "稍后重试。" },
-          },
-        })
-      : route.fulfill({ json: envelope([]) });
+    return route.fulfill({
+      status: 503,
+      json: { error: { code: "service_unavailable", action_hint: "退休入口不应读取分析。" } },
+    });
   });
   await page.goto(`/opportunities/${opportunityId}?tab=ai`);
   await expect(page.locator(".opportunity-detail")).toBeVisible();
-  const panel = page.locator(".opportunity-ai");
-  await expect(panel.getByRole("alert")).toContainText("AI 分析记录暂时无法读取");
-  await expect(panel.getByText("尚无 AI 分析记录。", { exact: true })).toHaveCount(0);
-  await expect(panel.getByRole("button", { name: "生成新分析" })).toHaveCount(0);
-  const readsBefore = reads;
-  unavailable = false;
-  await panel.getByRole("button", { name: "重新读取" }).click();
-  await expect(panel.getByText("尚无 AI 分析记录。", { exact: true })).toBeVisible();
-  await expect(panel.getByRole("alert")).toHaveCount(0);
-  expect(reads).toBeGreaterThan(readsBefore);
+  await expect(
+    page
+      .getByRole("navigation", { name: "选品详情分区" })
+      .getByRole("button", { name: "商品与评分", exact: true }),
+  ).toHaveAttribute("aria-current", "page");
+  await expect(page.locator(".opportunity-ai")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "生成新分析" })).toHaveCount(0);
+  expect(reads).toBe(0);
   expect(data.writes).toHaveLength(0);
 });
 

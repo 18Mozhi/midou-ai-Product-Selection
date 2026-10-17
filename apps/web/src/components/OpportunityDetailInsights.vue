@@ -629,8 +629,8 @@ const emit = defineEmits<{
 }
 
 .opportunity-insight-callout--caution {
-  border-left-color: var(--so-opportunity-review-warning);
-  background: var(--so-opportunity-review-warning-pale);
+  border-left-color: var(--so-warning);
+  background: var(--so-warning-soft);
 }
 
 .opportunity-insight-state--error {

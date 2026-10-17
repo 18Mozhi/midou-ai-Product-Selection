@@ -213,6 +213,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       const stylesheet = [
         sources[paths.indexOf("apps/web/src/automatic-selection.css")],
         sources[paths.indexOf("apps/web/src/components/OpportunityDetailNavigation.vue")],
+        sources[paths.indexOf("apps/web/src/components/OpportunityDetailInsights.vue")],
       ].join("\n");
       const references = new Set(
         [...stylesheet.matchAll(/var\((--so-opportunity(?:-review|-list)-[a-z-]+)\)/g)].map(

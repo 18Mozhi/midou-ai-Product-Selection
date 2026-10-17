@@ -25,7 +25,7 @@
 .opportunity-workspace .opportunity-decision-summary__lead p {
   margin: 0 0 3px;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
 }
 
@@ -68,12 +68,12 @@
 
 .opportunity-workspace .opportunity-gate-progress small {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .opportunity-workspace .opportunity-gate-progress > strong {
   color: var(--so-primary);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .opportunity-workspace .opportunity-gate-progress > i {
@@ -133,7 +133,7 @@
   padding: 8px;
   border: 1px solid var(--selection-line);
   background: transparent;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .opportunity-workspace .opportunity-quality-gates li b {
@@ -166,7 +166,7 @@
 
 .opportunity-workspace .opportunity-decision-waiting small {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .opportunity-workspace .opportunity-decision-waiting nav,
