@@ -307,7 +307,7 @@ P11多个子面板复用该共享反馈组件。它在error状态下显示“重
 | --- | --- |
 | apps/web/src/components/theme-studio/PreferenceRadioGroup.vue | 564207b20e57e29aba47737bc41d70f0327a42a58a3e9fafdc9c6356bb9944ad |
 
-### 2.10 P11 AccountShell 当前源码位置（2026-09-24）
+### 2.10 P11 AccountShell 当前源码位置（2026-10-17）
 
 #### A
 
@@ -323,7 +323,9 @@ P11多个子面板复用该共享反馈组件。它在error状态下显示“重
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/AccountShell.vue | 2dce02f4df060836b057ad539d4c0850d7dff06b841375cbfab2d7defdb7f869 |
+| apps/web/src/components/AccountShell.vue | 6b85eb1402fb1b873749d9915c8b5eb6d8494299a42c08ae85d9d1e9912bd853 |
+
+2026-10-17仅重制账号壳层样式及页头class，五个导航候选的身份、行号、路由和脚本保持原样，当前源码指纹随样式更新；历史截图与审批不变。
 
 本表登记当前五个入口；所有可见入口都单独定位，但不推导新增分区或改变导航权限。分区状态仍由route query的既有映射驱动；当前源码位置核对不替代P11移动可访问名、焦点或真实会话验证。
 

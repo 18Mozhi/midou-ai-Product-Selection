@@ -5532,5 +5532,22 @@
     ],
     "contract": "Compact full-width loading and read failure states at all widths. Original scripts, event/model bindings, GET recovery, permission and retained-snapshot behavior unchanged. No HTTP, schema, config, dependency or runtime consumer change. Frontend publish and refresh only.",
     "verification": "Full organization browser suite: desktop 75 passed; mobile 74 passed, 1 original desktop-only timeout skip. Historical helper targeted 38 passed. No production or daily-100 acceptance claim."
+  },
+  "selectionPersonalWorkspace20261017": {
+    "status": "implemented",
+    "statusDetail": "local_requires_release_and_remaining_goal_acceptance",
+    "requirements": "docs/selection-personal-workspace.md",
+    "verification": "89 related Node checks and 20 desktop/mobile browser cases passed; original script and bindings unchanged. Web typecheck/build, static analysis, bundle budget, realism and documentation passed. No production or daily-100 acceptance claim.",
+    "routes": ["/me"],
+    "implementationFiles": [
+      "apps/web/src/components/AccountShell.vue",
+      "apps/web/src/components/personal-center/personal-center.css"
+    ],
+    "testFiles": [
+      "tests/e2e/ui-phase2-account-contracts.spec.ts",
+      "tests/unit/personal-center.test.mjs",
+      "tests/unit/personal-center-page-preview.test.mjs"
+    ],
+    "contract": "Compact account header and wrapping section tabs; full-width permission, security and asset panels. Original account script, links, events, profile version/idempotency, section failure and five preference booleans unchanged. No backend, API, schema, config, permission or dependency change. Frontend publish and refresh only."
   }
 }

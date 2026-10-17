@@ -32,7 +32,7 @@ const activeSection = computed(() => {
       <SessionLogout :api-base-url="apiBaseUrl" />
     </header>
 
-    <section class="p11-hero" aria-labelledby="p11-title">
+    <section class="p11-page-heading" aria-labelledby="p11-title">
       <h1 id="p11-title">个人中心</h1>
     </section>
 
@@ -66,182 +66,134 @@ const activeSection = computed(() => {
 
 <style scoped>
 .account-shell {
-  --p11-blue: var(--so-primary);
-  --p11-ink: var(--so-text);
-  --p11-muted: var(--so-text-muted);
-  --p11-line: var(--so-border);
   min-height: 100vh;
   display: grid;
-  grid-template-rows: 64px auto auto minmax(0, 1fr);
-  justify-items: center;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  align-content: start;
   background: var(--so-bg);
-  color: var(--p11-ink);
-  font-size: 17px;
+  color: var(--so-text);
+  font-size: 13px;
+  line-height: 1.6;
 }
-
 .p11-top,
-.p11-hero,
+.p11-page-heading,
 .p11-directory,
 .p11-content {
-  width: min(1120px, calc(100% - 48px));
+  box-sizing: border-box;
+  width: min(1440px, calc(100% - 48px));
   margin-inline: auto;
+  min-width: 0;
 }
-
 .p11-top {
   display: flex;
   align-items: center;
-  gap: 14px;
-  min-height: 64px;
+  gap: 16px;
+  min-height: 56px;
+  padding-block: 6px;
+  border-bottom: 1px solid var(--so-border);
 }
-
 .p11-brand {
-  padding: 6px 12px;
-  background: var(--p11-blue);
-  color: var(--so-on-primary);
-  font-weight: 800;
+  color: var(--so-primary);
+  font-size: 18px;
+  font-weight: 700;
   text-decoration: none;
 }
-
 .p11-current-page {
-  font-weight: 800;
+  color: var(--so-text-muted);
 }
-
 .p11-scope-link {
   margin-left: auto;
   min-height: 44px;
   padding: 8px 12px;
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--p11-blue);
-  color: var(--p11-blue);
-  font-weight: 700;
+  color: var(--so-primary);
+  font-weight: 500;
   text-decoration: none;
 }
-
-.p11-hero {
-  display: grid;
-  align-content: center;
-  gap: 8px;
-  min-height: 190px;
-  padding: 30px 38px;
-  background: var(--p11-blue);
-  color: var(--so-on-primary);
+.p11-page-heading {
+  padding-block: 20px 12px;
 }
-
-.p11-hero p,
-.p11-hero h1 {
+.p11-page-heading h1 {
   margin: 0;
+  font-size: 22px;
+  line-height: 1.5;
+  font-weight: 600;
 }
-
-.p11-hero p {
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-}
-
-.p11-hero h1 {
-  font-size: clamp(28px, 3vw, 36px);
-  line-height: 1.2;
-}
-
 .p11-directory {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  border: 1px solid var(--p11-line);
-  background: var(--so-panel);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
+  border-bottom: 1px solid var(--so-border);
 }
-
 .p11-directory a {
-  min-height: 76px;
-  padding: 12px 14px;
-  display: grid;
-  align-content: center;
-  gap: 3px;
-  border-right: 1px solid var(--p11-line);
-  color: var(--p11-ink);
+  min-height: 48px;
+  padding: 10px 2px;
+  display: inline-flex;
+  align-items: center;
+  border-bottom: 2px solid transparent;
+  color: var(--so-text-muted);
   text-decoration: none;
 }
-
-.p11-directory a:last-child {
-  border-right: 0;
+.p11-directory b {
+  font-size: 13px;
+  font-weight: 500;
 }
-
+.p11-directory small {
+  display: none;
+}
 .p11-directory a:hover,
 .p11-directory a[aria-current="page"] {
-  background: var(--so-signal-soft);
-  color: var(--p11-blue);
+  color: var(--so-primary);
 }
-
 .p11-directory a[aria-current="page"] {
-  box-shadow: inset 0 -3px var(--p11-blue);
+  border-bottom-color: var(--so-primary);
 }
-
-.p11-directory b {
-  font-size: 17px;
-}
-
-.p11-directory small {
-  color: var(--p11-muted);
-  font-size: 17px;
-}
-
 .p11-content {
-  min-width: 0;
-  padding: 24px 0 60px;
+  padding-block: 16px 40px;
 }
-
 .p11-crumb {
   display: flex;
   gap: 8px;
-  margin-bottom: 14px;
-  color: var(--p11-muted);
-  font-size: 17px;
+  margin-bottom: 12px;
+  color: var(--so-text-muted);
+  font-size: 12px;
 }
-
 .p11-crumb a {
-  color: var(--p11-blue);
+  color: var(--so-primary);
 }
-
 .p11-crumb [aria-current="page"] {
-  color: var(--p11-ink);
+  color: var(--so-text);
 }
-
+.account-shell a:focus-visible {
+  outline: 3px solid var(--so-focus);
+  outline-offset: 3px;
+}
 @media (max-width: 760px) {
   .p11-top,
-  .p11-hero,
+  .p11-page-heading,
   .p11-directory,
   .p11-content {
-    width: min(100% - 32px, 520px);
+    width: calc(100% - 32px);
   }
-
   .p11-top {
     flex-wrap: wrap;
-    padding: 12px 0;
+    gap: 4px 12px;
   }
-
+  .p11-current-page {
+    display: none;
+  }
   .p11-scope-link {
-    margin-left: 0;
+    padding-inline: 4px;
   }
-
-  .p11-hero {
-    min-height: 168px;
-    padding: 24px 20px;
-  }
-
-  .p11-hero h1 {
-    font-size: 28px;
-  }
-
   .p11-directory {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 16px;
   }
-
-  .p11-directory a {
-    min-height: 70px;
+  .p11-page-heading {
+    padding-top: 16px;
   }
-
   .p11-content {
-    padding-top: 18px;
+    padding-top: 12px;
   }
 }
 </style>

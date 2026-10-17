@@ -32,6 +32,69 @@ async function accountSession(page: Page) {
   );
 }
 
+for (const section of ["profile", "permissions", "security", "notifications", "assets"]) {
+  test(`personal workspace keeps compact navigation and full-width sections: ${section}`, async ({
+    page,
+  }) => {
+    await accountSession(page);
+    let writes = 0;
+    const resources: Record<string, unknown> = {
+      profile,
+      authorization: { roles: ["member"], capabilities: ["audit:read"], data_scopes: [] },
+      sessions: [
+        { id: "session-layout", device_label: "浏览器设备", status: "active", last_seen_at: null },
+      ],
+      assets: { followed_trends: [], decisions: [], tasks: [] },
+      "notification-preferences": {
+        version: 7,
+        in_app_enabled: true,
+        email_enabled: false,
+        task_enabled: true,
+        approval_enabled: true,
+        competitor_enabled: true,
+      },
+    };
+    for (const [endpoint, data] of Object.entries(resources)) {
+      await page.route(`**/api/v1/me/${endpoint}`, (route) => {
+        if (route.request().method() !== "GET") writes += 1;
+        return route.fulfill({ json: envelope(data) });
+      });
+    }
+    await page.goto(`/me?section=${section}`);
+    await expect(page.locator(".personal-center")).toHaveAttribute("data-state", "ready");
+    const directory = page.getByRole("navigation", { name: "个人中心分区", exact: true });
+    await expect(directory.getByRole("link")).toHaveCount(6);
+    await expect(directory.locator('[aria-current="page"]')).toHaveCount(1);
+    await expect(page.locator(".p11-page-heading")).toHaveCSS(
+      "background-color",
+      "rgba(0, 0, 0, 0)",
+    );
+    expect((await page.locator(".p11-page-heading").boundingBox())!.height).toBeLessThan(80);
+    const center = page.locator(".personal-center");
+    await expect(center).toHaveCSS("font-size", "13px");
+    const panels = center.locator(".p11-panel");
+    await expect(panels.first()).toBeVisible();
+    const bounds = await panels.evaluateAll((items) =>
+      items.map((item) => ({
+        width: item.getBoundingClientRect().width,
+        parent: item.parentElement!.getBoundingClientRect().width,
+      })),
+    );
+    for (const item of bounds) expect(Math.abs(item.width - item.parent)).toBeLessThan(3);
+    await expect(page.locator("body")).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+    if (section === "profile") {
+      await page.getByLabel("显示名称", { exact: true }).fill("未提交资料草稿");
+      await page.getByLabel("修改原因", { exact: true }).fill("尚未提交");
+      expect(writes).toBe(0);
+      await expect(page.getByLabel("显示名称", { exact: true })).toHaveValue("未提交资料草稿");
+    }
+    expect(writes).toBe(0);
+  });
+}
+
 test("UI2-A01 theme preview and restore do not persist density or write preferences", async ({
   page,
 }) => {
@@ -44,7 +107,7 @@ test("UI2-A01 theme preview and restore do not persist density or write preferen
   const save = page.getByRole("button", { name: "保存主题偏好", exact: true });
   await page.getByRole("radio", { name: /紧凑/ }).click();
   await expect(save).toBeDisabled();
-  await page.getByRole("radio", { name: /暮砂/ }).press("Enter");
+  await page.getByRole("radio", { name: /石墨/ }).press("Enter");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "aurora-purple");
   await expect(save).toBeEnabled();
   await page.getByRole("button", { name: "撤销主题预览", exact: true }).click();
@@ -74,10 +137,10 @@ test("UI2-A02 theme saves exact versioned payloads and uses the returned revisio
     await route.fulfill({ json: envelope(saved) });
   });
   await page.goto("/settings/theme");
-  await page.getByRole("radio", { name: /暮砂/ }).click();
+  await page.getByRole("radio", { name: /石墨/ }).click();
   await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
   await expect(page.getByRole("button", { name: "已保存", exact: true })).toBeVisible();
-  await page.getByRole("radio", { name: /晨雾/ }).click();
+  await page.getByRole("radio", { name: /青蓝/ }).click();
   await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
   await expect(page.getByRole("button", { name: "已保存", exact: true })).toBeVisible();
   expect(bodies).toEqual([
@@ -87,7 +150,7 @@ test("UI2-A02 theme saves exact versioned payloads and uses the returned revisio
   expect(keys.every((key) => key.length > 0)).toBe(true);
   expect(new Set(keys).size).toBe(2);
   await page.reload();
-  await expect(page.getByRole("radio", { name: /晨雾/ })).toHaveAttribute("aria-checked", "true");
+  await expect(page.getByRole("radio", { name: /青蓝/ })).toHaveAttribute("aria-checked", "true");
   expect(bodies).toHaveLength(2);
 });
 
@@ -117,14 +180,14 @@ test("UI2-A03 theme conflict requires fresh preference before the next versioned
     await route.fulfill({ json: envelope(preference(body.theme, 10)) });
   });
   await page.goto("/settings/theme");
-  await page.getByRole("radio", { name: /暮砂/ }).click();
+  await page.getByRole("radio", { name: /石墨/ }).click();
   await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
   await expect(page.getByText("偏好已在其他窗口更新", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "保存主题偏好", exact: true })).toHaveCount(0);
   expect(bodies).toHaveLength(1);
   await page.getByRole("button", { name: "重新读取", exact: true }).click();
-  await expect(page.getByRole("radio", { name: /晨雾/ })).toHaveAttribute("aria-checked", "true");
-  await page.getByRole("radio", { name: /暮砂/ }).click();
+  await expect(page.getByRole("radio", { name: /青蓝/ })).toHaveAttribute("aria-checked", "true");
+  await page.getByRole("radio", { name: /石墨/ }).click();
   await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
   await expect(page.getByRole("button", { name: "已保存", exact: true })).toBeVisible();
   expect(bodies).toEqual([
