@@ -1,5 +1,9 @@
+import { readPreRebuildTeamsBoundary } from "../fixtures/pre-rebuild-teams-boundary.mjs";
 import test from "node:test";
-import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { parse } from "@vue/compiler-sfc";
@@ -23,15 +27,9 @@ import {
   validateTeamsEvidenceBindings,
 } from "../../scripts/build-ui-phase2-teams-review.mjs";
 
-for (const name of packageNames) assertTeamsCurrentSources(name);
-// Only the retired packet's shared-dialog dependency uses its capture-era input.
-// Parent/child behavioral checks continue to execute current component sources.
-const sources = Object.fromEntries(
-  dependencies.map((f) => [
-    f,
-    f.endsWith("/AuditedReasonDialog.vue") ? readPreSelectionRebuild(f) : readFileSync(f, "utf8"),
-  ]),
-);
+for (const name of packageNames) assertTeamsCurrentSources(name, readPreRebuildTeamsBoundary);
+// Archived pre-rebuild review inputs. Current layout and writes have separate browser checks.
+const sources = Object.fromEntries(dependencies.map((f) => [f, readPreSelectionRebuild(f)]));
 const packages = new Map(
   packageNames.map((p) => [
     p,
@@ -43,16 +41,16 @@ const copy = (v) => JSON.parse(JSON.stringify(v));
 const context = {
   candidates: [parentFile, childFile].flatMap((f) => scanSource(sources[f], f).candidates),
   sourceHashes: build().surfaceReview.dependencyHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages,
   files: new Set(build().actions.flatMap((a) => a.testReferences.map((r) => r.file))),
 };
-test("P33 current action review covers all 34 parent and child sites without counting function props as events", () => {
+test("Archived pre-rebuild P33 current action review covers all 34 parent and child sites without counting function props as events", () => {
   const r = JSON.parse(readFileSync(`${base}/action-reviews/P33.json`, "utf8")),
     currentContext = {
       ...context,
       candidates: [parentFile, childFile].flatMap(
-        (file) => scanSource(readFileSync(file, "utf8"), file).candidates,
+        (file) => scanSource(readPreSelectionRebuild(file), file).candidates,
       ),
       sourceHashes: r.sourceHashes,
       files: new Set(r.actions.flatMap((action) => action.testReferences.map((ref) => ref.file))),
@@ -85,7 +83,7 @@ test("P33 current action review covers all 34 parent and child sites without cou
     /cannot grant action approval/,
   );
 });
-test("P33 41 business control variants and seven fields bind all catalog states and both viewports", () => {
+test("Archived pre-rebuild P33 41 business control variants and seven fields bind all catalog states and both viewports", () => {
   assert.deepEqual(validateTeamsEvidenceBindings(build(), packages), {
     controls: 44,
     sourceSignatures: 20,
@@ -109,7 +107,7 @@ test("P33 41 business control variants and seven fields bind all catalog states 
     assert.throws(() => validateTeamsEvidenceBindings(r, packages));
   }
 });
-test("P33 generic representative validation rejects catalog cross-action, selector, page, state and viewport forgery", () => {
+test("Archived pre-rebuild P33 generic representative validation rejects catalog cross-action, selector, page, state and viewport forgery", () => {
   for (const type of ["action", "selector", "page", "state", "viewport", "proposal", "mixed"]) {
     const r = build(),
       e = copy(packages.get(packageNames[1]));
@@ -130,7 +128,7 @@ test("P33 generic representative validation rejects catalog cross-action, select
     );
   }
 });
-test("P33 nonrepresentative control and field scenes cannot silently lose mobile coverage", () => {
+test("Archived pre-rebuild P33 nonrepresentative control and field scenes cannot silently lose mobile coverage", () => {
   for (const [pkg, scene] of [
     [packageNames[1], "remove-archived-focus"],
     [packageNames[2], "member-locked"],
@@ -144,7 +142,7 @@ test("P33 nonrepresentative control and field scenes cannot silently lose mobile
     );
   }
 });
-test("P33 thirteen models and three containers preserve one shared dialog versus inline creation", () => {
+test("Archived pre-rebuild P33 thirteen models and three containers preserve one shared dialog versus inline creation", () => {
   assert.deepEqual(validateReviewSurfaces(build().surfaceReview, { sources, packages }), {
     callerFiles: 2,
     localModelBindings: 13,
@@ -181,7 +179,7 @@ function bindings(source) {
       .map((p) => [p.arg.content, p.exp.content]),
   );
 }
-test("P33 actual function props and data/busy bindings match the registered child consumers", () => {
+test("Archived pre-rebuild P33 actual function props and data/busy bindings match the registered child consumers", () => {
   const r = build(),
     actual = bindings(sources[parentFile]);
   assert.deepEqual(actual, {
@@ -205,7 +203,7 @@ test("P33 actual function props and data/busy bindings match the registered chil
     "createWorkspace",
   );
 });
-test("P33 extracted behavior verifies real write contracts while retaining explicit unresolved OG-G02", async () => {
+test("Archived pre-rebuild P33 extracted behavior verifies real write contracts while retaining explicit unresolved OG-G02", async () => {
   const data = await buildTeamsDesignData(process.cwd());
   assert.equal(data.sourceChecks.length, 5);
   assert.ok(data.sourceChecks.some((s) => s.includes("OG-G02")));

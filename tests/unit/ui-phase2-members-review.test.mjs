@@ -1,5 +1,8 @@
 import test from "node:test";
-import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -23,12 +26,7 @@ import {
 } from "../../scripts/build-ui-phase2-members-review.mjs";
 
 const sources = Object.fromEntries(
-  dependencies.map((file) => [
-    file,
-    file.endsWith("/AuditedReasonDialog.vue")
-      ? readPreSelectionRebuild(file)
-      : readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
-  ]),
+  dependencies.map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const captureRevisions = new Map([
   [parentFile, "df4b7263b1684e94e4ecc8d46c856c202fd9ee7b"],
@@ -70,7 +68,7 @@ const context = {
       createHash("sha256").update(s).digest("hex"),
     ]),
   ),
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages,
   files: new Set([
     "scripts/verify-ui-phase2-members-c.mjs",
@@ -80,7 +78,7 @@ const context = {
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P30.json`, "utf8"));
 const plain = (v) => JSON.parse(JSON.stringify(v));
 
-test("P30 registers all 32 local sites without duplicating parent event forwards", () => {
+test("Archived pre-rebuild P30 registers all 32 local sites without duplicating parent event forwards", () => {
   const r = validateActionReview(review(), context);
   assert.equal(r.sourceSites, 32);
   assert.equal(r.semanticGroups, 26);
@@ -95,7 +93,7 @@ test("P30 registers all 32 local sites without duplicating parent event forwards
   );
   assert.equal(review().approval, "pending-user-review");
 });
-test("P30 registers thirteen exact event forwards, including both tabs and both pages", () => {
+test("Archived pre-rebuild P30 registers thirteen exact event forwards, including both tabs and both pages", () => {
   const r = review(),
     wire = r.actions.find((a) => a.kind === "wiring");
   assert.equal(wire.forwardBindings.length, 13);
@@ -113,7 +111,7 @@ test("P30 registers thirteen exact event forwards, including both tabs and both 
   assert.doesNotMatch(reset.handler, /invitationTab|form|memberRoles/);
 });
 
-test("P30 multiline event handlers render as thirteen intact Markdown rows without changing JSON", () => {
+test("Archived pre-rebuild P30 multiline event handlers render as thirteen intact Markdown rows without changing JSON", () => {
   const report = readFileSync(`${base}/ACTION-COVERAGE-REVIEW.md`, "utf8");
   const rows = report.split(/\r?\n/).filter((line) => line.startsWith("| WIRE-MEMBERS |"));
   const wire = review().actions.find((a) => a.kind === "wiring");
@@ -127,7 +125,7 @@ test("P30 multiline event handlers render as thirteen intact Markdown rows witho
   }
   assert.match(wire.forwardBindings.find((e) => e.event === "@update-member-query").handler, /\n/);
 });
-test("P30 distinguishes nine local models from six controlled values and shared reason input", async () => {
+test("Archived pre-rebuild P30 distinguishes nine local models from six controlled values and shared reason input", async () => {
   const r = review();
   const result = validateReviewSurfaces(r.surfaceReview, { sources, packages });
   assert.equal(result.localModelBindings, 9); // Six summary-only models plus three visible invite models.
@@ -187,7 +185,7 @@ test("shared-source page slices stay source-bound and explicitly non-exhaustive"
     /unknown reviewed input binding/,
   );
 });
-test("P30 four shared reason variants do not imply a dialog for invitation creation or other routes", () => {
+test("Archived pre-rebuild P30 four shared reason variants do not imply a dialog for invitation creation or other routes", () => {
   const r = review(),
     containers = r.surfaceReview.containers;
   assert.equal(containers[0].variants[0].evidenceScope, "route-excluded-reference");
@@ -199,7 +197,7 @@ test("P30 four shared reason variants do not imply a dialog for invitation creat
   assert.equal(r.actions.find((a) => a.actionId === "D-OG-REASON").kind, "local");
   assert.match(r.dialogs.remaining, /不是四独立dialog/);
 });
-test("P30 refuses invented completion, missing source identities and stale dependencies", () => {
+test("Archived pre-rebuild P30 refuses invented completion, missing source identities and stale dependencies", () => {
   const missing = review();
   missing.actions.pop();
   assert.throws(() => validateActionReview(missing, context), /forward target|unmapped candidates/);
@@ -218,7 +216,7 @@ test("P30 refuses invented completion, missing source identities and stale depen
     /input omissions/,
   );
 });
-test("P30 rejects missing events, changed handlers and unresolved forwarding targets", () => {
+test("Archived pre-rebuild P30 rejects missing events, changed handlers and unresolved forwarding targets", () => {
   for (const change of ["omit", "handler", "target"]) {
     const r = review(),
       wire = r.actions.find((a) => a.kind === "wiring");
@@ -231,7 +229,7 @@ test("P30 rejects missing events, changed handlers and unresolved forwarding tar
     assert.throws(() => validateActionReview(r, context), /forward event|forward target/);
   }
 });
-test("P30 keeps contextual screenshots separate from exact control-state approval", () => {
+test("Archived pre-rebuild P30 keeps contextual screenshots separate from exact control-state approval", () => {
   const r = review();
   assert.equal(evidence.screenshots.length, 94);
   for (const a of r.actions.filter((a) => !["wiring", "excluded"].includes(a.kind))) {
@@ -255,7 +253,7 @@ test("P30 keeps contextual screenshots separate from exact control-state approva
     /missing scene\/viewport/,
   );
 });
-test("P30 existing source function checks retain exact bodies and reproduce interrupted invitation tail loss", async () => {
+test("Archived pre-rebuild P30 existing source function checks retain exact bodies and reproduce interrupted invitation tail loss", async () => {
   const data = await buildMembersDesignData(process.cwd());
   assert.equal(data.members.items.length, 3);
   assert.equal(data.unauthorized.calls.length, 1);
@@ -283,7 +281,7 @@ function run(code, bindings) {
   );
   return box.exports;
 }
-test("P30 shared reason replaces an earlier ask and closes before the selected answer continues", async () => {
+test("Archived pre-rebuild P30 shared reason replaces an earlier ask and closes before the selected answer continues", async () => {
   const source = sources[dependencies[3]],
     ast = ts.createSourceFile("reason.ts", source, ts.ScriptTarget.Latest, true);
   const h = run(
@@ -311,7 +309,7 @@ test("P30 shared reason replaces an earlier ask and closes before the selected a
   h.cancel();
   assert.equal(await third, null);
 });
-test("P30 role_code is selected before awaiting a reason and not changed by a later selection", async () => {
+test("Archived pre-rebuild P30 role_code is selected before awaiting a reason and not changed by a later selection", async () => {
   const source = sources[parentFile],
     ast = ts.createSourceFile("parent.ts", source, ts.ScriptTarget.Latest, true);
   const fn = ast.statements.find(

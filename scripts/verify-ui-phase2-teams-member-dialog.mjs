@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import ts from "typescript";
+
+const args = process.argv.slice(2);
+assert.ok(args.length <= 1 && args.every((arg) => ["--smoke", "--capture"].includes(arg)));
+if (args.includes("--capture")) await mkdir("output/playwright/p33-member-dialog-c-r1");
 
 const base = "scripts/verify-ui-phase2-teams-create-states.mjs";
 let code = (await readFile(base, "utf8")).replaceAll("\r\n", "\n");

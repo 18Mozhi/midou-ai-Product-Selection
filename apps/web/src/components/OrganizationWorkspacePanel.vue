@@ -128,7 +128,6 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
   <section class="org-workspace-panel" aria-label="工作区治理台">
     <header class="org-workspace-overview">
       <div>
-        <p>工作区治理</p>
         <h3>工作区治理台</h3>
       </div>
       <button type="button" :disabled="busy" @click="openCreate">新建工作区</button>
@@ -160,7 +159,6 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
     <form v-if="createOpen" class="org-workspace-create" @submit.prevent="submitCreate">
       <header>
         <div>
-          <p>创建边界</p>
           <h3>新建工作区</h3>
           <span>创建后立即进入正常使用状态；成员与团队关系在团队管理中配置。</span>
         </div>
@@ -266,6 +264,7 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
             </select>
           </label>
           <button type="button" class="org-admin-secondary" @click="resetFilters">重置筛选</button>
+          <a class="org-directory-detail-link" href="#org-workspace-selected">定位所选详情</a>
         </div>
 
         <ul v-if="pageItems.length" class="org-workspace-list" aria-label="工作区列表">
@@ -277,7 +276,6 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
               :aria-current="workspace.id === selectedWorkspaceId ? 'true' : undefined"
               @click="selectedWorkspaceId = workspace.id"
             >
-              <span class="org-workspace-mark">{{ workspace.name.slice(0, 1) }}</span>
               <span>
                 <b>{{ workspace.name }}</b>
                 <small
@@ -291,7 +289,6 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
           </li>
         </ul>
         <div v-else class="org-workspace-empty" role="status">
-          <span aria-hidden="true">⌁</span>
           <h4>{{ workspaces.length ? "没有符合条件的工作区" : "当前组织还没有工作区" }}</h4>
           <p>
             {{
@@ -335,7 +332,11 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
         </nav>
       </article>
 
-      <article class="org-admin-card org-workspace-detail" aria-live="polite">
+      <article
+        id="org-workspace-selected"
+        class="org-admin-card org-workspace-detail"
+        aria-live="polite"
+      >
         <template v-if="selectedWorkspace">
           <header>
             <div>

@@ -513,7 +513,7 @@ test("organization admin palette resolves its approved C page colors in route sc
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set([...css.matchAll(/var\((--oa-[a-z-]+)\)/g)].map((match) => match[1]));
 
-  assert.equal(names.size, 22);
+  assert.equal(names.size, 19);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

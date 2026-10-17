@@ -59,7 +59,9 @@ test("permission composition preserves the whole parent runtime and all previous
   const before = parse(original).descriptor,
     after = parse(revised).descriptor;
   assert.equal(before.scriptSetup.content, after.scriptSetup.content);
-  assert.deepEqual(before.styles, after.styles);
+  // Template composition changes source offsets, not imported styles.
+  const styles = (blocks) => blocks.map(({ loc, ...style }) => style);
+  assert.deepEqual(styles(before.styles), styles(after.styles));
   assert.deepEqual(
     compileTemplate({
       source: after.template.content,

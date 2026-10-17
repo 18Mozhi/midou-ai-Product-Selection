@@ -989,7 +989,7 @@ test("organization teams expose searchable governance, bounded creation and audi
   });
 
   await page.goto("/org-admin/teams");
-  const teamItems = page.locator('.org-team-list > [role="listitem"]');
+  const teamItems = page.locator(".org-team-list > li");
   await expect(page.getByRole("region", { name: "团队治理台" })).toBeVisible();
   await expect(page.getByLabel("团队统计")).toContainText("10");
   await expect(teamItems).toHaveCount(8);
@@ -1004,7 +1004,7 @@ test("organization teams expose searchable governance, bounded creation and audi
   await expect(teamItems).toHaveCount(1);
   await page.getByRole("button", { name: "重置筛选" }).click();
 
-  await page.getByRole("listitem", { name: "选择团队 团队治理样本 02" }).click();
+  await page.getByRole("button", { name: "选择团队 团队治理样本 02" }).click();
   await expect(page.getByRole("heading", { name: "团队治理样本 02" })).toBeVisible();
   await page.getByLabel("当前组织成员").selectOption(memberBuyer);
   await page.getByRole("button", { name: "分配成员" }).click();
@@ -1057,7 +1057,7 @@ test("organization teams show an actionable empty state without invented rows", 
   await page.goto("/org-admin/teams");
   await expect(page.getByRole("heading", { name: "当前组织还没有团队" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "新建团队" })).toBeVisible();
-  await expect(page.locator('.org-team-list > [role="listitem"]')).toHaveCount(0);
+  await expect(page.locator(".org-team-list > li")).toHaveCount(0);
   await expect(page.getByText("创建首个团队后即可设置负责人并分配活动成员。")).toBeVisible();
 });
 
@@ -1186,7 +1186,7 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
   await retryButton.click();
   await retrySuccessResponse;
   await expect(recovery).toBeHidden();
-  await expect(page.getByRole("listitem", { name: "选择团队 只创建一次的协作组" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "选择团队 只创建一次的协作组" })).toBeVisible();
   await expect(page.locator(".org-admin-notice")).toContainText("创建操作未重复提交");
   expect(summaryReads).toBe(summaryReadsBeforeRetry);
   expect(memberReads).toBe(memberReadsBeforeRetry);
@@ -2491,3 +2491,86 @@ test("organization profile uses a full-width facts and editing workspace", async
   );
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
+
+for (const route of ["members", "workspaces", "teams"] as const) {
+  test(`organization directory workspace has a full-width list and usable local navigation: ${route}`, async ({
+    page,
+  }) => {
+    await setup(page);
+    await page.goto(`/org-admin/${route}`);
+    await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+    const root = page.locator(
+      route === "members"
+        ? ".org-member-workspace"
+        : route === "teams"
+          ? ".org-team-panel"
+          : ".org-workspace-panel",
+    );
+    const identity = await root.elementHandle();
+    let writes = 0;
+    page.on("request", (request) => {
+      if (
+        new URL(request.url()).pathname.startsWith("/api/v1/org/admin/") &&
+        !["GET", "HEAD"].includes(request.method())
+      )
+        writes += 1;
+    });
+    if (route === "members") {
+      const directory = await page.locator(".org-member-directory").boundingBox();
+      const invites = await page.locator(".org-member-invitations").boundingBox();
+      expect(directory!.y + directory!.height).toBeLessThanOrEqual(invites!.y);
+      const form = page.locator(".org-admin-invite-form");
+      await form.getByLabel("邮箱（每行一个）").fill("draft@example.test");
+      await form.getByLabel("原因", { exact: true }).fill("尚未提交的邀请草稿");
+      await page
+        .locator(".org-member-directory")
+        .getByRole("link", { name: "邀请成员", exact: true })
+        .click();
+      await expect(page).toHaveURL(/#organization-member-invite$/);
+      await expect(page.getByRole("button", { name: "创建邀请", exact: true })).toBeVisible();
+      await expect(form.getByLabel("邮箱（每行一个）")).toHaveValue("draft@example.test");
+      await expect(form.getByLabel("原因", { exact: true })).toHaveValue("尚未提交的邀请草稿");
+    } else {
+      const prefix = route === "teams" ? "org-team" : "org-workspace";
+      const directory = await page.locator(`.${prefix}-directory`).boundingBox();
+      const detail = await page.locator(`.${prefix}-detail`).boundingBox();
+      expect(Math.abs(directory!.width - detail!.width)).toBeLessThanOrEqual(1);
+      expect(directory!.y + directory!.height).toBeLessThanOrEqual(detail!.y);
+      const items = page.locator(`.${prefix}-list button`);
+      if ((await items.count()) > 1) await items.nth(1).click();
+      const heading = page.locator(`.${prefix}-detail header h3`).first();
+      const selectedName = await heading.innerText();
+      await root
+        .getByRole("button", { name: route === "teams" ? "新建团队" : "新建工作区", exact: true })
+        .click();
+      const nameField = root.locator(route === "teams" ? "#team-name" : "#workspace-name");
+      await nameField.fill("尚未提交的创建草稿");
+      await page.getByRole("link", { name: "定位所选详情", exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(`#${prefix}-selected$`));
+      await expect(heading).toBeVisible();
+      await expect(heading).toHaveText(selectedName);
+      await expect(nameField).toHaveValue("尚未提交的创建草稿");
+      await expect
+        .poll(async () => {
+          const box = await heading.boundingBox();
+          return Boolean(box && box.y >= 60 && box.y < (page.viewportSize()?.height ?? 900) - 44);
+        })
+        .toBe(true);
+      if (route === "teams") {
+        await expect(page.locator(".org-team-list")).toHaveJSProperty("tagName", "UL");
+        await expect(page.locator(".org-team-list li").first().getByRole("button")).toBeVisible();
+      }
+    }
+    expect(await identity!.evaluate((element) => element.isConnected)).toBe(true);
+    await identity!.dispose();
+    expect(writes).toBe(0);
+    expect(await page.evaluate(() => performance.getEntriesByType("navigation").length)).toBe(1);
+    for (const card of await root.locator(".org-admin-card").all()) {
+      await expect(card).toHaveCSS("background-image", "none");
+      await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  });
+}

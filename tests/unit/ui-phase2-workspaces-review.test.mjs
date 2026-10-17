@@ -1,6 +1,9 @@
 import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
-import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -21,14 +24,7 @@ import {
   buildWorkspacesReview,
 } from "../../scripts/build-ui-phase2-workspaces-review.mjs";
 
-const sources = Object.fromEntries(
-  dependencies.map((f) => [
-    f,
-    f.endsWith("/AuditedReasonDialog.vue")
-      ? readPreSelectionRebuild(f)
-      : readFileSync(f, "utf8").replaceAll("\r\n", "\n"),
-  ]),
-);
+const sources = Object.fromEntries(dependencies.map((f) => [f, readPreSelectionRebuild(f)]));
 const evidence = JSON.parse(
   readFileSync(`${base}/design/workspaces-direction-c/evidence.json`, "utf8"),
 );
@@ -46,14 +42,14 @@ const context = {
   sourceHashes: Object.fromEntries(
     Object.entries(sources).map(([f, s]) => [f, createHash("sha256").update(s).digest("hex")]),
   ),
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages,
   files: new Set([
     "scripts/verify-ui-phase2-workspaces-c.mjs",
     "scripts/verify-ui-phase2-workspaces-controls-c.mjs",
   ]),
 };
-test("P32 control evidence has exact dual-viewport bindings and current image/source fingerprints", () => {
+test("Archived pre-rebuild P32 control evidence has exact dual-viewport bindings and current image/source fingerprints", () => {
   assert.equal(Object.keys(controlsEvidence.controlReferences).length, 36);
   assert.equal(Object.keys(controlsEvidence.actionVisualReferences).length, 18);
   assert.equal(Object.keys(controlsEvidence.controlVariantReferences).length, 18);
@@ -98,7 +94,7 @@ test("P32 control evidence has exact dual-viewport bindings and current image/so
       .sort(),
   );
 });
-test("P32 selected controls remain distinct variants instead of pressed-state substitutes", () => {
+test("Archived pre-rebuild P32 selected controls remain distinct variants instead of pressed-state substitutes", () => {
   for (const key of ["all", "active", "archived"])
     assert.ok(
       controlsEvidence.controlVariantReferences[`P32-status-${key}-selected`].states.pressed,
@@ -114,7 +110,7 @@ test("P32 selected controls remain distinct variants instead of pressed-state su
   assert.ok(controlsEvidence.controlVariantReferences["P32-reason-restore-confirm"]);
   assert.equal(controlsEvidence.actionVisualReferences["D-OG-REASON"].states.busy, undefined);
 });
-test("P32 control binding rejects changed selector, missing viewport and changed variant action", () => {
+test("Archived pre-rebuild P32 control binding rejects changed selector, missing viewport and changed variant action", () => {
   for (const mutation of ["selector", "viewport", "action"]) {
     const bad = plain(controlsEvidence);
     if (mutation === "selector")
@@ -135,7 +131,7 @@ test("P32 control binding rejects changed selector, missing viewport and changed
     );
   }
 });
-test("P32 source and review preserve explicit inherited proposal differences", () => {
+test("Archived pre-rebuild P32 source and review preserve explicit inherited proposal differences", () => {
   const markup = readFileSync(`${base}/design/workspaces-controls-direction-c/index.html`, "utf8");
   assert.match(markup, /真实共享前端尚无上限/);
   assert.match(markup, /\.\.\/workspaces-direction-c\/workspaces\.js/);
@@ -143,7 +139,7 @@ test("P32 source and review preserve explicit inherited proposal differences", (
   assert.equal(review().approval, "pending-user-review");
   assert.match(review().compositionGaps.at(-1), /字段锁定/);
 });
-test("P32 maps 32 source sites and 18 actions while keeping action review pending", () => {
+test("Archived pre-rebuild P32 maps 32 source sites and 18 actions while keeping action review pending", () => {
   const r = review(),
     result = validateActionReview(r, context);
   assert.equal(result.sourceSites, 32);
@@ -157,7 +153,7 @@ test("P32 maps 32 source sites and 18 actions while keeping action review pendin
   assert.equal(r.visualApproval, "user-approved-remaining-pages-auto");
   assert.deepEqual(JSON.parse(readFileSync(`${base}/action-reviews/P32.json`, "utf8")), r);
 });
-test("P32 rejects omitted source, invented approval and a missing mobile scene", () => {
+test("Archived pre-rebuild P32 rejects omitted source, invented approval and a missing mobile scene", () => {
   const omitted = review();
   omitted.actions.pop();
   assert.throws(() => validateActionReview(omitted, context), /unmapped candidates/);
@@ -178,7 +174,7 @@ test("P32 rejects omitted source, invented approval and a missing mobile scene",
     /missing scene/,
   );
 });
-test("P32 binds eleven local models and three caller containers, not three dialogs", () => {
+test("Archived pre-rebuild P32 binds eleven local models and three caller containers, not three dialogs", () => {
   const result = validateReviewSurfaces(review().surfaceReview, { sources, packages });
   assert.equal(result.localModelBindings, 11);
   assert.equal(result.callerContainers, 3);
@@ -191,7 +187,7 @@ test("P32 binds eleven local models and three caller containers, not three dialo
   );
   assert.equal(review().sharedReasonInput.maximumLength, null);
 });
-test("P32 rejects stale source or a forged source-to-scene claim", () => {
+test("Archived pre-rebuild P32 rejects stale source or a forged source-to-scene claim", () => {
   assert.throws(
     () =>
       buildWorkspacesReview(
@@ -230,7 +226,7 @@ function assertFunctionProps(r, source) {
   );
   for (const p of r.functionProps) assert.ok(sources[childFile].includes(p.consumer + "("));
 }
-test("P32 registers function props separately from emitted-event candidates", () => {
+test("Archived pre-rebuild P32 registers function props separately from emitted-event candidates", () => {
   assertFunctionProps(review(), sources[parentFile]);
   assert.throws(() =>
     assertFunctionProps(
@@ -307,7 +303,7 @@ function childHarness() {
   ).h;
   return { h, props, watches, calls, resolve: (value) => resolve(value) };
 }
-test("P32 actual child searches only name and slug and retains filtered-out selection", () => {
+test("Archived pre-rebuild P32 actual child searches only name and slug and retains filtered-out selection", () => {
   const { h, props, watches } = childHarness();
   h.query.value = " EUROPE ";
   watches[1].callback();
@@ -326,7 +322,7 @@ test("P32 actual child searches only name and slug and retains filtered-out sele
   assert.equal(h.selectedWorkspaceId.value, "");
   assert.equal(h.createOpen.value, true);
 });
-test("P32 actual creation captures trimmed body, rejects repeat, retains failed draft", async () => {
+test("Archived pre-rebuild P32 actual creation captures trimmed body, rejects repeat, retains failed draft", async () => {
   const { h, calls, resolve } = childHarness();
   h.openCreate();
   h.form.value = { name: " 北美 ", slug: " north ", reason: " 建立范围 " };
@@ -342,7 +338,7 @@ test("P32 actual creation captures trimmed body, rejects repeat, retains failed 
   assert.equal(h.form.value.name, "请求后继续编辑");
   assert.equal(h.createBusy.value, false);
 });
-test("P32 characterization: success clears later draft while fields remain editable", async () => {
+test("Archived pre-rebuild P32 characterization: success clears later draft while fields remain editable", async () => {
   const { h, resolve } = childHarness();
   h.openCreate();
   h.form.value = { name: "北美", slug: "north", reason: "建立范围" };
@@ -367,7 +363,7 @@ function parentAction(bindings) {
   assert.ok(fn);
   return run(fn.getText(ast) + "\nexports.action=workspaceAction;", bindings).action;
 }
-test("P32 parent action captures status before reason and cancellation causes zero write", async () => {
+test("Archived pre-rebuild P32 parent action captures status before reason and cancellation causes zero write", async () => {
   let answer;
   const writes = [],
     notice = { value: "" };

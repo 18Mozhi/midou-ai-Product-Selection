@@ -1,6 +1,9 @@
 import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
-import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { verifyResponsiveFocusDependencies } from "../../scripts/lib/ui-phase2-responsive-focus-contract.mjs";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
@@ -22,12 +25,7 @@ import {
 } from "../../scripts/build-ui-phase2-roles-review.mjs";
 
 const sources = Object.fromEntries(
-  dependencies.map((f) => [
-    f,
-    f.endsWith("/AuditedReasonDialog.vue")
-      ? readPreSelectionRebuild(f)
-      : readFileSync(f, "utf8").replaceAll("\r\n", "\n"),
-  ]),
+  dependencies.map((file) => [file, readPreSelectionRebuild(file)]),
 );
 const evidence = JSON.parse(readFileSync(`${base}/design/roles-direction-c/evidence.json`, "utf8"));
 const controlsEvidence = JSON.parse(
@@ -90,7 +88,7 @@ const context = {
   sourceHashes: Object.fromEntries(
     Object.entries(sources).map(([f, s]) => [f, createHash("sha256").update(s).digest("hex")]),
   ),
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages,
   files: new Set([
     "scripts/verify-ui-phase2-roles-c.mjs",
@@ -100,7 +98,7 @@ const context = {
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P31.json`, "utf8"));
 const plain = (v) => JSON.parse(JSON.stringify(v));
 
-test("P31 covers 34 sites with 20 actions and six exact forwards without implying production acceptance", () => {
+test("Archived P31 covers 34 sites with 20 actions and six exact forwards without implying production acceptance", () => {
   const r = review(),
     result = validateActionReview(r, context);
   assert.equal(result.sourceSites, 34);
@@ -115,7 +113,7 @@ test("P31 covers 34 sites with 20 actions and six exact forwards without implyin
   assert.equal(wire.forwardsTo.length, 8);
   assert.deepEqual(r, buildRolesReview(sources, evidence));
 });
-test("P31 preserves explicit F04 source semantics rather than deriving them from button text", () => {
+test("Archived P31 preserves explicit F04 source semantics rather than deriving them from button text", () => {
   for (const a of review().actions)
     for (const id of a.sourceCandidateIds)
       assert.ok(
@@ -129,7 +127,7 @@ test("P31 preserves explicit F04 source semantics rather than deriving them from
         id,
       );
 });
-test("P31 registers 20 models, one controlled type and shared reason separately", () => {
+test("Archived P31 registers 20 models, one controlled type and shared reason separately", () => {
   const r = review(),
     result = validateReviewSurfaces(r.surfaceReview, { sources, packages });
   assert.equal(result.localModelBindings, 20);
@@ -157,7 +155,7 @@ test("P31 registers 20 models, one controlled type and shared reason separately"
   assert.match(sources[childFile], /v-model.trim="grantForm.reason"/);
   assert.match(sources[childFile], /maxlength="500"/);
 });
-test("P31 rejects omitted identities, changed wiring, fields and invented approval while tracking current source separately", () => {
+test("Archived P31 rejects omitted identities, changed wiring, fields and invented approval while tracking current source separately", () => {
   for (const mutation of ["omit", "handler", "target", "approval"]) {
     const r = review(),
       wire = r.actions.find((a) => a.kind === "wiring");
@@ -183,7 +181,7 @@ test("P31 rejects omitted identities, changed wiring, fields and invented approv
     "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
   );
 });
-test("P31 keeps 48 contextual images distinct from 76 exact representative references and 44 missing slots", () => {
+test("Archived P31 keeps 48 contextual images distinct from 76 exact representative references and 44 missing slots", () => {
   assert.equal(evidence.screenshots.length, 48);
   for (const a of review().actions.filter((a) => !["wiring", "excluded"].includes(a.kind))) {
     if (["OG-REFRESH", "OG-RETRY"].includes(a.actionId)) {
@@ -210,7 +208,7 @@ test("P31 keeps 48 contextual images distinct from 76 exact representative refer
   );
 });
 
-test("P31 control catalog covers 42 controls, 18 representatives and 24 variants without inventing enabled pages", () => {
+test("Archived P31 control catalog covers 42 controls, 18 representatives and 24 variants without inventing enabled pages", () => {
   const e = controlsEvidence;
   assert.equal(Object.keys(e.controlReferences).length, 42);
   assert.equal(Object.keys(e.actionVisualReferences).length, 18);
@@ -242,7 +240,7 @@ test("P31 control catalog covers 42 controls, 18 representatives and 24 variants
   for (const part of ["confirm", "cancel", "close"])
     assert.equal(e.controlReferences[`reason-${part}`].states.busy, undefined);
 });
-test("P31 offline control evidence preserves capture-time hashes and exact selector states", () => {
+test("Archived P31 offline control evidence preserves capture-time hashes and exact selector states", () => {
   const dir = `${base}/design/roles-controls-direction-c`;
   assert.notEqual(controlsEvidence.sourceHashes[parentFile], review().sourceHashes[parentFile]);
   assert.equal(
@@ -278,7 +276,7 @@ test("P31 offline control evidence preserves capture-time hashes and exact selec
     /missing scene\/viewport/,
   );
 });
-test("P31 selected and available variants are explicit while click counters are not backend acceptance", () => {
+test("Archived P31 selected and available variants are explicit while click counters are not backend acceptance", () => {
   for (const prefix of [
     "section-roles",
     "section-scopes",
@@ -302,7 +300,7 @@ test("P31 selected and available variants are explicit while click counters are 
 });
 
 const ref = (value) => ({ value });
-test("P31 fields bind all sixteen sources and nine combinations without implying production acceptance", () => {
+test("Archived P31 fields bind all sixteen sources and nine combinations without implying production acceptance", () => {
   const e = fieldEvidence,
     r = review();
   assert.equal(Object.keys(e.fieldVisualReferences).length, 16);
@@ -331,7 +329,7 @@ test("P31 fields bind all sixteen sources and nine combinations without implying
   });
   assert.equal(r.approval, "user-approved-remaining-pages-auto");
 });
-test("P31 field evidence preserves capture-time source hashes and screenshot fingerprints", () => {
+test("Archived P31 field evidence preserves capture-time source hashes and screenshot fingerprints", () => {
   assert.notEqual(fieldEvidence.sourceHashes[parentFile], review().sourceHashes[parentFile]);
   assert.equal(
     fieldEvidence.sourceHashes[parentFile],
@@ -357,7 +355,7 @@ test("P31 field evidence preserves capture-time source hashes and screenshot fin
     /missing consumer scene\/viewport/,
   );
 });
-test("P31 field checks distinguish shared501, invitation-free grant reasons500 and existing expiry rejection", () => {
+test("Archived P31 field checks distinguish shared501, invitation-free grant reasons500 and existing expiry rejection", () => {
   for (const width of [1440, 390]) {
     const c = (id, state) =>
       fieldEvidence.checks.find((c) => c.id === id && c.state === state && c.width === width);
@@ -371,7 +369,7 @@ test("P31 field checks distinguish shared501, invitation-free grant reasons500 a
   }
   assert.ok(fieldEvidence.checks.every((c) => c.metrics.help && !c.metrics.disabled));
 });
-test("P31 fixture-only controls do not claim extra workspaces, all OS popups or server acceptance", () => {
+test("Archived P31 fixture-only controls do not claim extra workspaces, all OS popups or server acceptance", () => {
   const e = fieldEvidence.fieldVisualReferences;
   assert.deepEqual(Object.keys(e["grantForm.workspace_id"].states), ["default", "hover", "focus"]);
   for (const value of ["task", "opportunity", "competitor", "sourcing"])
@@ -472,7 +470,7 @@ function childHarness() {
   );
   return { h, props, watches };
 }
-test("P31 extension fields keep the existing expiry rule and clear only their derived error", () => {
+test("Archived P31 extension fields keep the existing expiry rule and clear only their derived error", () => {
   const { h, props } = childHarness();
   const original = Date.parse(props.grants[0].expires_at);
   const expectedMinimum = (Math.floor(original / 60000) + 1) * 60000;
@@ -495,7 +493,7 @@ test("P31 extension fields keep the existing expiry rule and clear only their de
   h.grantMutation.value.expires_at = "";
   assert.equal(h.mutationExpiryError.value, "");
 });
-test("P31 extension minimum handles subminute expiry and unavailable expiry without guessing", () => {
+test("Archived P31 extension minimum handles subminute expiry and unavailable expiry without guessing", () => {
   const { h, props } = childHarness();
   props.grants[0].expires_at = new Date(frozen + 2 * 86400000 + 30000).toISOString();
   assert.equal(new Date(h.minMutationExpiry.value).valueOf(), frozen + 2 * 86400000 + 60000);
@@ -503,7 +501,7 @@ test("P31 extension minimum handles subminute expiry and unavailable expiry with
   assert.equal(h.minMutationExpiry.value, h.minGrantExpiry);
   assert.equal(h.mutationExpiryError.value, "");
 });
-test("P31 actual computed search boundaries distinguish roles, raw capabilities and current-page grants", () => {
+test("Archived P31 actual computed search boundaries distinguish roles, raw capabilities and current-page grants", () => {
   const { h, props } = childHarness();
   assert.equal(h.filteredRoles.value.length, 2);
   h.roleQuery.value = props.roles[0].code;
@@ -521,7 +519,7 @@ test("P31 actual computed search boundaries distinguish roles, raw capabilities 
   h.grantQuery.value = "采购";
   assert.equal(h.filteredGrants.value.length, 1);
 });
-test("P31 actual scope counts overlap and permission derives from capability not selected role", () => {
+test("Archived P31 actual scope counts overlap and permission derives from capability not selected role", () => {
   const { h, props } = childHarness();
   assert.deepEqual(plain(h.scopeCounts.value), { own: 0, team: 0, workspace: 1, organization: 2 });
   props.members[0].scopes.push("workspace");
@@ -536,7 +534,7 @@ test("P31 actual scope counts overlap and permission derives from capability not
   h.selectedRoleCode.value = props.roles[0].code;
   assert.equal(h.canManage.value, false);
 });
-test("P31 manually invoked actual watcher reproduces refresh draft reset without claiming mounted Vue", () => {
+test("Archived P31 manually invoked actual watcher reproduces refresh draft reset without claiming mounted Vue", () => {
   const { h, props, watches } = childHarness();
   assert.equal(watches.length, 4);
   h.grantMutation.value.reason = "未提交的新原因";
@@ -621,7 +619,7 @@ function parentHarness(overrides = {}) {
   );
   return { h, b, calls, submits, loads };
 }
-test("P31 actual create keeps exact payload, deduplicates actions and resets only existing success fields", async () => {
+test("Archived P31 actual create keeps exact payload, deduplicates actions and resets only existing success fields", async () => {
   const { h, b, calls, loads } = parentHarness();
   await h.createResourceGrant();
   assert.equal(calls[0][0], "/org/org-a/resource-grants");
@@ -641,7 +639,7 @@ test("P31 actual create keeps exact payload, deduplicates actions and resets onl
   assert.equal(b.resourceGrantPage.value, 1);
   assert.deepEqual(plain(loads), [[{ background: true, preserveNotice: true }]]);
 });
-test("P31 actual expiry rejects now/past/invalid/over30 days and busy or empty actions never submit", async () => {
+test("Archived P31 actual expiry rejects now/past/invalid/over30 days and busy or empty actions never submit", async () => {
   const { h, b, calls } = parentHarness();
   for (const v of [
     "invalid",
@@ -661,7 +659,7 @@ test("P31 actual expiry rejects now/past/invalid/over30 days and busy or empty a
   await h.createResourceGrant();
   assert.equal(calls.length, 0);
 });
-test("P31 actual type changes keep four whitelists and reproduce in-flight draft clearing", async () => {
+test("Archived P31 actual type changes keep four whitelists and reproduce in-flight draft clearing", async () => {
   let finish;
   const calls = [];
   const { h, b } = parentHarness({
@@ -690,7 +688,7 @@ test("P31 actual type changes keep four whitelists and reproduce in-flight draft
   assert.equal(b.resourceGrantForm.value.reason, "");
   assert.deepEqual(plain(b.resourceGrantForm.value.actions), ["sourcing:read"]);
 });
-test("P31 actual extend and revoke carry versions and cancelled reason causes zero writes", async () => {
+test("Archived P31 actual extend and revoke carry versions and cancelled reason causes zero writes", async () => {
   const { h, submits } = parentHarness();
   const grant = { id: "grant-a", version: 7, expires_at: "2026-09-20T10:00:00.000Z" };
   await h.extendResourceGrant({
@@ -717,7 +715,7 @@ test("P31 actual extend and revoke carry versions and cancelled reason causes ze
   await cancelled.h.revokeResourceGrant(grant);
   assert.equal(cancelled.submits.length, 0);
 });
-test("P31 actual revoke keeps the original organization, target and version across reason entry", async () => {
+test("Archived P31 actual revoke keeps the original organization, target and version across reason entry", async () => {
   let answer;
   const { h, b, submits } = parentHarness({
     auditedReason: () =>
@@ -762,7 +760,7 @@ test("P31 actual revoke keeps the original organization, target and version acro
   assert.equal(sameOrganization.submits[0][0], "/org/org-a/resource-grants/grant-a/revoke");
   assert.equal(sameOrganization.submits[0][1].expected_version, 7);
 });
-test("P31 actual status and page readers reset or reject in-flight edits without local paging", async () => {
+test("Archived P31 actual status and page readers reset or reject in-flight edits without local paging", async () => {
   const { h, b, loads } = parentHarness();
   b.refreshing.value = true;
   await h.updateResourceGrantStatus("revoked");

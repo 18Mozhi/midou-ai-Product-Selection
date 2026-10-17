@@ -1,5 +1,8 @@
 import test from "node:test";
-import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
@@ -20,17 +23,19 @@ import {
 
 const inputs = readOrgTokenReviewInputs(),
   build = () => buildOrgTokenReview(inputs);
-// Capture-era shared reason input; actual parent/child sources remain current.
+// Capture-era reason input.
 inputs.sources[reasonFile] = readPreSelectionRebuild(reasonFile);
+// Explicit retired packet inputs; these bytes do not attest the rebuilt UI.
+for (const file of dependencies) inputs.sources[file] = readPreSelectionRebuild(file);
 const context = {
   candidates: dependencies.flatMap((f) => scanSource(inputs.sources[f], f).candidates),
   sourceHashes: build().sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages: inputs.packages,
   files: new Set(["scripts/verify-ui-phase2-org-token-controls.mjs"]),
 };
 
-test("P36 exact27 current sites become12 route actions,2 wirings and7 exclusions", () => {
+test("Archived P36 exact27 current sites become12 route actions,2 wirings and7 exclusions", () => {
   const r = validateActionReview(build(), context);
   assert.equal(r.sourceSites, 27);
   assert.equal(r.semanticGroups, 21);
@@ -47,7 +52,7 @@ test("P36 exact27 current sites become12 route actions,2 wirings and7 exclusions
   promoted.approval = "approved";
   assert.throws(() => validateActionReview(promoted, context), /cannot grant action approval/);
 });
-test("P36 reason forwards target only rotate/revoke and other-page origins remain excluded", () => {
+test("Archived P36 reason forwards target only rotate/revoke and other-page origins remain excluded", () => {
   const review = build(),
     w = review.actions.find((a) => a.actionId === "W-K-REASON");
   assert.deepEqual(w.forwardsTo, ["OG-K-ROTATE", "OG-K-REVOKE"]);
@@ -72,7 +77,7 @@ test("P36 reason forwards target only rotate/revoke and other-page origins remai
   changed.actions.find((a) => a.actionId === "W-K-REASON").forwardBindings[0].handler = "load()";
   assert.throws(() => validateActionReview(changed, context), /forward event omitted or changed/);
 });
-test("P36 all seven child models,six excluded models,four current structures and seven contexts are registered", () => {
+test("Archived P36 all seven child models,six excluded models,four current structures and seven contexts are registered", () => {
   assert.deepEqual(validateReviewSurfaces(build().surfaceReview, inputs), {
     callerFiles: 2,
     localModelBindings: 13,
@@ -97,7 +102,7 @@ test("P36 all seven child models,six excluded models,four current structures and
   missing.surfaceReview.containers.pop();
   assert.throws(() => validateReviewSurfaces(missing.surfaceReview, inputs), /container omissions/);
 });
-test("P36 explicit parent props reject altered source routing and POST contract", () => {
+test("Archived P36 explicit parent props reject altered source routing and POST contract", () => {
   assert.equal(build().functionProps.length, 3);
   for (const [from, to] of [
     [
@@ -119,7 +124,7 @@ test("P36 explicit parent props reject altered source routing and POST contract"
     assert.throws(() => validateOrgTokenBindings(buildOrgTokenReview(changed), changed));
   }
 });
-test("P36 every control/field/composition/implementation image is bound without promotion", () => {
+test("Archived P36 every control/field/composition/implementation image is bound without promotion", () => {
   assert.deepEqual(validateOrgTokenBindings(build(), inputs), {
     sourceSites: 27,
     semanticGroups: 21,
@@ -160,7 +165,7 @@ test("P36 every control/field/composition/implementation image is bound without 
   assert.equal(build().visualApproval, "user-approved-remaining-pages-auto");
   assert.deepEqual(build().approvalRecords, ["P36-MOBILE-FILTER-COMPOSITION-APPROVAL.md"]);
 });
-test("P36 historical inert source handler checks preserve original bodies and defect diagnosis", async () => {
+test("Archived P36 historical inert source handler checks preserve original bodies and defect diagnosis", async () => {
   const data = await buildOrgTokenDesignData(process.cwd());
   assert.deepEqual(Object.keys(data.createBody).sort(), ["name", "reason", "scopes", "ttl_days"]);
   assert.equal(data.actionBodies.length, 2);

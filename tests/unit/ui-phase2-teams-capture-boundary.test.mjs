@@ -1,3 +1,4 @@
+import { readPreRebuildTeamsBoundary } from "../fixtures/pre-rebuild-teams-boundary.mjs";
 import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -64,19 +65,23 @@ test("P33 immutable historical packets stay in Git while current packets bind th
   assert.equal(currentImages, 602);
 });
 
-test("P33 current-source boundary checks every dependency, not only the changed shared dialog", () => {
+test("P33 archived boundary checks every dependency and refuses the rebuilt current UI", () => {
   for (const name of packageNames) {
-    assertTeamsCurrentSources(name);
+    assert.throws(() => assertTeamsCurrentSources(name), /Unverified current P33 source/);
+    assertTeamsCurrentSources(name, readPreRebuildTeamsBoundary);
     const evidence = JSON.parse(teamsHistoricalCapture(name).manifest);
     for (const changed of Object.keys(evidence.sourceHashes))
       assert.throws(
         () =>
-          assertTeamsCurrentSources(name, (file) => read(file) + (file === changed ? "\n" : "")),
+          assertTeamsCurrentSources(
+            name,
+            (file) => readPreRebuildTeamsBoundary(file) + (file === changed ? "\n" : ""),
+          ),
         /Unverified current P33 source/,
         changed,
       );
     assertTeamsCurrentSources(name, (file) =>
-      read(file).replaceAll("\r\n", "\n").replaceAll("\n", "\r\n"),
+      readPreRebuildTeamsBoundary(file).replaceAll("\r\n", "\n").replaceAll("\n", "\r\n"),
     );
   }
   assert.throws(() => teamsHistoricalCapture("unknown"), /Unknown P33 capture/);

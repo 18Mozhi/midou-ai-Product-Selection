@@ -44,7 +44,9 @@ test("read-feedback preview preserves whole runtime and all earlier error branch
   const before = parse(original).descriptor,
     after = parse(revised).descriptor;
   assert.equal(after.scriptSetup.content, before.scriptSetup.content);
-  assert.deepEqual(after.styles, before.styles);
+  // Template composition changes source offsets, not imported styles.
+  const styles = (blocks) => blocks.map(({ loc, ...style }) => style);
+  assert.deepEqual(styles(after.styles), styles(before.styles));
   assert.deepEqual(
     compileTemplate({
       source: after.template.content,

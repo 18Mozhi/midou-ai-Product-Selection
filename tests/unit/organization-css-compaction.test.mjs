@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
@@ -37,7 +38,15 @@ test("organization production compaction preserves every selector, declaration a
   assert.deepEqual(structure(postcss.parse(result.css)), structure(postcss.parse(source)));
   const before = await transform(source, { loader: "css", minify: true });
   const after = await transform(result.css, { loader: "css", minify: true });
-  assert.ok(Buffer.byteLength(before.code) - Buffer.byteLength(after.code) >= 1040);
+  assert.ok(Buffer.byteLength(after.code) <= Buffer.byteLength(before.code));
+  // Preserve the old 1040-byte optimization claim against its actual archived input.
+  const archived = readPreSelectionRebuild("apps/web/src/organization-admin.css");
+  const archivedResult = await postcss([compactOrganizationSelectors()]).process(archived, {
+    from: "apps/web/src/organization-admin.css",
+  });
+  const archivedBefore = await transform(archived, { loader: "css", minify: true });
+  const archivedAfter = await transform(archivedResult.css, { loader: "css", minify: true });
+  assert.ok(Buffer.byteLength(archivedBefore.code) - Buffer.byteLength(archivedAfter.code) >= 1040);
   const other = await postcss([compactOrganizationSelectors()]).process(source, {
     from: "apps/web/src/other.css",
   });

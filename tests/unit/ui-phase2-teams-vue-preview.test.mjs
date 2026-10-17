@@ -1,3 +1,4 @@
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
@@ -15,7 +16,7 @@ import {
 } from "../../scripts/lib/ui-phase2-teams-vue-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
-const source = read(teamsVueFile),
+const source = readPreSelectionRebuild(teamsVueFile),
   reviewed = previewTeamsVue(source);
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 
@@ -39,7 +40,7 @@ function bindings(source) {
   return found;
 }
 
-test("P33 C actual Vue preserves the entire script, all events/models and original form", () => {
+test("Archived pre-rebuild P33 C actual Vue preserves the entire script, all events/models and original form", () => {
   const original = parse(source).descriptor,
     next = parse(reviewed).descriptor;
   assert.equal(next.scriptSetup.content, original.scriptSetup.content);
@@ -62,7 +63,7 @@ test("P33 C actual Vue preserves the entire script, all events/models and origin
   assert.equal(reversed, source);
 });
 
-test("P33 native list and in-page regions are review-only and missing anchors fail closed", () => {
+test("Archived pre-rebuild P33 native list and in-page regions are review-only and missing anchors fail closed", () => {
   assert.match(reviewed, /<ul v-if="pageItems.length" class="org-team-list">/);
   assert.match(reviewed, /<li v-for="team in pageItems" :key="team.id"><button/);
   assert.doesNotMatch(reviewed, /role="listitem"/);
@@ -81,7 +82,7 @@ test("P33 native list and in-page regions are review-only and missing anchors fa
   );
 });
 
-test("P33 preserved capture binds historical sources, screenshots and visual approval without claiming production acceptance", () => {
+test("Archived pre-rebuild P33 preserved capture binds historical sources, screenshots and visual approval without claiming production acceptance", () => {
   const folder = "output/playwright/p33-teams-vue-c-r6";
   const e = JSON.parse(read(`${folder}/evidence.json`));
   assert.equal(e.reviewOnly, true);
@@ -119,7 +120,7 @@ test("P33 preserved capture binds historical sources, screenshots and visual app
   assert.match(e.boundary, /OG-G02 remains/);
 });
 
-test("P33 capture overwrite and unknown arguments fail before browser startup", () => {
+test("Archived pre-rebuild P33 capture overwrite and unknown arguments fail before browser startup", () => {
   for (const arg of ["--capture", "--unknown"]) {
     const result = spawnSync(process.execPath, ["scripts/verify-ui-phase2-teams-vue-c.mjs", arg], {
       encoding: "utf8",
@@ -130,7 +131,7 @@ test("P33 capture overwrite and unknown arguments fail before browser startup", 
   }
 });
 
-test("P33 first capture remains intact as a visual-defect record, not current source proof", () => {
+test("Archived pre-rebuild P33 first capture remains intact as a visual-defect record, not current source proof", () => {
   const folder = "output/playwright/p33-teams-vue-c-r1";
   const manifest = read(`${folder}/evidence.json`);
   assert.equal(hash(manifest), "cc30883b917dd8f3fec6d2532971b13cee6da5d9ae666491081ab041e24dbb12");
@@ -140,7 +141,7 @@ test("P33 first capture remains intact as a visual-defect record, not current so
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);
 });
 
-test("P33 second capture preserves the fixed-bar occlusion evidence", () => {
+test("Archived pre-rebuild P33 second capture preserves the fixed-bar occlusion evidence", () => {
   const folder = "output/playwright/p33-teams-vue-c-r2";
   const manifest = read(`${folder}/evidence.json`);
   assert.equal(hash(manifest), "63a6c480919ab996d937718e1d0786224d52ca121fc693ab6587f5b6f75d9f46");
@@ -148,7 +149,7 @@ test("P33 second capture preserves the fixed-bar occlusion evidence", () => {
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);
 });
 
-test("P33 r3 capture is preserved before the final formatting-only driver revision", () => {
+test("Archived pre-rebuild P33 r3 capture is preserved before the final formatting-only driver revision", () => {
   const folder = "output/playwright/p33-teams-vue-c-r3";
   const manifest = read(`${folder}/evidence.json`);
   assert.equal(hash(manifest), "54d4c63c4f852a29d4608eb23b48cdc2eea18763aa3d6022f7f6b66ab9547ee0");

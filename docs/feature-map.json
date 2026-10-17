@@ -5389,5 +5389,31 @@
     ],
     "contract": "Original script and native model/event bindings unchanged. Organization identity and facts precede compact metrics and full-width profile editing. Organization-only mobile labels stay bounded; other shells, backend, API, authorization and audited save/read contracts retain their behavior.",
     "verification": "206 related Node checks passed across final affected-suite reruns; script and native bindings preserved. Desktop/mobile profile save, read recovery, validation and full-width layout passed; nine organization toolbar/mobile-label bounds passed. Web typecheck/build, static analysis, bundle budget and screenshot-realism gates passed. Two Windows visual baselines recaptured and final desktop/mobile comparison plus layout (4 cases) passed; Linux comparison pending. No deployment or production writes."
+  },
+  "selectionOrganizationDirectories20261017": {
+    "status": "implemented",
+    "statusDetail": "local_ui_verified_historical_regressions_retested_requires_release",
+    "requirements": "docs/selection-organization-directories.md",
+    "routes": ["/org-admin/members", "/org-admin/workspaces", "/org-admin/teams"],
+    "sourceFiles": [
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/components/OrganizationMemberPanel.vue",
+      "apps/web/src/components/OrganizationWorkspacePanel.vue",
+      "apps/web/src/components/OrganizationTeamPanel.vue",
+      "apps/web/src/organization-directory-workspace.css",
+      "apps/web/src/organization-admin.css",
+      "apps/web/src/design/organization-admin-tokens.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m06-01-organization-admin.spec.ts",
+      "tests/unit/ui-phase2-members-review.test.mjs",
+      "tests/unit/ui-phase2-workspaces-review.test.mjs",
+      "tests/unit/ui-phase2-teams-review.test.mjs",
+      "tests/unit/ui-phase2-teams-capture-boundary.test.mjs",
+      "tests/unit/organization-css-compaction.test.mjs",
+      "tests/unit/platform-palette-contract.test.mjs"
+    ],
+    "contract": "Four component scripts and native event/model bindings unchanged. Members precede invitation management; workspace/team lists and selected details span full width. Native page-fragment links only; team list uses ul/li/button. Original tenant, permission, idempotency, version and audited-write contracts remain. No backend, schema, HTTP, environment or dependency change.",
+    "verification": "28 desktop/mobile business cases and 6 layout/navigation/draft-retention cases passed; Web typecheck/build and static/budget/style/realism gates passed. First full Node run: 3138 tests, 3119 pass/19 fail; all failing files fixed and retested: 75 pass. Retired review packets use explicit historical inputs; current guard entry points remain strict. No production acceptance or deployment claim."
   }
 }

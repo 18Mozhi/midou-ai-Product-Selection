@@ -174,7 +174,6 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
   <section class="org-team-panel" aria-label="团队治理台">
     <header class="org-team-overview">
       <div>
-        <p>协作边界</p>
         <h3>团队治理台</h3>
       </div>
       <button type="button" :disabled="busy" @click="openCreate">新建团队</button>
@@ -238,7 +237,6 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
     <form v-if="createOpen" class="org-team-create" @submit.prevent="submitCreate">
       <header>
         <div>
-          <p>建立协作单元</p>
           <h3>新建团队</h3>
           <span>负责人必须是当前组织的活动成员；选择负责人后会同时建立团队成员关系。</span>
         </div>
@@ -351,30 +349,30 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
             </select>
           </label>
           <button type="button" class="org-admin-secondary" @click="resetFilters">重置筛选</button>
+          <a class="org-directory-detail-link" href="#org-team-selected">定位所选详情</a>
         </div>
 
-        <div v-if="pageItems.length" class="org-team-list" role="list">
-          <button
-            v-for="team in pageItems"
-            :key="team.id"
-            type="button"
-            role="listitem"
-            :class="{ 'is-selected': team.id === selectedTeamId }"
-            :aria-label="`选择团队 ${team.name}`"
-            :aria-current="team.id === selectedTeamId ? 'true' : undefined"
-            @click="selectedTeamId = team.id"
-          >
-            <span class="org-team-mark">{{ team.name.slice(0, 1) }}</span>
-            <span>
-              <b>{{ team.name }}</b>
-              <small>{{ team.member_count }} 名成员 · {{ team.lead_email || "未设负责人" }}</small>
-            </span>
-            <em v-if="team.default_workflow_key">有默认流程</em>
-            <i :data-status="team.status">{{ statusText(team.status) }}</i>
-          </button>
-        </div>
+        <ul v-if="pageItems.length" class="org-team-list">
+          <li v-for="team in pageItems" :key="team.id">
+            <button
+              type="button"
+              :class="{ 'is-selected': team.id === selectedTeamId }"
+              :aria-label="`选择团队 ${team.name}`"
+              :aria-current="team.id === selectedTeamId ? 'true' : undefined"
+              @click="selectedTeamId = team.id"
+            >
+              <span>
+                <b>{{ team.name }}</b>
+                <small
+                  >{{ team.member_count }} 名成员 · {{ team.lead_email || "未设负责人" }}</small
+                >
+              </span>
+              <em v-if="team.default_workflow_key">有默认流程</em>
+              <i :data-status="team.status">{{ statusText(team.status) }}</i>
+            </button>
+          </li>
+        </ul>
         <div v-else class="org-team-empty" role="status">
-          <span aria-hidden="true">◎</span>
           <h4>{{ teams.length ? "没有符合条件的团队" : "当前组织还没有团队" }}</h4>
           <p>
             {{
@@ -418,7 +416,7 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
         </nav>
       </article>
 
-      <article class="org-admin-card org-team-detail" aria-live="polite">
+      <article id="org-team-selected" class="org-admin-card org-team-detail" aria-live="polite">
         <template v-if="selectedTeam">
           <header>
             <div>

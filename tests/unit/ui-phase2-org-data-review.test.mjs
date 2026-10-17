@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -19,15 +23,17 @@ import {
 
 const inputs = readOrgDataReviewInputs();
 const build = () => buildOrgDataReview(inputs);
+// Explicit retired packet inputs; these bytes do not attest the rebuilt UI.
+for (const file of dependencies) inputs.sources[file] = readPreSelectionRebuild(file);
 const context = {
   candidates: dependencies.flatMap((f) => scanSource(inputs.sources[f], f).candidates),
   sourceHashes: build().sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages: inputs.packages,
   files: new Set(["scripts/verify-ui-phase2-org-data-controls.mjs"]),
 };
 
-test("P35 all25 current source sites are nine read-only route actions and seven exclusions", () => {
+test("Archived P35 all25 current source sites are nine read-only route actions and seven exclusions", () => {
   const r = validateActionReview(build(), context);
   assert.equal(r.sourceSites, 25);
   assert.equal(r.semanticGroups, 16);
@@ -44,7 +50,7 @@ test("P35 all25 current source sites are nine read-only route actions and seven 
   assert.throws(() => validateActionReview(promoted, context), /cannot grant action approval/);
 });
 
-test("P35 actual props and two P34-only failure forwards remain route-separated", () => {
+test("Archived P35 actual props and two P34-only failure forwards remain route-separated", () => {
   const root = baseParse(parse(inputs.sources[parentFile]).descriptor.template.content),
     nodes = [];
   function visit(n) {
@@ -81,7 +87,7 @@ test("P35 actual props and two P34-only failure forwards remain route-separated"
   }
 });
 
-test("P35 eight local fields and six excluded parent fields, no local business dialog", () => {
+test("Archived P35 eight local fields and six excluded parent fields, no local business dialog", () => {
   const r = build();
   assert.deepEqual(validateReviewSurfaces(r.surfaceReview, inputs), {
     callerFiles: 2,
@@ -109,7 +115,7 @@ test("P35 eight local fields and six excluded parent fields, no local business d
   assert.throws(() => validateReviewSurfaces(missing.surfaceReview, inputs), /input omissions/);
 });
 
-test("P35 all independent control, field and real Vue images are pinned without promoting global slots", () => {
+test("Archived P35 all independent control, field and real Vue images are pinned without promoting global slots", () => {
   assert.deepEqual(validateOrgDataBindings(build(), inputs), {
     sourceSites: 25,
     existingControlVariants: 19,

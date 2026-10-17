@@ -22,6 +22,7 @@ assert.ok(
 const capture = process.argv.includes("--capture"),
   smoke = process.argv.includes("--smoke");
 const output = "output/playwright/p33-teams-vue-c-r5";
+if (capture) await mkdir(output); // Exclusive permanent review package; no overwrite.
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const shellFile = "apps/web/src/components/NavigationShell.vue";
@@ -53,7 +54,7 @@ const sources = new Set([
 const runs = [],
   screenshots = [],
   ports = [];
-if (capture) await mkdir(output); // Exclusive permanent review package; no overwrite.
+
 let browser, server;
 try {
   browser = await chromium.launch();

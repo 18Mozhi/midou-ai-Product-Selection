@@ -1668,3 +1668,5 @@ onMounted(() => void load());
 </template>
 
 <style src="../organization-profile-workspace.css"></style>
+
+<style src="../organization-directory-workspace.css"></style>

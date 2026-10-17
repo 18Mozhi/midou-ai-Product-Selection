@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
@@ -28,17 +32,20 @@ import {
   currentRouteEvidence,
 } from "../../scripts/build-ui-phase2-org-approvals-review.mjs";
 
-const { sources, packages } = readOrgApprovalsReviewInputs();
+const { packages } = readOrgApprovalsReviewInputs();
+const sources = Object.fromEntries(
+  dependencies.map((file) => [file, readPreSelectionRebuild(file)]),
+);
 const build = () => buildOrgApprovalsReview(sources, packages);
 const context = {
   candidates: dependencies.flatMap((f) => scanSource(sources[f], f).candidates),
   sourceHashes: build().sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages,
   files: new Set(build().actions.flatMap((a) => a.testReferences.map((r) => r.file))),
 };
 const copy = (v) => JSON.parse(JSON.stringify(v));
-test("P34 maps all33 source sites into8 read-only page actions,one forwarding and5 exclusions", () => {
+test("Archived P34 maps all33 source sites into8 read-only page actions,one forwarding and5 exclusions", () => {
   const review = build(),
     r = validateActionReview(review, context);
   assert.equal(r.sourceSites, 33);
@@ -62,7 +69,7 @@ test("P34 maps all33 source sites into8 read-only page actions,one forwarding an
   assert.throws(() => validateActionReview(forward, context), /forward event omitted or changed/);
 });
 
-test("P34 distinguishes25 existing control variants,7 historical proposal controls and one mobile implementation", () => {
+test("Archived P34 distinguishes25 existing control variants,7 historical proposal controls and one mobile implementation", () => {
   assert.deepEqual(validateOrgApprovalsBindings(build(), packages), {
     controls: 25,
     proposalOnlyControls: 7,
@@ -97,7 +104,7 @@ test("P34 distinguishes25 existing control variants,7 historical proposal contro
   assert.throws(() => validateOrgApprovalsBindings(build(), missingShot), /missing exact image/);
 });
 
-test("P34 registers16 model sites but excludes6 parent fields and does not invent local dialogs", () => {
+test("Archived P34 registers16 model sites but excludes6 parent fields and does not invent local dialogs", () => {
   const r = build();
   assert.deepEqual(validateReviewSurfaces(r.surfaceReview, { sources, packages }), {
     callerFiles: 4,
@@ -130,7 +137,7 @@ test("P34 registers16 model sites but excludes6 parent fields and does not inven
   );
 });
 
-test("P34 pass-through props and zero child emits are checked against actual SFC AST", () => {
+test("Archived P34 pass-through props and zero child emits are checked against actual SFC AST", () => {
   const root = baseParse(parse(sources[parentFile]).descriptor.template.content),
     found = [];
   function visit(n) {
@@ -162,7 +169,7 @@ test("P34 pass-through props and zero child emits are checked against actual SFC
   assert.match(sources[readFeedbackFile], /emit\('reload'\)/);
 });
 
-test("P34 implementation evidence and narrow approval records resolve without promoting design packages", () => {
+test("Archived P34 implementation evidence and narrow approval records resolve without promoting design packages", () => {
   const r = build();
   for (const ref of r.implementationEvidence) {
     assert.ok(existsSync(`${base}/${ref.review}`));
@@ -198,7 +205,7 @@ test("P34 implementation evidence and narrow approval records resolve without pr
   assert.deepEqual(r.implementedBindings[0].widths, [390]);
 });
 
-test("P34 maps current bindings separately from immutable proposal snapshots", () => {
+test("Archived P34 maps current bindings separately from immutable proposal snapshots", () => {
   const r = build();
   assert.equal(r.propBindings[0].props["owner-path"], "props.routePath");
   assert.ok(

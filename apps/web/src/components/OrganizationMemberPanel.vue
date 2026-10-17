@@ -51,77 +51,8 @@ const valueOf = (event: Event) => (event.target as HTMLInputElement | HTMLSelect
 </script>
 
 <template>
-  <section class="org-admin-grid">
-    <form class="org-admin-card org-admin-invite-form" @submit.prevent="emit('invite')">
-      <h3>邀请成员</h3>
-      <label
-        >邮箱（每行一个）<textarea
-          v-model="form.emails"
-          required
-          autocomplete="off"
-          placeholder="name@company.com"
-          aria-describedby="org-member-invite-help"
-        ></textarea>
-      </label>
-      <label
-        >角色<select v-model="form.role_code" required>
-          <option v-for="role in roles" :key="role" :value="role">{{ roleText(role) }}</option>
-        </select></label
-      >
-      <label>原因<textarea v-model="form.reason" required maxlength="500"></textarea></label>
-      <button :disabled="busy">{{ busy ? "正在创建…" : "创建邀请" }}</button>
-      <small id="org-member-invite-help"
-        >支持单个或批量邀请；每行填写一个邮箱。邮件服务尚未配置时，邀请会显示“等待邮件服务”，不会假装已经发送。</small
-      >
-      <ul v-if="invitationResults.length" class="org-admin-invite-results" aria-label="邀请结果">
-        <li v-for="result in invitationResults" :key="result.email" :data-status="result.status">
-          <b>{{ result.email }}</b
-          ><span>{{ result.message }}</span>
-        </li>
-      </ul>
-    </form>
-    <article class="org-admin-card">
-      <header class="org-admin-section-header">
-        <h3>邀请记录</h3>
-        <nav aria-label="邀请状态">
-          <button
-            :aria-pressed="invitationTab === 'pending'"
-            @click="emit('updateInvitationTab', 'pending')"
-          >
-            待接受 {{ pendingInvitations.length }}
-          </button>
-          <button
-            :aria-pressed="invitationTab === 'expired'"
-            @click="emit('updateInvitationTab', 'expired')"
-          >
-            已失效 {{ expiredInvitations.length }}
-          </button>
-        </nav>
-      </header>
-      <p v-if="!visibleInvitations.length">
-        {{ invitationTab === "pending" ? "暂无待接受邀请。" : "暂无已失效邀请。" }}
-      </p>
-      <div v-for="invitation in visibleInvitations" :key="invitation.id" class="org-admin-line">
-        <div>
-          <b>{{ invitation.email }}</b
-          ><small
-            >{{ roleText(invitation.role_code) }} · {{ formatTime(invitation.expires_at) }}</small
-          >
-        </div>
-        <div class="org-admin-actions">
-          <button
-            v-if="invitationTab === 'pending'"
-            type="button"
-            :disabled="busy"
-            @click="emit('invitationAction', invitation)"
-          >
-            撤销邀请
-          </button>
-          <i :data-status="invitation.status">{{ statusText(invitation.status) }}</i>
-        </div>
-      </div>
-    </article>
-    <article class="org-admin-card org-admin-wide">
+  <section class="org-member-workspace">
+    <article class="org-admin-card org-member-directory">
       <header class="org-admin-section-header">
         <div>
           <h3>组织成员</h3>
@@ -130,6 +61,7 @@ const valueOf = (event: Event) => (event.target as HTMLInputElement | HTMLSelect
             {{ memberPageCount }} 页</small
           >
         </div>
+        <a class="org-member-invite-link" href="#organization-member-invite">邀请成员</a>
       </header>
       <div class="org-admin-filters" aria-label="成员筛选">
         <label
@@ -230,5 +162,81 @@ const valueOf = (event: Event) => (event.target as HTMLInputElement | HTMLSelect
         </button>
       </nav>
     </article>
+
+    <section class="org-member-invitations" aria-label="成员邀请">
+      <form
+        id="organization-member-invite"
+        class="org-admin-card org-admin-invite-form"
+        @submit.prevent="emit('invite')"
+      >
+        <h3>邀请成员</h3>
+        <label
+          >邮箱（每行一个）<textarea
+            v-model="form.emails"
+            required
+            autocomplete="off"
+            placeholder="name@company.com"
+            aria-describedby="org-member-invite-help"
+          ></textarea>
+        </label>
+        <label
+          >角色<select v-model="form.role_code" required>
+            <option v-for="role in roles" :key="role" :value="role">{{ roleText(role) }}</option>
+          </select></label
+        >
+        <label>原因<textarea v-model="form.reason" required maxlength="500"></textarea></label>
+        <button :disabled="busy">{{ busy ? "正在创建…" : "创建邀请" }}</button>
+        <small id="org-member-invite-help"
+          >支持单个或批量邀请；每行填写一个邮箱。邮件服务尚未配置时，邀请会显示“等待邮件服务”，不会假装已经发送。</small
+        >
+        <ul v-if="invitationResults.length" class="org-admin-invite-results" aria-label="邀请结果">
+          <li v-for="result in invitationResults" :key="result.email" :data-status="result.status">
+            <b>{{ result.email }}</b
+            ><span>{{ result.message }}</span>
+          </li>
+        </ul>
+      </form>
+      <article class="org-admin-card org-member-invitation-history">
+        <header class="org-admin-section-header">
+          <h3>邀请记录</h3>
+          <nav aria-label="邀请状态">
+            <button
+              :aria-pressed="invitationTab === 'pending'"
+              @click="emit('updateInvitationTab', 'pending')"
+            >
+              待接受 {{ pendingInvitations.length }}
+            </button>
+            <button
+              :aria-pressed="invitationTab === 'expired'"
+              @click="emit('updateInvitationTab', 'expired')"
+            >
+              已失效 {{ expiredInvitations.length }}
+            </button>
+          </nav>
+        </header>
+        <p v-if="!visibleInvitations.length">
+          {{ invitationTab === "pending" ? "暂无待接受邀请。" : "暂无已失效邀请。" }}
+        </p>
+        <div v-for="invitation in visibleInvitations" :key="invitation.id" class="org-admin-line">
+          <div>
+            <b>{{ invitation.email }}</b
+            ><small
+              >{{ roleText(invitation.role_code) }} · {{ formatTime(invitation.expires_at) }}</small
+            >
+          </div>
+          <div class="org-admin-actions">
+            <button
+              v-if="invitationTab === 'pending'"
+              type="button"
+              :disabled="busy"
+              @click="emit('invitationAction', invitation)"
+            >
+              撤销邀请
+            </button>
+            <i :data-status="invitation.status">{{ statusText(invitation.status) }}</i>
+          </div>
+        </div>
+      </article>
+    </section>
   </section>
 </template>

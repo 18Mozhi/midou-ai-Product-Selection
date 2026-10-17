@@ -1,0 +1,576 @@
+#app
+  .org-admin-center:is(
+    .org-admin-center--member-review,
+    .org-admin-center--workspace-review,
+    .org-admin-center--team-review
+  ) {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  color: var(--so-text);
+  background: transparent;
+  font-size: 13px;
+  container-type: inline-size;
+}
+#app :is(.org-member-workspace, .org-workspace-panel, .org-team-panel) {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  & :is(article, form, section, header, footer, label) {
+    min-width: 0;
+  }
+  & :is(h3, h4, p, dl, dd) {
+    margin: 0;
+  }
+  & :is(h3, h4) {
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+  & :is(p, small, dt) {
+    color: var(--so-text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  & li {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  & :is(b, p, small, dd, code, h3, h4) {
+    overflow-wrap: anywhere;
+  }
+  & :is(.org-admin-card, .org-workspace-create, .org-team-create) {
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
+    box-shadow: none;
+  }
+  & :is(header, footer) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  & header > div {
+    min-width: 0;
+  }
+  & header p {
+    margin-bottom: 4px;
+  }
+  & label {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    margin: 0;
+    color: var(--so-text);
+    font-size: 13px;
+  }
+  & :is(input, select, textarea) {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid var(--so-border-strong);
+    border-radius: 6px;
+    color: var(--so-text);
+    background: var(--so-panel);
+    font: inherit;
+  }
+  & textarea {
+    min-height: 88px;
+    resize: vertical;
+  }
+  & button {
+    min-width: 0;
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid var(--so-border-strong);
+    border-radius: 6px;
+    color: var(--so-text);
+    background: var(--so-panel);
+    font: inherit;
+    cursor: pointer;
+  }
+  & button:hover:not(:disabled) {
+    color: var(--so-primary);
+    border-color: var(--so-primary-border);
+    background: var(--so-primary-soft);
+  }
+  & button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  & :is(input, select, textarea, button, a, summary):focus-visible {
+    outline: 2px solid var(--so-focus);
+    outline-offset: 2px;
+  }
+  & :is(a, summary) {
+    color: var(--so-primary);
+  }
+  &
+    :is(
+      .org-member-invite-link,
+      .org-directory-detail-link,
+      .org-team-links a,
+      .org-workspace-actions a
+    ) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 6px;
+    text-decoration: none;
+  }
+  &
+    :is(
+      .org-admin-technical,
+      .org-workspace-detail,
+      .org-team-detail,
+      #organization-member-invite
+    ) {
+    scroll-margin-top: 96px;
+  }
+  & .org-admin-technical {
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  & .org-admin-technical summary {
+    min-height: 44px;
+    padding: 10px 0;
+    cursor: pointer;
+  }
+  & .org-admin-technical code {
+    display: block;
+    font-size: 13px;
+  }
+  & i {
+    padding: 3px 8px;
+    border: 1px solid var(--so-border);
+    border-radius: 4px;
+    background: var(--so-panel-soft);
+    color: var(--so-text-muted);
+    font-size: 13px;
+    font-style: normal;
+    white-space: nowrap;
+  }
+  & i[data-status="active"] {
+    border-color: var(--so-success-border);
+    color: var(--so-success);
+    background: var(--so-success-soft);
+  }
+  & i:is([data-status="disabled"], [data-status="revoked"], [data-status="expired"]) {
+    border-color: var(--so-danger-border);
+    color: var(--so-danger);
+    background: var(--so-danger-soft);
+  }
+  & i:is([data-status="pending_delivery"], [data-status="locked"]) {
+    border-color: var(--so-warning-border);
+    color: var(--so-warning);
+    background: var(--so-warning-soft);
+  }
+  & :is(.org-workspace-overview, .org-team-overview) {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  &
+    :is(
+      .org-workspace-overview > button,
+      .org-team-overview > button,
+      .org-workspace-create > footer button,
+      .org-team-create > footer button,
+      .org-admin-invite-form > button,
+      .org-team-member-actions > button:first-child
+    ) {
+    justify-self: start;
+    color: var(--so-on-primary);
+    border-color: var(--so-primary);
+    background: var(--so-primary);
+  }
+  &
+    :is(
+      .org-workspace-overview > button,
+      .org-team-overview > button,
+      .org-workspace-create > footer button,
+      .org-team-create > footer button,
+      .org-admin-invite-form > button,
+      .org-team-member-actions > button:first-child
+    ):hover:not(:disabled) {
+    background: var(--so-primary-strong);
+    color: var(--so-on-primary);
+  }
+  &
+    :is(
+      .org-workspace-overview,
+      .org-team-overview,
+      .org-workspace-create,
+      .org-team-create
+    )::after {
+    content: none;
+  }
+  & :is(.org-workspace-metrics, .org-team-metrics) {
+    display: grid;
+    gap: 0;
+    min-width: 0;
+    margin: 0;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel);
+  }
+  & .org-workspace-metrics {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  & .org-team-metrics {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  & :is(.org-workspace-metrics, .org-team-metrics) article {
+    min-width: 0;
+    padding: 14px 16px;
+    border: 0;
+    border-right: 1px solid var(--so-border);
+    border-radius: 0;
+    background: transparent;
+  }
+  & :is(.org-workspace-metrics, .org-team-metrics) article:last-child {
+    border-right: 0;
+  }
+  & :is(.org-workspace-metrics, .org-team-metrics) :is(span, small) {
+    display: block;
+    color: var(--so-text-muted);
+    font-size: 13px;
+  }
+  & :is(.org-workspace-metrics, .org-team-metrics) b {
+    display: block;
+    margin: 5px 0;
+    font-size: 24px;
+    line-height: 1.3;
+    color: var(--so-text);
+  }
+  & .org-workspace-default-metric b {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  & :is(.org-workspace-browser, .org-team-browser) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    min-width: 0;
+  }
+  & :is(.org-workspace-toolbar, .org-team-toolbar) {
+    display: grid;
+    grid-template-columns: minmax(180px, 2fr) minmax(140px, 1fr) auto auto;
+    align-items: end;
+    gap: 12px;
+  }
+  & :is(.org-workspace-status-tabs, .org-team-status-tabs) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  & :is(.org-workspace-status-tabs, .org-team-status-tabs) [aria-pressed="true"] {
+    border-color: var(--so-primary-border);
+    color: var(--so-primary);
+    background: var(--so-primary-soft);
+  }
+  & :is(.org-workspace-list, .org-team-list) {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--so-border);
+  }
+  & :is(.org-workspace-list, .org-team-list) li {
+    min-width: 0;
+  }
+  & :is(.org-workspace-list, .org-team-list) button {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 12px;
+    text-align: left;
+    border: 0;
+    border-bottom: 1px solid var(--so-border);
+    border-radius: 0;
+  }
+  & :is(.org-workspace-list, .org-team-list) button.is-selected {
+    color: var(--so-text);
+    background: var(--so-primary-soft);
+  }
+  & :is(.org-workspace-list, .org-team-list) button > span {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+  }
+  & :is(.org-workspace-list, .org-team-list) b {
+    font-weight: 600;
+    font-size: 14px;
+  }
+  & :is(.org-workspace-list, .org-team-list) em {
+    padding: 3px 7px;
+    color: var(--so-primary);
+    background: var(--so-primary-soft);
+    font-size: 13px;
+    font-style: normal;
+  }
+  & :is(.org-workspace-empty, .org-team-empty) {
+    display: grid;
+    gap: 10px;
+    padding: 20px 0;
+    text-align: left;
+  }
+  & :is(.org-workspace-empty, .org-team-empty) button {
+    justify-self: start;
+  }
+  & :is(.org-workspace-detail, .org-team-detail) dl {
+    display: grid;
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid var(--so-border);
+    border-bottom: 1px solid var(--so-border);
+  }
+  & .org-workspace-detail dl {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  & .org-team-detail dl {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  & :is(.org-workspace-detail, .org-team-detail) dl > div {
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  & :is(.org-workspace-detail, .org-team-detail) dd {
+    margin-top: 5px;
+  }
+  & :is(.org-workspace-default-note, .org-workspace-impact, .org-team-refresh-warning) {
+    display: grid;
+    gap: 8px;
+    padding: 14px 16px;
+    border: 1px solid var(--so-border);
+    border-radius: 6px;
+    background: var(--so-panel-soft);
+  }
+  & .org-team-refresh-warning {
+    border-color: var(--so-warning-border);
+    color: var(--so-warning);
+    background: var(--so-warning-soft);
+  }
+  & .org-team-refresh-warning button {
+    justify-self: start;
+  }
+  & :is(.org-workspace-create-grid, .org-team-create-grid) {
+    display: grid;
+    gap: 16px;
+    min-width: 0;
+  }
+  & .org-workspace-create-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  & .org-team-create-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  & :is(.org-workspace-reason, .org-team-reason) {
+    grid-column: 1/-1;
+  }
+  & :is(.org-workspace-actions, .org-team-links, .org-team-member-actions) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  & .org-team-membership {
+    display: grid;
+    gap: 12px;
+  }
+  & .org-team-membership label {
+    max-width: 560px;
+  }
+  & .org-admin-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0;
+  }
+  & .org-admin-pagination span {
+    color: var(--so-text-muted);
+    font-size: 13px;
+  }
+  & .org-admin-filters {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    align-items: end;
+    margin: 0;
+    padding: 16px;
+    border: 1px solid var(--so-border);
+    border-radius: 6px;
+    background: var(--so-panel-soft);
+  }
+  & .org-admin-line {
+    display: grid;
+    grid-template-columns: minmax(160px, 1fr) minmax(0, auto);
+    align-items: center;
+    gap: 16px;
+    margin: 0;
+    padding: 16px 0;
+    border: 0;
+    border-bottom: 1px solid var(--so-border);
+    border-radius: 0;
+    background: transparent;
+  }
+  & .org-admin-line > div {
+    min-width: 0;
+  }
+  & .org-admin-line small {
+    display: block;
+    margin-top: 4px;
+  }
+  & .org-admin-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  & .org-admin-actions select {
+    width: auto;
+    max-width: 240px;
+  }
+  & .org-member-invitations {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  & .org-admin-invite-results {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  & .org-admin-invite-results li {
+    display: grid;
+    gap: 4px;
+    padding: 12px;
+    border: 1px solid var(--so-border);
+    border-radius: 6px;
+  }
+  & .org-admin-invite-results li[data-status="error"] {
+    color: var(--so-danger);
+    border-color: var(--so-danger-border);
+    background: var(--so-danger-soft);
+  }
+}
+@container (min-width: 960px) {
+  #app .org-member-workspace .org-admin-filters {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+@container (max-width: 820px) {
+  #app :is(.org-member-workspace, .org-workspace-panel, .org-team-panel) {
+    & :is(.org-workspace-metrics, .org-team-metrics) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    & :is(.org-workspace-metrics, .org-team-metrics) article {
+      border-bottom: 1px solid var(--so-border);
+    }
+    & :is(.org-workspace-metrics, .org-team-metrics) article:nth-child(3n) {
+      border-right: 0;
+    }
+    & .org-team-metrics article:nth-last-child(-n + 3) {
+      border-bottom: 0;
+    }
+    & .org-workspace-metrics article:nth-last-child(-n + 2) {
+      border-bottom: 0;
+    }
+    & :is(.org-workspace-toolbar, .org-team-toolbar) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    & .org-team-create-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    & .org-team-create-grid label:has(#team-workflow) {
+      grid-column: 1/-1;
+    }
+    & .org-admin-filters {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    & .org-admin-line {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    & .org-member-invitations {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    & :is(.org-workspace-detail, .org-team-detail) dl {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+@container (max-width: 540px) {
+  #app :is(.org-member-workspace, .org-workspace-panel, .org-team-panel) {
+    & :is(.org-admin-card, .org-workspace-create, .org-team-create) {
+      padding: 16px;
+    }
+    & :is(.org-workspace-metrics, .org-team-metrics) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    & :is(.org-workspace-metrics, .org-team-metrics) article {
+      border-right: 1px solid var(--so-border);
+      border-bottom: 1px solid var(--so-border);
+      padding: 12px;
+    }
+    & :is(.org-workspace-metrics, .org-team-metrics) article:nth-child(2n) {
+      border-right: 0;
+    }
+    & .org-team-metrics article:nth-last-child(-n + 2) {
+      border-bottom: 0;
+    }
+    & .org-team-metrics article:nth-child(4) {
+      border-bottom: 1px solid var(--so-border);
+    }
+    & .org-workspace-metrics article:last-child {
+      grid-column: 1/-1;
+      border-right: 0;
+      border-bottom: 0;
+    }
+    & .org-workspace-metrics article:nth-child(4) {
+      border-bottom: 1px solid var(--so-border);
+    }
+    & :is(.org-workspace-create-grid, .org-team-create-grid) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    & :is(.org-workspace-list, .org-team-list) button {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    & :is(.org-workspace-list, .org-team-list) em {
+      grid-column: 1;
+      justify-self: start;
+    }
+    & :is(.org-workspace-list, .org-team-list) i {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    & .org-admin-actions select {
+      max-width: 100%;
+    }
+    & .org-admin-section-header nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  }
+}

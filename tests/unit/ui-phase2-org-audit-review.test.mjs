@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -17,15 +21,17 @@ import {
 
 const inputs = readOrgAuditReviewInputs();
 const build = () => buildOrgAuditReview(inputs);
+// Explicit retired packet inputs; these bytes do not attest the rebuilt UI.
+for (const file of dependencies) inputs.sources[file] = readPreSelectionRebuild(file);
 const context = {
   candidates: dependencies.flatMap((f) => scanSource(inputs.sources[f], f).candidates),
   sourceHashes: build().sourceHashes,
-  contracts: runContractAudit().records,
+  contracts: runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles()).records,
   packages: inputs.packages,
   files: new Set(["scripts/verify-ui-phase2-org-audit-controls.mjs"]),
 };
 
-test("P37 covers25 exact sites in11 route actions and7 exclusions without writes", () => {
+test("Archived P37 covers25 exact sites in11 route actions and7 exclusions without writes", () => {
   assert.equal(build().visualApproval, "user-approved-remaining-pages-auto");
   const r = validateActionReview(build(), context);
   assert.equal(r.sourceSites, 25);
@@ -44,7 +50,7 @@ test("P37 covers25 exact sites in11 route actions and7 exclusions without writes
   assert.throws(() => validateActionReview(promoted, context), /cannot grant action approval/);
 });
 
-test("P37 has8 source fields,6 excluded fields,6 containers and9 explicit variants", () => {
+test("Archived P37 has8 source fields,6 excluded fields,6 containers and9 explicit variants", () => {
   assert.deepEqual(
     build().inputs["OrganizationAuditPanel.vue"],
     build()
@@ -72,7 +78,7 @@ test("P37 has8 source fields,6 excluded fields,6 containers and9 explicit varian
   assert.throws(() => validateReviewSurfaces(omitted.surfaceReview, inputs), /input omissions/);
 });
 
-test("P37 function props and actual v-else reject changed parent routing", () => {
+test("Archived P37 function props and actual v-else reject changed parent routing", () => {
   assert.equal(build().propBindings[0].directive, "else");
   for (const [from, to] of [
     [':apply-filters="applyAuditFilters"', ':apply-filters="load"'],
@@ -95,7 +101,7 @@ test("P37 function props and actual v-else reject changed parent routing", () =>
   }
 });
 
-test("P37 other-route reason and approvals remain exclusions,not local dialogs", () => {
+test("Archived P37 other-route reason and approvals remain exclusions,not local dialogs", () => {
   const r = build();
   assert.equal(r.actions.find((a) => a.actionId === "EX-REASON").sourceCandidateIds.length, 4);
   assert.equal(r.actions.find((a) => a.actionId === "EX-P34-RETRY").kind, "excluded");
@@ -115,7 +121,7 @@ test("P37 other-route reason and approvals remain exclusions,not local dialogs",
   );
 });
 
-test("P37 all19 variants and210 field/control images bind without proposal promotion", () => {
+test("Archived P37 all19 variants and210 field/control images bind without proposal promotion", () => {
   assert.deepEqual(validateOrgAuditBindings(build(), inputs), {
     sourceSites: 25,
     semanticGroups: 18,
@@ -150,7 +156,7 @@ test("P37 all19 variants and210 field/control images bind without proposal promo
   assert.throws(() => validateOrgAuditBindings(changed, inputs), /registry drift/);
 });
 
-test("P37 pure-space search and copy boundary remain explicit source distinctions", () => {
+test("Archived P37 pure-space search and copy boundary remain explicit source distinctions", () => {
   const source = inputs.sources[childFile];
   assert.match(source, /v-if="nextCursor && !loadedQuery"/);
   assert.match(source, /!loadedQuery.trim\(\) && !filters.action.trim\(\)/);

@@ -1,3 +1,4 @@
+import { readPreRebuildTeamsBoundary } from "../fixtures/pre-rebuild-teams-boundary.mjs";
 import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
@@ -84,9 +85,10 @@ test("P33 49 field states and nine combinations bind exactly 116 dual viewport i
     });
   }
 });
+
 test("P33 field evidence rejects source and image drift without modifying approved P32 image", () => {
   const capture = teamsHistoricalCapture("teams-fields-direction-c");
-  assertTeamsCurrentSources("teams-fields-direction-c");
+  assertTeamsCurrentSources("teams-fields-direction-c", readPreRebuildTeamsBoundary);
   const historical = JSON.parse(capture.manifest);
   for (const [file, sha] of Object.entries(historical.sourceHashes))
     assert.equal(hash(capture.source(file)), sha, file);

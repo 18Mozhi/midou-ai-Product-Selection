@@ -1,3 +1,4 @@
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -10,10 +11,13 @@ import {
   teamsAnchorScenario,
 } from "../../scripts/lib/ui-phase2-teams-anchor-driver.mjs";
 
-const base = readFileSync(teamsAnchorBase, "utf8").replaceAll("\r\n", "\n");
+const base = readCaptureSourceRevision(
+  teamsAnchorBase,
+  "499f71e8ca741fee8c8283eb107c8a3adc32de3d982477d64e050d8deb8a108a",
+);
 const composed = teamsAnchorDriver(base);
 
-test("anchor checks compose without changing original r5 checks or fixture wiring", () => {
+test("archived anchor checks compose without changing original r5 checks or fixture wiring", () => {
   let changed = base;
   for (const [before, after] of teamsAnchorEdits) changed = changed.replace(before, after);
   for (const [before, after] of [...teamsAnchorEdits].reverse()) {

@@ -24,6 +24,7 @@ assert.ok(args.length <= 1 && args.every((a) => ["--smoke", "--capture"].include
 const capture = args.includes("--capture"),
   smoke = args.includes("--smoke");
 const output = "output/playwright/p33-create-states-r2";
+if (capture) await mkdir(output);
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const shellFile = "apps/web/src/components/NavigationShell.vue";
@@ -59,7 +60,7 @@ const sources = new Set([
 ]);
 const runs = [],
   screenshots = [];
-if (capture) await mkdir(output);
+
 const reservation = reservePort();
 await new Promise((done) => reservation.listen(0, "127.0.0.1", done));
 const port = reservation.address().port;

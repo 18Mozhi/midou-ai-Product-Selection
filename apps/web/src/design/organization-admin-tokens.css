@@ -16,9 +16,6 @@ html:has(body #app .org-admin-center) {
   --oa-disabled-ink: #7a8999;
   --oa-disabled-bg: #e8edf3;
   --oa-danger: #b42318;
-  --oa-blue-soft: var(--glass-primary-soft);
-  --oa-blue-mid: #83a9e7;
-  --oa-blue-pale: var(--glass-primary-soft);
   --oa-blue-light: var(--glass-primary-soft);
   --oa-blue-wash: var(--glass-primary-soft);
 }

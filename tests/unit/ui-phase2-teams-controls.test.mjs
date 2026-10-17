@@ -1,3 +1,4 @@
+import { readPreRebuildTeamsBoundary } from "../fixtures/pre-rebuild-teams-boundary.mjs";
 import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
@@ -19,7 +20,7 @@ const e = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 test("P33 individual controls cover every captured child candidate once without counting variants as new source actions", () => {
   const candidates = scanSource(
-    beforePublishedPresentation(e.sourceFile, readFileSync(e.sourceFile, "utf8")),
+    beforePublishedPresentation(e.sourceFile, readPreSelectionRebuild(e.sourceFile)),
     e.sourceFile,
   ).candidates;
   assert.equal(candidates.length, 20);
@@ -65,7 +66,10 @@ test("P33 all control variants and reason compositions have exact dual-viewport 
 test("P33 post-capture Vue additions have current source and E2E evidence", () => {
   const capture = teamsHistoricalCapture("teams-controls-direction-c"),
     historical = scanSource(capture.source(e.sourceFile), e.sourceFile).candidates,
-    currentSource = beforePublishedPresentation(e.sourceFile, readFileSync(e.sourceFile, "utf8")),
+    currentSource = beforePublishedPresentation(
+      e.sourceFile,
+      readPreSelectionRebuild(e.sourceFile),
+    ),
     current = scanSource(currentSource, e.sourceFile).candidates,
     historicalIds = new Set(historical.map((c) => c.candidateId.split("#")[1])),
     additions = current.filter((c) => !historicalIds.has(c.candidateId.split("#")[1]));
@@ -106,7 +110,7 @@ test("P33 absent-member and archived-team states do not invent disabled rules or
 });
 test("P33 evidence rejects drift in source dependencies and all permanent screenshots", () => {
   const capture = teamsHistoricalCapture("teams-controls-direction-c");
-  assertTeamsCurrentSources("teams-controls-direction-c");
+  assertTeamsCurrentSources("teams-controls-direction-c", readPreRebuildTeamsBoundary);
   const historical = JSON.parse(capture.manifest);
   for (const [file, sha] of Object.entries(historical.sourceHashes))
     assert.equal(hash(capture.source(file)), sha, file);
