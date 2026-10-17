@@ -1,9 +1,14 @@
+import { readArchivedJourneySource } from "../../scripts/lib/retired-journey-surface.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 
-const read = (path) => readFile(path, "utf8");
+const read = (path) =>
+  path === "apps/web/src/components/SelectionJourney.vue" ||
+  path === "apps/web/src/selection-journey.css"
+    ? Promise.resolve(readArchivedJourneySource(path))
+    : readFile(path, "utf8");
 
 test("M07-06.A01-A06 exposes a member-scoped real selection journey", async () => {
   const [
@@ -55,7 +60,7 @@ test("M07-06.A01-A06 exposes a member-scoped real selection journey", async () =
   );
 });
 
-test("M07-06.A07-A17 keeps UI, contracts, production evidence and rollback synchronized", async () => {
+test("M07-06.A07-A17 preserves historical UI with backend contracts, production evidence and rollback", async () => {
   const files = await Promise.all(
     [
       "apps/web/src/components/SelectionJourney.vue",

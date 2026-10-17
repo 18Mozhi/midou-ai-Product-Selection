@@ -2628,7 +2628,7 @@ test("current P34 organization approvals map both pagers and isolate the histori
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current P16 decision form map refreshes its line while isolating the superseded identity", () => {
+test("live audit marks retired P16 decision form claims as source-missing instead of borrowing archived UI", () => {
   const file = "apps/web/src/components/SelectionJourney.vue";
   const document = "selection-journey-contract-review.md";
   const report = runContractAudit();
@@ -2646,12 +2646,11 @@ test("current P16 decision form map refreshes its line while isolating the super
       record.candidateId === currentId &&
       record.temporalScope !== "historical",
   );
-  assert.equal(historicalRow?.status, "identity-not-found");
+  assert.equal(historicalRow?.status, "source-missing");
   assert.equal(historicalRow?.currentLine, null);
-  assert.equal(currentRow?.status, "identity-current");
-  assert.equal(currentRow?.sourceBinding, "unrecorded");
+  assert.equal(currentRow?.status, "source-missing");
   assert.equal(currentRow?.recordedLine, 619);
-  assert.equal(currentRow?.currentLine, 619);
+  assert.equal(currentRow?.currentLine, null);
   assert.equal(
     report.unreferenced.some((candidate) => candidate.candidateId === currentId),
     false,

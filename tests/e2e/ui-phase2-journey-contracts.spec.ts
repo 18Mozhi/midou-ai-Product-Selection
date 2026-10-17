@@ -1,561 +1,75 @@
-import { expect, test, type Page, type Request } from "@playwright/test";
-import type { SelectionJourneyResult } from "../../apps/api/src/selection-journey-service";
+import { test, expect, type Page } from "@playwright/test";
 
-// Isolated real-Vue contracts, not external collection or real database acceptance.
-const id = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
-const journeyId = id(7601),
-  storageKey = "scoutops.selection-journey.active-id";
-const at = "2026-08-10T12:00:00.000Z";
-const envelope = (data: unknown) => ({
-  data,
-  request_id: "ui2-journey-request",
-  trace_id: "ui2-journey-trace",
-});
-function fixture(): SelectionJourneyResult {
-  return {
-    id: journeyId,
-    organization_id: id(7602),
-    workspace_id: id(7603),
-    input_kind: "keyword",
-    input_value: "portable blender",
-    provider_code: "google_news_search",
-    task_id: id(7604),
-    task_status: "succeeded",
-    state: "result_ready",
-    coverage_status: "partial",
-    available_result_count: 2,
-    results: [1, 2].map((n) => ({
-      raw_evidence_id: id(7610 + n),
-      title: `隔离候选 ${n}`,
-      publisher: "隔离来源",
-      canonical_url: `https://example.test/candidate-${n}`,
-      observed_at: at,
-      topic_id: n === 1 ? null : id(7620),
-      opportunity_id: null,
-      selection_stage: "not_eligible",
-      quality_gates: {
-        score: false,
-        market: false,
-        competition: false,
-        cost: false,
-        risk: false,
-        all_passed: false,
-      },
-    })),
-    first_result: null,
-    blocked_reason: null,
-    blocked_owner: null,
-    blocked_next_step: null,
-    timeline: [
-      { stage: "queued", status: "completed", occurred_at: at },
-      { stage: "collecting", status: "completed", occurred_at: at },
-      { stage: "parsing", status: "completed", occurred_at: at },
-      { stage: "decision", status: "active", occurred_at: at },
-    ],
-    decision: null,
-    opportunity_id: null,
-    verification_task_id: null,
-    accepted_at: at,
-    terminal_at: at,
-    decided_at: null,
-    elapsed_ms: 12000,
-    deadline_ms: 180000,
-    within_deadline: true,
-    request_id: "ui2-journey-request",
-    trace_id: "ui2-journey-trace",
-  };
-}
-async function ready(page: Page, savedId?: string) {
-  const data = { journey: fixture(), writes: [] as Request[], reads: [] as Request[] };
-  data.journey.first_result = data.journey.results[0];
-  if (savedId !== undefined)
-    await page.addInitScript(({ key, value }) => localStorage.setItem(key, value), {
-      key: storageKey,
-      value: savedId,
+// The member journey UI is retired. Backend journey contracts remain in M05-05 tests.
+async function setup(page: Page, canReadSelection = true) {
+  const calls: Array<{ path: string; method: string }> = [];
+  await page.route("**/api/v1/**", async (route) => {
+    const request = route.request(),
+      path = new URL(request.url()).pathname;
+    calls.push({ path, method: request.method() });
+    const envelope = (data: unknown, meta?: unknown) => ({
+      data,
+      meta,
+      request_id: "retired-journey",
+      trace_id: "retired-journey",
     });
-  page.on("request", (request) => {
-    if (!new URL(request.url()).pathname.startsWith("/api/v1/selection-journeys")) return;
-    (request.method() === "GET" ? data.reads : data.writes).push(request);
-  });
-  await page.route("**/api/v1/me/ui-preferences", (route) =>
-    route.fulfill({ json: envelope({ theme: "deep-ocean", version: 1 }) }),
-  );
-  await page.route("**/api/v1/me/navigation?shell=member", (route) =>
-    route.fulfill({
-      json: envelope({
-        shell: "member",
-        organization_id: data.journey.organization_id,
-        workspace_id: data.journey.workspace_id,
-        roles: ["member"],
-        capabilities: ["task:create", "opportunity:read", "opportunity:decide"],
-        platform_roles: [],
-        platform_capabilities: [],
-        guard_reason: "allowed",
-      }),
-    }),
-  );
-  await page.route("**/api/v1/selection-journeys**", (route) => {
-    const request = route.request();
-    if (request.method() === "GET") return route.fulfill({ json: envelope(data.journey) });
-    return route.fulfill({ status: 500, json: { error: { code: "unexpected_test_write" } } });
-  });
-  return data;
-}
-function assertPost(request: Request, path: string, body: unknown) {
-  expect(request.method()).toBe("POST");
-  expect(new URL(request.url()).pathname).toBe(`/api/v1${path}`);
-  expect(request.postDataJSON()).toEqual(body);
-  for (const header of ["idempotency-key", "x-request-id", "x-trace-id"])
-    expect(request.headers()[header]).toMatch(/^[0-9a-f-]{36}$/);
-}
-const savedId = (page: Page) => page.evaluate((key) => localStorage.getItem(key), storageKey);
-
-function qualify(data: Awaited<ReturnType<typeof ready>>) {
-  Object.assign(data.journey.results[1], {
-    opportunity_id: id(7621),
-    selection_stage: "recommended",
-    quality_gates: {
-      score: true,
-      market: true,
-      competition: true,
-      cost: true,
-      risk: true,
-      all_passed: true,
-    },
-  });
-}
-for (const [gate, label] of [
-  ["score", "评分"],
-  ["market", "市场"],
-  ["competition", "竞争"],
-  ["cost", "成本"],
-  ["risk", "风险"],
-] as const) {
-  test(`UI2-J07 missing ${gate} blocks adoption even with a stale aggregate flag`, async ({
-    page,
-  }) => {
-    const data = await ready(page, journeyId);
-    qualify(data);
-    data.journey.results[1].quality_gates[gate] = false;
-    await page.goto("/opportunities/start");
-    await page.getByText("隔离候选 2", { exact: true }).click();
-    await expect(page.getByRole("radio", { name: "采纳合格机会" })).toBeDisabled();
-    await expect(
-      page.getByText(`待通过质量门：${label}。请在机会列表补齐评估后刷新`, { exact: true }),
-    ).toBeVisible();
-    await expect(page.getByRole("radio", { name: "继续观察", exact: true })).toBeEnabled();
-    await expect(page.getByRole("radio", { name: "驳回", exact: true })).toBeEnabled();
-    expect(data.writes).toHaveLength(0);
-  });
-}
-test("UI2-J08 changing to an ineligible candidate blocks an already selected adopt without losing the reason", async ({
-  page,
-}) => {
-  const data = await ready(page, journeyId);
-  qualify(data);
-  await page.goto("/opportunities/start");
-  await page.getByText("隔离候选 2", { exact: true }).click();
-  await page.getByRole("radio", { name: "采纳合格机会" }).check();
-  await page.getByLabel("决策原因").fill("核对过的原因");
-  await page.getByText("隔离候选 1", { exact: true }).click();
-  await expect(page.getByRole("button", { name: "保存审计决策" })).toBeDisabled();
-  // A native form submit bypasses the disabled button: the handler must still refuse the POST.
-  await page
-    .locator(".selection-decision")
-    .evaluate((element) => (element as HTMLFormElement).requestSubmit());
-  await expect(page.locator(".selection-footer")).toContainText("所选候选尚未满足采纳条件");
-  await expect(page.getByLabel("决策原因")).toHaveValue("核对过的原因");
-  expect(data.writes).toHaveLength(0);
-});
-test("UI2-J09 server gate conflict preserves draft, refresh disables adoption, observe remains available", async ({
-  page,
-}) => {
-  const data = await ready(page, journeyId);
-  qualify(data);
-  await page.route(`**/api/v1/selection-journeys/${journeyId}/decisions`, (route) => {
-    if (route.request().postDataJSON().action === "adopt") {
-      data.journey.results[1].quality_gates.cost = false;
-      data.journey.results[1].quality_gates.all_passed = false;
-      data.journey.results[1].selection_stage = "rule_candidate";
+    if (path === "/api/v1/me/navigation")
       return route.fulfill({
-        status: 409,
-        json: {
-          error: {
-            code: "opportunity_adopt_evidence_insufficient",
-            message: "质量门已变化",
-            action_hint: "成本质量门已变化，请刷新后核对。",
-          },
-          request_id: "gate-conflict",
-          trace_id: "gate-conflict",
-        },
+        json: envelope({
+          shell: "member",
+          organization_id: "00000000-0000-4000-8000-000000000561",
+          workspace_id: "00000000-0000-4000-8000-000000000562",
+          roles: ["selection_manager"],
+          capabilities: canReadSelection ? ["opportunity:read", "team:manage"] : ["team:manage"],
+          platform_roles: [],
+          platform_capabilities: [],
+          guard_reason: "navigation_member_allowed",
+        }),
       });
-    }
-    data.journey.state = "decided";
-    data.journey.decision = {
-      action: "observe",
-      reason: "保留原因",
-      selected_raw_evidence_id: null,
-      actor_id: id(7640),
-      created_at: at,
-    };
-    return route.fulfill({ status: 201, json: envelope(data.journey) });
-  });
-  await page.goto("/opportunities/start");
-  await page.getByText("隔离候选 2", { exact: true }).click();
-  await page.getByRole("radio", { name: "采纳合格机会" }).check();
-  await page.getByLabel("决策原因").fill("保留原因");
-  await page.getByRole("button", { name: "保存审计决策" }).click();
-  await expect(page.locator(".ui-state-panel")).toContainText("成本质量门已变化");
-  await expect(page.getByLabel("决策原因")).toHaveValue("保留原因");
-  await page.getByRole("button", { name: "重试读取进度" }).click();
-  await expect(page.getByRole("radio", { name: "采纳合格机会" })).toBeDisabled();
-  await expect(page.getByRole("button", { name: "保存审计决策" })).toBeDisabled();
-  await page.getByRole("radio", { name: "继续观察", exact: true }).check();
-  await page.getByRole("button", { name: "保存审计决策" }).click();
-  await expect(page.locator(".selection-complete")).toContainText("决策已保存 · 继续观察");
-  expect(data.writes).toHaveLength(2);
-  assertPost(data.writes[1], `/selection-journeys/${journeyId}/decisions`, {
-    action: "observe",
-    reason: "保留原因",
-    selected_raw_evidence_id: null,
-  });
-});
-
-for (const stateCase of [
-  {
-    state: "blocked",
-    taskStatus: "blocked_login",
-    title: "真实来源已明确受阻",
-    description: "受阻原因",
-  },
-  {
-    state: "failed",
-    taskStatus: "failed_terminal",
-    title: "真实来源任务已终止失败",
-    description: "终止失败原因",
-  },
-  {
-    state: "succeeded_empty",
-    taskStatus: "succeeded_empty",
-    title: "真实来源没有返回可用结果",
-    description: "来源处理已完成，但没有返回可用候选",
-  },
-] as const) {
-  test(`UI2-J10 ${stateCase.state} explains the terminal result without conflating states`, async ({
-    page,
-  }) => {
-    const data = await ready(page, journeyId);
-    Object.assign(data.journey, {
-      state: stateCase.state,
-      task_status: stateCase.taskStatus,
-      results: [],
-      first_result: null,
-      available_result_count: 0,
-      blocked_reason: stateCase.state === "succeeded_empty" ? null : "isolated_status_code",
-    });
-
-    await page.goto("/opportunities/start");
-    const result = page.locator(".selection-evidence--empty");
-    await expect(result.getByRole("heading", { name: stateCase.title })).toBeVisible();
-    await expect(result).toContainText(stateCase.description);
-    if (stateCase.state !== "succeeded_empty")
-      await expect(result).toContainText("isolated_status_code");
-    expect(data.writes).toHaveLength(0);
-  });
-}
-
-for (const [kind, radio, field, value] of [
-  ["keyword", "关键词", "商品关键词", " portable blender "],
-  ["asin", "ASIN", "10 位 ASIN", "b012345678"],
-  ["product_url", "商品链接", "HTTPS 商品链接", "https://example.test/product"],
-] as const) {
-  test(`UI2-J01 ${kind} validates native input and sends only the actual create fields`, async ({
-    page,
-  }) => {
-    const data = await ready(page);
-    await page.route("**/api/v1/selection-journeys", (route) => {
-      const body = route.request().postDataJSON();
-      data.journey.input_kind = body.input_kind;
-      data.journey.input_value = body.input_value.trim();
-      return route.fulfill({ status: 202, json: envelope(data.journey) });
-    });
-    await page.goto("/opportunities/start");
-    const form = page.locator(".selection-start");
-    await form.getByRole("radio", { name: radio, exact: true }).check();
-    await form.getByRole("button", { name: "创建真实选品任务" }).click();
-    await expect(form.getByLabel(field, { exact: true })).toBeFocused();
-    expect(data.writes).toHaveLength(0);
-    if (kind === "asin") {
-      await form.getByLabel(field, { exact: true }).fill("short");
-      await form.getByRole("button", { name: "创建真实选品任务" }).click();
-      expect(data.writes).toHaveLength(0);
-    }
-    await form.getByLabel(field, { exact: true }).fill(value);
-    await form.getByRole("button", { name: "创建真实选品任务" }).click();
-    await expect(page.locator(".selection-status")).toHaveAttribute("data-state", "result_ready");
-    expect(data.writes).toHaveLength(1);
-    assertPost(data.writes[0], "/selection-journeys", { input_kind: kind, input_value: value });
-    expect(await savedId(page)).toBe(journeyId);
-    await expect(page.locator(".selection-candidates")).toContainText("已选 0 条");
-    await expect(page.getByRole("radio", { name: "采纳合格机会" })).toBeDisabled();
-    await expect(
-      page.locator('.selection-journey dialog, .selection-journey [role="dialog"]'),
-    ).toHaveCount(0);
-  });
-}
-
-test("UI2-J02 invalid stored ID is removed without a journey GET or POST", async ({ page }) => {
-  const data = await ready(page, "not-a-uuid");
-  await page.goto("/opportunities/start");
-  await expect(page.locator(".selection-start")).toBeVisible();
-  await expect.poll(() => savedId(page)).toBeNull();
-  expect(data.reads).toHaveLength(0);
-  expect(data.writes).toHaveLength(0);
-});
-
-test("UI2-J03 a missing saved journey clears only its active ID and allows a new input", async ({
-  page,
-}) => {
-  const data = await ready(page, journeyId);
-  await page.route(`**/api/v1/selection-journeys/${journeyId}`, (route) =>
-    route.fulfill({
-      status: 404,
+    if (path === "/api/v1/opportunities")
+      return route.fulfill({ json: envelope([], { total: 0, page: 1, page_size: 20 }) });
+    if (path === "/api/v1/opportunities/member-options")
+      return route.fulfill({ json: envelope([]) });
+    return route.fulfill({
+      status: 503,
       json: {
-        error: {
-          code: "selection_journey_not_found",
-          message: "记录不存在",
-          action_hint: "重新创建任务。",
-        },
+        error: { code: "dependency_unavailable", action_hint: "Fixture dependency unavailable" },
+        request_id: "retired-journey",
+        trace_id: "retired-journey",
       },
-    }),
-  );
-  await page.goto("/opportunities/start");
-  await expect.poll(() => savedId(page)).toBeNull();
-  await expect(page.locator(".selection-start")).toBeVisible();
-  await expect(page.locator(".selection-status")).toHaveCount(0);
-  expect(data.reads).toHaveLength(1);
-  expect(new URL(data.reads[0].url()).pathname).toBe(`/api/v1/selection-journeys/${journeyId}`);
-  expect(data.writes).toHaveLength(0);
-});
+    });
+  });
+  return calls;
+}
 
-for (const [action, label] of [
-  ["observe", "继续观察"],
-  ["reject", "驳回"],
-] as const) {
-  test(`UI2-J04 ${action} sends null candidate and renders the returned verification task without an opportunity`, async ({
+for (const address of [
+  "/opportunities/start",
+  "/opportunities/start?rule=00000000-0000-4000-8000-000000000553&action=edit#history",
+]) {
+  test(`retired member journey link opens selection without journey reads or writes: ${address}`, async ({
     page,
   }) => {
-    const data = await ready(page, journeyId);
-    await page.route(`**/api/v1/selection-journeys/${journeyId}/decisions`, (route) => {
-      const body = route.request().postDataJSON();
-      Object.assign(data.journey, {
-        state: "decided",
-        decided_at: at,
-        verification_task_id: id(7630),
-        decision: {
-          action,
-          reason: body.reason.trim(),
-          selected_raw_evidence_id: null,
-          actor_id: id(7640),
-          created_at: at,
-        },
-      });
-      return route.fulfill({ status: 201, json: envelope(data.journey) });
-    });
-    await page.goto("/opportunities/start");
-    await expect(page.locator(".selection-footer")).toContainText("已恢复上次未完成的选品进度。");
-    await page.getByText("隔离候选 2", { exact: true }).click();
-    const form = page.locator(".selection-decision");
-    await form.getByRole("radio", { name: label, exact: true }).check();
-    await form.getByRole("button", { name: "保存审计决策" }).click();
-    await expect(form.getByLabel("决策原因")).toBeFocused();
-    expect(data.writes).toHaveLength(0);
-    const reason = "  核对候选后记录判断  ";
-    await form.getByLabel("决策原因").fill(reason);
-    await form.getByRole("button", { name: "保存审计决策" }).click();
-    await expect(page.locator(".selection-status")).toHaveAttribute("data-state", "decided");
-    await expect(form).toHaveCount(0);
-    await expect(page.locator(".selection-complete h3")).toHaveText(reason.trim());
-    await expect(page.getByRole("link", { name: "查看机会、证据与决策历史 ↗" })).toHaveCount(0);
-    await expect(page.getByRole("link", { name: "打开自动生成的验证任务 ↗" })).toHaveAttribute(
-      "href",
-      `/tasks/${id(7630)}`,
+    const calls = await setup(page);
+    await page.goto(address);
+    await expect(page).toHaveURL(/\/opportunities(?:\?|$)/);
+    await expect(page.locator(".opportunity-workspace")).toBeVisible();
+    await expect(page.locator(".selection-journey")).toHaveCount(0);
+    expect(new URL(page.url()).search).toBe("");
+    expect(new URL(page.url()).hash).toBe("");
+    await expect(page.getByRole("button", { name: "创建选品", exact: true })).toHaveCount(0);
+    expect(calls.some(({ path }) => /\/selection-journeys(?:\/|$)/.test(path))).toBe(false);
+    expect(calls.every(({ method }) => method === "GET")).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
     );
-    expect(await savedId(page)).toBeNull();
-    expect(data.writes).toHaveLength(1);
-    assertPost(data.writes[0], `/selection-journeys/${journeyId}/decisions`, {
-      action,
-      reason,
-      selected_raw_evidence_id: null,
-    });
   });
 }
 
-test("UI2-J05 create failure retains input and explicit retry uses a fresh idempotency key", async ({
-  page,
-}) => {
-  const data = await ready(page);
-  let attempts = 0;
-  await page.route("**/api/v1/selection-journeys", (route) => {
-    attempts += 1;
-    return attempts === 1
-      ? route.fulfill({
-          status: 503,
-          json: {
-            error: {
-              code: "service_unavailable",
-              message: "暂不可用",
-              action_hint: "创建未获得成功确认，请稍后核对。",
-            },
-            request_id: "ui2-create-failure",
-            trace_id: "ui2-create-failure",
-          },
-        })
-      : route.fulfill({ status: 202, json: envelope(data.journey) });
-  });
+test("retired journey link retains target permission checks", async ({ page }) => {
+  const calls = await setup(page, false);
   await page.goto("/opportunities/start");
-  const form = page.locator(".selection-start");
-  await form.getByLabel("商品关键词", { exact: true }).fill("portable blender");
-  await form.getByRole("button", { name: "创建真实选品任务" }).click();
-  await expect(page.locator(".ui-state-panel")).toContainText("创建未获得成功确认");
-  await expect(form.getByLabel("商品关键词", { exact: true })).toHaveValue("portable blender");
-  await expect(form.getByLabel("商品关键词", { exact: true })).toBeEnabled();
-  expect(attempts).toBe(1);
-  expect(await savedId(page)).toBeNull();
-  await form.getByRole("button", { name: "创建真实选品任务" }).click();
-  await expect(page.locator(".selection-status")).toHaveAttribute("data-state", "result_ready");
-  expect(data.writes).toHaveLength(2);
-  for (const request of data.writes)
-    assertPost(request, "/selection-journeys", {
-      input_kind: "keyword",
-      input_value: "portable blender",
-    });
-  expect(data.writes[0].headers()["idempotency-key"]).not.toBe(
-    data.writes[1].headers()["idempotency-key"],
-  );
-  // Does not certify duplicate prevention after a server commit with a lost response.
-});
-
-test("UI2-J11 create locks submitted fields and ignores synchronous duplicate submits", async ({
-  page,
-}) => {
-  const data = await ready(page);
-  let release!: () => void;
-  const responseGate = new Promise<void>((resolve) => {
-    release = resolve;
-  });
-  await page.route("**/api/v1/selection-journeys", async (route) => {
-    await responseGate;
-    return route.fulfill({ status: 202, json: envelope(data.journey) });
-  });
-  await page.goto("/opportunities/start");
-  const form = page.locator(".selection-start"),
-    input = form.getByLabel("商品关键词", { exact: true });
-  await input.fill("portable blender");
-  await form.getByRole("button", { name: "创建真实选品任务" }).click();
-  await expect(input).toBeDisabled();
-  await expect(form.getByRole("radio", { name: "关键词" })).toBeDisabled();
-  await form.evaluate((element) => {
-    const formElement = element as HTMLFormElement;
-    formElement.requestSubmit();
-    formElement.requestSubmit();
-  });
-  await expect.poll(() => data.writes.length).toBe(1);
-  assertPost(data.writes[0], "/selection-journeys", {
-    input_kind: "keyword",
-    input_value: "portable blender",
-  });
-  release();
-  await expect(page.locator(".selection-status")).toHaveAttribute("data-state", "result_ready");
-  expect(data.writes).toHaveLength(1);
-});
-
-test("UI2-J12 decision locks its reason and ignores synchronous duplicate submits", async ({
-  page,
-}) => {
-  const data = await ready(page, journeyId);
-  let release!: () => void;
-  const responseGate = new Promise<void>((resolve) => {
-    release = resolve;
-  });
-  await page.route(`**/api/v1/selection-journeys/${journeyId}/decisions`, async (route) => {
-    await responseGate;
-    Object.assign(data.journey, {
-      state: "decided",
-      decided_at: at,
-      decision: {
-        action: "observe",
-        reason: "核对后继续观察",
-        selected_raw_evidence_id: null,
-        actor_id: id(7640),
-        created_at: at,
-      },
-    });
-    return route.fulfill({ status: 201, json: envelope(data.journey) });
-  });
-  await page.goto("/opportunities/start");
-  const form = page.locator(".selection-decision"),
-    reasonField = form.getByLabel("决策原因");
-  await form.getByRole("radio", { name: "继续观察" }).check();
-  await reasonField.fill("核对后继续观察");
-  await form.getByRole("button", { name: "保存审计决策" }).click();
-  await expect(reasonField).toBeDisabled();
-  await expect(form.getByRole("radio", { name: "继续观察" })).toBeDisabled();
-  await form.evaluate((element) => {
-    const formElement = element as HTMLFormElement;
-    formElement.requestSubmit();
-    formElement.requestSubmit();
-  });
-  await expect.poll(() => data.writes.length).toBe(1);
-  assertPost(data.writes[0], `/selection-journeys/${journeyId}/decisions`, {
-    action: "observe",
-    reason: "核对后继续观察",
-    selected_raw_evidence_id: null,
-  });
-  release();
-  await expect(page.locator(".selection-status")).toHaveAttribute("data-state", "decided");
-  await expect(page.locator(".selection-complete h3")).toHaveText("核对后继续观察");
-  expect(data.writes).toHaveLength(1);
-});
-
-test("UI2-J06 accepted journey polls existing ID and uses the server terminal result", async ({
-  page,
-}) => {
-  const data = await ready(page);
-  await page.route("**/api/v1/selection-journeys", (route) =>
-    route.fulfill({
-      status: 202,
-      json: envelope({
-        ...data.journey,
-        state: "accepted",
-        task_status: "scheduled",
-        results: [],
-        first_result: null,
-        available_result_count: 0,
-        terminal_at: null,
-        elapsed_ms: 100,
-        timeline: data.journey.timeline.map((step) => ({
-          ...step,
-          status: step.stage === "queued" ? "completed" : "waiting",
-          occurred_at: step.stage === "queued" ? at : null,
-        })),
-      }),
-    }),
-  );
-  await page.goto("/opportunities/start");
-  await page.getByLabel("商品关键词", { exact: true }).fill("portable blender");
-  await page.getByRole("button", { name: "创建真实选品任务" }).click();
-  await expect(page.locator(".selection-status")).toHaveAttribute("data-state", "accepted");
-  await expect(page.locator(".selection-decision")).toHaveCount(0);
-  await expect(page.locator(".selection-status")).toHaveAttribute("data-state", "result_ready", {
-    timeout: 6000,
-  });
-  expect(data.reads).toHaveLength(1);
-  expect(new URL(data.reads[0].url()).pathname).toBe(`/api/v1/selection-journeys/${journeyId}`);
-  expect(data.writes).toHaveLength(1);
-  await expect(page.locator(".selection-status")).toContainText("已进行 12 秒");
-  await page.getByRole("button", { name: "开始下一次" }).click();
-  await expect(page.getByLabel("商品关键词", { exact: true })).toHaveValue("");
-  expect(await savedId(page)).toBeNull();
-  expect(data.writes).toHaveLength(1);
+  await expect(page).toHaveURL(/\/opportunities(?:\?|$)/);
+  await expect(page.getByRole("heading", { name: "无权打开此页面" })).toBeVisible();
+  expect(calls.some(({ path }) => path === "/api/v1/opportunities")).toBe(false);
+  expect(calls.some(({ path }) => /\/selection-journeys(?:\/|$)/.test(path))).toBe(false);
 });

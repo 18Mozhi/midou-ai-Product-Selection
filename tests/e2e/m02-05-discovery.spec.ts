@@ -80,9 +80,7 @@ test("M02-05.A07/A08/A15 keyboard search is responsive and visual", async ({ pag
     });
   });
   await page.goto("/home");
-  await expect(
-    page.locator(".role-top-actions").getByRole("link", { name: "个人中心" }),
-  ).toBeVisible();
+  await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
   await page.keyboard.press("Control+K");
   const dialog = page.getByRole("dialog", { name: "全局搜索" });
   await expect(dialog).toBeVisible();
@@ -116,73 +114,22 @@ test("M02-05.A07/A08/A15 keyboard search is responsive and visual", async ({ pag
   await expect(dialog).toBeHidden();
 });
 
-test("M02-05.A07/A08/A09/A15 mobile quick create shows authorized entries only", async ({
-  page,
-}) => {
+test("retired quick-create entry is absent from member navigation", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await base(page);
-  await page.route("**/api/v1/me/quick-actions?**", (route) =>
-    route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({
-        data: [
-          {
-            id: "task",
-            label: "创建任务",
-            description: "进入任务创建页",
-            route: "/tasks?create=1",
-            required_capability: "task:create",
-          },
-          {
-            id: "sourcing",
-            label: "发起找货",
-            description: "进入供应链搜索",
-            route: "/sourcing?create=1",
-            required_capability: "sourcing:read",
-          },
-        ],
-        request_id: "m02-05-actions",
-        trace_id: "m02-05-actions",
-      }),
-    }),
-  );
+  const calls: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/me/quick-actions")) calls.push(request.url());
+  });
   await page.goto("/home");
+  await expect(page.getByRole("button", { name: "创建选品", exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: "打开导航菜单" }).click();
-  const navigationDialog = page.getByRole("dialog", { name: "工作台导航" });
-  const createButton = navigationDialog.getByRole("button", { name: "创建选品" });
-  await createButton.click();
-  const dialog = page.getByRole("dialog", { name: "快捷创建" });
-  const scope = dialog.locator(".discovery-c-scope");
-  const results = dialog.locator(".discovery-c-results-pane");
-  const scopeBox = await scope.boundingBox();
-  const resultsBox = await results.boundingBox();
-  expect(scopeBox).not.toBeNull();
-  expect(resultsBox).not.toBeNull();
-  expect(resultsBox!.y).toBeGreaterThan(scopeBox!.y);
-  expect(Math.abs(resultsBox!.width - scopeBox!.width)).toBeLessThan(2);
-  await expect(dialog.getByText("测试组织")).toBeVisible();
-  await expect(dialog.getByRole("link", { name: /创建任务/ })).toBeVisible();
-  await expect(dialog.getByRole("link", { name: /发起找货/ })).toBeVisible();
-  await expect(dialog.getByRole("link", { name: /创建任务/ })).toHaveAttribute(
-    "href",
-    "/tasks?create=1",
-  );
-  await expect(dialog.getByRole("link", { name: /发起找货/ })).toHaveAttribute(
-    "href",
-    "/sourcing?create=1",
-  );
-  await expect(dialog.getByText("邀请成员")).toHaveCount(0);
-  const productionLinks = await readQuickCreateLinks(dialog);
-  expect(productionLinks.map((link) => link.href)).toEqual([
-    "/tasks?create=1",
-    "/sourcing?create=1",
-  ]);
-
-  await page.keyboard.press("Escape");
-  await expect(dialog).toBeHidden();
-  await expect(navigationDialog).toBeVisible();
-  await expect(createButton).toBeFocused();
+  await expect(
+    page
+      .getByRole("dialog", { name: "工作台导航" })
+      .getByRole("button", { name: "创建选品", exact: true }),
+  ).toHaveCount(0);
+  expect(calls).toEqual([]);
 });
 
 test("M02-05.A08/A16 expired and empty states are not reported as success", async ({ page }) => {
@@ -223,9 +170,7 @@ test("M02-05.A08/A16 expired and empty states are not reported as success", asyn
     ),
   );
   await page.goto("/home");
-  await expect(
-    page.locator(".role-top-actions").getByRole("link", { name: "个人中心" }),
-  ).toBeVisible();
+  await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
   await page.keyboard.press("Control+K");
   const dialog = page.getByRole("dialog", { name: "全局搜索" });
   const input = dialog.getByPlaceholder("输入至少 2 个字符");

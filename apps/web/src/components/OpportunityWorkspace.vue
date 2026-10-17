@@ -551,9 +551,7 @@ useOpportunityWorkspaceLifecycle({
         </h2>
       </div>
       <div v-if="canDecide" class="catalogue-toolbar-actions">
-        <RouterLink class="primary so-action-primary" to="/opportunities/start"
-          >创建选品 →</RouterLink
-        ><RouterLink class="secondary so-action-secondary" to="/trends?section=rules"
+        <RouterLink class="secondary so-action-secondary" to="/trends?section=rules"
           >管理选品规则</RouterLink
         ><button
           v-if="selectionView === 'all'"

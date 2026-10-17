@@ -378,11 +378,8 @@ onBeforeUnmount(deactivate);
           <RouterLink class="home-secondary-action so-action-secondary" to="/trends?section=rules"
             >管理规则</RouterLink
           >
-          <RouterLink class="home-secondary-action so-action-secondary" to="/opportunities"
-            >查看推荐清单</RouterLink
-          >
-          <RouterLink class="home-primary-action so-action-primary" to="/opportunities/start"
-            >创建选品 →</RouterLink
+          <RouterLink class="home-primary-action so-action-primary" to="/opportunities"
+            >查看选品库</RouterLink
           >
         </nav>
       </header>

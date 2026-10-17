@@ -8,6 +8,7 @@ import path from "node:path";
 const packet = "output/playwright/p16-c-r2-fields-review";
 const manifestHash = "6b6cf0cdb58a7cc36c9d0553998a7bde4b1f1d10cfba1b3517121d63bedfc74e";
 const sourceVersions = new Map([
+  ["apps/web/src/selection-journey.css", "a21e8faafa9879564ab7bb899bcb46d5358cf443"],
   ["apps/web/src/signal-ledger-workflows.css", "c26e2b522bc616cbc2a67b01185d832f93789174"],
   ["apps/web/src/design/theme.ts", "c26e2b522bc616cbc2a67b01185d832f93789174"],
   ["apps/web/src/components/SelectionJourney.vue", "7beac32e8309830c99d09eb5eb1d6197a4b84371"],

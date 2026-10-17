@@ -3990,7 +3990,6 @@
         "../apps/api/src/mysql-selection-journey-repository.ts",
         "../apps/api/src/selection-journey-routes.ts",
         "../apps/worker/src/evidence-persistence.ts",
-        "../apps/web/src/components/SelectionJourney.vue",
         "../database/migrations/0059_selection_journey_candidates.up.sql",
         "../scripts/run-baota-selection-acceptance.mjs",
         "../infra/baota/selection-acceptance-manifest.json",
@@ -4064,7 +4063,15 @@
       },
       "verificationRunId": "78001216-8e65-44fb-81cf-9570f9f9534b",
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "module_verified",
+      "currentMemberUi": {
+        "status": "implemented",
+        "statusDetail": "manual_member_journey_retired",
+        "route": "/opportunities/start",
+        "redirect": "/opportunities",
+        "documentation": "selection-manual-journey-retirement.md",
+        "boundary": "Earlier uiPhase2 descriptions are historical evidence; backend historical data and API contracts remain. Removed component and styles are not current runtime entrypoints."
+      }
     },
     "runtimeTopology": {
       "uiPhase2TopologyCProposal": "P66 TOPOLOGY-C-r1 at design-plans/ui-phase-2-2026-09-07/design/topology-direction-c/README.md: 81 scenes, 181 PNGs, blue context and white source-separated node/process/probe/19-queue/alert workspace; timestamp/count/delta/reset restart details, zero samples not measured zero availability, three request-ID disclosure and simulated-copy consumers. Four source-execution/static groups and nine unchanged related B3b source hashes; no real Vue mounting, SQL/RBAC/audit/probe/server abort/deployment proof. Source ready with supervisor blocker or critical alert remains ready; future node/worker asymmetry and generic-error stale request-ID are reproduced, not business-rule fixes. Pending concrete design approval, production Vue/preserve lifecycle/themes and whole-site deployment/signoff. Existing due=false wording below does not mean running=false; this proposal distinguishes running non-due queues without changing scheduling policy.",
@@ -4761,10 +4768,10 @@
     },
     {
       "path": "/opportunities/start",
-      "view": "SelectionJourney",
+      "view": "Redirect",
       "domain": "selection_acceptance",
-      "status": "verified",
-      "statusDetail": "M07-06_module_verified"
+      "status": "implemented",
+      "statusDetail": "retired_manual_journey_redirect_to_selection_library"
     },
     {
       "path": "/opportunities/scoring-rules",
@@ -5623,5 +5630,29 @@
     "events": ["opportunity.supply_title_classified"],
     "contract": "Up to 60 latest eligible unique supply quotes, sequential batches of at most 10 model titles. Validate each batch independently, retain submitted input only, stop on a code-validated quote. Before each additional batch conditionally renew the current owned unexpired scoped lease; preserve requeue markers and final transactional checks. No new API/event field, schema, dependency or Python change. Existing timeout and lease config unchanged; BaoTa Node restart after release.",
     "verification": "24 targeted classification checks and 107 related checks passed; Worker/Backend builds and static/runtime docs passed. Real MySQL5.7 read-only SELECT predicate EXPLAIN only; UPDATE explain/prepare rejected by read-only transaction, no production renewal executed. No live SKU-match or daily-100 acceptance claim."
+  },
+  "selectionManualJourneyRetirement20261017": {
+    "status": "implemented",
+    "statusDetail": "local_targeted_and_dual_browser_verified_not_deployed",
+    "requirements": "docs/selection-manual-journey-retirement.md",
+    "routes": ["/opportunities/start", "/home", "/opportunities"],
+    "sourceFiles": [
+      "config/route-catalog.json",
+      "apps/web/src/components/navigation-surface-registry.ts",
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "scripts/lib/retired-journey-surface.mjs",
+      "apps/web/src/components/NavigationShell.vue"
+    ],
+    "testFiles": [
+      "tests/unit/retired-journey-surface.test.mjs",
+      "tests/e2e/ui-phase2-journey-contracts.spec.ts",
+      "tests/e2e/m02-05-discovery.spec.ts",
+      "tests/e2e/ui-phase2-discovery-shell-contracts.spec.ts",
+      "tests/m02-03/navigation-shell.test.mjs",
+      "tests/m07-06/selection-acceptance.test.mjs"
+    ],
+    "contract": "Remove manual journey runtime component and styles, retire start route to selection library with empty query/hash and target read permission. Fixed Git bytes are offline historical input only. No backend/API/schema/environment change; admin and organization approvals retained. Not full member cleanup or daily-100 production acceptance.",
+    "verification": "Retired-route desktop/mobile 6 cases, retained search/shell 72 cases and affected member-page/theme 10 cases passed; four dated Windows baselines retained and four update-disabled replays passed. Web typecheck/build, static/budget/style/docs gates passed. Expanded unit run: 3113 records, 3110 passed and 3 file-level initialization failures; all three affected files passed 41 cases on rerun. No all-suite clean rerun claim. Production and full goal remain unaccepted."
   }
 }

@@ -1,3 +1,4 @@
+import { readArchivedJourneySource } from "../../scripts/lib/retired-journey-surface.mjs";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import vm from "node:vm";
@@ -9,7 +10,7 @@ import { parse, compileTemplate } from "@vue/compiler-sfc";
 import { parse as parseHTML } from "@vue/compiler-dom";
 
 const filename = "apps/web/src/components/SelectionJourney.vue";
-const source = await readFile(filename, "utf8");
+const source = readArchivedJourneySource(filename);
 const compiled = compileTemplate({
   source: parse(source).descriptor.template.content,
   filename,

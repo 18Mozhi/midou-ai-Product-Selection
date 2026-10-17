@@ -1,3 +1,4 @@
+import { readArchivedJourneySource } from "../../scripts/lib/retired-journey-surface.mjs";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -7,11 +8,9 @@ import test from "node:test";
 import ts from "typescript";
 import { ref, reactive, computed, watch } from "vue";
 
-// Execute the actual setup with real Vue refs; lifecycle and HTTP are explicit test boundaries.
+// Execute the retired Git setup with real Vue refs; lifecycle and HTTP are explicit test boundaries.
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-const source = (
-  await readFile(path.join(repo, "apps/web/src/components/SelectionJourney.vue"), "utf8")
-)
+const source = readArchivedJourneySource("apps/web/src/components/SelectionJourney.vue")
   .split('<script setup lang="ts">')[1]
   .split("</script>")[0];
 const ast = ts.createSourceFile("journey.ts", source, ts.ScriptTarget.Latest, true);

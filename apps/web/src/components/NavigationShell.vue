@@ -135,11 +135,7 @@ const moreActive = computed(
     !primaryItems.value.some((item) => item.path === activeItem.value?.path),
 );
 const quickActionLabel = computed(() =>
-  props.shell === "member"
-    ? "创建选品"
-    : props.shell === "organization_admin"
-      ? "邀请成员"
-      : "新建组织",
+  props.shell === "organization_admin" ? "邀请成员" : "新建组织",
 );
 const memberReturnPath = () => {
   return getLastMemberRoute();
@@ -336,7 +332,13 @@ onUnmounted(() => {
             <AppIcon name="theme" /> <span>主题</span>
           </button>
         </div>
-        <button v-if="shell === 'member'" type="button" @click="openDiscovery('search')">
+        <button
+          v-if="shell === 'member'"
+          type="button"
+          aria-label="全局搜索"
+          class="role-quick-action"
+          @click="openDiscovery('search')"
+        >
           <AppIcon name="search" /> <span>搜索</span><kbd>快捷键</kbd>
         </button>
         <RouterLink
@@ -354,15 +356,6 @@ onUnmounted(() => {
           :aria-label="quickActionLabel"
           ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink
         >
-        <button
-          v-else-if="shell === 'member'"
-          type="button"
-          class="role-quick-action"
-          :aria-label="quickActionLabel"
-          @click="openDiscovery('create')"
-        >
-          <AppIcon name="plus" /> <span>创建选品</span>
-        </button>
         <RouterLink v-if="shell === 'member'" to="/notifications" aria-label="通知中心"
           ><AppIcon name="bell" /></RouterLink
         ><RouterLink to="/me" aria-label="个人中心"><AppIcon name="person" /></RouterLink>
@@ -474,9 +467,6 @@ onUnmounted(() => {
           <div v-if="shell === 'member' && compactNavigation" class="role-discovery-actions">
             <button type="button" @click="openDiscovery('search')">
               <AppIcon name="search" /><span>全局搜索</span>
-            </button>
-            <button type="button" @click="openDiscovery('create')">
-              <AppIcon name="plus" /><span>创建选品</span>
             </button>
           </div>
           <RouterLink

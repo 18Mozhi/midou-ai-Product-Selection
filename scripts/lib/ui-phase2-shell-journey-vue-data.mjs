@@ -1,3 +1,4 @@
+import { readArchivedJourneySource } from "./retired-journey-surface.mjs";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import vm from "node:vm";
@@ -18,7 +19,7 @@ export function previewShellJourney(source) {
   );
 }
 export async function buildShellJourneyFixture() {
-  const source = await readFile(journeyFixtureFile, "utf8");
+  const source = readArchivedJourneySource(journeyFixtureFile);
   const ast = ts.createSourceFile(journeyFixtureFile, source, ts.ScriptTarget.Latest, true);
   const nodes = [];
   const visit = (node) => {

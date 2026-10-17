@@ -416,15 +416,9 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   );
   await page.getByText("查看五项配置状态", { exact: true }).click();
   await expect(page.locator(".automatic-selection-readiness__details li")).toHaveCount(5);
-  const createSelection = page.getByRole("link", { name: "创建选品 →" });
+  await expect(page.locator('a[href="/opportunities/start"]')).toHaveCount(0);
   const manageSelectionRules = page.getByRole("link", { name: "管理选品规则" });
-  await expect(createSelection).toHaveAttribute("href", "/opportunities/start");
-  const [primaryBackground, secondaryBackground] = await Promise.all([
-    createSelection.evaluate((element) => getComputedStyle(element).backgroundColor),
-    manageSelectionRules.evaluate((element) => getComputedStyle(element).backgroundColor),
-  ]);
-  expect(primaryBackground).not.toBe(secondaryBackground);
-  expect(secondaryBackground).toBe("rgb(255, 255, 255)");
+  await expect(manageSelectionRules).toHaveAttribute("href", "/trends?section=rules");
   if ((page.viewportSize()?.width ?? 0) <= 760)
     await page.getByRole("button", { name: "高级筛选" }).click();
   await page.getByLabel("证据完整度").selectOption("partial");
@@ -444,7 +438,9 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("m04-02-opportunity-list.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("manual-journey-retired-list-20261017.png", {
+    fullPage: true,
+  });
   await page.getByRole("button", { name: "全部商品" }).click();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(1);
   const createButton = page.getByRole("button", { name: "手工添加", exact: true });
@@ -996,7 +992,9 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("m04-02-opportunity-detail.png", { fullPage: true });
+  await expect(page).toHaveScreenshot("manual-journey-retired-detail-20261017.png", {
+    fullPage: true,
+  });
   if ((page.viewportSize()?.width ?? 0) <= 640) {
     await expect(page.locator(".opportunity-decision-waiting")).toHaveCSS("position", "static");
   }
@@ -1905,8 +1903,8 @@ test("P15 aborts its active list read when the cached workspace is deactivated",
       request.url().includes("q=deactivate-read") &&
       request.failure()?.errorText.includes("ERR_ABORTED"),
   );
-  await page.getByRole("link", { name: /创建选品/ }).click();
-  await expect(page).toHaveURL(/\/opportunities\/start$/u);
+  await page.getByRole("link", { name: "管理选品规则" }).click();
+  await expect(page).toHaveURL(/\/trends\?section=rules$/u);
   const failedRequest = await abortedRead;
   expect(failedRequest.failure()?.errorText).toContain("ERR_ABORTED");
   releaseRead();

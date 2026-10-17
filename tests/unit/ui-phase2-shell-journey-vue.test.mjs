@@ -1,3 +1,7 @@
+import {
+  readArchivedJourneySource,
+  journeyArchiveRevision,
+} from "../../scripts/lib/retired-journey-surface.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import { readEvidenceSourceBytes } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
@@ -66,7 +70,7 @@ test("r4 preserves exact historical sources/images with a separately checked cur
   for (const [file, sha] of Object.entries(evidence.sourceHashes)) {
     const raw =
       file === "apps/web/src/components/SelectionJourney.vue"
-        ? (await readFile(file, "utf8")).replaceAll("\r\n", "\n")
+        ? readArchivedJourneySource(file).replaceAll("\r\n", "\n")
         : readEvidenceSourceBytes(file, sha);
     const current = beforePublishedPresentation(file, raw);
     if (file === "apps/web/src/components/SelectionJourney.vue" && hash(current) !== sha) {
@@ -143,7 +147,9 @@ test("actual-App journey fixture preserves existing role projection and qualifie
 });
 test("member composition only changes mobile active indicator beyond the existing shell preview", async () => {
   const file = "apps/web/src/components/NavigationShell.vue";
-  const source = (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
+  const source = execFileSync("git", ["show", `${journeyArchiveRevision}:${file}`], {
+    encoding: "utf8",
+  }).replaceAll("\r\n", "\n");
   const before = parse(previewShellVue(source)).descriptor;
   const after = parse(previewShellJourney(source)).descriptor;
   assert.equal(after.scriptSetup.content, before.scriptSetup.content);
@@ -175,12 +181,12 @@ test("composition stays review-scoped and preserves original production stage la
   assert.ok(css.includes("grid-auto-flow: column"));
   assert.ok(!css.includes("!important"));
   assert.ok(
-    (await readFile("apps/web/src/selection-journey.css", "utf8")).includes(
+    readArchivedJourneySource("apps/web/src/selection-journey.css").includes(
       "grid-template-columns: 208px minmax(0, 1fr)",
     ),
   );
   assert.ok(
-    !(await readFile("apps/web/src/components/SelectionJourney.vue", "utf8")).includes(
+    !readArchivedJourneySource("apps/web/src/components/SelectionJourney.vue").includes(
       "shell-journey-vue",
     ),
   );

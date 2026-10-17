@@ -1,3 +1,4 @@
+import { readArchivedJourneySource } from "./retired-journey-surface.mjs";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -7,10 +8,11 @@ const plain = (v) => JSON.parse(JSON.stringify(v));
 export async function buildJourneyDesignData(repo) {
   const read = async (file) =>
     (await readFile(path.join(repo, file), "utf8")).replaceAll("\r\n", "\n");
-  const main = (await read("apps/web/src/components/SelectionJourney.vue"))
+  // Offline fixture extraction from the retired Git revision, never served as current UI.
+  const main = readArchivedJourneySource("apps/web/src/components/SelectionJourney.vue", repo)
       .split('<script setup lang="ts">')[1]
       .split("</script>")[0],
-    fixture = await read("tests/e2e/ui-phase2-journey-contracts.spec.ts"),
+    fixture = readArchivedJourneySource("tests/e2e/ui-phase2-journey-contracts.spec.ts", repo),
     backend = await read("apps/api/src/selection-journey-service.ts"),
     repository = await read("apps/api/src/mysql-selection-journey-repository.ts");
   function extract(text, name, kind = "variable") {

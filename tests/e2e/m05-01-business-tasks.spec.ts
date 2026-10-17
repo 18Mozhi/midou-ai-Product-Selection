@@ -1215,27 +1215,27 @@ test("personal center renders the core profile instead of staying on its loading
   await expect(page.getByRole("button", { name: "保存资料" })).toBeVisible();
 });
 
-test("approval notification and real-selection surfaces follow every member theme", async ({
+test("retained approval notification and selection surfaces follow every member theme", async ({
   page,
 }) => {
-  await setup(page);
+  await setup(page, false, ["task:read", "notification:read", "opportunity:read"]);
   const cases = [
     {
       path: "/tasks/approvals",
       selector: ".approval-focus-strip",
-      theme: "暮砂",
+      theme: "石墨",
       expected: "aurora-purple",
     },
     {
       path: "/notifications",
       selector: ".notification-state",
-      theme: "晨雾",
+      theme: "青蓝",
       expected: "cloud-white",
     },
     {
-      path: "/opportunities/start",
-      selector: ".selection-start",
-      theme: "雾林",
+      path: "/opportunities",
+      selector: ".opportunity-workspace",
+      theme: "商务蓝",
       expected: "deep-ocean",
     },
   ];
@@ -1245,14 +1245,14 @@ test("approval notification and real-selection surfaces follow every member them
     await expect(surface).toBeVisible();
     const before = await surface.evaluate((element) => {
       const style = getComputedStyle(element);
-      return `${style.backgroundColor}|${style.backgroundImage}`;
+      return style.getPropertyValue("--so-primary").trim();
     });
     await page.getByRole("button", { name: "切换界面主题" }).click();
     await page.getByRole("button", { name: new RegExp(item.theme) }).click();
     await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe(item.expected);
     const after = await surface.evaluate((element) => {
       const style = getComputedStyle(element);
-      return `${style.backgroundColor}|${style.backgroundImage}`;
+      return style.getPropertyValue("--so-primary").trim();
     });
     expect(after, `${item.path} should update its surface when the member theme changes`).not.toBe(
       before,

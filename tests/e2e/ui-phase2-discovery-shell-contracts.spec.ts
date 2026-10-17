@@ -1,10 +1,8 @@
 import { expect, test, type Page, type Route } from "@playwright/test";
-
 test.beforeEach(async ({ page }, testInfo) => {
   if (testInfo.project.name === "desktop-chromium")
     await page.setViewportSize({ width: 1440, height: 1000 });
 });
-
 const org = "00000000-0000-4000-8000-000000000501";
 const workspace = "00000000-0000-4000-8000-000000000502";
 const taskId = "00000000-0000-4000-8000-000000000510";
@@ -58,7 +56,6 @@ const quickActions = [
     required_capability: "task:create",
   },
 ];
-
 async function setup(page: Page, navigation?: (route: Route, shell: string) => Promise<void>) {
   const navRequests: string[] = [];
   const writes: string[] = [];
@@ -97,21 +94,18 @@ async function setup(page: Page, navigation?: (route: Route, shell: string) => P
   );
   return { navRequests, writes };
 }
-
 async function openSearch(page: Page) {
   await page.keyboard.press("Control+K");
   const dialog = page.getByRole("dialog", { name: "全局搜索" });
   await expect(dialog).toBeVisible();
   return dialog;
 }
-
 async function enterPlatform(page: Page) {
   if ((page.viewportSize()?.width ?? 1440) <= 840)
     await page.getByRole("button", { name: "更多", exact: true }).click();
   await page.getByRole("link", { name: "进入管理后台", exact: true }).click();
   await expect(page).toHaveURL(/\/platform-admin$/);
 }
-
 async function paint(page: Page) {
   await page.evaluate(
     () =>
@@ -120,7 +114,6 @@ async function paint(page: Page) {
       ),
   );
 }
-
 async function ignoreTransportAbort(page: Page, pathname: string) {
   // Deliver the real intercepted response despite cancellation, testing ownership too.
   await page.addInitScript((path) => {
@@ -131,8 +124,7 @@ async function ignoreTransportAbort(page: Page, pathname: string) {
     };
   }, pathname);
 }
-
-for (const entry of ["search", "quick", "notifications"] as const) {
+for (const entry of ["search", "notifications"] as const) {
   test(`UI2-DI02 ${entry} navigation closes discovery without creating a business object`, async ({
     page,
   }) => {
@@ -140,12 +132,7 @@ for (const entry of ["search", "quick", "notifications"] as const) {
     await page.route("**/api/v1/me/global-search?**", (route) =>
       route.fulfill({ json: searchResult("隔离目标任务") }),
     );
-    if (entry === "quick") {
-      await page.getByRole("button", { name: "创建选品", exact: true }).click();
-      const dialog = page.getByRole("dialog", { name: "快捷创建" });
-      await dialog.getByRole("link", { name: /创建任务/ }).click();
-      await expect(page).toHaveURL(/\/tasks\?create=1$/);
-    } else {
+    {
       const dialog = await openSearch(page);
       if (entry === "search") {
         const input = dialog.getByPlaceholder("输入至少 2 个字符");
@@ -159,13 +146,14 @@ for (const entry of ["search", "quick", "notifications"] as const) {
       }
     }
     await expect(page.locator("dialog.discovery-c-backdrop")).not.toBeVisible();
-    await expect(page.getByRole("button", { name: "创建选品", exact: true })).toBeEnabled();
+    await expect(
+      page.locator(".role-top-actions").getByRole("button", { name: "全局搜索", exact: true }),
+    ).toBeEnabled();
     expect(writes).toEqual([]);
   });
 }
-
 for (const outcome of ["success", "forbidden"] as const) {
-  for (const transition of ["new-search", "reopen", "create"] as const) {
+  for (const transition of ["new-search", "reopen"] as const) {
     test(`UI2-DI04 ${transition} ignores a late ${outcome} from an older search`, async ({
       page,
     }) => {
@@ -195,13 +183,9 @@ for (const outcome of ["success", "forbidden"] as const) {
       if (transition !== "new-search") {
         await page.keyboard.press("Escape");
         await expect(dialog).toBeHidden();
-        if (transition === "create") {
-          await page.getByRole("button", { name: "创建选品", exact: true }).click();
-          dialog = page.getByRole("dialog", { name: "快捷创建" });
-          await expect(dialog.getByRole("link", { name: /创建任务/ })).toBeVisible();
-        } else dialog = await openSearch(page);
+        dialog = await openSearch(page);
       }
-      if (transition !== "create") {
+      {
         await dialog.getByPlaceholder("输入至少 2 个字符").fill("当前查询");
         await dialog.getByPlaceholder("输入至少 2 个字符").press("Enter");
         await expect(dialog.getByRole("link", { name: /当前查询结果/ })).toBeVisible();
@@ -220,16 +204,13 @@ for (const outcome of ["success", "forbidden"] as const) {
       );
       await expect.poll(() => oldTerminal).toBe(true);
       await paint(page);
-      await expect(
-        dialog.getByRole("link", { name: transition === "create" ? /创建任务/ : /当前查询结果/ }),
-      ).toBeVisible();
+      await expect(dialog.getByRole("link", { name: /当前查询结果/ })).toBeVisible();
       await expect(dialog.getByText("旧响应不得覆盖", { exact: true })).toHaveCount(0);
       await expect(dialog.getByText("旧范围拒绝", { exact: true })).toHaveCount(0);
       expect(writes).toEqual([]);
     });
   }
 }
-
 test("UI2-DI02 Enter on a same-route result closes discovery without adding a route entry", async ({
   page,
 }) => {
@@ -250,7 +231,6 @@ test("UI2-DI02 Enter on a same-route result closes discovery without adding a ro
   expect(await page.evaluate(() => history.length)).toBe(historyLength);
   expect(writes).toEqual([]);
 });
-
 for (const outcome of ["success", "forbidden"] as const) {
   test(`UI2-SH04 browser return ignores late platform ${outcome}`, async ({ page }) => {
     await ignoreTransportAbort(page, "/me/navigation?");
@@ -297,11 +277,12 @@ for (const outcome of ["success", "forbidden"] as const) {
       "data-state",
       "ready",
     );
-    await expect(page.getByRole("button", { name: "创建选品", exact: true })).toBeVisible();
+    await expect(
+      page.locator(".role-top-actions").getByRole("button", { name: "全局搜索", exact: true }),
+    ).toBeVisible();
     await expect(page.getByRole("heading", { name: /无权/ })).toHaveCount(0);
   });
 }
-
 for (const allowed of [true, false]) {
   test(`UI2-SH04 same-instance shell switch reloads its ${allowed ? "allowed" : "denied"} server guard`, async ({
     page,
@@ -343,23 +324,21 @@ for (const allowed of [true, false]) {
     }
   });
 }
-
-for (const mode of ["search", "create"] as const) {
+{
   for (const dismissal of ["escape", "close", "backdrop"] as const) {
-    test(`UI2-DI03 ${mode} ${dismissal} restores its opening focus without navigation`, async ({
+    test(`UI2-DI03 search ${dismissal} restores its opening focus without navigation`, async ({
       page,
     }) => {
       const { writes } = await setup(page);
-      const trigger = page.getByRole("button", { name: "创建选品", exact: true });
+      const trigger = page
+        .locator(".role-top-actions")
+        .getByRole("button", { name: "全局搜索", exact: true });
       await trigger.focus();
-      if (mode === "search") await openSearch(page);
-      else await trigger.press("Enter");
+      await openSearch(page);
       const dialog = page.getByRole("dialog", {
-        name: mode === "search" ? "全局搜索" : "快捷创建",
+        name: "全局搜索",
       });
       await expect(dialog).toBeVisible();
-      if (mode === "create")
-        await expect(dialog.getByRole("link", { name: /创建任务/ })).toBeVisible();
       if (dismissal === "escape") await page.keyboard.press("Escape");
       else if (dismissal === "close")
         await dialog.getByRole("button", { name: "关闭", exact: true }).click();
@@ -370,25 +349,21 @@ for (const mode of ["search", "create"] as const) {
       expect(writes).toEqual([]);
     });
   }
-
-  test(`UI2-DI03 ${mode} initial focus and forward/reverse Tab remain inside the modal`, async ({
+  test(`UI2-DI03 search initial focus and forward/reverse Tab remain inside the modal`, async ({
     page,
   }) => {
     const { writes } = await setup(page);
-    const trigger = page.getByRole("button", { name: "创建选品", exact: true });
+    const trigger = page
+      .locator(".role-top-actions")
+      .getByRole("button", { name: "全局搜索", exact: true });
     await trigger.focus();
-    if (mode === "search") await openSearch(page);
-    else await trigger.press("Enter");
+    await openSearch(page);
     const dialog = page.getByRole("dialog", {
-      name: mode === "search" ? "全局搜索" : "快捷创建",
+      name: "全局搜索",
     });
     const first = dialog.getByRole("button", { name: "关闭", exact: true });
     const last = dialog.getByRole("link", { name: "查看通知", exact: true });
-    if (mode === "search") await expect(dialog.getByPlaceholder("输入至少 2 个字符")).toBeFocused();
-    else {
-      await expect(dialog.getByRole("link", { name: /创建任务/ })).toBeVisible();
-      await expect(first).toBeFocused();
-    }
+    await expect(dialog.getByPlaceholder("输入至少 2 个字符")).toBeFocused();
     await first.focus();
     await first.press("Shift+Tab");
     await expect(last).toBeFocused();
@@ -398,110 +373,32 @@ for (const mode of ["search", "create"] as const) {
     await expect(trigger).toBeFocused();
     expect(writes).toEqual([]);
   });
-
-  test(`UI2-DI03 ${mode} inner pointer interaction keeps the modal and normal focus`, async ({
+  test(`UI2-DI03 search inner pointer interaction keeps the modal and normal focus`, async ({
     page,
   }) => {
     const { writes } = await setup(page);
-    if (mode === "search") await openSearch(page);
-    else await page.getByRole("button", { name: "创建选品", exact: true }).click();
+    await openSearch(page);
     const dialog = page.getByRole("dialog", {
-      name: mode === "search" ? "全局搜索" : "快捷创建",
+      name: "全局搜索",
     });
     await dialog.getByRole("heading").first().click();
     await expect(dialog).toBeVisible();
-    if (mode === "search") {
+    {
       const input = dialog.getByPlaceholder("输入至少 2 个字符");
       await input.click();
       await expect(input).toBeFocused();
       await input.fill("未提交的查询");
       await expect(input).toHaveValue("未提交的查询");
-    } else await expect(dialog.getByRole("link", { name: /创建任务/ })).toBeVisible();
+    }
     await expect(page).toHaveURL(/\/home$/);
     expect(writes).toEqual([]);
   });
 }
-
 test("UI2-DI01 search textbox has a meaningful accessible name", async ({ page }) => {
   await setup(page);
   const dialog = await openSearch(page);
   await expect(dialog.getByPlaceholder("输入至少 2 个字符")).toHaveAccessibleName("搜索关键词");
 });
-
-for (const outcome of ["success", "forbidden"] as const) {
-  for (const transition of ["search", "reopen", "unmount"] as const) {
-    test(`UI2-DI04 quick ${transition} ignores a delivered late ${outcome}`, async ({ page }) => {
-      await ignoreTransportAbort(page, "/me/quick-actions?");
-      const { writes } = await setup(page);
-      let oldRoute: Route | undefined;
-      let oldFinished = false;
-      page.on("requestfinished", (request) => {
-        if (request === oldRoute?.request()) oldFinished = true;
-      });
-      await page.route("**/api/v1/me/quick-actions?**", async (route) => {
-        if (!oldRoute) {
-          oldRoute = route;
-          return;
-        }
-        await route.fulfill({ json: envelope(quickActions) });
-      });
-      const trigger = page.getByRole("button", { name: "创建选品", exact: true });
-      await trigger.click();
-      await expect.poll(() => Boolean(oldRoute)).toBe(true);
-      if (transition === "search") {
-        // Change mode while the same native dialog is open.
-        await page.route("**/api/v1/me/global-search?**", (route) =>
-          route.fulfill({ json: searchResult("当前搜索事实") }),
-        );
-        const dialog = await openSearch(page);
-        await dialog.getByPlaceholder("输入至少 2 个字符").fill("当前搜索");
-        await dialog.getByPlaceholder("输入至少 2 个字符").press("Enter");
-        await expect(dialog.getByRole("link", { name: /当前搜索事实/ })).toBeVisible();
-      } else if (transition === "reopen") {
-        await page.keyboard.press("Escape");
-        await trigger.click();
-        await expect(
-          page.getByRole("dialog").getByRole("link", { name: /创建任务/ }),
-        ).toBeVisible();
-      } else {
-        await page.keyboard.press("Escape");
-        await page
-          .locator(".role-top-actions")
-          .getByRole("link", { name: "个人中心", exact: true })
-          .click();
-        await expect(page).toHaveURL(/\/me$/);
-        await expect(page.locator(".role-shell")).toHaveCount(0);
-      }
-      await oldRoute!.fulfill(
-        outcome === "success"
-          ? { json: envelope([{ ...quickActions[0], label: "旧快捷入口" }]) }
-          : {
-              status: 403,
-              json: {
-                error: { code: "forbidden", message: "旧快捷拒绝", action_hint: "旧快捷范围拒绝" },
-                request_id: "ui2-old-quick",
-                trace_id: "ui2-old-quick",
-              },
-            },
-      );
-      await expect.poll(() => oldFinished).toBe(true);
-      await paint(page);
-      if (transition !== "unmount") {
-        const dialog = page.getByRole("dialog");
-        await expect(
-          dialog.getByRole("link", { name: transition === "search" ? /当前搜索事实/ : /创建任务/ }),
-        ).toBeVisible();
-        await expect(dialog.getByText("旧快捷入口", { exact: true })).toHaveCount(0);
-        await expect(dialog.getByText("旧快捷范围拒绝", { exact: true })).toHaveCount(0);
-      } else {
-        await expect(page).toHaveURL(/\/me$/);
-        await expect(page.locator("dialog.discovery-c-backdrop")).toHaveCount(0);
-      }
-      expect(writes).toEqual([]);
-    });
-  }
-}
-
 for (const value of ["", "字", "   "]) {
   test(`UI2-DI01 short query ${JSON.stringify(value)} has a linked local error and sends no request`, async ({
     page,
@@ -526,7 +423,6 @@ for (const value of ["", "字", "   "]) {
     expect(writes).toEqual([]);
   });
 }
-
 test("UI2-DI01 valid resubmission clears the linked error and earlier request identifiers", async ({
   page,
 }) => {
@@ -565,75 +461,14 @@ test("UI2-DI01 valid resubmission clears the linked error and earlier request id
   expect(requests).toBe(2);
   expect(writes).toEqual([]);
 });
-
-test("UI2-DI06 recent entries reorder without duplication and reset on shell unmount", async ({
-  page,
-}) => {
-  const { writes } = await setup(page, (route, shell) =>
-    route.fulfill({
-      json: envelope(
-        shell === "platform_admin"
-          ? platform
-          : { ...member, capabilities: [...member.capabilities, "sourcing:read"] },
-      ),
-    }),
-  );
-  const entries = [
-    ...quickActions,
-    {
-      id: "sourcing",
-      label: "发起找货",
-      description: "进入供应链搜索",
-      route: "/sourcing?create=1",
-      required_capability: "sourcing:read",
-    },
-  ];
-  await page.route("**/api/v1/me/quick-actions?**", (route) =>
-    route.fulfill({ json: envelope(entries) }),
-  );
-  const dialog = page.getByRole("dialog", { name: "快捷创建" });
-  const labels = dialog.locator(".discovery-c-action strong");
-  const reopen = async () => {
-    await page.getByRole("button", { name: "创建选品", exact: true }).click();
-    await expect(labels).toHaveCount(2);
-  };
-  await reopen();
-  await expect(labels).toHaveText(["创建任务", "发起找货"]);
-  for (const label of ["发起找货", "创建任务", "创建任务"]) {
-    await dialog.getByRole("link", { name: new RegExp(label) }).click();
-    await expect(page).toHaveURL(
-      label === "发起找货" ? /\/sourcing\?create=1$/ : /\/tasks\?create=1$/,
-    );
-    await expect(dialog).toBeHidden();
-    await page.goBack();
-    await expect(page).toHaveURL(/\/home$/);
-    await reopen();
-    await expect(labels.first()).toHaveText(label);
-    await expect(
-      dialog.getByRole("link", { name: new RegExp(label) }).locator(".discovery-c-recent"),
-    ).toHaveText("最近");
-  }
-  await expect(labels).toHaveText(["创建任务", "发起找货"]);
-  await page.keyboard.press("Escape");
-  await page
-    .locator(".role-top-actions")
-    .getByRole("link", { name: "个人中心", exact: true })
-    .click();
-  await expect(page).toHaveURL(/\/me$/);
-  await page.goBack();
-  await expect(page).toHaveURL(/\/home$/);
-  await reopen();
-  await expect(labels).toHaveText(["创建任务", "发起找货"]);
-  await expect(dialog.locator(".discovery-c-recent")).toHaveCount(0);
-  expect(writes).toEqual([]);
-});
-
 for (const shortcut of ["Control+K", "Meta+K"]) {
   test(`UI2-DI06 ${shortcut} reuses member search and is inactive in the platform shell`, async ({
     page,
   }) => {
     await setup(page);
-    const trigger = page.getByRole("button", { name: "创建选品", exact: true });
+    const trigger = page
+      .locator(".role-top-actions")
+      .getByRole("button", { name: "全局搜索", exact: true });
     await trigger.focus();
     await page.keyboard.press(shortcut);
     const dialog = page.getByRole("dialog", { name: "全局搜索" });
@@ -655,7 +490,6 @@ for (const shortcut of ["Control+K", "Meta+K"]) {
     await expect(dialog).toBeHidden();
   });
 }
-
 test("UI2-DI01 invalid replacement cannot inherit an older search response or failure identifiers", async ({
   page,
 }) => {
@@ -686,7 +520,6 @@ test("UI2-DI01 invalid replacement cannot inherit an older search response or fa
   await openSearch(page);
   await expect(input).not.toHaveAttribute("aria-invalid", "true");
 });
-
 test("UI2-DI01 exact search parameters follow type and trim rules without sending scope IDs", async ({
   page,
 }) => {
@@ -725,8 +558,7 @@ test("UI2-DI01 exact search parameters follow type and trim rules without sendin
   await expect(input).toHaveAttribute("maxlength", "100");
   expect(writes).toEqual([]);
 });
-
-for (const mode of ["search", "create"] as const) {
+{
   for (const [statusCode, kind] of [
     [401, "expired"],
     [403, "forbidden"],
@@ -735,12 +567,11 @@ for (const mode of ["search", "create"] as const) {
     [500, "error"],
     [503, "blocked"],
   ] as const) {
-    test(`UI2-DI05 ${mode} ${statusCode} retry owns loading identifiers and stays in its mode`, async ({
+    test(`UI2-DI05 search ${statusCode} retry owns loading identifiers and stays in its mode`, async ({
       page,
     }) => {
       const { writes } = await setup(page);
-      const pattern =
-        mode === "search" ? "**/api/v1/me/global-search?**" : "**/api/v1/me/quick-actions?**";
+      const pattern = "**/api/v1/me/global-search?**";
       const requests: string[] = [];
       let retrying = false;
       let pending: Route | undefined;
@@ -763,11 +594,11 @@ for (const mode of ["search", "create"] as const) {
           },
         });
       });
-      if (mode === "search") {
+      {
         const dialog = await openSearch(page);
         await dialog.getByRole("textbox", { name: "搜索关键词" }).fill("隔离查询");
         await dialog.getByRole("textbox", { name: "搜索关键词" }).press("Enter");
-      } else await page.getByRole("button", { name: "创建选品", exact: true }).click();
+      }
       const dialog = page.locator("dialog.discovery-c-backdrop");
       const panel = dialog.locator(".ui-state-panel");
       await expect(panel).toHaveAttribute("data-kind", kind);
@@ -783,17 +614,14 @@ for (const mode of ["search", "create"] as const) {
       expect(requests).toHaveLength(before + 1);
       expect(new Set(requests).size).toBe(1);
       await pending!.fulfill({
-        json: mode === "search" ? searchResult("本次重试结果") : envelope(quickActions),
+        json: searchResult("本次重试结果"),
       });
-      await expect(
-        dialog.getByRole("link", { name: mode === "search" ? /本次重试结果/ : /创建任务/ }),
-      ).toBeVisible();
+      await expect(dialog.getByRole("link", { name: /本次重试结果/ })).toBeVisible();
       await expect(panel).toHaveCount(0);
       expect(writes).toEqual([]);
     });
   }
 }
-
 test("UI2-DI05 forbidden secondary action closes the overlay instead of a dead permission claim", async ({
   page,
 }) => {
@@ -808,7 +636,9 @@ test("UI2-DI05 forbidden secondary action closes the overlay instead of a dead p
       },
     }),
   );
-  const trigger = page.getByRole("button", { name: "创建选品", exact: true });
+  const trigger = page
+    .locator(".role-top-actions")
+    .getByRole("button", { name: "全局搜索", exact: true });
   await trigger.focus();
   const dialog = await openSearch(page);
   const input = dialog.getByRole("textbox", { name: "搜索关键词" });
@@ -822,32 +652,25 @@ test("UI2-DI05 forbidden secondary action closes the overlay instead of a dead p
   await expect(trigger).toBeFocused();
   expect(writes).toEqual([]);
 });
-
-for (const mode of ["search", "create"] as const) {
-  test(`UI2-DI05 ${mode} empty state offers a real retry and explicit dismissal`, async ({
+{
+  test(`UI2-DI05 search empty state offers a real retry and explicit dismissal`, async ({
     page,
   }) => {
     const { writes } = await setup(page);
-    await page.route(
-      mode === "search" ? "**/api/v1/me/global-search?**" : "**/api/v1/me/quick-actions?**",
-      (route) =>
-        route.fulfill({
-          json: envelope(
-            mode === "search"
-              ? {
-                  items: [],
-                  next_cursor: null,
-                  scope: { organization_id: org, workspace_id: workspace },
-                }
-              : [],
-          ),
+    await page.route("**/api/v1/me/global-search?**", (route) =>
+      route.fulfill({
+        json: envelope({
+          items: [],
+          next_cursor: null,
+          scope: { organization_id: org, workspace_id: workspace },
         }),
+      }),
     );
-    if (mode === "search") {
+    {
       const dialog = await openSearch(page);
       await dialog.getByRole("textbox", { name: "搜索关键词" }).fill("没有结果");
       await dialog.getByRole("textbox", { name: "搜索关键词" }).press("Enter");
-    } else await page.getByRole("button", { name: "创建选品", exact: true }).click();
+    }
     const dialog = page.locator("dialog.discovery-c-backdrop");
     const panel = dialog.locator(".ui-state-panel");
     await expect(panel).toHaveAttribute("data-kind", "empty");

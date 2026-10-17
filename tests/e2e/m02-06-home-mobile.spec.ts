@@ -162,14 +162,11 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
     "href",
     "/trends?section=rules",
   );
-  await expect(page.getByRole("link", { name: "查看推荐清单" })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: "查看选品库" })).toHaveAttribute(
     "href",
     "/opportunities",
   );
-  await expect(page.getByRole("link", { name: "创建选品 →" })).toHaveAttribute(
-    "href",
-    "/opportunities/start",
-  );
+  await expect(page.locator('a[href="/opportunities/start"]')).toHaveCount(0);
   await expect(page.getByText("竞品来源延迟")).toBeVisible();
   await expect(page.getByRole("heading", { name: "推荐清单" })).toBeVisible();
   await expect(page.locator(".home-status-facts")).toContainText("4待你采纳");
@@ -557,7 +554,7 @@ test("home continuously reads new results and stops when cached off route", asyn
   await page.route("**/api/v1/opportunities?**", (route) =>
     route.fulfill({ json: envelope({ items: [], total: 0 }) }),
   );
-  await page.getByRole("link", { name: "查看推荐清单", exact: true }).click();
+  await page.getByRole("link", { name: "查看选品库", exact: true }).click();
   await expect(page).toHaveURL(/opportunities/);
   const paused = reads;
   await page.clock.runFor(16000);

@@ -319,18 +319,19 @@
       "breadcrumb": ["洞察与选品", "创建选品"],
       "shell": "member",
       "view": null,
-      "capabilities": ["opportunity:decide"],
+      "capabilities": ["opportunity:read"],
       "notFound": false,
-      "surface": "selection-journey",
-      "cachePolicy": "reset_on_scope",
+      "surface": "",
+      "cachePolicy": "none",
       "acceptance": "protected",
       "featureMap": {
         "path": "/opportunities/start",
-        "view": "SelectionJourney",
+        "view": "Redirect",
         "domain": "selection_acceptance",
-        "status": "verified",
-        "statusDetail": "M07-06_module_verified"
-      }
+        "status": "implemented",
+        "statusDetail": "retired_manual_journey_redirect_to_selection_library"
+      },
+      "redirect": "/opportunities"
     },
     {
       "path": "/opportunities/scoring-rules",

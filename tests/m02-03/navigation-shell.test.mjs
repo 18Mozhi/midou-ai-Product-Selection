@@ -231,7 +231,9 @@ test("M02-03 aggregate surfaces defer their inactive route views and dialogs", a
     assert.match(source, /defineAsyncComponent/);
     const staticChildImports = [
       ...source.matchAll(/^import\s+\w+\s+from\s+["']\.\/([^"']+\.vue)["'];?$/gmu),
-    ].map((match) => match[1]);
+    ]
+      .map((match) => match[1])
+      .filter((name) => name !== "PlatformPageHeader.vue");
     assert.deepEqual(
       staticChildImports,
       name === "OpportunityWorkspace.vue"
@@ -421,7 +423,7 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(feature, /navigationShells/);
 });
 
-test("M02-03 each role shell keeps a neutral quick action in the top bar", async () => {
+test("M02-03 admin shells keep their quick actions while member manual creation is retired in the top bar", async () => {
   const component = await read("apps/web/src/components/NavigationShell.vue");
   const platformCreatePattern = [
     `v-if="shell === 'platform_admin' && allCapabilities\\.includes\\('platform:superadmin'\\)"`,
@@ -432,7 +434,7 @@ test("M02-03 each role shell keeps a neutral quick action in the top bar", async
   assert.match(component, /guard\?\.roles\?\.includes\('organization_admin'\)/);
   assert.match(component, /to="\/org-admin\/members"/);
   assert.match(component, /<span>邀请成员<\/span>/);
-  assert.match(
+  assert.doesNotMatch(
     component,
     /v-else-if="shell === 'member'"\s+type="button"\s+class="role-quick-action"[\s\S]*?创建选品/,
   );
