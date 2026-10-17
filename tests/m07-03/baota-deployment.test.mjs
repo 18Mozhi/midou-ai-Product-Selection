@@ -5,12 +5,13 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(path, "utf8");
 
-test("M07-06 finite selection acceptance runner and manifest ship together", async () => {
+test("M07-06 retired finite acceptance tombstone ships with historical manifest", async () => {
   const deployer = await read("scripts/deploy-baota.py");
   assert.match(deployer, /"run-baota-selection-acceptance\.mjs",/);
   assert.match(deployer, /"infra\/baota\/selection-acceptance-manifest\.json",/);
   const runner = await read("scripts/run-baota-selection-acceptance.mjs");
-  assert.match(runner, /infra\/baota\/selection-acceptance-manifest\.json/);
+  assert.match(runner, /manual_selection_acceptance_retired/);
+  assert.doesNotMatch(runner, /fetch\(|createDatabasePool|SelectionJourneyService/);
   assert.doesNotMatch(runner, /from ["']\.\//);
 });
 

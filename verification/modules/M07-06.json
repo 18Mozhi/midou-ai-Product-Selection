@@ -1,7 +1,7 @@
 {
   "moduleId":"M07-06",
   "phaseId":"P07",
-  "name":"Real Selection Acceptance",
+  "name":"Historical Manual Selection Acceptance (Retired)",
   "dependencies":["M00-01","M00-02","M00-03","M00-04","M00-05","M00-06","M00-07","M00-08","M01-01","M01-02","M01-03","M01-04","M01-05","M01-06","M02-01","M02-02","M02-03","M02-04","M02-05","M02-06","M03-01","M03-02","M03-03","M03-04","M03-05","M03-06","M03-07","M04-01","M04-02","M04-03","M04-04","M04-05","M04-06","M04-07","M05-01","M05-02","M05-03","M05-04","M05-05","M05-06","M06-01","M06-02","M06-03","M06-04","M06-05","M06-06"],
   "atomicTasks":[
     {"id":"M07-06.A01","evidence":"ordinary member real keyword ASIN or HTTPS product URL journey with fixed 3 15 and 180 second gates"},
@@ -27,9 +27,7 @@
     "node --test tests/m07-06/selection-acceptance.test.mjs",
     "node --check scripts/run-baota-selection-acceptance.mjs",
     "node --check scripts/verify-selection-acceptance-production.mjs",
-    "node scripts/run-baota-selection-acceptance.mjs",
-    "node scripts/verify-selection-acceptance-production.mjs",
-    "node scripts/verify-selection-acceptance-live.mjs",
+    "node --test tests/unit/retired-selection-acceptance-tools.test.mjs",
     "node scripts/verify-playwright-host.mjs",
     "npx playwright test tests/e2e/m07-06-selection-acceptance.spec.ts",
     "npm run verify:docs",

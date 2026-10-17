@@ -1,5 +1,7 @@
 {
   "schemaVersion": 1,
+  "workflowStatus": "retired",
+  "replacementDocumentation": "docs/selection-retired-acceptance-tools.md",
   "module": "M07-06",
   "productionManager": "baota",
   "topology": "single_host_huizhou",
@@ -22,13 +24,15 @@
     "allowedOutcomes": ["result_ready", "succeeded_empty", "blocked", "failed"],
     "decisionActions": ["observe", "reject", "adopt"]
   },
-  "restrictedEnvironment": [
-    "SELECTION_ACCEPTANCE_EMAIL",
-    "SELECTION_ACCEPTANCE_PASSWORD"
-  ],
+  "restrictedEnvironment": ["SELECTION_ACCEPTANCE_EMAIL", "SELECTION_ACCEPTANCE_PASSWORD"],
   "memberBoundary": {
     "requiredCapabilities": ["task:create", "opportunity:read", "opportunity:decide"],
-    "forbiddenPlatformCapabilities": ["provider:configure", "collection:replay", "platform:operate", "platform:superadmin"],
+    "forbiddenPlatformCapabilities": [
+      "provider:configure",
+      "collection:replay",
+      "platform:operate",
+      "platform:superadmin"
+    ],
     "sessionContextRequired": true,
     "exactlyOneActiveOrganization": true,
     "providerConfigurationTouchedByMember": false

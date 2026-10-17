@@ -1,4 +1,24 @@
 {
+  "selectionRetiredAcceptanceTools20261017": {
+    "status": "implemented",
+    "statusDetail": "64_related_node_tests_passed_not_deployed",
+    "requirements": "docs/selection-retired-acceptance-tools.md",
+    "sourceFiles": [
+      "scripts/run-baota-selection-acceptance.mjs",
+      "scripts/verify-selection-acceptance-live.mjs",
+      "scripts/verify-selection-acceptance-production.mjs"
+    ],
+    "configFiles": [
+      "infra/baota/selection-acceptance-manifest.json",
+      "verification/modules/M07-06.json"
+    ],
+    "testFiles": [
+      "tests/unit/retired-selection-acceptance-tools.test.mjs",
+      "tests/m07-06/selection-acceptance.test.mjs",
+      "tests/m07-03/baota-deployment.test.mjs"
+    ],
+    "contract": "Historical manual-journey tools always exit 2 with retired status before runtime imports, network, database, credentials, migrations or evidence writes. No automatic-pipeline production acceptance is claimed; historical API and audit data are retained."
+  },
   "selectionStatusLogLayout20261017": {
     "status": "implemented",
     "statusDetail": "156_related_31_shared_node_10_browser_web_build_and_gates_passed_not_deployed",

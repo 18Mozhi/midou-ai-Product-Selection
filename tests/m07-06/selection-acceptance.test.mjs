@@ -193,46 +193,12 @@ test("M07-06.A04/A08 keeps a journey running until the collection task is termin
   );
 });
 
-test("M07-06.A09/A16 production runner selects tenant context before member guard", async () => {
-  const [runner, manifestRaw] = await Promise.all([
-    read("scripts/run-baota-selection-acceptance.mjs"),
-    read("infra/baota/selection-acceptance-manifest.json"),
-  ]);
-  const manifest = JSON.parse(manifestRaw);
-  const memberships = runner.indexOf('request("/org/memberships"');
-  const workspaces = runner.indexOf("request(`/org/${organization.id}/workspaces`");
-  const context = runner.indexOf('request("/auth/context"');
-  const guard = runner.indexOf('request("/me/navigation?shell=member"');
-  assert.ok(memberships > 0, "production runner must list the account organizations after login");
-  assert.ok(
-    workspaces > memberships,
-    "production runner must resolve a workspace from the selected organization",
-  );
-  assert.ok(
-    context > workspaces,
-    "production runner must bind the new login session to organization/workspace context",
-  );
-  assert.ok(
-    guard > context,
-    "member capability guard must run only after tenant context is selected",
-  );
-  const contextWrite = runner.slice(context, guard);
-  const journeyWrite = runner.slice(runner.indexOf('request("/selection-journeys"'));
-  const idempotencyHeader = /"idempotency-key"\s*:\s*randomUUID\(\)/;
-  assert.match(contextWrite, idempotencyHeader);
-  assert.match(journeyWrite, idempotencyHeader);
+test("M07-06 historical finite task is explicitly retired and cannot certify automatic selection", async () => {
+  const manifest = JSON.parse(await read("infra/baota/selection-acceptance-manifest.json"));
+  assert.equal(manifest.workflowStatus, "retired");
+  assert.equal(manifest.replacementDocumentation, "docs/selection-retired-acceptance-tools.md");
   assert.equal(manifest.memberBoundary.sessionContextRequired, true);
   assert.equal(manifest.memberBoundary.exactlyOneActiveOrganization, true);
-});
-
-test("M07-06.A04 live verification accepts an already running journey", async () => {
-  const verifier = await read("scripts/verify-selection-acceptance-live.mjs");
-  assert.match(
-    verifier,
-    /\[\s*"accepted",\s*"running",?\s*\]\.includes\(created\.state\)/,
-    "the production worker may advance a newly committed journey before create() reads it back",
-  );
-  assert.match(verifier, /0059_selection_journey_candidates\.up\.sql/);
 });
 
 test("M07-06 rejects a non-compliant public source before scheduling collection work", async () => {
