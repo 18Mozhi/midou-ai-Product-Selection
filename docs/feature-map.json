@@ -1384,7 +1384,9 @@
       "tests/e2e/m06-01-platform-accounts.spec.ts",
       "tests/e2e/m06-02-platform-dashboard.spec.ts",
       "tests/e2e/m06-05-open-platform.spec.ts",
-      "tests/e2e/m02-03-navigation-shell.spec.ts"
+      "tests/e2e/m02-03-navigation-shell.spec.ts",
+      "tests/e2e/m04-10-selection-http.spec.ts",
+      "tests/fixtures/selection-http-stack.mjs"
     ],
     "contract": "Platform overview removes its1280px cap, uses full-width operational grid before shortcuts, retains all alerts with native desktop scroll, and uses two-column mobile metrics. Unused platform-kpis selectors are removed; component script is unchanged. Shared compact commerce toolbar; full-width platform overview and content workbench. Preserve existing forms, HTTP, permissions and audit. No API/schema/config/dependency change. Frontend rebuild only; not full-site or production acceptance."
   },

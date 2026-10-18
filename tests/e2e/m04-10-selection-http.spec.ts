@@ -227,3 +227,27 @@ test("[real-api] compact catalogue exposes identity and preserves market when se
   await expect(page).toHaveURL(/q=/);
   png(await page.screenshot({ fullPage: true }), page);
 });
+
+test("[real-api] member cannot read platform metrics or enter the rebuilt platform cockpit", async ({
+  page,
+}) => {
+  await login(page);
+  const denied = await page.request.get("/api/v1/platform/dashboard?window=24h");
+  expect(denied.status()).toBe(403);
+  expect(denied.headers()["x-request-id"]).toBeTruthy();
+  expect((await denied.json()).data).toBeUndefined();
+  const navigation = page.waitForResponse((response) => {
+    const url = new URL(response.url());
+    return (
+      url.pathname === "/api/v1/me/navigation" && url.searchParams.get("shell") === "platform_admin"
+    );
+  });
+  await page.goto("/platform-admin");
+  expect((await navigation).status()).toBe(403);
+  await expect(page.getByRole("heading", { name: "无权进入此工作台" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "返回成员工作台", exact: true })).toBeVisible();
+  await expect(page.locator(".platform-dashboard")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "新建组织", exact: true })).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  png(await page.screenshot({ fullPage: false }), page);
+});

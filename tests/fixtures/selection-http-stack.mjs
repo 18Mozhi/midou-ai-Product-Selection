@@ -17,6 +17,7 @@ import {
   OpportunityService,
   OpportunityServiceError,
 } from "../../apps/api/dist/opportunity-service.js";
+import { PlatformDashboardService } from "../../apps/api/dist/platform-dashboard-service.js";
 import { HomeDashboardService } from "../../apps/api/dist/home-dashboard-service.js";
 import { ScoringService } from "../../apps/api/dist/scoring-service.js";
 import { ProfitService } from "../../apps/api/dist/profit-service.js";
@@ -341,6 +342,15 @@ export async function createSelectionHttpStack(webOrigin) {
           inScope(input) && input.opportunityId === selectionHttpIds.product
             ? structuredClone(competitorItems)
             : [],
+      }),
+    },
+    platformDashboard: {
+      ...scope,
+      // Denial must happen in the actual auth/authorization route before any facts are read.
+      service: new PlatformDashboardService({
+        read: async () => {
+          throw new Error("platform_facts_must_not_be_read_by_member");
+        },
       }),
     },
     homeDashboard: {
