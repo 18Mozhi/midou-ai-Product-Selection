@@ -6373,7 +6373,7 @@
       "tests/unit/amazon-detail-facts.test.mjs",
       "tests/unit/amazon-disabled-health-lease.test.mjs"
     ],
-    "contract": "Adapter v17 / normalized schema v5 / browser evidence v1. Only matching validated succeeded_empty search artifacts with observed empty-search structure return zero records. Challenges, unknown layouts and detail mismatches remain failures; no auto enable or fabricated facts. Actual stored job replay passed; live recovery and daily100 require separate acceptance. Private health repository additionally binds canonical empty profile, active assets, approved valid terms and exact Amazon/public_page disabled source. Generic HTTP leases retain enabled-only behavior; no public field or schema change. Observed empty message container accepts data-cel-widget or cel_widget_id exactly; native attribute regression and second stored-job replay pass. Existing scheduling policy unchanged. Actual Amazon 503 template (official error image plus search form marker and error text) throws existing retryable dependency_unavailable after evidence/target validation; never counts as empty search or parser drift. Unknown layouts/challenges and existing retry/circuit boundaries remain unchanged."
+    "contract": "Adapter v18 / normalized schema v5 / browser evidence v1. Only matching validated succeeded_empty search artifacts with observed empty-search structure return zero records. Challenges, unknown layouts and detail mismatches remain failures; no auto enable or fabricated facts. Actual stored job replay passed; live recovery and daily100 require separate acceptance. Private health repository additionally binds canonical empty profile, active assets, approved valid terms and exact Amazon/public_page disabled source. Generic HTTP leases retain enabled-only behavior; no public field or schema change. Observed empty message container accepts data-cel-widget or cel_widget_id exactly; native attribute regression and second stored-job replay pass. Existing scheduling policy unchanged. Actual Amazon 503 template (official error image plus search form marker and error text) throws existing retryable dependency_unavailable after evidence/target validation; never counts as empty search or parser drift. Unknown layouts/challenges and existing retry/circuit boundaries remain unchanged."
   },
   "selectionArchivedUiVerificationClosure20261018": {
     "status": "implemented",
@@ -6436,5 +6436,29 @@
       "tests/unit/trend-projection-worker-scheduling.test.mjs"
     ],
     "contract": "Existing active organization and same-organization active workspace required at candidate/identity recheck and scheduling/backlog accounting. Archived/missing/mismatched scopes preserve history and consume no new claim/attempt or capacity. No deletion, migration, dependency, permission or new API/config fields. Existing in-flight lease completion, source holds, retry, priority and fairness unchanged. Six actual MySQL5.7 read-only derived cases passed; 220 real archived tasks all excluded. Deployment and daily100 acceptance remain separate."
+  },
+  "selectionAmazonUsObservation20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-us-observation-context.md",
+    "sourceFiles": [
+      "packages/playwright-crawler/src/amazon-delivery-context.ts",
+      "packages/playwright-crawler/src/index.ts",
+      "packages/provider-sources/src/amazon-browser-contract.ts",
+      "packages/provider-sources/src/parsers/amazon-product-facts.ts",
+      "packages/config/src/index.ts",
+      "apps/api/src/amazon-public-browser-health.ts",
+      "apps/worker/src/authenticated-browser-job-client.ts",
+      "apps/worker/src/index.ts",
+      "scripts/run-playwright-crawler.mjs",
+      "config/env.example",
+      "config/schema.json"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-delivery-context.test.mjs",
+      "tests/unit/amazon-detail-facts.test.mjs",
+      "tests/unit/amazon-browser-contract.test.mjs",
+      "tests/integration/amazon-browser-projection.test.mjs"
+    ],
+    "contract": "Explicit anonymous US observation postcode, default94404 observed in independent public browser; signed-in and cookie-backed contexts cannot change addresses. Wait for actual postal confirmation and verify header after re-reading target. Retain destination header in hashed raw evidence without altering empty-search fallback. Existing queued Amazon public plans inherit missing context only after canonical empty-profile checks. Split primary quote accepted only with unique complete observed symbol/whole/fraction and absent/empty offscreen label; list/foreign/recommendation/ambiguous facts remain unknown. No migration, dependency, normalized schema or public price field changes. Deployment and daily100 remain separately unproven."
   }
 }

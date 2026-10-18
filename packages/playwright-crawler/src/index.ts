@@ -1,3 +1,4 @@
+import { prepareAmazonDeliveryContext } from "./amazon-delivery-context.js";
 import { createHash, randomUUID } from "node:crypto";
 import { gunzipSync } from "node:zlib";
 import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
@@ -22,6 +23,7 @@ export interface BrowserBlockSignals {
 }
 export interface BrowserCollectionPlan {
   start_url: string;
+  amazon_delivery?: { country: "US"; postal_code: string };
   fail_on_http_error?: boolean;
   allowed_origins: string[];
   search?: { input_selector: string; query: string; submit_selector?: string };
@@ -202,6 +204,17 @@ export function validateBrowserPlan(
       (input.search.submit_selector && !selector(input.search.submit_selector)))
   )
     throw new PlaywrightCrawlerError("crawler_search_invalid", "parser_changed", false);
+  if (
+    input.amazon_delivery !== undefined &&
+    (!input.amazon_delivery ||
+      typeof input.amazon_delivery !== "object" ||
+      start.origin !== "https://www.amazon.com" ||
+      origins.length !== 1 ||
+      input.amazon_delivery.country !== "US" ||
+      typeof input.amazon_delivery.postal_code !== "string" ||
+      !/^\d{5}$/.test(input.amazon_delivery.postal_code))
+  )
+    throw new PlaywrightCrawlerError("crawler_amazon_delivery_invalid", "parser_changed", false);
   if (input.search_snapshot) {
     const snapshot = input.search_snapshot,
       canonicalProbe = snapshot.canonical_url_template.replace("{offer_id}", "1");
@@ -373,7 +386,10 @@ async function captureEvidence(
         strip: plan.evidence.strip_non_content === true,
       }),
     pageHtml = itemHtml || (await page.locator("body").evaluate((node) => node.outerHTML)),
-    html = boundedUtf8(pageHtml, 250_000);
+    deliveryHtml = plan.amazon_delivery
+      ? await page.locator("#glow-ingress-block").evaluate((node) => node.outerHTML)
+      : "",
+    html = boundedUtf8(deliveryHtml ? deliveryHtml + "\n" + pageHtml : pageHtml, 250_000);
   if (!html.byteLength)
     throw new PlaywrightCrawlerError("crawler_dom_fragment_invalid", "parser_changed", false);
   let screenshot = await page.screenshot({ type: "jpeg", quality: 35, fullPage: false });
@@ -615,6 +631,8 @@ export class PlaywrightCrawlerEngine {
     const offerDetails: BrowserOfferDetailSnapshot[] = [];
     try {
       options.signal?.throwIfAborted();
+      if (plan.amazon_delivery && options.cookies?.length)
+        throw new PlaywrightCrawlerError("permission_denied", "blocked_login", false);
       context = await chromium.launchPersistentContext(userDataDir, {
         headless: this.limits.headless,
         ...(this.limits.executablePath ? { executablePath: this.limits.executablePath } : {}),
@@ -632,6 +650,25 @@ export class PlaywrightCrawlerEngine {
       const page = context.pages()[0] ?? (await context.newPage());
       await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error);
       await blocked(page, plan.block_signals);
+      if (plan.amazon_delivery) {
+        const assertSafe = async () => {
+          if (httpUrl(page.url()).origin !== "https://www.amazon.com")
+            throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
+          await blocked(page, plan.block_signals);
+        };
+        const changed = await prepareAmazonDeliveryContext(
+          page,
+          plan.amazon_delivery.postal_code,
+          assertSafe,
+        );
+        if (changed)
+          await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error);
+        await assertSafe();
+        await page
+          .locator("#glow-ingress-block")
+          .filter({ hasText: new RegExp(`\\b${plan.amazon_delivery.postal_code}\\b`) })
+          .waitFor({ state: "visible" });
+      }
       if (plan.search) {
         await page.locator(plan.search.input_selector).fill(plan.search.query);
         if (plan.search.submit_selector) await page.locator(plan.search.submit_selector).click();

@@ -55,6 +55,41 @@ function block(html: string, id: string) {
   return body == null ? null : { opening: opening[0], body };
 }
 
+/** Observed primary price has an empty offscreen label and three explicit visible amount parts. */
+function visibleSplitPrice(content: string) {
+  const parts: Record<string, string[]> = {
+    "a-price-symbol": [],
+    "a-price-whole": [],
+    "a-price-fraction": [],
+  };
+  for (const match of visibleMarkup(content).matchAll(/<span\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi)) {
+    const classes = (attribute(match[0], "class") ?? "").split(/\s+/);
+    for (const key of Object.keys(parts)) {
+      if (!classes.includes(key)) continue;
+      const value = amazonTagContent(content, match.index! + match[0].length, "span");
+      if (value != null)
+        parts[key]!.push(
+          value
+            .replace(/<[^>]*>/g, "")
+            .replace(/&nbsp;|&#160;/g, " ")
+            .trim(),
+        );
+    }
+  }
+  if (Object.values(parts).some((values) => values.length !== 1)) return undefined;
+  const symbol = parts["a-price-symbol"]![0]!,
+    whole = parts["a-price-whole"]![0]!.replace(/\.$/, ""),
+    fraction = parts["a-price-fraction"]![0]!;
+  if (
+    !/^[$€£]$/.test(symbol) ||
+    !/^(?:\d{1,3}(?:,\d{3})+|\d+)$/.test(whole) ||
+    !/^\d{2}$/.test(fraction)
+  )
+    return undefined;
+  const amount = `${symbol}${whole}.${fraction}`;
+  return amazonMoney(amount) == null ? undefined : amount;
+}
+
 /** Only the primary offer and primary image column; recommendations are not fallback facts. */
 export function amazonDetailFacts(html: string, primaryColumn: string | null, asin: string) {
   let priceText: string | undefined,
@@ -74,8 +109,14 @@ export function amazonDetailFacts(html: string, primaryColumn: string | null, as
       const label = content?.match(
         /<span\b[^>]*class=["'][^"']*\ba-offscreen\b[^"']*["'][^>]*>([^<]*)<\/span>/i,
       )?.[1];
-      if (amazonMoney(label) != null) {
-        priceText = label;
+      const observedPrice =
+        amazonMoney(label) != null
+          ? label
+          : !label?.replace(/&nbsp;|&#160;/g, " ").trim() && content
+            ? visibleSplitPrice(content)
+            : undefined;
+      if (observedPrice) {
+        priceText = observedPrice;
         priceHtml = region.opening + region.body + "</div>";
         break;
       }

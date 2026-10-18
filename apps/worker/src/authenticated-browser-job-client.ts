@@ -33,9 +33,14 @@ export interface AuthenticatedBrowserCollection {
   parseError: ProviderAdapterFailure | null;
 }
 
-const requestFor = (provider: ProviderRuntimeDefinition, target: Record<string, unknown>) => {
+const requestFor = (
+  provider: ProviderRuntimeDefinition,
+  target: Record<string, unknown>,
+  deliveryPostalCode: string,
+) => {
   if (provider.code === "1688_search") return create1688BrowserExecutionRequest(target);
-  if (provider.code === "amazon_product") return createAmazonBrowserExecutionRequest(target);
+  if (provider.code === "amazon_product")
+    return createAmazonBrowserExecutionRequest(target, deliveryPostalCode);
   throw new ProviderAdapterFailure("adapter_not_registered", false);
 };
 
@@ -59,6 +64,7 @@ export class MySqlAuthenticatedBrowserJobClient {
     private readonly wait: (milliseconds: number) => Promise<void> = (milliseconds) =>
       new Promise((resolve) => setTimeout(resolve, milliseconds)),
     private readonly runTimeoutMs = 180_000,
+    private readonly deliveryPostalCode = "94404",
   ) {}
 
   async collect(
@@ -66,7 +72,7 @@ export class MySqlAuthenticatedBrowserJobClient {
     heartbeat: () => Promise<void>,
     signal?: AbortSignal,
   ): Promise<AuthenticatedBrowserCollection> {
-    const executionRequest = requestFor(input.provider, input.target),
+    const executionRequest = requestFor(input.provider, input.target, this.deliveryPostalCode),
       jobId = randomUUID(),
       started = Date.now(),
       deadline =

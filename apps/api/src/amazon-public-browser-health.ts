@@ -68,7 +68,10 @@ export class AmazonPublicBrowserHealth {
         String(profile.credential_asset_id),
       );
       const collect = async (target: Record<string, unknown>) => {
-        const request = createAmazonBrowserExecutionRequest(target);
+        const request = createAmazonBrowserExecutionRequest(
+          target,
+          this.config.providerAdapters.amazonPublicDeliveryPostalCode,
+        );
         controller.signal.throwIfAborted();
         await assertPublicCollectionPolicy({
           providerTargetUrl: provider.targetUrl,

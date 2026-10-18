@@ -115,6 +115,7 @@ export interface RuntimeConfig {
     publicRssRecoveryPollMs: number;
     publicRssRecoveryCooldownMs: number;
     amazonBrowserProfileId: string;
+    amazonPublicDeliveryPostalCode: string;
     amazonBrowserNavigationTimeoutMs: number;
     lan1688Token: string;
     lan1688TimeoutMs: number;
@@ -371,6 +372,12 @@ export function loadRuntimeConfig(
   );
   const playwrightExecutablePath = text(env, "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH");
   const amazonBrowserProfileId = text(env, "AMAZON_PUBLIC_BROWSER_PROFILE_ID");
+  const amazonPublicDeliveryPostalCode = text(env, "AMAZON_PUBLIC_DELIVERY_POSTAL_CODE", "94404");
+  if (!/^\d{5}$/.test(amazonPublicDeliveryPostalCode))
+    throw new ConfigError(
+      "AMAZON_PUBLIC_DELIVERY_POSTAL_CODE",
+      "must be a five-digit US observation postal code",
+    );
   if (
     amazonBrowserProfileId &&
     !/^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(
@@ -598,6 +605,7 @@ export function loadRuntimeConfig(
         86400000,
       ),
       amazonBrowserProfileId,
+      amazonPublicDeliveryPostalCode,
       amazonBrowserNavigationTimeoutMs: integer(
         env,
         "AMAZON_PUBLIC_BROWSER_NAVIGATION_TIMEOUT_MS",

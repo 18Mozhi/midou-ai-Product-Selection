@@ -96,6 +96,17 @@ try {
       bytes.fill(0);
     }
   }
+  // Existing queued anonymous plans inherit the configured US observation context.
+  const plan =
+    input.purpose === "amazon_public"
+      ? {
+          ...input.plan,
+          amazon_delivery: input.plan?.amazon_delivery ?? {
+            country: "US",
+            postal_code: config.providerAdapters.amazonPublicDeliveryPostalCode,
+          },
+        }
+      : input.plan;
   const result = await runWithEncryptedProfile(
     engine,
     record,
@@ -106,7 +117,7 @@ try {
       maxExtractedBytes: limits.maxExtractedBytes,
       maxFiles: limits.maxArchiveFiles,
     },
-    input.plan,
+    plan,
     ids,
     { locale: input.locale, timezoneId: input.timezone },
   );

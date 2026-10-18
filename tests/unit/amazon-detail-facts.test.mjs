@@ -92,7 +92,7 @@ test("explicit JSON-LD facts keep original provenance and parser version changes
   );
   assert.equal(p.fields.price, 21.25);
   assert.match(p.source_paths.price, /amazon.jsonld/);
-  assert.equal(new AmazonProductSearchAdapter().version, "amazon-public-product-adapter-v17");
+  assert.equal(new AmazonProductSearchAdapter().version, "amazon-public-product-adapter-v18");
 });
 
 test("search blank labels and missing images remain unknown; attribute order is independent", () => {
@@ -154,4 +154,47 @@ test("attribute values cannot impersonate a primary image id or source", () => {
   assert.equal(read(page("", decoy)).fields.image_url, null);
   const real = `<img data-note=" src='https://evil.test/image.jpg' " id="landingImage" src="${image}">`;
   assert.equal(read(page("", real)).fields.image_url, image);
+});
+
+const splitOffer =
+  '<span class="a-price aok-align-center reinventPricePriceToPayMargin priceToPay apex-pricetopay-value"><span class="a-offscreen"> </span><span aria-hidden="true"><span class="a-price-symbol">$</span><span class="a-price-whole">9<span class="a-price-decimal">.</span></span><span class="a-price-fraction">99</span></span></span>';
+test("actual primary split amount is observed even when offscreen text is empty", () => {
+  const payload = read(page(priceBlock(splitOffer)));
+  assert.equal(payload.fields.price, 9.99);
+  assert.equal(payload.fields.currency, "USD");
+  assert.match(payload.source_paths.price, /primary_offer/);
+  assert.ok(payload.raw_content.includes("a-price-fraction"));
+});
+for (const [label, markup] of [
+  ["missing symbol", splitOffer.replace('<span class="a-price-symbol">$</span>', "")],
+  [
+    "incomplete cents",
+    splitOffer.replace('class="a-price-fraction">99', 'class="a-price-fraction">9'),
+  ],
+  ["unknown whole", splitOffer.replace('class="a-price-whole">9', 'class="a-price-whole">unknown')],
+  [
+    "ambiguous amounts",
+    splitOffer.replace(
+      'class="a-price-fraction">99</span>',
+      'class="a-price-fraction">99</span><span class="a-price-whole">10</span>',
+    ),
+  ],
+  ["script text", `<script>${splitOffer}</script>`],
+  ["list price", splitOffer.replace("a-price aok-align-center", "a-price a-text-price")],
+  [
+    "explicit non-price label",
+    splitOffer.replace('class="a-offscreen"> ', 'class="a-offscreen">See price in cart'),
+  ],
+])
+  test(`split price rejects ${label}`, () => {
+    const payload = read(page(priceBlock(markup)));
+    assert.equal(payload.fields.price, null);
+    assert.equal(payload.fields.currency, null);
+  });
+test("split amount cannot use foreign ASIN or recommendation regions", () => {
+  assert.equal(read(page(priceBlock(splitOffer, "B000000001"))).fields.price, null);
+  assert.equal(
+    read(page("", "", '<div id="recommendations">' + splitOffer + "</div>")).fields.price,
+    null,
+  );
 });

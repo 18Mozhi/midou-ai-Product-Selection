@@ -77,6 +77,7 @@ const executor = new ProviderSourceExecutor(
     500,
     undefined,
     config.playwright.runTimeoutSeconds * 1000,
+    config.providerAdapters.amazonPublicDeliveryPostalCode,
   ),
   providerFetch,
   new Lan1688ImageSearch(

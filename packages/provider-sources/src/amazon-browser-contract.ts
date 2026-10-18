@@ -68,13 +68,19 @@ export function amazonBrowserUrl(target: Record<string, unknown>) {
   return "https://www.amazon.com/s?k=" + encodeURIComponent(target.query.trim());
 }
 
-export function createAmazonBrowserExecutionRequest(target: Record<string, unknown>) {
+export function createAmazonBrowserExecutionRequest(
+  target: Record<string, unknown>,
+  deliveryPostalCode = "94404",
+) {
+  if (typeof deliveryPostalCode !== "string" || !/^\d{5}$/.test(deliveryPostalCode))
+    throw new ProviderAdapterFailure("source_configuration_invalid", false);
   const url = amazonBrowserUrl(target),
     detail = new URL(url).pathname !== "/s";
   return {
     purpose: "amazon_public",
     plan: {
       start_url: url,
+      amazon_delivery: { country: "US" as const, postal_code: deliveryPostalCode },
       allowed_origins: ["https://www.amazon.com"],
       fail_on_http_error: true,
       item_selector: detail ? "#title" : '[data-component-type="s-search-result"]',
@@ -100,6 +106,9 @@ export function createAmazonBrowserExecutionRequest(target: Record<string, unkno
                 "#detailBulletsWrapper_feature_div",
                 "#productDetails_detailBullets_sections1",
                 "#localTopReviewsList",
+                "#availability",
+                "#productDetails_expanderSectionTables",
+                "#customer-reviews_feature_div",
               ],
               ancestor_ids: ["leftCol", "centerCol"],
               strip_non_content: true,
