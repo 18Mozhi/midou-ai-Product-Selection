@@ -35,6 +35,133 @@ const fullPage = {
   })),
 };
 
+test("1688 exhausted rate-limited nodes retain the existing retry classification", async () => {
+  for (const statuses of [Array(6).fill(429), [429, 503, 503, 503, 503, 503]]) {
+    let calls = 0,
+      canceled = 0;
+    const client = new Lan1688ImageSearch("test-only", 1000, async () => {
+      const response = new Response(null, { status: statuses[calls++] });
+      Object.defineProperty(response, "body", {
+        value: {
+          cancel: async () => {
+            canceled++;
+          },
+        },
+      });
+      return response;
+    });
+    await assert.rejects(
+      client.collect(image, async () => {}),
+      {
+        code: "rate_limited",
+        retryable: true,
+      },
+    );
+    assert.equal(calls, 6);
+    assert.equal(canceled, 6);
+  }
+});
+
+test("1688 pool health retains rate limits without masking fatal failures or healthy failover", async () => {
+  for (const [statuses, expected] of [
+    [[503, 429, 503, 503, 503, 503], "rate_limited"],
+    [[429, 403, 503, 503, 503, 503], "permission_denied"],
+    [[503, 503, 503, 503, 503, 503], "dependency_unavailable"],
+  ]) {
+    let calls = 0;
+    const client = new Lan1688ImageSearch(
+      "test-only",
+      1000,
+      async () => new Response(null, { status: statuses[calls++] }),
+    );
+    await assert.rejects(client.checkPoolHealth(image, new AbortController().signal), {
+      code: expected,
+    });
+    assert.equal(calls, 6);
+  }
+  let calls = 0;
+  const client = new Lan1688ImageSearch("test-only", 1000, async () =>
+    ++calls === 1 ? new Response(null, { status: 429 }) : Response.json(result),
+  );
+  assert.equal((await client.collect(image, async () => {})).records.length, 1);
+  assert.equal(calls, 2);
+});
+
+test("LAN 429 reaches the Worker rate-limit cooldown without persisting supplier facts", async () => {
+  const provider = {
+    id: "source",
+    code: "1688_search",
+    access_mode: "authenticated_browser",
+    target_url: "https://s.1688.com/selloffer/offer_search.htm",
+    parser_version: "1688-browser-contract-v3",
+    timeout_ms: 20000,
+    fields_json: ["title"],
+    status: "enabled",
+    runtime_circuit_state: "closed",
+    created_by: "actor",
+    circuit_failure_threshold: 5,
+  };
+  const query = async (sql) =>
+    sql.includes("FROM providers p")
+      ? [[provider]]
+      : sql.startsWith("SELECT")
+        ? [[]]
+        : [{ affectedRows: 1 }];
+  const pool = {
+    query,
+    getConnection: async () => ({
+      query,
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release() {},
+    }),
+  };
+  let persisted = 0;
+  const client = new Lan1688ImageSearch(
+    "test-only",
+    1000,
+    async () => new Response(null, { status: 429 }),
+  );
+  const executor = new ProviderSourceExecutor(
+    pool,
+    {},
+    {
+      persist: async () => {
+        persisted++;
+        throw new Error("unexpected supplier facts");
+      },
+    },
+    "worker",
+    undefined,
+    undefined,
+    client,
+  );
+  const started = Date.now();
+  await assert.rejects(
+    executor.execute(
+      {
+        id: "task",
+        organizationId: "org",
+        workspaceId: "workspace",
+        requestId: "request",
+        traceId: "trace",
+        subqueries: [
+          { id: "query", providerId: "source", required: true, target: { image_url: image } },
+        ],
+      },
+      async () => {},
+    ),
+    (error) => {
+      assert.equal(error.code, "rate_limited");
+      assert.ok(error.rateLimitResetAt instanceof Date);
+      assert.ok(error.rateLimitResetAt.getTime() >= started + 300000);
+      return true;
+    },
+  );
+  assert.equal(persisted, 0);
+});
+
 test("1688 retains a full verified page and rejects an over-limit response", async () => {
   const client = new Lan1688ImageSearch("test-only", 1000, async (_url, options) => {
     assert.equal(JSON.parse(options.body).result_limit, 60);

@@ -140,10 +140,11 @@ export class Lan1688ImageSearch {
       } catch (error) {
         if (signal?.aborted) throw signal.reason;
         if (error instanceof ProviderAdapterFailure && !error.retryable) throw error;
-        lastError =
+        const failure =
           error instanceof ProviderAdapterFailure
             ? error
             : new ProviderAdapterFailure("dependency_unavailable", true);
+        if (lastError.code !== "rate_limited") lastError = failure;
       }
     }
     throw lastError;
@@ -169,6 +170,7 @@ export class Lan1688ImageSearch {
         );
         throw (
           failures.find((item) => !item.retryable) ??
+          failures.find((item) => item.code === "rate_limited") ??
           failures[0] ??
           new ProviderAdapterFailure("dependency_unavailable", true)
         );
@@ -207,6 +209,10 @@ export class Lan1688ImageSearch {
       if (response.status === 401 || response.status === 403) {
         await response.body?.cancel();
         throw new ProviderAdapterFailure("permission_denied", false);
+      }
+      if (response.status === 429) {
+        await response.body?.cancel();
+        throw new ProviderAdapterFailure("rate_limited", true);
       }
       if (!response.ok) {
         await response.body?.cancel();

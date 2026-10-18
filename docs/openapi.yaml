@@ -1,4 +1,5 @@
 openapi: 3.0.3
+# LAN1688 HTTP429 uses existing rate_limited health/task codes; request/response schemas unchanged.
 # 2026-10-19: Trend detail pending state is frontend-only; trend API contracts unchanged.
 # Browser lease acquire retries only successfully rolled-back MySQL deadlocks, at most3 transactions with unchanged scope/idempotency/expiry; API fields unchanged.
 # Amazon anonymous delivery: actual legacy confirmation or detached postal input leads only to the guarded original-URL reread; strict final postal verification remains mandatory. No API field change.
