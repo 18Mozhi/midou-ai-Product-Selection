@@ -200,6 +200,21 @@ function observedEmptySearch(html: string) {
   );
 }
 
+/** Amazon can render its own temporary server-error page with an HTTP-success response. */
+function observedTemporaryServerFailure(html: string) {
+  const body = html.replace(/<!--[\s\S]*?-->|<(script|style)\b[^>]*>[\s\S]*?(?:<\/\1>|$)/gi, "");
+  return (
+    /<form\b[^>]*action=["']\/s["'][^>]*method=["']GET["']/i.test(body) &&
+    /<input\b[^>]*name=["']ref["'][^>]*value=["']cs_503_search["']/i.test(body) &&
+    /<img\b[^>]*src=["']https:\/\/images-na\.ssl-images-amazon\.com\/images\/G\/01\/error\/500_503\.png["'][^>]*alt=["']Sorry! Something went wrong on our end\./i.test(
+      body,
+    ) &&
+    !/captcha|verify you are human|bm-verify|id=["']productTitle["']|data-asin=["'][A-Z0-9]{10}["']/i.test(
+      body,
+    )
+  );
+}
+
 export function parseAmazonBrowserRunResult(
   input: Record<string, unknown>,
   target: Record<string, unknown>,
@@ -226,6 +241,8 @@ export function parseAmazonBrowserRunResult(
       throw new ProviderAdapterFailure("invalid_payload", false);
   }
   const html = dom.content.toString("utf8");
+  if (observedTemporaryServerFailure(html))
+    throw new ProviderAdapterFailure("dependency_unavailable", true);
   if (expected.pathname !== "/s" && observedEmptySearch(html))
     throw new ProviderAdapterFailure("source_changed", false);
   let records: ProviderRawRecord[];

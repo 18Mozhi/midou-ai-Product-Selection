@@ -453,7 +453,7 @@ export class AmazonTargetPageParseFailure extends ProviderAdapterFailure {
 export class AmazonProductSearchAdapter extends SourceAdapter {
   readonly key = "amazon_product";
   readonly accessMode = "public_page" as const;
-  readonly version = "amazon-public-product-adapter-v16";
+  readonly version = "amazon-public-product-adapter-v17";
   constructor(private readonly fetcher?: typeof fetch) {
     super();
   }

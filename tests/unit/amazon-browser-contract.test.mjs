@@ -83,6 +83,36 @@ test("observed ordinary Amazon empty search returns no facts without disabling t
   assert.throws(() => parseAmazonBrowserRunResult(result(emptySearch), { page_url: url }));
 });
 
+test("observed Amazon 503 error template is retryable rather than parser drift or empty facts", () => {
+  const source = "https://www.amazon.com/s?k=anti%20aging%20cream";
+  const target = { query: "anti aging cream" };
+  const serverError =
+    '<form action="/s" method="GET"><input name="ref" type="hidden" value="cs_503_search"></form><img src="https://images-na.ssl-images-amazon.com/images/G/01/error/500_503.png" alt="Sorry! Something went wrong on our end. Please go back and try again or go to Amazon home page.">';
+  const retryable = (error) => error.code === "dependency_unavailable" && error.retryable === true;
+  for (const status of ["succeeded", "succeeded_empty"])
+    assert.throws(
+      () => parseAmazonBrowserRunResult({ ...result(serverError, source), status }, target),
+      retryable,
+    );
+  for (const body of [
+    serverError.replace("cs_503_search", "unknown"),
+    serverError.replace("images-na.ssl-images-amazon.com", "example.test"),
+    `<script>${serverError}</script>`,
+    `${serverError}<form action="/errors/validateCaptcha">captcha</form>`,
+    `${serverError}<div data-asin="B000000001"></div>`,
+  ])
+    assert.throws(
+      () => parseAmazonBrowserRunResult(result(body, source), target),
+      (error) => error.code !== "dependency_unavailable",
+    );
+  const badHash = result(serverError, source);
+  badHash.artifacts[0].content_sha256 = "0".repeat(64);
+  assert.throws(
+    () => parseAmazonBrowserRunResult(badHash, target),
+    (error) => error.code === "invalid_payload",
+  );
+});
+
 test("queued genuine empty search has no parse error and retains both evidence artifacts", async () => {
   const source = "https://www.amazon.com/s?k=unavailable%20item";
   const terminal = {

@@ -92,7 +92,7 @@ test("explicit JSON-LD facts keep original provenance and parser version changes
   );
   assert.equal(p.fields.price, 21.25);
   assert.match(p.source_paths.price, /amazon.jsonld/);
-  assert.equal(new AmazonProductSearchAdapter().version, "amazon-public-product-adapter-v16");
+  assert.equal(new AmazonProductSearchAdapter().version, "amazon-public-product-adapter-v17");
 });
 
 test("search blank labels and missing images remain unknown; attribute order is independent", () => {
