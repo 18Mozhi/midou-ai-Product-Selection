@@ -13,7 +13,7 @@ test("home uses its actual Vue and one layout owner without legacy template inje
     ].map((p) => readFile(p, "utf8")),
   );
   assert.match(dashboard, /request<Summary>\("\/me\/home-dashboard"/);
-  assert.match(dashboard, /resumeRule\(pausedRules\[0\]\)/);
+  assert.doesNotMatch(dashboard, /monitoring-rules|resumeRule|setupForm/);
   assert.match(dashboard, /五项质量门/);
   assert.match(automation, /selection\.recommended_count/);
   assert.doesNotMatch(dashboard, /01 \/|02 \/|p12-hero/);

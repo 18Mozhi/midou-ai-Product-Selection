@@ -6,15 +6,9 @@ import type { TrendDetail } from "./trend-workspace-types";
 defineProps<{
   detail: TrendDetail;
   busy: string;
-  qualityIssueIds: Record<string, string>;
-  canManage: boolean;
 }>();
 const emit = defineEmits<{
   back: [];
-  follow: [];
-  createRule: [];
-  changeRelevance: [status: "active" | "irrelevant"];
-  reportAnomaly: [item: TrendDetail["evidence"][number]];
 }>();
 const freshness = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
@@ -45,32 +39,6 @@ const freshness = (value: string) =>
         ><small>实际信号数</small>
       </div>
     </header>
-    <div class="trend-actions">
-      <button v-if="canManage" class="so-action-secondary" type="button" @click="emit('follow')">
-        {{ detail.followed ? "已关注" : "关注" }}</button
-      ><button
-        v-if="canManage"
-        class="so-action-secondary"
-        type="button"
-        @click="emit('createRule')"
-      >
-        创建监控</button
-      ><button
-        v-if="canManage && detail.status !== 'irrelevant'"
-        class="quiet so-action-quiet"
-        type="button"
-        @click="emit('changeRelevance', 'irrelevant')"
-      >
-        标记无关</button
-      ><button
-        v-else-if="canManage"
-        class="quiet so-action-quiet"
-        type="button"
-        @click="emit('changeRelevance', 'active')"
-      >
-        恢复为相关
-      </button>
-    </div>
     <section class="trend-conclusion">
       <div>
         <p>可验证结论</p>
@@ -106,12 +74,6 @@ const freshness = (value: string) =>
         </div>
       </dl>
     </section>
-    <TrendEvidenceTimeline
-      :detail="detail"
-      :busy="busy"
-      :quality-issue-ids="qualityIssueIds"
-      :can-manage="canManage"
-      @report-anomaly="emit('reportAnomaly', $event)"
-    />
+    <TrendEvidenceTimeline :detail="detail" />
   </article>
 </template>

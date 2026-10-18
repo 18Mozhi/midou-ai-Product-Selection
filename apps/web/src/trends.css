@@ -15,68 +15,14 @@
 .trend-dashboard select {
   font: inherit;
 }
-.trend-rule-heading {
-  padding: 4px 2px 12px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 20px;
-}
-.trend-rule-heading p,
 .trend-detail p,
 .trend-evidence p,
-.trend-lower header p,
-.trend-modal header p {
+.trend-lower header p {
   margin: 0 0 7px;
   color: var(--so-primary);
   font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.16em;
-}
-.trend-rule-heading span {
-  display: block;
-  margin-top: 6px;
-  color: var(--so-text-muted);
-  line-height: 1.6;
-}
-.trend-rule-heading button,
-.trend-modal footer button:last-child {
-  min-height: var(--so-touch-target);
-  padding: 9px 15px;
-  border: 0;
-  border-radius: var(--so-control-radius);
-  color: var(--so-on-primary);
-  background: var(--so-primary);
-  font-weight: 750;
-}
-.trend-tabs {
-  margin: 0;
-  padding: 5px;
-  display: flex;
-  gap: 4px;
-  border: 1px solid var(--so-border);
-  border-radius: 12px;
-  background: var(--so-panel);
-}
-.trend-tabs button {
-  min-height: var(--so-touch-target);
-  padding: 9px 15px;
-  border: 0;
-  border-radius: 8px;
-  color: var(--so-text-muted);
-  background: transparent;
-}
-.trend-tabs button[aria-current="page"] {
-  color: var(--so-text);
-  background: color-mix(in srgb, var(--so-primary) 14%, var(--so-panel-soft));
-}
-.trend-tabs b {
-  margin-left: 7px;
-  padding: 2px 6px;
-  border-radius: 999px;
-  background: var(--so-primary);
-  color: var(--so-on-primary);
-  font-size: 13px;
 }
 .trend-message {
   padding: 11px 14px;
@@ -100,16 +46,14 @@
   border-radius: 14px;
   background: var(--so-panel);
 }
-.trend-filters label,
-.trend-modal label {
+.trend-filters label {
   display: grid;
   gap: 7px;
   color: var(--so-text-muted);
   font-size: 13px;
 }
 .trend-filters input,
-.trend-filters select,
-.trend-modal input {
+.trend-filters select {
   width: 100%;
   min-height: var(--so-touch-target);
   padding: 9px 11px;
@@ -142,9 +86,7 @@
   border-block: 1px solid var(--so-text);
 }
 .trend-list,
-.trend-detail,
-.trend-rules > article,
-.trend-rule-empty {
+.trend-detail {
   border: 1px solid var(--so-border);
   border-radius: 0;
   background: var(--so-panel);
@@ -287,35 +229,6 @@
   font-size: 36px;
 }
 .heat-summary small {
-  color: var(--so-text-muted);
-}
-.trend-actions {
-  position: sticky;
-  z-index: 6;
-  top: 0;
-  margin: 20px 0;
-  padding: 10px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  border: 1px solid var(--so-border);
-  border-radius: 0;
-  background: var(--so-panel);
-  box-shadow: none;
-  backdrop-filter: none;
-}
-.trend-actions button {
-  padding: 10px 13px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  color: var(--so-text);
-  background: var(--so-panel-soft);
-}
-.trend-actions button:disabled {
-  opacity: 0.46;
-}
-.trend-actions .quiet {
-  margin-left: auto;
   color: var(--so-text-muted);
 }
 .trend-conclusion {
@@ -495,173 +408,6 @@
   display: grid;
   gap: 11px;
 }
-.trend-rules > header {
-  margin-bottom: 4px;
-}
-.trend-rule-heading h3 {
-  font-size: 22px;
-}
-.trend-rules > article {
-  padding: 16px;
-  display: grid;
-  grid-template-columns: minmax(190px, 0.8fr) minmax(220px, 1.2fr) 1fr auto;
-  align-items: center;
-  gap: 16px;
-}
-.trend-rules article h4 {
-  margin: 7px 0 4px;
-}
-.trend-rules article span,
-.trend-rules article p,
-.trend-rules article small {
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.trend-rules article p strong,
-.trend-rules article p small {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--so-text);
-}
-.trend-rules article dl {
-  margin: 0;
-  display: flex;
-  gap: 15px;
-}
-.trend-rules article dt {
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.trend-rules article dd {
-  margin: 4px 0 0;
-  font-size: 13px;
-}
-.trend-rules article b {
-  padding: 4px 7px;
-  border-radius: 999px;
-  color: var(--so-success);
-  background: color-mix(in srgb, var(--so-success) 10%, transparent);
-  font-size: 13px;
-}
-.trend-rules article b[data-status="paused"] {
-  color: var(--so-warning);
-  background: color-mix(in srgb, var(--so-warning) 10%, transparent);
-}
-.trend-rules article > button,
-.trend-rule-empty button {
-  padding: 9px 13px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  color: var(--so-text);
-  background: var(--so-panel-soft);
-}
-.trend-rule-empty {
-  padding: 48px;
-  display: grid;
-  justify-items: center;
-  gap: 10px;
-  text-align: center;
-}
-.trend-rule-empty span {
-  color: var(--so-text-muted);
-}
-.trend-modal {
-  position: fixed;
-  z-index: 120;
-  inset: 0;
-  padding: 18px;
-  display: grid;
-  place-items: center;
-  background: var(--so-overlay);
-  backdrop-filter: blur(14px);
-}
-.trend-relevance-dialog:not([open]),
-.trend-native-dialog:not([open]) {
-  display: none;
-}
-.trend-modal.trend-relevance-dialog[open] {
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  max-height: none;
-  margin: 0;
-  border: 0;
-  color: var(--so-text);
-  background: transparent;
-  backdrop-filter: none;
-}
-.trend-modal.trend-native-dialog[open] {
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  max-height: none;
-  margin: 0;
-  border: 0;
-  color: var(--so-text);
-  background: transparent;
-  backdrop-filter: none;
-}
-.trend-native-dialog::backdrop {
-  background: var(--so-overlay);
-  backdrop-filter: blur(14px);
-}
-.trend-relevance-dialog::backdrop {
-  background: var(--so-overlay);
-  backdrop-filter: blur(14px);
-}
-.trend-modal form {
-  width: min(620px, 100%);
-  max-height: calc(100vh - 36px);
-  padding: 26px;
-  display: grid;
-  gap: 15px;
-  border: 1px solid var(--so-border);
-  border-radius: 22px;
-  background: var(--so-bg-elevated);
-  box-shadow: var(--so-shadow-dialog);
-  overflow: auto;
-}
-.trend-modal header {
-  display: flex;
-  justify-content: space-between;
-}
-.trend-modal header button {
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  color: var(--so-text);
-  background: var(--so-panel-soft);
-}
-.trend-modal form > div {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.trend-modal aside {
-  padding: 12px;
-  border-left: 3px solid var(--so-info);
-  border-radius: 9px;
-  background: color-mix(in srgb, var(--so-info) 7%, transparent);
-}
-.trend-modal aside span {
-  display: block;
-  margin-top: 5px;
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.trend-modal footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 9px;
-}
-.trend-modal footer button {
-  padding: 10px 15px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  color: var(--so-text);
-  background: transparent;
-}
 @media (max-width: 1100px) {
   .trend-workbench {
     height: auto;
@@ -698,25 +444,10 @@
   .trend-filters .search {
     grid-column: span 2;
   }
-  .trend-rules > article {
-    grid-template-columns: 1fr 1fr;
-  }
-  .trend-rules article > button {
-    justify-self: end;
-  }
 }
 @media (max-width: 640px) {
   .trend-dashboard {
     margin-top: 18px;
-  }
-  .trend-rule-heading {
-    padding: 2px 0 10px;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .trend-rule-heading button {
-    width: 100%;
   }
   .trend-filters {
     grid-template-columns: 1fr 1fr;
@@ -752,12 +483,6 @@
   .heat-summary b {
     font-size: 28px;
   }
-  .trend-actions button {
-    flex: 1;
-  }
-  .trend-actions .quiet {
-    margin-left: 0;
-  }
   .trend-conclusion {
     grid-template-columns: 1fr;
   }
@@ -772,33 +497,6 @@
   }
   .trend-lower {
     grid-template-columns: 1fr;
-  }
-  .trend-rules > article {
-    grid-template-columns: 1fr;
-  }
-  .trend-rules article > button {
-    width: 100%;
-    justify-self: stretch;
-  }
-  .trend-modal form {
-    padding: 20px 15px;
-  }
-  .trend-modal form > div {
-    grid-template-columns: 1fr;
-  }
-}
-.trend-actions a {
-  padding: 10px 13px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  color: var(--so-text);
-  background: var(--so-panel-soft);
-  text-decoration: none;
-}
-@media (max-width: 640px) {
-  .trend-actions a {
-    flex: 1;
-    text-align: center;
   }
 }
 
@@ -845,21 +543,6 @@
   border: 1px solid var(--trend-line);
   border-radius: 4px;
 }
-.trend-collection-status {
-  border: 1px solid var(--trend-line);
-  background: var(--trend-surface);
-}
-.trend-collection-status > summary {
-  min-height: 44px;
-  padding: 12px 16px;
-  cursor: pointer;
-  color: var(--trend-muted);
-  font-size: 13px;
-}
-.trend-collection-status > summary span {
-  margin-left: 14px;
-  color: var(--trend-ink);
-}
 .trend-dashboard--review .monitoring-readiness {
   margin: 0;
   padding: 16px;
@@ -880,38 +563,6 @@
   color: var(--trend-muted);
   font-size: 13px;
   font-variant-numeric: tabular-nums;
-}
-.trend-dashboard--review .trend-tabs {
-  padding: 0;
-  gap: 0;
-  border: 1px solid var(--trend-line);
-  border-radius: 0;
-  background: var(--trend-surface);
-}
-.trend-dashboard--review .trend-tabs button {
-  min-height: 48px;
-  flex: 0 1 auto;
-  min-width: 120px;
-  padding-inline: 18px;
-  border-radius: 0;
-  border-bottom: 3px solid transparent;
-  color: var(--trend-muted);
-  background: var(--trend-surface);
-  font-weight: 750;
-}
-.trend-dashboard--review .trend-tabs button[aria-current="page"] {
-  border-bottom-color: var(--trend-blue);
-  color: var(--trend-blue);
-  background: var(--trend-surface-selected);
-}
-.trend-dashboard--review .trend-tabs b {
-  min-width: 22px;
-  padding: 2px 6px;
-  display: inline-flex;
-  justify-content: center;
-  border-radius: 999px;
-  color: var(--trend-on-blue);
-  background: var(--trend-blue);
 }
 .trend-dashboard--review .trend-message {
   margin: 0;
@@ -934,8 +585,7 @@
 .trend-dashboard--review .trend-filters label {
   color: var(--trend-muted);
 }
-.trend-dashboard--review .trend-filters :is(input, select),
-.trend-dashboard--review .trend-modal :is(input, select, textarea) {
+.trend-dashboard--review .trend-filters :is(input, select) {
   min-height: 44px;
   border: 1px solid var(--trend-control-border);
   border-radius: 4px;
@@ -1051,25 +701,6 @@
   color: var(--trend-blue);
   font-size: 36px;
 }
-.trend-dashboard--review .trend-actions {
-  margin: 22px 0;
-  padding: 9px 0;
-  border-block: 1px solid var(--trend-line);
-  border-inline: 0;
-  background: var(--trend-surface);
-}
-.trend-dashboard--review .trend-actions :is(button, a) {
-  min-height: 42px;
-  padding: 9px 14px;
-  border: 1px solid var(--trend-control-border);
-  border-radius: 4px;
-  color: var(--trend-blue);
-  background: var(--trend-surface);
-}
-.trend-dashboard--review .trend-actions .quiet {
-  border-color: transparent;
-  color: var(--trend-muted);
-}
 .trend-dashboard--review .trend-conclusion,
 .trend-dashboard--review .trend-evidence,
 .trend-dashboard--review .trend-lower > section {
@@ -1117,63 +748,6 @@
   padding: 10px 0;
   cursor: pointer;
 }
-.trend-dashboard--review .trend-rules > article,
-.trend-dashboard--review .trend-rule-empty {
-  border: 1px solid var(--trend-line);
-  border-radius: 0;
-  background: var(--trend-surface);
-}
-.trend-dashboard--review .trend-rule-heading {
-  padding: 18px 0 14px;
-}
-.trend-dashboard--review .trend-rule-heading h3 {
-  color: var(--trend-ink);
-}
-.trend-dashboard--review .trend-rule-heading button,
-.trend-dashboard--review .trend-rules article > button:first-of-type,
-.trend-dashboard--review .trend-rule-empty button {
-  min-height: 42px;
-  border: 1px solid var(--trend-blue);
-  border-radius: 4px;
-  color: var(--trend-on-blue);
-  background: var(--trend-blue);
-}
-.trend-dashboard--review .trend-rules article > button.secondary {
-  color: var(--trend-blue);
-  background: var(--trend-surface);
-}
-.trend-dashboard--review .trend-modal {
-  background: var(--trend-modal-backdrop);
-  backdrop-filter: blur(6px);
-}
-.trend-dashboard--review .trend-modal.trend-relevance-dialog[open] {
-  background: transparent;
-  backdrop-filter: none;
-}
-.trend-dashboard--review .trend-modal.trend-native-dialog[open] {
-  background: transparent;
-  backdrop-filter: none;
-}
-.trend-dashboard--review .trend-native-dialog::backdrop {
-  background: var(--trend-modal-backdrop);
-  backdrop-filter: blur(6px);
-}
-.trend-dashboard--review .trend-relevance-dialog::backdrop {
-  background: var(--trend-modal-backdrop);
-  backdrop-filter: blur(6px);
-}
-.trend-dashboard--review .trend-modal form {
-  border: 1px solid var(--trend-line);
-  border-top: 5px solid var(--trend-blue);
-  border-radius: 0;
-  background: var(--trend-surface);
-  box-shadow: 0 22px 48px var(--trend-modal-shadow);
-}
-.trend-dashboard--review .trend-modal footer button:last-child {
-  border-color: var(--trend-blue);
-  border-radius: 4px;
-  background: var(--trend-blue);
-}
 @media (max-width: 1100px) {
   .trend-dashboard--review .trend-workbench {
     height: auto;
@@ -1193,10 +767,6 @@
   }
   .trend-market-actions button {
     flex: 1;
-  }
-  .trend-dashboard--review .trend-tabs button {
-    padding-inline: 8px;
-    font-size: 13px;
   }
   .trend-dashboard--review .trend-filters {
     padding: 15px;
@@ -1218,16 +788,6 @@
   .trend-dashboard--review .heat-summary {
     min-width: 72px;
     padding-inline: 10px;
-  }
-  .trend-dashboard--review .trend-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  .trend-dashboard--review .trend-actions .quiet {
-    margin-left: 0;
-  }
-  .trend-dashboard--review .trend-actions :last-child {
-    grid-column: 1 / -1;
   }
 }
 
@@ -1256,11 +816,6 @@
   }
 }
 @media (max-width: 640px) {
-  .trend-dashboard--review .trend-tabs button {
-    min-width: 0;
-    flex: 1 1 0;
-    padding-inline: 8px;
-  }
   .trend-dashboard--review .trend-filter-actions {
     flex-wrap: wrap;
   }

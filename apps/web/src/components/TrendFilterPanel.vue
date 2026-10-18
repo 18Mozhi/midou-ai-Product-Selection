@@ -6,7 +6,6 @@ const props = defineProps<{ filters: TrendFilters; sort: TrendSort; activeCount:
 const emit = defineEmits<{
   apply: [];
   clear: [];
-  saveView: [];
   updateFilters: [filters: TrendFilters];
   updateSort: [sort: TrendSort];
 }>();
@@ -52,13 +51,11 @@ const updateFilter = (key: keyof TrendFilters, event: Event) =>
           <option value="impact">影响程度</option>
           <option value="latest">最新信号</option>
           <option value="momentum">增长速度</option>
-          <option value="followed">我的关注优先</option>
         </select></label
       >
       <div class="trend-filter-actions">
         <button class="filter-apply-action secondary" type="submit">筛选</button>
         <button type="button" class="secondary" @click="emit('clear')">清除</button>
-        <button type="button" class="secondary" @click="emit('saveView')">保存视图链接</button>
       </div>
     </form>
   </ResponsiveFilterDrawer>

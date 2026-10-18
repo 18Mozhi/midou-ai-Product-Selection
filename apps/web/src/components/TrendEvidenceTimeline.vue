@@ -4,11 +4,7 @@ import type { TrendDetail } from "./trend-workspace-types";
 
 const props = defineProps<{
   detail: TrendDetail;
-  busy: string;
-  qualityIssueIds: Record<string, string>;
-  canManage: boolean;
 }>();
-const emit = defineEmits<{ reportAnomaly: [item: TrendDetail["evidence"][number]] }>();
 const timelineSource = ref("");
 const freshness = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
@@ -56,15 +52,9 @@ watch(
           {{ freshness(item.observed_at) }} · 原始来源可核对</small
         ></span
       ><span class="trend-evidence-actions"
-        ><a :href="item.canonical_url" target="_blank" rel="noopener noreferrer">查看原文 ↗</a
-        ><button
-          v-if="canManage"
-          type="button"
-          :disabled="Boolean(busy) || Boolean(qualityIssueIds[item.id])"
-          @click="emit('reportAnomaly', item)"
-        >
-          {{ qualityIssueIds[item.id] ? "已建质量工单" : "报告异常" }}
-        </button></span
+        ><a :href="item.canonical_url" target="_blank" rel="noopener noreferrer"
+          >查看原文 ↗</a
+        ></span
       >
     </article>
   </section>

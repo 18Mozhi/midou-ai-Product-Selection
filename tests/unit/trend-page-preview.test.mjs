@@ -16,18 +16,9 @@ test("market intelligence uses actual Vue and preserves evidence and workflow bi
     }).errors,
     [],
   );
-  for (const contract of [
-    "/trends/monitoring-rules",
-    "/trends/change-requests",
-    "/trends/${currentId}",
-    "TrendDetailPanel",
-    "TrendChangeQueue",
-    "refreshHotspots",
-    "trend-collection-status",
-    "新建监控",
-  ])
+  for (const contract of ["/trends/${currentId}", "TrendDetailPanel", "刷新情报", "queueLoad"])
     assert.ok(source.includes(contract), contract);
-  assert.ok(source.includes("记录已读取"));
+  assert.doesNotMatch(source, /monitoring-rules|change-requests|TrendRuleDialog|TrendChangeQueue/);
   assert.doesNotMatch(
     source,
     /:status="trendReadiness.summary.status"|:title="trendReadiness.summary.title"/,

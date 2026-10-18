@@ -432,13 +432,9 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "apps/api/src/mysql-trend-repository.ts",
     "apps/api/src/trend-routes.ts",
     "apps/web/src/components/TrendDashboard.vue",
-    "apps/web/src/components/TrendRuleDialog.vue",
-    "apps/web/src/components/shared/MonitoringReadinessStrip.vue",
-    "apps/web/src/components/shared/monitoring-readiness.ts",
     "apps/web/src/components/TrendFilterPanel.vue",
     "apps/web/src/components/TrendDetailPanel.vue",
     "apps/web/src/components/TrendEvidenceTimeline.vue",
-    "apps/web/src/components/TrendChangeQueue.vue",
     "apps/web/src/components/trend-workspace-types.ts",
     "config/schema.json",
     "config/env.example",
@@ -465,13 +461,9 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       repository,
       routes,
       web,
-      ruleDialog,
-      readinessStrip,
-      readinessModel,
       filterPanel,
       detailPanel,
       evidenceTimeline,
-      changeQueue,
       webTypes,
       schema,
       env,
@@ -501,23 +493,16 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     /trend_change_self_confirmation_forbidden[\s\S]*trend_change_opportunity_conflict/,
   );
   assert.match(routes, /trend:read[\s\S]*trend:manage/);
-  const ruleList = await readFile("apps/web/src/components/TrendRuleList.vue", "utf8");
-  const webSurface = `${webTypes}\n${web}\n${ruleDialog}\n${ruleList}\n${readinessStrip}\n${readinessModel}\n${filterPanel}\n${detailPanel}\n${evidenceTimeline}\n${changeQueue}`;
-  assert.match(web, /TrendRuleList/);
+  const webSurface = `${webTypes}\n${web}\n${filterPanel}\n${detailPanel}\n${evidenceTimeline}`;
+  assert.doesNotMatch(web, /TrendRuleList|monitoring-rules|change-requests/);
   assert.match(
     webSurface,
     /loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/,
   );
   assert.match(webSurface, /来源筛选[\s\S]*timeline_sources/);
   assert.match(webSurface, /相关性回溯/);
-  assert.match(webSurface, /合并主题[\s\S]*拆分主题[\s\S]*待确认/);
-  assert.match(webSurface, /提议原因[\s\S]*驳回原因/);
-  assert.match(webSurface, /下次采集[\s\S]*上次失败来源/);
-  assert.match(web, /class="so-action-primary"[\s\S]*新建监控/);
-  assert.match(web, /class="so-action-secondary"[\s\S]*refreshHotspots/);
+  assert.match(web, /刷新情报/);
   for (const fact of ["个来源", "新鲜度", "可信度"]) assert.match(webSurface, new RegExp(fact));
-  assert.match(webSurface, /市场质量门[\s\S]*持续监控中/);
-  assert.match(webSurface, /候选不等于建议采纳[\s\S]*五项质量门/);
   assert.match(schema, /TREND_PROJECTION_POLL_MS/);
   assert.match(env, /TREND_PROJECTION_LEASE_SECONDS/);
   assert.match(openapi, /\/trends\/\{topicId\}\/follow:[\s\S]*timeline_sources/);
@@ -600,7 +585,7 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(feature, /automaticProductDiscovery/);
   assert.match(architecture, /商品型热点频道[\s\S]*待评估选品/);
   assert.match(runbook, /自动发现选品[\s\S]*回滚/);
-  assert.match(web, /route\.query\.topic[\s\S]*saveViewLink[\s\S]*清除筛选并恢复/);
+  assert.match(web, /route\.query\.topic[\s\S]*applyFilters[\s\S]*清除筛选并恢复/);
   assert.match(feature, /navigationState[\s\S]*layoutBoundary/);
   assert.match(architecture, /sort[\s\S]*topic[\s\S]*section/);
   assert.match(runbook, /复制后的视图链接[\s\S]*清除筛选并恢复/);

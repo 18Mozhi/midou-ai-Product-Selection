@@ -53,27 +53,6 @@ export interface TrendDetail extends TrendTopic {
   }>;
 }
 
-export interface TrendRule {
-  id: string;
-  name: string;
-  include_keywords: string[];
-  negative_keywords: string[];
-  market: string;
-  language: string;
-  category: string | null;
-  notification_channel: "in_app";
-  collection_interval_minutes: number;
-  recommendation_min_source_count: number;
-  status: "enabled" | "paused";
-  last_evaluated_at: string | null;
-  last_collection_at: string | null;
-  next_collection_at: string | null;
-  last_collection_task_id: string | null;
-  last_failed_sources: string[];
-  version: number;
-  updated_at: string;
-}
-
 export interface TrendFilters {
   q: string;
   market: string;
@@ -81,24 +60,4 @@ export interface TrendFilters {
   status: string;
 }
 
-export type TrendSort = "impact" | "latest" | "momentum" | "followed";
-
-export interface TrendTopicChangeRequest {
-  id: string;
-  operation: "merge" | "split";
-  target_topic: Pick<TrendTopic, "id" | "title" | "market" | "language" | "version">;
-  source_topics: Array<Pick<TrendTopic, "id" | "title" | "market" | "language" | "version">>;
-  signal_ids: string[];
-  new_title: string | null;
-  new_category: string | null;
-  reason: string;
-  status: "pending" | "confirmed" | "rejected";
-  result_topic_id: string | null;
-  proposed_by: string;
-  decided_by: string | null;
-  decision_reason: string | null;
-  decided_at: string | null;
-  version: number;
-  created_at: string;
-  updated_at: string;
-}
+export type TrendSort = "impact" | "latest" | "momentum";

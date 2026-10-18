@@ -1,7 +1,6 @@
 <script setup lang="ts">
 interface AutomaticSelectionSummary {
   state: "not_configured" | "running" | "attention";
-  enabled_rule_count: number;
   candidate_count: number;
   rule_candidate_count: number;
   recommended_count: number;
@@ -29,11 +28,11 @@ const date = (value: string | null) => (value ? new Date(value).toLocaleString("
       </RouterLink>
       <RouterLink to="/opportunities?view=evidence_pending">
         <strong>{{ selection.awaiting_evidence_count }}</strong>
-        <span>采集中</span>
+        <span>待补证据</span>
       </RouterLink>
-      <RouterLink to="/trends?section=rules">
-        <strong>{{ selection.enabled_rule_count }}</strong>
-        <span>运行规则</span>
+      <RouterLink to="/opportunities?view=all&decision_status=adopted">
+        <strong>{{ selection.adopted_count }}</strong>
+        <span>累计采纳</span>
       </RouterLink>
     </div>
 

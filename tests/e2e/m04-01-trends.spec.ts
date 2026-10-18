@@ -212,27 +212,15 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await ready(page);
   await page.goto("/trends");
   await expect(page.getByRole("heading", { name: /市场情报/, level: 2 })).toBeVisible();
-  const status = page.locator(".trend-collection-status");
-  await expect(status).not.toHaveAttribute("open");
-  await expect(status.locator("summary")).toContainText("1 条监控启用");
-  await expect(page.getByRole("button", { name: "立即刷新来源", exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "新建监控", exact: true })).toBeVisible();
+  await expect(page.locator(".trend-collection-status, .trend-tabs")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "刷新情报", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "新建监控", exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   if ((page.viewportSize()?.width ?? 0) > 1100) {
-    await expect(page.getByRole("button", { name: "保存视图链接", exact: true })).toHaveCSS(
-      "white-space",
-      "nowrap",
-    );
     const metric = await page.locator(".trend-conclusion dl div").first().boundingBox();
     expect(metric?.width).toBeGreaterThan(90);
   }
   await expect(page).toHaveScreenshot("m04-01-market-list.png", { fullPage: true });
-  await status.locator("summary").click();
-  const readiness = page.getByLabel("市场质量门 · 证据就绪");
-  await expect(readiness.getByText("1 条启用")).toBeVisible();
-  await expect(readiness.getByText("1 个")).toBeVisible();
-  await expect(readiness.getByText("记录已读取")).toBeVisible();
-  await status.locator("summary").click();
   const trendList = page.locator(".trend-list");
   await expect(trendList.getByText("2 个来源")).toBeVisible();
   await expect(trendList.getByText(/新鲜度/)).toBeVisible();
@@ -252,26 +240,16 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
     hasText: "AI Skin Care Demand Rises",
   });
   await expect(evidence).toContainText("Example News");
-  await evidence.getByRole("button", { name: "报告异常" }).click();
-  await page.getByLabel("异常说明").fill("标题与原始页面字段不一致");
-  await page.getByRole("button", { name: "创建质量工单" }).click();
-  await expect(page.getByText(new RegExp(`质量工单 ${issueId} 已创建`))).toBeVisible();
-  await expect(evidence.getByRole("button", { name: "已建质量工单" })).toBeDisabled();
+  await expect(evidence.getByRole("link", { name: "查看原文 ↗" })).toBeVisible();
   await expect(page.locator(".trend-workbench + .trend-explainer")).toBeVisible();
   await expect(page.locator(".trend-explainer")).not.toHaveAttribute("open");
   await expect(page.getByRole("link", { name: "转为机会" })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "创建监控", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "创建监控", exact: true })).toHaveCount(0);
   await page.getByLabel("来源筛选").selectOption({ label: "Example News" });
   await expect(page.locator(".timeline-bars")).toHaveAttribute(
     "aria-label",
     /来源 Example News，共 1 个时间点/,
   );
-  await page.getByRole("button", { name: "关注", exact: true }).click();
-  await expect(page.getByRole("button", { name: "已关注", exact: true })).toBeVisible();
-  await page.keyboard.press("Tab");
-  if ((page.viewportSize()?.width ?? 0) > 1100) {
-    await expect(page.getByRole("button", { name: "创建监控", exact: true })).toBeFocused();
-  }
   // Both viewports capture fixed navigation at a deliberate scroll position.
   await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
@@ -307,44 +285,31 @@ test("long trend timelines scroll inside the detail card without widening the pa
     )
     .toBe(true);
 });
-test("M04-01.A08/A09 monitoring rule and empty/forbidden states are explicit", async ({ page }) => {
-  await ready(page);
-  await page.goto("/trends");
-  await page.getByRole("button", { name: /^监控规则/ }).click();
-  await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
-  await expect(page.getByText(/邮件服务未确认/)).toBeVisible();
-  await expect(page.getByText("至少 2 个独立来源", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "＋ 创建规则" }).click();
-  await expect(page.getByRole("dialog", { name: "创建趋势监控" })).toBeVisible();
-  await expect(page.getByText("候选不等于建议采纳")).toBeVisible();
-  await page.getByLabel("规则名称").fill("新的监控");
-  await page.getByLabel("包含关键词（逗号分隔）").fill("desk lamp");
-  await page.getByRole("button", { name: "创建并启用" }).click();
-  await expect(page.getByText("关键词监控已启用；系统会继续采集相关情报。")).toBeVisible();
-});
-
-test("monitoring-rule deep links open the rule view and keep the legacy alias working", async ({
+test("member intelligence exposes no configuration or mutation controls even to managers", async ({
   page,
 }) => {
   await ready(page);
-  await page.goto("/trends?section=rules");
-  await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
-  await page.goto("/trends?tab=rules");
-  await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
-
-  await page.getByRole("button", { name: "趋势主题" }).click();
-  await expect(page).not.toHaveURL(/(?:\?|&)tab=rules(?:&|$)/);
-  await expect(page.getByRole("button", { name: "趋势主题" })).toHaveAttribute(
-    "aria-current",
-    "page",
-  );
-  await page.getByRole("button", { name: /^监控规则/ }).click();
-  await expect(page).toHaveURL(/section=rules/);
-  await expect(page).not.toHaveURL(/(?:\?|&)tab=/);
-  await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
+  await page.goto("/trends");
+  await expect(page.getByRole("heading", { name: /市场情报/, level: 2 })).toBeVisible();
+  for (const name of ["新建监控", "创建监控", "关注", "标记无关", "报告异常"])
+    await expect(page.getByRole("button", { name, exact: true })).toHaveCount(0);
+  await expect(page.locator(".trend-rule-dialog, .trend-governance, .trend-tabs")).toHaveCount(0);
 });
 
-test("trend:read-only loads topics and rules without requesting or exposing governance", async ({
+test("retired monitoring and governance links resolve to intelligence without configuration requests", async ({
+  page,
+}) => {
+  await ready(page);
+  for (const query of ["section=rules", "tab=rules", "section=governance"]) {
+    await page.goto(`/trends?${query}&q=skin`);
+    await expect(page.getByRole("heading", { name: /市场情报/, level: 2 })).toBeVisible();
+    await expect(page).not.toHaveURL(/(?:section|tab)=/);
+    await expect(page).toHaveURL(/q=skin/);
+    await expect(page.locator(".trend-tabs")).toHaveCount(0);
+  }
+});
+
+test("trend:read-only loads intelligence and evidence without requesting management", async ({
   page,
 }) => {
   let governanceRequests = 0;
@@ -364,38 +329,38 @@ test("trend:read-only loads topics and rules without requesting or exposing gove
   if ((page.viewportSize()?.width ?? 0) <= 1100)
     await page.locator(".trend-list > button").first().click();
   await expect(page.getByRole("heading", { name: topic.title })).toBeVisible();
-  await expect(page.getByRole("button", { name: "立即刷新来源" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "刷新情报" })).toBeVisible();
   await expect(page.getByRole("button", { name: /合并与拆分/ })).toHaveCount(0);
   await expect(page.getByRole("button", { name: /创建监控/ })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "关注", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "标记无关" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "报告异常" })).toHaveCount(0);
 
-  await page.getByRole("button", { name: /^监控规则/ }).click();
-  await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
-  await expect(page.getByText(/当前为只读权限/)).toBeVisible();
-  await expect(page.getByText(rule.name)).toBeVisible();
-  await expect(page.getByRole("button", { name: "暂停" })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "查看趋势结果" })).toBeVisible();
   await page.waitForLoadState("networkidle");
   expect(governanceRequests).toBe(0);
   expect(consoleErrors).toEqual([]);
   expect(requestFailures).toEqual([]);
 });
 
-test("trend governance proposes a merge into a second-person confirmation queue", async ({
+test("refreshing intelligence only reloads facts and never calls management endpoints", async ({
   page,
 }) => {
-  await ready(page, [topic, mergeTopic]);
+  let mutations = 0,
+    legacyReads = 0;
+  await ready(page);
+  page.on("request", (req) => {
+    const url = new URL(req.url());
+    if (url.pathname.startsWith("/api/v1/trends") && req.method() !== "GET") mutations++;
+    if (/\/trends\/(monitoring-rules|change-requests)/.test(url.pathname)) legacyReads++;
+  });
   await page.goto("/trends");
-  await page.getByRole("button", { name: /合并与拆分/ }).click();
-  await expect(page.getByRole("heading", { name: "合并与拆分确认队列" })).toBeVisible();
-  await page.getByText(`${mergeTopic.title} · v${mergeTopic.version}`).click();
-  await page.getByLabel("提议原因").fill("两个主题描述同一消费信号");
-  await page.getByRole("button", { name: "提交确认队列" }).click();
-  await expect(page.getByText("治理提议已进入确认队列；需要另一位趋势管理员确认。")).toBeVisible();
-  await expect(page.getByText("1 项待确认")).toBeVisible();
-  await expect(page.getByText(`并入：${mergeTopic.title}`)).toBeVisible();
+  await expect(page.getByRole("heading", { name: /市场情报/, level: 2 })).toBeVisible();
+  const refreshed = page.waitForResponse((r) => new URL(r.url()).pathname === "/api/v1/trends");
+  await page.getByRole("button", { name: "刷新情报", exact: true }).click();
+  await refreshed;
+  await expect(page.locator(".trend-list > button")).toHaveCount(1);
+  expect(mutations).toBe(0);
+  expect(legacyReads).toBe(0);
 });
 
 test("trend view URL restores filters, sorting and direct topic navigation", async ({ page }) => {

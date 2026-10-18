@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   computed,
-  nextTick,
   onActivated,
   onBeforeUnmount,
   onDeactivated,
@@ -12,24 +11,16 @@ import {
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
-import TrendEvidenceDialogs from "./TrendEvidenceDialogs.vue";
 import UiStatePanel from "./UiStatePanel.vue";
-import MonitoringReadinessStrip from "./shared/MonitoringReadinessStrip.vue";
-import { buildTrendMonitoringReadiness } from "./shared/monitoring-readiness";
 import TrendDetailPanel from "./TrendDetailPanel.vue";
 import TrendFilterPanel from "./TrendFilterPanel.vue";
-import TrendChangeQueue from "./TrendChangeQueue.vue";
-import TrendRuleDialog, { type TrendRuleDraft } from "./TrendRuleDialog.vue";
-import TrendRuleList from "./TrendRuleList.vue";
 import TrendMetricExplainer from "./TrendMetricExplainer.vue";
 import { statusLabel } from "../ui/status-labels";
 import type {
   TrendDetail as Detail,
   TrendFilters,
-  TrendRule as Rule,
   TrendSort,
   TrendTopic as Topic,
-  TrendTopicChangeRequest,
   TrendWorkspaceState as State,
 } from "./trend-workspace-types";
 import "../trends.css";
@@ -47,20 +38,9 @@ const props = defineProps<{
   topics = ref<Topic[]>([]),
   selected = ref<Detail | null>(null),
   mobileDetailOpen = ref(typeof route.query.topic === "string"),
-  rules = ref<Rule[]>([]),
-  changeRequests = ref<TrendTopicChangeRequest[]>([]),
   requestId = ref(""),
   message = ref(""),
   busy = ref(""),
-  tab = ref<"topics" | "rules" | "governance">("topics"),
-  showRule = ref(false),
-  anomalyEvidence = ref<Detail["evidence"][number] | null>(null),
-  anomalySeverity = ref<"warning" | "critical">("warning"),
-  anomalyReason = ref(""),
-  qualityIssueIds = reactive<Record<string, string>>({}),
-  relevanceDialog = ref<"active" | "irrelevant" | null>(null),
-  relevanceReason = ref(""),
-  evidenceDialogs = ref<{ discardAnomalyReturnFocus: () => void } | null>(null),
   total = ref(0),
   page = ref(1),
   sort = ref<TrendSort>("impact"),
@@ -94,24 +74,7 @@ const stateFrom = (kind: ApiFailureKind): State =>
       : kind === "blocked" || kind === "rate_limited"
         ? "blocked"
         : "error";
-const canManageTrends = computed(() => props.capabilities.includes("trend:manage")),
-  enabledRules = computed(() => rules.value.filter((item) => item.status === "enabled")),
-  evaluatedRuleCount = computed(
-    () => enabledRules.value.filter((item) => Boolean(item.last_evaluated_at)).length,
-  ),
-  failedRuleSources = computed(() => [
-    ...new Set(enabledRules.value.flatMap((item) => item.last_failed_sources)),
-  ]),
-  trendReadiness = computed(() =>
-    buildTrendMonitoringReadiness({
-      loading: state.value === "loading",
-      enabledRules: enabledRules.value.length,
-      evaluatedRules: evaluatedRuleCount.value,
-      totalTopics: total.value,
-      failedSources: failedRuleSources.value.length,
-    }),
-  ),
-  activeFilterCount = computed(
+const activeFilterCount = computed(
     () =>
       [filters.q, filters.market, filters.category].filter(Boolean).length +
       Number(filters.status !== "active"),
@@ -127,11 +90,6 @@ const canManageTrends = computed(() => props.capabilities.includes("trend:manage
       return items.sort(
         (left, right) =>
           (right.momentum_percent ?? -Infinity) - (left.momentum_percent ?? -Infinity),
-      );
-    if (sort.value === "followed")
-      return items.sort(
-        (left, right) =>
-          Number(right.followed) - Number(left.followed) || right.heat.value - left.heat.value,
       );
     return items.sort(
       (left, right) => right.heat.value - left.heat.value || right.source_count - left.source_count,
@@ -165,7 +123,8 @@ async function load() {
     filters.market,
     filters.category,
     filters.status,
-    canManageTrends.value,
+    props.organizationId,
+    props.workspaceId,
   ]);
   if (activeListReadKey === readKey && listReadController && !listReadController.signal.aborted)
     return;
@@ -186,21 +145,9 @@ async function load() {
     const params = new URLSearchParams({ page: String(page.value), page_size: "20" });
     for (const [key, value] of Object.entries(filters))
       if (value) params.set(key === "q" ? "q" : key, value);
-    const governanceRequest = canManageTrends.value
-      ? read("/trends/change-requests", isCurrent, controller.signal)
-      : Promise.resolve({ data: [] });
-    const [list, ruleList, governanceList] = await Promise.all([
-      read(`/trends?${params}`, isCurrent, controller.signal),
-      read("/trends/monitoring-rules", isCurrent, controller.signal),
-      governanceRequest,
-    ]);
+    const list = await read(`/trends?${params}`, isCurrent, controller.signal);
     if (!isCurrent()) return;
     topics.value = list.data;
-    rules.value = ruleList.data.map((item: Rule) => ({
-      ...item,
-      last_failed_sources: item.last_failed_sources ?? [],
-    }));
-    changeRequests.value = governanceList.data;
     total.value = (list.meta as { total: number }).total;
     if (detailGeneration !== topicDetailReadGeneration) return;
     const requestedTopic = typeof route.query.topic === "string" ? route.query.topic : "";
@@ -247,7 +194,8 @@ function queueLoad() {
     filters.market,
     filters.category,
     filters.status,
-    canManageTrends.value,
+    props.organizationId,
+    props.workspaceId,
   ]);
   if (queuedLoadKey === key || lastAutoLoadKey === key) return;
   lastAutoLoadKey = key;
@@ -273,18 +221,22 @@ function syncFromRoute() {
   filters.status = typeof route.query.status === "string" ? route.query.status : "active";
   const requestedPage = Number(route.query.page ?? 1);
   page.value = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
-  sort.value = ["impact", "latest", "momentum", "followed"].includes(String(route.query.sort))
+  sort.value = ["impact", "latest", "momentum"].includes(String(route.query.sort))
     ? (route.query.sort as typeof sort.value)
     : "impact";
-  const rulesRequested = route.query.section === "rules" || route.query.tab === "rules";
-  const governanceRequested = route.query.section === "governance";
-  tab.value = rulesRequested
-    ? "rules"
-    : governanceRequested && canManageTrends.value
-      ? "governance"
-      : "topics";
-  if (governanceRequested && !canManageTrends.value)
-    void router.replace({ query: { ...route.query, section: undefined } });
+  if (
+    route.query.section !== undefined ||
+    route.query.tab !== undefined ||
+    route.query.sort === "followed"
+  )
+    void router.replace({
+      query: {
+        ...route.query,
+        section: undefined,
+        tab: undefined,
+        sort: sort.value === "impact" ? undefined : sort.value,
+      },
+    });
 }
 async function applyFilters() {
   const previousPath = route.fullPath;
@@ -317,171 +269,6 @@ async function goPage(nextPage: number) {
   await router.push({
     query: { ...route.query, page: nextPage === 1 ? undefined : nextPage, topic: undefined },
   });
-}
-async function setTab(nextTab: "topics" | "rules" | "governance") {
-  if (nextTab === "governance" && !canManageTrends.value) return;
-  await router.push({
-    query: {
-      ...route.query,
-      tab: undefined,
-      section: nextTab === "topics" ? undefined : nextTab,
-    },
-  });
-}
-async function saveViewLink() {
-  try {
-    await navigator.clipboard.writeText(window.location.href);
-    message.value = "当前排序、筛选和页码链接已复制，可作为此视图入口。";
-  } catch {
-    message.value = "当前视图已同步到地址栏，可复制地址保存。";
-  }
-}
-async function viewRuleTopics(item: Rule) {
-  filters.q = item.include_keywords[0] ?? "";
-  await applyFilters();
-}
-async function write(path: string, method: string, body?: unknown) {
-  busy.value = path;
-  message.value = "";
-  try {
-    const response = await request<any>(path, {
-      method,
-      ...(body ? { body } : {}),
-    });
-    requestId.value = response.request_id;
-    return response.data;
-  } catch (error) {
-    if (error instanceof ApiClientError) {
-      requestId.value = error.requestId;
-      message.value = error.actionHint;
-      return null;
-    }
-    message.value = "依赖暂不可用，未写入任何状态。";
-    return null;
-  } finally {
-    busy.value = "";
-  }
-}
-function requireTrendManage() {
-  if (canManageTrends.value) return true;
-  message.value = "当前账号仅有趋势查看权限，管理操作未执行。";
-  return false;
-}
-async function follow() {
-  const target = selected.value;
-  if (!target || !requireTrendManage()) return;
-  const result = await write(`/trends/${target.id}/follow`, target.followed ? "DELETE" : "PUT");
-  if (result) {
-    target.followed = result.followed;
-    const item = topics.value.find((topic) => topic.id === target.id);
-    if (item) item.followed = result.followed;
-    message.value = result.followed ? "已关注该主题。" : "已取消关注。";
-  }
-}
-async function markIrrelevant() {
-  if (!selected.value || !relevanceDialog.value || !requireTrendManage()) return;
-  const targetStatus = relevanceDialog.value;
-  const result = await write(`/trends/${selected.value.id}/relevance`, "POST", {
-    status: targetStatus,
-    reason: relevanceReason.value.trim(),
-    expected_version: selected.value.version,
-  });
-  if (!result) return;
-  relevanceDialog.value = null;
-  relevanceReason.value = "";
-  message.value =
-    targetStatus === "active"
-      ? "已恢复为相关主题；历史原因完整保留。"
-      : "已标记无关；原始证据与原因保留。";
-  await load();
-}
-function openRelevance(status: "active" | "irrelevant") {
-  if (!requireTrendManage()) return;
-  relevanceReason.value = "";
-  relevanceDialog.value = status;
-}
-function openAnomaly(item: Detail["evidence"][number]) {
-  if (!requireTrendManage()) return;
-  anomalyEvidence.value = item;
-  anomalySeverity.value = "warning";
-  anomalyReason.value = "";
-}
-async function createQualityIssue() {
-  if (!selected.value || !anomalyEvidence.value || !requireTrendManage()) return;
-  const evidenceId = anomalyEvidence.value.id,
-    result = await write(
-      `/trends/${selected.value.id}/evidence/${evidenceId}/quality-issues`,
-      "POST",
-      { severity: anomalySeverity.value, reason: anomalyReason.value.trim() },
-    );
-  if (!result) return;
-  qualityIssueIds[evidenceId] = result.issue.id;
-  evidenceDialogs.value?.discardAnomalyReturnFocus();
-  anomalyEvidence.value = null;
-  anomalyReason.value = "";
-  message.value = result.created
-    ? `质量工单 ${result.issue.id} 已创建，可在数据质量页继续处理。`
-    : `该证据已有未关闭质量工单 ${result.issue.id}，请直接继续处理。`;
-  await nextTick();
-  document.querySelector<HTMLButtonElement>('.trend-tabs button[aria-current="page"]')?.focus();
-}
-async function createRule(form: TrendRuleDraft) {
-  if (!requireTrendManage()) return;
-  const result = await write("/trends/monitoring-rules", "POST", form);
-  if (result) {
-    showRule.value = false;
-    await load();
-    message.value = "关键词监控已启用；系统会继续采集相关情报。";
-    await setTab("rules");
-  }
-}
-async function toggleRule(item: Rule) {
-  if (!requireTrendManage()) return;
-  const result = await write(`/trends/monitoring-rules/${item.id}`, "PATCH", {
-    status: item.status === "enabled" ? "paused" : "enabled",
-    expected_version: item.version,
-    collection_interval_minutes: item.collection_interval_minutes,
-    recommendation_min_source_count: item.recommendation_min_source_count,
-  });
-  if (result) {
-    Object.assign(item, result);
-    message.value = item.status === "enabled" ? "规则已启用。" : "规则已暂停。";
-  }
-}
-async function proposeTopicChange(payload: Record<string, unknown>) {
-  if (!requireTrendManage()) return;
-  const result = await write("/trends/change-requests", "POST", payload);
-  if (!result) return;
-  await load();
-  await setTab("governance");
-  message.value = "治理提议已进入确认队列；需要另一位趋势管理员确认。";
-}
-async function decideTopicChange(payload: {
-  requestId: string;
-  decision: "confirm" | "reject";
-  reason: string;
-  expectedVersion: number;
-}) {
-  if (!requireTrendManage()) return;
-  const result = await write(`/trends/change-requests/${payload.requestId}/decisions`, "POST", {
-    decision: payload.decision,
-    reason: payload.reason,
-    expected_version: payload.expectedVersion,
-  });
-  if (!result) return;
-  await load();
-  message.value =
-    payload.decision === "confirm"
-      ? "主题治理已确认执行；信号、关注和允许迁移的机会关联已同步。"
-      : "治理提议已驳回并保留处理说明。";
-}
-async function refreshHotspots() {
-  const result = await write("/provider-sources/refresh", "POST", {
-    organization_id: props.organizationId,
-    workspace_id: props.workspaceId,
-  });
-  if (result)
-    message.value = `已开始从 ${result.source_count} 个实时频道获取热点，通常几分钟内出现在列表中。`;
 }
 watch(
   () => [
@@ -536,18 +323,15 @@ watch(
   () => [route.query.section, route.query.tab, route.query.sort],
   () => syncFromRoute(),
 );
-watch(canManageTrends, (allowed) => {
-  if (allowed && pageActive) {
+watch(
+  () => [props.organizationId, props.workspaceId],
+  () => {
+    selected.value = null;
+    topics.value = [];
     lastAutoLoadKey = null;
     queueLoad();
-    return;
-  }
-  changeRequests.value = [];
-  showRule.value = false;
-  anomalyEvidence.value = null;
-  relevanceDialog.value = null;
-  if (tab.value === "governance") void setTab("topics");
-});
+  },
+);
 onMounted(() => {
   syncFromRoute();
   void load();
@@ -599,165 +383,73 @@ onBeforeUnmount(() => {
         <button
           type="button"
           class="so-action-secondary"
-          :disabled="Boolean(busy)"
-          @click="refreshHotspots"
+          :disabled="state === 'loading'"
+          @click="load"
         >
-          {{ busy === "/provider-sources/refresh" ? "正在启动…" : "立即刷新来源" }}
-        </button>
-        <button
-          v-if="canManageTrends"
-          class="so-action-primary"
-          type="button"
-          @click="showRule = true"
-        >
-          新建监控
+          刷新情报
         </button>
       </div>
     </header>
-    <details class="trend-collection-status">
-      <summary>
-        采集与证据状态
-        <span v-if="state === 'ready' || state === 'empty'"
-          >{{ enabledRules.length }} 条监控启用</span
-        ><span v-else>状态待确认</span>
-      </summary>
-      <MonitoringReadinessStrip
-        eyebrow="市场质量门 · 证据就绪"
-        title="监控与来源记录"
-        description="状态来自当前监控规则和来源记录；商品评分请查看对应选品证据。"
-        :status="state === 'ready' || state === 'empty' ? '记录已读取' : '状态待确认'"
-        :tone="trendReadiness.summary.tone"
-        :facts="trendReadiness.facts"
-      />
-    </details>
-    <nav class="trend-tabs" aria-label="热点趋势视图">
-      <button :aria-current="tab === 'topics' ? 'page' : undefined" @click="setTab('topics')">
-        趋势主题</button
-      ><button :aria-current="tab === 'rules' ? 'page' : undefined" @click="setTab('rules')">
-        监控规则 <b>{{ rules.length }}</b></button
-      ><button
-        v-if="canManageTrends"
-        :aria-current="tab === 'governance' ? 'page' : undefined"
-        @click="setTab('governance')"
-      >
-        合并与拆分 <b>{{ changeRequests.filter((item) => item.status === "pending").length }}</b>
-      </button>
-    </nav>
     <p v-if="message" class="trend-message" role="status">
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
     </p>
-    <template v-if="tab === 'topics'">
-      <TrendFilterPanel
-        :filters="filters"
-        :sort="sort"
-        :active-count="activeFilterCount"
-        @apply="applyFilters"
-        @clear="clearFilters"
-        @save-view="saveViewLink"
-        @update-filters="Object.assign(filters, $event)"
-        @update-sort="sort = $event"
-      />
-      <UiStatePanel
-        v-if="state !== 'ready'"
-        :kind="state"
-        :request-id="requestId"
-        :primary-label="state === 'empty' ? '清除筛选并恢复' : '重新加载'"
-        :hide-secondary="true"
-        @primary="recoverTopics"
-      />
-      <div v-else class="trend-workbench" :class="{ 'is-mobile-detail-open': mobileDetailOpen }">
-        <section id="trend-list" class="trend-list">
-          <header>
-            <div>
-              <strong>情报列表</strong><span>共 {{ total }} 个主题</span>
-            </div>
-            <small>{{ sort === "impact" ? "按影响程度排序" : "按所选视图排序" }}</small>
-          </header>
-          <button
-            v-for="(topic, index) in sortedTopics"
-            :key="topic.id"
-            type="button"
-            :aria-pressed="selected?.id === topic.id"
-            @click="selectTopic(topic)"
-          >
-            <span class="topic-index" aria-hidden="true">{{ (page - 1) * 20 + index + 1 }}</span
-            ><span
-              ><strong>{{ topic.title }}</strong
-              ><small
-                >{{ topic.market }} · {{ topic.category || "未分类" }} ·
-                {{ statusLabel(topic.status) }}</small
-              ><small
-                >{{ topic.source_count }} 个来源 · 新鲜度
-                {{ freshness(topic.source_fresh_at) }}</small
-              ><small
-                >{{ confidenceLabel(topic)
-                }}<template v-if="topic.followed"> · 已关注</template></small
-              ></span
-            ><span class="topic-heat"
-              ><b>{{ topic.heat.value }}</b
-              ><small>条信号</small></span
-            ><em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
-          </button>
-          <footer class="trend-pagination" aria-label="趋势分页">
-            <button type="button" :disabled="page <= 1" @click="goPage(page - 1)">上一页</button>
-            <span>第 {{ page }} / {{ pageCount }} 页</span>
-            <button type="button" :disabled="page >= pageCount" @click="goPage(page + 1)">
-              下一页
-            </button>
-          </footer>
-        </section>
-        <TrendDetailPanel
-          v-if="selected"
-          :detail="selected"
-          :busy="busy"
-          :quality-issue-ids="qualityIssueIds"
-          :can-manage="canManageTrends"
-          @back="returnToTopicList"
-          @follow="follow"
-          @create-rule="showRule = true"
-          @change-relevance="openRelevance"
-          @report-anomaly="openAnomaly"
-        />
-      </div>
-      <TrendMetricExplainer />
-    </template>
-    <TrendRuleList
-      v-else-if="tab === 'rules'"
-      :state="state"
+    <TrendFilterPanel
+      :filters="filters"
+      :sort="sort"
+      :active-count="activeFilterCount"
+      @apply="applyFilters"
+      @clear="clearFilters"
+      @update-filters="Object.assign(filters, $event)"
+      @update-sort="sort = $event"
+    />
+    <UiStatePanel
+      v-if="state !== 'ready'"
+      :kind="state"
       :request-id="requestId"
-      :rules="rules"
-      :can-manage="canManageTrends"
-      @reload="load"
-      @create="showRule = true"
-      @toggle="toggleRule"
-      @view-topics="viewRuleTopics"
+      :primary-label="state === 'empty' ? '清除筛选并恢复' : '重新加载'"
+      :hide-secondary="true"
+      @primary="recoverTopics"
     />
-    <TrendChangeQueue
-      v-else-if="canManageTrends"
-      :topics="topics"
-      :selected="selected"
-      :requests="changeRequests"
-      :busy="busy"
-      @propose="proposeTopicChange"
-      @decide="decideTopicChange"
-    />
-    <TrendRuleDialog
-      :open="showRule && canManageTrends"
-      :busy="Boolean(busy)"
-      @close="showRule = false"
-      @submit="createRule"
-    />
-    <TrendEvidenceDialogs
-      ref="evidenceDialogs"
-      v-model:anomaly-evidence="anomalyEvidence"
-      v-model:anomaly-severity="anomalySeverity"
-      v-model:anomaly-reason="anomalyReason"
-      v-model:relevance-dialog="relevanceDialog"
-      v-model:relevance-reason="relevanceReason"
-      :can-manage="canManageTrends"
-      :busy="busy"
-      @create-quality-issue="createQualityIssue"
-      @mark-irrelevant="markIrrelevant"
-    />
+    <div v-else class="trend-workbench" :class="{ 'is-mobile-detail-open': mobileDetailOpen }">
+      <section id="trend-list" class="trend-list">
+        <header>
+          <div>
+            <strong>情报列表</strong><span>共 {{ total }} 个主题</span>
+          </div>
+          <small>{{ sort === "impact" ? "按影响程度排序" : "按所选视图排序" }}</small>
+        </header>
+        <button
+          v-for="(topic, index) in sortedTopics"
+          :key="topic.id"
+          type="button"
+          :aria-pressed="selected?.id === topic.id"
+          @click="selectTopic(topic)"
+        >
+          <span class="topic-index" aria-hidden="true">{{ (page - 1) * 20 + index + 1 }}</span
+          ><span
+            ><strong>{{ topic.title }}</strong
+            ><small
+              >{{ topic.market }} · {{ topic.category || "未分类" }} ·
+              {{ statusLabel(topic.status) }}</small
+            ><small
+              >{{ topic.source_count }} 个来源 · 新鲜度
+              {{ freshness(topic.source_fresh_at) }}</small
+            ><small>{{ confidenceLabel(topic) }}</small></span
+          ><span class="topic-heat"
+            ><b>{{ topic.heat.value }}</b
+            ><small>条信号</small></span
+          ><em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
+        </button>
+        <footer class="trend-pagination" aria-label="趋势分页">
+          <button type="button" :disabled="page <= 1" @click="goPage(page - 1)">上一页</button>
+          <span>第 {{ page }} / {{ pageCount }} 页</span>
+          <button type="button" :disabled="page >= pageCount" @click="goPage(page + 1)">
+            下一页
+          </button>
+        </footer>
+      </section>
+      <TrendDetailPanel v-if="selected" :detail="selected" :busy="busy" @back="returnToTopicList" />
+    </div>
+    <TrendMetricExplainer />
   </section>
 </template>
