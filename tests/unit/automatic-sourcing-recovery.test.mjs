@@ -33,8 +33,10 @@ function setup(
       calls.push([sql, values]);
       if (sql.startsWith("SELECT id,code FROM providers")) return [providers];
       if (sql.startsWith("SELECT o.id opportunity_id")) return [rows];
-      if (sql.startsWith("SELECT q.id FROM collection_subqueries"))
+      if (sql.startsWith("SELECT q.id FROM collection_subqueries")) {
+        if (existingCompetitorTasks instanceof Error) throw existingCompetitorTasks;
         return [existingCompetitorTasks];
+      }
       if (sql.startsWith("SELECT c.id,c.organization_id")) return [refreshRows];
       if (sql.startsWith("SELECT o.id discovery_opportunity_id")) return [discoveryRows];
       if (sql.startsWith("UPDATE sourcing_searches")) return [{ affectedRows: 1 }];
@@ -356,6 +358,8 @@ test("insufficient or unclassified competitors get a cooled-down discovery throu
     "recent.organization_id=o.organization_id",
     "recent.workspace_id=o.workspace_id",
     "busy.active_count IS NULL",
+    "busy.workspace_id=o.workspace_id",
+    "busy.opportunity_id=CONVERT(o.id USING utf8mb4)",
     "recent.last_discovery_at<=?",
     "competitors_classified",
     "COUNT(DISTINCT UPPER(c_sample.external_id))",
@@ -368,6 +372,49 @@ test("insufficient or unclassified competitors get a cooled-down discovery throu
   ])
     assert.ok(sql.includes(term), term);
   assert.deepEqual(calls.slice(-2), [["commit"], ["release"]]);
+});
+
+test("locked recent or active same-product discovery blocks stale candidate admission", async () => {
+  const { worker, calls, tasks } = setup(
+    [],
+    [{ id: "amazon", code: "amazon_product" }],
+    [],
+    [discoveryRow],
+    [{ id: "already-scheduled" }],
+  );
+  await worker.enqueueMissingAutomaticDownstream();
+  assert.equal(tasks.length, 0);
+  const [sql, values] = calls.find(([sql]) =>
+    String(sql).startsWith("SELECT q.id FROM collection_subqueries"),
+  );
+  assert.match(
+    sql,
+    /active_task.organization_id=q.organization_id AND active_task.workspace_id=q.workspace_id/,
+  );
+  assert.match(sql, /q.created_at>\? OR active_task.status IN/);
+  assert.match(sql, /LIMIT 1 FOR UPDATE$/);
+  assert.deepEqual(values, [
+    "amazon",
+    discoveryRow.organization_id,
+    discoveryRow.workspace_id,
+    discoveryRow.discovery_opportunity_id,
+    new Date("2026-10-16T23:00:00Z"),
+  ]);
+});
+
+test("failed locking discovery recheck rolls back without queueing or consuming the turn", async () => {
+  const failure = new Error("locking recheck failed");
+  const { worker, calls, tasks } = setup(
+    [],
+    [{ id: "amazon", code: "amazon_product" }],
+    [],
+    [discoveryRow],
+    failure,
+  );
+  await assert.rejects(worker.enqueueMissingAutomaticDownstream(), (error) => error === failure);
+  assert.equal(tasks.length, 0);
+  assert.deepEqual(calls.slice(-2), [["rollback"], ["release"]]);
+  assert.equal(worker.preferCompetitorDiscovery, false);
 });
 
 test("periodic details and incomplete discovery alternate without scheduling both in one transaction", async () => {

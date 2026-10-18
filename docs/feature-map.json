@@ -1,4 +1,15 @@
 {
+  "competitorDiscoveryResourceAdmission20261018": {
+    "status": "implemented",
+    "requirements": "docs/competitor-discovery-resource-admission.md",
+    "sourceFiles": ["apps/worker/src/trend-projection-persistence.ts"],
+    "testFiles": [
+      "tests/unit/automatic-sourcing-recovery.test.mjs",
+      "tests/unit/trend-projection-worker-scheduling.test.mjs",
+      "tests/unit/collection-completion-scheduling.test.mjs"
+    ],
+    "contract": "Insufficient-rival discovery waits only for active discovery on the same organization/workspace/opportunity, not all unrelated organization tasks. Retain source activation, five proven rivals, original cooldown, global backlog cap, one-minute eligibility scan and periodic alternation. Locking same-resource recent/active recheck prevents stale candidate duplication; failure rolls back without advancing the turn. No priority, concurrency, new config/API field/schema/dependency/frontend/Python or tenant status change."
+  },
   "amazonDeliveryAbortedReread20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-delivery-aborted-reread.md",

@@ -539,9 +539,15 @@ export class TrendProjectionPersistence {
        JOIN organizations active_org ON active_org.id=o.organization_id AND active_org.status='active'
        JOIN workspaces active_workspace ON active_workspace.id=o.workspace_id
          AND active_workspace.organization_id=o.organization_id AND active_workspace.status='active'
-       LEFT JOIN (SELECT organization_id,COUNT(*) active_count FROM collection_tasks
-         WHERE ${activeCollectionScopeSql("collection_tasks")} AND status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')
-         GROUP BY organization_id) busy ON busy.organization_id=o.organization_id
+       LEFT JOIN (SELECT q.organization_id,q.workspace_id,
+         JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.opportunity_id')) opportunity_id,COUNT(*) active_count
+         FROM collection_subqueries q JOIN collection_tasks active_task ON active_task.id=q.task_id
+           AND active_task.organization_id=q.organization_id AND active_task.workspace_id=q.workspace_id
+         WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='opportunity_competitors'
+           AND active_task.status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')
+         GROUP BY q.organization_id,q.workspace_id,opportunity_id) busy
+         ON busy.organization_id=o.organization_id AND busy.workspace_id=o.workspace_id
+         AND busy.opportunity_id=CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_bin
        LEFT JOIN (SELECT q.organization_id,q.workspace_id,
          JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.opportunity_id')) opportunity_id,MAX(q.created_at) last_discovery_at
          FROM collection_subqueries q
@@ -563,6 +569,16 @@ export class TrendProjectionPersistence {
     const row = rows[0],
       title = typeof row?.discovery_query === "string" ? row.discovery_query.trim() : "";
     if (!row || !/^[A-Z0-9]{10}$/.test(String(row.primary_asin)) || !title) return false;
+    const [existing] = await c.query<RowDataPacket[]>(
+      "SELECT q.id FROM collection_subqueries q JOIN collection_tasks active_task ON active_task.id=q.task_id " +
+        "AND active_task.organization_id=q.organization_id AND active_task.workspace_id=q.workspace_id " +
+        "WHERE q.provider_id=? AND q.organization_id=? AND q.workspace_id=? " +
+        "AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='opportunity_competitors' " +
+        "AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.opportunity_id'))=? " +
+        "AND (q.created_at>? OR active_task.status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')) LIMIT 1 FOR UPDATE",
+      [providerId, row.organization_id, row.workspace_id, row.discovery_opportunity_id, before],
+    );
+    if (existing[0]) return false;
     await this.scheduleCoreCollection(
       c,
       {

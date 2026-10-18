@@ -276,14 +276,18 @@ for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscov
     assert.equal(await persistence[method](connection, "amazon", now), false);
     assert.equal(statements.length, 1);
     assert.ok(statements[0].includes(activeCollectionScopeSql("backlog")));
-    assert.ok(statements[0].includes(activeCollectionScopeSql("collection_tasks")));
-    if (method === "enqueueDueCompetitorRefresh")
+    if (method === "enqueueDueCompetitorRefresh") {
+      assert.ok(statements[0].includes(activeCollectionScopeSql("collection_tasks")));
       assert.ok(statements[0].includes(activeCollectionScopeSql("c")));
-    else
+    } else {
       assert.match(
         statements[0],
         /active_workspace.organization_id=o.organization_id AND active_workspace.status='active'/,
       );
+      assert.match(statements[0], /busy.workspace_id=o.workspace_id/);
+      assert.match(statements[0], /busy.opportunity_id=CONVERT\(o.id USING utf8mb4\)/);
+      assert.match(statements[0], /active_task.workspace_id=q.workspace_id/);
+    }
   });
 }
 
