@@ -1,4 +1,11 @@
 {
+  "selectionTrendDetailFacts20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-trend-detail-facts.md",
+    "sourceFiles": ["apps/web/src/components/TrendDetailPanel.vue", "apps/web/src/trends.css"],
+    "testFiles": ["tests/e2e/m04-01-trends.spec.ts"],
+    "contract": "Compact semantic six-fact row replaces duplicated signal hero and conclusion boxes. Preserve raw signal/source/evidence counts, unknown confidence, coverage and momentum, timestamps, source links, timeline, filters and readonly permissions. Remove old CSS. No API/schema/config/Python/dependency change; daily100 remains unverified."
+  },
   "amazonConfirmedRegionReread20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-us-observation-context.md",

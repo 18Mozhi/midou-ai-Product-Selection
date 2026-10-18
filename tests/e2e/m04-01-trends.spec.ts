@@ -217,7 +217,7 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await expect(page.getByRole("button", { name: "新建监控", exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   if ((page.viewportSize()?.width ?? 0) > 1100) {
-    const metric = await page.locator(".trend-conclusion dl div").first().boundingBox();
+    const metric = await page.locator(".trend-detail-facts div").first().boundingBox();
     expect(metric?.width).toBeGreaterThan(90);
   }
   await expect(page).toHaveScreenshot("m04-01-market-list.png", { fullPage: true });
@@ -234,8 +234,10 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
     await expect(trendList).toHaveCSS("overflow-y", "auto");
     await expect(page.locator(".trend-detail")).toHaveCSS("overflow-y", "auto");
   }
-  await expect(page.getByText("实际信号数", { exact: true })).toBeVisible();
-  await expect(page.getByText("置信度：数据不足；不会用默认分数代替。")).toBeVisible();
+  const facts = page.getByRole("definition").filter({ hasText: "4 条" });
+  await expect(facts).toBeVisible();
+  await expect(page.getByLabel("情报资料")).toContainText("可信度数据不足");
+  await expect(page.locator(".heat-summary, .trend-conclusion")).toHaveCount(0);
   const evidence = page.locator(".trend-evidence-item").filter({
     hasText: "AI Skin Care Demand Rises",
   });

@@ -34,46 +34,49 @@ const freshness = (value: string) =>
           {{ freshness(detail.source_fresh_at) }}</span
         >
       </div>
-      <div class="heat-summary">
-        <b>{{ detail.heat.value }}</b
-        ><small>实际信号数</small>
-      </div>
     </header>
-    <section class="trend-conclusion">
+    <dl class="trend-detail-facts" aria-label="情报资料">
       <div>
-        <p>可验证结论</p>
-        <strong
-          >该主题包含 {{ detail.signal_count }} 条信号，来自
-          {{ detail.source_count }} 个来源。</strong
-        ><span v-if="detail.confidence.status === 'insufficient_data'"
-          >置信度：数据不足；不会用默认分数代替。</span
-        ><span v-else>置信度 {{ detail.confidence.score }} / 100</span>
+        <dt>信号</dt>
+        <dd>{{ detail.signal_count }} 条</dd>
       </div>
-      <dl>
-        <div>
-          <dt>证据覆盖</dt>
-          <dd>{{ detail.data_quality.evidence_count }} 条</dd>
-        </div>
-        <div>
-          <dt>数据状态</dt>
-          <dd>
-            {{
-              detail.data_quality.coverage_status === "covered"
-                ? "已覆盖"
-                : detail.data_quality.coverage_status === "insufficient_data"
-                  ? "数据不足"
-                  : detail.data_quality.coverage_status
-            }}
-          </dd>
-        </div>
-        <div>
-          <dt>环比</dt>
-          <dd>
-            {{ detail.momentum_percent == null ? "数据不足" : `${detail.momentum_percent}%` }}
-          </dd>
-        </div>
-      </dl>
-    </section>
+      <div>
+        <dt>来源</dt>
+        <dd>{{ detail.source_count }} 个</dd>
+      </div>
+      <div>
+        <dt>证据覆盖</dt>
+        <dd>{{ detail.data_quality.evidence_count }} 条</dd>
+      </div>
+      <div>
+        <dt>可信度</dt>
+        <dd>
+          {{
+            detail.confidence.status === "insufficient_data"
+              ? "数据不足"
+              : `${detail.confidence.score} / 100`
+          }}
+        </dd>
+      </div>
+      <div>
+        <dt>数据状态</dt>
+        <dd>
+          {{
+            detail.data_quality.coverage_status === "covered"
+              ? "已覆盖"
+              : detail.data_quality.coverage_status === "insufficient_data"
+                ? "数据不足"
+                : detail.data_quality.coverage_status
+          }}
+        </dd>
+      </div>
+      <div>
+        <dt>环比</dt>
+        <dd>
+          {{ detail.momentum_percent == null ? "数据不足" : `${detail.momentum_percent}%` }}
+        </dd>
+      </div>
+    </dl>
     <TrendEvidenceTimeline :detail="detail" />
   </article>
 </template>
