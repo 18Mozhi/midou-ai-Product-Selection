@@ -317,7 +317,7 @@ async function confirmBatch() {
     batchDialogGeneration === completionGeneration &&
     !showBatch.value
   )
-    message.value = `批量操作已完成 ${result.affected_count} 项，每个机会均保留独立事件。`;
+    message.value = `批量操作已完成 ${result.affected_count} 项，每个选品均保留独立事件。`;
 }
 function closeTransientDialogs() {
   showBatch.value = false;
@@ -370,7 +370,7 @@ useOpportunityWorkspaceLifecycle({
     <p v-if="!opportunityId && !canDecide" class="catalogue-readonly" role="note">
       当前为只读权限。
     </p>
-    <nav v-if="opportunityId" class="opportunity-detail-return" aria-label="机会详情返回路径">
+    <nav v-if="opportunityId" class="opportunity-detail-return" aria-label="选品详情返回路径">
       <RouterLink :to="returnPath">← 返回来源列表</RouterLink>
     </nav>
     <p v-if="message" class="opportunity-message" role="status">
@@ -533,7 +533,7 @@ useOpportunityWorkspaceLifecycle({
       v-if="canDecide"
       ref="batchDialogElement"
       class="opportunity-modal opportunity-batch-dialog"
-      aria-label="机会批量操作影响预览"
+      aria-label="选品批量操作影响预览"
       @cancel="handleBatchCancel"
     >
       <form @submit.prevent="confirmBatch">
@@ -547,10 +547,10 @@ useOpportunityWorkspaceLifecycle({
         </header>
         <p>
           本次仅处理当前结果中已选的
-          {{ currentPageSelectedItems.length }} 个机会；任一版本变化都会整批回滚。
+          {{ currentPageSelectedItems.length }} 个选品；任一版本变化都会整批回滚。
         </p>
         <p v-if="outsideCurrentPageSelectedCount" class="opportunity-batch-scope-note">
-          另有 {{ outsideCurrentPageSelectedCount }} 个已选机会不在当前结果中，不会随本次操作提交。
+          另有 {{ outsideCurrentPageSelectedCount }} 个已选商品不在当前结果中，不会随本次操作提交。
         </p>
         <label v-if="batchAction === 'assign'">
           负责人
@@ -562,10 +562,10 @@ useOpportunityWorkspaceLifecycle({
           </select>
         </label>
         <aside v-if="batchAction === 'review'">
-          每个机会会进入“验证中”阶段，并创建或复用一条人工复核任务；不会自动改变决策结论。
+          每个选品会进入“验证中”阶段，并创建或复用一条人工复核任务；不会自动改变决策结论。
         </aside>
         <aside v-else-if="batchAction === 'archive'">
-          已归档机会默认不在列表显示，可通过“阶段：已归档”筛选恢复查看。
+          已归档选品默认不在列表显示，可通过“阶段：已归档”筛选恢复查看。
         </aside>
         <label>
           操作原因

@@ -217,11 +217,11 @@ for (const [action, label] of [
     });
     await page.goto("/opportunities?view=all");
     for (const row of data.rows)
-      await page.getByRole("checkbox", { name: `选择机会：${row.name}`, exact: true }).check();
+      await page.getByRole("checkbox", { name: `选择商品：${row.name}`, exact: true }).check();
     const trigger = page.getByRole("button", { name: label, exact: true });
     await trigger.click();
-    const modal = page.getByRole("dialog", { name: "机会批量操作影响预览" });
-    await expect(modal).toContainText("本次仅处理当前结果中已选的 2 个机会");
+    const modal = page.getByRole("dialog", { name: "选品批量操作影响预览" });
+    await expect(modal).toContainText("本次仅处理当前结果中已选的 2 个选品");
     await modal.getByLabel("操作原因").fill("取消草稿");
     if (action === "assign")
       await modal.getByRole("combobox", { name: /^负责人/ }).selectOption(memberId);
@@ -242,7 +242,7 @@ for (const [action, label] of [
     await modal.getByRole("button", { name: "确认执行" }).click();
     await expect(modal).toBeHidden();
     await expect(page.locator(".opportunity-message")).toContainText("批量操作已完成 2 项");
-    await expect(page.getByRole("navigation", { name: "机会批量操作", exact: true })).toHaveCount(
+    await expect(page.getByRole("navigation", { name: "选品批量操作", exact: true })).toHaveCount(
       0,
     );
     expect(data.listReads).toBeGreaterThan(readsBefore);
@@ -270,25 +270,25 @@ test("UI2-OP04 filtered selections disclose the exact current-result batch scope
     route.fulfill({ json: envelope({ affected_count: 1 }) }),
   );
   await page.goto("/opportunities?view=all");
-  await page.getByRole("checkbox", { name: `选择机会：${first.name}`, exact: true }).check();
+  await page.getByRole("checkbox", { name: `选择商品：${first.name}`, exact: true }).check();
 
   const search = page.getByRole("search", { name: "搜索商品" });
   await search.getByLabel("商品名称").fill(second.name);
   await search.getByRole("button", { name: "搜索", exact: true }).click();
   await expect(page).toHaveURL(/q=/);
 
-  const batchBar = page.getByRole("navigation", { name: "机会批量操作", exact: true });
+  const batchBar = page.getByRole("navigation", { name: "选品批量操作", exact: true });
   await expect(batchBar).toContainText("已选 1 项");
-  await expect(batchBar).toContainText("当前结果中没有已选机会");
+  await expect(batchBar).toContainText("当前结果中没有勾选的商品");
   await expect(batchBar.getByRole("button", { name: "批量归档" })).toBeDisabled();
-  await page.getByRole("checkbox", { name: `选择机会：${second.name}`, exact: true }).check();
+  await page.getByRole("checkbox", { name: `选择商品：${second.name}`, exact: true }).check();
   await expect(batchBar).toContainText("本次仅处理当前页已选的 1 项");
   await expect(batchBar).toContainText("另有 1 项不在当前结果中");
 
   await batchBar.getByRole("button", { name: "批量归档", exact: true }).click();
-  const modal = page.getByRole("dialog", { name: "机会批量操作影响预览" });
-  await expect(modal).toContainText("本次仅处理当前结果中已选的 1 个机会");
-  await expect(modal).toContainText("另有 1 个已选机会不在当前结果中，不会随本次操作提交");
+  const modal = page.getByRole("dialog", { name: "选品批量操作影响预览" });
+  await expect(modal).toContainText("本次仅处理当前结果中已选的 1 个选品");
+  await expect(modal).toContainText("另有 1 个已选商品不在当前结果中，不会随本次操作提交");
   await modal.getByLabel("操作原因").fill("仅处理当前结果中的选中项");
   await modal.getByRole("button", { name: "确认执行", exact: true }).click();
 
@@ -320,16 +320,16 @@ test("UI2-OP07 a delayed batch receipt cannot close or clear a newer batch inten
   const first = data.rows[0];
   const second = data.rows[1];
   const firstCheckbox = page.getByRole("checkbox", {
-    name: `选择机会：${first.name}`,
+    name: `选择商品：${first.name}`,
     exact: true,
   });
   const secondCheckbox = page.getByRole("checkbox", {
-    name: `选择机会：${second.name}`,
+    name: `选择商品：${second.name}`,
     exact: true,
   });
   await firstCheckbox.check();
   await page.getByRole("button", { name: "批量归档", exact: true }).click();
-  const modal = page.getByRole("dialog", { name: "机会批量操作影响预览" });
+  const modal = page.getByRole("dialog", { name: "选品批量操作影响预览" });
   await modal.getByLabel("操作原因").fill("旧批量意图");
   await modal.getByRole("button", { name: "确认执行", exact: true }).click();
   await batchStarted;
@@ -373,9 +373,9 @@ test("UI2-OP07 batch confirmation rejects form re-entry while the first POST is 
   await page.goto("/opportunities?view=all");
 
   const first = data.rows[0];
-  await page.getByRole("checkbox", { name: `选择机会：${first.name}`, exact: true }).check();
+  await page.getByRole("checkbox", { name: `选择商品：${first.name}`, exact: true }).check();
   await page.getByRole("button", { name: "批量归档", exact: true }).click();
-  const modal = page.getByRole("dialog", { name: "机会批量操作影响预览" });
+  const modal = page.getByRole("dialog", { name: "选品批量操作影响预览" });
   await modal.getByLabel("操作原因").fill("确认批量归档");
   const form = modal.locator("form");
 
@@ -417,12 +417,12 @@ test("UI2-OP07 a delayed batch receipt preserves a reopened intent with the same
 
   const first = data.rows[0];
   const checkbox = page.getByRole("checkbox", {
-    name: `选择机会：${first.name}`,
+    name: `选择商品：${first.name}`,
     exact: true,
   });
   await checkbox.check();
   await page.getByRole("button", { name: "批量归档", exact: true }).click();
-  const modal = page.getByRole("dialog", { name: "机会批量操作影响预览" });
+  const modal = page.getByRole("dialog", { name: "选品批量操作影响预览" });
   await modal.getByLabel("操作原因").fill("旧批量意图");
   await modal.getByRole("button", { name: "确认执行", exact: true }).click();
   await batchStarted;

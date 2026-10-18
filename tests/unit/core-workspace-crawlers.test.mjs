@@ -421,8 +421,8 @@ test("sourcing lists show opportunity names while retaining internal trace ids",
     /searchName = \(item: Search \| null \| undefined\) =>[\s\S]*item\?\.display_name \|\| item\?\.input_ref/,
   );
   assert.match(workspace, /<b :title="searchName\(item\)">\{\{ searchName\(item\) \}\}/);
-  assert.match(workspace, /机会编号 \{\{ selected\.input_ref \}\}/);
-  assert.match(logic, /opportunity: "选品机会"[\s\S]*succeeded_empty: "未找到可用候选"/);
+  assert.match(workspace, /选品编号 \{\{ selected\.input_ref \}\}/);
+  assert.match(logic, /opportunity: "选品"[\s\S]*succeeded_empty: "未找到可用候选"/);
 });
 
 test("collection worker quarantines exhausted queue entries without blocking fresh crawls", async () => {

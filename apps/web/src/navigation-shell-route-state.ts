@@ -164,6 +164,6 @@ export function pageSummary(shell: NavigationShellKind, path: string) {
     return "维护费用和汇率规则，计算商品利润并明确展示缺失成本。";
   if (path === "/opportunities" || path.startsWith("/opportunities/"))
     return "汇总商品图片、趋势、竞争、利润、风险和原始证据，辅助判断是否值得做。";
-  if (path === "/trends") return "用热度、增速、来源和证据判断市场变化，并可转为选品机会。";
+  if (path === "/trends") return "用热度、增速、来源和证据判断市场变化，并可转为选品。";
   return "";
 }

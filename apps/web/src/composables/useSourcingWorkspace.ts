@@ -145,9 +145,8 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
       ].filter((value): value is string => Boolean(value));
     }),
     inputTypeText = (value: string) =>
-      ({ keyword: "关键词", image: "图片", opportunity: "选品机会", product_url: "商品链接" })[
-        value
-      ] ?? "其他输入",
+      ({ keyword: "关键词", image: "图片", opportunity: "选品", product_url: "商品链接" })[value] ??
+      "其他输入",
     candidateMissingText = (candidate: Candidate) =>
       candidate.missing_fields.map((field) => missingLabels[field] ?? field),
     timeText = (value: string) =>

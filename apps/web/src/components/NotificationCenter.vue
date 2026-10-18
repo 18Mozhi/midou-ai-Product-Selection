@@ -159,7 +159,7 @@ const pageSize = 20,
         approval: "审批",
         approval_request: "审批",
         competitor: "竞品",
-        opportunity: "机会",
+        opportunity: "选品",
         collection_task: "采集任务",
       }) as Record<string, string>
     )[v ?? ""] ?? "系统记录",

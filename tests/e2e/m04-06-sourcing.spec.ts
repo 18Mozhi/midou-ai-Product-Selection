@@ -1070,7 +1070,7 @@ test("opening another incomplete quote resets carried risk choices", async ({ pa
 for (const input of [
   { type: "keyword", label: "商品关键词", value: "  折叠收纳箱  " },
   { type: "image", label: "图片地址或图片证据编号", value: "https://example.test/source.png" },
-  { type: "opportunity", label: "机会编号", value: "00000000-0000-4000-8000-000000000612" },
+  { type: "opportunity", label: "选品编号", value: "00000000-0000-4000-8000-000000000612" },
   { type: "product_url", label: "商品链接", value: "https://example.test/item/source" },
 ]) {
   test(`UI2-SC04 sourcing ${input.type} submits only its explicit input and cancel does not write`, async ({

@@ -21,7 +21,7 @@ interface Result {
 }
 const resourceLabel = (value: string) =>
   ({
-    opportunity: "机会",
+    opportunity: "选品",
     evidence: "证据",
     collection_task: "采集任务",
   })[value] ?? value;
@@ -275,7 +275,7 @@ watch(resourceType, () => {
                       aria-label="对象类型"
                     >
                       <option value="">全部对象</option>
-                      <option value="opportunity">机会</option>
+                      <option value="opportunity">选品</option>
                       <option value="evidence">证据</option>
                       <option value="collection_task">采集任务</option>
                     </select>
@@ -302,7 +302,7 @@ watch(resourceType, () => {
                       aria-label="负责人"
                       maxlength="120"
                       :disabled="!assigneeApplicable"
-                      :placeholder="assigneeApplicable ? '姓名或账号' : '仅机会可用'"
+                      :placeholder="assigneeApplicable ? '姓名或账号' : '仅选品可用'"
                     />
                   </div>
                 </div>

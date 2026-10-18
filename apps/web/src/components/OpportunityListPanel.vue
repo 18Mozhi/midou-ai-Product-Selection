@@ -115,8 +115,8 @@ const props = defineProps<{
           description: "尚未取得可确认身份的 Amazon 主品证据，系统会继续采集。",
         },
         all: {
-          title: `全部 ${props.total} 个机会`,
-          description: "查看自动发现的商品与已有历史机会。",
+          title: `全部 ${props.total} 个商品`,
+          description: "查看自动发现的商品与已有历史选品。",
         },
       })[props.selectionView],
   );
@@ -365,8 +365,8 @@ watch(imageFailureResetSources, (items) => {
           ? '清除筛选'
           : selectionView === 'all'
             ? '刷新列表'
-            : '查看全部机会'
-        : '返回机会列表'
+            : '查看全部选品'
+        : '返回选品列表'
     "
     @primary="
       state === 'empty' && selectionView !== 'all' && needsRuleSetup
@@ -395,7 +395,7 @@ watch(imageFailureResetSources, (items) => {
     <nav
       v-if="canDecide && selectionView === 'all' && selectedIds.length"
       class="opportunity-batch-bar"
-      aria-label="机会批量操作"
+      aria-label="选品批量操作"
     >
       <div class="opportunity-batch-summary" aria-live="polite">
         <strong>已选 {{ selectedIds.length }} 项</strong>
@@ -405,7 +405,7 @@ watch(imageFailureResetSources, (items) => {
             · 另有 {{ outsideCurrentPageSelectedCount }} 项不在当前结果中
           </template>
         </small>
-        <small v-else>当前结果中没有已选机会，切换筛选或清除选择后再操作。</small>
+        <small v-else>当前结果中没有勾选的商品，切换筛选或清除选择后再操作。</small>
       </div>
       <button
         type="button"
@@ -441,7 +441,7 @@ watch(imageFailureResetSources, (items) => {
           <input
             type="checkbox"
             :checked="selectedIds.includes(item.id)"
-            :aria-label="`选择机会：${item.name}`"
+            :aria-label="`选择商品：${item.name}`"
             @change="
               emit(
                 'update:selectedIds',
@@ -528,7 +528,7 @@ watch(imageFailureResetSources, (items) => {
         >
       </article>
     </div>
-    <footer class="opportunity-pagination" aria-label="机会分页">
+    <footer class="opportunity-pagination" aria-label="选品分页">
       <button type="button" :disabled="page <= 1" @click="emit('page', page - 1)">上一页</button>
       <span>第 {{ page }} / {{ pageCount }} 页</span>
       <button type="button" :disabled="page >= pageCount" @click="emit('page', page + 1)">

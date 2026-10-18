@@ -320,7 +320,7 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
         if (!(error instanceof ApiClientError)) throw error;
         memberOptions.value = [];
         requestId.value = error.requestId;
-        message.value = "机会已加载；组织成员选项暂不可用，批量指派需稍后重试。";
+        message.value = "选品已加载；组织成员选项暂不可用，批量指派需稍后重试。";
       }
       await readinessPromise;
       if (!isCurrent()) return;

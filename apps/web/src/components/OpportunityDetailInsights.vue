@@ -250,7 +250,7 @@ const emit = defineEmits<{
             class="opportunity-insight-button opportunity-insight-button--secondary"
             @click="emit('selectTab', 'evidence')"
           >
-            查看机会证据
+            查看选品证据
           </button>
         </div>
       </article>
@@ -282,7 +282,7 @@ const emit = defineEmits<{
           <p>竞争事实</p>
           <h3>可追溯的竞品快照</h3>
         </div>
-        <span class="opportunity-insight-badge">按当前机会严格筛选</span>
+        <span class="opportunity-insight-badge">按当前选品严格筛选</span>
       </header>
       <template v-if="!canReadCompetitors">
         <div class="opportunity-insight-state" role="status">
@@ -362,7 +362,7 @@ const emit = defineEmits<{
           class="opportunity-insight-button opportunity-insight-button--secondary"
           @click="emit('selectTab', 'evidence')"
         >
-          查看机会证据 →
+          查看选品证据 →
         </button>
         <button
           type="button"

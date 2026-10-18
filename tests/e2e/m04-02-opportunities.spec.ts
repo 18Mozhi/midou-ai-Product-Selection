@@ -1134,7 +1134,7 @@ test("P18 redecision link always lands on the available decision state", async (
   await ready(page, evidence, { redecision_ready: true }, ["opportunity:read"]);
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(
-    page.getByText("当前角色可查看判断依据；最终决定需要“机会决策”权限。", { exact: true }),
+    page.getByText("当前角色可查看判断依据；最终决定需要“选品决策”权限。", { exact: true }),
   ).toBeVisible();
 
   const readonlyRedecisionLink = page.getByRole("link", { name: "前往决策" });
@@ -1142,7 +1142,7 @@ test("P18 redecision link always lands on the available decision state", async (
   await expect(page).toHaveURL(/#opportunity-decision-actions$/);
   await expect(page.locator("#opportunity-decision-actions")).toBeInViewport();
   await expect(page.locator("#opportunity-decision-actions")).toContainText(
-    "最终决定需要“机会决策”权限",
+    "最终决定需要“选品决策”权限",
   );
 });
 
@@ -1349,7 +1349,7 @@ test("P18 forbidden detail state returns to the opportunity list without retryin
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: "你没有此项权限" })).toBeVisible();
   await expect(page.getByRole("button", { name: "申请权限" })).toHaveCount(0);
-  await page.getByRole("button", { name: "返回机会列表" }).click();
+  await page.getByRole("button", { name: "返回选品列表" }).click();
   await expect(page).toHaveURL(/\/opportunities$/);
   await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
   expect(detailReads).toBe(1);
@@ -1373,7 +1373,7 @@ test("P18 blocked detail state offers a real retry and a separate list return", 
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: "依赖暂时受阻" })).toBeVisible();
   expect(detailReads).toBe(3);
-  await expect(page.getByRole("button", { name: "返回机会列表" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "返回选品列表" })).toBeVisible();
   await page.getByRole("button", { name: "稍后重试" }).click();
   await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
   expect(detailReads).toBe(4);
@@ -2075,7 +2075,7 @@ test("changing between the opportunity list and detail closes open list dialogs"
   await ready(page);
   await readyForNextOpportunity(page);
   await page.goto("/opportunities?view=all");
-  await expect(page.getByRole("heading", { name: /^全部 \d+ 个机会$/, level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^全部 \d+ 个商品$/, level: 2 })).toBeVisible();
 
   const switchToDetail = async () => {
     const request = page.waitForRequest((candidate) => {
@@ -2095,15 +2095,15 @@ test("changing between the opportunity list and detail closes open list dialogs"
     await expect(page.getByRole("dialog", { name: "创建机会候选" })).toHaveCount(0);
     await expect(page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" })).toHaveCount(0);
     await page.getByRole("button", { name: "全部商品" }).click();
-    await expect(page.getByRole("heading", { name: /^全部 \d+ 个机会$/, level: 2 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^全部 \d+ 个商品$/, level: 2 })).toBeVisible();
   };
 
   await expect(page.getByRole("button", { name: "手工添加", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "从 ERP 导入", exact: true })).toHaveCount(0);
 
-  await page.getByRole("checkbox", { name: `选择机会：${recommendedBase.name}` }).check();
+  await page.getByRole("checkbox", { name: `选择商品：${recommendedBase.name}` }).check();
   await page.getByRole("button", { name: "批量归档", exact: true }).click();
-  const batchDialog = page.getByRole("dialog", { name: "机会批量操作影响预览" });
+  const batchDialog = page.getByRole("dialog", { name: "选品批量操作影响预览" });
   await expect(batchDialog).toBeVisible();
   await switchToDetail();
   await expect(batchDialog).toBeHidden();
@@ -2112,13 +2112,13 @@ test("changing between the opportunity list and detail closes open list dialogs"
 test("P15 batch dialog traps keyboard focus and restores its trigger", async ({ page }) => {
   await ready(page);
   await page.goto("/opportunities?view=all");
-  await page.getByRole("checkbox", { name: `选择机会：${recommendedBase.name}` }).check();
+  await page.getByRole("checkbox", { name: `选择商品：${recommendedBase.name}` }).check();
 
   const trigger = page.getByRole("button", { name: "批量归档", exact: true });
   await trigger.focus();
   await page.keyboard.press("Enter");
 
-  const dialog = page.getByRole("dialog", { name: "机会批量操作影响预览" });
+  const dialog = page.getByRole("dialog", { name: "选品批量操作影响预览" });
   await expect(dialog).toBeVisible();
   await expect
     .poll(() => dialog.evaluate((element) => element.contains(document.activeElement)))
@@ -2974,7 +2974,7 @@ test("compact catalogue exposes the first product title above the fold with twen
   await page.getByRole("button", { name: "全部商品", exact: true }).click();
   await allRead;
   await expect(page.locator(".catalog-product")).toHaveCount(20);
-  await expect(page.getByRole("navigation", { name: "机会批量操作", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("navigation", { name: "选品批量操作", exact: true })).toHaveCount(0);
   await expect(firstTitle).toHaveText(longName);
   const firstCard = page.locator(".catalog-product").first();
   const selectBox = await firstCard.locator(".opportunity-row-select").boundingBox();
@@ -2998,8 +2998,8 @@ test("compact catalogue exposes the first product title above the fold with twen
   });
   const allBox = await firstTitle.boundingBox();
   expect(allBox!.y + allBox!.height).toBeLessThan(page.viewportSize()!.height - bottomReserve);
-  await page.getByRole("checkbox", { name: `选择机会：${longName}`, exact: true }).check();
-  await expect(page.getByRole("navigation", { name: "机会批量操作", exact: true })).toBeVisible();
+  await page.getByRole("checkbox", { name: `选择商品：${longName}`, exact: true }).check();
+  await expect(page.getByRole("navigation", { name: "选品批量操作", exact: true })).toBeVisible();
 });
 
 test("catalogue advanced filters trap focus and cancel without changing the applied URL", async ({

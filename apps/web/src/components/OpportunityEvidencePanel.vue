@@ -32,7 +32,7 @@ watch([() => props.opportunityId, () => props.evidence], () => collapse());
       </div>
       <span>{{ evidence.length }} 条</span>
     </header>
-    <p v-if="!evidence.length" class="opportunity-empty-copy">当前机会尚无关联证据。</p>
+    <p v-if="!evidence.length" class="opportunity-empty-copy">当前选品尚无关联证据。</p>
     <a
       v-for="item in visibleEvidence"
       :key="item.id"

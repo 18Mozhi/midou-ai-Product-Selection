@@ -82,7 +82,7 @@ const pageHeading = () => document.querySelector<HTMLElement>("#sourcing-page-ti
       ({
         keyword: "商品关键词",
         image: "图片地址或图片证据编号",
-        opportunity: "机会编号",
+        opportunity: "选品编号",
         product_url: "商品链接",
       })[props.searchForm.input_type] ?? "查找内容",
   ),
@@ -91,7 +91,7 @@ const pageHeading = () => document.querySelector<HTMLElement>("#sourcing-page-ti
       ({
         keyword: "例如：折叠收纳箱",
         image: "输入可访问的图片地址或已有图片证据编号",
-        opportunity: "从选品机会详情进入会自动填写",
+        opportunity: "从选品详情进入会自动填写",
         product_url: "输入需要查找同类货源的商品链接",
       })[props.searchForm.input_type] ?? "请输入查找内容",
   );
@@ -151,7 +151,7 @@ const searchName = (item: SourcingSearch | null) =>
         >输入类型<select v-model="searchForm.input_type">
           <option value="keyword">关键词</option>
           <option value="image">图片</option>
-          <option value="opportunity">机会</option>
+          <option value="opportunity">选品</option>
           <option value="product_url">商品链接</option>
         </select></label
       ><label

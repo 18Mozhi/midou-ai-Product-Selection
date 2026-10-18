@@ -44,11 +44,11 @@ export function useOpportunityWorkspaceAccess(options: OpportunityWorkspaceAcces
     statePanelKind.value === "expired"
       ? "重新登录"
       : ["empty", "forbidden", "not_found"].includes(statePanelKind.value)
-        ? "返回机会列表"
+        ? "返回选品列表"
         : "",
   );
   const statePanelSecondaryLabel = computed(() =>
-    ["error", "blocked"].includes(statePanelKind.value) ? "返回机会列表" : "",
+    ["error", "blocked"].includes(statePanelKind.value) ? "返回选品列表" : "",
   );
 
   function returnToOpportunityList() {

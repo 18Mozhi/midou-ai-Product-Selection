@@ -155,7 +155,7 @@ const pendingMessage = computed(() => {
           >搜索找货记录<input
             v-model="query"
             type="search"
-            placeholder="关键词、机会编号或状态" /></label
+            placeholder="关键词、选品编号或状态" /></label
         ><span>共 {{ filteredItems.length }} 条结果</span>
       </div>
       <dl class="sourcing-summary" aria-label="供应链找货数据总览">
@@ -240,7 +240,7 @@ const pendingMessage = computed(() => {
             <p>{{ inputTypeText(selected.input_type) }}</p>
             <h3>{{ searchName(selected) }}</h3>
             <code v-if="selected.input_type === 'opportunity'"
-              >机会编号 {{ selected.input_ref }}</code
+              >选品编号 {{ selected.input_ref }}</code
             >
           </div>
           <div class="sourcing-actions">

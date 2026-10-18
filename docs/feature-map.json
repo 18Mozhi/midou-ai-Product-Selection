@@ -7022,5 +7022,34 @@
       "tests/fixtures/competitor-functional-format-cases.mjs"
     ],
     "contract": "Prompt-only functional format, fit and audience versus decorative motif clarification; explicit multi-occupant evidence and abstention examples. Strict aliases, original titles, validators, minimum5 detailed independent competitors, completion gates and existing model settings unchanged. Historical15 and independent8 real-model diagnostics select5 explicit two-person candidates, writes0; uncertain-versus-different_use explanations still imperfect. No backfill or daily100 acceptance."
+  },
+  "selectionProductLanguage20261019": {
+    "status": "implemented",
+    "requirements": "docs/selection-product-language.md",
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityDecisionPanel.vue",
+      "apps/web/src/components/OpportunityDetailInsights.vue",
+      "apps/web/src/components/OpportunityEvidencePanel.vue",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/components/OpportunityMobileShell.vue",
+      "apps/web/src/components/OpportunityProfitPanel.vue",
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/use-opportunity-workspace-access.ts",
+      "apps/web/src/components/use-opportunity-workspace-reads.ts",
+      "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/composables/useSourcingWorkspace.ts",
+      "apps/web/src/navigation-shell-route-state.ts",
+      "apps/web/src/components/DiscoveryOverlay.vue",
+      "apps/web/src/components/NotificationCenter.vue",
+      "apps/web/src/components/personal-center/formatters.ts"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/e2e/m04-06-sourcing.spec.ts",
+      "tests/e2e/ui-phase2-opportunity-contracts.spec.ts",
+      "tests/unit/core-workspace-crawlers.test.mjs"
+    ],
+    "contract": "Member-facing fixed terminology uses selection consistently across catalogue/detail/batch/sourcing/search/notifications and accessibility labels. Original product names, facts, error payloads, API/resource/permission keys and workflow semantics unchanged. List count is not daily completion. No config/dependency/schema/Node/Python contract change; browser refresh after static release."
   }
 }

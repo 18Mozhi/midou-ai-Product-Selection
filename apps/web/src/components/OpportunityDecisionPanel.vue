@@ -92,7 +92,7 @@ const recommendationCopy = computed(() =>
         v-if="canDecide && canAdopt"
         id="opportunity-decision-actions"
         class="opportunity-decision-actions"
-        aria-label="机会决策操作"
+        aria-label="选品决策操作"
       >
         <button class="primary" :disabled="busy" @click="emit('decide', 'adopt')">采纳建议</button
         ><button @click="emit('decide', 'observe')">继续观察</button
@@ -122,7 +122,7 @@ const recommendationCopy = computed(() =>
         class="opportunity-decision-readonly"
         role="status"
       >
-        当前角色可查看判断依据；最终决定需要“机会决策”权限。
+        当前角色可查看判断依据；最终决定需要“选品决策”权限。
       </p>
     </div>
     <footer class="opportunity-decision-summary__details">
