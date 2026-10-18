@@ -50,17 +50,33 @@ export async function prepareAmazonDeliveryContext(
   reportStep("apply_postal");
   await page.locator("#GLUXZipUpdate input").click();
   reportStep("confirm_postal");
-  await page
-    .locator("#GLUXZipConfirmationSection")
-    .filter({ hasText: postal })
-    .waitFor({ state: "visible" });
+  let postalFormClosed = false;
+  try {
+    await page
+      .locator("#GLUXZipConfirmationSection")
+      .filter({ hasText: postal })
+      .waitFor({ state: "visible" });
+  } catch (error) {
+    if (
+      !(error instanceof errors.TimeoutError) ||
+      !reread ||
+      (await page.locator("#GLUXZipUpdateInput").count()) !== 0
+    )
+      throw error;
+    // Some pages close the postal form without the legacy confirmation/Done.
+    // Its absence proves nothing: only the original-URL reread and final strict
+    // postal header can establish the observation region below.
+    reportStep("postal_form_closed_guard");
+    await assertAnonymous();
+    postalFormClosed = true;
+  }
   await assertSafe();
-  reportStep("finish_location");
+  if (!postalFormClosed) reportStep("finish_location");
   // Done may return before its delayed main-frame reload starts. Register first,
   // using the existing navigation budget; in-place updates can finish directly.
   const navigation = reread ? undefined : page.waitForNavigation({ waitUntil: "domcontentloaded" });
   void navigation?.catch(() => {});
-  await page.locator('button[name="glowDoneButton"]').click();
+  if (!postalFormClosed) await page.locator('button[name="glowDoneButton"]').click();
   if (reread) {
     // Amazon can confirm the new region without refreshing its stale header.
     // Reuse the engine's original-URL reread before requiring that header.

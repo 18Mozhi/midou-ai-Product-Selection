@@ -1,4 +1,15 @@
 {
+  "amazonClosedPostalForm20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-closed-postal-form.md",
+    "sourceFiles": ["packages/playwright-crawler/src/amazon-delivery-context.ts"],
+    "testFiles": [
+      "tests/integration/amazon-closed-postal-form.test.mjs",
+      "tests/integration/amazon-delivery-readiness.test.mjs",
+      "tests/unit/amazon-delivery-context.test.mjs"
+    ],
+    "contract": "Only a real legacy postal-confirmation TimeoutError, an absent original ZIP input and an available original-URL reread permit the closed-form path. Recheck anonymous/origin/challenge guards, omit unavailable Done, perform existing guarded original-URL reread and require strict configured postal header. Missing controls or HTTP address-update success alone never prove region. Legacy flow, aborted-reread bound, all budgets, API fields, schema, config values, dependency/frontend/Python and source/circuit states unchanged."
+  },
   "competitorDiscoveryResourceAdmission20261018": {
     "status": "implemented",
     "requirements": "docs/competitor-discovery-resource-admission.md",

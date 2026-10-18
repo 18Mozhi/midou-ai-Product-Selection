@@ -1,0 +1,11 @@
+# Amazon 邮区输入直接结束后的原页核验
+
+2026-10-18生产08e99f50的原失败商品B0HBQ566FK独立诊断中，初始导航返回200，实际失败变为amazon_delivery.confirm_postal。地址更新请求使用现有94404，响应isAddressUpdated为1；之后GLUXZipUpdateInput及旧Done不存在，旧页头仍显示Taiwan。一轮出现含94404和United States的Continue提示，另一轮该提示亦不存在，不能假设固定的新按钮或未观察到的国家字段。隔离实验在此状态重读原URL，原匿名、来源和严格邮区核验后成功取得1条详情及证据，38499ms，不写业务事实、不计产量。回执保留本地.artifacts/selection-production-20261018/amazon-current-postal-dialog-contract-probe.json及amazon-closed-confirmation-reread-experiment.json。
+
+prepareAmazonDeliveryContext保留原确认等待。仅当等待抛出真实Playwright TimeoutError、原输入节点已不存在且引擎提供原URL重读能力时进入新分支，再核验匿名、来源及挑战页，省略已不存在的Done操作，复用现有受保护原URL重读和最后的严格邮区检查。节点缺失、地址接口HTTP200或isAddressUpdated均不直接视为邮区成功。输入仍在、普通错误、取消、登录或挑战、重读失败和陈旧/错误邮区均不能放行；没有重读能力的旧调用保留原失败。正常旧确认框及Done流程、已修复的导航中断有界恢复不变。
+
+25项定向检查通过：新增真实浏览器测试包含8个场景，覆盖有效应用、拒绝、错误邮区、隐藏但保留输入、登录变化、挑战页、重读失败和缺少重读回调；另保留旧确认/异步绑定、完整加载超时、新文档事件和匿名代理隔离回归。受控测试和独立诊断均不证明自然健康或每天100个完整商品。
+
+本次没有新增请求、外部字段、数据库、事件格式、依赖、前端、Python或环境变量。生产消费者仍为原引擎及其API健康/Worker采集，原动作、导航、整轮预算和配置值均不变；OpenAPI与环境示例只澄清邮区核验。可通过既有AMAZON_PUBLIC_DELIVERY_POSTAL_CODE选择既有观察邮区，本次未修改实际.env。通过既有deploy-baota.py本地构建、由宝塔重启固定Node项目后生效。仍需实际检查自然搜索与同商品详情、正式产出、竞品质量、评分及1688报价，当前整体目标未验收。
+
+本轮也按真实事件时间occurred_at核对了积压生产者：近30分钟新增的是4组已发现商品的详情、竞品和找货任务，没有新增情报搜索事件。因此没有根据积压增长去修改情报入口、提高上限或改变任何验收组织，未作生产写入。
