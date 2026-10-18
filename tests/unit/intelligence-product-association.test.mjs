@@ -314,6 +314,18 @@ test("search results choose exactly one actual product before projection and ret
   assert.equal(job.normalizedRecordId, "record-2");
   assert.equal(job.payload.asin, "B000000002");
   assert.equal(job.intelligenceSourceRecordId, sourceId);
+  // Superseded is version history, not forged/deleted evidence: both original
+  // association and actual search-result links still need exact scoped provenance.
+  const sourceSql = calls.find(([sql]) => sql.startsWith("SELECT n.id FROM normalized_records"))[0];
+  assert.match(sourceSql, /n.status IN \('active','superseded'\)/);
+  assert.match(sourceSql, /JSON_CONTAINS/);
+  assert.match(sourceSql, /BINARY n.id/);
+  const candidatesSql = calls.find(([sql]) => sql.startsWith("SELECT n.id,n.provider_id"))[0];
+  assert.match(candidatesSql, /n.status IN \('active','superseded'\)/);
+  assert.match(
+    candidatesSql,
+    /l.collection_task_id=\? AND l.organization_id=\? AND l.workspace_id=\?/,
+  );
   assert.match(calls[0][0], /e.organization_id=n.organization_id/);
   assert.match(calls[1][0], /l.organization_id=\? AND l.workspace_id=\?/);
 });

@@ -33,8 +33,11 @@ export type TrendProjectionResult =
       diagnostic?: string;
     };
 
-const intelligenceFirstOrderSql =
-  " ORDER BY CASE WHEN EXISTS (SELECT 1 FROM normalized_records n_intelligence " +
+export const intelligenceFirstOrderSql =
+  " ORDER BY COALESCE((SELECT CASE WHEN p_intelligence.code='amazon_product' " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(q_intelligence.target_json,'$.projection_type'))='intelligence_product_discovery' " +
+  "THEN 0 WHEN p_intelligence.access_mode='public_rss' THEN 1 ELSE 2 END " +
+  "FROM normalized_records n_intelligence " +
   "JOIN providers p_intelligence ON p_intelligence.id=n_intelligence.provider_id " +
   "JOIN raw_evidence e_intelligence ON e_intelligence.id=n_intelligence.raw_evidence_id " +
   "AND e_intelligence.organization_id=n_intelligence.organization_id AND e_intelligence.workspace_id=n_intelligence.workspace_id " +
@@ -42,10 +45,14 @@ const intelligenceFirstOrderSql =
   "AND q_intelligence.organization_id=n_intelligence.organization_id AND q_intelligence.workspace_id=n_intelligence.workspace_id " +
   "WHERE n_intelligence.id=trend_projection_jobs.normalized_record_id " +
   "AND n_intelligence.organization_id=trend_projection_jobs.organization_id " +
-  "AND n_intelligence.workspace_id=trend_projection_jobs.workspace_id " +
-  "AND (p_intelligence.access_mode='public_rss' OR (p_intelligence.code='amazon_product' " +
-  "AND JSON_UNQUOTE(JSON_EXTRACT(q_intelligence.target_json,'$.projection_type'))='intelligence_product_discovery'))) " +
-  "THEN 0 ELSE 1 END,available_at,id LIMIT 1";
+  "AND n_intelligence.workspace_id=trend_projection_jobs.workspace_id),2),available_at,id LIMIT 1";
+
+export const intelligenceProvenanceSql =
+  "SELECT n.id FROM normalized_records n JOIN trend_events e ON e.organization_id=n.organization_id " +
+  "AND e.workspace_id=n.workspace_id AND e.event_type='trend.intelligence.associated' " +
+  "WHERE n.id=? AND n.organization_id=? AND n.workspace_id=? AND n.status IN ('active','superseded') " +
+  "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(e.payload_json,'$.normalized_record_id'))=BINARY n.id " +
+  "AND JSON_CONTAINS(JSON_EXTRACT(e.payload_json,'$.association.queries'),JSON_QUOTE(?)) LIMIT 1";
 
 export class MySqlTrendProjectionWorker {
   private readonly persistence: TrendProjectionPersistence;
@@ -190,24 +197,17 @@ export class MySqlTrendProjectionWorker {
     }
     job.intelligenceModel = this.intelligence.model;
     if (job.intelligenceSourceRecordId) {
-      const [sources] = await this.pool.query<RowDataPacket[]>(
-        "SELECT n.id FROM normalized_records n JOIN trend_events e ON e.organization_id=n.organization_id " +
-          "AND e.workspace_id=n.workspace_id AND e.event_type='trend.intelligence.associated' " +
-          "WHERE n.id=? AND n.organization_id=? AND n.workspace_id=? AND n.status='active' " +
-          "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(e.payload_json,'$.normalized_record_id'))=BINARY n.id " +
-          "AND JSON_CONTAINS(JSON_EXTRACT(e.payload_json,'$.association.queries'),JSON_QUOTE(?)) LIMIT 1",
-        [
-          job.intelligenceSourceRecordId,
-          job.organizationId,
-          job.workspaceId,
-          job.intelligenceQuery,
-        ],
-      );
+      const [sources] = await this.pool.query<RowDataPacket[]>(intelligenceProvenanceSql, [
+        job.intelligenceSourceRecordId,
+        job.organizationId,
+        job.workspaceId,
+        job.intelligenceQuery,
+      ]);
       if (!sources[0]) throw new TrendProjectionError("intelligence_provenance_invalid", false);
       const [rows] = await this.pool.query<RowDataPacket[]>(
         "SELECT n.id,n.provider_id,n.raw_evidence_id,n.payload_json FROM collection_task_evidence_links l " +
           "JOIN normalized_records n ON n.id=l.normalized_record_id AND n.organization_id=l.organization_id " +
-          "AND n.workspace_id=l.workspace_id AND n.status='active' JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
+          "AND n.workspace_id=l.workspace_id AND n.status IN ('active','superseded') JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
           "WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=? ORDER BY l.created_at,n.id LIMIT 30",
         [job.collectionTaskId, job.organizationId, job.workspaceId],
       );

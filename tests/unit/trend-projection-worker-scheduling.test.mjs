@@ -111,6 +111,15 @@ test("projection locks only the selected scoped ID and rechecks eligibility", as
   }
   assert.match(locks[0], /collection_scope_org.id=trend_projection_jobs.organization_id/);
   assert.match(locks[0], /collection_scope_workspace.id=trend_projection_jobs.workspace_id/);
+  assert.match(
+    candidate,
+    /ORDER BY COALESCE\(\(SELECT CASE WHEN p_intelligence.code='amazon_product'/,
+  );
+  assert.match(
+    candidate,
+    /intelligence_product_discovery' THEN 0 WHEN p_intelligence.access_mode='public_rss' THEN 1 ELSE 2 END/,
+  );
+  assert.match(candidate, /\),2\),available_at,id LIMIT 1$/);
   assert.match(candidate, /p_intelligence.access_mode='public_rss'/);
   assert.match(candidate, /projection_type.*intelligence_product_discovery/);
   assert.match(candidate, /n_intelligence.organization_id=trend_projection_jobs.organization_id/);

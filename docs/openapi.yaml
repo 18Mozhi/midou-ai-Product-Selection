@@ -11731,3 +11731,9 @@ x-scoutops-lan-1688:
 # Internal task-derived probe context is never an HTTP request field; normal health endpoint
 # authentication, provider:configure capability and session context remain unchanged.
 # Runtime options: AMAZON_PUBLIC_AUTO_RECOVERY_ENABLED/POLL_MS/COOLDOWN_MS.
+
+# Internal trend projection serves fetched Amazon primary selection before RSS association;
+# no public ordering parameter, route, payload or score/quality contract changes.
+
+# One-time, explicitly scoped projection correction writes trend.intelligence.provenance_requeued audit;
+# it preserves prior errors/attempts and does not add HTTP replay permissions or collection mutations.
