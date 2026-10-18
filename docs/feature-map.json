@@ -1,4 +1,14 @@
 {
+  "downstreamRepairEligibilityFirst20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-downstream-repair-performance.md",
+    "sourceFiles": ["apps/worker/src/trend-projection-persistence.ts"],
+    "testFiles": [
+      "tests/unit/automatic-sourcing-recovery.test.mjs",
+      "tests/unit/trend-projection-worker-scheduling.test.mjs"
+    ],
+    "contract": "Materialize active scoped actionable missing tasks before primary/image resolution. Preserve 20 actionable rows, exact primary image, required sources, existing producer and transaction. Outer real competitor/search PK joins, changed search link exclusion and current locking competitor-task recheck. MySQL57 read-only original query hits3000ms limit, new query721ms; five SELECT-only scenarios pass. No schema/config/API/dependency changes. Throughput/daily100 and whole UI remain unverified."
+  },
   "sourcingCircuitRetry20261018": {
     "status": "implemented",
     "requirements": "docs/selection-sourcing-circuit-retry.md",

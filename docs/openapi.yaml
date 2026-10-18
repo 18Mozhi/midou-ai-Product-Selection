@@ -11747,3 +11747,6 @@ x-scoutops-lan-1688:
 # Existing sourcing/search/task APIs remain unchanged; there is no HTTP replay switch.
 # Internal health recovery recognizes zero-offer circuit-blocked searches even after
 # the old projection marked them succeeded_empty; genuine empty lookups are excluded.
+
+# Internal downstream repair resolves primary/image only after materializing scoped
+# missing work, with current task/link checks; existing HTTP contracts are unchanged.

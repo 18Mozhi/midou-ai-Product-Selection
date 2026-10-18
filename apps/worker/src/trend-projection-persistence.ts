@@ -266,21 +266,21 @@ export class TrendProjectionPersistence {
         await c.commit();
         return;
       }
-      // The derived-table LIMIT prevents MySQL 5.7 from merging away the primary
-      // identity cache and recomputing its correlated lookup for every image row.
+      // Materialize actionable identities before resolving their primary/image.
+      // Outer real competitor/search rows retain the existing locking boundary.
       const [rows] = await c.query<RowDataPacket[]>(
         `SELECT o.id opportunity_id,o.organization_id,o.workspace_id,o.name,o.market,o.created_by,
                   c.id competitor_id,c.external_id,c.product_url,c.latest_snapshot_id,
                   ss.id search_id,
                   ${automaticPrimaryImageSql} primary_image_url,
-                  (c.latest_snapshot_id IS NULL AND cq.competitor_id IS NULL) competitor_task_missing,
-                  (ss.id IS NOT NULL AND sq.search_id IS NULL) sourcing_task_missing
+                  (c.latest_snapshot_id IS NULL AND o.prior_competitor_task IS NULL) competitor_task_missing,
+                  (ss.id IS NOT NULL AND o.prior_sourcing_task IS NULL) sourcing_task_missing
            FROM (
-             SELECT o.*,${selectionPrimaryAsinSql} primary_asin FROM opportunities o
-             WHERE o.source_type='trend_topic' AND o.lifecycle_status<>'deleted'
-             LIMIT 18446744073709551615
-           ) o
-           JOIN competitors c
+             SELECT o.*,${selectionPrimaryAsinSql} primary_asin FROM (
+               SELECT o.*,c.id repair_competitor_id,ss.id repair_search_id,
+                      ss.collection_task_id previous_collection_task_id,
+                      cq.competitor_id prior_competitor_task,sq.search_id prior_sourcing_task
+               FROM opportunities o JOIN competitors c
              ON c.opportunity_id=o.id
             AND c.organization_id=o.organization_id
             AND c.workspace_id=o.workspace_id
@@ -324,18 +324,27 @@ export class TrendProjectionPersistence {
              ON sq.organization_id=o.organization_id
             AND sq.workspace_id=o.workspace_id
             AND sq.search_id=CONVERT(ss.id USING utf8mb4) COLLATE utf8mb4_bin
-           WHERE o.source_type='trend_topic'
-             AND o.lifecycle_status<>'deleted'
-             AND (
-               (c.latest_snapshot_id IS NULL AND cq.competitor_id IS NULL)
-               OR
-               (ss.id IS NOT NULL AND sq.search_id IS NULL)
-             )
+               WHERE o.source_type='trend_topic' AND o.lifecycle_status<>'deleted'
+                 AND EXISTS (SELECT 1 FROM organizations scope_org
+                   JOIN workspaces scope_ws ON scope_ws.organization_id=scope_org.id
+                   WHERE scope_org.id=o.organization_id AND scope_org.status='active'
+                     AND scope_ws.id=o.workspace_id AND scope_ws.status='active')
+                 AND ((? IS NOT NULL AND c.latest_snapshot_id IS NULL AND cq.competitor_id IS NULL)
+                   OR (? IS NOT NULL AND ss.id IS NOT NULL AND sq.search_id IS NULL))
+               LIMIT 18446744073709551615
+             ) o LIMIT 18446744073709551615
+           ) o
+           STRAIGHT_JOIN competitors c FORCE INDEX (PRIMARY) ON c.id=o.repair_competitor_id
+             AND c.organization_id=o.organization_id AND c.workspace_id=o.workspace_id AND c.deleted_at IS NULL
+           LEFT JOIN sourcing_searches ss ON ss.id=o.repair_search_id
+             AND ss.organization_id=o.organization_id AND ss.workspace_id=o.workspace_id
+             AND ss.input_ref=o.id AND ss.deleted_at IS NULL
+           WHERE (ss.id IS NULL OR ss.collection_task_id<=>o.previous_collection_task_id)
            HAVING (competitor_task_missing=1 AND ? IS NOT NULL)
                OR (sourcing_task_missing=1 AND ? IS NOT NULL AND primary_image_url IS NOT NULL)
            ORDER BY o.created_at,o.id
            LIMIT 20 FOR UPDATE`,
-        [providers.amazon, providers.alibaba1688],
+        [providers.amazon, providers.alibaba1688, providers.amazon, providers.alibaba1688],
       );
       const scheduledSearches = new Set<string>();
       for (const row of rows) {
@@ -351,7 +360,8 @@ export class TrendProjectionPersistence {
           Boolean(row.competitor_task_missing) &&
           !row.latest_snapshot_id &&
           row.product_url &&
-          row.external_id
+          row.external_id &&
+          !(await this.existingAutomaticCompetitorTask(c, row, providers.amazon))
         ) {
           await this.scheduleCoreCollection(
             c,
@@ -579,6 +589,20 @@ export class TrendProjectionPersistence {
       now,
     );
     return true;
+  }
+
+  private async existingAutomaticCompetitorTask(
+    c: PoolConnection,
+    row: RowDataPacket,
+    providerId: string,
+  ) {
+    // Current locking read after the real competitor row is locked: a stale
+    // materialized candidate must not create a duplicate after another writer.
+    const [existing] = await c.query<RowDataPacket[]>(
+      "SELECT q.id FROM collection_subqueries q WHERE q.provider_id=? AND q.organization_id=? AND q.workspace_id=? AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id'))=? AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='competitor_snapshot' AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.page_url')) IS NOT NULL LIMIT 1 FOR UPDATE",
+      [providerId, row.organization_id, row.workspace_id, row.competitor_id],
+    );
+    return Boolean(existing[0]);
   }
 
   private async downstreamProviders(c: PoolConnection) {

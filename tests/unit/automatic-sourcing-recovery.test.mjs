@@ -20,6 +20,7 @@ function setup(
   providers = [{ id: "lan", code: "1688_search" }],
   refreshRows = [],
   discoveryRows = [],
+  existingCompetitorTasks = [],
 ) {
   const calls = [],
     tasks = [];
@@ -32,6 +33,8 @@ function setup(
       calls.push([sql, values]);
       if (sql.startsWith("SELECT id,code FROM providers")) return [providers];
       if (sql.startsWith("SELECT o.id opportunity_id")) return [rows];
+      if (sql.startsWith("SELECT q.id FROM collection_subqueries"))
+        return [existingCompetitorTasks];
       if (sql.startsWith("SELECT c.id,c.organization_id")) return [refreshRows];
       if (sql.startsWith("SELECT o.id discovery_opportunity_id")) return [discoveryRows];
       if (sql.startsWith("UPDATE sourcing_searches")) return [{ affectedRows: 1 }];
@@ -91,7 +94,7 @@ test("recovery scans are scoped, exclude retired searches and qualify actionable
   const { worker, calls } = setup([]);
   await worker.enqueueMissingAutomaticDownstream();
   const [sql, params] = calls.find(([sql]) => sql.startsWith("SELECT o.id opportunity_id"));
-  assert.deepEqual(params, [null, "lan"]);
+  assert.deepEqual(params, [null, "lan", null, "lan"]);
   assert.match(sql, /ss\.workspace_id=o\.workspace_id[\s\S]*ss\.deleted_at IS NULL/);
   assert.match(sql, /p_supply\.code='1688_search'/);
   assert.match(sql, /n_image_seed\.workspace_id=l_image\.workspace_id/);
@@ -113,7 +116,18 @@ test("recovery scans are scoped, exclude retired searches and qualify actionable
     sql,
     /BINARY UPPER\(JSON_UNQUOTE\(JSON_EXTRACT\(n_detail\.payload_json,'\$\.asin'\)\)\)=BINARY o\.primary_asin/,
   );
-  assert.match(sql, /primary_asin FROM opportunities o[\s\S]*LIMIT 18446744073709551615/);
+  assert.match(
+    sql,
+    /primary_asin FROM \([\s\S]*FROM opportunities o[\s\S]*LIMIT 18446744073709551615/,
+  );
+  assert.match(sql, /scope_org.status='active'/);
+  assert.match(sql, /scope_ws.organization_id=scope_org.id/);
+  assert.match(sql, /scope_ws.status='active'/);
+  assert.match(sql, /ss.collection_task_id<=>o.previous_collection_task_id/);
+  assert.match(
+    sql,
+    /STRAIGHT_JOIN competitors c FORCE INDEX \(PRIMARY\) ON c.id=o.repair_competitor_id/,
+  );
   assert.match(sql, /HAVING[\s\S]*primary_image_url IS NOT NULL[\s\S]*LIMIT 20 FOR UPDATE/);
 });
 
@@ -139,6 +153,38 @@ test("failed repair rolls back its task and search linkage transaction", async (
     false,
   );
   assert.deepEqual(calls.slice(-2), [["rollback"], ["release"]]);
+});
+
+test("locked competitor repair rechecks existing tasks before scheduling from a stale candidate", async () => {
+  for (const existing of [[], [{ id: "other-writer-task" }]]) {
+    const { worker, calls, tasks } = setup(
+      [
+        {
+          ...row,
+          competitor_id: "competitor-1",
+          external_id: "B000000001",
+          product_url: "https://www.amazon.com/dp/B000000001",
+          latest_snapshot_id: null,
+          competitor_task_missing: 1,
+          sourcing_task_missing: 0,
+          search_id: null,
+        },
+      ],
+      [{ id: "amazon", code: "amazon_product" }],
+      [],
+      [],
+      existing,
+    );
+    await worker.enqueueMissingAutomaticDownstream();
+    assert.equal(tasks.length, existing.length ? 0 : 1);
+    const [sql, params] = calls.find(([sql]) =>
+      sql.startsWith("SELECT q.id FROM collection_subqueries"),
+    );
+    assert.deepEqual(params, ["amazon", "org-1", "workspace-1", "competitor-1"]);
+    assert.match(sql, /q.provider_id=\?/);
+    assert.match(sql, /LIMIT 1 FOR UPDATE$/);
+    if (tasks[0]) assert.equal(tasks[0].queries[0].required, true);
+  }
 });
 
 test("first automatic sourcing also uses only 1688 and preserves a missing-image reason", async () => {
