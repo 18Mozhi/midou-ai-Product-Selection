@@ -25,15 +25,15 @@ export const automaticCompletionTaskSql =
   "OR (completion_provider.code='1688_search' AND completion_event.event_type='sourcing.collection.auto_scheduled' " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(completion_query.target_json,'$.projection_type'))='sourcing_search')))";
 
-/** Hold queued tasks while a required source circuit is open; no lease means no attempt consumed. */
+/** Hold queued tasks while a required source is disabled or its circuit is open; consume no attempt. */
 export const collectionRequiredSourcesReadySql =
   " AND NOT EXISTS (SELECT 1 FROM collection_subqueries required_source_query " +
-  "JOIN provider_runtime_circuits required_source_circuit ON required_source_circuit.provider_id=required_source_query.provider_id " +
   "JOIN providers required_source_provider ON required_source_provider.id=required_source_query.provider_id " +
+  "LEFT JOIN provider_runtime_circuits required_source_circuit ON required_source_circuit.provider_id=required_source_query.provider_id " +
   "WHERE required_source_query.task_id=collection_tasks.id " +
   "AND required_source_query.organization_id=collection_tasks.organization_id " +
   "AND required_source_query.workspace_id=collection_tasks.workspace_id " +
-  "AND required_source_query.is_required=1 AND required_source_circuit.state='open' " +
+  "AND required_source_query.is_required=1 AND (required_source_provider.status<>'enabled' OR required_source_circuit.state='open') " +
   "AND NOT (required_source_provider.code='1688_search' " +
   "AND COALESCE(JSON_TYPE(JSON_EXTRACT(required_source_query.target_json,'$.acceptance_run')),'')='BOOLEAN' " +
   "AND COALESCE(JSON_UNQUOTE(JSON_EXTRACT(required_source_query.target_json,'$.acceptance_run')),'')='true'))";

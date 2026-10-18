@@ -187,9 +187,10 @@ function observedEmptySearch(html: string) {
     return false;
   const main = /<div\b[^>]*class=["'][^"']*\bs-main-slot\b[^"']*["'][^>]*>/i.exec(body);
   if (!main) return false;
-  const message = /<div\b[^>]*data-cel-widget=["']MAIN-MESSAGING-0["'][^>]*>/i.exec(
-    body.slice(main.index),
-  );
+  const message =
+    /<div\b[^>]*\s(?:data-cel-widget|cel_widget_id)=["']MAIN-MESSAGING-0["'][^>]*>/i.exec(
+      body.slice(main.index),
+    );
   if (!message) return false;
   const content = body.slice(main.index + message.index + message[0].length);
   const heading = /<h2\b[^>]*>([\s\S]*?)<\/h2>/i.exec(content)?.[1];

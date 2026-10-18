@@ -50,8 +50,12 @@ function setup(options = {}) {
       if (sql.startsWith("SELECT * FROM collection_tasks"))
         return [
           options.noCandidate ||
-          (sql.includes(collectionRequiredSourcesReadySql) && options.sourceOpen) ||
-          (sql.endsWith("FOR UPDATE") && (options.lost || options.sourceOpenedAfterSelection))
+          (sql.includes(collectionRequiredSourcesReadySql) &&
+            (options.sourceOpen || options.sourceDisabled)) ||
+          (sql.endsWith("FOR UPDATE") &&
+            (options.lost ||
+              options.sourceOpenedAfterSelection ||
+              options.sourceDisabledAfterSelection))
             ? []
             : [row],
         ];
@@ -164,7 +168,12 @@ test("targeted verification keeps its explicit task restriction before scoped lo
   assert.deepEqual(candidates[1][1], ["task"]);
 });
 
-for (const options of [{ sourceOpen: true }, { sourceOpenedAfterSelection: true }]) {
+for (const options of [
+  { sourceOpen: true },
+  { sourceOpenedAfterSelection: true },
+  { sourceDisabled: true },
+  { sourceDisabledAfterSelection: true },
+]) {
   test(`required-source hold creates no attempt, lease, event or fairness advance: ${JSON.stringify(options)}`, async () => {
     const { repository, calls } = setup(options);
     assert.equal(await repository.claim("worker", now, 120), null);
@@ -176,6 +185,8 @@ for (const options of [{ sourceOpen: true }, { sourceOpenedAfterSelection: true 
 }
 
 test("source hold is scoped to required queries and retains only the existing typed LAN acceptance exception", () => {
+  assert.match(collectionRequiredSourcesReadySql, /LEFT JOIN provider_runtime_circuits/);
+  assert.match(collectionRequiredSourcesReadySql, /required_source_provider\.status<>'enabled'/);
   for (const [left, right] of [
     ["task_id", "id"],
     ["organization_id", "organization_id"],

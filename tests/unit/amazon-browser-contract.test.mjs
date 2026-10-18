@@ -57,6 +57,17 @@ test("observed ordinary Amazon empty search returns no facts without disabling t
     ),
     [],
   );
+  const nativeWidget = emptySearch.replace(
+    'data-cel-widget="MAIN-MESSAGING-0"',
+    'cel_widget_id="MAIN-MESSAGING-0"',
+  );
+  assert.deepEqual(
+    parseAmazonBrowserRunResult(
+      { ...result(nativeWidget, source), status: "succeeded_empty" },
+      target,
+    ),
+    [],
+  );
   for (const body of [
     "<div>empty</div>",
     emptySearch.replace("s-main-slot", "unknown-slot"),

@@ -248,7 +248,7 @@
       "tests/unit/collection-completion-scheduling.test.mjs",
       "tests/unit/automatic-source-fairness.test.mjs"
     ],
-    "contract": "Keep explicit priority, intake precedence and leases. Prefer proven scoped Worker downstream targets inside each tier for 20 committed claims, then one original FIFO turn. Shared queue/claim phase; nonlocking candidate order followed by scoped PK lock and eligibility recheck. No schema/field/config/dependency change. Real chain and daily100 remain unverified."
+    "contract": "Keep explicit priority, intake precedence and leases. Prefer proven scoped Worker downstream targets inside each tier for 20 committed claims, then one original FIFO turn. Shared queue/claim phase; nonlocking candidate order followed by scoped PK lock and eligibility recheck. No schema/field/config/dependency change. Real chain and daily100 remain unverified. Required source status must also be enabled; LEFT JOIN circuits retains disabled holds when no circuit row exists. Optional sources and existing typed LAN acceptance exception unchanged. Ten real MySQL57 read-only scenarios pass; no priority or FIFO change."
   },
   "selectionIntelligenceSourceRecovery20261018": {
     "status": "implemented",
@@ -6373,7 +6373,7 @@
       "tests/unit/amazon-detail-facts.test.mjs",
       "tests/unit/amazon-disabled-health-lease.test.mjs"
     ],
-    "contract": "Adapter v15 / normalized schema v5 / browser evidence v1. Only matching validated succeeded_empty search artifacts with observed empty-search structure return zero records. Challenges, unknown layouts and detail mismatches remain failures; no auto enable or fabricated facts. Actual stored job replay passed; live recovery and daily100 require separate acceptance. Private health repository additionally binds canonical empty profile, active assets, approved valid terms and exact Amazon/public_page disabled source. Generic HTTP leases retain enabled-only behavior; no public field or schema change."
+    "contract": "Adapter v16 / normalized schema v5 / browser evidence v1. Only matching validated succeeded_empty search artifacts with observed empty-search structure return zero records. Challenges, unknown layouts and detail mismatches remain failures; no auto enable or fabricated facts. Actual stored job replay passed; live recovery and daily100 require separate acceptance. Private health repository additionally binds canonical empty profile, active assets, approved valid terms and exact Amazon/public_page disabled source. Generic HTTP leases retain enabled-only behavior; no public field or schema change. Observed empty message container accepts data-cel-widget or cel_widget_id exactly; native attribute regression and second stored-job replay pass. Existing scheduling policy unchanged."
   },
   "selectionArchivedUiVerificationClosure20261018": {
     "status": "implemented",
