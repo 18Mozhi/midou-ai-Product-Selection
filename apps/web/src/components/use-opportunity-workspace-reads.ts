@@ -27,10 +27,6 @@ interface OpportunityWorkspaceReadOptions {
   state: Ref<OpportunityTypes.OpportunityWorkspaceState>;
   items: Ref<OpportunityTypes.OpportunitySummary[]>;
   memberOptions: Ref<Array<{ id: string; label: string }>>;
-  costReviewerOptions: Ref<Array<{ id: string; label: string }>>;
-  costReviewerLoadState: Ref<OpportunityTypes.OpportunityPartialLoadState>;
-  costReviewerErrorMessage: Ref<string>;
-  costReviewerRequestId: Ref<string>;
   detail: Ref<OpportunityTypes.OpportunityDetail | null>;
   profit: Ref<OpportunityTypes.OpportunityProfitAnalysis | null>;
   profitLoadState: Ref<OpportunityTypes.OpportunityPartialLoadState>;
@@ -49,7 +45,6 @@ interface OpportunityWorkspaceReadOptions {
   filters: OpportunityWorkspaceFilters;
   canReadCompetitors: ComputedRef<boolean>;
   canReadSourcing: ComputedRef<boolean>;
-  canConfirmCost: ComputedRef<boolean>;
   pendingDecisionFocus: Ref<OpportunityDecisionFocus | null>;
   captureDecisionFocus: (opportunityId: string | undefined) => void;
   restoreDecisionFocus: (opportunityId: string) => Promise<void>;
@@ -62,10 +57,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
     state,
     items,
     memberOptions,
-    costReviewerOptions,
-    costReviewerLoadState,
-    costReviewerErrorMessage,
-    costReviewerRequestId,
     detail,
     profit,
     profitLoadState,
@@ -84,7 +75,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
     filters,
     canReadCompetitors,
     canReadSourcing,
-    canConfirmCost,
     pendingDecisionFocus,
     captureDecisionFocus,
     restoreDecisionFocus,
@@ -222,45 +212,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
     if (isCurrent()) automationReadiness.value = readiness;
   }
 
-  async function loadCostReviewers(isCurrent: () => boolean = () => true, signal?: AbortSignal) {
-    costReviewerLoadState.value = "loading";
-    costReviewerErrorMessage.value = "";
-    costReviewerRequestId.value = "";
-    try {
-      const reviewers = await request<Array<{ id: string; label: string }>>(
-        "/cost-input-reviewers",
-        { signal },
-      );
-      if (!isCurrent()) return;
-      costReviewerOptions.value = reviewers.data;
-      costReviewerLoadState.value = "ready";
-    } catch (error) {
-      if (!isCurrent()) return;
-      costReviewerOptions.value = [];
-      costReviewerLoadState.value = "error";
-      if (error instanceof ApiClientError) {
-        costReviewerRequestId.value = error.requestId;
-        costReviewerErrorMessage.value = error.actionHint;
-      } else {
-        costReviewerErrorMessage.value = "暂时无法读取成本复核人名单，请稍后重试。";
-      }
-    }
-  }
-
-  async function retryCostReviewers() {
-    const generation = readGeneration;
-    const currentOpportunityId = getOpportunityId();
-    if (!currentOpportunityId || !canConfirmCost.value || costReviewerLoadState.value === "loading")
-      return;
-    await loadCostReviewers(
-      () =>
-        generation === readGeneration &&
-        getOpportunityId() === currentOpportunityId &&
-        !workspaceReadController?.signal.aborted,
-      workspaceReadController?.signal,
-    );
-  }
-
   async function loadProfitAnalysis(
     currentOpportunityId: string,
     isCurrent: () => boolean,
@@ -343,14 +294,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
           !isCurrent()
         )
           return;
-        if (canConfirmCost.value) {
-          await loadCostReviewers(isCurrent, controller.signal);
-        } else {
-          costReviewerOptions.value = [];
-          costReviewerLoadState.value = "ready";
-          costReviewerErrorMessage.value = "";
-          costReviewerRequestId.value = "";
-        }
         if (!isCurrent()) return;
         await loadDownstream(currentOpportunityId, isCurrent, undefined, controller.signal);
         if (!isCurrent()) return;
@@ -396,8 +339,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
     loadDownstream,
     retryDownstream,
     loadAutomationReadiness,
-    loadCostReviewers,
-    retryCostReviewers,
     loadProfitAnalysis,
     retryProfitAnalysis,
   };

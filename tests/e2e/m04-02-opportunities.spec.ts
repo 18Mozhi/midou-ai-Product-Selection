@@ -2842,6 +2842,7 @@ test("source prices remain visible when generic product profit has not been calc
   await page.goto(`/opportunities/${opportunityId}?tab=profit`);
   const panel = page.locator(".opportunity-profit");
   await expect(panel.getByText("利润未知", { exact: true })).toBeVisible();
+  await panel.getByText("查看计算依据", { exact: true }).click();
   const prices = panel.locator(".profit-current-inputs");
   await expect(prices.getByText("25 USD · amazon", { exact: true })).toBeVisible();
   await expect(prices.getByText("5 CNY · amazon", { exact: true })).toBeVisible();

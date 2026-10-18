@@ -58,10 +58,6 @@ const props = defineProps<{
   state = ref<OpportunityTypes.OpportunityWorkspaceState>("loading"),
   items = ref<OpportunityTypes.OpportunitySummary[]>([]),
   memberOptions = ref<Array<{ id: string; label: string }>>([]),
-  costReviewerOptions = ref<Array<{ id: string; label: string }>>([]),
-  costReviewerLoadState = ref<"loading" | "ready" | "error">("loading"),
-  costReviewerErrorMessage = ref(""),
-  costReviewerRequestId = ref(""),
   selectedOpportunityIds = ref<string[]>([]),
   detail = ref<OpportunityTypes.OpportunityDetail | null>(null),
   profit = ref<OpportunityTypes.OpportunityProfitAnalysis | null>(null),
@@ -111,7 +107,7 @@ const { writeScopeKey, beginScopedWrite, finishScopedWrite, pendingWriteCount } 
     workspaceActive: () => workspaceActive,
     busy,
   });
-const { filters, costForm } = createOpportunityWorkspaceForms();
+const { filters } = createOpportunityWorkspaceForms();
 const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
   () => showBatch.value,
   () => (showBatch.value = false),
@@ -126,7 +122,6 @@ const {
   canReadSourcing,
   canOpenCompetitorComparison,
   canOpenSourcingWorkspace,
-  canConfirmCost,
   returnPath,
   statePanelKind,
   statePanelPrimaryLabel,
@@ -146,8 +141,6 @@ const {
   loadDownstream,
   retryDownstream,
   loadAutomationReadiness,
-  loadCostReviewers,
-  retryCostReviewers,
   loadProfitAnalysis,
   retryProfitAnalysis,
 } = useOpportunityWorkspaceReads({
@@ -156,10 +149,6 @@ const {
   state,
   items,
   memberOptions,
-  costReviewerOptions,
-  costReviewerLoadState,
-  costReviewerErrorMessage,
-  costReviewerRequestId,
   detail,
   profit,
   profitLoadState,
@@ -178,7 +167,6 @@ const {
   filters,
   canReadCompetitors,
   canReadSourcing,
-  canConfirmCost,
   pendingDecisionFocus,
   captureDecisionFocus,
   restoreDecisionFocus,
@@ -330,73 +318,6 @@ async function confirmBatch() {
     !showBatch.value
   )
     message.value = `批量操作已完成 ${result.affected_count} 项，每个机会均保留独立事件。`;
-}
-async function confirmCost() {
-  if (busy.value || !detail.value) return;
-  const submitted = {
-    opportunityId: detail.value.id,
-    inputType: costForm.input_type,
-    body: {
-      platform: costForm.platform,
-      input_type: costForm.input_type,
-      amount_value: Number(costForm.amount_value),
-      currency: costForm.currency,
-      source_type: costForm.source_type,
-      source_ref_id: costForm.source_ref_id,
-      evidence_id: costForm.evidence_id,
-      observed_at: new Date(costForm.observed_at).toISOString(),
-      reviewer_id: costForm.reviewer_id,
-      expected_version: detail.value.version,
-    },
-  };
-  const result = await write(
-    `/opportunities/${submitted.opportunityId}/cost-inputs`,
-    submitted.body,
-  );
-  if (result) {
-    await load();
-    message.value = `${submitted.inputType} 已提交双人复核；通过前不会影响利润。`;
-  }
-}
-async function reviewCost(payload: {
-  reviewId: string;
-  decision: "approved" | "rejected";
-  reason: string;
-  expectedVersion: number;
-}) {
-  if (busy.value || !detail.value) return;
-  const submitted = {
-    opportunityId: detail.value.id,
-    reviewId: payload.reviewId,
-    decision: payload.decision,
-    reason: payload.reason,
-    expectedVersion: payload.expectedVersion,
-  };
-  const result = await write(
-    `/opportunities/${submitted.opportunityId}/cost-input-reviews/${submitted.reviewId}/actions`,
-    {
-      decision: submitted.decision,
-      reason: submitted.reason,
-      expected_version: submitted.expectedVersion,
-    },
-  );
-  if (!result) return;
-  await load();
-  message.value =
-    submitted.decision === "approved"
-      ? "成本复核已通过并生效；如有活动费用规则，利润重算已排队。"
-      : "成本复核已驳回；原提交保留但不会进入利润计算。";
-}
-async function queueProfit() {
-  if (!detail.value) return;
-  const result = await write(`/opportunities/${detail.value.id}/profit-runs`, {
-    platform: costForm.platform,
-    expected_version: detail.value.version,
-  });
-  if (result) {
-    await load();
-    message.value = "利润计算已进入宝塔 Node Worker 队列；刷新后查看不可变运行快照。";
-  }
 }
 function closeTransientDialogs() {
   showBatch.value = false;
@@ -565,18 +486,8 @@ useOpportunityWorkspaceLifecycle({
                   :profit-load-state="profitLoadState"
                   :profit-error-message="profitErrorMessage"
                   :profit-request-id="profitRequestId"
-                  :cost-form="costForm"
-                  :reviewer-options="costReviewerOptions"
-                  :reviewer-load-state="costReviewerLoadState"
-                  :reviewer-error-message="costReviewerErrorMessage"
-                  :reviewer-request-id="costReviewerRequestId"
-                  :can-confirm-cost="canConfirmCost"
                   :busy="busy"
-                  @confirm-cost="confirmCost"
-                  @retry-reviewers="retryCostReviewers"
                   @retry-profit="retryProfitAnalysis"
-                  @review-cost="reviewCost"
-                  @queue-profit="queueProfit"
                 />
               </template>
               <OpportunityEvidencePanel

@@ -181,7 +181,6 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
     "apps/web/src/components/OpportunityWorkspace.vue",
     "apps/web/src/components/OpportunityProfitPanel.vue",
     "apps/web/src/components/use-opportunity-workspace-reads.ts",
-    "apps/web/src/components/OpportunityCostReviewQueue.vue",
     "apps/web/src/profit.css",
     "apps/web/src/opportunity-profit.css",
     "config/schema.json",
@@ -208,7 +207,6 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
     opportunityShell,
     profitPanel,
     opportunityReads,
-    costReviewQueue,
     ruleCss,
     profitCss,
     schema,
@@ -246,21 +244,20 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
     assert.match(consoleUi, new RegExp(state));
   assert.match(opportunityReads, /profit-analysis/);
   assert.match(opportunityShell, /OpportunityProfitPanel[\s\S]*:profit="profit"/);
-  assert.match(profitPanel, /提交成本复核[\s\S]*重新计算/);
-  assert.match(`${profitPanel}\n${costReviewQueue}`, /成本复核队列[\s\S]*指定复核人/);
+  assert.doesNotMatch(profitPanel, /提交成本复核|提交双人复核|queueProfit|confirmCost/);
+  assert.match(profitPanel, /利润未知[\s\S]*查看计算依据/);
   assert.match(consoleUi, /costSetupItems/);
   assert.match(consoleUi, /成本质量门未就绪/);
   assert.match(consoleUi, /成本规则已生效/);
   assert.match(consoleUi, /cost-setup-check[\s\S]*配置检查/);
   assert.ok(opportunityShell.split(/\r?\n/).length < 1000);
   assert.ok(profitPanel.split(/\r?\n/).length < 300);
-  assert.ok(costReviewQueue.split(/\r?\n/).length < 160);
   assert.match(ruleCss, /@media\s*\(\s*max-width:\s*820px\s*\)/);
   assert.match(ruleCss, /var\(--so-panel\)/);
   assert.match(ruleCss, /var\(--so-primary\)/);
   assert.match(ruleCss, /overflow-wrap:\s*anywhere/);
   assert.doesNotMatch(ruleCss, /!important|#[0-9a-f]{3,8}\b/i);
-  assert.match(profitCss, /@media\s*\(\s*max-width:\s*640px\s*\)/);
+  assert.match(profitCss, /@media\s*\(\s*max-width:\s*760px\s*\)/);
   assert.match(schema, /PROFIT_CALCULATION_POLL_MS/);
   assert.match(env, /PROFIT_CALCULATION_LEASE_SECONDS/);
   assert.match(openapi, /profit-analysis/);

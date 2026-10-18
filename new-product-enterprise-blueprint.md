@@ -1,3 +1,5 @@
+> 2026-10-18 成员商品详情退休手工成本录入/复核/重算，保留自动利润及只读依据；后台费用治理和历史API不变。见 `docs/selection-member-profit-retirement.md`。日百品仍需真实验收。
+
 > 2026-10-18 商品详情按分区聚焦，推荐与补证仅在商品评分页，已知自动评分缺失码中文化。见 `docs/selection-detail-section-focus.md`；全站与日百品仍待验收。
 
 > 2026-10-18 找货页重制：记录/报价分页、独立有界导航、报价优先与只读利润摘要，退休找货页手工成本编辑。旧P21成本编辑说明为历史。见 `docs/selection-sourcing-workbench-navigation.md`；全站及日百品仍待验收。

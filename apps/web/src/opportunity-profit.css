@@ -1,229 +1,104 @@
 .opportunity-profit {
-  padding: 18px;
+  padding: 16px;
   border: 1px solid var(--so-border);
-  border-radius: 14px;
-  background: var(--so-panel-soft);
+  border-radius: 0;
+  background: var(--so-panel);
+  min-width: 0;
 }
-.opportunity-profit > header {
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
+.opportunity-profit > header h4 {
+  margin: 0 0 8px;
 }
 .opportunity-profit > header span {
   color: var(--so-text-muted);
+  font-size: 13px;
 }
-.opportunity-profit > header a {
-  height: max-content;
-  padding: 9px 12px;
-  border-radius: 8px;
-  color: var(--so-on-primary);
-  background: var(--so-primary);
-  text-decoration: none;
-}
-.profit-summary {
+.opportunity-profit .profit-summary {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin: 18px 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 16px 0;
 }
-.profit-summary article {
-  padding: 14px;
-  border: 1px solid var(--so-border);
-  border-radius: 10px;
-  background: var(--so-panel);
+.opportunity-profit .profit-summary article {
+  min-width: 0;
+  padding: 8px 0;
 }
-.profit-summary small,
-.profit-summary span {
+.opportunity-profit .profit-summary small,
+.opportunity-profit .profit-summary span {
   display: block;
   color: var(--so-text-muted);
 }
-.profit-summary strong {
+.opportunity-profit .profit-summary strong {
   display: block;
-  margin: 8px 0;
+  margin: 6px 0;
   font-size: 18px;
+  overflow-wrap: anywhere;
 }
-.profit-summary[data-status="insufficient_data"] {
-  border-left: 3px solid var(--so-warning);
-}
-.profit-missing {
+.opportunity-profit .profit-missing {
   display: grid;
   gap: 6px;
-  padding: 14px;
-  border-left: 3px solid var(--so-warning);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--so-warning) 9%, transparent);
+  margin: 16px 0;
+  padding: 12px 0;
+  border-block: 1px solid var(--so-border);
 }
-.profit-components {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 9px;
+.opportunity-profit .profit-missing span {
+  color: var(--so-text-muted);
+  overflow-wrap: anywhere;
+}
+.opportunity-profit .profit-missing button {
+  justify-self: start;
+}
+.opportunity-profit .profit-calculation-evidence {
   margin-top: 16px;
+  border-top: 1px solid var(--so-border);
+  padding-top: 12px;
 }
-.profit-components article {
-  padding: 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  background: var(--so-panel);
+.opportunity-profit .profit-calculation-evidence summary {
+  cursor: pointer;
+  color: var(--so-primary);
 }
-.profit-components article[data-missing="true"] {
-  border-color: color-mix(in srgb, var(--so-warning) 50%, var(--so-border));
+.opportunity-profit .profit-components {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
 }
-.profit-components header {
+.opportunity-profit .profit-components article,
+.opportunity-profit .profit-current-inputs article {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--so-border);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.opportunity-profit .profit-components header {
   display: flex;
   justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
 }
-.profit-components span,
-.profit-components small,
-.profit-components em {
+.opportunity-profit .profit-components span,
+.opportunity-profit .profit-components small,
+.opportunity-profit .profit-components em,
+.opportunity-profit .profit-current-inputs small {
   display: block;
   margin-top: 5px;
   color: var(--so-text-muted);
   font-size: 13px;
 }
-.profit-components em {
-  color: var(--so-warning);
-}
-.profit-current-inputs,
-.profit-review-queue {
-  display: grid;
-  gap: 10px;
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid var(--so-border);
-}
-.profit-current-inputs article,
-.profit-review-queue > article {
-  display: grid;
-  gap: 6px;
-  padding: 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 10px;
-  background: var(--so-panel);
-}
-.profit-current-inputs small,
-.profit-review-queue small,
-.profit-review-queue > header span,
-.profit-review-queue > article > p {
-  color: var(--so-text-muted);
-}
-.profit-review-queue > header,
-.profit-review-queue > article > header,
-.profit-review-queue > article > footer,
-.profit-review-queue > article > form > div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-.profit-review-queue > article[data-status="pending"],
-.profit-review-queue > article[data-status="overdue"] {
-  border-left: 4px solid var(--so-warning);
-}
-.profit-review-queue > article[data-status="overdue"] {
-  border-color: color-mix(in srgb, var(--so-danger) 60%, var(--so-border));
-}
-.profit-review-queue > article > form,
-.profit-review-queue > article > form label {
-  display: grid;
-  gap: 8px;
-}
-.profit-review-queue textarea {
-  min-height: 76px;
-}
-.profit-input {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid var(--so-border);
-}
-.profit-input h5,
-.profit-input footer {
-  grid-column: 1/-1;
-}
-.profit-reviewer-status {
-  grid-column: 1/-1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 10px 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 8px;
-  color: var(--so-text-muted);
-  background: var(--so-panel);
-}
-.profit-reviewer-status p {
-  display: grid;
-  gap: 4px;
-  margin: 0;
-}
-.profit-reviewer-status[data-state="error"] {
-  border-color: color-mix(in srgb, var(--so-danger) 35%, var(--so-border));
-}
-.profit-reviewer-status[data-state="error"] p {
+.opportunity-profit .profit-components em {
   color: var(--so-danger);
 }
-.profit-reviewer-status button {
-  flex: 0 0 auto;
+.opportunity-profit .profit-current-inputs {
+  margin-top: 16px;
 }
-.profit-input label {
+.opportunity-profit .profit-current-inputs article {
   display: grid;
   gap: 5px;
-  color: var(--so-text-muted);
-  font-size: 13px;
 }
-.profit-input input,
-.profit-input select {
-  min-width: 0;
-  padding: 9px;
-  border: 1px solid var(--so-border);
-  border-radius: 7px;
-  color: var(--so-text);
-  background: var(--so-panel);
-}
-.profit-input footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-.profit-input button {
-  padding: 10px 14px;
-  border: 0;
-  border-radius: 8px;
-  color: var(--so-on-primary);
-  background: var(--so-primary);
-}
-.profit-input button:last-child {
-  background: var(--so-text);
-}
-.profit-input button:disabled,
-.profit-input select:disabled {
-  cursor: not-allowed;
-  opacity: 0.58;
-}
-@media (max-width: 1100px) {
-  .profit-summary,
-  .profit-input {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 760px) {
+  .opportunity-profit .profit-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
-@media (max-width: 640px) {
-  .opportunity-profit > header {
-    display: grid;
-  }
-  .profit-review-queue > header,
-  .profit-review-queue > article > header {
-    display: grid;
-  }
-  .profit-reviewer-status {
-    align-items: stretch;
-    flex-direction: column;
-  }
-  .profit-summary,
-  .profit-components,
-  .profit-input {
+  .opportunity-profit .profit-components {
     grid-template-columns: 1fr;
   }
 }

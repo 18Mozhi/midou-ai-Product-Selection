@@ -38,7 +38,6 @@ export function useOpportunityWorkspaceAccess(options: OpportunityWorkspaceAcces
   const canOpenSourcingWorkspace = computed(
     () => capabilities()?.includes("sourcing:read") ?? false,
   );
-  const canConfirmCost = computed(() => capabilities()?.includes("cost:confirm") ?? false);
   const returnPath = computed(() => safeOpportunityReturnPath(route.query.from));
   const statePanelKind = computed(() => (state.value === "ready" ? "empty" : state.value));
   const statePanelPrimaryLabel = computed(() =>
@@ -79,7 +78,6 @@ export function useOpportunityWorkspaceAccess(options: OpportunityWorkspaceAcces
     canReadSourcing,
     canOpenCompetitorComparison,
     canOpenSourcingWorkspace,
-    canConfirmCost,
     returnPath,
     statePanelKind,
     statePanelPrimaryLabel,

@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import OpportunityCostReviewQueue from "./OpportunityCostReviewQueue.vue";
 import type { OpportunityProfitAnalysis as ProfitAnalysis } from "./opportunity-workspace-types";
 import {
   opportunityProfitComponentLabel,
   opportunityStatusLabel,
 } from "./opportunity-workspace-presentation";
-
 withDefaults(
   defineProps<{
     profit: ProfitAnalysis | null;
@@ -13,52 +11,11 @@ withDefaults(
     profitLoadState?: "loading" | "ready" | "error";
     profitErrorMessage?: string;
     profitRequestId?: string;
-    costForm: {
-      platform: string;
-      input_type: "sale_price" | "purchase_price" | "logistics";
-      amount_value: number;
-      currency: string;
-      source_type: string;
-      source_ref_id: string;
-      evidence_id: string;
-      observed_at: string;
-      reviewer_id: string;
-    };
-    reviewerOptions: Array<{ id: string; label: string }>;
-    reviewerLoadState?: "unknown" | "loading" | "ready" | "error";
-    reviewerErrorMessage?: string;
-    reviewerRequestId?: string;
     busy: boolean;
-    costVersionReady?: boolean;
-    canConfirmCost?: boolean;
   }>(),
-  {
-    canConfirmCost: true,
-    profitStatus: null,
-    reviewerLoadState: "unknown",
-    reviewerErrorMessage: "",
-    reviewerRequestId: "",
-    costVersionReady: true,
-    profitLoadState: "ready",
-    profitErrorMessage: "",
-    profitRequestId: "",
-  },
+  { profitStatus: null, profitLoadState: "ready", profitErrorMessage: "", profitRequestId: "" },
 );
-
-defineEmits<{
-  confirmCost: [];
-  retryProfit: [];
-  retryReviewers: [];
-  queueProfit: [];
-  reviewCost: [
-    payload: {
-      reviewId: string;
-      decision: "approved" | "rejected";
-      reason: string;
-      expectedVersion: number;
-    },
-  ];
-}>();
+defineEmits<{ retryProfit: [] }>();
 const inputLabel = (value: string) =>
   ({ sale_price: "含税售价", purchase_price: "采购价", logistics: "物流" })[value] ?? value;
 </script>
@@ -67,11 +24,9 @@ const inputLabel = (value: string) =>
   <section class="opportunity-profit">
     <header>
       <div>
-        <p>利润与成本</p>
         <h4>利润与成本</h4>
         <span>净利润 = 含税售价 − 采购 − 物流 − 平台费 − 支付手续费 − 税费 − 履约成本</span>
       </div>
-      <RouterLink to="/sourcing/cost-rules">管理费用规则</RouterLink>
     </header>
     <aside v-if="profitLoadState === 'loading'" class="profit-missing" role="status">
       <strong>正在读取利润与成本</strong>
@@ -86,7 +41,7 @@ const inputLabel = (value: string) =>
       <button type="button" :disabled="busy" @click="$emit('retryProfit')">重新读取利润数据</button>
     </aside>
     <div
-      v-if="profit?.latest_run?.status === 'calculated' && profitStatus !== 'insufficient_data'"
+      v-if="profit?.latest_run?.status === 'calculated' && profitStatus === 'calculated'"
       class="profit-summary"
       :data-status="profit.latest_run.status"
     >
@@ -116,7 +71,7 @@ const inputLabel = (value: string) =>
     <aside
       v-if="
         profitLoadState === 'ready' &&
-        (profitStatus === 'insufficient_data' ||
+        (profitStatus !== 'calculated' ||
           !profit?.latest_run ||
           profit.latest_run.status === 'insufficient_data')
       "
@@ -131,135 +86,41 @@ const inputLabel = (value: string) =>
         >缺失：{{ profit?.latest_run?.missing_fields.join("、") || "尚无利润计算运行" }}</span
       >
     </aside>
-    <div v-if="profit?.latest_run" class="profit-components">
-      <article
-        v-for="item in profit.latest_run.components"
-        :key="item.component_type"
-        :data-missing="Boolean(item.missing_reason)"
-      >
-        <header>
-          <strong>{{ opportunityProfitComponentLabel(item.component_type) }}</strong
-          ><b>{{ item.converted_amount ?? "缺失" }} {{ item.target_currency ?? "" }}</b>
-        </header>
-        <span>原始 {{ item.source_amount ?? "—" }} {{ item.source_currency ?? "" }}</span
-        ><small>来源 {{ item.source_ref_id ?? "—" }} · 证据 {{ item.evidence_id ?? "—" }}</small
-        ><small v-if="item.exchange_quote_id">汇率快照 {{ item.exchange_quote_id }}</small
-        ><em v-if="item.missing_reason">{{ item.missing_reason }}</em>
-      </article>
-    </div>
-    <section v-if="profit?.current_inputs.length" class="profit-current-inputs">
-      <h5>已生效成本</h5>
-      <article v-for="item in profit.current_inputs" :key="`${item.platform}:${item.input_type}`">
-        <strong>{{ inputLabel(item.input_type) }}</strong>
-        <span>{{ item.amount_value }} {{ item.currency }} · {{ item.platform }}</span>
-        <small
-          >v{{ item.input_version }} ·
-          {{
-            item.confirmation_mode === "automatic_evidence" ? "爬虫证据自动确认" : "人工双人复核"
-          }}
-          · {{ item.source_ref_id }}</small
+    <details
+      v-if="profit?.latest_run || profit?.current_inputs.length"
+      class="profit-calculation-evidence"
+    >
+      <summary>查看计算依据</summary>
+      <div v-if="profit?.latest_run" class="profit-components">
+        <article
+          v-for="item in profit.latest_run.components"
+          :key="item.component_type"
+          :data-missing="Boolean(item.missing_reason)"
         >
-      </article>
-    </section>
-    <OpportunityCostReviewQueue
-      :reviews="profit?.cost_input_reviews || []"
-      :busy="busy"
-      @review-cost="$emit('reviewCost', $event)"
-    />
-    <form v-if="canConfirmCost" class="profit-input" @submit.prevent="$emit('confirmCost')">
-      <h5>提交成本复核</h5>
-      <label>平台<input v-model="costForm.platform" required maxlength="80" /></label>
-      <label
-        >类型<select v-model="costForm.input_type">
-          <option value="sale_price">含税售价</option>
-          <option value="purchase_price">采购价</option>
-          <option value="logistics">物流</option>
-        </select></label
-      >
-      <label
-        >金额<input
-          v-model.number="costForm.amount_value"
-          required
-          type="number"
-          min="0"
-          step="0.000001"
-      /></label>
-      <label>币种<input v-model="costForm.currency" required maxlength="3" /></label>
-      <label>来源类型<input v-model="costForm.source_type" required maxlength="80" /></label>
-      <label>来源标识<input v-model="costForm.source_ref_id" required maxlength="255" /></label>
-      <label>证据 ID<input v-model="costForm.evidence_id" required maxlength="36" /></label>
-      <label>观测时间<input v-model="costForm.observed_at" required type="datetime-local" /></label>
-      <label
-        >指定复核人<select
-          v-model="costForm.reviewer_id"
-          required
-          :disabled="
-            reviewerLoadState === 'loading' ||
-            reviewerLoadState === 'error' ||
-            !reviewerOptions.length
-          "
-        >
-          <option value="" disabled>
-            {{
-              reviewerLoadState === "loading"
-                ? "正在读取成本复核人…"
-                : reviewerLoadState === "error"
-                  ? "复核人列表暂不可用"
-                  : reviewerOptions.length
-                    ? "请选择另一名成本确认人"
-                    : "当前没有可选复核人"
-            }}
-          </option>
-          <option v-for="item in reviewerOptions" :key="item.id" :value="item.id">
-            {{ item.label }}
-          </option>
-        </select></label
-      >
-      <div
-        v-if="
-          reviewerLoadState === 'loading' ||
-          reviewerLoadState === 'error' ||
-          (reviewerLoadState === 'ready' && !reviewerOptions.length)
-        "
-        class="profit-reviewer-status"
-        :data-state="reviewerLoadState"
-      >
-        <p v-if="reviewerLoadState === 'loading'" role="status">正在读取可选成本复核人…</p>
-        <p v-else-if="reviewerLoadState === 'error'" role="alert">
-          {{ reviewerErrorMessage || "暂时无法读取成本复核人名单。" }}
-          <span v-if="reviewerRequestId">追踪编号：{{ reviewerRequestId }}</span>
-        </p>
-        <p v-else role="status">暂无可选成本复核人，请联系管理员。</p>
-        <button
-          v-if="reviewerLoadState === 'error'"
-          type="button"
-          :disabled="busy"
-          @click="$emit('retryReviewers')"
-        >
-          重新加载复核人
-        </button>
+          <header>
+            <strong>{{ opportunityProfitComponentLabel(item.component_type) }}</strong
+            ><b>{{ item.converted_amount ?? "缺失" }} {{ item.target_currency ?? "" }}</b>
+          </header>
+          <span>原始 {{ item.source_amount ?? "—" }} {{ item.source_currency ?? "" }}</span
+          ><small>来源 {{ item.source_ref_id ?? "—" }} · 证据 {{ item.evidence_id ?? "—" }}</small
+          ><small v-if="item.exchange_quote_id">汇率快照 {{ item.exchange_quote_id }}</small
+          ><em v-if="item.missing_reason">{{ item.missing_reason }}</em>
+        </article>
       </div>
-      <footer>
-        <button
-          type="submit"
-          :disabled="
-            busy ||
-            !costVersionReady ||
-            reviewerLoadState === 'loading' ||
-            reviewerLoadState === 'error' ||
-            (reviewerLoadState === 'ready' && !reviewerOptions.length) ||
-            !costForm.reviewer_id
-          "
-        >
-          提交双人复核</button
-        ><button type="button" :disabled="busy || !costVersionReady" @click="$emit('queueProfit')">
-          重新计算
-        </button>
-      </footer>
-    </form>
-    <aside v-else class="profit-missing">
-      <strong>当前角色为只读成本视图</strong
-      ><span>可以查看利润事实与复核记录；提交成本和重新计算需要“确认成本”权限。</span>
-    </aside>
+      <section v-if="profit?.current_inputs.length" class="profit-current-inputs">
+        <h5>已生效成本</h5>
+        <article v-for="item in profit.current_inputs" :key="`${item.platform}:${item.input_type}`">
+          <strong>{{ inputLabel(item.input_type) }}</strong>
+          <span>{{ item.amount_value }} {{ item.currency }} · {{ item.platform }}</span>
+          <small
+            >v{{ item.input_version }} ·
+            {{
+              item.confirmation_mode === "automatic_evidence" ? "爬虫证据自动确认" : "人工双人复核"
+            }}
+            · {{ item.source_ref_id }}</small
+          >
+        </article>
+      </section>
+    </details>
   </section>
 </template>
