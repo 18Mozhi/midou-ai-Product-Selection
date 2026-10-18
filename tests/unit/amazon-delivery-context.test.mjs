@@ -48,15 +48,24 @@ function fixture(options = {}) {
   });
   const page = {
     locator,
+    waitForLoadState: async (state) => {
+      actions.push(["load", state]);
+      if (options.loadFailed) throw new Error("Timeout waiting for page load");
+      if (options.locationAfterLoad) location = options.locationAfterLoad;
+    },
     getByRole: (role, value) => ({
       isVisible: async () =>
-        role === "link" && value.name === "Hello, sign in Account & Lists" && !options.signedIn,
+        role === "link" &&
+        value.name === "Hello, sign in Account & Lists" &&
+        !options.signedIn &&
+        !(options.signedInAfterLoad && actions.some((a) => a[0] === "load")),
     }),
   };
   let checks = 0;
   const safe = async () => {
     checks++;
-    if (options.blockAfterOpen && checks === 2) throw new Error("captcha block");
+    if ((options.blockAfterLoad && checks === 2) || (options.blockAfterOpen && checks === 3))
+      throw new Error("captcha block");
   };
   return { page, safe, actions, location: () => location };
 }
@@ -109,6 +118,7 @@ test("anonymous country mismatch waits for confirmed US postcode before closing 
   assert.deepEqual(
     f.actions.map((a) => a.slice(0, 2)),
     [
+      ["load", "load"],
       ["click", "#nav-global-location-popover-link"],
       ["fill", "#GLUXZipUpdateInput"],
       ["click", "#GLUXZipUpdate input"],
@@ -132,7 +142,28 @@ test("unconfirmed postal application never advances to Done or reports region su
 test("challenge/origin guards run again before filling location", async () => {
   const f = fixture({ blockAfterOpen: true });
   await assert.rejects(prepareAmazonDeliveryContext(f.page, "94404", f.safe), /captcha block/);
-  assert.deepEqual(f.actions, [["click", "#nav-global-location-popover-link"]]);
+  assert.deepEqual(f.actions, [
+    ["load", "load"],
+    ["click", "#nav-global-location-popover-link"],
+  ]);
+});
+
+test("loading failures and newly blocked or signed-in pages never open the location modal", async () => {
+  for (const options of [
+    { loadFailed: true },
+    { blockAfterLoad: true },
+    { signedInAfterLoad: true },
+  ]) {
+    const f = fixture(options);
+    await assert.rejects(prepareAmazonDeliveryContext(f.page, "94404", f.safe));
+    assert.deepEqual(f.actions, [["load", "load"]]);
+  }
+});
+
+test("a correct region that appears during loading needs no location interaction", async () => {
+  const f = fixture({ locationAfterLoad: "Deliver to San Mateo 94404" });
+  assert.equal(await prepareAmazonDeliveryContext(f.page, "94404", f.safe), false);
+  assert.deepEqual(f.actions, [["load", "load"]]);
 });
 test("cookie-backed contexts fail before any browser is launched", async () => {
   const { plan } = createAmazonBrowserExecutionRequest({ query: "metal sign" });

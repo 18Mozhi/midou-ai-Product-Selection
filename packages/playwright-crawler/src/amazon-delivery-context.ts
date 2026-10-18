@@ -8,15 +8,23 @@ export async function prepareAmazonDeliveryContext(
 ) {
   if (typeof postalCode !== "string" || !/^\d{5}$/.test(postalCode))
     throw new Error("amazon_delivery_postal_invalid");
-  await assertSafe();
-  if (
-    !(await page
-      .getByRole("link", { name: "Hello, sign in Account & Lists", exact: true })
-      .isVisible())
-  )
-    throw new Error("amazon_delivery_requires_anonymous_page");
+  const assertAnonymous = async () => {
+    await assertSafe();
+    if (
+      !(await page
+        .getByRole("link", { name: "Hello, sign in Account & Lists", exact: true })
+        .isVisible())
+    )
+      throw new Error("amazon_delivery_requires_anonymous_page");
+  };
+  await assertAnonymous();
   const header = page.locator("#glow-ingress-block");
   const postal = new RegExp(`\\b${postalCode}\\b`);
+  if (postal.test((await header.textContent()) ?? "")) return false;
+  // The visible empty-href link can precede its async modal handler. An early
+  // click reloads the page; use the existing navigation budget before acting.
+  await page.waitForLoadState("load");
+  await assertAnonymous();
   if (postal.test((await header.textContent()) ?? "")) return false;
   await page.locator("#nav-global-location-popover-link").click();
   await assertSafe();

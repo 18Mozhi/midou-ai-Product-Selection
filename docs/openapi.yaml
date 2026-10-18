@@ -11756,3 +11756,6 @@ x-scoutops-lan-1688:
 
 # Workbench daily completed/100 is displayed before cumulative counts; market filters
 # are responsive. Existing API, unknown-profit and daily completion semantics unchanged.
+
+# Amazon anonymous delivery preparation waits for loaded location handlers using
+# the existing navigation budget and rechecks guards; no public API or config change.

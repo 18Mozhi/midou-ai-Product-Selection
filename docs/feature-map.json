@@ -1,4 +1,14 @@
 {
+  "amazonDeliveryReadiness20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-us-observation-context.md",
+    "sourceFiles": ["packages/playwright-crawler/src/amazon-delivery-context.ts"],
+    "testFiles": [
+      "tests/unit/amazon-delivery-context.test.mjs",
+      "tests/integration/amazon-delivery-readiness.test.mjs"
+    ],
+    "contract": "Anonymous mismatched delivery context waits for page load under the existing navigation timeout before clicking the empty-href location trigger, then rechecks challenge/origin/login and current postcode. Already-correct regions skip all setting actions. No fixed delay, larger timeout, new config, request field, cookie import or relaxed confirmation. Real Chromium delayed async handler fails before fix and passes after; actual server diagnostic produced48 search rows after confirmed94404 without persisting business facts. Production automatic recovery and daily100 require separate evidence."
+  },
   "selectionWorkbenchProgressLayout20261018": {
     "status": "implemented",
     "requirements": "docs/selection-workbench-progress-layout.md",
