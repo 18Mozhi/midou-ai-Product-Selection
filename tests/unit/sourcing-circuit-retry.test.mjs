@@ -4,6 +4,7 @@ import { TrendProjectionPersistence } from "../../apps/worker/dist/trend-project
 import {
   recoverCircuitHeldSourcing,
   recoveredSourcingCandidateSql,
+  recoveredSourcingImageCandidateSql,
 } from "../../apps/worker/dist/automatic-sourcing-retry-policy.js";
 
 const row = {
@@ -34,9 +35,11 @@ function fixture(options = {}) {
         return [
           [
             {
-              image_url: options.badImage
-                ? "https://example.com/unrelated.jpg"
-                : "https://m.media-amazon.com/images/I/primary.jpg",
+              image_url: Object.hasOwn(options, "currentImage")
+                ? options.currentImage
+                : options.badImage
+                  ? "https://example.com/unrelated.jpg"
+                  : "https://m.media-amazon.com/images/I/primary.jpg",
             },
           ],
         ];
@@ -146,4 +149,42 @@ test("candidate policy requires scoped automatic provenance, zero evidence and r
   assert.match(recoveredSourcingCandidateSql, /ws\.organization_id=ss\.organization_id/);
   assert.match(recoveredSourcingCandidateSql, /p\.terms_expires_at>\?/);
   assert.doesNotMatch(recoveredSourcingCandidateSql, /FOR UPDATE/);
+});
+
+test("recovery prequalifies an allowed current image before limiting the nonlocking FIFO scan", async () => {
+  const f = fixture();
+  assert.equal(await f.run(), true);
+  assert.equal(f.calls[0].sql, recoveredSourcingImageCandidateSql);
+  assert.deepEqual(f.calls[0].params, [new Date("2026-10-18T08:00:00Z")]);
+  assert.ok(recoveredSourcingImageCandidateSql.includes(recoveredSourcingCandidateSql));
+  assert.match(recoveredSourcingImageCandidateSql, /SELECT recovery\.\*,o\.id,[\s\S]*primary_asin/);
+  assert.equal(
+    (recoveredSourcingImageCandidateSql.match(/LIMIT 18446744073709551615/g) ?? []).length,
+    2,
+  );
+  assert.match(
+    recoveredSourcingImageCandidateSql,
+    /WHERE BINARY[\s\S]*REGEXP[\s\S]*ORDER BY o\.blocked_updated_at,o\.search_id LIMIT 1$/,
+  );
+  assert.doesNotMatch(recoveredSourcingImageCandidateSql, /FOR UPDATE/);
+  const recheck = f.calls.find((c) => c.sql?.startsWith("SELECT ss.id"));
+  assert.equal(
+    recheck.sql,
+    recoveredSourcingCandidateSql +
+      " AND ss.id=? AND ss.organization_id=? AND ss.workspace_id=? LIMIT 1",
+  );
+});
+
+test("image loss after candidate selection does not write or schedule a recovery", async () => {
+  const f = fixture({ currentImage: null });
+  assert.equal(await f.run(), false);
+  assert.equal(f.scheduled.length, 0);
+  assert.ok(!f.calls.some((c) => c.sql?.startsWith("UPDATE")));
+});
+
+test("recovery uses the current locked-stage image rather than a stale candidate image", async () => {
+  const currentImage = "https://m.media-amazon.com/images/I/current.jpg";
+  const f = fixture({ currentImage });
+  assert.equal(await f.run(), true);
+  assert.equal(f.scheduled[0][3].image_url, currentImage);
 });

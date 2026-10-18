@@ -6920,5 +6920,16 @@
     "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/sourcing.css"],
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts", "tests/unit/sourcing-page-preview.test.mjs"],
     "contract": "Combine search and four factual counters in one responsive control panel; unboxed title and 44px heading actions. Two-line record names retain full accessible text and inline metadata. Full-width mobile block-flow rows grow with content inside the bounded scroll pane, preventing grid rows from squeezing to the control minimum. Remove superseded styles; retain scripts, pagination, reads/writes, permissions, raw facts and unknown profit. No API, config, schema, dependency or Python change; daily100 and source recovery remain independently unproven."
+  },
+  "sourcingRecoveryImageAdmission20261019": {
+    "status": "implemented",
+    "requirements": "docs/selection-sourcing-circuit-retry.md",
+    "sourceFiles": ["apps/worker/src/automatic-sourcing-retry-policy.ts"],
+    "testFiles": [
+      "tests/unit/sourcing-circuit-retry.test.mjs",
+      "tests/unit/automatic-sourcing-recovery.test.mjs",
+      "tests/unit/lan-1688-recovery.test.mjs"
+    ],
+    "contract": "Materialize original circuit-recovery eligibility, resolve current primary once and exclude missing/disallowed current images before the original FIFO LIMIT1. Preserve exact PK lock, task-link/eligibility recheck and fresh image read before scheduling; do not delete or mark image-less rows or alter old tasks/quotes. No API/event/schema/config/dependency/timeout/retry/concurrency/frontend/Python change. Compiled SQL MySQL57 read-only EXPLAIN+SELECT333ms; natural recovery and daily100 require separate proof."
   }
 }

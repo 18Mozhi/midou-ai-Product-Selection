@@ -7,7 +7,7 @@ import { buildSupplierSearchQuery } from "./trend-projection-calculation.js";
 /** Only an empty automatic task blocked by a circuit that has since recovered. */
 export const recoveredSourcingCandidateSql = `SELECT ss.id search_id,ss.organization_id,ss.workspace_id,
   ss.collection_task_id previous_task_id,ss.input_ref opportunity_id,t.created_by,
-  p.id provider_id,rc.recovered_at,o.name
+  p.id provider_id,rc.recovered_at,o.name,q.updated_at blocked_updated_at
   FROM providers p JOIN provider_runtime_circuits rc ON rc.provider_id=p.id AND rc.state='closed'
   JOIN collection_subqueries q ON q.provider_id=p.id
   JOIN collection_tasks t ON t.id=q.task_id AND t.organization_id=q.organization_id AND t.workspace_id=q.workspace_id
@@ -30,6 +30,17 @@ export const recoveredSourcingCandidateSql = `SELECT ss.id search_id,ss.organiza
       AND auto_event.organization_id=t.organization_id AND auto_event.workspace_id=t.workspace_id
       AND auto_event.event_type='sourcing.collection.auto_scheduled' AND auto_event.actor_type='worker')`;
 
+/** Resolve each actionable primary once and reject missing images before the FIFO limit. */
+export const recoveredSourcingImageCandidateSql = `SELECT o.* FROM (
+  SELECT recovery.*,o.id,${selectionPrimaryAsinSql} primary_asin
+  FROM (${recoveredSourcingCandidateSql} LIMIT 18446744073709551615) recovery
+  JOIN opportunities o ON o.id=recovery.opportunity_id AND o.organization_id=recovery.organization_id
+    AND o.workspace_id=recovery.workspace_id
+  LIMIT 18446744073709551615
+) o WHERE BINARY (${automaticPrimaryImageSql})
+  REGEXP '^https://(m[.]media-amazon[.]com|images-na[.]ssl-images-amazon[.]com)/'
+ORDER BY o.blocked_updated_at,o.search_id LIMIT 1`;
+
 type Schedule = (
   connection: PoolConnection,
   row: RowDataPacket,
@@ -41,10 +52,7 @@ type Schedule = (
 
 /** One PK lock and a fresh eligibility read; never lock the historical scan. */
 export async function recoverCircuitHeldSourcing(pool: Pool, schedule: Schedule, now: Date) {
-  const [candidates] = await pool.query<RowDataPacket[]>(
-    recoveredSourcingCandidateSql + " ORDER BY q.updated_at,ss.id LIMIT 1",
-    [now],
-  );
+  const [candidates] = await pool.query<RowDataPacket[]>(recoveredSourcingImageCandidateSql, [now]);
   const candidate = candidates[0];
   if (!candidate) return false;
   const c = await pool.getConnection();
