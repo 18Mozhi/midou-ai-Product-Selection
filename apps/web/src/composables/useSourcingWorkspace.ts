@@ -89,6 +89,7 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     mounted = false,
     refreshOnActivation = false;
   const missingLabels: Record<string, string> = {
+      supplier_listing: "供应商商品资料",
       moq: "最小起订量",
       specification: "规格",
       lead_time_days: "交期",

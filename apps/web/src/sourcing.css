@@ -86,24 +86,34 @@
   text-decoration: none;
   background: var(--so-panel);
 }
-.sourcing-notice,
-.missing {
+.sourcing-notice {
   margin: 0;
   padding: 12px 15px;
   background: var(--so-info-soft);
   border-left: 3px solid var(--so-info);
 }
+.sourcing-missing {
+  margin: 0;
+  padding: 12px 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
 .sourcing-pending {
   margin-top: 15px;
-  padding: 20px;
-  border: 1px dashed var(--so-border);
-  border-radius: 12px;
-  background: var(--so-panel-soft);
+  padding: 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 0;
+  background: var(--so-panel);
 }
-.sourcing-pending strong,
+.sourcing-pending h4,
 .sourcing-pending p,
 .sourcing-pending span {
   display: block;
+}
+.sourcing-pending h4 {
+  margin: 0;
+  font-size: 14px;
 }
 .sourcing-pending p {
   margin: 8px 0;
@@ -373,37 +383,44 @@
 }
 .sourcing-progress {
   margin: 14px 0;
-  padding: 16px;
-  border: 1px solid var(--so-border);
-  border-radius: 12px;
-  background: var(--so-panel-soft);
+  padding: 12px 0;
+  border-block: 1px solid var(--so-border);
 }
 .sourcing-progress > header,
+.sourcing-progress > header > div,
 .sourcing-progress dl {
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.sourcing-progress > header {
   justify-content: space-between;
-  gap: 12px;
 }
 .sourcing-progress h4 {
-  margin: 4px 0 0;
+  margin: 0;
+  font-size: 14px;
 }
-.sourcing-progress progress {
-  width: 100%;
-  margin: 12px 0;
+.sourcing-progress small,
+.sourcing-progress > header > span {
+  color: var(--so-text-muted);
+  font-size: 13px;
 }
 .sourcing-progress dl {
-  flex-wrap: wrap;
+  margin: 10px 0 0;
 }
 .sourcing-progress dl div {
-  min-width: 90px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
 }
 .sourcing-progress dt {
   color: var(--so-text-muted);
   font-size: 13px;
 }
 .sourcing-progress dd {
-  margin: 3px 0 0;
+  margin: 0;
+  font-size: 13px;
   font-weight: 600;
 }
 .sourcing-modal > form > dl {
@@ -583,34 +600,11 @@
 #app .sourcing-workspace--review .sourcing-detail h3 {
   font-size: 20px;
 }
-#app .sourcing-workspace--review .missing,
-#app .sourcing-workspace--review .sourcing-progress,
 #app .sourcing-workspace--review .sourcing-erp-reference,
 #app .sourcing-workspace--review .sourcing-pending {
   border: 1px solid var(--so-sourcing-review-border);
   border-radius: 0;
-  background: var(--so-sourcing-review-pale-blue);
-}
-#app .sourcing-workspace--review .sourcing-progress progress {
-  accent-color: var(--so-sourcing-review-blue);
-}
-#app .sourcing-workspace--review .sourcing-progress progress::-webkit-progress-value {
-  background: var(--so-sourcing-review-blue);
-}
-#app .sourcing-workspace--review .sourcing-progress progress::-moz-progress-bar {
-  background: var(--so-sourcing-review-blue);
-}
-#app .sourcing-workspace--review .sourcing-progress dl {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  margin-top: 12px;
-  border: 1px solid var(--so-sourcing-review-border);
-}
-#app .sourcing-workspace--review .sourcing-progress dl div {
-  padding: 10px;
-  border-right: 1px solid var(--so-sourcing-review-border);
-  background: var(--so-sourcing-review-soft);
+  background: var(--so-sourcing-review-white);
 }
 #app .sourcing-workspace--review .supplier-cards article,
 #app .sourcing-workspace--review .sourcing-comparisons article {
@@ -756,12 +750,6 @@
     width: 100%;
     justify-content: center;
     text-align: center;
-  }
-  #app .sourcing-workspace--review .sourcing-progress dl {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  #app .sourcing-workspace--review .sourcing-progress dl div:nth-child(2) {
-    border-right: 0;
   }
   #app .sourcing-workspace--review .supplier-cards dl {
     grid-template-columns: 1fr;

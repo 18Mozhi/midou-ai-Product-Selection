@@ -211,7 +211,7 @@ for (const scenario of [
       input_ref: "便携净水杯",
       status: "succeeded_empty",
       candidate_count: 0,
-      missing_fields: [],
+      missing_fields: ["supplier_listing"],
       created_at: "2026-08-08T12:00:00.000Z",
     };
     await page.route("**/api/v1/sourcing/searches", (route) =>
@@ -247,6 +247,26 @@ for (const scenario of [
     await expect(page.locator(".sourcing-pending")).not.toContainText(
       "正在采集供应商信息，完成后将显示候选",
     );
+    await expect(page.locator(".sourcing-missing")).toHaveCount(1);
+    await expect(page.locator(".sourcing-missing")).toHaveText("待补齐：供应商商品资料");
+    await expect(page.locator(".sourcing-detail")).not.toContainText("supplier_listing");
+    if (scenario.name !== "unknown") {
+      const progress = page.getByRole("region", { name: "来源采集进度", exact: true });
+      await expect(progress.locator("progress")).toHaveCount(0);
+      for (const [label, count] of [
+        ["成功", scenario.name === "empty" ? 1 : 0],
+        ["受阻", scenario.blocked],
+        ["失败", scenario.failed],
+        ["执行中 / 等待", scenario.active],
+      ] as const)
+        await expect(
+          progress.locator("dl div").filter({ hasText: label }).locator("dd"),
+        ).toHaveText(String(count));
+    }
+    if (scenario.name === "blocked")
+      await expect(page.locator(".sourcing-progress")).toHaveScreenshot(
+        "blocked-source-progress-20261018.png",
+      );
     expect(writes).toEqual([]);
   });
 }
@@ -383,7 +403,7 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   const supplierCandidates = page.locator(".supplier-cards");
   await expect(supplierCandidates.getByText("宁波澄净户外用品厂")).toBeVisible();
   await expect(
-    page.getByText("当前候选仍缺：规格、交期、所在地、可信度、稳定性、风险。"),
+    page.getByText("待补齐：规格、交期、所在地、可信度、稳定性、风险", { exact: true }),
   ).toBeVisible();
   await expect(page.getByLabel("找货流程")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "刷新记录", exact: true })).toBeVisible();

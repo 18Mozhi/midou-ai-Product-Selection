@@ -1,4 +1,16 @@
 {
+  "sourcingProgressFacts20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-sourcing-progress-facts.md",
+    "sourceFiles": [
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/composables/useSourcingWorkspace.ts",
+      "apps/web/src/sourcing.css",
+      "apps/web/src/design/sourcing-tokens.css"
+    ],
+    "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts", "tests/m04-06/sourcing.test.mjs"],
+    "contract": "Compact factual source status and4 counts replace full blue progress bar/cards. Empty quotes show missing fields once; known supplier_listing has Chinese label proven by current producer. Retain status branches, raw counts, task permissions and quote/purchase/comparison flows. Delete old CSS and unused token. No API/env/schema/Python/dependency change; real supply and daily100 unverified."
+  },
   "selectionMemberNavigationNames20261018": {
     "status": "implemented",
     "requirements": "docs/selection-member-navigation-names.md",

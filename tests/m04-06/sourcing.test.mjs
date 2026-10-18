@@ -149,7 +149,7 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
     uiSurface,
     /到岸价[\s\S]*待费用规则计算[\s\S]*已选 \{\{ selectedQuotes\.length \}\} \/ 5 家供应商/,
   );
-  assert.match(uiSurface, /完整采集进度[\s\S]*查看采集任务明细/);
+  assert.match(uiSurface, /aria-label="来源采集进度"[\s\S]*查看采集任务明细/);
   assert.match(uiSurface, /报价新鲜度/);
   assert.match(uiSurface, /确认依据证据（可搜索）[\s\S]*sourcing-evidence-options/);
   assert.match(uiSurface, /结构化采购创建[\s\S]*锁定报价版本[\s\S]*采购数量/);

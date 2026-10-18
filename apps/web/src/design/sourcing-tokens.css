@@ -4,7 +4,6 @@ html:has(body #app .sourcing-workspace--review) {
   --so-sourcing-review-blue: var(--glass-primary);
   --so-sourcing-review-white: var(--glass-panel);
   --so-sourcing-review-border: var(--glass-border);
-  --so-sourcing-review-pale-blue: var(--glass-primary-soft);
   --so-sourcing-review-muted: var(--glass-text-muted);
   --so-sourcing-review-danger: #b42318;
   --so-sourcing-review-soft: #f3f6fb;

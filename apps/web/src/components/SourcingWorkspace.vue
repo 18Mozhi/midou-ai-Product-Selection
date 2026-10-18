@@ -253,32 +253,28 @@ const pendingMessage = computed(() => {
             </button>
           </div>
         </header>
-        <p v-if="selected.missing_fields.length" class="missing">
-          当前候选仍缺：{{ missingText }}。必须人工带证据确认。
+        <p v-if="candidates.length && selected.missing_fields.length" class="sourcing-missing">
+          待补齐：{{ missingText }}
         </p>
-        <section v-if="selected.collection_progress" class="sourcing-progress">
+        <section
+          v-if="selected.collection_progress"
+          class="sourcing-progress"
+          aria-label="来源采集进度"
+        >
           <header>
             <div>
-              <small>完整采集进度</small>
+              <small>来源采集</small>
               <h4>{{ statusText(selected.collection_progress.status) }}</h4>
             </div>
-            <strong
+            <span
               >{{
                 selected.collection_progress.successful_subqueries +
                 selected.collection_progress.failed_subqueries +
                 selected.collection_progress.blocked_subqueries
               }}
-              / {{ selected.collection_progress.total_subqueries }} 个来源已结束</strong
+              / {{ selected.collection_progress.total_subqueries }} 个来源已结束</span
             >
           </header>
-          <progress
-            :value="
-              selected.collection_progress.successful_subqueries +
-              selected.collection_progress.failed_subqueries +
-              selected.collection_progress.blocked_subqueries
-            "
-            :max="Math.max(1, selected.collection_progress.total_subqueries)"
-          ></progress>
           <dl>
             <div>
               <dt>成功</dt>
@@ -325,9 +321,11 @@ const pendingMessage = computed(() => {
           </div>
         </section>
         <section v-if="!candidates.length" class="sourcing-pending">
-          <strong>找货任务已经建立，尚未取得真实供应商报价</strong>
+          <h4>供应商报价</h4>
           <p>{{ pendingMessage }}</p>
-          <span v-if="selected.missing_fields.length">待补齐：{{ missingText }}</span>
+          <span v-if="selected.missing_fields.length" class="sourcing-missing"
+            >待补齐：{{ missingText }}</span
+          >
         </section>
         <section class="supplier-cards">
           <article

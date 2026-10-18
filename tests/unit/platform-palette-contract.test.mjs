@@ -472,7 +472,7 @@ test("open platform palette resolves the approved P60 page and shell colors", as
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("sourcing palette resolves its original colors and overrides without important", async () => {
+test("sourcing palette resolves only current colors and overrides without important", async () => {
   const [tokens, css] = await Promise.all([
     readFile("apps/web/src/design/sourcing-tokens.css", "utf8"),
     readFile("apps/web/src/sourcing.css", "utf8"),
@@ -487,7 +487,8 @@ test("sourcing palette resolves its original colors and overrides without import
     [...css.matchAll(/var\((--so-sourcing-review-[a-z-]+)\)/g)].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 12);
+  assert.equal(names.size, 11);
+  assert.ok(!names.has("--so-sourcing-review-pale-blue"));
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
