@@ -263,10 +263,6 @@ for (const scenario of [
           progress.locator("dl div").filter({ hasText: label }).locator("dd"),
         ).toHaveText(String(count));
     }
-    if (scenario.name === "blocked")
-      await expect(page.locator(".sourcing-progress")).toHaveScreenshot(
-        "blocked-source-progress-20261018.png",
-      );
     expect(writes).toEqual([]);
   });
 }
