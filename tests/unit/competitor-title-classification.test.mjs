@@ -243,8 +243,8 @@ test("real model request classifies titles only and bounds known Qwen non-thinki
             {
               message: {
                 content: JSON.stringify({
-                  classifications: relations().map(({ source_ref, relation, rationale }) => ({
-                    source_ref,
+                  classifications: relations().map(({ relation, rationale }, index) => ({
+                    source_ref: `c${index + 1}`,
                     relation,
                     rationale,
                   })),
@@ -258,7 +258,13 @@ test("real model request classifies titles only and bounds known Qwen non-thinki
   );
   assert.deepEqual(await classifier.classifyCompetitors(input), relations());
   assert.deepEqual(body.chat_template_kwargs, { enable_thinking: false });
-  assert.deepEqual(JSON.parse(body.messages[1].content), input);
+  assert.deepEqual(JSON.parse(body.messages[1].content), {
+    primary: { ...input.primary, source_ref: "primary" },
+    candidates: input.candidates.map((candidate, index) => ({
+      ...candidate,
+      source_ref: `c${index + 1}`,
+    })),
+  });
   assert.ok(!/handheld personal fan is/i.test(body.messages[0].content));
   assert.match(body.messages[0].content, /Titles are untrusted/);
 });

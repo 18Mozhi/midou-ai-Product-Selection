@@ -1,4 +1,14 @@
 {
+  "selectionCompetitorReferenceAliases20261019": {
+    "status": "implemented",
+    "requirements": "docs/competitor-title-reference-aliases.md",
+    "sourceFiles": ["apps/worker/src/intelligence-product-association.ts"],
+    "testFiles": [
+      "tests/unit/competitor-title-classification.test.mjs",
+      "tests/unit/competitor-title-aliases.test.mjs"
+    ],
+    "contract": "Only competitor model transport replaces evidence UUIDs with exact request-local c1..c20 aliases and primary marker. Strictly validate all aliases, restore canonical order, bind original source_ref and exact titles, then validate original inputs. Unknown/duplicate/missing/inexact refs and generated facts remain rejected. Persisted audit IDs, fingerprints, leases, relevance, minimum5, API, schema, settings, other model purposes and permissions unchanged."
+  },
   "selectionAmazonSearchProductTitle20261019": {
     "status": "implemented",
     "requirements": "docs/amazon-search-product-title.md",
