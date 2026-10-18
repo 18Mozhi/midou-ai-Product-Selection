@@ -39,3 +39,23 @@ test("opportunity detail renders persisted status and competitor facts without r
   assert.match(insights, /opportunity-association-grid/);
   assert.match(profit, /opportunityProfitComponentLabel/);
 });
+
+test("known scoring gaps use Chinese labels while unknown fields remain auditable", async () => {
+  const ts = await import("typescript");
+  const source = await readFile(
+    "apps/web/src/components/opportunity-workspace-presentation.ts",
+    "utf8",
+  );
+  const { outputText } = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.ESNext },
+  });
+  const { opportunityMissingFieldLabel: label } = await import(
+    `data:text/javascript;base64,${Buffer.from(outputText).toString("base64")}`
+  );
+  assert.equal(label("market_demand.input"), "市场需求评分资料");
+  assert.equal(label("profit.input"), "利润评分资料");
+  assert.equal(label("data_quality.input"), "数据质量评分资料");
+  assert.equal(label("provider.unknown"), "provider.unknown");
+  assert.equal(label("评价明细"), "评价明细");
+  assert.equal(label("unknown.input"), "unknown.input");
+});

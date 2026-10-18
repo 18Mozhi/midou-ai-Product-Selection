@@ -220,7 +220,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
           (match) => match[1],
         ),
       );
-      assert.equal(palette.size, 22);
+      assert.equal(palette.size, 21);
       assert.deepEqual([...references].sort(), [...palette].sort());
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

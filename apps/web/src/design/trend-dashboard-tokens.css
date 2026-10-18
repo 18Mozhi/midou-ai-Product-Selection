@@ -4,7 +4,6 @@ html:has(body #app .trend-dashboard--review) {
   --trend-muted: var(--glass-text-muted);
   --trend-line: var(--glass-border);
   --trend-focus: var(--glass-focus);
-  --trend-on-blue: #fff;
   --trend-surface: #fff;
   --trend-surface-selected: #edf3fc;
   --trend-surface-info: #edf4ff;
@@ -14,6 +13,4 @@ html:has(body #app .trend-dashboard--review) {
   --trend-pagination-border: #b9c9df;
   --trend-pagination-surface: #f4f7fb;
   --trend-subtle-surface: #f8fbff;
-  --trend-modal-backdrop: rgba(20, 40, 74, 0.56);
-  --trend-modal-shadow: rgba(20, 40, 74, 0.24);
 }

@@ -8,6 +8,13 @@ import {
 } from "./opportunity-workspace-presentation";
 
 const props = defineProps<{ detail: OpportunityDetail }>();
+const product = computed(() => props.detail.primary_product);
+const purchaseHint = computed(() => {
+  const badge = product.value?.public_signals?.sales_badge;
+  return badge
+    ? `${badge.period === "past_month" ? "近月" : "近周"} ≥ ${badge.quantity_lower_bound}`
+    : "未采集";
+});
 const imageFailed = ref(false);
 watch(
   () => [props.detail.id, props.detail.image_url],
@@ -52,6 +59,44 @@ const asin = computed(() =>
         <span>来源 {{ opportunityStatusLabel(detail.source_type) }}</span>
         <span>更新 {{ formatOpportunityTime(detail.updated_at) }}</span>
       </div>
+      <dl class="selection-product-header__facts" aria-label="主品采集资料">
+        <div>
+          <dt>售价</dt>
+          <dd>
+            {{
+              product?.price != null && product.currency
+                ? `${product.currency} ${product.price.toFixed(2)}`
+                : "未采集"
+            }}
+          </dd>
+        </div>
+        <div>
+          <dt>评分 / 评价</dt>
+          <dd>
+            {{ product?.rating_value != null ? product.rating_value.toFixed(1) : "—" }} /
+            {{ product?.review_count != null ? `${product.review_count} 条` : "未采集" }}
+          </dd>
+        </div>
+        <div>
+          <dt>购买提示</dt>
+          <dd>{{ purchaseHint }}</dd>
+        </div>
+        <div>
+          <dt>类目排名</dt>
+          <dd>
+            {{
+              product?.public_signals?.best_seller_rank
+                ? `#${product.public_signals.best_seller_rank.rank}`
+                : "未采集"
+            }}
+          </dd>
+        </div>
+      </dl>
+      <p class="selection-product-header__provenance">
+        <span>{{ product?.public_signals?.sponsored ? "观察到广告标记" : "广告标记未提供" }}</span>
+        <span v-if="product">商品采集 {{ formatOpportunityTime(product.captured_at) }}</span>
+        <span v-if="product?.public_signals?.sales_badge">购买提示为平台公开下限，非精确销量</span>
+      </p>
       <details class="selection-product-header__runtime">
         <summary>运行信息</summary>
         <small
@@ -135,6 +180,34 @@ const asin = computed(() =>
   color: var(--so-primary);
   text-underline-offset: 3px;
 }
+.selection-product-header__facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--so-border);
+}
+.selection-product-header__facts dt {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.selection-product-header__facts dd {
+  margin: 5px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.selection-product-header__provenance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
 .selection-product-header__runtime {
   margin-top: 10px;
   color: var(--so-text-muted);
@@ -200,6 +273,10 @@ const asin = computed(() =>
   }
   .selection-product-header__tags span {
     padding: 2px 5px;
+  }
+  .selection-product-header__facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 8px;
   }
   .selection-product-header__score {
     grid-column: 1/-1;

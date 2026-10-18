@@ -53,6 +53,14 @@ const scoreDimensionLabels: Record<string, string> = {
 export const opportunityScoreDimensionLabel = (value: string) =>
   scoreDimensionLabels[value] ?? value;
 
+export const opportunityMissingFieldLabel = (value: string) => {
+  const match = /^([a-z_]+)\.input$/.exec(value);
+  const dimension = match?.[1];
+  return dimension && scoreDimensionLabels[dimension]
+    ? `${scoreDimensionLabels[dimension]}评分资料`
+    : value;
+};
+
 const profitComponentLabels: Record<string, string> = {
   sale_price: "含税售价",
   purchase_price: "采购成本",

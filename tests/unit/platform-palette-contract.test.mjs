@@ -183,7 +183,7 @@ test("opportunity queue and detail colors resolve from their route-scoped palett
     ].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 22);
+  assert.equal(names.size, 21);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -773,7 +773,7 @@ test("P14 trend desk colors resolve from its route-scoped palette", async () => 
     [...css.matchAll(/var\((--trend-[a-z-]+)\)/g)].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 17);
+  assert.equal(names.size, 14);
   assert.equal(declarations.length, names.size, "no duplicate trend palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

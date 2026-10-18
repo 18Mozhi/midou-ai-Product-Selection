@@ -3269,3 +3269,59 @@ test("product supply ignores a superseded quote response after another search is
   await expect(panel).toContainText("报价证据 saved-quote-evidence");
   await expect(panel.getByText("示例1688工厂", { exact: true })).toHaveCount(0);
 });
+
+for (const populated of [false, true]) {
+  test(`primary product header preserves ${populated ? "observed zero values and sales lower bounds" : "unknown facts without claiming no advertising"}`, async ({
+    page,
+  }) => {
+    await ready(page, evidence, {
+      main_asin: "B0HG839FVV",
+      primary_product: populated
+        ? {
+            price: 0,
+            currency: "USD",
+            rating_value: 0,
+            review_count: 0,
+            captured_at: "2026-10-18T02:00:00.000Z",
+            public_signals: {
+              sales_badge: {
+                text: "100+ bought in past month",
+                quantity_lower_bound: 100,
+                period: "past_month",
+              },
+              sponsored: true,
+              best_seller_rank: { rank: 25, text: "#25 in Home" },
+            },
+          }
+        : null,
+    });
+    await page.goto(`/opportunities/${opportunityId}`);
+    const header = page.locator(".selection-product-header");
+    await expect(header.getByRole("definition")).toHaveCount(7);
+    await expect(header).toContainText(populated ? "USD 0.00" : "售价未采集");
+    await expect(header).toContainText(populated ? "0.0 / 0 条" : "— / 未采集");
+    await expect(header).toContainText(populated ? "近月 ≥ 100" : "购买提示未采集");
+    await expect(header).toContainText(populated ? "观察到广告标记" : "广告标记未提供");
+    await expect(header).not.toContainText("没有广告");
+    if (populated) {
+      await expect(header).toContainText("购买提示为平台公开下限，非精确销量");
+      await expect(header).toContainText("#25");
+    }
+    expect(await header.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(
+      true,
+    );
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+    if (populated) {
+      const reviewPath = test.info().outputPath("primary-product-facts-review.png");
+      await page.screenshot({ fullPage: true, path: reviewPath });
+      await test
+        .info()
+        .attach("primary-product-facts-review", { path: reviewPath, contentType: "image/png" });
+    }
+    await header.locator("summary").focus();
+    await page.keyboard.press("Enter");
+    await expect(header.getByText(/数据版本 v/)).toBeVisible();
+  });
+}

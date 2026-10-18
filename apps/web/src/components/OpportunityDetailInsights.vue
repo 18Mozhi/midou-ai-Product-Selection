@@ -10,6 +10,7 @@ import type {
 import {
   formatOpportunityTime,
   opportunityScoreDimensionLabel,
+  opportunityMissingFieldLabel,
   opportunityStatusLabel,
   opportunityProfitStatusLabel,
 } from "./opportunity-workspace-presentation";
@@ -49,7 +50,6 @@ const emit = defineEmits<{
 <template>
   <section v-if="tab === 'overview'" class="opportunity-insights">
     <header class="opportunity-insights-heading">
-      <p>分析概览</p>
       <h3>评分与采集进度</h3>
     </header>
 
@@ -57,8 +57,7 @@ const emit = defineEmits<{
       <article class="opportunity-insight-card opportunity-insight-card--wide">
         <header class="opportunity-insight-card__heading">
           <div>
-            <p>评分解释</p>
-            <h4>最近一次运行</h4>
+            <h4>评分明细</h4>
           </div>
           <span class="opportunity-insight-badge"
             >规则 {{ detail.score_rule_version ?? "未计算" }}</span
@@ -94,7 +93,9 @@ const emit = defineEmits<{
                   <span>{{ item.evidence_ids.length }} 条证据</span>
                   <details v-if="item.missing_fields.length">
                     <summary>缺失项</summary>
-                    <span>{{ item.missing_fields.join("、") }}</span>
+                    <span>{{
+                      item.missing_fields.map(opportunityMissingFieldLabel).join("、")
+                    }}</span>
                   </details>
                 </td>
               </tr>
@@ -105,7 +106,9 @@ const emit = defineEmits<{
           </table>
         </div>
         <p v-if="detail.latest_score_run?.missing_fields.length" class="opportunity-insight-note">
-          缺失：{{ detail.latest_score_run.missing_fields.join("、") }}
+          缺失：{{
+            detail.latest_score_run.missing_fields.map(opportunityMissingFieldLabel).join("、")
+          }}
         </p>
         <div class="opportunity-insight-actions">
           <RouterLink to="/opportunities/scoring-rules">规则版本</RouterLink>
@@ -124,10 +127,8 @@ const emit = defineEmits<{
       <article class="opportunity-insight-card opportunity-insight-card--wide">
         <header class="opportunity-insight-card__heading">
           <div>
-            <p>关联对象</p>
             <h4>竞品与供应候选</h4>
           </div>
-          <span class="opportunity-insight-badge">按权限分别读取</span>
         </header>
         <div class="opportunity-association-grid">
           <section class="opportunity-association">
@@ -374,7 +375,7 @@ const emit = defineEmits<{
 <style scoped>
 .opportunity-insights {
   display: grid;
-  gap: 16px;
+  gap: 12px;
   color: var(--so-opportunity-review-ink);
 }
 
@@ -386,12 +387,12 @@ const emit = defineEmits<{
 }
 
 .opportunity-insights h3 {
-  font-size: 23px;
+  font-size: 17px;
   line-height: 1.35;
 }
 
 .opportunity-insights h4 {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.4;
 }
 
@@ -405,7 +406,7 @@ const emit = defineEmits<{
 .opportunity-insight-state > span,
 .opportunity-risk-facts p {
   color: var(--so-opportunity-review-muted);
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.65;
 }
 
@@ -434,10 +435,10 @@ const emit = defineEmits<{
 
 .opportunity-insight-card {
   min-width: 0;
-  padding: 20px;
+  padding: 16px;
   display: grid;
   align-content: start;
-  gap: 16px;
+  gap: 12px;
   border: 0;
   border-bottom: 1px solid var(--so-opportunity-review-line);
   background: var(--so-opportunity-review-surface);
@@ -455,7 +456,7 @@ const emit = defineEmits<{
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   padding-bottom: 14px;
   border-bottom: 1px solid var(--so-opportunity-review-line);
 }
@@ -496,7 +497,7 @@ const emit = defineEmits<{
 }
 
 .opportunity-association > strong {
-  font-size: 25px;
+  font-size: 19px;
   line-height: 1.3;
   overflow-wrap: anywhere;
 }
@@ -548,7 +549,7 @@ const emit = defineEmits<{
 }
 
 .opportunity-insight-score {
-  font-size: 38px;
+  font-size: 25px;
   line-height: 1.15;
 }
 
