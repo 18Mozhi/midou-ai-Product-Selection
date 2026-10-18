@@ -1,4 +1,17 @@
 {
+  "lan1688HealthPoolCoverage20261018": {
+    "status": "implemented",
+    "requirements": "docs/source-transport-health.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/lan-1688-image-search.ts",
+      "packages/provider-sources/src/lan-1688-health-adapter.ts"
+    ],
+    "testFiles": [
+      "tests/unit/source-transport-health.test.mjs",
+      "tests/unit/lan-1688-image-search.test.mjs"
+    ],
+    "contract": "Health v2 covers all six approved nodes concurrently under the unchanged outer deadline, accepts only an actually parsed response, discards sample offers and cancels/settles siblings. One request per node per client. Any valid node means pool availability, not all-six health. Business sequential rotation and fail-closed authentication/schema guards unchanged. No new config/API/schema/dependency/Python or forced circuit change."
+  },
   "selectionMemberProfitRetirement20261018": {
     "status": "implemented",
     "requirements": "docs/selection-member-profit-retirement.md",

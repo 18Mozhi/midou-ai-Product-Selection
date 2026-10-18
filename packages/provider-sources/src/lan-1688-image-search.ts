@@ -106,10 +106,10 @@ export class Lan1688ImageSearch {
     private readonly fetcher: typeof fetch = fetch,
   ) {}
 
-  async collect(imageUrl: unknown, heartbeat: () => Promise<void>, signal?: AbortSignal) {
+  private imageUrl(imageUrl: unknown) {
     let url: URL;
     try {
-      url = new URL(string(imageUrl));
+      url = new URL(String(imageUrl));
     } catch {
       throw new ProviderAdapterFailure("invalid_payload", false);
     }
@@ -121,6 +121,11 @@ export class Lan1688ImageSearch {
     )
       throw new ProviderAdapterFailure("invalid_payload", false);
     if (!this.token) throw new ProviderAdapterFailure("permission_denied", false);
+    return url;
+  }
+
+  async collect(imageUrl: unknown, heartbeat: () => Promise<void>, signal?: AbortSignal) {
+    const url = this.imageUrl(imageUrl);
     const start = this.next++ % LAN_1688_ENDPOINTS.length;
     let lastError: ProviderAdapterFailure = new ProviderAdapterFailure(
       "dependency_unavailable",
@@ -130,57 +135,8 @@ export class Lan1688ImageSearch {
       if (signal?.aborted) throw signal.reason;
       const endpoint = LAN_1688_ENDPOINTS[(start + index) % LAN_1688_ENDPOINTS.length]!;
       if (this.busy.has(endpoint)) continue;
-      this.busy.add(endpoint);
       try {
-        await heartbeat();
-        const abort = AbortSignal.timeout(this.timeoutMs);
-        const response = await this.fetcher(endpoint, {
-          method: "POST",
-          redirect: "error",
-          signal: signal ? AbortSignal.any([signal, abort]) : abort,
-          headers: { Authorization: `Bearer ${this.token}`, "Content-Type": "application/json" },
-          body: JSON.stringify({
-            image_url: url.toString(),
-            begin_page: 1,
-            page_size: 60,
-            result_limit: LAN_1688_RESULT_LIMIT,
-          }),
-        });
-        if (response.status === 401 || response.status === 403) {
-          await response.body?.cancel();
-          throw new ProviderAdapterFailure("permission_denied", false);
-        }
-        if (!response.ok) {
-          await response.body?.cancel();
-          throw new ProviderAdapterFailure("dependency_unavailable", true);
-        }
-        const reader = response.body?.getReader();
-        if (!reader) throw new ProviderAdapterFailure("invalid_payload", false);
-        const chunks: Uint8Array[] = [];
-        let bytes = 0;
-        try {
-          while (true) {
-            const part = await reader.read();
-            if (part.done) break;
-            bytes += part.value.length;
-            if (bytes > 2 * 1024 * 1024) {
-              await reader.cancel();
-              throw new ProviderAdapterFailure("invalid_payload", false);
-            }
-            chunks.push(part.value);
-          }
-        } finally {
-          reader.releaseLock();
-        }
-        let payload: unknown;
-        try {
-          payload = JSON.parse(Buffer.concat(chunks).toString("utf8"));
-        } catch {
-          throw new ProviderAdapterFailure("invalid_payload", false);
-        }
-        const records = parseLan1688Result(payload, new Date().toISOString());
-        await heartbeat();
-        return { records, nextCursor: null };
+        return await this.requestEndpoint(url, endpoint, heartbeat, signal);
       } catch (error) {
         if (signal?.aborted) throw signal.reason;
         if (error instanceof ProviderAdapterFailure && !error.retryable) throw error;
@@ -188,10 +144,103 @@ export class Lan1688ImageSearch {
           error instanceof ProviderAdapterFailure
             ? error
             : new ProviderAdapterFailure("dependency_unavailable", true);
-      } finally {
-        this.busy.delete(endpoint);
       }
     }
     throw lastError;
+  }
+
+  /** Pool availability only: validate any approved node, discard sample offers and cancel siblings. */
+  async checkPoolHealth(imageUrl: unknown, signal: AbortSignal): Promise<void> {
+    const url = this.imageUrl(imageUrl);
+    signal.throwIfAborted();
+    const controller = new AbortController();
+    const combined = AbortSignal.any([signal, controller.signal]);
+    const checks = LAN_1688_ENDPOINTS.map((endpoint) =>
+      this.requestEndpoint(url, endpoint, async () => {}, combined),
+    );
+    try {
+      await Promise.any(checks);
+      signal.throwIfAborted();
+    } catch (error) {
+      if (signal.aborted) throw signal.reason;
+      if (error instanceof AggregateError) {
+        const failures = error.errors.filter(
+          (item): item is ProviderAdapterFailure => item instanceof ProviderAdapterFailure,
+        );
+        throw (
+          failures.find((item) => !item.retryable) ??
+          failures[0] ??
+          new ProviderAdapterFailure("dependency_unavailable", true)
+        );
+      }
+      throw error;
+    } finally {
+      controller.abort();
+      await Promise.allSettled(checks);
+    }
+  }
+
+  private async requestEndpoint(
+    url: URL,
+    endpoint: string,
+    heartbeat: () => Promise<void>,
+    signal?: AbortSignal,
+  ) {
+    if (this.busy.has(endpoint)) throw new ProviderAdapterFailure("dependency_unavailable", true);
+    if (signal?.aborted) throw signal.reason;
+    this.busy.add(endpoint);
+    try {
+      await heartbeat();
+      const abort = AbortSignal.timeout(this.timeoutMs);
+      const response = await this.fetcher(endpoint, {
+        method: "POST",
+        redirect: "error",
+        signal: signal ? AbortSignal.any([signal, abort]) : abort,
+        headers: { Authorization: `Bearer ${this.token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          image_url: url.toString(),
+          begin_page: 1,
+          page_size: 60,
+          result_limit: LAN_1688_RESULT_LIMIT,
+        }),
+      });
+      if (response.status === 401 || response.status === 403) {
+        await response.body?.cancel();
+        throw new ProviderAdapterFailure("permission_denied", false);
+      }
+      if (!response.ok) {
+        await response.body?.cancel();
+        throw new ProviderAdapterFailure("dependency_unavailable", true);
+      }
+      const reader = response.body?.getReader();
+      if (!reader) throw new ProviderAdapterFailure("invalid_payload", false);
+      const chunks: Uint8Array[] = [];
+      let bytes = 0;
+      try {
+        while (true) {
+          const part = await reader.read();
+          if (part.done) break;
+          bytes += part.value.length;
+          if (bytes > 2 * 1024 * 1024) {
+            await reader.cancel();
+            throw new ProviderAdapterFailure("invalid_payload", false);
+          }
+          chunks.push(part.value);
+        }
+      } finally {
+        reader.releaseLock();
+      }
+      let payload: unknown;
+      try {
+        payload = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+      } catch {
+        throw new ProviderAdapterFailure("invalid_payload", false);
+      }
+      const records = parseLan1688Result(payload, new Date().toISOString());
+      await heartbeat();
+      return { records, nextCursor: null };
+    } finally {
+      this.busy.delete(endpoint);
+    }
   }
 }

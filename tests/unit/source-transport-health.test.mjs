@@ -108,7 +108,7 @@ test("configured LAN health validates the real request and preserves normalize p
     organizationId: "org",
     workspaceId: "workspace",
   });
-  assert.equal(normalized.provenance.adapter_version, "1688-lan-health-adapter-v1");
+  assert.equal(normalized.provenance.adapter_version, "1688-lan-health-adapter-v2");
   assert.equal(normalized.fields.quoted_price, 9.5);
 });
 
@@ -197,4 +197,87 @@ test("invalid per-adapter deadline options fail closed", () => {
         }),
       { code: "adapter_limit_invalid" },
     );
+});
+
+test("LAN pool health reaches a healthy sixth node inside a tighter overall deadline", async () => {
+  const calls = [];
+  let cancelled = 0;
+  const registry = new ProviderAdapterRegistry({
+    healthTimeoutMs: 1000,
+    maxResponseBytes: 100000,
+    maxItemsPerBatch: 100,
+  });
+  const adapters = createBuiltinSourceAdapters(fetch, {
+    lan1688: {
+      token: "synthetic-secret",
+      timeoutMs: 1000,
+      fetcher: async (url, options) => {
+        calls.push(String(url));
+        if (new URL(url).hostname === "192.168.1.226")
+          return Response.json({ success: true, items: [offer] });
+        return new Promise((_, reject) =>
+          options.signal.addEventListener(
+            "abort",
+            () => {
+              cancelled++;
+              reject(options.signal.reason);
+            },
+            { once: true },
+          ),
+        );
+      },
+    },
+  });
+  for (const adapter of adapters) registry.register(adapter);
+  const health = await registry.healthCheck({
+    provider: { ...provider, timeoutMs: 100 },
+    requestId: "six-node",
+    traceId: "six-node",
+  });
+  assert.equal(health.status, "ready");
+  assert.equal(new Set(calls).size, 6);
+  assert.equal(cancelled, 5);
+  assert.equal("records" in health, false);
+  assert.doesNotMatch(JSON.stringify(health), /synthetic-secret|123456789/);
+});
+
+test("pool cancellation releases all node slots and overlapping collections never duplicate a node", async () => {
+  const calls = [];
+  let allEntered;
+  const entered = new Promise((resolve) => {
+    allEntered = resolve;
+  });
+  let cancelled = 0;
+  let ready = false;
+  const client = new Lan1688ImageSearch("synthetic-secret", 1000, async (url, options) => {
+    calls.push(String(url));
+    if (ready) return Response.json({ success: true, items: [offer] });
+    if (calls.length === 6) allEntered();
+    return new Promise((_, reject) =>
+      options.signal.addEventListener(
+        "abort",
+        () => {
+          cancelled++;
+          reject(options.signal.reason);
+        },
+        { once: true },
+      ),
+    );
+  });
+  const controller = new AbortController();
+  const image = "https://m.media-amazon.com/images/I/fixture.jpg";
+  const probe = client.checkPoolHealth(image, controller.signal);
+  const rejected = assert.rejects(probe, /cancelled/);
+  await entered;
+  await assert.rejects(
+    client.collect(image, async () => {}),
+    { code: "dependency_unavailable" },
+  );
+  assert.equal(calls.length, 6);
+  controller.abort(new Error("cancelled"));
+  await rejected;
+  assert.equal(cancelled, 6);
+  ready = true;
+  assert.equal((await client.collect(image, async () => {})).records.length, 1);
+  assert.equal(calls.length, 7);
 });

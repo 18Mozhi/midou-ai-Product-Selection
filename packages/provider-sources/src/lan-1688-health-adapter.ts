@@ -15,7 +15,7 @@ export const LAN_1688_HEALTH_IMAGE =
 export class Lan1688HealthAdapter implements ProviderAdapter {
   readonly key = "1688_search";
   readonly accessMode = "authenticated_browser" as const;
-  readonly version = "1688-lan-health-adapter-v1";
+  readonly version = "1688-lan-health-adapter-v2";
   private readonly client: Lan1688ImageSearch;
   constructor(
     private readonly browserAdapter: ProviderAdapter,
@@ -33,12 +33,12 @@ export class Lan1688HealthAdapter implements ProviderAdapter {
   async healthCheck(_context: AdapterHealthContext, signal: AbortSignal) {
     const started = Date.now();
     try {
-      await this.client.collect(LAN_1688_HEALTH_IMAGE, async () => {}, signal);
+      await this.client.checkPoolHealth(LAN_1688_HEALTH_IMAGE, signal);
       return {
         status: "ready" as const,
         latencyMs: Date.now() - started,
         errorCode: null,
-        message: "1688 局域网图搜已通过真实响应与数据格式检查；样本结果不计为选品货源。",
+        message: "1688 节点池至少一个节点通过真实响应与数据格式检查；样本不计为选品货源。",
       };
     } catch (error) {
       if (signal.aborted) throw signal.reason;
