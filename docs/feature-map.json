@@ -6994,7 +6994,7 @@
       "tests/unit/core-projection-claim-locking.test.mjs"
     ],
     "contract": "New trend and opportunity_competitors projection candidates defer before claim at existing active-scope unfinished collection backlog threshold. Existing details/sourcing projection and repair continue. No attempt/reset/identity/fact/gate/API/schema/permission/new setting changes. Admission threshold, not atomic global reservation; Node restart required, natural recovery and daily100 unverified.",
-    "statusDetail": "deployed_9d6ee468_hashes_matched_natural_pause_resume_and_daily100_pending"
+    "statusDetail": "deployed_9d6ee468_natural_pause_zero_attempts_and_detail_consumption_verified_capacity_resume_pending"
   },
   "selectionCatalogueReadPerformance20261019": {
     "status": "implemented",
@@ -7010,6 +7010,7 @@
       "tests/e2e/m04-10-selection-http.spec.ts",
       "tests/m04-02/opportunities.test.mjs"
     ],
-    "contract": "List row projection materializes scoped active normalized versions and reuses paged primary identity. Same seed/current/detail provenance, fields, quality gates, filters and order; original count/filter reads unchanged. No schema, API, permission, config, cache, dependency, frontend or Python change. Node restart; actual SQL and live HTTP acceptance required."
+    "contract": "List row projection materializes scoped active normalized versions and reuses paged primary identity. Same seed/current/detail provenance, fields, quality gates, filters and order; original count/filter reads unchanged. No schema, API, permission, config, cache, dependency, frontend or Python change. Node restart; actual SQL and live HTTP acceptance required.",
+    "statusDetail": "deployed_e1deee4d_hashes_matched_live_http_34485_to_3005ms_all_20_sql_rows_equal_daily100_pending"
   }
 }
