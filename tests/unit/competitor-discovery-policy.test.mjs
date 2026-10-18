@@ -246,6 +246,13 @@ test("discovery persists ten unique competitors and schedules their real detail 
     .filter((c) => c.sql.startsWith("INSERT INTO collection_subqueries"))
     .map((c) => JSON.parse(c.args[5]));
   assert.equal(targets.length, 10);
+  const identities = calls.filter((c) =>
+    c.sql.startsWith("SELECT id,opportunity_id FROM competitors"),
+  );
+  assert.equal(identities.length, 10);
+  assert.ok(
+    identities.every((c) => /AND opportunity_id=\?/.test(c.sql) && c.args.at(-1) === opportunity),
+  );
   assert.equal(new Set(targets.map((t) => t.page_url)).size, 10);
   assert.ok(
     targets.every(

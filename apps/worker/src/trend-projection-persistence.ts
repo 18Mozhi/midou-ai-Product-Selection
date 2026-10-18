@@ -1,5 +1,6 @@
 import { activeCollectionScopeSql } from "./collection-source-scheduling-policy.js";
 import { recoverCircuitHeldSourcing } from "./automatic-sourcing-retry-policy.js";
+import { repairMissingPrimaryProduct } from "./automatic-primary-product-repair.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
@@ -20,6 +21,7 @@ import {
 } from "./trend-projection-calculation.js";
 
 export class TrendProjectionPersistence {
+  private primaryRepairAfterId = "";
   private preferCompetitorDiscovery = false;
   private nextCompetitorDiscoveryScanAt = 0;
   private readonly alerts: TrendProjectionAlerts;
@@ -266,6 +268,9 @@ export class TrendProjectionPersistence {
         await c.commit();
         return;
       }
+      const primaryRepair = providers.amazon
+        ? await repairMissingPrimaryProduct(c, providers.amazon, now, this.primaryRepairAfterId)
+        : null;
       // Materialize actionable identities before resolving their primary/image.
       // Outer real competitor/search rows retain the existing locking boundary.
       const [rows] = await c.query<RowDataPacket[]>(
@@ -448,6 +453,7 @@ export class TrendProjectionPersistence {
         }
       }
       await c.commit();
+      if (primaryRepair) this.primaryRepairAfterId = primaryRepair.afterId;
       if (periodic) this.preferCompetitorDiscovery = periodic === "detail";
       if (discoveryScanned) this.nextCompetitorDiscoveryScanAt = now.getTime() + 60_000;
     } catch (error) {
@@ -900,10 +906,10 @@ export class TrendProjectionPersistence {
         ],
       );
       const [competitors] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM competitors WHERE organization_id=? AND workspace_id=? AND market=? AND source_site='Amazon' AND external_id=? AND deleted_at IS NULL LIMIT 1 FOR UPDATE",
-        [job.organizationId, job.workspaceId, market, asin],
+        "SELECT id FROM competitors WHERE organization_id=? AND workspace_id=? AND market=? AND source_site='Amazon' AND external_id=? AND opportunity_id=? AND deleted_at IS NULL LIMIT 1 FOR UPDATE",
+        [job.organizationId, job.workspaceId, market, asin, opportunityId],
       );
-      competitorId = String(competitors[0]?.id ?? proposedCompetitorId);
+      competitorId = competitors[0] ? String(competitors[0].id) : null;
     }
     const searchId = randomUUID(),
       providers = await this.downstreamProviders(c),

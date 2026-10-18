@@ -32,6 +32,7 @@ function setup(
     query: async (sql, values) => {
       calls.push([sql, values]);
       if (sql.startsWith("SELECT id,code FROM providers")) return [providers];
+      if (sql.startsWith("SELECT primary_repair.*")) return [[]];
       if (sql.startsWith("SELECT o.id opportunity_id")) return [rows];
       if (sql.startsWith("SELECT q.id FROM collection_subqueries")) {
         if (existingCompetitorTasks instanceof Error) throw existingCompetitorTasks;

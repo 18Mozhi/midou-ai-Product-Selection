@@ -7667,6 +7667,7 @@ components:
         evidence_id: { type: string, format: uuid }
     CompetitorCreateInput:
       type: object
+      description: 商品身份在组织、工作区、市场、站点与所关联选品内去重；不同选品独立保存快照。未关联选品的新增仍拒绝同身份重复。
       required: [product_url, title]
       properties:
         provider_id: { type: string, format: uuid, nullable: true }

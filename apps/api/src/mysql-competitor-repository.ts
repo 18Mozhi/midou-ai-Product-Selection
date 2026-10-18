@@ -129,6 +129,32 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
       now = new Date();
     try {
       await c.beginTransaction();
+      if (!i.value.opportunity_id) {
+        // MySQL treats NULLs as distinct in a unique key. Serialize all unbound
+        // creates in this workspace, then use a current read (including tombstones).
+        const [workspace] = await c.query<RowDataPacket[]>(
+          "SELECT id FROM workspaces WHERE id=? AND organization_id=? FOR UPDATE",
+          [i.workspaceId, i.organizationId],
+        );
+        if (!workspace[0])
+          throw new CompetitorServiceError("workspace_not_found", 404, "选择当前工作区。");
+        const [duplicate] = await c.query<RowDataPacket[]>(
+          "SELECT id FROM competitors WHERE organization_id=? AND workspace_id=? AND market=? AND source_site=? AND external_id=? AND opportunity_id IS NULL LIMIT 1 FOR UPDATE",
+          [
+            i.organizationId,
+            i.workspaceId,
+            i.value.market,
+            i.value.source_site,
+            i.value.external_id,
+          ],
+        );
+        if (duplicate[0])
+          throw new CompetitorServiceError(
+            "competitor_identity_conflict",
+            409,
+            "该竞品已经在监控列表中。",
+          );
+      }
       let providerId = i.value.provider_id as string | null;
       if (providerId) await this.provider(c, providerId);
       else {

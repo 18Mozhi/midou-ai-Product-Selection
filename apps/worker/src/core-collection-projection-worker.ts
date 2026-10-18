@@ -335,14 +335,16 @@ export class CoreCollectionProjectionWorker {
         ],
       );
       const [competitors] = await c.query<RowDataPacket[]>(
-        "SELECT id,opportunity_id FROM competitors WHERE organization_id=? AND workspace_id=? AND market=? AND source_site='Amazon' AND external_id=? AND deleted_at IS NULL LIMIT 1",
-        [job.organizationId, job.workspaceId, String(opportunities[0].market), asin],
+        "SELECT id,opportunity_id FROM competitors WHERE organization_id=? AND workspace_id=? AND market=? AND source_site='Amazon' AND external_id=? AND opportunity_id=? AND deleted_at IS NULL LIMIT 1",
+        [
+          job.organizationId,
+          job.workspaceId,
+          String(opportunities[0].market),
+          asin,
+          job.resourceId,
+        ],
       );
-      if (
-        competitors[0]?.opportunity_id &&
-        String(competitors[0].opportunity_id) !== job.resourceId
-      )
-        continue;
+      if (!competitors[0] || String(competitors[0].opportunity_id) !== job.resourceId) continue;
       const persistedId = String(competitors[0]?.id ?? competitorId);
       if (await this.insertSnapshot(c, job, persistedId, record, fields, now, false)) count += 1;
       else if (Number(insert.affectedRows ?? 0)) count += 1;

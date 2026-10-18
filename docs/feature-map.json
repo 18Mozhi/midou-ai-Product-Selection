@@ -1,4 +1,21 @@
 {
+  "selectionProductOwnership20261019": {
+    "status": "implemented",
+    "migrationPhase": "preparation_only_0075_not_applied",
+    "requirements": "docs/selection-product-ownership.md",
+    "sourceFiles": [
+      "apps/worker/src/automatic-primary-product-repair.ts",
+      "apps/worker/src/trend-projection-persistence.ts",
+      "apps/worker/src/core-collection-projection-worker.ts",
+      "apps/api/src/mysql-competitor-repository.ts"
+    ],
+    "testFiles": [
+      "tests/unit/competitor-opportunity-identity.test.mjs",
+      "tests/unit/competitor-discovery-policy.test.mjs",
+      "tests/unit/automatic-sourcing-recovery.test.mjs"
+    ],
+    "contract": "Per-opportunity product lookup; no foreign-parent snapshots or proposed missing IDs. Unbound creates serialize scoped workspace and preserve existing duplicate 409 including tombstones. Bounded20 primary repair cursor advances only after commit, one fresh empty own record from current own evidence; original detail producer and quality gates unchanged. Deploy compatible preparation before separate 0075 identity-key migration. No new config/API fields/dependencies. Daily100 and full UI unverified."
+  },
   "selectionCompetitorReferenceAliases20261019": {
     "status": "implemented",
     "requirements": "docs/competitor-title-reference-aliases.md",
