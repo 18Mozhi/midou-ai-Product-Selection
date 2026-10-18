@@ -6309,5 +6309,22 @@
       "tests/unit/theme-and-icon-completion.test.mjs"
     ],
     "contract": "Show existing primary_product facts before detail analysis, preserve zero versus unknown, public sales lower bounds, unknown advertising and actual capture time. Compact scoring presentation and translate known dimension input labels; retain unknown identifiers and all permissions/actions. No API/schema/config/dependency/scoring or completion change. Daily 100 remains separate acceptance."
+  },
+  "selectionFeedRuntimeRecovery20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-intelligence-source-recovery.md",
+    "sourceFiles": [
+      "apps/api/src/provider-registry-service.ts",
+      "apps/api/src/provider-adapter-service.ts",
+      "apps/api/src/crawler-scheduler-repository.ts",
+      "apps/worker/src/automatic-source-scheduler.ts"
+    ],
+    "testFiles": [
+      "tests/m03-01/provider-registry.test.mjs",
+      "tests/m03-03/provider-adapter.test.mjs",
+      "tests/m08-05/crawler-single-host-scheduler.test.mjs",
+      "tests/unit/automatic-source-fairness.test.mjs"
+    ],
+    "contract": "Production operation restores 15 existing public feeds after actual robots and parser checks; 14 owner reviews advance v1 to v2 through existing optimistic services, health and audited recovery. Unchanged URLs, rates, retries, scope, leases and facts. First natural task persisted 90 news records in a different tenant, not MiDou or daily completion acceptance. No runtime code/schema/config/dependency change; no restart required. Transient source failures still lack automatic fresh-health recovery polling."
   }
 }
