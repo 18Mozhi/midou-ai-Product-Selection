@@ -1,4 +1,4 @@
-import type { Page } from "playwright";
+import { errors, type Page } from "playwright";
 
 /** Public observation context only. Never operates a signed-in address book. */
 export async function prepareAmazonDeliveryContext(
@@ -28,7 +28,15 @@ export async function prepareAmazonDeliveryContext(
   // The visible empty-href link can precede its async modal handler. An early
   // click reloads the page; use the existing navigation budget before acting.
   reportStep("page_load");
-  await page.waitForLoadState("load");
+  try {
+    await page.waitForLoadState("load");
+  } catch (error) {
+    if (!(error instanceof errors.TimeoutError)) throw error;
+    // Deferred page resources may outlive the navigation budget while the
+    // location handler is usable. All anonymous, modal and postal guards below
+    // still have to pass; this timeout alone never proves page readiness.
+    reportStep("page_load_timeout");
+  }
   reportStep("loaded_guard");
   await assertAnonymous();
   reportStep("loaded_header");

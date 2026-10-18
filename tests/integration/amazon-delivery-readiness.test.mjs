@@ -3,6 +3,74 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 import { prepareAmazonDeliveryContext } from "../../packages/playwright-crawler/dist/amazon-delivery-context.js";
 
+test("unfinished page resource does not replace the real location modal and postal checks", async () => {
+  const browser = await chromium.launch({ headless: true });
+  let releaseResource;
+  const resourceGate = new Promise((resolve) => {
+    releaseResource = resolve;
+  });
+  try {
+    for (const handlerReady of [true, false]) {
+      const page = await browser.newPage();
+      page.setDefaultTimeout(300);
+      page.setDefaultNavigationTimeout(150);
+      await page.route("**/*", async (route) => {
+        if (new URL(route.request().url()).pathname === "/pending-image") {
+          await resourceGate;
+          return route.abort();
+        }
+        return route.fulfill({
+          contentType: "text/html",
+          body: `
+          <a href="/signin">Hello, sign in Account &amp; Lists</a>
+          <span id="glow-ingress-block">Deliver to China</span>
+          <button id="nav-global-location-popover-link">Location</button>
+          <section hidden id="modal"><input id="GLUXZipUpdateInput">
+          <span id="GLUXZipUpdate"><input type="button" value="Apply"></span>
+          <p hidden id="GLUXZipConfirmationSection"></p><button name="glowDoneButton">Done</button></section>
+          <img src="/pending-image">
+          <script>
+          ${handlerReady ? "document.querySelector('#nav-global-location-popover-link').onclick=()=>document.querySelector('#modal').hidden=false;" : ""}
+          document.querySelector('#GLUXZipUpdate input').onclick=()=>{const el=document.querySelector('#GLUXZipConfirmationSection');el.textContent='Deliver to '+document.querySelector('#GLUXZipUpdateInput').value;el.hidden=false;};
+          document.querySelector('button[name="glowDoneButton"]').onclick=()=>document.querySelector('#glow-ingress-block').textContent='Deliver to San Mateo '+document.querySelector('#GLUXZipUpdateInput').value;
+          </script>`,
+        });
+      });
+      await page.goto("https://www.amazon.com/s?k=fixture", {
+        waitUntil: "domcontentloaded",
+        timeout: 3000,
+      });
+      const steps = [];
+      let rereads = 0;
+      const preparation = prepareAmazonDeliveryContext(
+        page,
+        "94404",
+        async () => {
+          assert.equal(new URL(page.url()).origin, "https://www.amazon.com");
+        },
+        (step) => steps.push(step),
+        async () => {
+          rereads++;
+        },
+      );
+      if (handlerReady) {
+        assert.equal(await preparation, true);
+        assert.equal(rereads, 1);
+        assert.match(await page.locator("#glow-ingress-block").textContent(), /94404/);
+      } else {
+        await assert.rejects(preparation, /Timeout/);
+        assert.equal(rereads, 0);
+        assert.match(await page.locator("#glow-ingress-block").textContent(), /China/);
+      }
+      assert.ok(steps.includes("page_load_timeout"));
+      await page.close();
+    }
+  } finally {
+    releaseResource();
+    await browser.close();
+  }
+});
+
 test("Done without navigation uses original URL reread before accepting the confirmed region", async () => {
   const browser = await chromium.launch({ headless: true });
   let confirmed = false,

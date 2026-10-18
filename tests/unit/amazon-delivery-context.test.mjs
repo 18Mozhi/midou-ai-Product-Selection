@@ -7,6 +7,7 @@ import {
 } from "../../packages/playwright-crawler/dist/index.js";
 import { createAmazonBrowserExecutionRequest } from "../../packages/provider-sources/dist/index.js";
 import { loadRuntimeConfig } from "../../packages/config/dist/index.js";
+import { errors } from "playwright";
 
 const limits = {
   navigationTimeoutMs: 1000,
@@ -54,6 +55,7 @@ function fixture(options = {}) {
     },
     waitForLoadState: async (state) => {
       actions.push(["load", state]);
+      if (options.loadError) throw options.loadError;
       if (options.loadFailed) throw new Error("Timeout waiting for page load");
       if (options.locationAfterLoad) location = options.locationAfterLoad;
     },
@@ -201,6 +203,40 @@ test("loading failures and newly blocked or signed-in pages never open the locat
     const f = fixture(options);
     await assert.rejects(prepareAmazonDeliveryContext(f.page, "94404", f.safe));
     assert.deepEqual(f.actions, [["load", "load"]]);
+  }
+});
+
+test("only Playwright load timeout can continue through all original region guards", async () => {
+  const f = fixture({ loadError: new errors.TimeoutError("page load timed out") });
+  const steps = [];
+  assert.equal(
+    await prepareAmazonDeliveryContext(f.page, "94404", f.safe, (s) => steps.push(s)),
+    true,
+  );
+  assert.ok(steps.includes("page_load_timeout"));
+  assert.equal(f.location(), "Deliver to San Mateo 94404");
+  const imitation = new Error("not a Playwright timeout");
+  imitation.name = "TimeoutError";
+  const rejected = fixture({ loadError: imitation });
+  await assert.rejects(
+    prepareAmazonDeliveryContext(rejected.page, "94404", rejected.safe),
+    (e) => e === imitation,
+  );
+  assert.deepEqual(rejected.actions, [["load", "load"]]);
+});
+
+test("load timeout never bypasses anonymous, challenge, confirmation, reread or postal guards", async () => {
+  for (const options of [
+    { blockAfterLoad: true },
+    { signedInAfterLoad: true },
+    { rejected: true },
+    { rereadFailed: true },
+    { doneWrongPostal: true },
+  ]) {
+    const f = fixture({ ...options, loadError: new errors.TimeoutError("page load timed out") });
+    await assert.rejects(prepareAmazonDeliveryContext(f.page, "94404", f.safe, () => {}, f.reread));
+    if (options.blockAfterLoad || options.signedInAfterLoad)
+      assert.deepEqual(f.actions, [["load", "load"]]);
   }
 });
 

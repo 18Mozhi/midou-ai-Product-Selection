@@ -1,4 +1,14 @@
 {
+  "amazonDeliveryLoadTimeout20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-delivery-load-timeout.md",
+    "sourceFiles": ["packages/playwright-crawler/src/amazon-delivery-context.ts"],
+    "testFiles": [
+      "tests/unit/amazon-delivery-context.test.mjs",
+      "tests/integration/amazon-delivery-readiness.test.mjs"
+    ],
+    "contract": "Keep existing full-load wait and budget. Only a real Playwright TimeoutError from that wait can proceed to unchanged anonymous/origin/challenge, modal, confirmation, original-URL reread and strict postal checks. No readiness assumed, extra retry, longer timeout, source/circuit writes or business facts from diagnostics. Other failures propagate. No API/env/schema/dependency/frontend/Python change."
+  },
   "sourcingProgressFacts20261018": {
     "status": "implemented",
     "requirements": "docs/selection-sourcing-progress-facts.md",
