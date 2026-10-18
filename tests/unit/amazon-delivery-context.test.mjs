@@ -216,3 +216,46 @@ test("configured source proxy reaches only private anonymous browser launch opti
     chromium.launchPersistentContext = original;
   }
 });
+
+test("postal timeout reports its fixed step without exposing postal input", async () => {
+  const f = fixture({ rejected: true });
+  const steps = [];
+  await assert.rejects(
+    prepareAmazonDeliveryContext(f.page, "94404", f.safe, (step) => steps.push(step)),
+    /Timeout/,
+  );
+  assert.equal(steps.at(-1), "confirm_postal");
+  assert.doesNotMatch(JSON.stringify(steps), /94404/);
+});
+
+test("Amazon failure diagnostics omit private errors and preserve the result contract", async () => {
+  const { chromium } = await import("playwright");
+  const original = chromium.launchPersistentContext;
+  const originalWarn = console.warn;
+  const messages = [];
+  chromium.launchPersistentContext = async () => {
+    throw new Error("private-password target-query");
+  };
+  console.warn = (message) => messages.push(message);
+  try {
+    const { plan } = createAmazonBrowserExecutionRequest({ query: "private-query" });
+    const result = await new PlaywrightCrawlerEngine(limits).run(
+      plan,
+      "not-created-diagnostic-context",
+      { requestId: "private-id", traceId: "private-trace" },
+    );
+    assert.deepEqual(messages.map(JSON.parse), [
+      {
+        event: "amazon_browser_step_failed",
+        stage: "browser_launch",
+        error_code: "dependency_unavailable",
+      },
+    ]);
+    assert.doesNotMatch(messages.join(""), /private|password|query/);
+    assert.equal(result.status, "dependency_failed");
+    assert.equal(Object.hasOwn(result, "stage"), false);
+  } finally {
+    chromium.launchPersistentContext = original;
+    console.warn = originalWarn;
+  }
+});

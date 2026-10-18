@@ -19,6 +19,16 @@
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],
     "contract": "Empty supplier panel distinguishes existing active/running, queued, blocked, failed/ended and missing/empty progress. Never claims collection is running solely because candidates are empty. Existing reads, retries, quote/cost permissions and daily completion rules unchanged; no API/config/schema changes."
   },
+  "amazonBrowserStepDiagnostics20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-us-observation-context.md",
+    "sourceFiles": [
+      "packages/playwright-crawler/src/index.ts",
+      "packages/playwright-crawler/src/amazon-delivery-context.ts"
+    ],
+    "testFiles": ["tests/unit/amazon-delivery-context.test.mjs"],
+    "contract": "Amazon failures emit fixed internal step and classified error code through existing stderr diagnostics. No raw errors, page data, queries, identifiers or credentials. Browser result, Python/API/database contracts, timeout and retries unchanged. Diagnostic evidence alone does not prove pipeline completion."
+  },
   "amazonDeliveryReadiness20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-us-observation-context.md",

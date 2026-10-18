@@ -627,6 +627,7 @@ export class PlaywrightCrawlerEngine {
     const onAbort = () => {
       void context?.close().catch(() => {});
     };
+    let stage = "browser_launch";
     let artifacts: BrowserEvidenceArtifact[] = [];
     let searchSnapshot: BrowserSearchSnapshot | undefined;
     const offerDetails: BrowserOfferDetailSnapshot[] = [];
@@ -652,7 +653,9 @@ export class PlaywrightCrawlerEngine {
         if (response.status() === 429) rateLimited = true;
       });
       const page = context.pages()[0] ?? (await context.newPage());
+      stage = "initial_navigation";
       await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error);
+      stage = "initial_guard";
       await blocked(page, plan.block_signals);
       if (plan.amazon_delivery) {
         const assertSafe = async () => {
@@ -664,15 +667,22 @@ export class PlaywrightCrawlerEngine {
           page,
           plan.amazon_delivery.postal_code,
           assertSafe,
+          (step) => {
+            stage = `amazon_delivery.${step}`;
+          },
         );
-        if (changed)
+        if (changed) {
+          stage = "delivery_reread_navigation";
           await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error);
+        }
+        stage = "delivery_final_header";
         await assertSafe();
         await page
           .locator("#glow-ingress-block")
           .filter({ hasText: new RegExp(`\\b${plan.amazon_delivery.postal_code}\\b`) })
           .waitFor({ state: "visible" });
       }
+      stage = "search_interaction";
       if (plan.search) {
         await page.locator(plan.search.input_selector).fill(plan.search.query);
         if (plan.search.submit_selector) await page.locator(plan.search.submit_selector).click();
@@ -687,6 +697,7 @@ export class PlaywrightCrawlerEngine {
           .waitFor({ state: "attached", timeout: this.limits.actionTimeoutMs })
           .catch(() => {});
       }
+      stage = "extract_items";
       for (let index = 0; index < plan.max_pages; index += 1) {
         if (rateLimited) throw new PlaywrightCrawlerError("rate_limited", "rate_limited", true);
         await blocked(page, plan.block_signals);
@@ -805,6 +816,10 @@ export class PlaywrightCrawlerEngine {
       };
     } catch (error) {
       const failure = classifyBrowserFailure(error);
+      if (plan.amazon_delivery)
+        console.warn(
+          JSON.stringify({ event: "amazon_browser_step_failed", stage, error_code: failure.code }),
+        );
       return {
         status: failure.status,
         page_count: pageCount,
