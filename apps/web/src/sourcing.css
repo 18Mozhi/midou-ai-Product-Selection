@@ -946,9 +946,7 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
 }
 @media (max-width: 760px) {
   .sourcing-record-items {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    align-content: start;
+    display: block;
   }
   .sourcing-profit-summary dl {
     grid-template-columns: repeat(2, minmax(0, 1fr));

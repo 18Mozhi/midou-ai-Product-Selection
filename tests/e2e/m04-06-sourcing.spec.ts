@@ -636,6 +636,17 @@ test("hundreds of sourcing records and supplier offers stay bounded and selectab
   });
   await page.goto("/sourcing");
   await expect(page.locator(".sourcing-record-items > button")).toHaveCount(20);
+  const rowsContainContent = await page
+    .locator(".sourcing-record-items > button")
+    .evaluateAll((rows) =>
+      rows.every((row) => {
+        const box = row.getBoundingClientRect();
+        return Array.from(row.children).every(
+          (child) => child.getBoundingClientRect().bottom <= box.bottom + 1,
+        );
+      }),
+    );
+  expect(rowsContainContent).toBe(true);
   await expect(page.locator(".supplier-cards > article")).toHaveCount(10);
   expect(
     await page
