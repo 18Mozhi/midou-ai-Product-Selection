@@ -1278,6 +1278,76 @@ test("API coverage dashboard exposes the current production truth dimensions on 
     true,
   );
 });
+test("platform cockpit gives live operations the full workspace and accessible alert scrolling", async ({
+  page,
+}) => {
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  if (!mobile) await page.setViewportSize({ width: 1858, height: 1000 });
+  await nav(page);
+  const overview = {
+    ...dashboard,
+    task_trend: [
+      { bucket: "2026-08-08T10:00:00.000Z", succeeded: 4, failed: 1 },
+      { bucket: "2026-08-08T11:00:00.000Z", succeeded: 8, failed: 0 },
+    ],
+    provider_health: Array.from({ length: 8 }, (_, index) => ({
+      ...dashboard.provider_health[index % 3],
+      id: `source-${index}`,
+      name: `来源 ${index + 1} · Amazon 美国商品与行业趋势`,
+    })),
+    alerts: Array.from({ length: 20 }, (_, index) => ({
+      ...dashboard.alerts[index % 2],
+      id: `alert-${index}`,
+    })),
+  };
+  await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(overview) }));
+  await page.goto("/platform-admin");
+  await expect(page.getByRole("region", { name: "平台指标" })).toContainText("活跃组织42");
+  await expect(page.locator(".platform-alerts > li")).toHaveCount(20);
+  const bounds = await page.locator(".platform-dashboard").evaluate((root) => {
+    const rect = (selector: string) => {
+      const r = root.querySelector(selector)!.getBoundingClientRect();
+      return { top: r.top, right: r.right, left: r.left, bottom: r.bottom };
+    };
+    const parent = root.parentElement!,
+      style = getComputedStyle(parent);
+    return {
+      width: root.getBoundingClientRect().width,
+      available:
+        parent.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+      trend: rect(".platform-trend-chart"),
+      sources: rect(".platform-source-health"),
+      grid: rect(".platform-dashboard-grid"),
+      shortcuts: rect(".platform-get-started"),
+    };
+  });
+  expect(bounds.shortcuts.top).toBeGreaterThanOrEqual(bounds.grid.bottom);
+  const alerts = page.getByRole("list", { name: "需要关注记录" });
+  if (mobile) {
+    expect(bounds.sources.top).toBeGreaterThanOrEqual(bounds.trend.bottom);
+    await expect(alerts).not.toHaveCSS("overflow-y", "auto");
+    const metrics = page.locator(".platform-facts article");
+    const first = await metrics.nth(0).boundingBox(),
+      second = await metrics.nth(1).boundingBox(),
+      last = await metrics.last().boundingBox();
+    expect(Math.abs(first!.y - second!.y)).toBeLessThan(2);
+    expect(last!.width).toBeGreaterThan(first!.width * 1.8);
+  } else {
+    expect(bounds.width).toBeGreaterThan(1400);
+    expect(Math.abs(bounds.width - bounds.available)).toBeLessThan(2);
+    expect(Math.abs(bounds.sources.top - bounds.trend.top)).toBeLessThan(2);
+    expect(bounds.sources.left).toBeGreaterThan(bounds.trend.right);
+    await expect(alerts).toHaveCSS("overflow-y", "auto");
+    await alerts.focus();
+    await alerts.press("End");
+    await expect.poll(() => alerts.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await alerts.evaluate((el) => (el as HTMLElement).blur());
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(page).toHaveScreenshot("platform-overview-workbench.png", { fullPage: false });
+});
+
 test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ page }) => {
   await nav(page);
   await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
@@ -1285,7 +1355,7 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
   await expect(page.getByRole("heading", { name: "平台运行概览", level: 2 })).toBeVisible();
   await expect(page.getByRole("link", { name: /等待处理 7/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /需要关注 2/ })).toBeVisible();
-  const facts = page.getByRole("region", { name: "平台事实" });
+  const facts = page.getByRole("region", { name: "平台指标" });
   await expect(facts).toContainText("活跃组织42");
   await expect(facts).toContainText("活跃用户318");
   await expect(facts).toContainText("启用来源3");
@@ -1448,7 +1518,7 @@ test("platform window persists and failed refresh keeps the last factual snapsho
     button.click();
   });
   await expect(page.getByRole("alert")).toContainText("继续显示上一份观测结果");
-  await expect(page.getByRole("region", { name: "平台事实" })).toContainText("活跃组织42");
+  await expect(page.getByRole("region", { name: "平台指标" })).toContainText("活跃组织42");
   expect(logicalReads.size).toBe(readsBeforeFailure + 1);
 });
 

@@ -275,10 +275,8 @@ onUnmounted(() => {
       <section class="platform-facts" aria-labelledby="platform-facts-heading">
         <header>
           <div>
-            <p>真实数据概览</p>
-            <h3 id="platform-facts-heading">平台事实</h3>
+            <h3 id="platform-facts-heading">平台指标</h3>
           </div>
-          <span>来自当前 MySQL 5.7 与所选时间范围</span>
         </header>
         <div>
           <article>
@@ -311,23 +309,7 @@ onUnmounted(() => {
           </article>
         </div>
       </section>
-      <section class="platform-get-started">
-        <header>
-          <h3>待办与常用入口</h3>
-          <span>根据运行状态进入对应管理页面</span>
-        </header>
-        <div>
-          <RouterLink
-            v-if="capabilities?.includes('platform:superadmin')"
-            to="/platform-admin/organizations"
-            ><b>管理组织和用户</b><span>新建组织、停用账号、分配管理员</span></RouterLink
-          ><RouterLink to="/platform-admin/providers/sources"
-            ><b>查看热点来源</b><span>确认自动来源、待配置来源和手动来源</span></RouterLink
-          ><RouterLink to="/platform-admin/collection/overview"
-            ><b>查看采集进度</b><span>看看自动获取是否完成、哪里需要处理</span></RouterLink
-          >
-        </div>
-      </section>
+
       <div class="platform-dashboard-grid">
         <section class="platform-trend-chart">
           <header>
@@ -361,7 +343,7 @@ onUnmounted(() => {
             }}</span>
           </footer>
         </section>
-        <section>
+        <section class="platform-source-health">
           <header>
             <h3>来源健康</h3>
             <span>{{ data.provider_health.length }} 个启用来源 · 异常优先</span>
@@ -479,7 +461,7 @@ onUnmounted(() => {
             }}
           </button>
         </section>
-        <section>
+        <section class="platform-system-checks">
           <header>
             <h3>系统检查</h3>
             <span>实时状态</span>
@@ -501,7 +483,7 @@ onUnmounted(() => {
             </div>
           </dl>
         </section>
-        <section>
+        <section class="platform-background-tasks">
           <header>
             <h3>后台任务</h3>
             <span>最近时间范围</span>
@@ -519,12 +501,12 @@ onUnmounted(() => {
             <p v-if="!data.queues.length">当前没有积压或失败任务</p>
           </div>
         </section>
-        <section>
+        <section class="platform-attention">
           <header>
             <h3>需要关注</h3>
             <span>最近 {{ data.alerts.length }} 条</span>
           </header>
-          <ul class="platform-alerts">
+          <ul class="platform-alerts" aria-label="需要关注记录" tabindex="0">
             <li v-for="a in data.alerts" :key="a.id">
               <i :data-health="a.severity"></i>
               <div>
@@ -540,6 +522,23 @@ onUnmounted(() => {
           </ul>
         </section>
       </div>
+      <section class="platform-get-started">
+        <header>
+          <h3>待办与常用入口</h3>
+          <span>根据运行状态进入对应管理页面</span>
+        </header>
+        <div>
+          <RouterLink
+            v-if="capabilities?.includes('platform:superadmin')"
+            to="/platform-admin/organizations"
+            ><b>管理组织和用户</b><span>新建组织、停用账号、分配管理员</span></RouterLink
+          ><RouterLink to="/platform-admin/providers/sources"
+            ><b>查看热点来源</b><span>确认自动来源、待配置来源和手动来源</span></RouterLink
+          ><RouterLink to="/platform-admin/collection/overview"
+            ><b>查看采集进度</b><span>看看自动获取是否完成、哪里需要处理</span></RouterLink
+          >
+        </div>
+      </section>
       <footer class="platform-observed">
         观测时间 {{ new Date(data.observed_at).toLocaleString() }}
         <TechnicalDetails :request-id="requestId" /></footer
@@ -547,9 +546,6 @@ onUnmounted(() => {
   </section>
 </template>
 <style scoped>
-.platform-trend-chart {
-  grid-column: 1/-1;
-}
 .platform-trend-chart svg {
   display: block;
   width: 100%;

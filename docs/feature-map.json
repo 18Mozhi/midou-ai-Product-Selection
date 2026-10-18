@@ -1369,6 +1369,7 @@
     "sourceFiles": [
       "apps/web/src/components/PlatformPageHeader.vue",
       "apps/web/src/components/PlatformDashboard.vue",
+      "apps/web/src/styles/platform-dashboard.css",
       "apps/web/src/components/PlatformAccountCenter.vue",
       "apps/web/src/components/PlatformManagementCenter.vue",
       "apps/web/src/components/PlatformContentCenter.vue",
@@ -1385,7 +1386,7 @@
       "tests/e2e/m06-05-open-platform.spec.ts",
       "tests/e2e/m02-03-navigation-shell.spec.ts"
     ],
-    "contract": "Shared compact commerce toolbar; full-width platform overview and content workbench. Preserve existing forms, HTTP, permissions and audit. No API/schema/config/dependency change. Frontend rebuild only; not full-site or production acceptance."
+    "contract": "Platform overview removes its1280px cap, uses full-width operational grid before shortcuts, retains all alerts with native desktop scroll, and uses two-column mobile metrics. Unused platform-kpis selectors are removed; component script is unchanged. Shared compact commerce toolbar; full-width platform overview and content workbench. Preserve existing forms, HTTP, permissions and audit. No API/schema/config/dependency change. Frontend rebuild only; not full-site or production acceptance."
   },
   "selectionCrossLanguageSupply20261017": {
     "status": "implemented",
