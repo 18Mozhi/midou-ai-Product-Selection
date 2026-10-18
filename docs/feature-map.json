@@ -1,4 +1,17 @@
 {
+  "collectionDatabaseFailureContext20261018": {
+    "status": "implemented",
+    "requirements": "docs/collection-database-failure-context.md",
+    "sourceFiles": [
+      "apps/worker/src/collection-task-database-context.ts",
+      "apps/worker/src/collection-task-worker.ts"
+    ],
+    "tests": [
+      "tests/unit/collection-database-context.test.mjs",
+      "tests/m03-05/collection-task-state-machine.test.mjs"
+    ],
+    "acceptance": "Diagnostic context only; concrete production deadlock statement and continuous pipeline still require live verification. Existing retries, circuits and rollback unchanged."
+  },
   "homeSummaryQueryPerformance20261018": {
     "status": "implemented",
     "deploymentState": "release_receipt_required",

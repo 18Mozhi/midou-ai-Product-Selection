@@ -1,3 +1,4 @@
+import { collectionQueueDatabaseContext } from "./collection-task-database-context.js";
 import type { OrganizationId, WorkspaceId } from "@scoutops/contracts";
 import { ScopedRedisStore } from "@scoutops/redis";
 import {
@@ -98,10 +99,16 @@ export async function processCollectionTaskOnce(input: {
       return { status: "resource_blocked" as const, recovered: 0 };
     }
   }
-  const recovered = await input.repository.recoverExpired(now);
-  const queued = await input.repository.queueReady(now);
+  const recovered = await collectionQueueDatabaseContext("recover_expired", () =>
+    input.repository.recoverExpired(now),
+  );
+  const queued = await collectionQueueDatabaseContext("queue_ready", () =>
+    input.repository.queueReady(now),
+  );
   if (queued) await input.coordinator.signal(queued);
-  const claimed = await input.repository.claim(input.workerId, now, input.leaseSeconds);
+  const claimed = await collectionQueueDatabaseContext("claim", () =>
+    input.repository.claim(input.workerId, now, input.leaseSeconds),
+  );
   if (!claimed) return { status: "idle" as const, recovered };
   if (!(await input.coordinator.acquire(claimed, input.leaseSeconds))) {
     const result = await input.repository.releaseCoordinationConflict(claimed, now);
