@@ -112,6 +112,15 @@ export class AmazonPublicBrowserHealth {
               locale: String(profile.locale),
               timezoneId: String(profile.timezone),
               signal: controller.signal,
+              ...(this.config.providerAdapters.proxy
+                ? {
+                    proxy: {
+                      server: this.config.providerAdapters.proxy.url,
+                      username: this.config.providerAdapters.proxy.username,
+                      password: this.config.providerAdapters.proxy.password,
+                    },
+                  }
+                : {}),
             },
           );
           controller.signal.throwIfAborted();

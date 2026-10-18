@@ -119,7 +119,19 @@ try {
     },
     plan,
     ids,
-    { locale: input.locale, timezoneId: input.timezone },
+    {
+      locale: input.locale,
+      timezoneId: input.timezone,
+      ...(input.purpose === "amazon_public" && config.providerAdapters.proxy
+        ? {
+            proxy: {
+              server: config.providerAdapters.proxy.url,
+              username: config.providerAdapters.proxy.username,
+              password: config.providerAdapters.proxy.password,
+            },
+          }
+        : {}),
+    },
   );
   console.log(
     JSON.stringify(

@@ -613,6 +613,7 @@ export class PlaywrightCrawlerEngine {
       locale?: string;
       timezoneId?: string;
       cookies?: BrowserCookie[];
+      proxy?: { server: string; username?: string; password?: string };
       signal?: AbortSignal;
     } = {},
   ): Promise<BrowserRunResult> {
@@ -631,10 +632,13 @@ export class PlaywrightCrawlerEngine {
     const offerDetails: BrowserOfferDetailSnapshot[] = [];
     try {
       options.signal?.throwIfAborted();
+      if (options.proxy && !plan.amazon_delivery)
+        throw new PlaywrightCrawlerError("crawler_proxy_scope_invalid", "parser_changed", false);
       if (plan.amazon_delivery && options.cookies?.length)
         throw new PlaywrightCrawlerError("permission_denied", "blocked_login", false);
       context = await chromium.launchPersistentContext(userDataDir, {
         headless: this.limits.headless,
+        ...(options.proxy ? { proxy: options.proxy } : {}),
         ...(this.limits.executablePath ? { executablePath: this.limits.executablePath } : {}),
         ...(options.locale ? { locale: options.locale } : {}),
         ...(options.timezoneId ? { timezoneId: options.timezoneId } : {}),
@@ -988,7 +992,12 @@ export async function runWithEncryptedProfile(
   archiveLimits: ProfileArchiveLimits,
   plan: BrowserCollectionPlan,
   ids: { requestId: string; traceId: string },
-  options: { locale?: string; timezoneId?: string; signal?: AbortSignal } = {},
+  options: {
+    locale?: string;
+    timezoneId?: string;
+    signal?: AbortSignal;
+    proxy?: { server: string; username?: string; password?: string };
+  } = {},
 ) {
   return withMaterializedCredential(record, masterKey, tempRoot, (archivePath) =>
     record.kind === "cookie_bundle"

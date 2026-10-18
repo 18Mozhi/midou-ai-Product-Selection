@@ -145,3 +145,43 @@ test("cookie-backed contexts fail before any browser is launched", async () => {
   assert.equal(result.status, "blocked_login");
   assert.equal(result.error_code, "permission_denied");
 });
+
+test("configured source proxy reaches only private anonymous browser launch options", async () => {
+  const { chromium } = await import("playwright");
+  const original = chromium.launchPersistentContext;
+  const proxy = {
+    server: "http://127.0.0.1:18899",
+    username: "fixture-user",
+    password: "fixture-only-password",
+  };
+  let launchOptions;
+  chromium.launchPersistentContext = async (_directory, options) => {
+    launchOptions = options;
+    throw new Error("fixture_launch_boundary");
+  };
+  try {
+    const { plan } = createAmazonBrowserExecutionRequest({ query: "metal sign" });
+    const result = await new PlaywrightCrawlerEngine(limits).run(
+      plan,
+      "not-created-proxy-context",
+      { requestId: "req", traceId: "trace" },
+      { proxy },
+    );
+    assert.equal(result.status, "dependency_failed");
+    assert.deepEqual(launchOptions.proxy, proxy);
+    assert.doesNotMatch(JSON.stringify(plan), /fixture-user|fixture-only-password|18899/);
+    launchOptions = undefined;
+    const legacyPlan = { ...plan };
+    delete legacyPlan.amazon_delivery;
+    const rejected = await new PlaywrightCrawlerEngine(limits).run(
+      legacyPlan,
+      "not-created-proxy-context",
+      { requestId: "req", traceId: "trace" },
+      { proxy },
+    );
+    assert.equal(rejected.error_code, "crawler_proxy_scope_invalid");
+    assert.equal(launchOptions, undefined);
+  } finally {
+    chromium.launchPersistentContext = original;
+  }
+});
