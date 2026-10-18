@@ -3313,13 +3313,6 @@ for (const populated of [false, true]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );
-    if (populated) {
-      const reviewPath = test.info().outputPath("primary-product-facts-review.png");
-      await page.screenshot({ fullPage: true, path: reviewPath });
-      await test
-        .info()
-        .attach("primary-product-facts-review", { path: reviewPath, contentType: "image/png" });
-    }
     await header.locator("summary").focus();
     await page.keyboard.press("Enter");
     await expect(header.getByText(/数据版本 v/)).toBeVisible();
