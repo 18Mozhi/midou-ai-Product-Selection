@@ -673,6 +673,7 @@ export class PlaywrightCrawlerEngine {
           async () => {
             await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error);
           },
+          this.limits.navigationTimeoutMs,
         );
         stage = "delivery_final_header";
         await assertSafe();

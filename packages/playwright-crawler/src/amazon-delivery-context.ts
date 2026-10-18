@@ -7,6 +7,7 @@ export async function prepareAmazonDeliveryContext(
   assertSafe: () => Promise<void>,
   reportStep: (step: string) => void = () => {},
   reread?: () => Promise<void>,
+  navigationTimeoutMs?: number,
 ) {
   if (typeof postalCode !== "string" || !/^\d{5}$/.test(postalCode))
     throw new Error("amazon_delivery_postal_invalid");
@@ -72,7 +73,10 @@ export async function prepareAmazonDeliveryContext(
       // Done can start a competing main-frame reload. Observe that navigation and
       // recheck the original guards before one original-URL reread, never a loop.
       reportStep("reread_interrupted_wait");
-      await page.waitForNavigation({ waitUntil: "domcontentloaded" });
+      await page.waitForEvent(
+        "domcontentloaded",
+        navigationTimeoutMs === undefined ? undefined : { timeout: navigationTimeoutMs },
+      );
       await assertAnonymous();
       reportStep("reread_retry");
       await reread();

@@ -37,6 +37,11 @@ test("Chromium aborted reread recovers once through a real guarded original-URL 
     const original = "https://www.amazon.com/dp/B0F6FT397Y";
     await page.goto(original);
     const steps = [];
+    let navigationWaits = 0;
+    page.waitForNavigation = async () => {
+      navigationWaits++;
+      throw new Error("page.waitForNavigation: net::ERR_ABORTED; maybe frame was detached?");
+    };
     assert.equal(
       await prepareAmazonDeliveryContext(
         page,
@@ -48,10 +53,12 @@ test("Chromium aborted reread recovers once through a real guarded original-URL 
         async () => {
           await page.goto(original, { waitUntil: "domcontentloaded" });
         },
+        2000,
       ),
       true,
     );
     assert.equal(requests, 4);
+    assert.equal(navigationWaits, 0);
     await competingNavigation;
     assert.ok(steps.includes("reread_retry"));
     assert.equal(page.url(), original);

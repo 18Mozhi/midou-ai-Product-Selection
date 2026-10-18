@@ -119,8 +119,9 @@ test("an aborted original-URL reread is retried once after document and anonymou
   const steps = [];
   let calls = 0;
   const success = fixture({ locationAfterReread: "Deliver to San Mateo 94404" });
-  success.page.waitForNavigation = async (options) => {
-    success.actions.push(["navigation", options.waitUntil]);
+  success.page.waitForEvent = async (event, options) => {
+    assert.equal(options.timeout, 321);
+    success.actions.push(["navigation", event]);
   };
   assert.equal(
     await prepareAmazonDeliveryContext(
@@ -132,6 +133,7 @@ test("an aborted original-URL reread is retried once after document and anonymou
         if (++calls === 1) throw new Error("page.goto: net::ERR_ABORTED");
         await success.reread();
       },
+      321,
     ),
     true,
   );
@@ -152,7 +154,7 @@ test("aborted reread recovery preserves all guards and cannot retry indefinitely
   ]) {
     const f = fixture({ doneWrongPostal: true });
     let calls = 0;
-    f.page.waitForNavigation = async () => {
+    f.page.waitForEvent = async () => {
       if (mode === "settle_failed") throw new errors.TimeoutError("settle failed");
     };
     const safe = async () => {

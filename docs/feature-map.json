@@ -2,12 +2,15 @@
   "amazonDeliveryAbortedReread20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-delivery-aborted-reread.md",
-    "sourceFiles": ["packages/playwright-crawler/src/amazon-delivery-context.ts"],
+    "sourceFiles": [
+      "packages/playwright-crawler/src/amazon-delivery-context.ts",
+      "packages/playwright-crawler/src/index.ts"
+    ],
     "testFiles": [
       "tests/unit/amazon-delivery-context.test.mjs",
       "tests/integration/amazon-delivery-readiness.test.mjs"
     ],
-    "contract": "Only explicit original-URL reread throwing Chromium net::ERR_ABORTED can wait for actual subsequent navigation to DOMContentLoaded and recheck original anonymous/origin/challenge guards before one additional original-URL reread. Old document load state cannot substitute for navigation. Missing navigation or second failure propagates; no loop, new config or budget. Final reread retains original engine HTTP, origin and strict postal checks. No API/schema/env/dependency/frontend/Python or forced health/circuit changes."
+    "contract": "Only explicit original-URL reread throwing Chromium net::ERR_ABORTED can wait for a new DOMContentLoaded event using the engine's existing navigation budget, then recheck original anonymous/origin/challenge guards before one additional original-URL reread. Old document load state or queued failed-navigation events cannot substitute for the new document event. Missing event or second failure propagates; no loop, new config or budget. Final reread retains original engine HTTP, origin and strict postal checks. No external API/schema/env/dependency/frontend/Python or forced health/circuit changes."
   },
   "amazonDeliveryLoadTimeout20261018": {
     "status": "implemented",
