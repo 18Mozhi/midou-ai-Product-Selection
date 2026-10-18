@@ -24,7 +24,7 @@ test("production root resolves the authenticated role landing instead of the fou
   assert.equal(landing?.name, "landing");
   assert.equal(landing?.title, "正在进入");
   assert.equal(landing?.view, "landing");
-  assert.equal(catalog.routes.find((route) => route.path === "/home")?.title, "今日行动");
+  assert.equal(catalog.routes.find((route) => route.path === "/home")?.title, "选品工作台");
   assert.match(routeAdapter, /route-catalog\.generated\.json/);
   assert.doesNotMatch(shell, /\{\{\s*phaseLabel\s*\}\}/);
 });

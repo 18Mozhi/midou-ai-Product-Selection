@@ -174,8 +174,8 @@ test("M00-01.A15 product entry is accessible and visually stable", async ({ page
     }),
   );
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "今日行动" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "选品控制台" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "选品工作台", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "选品工作台", level: 2 })).toBeVisible();
   await expect(page.getByText("自动选品状态暂不可用", { exact: true })).toBeVisible();
 });
 

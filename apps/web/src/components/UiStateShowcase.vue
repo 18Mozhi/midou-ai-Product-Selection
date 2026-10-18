@@ -135,11 +135,11 @@ async function secondary() {
           :kind="current"
           :description="
             current === 'not_found'
-              ? `地址可能已变更。可返回最近有效页面 ${recentRoute}，或回到今日行动。`
+              ? `地址可能已变更。可返回最近有效页面 ${recentRoute}，或回到选品工作台。`
               : undefined
           "
           :primary-label="current === 'not_found' ? '返回最近页面' : undefined"
-          :secondary-label="current === 'not_found' ? '返回今日行动' : undefined"
+          :secondary-label="current === 'not_found' ? '返回选品工作台' : undefined"
           request-id="m02-04-request"
           trace-id="m02-04-trace"
           @primary="primary"

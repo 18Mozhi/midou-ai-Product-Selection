@@ -79,7 +79,7 @@ export const DEFAULT_STATE_COPY: Record<
   not_found: {
     title: "没有找到这个页面",
     description: "地址可能有误，或页面已变更。",
-    primary: "返回今日行动",
+    primary: "返回选品工作台",
     secondary: "返回上一页",
   },
 };

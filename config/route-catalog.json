@@ -221,8 +221,8 @@
     {
       "path": "/home",
       "name": "home",
-      "title": "今日行动",
-      "breadcrumb": ["工作台", "今日行动"],
+      "title": "选品工作台",
+      "breadcrumb": ["工作台", "选品工作台"],
       "shell": "member",
       "view": null,
       "capabilities": ["task:read"],
@@ -245,8 +245,8 @@
     {
       "path": "/work",
       "name": "today-work",
-      "title": "今日行动",
-      "breadcrumb": ["工作台", "今日行动"],
+      "title": "选品工作台",
+      "breadcrumb": ["工作台", "选品工作台"],
       "shell": "member",
       "view": null,
       "capabilities": ["task:read"],

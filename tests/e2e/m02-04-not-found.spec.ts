@@ -45,9 +45,16 @@ test("M02-04 fallback fails closed when the stored recent route is no longer reg
   });
   await page.reload();
   await expect(page.getByRole("link", { name: "返回最近页面" })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "返回今日行动" })).toBeVisible();
+  await expect(
+    page
+      .getByRole("navigation", { name: "页面恢复操作" })
+      .getByRole("link", { name: "返回选品工作台" }),
+  ).toBeVisible();
   await expect(page.getByText("retired/module")).toHaveCount(0);
-  await page.getByRole("link", { name: "返回今日行动" }).click();
+  await page
+    .getByRole("navigation", { name: "页面恢复操作" })
+    .getByRole("link", { name: "返回选品工作台" })
+    .click();
   await expect(page).toHaveURL(/\/home$/);
 });
 
@@ -69,11 +76,17 @@ test("M02-04 fallback home and brand actions reach their declared destination", 
   page,
 }) => {
   await page.goto("/unknown/home-action");
-  await page.getByRole("link", { name: "返回今日行动" }).click();
+  await page
+    .getByRole("navigation", { name: "页面恢复操作" })
+    .getByRole("link", { name: "返回选品工作台" })
+    .click();
   await expect(page).toHaveURL(/\/home$/);
 
   await page.goto("/unknown/brand-action");
-  await page.getByRole("link", { name: "返回智能选品今日行动" }).click();
+  await page
+    .locator(".not-found-page header")
+    .getByRole("link", { name: "返回选品工作台" })
+    .click();
   await expect(page).toHaveURL(/\/home$/);
 });
 

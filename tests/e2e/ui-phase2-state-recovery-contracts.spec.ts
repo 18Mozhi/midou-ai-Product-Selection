@@ -135,10 +135,11 @@ for (const stored of ["https://example.invalid/outside", "//example.invalid/outs
       page.getByRole("heading", { name: "没有找到这个页面", exact: true }),
     ).toBeFocused();
     await expect(page.getByRole("link", { name: "返回最近页面", exact: true })).toHaveCount(0);
-    await expect(page.getByRole("link", { name: "返回今日行动", exact: true })).toHaveAttribute(
-      "href",
-      "/home",
-    );
+    await expect(
+      page
+        .getByRole("navigation", { name: "页面恢复操作" })
+        .getByRole("link", { name: "返回选品工作台", exact: true }),
+    ).toHaveAttribute("href", "/home");
     await expect(page.getByRole("region", { name: "页面恢复信息" }).locator("code")).toHaveText(
       "/missing/ui2-recovery",
     );
@@ -165,10 +166,11 @@ test("UI2-NF02 unavailable local storage still renders a usable fallback", async
   const requests = observeApiRequests(page);
   await page.goto("/missing/ui2-storage");
   await expect(page.getByRole("heading", { name: "没有找到这个页面", exact: true })).toBeFocused();
-  await expect(page.getByRole("link", { name: "返回今日行动", exact: true })).toHaveAttribute(
-    "href",
-    "/home",
-  );
+  await expect(
+    page
+      .getByRole("navigation", { name: "页面恢复操作" })
+      .getByRole("link", { name: "返回选品工作台", exact: true }),
+  ).toHaveAttribute("href", "/home");
   await page.reload();
   await expect(page.getByRole("heading", { name: "没有找到这个页面", exact: true })).toBeVisible();
   expect(requests).toEqual([]);

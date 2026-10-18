@@ -2147,7 +2147,7 @@ test("P18 keeps a shared write locked across cached route deactivation and refre
     window.dispatchEvent(new PopStateEvent("popstate"));
   });
   await expect(page).toHaveURL(/\/home$/);
-  await expect(page.getByRole("heading", { name: "今日行动" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "选品工作台", level: 1 })).toBeVisible();
 
   const detailRequest = page.waitForRequest(
     (request) => new URL(request.url()).pathname === `/api/v1/opportunities/${opportunityId}`,

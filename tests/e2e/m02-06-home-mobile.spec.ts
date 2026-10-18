@@ -150,7 +150,9 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
     }),
   );
   await page.goto("/home");
-  await expect(page.getByRole("heading", { name: "选品工作台", exact: true })).toBeVisible();
+  await expect(
+    page.locator(".home-command-bar").getByRole("heading", { name: "选品工作台", exact: true }),
+  ).toBeVisible();
   await expect(page.locator(".home-system-state")).toHaveText("采集调度已配置");
   await expect(page.getByText("便携咖啡机候选")).toBeVisible();
   await expect(page.getByText("86.5 分")).toBeVisible();
@@ -213,7 +215,7 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
       metricsInSidebar: Boolean(metrics.closest("aside")),
     };
   });
-  expect(layout.headerColor).toBe(layout.queueColor);
+  expect(layout.headerColor).toBe("rgba(0, 0, 0, 0)");
   expect(layout.headerHeight).toBeLessThan(testInfo.project.name === "mobile-390" ? 260 : 160);
   expect(layout.metricsAboveQueue).toBe(true);
   expect(layout.metricsInSidebar).toBe(false);
@@ -686,7 +688,12 @@ test.describe("daily snapshots retain Beijing time in overseas browsers", () => 
       const daily = page.getByRole("region", { name: "每日选品产出" });
       const dailyBox = await daily.boundingBox();
       const cumulativeBox = await page.locator(".home-automation-overview").boundingBox();
-      expect(dailyBox!.y).toBeLessThan(cumulativeBox!.y);
+      if (test.info().project.name === "mobile-390") {
+        expect(dailyBox!.y).toBeLessThan(cumulativeBox!.y);
+      } else {
+        expect(Math.abs(dailyBox!.y - cumulativeBox!.y)).toBeLessThanOrEqual(1);
+        expect(dailyBox!.x + dailyBox!.width).toBeLessThanOrEqual(cumulativeBox!.x + 1);
+      }
       await expect(page.getByText("采集调度已配置", { exact: true }).first()).toBeVisible();
       if (completed === null) {
         await expect(
@@ -703,7 +710,8 @@ test.describe("daily snapshots retain Beijing time in overseas browsers", () => 
         await expect(daily.getByText("150", { exact: true })).toBeVisible();
         await expect(daily.locator("progress")).toHaveAttribute("value", String(completed));
         await expect(daily.locator("progress")).toHaveAttribute("max", "100");
-        await expect(daily.getByText(/当前快照不能证明全天不间断运行/)).toBeVisible();
+        await page.locator(".home-truth summary").click();
+        await expect(page.locator(".home-truth")).toContainText("当前快照不能证明全天不间断运行");
         await expect(daily).toContainText("统计时间 2026/10/17 08:00:00");
         await expect(daily.locator("dd").nth(0)).toHaveText(`${completed} / 100 目标`);
         expect(
@@ -711,8 +719,8 @@ test.describe("daily snapshots retain Beijing time in overseas browsers", () => 
             .locator("dd")
             .first()
             .evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
-        ).toBeGreaterThanOrEqual(36);
-        await expect(daily).toContainText("明确标注利润未知的已分析商品");
+        ).toBeGreaterThanOrEqual(28);
+        await expect(page.locator(".home-truth")).toContainText("明确标注利润未知的已分析商品");
       }
       await expect
         .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))

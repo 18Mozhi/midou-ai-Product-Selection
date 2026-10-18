@@ -76,7 +76,7 @@ test("M02-04 navigation actions reach their declared destinations", async ({ pag
   await expect(page).toHaveURL(/\/login$/);
   await page.goBack();
   await page.getByRole("button", { name: "404" }).click();
-  await page.getByRole("button", { name: "返回今日行动" }).click();
+  await page.getByRole("button", { name: "返回选品工作台" }).click();
   await expect(page).toHaveURL(/\/home$/);
 });
 test("M02-04.A07/A15 internal state library keeps its 404 example isolated", async ({ page }) => {

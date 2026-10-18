@@ -6876,5 +6876,29 @@
       "tests/integration/amazon-browser-projection.test.mjs"
     ],
     "contract": "Explicit anonymous US observation postcode, default94404 observed in independent public browser; signed-in and cookie-backed contexts cannot change addresses. Wait for actual postal confirmation and verify header after re-reading target. Retain destination header in hashed raw evidence without altering empty-search fallback. Existing queued Amazon public plans inherit missing context only after canonical empty-profile checks. Split primary quote accepted only with unique complete observed symbol/whole/fraction and absent/empty offscreen label; list/foreign/recommendation/ambiguous facts remain unknown. Private anonymous browser runtime also reuses the existing configured authenticated source HTTP proxy; no credentials in plans or frontend, no proxy changes for other browser sources, no TLS weakening or new proxy service. No migration, dependency, normalized schema or public price field changes. Deployment and daily100 remain separately unproven."
+  },
+  "selectionHomeMetricGroups20261019": {
+    "status": "implemented",
+    "statusDetail": "97_related_node_checks_and_136_related_browser_cases_passed_publication_pending",
+    "requirements": "docs/selection-home-layout.md",
+    "routes": ["/home", "/work"],
+    "sourceFiles": [
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/components/HomeAutomationOverview.vue",
+      "apps/web/src/home-dashboard.css",
+      "config/route-catalog.json",
+      "apps/web/src/ui/state-contract.ts",
+      "apps/web/src/components/NotFoundPage.vue",
+      "apps/web/src/components/UiStateShowcase.vue"
+    ],
+    "testFiles": [
+      "tests/e2e/m02-06-home-mobile.spec.ts",
+      "tests/e2e/m02-04-not-found.spec.ts",
+      "tests/e2e/m02-04-ui-states.spec.ts",
+      "tests/e2e/ui-phase2-state-recovery-contracts.spec.ts",
+      "tests/e2e/m00-01-runtime.spec.ts",
+      "tests/regression/product-delivery.test.mjs"
+    ],
+    "contract": "One grouped daily/cumulative metrics panel with desktop columns and narrow-screen stacking. Exact daily counts, unknown state and Beijing time retained; factual definitions remain in existing data explanation disclosure. Home caption unified as selection workbench. No API, database, authorization, polling, environment or dependency change."
   }
 }

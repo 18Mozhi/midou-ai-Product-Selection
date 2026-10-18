@@ -28,10 +28,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 20px 24px;
-  border: 1px solid var(--home-hairline);
-  background: var(--so-panel);
-  border-radius: 6px;
+  padding: 0 0 16px;
 }
 .home-command-bar > div {
   display: flex;
@@ -106,21 +103,22 @@ html[data-design="commerce"] #app .home-command-bar nav .home-primary-action {
   border-color: var(--home-accent);
 }
 .home-automation-overview {
-  margin-top: 16px;
-  background: var(--so-panel);
-  border: 1px solid var(--home-hairline);
-  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 .home-status-facts {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-height: 112px;
 }
 .home-status-facts > a {
   display: flex;
   flex-direction: column-reverse;
+  justify-content: center;
   align-items: flex-start;
   gap: 8px;
-  padding: 16px 24px;
+  padding: 16px 20px;
   color: var(--so-text);
   text-decoration: none;
   min-width: 0;
@@ -146,7 +144,8 @@ html[data-design="commerce"] #app .home-command-bar nav .home-primary-action {
   font-size: 13px;
 }
 .home-runtime-details {
-  padding: 0 24px;
+  margin-top: auto;
+  padding: 0 20px;
   border-top: 1px solid var(--home-hairline);
 }
 .home-runtime-details > summary {
@@ -181,8 +180,8 @@ html[data-design="commerce"] #app .home-command-bar nav .home-primary-action {
 }
 .home-runtime-panel {
   display: grid;
-  grid-template-columns: 130px minmax(0, 1fr);
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
   padding: 16px 0;
   border-top: 1px solid var(--home-hairline);
 }
@@ -195,7 +194,7 @@ html[data-design="commerce"] #app .home-command-bar nav .home-primary-action {
 }
 .home-runtime-panel dl {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 .home-runtime-panel dt {
@@ -207,55 +206,76 @@ html[data-design="commerce"] #app .home-command-bar nav .home-primary-action {
   overflow-wrap: anywhere;
 }
 .home-runtime-panel > p {
-  grid-column: 2;
+  grid-column: 1 / -1;
   color: var(--so-text-muted);
   font-size: 13px;
 }
 .home-daily-production {
-  margin-top: 16px;
-  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-right: 1px solid var(--home-hairline);
+}
+
+.home-overview-panel {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: minmax(380px, 1.1fr) minmax(0, 1.9fr);
   border: 1px solid var(--home-hairline);
   border-radius: 6px;
   background: var(--so-panel);
+  overflow: hidden;
 }
-.home-daily-production > header {
+.home-daily-production > header,
+.home-automation-heading {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 8px 16px;
   flex-wrap: wrap;
+  min-height: 56px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--home-hairline);
 }
-.home-daily-production h3 {
+.home-daily-production h3,
+.home-automation-heading h3 {
   font-size: 15px;
   font-weight: 600;
 }
 .home-daily-production > header > span,
-.home-daily-production > small {
+.home-automation-heading > span {
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.home-daily-meta {
+  display: flex;
+  align-items: center;
+  min-height: 45px;
+  margin-top: auto;
+  padding: 10px 20px;
+  border-top: 1px solid var(--home-hairline);
+  color: var(--so-text-muted);
+}
+.home-daily-meta small {
+  font-size: 12px;
+}
+.home-read-hint {
+  padding: 0 20px 12px;
   color: var(--so-text-muted);
   font-size: 13px;
 }
 .home-daily-production dl {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
-  gap: 0;
-  border: 1px solid var(--home-hairline);
-  border-radius: 6px;
-  overflow: hidden;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  min-height: 112px;
 }
 .home-daily-production dl > div {
   min-width: 0;
-  padding: 14px 18px;
+  padding: 16px 20px;
   border-right: 1px solid var(--home-hairline);
   align-content: center;
 }
 .home-daily-production dl > div:last-child {
   border-right: 0;
-}
-.home-daily-completion {
-  background: var(--so-panel-soft);
 }
 .home-daily-production dt {
   color: var(--so-text-muted);
@@ -263,12 +283,14 @@ html[data-design="commerce"] #app .home-command-bar nav .home-primary-action {
 }
 html[data-design="commerce"] #app .home-daily-production dd {
   margin: 3px 0 0;
-  font-size: max(24px, var(--so-font-body));
+  font-size: max(28px, var(--so-font-body));
+  line-height: 1.25;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
 }
 html[data-design="commerce"] #app .home-daily-completion dd {
-  font-size: max(36px, var(--so-font-body));
+  font-size: max(32px, var(--so-font-body));
   line-height: 1.2;
 }
 .home-daily-production dd small {
@@ -277,30 +299,19 @@ html[data-design="commerce"] #app .home-daily-completion dd {
   font-weight: 400;
 }
 .home-daily-production progress {
+  display: block;
   width: 100%;
-  height: 6px;
-  grid-column: 1;
+  height: 5px;
+  margin-top: 8px;
   accent-color: var(--home-accent);
 }
-.home-daily-production > p,
-.home-daily-production > small {
-  grid-column: 1 / -1;
+.home-daily-production > p {
+  padding: 16px 20px;
+  color: var(--so-text-muted);
   font-size: 13px;
 }
-.home-daily-production > p {
-  color: var(--so-text-muted);
-}
-.home-discovery-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 16px;
-  margin-top: 16px;
-  align-items: start;
-}
-.home-main-grid {
-  min-width: 0;
-}
 .home-review-queue {
+  margin-top: 16px;
   background: var(--so-panel);
   border: 1px solid var(--home-hairline);
   border-radius: 6px;
@@ -369,8 +380,8 @@ html[data-design="commerce"] #app .home-daily-completion dd {
   background: var(--so-panel-soft);
 }
 .home-quiet-empty {
-  min-height: 180px;
-  padding: 32px 20px;
+  min-height: 148px;
+  padding: 24px 20px;
   display: grid;
   align-content: center;
   justify-items: center;
@@ -433,20 +444,28 @@ html[data-design="commerce"] #app .home-daily-completion dd {
   cursor: pointer;
 }
 .home-truth > div {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
+  display: grid;
+  gap: 8px;
   padding: 8px 0;
 }
+.home-truth-meta {
+  display: flex;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+}
 @media (max-width: 1100px) {
+  .home-overview-panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .home-daily-production {
+    border-right: 0;
+    border-bottom: 1px solid var(--home-hairline);
+  }
   .home-command-bar {
     align-items: flex-start;
   }
   .home-command-bar nav {
     max-width: 450px;
-  }
-  .home-discovery-layout {
-    grid-template-columns: minmax(0, 1fr);
   }
   .home-runtime-panel dl {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -455,7 +474,7 @@ html[data-design="commerce"] #app .home-daily-completion dd {
 @media (max-width: 640px) {
   .home-command-bar {
     flex-direction: column;
-    padding: 16px;
+    padding: 0 0 16px;
     gap: 14px;
   }
   .home-command-bar nav {
@@ -489,21 +508,28 @@ html[data-design="commerce"] #app .home-daily-completion dd {
   .home-runtime-panel > p {
     grid-column: 1;
   }
-  .home-daily-production {
-    padding: 16px;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
+  .home-daily-production > header,
+  .home-automation-heading {
+    padding: 12px 16px;
   }
-  .home-daily-production progress {
-    grid-column: 1;
+  .home-daily-meta {
+    padding: 10px 16px;
   }
   .home-daily-production dl {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1.3fr 1fr 1fr;
   }
-  .home-daily-production .home-daily-completion {
-    grid-column: 1 / -1;
-    border-right: 0;
-    border-bottom: 1px solid var(--home-hairline);
+  .home-daily-production dl > div {
+    padding: 14px 10px;
+  }
+  html[data-design="commerce"] #app .home-daily-production dd {
+    font-size: max(24px, var(--so-font-body));
+  }
+  html[data-design="commerce"] #app .home-daily-completion dd {
+    font-size: max(28px, var(--so-font-body));
+  }
+  .home-daily-production dd small {
+    display: block;
+    font-size: 12px;
   }
   .home-review-queue > header {
     padding: 14px 16px;

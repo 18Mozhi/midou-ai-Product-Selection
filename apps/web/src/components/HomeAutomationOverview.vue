@@ -17,6 +17,10 @@ const date = (value: string | null) => (value ? new Date(value).toLocaleString("
 
 <template>
   <section class="home-automation-overview" aria-label="自动选品状态">
+    <header class="home-automation-heading">
+      <h3>选品库概况</h3>
+      <span>当前工作区累计</span>
+    </header>
     <div class="home-status-facts">
       <RouterLink to="/opportunities?view=recommended" data-tone="positive">
         <strong>{{ selection.recommended_count }}</strong>

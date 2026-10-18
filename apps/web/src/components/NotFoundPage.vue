@@ -43,7 +43,7 @@ watch(() => route.fullPath, focusHeading);
 <template>
   <main class="not-found-page not-found-page--review" aria-labelledby="not-found-title">
     <header class="p73-top">
-      <RouterLink to="/home" aria-label="返回智能选品今日行动">
+      <RouterLink to="/home" aria-label="返回选品工作台">
         <span aria-hidden="true">选</span><b>ScoutOps</b>
       </RouterLink>
     </header>
@@ -64,16 +64,16 @@ watch(() => route.fullPath, focusHeading);
         </div>
         <nav aria-label="页面恢复操作">
           <RouterLink class="not-found-primary" :to="recentDestination.fullPath">
-            {{ hasDistinctRecentDestination ? "返回最近页面" : "返回今日行动" }}
+            {{ hasDistinctRecentDestination ? "返回最近页面" : "返回选品工作台" }}
           </RouterLink>
           <RouterLink v-if="hasDistinctRecentDestination" class="not-found-secondary" to="/home">
-            返回今日行动
+            返回选品工作台
           </RouterLink>
         </nav>
       </div>
       <p class="not-found-continuity">
         <template v-if="hasDistinctRecentDestination">将返回：{{ recentTitle }}</template>
-        <template v-else>将从今日行动重新进入业务流程</template>
+        <template v-else>将从选品工作台重新进入业务流程</template>
       </p>
     </section>
   </main>
