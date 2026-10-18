@@ -447,7 +447,7 @@ export class AmazonTargetPageParseFailure extends ProviderAdapterFailure {
 export class AmazonProductSearchAdapter extends SourceAdapter {
   readonly key = "amazon_product";
   readonly accessMode = "public_page" as const;
-  readonly version = "amazon-public-product-adapter-v10";
+  readonly version = "amazon-public-product-adapter-v11";
   constructor(private readonly fetcher?: typeof fetch) {
     super();
   }
@@ -540,19 +540,32 @@ export class AmazonProductSearchAdapter extends SourceAdapter {
       url = AMAZON_HEALTH_SEARCH_URL;
     try {
       this.requireParser(context.provider);
-      await this.records(url, signal, 1);
+      const [product] = await this.records(url, signal, 1);
+      if (!product || !/^[A-Z0-9]{10}$/.test(product.externalId))
+        throw new ProviderAdapterFailure("invalid_payload", false);
+      const detailUrl = `https://www.amazon.com/dp/${product.externalId}`;
+      signal.throwIfAborted();
+      await assertPublicCollectionPolicy({
+        providerTargetUrl: detailUrl,
+        fetcher: this.fetcher ?? fetch,
+        timeoutMs: 10000,
+      });
+      signal.throwIfAborted();
+      const [detail] = await this.records(detailUrl, signal, 1);
+      if (!detail || detail.externalId !== product.externalId)
+        throw new ProviderAdapterFailure("invalid_payload", false);
       return {
         status: "ready" as const,
         latencyMs: Date.now() - started,
         errorCode: null,
-        message: "Amazon 公开商品搜索页面可抓取。",
+        message: "Amazon 公开商品搜索与抽样详情页均可抓取。",
       };
     } catch (error) {
       return {
         status: "degraded" as const,
         latencyMs: Date.now() - started,
         errorCode: error instanceof ProviderAdapterFailure ? error.code : "network_error",
-        message: "Amazon 公开商品页当前不可解析。",
+        message: "Amazon 搜索或抽样详情页当前不可用；搜索成功不代表详情可采集。",
       };
     }
   }

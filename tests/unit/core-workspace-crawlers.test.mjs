@@ -213,7 +213,7 @@ test("Amazon adapter keeps injected transports for deterministic replay and repo
     },
     AbortSignal.timeout(1000),
   );
-  assert.equal(adapter.version, "amazon-public-product-adapter-v10");
+  assert.equal(adapter.version, "amazon-public-product-adapter-v11");
   assert.match(requestedUrl, /^https:\/\/www\.amazon\.com\/s\?k=storage%20box$/);
   assert.equal(result.records.length, 1);
 });

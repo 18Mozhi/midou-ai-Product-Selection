@@ -1,4 +1,16 @@
 {
+  "amazonHealthDetailProbe20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-health-detail-probe.md",
+    "sourceFiles": ["packages/provider-sources/src/adapters/index.ts"],
+    "tests": [
+      "tests/unit/amazon-health-detail.test.mjs",
+      "tests/unit/core-workspace-crawlers.test.mjs",
+      "tests/unit/amazon-public-reviews.test.mjs",
+      "tests/unit/amazon-detail-facts.test.mjs"
+    ],
+    "acceptance": "Pending deployed probe; Amazon detail access and daily complete-chain target unresolved."
+  },
   "collectionRequiredSourceHold20261018": {
     "status": "implemented",
     "requirements": "docs/collection-required-source-hold.md",
