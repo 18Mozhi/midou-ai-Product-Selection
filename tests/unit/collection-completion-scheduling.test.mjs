@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { MySqlCollectionTaskWorkerRepository } from "../../apps/worker/dist/collection-task-state-machine.js";
 import {
+  activeCollectionScopeSql,
   automaticCompletionTaskSql,
   collectionRequiredSourcesReadySql,
 } from "../../apps/worker/dist/collection-source-scheduling-policy.js";
@@ -50,12 +51,14 @@ function setup(options = {}) {
       if (sql.startsWith("SELECT * FROM collection_tasks"))
         return [
           options.noCandidate ||
+          (sql.includes(activeCollectionScopeSql("collection_tasks")) && options.scopeInactive) ||
           (sql.includes(collectionRequiredSourcesReadySql) &&
             (options.sourceOpen || options.sourceDisabled)) ||
           (sql.endsWith("FOR UPDATE") &&
             (options.lost ||
               options.sourceOpenedAfterSelection ||
-              options.sourceDisabledAfterSelection))
+              options.sourceDisabledAfterSelection ||
+              options.scopeArchivedAfterSelection))
             ? []
             : [row],
         ];
@@ -92,13 +95,15 @@ for (const method of ["queueReady", "claim"]) {
     assert.equal((await invoke(repository)).id, "task");
     const selections = calls.filter(([sql]) => sql.startsWith("SELECT * FROM collection_tasks"));
     assert.equal(selections.length, 2);
+    for (const [sql] of selections)
+      assert.ok(sql.includes(activeCollectionScopeSql("collection_tasks")));
     assert.match(selections[0][0], /ORDER BY/);
     assert.doesNotMatch(selections[0][0], /FOR UPDATE/);
     assert.match(selections[1][0], /WHERE id=\? AND organization_id=\? AND workspace_id=\?/);
     assert.doesNotMatch(selections[1][0], /ORDER BY/);
     assert.deepEqual(selections[1][1].slice(0, 3), ["task", "org", "workspace"]);
     if (method === "queueReady") {
-      assert.match(selections[1][0], /status IN .*available_at<=\? FOR UPDATE$/);
+      assert.match(selections[1][0], /status IN .*available_at<=\?.* FOR UPDATE$/);
       assert.equal(selections[1][1][3], now);
     } else {
       for (const [sql] of selections) assert.ok(sql.includes(collectionRequiredSourcesReadySql));
@@ -106,7 +111,12 @@ for (const method of ["queueReady", "claim"]) {
       assert.match(selections[1][0], / FOR UPDATE$/);
     }
   });
-  for (const options of [{ lost: true }, { noCandidate: true }]) {
+  for (const options of [
+    { lost: true },
+    { noCandidate: true },
+    { scopeInactive: true },
+    { scopeArchivedAfterSelection: true },
+  ]) {
     test(`${method} does not overwrite a missing or changed candidate: ${JSON.stringify(options)}`, async () => {
       const { repository, calls } = setup(options);
       assert.equal(await invoke(repository), null);
@@ -132,6 +142,8 @@ test("twenty committed claims are followed by one shared FIFO turn then completi
         ([sql]) => sql.includes("ORDER BY") && sql.startsWith("SELECT * FROM collection_tasks"),
       );
     assert.equal(selections.length, 2);
+    for (const [sql] of selections)
+      assert.ok(sql.includes(activeCollectionScopeSql("collection_tasks")));
     assert.equal(
       selections[0][0].slice(selections[0][0].indexOf(" ORDER BY")),
       selections[1][0].slice(selections[1][0].indexOf(" ORDER BY")),

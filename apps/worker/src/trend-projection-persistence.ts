@@ -1,3 +1,4 @@
+import { activeCollectionScopeSql } from "./collection-source-scheduling-policy.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
@@ -432,7 +433,7 @@ export class TrendProjectionPersistence {
        JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id AND s.competitor_id=c.id
          AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id
        LEFT JOIN (SELECT organization_id,COUNT(*) active_count FROM collection_tasks
-         WHERE status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')
+         WHERE ${activeCollectionScopeSql("collection_tasks")} AND status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')
          GROUP BY organization_id) busy ON busy.organization_id=c.organization_id
        LEFT JOIN (SELECT q.organization_id,q.workspace_id,
          JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id')) competitor_id
@@ -441,13 +442,13 @@ export class TrendProjectionPersistence {
          GROUP BY q.organization_id,q.workspace_id,competitor_id) recent
          ON recent.organization_id=c.organization_id AND recent.workspace_id=c.workspace_id
          AND recent.competitor_id=CONVERT(c.id USING utf8mb4) COLLATE utf8mb4_bin
-       WHERE c.status='active' AND c.deleted_at IS NULL AND c.source_site='Amazon'
+       WHERE ${activeCollectionScopeSql("c")} AND c.status='active' AND c.deleted_at IS NULL AND c.source_site='Amazon'
          AND c.external_id REGEXP '^[A-Z0-9]{10}$'
          AND c.product_url REGEXP CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',c.external_id,'([/?#]|$)')
          AND o.source_type='trend_topic' AND o.lifecycle_status NOT IN ('archived','deleted')
          AND s.captured_at<=?
          AND (SELECT COUNT(*) FROM collection_tasks backlog
-           WHERE backlog.status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'))<?
+           WHERE ${activeCollectionScopeSql("backlog")} AND backlog.status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'))<?
          AND busy.active_count IS NULL AND recent.competitor_id IS NULL
        ORDER BY s.captured_at,c.id LIMIT 1 FOR UPDATE`,
       [before, before, this.queueBacklogLimit],
@@ -505,7 +506,7 @@ export class TrendProjectionPersistence {
        JOIN workspaces active_workspace ON active_workspace.id=o.workspace_id
          AND active_workspace.organization_id=o.organization_id AND active_workspace.status='active'
        LEFT JOIN (SELECT organization_id,COUNT(*) active_count FROM collection_tasks
-         WHERE status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')
+         WHERE ${activeCollectionScopeSql("collection_tasks")} AND status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')
          GROUP BY organization_id) busy ON busy.organization_id=o.organization_id
        LEFT JOIN (SELECT q.organization_id,q.workspace_id,
          JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.opportunity_id')) opportunity_id,MAX(q.created_at) last_discovery_at
@@ -518,7 +519,7 @@ export class TrendProjectionPersistence {
          AND locked_opportunity.lifecycle_status NOT IN ('archived','deleted')
          AND (recent.last_discovery_at IS NULL OR recent.last_discovery_at<=?)
          AND busy.active_count IS NULL
-         AND (SELECT COUNT(*) FROM collection_tasks backlog WHERE backlog.status IN
+         AND (SELECT COUNT(*) FROM collection_tasks backlog WHERE ${activeCollectionScopeSql("backlog")} AND backlog.status IN
            ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'))<?
          AND NOT ${selectionCompetitionGateSql(5, "materialized")}
        HAVING LENGTH(TRIM(discovery_query))>0

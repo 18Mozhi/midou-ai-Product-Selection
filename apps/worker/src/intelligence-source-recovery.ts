@@ -1,6 +1,8 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 
+import { activeCollectionScopeSql } from "./collection-source-scheduling-policy.js";
+
 const activeStatuses =
   "('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')";
 const provenance =
@@ -70,7 +72,7 @@ export class IntelligenceSourceRecovery {
         return 0;
       }
       const [backlog] = await c.query<RowDataPacket[]>(
-        `SELECT COUNT(*) count FROM collection_tasks WHERE status IN ${activeStatuses}`,
+        `SELECT COUNT(*) count FROM collection_tasks WHERE ${activeCollectionScopeSql("collection_tasks")} AND status IN ${activeStatuses}`,
       );
       const limit = Math.min(
         20,

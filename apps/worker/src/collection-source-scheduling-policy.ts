@@ -1,3 +1,12 @@
+/** Archived or mismatched tenant scopes retain history but cannot consume collection capacity. */
+export const activeCollectionScopeSql = (
+  alias: "collection_tasks" | "ct" | "backlog" | "s" | "r" | "c",
+) =>
+  "EXISTS (SELECT 1 FROM organizations collection_scope_org " +
+  "JOIN workspaces collection_scope_workspace ON collection_scope_workspace.organization_id=collection_scope_org.id " +
+  `WHERE collection_scope_org.id=${alias}.organization_id AND collection_scope_org.status='active' ` +
+  `AND collection_scope_workspace.id=${alias}.workspace_id AND collection_scope_workspace.status='active')`;
+
 /** Durable producer provenance, never the caller-controlled request ID. */
 export const automaticIntelligenceTaskSql = (taskAlias: "ct" | "collection_tasks") =>
   "EXISTS (SELECT 1 FROM collection_task_events source_event " +

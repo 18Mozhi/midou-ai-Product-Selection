@@ -192,3 +192,16 @@ test("repair dependency failure is logged without blocking new intelligence proc
   assert.equal(fresh, 1);
   assert.deepEqual(warnings, [["intelligence_source_recovery_failed", "ER_LOCK_DEADLOCK"]]);
 });
+
+test("source recovery backlog counts only existing active organization and workspace scopes", async () => {
+  const { recovery, calls } = setup({ backlog: 1000 });
+  assert.equal(await recovery.processOnce(), 0);
+  const sql = calls.find(([sql]) =>
+    sql.startsWith("SELECT COUNT(*) count FROM collection_tasks"),
+  )[0];
+  assert.match(sql, /collection_scope_org.id=collection_tasks.organization_id/);
+  assert.match(sql, /collection_scope_workspace.organization_id=collection_scope_org.id/);
+  assert.match(sql, /collection_scope_workspace.id=collection_tasks.workspace_id/);
+  assert.match(sql, /collection_scope_org.status='active'/);
+  assert.match(sql, /collection_scope_workspace.status='active'/);
+});

@@ -9532,7 +9532,7 @@ components:
         priority:
           type: string
           enum: [low, normal, high, critical]
-          description: Explicit tiers remain ordered. Within a tier, audited full-source intake keeps precedence; proven Worker product-detail, competitor and sourcing tasks receive bounded preference, with one original FIFO turn after every twenty committed claims in the live Worker process. Queued work waits without consuming an attempt while a required source is disabled or its circuit is open; the existing typed 1688 acceptance exception remains.
+          description: Explicit tiers remain ordered. Within a tier, audited full-source intake keeps precedence; proven Worker product-detail, competitor and sourcing tasks receive bounded preference, with one original FIFO turn after every twenty committed claims in the live Worker process. Queued work waits without consuming an attempt while a required source is disabled or its circuit is open; the existing typed 1688 acceptance exception remains. Collection scheduling and capacity accounting require an existing active organization and its active workspace; archived history is retained without new claims or attempts.
         scheduled_at: { type: string, format: date-time }
         available_at: { type: string, format: date-time }
         attempt_count:

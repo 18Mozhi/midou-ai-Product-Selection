@@ -1,6 +1,9 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
-import { automaticIntelligenceTaskSql } from "./collection-source-scheduling-policy.js";
+import {
+  activeCollectionScopeSql,
+  automaticIntelligenceTaskSql,
+} from "./collection-source-scheduling-policy.js";
 
 export interface AutomaticSourceScheduleResult {
   status: "idle" | "scheduled" | "backpressure";
@@ -75,8 +78,13 @@ export class MySqlAutomaticSourceScheduler {
       const [schedules] = await c.query<RowDataPacket[]>(
         statement(
           "SELECT s.* FROM automatic_source_schedules s WHERE s.next_scheduled_at<=? ",
+          "AND ",
+          activeCollectionScopeSql("s"),
+          " ",
           "AND (SELECT COUNT(*) FROM collection_tasks ct ",
           "WHERE ct.organization_id=s.organization_id AND ",
+          activeCollectionScopeSql("ct"),
+          " AND ",
           automaticIntelligenceTaskSql("ct"),
           " AND ct.status IN ",
           "('scheduled','queued','leased','running','parsing','validating',",
@@ -89,7 +97,8 @@ export class MySqlAutomaticSourceScheduler {
       const schedule = schedules[0];
       if (!schedule) {
         const [dueSchedules] = await c.query<RowDataPacket[]>(
-          "SELECT COUNT(*) count FROM automatic_source_schedules WHERE next_scheduled_at<=?",
+          "SELECT COUNT(*) count FROM automatic_source_schedules s WHERE s.next_scheduled_at<=? AND " +
+            activeCollectionScopeSql("s"),
           [now],
         );
         await c.commit();
@@ -240,9 +249,14 @@ export class MySqlAutomaticSourceScheduler {
     const [rules] = await c.query<RowDataPacket[]>(
       statement(
         "SELECT r.* FROM trend_monitoring_rules r WHERE r.status='enabled' ",
+        "AND ",
+        activeCollectionScopeSql("r"),
+        " ",
         "AND (r.next_collection_at IS NULL OR r.next_collection_at<=?) ",
         "AND (SELECT COUNT(*) FROM collection_tasks ct ",
-        "WHERE ct.organization_id=r.organization_id AND ct.status IN ",
+        "WHERE ct.organization_id=r.organization_id AND ",
+        activeCollectionScopeSql("ct"),
+        " AND ct.status IN ",
         "('scheduled','queued','leased','running','parsing','validating',",
         "'retry_scheduled','rate_limited'))<? ",
         "ORDER BY COALESCE(r.next_collection_at,'1000-01-01'),",
@@ -254,7 +268,8 @@ export class MySqlAutomaticSourceScheduler {
     const rule = rules[0];
     if (!rule) {
       const [dueRules] = await c.query<RowDataPacket[]>(
-        "SELECT COUNT(*) count FROM trend_monitoring_rules WHERE status='enabled' AND (next_collection_at IS NULL OR next_collection_at<=?)",
+        "SELECT COUNT(*) count FROM trend_monitoring_rules r WHERE r.status='enabled' AND (r.next_collection_at IS NULL OR r.next_collection_at<=?) AND " +
+          activeCollectionScopeSql("r"),
         [now],
       );
       return Number(dueRules[0]?.count ?? 0) > 0
@@ -419,7 +434,9 @@ export class MySqlAutomaticSourceScheduler {
   private async backlog(c: PoolConnection) {
     const [rows] = await c.query<RowDataPacket[]>(
       statement(
-        "SELECT COUNT(*) count FROM collection_tasks WHERE status IN ",
+        "SELECT COUNT(*) count FROM collection_tasks WHERE ",
+        activeCollectionScopeSql("collection_tasks"),
+        " AND status IN ",
         "('scheduled','queued','leased','running','parsing','validating',",
         "'retry_scheduled','rate_limited')",
       ),

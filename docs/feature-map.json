@@ -6418,5 +6418,23 @@
       "tests/unit/responsive-detail-palette-contract.test.mjs"
     ],
     "contract": "Eight existing source/collection routes use one full-width top navigation. Remove36 obsolete rail/navigation rules and three centered width caps. Original SFC templates, links, capability guards, API/schema/env/Python unchanged. Desktop/mobile16 controlled read-error layout checks pass; no new font, dependency or motion. Production visual and full daily100 acceptance remain independent."
+  },
+  "selectionActiveScopeScheduling20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-active-scope-scheduling.md",
+    "sourceFiles": [
+      "apps/worker/src/collection-source-scheduling-policy.ts",
+      "apps/worker/src/collection-task-state-machine.ts",
+      "apps/worker/src/automatic-source-scheduler.ts",
+      "apps/worker/src/intelligence-source-recovery.ts",
+      "apps/worker/src/trend-projection-persistence.ts"
+    ],
+    "testFiles": [
+      "tests/unit/collection-completion-scheduling.test.mjs",
+      "tests/unit/automatic-source-fairness.test.mjs",
+      "tests/unit/intelligence-source-recovery.test.mjs",
+      "tests/unit/trend-projection-worker-scheduling.test.mjs"
+    ],
+    "contract": "Existing active organization and same-organization active workspace required at candidate/identity recheck and scheduling/backlog accounting. Archived/missing/mismatched scopes preserve history and consume no new claim/attempt or capacity. No deletion, migration, dependency, permission or new API/config fields. Existing in-flight lease completion, source holds, retry, priority and fairness unchanged. Six actual MySQL5.7 read-only derived cases passed; 220 real archived tasks all excluded. Deployment and daily100 acceptance remain separate."
   }
 }

@@ -12,6 +12,7 @@ import {
 } from "./collection-task-contracts.js";
 import { completeCollectionTask } from "./collection-task-evidence.js";
 import {
+  activeCollectionScopeSql,
   collectionReadyOrderSql,
   collectionRequiredSourcesReadySql,
 } from "./collection-source-scheduling-policy.js";
@@ -78,6 +79,8 @@ export class MySqlCollectionTaskWorkerRepository {
       const sql =
           "SELECT * FROM collection_tasks WHERE status IN ('scheduled','retry_scheduled','rate_limited') AND available_at<=?" +
           (this.taskId ? " AND id=?" : "") +
+          " AND " +
+          activeCollectionScopeSql("collection_tasks") +
           this.readyOrder(),
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [now, this.taskId] : [now]);
       const candidate = rows[0];
@@ -87,7 +90,10 @@ export class MySqlCollectionTaskWorkerRepository {
       }
       const [locked] = await c.query<RowDataPacket[]>(
         "SELECT * FROM collection_tasks WHERE id=? AND organization_id=? AND workspace_id=? " +
-          "AND status IN ('scheduled','retry_scheduled','rate_limited') AND available_at<=? FOR UPDATE",
+          "AND status IN ('scheduled','retry_scheduled','rate_limited') AND available_at<=?" +
+          " AND " +
+          activeCollectionScopeSql("collection_tasks") +
+          " FOR UPDATE",
         [candidate.id, candidate.organization_id, candidate.workspace_id, now],
       );
       const row = locked[0];
@@ -137,6 +143,8 @@ export class MySqlCollectionTaskWorkerRepository {
       const sql =
           "SELECT * FROM collection_tasks WHERE status='queued' AND attempt_count<4" +
           (this.taskId ? " AND id=?" : "") +
+          " AND " +
+          activeCollectionScopeSql("collection_tasks") +
           collectionRequiredSourcesReadySql +
           this.readyOrder(),
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [this.taskId] : []);
@@ -148,6 +156,8 @@ export class MySqlCollectionTaskWorkerRepository {
       const [locked] = await c.query<RowDataPacket[]>(
         "SELECT * FROM collection_tasks WHERE id=? AND organization_id=? AND workspace_id=? " +
           "AND status='queued' AND attempt_count<4" +
+          " AND " +
+          activeCollectionScopeSql("collection_tasks") +
           collectionRequiredSourcesReadySql +
           " FOR UPDATE",
         [candidate.id, candidate.organization_id, candidate.workspace_id],

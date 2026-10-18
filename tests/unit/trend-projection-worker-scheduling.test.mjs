@@ -237,3 +237,32 @@ test("failed bounded repair does not permanently block fresh projection work", a
   await assert.rejects(worker.processOnce(), /repair failed/);
   assert.equal((await worker.processOnce()).status, "succeeded");
 });
+
+for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscovery"]) {
+  test(`${method} applies active tenant scope to global and tenant capacity`, async () => {
+    const { TrendProjectionPersistence } =
+      await import("../../apps/worker/dist/trend-projection-persistence.js");
+    const { activeCollectionScopeSql } =
+      await import("../../apps/worker/dist/collection-source-scheduling-policy.js");
+    const statements = [];
+    const connection = {
+      query: async (sql, values) => {
+        statements.push(sql);
+        assert.equal(values.at(-1), 1000);
+        return [[]];
+      },
+    };
+    const persistence = new TrendProjectionPersistence({}, "worker", () => now);
+    assert.equal(await persistence[method](connection, "amazon", now), false);
+    assert.equal(statements.length, 1);
+    assert.ok(statements[0].includes(activeCollectionScopeSql("backlog")));
+    assert.ok(statements[0].includes(activeCollectionScopeSql("collection_tasks")));
+    if (method === "enqueueDueCompetitorRefresh")
+      assert.ok(statements[0].includes(activeCollectionScopeSql("c")));
+    else
+      assert.match(
+        statements[0],
+        /active_workspace.organization_id=o.organization_id AND active_workspace.status='active'/,
+      );
+  });
+}
