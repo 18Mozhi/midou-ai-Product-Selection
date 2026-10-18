@@ -92,7 +92,7 @@ test("explicit JSON-LD facts keep original provenance and parser version changes
   );
   assert.equal(p.fields.price, 21.25);
   assert.match(p.source_paths.price, /amazon.jsonld/);
-  assert.equal(new AmazonProductSearchAdapter().version, "amazon-public-product-adapter-v11");
+  assert.equal(new AmazonProductSearchAdapter().version, "amazon-public-product-adapter-v12");
 });
 
 test("search blank labels and missing images remain unknown; attribute order is independent", () => {
@@ -136,4 +136,22 @@ test("JSON-LD fallback outside both primary columns retains the actual price blo
   assert.equal(p.fields.price, 17.99);
   assert.equal(p.content_type, "application/json");
   assert.ok(JSON.parse(p.raw_content).price_html.includes(`data-csa-c-asin="${asin}"`));
+});
+
+test("observed onload greater-than does not truncate the primary image tag", () => {
+  const p = read(
+    page(
+      "",
+      `<img onload="if (this.naturalWidth > 0) this.dataset.ready='yes';" src="${image}" id="landingImage">`,
+    ),
+  );
+  assert.equal(p.fields.image_url, image);
+  assert.match(p.source_paths.image_url, /leftCol/);
+});
+
+test("attribute values cannot impersonate a primary image id or source", () => {
+  const decoy = `<img data-note=" id='landingImage' " id="secondaryImage" src="${image}">`;
+  assert.equal(read(page("", decoy)).fields.image_url, null);
+  const real = `<img data-note=" src='https://evil.test/image.jpg' " id="landingImage" src="${image}">`;
+  assert.equal(read(page("", real)).fields.image_url, image);
 });

@@ -1,4 +1,18 @@
 {
+  "amazonPrimaryImageAttributeFix20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-primary-image-attribute-fix.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/parsers/amazon-product-facts.ts",
+      "packages/provider-sources/src/adapters/index.ts"
+    ],
+    "tests": [
+      "tests/unit/amazon-detail-facts.test.mjs",
+      "tests/unit/amazon-public-reviews.test.mjs",
+      "tests/unit/core-workspace-crawlers.test.mjs"
+    ],
+    "acceptance": "Real anonymous DOM replay restores primary image; 85 related tests pass. Price region was truncated from the bounded capture; browser transport integration, HTTP permission gate and daily100 remain unaccepted."
+  },
   "collectionDatabaseFailureContext20261018": {
     "status": "implemented",
     "requirements": "docs/collection-database-failure-context.md",

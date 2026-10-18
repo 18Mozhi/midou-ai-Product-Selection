@@ -1,8 +1,13 @@
 import { amazonDivContent, amazonTagContent } from "./amazon-public-signals.js";
 
 const unescape = (value: string) => value.replace(/&amp;/g, "&").replace(/&quot;/g, '"');
-const attribute = (tag: string, name: string) =>
-  new RegExp(`(?:^|\\s)${name}=["']([^"']*)["']`, "i").exec(tag)?.[1];
+const attribute = (tag: string, name: string) => {
+  // Consume each complete quoted value before looking for the next name. Text
+  // inside an onload/data attribute is never another HTML attribute.
+  for (const match of tag.matchAll(/\s([A-Za-z_:][A-Za-z0-9_.:-]*)\s*=\s*(?:"([^"]*)"|'([^']*)')/g))
+    if (match[1]!.toLowerCase() === name.toLowerCase()) return match[2] ?? match[3];
+  return undefined;
+};
 const visibleMarkup = (html: string) =>
   html.replace(/<!--[\s\S]*?-->|<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, (value) =>
     " ".repeat(value.length),
@@ -80,7 +85,9 @@ export function amazonDetailFacts(html: string, primaryColumn: string | null, as
   const imageColumn = block(html, "leftCol");
   const imageTag =
     imageColumn &&
-    visibleMarkup(imageColumn.body).match(/<img\b(?=[^>]*\bid=["']landingImage["'])[^>]*>/i)?.[0];
+    [...visibleMarkup(imageColumn.body).matchAll(/<img\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi)]
+      .map((match) => match[0])
+      .find((tag) => attribute(tag, "id") === "landingImage");
   const imageUrl = imageTag
     ? (amazonImageUrl(attribute(imageTag, "data-old-hires")) ??
       amazonImageUrl(attribute(imageTag, "src")))
