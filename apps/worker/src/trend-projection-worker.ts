@@ -1,4 +1,7 @@
-import { activeCollectionScopeSql } from "./collection-source-scheduling-policy.js";
+import {
+  activeCollectionScopeSql,
+  automaticCollectionBacklogCountSql,
+} from "./collection-source-scheduling-policy.js";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import {
   buildSupplierSearchQuery,
@@ -66,7 +69,7 @@ export class MySqlTrendProjectionWorker {
     private readonly now: () => Date = () => new Date(),
     private readonly intelligence?: IntelligenceProductClassifier,
     refreshIntervalSeconds = 3600,
-    queueBacklogLimit = 1000,
+    private readonly queueBacklogLimit = 1000,
   ) {
     this.sourceRecovery = new IntelligenceSourceRecovery(pool, workerId, now, queueBacklogLimit);
     this.persistence = new TrendProjectionPersistence(
@@ -254,9 +257,9 @@ export class MySqlTrendProjectionWorker {
     try {
       await c.beginTransaction();
       const [candidates] = await c.query<RowDataPacket[]>(
-        `SELECT id,organization_id,workspace_id FROM trend_projection_jobs WHERE ${activeCollectionScopeSql("trend_projection_jobs")} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?))` +
+        `SELECT id,organization_id,workspace_id FROM trend_projection_jobs WHERE ${activeCollectionScopeSql("trend_projection_jobs")} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) AND ${automaticCollectionBacklogCountSql}<?` +
           intelligenceFirstOrderSql,
-        [now, now],
+        [now, now, this.queueBacklogLimit],
       );
       const candidate = candidates[0];
       if (!candidate) {

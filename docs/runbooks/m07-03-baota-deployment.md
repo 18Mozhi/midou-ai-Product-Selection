@@ -36,3 +36,5 @@
 - 版本或配置指纹不一致：停止签发，恢复同一上一稳定 commit 与环境快照。
 
 回滚时先冻结新写入，在本地切到上一签发提交并重新运行固定目录部署，按数据影响决定是否逆序迁移，然后由宝塔重启 Node/Python，重新验证 live/ready/version、子进程心跳与审计。不得删除失败发布记录、`config/runtime/backups` 或审计证据。M07-04 完成后也只能声明同机逻辑恢复，不可声称整机或异地灾备能力。
+
+2026-10-19自动新增投影也遵循现有AUTOMATIC_SOURCE_QUEUE_BACKLOG_LIMIT；详情/货源已完成结果继续消费。Node Worker启动读取该值，修改配置或发布代码后须由宝塔重启ai选品，单独此项不需Python重启。准入并非全局原子硬预留；见[自动新增投影背压](../selection-automatic-fanout-backpressure.md)。

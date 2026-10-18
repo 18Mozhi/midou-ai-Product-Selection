@@ -6977,5 +6977,22 @@
       "tests/unit/lan-1688-recovery.test.mjs"
     ],
     "contract": "Materialize original circuit-recovery eligibility, resolve current primary once and exclude missing/disallowed current images before the original FIFO LIMIT1. Preserve exact PK lock, task-link/eligibility recheck and fresh image read before scheduling; do not delete or mark image-less rows or alter old tasks/quotes. No API/event/schema/config/dependency/timeout/retry/concurrency/frontend/Python change. Compiled SQL MySQL57 read-only EXPLAIN+SELECT333ms; natural recovery and daily100 require separate proof."
+  },
+  "selectionAutomaticFanoutBackpressure20261019": {
+    "status": "implemented",
+    "requirements": "docs/selection-automatic-fanout-backpressure.md",
+    "sourceFiles": [
+      "apps/worker/src/collection-source-scheduling-policy.ts",
+      "apps/worker/src/trend-projection-worker.ts",
+      "apps/worker/src/core-collection-projection-worker.ts",
+      "apps/worker/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-fanout-admission.test.mjs",
+      "tests/fixtures/automatic-fanout-admission-sql.mjs",
+      "tests/unit/trend-projection-worker-scheduling.test.mjs",
+      "tests/unit/core-projection-claim-locking.test.mjs"
+    ],
+    "contract": "New trend and opportunity_competitors projection candidates defer before claim at existing active-scope unfinished collection backlog threshold. Existing details/sourcing projection and repair continue. No attempt/reset/identity/fact/gate/API/schema/permission/new setting changes. Admission threshold, not atomic global reservation; Node restart required, natural recovery and daily100 unverified."
   }
 }

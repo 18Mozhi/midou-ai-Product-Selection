@@ -1,3 +1,4 @@
+import { automaticCollectionBacklogCountSql } from "./collection-source-scheduling-policy.js";
 import { randomUUID } from "node:crypto";
 import { competitorDetailEvidenceSql } from "@scoutops/database";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
@@ -49,6 +50,7 @@ export class CoreCollectionProjectionWorker {
     private readonly pool: Pool,
     private readonly workerId: string,
     private readonly now: () => Date = () => new Date(),
+    private readonly queueBacklogLimit = 1000,
   ) {}
 
   async processOnce() {
@@ -107,7 +109,10 @@ export class CoreCollectionProjectionWorker {
          WHERE r.id IS NULL
            AND t.status IN ('succeeded','succeeded_empty','completed_with_warnings')
            AND JSON_UNQUOTE(JSON_EXTRACT(s.target_json,'$.projection_type')) IN ('opportunity_competitors','competitor_snapshot','sourcing_search')
+           AND (JSON_UNQUOTE(JSON_EXTRACT(s.target_json,'$.projection_type'))<>'opportunity_competitors'
+             OR ${automaticCollectionBacklogCountSql}<?)
          ORDER BY t.finished_at,t.id LIMIT 1`,
+        [this.queueBacklogLimit],
       );
       const candidate = rows[0];
       if (!candidate) {

@@ -79,3 +79,9 @@ export const collectionReadyOrderSql = (completionFirst: boolean) =>
   "END," +
   (completionFirst ? "CASE WHEN " + pendingBrowserResultSql + " THEN 0 ELSE 1 END," : "") +
   "available_at,id LIMIT 1";
+
+/** Shared admission threshold: count only unfinished collection work in active matching scopes. */
+export const automaticCollectionBacklogCountSql =
+  "(SELECT COUNT(*) FROM collection_tasks backlog WHERE " +
+  activeCollectionScopeSql("backlog") +
+  " AND backlog.status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'))";

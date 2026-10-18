@@ -202,7 +202,12 @@ const automaticSelectionEvaluation = new MySqlAutomaticSelectionEvaluationWorker
     Math.min(config.ai.timeoutMs, config.automaticSelection.leaseSeconds * 500),
   ),
 );
-const coreCollectionProjection = new CoreCollectionProjectionWorker(pool, config.identity.workerId);
+const coreCollectionProjection = new CoreCollectionProjectionWorker(
+  pool,
+  config.identity.workerId,
+  () => new Date(),
+  config.automaticSources.queueBacklogLimit,
+);
 const pollers = new WorkerPollers();
 const schedulerStateWriter = new WorkerSchedulerStateWriter(
   config.runtime.workerSchedulerStateFile,
