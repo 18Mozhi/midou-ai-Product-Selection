@@ -4,7 +4,13 @@ import { recoverSupersededIntelligenceProjections } from "../../apps/worker/dist
 const jobId = "00000000-0000-4000-8000-000000000001";
 const now = new Date("2026-10-18T07:00:00Z"),
   scope = { organizationId: "org", workspaceId: "workspace", projectionJobIds: [jobId] };
-function fixture({ empty = false, lost = false, changed = false, auditFailure = false } = {}) {
+function fixture({
+  empty = false,
+  lost = false,
+  changed = false,
+  auditFailure = false,
+  eligibilityLost = false,
+} = {}) {
   const calls = [],
     state = { commits: 0, rollbacks: 0, releases: 0 };
   let scanned = false;
@@ -15,9 +21,11 @@ function fixture({ empty = false, lost = false, changed = false, auditFailure = 
     release: () => state.releases++,
     query: async (sql, params) => {
       calls.push({ sql, params });
+      if (sql.startsWith("SELECT id FROM trend_projection_jobs"))
+        return [lost ? [] : [{ id: jobId }]];
       if (sql.startsWith("SELECT"))
         return [
-          lost
+          eligibilityLost
             ? []
             : [
                 {
@@ -60,7 +68,13 @@ test("historical provenance correction is scoped, bounded and atomically audited
   assert.match(candidate.sql, /history.actor_type='worker'/);
   assert.match(candidate.sql, /JSON_CONTAINS/);
   assert.match(candidate.sql, /collection_scope_org.status='active'/);
-  assert.match(f.calls[1].sql, /AND trend_projection_jobs.id=\? LIMIT 1 FOR UPDATE$/);
+  assert.match(
+    f.calls[1].sql,
+    /WHERE id=\? AND organization_id=\? AND workspace_id=\?.*FOR UPDATE$/,
+  );
+  assert.doesNotMatch(f.calls[1].sql, /JOIN|ORDER BY/);
+  assert.doesNotMatch(f.calls[2].sql, /FOR UPDATE/);
+  assert.match(f.calls[2].sql, /AND trend_projection_jobs.id=\? LIMIT 1$/);
   const update = f.calls.find((c) => c.sql.startsWith("UPDATE"));
   assert.doesNotMatch(update.sql, /attempt_count\s*=/);
   assert.deepEqual(update.params, [now, now, jobId, "org", "workspace"]);
@@ -116,4 +130,16 @@ test("recovery requires an explicit bounded list of verified projection IDs", as
       /targets_invalid/,
     );
   assert.equal(f.calls.length, 0);
+});
+
+test("evidence eligibility lost after the primary-key lock performs no requeue", async () => {
+  const f = fixture({ eligibilityLost: true });
+  assert.deepEqual(
+    (await recoverSupersededIntelligenceProjections(f.pool, scope, now)).requeued,
+    [],
+  );
+  assert.equal(
+    f.calls.some((c) => c.sql.startsWith("UPDATE")),
+    false,
+  );
 });

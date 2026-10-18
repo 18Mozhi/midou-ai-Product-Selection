@@ -50,10 +50,18 @@ export async function recoverSupersededIntelligenceProjections(
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
+      const [locked] = await connection.query<RowDataPacket[]>(
+        "SELECT id FROM trend_projection_jobs WHERE id=? AND organization_id=? AND workspace_id=? AND status='failed_terminal' AND last_error_code='intelligence_provenance_invalid' FOR UPDATE",
+        [candidate.id, scope.organizationId, scope.workspaceId],
+      );
+      if (!locked[0]) {
+        await connection.commit();
+        continue;
+      }
       const [rows] = await connection.query<RowDataPacket[]>(
         "SELECT trend_projection_jobs.id,trend_projection_jobs.attempt_count,trend_projection_jobs.updated_at,history.resource_id topic_id,n.created_by actor_id,original.id source_record_id" +
           intelligenceProvenanceRecoveryFromSql +
-          " AND trend_projection_jobs.id=? LIMIT 1 FOR UPDATE",
+          " AND trend_projection_jobs.id=? LIMIT 1",
         [scope.organizationId, scope.workspaceId, candidate.id],
       );
       const job = rows[0];
