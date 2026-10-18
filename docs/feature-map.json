@@ -1348,7 +1348,7 @@
   },
   "selectionPlatformToolbar20261017": {
     "status": "implemented",
-    "statusDetail": "targeted_browser_and_build_checks_passed_not_deployed_full_site_pending",
+    "statusDetail": "deployed_cfdca3e6_real_chrome_desktop_mobile_layout_verified_full_site_pending",
     "requirements": "docs/selection-platform-toolbar.md",
     "routes": [
       "/platform-admin",
@@ -6993,6 +6993,7 @@
       "tests/unit/trend-projection-worker-scheduling.test.mjs",
       "tests/unit/core-projection-claim-locking.test.mjs"
     ],
-    "contract": "New trend and opportunity_competitors projection candidates defer before claim at existing active-scope unfinished collection backlog threshold. Existing details/sourcing projection and repair continue. No attempt/reset/identity/fact/gate/API/schema/permission/new setting changes. Admission threshold, not atomic global reservation; Node restart required, natural recovery and daily100 unverified."
+    "contract": "New trend and opportunity_competitors projection candidates defer before claim at existing active-scope unfinished collection backlog threshold. Existing details/sourcing projection and repair continue. No attempt/reset/identity/fact/gate/API/schema/permission/new setting changes. Admission threshold, not atomic global reservation; Node restart required, natural recovery and daily100 unverified.",
+    "statusDetail": "deployed_9d6ee468_hashes_matched_natural_pause_resume_and_daily100_pending"
   }
 }
