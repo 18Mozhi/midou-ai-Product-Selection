@@ -8,7 +8,7 @@
       "tests/integration/amazon-delivery-readiness.test.mjs",
       "tests/unit/amazon-delivery-context.test.mjs"
     ],
-    "contract": "Only a real legacy postal-confirmation TimeoutError, an absent original ZIP input and an available original-URL reread permit the closed-form path. Recheck anonymous/origin/challenge guards, omit unavailable Done, perform existing guarded original-URL reread and require strict configured postal header. Missing controls or HTTP address-update success alone never prove region. Legacy flow, aborted-reread bound, all budgets, API fields, schema, config values, dependency/frontend/Python and source/circuit states unchanged."
+    "contract": "Legacy confirmation TimeoutError, absent ZIP input and original-URL reread required. Only the closed-form overlay may ARIA-hide a CSS-visible exact anonymous link; initial/final anonymous gates stay strict. No CSS-hidden, signed-in, challenge or stale postal bypass. Skip absent Done, reuse bounded guarded reread, require configured postal header. Missing controls or HTTP address-update success never prove region. No budget/config/API/schema/dependency/frontend/Python/source/circuit change."
   },
   "competitorDiscoveryResourceAdmission20261018": {
     "status": "implemented",

@@ -8,6 +8,10 @@ test("closed postal form requires an actual original-URL reread and strict targe
   try {
     for (const scenario of [
       "accepted",
+      "aria_hidden",
+      "css_hidden",
+      "aria_hidden_signed_in",
+      "initial_aria_hidden",
       "rejected",
       "wrong_postal",
       "input_remains",
@@ -27,14 +31,16 @@ test("closed postal form requires an actual original-URL reread and strict targe
           contentType: "text/html",
           body: rereads
             ? `<a href="/signin">Hello, sign in Account &amp; Lists</a><span id="glow-ingress-block">${observedApplication ? `Deliver to San Mateo ${scenario === "wrong_postal" ? "95001" : "94404"}` : "Deliver to Taiwan"}</span>`
-            : `<a id="account" href="/signin">Hello, sign in Account &amp; Lists</a>
+            : `<a id="account" href="/signin" ${scenario === "initial_aria_hidden" ? 'aria-hidden="true"' : ""}>Hello, sign in Account &amp; Lists</a>
           <span id="glow-ingress-block">Deliver to Taiwan</span>
           <button id="nav-global-location-popover-link">Location</button>
           <section id="postal-form"><input id="GLUXZipUpdateInput"><span id="GLUXZipUpdate"><input type="button" value="Apply"></span></section>
           <script>document.querySelector('#GLUXZipUpdate input').onclick=()=>{
           window.postalApplied=${scenario !== "rejected"};
           ${scenario === "input_remains" ? "document.querySelector('#postal-form').hidden=true;" : "document.querySelector('#postal-form').remove();"}
-          ${scenario === "signed_in" ? "document.querySelector('#account').textContent='Hello, Account & Lists';" : ""}
+          ${["signed_in", "aria_hidden_signed_in"].includes(scenario) ? "document.querySelector('#account').textContent='Hello, Account & Lists';" : ""}
+          ${["aria_hidden", "aria_hidden_signed_in"].includes(scenario) ? "document.querySelector('#account').setAttribute('aria-hidden','true');" : ""}
+          ${scenario === "css_hidden" ? "document.querySelector('#account').style.display='none';" : ""}
           ${scenario === "challenge" ? "document.body.insertAdjacentHTML('beforeend','<form action=\"/validateCaptcha\"></form>');" : ""}
           };</script>`,
         }),
@@ -62,7 +68,7 @@ test("closed postal form requires an actual original-URL reread and strict targe
         reread,
         2000,
       );
-      if (scenario === "accepted") {
+      if (["accepted", "aria_hidden"].includes(scenario)) {
         assert.equal(await preparation, true);
         assert.equal(rereads, 1);
         assert.match(await page.locator("#glow-ingress-block").textContent(), /94404/);

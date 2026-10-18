@@ -11,11 +11,15 @@ export async function prepareAmazonDeliveryContext(
 ) {
   if (typeof postalCode !== "string" || !/^\d{5}$/.test(postalCode))
     throw new Error("amazon_delivery_postal_invalid");
-  const assertAnonymous = async () => {
+  const assertAnonymous = async (includeAriaHidden = false) => {
     await assertSafe();
     if (
       !(await page
-        .getByRole("link", { name: "Hello, sign in Account & Lists", exact: true })
+        .getByRole("link", {
+          name: "Hello, sign in Account & Lists",
+          exact: true,
+          includeHidden: includeAriaHidden,
+        })
         .isVisible())
     )
       throw new Error("amazon_delivery_requires_anonymous_page");
@@ -67,7 +71,9 @@ export async function prepareAmazonDeliveryContext(
     // Its absence proves nothing: only the original-URL reread and final strict
     // postal header can establish the observation region below.
     reportStep("postal_form_closed_guard");
-    await assertAnonymous();
+    // A confirmation overlay can aria-hide the still CSS-visible account link.
+    // This branch still requires its exact anonymous label and CSS visibility.
+    await assertAnonymous(true);
     postalFormClosed = true;
   }
   await assertSafe();
