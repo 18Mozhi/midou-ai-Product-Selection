@@ -1,4 +1,15 @@
 {
+  "selectionCoreProjectionClaimLocking20261019": {
+    "status": "implemented",
+    "requirements": "docs/core-projection-claim-locking.md",
+    "sourceFiles": ["apps/worker/src/core-collection-projection-worker.ts"],
+    "testFiles": [
+      "tests/unit/core-projection-claim-locking.test.mjs",
+      "tests/unit/competitor-discovery-policy.test.mjs",
+      "tests/unit/amazon-observation-lineage.test.mjs"
+    ],
+    "contract": "Core projection candidate filesort is nonlocking. Selected task and subquery current reads are primary-key and tenant scoped, followed by unique task-run current read. Concurrent disappearance, ineligibility or duplicate claim yields no insert. Original target types, terminal statuses, order, unique guard and downstream facts remain. No new settings, schema, API, retry or permissions. Live evidence proves a broad locking scan and an evidence deadlock, not its full counterpart cycle."
+  },
   "selectionCollectionFailureDiagnostic20261019": {
     "status": "implemented",
     "requirements": "docs/collection-internal-failure-diagnostic.md",

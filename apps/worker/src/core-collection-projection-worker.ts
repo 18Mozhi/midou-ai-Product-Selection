@@ -107,13 +107,50 @@ export class CoreCollectionProjectionWorker {
          WHERE r.id IS NULL
            AND t.status IN ('succeeded','succeeded_empty','completed_with_warnings')
            AND JSON_UNQUOTE(JSON_EXTRACT(s.target_json,'$.projection_type')) IN ('opportunity_competitors','competitor_snapshot','sourcing_search')
-         ORDER BY t.finished_at,t.id LIMIT 1 FOR UPDATE`,
+         ORDER BY t.finished_at,t.id LIMIT 1`,
       );
-      const row = rows[0];
-      if (!row) {
+      const candidate = rows[0];
+      if (!candidate) {
         await c.commit();
         return null;
       }
+      // The filesorted backlog read must not lock unrelated running collectors.
+      // Recheck the selected identities with current locking reads in task/query order.
+      const [tasks] = await c.query<RowDataPacket[]>(
+        "SELECT id,organization_id,workspace_id,request_id,trace_id,created_by FROM collection_tasks " +
+          "WHERE id=? AND organization_id=? AND workspace_id=? " +
+          "AND status IN ('succeeded','succeeded_empty','completed_with_warnings') FOR UPDATE",
+        [candidate.id, candidate.organization_id, candidate.workspace_id],
+      );
+      if (!tasks[0]) {
+        await c.commit();
+        return null;
+      }
+      const [queries] = await c.query<RowDataPacket[]>(
+        "SELECT target_json,id classification_subquery_id FROM collection_subqueries " +
+          "WHERE id=? AND task_id=? AND organization_id=? AND workspace_id=? " +
+          "AND JSON_UNQUOTE(JSON_EXTRACT(target_json,'$.projection_type')) " +
+          "IN ('opportunity_competitors','competitor_snapshot','sourcing_search') FOR UPDATE",
+        [
+          candidate.classification_subquery_id,
+          candidate.id,
+          candidate.organization_id,
+          candidate.workspace_id,
+        ],
+      );
+      if (!queries[0]) {
+        await c.commit();
+        return null;
+      }
+      const [existing] = await c.query<RowDataPacket[]>(
+        "SELECT id FROM core_collection_projection_runs WHERE collection_task_id=? FOR UPDATE",
+        [candidate.id],
+      );
+      if (existing[0]) {
+        await c.commit();
+        return null;
+      }
+      const row = { ...tasks[0], ...queries[0] };
       const target = parse<Record<string, unknown>>(row.target_json),
         projectionType = String(target.projection_type) as ProjectionType,
         resourceKey =

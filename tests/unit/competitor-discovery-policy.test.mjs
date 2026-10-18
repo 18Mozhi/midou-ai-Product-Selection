@@ -126,7 +126,11 @@ async function project(
   const calls = [];
   const query = async (sql, args = []) => {
     calls.push({ sql, args });
-    if (sql.includes("FROM collection_tasks t"))
+    if (
+      sql.includes("FROM collection_tasks t") ||
+      sql.startsWith("SELECT id,organization_id") ||
+      sql.startsWith("SELECT target_json")
+    )
       return [
         [
           {
@@ -146,6 +150,7 @@ async function project(
           },
         ],
       ];
+    if (sql.startsWith("SELECT id FROM core_collection_projection_runs")) return [[]];
     if (sql.startsWith("SELECT payload_json FROM opportunity_events")) {
       if (!proof) return [[]];
       const context = await readCompetitorClassificationContext(
