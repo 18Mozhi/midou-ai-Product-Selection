@@ -6995,5 +6995,21 @@
     ],
     "contract": "New trend and opportunity_competitors projection candidates defer before claim at existing active-scope unfinished collection backlog threshold. Existing details/sourcing projection and repair continue. No attempt/reset/identity/fact/gate/API/schema/permission/new setting changes. Admission threshold, not atomic global reservation; Node restart required, natural recovery and daily100 unverified.",
     "statusDetail": "deployed_9d6ee468_hashes_matched_natural_pause_resume_and_daily100_pending"
+  },
+  "selectionCatalogueReadPerformance20261019": {
+    "status": "implemented",
+    "requirements": "docs/selection-catalogue-read-performance.md",
+    "sourceFiles": [
+      "apps/api/src/opportunity-list-projection.ts",
+      "apps/api/src/mysql-opportunity-repository.ts"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-list-projection.test.mjs",
+      "tests/fixtures/opportunity-list-sql.mjs",
+      "tests/unit/opportunity-primary-product.test.mjs",
+      "tests/e2e/m04-10-selection-http.spec.ts",
+      "tests/m04-02/opportunities.test.mjs"
+    ],
+    "contract": "List row projection materializes scoped active normalized versions and reuses paged primary identity. Same seed/current/detail provenance, fields, quality gates, filters and order; original count/filter reads unchanged. No schema, API, permission, config, cache, dependency, frontend or Python change. Node restart; actual SQL and live HTTP acceptance required."
   }
 }

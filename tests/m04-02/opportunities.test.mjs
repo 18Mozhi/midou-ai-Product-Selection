@@ -284,7 +284,9 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "apps/web/src/components/OpportunityDetailInsights.vue",
     "utf8",
   );
-  const trendRuleDialogWeb = await readFile("apps/web/src/components/TrendRuleDialog.vue", "utf8");
+  await assert.rejects(readFile("apps/web/src/components/TrendRuleDialog.vue", "utf8"), {
+    code: "ENOENT",
+  });
   assert.match(
     up,
     /opportunities[\s\S]*opportunity_decisions[\s\S]*opportunity_refresh_jobs[\s\S]*opportunity_events[\s\S]*opportunity_outbox/,
@@ -307,17 +309,14 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(webContract, new RegExp(state));
   assert.match(webContract, /证据完整度[\s\S]*阻断原因[\s\S]*缺少可采纳证据/);
-  assert.match(webContract, /待我采纳[\s\S]*选品候选[\s\S]*采集中[\s\S]*全部机会/);
+  assert.match(webContract, /推荐商品[\s\S]*候选商品[\s\S]*采集中[\s\S]*全部商品/);
   assert.match(listWeb, /已识别 Amazon 主品，系统继续补齐五项质量门所需的证据/);
   assert.doesNotMatch(listWeb, /完成评分且结论为推荐/);
   assert.match(readinessWeb, /下一步：[\s\S]*查看五项配置状态/);
   assert.match(decisionWeb, /采纳建议[\s\S]*当前无需你处理[\s\S]*提前人工处理/);
   assert.match(decisionWeb, /补证阻断项/);
   assert.doesNotMatch(decisionWeb, /采纳前还缺/);
-  assert.match(
-    trendRuleDialogWeb,
-    /商品确认主品身份后进入选品候选[\s\S]*五项质量门全部通过后才显示“建议采纳”/,
-  );
+  assert.match(listWeb, /评分、市场、竞争、成本和风险五项质量门均已通过/);
   assert.doesNotMatch(detailInsightsWeb, /达到来源门槛即可进入推荐/);
   assert.match(evidenceWeb, /证据新鲜度：观测于/);
   assert.match(webContract, /阶段[\s\S]*负责人[\s\S]*批量指派[\s\S]*批量复核[\s\S]*批量归档/);

@@ -171,6 +171,9 @@ test("[real-api] observed decision saves through HTTP and survives reopening", a
   );
   await dialog.getByRole("button", { name: "确认记录" }).click();
   expect((await saved).status()).toBe(200);
+  await expect(page.locator(".opportunity-message")).toContainText(
+    "决策已记录；原始评分与证据未被改写。",
+  );
   const reopened = page.waitForResponse(
     (response) => new URL(response.url()).pathname === `/api/v1/opportunities/${ids.product}`,
   );

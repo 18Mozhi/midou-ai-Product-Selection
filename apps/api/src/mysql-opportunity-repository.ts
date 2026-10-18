@@ -1,4 +1,10 @@
 import {
+  opportunityListPrimaryAsinSql,
+  opportunityListPrimaryRecordsSql,
+  opportunityListSelectionProjectionSql,
+  reuseListPrimaryIdentitySql,
+} from "./opportunity-list-projection.js";
+import {
   opportunityPrimaryRecordsSql,
   readOpportunityPrimaryProduct,
 } from "./opportunity-primary-product.js";
@@ -177,11 +183,19 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       // rather than once per candidate evidence record. The outer sort preserves paging order.
       [rows] = await this.pool.query<RowDataPacket[]>(
         sqlText(
-          `SELECT o.*,${opportunityPrimaryRecordsSql},${opportunityCountsSql},${opportunityLifecycleSql},${opportunitySelectionProjectionSql}`,
-          `FROM (SELECT o.*,${opportunityPrimaryAsinSql} primary_fact_asin FROM (SELECT o.* FROM opportunities o WHERE ${sql} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
+          `SELECT o.*,${opportunityListPrimaryRecordsSql},${reuseListPrimaryIdentitySql(opportunityCountsSql)},${opportunityLifecycleSql},${opportunityListSelectionProjectionSql}`,
+          `FROM (SELECT o.*,${opportunityListPrimaryAsinSql} primary_fact_asin FROM (SELECT o.* FROM opportunities o WHERE ${sql} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
           "ORDER BY o.updated_at DESC,o.id DESC",
         ),
-        [...values, input.pageSize, (input.page - 1) * input.pageSize],
+        [
+          input.organizationId,
+          input.workspaceId,
+          input.organizationId,
+          input.workspaceId,
+          ...values,
+          input.pageSize,
+          (input.page - 1) * input.pageSize,
+        ],
       );
     return { items: rows.map(summary), total: Number(count[0]?.total ?? 0) };
   }
