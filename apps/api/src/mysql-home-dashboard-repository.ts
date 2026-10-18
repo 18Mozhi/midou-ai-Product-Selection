@@ -7,10 +7,10 @@ import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { HomeDashboardItem } from "@scoutops/contracts";
 import type { HomeDashboardRepository } from "./home-dashboard-service.js";
 import {
-  opportunityQualityGateSql,
-  opportunityRecommendedSql,
-  opportunityCandidateSql,
-} from "./opportunity-selection-policy.js";
+  homeQualityGateSql as opportunityQualityGateSql,
+  homeRecommendedSql as opportunityRecommendedSql,
+  homeCandidateSql as opportunityCandidateSql,
+} from "./home-selection-sql.js";
 export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
   constructor(
     private readonly pool: Pool,
