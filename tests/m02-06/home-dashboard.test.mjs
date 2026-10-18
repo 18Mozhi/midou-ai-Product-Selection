@@ -282,7 +282,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
       "apps/web/src/components/HomeDashboard.vue",
       "apps/web/src/components/HomeAutomationOverview.vue",
       "apps/web/src/api-client.ts",
-      "apps/web/src/components/OpportunityMobileShell.vue",
+      "apps/web/src/components/OpportunityWorkspace.vue",
       "apps/web/src/components/NavigationShell.vue",
       "apps/web/src/components/navigation-surface-registry.ts",
       "docs/openapi.yaml",
@@ -377,8 +377,13 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.doesNotMatch(overview, /<ol>|data-done/);
   assert.match(home, /<details v-if="selection" class="home-truth">[\s\S]*推荐需人工采纳/);
   assert.doesNotMatch(home, /全链路教学/);
-  assert.match(opportunity, /机会暂无详情[\s\S]*等待真实数据/);
-  assert.doesNotMatch(opportunity, /SKELETON|P04/);
+  assert.match(opportunity, /SelectionProductHeader[\s\S]*OpportunityDetailInsights/);
+  assert.match(opportunity, /:detail="detail"/);
+  assert.match(surfaces, /"opportunity-workspace":\s*lazy\("OpportunityWorkspace"\)/);
+  assert.doesNotMatch(surfaces, /OpportunityMobileShell/);
+  await assert.rejects(read("apps/web/src/components/OpportunityMobileShell.vue"), {
+    code: "ENOENT",
+  });
   assert.match(shell, /surfaceComponents\[activeSurface\.value\]/);
   assert.match(surfaces, /"home-dashboard":\s*lazy\("HomeDashboard"\)/);
   assert.doesNotMatch(env, /HOME_DASHBOARD_|DASHBOARD_PROJECTION_/);

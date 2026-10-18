@@ -2968,7 +2968,7 @@
         "../apps/web/src/components/HomeDashboard.vue",
         "../apps/web/src/components/HomeAutomationOverview.vue",
         "../apps/web/src/home-dashboard.css",
-        "../apps/web/src/components/OpportunityMobileShell.vue"
+        "../apps/web/src/components/OpportunityWorkspace.vue"
       ],
       "routes": ["/home", "/api/v1/me/home-dashboard", "/opportunities/{opportunityId}"],
       "sections": [
@@ -7031,9 +7031,8 @@
       "apps/web/src/components/OpportunityDetailInsights.vue",
       "apps/web/src/components/OpportunityEvidencePanel.vue",
       "apps/web/src/components/OpportunityListPanel.vue",
-      "apps/web/src/components/OpportunityMobileShell.vue",
-      "apps/web/src/components/OpportunityProfitPanel.vue",
       "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/OpportunityProfitPanel.vue",
       "apps/web/src/components/use-opportunity-workspace-access.ts",
       "apps/web/src/components/use-opportunity-workspace-reads.ts",
       "apps/web/src/components/SourcingWorkspaceDialogs.vue",
@@ -7051,5 +7050,15 @@
       "tests/unit/core-workspace-crawlers.test.mjs"
     ],
     "contract": "Member-facing fixed terminology uses selection consistently across catalogue/detail/batch/sourcing/search/notifications and accessibility labels. Original product names, facts, error payloads, API/resource/permission keys and workflow semantics unchanged. List count is not daily completion. No config/dependency/schema/Node/Python contract change; browser refresh after static release."
+  },
+  "selectionRetiredMobilePlaceholder20261019": {
+    "status": "implemented",
+    "requirements": "docs/selection-retired-mobile-placeholder.md",
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/navigation-surface-registry.ts"
+    ],
+    "testFiles": ["tests/m02-06/home-dashboard.test.mjs"],
+    "contract": "Unused static mobile placeholder retired. Desktop and mobile use registered real OpportunityWorkspace and detail facts. Historical immutable reconstruction hashes retained; no live placeholder, API/config/dependency/DB/permission/behavior change. Build equivalence required; no daily100 acceptance."
   }
 }
