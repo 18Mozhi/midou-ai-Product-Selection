@@ -71,8 +71,47 @@ function fixture(options = {}) {
     if ((options.blockAfterLoad && checks === 2) || (options.blockAfterOpen && checks === 3))
       throw new Error("captcha block");
   };
-  return { page, safe, actions, location: () => location };
+  const reread = async () => {
+    actions.push(["reread", "original_url"]);
+    if (options.rereadFailed) throw new Error("Timeout rereading original URL");
+    if (options.locationAfterReread) location = options.locationAfterReread;
+  };
+  return { page, safe, actions, reread, location: () => location };
 }
+
+test("confirmed region with no automatic navigation rereads original URL before strict header check", async () => {
+  const f = fixture({ doneWrongPostal: true, locationAfterReread: "Deliver to San Mateo 94404" });
+  const steps = [];
+  assert.equal(
+    await prepareAmazonDeliveryContext(f.page, "94404", f.safe, (s) => steps.push(s), f.reread),
+    true,
+  );
+  assert.equal(f.actions.filter((a) => a[0] === "reread").length, 1);
+  assert.ok(
+    f.actions.findIndex((a) => a[0] === "reread") <
+      f.actions.findIndex((a) => a[0] === "wait" && a[1] === "#glow-ingress-block"),
+  );
+  assert.ok(steps.includes("reread_navigation"));
+});
+
+test("explicit reread never accepts stale postal, failed navigation, rejected confirmation or signed-in context", async () => {
+  for (const options of [
+    { doneWrongPostal: true },
+    { rereadFailed: true },
+    { rejected: true },
+    { signedIn: true },
+  ]) {
+    const f = fixture(options);
+    await assert.rejects(prepareAmazonDeliveryContext(f.page, "94404", f.safe, () => {}, f.reread));
+    if (options.rejected || options.signedIn) assert.ok(!f.actions.some((a) => a[0] === "reread"));
+  }
+  const f = fixture({ location: "Deliver to San Mateo 94404" });
+  assert.equal(
+    await prepareAmazonDeliveryContext(f.page, "94404", f.safe, () => {}, f.reread),
+    false,
+  );
+  assert.deepEqual(f.actions, []);
+});
 
 test("US postal context is explicit, validated and configurable without credentials", () => {
   assert.equal(

@@ -3,6 +3,54 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 import { prepareAmazonDeliveryContext } from "../../packages/playwright-crawler/dist/amazon-delivery-context.js";
 
+test("Done without navigation uses original URL reread before accepting the confirmed region", async () => {
+  const browser = await chromium.launch({ headless: true });
+  let confirmed = false,
+    rereads = 0;
+  try {
+    const page = await browser.newPage();
+    page.setDefaultTimeout(200);
+    page.setDefaultNavigationTimeout(1000);
+    await page.route("**/*", (route) =>
+      route.fulfill({
+        contentType: "text/html",
+        body: confirmed
+          ? '<a>Hello, sign in Account &amp; Lists</a><span id="glow-ingress-block">Deliver to San Mateo 94404</span>'
+          : `<a>Hello, sign in Account &amp; Lists</a><span id="glow-ingress-block">Deliver to Los Angeles 90060</span>
+        <button id="nav-global-location-popover-link">Location</button><input id="GLUXZipUpdateInput">
+        <span id="GLUXZipUpdate"><input type="button" value="Apply"></span>
+        <p id="GLUXZipConfirmationSection">Deliver to 94404</p><button name="glowDoneButton">Done</button>
+        <script>document.querySelector('button[name="glowDoneButton"]').onclick=e=>e.target.hidden=true</script>`,
+      }),
+    );
+    // Give the anonymous-account links their actual semantic role.
+    await page.goto("https://www.amazon.com/s?k=fixture");
+    await page.locator("a").evaluate((el) => el.setAttribute("href", "/signin"));
+    const original = page.url();
+    const reread = async () => {
+      confirmed = true;
+      rereads++;
+      await page.goto(original, { waitUntil: "domcontentloaded" });
+      await page.locator("a").evaluate((el) => el.setAttribute("href", "/signin"));
+    };
+    assert.equal(
+      await prepareAmazonDeliveryContext(
+        page,
+        "94404",
+        async () => {},
+        () => {},
+        reread,
+      ),
+      true,
+    );
+    assert.equal(rereads, 1);
+    assert.equal(page.url(), original);
+    assert.match(await page.locator("#glow-ingress-block").textContent(), /94404/);
+  } finally {
+    await browser.close();
+  }
+});
+
 test("anonymous delivery waits for the loaded location handler before clicking its empty href", async () => {
   const browser = await chromium.launch({ headless: true });
   let releaseScript;

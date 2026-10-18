@@ -1,4 +1,17 @@
 {
+  "amazonConfirmedRegionReread20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-us-observation-context.md",
+    "sourceFiles": [
+      "packages/playwright-crawler/src/amazon-delivery-context.ts",
+      "packages/playwright-crawler/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-delivery-context.test.mjs",
+      "tests/integration/amazon-delivery-readiness.test.mjs"
+    ],
+    "contract": "Engine moves its existing original-URL reread directly after confirmed Done, before strict header verification. Recheck anonymous/origin/challenge/postal. Already-correct region skips reread; standalone helper keeps navigation fallback. No new timeout/retry/config/API/schema/Python/dependency. Live read-only reproduction returned48 search rows after strict94404; natural business and daily100 remain unverified."
+  },
   "lan1688HealthPoolCoverage20261018": {
     "status": "implemented",
     "requirements": "docs/source-transport-health.md",

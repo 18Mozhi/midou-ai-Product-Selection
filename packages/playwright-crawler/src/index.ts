@@ -663,18 +663,17 @@ export class PlaywrightCrawlerEngine {
             throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
           await blocked(page, plan.block_signals);
         };
-        const changed = await prepareAmazonDeliveryContext(
+        await prepareAmazonDeliveryContext(
           page,
           plan.amazon_delivery.postal_code,
           assertSafe,
           (step) => {
             stage = `amazon_delivery.${step}`;
           },
+          async () => {
+            await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error);
+          },
         );
-        if (changed) {
-          stage = "delivery_reread_navigation";
-          await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error);
-        }
         stage = "delivery_final_header";
         await assertSafe();
         await page
