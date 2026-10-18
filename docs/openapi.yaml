@@ -11759,3 +11759,6 @@ x-scoutops-lan-1688:
 
 # Amazon anonymous delivery preparation waits for loaded location handlers using
 # the existing navigation budget and rechecks guards; no public API or config change.
+
+# Sourcing empty UI derives pending/blocked/ended text from existing collection_progress;
+# an empty candidate list alone never implies a running collection. No response changes.

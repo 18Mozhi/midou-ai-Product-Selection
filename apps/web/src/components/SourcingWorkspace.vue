@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import {
   useSourcingWorkspace,
   type SourcingWorkspaceProps,
@@ -71,6 +72,21 @@ const {
   refreshSearch,
   removeSearch,
 } = useSourcingWorkspace(props);
+const pendingMessage = computed(() => {
+  const progress = selected.value?.collection_progress;
+  if (progress?.active_subqueries && progress.status === "running")
+    return "采集任务正在执行或等待来源返回，尚未取得供应商报价。可刷新记录查看最新进度。";
+  if (progress?.blocked_subqueries)
+    return "来源采集受阻，尚未取得供应商报价。请核对采集进度，来源恢复后再查看结果。";
+  if (
+    progress?.failed_subqueries ||
+    ["failed", "cancelled", "dead_letter"].includes(progress?.status ?? "")
+  )
+    return "本次采集已结束且未取得供应商报价，请核对失败或取消状态后再决定是否重新采集。";
+  if (progress?.active_subqueries)
+    return "采集任务仍在等待处理，尚未取得供应商报价。可刷新记录查看最新进度。";
+  return "当前记录没有供应商候选，请核对采集结果。需要再次查询时可点击“重新采集”。";
+});
 </script>
 <template>
   <section class="sourcing-workspace sourcing-workspace--review">
@@ -251,7 +267,7 @@ const {
         </section>
         <section v-if="!candidates.length" class="sourcing-pending">
           <strong>找货任务已经建立，尚未取得真实供应商报价</strong>
-          <p>正在采集供应商信息，完成后将显示候选。也可点击“重新采集”重试。</p>
+          <p>{{ pendingMessage }}</p>
           <span v-if="selected.missing_fields.length">待补齐：{{ missingText }}</span>
         </section>
         <section class="supplier-cards">

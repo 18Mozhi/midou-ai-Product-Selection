@@ -1,4 +1,11 @@
 {
+  "sourcingPendingState20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-sourcing-layout.md",
+    "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue"],
+    "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],
+    "contract": "Empty supplier panel distinguishes existing active/running, queued, blocked, failed/ended and missing/empty progress. Never claims collection is running solely because candidates are empty. Existing reads, retries, quote/cost permissions and daily completion rules unchanged; no API/config/schema changes."
+  },
   "amazonDeliveryReadiness20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-us-observation-context.md",

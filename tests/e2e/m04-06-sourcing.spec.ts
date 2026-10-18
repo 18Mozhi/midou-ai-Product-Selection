@@ -153,6 +153,104 @@ async function setup(
   );
 }
 
+for (const scenario of [
+  {
+    name: "running",
+    status: "running",
+    active: 1,
+    blocked: 0,
+    failed: 0,
+    text: "采集任务正在执行或等待来源返回",
+  },
+  {
+    name: "queued",
+    status: "queued",
+    active: 1,
+    blocked: 0,
+    failed: 0,
+    text: "采集任务仍在等待处理",
+  },
+  {
+    name: "blocked",
+    status: "completed_with_warnings",
+    active: 0,
+    blocked: 1,
+    failed: 0,
+    text: "来源采集受阻",
+  },
+  {
+    name: "failed",
+    status: "failed",
+    active: 0,
+    blocked: 0,
+    failed: 1,
+    text: "本次采集已结束且未取得供应商报价",
+  },
+  {
+    name: "empty",
+    status: "completed",
+    active: 0,
+    blocked: 0,
+    failed: 0,
+    text: "当前记录没有供应商候选",
+  },
+  {
+    name: "unknown",
+    status: "unknown",
+    active: 0,
+    blocked: 0,
+    failed: 0,
+    text: "当前记录没有供应商候选",
+  },
+]) {
+  test(`empty sourcing status remains factual for ${scenario.name}`, async ({ page }) => {
+    await setup(page);
+    const search = {
+      id: searchId,
+      input_type: "keyword",
+      input_ref: "便携净水杯",
+      status: "succeeded_empty",
+      candidate_count: 0,
+      missing_fields: [],
+      created_at: "2026-08-08T12:00:00.000Z",
+    };
+    await page.route("**/api/v1/sourcing/searches", (route) =>
+      route.fulfill({ json: envelope([search]) }),
+    );
+    await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+      route.fulfill({
+        json: envelope({
+          ...search,
+          candidates: [],
+          collection_progress:
+            scenario.name === "unknown"
+              ? null
+              : {
+                  status: scenario.status,
+                  total_subqueries: 1,
+                  successful_subqueries: scenario.name === "empty" ? 1 : 0,
+                  failed_subqueries: scenario.failed,
+                  blocked_subqueries: scenario.blocked,
+                  active_subqueries: scenario.active,
+                  available_at: "2026-08-08T12:00:00.000Z",
+                },
+        }),
+      }),
+    );
+    const writes: string[] = [];
+    page.on("request", (request) => {
+      if (request.url().includes("/api/v1/sourcing/") && request.method() !== "GET")
+        writes.push(request.method());
+    });
+    await page.goto("/sourcing");
+    await expect(page.locator(".sourcing-pending")).toContainText(scenario.text);
+    await expect(page.locator(".sourcing-pending")).not.toContainText(
+      "正在采集供应商信息，完成后将显示候选",
+    );
+    expect(writes).toEqual([]);
+  });
+}
+
 async function verifyDialogFocusCycle(
   page: Page,
   trigger: Locator,
