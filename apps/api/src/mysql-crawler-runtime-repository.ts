@@ -1,5 +1,6 @@
 import { anonymousAmazonFingerprint } from "@scoutops/provider-sources";
 import { randomUUID } from "node:crypto";
+import { setTimeout as delay } from "node:timers/promises";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type {
   CrawlerRuntimeRepository,
@@ -7,6 +8,12 @@ import type {
   BrowserCollectionAssignment,
 } from "./crawler-runtime-service.js";
 import { CrawlerRuntimeError } from "./crawler-runtime-service.js";
+
+class RolledBackCrawlerLeaseDeadlock extends Error {
+  constructor(readonly original: unknown) {
+    super("crawler_lease_transaction_deadlock");
+  }
+}
 
 const run = (row: RowDataPacket): CrawlerRunSummary => ({
   id: String(row.id),
@@ -139,6 +146,17 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     };
   }
   async acquire(input: Parameters<CrawlerRuntimeRepository["acquire"]>[0]) {
+    for (let attempt = 0; ; attempt++) {
+      try {
+        return await this.acquireOnce(input);
+      } catch (error) {
+        if (!(error instanceof RolledBackCrawlerLeaseDeadlock)) throw error;
+        if (attempt === 2) throw error.original;
+        await delay(25 * (attempt + 1));
+      }
+    }
+  }
+  private async acquireOnce(input: Parameters<CrawlerRuntimeRepository["acquire"]>[0]) {
     const c = await this.pool.getConnection(),
       route = "/internal/crawler-runtime/acquire";
     let committed = false;
@@ -314,7 +332,11 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       );
       return { run: run(rows[0]!), replayed: false };
     } catch (error) {
-      if (!committed) await c.rollback();
+      if (!committed) {
+        await c.rollback();
+        if ((error as { code?: string }).code === "ER_LOCK_DEADLOCK")
+          throw new RolledBackCrawlerLeaseDeadlock(error);
+      }
       if ((error as { code?: string }).code === "ER_DUP_ENTRY")
         throw new CrawlerRuntimeError("crawler_runtime_conflict", 409, "刷新采集运行状态后重试。");
       throw error;

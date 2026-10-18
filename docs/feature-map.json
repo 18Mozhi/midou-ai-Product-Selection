@@ -1,4 +1,15 @@
 {
+  "crawlerLeaseDeadlockRecovery20261018": {
+    "status": "implemented",
+    "requirements": "docs/crawler-lease-deadlock-recovery.md",
+    "sourceFiles": ["apps/api/src/mysql-crawler-runtime-repository.ts"],
+    "testFiles": [
+      "tests/unit/crawler-lease-deadlock-recovery.test.mjs",
+      "tests/unit/amazon-disabled-health-lease.test.mjs",
+      "tests/unit/amazon-public-recovery.test.mjs"
+    ],
+    "contract": "Acquire retries only ER_LOCK_DEADLOCK from successfully rolled-back uncommitted transactions after connection release, maximum3 attempts and25/50ms backoff. Keep same run/lease/idempotency/scope/expiry. No browser replay, retry after commit/rollback failure, business-conflict retry, config/API/schema/isolation/Python/dependency change. Natural stability and daily100 remain unverified."
+  },
   "selectionTrendDetailFacts20261018": {
     "status": "implemented",
     "requirements": "docs/selection-trend-detail-facts.md",
