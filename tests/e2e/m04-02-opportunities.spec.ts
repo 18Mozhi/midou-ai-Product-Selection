@@ -362,7 +362,10 @@ test("M04-02.A07/A08/A15 automatic opportunity list ignores retired creation and
 }) => {
   await ready(page);
   await page.goto("/opportunities?create=1");
-  await expect(page.getByRole("heading", { name: "待我采纳", level: 2 })).toBeVisible();
+  await expect(page.getByRole("button", { name: "推荐商品", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
   await expect(page.getByRole("heading", { name: "1 个商品建议采纳" })).toBeVisible();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(0);
   await expect(page.getByRole("dialog", { name: "创建机会候选" })).toHaveCount(0);
@@ -703,8 +706,10 @@ test("commerce catalogue switches layouts and keeps product navigation and missi
   await expect(catalogue).toHaveAttribute("data-display", "grid");
   await expect(page.locator(".catalog-product")).toHaveCount(1);
   await expect(page.locator(".opportunity-hero, .opportunity-view-bar")).toHaveCount(0);
-  const toolbar = page.locator(".catalogue-toolbar");
-  await expect(toolbar).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(page.locator(".catalogue-toolbar")).toHaveCount(0);
+  await expect(
+    catalogue.getByRole("heading", { name: "1 个商品建议采纳", level: 2 }),
+  ).toBeVisible();
   const firstProduct = await page.locator(".catalog-product").first().boundingBox();
   expect(firstProduct!.y).toBeLessThan(page.viewportSize()!.height);
   await expect(
@@ -1994,7 +1999,7 @@ test("changing between the opportunity list and detail closes open list dialogs"
   await ready(page);
   await readyForNextOpportunity(page);
   await page.goto("/opportunities?view=all");
-  await expect(page.getByRole("heading", { name: "全部机会", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^全部 \d+ 个机会$/, level: 2 })).toBeVisible();
 
   const switchToDetail = async () => {
     const request = page.waitForRequest((candidate) => {
@@ -2007,11 +2012,14 @@ test("changing between the opportunity list and detail closes open list dialogs"
   };
   const returnToList = async () => {
     await page.getByRole("link", { name: "← 返回来源列表" }).click();
-    await expect(page.getByRole("heading", { name: "待我采纳", level: 2 })).toBeVisible();
+    await expect(page.getByRole("button", { name: "推荐商品", exact: true })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
     await expect(page.getByRole("dialog", { name: "创建机会候选" })).toHaveCount(0);
     await expect(page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" })).toHaveCount(0);
     await page.getByRole("button", { name: "全部商品" }).click();
-    await expect(page.getByRole("heading", { name: "全部机会", level: 2 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^全部 \d+ 个机会$/, level: 2 })).toBeVisible();
   };
 
   await expect(page.getByRole("button", { name: "手工添加", exact: true })).toHaveCount(0);

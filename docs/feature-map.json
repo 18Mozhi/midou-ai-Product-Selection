@@ -1,4 +1,16 @@
 {
+  "selectionMobileHeader20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-mobile-header.md",
+    "sourceFiles": [
+      "apps/web/src/commerce-workspace.css",
+      "apps/web/src/selection-catalogue.css",
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/OpportunityListPanel.vue"
+    ],
+    "tests": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "acceptance": "Pending live mobile verification; complete UI and daily complete-chain target unresolved."
+  },
   "amazonHealthDetailProbe20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-health-detail-probe.md",

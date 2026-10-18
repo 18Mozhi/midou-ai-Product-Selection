@@ -151,9 +151,55 @@ html[data-design="commerce"] #app .product-catalog > header {
   background: transparent;
   border: 0;
 }
-html[data-design="commerce"] #app .product-catalog > header h3 {
+html[data-design="commerce"] #app .product-catalog > header h2 {
   font-size: 16px;
   margin: 0 0 4px;
+}
+@media (max-width: 640px) {
+  html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="member"] .role-topbar {
+    gap: 8px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .role-brand {
+    flex: 0 0 44px;
+    min-width: 44px;
+    min-height: 44px;
+    margin-right: 0;
+    justify-content: center;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .role-menu-toggle {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .role-workspace-identity h1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .role-top-actions {
+    flex: 0 0 auto;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="member"]
+    .role-top-actions
+    :is(.role-theme-switcher button, .role-quick-action) {
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="member"]
+    .role-top-actions
+    :is(.role-theme-switcher span, .role-quick-action span, .role-quick-action kbd) {
+    display: none;
+  }
 }
 .catalog-display {
   display: flex;

@@ -376,7 +376,7 @@ watch(imageFailureResetSources, (items) => {
   <section v-else class="product-catalog" :data-display="displayMode">
     <header>
       <div>
-        <h3>{{ viewCopy.title }}</h3>
+        <h2>{{ viewCopy.title }}</h2>
         <small>{{ viewCopy.description }}</small>
       </div>
       <div class="catalog-display" role="group" aria-label="商品展示方式">

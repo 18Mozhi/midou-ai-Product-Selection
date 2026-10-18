@@ -446,23 +446,10 @@ useOpportunityWorkspaceLifecycle({
 </script>
 <template>
   <section class="opportunity-workspace opportunity-workspace--review">
-    <header v-if="!opportunityId" class="catalogue-toolbar">
-      <div>
-        <h2>
-          {{
-            selectionView === "recommended"
-              ? "待我采纳"
-              : selectionView === "rule_candidates"
-                ? "选品候选"
-                : selectionView === "evidence_pending"
-                  ? "采集中"
-                  : "全部机会"
-          }}
-        </h2>
-      </div>
-      <span v-if="!canDecide">当前为只读权限。</span>
-    </header>
-    <nav v-else class="opportunity-detail-return" aria-label="机会详情返回路径">
+    <p v-if="!opportunityId && !canDecide" class="catalogue-readonly" role="note">
+      当前为只读权限。
+    </p>
+    <nav v-if="opportunityId" class="opportunity-detail-return" aria-label="机会详情返回路径">
       <RouterLink :to="returnPath">← 返回来源列表</RouterLink>
     </nav>
     <p v-if="message" class="opportunity-message" role="status">

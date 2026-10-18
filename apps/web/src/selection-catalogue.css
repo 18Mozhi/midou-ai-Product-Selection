@@ -1,22 +1,7 @@
 /* Catalogue controls are independent of the retired promotional hero styles. */
-html[data-design="commerce"] #app .catalogue-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin: 0 0 12px;
-  padding: 0;
-  min-height: 32px;
-  border: 0;
-  background: transparent;
-  color: var(--so-text);
-  box-shadow: none;
-}
-html[data-design="commerce"] #app .catalogue-toolbar h2 {
-  margin: 0;
-  font-size: 22px;
-  line-height: 1.4;
-  color: var(--so-text);
+html[data-design="commerce"] #app .catalogue-readonly {
+  color: var(--so-text-muted);
+  font-size: 13px;
 }
 html[data-design="commerce"] #app .catalogue-controls {
   display: grid;
@@ -158,15 +143,6 @@ html[data-design="commerce"] #app .catalogue-readiness .automatic-selection-read
   padding-top: 8px;
 }
 @media (max-width: 640px) {
-  html[data-design="commerce"] #app .catalogue-toolbar {
-    align-items: start;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  html[data-design="commerce"] #app .catalogue-toolbar h2 {
-    font-size: 20px;
-  }
   html[data-design="commerce"] #app .catalogue-controls {
     padding: 10px;
     gap: 10px;
