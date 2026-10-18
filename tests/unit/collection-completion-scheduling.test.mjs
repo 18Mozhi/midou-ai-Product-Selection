@@ -7,6 +7,7 @@ import {
   collectionScopeFairnessJoinSql,
   collectionReadyOrderSql,
   collectionRequiredSourcesReadySql,
+  pendingBrowserResultSql,
 } from "../../apps/worker/dist/collection-source-scheduling-policy.js";
 
 test("projected competitor detail tasks use their actual Worker producer in the completion lane", () => {
@@ -248,6 +249,23 @@ test("scope fairness is after effective priority and before the existing local l
     collectionScopeFairnessJoinSql,
     /FOR UPDATE|UPDATE |INSERT |DELETE |LIMIT|occurred_at FROM/,
   );
+});
+
+test("durable result consumption preserves scoped provenance and the FIFO escape turn", () => {
+  const preferred = collectionReadyOrderSql(true),
+    fifo = collectionReadyOrderSql(false);
+  assert.ok(
+    preferred.indexOf(pendingBrowserResultSql) > preferred.indexOf(automaticCompletionTaskSql),
+  );
+  assert.ok(preferred.indexOf(pendingBrowserResultSql) < preferred.indexOf("available_at,id"));
+  assert.ok(!fifo.includes(pendingBrowserResultSql));
+  for (const field of ["organization_id", "workspace_id", "provider_id"])
+    assert.ok(pendingBrowserResultSql.includes(`result_job.${field}=result_query.${field}`));
+  assert.match(pendingBrowserResultSql, /collection_task_id=result_query.task_id/);
+  assert.match(pendingBrowserResultSql, /collection_subquery_id=result_query.id/);
+  assert.match(pendingBrowserResultSql, /result_query.status='pending'/);
+  assert.match(pendingBrowserResultSql, /result_job.result_json IS NOT NULL/);
+  assert.doesNotMatch(pendingBrowserResultSql, /UPDATE |INSERT |DELETE |request_id/);
 });
 test("both admission readers join scope history exactly once and expose only the original task row", async () => {
   const { repository, calls } = setup();

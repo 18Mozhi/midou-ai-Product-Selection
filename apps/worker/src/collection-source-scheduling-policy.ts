@@ -55,7 +55,19 @@ export const collectionRequiredSourcesReadySql =
   "AND COALESCE(JSON_TYPE(JSON_EXTRACT(required_source_query.target_json,'$.acceptance_run')),'')='BOOLEAN' " +
   "AND COALESCE(JSON_UNQUOTE(JSON_EXTRACT(required_source_query.target_json,'$.acceptance_run')),'')='true'))";
 
-/** Explicit priority first, then least-recently claimed scope; intake/completion lanes stay local. */
+/** Only the same scoped, still-pending subquery's durable successful browser result can be consumed. */
+export const pendingBrowserResultSql =
+  "EXISTS (SELECT 1 FROM collection_subqueries result_query " +
+  "JOIN browser_collection_jobs result_job ON result_job.collection_subquery_id=result_query.id " +
+  "AND result_job.collection_task_id=result_query.task_id " +
+  "AND result_job.organization_id=result_query.organization_id " +
+  "AND result_job.workspace_id=result_query.workspace_id AND result_job.provider_id=result_query.provider_id " +
+  "WHERE result_query.task_id=collection_tasks.id " +
+  "AND result_query.organization_id=collection_tasks.organization_id " +
+  "AND result_query.workspace_id=collection_tasks.workspace_id AND result_query.status='pending' " +
+  "AND result_job.status IN ('succeeded','succeeded_empty') AND result_job.result_json IS NOT NULL)";
+
+/** Priority, scope and lanes precede durable result consumption; the FIFO escape turn stays unchanged. */
 export const collectionReadyOrderSql = (completionFirst: boolean) =>
   " ORDER BY FIELD(CASE WHEN " +
   automaticIntelligenceTaskSql("collection_tasks") +
@@ -64,4 +76,6 @@ export const collectionReadyOrderSql = (completionFirst: boolean) =>
   automaticIntelligenceTaskSql("collection_tasks") +
   " THEN 0 " +
   (completionFirst ? "WHEN " + automaticCompletionTaskSql + " THEN 1 ELSE 2 " : "ELSE 1 ") +
-  "END,available_at,id LIMIT 1";
+  "END," +
+  (completionFirst ? "CASE WHEN " + pendingBrowserResultSql + " THEN 0 ELSE 1 END," : "") +
+  "available_at,id LIMIT 1";

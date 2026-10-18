@@ -3,7 +3,10 @@ import assert from "node:assert/strict";
 import { MySqlAutomaticSourceScheduler } from "../../apps/worker/dist/automatic-source-scheduler.js";
 import { MySqlCollectionTaskWorkerRepository } from "../../apps/worker/dist/collection-task-state-machine.js";
 
-import { activeCollectionScopeSql } from "../../apps/worker/dist/collection-source-scheduling-policy.js";
+import {
+  activeCollectionScopeSql,
+  pendingBrowserResultSql,
+} from "../../apps/worker/dist/collection-source-scheduling-policy.js";
 
 const now = new Date("2026-10-18T00:00:00Z");
 function connectionFor(statements) {
@@ -62,7 +65,11 @@ for (const method of ["queueReady", "claim"]) {
     assert.match(selection, /THEN 0 WHEN EXISTS/);
     assert.match(selection, /completion_event\.actor_type='worker'/);
     assert.match(selection, /completion_query\.organization_id=completion_event\.organization_id/);
-    assert.match(selection, /ELSE 2 END,available_at,id LIMIT 1$/);
+    assert.ok(
+      selection.endsWith(
+        `ELSE 2 END,CASE WHEN ${pendingBrowserResultSql} THEN 0 ELSE 1 END,available_at,id LIMIT 1`,
+      ),
+    );
     assert.doesNotMatch(selection, /FOR UPDATE/);
     assert.doesNotMatch(selection, /request_id LIKE/);
   });

@@ -102,7 +102,7 @@
       "tests/fixtures/collection-scope-fairness-sql.mjs"
     ],
     "apiRoutes": ["/api/v1/platform/collection/tasks"],
-    "contract": "Within unchanged effective priority tiers, choose the eligible organization/workspace least recently leased by a committed Worker event, unclaimed first; then retain scope-local intake/completion/FIFO order. Materialize MAX history once. Both admission readers expose only collection_tasks.* and keep scoped locking, source/active/attempt gates and leases. No quota, task payload, schema, permission, dependency or runtime-setting change."
+    "contract": "Within existing priority, scope and lane order, prefer a pending subquery with its own scoped durable successful browser result; retain FIFO escape order and all admission/consumption validation. Within unchanged effective priority tiers, choose the eligible organization/workspace least recently leased by a committed Worker event, unclaimed first; then retain scope-local intake/completion/FIFO order. Materialize MAX history once. Both admission readers expose only collection_tasks.* and keep scoped locking, source/active/attempt gates and leases. No quota, task payload, schema, permission, dependency or runtime-setting change."
   },
   "selectionDiscoveryLayout20261019": {
     "status": "implemented",

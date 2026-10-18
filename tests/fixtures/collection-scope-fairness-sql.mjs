@@ -171,6 +171,65 @@ const scenarios = [
     expected: 102,
   },
 ];
+for (const [name, extra, expected, completionFirst = true] of [
+  ["successful browser result precedes fresh work in the same lane", {}, 102],
+  ["empty browser success is also consumed", { browserStatus: "succeeded_empty" }, 102],
+  ["failed browser result has no consumption preference", { browserStatus: "failed" }, 101],
+  ["missing result payload has no consumption preference", { resultJson: null }, 101],
+  ["already completed subquery has no consumption preference", { queryStatus: "succeeded" }, 101],
+  ["pending result does not bypass the FIFO escape turn", {}, 101, false],
+  ...[
+    "organization_id",
+    "workspace_id",
+    "collection_task_id",
+    "collection_subquery_id",
+    "provider_id",
+  ].map((field) => [
+    `foreign browser ${field} cannot promote a task`,
+    { browserMismatch: field },
+    101,
+  ]),
+])
+  scenarios.push({
+    name,
+    tasks: [
+      task(101, "a", { lane: "completion" }),
+      task(102, "a", { lane: "completion", available_at: stamp(5), browserResult: true, ...extra }),
+    ],
+    events: [],
+    expected,
+    completionFirst,
+  });
+scenarios.push(
+  {
+    name: "browser result cannot bypass another workspace turn",
+    tasks: [task(101), task(102, "b", { browserResult: true })],
+    events: [claim("b", 10)],
+    expected: 101,
+  },
+  {
+    name: "browser result cannot bypass critical priority",
+    tasks: [task(101, "a", { priority: "critical" }), task(102, "a", { browserResult: true })],
+    events: [],
+    expected: 101,
+  },
+  {
+    name: "browser result cannot bypass intake lane",
+    tasks: [
+      task(101, "a", { lane: "intake" }),
+      task(102, "a", { lane: "completion", browserResult: true }),
+    ],
+    events: [],
+    expected: 101,
+  },
+  {
+    name: "browser result cannot bypass an open required source",
+    tasks: [task(101), task(102, "a", { provider: "held", browserResult: true })],
+    events: [],
+    heldSource: "open",
+    expected: 101,
+  },
+);
 const literal = (value) =>
   value === null || value === undefined
     ? "NULL"
@@ -240,6 +299,7 @@ function queryFor(scenario, policy) {
     workspace_id: row.workspace_id,
     provider_id: row.provider === "held" ? uuid(402) : uuid(401),
     is_required: row.required ?? 1,
+    status: row.queryStatus ?? "pending",
     target_json: JSON.stringify({
       projection_type:
         row.lane === "completion" ? "competitor_snapshot" : "intelligence_product_discovery",
@@ -270,9 +330,36 @@ function queryFor(scenario, policy) {
         "workspace_id",
         "provider_id",
         "is_required",
+        "status",
         "target_json",
       ],
       queries,
+    ),
+    browser_collection_jobs: table(
+      [
+        "collection_subquery_id",
+        "collection_task_id",
+        "organization_id",
+        "workspace_id",
+        "provider_id",
+        "status",
+        "result_json",
+      ],
+      scenario.tasks.flatMap((row, index) => {
+        if (!row.browserResult) return [];
+        const query = queries[index];
+        const job = {
+          collection_subquery_id: query.id,
+          collection_task_id: query.task_id,
+          organization_id: query.organization_id,
+          workspace_id: query.workspace_id,
+          provider_id: query.provider_id,
+          status: row.browserStatus ?? "succeeded",
+          result_json: Object.hasOwn(row, "resultJson") ? row.resultJson : "{}",
+        };
+        if (row.browserMismatch) job[row.browserMismatch] = uuid(999);
+        return [job];
+      }),
     ),
     providers: table(
       ["id", "code", "status"],
@@ -304,7 +391,7 @@ function queryFor(scenario, policy) {
     policy.collectionReadyOrderSql(scenario.completionFirst ?? true);
   const keywords = new Set(["WHERE", "GROUP", "LEFT", "JOIN", "ON", "ORDER"]);
   return sql.replace(
-    /\b(FROM|JOIN) (collection_tasks|collection_task_events|collection_subqueries|providers|provider_runtime_circuits|organizations|workspaces)\b(\s+([A-Za-z_][A-Za-z0-9_]*))?/g,
+    /\b(FROM|JOIN) (collection_tasks|collection_task_events|collection_subqueries|browser_collection_jobs|providers|provider_runtime_circuits|organizations|workspaces)\b(\s+([A-Za-z_][A-Za-z0-9_]*))?/g,
     (_match, keyword, name, suffix = "", next = "") =>
       keyword +
       " " +
