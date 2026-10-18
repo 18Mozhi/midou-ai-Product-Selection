@@ -440,316 +440,248 @@ test.describe("supplier quote observation time", () => {
   });
 });
 
-test("opportunity sourcing detail exposes designated dual-person cost review", async ({ page }) => {
+async function opportunitySetup(
+  page: Page,
+  analysis: unknown,
+  currentStatus = "insufficient_data",
+) {
   await setup(page);
   const opportunityId = "00000000-0000-4000-8000-000000000612";
-  const opportunitySearch = {
+  const search = {
     id: searchId,
     input_type: "opportunity",
     input_ref: opportunityId,
+    display_name: "当前商品",
     status: "completed",
     candidate_count: 1,
     missing_fields: [],
     created_at: "2026-08-08T12:00:00.000Z",
   };
-  await page.unroute(`**/api/v1/sourcing/searches/${searchId}`);
-  await page.unroute("**/api/v1/sourcing/searches");
-  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
-    route.fulfill({ json: envelope({ ...opportunitySearch, candidates: [readyCandidate] }) }),
-  );
   await page.route("**/api/v1/sourcing/searches", (route) =>
-    route.fulfill({ json: envelope([opportunitySearch]) }),
+    route.fulfill({ json: envelope([search]) }),
+  );
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({ json: envelope({ ...search, candidates: [readyCandidate] }) }),
   );
   await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) =>
-    route.fulfill({ json: envelope({ id: opportunityId, version: 8 }) }),
+    route.fulfill({ json: envelope({ id: opportunityId, profit_status: currentStatus }) }),
   );
   await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
-    route.fulfill({
-      json: envelope({ latest_run: null, current_inputs: [], cost_input_reviews: [] }),
-    }),
+    route.fulfill({ json: envelope(analysis) }),
   );
-  await page.route("**/api/v1/cost-input-reviewers", (route) =>
-    route.fulfill({
-      json: envelope([{ id: "00000000-0000-4000-8000-000000000613", label: "供应链成本复核人" }]),
-    }),
-  );
-  await page.goto("/sourcing");
-  await expect(page.getByRole("heading", { name: "双人成本复核" })).toBeVisible();
-  await expect(page.getByText("提交后 24 小时内由指定复核人处理")).toBeVisible();
-  await expect(page.getByLabel("指定复核人")).toContainText("供应链成本复核人");
-  await expect(page.getByRole("link", { name: "打开机会详情" })).toHaveAttribute(
-    "href",
-    new RegExp(`/opportunities/${opportunityId}`),
-  );
+  return { opportunityId, search };
+}
+const calculatedProfit = (amount: number, rule = "current-rule") => ({
+  latest_run: {
+    id: rule,
+    status: "calculated",
+    rule_version_code: rule,
+    platform: "amazon",
+    market: "US",
+    currency: "USD",
+    sale_price: 100,
+    total_cost: 20,
+    net_profit: amount,
+    net_margin_percent: amount,
+    missing_fields: [],
+    calculated_at: "2026-08-08T12:00:00.000Z",
+    components: [],
+  },
+  current_inputs: [],
+  cost_input_reviews: [],
 });
 
-test("late opportunity-cost reads cannot replace the currently selected opportunity", async ({
+test("opportunity sourcing shows read-only current profit without old cost forms or reviewer calls", async ({
   page,
 }) => {
-  await setup(page);
-  const firstOpportunityId = "00000000-0000-4000-8000-000000000612";
-  const secondOpportunityId = "00000000-0000-4000-8000-000000000614";
-  const secondSearchId = "00000000-0000-4000-8000-000000000615";
-  const firstSearch = {
-    id: searchId,
-    input_type: "opportunity",
-    input_ref: firstOpportunityId,
-    status: "completed",
-    candidate_count: 0,
-    missing_fields: [],
-    created_at: "2026-08-08T12:00:00.000Z",
-  };
-  const secondSearch = { ...firstSearch, id: secondSearchId, input_ref: secondOpportunityId };
-  const profitFor = (ruleVersion: string) => ({
-    latest_run: {
-      id: ruleVersion,
-      status: "calculated",
-      rule_version_code: ruleVersion,
-      platform: "amazon",
-      market: "US",
-      currency: "USD",
-      sale_price: 100,
-      total_cost: 20,
-      net_profit: 80,
-      net_margin_percent: 80,
-      missing_fields: [],
-      calculated_at: "2026-08-08T12:00:00.000Z",
-      components: [],
-    },
-    current_inputs: [],
-    cost_input_reviews: [],
+  await opportunitySetup(page, calculatedProfit(80), "calculated");
+  const forbiddenRequests: string[] = [];
+  page.on("request", (r) => {
+    if (
+      r.url().includes("/api/v1/") &&
+      (r.method() !== "GET" || r.url().includes("cost-input-reviewers"))
+    )
+      forbiddenRequests.push(r.url());
   });
-  await page.unroute(`**/api/v1/sourcing/searches/${searchId}`);
-  await page.unroute("**/api/v1/sourcing/searches");
-  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
-    route.fulfill({ json: envelope({ ...firstSearch, candidates: [] }) }),
+  await page.goto("/sourcing");
+  const summary = page.getByRole("region", { name: "成本与利润摘要" });
+  await expect(summary).toContainText("80 USD");
+  await expect(summary).toContainText("80%");
+  await expect(page.locator(".profit-input,.sourcing-cost-confirmation")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "提交双人复核" })).toHaveCount(0);
+  await expect(summary.getByRole("link", { name: "查看商品分析" })).toHaveAttribute(
+    "href",
+    /tab=profit/,
+  );
+  expect(forbiddenRequests).toEqual([]);
+});
+
+test("late profit reads cannot replace the selected supplier record", async ({ page }) => {
+  const { opportunityId, search } = await opportunitySetup(
+    page,
+    calculatedProfit(999),
+    "calculated",
+  );
+  const secondId = "00000000-0000-4000-8000-000000000614";
+  const secondSearchId = "00000000-0000-4000-8000-000000000615";
+  const second = { ...search, id: secondSearchId, input_ref: secondId, display_name: "另一个商品" };
+  await page.route("**/api/v1/sourcing/searches", (route) =>
+    route.fulfill({ json: envelope([search, second]) }),
   );
   await page.route(`**/api/v1/sourcing/searches/${secondSearchId}`, (route) =>
-    route.fulfill({ json: envelope({ ...secondSearch, candidates: [] }) }),
+    route.fulfill({ json: envelope({ ...second, candidates: [] }) }),
   );
-  await page.route("**/api/v1/sourcing/searches", (route) =>
-    route.fulfill({ json: envelope([firstSearch, secondSearch]) }),
+  await page.route(`**/api/v1/opportunities/${secondId}`, (route) =>
+    route.fulfill({ json: envelope({ profit_status: "calculated" }) }),
   );
-  await page.route(`**/api/v1/opportunities/${firstOpportunityId}`, async (route) => {
-    firstVersionStarted = true;
-    await firstVersionGate;
-    await route.fulfill({ json: envelope({ id: firstOpportunityId, version: 8 }) });
-  });
-  await page.route(
-    `**/api/v1/opportunities/${firstOpportunityId}/profit-analysis`,
-    async (route) => {
-      firstProfitStarted = true;
-      await firstProfitGate;
-      await route.fulfill({ json: envelope(profitFor("OLD-A")) });
-    },
+  await page.route(`**/api/v1/opportunities/${secondId}/profit-analysis`, (route) =>
+    route.fulfill({ json: envelope(calculatedProfit(80, "second-rule")) }),
   );
-  await page.route(`**/api/v1/opportunities/${secondOpportunityId}`, (route) =>
-    route.fulfill({ json: envelope({ id: secondOpportunityId, version: 9 }) }),
-  );
-  let secondProfitReads = 0;
-  await page.route(`**/api/v1/opportunities/${secondOpportunityId}/profit-analysis`, (route) => {
-    secondProfitReads += 1;
-    return route.fulfill({ json: envelope(profitFor("CURRENT-B")) });
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
   });
-  let releaseFirstVersion!: () => void;
-  let releaseFirstProfit!: () => void;
-  let releaseFirstReviewers!: () => void;
-  let firstVersionStarted = false;
-  let firstProfitStarted = false;
-  let firstReviewersStarted = false;
-  const firstVersionGate = new Promise<void>((resolve) => (releaseFirstVersion = resolve));
-  const firstProfitGate = new Promise<void>((resolve) => (releaseFirstProfit = resolve));
-  const firstReviewersGate = new Promise<void>((resolve) => (releaseFirstReviewers = resolve));
-  let reviewerReads = 0;
-  await page.route("**/api/v1/cost-input-reviewers", async (route) => {
-    reviewerReads += 1;
-    if (reviewerReads === 1) {
-      firstReviewersStarted = true;
-      await firstReviewersGate;
-      await route.fulfill({ json: envelope([{ id: "reviewer-a", label: "旧机会复核人" }]) });
-      return;
-    }
-    await route.fulfill({ json: envelope([{ id: "reviewer-b", label: "当前机会复核人" }]) });
+  let entered = false;
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, async (route) => {
+    entered = true;
+    await gate;
+    await route.fulfill({ json: envelope(calculatedProfit(999)) });
   });
-  const submittedBodies: Record<string, unknown>[] = [];
-  let releaseSecondWrite!: () => void;
-  let secondWriteCompleted = false;
-  const secondWriteGate = new Promise<void>((resolve) => (releaseSecondWrite = resolve));
-  await page.route(`**/api/v1/opportunities/${secondOpportunityId}/cost-inputs`, async (route) => {
-    submittedBodies.push(route.request().postDataJSON() as Record<string, unknown>);
-    await secondWriteGate;
-    await route.fulfill({ status: 201, json: envelope({ id: "current-cost-input" }) });
-    secondWriteCompleted = true;
-  });
-
   await page.goto("/sourcing");
-  await expect.poll(() => firstVersionStarted).toBe(true);
-  await expect.poll(() => firstProfitStarted).toBe(true);
-  await expect.poll(() => firstReviewersStarted).toBe(true);
-  await page.locator(".sourcing-layout > aside > button").nth(1).click();
-  await expect(page.getByText(`机会编号 ${secondOpportunityId}`, { exact: true })).toBeVisible();
-  await expect(page.locator(".profit-summary")).toContainText("CURRENT-B");
-  await expect(page.getByLabel("指定复核人")).toContainText("当前机会复核人");
-
-  releaseFirstVersion();
-  releaseFirstProfit();
-  releaseFirstReviewers();
-  await expect(page.locator(".profit-summary")).toContainText("CURRENT-B");
-  await expect(page.locator(".profit-summary")).not.toContainText("OLD-A");
-  await expect(page.getByLabel("指定复核人")).toContainText("当前机会复核人");
-  await expect(page.getByLabel("指定复核人")).not.toContainText("旧机会复核人");
-
-  await page.getByLabel("来源标识").fill("source:current-opportunity");
-  await page.getByLabel("证据 ID").fill("00000000-0000-4000-8000-000000000616");
-  await page.getByLabel("指定复核人").selectOption("reviewer-b");
-  await page.locator("form.profit-input").evaluate((form: HTMLFormElement) => form.requestSubmit());
-  await expect.poll(() => submittedBodies.length).toBe(1);
-  expect(submittedBodies[0]).toMatchObject({ expected_version: 9, reviewer_id: "reviewer-b" });
-  await page.locator(".sourcing-layout > aside > button").nth(0).click();
-  await expect(page.getByText(`机会编号 ${firstOpportunityId}`, { exact: true })).toBeVisible();
-  releaseSecondWrite();
-  await expect.poll(() => secondWriteCompleted).toBe(true);
-  await expect(page.locator(".sourcing-cost-confirmation")).not.toContainText(
-    "成本已提交给指定复核人；通过前不会影响利润。",
-  );
-  expect(secondProfitReads).toBe(1);
+  await expect.poll(() => entered).toBe(true);
+  await page
+    .getByRole("complementary", { name: "找货记录" })
+    .getByRole("button", { name: /另一个商品/ })
+    .click();
+  const summary = page.getByRole("region", { name: "成本与利润摘要" });
+  await expect(summary).toContainText("80 USD");
+  release();
+  await expect(summary).not.toContainText("999");
 });
 
-test("cost write re-entry is blocked and its receipt survives a failed profit refresh", async ({
+test("profit read errors retry without writes and historical calculations stay explicitly unknown", async ({
+  page,
+}) => {
+  const { opportunityId } = await opportunitySetup(page, calculatedProfit(80));
+  let reads = 0;
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) => {
+    reads++;
+    return reads <= 3
+      ? route.fulfill({
+          status: 503,
+          json: {
+            error: { code: "profit_unavailable", action_hint: "利润读取暂不可用" },
+            request_id: "profit-read-failed",
+            trace_id: "profit-read-failed",
+          },
+        })
+      : route.fulfill({ json: envelope(calculatedProfit(80)) });
+  });
+  const writes: string[] = [];
+  page.on("request", (r) => {
+    if (r.url().includes("/api/v1/") && r.method() !== "GET") writes.push(r.url());
+  });
+  await page.goto("/sourcing");
+  const summary = page.getByRole("region", { name: "成本与利润摘要" });
+  await expect(summary.getByRole("alert")).toContainText("profit-read-failed");
+  await summary.getByRole("button", { name: "重新读取利润资料" }).click();
+  await expect(summary).toContainText("利润未知");
+  await expect(summary.locator("dl")).toHaveCount(0);
+  await summary.getByText("查看计算依据").click();
+  await expect(summary).toContainText("历史结果不作为当前利润");
+  expect(writes).toEqual([]);
+});
+
+test("hundreds of sourcing records and supplier offers stay bounded and selectable across pages", async ({
   page,
 }) => {
   await setup(page);
-  const opportunityId = "00000000-0000-4000-8000-000000000612";
-  const opportunitySearch = {
-    id: searchId,
-    input_type: "opportunity",
-    input_ref: opportunityId,
+  const records = Array.from({ length: 628 }, (_, i) => ({
+    id: `00000000-0000-4000-8000-${String(1000 + i).padStart(12, "0")}`,
+    input_type: "keyword",
+    input_ref: `长标题商品记录${i + 1}用于检验列表与详情导航`,
     status: "completed",
-    candidate_count: 0,
+    candidate_count: 21,
     missing_fields: [],
     created_at: "2026-08-08T12:00:00.000Z",
-  };
-  await page.unroute(`**/api/v1/sourcing/searches/${searchId}`);
-  await page.unroute("**/api/v1/sourcing/searches");
-  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
-    route.fulfill({ json: envelope({ ...opportunitySearch, candidates: [] }) }),
-  );
+  }));
+  const candidates = Array.from({ length: 21 }, (_, i) => ({
+    ...readyCandidate,
+    id: `candidate-${i}`,
+    supplier_name: `供应商${i + 1}`,
+    quote: { ...readyCandidate.quote, id: `quote-${i}` },
+  }));
   await page.route("**/api/v1/sourcing/searches", (route) =>
-    route.fulfill({ json: envelope([opportunitySearch]) }),
+    route.fulfill({ json: envelope(records) }),
   );
-  let versionReads = 0;
-  await page.route(`**/api/v1/opportunities/${opportunityId}`, async (route) => {
-    versionReads += 1;
-    if (versionReads <= 3) {
-      await route.fulfill({
-        status: 503,
-        json: {
-          error: {
-            code: "opportunity_version_unavailable",
-            message: "机会版本读取失败。",
-            action_hint: "当前机会版本暂时无法读取。",
-          },
-          request_id: "m04-06-opportunity-version-failure",
-          trace_id: "m04-06-opportunity-version-trace",
-        },
-      });
-      return;
-    }
-    await route.fulfill({ json: envelope({ id: opportunityId, version: 8 }) });
+  await page.route("**/api/v1/sourcing/searches/*", (route) => {
+    const id = route.request().url().split("/").pop();
+    return route.fulfill({ json: envelope({ ...records.find((r) => r.id === id), candidates }) });
   });
-  let profitReads = 0;
-  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, async (route) => {
-    profitReads += 1;
-    if (profitReads > 1) {
-      await route.fulfill({
-        status: 503,
-        json: {
-          error: {
-            code: "profit_refresh_unavailable",
-            message: "利润读取失败。",
-            action_hint: "利润数据暂时无法更新，请稍后重试。",
-          },
-          request_id: "m04-06-profit-refresh-failure",
-          trace_id: "m04-06-profit-refresh-trace",
-        },
-      });
-      return;
-    }
-    await route.fulfill({
-      json: envelope({ latest_run: null, current_inputs: [], cost_input_reviews: [] }),
-    });
-  });
-  let reviewerReads = 0;
-  await page.route("**/api/v1/cost-input-reviewers", async (route) => {
-    reviewerReads += 1;
-    if (reviewerReads <= 3) {
-      await route.fulfill({
-        status: 503,
-        json: {
-          error: {
-            code: "reviewer_directory_unavailable",
-            message: "复核人目录读取失败。",
-            action_hint: "成本复核人名单暂时无法读取。",
-          },
-          request_id: "m04-06-reviewer-directory-failure",
-          trace_id: "m04-06-reviewer-directory-trace",
-        },
-      });
-      return;
-    }
-    await route.fulfill({ json: envelope([{ id: "reviewer-a", label: "指定成本复核人" }]) });
-  });
-  let releaseWrite!: () => void;
-  const writeGate = new Promise<void>((resolve) => (releaseWrite = resolve));
-  const submittedBodies: Record<string, unknown>[] = [];
-  await page.route(`**/api/v1/opportunities/${opportunityId}/cost-inputs`, async (route) => {
-    submittedBodies.push(route.request().postDataJSON() as Record<string, unknown>);
-    await writeGate;
-    await route.fulfill({ status: 201, json: envelope({ id: "new-cost-input" }) });
-  });
-
   await page.goto("/sourcing");
-  await expect.poll(() => versionReads).toBe(3);
-  await expect.poll(() => reviewerReads).toBe(3);
-  await expect(page.getByRole("button", { name: "提交双人复核" })).toBeDisabled();
-  const versionError = page
-    .locator(".sourcing-cost-confirmation > p[role='alert']")
-    .filter({ hasText: "当前机会版本暂时无法读取。" });
-  await expect(versionError).toContainText("m04-06-opportunity-version-failure");
-  await expect(page.locator(".profit-reviewer-status")).toContainText(
-    "成本复核人名单暂时无法读取。",
-  );
-  await page.getByRole("button", { name: "重新读取机会版本" }).click();
-  await page
-    .locator(".profit-reviewer-status")
-    .getByRole("button", { name: "重新加载复核人" })
-    .click();
-  await expect.poll(() => versionReads).toBe(4);
-  await expect.poll(() => reviewerReads).toBe(4);
-  await expect(page.getByLabel("指定复核人")).toContainText("指定成本复核人");
-  await page.getByLabel("来源标识").fill("source:cost-write-lock");
-  await page.getByLabel("证据 ID").fill("00000000-0000-4000-8000-000000000617");
-  await page.getByLabel("指定复核人").selectOption("reviewer-a");
-  await page.locator("form.profit-input").evaluate((form: HTMLFormElement) => {
-    form.requestSubmit();
-    form.requestSubmit();
-  });
-  await expect.poll(() => submittedBodies.length).toBe(1);
-  await expect(page.getByRole("button", { name: "提交双人复核" })).toBeDisabled();
-  releaseWrite();
+  await expect(page.locator(".sourcing-record-items > button")).toHaveCount(20);
+  await expect(page.locator(".supplier-cards > article")).toHaveCount(10);
+  expect(
+    await page
+      .getByRole("complementary", { name: "找货记录" })
+      .evaluate((e) => e.getBoundingClientRect().height),
+  ).toBeLessThan(900);
+  expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThan(12000);
+  const recordPager = page.getByRole("navigation", { name: "找货记录分页" });
+  await recordPager.getByRole("button", { name: "下一页" }).click();
+  await expect(recordPager).toContainText("2 / 32");
   await expect(
     page
-      .locator(".sourcing-cost-confirmation > p[role='status']")
-      .filter({ hasText: "成本已提交给指定复核人" }),
-  ).toContainText("成本已提交给指定复核人；通过前不会影响利润。");
-  await expect(page.getByRole("alert")).toContainText("利润数据暂时无法更新，请稍后重试。");
-  await expect(page.getByRole("alert")).toContainText("m04-06-profit-refresh-failure");
-  expect(submittedBodies).toHaveLength(1);
-  expect(submittedBodies[0]).toMatchObject({
-    expected_version: 8,
-    reviewer_id: "reviewer-a",
-    source_ref_id: "source:cost-write-lock",
+      .getByRole("region", { name: "找货记录详情" })
+      .getByRole("heading", { name: /长标题商品记录21/ }),
+  ).toBeVisible();
+  const supplierPager = page.getByRole("navigation", { name: "货源报价分页" });
+  await supplierPager.getByRole("button", { name: "下一页" }).click();
+  await supplierPager.getByRole("button", { name: "下一页" }).click();
+  await expect(page.locator(".supplier-cards > article")).toHaveCount(1);
+  await expect(page.locator(".supplier-cards")).toContainText("供应商21");
+  await page.getByRole("searchbox", { name: "搜索找货记录" }).fill("长标题商品记录628用于");
+  await expect(page.locator(".sourcing-record-items > button")).toHaveCount(1);
+  await expect(
+    page
+      .getByRole("region", { name: "找货记录详情" })
+      .getByRole("heading", { name: /长标题商品记录628/ }),
+  ).toBeVisible();
+  await expect(page.locator(".supplier-cards > article")).toHaveCount(10);
+  expect(
+    await page.locator(".sourcing-record-items").evaluate((e) => e.scrollHeight > e.clientHeight),
+  ).toBe(false);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.goto(`/sourcing?record=${records[627]!.id}`);
+  await expect(page.getByRole("navigation", { name: "找货记录分页" })).toContainText("32 / 32");
+  await expect(
+    page.getByRole("complementary", { name: "找货记录" }).getByRole("button", { pressed: true }),
+  ).toContainText("长标题商品记录628");
+});
+
+test("returning to sourcing reads profit again and ignores the pre-deactivation reply", async ({
+  page,
+}) => {
+  const { opportunityId } = await opportunitySetup(page, calculatedProfit(999), "calculated");
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
   });
+  let reads = 0;
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, async (route) => {
+    const first = ++reads === 1;
+    if (first) await gate;
+    await route.fulfill({ json: envelope(calculatedProfit(first ? 999 : 90)) });
+  });
+  await page.goto("/sourcing");
+  await expect.poll(() => reads).toBe(1);
+  await navigateMemberMenu(page, "选品工作台");
+  await expect(page).toHaveURL(/\/home/);
+  release();
+  await navigateMemberMenu(page, "1688 找货");
+  const summary = page.getByRole("region", { name: "成本与利润摘要" });
+  await expect(summary).toContainText("90 USD");
+  await expect(summary).not.toContainText("999");
 });
 
 test("commerce sourcing keeps white surfaces while changing the selected accent", async ({

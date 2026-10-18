@@ -98,7 +98,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
       risk_level: "风险",
     },
     canManage = computed(() => props.capabilities.includes("supplier_quote:manage")),
-    canConfirmCost = computed(() => props.capabilities.includes("cost:confirm")),
     canInspectCollection = computed(
       () =>
         props.capabilities.includes("platform:operate") ||
@@ -647,7 +646,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     quote,
     purchaseForm,
     canManage,
-    canConfirmCost,
     canInspectCollection,
     candidates,
     searchName,

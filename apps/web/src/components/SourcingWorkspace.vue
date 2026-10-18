@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import {
   useSourcingWorkspace,
   type SourcingWorkspaceProps,
 } from "../composables/useSourcingWorkspace";
 import SourcingComparisonPanel from "./SourcingComparisonPanel.vue";
-import SourcingCostConfirmationPanel from "./SourcingCostConfirmationPanel.vue";
+import SourcingProfitSummary from "./SourcingProfitSummary.vue";
 import SourcingWorkspaceDialogs from "./SourcingWorkspaceDialogs.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../sourcing.css";
@@ -35,7 +35,6 @@ const {
   quote,
   purchaseForm,
   canManage,
-  canConfirmCost,
   canInspectCollection,
   candidates,
   searchName,
@@ -72,6 +71,51 @@ const {
   refreshSearch,
   removeSearch,
 } = useSourcingWorkspace(props);
+const recordPageSize = 20,
+  supplierPageSize = 10;
+const recordPage = ref(1),
+  supplierPage = ref(1);
+const recordPages = computed(() =>
+  Math.max(1, Math.ceil(filteredItems.value.length / recordPageSize)),
+);
+const supplierPages = computed(() =>
+  Math.max(1, Math.ceil(candidates.value.length / supplierPageSize)),
+);
+const visibleRecords = computed(() =>
+  filteredItems.value.slice(
+    (recordPage.value - 1) * recordPageSize,
+    recordPage.value * recordPageSize,
+  ),
+);
+const visibleCandidates = computed(() =>
+  candidates.value.slice(
+    (supplierPage.value - 1) * supplierPageSize,
+    supplierPage.value * supplierPageSize,
+  ),
+);
+watch([filteredItems, () => selected.value?.id], () => {
+  const index = filteredItems.value.findIndex((item) => item.id === selected.value?.id);
+  if (index >= 0) recordPage.value = Math.floor(index / recordPageSize) + 1;
+  else {
+    recordPage.value = 1;
+    const first = filteredItems.value[0];
+    if (first) void detail(first);
+  }
+});
+watch(
+  () => selected.value?.id,
+  () => {
+    supplierPage.value = 1;
+  },
+);
+watch(supplierPages, (count) => {
+  supplierPage.value = Math.min(supplierPage.value, count);
+});
+function changeRecordPage(next: number) {
+  recordPage.value = Math.max(1, Math.min(next, recordPages.value));
+  const first = visibleRecords.value[0];
+  if (first) void detail(first);
+}
 const pendingMessage = computed(() => {
   const progress = selected.value?.collection_progress;
   if (progress?.active_subqueries && progress.status === "running")
@@ -151,19 +195,40 @@ const pendingMessage = computed(() => {
       @secondary="canManage ? openSearch() : load()"
     />
     <div v-else class="sourcing-layout">
-      <aside aria-label="找货记录">
-        <button
-          v-for="item in filteredItems"
-          :key="item.id"
-          type="button"
-          :aria-pressed="selected?.id === item.id"
-          :class="{ selected: selected?.id === item.id }"
-          @click="detail(item)"
-        >
-          <b>{{ searchName(item) }}</b
-          ><small>{{ inputTypeText(item.input_type) }} · {{ statusText(item.status) }}</small
-          ><em>{{ item.candidate_count }} 个候选</em>
-        </button>
+      <aside aria-label="找货记录" :data-short="visibleRecords.length <= 2">
+        <header class="sourcing-record-heading">
+          <b>找货记录</b><span>{{ filteredItems.length }} 条</span>
+        </header>
+        <div class="sourcing-record-items">
+          <button
+            v-for="item in visibleRecords"
+            :key="item.id"
+            type="button"
+            :aria-pressed="selected?.id === item.id"
+            :class="{ selected: selected?.id === item.id }"
+            @click="detail(item)"
+          >
+            <b :title="searchName(item)">{{ searchName(item) }}</b
+            ><small>{{ inputTypeText(item.input_type) }} · {{ statusText(item.status) }}</small
+            ><em>{{ item.candidate_count }} 个候选</em>
+          </button>
+        </div>
+        <nav v-if="recordPages > 1" class="sourcing-pagination" aria-label="找货记录分页">
+          <button
+            type="button"
+            :disabled="recordPage === 1"
+            @click="changeRecordPage(recordPage - 1)"
+          >
+            上一页</button
+          ><span>{{ recordPage }} / {{ recordPages }}</span
+          ><button
+            type="button"
+            :disabled="recordPage === recordPages"
+            @click="changeRecordPage(recordPage + 1)"
+          >
+            下一页
+          </button>
+        </nav>
       </aside>
       <section v-if="selected" class="sourcing-detail" aria-label="找货记录详情">
         <header>
@@ -191,12 +256,6 @@ const pendingMessage = computed(() => {
         <p v-if="selected.missing_fields.length" class="missing">
           当前候选仍缺：{{ missingText }}。必须人工带证据确认。
         </p>
-        <SourcingCostConfirmationPanel
-          v-if="selected.input_type === 'opportunity'"
-          :api-base-url="apiBaseUrl"
-          :opportunity-id="selected.input_ref"
-          :can-confirm-cost="canConfirmCost"
-        />
         <section v-if="selected.collection_progress" class="sourcing-progress">
           <header>
             <div>
@@ -271,18 +330,16 @@ const pendingMessage = computed(() => {
           <span v-if="selected.missing_fields.length">待补齐：{{ missingText }}</span>
         </section>
         <section class="supplier-cards">
-          <article v-for="item in candidates" :key="item.id" :data-ready="item.status === 'ready'">
+          <article
+            v-for="item in visibleCandidates"
+            :key="item.id"
+            :data-ready="item.status === 'ready'"
+          >
             <header>
-              <label v-if="canManage && item.quote"
-                ><input
-                  type="checkbox"
-                  :checked="selectedQuotes.includes(item.quote.id)"
-                  @change="choose(item, $event)"
-                />加入对比</label
-              ><b>{{ item.supplier_name }}</b
+              <b>{{ item.supplier_name }}</b
               ><span>{{ statusText(item.status) }}</span>
             </header>
-            <h4>{{ item.product_title }}</h4>
+            <h4 :title="item.product_title">{{ item.product_title }}</h4>
             <dl>
               <div data-priority="primary">
                 <dt>报价</dt>
@@ -330,6 +387,13 @@ const pendingMessage = computed(() => {
               </li>
             </ul>
             <footer>
+              <label v-if="canManage && item.quote"
+                ><input
+                  type="checkbox"
+                  :checked="selectedQuotes.includes(item.quote.id)"
+                  @change="choose(item, $event)"
+                />加入对比</label
+              >
               <a :href="item.original_url" target="_blank" rel="noopener noreferrer"
                 >打开外部原始商品页（新窗口）</a
               ><time>采集于 {{ timeText(item.observed_at) }}</time
@@ -342,6 +406,20 @@ const pendingMessage = computed(() => {
             </footer>
           </article>
         </section>
+        <nav v-if="supplierPages > 1" class="sourcing-pagination" aria-label="货源报价分页">
+          <button type="button" :disabled="supplierPage === 1" @click="supplierPage--">
+            上一页</button
+          ><span>{{ supplierPage }} / {{ supplierPages }} · 共 {{ candidates.length }} 个候选</span
+          ><button type="button" :disabled="supplierPage === supplierPages" @click="supplierPage++">
+            下一页
+          </button>
+        </nav>
+        <SourcingProfitSummary
+          v-if="selected.input_type === 'opportunity'"
+          :key="selected.input_ref"
+          :api-base-url="apiBaseUrl"
+          :opportunity-id="selected.input_ref"
+        />
         <SourcingComparisonPanel
           :comparisons="comparisons"
           :failure="comparisonFailure"

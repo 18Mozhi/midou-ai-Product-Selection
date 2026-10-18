@@ -11762,3 +11762,7 @@ x-scoutops-lan-1688:
 
 # Sourcing empty UI derives pending/blocked/ended text from existing collection_progress;
 # an empty candidate list alone never implies a running collection. No response changes.
+
+# Sourcing record/offer pagination is client-only over existing responses.
+# The sourcing cost editor is retired; its replacement only GETs existing
+# opportunity state and profit-analysis. Backend cost APIs and permissions remain.
