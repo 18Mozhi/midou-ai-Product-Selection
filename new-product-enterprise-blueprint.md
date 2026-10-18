@@ -1,3 +1,5 @@
+> 2026-10-18 商品详情按分区聚焦，推荐与补证仅在商品评分页，已知自动评分缺失码中文化。见 `docs/selection-detail-section-focus.md`；全站与日百品仍待验收。
+
 > 2026-10-18 找货页重制：记录/报价分页、独立有界导航、报价优先与只读利润摘要，退休找货页手工成本编辑。旧P21成本编辑说明为历史。见 `docs/selection-sourcing-workbench-navigation.md`；全站及日百品仍待验收。
 
 > 2026-10-18 Amazon 搜索与详情采用独立观测身份；有效的新搜索报价继续保留，空报价不覆盖真实详情，完整性只认最新经证明详情，并保留原证据时间。见 `docs/amazon-search-detail-observations.md`；日百品仍需实际验收。

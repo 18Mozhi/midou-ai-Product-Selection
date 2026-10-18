@@ -495,13 +495,14 @@ useOpportunityWorkspaceLifecycle({
           <OpportunityDetailNavigation :active-tab="tab" :items="detailTabs" @select="setTab" />
           <div class="opportunity-detail-workface">
             <OpportunityDecisionPanel
+              v-if="tab === 'overview'"
               :detail="detail"
               :busy="busy"
               :can-decide="canDecide"
               @decide="startDecision"
             />
             <section
-              v-if="detail.selection_stage !== 'recommended'"
+              v-if="tab === 'overview' && detail.selection_stage !== 'recommended'"
               class="opportunity-next-steps opportunity-collection-tools"
             >
               <details>

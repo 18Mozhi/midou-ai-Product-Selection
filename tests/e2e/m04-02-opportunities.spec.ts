@@ -265,7 +265,7 @@ test("existing evidence task links open the exact task and retain the product co
 }) => {
   const taskId = "00000000-0000-4000-8000-000000000434";
   await ready(page, evidence, { adoption_blockers: [{ ...blockedEvidence, task_id: taskId }] });
-  const source = `/opportunities/${opportunityId}?tab=evidence`;
+  const source = `/opportunities/${opportunityId}?tab=overview`;
   await page.goto(source);
   const summary = page.getByRole("link", { name: "查看补采任务", exact: true });
   await expect(summary).toHaveAttribute("href", new RegExp(`^/tasks/${taskId}\\?from=`));
@@ -955,6 +955,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
     )
       decisionWrites.push(request.url());
   });
+  await page.getByRole("button", { name: "商品与评分", exact: true }).click();
   const earlyDecision = page.getByText("提前人工处理", { exact: true });
   const earlyDecisionDetails = page.locator(".opportunity-decision-waiting details");
   await earlyDecision.hover();
@@ -998,6 +999,9 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   await dialog.getByLabel("原因（必填）").fill("补齐成本与竞品后再判断");
   await dialog.getByRole("button", { name: "确认记录" }).click();
   await expect(page.getByText("决策已记录；原始评分与证据未被改写。")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 0) <= 640) {
+    await expect(page.locator(".opportunity-decision-waiting")).toHaveCSS("position", "static");
+  }
   await page.getByRole("button", { name: "决策记录" }).click();
   await expect(page.locator(".opportunity-decisions")).toHaveCSS("border-radius", "0px");
   await expect(page.locator(".opportunity-decisions")).toHaveCSS(
@@ -1018,9 +1022,6 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   await expect(page).toHaveScreenshot("legible-recommendation-detail-20261017.png", {
     fullPage: true,
   });
-  if ((page.viewportSize()?.width ?? 0) <= 640) {
-    await expect(page.locator(".opportunity-decision-waiting")).toHaveCSS("position", "static");
-  }
 });
 
 test("P18 adoption entry requires each quality gate even when the aggregate claims success", async ({
@@ -2735,7 +2736,9 @@ test("selection views send explicit truthful recommendation filters", async ({ p
   await page.getByRole("button", { name: "采集中" }).click();
   await evidencePending;
   await expect(page).toHaveURL(/view=evidence_pending/);
-  await expect(page.getByRole("heading", { name: "采集中", level: 2 })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "1 个商品仍在采集", exact: true, level: 2 }),
+  ).toBeVisible();
 
   const all = page.waitForRequest((request) => request.url().includes("selection_view=all"));
   await page.getByRole("button", { name: "全部商品" }).click();
@@ -3059,6 +3062,8 @@ for (const coverage of ["covered", "insufficient_data"]) {
         page.getByText("当前风险资料已覆盖，请结合原始证据核对已保存的风险等级。", { exact: true }),
       ).toHaveCount(0);
     }
+    await expect(page.locator(".opportunity-collection-tools")).toHaveCount(0);
+    await page.getByRole("button", { name: "商品与评分", exact: true }).click();
     await page.getByText("补证异常时手动处理", { exact: true }).click();
     await expect(
       page.getByText("补证状态以当前记录为准；需要立即重试时可使用下面的操作。", { exact: true }),
@@ -3360,3 +3365,32 @@ for (const populated of [false, true]) {
     await expect(header.getByText(/数据版本 v/)).toBeVisible();
   });
 }
+
+test("detail sections lead with their own content and keep decisions in product scoring", async ({
+  page,
+}) => {
+  await ready(page, evidence, {
+    score_components: [
+      {
+        dimension_code: "profit",
+        weight_percent: 30,
+        input_score: null,
+        weighted_score: null,
+        evidence_ids: [],
+        missing_fields: ["automatic_evaluation.profit.automatic_cost_scope_mismatch"],
+      },
+    ],
+  });
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.locator(".opportunity-decision-summary")).toHaveCount(1);
+  await page.getByText("缺失项", { exact: true }).click();
+  await expect(page.getByText("费用规则未覆盖当前商品类别", { exact: true })).toBeVisible();
+  for (const name of ["竞品对比", "货源与利润", "情报证据", "风险", "决策记录"]) {
+    await page.getByRole("button", { name, exact: true }).click();
+    await expect(page.locator(".opportunity-decision-summary")).toHaveCount(0);
+    await expect(page.locator(".opportunity-collection-tools")).toHaveCount(0);
+  }
+  await page.getByRole("button", { name: "商品与评分", exact: true }).click();
+  await expect(page.locator(".opportunity-decision-summary")).toHaveCount(1);
+  await expect(page.locator(".opportunity-collection-tools")).toHaveCount(1);
+});

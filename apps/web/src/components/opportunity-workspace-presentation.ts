@@ -53,7 +53,23 @@ const scoreDimensionLabels: Record<string, string> = {
 export const opportunityScoreDimensionLabel = (value: string) =>
   scoreDimensionLabels[value] ?? value;
 
+const automaticProfitGapLabels: Record<string, string> = {
+  automatic_rules_not_active: "费用规则尚未启用",
+  automatic_cost_scope_mismatch: "费用规则未覆盖当前商品类别",
+  high_confidence_1688_match_missing: "缺少可信的1688匹配货源",
+  automatic_cost_policy_incomplete: "物流或汇率依据尚未齐全",
+  automatic_cost_inputs_missing: "售价或采购成本依据尚未齐全",
+  profit_calculation_incomplete: "利润计算资料尚未齐全",
+};
+
 export const opportunityMissingFieldLabel = (value: string) => {
+  if (value === "automatic_evaluation.quality_blocked") return "原始证据未通过质量检查";
+  const automaticDimension = /^automatic_evaluation\.([a-z_]+)\.unsupported$/.exec(value)?.[1];
+  if (automaticDimension && scoreDimensionLabels[automaticDimension])
+    return `${scoreDimensionLabels[automaticDimension]}评分资料不足`;
+  const profitReason = /^automatic_evaluation\.profit\.([a-z0-9_]+)$/.exec(value)?.[1];
+  if (profitReason && automaticProfitGapLabels[profitReason])
+    return automaticProfitGapLabels[profitReason];
   const match = /^([a-z_]+)\.input$/.exec(value);
   const dimension = match?.[1];
   return dimension && scoreDimensionLabels[dimension]

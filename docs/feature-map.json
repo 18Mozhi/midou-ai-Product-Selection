@@ -1,4 +1,17 @@
 {
+  "selectionDetailSectionFocus20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-detail-section-focus.md",
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/opportunity-workspace-presentation.ts"
+    ],
+    "testFiles": [
+      "tests/m04-02/opportunity-detail-truth-regression.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "contract": "Decision guidance and manual collection fallback belong to overview only; other five sections lead with their own existing content. Known automatic scoring gaps use Chinese labels from actual worker codes, unknown fields remain auditable. No score, API, request, RBAC, schema, config, dependency or daily-completion changes."
+  },
   "sourcingWorkbenchNavigation20261018": {
     "status": "implemented",
     "requirements": "docs/selection-sourcing-workbench-navigation.md",

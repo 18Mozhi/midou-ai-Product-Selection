@@ -55,6 +55,21 @@ test("known scoring gaps use Chinese labels while unknown fields remain auditabl
   assert.equal(label("market_demand.input"), "市场需求评分资料");
   assert.equal(label("profit.input"), "利润评分资料");
   assert.equal(label("data_quality.input"), "数据质量评分资料");
+  assert.equal(label("automatic_evaluation.market_demand.unsupported"), "市场需求评分资料不足");
+  assert.equal(label("automatic_evaluation.competition.unsupported"), "竞争评分资料不足");
+  assert.equal(label("automatic_evaluation.quality_blocked"), "原始证据未通过质量检查");
+  assert.equal(
+    label("automatic_evaluation.profit.automatic_cost_scope_mismatch"),
+    "费用规则未覆盖当前商品类别",
+  );
+  assert.equal(
+    label("automatic_evaluation.profit.high_confidence_1688_match_missing"),
+    "缺少可信的1688匹配货源",
+  );
+  assert.equal(
+    label("automatic_evaluation.profit.future_reason"),
+    "automatic_evaluation.profit.future_reason",
+  );
   assert.equal(label("provider.unknown"), "provider.unknown");
   assert.equal(label("评价明细"), "评价明细");
   assert.equal(label("unknown.input"), "unknown.input");
