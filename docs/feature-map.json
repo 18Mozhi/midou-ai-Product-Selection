@@ -1400,9 +1400,11 @@
     ],
     "testFiles": [
       "tests/unit/supply-title-classification.test.mjs",
+      "tests/unit/intelligence-product-association.test.mjs",
       "tests/unit/automatic-evidence-scoring.test.mjs"
     ],
-    "events": ["opportunity.supply_title_classified"]
+    "events": ["opportunity.supply_title_classified"],
+    "contract": "Supply classification explicitly requires literal primary-language/case product_title excerpts, never translated or supply-only attributes. Unprovable three-attribute matches are omitted; empty classifications mean no match. Original strict validation, facts, identity, price, scoring and transport contracts remain unchanged."
   },
   "selectionOrganizationToolbar20261017": {
     "status": "implemented",

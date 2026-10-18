@@ -226,6 +226,34 @@ test("model supplies only classifications through the existing bounded OpenAI co
     await assert.rejects(api.classifySupplies({ ...input, candidates }), /input_invalid/);
 });
 
+test("supply model cannot cite translated or supply-only attributes as primary evidence", async () => {
+  const translated = structuredClone(result);
+  translated.attributes = translated.attributes.map((attribute) => ({
+    ...attribute,
+    product_excerpt: attribute.supply_excerpt,
+  }));
+  const responses = [{ classifications: [translated] }, { classifications: [] }];
+  const api = new OpenAiIntelligenceProductClassifier(
+    "configured-model",
+    "http://model.test/v1",
+    "",
+    1000,
+    async (_url, options) => {
+      const body = JSON.parse(options.body);
+      assert.deepEqual(JSON.parse(body.messages[1].content), input);
+      return Response.json({
+        choices: [{ message: { content: JSON.stringify(responses.shift()) } }],
+      });
+    },
+  );
+  await assert.rejects(api.classifySupplies(input), /supply_title_classification_invalid/);
+  assert.deepEqual(await api.classifySupplies(input), []);
+  assert.equal(
+    selectClassifiedSupplyQuote(input.product_ref, title, [offer], { input, classifications: [] }),
+    null,
+  );
+});
+
 test("Qwen 3.5 supply and intelligence classification use the documented non-thinking parameter", async () => {
   for (const model of ["Qwen3.5-9B-AWQ-4bit", "Qwen/Qwen3.5-9B"]) {
     const bodies = [];

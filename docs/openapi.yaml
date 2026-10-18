@@ -1,4 +1,5 @@
 openapi: 3.0.3
+# Supply title literal-citation prompt clarification: existing internal model/API schemas unchanged.
 # LAN1688 HTTP429 uses existing rate_limited health/task codes; request/response schemas unchanged.
 # 2026-10-19: Trend detail pending state is frontend-only; trend API contracts unchanged.
 # Browser lease acquire retries only successfully rolled-back MySQL deadlocks, at most3 transactions with unchanged scope/idempotency/expiry; API fields unchanged.

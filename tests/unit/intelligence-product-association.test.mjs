@@ -23,6 +23,23 @@ const association = {
 const { excerpt: _excerpt, ...modelAssociation } = association;
 const client = (fetcher) =>
   new OpenAiIntelligenceProductClassifier("local-model", "http://model.test/v1", "", 1000, fetcher);
+
+function scopedPrimaryFixture() {
+  let inserted;
+  return (sql, params) => {
+    if (sql.startsWith("INSERT IGNORE INTO competitors")) {
+      inserted = params;
+      return [{ affectedRows: 1 }];
+    }
+    if (sql.startsWith("SELECT id FROM competitors")) {
+      assert.ok(inserted, "lookup must resolve a real inserted primary");
+      assert.match(sql, /opportunity_id=\? AND deleted_at IS NULL/);
+      assert.deepEqual(params, [inserted[1], inserted[2], inserted[5], inserted[6], inserted[3]]);
+      return [[{ id: inserted[0] }]];
+    }
+    return null;
+  };
+}
 const response = (value) =>
   new Response(JSON.stringify({ choices: [{ message: { content: JSON.stringify(value) } }] }));
 
@@ -332,6 +349,7 @@ test("search results choose exactly one actual product before projection and ret
 
 test("selected Amazon primary links original news and schedules the existing detail, competitor and sourcing chain", async () => {
   const calls = [];
+  const primaryQuery = scopedPrimaryFixture();
   const connection = {
     beginTransaction: async () => {},
     commit: async () => {},
@@ -339,6 +357,8 @@ test("selected Amazon primary links original news and schedules the existing det
     release() {},
     query: async (sql, params) => {
       calls.push([sql, params]);
+      const primaryResult = primaryQuery(sql, params);
+      if (primaryResult) return primaryResult;
       if (sql.startsWith("SELECT id FROM trend_projection_jobs")) return [[{ id: "job" }]];
       if (sql.startsWith("SELECT id,code FROM providers"))
         return [
@@ -526,6 +546,7 @@ test("no-match and model failure preserve distinct terminal or retry queue recei
 
 function automaticChannelProjection(enabled = true) {
   const calls = [];
+  const primaryQuery = scopedPrimaryFixture();
   const connection = {
     beginTransaction: async () => {},
     commit: async () => {},
@@ -533,6 +554,8 @@ function automaticChannelProjection(enabled = true) {
     release() {},
     query: async (sql, params) => {
       calls.push([sql, params]);
+      const primaryResult = primaryQuery(sql, params);
+      if (primaryResult) return primaryResult;
       if (sql.startsWith("SELECT id FROM trend_projection_jobs")) return [[{ id: "job" }]];
       if (sql.startsWith("SELECT id,code FROM providers"))
         return [
