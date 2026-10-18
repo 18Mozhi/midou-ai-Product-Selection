@@ -119,6 +119,9 @@ test("an aborted original-URL reread is retried once after document and anonymou
   const steps = [];
   let calls = 0;
   const success = fixture({ locationAfterReread: "Deliver to San Mateo 94404" });
+  success.page.waitForNavigation = async (options) => {
+    success.actions.push(["navigation", options.waitUntil]);
+  };
   assert.equal(
     await prepareAmazonDeliveryContext(
       success.page,
@@ -135,7 +138,7 @@ test("an aborted original-URL reread is retried once after document and anonymou
   assert.equal(calls, 2);
   assert.ok(steps.includes("reread_interrupted_wait"));
   assert.ok(steps.includes("reread_retry"));
-  assert.ok(success.actions.some((a) => a[0] === "load" && a[1] === "domcontentloaded"));
+  assert.ok(success.actions.some((a) => a[0] === "navigation" && a[1] === "domcontentloaded"));
 });
 
 test("aborted reread recovery preserves all guards and cannot retry indefinitely", async () => {
@@ -149,11 +152,8 @@ test("aborted reread recovery preserves all guards and cannot retry indefinitely
   ]) {
     const f = fixture({ doneWrongPostal: true });
     let calls = 0;
-    const originalWait = f.page.waitForLoadState;
-    f.page.waitForLoadState = async (state) => {
-      if (state === "domcontentloaded" && mode === "settle_failed")
-        throw new errors.TimeoutError("settle failed");
-      await originalWait(state);
+    f.page.waitForNavigation = async () => {
+      if (mode === "settle_failed") throw new errors.TimeoutError("settle failed");
     };
     const safe = async () => {
       await f.safe();

@@ -69,10 +69,10 @@ export async function prepareAmazonDeliveryContext(
       await reread();
     } catch (error) {
       if (!(error instanceof Error) || !error.message.includes("net::ERR_ABORTED")) throw error;
-      // Done can start a competing main-frame reload. Settle its document and
+      // Done can start a competing main-frame reload. Observe that navigation and
       // recheck the original guards before one original-URL reread, never a loop.
       reportStep("reread_interrupted_wait");
-      await page.waitForLoadState("domcontentloaded");
+      await page.waitForNavigation({ waitUntil: "domcontentloaded" });
       await assertAnonymous();
       reportStep("reread_retry");
       await reread();

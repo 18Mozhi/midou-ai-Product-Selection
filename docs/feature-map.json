@@ -7,7 +7,7 @@
       "tests/unit/amazon-delivery-context.test.mjs",
       "tests/integration/amazon-delivery-readiness.test.mjs"
     ],
-    "contract": "Only explicit original-URL reread throwing Chromium net::ERR_ABORTED can settle current DOM and recheck original anonymous/origin/challenge guards before one additional original-URL reread. Second failure propagates; no loop, new config or budget. Final reread retains original engine HTTP, origin and strict postal checks. No API/schema/env/dependency/frontend/Python or forced health/circuit changes."
+    "contract": "Only explicit original-URL reread throwing Chromium net::ERR_ABORTED can wait for actual subsequent navigation to DOMContentLoaded and recheck original anonymous/origin/challenge guards before one additional original-URL reread. Old document load state cannot substitute for navigation. Missing navigation or second failure propagates; no loop, new config or budget. Final reread retains original engine HTTP, origin and strict postal checks. No API/schema/env/dependency/frontend/Python or forced health/circuit changes."
   },
   "amazonDeliveryLoadTimeout20261018": {
     "status": "implemented",

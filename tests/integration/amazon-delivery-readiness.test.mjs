@@ -5,14 +5,24 @@ import { prepareAmazonDeliveryContext } from "../../packages/playwright-crawler/
 
 test("Chromium aborted reread recovers once through a real guarded original-URL navigation", async () => {
   const browser = await chromium.launch({ headless: true });
+  let competingNavigation;
   try {
     const page = await browser.newPage();
     page.setDefaultTimeout(500);
     page.setDefaultNavigationTimeout(2000);
     let requests = 0;
-    await page.route("**/*", (route) => {
+    await page.route("**/*", async (route) => {
       requests++;
-      if (requests === 2) return route.abort("aborted");
+      if (requests === 2) {
+        await route.abort("aborted");
+        competingNavigation = new Promise((resolve) => setTimeout(resolve, 50)).then(() =>
+          page.goto("https://www.amazon.com/dp/B0F6FT397Y?settled=1", {
+            waitUntil: "domcontentloaded",
+          }),
+        );
+        void competingNavigation.catch(() => {});
+        return;
+      }
       return route.fulfill({
         contentType: "text/html",
         body:
@@ -41,11 +51,13 @@ test("Chromium aborted reread recovers once through a real guarded original-URL 
       ),
       true,
     );
-    assert.equal(requests, 3);
+    assert.equal(requests, 4);
+    await competingNavigation;
     assert.ok(steps.includes("reread_retry"));
     assert.equal(page.url(), original);
     assert.match(await page.locator("#glow-ingress-block").textContent(), /94404/);
   } finally {
+    await competingNavigation?.catch(() => {});
     await browser.close();
   }
 });
