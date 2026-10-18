@@ -1,4 +1,5 @@
 import { activeCollectionScopeSql } from "./collection-source-scheduling-policy.js";
+import { recoverCircuitHeldSourcing } from "./automatic-sourcing-retry-policy.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
@@ -233,6 +234,29 @@ export class TrendProjectionPersistence {
     }
   }
   async enqueueMissingAutomaticDownstream() {
+    if (
+      await recoverCircuitHeldSourcing(
+        this.pool,
+        async (connection, row, taskId, target, requestId, traceId) => {
+          await this.scheduleCoreCollection(
+            connection,
+            {
+              organizationId: String(row.organization_id),
+              workspaceId: String(row.workspace_id),
+              actorId: String(row.created_by),
+              requestId,
+              traceId,
+            },
+            taskId,
+            [{ providerId: String(row.provider_id), required: true, target }],
+            "sourcing.collection.auto_scheduled",
+            this.now(),
+          );
+        },
+        this.now(),
+      )
+    )
+      return;
     const c = await this.pool.getConnection(),
       now = this.now();
     try {

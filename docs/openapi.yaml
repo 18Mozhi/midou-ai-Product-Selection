@@ -11741,3 +11741,7 @@ x-scoutops-lan-1688:
 # LAN1688 transient recovery runs inside the existing API with pending system tasks and real health.
 # LAN_1688_AUTO_RECOVERY_ENABLED/POLL_MS/COOLDOWN_MS are backend-only; no new HTTP inputs.
 # Automatic product sourcing writes the existing is_required=true field and waits on source holds.
+
+# Internal Worker event sourcing.search.circuit_requeued links immutable previous_task_id
+# to a required replacement collection_task_id only after real later circuit recovery.
+# Existing sourcing/search/task APIs remain unchanged; there is no HTTP replay switch.

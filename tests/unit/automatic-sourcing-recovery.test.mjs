@@ -39,7 +39,7 @@ function setup(
     },
   };
   const worker = new TrendProjectionPersistence(
-    { getConnection: async () => connection },
+    { getConnection: async () => connection, query: async () => [[]] },
     "worker-1",
     () => new Date("2026-10-17T00:00:00Z"),
   );

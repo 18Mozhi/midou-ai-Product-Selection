@@ -1,4 +1,17 @@
 {
+  "sourcingCircuitRetry20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-sourcing-circuit-retry.md",
+    "sourceFiles": [
+      "apps/worker/src/automatic-sourcing-retry-policy.ts",
+      "apps/worker/src/trend-projection-persistence.ts"
+    ],
+    "testFiles": [
+      "tests/unit/sourcing-circuit-retry.test.mjs",
+      "tests/unit/automatic-sourcing-recovery.test.mjs"
+    ],
+    "contract": "One automatic empty circuit-held sourcing search per existing repair turn, only after the enabled reviewed source actually recovered later than its blocked query. Active exact tenant scope, immutable old task, PK search lock and eligibility recheck; current primary image, required existing task producer and atomic link/audit. No replay of genuine empty/other failures, schema/API/config/dependency changes. Natural recovery and daily100 remain unverified."
+  },
   "lan1688AutoRecovery20261018": {
     "status": "implemented",
     "requirements": "docs/lan-1688-auto-recovery.md",
