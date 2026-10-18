@@ -182,6 +182,142 @@ test("aborted reread recovery preserves all guards and cannot retry indefinitely
   }
 });
 
+test(
+  "actual postal input removal can finish guarded reread while legacy confirmation never appears",
+  { timeout: 1000 },
+  async () => {
+    const f = fixture({ doneWrongPostal: true, locationAfterReread: "Deliver to San Mateo 94404" });
+    const original = f.page.locator;
+    f.page.locator = (selector) => {
+      const value = original(selector);
+      if (selector === "#GLUXZipConfirmationSection")
+        return { ...value, filter: () => ({ waitFor: () => new Promise(() => {}) }) };
+      if (selector === "#GLUXZipUpdateInput")
+        return {
+          ...value,
+          count: async () => 0,
+          waitFor: async (options) => {
+            assert.equal(options.state, "detached");
+          },
+        };
+      return value;
+    };
+    const steps = [];
+    assert.equal(
+      await prepareAmazonDeliveryContext(f.page, "94404", f.safe, (s) => steps.push(s), f.reread),
+      true,
+    );
+    assert.ok(steps.includes("postal_form_closed_guard"));
+    assert.ok(steps.includes("verify_header"));
+    assert.equal(f.actions.filter((a) => a[0] === "reread").length, 1);
+    assert.equal(
+      f.actions.some((a) => a[1] === 'button[name="glowDoneButton"]'),
+      false,
+    );
+  },
+);
+
+test(
+  "a reinserted postal input still waits for real confirmation and Done",
+  { timeout: 1000 },
+  async () => {
+    const f = fixture();
+    const original = f.page.locator;
+    let confirm;
+    const confirmation = new Promise((resolve) => {
+      confirm = resolve;
+    });
+    f.page.locator = (selector) => {
+      const value = original(selector);
+      if (selector === "#GLUXZipConfirmationSection")
+        return { ...value, filter: () => ({ waitFor: () => confirmation }) };
+      if (selector === "#GLUXZipUpdateInput")
+        return {
+          ...value,
+          waitFor: async () => {},
+          count: async () => {
+            confirm();
+            return 1;
+          },
+        };
+      return value;
+    };
+    const steps = [];
+    assert.equal(
+      await prepareAmazonDeliveryContext(f.page, "94404", f.safe, (s) => steps.push(s), f.reread),
+      true,
+    );
+    assert.equal(steps.includes("postal_form_closed_guard"), false);
+    assert.equal(f.actions.filter((a) => a[1] === 'button[name="glowDoneButton"]').length, 1);
+    assert.ok(steps.includes("verify_header"));
+  },
+);
+
+test(
+  "a closed-form safety TimeoutError is never retried as an observation timeout",
+  { timeout: 1000 },
+  async () => {
+    const f = fixture({ locationAfterReread: "Deliver to San Mateo 94404" });
+    const original = f.page.locator;
+    f.page.locator = (selector) => {
+      const value = original(selector);
+      if (selector === "#GLUXZipConfirmationSection")
+        return { ...value, filter: () => ({ waitFor: () => new Promise(() => {}) }) };
+      if (selector === "#GLUXZipUpdateInput")
+        return { ...value, count: async () => 0, waitFor: async () => {} };
+      return value;
+    };
+    let safeCalls = 0;
+    const failure = new errors.TimeoutError("guard timeout");
+    const safe = async () => {
+      if (++safeCalls === 4) throw failure;
+    };
+    await assert.rejects(
+      prepareAmazonDeliveryContext(f.page, "94404", safe, () => {}, f.reread),
+      (error) => error === failure,
+    );
+    assert.equal(safeCalls, 4);
+    assert.equal(
+      f.actions.some((a) => a[0] === "reread"),
+      false,
+    );
+  },
+);
+
+test("both postal observations failing preserve the original confirmation error", async () => {
+  const f = fixture();
+  const original = f.page.locator;
+  const failure = new Error("original confirmation failure");
+  f.page.locator = (selector) => {
+    const value = original(selector);
+    if (selector === "#GLUXZipConfirmationSection")
+      return {
+        ...value,
+        filter: () => ({
+          waitFor: async () => {
+            throw failure;
+          },
+        }),
+      };
+    if (selector === "#GLUXZipUpdateInput")
+      return {
+        ...value,
+        waitFor: async () => {
+          throw new errors.TimeoutError("input remains");
+        },
+      };
+    return value;
+  };
+  await assert.rejects(
+    prepareAmazonDeliveryContext(f.page, "94404", f.safe, () => {}, f.reread),
+    (error) => error === failure,
+  );
+  assert.equal(
+    f.actions.some((a) => a[0] === "reread"),
+    false,
+  );
+});
+
 test("US postal context is explicit, validated and configurable without credentials", () => {
   assert.equal(
     loadRuntimeConfig({}, "api").providerAdapters.amazonPublicDeliveryPostalCode,

@@ -56,10 +56,33 @@ export async function prepareAmazonDeliveryContext(
   reportStep("confirm_postal");
   let postalFormClosed = false;
   try {
-    await page
+    const confirmation = page
       .locator("#GLUXZipConfirmationSection")
       .filter({ hasText: postal })
       .waitFor({ state: "visible" });
+    if (reread) {
+      // Both are actual DOM observations. A closed form still proves no region:
+      // it only permits the existing anonymous guard and protected URL reread.
+      const formDetached = await Promise.any([
+        confirmation.then(() => false),
+        page
+          .locator("#GLUXZipUpdateInput")
+          .waitFor({ state: "detached" })
+          .then(() => true),
+      ]).catch((error: unknown) => {
+        // Preserve the original confirmation error and its TimeoutError contract.
+        if (error instanceof AggregateError) throw error.errors[0];
+        throw error;
+      });
+      if (formDetached && (await page.locator("#GLUXZipUpdateInput").count()) === 0) {
+        postalFormClosed = true;
+      } else {
+        // A transient detach/reinsert cannot replace confirmation.
+        await confirmation;
+      }
+    } else {
+      await confirmation;
+    }
   } catch (error) {
     if (
       !(error instanceof errors.TimeoutError) ||
@@ -70,11 +93,13 @@ export async function prepareAmazonDeliveryContext(
     // Some pages close the postal form without the legacy confirmation/Done.
     // Its absence proves nothing: only the original-URL reread and final strict
     // postal header can establish the observation region below.
+    postalFormClosed = true;
+  }
+  if (postalFormClosed) {
     reportStep("postal_form_closed_guard");
     // A confirmation overlay can aria-hide the still CSS-visible account link.
     // This branch still requires its exact anonymous label and CSS visibility.
     await assertAnonymous(true);
-    postalFormClosed = true;
   }
   await assertSafe();
   if (!postalFormClosed) reportStep("finish_location");

@@ -1,6 +1,6 @@
 openapi: 3.0.3
 # Browser lease acquire retries only successfully rolled-back MySQL deadlocks, at most3 transactions with unchanged scope/idempotency/expiry; API fields unchanged.
-# Amazon anonymous delivery: existing original-URL reread occurs after confirmed Done and before strict postal verification; no API field change.
+# Amazon anonymous delivery: actual legacy confirmation or detached postal input leads only to the guarded original-URL reread; strict final postal verification remains mandatory. No API field change.
 # LAN1688 health v2 covers the six existing nodes within the original deadline; ready means at least one validated node, no offers returned.
 # Member manual cost controls are retired; governed cost/review/profit APIs and permissions remain unchanged.
 # Member detail section focus and scoring-gap labels are presentation only; request and response contracts unchanged.

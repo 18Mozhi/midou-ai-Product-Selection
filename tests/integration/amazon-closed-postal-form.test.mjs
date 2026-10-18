@@ -21,7 +21,8 @@ test("closed postal form requires an actual original-URL reread and strict targe
       "no_reread",
     ]) {
       const page = await browser.newPage();
-      page.setDefaultTimeout(250);
+      const fastExpected = ["accepted", "aria_hidden"].includes(scenario);
+      page.setDefaultTimeout(fastExpected ? 5000 : 250);
       page.setDefaultNavigationTimeout(2000);
       let rereads = 0;
       let observedApplication = false;
@@ -56,6 +57,7 @@ test("closed postal form requires an actual original-URL reread and strict targe
               rereads++;
               await page.goto(original, { waitUntil: "domcontentloaded" });
             };
+      const preparationStarted = Date.now();
       const preparation = prepareAmazonDeliveryContext(
         page,
         "94404",
@@ -68,8 +70,12 @@ test("closed postal form requires an actual original-URL reread and strict targe
         reread,
         2000,
       );
-      if (["accepted", "aria_hidden"].includes(scenario)) {
+      if (fastExpected) {
         assert.equal(await preparation, true);
+        assert.ok(
+          Date.now() - preparationStarted < 2000,
+          "detached form must not spend the 5s confirmation timeout",
+        );
         assert.equal(rereads, 1);
         assert.match(await page.locator("#glow-ingress-block").textContent(), /94404/);
         assert.equal(page.url(), original);
