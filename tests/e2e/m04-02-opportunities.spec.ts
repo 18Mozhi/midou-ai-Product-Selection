@@ -718,6 +718,21 @@ test("commerce catalogue switches layouts and keeps product navigation and missi
   await expect(page.getByRole("group", { name: "商品展示方式" })).toBeVisible();
   await page.getByRole("button", { name: "列表", exact: true }).click();
   await expect(catalogue).toHaveAttribute("data-display", "list");
+  const product = page.locator(".catalog-product").first();
+  const facts = await product.locator(".catalog-public-facts").boundingBox();
+  const metrics = await product.locator(".catalog-product-metrics").boundingBox();
+  const identity = await product.locator(".catalog-product-identity").boundingBox();
+  if ((page.viewportSize()?.width ?? 0) > 1100) {
+    expect(facts!.x).toBeGreaterThan(identity!.x);
+    expect(metrics!.x).toBeGreaterThan(facts!.x);
+    expect(Math.abs(facts!.y - metrics!.y)).toBeLessThan(2);
+    expect((await product.boundingBox())!.height).toBeLessThan(210);
+  } else {
+    expect(facts!.y).toBeGreaterThan(metrics!.y);
+  }
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
   await expect(page.locator(".catalog-product > a")).toHaveAttribute(
     "href",
     new RegExp(`/opportunities/${opportunityId}`),

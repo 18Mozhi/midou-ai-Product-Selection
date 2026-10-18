@@ -1,4 +1,11 @@
 {
+  "selectionCatalogueHorizontalList20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-catalogue-horizontal-list.md",
+    "sourceFiles": ["apps/web/src/commerce-workspace.css"],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "contract": "Desktop list aligns identity, public facts, decision summary and existing navigation in one row; coverage remains below. Narrow screens retain stacked sections. Neutral theme panel replaces tinted decision blocks. Existing data, permissions, filters, requests, unknown values and navigation unchanged. No API/config/schema/dependency change."
+  },
   "amazonClosedPostalForm20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-closed-postal-form.md",
