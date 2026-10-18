@@ -1,4 +1,14 @@
 {
+  "catalogueCardHierarchy20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-catalogue-card-hierarchy.md",
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/commerce-workspace.css"
+    ],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "contract": "Image-first cards separate source/identity, two-line title, original facts and bottom-aligned decision summary. Same four explicit unknown fact positions for missing primary data; real price emphasis respects body font. Existing filters, routing, selection, list mode and evidence semantics retained. Four intentional desktop/mobile screenshot baseline updates. UI fixtures do not prove production data or daily100; whole UI remains unverified."
+  },
   "downstreamRepairEligibilityFirst20261018": {
     "status": "implemented",
     "requirements": "docs/selection-downstream-repair-performance.md",

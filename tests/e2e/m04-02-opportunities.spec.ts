@@ -794,9 +794,31 @@ test("catalogue shows original primary facts without inventing sales or private 
   await expect(facts).toContainText("已观察到广告标记");
   await expect(page.locator(".catalog-data-note")).toContainText("不等于精确销量");
   await expect(page.locator(".catalog-data-note")).toHaveCount(1);
-  await expect(page.locator(".catalog-product").nth(1).locator(".catalog-public-facts")).toHaveText(
-    "商品资料待采集",
+  const missingFacts = page.locator(".catalog-product").nth(1).locator(".catalog-public-facts");
+  await expect(missingFacts).toContainText("商品资料待采集");
+  await expect(missingFacts.locator("dl > div")).toHaveCount(4);
+  await expect(missingFacts.locator(".is-price")).toContainText("未采集");
+  const priceSize = await facts
+    .locator(".is-price dd")
+    .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+  expect(priceSize).toBeGreaterThanOrEqual(18);
+  const factTops = await page
+    .locator(".catalog-public-facts")
+    .evaluateAll((els) => els.map((el) => el.getBoundingClientRect().top));
+  expect(Math.abs(factTops[0] - factTops[1])).toBeLessThan(2);
+  const decisionTops = await page.locator(".catalog-product-metrics").evaluateAll((els) =>
+    els.map((el) => ({
+      top: el.getBoundingClientRect().top,
+      margin: getComputedStyle(el).marginTop,
+      anchorHeight: el.parentElement?.getBoundingClientRect().height,
+      cardHeight: el.parentElement?.parentElement?.getBoundingClientRect().height,
+      parentDisplay: getComputedStyle(el.parentElement!).display,
+    })),
   );
+  expect(
+    Math.abs(decisionTops[0].top - decisionTops[1].top),
+    JSON.stringify(decisionTops),
+  ).toBeLessThan(2);
   await page.getByRole("button", { name: "列表", exact: true }).click();
   await expect(facts).toBeVisible();
   await expect

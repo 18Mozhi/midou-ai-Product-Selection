@@ -183,6 +183,8 @@ const opportunityStatus = (value: string) =>
       : item.source_type === "manual"
         ? "手工添加"
         : "其他线索",
+  catalogMeta = (item: Opportunity) =>
+    `${item.market} · ${item.category || "未分类"} · ${freshness(item.updated_at)}${item.matched_rule_count ? ` · 命中 ${item.matched_rule_count} 条规则` : ""}`,
   scoreLabel = (value: number | null) =>
     value == null ? "—" : Number.isInteger(value) ? String(value) : value.toFixed(1),
   selectionStage = (item: Opportunity) => item.selection_stage ?? "not_eligible",
@@ -469,42 +471,40 @@ watch(imageFailureResetSources, (items) => {
               @error="onImageError(item)"
             /><span v-else aria-hidden="true">{{ imageFallbackLabel(item) }}</span></span
           ><span class="catalog-product-identity"
-            ><strong>{{ item.name }}</strong
-            ><small v-if="item.main_asin"
-              >ASIN <span>{{ item.main_asin }}</span></small
-            ><small
-              >{{ item.market }} · {{ item.category || "未分类" }} ·
-              {{ freshness(item.updated_at) }}</small
-            ><em
-              >{{ sourceLabel(item)
-              }}<template v-if="item.matched_rule_count">
-                · 命中 {{ item.matched_rule_count }} 条规则</template
-              ></em
-            ></span
+            ><span class="catalog-product-key">
+              <small v-if="item.main_asin" :title="`ASIN ${item.main_asin}`"
+                >ASIN <span>{{ item.main_asin }}</span></small
+              >
+              <small v-else>主品待确认</small>
+              <em>{{ sourceLabel(item) }}</em>
+            </span>
+            <strong>{{ item.name }}</strong
+            ><small :title="catalogMeta(item)">{{ catalogMeta(item) }}</small></span
           >
           <div class="catalog-public-facts" :aria-label="`${item.name} 商品资料`">
-            <template v-if="item.primary_product">
-              <dl>
-                <div
-                  v-for="fact in productFacts(item)"
-                  :key="fact.label"
-                  :class="{ 'is-price': fact.label === '售价' }"
-                >
-                  <dt>{{ fact.label }}</dt>
-                  <dd>{{ fact.value }}</dd>
-                </div>
-              </dl>
-              <p>
-                <span>{{
-                  item.primary_product.public_signals?.sponsored
-                    ? "已观察到广告标记"
-                    : "广告标记未提供"
-                }}</span
-                ><time :datetime="item.primary_product.captured_at"
-                  >资料 {{ freshness(item.primary_product.captured_at) }}</time
-                >
-              </p>
-            </template>
+            <dl>
+              <div
+                v-for="fact in productFacts(item)"
+                :key="fact.label"
+                :class="{
+                  'is-price': fact.label === '售价',
+                  'is-missing': fact.value === '未采集',
+                }"
+              >
+                <dt>{{ fact.label }}</dt>
+                <dd>{{ fact.value }}</dd>
+              </div>
+            </dl>
+            <p v-if="item.primary_product">
+              <span>{{
+                item.primary_product.public_signals?.sponsored
+                  ? "已观察到广告标记"
+                  : "广告标记未提供"
+              }}</span
+              ><time :datetime="item.primary_product.captured_at"
+                >资料 {{ freshness(item.primary_product.captured_at) }}</time
+              >
+            </p>
             <p v-else>商品资料待采集</p>
           </div>
           <dl class="catalog-product-metrics" :aria-label="`${item.name} 决策摘要`">

@@ -11750,3 +11750,6 @@ x-scoutops-lan-1688:
 
 # Internal downstream repair resolves primary/image only after materializing scoped
 # missing work, with current task/link checks; existing HTTP contracts are unchanged.
+
+# Catalogue UI renders all four original public-fact positions as explicitly unknown
+# when primary_product is absent; this does not add facts or alter response fields.
