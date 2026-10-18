@@ -1,6 +1,7 @@
+// Retired task frontend references verify archived bytes; backend contracts remain current.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readTaskReviewFile as readFile } from "../../scripts/lib/retired-task-surface.mjs";
 import { readArchivedJourneySource } from "../../scripts/lib/retired-journey-surface.mjs";
 
 const read = (path) => readFile(path, "utf8");

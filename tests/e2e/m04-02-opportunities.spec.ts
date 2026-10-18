@@ -260,27 +260,24 @@ const blockedEvidence = {
   score_job_status: null,
 };
 
-test("existing evidence task links open the exact task and retain the product context", async ({
+test("historical evidence task retains blocker facts without restoring the retired task surface", async ({
   page,
 }) => {
-  const taskId = "00000000-0000-4000-8000-000000000434";
-  await ready(page, evidence, { adoption_blockers: [{ ...blockedEvidence, task_id: taskId }] });
-  const source = `/opportunities/${opportunityId}?tab=overview`;
-  await page.goto(source);
-  const summary = page.getByRole("link", { name: "查看补采任务", exact: true });
-  await expect(summary).toHaveAttribute("href", new RegExp(`^/tasks/${taskId}\\?from=`));
-  const target = new URL((await summary.getAttribute("href"))!, "http://localhost");
-  expect(target.pathname).toBe(`/tasks/${taskId}`);
-  expect(target.searchParams.get("from")).toBe(source);
+  const calls: string[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.startsWith("/api/v1/tasks")) calls.push(request.url());
+  });
+  await ready(page, evidence, {
+    adoption_blockers: [
+      { ...blockedEvidence, task_id: "00000000-0000-4000-8000-000000000434", progress_percent: 35 },
+    ],
+  });
+  await page.goto(`/opportunities/${opportunityId}?tab=overview`);
+  await expect(page.getByText("仍有 1 个补证阻断项", { exact: true })).toBeVisible();
+  await expect(page.locator('a[href^="/tasks"]')).toHaveCount(0);
   await page.getByText("查看判断条件与补证进度", { exact: true }).click();
-  await expect(page.getByRole("link", { name: "查看任务", exact: true })).toHaveAttribute(
-    "href",
-    target.pathname + target.search,
-  );
-  await summary.click();
-  await page.waitForURL(
-    (url) => url.pathname === `/tasks/${taskId}` && url.searchParams.get("from") === source,
-  );
+  await expect(page.getByText("补采任务进度 35%", { exact: true })).toBeVisible();
+  expect(calls).toEqual([]);
 });
 
 for (const status of ["blocked", "in_progress"]) {

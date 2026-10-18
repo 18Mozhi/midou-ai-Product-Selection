@@ -241,22 +241,23 @@
     {
       "path": "/work",
       "name": "today-work",
-      "title": "今日工作",
-      "breadcrumb": ["工作台", "今日工作"],
+      "title": "今日行动",
+      "breadcrumb": ["工作台", "今日行动"],
       "shell": "member",
       "view": null,
       "capabilities": ["task:read"],
       "notFound": false,
-      "surface": "task-workspace",
-      "cachePolicy": "reset_on_scope",
+      "surface": "",
+      "cachePolicy": "none",
       "acceptance": "protected",
       "featureMap": {
         "path": "/work",
-        "view": "TaskWorkspace",
-        "domain": "tasks",
-        "status": "verified",
-        "statusDetail": "M05-01_module_verified"
-      }
+        "view": "Redirect",
+        "domain": "selection",
+        "status": "implemented",
+        "statusDetail": "legacy_business_task_surface_retired"
+      },
+      "redirect": "/home"
     },
     {
       "path": "/trends",
@@ -451,43 +452,48 @@
     {
       "path": "/tasks",
       "name": "tasks",
-      "title": "全部任务",
-      "breadcrumb": ["工作台", "全部任务"],
+      "title": "选品库",
+      "breadcrumb": ["选品工作区", "选品库"],
       "shell": "member",
       "view": null,
-      "capabilities": ["task:read"],
+      "capabilities": ["opportunity:read"],
       "notFound": false,
-      "surface": "task-workspace",
-      "cachePolicy": "reset_on_scope",
+      "surface": "",
+      "cachePolicy": "none",
       "acceptance": "protected",
       "featureMap": {
         "path": "/tasks",
-        "view": "TaskWorkspace",
-        "domain": "tasks",
-        "status": "verified",
-        "statusDetail": "M05-01_module_verified"
-      }
+        "view": "Redirect",
+        "domain": "selection",
+        "status": "implemented",
+        "statusDetail": "legacy_business_task_surface_retired"
+      },
+      "redirect": "/opportunities"
     },
     {
       "path": "/tasks/:taskId",
       "name": "task-detail",
-      "title": "任务详情",
-      "breadcrumb": ["工作台", "全部任务", "任务详情"],
+      "title": "选品库",
+      "breadcrumb": ["选品工作区", "选品库"],
       "shell": "member",
       "view": null,
-      "capabilities": ["task:read"],
+      "capabilities": ["opportunity:read"],
       "notFound": false,
-      "surface": "task-workspace",
-      "cachePolicy": "reset_on_scope",
+      "surface": "",
+      "cachePolicy": "none",
       "acceptance": "protected",
-      "productionResolver": { "parentPath": "/tasks", "pathPattern": "^/tasks/[0-9a-f-]{36}$" },
+      "productionResolver": {
+        "parentPath": "/opportunities",
+        "pathPattern": "^/tasks/[0-9a-f-]{36}$"
+      },
       "featureMap": {
         "path": "/tasks/{taskId}",
-        "view": "TaskWorkspace",
-        "domain": "tasks",
+        "view": "Redirect",
+        "domain": "selection",
         "status": "implemented",
-        "statusDetail": "explicit_detail_route_implemented"
-      }
+        "statusDetail": "legacy_business_task_surface_retired"
+      },
+      "redirect": "/opportunities"
     },
     {
       "path": "/tasks/approvals",

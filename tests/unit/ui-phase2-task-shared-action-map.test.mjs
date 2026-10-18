@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { readTaskReviewFileSync as readFileSync } from "../../scripts/lib/retired-task-surface.mjs";
 import test from "node:test";
 import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
@@ -25,7 +25,7 @@ const reviews = Object.fromEntries(
   ]),
 );
 
-test("TaskWorkspace batch event candidate is current and accounted for across route modes", () => {
+test("archived TaskWorkspace batch bindings retain historical accounting without current approval", () => {
   const candidates = scanSource(source, file).candidates;
   const candidate = candidates.find((item) => item.candidateId === candidateId);
   assert.ok(candidate);
@@ -62,7 +62,7 @@ test("TaskWorkspace batch event candidate is current and accounted for across ro
     audit.unreferenced.some((item) => item.candidateId === candidateId),
     false,
   );
-  assert.equal(
+  assert.notEqual(
     audit.records.find((item) => item.candidateId === candidateId)?.status,
     "identity-current",
   );

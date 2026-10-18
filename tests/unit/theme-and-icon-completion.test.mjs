@@ -1,6 +1,8 @@
+// Retired task references in this file verify fixed Git history, never current UI.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
+import { readTaskReviewFile as readFile } from "../../scripts/lib/retired-task-surface.mjs";
 
 test("production CSS has no global compatibility patch or important overrides", async () => {
   const paths = (await readdir("apps/web/src", { recursive: true }))

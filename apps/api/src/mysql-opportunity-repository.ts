@@ -726,7 +726,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
                 : evidenceTask
                   ? String(evidenceTask.status) === "completed"
                     ? "补采任务已完成，等待评分结果。"
-                    : "历史补采任务尚未完成，可查看任务记录。"
+                    : "历史补采任务尚未完成，仍缺少有效采集证据。"
                   : "证据尚未齐备；请检查采集来源和自动分析状态。"))
             : "证据覆盖阻断已解除。",
           task_id: evidenceTask ? String(evidenceTask.id) : null,

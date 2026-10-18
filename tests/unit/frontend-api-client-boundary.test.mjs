@@ -37,7 +37,6 @@ test("migrated frontend surfaces use the shared API client instead of direct fet
     "apps/web/src/components/LandingRedirect.vue",
     "apps/web/src/components/ThemeStudio.vue",
     "apps/web/src/components/ApiFoundation.vue",
-    "apps/web/src/components/TaskWorkspace.vue",
     "apps/web/src/components/TrendDashboard.vue",
     "apps/web/src/components/ScoreRuleConsole.vue",
     "apps/web/src/components/CostRuleConsole.vue",

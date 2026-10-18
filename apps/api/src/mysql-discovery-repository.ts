@@ -12,14 +12,7 @@ export class MySqlDiscoveryRepository implements DiscoveryRepository {
           `${normalizeText("title")} title,${normalizeText("subtitle")} subtitle,` +
           `${nullText} status,${nullText} assignee_id,${nullText} assignee_name,` +
           `${normalizeText("route")} route,${normalizeText("required_capability")} required_capability,updated_at`,
-        "FROM search_documents WHERE organization_id=? AND workspace_id=?",
-        `UNION ALL SELECT t.id,${normalizeText("'task'")},t.id,${normalizeText("t.title")},` +
-          `${normalizeText("t.description")},${normalizeText("t.status")},${normalizeText("t.assignee_id")},` +
-          `${normalizeText("COALESCE(NULLIF(task_profile.display_name,''),task_user.email)")},` +
-          `${normalizeText(`CONCAT('/tasks/',${normalizeText("t.id")})`)},${normalizeText("'task:read'")},t.updated_at`,
-        "FROM tasks t LEFT JOIN users task_user ON task_user.id=t.assignee_id " +
-          "LEFT JOIN user_profiles task_profile ON task_profile.user_id=t.assignee_id " +
-          "WHERE t.organization_id=? AND t.workspace_id=? AND t.deleted_at IS NULL",
+        "FROM search_documents WHERE organization_id=? AND workspace_id=? AND resource_type<>'task'",
         `UNION ALL SELECT o.id,${normalizeText("'opportunity'")},o.id,${normalizeText("o.name")},` +
           `${normalizeText("CONCAT(o.market,' · ',COALESCE(o.category,'未分类'))")},` +
           `${normalizeText("o.lifecycle_status")},${normalizeText("o.owner_id")},` +
@@ -45,8 +38,6 @@ export class MySqlDiscoveryRepository implements DiscoveryRepository {
         "FROM collection_tasks WHERE organization_id=? AND workspace_id=?",
       ].join(" "),
       scopeParams = [
-        input.organizationId,
-        input.workspaceId,
         input.organizationId,
         input.workspaceId,
         input.organizationId,

@@ -17,7 +17,6 @@ const breadcrumbRoutes: Record<string, string> = {
   工作台: "/home",
   选品工作区: "/home",
   选品库: "/opportunities",
-  全部任务: "/tasks",
   "1688 找货": "/sourcing",
   组织后台: "/org-admin",
   平台后台: "/platform-admin",
@@ -77,13 +76,6 @@ export function surfaceProps(input: {
   switch (input.surface) {
     case "home-dashboard":
       return { ...common, capabilities: input.capabilities };
-    case "task-workspace":
-      return {
-        ...common,
-        mode: input.path === "/work" ? "today" : "all",
-        taskId: ids.taskId || undefined,
-        capabilities: input.capabilities,
-      };
     case "approval-workspace":
       return { ...common, capabilities: input.capabilities };
     case "organization-admin-center":

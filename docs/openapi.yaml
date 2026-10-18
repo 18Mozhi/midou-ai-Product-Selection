@@ -845,7 +845,7 @@ paths:
   /me/global-search:
     get:
       summary: Search indexed resources in the selected organization and workspace
-      description: Requires an active selected context and task:read. Results are additionally filtered by each document's required capability. Optional resource_type and exact persisted status filters apply before pagination; assignee matches only a task assignee or opportunity owner by id or display label and never treats a creator as an owner.
+      description: Requires an active selected context and task:read. Results are additionally filtered by each document's required capability. Retired member business tasks and their search_documents projections are excluded before pagination; legacy resource_type=task remains accepted and returns empty. Opportunity, evidence and collection_task search remain. Optional resource_type and exact persisted status filters apply before pagination; assignee matches an opportunity owner by id or display label and never treats a creator as an owner. Historical task CRUD and organization approvals are retained.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {

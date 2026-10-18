@@ -269,8 +269,8 @@ test("M02-05 regression: every MySQL UNION text slot uses the table collation", 
   assert.equal(queries.length, 1);
   assert.equal(
     queries[0].match(/COLLATE utf8mb4_unicode_ci/g)?.length,
-    46,
-    "all forty text slots and six nested ASCII fragments must use the table collation",
+    37,
+    "all retained UNION text slots and nested ASCII fragments use the table collation",
   );
 });
 
@@ -313,15 +313,17 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(repo, /organization_id=\?/);
   assert.match(repo, /required_capability IN/);
   assert.match(repo, /resource_type=\?[\s\S]*status=\?[\s\S]*assignee_name LIKE/);
-  for (const table of ["tasks", "opportunities", "raw_evidence", "collection_tasks"])
+  for (const table of ["opportunities", "raw_evidence", "collection_tasks"])
     assert.match(repo, new RegExp(`FROM ${table}|JOIN ${table}`));
   assert.match(repo, /normalizeText[\s\S]*utf8mb4_unicode_ci/);
-  assert.match(repo, /\/tasks\/[\s\S]*\/opportunities\/[\s\S]*evidence=[\s\S]*task=/);
+  assert.doesNotMatch(repo, /FROM tasks t|CONCAT\('\/tasks\//);
+  assert.match(repo, /\/opportunities\/[\s\S]*evidence=[\s\S]*task=/);
   assert.match(openapi, /\/me\/global-search:/);
   assert.match(openapi, /\/me\/quick-actions:/);
   assert.match(openapi, /name: shell[\s\S]*required: true/);
   assert.match(overlay, /createApiClient/);
-  assert.match(overlay, /任务[\s\S]*机会[\s\S]*证据[\s\S]*采集任务/);
+  assert.match(overlay, /机会[\s\S]*证据[\s\S]*采集任务/);
+  assert.doesNotMatch(overlay, /option value="task"/);
   assert.match(overlay, /对象类型[\s\S]*状态[\s\S]*负责人/);
   assert.doesNotMatch(
     overlay,

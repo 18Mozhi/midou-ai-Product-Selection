@@ -4,7 +4,7 @@ import {
 } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import test from "node:test";
-import { readFileSync } from "node:fs";
+import { readTaskReviewFileSync as readFileSync } from "../../scripts/lib/retired-task-surface.mjs";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
@@ -3089,7 +3089,7 @@ test("pre-rebuild current P67 Redis center maps refresh and retry controls witho
   }
 });
 
-test("current P23 export jobs panel maps its three report-center navigation paths", () => {
+test("retired P23 export history cannot count as current source approval", () => {
   const file = "apps/web/src/components/TaskExportJobsPanel.vue";
   const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
     "\r\n",
@@ -3112,9 +3112,9 @@ test("current P23 export jobs panel maps its three report-center navigation path
   assert.deepEqual(currentRows.map((record) => record.candidateId).sort(), expectedIds.sort());
   for (const record of currentRows) {
     const candidate = candidates.find((item) => item.candidateId === record.candidateId);
-    assert.equal(record.status, "identity-current", record.candidateId);
-    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
-    assert.equal(record.currentLine, candidate?.line, record.candidateId);
+    assert.equal(record.status, "source-missing", record.candidateId);
+    assert.equal(record.sourceBinding, "hash-drift", record.candidateId);
+    assert.equal(record.currentLine, null, record.candidateId);
     assert.equal(record.recordedLine, candidate?.line, record.candidateId);
     assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
   }
@@ -3123,7 +3123,7 @@ test("current P23 export jobs panel maps its three report-center navigation path
   );
   assert.equal(hashes.length, 1);
   assert.equal(hashes[0]?.hash, digest(source));
-  assert.equal(hashes[0]?.status, "hash-current");
+  assert.equal(hashes[0]?.status, "not-in-web-scan");
   assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
   assert.equal(report.denominatorFrozen, false);
 });

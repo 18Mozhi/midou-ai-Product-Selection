@@ -1,4 +1,27 @@
 {
+  "selectionRetiredMemberTasks20261018": {
+    "status": "implemented",
+    "statusDetail": "206_related_node_214_distinct_browser_passed_4_original_conditional_skips_mysql_readonly_passed_pending_publication",
+    "requirements": "docs/selection-retired-member-tasks.md",
+    "routes": ["/work", "/tasks", "/tasks/:taskId", "/tasks/approvals"],
+    "apiRoutes": ["/api/v1/me/global-search"],
+    "sourceFiles": [
+      "apps/web/src/route-catalog.ts",
+      "config/route-catalog.json",
+      "apps/web/src/components/navigation-surface-registry.ts",
+      "apps/web/src/components/OpportunityDecisionPanel.vue",
+      "apps/web/src/components/DiscoveryOverlay.vue",
+      "apps/api/src/mysql-discovery-repository.ts",
+      "apps/api/src/mysql-opportunity-repository.ts"
+    ],
+    "testFiles": [
+      "tests/unit/retired-task-surface.test.mjs",
+      "tests/e2e/m05-01-business-tasks.spec.ts",
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/m02-05/discovery-domain.test.mjs"
+    ],
+    "contract": "Remove 11 obsolete member-task runtime files; fixed aliases discard query/hash and use destination permissions. Preserve independent organization approval, collection admin, backend task APIs and historical data. Product blocker facts remain without old editor links. Global search excludes legacy task rows/documents before pagination; legacy task filter accepted empty. No schema/config/dependency/permission change."
+  },
   "selectionCatalogueHorizontalList20261018": {
     "status": "implemented",
     "requirements": "docs/selection-catalogue-horizontal-list.md",
@@ -798,15 +821,18 @@
     "requirements": "docs/selection-release-readability-palette.md",
     "sourceFiles": [
       "apps/web/src/components/opportunity-decision-panel.css",
-      "apps/web/src/components/OpportunityDetailInsights.vue",
-      "apps/web/src/design/task-workspace-tokens.css"
+      "apps/web/src/components/OpportunityDetailInsights.vue"
     ],
     "testFiles": [
       "tests/unit/design-quality-gate.test.mjs",
       "tests/unit/platform-palette-contract.test.mjs",
       "tests/e2e/m04-02-opportunities.spec.ts"
     ],
-    "contract": "Restore the existing 13px readability floor, remove four unused task colors and include the extracted opportunity insight component in exact palette validation. Undefined warning colors use existing shared semantic aliases. No API, decision, permission or schema change. Original-worktree full unit validation passes with existing historical review packets; clean c867271e candidate remains validation_failed and is not reused."
+    "contract": "Restore the existing 13px readability floor, remove four unused task colors and include the extracted opportunity insight component in exact palette validation. Undefined warning colors use existing shared semantic aliases. No API, decision, permission or schema change. Original-worktree full unit validation passes with existing historical review packets; clean c867271e candidate remains validation_failed and is not reused.",
+    "retiredSourceHistory": {
+      "revision": "d206bb018442bb2d4d24fc92c85de6fe41c55a7a",
+      "files": ["apps/web/src/design/task-workspace-tokens.css"]
+    }
   },
   "selectionRetiredTaskQuickAction20261017": {
     "status": "implemented",
@@ -819,39 +845,47 @@
   },
   "selectionTaskHeaderLayout20261017": {
     "status": "implemented",
-    "statusDetail": "10_related_node_112_browser_web_build_and_gates_passed_not_deployed",
+    "statusDetail": "retired_by_selectionRetiredMemberTasks20261018",
     "requirements": "docs/selection-task-header-layout.md",
     "routes": ["/work", "/tasks", "/tasks/:taskId"],
-    "sourceFiles": [
-      "apps/web/src/components/TaskWorkspace.vue",
-      "apps/web/src/components/task-page-header.css",
-      "apps/web/src/task-workspace.css",
-      "apps/web/src/task-workspace-enhancements.css"
-    ],
+    "sourceFiles": [],
     "testFiles": [
       "tests/e2e/m05-01-business-tasks.spec.ts",
       "tests/unit/task-detail-page-preview.test.mjs",
       "tests/unit/ui-phase2-task-shared-action-map.test.mjs"
     ],
-    "contract": "One compact white task header replaces 40 legacy selector branches. ScriptSetup is byte-identical; only header labels, empty markup and presentation change. No API, permissions, schema, environment or task behavior change; not deployed."
+    "contract": "One compact white task header replaces 40 legacy selector branches. ScriptSetup is byte-identical; only header labels, empty markup and presentation change. No API, permissions, schema, environment or task behavior change; not deployed.",
+    "retiredSourceHistory": {
+      "revision": "d206bb018442bb2d4d24fc92c85de6fe41c55a7a",
+      "files": [
+        "apps/web/src/components/TaskWorkspace.vue",
+        "apps/web/src/components/task-page-header.css",
+        "apps/web/src/task-workspace.css",
+        "apps/web/src/task-workspace-enhancements.css"
+      ]
+    }
   },
   "selectionMemberTaskCreationRetirement20261017": {
     "status": "implemented",
-    "statusDetail": "prior_88_node_112_browser_current_11_dead_css_selectors_ast_verified_not_deployed",
+    "statusDetail": "retired_by_selectionRetiredMemberTasks20261018",
     "requirements": "docs/selection-member-task-creation-retirement.md",
     "routes": ["/work", "/tasks", "/tasks/:taskId"],
-    "sourceFiles": [
-      "apps/web/src/components/TaskWorkspace.vue",
-      "apps/web/src/components/TaskListPanel.vue",
-      "apps/web/src/task-workspace.css",
-      "apps/web/src/task-workspace-enhancements.css"
-    ],
+    "sourceFiles": [],
     "testFiles": [
       "tests/e2e/m05-01-business-tasks.spec.ts",
       "tests/e2e/ui-phase2-task-contracts.spec.ts",
       "tests/m05-01/business-tasks.test.mjs"
     ],
-    "contract": "Member task-create buttons, empty-list create event, quick-create query consumption and POST /tasks branch are removed. Existing task editing keeps scoped PATCH, version, assignee and busy/error/focus protections; history, progress, comments, approvals and admin remain. No backend API, schema, permission or environment change; not deployed."
+    "contract": "Member task-create buttons, empty-list create event, quick-create query consumption and POST /tasks branch are removed. Existing task editing keeps scoped PATCH, version, assignee and busy/error/focus protections; history, progress, comments, approvals and admin remain. No backend API, schema, permission or environment change; not deployed.",
+    "retiredSourceHistory": {
+      "revision": "d206bb018442bb2d4d24fc92c85de6fe41c55a7a",
+      "files": [
+        "apps/web/src/components/TaskWorkspace.vue",
+        "apps/web/src/components/TaskListPanel.vue",
+        "apps/web/src/task-workspace.css",
+        "apps/web/src/task-workspace-enhancements.css"
+      ]
+    }
   },
   "selectionRetiredAcceptanceTools20261017": {
     "status": "implemented",
@@ -5619,10 +5653,10 @@
     { "path": "/home", "view": "HomeDashboard", "domain": "work", "status": "implemented" },
     {
       "path": "/work",
-      "view": "TaskWorkspace",
-      "domain": "tasks",
-      "status": "verified",
-      "statusDetail": "M05-01_module_verified"
+      "view": "Redirect",
+      "domain": "selection",
+      "status": "implemented",
+      "statusDetail": "legacy_business_task_surface_retired"
     },
     {
       "path": "/trends",
@@ -5689,17 +5723,17 @@
     },
     {
       "path": "/tasks",
-      "view": "TaskWorkspace",
-      "domain": "tasks",
-      "status": "verified",
-      "statusDetail": "M05-01_module_verified"
+      "view": "Redirect",
+      "domain": "selection",
+      "status": "implemented",
+      "statusDetail": "legacy_business_task_surface_retired"
     },
     {
       "path": "/tasks/{taskId}",
-      "view": "TaskWorkspace",
-      "domain": "tasks",
+      "view": "Redirect",
+      "domain": "selection",
       "status": "implemented",
-      "statusDetail": "explicit_detail_route_implemented"
+      "statusDetail": "legacy_business_task_surface_retired"
     },
     {
       "path": "/tasks/approvals",

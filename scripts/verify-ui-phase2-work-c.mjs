@@ -1,3 +1,5 @@
+import { assertTaskSurfaceActive } from "./lib/retired-task-surface.mjs";
+assertTaskSurfaceActive();
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, writeFile, readdir } from "node:fs/promises";

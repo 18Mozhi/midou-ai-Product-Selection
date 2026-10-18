@@ -1,6 +1,7 @@
+// Retired task references in this file verify fixed Git history, never current UI.
 import { execFileSync } from "node:child_process";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readTaskReviewFile as readFile } from "../../scripts/lib/retired-task-surface.mjs";
 import test from "node:test";
 import { previewTaskWorkspace } from "../../scripts/lib/task-page-preview.mjs";
 

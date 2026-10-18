@@ -71,7 +71,6 @@ test("native business dialogs share modal top-layer and focus-return behavior", 
     [
       "apps/web/src/approval-workspace.css",
       "apps/web/src/notification-center.css",
-      "apps/web/src/task-workspace.css",
       "apps/web/src/components/CommercialOperationsCenter.vue",
       "apps/web/src/components/PlatformAccountDialogs.css",
       "apps/web/src/components/PlatformManagementCenter.vue",

@@ -21,7 +21,6 @@ interface Result {
 }
 const resourceLabel = (value: string) =>
   ({
-    task: "任务",
     opportunity: "机会",
     evidence: "证据",
     collection_task: "采集任务",
@@ -55,10 +54,6 @@ const statusLabel = (value: string | null) =>
       )[value] ?? value)
     : "未提供状态";
 const STATUS_OPTIONS: Record<string, Array<{ value: string; label: string }>> = {
-  task: ["todo", "in_progress", "paused", "completed", "cancelled"].map((value) => ({
-    value,
-    label: statusLabel(value),
-  })),
   opportunity: ["candidate", "validating", "ready", "adopted", "observing", "rejected"].map(
     (value) => ({ value, label: statusLabel(value) }),
   ),
@@ -97,7 +92,7 @@ const query = ref(""),
   actionHint = ref(""),
   input = ref<HTMLInputElement | null>(null),
   statusOptions = computed(() => STATUS_OPTIONS[resourceType.value] ?? []),
-  assigneeApplicable = computed(() => ["task", "opportunity"].includes(resourceType.value)),
+  assigneeApplicable = computed(() => resourceType.value === "opportunity"),
   organizationLabel = computed(() => props.organizationName?.trim() || "当前组织"),
   workspaceLabel = computed(() => props.workspaceName?.trim() || "当前工作区");
 const { dialogElement, handleCancel } = useModalDialog(
@@ -267,7 +262,6 @@ watch(resourceType, () => {
                 <label for="discovery-c-resource-type">对象类型</label>
                 <select id="discovery-c-resource-type" v-model="resourceType" aria-label="对象类型">
                   <option value="">全部对象</option>
-                  <option value="task">任务</option>
                   <option value="opportunity">机会</option>
                   <option value="evidence">证据</option>
                   <option value="collection_task">采集任务</option>

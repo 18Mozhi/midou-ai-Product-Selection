@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { RouterLink, useRoute } from "vue-router";
 import { statusLabel } from "../ui/status-labels";
 import type { OpportunityDetail } from "./opportunity-workspace-types";
 import {
@@ -21,7 +20,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   decide: [action: "adopt" | "observe" | "reject"];
 }>();
-const route = useRoute();
 const unresolvedBlockers = computed(() =>
   (props.detail.adoption_blockers ?? []).filter((item) => item.status !== "cleared"),
 );
@@ -121,11 +119,6 @@ const recommendationCopy = computed(() =>
         <strong>仍有 {{ unresolvedBlockers.length }} 个补证阻断项</strong>
         <span>{{ unresolvedBlockers[0]?.next_action }}</span>
       </div>
-      <RouterLink
-        v-if="unresolvedBlockers[0]?.task_id"
-        :to="{ path: `/tasks/${unresolvedBlockers[0].task_id}`, query: { from: route.fullPath } }"
-        >查看补采任务</RouterLink
-      >
     </section>
     <details v-if="detail.adoption_blockers?.length" class="opportunity-blocker-details">
       <summary>查看判断条件与补证进度</summary>
@@ -145,11 +138,6 @@ const recommendationCopy = computed(() =>
             >评分任务 {{ statusLabel(blocker.score_job_status) }}</small
           >
         </div>
-        <RouterLink
-          v-if="blocker.task_id"
-          :to="{ path: `/tasks/${blocker.task_id}`, query: { from: route.fullPath } }"
-          >查看任务</RouterLink
-        >
       </article>
     </details>
   </section>

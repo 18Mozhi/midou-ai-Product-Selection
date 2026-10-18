@@ -262,42 +262,6 @@
   color: var(--so-primary);
   text-decoration: none;
 }
-.task-progress {
-  min-width: 100px;
-}
-.task-progress > b {
-  display: block;
-  text-align: right;
-}
-.task-progress > i {
-  height: 6px;
-  display: block;
-  border-radius: 5px;
-  overflow: hidden;
-  background: var(--so-panel-soft);
-}
-.task-progress u {
-  height: 100%;
-  display: block;
-  background: linear-gradient(90deg, var(--so-primary), var(--so-primary-strong));
-}
-.task-kind-guide {
-  padding: 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 11px;
-  background: var(--so-panel-soft);
-}
-.task-kind-guide b,
-.task-kind-guide span {
-  display: block;
-}
-.task-kind-guide span {
-  color: var(--so-text-muted);
-}
-.task-actions .danger {
-  color: var(--so-danger);
-  border-color: var(--so-danger-border);
-}
 @media (max-width: 900px) {
   .trend-explainer,
   .member-module-guide,

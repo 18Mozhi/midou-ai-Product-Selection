@@ -1,5 +1,7 @@
 > 2026-10-17 当前搜索界面不再读取快捷创建接口；历史接口已移除task创建项。API/Backend发布后需宝塔重启Node项目ai选品，Python无需重启。旧手动创建说明仅作历史记录，见 `../selection-retired-task-quick-action.md`。
 
+> 2026-10-18：成员业务任务界面整体退休，全局搜索排除旧 tasks 事实和 task 投影，历史 task 筛选兼容返回空；机会、证据、采集任务与原鉴权保留。下文四类搜索属于历史，当前见 selection-retired-member-tasks.md。
+
 # M02-05 宝塔发布、验证与回滚
 
 ## 发布

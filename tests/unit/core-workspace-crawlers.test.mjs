@@ -361,9 +361,8 @@ test("core workspace migration is MySQL 5.7 compatible and keeps crawler project
 });
 
 test("core list pages expose explicit detail and operational actions", async () => {
-  const [tasks, opportunities, competitors, sourcing] = await Promise.all(
+  const [opportunities, competitors, sourcing] = await Promise.all(
     [
-      ["TaskWorkspace.vue", "TaskListPanel.vue", "TaskDetailPanel.vue"],
       "OpportunityWorkspace.vue",
       "SelectionProductComparison.vue",
       ["SourcingWorkspace.vue", "SourcingComparisonPanel.vue"],
@@ -375,7 +374,6 @@ test("core list pages expose explicit detail and operational actions", async () 
         : readFile(`apps/web/src/components/${name}`, "utf8"),
     ),
   );
-  assert.match(tasks, /查看 →.*删除任务/s);
   assert.match(opportunities, /采集 Amazon 竞品.*采集公开供应商/s);
   assert.match(competitors, /MAXIMUM_SELECTION_COMPETITORS/);
   assert.match(competitors, /Amazon 主品与竞品/);
@@ -422,7 +420,7 @@ test("sourcing lists show opportunity names while retaining internal trace ids",
     logic,
     /searchName = \(item: Search \| null \| undefined\) =>[\s\S]*item\?\.display_name \|\| item\?\.input_ref/,
   );
-  assert.match(workspace, /<b>\{\{ searchName\(item\) \}\}/);
+  assert.match(workspace, /<b :title="searchName\(item\)">\{\{ searchName\(item\) \}\}/);
   assert.match(workspace, /机会编号 \{\{ selected\.input_ref \}\}/);
   assert.match(logic, /opportunity: "选品机会"[\s\S]*succeeded_empty: "未找到可用候选"/);
 });

@@ -1,9 +1,10 @@
+// Retired task references in this file verify fixed Git history, never current UI.
 import { readArchivedAutomationSource } from "../../scripts/lib/retired-automation-surface.mjs";
 import { readArchivedReportSource } from "../../scripts/lib/retired-report-surface.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readdir } from "node:fs/promises";
-import { readCompetitorReviewFile as readFile } from "../../scripts/lib/retired-competitor-surface.mjs";
+import { readTaskReviewFile as readFile } from "../../scripts/lib/retired-task-surface.mjs";
 
 // Retained exclusively for archived sidebar review styles. Production no longer
 // renders those rules; every live reference must still resolve exactly.

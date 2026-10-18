@@ -4,7 +4,6 @@ import { asyncSurface } from "../ui/async-surface";
 const componentModules: Record<string, () => Promise<{ default: Component }>> = {
   "./DiscoveryOverlay.vue": () => import("./DiscoveryOverlay.vue"),
   "./HomeDashboard.vue": () => import("./HomeDashboard.vue"),
-  "./TaskWorkspace.vue": () => import("./TaskWorkspace.vue"),
   "./ApprovalWorkspace.vue": () => import("./ApprovalWorkspace.vue"),
   "./NotificationCenter.vue": () => import("./NotificationCenter.vue"),
   "./PersonalCenter.vue": () => import("./PersonalCenter.vue"),
@@ -45,7 +44,6 @@ export const DiscoveryOverlay = lazy("DiscoveryOverlay");
 
 export const surfaceComponents: Record<string, Component> = {
   "home-dashboard": lazy("HomeDashboard"),
-  "task-workspace": lazy("TaskWorkspace"),
   "approval-workspace": lazy("ApprovalWorkspace"),
   "notification-center": lazy("NotificationCenter"),
   "personal-center": lazy("PersonalCenter"),
