@@ -149,31 +149,33 @@ const pendingMessage = computed(() => {
     <p v-if="notice" class="sourcing-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
     </p>
-    <dl class="sourcing-summary" aria-label="供应链找货数据总览">
-      <div>
-        <dt>找货任务</dt>
-        <dd>{{ summary.total }}</dd>
+    <div class="sourcing-overview">
+      <div class="sourcing-toolbar">
+        <label
+          >搜索找货记录<input
+            v-model="query"
+            type="search"
+            placeholder="关键词、机会编号或状态" /></label
+        ><span>共 {{ filteredItems.length }} 条结果</span>
       </div>
-      <div>
-        <dt>采集中</dt>
-        <dd>{{ summary.running }}</dd>
-      </div>
-      <div>
-        <dt>真实候选</dt>
-        <dd>{{ summary.candidates }}</dd>
-      </div>
-      <div>
-        <dt>已有结果</dt>
-        <dd>{{ summary.ready }}</dd>
-      </div>
-    </dl>
-    <div class="sourcing-toolbar">
-      <label
-        >搜索找货记录<input
-          v-model="query"
-          type="search"
-          placeholder="关键词、机会编号或状态" /></label
-      ><span>共 {{ filteredItems.length }} 条结果</span>
+      <dl class="sourcing-summary" aria-label="供应链找货数据总览">
+        <div>
+          <dt>找货任务</dt>
+          <dd>{{ summary.total }}</dd>
+        </div>
+        <div>
+          <dt>采集中</dt>
+          <dd>{{ summary.running }}</dd>
+        </div>
+        <div>
+          <dt>真实候选</dt>
+          <dd>{{ summary.candidates }}</dd>
+        </div>
+        <div>
+          <dt>已有结果</dt>
+          <dd>{{ summary.ready }}</dd>
+        </div>
+      </dl>
     </div>
     <UiStatePanel
       v-if="state !== 'ready'"
@@ -209,8 +211,10 @@ const pendingMessage = computed(() => {
             @click="detail(item)"
           >
             <b :title="searchName(item)">{{ searchName(item) }}</b
-            ><small>{{ inputTypeText(item.input_type) }} · {{ statusText(item.status) }}</small
-            ><em>{{ item.candidate_count }} 个候选</em>
+            ><span class="sourcing-record-meta"
+              ><small>{{ inputTypeText(item.input_type) }} · {{ statusText(item.status) }}</small
+              ><em>{{ item.candidate_count }} 个候选</em></span
+            >
           </button>
         </div>
         <nav v-if="recordPages > 1" class="sourcing-pagination" aria-label="找货记录分页">

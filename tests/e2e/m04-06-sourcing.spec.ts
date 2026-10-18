@@ -1387,6 +1387,21 @@ test("sourcing workspace uses compact catalogue layout and read-only refresh", a
   const root = page.locator(".sourcing-workspace");
   await expect(root.getByRole("heading", { name: "供应链找货", level: 1 })).toBeVisible();
   await expect(root.locator(".sourcing-summary dt")).toHaveCount(4);
+  const overview = root.locator(".sourcing-overview");
+  await expect(overview.getByRole("searchbox", { name: "搜索找货记录" })).toBeVisible();
+  await expect(overview.locator(".sourcing-summary")).toBeVisible();
+  const searchBox = await overview.locator(".sourcing-toolbar").boundingBox();
+  const summaryBox = await overview.locator(".sourcing-summary").boundingBox();
+  if (test.info().project.name === "mobile-390") {
+    expect(summaryBox!.y).toBeGreaterThanOrEqual(searchBox!.y + searchBox!.height);
+  } else {
+    expect(summaryBox!.x).toBeGreaterThanOrEqual(searchBox!.x + searchBox!.width);
+    expect(summaryBox!.y).toBeLessThan(searchBox!.y + searchBox!.height);
+  }
+  const headerControls = await root
+    .locator(".sourcing-heading-actions :is(button,a)")
+    .evaluateAll((els) => els.map((el) => el.getBoundingClientRect().height));
+  expect(Math.min(...headerControls)).toBeGreaterThanOrEqual(44);
   await expect(root.locator(".sourcing-journey,.sourcing-tabs,.member-module-guide")).toHaveCount(
     0,
   );

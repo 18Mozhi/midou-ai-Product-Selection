@@ -501,7 +501,7 @@ test("sourcing palette resolves only current colors and overrides without import
   assert.match(css, /#app \.sourcing-workspace--review button\.danger\s*\{/);
   assert.match(
     css,
-    /#app \.sourcing-workspace--review \.sourcing-layout > aside button\.selected\s*\{/,
+    /#app \.sourcing-workspace--review \.sourcing-record-items > button\.selected\s*\{/,
   );
 });
 
