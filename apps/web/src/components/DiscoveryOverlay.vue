@@ -229,7 +229,6 @@ watch(resourceType, () => {
       <section class="discovery-c-dialog">
         <header class="discovery-c-header">
           <div>
-            <p>GLOBAL SEARCH</p>
             <h2>搜索当前工作区</h2>
           </div>
           <button type="button" aria-label="关闭" @click="emit('close')">
@@ -239,55 +238,74 @@ watch(resourceType, () => {
         <div class="discovery-c-scroll">
           <div class="discovery-c-layout">
             <aside class="discovery-c-scope" aria-label="当前范围与搜索条件">
-              <p class="discovery-c-kicker">当前范围</p>
-              <h3>{{ organizationLabel }}</h3>
-              <p class="discovery-c-workspace-label">{{ workspaceLabel }}</p>
-              <p class="discovery-c-scope-note">范围由当前会话决定，不跨组织或工作区。</p>
+              <p class="discovery-c-context">
+                <strong>{{ organizationLabel }}</strong
+                ><span aria-hidden="true">/</span>
+                <span>{{ workspaceLabel }}</span>
+              </p>
               <form class="discovery-c-form" novalidate @submit.prevent="search">
-                <label for="discovery-c-query">搜索关键词</label>
-                <input
-                  id="discovery-c-query"
-                  ref="input"
-                  v-model="query"
-                  type="text"
-                  minlength="2"
-                  maxlength="100"
-                  autocomplete="off"
-                  aria-label="搜索关键词"
-                  :aria-invalid="queryError ? 'true' : undefined"
-                  :aria-describedby="queryError ? 'discovery-query-error' : undefined"
-                  placeholder="输入至少 2 个字符"
-                />
-                <p v-if="queryError" id="discovery-query-error" role="alert">{{ queryError }}</p>
-                <label for="discovery-c-resource-type">对象类型</label>
-                <select id="discovery-c-resource-type" v-model="resourceType" aria-label="对象类型">
-                  <option value="">全部对象</option>
-                  <option value="opportunity">机会</option>
-                  <option value="evidence">证据</option>
-                  <option value="collection_task">采集任务</option>
-                </select>
-                <label for="discovery-c-status">状态</label>
-                <select
-                  id="discovery-c-status"
-                  v-model="status"
-                  aria-label="状态"
-                  :disabled="!resourceType"
-                >
-                  <option value="">{{ resourceType ? "全部状态" : "先选对象类型" }}</option>
-                  <option v-for="item in statusOptions" :key="item.value" :value="item.value">
-                    {{ item.label }}
-                  </option>
-                </select>
-                <label for="discovery-c-assignee">负责人</label>
-                <input
-                  id="discovery-c-assignee"
-                  v-model="assignee"
-                  aria-label="负责人"
-                  maxlength="120"
-                  :disabled="!assigneeApplicable"
-                  :placeholder="assigneeApplicable ? '姓名或账号' : '仅任务和机会可用'"
-                />
-                <button class="discovery-c-submit" type="submit">搜索</button>
+                <div class="discovery-c-query-row">
+                  <div class="discovery-c-field">
+                    <label for="discovery-c-query">搜索关键词</label>
+                    <input
+                      id="discovery-c-query"
+                      ref="input"
+                      v-model="query"
+                      type="text"
+                      minlength="2"
+                      maxlength="100"
+                      autocomplete="off"
+                      aria-label="搜索关键词"
+                      :aria-invalid="queryError ? 'true' : undefined"
+                      :aria-describedby="queryError ? 'discovery-query-error' : undefined"
+                      placeholder="输入至少 2 个字符"
+                    />
+                    <p v-if="queryError" id="discovery-query-error" role="alert">
+                      {{ queryError }}
+                    </p>
+                  </div>
+                  <button class="discovery-c-submit" type="submit">搜索</button>
+                </div>
+                <div class="discovery-c-filters">
+                  <div class="discovery-c-field">
+                    <label for="discovery-c-resource-type">对象类型</label>
+                    <select
+                      id="discovery-c-resource-type"
+                      v-model="resourceType"
+                      aria-label="对象类型"
+                    >
+                      <option value="">全部对象</option>
+                      <option value="opportunity">机会</option>
+                      <option value="evidence">证据</option>
+                      <option value="collection_task">采集任务</option>
+                    </select>
+                  </div>
+                  <div class="discovery-c-field">
+                    <label for="discovery-c-status">状态</label>
+                    <select
+                      id="discovery-c-status"
+                      v-model="status"
+                      aria-label="状态"
+                      :disabled="!resourceType"
+                    >
+                      <option value="">{{ resourceType ? "全部状态" : "先选对象类型" }}</option>
+                      <option v-for="item in statusOptions" :key="item.value" :value="item.value">
+                        {{ item.label }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="discovery-c-field">
+                    <label for="discovery-c-assignee">负责人</label>
+                    <input
+                      id="discovery-c-assignee"
+                      v-model="assignee"
+                      aria-label="负责人"
+                      maxlength="120"
+                      :disabled="!assigneeApplicable"
+                      :placeholder="assigneeApplicable ? '姓名或账号' : '仅机会可用'"
+                    />
+                  </div>
+                </div>
               </form>
             </aside>
             <section class="discovery-c-results-pane" aria-label="结果区">
@@ -356,7 +374,7 @@ watch(resourceType, () => {
           </div>
         </div>
         <footer class="discovery-c-footer">
-          <span>搜索不跨组织或工作区</span>
+          <span>Esc 关闭</span>
           <RouterLink v-if="shell === 'member'" to="/notifications" @click="navigateAway"
             >查看通知 <span aria-hidden="true">→</span></RouterLink
           >

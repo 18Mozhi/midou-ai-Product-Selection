@@ -91,13 +91,21 @@ test("M02-05.A07/A08/A15 keyboard search is responsive and visual", async ({ pag
   const resultsBox = await dialog.locator(".discovery-c-results-pane").boundingBox();
   expect(scopeBox).not.toBeNull();
   expect(resultsBox).not.toBeNull();
-  if ((page.viewportSize()?.width ?? 0) <= 700) {
-    expect(resultsBox!.y).toBeGreaterThan(scopeBox!.y);
-    expect(Math.abs(resultsBox!.width - scopeBox!.width)).toBeLessThan(2);
-  } else {
-    expect(resultsBox!.x).toBeGreaterThan(scopeBox!.x);
-    expect(Math.abs(scopeBox!.y - resultsBox!.y)).toBeLessThan(2);
-  }
+  expect(resultsBox!.y).toBeGreaterThanOrEqual(scopeBox!.y + scopeBox!.height - 1);
+  expect(Math.abs(resultsBox!.width - scopeBox!.width)).toBeLessThan(2);
+  await expect(dialog.getByText("GLOBAL SEARCH", { exact: true })).toHaveCount(0);
+  await expect(dialog.getByLabel("负责人")).toHaveAttribute("placeholder", "仅机会可用");
+  const keywordBox = await dialog.getByLabel("搜索关键词").boundingBox();
+  const submitBox = await dialog.getByRole("button", { name: "搜索", exact: true }).boundingBox();
+  expect(Math.abs(keywordBox!.y - submitBox!.y)).toBeLessThan(2);
+  const idle = await dialog.locator(".discovery-c-idle").evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { color: style.color, background: style.backgroundColor };
+  });
+  expect(idle.color).not.toBe(idle.background);
+  expect((await dialog.locator(".discovery-c-dialog").boundingBox())!.height).toBeLessThan(
+    page.viewportSize()!.height,
+  );
   await dialog.getByLabel("对象类型").selectOption("opportunity");
   await dialog.getByLabel("状态").selectOption("ready");
   await dialog.getByLabel("负责人").fill("选品经理");

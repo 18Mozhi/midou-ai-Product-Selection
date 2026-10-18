@@ -5,7 +5,7 @@ test.beforeEach(async ({ page }, testInfo) => {
 });
 const org = "00000000-0000-4000-8000-000000000501";
 const workspace = "00000000-0000-4000-8000-000000000502";
-const taskId = "00000000-0000-4000-8000-000000000510";
+const productId = "00000000-0000-4000-8000-000000000510";
 const envelope = (data: unknown, id = "ui2-shared") => ({ data, request_id: id, trace_id: id });
 const member = {
   shell: "member",
@@ -14,7 +14,7 @@ const member = {
   organization_name: "隔离组织",
   workspace_name: "隔离工作区",
   roles: ["member"],
-  capabilities: ["task:read", "task:create", "notification:read"],
+  capabilities: ["task:read", "task:create", "notification:read", "opportunity:read"],
   platform_roles: ["platform_operations_admin"],
   platform_capabilities: [],
   guard_reason: "navigation_member_allowed",
@@ -30,15 +30,15 @@ const platform = {
   guard_reason: "navigation_platform_allowed",
 };
 const result = (title: string) => ({
-  id: taskId,
-  resource_id: taskId,
-  resource_type: "task",
+  id: productId,
+  resource_id: productId,
+  resource_type: "opportunity",
   title,
   subtitle: null,
-  status: "todo",
+  status: "ready",
   assignee_id: null,
   assignee_name: null,
-  route: `/tasks/${taskId}`,
+  route: `/opportunities/${productId}`,
   updated_at: "2026-08-07T15:00:00.000Z",
 });
 const searchResult = (title: string) =>
@@ -130,7 +130,7 @@ for (const entry of ["search", "notifications"] as const) {
   }) => {
     const { writes } = await setup(page);
     await page.route("**/api/v1/me/global-search?**", (route) =>
-      route.fulfill({ json: searchResult("隔离目标任务") }),
+      route.fulfill({ json: searchResult("隔离目标商品") }),
     );
     {
       const dialog = await openSearch(page);
@@ -138,8 +138,8 @@ for (const entry of ["search", "notifications"] as const) {
         const input = dialog.getByPlaceholder("输入至少 2 个字符");
         await input.fill("隔离目标");
         await input.press("Enter");
-        await dialog.getByRole("link", { name: /隔离目标任务/ }).click();
-        await expect(page).toHaveURL(new RegExp(`/tasks/${taskId}$`));
+        await dialog.getByRole("link", { name: /隔离目标商品/ }).click();
+        await expect(page).toHaveURL(new RegExp(`/opportunities/${productId}$`));
       } else {
         await dialog.getByRole("link", { name: "查看通知", exact: true }).click();
         await expect(page).toHaveURL(/\/notifications$/);
@@ -215,16 +215,16 @@ test("UI2-DI02 Enter on a same-route result closes discovery without adding a ro
   page,
 }) => {
   const { writes } = await setup(page);
-  await page.goto(`/tasks/${taskId}`);
+  await page.goto(`/opportunities/${productId}`);
   await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
   await page.route("**/api/v1/me/global-search?**", (route) =>
-    route.fulfill({ json: searchResult("当前任务") }),
+    route.fulfill({ json: searchResult("当前商品") }),
   );
   const dialog = await openSearch(page);
   const historyLength = await page.evaluate(() => history.length);
-  await dialog.getByPlaceholder("输入至少 2 个字符").fill("当前任务");
+  await dialog.getByPlaceholder("输入至少 2 个字符").fill("当前商品");
   await dialog.getByPlaceholder("输入至少 2 个字符").press("Enter");
-  const link = dialog.getByRole("link", { name: /当前任务/ });
+  const link = dialog.getByRole("link", { name: /当前商品/ });
   await link.focus();
   await link.press("Enter");
   await expect(dialog).toBeHidden();
@@ -532,15 +532,14 @@ test("UI2-DI01 exact search parameters follow type and trim rules without sendin
   const dialog = await openSearch(page);
   const input = dialog.getByRole("textbox", { name: "搜索关键词" });
   await input.fill("  合同查询  ");
-  const types = ["task", "opportunity", "evidence", "collection_task", ""];
-  const states = ["todo", "ready", "active", "queued", ""];
+  const types = ["opportunity", "evidence", "collection_task", ""];
+  const states = ["ready", "active", "queued", ""];
   for (let index = 0; index < types.length; index += 1) {
     const type = types[index];
     await dialog.getByLabel("对象类型").selectOption(type);
     await expect(dialog.getByLabel("状态")).toHaveValue("");
     if (type) await dialog.getByLabel("状态").selectOption(states[index]);
-    if (["task", "opportunity"].includes(type))
-      await dialog.getByLabel("负责人").fill("  负责人甲  ");
+    if (type === "opportunity") await dialog.getByLabel("负责人").fill("  负责人甲  ");
     else {
       await expect(dialog.getByLabel("负责人")).toBeDisabled();
       await expect(dialog.getByLabel("负责人")).toHaveValue("");
@@ -551,7 +550,7 @@ test("UI2-DI01 exact search parameters follow type and trim rules without sendin
       q: "合同查询",
       limit: "10",
       ...(type ? { resource_type: type, status: states[index] } : {}),
-      ...(["task", "opportunity"].includes(type) ? { assignee: "负责人甲" } : {}),
+      ...(type === "opportunity" ? { assignee: "负责人甲" } : {}),
     });
     await expect(dialog.getByRole("link", { name: /参数验证结果/ })).toBeVisible();
   }

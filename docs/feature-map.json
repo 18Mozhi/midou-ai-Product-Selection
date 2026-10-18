@@ -1,4 +1,19 @@
 {
+  "selectionDiscoveryLayout20261019": {
+    "status": "implemented",
+    "statusDetail": "72_browser_22_node_web_build_and_gates_passed_pending_publication",
+    "requirements": "docs/selection-discovery-layout.md",
+    "sourceFiles": [
+      "apps/web/src/components/DiscoveryOverlay.vue",
+      "apps/web/src/styles/navigation-discovery-c.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m02-05-discovery.spec.ts",
+      "tests/e2e/ui-phase2-discovery-shell-contracts.spec.ts",
+      "tests/unit/theme-and-icon-completion.test.mjs"
+    ],
+    "contract": "Replace blue-sidebar search with stacked context, query, filters and full-width results. Delete old discovery palette; shared semantic colors fix unreadable idle state. Native control bindings, search API/scope/async ownership/retry/focus behavior unchanged. No API/config/schema/dependency change; no legacy task type restored."
+  },
   "selectionRetiredMemberTasks20261018": {
     "status": "implemented",
     "statusDetail": "206_related_node_214_distinct_browser_passed_4_original_conditional_skips_mysql_readonly_passed_pending_publication",
