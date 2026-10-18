@@ -6361,16 +6361,19 @@
     "requirements": "docs/amazon-observed-empty-search.md",
     "sourceFiles": [
       "packages/provider-sources/src/amazon-browser-contract.ts",
-      "packages/provider-sources/src/adapters/index.ts"
+      "packages/provider-sources/src/adapters/index.ts",
+      "apps/api/src/mysql-crawler-runtime-repository.ts",
+      "apps/api/src/amazon-public-browser-health.ts"
     ],
     "testFiles": [
       "tests/unit/amazon-browser-contract.test.mjs",
       "tests/unit/amazon-target-drift.test.mjs",
       "tests/unit/core-workspace-crawlers.test.mjs",
       "tests/unit/amazon-public-reviews.test.mjs",
-      "tests/unit/amazon-detail-facts.test.mjs"
+      "tests/unit/amazon-detail-facts.test.mjs",
+      "tests/unit/amazon-disabled-health-lease.test.mjs"
     ],
-    "contract": "Adapter v15 / normalized schema v5 / browser evidence v1. Only matching validated succeeded_empty search artifacts with observed empty-search structure return zero records. Challenges, unknown layouts and detail mismatches remain failures; no auto enable or fabricated facts. Actual stored job replay passed; live recovery and daily100 require separate acceptance."
+    "contract": "Adapter v15 / normalized schema v5 / browser evidence v1. Only matching validated succeeded_empty search artifacts with observed empty-search structure return zero records. Challenges, unknown layouts and detail mismatches remain failures; no auto enable or fabricated facts. Actual stored job replay passed; live recovery and daily100 require separate acceptance. Private health repository additionally binds canonical empty profile, active assets, approved valid terms and exact Amazon/public_page disabled source. Generic HTTP leases retain enabled-only behavior; no public field or schema change."
   },
   "selectionArchivedUiVerificationClosure20261018": {
     "status": "implemented",

@@ -57,7 +57,13 @@ export class AmazonPublicBrowserHealth {
         (!Number(t.terms_permanent) && !(new Date(t.terms_expires_at).getTime() > Date.now()))
       )
         throw new ProviderAdapterFailure("permission_denied", false);
-      const runtime = new CrawlerRuntimeService(new MySqlCrawlerRuntimeRepository(this.pool));
+      const runtime = new CrawlerRuntimeService(
+        new MySqlCrawlerRuntimeRepository(
+          this.pool,
+          "",
+          this.config.providerAdapters.amazonBrowserProfileId,
+        ),
+      );
       const record = await new MySqlCredentialAssetRepository(this.pool).getCipherRecord(
         String(profile.credential_asset_id),
       );

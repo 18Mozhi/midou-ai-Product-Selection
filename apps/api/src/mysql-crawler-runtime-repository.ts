@@ -29,6 +29,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
   constructor(
     private readonly pool: Pool,
     private readonly amazonPublicProfileId = "",
+    private readonly amazonHealthProfileId = "",
   ) {}
   async list(input: Parameters<CrawlerRuntimeRepository["list"]>[0]) {
     const conditions: string[] = [],
@@ -167,14 +168,29 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           409,
           "当前惠州单机已有 Crawler 运行，请等待全局租约释放。",
         );
+      const publicHealth =
+        Boolean(this.amazonHealthProfileId) &&
+        input.profileId === this.amazonHealthProfileId &&
+        input.leaseOwner === "amazon-public-health";
       const [scope] = await c.query<RowDataPacket[]>(
         [
           "SELECT p.provider_id,p.updated_by,a.expires_at FROM crawler_profiles p JOIN credential_assets a ON ",
           "a.id=p.credential_asset_id JOIN providers v ON v.id=p.provider_id JOIN workspaces w ON w.id=? AND ",
           "w.organization_id=? AND w.status='active' WHERE p.id=? AND p.status='active' AND a.status='active' ",
-          "AND a.kind IN ('browser_profile','cookie_bundle') AND v.status='enabled' LIMIT 1 FOR UPDATE",
+          "AND a.kind IN ('browser_profile','cookie_bundle') AND (v.status='enabled'",
+          publicHealth
+            ? " OR (v.status='disabled' AND v.code='amazon_product' AND v.access_mode='public_page' AND p.id=? AND a.kind='browser_profile' AND a.fingerprint=? AND v.terms_review_status='approved' AND CHAR_LENGTH(v.terms_version)>0 AND (v.terms_permanent=1 OR v.terms_expires_at>?))"
+            : "",
+          ") LIMIT 1 FOR UPDATE",
         ].join(""),
-        [input.workspaceId, input.organizationId, input.profileId],
+        [
+          input.workspaceId,
+          input.organizationId,
+          input.profileId,
+          ...(publicHealth
+            ? [this.amazonHealthProfileId, anonymousAmazonFingerprint(), input.now]
+            : []),
+        ],
       );
       if (!scope[0])
         throw new CrawlerRuntimeError(
