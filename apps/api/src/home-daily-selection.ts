@@ -1,7 +1,5 @@
-import {
-  opportunityPrimaryAsinSql,
-  opportunityQualityGateSql,
-} from "./opportunity-selection-policy.js";
+import { selectionScopedPrimaryIdentitiesSql } from "@scoutops/database";
+import { homeQualityGateSql } from "./home-selection-sql.js";
 
 /** User target uses the current workspace and Beijing calendar day; stored timestamps are UTC. */
 export function dailySelectionWindow(now: Date) {
@@ -18,16 +16,13 @@ export const dailySelectionCountSql = (dailySql: string, historicalSql: string) 
   `AND NOT EXISTS (SELECT 1 FROM (${historicalSql}) historical WHERE BINARY historical.main_asin=BINARY daily.main_asin)`;
 
 export const dailySelectionProductionSql = dailySelectionCountSql(
-  "SELECT " +
-    opportunityPrimaryAsinSql +
-    " main_asin," +
-    opportunityQualityGateSql +
-    " quality_passed " +
-    "FROM opportunities o WHERE o.organization_id=? AND o.workspace_id=? " +
-    "AND o.created_at>=? AND o.created_at<? AND o.lifecycle_status NOT IN ('archived','deleted')",
-  "SELECT " +
-    opportunityPrimaryAsinSql +
-    " main_asin FROM opportunities o WHERE o.organization_id=? AND o.workspace_id=? AND o.created_at<?",
+  "SELECT daily_identity.main_asin," +
+    homeQualityGateSql +
+    " quality_passed FROM (" +
+    selectionScopedPrimaryIdentitiesSql("daily") +
+    ") daily_identity " +
+    "JOIN opportunities o ON o.id=daily_identity.opportunity_id",
+  selectionScopedPrimaryIdentitiesSql("historical"),
 );
 
 /** First verified full-pipeline completion per workspace ASIN; repeated refreshes never create a new day. */

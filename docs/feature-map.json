@@ -1,21 +1,23 @@
 {
   "homeSummaryQueryPerformance20261018": {
     "status": "implemented",
-    "deploymentState": "local_only_partial_home_fix",
+    "deploymentState": "release_receipt_required",
     "requirements": "docs/home-summary-query-performance.md",
     "sourceFiles": [
       "apps/api/src/home-selection-sql.ts",
       "apps/api/src/mysql-home-dashboard-repository.ts",
       "packages/database/src/selection-candidate-sql.ts",
-      "packages/database/src/index.ts"
+      "packages/database/src/index.ts",
+      "apps/api/src/home-daily-selection.ts"
     ],
     "tests": [
       "tests/unit/home-selection-query.test.mjs",
       "tests/unit/home-daily-selection.test.mjs",
       "tests/m02-06/home-dashboard.test.mjs",
-      "tests/m02-06/home-discovery-health.test.mjs"
+      "tests/m02-06/home-discovery-health.test.mjs",
+      "tests/m02-06/home-primary-identities.fixture.mjs"
     ],
-    "acceptance": "Initial statistics query improved in read-only production diagnostics; historical daily identity query remains slow. Full home and daily100 not accepted."
+    "acceptance": "Read-only full automaticSelection returned in 2726ms; 136 live historical identities equal old scalar results in one consistent snapshot; 12 MySQL fixture cases passed fast/fallback/daily reads. HTTP rollout and daily100 still require independent verification."
   },
   "selectionMemberIntelligenceFlow20261018": {
     "status": "implemented",

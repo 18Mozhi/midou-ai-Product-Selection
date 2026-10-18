@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   selectionPrimaryAsinSql,
   selectionCandidateExistsSql,
+  selectionScopedPrimaryIdentitiesSql,
 } from "../../packages/database/dist/index.js";
 import {
   homeCandidateSql,
@@ -67,4 +68,24 @@ test("home summary and recommendation rows both use the bounded full proof", asy
   const recommendation = calls.find((c) => c.sql.startsWith("SELECT o.id,o.name"));
   assert.ok(recommendation.sql.includes(homeRecommendedSql));
   assert.deepEqual(recommendation.params, ["org", "ws", "actor"]);
+});
+
+test("grouped reads preserve scoped proof and scalar fallback without merging historical identities per row", () => {
+  for (const mode of ["daily", "historical"]) {
+    const sql = selectionScopedPrimaryIdentitiesSql(mode);
+    assert.ok(sql.includes(`ELSE ${selectionPrimaryAsinSql} END main_asin`));
+    assert.match(sql, /@@session.group_concat_max_len>=10/);
+    assert.match(sql, /ORDER BY l_primary.created_at,n_primary.created_at DESC SEPARATOR ''/);
+    assert.match(sql, /n_primary.status IN \('active','superseded'\)/);
+    assert.match(sql, /n_primary_current.status='active'/);
+    assert.match(sql, /o.organization_id=\? AND o.workspace_id=\?/);
+    assert.match(sql, /GROUP BY o.id$/);
+  }
+  assert.match(
+    selectionScopedPrimaryIdentitiesSql("daily"),
+    /o.created_at>=\? AND o.created_at<\? AND o.lifecycle_status NOT IN \('archived','deleted'\)/,
+  );
+  const historical = selectionScopedPrimaryIdentitiesSql("historical");
+  assert.match(historical, /o.created_at<\? GROUP BY o.id/);
+  assert.doesNotMatch(historical, /lifecycle_status NOT IN/);
 });

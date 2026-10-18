@@ -6,6 +6,7 @@ export {
   selectionCandidateSql,
   selectionPrimaryAsinSql,
   selectionCandidateExistsSql,
+  selectionScopedPrimaryIdentitiesSql,
 } from "./selection-candidate-sql.js";
 export {
   selectionRiskGateSql,
