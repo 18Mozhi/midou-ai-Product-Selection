@@ -1,3 +1,5 @@
+> 当前交接与逐项验收状态见 [selection-current-acceptance.md](selection-current-acceptance.md)。旧记录的“未部署”为当时状态，代码发布与真实业务验收分别核对。
+
 > 2026-10-17 后台保留回归：修复组织资料窄内容区溢出、原因弹窗首次挂载焦点、手机账号筛选样式和侧栏返回标签；详见 `docs/selection-backend-preservation.md`。核心页面新增小字提升至 13px，48 项相关浏览器检查通过；历史审计与现行运行检查分离。真实性门禁已通过，整体发布仍等待全量与真实采集验收，见 `docs/selection-release-verification.md`，未部署。
 
 > 2026-10-17 选品库布局重制：移除大蓝横幅与旧渐变标题，采用紧凑工具栏、商品视图与筛选分区、实际配置摘要，删除旧标题/视图栏 CSS 和两个废弃样式文件。见 `docs/selection-catalogue-layout.md`，本地未部署。

@@ -1,3 +1,5 @@
+> 当前交接与逐项验收状态见 [selection-current-acceptance.md](docs/selection-current-acceptance.md)。旧记录的“未部署”为当时状态，代码发布与真实业务验收分别核对。
+
 > 2026-10-18 成员商品详情退休手工成本录入/复核/重算，保留自动利润及只读依据；后台费用治理和历史API不变。见 `docs/selection-member-profit-retirement.md`。日百品仍需真实验收。
 
 > 2026-10-18 商品详情按分区聚焦，推荐与补证仅在商品评分页，已知自动评分缺失码中文化。见 `docs/selection-detail-section-focus.md`；全站与日百品仍待验收。
