@@ -91,3 +91,26 @@ test("periodic competitor refresh interval has a server-only bounded default", (
       (e) => e instanceof ConfigError && e.key === "COMPETITOR_REFRESH_INTERVAL_SECONDS",
     );
 });
+
+test("public RSS automatic recovery configuration stays server-only and bounded", () => {
+  const config = loadRuntimeConfig({
+    NODE_ENV: "test",
+    PUBLIC_RSS_AUTO_RECOVERY_ENABLED: "false",
+    PUBLIC_RSS_AUTO_RECOVERY_POLL_MS: "120000",
+    PUBLIC_RSS_AUTO_RECOVERY_COOLDOWN_MS: "600000",
+  });
+  assert.equal(config.providerAdapters.publicRssRecoveryEnabled, false);
+  assert.equal(config.providerAdapters.publicRssRecoveryPollMs, 120000);
+  assert.equal(config.providerAdapters.publicRssRecoveryCooldownMs, 600000);
+  for (const [key, value] of [
+    ["PUBLIC_RSS_AUTO_RECOVERY_POLL_MS", "999"],
+    ["PUBLIC_RSS_AUTO_RECOVERY_POLL_MS", "3600001"],
+    ["PUBLIC_RSS_AUTO_RECOVERY_COOLDOWN_MS", "999"],
+    ["PUBLIC_RSS_AUTO_RECOVERY_COOLDOWN_MS", "86400001"],
+  ])
+    assert.throws(
+      () => loadRuntimeConfig({ [key]: value }),
+      (error) => error instanceof ConfigError && error.key === key,
+    );
+  assert.equal(JSON.stringify(browserConfig(config)).includes("publicRssRecovery"), false);
+});

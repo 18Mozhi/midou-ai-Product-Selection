@@ -121,6 +121,7 @@ export interface CrawlerSchedulerRepository {
     traceId: string;
     idempotencyKey: string;
     now: Date;
+    automaticRecovery?: { providerVersion: number; openedAt: Date };
   }): Promise<{ provider_id: string; recovered: boolean }>;
 }
 export interface CrawlerSchedulerHostProbe {

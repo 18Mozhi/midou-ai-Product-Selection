@@ -177,6 +177,28 @@ export function parseAmazonBrowserEvidenceArtifacts(
   return output;
 }
 
+function observedEmptySearch(html: string) {
+  const body = html.replace(/<!--[\s\S]*?-->|<(script|style)\b[^>]*>[\s\S]*?(?:<\/\1>|$)/gi, "");
+  if (
+    /captcha|verify you are human|bm-verify|id=["']productTitle["']|data-asin=["'][A-Z0-9]{10}["']/i.test(
+      body,
+    )
+  )
+    return false;
+  const main = /<div\b[^>]*class=["'][^"']*\bs-main-slot\b[^"']*["'][^>]*>/i.exec(body);
+  if (!main) return false;
+  const message = /<div\b[^>]*data-cel-widget=["']MAIN-MESSAGING-0["'][^>]*>/i.exec(
+    body.slice(main.index),
+  );
+  if (!message) return false;
+  const content = body.slice(main.index + message.index + message[0].length);
+  const heading = /<h2\b[^>]*>([\s\S]*?)<\/h2>/i.exec(content)?.[1];
+  return (
+    heading?.replace(/<[^>]*>/g, "").trim() === "No results for your search query." &&
+    /<span\b[^>]*>Try checking your spelling or use more general terms<\/span>/i.test(content)
+  );
+}
+
 export function parseAmazonBrowserRunResult(
   input: Record<string, unknown>,
   target: Record<string, unknown>,
@@ -202,11 +224,23 @@ export function parseAmazonBrowserRunResult(
     )
       throw new ProviderAdapterFailure("invalid_payload", false);
   }
-  const records = parseAmazonProductPage(
-    "<html><body>" + dom.content.toString("utf8") + "</body></html>",
-    dom.source_url,
-    20,
-  );
+  const html = dom.content.toString("utf8");
+  if (expected.pathname !== "/s" && observedEmptySearch(html))
+    throw new ProviderAdapterFailure("source_changed", false);
+  let records: ProviderRawRecord[];
+  try {
+    records = parseAmazonProductPage("<html><body>" + html + "</body></html>", dom.source_url, 20);
+  } catch (error) {
+    if (
+      error instanceof ProviderAdapterFailure &&
+      error.code === "source_changed" &&
+      input.status === "succeeded_empty" &&
+      expected.pathname === "/s" &&
+      observedEmptySearch(html)
+    )
+      return [];
+    throw error;
+  }
   if (!records.length) throw new ProviderAdapterFailure("source_changed", false);
   for (const r of records) {
     r.observedAt = dom.captured_at.toISOString();

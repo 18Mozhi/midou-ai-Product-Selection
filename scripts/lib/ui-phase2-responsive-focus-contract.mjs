@@ -53,9 +53,9 @@ export const responsiveFocusRevision = Object.freeze({
     "apps/web/src/styles/access-governance.css":
       "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
     "apps/web/src/styles/onboarding-navigation.css":
-      "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26",
+      "22a3f9c957d32bf2f827947384246181aa04b3773847ac5ddf970a4407a99a08",
     "apps/web/src/styles/platform-operations.css":
-      "786190eaa58cd38ae56a602d927d42cfcf44a11e9dfaf76b61a692871c0c459b",
+      "be78aae15d5caa82633d56420f24bbd2a6251feba41efb46a4ced3505a957c2b",
     "apps/web/src/styles/platform-dashboard.css":
       "ffd619eb95c582b11dc3ced13905808deea169d8d86cbb38c0640fe973914239",
     "apps/web/src/design/tokens.css":

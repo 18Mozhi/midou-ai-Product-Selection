@@ -90,3 +90,8 @@ export const workerQueue = (
   run,
   ...WORKER_QUEUE_POLICIES[name],
 });
+
+export const workerQueues = (
+  specifications: ReadonlyArray<readonly [WorkerQueueName, number, QueueSchedulerJob["run"]]>,
+): QueueSchedulerJob[] =>
+  specifications.map(([name, intervalMs, run]) => workerQueue(name, intervalMs, run));

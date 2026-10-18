@@ -78,7 +78,7 @@ test("every registered Trends country uses the dedicated parser and adapter", ()
   assert.equal(sources.length, 10);
   for (const s of sources) {
     assert.equal(s.parser_version, "google-trends-rss-v1");
-    assert.equal(adapters.find((a) => a.key === s.code).version, "google-trends-rss-adapter-v1");
+    assert.equal(adapters.find((a) => a.key === s.code).version, "google-trends-rss-adapter-v2");
   }
 });
 
@@ -95,7 +95,7 @@ test("missing published time anywhere in the sampled feed fails the Trends healt
 
 test("Trends has a dedicated version while ordinary RSS identity remains unchanged", () => {
   assert.equal(source.parser_version, "google-trends-rss-v1");
-  assert.equal(adapterFor(feed(item("portable fan"))).version, "google-trends-rss-adapter-v1");
+  assert.equal(adapterFor(feed(item("portable fan"))).version, "google-trends-rss-adapter-v2");
   const ordinary = parseSyndicationFeed(
     "<rss><channel><item><title>News</title><guid>stable</guid><link>https://example.test/news</link><pubDate>Sat, 17 Oct 2026 20:50:00 GMT</pubDate></item></channel></rss>",
     "News",

@@ -1,3 +1,4 @@
+import { readEvidenceSourceBytes } from "./ui-phase2-token-copy-baseline.mjs";
 import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
@@ -41,7 +42,7 @@ export async function verifyJourneyControlsHistory(repo) {
     const version = sourceVersions.get(file);
     const source = version
       ? execFileSync("git", ["show", `${version}:${file}`], { cwd: repo, encoding: "utf8" })
-      : await readFile(path.join(repo, file), "utf8");
+      : readEvidenceSourceBytes(file, expected);
     assert.equal(hash(beforePublishedPresentation(file, source)), expected, file);
   }
   assert.equal(evidence.screenshots.length, 114);

@@ -6326,5 +6326,71 @@
       "tests/unit/automatic-source-fairness.test.mjs"
     ],
     "contract": "Production operation restores 15 existing public feeds after actual robots and parser checks; 14 owner reviews advance v1 to v2 through existing optimistic services, health and audited recovery. Unchanged URLs, rates, retries, scope, leases and facts. First natural task persisted 90 news records in a different tenant, not MiDou or daily completion acceptance. No runtime code/schema/config/dependency change; no restart required. Transient source failures still lack automatic fresh-health recovery polling."
+  },
+  "selectionPublicRssAutomaticRecovery20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-public-rss-auto-recovery.md",
+    "sourceFiles": [
+      "apps/api/src/public-rss-recovery.ts",
+      "apps/api/src/server.ts",
+      "apps/api/src/crawler-scheduler-repository.ts",
+      "apps/api/src/crawler-scheduler-service.ts",
+      "packages/provider-sources/src/adapters/index.ts",
+      "packages/config/src/index.ts",
+      "config/env.example",
+      "config/schema.json",
+      "apps/worker/src/index.ts",
+      "apps/worker/src/worker-queue-registry.ts",
+      "apps/api/src/bootstrap/create-provider-adapter-runtime.ts"
+    ],
+    "testFiles": [
+      "tests/unit/public-rss-recovery.test.mjs",
+      "tests/unit/public-rss-health-policy.test.mjs",
+      "tests/m00-02/config-boundary.test.mjs",
+      "tests/m03-03/provider-adapter.test.mjs",
+      "tests/unit/google-trends-rss.test.mjs",
+      "tests/unit/public-rss-recovery-query.fixture.mjs",
+      "tests/unit/worker-handler-boundaries.test.mjs",
+      "tests/unit/worker-scheduler.test.mjs",
+      "tests/unit/api-domain-registration.test.mjs"
+    ],
+    "contract": "Existing production API runs one cooled probe for enabled approved unexpired builtin RSS with transient open circuits and active configured system actor. RSS health v2 checks actual robots before parsing. Existing audited recovery atomically rechecks definition version, approvals, same circuit and fresh ready health. No auto approval, private/browser sources, new service, schema or HTTP fields. Backend-only PUBLIC_RSS_AUTO_RECOVERY_ENABLED/POLL_MS/COOLDOWN_MS require BaoTa Node restart. Daily100 remains unproven."
+  },
+  "amazonObservedEmptySearch20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-observed-empty-search.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/amazon-browser-contract.ts",
+      "packages/provider-sources/src/adapters/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-browser-contract.test.mjs",
+      "tests/unit/amazon-target-drift.test.mjs",
+      "tests/unit/core-workspace-crawlers.test.mjs",
+      "tests/unit/amazon-public-reviews.test.mjs",
+      "tests/unit/amazon-detail-facts.test.mjs"
+    ],
+    "contract": "Adapter v15 / normalized schema v5 / browser evidence v1. Only matching validated succeeded_empty search artifacts with observed empty-search structure return zero records. Challenges, unknown layouts and detail mismatches remain failures; no auto enable or fabricated facts. Actual stored job replay passed; live recovery and daily100 require separate acceptance."
+  },
+  "selectionArchivedUiVerificationClosure20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-public-rss-auto-recovery.md",
+    "sourceFiles": [
+      "scripts/lib/ui-phase2-journey-controls-history.mjs",
+      "scripts/lib/ui-phase2-journey-fields-history.mjs",
+      "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+      "tests/fixtures/pre-selection-rebuild-snapshot.mjs"
+    ],
+    "testFiles": [
+      "tests/unit/ui-phase2-journey-controls-history.test.mjs",
+      "tests/unit/ui-phase2-journey-fields-history.test.mjs",
+      "tests/unit/ui-phase2-org-audit-copy-evidence.test.mjs",
+      "tests/unit/ui-phase2-platform-overview-review.test.mjs",
+      "tests/unit/responsive-data-view-focus.test.mjs",
+      "tests/unit/responsive-detail-palette-contract.test.mjs",
+      "tests/unit/ui-phase2-contract-audit.test.mjs",
+      "tests/unit/ui-phase2-roles-review.test.mjs"
+    ],
+    "contract": "Immutable archived captures bind exact Git bytes and original image hashes; current source bindings are recorded separately. No historical screenshot is evidence of current UI acceptance; unknown source revisions still fail."
   }
 }

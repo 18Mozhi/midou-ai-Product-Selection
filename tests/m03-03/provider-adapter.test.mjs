@@ -128,6 +128,9 @@ test("M03-03.A10 runtime limits use validated Baota-configurable bounds", () => 
     PROVIDER_PROXY_CONNECT_TIMEOUT_MS: "5000",
   });
   assert.deepEqual(config.providerAdapters, {
+    publicRssRecoveryEnabled: true,
+    publicRssRecoveryPollMs: 60000,
+    publicRssRecoveryCooldownMs: 300000,
     lan1688Token: "",
     lan1688TimeoutMs: 45000,
     amazonBrowserProfileId: "",

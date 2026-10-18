@@ -1,4 +1,4 @@
-import { AmazonPublicBrowserHealth } from "./amazon-public-browser-health.js";
+import { createProviderAdapterRuntime } from "./bootstrap/create-provider-adapter-runtime.js";
 import { buildApp } from "./app.js";
 import { readFile } from "node:fs/promises";
 import { loadRuntimeConfig } from "@scoutops/config";
@@ -39,8 +39,6 @@ import { MySqlProviderRegistryRepository } from "./mysql-provider-registry-repos
 import { CredentialAssetService } from "./credential-asset-service.js";
 import { MySqlCredentialAssetRepository } from "./mysql-credential-asset-repository.js";
 import { ProviderAdapterRegistry } from "@scoutops/provider-adapters";
-import { ProviderAdapterService } from "./provider-adapter-service.js";
-import { MySqlProviderAdapterRepository } from "./mysql-provider-adapter-repository.js";
 import { CrawlerRuntimeService } from "./crawler-runtime-service.js";
 import { MySqlCrawlerRuntimeRepository } from "./mysql-crawler-runtime-repository.js";
 import { CollectionTaskService } from "./collection-task-service.js";
@@ -266,6 +264,12 @@ for (const adapter of createBuiltinSourceAdapters(
 const providerSourceService = new ProviderSourceService(
   new MySqlProviderSourceRepository(pool, Boolean(config.providerAdapters.lan1688Token)),
 );
+const { service: providerAdapterService, publicRssRecovery } = createProviderAdapterRuntime(
+  pool,
+  config,
+  providerAdapterRegistry,
+  authorization,
+);
 const app = buildApp({
   logger: true,
   version: config.app.version,
@@ -386,31 +390,7 @@ const app = buildApp({
     webOrigin: config.app.webOrigin,
   },
   providerAdapters: {
-    service: new ProviderAdapterService(
-      new MySqlProviderAdapterRepository(pool),
-      providerAdapterRegistry,
-      undefined,
-      config.providerAdapters.amazonBrowserProfileId
-        ? (provider, context) =>
-            new AmazonPublicBrowserHealth(
-              pool,
-              config,
-              createProviderSourceFetch(
-                config.providerAdapters.proxy,
-                {},
-                AUTOMATIC_PROVIDER_SOURCE_HOSTS,
-              ),
-              async (c) => {
-                if (!c.sessionId) throw new Error("selected_scope_required");
-                const resolved = await authorization.resolveSession(c.actorId, c.sessionId);
-                return {
-                  organizationId: resolved.context.organization_id,
-                  workspaceId: resolved.context.workspace_id,
-                };
-              },
-            ).probe(provider, context)
-        : undefined,
-    ),
+    service: providerAdapterService,
     authorization,
     auth: localAuth,
     secureCookie: config.nodeEnv === "production",
@@ -551,6 +531,7 @@ const publishRuntimeHeartbeat = async (status: "ready" | "stopped") => {
 app.addHook("onClose", async () => {
   if (runtimeHeartbeatTimer) clearInterval(runtimeHeartbeatTimer);
   if (runtimeHealthProbeTimer) clearInterval(runtimeHealthProbeTimer);
+  await publicRssRecovery.stop();
   await runtimeHealthProbeMonitor.stop();
   try {
     await publishRuntimeHeartbeat("stopped");
@@ -587,6 +568,7 @@ try {
       .catch((error) => app.log.warn({ error }, "runtime health probe cycle failed"));
   }, config.runtimeTopology.healthProbeIntervalMs);
   runtimeHealthProbeTimer.unref();
+  publicRssRecovery.start();
 } catch (error) {
   app.log.error({ error }, "API startup failed");
   try {

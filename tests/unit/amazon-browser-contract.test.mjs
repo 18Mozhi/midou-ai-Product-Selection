@@ -45,6 +45,71 @@ const result = (body = html, source = url) => ({
   ],
 });
 
+const emptySearch =
+  '<div class="s-main-slot s-result-list s-search-results sg-row"><div data-cel-widget="MAIN-MESSAGING-0"><div class="a-section a-spacing-none"><div class="s-no-outline"><div class="a-row"><h2><span class="a-size-medium a-color-base a-text-normal">No results for your search query.</span></h2></div><div class="a-row a-size-base a-color-base"><span>Try checking your spelling or use more general terms</span></div></div></div></div></div>';
+test("observed ordinary Amazon empty search returns no facts without disabling the source", () => {
+  const source = "https://www.amazon.com/s?k=luxury%20aircraft%20cabin%20door%20safety%20upgrade";
+  const target = { query: "luxury aircraft cabin door safety upgrade" };
+  assert.deepEqual(
+    parseAmazonBrowserRunResult(
+      { ...result(emptySearch, source), status: "succeeded_empty" },
+      target,
+    ),
+    [],
+  );
+  for (const body of [
+    "<div>empty</div>",
+    emptySearch.replace("s-main-slot", "unknown-slot"),
+    emptySearch.replace("MAIN-MESSAGING-0", "unknown-message"),
+    `<script>${emptySearch}</script>`,
+    `${emptySearch}<form action="/errors/validateCaptcha">Verify you are human</form>`,
+    `${emptySearch}<div data-asin="B000000001"></div>`,
+  ]) {
+    assert.throws(() =>
+      parseAmazonBrowserRunResult({ ...result(body, source), status: "succeeded_empty" }, target),
+    );
+  }
+  assert.throws(() => parseAmazonBrowserRunResult(result(emptySearch), { page_url: url }));
+});
+
+test("queued genuine empty search has no parse error and retains both evidence artifacts", async () => {
+  const source = "https://www.amazon.com/s?k=unavailable%20item";
+  const terminal = {
+    id: "empty-job",
+    status: "succeeded_empty",
+    result_json: { ...result(emptySearch, source), status: "succeeded_empty" },
+  };
+  const client = new MySqlAuthenticatedBrowserJobClient(
+    {
+      query: async (sql) =>
+        sql.startsWith("SELECT id,status") ? [[terminal]] : [{ affectedRows: 1 }],
+    },
+    1,
+    async () => assert.fail("terminal empty search must not poll"),
+  );
+  const collected = await client.collect(
+    {
+      organizationId: "org",
+      workspaceId: "workspace",
+      taskId: "task",
+      subqueryId: "subquery",
+      provider: {
+        id: "provider",
+        code: "amazon_product",
+        accessMode: "public_page",
+        timeoutMs: 1000,
+      },
+      target: { query: "unavailable item" },
+      requestId: "request",
+      traceId: "trace",
+    },
+    async () => {},
+  );
+  assert.deepEqual(collected.records, []);
+  assert.equal(collected.parseError, null);
+  assert.equal(collected.artifacts.length, 2);
+});
+
 test("anonymous archive contains only empty tar blocks and has stable credential fingerprint", () => {
   const archive = anonymousAmazonArchive();
   assert.deepEqual(gunzipSync(archive), Buffer.alloc(1024));

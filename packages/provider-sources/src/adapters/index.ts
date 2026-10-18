@@ -292,7 +292,7 @@ export class FixedGoogleNewsRssAdapter extends SourceAdapter {
 }
 export class FixedSyndicationFeedAdapter extends SourceAdapter {
   readonly accessMode = "public_rss" as const;
-  readonly version: string = "syndication-feed-adapter-v1";
+  readonly version: string = "syndication-feed-adapter-v2";
   protected readonly healthSampleLimit: number = 1;
   protected parseFeed(xml: string, sourceName: string, limit: number) {
     return parseSyndicationFeed(xml, sourceName, limit);
@@ -340,6 +340,12 @@ export class FixedSyndicationFeedAdapter extends SourceAdapter {
   ): Promise<AdapterHealthSignal> {
     const started = Date.now();
     try {
+      this.url(context.provider.targetUrl);
+      await assertPublicCollectionPolicy({
+        providerTargetUrl: context.provider.targetUrl,
+        fetcher: this.fetcher,
+        timeoutMs: context.provider.timeoutMs,
+      });
       const response = await this.response(context.provider.targetUrl, signal);
       this.parseFeed(await response.text(), this.sourceName, this.healthSampleLimit);
       return {
@@ -355,7 +361,7 @@ export class FixedSyndicationFeedAdapter extends SourceAdapter {
   }
 }
 export class GoogleTrendsRssAdapter extends FixedSyndicationFeedAdapter {
-  readonly version = "google-trends-rss-adapter-v1";
+  readonly version = "google-trends-rss-adapter-v2";
   protected readonly healthSampleLimit = 20;
   protected parseFeed(xml: string, sourceName: string, limit: number) {
     return parseGoogleTrendsRss(xml, sourceName, limit);
@@ -447,7 +453,7 @@ export class AmazonTargetPageParseFailure extends ProviderAdapterFailure {
 export class AmazonProductSearchAdapter extends SourceAdapter {
   readonly key = "amazon_product";
   readonly accessMode = "public_page" as const;
-  readonly version = "amazon-public-product-adapter-v14";
+  readonly version = "amazon-public-product-adapter-v15";
   constructor(private readonly fetcher?: typeof fetch) {
     super();
   }

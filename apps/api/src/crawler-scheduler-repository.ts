@@ -376,6 +376,42 @@ export class CrawlerSchedulerRepository implements Contract {
         ),
         circuit = circuits[0],
         result = { provider_id: input.providerId, recovered: circuit?.state === "open" };
+      if (input.automaticRecovery) {
+        const [definitions] = await c.query<RowDataPacket[]>(
+          "SELECT version,terms_review_status,terms_version,terms_permanent,terms_expires_at FROM providers WHERE id=? FOR UPDATE",
+          [input.providerId],
+        );
+        const definition = definitions[0];
+        if (
+          !definition ||
+          Number(definition.version) !== input.automaticRecovery.providerVersion ||
+          definition.terms_review_status !== "approved" ||
+          !definition.terms_version ||
+          (Number(definition.terms_permanent) !== 1 &&
+            (!definition.terms_expires_at ||
+              !(new Date(definition.terms_expires_at).getTime() > input.now.getTime())))
+        )
+          throw new CrawlerSchedulerError(
+            "crawler_provider_recovery_configuration_changed",
+            409,
+            "来源配置已变化，保留暂停状态后重新检查。",
+          );
+        const [errors] = await c.query<RowDataPacket[]>(
+          "SELECT last_error_code FROM provider_runtime_circuits WHERE provider_id=? FOR UPDATE",
+          [input.providerId],
+        );
+        if (
+          !circuit ||
+          circuit.state !== "open" ||
+          new Date(circuit.opened_at).getTime() !== input.automaticRecovery.openedAt.getTime() ||
+          !["network_error", "timeout", "rate_limited"].includes(String(errors[0]?.last_error_code))
+        )
+          throw new CrawlerSchedulerError(
+            "crawler_provider_recovery_circuit_changed",
+            409,
+            "熔断状态已变化，保留最新状态后重新检查。",
+          );
+      }
       if (circuit?.state === "open") {
         const [healthRows] = await c.query<RowDataPacket[]>(
             "SELECT health_status,last_checked_at FROM provider_adapter_health WHERE provider_id=? LIMIT 1",

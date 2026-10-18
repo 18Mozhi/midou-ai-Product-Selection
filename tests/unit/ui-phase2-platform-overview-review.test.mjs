@@ -25,7 +25,12 @@ import {
   validatePlatformReview,
 } from "../../scripts/build-ui-phase2-platform-overview-review.mjs";
 
-const inputs = readPlatformReviewInputs(readPreSelectionRebuild);
+const savedReview = JSON.parse(readFileSync(base + "/action-reviews/P38.json", "utf8"));
+const inputs = readPlatformReviewInputs((file) =>
+  savedReview.sourceHashes[file]
+    ? readEvidenceSourceBytes(file, savedReview.sourceHashes[file])
+    : readPreSelectionRebuild(file),
+);
 const build = () => buildPlatformReview(inputs);
 const context = {
   candidates: sourceFiles.flatMap((f) => scanSource(inputs.sources[f], f).candidates),
@@ -57,9 +62,12 @@ test("Archived P38 exact30 sites map to19 interactions and one dialog definition
   }
   assert.equal(current.approval, "pending-user-review");
   assert.equal(current.status, "source-reviewed-not-runtime-accepted");
+  // The saved machine review predates the document's six-line source shift.
+  // Validate each against its own exact inputs; neither approves current UI.
+  const documentInputs = readPlatformReviewInputs(readPreSelectionRebuild);
   assert.equal(
     readFileSync(contractFile, "utf8").replaceAll("\r\n", "\n"),
-    renderPlatformContract(build(), inputs),
+    renderPlatformContract(buildPlatformReview(documentInputs), documentInputs),
   );
   const omitted = build();
   omitted.actions.find((a) => a.actionId === "PA38-SOURCES").sourceCandidateIds.pop();

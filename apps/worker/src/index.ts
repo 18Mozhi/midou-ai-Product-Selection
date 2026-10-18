@@ -42,7 +42,7 @@ import { MySqlSourcingProjectionWorker } from "./sourcing-projection-worker.js";
 import { MySqlTrendProjectionWorker } from "./trend-projection-worker.js";
 import { WebhookDeliveryWorker } from "./webhook-delivery-worker.js";
 import { WorkerPollers } from "./worker-pollers.js";
-import { workerQueue } from "./worker-queue-registry.js";
+import { workerQueues } from "./worker-queue-registry.js";
 import { WorkerSchedulerStateWriter } from "./worker-scheduler-state.js";
 
 const config = loadRuntimeConfig(process.env, "worker");
@@ -239,8 +239,8 @@ const heartbeat = () => {
   void persistSchedulerState();
 };
 
-const queues = [
-  workerQueue(
+const queues = workerQueues([
+  [
     "collection_tasks",
     config.collectionTasks.pollMs,
     pollers.create("collection_tasks", async (signal) => {
@@ -255,8 +255,8 @@ const queues = [
         resourceProbe: collectionResourceProbe,
       });
     }),
-  ),
-  workerQueue(
+  ],
+  [
     "auth_delivery",
     config.auth.outboxPollMs,
     pollers.create(
@@ -270,100 +270,96 @@ const queues = [
         }),
       { enabled: () => Boolean(config.security.credentialsMasterKey) },
     ),
-  ),
-  workerQueue(
+  ],
+  [
     "business_task_projection",
     config.businessTasks.pollMs,
     pollers.create("business_task_projection", () =>
       projectBusinessTaskOnce(pool, config.identity.workerId, config.businessTasks.leaseSeconds),
     ),
-  ),
-  workerQueue(
+  ],
+  [
     "approval_escalation",
     config.approvals.escalationPollMs,
     pollers.create("approval_escalation", () => approvalEscalation.processOnce()),
-  ),
-  workerQueue(
+  ],
+  [
     "notification_outbox",
     config.notifications.outboxPollMs,
     pollers.create("notification_outbox", () => notificationOutbox.processOnce()),
-  ),
-  workerQueue(
+  ],
+  [
     "webhook_deliveries",
     config.openPlatform.webhookPollMs,
     pollers.create("webhook_deliveries", () => webhookDeliveries.runOnce(), {
       enabled: () => Boolean(config.security.credentialsMasterKey),
       logResult: false,
     }),
-  ),
-  workerQueue(
+  ],
+  [
     "automatic_selection_evaluation",
     config.automaticSelection.pollMs,
     pollers.create("automatic_selection_evaluation", () =>
       automaticSelectionEvaluation.processOnce(),
     ),
-  ),
-  workerQueue(
+  ],
+  [
     "opportunity_refresh",
     config.opportunities.refreshPollMs,
     pollers.create("opportunity_refresh", () => opportunityRefresh.processOnce()),
-  ),
-  workerQueue(
+  ],
+  [
     "opportunity_scoring",
     config.scoring.pollMs,
     pollers.create("opportunity_scoring", () => opportunityScoring.processOnce()),
-  ),
-  workerQueue(
+  ],
+  [
     "opportunity_profit",
     config.profit.pollMs,
     pollers.create("opportunity_profit", () => opportunityProfit.processOnce()),
-  ),
-  workerQueue(
+  ],
+  [
     "competitor_monitor",
     config.competitorMonitor.pollMs,
     pollers.create("competitor_monitor", () => competitorMonitor.processOnce()),
-  ),
-  workerQueue(
+  ],
+  [
     "sourcing_projection",
     config.sourcing.pollMs,
     pollers.create("sourcing_projection", () => sourcingProjection.processOnce()),
-  ),
-  workerQueue(
+  ],
+  [
     "trend_projection",
     config.trends.projectionPollMs,
     pollers.create("trend_projection", () => trendProjection.processOnce()),
-  ),
-  workerQueue(
-    "ai_analysis",
-    config.ai.pollMs,
-    pollers.create("ai_analysis", () => aiAnalysis.processOnce()),
-  ),
-  workerQueue(
+  ],
+  ["ai_analysis", config.ai.pollMs, pollers.create("ai_analysis", () => aiAnalysis.processOnce())],
+  [
     "report_exports",
     config.reports.pollMs,
     pollers.create("report_exports", () => reportExports.processOnce()),
-  ),
-  workerQueue(
+  ],
+  [
     "automation_rules",
     config.automations.pollMs,
     pollers.create("automation_rules", () => automation.processOnce()),
-  ),
-  workerQueue(
+  ],
+  [
     "core_collection_projection",
     2_000,
     pollers.create("core_collection_projection", () => coreCollectionProjection.processOnce()),
-  ),
-  workerQueue(
+  ],
+  [
     "automatic_rule_sources",
     config.automaticSources.pollMs,
     pollers.create("automatic_rule_sources", () => automaticSourceScheduler.processRuleOnce()),
-  ),
-  workerQueue(
+  ],
+  [
     "automatic_full_sources",
     config.automaticSources.pollMs,
     pollers.create("automatic_full_sources", () => automaticSourceScheduler.processFullOnce()),
-  ),
-];
+  ],
+]);
 
 scheduler = new QueueScheduler({
   maxConcurrency: config.runtime.workerMaxConcurrency,

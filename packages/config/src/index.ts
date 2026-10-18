@@ -111,6 +111,9 @@ export interface RuntimeConfig {
     crawlerServiceToken: string;
   };
   providerAdapters: {
+    publicRssRecoveryEnabled: boolean;
+    publicRssRecoveryPollMs: number;
+    publicRssRecoveryCooldownMs: number;
     amazonBrowserProfileId: string;
     amazonBrowserNavigationTimeoutMs: number;
     lan1688Token: string;
@@ -579,6 +582,21 @@ export function loadRuntimeConfig(
       crawlerServiceToken: secret(env, "CRAWLER_SERVICE_TOKEN", production && target === "api", 32),
     },
     providerAdapters: {
+      publicRssRecoveryEnabled: text(env, "PUBLIC_RSS_AUTO_RECOVERY_ENABLED", "true") === "true",
+      publicRssRecoveryPollMs: integer(
+        env,
+        "PUBLIC_RSS_AUTO_RECOVERY_POLL_MS",
+        60000,
+        1000,
+        3600000,
+      ),
+      publicRssRecoveryCooldownMs: integer(
+        env,
+        "PUBLIC_RSS_AUTO_RECOVERY_COOLDOWN_MS",
+        300000,
+        1000,
+        86400000,
+      ),
       amazonBrowserProfileId,
       amazonBrowserNavigationTimeoutMs: integer(
         env,
