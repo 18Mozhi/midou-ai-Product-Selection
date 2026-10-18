@@ -48,7 +48,8 @@ PYTHON_BIN = "/www/server/pyporject_evn/versions/3.12.13/bin/python3.12"
 PANEL_PYTHON = "/www/server/panel/pyenv/bin/python"
 PUBLIC_BASE_URL = "https://midouai.medouai.com"
 EXPECTED_GITHUB_REPOSITORY = "18Mozhi/midou-ai-Product-Selection"
-DEPLOYMENT_MIGRATION_VERSION = "0074_provider_terms_permanent.up.sql"
+DEPLOYMENT_MIGRATION_VERSION = "0075_competitor_opportunity_identity.up.sql"
+OPPORTUNITY_IDENTITY_PREPARATION_SHA = "59bbc39a4954d19342a95de8a2fc0508bffd5a80"
 NODE_START_COMMAND = (
     f"node --env-file={PROJECT_ROOT}/config/product_scout.env "
     f"--env-file={PROJECT_ROOT}/config/release.env apps/backend/dist/server.js"
@@ -135,6 +136,22 @@ def verify_production_sha_history(repo: Path, production_sha: str | None, target
     )
     if commit.returncode != 0 or ancestor.returncode != 0:
         raise RuntimeError("production BUILD_SHA is not an ancestor in the current approved repository history")
+
+
+def verify_opportunity_identity_migration_base(repo: Path, production_identity: dict) -> None:
+    if production_identity.get("migration_version") not in (
+        "0074_provider_terms_permanent.up.sql", DEPLOYMENT_MIGRATION_VERSION
+    ):
+        raise RuntimeError("opportunity identity migration requires a known prepared schema")
+    production_sha = production_identity.get("build_sha")
+    if not isinstance(production_sha, str) or len(production_sha) != 40:
+        raise RuntimeError("opportunity identity migration requires a prepared production build")
+    prepared = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", OPPORTUNITY_IDENTITY_PREPARATION_SHA, production_sha],
+        cwd=repo, text=True, capture_output=True,
+    )
+    if prepared.returncode != 0:
+        raise RuntimeError("publish the opportunity identity preparation build before migration 0075")
 
 
 def read_windows_credential() -> str:
@@ -1126,6 +1143,7 @@ def main() -> None:
             lock_acquired = True
             production_identity = remote_python(client, production_identity_source(), timeout=30)
             verify_production_sha_history(repo, production_identity.get("build_sha"), build_sha)
+            verify_opportunity_identity_migration_base(repo, production_identity)
             if args.rollback_drill and (production_identity.get("migration_version") not in ("0073_automatic_selection_migration_timestamp_timezone.up.sql", DEPLOYMENT_MIGRATION_VERSION) or DEPLOYMENT_MIGRATION_VERSION != "0074_provider_terms_permanent.up.sql" or production_identity.get("build_sha") == build_sha):
                 raise RuntimeError("rollback drill requires a different known prior build with the explicitly compatible 0073/0074 schema")
             sftp = client.open_sftp()
@@ -1146,7 +1164,7 @@ def main() -> None:
             migrate = (
                 f"cd '{remote_stage}/backend' && "
                 f"'{NODE_BIN}' --env-file='{PROJECT_ROOT}/config/product_scout.env' "
-                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql 0059_selection_journey_candidates.up.sql 0060_opportunity_workflow_visibility.up.sql 0061_crawler_completion_spool_status.up.sql 0062_runtime_process_restart_observations.up.sql 0063_runtime_health_endpoint_probes.up.sql 0064_governed_workflow_confirmations.up.sql 0065_opportunity_operating_feedback.up.sql 0066_automation_task_source_restore.up.sql 0067_usernames_login.up.sql 0068_automatic_selection_rule_matches.up.sql 0069_rule_based_recommendations.up.sql 0070_rule_candidates_quality_gate.up.sql 0071_opportunity_migration_timestamp_timezone.up.sql 0072_automatic_quality_evaluation.up.sql 0073_automatic_selection_migration_timestamp_timezone.up.sql 0074_provider_terms_permanent.up.sql"
+                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql 0059_selection_journey_candidates.up.sql 0060_opportunity_workflow_visibility.up.sql 0061_crawler_completion_spool_status.up.sql 0062_runtime_process_restart_observations.up.sql 0063_runtime_health_endpoint_probes.up.sql 0064_governed_workflow_confirmations.up.sql 0065_opportunity_operating_feedback.up.sql 0066_automation_task_source_restore.up.sql 0067_usernames_login.up.sql 0068_automatic_selection_rule_matches.up.sql 0069_rule_based_recommendations.up.sql 0070_rule_candidates_quality_gate.up.sql 0071_opportunity_migration_timestamp_timezone.up.sql 0072_automatic_quality_evaluation.up.sql 0073_automatic_selection_migration_timestamp_timezone.up.sql 0074_provider_terms_permanent.up.sql 0075_competitor_opportunity_identity.up.sql"
             )
             remote_python(client, panel_node_action_source("stop"), timeout=90)
             node_stopped_for_migration = True

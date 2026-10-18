@@ -1,18 +1,24 @@
 {
   "selectionProductOwnership20261019": {
     "status": "implemented",
-    "migrationPhase": "preparation_only_0075_not_applied",
+    "migrationPhase": "0075_requires_preparation_build_59bbc39a",
     "requirements": "docs/selection-product-ownership.md",
     "sourceFiles": [
       "apps/worker/src/automatic-primary-product-repair.ts",
       "apps/worker/src/trend-projection-persistence.ts",
       "apps/worker/src/core-collection-projection-worker.ts",
-      "apps/api/src/mysql-competitor-repository.ts"
+      "apps/api/src/mysql-competitor-repository.ts",
+      "database/migrations/0075_competitor_opportunity_identity.up.sql",
+      "database/migrations/0075_competitor_opportunity_identity.down.sql",
+      "scripts/deploy-baota.py",
+      "scripts/apply-deployment-migrations.mjs",
+      "scripts/single-backend-rollback.py"
     ],
     "testFiles": [
       "tests/unit/competitor-opportunity-identity.test.mjs",
       "tests/unit/competitor-discovery-policy.test.mjs",
-      "tests/unit/automatic-sourcing-recovery.test.mjs"
+      "tests/unit/automatic-sourcing-recovery.test.mjs",
+      "tests/unit/competitor-opportunity-migration.test.mjs"
     ],
     "contract": "Per-opportunity product lookup; no foreign-parent snapshots or proposed missing IDs. Unbound creates serialize scoped workspace and preserve existing duplicate 409 including tombstones. Bounded20 primary repair cursor advances only after commit, one fresh empty own record from current own evidence; original detail producer and quality gates unchanged. Deploy compatible preparation before separate 0075 identity-key migration. No new config/API fields/dependencies. Daily100 and full UI unverified."
   },

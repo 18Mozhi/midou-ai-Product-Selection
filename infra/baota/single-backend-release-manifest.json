@@ -13,8 +13,9 @@
   "candidateInstances": 0,
   "directories": ["frontend", "backend", "python"],
   "databaseRollback": false,
-  "migrationPolicy": "backward_compatible_only",
-  "migrationVersion": "0074_provider_terms_permanent.up.sql",
+  "migrationPolicy": "prepared_runtime_only",
+  "migrationVersion": "0075_competitor_opportunity_identity.up.sql",
+  "migrationPrerequisiteBuild": "59bbc39a4954d19342a95de8a2fc0508bffd5a80",
   "healthPaths": ["live", "ready", "available", "version"],
   "evidenceFile": ".artifacts/verification/single-backend-release-production-evidence.json",
   "boundary": "Finite maintenance-window package rollback and forward recovery on the same BaoTa projects. No candidate process, traffic split, HA, capacity or database restore claim. Historical dual-slot records remain immutable."

@@ -1,5 +1,7 @@
 # M07-05 宝塔发布与回滚 Runbook
 
+2026-10-19 0075 发布：先发布准备提交 59bbc39a4954d19342a95de8a2fc0508bffd5a80，再从干净且已推送的 main 执行既有 python scripts/deploy-baota.py。迁移前核验线上已知 0074/0075 身份和准备提交祖先，部署器停止/重启既有宝塔 Node；没有新环境变量。失败时不手工执行 down、搬迁归属或回滚到准备提交之前。涉及 0075 的包交换会在停服前拒绝不兼容目标。下面的 --rollback-drill/旧证据仅属于历史 0073/0074，不能用于签收当前迁移；参见 [选品商品归属](../selection-product-ownership.md)。
+
 ## 当前单后端验收（2026-10-15）
 
 当前模块使用 `node scripts/verify-single-backend-release-production.mjs --production`，不执行旧双槽生产验证器。

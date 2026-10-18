@@ -3,6 +3,18 @@ import json
 import inspect
 
 
+def validate_identity_rollback_target(current_migration, target_migration, target_sha):
+    identity_migration = "0075_competitor_opportunity_identity.up.sql"
+    if identity_migration not in (current_migration, target_migration):
+        return
+    if target_migration == identity_migration:
+        return
+    if (target_migration == "0074_provider_terms_permanent.up.sql" and
+            target_sha == "59bbc39a4954d19342a95de8a2fc0508bffd5a80"):
+        return
+    raise RuntimeError("rollback_target_lacks_opportunity_identity_contract")
+
+
 def exchange_pairs(pairs, scratch):
     scratch.mkdir(mode=0o700)
     completed = []
@@ -56,6 +68,9 @@ release=root/'config'/'release.env'
 def sha(path):
  return next((x.partition('=')[2].strip() for x in path.read_text().splitlines() if x.startswith('BUILD_SHA=')),None)
 if sha(release)!=v['expected'] or not backup.is_dir() or backup.is_symlink(): raise RuntimeError('rollback_release_identity_invalid')
+def migration(path):
+ return next((x.partition('=')[2].strip() for x in path.read_text().splitlines() if x.startswith('RELEASE_SOURCE_MIGRATION_VERSION=')),None)
+validate_identity_rollback_target(migration(release),migration(backup/'release.env'),sha(backup/'release.env'))
 pairs=[(root/n,backup/n) for n in ('frontend','backend','python')]+[(release,backup/'release.env')]
 for live,old in pairs:
  for p in (live,old):
@@ -94,4 +109,4 @@ print('SCOUTOPS_RESULT='+json.dumps({'status':True,'message':'single backend pac
   except BaseException as error: errors.append(str(error))
  if errors: raise RuntimeError('rollback_restart_failed')
 """
-    return inspect.getsource(exchange_pairs) + "\n" + source[:start] + "try:\n" + "\n".join(" " + line for line in body.splitlines()) + "\n" + restart + source[end:]
+    return inspect.getsource(validate_identity_rollback_target) + "\n" + inspect.getsource(exchange_pairs) + "\n" + source[:start] + "try:\n" + "\n".join(" " + line for line in body.splitlines()) + "\n" + restart + source[end:]
