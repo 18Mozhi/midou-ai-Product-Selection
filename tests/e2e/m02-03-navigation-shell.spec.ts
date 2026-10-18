@@ -44,6 +44,29 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
   });
 }
 
+test("core member titles and breadcrumbs use the current navigation names", async ({ page }) => {
+  await allow(page, "member");
+  for (const [path, title] of [
+    ["/trends", "市场情报"],
+    ["/opportunities", "选品库"],
+    ["/sourcing", "1688 找货"],
+  ]) {
+    await page.goto(path);
+    await expect(page.getByRole("heading", { name: title, exact: true, level: 1 })).toBeVisible();
+    const breadcrumb = page.getByRole("navigation", { name: "面包屑" });
+    await expect(breadcrumb).toContainText(title);
+    await expect(breadcrumb.getByRole("link", { name: "选品工作区", exact: true })).toHaveAttribute(
+      "href",
+      "/home",
+    );
+  }
+  await page
+    .getByRole("navigation", { name: "面包屑" })
+    .getByRole("link", { name: "选品工作区", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/home$/);
+});
+
 const summary = (shell: "member" | "organization_admin" | "platform_admin") => ({
   shell,
   organization_id: shell === "platform_admin" ? null : "00000000-0000-4000-8000-000000000103",
@@ -205,7 +228,7 @@ for (const item of [
   {
     shell: "member" as const,
     path: "/home",
-    heading: "选品控制台",
+    heading: "选品工作台",
     snapshot: "m02-03-member-commerce-20261017.png",
   },
   {
@@ -600,7 +623,7 @@ test("real breadcrumbs are keyboard navigable and mobile secondary pages highlig
   await allow(page, "member");
   await page.goto("/opportunities/scoring-rules");
   const breadcrumb = page.getByRole("navigation", { name: "面包屑" });
-  const parent = breadcrumb.getByRole("link", { name: "选品机会" });
+  const parent = breadcrumb.getByRole("link", { name: "选品库" });
   await expect(parent).toHaveAttribute("href", "/opportunities");
   await parent.focus();
   await page.keyboard.press("Enter");

@@ -96,7 +96,7 @@ test("P17 cancels an interrupted version-directory read and reloads on KeepAlive
   await page.goto("/opportunities/scoring-rules");
   await firstReadStarted;
   try {
-    await page.locator(".role-page-breadcrumb").getByRole("link", { name: "选品机会" }).click();
+    await page.locator(".role-page-breadcrumb").getByRole("link", { name: "选品库" }).click();
     await expect(page).toHaveURL(/\/opportunities$/);
     await interruptedRead;
     releaseFirstRead();

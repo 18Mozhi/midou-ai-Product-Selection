@@ -15,10 +15,10 @@ export const platformOperationsNavigation = [
 
 const breadcrumbRoutes: Record<string, string> = {
   工作台: "/home",
-  洞察与选品: "/opportunities",
-  选品机会: "/opportunities",
+  选品工作区: "/home",
+  选品库: "/opportunities",
   全部任务: "/tasks",
-  供应链与利润: "/sourcing",
+  "1688 找货": "/sourcing",
   组织后台: "/org-admin",
   平台后台: "/platform-admin",
   账号与组织: "/platform-admin/accounts",

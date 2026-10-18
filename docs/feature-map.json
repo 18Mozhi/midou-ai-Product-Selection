@@ -1,4 +1,18 @@
 {
+  "selectionMemberNavigationNames20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-member-navigation-names.md",
+    "sourceFiles": [
+      "config/route-catalog.json",
+      "apps/web/src/route-catalog.generated.json",
+      "apps/web/src/navigation-shell-route-state.ts"
+    ],
+    "testFiles": [
+      "tests/e2e/m02-03-navigation-shell.spec.ts",
+      "tests/e2e/ui-phase2-scoring-contracts.spec.ts"
+    ],
+    "contract": "Align core member titles/breadcrumbs with existing market-intelligence, selection-library and1688 navigation; product-detail title. Workspace parent returns/home; library/sourcing parent routes preserved. Remove old breadcrumb name mappings. No page URL/query/route identity/RBAC/API/schema/env/Python/dependency change. Full UI and daily100 remain unverified."
+  },
   "crawlerLeaseDeadlockRecovery20261018": {
     "status": "implemented",
     "requirements": "docs/crawler-lease-deadlock-recovery.md",

@@ -892,7 +892,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   await ready(page);
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: "AI 驱动的个性化护肤机会" })).toBeVisible();
-  await expect(page.getByText("机会详情", { exact: true })).toHaveCount(1);
+  await expect(page.getByText("商品详情", { exact: true })).toHaveCount(1);
   await expect(page.getByText("来源 热点自动发现")).toBeVisible();
   const decisionSurface = page.locator(".opportunity-decision-summary");
   await expect(decisionSurface).toHaveCSS("border-radius", "0px");
