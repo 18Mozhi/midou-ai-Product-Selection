@@ -1,0 +1,345 @@
+// Synthetic SELECT-only MySQL 5.7 proof. No tables, fixtures or events are written.
+const uuid = (n) => `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
+const scopes = {
+  a: { organization_id: uuid(1), workspace_id: uuid(11) },
+  b: { organization_id: uuid(2), workspace_id: uuid(12) },
+  c: { organization_id: uuid(1), workspace_id: uuid(13) },
+};
+const stamp = (n) => `2026-10-18 00:00:${String(n).padStart(2, "0")}.000`;
+const task = (id, scope = "a", extra = {}) => ({
+  id: uuid(id),
+  ...scopes[scope],
+  status: "queued",
+  priority: "high",
+  attempt_count: 0,
+  available_at: stamp(1),
+  ...extra,
+});
+const claim = (scope, at, extra = {}) => ({
+  ...scopes[scope],
+  occurred_at: stamp(at),
+  event_type: "collection.task.leased",
+  actor_type: "worker",
+  ...extra,
+});
+const scenarios = [
+  {
+    name: "unclaimed scope beats recently claimed scope",
+    tasks: [task(101), task(102, "b", { available_at: stamp(5) })],
+    events: [claim("a", 10)],
+    expected: 102,
+  },
+  {
+    name: "oldest committed scope claim wins",
+    tasks: [task(101), task(102, "b")],
+    events: [claim("a", 5), claim("b", 10)],
+    expected: 101,
+  },
+  {
+    name: "same organization workspaces remain independent",
+    tasks: [task(101), task(103, "c")],
+    events: [claim("a", 10), claim("c", 5)],
+    expected: 103,
+  },
+  {
+    name: "critical priority remains before scope fairness",
+    tasks: [task(101), task(102, "b", { priority: "critical" })],
+    events: [claim("b", 10)],
+    expected: 102,
+  },
+  {
+    name: "normal priority cannot bypass high priority",
+    tasks: [task(101), task(102, "b", { priority: "normal" })],
+    events: [claim("a", 10)],
+    expected: 101,
+  },
+  {
+    name: "automatic intake normal priority retains high promotion",
+    tasks: [task(101), task(102, "b", { priority: "normal", lane: "intake" })],
+    events: [claim("a", 10)],
+    expected: 102,
+  },
+  {
+    name: "local intake stays before completion",
+    tasks: [
+      task(101, "a", { lane: "completion" }),
+      task(102, "a", { lane: "intake", available_at: stamp(5) }),
+    ],
+    events: [],
+    expected: 102,
+  },
+  {
+    name: "local completion stays before discovery",
+    tasks: [task(101), task(102, "a", { lane: "completion", available_at: stamp(5) })],
+    events: [],
+    expected: 102,
+  },
+  {
+    name: "existing FIFO turn stays local",
+    tasks: [task(101), task(102, "a", { lane: "completion", available_at: stamp(5) })],
+    events: [],
+    completionFirst: false,
+    expected: 101,
+  },
+  {
+    name: "waiting discovery scope precedes busy completion scope",
+    tasks: [task(101, "a", { lane: "completion" }), task(102, "b")],
+    events: [claim("a", 10)],
+    expected: 102,
+  },
+  {
+    name: "latest committed claim is MAX not MIN",
+    tasks: [task(101), task(102, "b")],
+    events: [claim("a", 2), claim("a", 15), claim("b", 10)],
+    expected: 102,
+  },
+  {
+    name: "user events cannot change worker fairness",
+    tasks: [task(101), task(102, "b")],
+    events: [claim("a", 20, { actor_type: "user" }), claim("b", 10)],
+    expected: 101,
+  },
+  {
+    name: "running events cannot masquerade as claims",
+    tasks: [task(101), task(102, "b")],
+    events: [claim("a", 20, { event_type: "collection.task.running" }), claim("b", 10)],
+    expected: 101,
+  },
+  {
+    name: "foreign organization event cannot alter workspace fairness",
+    tasks: [task(101), task(102, "b")],
+    events: [claim("a", 20, { organization_id: scopes.b.organization_id }), claim("b", 10)],
+    expected: 101,
+  },
+  {
+    name: "null claim ties retain available time then id",
+    tasks: [task(102, "b"), task(101)],
+    events: [],
+    expected: 101,
+  },
+  {
+    name: "open required source stays held",
+    tasks: [task(101), task(102, "b", { provider: "held" })],
+    events: [claim("a", 10)],
+    heldSource: "open",
+    expected: 101,
+  },
+  {
+    name: "disabled required source stays held",
+    tasks: [task(101), task(102, "b", { provider: "held" })],
+    events: [claim("a", 10)],
+    heldSource: "disabled",
+    expected: 101,
+  },
+  {
+    name: "optional disabled source does not become a new hold",
+    tasks: [task(101), task(102, "b", { provider: "held", required: 0 })],
+    events: [claim("a", 10)],
+    heldSource: "disabled",
+    expected: 102,
+  },
+  {
+    name: "archived organization never gains capacity",
+    tasks: [task(101), task(102, "b")],
+    events: [claim("a", 10)],
+    archivedOrganization: "b",
+    expected: 101,
+  },
+  {
+    name: "archived workspace never gains capacity",
+    tasks: [task(101), task(102, "b")],
+    events: [claim("a", 10)],
+    archivedWorkspace: "b",
+    expected: 101,
+  },
+  {
+    name: "exhausted task stays ineligible",
+    tasks: [task(101), task(102, "b", { attempt_count: 4 })],
+    events: [claim("a", 10)],
+    expected: 101,
+  },
+  {
+    name: "an absent rollback event does not advance fairness",
+    tasks: [task(101), task(102, "b")],
+    events: [claim("a", 5), claim("b", 10)],
+    expected: 101,
+  },
+  {
+    name: "a committed claim advances fairness",
+    tasks: [task(101), task(102, "b")],
+    events: [claim("a", 5), claim("b", 10), claim("a", 20)],
+    expected: 102,
+  },
+];
+const literal = (value) =>
+  value === null || value === undefined
+    ? "NULL"
+    : typeof value === "number"
+      ? String(value)
+      : `'${String(value).replaceAll("'", "''")}'`;
+function table(columns, rows) {
+  const data = rows.length ? rows : [Object.fromEntries(columns.map((column) => [column, null]))];
+  return (
+    "(" +
+    data
+      .map(
+        (row, index) =>
+          "SELECT " +
+          columns
+            .map((column) => {
+              const value = ["occurred_at", "available_at"].includes(column)
+                ? `CAST(${literal(row[column])} AS DATETIME(3))`
+                : literal(row[column]);
+              return value + (index === 0 ? ` AS ${column}` : "");
+            })
+            .join(",") +
+          (rows.length ? "" : " WHERE 1=0"),
+      )
+      .join(" UNION ALL ") +
+    ")"
+  );
+}
+function queryFor(scenario, policy) {
+  const events = scenario.events.map((row, index) => ({ task_id: uuid(900 + index), ...row }));
+  for (const row of scenario.tasks) {
+    if (row.lane === "intake")
+      events.push({
+        ...row,
+        task_id: row.id,
+        event_type: "hotspot.automatic.scheduled",
+        actor_type: "system",
+        occurred_at: stamp(1),
+      });
+    if (row.lane === "completion")
+      events.push({
+        ...row,
+        task_id: row.id,
+        event_type: "competitor.detail.auto_scheduled",
+        actor_type: "worker",
+        occurred_at: stamp(1),
+      });
+  }
+  const organizations = [
+    ...new Set(Object.values(scopes).map((scope) => scope.organization_id)),
+  ].map((id) => ({
+    id,
+    status:
+      scenario.archivedOrganization && scopes[scenario.archivedOrganization].organization_id === id
+        ? "archived"
+        : "active",
+  }));
+  const workspaces = Object.entries(scopes).map(([name, scope]) => ({
+    id: scope.workspace_id,
+    organization_id: scope.organization_id,
+    status: scenario.archivedWorkspace === name ? "archived" : "active",
+  }));
+  const queries = scenario.tasks.map((row, index) => ({
+    id: uuid(500 + index),
+    task_id: row.id,
+    organization_id: row.organization_id,
+    workspace_id: row.workspace_id,
+    provider_id: row.provider === "held" ? uuid(402) : uuid(401),
+    is_required: row.required ?? 1,
+    target_json: JSON.stringify({
+      projection_type:
+        row.lane === "completion" ? "competitor_snapshot" : "intelligence_product_discovery",
+    }),
+  }));
+  const tables = {
+    collection_tasks: table(
+      [
+        "id",
+        "organization_id",
+        "workspace_id",
+        "status",
+        "priority",
+        "attempt_count",
+        "available_at",
+      ],
+      scenario.tasks,
+    ),
+    collection_task_events: table(
+      ["task_id", "organization_id", "workspace_id", "event_type", "actor_type", "occurred_at"],
+      events,
+    ),
+    collection_subqueries: table(
+      [
+        "id",
+        "task_id",
+        "organization_id",
+        "workspace_id",
+        "provider_id",
+        "is_required",
+        "target_json",
+      ],
+      queries,
+    ),
+    providers: table(
+      ["id", "code", "status"],
+      [
+        { id: uuid(401), code: "amazon_product", status: "enabled" },
+        {
+          id: uuid(402),
+          code: "fixture_held_source",
+          status: scenario.heldSource === "disabled" ? "disabled" : "enabled",
+        },
+      ],
+    ),
+    provider_runtime_circuits: table(
+      ["provider_id", "state"],
+      [
+        { provider_id: uuid(401), state: "closed" },
+        { provider_id: uuid(402), state: scenario.heldSource === "open" ? "open" : "closed" },
+      ],
+    ),
+    organizations: table(["id", "status"], organizations),
+    workspaces: table(["id", "organization_id", "status"], workspaces),
+  };
+  const sql =
+    "SELECT collection_tasks.id FROM collection_tasks" +
+    policy.collectionScopeFairnessJoinSql +
+    " WHERE status='queued' AND attempt_count<4 AND " +
+    policy.activeCollectionScopeSql("collection_tasks") +
+    policy.collectionRequiredSourcesReadySql +
+    policy.collectionReadyOrderSql(scenario.completionFirst ?? true);
+  const keywords = new Set(["WHERE", "GROUP", "LEFT", "JOIN", "ON", "ORDER"]);
+  return sql.replace(
+    /\b(FROM|JOIN) (collection_tasks|collection_task_events|collection_subqueries|providers|provider_runtime_circuits|organizations|workspaces)\b(\s+([A-Za-z_][A-Za-z0-9_]*))?/g,
+    (_match, keyword, name, suffix = "", next = "") =>
+      keyword +
+      " " +
+      tables[name] +
+      (!next || keywords.has(next.toUpperCase()) ? " " + name : "") +
+      suffix,
+  );
+}
+export function collectionScopeFairnessSqlCases(policy) {
+  const result = scenarios.map((scenario) => ({
+    name: scenario.name,
+    sql: queryFor(scenario, policy),
+    expected: uuid(scenario.expected),
+  }));
+  const rotating = {
+    tasks: [task(101), task(102, "b"), task(103, "c")],
+    events: [claim("a", 10), claim("b", 5)],
+  };
+  for (const [turn, scope] of ["c", "b", "a", "c"].entries()) {
+    result.push({
+      name: `durable three-scope rotation ${turn + 1}`,
+      sql: queryFor(rotating, policy),
+      expected: rotating.tasks.find((row) => row.workspace_id === scopes[scope].workspace_id).id,
+    });
+    rotating.events.push(claim(scope, 20 + turn));
+  }
+  return result;
+}
+export async function runCollectionScopeFairnessSqlProof(connection, policy) {
+  const passed = [];
+  for (const item of collectionScopeFairnessSqlCases(policy)) {
+    const [rows] = await connection.query(item.sql);
+    if (rows.length !== 1 || String(rows[0].id) !== item.expected)
+      throw new Error(`scope_fairness_sql_case_failed:${item.name}`);
+    passed.push(item.name);
+  }
+  return { passed: passed.length, cases: passed };
+}

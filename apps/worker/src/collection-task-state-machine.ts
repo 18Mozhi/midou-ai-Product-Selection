@@ -14,6 +14,7 @@ import { completeCollectionTask } from "./collection-task-evidence.js";
 import {
   activeCollectionScopeSql,
   collectionReadyOrderSql,
+  collectionScopeFairnessJoinSql,
   collectionRequiredSourcesReadySql,
 } from "./collection-source-scheduling-policy.js";
 import {
@@ -77,7 +78,9 @@ export class MySqlCollectionTaskWorkerRepository {
     try {
       await c.beginTransaction();
       const sql =
-          "SELECT * FROM collection_tasks WHERE status IN ('scheduled','retry_scheduled','rate_limited') AND available_at<=?" +
+          "SELECT collection_tasks.* FROM collection_tasks" +
+          collectionScopeFairnessJoinSql +
+          " WHERE status IN ('scheduled','retry_scheduled','rate_limited') AND available_at<=?" +
           (this.taskId ? " AND id=?" : "") +
           " AND " +
           activeCollectionScopeSql("collection_tasks") +
@@ -141,7 +144,9 @@ export class MySqlCollectionTaskWorkerRepository {
         return null;
       }
       const sql =
-          "SELECT * FROM collection_tasks WHERE status='queued' AND attempt_count<4" +
+          "SELECT collection_tasks.* FROM collection_tasks" +
+          collectionScopeFairnessJoinSql +
+          " WHERE status='queued' AND attempt_count<4" +
           (this.taskId ? " AND id=?" : "") +
           " AND " +
           activeCollectionScopeSql("collection_tasks") +

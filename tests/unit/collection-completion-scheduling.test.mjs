@@ -4,6 +4,8 @@ import { MySqlCollectionTaskWorkerRepository } from "../../apps/worker/dist/coll
 import {
   activeCollectionScopeSql,
   automaticCompletionTaskSql,
+  collectionScopeFairnessJoinSql,
+  collectionReadyOrderSql,
   collectionRequiredSourcesReadySql,
 } from "../../apps/worker/dist/collection-source-scheduling-policy.js";
 
@@ -22,6 +24,8 @@ test("projected competitor detail tasks use their actual Worker producer in the 
       ),
     );
 });
+
+const isTaskRead = (sql) => /^SELECT (?:collection_tasks\.)?\* FROM collection_tasks/.test(sql);
 
 const now = new Date("2026-10-18T00:00:00Z");
 const row = {
@@ -48,7 +52,7 @@ function setup(options = {}) {
       assert.equal((sql.match(/\?/g) ?? []).length, args.length);
       if (sql.startsWith("SELECT slot_key"))
         return [options.activeLease ? [{ slot_key: "single-host" }] : []];
-      if (sql.startsWith("SELECT * FROM collection_tasks"))
+      if (isTaskRead(sql))
         return [
           options.noCandidate ||
           (sql.includes(activeCollectionScopeSql("collection_tasks")) && options.scopeInactive) ||
@@ -93,7 +97,7 @@ for (const method of ["queueReady", "claim"]) {
   test(`${method} sorts without locking and locks only the selected scoped identity`, async () => {
     const { repository, calls } = setup();
     assert.equal((await invoke(repository)).id, "task");
-    const selections = calls.filter(([sql]) => sql.startsWith("SELECT * FROM collection_tasks"));
+    const selections = calls.filter(([sql]) => isTaskRead(sql));
     assert.equal(selections.length, 2);
     for (const [sql] of selections)
       assert.ok(sql.includes(activeCollectionScopeSql("collection_tasks")));
@@ -138,9 +142,7 @@ test("twenty committed claims are followed by one shared FIFO turn then completi
     await repository.claim("worker", now, 120);
     const selections = calls
       .slice(start)
-      .filter(
-        ([sql]) => sql.includes("ORDER BY") && sql.startsWith("SELECT * FROM collection_tasks"),
-      );
+      .filter(([sql]) => sql.includes("ORDER BY") && isTaskRead(sql));
     assert.equal(selections.length, 2);
     for (const [sql] of selections)
       assert.ok(sql.includes(activeCollectionScopeSql("collection_tasks")));
@@ -161,7 +163,7 @@ test("twenty committed claims are followed by one shared FIFO turn then completi
 test("an active single-host lease or rolled-back claim never advances the fairness turn", async () => {
   const active = setup({ activeLease: true });
   assert.equal(await active.repository.claim("worker", now, 120), null);
-  assert.ok(!active.calls.some(([sql]) => sql.startsWith("SELECT * FROM collection_tasks")));
+  assert.ok(!active.calls.some(([sql]) => isTaskRead(sql)));
   assert.equal(active.repository.successfulClaims, 0);
   const failed = setup({ failCommit: true });
   await assert.rejects(() => failed.repository.claim("worker", now, 120), /commit failed/);
@@ -173,9 +175,7 @@ test("targeted verification keeps its explicit task restriction before scoped lo
   const { repository, calls } = setup({ taskId: "task" });
   await repository.queueReady(now);
   await repository.claim("worker", now, 120);
-  const candidates = calls.filter(
-    ([sql]) => sql.startsWith("SELECT * FROM collection_tasks") && sql.includes("ORDER BY"),
-  );
+  const candidates = calls.filter(([sql]) => isTaskRead(sql) && sql.includes("ORDER BY"));
   assert.deepEqual(candidates[0][1], [now, "task"]);
   assert.deepEqual(candidates[1][1], ["task"]);
 });
@@ -220,4 +220,43 @@ test("source hold is scoped to required queries and retains only the existing ty
   ])
     assert.ok(collectionRequiredSourcesReadySql.includes(fragment));
   assert.doesNotMatch(collectionRequiredSourcesReadySql, /request_id|UPDATE|DELETE|INSERT/);
+});
+
+test("scope fairness is after effective priority and before the existing local lanes", () => {
+  for (const completionFirst of [true, false]) {
+    const order = collectionReadyOrderSql(completionFirst);
+    assert.ok(
+      order.indexOf("'critical','high','normal','low'") <
+        order.indexOf("collection_scope_turn.last_claim_at"),
+    );
+    assert.ok(order.indexOf("collection_scope_turn.last_claim_at") < order.indexOf(" THEN 0 "));
+    assert.match(order, /available_at,id LIMIT 1$/);
+  }
+  assert.match(collectionScopeFairnessJoinSql, /MAX\(occurred_at\) last_claim_at/);
+  assert.match(
+    collectionScopeFairnessJoinSql,
+    /event_type='collection.task.leased' AND actor_type='worker'/,
+  );
+  assert.match(collectionScopeFairnessJoinSql, /GROUP BY organization_id,workspace_id/);
+  for (const field of ["organization_id", "workspace_id"])
+    assert.ok(
+      collectionScopeFairnessJoinSql.includes(
+        `collection_scope_turn.${field}=collection_tasks.${field}`,
+      ),
+    );
+  assert.doesNotMatch(
+    collectionScopeFairnessJoinSql,
+    /FOR UPDATE|UPDATE |INSERT |DELETE |LIMIT|occurred_at FROM/,
+  );
+});
+test("both admission readers join scope history exactly once and expose only the original task row", async () => {
+  const { repository, calls } = setup();
+  await repository.queueReady(now);
+  await repository.claim("worker", now, 120);
+  const selections = calls.filter(([sql]) => isTaskRead(sql) && sql.includes("ORDER BY"));
+  assert.equal(selections.length, 2);
+  for (const [sql] of selections) {
+    assert.ok(sql.startsWith("SELECT collection_tasks.* FROM collection_tasks"));
+    assert.equal(sql.split(collectionScopeFairnessJoinSql).length, 2);
+  }
 });

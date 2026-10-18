@@ -7,6 +7,14 @@ export const activeCollectionScopeSql = (
   `WHERE collection_scope_org.id=${alias}.organization_id AND collection_scope_org.status='active' ` +
   `AND collection_scope_workspace.id=${alias}.workspace_id AND collection_scope_workspace.status='active')`;
 
+/** Materialize each scope's committed Worker claim once, never a per-candidate history lookup. */
+export const collectionScopeFairnessJoinSql =
+  " LEFT JOIN (SELECT organization_id,workspace_id,MAX(occurred_at) last_claim_at " +
+  "FROM collection_task_events WHERE event_type='collection.task.leased' AND actor_type='worker' " +
+  "GROUP BY organization_id,workspace_id) collection_scope_turn " +
+  "ON collection_scope_turn.organization_id=collection_tasks.organization_id " +
+  "AND collection_scope_turn.workspace_id=collection_tasks.workspace_id";
+
 /** Durable producer provenance, never the caller-controlled request ID. */
 export const automaticIntelligenceTaskSql = (taskAlias: "ct" | "collection_tasks") =>
   "EXISTS (SELECT 1 FROM collection_task_events source_event " +
@@ -47,11 +55,12 @@ export const collectionRequiredSourcesReadySql =
   "AND COALESCE(JSON_TYPE(JSON_EXTRACT(required_source_query.target_json,'$.acceptance_run')),'')='BOOLEAN' " +
   "AND COALESCE(JSON_UNQUOTE(JSON_EXTRACT(required_source_query.target_json,'$.acceptance_run')),'')='true'))";
 
-/** Explicit priority and intake stay first; one FIFO turn bounds completion bursts. No locks during sorting. */
+/** Explicit priority first, then least-recently claimed scope; intake/completion lanes stay local. */
 export const collectionReadyOrderSql = (completionFirst: boolean) =>
   " ORDER BY FIELD(CASE WHEN " +
   automaticIntelligenceTaskSql("collection_tasks") +
-  " AND priority='normal' THEN 'high' ELSE priority END,'critical','high','normal','low'),CASE WHEN " +
+  " AND priority='normal' THEN 'high' ELSE priority END,'critical','high','normal','low')," +
+  "collection_scope_turn.last_claim_at,CASE WHEN " +
   automaticIntelligenceTaskSql("collection_tasks") +
   " THEN 0 " +
   (completionFirst ? "WHEN " + automaticCompletionTaskSql + " THEN 1 ELSE 2 " : "ELSE 1 ") +

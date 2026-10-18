@@ -1,5 +1,7 @@
 > 当前交接与逐项验收状态见 [selection-current-acceptance.md](docs/selection-current-acceptance.md)。旧记录的“未部署”为当时状态，代码发布与真实业务验收分别核对。
 
+> 2026-10-19：采集在同一有效优先级内按工作区最近真实领取公平轮转，再执行范围内摄取/完成通道；不改变来源、租约、次数或积压预算。见 docs/selection-collection-scope-fairness.md，整链百品仍需真实验收。
+
 > 2026-10-18：成员今日工作、业务任务目录、详情、导出和编辑整页退休，保留组织审批、采集后台及后端历史合同；见 docs/selection-retired-member-tasks.md。整链百品与全站验收仍未通过。
 
 > 2026-10-18 成员商品详情退休手工成本录入/复核/重算，保留自动利润及只读依据；后台费用治理和历史API不变。见 `docs/selection-member-profit-retirement.md`。日百品仍需真实验收。

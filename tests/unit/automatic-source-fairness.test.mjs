@@ -42,7 +42,7 @@ test("full-source tenant budget reserves intake capacity using durable system ev
 });
 
 for (const method of ["queueReady", "claim"]) {
-  test(`${method} gives intake precedence inside its priority tier without trusting a request header`, async () => {
+  test(`${method} gives local intake precedence after priority and scope fairness without trusting a request header`, async () => {
     const statements = [];
     const connection = connectionFor(statements);
     const repository = new MySqlCollectionTaskWorkerRepository({
@@ -50,10 +50,12 @@ for (const method of ["queueReady", "claim"]) {
     });
     if (method === "claim") await repository.claim("worker", now, 120);
     else await repository.queueReady(now);
-    const selection = statements.find((sql) => sql.startsWith("SELECT * FROM collection_tasks"));
+    const selection = statements.find((sql) =>
+      sql.startsWith("SELECT collection_tasks.* FROM collection_tasks"),
+    );
     assert.match(
       selection,
-      /ORDER BY FIELD\(CASE WHEN .* AND priority='normal' THEN 'high' ELSE priority END,'critical','high','normal','low'\),CASE WHEN EXISTS/,
+      /ORDER BY FIELD\(CASE WHEN .* AND priority='normal' THEN 'high' ELSE priority END,'critical','high','normal','low'\),collection_scope_turn\.last_claim_at,CASE WHEN EXISTS/,
     );
     assert.match(selection, /source_event\.task_id=collection_tasks\.id/);
     assert.match(selection, /source_event\.actor_type='system'/);
