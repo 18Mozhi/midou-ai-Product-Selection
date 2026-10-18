@@ -55,7 +55,10 @@ test("LAN1688 transient recovery uses existing task/tenant policy and real ready
   assert.match(f.calls[0].sql, /p.status='enabled'/);
   assert.match(f.calls[0].sql, /q.error_code='source_circuit_open' AND q.available_result_count=0/);
   assert.match(f.calls[0].sql, /pending_search.collection_task_id=t.id/);
-  assert.match(f.calls[0].sql, /pending_search.status='queued'/);
+  assert.match(f.calls[0].sql, /pending_search.status IN \('queued','succeeded_empty'\)/);
+  assert.match(f.calls[0].sql, /pending_search.candidate_count=0/);
+  assert.match(f.calls[0].sql, /NOT EXISTS \(SELECT 1 FROM sourcing_candidates pending_offer/);
+  assert.match(f.calls[0].sql, /pending_offer.workspace_id=pending_search.workspace_id/);
   assert.match(f.calls[0].sql, /pending_search.deleted_at IS NULL/);
   assert.match(f.calls[0].sql, /p.terms_review_status='approved'/);
   assert.match(f.calls[0].sql, /h.health_status='blocked'/);

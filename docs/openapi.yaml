@@ -11745,3 +11745,5 @@ x-scoutops-lan-1688:
 # Internal Worker event sourcing.search.circuit_requeued links immutable previous_task_id
 # to a required replacement collection_task_id only after real later circuit recovery.
 # Existing sourcing/search/task APIs remain unchanged; there is no HTTP replay switch.
+# Internal health recovery recognizes zero-offer circuit-blocked searches even after
+# the old projection marked them succeeded_empty; genuine empty lookups are excluded.

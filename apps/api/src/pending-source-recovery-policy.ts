@@ -10,7 +10,9 @@ export function pendingTaskRecoveryCandidatesSql(code: keyof typeof sourcePolici
     throw new Error("automatic_source_recovery_policy_invalid");
   const pendingWork =
     code === "1688_search"
-      ? "(t.status IN ('scheduled','queued','retry_scheduled','rate_limited') OR (t.status='completed_with_warnings' AND q.status='blocked' AND q.error_code='source_circuit_open' AND q.available_result_count=0 AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search' AND EXISTS (SELECT 1 FROM sourcing_searches pending_search WHERE pending_search.collection_task_id=t.id AND pending_search.organization_id=t.organization_id AND pending_search.workspace_id=t.workspace_id AND pending_search.status='queued' AND pending_search.input_type='opportunity' AND pending_search.deleted_at IS NULL)))"
+      ? "(t.status IN ('scheduled','queued','retry_scheduled','rate_limited') OR (t.status='completed_with_warnings' AND q.status='blocked' AND q.error_code='source_circuit_open' AND q.available_result_count=0 AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search' " +
+        "AND EXISTS (SELECT 1 FROM sourcing_searches pending_search WHERE pending_search.collection_task_id=t.id AND pending_search.organization_id=t.organization_id AND pending_search.workspace_id=t.workspace_id AND pending_search.status IN ('queued','succeeded_empty') AND pending_search.candidate_count=0 AND pending_search.input_type='opportunity' AND pending_search.deleted_at IS NULL " +
+        "AND NOT EXISTS (SELECT 1 FROM sourcing_candidates pending_offer WHERE pending_offer.search_id=pending_search.id AND pending_offer.organization_id=pending_search.organization_id AND pending_offer.workspace_id=pending_search.workspace_id))))"
       : "t.status IN ('scheduled','queued','retry_scheduled','rate_limited')";
   return (
     "SELECT p.id,p.version,c.opened_at,t.id collection_task_id FROM providers p " +
