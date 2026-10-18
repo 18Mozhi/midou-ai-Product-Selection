@@ -11722,3 +11722,7 @@ x-scoutops-lan-1688:
   authorization: Bearer token injected using LAN_1688_TOKEN; never sent to frontend
   timeoutEnvironment: LAN_1688_TIMEOUT_MS
   runbook: docs/selection-core-rebuild.md
+
+# trend_projection_jobs: internal enqueue and candidate/locked recheck require the existing
+# active organization and its active workspace; archived jobs retain history and attempts.
+# No public request/response field, permission or route changes.

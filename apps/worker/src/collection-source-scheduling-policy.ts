@@ -1,6 +1,6 @@
 /** Archived or mismatched tenant scopes retain history but cannot consume collection capacity. */
 export const activeCollectionScopeSql = (
-  alias: "collection_tasks" | "ct" | "backlog" | "s" | "r" | "c",
+  alias: "collection_tasks" | "ct" | "backlog" | "s" | "r" | "c" | "n" | "trend_projection_jobs",
 ) =>
   "EXISTS (SELECT 1 FROM organizations collection_scope_org " +
   "JOIN workspaces collection_scope_workspace ON collection_scope_workspace.organization_id=collection_scope_org.id " +

@@ -100,6 +100,17 @@ test("projection locks only the selected scoped ID and rechecks eligibility", as
   assert.doesNotMatch(locks[0], /ORDER BY/);
   const candidate = statements.find((sql) => sql.startsWith("SELECT id,organization_id"));
   assert.doesNotMatch(candidate, /FOR UPDATE/);
+  for (const sql of [
+    candidate,
+    locks[0],
+    ...statements.filter((sql) => sql.startsWith("INSERT IGNORE INTO trend_projection_jobs")),
+  ]) {
+    assert.match(sql, /collection_scope_org.status='active'/);
+    assert.match(sql, /collection_scope_workspace.status='active'/);
+    assert.match(sql, /collection_scope_workspace.organization_id=collection_scope_org.id/);
+  }
+  assert.match(locks[0], /collection_scope_org.id=trend_projection_jobs.organization_id/);
+  assert.match(locks[0], /collection_scope_workspace.id=trend_projection_jobs.workspace_id/);
   assert.match(candidate, /p_intelligence.access_mode='public_rss'/);
   assert.match(candidate, /projection_type.*intelligence_product_discovery/);
   assert.match(candidate, /n_intelligence.organization_id=trend_projection_jobs.organization_id/);
@@ -266,3 +277,20 @@ for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscov
       );
   });
 }
+
+test("scope becoming inactive between selection and locked recheck consumes no attempt", async () => {
+  const { pool, calls, statements } = createPool(
+    { ...jobScope, id: "archived-after-selection", attempt_count: 0 },
+    true,
+  );
+  const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.sourceRecovery.processOnce = async () => 0;
+  worker.persistence.enqueueMissingAutomaticDownstream = async () => {};
+  worker.persistence.project = async () => assert.fail("inactive scope must not project");
+  assert.deepEqual(await worker.processOnce(), { status: "idle" });
+  assert.equal(calls.includes("lease"), false);
+  assert.equal(calls.includes("record"), false);
+  const locked = statements.find((sql) => sql.endsWith("FOR UPDATE"));
+  assert.match(locked, /collection_scope_org.status='active'/);
+  assert.match(locked, /collection_scope_workspace.id=trend_projection_jobs.workspace_id/);
+});

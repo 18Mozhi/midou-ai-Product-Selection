@@ -1,3 +1,4 @@
+import { activeCollectionScopeSql } from "./collection-source-scheduling-policy.js";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import {
   buildSupplierSearchQuery,
@@ -156,7 +157,7 @@ export class MySqlTrendProjectionWorker {
         "(p.code NOT IN ('1688_search','amazon_product','dhgate_supplier_search','made_in_china_search','ec21_supplier_search') ",
         "OR (p.code='amazon_product' AND EXISTS (SELECT 1 FROM collection_subqueries cs ",
         "WHERE cs.id=e.collection_subquery_id AND JSON_UNQUOTE(JSON_EXTRACT(cs.target_json,'$.projection_type'))='rule_product_discovery'))) ",
-        "ORDER BY n.created_at LIMIT 100",
+        `AND ${activeCollectionScopeSql("n")} ORDER BY n.created_at LIMIT 100`,
       ].join(""),
       [now, now, now],
     );
@@ -175,7 +176,8 @@ export class MySqlTrendProjectionWorker {
         "ON n_first.id=l_first.normalized_record_id AND n_first.organization_id=l_first.organization_id " +
         "AND n_first.workspace_id=l_first.workspace_id AND n_first.status='active' " +
         "WHERE l_first.collection_task_id=cs.task_id AND l_first.organization_id=n.organization_id " +
-        "AND l_first.workspace_id=n.workspace_id) ORDER BY n.created_at LIMIT 100",
+        "AND l_first.workspace_id=n.workspace_id) " +
+        `AND ${activeCollectionScopeSql("n")} ORDER BY n.created_at LIMIT 100`,
       [now, now, now],
     );
   }
@@ -252,7 +254,7 @@ export class MySqlTrendProjectionWorker {
     try {
       await c.beginTransaction();
       const [candidates] = await c.query<RowDataPacket[]>(
-        "SELECT id,organization_id,workspace_id FROM trend_projection_jobs WHERE ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?))" +
+        `SELECT id,organization_id,workspace_id FROM trend_projection_jobs WHERE ${activeCollectionScopeSql("trend_projection_jobs")} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?))` +
           intelligenceFirstOrderSql,
         [now, now],
       );
@@ -265,7 +267,7 @@ export class MySqlTrendProjectionWorker {
       // Recheck under a single-row current read if another owner won the race.
       const [jobs] = await c.query<RowDataPacket[]>(
         "SELECT * FROM trend_projection_jobs WHERE id=? AND organization_id=? AND workspace_id=? " +
-          "AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) FOR UPDATE",
+          `AND ${activeCollectionScopeSql("trend_projection_jobs")} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) FOR UPDATE`,
         [candidate.id, candidate.organization_id, candidate.workspace_id, now, now],
       );
       if (!jobs[0]) {

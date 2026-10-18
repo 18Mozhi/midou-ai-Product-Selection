@@ -6427,7 +6427,8 @@
       "apps/worker/src/collection-task-state-machine.ts",
       "apps/worker/src/automatic-source-scheduler.ts",
       "apps/worker/src/intelligence-source-recovery.ts",
-      "apps/worker/src/trend-projection-persistence.ts"
+      "apps/worker/src/trend-projection-persistence.ts",
+      "apps/worker/src/trend-projection-worker.ts"
     ],
     "testFiles": [
       "tests/unit/collection-completion-scheduling.test.mjs",
@@ -6435,7 +6436,7 @@
       "tests/unit/intelligence-source-recovery.test.mjs",
       "tests/unit/trend-projection-worker-scheduling.test.mjs"
     ],
-    "contract": "Existing active organization and same-organization active workspace required at candidate/identity recheck and scheduling/backlog accounting. Archived/missing/mismatched scopes preserve history and consume no new claim/attempt or capacity. No deletion, migration, dependency, permission or new API/config fields. Existing in-flight lease completion, source holds, retry, priority and fairness unchanged. Six actual MySQL5.7 read-only derived cases passed; 220 real archived tasks all excluded. Deployment and daily100 acceptance remain separate."
+    "contract": "Existing active organization and same-organization active workspace required at candidate/identity recheck and scheduling/backlog accounting. Archived/missing/mismatched scopes preserve history and consume no new claim/attempt or capacity. No deletion, migration, dependency, permission or new API/config fields. Existing in-flight lease completion, source holds, retry, priority and fairness unchanged. Six actual MySQL5.7 read-only derived cases passed; 220 real archived tasks all excluded. Trend projection enqueue and candidate/locked recheck enforce the same active scope, preserving archived job history and in-flight leases. Deployment and daily100 acceptance remain separate."
   },
   "selectionAmazonUsObservation20261018": {
     "status": "implemented",
