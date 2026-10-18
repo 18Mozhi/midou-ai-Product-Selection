@@ -1,4 +1,21 @@
 {
+  "selectionDetailLayout20261019": {
+    "status": "implemented",
+    "requirements": "docs/selection-detail-layout.md",
+    "sourceFiles": [
+      "apps/web/src/components/SelectionProductHeader.vue",
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/OpportunityDecisionPanel.vue",
+      "apps/web/src/components/opportunity-decision-panel.css",
+      "apps/web/src/components/OpportunityDetailInsights.vue",
+      "apps/api/src/mysql-opportunity-repository.ts"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/unit/opportunity-blocking-filter.test.mjs"
+    ],
+    "contract": "Product facts then score/collection panels, decision and manual tools afterwards. >=1280 parallel analysis, narrow stacked. Mobile full-row facts/provenance/score. Four component scripts unchanged; source facts, unknowns/zero/lower bounds, permissions, five adoption gates, reason and anchor remain. Accurate existing primary snapshot guidance; no new API field/config/dependency/schema. Full UI and daily100 remain unverified."
+  },
   "selectionProductOwnership20261019": {
     "status": "implemented",
     "migrationPhase": "0075_requires_preparation_build_59bbc39a",

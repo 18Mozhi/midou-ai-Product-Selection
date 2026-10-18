@@ -76,28 +76,32 @@ for (const status of [
   });
 }
 
-test("evidence blocker keeps the actual automatic failure reason instead of asking for manual task creation", async () => {
-  const repository = new MySqlOpportunityRepository({
-    query: async (sql) => {
-      if (sql.includes("FROM opportunities o")) return [[row], []];
-      if (sql.includes("FROM automatic_selection_evaluations"))
-        return [
-          [
-            {
-              status: "retry_scheduled",
-              last_error_code: "amazon_product_evidence_missing",
-              result_json: "{}",
-            },
-          ],
-          [],
-        ];
-      return [[], []];
-    },
+for (const [errorCode, guidance] of [
+  ["amazon_product_evidence_missing", "等待 Amazon 商品页证据。"],
+  ["amazon_competitor_snapshot_missing", "等待当前主品的 Amazon 详情快照。"],
+])
+  test(`evidence blocker explains the actual automatic failure ${errorCode}`, async () => {
+    const repository = new MySqlOpportunityRepository({
+      query: async (sql) => {
+        if (sql.includes("FROM opportunities o")) return [[row], []];
+        if (sql.includes("FROM automatic_selection_evaluations"))
+          return [
+            [
+              {
+                status: "retry_scheduled",
+                last_error_code: errorCode,
+                result_json: "{}",
+              },
+            ],
+            [],
+          ];
+        return [[], []];
+      },
+    });
+    const detail = await repository.get({ ...scope, opportunityId: row.id });
+    assert.equal(detail.adoption_blockers[0].next_action, guidance);
+    assert.equal(detail.adoption_blockers[0].status, "in_progress");
   });
-  const detail = await repository.get({ ...scope, opportunityId: row.id });
-  assert.equal(detail.adoption_blockers[0].next_action, "等待 Amazon 商品页证据。");
-  assert.equal(detail.adoption_blockers[0].status, "in_progress");
-});
 
 test("completed historical work is not an active evidence job without pending analysis", async () => {
   const repository = new MySqlOpportunityRepository({

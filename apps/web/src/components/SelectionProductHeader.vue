@@ -59,39 +59,41 @@ const asin = computed(() =>
         <span>来源 {{ opportunityStatusLabel(detail.source_type) }}</span>
         <span>更新 {{ formatOpportunityTime(detail.updated_at) }}</span>
       </div>
-      <dl class="selection-product-header__facts" aria-label="主品采集资料">
-        <div>
-          <dt>售价</dt>
-          <dd>
-            {{
-              product?.price != null && product.currency
-                ? `${product.currency} ${product.price.toFixed(2)}`
-                : "未采集"
-            }}
-          </dd>
-        </div>
-        <div>
-          <dt>评分 / 评价</dt>
-          <dd>
-            {{ product?.rating_value != null ? product.rating_value.toFixed(1) : "—" }} /
-            {{ product?.review_count != null ? `${product.review_count} 条` : "未采集" }}
-          </dd>
-        </div>
-        <div>
-          <dt>购买提示</dt>
-          <dd>{{ purchaseHint }}</dd>
-        </div>
-        <div>
-          <dt>类目排名</dt>
-          <dd>
-            {{
-              product?.public_signals?.best_seller_rank
-                ? `#${product.public_signals.best_seller_rank.rank}`
-                : "未采集"
-            }}
-          </dd>
-        </div>
-      </dl>
+    </div>
+    <dl class="selection-product-header__facts" aria-label="主品采集资料">
+      <div>
+        <dt>售价</dt>
+        <dd>
+          {{
+            product?.price != null && product.currency
+              ? `${product.currency} ${product.price.toFixed(2)}`
+              : "未采集"
+          }}
+        </dd>
+      </div>
+      <div>
+        <dt>评分 / 评价</dt>
+        <dd>
+          {{ product?.rating_value != null ? product.rating_value.toFixed(1) : "—" }} /
+          {{ product?.review_count != null ? `${product.review_count} 条` : "未采集" }}
+        </dd>
+      </div>
+      <div>
+        <dt>购买提示</dt>
+        <dd>{{ purchaseHint }}</dd>
+      </div>
+      <div>
+        <dt>类目排名</dt>
+        <dd>
+          {{
+            product?.public_signals?.best_seller_rank
+              ? `#${product.public_signals.best_seller_rank.rank}`
+              : "未采集"
+          }}
+        </dd>
+      </div>
+    </dl>
+    <div class="selection-product-header__utility">
       <p class="selection-product-header__provenance">
         <span>{{ product?.public_signals?.sponsored ? "观察到广告标记" : "广告标记未提供" }}</span>
         <span v-if="product">商品采集 {{ formatOpportunityTime(product.captured_at) }}</span>
@@ -127,14 +129,16 @@ const asin = computed(() =>
 <style scoped>
 .selection-product-header {
   display: grid;
-  grid-template-columns: 136px minmax(0, 1fr) 150px;
+  grid-template-columns: 112px minmax(0, 1fr) 150px;
+  grid-template-areas: "image identity score" "image facts score" "image utility score";
   align-items: start;
-  gap: 24px;
-  padding: 24px;
+  gap: 0 20px;
+  padding: 20px;
   background: var(--so-panel);
   color: var(--so-text);
 }
 .selection-product-header__image {
+  grid-area: image;
   aspect-ratio: 1;
   display: grid;
   place-items: center;
@@ -154,6 +158,7 @@ const asin = computed(() =>
   font-size: 13px;
 }
 .selection-product-header__identity {
+  grid-area: identity;
   min-width: 0;
 }
 .selection-product-header__tags,
@@ -170,7 +175,7 @@ const asin = computed(() =>
   border: 1px solid var(--so-border);
 }
 .selection-product-header h1 {
-  margin: 12px 0;
+  margin: 6px 0;
   font-size: 21px;
   font-weight: 650;
   line-height: 1.5;
@@ -181,11 +186,12 @@ const asin = computed(() =>
   text-underline-offset: 3px;
 }
 .selection-product-header__facts {
+  grid-area: facts;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
-  margin: 18px 0 10px;
-  padding-top: 14px;
+  margin: 10px 0 6px;
+  padding-top: 10px;
   border-top: 1px solid var(--so-border);
 }
 .selection-product-header__facts dt {
@@ -207,9 +213,22 @@ const asin = computed(() =>
   color: var(--so-text-muted);
   font-size: 13px;
   line-height: 1.5;
+  font-weight: 400;
+}
+.selection-product-header__utility {
+  grid-area: utility;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 18px;
+}
+.selection-product-header__utility > p {
+  flex: 1 1 300px;
+  font-size: 13px;
+  letter-spacing: normal;
 }
 .selection-product-header__runtime {
-  margin-top: 10px;
+  margin: 0;
   color: var(--so-text-muted);
   font-size: 13px;
 }
@@ -232,6 +251,7 @@ const asin = computed(() =>
   outline-offset: 3px;
 }
 .selection-product-header__score {
+  grid-area: score;
   display: grid;
   gap: 14px;
   margin: 0;
@@ -261,6 +281,7 @@ const asin = computed(() =>
 @media (max-width: 760px) {
   .selection-product-header {
     grid-template-columns: 84px minmax(0, 1fr);
+    grid-template-areas: "image identity" "facts facts" "utility utility" "score score";
     gap: 14px;
     padding: 16px;
   }
@@ -278,8 +299,10 @@ const asin = computed(() =>
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px 8px;
   }
+  .selection-product-header__utility {
+    align-items: flex-start;
+  }
   .selection-product-header__score {
-    grid-column: 1/-1;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
     padding: 14px 0 0;

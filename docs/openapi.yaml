@@ -11605,7 +11605,7 @@ components:
                       progress_percent: { type: integer, minimum: 0, maximum: 100, nullable: true }
                       next_action:
                         type: string
-                        description: 当前补证或推荐阻断的真实处理指引；自动分析状态和已知失败原因优先，不要求用户创建人工补采任务。历史任务引用仅在已有记录时返回。
+                        description: 当前补证或推荐阻断的真实处理指引；自动分析状态和已知失败原因优先，不要求用户创建人工补采任务。主品详情快照缺失明确提示当前主品，不与竞品发现混淆。历史任务引用仅在已有记录时返回。
                       task_id: { type: string, format: uuid, nullable: true }
                       task_status: { type: string, nullable: true }
                       score_job_status: { type: string, nullable: true }

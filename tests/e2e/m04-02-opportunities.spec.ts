@@ -910,8 +910,29 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   await expect(decisionSurface).toHaveCSS("border-radius", "0px");
   await expect(decisionSurface).toHaveCSS("background-color", "rgb(255, 255, 255)");
   expect((await decisionSurface.boundingBox())!.height).toBeLessThan(
-    page.viewportSize()!.width < 760 ? 520 : 360,
+    page.viewportSize()!.width < 760 ? 520 : 240,
   );
+  const scorePanel = page.locator(".opportunity-insight-card--score");
+  const collectionPanel = page.locator(".opportunity-insight-card--collection");
+  await expect(scorePanel).toBeVisible();
+  const scoreBounds = (await scorePanel.boundingBox())!;
+  const collectionBounds = (await collectionPanel.boundingBox())!;
+  if (page.viewportSize()!.width >= 1280) {
+    expect(Math.abs(scoreBounds.y - collectionBounds.y)).toBeLessThan(2);
+    expect(collectionBounds.x).toBeGreaterThan(scoreBounds.x + scoreBounds.width - 2);
+  } else {
+    expect(collectionBounds.y).toBeGreaterThanOrEqual(scoreBounds.y + scoreBounds.height - 2);
+  }
+  const insightsBounds = (await page.locator(".opportunity-insights").boundingBox())!;
+  expect((await decisionSurface.boundingBox())!.y).toBeGreaterThanOrEqual(
+    insightsBounds.y + insightsBounds.height - 2,
+  );
+  const manualToolsBounds = (await page.locator(".opportunity-collection-tools").boundingBox())!;
+  expect(manualToolsBounds.y).toBeGreaterThanOrEqual(insightsBounds.y + insightsBounds.height - 2);
+  await expect(collectionPanel).not.toContainText("正在读取");
+  await expect(page).toHaveScreenshot("selection-detail-overview-20261019.png", {
+    fullPage: false,
+  });
   const gateFontSize = await decisionSurface
     .locator(".opportunity-quality-gates li")
     .first()
@@ -1031,7 +1052,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("legible-recommendation-detail-20261017.png", {
+  await expect(page).toHaveScreenshot("selection-detail-decisions-20261019.png", {
     fullPage: true,
   });
 });

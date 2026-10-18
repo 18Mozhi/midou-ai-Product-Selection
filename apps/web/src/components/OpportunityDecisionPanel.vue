@@ -67,7 +67,6 @@ const recommendationCopy = computed(() =>
   >
     <header class="opportunity-decision-summary__lead">
       <div>
-        <p>系统建议</p>
         <h3 id="opportunity-decision-summary-title">{{ recommendationTitle }}</h3>
         <span>{{ recommendationCopy }}</span>
       </div>
@@ -81,65 +80,74 @@ const recommendationCopy = computed(() =>
         </i>
         <strong>{{ qualityGates.all_passed ? "全部通过" : `下一项：${nextMissingGate}` }}</strong>
       </div>
-      <OpportunityQualityGateDetails :quality-gates="qualityGates" />
     </header>
-    <nav
-      v-if="canDecide && canAdopt"
-      id="opportunity-decision-actions"
-      class="opportunity-decision-actions"
-      aria-label="机会决策操作"
-    >
-      <button class="primary" :disabled="busy" @click="emit('decide', 'adopt')">采纳建议</button
-      ><button @click="emit('decide', 'observe')">继续观察</button
-      ><button class="reject" @click="emit('decide', 'reject')">驳回</button>
-    </nav>
-    <div
-      v-else-if="canDecide"
-      id="opportunity-decision-actions"
-      class="opportunity-decision-waiting"
-      role="status"
-    >
-      <span>
-        <b>当前无需你处理</b>
-        <small>证据齐备并通过评分后，会更新选品建议；当前处理状态见下方。</small>
-      </span>
-      <details>
-        <summary>提前人工处理</summary>
-        <nav aria-label="候选提前人工处理">
-          <button type="button" @click="emit('decide', 'observe')">继续观察</button>
-          <button type="button" class="reject" @click="emit('decide', 'reject')">驳回</button>
-        </nav>
-      </details>
-    </div>
-    <p v-else id="opportunity-decision-actions" class="opportunity-decision-readonly" role="status">
-      当前角色可查看判断依据；最终决定需要“机会决策”权限。
-    </p>
-    <section v-if="unresolvedBlockers.length" class="opportunity-decision-gap">
-      <div>
-        <strong>仍有 {{ unresolvedBlockers.length }} 个补证阻断项</strong>
-        <span>{{ unresolvedBlockers[0]?.next_action }}</span>
-      </div>
-    </section>
-    <details v-if="detail.adoption_blockers?.length" class="opportunity-blocker-details">
-      <summary>查看判断条件与补证进度</summary>
-      <article
-        v-for="blocker in detail.adoption_blockers"
-        :key="blocker.code"
-        :data-status="blocker.status"
-      >
+    <div class="opportunity-decision-summary__statusline">
+      <section v-if="unresolvedBlockers.length" class="opportunity-decision-gap">
         <div>
-          <strong>{{ opportunityStatusLabel(blocker.code) }}</strong>
-          <span
-            >{{ opportunityBlockerStatusLabel(blocker.status) }} · {{ blocker.next_action }}</span
-          >
-          <small v-if="blocker.progress_percent != null"
-            >补采任务进度 {{ blocker.progress_percent }}%</small
-          ><small v-if="blocker.score_job_status"
-            >评分任务 {{ statusLabel(blocker.score_job_status) }}</small
-          >
+          <strong>仍有 {{ unresolvedBlockers.length }} 个补证阻断项</strong>
+          <span>{{ unresolvedBlockers[0]?.next_action }}</span>
         </div>
-      </article>
-    </details>
+      </section>
+      <nav
+        v-if="canDecide && canAdopt"
+        id="opportunity-decision-actions"
+        class="opportunity-decision-actions"
+        aria-label="机会决策操作"
+      >
+        <button class="primary" :disabled="busy" @click="emit('decide', 'adopt')">采纳建议</button
+        ><button @click="emit('decide', 'observe')">继续观察</button
+        ><button class="reject" @click="emit('decide', 'reject')">驳回</button>
+      </nav>
+      <div
+        v-else-if="canDecide"
+        id="opportunity-decision-actions"
+        class="opportunity-decision-waiting"
+        role="status"
+      >
+        <span>
+          <b>当前无需你处理</b>
+          <small>证据齐备并通过评分后，会更新选品建议；当前处理状态见下方。</small>
+        </span>
+        <details>
+          <summary>提前人工处理</summary>
+          <nav aria-label="候选提前人工处理">
+            <button type="button" @click="emit('decide', 'observe')">继续观察</button>
+            <button type="button" class="reject" @click="emit('decide', 'reject')">驳回</button>
+          </nav>
+        </details>
+      </div>
+      <p
+        v-else
+        id="opportunity-decision-actions"
+        class="opportunity-decision-readonly"
+        role="status"
+      >
+        当前角色可查看判断依据；最终决定需要“机会决策”权限。
+      </p>
+    </div>
+    <footer class="opportunity-decision-summary__details">
+      <OpportunityQualityGateDetails :quality-gates="qualityGates" />
+      <details v-if="detail.adoption_blockers?.length" class="opportunity-blocker-details">
+        <summary>查看判断条件与补证进度</summary>
+        <article
+          v-for="blocker in detail.adoption_blockers"
+          :key="blocker.code"
+          :data-status="blocker.status"
+        >
+          <div>
+            <strong>{{ opportunityStatusLabel(blocker.code) }}</strong>
+            <span
+              >{{ opportunityBlockerStatusLabel(blocker.status) }} · {{ blocker.next_action }}</span
+            >
+            <small v-if="blocker.progress_percent != null"
+              >补采任务进度 {{ blocker.progress_percent }}%</small
+            ><small v-if="blocker.score_job_status"
+              >评分任务 {{ statusLabel(blocker.score_job_status) }}</small
+            >
+          </div>
+        </article>
+      </details>
+    </footer>
   </section>
 </template>
 

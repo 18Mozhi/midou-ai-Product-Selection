@@ -54,7 +54,7 @@ const emit = defineEmits<{
     </header>
 
     <div class="opportunity-insight-grid">
-      <article class="opportunity-insight-card opportunity-insight-card--wide">
+      <article class="opportunity-insight-card opportunity-insight-card--score">
         <header class="opportunity-insight-card__heading">
           <div>
             <h4>评分明细</h4>
@@ -63,12 +63,16 @@ const emit = defineEmits<{
             >规则 {{ detail.score_rule_version ?? "未计算" }}</span
           >
         </header>
-        <strong class="opportunity-insight-score">{{ detail.overall_score ?? "数据不足" }}</strong>
-        <span v-if="detail.latest_score_run" class="opportunity-insight-support">
-          覆盖 {{ detail.latest_score_run.coverage_percent }}% ·
-          {{ formatOpportunityTime(detail.latest_score_run.scored_at) }}
-        </span>
-        <span v-else class="opportunity-insight-support">暂无评分记录。</span>
+        <div class="opportunity-insight-scoreline">
+          <strong class="opportunity-insight-score">{{
+            detail.overall_score ?? "数据不足"
+          }}</strong>
+          <span v-if="detail.latest_score_run" class="opportunity-insight-support">
+            覆盖 {{ detail.latest_score_run.coverage_percent }}% ·
+            {{ formatOpportunityTime(detail.latest_score_run.scored_at) }}
+          </span>
+          <span v-else class="opportunity-insight-support">暂无评分记录。</span>
+        </div>
         <div class="selection-score-table-wrap">
           <table class="selection-score-table">
             <caption>
@@ -124,7 +128,7 @@ const emit = defineEmits<{
         </div>
       </article>
 
-      <article class="opportunity-insight-card opportunity-insight-card--wide">
+      <article class="opportunity-insight-card opportunity-insight-card--collection">
         <header class="opportunity-insight-card__heading">
           <div>
             <h4>竞品与供应候选</h4>
@@ -427,7 +431,7 @@ const emit = defineEmits<{
 
 .opportunity-insight-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
   border: 1px solid var(--so-opportunity-review-line);
   background: var(--so-opportunity-review-surface);
@@ -444,8 +448,11 @@ const emit = defineEmits<{
   background: var(--so-opportunity-review-surface);
 }
 
-.opportunity-insight-card--wide {
-  grid-column: 1 / -1;
+.opportunity-insight-scoreline {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 16px;
 }
 
 .opportunity-insight-card--compact {
@@ -469,9 +476,9 @@ const emit = defineEmits<{
 .opportunity-insight-badge {
   width: fit-content;
   max-width: 100%;
-  padding: 5px 8px;
+  padding: 0;
   color: var(--so-opportunity-review-blue);
-  background: var(--so-opportunity-review-pale);
+  background: transparent;
   font-size: 13px;
   line-height: 1.4;
   overflow-wrap: anywhere;
@@ -689,6 +696,15 @@ const emit = defineEmits<{
   background: var(--so-opportunity-review-canvas);
 }
 
+@media (min-width: 1280px) {
+  .opportunity-insight-grid {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+  .opportunity-insight-grid > article:nth-child(odd) {
+    border-right: 1px solid var(--so-opportunity-review-line);
+  }
+}
+
 @media (max-width: 760px) {
   .opportunity-insight-grid,
   .opportunity-association-grid,
@@ -698,10 +714,6 @@ const emit = defineEmits<{
 
   .opportunity-insight-card {
     padding: 16px;
-  }
-
-  .opportunity-insight-card--wide {
-    grid-column: auto;
   }
 
   .opportunity-association,

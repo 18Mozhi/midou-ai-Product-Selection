@@ -415,39 +415,6 @@ useOpportunityWorkspaceLifecycle({
           <SelectionProductHeader :detail="detail" />
           <OpportunityDetailNavigation :active-tab="tab" :items="detailTabs" @select="setTab" />
           <div class="opportunity-detail-workface">
-            <OpportunityDecisionPanel
-              v-if="tab === 'overview'"
-              :detail="detail"
-              :busy="busy"
-              :can-decide="canDecide"
-              @decide="startDecision"
-            />
-            <section
-              v-if="tab === 'overview' && detail.selection_stage !== 'recommended'"
-              class="opportunity-next-steps opportunity-collection-tools"
-            >
-              <details>
-                <summary>补证异常时手动处理</summary>
-                <p>补证状态以当前记录为准；需要立即重试时可使用下面的操作。</p>
-                <div>
-                  <button
-                    v-if="canManageCompetitors"
-                    type="button"
-                    :disabled="busy"
-                    @click="discoverCompetitors"
-                  >
-                    采集 Amazon 竞品</button
-                  ><button
-                    v-if="canManageSuppliers"
-                    type="button"
-                    :disabled="busy"
-                    @click="discoverSuppliers"
-                  >
-                    采集公开供应商</button
-                  ><RouterLink to="/opportunities/scoring-rules">检查评分规则</RouterLink>
-                </div>
-              </details>
-            </section>
             <div class="opportunity-detail-section-content">
               <OpportunityDetailInsights
                 v-if="['overview', 'competition', 'risk'].includes(tab)"
@@ -516,6 +483,39 @@ useOpportunityWorkspaceLifecycle({
                 </article>
               </section>
             </div>
+            <OpportunityDecisionPanel
+              v-if="tab === 'overview'"
+              :detail="detail"
+              :busy="busy"
+              :can-decide="canDecide"
+              @decide="startDecision"
+            />
+            <section
+              v-if="tab === 'overview' && detail.selection_stage !== 'recommended'"
+              class="opportunity-next-steps opportunity-collection-tools"
+            >
+              <details>
+                <summary>补证异常时手动处理</summary>
+                <p>补证状态以当前记录为准；需要立即重试时可使用下面的操作。</p>
+                <div>
+                  <button
+                    v-if="canManageCompetitors"
+                    type="button"
+                    :disabled="busy"
+                    @click="discoverCompetitors"
+                  >
+                    采集 Amazon 竞品</button
+                  ><button
+                    v-if="canManageSuppliers"
+                    type="button"
+                    :disabled="busy"
+                    @click="discoverSuppliers"
+                  >
+                    采集公开供应商</button
+                  ><RouterLink to="/opportunities/scoring-rules">检查评分规则</RouterLink>
+                </div>
+              </details>
+            </section>
           </div>
         </main>
       </article></template
