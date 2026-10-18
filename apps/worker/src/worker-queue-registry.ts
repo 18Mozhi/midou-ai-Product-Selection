@@ -74,7 +74,8 @@ export const WORKER_QUEUE_POLICIES: Readonly<Record<WorkerQueueName, QueuePolicy
   ai_analysis: policy(50, 300_000, 0, 3),
   report_exports: policy(45, 300_000, 0, 3),
   automation_rules: policy(40, 120_000, 1, 4),
-  core_collection_projection: policy(35, 120_000, 1, 4),
+  // Give collected facts precedence over new refresh/scoring polls.
+  core_collection_projection: policy(88, 120_000, 1, 4),
   automatic_rule_sources: policy(32, 60_000, 1, 3),
   automatic_full_sources: policy(30, 60_000, 1, 3),
   automatic_selection_evaluation: policy(68, 120_000, 0, 4),

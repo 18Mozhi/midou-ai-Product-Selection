@@ -565,3 +565,65 @@ test("调度快照保存最近业务失败关联但不保存原始结果载荷",
   assert.doesNotMatch(JSON.stringify(queue), /must-not-leak|raw_snapshot/);
   await scheduler.stop();
 });
+
+test("已采集核心事实先投影，再执行刷新和评分，保留高优先级隔离与并发额度", async () => {
+  const { QueueScheduler } = await import("../../apps/worker/dist/queue-scheduler.js");
+  const { workerQueues } = await import("../../apps/worker/dist/worker-queue-registry.js");
+  const events = [];
+  let releaseHigh;
+  let releaseProjection;
+  const highGate = new Promise((resolve) => {
+    releaseHigh = resolve;
+  });
+  const projectionGate = new Promise((resolve) => {
+    releaseProjection = resolve;
+  });
+  const scheduler = new QueueScheduler({ maxConcurrency: 4, tickMs: 5 });
+  const names = [
+    "trend_projection",
+    "automatic_selection_evaluation",
+    "opportunity_refresh",
+    "core_collection_projection",
+    "business_task_projection",
+    "auth_delivery",
+    "collection_tasks",
+  ];
+  for (const job of workerQueues(
+    names.map((name) => [
+      name,
+      10000,
+      async () => {
+        events.push(name);
+        if (["collection_tasks", "auth_delivery", "business_task_projection"].includes(name))
+          await highGate;
+        if (name === "core_collection_projection") await projectionGate;
+        return { status: "succeeded" };
+      },
+    ]),
+  ))
+    scheduler.register(job);
+  try {
+    scheduler.start();
+    await waitFor(() => events.length === 4);
+    assert.deepEqual(events, [
+      "collection_tasks",
+      "auth_delivery",
+      "business_task_projection",
+      "core_collection_projection",
+    ]);
+    assert.equal(scheduler.snapshot().active_runs, 4);
+    assert.equal(scheduler.snapshot().due_queue_count, 3);
+    releaseProjection();
+    await waitFor(() => events.length === 7);
+    assert.deepEqual(events.slice(4), [
+      "opportunity_refresh",
+      "automatic_selection_evaluation",
+      "trend_projection",
+    ]);
+    assert.equal(scheduler.snapshot().active_runs, 3);
+  } finally {
+    releaseHigh();
+    releaseProjection();
+    await scheduler.stop();
+  }
+});

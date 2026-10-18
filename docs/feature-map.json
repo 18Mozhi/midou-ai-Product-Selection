@@ -6900,5 +6900,17 @@
       "tests/regression/product-delivery.test.mjs"
     ],
     "contract": "One grouped daily/cumulative metrics panel with desktop columns and narrow-screen stacking. Exact daily counts, unknown state and Beijing time retained; factual definitions remain in existing data explanation disclosure. Home caption unified as selection workbench. No API, database, authorization, polling, environment or dependency change."
+  },
+  "coreProjectionScheduling20261019": {
+    "status": "implemented",
+    "requirements": "docs/core-projection-scheduling.md",
+    "sourceFiles": ["apps/worker/src/worker-queue-registry.ts"],
+    "testFiles": [
+      "tests/unit/worker-scheduler.test.mjs",
+      "tests/unit/core-projection-claim-locking.test.mjs",
+      "tests/unit/competitor-title-classification.test.mjs",
+      "tests/unit/competitor-discovery-policy.test.mjs"
+    ],
+    "contract": "Core collection projection priority 88 processes collected facts before refresh/scoring and new intelligence projection; collection100/auth95/business90 remain ahead. Preserve concurrency, polling, timeout, retry, circuit, aging and all original evidence/fingerprint/tenant/lease/quality gates. No terminal task reset, historical replay, API/schema/config/dependency/frontend/Python change. Runtime snapshot exposes existing priority field; BaoTa Node restart required. Natural projection and daily100 remain separately verified."
   }
 }
