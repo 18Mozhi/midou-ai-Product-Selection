@@ -155,7 +155,7 @@
       "apps/web/src/member-workspace-polish.css"
     ],
     "verification": ["npm run typecheck:web", "npm run build:web"],
-    "acceptance": "Pending rendered desktop/mobile verification; daily full-chain target remains unverified.",
+    "acceptance": "Desktop/mobile controlled rendering verified; uniform image states, prominent original price and one shared lower-bound note. Production visual check and daily full-chain target remain independent.",
     "legacyBoundary": "Product catalogue no longer mounts retired opportunity-list class; 78 unused list/image selectors removed, shared detail selectors retained."
   },
   "selectionAmazonObservationLineage20261018": {

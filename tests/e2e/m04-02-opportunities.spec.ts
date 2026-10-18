@@ -792,7 +792,8 @@ test("catalogue shows original primary facts without inventing sales or private 
   await expect(facts).toContainText("近月 ≥ 100");
   await expect(facts).toContainText("#123");
   await expect(facts).toContainText("已观察到广告标记");
-  await expect(facts).toContainText("不等于精确销量");
+  await expect(page.locator(".catalog-data-note")).toContainText("不等于精确销量");
+  await expect(page.locator(".catalog-data-note")).toHaveCount(1);
   await expect(page.locator(".catalog-product").nth(1).locator(".catalog-public-facts")).toHaveText(
     "商品资料待采集",
   );
@@ -827,6 +828,12 @@ test("opportunity list distinguishes a failed product image from one not yet col
               name: "尚未采集主图的机会",
               image_url: null,
             },
+            {
+              ...recommendedBase,
+              id: "00000000-0000-4000-8000-000000000433",
+              name: "已采集主图的机会",
+              image_url: "/fixtures/opportunity-image-valid.svg",
+            },
           ],
           { page: 1, page_size: 20, total: 2 },
         ),
@@ -837,11 +844,24 @@ test("opportunity list distinguishes a failed product image from one not yet col
     route.fulfill({ status: 404, contentType: "image/png", body: "" }),
   );
 
+  await page.route("**/fixtures/opportunity-image-valid.svg", (route) =>
+    route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" fill="#2563eb"/></svg>',
+    }),
+  );
   await page.goto("/opportunities");
 
   await expect(page.getByRole("img", { name: "商品主图加载失败" })).toBeVisible();
   await expect(page.getByRole("img", { name: "商品主图待采集" })).toBeVisible();
   await expect(page.getByRole("img", { name: `${recommendedBase.name} 商品图` })).toHaveCount(0);
+  const image = page.getByRole("img", { name: "已采集主图的机会 商品图", exact: true });
+  await expect.poll(() => image.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBe(120);
+  const boxes = await page
+    .locator(".opportunity-picture")
+    .evaluateAll((elements) => elements.map((el) => el.getBoundingClientRect().height));
+  expect(boxes).toHaveLength(3);
+  expect(new Set(boxes).size).toBe(1);
 });
 
 test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decision preserve missing states", async ({

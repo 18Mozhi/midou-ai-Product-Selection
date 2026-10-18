@@ -275,8 +275,7 @@ html[data-design="commerce"] #app .catalog-product .opportunity-picture {
   font-weight: 400;
 }
 html[data-design="commerce"] #app .catalog-product .opportunity-picture.is-placeholder {
-  height: 64px;
-  padding: 8px 12px 8px 54px;
+  padding: 18px;
   background: var(--so-panel);
   color: var(--so-text-muted);
 }
@@ -484,11 +483,19 @@ html[data-design="commerce"] #app .catalog-public-facts dl {
 .catalog-public-facts > p:first-child {
   margin: 0;
 }
-.catalog-public-facts small {
-  display: block;
-  margin-top: 6px;
+.catalog-data-note {
+  margin: 0 0 12px;
   color: var(--so-text-muted);
   font-size: 13px;
+}
+.catalog-public-facts .is-price dd {
+  color: var(--so-text);
+  font-size: clamp(13px, 1.2vw, 18px);
+  line-height: 1.25;
+  font-weight: 700;
+}
+.catalog-public-facts dl > div {
+  align-self: end;
 }
 .product-catalog[data-display="list"] .catalog-product-identity {
   grid-column: 2;

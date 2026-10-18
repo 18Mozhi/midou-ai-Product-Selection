@@ -389,6 +389,7 @@ watch(imageFailureResetSources, (items) => {
         </button>
       </div>
     </header>
+    <p class="catalog-data-note">购买提示为公开下限，不等于精确销量；未采集的数据保持未知。</p>
     <nav
       v-if="canDecide && selectionView === 'all' && selectedIds.length"
       class="opportunity-batch-bar"
@@ -484,7 +485,11 @@ watch(imageFailureResetSources, (items) => {
           <div class="catalog-public-facts" :aria-label="`${item.name} 商品资料`">
             <template v-if="item.primary_product">
               <dl>
-                <div v-for="fact in productFacts(item)" :key="fact.label">
+                <div
+                  v-for="fact in productFacts(item)"
+                  :key="fact.label"
+                  :class="{ 'is-price': fact.label === '售价' }"
+                >
                   <dt>{{ fact.label }}</dt>
                   <dd>{{ fact.value }}</dd>
                 </div>
@@ -499,7 +504,6 @@ watch(imageFailureResetSources, (items) => {
                   >资料 {{ freshness(item.primary_product.captured_at) }}</time
                 >
               </p>
-              <small>购买提示为公开下限，不等于精确销量。</small>
             </template>
             <p v-else>商品资料待采集</p>
           </div>
