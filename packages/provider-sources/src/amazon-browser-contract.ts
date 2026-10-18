@@ -9,6 +9,33 @@ export const anonymousAmazonArchive = () => gzipSync(Buffer.alloc(1024));
 export const anonymousAmazonFingerprint = () =>
   createHash("sha256").update(anonymousAmazonArchive()).digest("hex").slice(0, 16);
 
+const verificationUrl = (url: URL) =>
+  url.origin === "https://www.amazon.com" &&
+  (url.pathname.startsWith("/checkpoint/") ||
+    url.pathname.startsWith("/ap/") ||
+    url.searchParams.has("bm-verify"));
+
+/** Verification redirects are failures; discard their body and transient URL parameters. */
+export function sanitizeAmazonBrowserRunResult(input: Record<string, unknown>) {
+  if (!Array.isArray(input.artifacts)) return input;
+  const denied = input.artifacts.some((artifact) => {
+    try {
+      return verificationUrl(new URL(String(artifact?.source_url)));
+    } catch {
+      return false;
+    }
+  });
+  if (!denied) return input;
+  const { artifacts, snapshots, ...rest } = input;
+  return {
+    ...rest,
+    status: "dependency_failed",
+    error_code: "permission_denied",
+    item_count: 0,
+    detail_count: 0,
+  };
+}
+
 export function amazonBrowserUrl(target: Record<string, unknown>) {
   if (target.page_url !== undefined) {
     if (typeof target.page_url !== "string")
@@ -103,6 +130,7 @@ export function parseAmazonBrowserEvidenceArtifacts(
     } catch {
       throw new ProviderAdapterFailure("invalid_payload", false);
     }
+    if (verificationUrl(u)) throw new ProviderAdapterFailure("permission_denied", false);
     const bytes = Buffer.from(a.content_base64, "base64"),
       date = new Date(String(a.captured_at));
     if (

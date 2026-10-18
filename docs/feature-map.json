@@ -17,7 +17,7 @@
       "tests/unit/browser-collection-chain.test.mjs",
       "tests/integration/authenticated-browser-source.test.mjs"
     ],
-    "contract": "Optional server-only canonical empty profile; existing public_page mode, scope, compliance, robots, circuit and global lease retained. Adapter v13 / normalized schema v5. Real continuous collection and daily100 require production verification."
+    "contract": "Optional server-only canonical empty profile; existing public_page mode, scope, compliance, robots, circuit and global lease retained. Adapter v14 / normalized schema v5; observed verification redirects are permission_denied with body and transient URL omitted. Real continuous collection and daily100 require production verification."
   },
   "amazonPrimaryImageAttributeFix20261018": {
     "status": "implemented",

@@ -14,7 +14,7 @@ AMAZON_PUBLIC_BROWSER_NAVIGATION_TIMEOUT_MS 默认 60000，可设 1000–120000�
 
 ## 数据与证据
 
-适配器版本为 amazon-public-product-adapter-v13，标准化字段版本仍为 amazon-public-product-v5。内部浏览器计划增加可选 fail_on_http_error，以及 evidence.dom_selectors、ancestor_ids、strip_non_content。选择器最多 12 个、祖先 ID 最多 8 个；未设置时保持现有行为。
+适配器版本为 amazon-public-product-adapter-v14，标准化字段版本仍为 amazon-public-product-v5。内部浏览器计划增加可选 fail_on_http_error，以及 evidence.dom_selectors、ancestor_ids、strip_non_content。选择器最多 12 个、祖先 ID 最多 8 个；未设置时保持现有行为。
 
 详情证据只裁取真实主图、标题、评分、主报价、购买提示、详情与有限公开评价区域，并保留实际 leftCol/centerCol 祖先。合并同一祖先，避免多个 centerCol 造成后续字段丢失；仅对脱离页面的克隆去掉脚本和样式，不修改真实页面。DOM 250000 字节、JPEG 800000 字节上限不变。
 
@@ -25,3 +25,9 @@ AMAZON_PUBLIC_BROWSER_NAVIGATION_TIMEOUT_MS 默认 60000，可设 1000–120000�
 单元测试覆盖 URL、空档案、证据篡改、身份错配、未知价格、配置和作业领取限制；真实 Chromium 本地夹具检查主区域裁剪和原页面不变，既有 1688 加密浏览器集成回归仍保留。这些测试不代表 Amazon 生产网站持续可用。
 
 生产还必须验证真实健康检查、正常任务经过 Python 领取与 Node 标准化、真实主品与 5–10 竞品、1688 货源及评分落库。每天 100 品按北京时间首次完成整链的不同主 ASIN 计数，低分、不推荐和明确标注利润未知可计入；诊断抓取、未完成分析和伪造字段不能计入。
+
+## 生产回读 2026-10-18
+
+5609f532 已通过固定宝塔部署，v13 匿名浏览器搜索和同一商品详情健康检查实际通过，总计 15953ms，随后审计恢复来源。正常任务已经写入带图、价格、币种及评价数的搜索记录和真实详情；B0756BXDTX 详情的观察价格为 240.62 CNY，评价数 33915。币种来自页面，不能当作 USD。该观察不代表整链或每日百品完成。
+
+后续遇到详情重定向 /checkpoint/continue，旧执行器错误上报 succeeded_empty。v14 在输出前将已观察到的验证路径、登录路径和 bm-verify 网址转换为 permission_denied，移除验证正文、截图与临时 URL 参数；消费者独立拒绝这类证据。正常商品结果不变，不尝试完成验证。既有错误作业与历史审计不改写。

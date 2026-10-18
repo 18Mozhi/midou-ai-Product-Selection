@@ -11,6 +11,7 @@ import {
   createAmazonBrowserExecutionRequest,
   parseAmazonBrowserRunResult,
   parseAmazonBrowserEvidenceArtifacts,
+  sanitizeAmazonBrowserRunResult,
   AMAZON_BROWSER_PARSER_VERSION,
 } from "../../packages/provider-sources/dist/index.js";
 import { loadRuntimeConfig } from "../../packages/config/dist/index.js";
@@ -352,4 +353,24 @@ test("Node runner rejects nonempty and cookie profiles before loading a public b
     assert.equal(run.status, 2, run.stderr);
     assert.equal(JSON.parse(run.stdout).code, "crawler_anonymous_profile_invalid");
   }
+});
+
+test("observed checkpoint redirects fail closed without emitting verification content or URL parameters", () => {
+  const challenge = result(
+    "<main>Verification body</main>",
+    "https://www.amazon.com/checkpoint/continue?token=test-only-transient-value",
+  );
+  challenge.status = "succeeded_empty";
+  const clean = sanitizeAmazonBrowserRunResult(challenge);
+  assert.equal(clean.status, "dependency_failed");
+  assert.equal(clean.error_code, "permission_denied");
+  assert.equal(clean.item_count, 0);
+  assert.equal(clean.artifacts, undefined);
+  assert.doesNotMatch(JSON.stringify(clean), /test-only-transient-value|content_base64|source_url/);
+  assert.throws(
+    () => parseAmazonBrowserEvidenceArtifacts(challenge.artifacts),
+    (e) => e.code === "permission_denied" && !e.retryable,
+  );
+  const valid = result();
+  assert.equal(sanitizeAmazonBrowserRunResult(valid), valid);
 });

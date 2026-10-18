@@ -3,6 +3,7 @@ import { openCredential } from "../packages/credentials/dist/index.js";
 import {
   anonymousAmazonFingerprint,
   AMAZON_BROWSER_PARSER_VERSION,
+  sanitizeAmazonBrowserRunResult,
 } from "../packages/provider-sources/dist/index.js";
 import { resolve } from "node:path";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
@@ -109,7 +110,11 @@ try {
     ids,
     { locale: input.locale, timezoneId: input.timezone },
   );
-  console.log(JSON.stringify(result));
+  console.log(
+    JSON.stringify(
+      input.purpose === "amazon_public" ? sanitizeAmazonBrowserRunResult(result) : result,
+    ),
+  );
 } catch (error) {
   const candidate =
     typeof error?.code === "string"
