@@ -65,7 +65,18 @@ export async function prepareAmazonDeliveryContext(
     // Reuse the engine's original-URL reread before requiring that header.
     reportStep("reread_navigation");
     await assertSafe();
-    await reread();
+    try {
+      await reread();
+    } catch (error) {
+      if (!(error instanceof Error) || !error.message.includes("net::ERR_ABORTED")) throw error;
+      // Done can start a competing main-frame reload. Settle its document and
+      // recheck the original guards before one original-URL reread, never a loop.
+      reportStep("reread_interrupted_wait");
+      await page.waitForLoadState("domcontentloaded");
+      await assertAnonymous();
+      reportStep("reread_retry");
+      await reread();
+    }
     await assertAnonymous();
   } else {
     reportStep("location_navigation");

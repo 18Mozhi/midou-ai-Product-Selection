@@ -3,6 +3,53 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 import { prepareAmazonDeliveryContext } from "../../packages/playwright-crawler/dist/amazon-delivery-context.js";
 
+test("Chromium aborted reread recovers once through a real guarded original-URL navigation", async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage();
+    page.setDefaultTimeout(500);
+    page.setDefaultNavigationTimeout(2000);
+    let requests = 0;
+    await page.route("**/*", (route) => {
+      requests++;
+      if (requests === 2) return route.abort("aborted");
+      return route.fulfill({
+        contentType: "text/html",
+        body:
+          requests > 2
+            ? '<a href="/signin">Hello, sign in Account &amp; Lists</a><span id="glow-ingress-block">Deliver to San Mateo 94404</span>'
+            : `<a href="/signin">Hello, sign in Account &amp; Lists</a><span id="glow-ingress-block">Deliver to China</span>
+          <button id="nav-global-location-popover-link">Location</button><input id="GLUXZipUpdateInput">
+          <span id="GLUXZipUpdate"><input type="button" value="Apply"></span>
+          <p id="GLUXZipConfirmationSection">Deliver to 94404</p><button name="glowDoneButton">Done</button>`,
+      });
+    });
+    const original = "https://www.amazon.com/dp/B0F6FT397Y";
+    await page.goto(original);
+    const steps = [];
+    assert.equal(
+      await prepareAmazonDeliveryContext(
+        page,
+        "94404",
+        async () => {
+          assert.equal(new URL(page.url()).origin, "https://www.amazon.com");
+        },
+        (step) => steps.push(step),
+        async () => {
+          await page.goto(original, { waitUntil: "domcontentloaded" });
+        },
+      ),
+      true,
+    );
+    assert.equal(requests, 3);
+    assert.ok(steps.includes("reread_retry"));
+    assert.equal(page.url(), original);
+    assert.match(await page.locator("#glow-ingress-block").textContent(), /94404/);
+  } finally {
+    await browser.close();
+  }
+});
+
 test("unfinished page resource does not replace the real location modal and postal checks", async () => {
   const browser = await chromium.launch({ headless: true });
   let releaseResource;

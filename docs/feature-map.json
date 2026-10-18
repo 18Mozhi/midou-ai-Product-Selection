@@ -1,4 +1,14 @@
 {
+  "amazonDeliveryAbortedReread20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-delivery-aborted-reread.md",
+    "sourceFiles": ["packages/playwright-crawler/src/amazon-delivery-context.ts"],
+    "testFiles": [
+      "tests/unit/amazon-delivery-context.test.mjs",
+      "tests/integration/amazon-delivery-readiness.test.mjs"
+    ],
+    "contract": "Only explicit original-URL reread throwing Chromium net::ERR_ABORTED can settle current DOM and recheck original anonymous/origin/challenge guards before one additional original-URL reread. Second failure propagates; no loop, new config or budget. Final reread retains original engine HTTP, origin and strict postal checks. No API/schema/env/dependency/frontend/Python or forced health/circuit changes."
+  },
   "amazonDeliveryLoadTimeout20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-delivery-load-timeout.md",

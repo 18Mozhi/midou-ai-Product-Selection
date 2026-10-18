@@ -115,6 +115,71 @@ test("explicit reread never accepts stale postal, failed navigation, rejected co
   assert.deepEqual(f.actions, []);
 });
 
+test("an aborted original-URL reread is retried once after document and anonymous guards", async () => {
+  const steps = [];
+  let calls = 0;
+  const success = fixture({ locationAfterReread: "Deliver to San Mateo 94404" });
+  assert.equal(
+    await prepareAmazonDeliveryContext(
+      success.page,
+      "94404",
+      success.safe,
+      (s) => steps.push(s),
+      async () => {
+        if (++calls === 1) throw new Error("page.goto: net::ERR_ABORTED");
+        await success.reread();
+      },
+    ),
+    true,
+  );
+  assert.equal(calls, 2);
+  assert.ok(steps.includes("reread_interrupted_wait"));
+  assert.ok(steps.includes("reread_retry"));
+  assert.ok(success.actions.some((a) => a[0] === "load" && a[1] === "domcontentloaded"));
+});
+
+test("aborted reread recovery preserves all guards and cannot retry indefinitely", async () => {
+  for (const mode of [
+    "generic",
+    "second_abort",
+    "blocked",
+    "signed_in",
+    "wrong_postal",
+    "settle_failed",
+  ]) {
+    const f = fixture({ doneWrongPostal: true });
+    let calls = 0;
+    const originalWait = f.page.waitForLoadState;
+    f.page.waitForLoadState = async (state) => {
+      if (state === "domcontentloaded" && mode === "settle_failed")
+        throw new errors.TimeoutError("settle failed");
+      await originalWait(state);
+    };
+    const safe = async () => {
+      await f.safe();
+      if (calls && mode === "blocked") throw new Error("captcha block");
+    };
+    const role = f.page.getByRole;
+    f.page.getByRole = (...args) =>
+      calls && mode === "signed_in" ? { isVisible: async () => false } : role(...args);
+    await assert.rejects(
+      prepareAmazonDeliveryContext(
+        f.page,
+        "94404",
+        safe,
+        () => {},
+        async () => {
+          calls++;
+          if (mode === "generic") throw new Error("ERR_ABORTED without Chromium navigation error");
+          if (calls === 1 || mode === "second_abort")
+            throw new Error("page.goto: net::ERR_ABORTED");
+        },
+      ),
+    );
+    assert.equal(calls, ["second_abort", "wrong_postal"].includes(mode) ? 2 : 1);
+  }
+});
+
 test("US postal context is explicit, validated and configurable without credentials", () => {
   assert.equal(
     loadRuntimeConfig({}, "api").providerAdapters.amazonPublicDeliveryPostalCode,
