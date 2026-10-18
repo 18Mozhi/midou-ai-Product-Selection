@@ -47,10 +47,16 @@ export async function recoverExpiredCollectionTasks(
     await c.beginTransaction();
     const sql =
         "SELECT * FROM collection_tasks WHERE status IN ('leased','running') AND lease_expires_at<=?" +
-        (context.taskId ? " AND id=?" : "") +
-        " FOR UPDATE",
+        (context.taskId ? " AND id=?" : ""),
       [rows] = await c.query<RowDataPacket[]>(sql, context.taskId ? [now, context.taskId] : [now]);
-    for (const row of rows) {
+    for (const candidate of rows) {
+      const [locked] = await c.query<RowDataPacket[]>(
+        "SELECT * FROM collection_tasks WHERE id=? AND organization_id=? AND workspace_id=? " +
+          "AND status IN ('leased','running') AND lease_expires_at<=? FOR UPDATE",
+        [candidate.id, candidate.organization_id, candidate.workspace_id, now],
+      );
+      const row = locked[0];
+      if (!row) continue;
       const classification = classifyCollectionFailure("timeout", Number(row.attempt_count)),
         next =
           classification.status === "retry_scheduled"
@@ -100,12 +106,19 @@ export async function recoverExpiredCollectionTasks(
     const overflowSql =
         "SELECT * FROM collection_tasks WHERE status='queued' AND attempt_count>=4" +
         (context.taskId ? " AND id=?" : "") +
-        " ORDER BY FIELD(priority,'critical','high','normal','low'),available_at,id LIMIT 100 FOR UPDATE",
+        " ORDER BY FIELD(priority,'critical','high','normal','low'),available_at,id LIMIT 100",
       [overflowRows] = await c.query<RowDataPacket[]>(
         overflowSql,
         context.taskId ? [context.taskId] : [],
       );
-    for (const row of overflowRows) {
+    for (const candidate of overflowRows) {
+      const [locked] = await c.query<RowDataPacket[]>(
+        "SELECT * FROM collection_tasks WHERE id=? AND organization_id=? AND workspace_id=? " +
+          "AND status='queued' AND attempt_count>=4 FOR UPDATE",
+        [candidate.id, candidate.organization_id, candidate.workspace_id],
+      );
+      const row = locked[0];
+      if (!row) continue;
       await c.query(
         statement(
           "UPDATE collection_tasks SET status='dead_letter',lease_owner=NULL,",

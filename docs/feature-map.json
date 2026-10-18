@@ -1,4 +1,19 @@
 {
+  "selectionWorkerDatabaseStalls20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-worker-database-stalls.md",
+    "sourceFiles": [
+      "apps/worker/src/collection-task-dead-letter.ts",
+      "apps/worker/src/automatic-selection-evidence.ts"
+    ],
+    "tests": [
+      "tests/unit/collection-expiry-locks.test.mjs",
+      "tests/unit/automatic-primary-query.fixture.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/unit/automatic-evidence-scoring.test.mjs"
+    ],
+    "contract": "Candidate scans do not lock status ranges; scoped primary locks revalidate expiry/attempts. Original primary identity is materialized once; facts and three bindings unchanged. MySQL57 read-only comparison passed; live continuous pipeline verification remains required."
+  },
   "amazonPublicBrowserTransport20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-public-browser-transport.md",

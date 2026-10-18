@@ -1,3 +1,4 @@
+import { automaticPrimaryEvidenceSql } from "../../apps/worker/dist/automatic-selection-evidence.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -95,7 +96,7 @@ function fixture({ lease = true, mutate = false, auditFails = false } = {}) {
   };
   const sql = async (s, args) => {
     calls.push({ sql: s, args });
-    if (s.includes("FROM opportunities o JOIN opportunity_evidence_links"))
+    if (s === automaticPrimaryEvidenceSql)
       return [
         [
           {

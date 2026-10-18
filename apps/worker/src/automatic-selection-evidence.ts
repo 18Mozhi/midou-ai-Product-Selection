@@ -79,12 +79,16 @@ export const automaticPrimaryImageSql =
 /** Resolve the same primary used by the catalogue, rather than the latest linked competitor. */
 export const automaticPrimaryEvidenceSql =
   "SELECT n.raw_evidence_id,n.created_at observed_at,n.payload_json,p.status provider_status " +
-  "FROM opportunities o JOIN opportunity_evidence_links l ON l.opportunity_id=o.id " +
+  // LIMIT prevents MySQL 5.7 from merging this scoped identity into every history row.
+  "FROM (SELECT o.id,o.organization_id,o.workspace_id," +
+  selectionPrimaryAsinSql +
+  " primary_asin " +
+  "FROM opportunities o WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1) o " +
+  "JOIN opportunity_evidence_links l ON l.opportunity_id=o.id " +
   "AND l.organization_id=o.organization_id AND l.workspace_id=o.workspace_id " +
   currentProductVersionJoinSql("l", "n") +
   "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
-  "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? " +
-  `AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY ${selectionPrimaryAsinSql} ` +
+  "WHERE BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY o.primary_asin " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.canonical_url')) REGEXP " +
   "CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')),'([/?#]|$)') " +
   "ORDER BY l.observed_at DESC,n.created_at DESC,n.id DESC LIMIT 1";

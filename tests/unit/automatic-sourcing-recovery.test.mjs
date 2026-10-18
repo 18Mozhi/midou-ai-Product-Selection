@@ -94,7 +94,8 @@ test("recovery scans are scoped, exclude retired searches and qualify actionable
   assert.deepEqual(params, [null, "lan"]);
   assert.match(sql, /ss\.workspace_id=o\.workspace_id[\s\S]*ss\.deleted_at IS NULL/);
   assert.match(sql, /p_supply\.code='1688_search'/);
-  assert.match(sql, /n_image\.workspace_id=l_image\.workspace_id/);
+  assert.match(sql, /n_image_seed\.workspace_id=l_image\.workspace_id/);
+  assert.match(sql, /n_image\.workspace_id=n_image_seed\.workspace_id/);
   assert.match(sql, /BINARY UPPER[\s\S]*n_primary\.payload_json/);
   assert.match(sql, /BINARY o\.primary_asin/);
   assert.match(

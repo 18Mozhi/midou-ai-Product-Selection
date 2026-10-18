@@ -1,3 +1,4 @@
+import { automaticPrimaryEvidenceSql } from "../../apps/worker/dist/automatic-selection-evidence.js";
 import { readCompetitorClassificationContext } from "../../apps/worker/dist/competitor-title-classification.js";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -177,7 +178,7 @@ async function project(
         ],
       ];
     }
-    if (sql.includes("FROM opportunities o JOIN opportunity_evidence_links"))
+    if (sql === automaticPrimaryEvidenceSql)
       return [
         [
           {
