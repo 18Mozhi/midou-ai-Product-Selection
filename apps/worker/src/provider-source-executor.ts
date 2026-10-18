@@ -152,6 +152,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
     private readonly publicPolicyFetch?: typeof fetch,
     private readonly lan1688?: Lan1688ImageSearch,
     private readonly competitorClassification?: MySqlCompetitorTitleClassification,
+    private readonly amazonBrowserEnabled = false,
   ) {}
   async execute(task: ClaimedCollectionTask, heartbeat: () => Promise<void>, signal?: AbortSignal) {
     await this.pool.query(
@@ -374,7 +375,11 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
             ? await this.lan1688.collect(query.target.image_url, heartbeat, signal)
             : null,
         browserCollection =
-          !lanCollection && provider.accessMode === "authenticated_browser"
+          !lanCollection &&
+          (provider.accessMode === "authenticated_browser" ||
+            (this.amazonBrowserEnabled &&
+              provider.code === "amazon_product" &&
+              provider.accessMode === "public_page"))
             ? await this.browserJobs!.collect(
                 {
                   organizationId: task.organizationId,

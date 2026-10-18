@@ -135,7 +135,7 @@ test("review fields and provenance survive adapter normalization without widenin
     "Example & useful title",
   );
   assert.equal(normalized.provenance.parser_version, "amazon-public-product-v5");
-  assert.equal(normalized.provenance.adapter_version, "amazon-public-product-adapter-v12");
+  assert.equal(normalized.provenance.adapter_version, "amazon-public-product-adapter-v13");
   assert.throws(
     () => adapter.normalize(record, { provider: { parserVersion: "amazon-public-product-v3" } }),
     /source_configuration_invalid/,

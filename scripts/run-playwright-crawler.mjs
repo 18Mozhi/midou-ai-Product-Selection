@@ -1,3 +1,9 @@
+import { createHash } from "node:crypto";
+import { openCredential } from "../packages/credentials/dist/index.js";
+import {
+  anonymousAmazonFingerprint,
+  AMAZON_BROWSER_PARSER_VERSION,
+} from "../packages/provider-sources/dist/index.js";
 import { resolve } from "node:path";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import {
@@ -41,7 +47,10 @@ try {
     requestedRoot = resolve(input.temp_root);
   if (requestedRoot !== tempRoot) throw new Error("crawler_runner_temp_scope_invalid");
   const limits = {
-    navigationTimeoutMs: config.playwright.navigationTimeoutMs,
+    navigationTimeoutMs:
+      input.purpose === "amazon_public"
+        ? config.providerAdapters.amazonBrowserNavigationTimeoutMs
+        : config.playwright.navigationTimeoutMs,
     actionTimeoutMs: config.playwright.actionTimeoutMs,
     maxPages: config.playwright.maxPages,
     maxScrolls: config.playwright.maxScrolls,
@@ -68,6 +77,24 @@ try {
     authTag: Buffer.from(String(credential.auth_tag_base64 ?? ""), "base64"),
     fingerprint: "",
   };
+  if (input.purpose === "amazon_public") {
+    if (
+      record.kind !== "browser_profile" ||
+      input.plan?.evidence?.parser_version !== AMAZON_BROWSER_PARSER_VERSION
+    )
+      throw new Error("crawler_anonymous_profile_invalid");
+    const payload = openCredential(record, input.master_key),
+      bytes = Buffer.from(payload.value, payload.encoding === "base64" ? "base64" : "utf8");
+    try {
+      if (
+        createHash("sha256").update(bytes).digest("hex").slice(0, 16) !==
+        anonymousAmazonFingerprint()
+      )
+        throw new Error("crawler_anonymous_profile_invalid");
+    } finally {
+      bytes.fill(0);
+    }
+  }
   const result = await runWithEncryptedProfile(
     engine,
     record,

@@ -1,3 +1,4 @@
+import { anonymousAmazonFingerprint } from "@scoutops/provider-sources";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type {
@@ -25,7 +26,10 @@ const run = (row: RowDataPacket): CrawlerRunSummary => ({
   finished_at: row.finished_at == null ? null : new Date(row.finished_at).toISOString(),
 });
 export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
-  constructor(private readonly pool: Pool) {}
+  constructor(
+    private readonly pool: Pool,
+    private readonly amazonPublicProfileId = "",
+  ) {}
   async list(input: Parameters<CrawlerRuntimeRepository["list"]>[0]) {
     const conditions: string[] = [],
       parameters: unknown[] = [];
@@ -561,14 +565,23 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           "SELECT j.*,v.code provider_code,p.id profile_id,p.locale,p.timezone,p.updated_by,a.id ",
           "asset_id,a.version asset_version,a.kind,a.key_version,a.payload_ciphertext,a.payload_nonce,a.payload",
           "_auth_tag,a.expires_at FROM browser_collection_jobs j JOIN providers v ON v.id=j.provider_id AND ",
-          "v.access_mode='authenticated_browser' AND (v.status='enabled' OR (v.code='1688_search' AND ",
+          (this.amazonPublicProfileId
+            ? "(v.access_mode='authenticated_browser' OR (v.code='amazon_product' AND v.access_mode='public_page')) "
+            : "v.access_mode='authenticated_browser' ") +
+            "AND (v.status='enabled' OR (v.code='1688_search' AND ",
           "JSON_UNQUOTE(JSON_EXTRACT(j.execution_request_json,'$.purpose'))='acceptance')) JOIN crawler_profiles p ON ",
           "p.provider_id=j.provider_id AND p.status='active' JOIN credential_assets a ON ",
           "a.id=p.credential_asset_id AND a.status='active' AND a.kind IN ('browser_profile','cookie_bundle') ",
-          "WHERE j.status='queued' ORDER BY (a.expires_at IS NULL OR a.expires_at>?) DESC,j.created_at,j.id ",
+          "WHERE j.status='queued' " +
+            (this.amazonPublicProfileId
+              ? "AND (v.access_mode='authenticated_browser' OR (v.code='amazon_product' AND p.id=? AND a.kind='browser_profile' AND a.fingerprint=? AND JSON_UNQUOTE(JSON_EXTRACT(j.execution_request_json,'$.purpose'))='amazon_public')) "
+              : "") +
+            "ORDER BY (a.expires_at IS NULL OR a.expires_at>?) DESC,j.created_at,j.id ",
           "LIMIT 1 FOR UPDATE",
         ].join(""),
-        [input.now],
+        this.amazonPublicProfileId
+          ? [this.amazonPublicProfileId, anonymousAmazonFingerprint(), input.now]
+          : [input.now],
       );
       const row = rows[0];
       if (!row) {

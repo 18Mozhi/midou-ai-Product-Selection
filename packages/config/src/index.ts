@@ -111,6 +111,8 @@ export interface RuntimeConfig {
     crawlerServiceToken: string;
   };
   providerAdapters: {
+    amazonBrowserProfileId: string;
+    amazonBrowserNavigationTimeoutMs: number;
     lan1688Token: string;
     lan1688TimeoutMs: number;
     healthTimeoutMs: number;
@@ -365,6 +367,17 @@ export function loadRuntimeConfig(
     text(env, "CREDENTIAL_TEMP_ROOT", "./runtime/credential-tmp"),
   );
   const playwrightExecutablePath = text(env, "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH");
+  const amazonBrowserProfileId = text(env, "AMAZON_PUBLIC_BROWSER_PROFILE_ID");
+  if (
+    amazonBrowserProfileId &&
+    !/^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(
+      amazonBrowserProfileId,
+    )
+  )
+    throw new ConfigError(
+      "AMAZON_PUBLIC_BROWSER_PROFILE_ID",
+      "must be an existing anonymous profile UUID",
+    );
   const authEmailDeliveryMode = text(env, "AUTH_EMAIL_DELIVERY_MODE", "placeholder");
   if (authEmailDeliveryMode !== "placeholder" && authEmailDeliveryMode !== "qq_smtp")
     throw new ConfigError("AUTH_EMAIL_DELIVERY_MODE", "must be placeholder or qq_smtp");
@@ -566,6 +579,14 @@ export function loadRuntimeConfig(
       crawlerServiceToken: secret(env, "CRAWLER_SERVICE_TOKEN", production && target === "api", 32),
     },
     providerAdapters: {
+      amazonBrowserProfileId,
+      amazonBrowserNavigationTimeoutMs: integer(
+        env,
+        "AMAZON_PUBLIC_BROWSER_NAVIGATION_TIMEOUT_MS",
+        60000,
+        1000,
+        120000,
+      ),
       lan1688Token: text(env, "LAN_1688_TOKEN"),
       lan1688TimeoutMs: integer(env, "LAN_1688_TIMEOUT_MS", 45000, 1000, 60000),
       healthTimeoutMs: integer(env, "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS", 10000, 100, 120000),

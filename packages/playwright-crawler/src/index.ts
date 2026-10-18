@@ -22,6 +22,7 @@ export interface BrowserBlockSignals {
 }
 export interface BrowserCollectionPlan {
   start_url: string;
+  fail_on_http_error?: boolean;
   allowed_origins: string[];
   search?: { input_selector: string; query: string; submit_selector?: string };
   item_selector: string;
@@ -33,7 +34,12 @@ export interface BrowserCollectionPlan {
   max_scrolls: number;
   max_details: number;
   block_signals?: BrowserBlockSignals;
-  evidence?: { parser_version: string };
+  evidence?: {
+    parser_version: string;
+    dom_selectors?: string[];
+    ancestor_ids?: string[];
+    strip_non_content?: boolean;
+  };
 }
 export interface BrowserOfferDetailSnapshotPlan {
   schema_version: string;
@@ -160,6 +166,8 @@ export function validateBrowserPlan(
 ): BrowserCollectionPlan {
   if (!input || typeof input !== "object")
     throw new PlaywrightCrawlerError("crawler_plan_invalid", "parser_changed", false);
+  if (input.fail_on_http_error !== undefined && typeof input.fail_on_http_error !== "boolean")
+    throw new PlaywrightCrawlerError("crawler_http_policy_invalid", "parser_changed", false);
   const start = httpUrl(input.start_url),
     origins = [...new Set(input.allowed_origins ?? [])];
   if (
@@ -232,6 +240,32 @@ export function validateBrowserPlan(
       throw new PlaywrightCrawlerError("crawler_block_signal_invalid", "parser_changed", false);
   if (input.evidence && !/^[A-Za-z0-9._-]{1,120}$/.test(input.evidence.parser_version))
     throw new PlaywrightCrawlerError("crawler_parser_version_invalid", "parser_changed", false);
+  if (input.evidence) {
+    const {
+      dom_selectors: selections,
+      ancestor_ids: ancestors,
+      strip_non_content: strip,
+    } = input.evidence;
+    if (
+      (selections !== undefined &&
+        (!Array.isArray(selections) ||
+          !selections.length ||
+          selections.length > 12 ||
+          selections.some((x) => !selector(x)))) ||
+      (ancestors !== undefined &&
+        (!Array.isArray(ancestors) ||
+          ancestors.length > 8 ||
+          ancestors.some(
+            (x) => typeof x !== "string" || !/^[A-Za-z][A-Za-z0-9_-]{0,79}$/.test(x),
+          ))) ||
+      (strip !== undefined && typeof strip !== "boolean")
+    )
+      throw new PlaywrightCrawlerError(
+        "crawler_evidence_projection_invalid",
+        "parser_changed",
+        false,
+      );
+  }
   return { ...input, allowed_origins: origins };
 }
 export function classifyBrowserFailure(error: unknown): {
@@ -293,6 +327,38 @@ const boundedUtf8 = (value: string, maximumBytes: number): Buffer => {
   return Buffer.from(value.slice(0, low));
 };
 
+/** Detached clones retain actual primary ancestry; the live page is never changed. */
+export function projectBrowserEvidenceNodes(
+  nodes: Element[],
+  options: { ancestorIds: string[]; strip: boolean },
+) {
+  const selected = nodes.filter(
+    (node) => !nodes.some((other) => other !== node && other.contains(node)),
+  );
+  const columns = new Map<Element, Element>();
+  const output: Element[] = [];
+  for (const node of selected) {
+    const copy = node.cloneNode(true) as Element;
+    if (options.strip)
+      copy
+        .querySelectorAll('script:not([type="application/ld+json"]), style')
+        .forEach((child) => child.remove());
+    const ancestor = options.ancestorIds.length
+      ? node.closest(options.ancestorIds.map((id) => "#" + id).join(","))
+      : null;
+    if (ancestor && ancestor !== node) {
+      let column = columns.get(ancestor);
+      if (!column) {
+        column = ancestor.cloneNode(false) as Element;
+        columns.set(ancestor, column);
+        output.push(column);
+      }
+      column.appendChild(copy);
+    } else output.push(copy);
+  }
+  return output.map((node) => node.outerHTML).join("\n");
+}
+
 async function captureEvidence(
   page: Page,
   plan: BrowserCollectionPlan,
@@ -301,8 +367,11 @@ async function captureEvidence(
   const capturedAt = new Date().toISOString(),
     sourceUrl = httpUrl(page.url()).toString(),
     itemHtml = await page
-      .locator(plan.item_selector)
-      .evaluateAll((nodes) => nodes.map((node) => node.outerHTML).join("\n")),
+      .locator(plan.evidence.dom_selectors?.join(",") ?? plan.item_selector)
+      .evaluateAll(projectBrowserEvidenceNodes, {
+        ancestorIds: plan.evidence.ancestor_ids ?? [],
+        strip: plan.evidence.strip_non_content === true,
+      }),
     pageHtml = itemHtml || (await page.locator("body").evaluate((node) => node.outerHTML)),
     html = boundedUtf8(pageHtml, 250_000);
   if (!html.byteLength)
@@ -528,6 +597,7 @@ export class PlaywrightCrawlerEngine {
       locale?: string;
       timezoneId?: string;
       cookies?: BrowserCookie[];
+      signal?: AbortSignal;
     } = {},
   ): Promise<BrowserRunResult> {
     const plan = validateBrowserPlan(planInput, this.limits),
@@ -537,16 +607,22 @@ export class PlaywrightCrawlerEngine {
       pageCount = 0,
       itemCount = 0,
       detailCount = 0;
+    const onAbort = () => {
+      void context?.close().catch(() => {});
+    };
     let artifacts: BrowserEvidenceArtifact[] = [];
     let searchSnapshot: BrowserSearchSnapshot | undefined;
     const offerDetails: BrowserOfferDetailSnapshot[] = [];
     try {
+      options.signal?.throwIfAborted();
       context = await chromium.launchPersistentContext(userDataDir, {
         headless: this.limits.headless,
         ...(this.limits.executablePath ? { executablePath: this.limits.executablePath } : {}),
         ...(options.locale ? { locale: options.locale } : {}),
         ...(options.timezoneId ? { timezoneId: options.timezoneId } : {}),
       });
+      options.signal?.addEventListener("abort", onAbort, { once: true });
+      options.signal?.throwIfAborted();
       if (options.cookies?.length) await context.addCookies(options.cookies);
       context.setDefaultTimeout(this.limits.actionTimeoutMs);
       context.setDefaultNavigationTimeout(this.limits.navigationTimeoutMs);
@@ -554,7 +630,7 @@ export class PlaywrightCrawlerEngine {
         if (response.status() === 429) rateLimited = true;
       });
       const page = context.pages()[0] ?? (await context.newPage());
-      await this.goto(page, plan.start_url, plan.allowed_origins);
+      await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error);
       await blocked(page, plan.block_signals);
       if (plan.search) {
         await page.locator(plan.search.input_selector).fill(plan.search.query);
@@ -708,10 +784,11 @@ export class PlaywrightCrawlerEngine {
           : {}),
       };
     } finally {
+      options.signal?.removeEventListener("abort", onAbort);
       await context?.close().catch(() => {});
     }
   }
-  private async goto(page: Page, target: string, origins: string[]) {
+  private async goto(page: Page, target: string, origins: string[], strict = false) {
     const url = httpUrl(target);
     if (!origins.includes(url.origin))
       throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
@@ -720,6 +797,16 @@ export class PlaywrightCrawlerEngine {
     });
     if (!origins.includes(httpUrl(page.url()).origin))
       throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
+    if (strict && response && response.status() >= 400 && response.status() !== 429) {
+      const status = response.status(),
+        code =
+          status >= 500
+            ? "network_error"
+            : [404, 410].includes(status)
+              ? "empty_result"
+              : "permission_denied";
+      throw new PlaywrightCrawlerError(code, "dependency_failed", status >= 500);
+    }
     if (response?.status() === 429)
       throw new PlaywrightCrawlerError("rate_limited", "rate_limited", true);
   }
@@ -864,7 +951,7 @@ export async function runWithEncryptedProfile(
   archiveLimits: ProfileArchiveLimits,
   plan: BrowserCollectionPlan,
   ids: { requestId: string; traceId: string },
-  options: { locale?: string; timezoneId?: string } = {},
+  options: { locale?: string; timezoneId?: string; signal?: AbortSignal } = {},
 ) {
   return withMaterializedCredential(record, masterKey, tempRoot, (archivePath) =>
     record.kind === "cookie_bundle"

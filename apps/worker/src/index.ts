@@ -91,6 +91,7 @@ const executor = new ProviderSourceExecutor(
     ),
     config.identity.workerId,
   ),
+  Boolean(config.providerAdapters.amazonBrowserProfileId),
 );
 const trendProjection = new MySqlTrendProjectionWorker(
   pool,

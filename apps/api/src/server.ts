@@ -1,3 +1,4 @@
+import { AmazonPublicBrowserHealth } from "./amazon-public-browser-health.js";
 import { buildApp } from "./app.js";
 import { readFile } from "node:fs/promises";
 import { loadRuntimeConfig } from "@scoutops/config";
@@ -388,6 +389,27 @@ const app = buildApp({
     service: new ProviderAdapterService(
       new MySqlProviderAdapterRepository(pool),
       providerAdapterRegistry,
+      undefined,
+      config.providerAdapters.amazonBrowserProfileId
+        ? (provider, context) =>
+            new AmazonPublicBrowserHealth(
+              pool,
+              config,
+              createProviderSourceFetch(
+                config.providerAdapters.proxy,
+                {},
+                AUTOMATIC_PROVIDER_SOURCE_HOSTS,
+              ),
+              async (c) => {
+                if (!c.sessionId) throw new Error("selected_scope_required");
+                const resolved = await authorization.resolveSession(c.actorId, c.sessionId);
+                return {
+                  organizationId: resolved.context.organization_id,
+                  workspaceId: resolved.context.workspace_id,
+                };
+              },
+            ).probe(provider, context)
+        : undefined,
     ),
     authorization,
     auth: localAuth,
@@ -395,7 +417,9 @@ const app = buildApp({
     webOrigin: config.app.webOrigin,
   },
   crawlerRuntime: {
-    service: new CrawlerRuntimeService(new MySqlCrawlerRuntimeRepository(pool)),
+    service: new CrawlerRuntimeService(
+      new MySqlCrawlerRuntimeRepository(pool, config.providerAdapters.amazonBrowserProfileId),
+    ),
     authorization,
     auth: localAuth,
     secureCookie: config.nodeEnv === "production",

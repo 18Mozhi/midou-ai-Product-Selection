@@ -36,7 +36,7 @@ export function registerProviderAdapterRoutes(
       surface: "api",
       ...ids(request),
     });
-    return authenticated.user.id;
+    return { actorId: authenticated.user.id, sessionId: authenticated.session.id };
   };
   app.get("/api/v1/platform/provider-adapters", async (request, reply) => {
     await actor(request);
@@ -46,11 +46,11 @@ export function registerProviderAdapterRoutes(
   app.post("/api/v1/platform/provider-adapters/:providerId/health-check", async (request) => {
     if (request.headers.origin !== options.webOrigin)
       throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
-    const actorId = await actor(request);
+    const actorContext = await actor(request);
     const providerId = (request.params as { providerId: string }).providerId;
     return envelope(
       await options.service.probe(providerId, {
-        actorId,
+        ...actorContext,
         idempotencyKey: requireIdempotencyKey(request),
         ...ids(request),
       }),

@@ -1,4 +1,24 @@
 {
+  "amazonPublicBrowserTransport20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-public-browser-transport.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/amazon-browser-contract.ts",
+      "packages/playwright-crawler/src/index.ts",
+      "apps/worker/src/authenticated-browser-job-client.ts",
+      "apps/worker/src/provider-source-executor.ts",
+      "apps/api/src/amazon-public-browser-health.ts",
+      "apps/api/src/mysql-crawler-runtime-repository.ts",
+      "scripts/run-playwright-crawler.mjs"
+    ],
+    "tests": [
+      "tests/unit/amazon-browser-contract.test.mjs",
+      "tests/integration/amazon-browser-projection.test.mjs",
+      "tests/unit/browser-collection-chain.test.mjs",
+      "tests/integration/authenticated-browser-source.test.mjs"
+    ],
+    "contract": "Optional server-only canonical empty profile; existing public_page mode, scope, compliance, robots, circuit and global lease retained. Adapter v13 / normalized schema v5. Real continuous collection and daily100 require production verification."
+  },
   "amazonPrimaryImageAttributeFix20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-primary-image-attribute-fix.md",

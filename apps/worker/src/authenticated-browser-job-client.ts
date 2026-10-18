@@ -7,6 +7,9 @@ import {
 } from "@scoutops/provider-adapters";
 import {
   create1688BrowserExecutionRequest,
+  createAmazonBrowserExecutionRequest,
+  parseAmazonBrowserRunResult,
+  parseAmazonBrowserEvidenceArtifacts,
   parseBrowserEvidenceArtifacts,
   parse1688BrowserRunResult,
   type BrowserEvidenceArtifactContract,
@@ -32,13 +35,16 @@ export interface AuthenticatedBrowserCollection {
 
 const requestFor = (provider: ProviderRuntimeDefinition, target: Record<string, unknown>) => {
   if (provider.code === "1688_search") return create1688BrowserExecutionRequest(target);
+  if (provider.code === "amazon_product") return createAmazonBrowserExecutionRequest(target);
   throw new ProviderAdapterFailure("adapter_not_registered", false);
 };
 
 const recordsFor = (
   provider: ProviderRuntimeDefinition,
   result: Record<string, unknown>,
+  target: Record<string, unknown>,
 ): ProviderRawRecord[] => {
+  if (provider.code === "amazon_product") return parseAmazonBrowserRunResult(result, target);
   if (provider.code === "1688_search")
     return parse1688BrowserRunResult(
       result as { status: string; error_code: string | null; snapshots?: unknown },
@@ -109,11 +115,14 @@ export class MySqlAuthenticatedBrowserJobClient {
       if (["succeeded", "succeeded_empty"].includes(String(row.status))) {
         const result =
             typeof row.result_json === "string" ? JSON.parse(row.result_json) : row.result_json,
-          artifacts = parseBrowserEvidenceArtifacts((result as Record<string, unknown>).artifacts);
+          artifacts =
+            input.provider.code === "amazon_product"
+              ? parseAmazonBrowserEvidenceArtifacts((result as Record<string, unknown>).artifacts)
+              : parseBrowserEvidenceArtifacts((result as Record<string, unknown>).artifacts);
         let records: ProviderRawRecord[] = [],
           parseError: ProviderAdapterFailure | null = null;
         try {
-          records = recordsFor(input.provider, result as Record<string, unknown>);
+          records = recordsFor(input.provider, result as Record<string, unknown>, input.target);
         } catch (error) {
           if (!(error instanceof ProviderAdapterFailure)) throw error;
           parseError = error;
@@ -131,7 +140,11 @@ export class MySqlAuthenticatedBrowserJobClient {
         );
         throw new ProviderAdapterFailure(
           errorCode,
-          ["failed", "timed_out"].includes(String(row.status)),
+          input.provider.code === "amazon_product"
+            ? ["timeout", "network_error", "rate_limited", "dependency_unavailable"].includes(
+                errorCode,
+              )
+            : ["failed", "timed_out"].includes(String(row.status)),
         );
       }
       await this.wait(this.pollMs);

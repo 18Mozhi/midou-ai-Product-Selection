@@ -114,11 +114,24 @@ export interface ProviderAdapterRepository {
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+export interface ProviderProbeContext {
+  actorId: string;
+  idempotencyKey: string;
+  requestId: string;
+  traceId: string;
+  sessionId?: string;
+  organizationId?: string;
+  workspaceId?: string;
+}
 export class ProviderAdapterService {
   constructor(
     private readonly repository: ProviderAdapterRepository,
     private readonly registry: ProviderAdapterRegistry,
     private readonly now: () => Date = () => new Date(),
+    private readonly amazonBrowserProbe?: (
+      provider: AdapterProviderRecord,
+      context: ProviderProbeContext,
+    ) => Promise<AdapterHealthSignal>,
   ) {}
 
   async list(): Promise<ProviderAdapterSummary[]> {
@@ -128,10 +141,7 @@ export class ProviderAdapterService {
     );
   }
 
-  async probe(
-    providerId: string,
-    context: { actorId: string; idempotencyKey: string; requestId: string; traceId: string },
-  ): Promise<ProviderAdapterSummary> {
+  async probe(providerId: string, context: ProviderProbeContext): Promise<ProviderAdapterSummary> {
     if (!uuid.test(providerId))
       throw new ProviderAdapterServiceError("provider_id_invalid", 400, "刷新来源列表后重试。");
     const provider = await this.repository.getProvider(providerId);
@@ -168,11 +178,14 @@ export class ProviderAdapterService {
         this.registry.describe().find((item) => item.key === provider.code)?.version ?? null;
       const started = Date.now();
       try {
-        signal = await this.registry.healthCheck({
-          provider,
-          requestId: context.requestId,
-          traceId: context.traceId,
-        });
+        signal =
+          provider.code === "amazon_product" && this.amazonBrowserProbe
+            ? await this.amazonBrowserProbe(provider, context)
+            : await this.registry.healthCheck({
+                provider,
+                requestId: context.requestId,
+                traceId: context.traceId,
+              });
       } catch (error) {
         const failure = classifyProviderAdapterFailure(error);
         signal = {
