@@ -1,4 +1,5 @@
 openapi: 3.0.3
+# 2026-10-19: Trend detail pending state is frontend-only; trend API contracts unchanged.
 # Browser lease acquire retries only successfully rolled-back MySQL deadlocks, at most3 transactions with unchanged scope/idempotency/expiry; API fields unchanged.
 # Amazon anonymous delivery: actual legacy confirmation or detached postal input leads only to the guarded original-URL reread; strict final postal verification remains mandatory. No API field change.
 # LAN1688 health v2 covers the six existing nodes within the original deadline; ready means at least one validated node, no offers returned.

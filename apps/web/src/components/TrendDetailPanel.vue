@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { statusLabel } from "../ui/status-labels";
+import UiStatePanel from "./UiStatePanel.vue";
 import TrendEvidenceTimeline from "./TrendEvidenceTimeline.vue";
 import type { TrendDetail } from "./trend-workspace-types";
 
@@ -27,15 +28,24 @@ const freshness = (value: string) =>
         <button class="trend-detail-back so-action-quiet" type="button" @click="emit('back')">
           返回趋势列表
         </button>
-        <p>{{ statusLabel(detail.status) }} · {{ detail.market }} · {{ detail.language }}</p>
-        <h3>{{ detail.title }}</h3>
-        <span
+        <p v-if="busy !== 'detail'">
+          {{ statusLabel(detail.status) }} · {{ detail.market }} · {{ detail.language }}
+        </p>
+        <h3 v-if="busy !== 'detail'">{{ detail.title }}</h3>
+        <span v-if="busy !== 'detail'"
           >首次 {{ freshness(detail.first_seen_at) }} · 最近来源
           {{ freshness(detail.source_fresh_at) }}</span
         >
       </div>
     </header>
-    <dl class="trend-detail-facts" aria-label="情报资料">
+    <UiStatePanel
+      v-if="busy === 'detail'"
+      kind="loading"
+      title="正在读取情报证据"
+      description="读取完成后显示所选情报的详情。"
+      :compact="true"
+    />
+    <dl v-else class="trend-detail-facts" aria-label="情报资料">
       <div>
         <dt>信号</dt>
         <dd>{{ detail.signal_count }} 条</dd>
@@ -77,6 +87,6 @@ const freshness = (value: string) =>
         </dd>
       </div>
     </dl>
-    <TrendEvidenceTimeline :detail="detail" />
+    <TrendEvidenceTimeline v-if="busy !== 'detail'" :detail="detail" />
   </article>
 </template>

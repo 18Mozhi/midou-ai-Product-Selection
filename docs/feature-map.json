@@ -540,6 +540,7 @@
     "tests": [
       "tests/unit/intelligence-member-flow.test.mjs",
       "tests/unit/home-page-preview.test.mjs",
+      "tests/e2e/ui-phase2-trend-contracts.spec.ts",
       "tests/unit/trend-page-preview.test.mjs",
       "tests/m02-06/home-dashboard.test.mjs",
       "tests/m04-01/trends.test.mjs",
@@ -1748,7 +1749,7 @@
       "tests/m04-01/trends.test.mjs",
       "tests/unit/platform-palette-contract.test.mjs"
     ],
-    "contract": "Market intelligence uses compact factual header and direct actions, a collapsed collection-status disclosure, readable filters, ranked current-page rows and bounded desktop master/detail panes with single-pane mobile navigation. Blue instructional hero and decorative marks/unused palette tokens are removed. Existing scoped reads, filters, evidence, monitoring, quality, governance, decisions and permissions remain. Preview runs the real Vue route rather than injecting a replacement historical template. No API/schema/env/dependency change."
+    "contract": "Historical member mutation browser cases and unused fixtures are removed; current filter focus/count and list/topic/deactivation cancellation contracts remain, while historical design audits are not current acceptance. Topic switches immediately mask previous detail facts while the scoped request is pending; mobile return stays available and only the resolved current topic renders. Market intelligence uses compact factual header and direct actions, a collapsed collection-status disclosure, readable filters, ranked current-page rows and bounded desktop master/detail panes with single-pane mobile navigation. Blue instructional hero and decorative marks/unused palette tokens are removed. Scoped reads, filters, evidence, URL state and permissions remain. Historical member mutation controls are retired; backend management is retained. Preview runs the real Vue route rather than injecting a replacement historical template. No API/schema/env/dependency change."
   },
   "selectionRetiredReports20261017": {
     "status": "implemented",

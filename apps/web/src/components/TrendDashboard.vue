@@ -207,6 +207,7 @@ function queueLoad() {
   });
 }
 async function selectTopic(topic: Topic) {
+  if (selected.value?.id !== topic.id) busy.value = "detail";
   mobileDetailOpen.value = true;
   await router.push({ query: { ...route.query, topic: topic.id, section: undefined } });
 }

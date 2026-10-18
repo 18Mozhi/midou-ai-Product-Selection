@@ -447,6 +447,41 @@ test("all-status selection survives the URL and reload without adding an API sta
   ).toBe(true);
 });
 
+test("switching topics hides previous evidence until the requested detail arrives", async ({
+  page,
+}) => {
+  await ready(page, [topic, mergeTopic]);
+  let releaseDetail!: () => void;
+  const detailGate = new Promise<void>((resolve) => {
+    releaseDetail = resolve;
+  });
+  await page.route(`**/api/v1/trends/${mergeTopic.id}`, async (route) => {
+    await detailGate;
+    await route.fulfill({ json: envelope({ ...detail, ...mergeTopic, evidence: [] }) });
+  });
+  await page.goto("/trends");
+  await expect(page.locator('.trend-list > button[aria-pressed="true"]')).toContainText(
+    topic.title,
+  );
+  try {
+    await page.locator(".trend-list > button").filter({ hasText: mergeTopic.title }).click();
+    await expect(page.getByRole("heading", { name: "正在读取情报证据" })).toBeVisible();
+    await expect(page.locator(".trend-detail h3")).toHaveCount(0);
+    await expect(page.locator(".trend-detail-facts, .trend-detail .trend-evidence")).toHaveCount(0);
+    if ((page.viewportSize()?.width ?? 0) <= 1100) {
+      await page.getByRole("button", { name: "返回趋势列表" }).click();
+      await expect(page.locator(".trend-list")).toBeVisible();
+      await page.locator(".trend-list > button").filter({ hasText: mergeTopic.title }).click();
+    }
+    releaseDetail();
+    await expect(page.locator(".trend-detail h3")).toHaveText(mergeTopic.title);
+    await expect(page.getByRole("heading", { name: "正在读取情报证据" })).toHaveCount(0);
+    await expect(page.locator(".trend-detail")).not.toContainText(detail.evidence[0].title);
+  } finally {
+    releaseDetail();
+  }
+});
+
 test("empty trend filters expose a one-step recovery action", async ({ page }) => {
   await ready(page);
   await page.unroute("**/api/v1/trends?*");
