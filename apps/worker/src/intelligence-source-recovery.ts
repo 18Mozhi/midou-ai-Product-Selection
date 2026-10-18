@@ -17,14 +17,22 @@ const provenance =
   "AND JSON_CONTAINS(JSON_EXTRACT(e.payload_json,'$.association.queries'),JSON_EXTRACT(s.target_json,'$.query')))";
 
 export const intelligenceRecoveryCandidatesSql =
-  "SELECT t.id,t.organization_id,t.workspace_id FROM collection_subqueries s " +
+  "SELECT t.id,t.organization_id,t.workspace_id,recovery_disabled.version disabled_version," +
+  "recovery_restored.version restored_version,recovery_disabled.created_at disabled_at,recovery_restored.created_at restored_at " +
+  "FROM collection_subqueries s " +
   "JOIN collection_tasks t ON t.id=s.task_id AND t.organization_id=s.organization_id AND t.workspace_id=s.workspace_id " +
   "JOIN organizations o ON o.id=t.organization_id AND o.status='active' " +
   "JOIN workspaces w ON w.id=t.workspace_id AND w.organization_id=t.organization_id AND w.status='active' " +
   "JOIN users u ON u.id=t.created_by AND u.status='active' " +
-  "WHERE s.provider_id=? AND s.status='blocked' AND s.error_code='permission_denied' AND s.is_required=1 " +
+  "JOIN provider_versions recovery_disabled ON recovery_disabled.provider_id=s.provider_id " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(recovery_disabled.snapshot_json,'$.status'))='disabled' " +
+  "JOIN provider_versions recovery_restored ON recovery_restored.provider_id=s.provider_id " +
+  "AND recovery_restored.version=recovery_disabled.version+1 AND recovery_restored.action='configuration_updated' " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(recovery_restored.snapshot_json,'$.status'))='enabled' " +
+  "WHERE s.provider_id=? AND recovery_restored.version<=? AND s.status='blocked' AND s.error_code='permission_denied' AND s.is_required=1 " +
   "AND t.status='failed_terminal' AND t.last_error_code='permission_denied' AND t.available_result_count=0 " +
-  "AND t.replay_of_task_id IS NULL AND t.finished_at>=? AND t.finished_at<? " +
+  "AND t.replay_of_task_id IS NULL AND t.finished_at>=recovery_disabled.created_at " +
+  "AND t.finished_at<recovery_restored.created_at " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(s.target_json,'$.projection_type'))='intelligence_product_discovery' " +
   "AND EXISTS (SELECT 1 FROM collection_task_events origin WHERE origin.task_id=t.id " +
   "AND origin.organization_id=t.organization_id AND origin.workspace_id=t.workspace_id " +
@@ -84,8 +92,7 @@ export class IntelligenceSourceRecovery {
       }
       const [candidates] = await c.query<RowDataPacket[]>(intelligenceRecoveryCandidatesSql, [
         provider.id,
-        provider.disabled_at,
-        provider.restored_at,
+        provider.version,
         limit,
       ]);
       let recovered = 0;
@@ -101,8 +108,8 @@ export class IntelligenceSourceRecovery {
             candidate.id,
             candidate.organization_id,
             candidate.workspace_id,
-            provider.disabled_at,
-            provider.restored_at,
+            candidate.disabled_at,
+            candidate.restored_at,
           ],
         );
         const task = tasks[0];
@@ -216,8 +223,8 @@ export class IntelligenceSourceRecovery {
               JSON.stringify({
                 original_task_id: task.id,
                 provider_id: provider.id,
-                provider_version: provider.version,
-                disabled_version: provider.disabled_version,
+                provider_version: Number(candidate.restored_version),
+                disabled_version: Number(candidate.disabled_version),
                 automatic: true,
                 source: "automatic_product_discovery",
               }),

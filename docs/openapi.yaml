@@ -9550,7 +9550,7 @@ components:
           type: string
           format: uuid
           nullable: true
-          description: Links an existing replay or a once-only audited intelligence source-outage replacement to its original task. Source-outage recovery preserves the original failed_terminal history; the manual replay endpoint remains limited to dead_letter tasks.
+          description: Links an existing replay or a once-only audited intelligence source-outage replacement to its original task. Source-outage recovery can match older recovered audited intervals after subsequent outages, preserving the original interval versions and failed_terminal history; the manual replay endpoint remains limited to dead_letter tasks.
         replay_reason: { type: string, nullable: true }
         request_id: { type: string }
         trace_id: { type: string }

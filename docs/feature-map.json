@@ -263,7 +263,7 @@
       "tests/unit/intelligence-product-association.test.mjs"
     ],
     "events": ["intelligence.product_search.source_recovered"],
-    "contract": "Once-only linked reissue of proven automatic intelligence searches denied within the latest audited Amazon disabled-to-enabled interval. Require approved enabled healthy closed source and exact scoped provenance. Preserve original terminal history, policy and manual replay permissions. Bound scan 30s/batch20 by existing global backlog budget; isolate scan failure from fresh projection. No schema/new API/config field/Python dependency."
+    "contract": "Once-only linked reissue of proven automatic intelligence searches denied within any recovered adjacent audited Amazon disabled-to-enabled interval up to the current admitted version. Recheck each candidate against its original historical window and record its actual restored/disabled versions, so backlog across repeated outages cannot orphan older originals. Require approved enabled healthy closed source and exact scoped provenance. Preserve original terminal history, policy and manual replay permissions. Bound scan 30s/batch20 by existing global backlog budget; isolate scan failure from fresh projection. No schema/new API/config field/Python dependency."
   },
   "selectionAmazonVerification20261018": {
     "status": "implemented",

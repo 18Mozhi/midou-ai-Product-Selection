@@ -45,7 +45,7 @@ function setup(options = {}) {
             : [
                 {
                   id: "amazon",
-                  version: 13,
+                  version: options.currentVersion ?? 13,
                   disabled_version: 12,
                   disabled_at: new Date("2026-10-17T20:00:00Z"),
                   restored_at: new Date("2026-10-17T21:00:00Z"),
@@ -53,7 +53,18 @@ function setup(options = {}) {
               ],
         ];
       if (sql.startsWith("SELECT COUNT(*) count")) return [[{ count: options.backlog ?? 0 }]];
-      if (sql.startsWith("SELECT t.id,t.organization_id")) return [[task]];
+      if (sql.startsWith("SELECT t.id,t.organization_id"))
+        return [
+          [
+            {
+              ...task,
+              disabled_version: 12,
+              restored_version: 13,
+              disabled_at: new Date("2026-10-17T20:00:00Z"),
+              restored_at: new Date("2026-10-17T21:00:00Z"),
+            },
+          ],
+        ];
       if (sql.startsWith("SELECT t.*")) return [options.lost ? [] : [task]];
       if (sql.startsWith("SELECT id FROM collection_tasks"))
         return [replay ? [{ id: "child" }] : []];
@@ -157,7 +168,7 @@ test("recovery respects the remaining backlog capacity and rolls back partial wr
   const capacity = setup({ backlog: 999 });
   await capacity.recovery.processOnce();
   assert.equal(
-    capacity.calls.find(([s]) => s.startsWith("SELECT t.id,t.organization_id"))[1][3],
+    capacity.calls.find(([s]) => s.startsWith("SELECT t.id,t.organization_id"))[1][2],
     1,
   );
   const failed = setup({ fail: true });
@@ -204,4 +215,32 @@ test("source recovery backlog counts only existing active organization and works
   assert.match(sql, /collection_scope_workspace.id=collection_tasks.workspace_id/);
   assert.match(sql, /collection_scope_org.status='active'/);
   assert.match(sql, /collection_scope_workspace.status='active'/);
+});
+
+test("later restoration still recovers an older audited outage with its original version and time window", async () => {
+  const { recovery, calls, advance } = setup({ currentVersion: 19 });
+  assert.equal(await recovery.processOnce(), 1);
+  const candidates = calls.find(([sql]) => sql.startsWith("SELECT t.id,t.organization_id"));
+  assert.deepEqual(candidates[1], ["amazon", 19, 20]);
+  assert.match(candidates[0], /recovery_restored.version=recovery_disabled.version\+1/);
+  assert.match(candidates[0], /recovery_restored.action='configuration_updated'/);
+  assert.match(candidates[0], /recovery_restored.version<=\?/);
+  assert.match(candidates[0], /t.finished_at>=recovery_disabled.created_at/);
+  assert.match(candidates[0], /t.finished_at<recovery_restored.created_at/);
+  const locked = calls.find(([sql]) => sql.startsWith("SELECT t.*"));
+  assert.deepEqual(locked[1].slice(-2), [
+    new Date("2026-10-17T20:00:00Z"),
+    new Date("2026-10-17T21:00:00Z"),
+  ]);
+  const metadata = JSON.parse(
+    calls.find(
+      ([sql, values]) =>
+        sql.startsWith("INSERT INTO collection_task_events") &&
+        values[4] === "intelligence.product_search.source_recovered",
+    )[1][8],
+  );
+  assert.equal(metadata.provider_version, 13);
+  assert.equal(metadata.disabled_version, 12);
+  advance();
+  assert.equal(await recovery.processOnce(), 0);
 });
