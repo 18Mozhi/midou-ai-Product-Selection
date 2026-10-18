@@ -75,8 +75,6 @@
 
 /* P52 C composition is now the production collection overview surface. */
 .collection-ops--review {
-  max-width: 1160px;
-  margin: 0 auto;
   color: var(--p52-ink);
   background: var(--p52-canvas);
 }

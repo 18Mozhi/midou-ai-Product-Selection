@@ -6,67 +6,6 @@
 html body:has(#app .adapter-center--c) #app .role-mobile-nav :is(a, button, i) {
   color: var(--p47-accent);
 }
-html body:has(#app .adapter-center--c) #app .provider-runtime-surface {
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: 28px;
-  align-items: start;
-}
-html body:has(#app .adapter-center--c) #app .provider-runtime-tabs {
-  display: grid;
-  gap: 6px;
-  padding: 18px;
-  border: 0;
-  border-radius: 10px;
-  background: var(--p47-accent);
-}
-html body:has(#app .adapter-center--c) #app .provider-runtime-tabs a {
-  display: flex;
-  align-items: center;
-  min-height: 48px;
-  padding: 12px;
-  color: var(--p47-panel);
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 5px;
-  font-size: 14px;
-  text-decoration: none;
-}
-html body:has(#app .adapter-center--c) #app .provider-runtime-tabs a[aria-current="page"] {
-  background: var(--p47-panel);
-  color: var(--p47-accent);
-  font-weight: 700;
-}
-html body:has(#app .adapter-center--c) #app .provider-runtime-tabs a:focus-visible {
-  outline: 3px solid var(--p47-panel);
-  outline-offset: 3px;
-}
-@media (max-width: 1100px) {
-  html body:has(#app .adapter-center--c) #app .provider-runtime-surface {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-  }
-  html body:has(#app .adapter-center--c) #app .provider-runtime-tabs {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  html body:has(#app .adapter-center--c) #app .provider-runtime-tabs a {
-    flex: 1 1 150px;
-  }
-}
-@media (max-width: 760px) {
-  html body:has(#app .adapter-center--c) #app .provider-runtime-tabs {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    padding: 12px;
-  }
-  html body:has(#app .adapter-center--c) #app .provider-runtime-tabs a {
-    padding: 10px;
-  }
-  html body:has(#app .adapter-center--c) #app .provider-runtime-tabs a:last-child {
-    grid-column: 1/-1;
-  }
-}
 
 html:has(body #app .adapter-center--c) {
   --so-font-ui: "Microsoft YaHei", sans-serif;
@@ -99,23 +38,6 @@ html body:has(#app .adapter-center--c) #app .role-mobile-nav :is(a, button) {
 }
 
 @media (max-width: 840px) {
-  html body:has(#app .adapter-center--c) #app .provider-runtime-tabs {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 6px;
-    padding: 8px;
-    overflow-x: auto;
-    scroll-padding: 8px;
-  }
-  html body:has(#app .adapter-center--c) #app .provider-runtime-tabs a {
-    flex: 0 0 auto;
-    min-height: 44px;
-    padding: 10px;
-    font-size: 14px;
-  }
-  html body:has(#app .adapter-center--c) #app .provider-runtime-tabs a:last-child {
-    grid-column: auto;
-  }
   html body:has(#app .adapter-center--c) #app .adapter-metrics {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;

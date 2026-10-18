@@ -1,4 +1,5 @@
 @import "./design/commerce-tokens.css";
+@import "./provider-runtime-navigation.css";
 html[data-design="commerce"] {
   color: var(--so-text);
   background: var(--so-bg);

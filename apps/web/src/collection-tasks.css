@@ -8,8 +8,6 @@
 
 /* P51 C composition is now the production task-center surface. */
 .collection-task-center--review {
-  max-width: 1160px;
-  margin: 0 auto;
   color: var(--so-collection-task-c-ink);
   background: var(--so-collection-task-c-canvas);
 }

@@ -494,29 +494,6 @@
   border: 0;
 }
 
-#app .role-shell.role-shell--c .provider-runtime-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 0 16px;
-  border-bottom: 1px solid var(--shell-border);
-  border-radius: 0;
-  background: transparent;
-}
-
-#app .role-shell.role-shell--c .provider-runtime-tabs a {
-  flex: 0 1 auto;
-  min-height: 44px;
-  padding: 10px 14px;
-  color: var(--shell-muted);
-  background: transparent;
-}
-
-#app .role-shell.role-shell--c .provider-runtime-tabs a[aria-current="page"] {
-  color: var(--shell-paper);
-  background: var(--shell-blue);
-}
-
 #app
   .role-shell.role-shell--c
   :is(.role-topbar, .role-content, .role-mobile-nav)
@@ -650,14 +627,5 @@
   #app .role-shell.role-shell--c .role-mobile-nav [aria-current="page"] {
     color: var(--shell-blue);
     background: var(--shell-selection);
-  }
-  #app .role-shell.role-shell--c .provider-runtime-tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-  #app .role-shell.role-shell--c .provider-runtime-tabs a {
-    flex: 1 1 135px;
-    justify-content: center;
-    text-align: center;
   }
 }

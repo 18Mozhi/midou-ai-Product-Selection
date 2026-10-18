@@ -1,0 +1,57 @@
+/* One content-wide navigation for source management and collection operations. */
+html[data-design="commerce"] #app .provider-runtime-surface {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  min-width: 0;
+  align-items: start;
+}
+html[data-design="commerce"] #app .provider-runtime-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--so-border);
+  border-radius: 0;
+  background: transparent;
+}
+html[data-design="commerce"] #app .provider-runtime-tabs a {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 10px 4px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--so-text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 22px;
+  text-decoration: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+html[data-design="commerce"] #app .provider-runtime-tabs a:hover {
+  color: var(--so-text);
+}
+html[data-design="commerce"] #app .provider-runtime-tabs a[aria-current="page"] {
+  border-bottom-color: var(--so-primary);
+  color: var(--so-primary);
+}
+html[data-design="commerce"] #app .provider-runtime-tabs a:focus-visible {
+  outline: 2px solid var(--so-focus);
+  outline-offset: 2px;
+}
+@media (max-width: 760px) {
+  html[data-design="commerce"] #app .provider-runtime-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 12px;
+  }
+}

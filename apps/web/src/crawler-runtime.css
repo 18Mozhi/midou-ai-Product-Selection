@@ -284,8 +284,6 @@
 
 /* P53 C composition is now the production browser-runtime surface. */
 .crawler-center--review {
-  max-width: 1160px;
-  margin: 0 auto;
   color: var(--so-crawler-c-ink);
   background: var(--so-crawler-c-canvas);
 }

@@ -6395,5 +6395,28 @@
       "tests/unit/ui-phase2-roles-review.test.mjs"
     ],
     "contract": "Immutable archived captures bind exact Git bytes and original image hashes; current source bindings are recorded separately. No historical screenshot is evidence of current UI acceptance; unknown source revisions still fail."
+  },
+  "selectionRuntimeNavigationRemake20261018": {
+    "status": "implemented",
+    "statusDetail": "local_browser_layout_passed_live_verification_pending",
+    "requirements": "docs/selection-runtime-navigation-remake.md",
+    "sourceFiles": [
+      "apps/web/src/provider-runtime-navigation.css",
+      "apps/web/src/commerce-workspace.css",
+      "apps/web/src/navigation-shell-c.css",
+      "apps/web/src/provider-adapters-c-page.css",
+      "apps/web/src/provider-adapters-contrast.css",
+      "apps/web/src/styles/provider-approved-structure.css",
+      "apps/web/src/collection-tasks.css",
+      "apps/web/src/crawler-runtime.css",
+      "apps/web/src/styles/platform-operations.css"
+    ],
+    "testFiles": [
+      "tests/e2e/runtime-navigation-layout.spec.ts",
+      "tests/unit/provider-registry-c-completion.test.mjs",
+      "tests/unit/responsive-data-view-focus.test.mjs",
+      "tests/unit/responsive-detail-palette-contract.test.mjs"
+    ],
+    "contract": "Eight existing source/collection routes use one full-width top navigation. Remove36 obsolete rail/navigation rules and three centered width caps. Original SFC templates, links, capability guards, API/schema/env/Python unchanged. Desktop/mobile16 controlled read-error layout checks pass; no new font, dependency or motion. Production visual and full daily100 acceptance remain independent."
   }
 }
