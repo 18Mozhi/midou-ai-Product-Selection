@@ -19,6 +19,16 @@
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],
     "contract": "Empty supplier panel distinguishes existing active/running, queued, blocked, failed/ended and missing/empty progress. Never claims collection is running solely because candidates are empty. Existing reads, retries, quote/cost permissions and daily completion rules unchanged; no API/config/schema changes."
   },
+  "amazonDeliveryDoneNavigation20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-us-observation-context.md",
+    "sourceFiles": ["packages/playwright-crawler/src/amazon-delivery-context.ts"],
+    "testFiles": [
+      "tests/unit/amazon-delivery-context.test.mjs",
+      "tests/integration/amazon-delivery-readiness.test.mjs"
+    ],
+    "contract": "Register Done navigation before click under existing navigation budget, race with in-place header readiness, then recheck safety and strict postcode. Preserve original timeout when both fail. No new timeout value, retry, API, schema, credentials or config. Real Chromium pending-navigation regression fails before fix and passes after; production daily100 remains unverified."
+  },
   "amazonBrowserStepDiagnostics20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-us-observation-context.md",

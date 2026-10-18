@@ -46,7 +46,15 @@ export async function prepareAmazonDeliveryContext(
     .waitFor({ state: "visible" });
   await assertSafe();
   reportStep("finish_location");
+  // Done may return before its delayed main-frame reload starts. Register first,
+  // using the existing navigation budget; in-place updates can finish directly.
+  const navigation = page.waitForNavigation({ waitUntil: "domcontentloaded" });
+  void navigation.catch(() => {});
   await page.locator('button[name="glowDoneButton"]').click();
+  reportStep("location_navigation");
+  const headerReady = header.filter({ hasText: postal }).waitFor({ state: "visible" });
+  await Promise.any([navigation, headerReady]).catch(() => headerReady);
+  await assertSafe();
   reportStep("verify_header");
   await header.filter({ hasText: postal }).waitFor({ state: "visible" });
   await assertSafe();

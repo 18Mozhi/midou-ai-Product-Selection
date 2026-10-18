@@ -1,4 +1,5 @@
 openapi: 3.0.3
+# Internal Amazon Done navigation uses existing navigation budget and strict header checks; no API contract change.
 # Internal Amazon browser failure stages use existing sanitized stderr diagnostics; no API contract change. See docs/amazon-us-observation-context.md.
 info:
   title: ScoutOps Internal API

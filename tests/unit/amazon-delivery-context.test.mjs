@@ -34,7 +34,8 @@ function fixture(options = {}) {
     click: async () => {
       actions.push(["click", selector]);
       if (selector === "#GLUXZipUpdate input") applied = !options.rejected;
-      if (selector === 'button[name="glowDoneButton"]') location = `Deliver to San Mateo ${postal}`;
+      if (selector === 'button[name="glowDoneButton"]' && !options.doneWrongPostal)
+        location = `Deliver to San Mateo ${postal}`;
     },
     waitFor: async () => {
       actions.push(["wait", selector]);
@@ -48,6 +49,9 @@ function fixture(options = {}) {
   });
   const page = {
     locator,
+    waitForNavigation: async () => {
+      throw new Error("Timeout without navigation");
+    },
     waitForLoadState: async (state) => {
       actions.push(["load", state]);
       if (options.loadFailed) throw new Error("Timeout waiting for page load");
@@ -124,6 +128,7 @@ test("anonymous country mismatch waits for confirmed US postcode before closing 
       ["click", "#GLUXZipUpdate input"],
       ["wait", "#GLUXZipConfirmationSection"],
       ["click", 'button[name="glowDoneButton"]'],
+      ["wait", "#glow-ingress-block"],
       ["wait", "#glow-ingress-block"],
     ],
   );
@@ -258,4 +263,13 @@ test("Amazon failure diagnostics omit private errors and preserve the result con
     chromium.launchPersistentContext = original;
     console.warn = originalWarn;
   }
+});
+
+test("Done without navigation or matching header retains the original timeout failure", async () => {
+  const f = fixture({ doneWrongPostal: true });
+  await assert.rejects(
+    prepareAmazonDeliveryContext(f.page, "94404", f.safe),
+    /Timeout waiting for actual location confirmation/,
+  );
+  assert.equal(f.location(), "Deliver to China");
 });

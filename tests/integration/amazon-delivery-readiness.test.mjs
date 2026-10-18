@@ -61,3 +61,38 @@ test("anonymous delivery waits for the loaded location handler before clicking i
     await browser.close();
   }
 });
+
+test("Done navigation uses the existing navigation budget before verifying the new header", async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage();
+    page.setDefaultTimeout(500);
+    page.setDefaultNavigationTimeout(4000);
+    await page.route("**/*", async (route) => {
+      const url = new URL(route.request().url());
+      if (url.origin !== "https://www.amazon.com") return route.abort();
+      if (url.searchParams.has("confirmed")) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return route.fulfill({
+          contentType: "text/html",
+          body: '<a href="/signin">Hello, sign in Account &amp; Lists</a><span id="glow-ingress-block">Deliver to San Mateo 94404</span>',
+        });
+      }
+      return route.fulfill({
+        contentType: "text/html",
+        body: `
+        <a href="/signin">Hello, sign in Account &amp; Lists</a><span id="glow-ingress-block">Deliver to China</span>
+        <button id="nav-global-location-popover-link">Location</button><input id="GLUXZipUpdateInput">
+        <span id="GLUXZipUpdate"><input type="button" value="Apply"></span>
+        <p id="GLUXZipConfirmationSection">Deliver to 94404</p>
+        <button name="glowDoneButton">Done</button>
+        <script>document.querySelector('button[name="glowDoneButton"]').onclick=()=>setTimeout(()=>location.href='/s?confirmed=1',50)</script>`,
+      });
+    });
+    await page.goto("https://www.amazon.com/s?fixture=1");
+    assert.equal(await prepareAmazonDeliveryContext(page, "94404", async () => {}), true);
+    assert.match(await page.locator("#glow-ingress-block").textContent(), /94404/);
+  } finally {
+    await browser.close();
+  }
+});
