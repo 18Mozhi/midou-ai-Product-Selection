@@ -150,7 +150,7 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
     }),
   );
   await page.goto("/home");
-  await expect(page.getByRole("heading", { name: "选品控制台" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "选品工作台", exact: true })).toBeVisible();
   await expect(page.locator(".home-system-state")).toHaveText("采集调度已配置");
   await expect(page.getByText("便携咖啡机候选")).toBeVisible();
   await expect(page.getByText("86.5 分")).toBeVisible();
@@ -158,16 +158,18 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
     "href",
     "/opportunities/00000000-0000-4000-8000-000000000610",
   );
-  await expect(page.getByRole("link", { name: "管理规则" })).toHaveAttribute(
-    "href",
-    "/opportunities?view=all&decision_status=adopted",
-  );
+  await expect(page.getByRole("link", { name: "管理规则" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "查看选品库" })).toHaveAttribute(
     "href",
     "/opportunities",
   );
+  const actionHeights = await page
+    .locator(".home-command-bar nav a,.home-command-bar nav button")
+    .evaluateAll((els) => els.map((el) => el.getBoundingClientRect().height));
+  expect(actionHeights.length).toBeGreaterThanOrEqual(3);
+  expect(Math.min(...actionHeights)).toBeGreaterThanOrEqual(44);
   await expect(page.locator('a[href="/opportunities/start"]')).toHaveCount(0);
-  await expect(page.getByText("竞品来源延迟")).toBeVisible();
+  await expect(page.getByText("竞品来源延迟")).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "推荐清单" })).toBeVisible();
   await expect(page.locator(".home-status-facts")).toContainText("4待你采纳");
   await expect(page.locator(".home-status-facts")).toContainText("5选品候选");
@@ -439,14 +441,26 @@ test("M02-06 home state errors expose only the wired retry action", async ({ pag
       });
     return route.fulfill({
       json: envelope({
-        actions: [
-          item(
-            "00000000-0000-4000-8000-000000000690",
-            "action",
-            "重新读取后可见",
-            "/opportunities",
-          ),
-        ],
+        actions: [],
+        automatic_selection: {
+          state: "running",
+          enabled_rule_count: 1,
+          candidate_count: 1,
+          rule_candidate_count: 0,
+          recommended_count: 1,
+          awaiting_evidence_count: 0,
+          adopted_count: 0,
+          recommended_items: [
+            item(
+              "00000000-0000-4000-8000-000000000690",
+              "action",
+              "重新读取后可见",
+              "/opportunities",
+            ),
+          ],
+          last_collection_at: at,
+          next_collection_at: null,
+        },
         changes: [],
         follows: [],
         health: [],
@@ -670,6 +684,9 @@ test.describe("daily snapshots retain Beijing time in overseas browsers", () => 
       );
       await page.goto("/home");
       const daily = page.getByRole("region", { name: "每日选品产出" });
+      const dailyBox = await daily.boundingBox();
+      const cumulativeBox = await page.locator(".home-automation-overview").boundingBox();
+      expect(dailyBox!.y).toBeLessThan(cumulativeBox!.y);
       await expect(page.getByText("采集调度已配置", { exact: true }).first()).toBeVisible();
       if (completed === null) {
         await expect(
@@ -689,6 +706,12 @@ test.describe("daily snapshots retain Beijing time in overseas browsers", () => 
         await expect(daily.getByText(/当前快照不能证明全天不间断运行/)).toBeVisible();
         await expect(daily).toContainText("统计时间 2026/10/17 08:00:00");
         await expect(daily.locator("dd").nth(0)).toHaveText(`${completed} / 100 目标`);
+        expect(
+          await daily
+            .locator("dd")
+            .first()
+            .evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
+        ).toBeGreaterThanOrEqual(36);
         await expect(daily).toContainText("明确标注利润未知的已分析商品");
       }
       await expect

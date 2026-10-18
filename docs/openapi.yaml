@@ -11753,3 +11753,6 @@ x-scoutops-lan-1688:
 
 # Catalogue UI renders all four original public-fact positions as explicitly unknown
 # when primary_product is absent; this does not add facts or alter response fields.
+
+# Workbench daily completed/100 is displayed before cumulative counts; market filters
+# are responsive. Existing API, unknown-profit and daily completion semantics unchanged.

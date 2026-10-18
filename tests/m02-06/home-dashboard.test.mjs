@@ -337,7 +337,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.match(openapi, /\/me\/home-dashboard:/);
   assert.match(home, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
-  for (const fact of ["采集调度已配置", "选品控制台", "HomeAutomationOverview"])
+  for (const fact of ["采集调度已配置", "选品工作台", "HomeAutomationOverview"])
     assert.match(home, new RegExp(fact));
   for (const destination of ["/trends", "/opportunities"])
     assert.match(home, new RegExp(`to="${destination}"`));

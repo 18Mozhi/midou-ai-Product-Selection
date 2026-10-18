@@ -258,6 +258,30 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   });
 });
 
+test("wide intelligence filters share one control row without widening the page", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1600, height: 1000 });
+  await ready(page);
+  await page.goto("/trends");
+  await expect(page.locator(".trend-filters")).toBeVisible();
+  const controls = await page
+    .locator(".trend-filters label input,.trend-filters label select,.trend-filter-actions")
+    .evaluateAll((els) =>
+      els.map((el) => ({
+        top: el.getBoundingClientRect().top,
+        height: el.getBoundingClientRect().height,
+      })),
+    );
+  expect(controls).toHaveLength(6);
+  expect(
+    Math.max(...controls.map((x) => x.top)) - Math.min(...controls.map((x) => x.top)),
+  ).toBeLessThan(2);
+  expect(Math.min(...controls.map((x) => x.height))).toBeGreaterThanOrEqual(44);
+  expect((await page.locator(".trend-filters").boundingBox())!.height).toBeLessThan(120);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
 test("long trend timelines scroll inside the detail card without widening the page", async ({
   page,
 }) => {

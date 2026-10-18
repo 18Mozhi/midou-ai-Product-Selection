@@ -199,7 +199,7 @@ onBeforeUnmount(deactivate);
                     : "自动选品状态暂不可用"
             }}
           </span>
-          <h2>选品控制台</h2>
+          <h2>选品工作台</h2>
         </div>
         <nav>
           <div class="home-live-status" role="status" aria-live="off">
@@ -216,7 +216,6 @@ onBeforeUnmount(deactivate);
           >
         </nav>
       </header>
-      <HomeAutomationOverview v-if="selection" :selection="selection" />
       <section class="home-daily-production" aria-label="每日选品产出">
         <header>
           <h3>今日选品产出</h3>
@@ -226,7 +225,7 @@ onBeforeUnmount(deactivate);
         </header>
         <template v-if="selection?.daily_production">
           <dl>
-            <div>
+            <div class="home-daily-completion">
               <dt>完成整条流程</dt>
               <dd v-if="selection.daily_production.completed_count != null">
                 {{ selection.daily_production.completed_count }}
@@ -263,6 +262,7 @@ onBeforeUnmount(deactivate);
         </template>
         <p v-else>每日产出尚未读取，暂不显示数量或目标达成状态。</p>
       </section>
+      <HomeAutomationOverview v-if="selection" :selection="selection" />
 
       <section v-if="selection?.state === 'not_configured'" class="home-setup-callout">
         <div>
@@ -305,7 +305,7 @@ onBeforeUnmount(deactivate);
               <b>当前没有待人工采纳的推荐</b
               ><span>{{
                 selection.rule_candidate_count > 0
-                  ? `${selection.rule_candidate_count} 条选品候选正在完成五项质量门校验。`
+                  ? `${selection.rule_candidate_count} 条选品候选尚待五项质量门校验，可查看缺失资料。`
                   : selection.awaiting_evidence_count > 0
                     ? `${selection.awaiting_evidence_count} 条商品等待补充主品证据。`
                     : "系统会在五项质量门全部通过后自动加入这里。"

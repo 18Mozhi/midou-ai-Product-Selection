@@ -1,4 +1,19 @@
 {
+  "selectionWorkbenchProgressLayout20261018": {
+    "status": "implemented",
+    "requirements": "docs/selection-workbench-progress-layout.md",
+    "sourceFiles": [
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/home-dashboard.css",
+      "apps/web/src/trends.css"
+    ],
+    "testFiles": [
+      "tests/m02-06/home-dashboard.test.mjs",
+      "tests/e2e/m02-06-home-mobile.spec.ts",
+      "tests/e2e/m04-01-trends.spec.ts"
+    ],
+    "contract": "Daily completed/100 precedes cumulative overview; 44px header actions, three grouped metrics and explicit pending evidence. Wide market filters use six columns, medium three, mobile existing drawer. Unreferenced legacy gradient CSS removed. No API, score, completion, permission, schema or runtime-config changes; fixture UI verification does not prove daily100."
+  },
   "catalogueCardHierarchy20261018": {
     "status": "implemented",
     "requirements": "docs/selection-catalogue-card-hierarchy.md",
