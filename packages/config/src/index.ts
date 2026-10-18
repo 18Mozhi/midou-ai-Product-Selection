@@ -111,6 +111,9 @@ export interface RuntimeConfig {
     crawlerServiceToken: string;
   };
   providerAdapters: {
+    amazonPublicRecoveryEnabled: boolean;
+    amazonPublicRecoveryPollMs: number;
+    amazonPublicRecoveryCooldownMs: number;
     publicRssRecoveryEnabled: boolean;
     publicRssRecoveryPollMs: number;
     publicRssRecoveryCooldownMs: number;
@@ -589,6 +592,22 @@ export function loadRuntimeConfig(
       crawlerServiceToken: secret(env, "CRAWLER_SERVICE_TOKEN", production && target === "api", 32),
     },
     providerAdapters: {
+      amazonPublicRecoveryEnabled:
+        text(env, "AMAZON_PUBLIC_AUTO_RECOVERY_ENABLED", "true") === "true",
+      amazonPublicRecoveryPollMs: integer(
+        env,
+        "AMAZON_PUBLIC_AUTO_RECOVERY_POLL_MS",
+        60000,
+        1000,
+        3600000,
+      ),
+      amazonPublicRecoveryCooldownMs: integer(
+        env,
+        "AMAZON_PUBLIC_AUTO_RECOVERY_COOLDOWN_MS",
+        300000,
+        1000,
+        86400000,
+      ),
       publicRssRecoveryEnabled: text(env, "PUBLIC_RSS_AUTO_RECOVERY_ENABLED", "true") === "true",
       publicRssRecoveryPollMs: integer(
         env,

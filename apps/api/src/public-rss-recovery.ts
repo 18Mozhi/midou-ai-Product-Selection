@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import { BUILTIN_PROVIDER_SOURCES } from "@scoutops/provider-sources";
-import type { ProviderAdapterService } from "./provider-adapter-service.js";
+import type { ProviderProbeContext, ProviderAdapterService } from "./provider-adapter-service.js";
 import type { CrawlerSchedulerRepository } from "./crawler-scheduler-repository.js";
 
 const codes = BUILTIN_PROVIDER_SOURCES.filter(
@@ -31,6 +31,12 @@ type Options = {
   cooldownMs: number;
 };
 type Result = { status: string; provider_id?: string };
+export type PublicSourceRecoveryTarget = {
+  candidatesSql: string;
+  parameters: (actorId: string, now: Date, cooledAt: Date) => unknown[];
+  taskContext: boolean;
+  idempotencyPrefix: string;
+};
 
 /** One bounded probe in the existing API process; no additional production service. */
 export class PublicRssRecovery {
@@ -46,6 +52,7 @@ export class PublicRssRecovery {
     private readonly now: () => Date = () => new Date(),
     private readonly onError: (code: string) => void = () => {},
     private readonly onObservation: (result: Result) => void = () => {},
+    private readonly target?: PublicSourceRecoveryTarget,
   ) {}
 
   processOnce(): Promise<Result> {
@@ -95,22 +102,24 @@ export class PublicRssRecovery {
   private async run(): Promise<Result> {
     const now = this.now();
     const cooledAt = new Date(now.getTime() - this.options.cooldownMs);
-    const [rows] = await this.pool.query<RowDataPacket[]>(publicRssRecoveryCandidatesSql, [
-      this.options.actorId,
-      now,
-      ...codes,
-      cooledAt,
-      cooledAt,
-    ]);
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      this.target?.candidatesSql ?? publicRssRecoveryCandidatesSql,
+      this.target
+        ? this.target.parameters(this.options.actorId, now, cooledAt)
+        : [this.options.actorId, now, ...codes, cooledAt, cooledAt],
+    );
     const candidate = rows[0];
     if (!candidate) return { status: "idle" };
     const providerId = String(candidate.id),
       requestId = randomUUID();
-    const context = {
+    const context: ProviderProbeContext = {
       actorId: this.options.actorId,
       requestId,
       traceId: requestId,
-      idempotencyKey: `public-rss-recovery:${requestId}`,
+      idempotencyKey: `${this.target?.idempotencyPrefix ?? "public-rss-recovery"}:${requestId}`,
+      ...(this.target?.taskContext
+        ? { automaticCollectionTaskId: String(candidate.collection_task_id) }
+        : {}),
     };
     const health = await this.health.probe(providerId, context);
     if (health.health_status !== "ready")

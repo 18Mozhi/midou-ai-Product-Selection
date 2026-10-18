@@ -1,4 +1,23 @@
 {
+  "amazonPublicAutoRecovery20261018": {
+    "status": "implemented",
+    "requirements": "docs/amazon-public-auto-recovery.md",
+    "sourceFiles": [
+      "apps/api/src/amazon-public-recovery.ts",
+      "apps/api/src/public-rss-recovery.ts",
+      "apps/api/src/amazon-public-browser-health.ts",
+      "apps/api/src/bootstrap/create-provider-adapter-runtime.ts",
+      "apps/api/src/provider-adapter-service.ts",
+      "apps/api/src/server.ts",
+      "packages/config/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-public-recovery.test.mjs",
+      "tests/unit/public-rss-recovery.test.mjs",
+      "tests/unit/amazon-disabled-health-lease.test.mjs"
+    ],
+    "contract": "Existing API timer probes only cooled transient open Amazon public-page circuits for existing pending dedicated-system-actor tasks in active tenant scopes. Canonical anonymous profile, actual search/detail ready, current version/terms/incident and original audited recovery required. No disabled-source lease exception for automatic checks, login-session reuse, HTTP internal-context injection, new roles or fabricated business facts. Natural production auto-recovery and daily100 remain unverified."
+  },
   "selectionWorkerDatabaseStalls20261018": {
     "status": "implemented",
     "requirements": "docs/selection-worker-database-stalls.md",

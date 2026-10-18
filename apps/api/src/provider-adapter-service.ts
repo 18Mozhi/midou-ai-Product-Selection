@@ -115,6 +115,8 @@ export interface ProviderAdapterRepository {
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export interface ProviderProbeContext {
+  /** Private API-process recovery context; never accepted from HTTP input. */
+  automaticCollectionTaskId?: string;
   actorId: string;
   idempotencyKey: string;
   requestId: string;

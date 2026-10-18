@@ -264,12 +264,11 @@ for (const adapter of createBuiltinSourceAdapters(
 const providerSourceService = new ProviderSourceService(
   new MySqlProviderSourceRepository(pool, Boolean(config.providerAdapters.lan1688Token)),
 );
-const { service: providerAdapterService, publicRssRecovery } = createProviderAdapterRuntime(
-  pool,
-  config,
-  providerAdapterRegistry,
-  authorization,
-);
+const {
+  service: providerAdapterService,
+  publicRssRecovery,
+  publicAmazonRecovery,
+} = createProviderAdapterRuntime(pool, config, providerAdapterRegistry, authorization);
 const app = buildApp({
   logger: true,
   version: config.app.version,
@@ -532,6 +531,7 @@ app.addHook("onClose", async () => {
   if (runtimeHeartbeatTimer) clearInterval(runtimeHeartbeatTimer);
   if (runtimeHealthProbeTimer) clearInterval(runtimeHealthProbeTimer);
   await publicRssRecovery.stop();
+  await publicAmazonRecovery.stop();
   await runtimeHealthProbeMonitor.stop();
   try {
     await publishRuntimeHeartbeat("stopped");
@@ -569,6 +569,7 @@ try {
   }, config.runtimeTopology.healthProbeIntervalMs);
   runtimeHealthProbeTimer.unref();
   publicRssRecovery.start();
+  publicAmazonRecovery.start();
 } catch (error) {
   app.log.error({ error }, "API startup failed");
   try {

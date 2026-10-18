@@ -11726,3 +11726,8 @@ x-scoutops-lan-1688:
 # trend_projection_jobs: internal enqueue and candidate/locked recheck require the existing
 # active organization and its active workspace; archived jobs retain history and attempts.
 # No public request/response field, permission or route changes.
+
+# Amazon public-browser transient recovery runs inside the existing API process.
+# Internal task-derived probe context is never an HTTP request field; normal health endpoint
+# authentication, provider:configure capability and session context remain unchanged.
+# Runtime options: AMAZON_PUBLIC_AUTO_RECOVERY_ENABLED/POLL_MS/COOLDOWN_MS.

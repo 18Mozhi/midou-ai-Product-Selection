@@ -10,6 +10,10 @@ import { AmazonPublicBrowserHealth } from "../amazon-public-browser-health.js";
 import { ProviderAdapterService } from "../provider-adapter-service.js";
 import { MySqlProviderAdapterRepository } from "../mysql-provider-adapter-repository.js";
 import { CrawlerSchedulerRepository } from "../crawler-scheduler-repository.js";
+import {
+  amazonPublicRecoveryTarget,
+  resolveAmazonPublicRecoveryScope,
+} from "../amazon-public-recovery.js";
 import { PublicRssRecovery } from "../public-rss-recovery.js";
 
 export function createProviderAdapterRuntime(
@@ -33,7 +37,12 @@ export function createProviderAdapterRuntime(
               AUTOMATIC_PROVIDER_SOURCE_HOSTS,
             ),
             async (c) => {
-              if (!c.sessionId) throw new Error("selected_scope_required");
+              if (!c.sessionId)
+                return resolveAmazonPublicRecoveryScope(
+                  pool,
+                  config.automaticSources.systemActorId,
+                  c,
+                );
               const resolved = await authorization.resolveSession(c.actorId, c.sessionId);
               return {
                 organizationId: resolved.context.organization_id,
@@ -65,5 +74,31 @@ export function createProviderAdapterRuntime(
         }),
       ),
   );
-  return { service, publicRssRecovery };
+  const publicAmazonRecovery = new PublicRssRecovery(
+    pool,
+    service,
+    new CrawlerSchedulerRepository(pool),
+    {
+      enabled:
+        config.nodeEnv === "production" &&
+        config.providerAdapters.amazonPublicRecoveryEnabled &&
+        Boolean(config.providerAdapters.amazonBrowserProfileId),
+      actorId: config.automaticSources.systemActorId,
+      pollMs: config.providerAdapters.amazonPublicRecoveryPollMs,
+      cooldownMs: config.providerAdapters.amazonPublicRecoveryCooldownMs,
+    },
+    undefined,
+    () => console.warn("amazon_public_auto_recovery_failed"),
+    (result) =>
+      console.info(
+        JSON.stringify({
+          service: "product-scout-api",
+          event: "amazon_public_auto_recovery",
+          observed_at: new Date().toISOString(),
+          ...result,
+        }),
+      ),
+    amazonPublicRecoveryTarget,
+  );
+  return { service, publicRssRecovery, publicAmazonRecovery };
 }

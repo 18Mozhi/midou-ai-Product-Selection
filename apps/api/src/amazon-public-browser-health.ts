@@ -61,7 +61,9 @@ export class AmazonPublicBrowserHealth {
         new MySqlCrawlerRuntimeRepository(
           this.pool,
           "",
-          this.config.providerAdapters.amazonBrowserProfileId,
+          context.automaticCollectionTaskId
+            ? ""
+            : this.config.providerAdapters.amazonBrowserProfileId,
         ),
       );
       const record = await new MySqlCredentialAssetRepository(this.pool).getCipherRecord(
