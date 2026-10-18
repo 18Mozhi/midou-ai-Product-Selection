@@ -11737,3 +11737,7 @@ x-scoutops-lan-1688:
 
 # One-time, explicitly scoped projection correction writes trend.intelligence.provenance_requeued audit;
 # it preserves prior errors/attempts and does not add HTTP replay permissions or collection mutations.
+
+# LAN1688 transient recovery runs inside the existing API with pending system tasks and real health.
+# LAN_1688_AUTO_RECOVERY_ENABLED/POLL_MS/COOLDOWN_MS are backend-only; no new HTTP inputs.
+# Automatic product sourcing writes the existing is_required=true field and waits on source holds.

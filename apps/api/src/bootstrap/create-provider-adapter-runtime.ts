@@ -14,6 +14,7 @@ import {
   amazonPublicRecoveryTarget,
   resolveAmazonPublicRecoveryScope,
 } from "../amazon-public-recovery.js";
+import { lan1688RecoveryTarget } from "../lan-1688-recovery.js";
 import { PublicRssRecovery } from "../public-rss-recovery.js";
 
 export function createProviderAdapterRuntime(
@@ -100,5 +101,31 @@ export function createProviderAdapterRuntime(
       ),
     amazonPublicRecoveryTarget,
   );
-  return { service, publicRssRecovery, publicAmazonRecovery };
+  const publicLan1688Recovery = new PublicRssRecovery(
+    pool,
+    service,
+    new CrawlerSchedulerRepository(pool),
+    {
+      enabled:
+        config.nodeEnv === "production" &&
+        config.providerAdapters.lan1688RecoveryEnabled &&
+        Boolean(config.providerAdapters.lan1688Token),
+      actorId: config.automaticSources.systemActorId,
+      pollMs: config.providerAdapters.lan1688RecoveryPollMs,
+      cooldownMs: config.providerAdapters.lan1688RecoveryCooldownMs,
+    },
+    undefined,
+    () => console.warn("lan_1688_auto_recovery_failed"),
+    (result) =>
+      console.info(
+        JSON.stringify({
+          service: "product-scout-api",
+          event: "lan_1688_auto_recovery",
+          observed_at: new Date().toISOString(),
+          ...result,
+        }),
+      ),
+    lan1688RecoveryTarget,
+  );
+  return { service, publicRssRecovery, publicAmazonRecovery, publicLan1688Recovery };
 }

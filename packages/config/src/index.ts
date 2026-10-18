@@ -120,6 +120,9 @@ export interface RuntimeConfig {
     amazonBrowserProfileId: string;
     amazonPublicDeliveryPostalCode: string;
     amazonBrowserNavigationTimeoutMs: number;
+    lan1688RecoveryEnabled: boolean;
+    lan1688RecoveryPollMs: number;
+    lan1688RecoveryCooldownMs: number;
     lan1688Token: string;
     lan1688TimeoutMs: number;
     healthTimeoutMs: number;
@@ -631,6 +634,15 @@ export function loadRuntimeConfig(
         60000,
         1000,
         120000,
+      ),
+      lan1688RecoveryEnabled: text(env, "LAN_1688_AUTO_RECOVERY_ENABLED", "true") === "true",
+      lan1688RecoveryPollMs: integer(env, "LAN_1688_AUTO_RECOVERY_POLL_MS", 60000, 1000, 3600000),
+      lan1688RecoveryCooldownMs: integer(
+        env,
+        "LAN_1688_AUTO_RECOVERY_COOLDOWN_MS",
+        300000,
+        1000,
+        86400000,
       ),
       lan1688Token: text(env, "LAN_1688_TOKEN"),
       lan1688TimeoutMs: integer(env, "LAN_1688_TIMEOUT_MS", 45000, 1000, 60000),

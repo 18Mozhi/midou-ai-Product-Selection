@@ -55,7 +55,7 @@ test("historical sourcing repair uses the primary image and schedules a shared s
   assert.deepEqual(tasks[0].queries, [
     {
       providerId: "lan",
-      required: false,
+      required: true,
       target: {
         query: "Product",
         image_url: image,

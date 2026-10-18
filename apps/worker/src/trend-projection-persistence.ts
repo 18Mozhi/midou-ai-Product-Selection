@@ -366,7 +366,7 @@ export class TrendProjectionPersistence {
             taskId,
             supplierProviderIds.map((providerId) => ({
               providerId,
-              required: false,
+              required: true,
               target: {
                 query: buildSupplierSearchQuery(String(row.name)),
                 image_url: imageUrl,
@@ -859,7 +859,7 @@ export class TrendProjectionPersistence {
         supplierTaskId,
         supplierProviderIds.map((providerId) => ({
           providerId,
-          required: false,
+          required: true,
           target: {
             query: buildSupplierSearchQuery(title),
             ...(providerId === providers.alibaba1688 ? { image_url: imageUrl } : {}),

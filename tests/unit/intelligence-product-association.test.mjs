@@ -380,6 +380,16 @@ test("selected Amazon primary links original news and schedules the existing det
     ["sourcing_search", "opportunity_competitors", "competitor_snapshot"],
   );
   assert.equal(targets[1].main_asin, "B000000001");
+  const supplierQuery = calls.find(
+    ([sql, params]) =>
+      sql.startsWith("INSERT INTO collection_subqueries") &&
+      JSON.parse(params[6]).projection_type === "sourcing_search",
+  );
+  assert.equal(
+    Boolean(supplierQuery[1][7]),
+    true,
+    "automatic product sourcing is required and must wait for a paused source",
+  );
   const newsLink = calls.find(([sql]) =>
     sql.includes("FROM trend_signals s WHERE s.normalized_record_id=?"),
   );

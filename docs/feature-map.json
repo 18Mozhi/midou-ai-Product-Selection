@@ -1,4 +1,25 @@
 {
+  "lan1688AutoRecovery20261018": {
+    "status": "implemented",
+    "requirements": "docs/lan-1688-auto-recovery.md",
+    "sourceFiles": [
+      "apps/api/src/lan-1688-recovery.ts",
+      "apps/api/src/pending-source-recovery-policy.ts",
+      "apps/api/src/amazon-public-recovery.ts",
+      "apps/api/src/bootstrap/create-provider-adapter-runtime.ts",
+      "apps/api/src/server.ts",
+      "packages/config/src/index.ts",
+      "apps/worker/src/trend-projection-persistence.ts"
+    ],
+    "testFiles": [
+      "tests/unit/lan-1688-recovery.test.mjs",
+      "tests/unit/amazon-public-recovery.test.mjs",
+      "tests/unit/public-rss-recovery.test.mjs",
+      "tests/unit/intelligence-product-association.test.mjs",
+      "tests/unit/automatic-sourcing-recovery.test.mjs"
+    ],
+    "contract": "Existing API probes only cooled transient enabled approved LAN1688 circuits with actual pending system-actor work in active scopes and existing backend token. True health and original version/incident-checked audited recovery required. Automatic product sourcing is required at initial and missing-task producers, preserving optional contracts elsewhere. Current six-node diagnostics yielded503/429/timeout and zero persisted offers; natural recovery, matching quotes and daily100 remain unverified."
+  },
   "amazonPublicAutoRecovery20261018": {
     "status": "implemented",
     "requirements": "docs/amazon-public-auto-recovery.md",

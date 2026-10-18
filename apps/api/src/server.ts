@@ -268,6 +268,7 @@ const {
   service: providerAdapterService,
   publicRssRecovery,
   publicAmazonRecovery,
+  publicLan1688Recovery,
 } = createProviderAdapterRuntime(pool, config, providerAdapterRegistry, authorization);
 const app = buildApp({
   logger: true,
@@ -532,6 +533,7 @@ app.addHook("onClose", async () => {
   if (runtimeHealthProbeTimer) clearInterval(runtimeHealthProbeTimer);
   await publicRssRecovery.stop();
   await publicAmazonRecovery.stop();
+  await publicLan1688Recovery.stop();
   await runtimeHealthProbeMonitor.stop();
   try {
     await publishRuntimeHeartbeat("stopped");
@@ -570,6 +572,7 @@ try {
   runtimeHealthProbeTimer.unref();
   publicRssRecovery.start();
   publicAmazonRecovery.start();
+  publicLan1688Recovery.start();
 } catch (error) {
   app.log.error({ error }, "API startup failed");
   try {
