@@ -70,6 +70,7 @@ export function providerEvidenceDedupeKey(
   taskId: string,
   rawContent: string,
   recordKey?: string,
+  normalizerVersion?: string,
 ) {
   if (provider.parserVersion === GOOGLE_TRENDS_RSS_PARSER_VERSION)
     return sha({
@@ -84,6 +85,9 @@ export function providerEvidenceDedupeKey(
         parser_version: provider.parserVersion,
         content_sha256: createHash("sha256").update(rawContent).digest("hex"),
         ...(provider.code === "amazon_product" && recordKey ? { record_key: recordKey } : {}),
+        ...(provider.code === "amazon_product" && normalizerVersion
+          ? { normalizer_version: normalizerVersion }
+          : {}),
       })
     : externalId;
 }
@@ -464,6 +468,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
                 task.id,
                 source.raw_content,
                 recordKey,
+                normalized.provenance.adapter_version,
               ),
               contentType: source.content_type,
               content: Buffer.from(source.raw_content),

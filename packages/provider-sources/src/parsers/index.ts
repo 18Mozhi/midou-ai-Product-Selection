@@ -3,6 +3,7 @@ import {
   amazonMoney,
   amazonImageUrl,
   amazonSearchImage,
+  amazonSearchTitle,
 } from "./amazon-product-facts.js";
 import { amazonPublicReviewFields } from "./amazon-public-reviews.js";
 import { createHash } from "node:crypto";
@@ -765,6 +766,7 @@ export function parseAmazonProductPage(
   for (const [index, item] of sourceBlocks.entries()) {
     const title = stripHtml(
         (directAsin ? item.html.match(/id=["']productTitle["'][^>]*>([\s\S]*?)<\//i)?.[1] : null) ??
+          (!directAsin ? amazonSearchTitle(item.html, item.asin, pageUrl) : undefined) ??
           item.html.match(/<(?:h1|h2)\b[^>]*>[\s\S]*?<span\b[^>]*>([\s\S]*?)<\/span>/i)?.[1] ??
           item.html.match(/id=["']productTitle["'][^>]*>([\s\S]*?)<\//i)?.[1] ??
           "",

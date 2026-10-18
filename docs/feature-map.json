@@ -1,4 +1,21 @@
 {
+  "selectionAmazonSearchProductTitle20261019": {
+    "status": "implemented",
+    "requirements": "docs/amazon-search-product-title.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/parsers/amazon-product-facts.ts",
+      "packages/provider-sources/src/parsers/index.ts",
+      "packages/provider-sources/src/adapters/index.ts",
+      "apps/worker/src/provider-source-executor.ts"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-search-product-title.test.mjs",
+      "tests/unit/amazon-detail-facts.test.mjs",
+      "tests/unit/amazon-public-reviews.test.mjs",
+      "tests/unit/core-workspace-crawlers.test.mjs"
+    ],
+    "contract": "Prefer the full search heading tied to the current same-host ASIN product link, not an earlier brand h2. Preserve legacy unlinked heading fallback, detail and JSON-LD priority. Amazon adapter v19 participates in the existing evidence hash through normalizer_version; preserve prior evidence/version history and other source identities. ParserVersion, API, schema, settings, permissions and quality gates unchanged."
+  },
   "selectionCoreProjectionClaimLocking20261019": {
     "status": "implemented",
     "requirements": "docs/core-projection-claim-locking.md",

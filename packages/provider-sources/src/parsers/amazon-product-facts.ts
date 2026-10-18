@@ -13,6 +13,43 @@ const visibleMarkup = (html: string) =>
     " ".repeat(value.length),
   );
 
+/** Brand headings may precede the title: prefer a heading attached to this ASIN's product link. */
+export function amazonSearchTitle(
+  html: string,
+  asin: string,
+  pageUrl = "https://www.amazon.com/",
+): string | undefined {
+  const markup = visibleMarkup(html);
+  const headings = (value: string) => [...value.matchAll(/<(h1|h2)\b[^>]*>([\s\S]*?)<\/\1\s*>/gi)];
+  const identity = new RegExp(`/(?:dp|gp/product)/${asin}(?:/|$)`, "i");
+  const links = (value: string) => [...value.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a\s*>/gi)];
+  const matchesProduct = (link: RegExpMatchArray) => {
+    const opening = link[0].slice(0, link[0].indexOf(">") + 1);
+    try {
+      const base = new URL(pageUrl);
+      const url = new URL(unescape(attribute(opening, "href") ?? ""), base);
+      return (
+        url.protocol === "https:" &&
+        url.hostname === base.hostname &&
+        !url.username &&
+        !url.password &&
+        identity.test(url.pathname)
+      );
+    } catch {
+      return false;
+    }
+  };
+  // Legacy layout: the heading wraps the product link. Current layout: the link wraps the heading.
+  for (const heading of headings(markup))
+    if (links(heading[2]!).some(matchesProduct)) return heading[2];
+  for (const link of links(markup))
+    if (matchesProduct(link)) {
+      const heading = headings(link[1]!)[0];
+      if (heading) return heading[2];
+    }
+  return undefined;
+}
+
 /** A missing amount must never become Number("") = 0. */
 export function amazonMoney(value: string | undefined) {
   if (!value) return null;
