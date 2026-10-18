@@ -1,4 +1,5 @@
 import { collectionQueueDatabaseContext } from "./collection-task-database-context.js";
+import { collectionFailureDiagnostic } from "./collection-failure-diagnostic.js";
 import type { OrganizationId, WorkspaceId } from "@scoutops/contracts";
 import { ScopedRedisStore } from "@scoutops/redis";
 import {
@@ -135,6 +136,12 @@ export async function processCollectionTaskOnce(input: {
         recovered,
       };
     } catch (error) {
+      if (!(error instanceof CollectionExecutionError))
+        console.error(
+          JSON.stringify(
+            collectionFailureDiagnostic(error, { taskId: claimed.id, stage: "task_execution" }),
+          ),
+        );
       const failure =
         error instanceof CollectionExecutionError
           ? error

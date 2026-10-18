@@ -28,6 +28,7 @@ import { EvidencePersistenceError, MySqlEvidencePersistence } from "./evidence-p
 import type { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
 import { LAN_1688_PARSER_VERSION, type Lan1688ImageSearch } from "./lan-1688-image-search.js";
 import { amazonAsin } from "./competitor-discovery-policy.js";
+import { collectionFailureDiagnostic } from "./collection-failure-diagnostic.js";
 import {
   CompetitorClassificationError,
   type MySqlCompetitorTitleClassification,
@@ -339,6 +340,9 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         errorCode: "source_circuit_open",
       };
     let robotsDecision: RobotsPolicyDecision | undefined;
+    let failureStage: Parameters<typeof collectionFailureDiagnostic>[1]["stage"] =
+      "source_collection";
+    let recordOrdinal = 0;
     try {
       if (
         provider.code === "1688_search" &&
@@ -400,6 +404,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           (browserCollection
             ? { records: browserCollection.records, nextCursor: null }
             : await this.registry.collect({ ...context, target: query.target, limit: 20 }));
+      failureStage = "evidence_artifact";
       if (browserCollection)
         for (const artifact of browserCollection.artifacts)
           await this.evidence.persistBrowserArtifact({
@@ -426,6 +431,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         deduplicated = 0,
         hasDedupeConflict = false;
       for (const raw of batch.records) {
+        failureStage = "normalize";
+        recordOrdinal += 1;
         const normalized = this.registry.normalize(provider.code, raw, context),
           source = sourceEvidencePayload(raw),
           recordKey = providerEvidenceRecordKey(
@@ -441,6 +448,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
             sourceValueHash: sha(source.fields[fieldPath] ?? null),
           }));
         try {
+          failureStage = "evidence_persist";
           const persisted = await this.persistEvidenceWithRetry(
             {
               organizationId: task.organizationId,
@@ -514,6 +522,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         provider.code === "amazon_product" &&
         query.target.projection_type === "opportunity_competitors"
       ) {
+        failureStage = "classification";
         if (!this.competitorClassification)
           throw new CompetitorClassificationError("competitor_model_unavailable");
         try {
@@ -524,6 +533,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
             : new CompetitorClassificationError("competitor_classification_persist_failed");
         }
       }
+      failureStage = "provider_runtime";
       await this.recordProviderRuntimeResult(
         provider.id,
         Number(row.circuit_failure_threshold),
@@ -549,6 +559,21 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         ...(robotsDecision ? { robotsDecision } : {}),
       };
     } catch (error) {
+      if (
+        !(error instanceof ProviderAdapterFailure) &&
+        !(error instanceof CompetitorClassificationError) &&
+        !isEvidenceValidationError(error)
+      )
+        console.error(
+          JSON.stringify(
+            collectionFailureDiagnostic(error, {
+              taskId: task.id,
+              providerId: provider.id,
+              stage: failureStage,
+              ...(recordOrdinal ? { recordOrdinal } : {}),
+            }),
+          ),
+        );
       if (error instanceof CompetitorClassificationError)
         throw new ProviderCollectionExecutionError("validation_failed", undefined, robotsDecision);
       const failure = classifyProviderAdapterFailure(error),

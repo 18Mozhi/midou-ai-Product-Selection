@@ -1,4 +1,15 @@
 {
+  "selectionCollectionFailureDiagnostic20261019": {
+    "status": "implemented",
+    "requirements": "docs/collection-internal-failure-diagnostic.md",
+    "sourceFiles": [
+      "apps/worker/src/collection-failure-diagnostic.ts",
+      "apps/worker/src/provider-source-executor.ts",
+      "apps/worker/src/collection-task-worker.ts"
+    ],
+    "testFiles": ["tests/unit/collection-failure-diagnostic.test.mjs"],
+    "contract": "Internal allowlisted technical diagnostics restore evidence lost before network_error mapping. Stage and record ordinal are internal logs only. No exception messages, SQL, page contents, causes or unknown codes are serialized. Existing source/task failures, retries, transactions, API, schema, settings and acceptance gates remain unchanged; root cause still requires live evidence."
+  },
   "collectionScopeFairness20261019": {
     "status": "implemented",
     "statusDetail": "58_node_27_readonly_mysql_worker_build_passed_pending_publication",
