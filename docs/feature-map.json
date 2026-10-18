@@ -7012,5 +7012,15 @@
     ],
     "contract": "List row projection materializes scoped active normalized versions and reuses paged primary identity. Same seed/current/detail provenance, fields, quality gates, filters and order; original count/filter reads unchanged. No schema, API, permission, config, cache, dependency, frontend or Python change. Node restart; actual SQL and live HTTP acceptance required.",
     "statusDetail": "deployed_e1deee4d_hashes_matched_live_http_34485_to_3005ms_all_20_sql_rows_equal_daily100_pending"
+  },
+  "selectionCompetitorFunctionalFormat20261019": {
+    "status": "implemented",
+    "requirements": "docs/competitor-functional-format.md",
+    "sourceFiles": ["apps/worker/src/intelligence-product-association.ts"],
+    "testFiles": [
+      "tests/unit/competitor-title-classification.test.mjs",
+      "tests/fixtures/competitor-functional-format-cases.mjs"
+    ],
+    "contract": "Prompt-only functional format, fit and audience versus decorative motif clarification; explicit multi-occupant evidence and abstention examples. Strict aliases, original titles, validators, minimum5 detailed independent competitors, completion gates and existing model settings unchanged. Historical15 and independent8 real-model diagnostics select5 explicit two-person candidates, writes0; uncertain-versus-different_use explanations still imperfect. No backfill or daily100 acceptance."
   }
 }

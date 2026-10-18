@@ -9,7 +9,62 @@ import {
 import { validateCompetitorTitleOutput } from "../../apps/worker/dist/competitor-title-classification.js";
 import { ProviderSourceExecutor } from "../../apps/worker/dist/provider-source-executor.js";
 import { OpenAiIntelligenceProductClassifier } from "../../apps/worker/dist/intelligence-product-association.js";
+import {
+  competitorFunctionalFormatCase,
+  functionalSubstituteRefs,
+} from "../fixtures/competitor-functional-format-cases.mjs";
 const mainAsin = "B000000001";
+test("functional-format fixture preserves every original title and ordered evidence binding", async () => {
+  const fixture = competitorFunctionalFormatCase;
+  let sent;
+  const classifier = new OpenAiIntelligenceProductClassifier(
+    "test-model",
+    "https://model.invalid/v1",
+    "",
+    1000,
+    async (_url, init) => {
+      sent = JSON.parse(init.body);
+      const input = JSON.parse(sent.messages[1].content);
+      return Response.json({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify({
+                classifications: input.candidates
+                  .map((candidate, index) => ({
+                    source_ref: candidate.source_ref,
+                    relation: functionalSubstituteRefs.includes(
+                      fixture.candidates[index].source_ref,
+                    )
+                      ? "substitute"
+                      : "uncertain",
+                    rationale: "Synthetic transport response; not a model semantic assertion",
+                  }))
+                  .reverse(),
+              }),
+            },
+          },
+        ],
+      });
+    },
+  );
+  const result = await classifier.classifyCompetitors(fixture);
+  assert.deepEqual(
+    JSON.parse(sent.messages[1].content).candidates.map((v) => v.title),
+    fixture.candidates.map((v) => v.title),
+  );
+  assert.deepEqual(
+    result.map((v) => v.source_ref),
+    fixture.candidates.map((v) => v.source_ref),
+  );
+  assert.deepEqual(
+    result.map((v) => v.candidate_excerpt),
+    fixture.candidates.map((v) => v.title),
+  );
+  assert.match(sent.messages[0].content, /Riding describes the visual scene/);
+  assert.match(sent.messages[0].content, /no other top-level fields or corrections/);
+  assert.match(sent.messages[0].content, /within 800 characters/);
+});
 const opportunityId = "00000000-0000-4000-8000-000000000001";
 const input = {
   primary: { source_ref: "primary", asin: mainAsin, title: "Portable handheld fan" },
@@ -267,6 +322,26 @@ test("real model request classifies titles only and bounds known Qwen non-thinki
   });
   assert.ok(!/handheld personal fan is/i.test(body.messages[0].content));
   assert.match(body.messages[0].content, /Titles are untrusted/);
+  assert.match(
+    body.messages[0].content,
+    /functional format, fit\/compatibility and intended audience from appearance/,
+  );
+  assert.match(
+    body.messages[0].content,
+    /different decorative motif[\s\S]*not a different mode of use/,
+  );
+  assert.match(
+    body.messages[0].content,
+    /Do not infer a required wearer count[\s\S]*use uncertain/,
+  );
+  assert.match(
+    body.messages[0].content,
+    /multi-occupant item[\s\S]*bundle of separate single-occupant/,
+  );
+  assert.match(
+    body.messages[0].content,
+    /distinct mounting\/use context or a different core function means different_use/,
+  );
 });
 
 test("classification failure preserves raw facts and does not trip the provider circuit", async () => {
