@@ -1,5 +1,7 @@
 # M04-06 供应链找货运维与回滚
 
+> 2026-10-20成员流程覆盖：手动发起找货、重新采集及删除记录入口与前端写入链已退休，旧UI操作描述仅作历史；自动1688采集与后台合同保持。见[当前货源页操作](../selection-retired-sourcing-search-actions.md)。
+
 > 2026-10-20当前覆盖：成员找货页已删除采购创建入口、弹窗和POST生产者，旧采购UI步骤仅为历史；后端API、MOQ/版本/权限合同与历史保留。当前操作见 [采购创建退休](../selection-retired-sourcing-procurement.md)。
 > 六节点单图实测、来源报价条件与发布步骤见 `docs/selection-lan-1688-validation.md`。`source_price_description` 是只读来源说明，无新配置或迁移；发布后重启唯一宝塔 Node 项目 `ai选品` 并刷新浏览器，Python 不变。
 

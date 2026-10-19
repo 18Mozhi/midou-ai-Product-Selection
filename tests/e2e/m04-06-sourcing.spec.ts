@@ -192,7 +192,7 @@ for (const scenario of [
     active: 0,
     blocked: 0,
     failed: 0,
-    text: "当前记录没有供应商候选",
+    text: "当前记录尚无供应商候选",
   },
   {
     name: "unknown",
@@ -200,7 +200,7 @@ for (const scenario of [
     active: 0,
     blocked: 0,
     failed: 0,
-    text: "当前记录没有供应商候选",
+    text: "当前记录尚无供应商候选",
   },
 ]) {
   test(`empty sourcing status remains factual for ${scenario.name}`, async ({ page }) => {
@@ -388,14 +388,7 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await setup(page);
   await page.goto("/sourcing?create=1");
   await expect(page.getByRole("heading", { name: "供应链找货", level: 1 })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "发起供应商找货" })).toBeVisible();
-  await expect(page.getByLabel("输入类型").locator("option")).toHaveText([
-    "关键词",
-    "图片",
-    "选品",
-    "商品链接",
-  ]);
-  await page.getByRole("button", { name: "关闭供应商搜索" }).click();
+  await expect(page.getByRole("dialog", { name: "发起供应商找货" })).toHaveCount(0);
   const supplierCandidates = page.locator(".supplier-cards");
   await expect(supplierCandidates.getByText("宁波澄净户外用品厂")).toBeVisible();
   await expect(
@@ -732,31 +725,29 @@ test("commerce sourcing keeps white surfaces while changing the selected accent"
   await expect(surface).toHaveCSS("background-image", "none");
 });
 
-test("empty state opens the real sourcing form", async ({ page }) => {
+test("empty automatic sourcing state refreshes facts without creating work", async ({ page }) => {
   await setup(page);
+  let reads = 0;
+  const writes: string[] = [];
+  page.on("request", (r) => {
+    if (r.method() !== "GET" && r.url().includes("/api/v1/sourcing/")) writes.push(r.url());
+  });
   await page.unroute("**/api/v1/sourcing/searches");
-  await page.route("**/api/v1/sourcing/searches", (route) => route.fulfill({ json: envelope([]) }));
-  await page.goto("/sourcing");
-  await page.getByRole("button", { name: "开始创建" }).click();
-  const dialog = page.getByRole("dialog", { name: "发起供应商找货" });
-  await expect(dialog).toBeVisible();
-  await expect(page.getByRole("button", { name: "关闭供应商搜索" })).toBeFocused();
-  await page.keyboard.press("Escape");
-  await expect(dialog).toHaveCount(0);
+  await page.route("**/api/v1/sourcing/searches", (route) => {
+    reads += 1;
+    return route.fulfill({ json: envelope([]) });
+  });
+  await page.goto("/sourcing?create=1");
+  await expect(page.getByRole("button", { name: "刷新记录", exact: true })).toHaveCount(2);
+  await page.getByRole("button", { name: "刷新记录", exact: true }).last().click();
+  await expect.poll(() => reads).toBe(2);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  expect(writes).toEqual([]);
 });
 
-test("three sourcing dialogs contain keyboard focus and return it to their opener", async ({
-  page,
-}) => {
+test("quote dialog contains keyboard focus and returns it to its opener", async ({ page }) => {
   await setup(page);
   await page.goto("/sourcing");
-  await verifyDialogFocusCycle(
-    page,
-    page.getByRole("button", { name: "发起供应商找货", exact: true }),
-    "发起供应商找货",
-    "关闭供应商搜索",
-    "开始公开网页采集",
-  );
   await verifyDialogFocusCycle(
     page,
     page.getByRole("button", { name: "确认报价", exact: true }),
@@ -764,66 +755,40 @@ test("three sourcing dialogs contain keyboard focus and return it to their opene
     "关闭报价编辑",
     "确认新版本",
   );
-  await verifyDialogFocusCycle(
-    page,
-    page.getByRole("button", { name: "删除找货记录", exact: true }),
-    "删除找货记录",
-    "关闭删除确认",
-    "确认删除",
-  );
 });
 
-test("query-opened sourcing dialog returns focus to the page heading without an opener", async ({
+test("legacy sourcing create links preserve readable results without opening or writing", async ({
   page,
 }) => {
   await setup(page);
-  await page.goto("/sourcing?create=1");
-  const dialog = page.getByRole("dialog", { name: "发起供应商找货" });
-  await expect(dialog).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(dialog).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "供应链找货", level: 1 })).toBeFocused();
+  const writes: string[] = [];
+  page.on("request", (r) => {
+    if (r.method() !== "GET" && r.url().includes("/api/v1/sourcing/")) writes.push(r.url());
+  });
+  await page.goto("/sourcing?create=1&opportunity_id=00000000-0000-4000-8000-000000000612");
+  await expect(page.locator(".supplier-cards").getByText("CNY 12.8")).toBeVisible();
+  for (const name of ["发起供应商找货", "重新采集", "删除找货记录"])
+    await expect(page.getByRole("button", { name, exact: true })).toHaveCount(0);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  expect(writes).toEqual([]);
 });
 
-test("three sourcing write failures stay visible with their request IDs inside each dialog", async ({
+test("quote write failure retains draft and request ID inside the surviving dialog", async ({
   page,
 }) => {
   await setup(page);
-  await rejectSourcingRequest(page, "/api/v1/sourcing/searches", "POST", "p21-search-fail-503");
   await rejectSourcingRequest(page, "/api/v1/sourcing/quotes", "POST", "p21-quote-fail-503");
-  await rejectSourcingRequest(
-    page,
-    `/api/v1/sourcing/searches/${searchId}`,
-    "DELETE",
-    "p21-delete-fail-503",
-  );
   await page.goto("/sourcing");
-
-  await page.getByRole("button", { name: "发起供应商找货", exact: true }).click();
-  let dialog = page.getByRole("dialog", { name: "发起供应商找货" });
-  await dialog.getByLabel("商品关键词").fill("折叠收纳箱");
-  await dialog.getByRole("button", { name: "开始公开网页采集" }).click();
-  await expect(dialog.getByRole("alert")).toContainText("服务暂时无法完成这项操作，请检查后重试。");
-  await expect(dialog.getByRole("alert")).toContainText("p21-search-fail-503");
-  await dialog.getByRole("button", { name: "取消" }).click();
-
   await page.getByRole("button", { name: "确认报价", exact: true }).click();
-  dialog = page.getByRole("dialog", { name: "确认完整供应商报价" });
+  const dialog = page.getByRole("dialog", { name: "确认完整供应商报价" });
   await dialog.getByLabel("规格").fill("420ml / 黑色 / 单只盒装");
   await dialog.getByLabel("所在地").fill("浙江宁波");
   await dialog.getByRole("button", { name: "确认新版本" }).click();
   await expect(dialog.getByRole("alert")).toContainText("p21-quote-fail-503");
   await dialog.getByRole("button", { name: "取消" }).click();
-
-  await page.getByRole("button", { name: "删除找货记录", exact: true }).click();
-  dialog = page.getByRole("dialog", { name: "删除找货记录" });
-  await dialog.getByLabel("删除原因").fill("来源内容需要重新核对");
-  await dialog.getByRole("button", { name: "确认删除" }).click();
-  await expect(dialog.getByRole("alert")).toContainText("p21-delete-fail-503");
-  await expect(dialog.getByLabel("删除原因")).toHaveValue("来源内容需要重新核对");
 });
 
-test("pending sourcing writes do not close or overwrite a reopened dialog", async ({ page }) => {
+test("pending quote writes do not close or overwrite a reopened dialog", async ({ page }) => {
   await setup(page);
   let releaseWrite: (() => void) | undefined;
   let markWriteStarted: (() => void) | undefined;
@@ -858,25 +823,9 @@ test("pending sourcing writes do not close or overwrite a reopened dialog", asyn
     await expect.poll(() => requestCount).toBeGreaterThan(0);
   }
 
-  let pending = await beginWrite();
-  await page.getByRole("button", { name: "发起供应商找货", exact: true }).click();
-  let dialog = page.getByRole("dialog", { name: "发起供应商找货" });
-  await dialog.getByLabel("商品关键词").fill("旧找货草稿");
-  await dialog.getByRole("button", { name: "开始公开网页采集" }).click();
-  await pending.started;
-  await duplicateSubmit(dialog);
-  await dialog.getByRole("button", { name: "取消" }).click();
-  await page.getByRole("button", { name: "发起供应商找货", exact: true }).click();
-  dialog = page.getByRole("dialog", { name: "发起供应商找货" });
-  await dialog.getByLabel("商品关键词").fill("新找货草稿");
-  pending.release();
-  await expect(dialog).toBeVisible();
-  await expect(dialog.getByLabel("商品关键词")).toHaveValue("新找货草稿");
-  await dialog.getByRole("button", { name: "取消" }).click();
-
-  pending = await beginWrite();
+  const pending = await beginWrite();
   await page.getByRole("button", { name: "确认报价", exact: true }).click();
-  dialog = page.getByRole("dialog", { name: "确认完整供应商报价" });
+  let dialog = page.getByRole("dialog", { name: "确认完整供应商报价" });
   await dialog.getByLabel("规格").fill("旧报价草稿");
   await dialog.getByLabel("所在地").fill("浙江宁波");
   await dialog.getByRole("button", { name: "确认新版本" }).click();
@@ -892,24 +841,10 @@ test("pending sourcing writes do not close or overwrite a reopened dialog", asyn
   await expect(dialog.getByLabel("规格")).toHaveValue("新报价草稿");
   await dialog.getByRole("button", { name: "取消" }).click();
 
-  pending = await beginWrite();
-  await page.getByRole("button", { name: "删除找货记录", exact: true }).click();
-  dialog = page.getByRole("dialog", { name: "删除找货记录" });
-  await dialog.getByLabel("删除原因").fill("旧删除原因草稿");
-  await dialog.getByRole("button", { name: "确认删除" }).click();
-  await pending.started;
-  await duplicateSubmit(dialog);
-  await dialog.getByRole("button", { name: "取消" }).click();
-  await page.getByRole("button", { name: "删除找货记录", exact: true }).click();
-  dialog = page.getByRole("dialog", { name: "删除找货记录" });
-  await dialog.getByLabel("删除原因").fill("新删除原因草稿");
-  pending.release();
-  await expect(dialog).toBeVisible();
-  await expect(dialog.getByLabel("删除原因")).toHaveValue("新删除原因草稿");
-  expect(requestCount).toBe(3);
+  expect(requestCount).toBe(1);
 });
 
-test("a delayed sourcing failure is not attached to a newly opened draft", async ({ page }) => {
+test("a delayed quote failure is not attached to a newly opened draft", async ({ page }) => {
   await setup(page);
   let releaseFailure!: () => void;
   let markFailureStarted!: () => void;
@@ -919,7 +854,7 @@ test("a delayed sourcing failure is not attached to a newly opened draft", async
   const failureGate = new Promise<void>((resolve) => {
     releaseFailure = resolve;
   });
-  await page.route("**/api/v1/sourcing/searches", async (route) => {
+  await page.route("**/api/v1/sourcing/quotes", async (route) => {
     if (route.request().method() !== "POST") return route.fallback();
     markFailureStarted();
     await failureGate;
@@ -933,17 +868,18 @@ test("a delayed sourcing failure is not attached to a newly opened draft", async
     });
   });
   await page.goto("/sourcing");
-  await page.getByRole("button", { name: "发起供应商找货", exact: true }).click();
-  let dialog = page.getByRole("dialog", { name: "发起供应商找货" });
-  await dialog.getByLabel("商品关键词").fill("旧失败请求");
-  await dialog.getByRole("button", { name: "开始公开网页采集" }).click();
+  await page.getByRole("button", { name: "确认报价", exact: true }).click();
+  let dialog = page.getByRole("dialog", { name: "确认完整供应商报价" });
+  await dialog.getByLabel("规格").fill("旧失败请求");
+  await dialog.getByLabel("所在地").fill("浙江宁波");
+  await dialog.getByRole("button", { name: "确认新版本" }).click();
   await started;
   await dialog.getByRole("button", { name: "取消" }).click();
-  await page.getByRole("button", { name: "发起供应商找货", exact: true }).click();
-  dialog = page.getByRole("dialog", { name: "发起供应商找货" });
-  await dialog.getByLabel("商品关键词").fill("新草稿保持");
+  await page.getByRole("button", { name: "确认报价", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "确认完整供应商报价" });
+  await dialog.getByLabel("规格").fill("新草稿保持");
   releaseFailure();
-  await expect(dialog.getByLabel("商品关键词")).toHaveValue("新草稿保持");
+  await expect(dialog.getByLabel("规格")).toHaveValue("新草稿保持");
   await expect(dialog.getByRole("alert")).toHaveCount(0);
 });
 
@@ -1031,53 +967,6 @@ test("opening another incomplete quote resets carried risk choices", async ({ pa
   await expect(page.getByLabel("稳定性")).toHaveValue("unknown");
   await expect(page.getByLabel("风险")).toHaveValue("unknown");
 });
-
-for (const input of [
-  { type: "keyword", label: "商品关键词", value: "  折叠收纳箱  " },
-  { type: "image", label: "图片地址或图片证据编号", value: "https://example.test/source.png" },
-  { type: "opportunity", label: "选品编号", value: "00000000-0000-4000-8000-000000000612" },
-  { type: "product_url", label: "商品链接", value: "https://example.test/item/source" },
-]) {
-  test(`UI2-SC04 sourcing ${input.type} submits only its explicit input and cancel does not write`, async ({
-    page,
-  }) => {
-    await setup(page);
-    const bodies: unknown[] = [];
-    await page.route("**/api/v1/sourcing/searches", async (route) => {
-      if (route.request().method() !== "POST") return route.fallback();
-      bodies.push(route.request().postDataJSON());
-      await route.fulfill({
-        status: 202,
-        json: envelope({
-          id: searchId,
-          status: "queued",
-          collection_task_id: "00000000-0000-4000-8000-000000000620",
-        }),
-      });
-    });
-    await page.goto("/sourcing");
-    const trigger = page.getByRole("button", { name: "发起供应商找货", exact: true });
-    await trigger.click();
-    const dialog = page.getByRole("dialog", { name: "发起供应商找货" });
-    await dialog.getByLabel("输入类型").selectOption(input.type);
-    await dialog.getByRole("button", { name: "开始公开网页采集" }).click();
-    expect(bodies).toEqual([]);
-    await expect(dialog).toBeVisible();
-    await dialog.getByLabel(input.label, { exact: true }).fill(input.value);
-    await dialog.getByRole("button", { name: "取消", exact: true }).click();
-    await expect(dialog).toHaveCount(0);
-    await expect(page).not.toHaveURL(/create=1/);
-    expect(bodies).toEqual([]);
-    await trigger.click();
-    await expect(dialog.getByLabel(input.label, { exact: true })).toHaveValue(input.value);
-    await dialog.getByRole("button", { name: "开始公开网页采集" }).click();
-    await expect(dialog).toHaveCount(0);
-    expect(bodies).toEqual([{ input_type: input.type, input_ref: input.value }]);
-    await expect(
-      page.getByText("公开供应商网页采集已排队，候选与原始证据会自动回填。"),
-    ).toBeVisible();
-  });
-}
 
 test("UI2-SC05 retired procurement leaves confirmed quote facts readable without purchase writes", async ({
   page,
@@ -1372,7 +1261,5 @@ test("sourcing workspace uses compact catalogue layout and read-only refresh", a
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);
-  await expect(page).toHaveScreenshot("sourcing-workspace-layout-commerce-20261018.png", {
-    fullPage: false,
-  });
+  await expect(root.locator(".sourcing-heading-actions button")).toHaveCount(1);
 });

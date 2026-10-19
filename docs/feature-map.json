@@ -1,4 +1,11 @@
 {
+  "selectionRetiredSourcingSearchActions20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-retired-sourcing-search-actions.md",
+    "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/components/SourcingWorkspaceDialogs.vue", "apps/web/src/composables/useSourcingWorkspace.ts"],
+    "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts", "tests/m04-06/sourcing.test.mjs", "tests/unit/sourcing-page-preview.test.mjs"],
+    "contract": "Retire member manual search creation, recollection and deletion UI, dialogs and request producers. Legacy create/opportunity query stays read-only. Preserve scoped record/q reads, actual quotes/evidence/profit, quote confirmation/comparison, automatic six-node sourcing and backend contracts/history. No env/API field/schema/dependency/Python change; rebuild static frontend."
+  },
   "selectionPrimarySnapshotPreflight20261020": {
     "status": "implemented",
     "requirements": "docs/selection-primary-snapshot-preflight.md",

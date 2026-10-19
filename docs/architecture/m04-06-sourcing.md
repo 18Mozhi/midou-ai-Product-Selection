@@ -1,5 +1,7 @@
 # M04-06 供应链找货架构
 
+> 2026-10-20成员流程覆盖：手动发起找货、重新采集及删除记录入口与前端写入链已退休，旧UI操作描述仅作历史；自动1688采集与后台合同保持。见[当前货源页操作](../selection-retired-sourcing-search-actions.md)。
+
 > 2026-10-20当前覆盖：成员找货页已删除采购创建入口、弹窗和POST生产者，旧采购UI步骤仅为历史；后端API、MOQ/版本/权限合同与历史保留。当前操作见 [采购创建退休](../selection-retired-sourcing-procurement.md)。
 > 当前重制以 `docs/selection-sourcing-recovery.md` 和 `docs/selection-lan-1688-validation.md` 为准。自动找货已只走 1688 主品图片；下文多站关键词链描述仍保留的历史和人工兼容通道。候选只读价格说明绑定同一证据，保留新人价条件，不改人工报价或成本规则。
 

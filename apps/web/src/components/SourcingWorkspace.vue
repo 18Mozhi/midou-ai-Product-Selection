@@ -20,17 +20,13 @@ const {
   dialogFailure,
   notice,
   busy,
-  showSearch,
   query,
-  deleting,
-  deleteReason,
   comparisons,
   comparisonFailure,
   comparisonLoading,
   loadComparisons,
   quoteCandidate,
   selectedQuotes,
-  form,
   quote,
   canManage,
   canInspectCollection,
@@ -50,12 +46,7 @@ const {
   riskText,
   load,
   detail,
-  create,
-  openSearch,
-  closeSearch,
   closeQuote,
-  openDelete,
-  closeDelete,
   resetQuery,
   handleStatePrimary,
   handleStateSecondary,
@@ -63,8 +54,6 @@ const {
   choose,
   openQuote,
   compare,
-  refreshSearch,
-  removeSearch,
 } = useSourcingWorkspace(props);
 const recordPageSize = 20,
   supplierPageSize = 10;
@@ -121,10 +110,10 @@ const pendingMessage = computed(() => {
     progress?.failed_subqueries ||
     ["failed", "cancelled", "dead_letter"].includes(progress?.status ?? "")
   )
-    return "本次采集已结束且未取得供应商报价，请核对失败或取消状态后再决定是否重新采集。";
+    return "本次采集已结束且未取得供应商报价，请核对来源采集状态。";
   if (progress?.active_subqueries)
     return "采集任务仍在等待处理，尚未取得供应商报价。可刷新记录查看最新进度。";
-  return "当前记录没有供应商候选，请核对采集结果。需要再次查询时可点击“重新采集”。";
+  return "当前记录尚无供应商候选，可刷新记录查看自动找货进度。";
 });
 </script>
 <template>
@@ -138,7 +127,6 @@ const pendingMessage = computed(() => {
         <button type="button" class="ghost" :disabled="state === 'loading' || busy" @click="load">
           刷新记录
         </button>
-        <button v-if="canManage" type="button" @click="openSearch">发起供应商找货</button>
       </div>
     </header>
     <p v-if="notice" class="sourcing-notice">
@@ -177,7 +165,14 @@ const pendingMessage = computed(() => {
       :kind="state"
       :request-id="requestId"
       :action-hint="notice"
-      :primary-label="state === 'empty' && !canManage ? '重新加载' : ''"
+      :title="state === 'empty' ? '尚无找货记录' : ''"
+      :description="
+        state === 'empty'
+          ? '自动选品产生货源查询后，结果将在这里显示。可刷新记录查看最新状态。'
+          : ''
+      "
+      :hide-secondary="state === 'empty'"
+      :primary-label="state === 'empty' ? '刷新记录' : ''"
       @primary="handleStatePrimary"
       @secondary="handleStateSecondary"
     />
@@ -187,9 +182,9 @@ const pendingMessage = computed(() => {
       title="没有匹配的找货记录"
       description="当前搜索条件没有命中记录；清空搜索后可继续查看原有找货结果。"
       primary-label="清空搜索"
-      :secondary-label="canManage ? '发起新找货' : '重新加载'"
+      secondary-label="刷新记录"
       @primary="resetQuery"
-      @secondary="canManage ? openSearch() : load()"
+      @secondary="load"
     />
     <div v-else class="sourcing-layout">
       <aside aria-label="找货记录" :data-short="visibleRecords.length <= 2">
@@ -239,17 +234,11 @@ const pendingMessage = computed(() => {
             >
           </div>
           <div class="sourcing-actions">
-            <template v-if="canManage">
-              <button type="button" :disabled="busy" @click="refreshSearch">
-                重新采集
-              </button></template
-            ><RouterLink
+            <RouterLink
               class="sourcing-cost-link"
               :to="{ path: '/sourcing/cost-rules', query: { from: route.fullPath } }"
               >费用与利润规则</RouterLink
-            ><button v-if="canManage" type="button" class="danger ghost" @click="openDelete">
-              删除找货记录
-            </button>
+            >
           </div>
         </header>
         <p v-if="candidates.length && selected.missing_fields.length" class="sourcing-missing">
@@ -436,22 +425,13 @@ const pendingMessage = computed(() => {
     </aside>
     <SourcingWorkspaceDialogs
       v-if="canManage"
-      :show-search="showSearch"
-      :search-form="form"
       :quote-candidate="quoteCandidate"
       :quote="quote"
       :evidence-options="evidenceOptions"
-      :deleting="deleting"
-      :delete-reason="deleteReason"
       :busy="busy"
       :failure="dialogFailure"
-      @close-search="closeSearch"
-      @create="create"
       @close-quote="closeQuote"
       @confirm-quote="confirm"
-      @close-delete="closeDelete"
-      @remove-search="removeSearch"
-      @update-delete-reason="deleteReason = $event"
     />
   </section>
 </template>

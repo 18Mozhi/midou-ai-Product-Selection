@@ -18,7 +18,7 @@ import type {
   SourcingState as State,
 } from "../components/sourcing-workspace-types";
 type SourcingDialogFailure = {
-  dialog: "search" | "quote" | "delete";
+  dialog: "quote";
   message: string;
   requestId: string;
 };
@@ -41,14 +41,9 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     dialogFailure = ref<SourcingDialogFailure | null>(null),
     notice = ref(""),
     busy = ref(false),
-    showSearch = ref(false),
     query = ref(""),
-    deleting = ref<Search | null>(null),
-    deleteReason = ref(""),
     dialogGeneration = reactive<Record<SourcingDialogName, number>>({
-      search: 0,
       quote: 0,
-      delete: 0,
     }),
     routeGeneration = ref(0),
     {
@@ -60,10 +55,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     } = useSourcingComparisons(request),
     quoteCandidate = ref<Candidate | null>(null),
     selectedQuotes = ref<string[]>([]),
-    form = reactive({
-      input_type: "keyword",
-      input_ref: "",
-    }),
     quote = reactive({
       moq: 1,
       specification: "",
@@ -214,7 +205,9 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
           selected.value?.id === selectedId &&
           route.query.record !== selectedId
         )
-          await router.replace({ query: { ...route.query, record: selectedId } });
+          await router.replace({
+            query: { ...route.query, record: selectedId, create: undefined },
+          });
       }
     } catch (error) {
       if (!ownsListRead(generation, lifecycle)) return;
@@ -306,56 +299,16 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
       busy.value = false;
     }
   }
-  async function create() {
-    if (busy.value) return;
-    const attempt = startDialogAttempt("search"),
-      routeAtSubmit = route.fullPath;
-    if (await post("/sourcing/searches", form, attempt)) {
-      if (!isCurrentDialogAttempt(attempt) || route.fullPath !== routeAtSubmit) {
-        notice.value = "先前的找货请求已排队；当前打开的窗口与页面选择保持不变。";
-        return;
-      }
-      closeSearch();
-      await load();
-      notice.value = "公开供应商网页采集已排队，候选与原始证据会自动回填。";
-    } else if (!isCurrentDialogAttempt(attempt)) {
-      notice.value = "先前的找货请求未完成；当前打开的窗口与页面选择保持不变。";
-    }
-  }
-  function openSearch() {
-    if (!canManage.value) return;
-    dialogGeneration.search += 1;
-    if (dialogFailure.value?.dialog === "search") dialogFailure.value = null;
-    showSearch.value = true;
-    void router.replace({ query: { ...route.query, create: "1" } });
-  }
-  function closeSearch() {
-    dialogGeneration.search += 1;
-    showSearch.value = false;
-    if (dialogFailure.value?.dialog === "search") dialogFailure.value = null;
-    void router.replace({ query: { ...route.query, create: undefined } });
-  }
   function closeQuote() {
     dialogGeneration.quote += 1;
     quoteCandidate.value = null;
     if (dialogFailure.value?.dialog === "quote") dialogFailure.value = null;
   }
-  function openDelete() {
-    dialogGeneration.delete += 1;
-    if (dialogFailure.value?.dialog === "delete") dialogFailure.value = null;
-    deleting.value = selected.value;
-  }
-  function closeDelete() {
-    dialogGeneration.delete += 1;
-    deleting.value = null;
-    if (dialogFailure.value?.dialog === "delete") dialogFailure.value = null;
-  }
   function resetQuery() {
     query.value = "";
   }
   function handleStatePrimary() {
-    if (state.value === "empty" && canManage.value) openSearch();
-    else void load();
+    void load();
   }
   function handleStateSecondary() {
     if (state.value === "empty") resetQuery();
@@ -441,84 +394,10 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
       notice.value = `已保存 ${selectedCount} 家报价对比。`;
     }
   }
-  async function refreshSearch() {
-    if (!selected.value || busy.value) return;
-    const searchIdAtSubmit = selected.value.id,
-      routeGenerationAtSubmit = routeGeneration.value,
-      result = await post(`/sourcing/searches/${searchIdAtSubmit}/refresh`, {});
-    if (result) {
-      if (
-        routeGeneration.value !== routeGenerationAtSubmit ||
-        selected.value?.id !== searchIdAtSubmit
-      ) {
-        notice.value = `先前记录的重新采集已排队，任务编号 ${result.task_id}；当前页面选择保持不变。`;
-        return;
-      }
-      await load();
-      notice.value = `重新采集已排队，任务编号 ${result.task_id}。`;
-    }
-  }
-  async function removeSearch() {
-    if (!deleting.value || !deleteReason.value.trim() || busy.value) return;
-    const attempt = startDialogAttempt("delete"),
-      deletedSearchId = deleting.value.id,
-      routeAtSubmit = route.fullPath;
-    busy.value = true;
-    dialogFailure.value = null;
-    try {
-      const response = await request(`/sourcing/searches/${deleting.value.id}`, {
-        method: "DELETE",
-        body: { reason: deleteReason.value.trim() },
-      });
-      requestId.value = response.request_id;
-      if (
-        isCurrentDialogAttempt(attempt) &&
-        route.fullPath === routeAtSubmit &&
-        deleting.value?.id === deletedSearchId &&
-        selected.value?.id === deletedSearchId
-      ) {
-        closeDelete();
-        selected.value = null;
-        deleteReason.value = "";
-        await load();
-        notice.value = "找货记录已删除，候选证据与审计仍保留。";
-      } else {
-        notice.value = "先前的找货记录删除已完成；当前打开的窗口与页面选择保持不变。";
-      }
-    } catch (error) {
-      if (error instanceof ApiClientError) {
-        requestId.value = error.requestId;
-        notice.value = error.actionHint;
-        if (isCurrentDialogAttempt(attempt))
-          dialogFailure.value = {
-            dialog: "delete",
-            message: error.actionHint,
-            requestId: error.requestId,
-          };
-      } else {
-        notice.value = "依赖暂不可用，删除未完成。";
-        if (isCurrentDialogAttempt(attempt))
-          dialogFailure.value = {
-            dialog: "delete",
-            message: "依赖暂不可用，删除未完成。",
-            requestId: "",
-          };
-      }
-    } finally {
-      busy.value = false;
-    }
-  }
   onMounted(() => {
     mounted = true;
     pageActive = true;
-    showSearch.value = route.query.create === "1";
     query.value = typeof route.query.q === "string" ? route.query.q : "";
-    const opportunityId =
-      typeof route.query.opportunity_id === "string" ? route.query.opportunity_id : "";
-    if (opportunityId) {
-      form.input_type = "opportunity";
-      form.input_ref = opportunityId;
-    }
     void load();
   });
   onActivated(() => {
@@ -565,12 +444,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
   watch(query, (value) => {
     void router.replace({ query: { ...route.query, q: value || undefined, create: undefined } });
   });
-  watch(
-    () => route.query.create,
-    (value) => {
-      showSearch.value = value === "1" && canManage.value;
-    },
-  );
 
   return {
     route,
@@ -581,17 +454,13 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     dialogFailure,
     notice,
     busy,
-    showSearch,
     query,
-    deleting,
-    deleteReason,
     comparisons,
     comparisonFailure,
     comparisonLoading,
     loadComparisons,
     quoteCandidate,
     selectedQuotes,
-    form,
     quote,
     canManage,
     canInspectCollection,
@@ -611,12 +480,7 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     riskText,
     load,
     detail,
-    create,
-    openSearch,
-    closeSearch,
     closeQuote,
-    openDelete,
-    closeDelete,
     resetQuery,
     handleStatePrimary,
     handleStateSecondary,
@@ -624,7 +488,5 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     choose,
     openQuote,
     compare,
-    refreshSearch,
-    removeSearch,
   };
 }

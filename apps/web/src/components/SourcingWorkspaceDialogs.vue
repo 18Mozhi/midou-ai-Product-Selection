@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import { computed, nextTick, watch } from "vue";
+import { nextTick, watch } from "vue";
 import { useModalDialog } from "../use-modal-dialog";
 import { sanitizeCorrelationId } from "../ui/state-contract";
-import type { SourcingCandidate, SourcingSearch } from "./sourcing-workspace-types";
+import type { SourcingCandidate } from "./sourcing-workspace-types";
 
 type DialogFailure = {
-  dialog: "search" | "quote" | "delete";
+  dialog: "quote";
   message: string;
   requestId: string;
 };
 
 const props = defineProps<{
-  showSearch: boolean;
-  searchForm: { input_type: string; input_ref: string };
   quoteCandidate: SourcingCandidate | null;
   quote: {
     moq: number;
@@ -26,64 +24,21 @@ const props = defineProps<{
     evidence_id: string;
   };
   evidenceOptions: Array<{ id: string; label: string }>;
-  deleting: SourcingSearch | null;
-  deleteReason: string;
   busy: boolean;
   failure: DialogFailure | null;
 }>();
 const emit = defineEmits<{
-  closeSearch: [];
-  create: [];
   closeQuote: [];
   confirmQuote: [];
-  closeDelete: [];
-  removeSearch: [];
-  updateDeleteReason: [value: string];
 }>();
-const deleteReasonModel = computed({
-  get: () => props.deleteReason,
-  set: (value: string) => emit("updateDeleteReason", value),
-});
 const failureFor = (dialog: DialogFailure["dialog"]) =>
   props.failure?.dialog === dialog ? props.failure : null;
 const pageHeading = () => document.querySelector<HTMLElement>("#sourcing-page-title"),
-  { dialogElement: searchDialog, handleCancel: handleSearchCancel } = useModalDialog(
-    () => props.showSearch,
-    () => emit("closeSearch"),
-    pageHeading,
-    {
-      trapFocus: true,
-    },
-  ),
   { dialogElement: quoteDialog, handleCancel: handleQuoteCancel } = useModalDialog(
     () => Boolean(props.quoteCandidate),
     () => emit("closeQuote"),
     pageHeading,
     { trapFocus: true },
-  ),
-  { dialogElement: deleteDialog, handleCancel: handleDeleteCancel } = useModalDialog(
-    () => Boolean(props.deleting),
-    () => emit("closeDelete"),
-    pageHeading,
-    { trapFocus: true },
-  ),
-  inputLabel = computed(
-    () =>
-      ({
-        keyword: "商品关键词",
-        image: "图片地址或图片证据编号",
-        opportunity: "选品编号",
-        product_url: "商品链接",
-      })[props.searchForm.input_type] ?? "查找内容",
-  ),
-  inputPlaceholder = computed(
-    () =>
-      ({
-        keyword: "例如：折叠收纳箱",
-        image: "输入可访问的图片地址或已有图片证据编号",
-        opportunity: "从选品详情进入会自动填写",
-        product_url: "输入需要查找同类货源的商品链接",
-      })[props.searchForm.input_type] ?? "请输入查找内容",
   );
 function focusFirst(dialog: () => HTMLDialogElement | null) {
   void nextTick(() =>
@@ -95,81 +50,12 @@ function focusFirst(dialog: () => HTMLDialogElement | null) {
   );
 }
 watch(
-  () => props.showSearch,
-  (open) => open && focusFirst(() => searchDialog.value),
-);
-watch(
   () => props.quoteCandidate,
   (value) => value && focusFirst(() => quoteDialog.value),
 );
-watch(
-  () => props.deleting,
-  (value) => value && focusFirst(() => deleteDialog.value),
-);
-const searchName = (item: SourcingSearch | null) =>
-  item?.display_name || item?.input_ref || "供应商";
 </script>
 
 <template>
-  <dialog
-    v-if="showSearch"
-    ref="searchDialog"
-    class="sourcing-modal"
-    aria-labelledby="sourcing-search-title"
-    @cancel="handleSearchCancel"
-  >
-    <form
-      :aria-describedby="failureFor('search') ? 'sourcing-search-error' : undefined"
-      @submit.prevent="emit('create')"
-    >
-      <header>
-        <h3 id="sourcing-search-title">发起供应商找货</h3>
-        <button
-          type="button"
-          aria-label="关闭供应商搜索"
-          title="关闭供应商搜索"
-          @click="emit('closeSearch')"
-        >
-          ×
-        </button>
-      </header>
-      <label
-        >输入类型<select v-model="searchForm.input_type">
-          <option value="keyword">关键词</option>
-          <option value="image">图片</option>
-          <option value="opportunity">选品</option>
-          <option value="product_url">商品链接</option>
-        </select></label
-      ><label
-        >{{ inputLabel
-        }}<input
-          v-model="searchForm.input_ref"
-          required
-          maxlength="2048"
-          :inputmode="['image', 'product_url'].includes(searchForm.input_type) ? 'url' : 'text'"
-          :placeholder="inputPlaceholder"
-      /></label>
-      <aside>
-        系统会直接爬取公开供应商商品页，保存供应商、商品、价格、图片、网址与采集时间；网页没有披露的
-        MOQ、规格和交期会明确标为待确认。
-      </aside>
-      <p
-        v-if="failureFor('search')"
-        id="sourcing-search-error"
-        class="sourcing-dialog-error"
-        role="alert"
-      >
-        {{ failureFor("search")?.message }}
-        <code v-if="sanitizeCorrelationId(failureFor('search')?.requestId)">
-          请求编号 {{ sanitizeCorrelationId(failureFor("search")?.requestId) }}
-        </code>
-      </p>
-      <footer>
-        <button type="button" class="ghost" @click="emit('closeSearch')">取消</button
-        ><button type="submit" :disabled="busy">开始公开网页采集</button>
-      </footer>
-    </form>
-  </dialog>
   <dialog
     v-if="quoteCandidate"
     ref="quoteDialog"
@@ -251,54 +137,6 @@ const searchName = (item: SourcingSearch | null) =>
       <footer>
         <button type="button" class="ghost" @click="emit('closeQuote')">取消</button
         ><button type="submit" :disabled="busy">确认新版本</button>
-      </footer>
-    </form>
-  </dialog>
-  <dialog
-    v-if="deleting"
-    ref="deleteDialog"
-    class="sourcing-modal"
-    aria-labelledby="sourcing-delete-title"
-    @cancel="handleDeleteCancel"
-  >
-    <form
-      :aria-describedby="failureFor('delete') ? 'sourcing-delete-error' : undefined"
-      @submit.prevent="emit('removeSearch')"
-    >
-      <header>
-        <h3 id="sourcing-delete-title">删除找货记录</h3>
-        <button
-          type="button"
-          aria-label="关闭删除确认"
-          title="关闭删除确认"
-          @click="emit('closeDelete')"
-        >
-          ×
-        </button>
-      </header>
-      <p>删除“{{ searchName(deleting) }}”后不再显示在工作台，候选证据和审计记录仍保留。</p>
-      <label
-        >删除原因<textarea
-          v-model="deleteReasonModel"
-          required
-          maxlength="500"
-          placeholder="请填写删除原因"
-        ></textarea>
-      </label>
-      <p
-        v-if="failureFor('delete')"
-        id="sourcing-delete-error"
-        class="sourcing-dialog-error"
-        role="alert"
-      >
-        {{ failureFor("delete")?.message }}
-        <code v-if="sanitizeCorrelationId(failureFor('delete')?.requestId)">
-          请求编号 {{ sanitizeCorrelationId(failureFor("delete")?.requestId) }}
-        </code>
-      </p>
-      <footer>
-        <button type="button" class="ghost" @click="emit('closeDelete')">取消</button
-        ><button type="submit" class="danger" :disabled="busy">确认删除</button>
       </footer>
     </form>
   </dialog>
