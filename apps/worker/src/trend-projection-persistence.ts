@@ -8,6 +8,7 @@ import {
   automaticCollectionBacklogCountSql,
 } from "./collection-source-scheduling-policy.js";
 import { recoverCircuitHeldSourcing } from "./automatic-sourcing-retry-policy.js";
+import { refreshStaleAutomaticSourcing } from "./automatic-sourcing-refresh.js";
 import { repairMissingPrimaryProduct } from "./automatic-primary-product-repair.js";
 import { findWaitingPrimaryDetailRefresh } from "./automatic-primary-detail-refresh.js";
 import { randomUUID } from "node:crypto";
@@ -32,6 +33,7 @@ import {
 export class TrendProjectionPersistence {
   private primaryRepairAfterId = "";
   private preferCompetitorDiscovery = false;
+  private preferSourcingRefresh = false;
   private nextCompetitorDiscoveryScanAt = 0;
   private competitorDiscoveryAfterId = "";
   private readonly alerts: TrendProjectionAlerts;
@@ -246,6 +248,44 @@ export class TrendProjectionPersistence {
     }
   }
   async enqueueMissingAutomaticDownstream(): Promise<boolean> {
+    if (this.preferSourcingRefresh && (await this.enqueueSourcingRefresh())) {
+      this.preferSourcingRefresh = false;
+      return true;
+    }
+    if (await this.enqueueExistingAutomaticDownstream()) {
+      this.preferSourcingRefresh = true;
+      return true;
+    }
+    if (await this.enqueueSourcingRefresh()) {
+      this.preferSourcingRefresh = false;
+      return true;
+    }
+    return false;
+  }
+  private async enqueueSourcingRefresh(): Promise<boolean> {
+    return refreshStaleAutomaticSourcing(
+      this.pool,
+      async (connection, row, taskId, target, requestId, traceId) => {
+        await this.scheduleCoreCollection(
+          connection,
+          {
+            organizationId: String(row.organization_id),
+            workspaceId: String(row.workspace_id),
+            actorId: String(row.created_by),
+            requestId,
+            traceId,
+          },
+          taskId,
+          [{ providerId: String(row.provider_id), required: true, target }],
+          "sourcing.collection.auto_scheduled",
+          this.now(),
+        );
+      },
+      this.now(),
+      this.queueBacklogLimit,
+    );
+  }
+  private async enqueueExistingAutomaticDownstream(): Promise<boolean> {
     if (
       await recoverCircuitHeldSourcing(
         this.pool,

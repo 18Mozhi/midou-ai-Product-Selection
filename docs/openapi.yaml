@@ -1,4 +1,5 @@
 openapi: 3.0.3
+# Successful automatic sourcing refresh uses existing provider schedule_minutes and new historical searches; API fields, permissions and schemas unchanged.
 # Supply title eligible prefilter reuses unchanged final quote guards; item citation failures remain separate from batch identity/schema errors. No API field change.
 # Catalogue scoped active-version query optimization preserves list API fields, filters and gates.
 # Automatic fanout backpressure reuses the existing runtime threshold; no API/schema/state changes.

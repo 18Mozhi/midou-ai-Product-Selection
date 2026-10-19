@@ -1,4 +1,16 @@
 {
+  "selectionSourcingRefresh20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-sourcing-refresh.md",
+    "sourceFiles": [
+      "apps/worker/src/automatic-sourcing-refresh.ts",
+      "apps/worker/src/trend-projection-persistence.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-sourcing-refresh.test.mjs"
+    ],
+    "contract": "Refresh only stale successful latest automatic sourcing searches for pending scoped primaries waiting for a trustworthy purchase input, using existing provider schedule_minutes. Original source, primary, quote, active-task and shared1000 admission guards. Ordinary candidate reads, scoped primary checks and PK-serialized transaction create new search/task/seed history. Alternate successful refresh and original downstream turns; no API/env/schema/dependency/Python change. Existing source schedule is dynamic; BaoTa Node code restart required."
+  },
   "selectionSupplyEligibleCitations20261020": {
     "status": "implemented",
     "requirements": "docs/selection-supply-eligible-citations.md",
