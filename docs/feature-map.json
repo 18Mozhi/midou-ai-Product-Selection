@@ -1,4 +1,11 @@
 {
+  "amazonEmptyFeaturedCarousel20261020": {
+    "status": "implemented",
+    "requirements": "docs/amazon-empty-featured-carousel.md",
+    "sourceFiles": ["packages/provider-sources/src/amazon-browser-contract.ts"],
+    "testFiles": ["tests/unit/amazon-browser-contract.test.mjs"],
+    "contract": "Observed explicit empty messaging may precede a featured-ASIN carousel with the exact native heading. Return zero facts only with succeeded_empty; retain challenge, real search-card, detail, pre-heading ASIN and unknown-structure protection. No producer/API/schema/config/dependency change. BaoTa Node restart required; no forced source enable."
+  },
   "selectionPersistenceCircuitIsolation20261020": {
     "status": "implemented",
     "requirements": "docs/selection-persistence-circuit-isolation.md",

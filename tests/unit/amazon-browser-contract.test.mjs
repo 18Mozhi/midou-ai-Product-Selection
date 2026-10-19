@@ -84,6 +84,32 @@ test("observed ordinary Amazon empty search returns no facts without disabling t
   assert.throws(() => parseAmazonBrowserRunResult(result(emptySearch), { page_url: url }));
 });
 
+test("observed no-results featured carousel remains empty without supplying recommendation facts", () => {
+  const source = "https://www.amazon.com/s?k=Waymo+vehicle+accessories";
+  const target = { query: "Waymo vehicle accessories" };
+  const carousel =
+    '<h2 id="loom-desktop-inline-slot_featuredasins-heading" class="a-size-medium-plus a-color-base">Customers frequently viewed</h2><div data-asin="B0CYQ27WHS" data-uuid="s-searchgrid-carousel:0"><h2>Car Ceiling Cargo Net</h2></div>';
+  assert.deepEqual(
+    parseAmazonBrowserRunResult(
+      { ...result(emptySearch + carousel, source), status: "succeeded_empty" },
+      target,
+    ),
+    [],
+  );
+  for (const body of [
+    emptySearch + carousel.replace("loom-desktop-inline-slot_featuredasins-heading", "unknown"),
+    emptySearch +
+      carousel +
+      '<div data-component-type="s-search-result" data-asin="B000000001"></div>',
+    '<div data-asin="B000000001"></div>' + emptySearch + carousel,
+    emptySearch + carousel + "<form>Verify you are human</form>",
+  ])
+    assert.throws(() =>
+      parseAmazonBrowserRunResult({ ...result(body, source), status: "succeeded_empty" }, target),
+    );
+  assert.throws(() => parseAmazonBrowserRunResult(result(emptySearch + carousel, source), target));
+});
+
 test("observed Amazon 503 error template is retryable rather than parser drift or empty facts", () => {
   const source = "https://www.amazon.com/s?k=anti%20aging%20cream";
   const target = { query: "anti aging cream" };

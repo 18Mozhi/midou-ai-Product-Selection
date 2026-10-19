@@ -188,10 +188,18 @@ export function parseAmazonBrowserEvidenceArtifacts(
 
 function observedEmptySearch(html: string) {
   const body = html.replace(/<!--[\s\S]*?-->|<(script|style)\b[^>]*>[\s\S]*?(?:<\/\1>|$)/gi, "");
-  if (
-    /captcha|verify you are human|bm-verify|id=["']productTitle["']|data-asin=["'][A-Z0-9]{10}["']/i.test(
+  // Observed empty searches can append an unrelated featured-ASIN carousel.
+  // Its products must never become search facts or invalidate the actual empty message.
+  const recommendations =
+    /<h2\b[^>]*\sid=["']loom-desktop-inline-slot_featuredasins-heading["'][^>]*>\s*Customers frequently viewed\s*<\/h2>/i.exec(
       body,
-    )
+    );
+  const searchBody = recommendations ? body.slice(0, recommendations.index) : body;
+  if (
+    /captcha|verify you are human|bm-verify|id=["']productTitle["']|data-component-type=["']s-search-result["']/i.test(
+      body,
+    ) ||
+    /data-asin=["'][A-Z0-9]{10}["']/i.test(searchBody)
   )
     return false;
   const main = /<div\b[^>]*class=["'][^"']*\bs-main-slot\b[^"']*["'][^>]*>/i.exec(body);
@@ -202,6 +210,8 @@ function observedEmptySearch(html: string) {
     );
   if (!message) return false;
   const content = body.slice(main.index + message.index + message[0].length);
+  if (recommendations && recommendations.index < main.index + message.index + message[0].length)
+    return false;
   const heading = /<h2\b[^>]*>([\s\S]*?)<\/h2>/i.exec(content)?.[1];
   return (
     heading?.replace(/<[^>]*>/g, "").trim() === "No results for your search query." &&
