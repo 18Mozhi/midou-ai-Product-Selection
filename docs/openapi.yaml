@@ -11808,3 +11808,6 @@ x-scoutops-lan-1688:
 # 2026-10-20 member sourcing search creation/recollection/deletion UI and request producers retired.
 # Existing backend routes, permissions, audit/history and automatic sourcing contracts remain unchanged.
 # Current member scope: docs/selection-retired-sourcing-search-actions.md
+
+# 2026-10-20 internal intake admission uses max(1, existing backlog budget - existing3-query fanout).
+# Completion admission, API fields and task payloads remain unchanged. See docs/selection-intake-completion-headroom.md.

@@ -1,3 +1,4 @@
+import { automaticIntakeBacklogLimit } from "../../apps/worker/dist/automatic-intake-capacity-policy.js";
 import { automaticCollectionBacklogCountSql } from "../../apps/worker/dist/collection-source-scheduling-policy.js";
 
 // SELECT-only MySQL 5.7 cases using the production count expression over synthetic derived tables.
@@ -52,5 +53,37 @@ export function automaticFanoutAdmissionCases() {
         sourcing_allowed: 1,
       },
     }));
+  });
+}
+
+/** Actual shared count SQL over scoped synthetic rows; never writes fixtures to MySQL. */
+export function automaticIntakeHeadroomCases() {
+  const digits =
+    "(SELECT 0 n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9)";
+  return [1, 2, 3, 7, 1000].flatMap((limit) => {
+    const intakeLimit = automaticIntakeBacklogLimit(limit);
+    return [...new Set([0, intakeLimit - 1, intakeLimit, limit - 1, limit])].map((backlog) => {
+      const rows = `(SELECT 'o' organization_id,'w' workspace_id,'queued' status FROM ${digits} a CROSS JOIN ${digits} b CROSS JOIN ${digits} c WHERE a.n+10*b.n+100*c.n<${backlog}) backlog`;
+      const countSql = automaticCollectionBacklogCountSql
+        .replace("collection_tasks backlog", () => rows)
+        .replace(
+          "organizations collection_scope_org",
+          "(SELECT 'o' id,'active' status) collection_scope_org",
+        )
+        .replace(
+          "workspaces collection_scope_workspace",
+          "(SELECT 'w' id,'o' organization_id,'active' status) collection_scope_workspace",
+        );
+      return {
+        name: `limit-${limit}-backlog-${backlog}`,
+        sql: `SELECT ${countSql} backlog,(${countSql}<?) intake_allowed,(${countSql}<?) completion_allowed`,
+        params: [intakeLimit, limit],
+        expected: {
+          backlog,
+          intake_allowed: Number(backlog < intakeLimit),
+          completion_allowed: Number(backlog < limit),
+        },
+      };
+    });
   });
 }

@@ -1,3 +1,4 @@
+import { automaticIntakeBacklogLimit } from "./automatic-intake-capacity-policy.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
@@ -50,7 +51,7 @@ export class MySqlAutomaticSourceScheduler {
       await c.beginTransaction();
       const now = this.now();
       const backlog = await this.backlog(c);
-      if (backlog >= this.policy.queueBacklogLimit) {
+      if (backlog >= automaticIntakeBacklogLimit(this.policy.queueBacklogLimit)) {
         await c.commit();
         return { status: "backpressure", reason: "queue_backlog_limit" };
       }

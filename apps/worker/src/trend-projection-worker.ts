@@ -1,3 +1,4 @@
+import { automaticIntakeBacklogLimit } from "./automatic-intake-capacity-policy.js";
 import {
   activeCollectionScopeSql,
   automaticCollectionBacklogCountSql,
@@ -280,7 +281,7 @@ export class MySqlTrendProjectionWorker {
       const [candidates] = await c.query<RowDataPacket[]>(
         `SELECT id,organization_id,workspace_id FROM trend_projection_jobs WHERE ${activeCollectionScopeSql("trend_projection_jobs")} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) AND ${automaticCollectionBacklogCountSql}<?` +
           intelligenceFirstOrderSql,
-        [now, now, this.queueBacklogLimit],
+        [now, now, automaticIntakeBacklogLimit(this.queueBacklogLimit)],
       );
       const candidate = candidates[0];
       if (!candidate) {

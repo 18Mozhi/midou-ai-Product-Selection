@@ -1,3 +1,4 @@
+import { automaticIntakeBacklogLimit } from "./automatic-intake-capacity-policy.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 
@@ -84,7 +85,10 @@ export class IntelligenceSourceRecovery {
       );
       const limit = Math.min(
         20,
-        Math.max(0, this.queueBacklogLimit - Number(backlog[0]?.count ?? 0)),
+        Math.max(
+          0,
+          automaticIntakeBacklogLimit(this.queueBacklogLimit) - Number(backlog[0]?.count ?? 0),
+        ),
       );
       if (!limit) {
         await c.commit();

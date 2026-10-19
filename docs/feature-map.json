@@ -1,4 +1,11 @@
 {
+  "selectionIntakeCompletionHeadroom20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-intake-completion-headroom.md",
+    "sourceFiles": ["apps/worker/src/automatic-intake-capacity-policy.ts", "apps/worker/src/automatic-source-scheduler.ts", "apps/worker/src/intelligence-source-recovery.ts", "apps/worker/src/trend-projection-worker.ts", "apps/worker/src/intelligence-product-association.ts"],
+    "testFiles": ["tests/unit/automatic-intake-headroom.test.mjs", "tests/unit/automatic-fanout-admission.test.mjs", "tests/unit/intelligence-source-recovery.test.mjs", "tests/fixtures/automatic-fanout-admission-sql.mjs"],
+    "contract": "Fresh source/rule scheduling, proven intelligence recovery and trend claims use max(1, existing backlog limit minus existing3-query fanout). Completion keeps the original budget and quality/source/scope/cooldown/lease contracts. No atomic reservation or throughput claim. Same config value, no new API/env/schema/dependency/Python field; BaoTa Node restart required."
+  },
   "selectionRetiredSourcingSearchActions20261020": {
     "status": "implemented",
     "requirements": "docs/selection-retired-sourcing-search-actions.md",

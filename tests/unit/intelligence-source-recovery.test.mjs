@@ -133,6 +133,8 @@ test("source outage recovery creates one linked search with original scope, targ
 for (const [label, options] of [
   ["provider not admitted or not restored", { provider: false }],
   ["global backlog full", { backlog: 1000 }],
+  ["completion headroom starts", { backlog: 997 }],
+  ["last completion slot stays available", { backlog: 999 }],
   ["candidate lost", { lost: true }],
   ["another recovery already exists", { replay: true }],
   ["multiple original subqueries", { queries: [query, query] }],
@@ -165,7 +167,7 @@ for (const [label, options] of [
 }
 
 test("recovery respects the remaining backlog capacity and rolls back partial writes on error", async () => {
-  const capacity = setup({ backlog: 999 });
+  const capacity = setup({ backlog: 996 });
   await capacity.recovery.processOnce();
   assert.equal(
     capacity.calls.find(([s]) => s.startsWith("SELECT t.id,t.organization_id"))[1][2],

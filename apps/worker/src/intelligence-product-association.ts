@@ -1,3 +1,4 @@
+import { intelligenceProductQueryLimit } from "./automatic-intake-capacity-policy.js";
 import type { RuntimeConfig } from "@scoutops/config";
 import {
   validateSupplyTitleClassifications,
@@ -50,7 +51,7 @@ export function validateProductAssociation(value: unknown, input: IntelligenceIn
     !text(result.excerpt, 500) ||
     !`${input.title}\n${input.summary}`.includes(result.excerpt) ||
     !Array.isArray(result.queries) ||
-    result.queries.length > 3 ||
+    result.queries.length > intelligenceProductQueryLimit ||
     result.queries.some((query) => !text(query, 120) || /[\r\n\u0000-\u001f]/u.test(query)) ||
     (result.relation === "unrelated" ? result.queries.length !== 0 : result.queries.length === 0)
   )

@@ -1,3 +1,4 @@
+import { automaticIntakeBacklogLimit } from "../../apps/worker/dist/automatic-intake-capacity-policy.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
@@ -31,7 +32,10 @@ for (const limit of [1, 7, 1000]) {
       assert.equal(await worker.claim(), null);
       assert.equal(calls.length, 3);
       assert.deepEqual(calls.slice(1), ["commit", "release"]);
-      assert.equal(calls[0].params.at(-1), limit);
+      assert.equal(
+        calls[0].params.at(-1),
+        kind === "trend" ? automaticIntakeBacklogLimit(limit) : limit,
+      );
       assert.ok(calls[0].sql.includes(automaticCollectionBacklogCountSql + "<?"));
       assert.doesNotMatch(calls[0].sql, /FOR UPDATE|INSERT|UPDATE |DELETE /);
       if (kind === "core")
