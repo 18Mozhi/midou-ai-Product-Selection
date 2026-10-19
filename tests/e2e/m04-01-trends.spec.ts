@@ -97,6 +97,16 @@ const envelope = (data: unknown, meta?: unknown) => ({
   trace_id: "m04-01-e2e-trace",
 });
 const managerCapabilities = ["task:read", "trend:read", "trend:manage"];
+const relatedProduct = {
+  id: "00000000-0000-4000-8000-000000000488",
+  name: "情报对应的收纳盒",
+  market: "US",
+  main_asin: "B000000001",
+  overall_score: null,
+  competitor_count: 4,
+  supplier_candidate_count: 60,
+  profit_status: "insufficient_data",
+};
 async function navigation(page: Page, capabilities = managerCapabilities) {
   await page.route("**/api/v1/me/ui-preferences", (route) =>
     route.fulfill({ json: envelope({ theme: "deep-ocean", version: 1 }) }),
@@ -507,4 +517,197 @@ test("empty trend filters expose a one-step recovery action", async ({ page }) =
   if ((page.viewportSize()?.width ?? 0) <= 1100)
     await page.locator(".trend-list > button").first().click();
   await expect(page.getByRole("heading", { name: detail.title })).toBeVisible();
+});
+
+test("related products use exact topic scope, preserve unknowns and paginate without writes", async ({
+  page,
+}) => {
+  await ready(page, [topic], { capabilities: [...managerCapabilities, "opportunity:read"] });
+  const reads: URL[] = [];
+  await page.route("**/api/v1/opportunities?*", async (route) => {
+    const query = new URL(route.request().url());
+    reads.push(query);
+    expect(route.request().method()).toBe("GET");
+    expect(query.searchParams.get("source_topic_id")).toBe(topicId);
+    expect(query.searchParams.get("selection_view")).toBe("all");
+    expect(query.searchParams.get("page_size")).toBe("5");
+    const second = query.searchParams.get("page") === "2";
+    await route.fulfill({
+      json: envelope(
+        [{ ...relatedProduct, name: second ? "第二页关联选品" : relatedProduct.name }],
+        { total: 6 },
+      ),
+    });
+  });
+  await page.goto(`/trends?topic=${topicId}`);
+  const region = page.getByRole("region", { name: "关联选品", exact: true });
+  await expect(region.getByRole("link", { name: relatedProduct.name })).toBeVisible();
+  await expect(region).toContainText("不代表已推荐或整链完成");
+  await expect(region).toContainText("未知");
+  await expect(region).toContainText("竞品候选");
+  const href = await region.getByRole("link", { name: relatedProduct.name }).getAttribute("href");
+  expect(new URL(href!, "https://example.test").searchParams.get("from")).toBe(
+    `/trends?topic=${topicId}`,
+  );
+  await region.scrollIntoViewIfNeeded();
+  await expect(page).toHaveScreenshot("intelligence-related-products-20261019.png", {
+    fullPage: false,
+  });
+  await region.getByRole("button", { name: "下一页" }).click();
+  await expect(region).toContainText("第二页关联选品");
+  await region.getByRole("button", { name: "上一页" }).click();
+  await expect(region).toContainText(relatedProduct.name);
+  expect(reads.map((url) => url.searchParams.get("page"))).toEqual(["1", "2", "1"]);
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
+});
+
+test("related products never read without opportunity permission", async ({ page }) => {
+  await ready(page);
+  let reads = 0;
+  await page.route("**/api/v1/opportunities?*", (route) => {
+    reads++;
+    return route.fulfill({ json: envelope([], { total: 0 }) });
+  });
+  await page.goto(`/trends?topic=${topicId}`);
+  await expect(page.getByRole("heading", { name: "主要证据", exact: true })).toBeVisible();
+  await expect(page.getByRole("region", { name: "关联选品", exact: true })).toHaveCount(0);
+  expect(reads).toBe(0);
+});
+
+test("related product failure is local and retry reads only related products", async ({ page }) => {
+  await ready(page, [topic], { capabilities: [...managerCapabilities, "opportunity:read"] });
+  let reads = 0;
+  await page.route("**/api/v1/opportunities?*", (route) => {
+    reads++;
+    return reads === 1
+      ? route.fulfill({
+          status: 500,
+          json: {
+            error: { code: "internal_error", message: "test failure" },
+            request_id: "related-read",
+            trace_id: "related-read",
+          },
+        })
+      : route.fulfill({ json: envelope([relatedProduct], { total: 1 }) });
+  });
+  await page.goto(`/trends?topic=${topicId}`);
+  const region = page.getByRole("region", { name: "关联选品", exact: true });
+  await expect(region).toContainText("读取失败");
+  await expect(page.getByRole("heading", { name: "主要证据", exact: true })).toBeVisible();
+  await region.getByRole("button", { name: "重试关联选品" }).click();
+  await expect(region).toContainText(relatedProduct.name);
+  expect(reads).toBe(2);
+});
+
+test("related product permission denial preserves evidence without offering a blind retry", async ({
+  page,
+}) => {
+  await ready(page, [topic], { capabilities: [...managerCapabilities, "opportunity:read"] });
+  let reads = 0;
+  await page.route("**/api/v1/opportunities?*", (route) => {
+    reads++;
+    return route.fulfill({
+      status: 403,
+      json: {
+        error: { code: "capability_required", message: "denied" },
+        request_id: "denied-related",
+        trace_id: "denied-related",
+      },
+    });
+  });
+  await page.goto(`/trends?topic=${topicId}`);
+  const region = page.getByRole("region", { name: "关联选品", exact: true });
+  await expect(region).toContainText("无权读取关联选品");
+  await expect(region.getByRole("button")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "主要证据", exact: true })).toBeVisible();
+  expect(reads).toBe(1);
+});
+
+test("related products recover from a page that disappears without hiding existing records", async ({
+  page,
+}) => {
+  await ready(page, [topic], { capabilities: [...managerCapabilities, "opportunity:read"] });
+  let reads = 0;
+  await page.route("**/api/v1/opportunities?*", (route) => {
+    reads++;
+    const second = new URL(route.request().url()).searchParams.get("page") === "2";
+    return route.fulfill({
+      json: envelope(second ? [] : [relatedProduct], { total: reads === 1 ? 6 : 1 }),
+    });
+  });
+  await page.goto(`/trends?topic=${topicId}`);
+  const region = page.getByRole("region", { name: "关联选品", exact: true });
+  await expect(region).toContainText(relatedProduct.name);
+  await region.getByRole("button", { name: "下一页" }).click();
+  await expect(region).toContainText("1 个未归档记录");
+  await expect(region).toContainText(relatedProduct.name);
+  await expect(region.getByRole("navigation")).toHaveCount(0);
+  expect(reads).toBe(3);
+});
+
+test("related products empty state does not claim discovery is running", async ({ page }) => {
+  await ready(page, [topic], { capabilities: [...managerCapabilities, "opportunity:read"] });
+  await page.route("**/api/v1/opportunities?*", (route) =>
+    route.fulfill({ json: envelope([], { total: 0 }) }),
+  );
+  await page.goto(`/trends?topic=${topicId}`);
+  const region = page.getByRole("region", { name: "关联选品", exact: true });
+  await expect(region).toContainText("尚无已关联的未归档选品记录");
+  await expect(region).not.toContainText("正在读取");
+  await expect(region.getByRole("link")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "主要证据", exact: true })).toBeVisible();
+});
+
+test("a late related product response cannot replace the newly selected topic", async ({
+  page,
+}) => {
+  await ready(page, [topic, mergeTopic], {
+    capabilities: [...managerCapabilities, "opportunity:read"],
+  });
+  await page.route(`**/api/v1/trends/${mergeTopic.id}`, (route) =>
+    route.fulfill({ json: envelope({ ...detail, ...mergeTopic }) }),
+  );
+  let release!: () => void;
+  const blocked = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  let firstRead!: () => void;
+  const started = new Promise<void>((resolve) => {
+    firstRead = resolve;
+  });
+  let finishOld!: () => void;
+  const oldFinished = new Promise<void>((resolve) => {
+    finishOld = resolve;
+  });
+  await page.route("**/api/v1/opportunities?*", async (route) => {
+    const old = new URL(route.request().url()).searchParams.get("source_topic_id") === topicId;
+    if (old) {
+      firstRead();
+      await blocked;
+    }
+    await route
+      .fulfill({
+        json: envelope([{ ...relatedProduct, name: old ? "过期关联选品" : "新主题关联选品" }], {
+          total: 1,
+        }),
+      })
+      .catch(() => {});
+    if (old) finishOld();
+  });
+  await page.goto(`/trends?topic=${topicId}`);
+  await started;
+  try {
+    if ((page.viewportSize()?.width ?? 0) <= 1100)
+      await page.getByRole("button", { name: "返回趋势列表" }).click();
+    await page.locator(".trend-list > button").filter({ hasText: mergeTopic.title }).click();
+    const region = page.getByRole("region", { name: "关联选品", exact: true });
+    await expect(region).toContainText("新主题关联选品");
+    release();
+    await oldFinished;
+    await expect(region).not.toContainText("过期关联选品");
+  } finally {
+    release();
+  }
 });

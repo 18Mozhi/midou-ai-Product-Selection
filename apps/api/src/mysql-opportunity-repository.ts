@@ -9,6 +9,7 @@ import {
   readOpportunityPrimaryProduct,
 } from "./opportunity-primary-product.js";
 import { readOpportunityPurchasePrices } from "./opportunity-purchase-price.js";
+import { opportunitySourceTopicFilterSql } from "./opportunity-source-topic-filter.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
@@ -122,11 +123,16 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     lifecycleStatus?:
       "candidate" | "validating" | "ready" | "adopted" | "observing" | "rejected" | "archived";
     ownerId?: string;
+    sourceTopicId?: string;
     scope?: "product" | "all";
     selectionView?: "recommended" | "rule_candidates" | "evidence_pending" | "all";
   }) {
     const where = ["o.organization_id=?", "o.workspace_id=?"],
       values: unknown[] = [input.organizationId, input.workspaceId];
+    if (input.sourceTopicId) {
+      where.push(opportunitySourceTopicFilterSql);
+      values.push(input.sourceTopicId);
+    }
     if (input.selectionView === "recommended") {
       where.push("o.decision_status='pending'", opportunityRecommendedSql);
     } else if (input.selectionView === "rule_candidates") {

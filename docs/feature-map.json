@@ -1,4 +1,26 @@
 {
+  "intelligenceRelatedProducts20261019": {
+    "status": "implemented",
+    "requirements": "docs/intelligence-related-products.md",
+    "routes": ["/trends", "/opportunities/:id"],
+    "apis": ["GET /api/v1/opportunities?source_topic_id=<topic_uuid>"],
+    "sourceFiles": [
+      "apps/api/src/opportunity-source-topic-filter.ts",
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/api/src/opportunity-service.ts",
+      "apps/api/src/opportunity-routes.ts",
+      "apps/web/src/components/TrendRelatedProducts.vue",
+      "apps/web/src/components/TrendDashboard.vue",
+      "apps/web/src/components/TrendDetailPanel.vue",
+      "docs/openapi.yaml"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-source-topic-filter.test.mjs",
+      "tests/m04-02/opportunities.test.mjs",
+      "tests/e2e/m04-01-trends.spec.ts"
+    ],
+    "contract": "Read exact scoped direct topic origins or persisted original-intelligence trend-signal evidence links. Reuse opportunity:read and reject invalid or empty UUIDs instead of broadening. Isolate related-product read failures and stale responses, preserve evidence and detail return paths. No title matching, writes, new permission, schema, environment or Python change. Related records are not daily completions."
+  },
   "selectionCatalogueDefaultDataList20261019": {
     "status": "implemented",
     "requirements": "docs/catalogue-default-data-list.md",

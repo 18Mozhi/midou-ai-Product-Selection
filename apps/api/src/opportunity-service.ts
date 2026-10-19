@@ -386,6 +386,7 @@ export interface OpportunityRepository {
       blockingReason?: OpportunityBlockingReason;
       lifecycleStatus?: OpportunityLifecycle;
       ownerId?: string;
+      sourceTopicId?: string;
       scope?: "product" | "all";
       selectionView?: OpportunitySelectionView;
     },
@@ -442,6 +443,7 @@ export class OpportunityService {
       blockingReason?: OpportunityBlockingReason;
       lifecycleStatus?: OpportunityLifecycle;
       ownerId?: string;
+      sourceTopicId?: string;
       scope?: "product" | "all";
       selectionView?: OpportunitySelectionView;
     },
@@ -522,6 +524,9 @@ export class OpportunityService {
         ? { market: bounded(input.market, "market", 40, /^[A-Za-z0-9._-]+$/).toUpperCase() }
         : {}),
       ...(input.ownerId ? { ownerId: uuid(input.ownerId, "owner_id") } : {}),
+      ...(input.sourceTopicId !== undefined
+        ? { sourceTopicId: uuid(input.sourceTopicId, "source_topic_id") }
+        : {}),
     });
   }
   memberOptions(input: OpportunityScope) {

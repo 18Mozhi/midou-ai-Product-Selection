@@ -80,6 +80,7 @@ export function registerOpportunityRoutes(app: FastifyInstance, options: Opportu
         ? { selectionView: query.selection_view as OpportunitySelectionView }
         : {}),
       ...(query.q ? { query: query.q } : {}),
+      ...(query.source_topic_id !== undefined ? { sourceTopicId: query.source_topic_id } : {}),
       ...(query.market ? { market: query.market } : {}),
       ...(query.decision_status
         ? { decisionStatus: query.decision_status as OpportunityDecision }

@@ -179,7 +179,7 @@ test("M04-02.A06/A09/A13 API derives scope and protects writes with origin and i
     });
   let response = await app.inject({
     method: "GET",
-    url: "/api/v1/opportunities?page=1&page_size=20&selection_view=recommended&coverage_status=partial&blocking_reason=recommendation_insufficient",
+    url: `/api/v1/opportunities?page=1&page_size=20&selection_view=recommended&coverage_status=partial&blocking_reason=recommendation_insufficient&source_topic_id=${ids.topic}`,
     headers: {
       cookie: "scoutops_session=test",
       "x-request-id": "opp-read",
@@ -193,6 +193,7 @@ test("M04-02.A06/A09/A13 API derives scope and protects writes with origin and i
   assert.equal(calls[1][1].selectionView, "recommended");
   assert.equal(calls[1][1].coverageStatus, "partial");
   assert.equal(calls[1][1].blockingReason, "recommendation_insufficient");
+  assert.equal(calls[1][1].sourceTopicId, ids.topic);
   response = await app.inject({
     method: "POST",
     url: "/api/v1/opportunities",

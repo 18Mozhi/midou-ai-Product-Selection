@@ -13,6 +13,7 @@ import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import UiStatePanel from "./UiStatePanel.vue";
 import TrendDetailPanel from "./TrendDetailPanel.vue";
+import TrendRelatedProducts from "./TrendRelatedProducts.vue";
 import TrendFilterPanel from "./TrendFilterPanel.vue";
 import TrendMetricExplainer from "./TrendMetricExplainer.vue";
 import { statusLabel } from "../ui/status-labels";
@@ -449,7 +450,17 @@ onBeforeUnmount(() => {
           </button>
         </footer>
       </section>
-      <TrendDetailPanel v-if="selected" :detail="selected" :busy="busy" @back="returnToTopicList" />
+      <TrendDetailPanel v-if="selected" :detail="selected" :busy="busy" @back="returnToTopicList">
+        <template #related-products>
+          <TrendRelatedProducts
+            v-if="capabilities.includes('opportunity:read')"
+            :api-base-url="apiBaseUrl"
+            :topic-id="selected.id"
+            :organization-id="organizationId"
+            :workspace-id="workspaceId"
+          />
+        </template>
+      </TrendDetailPanel>
     </div>
     <TrendMetricExplainer />
   </section>

@@ -88,6 +88,7 @@ const freshness = (value: string) =>
         </dd>
       </div>
     </dl>
+    <slot v-if="busy !== 'detail'" name="related-products" />
     <TrendEvidenceTimeline v-if="busy !== 'detail'" :detail="detail" />
   </article>
 </template>

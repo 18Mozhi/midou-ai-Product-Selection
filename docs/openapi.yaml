@@ -1946,6 +1946,12 @@ paths:
               },
           }
         - { name: owner_id, in: query, schema: { type: string, format: uuid } }
+        - {
+            name: source_topic_id,
+            in: query,
+            description: "Exact same-workspace topic origin or retained trend-signal evidence link; no title matching. An empty or malformed UUID fails with 400 rather than returning an unfiltered page.",
+            schema: { type: string, format: uuid },
+          }
       responses:
         "200":
           {
