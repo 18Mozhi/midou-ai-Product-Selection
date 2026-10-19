@@ -771,7 +771,7 @@ async function confirmBatchReplay() {
             当前范围没有来源健康记录。
           </p>
         </section>
-        <section>
+        <section class="collection-summary">
           <h3>任务状态</h3>
           <div v-if="data.task_states.length" class="collection-state-chips">
             <span v-for="t in data.task_states" :key="t.status"
@@ -789,7 +789,11 @@ async function confirmBatchReplay() {
           </div>
           <p v-else class="collection-section-empty">当前范围没有质量问题。</p>
         </section>
-        <section ref="rootCauseSection" class="collection-root-causes" tabindex="-1">
+        <section
+          ref="rootCauseSection"
+          class="collection-root-causes collection-wide-section"
+          tabindex="-1"
+        >
           <header>
             <div>
               <h3>错误根因</h3>
@@ -829,7 +833,7 @@ async function confirmBatchReplay() {
           </div>
           <p v-else>当前筛选范围没有采集错误。</p>
         </section>
-        <section>
+        <section class="collection-wide-section">
           <header class="collection-section-header">
             <h3>最近尝试</h3>
             <span>{{ rangeLabel(data.pagination?.attempts) }}</span>
@@ -946,7 +950,7 @@ async function confirmBatchReplay() {
             </button>
           </nav>
         </section>
-        <section>
+        <section class="collection-wide-section">
           <header class="collection-section-header">
             <h3>开放与已重放死信</h3>
             <span>{{ rangeLabel(data.pagination?.dead_letters) }}</span>

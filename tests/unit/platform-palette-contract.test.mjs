@@ -184,7 +184,7 @@ test("opportunity queue and detail colors resolve from their route-scoped palett
     ].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 21);
+  assert.equal(names.size, 19);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -812,29 +812,11 @@ test("P38 platform dashboard colors resolve from its route-scoped palette", asyn
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("P52 collection operations colors resolve from its route-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/collection-ops-tokens.css", "utf8"),
-    readFile("apps/web/src/styles/platform-operations.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--p52-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p52-[a-z-]+)\)/g)].map((match) => match[1]));
-
-  assert.equal(names.size, 9);
-  assert.equal(
-    declarations.length,
-    names.size,
-    "no duplicate collection operations palette declarations",
-  );
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.collection-ops--review\)\s*\{[\s\S]*\}$/,
-  );
-  assert.ok(css.startsWith('@import "../design/collection-ops-tokens.css";'));
-  assertPaletteUsage(references, names);
+test("collection overview uses shared theme tokens after retiring its fixed blue palette", async () => {
+  const css = await readFile("apps/web/src/styles/platform-operations.css", "utf8");
+  assert.doesNotMatch(css, /--p52-|collection-ops-tokens/);
+  assert.match(css, /var\(--so-panel\)/);
+  assert.match(css, /var\(--so-text-muted\)/);
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 

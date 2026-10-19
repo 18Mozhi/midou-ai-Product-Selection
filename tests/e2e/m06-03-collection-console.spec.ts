@@ -139,6 +139,41 @@ async function navigation(page: Page) {
   );
 }
 
+test("collection overview separates monitoring panels and keeps long records full width", async ({
+  page,
+}) => {
+  await navigation(page);
+  await page.route("**/api/v1/platform/collection/console?**", (route) =>
+    route.fulfill({ json: envelope(data) }),
+  );
+  await page.goto("/platform-admin/collection/overview");
+  await expect(page.getByRole("heading", { name: "最近尝试", exact: true })).toBeVisible();
+  const layout = await page.locator(".collection-ops-grid").evaluate((element) => {
+    const grid = element.getBoundingClientRect();
+    const panels = [...element.querySelectorAll(":scope > section")].map((panel) => {
+      const rect = panel.getBoundingClientRect();
+      return {
+        wide: panel.classList.contains("collection-wide-section"),
+        width: rect.width,
+        x: rect.x,
+      };
+    });
+    return {
+      width: grid.width,
+      panels,
+      overflow: document.documentElement.scrollWidth > innerWidth,
+      topBorder: getComputedStyle(element).borderTopWidth,
+    };
+  });
+  expect(layout.overflow).toBe(false);
+  expect(layout.topBorder).toBe("0px");
+  expect(layout.panels.filter((panel) => panel.wide)).toHaveLength(3);
+  for (const panel of layout.panels.filter((panel) => panel.wide))
+    expect(Math.abs(panel.width - layout.width)).toBeLessThan(2);
+  if ((page.viewportSize()?.width ?? 0) > 1360)
+    expect(layout.panels[1].x).toBeGreaterThan(layout.panels[0].x);
+});
+
 test("M06-03.A07/A08/A15 filters source and time, drills exact root cause, and renders responsive UI", async ({
   page,
 }) => {

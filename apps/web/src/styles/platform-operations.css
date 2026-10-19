@@ -1,5 +1,3 @@
-@import "../design/collection-ops-tokens.css";
-
 @media (max-width: 780px) {
   .state-showcase {
     padding: 14px 12px;
@@ -73,80 +71,107 @@
   gap: 18px;
 }
 
-/* P52 C composition is now the production collection overview surface. */
+/* Collection overview shares the commerce administration surface and theme. */
 .collection-ops--review {
-  color: var(--p52-ink);
-  background: var(--p52-canvas);
+  color: var(--so-text);
+  gap: 16px;
 }
-
-.collection-ops--review .collection-ops-links {
-  gap: 0;
-  margin: 24px 0;
-  border: 1px solid var(--p52-border);
-  background: var(--p52-panel);
-}
-
-.collection-ops--review .collection-ops-links a {
-  border-color: var(--p52-border);
-  border-radius: 0;
-  color: var(--p52-blue);
-  font-weight: 800;
-}
-
-.collection-ops--review .collection-ops-grid {
-  gap: 0;
-  border: 1px solid var(--p52-border);
-  border-top: 5px solid var(--p52-blue);
-  background: var(--p52-panel);
-}
-
-.collection-ops--review .collection-ops-grid > section {
-  padding: 24px;
+.collection-ops--review > header.platform-page-header {
+  padding: 4px 0 8px;
   border: 0;
-  border-right: 1px solid var(--p52-border);
-  border-bottom: 1px solid var(--p52-border);
+  background: transparent;
+}
+.collection-ops--review .collection-ops-links {
+  gap: 8px 20px;
+  margin: 0;
+  padding: 0 2px;
+}
+.collection-ops--review .collection-ops-links a {
+  padding: 6px 0;
+  border: 0;
   border-radius: 0;
-  background: var(--p52-panel);
+  color: var(--so-primary);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.collection-ops--review .collection-ops-links a:hover {
+  text-decoration: underline;
+}
+.collection-ops--review .collection-ops-grid {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+}
+.collection-ops--review .collection-ops-grid > section {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  background: var(--so-panel);
   box-shadow: none;
 }
-
-.collection-ops--review .collection-ops-grid > section:nth-child(3n) {
-  border-right: 0;
+.collection-ops--review .collection-ops-grid > .collection-wide-section {
+  grid-column: 1 / -1;
 }
-
 .collection-ops--review .collection-section-header {
-  border-bottom: 1px solid var(--p52-border);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--so-border);
 }
-
-.collection-ops--review :is(h3, h4, code) {
-  color: var(--p52-blue);
+.collection-ops--review h3 {
+  margin: 0 0 14px;
+  color: var(--so-text);
+  font-size: 15px;
+  font-weight: 650;
 }
-
-.collection-ops--review :is(table th, table td) {
-  border-color: var(--p52-border);
+.collection-ops--review .collection-summary > h3:not(:first-child) {
+  margin-top: 24px;
 }
-
 .collection-ops--review table th {
-  color: var(--p52-on-blue);
-  background: var(--p52-blue);
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+  font-weight: 500;
 }
-
-.collection-ops--review .collection-state-chips span,
-.collection-ops--review .collection-root-list article,
-.collection-ops--review details,
-.collection-ops--review .collection-ops-grid > section > ul > li {
-  border-color: var(--p52-border);
+.collection-ops--review .collection-state-chips {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid var(--so-border);
+  border-radius: 6px;
+}
+.collection-ops--review .collection-state-chips span {
+  gap: 6px;
+  min-width: 0;
+  padding: 14px 12px;
+  border: 0;
   border-radius: 0;
-  background: var(--p52-muted-panel);
+  background: transparent;
+  color: var(--so-text-muted);
+  font-size: 12px;
 }
-
+.collection-ops--review .collection-state-chips b {
+  color: var(--so-text);
+  font-size: 22px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.collection-ops--review .collection-root-list {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.collection-ops--review .collection-root-list article {
+  min-width: 0;
+  border-radius: 6px;
+  background: var(--so-panel-soft);
+}
+.collection-ops--review .collection-root-list button {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
 .collection-ops--review .collection-root-list article[data-selected="true"] {
-  border-left: 5px solid var(--p52-blue);
-  background: var(--p52-selected-panel);
+  border-color: var(--so-primary);
 }
-
 .collection-ops--review :is(button, input, select, a, summary):focus-visible {
-  outline: 3px solid var(--p52-focus);
+  outline: 2px solid var(--so-focus);
   outline-offset: 3px;
 }
 
@@ -420,29 +445,25 @@
     grid-column: 1 / -1;
     justify-content: flex-end;
   }
-  .collection-ops-grid {
-    grid-template-columns: 1fr;
+  .collection-ops-grid,
+  .collection-ops--review .collection-ops-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 1360px) {
+  .collection-ops--review .collection-ops-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 @media (max-width: 800px) {
-  .collection-ops--review .collection-ops-links {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin: 0;
-  }
-
-  .collection-ops--review .collection-ops-links a:nth-child(2n) {
-    border-right: 0;
-  }
-
   .collection-ops--review .collection-ops-grid {
-    display: block;
-    border-right: 0;
-    border-left: 0;
+    grid-template-columns: minmax(0, 1fr);
   }
-
+  .collection-ops--review .collection-root-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .collection-ops--review .collection-ops-grid > section {
-    border-right: 0;
+    padding: 14px;
   }
 
   .collection-ops form {

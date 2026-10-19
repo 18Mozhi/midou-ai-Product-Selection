@@ -18,6 +18,8 @@ import {
   OpportunityServiceError,
 } from "../../apps/api/dist/opportunity-service.js";
 import { PlatformDashboardService } from "../../apps/api/dist/platform-dashboard-service.js";
+import { CollectionConsoleService } from "../../apps/api/dist/collection-console-service.js";
+import { collectionConsoleHttpFacts } from "./collection-console-http.mjs";
 import { HomeDashboardService } from "../../apps/api/dist/home-dashboard-service.js";
 import { ScoringService } from "../../apps/api/dist/scoring-service.js";
 import { ProfitService } from "../../apps/api/dist/profit-service.js";
@@ -28,6 +30,7 @@ export const selectionHttpAccounts = {
   member: "selection-http@example.test",
   viewer: "selection-viewer@example.test",
   foreign: "selection-foreign@example.test",
+  operator: "selection-operator@example.test",
   password: "Local-Selection-Only-42!",
 };
 export const selectionHttpIds = {
@@ -63,7 +66,7 @@ export async function createSelectionHttpStack(webOrigin) {
   const repository = new FixtureAuthRepository();
   const hasher = createArgon2PasswordHasher({ memoryCost: 19456, timeCost: 2, parallelism: 1 });
   const passwordHash = await hasher.hash(selectionHttpAccounts.password);
-  for (const role of ["member", "viewer", "foreign"]) {
+  for (const role of ["member", "viewer", "foreign", "operator"]) {
     const id = randomUUID(),
       foreign = role === "foreign";
     const organization = foreign ? randomUUID() : selectionHttpIds.organization;
@@ -98,10 +101,15 @@ export async function createSelectionHttpStack(webOrigin) {
         role === "viewer"
           ? ["task:read"]
           : ["task:read", "opportunity:read", "opportunity:decide", "competitor:read"],
-      scopes: [{ scope: "organization" }],
-      platform_role_codes: [],
-      platform_capabilities: [],
+      scopes: role === "operator" ? [{ scope: "platform" }] : [{ scope: "organization" }],
+      platform_role_codes: role === "operator" ? ["platform_operations_admin"] : [],
+      platform_capabilities: role === "operator" ? ["platform:operate"] : [],
     });
+    if (role === "operator")
+      authorizationRepository.subjects.set(
+        authorizationRepository.key(id),
+        authorizationRepository.subjects.get(authorizationRepository.key(id, organization)),
+      );
   }
   const auth = new LocalAuthService({
     repository,
@@ -313,6 +321,12 @@ export async function createSelectionHttpStack(webOrigin) {
     },
   }));
   return {
+    collectionConsole: {
+      ...scope,
+      service: new CollectionConsoleService({
+        read: async (input) => collectionConsoleHttpFacts(input),
+      }),
+    },
     localAuth: {
       service: auth,
       idempotency: { execute, executeSensitive: execute },

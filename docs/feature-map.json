@@ -1,4 +1,22 @@
 {
+  "selectionCollectionLayout20261019": {
+    "status": "implemented",
+    "requirements": "docs/selection-collection-layout.md",
+    "sourceFiles": [
+      "apps/web/src/components/CollectionOperationsConsole.vue",
+      "apps/web/src/styles/platform-operations.css",
+      "apps/web/src/design/opportunity-review-tokens.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m06-03-collection-console.spec.ts",
+      "tests/e2e/collection-console-http.spec.ts",
+      "tests/fixtures/collection-console-http.mjs",
+      "tests/fixtures/selection-http-stack.mjs",
+      "tests/unit/platform-palette-contract.test.mjs",
+      "tests/unit/theme-and-icon-completion.test.mjs"
+    ],
+    "contract": "Independent commerce administration panels replace retired P52 fixed-blue layout. Source/summary first row; root causes, attempts and dead letters full width. Existing script, scope, pagination, exact errors, replay permissions/reason/frozen targets/focus/unknown-result protection unchanged. No new config/API/schema/dependency; full UI and daily100 remain unverified."
+  },
   "selectionBrowserCaptchaBoundary20261019": {
     "status": "implemented",
     "requirements": "docs/browser-captcha-error-boundary.md",

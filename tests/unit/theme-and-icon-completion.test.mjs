@@ -222,7 +222,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
           (match) => match[1],
         ),
       );
-      assert.equal(palette.size, 21);
+      assert.equal(palette.size, 19);
       assert.deepEqual([...references].sort(), [...palette].sort());
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -332,13 +332,6 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         /^html:has\(body #app \.platform-dashboard--review\)\s*\{(?:\s*--pd-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
-      );
-      continue;
-    }
-    if (paths[index] === "apps/web/src/design/collection-ops-tokens.css") {
-      assert.match(
-        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html:has\(body #app \.collection-ops--review\)\s*\{(?:\s*--p52-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
       );
       continue;
     }
