@@ -9,3 +9,11 @@ Worker的MySqlAuthenticatedBrowserJobClient此前将原始blocked_captcha直接�
 15项最小回归、40项相关Node回归、22工作区完整构建以及文档、运行一致性、静态分析、格式、发布矩阵门通过。发布前检查main和origin/main均bd9bbceb，所有本地分支已包含；现有verification/state.json的用户修改保持未暂存。
 
 无需新增配置、环境变量、API字段、数据库结构、依赖或浏览器界面。OpenAPI、env.example和Python输入不适用。使用方式与现有采集一致；官方deploy-baota.py发布后由宝塔重启Node项目ai选品才能载入Worker代码，不需单独更改参数。不会清除已有熔断、改写历史validation_failed、重放旧任务、绕过验证码或计入每日完成数。来源自然恢复与每日100品仍须真实验收。
+
+## 发布与真实边界
+
+ec74d025已通过官方宝塔脚本发布，运行版本与本地编译文件SHA256 b60295f901ac742dcbb54921d0904190ff63766a2b8087249c52af38d8349aeb一致。发布第一次在本地换行格式检查失败、未上传；修正发布工作区格式并保持Git内容相同后重跑，完整检查通过且临时部署包已自动删除。
+
+2026-10-19 13:01只读复核，使用线上已缓存的上述原始浏览器行驱动已部署客户端，但数据库连接是进程内替身：实际数据库写入0、外部采集请求0，返回captcha、retryable=false、额外轮询0。原始browser行仍blocked/blocked_captcha；该诊断证明错误映射，不证明新采集成功或真实调度恢复。
+
+来源仍enabled/version19、circuit=open、last_error_code=validation_failed；这是保留的历史熔断，没有强行清除。health ready的last_checked_at仍2026-10-18T15:15:18.898Z，不能宣称本次健康。本工作区今日整链完成0，全站最终UI签收及每日100品仍未通过。没有新增临时测试文件、服务或浏览器会话；此前拒绝清理的路径继续按retired-member-batch-cleanup-handoff.json及前序链保留，不重试删除。
