@@ -619,7 +619,11 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           ...(policyDecision ? { robotsDecision: policyDecision } : {}),
         };
       }
-      if (!historicalBrowserResult)
+      const internalPersistenceFailure =
+        ["evidence_persist", "evidence_artifact", "provider_runtime"].includes(failureStage) &&
+        !isEvidenceValidationError(error) &&
+        TRANSIENT_EVIDENCE_ERROR_CODES.has(rawErrorCode(error));
+      if (!historicalBrowserResult && !internalPersistenceFailure)
         await this.recordProviderRuntimeResult(
           provider.id,
           Number(row.circuit_failure_threshold),
