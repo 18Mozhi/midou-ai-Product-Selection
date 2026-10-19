@@ -100,7 +100,7 @@ export function validateSupplyTitleClassifications(
         ) ||
         supplyExcerpts.some((item) => item.includes(supplyExcerpt) || supplyExcerpt.includes(item))
       )
-        throw invalid();
+        invalidCitation = true;
       productExcerpts.push(productExcerpt);
       supplyExcerpts.push(supplyExcerpt);
       kinds.add(attribute.kind);
@@ -112,7 +112,7 @@ export function validateSupplyTitleClassifications(
   return structuredClone(object.classifications);
 }
 
-/** Independent literal-citation failures cannot authorize a quote or hide identity/schema errors. */
+/** Invalid literal/disjoint citations cannot authorize a quote or hide identity/schema errors. */
 export function validatedSupplyTitleCandidates(value: unknown, input: SupplyTitleInput) {
   const object = value as { classifications: SupplyTitleClassification[] };
   if (

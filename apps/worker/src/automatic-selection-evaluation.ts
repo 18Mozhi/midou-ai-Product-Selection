@@ -152,7 +152,7 @@ const explicitMaterials = (value: string) => {
 };
 const numericTitleSpecifications = (title: string) =>
   new Set(title.normalize("NFKC").match(/\d+(?:[.,]\d+)?/g) ?? []);
-const genericTitleFactsCompatible = (productTitle: string, supplyTitle: string) => {
+export const genericTitleFactsCompatible = (productTitle: string, supplyTitle: string) => {
   const product = explicitMaterials(productTitle),
     supply = explicitMaterials(supplyTitle),
     productNumbers = numericTitleSpecifications(productTitle),

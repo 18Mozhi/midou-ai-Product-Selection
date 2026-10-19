@@ -1,7 +1,7 @@
 import type { Pool, RowDataPacket, ResultSetHeader } from "mysql2/promise";
 import { selectionCandidateSql } from "@scoutops/database";
 
-export const SUPPLY_TITLE_CLASSIFIER_REVISION = "supply-title-disjoint-v1";
+export const SUPPLY_TITLE_CLASSIFIER_REVISION = "supply-title-eligible-citations-v1";
 
 const eligible =
   "e.status='waiting_evidence' AND " +

@@ -9,6 +9,7 @@ import {
   isPhoneCase,
   productIdentityConfidence,
   selectClassifiedSupplyQuote,
+  genericTitleFactsCompatible,
 } from "../../apps/worker/dist/automatic-selection-evaluation.js";
 import { OpenAiIntelligenceProductClassifier } from "../../apps/worker/dist/intelligence-product-association.js";
 import { MySqlAutomaticSelectionEvaluationWorker } from "../../apps/worker/dist/automatic-selection-evaluation-worker.js";
@@ -493,6 +494,89 @@ function batchHarness(
   };
 }
 
+test("an impossible material or numeric cohort consumes no model or renewal budget", async () => {
+  for (const supplyTitle of [offer.title + " 20", "防水硅胶化妆包拉链收纳", "防水化妆包拉链收纳"]) {
+    assert.equal(genericTitleFactsCompatible(title, supplyTitle), false);
+    const h = batchHarness(
+      60,
+      () => {
+        throw new Error("ineligible candidate reached model");
+      },
+      {
+        supplyTitles: () => supplyTitle,
+      },
+    );
+    assert.equal(await h.run(), undefined);
+    assert.equal(h.calls.length, 0);
+    assert.equal(h.renewals.length, 0);
+  }
+});
+
+test("eligibility precedes the original60 model budget and preserves the actual source and quote", async () => {
+  const h = batchHarness(
+    61,
+    (value) => [{ ...result, source_ref: value.candidates[0].source_ref }],
+    {
+      supplyTitles: (index) => (index === 60 ? offer.title : offer.title + " 20"),
+    },
+  );
+  const value = await h.run();
+  assert.equal(h.calls.length, 1);
+  assert.equal(h.calls[0].candidates.length, 1);
+  assert.equal(h.calls[0].candidates[0].source_ref, "61:raw-61");
+  assert.equal(h.renewals.length, 0);
+  const match = selectClassifiedSupplyQuote(input.product_ref, title, h.supplies, value);
+  assert.equal(match.item.externalId, "61");
+  assert.equal(match.item.evidenceId, "raw-61");
+  assert.equal(match.conservativePrice, offer.price);
+  assert.equal(match.confidence, null);
+});
+
+test("source numeric equality remains exact; no unit, pack or model conversion is introduced", () => {
+  assert.equal(genericTitleFactsCompatible("Fan 5V 120mm 360mm", "风扇5V 120mm 360mm"), true);
+  for (const candidate of [
+    "风扇5V",
+    "风扇5V 12cm 36cm",
+    "风扇12V 120mm 360mm",
+    "风扇12025 5V",
+    "风扇5V 120mm 360mm 3",
+  ])
+    assert.equal(genericTitleFactsCompatible("Fan 5V 120mm 360mm", candidate), false);
+});
+
+for (const side of ["product_excerpt", "supply_excerpt"]) {
+  test(`overlapping ${side} rejects that item without poisoning a separate valid candidate`, () => {
+    const second = { ...input.candidates[0], source_ref: "second" };
+    const scoped = { ...input, candidates: [...input.candidates, second] };
+    const bad = structuredClone(result);
+    bad.attributes[1][side] = bad.attributes[0][side];
+    const good = { ...structuredClone(result), source_ref: "second" };
+    assert.throws(
+      () => validateSupplyTitleClassifications({ classifications: [bad] }, scoped),
+      SupplyTitleCitationError,
+    );
+    assert.deepEqual(validatedSupplyTitleCandidates({ classifications: [bad, good] }, scoped), [
+      good,
+    ]);
+    assert.equal(
+      selectClassifiedSupplyQuote(scoped.product_ref, scoped.product_title, [offer], {
+        input: scoped,
+        classifications: [bad],
+      }),
+      null,
+    );
+    for (const mutation of [
+      { ...bad, source_ref: "unknown" },
+      { ...bad, extra_price: 1 },
+      { ...bad, attributes: [...bad.attributes, bad.attributes[0]] },
+    ])
+      assert.throws(
+        () => validatedSupplyTitleCandidates({ classifications: [good, mutation] }, scoped),
+        /classification_invalid/,
+      );
+  });
+}
+
 test("literal-citation rejection preserves a separately validated candidate but identity errors fail closed", () => {
   const second = { ...input.candidates[0], source_ref: "second" };
   const scoped = { ...input, candidates: [...input.candidates, second] };
@@ -579,7 +663,7 @@ test("classification covers at most sixty offers in ten-title batches with bound
   );
 });
 
-test("a model false positive with conflicting dimensions does not stop later supply matching", async () => {
+test("conflicting dimensions are filtered before the model without hiding a later valid quote", async () => {
   const h = batchHarness(
     11,
     (value) => [{ ...result, source_ref: value.candidates[0].source_ref }],
@@ -589,7 +673,12 @@ test("a model false positive with conflicting dimensions does not stop later sup
     },
   );
   const value = await h.run();
-  assert.equal(h.calls.length, 2);
+  assert.equal(h.calls.length, 1);
+  assert.equal(h.renewals.length, 0);
+  assert.deepEqual(
+    h.calls[0].candidates.map((candidate) => candidate.source_ref),
+    ["11:raw-11"],
+  );
   assert.equal(
     selectClassifiedSupplyQuote(input.product_ref, h.productTitle, h.supplies, value).item
       .externalId,

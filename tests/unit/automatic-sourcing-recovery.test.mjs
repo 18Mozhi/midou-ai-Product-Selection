@@ -1,5 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { automaticPrimaryRefreshCandidateSql } from "../../apps/worker/dist/automatic-primary-detail-refresh.js";
+import { competitorRefreshOrderSql } from "../../apps/worker/dist/competitor-refresh-policy.js";
 import { TrendProjectionPersistence } from "../../apps/worker/dist/trend-projection-persistence.js";
 
 const image = "https://m.media-amazon.com/images/I/primary.jpg";
@@ -50,6 +52,7 @@ function setup(
         if (existingCompetitorTasks instanceof Error) throw existingCompetitorTasks;
         return [existingCompetitorTasks];
       }
+      if (sql === automaticPrimaryRefreshCandidateSql) return [[]];
       if (sql.startsWith("SELECT c.id,c.organization_id")) return [refreshRows];
       if (sql.startsWith("SELECT o.id discovery_opportunity_id")) return [discoveryRows];
       if (sql.startsWith("UPDATE sourcing_searches")) return [{ affectedRows: 1 }];
@@ -344,7 +347,11 @@ test("stale primary or competitor refresh uses the existing detail queue with sc
   ]);
   assert.equal(tasks[0].context.organizationId, "org-1");
   assert.equal(tasks[0].context.workspaceId, "workspace-1");
-  const read = calls.find(([sql]) => sql.startsWith("SELECT c.id,c.organization_id"));
+  const read = calls.find(
+    ([sql]) =>
+      sql.startsWith("SELECT c.id,c.organization_id") &&
+      sql !== automaticPrimaryRefreshCandidateSql,
+  );
   assert.deepEqual(read[1], [
     new Date("2026-10-16T23:00:00Z"),
     new Date("2026-10-16T23:00:00Z"),
@@ -368,7 +375,11 @@ test("stale primary or competitor refresh uses the existing detail queue with sc
     /recent\.organization_id=c\.organization_id AND recent\.workspace_id=c\.workspace_id/,
   );
   assert.match(read[0], /q\.created_at>\?/);
-  assert.match(read[0], /ORDER BY s\.captured_at,c\.id LIMIT 1 FOR UPDATE/);
+  assert.ok(read[0].endsWith(competitorRefreshOrderSql));
+  assert.match(
+    read[0],
+    /CASE WHEN c\.latest_snapshot_id IS NULL THEN c\.created_at ELSE s\.captured_at END/,
+  );
   assert.deepEqual(calls.slice(-2), [["commit"], ["release"]]);
 });
 test("missing downstream work is served before periodic refresh", async () => {
@@ -602,9 +613,14 @@ test("empty discovery scans are bounded to one minute without stopping existing 
     1,
   );
   assert.equal(
-    calls.filter(([sql]) => String(sql).startsWith("SELECT c.id,c.organization_id")).length,
+    calls.filter(
+      ([sql]) =>
+        String(sql).startsWith("SELECT c.id,c.organization_id") &&
+        sql !== automaticPrimaryRefreshCandidateSql,
+    ).length,
     3,
   );
+  assert.equal(calls.filter(([sql]) => sql === automaticPrimaryRefreshCandidateSql).length, 3);
   tick += 1;
   await worker.enqueueMissingAutomaticDownstream();
   assert.equal(

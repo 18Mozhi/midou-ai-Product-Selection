@@ -31,6 +31,7 @@ import {
 import {
   AUTOMATIC_SELECTION_FORMULA_VERSION,
   calculateAutomaticScoreFacts,
+  genericTitleFactsCompatible,
   isPhoneCase,
   normalizedProductFields,
   selectConservativeSupplyMatch,
@@ -259,7 +260,8 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           item.price > 0 &&
           item.evidenceId &&
           !item.priceDescription?.includes("新人价") &&
-          !isPhoneCase(item.title),
+          !isPhoneCase(item.title) &&
+          genericTitleFactsCompatible(title, item.title),
       )
       .slice(0, LAN_1688_RESULT_LIMIT)
       .map((item) => ({ source_ref: `${item.externalId}:${item.evidenceId}`, title: item.title }));
