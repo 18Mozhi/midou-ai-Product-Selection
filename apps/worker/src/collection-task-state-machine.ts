@@ -31,7 +31,10 @@ const statement = (...parts: string[]) => parts.join("");
 export class MySqlCollectionTaskWorkerRepository {
   private successfulClaims = 0;
   private readyOrder() {
-    return collectionReadyOrderSql(this.successfulClaims % 21 !== 20);
+    return collectionReadyOrderSql(
+      this.successfulClaims % 21 !== 20,
+      this.successfulClaims % 2 === 1,
+    );
   }
   constructor(
     readonly pool: Pool,

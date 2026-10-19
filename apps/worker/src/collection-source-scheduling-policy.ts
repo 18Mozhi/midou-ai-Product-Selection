@@ -43,6 +43,21 @@ export const automaticCompletionTaskSql =
   "OR (completion_provider.code='1688_search' AND completion_event.event_type='sourcing.collection.auto_scheduled' " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(completion_query.target_json,'$.projection_type'))='sourcing_search')))";
 
+/** The actual intelligence-to-Amazon producer is a separate progress stage, not manual history. */
+export const automaticProductSearchTaskSql =
+  "EXISTS (SELECT 1 FROM collection_task_events product_search_event " +
+  "JOIN collection_subqueries product_search_query ON product_search_query.task_id=product_search_event.task_id " +
+  "AND product_search_query.organization_id=product_search_event.organization_id " +
+  "AND product_search_query.workspace_id=product_search_event.workspace_id " +
+  "JOIN providers product_search_provider ON product_search_provider.id=product_search_query.provider_id " +
+  "WHERE product_search_event.task_id=collection_tasks.id " +
+  "AND product_search_event.organization_id=collection_tasks.organization_id " +
+  "AND product_search_event.workspace_id=collection_tasks.workspace_id " +
+  "AND product_search_event.actor_type='worker' " +
+  "AND product_search_event.event_type='intelligence.product_search.auto_scheduled' " +
+  "AND product_search_provider.code='amazon_product' " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(product_search_query.target_json,'$.projection_type'))='intelligence_product_discovery')";
+
 /** Hold queued tasks while a required source is disabled or its circuit is open; consume no attempt. */
 export const collectionRequiredSourcesReadySql =
   " AND NOT EXISTS (SELECT 1 FROM collection_subqueries required_source_query " +
@@ -68,15 +83,25 @@ export const pendingBrowserResultSql =
   "AND result_query.workspace_id=collection_tasks.workspace_id AND result_query.status='pending' " +
   "AND result_job.status IN ('succeeded','succeeded_empty') AND result_job.result_json IS NOT NULL)";
 
-/** Priority, scope and lanes precede durable result consumption; the FIFO escape turn stays unchanged. */
-export const collectionReadyOrderSql = (completionFirst: boolean) =>
+/** Priority, scope and alternating progress stages precede result consumption; FIFO stays unchanged. */
+export const collectionReadyOrderSql = (completionFirst: boolean, productSearchFirst = false) =>
   " ORDER BY FIELD(CASE WHEN " +
   automaticIntelligenceTaskSql("collection_tasks") +
   " AND priority='normal' THEN 'high' ELSE priority END,'critical','high','normal','low')," +
   "collection_scope_turn.last_claim_at,CASE WHEN " +
   automaticIntelligenceTaskSql("collection_tasks") +
   " THEN 0 " +
-  (completionFirst ? "WHEN " + automaticCompletionTaskSql + " THEN 1 ELSE 2 " : "ELSE 1 ") +
+  (completionFirst
+    ? "WHEN " +
+      automaticCompletionTaskSql +
+      " THEN " +
+      (productSearchFirst ? 2 : 1) +
+      " WHEN " +
+      automaticProductSearchTaskSql +
+      " THEN " +
+      (productSearchFirst ? 1 : 2) +
+      " ELSE 3 "
+    : "ELSE 1 ") +
   "END," +
   (completionFirst ? "CASE WHEN " + pendingBrowserResultSql + " THEN 0 ELSE 1 END," : "") +
   "available_at,id LIMIT 1";

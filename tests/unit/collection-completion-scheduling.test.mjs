@@ -4,6 +4,7 @@ import { MySqlCollectionTaskWorkerRepository } from "../../apps/worker/dist/coll
 import {
   activeCollectionScopeSql,
   automaticCompletionTaskSql,
+  automaticProductSearchTaskSql,
   collectionScopeFairnessJoinSql,
   collectionReadyOrderSql,
   collectionRequiredSourcesReadySql,
@@ -135,7 +136,7 @@ for (const method of ["queueReady", "claim"]) {
   }
 }
 
-test("twenty committed claims are followed by one shared FIFO turn then completion preference resumes", async () => {
+test("twenty alternating committed stage claims retain the shared FIFO escape and resume rotation", async () => {
   const { repository, calls } = setup();
   for (let turn = 0; turn < 22; turn += 1) {
     const start = calls.length;
@@ -153,12 +154,38 @@ test("twenty committed claims are followed by one shared FIFO turn then completi
     );
     for (const [sql] of selections) {
       assert.equal(sql.includes("completion_event"), turn !== 20);
+      assert.equal(sql.includes("product_search_event"), turn !== 20);
+      if (turn !== 20) {
+        assert.ok(
+          sql.includes("WHEN " + automaticCompletionTaskSql + " THEN " + (turn % 2 ? 2 : 1)),
+        );
+        assert.ok(
+          sql.includes("WHEN " + automaticProductSearchTaskSql + " THEN " + (turn % 2 ? 1 : 2)),
+        );
+      }
       assert.match(sql, /'critical','high','normal','low'/);
       assert.match(sql, /hotspot\.automatic\.scheduled/);
       assert.doesNotMatch(sql, /request_id LIKE/);
     }
   }
   assert.equal(repository.successfulClaims, 22);
+});
+
+test("product search priority requires the scoped real Worker producer and its Amazon discovery target", () => {
+  for (const field of ["organization_id", "workspace_id"])
+    assert.ok(
+      automaticProductSearchTaskSql.includes(
+        `product_search_event.${field}=collection_tasks.${field}`,
+      ),
+    );
+  assert.match(automaticProductSearchTaskSql, /product_search_event.actor_type='worker'/);
+  assert.match(automaticProductSearchTaskSql, /intelligence\.product_search\.auto_scheduled/);
+  assert.match(automaticProductSearchTaskSql, /product_search_provider.code='amazon_product'/);
+  assert.match(
+    automaticProductSearchTaskSql,
+    /projection_type'\)\)='intelligence_product_discovery'/,
+  );
+  assert.doesNotMatch(automaticProductSearchTaskSql, /request_id|UPDATE|INSERT|DELETE/);
 });
 
 test("an active single-host lease or rolled-back claim never advances the fairness turn", async () => {

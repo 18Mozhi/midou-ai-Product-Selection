@@ -1,0 +1,31 @@
+# 情报找品与整链补采轮换
+
+## 真实依据
+
+2026-10-20 07:08，活动范围queued队列有44条原completion任务、954条other任务。逐条新谓词只读分组在07:12:29确认954条全部来自intelligence.product_search.auto_scheduled真实worker生产事件，并绑定同任务/组织/工作区的amazon_product来源及intelligence_product_discovery查询。它们是现有情报分析后的Amazon找品链路，不能当作已废弃手工历史删除。
+
+旧排序只识别hotspot.automatic.scheduled摄取和详情/竞品/1688完成任务。在同优先级、同工作区仍有completion时，954条找品任务只有每21次已提交领取中的共享FIFO轮能够与其竞争；不断完成旧主品的同时，新情报缺少取得主品的均衡机会。07:07两来源熔断均closed，Worker无stuck；Amazon详情实际成功，不能误报为停机或来源全失败。
+
+## 变更合同
+
+在原优先级、已提交工作区公平轮转、原情报摄取优先规则之后，将20个优先轮中的原completion和实际product_search两阶段交替偏好，每个阶段各10轮。第21轮仍为原共享FIFO，SQL顺序逐字保留。无对应阶段候选时自然选择另一阶段或普通任务，不空等。
+
+product_search仅由同范围collection_task_events与collection_subqueries、真实worker事件、实际amazon_product provider和精确projection_type共同识别。request_id、用户填写的query或target单独不能取得阶段优先。该识别只影响排序；消费者原有情报来源、模型假设、证据和商品身份验证完全保留，阶段识别不证明商品真实或完成。
+
+queueReady和claim复用同一轮次和排序；仅原已提交领取后successfulClaims递增。缺候选、活动single-host租约、事务回滚、被停用来源和范围变化均不切换轮次。轮次仍为进程本地，重启从原completion阶段开始；工作区领取历史仍来自原已提交事件，没有变成本地计数。
+
+本次没有增加并发、放开single-host/provider/browser租约、提高1000容量、修改来源状态、重放终态任务、删除历史、改写价格或评分。不承诺实际成功数量恰好1:1：原优先级/范围/摄取、缺候选、协调冲突和FIFO均先按原合同运行。
+
+## 使用与部署
+
+无需新增设置、环境变量、API或数据库迁移；沿用现有后台来源开关/周期和运行监控。代码需要通过项目既定deploy-baota.py发布并由宝塔重启Node项目ai选品。Python、前端、鉴权、依赖和消费者payload均未改。旧运维文档中的20次completion优先是历史行为，以本节阶段轮换覆盖；FIFO和所有原门限继续适用。
+
+## 验证与验收
+
+23项定向Node测试通过；扩充原tests/fixtures/collection-scope-fairness-sql.mjs，以真实编译SQL运行52组MySQL5.7只读虚拟场景全部通过。新增10组覆盖阶段轮换、缺阶段回退、用户伪造事件、跨工作区、错误来源/target、原摄取优先和工作区公平；原来源/归档/租约/浏览器结果/FIFO场景保留。没有创建表或写测试数据。
+
+07:11:54对真实queued数据只读执行新排序：completion轮选ac43e2ad-76a9-4fb4-a6b7-0f227fc53751，projection为competitor_snapshot，用时468ms；product_search轮选6894f5bf-ab80-4c76-bc19-ff633e397c34，projection为intelligence_product_discovery，用时367ms，两者在当前应得的同一工作区。均未领取任务或写库。该读数不作为持续性能SLA或实际采集成功证明。
+
+144项相关Node测试与22工作区构建通过，文档/路由地图校验通过。地图生成器修复既有格式漂移，移除本次新增条目后与提交前JSON语义逐字序列化相同，未改变旧路由或功能节点。旧线上与新本地FIFO SQL字符串SHA256均为764f02aa77fd3d3efaeebf95830589afd2f7438bec44784460df5fa4fc056ae1，原逃逸顺序未变。
+
+正式部署与自然领取验收待回读；每日整链100个仍未通过。本轮未创建临时脚本、测试数据、浏览器标签或本地服务。

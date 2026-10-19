@@ -24,6 +24,79 @@ const claim = (scope, at, extra = {}) => ({
 });
 const scenarios = [
   {
+    name: "product-search turn advances intelligence-derived Amazon queries",
+    tasks: [task(101, "a", { lane: "completion" }), task(102, "a", { lane: "product_search" })],
+    events: [],
+    productSearchFirst: true,
+    expected: 102,
+  },
+  {
+    name: "completion turn retains existing primary competitor and sourcing preference",
+    tasks: [task(101, "a", { lane: "product_search" }), task(102, "a", { lane: "completion" })],
+    events: [],
+    productSearchFirst: false,
+    expected: 102,
+  },
+  {
+    name: "product-search producer beats ordinary history when completion is absent",
+    tasks: [task(101), task(102, "a", { lane: "product_search" })],
+    events: [],
+    expected: 102,
+  },
+  {
+    name: "manual actor cannot claim the product-search stage",
+    tasks: [task(101), task(102, "a", { lane: "product_search", eventActor: "user" })],
+    events: [],
+    productSearchFirst: true,
+    expected: 101,
+  },
+  {
+    name: "foreign workspace producer cannot claim the product-search stage",
+    tasks: [task(101), task(102, "a", { lane: "product_search", eventScope: scopes.b })],
+    events: [],
+    productSearchFirst: true,
+    expected: 101,
+  },
+  {
+    name: "wrong source cannot claim the product-search stage",
+    tasks: [task(101), task(102, "a", { lane: "product_search", provider: "held" })],
+    events: [],
+    productSearchFirst: true,
+    expected: 101,
+  },
+  {
+    name: "wrong target cannot claim the product-search stage",
+    tasks: [
+      task(101),
+      task(102, "a", { lane: "product_search", projection: "competitor_snapshot" }),
+    ],
+    events: [],
+    productSearchFirst: true,
+    expected: 101,
+  },
+  {
+    name: "shared FIFO escape ignores product-search preference",
+    tasks: [task(101), task(102, "a", { lane: "product_search" })],
+    events: [],
+    completionFirst: false,
+    productSearchFirst: true,
+    expected: 101,
+  },
+  {
+    name: "raw intelligence intake keeps its existing precedence",
+    tasks: [task(101, "a", { lane: "product_search" }), task(102, "a", { lane: "intake" })],
+    events: [],
+    productSearchFirst: true,
+    expected: 102,
+  },
+  {
+    name: "tenant fairness remains before product-search stage preference",
+    tasks: [task(101, "a", { lane: "product_search" }), task(102, "b", { lane: "completion" })],
+    events: [claim("a", 10), claim("b", 5)],
+    productSearchFirst: true,
+    expected: 102,
+  },
+  {
     name: "unclaimed scope beats recently claimed scope",
     tasks: [task(101), task(102, "b", { available_at: stamp(5) })],
     events: [claim("a", 10)],
@@ -277,6 +350,15 @@ function queryFor(scenario, policy) {
         actor_type: "worker",
         occurred_at: stamp(1),
       });
+    if (row.lane === "product_search")
+      events.push({
+        ...row,
+        ...row.eventScope,
+        task_id: row.id,
+        event_type: "intelligence.product_search.auto_scheduled",
+        actor_type: row.eventActor ?? "worker",
+        occurred_at: stamp(1),
+      });
   }
   const organizations = [
     ...new Set(Object.values(scopes).map((scope) => scope.organization_id)),
@@ -302,7 +384,8 @@ function queryFor(scenario, policy) {
     status: row.queryStatus ?? "pending",
     target_json: JSON.stringify({
       projection_type:
-        row.lane === "completion" ? "competitor_snapshot" : "intelligence_product_discovery",
+        row.projection ??
+        (row.lane === "completion" ? "competitor_snapshot" : "intelligence_product_discovery"),
     }),
   }));
   const tables = {
@@ -388,7 +471,10 @@ function queryFor(scenario, policy) {
     " WHERE status='queued' AND attempt_count<4 AND " +
     policy.activeCollectionScopeSql("collection_tasks") +
     policy.collectionRequiredSourcesReadySql +
-    policy.collectionReadyOrderSql(scenario.completionFirst ?? true);
+    policy.collectionReadyOrderSql(
+      scenario.completionFirst ?? true,
+      scenario.productSearchFirst ?? false,
+    );
   const keywords = new Set(["WHERE", "GROUP", "LEFT", "JOIN", "ON", "ORDER"]);
   return sql.replace(
     /\b(FROM|JOIN) (collection_tasks|collection_task_events|collection_subqueries|browser_collection_jobs|providers|provider_runtime_circuits|organizations|workspaces)\b(\s+([A-Za-z_][A-Za-z0-9_]*))?/g,

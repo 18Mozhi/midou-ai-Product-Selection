@@ -1,4 +1,17 @@
 {
+  "selectionProductSearchTurns20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-product-search-turns.md",
+    "sourceFiles": [
+      "apps/worker/src/collection-source-scheduling-policy.ts",
+      "apps/worker/src/collection-task-state-machine.ts"
+    ],
+    "testFiles": [
+      "tests/unit/collection-completion-scheduling.test.mjs",
+      "tests/fixtures/collection-scope-fairness-sql.mjs"
+    ],
+    "contract": "Recognize scoped worker intelligence.product_search.auto_scheduled plus matching Amazon intelligence_product_discovery queries as a distinct progress stage. Alternate product-search and original completion preferences within the existing20 committed claim turns; retain21st shared FIFO, effective priority, scope fairness and raw intake precedence. Same ordinary candidate/PK recheck, source/active/attempt/lease/capacity guards and consumer validation. No API/env/schema/dependency/Python/frontend change; BaoTa Node restart."
+  },
   "selectionSourcingRefresh20261020": {
     "status": "implemented",
     "requirements": "docs/selection-sourcing-refresh.md",
@@ -6,9 +19,7 @@
       "apps/worker/src/automatic-sourcing-refresh.ts",
       "apps/worker/src/trend-projection-persistence.ts"
     ],
-    "testFiles": [
-      "tests/unit/automatic-sourcing-refresh.test.mjs"
-    ],
+    "testFiles": ["tests/unit/automatic-sourcing-refresh.test.mjs"],
     "contract": "Refresh only stale successful latest automatic sourcing searches for pending scoped primaries waiting for a trustworthy purchase input, using existing provider schedule_minutes. Original source, primary, quote, active-task and shared1000 admission guards. Ordinary candidate reads, scoped primary checks and PK-serialized transaction create new search/task/seed history. Alternate successful refresh and original downstream turns; no API/env/schema/dependency/Python change. Existing source schedule is dynamic; BaoTa Node code restart required."
   },
   "selectionSupplyEligibleCitations20261020": {
@@ -45,64 +56,141 @@
   "selectionWaitingPrimaryRefresh20261020": {
     "status": "implemented",
     "requirements": "docs/selection-waiting-primary-refresh.md",
-    "sourceFiles": ["apps/worker/src/automatic-primary-detail-refresh.ts", "apps/worker/src/trend-projection-persistence.ts"],
-    "testFiles": ["tests/unit/automatic-primary-detail-refresh.test.mjs", "tests/unit/competitor-refresh-policy.test.mjs", "tests/unit/trend-projection-worker-scheduling.test.mjs", "tests/fixtures/automatic-primary-detail-refresh-sql.mjs"],
+    "sourceFiles": [
+      "apps/worker/src/automatic-primary-detail-refresh.ts",
+      "apps/worker/src/trend-projection-persistence.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-primary-detail-refresh.test.mjs",
+      "tests/unit/competitor-refresh-policy.test.mjs",
+      "tests/unit/trend-projection-worker-scheduling.test.mjs",
+      "tests/fixtures/automatic-primary-detail-refresh-sql.mjs"
+    ],
     "contract": "Within the original periodic detail turn, prefer scoped pending automatic primaries actually missing detail and waiting for snapshot/sale evidence. Ordinary candidate read then PK scoped current recheck; reuse formal identity/detail and original cadence/recent-attempt/own-task/capacity guards. Same producer/payload, original fallback SQL unchanged, no evaluation/history/source/queue reset or API/env/schema/dependency/Python change. BaoTa Node restart required."
   },
   "selectionSupplierOfferTable20261020": {
     "status": "implemented",
     "requirements": "docs/selection-supplier-offer-table.md",
-    "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/components/SupplierOfferList.vue", "apps/web/src/composables/useSourcingWorkspace.ts", "apps/web/src/sourcing.css", "apps/web/src/supplier-offer-list.css"],
-    "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts", "tests/unit/sourcing-page-preview.test.mjs", "tests/m04-06/sourcing.test.mjs"],
+    "sourceFiles": [
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/SupplierOfferList.vue",
+      "apps/web/src/composables/useSourcingWorkspace.ts",
+      "apps/web/src/sourcing.css",
+      "apps/web/src/supplier-offer-list.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-06-sourcing.spec.ts",
+      "tests/unit/sourcing-page-preview.test.mjs",
+      "tests/m04-06/sourcing.test.mjs"
+    ],
     "contract": "Replace oversized offer cards with uniform price/MOQ/lead-time/status columns and native per-row factual disclosure; responsive same-data rows. Remove old49 CSS selectors and duplicate cost link, preserve return context, quote/compare permissions and data. Localize existing collection status codes only in display. No API/env/schema/dependency/backend/Python change; static frontend rebuild and refresh."
   },
   "selectionIntakeCompletionHeadroom20261020": {
     "status": "implemented",
     "requirements": "docs/selection-intake-completion-headroom.md",
-    "sourceFiles": ["apps/worker/src/automatic-intake-capacity-policy.ts", "apps/worker/src/automatic-source-scheduler.ts", "apps/worker/src/intelligence-source-recovery.ts", "apps/worker/src/trend-projection-worker.ts", "apps/worker/src/intelligence-product-association.ts"],
-    "testFiles": ["tests/unit/automatic-intake-headroom.test.mjs", "tests/unit/automatic-fanout-admission.test.mjs", "tests/unit/intelligence-source-recovery.test.mjs", "tests/fixtures/automatic-fanout-admission-sql.mjs"],
+    "sourceFiles": [
+      "apps/worker/src/automatic-intake-capacity-policy.ts",
+      "apps/worker/src/automatic-source-scheduler.ts",
+      "apps/worker/src/intelligence-source-recovery.ts",
+      "apps/worker/src/trend-projection-worker.ts",
+      "apps/worker/src/intelligence-product-association.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-intake-headroom.test.mjs",
+      "tests/unit/automatic-fanout-admission.test.mjs",
+      "tests/unit/intelligence-source-recovery.test.mjs",
+      "tests/fixtures/automatic-fanout-admission-sql.mjs"
+    ],
     "contract": "Fresh source/rule scheduling, proven intelligence recovery and trend claims use max(1, existing backlog limit minus existing3-query fanout). Completion keeps the original budget and quality/source/scope/cooldown/lease contracts. No atomic reservation or throughput claim. Same config value, no new API/env/schema/dependency/Python field; BaoTa Node restart required."
   },
   "selectionRetiredSourcingSearchActions20261020": {
     "status": "implemented",
     "requirements": "docs/selection-retired-sourcing-search-actions.md",
-    "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/components/SourcingWorkspaceDialogs.vue", "apps/web/src/composables/useSourcingWorkspace.ts"],
-    "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts", "tests/m04-06/sourcing.test.mjs", "tests/unit/sourcing-page-preview.test.mjs"],
+    "sourceFiles": [
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+      "apps/web/src/composables/useSourcingWorkspace.ts"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-06-sourcing.spec.ts",
+      "tests/m04-06/sourcing.test.mjs",
+      "tests/unit/sourcing-page-preview.test.mjs"
+    ],
     "contract": "Retire member manual search creation, recollection and deletion UI, dialogs and request producers. Legacy create/opportunity query stays read-only. Preserve scoped record/q reads, actual quotes/evidence/profit, quote confirmation/comparison, automatic six-node sourcing and backend contracts/history. No env/API field/schema/dependency/Python change; rebuild static frontend."
   },
   "selectionPrimarySnapshotPreflight20261020": {
     "status": "implemented",
     "requirements": "docs/selection-primary-snapshot-preflight.md",
-    "sourceFiles": ["apps/worker/src/automatic-selection-evidence.ts", "apps/worker/src/automatic-selection-evaluation-worker.ts"],
-    "testFiles": ["tests/unit/automatic-evidence-scoring.test.mjs", "tests/unit/supply-title-classification.test.mjs"],
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-evidence.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-evidence-scoring.test.mjs",
+      "tests/unit/supply-title-classification.test.mjs"
+    ],
     "contract": "Before supplier reads/model classification, require the same scoped actual primary detail query already required by evaluation. Reuse the unchanged SQL and recheck inside the evaluation transaction. Missing snapshot keeps original waiting reason, no source facts/queue/lease/AI budget/API/schema/env/dependency changes; BaoTa Node restart required."
   },
   "selectionFirstDetailRecovery20261020": {
     "status": "implemented",
     "requirements": "docs/selection-first-detail-recovery.md",
-    "sourceFiles": ["apps/worker/src/competitor-refresh-policy.ts", "apps/worker/src/trend-projection-persistence.ts"],
-    "testFiles": ["tests/unit/competitor-refresh-policy.test.mjs", "tests/fixtures/competitor-first-observation-sql.mjs", "tests/unit/trend-projection-worker-scheduling.test.mjs"],
+    "sourceFiles": [
+      "apps/worker/src/competitor-refresh-policy.ts",
+      "apps/worker/src/trend-projection-persistence.ts"
+    ],
+    "testFiles": [
+      "tests/unit/competitor-refresh-policy.test.mjs",
+      "tests/fixtures/competitor-first-observation-sql.mjs",
+      "tests/unit/trend-projection-worker-scheduling.test.mjs"
+    ],
     "contract": "Allow original periodic detail path to recover never-observed competitors after the same creation-age/cooldown interval; prioritize missing first observations before stale observed monitors. Same scope, pointer proof, source/circuit behavior, own-task exclusion, original backlog and payload. Preserve failed task history; no fabricated snapshot/API/schema/env/dependency changes. BaoTa Node restart required."
   },
   "selectionEvaluationPointAdmission20261020": {
     "status": "implemented",
     "requirements": "docs/selection-evaluation-point-admission.md",
-    "sourceFiles": ["apps/worker/src/automatic-selection-evaluation-admission.ts", "apps/worker/src/automatic-selection-evaluation-worker.ts"],
-    "testFiles": ["tests/unit/automatic-evaluation-admission.test.mjs", "tests/unit/automatic-selection-evaluation.test.mjs", "tests/unit/automatic-evidence-scoring.test.mjs", "tests/unit/automatic-classifier-recovery.test.mjs", "tests/unit/automatic-skipped-recovery.test.mjs", "tests/unit/selection-pipeline-completion.test.mjs"],
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-evaluation-admission.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-evaluation-admission.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/unit/automatic-evidence-scoring.test.mjs",
+      "tests/unit/automatic-classifier-recovery.test.mjs",
+      "tests/unit/automatic-skipped-recovery.test.mjs",
+      "tests/unit/selection-pipeline-completion.test.mjs"
+    ],
     "contract": "Replace global evaluation INSERT SELECT with bounded ordinary full-presence candidate read and atomic scoped point INSERT IGNORE. Same original presence proof with existing evidence/key indexes, pending/lifecycle rules, 100 limit, queue shape, duplicate protection and recovery/model/lease order. No schema/API/env/dependency/Python changes; BaoTa Node restart required."
   },
   "selectionRecommendedReadScope20261020": {
     "status": "implemented",
     "requirements": "docs/selection-recommended-read-scope.md",
-    "sourceFiles": ["apps/api/src/opportunity-recommended-list-scope.ts", "apps/api/src/mysql-opportunity-repository.ts", "apps/api/src/opportunity-selection-policy.ts"],
-    "testFiles": ["tests/unit/opportunity-recommended-list-scope.test.mjs", "tests/unit/opportunity-list-projection.test.mjs", "tests/unit/opportunity-selection-policy.test.mjs", "tests/unit/opportunity-completed-filter.test.mjs"],
+    "sourceFiles": [
+      "apps/api/src/opportunity-recommended-list-scope.ts",
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/api/src/opportunity-selection-policy.ts"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-recommended-list-scope.test.mjs",
+      "tests/unit/opportunity-list-projection.test.mjs",
+      "tests/unit/opportunity-selection-policy.test.mjs",
+      "tests/unit/opportunity-completed-filter.test.mjs"
+    ],
     "contract": "Recommended list only: materialize scoped necessary scalar facts then reuse the original primary identity once in unchanged full count/page eligibility. Preserve explicit archived filters, parameters, ordering, all quality gates and other views. No API/schema/env/dependency/Python change; BaoTa Node restart required."
   },
   "selectionCompletedDefault20261020": {
     "status": "implemented",
     "requirements": "docs/selection-completed-library.md",
-    "sourceFiles": ["apps/web/src/components/OpportunityWorkspace.vue", "apps/web/src/components/OpportunityListPanel.vue", "apps/web/src/components/use-opportunity-workspace-navigation.ts", "apps/web/src/components/use-opportunity-workspace-reads.ts"],
-    "testFiles": ["tests/e2e/ui-phase2-opportunity-contracts.spec.ts", "tests/e2e/m04-02-opportunities.spec.ts"],
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/components/use-opportunity-workspace-navigation.ts",
+      "apps/web/src/components/use-opportunity-workspace-reads.ts"
+    ],
+    "testFiles": [
+      "tests/e2e/ui-phase2-opportunity-contracts.spec.ts",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
     "contract": "Member catalogue defaults to completed analysis; explicit recommended and existing other views remain. Settle successful list independently of optional recommendation readiness; preserve abort/generation ownership, main read failures, original API defaults, evidence and daily counting. Frontend release required, no schema/env/dependency/Python change."
   },
   "selectionRetiredSourcingProcurement20261020": {
@@ -113,7 +201,11 @@
       "apps/web/src/components/SourcingWorkspaceDialogs.vue",
       "apps/web/src/composables/useSourcingWorkspace.ts"
     ],
-    "testFiles": ["tests/unit/sourcing-page-preview.test.mjs", "tests/e2e/m04-06-sourcing.spec.ts", "tests/m04-06/sourcing.test.mjs"],
+    "testFiles": [
+      "tests/unit/sourcing-page-preview.test.mjs",
+      "tests/e2e/m04-06-sourcing.spec.ts",
+      "tests/m04-06/sourcing.test.mjs"
+    ],
     "contract": "Retire member sourcing procurement button, dialog, form state and purchase-task POST producer. Preserve automatic Amazon-to-1688 pipeline, factual quote/source reads, comparison, remaining error/focus lifecycle, backend authorization/API and immutable history. No schema/env/dependency/Python change; rebuild/release frontend."
   },
   "selectionRetiredDetailCollection20261020": {
@@ -136,20 +228,14 @@
   "selectionCompletionTurns20261020": {
     "status": "implemented",
     "requirements": "docs/selection-completion-turns.md",
-    "sourceFiles": [
-      "apps/worker/src/trend-projection-worker.ts"
-    ],
-    "testFiles": [
-      "tests/unit/trend-projection-worker-scheduling.test.mjs"
-    ],
+    "sourceFiles": ["apps/worker/src/trend-projection-worker.ts"],
+    "testFiles": ["tests/unit/trend-projection-worker-scheduling.test.mjs"],
     "contract": "Replace twenty-fresh-claims batching with one fresh then an owed existing-product completion opportunity. Preserve owed turn across no-work/backpressure; failed repair yields next fresh turn. Existing bounded repair, source/scope gates, capacity, cooldown, retries, leases, quality rules and retired-work batch remain. No new API/schema/env/dependency/concurrency/Python contract; BaoTa Node restart required."
   },
   "selectionSaleBeforeSupplyClassification20261020": {
     "status": "implemented",
     "requirements": "docs/selection-sale-before-supply-classification.md",
-    "sourceFiles": [
-      "apps/worker/src/automatic-selection-evaluation-worker.ts"
-    ],
+    "sourceFiles": ["apps/worker/src/automatic-selection-evaluation-worker.ts"],
     "testFiles": [
       "tests/unit/automatic-evidence-scoring.test.mjs",
       "tests/unit/supply-title-classification.test.mjs"
