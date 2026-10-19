@@ -11,3 +11,13 @@ GET /platform/collection/console的sources只读投影复用既有适配器接�
 5项服务/仓库定向检查通过；无记录的四个运行字段均null，旧ready/0与当前open/7可并存且各自保留。真实HTTP合成持久层验证平台权限与响应，原截获响应测试覆盖操作失败/失效读取/重放；6项定向复查和最终50项桌面/390px浏览器检查通过。初轮样式调整期间手机重放勾选超时，固定代码后单独复查与全量重跑均通过，未弱化确认断言。22工作区完整构建及文档/运行一致性/静态分析/格式/发布矩阵门通过；截图仅新增circuit名称两张，历史commerce截图未改。
 
 本轮3个临时测试输出目录删除被自动审批策略拒绝，未重试或绕过，路径见.artifacts/selection-production-20261018/collection-circuit-cleanup-handoff.json并串接前轮清理链。4167/5237测试服务已退出，未新增常驻进程；verification/state.json原有用户修改保持未暂存。
+
+## 发布与恢复回读
+
+c64c2231已通过官方发布前检查和22工作区构建，但初次发布命令公网验收阶段失败，最后错误是本地TLS EOF。没有据此重复部署：SSH实测3306已通、4101拒绝；本项目启动日志有两条结构化ECONNREFUSED、address=127.0.0.1、port=3306，证明Node启动时数据库不可用，不是仅公网观测异常。未证实本次是OOM，不把旧故障原因套用到本次。
+
+先将本项目原日志归档到/www/wwwroot/ai选品/runtime/evidence/deploy-c64c2231-startup-db-refused-20261019.log（0640），再调用宝塔restart_project.py nodejs ai选品，退出0、4101恢复。15:01:58官方verify_public在原TLS验证下全部通过：live/ready/available/version/knownRoute/missingRoute/browserHelper。随后调用同一发布脚本cleanup_source清理本次rollback材料；本地临时部署包也已由原上下文清理。没有降低TLS验证、改动MySQL全局参数或启动面板外服务。
+
+真实Chrome1920px总览第一条Amazon显示已暂停（熔断）/连续失败5，历史正常检查仍为2026/10/18 23:15:18；390px可见摘要同样写明已暂停与上次检查正常，无横向溢出。已恢复视口并关闭验证标签。15:00:32本工作区今日completed_count仍0，Amazon仍open/validation_failed，1688 closed的健康时间仍旧记录，不宣称本次探测六节点成功。人工重启恢复只证明当前服务已恢复，不证明依赖故障后的不间断自愈；该真实缺口仍需继续处理。本文回执为文档提交，无需再次部署。
+
+15:03线上编译仓库SHA256为7cd339a29e098d9e6832efd537e46bb180978ffe0b9b8422fa5b0f8a52529b90，与本地一致；同一新查询再次只读返回245行/21ms，两个来源的运行状态与页面一致。没有写入采集业务事实。
