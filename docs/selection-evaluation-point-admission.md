@@ -25,3 +25,11 @@
 完整定向回归102项通过，覆盖自动评分/货源事实、人工作价保护、缺价预检、分类器/旧跳过恢复及严格完整事件写入。OpenAPI仅同步内部入队策略，未新增API字段。
 
 完整22工作区构建、格式、运行文档及OpenAPI语法门通过；当前修改没有数据库迁移、环境默认或API消费方变更。构建产物为项目既有输出，不作为临时测试文件删除。发布前工作区仅本次任务文件和预存verification/state.json；仅精确暂存本次文件。
+
+## 发布与原Worker自然轮询
+
+08d9b3291db87a02dad257bfe261666a9cc8994c固定宝塔发布终态exit0，8文件归属、格式/运行文档/发布矩阵及正式22工作区重建通过，脚本临时包删除。20:19:37Z独立BUILD_SHA一致，两模块SHA256与本地构建相同：automatic-selection-evaluation-admission=f115ebed96668ea600bcb42740d1be734d00af4be5edca9094fd2a1c7337756f；automatic-selection-evaluation-worker=18376d7819b40408c2aedfe824ea29350562ffb44a657a7be7330ee47870dd90。
+
+部署后实际模块SQL只读回读：首次admission366ms/0候选、原skipped恢复70ms/0候选、原classifier恢复5ms/0候选，没有发现这两条恢复路径继续拖慢。无评估租约，不手工创建或重放任务。20:19:49Z原调度running、suspected_stuck_runs=0，automatic_selection_evaluation自然轮询从20:19:49.223Z到49.634Z正常结束（411ms）、last_error=null，证明原队列执行器不再在空首次入队阶段等待17秒。此空批次没有触发点插入，因此实际新增候选自然点插入、评估吞吐和日百品仍不能据此签收。
+
+同刻活动采集积压1005、当前工作区今日整链仍1/100。没有扩大原1000准入阈值；既有在途扇出可能高于阈值，沿用原容量语义。其他工作区自然竞品详情任务不计当前工作区完成数。本轮无新临时文件、日志、截图、浏览器标签页或测试服务；用户verification/state.json原修改未动、未暂存；先前清理拒绝路径未重试。
