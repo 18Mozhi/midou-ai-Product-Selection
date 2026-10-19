@@ -347,6 +347,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
     let failureStage: Parameters<typeof collectionFailureDiagnostic>[1]["stage"] =
       "source_collection";
     let recordOrdinal = 0;
+    let historicalBrowserResult = false;
     try {
       if (
         provider.code === "1688_search" &&
@@ -395,6 +396,9 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
                   taskId: task.id,
                   attemptCount: task.attemptCount,
                   leaseToken: task.leaseToken,
+                  onHistoricalResult: () => {
+                    historicalBrowserResult = true;
+                  },
                   subqueryId: query.id,
                   provider,
                   target: query.target,
@@ -510,11 +514,12 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         }
       }
       if (hasDedupeConflict && query.required) {
-        await this.recordProviderRuntimeResult(
-          provider.id,
-          Number(row.circuit_failure_threshold),
-          "validation_failed",
-        );
+        if (!historicalBrowserResult)
+          await this.recordProviderRuntimeResult(
+            provider.id,
+            Number(row.circuit_failure_threshold),
+            "validation_failed",
+          );
         return {
           id: query.id,
           required: true,
@@ -541,11 +546,12 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         }
       }
       failureStage = "provider_runtime";
-      await this.recordProviderRuntimeResult(
-        provider.id,
-        Number(row.circuit_failure_threshold),
-        null,
-      );
+      if (!historicalBrowserResult)
+        await this.recordProviderRuntimeResult(
+          provider.id,
+          Number(row.circuit_failure_threshold),
+          null,
+        );
       const noNewRssContent = provider.accessMode === "public_rss" && available > 0 && fresh === 0,
         emptyRssSuccess = provider.accessMode === "public_rss" && batch.records.length === 0,
         countForTask = noNewRssContent && !query.required ? 0 : available;
@@ -594,11 +600,12 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           "permission_denied",
         ].includes(mapped);
       if (provider.accessMode === "public_rss" && mapped === "empty_result") {
-        await this.recordProviderRuntimeResult(
-          provider.id,
-          Number(row.circuit_failure_threshold),
-          null,
-        );
+        if (!historicalBrowserResult)
+          await this.recordProviderRuntimeResult(
+            provider.id,
+            Number(row.circuit_failure_threshold),
+            null,
+          );
         return {
           id: query.id,
           required: query.required,
@@ -612,13 +619,14 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           ...(policyDecision ? { robotsDecision: policyDecision } : {}),
         };
       }
-      await this.recordProviderRuntimeResult(
-        provider.id,
-        Number(row.circuit_failure_threshold),
-        provider.code === "amazon_product" && error instanceof AmazonTargetPageParseFailure
-          ? null
-          : mapped,
-      );
+      if (!historicalBrowserResult)
+        await this.recordProviderRuntimeResult(
+          provider.id,
+          Number(row.circuit_failure_threshold),
+          provider.code === "amazon_product" && error instanceof AmazonTargetPageParseFailure
+            ? null
+            : mapped,
+        );
       if (mapped === "source_changed")
         await this.pauseProviderForParserDrift(task, provider, String(row.created_by), failure);
       if (query.required) {

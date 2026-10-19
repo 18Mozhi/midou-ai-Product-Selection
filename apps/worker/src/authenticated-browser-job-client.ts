@@ -26,6 +26,7 @@ interface BrowserJobInput {
   traceId: string;
   attemptCount?: number;
   leaseToken?: string;
+  onHistoricalResult?: () => void;
 }
 
 export interface AuthenticatedBrowserCollection {
@@ -158,12 +159,48 @@ export class MySqlAuthenticatedBrowserJobClient {
         throw new ProviderAdapterFailure("dependency_unavailable", true);
       }
       await heartbeat();
+      const inspectHistory =
+        input.provider.code === "amazon_product" &&
+        input.leaseToken &&
+        Number.isInteger(input.attemptCount) &&
+        input.onHistoricalResult;
       const [rows] = await this.pool.query<RowDataPacket[]>(
-        "SELECT id,status,result_json,error_code FROM browser_collection_jobs WHERE collection_subquery_id=? LIMIT 1",
-        [input.subqueryId],
+        inspectHistory
+          ? [
+              "SELECT id,status,result_json,error_code,EXISTS(SELECT 1 FROM collection_tasks t ",
+              "JOIN collection_task_attempts a ON a.task_id=t.id AND a.attempt_number=t.attempt_count ",
+              "WHERE t.id=j.collection_task_id AND t.organization_id=j.organization_id ",
+              "AND t.workspace_id=j.workspace_id AND t.status='running' ",
+              "AND t.lease_token_hash=UNHEX(?) AND t.lease_expires_at>NOW(3) ",
+              "AND t.attempt_count=? AND a.status='running' AND a.started_at>j.finished_at) historical_result ",
+              "FROM browser_collection_jobs j WHERE collection_subquery_id=? ",
+              "AND organization_id=? AND workspace_id=? AND collection_task_id=? AND provider_id=? LIMIT 1",
+            ].join("")
+          : "SELECT id,status,result_json,error_code FROM browser_collection_jobs WHERE collection_subquery_id=? LIMIT 1",
+        inspectHistory
+          ? [
+              createHash("sha256")
+                .update("scoutops:collection-task-lease:v1\0" + input.leaseToken)
+                .digest("hex"),
+              input.attemptCount,
+              input.subqueryId,
+              input.organizationId,
+              input.workspaceId,
+              input.taskId,
+              input.provider.id,
+            ]
+          : [input.subqueryId],
       );
       const row = rows[0];
       if (!row) throw new ProviderAdapterFailure("dependency_unavailable", true);
+      if (
+        inspectHistory &&
+        Number(row.historical_result) === 1 &&
+        ["succeeded", "succeeded_empty", "blocked", "failed", "timed_out", "cancelled"].includes(
+          String(row.status),
+        )
+      )
+        input.onHistoricalResult!();
       if (["succeeded", "succeeded_empty"].includes(String(row.status))) {
         const result =
             typeof row.result_json === "string" ? JSON.parse(row.result_json) : row.result_json,

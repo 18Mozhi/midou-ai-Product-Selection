@@ -298,98 +298,253 @@ test("queued Amazon job carries target, returns evidence and does not retry perm
   );
 });
 
-test("raw browser captcha stays blocked through collection outcomes and source circuit accounting", async () => {
-  const statements = [];
-  const provider = {
-    id: "provider",
-    code: "amazon_product",
-    access_mode: "public_page",
-    target_url: "https://www.amazon.com/s",
-    parser_version: "amazon-public-product-v19",
-    timeout_ms: 1000,
-    fields_json: ["title"],
-    status: "enabled",
-    terms_review_status: "approved",
-    terms_version: "test-only",
-    terms_permanent: 1,
-    circuit_failure_threshold: 3,
-    runtime_circuit_state: "closed",
-    created_by: "actor",
-  };
-  const query = async (sql, values) => {
-    statements.push({ sql, values });
-    if (sql.includes("FROM providers p")) return [[provider]];
-    if (sql.startsWith("SELECT id,status"))
-      return [
-        [
-          {
-            id: "job",
-            status: "blocked",
-            error_code: "blocked_captcha",
-            result_json: { status: "blocked_captcha", error_code: "blocked_captcha" },
-          },
-        ],
-      ];
-    if (sql.startsWith("SELECT state,")) return [[]];
-    return [{ affectedRows: 1 }];
-  };
-  const pool = {
-    query,
-    getConnection: async () => ({
-      query,
-      beginTransaction: async () => {},
-      commit: async () => {},
-      rollback: async () => {},
-      release() {},
-    }),
-  };
-  const executor = new ProviderSourceExecutor(
-    pool,
-    { collect: async () => assert.fail("must use the browser job") },
-    { persist: async () => assert.fail("captcha cannot produce product facts") },
-    "test-worker",
-    new MySqlAuthenticatedBrowserJobClient(pool, 1, async () => assert.fail("must not poll")),
-    async () => new Response("User-agent: *\nAllow: /"),
-    undefined,
-    undefined,
-    true,
-  );
-  await assert.rejects(
-    () =>
-      executor.execute(
-        {
-          id: "task",
-          organizationId: "org",
-          workspaceId: "workspace",
-          attemptCount: 1,
-          requestId: "request",
-          traceId: "trace",
-          leaseToken: "lease",
-          subqueries: [
+test("cached captcha remains blocked without counting a new source failure", async () => {
+  for (const historical of [0, 1]) {
+    const statements = [];
+    const provider = {
+      id: "provider",
+      code: "amazon_product",
+      access_mode: "public_page",
+      target_url: "https://www.amazon.com/s",
+      parser_version: "amazon-public-product-v19",
+      timeout_ms: 1000,
+      fields_json: ["title"],
+      status: "enabled",
+      terms_review_status: "approved",
+      terms_version: "test-only",
+      terms_permanent: 1,
+      circuit_failure_threshold: 3,
+      runtime_circuit_state: "closed",
+      created_by: "actor",
+    };
+    const query = async (sql, values) => {
+      statements.push({ sql, values });
+      if (sql.includes("FROM providers p")) return [[provider]];
+      if (sql.startsWith("SELECT id,status"))
+        return [
+          [
             {
-              id: "subquery",
-              providerId: "provider",
-              ordinal: 0,
-              required: true,
-              target: { page_url: url },
+              id: "job",
+              historical_result: historical,
+              status: "blocked",
+              error_code: "blocked_captcha",
+              result_json: { status: "blocked_captcha", error_code: "blocked_captcha" },
             },
           ],
+        ];
+      if (sql.startsWith("SELECT state,")) return [[]];
+      return [{ affectedRows: 1 }];
+    };
+    const pool = {
+      query,
+      getConnection: async () => ({
+        query,
+        beginTransaction: async () => {},
+        commit: async () => {},
+        rollback: async () => {},
+        release() {},
+      }),
+    };
+    const executor = new ProviderSourceExecutor(
+      pool,
+      { collect: async () => assert.fail("must use the browser job") },
+      { persist: async () => assert.fail("captcha cannot produce product facts") },
+      "test-worker",
+      new MySqlAuthenticatedBrowserJobClient(pool, 1, async () => assert.fail("must not poll")),
+      async () => new Response("User-agent: *\nAllow: /"),
+      undefined,
+      undefined,
+      true,
+    );
+    await assert.rejects(
+      () =>
+        executor.execute(
+          {
+            id: "task",
+            organizationId: "org",
+            workspaceId: "workspace",
+            attemptCount: 1,
+            requestId: "request",
+            traceId: "trace",
+            leaseToken: "lease",
+            subqueries: [
+              {
+                id: "subquery",
+                providerId: "provider",
+                ordinal: 0,
+                required: true,
+                target: { page_url: url },
+              },
+            ],
+          },
+          async () => {},
+        ),
+      { code: "captcha" },
+    );
+    const circuit = statements.find(({ sql }) =>
+      sql.startsWith("INSERT INTO provider_runtime_circuits"),
+    );
+    if (historical) assert.equal(circuit, undefined);
+    else {
+      assert.equal(circuit.values[4], "captcha");
+      assert.equal(circuit.values[2], 1);
+    }
+    const outcome = statements.find(({ sql }) =>
+      sql.includes("INSERT INTO collection_task_events"),
+    );
+    assert.ok(outcome);
+    assert.equal(outcome.values[4], "blocked");
+    assert.equal(JSON.parse(outcome.values[8]).error_code, "captcha");
+    assert.equal(JSON.parse(outcome.values[8]).available_result_count, 0);
+    assert.ok(statements.every(({ sql }) => !sql.includes("SET status='disabled'")));
+  }
+});
+
+test("historical success is consumed but cannot reset the source failure counter", async () => {
+  for (const historical of [false, true]) {
+    const writes = [];
+    const query = async (sql, values) => {
+      if (sql.includes("FROM providers p"))
+        return [
+          [
+            {
+              id: "provider",
+              code: "amazon_product",
+              access_mode: "public_page",
+              target_url: "https://www.amazon.com/s",
+              parser_version: AMAZON_BROWSER_PARSER_VERSION,
+              timeout_ms: 1000,
+              fields_json: ["title"],
+              status: "enabled",
+              terms_review_status: "approved",
+              terms_version: "test",
+              terms_permanent: 1,
+              circuit_failure_threshold: 5,
+              runtime_circuit_state: "closed",
+              created_by: "actor",
+            },
+          ],
+        ];
+      if (sql.startsWith("SELECT state,")) return [[{ state: "closed", consecutive_failures: 2 }]];
+      if (sql.startsWith("INSERT INTO provider_runtime_circuits")) writes.push(values);
+      return [{ affectedRows: 1 }];
+    };
+    const pool = {
+      query,
+      getConnection: async () => ({
+        query,
+        beginTransaction: async () => {},
+        commit: async () => {},
+        rollback: async () => {},
+        release() {},
+      }),
+    };
+    const executor = new ProviderSourceExecutor(
+      pool,
+      {},
+      {},
+      "worker",
+      {
+        collect: async (input) => {
+          if (historical) input.onHistoricalResult();
+          return { browserJobId: "job", records: [], artifacts: [], parseError: null };
         },
-        async () => {},
-      ),
-    { code: "captcha" },
-  );
-  const circuit = statements.find(({ sql }) =>
-    sql.startsWith("INSERT INTO provider_runtime_circuits"),
-  );
-  assert.equal(circuit.values[4], "captcha");
-  assert.equal(circuit.values[2], 1);
-  const outcome = statements.find(({ sql }) => sql.includes("INSERT INTO collection_task_events"));
-  assert.ok(outcome);
-  assert.equal(outcome.values[4], "blocked");
-  assert.equal(JSON.parse(outcome.values[8]).error_code, "captcha");
-  assert.equal(JSON.parse(outcome.values[8]).available_result_count, 0);
-  assert.ok(statements.every(({ sql }) => !sql.includes("SET status='disabled'")));
+      },
+      async () => new Response("User-agent: *\nAllow: /"),
+      undefined,
+      undefined,
+      true,
+    );
+    const [outcome] = await executor.execute(
+      {
+        id: "task",
+        organizationId: "org",
+        workspaceId: "workspace",
+        attemptCount: 2,
+        leaseToken: "lease",
+        requestId: "request",
+        traceId: "trace",
+        subqueries: [
+          {
+            id: "query",
+            providerId: "provider",
+            required: true,
+            ordinal: 0,
+            target: { query: "storage" },
+          },
+        ],
+      },
+      async () => {},
+    );
+    assert.equal(outcome.status, "succeeded_empty");
+    assert.equal(writes.length, historical ? 0 : 1);
+    if (!historical) assert.equal(writes[0][2], 0);
+  }
+});
+
+test("historical browser classification uses the scoped live attempt, including success caches", async () => {
+  for (const historical of [undefined, 0, 1]) {
+    let notices = 0;
+    let observation;
+    const client = new MySqlAuthenticatedBrowserJobClient({
+      query: async (sql, values) => {
+        if (sql.startsWith("SELECT")) {
+          observation = { sql, values };
+          return [
+            [
+              {
+                id: "job",
+                status: "succeeded",
+                result_json: result(),
+                historical_result: historical,
+              },
+            ],
+          ];
+        }
+        return [{ affectedRows: 0 }];
+      },
+    });
+    const collected = await client.collect(
+      {
+        organizationId: "org",
+        workspaceId: "workspace",
+        taskId: "task",
+        subqueryId: "query",
+        attemptCount: 2,
+        leaseToken: "lease",
+        provider: { id: "provider", code: "amazon_product", timeoutMs: 1000 },
+        target: { page_url: url },
+        requestId: "request",
+        traceId: "trace",
+        onHistoricalResult: () => {
+          notices++;
+        },
+      },
+      async () => {},
+    );
+    assert.equal(collected.records[0].externalId, asin);
+    assert.equal(notices, historical === 1 ? 1 : 0);
+    for (const guard of [
+      "t.organization_id=j.organization_id",
+      "t.workspace_id=j.workspace_id",
+      "t.status='running'",
+      "t.lease_expires_at>NOW(3)",
+      "a.status='running'",
+      "a.started_at>j.finished_at",
+      "a.attempt_number=t.attempt_count",
+      "collection_task_id=? AND provider_id=?",
+    ])
+      assert.ok(observation.sql.includes(guard), guard);
+    assert.deepEqual(observation.values, [
+      createHash("sha256").update("scoutops:collection-task-lease:v1\0lease").digest("hex"),
+      2,
+      "query",
+      "org",
+      "workspace",
+      "task",
+      "provider",
+    ]);
+  }
 });
 
 test("crawler claim only permits the configured canonical empty Amazon profile and retains legacy default", async () => {

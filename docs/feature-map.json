@@ -1,4 +1,14 @@
 {
+  "selectionBrowserCacheSourceAccounting20261019": {
+    "status": "implemented",
+    "requirements": "docs/browser-cache-source-accounting.md",
+    "sourceFiles": [
+      "apps/worker/src/authenticated-browser-job-client.ts",
+      "apps/worker/src/provider-source-executor.ts"
+    ],
+    "testFiles": ["tests/unit/amazon-browser-contract.test.mjs"],
+    "contract": "Scope and live parent lease plus current running attempt must prove a terminal Amazon browser result predates this attempt before excluding it from both source failure increments and success resets. Task outcomes and evidence remain unchanged. New or unproven outcomes retain accounting. No circuit reset, replay, schema, public API, Python or configuration change."
+  },
   "selectionBrowserTransientRetry20261019": {
     "status": "implemented",
     "requirements": "docs/browser-transient-retry.md",
