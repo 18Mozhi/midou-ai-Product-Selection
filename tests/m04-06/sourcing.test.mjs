@@ -152,7 +152,7 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
   assert.match(uiSurface, /aria-label="来源采集进度"[\s\S]*查看采集任务明细/);
   assert.match(uiSurface, /报价新鲜度/);
   assert.match(uiSurface, /确认依据证据（可搜索）[\s\S]*sourcing-evidence-options/);
-  assert.match(uiSurface, /结构化采购创建[\s\S]*锁定报价版本[\s\S]*采购数量/);
+  assert.doesNotMatch(uiSurface, /结构化采购创建|创建采购任务|purchaseCandidate|purchaseForm/);
   assert.doesNotMatch(uiSurface, /window\.prompt/);
   assert.match(costRuleUi, /route\.query\.from[\s\S]*返回当前找货记录/);
   assert.match(css, /sourcing-comparison-grid[\s\S]*sourcing-compare-tray/);
