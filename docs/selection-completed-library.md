@@ -39,3 +39,9 @@ API producer/service/repository、Vue路由恢复/读取/列表和工作台入�
 2026-10-20默认入口变更验证：最小4项双端用例通过后，26项不重复桌面/390px场景通过，覆盖默认完成、显式推荐、刷新/返回、配置挂起不挡列表、空推荐配置提示、其他视图请求、详情退休入口及原决策失败重试。4项Node完成过滤/权限检查、Vue类型、完整22工作区构建、格式、运行文档及OpenAPI语法通过。配置挂起为受控路由复现，不能据此断言生产加载中现象唯一由配置请求造成。
 
 本轮临时输出仅`.artifacts/completed-default-20261020`、`.artifacts/completed-default-full-20261020`和`.artifacts/completed-default-details-20261020`各一个`.last-run.json`，原生删除被自动审批策略拒绝，未重试/绕过；路径交接`.artifacts/completed-default-cleanup-handoff.json`，全部忽略且未暂存。未产生失败截图/trace，测试服务已停止。生产发布与真实页面需另外回读。
+
+## 默认入口正式发布
+
+510c269870350a42aa134439520f11d4d563ae6d固定宝塔部署exit0，格式/运行文档/发布矩阵/10文件归属及22工作区重建通过；临时发布包由脚本删除。2026-10-19T19:59:36.391Z独立BUILD_SHA一致，frontend/index.html SHA256=29f0ed46078bda78b5ea138fe3b0920bad5e901dae5dc91087e5f8f9188b2483与发布树最终构建相同。
+
+真实Chrome米兜/默认工作区直接进入无query的/opportunities，显示1个商品已完成分析、全部日期说明和原B0GYL94HGW商品，售价USD30.99、进货CNY54.43、评分65.8、利润未知。点击推荐商品生成?view=recommended（主读取仍加载中，未据此宣称推荐接口性能已修复），浏览器返回恢复无query完成清单和同一商品；没有写入、采纳、改来源或补事件。验收标签页已关闭，无视口覆盖。今日首次整链仍1/100，本次入口和辅助读取变化不能被计作新增产出。
