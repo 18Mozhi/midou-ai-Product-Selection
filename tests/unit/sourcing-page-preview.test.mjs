@@ -13,7 +13,7 @@ test("P21 does not turn missing supplier facts into confirmed quotes", async () 
   assert.match(dialogs, /确认依据证据（可搜索）[\s\S]*v-model="quote\.evidence_id"[\s\S]*required/);
 });
 
-test("P21 keeps comparison and purchase boundaries on actual confirmed quote state", async () => {
+test("P21 keeps comparison boundaries on actual confirmed quote state and retires procurement", async () => {
   const [workspace, logic] = await Promise.all([
     readFile("apps/web/src/components/SourcingWorkspace.vue", "utf8"),
     readFile("apps/web/src/composables/useSourcingWorkspace.ts", "utf8"),
@@ -22,5 +22,9 @@ test("P21 keeps comparison and purchase boundaries on actual confirmed quote sta
   assert.match(workspace, /至少再选一家才能对比/);
   assert.match(logic, /if \(!candidate\.quote\) return;/);
   assert.match(logic, /selectedQuotes\.value\.length < 5/);
-  assert.match(logic, /quote_id: candidate\.quote\.id/);
+  assert.doesNotMatch(
+    logic,
+    /purchaseCandidate|purchaseForm|openPurchase|closePurchase|sourcing\/purchase-tasks/,
+  );
+  assert.doesNotMatch(workspace, /创建采购任务|openPurchase|purchase-candidate/);
 });

@@ -2826,6 +2826,7 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /sourcing/purchase-tasks:
     post:
+      description: 保留既有采购任务API及权限合同。成员找货页已退休采购创建入口与提交代码，当前自动选品流程不调用该接口。
       summary: Queue a purchase task from a current quote without bypassing MOQ
       security: [{ HttpOnlySession: [] }]
       x-required-capability: supplier_quote:manage

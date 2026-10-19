@@ -5,7 +5,7 @@ import { sanitizeCorrelationId } from "../ui/state-contract";
 import type { SourcingCandidate, SourcingSearch } from "./sourcing-workspace-types";
 
 type DialogFailure = {
-  dialog: "search" | "quote" | "purchase" | "delete";
+  dialog: "search" | "quote" | "delete";
   message: string;
   requestId: string;
 };
@@ -26,8 +26,6 @@ const props = defineProps<{
     evidence_id: string;
   };
   evidenceOptions: Array<{ id: string; label: string }>;
-  purchaseCandidate: SourcingCandidate | null;
-  purchaseForm: { quantity: number; reason: string };
   deleting: SourcingSearch | null;
   deleteReason: string;
   busy: boolean;
@@ -38,8 +36,6 @@ const emit = defineEmits<{
   create: [];
   closeQuote: [];
   confirmQuote: [];
-  closePurchase: [];
-  purchase: [];
   closeDelete: [];
   removeSearch: [];
   updateDeleteReason: [value: string];
@@ -62,12 +58,6 @@ const pageHeading = () => document.querySelector<HTMLElement>("#sourcing-page-ti
   { dialogElement: quoteDialog, handleCancel: handleQuoteCancel } = useModalDialog(
     () => Boolean(props.quoteCandidate),
     () => emit("closeQuote"),
-    pageHeading,
-    { trapFocus: true },
-  ),
-  { dialogElement: purchaseDialog, handleCancel: handlePurchaseCancel } = useModalDialog(
-    () => Boolean(props.purchaseCandidate),
-    () => emit("closePurchase"),
     pageHeading,
     { trapFocus: true },
   ),
@@ -111,10 +101,6 @@ watch(
 watch(
   () => props.quoteCandidate,
   (value) => value && focusFirst(() => quoteDialog.value),
-);
-watch(
-  () => props.purchaseCandidate,
-  (value) => value && focusFirst(() => purchaseDialog.value),
 );
 watch(
   () => props.deleting,
@@ -265,87 +251,6 @@ const searchName = (item: SourcingSearch | null) =>
       <footer>
         <button type="button" class="ghost" @click="emit('closeQuote')">取消</button
         ><button type="submit" :disabled="busy">确认新版本</button>
-      </footer>
-    </form>
-  </dialog>
-  <dialog
-    v-if="purchaseCandidate"
-    ref="purchaseDialog"
-    class="sourcing-modal"
-    aria-labelledby="purchase-task-title"
-    @cancel="handlePurchaseCancel"
-  >
-    <form
-      :aria-describedby="failureFor('purchase') ? 'sourcing-purchase-error' : undefined"
-      @submit.prevent="emit('purchase')"
-    >
-      <header>
-        <div>
-          <small>结构化采购创建</small>
-          <h3 id="purchase-task-title">创建采购任务</h3>
-        </div>
-        <button type="button" aria-label="关闭采购任务创建" @click="emit('closePurchase')">
-          ×
-        </button>
-      </header>
-      <dl>
-        <div>
-          <dt>供应商</dt>
-          <dd>{{ purchaseCandidate.supplier_name }}</dd>
-        </div>
-        <div>
-          <dt>锁定报价版本</dt>
-          <dd>v{{ purchaseCandidate.quote?.version }}</dd>
-        </div>
-        <div>
-          <dt>最小起订量（MOQ）</dt>
-          <dd>{{ purchaseCandidate.moq }}</dd>
-        </div>
-        <div>
-          <dt>报价证据</dt>
-          <dd>{{ purchaseCandidate.quote?.evidence_id }}</dd>
-        </div>
-      </dl>
-      <label
-        >采购数量<input
-          v-model.number="purchaseForm.quantity"
-          type="number"
-          :min="purchaseCandidate.moq ?? 1"
-          step="1"
-          required
-      /></label>
-      <label
-        >创建原因<textarea
-          v-model="purchaseForm.reason"
-          minlength="2"
-          maxlength="1000"
-          rows="3"
-          required
-        ></textarea>
-      </label>
-      <p
-        v-if="failureFor('purchase')"
-        id="sourcing-purchase-error"
-        class="sourcing-dialog-error"
-        role="alert"
-      >
-        {{ failureFor("purchase")?.message }}
-        <code v-if="sanitizeCorrelationId(failureFor('purchase')?.requestId)">
-          请求编号 {{ sanitizeCorrelationId(failureFor("purchase")?.requestId) }}
-        </code>
-      </p>
-      <footer>
-        <button type="button" class="ghost" @click="emit('closePurchase')">取消</button
-        ><button
-          type="submit"
-          :disabled="
-            busy ||
-            purchaseForm.reason.trim().length < 2 ||
-            purchaseForm.quantity < (purchaseCandidate.moq ?? 1)
-          "
-        >
-          确认创建
-        </button>
       </footer>
     </form>
   </dialog>

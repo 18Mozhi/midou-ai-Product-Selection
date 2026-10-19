@@ -1,4 +1,15 @@
 {
+  "selectionRetiredSourcingProcurement20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-retired-sourcing-procurement.md",
+    "sourceFiles": [
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+      "apps/web/src/composables/useSourcingWorkspace.ts"
+    ],
+    "testFiles": ["tests/unit/sourcing-page-preview.test.mjs", "tests/e2e/m04-06-sourcing.spec.ts"],
+    "contract": "Retire member sourcing procurement button, dialog, form state and purchase-task POST producer. Preserve automatic Amazon-to-1688 pipeline, factual quote/source reads, comparison, remaining error/focus lifecycle, backend authorization/API and immutable history. No schema/env/dependency/Python change; rebuild/release frontend."
+  },
   "selectionRetiredDetailCollection20261020": {
     "status": "implemented",
     "requirements": "docs/selection-retired-detail-collection.md",

@@ -745,7 +745,7 @@ test("empty state opens the real sourcing form", async ({ page }) => {
   await expect(dialog).toHaveCount(0);
 });
 
-test("four sourcing dialogs contain keyboard focus and return it to their opener", async ({
+test("three sourcing dialogs contain keyboard focus and return it to their opener", async ({
   page,
 }) => {
   await setup(page);
@@ -763,13 +763,6 @@ test("four sourcing dialogs contain keyboard focus and return it to their opener
     "确认完整供应商报价",
     "关闭报价编辑",
     "确认新版本",
-  );
-  await verifyDialogFocusCycle(
-    page,
-    page.getByRole("button", { name: "创建采购任务", exact: true }),
-    "创建采购任务",
-    "关闭采购任务创建",
-    "确认创建",
   );
   await verifyDialogFocusCycle(
     page,
@@ -792,18 +785,12 @@ test("query-opened sourcing dialog returns focus to the page heading without an 
   await expect(page.getByRole("heading", { name: "供应链找货", level: 1 })).toBeFocused();
 });
 
-test("four sourcing write failures stay visible with their request IDs inside each dialog", async ({
+test("three sourcing write failures stay visible with their request IDs inside each dialog", async ({
   page,
 }) => {
   await setup(page);
   await rejectSourcingRequest(page, "/api/v1/sourcing/searches", "POST", "p21-search-fail-503");
   await rejectSourcingRequest(page, "/api/v1/sourcing/quotes", "POST", "p21-quote-fail-503");
-  await rejectSourcingRequest(
-    page,
-    "/api/v1/sourcing/purchase-tasks",
-    "POST",
-    "p21-purchase-fail-503",
-  );
   await rejectSourcingRequest(
     page,
     `/api/v1/sourcing/searches/${searchId}`,
@@ -826,12 +813,6 @@ test("four sourcing write failures stay visible with their request IDs inside ea
   await dialog.getByLabel("所在地").fill("浙江宁波");
   await dialog.getByRole("button", { name: "确认新版本" }).click();
   await expect(dialog.getByRole("alert")).toContainText("p21-quote-fail-503");
-  await dialog.getByRole("button", { name: "取消" }).click();
-
-  await page.getByRole("button", { name: "创建采购任务", exact: true }).click();
-  dialog = page.getByRole("dialog", { name: "创建采购任务" });
-  await dialog.getByRole("button", { name: "确认创建" }).click();
-  await expect(dialog.getByRole("alert")).toContainText("p21-purchase-fail-503");
   await dialog.getByRole("button", { name: "取消" }).click();
 
   await page.getByRole("button", { name: "删除找货记录", exact: true }).click();
@@ -912,22 +893,6 @@ test("pending sourcing writes do not close or overwrite a reopened dialog", asyn
   await dialog.getByRole("button", { name: "取消" }).click();
 
   pending = await beginWrite();
-  await page.getByRole("button", { name: "创建采购任务", exact: true }).click();
-  dialog = page.getByRole("dialog", { name: "创建采购任务" });
-  await dialog.getByLabel("创建原因").fill("旧采购草稿原因");
-  await dialog.getByRole("button", { name: "确认创建" }).click();
-  await pending.started;
-  await duplicateSubmit(dialog);
-  await dialog.getByRole("button", { name: "取消" }).click();
-  await page.getByRole("button", { name: "创建采购任务", exact: true }).click();
-  dialog = page.getByRole("dialog", { name: "创建采购任务" });
-  await dialog.getByLabel("创建原因").fill("新采购草稿原因");
-  pending.release();
-  await expect(dialog).toBeVisible();
-  await expect(dialog.getByLabel("创建原因")).toHaveValue("新采购草稿原因");
-  await dialog.getByRole("button", { name: "取消" }).click();
-
-  pending = await beginWrite();
   await page.getByRole("button", { name: "删除找货记录", exact: true }).click();
   dialog = page.getByRole("dialog", { name: "删除找货记录" });
   await dialog.getByLabel("删除原因").fill("旧删除原因草稿");
@@ -941,7 +906,7 @@ test("pending sourcing writes do not close or overwrite a reopened dialog", asyn
   pending.release();
   await expect(dialog).toBeVisible();
   await expect(dialog.getByLabel("删除原因")).toHaveValue("新删除原因草稿");
-  expect(requestCount).toBe(4);
+  expect(requestCount).toBe(3);
 });
 
 test("a delayed sourcing failure is not attached to a newly opened draft", async ({ page }) => {
@@ -1114,43 +1079,25 @@ for (const input of [
   });
 }
 
-test("UI2-SC05 purchase enforces displayed MOQ and binds the current quote with a trimmed reason", async ({
+test("UI2-SC05 retired procurement leaves confirmed quote facts readable without purchase writes", async ({
   page,
 }) => {
   await setup(page);
-  const bodies: Record<string, unknown>[] = [];
-  await page.route("**/api/v1/sourcing/purchase-tasks", async (route) => {
-    const body = route.request().postDataJSON() as Record<string, unknown>;
-    bodies.push(body);
-    await route.fulfill({
-      status: 202,
-      json: envelope({
-        id: "00000000-0000-4000-8000-000000000621",
-        status: "queued",
-        quote_id: body.quote_id,
-        quantity: body.quantity,
-      }),
-    });
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (request.method() !== "GET" && request.url().includes("/sourcing/purchase-tasks"))
+      writes.push(request.url());
   });
   await page.goto("/sourcing");
-  const trigger = page.getByRole("button", { name: "创建采购任务", exact: true });
-  await trigger.click();
-  const dialog = page.getByRole("dialog", { name: "创建采购任务" });
-  await expect(dialog).toContainText("v2");
-  await expect(dialog.getByLabel("采购数量")).toHaveValue("100");
-  await dialog.getByLabel("采购数量").fill("99");
-  await expect(dialog.getByRole("button", { name: "确认创建", exact: true })).toBeDisabled();
-  await dialog.getByRole("button", { name: "取消", exact: true }).click();
-  expect(bodies).toEqual([]);
-  await trigger.click();
-  await expect(dialog.getByLabel("采购数量")).toHaveValue("100");
-  await dialog.getByLabel("创建原因").fill("  核对报价后采购  ");
-  await dialog.getByRole("button", { name: "确认创建", exact: true }).click();
-  await expect(dialog).toHaveCount(0);
-  expect(bodies).toEqual([
-    { quote_id: readyCandidate.quote.id, quantity: 100, reason: "核对报价后采购" },
-  ]);
-  await expect(page.getByText("采购任务已进入任务中心待消费队列。")).toBeVisible();
+  await expect(
+    page.locator(".supplier-cards article").filter({ hasText: readyCandidate.supplier_name }),
+  ).toContainText(String(readyCandidate.quoted_price));
+  await expect(page.getByRole("button", { name: "创建采购任务", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "创建采购任务" })).toHaveCount(0);
+  await expect(page.getByRole("checkbox", { name: "加入对比" }).first()).toBeVisible();
+  await page.getByRole("button", { name: "刷新记录", exact: true }).click();
+  await expect(page.getByRole("button", { name: "创建采购任务", exact: true })).toHaveCount(0);
+  expect(writes).toEqual([]);
 });
 
 test("UI2-SC06 comparison accepts two through five current quote IDs and leaves a sixth unselected", async ({

@@ -29,11 +29,9 @@ const {
   comparisonLoading,
   loadComparisons,
   quoteCandidate,
-  purchaseCandidate,
   selectedQuotes,
   form,
   quote,
-  purchaseForm,
   canManage,
   canInspectCollection,
   candidates,
@@ -56,7 +54,6 @@ const {
   openSearch,
   closeSearch,
   closeQuote,
-  closePurchase,
   openDelete,
   closeDelete,
   resetQuery,
@@ -66,8 +63,6 @@ const {
   choose,
   openQuote,
   compare,
-  openPurchase,
-  purchase,
   refreshSearch,
   removeSearch,
 } = useSourcingWorkspace(props);
@@ -401,9 +396,7 @@ const pendingMessage = computed(() => {
               ><time>采集于 {{ timeText(item.observed_at) }}</time
               ><code>证据 {{ item.evidence_id }}</code
               ><button v-if="canManage && !item.quote" type="button" @click="openQuote(item)">
-                确认报价</button
-              ><button v-else-if="canManage" type="button" @click="openPurchase(item)">
-                创建采购任务
+                确认报价
               </button>
             </footer>
           </article>
@@ -448,8 +441,6 @@ const pendingMessage = computed(() => {
       :quote-candidate="quoteCandidate"
       :quote="quote"
       :evidence-options="evidenceOptions"
-      :purchase-candidate="purchaseCandidate"
-      :purchase-form="purchaseForm"
       :deleting="deleting"
       :delete-reason="deleteReason"
       :busy="busy"
@@ -458,8 +449,6 @@ const pendingMessage = computed(() => {
       @create="create"
       @close-quote="closeQuote"
       @confirm-quote="confirm"
-      @close-purchase="closePurchase"
-      @purchase="purchase"
       @close-delete="closeDelete"
       @remove-search="removeSearch"
       @update-delete-reason="deleteReason = $event"

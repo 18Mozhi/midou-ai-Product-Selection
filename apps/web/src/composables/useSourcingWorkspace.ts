@@ -18,7 +18,7 @@ import type {
   SourcingState as State,
 } from "../components/sourcing-workspace-types";
 type SourcingDialogFailure = {
-  dialog: "search" | "quote" | "purchase" | "delete";
+  dialog: "search" | "quote" | "delete";
   message: string;
   requestId: string;
 };
@@ -48,7 +48,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     dialogGeneration = reactive<Record<SourcingDialogName, number>>({
       search: 0,
       quote: 0,
-      purchase: 0,
       delete: 0,
     }),
     routeGeneration = ref(0),
@@ -60,7 +59,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
       setActive: setComparisonsActive,
     } = useSourcingComparisons(request),
     quoteCandidate = ref<Candidate | null>(null),
-    purchaseCandidate = ref<Candidate | null>(null),
     selectedQuotes = ref<string[]>([]),
     form = reactive({
       input_type: "keyword",
@@ -76,10 +74,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
       risk_level: "unknown",
       observed_at: new Date().toISOString().slice(0, 16),
       evidence_id: "",
-    }),
-    purchaseForm = reactive({
-      quantity: 1,
-      reason: "从供应链找货页面创建采购任务",
     });
   let listReadGeneration = 0,
     detailReadGeneration = 0,
@@ -346,11 +340,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     quoteCandidate.value = null;
     if (dialogFailure.value?.dialog === "quote") dialogFailure.value = null;
   }
-  function closePurchase() {
-    dialogGeneration.purchase += 1;
-    purchaseCandidate.value = null;
-    if (dialogFailure.value?.dialog === "purchase") dialogFailure.value = null;
-  }
   function openDelete() {
     dialogGeneration.delete += 1;
     if (dialogFailure.value?.dialog === "delete") dialogFailure.value = null;
@@ -450,45 +439,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
       selectedQuotes.value = [];
       await load();
       notice.value = `已保存 ${selectedCount} 家报价对比。`;
-    }
-  }
-  function openPurchase(candidate: Candidate) {
-    if (!candidate.quote) return;
-    dialogGeneration.purchase += 1;
-    if (dialogFailure.value?.dialog === "purchase") dialogFailure.value = null;
-    purchaseCandidate.value = candidate;
-    purchaseForm.quantity = candidate.moq ?? 1;
-    purchaseForm.reason = "从供应链找货页面创建采购任务";
-  }
-  async function purchase() {
-    const candidate = purchaseCandidate.value;
-    if (!candidate?.quote || busy.value) return;
-    const attempt = startDialogAttempt("purchase"),
-      candidateId = candidate.id,
-      routeAtSubmit = route.fullPath;
-    if (
-      await post(
-        "/sourcing/purchase-tasks",
-        {
-          quote_id: candidate.quote.id,
-          quantity: Number(purchaseForm.quantity),
-          reason: purchaseForm.reason.trim(),
-        },
-        attempt,
-      )
-    ) {
-      if (
-        !isCurrentDialogAttempt(attempt) ||
-        route.fullPath !== routeAtSubmit ||
-        purchaseCandidate.value?.id !== candidateId
-      ) {
-        notice.value = "先前的采购任务已排队；当前打开的窗口与页面选择保持不变。";
-        return;
-      }
-      purchaseCandidate.value = null;
-      notice.value = "采购任务已进入任务中心待消费队列。";
-    } else if (!isCurrentDialogAttempt(attempt)) {
-      notice.value = "先前的采购任务未完成；当前打开的窗口与页面选择保持不变。";
     }
   }
   async function refreshSearch() {
@@ -640,11 +590,9 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     comparisonLoading,
     loadComparisons,
     quoteCandidate,
-    purchaseCandidate,
     selectedQuotes,
     form,
     quote,
-    purchaseForm,
     canManage,
     canInspectCollection,
     candidates,
@@ -667,7 +615,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     openSearch,
     closeSearch,
     closeQuote,
-    closePurchase,
     openDelete,
     closeDelete,
     resetQuery,
@@ -677,8 +624,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     choose,
     openQuote,
     compare,
-    openPurchase,
-    purchase,
     refreshSearch,
     removeSearch,
   };
