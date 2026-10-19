@@ -76,7 +76,10 @@ function createPool(job, loseCandidate = false) {
         statements.push(sql);
         if (sql.startsWith("UPDATE trend_projection_jobs SET status=?")) calls.push("finish");
         else {
-          assert.match(sql, /^INSERT IGNORE INTO trend_projection_jobs/);
+          assert.match(
+            sql,
+            /^SELECT n.id,n.organization_id,n.workspace_id FROM normalized_records n /,
+          );
           calls.push("enqueue");
         }
         return [[], []];
@@ -85,6 +88,46 @@ function createPool(job, loseCandidate = false) {
     },
   };
 }
+
+test("projection admission scans without write locks and inserts only scoped record identities", async () => {
+  const reads = [],
+    writes = [];
+  const worker = new MySqlTrendProjectionWorker(
+    {
+      query: async (sql, params) => {
+        if (sql.startsWith("SELECT n.id,n.organization_id,n.workspace_id")) {
+          reads.push(sql);
+          return [[{ id: "record-1", organization_id: "org-1", workspace_id: "ws-1" }]];
+        }
+        writes.push([sql, params]);
+        return [{ affectedRows: 0 }];
+      },
+    },
+    "worker",
+    120,
+    () => now,
+  );
+  await worker.enqueueMissing();
+  assert.equal(reads.length, 2);
+  assert.equal(writes.length, 2);
+  for (let i = 0; i < 2; i++) {
+    assert.doesNotMatch(reads[i], /FOR UPDATE|LOCK IN SHARE MODE|INSERT/);
+    assert.match(reads[i], /ORDER BY n.created_at LIMIT 100$/);
+    const source = reads[i]
+      .replace(/^SELECT n.id,n.organization_id,n.workspace_id /, "")
+      .replace(/ ORDER BY n.created_at LIMIT 100$/, "");
+    assert.ok(
+      writes[i][0].includes(source + " AND n.id=? AND n.organization_id=? AND n.workspace_id=?"),
+    );
+    assert.match(writes[i][0], /^INSERT IGNORE INTO trend_projection_jobs/);
+    assert.match(writes[i][0], /LIMIT 1$/);
+    assert.deepEqual(writes[i][1], [now, now, now, "record-1", "org-1", "ws-1"]);
+    assert.match(source, /n.status='active' AND j.id IS NULL/);
+    assert.match(source, /collection_scope_workspace.status='active'/);
+  }
+  assert.match(reads[1], /t.status IN \('succeeded','completed_with_warnings'\)/);
+  assert.match(reads[1], /MIN\(n_first.id\)/);
+});
 
 test("projection locks only the selected scoped ID and rechecks eligibility", async () => {
   const { pool, statements } = createPool({ ...jobScope, id: "job-1", attempt_count: 0 });

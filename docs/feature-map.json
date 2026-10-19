@@ -1,4 +1,11 @@
 {
+  "selectionProjectionPointAdmission20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-projection-point-admission.md",
+    "sourceFiles": ["apps/worker/src/trend-projection-worker.ts"],
+    "testFiles": ["tests/unit/trend-projection-worker-scheduling.test.mjs"],
+    "contract": "Read original bounded projection candidates consistently, then recheck the unchanged full eligibility predicate with exact normalized-record/org/workspace keys in each INSERT IGNORE. Keep batch100, first intelligence evidence, parent success, active scopes, exclusions and unique-job dedupe. No isolation/schema/API/config/dependency/Python change. BaoTa Node restart required; no claim all deadlocks or daily100 are resolved."
+  },
   "amazonEmptyFeaturedCarousel20261020": {
     "status": "implemented",
     "requirements": "docs/amazon-empty-featured-carousel.md",

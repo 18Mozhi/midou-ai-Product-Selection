@@ -158,9 +158,28 @@ export class MySqlTrendProjectionWorker {
     }
   }
 
+  /** Candidate scans are consistent reads; INSERT SELECT only reads a scoped primary key. */
+  private async enqueueMissingBatch(sql: string, now: Date) {
+    const start = sql.indexOf("FROM normalized_records n ");
+    const suffix = " ORDER BY n.created_at LIMIT 100";
+    if (start < 0 || !sql.endsWith(suffix)) throw new Error("projection_enqueue_sql_invalid");
+    const source = sql.slice(start, -suffix.length);
+    const [candidates] = await this.pool.query<RowDataPacket[]>(
+      "SELECT n.id,n.organization_id,n.workspace_id " + source + suffix,
+    );
+    for (const row of candidates) {
+      await this.pool.query(
+        sql.slice(0, start) +
+          source +
+          " AND n.id=? AND n.organization_id=? AND n.workspace_id=? ORDER BY n.created_at LIMIT 1",
+        [now, now, now, row.id, row.organization_id, row.workspace_id],
+      );
+    }
+  }
+
   private async enqueueMissing() {
     const now = this.now();
-    await this.pool.query(
+    await this.enqueueMissingBatch(
       [
         "INSERT IGNORE INTO trend_projection_jobs (id,organization_id,workspace_id,normalized_record_id,status,",
         "attempt_count,available_at,lease_owner,lease_expires_at,last_error_code,request_id,trace_id,created_at,",
@@ -172,9 +191,9 @@ export class MySqlTrendProjectionWorker {
         "WHERE cs.id=e.collection_subquery_id AND JSON_UNQUOTE(JSON_EXTRACT(cs.target_json,'$.projection_type'))='rule_product_discovery'))) ",
         `AND ${activeCollectionScopeSql("n")} ORDER BY n.created_at LIMIT 100`,
       ].join(""),
-      [now, now, now],
+      now,
     );
-    await this.pool.query(
+    await this.enqueueMissingBatch(
       "INSERT IGNORE INTO trend_projection_jobs (id,organization_id,workspace_id,normalized_record_id,status," +
         "attempt_count,available_at,request_id,trace_id,created_at,updated_at) " +
         "SELECT UUID(),n.organization_id,n.workspace_id,n.id,'scheduled',0,?,n.request_id,n.trace_id,?,? " +
@@ -191,7 +210,7 @@ export class MySqlTrendProjectionWorker {
         "WHERE l_first.collection_task_id=cs.task_id AND l_first.organization_id=n.organization_id " +
         "AND l_first.workspace_id=n.workspace_id) " +
         `AND ${activeCollectionScopeSql("n")} ORDER BY n.created_at LIMIT 100`,
-      [now, now, now],
+      now,
     );
   }
 
