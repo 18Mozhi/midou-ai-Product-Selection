@@ -2,6 +2,7 @@ import type { ComputedRef, Ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import {
   loadAutomaticSelectionReadiness,
+  unavailableAutomaticSelectionReadiness,
   type AutomaticSelectionReadiness,
 } from "../automatic-selection-readiness";
 import { createOpportunityWorkspaceForms } from "./opportunity-workspace-forms";
@@ -206,8 +207,12 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
     signal?: AbortSignal,
   ) {
     automationReadiness.value = null;
-    const readiness = await loadAutomaticSelectionReadiness(request, signal);
-    if (isCurrent()) automationReadiness.value = readiness;
+    try {
+      const readiness = await loadAutomaticSelectionReadiness(request, signal);
+      if (isCurrent()) automationReadiness.value = readiness;
+    } catch {
+      if (isCurrent()) automationReadiness.value = unavailableAutomaticSelectionReadiness();
+    }
   }
 
   async function loadProfitAnalysis(
@@ -308,11 +313,9 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
       const result = await read(`/opportunities?${params}`, isCurrent, controller.signal);
       if (!isCurrent()) return;
       items.value = result.data;
-      const readinessPromise = loadAutomationReadiness(isCurrent, controller.signal);
-      await readinessPromise;
-      if (!isCurrent()) return;
       total.value = (result.meta as { total: number }).total;
       state.value = items.value.length ? "ready" : "empty";
+      void loadAutomationReadiness(isCurrent, controller.signal);
     } catch (error) {
       if (pendingDecisionFocus.value?.opportunityId === currentOpportunityId)
         pendingDecisionFocus.value = null;

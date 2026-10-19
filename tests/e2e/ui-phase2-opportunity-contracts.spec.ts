@@ -209,6 +209,34 @@ for (const canCollect of [false, true]) {
   });
 }
 
+test("list results settle while optional recommendation configuration is pending", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  let release!: () => void;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/api/v1/opportunity-score-rules", async (route) => {
+    await gate;
+    await route.fulfill({ json: envelope([]) });
+  });
+  await page.goto("/opportunities");
+  await expect(page.getByRole("heading", { name: "2 个商品已完成分析" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "正在加载", exact: true })).toHaveCount(0);
+  await page.getByRole("button", { name: "推荐商品", exact: true }).click();
+  await expect(page).toHaveURL(/view=recommended/);
+  release();
+  await expect(page.getByRole("button", { name: "推荐商品", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await page.getByRole("button", { name: "已完成分析", exact: true }).click();
+  await expect(page).not.toHaveURL(/view=recommended/);
+  await expect(page.getByRole("heading", { name: "2 个商品已完成分析" })).toBeVisible();
+  expect(data.writes).toHaveLength(0);
+});
+
 test("completed analysis view survives refresh and view navigation without requiring recommendation setup", async ({
   page,
 }) => {
@@ -219,7 +247,7 @@ test("completed analysis view survives refresh and view navigation without requi
     if (url.pathname === "/api/v1/opportunities")
       requests.push(url.searchParams.get("selection_view") ?? "");
   });
-  await page.goto("/opportunities?view=completed");
+  await page.goto("/opportunities");
   await expect(page.getByRole("button", { name: "已完成分析", exact: true })).toHaveAttribute(
     "aria-current",
     "page",
@@ -233,7 +261,7 @@ test("completed analysis view survives refresh and view navigation without requi
   ).toBeVisible();
   expect(requests.at(-1)).toBe("completed");
   await page.getByRole("button", { name: "推荐商品", exact: true }).click();
-  await expect(page).not.toHaveURL(/view=completed/);
+  await expect(page).toHaveURL(/view=recommended/);
   await expect.poll(() => requests.at(-1)).toBe("recommended");
   await page.goBack();
   await expect(page.getByRole("heading", { name: "2 个商品已完成分析" })).toBeVisible();

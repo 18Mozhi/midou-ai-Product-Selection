@@ -1,4 +1,11 @@
 {
+  "selectionCompletedDefault20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-completed-library.md",
+    "sourceFiles": ["apps/web/src/components/OpportunityWorkspace.vue", "apps/web/src/components/OpportunityListPanel.vue", "apps/web/src/components/use-opportunity-workspace-navigation.ts", "apps/web/src/components/use-opportunity-workspace-reads.ts"],
+    "testFiles": ["tests/e2e/ui-phase2-opportunity-contracts.spec.ts", "tests/e2e/m04-02-opportunities.spec.ts"],
+    "contract": "Member catalogue defaults to completed analysis; explicit recommended and existing other views remain. Settle successful list independently of optional recommendation readiness; preserve abort/generation ownership, main read failures, original API defaults, evidence and daily counting. Frontend release required, no schema/env/dependency/Python change."
+  },
   "selectionRetiredSourcingProcurement20261020": {
     "status": "implemented",
     "requirements": "docs/selection-retired-sourcing-procurement.md",

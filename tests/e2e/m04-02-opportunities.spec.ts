@@ -2631,14 +2631,14 @@ test("selection views send explicit truthful recommendation filters", async ({ p
   const recommended = page.waitForRequest((request) =>
     request.url().includes("selection_view=recommended"),
   );
-  await page.goto("/opportunities");
+  await page.goto("/opportunities?view=recommended");
   await recommended;
   await expect(page.getByRole("button", { name: "推荐商品" })).toHaveAttribute(
     "aria-current",
     "page",
   );
   const queueButtons = page.locator(".catalogue-controls > nav button");
-  await expect(queueButtons).toHaveCount(4);
+  await expect(queueButtons).toHaveCount(5);
   if ((page.viewportSize()?.width ?? 0) > 760) {
     await expect
       .poll(() =>
@@ -2940,7 +2940,7 @@ for (const configured of [true, false]) {
       ),
       page.waitForResponse((response) => new URL(response.url()).pathname === "/api/v1/cost-rules"),
     ]);
-    await page.goto("/opportunities");
+    await page.goto("/opportunities?view=recommended");
     await configs;
     await expect(page.getByRole("heading", { name: "暂无选品结果" })).toBeVisible();
     if (configured) {
@@ -2951,7 +2951,7 @@ for (const configured of [true, false]) {
       const before = reads;
       await page.getByRole("button", { name: "刷新列表", exact: true }).click();
       await expect.poll(() => reads).toBeGreaterThan(before);
-      await expect(page).toHaveURL(/\/opportunities$/);
+      await expect(page).toHaveURL(/view=recommended/);
     } else {
       await expect(page.locator(".catalogue-readiness")).toBeVisible();
       await expect(page.getByRole("link", { name: "设置评分规则", exact: true })).toHaveAttribute(

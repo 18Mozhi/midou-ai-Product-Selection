@@ -42,7 +42,9 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
             ? "evidence_pending"
             : route.query.view === "all" || route.query.scope === "all"
               ? "all"
-              : "recommended";
+              : route.query.view === "recommended"
+                ? "recommended"
+                : "completed";
     const requestedPage = Number(route.query.page ?? 1);
     page.value = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
   }
@@ -57,7 +59,7 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
         coverage_status: filters.coverage_status || undefined,
         blocking_reason: filters.blocking_reason || undefined,
         lifecycle_status: filters.lifecycle_status || undefined,
-        view: selectionView.value === "recommended" ? undefined : selectionView.value,
+        view: selectionView.value === "completed" ? undefined : selectionView.value,
       },
     });
     if (route.fullPath === previousPath) await load();
@@ -67,7 +69,7 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
     for (const key of Object.keys(filters) as Array<keyof typeof filters>) filters[key] = "";
     const previousPath = route.fullPath;
     await router.push({
-      query: { view: selectionView.value === "recommended" ? undefined : selectionView.value },
+      query: { view: selectionView.value === "completed" ? undefined : selectionView.value },
     });
     if (route.fullPath === previousPath) await load();
   }
@@ -77,7 +79,7 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
     await router.push({
       query: {
         ...route.query,
-        view: nextView === "recommended" ? undefined : nextView,
+        view: nextView === "completed" ? undefined : nextView,
         scope: undefined,
         page: undefined,
         decision_status: nextView === "all" ? route.query.decision_status : undefined,

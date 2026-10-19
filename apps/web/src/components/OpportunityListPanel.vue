@@ -260,7 +260,7 @@ watch(imageFailureResetSources, (items) => {
 </script>
 
 <template>
-  <section class="catalogue-controls" aria-label="推荐清单视图">
+  <section class="catalogue-controls" aria-label="选品结果视图">
     <nav>
       <button
         v-for="option in viewOptions"

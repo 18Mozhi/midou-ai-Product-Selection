@@ -72,7 +72,7 @@ const props = defineProps<{
   automationReadiness = ref<AutomaticSelectionReadiness | null>(null),
   busy = ref(false),
   selectionView = ref<"recommended" | "rule_candidates" | "evidence_pending" | "completed" | "all">(
-    "recommended",
+    "completed",
   ),
   downstream = ref({ competitors: 0, snapshots: 0, searches: 0, suppliers: 0 }),
   tab = ref<OpportunityTypes.OpportunityTab>("overview"),
