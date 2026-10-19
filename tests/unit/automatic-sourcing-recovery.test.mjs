@@ -354,7 +354,15 @@ test("stale primary or competitor refresh uses the existing detail queue with sc
     read[0],
     /s\.organization_id=c\.organization_id AND s\.workspace_id=c\.workspace_id/,
   );
-  assert.match(read[0], /busy\.organization_id=c\.organization_id/);
+  assert.match(
+    read[0],
+    /q_refresh\.organization_id=c\.organization_id AND q_refresh\.workspace_id=c\.workspace_id/,
+  );
+  assert.match(
+    read[0],
+    /ct_refresh\.organization_id=q_refresh\.organization_id AND ct_refresh\.workspace_id=q_refresh\.workspace_id/,
+  );
+  assert.doesNotMatch(read[0], /busy\.active_count/);
   assert.match(
     read[0],
     /recent\.organization_id=c\.organization_id AND recent\.workspace_id=c\.workspace_id/,

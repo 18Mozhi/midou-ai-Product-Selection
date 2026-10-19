@@ -1,4 +1,19 @@
 {
+  "selectionDetailRefreshResourceScope20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-detail-refresh-resource-scope.md",
+    "sourceFiles": [
+      "apps/worker/src/competitor-refresh-policy.ts",
+      "apps/worker/src/trend-projection-persistence.ts"
+    ],
+    "testFiles": [
+      "tests/unit/competitor-refresh-policy.test.mjs",
+      "tests/unit/trend-projection-worker-scheduling.test.mjs",
+      "tests/unit/automatic-sourcing-recovery.test.mjs",
+      "tests/fixtures/competitor-refresh-sql.mjs"
+    ],
+    "contract": "Detail refresh waits only for its own scoped active competitor_snapshot parent task, not arbitrary organization ingestion. Preserve current source gates, one-hour cadence, resource cooldown, backlog threshold, oldest-first limit1 and transaction, payload and audit. No API/schema/env/dependency/Python change; BaoTa Node restart required. Removing one guard does not bypass full capacity or invent missing prices."
+  },
   "selectionSkippedPrimaryRecovery20261020": {
     "status": "implemented",
     "requirements": "docs/selection-skipped-primary-recovery.md",

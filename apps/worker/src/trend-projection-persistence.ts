@@ -1,3 +1,4 @@
+import { competitorRefreshNoActiveDetailSql } from "./competitor-refresh-policy.js";
 import {
   activeCollectionScopeSql,
   automaticCollectionBacklogCountSql,
@@ -484,9 +485,6 @@ export class TrendProjectionPersistence {
          AND o.organization_id=c.organization_id AND o.workspace_id=c.workspace_id
        JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id AND s.competitor_id=c.id
          AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id
-       LEFT JOIN (SELECT organization_id,COUNT(*) active_count FROM collection_tasks
-         WHERE ${activeCollectionScopeSql("collection_tasks")} AND status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')
-         GROUP BY organization_id) busy ON busy.organization_id=c.organization_id
        LEFT JOIN (SELECT q.organization_id,q.workspace_id,
          JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id')) competitor_id
          FROM collection_subqueries q WHERE q.created_at>?
@@ -501,7 +499,7 @@ export class TrendProjectionPersistence {
          AND s.captured_at<=?
          AND (SELECT COUNT(*) FROM collection_tasks backlog
            WHERE ${activeCollectionScopeSql("backlog")} AND backlog.status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'))<?
-         AND busy.active_count IS NULL AND recent.competitor_id IS NULL
+         AND ${competitorRefreshNoActiveDetailSql} AND recent.competitor_id IS NULL
        ORDER BY s.captured_at,c.id LIMIT 1 FOR UPDATE`,
       [before, before, this.queueBacklogLimit],
     );

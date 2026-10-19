@@ -337,7 +337,7 @@ test("idle backpressure polls preserve twenty accumulated claims and the next re
 });
 
 for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscovery"]) {
-  test(`${method} applies active tenant scope to global and tenant capacity`, async () => {
+  test(`${method} applies active tenant scope and the original capacity guards`, async () => {
     const { TrendProjectionPersistence } =
       await import("../../apps/worker/dist/trend-projection-persistence.js");
     const { activeCollectionScopeSql } =
@@ -359,7 +359,11 @@ for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscov
     assert.equal(statements.length, method === "enqueueDueCompetitorDiscovery" ? 2 : 1);
     assert.ok(statements[0].includes(activeCollectionScopeSql("backlog")));
     if (method === "enqueueDueCompetitorRefresh") {
-      assert.ok(statements[0].includes(activeCollectionScopeSql("collection_tasks")));
+      assert.match(
+        statements[0],
+        /ct_refresh.organization_id=q_refresh.organization_id AND ct_refresh.workspace_id=q_refresh.workspace_id/,
+      );
+      assert.doesNotMatch(statements[0], /busy.active_count/);
       assert.ok(statements[0].includes(activeCollectionScopeSql("c")));
     } else {
       assert.match(statements[0], /o.id>\?[\s\S]*ORDER BY o.id LIMIT 20/);
