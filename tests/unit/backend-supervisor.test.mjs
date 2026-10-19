@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
+import { spawnSync } from "node:child_process";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -31,6 +32,62 @@ class FakeChild extends EventEmitter {
     return true;
   }
 }
+
+for (const failure of ["spawn", "exit", "circuit"]) {
+  test(`standalone supervisor survives ${failure} failure until the scheduled retry`, () => {
+    const script = `
+      import {spawn} from 'node:child_process';
+      import {BackendSupervisor} from './apps/backend/dist/supervisor.js';
+      let attempts=0;
+      const supervisor=new BackendSupervisor([{name:'api',entrypoint:'unused-test-entry'}],{
+        stateFile:null,restartDelayMs:50,readinessPollMs:1,
+        circuitThreshold:${failure === "circuit" ? 1 : 5},circuitOpenMs:50,
+        readinessProbe:async()=>attempts>1,
+        spawnProcess:()=>{
+          attempts++;
+          if(attempts===1&&${JSON.stringify(failure)}!=='exit') throw Error('synthetic dependency unavailable');
+          const child=spawn(process.execPath,['-e',attempts===1?'process.exit(1)':'setInterval(()=>{},1000)'],{stdio:'ignore'});
+          if(attempts>1) setTimeout(()=>void supervisor.stop(),20);
+          return child;
+        }
+      });
+      process.on('exit',()=>console.log(JSON.stringify({attempts})));
+      supervisor.start();
+    `;
+    const result = spawnSync(process.execPath, ["--input-type=module", "-e", script], {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      timeout: 5000,
+    });
+    assert.equal(result.status, 0, result.stderr || String(result.error));
+    const records = result.stdout
+      .trim()
+      .split(/\r?\n/)
+      .map((line) => JSON.parse(line));
+    assert.equal(records.at(-1).attempts, 2, "no test-runner timer may keep the supervisor alive");
+    assert.ok(records.some((row) => row.event === "backend_child_ready"));
+    if (failure === "circuit")
+      assert.ok(records.some((row) => row.event === "backend_child_circuit_open"));
+  });
+}
+
+test("stopping a standalone supervisor cancels a long pending restart without holding exit open", () => {
+  const script = `
+    import {BackendSupervisor} from './apps/backend/dist/supervisor.js';
+    const supervisor=new BackendSupervisor([{name:'api',entrypoint:'unused-test-entry'}],{
+      stateFile:null,restartDelayMs:60000,restartMaxDelayMs:60000,
+      spawnProcess:()=>{throw Error('synthetic spawn failure')}
+    });
+    supervisor.start();await supervisor.stop();console.log('stopped');
+  `;
+  const result = spawnSync(process.execPath, ["--input-type=module", "-e", script], {
+    cwd: process.cwd(),
+    encoding: "utf8",
+    timeout: 3000,
+  });
+  assert.equal(result.status, 0, result.stderr || String(result.error));
+  assert.match(result.stdout, /stopped/);
+});
 
 test("unified backend restarts an unexpectedly exited child", async () => {
   const children = [];

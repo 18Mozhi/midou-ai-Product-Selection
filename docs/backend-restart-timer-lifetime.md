@@ -1,0 +1,15 @@
+# 监督器等待重启时保留进程存活
+
+2026-10-19 c64c2231发布时Node启动日志记录两次ECONNREFUSED127.0.0.1:3306；数据库恢复后4101仍拒绝，需宝塔人工重启。该日志已归档，详见collection-runtime-health-truth.md。不能用已恢复的MySQL端口证明API自己恢复，也没有本次OOM证据。
+
+实际链路：API启动失败后子进程退出，Worker依据既有规则等待API就绪；BackendSupervisor.scheduleRestart虽已计算退避/熔断延迟，却将定时器unref。其他子进程句柄消失、就绪轮询结束后，父进程在重试前自然退出。旧单元测试自己的等待定时器维持事件循环，掩盖此问题。
+
+新增独立Node子进程回归，父测试进程不提供存活句柄：同步spawn失败和真实子进程exit1在修复前均仅尝试1次、未就绪；修复后实际进行第2次并就绪。另覆盖熔断冷却后再启与停止时取消60秒待启定时器。服务器已部署旧代码在Node20.19.6同样只尝试1次；该诊断仅合成进程，不监听端口、访问数据库或执行真实业务。
+
+现监督器按进程名持有重启定时器，等待期间保留引用，到时先删除句柄再调用原startProcess；stop先取消所有待启定时器，再按原优雅停机流程处理子进程。没有新增定时策略；原指数退避、最大延迟、窗口、熔断阈值、冷却、API真实版本就绪、目录同步、Worker就绪、信号、运行时租约和退出保护不变。永久配置错误仍不能被报告成健康。
+
+20项相关Node回归通过。无新增环境变量、API/事件/数据库字段、依赖或Python输入，config/env.example与OpenAPI无需修改。内部生产者scheduleRestart与消费者startProcess/stop均已检查；监督快照格式不变，前端只消费原字段。部署用官方deploy-baota.py，由宝塔重启Node项目ai选品后载入父进程修复。沿用BACKEND_RESTART_INITIAL_DELAY_MS=1000、BACKEND_RESTART_MAX_DELAY_MS=30000、BACKEND_RESTART_WINDOW_SECONDS=60、BACKEND_RESTART_CIRCUIT_THRESHOLD=5、BACKEND_RESTART_CIRCUIT_OPEN_SECONDS=60；必要调整仅在宝塔受限环境，调整后重启ai选品。
+
+不人为关闭生产MySQL或杀死真实业务进程制造验收。合成诊断不证明整个依赖故障持续自愈、整链产出或每日100品完成。没有新增临时测试文件或服务；新增测试启动的短暂进程已退出，既有单元测试临时目录按其原finally清理，前轮拒绝清理链仍保留。
+
+完整相关验证42项通过（20项监督/目录/发布回归及22项宝塔骨架/Worker调度回归），22工作区构建通过，文档、运行一致性、静态分析、格式和发布矩阵门通过。改动只有监督器、既有测试及直接相关文档/地图，不改变浏览器界面，故没有新增浏览器截图或重复UI测试。

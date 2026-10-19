@@ -82,6 +82,7 @@ export class BackendSupervisor {
   private readonly spawnProcess: NonNullable<SupervisorOptions["spawnProcess"]>;
   private readonly readinessProbe: NonNullable<SupervisorOptions["readinessProbe"]>;
   private readonly runtime = new Map<string, ProcessRuntime>();
+  private readonly restartTimers = new Map<string, ReturnType<typeof setTimeout>>();
   private stopping = false;
   private workerWaitingForApi = false;
 
@@ -145,6 +146,8 @@ export class BackendSupervisor {
   async stop(signal: NodeJS.Signals = "SIGTERM"): Promise<void> {
     if (this.stopping) return;
     this.stopping = true;
+    for (const timer of this.restartTimers.values()) clearTimeout(timer);
+    this.restartTimers.clear();
     const active = [...this.children.values()].filter((child) => child.exitCode === null);
     for (const child of active) child.kill(signal);
     if (active.length) {
@@ -317,7 +320,14 @@ export class BackendSupervisor {
       this.log("restart_scheduled", managed.name, undefined, `${detail};restart_after_ms=${delay}`);
     }
     this.publishState();
-    setTimeout(() => this.startProcess(managed), delay).unref();
+    const previousTimer = this.restartTimers.get(managed.name);
+    if (previousTimer) clearTimeout(previousTimer);
+    // The supervisor must outlive failed children while its existing retry policy waits.
+    const timer = setTimeout(() => {
+      this.restartTimers.delete(managed.name);
+      this.startProcess(managed);
+    }, delay);
+    this.restartTimers.set(managed.name, timer);
   }
 
   private publishState(): void {

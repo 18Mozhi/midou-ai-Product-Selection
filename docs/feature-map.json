@@ -1,4 +1,11 @@
 {
+  "selectionSupervisorRetryLifetime20261019": {
+    "status": "implemented",
+    "requirements": "docs/backend-restart-timer-lifetime.md",
+    "sourceFiles": ["apps/backend/src/supervisor.ts"],
+    "testFiles": ["tests/unit/backend-supervisor.test.mjs"],
+    "contract": "Referenced per-process retry timers keep the unified supervisor alive after all children exit or synchronous spawn fails. stop cancels pending retries. Existing backoff/circuit/readiness/API-before-Worker/leases/state schema unchanged. Standalone subprocess tests expose the previous unref early exit; no forced production fault or claim of daily100."
+  },
   "selectionCollectionRuntimeTruth20261019": {
     "status": "implemented",
     "requirements": "docs/collection-runtime-health-truth.md",
