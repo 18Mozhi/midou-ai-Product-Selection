@@ -1,0 +1,11 @@
+# 浏览器验证码原因传递
+
+2026-10-19 08:40只读检查本工作区详情子查询60c63ea3-f560-43e3-8d11-ba7940fcd2ac对应浏览器作业4eacbfe8-f6a2-45ce-883e-24194e9be505：行status=blocked、error_code=blocked_captcha，result_json同样为blocked_captcha，没有artifacts。该结果不能当作成功页面用于解析器验证。原集合子查询却记录validation_failed；真实原因不是已证明的页面字段校验失败。
+
+Worker的MySqlAuthenticatedBrowserJobClient此前将原始blocked_captcha直接抛出，上层ProviderSourceExecutor仅识别规范captcha，未知值回退validation_failed。现只在浏览器消费边界将已观察到的精确blocked_captcha转为ProviderAdapterFailure(captcha,false)。浏览器行与原始结果不改写，Python/API生产者合同不变；集合任务、事件和来源熔断沿用已有captcha合同。其他错误码不扩大映射。
+
+回归使用无artifacts的真实返回形状，确认不解析、不生成商品证据、不继续轮询，集合子查询blocked、零结果、事件captcha、来源仍累计一次失败；并保留成功/空结果/权限失败原行为。测试使用进程内数据库替身，不代表真实Amazon恢复。
+
+15项最小回归、40项相关Node回归、22工作区完整构建以及文档、运行一致性、静态分析、格式、发布矩阵门通过。发布前检查main和origin/main均bd9bbceb，所有本地分支已包含；现有verification/state.json的用户修改保持未暂存。
+
+无需新增配置、环境变量、API字段、数据库结构、依赖或浏览器界面。OpenAPI、env.example和Python输入不适用。使用方式与现有采集一致；官方deploy-baota.py发布后由宝塔重启Node项目ai选品才能载入Worker代码，不需单独更改参数。不会清除已有熔断、改写历史validation_failed、重放旧任务、绕过验证码或计入每日完成数。来源自然恢复与每日100品仍须真实验收。

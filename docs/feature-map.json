@@ -1,4 +1,11 @@
 {
+  "selectionBrowserCaptchaBoundary20261019": {
+    "status": "implemented",
+    "requirements": "docs/browser-captcha-error-boundary.md",
+    "sourceFiles": ["apps/worker/src/authenticated-browser-job-client.ts"],
+    "testFiles": ["tests/unit/amazon-browser-contract.test.mjs"],
+    "contract": "Observed raw browser blocked_captcha becomes existing canonical captcha at the Worker consumer boundary, non-retryable and blocked with zero facts. Raw browser rows/results and historical failures remain immutable; source circuit accounting and captcha protection stay enabled. No new config/API/schema or recovery claim."
+  },
   "selectionDetailLayout20261019": {
     "status": "implemented",
     "requirements": "docs/selection-detail-layout.md",

@@ -144,6 +144,8 @@ export class MySqlAuthenticatedBrowserJobClient {
         const errorCode = String(
           row.error_code ?? (row.status === "timed_out" ? "timeout" : "dependency_unavailable"),
         );
+        // Browser rows retain their raw crawler code; collection tasks use the canonical code.
+        if (errorCode === "blocked_captcha") throw new ProviderAdapterFailure("captcha", false);
         throw new ProviderAdapterFailure(
           errorCode,
           input.provider.code === "amazon_product"

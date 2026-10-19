@@ -16,6 +16,7 @@ import {
 } from "../../packages/provider-sources/dist/index.js";
 import { loadRuntimeConfig } from "../../packages/config/dist/index.js";
 import { MySqlAuthenticatedBrowserJobClient } from "../../apps/worker/dist/authenticated-browser-job-client.js";
+import { ProviderSourceExecutor } from "../../apps/worker/dist/provider-source-executor.js";
 import { MySqlCrawlerRuntimeRepository } from "../../apps/api/dist/mysql-crawler-runtime-repository.js";
 import { AmazonPublicBrowserHealth } from "../../apps/api/dist/amazon-public-browser-health.js";
 import { ProviderAdapterService } from "../../apps/api/dist/provider-adapter-service.js";
@@ -278,6 +279,117 @@ test("queued Amazon job carries target, returns evidence and does not retry perm
     () => client.collect(input, async () => {}),
     (e) => e.code === "permission_denied" && !e.retryable,
   );
+  terminal = {
+    id: "job",
+    status: "blocked",
+    error_code: "blocked_captcha",
+    result_json: { status: "blocked_captcha", error_code: "blocked_captcha" },
+  };
+  const writesBeforeCaptcha = calls.filter(({ sql }) => !sql.startsWith("SELECT")).length;
+  await assert.rejects(
+    () => client.collect(input, async () => {}),
+    (e) => e.code === "captcha" && !e.retryable,
+  );
+  assert.equal(terminal.error_code, "blocked_captcha");
+  assert.equal(terminal.result_json.error_code, "blocked_captcha");
+  assert.equal(
+    calls.filter(({ sql }) => !sql.startsWith("SELECT")).length,
+    writesBeforeCaptcha + 1,
+  );
+});
+
+test("raw browser captcha stays blocked through collection outcomes and source circuit accounting", async () => {
+  const statements = [];
+  const provider = {
+    id: "provider",
+    code: "amazon_product",
+    access_mode: "public_page",
+    target_url: "https://www.amazon.com/s",
+    parser_version: "amazon-public-product-v19",
+    timeout_ms: 1000,
+    fields_json: ["title"],
+    status: "enabled",
+    terms_review_status: "approved",
+    terms_version: "test-only",
+    terms_permanent: 1,
+    circuit_failure_threshold: 3,
+    runtime_circuit_state: "closed",
+    created_by: "actor",
+  };
+  const query = async (sql, values) => {
+    statements.push({ sql, values });
+    if (sql.includes("FROM providers p")) return [[provider]];
+    if (sql.startsWith("SELECT id,status"))
+      return [
+        [
+          {
+            id: "job",
+            status: "blocked",
+            error_code: "blocked_captcha",
+            result_json: { status: "blocked_captcha", error_code: "blocked_captcha" },
+          },
+        ],
+      ];
+    if (sql.startsWith("SELECT state,")) return [[]];
+    return [{ affectedRows: 1 }];
+  };
+  const pool = {
+    query,
+    getConnection: async () => ({
+      query,
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release() {},
+    }),
+  };
+  const executor = new ProviderSourceExecutor(
+    pool,
+    { collect: async () => assert.fail("must use the browser job") },
+    { persist: async () => assert.fail("captcha cannot produce product facts") },
+    "test-worker",
+    new MySqlAuthenticatedBrowserJobClient(pool, 1, async () => assert.fail("must not poll")),
+    async () => new Response("User-agent: *\nAllow: /"),
+    undefined,
+    undefined,
+    true,
+  );
+  await assert.rejects(
+    () =>
+      executor.execute(
+        {
+          id: "task",
+          organizationId: "org",
+          workspaceId: "workspace",
+          attemptCount: 1,
+          requestId: "request",
+          traceId: "trace",
+          leaseToken: "lease",
+          subqueries: [
+            {
+              id: "subquery",
+              providerId: "provider",
+              ordinal: 0,
+              required: true,
+              target: { page_url: url },
+            },
+          ],
+        },
+        async () => {},
+      ),
+    { code: "captcha" },
+  );
+  const circuit = statements.find(({ sql }) =>
+    sql.startsWith("INSERT INTO provider_runtime_circuits"),
+  );
+  assert.equal(circuit.values[4], "captcha");
+  assert.equal(circuit.values[2], 1);
+  const outcome = statements.find(({ sql }) => sql.includes("INSERT INTO collection_task_events"));
+  assert.ok(outcome);
+  assert.equal(outcome.values[4], "blocked");
+  assert.equal(JSON.parse(outcome.values[8]).error_code, "captcha");
+  assert.equal(JSON.parse(outcome.values[8]).available_result_count, 0);
+  assert.ok(statements.every(({ sql }) => !sql.includes("SET status='disabled'")));
 });
 
 test("crawler claim only permits the configured canonical empty Amazon profile and retains legacy default", async () => {
