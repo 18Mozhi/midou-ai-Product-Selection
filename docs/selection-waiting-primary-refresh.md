@@ -33,3 +33,9 @@
 21:56:58.703Z真实容量1000/1000，实际候选为空；两来源enabled/closed，Cooling主品仍无详情、仅有原permission_denied终止任务。仅在SELECT诊断中使用backlog+1，原编译方法选中当前工作区B0FLY4HV8V，沿用auto-refresh载荷和competitor.collection.auto_scheduled；scheduleCoreCollection已被只读哨兵替换，在任何写入前抛出，未创建任务/事件或锁定业务记录。该探针只能证明线上选择与生产者边界，不是自然调度成功。
 
 从21:56:58.703Z至21:57:20.512Z，新详情/发现事件为0，积压仍1000，当前工作区当日整链仍1/100；不提高阈值、不重放任务、不将诊断或旧监控快照计入产量。自然优先入队、真实详情和日百品仍待验收，总目标未完成。
+
+## 自然优先入队已验证（2026-10-20 05:59，北京时间）
+
+21:59:29.476Z原采集任务自然成功释放容量；21:59:31.979Z原投影轮次自动创建d110fb9b-b886-4c5d-bbeb-e2ff5a856b3a，事件competitor.collection.auto_scheduled/worker，组织6a91c1bf-661d-459f-9530-54e6315056ff、工作区99a2e4be-1796-4030-a42a-a2d95138679d，主品B0FLY4HV8V/对象08bd72be-1ebd-483f-bb19-001a486a0abe，与线上只读候选一致。21:59:54.338Z任务scheduled、latest_snapshot_id=NULL、积压1000、当日1/100。这是自然入队证明，尚非详情或整链完成；没有运行诊断中的scheduleCoreCollection替身写入、人工建任务、重放旧任务或提高阈值。
+
+21:58:09Z有效排队999条，其中正式完成通道37条、其他既有任务962条；21:58:30Z调度running/suspected_stuck_runs=0。21:59:30Z最近30分钟有29条succeeded（全局查询，不能等同于当前工作区商品数），当前正在处理旧intelligence_product_discovery任务。以上为实际吞吐和排队快照，不是日百品承诺或旧任务可删除的依据。只读排查初次误用浏览器表last_error_code字段已失败，按真实代码改查error_code后成功，没有修改表或数据。
