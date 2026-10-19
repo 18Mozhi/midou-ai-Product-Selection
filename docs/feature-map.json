@@ -1,4 +1,16 @@
 {
+  "selectionSaleBeforeSupplyClassification20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-sale-before-supply-classification.md",
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-evaluation-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-evidence-scoring.test.mjs",
+      "tests/unit/supply-title-classification.test.mjs"
+    ],
+    "contract": "Resolve the original atomic primary evidence first; missing/nonpositive/nonfinite sale price or missing nonempty string currency skips supply reads and model classification. Preserve transactional reevaluation, original waiting result, current-detail precedence and all original evidence/quote/score/completion gates. No queue wakeups, classifier revision bump, API/schema/env/dependency/Python change; BaoTa Node restart required."
+  },
   "selectionDetailRefreshResourceScope20261020": {
     "status": "implemented",
     "requirements": "docs/selection-detail-refresh-resource-scope.md",

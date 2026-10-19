@@ -346,7 +346,13 @@ test("preflight model call holds no SQL transaction and reads only the scoped ma
       reads.push({ sql, params });
       if (sql === automaticPrimaryEvidenceSql)
         return [
-          [{ raw_evidence_id: "main-1", observed_at: offer.observedAt, payload_json: { title } }],
+          [
+            {
+              raw_evidence_id: "main-1",
+              observed_at: offer.observedAt,
+              payload_json: { title, price: 25, currency: "USD" },
+            },
+          ],
         ];
       if (sql === automaticPrimaryDetailEvidenceSql) return [[]];
       if (sql === automaticSupplyEvidenceSql)
@@ -415,7 +421,7 @@ function batchHarness(
             {
               raw_evidence_id: "main-1",
               observed_at: offer.observedAt,
-              payload_json: { title: productTitle },
+              payload_json: { title: productTitle, price: 25, currency: "USD" },
             },
           ],
         ];

@@ -227,6 +227,87 @@ const bilingualOptions = {
   },
 };
 
+for (const [name, fields] of [
+  ...[
+    undefined,
+    null,
+    "",
+    " ",
+    0,
+    -1,
+    "0",
+    "-1",
+    Number.NaN,
+    Number.POSITIVE_INFINITY,
+    "invalid",
+  ].map((price, index) => [`invalid price ${index}`, { price }]),
+  ...[undefined, null, "", " ", 1].map((currency, index) => [
+    `missing currency ${index}`,
+    { currency },
+  ]),
+  ["blank title", { title: " " }],
+]) {
+  test(`sale preflight avoids supply reads and model work for ${name} while preserving the original waiting result`, async () => {
+    let modelCalls = 0;
+    const f = fixture({
+      ...bilingualOptions,
+      fields: { ...bilingualOptions.fields, ...fields },
+      supplyClassifier: {
+        classifySupplies: async () => {
+          modelCalls++;
+          throw new Error("unexpected model call");
+        },
+      },
+    });
+    const classification = await f.worker.classifySupplyTitles(job);
+    assert.equal(classification, undefined);
+    assert.equal(modelCalls, 0);
+    assert.equal(
+      f.calls.some((call) => call.sql === automaticSupplyEvidenceSql),
+      false,
+    );
+    const result = await f.worker.evaluate(job, classification);
+    assert.equal(result.status, "waiting_evidence");
+    assert.equal(result.payload.error_code, "amazon_sale_facts_incomplete");
+    assert.equal(
+      f.calls.some(
+        (call) =>
+          call.sql.startsWith("INSERT INTO opportunity_cost_inputs") ||
+          call.sql.startsWith("INSERT INTO opportunity_score_inputs"),
+      ),
+      false,
+    );
+  });
+}
+
+test("sale preflight uses the resolved atomic primary detail and does not block valid source prices", async () => {
+  let modelCalls = 0;
+  const f = fixture({
+    ...bilingualOptions,
+    fields: { ...bilingualOptions.fields, price: null, currency: null },
+    detail: {
+      raw_evidence_id: "new-primary",
+      observed_at: new Date(now.getTime() + 1000),
+      payload_json: {
+        asin: "B000000001",
+        title: bilingualOptions.fields.title,
+        price: 25,
+        currency: "USD",
+      },
+    },
+    supplyClassifier: {
+      classifySupplies: async (input) => {
+        modelCalls++;
+        return bilingualOptions.supplyClassifier.classifySupplies(input);
+      },
+    },
+  });
+  const classification = await f.worker.classifySupplyTitles(job);
+  assert.equal(modelCalls, 1);
+  assert.equal(classification.input.product_ref, "amazon:new-primary");
+  assert.equal(classification.classifications.length, 3);
+});
+
 test("classified source writes its exact original quote and evidence audit without phone fees or profit", async () => {
   const f = fixture(bilingualOptions);
   const classification = await f.worker.classifySupplyTitles(job);

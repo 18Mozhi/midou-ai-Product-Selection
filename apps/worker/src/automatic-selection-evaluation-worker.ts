@@ -222,22 +222,27 @@ export class MySqlAutomaticSelectionEvaluationWorker {
   private async classifySupplyTitles(job: EvaluationJob): Promise<SupplyTitleContext | undefined> {
     if (!this.supplyClassifier) return undefined;
     const params = [job.opportunityId, job.organizationId, job.workspaceId];
-    const [[linked], [details], [rows]] = await Promise.all([
+    const [[linked], [details]] = await Promise.all([
       this.pool.query<RowDataPacket[]>(automaticPrimaryEvidenceSql, params),
       this.pool.query<RowDataPacket[]>(automaticPrimaryDetailEvidenceSql, params),
-      this.pool.query<RowDataPacket[]>(automaticSupplyEvidenceSql, params),
     ]);
     const primary = primaryEvidence(linked[0], details[0]);
     if (!primary) return undefined;
-    const title = text(normalizedProductFields(parse(primary.payload_json, {})).title),
-      supplies = supplyFacts(rows);
+    const fields = normalizedProductFields(parse(primary.payload_json, {})),
+      title = text(fields.title),
+      price = number(fields.price);
     if (
       !title ||
       title.length > 1000 ||
-      isPhoneCase(title) ||
-      selectConservativeSupplyMatch(title, supplies)
+      price == null ||
+      price <= 0 ||
+      !text(fields.currency) ||
+      isPhoneCase(title)
     )
       return undefined;
+    const [rows] = await this.pool.query<RowDataPacket[]>(automaticSupplyEvidenceSql, params),
+      supplies = supplyFacts(rows);
+    if (selectConservativeSupplyMatch(title, supplies)) return undefined;
     const latest = new Map<string, SupplyFacts>();
     for (const item of supplies) {
       if (!Number.isFinite(item.observedAt.getTime())) continue;
