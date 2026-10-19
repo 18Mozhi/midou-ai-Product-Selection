@@ -21,3 +21,15 @@
 正式发布、自然准入/消化与当前工作区整链完成仍须分别复核。
 
 扩大相关验证共164项Node回归通过，增加原完成任务优先/公平、周期详情和事实评分检查；22工作区构建、格式、运行文档与地图/OpenAPI解析通过。没有新增临时文件/目录、截图、日志、浏览器或长期验证进程；19项数据库验证全为SELECT派生表。首次直接传递全部SQL受Windows命令行长度限制，改为内存压缩传递，未落地脚本或安装依赖。用户原verification/state.json哈希保持29AB3761860D03F2A90DC356B4511D6054F66AD856FEAE165330D07B96C50C2C，不暂存；以前清理拒绝路径不重试。
+
+## 正式发布与初次自然观察
+
+6e35fc6ddb678a8523f0df1acd7424af9f73f678固定宝塔发布终态exit0，17文件归属、正式格式/运行文档/发布矩阵和22工作区重建通过，部署临时包删除。Git首次推送经原进程终态确认TLS失败后按原HTTP1.1重试成功，没有关闭TLS校验或改变remote。21:14:45Z独立BUILD_SHA一致，原领取SQL哈希仍63fa30ab466ac939101cbbb0b855f214e05a8a5aadb81cb4e2f1a8d46d134946，当前绑定997；原1000/新997真实只读分别41/13ms、均0候选。
+
+21:14:53Z五个已发布模块与本地构建SHA256一致：automatic-intake-capacity-policy=f19a3d1aafed2644ed174edcaaec153edd09bce1f7a0af5c941056235e6922b1；automatic-source-scheduler=8c4734d15a362265a48d9a07da52dc6ebe341439a7491a51bebd350f2a23bfd5；intelligence-product-association=6f85aa2338f5d8c197ecce6c67183aceae837dc01e12c2e3e71c02e293dae52d；intelligence-source-recovery=3b3b3045f8abfb31e9299d3931a5cf50b777eb02b92dc438899897a306d8681e；trend-projection-worker=3bee837fcf0e8228db5a08cf05c5b9174275c92b65fda13b0553df914f660597。全局阈值1000/新增997，实际积压1003。真实编译来源调度入口的只读替身探针只允许首条COUNT，其余操作前阻止，实际返回backpressure/queue_backlog_limit；没有写入调度表或任务。初次探针重复声明已有import导致解析失败，移除重复声明后重跑通过，未改生产代码。
+
+21:14:46Z主品仍无详情/新任务，原失败记录未改，Amazon/1688均closed，今日仍1/100。21:14:47Z起建立发布后观察窗口，21:15:13Z确认浏览器作业68425912-c1c1-407c-b2d0-affce5526627仍leased、父任务84b7209c-82c2-44a4-b4a8-8e77ce5ff56a运行中，租约至21:16:01Z；此刻该窗口已完成采集0、新增补齐或情报搜索事件0。没有把仍活跃作业视为失败或重启，也不以只读探针签收自然补采/队列释放/日百品。
+
+同一浏览器作业后续追踪：21:15:46Z仍原租约leased；21:16:21Z在原租约到期后由现有流程重新领取，leased_at=21:16:16.626Z、新租约至21:18:16Z，父任务retry_scheduled/timeout。21:17:12Z该浏览器作业已自然succeeded，finished_at=21:16:46.873Z；父任务仍retry_scheduled。此刻发布后窗口采集结束1条、积压1002、新增补齐/搜索事件仍0、工作区今日1/100。窗口完成的采集未归因到尚在重试的该父任务；浏览器成功也未当作商品整链完成。
+
+21:17:34Z原父任务84b7209c-82c2-44a4-b4a8-8e77ce5ff56a仍retry_scheduled、attempt_count=1、available_at=21:17:12.523Z、原子查询pending/0结果，等待原消费者读取持久化浏览器结果。没有重启、重放、手工消费或把观察超时当终态。自然完成任务、容量降到原1000以下并允许补齐、来源连续正常及日百品仍未验收；后续继续以真实父任务/事件/新快照为准。当前轮无新临时产物或验证进程，旧清理拒绝目录未触碰。
