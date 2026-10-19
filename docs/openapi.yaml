@@ -2464,6 +2464,7 @@ paths:
   /opportunities/{opportunityId}/competitor-discovery:
     post:
       summary: Crawl public Amazon search results and project competitors with immutable evidence
+      description: Member opportunity-detail manual collection controls are retired. Automatic discovery keeps its existing Worker flow; this API retains its current authentication, capability and idempotency contract.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:manage
       parameters:
@@ -2720,6 +2721,7 @@ paths:
     post:
       summary: Queue public supplier-page collection or project a completed same-workspace task
       security: [{ HttpOnlySession: [] }]
+      description: Member opportunity-detail manual collection controls are retired. Existing search clients and backend operations retain the current request fields, source rules, authentication, capability and idempotency contract.
       x-required-capability: supplier_quote:manage
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       requestBody:

@@ -40,7 +40,6 @@ import { useOpportunityWorkspaceAccess } from "./use-opportunity-workspace-acces
 import { useOpportunityWorkspaceDecisionFocus } from "./use-opportunity-workspace-decision-focus";
 import { useOpportunityWorkspaceLifecycle } from "./use-opportunity-workspace-lifecycle";
 import { useOpportunityWorkspaceWriteScopes } from "./use-opportunity-workspace-write-scopes";
-import { useOpportunityWorkspaceCollectionActions } from "./use-opportunity-workspace-collection-actions";
 import "../opportunities.css";
 import "../opportunity-profit.css";
 import "../selection-catalogue.css";
@@ -98,9 +97,7 @@ const { writeScopeKey, beginScopedWrite, finishScopedWrite, pendingWriteCount } 
 const { filters } = createOpportunityWorkspaceForms();
 const {
   canDecide,
-  canManageCompetitors,
   canReadCompetitors,
-  canManageSuppliers,
   canReadSourcing,
   canOpenCompetitorComparison,
   canOpenSourcingWorkspace,
@@ -170,11 +167,7 @@ const {
   tab,
   load,
 });
-const { discoverCompetitors, discoverSuppliers } = useOpportunityWorkspaceCollectionActions({
-  detail,
-  write,
-  message,
-});
+
 async function write(path: string, body: unknown) {
   if (busy.value) return null;
   const generation = writeScopeGeneration;
@@ -329,8 +322,7 @@ useOpportunityWorkspaceLifecycle({
         :secondary-label="statePanelSecondaryLabel"
         :hide-secondary="!statePanelSecondaryLabel"
         @primary="handleStatePrimary"
-        @secondary="returnToOpportunityList"
-      />
+        @secondary="returnToOpportunityList" />
       <article v-else class="opportunity-detail opportunity-detail--c">
         <main class="opportunity-detail-main">
           <SelectionProductHeader :detail="detail" />
@@ -347,14 +339,10 @@ useOpportunityWorkspaceLifecycle({
                 :competitor-items="competitorItems"
                 :busy="busy"
                 :can-decide="canDecide"
-                :can-manage-competitors="canManageCompetitors"
-                :can-manage-suppliers="canManageSuppliers"
                 :can-read-competitors="canReadCompetitors"
                 :can-read-sourcing="canReadSourcing"
                 :can-open-competitor-comparison="canOpenCompetitorComparison"
                 :can-open-sourcing-workspace="canOpenSourcingWorkspace"
-                @discover-competitors="discoverCompetitors"
-                @discover-suppliers="discoverSuppliers"
                 @queue-score="queueScore"
                 @retry-downstream="retryDownstream($event)"
                 @select-tab="setTab"
@@ -411,36 +399,9 @@ useOpportunityWorkspaceLifecycle({
               :can-decide="canDecide"
               @decide="startDecision"
             />
-            <section
-              v-if="tab === 'overview' && detail.selection_stage !== 'recommended'"
-              class="opportunity-next-steps opportunity-collection-tools"
-            >
-              <details>
-                <summary>补证异常时手动处理</summary>
-                <p>补证状态以当前记录为准；需要立即重试时可使用下面的操作。</p>
-                <div>
-                  <button
-                    v-if="canManageCompetitors"
-                    type="button"
-                    :disabled="busy"
-                    @click="discoverCompetitors"
-                  >
-                    采集 Amazon 竞品</button
-                  ><button
-                    v-if="canManageSuppliers"
-                    type="button"
-                    :disabled="busy"
-                    @click="discoverSuppliers"
-                  >
-                    采集公开供应商</button
-                  ><RouterLink to="/opportunities/scoring-rules">检查评分规则</RouterLink>
-                </div>
-              </details>
-            </section>
           </div>
-        </main>
-      </article></template
-    >
+        </main></article
+    ></template>
     <OpportunityWorkspaceDialogs
       v-if="canDecide"
       v-model:decision-open="showDecision"

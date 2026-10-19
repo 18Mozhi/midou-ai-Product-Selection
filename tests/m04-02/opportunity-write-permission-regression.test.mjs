@@ -17,15 +17,18 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(access, /includes\("supplier_quote:manage"\)/);
   assert.doesNotMatch(workspace, /catalogue-toolbar-actions|opportunities\/batch|confirmBatch/);
   assert.match(workspace, /:can-decide="canDecide"/);
-  assert.match(workspace, /v-if="canManageCompetitors"[\s\S]*discoverCompetitors/);
-  assert.match(workspace, /v-if="canManageSuppliers"[\s\S]*discoverSuppliers/);
+  assert.doesNotMatch(
+    workspace,
+    /discoverCompetitors|discoverSuppliers|useOpportunityWorkspaceCollectionActions/,
+  );
+  assert.doesNotMatch(workspace, /opportunity-collection-tools|补证异常时手动处理/);
   assert.doesNotMatch(list, /opportunity-row-select|selectedIds|emit\('batch'/);
   assert.match(list, /@click="emit\('reset'\)">\s*重置/);
   assert.doesNotMatch(list, /手工添加机会/);
   assert.match(list, /selectionView === 'all'[\s\S]*'刷新列表'[\s\S]*'查看全部选品'/);
   assert.match(
     list,
-    /state === 'empty' && selectionView !== 'all'[\s\S]*emit\('manageSetup', nextSetupPath\)/,
+    /!\['all', 'completed'\]\.includes\(selectionView\)[\s\S]*emit\('manageSetup', nextSetupPath\)/,
   );
   assert.match(workspace, /@manage-setup="router\.push\(\$event\)"/);
   assert.match(navigation, /async function resetListFilters\(\)/);

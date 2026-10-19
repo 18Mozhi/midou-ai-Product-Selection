@@ -486,7 +486,6 @@
 }
 
 .opportunity-workspace .opportunity-technical-details summary,
-.opportunity-workspace .opportunity-collection-tools summary,
 .opportunity-workspace .opportunity-tabs details > summary {
   width: fit-content;
   cursor: pointer;
@@ -498,41 +497,6 @@
 .opportunity-workspace .opportunity-technical-details small {
   display: block;
   margin-top: 6px;
-}
-
-.opportunity-workspace .opportunity-collection-tools {
-  margin-top: 10px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-}
-
-.opportunity-workspace .opportunity-collection-tools details {
-  padding: 10px 2px;
-}
-
-.opportunity-workspace .opportunity-collection-tools p {
-  margin: 9px 0;
-  color: var(--so-text-muted);
-}
-
-.opportunity-workspace .opportunity-collection-tools details > div {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.opportunity-workspace .opportunity-collection-tools button,
-.opportunity-workspace .opportunity-collection-tools a {
-  min-height: 38px;
-  padding: 0 12px;
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid var(--selection-line);
-  border-radius: 8px;
-  color: var(--selection-accent);
-  background: transparent;
-  text-decoration: none;
 }
 
 .opportunity-workspace .opportunity-tabs {

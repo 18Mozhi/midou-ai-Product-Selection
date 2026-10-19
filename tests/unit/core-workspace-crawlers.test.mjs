@@ -374,7 +374,12 @@ test("core list pages expose explicit detail and operational actions", async () 
         : readFile(`apps/web/src/components/${name}`, "utf8"),
     ),
   );
-  assert.match(opportunities, /采集 Amazon 竞品.*采集公开供应商/s);
+  assert.doesNotMatch(
+    opportunities,
+    /discoverCompetitors|discoverSuppliers|opportunity-collection-tools/,
+  );
+  assert.match(opportunities, /OpportunityDetailInsights/);
+  assert.match(opportunities, /OpportunitySupplyPanel/);
   assert.match(competitors, /MAXIMUM_SELECTION_COMPETITORS/);
   assert.match(competitors, /Amazon 主品与竞品/);
   assert.match(sourcing, /重新采集.*删除找货记录/s);

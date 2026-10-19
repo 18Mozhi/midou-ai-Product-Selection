@@ -167,6 +167,48 @@ async function openOpportunitySection(page: Page, label: string) {
     .click();
 }
 
+for (const canCollect of [false, true]) {
+  test(`retired detail collection controls stay absent with collection permission ${canCollect}`, async ({
+    page,
+  }) => {
+    const data = await ready(page, true, [
+      "competitor:read",
+      "sourcing:read",
+      ...(canCollect ? ["competitor:manage", "supplier_quote:manage"] : []),
+    ]);
+    let collectionWrites = 0;
+    await page.route("**/api/v1/sourcing/searches**", (route) => {
+      if (route.request().method() !== "GET") {
+        collectionWrites++;
+        return route.abort();
+      }
+      return route.fulfill({ json: envelope([]) });
+    });
+    await page.route("**/api/v1/competitors**", (route) => route.fulfill({ json: envelope([]) }));
+    await page.goto(`/opportunities/${opportunityId}`);
+    await expect(page.getByRole("heading", { name: "隔离机会候选", exact: true })).toBeVisible();
+    for (const label of ["商品与评分", "竞品对比", "货源与利润", "情报证据", "风险", "决策记录"]) {
+      await openOpportunitySection(page, label);
+      await expect(page.getByRole("button", { name: "采集 Amazon 竞品", exact: true })).toHaveCount(
+        0,
+      );
+      await expect(page.getByRole("button", { name: "采集公开供应商", exact: true })).toHaveCount(
+        0,
+      );
+      await expect(page.getByText("补证异常时手动处理", { exact: true })).toHaveCount(0);
+    }
+    await page.reload();
+    await openOpportunitySection(page, "商品与评分");
+    await expect(page.getByRole("button", { name: "查看竞品对比", exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toBeVisible();
+    expect(collectionWrites).toBe(0);
+    expect(data.writes).toHaveLength(0);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+    ).toBe(true);
+  });
+}
+
 test("completed analysis view survives refresh and view navigation without requiring recommendation setup", async ({
   page,
 }) => {

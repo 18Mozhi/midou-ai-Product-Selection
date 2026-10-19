@@ -1,4 +1,21 @@
 {
+  "selectionRetiredDetailCollection20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-retired-detail-collection.md",
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/OpportunityDetailInsights.vue",
+      "apps/web/src/components/use-opportunity-workspace-access.ts",
+      "apps/web/src/automatic-selection.css"
+    ],
+    "testFiles": [
+      "tests/e2e/ui-phase2-opportunity-contracts.spec.ts",
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/m04-02/opportunity-write-permission-regression.test.mjs",
+      "tests/unit/core-workspace-crawlers.test.mjs"
+    ],
+    "contract": "Retire member detail manual competitor/supplier collection controls, events, unused permission projections, dedicated write composable and CSS. Keep original automatic pipeline, read retry/comparison/source facts, scoring and decisions, backend collection/source operations and API authorization. No API/schema/env/dependency/Python change; frontend build/release required."
+  },
   "selectionCompletionTurns20261020": {
     "status": "implemented",
     "requirements": "docs/selection-completion-turns.md",

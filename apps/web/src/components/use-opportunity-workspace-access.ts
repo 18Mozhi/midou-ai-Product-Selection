@@ -14,18 +14,14 @@ interface OpportunityWorkspaceAccessOptions {
 export function useOpportunityWorkspaceAccess(options: OpportunityWorkspaceAccessOptions) {
   const { capabilities, route, router, state, load } = options;
   const canDecide = computed(() => capabilities()?.includes("opportunity:decide") ?? false);
-  const canManageCompetitors = computed(
-    () => capabilities()?.includes("competitor:manage") ?? false,
-  );
+
   const canReadCompetitors = computed(
     () =>
       capabilities()?.includes("competitor:read") ||
       capabilities()?.includes("competitor:manage") ||
       false,
   );
-  const canManageSuppliers = computed(
-    () => capabilities()?.includes("supplier_quote:manage") ?? false,
-  );
+
   const canReadSourcing = computed(
     () =>
       capabilities()?.includes("sourcing:read") ||
@@ -72,9 +68,7 @@ export function useOpportunityWorkspaceAccess(options: OpportunityWorkspaceAcces
 
   return {
     canDecide,
-    canManageCompetitors,
     canReadCompetitors,
-    canManageSuppliers,
     canReadSourcing,
     canOpenCompetitorComparison,
     canOpenSourcingWorkspace,

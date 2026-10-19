@@ -941,8 +941,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   expect((await decisionSurface.boundingBox())!.y).toBeGreaterThanOrEqual(
     insightsBounds.y + insightsBounds.height - 2,
   );
-  const manualToolsBounds = (await page.locator(".opportunity-collection-tools").boundingBox())!;
-  expect(manualToolsBounds.y).toBeGreaterThanOrEqual(insightsBounds.y + insightsBounds.height - 2);
+  await expect(page.locator(".opportunity-collection-tools")).toHaveCount(0);
   await expect(collectionPanel).not.toContainText("正在读取");
   await expect(page).toHaveScreenshot("selection-detail-overview-20261019.png", {
     fullPage: false,
@@ -1609,7 +1608,7 @@ test("P18 discovery actions require their matching manage capabilities", async (
   expect(discoveryWrites).toBe(0);
 });
 
-test("P18 competitor and supplier discovery keep separate request contracts and task receipts", async ({
+test("P18 retired competitor and supplier collection controls produce no member writes", async ({
   page,
 }) => {
   await ready(page);
@@ -1650,123 +1649,49 @@ test("P18 competitor and supplier discovery keep separate request contracts and 
 
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
-  await page.getByRole("button", { name: "采集 Amazon 竞品" }).click();
-  await expect(page.locator(".opportunity-message")).toContainText(
-    "Amazon 竞品采集已排队，任务编号 competitor-task-1。",
-  );
-  await page.getByRole("button", { name: "采集公开供应商" }).click();
-  await expect(page.locator(".opportunity-message")).toContainText(
-    "公开供应商采集已排队，任务编号 supplier-task-1。",
-  );
-  expect(competitorBodies).toEqual([{}]);
-  expect(sourcingBodies).toEqual([{ input_type: "opportunity", input_ref: opportunityId }]);
+  await expect(page.getByRole("button", { name: "采集 Amazon 竞品" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "采集公开供应商" })).toHaveCount(0);
+  expect(competitorBodies).toEqual([]);
+  expect(sourcingBodies).toEqual([]);
 });
 
-test("P18 delayed discovery receipts stay scoped to their originating opportunity", async ({
+test("P18 changing product preserves read navigation without retired collection writes", async ({
   page,
 }) => {
-  await ready(page);
+  await ready(page, evidence, {}, [
+    "opportunity:read",
+    "opportunity:decide",
+    "competitor:read",
+    "competitor:manage",
+    "sourcing:read",
+    "supplier_quote:manage",
+  ]);
   await readyForNextOpportunity(page);
-  await page.route("**/api/v1/me/navigation?shell=member", (route) =>
-    route.fulfill({
-      json: envelope({
-        shell: "member",
-        organization_id: "00000000-0000-4000-8000-000000000421",
-        workspace_id: "00000000-0000-4000-8000-000000000422",
-        roles: ["member"],
-        capabilities: [
-          "opportunity:read",
-          "opportunity:decide",
-          "competitor:manage",
-          "supplier_quote:manage",
-        ],
-        platform_roles: [],
-        platform_capabilities: [],
-        guard_reason: "navigation_member_allowed",
-      }),
-    }),
-  );
-  let releaseCompetitor!: () => void;
-  let markCompetitorStarted!: () => void;
-  const competitorGate = new Promise<void>((resolve) => (releaseCompetitor = resolve));
-  const competitorStarted = new Promise<void>((resolve) => (markCompetitorStarted = resolve));
-  let releaseSourcing!: () => void;
-  let markSourcingStarted!: () => void;
-  const sourcingGate = new Promise<void>((resolve) => (releaseSourcing = resolve));
-  const sourcingStarted = new Promise<void>((resolve) => (markSourcingStarted = resolve));
-  let nextDetailReads = 0;
-  await page.route("**/api/v1/opportunities/*/competitor-discovery", async (route) => {
-    markCompetitorStarted();
-    await competitorGate;
-    await route.fulfill({ status: 202, json: envelope({ task_id: "late-competitor-task" }) });
+  let writes = 0;
+  await page.route("**/api/v1/opportunities/*/competitor-discovery", (route) => {
+    writes++;
+    return route.abort();
   });
-  await page.route("**/api/v1/sourcing/searches*", async (route) => {
+  await page.route("**/api/v1/sourcing/searches*", (route) => {
     if (route.request().method() === "GET") return route.fulfill({ json: envelope([]) });
-    markSourcingStarted();
-    await sourcingGate;
-    await route.fulfill({ status: 202, json: envelope({ task_id: "late-supplier-task" }) });
+    writes++;
+    return route.abort();
   });
   await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) =>
     route.fulfill({ json: envelope([]) }),
   );
-  await page.route(`**/api/v1/opportunities/${nextOpportunityId}`, (route) => {
-    nextDetailReads += 1;
-    return route.fallback();
-  });
-
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
-  await page.getByRole("button", { name: "采集 Amazon 竞品" }).click();
-  await competitorStarted;
-  let currentDetailRequest = page.waitForRequest((request) => {
-    const url = new URL(request.url());
-    return url.pathname === `/api/v1/opportunities/${nextOpportunityId}`;
-  });
-  await switchOpportunityInPlace(page, nextOpportunityId);
-  await currentDetailRequest;
-  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
-  let currentReads = nextDetailReads;
-  let competitorResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes("/competitor-discovery") &&
-      response.request().method() === "POST" &&
-      response.status() === 202,
-  );
-  releaseCompetitor();
-  await competitorResponse;
-  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
-  expect(nextDetailReads).toBe(currentReads);
-  await expect(page.locator(".opportunity-message")).toHaveCount(0);
-
-  const returnToOrigin = page.waitForRequest((request) => {
-    const url = new URL(request.url());
-    return url.pathname === `/api/v1/opportunities/${opportunityId}`;
-  });
-  await switchOpportunityInPlace(page, opportunityId);
-  await returnToOrigin;
-  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
-  await page.getByRole("button", { name: "采集公开供应商" }).click();
-  await sourcingStarted;
-
-  currentDetailRequest = page.waitForRequest((request) => {
-    const url = new URL(request.url());
-    return url.pathname === `/api/v1/opportunities/${nextOpportunityId}`;
-  });
-  await switchOpportunityInPlace(page, nextOpportunityId);
-  await currentDetailRequest;
-  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
-  currentReads = nextDetailReads;
-  const sourcingResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes("/api/v1/sourcing/searches") &&
-      response.request().method() === "POST" &&
-      response.status() === 202,
-  );
-  releaseSourcing();
-  await sourcingResponse;
-  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
-  expect(nextDetailReads).toBe(currentReads);
-  await expect(page.locator(".opportunity-message")).toHaveCount(0);
+  for (const [target, name] of [
+    [nextOpportunityId, nextOpportunity.name],
+    [opportunityId, base.name],
+  ]) {
+    await switchOpportunityInPlace(page, target);
+    await expect(page.getByRole("heading", { name })).toBeVisible();
+    await expect(page.getByRole("button", { name: "采集 Amazon 竞品" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "采集公开供应商" })).toHaveCount(0);
+  }
+  expect(writes).toBe(0);
 });
 
 test("P18 overview competition action stays in the detail and respects read permissions", async ({
@@ -3070,13 +2995,9 @@ for (const coverage of ["covered", "insufficient_data"]) {
     }
     await expect(page.locator(".opportunity-collection-tools")).toHaveCount(0);
     await page.getByRole("button", { name: "商品与评分", exact: true }).click();
-    await page.getByText("补证异常时手动处理", { exact: true }).click();
-    await expect(
-      page.getByText("补证状态以当前记录为准；需要立即重试时可使用下面的操作。", { exact: true }),
-    ).toBeVisible();
-    await expect(
-      page.getByText("系统会持续自动补证；只有需要立即重试时才使用下面的操作。", { exact: true }),
-    ).toHaveCount(0);
+    await expect(page.getByText("补证异常时手动处理", { exact: true })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "采集 Amazon 竞品" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "采集公开供应商" })).toHaveCount(0);
   });
 }
 

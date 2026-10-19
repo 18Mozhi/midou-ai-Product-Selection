@@ -30,8 +30,6 @@ const props = defineProps<{
   competitorItems: OpportunityCompetitorSummary[];
   busy: boolean;
   canDecide: boolean;
-  canManageCompetitors: boolean;
-  canManageSuppliers: boolean;
   canReadCompetitors: boolean;
   canReadSourcing: boolean;
   canOpenCompetitorComparison: boolean;
@@ -39,8 +37,6 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  discoverCompetitors: [];
-  discoverSuppliers: [];
   queueScore: [];
   retryDownstream: [source: DownstreamSource];
   selectTab: [tab: OpportunityTab];
@@ -162,15 +158,6 @@ const emit = defineEmits<{
             </template>
             <div class="opportunity-insight-actions">
               <button
-                v-if="canManageCompetitors"
-                type="button"
-                class="opportunity-insight-button"
-                :disabled="busy"
-                @click="emit('discoverCompetitors')"
-              >
-                采集 Amazon 竞品
-              </button>
-              <button
                 v-if="canOpenCompetitorComparison"
                 type="button"
                 @click="emit('selectTab', 'competition')"
@@ -208,15 +195,6 @@ const emit = defineEmits<{
               <span>候选数量按关联搜索汇总，未去重。</span>
             </template>
             <div class="opportunity-insight-actions">
-              <button
-                v-if="canManageSuppliers"
-                type="button"
-                class="opportunity-insight-button"
-                :disabled="busy"
-                @click="emit('discoverSuppliers')"
-              >
-                采集公开供应商
-              </button>
               <RouterLink v-if="canOpenSourcingWorkspace" to="/sourcing">供应链工作台</RouterLink>
             </div>
           </section>
@@ -312,17 +290,6 @@ const emit = defineEmits<{
       <template v-else>
         <SelectionProductComparison :main-asin="detail.main_asin" :items="competitorItems" />
       </template>
-      <div class="opportunity-insight-actions">
-        <button
-          v-if="canManageCompetitors"
-          type="button"
-          class="opportunity-insight-button"
-          :disabled="busy"
-          @click="emit('discoverCompetitors')"
-        >
-          采集 Amazon 竞品
-        </button>
-      </div>
     </article>
   </section>
 
