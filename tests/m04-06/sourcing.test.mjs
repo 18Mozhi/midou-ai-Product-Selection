@@ -124,21 +124,32 @@ test("M04-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(blueprint, /M04-06 实现合同/);
 });
 test("M04-06 saved comparisons align specification MOQ price and lead time without inventing login renewal", async () => {
-  const [ui, comparisonPanel, dialogs, costRuleUi, css, architecture, e2e, feature, runbook] =
-    await Promise.all(
-      [
-        "apps/web/src/components/SourcingWorkspace.vue",
-        "apps/web/src/components/SourcingComparisonPanel.vue",
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue",
-        "apps/web/src/components/CostRuleConsole.vue",
-        "apps/web/src/sourcing.css",
-        "docs/architecture/m04-06-sourcing.md",
-        "tests/e2e/m04-06-sourcing.spec.ts",
-        "docs/feature-map.json",
-        "docs/runbooks/m04-06-sourcing.md",
-      ].map((path) => readFile(path, "utf8")),
-    );
-  const uiSurface = `${ui}\n${comparisonPanel}\n${dialogs}`;
+  const [
+    ui,
+    comparisonPanel,
+    dialogs,
+    costRuleUi,
+    css,
+    architecture,
+    e2e,
+    feature,
+    runbook,
+    offers,
+  ] = await Promise.all(
+    [
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/SourcingComparisonPanel.vue",
+      "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+      "apps/web/src/components/CostRuleConsole.vue",
+      "apps/web/src/sourcing.css",
+      "docs/architecture/m04-06-sourcing.md",
+      "tests/e2e/m04-06-sourcing.spec.ts",
+      "docs/feature-map.json",
+      "docs/runbooks/m04-06-sourcing.md",
+      "apps/web/src/components/SupplierOfferList.vue",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  const uiSurface = `${offers}\n${ui}\n${comparisonPanel}\n${dialogs}`;
   assert.match(uiSurface, /规格、最小起订量与交期对比[\s\S]*最小起订量[\s\S]*报价[\s\S]*交期/);
   assert.match(uiSurface, /规格归一化提示/);
   assert.match(uiSurface, /系统不会自动换算或判断等价/);
@@ -150,7 +161,7 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
     /到岸价[\s\S]*待费用规则计算[\s\S]*已选 \{\{ selectedQuotes\.length \}\} \/ 5 家供应商/,
   );
   assert.match(uiSurface, /aria-label="来源采集进度"[\s\S]*查看采集任务明细/);
-  assert.match(uiSurface, /报价新鲜度/);
+  assert.match(uiSurface, /状态 \/ 观测时间/);
   assert.match(uiSurface, /确认依据证据（可搜索）[\s\S]*sourcing-evidence-options/);
   assert.doesNotMatch(uiSurface, /结构化采购创建|创建采购任务|purchaseCandidate|purchaseForm/);
   assert.doesNotMatch(uiSurface, /window\.prompt/);

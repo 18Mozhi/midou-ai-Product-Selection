@@ -1,4 +1,11 @@
 {
+  "selectionSupplierOfferTable20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-supplier-offer-table.md",
+    "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/components/SupplierOfferList.vue", "apps/web/src/composables/useSourcingWorkspace.ts", "apps/web/src/sourcing.css", "apps/web/src/supplier-offer-list.css"],
+    "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts", "tests/unit/sourcing-page-preview.test.mjs", "tests/m04-06/sourcing.test.mjs"],
+    "contract": "Replace oversized offer cards with uniform price/MOQ/lead-time/status columns and native per-row factual disclosure; responsive same-data rows. Remove old49 CSS selectors and duplicate cost link, preserve return context, quote/compare permissions and data. Localize existing collection status codes only in display. No API/env/schema/dependency/backend/Python change; static frontend rebuild and refresh."
+  },
   "selectionIntakeCompletionHeadroom20261020": {
     "status": "implemented",
     "requirements": "docs/selection-intake-completion-headroom.md",

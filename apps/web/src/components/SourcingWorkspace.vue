@@ -5,6 +5,7 @@ import {
   type SourcingWorkspaceProps,
 } from "../composables/useSourcingWorkspace";
 import SourcingComparisonPanel from "./SourcingComparisonPanel.vue";
+import SupplierOfferList from "./SupplierOfferList.vue";
 import SourcingProfitSummary from "./SourcingProfitSummary.vue";
 import SourcingWorkspaceDialogs from "./SourcingWorkspaceDialogs.vue";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -123,7 +124,11 @@ const pendingMessage = computed(() => {
         <h1 id="sourcing-page-title" tabindex="-1">供应链找货</h1>
       </div>
       <div class="sourcing-heading-actions">
-        <RouterLink to="/sourcing/cost-rules">费用与利润规则</RouterLink>
+        <RouterLink
+          class="sourcing-cost-link"
+          :to="{ path: '/sourcing/cost-rules', query: { from: route.fullPath } }"
+          >费用与利润规则</RouterLink
+        >
         <button type="button" class="ghost" :disabled="state === 'loading' || busy" @click="load">
           刷新记录
         </button>
@@ -233,13 +238,6 @@ const pendingMessage = computed(() => {
               >选品编号 {{ selected.input_ref }}</code
             >
           </div>
-          <div class="sourcing-actions">
-            <RouterLink
-              class="sourcing-cost-link"
-              :to="{ path: '/sourcing/cost-rules', query: { from: route.fullPath } }"
-              >费用与利润规则</RouterLink
-            >
-          </div>
         </header>
         <p v-if="candidates.length && selected.missing_fields.length" class="sourcing-missing">
           待补齐：{{ missingText }}
@@ -315,81 +313,18 @@ const pendingMessage = computed(() => {
             >待补齐：{{ missingText }}</span
           >
         </section>
-        <section class="supplier-cards">
-          <article
-            v-for="item in visibleCandidates"
-            :key="item.id"
-            :data-ready="item.status === 'ready'"
-          >
-            <header>
-              <b>{{ item.supplier_name }}</b
-              ><span>{{ statusText(item.status) }}</span>
-            </header>
-            <h4 :title="item.product_title">{{ item.product_title }}</h4>
-            <dl>
-              <div data-priority="primary">
-                <dt>报价</dt>
-                <dd>{{ item.currency }} {{ item.quoted_price }}</dd>
-              </div>
-              <div v-if="!item.quote && item.source_price_description" data-priority="primary">
-                <dt>采集价格说明</dt>
-                <dd>{{ item.source_price_description }}</dd>
-              </div>
-              <div data-priority="primary">
-                <dt>最小起订量（MOQ）</dt>
-                <dd>{{ item.moq ?? "待确认" }}</dd>
-              </div>
-              <div data-priority="primary">
-                <dt>报价新鲜度</dt>
-                <dd>{{ timeText(item.quote?.observed_at ?? item.observed_at) }}</dd>
-              </div>
-              <div data-priority="primary">
-                <dt>到岸价</dt>
-                <dd>待费用规则计算</dd>
-              </div>
-              <div data-priority="primary">
-                <dt>交期</dt>
-                <dd>{{ item.lead_time_days == null ? "待确认" : `${item.lead_time_days} 天` }}</dd>
-              </div>
-              <div>
-                <dt>规格</dt>
-                <dd>{{ item.specification ?? "缺失" }}</dd>
-              </div>
-              <div>
-                <dt>所在地</dt>
-                <dd>{{ item.location ?? "缺失" }}</dd>
-              </div>
-              <div>
-                <dt>稳定性 / 风险</dt>
-                <dd>
-                  {{ stabilityText(item.quote?.stability_status) }} /
-                  {{ riskText(item.quote?.risk_level) }}
-                </dd>
-              </div>
-            </dl>
-            <ul v-if="item.missing_fields.length" class="supplier-missing-actions">
-              <li v-for="field in candidateMissingText(item)" :key="field">
-                {{ field }}：确认报价时补齐
-              </li>
-            </ul>
-            <footer>
-              <label v-if="canManage && item.quote"
-                ><input
-                  type="checkbox"
-                  :checked="selectedQuotes.includes(item.quote.id)"
-                  @change="choose(item, $event)"
-                />加入对比</label
-              >
-              <a :href="item.original_url" target="_blank" rel="noopener noreferrer"
-                >打开外部原始商品页（新窗口）</a
-              ><time>采集于 {{ timeText(item.observed_at) }}</time
-              ><code>证据 {{ item.evidence_id }}</code
-              ><button v-if="canManage && !item.quote" type="button" @click="openQuote(item)">
-                确认报价
-              </button>
-            </footer>
-          </article>
-        </section>
+        <SupplierOfferList
+          :candidates="visibleCandidates"
+          :selected-quotes="selectedQuotes"
+          :can-manage="canManage"
+          :status-text="statusText"
+          :time-text="timeText"
+          :stability-text="stabilityText"
+          :risk-text="riskText"
+          :missing-text="candidateMissingText"
+          @choose="choose"
+          @confirm-quote="openQuote"
+        />
         <nav v-if="supplierPages > 1" class="sourcing-pagination" aria-label="货源报价分页">
           <button type="button" :disabled="supplierPage === 1" @click="supplierPage--">
             上一页</button

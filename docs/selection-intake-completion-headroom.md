@@ -33,3 +33,11 @@
 同一浏览器作业后续追踪：21:15:46Z仍原租约leased；21:16:21Z在原租约到期后由现有流程重新领取，leased_at=21:16:16.626Z、新租约至21:18:16Z，父任务retry_scheduled/timeout。21:17:12Z该浏览器作业已自然succeeded，finished_at=21:16:46.873Z；父任务仍retry_scheduled。此刻发布后窗口采集结束1条、积压1002、新增补齐/搜索事件仍0、工作区今日1/100。窗口完成的采集未归因到尚在重试的该父任务；浏览器成功也未当作商品整链完成。
 
 21:17:34Z原父任务84b7209c-82c2-44a4-b4a8-8e77ce5ff56a仍retry_scheduled、attempt_count=1、available_at=21:17:12.523Z、原子查询pending/0结果，等待原消费者读取持久化浏览器结果。没有重启、重放、手工消费或把观察超时当终态。自然完成任务、容量降到原1000以下并允许补齐、来源连续正常及日百品仍未验收；后续继续以真实父任务/事件/新快照为准。当前轮无新临时产物或验证进程，旧清理拒绝目录未触碰。
+
+## 05:31 自然首详情恢复补证
+
+21:18:32Z原父任务84b7209c-82c2-44a4-b4a8-8e77ce5ff56a已自然succeeded，attempt_count=2、updated_at=21:17:59.688Z，原子查询succeeded/1结果；不是人工消费缓存。21:27:02Z发布后窗口已结束12条采集，计入competitor.detail.auto_scheduled后共16条详情扇出及1条周期补齐，0新情报搜索/入口事件；积压1008。此处修正观察查询的事件覆盖，将detail和sourcing生产者纳入；回查21:14:47–21:17:12.523Z全6类事件仍为空，原初次无新任务结论成立。
+
+唯一周期任务279f0e9e-37df-4237-9378-954533108c3a于21:24:45.601Z自然创建并于21:28:09.234Z成功，归属当前工作区99a2e4be-1796-4030-a42a-a2d95138679d/原组织，competitor9a7d53d4-ff08-42bd-be07-26fae3596977，ASIN B09PDLBFKY，opportunity41b82018-3418-4e69-a98e-73b482093d59（YISHU 6Ft Surge Protector…）。其此前latest_snapshot_id为NULL，旧8月任务dead_letter/validation_failed与succeeded_empty保持原样；新的普通auto-refresh任务未重置这些历史。21:31:06Z正式最新详情查询验证snapshot1101b901-b603-4103-9120-3ac2de577dc2 valid_detail=1，captured_at=21:28:08.493Z，USD9.98、rating4.6、reviews54460、rank仍NULL。证明同工作区首次详情的自然准入、采集和投影成功，不等于该商品整链已齐或Router Cooling Fan主品已修复；每日仍1/100。
+
+16条详情扇出来自另外两个仍活动工作区，不计当前工作区产量。21:30:35Z核对它们的latest_snapshot非空仅为21:17/21:23的搜索观察，正式latestCompetitorDetailSnapshotSql全为NULL，所以不能误判为已有完整详情后的重复采集，也未取消这些真实补齐任务。既有批次扇出解释容量短时超过阈值，未宣称硬预留或强制降到1000。

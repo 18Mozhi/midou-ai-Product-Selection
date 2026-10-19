@@ -3,13 +3,14 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 test("P21 does not turn missing supplier facts into confirmed quotes", async () => {
-  const [source, dialogs] = await Promise.all([
+  const [source, dialogs, offers] = await Promise.all([
     readFile("apps/web/src/components/SourcingWorkspace.vue", "utf8"),
     readFile("apps/web/src/components/SourcingWorkspaceDialogs.vue", "utf8"),
+    readFile("apps/web/src/components/SupplierOfferList.vue", "utf8"),
   ]);
   assert.match(source, /sourcing-pending[\s\S]*pendingMessage/);
   assert.match(source, /尚未取得供应商报价/);
-  assert.match(source, /待费用规则计算/);
+  assert.match(offers, /待费用规则计算/);
   assert.match(dialogs, /确认依据证据（可搜索）[\s\S]*v-model="quote\.evidence_id"[\s\S]*required/);
 });
 

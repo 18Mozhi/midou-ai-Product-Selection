@@ -11811,3 +11811,7 @@ x-scoutops-lan-1688:
 
 # 2026-10-20 internal intake admission uses max(1, existing backlog budget - existing3-query fanout).
 # Completion admission, API fields and task payloads remain unchanged. See docs/selection-intake-completion-headroom.md.
+
+# 2026-10-20 sourcing candidate UI uses uniform offer rows and local native evidence disclosure.
+# Same search/detail/quote/comparison payloads, fields and permissions; no added endpoint or auto write.
+# See docs/selection-supplier-offer-table.md.

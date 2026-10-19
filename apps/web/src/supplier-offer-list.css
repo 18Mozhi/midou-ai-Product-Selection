@@ -1,0 +1,213 @@
+.supplier-offer-list {
+  margin-top: 16px;
+  min-width: 0;
+}
+.supplier-offer-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  color: var(--so-text);
+  font-size: 13px;
+}
+.supplier-offer-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.offer-product-column {
+  width: 34%;
+}
+.offer-price-column {
+  width: 15%;
+}
+.offer-terms-column {
+  width: 15%;
+}
+.offer-state-column {
+  width: 18%;
+}
+.offer-actions-column {
+  width: 18%;
+}
+.supplier-offer-table th {
+  padding: 11px 10px;
+  background: var(--so-panel-muted);
+  color: var(--so-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+}
+.supplier-offer-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--so-border);
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.supplier-offer-table tbody tr:hover {
+  background: var(--so-panel-soft);
+}
+.supplier-offer-table h4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+#app .supplier-offer-table .supplier-offer-name {
+  margin-top: 5px;
+  color: var(--so-text-muted);
+}
+.supplier-offer-table summary {
+  min-height: 44px;
+  align-content: center;
+  color: var(--so-primary);
+  cursor: pointer;
+}
+#app .supplier-offer-table dl {
+  display: grid;
+  gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid var(--so-border);
+}
+.supplier-offer-table dl > div {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 8px;
+}
+.supplier-offer-table dt {
+  color: var(--so-text-muted);
+}
+.supplier-offer-table dd {
+  min-width: 0;
+  line-height: 1.5;
+}
+.supplier-offer-table code {
+  font-size: 11px;
+}
+.supplier-offer-price strong {
+  display: block;
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+  white-space: normal;
+}
+.supplier-offer-price-note {
+  display: grid;
+  gap: 3px;
+  margin-top: 7px;
+  color: var(--so-text-muted);
+}
+.supplier-offer-price-note small {
+  font-size: 11px;
+}
+.supplier-offer-terms > span {
+  display: block;
+  margin-bottom: 7px;
+}
+.supplier-offer-terms > span:last-child {
+  color: var(--so-text-muted);
+}
+.supplier-offer-state > :is(span, small, time) {
+  display: block;
+  margin-bottom: 7px;
+}
+.supplier-offer-state time {
+  color: var(--so-text-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.supplier-offer-status {
+  color: var(--so-warning);
+}
+.supplier-offer-table tr[data-ready="true"] .supplier-offer-status {
+  color: var(--so-success);
+}
+.supplier-offer-state small {
+  color: var(--so-text-muted);
+}
+#app
+  .sourcing-workspace--review
+  .supplier-offer-table
+  .supplier-offer-actions
+  :is(a, button, label) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--so-primary);
+  font: inherit;
+  white-space: nowrap;
+  text-decoration: none;
+}
+html[data-design="commerce"] #app .supplier-offer-actions input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  flex: 0 0 16px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--so-primary);
+}
+@media (max-width: 1200px) {
+  .supplier-offer-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .supplier-offer-table colgroup {
+    display: none;
+  }
+  .supplier-offer-table tbody {
+    display: block;
+  }
+  .supplier-offer-table tbody > tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 12px 0;
+    border-bottom: 1px solid var(--so-border);
+  }
+  .supplier-offer-table td {
+    padding: 6px;
+    border: 0;
+  }
+  .supplier-offer-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 7px;
+    color: var(--so-text-muted);
+    font-size: 11px;
+  }
+  .supplier-offer-product {
+    grid-column: 1 / -1;
+  }
+  .supplier-offer-table .supplier-offer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 12px;
+  }
+  .supplier-offer-table .supplier-offer-actions::before {
+    display: none;
+  }
+  .supplier-offer-table .supplier-offer-state {
+    grid-column: 1 / -1;
+  }
+  .supplier-offer-state > :is(span, small, time) {
+    display: inline;
+    margin-right: 10px;
+  }
+  .supplier-offer-table .supplier-offer-state::before {
+    display: none;
+  }
+}

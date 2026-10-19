@@ -6,8 +6,6 @@
   color: var(--so-text);
 }
 .sourcing-detail > header,
-.supplier-cards article > header,
-.supplier-cards article > footer,
 .sourcing-modal header,
 .sourcing-modal footer {
   display: flex;
@@ -39,12 +37,6 @@
 .sourcing-workspace button.danger {
   color: var(--so-danger);
   border-color: color-mix(in srgb, var(--so-danger) 35%, var(--so-border));
-}
-.sourcing-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 8px;
 }
 .sourcing-cost-link {
   padding: 10px 15px;
@@ -139,83 +131,6 @@
   border: 1px solid var(--so-border);
   border-radius: 14px;
   padding: 22px;
-}
-.supplier-cards {
-  display: grid;
-  gap: 12px;
-  margin-top: 15px;
-}
-.supplier-cards article {
-  padding: 18px;
-  border: 1px solid var(--so-border);
-  border-radius: 11px;
-}
-.supplier-cards article[data-ready="true"] {
-  border-left: 4px solid var(--so-success);
-}
-.supplier-cards h4 {
-  margin: 12px 0;
-}
-.supplier-cards header label {
-  display: flex;
-  gap: 7px;
-  align-items: center;
-}
-.supplier-cards header input[type="checkbox"] {
-  transform: scale(0.5);
-}
-.supplier-cards header span {
-  color: var(--so-warning);
-}
-.supplier-cards dl {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 9px;
-}
-.supplier-cards dl div[data-priority="primary"] {
-  border-left: 3px solid var(--so-primary);
-}
-.supplier-cards dl div[data-priority="primary"] dd {
-  color: var(--so-text);
-  font-size: 16px;
-}
-.supplier-cards dl div {
-  padding: 11px;
-  background: var(--so-panel-soft);
-}
-.supplier-cards dt {
-  font-size: 13px;
-  color: var(--so-text-muted);
-}
-.supplier-cards dd {
-  margin: 7px 0 0;
-  font-weight: 700;
-}
-.supplier-cards footer {
-  align-items: center;
-  margin-top: 14px;
-}
-.supplier-cards footer a {
-  color: var(--so-primary);
-}
-.supplier-cards footer code {
-  font-size: 13px;
-  color: var(--so-text-muted);
-  flex: 1;
-}
-.supplier-cards footer time {
-  color: var(--so-text-muted);
-}
-.supplier-missing-actions {
-  margin: 12px 0 0;
-  padding: 12px 12px 12px 30px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px 18px;
-  border: 1px dashed var(--so-border);
-  border-radius: var(--so-control-radius);
-  color: var(--so-warning);
-  background: var(--so-panel-soft);
 }
 .sourcing-compare-tray {
   position: fixed;
@@ -569,25 +484,9 @@
   border-radius: 0;
   background: var(--so-sourcing-review-white);
 }
-#app .sourcing-workspace--review .supplier-cards article,
 #app .sourcing-workspace--review .sourcing-comparisons article {
   padding: 18px;
   border: 1px solid var(--so-sourcing-review-border);
-  border-radius: 0;
-  background: var(--so-sourcing-review-white);
-}
-#app .sourcing-workspace--review .supplier-cards dl {
-  gap: 0;
-  border: 1px solid var(--so-sourcing-review-border);
-}
-#app .sourcing-workspace--review .supplier-cards dl div,
-#app .sourcing-workspace--review .supplier-cards dl div[data-priority="primary"] {
-  border: 0;
-  border-right: 1px solid var(--so-sourcing-review-border);
-  border-bottom: 1px solid var(--so-sourcing-review-border);
-  background: var(--so-sourcing-review-soft);
-}
-#app .sourcing-workspace--review .supplier-missing-actions {
   border-radius: 0;
   background: var(--so-sourcing-review-white);
 }
@@ -644,29 +543,16 @@
   .sourcing-comparison-error button {
     width: 100%;
   }
-  .supplier-cards dl {
-    grid-template-columns: 1fr 1fr;
-  }
 }
 @media (max-width: 520px) {
   .form-grid {
     grid-template-columns: 1fr;
-  }
-  .supplier-cards article > header,
-  .supplier-cards article > footer {
-    display: grid;
-  }
-  .supplier-cards dl {
-    grid-template-columns: 1fr 1fr;
   }
   .sourcing-comparison-grid,
   .sourcing-comparison-grid dl {
     grid-template-columns: 1fr;
   }
   .sourcing-erp-reference {
-    grid-template-columns: 1fr;
-  }
-  .supplier-missing-actions {
     grid-template-columns: 1fr;
   }
   .sourcing-compare-tray {
@@ -700,28 +586,6 @@
   #app .sourcing-workspace--review .sourcing-detail > header {
     align-items: stretch;
     flex-direction: column;
-  }
-  #app .sourcing-workspace--review .sourcing-actions {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-  #app .sourcing-workspace--review .sourcing-actions :is(button, a) {
-    width: 100%;
-    justify-content: center;
-    text-align: center;
-  }
-  #app .sourcing-workspace--review .supplier-cards dl {
-    grid-template-columns: 1fr;
-  }
-  #app .sourcing-workspace--review .supplier-cards dl div {
-    border-right: 0;
-  }
-  #app .sourcing-workspace--review .supplier-cards article > footer {
-    align-items: stretch;
-    flex-direction: column;
-  }
-  #app .sourcing-workspace--review .supplier-cards article > footer button {
-    width: 100%;
   }
   #app .sourcing-workspace--review .sourcing-compare-tray {
     right: 12px;
@@ -790,25 +654,6 @@
   }
 }
 
-#app .sourcing-workspace--review .sourcing-actions :is(button, a) {
-  min-height: 36px;
-  padding: 7px 10px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-@media (max-width: 760px) {
-  #app .sourcing-workspace--review .sourcing-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  #app .sourcing-workspace--review .sourcing-actions :is(button, a) {
-    width: auto;
-    flex: 1 1 auto;
-  }
-}
-
 .sourcing-record-heading {
   display: flex;
   align-items: center;
@@ -816,49 +661,6 @@
   gap: 8px;
   padding: 12px 16px;
   border-bottom: 1px solid var(--so-border);
-}
-html[data-design="commerce"] #app .supplier-cards article > header {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-  align-items: start;
-  min-height: 48px;
-}
-.supplier-cards article > footer label {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 44px;
-}
-html[data-design="commerce"] #app .supplier-cards article > footer {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  align-items: center;
-  min-width: 0;
-}
-.supplier-cards article > footer :is(time, code) {
-  grid-column: 1 / -1;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.supplier-cards article > footer button {
-  grid-column: 2;
-}
-.supplier-cards article h4 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  min-height: 3em;
-  line-height: 1.5;
-}
-.supplier-cards article > header > span {
-  white-space: nowrap;
-}
-html[data-design="commerce"] #app .supplier-cards dl > div:first-child dd {
-  font-size: max(20px, var(--so-font-body));
 }
 #app .sourcing-workspace--review .sourcing-layout > aside[data-short="true"] {
   height: auto;
@@ -938,11 +740,6 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
 }
 .sourcing-profit-summary li {
   overflow-wrap: anywhere;
-}
-@media (min-width: 1100px) {
-  .sourcing-workspace--review .supplier-cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 @media (max-width: 760px) {
   .sourcing-record-items {

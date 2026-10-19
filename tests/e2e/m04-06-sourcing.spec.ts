@@ -371,11 +371,11 @@ test("source price conditions remain visible without relabelling confirmed quote
     }),
   );
   await page.goto("/sourcing");
-  const cards = page.locator(".supplier-cards");
-  const raw = cards.locator("article").filter({ hasText: incompleteCandidate.supplier_name });
+  const cards = page.locator(".supplier-offer-list");
+  const raw = cards.locator("tbody > tr").filter({ hasText: incompleteCandidate.supplier_name });
   await expect(raw.getByText("采集价格说明", { exact: true })).toBeVisible();
   await expect(raw.getByText("新人价", { exact: true })).toBeVisible();
-  const confirmed = cards.locator("article").filter({ hasText: readyCandidate.supplier_name });
+  const confirmed = cards.locator("tbody > tr").filter({ hasText: readyCandidate.supplier_name });
   await expect(confirmed.getByText("CNY 12.8", { exact: true })).toBeVisible();
   await expect(confirmed.getByText("旧采集新人价", { exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -389,7 +389,7 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await page.goto("/sourcing?create=1");
   await expect(page.getByRole("heading", { name: "供应链找货", level: 1 })).toBeVisible();
   await expect(page.getByRole("dialog", { name: "发起供应商找货" })).toHaveCount(0);
-  const supplierCandidates = page.locator(".supplier-cards");
+  const supplierCandidates = page.locator(".supplier-offer-list");
   await expect(supplierCandidates.getByText("宁波澄净户外用品厂")).toBeVisible();
   await expect(
     page.getByText("待补齐：规格、交期、所在地、可信度、稳定性、风险", { exact: true }),
@@ -399,6 +399,7 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await expect(
     page.getByRole("complementary", { name: "找货记录" }).getByRole("button", { pressed: true }),
   ).toHaveCount(1);
+  await supplierCandidates.locator("summary").first().click();
   await expect(page.getByText(/证据 00000000-0000-4000-8000-000000000603/)).toBeVisible();
   await expect(supplierCandidates.getByText("CNY 12.8")).toBeVisible();
   await expect(supplierCandidates.getByText("待费用规则计算").first()).toBeVisible();
@@ -640,7 +641,7 @@ test("hundreds of sourcing records and supplier offers stay bounded and selectab
       }),
     );
   expect(rowsContainContent).toBe(true);
-  await expect(page.locator(".supplier-cards > article")).toHaveCount(10);
+  await expect(page.locator(".supplier-offer-table tbody > tr")).toHaveCount(10);
   expect(
     await page
       .getByRole("complementary", { name: "找货记录" })
@@ -658,8 +659,8 @@ test("hundreds of sourcing records and supplier offers stay bounded and selectab
   const supplierPager = page.getByRole("navigation", { name: "货源报价分页" });
   await supplierPager.getByRole("button", { name: "下一页" }).click();
   await supplierPager.getByRole("button", { name: "下一页" }).click();
-  await expect(page.locator(".supplier-cards > article")).toHaveCount(1);
-  await expect(page.locator(".supplier-cards")).toContainText("供应商21");
+  await expect(page.locator(".supplier-offer-table tbody > tr")).toHaveCount(1);
+  await expect(page.locator(".supplier-offer-list")).toContainText("供应商21");
   await page.getByRole("searchbox", { name: "搜索找货记录" }).fill("长标题商品记录628用于");
   await expect(page.locator(".sourcing-record-items > button")).toHaveCount(1);
   await expect(
@@ -667,7 +668,7 @@ test("hundreds of sourcing records and supplier offers stay bounded and selectab
       .getByRole("region", { name: "找货记录详情" })
       .getByRole("heading", { name: /长标题商品记录628/ }),
   ).toBeVisible();
-  await expect(page.locator(".supplier-cards > article")).toHaveCount(10);
+  await expect(page.locator(".supplier-offer-table tbody > tr")).toHaveCount(10);
   expect(
     await page.locator(".sourcing-record-items").evaluate((e) => e.scrollHeight > e.clientHeight),
   ).toBe(false);
@@ -766,7 +767,7 @@ test("legacy sourcing create links preserve readable results without opening or 
     if (r.method() !== "GET" && r.url().includes("/api/v1/sourcing/")) writes.push(r.url());
   });
   await page.goto("/sourcing?create=1&opportunity_id=00000000-0000-4000-8000-000000000612");
-  await expect(page.locator(".supplier-cards").getByText("CNY 12.8")).toBeVisible();
+  await expect(page.locator(".supplier-offer-list").getByText("CNY 12.8")).toBeVisible();
   for (const name of ["发起供应商找货", "重新采集", "删除找货记录"])
     await expect(page.getByRole("button", { name, exact: true })).toHaveCount(0);
   await expect(page.getByRole("dialog")).toHaveCount(0);
@@ -979,7 +980,9 @@ test("UI2-SC05 retired procurement leaves confirmed quote facts readable without
   });
   await page.goto("/sourcing");
   await expect(
-    page.locator(".supplier-cards article").filter({ hasText: readyCandidate.supplier_name }),
+    page
+      .locator(".supplier-offer-table tbody > tr")
+      .filter({ hasText: readyCandidate.supplier_name }),
   ).toContainText(String(readyCandidate.quoted_price));
   await expect(page.getByRole("button", { name: "创建采购任务", exact: true })).toHaveCount(0);
   await expect(page.getByRole("dialog", { name: "创建采购任务" })).toHaveCount(0);
@@ -1254,12 +1257,106 @@ test("sourcing workspace uses compact catalogue layout and read-only refresh", a
   );
   const records = root.getByRole("complementary", { name: "找货记录" });
   await expect(records.getByRole("button", { pressed: true })).toHaveCount(1);
-  await expect(root.locator(".supplier-cards").getByText("CNY 12.8")).toBeVisible();
+  await expect(root.locator(".supplier-offer-list").getByText("CNY 12.8")).toBeVisible();
   await root.getByRole("button", { name: "刷新记录", exact: true }).click();
-  await expect(root.locator(".supplier-cards").getByText("CNY 12.8")).toBeVisible();
+  await expect(root.locator(".supplier-offer-list").getByText("CNY 12.8")).toBeVisible();
   expect(writes).toEqual([]);
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);
   await expect(root.locator(".sourcing-heading-actions button")).toHaveCount(1);
+});
+
+test("supplier offers align scan columns and disclose evidence without a write", async ({
+  page,
+}) => {
+  await setup(page);
+  const writes: string[] = [];
+  page.on("request", (r) => {
+    if (r.method() !== "GET" && r.url().includes("/api/v1/sourcing/")) writes.push(r.url());
+  });
+  await page.goto("/sourcing");
+  const table = page.getByRole("table", { name: "当前找货记录的真实供应商报价" });
+  await expect(table).toBeVisible();
+  await expect(table.locator("thead th")).toHaveText([
+    "商品 / 供应商",
+    "原币报价",
+    "起订 / 交期",
+    "状态 / 观测时间",
+    "操作",
+  ]);
+  const rows = table.locator("tbody > tr");
+  await expect(rows).toHaveCount(2);
+  const incomplete = rows.filter({ hasText: incompleteCandidate.supplier_name });
+  await expect(incomplete.locator(".supplier-offer-price")).toHaveText("CNY 10.6");
+  await expect(incomplete.locator(".supplier-offer-terms")).toContainText("MOQ 200");
+  await expect(incomplete.locator(".supplier-offer-terms")).toContainText("交期待确认");
+  await expect(incomplete.locator(".supplier-offer-state")).toContainText("缺 6 项");
+  await expect(incomplete.locator("details")).not.toHaveAttribute("open");
+  const summary = incomplete.locator("summary");
+  await summary.focus();
+  await page.keyboard.press("Enter");
+  await expect(incomplete.locator("details")).toHaveAttribute("open", "");
+  await expect(
+    incomplete.getByText("证据 " + incompleteCandidate.evidence_id, { exact: true }),
+  ).toBeVisible();
+  await expect(incomplete.locator("dl")).toContainText("规格、交期、所在地、可信度、稳定性、风险");
+  await expect(incomplete.locator("dl")).toContainText("待费用规则计算");
+  await page.keyboard.press("Enter");
+  await expect(incomplete.locator("details")).not.toHaveAttribute("open");
+  await expect(page.getByRole("link", { name: "费用与利润规则", exact: true })).toHaveCount(1);
+  expect(writes).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  if (test.info().project.name === "desktop-chromium") {
+    const first = await rows.nth(0).locator(".supplier-offer-price").boundingBox();
+    const second = await rows.nth(1).locator(".supplier-offer-price").boundingBox();
+    expect(first!.x).toBe(second!.x);
+    expect(first!.width).toBe(second!.width);
+    expect((await rows.first().boundingBox())!.height).toBeLessThan(210);
+  }
+  const confirmedActions = rows.first().locator(".supplier-offer-actions");
+  const checkbox = confirmedActions.getByRole("checkbox", { name: "加入对比" });
+  const checkboxBox = await checkbox.boundingBox();
+  expect(checkboxBox!.width).toBe(16);
+  expect(checkboxBox!.height).toBe(16);
+  const cellBox = await confirmedActions.boundingBox();
+  const labelBox = await confirmedActions.locator("label").boundingBox();
+  expect(labelBox!.height).toBeGreaterThanOrEqual(44);
+  expect(labelBox!.x + labelBox!.width).toBeLessThanOrEqual(cellBox!.x + cellBox!.width);
+  const controls = await incomplete
+    .locator("summary,a,button")
+    .evaluateAll((elements) => elements.map((e) => e.getBoundingClientRect().height));
+  expect(Math.min(...controls)).toBeGreaterThanOrEqual(44);
+});
+
+test("actual successful source task code is shown in Chinese", async ({ page }) => {
+  await setup(page);
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({
+      json: envelope({
+        id: searchId,
+        input_type: "keyword",
+        input_ref: "便携净水杯",
+        status: "completed_with_warnings",
+        candidate_count: 1,
+        missing_fields: [],
+        created_at: "2026-08-08T12:00:00Z",
+        candidates: [incompleteCandidate],
+        collection_progress: {
+          status: "succeeded",
+          total_subqueries: 1,
+          successful_subqueries: 1,
+          failed_subqueries: 0,
+          blocked_subqueries: 0,
+          active_subqueries: 0,
+          available_at: "2026-08-08T12:00:00Z",
+        },
+      }),
+    }),
+  );
+  await page.goto("/sourcing");
+  const progress = page.getByRole("region", { name: "来源采集进度" });
+  await expect(progress).toContainText("采集成功");
+  await expect(progress).not.toContainText("succeeded");
+  await expect(progress).toContainText("1 / 1 个来源已结束");
 });
