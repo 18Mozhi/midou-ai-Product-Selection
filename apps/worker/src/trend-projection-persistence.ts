@@ -1,4 +1,8 @@
-import { competitorRefreshNoActiveDetailSql } from "./competitor-refresh-policy.js";
+import {
+  competitorRefreshNoActiveDetailSql,
+  competitorRefreshObservedAtSql,
+  competitorRefreshOrderSql,
+} from "./competitor-refresh-policy.js";
 import {
   activeCollectionScopeSql,
   automaticCollectionBacklogCountSql,
@@ -483,7 +487,7 @@ export class TrendProjectionPersistence {
       `SELECT c.id,c.organization_id,c.workspace_id,c.external_id,c.product_url,o.created_by
        FROM competitors c JOIN opportunities o ON o.id=c.opportunity_id
          AND o.organization_id=c.organization_id AND o.workspace_id=c.workspace_id
-       JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id AND s.competitor_id=c.id
+       LEFT JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id AND s.competitor_id=c.id
          AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id
        LEFT JOIN (SELECT q.organization_id,q.workspace_id,
          JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id')) competitor_id
@@ -496,11 +500,11 @@ export class TrendProjectionPersistence {
          AND c.external_id REGEXP '^[A-Z0-9]{10}$'
          AND c.product_url REGEXP CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',c.external_id,'([/?#]|$)')
          AND o.source_type='trend_topic' AND o.lifecycle_status NOT IN ('archived','deleted')
-         AND s.captured_at<=?
+         AND ${competitorRefreshObservedAtSql}<=?
          AND (SELECT COUNT(*) FROM collection_tasks backlog
            WHERE ${activeCollectionScopeSql("backlog")} AND backlog.status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'))<?
          AND ${competitorRefreshNoActiveDetailSql} AND recent.competitor_id IS NULL
-       ORDER BY s.captured_at,c.id LIMIT 1 FOR UPDATE`,
+       ${competitorRefreshOrderSql}`,
       [before, before, this.queueBacklogLimit],
     );
     const row = rows[0];

@@ -1,4 +1,11 @@
 {
+  "selectionFirstDetailRecovery20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-first-detail-recovery.md",
+    "sourceFiles": ["apps/worker/src/competitor-refresh-policy.ts", "apps/worker/src/trend-projection-persistence.ts"],
+    "testFiles": ["tests/unit/competitor-refresh-policy.test.mjs", "tests/fixtures/competitor-first-observation-sql.mjs", "tests/unit/trend-projection-worker-scheduling.test.mjs"],
+    "contract": "Allow original periodic detail path to recover never-observed competitors after the same creation-age/cooldown interval; prioritize missing first observations before stale observed monitors. Same scope, pointer proof, source/circuit behavior, own-task exclusion, original backlog and payload. Preserve failed task history; no fabricated snapshot/API/schema/env/dependency changes. BaoTa Node restart required."
+  },
   "selectionEvaluationPointAdmission20261020": {
     "status": "implemented",
     "requirements": "docs/selection-evaluation-point-admission.md",

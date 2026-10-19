@@ -1,7 +1,12 @@
+import { competitorFirstObservationCases } from "../fixtures/competitor-first-observation-sql.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { TrendProjectionPersistence } from "../../apps/worker/dist/trend-projection-persistence.js";
-import { competitorRefreshNoActiveDetailSql } from "../../apps/worker/dist/competitor-refresh-policy.js";
+import {
+  competitorRefreshNoActiveDetailSql,
+  competitorRefreshObservedAtSql,
+  competitorRefreshOrderSql,
+} from "../../apps/worker/dist/competitor-refresh-policy.js";
 import { competitorRefreshGuardCases } from "../fixtures/competitor-refresh-sql.mjs";
 
 test("refresh keeps cadence, cooldown, backlog, original task payload and scoped resource lock", async () => {
@@ -29,8 +34,12 @@ test("refresh keeps cadence, cooldown, backlog, original task payload and scoped
   assert.ok(sql.includes(competitorRefreshNoActiveDetailSql));
   assert.match(sql, /recent.competitor_id IS NULL/);
   assert.match(sql, /recent.workspace_id=c.workspace_id/);
-  assert.match(sql, /s.captured_at<=\?/);
-  assert.match(sql, /ORDER BY s.captured_at,c.id LIMIT 1 FOR UPDATE/);
+  assert.ok(sql.includes(competitorRefreshObservedAtSql + "<=?"));
+  assert.match(
+    sql,
+    /LEFT JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id AND s.competitor_id=c.id/,
+  );
+  assert.ok(sql.includes(competitorRefreshOrderSql));
   assert.doesNotMatch(sql, /busy.active_count|GROUP BY organization_id\) busy/);
   assert.deepEqual(params, [
     new Date(now.getTime() - 3600000),
@@ -76,4 +85,19 @@ test("derived duplicate-guard cases exercise scoped active and terminal task sta
     assert.match(item.sql, /^SELECT /);
     assert.doesNotMatch(item.sql, /FOR UPDATE|INSERT |UPDATE |DELETE |CREATE |DROP /);
   }
+});
+
+test("first observations retain evidence pointer boundaries and have SELECT-only cadence/order probes", () => {
+  const cases = competitorFirstObservationCases();
+  assert.equal(cases.length, 18);
+  for (const item of cases) {
+    assert.match(item.sql, /^SELECT /);
+    assert.doesNotMatch(item.sql, /FOR UPDATE|INSERT |UPDATE |DELETE |CREATE |DROP /);
+    assert.equal((item.sql.match(/\?/g) || []).length, item.params.length);
+  }
+  assert.match(
+    competitorRefreshObservedAtSql,
+    /CASE WHEN c.latest_snapshot_id IS NULL THEN c.created_at ELSE s.captured_at END/,
+  );
+  assert.match(competitorRefreshOrderSql, /ORDER BY \(c.latest_snapshot_id IS NOT NULL\),/);
 });
