@@ -17,13 +17,13 @@ import {
 import { LAN_1688_RESULT_LIMIT } from "./lan-1688-image-search.js";
 import {
   selectionCandidateSql,
-  latestCompetitorDetailSnapshotSql,
   automaticEvaluationCompleteSql,
   automaticEvaluationFailureSql,
   automaticEvaluationEnqueueUpdateSql,
 } from "@scoutops/database";
 import {
   automaticPrimaryEvidenceSql,
+  automaticPrimarySnapshotSql,
   automaticPrimaryDetailEvidenceSql,
   automaticSupplyEvidenceSql,
   primaryProductEvidence as primaryEvidence,
@@ -235,6 +235,11 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       isPhoneCase(title)
     )
       return undefined;
+    const [snapshots] = await this.pool.query<RowDataPacket[]>(automaticPrimarySnapshotSql, [
+      ...params,
+      amazonAsin(fields, text(fields.canonical_url ?? fields.source_url)) ?? "",
+    ]);
+    if (!snapshots[0]) return undefined;
     const [rows] = await this.pool.query<RowDataPacket[]>(automaticSupplyEvidenceSql, params),
       supplies = supplyFacts(rows);
     if (selectConservativeSupplyMatch(title, supplies)) return undefined;
@@ -395,18 +400,12 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           },
           now,
         );
-      const [competitors] = await connection.query<RowDataPacket[]>(
-        `SELECT s.* FROM competitors c JOIN competitor_snapshots s ON s.id=${latestCompetitorDetailSnapshotSql("c")} ` +
-          "WHERE c.opportunity_id=? AND c.organization_id=? AND c.workspace_id=? AND c.status='active' " +
-          "AND c.source_site='Amazon' AND c.external_id=? AND c.deleted_at IS NULL " +
-          "ORDER BY s.captured_at DESC,s.id DESC LIMIT 1",
-        [
-          job.opportunityId,
-          job.organizationId,
-          job.workspaceId,
-          amazonAsin(fields, text(fields.canonical_url ?? fields.source_url)) ?? "",
-        ],
-      );
+      const [competitors] = await connection.query<RowDataPacket[]>(automaticPrimarySnapshotSql, [
+        job.opportunityId,
+        job.organizationId,
+        job.workspaceId,
+        amazonAsin(fields, text(fields.canonical_url ?? fields.source_url)) ?? "",
+      ]);
       const competitor = competitors[0];
       if (!competitor)
         return await this.waiting(connection, job, "amazon_competitor_snapshot_missing", {}, now);

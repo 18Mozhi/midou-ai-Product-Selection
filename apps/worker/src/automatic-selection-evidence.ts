@@ -2,6 +2,7 @@ import {
   selectionPrimaryAsinSql,
   currentProductVersionJoinSql,
   competitorDetailEvidenceSql,
+  latestCompetitorDetailSnapshotSql,
 } from "@scoutops/database";
 import { selectPrimaryObservation } from "@scoutops/provider-sources";
 import { normalizedProductFields } from "./automatic-selection-evaluation.js";
@@ -123,3 +124,10 @@ export const automaticSupplyEvidenceSql =
   "WHERE ss.input_type='opportunity' AND ss.input_ref=? AND ss.organization_id=? AND ss.workspace_id=? " +
   "AND ss.deleted_at IS NULL AND n.status='active' AND p.code='1688_search' " +
   "ORDER BY n.created_at DESC,n.id DESC LIMIT 500";
+
+/** Same actual primary detail prerequisite for model preflight and the authoritative evaluation transaction. */
+export const automaticPrimarySnapshotSql =
+  `SELECT s.* FROM competitors c JOIN competitor_snapshots s ON s.id=${latestCompetitorDetailSnapshotSql("c")} ` +
+  "WHERE c.opportunity_id=? AND c.organization_id=? AND c.workspace_id=? AND c.status='active' " +
+  "AND c.source_site='Amazon' AND c.external_id=? AND c.deleted_at IS NULL " +
+  "ORDER BY s.captured_at DESC,s.id DESC LIMIT 1";

@@ -14,6 +14,7 @@ import { OpenAiIntelligenceProductClassifier } from "../../apps/worker/dist/inte
 import { MySqlAutomaticSelectionEvaluationWorker } from "../../apps/worker/dist/automatic-selection-evaluation-worker.js";
 import {
   automaticPrimaryEvidenceSql,
+  automaticPrimarySnapshotSql,
   automaticPrimaryDetailEvidenceSql,
   automaticSupplyEvidenceSql,
 } from "../../apps/worker/dist/automatic-selection-evidence.js";
@@ -350,11 +351,18 @@ test("preflight model call holds no SQL transaction and reads only the scoped ma
             {
               raw_evidence_id: "main-1",
               observed_at: offer.observedAt,
-              payload_json: { title, price: 25, currency: "USD" },
+              payload_json: {
+                title,
+                price: 25,
+                currency: "USD",
+                asin: "B000000001",
+                canonical_url: "https://www.amazon.com/dp/B000000001",
+              },
             },
           ],
         ];
       if (sql === automaticPrimaryDetailEvidenceSql) return [[]];
+      if (sql === automaticPrimarySnapshotSql) return [[{ id: "primary-detail" }]];
       if (sql === automaticSupplyEvidenceSql)
         return [
           [
@@ -392,8 +400,14 @@ test("preflight model call holds no SQL transaction and reads only the scoped ma
     context(),
   );
   assert.equal(called, 1);
-  assert.equal(reads.length, 3);
-  for (const read of reads) assert.deepEqual(read.params, ["item", "org", "ws"]);
+  assert.equal(reads.length, 4);
+  for (const read of reads)
+    assert.deepEqual(
+      read.params,
+      read.sql === automaticPrimarySnapshotSql
+        ? ["item", "org", "ws", "B000000001"]
+        : ["item", "org", "ws"],
+    );
 });
 
 function batchHarness(
@@ -421,11 +435,18 @@ function batchHarness(
             {
               raw_evidence_id: "main-1",
               observed_at: offer.observedAt,
-              payload_json: { title: productTitle, price: 25, currency: "USD" },
+              payload_json: {
+                title: productTitle,
+                price: 25,
+                currency: "USD",
+                asin: "B000000001",
+                canonical_url: "https://www.amazon.com/dp/B000000001",
+              },
             },
           ],
         ];
       if (sql === automaticPrimaryDetailEvidenceSql) return [[]];
+      if (sql === automaticPrimarySnapshotSql) return [[{ id: "primary-detail" }]];
       if (sql === automaticSupplyEvidenceSql)
         return [
           supplies.map((item) => ({

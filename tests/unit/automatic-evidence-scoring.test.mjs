@@ -5,6 +5,7 @@ import { calculateScoreProjection } from "../../packages/contracts/dist/index.js
 import { MySqlAutomaticSelectionEvaluationWorker } from "../../apps/worker/dist/automatic-selection-evaluation-worker.js";
 import {
   automaticPrimaryEvidenceSql,
+  automaticPrimarySnapshotSql,
   automaticPrimaryDetailEvidenceSql,
   automaticSupplyEvidenceSql,
 } from "../../apps/worker/dist/automatic-selection-evidence.js";
@@ -838,4 +839,81 @@ test("newer detail evidence cannot overwrite human-confirmed sale or purchase pr
   assert.deepEqual(JSON.parse(f.inputs.get("market_demand").evidence_ids_json), [
     "detail-evidence",
   ]);
+});
+
+test("missing primary detail skips supplier reads and model work but retains the original evidence wait", async () => {
+  let modelCalls = 0;
+  const f = fixture({
+    ...bilingualOptions,
+    noSnapshot: true,
+    fields: { ...bilingualOptions.fields, canonical_url: "https://www.amazon.com/dp/B000000001" },
+    supplyClassifier: {
+      classifySupplies: async () => {
+        modelCalls++;
+        throw new Error("unexpected model");
+      },
+    },
+  });
+  const classification = await f.worker.classifySupplyTitles(job);
+  assert.equal(classification, undefined);
+  assert.equal(modelCalls, 0);
+  assert.equal(f.calls.filter((x) => x.sql === automaticPrimarySnapshotSql).length, 1);
+  assert.deepEqual(f.calls.find((x) => x.sql === automaticPrimarySnapshotSql).params, [
+    job.opportunityId,
+    job.organizationId,
+    job.workspaceId,
+    "B000000001",
+  ]);
+  assert.equal(
+    f.calls.some((x) => x.sql === automaticSupplyEvidenceSql),
+    false,
+  );
+  const result = await f.worker.evaluate(job, classification);
+  assert.equal(result.status, "waiting_evidence");
+  assert.equal(result.payload.error_code, "amazon_competitor_snapshot_missing");
+  assert.equal(f.calls.filter((x) => x.sql === automaticPrimarySnapshotSql).length, 2);
+  assert.equal(
+    f.calls.some((x) => /INSERT INTO opportunity_(cost|score)_inputs/.test(x.sql)),
+    false,
+  );
+});
+test("a primary snapshot with valid sale facts still permits original supplier classification", async () => {
+  let modelCalls = 0;
+  const f = fixture({
+    ...bilingualOptions,
+    fields: { ...bilingualOptions.fields, canonical_url: "https://www.amazon.com/dp/B000000001" },
+    supplyClassifier: {
+      classifySupplies: async (input) => {
+        modelCalls++;
+        return bilingualOptions.supplyClassifier.classifySupplies(input);
+      },
+    },
+  });
+  const classification = await f.worker.classifySupplyTitles(job);
+  assert.equal(modelCalls, 1);
+  assert.equal(classification.classifications.length, 3);
+  assert.equal(f.calls.filter((x) => x.sql === automaticPrimarySnapshotSql).length, 1);
+  assert.equal(f.calls.filter((x) => x.sql === automaticSupplyEvidenceSql).length, 1);
+});
+test("evaluation rechecks primary detail after preflight rather than trusting its earlier snapshot", async () => {
+  const options = {
+    ...bilingualOptions,
+    noSnapshot: false,
+    supplyClassifier: {
+      classifySupplies: async (input) => {
+        options.noSnapshot = true;
+        return bilingualOptions.supplyClassifier.classifySupplies(input);
+      },
+    },
+  };
+  const f = fixture(options);
+  const classification = await f.worker.classifySupplyTitles(job);
+  assert.ok(classification);
+  const result = await f.worker.evaluate(job, classification);
+  assert.equal(result.payload.error_code, "amazon_competitor_snapshot_missing");
+  assert.equal(f.calls.filter((x) => x.sql === automaticPrimarySnapshotSql).length, 2);
+  assert.equal(
+    f.calls.some((x) => /INSERT INTO opportunity_(cost|score)_inputs/.test(x.sql)),
+    false,
+  );
 });
