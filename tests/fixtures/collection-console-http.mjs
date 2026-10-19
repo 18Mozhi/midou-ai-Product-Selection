@@ -25,6 +25,10 @@ export function collectionConsoleHttpFacts(input) {
         last_latency_ms: 80,
         last_error_code: null,
         consecutive_failures: 0,
+        runtime_circuit_state: "open",
+        runtime_consecutive_failures: 7,
+        runtime_last_error_code: "validation_failed",
+        runtime_circuit_opened_at: "2026-08-08T13:00:00Z",
       },
     ],
     task_states: [

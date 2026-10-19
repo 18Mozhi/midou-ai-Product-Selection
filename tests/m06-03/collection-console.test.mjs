@@ -132,6 +132,15 @@ test("M06-03 repository applies one source and time scope to task facts without 
               parser_version: "v1",
               health_status: "ready",
               consecutive_failures: 0,
+              runtime_circuit_state: "open",
+              runtime_consecutive_failures: "7",
+              runtime_last_error_code: "validation_failed",
+              runtime_circuit_opened_at: new Date("2026-08-19T01:30:00Z"),
+            },
+            {
+              id: "00000000-0000-4000-8000-000000000609",
+              code: "unobserved",
+              name: "尚无运行记录",
             },
           ],
         ];
@@ -180,6 +189,17 @@ test("M06-03 repository applies one source and time scope to task facts without 
     traceId: "trace",
   });
   assert.equal(result.sources.length, 1);
+  assert.equal(result.sources[0].health_status, "ready");
+  assert.equal(result.sources[0].consecutive_failures, 0);
+  assert.equal(result.sources[0].runtime_circuit_state, "open");
+  assert.equal(result.sources[0].runtime_consecutive_failures, 7);
+  assert.equal(result.sources[0].runtime_last_error_code, "validation_failed");
+  assert.equal(result.sources[0].runtime_circuit_opened_at, "2026-08-19T01:30:00.000Z");
+  assert.ok(
+    calls.some(([sql]) =>
+      sql.includes("LEFT JOIN provider_runtime_circuits c ON c.provider_id=p.id"),
+    ),
+  );
   assert.equal(result.root_causes[0].error_code, "parser_failed");
   assert.equal(result.root_causes[0].total, 1);
   assert.equal(result.filters.provider_id, providerId);
@@ -208,6 +228,20 @@ test("M06-03 repository applies one source and time scope to task facts without 
     ),
   );
   assert.ok(factQueries.every(([sql]) => />= \?/.test(sql)));
+  const all = await repository.read({
+    actorId: "actor",
+    window: "24h",
+    attemptPage: 1,
+    deadLetterPage: 1,
+    recentLimit: 25,
+    requestId: "request",
+    traceId: "trace",
+  });
+  const missing = all.sources.find((row) => row.code === "unobserved");
+  assert.equal(missing.runtime_circuit_state, null);
+  assert.equal(missing.runtime_consecutive_failures, null);
+  assert.equal(missing.runtime_last_error_code, null);
+  assert.equal(missing.runtime_circuit_opened_at, null);
 });
 
 test("M06-03.A06/A07/A08/A10/A13/A17 delivery contracts", async () => {

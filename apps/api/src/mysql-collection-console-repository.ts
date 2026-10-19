@@ -47,8 +47,12 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
         "SELECT p.id, p.code, p.name, p.status, p.owner_label,\n                  p.schedule_minutes," +
           " p.concurrency_limit, p.parser_version,\n                  h.health_status," +
           " h.last_checked_at, h.last_latency_ms,\n                  h.last_error_code," +
-          " h.consecutive_failures\n             FROM providers p\n        LEFT JOIN provider_adapter_health " +
-          "h ON h.provider_id = p.id\n         ORDER BY p.status = 'enabled' DESC, p.name",
+          " h.consecutive_failures,c.state runtime_circuit_state," +
+          " c.consecutive_failures runtime_consecutive_failures," +
+          " c.last_error_code runtime_last_error_code,c.opened_at runtime_circuit_opened_at" +
+          " FROM providers p LEFT JOIN provider_adapter_health h ON h.provider_id=p.id " +
+          "LEFT JOIN provider_runtime_circuits c ON c.provider_id=p.id " +
+          "ORDER BY p.status = 'enabled' DESC, p.name",
       ),
       this.pool.query<RowDataPacket[]>(
         `SELECT t.status, COUNT(*) total
@@ -117,6 +121,13 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
       consecutive_failures: numberValue(row.consecutive_failures),
       last_checked_at: iso(row.last_checked_at),
       health_status: row.health_status ?? "unknown",
+      runtime_circuit_state: row.runtime_circuit_state ?? null,
+      runtime_consecutive_failures:
+        row.runtime_consecutive_failures == null
+          ? null
+          : numberValue(row.runtime_consecutive_failures),
+      runtime_last_error_code: row.runtime_last_error_code ?? null,
+      runtime_circuit_opened_at: iso(row.runtime_circuit_opened_at),
     }));
     const result = {
       filters: {

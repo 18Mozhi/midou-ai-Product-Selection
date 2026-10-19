@@ -5329,6 +5329,7 @@ paths:
   /platform/collection/console:
     get:
       summary: Read the audited source and collection operations console
+      x-source-runtime-observation: "sources additionally return nullable runtime_circuit_state (open/closed), runtime_consecutive_failures, runtime_last_error_code and runtime_circuit_opened_at from provider_runtime_circuits, independently of the unchanged last health check fields. Missing runtime rows remain null, not healthy. Read-only projection; no recovery or scheduling change."
       description: Requires platform:operate. Optional organization_id, workspace_id, provider_id, window and exact error_code scope task, attempt, dead-letter and quality rows; attempt_page and dead_letter_page independently page the two detail collections using the server-configured page size and return exact totals. Root causes count exact collection_dead_letters.error_code facts only, excluding attempts that have not entered dead letter. Source definitions remain platform-global. Write and replay actions use their existing versioned idempotent endpoints.
       security: [{ HttpOnlySession: [] }]
       parameters:

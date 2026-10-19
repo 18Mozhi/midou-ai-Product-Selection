@@ -127,6 +127,7 @@ const selectedDeadLetters = computed(() =>
   orderedSources = computed(() =>
     [...(data.value?.sources ?? [])].sort((left: any, right: any) => {
       const priority = (item: any) =>
+        item.runtime_circuit_state === "open" ||
         ["blocked", "critical", "degraded", "warning"].includes(item.health_status) ||
         Number(item.consecutive_failures) > 0
           ? 0
@@ -345,6 +346,8 @@ const when = (v: string | null) =>
     browser_runtime: "浏览器运行",
     data_quality: "数据质量",
   },
+  circuitLabel = (value: unknown) =>
+    value === "open" ? "已暂停（熔断）" : value === "closed" ? "未熔断" : "采集保护未观测",
   healthLabel = (value: string) =>
     (
       ({
@@ -671,6 +674,9 @@ async function confirmBatchReplay() {
             <h3>来源与健康</h3>
             <span>共 {{ data.sources.length }} 个 · 异常优先</span>
           </header>
+          <p class="collection-health-note">
+            采集保护显示当前熔断状态；健康结果来自最近一次检查，不代表当前可采集。
+          </p>
           <div v-if="data.sources.length" id="collection-source-results">
             <ResponsiveDataView
               title="来源与健康"
@@ -683,10 +689,9 @@ async function confirmBatchReplay() {
                   <thead>
                     <tr>
                       <th>来源</th>
-                      <th>状态</th>
-                      <th>健康</th>
-                      <th>连续失败</th>
-                      <th>最近检查</th>
+                      <th>配置</th>
+                      <th>采集保护</th>
+                      <th>最近健康检查</th>
                       <th>技术详情</th>
                     </tr>
                   </thead>
@@ -698,14 +703,30 @@ async function confirmBatchReplay() {
                       </td>
                       <td>{{ statusLabel(s.status) }}</td>
                       <td>
-                        <i :data-health="s.health_status">{{ healthLabel(s.health_status) }}</i>
+                        <i
+                          :data-health="s.runtime_circuit_state === 'open' ? 'blocked' : 'unknown'"
+                          >{{ circuitLabel(s.runtime_circuit_state) }}</i
+                        >
+                        <small v-if="s.runtime_consecutive_failures != null"
+                          >连续失败 {{ s.runtime_consecutive_failures }}</small
+                        >
                       </td>
-                      <td>{{ s.consecutive_failures }}</td>
-                      <td>{{ when(s.last_checked_at) }}</td>
+                      <td>
+                        <i :data-health="s.health_status">{{ healthLabel(s.health_status) }}</i>
+                        <small>{{ when(s.last_checked_at) }}</small>
+                      </td>
                       <td>
                         <details>
                           <summary>查看</summary>
                           <code>{{ s.code }}</code>
+                          <p v-if="s.runtime_last_error_code">
+                            采集原因：{{ errorLabel(s.runtime_last_error_code) }}
+                            <code>{{ s.runtime_last_error_code }}</code>
+                          </p>
+                          <p v-if="s.runtime_circuit_opened_at">
+                            熔断时间 {{ when(s.runtime_circuit_opened_at) }}
+                          </p>
+                          <p>检查连续失败 {{ s.consecutive_failures }}</p>
                         </details>
                       </td>
                     </tr>
@@ -715,7 +736,10 @@ async function confirmBatchReplay() {
               <template #summary="{ row: s }">
                 <span class="responsive-record-summary">
                   <strong>{{ s.name }}</strong>
-                  <span>{{ statusLabel(s.status) }} · {{ healthLabel(s.health_status) }}</span>
+                  <span
+                    >{{ statusLabel(s.status) }} · {{ circuitLabel(s.runtime_circuit_state) }}</span
+                  >
+                  <small>上次检查：{{ healthLabel(s.health_status) }}</small>
                   <small>{{ s.owner_label }} · 最近检查 {{ when(s.last_checked_at) }}</small>
                 </span>
               </template>
@@ -734,12 +758,24 @@ async function confirmBatchReplay() {
                     <dd>{{ statusLabel(s.status) }}</dd>
                   </div>
                   <div>
-                    <dt>健康状态</dt>
+                    <dt>最近检查结果</dt>
                     <dd>{{ healthLabel(s.health_status) }}</dd>
                   </div>
                   <div>
-                    <dt>连续失败</dt>
+                    <dt>检查连续失败</dt>
                     <dd>{{ s.consecutive_failures }}</dd>
+                  </div>
+                  <div>
+                    <dt>采集保护</dt>
+                    <dd>{{ circuitLabel(s.runtime_circuit_state) }}</dd>
+                  </div>
+                  <div>
+                    <dt>采集连续失败</dt>
+                    <dd>{{ s.runtime_consecutive_failures ?? "未观测" }}</dd>
+                  </div>
+                  <div v-if="s.runtime_last_error_code">
+                    <dt>采集原因</dt>
+                    <dd>{{ errorLabel(s.runtime_last_error_code) }}</dd>
                   </div>
                   <div>
                     <dt>最近检查</dt>
@@ -749,6 +785,12 @@ async function confirmBatchReplay() {
                 <details>
                   <summary>技术详情</summary>
                   <code>{{ s.code }}</code>
+                  <p v-if="s.runtime_last_error_code">
+                    <code>{{ s.runtime_last_error_code }}</code>
+                  </p>
+                  <p v-if="s.runtime_circuit_opened_at">
+                    熔断时间 {{ when(s.runtime_circuit_opened_at) }}
+                  </p>
                 </details>
               </template>
             </ResponsiveDataView>

@@ -1,4 +1,20 @@
 {
+  "selectionCollectionRuntimeTruth20261019": {
+    "status": "implemented",
+    "requirements": "docs/collection-runtime-health-truth.md",
+    "sourceFiles": [
+      "apps/api/src/mysql-collection-console-repository.ts",
+      "apps/web/src/components/CollectionOperationsConsole.vue",
+      "apps/web/src/styles/platform-operations.css"
+    ],
+    "testFiles": [
+      "tests/m06-03/collection-console.test.mjs",
+      "tests/e2e/m06-03-collection-console.spec.ts",
+      "tests/e2e/collection-console-http.spec.ts",
+      "tests/fixtures/collection-console-http.mjs"
+    ],
+    "contract": "Console sources project existing nullable runtime_circuit_state/consecutive failures/last error/opened time independently from historical adapter health. Current open circuits stay prominent despite old ready checks; missing runtime records remain unknown. Original permission/scope/audit/replay/recovery unchanged; no migration/config/dependency."
+  },
   "selectionCollectionLayout20261019": {
     "status": "implemented",
     "requirements": "docs/selection-collection-layout.md",

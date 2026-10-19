@@ -348,6 +348,46 @@ test("M06-03 distinguishes network login captcha and parser alert categories", a
     await expect(page.getByText(`告警类别：${category}`, { exact: true })).toBeVisible();
 });
 
+test("collection overview distinguishes an old ready check from a current open circuit", async ({
+  page,
+}) => {
+  await navigation(page);
+  await page.route("**/api/v1/platform/collection/console?**", (route) =>
+    route.fulfill({
+      json: envelope({
+        ...data,
+        sources: [
+          { ...data.sources[0], name: "未观测来源" },
+          {
+            ...data.sources[0],
+            id: "open-source",
+            name: "当前熔断来源",
+            runtime_circuit_state: "open",
+            runtime_consecutive_failures: 7,
+            runtime_last_error_code: "validation_failed",
+          },
+        ],
+      }),
+    }),
+  );
+  await page.goto("/platform-admin/collection/overview");
+  await expect(page.locator("#collection-source-results")).toContainText("已暂停（熔断）");
+  await expect(page.locator("#collection-source-results")).toContainText("采集保护未观测");
+  if ((page.viewportSize()?.width ?? 0) > 760) {
+    await expect(page.locator("#collection-source-results tbody tr").first()).toContainText(
+      "当前熔断来源",
+    );
+  } else {
+    await expect(page.getByRole("button", { name: /当前熔断来源/ })).toContainText(
+      "上次检查：正常",
+    );
+    await page.getByRole("button", { name: /当前熔断来源/ }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toContainText("已暂停（熔断）");
+    await expect(dialog).toContainText("采集连续失败");
+  }
+});
+
 test("collection overview prioritizes unhealthy sources and keeps the complete catalog reachable", async ({
   page,
 }) => {

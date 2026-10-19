@@ -118,6 +118,12 @@
   padding-bottom: 12px;
   border-bottom: 1px solid var(--so-border);
 }
+.collection-ops--review .collection-health-note {
+  margin: 0 0 12px;
+  color: var(--so-text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
 .collection-ops--review h3 {
   margin: 0 0 14px;
   color: var(--so-text);

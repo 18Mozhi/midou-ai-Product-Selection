@@ -31,7 +31,9 @@ test("[real-api] collection overview renders authorized HTTP facts with the rebu
   expect(layout.overflow).toBe(false);
   expect(layout.wide).toHaveLength(3);
   for (const width of layout.wide) expect(Math.abs(width - layout.width)).toBeLessThan(2);
-  await expect(page).toHaveScreenshot("collection-overview-commerce-20261019.png", {
+  await expect(page.locator(".collection-ops")).toContainText("已暂停（熔断）");
+  await expect(page.locator(".collection-ops")).toContainText("健康结果来自最近一次检查");
+  await expect(page).toHaveScreenshot("collection-overview-circuit-20261019.png", {
     fullPage: true,
   });
 });
