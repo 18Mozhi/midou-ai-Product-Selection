@@ -19,3 +19,11 @@ classifySupplyTitles保留原售价、币种、标题和手机壳早退；随后
 本轮探针在工具会话中执行，未创建临时文件/目录、日志、截图、浏览器或测试服务；永久回归测试保留。用户verification/state.json原修改不动、不暂存；先前清理被拒路径不重试。正式发布、真实替身复核与自然整链仍需各自回读，不能把省去无谓模型调用计作新增完整商品或日百品达标。
 
 完整22工作区构建、格式/运行文档及OpenAPI语法检查通过。20:41:14Z主品周期恢复回读仍无新任务，活动积压1000等于原阈值，来源enabled/closed；未为验证本改动绕过容量或唤醒任务。
+
+## 发布与真实模型边界复核
+
+46df6acf7d61d09d6fb6045219bf64122c377189固定宝塔发布exit0，8文件归属、格式/运行文档/发布矩阵及正式22工作区重建通过，脚本临时包删除。20:45:30Z独立BUILD_SHA一致，两个模块SHA256与本地构建匹配：automatic-selection-evidence=e73af3b06f67c1324b9b3cbb838057e955d26839ca4cedfae2ee696db3cbdb84；automatic-selection-evaluation-worker=57f7278e2f34f2e527c5929665954fb2f1313c7a7ebfc94fb0dafc0f1ede5e59。快照SQL哈希仍ea59647b7445dec0d10bf3f68fd19a9113ea59fd1ed92a23fe8b4b0cbfa22f69，与原评分查询逐字相同。
+
+同一只读替身探针：无主品详情的Router Cooling Fan现在snapshot_reads=1、supply_reads=0、model_entries=0；有完整详情的RC对照snapshot_reads=1、supply_reads=1、model_entries=1，并仍在实际模型前停止。所有SQL均由白名单拒绝非SELECT，不续租、不改写队列/价格/评分、不实际请求AI。证明本改动消除该真实缺详情样本的无效前置模型入口，同时未误挡有效对照；它是模型边界复核，不是新采集或业务完成。
+
+20:45:32Z主品仍无新任务/快照，原失败任务未变；Amazon/1688均enabled/closed，活动积压1000仍等于原阈值，恢复需等待准入。当前工作区今日仍1/100。自然主品恢复、真实新分类与全站UI及日百品验收仍未通过。本轮无临时测试文件/目录、日志、截图、浏览器或常驻验证服务；用户原verification/state.json不暂存，先前清理拒绝路径未重试。
