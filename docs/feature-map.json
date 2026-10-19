@@ -1,4 +1,18 @@
 {
+  "selectionCatalogueNativeTable20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-catalogue-native-table.md",
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityCatalogueList.vue",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/commerce-workspace.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/e2e/m04-10-selection-http.spec.ts"
+    ],
+    "contract": "Replace the default simulated whole-row anchor layout with a native four-column product table. Same facts, image-failure state, grid toggle, filters, pagination and scoped detail return links. Responsive same-data rows, explicit title/action links; remove26 obsolete list CSS rules. No API/env/schema/dependency/worker/Python change; static frontend rebuild and refresh."
+  },
   "selectionWaitingPrimaryRefresh20261020": {
     "status": "implemented",
     "requirements": "docs/selection-waiting-primary-refresh.md",

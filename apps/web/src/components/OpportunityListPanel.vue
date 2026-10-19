@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import { opportunityProfitStatusLabel } from "./opportunity-workspace-presentation";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import AutomaticSelectionReadinessPanel from "./AutomaticSelectionReadinessPanel.vue";
+import OpportunityCatalogueList from "./OpportunityCatalogueList.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import type { OpportunitySummary } from "./opportunity-workspace-types";
@@ -398,11 +399,20 @@ watch(imageFailureResetSources, (items) => {
     <p class="catalog-data-note">
       购买提示为公开下限，不等于精确销量；进货价为已有采集记录，不含其他成本；候选数量不代表可用货源。
     </p>
-    <div class="catalog-products">
-      <div v-if="displayMode === 'list'" class="catalog-list-head" aria-hidden="true">
-        <span>商品</span><span>Amazon 公开资料 / 1688 进货价</span><span>分析结果</span
-        ><span>详情</span>
-      </div>
+    <OpportunityCatalogueList
+      v-if="displayMode === 'list'"
+      :items="items"
+      :return-path="route.fullPath"
+      :product-facts="productFacts"
+      :row-facts="rowFacts"
+      :catalog-meta="catalogMeta"
+      :source-label="sourceLabel"
+      :freshness="freshness"
+      :has-usable-image="hasUsableImage"
+      :image-fallback-label="imageFallbackLabel"
+      @image-error="onImageError"
+    />
+    <div v-else class="catalog-products">
       <article v-for="item in items" :key="item.id" class="catalog-product">
         <RouterLink
           :to="{

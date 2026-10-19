@@ -39,3 +39,11 @@
 21:59:29.476Z原采集任务自然成功释放容量；21:59:31.979Z原投影轮次自动创建d110fb9b-b886-4c5d-bbeb-e2ff5a856b3a，事件competitor.collection.auto_scheduled/worker，组织6a91c1bf-661d-459f-9530-54e6315056ff、工作区99a2e4be-1796-4030-a42a-a2d95138679d，主品B0FLY4HV8V/对象08bd72be-1ebd-483f-bb19-001a486a0abe，与线上只读候选一致。21:59:54.338Z任务scheduled、latest_snapshot_id=NULL、积压1000、当日1/100。这是自然入队证明，尚非详情或整链完成；没有运行诊断中的scheduleCoreCollection替身写入、人工建任务、重放旧任务或提高阈值。
 
 21:58:09Z有效排队999条，其中正式完成通道37条、其他既有任务962条；21:58:30Z调度running/suspected_stuck_runs=0。21:59:30Z最近30分钟有29条succeeded（全局查询，不能等同于当前工作区商品数），当前正在处理旧intelligence_product_discovery任务。以上为实际吞吐和排队快照，不是日百品承诺或旧任务可删除的依据。只读排查初次误用浏览器表last_error_code字段已失败，按真实代码改查error_code后成功，没有修改表或数据。
+
+## 三个当前主品真实详情已自然恢复（2026-10-20 06:09，北京时间）
+
+22:09:39.306Z正式同范围latestCompetitorDetailSnapshotSql确认三条新详情均valid_detail=1：B0FLY4HV8V快照f1cf3fae-ce2c-418d-9d50-1af0c0fc958c，22:02:08.633Z，USD21.59/4.3/121174评价；B0DHJH2GZL快照bd262cc3-e3d7-4e79-9f9a-6cef9d8162bf，22:04:54.985Z，USD558.90/3.9/2772评价；Cooling主品B0B5DJ6KF7快照c58576a4-d172-4cb3-be9d-17d311d52ee6，22:07:48.722Z，USD27.99/4.3/91评价。三者rank_value均NULL，不补造排名或销量。
+
+评估已自然推进至下一证据门：第一条high_confidence_1688_match_missing，后两条automatic_cost_scope_mismatch。真实详情恢复已证明，尚不等于评分/货源/整链完成。旧Cooling permission_denied任务未重放或改写，新任务来自原周期策略并满足冷却和容量。此为评估等待原因，不证明利润未知本身会阻断：现有waitForCost仍发布非利润评分，并在评分输入稳定后按完整证明尝试记账。22:14:01Z只读正式证明中Cooling有效竞品8、iPhone16有效竞品9，二者完整proof仍空；采购报价等其余条件需继续逐项核对，不能伪造报价、改写规则或直接增加完成数。
+
+22:16:45.107Z进一步只读核对上述三商品的同范围当前成本输入：各自只有真实automatic_evidence售价（USD558.90/27.99/21.59），没有purchase_price。缺少实际可确认采购报价是当前未形成完整证明的已证实条件之一；利润未知仍按已确认规则允许，不应为此再次要求用户确认或放宽进货价事实。

@@ -82,10 +82,16 @@ test("[real-api] catalogue renders returned primary identity and public facts", 
   await expect(page.getByText("B0HTTP0000", { exact: true })).toBeVisible();
   await expect(page.getByText("USD 19.95", { exact: true })).toBeVisible();
   await expect(page.getByText("CNY 3.25", { exact: true })).toBeVisible();
-  await expect(page.locator(".catalog-product-coverage").first()).toContainText("货源候选 60");
-  await expect(page.locator(".catalog-public-facts").nth(1)).toContainText("未取得");
+  await expect(
+    page.locator(":is(.catalog-product-coverage,.selection-product-coverage)").first(),
+  ).toContainText("货源候选 60");
+  await expect(
+    page.locator(":is(.catalog-public-facts,.selection-product-facts-cell)").nth(1),
+  ).toContainText("未取得");
   await expect(page.getByText("HTTP 验证旅行收纳袋", { exact: true })).toBeVisible();
-  await expect(page.locator(".catalog-product-coverage").first()).toContainText("利润未知");
+  await expect(
+    page.locator(":is(.catalog-product-coverage,.selection-product-coverage)").first(),
+  ).toContainText("利润未知");
   png(await page.screenshot({ fullPage: true }), page);
 });
 
@@ -206,7 +212,9 @@ test("[real-api] compact catalogue exposes identity and preserves market when se
 }) => {
   await login(page);
   await catalogue(page);
-  const firstTitle = page.locator(".catalog-product-identity > strong").first();
+  const firstTitle = page
+    .locator(":is(.catalog-product-identity,.selection-product-name) > strong")
+    .first();
   await expect(firstTitle).toHaveText("HTTP 验证耳机收纳盒");
   const box = await firstTitle.boundingBox();
   const reserve = page.viewportSize()!.width <= 760 ? 80 : 24;

@@ -356,11 +356,11 @@ test("M04-02.A07/A08/A15 automatic opportunity list ignores retired creation and
 }) => {
   await ready(page);
   await page.goto("/opportunities?create=1");
-  await expect(page.getByRole("button", { name: "推荐商品", exact: true })).toHaveAttribute(
+  await expect(page.getByRole("button", { name: "已完成分析", exact: true })).toHaveAttribute(
     "aria-current",
     "page",
   );
-  await expect(page.getByRole("heading", { name: "1 个商品建议采纳" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "1 个商品已完成分析" })).toBeVisible();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(0);
   await expect(page.getByRole("dialog", { name: "创建机会候选" })).toHaveCount(0);
   await expect(page.locator(".catalogue-readiness")).toHaveCount(0);
@@ -702,46 +702,66 @@ test("commerce catalogue switches layouts and keeps product navigation and missi
     "aria-pressed",
     "true",
   );
-  await expect(page.locator(".catalog-product")).toHaveCount(1);
+  await expect(page.locator(":is(.catalog-product,.selection-product-row)")).toHaveCount(1);
   await expect(page.locator(".opportunity-hero, .opportunity-view-bar")).toHaveCount(0);
   await expect(page.locator(".catalogue-toolbar")).toHaveCount(0);
   await expect(
-    catalogue.getByRole("heading", { name: "1 个商品建议采纳", level: 2 }),
+    catalogue.getByRole("heading", { name: "1 个商品已完成分析", level: 2 }),
   ).toBeVisible();
-  const firstProduct = await page.locator(".catalog-product").first().boundingBox();
+  const firstProduct = await page
+    .locator(":is(.catalog-product,.selection-product-row)")
+    .first()
+    .boundingBox();
   expect(firstProduct!.y).toBeLessThan(page.viewportSize()!.height);
   await expect(
-    page.locator(".catalogue-controls").getByRole("button", { name: "推荐商品", exact: true }),
+    page.locator(".catalogue-controls").getByRole("button", { name: "已完成分析", exact: true }),
   ).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("group", { name: "商品展示方式" })).toBeVisible();
+  const layoutButton = await page.getByRole("button", { name: "图卡", exact: true }).boundingBox();
+  expect(layoutButton!.height).toBeGreaterThanOrEqual(44);
+  expect(layoutButton!.height).toBeLessThan(50);
+  expect(layoutButton!.width).toBeGreaterThanOrEqual(44);
   await page.getByRole("button", { name: "列表", exact: true }).click();
   await expect(catalogue).toHaveAttribute("data-display", "list");
-  const product = page.locator(".catalog-product").first();
-  const facts = await product.locator(".catalog-public-facts").boundingBox();
-  const metrics = await product.locator(".catalog-product-metrics").boundingBox();
-  const identity = await product.locator(".catalog-product-identity").boundingBox();
+  const product = page.locator(":is(.catalog-product,.selection-product-row)").first();
+  const facts = await product
+    .locator(":is(.catalog-public-facts,.selection-product-facts-cell)")
+    .boundingBox();
+  const metrics = await product.locator(".selection-product-result-cell").boundingBox();
+  const identity = await product.locator(".selection-product-name").boundingBox();
   if ((page.viewportSize()?.width ?? 0) > 1100) {
-    await expect(page.locator(".catalog-list-head")).toBeVisible();
-    const heading = await page.locator(".catalog-list-head > span").nth(1).boundingBox();
+    await expect(page.getByRole("table", { name: "选品商品列表" })).toBeVisible();
+    await expect(page.getByRole("columnheader")).toHaveCount(4);
+    const heading = await page
+      .getByRole("columnheader", { name: "Amazon 公开资料 / 1688 进货价", exact: true })
+      .boundingBox();
     expect(Math.abs(heading!.x - facts!.x)).toBeLessThan(2);
     expect(facts!.x).toBeGreaterThan(identity!.x);
     expect(metrics!.x).toBeGreaterThan(facts!.x);
     expect(Math.abs(facts!.y - metrics!.y)).toBeLessThan(2);
     expect((await product.boundingBox())!.height).toBeLessThan(210);
   } else {
-    await expect(page.locator(".catalog-list-head")).toBeHidden();
+    await expect(page.getByRole("table", { name: "选品商品列表" })).toBeVisible();
     expect(facts!.y).toBeGreaterThan(metrics!.y);
   }
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);
-  await expect(page.locator(".catalog-product > a")).toHaveAttribute(
+  await expect(page.locator(".selection-product-name a")).toHaveAttribute(
     "href",
     new RegExp(`/opportunities/${opportunityId}`),
   );
+  await expect(product.getByRole("cell")).toHaveCount(4);
+  const actionBounds = await product.locator(".selection-product-action-cell a").boundingBox();
+  expect(actionBounds!.height).toBeGreaterThanOrEqual(44);
+  expect(actionBounds!.height).toBeLessThan(50);
+  const titleLink = page.locator(".selection-product-name a");
+  await titleLink.focus();
+  await expect(titleLink).toBeFocused();
+  await page.screenshot({ path: testInfo.outputPath("native-product-table.png"), fullPage: true });
   await page.getByRole("button", { name: "图卡", exact: true }).click();
   await expect(catalogue).toHaveAttribute("data-display", "grid");
-  await expect(page.locator(".catalog-list-head")).toHaveCount(0);
+  await expect(page.getByRole("table", { name: "选品商品列表" })).toHaveCount(0);
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);
@@ -797,7 +817,10 @@ test("catalogue shows original primary facts without inventing sales or private 
     }),
   );
   await page.goto("/opportunities");
-  const facts = page.locator(".catalog-product").first().locator(".catalog-public-facts");
+  const facts = page
+    .locator(":is(.catalog-product,.selection-product-row)")
+    .first()
+    .locator(":is(.catalog-public-facts,.selection-product-facts-cell)");
   await page.getByRole("button", { name: "图卡", exact: true }).click();
   await expect(facts).toContainText("USD 29.00");
   await expect
@@ -813,7 +836,10 @@ test("catalogue shows original primary facts without inventing sales or private 
   await expect(facts).toContainText("已观察到广告标记");
   await expect(page.locator(".catalog-data-note")).toContainText("不等于精确销量");
   await expect(page.locator(".catalog-data-note")).toHaveCount(1);
-  const missingFacts = page.locator(".catalog-product").nth(1).locator(".catalog-public-facts");
+  const missingFacts = page
+    .locator(":is(.catalog-product,.selection-product-row)")
+    .nth(1)
+    .locator(":is(.catalog-public-facts,.selection-product-facts-cell)");
   await expect(missingFacts).toContainText("商品资料待采集");
   await expect(missingFacts.locator("dl > div")).toHaveCount(6);
   await expect(missingFacts.locator(".is-price").filter({ hasText: "售价" })).toContainText(
@@ -829,18 +855,20 @@ test("catalogue shows original primary facts without inventing sales or private 
     .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
   expect(priceSize).toBeGreaterThanOrEqual(18);
   const factTops = await page
-    .locator(".catalog-public-facts")
+    .locator(":is(.catalog-public-facts,.selection-product-facts-cell)")
     .evaluateAll((els) => els.map((el) => el.getBoundingClientRect().top));
   expect(Math.abs(factTops[0] - factTops[1])).toBeLessThan(2);
-  const decisionTops = await page.locator(".catalog-product-metrics").evaluateAll((els) =>
-    els.map((el) => ({
-      top: el.getBoundingClientRect().top,
-      margin: getComputedStyle(el).marginTop,
-      anchorHeight: el.parentElement?.getBoundingClientRect().height,
-      cardHeight: el.parentElement?.parentElement?.getBoundingClientRect().height,
-      parentDisplay: getComputedStyle(el.parentElement!).display,
-    })),
-  );
+  const decisionTops = await page
+    .locator(":is(.catalog-product-metrics,.selection-product-results)")
+    .evaluateAll((els) =>
+      els.map((el) => ({
+        top: el.getBoundingClientRect().top,
+        margin: getComputedStyle(el).marginTop,
+        anchorHeight: el.parentElement?.getBoundingClientRect().height,
+        cardHeight: el.parentElement?.parentElement?.getBoundingClientRect().height,
+        parentDisplay: getComputedStyle(el.parentElement!).display,
+      })),
+    );
   expect(
     Math.abs(decisionTops[0].top - decisionTops[1].top),
     JSON.stringify(decisionTops),
@@ -906,7 +934,7 @@ test("opportunity list distinguishes a failed product image from one not yet col
   const image = page.getByRole("img", { name: "已采集主图的机会 商品图", exact: true });
   await expect.poll(() => image.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBe(120);
   const boxes = await page
-    .locator(".opportunity-picture")
+    .locator(":is(.opportunity-picture,.selection-product-picture)")
     .evaluateAll((elements) => elements.map((el) => el.getBoundingClientRect().height));
   expect(boxes).toHaveLength(3);
   expect(new Set(boxes).size).toBe(1);
@@ -1364,7 +1392,7 @@ test("P18 forbidden detail state returns to the opportunity list without retryin
   await expect(page.getByRole("button", { name: "申请权限" })).toHaveCount(0);
   await page.getByRole("button", { name: "返回选品列表" }).click();
   await expect(page).toHaveURL(/\/opportunities$/);
-  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+  await expect(page.getByRole("link", { name: base.name, exact: true })).toBeVisible();
   expect(detailReads).toBe(1);
 });
 
@@ -1812,22 +1840,28 @@ test("opportunity list aborts an older read after a newer filter read", async ({
       await olderGate;
       await route
         .fulfill({
-          json: envelope([{ ...recommendedBase, id: "older-opportunity", name: "过期筛选结果" }], {
-            page: 1,
-            page_size: 20,
-            total: 1,
-          }),
+          json: envelope(
+            [{ ...recommendedBase, id: "older-opportunity", name: "过期筛选结果", exact: true }],
+            {
+              page: 1,
+              page_size: 20,
+              total: 1,
+            },
+          ),
         })
         .catch(() => {});
       return;
     }
     if (query === "newer-read") {
       await route.fulfill({
-        json: envelope([{ ...recommendedBase, id: "newer-opportunity", name: "当前筛选结果" }], {
-          page: 1,
-          page_size: 20,
-          total: 1,
-        }),
+        json: envelope(
+          [{ ...recommendedBase, id: "newer-opportunity", name: "当前筛选结果", exact: true }],
+          {
+            page: 1,
+            page_size: 20,
+            total: 1,
+          },
+        ),
       });
       return;
     }
@@ -1835,7 +1869,7 @@ test("opportunity list aborts an older read after a newer filter read", async ({
   });
 
   await page.goto("/opportunities");
-  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+  await expect(page.getByRole("link", { name: base.name, exact: true })).toBeVisible();
   const applyQuery = async (value: string) => {
     const search = page.getByRole("search", { name: "搜索商品" });
     await search.getByLabel("商品名称").fill(value);
@@ -1849,12 +1883,12 @@ test("opportunity list aborts an older read after a newer filter read", async ({
   await olderStarted;
   await expect(page).toHaveURL(/q=older-read/);
   await applyQuery("newer-read");
-  await expect(page.getByRole("link", { name: "当前筛选结果" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "当前筛选结果", exact: true })).toBeVisible();
   const failedRequest = await olderAbort;
   expect(failedRequest.failure()?.errorText).toContain("ERR_ABORTED");
   releaseOlder();
-  await expect(page.getByRole("link", { name: "当前筛选结果" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "过期筛选结果" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "当前筛选结果", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "过期筛选结果", exact: true })).toHaveCount(0);
 });
 
 test("P15 aborts its active list read when the cached workspace is deactivated", async ({
@@ -1876,7 +1910,7 @@ test("P15 aborts its active list read when the cached workspace is deactivated",
   });
 
   await page.goto("/opportunities");
-  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+  await expect(page.getByRole("link", { name: base.name, exact: true })).toBeVisible();
   const search = page.getByRole("search", { name: "搜索商品" });
   await search.getByLabel("商品名称").fill("deactivate-read");
   await search.getByRole("button", { name: "搜索", exact: true }).click();
@@ -1923,11 +1957,11 @@ test("opportunity detail failure cannot replace the list after navigating away",
       request.failure()?.errorText.includes("ERR_ABORTED"),
   );
   await page.getByRole("link", { name: "← 返回来源列表" }).click();
-  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+  await expect(page.getByRole("link", { name: base.name, exact: true })).toBeVisible();
   const failedRequest = await delayedFailure;
   expect(failedRequest.failure()?.errorText).toContain("ERR_ABORTED");
   releaseDetail();
-  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+  await expect(page.getByRole("link", { name: base.name, exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "暂时不可用" })).toHaveCount(0);
 });
 
@@ -2025,15 +2059,15 @@ test("retired member batch workflows expose no controls and issue no member or b
   for (const view of ["recommended", "rule_candidates", "evidence_pending", "all"]) {
     await page.goto(`/opportunities?view=${view}&owner_id=retired-owner`);
     await expect(page.locator(".opportunity-workspace--review")).toBeVisible();
-    await expect(page.locator(".catalog-product")).toHaveCount(1);
+    await expect(page.locator(":is(.catalog-product,.selection-product-row)")).toHaveCount(1);
     await expect(page.locator(".catalog-product input[type=checkbox]")).toHaveCount(0);
     await expect(page.getByRole("button", { name: /^批量/ })).toHaveCount(0);
     await expect(page.getByRole("dialog", { name: "选品批量操作影响预览" })).toHaveCount(0);
   }
-  await page.locator(".catalog-product > a").first().click();
+  await page.locator(".selection-product-name a").first().click();
   await expect(page.getByRole("heading", { name: recommendedBase.name })).toBeVisible();
   await page.getByRole("link", { name: "← 返回来源列表" }).click();
-  await expect(page.locator(".catalog-product")).toHaveCount(1);
+  await expect(page.locator(":is(.catalog-product,.selection-product-row)")).toHaveCount(1);
   expect(obsoleteRequests).toEqual([]);
   expect(obsoleteOwnerFilters).toEqual([]);
 });
@@ -2623,7 +2657,7 @@ test("mobile opportunity filters preserve selected adoption blocker inside the d
   await filtered;
   await expect(page).toHaveURL(/blocking_reason=recommendation_insufficient/);
   await expect(filterTrigger).toContainText("1 项已选");
-  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+  await expect(page.getByRole("link", { name: base.name, exact: true })).toBeVisible();
 });
 
 test("selection views send explicit truthful recommendation filters", async ({ page }) => {
@@ -2851,10 +2885,12 @@ test("compact catalogue exposes the first product title above the fold with twen
     });
   });
   await page.goto("/opportunities");
-  await expect(page.locator(".catalog-product")).toHaveCount(20);
+  await expect(page.locator(":is(.catalog-product,.selection-product-row)")).toHaveCount(20);
   await expect(page.locator(".product-catalog")).toHaveAttribute("data-display", "list");
   await expect(page.locator(".catalogue-readiness")).toHaveCount(0);
-  const firstTitle = page.locator(".catalog-product-identity > strong").first();
+  const firstTitle = page
+    .locator(":is(.catalog-product-identity,.selection-product-name) > strong")
+    .first();
   await expect(firstTitle).toHaveText("目录演示商品 01");
   const box = await firstTitle.boundingBox();
   const bottomReserve = page.viewportSize()!.width <= 760 ? 80 : 24;
@@ -2864,7 +2900,7 @@ test("compact catalogue exposes the first product title above the fold with twen
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);
   const paths = await page
-    .locator(".catalog-product > a")
+    .locator(".selection-product-name a")
     .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
   expect(new Set(paths).size).toBe(20);
   const allRead = page.waitForResponse((response) => {
@@ -2875,10 +2911,10 @@ test("compact catalogue exposes the first product title above the fold with twen
   });
   await page.getByRole("button", { name: "全部商品", exact: true }).click();
   await allRead;
-  await expect(page.locator(".catalog-product")).toHaveCount(20);
+  await expect(page.locator(":is(.catalog-product,.selection-product-row)")).toHaveCount(20);
   await expect(page.getByRole("navigation", { name: "选品批量操作", exact: true })).toHaveCount(0);
   await expect(firstTitle).toHaveText(longName);
-  const firstCard = page.locator(".catalog-product").first();
+  const firstCard = page.locator(":is(.catalog-product,.selection-product-row)").first();
   await expect(firstCard.locator("input[type=checkbox]")).toHaveCount(0);
   const titleLayout = await firstTitle.evaluate((element) => {
     const rect = element.getBoundingClientRect();
@@ -2886,7 +2922,7 @@ test("compact catalogue exposes the first product title above the fold with twen
     return {
       height: rect.height,
       lineHeight: Number.parseFloat(getComputedStyle(element).lineHeight),
-      unobscured: Boolean(hit?.closest(".catalog-product-identity")),
+      unobscured: Boolean(hit?.closest(".catalog-product-identity,.selection-product-name")),
     };
   });
   expect(titleLayout.height).toBeLessThanOrEqual(titleLayout.lineHeight * 2 + 1);
@@ -3319,5 +3355,5 @@ test("detail sections lead with their own content and keep decisions in product 
   }
   await page.getByRole("button", { name: "商品与评分", exact: true }).click();
   await expect(page.locator(".opportunity-decision-summary")).toHaveCount(1);
-  await expect(page.locator(".opportunity-collection-tools")).toHaveCount(1);
+  await expect(page.locator(".opportunity-collection-tools")).toHaveCount(0);
 });
