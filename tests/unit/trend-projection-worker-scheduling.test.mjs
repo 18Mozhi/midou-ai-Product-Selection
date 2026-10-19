@@ -268,25 +268,31 @@ for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscov
     const connection = {
       query: async (sql, values) => {
         statements.push(sql);
+        if (sql.includes("backlog_count")) {
+          assert.deepEqual(values, [""]);
+          return [[{ id: "scan-opportunity", backlog_count: 0 }]];
+        }
         assert.equal(values.at(-1), 1000);
         return [[]];
       },
     };
     const persistence = new TrendProjectionPersistence({}, "worker", () => now);
     assert.equal(await persistence[method](connection, "amazon", now), false);
-    assert.equal(statements.length, 1);
+    assert.equal(statements.length, method === "enqueueDueCompetitorDiscovery" ? 2 : 1);
     assert.ok(statements[0].includes(activeCollectionScopeSql("backlog")));
     if (method === "enqueueDueCompetitorRefresh") {
       assert.ok(statements[0].includes(activeCollectionScopeSql("collection_tasks")));
       assert.ok(statements[0].includes(activeCollectionScopeSql("c")));
     } else {
+      assert.match(statements[0], /o.id>\?[\s\S]*ORDER BY o.id LIMIT 20/);
+      assert.ok(statements[0].includes(activeCollectionScopeSql("o")));
       assert.match(
-        statements[0],
+        statements[1],
         /active_workspace.organization_id=o.organization_id AND active_workspace.status='active'/,
       );
-      assert.match(statements[0], /busy.workspace_id=o.workspace_id/);
-      assert.match(statements[0], /busy.opportunity_id=CONVERT\(o.id USING utf8mb4\)/);
-      assert.match(statements[0], /active_task.workspace_id=q.workspace_id/);
+      assert.match(statements[1], /busy.workspace_id=o.workspace_id/);
+      assert.match(statements[1], /busy.opportunity_id=CONVERT\(o.id USING utf8mb4\)/);
+      assert.match(statements[1], /active_task.workspace_id=q.workspace_id/);
     }
   });
 }

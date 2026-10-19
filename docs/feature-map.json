@@ -7060,5 +7060,18 @@
     ],
     "testFiles": ["tests/m02-06/home-dashboard.test.mjs"],
     "contract": "Unused static mobile placeholder retired. Desktop and mobile use registered real OpportunityWorkspace and detail facts. Historical immutable reconstruction hashes retained; no live placeholder, API/config/dependency/DB/permission/behavior change. Build equivalence required; no daily100 acceptance."
+  },
+  "selectionCompetitorRediscoveryBoundedScan20261019": {
+    "status": "implemented",
+    "requirements": "docs/competitor-rediscovery-bounded-scan.md",
+    "sourceFiles": [
+      "apps/worker/src/trend-projection-persistence.ts",
+      "apps/worker/src/collection-source-scheduling-policy.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-sourcing-recovery.test.mjs",
+      "tests/unit/trend-projection-worker-scheduling.test.mjs"
+    ],
+    "contract": "20 active opportunity IDs per scan; unchanged complete eligibility and within-page ordering, one scheduled product. Commit-only in-memory cursor advances on ineligible pages and wraps; full/invalid capacity keeps cursor, existing threshold rechecked. 60s cadence and minimum refresh interval unchanged; actual scheduling can be later. No schema/config/API/payload/dependency/permission changes. Real MySQL same20 equality and all1474 identities covered; diagnostics write0, natural daily100 pending."
   }
 }

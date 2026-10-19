@@ -1,4 +1,7 @@
-import { activeCollectionScopeSql } from "./collection-source-scheduling-policy.js";
+import {
+  activeCollectionScopeSql,
+  automaticCollectionBacklogCountSql,
+} from "./collection-source-scheduling-policy.js";
 import { recoverCircuitHeldSourcing } from "./automatic-sourcing-retry-policy.js";
 import { repairMissingPrimaryProduct } from "./automatic-primary-product-repair.js";
 import { randomUUID } from "node:crypto";
@@ -24,6 +27,7 @@ export class TrendProjectionPersistence {
   private primaryRepairAfterId = "";
   private preferCompetitorDiscovery = false;
   private nextCompetitorDiscoveryScanAt = 0;
+  private competitorDiscoveryAfterId = "";
   private readonly alerts: TrendProjectionAlerts;
 
   constructor(
@@ -433,17 +437,18 @@ export class TrendProjectionPersistence {
       }
       let periodic: "discovery" | "detail" | null = null;
       let discoveryScanned = false;
+      const discoveryCursor = { afterId: this.competitorDiscoveryAfterId };
       if (!rows.length && providers.amazon) {
         const order: Array<"discovery" | "detail"> = this.preferCompetitorDiscovery
           ? ["discovery", "detail"]
           : ["detail", "discovery"];
         for (const kind of order) {
           // Missing-work repair keeps its original cadence; only the broader
-          // discovery scan is bounded to one read per minute in this Worker.
+          // discovery page is bounded to one scan per minute in this Worker.
           if (kind === "discovery" && now.getTime() < this.nextCompetitorDiscoveryScanAt) continue;
           const scheduled =
             kind === "discovery"
-              ? await this.enqueueDueCompetitorDiscovery(c, providers.amazon, now)
+              ? await this.enqueueDueCompetitorDiscovery(c, providers.amazon, now, discoveryCursor)
               : await this.enqueueDueCompetitorRefresh(c, providers.amazon, now);
           if (kind === "discovery") discoveryScanned = true;
           if (scheduled) {
@@ -455,7 +460,10 @@ export class TrendProjectionPersistence {
       await c.commit();
       if (primaryRepair) this.primaryRepairAfterId = primaryRepair.afterId;
       if (periodic) this.preferCompetitorDiscovery = periodic === "detail";
-      if (discoveryScanned) this.nextCompetitorDiscoveryScanAt = now.getTime() + 60_000;
+      if (discoveryScanned) {
+        this.nextCompetitorDiscoveryScanAt = now.getTime() + 60_000;
+        this.competitorDiscoveryAfterId = discoveryCursor.afterId;
+      }
     } catch (error) {
       await c.rollback();
       throw error;
@@ -523,7 +531,30 @@ export class TrendProjectionPersistence {
     return true;
   }
 
-  private async enqueueDueCompetitorDiscovery(c: PoolConnection, providerId: string, now: Date) {
+  private async enqueueDueCompetitorDiscovery(
+    c: PoolConnection,
+    providerId: string,
+    now: Date,
+    cursor = { afterId: this.competitorDiscoveryAfterId },
+  ) {
+    // Resolve expensive identity/title/relevance facts only for a bounded page.
+    // Cursor is committed by the caller, including pages without an eligible item.
+    const [identities] = await c.query<RowDataPacket[]>(
+      `SELECT o.id,${automaticCollectionBacklogCountSql} backlog_count FROM opportunities o
+       WHERE ${activeCollectionScopeSql("o")} AND o.source_type='trend_topic'
+         AND o.lifecycle_status NOT IN ('archived','deleted') AND o.id>?
+       ORDER BY o.id LIMIT 20`,
+      [cursor.afterId],
+    );
+    if (!identities.length) {
+      cursor.afterId = "";
+      return false;
+    }
+    const backlog = Number(identities[0]!.backlog_count);
+    if (!Number.isSafeInteger(backlog) || backlog < 0 || backlog >= this.queueBacklogLimit)
+      return false;
+    const opportunityIds = identities.map((row) => String(row.id));
+    cursor.afterId = opportunityIds.at(-1)!;
     const before = new Date(now.getTime() - this.refreshIntervalSeconds * 1000);
     const [rows] = await c.query<RowDataPacket[]>(
       `SELECT o.id discovery_opportunity_id,o.organization_id,o.workspace_id,o.created_by,o.primary_asin,
@@ -538,6 +569,7 @@ export class TrendProjectionPersistence {
              AND JSON_UNQUOTE(JSON_EXTRACT(n_identified.payload_json,'$.asin')) REGEXP '^[A-Za-z0-9]{10}$') identified
            ON identified.opportunity_id=o.id AND identified.organization_id=o.organization_id AND identified.workspace_id=o.workspace_id
          WHERE o.source_type='trend_topic' AND o.lifecycle_status NOT IN ('archived','deleted')
+           AND o.id IN (?)
          HAVING primary_asin REGEXP '^[A-Z0-9]{10}$'
          LIMIT 18446744073709551615) o
        JOIN opportunities locked_opportunity ON locked_opportunity.id=o.id
@@ -570,7 +602,7 @@ export class TrendProjectionPersistence {
          AND NOT ${selectionCompetitionGateSql(5, "materialized")}
        HAVING LENGTH(TRIM(discovery_query))>0
        ORDER BY COALESCE(recent.last_discovery_at,o.created_at),o.id LIMIT 1 FOR UPDATE`,
-      [before, this.queueBacklogLimit],
+      [opportunityIds, before, this.queueBacklogLimit],
     );
     const row = rows[0],
       title = typeof row?.discovery_query === "string" ? row.discovery_query.trim() : "";

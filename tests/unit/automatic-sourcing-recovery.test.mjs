@@ -21,6 +21,7 @@ function setup(
   refreshRows = [],
   discoveryRows = [],
   existingCompetitorTasks = [],
+  identityPages = null,
 ) {
   const calls = [],
     tasks = [];
@@ -33,6 +34,17 @@ function setup(
       calls.push([sql, values]);
       if (sql.startsWith("SELECT id,code FROM providers")) return [providers];
       if (sql.startsWith("SELECT primary_repair.*")) return [[]];
+      if (sql.startsWith("SELECT o.id,") && sql.includes("backlog_count"))
+        return [
+          identityPages
+            ? (identityPages.shift() ?? [])
+            : [
+                {
+                  id: discoveryRows[0]?.discovery_opportunity_id ?? "scan-opportunity",
+                  backlog_count: 0,
+                },
+              ],
+        ];
       if (sql.startsWith("SELECT o.id opportunity_id")) return [rows];
       if (sql.startsWith("SELECT q.id FROM collection_subqueries")) {
         if (existingCompetitorTasks instanceof Error) throw existingCompetitorTasks;
@@ -51,8 +63,75 @@ function setup(
   );
   worker.scheduleCoreCollection = async (_connection, context, id, queries, event) =>
     tasks.push({ context, id, queries, event });
-  return { worker, calls, tasks };
+  return { worker, calls, tasks, connection };
 }
+
+test("discovery advances past empty pages, wraps at the end and only commits its cursor", async () => {
+  const { worker, calls } = setup(
+    [],
+    [{ id: "amazon", code: "amazon_product" }],
+    [],
+    [],
+    [],
+    [
+      [{ id: "page-20", backlog_count: 0 }],
+      [{ id: "page-40", backlog_count: 0 }],
+      [],
+      [{ id: "page-20", backlog_count: 0 }],
+    ],
+  );
+  let tick = Date.parse("2026-10-17T00:00:00Z");
+  worker.now = () => new Date(tick);
+  for (const expected of ["page-20", "page-40", "", "page-20"]) {
+    await worker.enqueueMissingAutomaticDownstream();
+    assert.equal(worker.competitorDiscoveryAfterId, expected);
+    tick += 60_000;
+  }
+  const reads = calls.filter(([sql]) => typeof sql === "string" && sql.includes("backlog_count"));
+  assert.deepEqual(
+    reads.map(([, args]) => args),
+    [[""], ["page-20"], ["page-40"], [""]],
+  );
+});
+
+test("full or invalid capacity leaves discovery cursor unchanged and avoids eligibility and queue writes", async () => {
+  for (const backlog_count of [1000, 1001, -1, "invalid"]) {
+    const { worker, calls, tasks } = setup(
+      [],
+      [{ id: "amazon", code: "amazon_product" }],
+      [],
+      [],
+      [],
+      [[{ id: "later", backlog_count }]],
+    );
+    worker.competitorDiscoveryAfterId = "earlier";
+    await worker.enqueueMissingAutomaticDownstream();
+    assert.equal(worker.competitorDiscoveryAfterId, "earlier");
+    assert.equal(tasks.length, 0);
+    assert.equal(
+      calls.some(([sql]) => String(sql).startsWith("SELECT o.id discovery_opportunity_id")),
+      false,
+    );
+  }
+});
+
+test("failed transaction commit does not consume the discovery page or scan cadence", async () => {
+  const { worker, connection } = setup(
+    [],
+    [{ id: "amazon", code: "amazon_product" }],
+    [],
+    [],
+    [],
+    [[{ id: "later", backlog_count: 0 }]],
+  );
+  worker.competitorDiscoveryAfterId = "earlier";
+  connection.commit = async () => {
+    throw new Error("commit failed");
+  };
+  await assert.rejects(worker.enqueueMissingAutomaticDownstream(), /commit failed/);
+  assert.equal(worker.competitorDiscoveryAfterId, "earlier");
+  assert.equal(worker.nextCompetitorDiscoveryScanAt, 0);
+});
 
 test("historical sourcing repair uses the primary image and schedules a shared search only once", async () => {
   const { worker, calls, tasks } = setup([row, { ...row, competitor_id: "another" }]);
@@ -354,7 +433,11 @@ test("insufficient or unclassified competitors get a cooled-down discovery throu
   const [sql, values] = calls.find(([sql]) =>
     String(sql).startsWith("SELECT o.id discovery_opportunity_id"),
   );
-  assert.deepEqual(values, [new Date("2026-10-16T23:00:00Z"), 1000]);
+  assert.deepEqual(values, [
+    [discoveryRow.discovery_opportunity_id],
+    new Date("2026-10-16T23:00:00Z"),
+    1000,
+  ]);
   for (const term of [
     "recent.organization_id=o.organization_id",
     "recent.workspace_id=o.workspace_id",
