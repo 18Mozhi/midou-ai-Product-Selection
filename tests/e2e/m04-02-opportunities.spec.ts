@@ -821,6 +821,15 @@ test("catalogue shows original primary facts without inventing sales or private 
     .locator(":is(.catalog-product,.selection-product-row)")
     .first()
     .locator(":is(.catalog-public-facts,.selection-product-facts-cell)");
+  const nativePrice = page
+    .locator(".selection-product-facts .is-price")
+    .filter({ hasText: "售价" })
+    .first()
+    .locator("dd");
+  await expect(nativePrice).toHaveText("USD 29.00");
+  expect(
+    await nativePrice.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)),
+  ).toBeGreaterThanOrEqual(20);
   await page.getByRole("button", { name: "图卡", exact: true }).click();
   await expect(facts).toContainText("USD 29.00");
   await expect

@@ -258,8 +258,8 @@ const rows = computed(() =>
   font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
-.selection-product-facts .is-price dd {
-  font-size: 20px;
+#app .selection-product-facts .is-price:not(.is-missing) dd {
+  font-size: max(20px, var(--so-font-body));
   line-height: 1.35;
 }
 .selection-product-facts .is-missing dd {

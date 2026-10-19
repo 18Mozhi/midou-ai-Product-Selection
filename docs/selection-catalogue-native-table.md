@@ -25,3 +25,15 @@ OpportunityListPanel继续拥有筛选、页签、图卡切换和现有图片失
 最终完整双端回归180项通过（桌面90/390手机90，最终一轮不更新截图），16项单元回归通过，最终格式检查通过：changed=5/production=721/repositories=51/max_line_length=640。截图基线仅更新四张本次列表图片，详情基线未动；编译后frontend/index.html SHA256=1d85f8585a246601b80db3281cb34e93d1ef0012c646db48baf2b75c54b1db54。待正式发布后独立核对。
 
 临时输出收尾例外：已核验精确路径位于用户TEMP内，原生PowerShell Remove-Item -LiteralPath -Recurse仍被自动审批以blocked by policy拒绝，没有重试或改用其他方法。保留路径C:/Users/23136/AppData/Local/Temp/scoutops-catalogue-table-20261020，含本轮截图/测试输出；不暂存。之前已拒绝清理的其他路径未操作。用户原verification/state.json保持原SHA256且不暂存；测试服务由测试框架退出，结束前再检查端口。
+
+## 真实发布后价格层级补充
+
+7e73776e9固定发布已exit=0，线上BUILD_SHA一致。22:22:30.672Z线上frontend/index.html SHA256为0096f9045d3e23a1b4cc158e7ee2cb18643649a61231c68fc0b71cd5daa61ba6，与正式发布工作区最后构建完全一致；此前1d85为源工作区规范化前构建，不能当正式包哈希。两工作区三个改动源文件统一LF后逐字相同，正式工作区无脏文件。
+
+真实Chrome确认TABLE/4个scope=col表头/每行4单元格，旧模拟列头0，1920宽无页面溢出，真实RC行161.5px，标题与操作/展示切换均44px，原USD30.99/CNY54.43/65.8/利润未知正确。真实读取同时发现accessibility.css的#app全局字号规则覆盖了本组件20px价格规则，使实际仍16px；保留该全局可读性规则，只提升实际价格选择器并使用max(20px,var(--so-font-body))，确保大字号设置不被压低。新增原生表格价格字号回归；图卡及其余字段不变。
+
+后续定向验证输出单独使用C:/Users/23136/AppData/Local/Temp/scoutops-catalogue-native-price-20261020，不复用或清理此前被拒绝的目录。最终双端回读仍待价格补充发布后进行。
+
+价格补充本地验证：原生价格字号新增断言在首次尝试正确捕获16px，实际Vue scoped编译显示:global(#app)会吞掉后续选择器；未发布该尝试。改为普通#app祖先加作用域末端，仅匹配非缺失价格，编译后仍带本组件data-v属性且无裸#app全局规则。28项桌面/390定向与真实HTTP回归通过，前端类型/构建及两个文件格式检查通过；180项其余业务回归没有因这一字号属性变化重复。缺失价格仍保留原可读性大小/未知标记，全部数据不变。
+
+新增价格验证目录已按本次列出的文件逐个Remove-Item -LiteralPath，再删除已检查为空的目录，清理成功且Test-Path=false；没有使用递归删除，也未触碰此前拒绝清理的scoutops-catalogue-table-20261020。该旧目录剩5个验证文件共216650字节，单独保留记录。所有本地测试服务已退出，发布临时包由固定脚本自动删除。
