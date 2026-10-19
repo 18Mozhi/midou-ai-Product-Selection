@@ -30,6 +30,11 @@ const text = (value: unknown, maximum: number): value is string =>
   value.length <= maximum &&
   !/[\u0000-\u001f]/u.test(value);
 const invalid = () => new Error("supply_title_classification_invalid");
+export class SupplyTitleCitationError extends Error {
+  constructor() {
+    super("supply_title_classification_invalid");
+  }
+}
 
 /** Model classifications stay separate from source facts; all supporting excerpts must exist verbatim. */
 export function validateSupplyTitleClassifications(
@@ -67,6 +72,7 @@ export function validateSupplyTitleClassifications(
       kinds = new Set<string>(),
       productExcerpts: string[] = [],
       supplyExcerpts: string[] = [];
+    let invalidCitation = false;
     for (const attribute of result.attributes) {
       if (
         !attribute ||
@@ -78,11 +84,14 @@ export function validateSupplyTitleClassifications(
         ) ||
         kinds.has(attribute.kind) ||
         !text(attribute.product_excerpt, 120) ||
-        !text(attribute.supply_excerpt, 120) ||
+        !text(attribute.supply_excerpt, 120)
+      )
+        throw invalid();
+      if (
         !input.product_title.includes(attribute.product_excerpt) ||
         !candidate.title.includes(attribute.supply_excerpt)
       )
-        throw invalid();
+        invalidCitation = true;
       const productExcerpt = attribute.product_excerpt.trim().toLocaleLowerCase("en-US"),
         supplyExcerpt = attribute.supply_excerpt.trim().toLocaleLowerCase("en-US");
       if (
@@ -98,6 +107,45 @@ export function validateSupplyTitleClassifications(
     }
     if (result.relation === "compatible" && (!kinds.has("product_type") || kinds.size < 3))
       throw invalid();
+    if (invalidCitation) throw new SupplyTitleCitationError();
   }
   return structuredClone(object.classifications);
+}
+
+/** Independent literal-citation failures cannot authorize a quote or hide identity/schema errors. */
+export function validatedSupplyTitleCandidates(value: unknown, input: SupplyTitleInput) {
+  const object = value as { classifications: SupplyTitleClassification[] };
+  if (
+    !object ||
+    typeof object !== "object" ||
+    Array.isArray(object) ||
+    !keys(object, ["classifications"]) ||
+    !Array.isArray(object.classifications) ||
+    object.classifications.length > input.candidates.length
+  )
+    throw invalid();
+  const allowed = new Set(input.candidates.map((x) => x.source_ref)),
+    seen = new Set<string>();
+  for (const item of object.classifications) {
+    if (
+      !item ||
+      typeof item !== "object" ||
+      !allowed.has(item.source_ref) ||
+      seen.has(item.source_ref)
+    )
+      throw invalid();
+    seen.add(item.source_ref);
+  }
+  const accepted: SupplyTitleClassification[] = [];
+  let citationFailure: SupplyTitleCitationError | undefined;
+  for (const item of object.classifications) {
+    try {
+      accepted.push(...validateSupplyTitleClassifications({ classifications: [item] }, input));
+    } catch (error) {
+      if (!(error instanceof SupplyTitleCitationError)) throw error;
+      citationFailure = error;
+    }
+  }
+  if (!accepted.length && citationFailure) throw citationFailure;
+  return validateSupplyTitleClassifications({ classifications: accepted }, input);
 }

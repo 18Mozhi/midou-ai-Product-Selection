@@ -4,6 +4,7 @@ import type { Pool, PoolConnection, RowDataPacket, ResultSetHeader } from "mysql
 import { amazonAsin } from "./competitor-discovery-policy.js";
 import {
   validateSupplyTitleClassifications,
+  SupplyTitleCitationError,
   type SupplyTitleClassifier,
   type SupplyTitleContext,
 } from "./supply-title-classification.js";
@@ -267,17 +268,26 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       },
       classifications: [],
     };
+    let citationFailure: SupplyTitleCitationError | undefined;
     for (let offset = 0; offset < candidates.length; offset += 10) {
       if (offset > 0) await this.renewClassificationLease(job);
-      const input = { ...context.input, candidates: candidates.slice(offset, offset + 10) },
+      const input = { ...context.input, candidates: candidates.slice(offset, offset + 10) };
+      let classifications;
+      try {
         classifications = validateSupplyTitleClassifications(
           { classifications: await this.supplyClassifier.classifySupplies(input) },
           input,
         );
+      } catch (error) {
+        if (!(error instanceof SupplyTitleCitationError)) throw error;
+        citationFailure = error;
+        continue;
+      }
       context.input.candidates.push(...input.candidates);
       context.classifications.push(...classifications);
       if (selectClassifiedSupplyQuote(context.input.product_ref, title, supplies, context)) break;
     }
+    if (!context.classifications.length && citationFailure) throw citationFailure;
     return context;
   }
 

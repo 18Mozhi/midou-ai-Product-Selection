@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { validateSupplyTitleClassifications } from "../../apps/worker/dist/supply-title-classification.js";
+import {
+  validateSupplyTitleClassifications,
+  validatedSupplyTitleCandidates,
+  SupplyTitleCitationError,
+} from "../../apps/worker/dist/supply-title-classification.js";
 import {
   isPhoneCase,
   productIdentityConfidence,
@@ -208,7 +212,13 @@ test("model supplies only classifications through the existing bounded OpenAI co
       body = JSON.parse(options.body);
       return new Response(
         JSON.stringify({
-          choices: [{ message: { content: JSON.stringify({ classifications: [result] }) } }],
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({ classifications: [{ ...result, source_ref: "c1" }] }),
+              },
+            },
+          ],
         }),
       );
     },
@@ -216,7 +226,11 @@ test("model supplies only classifications through the existing bounded OpenAI co
   assert.deepEqual(await api.classifySupplies(input), [result]);
   assert.equal(body.model, "configured-model");
   assert.equal(body.chat_template_kwargs, undefined);
-  assert.deepEqual(JSON.parse(body.messages[1].content), input);
+  assert.deepEqual(JSON.parse(body.messages[1].content), {
+    ...input,
+    product_ref: "primary",
+    candidates: input.candidates.map((c, i) => ({ ...c, source_ref: `c${i + 1}` })),
+  });
   assert.doesNotMatch(body.messages[1].content, /8\.5|price|currency/);
   for (const candidates of [
     [],
@@ -226,13 +240,51 @@ test("model supplies only classifications through the existing bounded OpenAI co
     await assert.rejects(api.classifySupplies({ ...input, candidates }), /input_invalid/);
 });
 
+test("short model references restore the exact original candidate even when results omit or reorder entries", async () => {
+  const original = {
+    ...input,
+    candidates: [
+      { ...input.candidates[0], source_ref: "111:00000000-0000-4000-8000-000000000001" },
+      { ...input.candidates[0], source_ref: "222:00000000-0000-4000-8000-000000000002" },
+    ],
+  };
+  const api = new OpenAiIntelligenceProductClassifier(
+    "configured-model",
+    "http://model.test/v1",
+    "",
+    1000,
+    async (_url, options) => {
+      const payload = JSON.parse(JSON.parse(options.body).messages[1].content);
+      assert.deepEqual(
+        payload.candidates.map((c) => c.source_ref),
+        ["c1", "c2"],
+      );
+      return Response.json({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify({ classifications: [{ ...result, source_ref: "c2" }] }),
+            },
+          },
+        ],
+      });
+    },
+  );
+  assert.deepEqual(await api.classifySupplies(original), [
+    { ...result, source_ref: original.candidates[1].source_ref },
+  ]);
+});
+
 test("supply model cannot cite translated or supply-only attributes as primary evidence", async () => {
   const translated = structuredClone(result);
   translated.attributes = translated.attributes.map((attribute) => ({
     ...attribute,
     product_excerpt: attribute.supply_excerpt,
   }));
-  const responses = [{ classifications: [translated] }, { classifications: [] }];
+  const responses = [
+    { classifications: [{ ...translated, source_ref: "c1" }] },
+    { classifications: [] },
+  ];
   const api = new OpenAiIntelligenceProductClassifier(
     "configured-model",
     "http://model.test/v1",
@@ -240,7 +292,7 @@ test("supply model cannot cite translated or supply-only attributes as primary e
     1000,
     async (_url, options) => {
       const body = JSON.parse(options.body);
-      assert.deepEqual(JSON.parse(body.messages[1].content), input);
+      assert.equal(JSON.parse(body.messages[1].content).candidates[0].source_ref, "c1");
       return Response.json({
         choices: [{ message: { content: JSON.stringify(responses.shift()) } }],
       });
@@ -266,7 +318,7 @@ test("Qwen 3.5 supply and intelligence classification use the documented non-thi
         const body = JSON.parse(options.body);
         bodies.push(body);
         const value = body.messages[0].content.includes("Compare the English Amazon")
-          ? { classifications: [result] }
+          ? { classifications: [{ ...result, source_ref: "c1" }] }
           : {
               relation: "unrelated",
               rationale: "No physical product demand.",
@@ -413,6 +465,61 @@ function batchHarness(
     run: () => worker.classifySupplyTitles(job),
   };
 }
+
+test("literal-citation rejection preserves a separately validated candidate but identity errors fail closed", () => {
+  const second = { ...input.candidates[0], source_ref: "second" };
+  const scoped = { ...input, candidates: [...input.candidates, second] };
+  const bad = structuredClone(result);
+  bad.attributes[0].supply_excerpt = "not in original";
+  const good = { ...result, source_ref: "second" };
+  assert.deepEqual(validatedSupplyTitleCandidates({ classifications: [bad, good] }, scoped), [
+    good,
+  ]);
+  assert.throws(
+    () => validatedSupplyTitleCandidates({ classifications: [bad] }, scoped),
+    SupplyTitleCitationError,
+  );
+  for (const items of [
+    [good, { ...bad, source_ref: "unknown" }],
+    [good, good],
+    [good, { ...bad, attributes: "invalid" }],
+    [
+      good,
+      {
+        ...bad,
+        attributes: [bad.attributes[0], { ...bad.attributes[1], extra: true }, bad.attributes[2]],
+      },
+    ],
+  ])
+    assert.throws(
+      () => validatedSupplyTitleCandidates({ classifications: items }, scoped),
+      /classification_invalid/,
+    );
+});
+
+test("a citation-rejected batch does not hide a later independently validated quote", async () => {
+  const h = batchHarness(60, (value, batch) => {
+    if (batch === 1) throw new SupplyTitleCitationError();
+    return [{ ...result, source_ref: value.candidates[0].source_ref }];
+  });
+  const value = await h.run();
+  assert.equal(h.calls.length, 2);
+  assert.equal(h.renewals.length, 1);
+  assert.equal(
+    selectClassifiedSupplyQuote(input.product_ref, title, h.supplies, value).item.externalId,
+    "11",
+  );
+  const allBad = batchHarness(60, () => {
+    throw new SupplyTitleCitationError();
+  });
+  await assert.rejects(allBad.run(), SupplyTitleCitationError);
+  assert.equal(allBad.calls.length, 6);
+  const network = batchHarness(60, () => {
+    throw Object.assign(new Error("private"), { code: "intelligence_model_timeout" });
+  });
+  await assert.rejects(network.run(), { code: "intelligence_model_timeout" });
+  assert.equal(network.calls.length, 1);
+});
 
 test("a compatible quote after the first ten is found without classifying later batches", async () => {
   const h = batchHarness(60, (value, batch) =>

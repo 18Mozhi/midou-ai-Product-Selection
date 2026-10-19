@@ -1,4 +1,19 @@
 {
+  "selectionSupplyCitationIsolation20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-supply-citation-isolation.md",
+    "sourceFiles": [
+      "apps/worker/src/supply-title-classification.ts",
+      "apps/worker/src/intelligence-product-association.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/supply-title-classification.test.mjs",
+      "tests/unit/automatic-evidence-scoring.test.mjs",
+      "tests/unit/selection-pipeline-completion.test.mjs"
+    ],
+    "contract": "Use model-local short references and restore original evidence identities. Isolate only literal-citation failures; preserve full schema/identity/attribute/conflict validation and final caller checks. Continue existing bounded later batches only for typed citation failures; no new retry/timeout/concurrency. All-invalid, unknown refs, schema, network and lease errors remain fail closed. No API/schema/config/dependency/Python change; BaoTa Node restart required."
+  },
   "selectionProjectionPointAdmission20261020": {
     "status": "implemented",
     "requirements": "docs/selection-projection-point-admission.md",
