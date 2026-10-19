@@ -38,4 +38,6 @@ queueReady和claim复用同一轮次和排序；仅原已提交领取后successf
 
 07:19:12回读：原租约到期后，Worker已自然领取4ad53ea0-c224-4fff-98f3-dc7ce3de2fac，leased事件07:19:00.466，projection=competitor_snapshot，符合新进程首轮保留completion偏好；实时心跳07:19:12.399且租约延至07:21:12.399。此时仅验证首轮真实领取，完整阶段交替及后续成功结果仍待观察。
 
+07:20:19补充：Worker在07:19:59.029自然领取6894f5bf-ab80-4c76-bc19-ff633e397c34（本工作区intelligence_product_discovery），随后07:20:01.030领取3c759860-f0ef-49b7-8b2f-8c5bf603f46b（另一应得工作区competitor_snapshot）。与首条形成completion→product_search→completion；首两条均已succeeded，找品任务及子查询available_result_count均14、error_code=NULL。第三条持续真实心跳，尚在running。没有人工领取或重放。该证据证明这轮自然阶段交替和实际找品返回，不证明14个新商品或整链完成、持续吞吐量或每日100达标。
+
 每日整链100个仍未通过。本轮未创建临时脚本、测试数据、浏览器标签或本地服务；既有verification/state.json未改未提交，原SHA256不变。
