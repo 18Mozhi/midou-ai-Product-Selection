@@ -41,3 +41,5 @@
 唯一周期任务279f0e9e-37df-4237-9378-954533108c3a于21:24:45.601Z自然创建并于21:28:09.234Z成功，归属当前工作区99a2e4be-1796-4030-a42a-a2d95138679d/原组织，competitor9a7d53d4-ff08-42bd-be07-26fae3596977，ASIN B09PDLBFKY，opportunity41b82018-3418-4e69-a98e-73b482093d59（YISHU 6Ft Surge Protector…）。其此前latest_snapshot_id为NULL，旧8月任务dead_letter/validation_failed与succeeded_empty保持原样；新的普通auto-refresh任务未重置这些历史。21:31:06Z正式最新详情查询验证snapshot1101b901-b603-4103-9120-3ac2de577dc2 valid_detail=1，captured_at=21:28:08.493Z，USD9.98、rating4.6、reviews54460、rank仍NULL。证明同工作区首次详情的自然准入、采集和投影成功，不等于该商品整链已齐或Router Cooling Fan主品已修复；每日仍1/100。
 
 16条详情扇出来自另外两个仍活动工作区，不计当前工作区产量。21:30:35Z核对它们的latest_snapshot非空仅为21:17/21:23的搜索观察，正式latestCompetitorDetailSnapshotSql全为NULL，所以不能误判为已有完整详情后的重复采集，也未取消这些真实补齐任务。既有批次扇出解释容量短时超过阈值，未宣称硬预留或强制降到1000。
+
+21:33:18Z进一步核对当前身份门：已补详情的41b82018-3418-4e69-a98e-73b482093d59仍primary_asin=NULL、candidate_present=0；Router Cooling Fan的222094fd-12d6-4398-89f8-5e9a1c5a131c为B0B5DJ6KF7、candidate_present=1、waiting_evidence。因此自然首详情成功只能证明恢复链路，不能签收核心有效商品的优先完成；后续调度需要依据这一真实差异继续核对，不能因legacy记录年龄更老而推断其当前自动资格，也未据此删除/归档任何旧记录。
