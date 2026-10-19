@@ -1,4 +1,8 @@
 import { recordSelectionPipelineCompletion } from "./selection-pipeline-completion.js";
+import {
+  recoverSupplyClassifierEvaluations,
+  SUPPLY_TITLE_CLASSIFIER_REVISION,
+} from "./automatic-selection-classifier-recovery.js";
 import { createHash, randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket, ResultSetHeader } from "mysql2/promise";
 import { amazonAsin } from "./competitor-discovery-policy.js";
@@ -165,6 +169,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
 
   private async enqueueEligibleCandidates() {
     const now = this.now();
+    if (this.supplyClassifier) await recoverSupplyClassifierEvaluations(this.pool, now);
     await this.pool.query(
       "INSERT IGNORE INTO automatic_selection_evaluations (opportunity_id,organization_id,workspace_id,status,attempt_count,available_at,created_at,updated_at) " +
         "SELECT o.id,o.organization_id,o.workspace_id,'queued',0,?,?,? FROM opportunities o " +
@@ -1065,7 +1070,12 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       now,
       typeof result.error_code === "string" ? result.error_code : null,
       evidenceFingerprint,
-      JSON.stringify(result),
+      JSON.stringify({
+        ...result,
+        ...(this.supplyClassifier
+          ? { supply_title_classifier_revision: SUPPLY_TITLE_CLASSIFIER_REVISION }
+          : {}),
+      }),
       now,
       now,
       job.opportunityId,

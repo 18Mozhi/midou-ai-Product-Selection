@@ -1,4 +1,17 @@
 {
+  "selectionClassifierVersionRecovery20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-classifier-version-recovery.md",
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-classifier-recovery.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-classifier-recovery.test.mjs",
+      "tests/fixtures/supply-classifier-recovery-sql.mjs"
+    ],
+    "contract": "Recover only scoped active pending candidates with an older revision and the exact waiting classification failure. Read at most100 then atomically recheck each scoped PK; never take leases or revive terminal jobs. Stamp internal result JSON with the fixed classifier revision so same-version failures cannot loop. Preserve original worker evaluation, evidence, prices, scoring and completion gates. No public API/schema migration/config/dependency/Python change; BaoTa Node restart required."
+  },
   "selectionSupplyCitationIsolation20261020": {
     "status": "implemented",
     "requirements": "docs/selection-supply-citation-isolation.md",
