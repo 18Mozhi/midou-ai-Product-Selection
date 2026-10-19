@@ -1,4 +1,11 @@
 {
+  "selectionEvaluationPointAdmission20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-evaluation-point-admission.md",
+    "sourceFiles": ["apps/worker/src/automatic-selection-evaluation-admission.ts", "apps/worker/src/automatic-selection-evaluation-worker.ts"],
+    "testFiles": ["tests/unit/automatic-evaluation-admission.test.mjs", "tests/unit/automatic-selection-evaluation.test.mjs", "tests/unit/automatic-evidence-scoring.test.mjs", "tests/unit/automatic-classifier-recovery.test.mjs", "tests/unit/automatic-skipped-recovery.test.mjs", "tests/unit/selection-pipeline-completion.test.mjs"],
+    "contract": "Replace global evaluation INSERT SELECT with bounded ordinary full-presence candidate read and atomic scoped point INSERT IGNORE. Same original presence proof with existing evidence/key indexes, pending/lifecycle rules, 100 limit, queue shape, duplicate protection and recovery/model/lease order. No schema/API/env/dependency/Python changes; BaoTa Node restart required."
+  },
   "selectionRecommendedReadScope20261020": {
     "status": "implemented",
     "requirements": "docs/selection-recommended-read-scope.md",

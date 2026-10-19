@@ -63,7 +63,10 @@ test("historical repair admits only exact skipped successes with current primary
     120,
   );
   await worker.enqueueEligibleCandidates();
-  assert.match(calls[0].sql, /INSERT IGNORE[\s\S]*e.opportunity_id IS NULL/);
+  assert.match(
+    calls[0].sql,
+    /SELECT o.id,o.organization_id,o.workspace_id[\s\S]*e.opportunity_id IS NULL/,
+  );
   assert.match(
     calls[1].sql,
     /WHERE e.status='succeeded'[\s\S]*IN \('not_rule_candidate','primary_product_missing_or_not_pending'\)/,

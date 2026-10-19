@@ -1,3 +1,4 @@
+import { enqueueMissingSelectionEvaluations } from "./automatic-selection-evaluation-admission.js";
 import { recoverSkippedSelectionEvaluations } from "./automatic-selection-skipped-recovery.js";
 import { recordSelectionPipelineCompletion } from "./selection-pipeline-completion.js";
 import {
@@ -171,13 +172,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
   private async enqueueEligibleCandidates() {
     const now = this.now();
     if (this.supplyClassifier) await recoverSupplyClassifierEvaluations(this.pool, now);
-    await this.pool.query(
-      "INSERT IGNORE INTO automatic_selection_evaluations (opportunity_id,organization_id,workspace_id,status,attempt_count,available_at,created_at,updated_at) " +
-        "SELECT o.id,o.organization_id,o.workspace_id,'queued',0,?,?,? FROM opportunities o " +
-        "LEFT JOIN automatic_selection_evaluations e ON e.opportunity_id=o.id " +
-        `WHERE e.opportunity_id IS NULL AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted') AND ${selectionCandidateSql} LIMIT 100`,
-      [now, now, now],
-    );
+    await enqueueMissingSelectionEvaluations(this.pool, now);
     await recoverSkippedSelectionEvaluations(this.pool, now);
   }
 
