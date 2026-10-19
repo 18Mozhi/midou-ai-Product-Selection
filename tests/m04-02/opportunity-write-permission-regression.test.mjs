@@ -15,15 +15,14 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(access, /includes\("opportunity:decide"\)/);
   assert.match(access, /includes\("competitor:manage"\)/);
   assert.match(access, /includes\("supplier_quote:manage"\)/);
-  assert.match(workspace, /v-if="canDecide" class="catalogue-toolbar-actions"/);
+  assert.doesNotMatch(workspace, /catalogue-toolbar-actions|opportunities\/batch|confirmBatch/);
   assert.match(workspace, /:can-decide="canDecide"/);
   assert.match(workspace, /v-if="canManageCompetitors"[\s\S]*discoverCompetitors/);
   assert.match(workspace, /v-if="canManageSuppliers"[\s\S]*discoverSuppliers/);
-  assert.match(list, /v-if="canDecide && selectionView === 'all' && selectedIds\.length"/);
-  assert.match(list, /v-if="canDecide && selectionView === 'all'" class="opportunity-row-select"/);
+  assert.doesNotMatch(list, /opportunity-row-select|selectedIds|emit\('batch'/);
   assert.match(list, /@click="emit\('reset'\)">\s*重置/);
-  assert.match(list, /selectionView === 'all'[\s\S]*canDecide[\s\S]*'手工添加机会'/);
-  assert.match(list, /selectionView === 'all'[\s\S]*'刷新列表'[\s\S]*'查看全部机会'/);
+  assert.doesNotMatch(list, /手工添加机会/);
+  assert.match(list, /selectionView === 'all'[\s\S]*'刷新列表'[\s\S]*'查看全部选品'/);
   assert.match(
     list,
     /state === 'empty' && selectionView !== 'all'[\s\S]*emit\('manageSetup', nextSetupPath\)/,
@@ -31,7 +30,7 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(workspace, /@manage-setup="router\.push\(\$event\)"/);
   assert.match(navigation, /async function resetListFilters\(\)/);
   assert.match(workspace, /@reset="resetListFilters"/);
-  assert.match(decision, /v-if="canDecide && canAdopt"[\s\S]*aria-label="机会决策操作"/);
+  assert.match(decision, /v-if="canDecide && canAdopt"[\s\S]*aria-label="选品决策操作"/);
   assert.match(decision, /v-else-if="canDecide"[\s\S]*opportunity-decision-waiting/);
   assert.doesNotMatch(decision, /createEvidenceTask|创建补采任务/);
   assert.match(

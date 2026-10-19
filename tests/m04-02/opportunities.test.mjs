@@ -319,7 +319,8 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(listWeb, /评分、市场、竞争、成本和风险五项质量门均已通过/);
   assert.doesNotMatch(detailInsightsWeb, /达到来源门槛即可进入推荐/);
   assert.match(evidenceWeb, /证据新鲜度：观测于/);
-  assert.match(webContract, /阶段[\s\S]*负责人[\s\S]*批量指派[\s\S]*批量复核[\s\S]*批量归档/);
+  assert.match(listWeb, /阶段[\s\S]*已归档/);
+  assert.doesNotMatch(webContract, /批量指派|批量复核|批量归档|filters.owner_id|memberOptions/);
   assert.doesNotMatch(webContract, /创建补采任务/);
   assert.doesNotMatch(web, /evidence-completion-tasks/);
   assert.match(access, /route\.query\.from/);

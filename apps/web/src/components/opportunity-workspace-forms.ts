@@ -9,7 +9,6 @@ export function createOpportunityWorkspaceForms() {
       coverage_status: "",
       blocking_reason: "",
       lifecycle_status: "",
-      owner_id: "",
     }),
   };
 }

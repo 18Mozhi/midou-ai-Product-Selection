@@ -164,47 +164,6 @@
   color: var(--so-text-muted);
   font-size: 13px;
 }
-.opportunity-row-select {
-  position: absolute;
-  z-index: 2;
-  inset: 0 auto 0 0;
-  width: 44px;
-  display: grid;
-  place-items: center;
-}
-.opportunity-row-select input {
-  width: 20px;
-  height: 20px;
-}
-.opportunity-batch-bar {
-  position: sticky;
-  z-index: 4;
-  top: 8px;
-  margin-top: 12px;
-  padding: 10px 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--so-primary);
-  border-radius: 10px;
-  background: var(--so-bg-elevated);
-}
-.opportunity-batch-bar span {
-  margin-right: auto;
-  font-weight: 750;
-}
-.opportunity-batch-bar .danger {
-  color: var(--so-danger);
-}
-.opportunity-batch-dialog select {
-  width: 100%;
-  min-height: 42px;
-  padding: 9px 11px;
-  border: 1px solid var(--so-border);
-  border-radius: 9px;
-  color: var(--so-text);
-  background: var(--so-bg);
-}
 .opportunity-detail > header {
   padding: 5px 5px 18px;
   display: flex;

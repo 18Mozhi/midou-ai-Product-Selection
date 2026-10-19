@@ -12,7 +12,6 @@ interface OpportunityWorkspaceNavigationOptions {
   router: Pick<Router, "push" | "replace">;
   filters: OpportunityWorkspaceForms["filters"];
   selectionView: Ref<OpportunitySelectionView>;
-  selectedOpportunityIds: Ref<string[]>;
   page: Ref<number>;
   pageCount: ComputedRef<number>;
   tab: Ref<OpportunityTypes.OpportunityTab>;
@@ -20,17 +19,7 @@ interface OpportunityWorkspaceNavigationOptions {
 }
 
 export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceNavigationOptions) {
-  const {
-    route,
-    router,
-    filters,
-    selectionView,
-    selectedOpportunityIds,
-    page,
-    pageCount,
-    tab,
-    load,
-  } = options;
+  const { route, router, filters, selectionView, page, pageCount, tab, load } = options;
 
   function syncListRoute() {
     filters.q = typeof route.query.q === "string" ? route.query.q : "";
@@ -43,7 +32,6 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
       typeof route.query.blocking_reason === "string" ? route.query.blocking_reason : "";
     filters.lifecycle_status =
       typeof route.query.lifecycle_status === "string" ? route.query.lifecycle_status : "";
-    filters.owner_id = typeof route.query.owner_id === "string" ? route.query.owner_id : "";
     selectionView.value =
       route.query.view === "rule_candidates"
         ? "rule_candidates"
@@ -66,7 +54,6 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
         coverage_status: filters.coverage_status || undefined,
         blocking_reason: filters.blocking_reason || undefined,
         lifecycle_status: filters.lifecycle_status || undefined,
-        owner_id: filters.owner_id || undefined,
         view: selectionView.value === "recommended" ? undefined : selectionView.value,
       },
     });
@@ -84,7 +71,6 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
 
   async function setSelectionView(nextView: OpportunitySelectionView) {
     if (selectionView.value === nextView) return;
-    selectedOpportunityIds.value = [];
     await router.push({
       query: {
         ...route.query,

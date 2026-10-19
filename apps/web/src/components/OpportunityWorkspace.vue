@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineAsyncComponent, ref } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 const OpportunityListPanel = defineAsyncComponent(() => import("./OpportunityListPanel.vue"));
@@ -23,7 +23,6 @@ const OpportunityWorkspaceDialogs = defineAsyncComponent(
 import { createOpportunityWorkspaceForms } from "./opportunity-workspace-forms";
 import UiStatePanel from "./UiStatePanel.vue";
 import SelectionProductHeader from "./SelectionProductHeader.vue";
-import { useModalDialog } from "../use-modal-dialog";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import {
   formatOpportunityTime as freshness,
@@ -42,7 +41,6 @@ import { useOpportunityWorkspaceDecisionFocus } from "./use-opportunity-workspac
 import { useOpportunityWorkspaceLifecycle } from "./use-opportunity-workspace-lifecycle";
 import { useOpportunityWorkspaceWriteScopes } from "./use-opportunity-workspace-write-scopes";
 import { useOpportunityWorkspaceCollectionActions } from "./use-opportunity-workspace-collection-actions";
-import { useOpportunityWorkspaceListState } from "./use-opportunity-workspace-list-state";
 import "../opportunities.css";
 import "../opportunity-profit.css";
 import "../selection-catalogue.css";
@@ -57,8 +55,6 @@ const props = defineProps<{
   request = createApiClient(props.apiBaseUrl),
   state = ref<OpportunityTypes.OpportunityWorkspaceState>("loading"),
   items = ref<OpportunityTypes.OpportunitySummary[]>([]),
-  memberOptions = ref<Array<{ id: string; label: string }>>([]),
-  selectedOpportunityIds = ref<string[]>([]),
   detail = ref<OpportunityTypes.OpportunityDetail | null>(null),
   profit = ref<OpportunityTypes.OpportunityProfitAnalysis | null>(null),
   profitLoadState = ref<"loading" | "ready" | "error">("loading"),
@@ -82,10 +78,6 @@ const props = defineProps<{
   downstream = ref({ competitors: 0, snapshots: 0, searches: 0, suppliers: 0 }),
   tab = ref<OpportunityTypes.OpportunityTab>("overview"),
   showDecision = ref(false),
-  showBatch = ref(false),
-  batchAction = ref<"assign" | "archive" | "review">("assign"),
-  batchReason = ref(""),
-  batchAssigneeId = ref(""),
   decisionAction = ref<"adopt" | "observe" | "reject">("observe"),
   decisionReason = ref("");
 let workspaceActive = true;
@@ -94,11 +86,7 @@ const { pendingDecisionFocus, captureDecisionFocus, restoreDecisionFocus } =
     opportunityId: () => props.opportunityId,
     workspaceActive: () => workspaceActive,
   });
-const { pageCount, currentPageSelectedItems, outsideCurrentPageSelectedCount } =
-  useOpportunityWorkspaceListState({ items, selectedOpportunityIds, total });
-let batchDialogGeneration = 0;
-let batchIntentGeneration = 0;
-let batchSelectionGeneration = 0;
+const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
 let decisionDialogGeneration = 0;
 let writeScopeGeneration = 0;
 const { writeScopeKey, beginScopedWrite, finishScopedWrite, pendingWriteCount } =
@@ -108,12 +96,6 @@ const { writeScopeKey, beginScopedWrite, finishScopedWrite, pendingWriteCount } 
     busy,
   });
 const { filters } = createOpportunityWorkspaceForms();
-const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
-  () => showBatch.value,
-  () => (showBatch.value = false),
-  undefined,
-  { trapFocus: true },
-);
 const {
   canDecide,
   canManageCompetitors,
@@ -148,7 +130,6 @@ const {
   opportunityId: () => props.opportunityId,
   state,
   items,
-  memberOptions,
   detail,
   profit,
   profitLoadState,
@@ -184,7 +165,6 @@ const {
   router,
   filters,
   selectionView,
-  selectedOpportunityIds,
   page,
   pageCount,
   tab,
@@ -279,48 +259,7 @@ async function queueScore() {
     message.value = queueReceipt;
   }
 }
-function openBatch(action: "assign" | "archive" | "review") {
-  if (!currentPageSelectedItems.value.length) return;
-  batchAction.value = action;
-  batchReason.value = "";
-  batchAssigneeId.value = "";
-  showBatch.value = true;
-}
-async function confirmBatch() {
-  if (busy.value) return;
-  const selectedItems = currentPageSelectedItems.value;
-  if (!selectedItems.length || !batchReason.value.trim()) return;
-  const dialogGeneration = batchDialogGeneration,
-    intentGeneration = batchIntentGeneration,
-    selectionGeneration = batchSelectionGeneration,
-    routePath = route.fullPath,
-    opportunityId = props.opportunityId;
-  const result = await write("/opportunities/batch", {
-    action: batchAction.value,
-    items: selectedItems.map((item) => ({ id: item.id, expected_version: item.version })),
-    reason: batchReason.value.trim(),
-    assignee_id: batchAction.value === "assign" ? batchAssigneeId.value : null,
-  });
-  if (!result || route.fullPath !== routePath || props.opportunityId !== opportunityId) return;
-
-  if (batchDialogGeneration === dialogGeneration) showBatch.value = false;
-  if (
-    batchIntentGeneration === intentGeneration &&
-    batchSelectionGeneration === selectionGeneration
-  )
-    selectedOpportunityIds.value = [];
-  const completionGeneration = batchDialogGeneration;
-  await load();
-  if (
-    route.fullPath === routePath &&
-    props.opportunityId === opportunityId &&
-    batchDialogGeneration === completionGeneration &&
-    !showBatch.value
-  )
-    message.value = `批量操作已完成 ${result.affected_count} 项，每个选品均保留独立事件。`;
-}
 function closeTransientDialogs() {
-  showBatch.value = false;
   showDecision.value = false;
   decisionAction.value = "observe";
   decisionReason.value = "";
@@ -328,11 +267,9 @@ function closeTransientDialogs() {
 useOpportunityWorkspaceLifecycle({
   route,
   opportunityId: () => props.opportunityId,
-  showBatch,
   showDecision,
   decisionAction,
   decisionReason,
-  selectedOpportunityIds,
   busy,
   detail,
   profit,
@@ -350,15 +287,6 @@ useOpportunityWorkspaceLifecycle({
   closeTransientDialogs,
   advanceDecisionDialog: () => {
     decisionDialogGeneration += 1;
-  },
-  advanceBatchDialog: () => {
-    batchDialogGeneration += 1;
-  },
-  advanceBatchIntent: () => {
-    batchIntentGeneration += 1;
-  },
-  advanceBatchSelection: () => {
-    batchSelectionGeneration += 1;
   },
   advanceWriteScope: () => {
     writeScopeGeneration += 1;
@@ -384,20 +312,13 @@ useOpportunityWorkspaceLifecycle({
       :state="state"
       :request-id="requestId"
       :filters="filters"
-      :member-options="memberOptions"
-      :selected-ids="selectedOpportunityIds"
-      :current-page-selected-count="currentPageSelectedItems.length"
-      :outside-current-page-selected-count="outsideCurrentPageSelectedCount"
       :page="page"
-      :can-decide="canDecide"
       :automation-readiness="automationReadiness"
       @apply="applyListFilters"
-      @batch="openBatch"
       @manage-setup="router.push($event)"
       @page="goListPage"
       @reset="resetListFilters"
       @view="setSelectionView"
-      @update:selected-ids="selectedOpportunityIds = $event"
     />
     <template v-else
       ><UiStatePanel
@@ -529,53 +450,5 @@ useOpportunityWorkspaceLifecycle({
       :has-detail="Boolean(detail)"
       @decide="decide"
     />
-    <dialog
-      v-if="canDecide"
-      ref="batchDialogElement"
-      class="opportunity-modal opportunity-batch-dialog"
-      aria-label="选品批量操作影响预览"
-      @cancel="handleBatchCancel"
-    >
-      <form @submit.prevent="confirmBatch">
-        <header>
-          <p>影响预览</p>
-          <h3>
-            批量{{
-              batchAction === "assign" ? "指派" : batchAction === "archive" ? "归档" : "复核"
-            }}
-          </h3>
-        </header>
-        <p>
-          本次仅处理当前结果中已选的
-          {{ currentPageSelectedItems.length }} 个选品；任一版本变化都会整批回滚。
-        </p>
-        <p v-if="outsideCurrentPageSelectedCount" class="opportunity-batch-scope-note">
-          另有 {{ outsideCurrentPageSelectedCount }} 个已选商品不在当前结果中，不会随本次操作提交。
-        </p>
-        <label v-if="batchAction === 'assign'">
-          负责人
-          <select v-model="batchAssigneeId" required>
-            <option value="" disabled>请选择可访问当前工作区的成员</option>
-            <option v-for="member in memberOptions" :key="member.id" :value="member.id">
-              {{ member.label }}
-            </option>
-          </select>
-        </label>
-        <aside v-if="batchAction === 'review'">
-          每个选品会进入“验证中”阶段，并创建或复用一条人工复核任务；不会自动改变决策结论。
-        </aside>
-        <aside v-else-if="batchAction === 'archive'">
-          已归档选品默认不在列表显示，可通过“阶段：已归档”筛选恢复查看。
-        </aside>
-        <label>
-          操作原因
-          <textarea v-model="batchReason" required maxlength="1000"></textarea>
-        </label>
-        <footer>
-          <button type="button" @click="showBatch = false">返回</button>
-          <button type="submit" :disabled="busy">确认执行</button>
-        </footer>
-      </form>
-    </dialog>
   </section>
 </template>

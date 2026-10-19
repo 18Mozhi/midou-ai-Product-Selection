@@ -26,7 +26,6 @@ interface OpportunityWorkspaceReadOptions {
   opportunityId: () => string | undefined;
   state: Ref<OpportunityTypes.OpportunityWorkspaceState>;
   items: Ref<OpportunityTypes.OpportunitySummary[]>;
-  memberOptions: Ref<Array<{ id: string; label: string }>>;
   detail: Ref<OpportunityTypes.OpportunityDetail | null>;
   profit: Ref<OpportunityTypes.OpportunityProfitAnalysis | null>;
   profitLoadState: Ref<OpportunityTypes.OpportunityPartialLoadState>;
@@ -56,7 +55,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
     opportunityId: getOpportunityId,
     state,
     items,
-    memberOptions,
     detail,
     profit,
     profitLoadState,
@@ -311,17 +309,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
       if (!isCurrent()) return;
       items.value = result.data;
       const readinessPromise = loadAutomationReadiness(isCurrent, controller.signal);
-      try {
-        memberOptions.value = (
-          await request<any[]>("/opportunities/member-options", { signal: controller.signal })
-        ).data;
-      } catch (error) {
-        if (!isCurrent()) return;
-        if (!(error instanceof ApiClientError)) throw error;
-        memberOptions.value = [];
-        requestId.value = error.requestId;
-        message.value = "选品已加载；组织成员选项暂不可用，批量指派需稍后重试。";
-      }
       await readinessPromise;
       if (!isCurrent()) return;
       total.value = (result.meta as { total: number }).total;

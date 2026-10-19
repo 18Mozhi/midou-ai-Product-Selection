@@ -366,21 +366,6 @@ html[data-design="commerce"] #app .catalog-product-metrics {
   font-size: 13px;
   font-weight: 500;
 }
-html[data-design="commerce"] #app .catalog-product > .opportunity-row-select {
-  position: absolute;
-  inset: 10px auto auto 10px;
-  height: 44px;
-  z-index: 1;
-  padding: 3px;
-  background: var(--commerce-color-0);
-  border-radius: 3px;
-}
-html[data-design="commerce"] #app .catalog-product input[type="checkbox"] {
-  min-height: 18px;
-  width: 18px;
-  height: 18px;
-  accent-color: var(--so-primary);
-}
 .product-catalog[data-display="list"] .catalog-products {
   grid-template-columns: 1fr;
   gap: 8px;

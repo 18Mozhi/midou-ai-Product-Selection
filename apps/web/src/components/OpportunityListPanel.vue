@@ -17,7 +17,6 @@ interface OpportunityFilters {
   coverage_status: string;
   blocking_reason: string;
   lifecycle_status: string;
-  owner_id: string;
 }
 type Opportunity = OpportunitySummary;
 const displayMode = ref<"grid" | "list">("grid");
@@ -34,7 +33,6 @@ const filterQueryKeys = [
   "coverage_status",
   "blocking_reason",
   "lifecycle_status",
-  "owner_id",
 ] as const;
 
 const props = defineProps<{
@@ -44,12 +42,7 @@ const props = defineProps<{
     requestId: string;
     filters: OpportunityFilters;
     selectionView: SelectionView;
-    memberOptions: Array<{ id: string; label: string }>;
-    selectedIds: string[];
-    currentPageSelectedCount: number;
-    outsideCurrentPageSelectedCount: number;
     page: number;
-    canDecide: boolean;
     automationReadiness: AutomaticSelectionReadiness | null;
   }>(),
   failedImageSources = reactive(new Map<string, string>()),
@@ -69,8 +62,6 @@ const props = defineProps<{
     apply: [];
     page: [value: number];
     view: [value: SelectionView];
-    "update:selectedIds": [value: string[]];
-    batch: [value: "assign" | "archive" | "review"];
     manageSetup: [path: string];
     reset: [];
   }>(),
@@ -318,13 +309,6 @@ watch(imageFailureResetSources, (items) => {
               <option value="rejected">已驳回</option>
               <option value="archived">已归档</option>
             </select></label
-          ><label
-            >负责人<select v-model="filters.owner_id">
-              <option value="">全部负责人</option>
-              <option v-for="member in memberOptions" :key="member.id" :value="member.id">
-                {{ member.label }}
-              </option>
-            </select></label
           >
           <footer class="opportunity-filter-actions">
             <button class="filter-apply-action secondary so-action-secondary" type="submit">
@@ -392,66 +376,8 @@ watch(imageFailureResetSources, (items) => {
       </div>
     </header>
     <p class="catalog-data-note">购买提示为公开下限，不等于精确销量；未采集的数据保持未知。</p>
-    <nav
-      v-if="canDecide && selectionView === 'all' && selectedIds.length"
-      class="opportunity-batch-bar"
-      aria-label="选品批量操作"
-    >
-      <div class="opportunity-batch-summary" aria-live="polite">
-        <strong>已选 {{ selectedIds.length }} 项</strong>
-        <small v-if="currentPageSelectedCount">
-          本次仅处理当前页已选的 {{ currentPageSelectedCount }} 项
-          <template v-if="outsideCurrentPageSelectedCount">
-            · 另有 {{ outsideCurrentPageSelectedCount }} 项不在当前结果中
-          </template>
-        </small>
-        <small v-else>当前结果中没有勾选的商品，切换筛选或清除选择后再操作。</small>
-      </div>
-      <button
-        type="button"
-        :disabled="currentPageSelectedCount === 0"
-        @click="emit('batch', 'assign')"
-      >
-        批量指派
-      </button>
-      <button
-        type="button"
-        :disabled="currentPageSelectedCount === 0"
-        @click="emit('batch', 'review')"
-      >
-        批量复核
-      </button>
-      <button
-        type="button"
-        class="danger"
-        :disabled="currentPageSelectedCount === 0"
-        @click="emit('batch', 'archive')"
-      >
-        批量归档
-      </button>
-    </nav>
     <div class="catalog-products">
-      <article
-        v-for="item in items"
-        :key="item.id"
-        class="catalog-product"
-        :class="{ 'is-selectable': canDecide && selectionView === 'all' }"
-      >
-        <label v-if="canDecide && selectionView === 'all'" class="opportunity-row-select">
-          <input
-            type="checkbox"
-            :checked="selectedIds.includes(item.id)"
-            :aria-label="`选择商品：${item.name}`"
-            @change="
-              emit(
-                'update:selectedIds',
-                selectedIds.includes(item.id)
-                  ? selectedIds.filter((id) => id !== item.id)
-                  : [...selectedIds, item.id],
-              )
-            "
-          />
-        </label>
+      <article v-for="item in items" :key="item.id" class="catalog-product">
         <RouterLink
           :to="{
             path: `/opportunities/${item.id}`,

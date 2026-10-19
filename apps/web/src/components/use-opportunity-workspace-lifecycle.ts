@@ -5,11 +5,9 @@ import type * as OpportunityTypes from "./opportunity-workspace-types";
 interface OpportunityWorkspaceLifecycleOptions {
   route: Pick<RouteLocationNormalizedLoaded, "fullPath" | "path" | "query">;
   opportunityId: () => string | undefined;
-  showBatch: Ref<boolean>;
   showDecision: Ref<boolean>;
   decisionAction: Ref<"adopt" | "observe" | "reject">;
   decisionReason: Ref<string>;
-  selectedOpportunityIds: Ref<string[]>;
   busy: Ref<boolean>;
   detail: Ref<OpportunityTypes.OpportunityDetail | null>;
   profit: Ref<OpportunityTypes.OpportunityProfitAnalysis | null>;
@@ -24,9 +22,6 @@ interface OpportunityWorkspaceLifecycleOptions {
   setWorkspaceActive: (active: boolean) => void;
   closeTransientDialogs: () => void;
   advanceDecisionDialog: () => void;
-  advanceBatchDialog: () => void;
-  advanceBatchIntent: () => void;
-  advanceBatchSelection: () => void;
   advanceWriteScope: () => void;
 }
 
@@ -34,11 +29,9 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
   const {
     route,
     opportunityId,
-    showBatch,
     showDecision,
     decisionAction,
     decisionReason,
-    selectedOpportunityIds,
     busy,
     detail,
     profit,
@@ -53,9 +46,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     setWorkspaceActive,
     closeTransientDialogs,
     advanceDecisionDialog,
-    advanceBatchDialog,
-    advanceBatchIntent,
-    advanceBatchSelection,
     advanceWriteScope,
   } = options;
   let loadQueued = false;
@@ -71,17 +61,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
   }
 
   watch(showDecision, advanceDecisionDialog, { flush: "sync" });
-  watch(() => [showBatch.value, route.fullPath, opportunityId()], advanceBatchDialog, {
-    flush: "sync",
-  });
-  watch(
-    showBatch,
-    (open) => {
-      if (open) advanceBatchIntent();
-    },
-    { flush: "sync" },
-  );
-  watch(selectedOpportunityIds, advanceBatchSelection, { deep: true, flush: "sync" });
   onDeactivated(() => {
     setWorkspaceActive(false);
     closeTransientDialogs();
@@ -142,7 +121,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
       route.query.coverage_status,
       route.query.blocking_reason,
       route.query.lifecycle_status,
-      route.query.owner_id,
       route.query.view,
       route.query.scope,
       route.query.page,

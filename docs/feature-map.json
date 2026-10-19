@@ -891,7 +891,7 @@
       "tests/e2e/ui-phase2-opportunity-contracts.spec.ts",
       "tests/e2e/m04-10-selection-http.spec.ts"
     ],
-    "contract": "Compact product-first catalogue: visible name search, existing all-width advanced filter dialog, no completed readiness card or duplicate rule-management toolbar action. Preserve every filter parameter, workspace scope, query cancellation, batching and decision gates. Empty configured catalogue refreshes instead of implying missing setup; only actual missing rule configuration prompts setup. No API, database, environment, dependency or shared drawer implementation changes."
+    "contract": "Compact product-first catalogue: visible name search, existing all-width advanced filter dialog, no completed readiness card or duplicate rule-management toolbar action. Preserve active product filters, workspace scope, query cancellation and individual decision gates. Member owner/batch flows subsequently retired; see docs/selection-retired-member-batch.md. Empty configured catalogue refreshes instead of implying missing setup; only actual missing rule configuration prompts setup. No API, database, environment, dependency or shared drawer implementation changes."
   },
   "selectionManualProductCreationRetirement20261017": {
     "status": "implemented",
@@ -905,7 +905,6 @@
       "apps/web/src/components/opportunity-workspace-forms.ts",
       "apps/web/src/components/use-opportunity-workspace-navigation.ts",
       "apps/web/src/components/use-opportunity-workspace-lifecycle.ts",
-      "apps/web/src/components/use-opportunity-workspace-list-state.ts",
       "apps/web/src/components/TrendDashboard.vue",
       "apps/web/src/components/TrendDetailPanel.vue"
     ],
@@ -915,7 +914,7 @@
       "tests/e2e/m04-01-trends.spec.ts",
       "tests/unit/trend-page-preview.test.mjs"
     ],
-    "contract": "Member manual product creation removed: toolbar, empty-state event, modal, draft/feedback, POST consumer and query-driven creation, plus trend conversion link. Preserve historical records and source labels, backend APIs, permissions, automatic pipeline, evidence, decisions and batch controls. Empty all-products refreshes. Static frontend refresh after publication; no new dependency, config, database or API contract."
+    "contract": "Member manual product creation removed: toolbar, empty-state event, modal, draft/feedback, POST consumer and query-driven creation, plus trend conversion link. Preserve historical records and source labels, backend APIs, permissions, automatic pipeline, evidence and individual decisions. Member batch controls were subsequently retired; see docs/selection-retired-member-batch.md. Empty all-products refreshes. Static frontend refresh after publication; no new dependency, config, database or API contract."
   },
   "selectionMemberErpRetirement20261017": {
     "status": "implemented",
@@ -7073,5 +7072,27 @@
       "tests/unit/trend-projection-worker-scheduling.test.mjs"
     ],
     "contract": "20 active opportunity IDs per scan; unchanged complete eligibility and within-page ordering, one scheduled product. Commit-only in-memory cursor advances on ineligible pages and wraps; full/invalid capacity keeps cursor, existing threshold rechecked. 60s cadence and minimum refresh interval unchanged; actual scheduling can be later. No schema/config/API/payload/dependency/permission changes. Real MySQL same20 equality and all1474 identities covered; diagnostics write0, natural daily100 pending."
+  },
+  "selectionRetiredMemberBatch20261019": {
+    "status": "implemented",
+    "requirements": "docs/selection-retired-member-batch.md",
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/components/use-opportunity-workspace-lifecycle.ts",
+      "apps/web/src/components/use-opportunity-workspace-navigation.ts",
+      "apps/web/src/components/use-opportunity-workspace-reads.ts",
+      "apps/web/src/opportunities.css",
+      "apps/web/src/automatic-selection.css",
+      "apps/web/src/commerce-workspace.css",
+      "apps/web/src/components/opportunity-workspace-forms.ts",
+      "apps/web/src/design/opportunity-review-tokens.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/e2e/ui-phase2-opportunity-contracts.spec.ts",
+      "tests/e2e/m04-10-selection-http.spec.ts"
+    ],
+    "contract": "Member catalogue batch assignment/review/archive, selection checkboxes/state/dialog, owner dropdown/member-options GET and obsolete CSS retired. Direct product analysis and individual decisions, reasons, gates, version/concurrency/focus and stale receipt protection preserved. Retired owner_id URLs no longer filter member requests; backend batch/member/filter contracts/history/permissions remain. No config/dependency/schema/Python change; daily100 and full UI unverified."
   }
 }

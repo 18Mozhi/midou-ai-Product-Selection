@@ -111,9 +111,6 @@ async function ready(
       ),
     }),
   );
-  await page.route("**/api/v1/opportunities/member-options", (route) =>
-    route.fulfill({ json: envelope([{ id: base.owner_id, label: "选品成员" }]) }),
-  );
   await page.route(`**/api/v1/opportunities/${opportunityId}/decisions`, (route) => {
     decided = true;
     return route.fulfill({
@@ -389,7 +386,7 @@ test("M04-02.A07/A08/A15 automatic opportunity list ignores retired creation and
     fullPage: true,
   });
   await page.getByRole("button", { name: "全部商品" }).click();
-  await expect(page.locator(".opportunity-row-select")).toHaveCount(1);
+  await expect(page.locator(".opportunity-row-select")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "手工添加", exact: true })).toHaveCount(0);
 });
 
@@ -2069,72 +2066,34 @@ test("changing opportunities closes and clears an unsubmitted decision draft", a
   expect(submittedDecisions).toEqual([]);
 });
 
-test("changing between the opportunity list and detail closes open list dialogs", async ({
+test("retired member batch workflows expose no controls and issue no member or batch requests", async ({
   page,
 }) => {
   await ready(page);
-  await readyForNextOpportunity(page);
-  await page.goto("/opportunities?view=all");
-  await expect(page.getByRole("heading", { name: /^全部 \d+ 个商品$/, level: 2 })).toBeVisible();
-
-  const switchToDetail = async () => {
-    const request = page.waitForRequest((candidate) => {
-      const url = new URL(candidate.url());
-      return url.pathname === `/api/v1/opportunities/${nextOpportunityId}`;
-    });
-    await switchOpportunityInPlace(page, nextOpportunityId);
-    await request;
-    await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
-  };
-  const returnToList = async () => {
-    await page.getByRole("link", { name: "← 返回来源列表" }).click();
-    await expect(page.getByRole("button", { name: "推荐商品", exact: true })).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
-    await expect(page.getByRole("dialog", { name: "创建机会候选" })).toHaveCount(0);
-    await expect(page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" })).toHaveCount(0);
-    await page.getByRole("button", { name: "全部商品" }).click();
-    await expect(page.getByRole("heading", { name: /^全部 \d+ 个商品$/, level: 2 })).toBeVisible();
-  };
-
-  await expect(page.getByRole("button", { name: "手工添加", exact: true })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "从 ERP 导入", exact: true })).toHaveCount(0);
-
-  await page.getByRole("checkbox", { name: `选择商品：${recommendedBase.name}` }).check();
-  await page.getByRole("button", { name: "批量归档", exact: true }).click();
-  const batchDialog = page.getByRole("dialog", { name: "选品批量操作影响预览" });
-  await expect(batchDialog).toBeVisible();
-  await switchToDetail();
-  await expect(batchDialog).toBeHidden();
-});
-
-test("P15 batch dialog traps keyboard focus and restores its trigger", async ({ page }) => {
-  await ready(page);
-  await page.goto("/opportunities?view=all");
-  await page.getByRole("checkbox", { name: `选择商品：${recommendedBase.name}` }).check();
-
-  const trigger = page.getByRole("button", { name: "批量归档", exact: true });
-  await trigger.focus();
-  await page.keyboard.press("Enter");
-
-  const dialog = page.getByRole("dialog", { name: "选品批量操作影响预览" });
-  await expect(dialog).toBeVisible();
-  await expect
-    .poll(() => dialog.evaluate((element) => element.contains(document.activeElement)))
-    .toBe(true);
-
-  const first = dialog.getByRole("textbox", { name: "操作原因" });
-  const last = dialog.getByRole("button", { name: "确认执行" });
-  await last.focus();
-  await page.keyboard.press("Tab");
-  await expect(first).toBeFocused();
-  await page.keyboard.press("Shift+Tab");
-  await expect(last).toBeFocused();
-
-  await page.keyboard.press("Escape");
-  await expect(dialog).toBeHidden();
-  await expect(trigger).toBeFocused();
+  const obsoleteRequests: string[] = [];
+  const obsoleteOwnerFilters: string[] = [];
+  page.on("request", (request) => {
+    const url = new URL(request.url());
+    const path = url.pathname;
+    if (path === "/api/v1/opportunities/member-options" || path === "/api/v1/opportunities/batch")
+      obsoleteRequests.push(path);
+    if (path === "/api/v1/opportunities" && url.searchParams.has("owner_id"))
+      obsoleteOwnerFilters.push(url.searchParams.get("owner_id")!);
+  });
+  for (const view of ["recommended", "rule_candidates", "evidence_pending", "all"]) {
+    await page.goto(`/opportunities?view=${view}&owner_id=retired-owner`);
+    await expect(page.locator(".opportunity-workspace--review")).toBeVisible();
+    await expect(page.locator(".catalog-product")).toHaveCount(1);
+    await expect(page.locator(".catalog-product input[type=checkbox]")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /^批量/ })).toHaveCount(0);
+    await expect(page.getByRole("dialog", { name: "选品批量操作影响预览" })).toHaveCount(0);
+  }
+  await page.locator(".catalog-product > a").first().click();
+  await expect(page.getByRole("heading", { name: recommendedBase.name })).toBeVisible();
+  await page.getByRole("link", { name: "← 返回来源列表" }).click();
+  await expect(page.locator(".catalog-product")).toHaveCount(1);
+  expect(obsoleteRequests).toEqual([]);
+  expect(obsoleteOwnerFilters).toEqual([]);
 });
 
 test("P18 keeps a shared write locked across cached route deactivation and refreshes its receipt", async ({
@@ -2977,11 +2936,7 @@ test("compact catalogue exposes the first product title above the fold with twen
   await expect(page.getByRole("navigation", { name: "选品批量操作", exact: true })).toHaveCount(0);
   await expect(firstTitle).toHaveText(longName);
   const firstCard = page.locator(".catalog-product").first();
-  const selectBox = await firstCard.locator(".opportunity-row-select").boundingBox();
-  const pictureBox = await firstCard.locator(".opportunity-picture").boundingBox();
-  expect(selectBox!.height).toBe(44);
-  expect(selectBox!.width).toBe(44);
-  expect(selectBox!.y + selectBox!.height).toBeLessThanOrEqual(pictureBox!.y + pictureBox!.height);
+  await expect(firstCard.locator("input[type=checkbox]")).toHaveCount(0);
   const titleLayout = await firstTitle.evaluate((element) => {
     const rect = element.getBoundingClientRect();
     const hit = document.elementFromPoint(rect.left + 8, rect.top + 8);
@@ -2993,13 +2948,12 @@ test("compact catalogue exposes the first product title above the fold with twen
   });
   expect(titleLayout.height).toBeLessThanOrEqual(titleLayout.lineHeight * 2 + 1);
   expect(titleLayout.unobscured).toBe(true);
-  await expect(page).toHaveScreenshot("compact-all-catalogue-long-title-20261018.png", {
+  await expect(page).toHaveScreenshot("compact-all-catalogue-no-batch-20261019.png", {
     fullPage: false,
   });
   const allBox = await firstTitle.boundingBox();
   expect(allBox!.y + allBox!.height).toBeLessThan(page.viewportSize()!.height - bottomReserve);
-  await page.getByRole("checkbox", { name: `选择商品：${longName}`, exact: true }).check();
-  await expect(page.getByRole("navigation", { name: "选品批量操作", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: /^批量/ })).toHaveCount(0);
 });
 
 test("catalogue advanced filters trap focus and cancel without changing the applied URL", async ({
