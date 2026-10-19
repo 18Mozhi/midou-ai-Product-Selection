@@ -12,7 +12,7 @@ import {
 
 const sourceFile = "apps/web/src/components/SourcingWorkspaceDialogs.vue";
 const reviewPath = "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json";
-const source = readFileSync(sourceFile, "utf8").replaceAll("\r\n", "\n");
+const source = readPreSelectionRebuild(sourceFile);
 const sourceHash = createHash("sha256").update(source).digest("hex");
 const review = JSON.parse(readFileSync(reviewPath, "utf8"));
 const candidateId = (signature) => `${sourceFile}#${signature}.1`;
@@ -43,7 +43,7 @@ const dialogs = [
   },
 ];
 
-test("P21 maps all current native sourcing dialog candidates to their existing actions", () => {
+test("archived P21 maps its captured native sourcing dialog candidates to their existing actions", () => {
   const current = scanSource(source, sourceFile).candidates.map((item) => item.candidateId);
   const mapped = review.actions.flatMap((action) => action.sourceCandidateIds ?? []);
   const currentForFile = current.filter((id) => id.startsWith(`${sourceFile}#`));
@@ -70,7 +70,7 @@ test("P21 maps all current native sourcing dialog candidates to their existing a
     assert.ok(definition.handler.includes("useModalDialog"));
   }
 
-  const audit = runContractAudit();
+  const audit = runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles());
   const dialogCandidates = dialogs.flatMap((dialog) => [
     candidateId(dialog.definition),
     candidateId(dialog.cancel),

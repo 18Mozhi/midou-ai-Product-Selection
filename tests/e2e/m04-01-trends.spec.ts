@@ -255,7 +255,13 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   // Both viewports capture fixed navigation at a deliberate scroll position.
   await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
-  await expect(page).toHaveScreenshot("manual-product-create-retired-trends-20261017.png", {
+  expect(
+    await page
+      .locator(".trend-detail-facts dt")
+      .first()
+      .evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)),
+  ).toBeGreaterThanOrEqual(13);
+  await expect(page).toHaveScreenshot("intelligence-detail-readable-20261019.png", {
     fullPage: true,
   });
 });

@@ -215,18 +215,7 @@ const schedulerStateWriter = new WorkerSchedulerStateWriter(
 let scheduler: QueueScheduler | null = null;
 
 const persistSchedulerState = async () => {
-  if (!scheduler) return;
-  try {
-    await schedulerStateWriter.write(scheduler.snapshot());
-  } catch {
-    console.error(
-      JSON.stringify({
-        service: "product-scout-worker",
-        status: "scheduler_state_write_failed",
-        observed_at: new Date().toISOString(),
-      }),
-    );
-  }
+  if (scheduler) await schedulerStateWriter.writeBestEffort(scheduler.snapshot());
 };
 
 const heartbeat = () => {

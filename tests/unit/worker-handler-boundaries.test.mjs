@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { WorkerSchedulerStateWriter } from "../../apps/worker/dist/worker-scheduler-state.js";
 
 const handlers = [
   ["auth-delivery-worker.ts", /processAuthDeliveryOnce/],
@@ -38,4 +39,26 @@ test("worker entrypoint only orchestrates independently implemented queue handle
   assert.ok(index.split(/\r?\n/u).filter((line) => line.trim()).length < 400);
   assert.match(index, /WorkerPollers/);
   assert.match(await readFile("apps/worker/src/worker-pollers.ts", "utf8"), /activeQueues/);
+});
+
+test("best-effort scheduler persistence keeps the original safe failure diagnostic", async () => {
+  const writer = new WorkerSchedulerStateWriter("");
+  const messages = [];
+  const original = console.error;
+  let writes = 0;
+  writer.write = async () => {
+    if (++writes === 1) throw new Error("private-payload");
+  };
+  console.error = (value) => messages.push(JSON.parse(value));
+  try {
+    await writer.writeBestEffort({});
+    await writer.writeBestEffort({});
+  } finally {
+    console.error = original;
+  }
+  assert.equal(writes, 2);
+  assert.equal(messages.length, 1);
+  assert.equal(messages[0].status, "scheduler_state_write_failed");
+  assert.equal(messages[0].service, "product-scout-worker");
+  assert.deepEqual(Object.keys(messages[0]).sort(), ["observed_at", "service", "status"]);
 });

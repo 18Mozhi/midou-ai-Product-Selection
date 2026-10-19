@@ -7,6 +7,20 @@ export class WorkerSchedulerStateWriter {
 
   constructor(private readonly filePath: string) {}
 
+  async writeBestEffort(snapshot: QueueSchedulerSnapshot): Promise<void> {
+    try {
+      await this.write(snapshot);
+    } catch {
+      console.error(
+        JSON.stringify({
+          service: "product-scout-worker",
+          status: "scheduler_state_write_failed",
+          observed_at: new Date().toISOString(),
+        }),
+      );
+    }
+  }
+
   write(snapshot: QueueSchedulerSnapshot): Promise<void> {
     if (!this.filePath) return Promise.resolve();
     this.writeChain = this.writeChain

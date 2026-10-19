@@ -392,7 +392,7 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await expect(page.getByLabel("输入类型").locator("option")).toHaveText([
     "关键词",
     "图片",
-    "机会",
+    "选品",
     "商品链接",
   ]);
   await page.getByRole("button", { name: "关闭供应商搜索" }).click();

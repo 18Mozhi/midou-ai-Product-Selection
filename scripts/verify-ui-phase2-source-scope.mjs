@@ -109,9 +109,14 @@ export async function verifySourceScope(readSource = (file) => readFile(file, "u
   for (const file of Object.keys(review.sources)) {
     assert.ok(/^(apps\/web\/src\/|config\/route-catalog\.json$)/.test(file));
     assert.ok(!file.split("/").includes(".."));
-    sourceHashes[file] = createHash("sha256")
-      .update((await readSource(path.join(repo, file))).replace(/\r\n/g, "\n"))
-      .digest("hex");
+    let source;
+    try {
+      source = await readSource(path.join(repo, file));
+    } catch (error) {
+      if (error?.code === "ENOENT") throw new Error(`stale source review: missing ${file}`);
+      throw error;
+    }
+    sourceHashes[file] = createHash("sha256").update(source.replace(/\r\n/g, "\n")).digest("hex");
   }
   for (const file of new Set(review.records.map((row) => row.testFile).filter(Boolean)))
     await readFile(path.join(repo, file), "utf8");

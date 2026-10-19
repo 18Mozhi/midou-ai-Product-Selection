@@ -33,7 +33,12 @@ test("[real-api] collection overview renders authorized HTTP facts with the rebu
   for (const width of layout.wide) expect(Math.abs(width - layout.width)).toBeLessThan(2);
   await expect(page.locator(".collection-ops")).toContainText("已暂停（熔断）");
   await expect(page.locator(".collection-ops")).toContainText("健康结果来自最近一次检查");
-  await expect(page).toHaveScreenshot("collection-overview-circuit-20261019.png", {
+  expect(
+    await page
+      .locator(".collection-health-note")
+      .evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)),
+  ).toBeGreaterThanOrEqual(13);
+  await expect(page).toHaveScreenshot("collection-overview-readable-20261019.png", {
     fullPage: true,
   });
 });

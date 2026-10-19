@@ -304,7 +304,7 @@ test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 con
   ).toBeVisible();
   await expect(
     page
-      .getByRole("navigation", { name: "机会详情返回路径" })
+      .getByRole("navigation", { name: "选品详情返回路径" })
       .getByRole("link", { name: "← 返回来源列表" }),
   ).toHaveAttribute("href", "/opportunities");
   await expect(page.getByText("暂无评分记录。")).toBeVisible();

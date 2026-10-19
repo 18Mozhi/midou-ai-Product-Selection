@@ -44,6 +44,7 @@ const freshness = (value: string) =>
       title="正在读取情报证据"
       description="读取完成后显示所选情报的详情。"
       :compact="true"
+      :hide-secondary="true"
     />
     <dl v-else class="trend-detail-facts" aria-label="情报资料">
       <div>

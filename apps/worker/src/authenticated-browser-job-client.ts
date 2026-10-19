@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import {
   ProviderAdapterFailure,
@@ -24,6 +24,8 @@ interface BrowserJobInput {
   target: Record<string, unknown>;
   requestId: string;
   traceId: string;
+  attemptCount?: number;
+  leaseToken?: string;
 }
 
 export interface AuthenticatedBrowserCollection {
@@ -99,6 +101,50 @@ export class MySqlAuthenticatedBrowserJobClient {
         input.traceId,
       ],
     );
+    if (
+      input.provider.code === "amazon_product" &&
+      input.leaseToken &&
+      Number.isInteger(input.attemptCount) &&
+      input.attemptCount! >= 2 &&
+      input.attemptCount! <= 4
+    ) {
+      signal?.throwIfAborted();
+      await heartbeat();
+      // A retry is a new browser execution, not another read of the previous failure.
+      // Fence it to the current parent lease and a failure completed before this attempt.
+      await this.pool.query(
+        "UPDATE browser_collection_jobs j JOIN collection_tasks t ON t.id=j.collection_task_id " +
+          "AND t.organization_id=j.organization_id AND t.workspace_id=j.workspace_id " +
+          "JOIN collection_task_attempts a ON a.task_id=t.id AND a.attempt_number=t.attempt_count " +
+          "JOIN collection_task_attempts previous ON previous.task_id=t.id " +
+          "AND previous.attempt_number=t.attempt_count-1 " +
+          "SET j.execution_request_json=?,j.status='queued',j.crawler_profile_id=NULL,j.crawler_run_id=NULL,j.result_json=NULL," +
+          "j.error_code=NULL,j.lease_owner=NULL,j.lease_token_hash=NULL,j.leased_at=NULL," +
+          "j.heartbeat_at=NULL,j.lease_expires_at=NULL,j.finished_at=NULL,j.updated_at=NOW(3) " +
+          "WHERE j.organization_id=? AND j.workspace_id=? AND j.collection_task_id=? " +
+          "AND j.collection_subquery_id=? AND j.provider_id=? " +
+          "AND ((j.status IN ('failed','timed_out') " +
+          "AND j.error_code IN ('timeout','network_error','rate_limited','dependency_unavailable','worker_wait_timeout')) " +
+          "OR (j.status='cancelled' AND j.error_code='worker_shutdown_cancelled')) " +
+          "AND t.status='running' AND t.lease_token_hash=UNHEX(?) AND t.lease_expires_at>NOW(3) " +
+          "AND t.attempt_count=? AND a.status='running' AND a.started_at>j.finished_at " +
+          "AND previous.status IN ('retry_scheduled','rate_limited') " +
+          "AND previous.error_code IN ('timeout','network_error','rate_limited')",
+        [
+          JSON.stringify(executionRequest),
+          input.organizationId,
+          input.workspaceId,
+          input.taskId,
+          input.subqueryId,
+          input.provider.id,
+          createHash("sha256")
+            .update("scoutops:collection-task-lease:v1\0")
+            .update(input.leaseToken)
+            .digest("hex"),
+          input.attemptCount,
+        ],
+      );
+    }
     while (Date.now() <= deadline) {
       if (signal?.aborted) {
         await this.pool.query(
@@ -146,6 +192,12 @@ export class MySqlAuthenticatedBrowserJobClient {
         );
         // Browser rows retain their raw crawler code; collection tasks use the canonical code.
         if (errorCode === "blocked_captcha") throw new ProviderAdapterFailure("captcha", false);
+        if (input.provider.code === "amazon_product") {
+          if (errorCode === "worker_wait_timeout")
+            throw new ProviderAdapterFailure("timeout", true);
+          if (errorCode === "worker_shutdown_cancelled")
+            throw new ProviderAdapterFailure("dependency_unavailable", true);
+        }
         throw new ProviderAdapterFailure(
           errorCode,
           input.provider.code === "amazon_product"

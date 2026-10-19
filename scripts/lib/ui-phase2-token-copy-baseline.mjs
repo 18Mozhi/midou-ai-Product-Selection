@@ -41,7 +41,7 @@ export function historicalTokenCopySource(file, source) {
   return cache.get(file);
 }
 
-// Read versions in one bounded Git batch. Repeated checks still verify the
+// Read versions in bounded Git batches. Repeated checks still verify the
 // complete transformed bytes; cached history never substitutes a current hash.
 function committedSources(file) {
   if (committedSourceCache.has(file)) return committedSourceCache.get(file);
@@ -52,33 +52,79 @@ function committedSources(file) {
     .split(/\r?\n/u)
     .filter(Boolean);
   if (!commits.length) return [];
-  const bytes = execFileSync("git", ["cat-file", "--batch"], {
-    input: commits.map((commit) => `${commit}:${file}\n`).join(""),
-    maxBuffer: 64 * 1024 * 1024,
-  });
-  const sources = [];
-  let offset = 0;
-  for (const commit of commits) {
-    const end = bytes.indexOf(10, offset);
-    assert.ok(end >= offset, "Incomplete historical Git header");
-    const header = bytes.subarray(offset, end).toString("utf8");
-    offset = end + 1;
-    if (header === `${commit}:${file} missing`) continue;
-    const match = /^([a-f0-9]{40,64}) blob (\d+)$/.exec(header);
-    assert.ok(match, "Unexpected historical Git object");
-    const size = Number(match[2]);
-    assert.ok(Number.isSafeInteger(size) && size >= 0 && offset + size < bytes.length);
-    assert.equal(bytes[offset + size], 10, "Incomplete historical Git blob");
-    sources.push(
-      bytes
-        .subarray(offset, offset + size)
-        .toString("utf8")
-        .replaceAll("\r\n", "\n"),
-    );
-    offset += size + 1;
-  }
-  assert.equal(offset, bytes.length, "Unexpected trailing historical Git bytes");
+  const sources = readCommittedSourceBatches(file, commits);
   committedSourceCache.set(file, sources);
+  return sources;
+}
+
+export function readCommittedSourceBatches(
+  file,
+  commits,
+  execute = execFileSync,
+  batchByteBudget = 32 * 1024 * 1024,
+) {
+  if (!commits.length) return [];
+  const maxBuffer = 64 * 1024 * 1024;
+  assert.ok(
+    Number.isSafeInteger(batchByteBudget) && batchByteBudget > 0 && batchByteBudget <= maxBuffer,
+  );
+  const metadata = execute("git", ["cat-file", "--batch-check"], {
+    input: commits.map((commit) => `${commit}:${file}\n`).join(""),
+    maxBuffer,
+  })
+    .toString("utf8")
+    .trimEnd()
+    .split("\n");
+  assert.equal(metadata.length, commits.length, "Incomplete historical Git metadata");
+  const batches = [];
+  let batch = [];
+  let batchBytes = 0;
+  for (const [index, commit] of commits.entries()) {
+    const header = metadata[index];
+    const missing = header === `${commit}:${file} missing`;
+    const match = /^([a-f0-9]{40,64}) blob (\d+)$/.exec(header);
+    assert.ok(missing || match, "Unexpected historical Git metadata");
+    const size = missing ? 0 : Number(match[2]);
+    const bytes = Buffer.byteLength(header) + 1 + (missing ? 0 : size + 1);
+    assert.ok(Number.isSafeInteger(size) && size >= 0 && bytes <= maxBuffer);
+    if (batch.length && batchBytes + bytes > batchByteBudget) {
+      batches.push(batch);
+      batch = [];
+      batchBytes = 0;
+    }
+    batch.push({ commit, header });
+    batchBytes += bytes;
+  }
+  if (batch.length) batches.push(batch);
+  const sources = [];
+  for (const batch of batches) {
+    const bytes = execute("git", ["cat-file", "--batch"], {
+      input: batch.map(({ commit }) => `${commit}:${file}\n`).join(""),
+      maxBuffer,
+    });
+    let offset = 0;
+    for (const { commit, header: expectedHeader } of batch) {
+      const end = bytes.indexOf(10, offset);
+      assert.ok(end >= offset, "Incomplete historical Git header");
+      const header = bytes.subarray(offset, end).toString("utf8");
+      assert.equal(header, expectedHeader, "Historical Git metadata changed");
+      offset = end + 1;
+      if (header === `${commit}:${file} missing`) continue;
+      const match = /^([a-f0-9]{40,64}) blob (\d+)$/.exec(header);
+      assert.ok(match, "Unexpected historical Git object");
+      const size = Number(match[2]);
+      assert.ok(Number.isSafeInteger(size) && size >= 0 && offset + size < bytes.length);
+      assert.equal(bytes[offset + size], 10, "Incomplete historical Git blob");
+      sources.push(
+        bytes
+          .subarray(offset, offset + size)
+          .toString("utf8")
+          .replaceAll("\r\n", "\n"),
+      );
+      offset += size + 1;
+    }
+    assert.equal(offset, bytes.length, "Unexpected trailing historical Git bytes");
+  }
   return sources;
 }
 

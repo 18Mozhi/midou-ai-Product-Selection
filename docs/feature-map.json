@@ -1,4 +1,40 @@
 {
+  "selectionBrowserTransientRetry20261019": {
+    "status": "implemented",
+    "requirements": "docs/browser-transient-retry.md",
+    "sourceFiles": [
+      "apps/worker/src/authenticated-browser-job-client.ts",
+      "apps/worker/src/provider-source-executor.ts",
+      "apps/worker/src/index.ts",
+      "apps/worker/src/worker-scheduler-state.ts",
+      "apps/web/src/home-dashboard.css",
+      "apps/web/src/sourcing.css",
+      "apps/web/src/trends.css",
+      "apps/web/src/styles/platform-operations.css",
+      "apps/web/src/components/TrendDetailPanel.vue",
+      "scripts/lib/ui-phase2-responsive-focus-contract.mjs",
+      "scripts/lib/ui-phase2-token-copy-baseline.mjs",
+      "scripts/build-ui-phase2-p72-action-review.mjs",
+      "scripts/build-ui-phase2-p73-action-review.mjs",
+      "scripts/verify-ui-phase2-source-scope.mjs"
+    ],
+    "testFiles": [
+      "tests/unit/browser-transient-retry.test.mjs",
+      "tests/unit/worker-handler-boundaries.test.mjs",
+      "tests/unit/design-quality-gate.test.mjs",
+      "tests/unit/historical-source-batches.test.mjs",
+      "tests/unit/ui-phase2-p21-dialog-action-map.test.mjs",
+      "tests/unit/ui-phase2-p72-action-review.test.mjs",
+      "tests/unit/ui-phase2-p73-action-review.test.mjs",
+      "tests/unit/ui-phase2-source-scope.test.mjs",
+      "tests/unit/ui-state-panel-secondary-wiring.test.mjs",
+      "tests/e2e/collection-console-http.spec.ts",
+      "tests/e2e/m02-06-home-mobile.spec.ts",
+      "tests/e2e/m04-01-trends.spec.ts",
+      "tests/e2e/m04-06-sourcing.spec.ts"
+    ],
+    "contract": "Only an existing authorized Amazon parent retry with matching scope, current live task lease, current attempt and prior retryable attempt can requeue an older transient failed browser slot. Preserve successful caches, blocked/parser failures, attempt limits, backoff, source circuits and historical run/attempt rows. No HTTP/Python/schema/config/dependency change; no replay of dead letters or claim of daily100."
+  },
   "selectionCataloguePurchasePrice20261019": {
     "status": "implemented",
     "requirements": "docs/catalogue-purchase-price.md",

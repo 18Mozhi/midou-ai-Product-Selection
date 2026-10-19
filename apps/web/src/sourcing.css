@@ -1098,7 +1098,7 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
 }
 .sourcing-record-meta :is(small, em) {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-style: normal;
   line-height: 1.5;
 }

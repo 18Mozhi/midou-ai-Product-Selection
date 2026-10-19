@@ -393,6 +393,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
                   organizationId: task.organizationId,
                   workspaceId: task.workspaceId,
                   taskId: task.id,
+                  attemptCount: task.attemptCount,
+                  leaseToken: task.leaseToken,
                   subqueryId: query.id,
                   provider,
                   target: query.target,
