@@ -1,4 +1,18 @@
 {
+  "selectionCollectedResultAdmission20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-collected-result-admission.md",
+    "sourceFiles": [
+      "apps/worker/src/collected-product-projection-policy.ts",
+      "apps/worker/src/trend-projection-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/collected-product-projection.test.mjs",
+      "tests/unit/trend-projection-worker-scheduling.test.mjs",
+      "tests/fixtures/collected-product-projection-sql.mjs"
+    ],
+    "contract": "Already-collected successful scoped automatic Amazon search evidence gets a distinct preclaim under the original completion1000 threshold, alternating with the original repair/fresh turn. Raw intake997 candidate unchanged. Ordinary read then PK/evidence/status/capacity recheck; original provenance, model, projection, fanout, lease, source and completion gates unchanged. No API/env/schema/dependency/frontend/Python change; existing capacity setting needs BaoTa Node restart."
+  },
   "selectionProductSearchTurns20261020": {
     "status": "implemented",
     "requirements": "docs/selection-product-search-turns.md",

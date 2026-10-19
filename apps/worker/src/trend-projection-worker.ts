@@ -1,4 +1,5 @@
 import { automaticIntakeBacklogLimit } from "./automatic-intake-capacity-policy.js";
+import { collectedProductProjectionSql } from "./collected-product-projection-policy.js";
 import {
   activeCollectionScopeSql,
   automaticCollectionBacklogCountSql,
@@ -62,6 +63,7 @@ export class MySqlTrendProjectionWorker {
   private readonly persistence: TrendProjectionPersistence;
   private readonly sourceRecovery: IntelligenceSourceRecovery;
   private repairDue = false;
+  private preferCollectedResult = true;
 
   constructor(
     private readonly pool: Pool,
@@ -93,17 +95,22 @@ export class MySqlTrendProjectionWorker {
       );
     }
     await this.enqueueMissing();
+    // Already-collected products use completion admission, before a producer can
+    // consume the released slot. Alternate with the entire original repair/fresh turn.
+    let job = this.preferCollectedResult ? await this.claim(true) : null;
+    const collected = Boolean(job);
+    this.preferCollectedResult = !collected;
     // Keep fresh intelligence moving, then give existing product completion the next turn.
     // A capacity/no-work result retains the owed turn; it must not restart a fresh batch.
     let repaired = false;
-    if (this.repairDue) {
+    if (!job && this.repairDue) {
       // An exception still yields the next turn to fresh work. An ordinary
       // capacity/no-work result retains the owed repair turn across idle polls.
       this.repairDue = false;
       if (!(await this.persistence.enqueueMissingAutomaticDownstream())) this.repairDue = true;
       repaired = true;
     }
-    let job = await this.claim();
+    job ??= await this.claim();
     let skipped = 0;
     // Retire old non-intelligence work through the normal lease/finish contract.
     // A supply batch must not cost one complete scheduler turn per offer.
@@ -272,16 +279,20 @@ export class MySqlTrendProjectionWorker {
     return true;
   }
 
-  private async claim(): Promise<TrendProjectionJob | null> {
+  private async claim(collectedProductsOnly = false): Promise<TrendProjectionJob | null> {
     const c = await this.pool.getConnection(),
       now = this.now(),
-      expires = new Date(now.getTime() + this.leaseSeconds * 1000);
+      expires = new Date(now.getTime() + this.leaseSeconds * 1000),
+      admissionLimit = collectedProductsOnly
+        ? this.queueBacklogLimit
+        : automaticIntakeBacklogLimit(this.queueBacklogLimit),
+      collectedGuard = collectedProductsOnly ? ` AND ${collectedProductProjectionSql}` : "";
     try {
       await c.beginTransaction();
       const [candidates] = await c.query<RowDataPacket[]>(
-        `SELECT id,organization_id,workspace_id FROM trend_projection_jobs WHERE ${activeCollectionScopeSql("trend_projection_jobs")} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) AND ${automaticCollectionBacklogCountSql}<?` +
+        `SELECT id,organization_id,workspace_id FROM trend_projection_jobs WHERE ${activeCollectionScopeSql("trend_projection_jobs")} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?))${collectedGuard} AND ${automaticCollectionBacklogCountSql}<?` +
           intelligenceFirstOrderSql,
-        [now, now, automaticIntakeBacklogLimit(this.queueBacklogLimit)],
+        [now, now, admissionLimit],
       );
       const candidate = candidates[0];
       if (!candidate) {
@@ -292,8 +303,17 @@ export class MySqlTrendProjectionWorker {
       // Recheck under a single-row current read if another owner won the race.
       const [jobs] = await c.query<RowDataPacket[]>(
         "SELECT * FROM trend_projection_jobs WHERE id=? AND organization_id=? AND workspace_id=? " +
-          `AND ${activeCollectionScopeSql("trend_projection_jobs")} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) FOR UPDATE`,
-        [candidate.id, candidate.organization_id, candidate.workspace_id, now, now],
+          `AND ${activeCollectionScopeSql("trend_projection_jobs")} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?))${collectedGuard}` +
+          (collectedProductsOnly ? ` AND ${automaticCollectionBacklogCountSql}<?` : "") +
+          " FOR UPDATE",
+        [
+          candidate.id,
+          candidate.organization_id,
+          candidate.workspace_id,
+          now,
+          now,
+          ...(collectedProductsOnly ? [admissionLimit] : []),
+        ],
       );
       if (!jobs[0]) {
         await c.commit();

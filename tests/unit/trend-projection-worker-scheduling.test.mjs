@@ -34,6 +34,7 @@ function createPool(job, loseCandidate = false) {
       if (sql.startsWith("SELECT id,organization_id,workspace_id FROM trend_projection_jobs")) {
         calls.push("candidate");
         const candidate = Array.isArray(job) ? job[0] : job;
+        if (sql.includes("n_collected") && !candidate?.collected) return [[], []];
         return [candidate ? [candidate] : [], []];
       }
       if (sql.startsWith("UPDATE trend_projection_jobs SET status='leased'")) {
