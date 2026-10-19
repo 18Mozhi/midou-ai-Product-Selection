@@ -1,5 +1,7 @@
 # 当前重制与整链验收状态
 
+2026-10-20 01:16复核：Amazon空搜索推荐轮播误报已修复并部署dfe02ed1，线上原始作业只读重解析为0条、哈希一致；来源仍disabled，不能认为采集已恢复。样本ac0aacd2现有11个商品及快照、评分65.85，不能继续引用此前0竞品为当前状态。今日本工作区整链完成0，详见[空搜索轮播诊断](amazon-empty-featured-carousel.md)。
+
 诊断更正及发布（2026-10-20）：此前“恢复后没有自然尝试”的UTC文本筛选不成立；Date参数重查确认本工作区存在自然成功任务。详见[持久化故障隔离](selection-persistence-circuit-isolation.md)。隔离修复eece3cc4已宝塔部署并核对Worker哈希；01:09北京时间本工作区今日整链完成0，Amazon circuit closed、最近错误source_changed。未据此宣称持续整链或每日100达标。下方旧线上记录保留原观测时间。
 
 最后线上复核为北京时间2026-10-19 18:52，运行版本4bc03272fb70b3d12c5a794b063a0388581de23d，迁移身份仍为0075_competitor_opportunity_identity.up.sql，本轮无数据库迁移。市场情报到精确关联选品的只读入口已上线，4个API模块SHA匹配，真实双端及往返路径见intelligence-related-products.md；首次返回局部读取失败、重试及再次往返HTTP200的边界保留。默认连续列表见catalogue-default-data-list.md。本工作区北京当日整链完成0，Amazon18:16真实健康成功后18:21经审计恢复，但18:52已再次open/timeout、最新健康degraded；1688 closed。没有再次强行恢复或把健康样本计入产出。浏览器瞬态重试及历史结果计数修复仍保留；自然持续整链、每日100品及全站UI最终验收仍未通过。各项历史证据时间见表与对应末节，不能将旧时间的状态当作实时探测。代码发布不等于整链业务验收。
