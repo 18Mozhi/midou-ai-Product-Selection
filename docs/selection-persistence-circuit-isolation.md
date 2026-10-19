@@ -15,3 +15,7 @@ Worker现在仅对 evidence_persist、evidence_artifact、provider_runtime 三�
 ## 诊断时间修正
 
 此前以UTC文本直接筛选 started_at 的诊断漏查自然任务。数据库原生时间为EDT，驱动按本地时区转换；应绑定JavaScript Date，而不是UTC格式文本。修正查询确认本工作区任务2fd80023-a4ca-4218-83e1-565bc07b6dff和3de342e5-2263-4dff-9498-6655fdac46ad分别在10:53:13Z、10:55:41Z自然成功。此前空结果不能作为没有运行或调度不公平的证据。不改变数据库时区。每日完成统计原本使用Date边界，未因此放宽口径；这些单步成功不等于整链完成。
+
+## 发布复核
+
+修复提交eece3cc48bff6874a28a57dc9c247fe5ed0ebd23已通过固定宝塔部署命令，退出码0，发布临时包由脚本删除。22个工作区构建、格式、运行文档和发布矩阵检查通过。2026-10-19T17:09:16.034Z独立只读回查确认运行版本一致，Worker文件SHA256为efa72c33886fd4ddec117d4000d016b188e7bc134c65254b242d2bbe3827acba，与本地相符。北京时间10月20日本工作区整链完成数0；Amazon circuit closed、连续失败1、最近错误source_changed。此为即时状态，尚无部署后自然死锁恢复证明，不能签收持续整链或每日100目标。本轮未启动本地临时服务，新增回归为永久测试；用户原有verification/state.json保持原哈希且不提交。
