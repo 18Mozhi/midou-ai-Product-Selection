@@ -1,4 +1,15 @@
 {
+  "selectionCompletionTurns20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-completion-turns.md",
+    "sourceFiles": [
+      "apps/worker/src/trend-projection-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/trend-projection-worker-scheduling.test.mjs"
+    ],
+    "contract": "Replace twenty-fresh-claims batching with one fresh then an owed existing-product completion opportunity. Preserve owed turn across no-work/backpressure; failed repair yields next fresh turn. Existing bounded repair, source/scope gates, capacity, cooldown, retries, leases, quality rules and retired-work batch remain. No new API/schema/env/dependency/concurrency/Python contract; BaoTa Node restart required."
+  },
   "selectionSaleBeforeSupplyClassification20261020": {
     "status": "implemented",
     "requirements": "docs/selection-sale-before-supply-classification.md",

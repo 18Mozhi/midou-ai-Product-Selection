@@ -60,7 +60,7 @@ export const intelligenceProvenanceSql =
 export class MySqlTrendProjectionWorker {
   private readonly persistence: TrendProjectionPersistence;
   private readonly sourceRecovery: IntelligenceSourceRecovery;
-  private claimedSinceRepair = 0;
+  private repairDue = false;
 
   constructor(
     private readonly pool: Pool,
@@ -92,15 +92,14 @@ export class MySqlTrendProjectionWorker {
       );
     }
     await this.enqueueMissing();
-    // A permanently busy projection queue must not starve historical sourcing.
-    // Match the recovery batch bound, while still serving fresh work first.
+    // Keep fresh intelligence moving, then give existing product completion the next turn.
+    // A capacity/no-work result retains the owed turn; it must not restart a fresh batch.
     let repaired = false;
-    if (this.claimedSinceRepair >= 20) {
+    if (this.repairDue) {
       // An exception still yields the next turn to fresh work. An ordinary
       // capacity/no-work result retains the owed repair turn across idle polls.
-      this.claimedSinceRepair = 0;
-      if (!(await this.persistence.enqueueMissingAutomaticDownstream()))
-        this.claimedSinceRepair = 20;
+      this.repairDue = false;
+      if (!(await this.persistence.enqueueMissingAutomaticDownstream())) this.repairDue = true;
       repaired = true;
     }
     let job = await this.claim();
@@ -108,17 +107,17 @@ export class MySqlTrendProjectionWorker {
     // Retire old non-intelligence work through the normal lease/finish contract.
     // A supply batch must not cost one complete scheduler turn per offer.
     while (job && !projectedTrendProviderContext(job.providerCode).accepted) {
-      this.claimedSinceRepair += 1;
+      this.repairDue = true;
       await this.finish(job, "succeeded_empty", null);
       if (++skipped === 20) return { status: "succeeded_empty", job_id: job.id };
       job = await this.claim();
     }
     if (!job) {
       if (!repaired && (await this.persistence.enqueueMissingAutomaticDownstream()))
-        this.claimedSinceRepair = 0;
+        this.repairDue = false;
       return { status: "idle" };
     }
-    this.claimedSinceRepair += 1;
+    this.repairDue = true;
     try {
       if (!(await this.prepareIntelligence(job))) {
         await this.finish(job, "succeeded_empty", "intelligence_no_relevant_product");

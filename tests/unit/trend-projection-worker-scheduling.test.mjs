@@ -259,7 +259,7 @@ test("projection worker also repairs immediately when the queue is idle", async 
   assert.ok(calls.indexOf("claim") < calls.indexOf("repair"));
 });
 
-test("a continuously busy projection queue gives historical repair a bounded turn", async () => {
+test("each fresh projection gives downstream completion the next turn", async () => {
   const { pool, calls } = createPool({
     id: "job-1",
     organization_id: "organization-1",
@@ -274,12 +274,32 @@ test("a continuously busy projection queue gives historical repair a bounded tur
     calls.push("project");
     return "topic-1";
   };
-  for (let index = 0; index < 20; index += 1) await worker.processOnce();
+  await worker.processOnce();
   assert.equal(calls.includes("repair"), false);
   await worker.processOnce();
   const repair = calls.indexOf("repair");
-  assert.equal(calls.slice(0, repair).filter((value) => value === "project").length, 20);
+  assert.equal(calls.slice(0, repair).filter((value) => value === "project").length, 1);
   assert.equal(calls.slice(repair).filter((value) => value === "project").length, 1);
+});
+
+test("successful completion turns alternate with fresh work without requiring twenty claims", async () => {
+  const { pool, calls } = createPool({ ...jobScope, id: "fresh", attempt_count: 0 });
+  const worker = new MySqlTrendProjectionWorker(pool, "worker", 120, () => now);
+  worker.sourceRecovery.processOnce = async () => 0;
+  worker.persistence.project = async () => {
+    calls.push("fresh-work");
+    return "topic";
+  };
+  worker.persistence.enqueueMissingAutomaticDownstream = async () => {
+    calls.push("completion-turn");
+    return true;
+  };
+  for (let index = 0; index < 6; index++)
+    assert.equal((await worker.processOnce()).status, "succeeded");
+  assert.deepEqual(
+    calls.filter((value) => ["fresh-work", "completion-turn"].includes(value)),
+    ["fresh-work", ...Array.from({ length: 5 }, () => ["completion-turn", "fresh-work"]).flat()],
+  );
 });
 
 test("failed bounded repair does not permanently block fresh projection work", async () => {
@@ -296,12 +316,12 @@ test("failed bounded repair does not permanently block fresh projection work", a
   worker.persistence.enqueueMissingAutomaticDownstream = async () => {
     throw new Error("repair failed");
   };
-  for (let index = 0; index < 20; index += 1) await worker.processOnce();
+  await worker.processOnce();
   await assert.rejects(worker.processOnce(), /repair failed/);
   assert.equal((await worker.processOnce()).status, "succeeded");
 });
 
-test("idle backpressure polls preserve twenty accumulated claims and the next repair precedes fresh work", async () => {
+test("idle backpressure preserves the owed completion turn before the next fresh claim", async () => {
   const { pool, calls } = createPool({ ...jobScope, id: "fresh", attempt_count: 0 });
   const worker = new MySqlTrendProjectionWorker(pool, "worker", 120, () => now);
   worker.sourceRecovery.processOnce = async () => 0;
@@ -315,17 +335,17 @@ test("idle backpressure polls preserve twenty accumulated claims and the next re
     return progress;
   };
   const claim = worker.claim.bind(worker);
-  for (let index = 0; index < 20; index += 1) {
+  for (let index = 0; index < 3; index += 1) {
     worker.claim = claim;
     await worker.processOnce();
     worker.claim = async () => null;
     await worker.processOnce();
-    assert.equal(worker.claimedSinceRepair, index + 1);
+    assert.equal(worker.repairDue, true);
   }
-  assert.equal(worker.claimedSinceRepair, 20);
+  assert.equal(worker.repairDue, true);
   for (let index = 0; index < 3; index += 1) {
     await worker.processOnce();
-    assert.equal(worker.claimedSinceRepair, 20);
+    assert.equal(worker.repairDue, true);
   }
   progress = true;
   worker.claim = claim;
@@ -333,7 +353,7 @@ test("idle backpressure polls preserve twenty accumulated claims and the next re
   await worker.processOnce();
   assert.ok(calls.indexOf("repair") < calls.indexOf("claim"));
   assert.ok(calls.indexOf("claim") < calls.indexOf("project"));
-  assert.equal(worker.claimedSinceRepair, 1);
+  assert.equal(worker.repairDue, true);
 });
 
 for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscovery"]) {
