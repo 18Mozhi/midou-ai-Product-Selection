@@ -11815,3 +11815,7 @@ x-scoutops-lan-1688:
 # 2026-10-20 sourcing candidate UI uses uniform offer rows and local native evidence disclosure.
 # Same search/detail/quote/comparison payloads, fields and permissions; no added endpoint or auto write.
 # See docs/selection-supplier-offer-table.md.
+
+# 2026-10-20 periodic detail turns prefer current scoped automatic primaries waiting for actual missing detail/sale facts.
+# Same event/payload, cooldown, source guards and fallback; no added endpoint or field.
+# See docs/selection-waiting-primary-refresh.md.

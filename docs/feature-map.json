@@ -1,4 +1,11 @@
 {
+  "selectionWaitingPrimaryRefresh20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-waiting-primary-refresh.md",
+    "sourceFiles": ["apps/worker/src/automatic-primary-detail-refresh.ts", "apps/worker/src/trend-projection-persistence.ts"],
+    "testFiles": ["tests/unit/automatic-primary-detail-refresh.test.mjs", "tests/unit/competitor-refresh-policy.test.mjs", "tests/unit/trend-projection-worker-scheduling.test.mjs", "tests/fixtures/automatic-primary-detail-refresh-sql.mjs"],
+    "contract": "Within the original periodic detail turn, prefer scoped pending automatic primaries actually missing detail and waiting for snapshot/sale evidence. Ordinary candidate read then PK scoped current recheck; reuse formal identity/detail and original cadence/recent-attempt/own-task/capacity guards. Same producer/payload, original fallback SQL unchanged, no evaluation/history/source/queue reset or API/env/schema/dependency/Python change. BaoTa Node restart required."
+  },
   "selectionSupplierOfferTable20261020": {
     "status": "implemented",
     "requirements": "docs/selection-supplier-offer-table.md",

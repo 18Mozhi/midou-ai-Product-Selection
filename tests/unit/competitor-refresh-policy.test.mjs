@@ -26,11 +26,12 @@ test("refresh keeps cadence, cooldown, backlog, original task payload and scoped
   const connection = {
     query: async (sql, params) => {
       queries.push({ sql, params });
+      if (sql.includes("FROM automatic_selection_evaluations e FORCE INDEX")) return [[]];
       return [[row]];
     },
   };
   assert.equal(await persistence.enqueueDueCompetitorRefresh(connection, "amazon", now), true);
-  const { sql, params } = queries[0];
+  const { sql, params } = queries.find(({ sql }) => sql.includes(competitorRefreshOrderSql));
   assert.ok(sql.includes(competitorRefreshNoActiveDetailSql));
   assert.match(sql, /recent.competitor_id IS NULL/);
   assert.match(sql, /recent.workspace_id=c.workspace_id/);

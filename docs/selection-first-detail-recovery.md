@@ -1,5 +1,7 @@
 # 首次详情无快照的自然恢复
 
+> 2026-10-20优先顺序补充：原周期先补当前自动身份有效且等待主品详情/售价事实的缺详情商品，再回退原到期监控；原冷却/范围/容量不变。见[当前主品优先补采](selection-waiting-primary-refresh.md)。
+
 2026-10-19T20:21:22Z，当前工作区Router Cooling Fan主品B0B5DJ6KF7的8个独立竞品详情任务均自然succeeded；正式完整竞品查询返回8。主品a295d42f-b6b0-4cf6-9326-c78c2f525665于19:18:01.853Z建立，首次详情399de98f已于19:38:58Z permission_denied终止，latest_snapshot_id一直NULL，评估等待amazon_competitor_snapshot_missing。首次失败状态和浏览器记录保留。
 
 原enqueueDueCompetitorRefresh内连接当前快照，完全排除从未成功取得快照者；已有首次任务又使初始化补缺不再创建，导致该主品无法进入正常周期恢复。此问题不能以竞品任务成功或搜索页售价替代详情证明。

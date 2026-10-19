@@ -9,6 +9,7 @@ import {
 } from "./collection-source-scheduling-policy.js";
 import { recoverCircuitHeldSourcing } from "./automatic-sourcing-retry-policy.js";
 import { repairMissingPrimaryProduct } from "./automatic-primary-product-repair.js";
+import { findWaitingPrimaryDetailRefresh } from "./automatic-primary-detail-refresh.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
@@ -483,8 +484,11 @@ export class TrendProjectionPersistence {
 
   private async enqueueDueCompetitorRefresh(c: PoolConnection, providerId: string, now: Date) {
     const before = new Date(now.getTime() - this.refreshIntervalSeconds * 1000);
-    const [rows] = await c.query<RowDataPacket[]>(
-      `SELECT c.id,c.organization_id,c.workspace_id,c.external_id,c.product_url,o.created_by
+    const preferred = await findWaitingPrimaryDetailRefresh(c, before, this.queueBacklogLimit);
+    const [rows] = preferred
+      ? [[preferred]]
+      : await c.query<RowDataPacket[]>(
+          `SELECT c.id,c.organization_id,c.workspace_id,c.external_id,c.product_url,o.created_by
        FROM competitors c JOIN opportunities o ON o.id=c.opportunity_id
          AND o.organization_id=c.organization_id AND o.workspace_id=c.workspace_id
        LEFT JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id AND s.competitor_id=c.id
@@ -505,8 +509,8 @@ export class TrendProjectionPersistence {
            WHERE ${activeCollectionScopeSql("backlog")} AND backlog.status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'))<?
          AND ${competitorRefreshNoActiveDetailSql} AND recent.competitor_id IS NULL
        ${competitorRefreshOrderSql}`,
-      [before, before, this.queueBacklogLimit],
-    );
+          [before, before, this.queueBacklogLimit],
+        );
     const row = rows[0];
     if (!row || !amazonAsin({ asin: row.external_id }, String(row.product_url))) return false;
     await this.scheduleCoreCollection(

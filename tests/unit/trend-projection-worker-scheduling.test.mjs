@@ -376,7 +376,7 @@ for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscov
     };
     const persistence = new TrendProjectionPersistence({}, "worker", () => now);
     assert.equal(await persistence[method](connection, "amazon", now), false);
-    assert.equal(statements.length, method === "enqueueDueCompetitorDiscovery" ? 2 : 1);
+    assert.equal(statements.length, 2);
     assert.ok(statements[0].includes(activeCollectionScopeSql("backlog")));
     if (method === "enqueueDueCompetitorRefresh") {
       assert.match(
