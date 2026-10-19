@@ -97,7 +97,11 @@ export class MySqlTrendProjectionWorker {
     await this.enqueueMissing();
     // Already-collected products use completion admission, before a producer can
     // consume the released slot. Alternate with the entire original repair/fresh turn.
-    let job = this.preferCollectedResult ? await this.claim(true) : null;
+    const collectedTurn = this.preferCollectedResult;
+    let job = collectedTurn ? await this.claim(true) : null;
+    // A released slot can appear after the admission read. Retain the owed
+    // collected turn rather than letting this same loop's producer take it.
+    if (collectedTurn && !job && (await this.hasReadyCollectedResult())) return { status: "idle" };
     const collected = Boolean(job);
     this.preferCollectedResult = !collected;
     // Keep fresh intelligence moving, then give existing product completion the next turn.
@@ -277,6 +281,15 @@ export class MySqlTrendProjectionWorker {
       );
     }
     return true;
+  }
+
+  private async hasReadyCollectedResult(): Promise<boolean> {
+    const now = this.now();
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      `SELECT id FROM trend_projection_jobs WHERE ${activeCollectionScopeSql("trend_projection_jobs")} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) AND ${collectedProductProjectionSql} LIMIT 1`,
+      [now, now],
+    );
+    return Boolean(rows[0]);
   }
 
   private async claim(collectedProductsOnly = false): Promise<TrendProjectionJob | null> {

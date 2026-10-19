@@ -114,3 +114,43 @@ test("already-collected turn precedes a producer, then yields to the original re
     "collected-project",
   ]);
 });
+
+test("a due collected result retains its turn under backpressure and blocks this loop's producer", async () => {
+  const f = fixture(),
+    events = [],
+    w = f.worker;
+  w.enqueueMissing = async () => {};
+  w.sourceRecovery.processOnce = async () => 0;
+  w.claim = async (only) => {
+    events.push(only ? "collected-check" : "raw-check");
+    return null;
+  };
+  w.hasReadyCollectedResult = async () => true;
+  w.persistence.enqueueMissingAutomaticDownstream = async () => {
+    throw Error("producer must wait");
+  };
+  for (let i = 0; i < 3; i++) assert.deepEqual(await w.processOnce(), { status: "idle" });
+  assert.deepEqual(events, ["collected-check", "collected-check", "collected-check"]);
+  assert.equal(w.preferCollectedResult, true);
+});
+
+test("ready-collected debt uses the same proof and due/active guards without a capacity condition", async () => {
+  const calls = [];
+  const w = new MySqlTrendProjectionWorker(
+    {
+      query: async (sql, params) => {
+        calls.push([sql, params]);
+        return [[{ id: "job" }]];
+      },
+    },
+    "worker",
+    120,
+    () => now,
+  );
+  assert.equal(await w.hasReadyCollectedResult(), true);
+  assert.ok(calls[0][0].includes(collectedProductProjectionSql));
+  assert.match(calls[0][0], /available_at<=\?.*lease_expires_at<=\?/);
+  assert.match(calls[0][0], /collection_scope_workspace.status='active'/);
+  assert.doesNotMatch(calls[0][0], /backlog|FOR UPDATE|UPDATE |INSERT /);
+  assert.deepEqual(calls[0][1], [now, now]);
+});

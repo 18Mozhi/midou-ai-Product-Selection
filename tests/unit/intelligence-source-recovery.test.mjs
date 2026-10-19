@@ -193,6 +193,7 @@ test("repair dependency failure is logged without blocking new intelligence proc
     fresh += 1;
   };
   worker.claim = async () => null;
+  worker.hasReadyCollectedResult = async () => false;
   worker.persistence.enqueueMissingAutomaticDownstream = async () => {};
   const oldWarn = console.warn,
     warnings = [];

@@ -9,9 +9,10 @@
     "testFiles": [
       "tests/unit/collected-product-projection.test.mjs",
       "tests/unit/trend-projection-worker-scheduling.test.mjs",
+      "tests/unit/intelligence-source-recovery.test.mjs",
       "tests/fixtures/collected-product-projection-sql.mjs"
     ],
-    "contract": "Already-collected successful scoped automatic Amazon search evidence gets a distinct preclaim under the original completion1000 threshold, alternating with the original repair/fresh turn. Raw intake997 candidate unchanged. Ordinary read then PK/evidence/status/capacity recheck; original provenance, model, projection, fanout, lease, source and completion gates unchanged. No API/env/schema/dependency/frontend/Python change; existing capacity setting needs BaoTa Node restart."
+    "contract": "Already-collected successful scoped automatic Amazon search evidence gets a distinct preclaim under the original completion1000 threshold, alternating with the original repair/fresh turn. Retain the owed collected turn while valid due evidence waits for capacity, preventing this loop's downstream producer from consuming that slot. Raw intake997 candidate unchanged. Ordinary read then PK/evidence/status/capacity recheck; original provenance, model, projection, fanout, lease, source and completion gates unchanged. No API/env/schema/dependency/frontend/Python change; existing capacity setting needs BaoTa Node restart."
   },
   "selectionProductSearchTurns20261020": {
     "status": "implemented",

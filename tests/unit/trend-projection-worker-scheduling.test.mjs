@@ -75,6 +75,7 @@ function createPool(job, loseCandidate = false) {
     pool: {
       query: async (sql) => {
         statements.push(sql);
+        if (sql.startsWith("SELECT id FROM trend_projection_jobs")) return [[], []];
         if (sql.startsWith("UPDATE trend_projection_jobs SET status=?")) calls.push("finish");
         else {
           assert.match(
