@@ -5,6 +5,10 @@ import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql
 import type { OrganizationId, WorkspaceId } from "@scoutops/contracts";
 import { buildScopedFilePath, writeScopedFile } from "@scoutops/storage";
 import {
+  markEvidencePersistenceFailure,
+  type EvidencePersistenceOperation,
+} from "./collection-failure-diagnostic.js";
+import {
   evaluateQualityMetric,
   validateEvidenceInput,
   type EvidencePersistInput,
@@ -91,12 +95,17 @@ export class MySqlEvidencePersistence {
     const value = validateEvidenceInput(input, this.maxRawBytes);
     const connection = await this.pool.getConnection();
     let target: string | null = null;
+    let operation: EvidencePersistenceOperation = "transaction_begin";
     try {
       await connection.beginTransaction();
+      operation = "scope_lock";
       const retentionDays = await this.validateScope(connection, value);
+      operation = "dedupe_lock";
       const existing = await this.findExisting(connection, value);
       if (existing) {
+        operation = "dedupe_link";
         const result = await this.linkExisting(connection, value, existing, this.now());
+        operation = "transaction_commit";
         await connection.commit();
         return result;
       }
@@ -104,6 +113,7 @@ export class MySqlEvidencePersistence {
       const evidenceId = randomUUID();
       const fileAssetId = randomUUID();
       const recordId = randomUUID();
+      operation = "record_version_lock";
       const previousRecord = await this.findExistingRecord(connection, value);
       const fileInput = {
         organization_id: value.organizationId as OrganizationId,
@@ -113,10 +123,12 @@ export class MySqlEvidencePersistence {
         filename: `${evidenceId}.bin`,
       };
       target = buildScopedFilePath(this.evidenceRoot, fileInput);
+      operation = "file_write";
       await writeScopedFile(this.evidenceRoot, fileInput, value.content);
       const now = this.now();
       const retentionUntil = new Date(value.capturedAt.getTime() + retentionDays * 86400000);
       const relativePath = relative(resolve(this.evidenceRoot), target).split(sep).join("/");
+      operation = "file_asset_insert";
       await connection.query(
         [
           "INSERT INTO file_assets (id,organization_id,workspace_id,category,relative_path,content_sha256,",
@@ -134,6 +146,7 @@ export class MySqlEvidencePersistence {
           now,
         ],
       );
+      operation = "raw_evidence_insert";
       await connection.query(
         [
           "INSERT INTO raw_evidence (id,organization_id,workspace_id,collection_task_id,collection_subquery_id,",
@@ -165,11 +178,13 @@ export class MySqlEvidencePersistence {
           now,
         ],
       );
+      operation = "record_supersede";
       if (previousRecord)
         await connection.query(
           "UPDATE normalized_records SET status='superseded' WHERE id=? AND status='active'",
           [previousRecord.record_id],
         );
+      operation = "normalized_record_insert";
       await connection.query(
         [
           "INSERT INTO normalized_records (id,organization_id,workspace_id,provider_id,raw_evidence_id,",
@@ -194,6 +209,7 @@ export class MySqlEvidencePersistence {
         ],
       );
       for (const item of value.provenance) {
+        operation = "provenance_insert";
         await connection.query(
           [
             "INSERT INTO field_provenance (id,organization_id,workspace_id,normalized_record_id,raw_evidence_id,",
@@ -213,7 +229,9 @@ export class MySqlEvidencePersistence {
           ],
         );
       }
+      operation = "evidence_link";
       await this.link(connection, value, evidenceId, recordId, "captured", now);
+      operation = "event_insert";
       await this.event(
         connection,
         value,
@@ -227,6 +245,7 @@ export class MySqlEvidencePersistence {
         },
         now,
       );
+      operation = "outbox_insert";
       await this.outbox(
         connection,
         value,
@@ -236,6 +255,7 @@ export class MySqlEvidencePersistence {
         { evidence_id: evidenceId, normalized_record_id: recordId },
         now,
       );
+      operation = "operation_insert";
       await connection.query(
         "INSERT INTO evidence_data_operations (id,actor_id,route,idempotency_key,resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
         [
@@ -248,10 +268,12 @@ export class MySqlEvidencePersistence {
           now,
         ],
       );
+      operation = "transaction_commit";
       await connection.commit();
       target = null;
       return { evidence_id: evidenceId, normalized_record_id: recordId, deduplicated: false };
     } catch (error) {
+      markEvidencePersistenceFailure(error, operation);
       await connection.rollback();
       if (target) await rm(target, { force: true });
       if ((error as { code?: string }).code === "ER_DUP_ENTRY")

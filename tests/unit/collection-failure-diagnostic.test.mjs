@@ -1,8 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { collectionFailureDiagnostic } from "../../apps/worker/dist/collection-failure-diagnostic.js";
 import { ProviderSourceExecutor } from "../../apps/worker/dist/provider-source-executor.js";
 import { ProviderAdapterRegistry } from "../../packages/provider-adapters/dist/index.js";
+import { MySqlEvidencePersistence } from "../../apps/worker/dist/evidence-persistence.js";
 import {
   BUILTIN_PROVIDER_SOURCES,
   createBuiltinSourceAdapters,
@@ -37,6 +39,91 @@ test("internal diagnostics retain only allowlisted technical values, never error
     assert.equal(safe.mysql_errno, undefined);
     assert.equal(JSON.stringify(safe).includes("secret"), false);
   }
+});
+
+test("real persistence lock failures carry only the failing internal step and retain rollback", async () => {
+  const id = (n) => `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
+  const input = {
+    organizationId: id(1),
+    workspaceId: id(2),
+    taskId: id(3),
+    subqueryId: id(4),
+    providerId: id(5),
+    actorId: id(6),
+    sourceUrl: "https://example.test/raw",
+    canonicalUrl: "https://example.test/item",
+    dedupeKey: "observed",
+    recordKey: "observed",
+    contentType: "application/json",
+    content: Buffer.from("{}"),
+    capturedAt: new Date(),
+    parserVersion: "test",
+    adapterVersion: "test",
+    recordSchemaVersion: "v1",
+    normalizedPayload: { title: "Observed" },
+    provenance: [
+      {
+        fieldPath: "title",
+        sourcePath: "$.title",
+        transformVersion: "copy-v1",
+        sourceValueHash: createHash("sha256").update("Observed").digest("hex"),
+      },
+    ],
+    requestId: "test",
+    traceId: "test",
+  };
+  for (const [failAt, expected] of [
+    [0, "transaction_begin"],
+    [1, "scope_lock"],
+    [2, "dedupe_lock"],
+    [3, "record_version_lock"],
+  ]) {
+    let calls = 0,
+      rollbacks = 0,
+      releases = 0;
+    const error = Object.assign(new Error("private SQL and parameters"), {
+      code: "ER_LOCK_DEADLOCK",
+      persistence_operation: "secret-spoof",
+    });
+    const connection = {
+      beginTransaction: async () => {
+        if (failAt === 0) throw error;
+      },
+      query: async () => {
+        calls++;
+        if (calls === failAt) throw error;
+        return calls === 1 ? [[{ retention_days: 30 }]] : [[]];
+      },
+      rollback: async () => {
+        rollbacks++;
+      },
+      release() {
+        releases++;
+      },
+    };
+    const persistence = new MySqlEvidencePersistence(
+      { getConnection: async () => connection },
+      "unused-no-file-write",
+      1024,
+    );
+    await assert.rejects(persistence.persist(input), (value) => value === error);
+    const diagnostic = collectionFailureDiagnostic(error, {
+      taskId: input.taskId,
+      stage: "evidence_persist",
+    });
+    assert.equal(diagnostic.persistence_operation, expected);
+    assert.equal(rollbacks, 1);
+    assert.equal(releases, 1);
+    assert.equal(JSON.stringify(diagnostic).includes("private"), false);
+    assert.equal(JSON.stringify(diagnostic).includes("secret"), false);
+  }
+  assert.equal(
+    collectionFailureDiagnostic(
+      { persistence_operation: "scope_lock" },
+      { taskId: "task", stage: "evidence_persist" },
+    ).persistence_operation,
+    undefined,
+  );
 });
 
 test("a tenth-record storage failure is diagnosed while preserving task failure and nine prior writes", async (t) => {

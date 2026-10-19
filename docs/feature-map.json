@@ -9,8 +9,15 @@
   "selectionPersistenceCircuitIsolation20261020": {
     "status": "implemented",
     "requirements": "docs/selection-persistence-circuit-isolation.md",
-    "sourceFiles": ["apps/worker/src/provider-source-executor.ts"],
-    "testFiles": ["tests/unit/provider-persistence-circuit-isolation.test.mjs"],
+    "sourceFiles": [
+      "apps/worker/src/provider-source-executor.ts",
+      "apps/worker/src/evidence-persistence.ts",
+      "apps/worker/src/collection-failure-diagnostic.ts"
+    ],
+    "testFiles": [
+      "tests/unit/provider-persistence-circuit-isolation.test.mjs",
+      "tests/unit/collection-failure-diagnostic.test.mjs"
+    ],
     "contract": "Skip circuit writes only for existing transient persistence codes at internal evidence_persist/evidence_artifact/provider_runtime stages, excluding semantic evidence validation. Preserve failed task outcomes, retries, genuine upstream protection, historical result isolation and existing circuit state. No API/schema/config/dependency/Python change; BaoTa Node restart required. Not daily completion evidence."
   },
   "intelligenceRelatedProducts20261019": {

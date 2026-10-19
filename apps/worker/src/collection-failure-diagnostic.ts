@@ -20,6 +20,31 @@ const technicalCodes = new Set([
   "EPERM",
 ]);
 const errorNames = new Set(["Error", "TypeError", "RangeError", "SyntaxError"]);
+export type EvidencePersistenceOperation =
+  | "transaction_begin"
+  | "scope_lock"
+  | "dedupe_lock"
+  | "record_version_lock"
+  | "file_write"
+  | "file_asset_insert"
+  | "raw_evidence_insert"
+  | "record_supersede"
+  | "normalized_record_insert"
+  | "provenance_insert"
+  | "evidence_link"
+  | "event_insert"
+  | "outbox_insert"
+  | "operation_insert"
+  | "transaction_commit"
+  | "dedupe_link";
+const persistenceOperations = new WeakMap<object, EvidencePersistenceOperation>();
+/** Keep context outside the error and never trust arbitrary error properties. */
+export function markEvidencePersistenceFailure(
+  error: unknown,
+  operation: EvidencePersistenceOperation,
+) {
+  if (error && typeof error === "object") persistenceOperations.set(error, operation);
+}
 
 /** Internal diagnosis only: never serialize the error, message, SQL, payload or cause. */
 export function collectionFailureDiagnostic(
@@ -50,6 +75,8 @@ export function collectionFailureDiagnostic(
     stage: context.stage,
     provider_id: context.providerId,
     record_ordinal: context.recordOrdinal,
+    persistence_operation:
+      error && typeof error === "object" ? persistenceOperations.get(error) : undefined,
     technical_code:
       typeof value.code === "string" && technicalCodes.has(value.code)
         ? value.code
