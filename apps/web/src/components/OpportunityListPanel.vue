@@ -19,7 +19,7 @@ interface OpportunityFilters {
   lifecycle_status: string;
 }
 type Opportunity = OpportunitySummary;
-const displayMode = ref<"grid" | "list">("grid");
+const displayMode = ref<"grid" | "list">("list");
 const viewOptions: Array<{ value: SelectionView; label: string }> = [
   { value: "recommended", label: "推荐商品" },
   { value: "rule_candidates", label: "候选商品" },
@@ -391,6 +391,10 @@ watch(imageFailureResetSources, (items) => {
       购买提示为公开下限，不等于精确销量；进货价为已有采集记录，不含其他成本；候选数量不代表可用货源。
     </p>
     <div class="catalog-products">
+      <div v-if="displayMode === 'list'" class="catalog-list-head" aria-hidden="true">
+        <span>商品</span><span>Amazon 公开资料 / 1688 进货价</span><span>分析结果</span
+        ><span>详情</span>
+      </div>
       <article v-for="item in items" :key="item.id" class="catalog-product">
         <RouterLink
           :to="{

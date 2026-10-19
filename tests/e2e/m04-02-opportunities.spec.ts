@@ -382,7 +382,7 @@ test("M04-02.A07/A08/A15 automatic opportunity list ignores retired creation and
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("catalogue-purchase-record-first-screen-20261019.png", {
+  await expect(page).toHaveScreenshot("catalogue-data-list-first-screen-20261019.png", {
     fullPage: true,
   });
   await page.getByRole("button", { name: "全部商品" }).click();
@@ -697,7 +697,11 @@ test("commerce catalogue switches layouts and keeps product navigation and missi
   await ready(page);
   await page.goto("/opportunities");
   const catalogue = page.locator(".product-catalog");
-  await expect(catalogue).toHaveAttribute("data-display", "grid");
+  await expect(catalogue).toHaveAttribute("data-display", "list");
+  await expect(page.getByRole("button", { name: "列表", exact: true })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
   await expect(page.locator(".catalog-product")).toHaveCount(1);
   await expect(page.locator(".opportunity-hero, .opportunity-view-bar")).toHaveCount(0);
   await expect(page.locator(".catalogue-toolbar")).toHaveCount(0);
@@ -717,11 +721,15 @@ test("commerce catalogue switches layouts and keeps product navigation and missi
   const metrics = await product.locator(".catalog-product-metrics").boundingBox();
   const identity = await product.locator(".catalog-product-identity").boundingBox();
   if ((page.viewportSize()?.width ?? 0) > 1100) {
+    await expect(page.locator(".catalog-list-head")).toBeVisible();
+    const heading = await page.locator(".catalog-list-head > span").nth(1).boundingBox();
+    expect(Math.abs(heading!.x - facts!.x)).toBeLessThan(2);
     expect(facts!.x).toBeGreaterThan(identity!.x);
     expect(metrics!.x).toBeGreaterThan(facts!.x);
     expect(Math.abs(facts!.y - metrics!.y)).toBeLessThan(2);
     expect((await product.boundingBox())!.height).toBeLessThan(210);
   } else {
+    await expect(page.locator(".catalog-list-head")).toBeHidden();
     expect(facts!.y).toBeGreaterThan(metrics!.y);
   }
   await expect
@@ -733,6 +741,7 @@ test("commerce catalogue switches layouts and keeps product navigation and missi
   );
   await page.getByRole("button", { name: "图卡", exact: true }).click();
   await expect(catalogue).toHaveAttribute("data-display", "grid");
+  await expect(page.locator(".catalog-list-head")).toHaveCount(0);
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);
@@ -789,6 +798,7 @@ test("catalogue shows original primary facts without inventing sales or private 
   );
   await page.goto("/opportunities");
   const facts = page.locator(".catalog-product").first().locator(".catalog-public-facts");
+  await page.getByRole("button", { name: "图卡", exact: true }).click();
   await expect(facts).toContainText("USD 29.00");
   await expect
     .poll(() =>
@@ -2917,6 +2927,7 @@ test("compact catalogue exposes the first product title above the fold with twen
   });
   await page.goto("/opportunities");
   await expect(page.locator(".catalog-product")).toHaveCount(20);
+  await expect(page.locator(".product-catalog")).toHaveAttribute("data-display", "list");
   await expect(page.locator(".catalogue-readiness")).toHaveCount(0);
   const firstTitle = page.locator(".catalog-product-identity > strong").first();
   await expect(firstTitle).toHaveText("目录演示商品 01");
@@ -2955,7 +2966,7 @@ test("compact catalogue exposes the first product title above the fold with twen
   });
   expect(titleLayout.height).toBeLessThanOrEqual(titleLayout.lineHeight * 2 + 1);
   expect(titleLayout.unobscured).toBe(true);
-  await expect(page).toHaveScreenshot("catalogue-purchase-record-all-20261019.png", {
+  await expect(page).toHaveScreenshot("catalogue-data-list-all-20261019.png", {
     fullPage: false,
   });
   const allBox = await firstTitle.boundingBox();

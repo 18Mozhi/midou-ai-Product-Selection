@@ -1,4 +1,16 @@
 {
+  "selectionCatalogueDefaultDataList20261019": {
+    "status": "implemented",
+    "requirements": "docs/catalogue-default-data-list.md",
+    "routes": ["/opportunities"],
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/commerce-workspace.css",
+      "apps/web/src/selection-catalogue.css"
+    ],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "contract": "Default to a continuous product data list with aligned desktop group headings and a compact desktop filter row; preserve the grid toggle, narrow-screen reading order, unknown facts, navigation, filters and permissions. No new persistence, dependencies, configuration or API change."
+  },
   "selectionBrowserCacheSourceAccounting20261019": {
     "status": "implemented",
     "requirements": "docs/browser-cache-source-accounting.md",

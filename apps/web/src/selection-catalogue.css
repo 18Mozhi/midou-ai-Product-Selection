@@ -18,6 +18,16 @@ html[data-design="commerce"] #app .catalogue-controls {
   gap: 4px;
   border-bottom: 1px solid var(--so-border);
 }
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .catalogue-controls {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+    align-items: center;
+  }
+  .catalogue-controls > nav {
+    flex-wrap: nowrap;
+    border-bottom: 0;
+  }
+}
 html[data-design="commerce"] #app .catalogue-controls > nav button {
   padding: 10px 16px;
   min-height: 44px;
