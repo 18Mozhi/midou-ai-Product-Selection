@@ -1,4 +1,11 @@
 {
+  "selectionRecommendedReadScope20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-recommended-read-scope.md",
+    "sourceFiles": ["apps/api/src/opportunity-recommended-list-scope.ts", "apps/api/src/mysql-opportunity-repository.ts", "apps/api/src/opportunity-selection-policy.ts"],
+    "testFiles": ["tests/unit/opportunity-recommended-list-scope.test.mjs", "tests/unit/opportunity-list-projection.test.mjs", "tests/unit/opportunity-selection-policy.test.mjs", "tests/unit/opportunity-completed-filter.test.mjs"],
+    "contract": "Recommended list only: materialize scoped necessary scalar facts then reuse the original primary identity once in unchanged full count/page eligibility. Preserve explicit archived filters, parameters, ordering, all quality gates and other views. No API/schema/env/dependency/Python change; BaoTa Node restart required."
+  },
   "selectionCompletedDefault20261020": {
     "status": "implemented",
     "requirements": "docs/selection-completed-library.md",

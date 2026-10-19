@@ -1,3 +1,7 @@
+import {
+  opportunityRecommendedListSourceSql,
+  reuseRecommendedFilterIdentitySql,
+} from "./opportunity-recommended-list-scope.js";
 import { opportunityCompletedFilterSql } from "./opportunity-completed-filter.js";
 import {
   opportunityListPrimaryAsinSql,
@@ -184,17 +188,30 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       where.push("o.owner_id=?");
       values.push(input.ownerId);
     }
-    const sql = where.join(" AND "),
+    const recommended = input.selectionView === "recommended",
+      source = recommended ? opportunityRecommendedListSourceSql : "opportunities o",
+      sql = recommended
+        ? reuseRecommendedFilterIdentitySql(where.join(" AND "))
+        : where.join(" AND "),
+      filterValues = recommended
+        ? [
+            input.organizationId,
+            input.workspaceId,
+            input.organizationId,
+            input.workspaceId,
+            ...values,
+          ]
+        : values,
       [count] = await this.pool.query<RowDataPacket[]>(
-        `SELECT COUNT(*) total FROM opportunities o WHERE ${sql}`,
-        values,
+        `SELECT COUNT(*) total FROM ${source} WHERE ${sql}`,
+        filterValues,
       ),
       // LIMIT prevents MySQL 5.7 derived merging: resolve identity once per paged row,
       // rather than once per candidate evidence record. The outer sort preserves paging order.
       [rows] = await this.pool.query<RowDataPacket[]>(
         sqlText(
           `SELECT o.*,${opportunityListPrimaryRecordsSql},${reuseListPrimaryIdentitySql(opportunityCountsSql)},${opportunityLifecycleSql},${opportunityListSelectionProjectionSql}`,
-          `FROM (SELECT o.*,${opportunityListPrimaryAsinSql} primary_fact_asin FROM (SELECT o.* FROM opportunities o WHERE ${sql} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
+          `FROM (SELECT o.*,${opportunityListPrimaryAsinSql} primary_fact_asin FROM (SELECT o.* FROM ${source} WHERE ${sql} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
           "ORDER BY o.updated_at DESC,o.id DESC",
         ),
         [
@@ -202,7 +219,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           input.workspaceId,
           input.organizationId,
           input.workspaceId,
-          ...values,
+          ...filterValues,
           input.pageSize,
           (input.page - 1) * input.pageSize,
         ],

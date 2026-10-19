@@ -1,0 +1,19 @@
+# 推荐列表读取范围与主品身份复用
+
+2026-10-19T20:01:13Z，当前工作区真实MySqlOpportunityRepository.list(recommended)在仅诊断使用的MAX_EXECUTION_TIME(3000)下计数3033ms超时，未到分页。范围内1281条机会中36条具备原推荐必要标量；原candidate和competition分别超时，risk计数36ms返回。仅物化36条标量仍超时，问题不能简化为机会总量或风险字段。
+
+原计数与分页过滤调用未优化的共享主品标量，在候选及竞品门中反复关联历史normalized_records。已存在的opportunityListPrimaryAsinSql保留同一原始链接、当前版本、ASIN/URL、Provider及排序证明，但采用既有索引、范围内active版本物化和STRAIGHT_JOIN。现在仅recommended视图在同组织/工作区先物化必要标量，再为每个候选解析一次该原身份为内部filter_primary_asin，完整外层筛选复用此身份。分页最终事实仍使用既有primary_fact_asin与记录读取。
+
+opportunityRecommendationFactsSql只是从原完整质量门原样抽出标量字符串；重新拼接的完整质量门与此前相同。计数、分页保留完整原候选、推荐、市场、竞争、利润及风险门，不以缓存状态替代任何证据。来源与租户范围均绑定，内外重复核对；所有用户筛选仍是绑定参数。未在内层排除归档，因此显式lifecycle_status=archived与原行为相同。所有其他视图、原默认scope、详情、首页和Worker判定不改。
+
+三层原MySQL5.7 LIMIT防止优化器合并：范围标量候选、每候选主品身份、active记录集。没有临时表、索引/结构迁移、写入、权限变化、依赖或配置。3秒上限仅用于只读诊断，不加入生产超时或新增环境变量。
+
+只读试验：先只改count时其1520ms返回，但原page仍3012ms超时；同时替换两者后1671/1336ms返回total0、rows0。当前编译helper实际生成SQL复验（保留显式归档可能性）为count1380ms、page1436ms，total0/rows0。它们是当前工作区样本，不能宣称所有组织或所有筛选均固定在3秒内，也不算新增整链产出。
+
+25项最小定向检查通过，包含对完整原eligibility逐字还原比较、同count/page谓词、原全部质量门、租户与参数顺序、分页、显式归档、绑定文本、其他视图及正则美元符号不被JS替换展开。新测试最初把SQL字符串内正则问号也当占位符，已改为只统计非字符串部分，未改生产参数。正式构建和发布结果另行补记。
+
+API字段与返回、前端调用、Python/插件协议、自动采集/评分/完成事件、env与数据库均不变。OpenAPI/Feature Map/总纲同步内部执行策略。使用方式仍是选品库“推荐商品”或GET /api/v1/opportunities?selection_view=recommended；通过固定deploy-baota.py构建上传并由宝塔重启Node加载，无需用户调参，不新增服务。正式发布后须核对模块哈希及真实推荐页空结果/其他视图返回，不把SQL探针当真实浏览器验收。
+
+补充验证：其余16项首页日界线、候选/质量门、API范围/权限及模块检查通过，合计41项。完整22工作区构建、格式/运行文档/OpenAPI语法通过。变更前生产510c2698与新编译的完整opportunityQualityGateSql SHA256均为2f77de40fe67a518d5bf49efbd0ccbf29e4ea107239115ccad90d520cc32a571，证明抽取常量没有改变完整质量门的任何字符。
+
+本轮未创建临时文件、目录、截图、日志、测试服务或浏览器标签页；只读探针代码保存在工具会话内，没有向数据库写入。正式发布所需临时包由既有脚本跟踪和清理，既有用户verification/state.json不修改、不暂存。先前清理被拒的目录不触碰、不重试。

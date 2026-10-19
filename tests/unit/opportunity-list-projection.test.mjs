@@ -90,9 +90,19 @@ for (const selectionView of ["all", "recommended", "rule_candidates", "evidence_
     assert.ok(rows.sql.includes(opportunityListPrimaryAsinSql + " primary_fact_asin"));
     assert.ok(rows.sql.includes(opportunityListPrimaryRecordsSql));
     assert.ok(rows.sql.endsWith("ORDER BY o.updated_at DESC,o.id DESC"));
-    assert.match(
-      count.sql,
-      /SELECT COUNT\(\*\) total FROM opportunities o WHERE o.organization_id=\? AND o.workspace_id=\?/,
-    );
-    assert.doesNotMatch(count.sql, /active_version/);
+    if (selectionView === "recommended") {
+      assert.match(count.sql, /filter_primary_asin/);
+      assert.deepEqual(count.params.slice(0, 4), [
+        input.organizationId,
+        input.workspaceId,
+        input.organizationId,
+        input.workspaceId,
+      ]);
+    } else {
+      assert.match(
+        count.sql,
+        /SELECT COUNT\(\*\) total FROM opportunities o WHERE o.organization_id=\? AND o.workspace_id=\?/,
+      );
+      assert.doesNotMatch(count.sql, /active_version/);
+    }
   });

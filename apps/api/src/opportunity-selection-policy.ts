@@ -28,11 +28,13 @@ export const opportunityCompetitionGateSql = selectionCompetitionGateSql(
   MINIMUM_SELECTION_COMPETITORS,
 );
 
-export const opportunityQualityGateSql =
-  `(o.recommendation_status='recommend' AND o.overall_score IS NOT NULL AND ` +
-  `o.score_rule_version IS NOT NULL AND o.coverage_status='complete' AND ` +
-  `o.trend_score IS NOT NULL AND o.competition_score IS NOT NULL AND ` +
-  `o.profit_status='calculated' AND ${opportunityRiskGateSql} AND ${opportunityCompetitionGateSql})`;
+export const opportunityRecommendationFactsSql =
+  "o.recommendation_status='recommend' AND o.overall_score IS NOT NULL AND " +
+  "o.score_rule_version IS NOT NULL AND o.coverage_status='complete' AND " +
+  "o.trend_score IS NOT NULL AND o.competition_score IS NOT NULL AND " +
+  "o.profit_status='calculated'";
+
+export const opportunityQualityGateSql = `(${opportunityRecommendationFactsSql} AND ${opportunityRiskGateSql} AND ${opportunityCompetitionGateSql})`;
 
 export const opportunityRecommendedSql = `(${opportunityCandidateSql} AND ${opportunityQualityGateSql})`;
 
