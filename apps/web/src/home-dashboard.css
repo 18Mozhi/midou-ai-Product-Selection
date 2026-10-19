@@ -248,12 +248,18 @@ html[data-design="commerce"] #app .home-command-bar nav .home-primary-action {
 }
 .home-daily-meta {
   display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
   align-items: center;
   min-height: 45px;
   margin-top: auto;
   padding: 10px 20px;
   border-top: 1px solid var(--home-hairline);
   color: var(--so-text-muted);
+}
+.home-daily-meta a {
+  margin-left: auto;
+  font-size: 13px;
 }
 .home-daily-meta small {
   font-size: 13px;

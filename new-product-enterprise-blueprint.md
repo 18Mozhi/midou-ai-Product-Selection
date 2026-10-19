@@ -1,3 +1,5 @@
+> 2026-10-20：选品库新增“已完成分析”，工作台可直接进入全部日期的整链完成商品；按工作区内首次有效完成主品ASIN去重，包含低分、不推荐、利润未知及归档历史，不改变推荐质量门和每日北京时间统计。见 docs/selection-completed-library.md。
+
 > 2026-10-19：成员选品库退休批量指派、人工复核、归档及负责人筛选，删除旧选择状态和样式；历史owner_id不再影响成员请求，逐品决策和后台历史合同保留。见 docs/selection-retired-member-batch.md。旧章节的批量入口要求不再适用于成员界面，整链百品仍未通过。
 
 > 当前交接与逐项验收状态见 [selection-current-acceptance.md](docs/selection-current-acceptance.md)。旧记录的“未部署”为当时状态，代码发布与真实业务验收分别核对。

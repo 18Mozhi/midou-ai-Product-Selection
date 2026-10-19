@@ -72,7 +72,7 @@ const props = defineProps<{
   message = ref(""),
   automationReadiness = ref<AutomaticSelectionReadiness | null>(null),
   busy = ref(false),
-  selectionView = ref<"recommended" | "rule_candidates" | "evidence_pending" | "all">(
+  selectionView = ref<"recommended" | "rule_candidates" | "evidence_pending" | "completed" | "all">(
     "recommended",
   ),
   downstream = ref({ competitors: 0, snapshots: 0, searches: 0, suppliers: 0 }),

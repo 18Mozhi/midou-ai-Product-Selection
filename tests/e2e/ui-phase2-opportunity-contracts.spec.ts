@@ -167,6 +167,50 @@ async function openOpportunitySection(page: Page, label: string) {
     .click();
 }
 
+test("completed analysis view survives refresh and view navigation without requiring recommendation setup", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  const requests: string[] = [];
+  page.on("request", (request) => {
+    const url = new URL(request.url());
+    if (url.pathname === "/api/v1/opportunities")
+      requests.push(url.searchParams.get("selection_view") ?? "");
+  });
+  await page.goto("/opportunities?view=completed");
+  await expect(page.getByRole("button", { name: "已完成分析", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(page.getByRole("heading", { name: "2 个商品已完成分析" })).toBeVisible();
+  await expect(
+    page.getByText(
+      "全部日期 · 按工作区内首次完成的主品 ASIN 去重，包含低分、不推荐和利润未知的结果。",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  expect(requests.at(-1)).toBe("completed");
+  await page.getByRole("button", { name: "推荐商品", exact: true }).click();
+  await expect(page).not.toHaveURL(/view=completed/);
+  await expect.poll(() => requests.at(-1)).toBe("recommended");
+  await page.goBack();
+  await expect(page.getByRole("heading", { name: "2 个商品已完成分析" })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("button", { name: "已完成分析", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  expect(requests.at(-1)).toBe("completed");
+  data.queryRows = [];
+  await page.goto("/opportunities?view=completed&q=no-results");
+  await expect(page.getByRole("heading", { name: "暂无选品结果" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "完善自动推荐配置", exact: true })).toHaveCount(0);
+  expect(data.writes).toHaveLength(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
+});
+
 for (const canDecide of [true, false]) {
   test(`UI2-OP01 retired manual and trend creation stay inactive with decision permission ${canDecide}`, async ({
     page,

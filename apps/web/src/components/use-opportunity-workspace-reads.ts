@@ -39,7 +39,7 @@ interface OpportunityWorkspaceReadOptions {
   requestId: Ref<string>;
   message: Ref<string>;
   automationReadiness: Ref<AutomaticSelectionReadiness | null>;
-  selectionView: Ref<"recommended" | "rule_candidates" | "evidence_pending" | "all">;
+  selectionView: Ref<"recommended" | "rule_candidates" | "evidence_pending" | "completed" | "all">;
   downstream: Ref<{ competitors: number; snapshots: number; searches: number; suppliers: number }>;
   filters: OpportunityWorkspaceFilters;
   canReadCompetitors: ComputedRef<boolean>;

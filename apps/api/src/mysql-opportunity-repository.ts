@@ -1,3 +1,4 @@
+import { opportunityCompletedFilterSql } from "./opportunity-completed-filter.js";
 import {
   opportunityListPrimaryAsinSql,
   opportunityListPrimaryRecordsSql,
@@ -125,7 +126,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     ownerId?: string;
     sourceTopicId?: string;
     scope?: "product" | "all";
-    selectionView?: "recommended" | "rule_candidates" | "evidence_pending" | "all";
+    selectionView?: "recommended" | "rule_candidates" | "evidence_pending" | "completed" | "all";
   }) {
     const where = ["o.organization_id=?", "o.workspace_id=?"],
       values: unknown[] = [input.organizationId, input.workspaceId];
@@ -133,7 +134,9 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       where.push(opportunitySourceTopicFilterSql);
       values.push(input.sourceTopicId);
     }
-    if (input.selectionView === "recommended") {
+    if (input.selectionView === "completed") {
+      where.push(opportunityCompletedFilterSql);
+    } else if (input.selectionView === "recommended") {
       where.push("o.decision_status='pending'", opportunityRecommendedSql);
     } else if (input.selectionView === "rule_candidates") {
       where.push(
@@ -176,7 +179,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     if (input.lifecycleStatus) {
       where.push("o.lifecycle_status=?");
       values.push(input.lifecycleStatus);
-    } else where.push("o.lifecycle_status<>'archived'");
+    } else if (input.selectionView !== "completed") where.push("o.lifecycle_status<>'archived'");
     if (input.ownerId) {
       where.push("o.owner_id=?");
       values.push(input.ownerId);

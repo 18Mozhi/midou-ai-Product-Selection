@@ -4,7 +4,8 @@ import type { createOpportunityWorkspaceForms } from "./opportunity-workspace-fo
 import type * as OpportunityTypes from "./opportunity-workspace-types";
 import { resolveOpportunityTab } from "./opportunity-workspace-presentation";
 
-type OpportunitySelectionView = "recommended" | "rule_candidates" | "evidence_pending" | "all";
+type OpportunitySelectionView =
+  "recommended" | "rule_candidates" | "evidence_pending" | "completed" | "all";
 type OpportunityWorkspaceForms = ReturnType<typeof createOpportunityWorkspaceForms>;
 
 interface OpportunityWorkspaceNavigationOptions {
@@ -33,13 +34,15 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
     filters.lifecycle_status =
       typeof route.query.lifecycle_status === "string" ? route.query.lifecycle_status : "";
     selectionView.value =
-      route.query.view === "rule_candidates"
-        ? "rule_candidates"
-        : route.query.view === "evidence_pending"
-          ? "evidence_pending"
-          : route.query.view === "all" || route.query.scope === "all"
-            ? "all"
-            : "recommended";
+      route.query.view === "completed"
+        ? "completed"
+        : route.query.view === "rule_candidates"
+          ? "rule_candidates"
+          : route.query.view === "evidence_pending"
+            ? "evidence_pending"
+            : route.query.view === "all" || route.query.scope === "all"
+              ? "all"
+              : "recommended";
     const requestedPage = Number(route.query.page ?? 1);
     page.value = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
   }

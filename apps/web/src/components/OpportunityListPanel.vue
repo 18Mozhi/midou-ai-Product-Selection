@@ -9,7 +9,7 @@ import UiStatePanel from "./UiStatePanel.vue";
 import type { OpportunitySummary } from "./opportunity-workspace-types";
 
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
-type SelectionView = "recommended" | "rule_candidates" | "evidence_pending" | "all";
+type SelectionView = "recommended" | "rule_candidates" | "evidence_pending" | "completed" | "all";
 interface OpportunityFilters {
   q: string;
   market: string;
@@ -21,6 +21,7 @@ interface OpportunityFilters {
 type Opportunity = OpportunitySummary;
 const displayMode = ref<"grid" | "list">("list");
 const viewOptions: Array<{ value: SelectionView; label: string }> = [
+  { value: "completed", label: "已完成分析" },
   { value: "recommended", label: "推荐商品" },
   { value: "rule_candidates", label: "候选商品" },
   { value: "evidence_pending", label: "采集中" },
@@ -93,6 +94,11 @@ const props = defineProps<{
   viewCopy = computed(
     () =>
       ({
+        completed: {
+          title: `${props.total} 个商品已完成分析`,
+          description:
+            "全部日期 · 按工作区内首次完成的主品 ASIN 去重，包含低分、不推荐和利润未知的结果。",
+        },
         recommended: {
           title: `${props.total} 个商品建议采纳`,
           description: "评分、市场、竞争、成本和风险五项质量门均已通过，只等你最终采纳。",
@@ -228,7 +234,7 @@ const opportunityStatus = (value: string) =>
         { label: "命中规则", value: `${item.matched_rule_count} 条` },
       ];
     return [
-      ...(props.selectionView === "all"
+      ...(["all", "completed"].includes(props.selectionView)
         ? [{ label: "当前结论", value: recommendationLabel(item) }]
         : []),
       { label: "综合评分", value: scoreLabel(item.overall_score) },
@@ -349,7 +355,7 @@ watch(imageFailureResetSources, (items) => {
     "
     :primary-label="
       state === 'empty'
-        ? selectionView !== 'all' && needsRuleSetup
+        ? !['all', 'completed'].includes(selectionView) && needsRuleSetup
           ? '完善自动推荐配置'
           : '刷新列表'
         : ''
@@ -365,7 +371,7 @@ watch(imageFailureResetSources, (items) => {
         : '返回选品列表'
     "
     @primary="
-      state === 'empty' && selectionView !== 'all' && needsRuleSetup
+      state === 'empty' && !['all', 'completed'].includes(selectionView) && needsRuleSetup
         ? emit('manageSetup', nextSetupPath)
         : emit('apply')
     "
@@ -375,7 +381,9 @@ watch(imageFailureResetSources, (items) => {
     <header>
       <div>
         <h2>{{ viewCopy.title }}</h2>
-        <small>{{ viewCopy.description }}</small>
+        <small :class="{ 'completed-analysis-summary': selectionView === 'completed' }">{{
+          viewCopy.description
+        }}</small>
       </div>
       <div class="catalog-display" role="group" aria-label="商品展示方式">
         <span>按更新时间排序</span>
@@ -495,6 +503,11 @@ watch(imageFailureResetSources, (items) => {
 }
 
 @media (max-width: 760px) {
+  .completed-analysis-summary {
+    display: block;
+    white-space: normal;
+    line-height: 1.6;
+  }
   .filter-apply-action {
     border-color: var(--so-primary);
     color: var(--so-on-primary);

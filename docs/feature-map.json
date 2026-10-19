@@ -1,4 +1,23 @@
 {
+  "selectionCompletedLibrary20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-completed-library.md",
+    "sourceFiles": [
+      "apps/api/src/opportunity-completed-filter.ts",
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/api/src/opportunity-service.ts",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/components/use-opportunity-workspace-navigation.ts",
+      "apps/web/src/components/use-opportunity-workspace-reads.ts"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-completed-filter.test.mjs",
+      "tests/fixtures/opportunity-completed-sql.mjs",
+      "tests/e2e/ui-phase2-opportunity-contracts.spec.ts"
+    ],
+    "contract": "selection_view=completed exposes all-date first worker v1/v2 completion per scoped primary ASIN. Earliest event then event id selects the original opportunity. Includes unknown profit, low scores, not recommended and archived history; explicit lifecycle filters still apply. Existing views, daily Beijing counts, evidence gates, decisions and permissions unchanged. No environment/schema/Python/dependency change. BaoTa Node restart and frontend deploy required."
+  },
   "selectionClassifierVersionRecovery20261020": {
     "status": "implemented",
     "requirements": "docs/selection-classifier-version-recovery.md",

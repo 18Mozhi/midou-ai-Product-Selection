@@ -5,7 +5,7 @@ export type OpportunityDecision = "pending" | "adopted" | "observing" | "rejecte
 export type OpportunityCoverageStatus = "insufficient" | "partial" | "complete";
 export type OpportunityBlockingReason = "evidence_insufficient" | "recommendation_insufficient";
 export type OpportunitySelectionView =
-  "recommended" | "rule_candidates" | "evidence_pending" | "all";
+  "recommended" | "rule_candidates" | "evidence_pending" | "completed" | "all";
 export type OpportunitySelectionStage = "rule_candidate" | "recommended" | "not_eligible";
 export type OpportunityLifecycle =
   "candidate" | "validating" | "ready" | "adopted" | "observing" | "rejected" | "archived";
@@ -491,7 +491,9 @@ export class OpportunityService {
       );
     if (
       input.selectionView &&
-      !["recommended", "rule_candidates", "evidence_pending", "all"].includes(input.selectionView)
+      !["recommended", "rule_candidates", "evidence_pending", "completed", "all"].includes(
+        input.selectionView,
+      )
     )
       throw new OpportunityServiceError(
         "opportunity_filter_invalid",

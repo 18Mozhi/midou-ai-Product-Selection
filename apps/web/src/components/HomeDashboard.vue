@@ -254,6 +254,7 @@ onBeforeUnmount(deactivate);
             </p>
             <footer class="home-daily-meta">
               <small>统计时间 {{ dailyTime(selection.daily_production.measured_at) }}</small>
+              <RouterLink to="/opportunities?view=completed">查看已完成分析（全部日期）</RouterLink>
             </footer>
           </template>
           <p v-else>每日产出尚未读取，暂不显示数量或目标达成状态。</p>
