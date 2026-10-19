@@ -1,5 +1,7 @@
 # 合格货源优先与独立引用失败隔离
 
+当前交付：999303a4b已正式上线并完成自然恢复回读；此前待发布文字属于阶段记录，以文末正式回执为准。整链日百品仍未验收。
+
 ## 真实依据
 
 用户要求自动持续完成情报、主品、5–10竞品、评分与具体1688货源，且旧逻辑不得妨碍根本目标。2026-10-20 06:31，同工作区三个新恢复主品仍只有真实Amazon售价，没有purchase_price；Cooling记录supply_title_classification_failed。22:32:45.944Z用原主品/前10实际供应标题/当前配置模型做一次只读复现，HTTP成功、约4895ms，但输出把Router Cooling Fan与Cooling重复计为两个独立依据，另有散热风扇...路由器拼接引用；原严格校验正确拒绝。没有保存模型输出、采购价、评分或事件。
@@ -33,3 +35,15 @@
 本轮诊断均通过标准输入/参数与内存传递，没有新临时脚本、截图、日志、浏览器或常驻验证进程。永久单元/夹具为交付；用户原verification/state.json保持原哈希且不暂存，以前被拒绝清理的目录未操作。
 
 22工作区完整构建、格式/运行文档/地图JSON/OpenAPI YAML语法检查通过。22:42:23.265Z线上原恢复SQL哈希与新编译模块完全一致：候选9827f87dd1bee4b62bcd117dfbb1cc7c47b7b64a30b43912f35fb5f8726b64f0，主键复核81eb5bceee731e185f1881259800854840a4bf38751a5f0bbb5e508cdb076a27。只有原参数修订值变更，SQL本身不变。无新增临时文件/服务，用户原状态哈希仍一致。正式部署与自然恢复待回读。
+
+## 正式发布与自然验证（2026-10-20 06:47，北京时间）
+
+999303a4b51f2a3b5ca7dbe8fcc6290208ed3360按固定脚本通过格式/运行文档/矩阵/12路径归属和22工作区构建；上传、宝塔Node/Python原流程重启及公开验证完成，终端exit=0、发布临时包已删除。22:45:31.743Z BUILD_SHA/修订值一致，四模块SHA256与本地编译一致：automatic-selection-evaluation=709655798c811b7864dc0057a536a7e3a825e0af660cff5b5e003736ee29ddc2；evaluation-worker=8a979a8f8941f7edb8f2370af46fda797543a7324386bafd4c1558d522d35ca6；supply-title-classification=b97b6b07caff89b2a0bb811f18932d2aa45271e5445baf6303a6dbf157ac2082；classifier-recovery=029b4ef53dc6b3782397e2e1e764dcaf23684ddcc6c1c780b3d6d69199be9eaa。frontend/index.html仍5e574da54d4ed0b1f89cc42de3c8afad9b56ee62c71074ea3a3ec4118cc1d889，UI未改。
+
+原队列已在22:45:03.414Z自然重评Cooling，修订变为supply-title-eligible-citations-v1，supply_title_classification_error清空；22:47:42.236Z该时间和waiting_evidence状态保持，未在观察窗口循环唤醒。iPhone16和Miracase两条无分类错误对照的原修订、评估时间完全未变，符合原恢复范围。三个真实售价/原证据/观察时间不变，仍无purchase_price；今日仍1/100。这里的自然重评不是货源已找到。
+
+22:46:20.896Z直接调用正式部署模块的classifySupplyTitles只读入口再次验证：Cooling四次同范围SELECT/0模型/0事务及写入尝试；真实RC对照仍有1个合格候选进入模型哨兵，在真实模型前终止。没有人工调用processOnce或重放/重建采集任务。
+
+SKU/后续定位：Cooling现60条记录均有sku_id，但dimensions均NULL；22:44:51Z核验第一条原始证据文件及其数据库双哈希一致，原始返回只有sku_id，没有可用SKU规格属性。不能从该ID编造360mm/包装数量或换算价格。Miracase当前同范围仅10条货源，按原规则≥80且非新人价仅1条，标题含多个设备型号；不能把这条CNY1.5候选直接当当前主品进价，也未降低3样本规则。后续须追踪原找货结果的刷新与真实SKU信息，不能宣称这两处已解决。
+
+本轮184项相关回归、32项真实MySQL只读场景、22工作区构建及正式发布门均通过，无前端/API字段/Python协议变化，未重复无关UI测试；用户无需调参，Node已按宝塔重启。无新增临时文件、浏览器、日志或验证常驻进程，4101/5173监听0；旧清理拒绝目录未操作，verification/state.json原SHA256保持且未暂存。总目标继续，不能以模型调用减少替代日百品验收。

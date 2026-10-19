@@ -1,6 +1,6 @@
 # 中英文货源标题分类与原始报价
 
-本项处理通用品英文 Amazon 标题与中文 1688 标题无法依靠共有英文词匹配的问题，同时修复普通 makeup case、pencil case、storage case 被旧 `case` 关键词错误归入手机壳费用范围的问题。仍未部署，真实同款、一般品类费用和每日整链百品验收尚未通过。
+本项处理通用品英文 Amazon 标题与中文 1688 标题无法依靠共有英文词匹配的问题，同时修复普通 makeup case、pencil case、storage case 被旧 `case` 关键词错误归入手机壳费用范围的问题。已上线；最新999303a4b的合格候选与引用隔离验证见selection-supply-eligible-citations.md。下文未发布等仅指各自初次阶段；真实同款、一般品类费用和每日整链百品验收仍未全部通过。
 
 ## 处理链
 
