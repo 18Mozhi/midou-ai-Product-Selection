@@ -181,6 +181,10 @@ export class OpenAiIntelligenceProductClassifier
         "Reject conflicting materials, dimensions, device models, pack sizes or functions; missing essential facts mean uncertain. " +
         "Do not treat a matching category alone, generic promotional adjectives, or a shared brand as matching products. " +
         "Do not repeat one excerpt under multiple kinds. source_ref must be supplied; return no prices, confidence percentages, image-similarity scores, profit or sales. " +
+        "Every pair of product_excerpt strings, and every pair of supply_excerpt strings, must be disjoint: neither may contain the other, ignoring case and surrounding spaces. " +
+        "A longer product-type phrase containing the function cannot be cited alongside that function. Choose the shortest exact fragment that independently states each attribute. " +
+        "Valid independent example: product title Waterproof nylon makeup case with zipper, supply title 防水尼龙化妆包拉链收纳: product_type makeup case / 化妆包, material nylon / 尼龙, function Waterproof / 防水. " +
+        "All six are literal, independent fragments. Never copy example words unless they occur in the actual input titles. Omit candidates when three disjoint attributes cannot be supported. " +
         "Before emitting any compatible candidate, check every product_excerpt is copied literally from product_title, in its original language and exact case. " +
         "Never translate product_title or copy supply-only attributes into product_excerpt. Check every supply_excerpt literally occurs in that candidate title. " +
         "If three independent explicit matching attributes cannot be cited in BOTH titles, omit the candidate. Return an empty classifications array when none pass these citation checks. " +

@@ -12,7 +12,7 @@
       "tests/unit/automatic-evidence-scoring.test.mjs",
       "tests/unit/selection-pipeline-completion.test.mjs"
     ],
-    "contract": "Use model-local short references and restore original evidence identities. Isolate only literal-citation failures; preserve full schema/identity/attribute/conflict validation and final caller checks. Continue existing bounded later batches only for typed citation failures; no new retry/timeout/concurrency. All-invalid, unknown refs, schema, network and lease errors remain fail closed. No API/schema/config/dependency/Python change; BaoTa Node restart required."
+    "contract": "Use model-local short references and restore original evidence identities. Explicitly request shortest non-overlapping literal excerpts, matching the existing validator. Isolate only literal-citation failures; preserve full schema/identity/attribute/conflict validation and final caller checks. Continue existing bounded later batches only for typed citation failures; no new retry/timeout/concurrency. All-invalid, unknown refs, schema, network and lease errors remain fail closed. No API/schema/config/dependency/Python change; BaoTa Node restart required."
   },
   "selectionProjectionPointAdmission20261020": {
     "status": "implemented",
