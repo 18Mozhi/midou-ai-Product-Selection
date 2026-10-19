@@ -7094,5 +7094,18 @@
       "tests/e2e/m04-10-selection-http.spec.ts"
     ],
     "contract": "Member catalogue batch assignment/review/archive, selection checkboxes/state/dialog, owner dropdown/member-options GET and obsolete CSS retired. Direct product analysis and individual decisions, reasons, gates, version/concurrency/focus and stale receipt protection preserved. Retired owner_id URLs no longer filter member requests; backend batch/member/filter contracts/history/permissions remain. No config/dependency/schema/Python change; daily100 and full UI unverified."
+  },
+  "selectionTrendRepairAdmissionDebt20261019": {
+    "status": "implemented",
+    "requirements": "docs/trend-repair-admission-debt.md",
+    "sourceFiles": [
+      "apps/worker/src/trend-projection-worker.ts",
+      "apps/worker/src/trend-projection-persistence.ts"
+    ],
+    "testFiles": [
+      "tests/unit/trend-projection-worker-scheduling.test.mjs",
+      "tests/unit/automatic-sourcing-recovery.test.mjs"
+    ],
+    "contract": "Preserve existing20-claim historical-repair turn across empty/capacity idle polls; only committed repair progress clears debt. No-work retains due turn while fresh claims continue; exceptions retain existing next-fresh-turn behavior. Internal downstream helper returns committed-work boolean, cursor-only/no-source/no-capacity false. No change to admission thresholds, source protection, scope, task payload, quality, API/config/schema/dependencies. 107 related tests; real natural admission and daily100 pending."
   }
 }

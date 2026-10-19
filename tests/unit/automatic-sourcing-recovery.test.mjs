@@ -135,7 +135,7 @@ test("failed transaction commit does not consume the discovery page or scan cade
 
 test("historical sourcing repair uses the primary image and schedules a shared search only once", async () => {
   const { worker, calls, tasks } = setup([row, { ...row, competitor_id: "another" }]);
-  await worker.enqueueMissingAutomaticDownstream();
+  assert.equal(await worker.enqueueMissingAutomaticDownstream(), true);
   assert.equal(tasks.length, 1);
   assert.deepEqual(tasks[0].queries, [
     {
@@ -163,7 +163,7 @@ test("missing image or disabled 1688 cannot silently fall back to unrelated supp
     [[row], [{ id: "old", code: "dhgate_supplier_search" }]],
   ]) {
     const { worker, calls, tasks } = setup(rows, providers);
-    await worker.enqueueMissingAutomaticDownstream();
+    assert.equal(await worker.enqueueMissingAutomaticDownstream(), false);
     assert.equal(tasks.length, 0);
     assert.equal(
       calls.some(([sql]) => sql.startsWith("UPDATE sourcing_searches")),

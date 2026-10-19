@@ -96,8 +96,11 @@ export class MySqlTrendProjectionWorker {
     // Match the recovery batch bound, while still serving fresh work first.
     let repaired = false;
     if (this.claimedSinceRepair >= 20) {
+      // An exception still yields the next turn to fresh work. An ordinary
+      // capacity/no-work result retains the owed repair turn across idle polls.
       this.claimedSinceRepair = 0;
-      await this.persistence.enqueueMissingAutomaticDownstream();
+      if (!(await this.persistence.enqueueMissingAutomaticDownstream()))
+        this.claimedSinceRepair = 20;
       repaired = true;
     }
     let job = await this.claim();
@@ -111,8 +114,8 @@ export class MySqlTrendProjectionWorker {
       job = await this.claim();
     }
     if (!job) {
-      this.claimedSinceRepair = 0;
-      if (!repaired) await this.persistence.enqueueMissingAutomaticDownstream();
+      if (!repaired && (await this.persistence.enqueueMissingAutomaticDownstream()))
+        this.claimedSinceRepair = 0;
       return { status: "idle" };
     }
     this.claimedSinceRepair += 1;

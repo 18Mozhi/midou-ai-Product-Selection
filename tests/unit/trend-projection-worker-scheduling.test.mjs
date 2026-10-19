@@ -258,6 +258,41 @@ test("failed bounded repair does not permanently block fresh projection work", a
   assert.equal((await worker.processOnce()).status, "succeeded");
 });
 
+test("idle backpressure polls preserve twenty accumulated claims and the next repair precedes fresh work", async () => {
+  const { pool, calls } = createPool({ ...jobScope, id: "fresh", attempt_count: 0 });
+  const worker = new MySqlTrendProjectionWorker(pool, "worker", 120, () => now);
+  worker.sourceRecovery.processOnce = async () => 0;
+  worker.persistence.project = async () => {
+    calls.push("project");
+    return "topic";
+  };
+  let progress = false;
+  worker.persistence.enqueueMissingAutomaticDownstream = async () => {
+    calls.push("repair");
+    return progress;
+  };
+  const claim = worker.claim.bind(worker);
+  for (let index = 0; index < 20; index += 1) {
+    worker.claim = claim;
+    await worker.processOnce();
+    worker.claim = async () => null;
+    await worker.processOnce();
+    assert.equal(worker.claimedSinceRepair, index + 1);
+  }
+  assert.equal(worker.claimedSinceRepair, 20);
+  for (let index = 0; index < 3; index += 1) {
+    await worker.processOnce();
+    assert.equal(worker.claimedSinceRepair, 20);
+  }
+  progress = true;
+  worker.claim = claim;
+  calls.length = 0;
+  await worker.processOnce();
+  assert.ok(calls.indexOf("repair") < calls.indexOf("claim"));
+  assert.ok(calls.indexOf("claim") < calls.indexOf("project"));
+  assert.equal(worker.claimedSinceRepair, 1);
+});
+
 for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscovery"]) {
   test(`${method} applies active tenant scope to global and tenant capacity`, async () => {
     const { TrendProjectionPersistence } =

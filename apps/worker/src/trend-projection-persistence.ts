@@ -239,7 +239,7 @@ export class TrendProjectionPersistence {
       c.release();
     }
   }
-  async enqueueMissingAutomaticDownstream() {
+  async enqueueMissingAutomaticDownstream(): Promise<boolean> {
     if (
       await recoverCircuitHeldSourcing(
         this.pool,
@@ -262,7 +262,7 @@ export class TrendProjectionPersistence {
         this.now(),
       )
     )
-      return;
+      return true;
     const c = await this.pool.getConnection(),
       now = this.now();
     try {
@@ -270,7 +270,7 @@ export class TrendProjectionPersistence {
       const providers = await this.downstreamProviders(c);
       if (!providers.amazon && !providers.alibaba1688) {
         await c.commit();
-        return;
+        return false;
       }
       const primaryRepair = providers.amazon
         ? await repairMissingPrimaryProduct(c, providers.amazon, now, this.primaryRepairAfterId)
@@ -356,6 +356,7 @@ export class TrendProjectionPersistence {
         [providers.amazon, providers.alibaba1688, providers.amazon, providers.alibaba1688],
       );
       const scheduledSearches = new Set<string>();
+      let scheduledWork = false;
       for (const row of rows) {
         const context = {
           organizationId: String(row.organization_id),
@@ -391,6 +392,7 @@ export class TrendProjectionPersistence {
             "competitor.collection.auto_scheduled",
             now,
           );
+          scheduledWork = true;
         }
         const searchId = row.search_id == null ? null : String(row.search_id),
           imageUrl = row.primary_image_url ? String(row.primary_image_url) : null,
@@ -433,6 +435,7 @@ export class TrendProjectionPersistence {
             ],
           );
           scheduledSearches.add(searchKey);
+          scheduledWork = true;
         }
       }
       let periodic: "discovery" | "detail" | null = null;
@@ -464,6 +467,7 @@ export class TrendProjectionPersistence {
         this.nextCompetitorDiscoveryScanAt = now.getTime() + 60_000;
         this.competitorDiscoveryAfterId = discoveryCursor.afterId;
       }
+      return Boolean(primaryRepair?.repaired || scheduledWork || periodic);
     } catch (error) {
       await c.rollback();
       throw error;
