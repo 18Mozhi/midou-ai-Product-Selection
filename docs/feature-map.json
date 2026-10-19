@@ -1,4 +1,24 @@
 {
+  "selectionCataloguePurchasePrice20261019": {
+    "status": "implemented",
+    "requirements": "docs/catalogue-purchase-price.md",
+    "routes": ["/opportunities"],
+    "sourceFiles": [
+      "apps/api/src/opportunity-purchase-price.ts",
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/api/src/opportunity-service.ts",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/components/opportunity-workspace-types.ts",
+      "apps/web/src/commerce-workspace.css"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-purchase-price.test.mjs",
+      "tests/unit/opportunity-primary-product.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/e2e/m04-10-selection-http.spec.ts"
+    ],
+    "contract": "List separates candidate counts from an existing current automatic 1688 procurement input with original observation time and evidence. One scoped batched query for paged opportunity IDs; missing stays null/unobtained, never candidate minima or profit. Existing matching, score, recommendation, decision, permissions and historical facts unchanged. No schema/config/dependency; full daily100 remains unverified."
+  },
   "selectionSupervisorRetryLifetime20261019": {
     "status": "implemented",
     "requirements": "docs/backend-restart-timer-lifetime.md",

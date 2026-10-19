@@ -28,6 +28,8 @@ export interface OpportunityCreateInput {
   source_topic_id?: string | null;
 }
 export interface OpportunitySummary {
+  automatic_purchase_price?:
+    import("./opportunity-purchase-price.js").AutomaticPurchasePrice | null;
   id: string;
   name: string;
   image_url: string | null;

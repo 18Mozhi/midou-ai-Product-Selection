@@ -11210,6 +11210,19 @@ components:
           updated_at,
         ]
       properties:
+        automatic_purchase_price:
+          type: object
+          nullable: true
+          readOnly: true
+          description: List-only current automatic Amazon-platform purchase input backed by active scoped 1688 evidence linked to this opportunity. Null when missing. Existing recorded unit price, not a candidate minimum or landed cost; original observed_at retained.
+          required: [id, amount_value, currency, observed_at, evidence_id, source_ref_id]
+          properties:
+            id: { type: string, format: uuid }
+            amount_value: { type: number, exclusiveMinimum: true, minimum: 0 }
+            currency: { type: string, enum: [CNY] }
+            observed_at: { type: string, format: date-time }
+            evidence_id: { type: string, format: uuid }
+            source_ref_id: { type: string }
         id: { type: string, format: uuid }
         name: { type: string, maxLength: 200 }
         image_url:

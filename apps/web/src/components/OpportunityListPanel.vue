@@ -121,6 +121,12 @@ const productFacts = (item: Opportunity) => {
       value: p?.price != null && p.currency ? `${p.currency} ${p.price.toFixed(2)}` : "未采集",
     },
     {
+      label: "1688进货价",
+      value: item.automatic_purchase_price
+        ? `CNY ${item.automatic_purchase_price.amount_value.toFixed(2)}`
+        : "未取得",
+    },
+    {
       label: "评分 / 评价",
       value: `${p?.rating_value != null ? p.rating_value.toFixed(1) : "—"} / ${p?.review_count != null ? `${p.review_count} 条` : "未采集"}`,
     },
@@ -135,6 +141,12 @@ const productFacts = (item: Opportunity) => {
       value: p?.public_signals?.best_seller_rank
         ? `#${p.public_signals.best_seller_rank.rank}`
         : "未采集",
+    },
+    {
+      label: "采价时间",
+      value: item.automatic_purchase_price
+        ? freshness(item.automatic_purchase_price.observed_at)
+        : "未取得",
     },
   ];
 };
@@ -375,7 +387,9 @@ watch(imageFailureResetSources, (items) => {
         </button>
       </div>
     </header>
-    <p class="catalog-data-note">购买提示为公开下限，不等于精确销量；未采集的数据保持未知。</p>
+    <p class="catalog-data-note">
+      购买提示为公开下限，不等于精确销量；进货价为已有采集记录，不含其他成本；候选数量不代表可用货源。
+    </p>
     <div class="catalog-products">
       <article v-for="item in items" :key="item.id" class="catalog-product">
         <RouterLink
@@ -413,8 +427,8 @@ watch(imageFailureResetSources, (items) => {
                 v-for="fact in productFacts(item)"
                 :key="fact.label"
                 :class="{
-                  'is-price': fact.label === '售价',
-                  'is-missing': fact.value === '未采集',
+                  'is-price': ['售价', '1688进货价'].includes(fact.label),
+                  'is-missing': ['未采集', '未取得'].includes(fact.value),
                 }"
               >
                 <dt>{{ fact.label }}</dt>
@@ -441,10 +455,10 @@ watch(imageFailureResetSources, (items) => {
           </dl>
           <div class="catalog-product-coverage">
             <span
-              >竞品 <strong>{{ item.competitor_count }}</strong></span
+              >竞品候选 <strong>{{ item.competitor_count }}</strong></span
             >
             <span
-              >货源 <strong>{{ item.supplier_candidate_count }}</strong></span
+              >货源候选 <strong>{{ item.supplier_candidate_count }}</strong></span
             >
             <span>{{ opportunityProfitStatusLabel(item.profit_status) }}</span>
           </div>

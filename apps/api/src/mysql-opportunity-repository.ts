@@ -8,6 +8,7 @@ import {
   opportunityPrimaryRecordsSql,
   readOpportunityPrimaryProduct,
 } from "./opportunity-primary-product.js";
+import { readOpportunityPurchasePrices } from "./opportunity-purchase-price.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
@@ -197,7 +198,18 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           (input.page - 1) * input.pageSize,
         ],
       );
-    return { items: rows.map(summary), total: Number(count[0]?.total ?? 0) };
+    const prices = await readOpportunityPurchasePrices(
+      this.pool,
+      input,
+      rows.map((row) => String(row.id)),
+    );
+    return {
+      items: rows.map((row) => ({
+        ...summary(row),
+        automatic_purchase_price: prices.get(String(row.id)) ?? null,
+      })),
+      total: Number(count[0]?.total ?? 0),
+    };
   }
   async memberOptions(input: { organizationId: string; workspaceId: string }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(

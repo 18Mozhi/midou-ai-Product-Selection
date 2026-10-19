@@ -165,6 +165,7 @@ export async function createSelectionHttpStack(webOrigin) {
     source_count: 0,
     competitor_count: 5,
     supplier_candidate_count: 0,
+    automatic_purchase_price: null,
     matched_rule_count: 0,
     selection_stage: "not_eligible",
     quality_gates: {
@@ -187,6 +188,15 @@ export async function createSelectionHttpStack(webOrigin) {
       id: selectionHttpIds.product,
       main_asin: "B0HTTP0000",
       name: "HTTP 验证耳机收纳盒",
+      supplier_candidate_count: 60,
+      automatic_purchase_price: {
+        id: "00000000-0000-4000-8000-000000009105",
+        amount_value: 3.25,
+        currency: "CNY",
+        observed_at: "2026-08-08T12:00:00.000Z",
+        evidence_id: "00000000-0000-4000-8000-000000009106",
+        source_ref_id: "1688:123:p75:5",
+      },
       primary_product: primary(19.95),
     },
     {

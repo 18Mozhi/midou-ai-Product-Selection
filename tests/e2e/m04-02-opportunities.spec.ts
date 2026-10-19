@@ -382,7 +382,7 @@ test("M04-02.A07/A08/A15 automatic opportunity list ignores retired creation and
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("compact-catalogue-first-screen-20261017.png", {
+  await expect(page).toHaveScreenshot("catalogue-purchase-record-first-screen-20261019.png", {
     fullPage: true,
   });
   await page.getByRole("button", { name: "全部商品" }).click();
@@ -805,10 +805,17 @@ test("catalogue shows original primary facts without inventing sales or private 
   await expect(page.locator(".catalog-data-note")).toHaveCount(1);
   const missingFacts = page.locator(".catalog-product").nth(1).locator(".catalog-public-facts");
   await expect(missingFacts).toContainText("商品资料待采集");
-  await expect(missingFacts.locator("dl > div")).toHaveCount(4);
-  await expect(missingFacts.locator(".is-price")).toContainText("未采集");
+  await expect(missingFacts.locator("dl > div")).toHaveCount(6);
+  await expect(missingFacts.locator(".is-price").filter({ hasText: "售价" })).toContainText(
+    "未采集",
+  );
+  await expect(missingFacts.locator(".is-price").filter({ hasText: "1688进货价" })).toContainText(
+    "未取得",
+  );
   const priceSize = await facts
-    .locator(".is-price dd")
+    .locator(".is-price")
+    .filter({ hasText: "售价" })
+    .locator("dd")
     .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
   expect(priceSize).toBeGreaterThanOrEqual(18);
   const factTops = await page
@@ -2948,7 +2955,7 @@ test("compact catalogue exposes the first product title above the fold with twen
   });
   expect(titleLayout.height).toBeLessThanOrEqual(titleLayout.lineHeight * 2 + 1);
   expect(titleLayout.unobscured).toBe(true);
-  await expect(page).toHaveScreenshot("compact-all-catalogue-no-batch-20261019.png", {
+  await expect(page).toHaveScreenshot("catalogue-purchase-record-all-20261019.png", {
     fullPage: false,
   });
   const allBox = await firstTitle.boundingBox();

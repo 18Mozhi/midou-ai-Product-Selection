@@ -31,6 +31,14 @@ export type OpportunityTab =
   "overview" | "competition" | "profit" | "risk" | "evidence" | "decisions";
 
 export interface OpportunitySummary {
+  automatic_purchase_price?: {
+    id: string;
+    amount_value: number;
+    currency: "CNY";
+    observed_at: string;
+    evidence_id: string;
+    source_ref_id: string;
+  } | null;
   id: string;
   name: string;
   image_url: string | null;

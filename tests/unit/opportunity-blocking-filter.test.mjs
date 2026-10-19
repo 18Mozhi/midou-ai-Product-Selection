@@ -161,21 +161,28 @@ test("opportunity blocker filters reuse the persisted adoption guard facts", asy
   assert.equal(result.items[0].lifecycle_dwell_seconds, 14400);
   assert.match(statements[1].sql, /lifecycle_entered_at[\s\S]*lifecycle_dwell_seconds/);
   assert.ok(
-    statements.every(({ sql }) =>
-      sql.includes("(o.evidence_count=0 OR o.coverage_status='insufficient')"),
-    ),
+    statements
+      .slice(0, 2)
+      .every(({ sql }) => sql.includes("(o.evidence_count=0 OR o.coverage_status='insufficient')")),
   );
+  assert.equal(statements.length, 3);
+  assert.deepEqual(statements[2].values, [scope.organizationId, scope.workspaceId, row.id]);
+  assert.match(statements[2].sql, /ci\.opportunity_id IN \(\?\)/);
 
   statements.length = 0;
   await repository.list({ ...scope, blockingReason: "recommendation_insufficient" });
   assert.ok(
-    statements.every(
-      ({ sql }) =>
-        sql.includes("NOT (o.recommendation_status='recommend'") &&
-        sql.includes("o.profit_status='calculated'") &&
-        sql.includes("sc_gate.dimension_code='risk'"),
-    ),
+    statements
+      .slice(0, 2)
+      .every(
+        ({ sql }) =>
+          sql.includes("NOT (o.recommendation_status='recommend'") &&
+          sql.includes("o.profit_status='calculated'") &&
+          sql.includes("sc_gate.dimension_code='risk'"),
+      ),
   );
+  assert.equal(statements.length, 3);
+  assert.deepEqual(statements[2].values, [scope.organizationId, scope.workspaceId, row.id]);
 });
 
 test("opportunity detail centralizes persisted blocker release progress", async () => {

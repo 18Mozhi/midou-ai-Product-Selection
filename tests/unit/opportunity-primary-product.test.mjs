@@ -140,6 +140,20 @@ test("list repository exposes only selected primary facts and keeps counts", asy
     query: async (sql, params) => {
       calls.push([sql, params]);
       if (sql.startsWith("SELECT COUNT(*) total")) return [[{ total: 1 }]];
+      if (sql.startsWith("SELECT ci.opportunity_id"))
+        return [
+          [
+            {
+              opportunity_id: "item",
+              id: "cost",
+              amount_value: "3.250000",
+              currency: "CNY",
+              observed_at: now,
+              evidence_id: "supply-evidence",
+              source_ref_id: "1688:123:p75:5",
+            },
+          ],
+        ];
       return [
         [
           {
@@ -173,6 +187,9 @@ test("list repository exposes only selected primary facts and keeps counts", asy
   assert.match(calls[1][0], /LIMIT 18446744073709551615/);
   assert.equal(r.items[0].primary_product.price, 29);
   assert.equal(r.items[0].competitor_count, 5);
+  assert.equal(r.items[0].supplier_candidate_count, 10);
+  assert.equal(r.items[0].automatic_purchase_price.amount_value, 3.25);
+  assert.equal(calls.length, 3, "one batched price query, never a request per product");
   assert.equal(r.items[0].image_url, "https://m.media-amazon.com/images/I/product.jpg");
   assert.equal(r.items[0].primary_linked_record, undefined);
   assert.deepEqual(calls[1][1].slice(0, 2), ["org", "ws"]);
