@@ -49,7 +49,7 @@ const supply = (id, title, price) => ({
   externalId: String(1000 + id),
 });
 
-test("historical repair only revives exact legacy rule skips and leaves leased or failed work untouched", async () => {
+test("historical repair admits only exact skipped successes with current primary evidence", async () => {
   const calls = [];
   const worker = new MySqlAutomaticSelectionEvaluationWorker(
     {
@@ -66,9 +66,9 @@ test("historical repair only revives exact legacy rule skips and leaves leased o
   assert.match(calls[0].sql, /INSERT IGNORE[\s\S]*e.opportunity_id IS NULL/);
   assert.match(
     calls[1].sql,
-    /WHERE e.status='succeeded'[\s\S]*\$\.skipped'\)\)='not_rule_candidate'/,
+    /WHERE e.status='succeeded'[\s\S]*IN \('not_rule_candidate','primary_product_missing_or_not_pending'\)/,
   );
-  assert.match(calls[1].sql, /result_json=NULL/);
+  assert.doesNotMatch(calls[1].sql, /UPDATE |FOR UPDATE/);
   for (const { sql } of calls) {
     assert.match(sql, /o.decision_status='pending'/);
     assert.match(sql, /o.lifecycle_status NOT IN \('archived','deleted'\)/);

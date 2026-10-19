@@ -1,4 +1,18 @@
 {
+  "selectionSkippedPrimaryRecovery20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-skipped-primary-recovery.md",
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-skipped-recovery.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-skipped-recovery.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/fixtures/skipped-selection-recovery-sql.mjs"
+    ],
+    "contract": "Recover only exact succeeded skips not_rule_candidate or primary_product_missing_or_not_pending after scoped active pending current primary eligibility. Ordinary bounded read then scoped atomic per-row recheck; never revive real success, leased or terminal work, or rewrite evidence prices scores decisions or completion. Existing worker scheduling and quality gates remain. No API/schema/config/dependency/Python change; BaoTa Node restart required."
+  },
   "selectionCompletedLibrary20261020": {
     "status": "implemented",
     "requirements": "docs/selection-completed-library.md",

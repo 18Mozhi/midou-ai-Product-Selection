@@ -1,3 +1,4 @@
+import { recoverSkippedSelectionEvaluations } from "./automatic-selection-skipped-recovery.js";
 import { recordSelectionPipelineCompletion } from "./selection-pipeline-completion.js";
 import {
   recoverSupplyClassifierEvaluations,
@@ -177,14 +178,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         `WHERE e.opportunity_id IS NULL AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted') AND ${selectionCandidateSql} LIMIT 100`,
       [now, now, now],
     );
-    await this.pool.query(
-      "UPDATE automatic_selection_evaluations e SET status='queued',attempt_count=0,available_at=?,result_json=NULL,last_error_code=NULL,updated_at=? " +
-        "WHERE e.status='succeeded' AND JSON_UNQUOTE(JSON_EXTRACT(e.result_json,'$.skipped'))='not_rule_candidate' " +
-        "AND EXISTS (SELECT 1 FROM opportunities o WHERE o.id=e.opportunity_id AND o.organization_id=e.organization_id " +
-        "AND o.workspace_id=e.workspace_id AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted') " +
-        `AND ${selectionCandidateSql}) LIMIT 100`,
-      [now, now],
-    );
+    await recoverSkippedSelectionEvaluations(this.pool, now);
   }
 
   private async claim(): Promise<EvaluationJob | null> {
