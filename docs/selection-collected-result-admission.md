@@ -37,3 +37,25 @@
 据此补上结果轮保留：有合格到期已采集结果却没领取到时，不再同轮调用下游生产。该“有无合格结果”检查不含容量条件、不锁历史或写库；07:36:53实际MySQL只读44ms确认ready=true、0修改。新增回归覆盖连续三次容量等待均不调生产者并保留轮次，以及证明/到期/活动范围不变。此修正的正式发布和自然处理仍须另行核验。
 
 轮次保留修正最终211项相关Node、22工作区完整构建、定向格式和文档/路由校验通过；首次扩大回归有一条历史单测的空pool替身缺少新检查，补齐“无到期已采集结果”替身后定向27项和全量211项均通过，未修改业务错误处理来绕开测试。
+
+## 轮次保留修正发布回执
+
+327ec54a6df27b5cf85a4051b599df902bb5a240已按既定脚本发布，8文件归属/格式/运行文档/发布矩阵及22工作区正式构建、宝塔/公网检查通过，终态exit0、status=deployed，临时包已删除。没有新增生产服务或提高运行并发。
+
+2026-10-20 07:41:54和07:43:16独立BUILD_SHA均为该版本；collected-product-projection-policy模块仍4388f9f23b3dd75c279f7047462772598a0e1dbaf2e729e5bf1ffb9af449a400，trend-projection-worker更新为ca9a984ef095df23ba385b01a07122ec553d48d5689396e1f95d424dcb3e87f7，与本地一致；前端index.html仍5e574da54d4ed0b1f89cc42de3c8afad9b56ee62c71074ea3a3ec4118cc1d889。
+
+以07:41:54为新观察边界，07:43:29尚无边界后的已采集投影更新或下游生产事件，原代表任务scheduled/attempt0、证明为1、没有主品关联，活动积压1001、每日完成1。调度实时心跳正常、suspected_stuck_runs=0；部署前94b6601f-3f9f-412c-96bb-7444de1e9516旧running行最近心跳07:41:29，原租约07:43:29到期，未强制清除。旧状态行不能证明该任务仍存活。自然容量释放后的主品投影及整链恢复仍待验证，不将已部署或14条采集结果计为完成商品。
+
+本轮没有新增临时验证文件、浏览器标签或本地服务。仅保留永久回归资料与发布回执；原verification/state.json未改未提交，SHA256仍29ab3761860d03f2a90dc356b4511d6054f66ad856feae165330d07b96c50c2c。
+
+## 自然投影恢复（2026-10-20 07:47，北京时间）
+
+旧租约按原机制到期后，已确认新采集作业95924d27-489e-43dd-ad95-ef9477b964ca有实时心跳，未强制清租约；随后容量自然释放。07:45:25只读发现本工作区历史已采集投影b9cc2525-cc04-11f1-808f-06e02481d500已在07:44:58.679自然succeeded，attempt1、last_error_code=NULL。不是手工processOnce、重放或修改队列状态。
+
+07:46:58及07:47:51正式回读确认新机会b118cb56-ce5a-4177-8098-f94da63bb4d0、主品ASIN B0GWJTQBNM、原标题Student Driver Magnet for Car 2 Pack, Large Reflective 10x3.4 in，选中规范化记录65bd119c-ca7d-47ae-8a81-4049795e97cc、原始证据cca70e5d-a70e-47d7-8e87-fbf61c5f6653。该证据实际关联到同范围机会，原observed_at=05:33:22.275保持不变；主品competitor为ae336603-940c-4c95-bc41-98a5ba496bc9，尚无详情快照。
+
+opportunity.created_at与projection.updated_at同为07:44:58.679；不可用晚20ms的primary_selected事件时间作为严格相等建档比较。首次只读比较因此得到false，已改按同事务投影时间及实际证据/任务核对，不能据首次false误判成旧商品或改写数据库时间。
+
+同范围、同trace、同建档时间自然生成三项原下游任务：0265caa1-4b0b-4238-8b0c-b523a58d1fdd主品competitor_snapshot（queued）、42a4c289-c791-4de7-a4ab-bfd68002c726竞品opportunity_competitors（scheduled）、bc3eb5b8-6875-4f6f-a008-32fceb3f76b0货源sourcing_search（scheduled）。新搜索1739167d-bda5-4821-88a7-3d8619378657绑定该机会、真实1688_search、supplier-keywords-v2、非空主品图和精确search_id，candidate_count仍0。
+
+这证明已采集结果已自然进入主品建档及原三项下游链路，不证明详情、5–10竞品、1688报价或整链已完成。原14结果代表9d3051fa-cc13-11f1-808f-06e02481d500仍scheduled、没有主品关联；新主品来自另一条既有找品结果，不能把两条任务混为一条。07:45:27每日完成仍1，活动积压1002，保持原软门限解释，不抬高完成数。
