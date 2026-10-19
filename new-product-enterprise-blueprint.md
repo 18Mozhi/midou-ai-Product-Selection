@@ -1,3 +1,5 @@
+> 2026-10-19：成员选品库退休批量指派、人工复核、归档及负责人筛选，删除旧选择状态和样式；历史owner_id不再影响成员请求，逐品决策和后台历史合同保留。见 docs/selection-retired-member-batch.md。旧章节的批量入口要求不再适用于成员界面，整链百品仍未通过。
+
 > 当前交接与逐项验收状态见 [selection-current-acceptance.md](docs/selection-current-acceptance.md)。旧记录的“未部署”为当时状态，代码发布与真实业务验收分别核对。
 
 > 2026-10-19：采集在同一有效优先级内按工作区最近真实领取公平轮转，再执行范围内摄取/完成通道；不改变来源、租约、次数或积压预算。见 docs/selection-collection-scope-fairness.md，整链百品仍需真实验收。
