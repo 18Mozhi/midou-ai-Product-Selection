@@ -25,3 +25,11 @@
 21:43:20Z实际1000阈值查询17ms/0；仅忽略容量的诊断1491ms选出当前范围B0FLY4HV8V，再经同身份只读点选成功，没有手工调度。21:48:40Z EXPLAIN显示普通候选从现有status索引读评估队列，o主键/c机会索引；当前点选的c/o为PRIMARY const各1，等待评估为嵌套PRIMARY const1。没有执行真实FOR UPDATE或任何写入。正式发布、自然优先入队、新详情/整链仍须分别验证。
 
 22工作区完整构建、格式、运行文档及地图/OpenAPI语法解析通过。没有新增临时脚本/目录、日志、截图、浏览器或常驻验证进程；永久SQL/单元测试为本次交付保留。旧清理拒绝路径未重试，用户原verification/state.json保持原哈希且不暂存。配置仅注释更新，无真实.env修改；正式发布和自然优先任务结果待上线后回读。
+
+## 正式发布与真实边界（2026-10-20 05:57，北京时间）
+
+59ee638bd2025f803acd5a9dad0cca1c66af82aa已由固定发布命令通过格式、运行文档、发布矩阵、13路径归属及22工作区构建，上传与宝塔重启、公开验证完成，终端exit=0，发布临时包已自动删除。独立只读回读BUILD_SHA一致；automatic-primary-detail-refresh哈希8b42fd3fe78421d4c92aa1ec84d56b1222517c1ac3c77da7d8b446ccf72b43f0，trend-projection-persistence哈希a40a437d90bb00257a1b595d86473998c904f9882fa6549406e8283abd76ca9c，与本地构建完全一致；原competitor-refresh-policy哈希4444009e2c296325617450349c996bef394ea0164acf0aa63a0cb62184c27f60未变。线上编译方法捕获原回退SQL哈希仍9092c7b10f8d2420f23d34115215003b68726094ed674c9ff269274ca33359f7。
+
+21:56:58.703Z真实容量1000/1000，实际候选为空；两来源enabled/closed，Cooling主品仍无详情、仅有原permission_denied终止任务。仅在SELECT诊断中使用backlog+1，原编译方法选中当前工作区B0FLY4HV8V，沿用auto-refresh载荷和competitor.collection.auto_scheduled；scheduleCoreCollection已被只读哨兵替换，在任何写入前抛出，未创建任务/事件或锁定业务记录。该探针只能证明线上选择与生产者边界，不是自然调度成功。
+
+从21:56:58.703Z至21:57:20.512Z，新详情/发现事件为0，积压仍1000，当前工作区当日整链仍1/100；不提高阈值、不重放任务、不将诊断或旧监控快照计入产量。自然优先入队、真实详情和日百品仍待验收，总目标未完成。
