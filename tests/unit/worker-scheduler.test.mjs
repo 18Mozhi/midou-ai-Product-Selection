@@ -566,6 +566,32 @@ test("调度快照保存最近业务失败关联但不保存原始结果载荷",
   await scheduler.stop();
 });
 
+test("采集队列覆盖浏览器预算及回执时间，其他队列和旧预算保持不变", async () => {
+  const { workerQueues, WORKER_QUEUE_POLICIES } =
+    await import("../../apps/worker/dist/worker-queue-registry.js");
+  const specifications = Object.keys(WORKER_QUEUE_POLICIES).map((name) => [
+    name,
+    2000,
+    async () => {},
+  ]);
+  const original = workerQueues(specifications);
+  const extended = workerQueues(specifications, 600000);
+  for (let i = 0; i < original.length; i++) {
+    if (original[i].name === "collection_tasks") {
+      assert.equal(extended[i].timeoutMs, 630000);
+      assert.equal(extended[i].stuckAfterMs, 1260000);
+      assert.equal(extended[i].maxConcurrency, original[i].maxConcurrency);
+      assert.equal(extended[i].maxRetries, original[i].maxRetries);
+    } else assert.deepEqual(extended[i], original[i]);
+  }
+  assert.deepEqual(workerQueues(specifications, 180000), original);
+  for (const invalid of [-1, NaN, Infinity, 1.5])
+    assert.throws(
+      () => workerQueues(specifications, invalid),
+      /collection_browser_timeout_invalid/,
+    );
+});
+
 test("已采集核心事实先投影，再执行刷新和评分，保留高优先级隔离与并发额度", async () => {
   const { QueueScheduler } = await import("../../apps/worker/dist/queue-scheduler.js");
   const { workerQueues } = await import("../../apps/worker/dist/worker-queue-registry.js");

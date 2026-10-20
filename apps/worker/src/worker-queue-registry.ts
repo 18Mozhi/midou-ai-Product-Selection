@@ -94,5 +94,18 @@ export const workerQueue = (
 
 export const workerQueues = (
   specifications: ReadonlyArray<readonly [WorkerQueueName, number, QueueSchedulerJob["run"]]>,
-): QueueSchedulerJob[] =>
-  specifications.map(([name, intervalMs, run]) => workerQueue(name, intervalMs, run));
+  collectionBrowserRunTimeoutMs = 0,
+): QueueSchedulerJob[] => {
+  if (!Number.isSafeInteger(collectionBrowserRunTimeoutMs) || collectionBrowserRunTimeoutMs < 0)
+    throw new Error("collection_browser_timeout_invalid");
+  return specifications.map(([name, intervalMs, run]) => {
+    const queue = workerQueue(name, intervalMs, run);
+    if (name === "collection_tasks" && collectionBrowserRunTimeoutMs > 0) {
+      // Browser client already waits run budget + 10 seconds. Keep settlement
+      // inside the outer queue deadline instead of aborting a live human handoff.
+      const timeoutMs = Math.max(queue.timeoutMs!, collectionBrowserRunTimeoutMs + 30_000);
+      return { ...queue, timeoutMs, stuckAfterMs: Math.max(timeoutMs * 2, 120_000) };
+    }
+    return queue;
+  });
+};

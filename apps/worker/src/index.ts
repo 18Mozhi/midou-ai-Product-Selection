@@ -234,127 +234,134 @@ const heartbeat = () => {
   void persistSchedulerState();
 };
 
-const queues = workerQueues([
+const queues = workerQueues(
   [
-    "collection_tasks",
-    config.collectionTasks.pollMs,
-    pollers.create("collection_tasks", async (signal) => {
-      await redisStore.connect();
-      return processCollectionTaskOnce({
-        repository: collectionRepository,
-        coordinator,
-        executor,
-        workerId: config.identity.workerId,
-        leaseSeconds: config.collectionTasks.leaseSeconds,
-        signal,
-        resourceProbe: collectionResourceProbe,
-      });
-    }),
-  ],
-  [
-    "auth_delivery",
-    config.auth.outboxPollMs,
-    pollers.create(
-      "auth_delivery",
-      () =>
-        processAuthDeliveryOnce({
-          pool,
+    [
+      "collection_tasks",
+      config.collectionTasks.pollMs,
+      pollers.create("collection_tasks", async (signal) => {
+        await redisStore.connect();
+        return processCollectionTaskOnce({
+          repository: collectionRepository,
+          coordinator,
+          executor,
           workerId: config.identity.workerId,
-          masterKey: config.security.credentialsMasterKey,
-          provider: authMailProvider,
-        }),
-      { enabled: () => Boolean(config.security.credentialsMasterKey) },
-    ),
+          leaseSeconds: config.collectionTasks.leaseSeconds,
+          signal,
+          resourceProbe: collectionResourceProbe,
+        });
+      }),
+    ],
+    [
+      "auth_delivery",
+      config.auth.outboxPollMs,
+      pollers.create(
+        "auth_delivery",
+        () =>
+          processAuthDeliveryOnce({
+            pool,
+            workerId: config.identity.workerId,
+            masterKey: config.security.credentialsMasterKey,
+            provider: authMailProvider,
+          }),
+        { enabled: () => Boolean(config.security.credentialsMasterKey) },
+      ),
+    ],
+    [
+      "business_task_projection",
+      config.businessTasks.pollMs,
+      pollers.create("business_task_projection", () =>
+        projectBusinessTaskOnce(pool, config.identity.workerId, config.businessTasks.leaseSeconds),
+      ),
+    ],
+    [
+      "approval_escalation",
+      config.approvals.escalationPollMs,
+      pollers.create("approval_escalation", () => approvalEscalation.processOnce()),
+    ],
+    [
+      "notification_outbox",
+      config.notifications.outboxPollMs,
+      pollers.create("notification_outbox", () => notificationOutbox.processOnce()),
+    ],
+    [
+      "webhook_deliveries",
+      config.openPlatform.webhookPollMs,
+      pollers.create("webhook_deliveries", () => webhookDeliveries.runOnce(), {
+        enabled: () => Boolean(config.security.credentialsMasterKey),
+        logResult: false,
+      }),
+    ],
+    [
+      "automatic_selection_evaluation",
+      config.automaticSelection.pollMs,
+      pollers.create("automatic_selection_evaluation", () =>
+        automaticSelectionEvaluation.processOnce(),
+      ),
+    ],
+    [
+      "opportunity_refresh",
+      config.opportunities.refreshPollMs,
+      pollers.create("opportunity_refresh", () => opportunityRefresh.processOnce()),
+    ],
+    [
+      "opportunity_scoring",
+      config.scoring.pollMs,
+      pollers.create("opportunity_scoring", () => opportunityScoring.processOnce()),
+    ],
+    [
+      "opportunity_profit",
+      config.profit.pollMs,
+      pollers.create("opportunity_profit", () => opportunityProfit.processOnce()),
+    ],
+    [
+      "competitor_monitor",
+      config.competitorMonitor.pollMs,
+      pollers.create("competitor_monitor", () => competitorMonitor.processOnce()),
+    ],
+    [
+      "sourcing_projection",
+      config.sourcing.pollMs,
+      pollers.create("sourcing_projection", () => sourcingProjection.processOnce()),
+    ],
+    [
+      "trend_projection",
+      config.trends.projectionPollMs,
+      pollers.create("trend_projection", () => trendProjection.processOnce()),
+    ],
+    [
+      "ai_analysis",
+      config.ai.pollMs,
+      pollers.create("ai_analysis", () => aiAnalysis.processOnce()),
+    ],
+    [
+      "report_exports",
+      config.reports.pollMs,
+      pollers.create("report_exports", () => reportExports.processOnce()),
+    ],
+    [
+      "automation_rules",
+      config.automations.pollMs,
+      pollers.create("automation_rules", () => automation.processOnce()),
+    ],
+    [
+      "core_collection_projection",
+      2_000,
+      pollers.create("core_collection_projection", () => coreCollectionProjection.processOnce()),
+    ],
+    [
+      "automatic_rule_sources",
+      config.automaticSources.pollMs,
+      pollers.create("automatic_rule_sources", () => automaticSourceScheduler.processRuleOnce()),
+    ],
+    [
+      "automatic_full_sources",
+      config.automaticSources.pollMs,
+      pollers.create("automatic_full_sources", () => automaticSourceScheduler.processFullOnce()),
+    ],
   ],
-  [
-    "business_task_projection",
-    config.businessTasks.pollMs,
-    pollers.create("business_task_projection", () =>
-      projectBusinessTaskOnce(pool, config.identity.workerId, config.businessTasks.leaseSeconds),
-    ),
-  ],
-  [
-    "approval_escalation",
-    config.approvals.escalationPollMs,
-    pollers.create("approval_escalation", () => approvalEscalation.processOnce()),
-  ],
-  [
-    "notification_outbox",
-    config.notifications.outboxPollMs,
-    pollers.create("notification_outbox", () => notificationOutbox.processOnce()),
-  ],
-  [
-    "webhook_deliveries",
-    config.openPlatform.webhookPollMs,
-    pollers.create("webhook_deliveries", () => webhookDeliveries.runOnce(), {
-      enabled: () => Boolean(config.security.credentialsMasterKey),
-      logResult: false,
-    }),
-  ],
-  [
-    "automatic_selection_evaluation",
-    config.automaticSelection.pollMs,
-    pollers.create("automatic_selection_evaluation", () =>
-      automaticSelectionEvaluation.processOnce(),
-    ),
-  ],
-  [
-    "opportunity_refresh",
-    config.opportunities.refreshPollMs,
-    pollers.create("opportunity_refresh", () => opportunityRefresh.processOnce()),
-  ],
-  [
-    "opportunity_scoring",
-    config.scoring.pollMs,
-    pollers.create("opportunity_scoring", () => opportunityScoring.processOnce()),
-  ],
-  [
-    "opportunity_profit",
-    config.profit.pollMs,
-    pollers.create("opportunity_profit", () => opportunityProfit.processOnce()),
-  ],
-  [
-    "competitor_monitor",
-    config.competitorMonitor.pollMs,
-    pollers.create("competitor_monitor", () => competitorMonitor.processOnce()),
-  ],
-  [
-    "sourcing_projection",
-    config.sourcing.pollMs,
-    pollers.create("sourcing_projection", () => sourcingProjection.processOnce()),
-  ],
-  [
-    "trend_projection",
-    config.trends.projectionPollMs,
-    pollers.create("trend_projection", () => trendProjection.processOnce()),
-  ],
-  ["ai_analysis", config.ai.pollMs, pollers.create("ai_analysis", () => aiAnalysis.processOnce())],
-  [
-    "report_exports",
-    config.reports.pollMs,
-    pollers.create("report_exports", () => reportExports.processOnce()),
-  ],
-  [
-    "automation_rules",
-    config.automations.pollMs,
-    pollers.create("automation_rules", () => automation.processOnce()),
-  ],
-  [
-    "core_collection_projection",
-    2_000,
-    pollers.create("core_collection_projection", () => coreCollectionProjection.processOnce()),
-  ],
-  [
-    "automatic_rule_sources",
-    config.automaticSources.pollMs,
-    pollers.create("automatic_rule_sources", () => automaticSourceScheduler.processRuleOnce()),
-  ],
-  [
-    "automatic_full_sources",
-    config.automaticSources.pollMs,
-    pollers.create("automatic_full_sources", () => automaticSourceScheduler.processFullOnce()),
-  ],
-]);
+  config.playwright.runTimeoutSeconds * 1000,
+);
 
 scheduler = new QueueScheduler({
   maxConcurrency: config.runtime.workerMaxConcurrency,
