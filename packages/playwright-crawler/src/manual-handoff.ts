@@ -155,6 +155,7 @@ export async function waitForManualCaptcha(input: {
   page: Page;
   captchaSelector: string;
   allowedOrigins: string[];
+  isReady?: () => Promise<boolean>;
   signal?: AbortSignal;
 }) {
   const { page } = input,
@@ -181,7 +182,11 @@ export async function waitForManualCaptcha(input: {
       if (!(await page.locator(input.captchaSelector).count())) {
         await page.waitForLoadState("domcontentloaded");
         await safe();
-        if (!(await page.locator(input.captchaSelector).count())) return;
+        if (
+          !(await page.locator(input.captchaSelector).count()) &&
+          (!input.isReady || (await input.isReady()))
+        )
+          return;
       }
       const frame = await page.screenshot({ type: "jpeg", quality: 75, timeout: 5000 });
       const info: HandoffInfo = {
@@ -213,7 +218,11 @@ export async function waitForManualCaptcha(input: {
           await rm(commandPath + ".lock", { force: true });
         }
         const command = packet.command;
-        if (!(await page.locator(input.captchaSelector).count())) continue;
+        if (
+          !(await page.locator(input.captchaSelector).count()) &&
+          (!input.isReady || (await input.isReady()))
+        )
+          continue;
         if (
           packet.id &&
           handoffIdValid(packet.id) &&

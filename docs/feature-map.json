@@ -85,7 +85,7 @@
       "tests/m03-04/playwright-crawler.test.mjs",
       "tests/integration/browser-handoff.test.mjs"
     ],
-    "contract": "Inspect real CAPTCHA before HTTP 5xx classification, retain same public Amazon browser context for at most 300 seconds, expose bounded screenshot/input to one superadmin login session behind same-origin, live lease and audit checks, then automatically continue only after real guard clears. Preserve HTTP429, robots/login, parser, delivery and completion gates. Existing PLAYWRIGHT_RUN_TIMEOUT_SECONDS=600 accommodates handoff. No new service, dependency, database schema or external browser credential/CDP exposure. Node and Python BaoTa restart plus frontend refresh required; real source and 100/day acceptance remain separate."
+    "contract": "Inspect real CAPTCHA before HTTP 5xx classification, retain same public Amazon browser context for at most 300 seconds, expose bounded screenshot/input to one superadmin login session behind same-origin, live lease and audit checks, then automatically continue only after the CAPTCHA marker clears and the existing exact anonymous account link is visible; intermediate marker disappearance retains the live handoff and bounded operator input. Preserve HTTP429, robots/login, parser, delivery and completion gates. Existing PLAYWRIGHT_RUN_TIMEOUT_SECONDS=600 accommodates handoff. No new service, dependency, database schema or external browser credential/CDP exposure. Node and Python BaoTa restart plus frontend refresh required; real source and 100/day acceptance remain separate."
   },
   "selectionAnalysisWaitingCopy20261020": {
     "status": "implemented",

@@ -94,6 +94,57 @@ test("real-context handoff applies only bounded operator input, resumes and remo
   }
 });
 
+test("challenge marker disappearing does not resume before normal page readiness", async () => {
+  const root = await mkdtemp(join(tmpdir(), "scoutops-handoff-test-"));
+  const store = new BrowserHandoffStore(root);
+  let ready = false,
+    settled = false,
+    clicks = 0;
+  const page = {
+    url: () => "https://www.amazon.com/errors/validateCaptcha",
+    setViewportSize: async () => {},
+    locator: () => ({ count: async () => 0 }),
+    waitForLoadState: async () => {},
+    screenshot: async () => Buffer.from("waiting-page"),
+    mouse: {
+      click: async () => {
+        clicks++;
+        ready = true;
+      },
+    },
+  };
+  const running = waitForManualCaptcha({
+    root,
+    runId: randomUUID(),
+    requestId: randomUUID(),
+    page,
+    captchaSelector: "#captcha",
+    allowedOrigins: ["https://www.amazon.com"],
+    isReady: async () => ready,
+  }).then(() => {
+    settled = true;
+  });
+  try {
+    let items = [];
+    for (let i = 0; i < 100 && !items.length; i++) {
+      await new Promise((r) => setTimeout(r, 10));
+      items = await store.list();
+    }
+    assert.equal(items.length, 1);
+    assert.equal(settled, false);
+    assert.equal((await store.frame(items[0].id)).toString(), "waiting-page");
+    await store.command(items[0].id, { kind: "click", x: 10, y: 20 }, randomUUID());
+    await running;
+    assert.equal(clicks, 1);
+    assert.equal(settled, true);
+    assert.deepEqual(await readdir(root), []);
+  } finally {
+    ready = true;
+    await running;
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test("operator routes require superadmin, origin, live lease, exclusive session and bounded commands", async () => {
   const root = await mkdtemp(join(tmpdir(), "scoutops-handoff-routes-")),
     id = randomUUID(),

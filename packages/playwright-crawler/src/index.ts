@@ -656,6 +656,14 @@ export class PlaywrightCrawlerEngine {
                   page,
                   captchaSelector: selector,
                   allowedOrigins: plan.allowed_origins,
+                  isReady: () =>
+                    page
+                      .getByRole("link", {
+                        name: "Hello, sign in Account & Lists",
+                        exact: true,
+                        includeHidden: true,
+                      })
+                      .isVisible(),
                   ...(options.signal ? { signal: options.signal } : {}),
                 });
               } catch {
