@@ -103,6 +103,7 @@ export function parseLan1688Result(payload: unknown, observedAt: string): Provid
 /** One in-flight request per appliance; failover remains within the six approved hosts. */
 export class Lan1688ImageSearch {
   private next = 0;
+  private detailCooldownUntil = 0;
   private readonly busy = new Set<string>();
   private readonly releaseWaiters = new Set<() => void>();
   constructor(
@@ -227,6 +228,8 @@ export class Lan1688ImageSearch {
     signal?: AbortSignal,
   ) {
     if (!this.token) throw new ProviderAdapterFailure("permission_denied", false);
+    if (Date.now() < this.detailCooldownUntil)
+      throw new ProviderAdapterFailure("rate_limited", true);
     if (
       offerIds.length > LAN_1688_COLLECTION_LIMIT ||
       offerIds.some((id) => !/^\d{1,40}$/.test(id))
@@ -276,7 +279,11 @@ export class Lan1688ImageSearch {
               break;
             } catch (error) {
               combined.throwIfAborted();
-              if (error instanceof ProviderAdapterFailure && !error.retryable) throw error;
+              if (
+                error instanceof ProviderAdapterFailure &&
+                (!error.retryable || error.code === "rate_limited")
+              )
+                throw error;
               if (!(failure instanceof ProviderAdapterFailure) || failure.code !== "rate_limited")
                 failure =
                   error instanceof ProviderAdapterFailure
@@ -301,6 +308,8 @@ export class Lan1688ImageSearch {
   }
 
   async collectEnriched(imageUrl: unknown, heartbeat: () => Promise<void>, signal?: AbortSignal) {
+    if (Date.now() < this.detailCooldownUntil)
+      throw new ProviderAdapterFailure("rate_limited", true);
     const image = await this.collect(imageUrl, heartbeat, signal);
     const ids = image.records.map((record) =>
       String((record.payload as { fields: { external_id: string } }).fields.external_id),
@@ -437,7 +446,18 @@ export class Lan1688ImageSearch {
         await response.body?.cancel();
         throw new ProviderAdapterFailure("permission_denied", false);
       }
-      if (response.status === 429) {
+      const detailRequest = endpoint.endsWith("/item-detail");
+      const retryAfter = response.headers.get("retry-after");
+      const retryAt =
+        retryAfter && /^\d+$/.test(retryAfter.trim())
+          ? Date.now() + Number(retryAfter.trim()) * 1000
+          : retryAfter
+            ? Date.parse(retryAfter)
+            : NaN;
+      const cooling = Number.isFinite(retryAt) && retryAt > Date.now();
+      if (response.status === 429 || (detailRequest && response.status === 409 && cooling)) {
+        if (detailRequest && cooling)
+          this.detailCooldownUntil = Math.max(this.detailCooldownUntil, retryAt);
         await response.body?.cancel();
         throw new ProviderAdapterFailure("rate_limited", true);
       }

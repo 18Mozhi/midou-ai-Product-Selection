@@ -11844,6 +11844,7 @@ x-scoutops-lan-1688-item-detail:
   resultFields: [success, complete, partial, failed, incomplete, succeeded, total, items]
   bounds: 2 offer IDs per batch; 120 distinct offers; 120 SKUs per offer; one shared in-flight request per node
   parserVersion: 1688-lan-item-detail-v1
+  backpressure: detail 429 or 409 with valid Retry-After stops batch fanout; client honors declared cooldown
   imageContextVersion: 1688-lan-image-detail-context-v1
   quoteIdentity: exact image offer and SKU; no cheapest or first SKU substitution
   runbook: docs/selection-lan-item-detail.md

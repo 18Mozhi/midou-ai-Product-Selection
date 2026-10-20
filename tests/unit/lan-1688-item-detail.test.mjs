@@ -485,3 +485,30 @@ test("SKU projection retains the selected quote and specification without duplic
   assert.equal(inserts[0].args[14], selected.location);
   assert.ok(!JSON.parse(inserts[0].args[17]).includes("specification"));
 });
+
+test("detail 409/429 Retry-After stops fanout and prevents requests during the declared cooldown", async () => {
+  for (const status of [409, 429]) {
+    let calls = 0;
+    const client = new Lan1688ImageSearch("test-only", 1000, async () => {
+      calls++;
+      return new Response(null, { status, headers: { "Retry-After": "300" } });
+    });
+    const offers = Array.from({ length: 12 }, (_, i) => String(800000000000 + i));
+    await assert.rejects(
+      client.collectItemDetails(offers, async () => {}),
+      { code: "rate_limited" },
+    );
+    assert.ok(calls > 0 && calls <= 6);
+    const previous = calls;
+    await assert.rejects(
+      client.collectItemDetails(offers, async () => {}),
+      { code: "rate_limited" },
+    );
+    assert.equal(calls, previous);
+    await assert.rejects(
+      client.collectEnriched(image, async () => {}),
+      { code: "rate_limited" },
+    );
+    assert.equal(calls, previous);
+  }
+});

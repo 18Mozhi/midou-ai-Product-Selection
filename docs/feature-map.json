@@ -24,7 +24,7 @@
       "tests/fixtures/lan-1688-item-detail.json",
       "tests/e2e/m04-06-sourcing.spec.ts"
     ],
-    "contract": "User supplied POST item-detail contract, fixed six appliances and existing backend token. Bind actual image SKU and scoped evidence; preserve literal specifications, units, source price conditions and original quote quantity. Do not price unmatched SKU, aggregate colors as independent offers, use packaging as product dimensions, or guess freight/fees. Read-only sourcing SKU facts; no schema, dependency, permission, Python or scheduler topology change. BaoTa Node restart and frontend upload required."
+    "contract": "User supplied POST item-detail contract, fixed six appliances and existing backend token. Detail 409/429 Retry-After stops fanout and preserves the server-declared cooldown. Bind actual image SKU and scoped evidence; preserve literal specifications, units, source price conditions and original quote quantity. Do not price unmatched SKU, aggregate colors as independent offers, use packaging as product dimensions, or guess freight/fees. Read-only sourcing SKU facts; no schema, dependency, permission, Python or scheduler topology change. BaoTa Node restart and frontend upload required."
   },
   "selectionLanBoundedPagination20261020": {
     "status": "implemented",
