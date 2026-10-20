@@ -126,6 +126,7 @@ export class AmazonPublicBrowserHealth {
                       server: this.config.providerAdapters.proxy.url,
                       username: this.config.providerAdapters.proxy.username,
                       password: this.config.providerAdapters.proxy.password,
+                      connectTimeoutMs: this.config.providerAdapters.proxy.connectTimeoutMs,
                     },
                   }
                 : {}),

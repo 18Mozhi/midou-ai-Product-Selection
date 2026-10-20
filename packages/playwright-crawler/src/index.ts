@@ -1,6 +1,7 @@
 import { prepareAmazonDeliveryContext } from "./amazon-delivery-context.js";
 import { waitForManualCaptcha } from "./manual-handoff.js";
 import { installNavigationRequestTransport } from "./navigation-transport.js";
+import { createAuthenticatedBrowserProxy } from "./authenticated-proxy.js";
 export {
   BrowserHandoffStore,
   validHandoffCommand,
@@ -633,7 +634,7 @@ export class PlaywrightCrawlerEngine {
       locale?: string;
       timezoneId?: string;
       cookies?: BrowserCookie[];
-      proxy?: { server: string; username?: string; password?: string };
+      proxy?: { server: string; username?: string; password?: string; connectTimeoutMs?: number };
       signal?: AbortSignal;
       handoff?: { root: string; runId: string };
       navigationTransport?: "browser" | "request";
@@ -668,6 +669,7 @@ export class PlaywrightCrawlerEngine {
       pageCount = 0,
       itemCount = 0,
       detailCount = 0;
+    let localProxy: Awaited<ReturnType<typeof createAuthenticatedBrowserProxy>> | undefined;
     const onAbort = () => {
       void context?.close().catch(() => {});
     };
@@ -688,9 +690,36 @@ export class PlaywrightCrawlerEngine {
         throw new PlaywrightCrawlerError("crawler_proxy_scope_invalid", "parser_changed", false);
       if (plan.amazon_delivery && options.cookies?.length)
         throw new PlaywrightCrawlerError("permission_denied", "blocked_login", false);
+      if (options.proxy?.username && options.proxy.password)
+        localProxy = await createAuthenticatedBrowserProxy(
+          {
+            server: options.proxy.server,
+            username: options.proxy.username,
+            password: options.proxy.password,
+            ...(options.proxy.connectTimeoutMs === undefined
+              ? {}
+              : { connectTimeoutMs: options.proxy.connectTimeoutMs }),
+          },
+          (status) => {
+            if (status !== 200)
+              recordResourceFailure({ stage, resource_type: "proxy_connect", http_status: status });
+          },
+        );
       context = await chromium.launchPersistentContext(userDataDir, {
         headless: this.limits.headless,
-        ...(options.proxy ? { proxy: options.proxy } : {}),
+        ...(options.proxy
+          ? {
+              proxy: localProxy?.proxy ?? {
+                server: options.proxy.server,
+                ...(options.proxy.username === undefined
+                  ? {}
+                  : { username: options.proxy.username }),
+                ...(options.proxy.password === undefined
+                  ? {}
+                  : { password: options.proxy.password }),
+              },
+            }
+          : {}),
         ...(this.limits.executablePath ? { executablePath: this.limits.executablePath } : {}),
         ...(options.locale ? { locale: options.locale } : {}),
         ...(options.timezoneId ? { timezoneId: options.timezoneId } : {}),
@@ -935,6 +964,7 @@ export class PlaywrightCrawlerEngine {
             ...(networkCode ? { network_code: networkCode } : {}),
             ...(deliveryState ? { delivery_state: deliveryState } : {}),
             ...(resourceFailures.length ? { resource_failures: resourceFailures } : {}),
+            ...(localProxy ? { proxy_auth_relay: true } : {}),
             ...(options.navigationTransport === "request"
               ? { navigation_transport: "request" }
               : {}),
@@ -962,6 +992,7 @@ export class PlaywrightCrawlerEngine {
     } finally {
       options.signal?.removeEventListener("abort", onAbort);
       await context?.close().catch(() => {});
+      await localProxy?.close();
     }
   }
   private async goto(
@@ -1142,7 +1173,7 @@ export async function runWithEncryptedProfile(
     locale?: string;
     timezoneId?: string;
     signal?: AbortSignal;
-    proxy?: { server: string; username?: string; password?: string };
+    proxy?: { server: string; username?: string; password?: string; connectTimeoutMs?: number };
     handoff?: { root: string; runId: string };
     navigationTransport?: "browser" | "request";
   } = {},

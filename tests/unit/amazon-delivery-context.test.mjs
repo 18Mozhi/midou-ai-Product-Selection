@@ -460,7 +460,7 @@ test("cookie-backed contexts fail before any browser is launched", async () => {
   assert.equal(result.error_code, "permission_denied");
 });
 
-test("configured source proxy reaches only private anonymous browser launch options", async () => {
+test("configured source proxy stays backend-only and the browser gets per-run local credentials", async () => {
   const { chromium } = await import("playwright");
   const original = chromium.launchPersistentContext;
   const proxy = {
@@ -482,7 +482,11 @@ test("configured source proxy reaches only private anonymous browser launch opti
       { proxy },
     );
     assert.equal(result.status, "dependency_failed");
-    assert.deepEqual(launchOptions.proxy, proxy);
+    assert.match(launchOptions.proxy.server, /^http:\/\/127\.0\.0\.1:\d+$/);
+    assert.notEqual(launchOptions.proxy.server, proxy.server);
+    assert.notEqual(launchOptions.proxy.username, proxy.username);
+    assert.notEqual(launchOptions.proxy.password, proxy.password);
+    assert.doesNotMatch(JSON.stringify(launchOptions), /fixture-user|fixture-only-password|18899/);
     assert.doesNotMatch(JSON.stringify(plan), /fixture-user|fixture-only-password|18899/);
     launchOptions = undefined;
     const legacyPlan = { ...plan };

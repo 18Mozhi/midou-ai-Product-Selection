@@ -1,4 +1,5 @@
 openapi: 3.0.3
+# Private per-run authenticated loopback CONNECT relay fixes upstream proxy-auth delivery without changing TLS/source content or public HTTP fields.
 # Private Amazon navigation transport may relay the same original request/response; no public HTTP field, credential or success-gate change.
 # Server-only opt-in can open human Amazon CAPTCHA handoffs and recover from fresh actual health; no HTTP input can set the internal exception. No public schema change.
 # Postal dialog arrival reuses the existing navigation budget; safe internal diagnostics only, no HTTP contract change.

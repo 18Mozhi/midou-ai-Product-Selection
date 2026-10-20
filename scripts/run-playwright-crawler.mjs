@@ -139,6 +139,7 @@ try {
               server: config.providerAdapters.proxy.url,
               username: config.providerAdapters.proxy.username,
               password: config.providerAdapters.proxy.password,
+              connectTimeoutMs: config.providerAdapters.proxy.connectTimeoutMs,
             },
           }
         : {}),
