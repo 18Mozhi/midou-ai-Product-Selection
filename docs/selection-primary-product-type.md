@@ -1,0 +1,23 @@
+# 主品必须匹配查询的商品类型
+
+## 真实误选与范围
+
+2026-10-20 08:28北京时间只读追溯当前工作区opportunity b118cb56-ce5a-4177-8098-f94da63bb4d0：原情报为Driving test waits fall to two-year low - but still average 20 weeks，原查询car cover for learner drivers。实际候选包含11条车罩和1条Student Driver Magnet for Car 2 Pack, Large Reflective 10x3.4 in。旧主品选中磁贴65bd119c-ca7d-47ae-8a81-4049795e97cc，理由只有Student Driver对应learner driver。现有记录来源链真实，但这一相关性分类错误。
+
+本次只明确既有selectPrimary标题相关性指令：先确认查询要求的实物类型、必需物理功能和设备兼容，再在真实候选内选择；共同人群、主题或品牌不能把其他类型变成同类商品。普通车罩适用于学车者，不必在标题里重复learner/student词。全是磁贴时返回原有source_ref:null，不能硬选最接近候选。
+
+不改查询生成、不新增品牌/类目黑名单、不预测需求增量或推荐采购。分类仍是模型判断，不能保证任意未来输入都准确；需继续观察真实新主品。旧主品、证据、评分、任务和完成事件不删除、不改写、不重放。本次不是重新将旧机会替换成车罩。
+
+## 调用链与运行合同
+
+生产者为OpenAiIntelligenceProductClassifier.selectPrimary，输出仍为{source_ref,rationale}、source_ref可为null且非空值必须来自真实候选。消费者MySqlTrendProjectionWorker.prepareIntelligence原流程保留：无匹配不创建机会；真实选择才进入TrendProjectionPersistence，保留原情报证据关联及主品详情/竞品/1688三项下游。
+
+API、持久化格式、数据库、依赖、队列、容量、模型地址/名称/超时/重试、前端及Python不变；无需新增设置或修改.env。更改服务端提示需既定deploy-baota.py上传并由宝塔重启Node项目ai选品；不可通过浏览器配置。原供应商报价与整链完成标准不变。
+
+## 验证证据
+
+08:29真实后端模型仅分类对照：从同组织/工作区真实任务证据链接读取原12条非广告候选，旧提示仍选磁贴；修正提示选31b7637d-097d-4634-bfd5-4a1f5b629ede真实车罩。首次试验错误地把缺learner措辞当成不匹配，返回null；随后明确通用品的人群词规则，未改模型或数据。
+
+08:30:32最终三组实际模型分类全部通过：原12候选选择车罩；仅保留实际磁贴候选返回null；仅保留实际11车罩仍选择车罩。三个场景中的子集是只读模型验证，不是历史查询的新采集结果。未写数据库、领取任务或发布机会，不计入完成量。
+
+worker定向构建和21项原情报/主品单元回归先通过，覆盖真实引用与空选择、无匹配不投影、失败重试、完整情报/主品/三项下游和来源/广告/范围保护。随后123项情报、投影、竞品和货源相关回归、22工作区完整构建、格式及文档地图门通过。正式发布回执后续补充；日100整链目标未完成。

@@ -131,9 +131,21 @@ export class OpenAiIntelligenceProductClassifier
 
   async selectPrimary(query: string, candidates: ProductCandidate[]) {
     const value = (await this.request(
-      "Select at most one real candidate most directly matching the supplied product query. " +
-        "Return exactly {source_ref,rationale}. source_ref must be one of the supplied source_ref values, " +
-        "or null when no candidate is a relevant physical product. Compare titles for relevance only; " +
+      "Select at most one real candidate whose title explicitly supports the product type and any " +
+        "required physical function or device compatibility in the supplied product query. Return " +
+        "exactly {source_ref,rationale}. source_ref must be one of the supplied source_ref values, " +
+        "or null when none match. First identify what physical item the query asks for, then reject " +
+        "different product types, accessories and conflicting required compatibility or format. A " +
+        "shared audience, theme, brand or keyword alone does not establish a match. Never choose " +
+        "the closest candidate when all are different products. For example, car cover for learner " +
+        "drivers asks for a cover: a Student Driver magnet or sticker is not a car cover, despite " +
+        "the shared learner-driver audience; return null if only magnets or stickers are available. " +
+        "If a relevant cover and a magnet are both supplied, select the cover. Audience wording " +
+        "does not make a generally usable product incompatible: a normal car cover can serve a " +
+        "learner driver even if its title does not say student or learner. When the query is car " +
+        "cover for learner drivers and actual car covers are supplied, choose a cover, never a " +
+        "magnet and never null solely because the covers omit learner-driver wording. Missing " +
+        "evidence for the required product type means no match. Compare titles for relevance only; " +
         "do not infer sales, quality, price, profit, advertising metrics, or a purchase decision.",
       { query, candidates },
       true,

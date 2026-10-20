@@ -1,4 +1,11 @@
 {
+  "selectionPrimaryProductType20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-primary-product-type.md",
+    "sourceFiles": ["apps/worker/src/intelligence-product-association.ts"],
+    "testFiles": ["tests/unit/intelligence-product-association.test.mjs"],
+    "contract": "Clarify existing title-relevance classification: primary must match requested physical product type and required function/device compatibility. Shared audience alone cannot substitute another product type; generally usable products need not repeat audience words. Existing nullable source_ref/rationale schema, exact supplied-reference validation and no-match consumer preserved. No API/env/schema/dependency/queue/history change; BaoTa Node restart."
+  },
   "selectionCompletionSourcingTurns20261020": {
     "status": "implemented",
     "requirements": "docs/selection-completion-sourcing-turns.md",
