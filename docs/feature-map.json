@@ -1,4 +1,17 @@
 {
+  "selectionRetiredMemberStyles20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-retired-member-styles.md",
+    "sourceFiles": [
+      "apps/web/src/member-workspace-polish.css",
+      "apps/web/src/components/TrendMetricExplainer.vue"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-01-trends.spec.ts",
+      "tests/unit/theme-and-icon-completion.test.mjs"
+    ],
+    "contract": "Remove only unreferenced retired member guide/home/report styles. Keep current home-overview-panel, theme controls and accessibility floors. Scope existing trend metric help body styles to its component; preserve native disclosure and four explanations. No API/OpenAPI/env/schema/permission/dependency/Worker/Python change. Frontend rebuild/upload and browser refresh only."
+  },
   "selectionSourceSupportedCompetitorTurns20261020": {
     "status": "implemented",
     "requirements": "docs/selection-source-supported-competitor-turns.md",

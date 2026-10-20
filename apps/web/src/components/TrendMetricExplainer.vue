@@ -13,3 +13,48 @@
     </ol>
   </details>
 </template>
+
+<style scoped>
+.trend-explainer > div {
+  padding: 12px 0;
+}
+.trend-explainer p {
+  margin: 0;
+  color: var(--so-text-muted);
+}
+.trend-explainer h3 {
+  margin: 4px 0 0;
+  font-size: 16px;
+}
+.trend-explainer ol {
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.trend-explainer li {
+  padding: 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 4px;
+  background: var(--so-panel-soft);
+}
+.trend-explainer li b,
+.trend-explainer li span {
+  display: block;
+}
+.trend-explainer li span {
+  color: var(--so-text-muted);
+}
+@media (max-width: 900px) {
+  .trend-explainer ol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .trend-explainer ol {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

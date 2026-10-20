@@ -551,7 +551,7 @@ test("icon-only production actions expose hover and focus names", async () => {
   for (const label of ["关闭凭证编辑", "关闭浏览器档案编辑"])
     assert.match(credentials, new RegExp(label));
   assert.match(registry, /关闭来源设置编辑/);
-  assert.match(sourcingDialogs, /关闭供应商搜索/);
+  assert.doesNotMatch(sourcingDialogs, /关闭供应商搜索/);
   assert.match(sourcingDialogs, /关闭报价编辑/);
 });
 

@@ -711,3 +711,27 @@ test("a late related product response cannot replace the newly selected topic", 
     release();
   }
 });
+
+test("metric help opens without retired member styles or horizontal overflow", async ({ page }) => {
+  await ready(page);
+  await page.goto("/trends");
+  const help = page.locator(".trend-explainer");
+  await expect(help).not.toHaveAttribute("open");
+  await expect(help.locator("ol")).toBeHidden();
+  await help.locator("summary").click();
+  await expect(help).toHaveAttribute("open", "");
+  const items = help.locator("li");
+  await expect(items).toHaveCount(4);
+  for (const item of await items.all()) {
+    await expect(item).toBeVisible();
+    const box = await item.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.x).toBeGreaterThanOrEqual(0);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await help.locator("summary").focus();
+  await page.keyboard.press("Enter");
+  await expect(help).not.toHaveAttribute("open");
+  await expect(help.locator("ol")).toBeHidden();
+});
