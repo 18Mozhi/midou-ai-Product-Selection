@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { MySqlAutomaticSourceScheduler } from "../../apps/worker/dist/automatic-source-scheduler.js";
 import { MySqlCollectionTaskWorkerRepository } from "../../apps/worker/dist/collection-task-state-machine.js";
+import { completionReadySourcingTaskSql } from "../../apps/worker/dist/completion-sourcing-policy.js";
 
 import {
   activeCollectionScopeSql,
@@ -67,7 +68,7 @@ for (const method of ["queueReady", "claim"]) {
     assert.match(selection, /completion_query\.organization_id=completion_event\.organization_id/);
     assert.ok(
       selection.endsWith(
-        `ELSE 2 END,CASE WHEN ${pendingBrowserResultSql} THEN 0 ELSE 1 END,available_at,id LIMIT 1`,
+        `ELSE 3 END,CASE WHEN ${completionReadySourcingTaskSql} THEN 0 ELSE 1 END,CASE WHEN ${pendingBrowserResultSql} THEN 0 ELSE 1 END,available_at,id LIMIT 1`,
       ),
     );
     assert.doesNotMatch(selection, /FOR UPDATE/);

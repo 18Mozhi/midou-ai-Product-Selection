@@ -293,8 +293,29 @@ test("durable result consumption preserves scoped provenance and the FIFO escape
   assert.match(pendingBrowserResultSql, /collection_task_id=result_query.task_id/);
   assert.match(pendingBrowserResultSql, /collection_subquery_id=result_query.id/);
   assert.match(pendingBrowserResultSql, /result_query.status='pending'/);
+  assert.match(pendingBrowserResultSql, /result_query.status='failed'/);
+  assert.match(pendingBrowserResultSql, /result_query.error_code='validation_failed'/);
+  assert.match(
+    pendingBrowserResultSql,
+    /collection_tasks.status IN \('queued','retry_scheduled'\)/,
+  );
   assert.match(pendingBrowserResultSql, /result_job.result_json IS NOT NULL/);
   assert.doesNotMatch(pendingBrowserResultSql, /UPDATE |INSERT |DELETE |request_id/);
+});
+
+test("validation retries remain a result preference below existing stage order, never a FIFO or lease override", () => {
+  const preferred = collectionReadyOrderSql(true, false, false);
+  assert.ok(preferred.includes(pendingBrowserResultSql));
+  assert.ok(
+    preferred.indexOf("collection_scope_turn.last_claim_at") <
+      preferred.indexOf(pendingBrowserResultSql),
+  );
+  assert.match(pendingBrowserResultSql, /result_job.status IN \('succeeded','succeeded_empty'\)/);
+  assert.doesNotMatch(
+    pendingBrowserResultSql,
+    /attempt_count|lease_token|lease_expires|status='dead_letter'/,
+  );
+  assert.ok(!collectionReadyOrderSql(false).includes(pendingBrowserResultSql));
 });
 test("both admission readers join scope history exactly once and expose only the original task row", async () => {
   const { repository, calls } = setup();

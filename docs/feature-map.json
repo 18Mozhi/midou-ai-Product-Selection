@@ -7721,5 +7721,17 @@
       "tests/unit/intelligence-product-association.test.mjs"
     ],
     "contract": "Only competitor title classification requests strict JSON Schema with current short candidate refs and original four relations. Preserve semantic prompt, original titles, exhaustive application validation, lease/fingerprint/audit and all other json_object callers. No new config/schema/dependency/API/Python; verified actual service support, release/daily100 pending."
+  },
+  "selectionCachedValidationResult20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-cached-validation-result.md",
+    "sourceFiles": ["apps/worker/src/collection-source-scheduling-policy.ts"],
+    "testFiles": [
+      "tests/unit/collection-completion-scheduling.test.mjs",
+      "tests/unit/automatic-source-fairness.test.mjs",
+      "tests/unit/amazon-browser-contract.test.mjs",
+      "tests/fixtures/cached-validation-result-cases.mjs"
+    ],
+    "contract": "Keep original pending cached-result preference; include only ordinary queued/retry_scheduled validation_failed subqueries with a successful nonnull browser result in exact task/subquery/org/workspace/provider scope. Ordering only after priority, scope and stages; FIFO bytes and source/lease/retry/quality protections unchanged. No API/config/schema/dependency/Python change; release/natural/day100 pending."
   }
 }
