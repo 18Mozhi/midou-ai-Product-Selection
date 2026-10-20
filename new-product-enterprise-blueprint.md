@@ -1,6 +1,6 @@
 > 2026-10-20：详情通过真实完成事件展示analysis_completed_at，已完成分析的状态和当前采纳条件前置，利润未知继续保留；未完成不因列表来源URL或评分误标完成。完成列表的非推荐商品入口为查看分析，见 docs/selection-analysis-completion-ui.md。
 
-> 2026-10-20：竞品标题分类仅在模型传输层使用真实服务已验证的严格JSON Schema，防止rationable等拼错字段使整批失败；原相关性、引用、租约及全部校验保留，其他模型请求不变。见 docs/selection-competitor-structured-output.md，尚未发布，日百品未验收。
+> 2026-10-20：竞品标题分类仅在模型传输层使用真实服务已验证的严格JSON Schema，防止rationable等拼错字段使整批失败；原相关性、引用、租约及全部校验保留，其他模型请求不变。见 docs/selection-competitor-structured-output.md，已正式发布，原失败任务自然重试与日百品未验收。
 
 > 2026-10-20：手机壳自动进价绑定代数及后缀，拒绝混用不同设备SKU；同范围旧自动P75输入一次修订复核，完成前重验实际主品及报价。保留原3样本/80分/P75、人工价及历史事件，见 docs/selection-phone-case-device-fit.md；已发布并有首条自然纠正，其余旧价复核和日百品未验收。
 > 2026-10-20：情报关联不得虚构需求前提；主品筛选同时读取同范围原情报复核旧查询，模型用候选短编号、后端严格映射真实ID。缺原文或无相关性走原无匹配流程，历史不删除不重放，见 docs/selection-intelligence-source-support.md。
