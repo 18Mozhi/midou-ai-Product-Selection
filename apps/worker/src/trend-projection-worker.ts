@@ -53,7 +53,7 @@ export const intelligenceFirstOrderSql =
   "AND n_intelligence.workspace_id=trend_projection_jobs.workspace_id),2),available_at,id LIMIT 1";
 
 export const intelligenceProvenanceSql =
-  "SELECT n.id FROM normalized_records n JOIN trend_events e ON e.organization_id=n.organization_id " +
+  "SELECT n.id,n.payload_json FROM normalized_records n JOIN trend_events e ON e.organization_id=n.organization_id " +
   "AND e.workspace_id=n.workspace_id AND e.event_type='trend.intelligence.associated' " +
   "WHERE n.id=? AND n.organization_id=? AND n.workspace_id=? AND n.status IN ('active','superseded') " +
   "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(e.payload_json,'$.normalized_record_id'))=BINARY n.id " +
@@ -240,6 +240,13 @@ export class MySqlTrendProjectionWorker {
         job.intelligenceQuery,
       ]);
       if (!sources[0]) throw new TrendProjectionError("intelligence_provenance_invalid", false);
+      const sourcePayload = sources[0].payload_json;
+      const originatingIntelligence = intelligenceInput(
+        job.intelligenceSourceRecordId,
+        typeof sourcePayload === "string" ? JSON.parse(sourcePayload) : (sourcePayload ?? {}),
+      );
+      if (!originatingIntelligence.title.trim() && !originatingIntelligence.summary.trim())
+        return false;
       const [rows] = await this.pool.query<RowDataPacket[]>(
         "SELECT n.id,n.provider_id,n.raw_evidence_id,n.payload_json FROM collection_task_evidence_links l " +
           "JOIN normalized_records n ON n.id=l.normalized_record_id AND n.organization_id=l.organization_id " +
@@ -260,7 +267,11 @@ export class MySqlTrendProjectionWorker {
           : [];
       });
       if (!candidates.length) return false;
-      const selected = await this.intelligence.selectPrimary(job.intelligenceQuery!, candidates);
+      const selected = await this.intelligence.selectPrimary(
+        job.intelligenceQuery!,
+        candidates,
+        originatingIntelligence,
+      );
       if (!selected.source_ref) return false;
       const record = rows.find((row) => String(row.id) === selected.source_ref);
       if (!record) throw new TrendProjectionError("intelligence_primary_invalid", false);

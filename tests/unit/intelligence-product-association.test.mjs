@@ -167,6 +167,122 @@ test("primary selection accepts only real supplied source references including a
   );
 });
 
+test("primary transport binds original source alongside a legacy query without asserting it is demand", async () => {
+  const source = {
+    source_ref: "original-news",
+    title: "Driving test waits fall",
+    summary: "Waits average20weeks.",
+  };
+  const candidates = [
+    { source_ref: "actual-cover", asin: "B000000001", title: "Waterproof car cover" },
+  ];
+  const selected = await client(async (_url, options) => {
+    const body = JSON.parse(options.body);
+    assert.deepEqual(JSON.parse(body.messages[1].content), {
+      query: "car cover for learner drivers",
+      candidates: [{ ...candidates[0], source_ref: "c1" }],
+      originating_intelligence: { title: source.title, summary: source.summary },
+    });
+    return response({
+      source_ref: null,
+      rationale: "The source does not establish a need for covers.",
+    });
+  }).selectPrimary("car cover for learner drivers", candidates, source);
+  assert.equal(selected.source_ref, null);
+});
+
+test("source-bound primary aliases map only exact supplied candidates back to durable identities", async () => {
+  const candidates = [{ source_ref: "durable-product", asin: "B000000001", title: "Portable fan" }];
+  const source = { source_ref: "durable-news", title: "Heatwave", summary: "Prolonged heat" };
+  const result = await client(async () =>
+    response({ source_ref: "c1", rationale: "Cooling need." }),
+  ).selectPrimary("fan", candidates, source);
+  assert.equal(result.source_ref, "durable-product");
+  for (const reference of ["c0", "c2", "C1", "durable-product", "durable-news", "B000000001"])
+    await assert.rejects(
+      client(async () =>
+        response({ source_ref: reference, rationale: "Wrong identity." }),
+      ).selectPrimary("fan", candidates, source),
+      /intelligence_output_invalid/,
+    );
+});
+
+test("missing original source text stops legacy result projection before candidate or model reads", async () => {
+  for (const payload of [undefined, {}, { title: "  ", summary: "\n" }]) {
+    let reads = 0;
+    const worker = new MySqlTrendProjectionWorker(
+      {
+        query: async () => {
+          reads++;
+          return [[{ id: sourceId, payload_json: payload }]];
+        },
+      },
+      "worker",
+      120,
+      () => now,
+      {
+        model: "local",
+        selectPrimary: async () => {
+          throw new Error("unexpected_model_call");
+        },
+      },
+    );
+    assert.equal(
+      await worker.prepareIntelligence({
+        ...baseJob,
+        intelligenceSourceRecordId: sourceId,
+        intelligenceQuery: "fan",
+      }),
+      false,
+    );
+    assert.equal(reads, 1);
+  }
+});
+
+test("an unsupported legacy query cannot select a matching candidate without original-source support", async () => {
+  let reads = 0;
+  const source = {
+    title: "Driving test waits fall",
+    summary: "Learners wait for a practical test.",
+  };
+  const worker = new MySqlTrendProjectionWorker(
+    {
+      query: async () => [
+        reads++ === 0
+          ? [{ id: sourceId, payload_json: source }]
+          : [
+              {
+                id: "actual-cover",
+                provider_id: "amazon",
+                raw_evidence_id: "raw-cover",
+                payload_json: { title: "Waterproof car cover", asin: "B000000001" },
+              },
+            ],
+      ],
+    },
+    "worker",
+    120,
+    () => now,
+    {
+      model: "local",
+      selectPrimary: async (query, candidates, originatingIntelligence) => {
+        assert.equal(query, "car cover for learner drivers");
+        assert.equal(candidates[0].source_ref, "actual-cover");
+        assert.deepEqual(originatingIntelligence, { source_ref: sourceId, ...source });
+        return { source_ref: null, rationale: "The source does not establish cover demand." };
+      },
+    },
+  );
+  const job = {
+    ...baseJob,
+    intelligenceSourceRecordId: sourceId,
+    intelligenceQuery: "car cover for learner drivers",
+  };
+  assert.equal(await worker.prepareIntelligence(job), false);
+  assert.equal(job.normalizedRecordId, baseJob.normalizedRecordId);
+  assert.equal(reads, 2);
+});
+
 test("model failures preserve retry classification and cap response bytes", async () => {
   for (const [status, retryable] of [
     [401, false],
@@ -303,8 +419,8 @@ test("search results choose exactly one actual product before projection and ret
     {
       query: async (sql, params) => {
         calls.push([sql, params]);
-        return sql.startsWith("SELECT n.id FROM normalized_records")
-          ? [[{ id: sourceId }]]
+        return sql.startsWith("SELECT n.id,n.payload_json FROM normalized_records")
+          ? [[{ id: sourceId, payload_json: { title: input.title, summary: input.summary } }]]
           : [[product(1), product(2)]];
       },
     },
@@ -314,9 +430,10 @@ test("search results choose exactly one actual product before projection and ret
     {
       model: "local",
       associate: async () => association,
-      selectPrimary: async (query, candidates) => {
+      selectPrimary: async (query, candidates, originatingIntelligence) => {
         assert.equal(query, "portable fan");
         assert.equal(candidates.length, 2);
+        assert.deepEqual(originatingIntelligence, { ...input, source_ref: sourceId });
         return { source_ref: "record-2", rationale: "Exact product type match." };
       },
     },
@@ -333,7 +450,9 @@ test("search results choose exactly one actual product before projection and ret
   assert.equal(job.intelligenceSourceRecordId, sourceId);
   // Superseded is version history, not forged/deleted evidence: both original
   // association and actual search-result links still need exact scoped provenance.
-  const sourceSql = calls.find(([sql]) => sql.startsWith("SELECT n.id FROM normalized_records"))[0];
+  const sourceSql = calls.find(([sql]) =>
+    sql.startsWith("SELECT n.id,n.payload_json FROM normalized_records"),
+  )[0];
   assert.match(sourceSql, /n.status IN \('active','superseded'\)/);
   assert.match(sourceSql, /JSON_CONTAINS/);
   assert.match(sourceSql, /BINARY n.id/);
@@ -444,7 +563,7 @@ test("forged intelligence lineage and no relevant matches cannot project product
   assert.equal(selected, false);
   let index = 0;
   const empty = new MySqlTrendProjectionWorker(
-    { query: async () => [index++ ? [] : [{ id: sourceId }]] },
+    { query: async () => [index++ ? [] : [{ id: sourceId, payload_json: input }]] },
     "worker",
     120,
     () => now,
@@ -459,7 +578,7 @@ test("observed numeric advertising flags are excluded before selecting the prima
     {
       query: async () => [
         reads++ === 0
-          ? [{ id: sourceId }]
+          ? [{ id: sourceId, payload_json: JSON.stringify(input) }]
           : [
               {
                 id: "ad",

@@ -1,4 +1,14 @@
 {
+  "selectionIntelligenceSourceSupport20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-intelligence-source-support.md",
+    "sourceFiles": [
+      "apps/worker/src/intelligence-product-association.ts",
+      "apps/worker/src/trend-projection-worker.ts"
+    ],
+    "testFiles": ["tests/unit/intelligence-product-association.test.mjs"],
+    "contract": "Association requires an original-source condition for each physical-goods hypothesis, without invented activities or restrictions. Provenance reads also return original payload; selected-result classification receives bounded original title/summary and checks query support before product type. Source-bound transport uses c1 aliases with strict durable mapping; source IDs stay in caller. Missing source text and unsupported queries use existing no-match flow. Existing scoped provenance, output, queue/lease/source/price/scoring/API/schema/env/dependency/frontend/Python contracts retained; BaoTa Node restart."
+  },
   "selectionCrawlerIdlePolling20261020": {
     "status": "implemented",
     "requirements": "docs/selection-crawler-idle-polling.md",
