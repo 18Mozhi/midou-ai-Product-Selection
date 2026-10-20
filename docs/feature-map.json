@@ -1,4 +1,23 @@
 {
+  "selectionPersistedPrimarySourceSupport20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-persisted-primary-source-support.md",
+    "sourceFiles": [
+      "apps/worker/src/primary-source-support.ts",
+      "apps/worker/src/primary-source-support-recovery.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/worker/src/opportunity-scoring-worker.ts",
+      "apps/worker/src/selection-pipeline-completion.ts",
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/web/src/components/opportunity-workspace-presentation.ts"
+    ],
+    "testFiles": [
+      "tests/unit/primary-source-support.test.mjs",
+      "tests/unit/selection-pipeline-completion.test.mjs",
+      "tests/fixtures/primary-source-support.mjs"
+    ],
+    "contract": "Revalidate persisted automatic primaries using their scoped original intelligence, query and actual main product through the existing causal/type classifier. Cache worker audit proofs by evidence fingerprint; check again under opportunity lock and evaluation lease. Unsupported or unverified source blocks new purchase processing, recommendation and completion without altering numeric facts/history. Bounded once-per-revision ordinary evaluation recovery; no crawler replay, schema, API field, dependency or new env. Existing AI/lease settings, quality gates and manual flows preserved; BaoTa Node restart and frontend reason-label publish required."
+  },
   "selectionCompetitorCompletionTurns": {
     "requirements": "docs/selection-competitor-completion-turns.md",
     "entrypoints": [

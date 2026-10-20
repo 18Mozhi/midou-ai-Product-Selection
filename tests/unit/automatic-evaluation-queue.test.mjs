@@ -1,3 +1,5 @@
+import { PRIMARY_SOURCE_SUPPORT_REVISION } from "../../apps/worker/dist/primary-source-support.js";
+import { SUPPLY_DEVICE_FIT_REVISION } from "../../apps/worker/dist/automatic-selection-device-fit-recovery.js";
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
@@ -85,7 +87,11 @@ for (const status of ["waiting_evidence", "waiting_profit", "succeeded"]) {
     assert.match(sql, /WHERE opportunity_id=\? AND lease_owner=\?/);
     assert.deepEqual(params.slice(0, 3), [status, now, "pending_fact"]);
     assert.deepEqual(params.slice(-2), [job.opportunityId, "worker"]);
-    assert.deepEqual(JSON.parse(params[4]), { error_code: "pending_fact" });
+    assert.deepEqual(JSON.parse(params[4]), {
+      error_code: "pending_fact",
+      primary_source_support_revision: PRIMARY_SOURCE_SUPPORT_REVISION,
+      supply_device_fit_revision: SUPPLY_DEVICE_FIT_REVISION,
+    });
   });
 }
 for (const status of ["scheduled", "failed_terminal", "dead_letter"]) {

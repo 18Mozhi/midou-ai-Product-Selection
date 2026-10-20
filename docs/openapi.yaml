@@ -11280,7 +11280,7 @@ components:
           {
             type: string,
             enum: [insufficient_data, recommend, observe, not_recommend],
-            description: Persisted scoring conclusion; use selection_stage for the user-facing automatic-selection state.,
+            description: Persisted scoring conclusion; automatic trend products remain insufficient_data without a current scoped original-source support proof. Numeric scores are retained. Use selection_stage for the user-facing automatic-selection state.,
           }
         overall_score: { type: number, minimum: 0, maximum: 100, nullable: true }
         trend_score: { type: number, minimum: 0, maximum: 100, nullable: true }
@@ -11517,7 +11517,7 @@ components:
                   type: string
                   format: date-time
                   nullable: true
-                  description: First verified worker pipeline completion for this scoped opportunity and its current main ASIN; historical completion does not change current recommendation gates.
+                  description: First verified worker pipeline completion for this scoped opportunity and its current main ASIN; new completion writes independently require a current original-source support proof. Historical completion does not change current recommendation gates.
                 lineage:
                   type: object
                   required: [freshness, failure_impact, request_ids, trace_ids, nodes]

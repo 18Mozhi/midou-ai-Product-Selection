@@ -1,4 +1,5 @@
 import { recordSelectionPipelineCompletion } from "./selection-pipeline-completion.js";
+import { primarySourceSupportStatus } from "./primary-source-support.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
@@ -140,6 +141,7 @@ export class MySqlOpportunityScoringWorker {
         [job.opportunityId, job.organizationId, job.workspaceId],
       );
       if (!opportunities[0]) throw new OpportunityScoringError("opportunity_scope_missing", false);
+      const sourceSupport = await primarySourceSupportStatus(c, job);
       const [inputs] = await c.query<RowDataPacket[]>(
         "SELECT * FROM opportunity_score_inputs WHERE opportunity_id=? AND organization_id=? AND workspace_id=? AND is_current=1",
         [job.opportunityId, job.organizationId, job.workspaceId],
@@ -179,7 +181,10 @@ export class MySqlOpportunityScoringWorker {
         projection = calculateScoreProjection(dimensions, thresholds, normalizedInputs),
         overall = projection.overall_score,
         coverage = projection.coverage_percent,
-        recommendation = projection.recommendation_status,
+        recommendation =
+          sourceSupport.applicable && !sourceSupport.supported
+            ? "insufficient_data"
+            : projection.recommendation_status,
         complete = projection.complete_core_evidence,
         available = projection.components.filter((item) => item.usable),
         byCode = new Map(normalizedInputs.map((item) => [item.dimension_code, item])),

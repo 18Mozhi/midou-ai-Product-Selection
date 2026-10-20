@@ -1,3 +1,4 @@
+import { primarySourceFixtureRead } from "../fixtures/primary-source-support.mjs";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { MySqlProfitRepository } from "../../apps/api/dist/mysql-profit-repository.js";
@@ -63,6 +64,10 @@ function fixture(options = {}) {
     release() {},
     async query(sql, params) {
       calls.push({ sql, params });
+      if (![automaticPrimaryEvidenceSql, automaticPrimaryDetailEvidenceSql].includes(sql)) {
+        const source = primarySourceFixtureRead(sql, params, { asin: "B000000001" });
+        if (source) return source;
+      }
       if (sql === selectionPipelineCompletionProofSql)
         return [options.completionProof ? [options.completionProof] : []];
       if (sql === selectionCompletedCompetitorsSql)

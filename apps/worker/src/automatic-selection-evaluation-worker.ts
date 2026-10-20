@@ -1,4 +1,14 @@
 import { enqueueMissingSelectionEvaluations } from "./automatic-selection-evaluation-admission.js";
+import {
+  classifyPrimarySource,
+  readPrimarySourceContext,
+  readPrimarySourceVerdict,
+  PRIMARY_SOURCE_SUPPORT_EVENT,
+  PRIMARY_SOURCE_SUPPORT_REVISION,
+  type PrimarySourceVerdict,
+} from "./primary-source-support.js";
+import type { IntelligenceProductClassifier } from "./intelligence-product-association.js";
+import { recoverPrimarySourceEvaluations } from "./primary-source-support-recovery.js";
 import { recoverSkippedSelectionEvaluations } from "./automatic-selection-skipped-recovery.js";
 import {
   recoverDeviceFitEvaluations,
@@ -138,7 +148,8 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     private readonly systemActorId: string,
     private readonly leaseSeconds: number,
     private readonly now: () => Date = () => new Date(),
-    private readonly supplyClassifier?: SupplyTitleClassifier,
+    private readonly supplyClassifier?: SupplyTitleClassifier &
+      Partial<Pick<IntelligenceProductClassifier, "selectPrimary">>,
   ) {}
 
   async processOnce() {
@@ -146,16 +157,24 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     const job = await this.claim();
     if (!job) return { status: "idle" as const };
     try {
+      const sourceVerdict = await classifyPrimarySource(
+        this.pool,
+        job,
+        this.supplyClassifier?.selectPrimary
+          ? { selectPrimary: this.supplyClassifier.selectPrimary.bind(this.supplyClassifier) }
+          : undefined,
+      );
+      await this.renewClassificationLease(job);
       let classification: SupplyTitleContext | undefined, classificationError: string | undefined;
       try {
-        classification = await this.classifySupplyTitles(job);
+        if (sourceVerdict?.supported) classification = await this.classifySupplyTitles(job);
       } catch (error) {
         const code = String((error as { code?: unknown }).code ?? "");
         classificationError = /^intelligence_[a-z_]{1,64}$/.test(code)
           ? code
           : "supply_title_classification_failed";
       }
-      const result = await this.evaluate(job, classification, classificationError);
+      const result = await this.evaluate(job, classification, classificationError, sourceVerdict);
       return { status: result.status, opportunity_id: job.opportunityId, ...result.payload };
     } catch (error) {
       const wrapped =
@@ -181,6 +200,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     await enqueueMissingSelectionEvaluations(this.pool, now);
     await recoverSkippedSelectionEvaluations(this.pool, now);
     await recoverDeviceFitEvaluations(this.pool, now);
+    if (this.supplyClassifier?.selectPrimary) await recoverPrimarySourceEvaluations(this.pool, now);
   }
 
   private async claim(): Promise<EvaluationJob | null> {
@@ -320,6 +340,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     job: EvaluationJob,
     classification?: SupplyTitleContext,
     classificationError?: string,
+    sourceVerdict?: PrimarySourceVerdict | null,
   ) {
     const connection = await this.pool.getConnection(),
       now = this.now(),
@@ -332,7 +353,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           `AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted') AND ${selectionCandidateSql} FOR UPDATE`,
         [job.opportunityId, job.organizationId, job.workspaceId],
       );
-      if (classification || this.supplyClassifier) {
+      if (classification || this.supplyClassifier || sourceVerdict) {
         const [leases] = await connection.query<RowDataPacket[]>(
           "SELECT opportunity_id FROM automatic_selection_evaluations WHERE opportunity_id=? AND organization_id=? AND workspace_id=? " +
             "AND status='leased' AND lease_owner=? AND lease_expires_at>? FOR UPDATE",
@@ -357,27 +378,6 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           payload: { skipped: "primary_product_missing_or_not_pending" },
         };
       }
-      const [scoreRules] = await connection.query<RowDataPacket[]>(
-          "SELECT id,version_code,dimensions_json FROM score_rules WHERE organization_id=? AND " +
-            "workspace_id=? AND status='active' ORDER BY activated_at DESC,id DESC LIMIT 1",
-          [job.organizationId, job.workspaceId],
-        ),
-        [costRules] = await connection.query<RowDataPacket[]>(
-          "SELECT id,version_code,fee_lines_json,conversion_rates_json,automatic_scope_json FROM cost_rules WHERE " +
-            "organization_id=? AND workspace_id=? AND market=? AND platform='amazon' AND status='active' " +
-            "ORDER BY published_at DESC,id DESC LIMIT 1",
-          [job.organizationId, job.workspaceId, opportunity.market],
-        );
-      const scoreRule = scoreRules[0];
-      if (!scoreRule)
-        return await this.waiting(
-          connection,
-          job,
-          "automatic_rules_not_active",
-          { score_rule: Boolean(scoreRules[0]), cost_rule: Boolean(costRules[0]) },
-          now,
-        );
-
       const [amazonRows] = await connection.query<RowDataPacket[]>(automaticPrimaryEvidenceSql, [
         job.opportunityId,
         job.organizationId,
@@ -408,6 +408,63 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           },
           now,
         );
+      const sourceContext = await readPrimarySourceContext(connection, job);
+      let sourceSupportNew = false;
+      if (sourceContext) {
+        if (sourceVerdict && sourceVerdict.fingerprint !== sourceContext.fingerprint)
+          throw new AutomaticSelectionEvaluationError("automatic_primary_source_changed", true);
+        const cached = await readPrimarySourceVerdict(connection, job, sourceContext);
+        if (!cached && sourceVerdict) {
+          await this.event(
+            connection,
+            job,
+            PRIMARY_SOURCE_SUPPORT_EVENT,
+            sourceVerdict,
+            requestId,
+            traceId,
+            now,
+          );
+          sourceSupportNew = sourceVerdict.supported;
+        }
+        if (!(cached ?? sourceVerdict)?.supported) {
+          await connection.query(
+            "UPDATE opportunities SET recommendation_status='insufficient_data',version=version+1,updated_at=? " +
+              "WHERE id=? AND organization_id=? AND workspace_id=? AND decision_status='pending' " +
+              "AND recommendation_status<>'insufficient_data'",
+            [now, job.opportunityId, job.organizationId, job.workspaceId],
+          );
+          return await this.waiting(
+            connection,
+            job,
+            (cached ?? sourceVerdict)
+              ? "automatic_primary_source_unsupported"
+              : "automatic_primary_source_unverified",
+            {},
+            now,
+          );
+        }
+      }
+      const [scoreRules] = await connection.query<RowDataPacket[]>(
+          "SELECT id,version_code,dimensions_json FROM score_rules WHERE organization_id=? AND " +
+            "workspace_id=? AND status='active' ORDER BY activated_at DESC,id DESC LIMIT 1",
+          [job.organizationId, job.workspaceId],
+        ),
+        [costRules] = await connection.query<RowDataPacket[]>(
+          "SELECT id,version_code,fee_lines_json,conversion_rates_json,automatic_scope_json FROM cost_rules WHERE " +
+            "organization_id=? AND workspace_id=? AND market=? AND platform='amazon' AND status='active' " +
+            "ORDER BY published_at DESC,id DESC LIMIT 1",
+          [job.organizationId, job.workspaceId, opportunity.market],
+        );
+      const scoreRule = scoreRules[0];
+      if (!scoreRule)
+        return await this.waiting(
+          connection,
+          job,
+          "automatic_rules_not_active",
+          { score_rule: Boolean(scoreRules[0]), cost_rule: Boolean(costRules[0]) },
+          now,
+        );
+
       const [competitors] = await connection.query<RowDataPacket[]>(automaticPrimarySnapshotSql, [
         job.opportunityId,
         job.organizationId,
@@ -502,7 +559,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
               now,
             })) || scoreInputsChanged;
         }
-        if (scoreInputsChanged || !opportunity.score_rule_version)
+        if (scoreInputsChanged || sourceSupportNew || !opportunity.score_rule_version)
           await this.queueScore(connection, job, String(scoreRule.id), requestId, traceId, now);
         await connection.query(
           "UPDATE opportunities SET risk_level=?,recommendation_status=IF(?,'insufficient_data'," +
@@ -1091,6 +1148,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       evidenceFingerprint,
       JSON.stringify({
         ...result,
+        primary_source_support_revision: PRIMARY_SOURCE_SUPPORT_REVISION,
         supply_device_fit_revision: SUPPLY_DEVICE_FIT_REVISION,
         ...(this.supplyClassifier
           ? { supply_title_classifier_revision: SUPPLY_TITLE_CLASSIFIER_REVISION }

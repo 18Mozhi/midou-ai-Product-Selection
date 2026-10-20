@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { primarySourceSupportStatus } from "./primary-source-support.js";
 import type { PoolConnection, RowDataPacket, ResultSetHeader } from "mysql2/promise";
 import { MINIMUM_SELECTION_COMPETITORS } from "@scoutops/contracts";
 import { automaticSupplyCompletionQuoteValid } from "./automatic-supply-completion-guard.js";
@@ -32,6 +33,8 @@ export async function recordSelectionPipelineCompletion(
   );
   const proof = proofs[0];
   if (!proof || !/^[A-Z0-9]{10}$/.test(String(proof.main_asin ?? ""))) return false;
+  const sourceSupport = await primarySourceSupportStatus(connection, scope);
+  if (!sourceSupport.applicable || !sourceSupport.supported) return false;
   if (!(await automaticSupplyCompletionQuoteValid(connection, parameters, proof))) return false;
   const [prior] = await connection.query<RowDataPacket[]>(
     "SELECT id FROM opportunity_events WHERE organization_id=? AND workspace_id=? " +

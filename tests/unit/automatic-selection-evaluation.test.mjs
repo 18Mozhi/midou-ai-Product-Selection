@@ -1,3 +1,4 @@
+import { primarySourceOriginSql } from "../../apps/worker/dist/primary-source-support.js";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -208,6 +209,7 @@ test("automatic evaluation binds primary identity and supply tasks to the curren
     release() {},
     query: async (sql, params) => {
       calls.push({ sql, params });
+      if (sql === primarySourceOriginSql) return [[]];
       if (sql.startsWith("SELECT o.*")) return [[{ market: "US" }]];
       if (sql.startsWith("SELECT id,version_code,dimensions_json")) return [[{ id: "score" }]];
       if (sql.startsWith("SELECT id,version_code,fee_lines_json"))

@@ -56,6 +56,8 @@ export const opportunityScoreDimensionLabel = (value: string) =>
 const automaticProfitGapLabels: Record<string, string> = {
   automatic_rules_not_active: "费用规则尚未启用",
   automatic_cost_scope_mismatch: "费用规则未覆盖当前商品类别",
+  automatic_primary_source_unsupported: "原情报不支持当前主品",
+  automatic_primary_source_unverified: "等待原情报关联复核",
   high_confidence_1688_match_missing: "缺少可信的1688匹配货源",
   automatic_cost_policy_incomplete: "物流或汇率依据尚未齐全",
   automatic_cost_inputs_missing: "售价或采购成本依据尚未齐全",

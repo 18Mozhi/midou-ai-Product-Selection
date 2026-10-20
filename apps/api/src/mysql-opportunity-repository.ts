@@ -741,6 +741,8 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
             amazon_sale_facts_incomplete: "Amazon 商品页尚未取得有效标题、售价或币种。",
             automatic_cost_scope_mismatch:
               "当前费用规则未覆盖该商品族；系统不会套用其他品类的成本假设。",
+            automatic_primary_source_unsupported: "原情报不支持当前主品的需求关联或商品类型。",
+            automatic_primary_source_unverified: "等待复核原情报与当前主品的关联。",
             amazon_competitor_snapshot_missing: "等待当前主品的 Amazon 详情快照。",
             high_confidence_1688_match_missing:
               "1688 同款高置信报价不足 3 条；系统会继续采集，不会用弱匹配强行估算。",

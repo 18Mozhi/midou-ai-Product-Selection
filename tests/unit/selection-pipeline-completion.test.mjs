@@ -1,3 +1,4 @@
+import { primarySourceFixtureRead } from "../fixtures/primary-source-support.mjs";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { recordSelectionPipelineCompletion } from "../../apps/worker/dist/selection-pipeline-completion.js";
@@ -54,6 +55,8 @@ function fixture(p = proof, rows = competitors.slice(0, 5)) {
     connection: {
       query: async (sql, params) => {
         calls.push({ sql, params });
+        const source = primarySourceFixtureRead(sql, params);
+        if (source) return source;
         if (
           sql === selectionPipelineCompletionProofSql ||
           sql === selectionCompletedCompetitorsSql
@@ -88,6 +91,33 @@ function fixture(p = proof, rows = competitors.slice(0, 5)) {
   };
 }
 
+for (const sourceState of ["rejected", "unverified", "missing_origin"])
+  test(`completion independently rejects ${sourceState} primary source support`, async () => {
+    const f = fixture(),
+      originalQuery = f.connection.query;
+    f.connection.query = async (sql, params) => {
+      if (sql.includes("SELECT payload_json FROM opportunity_events"))
+        return sourceState === "unverified"
+          ? [[]]
+          : primarySourceFixtureRead(sql, params, { supported: false });
+      if (
+        sourceState === "missing_origin" &&
+        sql.startsWith("SELECT o.source_type,e.id,e.payload_json FROM opportunities")
+      )
+        return [[]];
+      return originalQuery(sql, params);
+    };
+    assert.equal(
+      await recordSelectionPipelineCompletion(f.connection, scope, "worker", now),
+      false,
+    );
+    assert.equal(f.events.size, 0);
+    assert.equal(
+      f.calls.some(({ sql }) => sql === selectionCompletedCompetitorsSql),
+      false,
+    );
+  });
+
 for (const compatible of [false, true]) {
   test(`completion recorder independently checks legacy automatic P75 evidence, compatible=${compatible}`, async () => {
     const p = {
@@ -111,7 +141,12 @@ for (const compatible of [false, true]) {
           return [
             [
               {
-                payload_json: { title: "iPhone 17 Pro Max Case", price: 30, currency: "USD" },
+                payload_json: {
+                  asin: proof.main_asin,
+                  title: "iPhone 17 Pro Max Case",
+                  price: 30,
+                  currency: "USD",
+                },
                 observed_at: now,
               },
             ],
@@ -366,6 +401,8 @@ for (const [profitWeight, failCompletion] of [
       },
       release() {},
       async query(sql, params) {
+        const source = primarySourceFixtureRead(sql, params);
+        if (source) return source;
         if (sql.startsWith("SELECT version_code,dimensions_json"))
           return [
             [
