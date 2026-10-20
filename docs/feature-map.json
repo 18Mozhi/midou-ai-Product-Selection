@@ -1,4 +1,21 @@
 {
+  "selectionAmazonNavigationTransport20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-browser-navigation-transport.md",
+    "sourceFiles": [
+      "packages/playwright-crawler/src/navigation-transport.ts",
+      "packages/playwright-crawler/src/index.ts",
+      "packages/config/src/index.ts",
+      "apps/api/src/amazon-public-browser-health.ts",
+      "scripts/run-playwright-crawler.mjs"
+    ],
+    "testFiles": [
+      "tests/integration/navigation-request-transport.test.mjs",
+      "tests/integration/browser-handoff.test.mjs",
+      "tests/unit/amazon-delivery-context.test.mjs"
+    ],
+    "contract": "Server-only browser/request navigation transport switch defaults to browser. Request mode relays original same-origin public Amazon main-frame requests and unmodified actual responses through the same browser context. No header/body/URL/status spoofing, implicit retries, backend redirect following, TLS weakening or imported cookies. Preserve CAPTCHA handoff and strict source, login, HTTP429, delivery, parsing and completion gates. No dependency/service/schema/public API/Python task field changes. Config/schema/env docs synchronized; BaoTa Node/Python restart required. Production source and 100/day acceptance remain separate."
+  },
   "selectionAmazonHandoffRecovery20261020": {
     "status": "implemented",
     "requirements": "docs/selection-browser-manual-handoff.md",

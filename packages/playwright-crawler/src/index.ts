@@ -1,5 +1,6 @@
 import { prepareAmazonDeliveryContext } from "./amazon-delivery-context.js";
 import { waitForManualCaptcha } from "./manual-handoff.js";
+import { installNavigationRequestTransport } from "./navigation-transport.js";
 export {
   BrowserHandoffStore,
   validHandoffCommand,
@@ -635,6 +636,7 @@ export class PlaywrightCrawlerEngine {
       proxy?: { server: string; username?: string; password?: string };
       signal?: AbortSignal;
       handoff?: { root: string; runId: string };
+      navigationTransport?: "browser" | "request";
     } = {},
   ): Promise<BrowserRunResult> {
     const plan = validateBrowserPlan(planInput, this.limits),
@@ -682,6 +684,8 @@ export class PlaywrightCrawlerEngine {
       options.signal?.throwIfAborted();
       if (options.proxy && !plan.amazon_delivery)
         throw new PlaywrightCrawlerError("crawler_proxy_scope_invalid", "parser_changed", false);
+      if (options.navigationTransport === "request" && !plan.amazon_delivery)
+        throw new PlaywrightCrawlerError("crawler_proxy_scope_invalid", "parser_changed", false);
       if (plan.amazon_delivery && options.cookies?.length)
         throw new PlaywrightCrawlerError("permission_denied", "blocked_login", false);
       context = await chromium.launchPersistentContext(userDataDir, {
@@ -696,6 +700,12 @@ export class PlaywrightCrawlerEngine {
       if (options.cookies?.length) await context.addCookies(options.cookies);
       context.setDefaultTimeout(this.limits.actionTimeoutMs);
       context.setDefaultNavigationTimeout(this.limits.navigationTimeoutMs);
+      if (options.navigationTransport === "request")
+        await installNavigationRequestTransport(
+          context,
+          "https://www.amazon.com",
+          this.limits.navigationTimeoutMs,
+        );
       context.on("response", (response) => {
         if (response.status() === 429) rateLimited = true;
         if (plan.amazon_delivery && response.status() >= 400)
@@ -925,6 +935,9 @@ export class PlaywrightCrawlerEngine {
             ...(networkCode ? { network_code: networkCode } : {}),
             ...(deliveryState ? { delivery_state: deliveryState } : {}),
             ...(resourceFailures.length ? { resource_failures: resourceFailures } : {}),
+            ...(options.navigationTransport === "request"
+              ? { navigation_transport: "request" }
+              : {}),
           }),
         );
       return {
@@ -1131,6 +1144,7 @@ export async function runWithEncryptedProfile(
     signal?: AbortSignal;
     proxy?: { server: string; username?: string; password?: string };
     handoff?: { root: string; runId: string };
+    navigationTransport?: "browser" | "request";
   } = {},
 ) {
   return withMaterializedCredential(record, masterKey, tempRoot, (archivePath) =>

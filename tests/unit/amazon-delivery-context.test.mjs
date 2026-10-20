@@ -543,6 +543,36 @@ test("Amazon failure diagnostics omit private errors and preserve the result con
   }
 });
 
+test("navigation request transport is server-configured and rejects non-Amazon plans before launch", async () => {
+  assert.equal(
+    loadRuntimeConfig({}, "api").providerAdapters.amazonBrowserNavigationTransport,
+    "browser",
+  );
+  assert.equal(
+    loadRuntimeConfig({ AMAZON_PUBLIC_BROWSER_NAVIGATION_TRANSPORT: "request" }, "api")
+      .providerAdapters.amazonBrowserNavigationTransport,
+    "request",
+  );
+  assert.throws(
+    () => loadRuntimeConfig({ AMAZON_PUBLIC_BROWSER_NAVIGATION_TRANSPORT: "unknown" }, "api"),
+    /AMAZON_PUBLIC_BROWSER_NAVIGATION_TRANSPORT/,
+  );
+  const result = await new PlaywrightCrawlerEngine(limits).run(
+    {
+      start_url: "https://example.test",
+      allowed_origins: ["https://example.test"],
+      item_selector: "article",
+      max_pages: 1,
+      max_scrolls: 0,
+      max_details: 0,
+    },
+    "not-created",
+    { requestId: "scope", traceId: "scope" },
+    { navigationTransport: "request" },
+  );
+  assert.equal(result.error_code, "crawler_proxy_scope_invalid");
+});
+
 test("async postal dialog uses the caller navigation budget and still requires a confirmed header", async () => {
   const f = fixture(),
     originalLocator = f.page.locator;

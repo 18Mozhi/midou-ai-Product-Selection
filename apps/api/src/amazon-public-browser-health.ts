@@ -115,6 +115,7 @@ export class AmazonPublicBrowserHealth {
               locale: String(profile.locale),
               timezoneId: String(profile.timezone),
               signal: controller.signal,
+              navigationTransport: this.config.providerAdapters.amazonBrowserNavigationTransport,
               handoff: {
                 root: join(this.config.storage.runtimeTempRoot, "browser-handoffs"),
                 runId: lease.run.id,

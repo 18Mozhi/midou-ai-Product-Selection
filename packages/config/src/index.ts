@@ -121,6 +121,7 @@ export interface RuntimeConfig {
     amazonBrowserProfileId: string;
     amazonPublicDeliveryPostalCode: string;
     amazonBrowserNavigationTimeoutMs: number;
+    amazonBrowserNavigationTransport: "browser" | "request";
     lan1688RecoveryEnabled: boolean;
     lan1688RecoveryPollMs: number;
     lan1688RecoveryCooldownMs: number;
@@ -631,6 +632,11 @@ export function loadRuntimeConfig(
       ),
       amazonBrowserProfileId,
       amazonPublicDeliveryPostalCode,
+      amazonBrowserNavigationTransport: text(
+        env,
+        "AMAZON_PUBLIC_BROWSER_NAVIGATION_TRANSPORT",
+        "browser",
+      ) as "browser" | "request",
       amazonBrowserNavigationTimeoutMs: integer(
         env,
         "AMAZON_PUBLIC_BROWSER_NAVIGATION_TIMEOUT_MS",
@@ -1005,6 +1011,15 @@ export function loadRuntimeConfig(
     throw new ConfigError("PLAYWRIGHT_HEADLESS", "must be true or false");
   if (!["true", "false"].includes(text(env, "AMAZON_PUBLIC_HANDOFF_RECOVERY_ENABLED", "false")))
     throw new ConfigError("AMAZON_PUBLIC_HANDOFF_RECOVERY_ENABLED", "must be true or false");
+  if (
+    !["browser", "request"].includes(
+      text(env, "AMAZON_PUBLIC_BROWSER_NAVIGATION_TRANSPORT", "browser"),
+    )
+  )
+    throw new ConfigError(
+      "AMAZON_PUBLIC_BROWSER_NAVIGATION_TRANSPORT",
+      "must be browser or request",
+    );
   if (text(env, "NOTIFICATION_EMAIL_DELIVERY_MODE", "placeholder") !== "placeholder")
     throw new ConfigError(
       "NOTIFICATION_EMAIL_DELIVERY_MODE",

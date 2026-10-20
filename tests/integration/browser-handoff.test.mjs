@@ -12,6 +12,7 @@ import {
   PlaywrightCrawlerEngine,
 } from "../../packages/playwright-crawler/dist/index.js";
 import { waitForManualCaptcha } from "../../packages/playwright-crawler/dist/manual-handoff.js";
+import { installNavigationRequestTransport } from "../../packages/playwright-crawler/dist/navigation-transport.js";
 import { registerBrowserHandoffRoutes } from "../../apps/api/dist/browser-handoff-routes.js";
 
 // Owned local confirmation fixture, never a third-party CAPTCHA or production acceptance.
@@ -61,6 +62,7 @@ test("real Chromium 503 manual fixture is operated through authenticated HTTP an
     context = await browser.newContext(),
     page = await context.newPage();
   try {
+    await installNavigationRequestTransport(context, origin, 5000);
     const engine = new PlaywrightCrawlerEngine({}),
       navigation = engine.goto(page, origin, [origin], true, async (current) => {
         if (!(await current.locator("#manual-fixture").count())) return false;
