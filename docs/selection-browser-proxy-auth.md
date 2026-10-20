@@ -37,3 +37,12 @@ AMAZON_PUBLIC_BROWSER_NAVIGATION_TRANSPORT设为browser核验原生路径，requ
 夹具主动关闭TLS，不访问外网、不降低证书要求，也不冒充生产页面成功。
 启动失败回归确认Chromium只看到本机临时凭证，原代理凭证不在启动选项或plan。
 上述测试通过不等于生产407、503或每日100个已验收；以正式run、接管会话及完成事件为准。
+
+## 验证脚本连接诊断
+
+2026-10-20真实业务验证码失败回执仍出现script/ERR_TUNNEL_CONNECTION_FAILED。
+连接失败现仅补记HTTPS标准DNS主机名（最多253字符），不含URL路径、查询、用户信息、
+头部、cookie或代理凭证；IP、localhost、非HTTPS及无效URL不记主机名。
+私有CONNECT代理区分本地target_not_allowed与upstream_response，仍沿用原允许范围，
+不得凭错误码猜测或直接放开任意域名。诊断仍最多10条，正常成功连接不输出。
+本次不改变代理允许域名、验证码处理、事实解析或完成计数；需要既有宝塔Node/Python重启。

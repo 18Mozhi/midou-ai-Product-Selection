@@ -10,6 +10,16 @@ const suffixes = [
   "amazon-adsystem.com",
 ];
 const digest = (s: string) => createHash("sha256").update(s).digest();
+const publicDnsName = (host: string) =>
+  host.length <= 253 && /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(host);
+export function browserResourceHostname(value: string): string | undefined {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && publicDnsName(url.hostname) ? url.hostname : undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 /** Private per-run CONNECT relay. The browser gets only short-lived local
  * credentials. Existing upstream credentials are sent preemptively to the
@@ -21,7 +31,10 @@ export async function createAuthenticatedBrowserProxy(
     password: string;
     connectTimeoutMs?: number;
   },
-  report: (status: number) => void = () => {},
+  report: (
+    status: number,
+    detail?: { hostname: string; reason: "target_not_allowed" | "upstream_response" },
+  ) => void = () => {},
 ) {
   const upstream = new URL(input.server);
   if (
@@ -77,6 +90,10 @@ export async function createAuthenticatedBrowserProxy(
     const match = /^([a-z0-9.-]{1,253}):443$/i.exec(request.url ?? ""),
       host = match?.[1]?.toLowerCase();
     if (!host || !suffixes.some((s) => host === s || host.endsWith("." + s))) {
+      report(
+        403,
+        host && publicDnsName(host) ? { hostname: host, reason: "target_not_allowed" } : undefined,
+      );
       reply(403);
       return;
     }
@@ -117,7 +134,7 @@ export async function createAuthenticatedBrowserProxy(
       const end = pending.indexOf("\r\n\r\n");
       if (end < 0) return;
       const status = Number(/^HTTP\/1\.[01]\s+(\d{3})/.exec(pending.toString("latin1"))?.[1] ?? 0);
-      report(status);
+      report(status, { hostname: host, reason: "upstream_response" });
       if (status !== 200) {
         fail(502);
         return;

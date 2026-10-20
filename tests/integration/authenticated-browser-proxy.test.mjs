@@ -2,8 +2,26 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createServer, connect } from "node:net";
 import { chromium } from "playwright";
-import { createAuthenticatedBrowserProxy } from "../../packages/playwright-crawler/dist/authenticated-proxy.js";
+import {
+  createAuthenticatedBrowserProxy,
+  browserResourceHostname,
+} from "../../packages/playwright-crawler/dist/authenticated-proxy.js";
 import { installNavigationRequestTransport } from "../../packages/playwright-crawler/dist/navigation-transport.js";
+
+test("resource diagnostics retain only bounded HTTPS DNS hostnames", () => {
+  assert.equal(
+    browserResourceHostname("https://user:password@www.amazon.com/path?token=secret#answer"),
+    "www.amazon.com",
+  );
+  for (const value of [
+    "not a URL",
+    "http://www.amazon.com/path",
+    "https://127.0.0.1/path",
+    "https://[::1]/",
+    "https://localhost/",
+  ])
+    assert.equal(browserResourceHostname(value), undefined);
+});
 
 test("private relay authenticates both hops, preserves opaque bytes, restricts targets and closes with its owner", async () => {
   const upstreamAuth = "Basic " + Buffer.from("fixture-user:fixture-password").toString("base64"),
@@ -34,6 +52,7 @@ test("private relay authenticates both hops, preserves opaque bytes, restricts t
   });
   await new Promise((r) => upstream.listen(0, "127.0.0.1", r));
   const statuses = [],
+    details = [],
     relay = await createAuthenticatedBrowserProxy(
       {
         server: `http://127.0.0.1:${upstream.address().port}`,
@@ -41,7 +60,10 @@ test("private relay authenticates both hops, preserves opaque bytes, restricts t
         password: "fixture-password",
         connectTimeoutMs: 1000,
       },
-      (s) => statuses.push(s),
+      (s, detail) => {
+        statuses.push(s);
+        if (detail) details.push(detail);
+      },
     );
   const u = new URL(relay.proxy.server),
     localAuth =
@@ -85,6 +107,10 @@ test("private relay authenticates both hops, preserves opaque bytes, restricts t
       badTarget.socket.destroy();
     }
     assert.equal(receipts.length, 0);
+    assert.ok(
+      details.some((d) => d.hostname === "evilamazon.com" && d.reason === "target_not_allowed"),
+    );
+    assert.ok(!JSON.stringify(details).includes("127.0.0.1"));
     const good = await tunnel("m.media-amazon.com:443");
     assert.equal(good.status, 200);
     const payload = Buffer.from([0x17, 3, 3, 0, 4, 200, 201, 202, 203]);
@@ -99,6 +125,9 @@ test("private relay authenticates both hops, preserves opaque bytes, restricts t
     assert.equal(refused.status, 502);
     refused.socket.destroy();
     assert.ok(statuses.includes(407));
+    assert.ok(
+      details.some((d) => d.hostname === "www.amazon.com" && d.reason === "upstream_response"),
+    );
   } finally {
     await relay.close();
     for (const peer of peers) peer.destroy();

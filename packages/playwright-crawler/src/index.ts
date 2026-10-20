@@ -1,7 +1,7 @@
 import { prepareAmazonDeliveryContext } from "./amazon-delivery-context.js";
 import { waitForManualCaptcha } from "./manual-handoff.js";
 import { installNavigationRequestTransport } from "./navigation-transport.js";
-import { createAuthenticatedBrowserProxy } from "./authenticated-proxy.js";
+import { createAuthenticatedBrowserProxy, browserResourceHostname } from "./authenticated-proxy.js";
 export {
   BrowserHandoffStore,
   validHandoffCommand,
@@ -708,9 +708,14 @@ export class PlaywrightCrawlerEngine {
               ? {}
               : { connectTimeoutMs: options.proxy.connectTimeoutMs }),
           },
-          (status) => {
+          (status, detail) => {
             if (status !== 200)
-              recordResourceFailure({ stage, resource_type: "proxy_connect", http_status: status });
+              recordResourceFailure({
+                stage,
+                resource_type: "proxy_connect",
+                http_status: status,
+                ...detail,
+              });
           },
         );
       context = await chromium.launchPersistentContext(userDataDir, {
@@ -750,6 +755,9 @@ export class PlaywrightCrawlerEngine {
             stage,
             resource_type: response.request().resourceType(),
             http_status: response.status(),
+            ...(typeof response.url === "function"
+              ? { hostname: browserResourceHostname(response.url()) }
+              : {}),
           });
       });
       context.on("requestfailed", (request) => {
@@ -760,6 +768,9 @@ export class PlaywrightCrawlerEngine {
             stage,
             resource_type: request.resourceType(),
             network_code: code,
+            ...(typeof request.url === "function"
+              ? { hostname: browserResourceHostname(request.url()) }
+              : {}),
           });
       });
       const page = context.pages()[0] ?? (await context.newPage());
