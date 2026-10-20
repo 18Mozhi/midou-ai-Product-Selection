@@ -19,8 +19,181 @@ export function completionCompetitorGateCases(sql) {
     `(SELECT id,organization_id,workspace_id,${changes.price ?? "current_price"} current_price,currency,${changes.reviews ?? "review_count"} review_count,rating_value,${changes.freshness ?? "freshness"} freshness,${changes.source ?? "source_status"} source_status FROM competitor_snapshots)`;
   const main = (changes) =>
     sql.replaceAll("JOIN competitor_snapshots s_main ON", `JOIN ${mainView(changes)} s_main ON`);
+  const sourceApproval = (changes) =>
+    sql.replaceAll(
+      "FROM opportunity_events source_approval",
+      () =>
+        "FROM (SELECT id," +
+        (changes.organization_id ?? "organization_id") +
+        " organization_id," +
+        (changes.workspace_id ?? "workspace_id") +
+        " workspace_id,resource_id,resource_type,event_type," +
+        (changes.actor_type ?? "actor_type") +
+        " actor_type,occurred_at," +
+        (changes.payload ?? "payload_json") +
+        " payload_json FROM opportunity_events) source_approval",
+    );
+  const sourcePayload = (path, value) =>
+    sourceApproval({ payload: `JSON_SET(payload_json,'$.${path}',${value})` });
+  const sourceOrigin = (changes) =>
+    sql.replaceAll(
+      "JOIN trend_events source_origin ON",
+      () =>
+        "JOIN (SELECT id,organization_id,workspace_id," +
+        (changes.resource_id ?? "resource_id") +
+        " resource_id,resource_type," +
+        (changes.event_type ?? "event_type") +
+        " event_type,occurred_at," +
+        (changes.payload ?? "payload_json") +
+        " payload_json FROM trend_events) source_origin ON",
+    );
+  const news = (changes) =>
+    sql.replaceAll(
+      "JOIN normalized_records source_news ON",
+      () =>
+        "JOIN (SELECT id," +
+        (changes.organization_id ?? "organization_id") +
+        " organization_id," +
+        (changes.workspace_id ?? "workspace_id") +
+        " workspace_id," +
+        (changes.status ?? "status") +
+        " status FROM normalized_records) source_news ON",
+    );
+  const newerApproval = (actor) =>
+    sql.replaceAll(
+      "FROM opportunity_events newer_source",
+      () =>
+        "FROM (SELECT id,organization_id,workspace_id,resource_id,resource_type,event_type," +
+        actor +
+        " actor_type,DATE_ADD(occurred_at,INTERVAL 1 SECOND) occurred_at FROM opportunity_events) newer_source",
+    );
+  const newerOrigin = (payload = "payload_json") =>
+    sql.replaceAll(
+      "FROM trend_events newer_origin",
+      () =>
+        "FROM (SELECT id,organization_id,workspace_id,resource_id,resource_type,event_type," +
+        payload +
+        " payload_json,DATE_ADD(occurred_at,INTERVAL 1 SECOND) occurred_at FROM trend_events) newer_origin",
+    );
   return [
     { name: "actual independent detail candidates exist", sql, minimum: 1 },
+    {
+      name: "rejected original source cannot retain preference",
+      sql: sourcePayload("supported", "JSON_EXTRACT('false','$')"),
+      expected: 0,
+    },
+    {
+      name: "string true is not worker approval",
+      sql: sourcePayload("supported", "'true'"),
+      expected: 0,
+    },
+    {
+      name: "unreviewed source cannot retain preference",
+      sql: sourceApproval({ payload: "JSON_REMOVE(payload_json,'$.supported')" }),
+      expected: 0,
+    },
+    {
+      name: "unknown source revision cannot retain preference",
+      sql: sourcePayload("revision", "'unknown'"),
+      expected: 0,
+    },
+    {
+      name: "different main ASIN cannot borrow approval",
+      sql: sourcePayload("primary_asin", "'B000000000'"),
+      expected: 0,
+    },
+    {
+      name: "different original selection cannot borrow approval",
+      sql: sourcePayload("origin_event_id", wrongId),
+      expected: 0,
+    },
+    {
+      name: "different original news cannot borrow approval",
+      sql: sourcePayload("intelligence_record_id", wrongId),
+      expected: 0,
+    },
+    {
+      name: "malformed source fingerprint cannot retain preference",
+      sql: sourcePayload("fingerprint", "'invalid'"),
+      expected: 0,
+    },
+    {
+      name: "manual source audit cannot grant preference",
+      sql: sourceApproval({ actor_type: "'user'" }),
+      expected: 0,
+    },
+    {
+      name: "foreign source audit organization cannot grant preference",
+      sql: sourceApproval({ organization_id: wrongId }),
+      expected: 0,
+    },
+    {
+      name: "foreign source audit workspace cannot grant preference",
+      sql: sourceApproval({ workspace_id: wrongId }),
+      expected: 0,
+    },
+    {
+      name: "different source topic cannot grant preference",
+      sql: sourceOrigin({ resource_id: wrongId }),
+      expected: 0,
+    },
+    {
+      name: "different original event cannot grant preference",
+      sql: sourceOrigin({ event_type: "'trend.intelligence.associated'" }),
+      expected: 0,
+    },
+    {
+      name: "different original opportunity cannot grant preference",
+      sql: sourceOrigin({ payload: `JSON_SET(payload_json,'$.opportunity_id',${wrongId})` }),
+      expected: 0,
+    },
+    {
+      name: "different original news identity cannot grant preference",
+      sql: sourceOrigin({
+        payload: `JSON_SET(payload_json,'$.intelligence_source_record_id',${wrongId})`,
+      }),
+      expected: 0,
+    },
+    {
+      name: "inactive original news cannot grant preference",
+      sql: news({ status: "'deleted'" }),
+      expected: 0,
+    },
+    {
+      name: "foreign news organization cannot grant preference",
+      sql: news({ organization_id: wrongId }),
+      expected: 0,
+    },
+    {
+      name: "foreign news workspace cannot grant preference",
+      sql: news({ workspace_id: wrongId }),
+      expected: 0,
+    },
+    {
+      name: "immutable superseded news remains usable",
+      sql: news({ status: "'superseded'" }),
+      minimum: 1,
+    },
+    {
+      name: "newer worker source audit supersedes prior approval",
+      sql: newerApproval("actor_type"),
+      expected: 0,
+    },
+    {
+      name: "manual source event cannot supersede worker approval",
+      sql: newerApproval("'user'"),
+      minimum: 1,
+    },
+    {
+      name: "new original selection invalidates old approval preference",
+      sql: newerOrigin(),
+      expected: 0,
+    },
+    {
+      name: "unrelated opportunity selection cannot supersede original approval",
+      sql: newerOrigin(`JSON_SET(payload_json,'$.opportunity_id',${wrongId})`),
+      minimum: 1,
+    },
     {
       name: "foreign competitor organization cannot gain preference",
       sql: competitor("organization_id"),

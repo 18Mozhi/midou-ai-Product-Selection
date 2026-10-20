@@ -1,4 +1,20 @@
 {
+  "selectionSourceSupportedCompetitorTurns20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-source-supported-competitor-turns.md",
+    "sourceFiles": [
+      "apps/worker/src/completion-competitor-policy.ts",
+      "apps/worker/src/primary-source-support-contract.ts",
+      "apps/worker/src/primary-source-support.ts"
+    ],
+    "testFiles": [
+      "tests/unit/completion-competitor-priority.test.mjs",
+      "tests/fixtures/completion-competitor-priority-sql.mjs",
+      "tests/unit/collection-completion-scheduling.test.mjs",
+      "tests/unit/primary-source-support.test.mjs"
+    ],
+    "contract": "Narrow only the existing completion-owned independent-competitor preference to the latest trusted source-approved current main ASIN and scoped original selection/news/topic. Newer worker audits or original selections supersede prior approval; retain active/superseded news. Preserve original formal main/detail/relevance gates, ordinary queue eligibility, cache/source/priority/fairness/FIFO order and fixed concurrency. Pure source event/revision constants retain values and legacy exports, without loading classifiers into scheduling. No API/env/schema/event/dependency/frontend/Python change; BaoTa Node restart required."
+  },
   "selectionCompletionSourceRevocation20261020": {
     "status": "implemented",
     "requirements": "docs/selection-completion-source-revocation.md",

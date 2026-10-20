@@ -9,12 +9,19 @@ import {
 import {
   completionReadyCompetitorRowsSql as rows,
   completionReadyCompetitorTaskSql as preferred,
+  completionCompetitorApprovedSourceSql as sourceProof,
 } from "../../apps/worker/dist/completion-competitor-policy.js";
+import {
+  PRIMARY_SOURCE_SUPPORT_EVENT,
+  PRIMARY_SOURCE_SUPPORT_REVISION,
+} from "../../apps/worker/dist/primary-source-support-contract.js";
 import * as policy from "../../apps/worker/dist/collection-source-scheduling-policy.js";
 import { collectionScopeFairnessSqlCases } from "../fixtures/collection-scope-fairness-sql.mjs";
 import { completionReadySourcingTaskSql } from "../../apps/worker/dist/completion-sourcing-policy.js";
+import { completionCompetitorGateCases } from "../fixtures/completion-competitor-priority-sql.mjs";
 
 test("competitor preference retains actual primary, current relevance and original five-detail gate", () => {
+  assert.ok(rows.includes(sourceProof));
   assert.ok(rows.includes(selectionPrimaryAsinSql));
   assert.ok(rows.includes(selectionCompetitionGateSql(5, "materialized")));
   assert.ok(
@@ -43,6 +50,42 @@ test("competitor preference retains actual primary, current relevance and origin
   ])
     assert.ok(rows.includes(fragment), fragment);
   assert.doesNotMatch(rows, /FOR UPDATE|\b(?:INSERT|UPDATE|DELETE)\b/);
+});
+
+test("competitor preference binds the latest worker approval to current primary and original source", () => {
+  for (const fragment of [
+    PRIMARY_SOURCE_SUPPORT_EVENT,
+    PRIMARY_SOURCE_SUPPORT_REVISION,
+    "source_approval.organization_id=o.organization_id",
+    "source_approval.workspace_id=o.workspace_id",
+    "source_approval.resource_id=o.id",
+    "source_approval.actor_type='worker'",
+    "source_origin.resource_id=o.source_ref_id",
+    "source_news.status IN ('active','superseded')",
+    "JSON_TYPE(JSON_EXTRACT(source_approval.payload_json,'$.supported'))='BOOLEAN'",
+    "UPPER(JSON_UNQUOTE(JSON_EXTRACT(source_approval.payload_json,'$.primary_asin')))=BINARY o.primary_asin",
+    "newer_source.actor_type='worker'",
+    "newer_origin.occurred_at>source_origin.occurred_at",
+  ])
+    assert.ok(sourceProof.includes(fragment), fragment);
+  assert.doesNotMatch(sourceProof, /FOR UPDATE|\b(?:INSERT|UPDATE|DELETE)\b/);
+});
+
+test("source proof counterfactuals retain literal JSON boolean SQL and only produce reads", () => {
+  const cases = completionCompetitorGateCases(rows);
+  assert.equal(cases.length, 44);
+  assert.equal(new Set(cases.map((c) => c.name)).size, cases.length);
+  assert.ok(
+    cases
+      .find((c) => c.name === "rejected original source cannot retain preference")
+      .sql.includes(
+        "JSON_SET(payload_json,'$.supported',JSON_EXTRACT('false','$')) payload_json FROM opportunity_events) source_approval",
+      ),
+  );
+  for (const c of cases) {
+    assert.match(c.sql, /^SELECT /);
+    assert.doesNotMatch(c.sql, /FOR UPDATE|\b(?:INSERT INTO|DELETE FROM|UPDATE [a-z_]+ SET)\b/i);
+  }
 });
 
 test("only completion preference follows cached results, without changing the FIFO escape", () => {

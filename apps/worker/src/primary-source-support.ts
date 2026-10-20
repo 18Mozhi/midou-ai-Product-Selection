@@ -9,8 +9,14 @@ import {
   primaryProductEvidence,
 } from "./automatic-selection-evidence.js";
 
-export const PRIMARY_SOURCE_SUPPORT_REVISION = "persisted-primary-source-support-v1";
-export const PRIMARY_SOURCE_SUPPORT_EVENT = "opportunity.primary_source_support_checked";
+import {
+  PRIMARY_SOURCE_SUPPORT_REVISION,
+  PRIMARY_SOURCE_SUPPORT_EVENT,
+} from "./primary-source-support-contract.js";
+export {
+  PRIMARY_SOURCE_SUPPORT_REVISION,
+  PRIMARY_SOURCE_SUPPORT_EVENT,
+} from "./primary-source-support-contract.js";
 type Scope = { opportunityId: string; organizationId: string; workspaceId: string };
 type Reader = Pool | PoolConnection;
 const parse = (value: unknown): Record<string, unknown> => {
