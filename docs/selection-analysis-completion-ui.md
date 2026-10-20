@@ -27,3 +27,13 @@ API构建和Vue类型检查通过。最小双端浏览器6项通过：完成且�
 无环境变量、数据库迁移、配置开关或依赖变更。发布前端静态文件并通过固定deploy-baota.py部署、由宝塔重启Node项目ai选品；Python和Worker业务逻辑不变。无需用户设置。新字段兼容旧客户端，新客户端遇旧响应不伪造完成。完整API/OpenAPI、类型、消费方、Feature Map同步。
 
 本轮临时验证输出目录为项目.artifacts/completion-receipt-ui-20261020及.artifacts/completion-receipt-full-20261020，完整测试后已核验路径位于本项目.artifacts内并清理，分别1和9个临时文件及空目录均删除。Playwright管理的测试服务已关闭，4101/5173本地监听0。真实Chrome仅创建标签758606130，正式复核结束时关闭。新增fixture、测试、文档和组件为永久交付。用户verification/state.json不修改、不暂存。日100、全部数据来源及全站总验收未完成。
+
+## 正式发布与真实界面回执
+
+代码f5a89868df2a930e7032688acb0296482d4a88c9通过固定deploy-baota.py正式发布，命令退出0、终态deployed、临时包删除，宝塔Node已重启。09:27:41独立回读BUILD_SHA一致；opportunity-completed-filter.js SHA256=fa22335e71f590ae7352f8a79f0d460597661154eb97f114269d4c16767c01ed、mysql-opportunity-repository.js SHA256=16fd86d16d82d6e557860c5c671fdfb7c96b0bf87ed6410e52c6c4bab9579adb，与本地构建一致。前端index.html SHA256=f3b43ccb00e83740cea08f44e9a9ee53d17cba14e0a80638fee6f7da22ada1b5，与正式发布工作树本次构建一致。
+
+真实已登录Chrome同一RC商品验证：默认1920视口显示“分析已完成 / 完成于10/20 02:01”，time的datetime精确为2026-10-19T18:01:19.130Z；完成状态及当前采纳条件位于评分明细前，评分仍65.85、售价USD30.99、利润未知，采纳建议按钮0。390视口同样成立，根页面没有横向溢出。返回来源列表保留view=completed，真实入口为“查看分析”，列表CNY54.43和其他商品事实未改。
+
+手机全长截图的CDP操作超时，随后轻量页面检查成功，属于截图操作超时而非Chrome连接重置；未重启浏览器，改用稳定可见区域保存。桌面和手机两张真实JPEG作为本地交付保留（analysis-completion-desktop-20261020.jpg / analysis-completion-mobile-20261020.jpg），不打包上传或计入采集数据。验证标签758606130已关闭，临时390视口已reset。没有修改实际业务决定。
+
+09:27:44原调度running、suspected_stuck_runs=0，采集任务e87eeb7f-c19a-45d9-adc9-d08d79192c2d有新鲜运行心跳；投影也在原循环内运行。这证明后台仍运行，不代表全部来源或日百品通过。当前工作区北京时间今日仍1/100；本轮只展示原历史完成事件，不新增或重放事件，总目标保持未完成。
