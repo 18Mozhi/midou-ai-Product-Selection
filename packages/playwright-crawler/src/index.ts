@@ -1,4 +1,5 @@
 import { prepareAmazonDeliveryContext } from "./amazon-delivery-context.js";
+import { recordResourceFailure as retainResourceFailure } from "./resource-failures.js";
 import { waitForManualCaptcha } from "./manual-handoff.js";
 import { installNavigationRequestTransport } from "./navigation-transport.js";
 import { createAuthenticatedBrowserProxy, browserResourceHostname } from "./authenticated-proxy.js";
@@ -684,8 +685,7 @@ export class PlaywrightCrawlerEngine {
     let stage = "browser_launch";
     const resourceFailures: Record<string, unknown>[] = [];
     const recordResourceFailure = (failure: Record<string, unknown>) => {
-      if (resourceFailures.length === 10) resourceFailures.shift();
-      resourceFailures.push(failure);
+      retainResourceFailure(resourceFailures, failure);
     };
     let artifacts: BrowserEvidenceArtifact[] = [];
     let searchSnapshot: BrowserSearchSnapshot | undefined;

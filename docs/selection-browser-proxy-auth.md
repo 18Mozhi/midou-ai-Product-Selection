@@ -45,6 +45,10 @@ AMAZON_PUBLIC_BROWSER_NAVIGATION_TRANSPORT设为browser核验原生路径，requ
 头部、cookie或代理凭证；IP、localhost、非HTTPS及无效URL不记主机名。
 私有CONNECT代理区分本地target_not_allowed与upstream_response，仍沿用原允许范围，
 不得凭错误码猜测或直接放开任意域名。诊断仍最多10条，正常成功连接不输出。
+失败记录按document/script/xhr/fetch/stylesheet、CONNECT、其余资源的顺序保留；
+满额时只移除最低优先级中最早的一条，低优先级新失败不得挤掉已有高优先级失败。
+同级保留最近记录，原始安全字段不变。这样广告图片/同步连接不会覆盖弹窗接口或脚本错误。
+定向验证：node --test tests/unit/browser-resource-failures.test.mjs；构建采集包后运行。
 本次不改变代理允许域名、验证码处理、事实解析或完成计数；需要既有宝塔Node/Python重启。
 
 ## 实际页面引用的单一CDN资源
