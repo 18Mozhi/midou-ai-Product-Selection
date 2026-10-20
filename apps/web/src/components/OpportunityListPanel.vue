@@ -8,6 +8,12 @@ import OpportunityCatalogueList from "./OpportunityCatalogueList.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import type { OpportunitySummary } from "./opportunity-workspace-types";
+import {
+  catalogueProductFacts as productFacts,
+  catalogueFreshness as freshness,
+  catalogueMeta as catalogMeta,
+  catalogueSourceLabel as sourceLabel,
+} from "./opportunity-catalogue-facts";
 
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type SelectionView = "recommended" | "rule_candidates" | "evidence_pending" | "completed" | "all";
@@ -119,45 +125,6 @@ const props = defineProps<{
       })[props.selectionView],
   );
 
-const productFacts = (item: Opportunity) => {
-  const p = item.primary_product;
-  const sales = p?.public_signals?.sales_badge;
-  return [
-    {
-      label: "售价",
-      value: p?.price != null && p.currency ? `${p.currency} ${p.price.toFixed(2)}` : "未采集",
-    },
-    {
-      label: "1688进货价",
-      value: item.automatic_purchase_price
-        ? `CNY ${item.automatic_purchase_price.amount_value.toFixed(2)}`
-        : "未取得",
-    },
-    {
-      label: "评分 / 评价",
-      value: `${p?.rating_value != null ? p.rating_value.toFixed(1) : "—"} / ${p?.review_count != null ? `${p.review_count} 条` : "未采集"}`,
-    },
-    {
-      label: "购买提示",
-      value: sales
-        ? `${sales.period === "past_month" ? "近月" : "近周"} ≥ ${sales.quantity_lower_bound}`
-        : "未采集",
-    },
-    {
-      label: "类目排名",
-      value: p?.public_signals?.best_seller_rank
-        ? `#${p.public_signals.best_seller_rank.rank}`
-        : "未采集",
-    },
-    {
-      label: "采价时间",
-      value: item.automatic_purchase_price
-        ? freshness(item.automatic_purchase_price.observed_at)
-        : "未取得",
-    },
-  ];
-};
-
 const opportunityStatus = (value: string) =>
     (
       ({
@@ -179,22 +146,6 @@ const opportunityStatus = (value: string) =>
         archived: "已归档",
       }) as Record<string, string>
     )[value] ?? value,
-  freshness = (value: string) =>
-    new Intl.DateTimeFormat("zh-CN", {
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).format(new Date(value)),
-  sourceLabel = (item: Opportunity) =>
-    item.source_type === "trend_topic"
-      ? "情报发现"
-      : item.source_type === "manual"
-        ? "手工添加"
-        : "其他线索",
-  catalogMeta = (item: Opportunity) =>
-    `${item.market} · ${item.category || "未分类"} · ${freshness(item.updated_at)}${item.matched_rule_count ? ` · 命中 ${item.matched_rule_count} 条规则` : ""}`,
   scoreLabel = (value: number | null) =>
     value == null ? "—" : Number.isInteger(value) ? String(value) : value.toFixed(1),
   selectionStage = (item: Opportunity) => item.selection_stage ?? "not_eligible",

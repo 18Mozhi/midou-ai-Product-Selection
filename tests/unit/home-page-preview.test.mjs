@@ -14,7 +14,9 @@ test("home uses its actual Vue and one layout owner without legacy template inje
   );
   assert.match(dashboard, /request<Summary>\("\/me\/home-dashboard"/);
   assert.doesNotMatch(dashboard, /monitoring-rules|resumeRule|setupForm/);
-  assert.match(dashboard, /五项质量门/);
+  const results = await readFile("apps/web/src/components/HomeSelectionResults.vue", "utf8");
+  assert.match(dashboard, /HomeSelectionResults/);
+  assert.match(results, /五项质量门/);
   assert.match(automation, /selection\.recommended_count/);
   assert.doesNotMatch(dashboard, /01 \/|02 \/|p12-hero/);
   assert.doesNotMatch(commerce, /\.home-/);

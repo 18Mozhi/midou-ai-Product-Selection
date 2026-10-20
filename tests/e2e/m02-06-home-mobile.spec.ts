@@ -52,6 +52,9 @@ const envelope = (data: unknown) => ({
 });
 
 async function nav(page: any) {
+  await page.route(/\/api\/v1\/opportunities\?selection_view=completed(?:&|$)/, (route: any) =>
+    route.fulfill({ json: envelope([]) }),
+  );
   await page.route("**/api/v1/me/navigation?**", (route: any) =>
     route.fulfill({
       status: 200,
@@ -154,6 +157,7 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
     page.locator(".home-command-bar").getByRole("heading", { name: "选品工作台", exact: true }),
   ).toBeVisible();
   await expect(page.locator(".home-system-state")).toHaveText("采集调度已配置");
+  await page.getByRole("button", { name: /^待采纳推荐/ }).click();
   await expect(page.getByText("便携咖啡机候选")).toBeVisible();
   await expect(page.getByText("86.5 分")).toBeVisible();
   await expect(page.getByRole("link", { name: /便携咖啡机候选/ })).toHaveAttribute(
@@ -206,7 +210,7 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   const layout = await page.evaluate(() => {
     const header = document.querySelector(".home-command-bar")!;
     const metrics = document.querySelector(".home-automation-overview")!;
-    const queue = document.querySelector(".home-review-queue")!;
+    const queue = document.querySelector(".home-result-workspace")!;
     return {
       headerColor: getComputedStyle(header).backgroundColor,
       queueColor: getComputedStyle(queue).backgroundColor,
@@ -410,6 +414,7 @@ test("M02-06.A10/A12 missing selection and failed rule read remain unknown and n
 
   await page.goto("/home");
   await expect(page.getByText("自动选品状态暂不可用")).toBeVisible();
+  await page.getByRole("button", { name: /^待采纳推荐/ }).click();
   await expect(page.getByText("自动选品数据暂不可用")).toBeVisible();
   await expect(page.getByText(/选品规则读取失败，请重试/)).toHaveCount(0);
   await expect(page.getByText("等待采集来源就绪")).toBeHidden();
@@ -489,6 +494,7 @@ test("M02-06 home state errors expose only the wired retry action", async ({ pag
   status = 200;
   const readsBeforeRetry = reads;
   await page.locator(".ui-state-panel").getByRole("button", { name: "重新读取" }).click();
+  await page.getByRole("button", { name: /^待采纳推荐/ }).click();
   await expect(page.getByText("重新读取后可见")).toBeVisible();
   expect(reads).toBeGreaterThan(readsBeforeRetry);
 });
@@ -525,6 +531,7 @@ test("home continuously reads new results and stops when cached off route", asyn
     });
   });
   await page.goto("/home");
+  await page.getByRole("button", { name: /^待采纳推荐/ }).click();
   await expect(page.getByText("最新结果 1", { exact: true })).toBeVisible();
   await page.clock.runFor(5100);
   await expect(page.getByText("最新结果 2", { exact: true })).toBeVisible();
@@ -576,6 +583,7 @@ test("home background expiry clears protected cached results", async ({ page }) 
         });
   });
   await page.goto("/home");
+  await page.getByRole("button", { name: /^待采纳推荐/ }).click();
   await expect(page.getByText("工作区受保护结果", { exact: true })).toBeVisible();
   await page.clock.runFor(5100);
   await expect(page.getByText("工作区受保护结果", { exact: true })).toHaveCount(0);
@@ -587,6 +595,7 @@ test("home background expiry clears protected cached results", async ({ page }) 
     .locator(".ui-state-panel")
     .getByRole("button", { name: "重新读取", exact: true })
     .click();
+  await page.getByRole("button", { name: /^待采纳推荐/ }).click();
   await expect(page.getByText("工作区受保护结果", { exact: true })).toBeVisible();
   await page.clock.runFor(5100);
   await expect.poll(() => reads).toBeGreaterThan(stopped + 1);
@@ -731,7 +740,10 @@ test.describe("daily snapshots retain Beijing time in overseas browsers", () => 
           await markOcclusionProbe(daily);
           await expectAboveMobileNavigation(page, daily);
         }
-        await expect(daily).toHaveScreenshot("daily-product-production.png");
+        await expect(
+          daily.getByRole("link", { name: "查看已完成分析（全部日期）" }),
+        ).toHaveAttribute("href", "/opportunities?view=completed");
+        await expect(daily).toHaveScreenshot("daily-product-production-with-completed-link.png");
       }
     });
   }

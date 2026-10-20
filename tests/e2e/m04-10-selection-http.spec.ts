@@ -58,6 +58,13 @@ test("[real-api] workspace shows distinct discovered count without inventing qua
   const read = page.waitForResponse((response) =>
     response.url().endsWith("/api/v1/me/home-dashboard"),
   );
+  const completedRead = page.waitForResponse((response) => {
+    const url = new URL(response.url());
+    return (
+      url.pathname === "/api/v1/opportunities" &&
+      url.searchParams.get("selection_view") === "completed"
+    );
+  });
   await page.goto("/home");
   const response = await read;
   expect(response.status()).toBe(200);
@@ -70,6 +77,10 @@ test("[real-api] workspace shows distinct discovered count without inventing qua
   const daily = page.getByRole("region", { name: "每日选品产出" });
   await expect(daily).toContainText("新增主品 ASIN");
   await expect(daily.getByRole("progressbar")).toHaveAttribute("value", "0");
+  const completedResponse = await completedRead;
+  expect(completedResponse.status()).toBe(200);
+  expect((await completedResponse.json()).data).toEqual([]);
+  await expect(page.getByText("暂无已完成分析的商品", { exact: true })).toBeVisible();
   png(await page.screenshot({ fullPage: true }), page);
 });
 

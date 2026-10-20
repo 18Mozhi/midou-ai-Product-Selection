@@ -3547,17 +3547,26 @@
         "../apps/web/src/components/HomeDashboard.vue",
         "../apps/web/src/components/HomeAutomationOverview.vue",
         "../apps/web/src/home-dashboard.css",
-        "../apps/web/src/components/OpportunityWorkspace.vue"
+        "../apps/web/src/components/OpportunityWorkspace.vue",
+        "../apps/web/src/components/HomeSelectionResults.vue",
+        "../apps/web/src/components/HomeCompletedProducts.vue",
+        "../apps/web/src/components/use-home-completed-products.ts",
+        "../apps/web/src/components/opportunity-catalogue-facts.ts",
+        "../apps/web/src/home-selection-results.css"
       ],
-      "routes": ["/home", "/api/v1/me/home-dashboard", "/opportunities/{opportunityId}"],
+      "routes": [
+        "/home",
+        "/api/v1/me/home-dashboard",
+        "/opportunities/{opportunityId}",
+        "/api/v1/opportunities"
+      ],
       "sections": [
-        "automatic selection operating state",
-        "recommendation review queue",
-        "progressively disclosed selection pipeline status",
-        "secondary actionable work",
-        "actionable empty state"
+        "daily completed workflow count",
+        "completed-analysis product catalogue",
+        "pending-adoption recommendation queue",
+        "progressively disclosed collection status"
       ],
-      "presentationBoundary": "the first fold is a decision-first automatic-selection console: the unique primary action and pending human-adoption review queue precede automation counters and technical runtime details; four compact factual counters deep-link to suggested adoption rule-threshold candidates still-collecting items and running rules, an empty review queue exposes only the truthful candidate or collection progress action when one exists, the full collection pipeline timestamps adopted count and technical projection facts remain available through native progressive disclosure, and recommendation items are divider-based rows instead of nested cards; on narrow screens the primary action owns the first row, two secondary actions share the next row and the first actionable item clears the fixed navigation; first-time users can create or resume the core monitoring rule in place without entering the diagnostic trend workspace, every action keeps an explicit internal route and no decorative metric is invented",
+      "presentationBoundary": "2026-10-20: the commerce workspace defaults to five completed-analysis products from the existing scoped completed-list API, including low-score, non-recommended and explicitly unknown-profit records. A separate pending-adoption view preserves all recommendation gates. Desktop uses the shared product catalogue table; mobile uses its responsive rows. All-date rows are ordered by updated_at, not claimed as today-only output. Daily production stays a separate Beijing-time count. Only opportunity:read members request completed products; scope changes and authentication failures clear prior protected rows; transient failures retain an explicitly stale snapshot. Product reads follow initial activation, completion-count changes, manual refresh and focus, never every unchanged five-second summary poll.",
       "actionOrder": ["overdue", "blocking", "high_risk", "high_value", "normal"],
       "scope": "exact organization and workspace; required capability; enabled monitoring rules, rule-created candidates, evidence-backed recommendations, pending human adoption, active tasks assigned to the actor, pending approvals at the actor's current node, and health exact authenticated audience user; an unassigned rule recommendation is visible to every scoped opportunity:read member, while an assigned recommendation remains in its owner's home queue",
       "truth": "synchronous MySQL 5.7 cross-module read from monitoring rules collection tasks opportunities decisions tasks approvals plus stored change follow and health projections; automatic-selection state, counters and pipeline completion markers are derived from persisted facts, so the monitoring-platform step is complete only when enabled_rule_count is positive and never implies that an unconfigured or blocked crawler is running; the home recommendation queue includes only pending exact rule matches that reached the enabled distinct-source threshold and passed score market competition cost and risk quality gates; reaching the source threshold alone is counted only as a rule candidate, unassigned recommendations remain visible to scoped opportunity:read members, and adoption remains a separate human action",

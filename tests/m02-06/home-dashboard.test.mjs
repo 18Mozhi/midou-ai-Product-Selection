@@ -352,8 +352,11 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.doesNotMatch(home, /setupBusy|setupOpen|monitoring-rules|resumeRule/);
   assert.match(home, /generation !== loadGeneration/);
   assert.match(home, /当前显示上次成功读取的快照/);
-  assert.match(home, /home-review-queue[\s\S]*推荐清单/);
-  assert.match(home, /recommended_items[\s\S]*recommended_count/);
+  const results = await read("apps/web/src/components/HomeSelectionResults.vue");
+  assert.match(home, /HomeSelectionResults/);
+  assert.match(results, /home-result-workspace[\s\S]*推荐清单/);
+  assert.match(home, /recommended_items/);
+  assert.match(results, /selection.recommended_count/);
   assert.match(
     overview,
     /home-status-facts[\s\S]*待你采纳[\s\S]*选品候选[\s\S]*待补证据[\s\S]*累计采纳/,
@@ -365,9 +368,9 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     "/opportunities\\?view=all&decision_status=adopted",
   ])
     assert.match(overview, new RegExp(`to="${destination}"`));
-  assert.match(home, /查看候选进度[\s\S]*查看采集进度/);
+  assert.match(results, /查看候选进度[\s\S]*查看采集进度/);
   assert.match(home, /等待采集来源就绪[\s\S]*来源和采集调度由后台管理/);
-  assert.match(home, /五项质量门全部通过后自动加入/);
+  assert.match(results, /五项质量门全部通过后自动加入/);
   assert.doesNotMatch(home, /按真实来源门槛推荐/);
   assert.match(
     overview,

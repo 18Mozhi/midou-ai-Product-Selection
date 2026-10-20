@@ -260,6 +260,8 @@ html[data-design="commerce"] #app .home-command-bar nav .home-primary-action {
 .home-daily-meta a {
   margin-left: auto;
   font-size: 13px;
+  color: var(--home-accent);
+  text-decoration: none;
 }
 .home-daily-meta small {
   font-size: 13px;
@@ -315,34 +317,6 @@ html[data-design="commerce"] #app .home-daily-completion dd {
   padding: 16px 20px;
   color: var(--so-text-muted);
   font-size: 13px;
-}
-.home-review-queue {
-  margin-top: 16px;
-  background: var(--so-panel);
-  border: 1px solid var(--home-hairline);
-  border-radius: 6px;
-  overflow: hidden;
-}
-.home-review-queue > header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--home-hairline);
-}
-.home-review-queue > header span {
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.home-review-queue h3 {
-  font-size: 16px;
-  font-weight: 600;
-}
-.home-review-queue header a,
-.home-quiet-empty a {
-  color: var(--home-accent);
-  text-decoration: none;
 }
 .home-review-row {
   display: grid;
@@ -536,9 +510,6 @@ html[data-design="commerce"] #app .home-daily-completion dd {
   .home-daily-production dd small {
     display: block;
     font-size: 13px;
-  }
-  .home-review-queue > header {
-    padding: 14px 16px;
   }
   .home-review-row {
     padding: 14px 16px;

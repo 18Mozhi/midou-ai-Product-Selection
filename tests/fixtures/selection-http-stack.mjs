@@ -218,8 +218,8 @@ export async function createSelectionHttpStack(webOrigin) {
           (!input.market || item.market === input.market) &&
           (!input.decisionStatus || item.decision_status === input.decisionStatus),
       );
-      if (input.selectionView === "recommended" || input.selectionView === "rule_candidates")
-        items = [];
+      // These synthetic products have no completed-pipeline evidence; do not fake that view.
+      if (["recommended", "rule_candidates", "completed"].includes(input.selectionView)) items = [];
       const total = items.length;
       return {
         items: structuredClone(

@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, onActivated, onDeactivated, ref }
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import type { DailySelectionProduction } from "@scoutops/contracts";
 import HomeAutomationOverview from "./HomeAutomationOverview.vue";
+import HomeSelectionResults from "./HomeSelectionResults.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../home-dashboard.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
@@ -64,12 +65,12 @@ let liveReadPending = false;
 const HOME_REFRESH_INTERVAL_MS = 5000;
 const refreshing = ref(false);
 const lastRefreshedAt = ref("");
+const resultRefreshVersion = ref(0);
 const selection = computed(() => data.value?.automatic_selection ?? null),
   decisionActions = computed(() => selection.value?.recommended_items ?? []),
   date = (value: string | null) => (value ? new Date(value).toLocaleString("zh-CN") : "未设置");
 const dailyTime = (value: string) =>
   new Date(value).toLocaleString("zh-CN", { timeZone: "Asia/Shanghai", hour12: false });
-const score = (value: number) => (Number.isInteger(value) ? String(value) : value.toFixed(1));
 const failure = (kind: ApiFailureKind): State =>
   kind === "expired"
     ? "expired"
@@ -78,7 +79,7 @@ const failure = (kind: ApiFailureKind): State =>
       : kind === "blocked" || kind === "rate_limited"
         ? "blocked"
         : "error";
-async function load() {
+async function load(refreshResults = false) {
   readController?.abort();
   const controller = new AbortController();
   readController = controller;
@@ -92,6 +93,7 @@ async function load() {
     requestId.value = response.request_id;
     traceId.value = response.trace_id;
     data.value = response.data;
+    if (refreshResults) resultRefreshVersion.value += 1;
     lastRefreshedAt.value = new Date().toLocaleTimeString("zh-CN");
     state.value =
       response.data.actions.length +
@@ -129,7 +131,7 @@ function scheduleRefresh() {
   if (active && !["expired", "forbidden"].includes(state.value))
     refreshTimer = setTimeout(() => void refreshLive(), HOME_REFRESH_INTERVAL_MS);
 }
-async function refreshLive() {
+async function refreshLive(refreshResults = false) {
   if (!active || liveReadPending) return;
   if (document.visibilityState !== "visible" || refreshing.value) {
     scheduleRefresh();
@@ -137,13 +139,13 @@ async function refreshLive() {
   }
   liveReadPending = true;
   try {
-    await load();
+    await load(refreshResults);
   } finally {
     liveReadPending = false;
   }
 }
 function resumeVisible() {
-  if (document.visibilityState === "visible") void refreshLive();
+  if (document.visibilityState === "visible") void refreshLive(true);
 }
 function activate() {
   if (active) return;
@@ -206,7 +208,7 @@ onBeforeUnmount(deactivate);
             <span>{{
               refreshing ? "正在更新" : lastRefreshedAt ? `已更新 ${lastRefreshedAt}` : "等待数据"
             }}</span>
-            <button type="button" :disabled="refreshing" @click="load()">刷新</button>
+            <button type="button" :disabled="refreshing" @click="load(true)">刷新</button>
           </div>
           <RouterLink class="home-secondary-action so-action-secondary" to="/trends"
             >市场情报</RouterLink
@@ -268,55 +270,15 @@ onBeforeUnmount(deactivate);
           ><span>来源和采集调度由后台管理；可用来源开始采集后，系统会自动分析情报并寻找商品。</span>
         </div>
       </section>
-      <section class="home-review-queue so-ledger-surface" aria-labelledby="home-review-title">
-        <header>
-          <div>
-            <h3 id="home-review-title">推荐清单</h3>
-          </div>
-          <RouterLink v-if="selection" to="/opportunities">
-            全部 {{ selection.recommended_count }} 条 →
-          </RouterLink>
-        </header>
-        <RouterLink
-          v-for="item in decisionActions"
-          :key="item.id"
-          :to="item.route"
-          class="home-review-row"
-        >
-          <div>
-            <strong>{{ item.title }}</strong
-            ><small>{{ item.reason }}</small>
-          </div>
-          <span>{{
-            item.value_score === null ? "评分未读取" : `${score(item.value_score)} 分`
-          }}</span
-          ><b>查看 →</b>
-        </RouterLink>
-        <div v-if="!selection" class="home-quiet-empty" role="status">
-          <b>自动选品数据暂不可用</b>
-          <span>推荐与运行统计暂不可用，请稍后刷新。</span>
-        </div>
-        <div v-else-if="!decisionActions.length" class="home-quiet-empty">
-          <b>当前没有待人工采纳的推荐</b
-          ><span>{{
-            selection.rule_candidate_count > 0
-              ? `${selection.rule_candidate_count} 条选品候选尚待五项质量门校验，可查看缺失资料。`
-              : selection.awaiting_evidence_count > 0
-                ? `${selection.awaiting_evidence_count} 条商品等待补充主品证据。`
-                : "系统会在五项质量门全部通过后自动加入这里。"
-          }}</span>
-          <RouterLink
-            v-if="selection.rule_candidate_count > 0"
-            to="/opportunities?view=rule_candidates"
-            >查看候选进度</RouterLink
-          >
-          <RouterLink
-            v-else-if="selection.awaiting_evidence_count > 0"
-            to="/opportunities?view=evidence_pending"
-            >查看采集进度</RouterLink
-          >
-        </div>
-      </section>
+      <HomeSelectionResults
+        :key="`${data?.scope?.organization_id}:${data?.scope?.workspace_id}`"
+        :api-base-url="apiBaseUrl"
+        :capabilities="capabilities"
+        :selection="selection"
+        :items="decisionActions"
+        :completed-count="selection?.daily_production?.completed_count"
+        :refresh-version="resultRefreshVersion"
+      />
 
       <details v-if="selection" class="home-truth">
         <summary>数据说明</summary>

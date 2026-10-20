@@ -1,3 +1,5 @@
+> 2026-10-20：首页默认展示现有完成接口返回的真实商品，独立推荐视图保留全部采纳门；日完成与全部日期结果分开，见 docs/selection-home-results-workspace.md。
+
 > 2026-10-20：详情通过真实完成事件展示analysis_completed_at，已完成分析的状态和当前采纳条件前置，利润未知继续保留；未完成不因列表来源URL或评分误标完成。完成列表的非推荐商品入口为查看分析，见 docs/selection-analysis-completion-ui.md。
 
 > 2026-10-20：同范围成功浏览器结果在普通validation_failed重试中保留原结果处理排序偏好，原优先级/公平/阶段/FIFO/来源和校验保护不变；不复活死信或重放采集，见 docs/selection-cached-validation-result.md。已正式发布并验证原任务偏好0到1，自然分类和日百品未验收。
