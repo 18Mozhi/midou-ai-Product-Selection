@@ -403,6 +403,7 @@ watch(imageFailureResetSources, (items) => {
       v-if="displayMode === 'list'"
       :items="items"
       :return-path="route.fullPath"
+      :completed-view="selectionView === 'completed'"
       :product-facts="productFacts"
       :row-facts="rowFacts"
       :catalog-meta="catalogMeta"
@@ -485,7 +486,14 @@ watch(imageFailureResetSources, (items) => {
             <span>{{ opportunityProfitStatusLabel(item.profit_status) }}</span>
           </div>
           <b :data-status="item.decision_status"
-            >{{ selectionStage(item) === "recommended" ? "审阅并采纳" : "查看进度" }} →</b
+            >{{
+              selectionStage(item) === "recommended"
+                ? "审阅并采纳"
+                : selectionView === "completed"
+                  ? "查看分析"
+                  : "查看进度"
+            }}
+            →</b
           ></RouterLink
         >
       </article>

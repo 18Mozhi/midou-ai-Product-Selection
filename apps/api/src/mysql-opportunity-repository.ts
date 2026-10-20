@@ -2,7 +2,10 @@ import {
   opportunityRecommendedListSourceSql,
   reuseRecommendedFilterIdentitySql,
 } from "./opportunity-recommended-list-scope.js";
-import { opportunityCompletedFilterSql } from "./opportunity-completed-filter.js";
+import {
+  opportunityAnalysisCompletedAtSql,
+  opportunityCompletedFilterSql,
+} from "./opportunity-completed-filter.js";
 import {
   opportunityListPrimaryAsinSql,
   opportunityListPrimaryRecordsSql,
@@ -662,26 +665,33 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       ),
       [input.opportunityId, input.organizationId, input.workspaceId],
     );
-    const [[evidenceTasks], [scoreJobs], [automaticEvaluations]] = await Promise.all([
-      this.pool.query<RowDataPacket[]>(
-        "SELECT id,status,progress_percent,assignee_id,due_at,completed_at,created_at,updated_at " +
-          "FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
-          "source_type='evidence_completion' AND source_ref_id=? AND deleted_at IS NULL " +
-          "ORDER BY created_at DESC,id DESC LIMIT 1",
-        [input.organizationId, input.workspaceId, input.opportunityId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT id,status,trigger_task_id,last_error_code,created_at,updated_at FROM opportunity_score_jobs " +
-          "WHERE organization_id=? AND workspace_id=? AND opportunity_id=? " +
-          "ORDER BY created_at DESC,id DESC LIMIT 1",
-        [input.organizationId, input.workspaceId, input.opportunityId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT status,last_error_code,result_json,evaluated_at FROM automatic_selection_evaluations " +
-          "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? LIMIT 1",
-        [input.opportunityId, input.organizationId, input.workspaceId],
-      ),
-    ]);
+    const [[evidenceTasks], [scoreJobs], [automaticEvaluations], [analysisCompletions]] =
+      await Promise.all([
+        this.pool.query<RowDataPacket[]>(
+          "SELECT id,status,progress_percent,assignee_id,due_at,completed_at,created_at,updated_at " +
+            "FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
+            "source_type='evidence_completion' AND source_ref_id=? AND deleted_at IS NULL " +
+            "ORDER BY created_at DESC,id DESC LIMIT 1",
+          [input.organizationId, input.workspaceId, input.opportunityId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT id,status,trigger_task_id,last_error_code,created_at,updated_at FROM opportunity_score_jobs " +
+            "WHERE organization_id=? AND workspace_id=? AND opportunity_id=? " +
+            "ORDER BY created_at DESC,id DESC LIMIT 1",
+          [input.organizationId, input.workspaceId, input.opportunityId],
+        ),
+        this.pool.query<RowDataPacket[]>(
+          "SELECT status,last_error_code,result_json,evaluated_at FROM automatic_selection_evaluations " +
+            "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? LIMIT 1",
+          [input.opportunityId, input.organizationId, input.workspaceId],
+        ),
+        this.pool.query<RowDataPacket[]>(opportunityAnalysisCompletedAtSql, [
+          input.organizationId,
+          input.workspaceId,
+          input.opportunityId,
+          row.main_asin ?? "",
+        ]),
+      ]);
     let scoreRun: RowDataPacket | undefined,
       components: RowDataPacket[] = [];
     try {
@@ -764,6 +774,9 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       );
     return {
       ...summary(row),
+      analysis_completed_at: analysisCompletions[0]
+        ? iso(analysisCompletions[0].occurred_at)
+        : null,
       operating_feedback: operatingFeedback,
       lineage,
       adoption_blockers: [

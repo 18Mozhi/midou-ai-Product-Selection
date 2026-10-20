@@ -257,6 +257,93 @@ const blockedEvidence = {
   score_job_status: null,
 };
 
+test("completed analysis receipt leads with completion while unknown profit keeps adoption blocked", async ({
+  page,
+}) => {
+  await ready(page, evidence, {
+    analysis_completed_at: "2026-10-19T18:01:19.130Z",
+    overall_score: 65.85,
+    quality_gates: {
+      score: false,
+      market: true,
+      competition: true,
+      cost: false,
+      risk: true,
+      all_passed: false,
+    },
+    adoption_blockers: [
+      {
+        ...blockedEvidence,
+        code: "recommendation_insufficient",
+        next_action: "费用规则未覆盖当前商品类别。",
+      },
+    ],
+  });
+  const writes: string[] = [];
+  page.on("request", (r) => {
+    if (r.method() === "POST" && r.url().includes(`/opportunities/${opportunityId}/`))
+      writes.push(r.url());
+  });
+  await page.goto(`/opportunities/${opportunityId}?from=%2Fopportunities%3Fview%3Dcompleted`);
+  const completion = page.locator(".opportunity-analysis-completion");
+  await expect(completion).toContainText("分析已完成");
+  await expect(completion.locator("time")).toHaveAttribute("datetime", "2026-10-19T18:01:19.130Z");
+  const summary = page.locator(".opportunity-decision-summary");
+  await expect(summary).toHaveCount(1);
+  await expect(summary).toContainText("采纳条件");
+  await expect(summary).toContainText("待满足：评分");
+  await expect(summary).not.toContainText("下一项：评分");
+  await expect(page.getByText("利润未知", { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("button", { name: "采纳建议", exact: true })).toHaveCount(0);
+  await expect(page.locator(".opportunity-insights")).toBeVisible();
+  const panel = (await summary.boundingBox())!,
+    insights = (await page.locator(".opportunity-insights").boundingBox())!;
+  expect(panel.y + panel.height).toBeLessThanOrEqual(insights.y + 2);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+    page.viewportSize()!.width + 1,
+  );
+  expect(writes).toEqual([]);
+});
+
+test("a completed return URL without an API receipt cannot claim analysis completion", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.goto(`/opportunities/${opportunityId}?from=%2Fopportunities%3Fview%3Dcompleted`);
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  await expect(page.locator(".opportunity-analysis-completion")).toHaveCount(0);
+  await expect(page.locator(".opportunity-decision-summary")).toContainText("系统会继续补齐");
+  await expect(page.getByRole("button", { name: "采纳建议", exact: true })).toHaveCount(0);
+});
+
+test("completed catalogue table and cards open analysis rather than claim ongoing collection", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.route("**/api/v1/opportunities?*", (route) =>
+    route.fulfill({
+      json: envelope(
+        [
+          {
+            ...recommendedBase,
+            selection_stage: "rule_candidate",
+            recommendation_status: "not_recommend",
+            profit_status: "insufficient_data",
+          },
+        ],
+        { page: 1, page_size: 20, total: 1 },
+      ),
+    }),
+  );
+  await page.goto("/opportunities?view=completed");
+  await expect(
+    page.getByRole("link", { name: `查看分析：${recommendedBase.name}`, exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "图卡", exact: true }).click();
+  await expect(page.locator(".catalog-product > a")).toContainText("查看分析");
+  await expect(page.locator(".catalog-product > a")).not.toContainText("查看进度");
+});
+
 test("historical evidence task retains blocker facts without restoring the retired task surface", async ({
   page,
 }) => {

@@ -81,6 +81,7 @@ export interface OpportunitySummary {
 }
 
 export interface OpportunityDetail extends OpportunitySummary {
+  analysis_completed_at?: string | null;
   adoption_blockers: Array<{
     code: "evidence_insufficient" | "recommendation_insufficient";
     status: "blocked" | "in_progress" | "cleared";

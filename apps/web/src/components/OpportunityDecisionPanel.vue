@@ -4,13 +4,14 @@ import { statusLabel } from "../ui/status-labels";
 import type { OpportunityDetail } from "./opportunity-workspace-types";
 import {
   countPassedOpportunityQualityGates,
+  opportunityAnalysisCompletedAt,
   nextOpportunityQualityGateLabel,
   opportunityBlockerStatusLabel,
   opportunityDecisionCopy,
   opportunityQualityGatesPassed,
-  opportunityQualityGateLabels,
 } from "./opportunity-decision-presentation";
 import { opportunityStatusLabel } from "./opportunity-workspace-presentation";
+import SelectionAnalysisCompletion from "./SelectionAnalysisCompletion.vue";
 import OpportunityQualityGateDetails from "./OpportunityQualityGateDetails.vue";
 const props = defineProps<{
   detail: OpportunityDetail;
@@ -22,6 +23,9 @@ const emit = defineEmits<{
 }>();
 const unresolvedBlockers = computed(() =>
   (props.detail.adoption_blockers ?? []).filter((item) => item.status !== "cleared"),
+);
+const analysisCompletedAt = computed(() =>
+  opportunityAnalysisCompletedAt(props.detail.analysis_completed_at),
 );
 const qualityGates = computed(
   () =>
@@ -50,7 +54,9 @@ const recommendationTitle = computed(() =>
 const passedGateCount = computed(() => countPassedOpportunityQualityGates(qualityGates.value));
 const nextMissingGate = computed(() => nextOpportunityQualityGateLabel(qualityGates.value));
 const recommendationCopy = computed(() =>
-  opportunityDecisionCopy(canAdopt.value, selectionStage.value),
+  analysisCompletedAt.value
+    ? "已完成商品分析，当前建议与采纳条件按最新资料显示。"
+    : opportunityDecisionCopy(canAdopt.value, selectionStage.value),
 );
 </script>
 <template>
@@ -65,6 +71,7 @@ const recommendationCopy = computed(() =>
     class="opportunity-decision-summary"
     aria-labelledby="opportunity-decision-summary-title"
   >
+    <SelectionAnalysisCompletion v-if="analysisCompletedAt" :completed-at="analysisCompletedAt" />
     <header class="opportunity-decision-summary__lead">
       <div>
         <h3 id="opportunity-decision-summary-title">{{ recommendationTitle }}</h3>
@@ -72,19 +79,27 @@ const recommendationCopy = computed(() =>
       </div>
       <div class="opportunity-gate-progress" :data-ready="qualityGates.all_passed">
         <span>
-          <b>五项质量门</b>
+          <b>{{ analysisCompletedAt ? "采纳条件" : "五项质量门" }}</b>
           <small>{{ passedGateCount }}/5 已通过</small>
         </span>
         <i aria-hidden="true">
           <b :style="{ width: `${passedGateCount * 20}%` }"></b>
         </i>
-        <strong>{{ qualityGates.all_passed ? "全部通过" : `下一项：${nextMissingGate}` }}</strong>
+        <strong>{{
+          qualityGates.all_passed
+            ? "全部通过"
+            : `${analysisCompletedAt ? "待满足" : "下一项"}：${nextMissingGate}`
+        }}</strong>
       </div>
     </header>
     <div class="opportunity-decision-summary__statusline">
       <section v-if="unresolvedBlockers.length" class="opportunity-decision-gap">
         <div>
-          <strong>仍有 {{ unresolvedBlockers.length }} 个补证阻断项</strong>
+          <strong>{{
+            analysisCompletedAt
+              ? `当前采纳限制 ${unresolvedBlockers.length} 项`
+              : `仍有 ${unresolvedBlockers.length} 个补证阻断项`
+          }}</strong>
           <span>{{ unresolvedBlockers[0]?.next_action }}</span>
         </div>
       </section>
@@ -105,8 +120,12 @@ const recommendationCopy = computed(() =>
         role="status"
       >
         <span>
-          <b>当前无需你处理</b>
-          <small>证据齐备并通过评分后，会更新选品建议；当前处理状态见下方。</small>
+          <b>{{ analysisCompletedAt ? "可查看分析结果" : "当前无需你处理" }}</b>
+          <small>{{
+            analysisCompletedAt
+              ? "当前仍有采纳条件未满足，缺失项和判断依据继续保留。"
+              : "证据齐备并通过评分后，会更新选品建议；当前处理状态见下方。"
+          }}</small>
         </span>
         <details>
           <summary>提前人工处理</summary>

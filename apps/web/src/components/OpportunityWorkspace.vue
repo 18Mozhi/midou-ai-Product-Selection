@@ -23,6 +23,7 @@ const OpportunityWorkspaceDialogs = defineAsyncComponent(
 import { createOpportunityWorkspaceForms } from "./opportunity-workspace-forms";
 import UiStatePanel from "./UiStatePanel.vue";
 import SelectionProductHeader from "./SelectionProductHeader.vue";
+import { opportunityAnalysisCompletedAt } from "./opportunity-decision-presentation";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import {
   formatOpportunityTime as freshness,
@@ -86,6 +87,9 @@ const { pendingDecisionFocus, captureDecisionFocus, restoreDecisionFocus } =
     workspaceActive: () => workspaceActive,
   });
 const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
+const completedAnalysisAt = computed(() =>
+  opportunityAnalysisCompletedAt(detail.value?.analysis_completed_at),
+);
 let decisionDialogGeneration = 0;
 let writeScopeGeneration = 0;
 const { writeScopeKey, beginScopedWrite, finishScopedWrite, pendingWriteCount } =
@@ -328,6 +332,13 @@ useOpportunityWorkspaceLifecycle({
           <SelectionProductHeader :detail="detail" />
           <OpportunityDetailNavigation :active-tab="tab" :items="detailTabs" @select="setTab" />
           <div class="opportunity-detail-workface">
+            <OpportunityDecisionPanel
+              v-if="tab === 'overview' && completedAnalysisAt"
+              :detail="detail"
+              :busy="busy"
+              :can-decide="canDecide"
+              @decide="startDecision"
+            />
             <div class="opportunity-detail-section-content">
               <OpportunityDetailInsights
                 v-if="['overview', 'competition', 'risk'].includes(tab)"
@@ -393,7 +404,7 @@ useOpportunityWorkspaceLifecycle({
               </section>
             </div>
             <OpportunityDecisionPanel
-              v-if="tab === 'overview'"
+              v-if="tab === 'overview' && !completedAnalysisAt"
               :detail="detail"
               :busy="busy"
               :can-decide="canDecide"

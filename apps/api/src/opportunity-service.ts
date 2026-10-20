@@ -127,6 +127,7 @@ export interface OpportunityOperatingFeedback {
   };
 }
 export interface OpportunityDetail extends OpportunitySummary {
+  analysis_completed_at?: string | null;
   operating_feedback: OpportunityOperatingFeedback;
   lineage: {
     freshness: {

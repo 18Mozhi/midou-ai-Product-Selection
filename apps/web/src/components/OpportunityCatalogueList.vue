@@ -7,6 +7,7 @@ type Fact = { label: string; value: string };
 const props = defineProps<{
   items: OpportunitySummary[];
   returnPath: string;
+  completedView?: boolean;
   productFacts: (item: OpportunitySummary) => Fact[];
   rowFacts: (item: OpportunitySummary) => Fact[];
   catalogMeta: (item: OpportunitySummary) => string;
@@ -125,8 +126,13 @@ const rows = computed(() =>
           <td class="selection-product-action-cell">
             <RouterLink
               :to="to"
-              :aria-label="`${item.selection_stage === 'recommended' ? '审阅并采纳' : '查看进度'}：${item.name}`"
-              >{{ item.selection_stage === "recommended" ? "审阅并采纳" : "查看进度"
+              :aria-label="`${item.selection_stage === 'recommended' ? '审阅并采纳' : completedView ? '查看分析' : '查看进度'}：${item.name}`"
+              >{{
+                item.selection_stage === "recommended"
+                  ? "审阅并采纳"
+                  : completedView
+                    ? "查看分析"
+                    : "查看进度"
               }}<span aria-hidden="true"> →</span></RouterLink
             >
           </td>

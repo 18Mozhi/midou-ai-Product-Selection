@@ -20,6 +20,24 @@
   border: 0;
   background: transparent;
 }
+.opportunity-workspace .opportunity-analysis-completion {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--selection-line);
+}
+.opportunity-workspace .opportunity-analysis-completion strong {
+  color: var(--so-text);
+  font-size: 15px;
+}
+.opportunity-workspace .opportunity-analysis-completion time {
+  color: var(--so-text-muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
 .opportunity-workspace .opportunity-decision-summary__lead h3 {
   margin: 0;
   font:

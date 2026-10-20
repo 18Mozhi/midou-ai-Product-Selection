@@ -1,5 +1,12 @@
 import type { OpportunitySummary } from "./opportunity-workspace-types";
 
+export const opportunityAnalysisCompletedAt = (value: unknown): string | null =>
+  typeof value === "string" &&
+  /^\d{4}-\d{2}-\d{2}T/.test(value) &&
+  Number.isFinite(Date.parse(value))
+    ? value
+    : null;
+
 export const opportunityQualityGateLabels = {
   score: "评分",
   market: "市场",

@@ -5,6 +5,14 @@ const validCompletion = (alias: string) =>
   `JSON_UNQUOTE(JSON_EXTRACT(${alias}.payload_json,'$.contract')) IN ('selection-pipeline-v1','selection-pipeline-v2') AND ` +
   `JSON_UNQUOTE(JSON_EXTRACT(${alias}.payload_json,'$.main_asin')) REGEXP '^[A-Za-z0-9]{10}$'`;
 
+/** Historical completion belongs to this scoped opportunity and its current primary ASIN. */
+export const opportunityAnalysisCompletedAtSql =
+  "SELECT receipt.occurred_at FROM opportunity_events receipt WHERE receipt.organization_id=? " +
+  "AND receipt.workspace_id=? AND receipt.resource_id=? AND " +
+  validCompletion("receipt") +
+  " AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(receipt.payload_json,'$.main_asin')))=BINARY UPPER(?) " +
+  "ORDER BY receipt.occurred_at,receipt.id LIMIT 1";
+
 /** Keep the original opportunity of the first completion per scoped ASIN, breaking timestamp ties by event id. */
 export const opportunityCompletedFilterSql =
   "EXISTS (SELECT 1 FROM opportunity_events completed WHERE completed.organization_id=o.organization_id " +

@@ -1,4 +1,27 @@
 {
+  "selectionAnalysisCompletionUi20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-analysis-completion-ui.md",
+    "sourceFiles": [
+      "apps/api/src/opportunity-completed-filter.ts",
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/api/src/opportunity-service.ts",
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/OpportunityDecisionPanel.vue",
+      "apps/web/src/components/SelectionAnalysisCompletion.vue",
+      "apps/web/src/components/opportunity-decision-panel.css",
+      "apps/web/src/components/opportunity-decision-presentation.ts",
+      "apps/web/src/components/opportunity-workspace-types.ts",
+      "apps/web/src/components/OpportunityCatalogueList.vue",
+      "apps/web/src/components/OpportunityListPanel.vue"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-completion-receipt.test.mjs",
+      "tests/fixtures/opportunity-completion-receipt-sql.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "contract": "Add nullable detail analysis_completed_at from first scoped valid worker v1/v2 completion matching current main ASIN. Completed detail leads with factual historical completion and current adoption gates; pending detail keeps original progress. Completed non-recommended table/cards open analysis, recommended adoption label preserved. URL, score and candidate counts never prove completion. Current adoption, profit, permissions, daily count and write contracts unchanged. No env/schema/dependency/Worker/Python change; frontend publish and BaoTa Node restart required."
+  },
   "selectionIntelligenceSourceSupport20261020": {
     "status": "implemented",
     "requirements": "docs/selection-intelligence-source-support.md",

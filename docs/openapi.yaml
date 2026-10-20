@@ -11513,6 +11513,11 @@ components:
                 ]
               properties:
                 operating_feedback: { $ref: "#/components/schemas/OpportunityOperatingFeedback" }
+                analysis_completed_at:
+                  type: string
+                  format: date-time
+                  nullable: true
+                  description: First verified worker pipeline completion for this scoped opportunity and its current main ASIN; historical completion does not change current recommendation gates.
                 lineage:
                   type: object
                   required: [freshness, failure_impact, request_ids, trace_ids, nodes]
