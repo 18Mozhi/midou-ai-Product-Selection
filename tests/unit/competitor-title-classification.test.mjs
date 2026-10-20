@@ -49,6 +49,27 @@ test("functional-format fixture preserves every original title and ordered evide
     },
   );
   const result = await classifier.classifyCompetitors(fixture);
+  const format = sent.response_format;
+  assert.equal(format.type, "json_schema");
+  assert.equal(format.json_schema.strict, true);
+  const schema = format.json_schema.schema;
+  assert.equal(schema.additionalProperties, false);
+  assert.deepEqual(schema.required, ["classifications"]);
+  const item = schema.properties.classifications.items;
+  assert.equal(item.additionalProperties, false);
+  assert.deepEqual(item.required, ["source_ref", "relation", "rationale"]);
+  assert.deepEqual(Object.keys(item.properties).sort(), ["rationale", "relation", "source_ref"]);
+  assert.deepEqual(
+    item.properties.source_ref.enum,
+    fixture.candidates.map((_, i) => `c${i + 1}`),
+  );
+  assert.deepEqual(item.properties.relation.enum, [
+    "substitute",
+    "different_use",
+    "accessory",
+    "uncertain",
+  ]);
+  assert.equal(item.properties.rationale.type, "string");
   assert.deepEqual(
     JSON.parse(sent.messages[1].content).candidates.map((v) => v.title),
     fixture.candidates.map((v) => v.title),
@@ -73,6 +94,55 @@ const input = {
     { source_ref: "n2", asin: "B000000003", title: "Desktop air circulator" },
   ],
 };
+
+test("a service ignoring the requested schema still cannot pass a misspelled rationale field", async () => {
+  let calls = 0;
+  const classifier = new OpenAiIntelligenceProductClassifier(
+    "test-model",
+    "http://model.invalid/v1",
+    "",
+    1000,
+    async (_url, request) => {
+      calls += 1;
+      const sent = JSON.parse(request.body),
+        modelInput = JSON.parse(sent.messages[1].content);
+      assert.equal(sent.response_format.type, "json_schema");
+      return Response.json({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify({
+                classifications: modelInput.candidates.map((c, i) => ({
+                  source_ref: c.source_ref,
+                  relation: "substitute",
+                  [i === 0 ? "rationable" : "rationale"]: "Synthetic spelling regression",
+                })),
+              }),
+            },
+          },
+        ],
+      });
+    },
+  );
+  await assert.rejects(classifier.classifyCompetitors(input), /competitor_classification_invalid/);
+  assert.equal(calls, 1, "no repair request or automatic weaker JSON fallback");
+});
+
+test("unsupported structured output fails closed without a weaker transport retry", async () => {
+  let calls = 0;
+  const classifier = new OpenAiIntelligenceProductClassifier(
+    "test-model",
+    "http://model.invalid/v1",
+    "",
+    1000,
+    async () => {
+      calls += 1;
+      return Response.json({ error: "unsupported response format" }, { status: 400 });
+    },
+  );
+  await assert.rejects(classifier.classifyCompetitors(input), /intelligence_model_unavailable/);
+  assert.equal(calls, 1);
+});
 const relations = () =>
   input.candidates.map((c, i) => ({
     source_ref: c.source_ref,

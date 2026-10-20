@@ -7707,5 +7707,19 @@
       "tests/unit/selection-pipeline-completion.test.mjs"
     ],
     "contract": "Bind iPhone generation to suffix and require identical explicit compatibility sets before original min80/min3/P75. Scoped automatic P75 retirement preserves history and human/classified prices; revision-bound pending unleased recovery and completion-time actual-primary quote recheck. No schema/API/config/dependency/Python change; daily100 unverified."
+  },
+  "selectionCompetitorStructuredOutput20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-competitor-structured-output.md",
+    "sourceFiles": [
+      "apps/worker/src/competitor-title-response-format.ts",
+      "apps/worker/src/intelligence-product-association.ts",
+      "apps/worker/src/competitor-title-classification.ts"
+    ],
+    "testFiles": [
+      "tests/unit/competitor-title-classification.test.mjs",
+      "tests/unit/intelligence-product-association.test.mjs"
+    ],
+    "contract": "Only competitor title classification requests strict JSON Schema with current short candidate refs and original four relations. Preserve semantic prompt, original titles, exhaustive application validation, lease/fingerprint/audit and all other json_object callers. No new config/schema/dependency/API/Python; verified actual service support, release/daily100 pending."
   }
 }

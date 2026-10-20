@@ -74,6 +74,7 @@ test("model transport uses configured backend endpoint and a separate hypothesis
     assert.equal(url, "http://model.test/v1/chat/completions");
     assert.equal(options.redirect, "error");
     const body = JSON.parse(options.body);
+    assert.deepEqual(body.response_format, { type: "json_object" });
     assert.equal(body.model, "local-model");
     assert.match(body.messages[0].content, /untrusted evidence/);
     assert.match(body.messages[0].content, /without asserting actual sales uplift/);
