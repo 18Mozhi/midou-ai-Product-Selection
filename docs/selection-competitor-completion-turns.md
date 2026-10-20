@@ -25,3 +25,21 @@
 ## 配置与运行
 
 无新增环境变量、开关、API、数据库结构或依赖，真实.env不变。config/env.example仅补充现有调度说明，前端和Python不变。无需用户调参，5沿用原最低独立详细竞品证明。通过固定本地deploy-baota.py发布，并由宝塔重启Node项目ai选品；统一部署命令执行原项目重启。上线后必须用普通队列的新领取/详情证据核对，而不能把SELECT测试或候选计入每日100。
+
+## 正式发布核对
+
+edb2041c85352a930c2f28597076e92a05eb6734通过固定部署命令，终态deployed、退出0、部署临时包已删除。11:52:52独立回读BUILD_SHA一致，三个变更模块SHA256与发布工作树一致：completion-competitor-policy=4a188451108db98f0bc70eb7d6969a9dac6b74315ef267bdae4ac04ff5052f2e，collection-source-scheduling-policy=ff5a1a7460ddeff0fdee00ac022ec80b26ebad6f42bd70515f064952df200a60，collection-task-state-machine=94d9b590bf8bf406dfbbf49fe15f0fc9ab55631e621be415ddafeca25a681ff1。原FIFO哈希仍764f02aa77fd3d3efaeebf95830589afd2f7438bec44784460df5fa4fc056ae1，原3个模型/分类模块及前端HTML/首页JS/CSS字节均保持。
+
+11:52:54目标3b00be99-7596-4ab8-a302-bbe4fb9829ca仍queued/attempt0，其B0F63PGMWT现有6.99美元/28评价快照只有搜索摘要，actual_detail=0、整组详细独立竞品0；不得把已有摘要算成新详情。重启后保留的旧运行租约仍按原TTL处理，未手工释放或重试。自然新领取与实际详情落库继续观察，当前日完成仍1/100。
+
+本轮验证脚本均走内存/标准输入，无新增临时脚本、截图、日志或本地验证服务。正常项目构建产物保留供发布，既有历史临时目录不改。原用户verification/state.json的SHA256保持29AB3761860D03F2A90DC356B4511D6054F66AD856FEAE165330D07B96C50C2C且未暂存。无新外部API或消费方契约，故OpenAPI/前端/Python无需变更。
+
+## 自然队列回读
+
+11:55:09.740原Worker自然领取上述3b00be99任务，11:55:26.169首次尝试成功，原available_at保持02:18:18.536Z。B0F63PGMWT新快照531e7b2d-0d70-4908-8c72-dcb4be09093d通过原competitorDetailEvidenceSql证明，actual_detail从0到1，价格6.99美元、28评价、4.40评分仍来自真实详情；该商品的正式独立详细竞品从0到1，11:58:12继续自然增长到2。没有手工processOnce、领取、清队列或重放。
+
+11:56:56任务5684567e-b46f-4307-8bb6-ab697f6a3629具有新鲜心跳；调度running、suspected_stuck_runs=0。其他工作区的权限拒绝不混入当前工作区成功，不调整权限来绕过它。2个详情仍小于原5个最低证明，不把单条成功或上线算成整条流程完成；整组和日百品继续真实验收。
+
+12:08补验已达到原5个正式独立详细竞品：bd5c70f5-9ad0-4dbd-a1fe-c660a8c9fcb2 / B0GRNNBH4X于04:08:09.224Z首次自然成功；其余四条成功任务为3b00be99、5684567e、6f192177、7bb43db2。完整原selectionCompletedCompetitorsSql回读为5，不含主品、搜索摘要或其他工作区。12:08:33实际部署模块的新优先候选对该商品返回0；仍有4个未尝试详情和1个timeout后普通排队重试的任务，均未删除或取消。这证明达到5后停止新偏好，余下第6–10个继续普通队列。
+
+12:09:27该组仍waiting_evidence / automatic_cost_scope_mismatch，当前Amazon purchase_price输入为空；日完成仍1/100。竞品环节已达最低要求，但真实合格进货价仍缺，不能拿利润未知例外替代实际进价，也不能把该商品提前计为整链完成。下一步继续真实货源与价格证据链，评分、报价和完成门不降低。
