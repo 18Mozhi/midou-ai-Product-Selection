@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { RuntimeConfig } from "@scoutops/config";
 import { PlaywrightCrawlerEngine, runWithEncryptedProfile } from "@scoutops/playwright-crawler";
+import { join } from "node:path";
 import { ProviderAdapterFailure, type AdapterHealthSignal } from "@scoutops/provider-adapters";
 import {
   anonymousAmazonFingerprint,
@@ -114,6 +115,10 @@ export class AmazonPublicBrowserHealth {
               locale: String(profile.locale),
               timezoneId: String(profile.timezone),
               signal: controller.signal,
+              handoff: {
+                root: join(this.config.storage.runtimeTempRoot, "browser-handoffs"),
+                runId: lease.run.id,
+              },
               ...(this.config.providerAdapters.proxy
                 ? {
                     proxy: {

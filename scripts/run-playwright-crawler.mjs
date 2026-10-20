@@ -5,7 +5,7 @@ import {
   AMAZON_BROWSER_PARSER_VERSION,
   sanitizeAmazonBrowserRunResult,
 } from "../packages/provider-sources/dist/index.js";
-import { resolve } from "node:path";
+import { resolve, join } from "node:path";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import {
   PlaywrightCrawlerEngine,
@@ -122,6 +122,14 @@ try {
     {
       locale: input.locale,
       timezoneId: input.timezone,
+      ...(input.purpose === "amazon_public" && typeof input.run_id === "string"
+        ? {
+            handoff: {
+              root: join(config.storage.runtimeTempRoot, "browser-handoffs"),
+              runId: input.run_id,
+            },
+          }
+        : {}),
       ...(input.purpose === "amazon_public" && config.providerAdapters.proxy
         ? {
             proxy: {

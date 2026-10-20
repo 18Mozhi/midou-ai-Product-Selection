@@ -5,6 +5,10 @@ import type { AuthorizationService } from "@scoutops/authorization";
 import type { CrawlerRuntimeService } from "./crawler-runtime-service.js";
 import { sessionToken } from "./auth-routes.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
+import {
+  registerBrowserHandoffRoutes,
+  type BrowserHandoffRouteOptions,
+} from "./browser-handoff-routes.js";
 export interface CrawlerRuntimeRouteOptions {
   service: CrawlerRuntimeService;
   authorization: AuthorizationService;
@@ -13,6 +17,7 @@ export interface CrawlerRuntimeRouteOptions {
   webOrigin: string;
   serviceToken: string;
   serviceActorId: string;
+  handoff?: Pick<BrowserHandoffRouteOptions, "root" | "isLive" | "audit">;
 }
 const ids = (r: FastifyRequest) => ({
   requestId: r.headers["x-request-id"]!.toString(),
@@ -49,6 +54,7 @@ const withDependencyBoundary = async <T>(operation: () => Promise<T>) => {
   }
 };
 export function registerCrawlerRuntimeRoutes(app: FastifyInstance, o: CrawlerRuntimeRouteOptions) {
+  if (o.handoff) registerBrowserHandoffRoutes(app, { ...o, ...o.handoff });
   const actor = async (r: FastifyRequest) => {
     const a = await o.auth.authenticate(sessionToken(r, o.secureCookie));
     await o.authorization.authorize({

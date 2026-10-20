@@ -17,6 +17,7 @@ def execute_lease(
         request = dict(lease.execution_request)
         request["request_id"] = lease.request_id
         request["trace_id"] = lease.trace_id
+        request["run_id"] = lease.run_id
         request["credential"] = lease.credential
         request["master_key"] = config.credentials_master_key
         request["locale"] = lease.locale

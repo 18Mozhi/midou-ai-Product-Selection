@@ -1,6 +1,7 @@
 import { createProviderAdapterRuntime } from "./bootstrap/create-provider-adapter-runtime.js";
 import { buildApp } from "./app.js";
 import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { loadRuntimeConfig } from "@scoutops/config";
 import { createDatabasePool } from "@scoutops/database";
 import {
@@ -397,6 +398,17 @@ const app = buildApp({
     webOrigin: config.app.webOrigin,
   },
   crawlerRuntime: {
+    handoff: {
+      root: join(config.storage.runtimeTempRoot, "browser-handoffs"),
+      isLive: async (runId) => {
+        const [rows] = await pool.query(
+          "SELECT r.id FROM crawler_browser_runs r JOIN crawler_profile_leases l ON l.run_id=r.id WHERE r.id=? AND r.status='running' AND l.expires_at>UTC_TIMESTAMP(3) LIMIT 1",
+          [runId],
+        );
+        return Array.isArray(rows) && rows.length > 0;
+      },
+      audit: (event) => new MySqlAuditRepository(pool).append(event),
+    },
     service: new CrawlerRuntimeService(
       new MySqlCrawlerRuntimeRepository(pool, config.providerAdapters.amazonBrowserProfileId),
     ),

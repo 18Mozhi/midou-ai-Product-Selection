@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PlatformPageHeader from "./PlatformPageHeader.vue";
+import CrawlerCaptchaHandoff from "./CrawlerCaptchaHandoff.vue";
 import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
@@ -427,6 +428,7 @@ onActivated(() => {
       </button>
       <small id="crawler-recovery-help">{{ recoveryHelp }}</small>
     </PlatformPageHeader>
+    <CrawlerCaptchaHandoff :api-base-url="apiBaseUrl" />
     <p class="crawler-notice" role="status" aria-live="polite">{{ recoveryNotice }}</p>
     <p class="crawler-notice" role="status" aria-live="polite">{{ readNotice }}</p>
     <UiStatePanel

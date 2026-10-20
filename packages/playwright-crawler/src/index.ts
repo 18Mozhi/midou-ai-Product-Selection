@@ -1,4 +1,12 @@
 import { prepareAmazonDeliveryContext } from "./amazon-delivery-context.js";
+import { waitForManualCaptcha } from "./manual-handoff.js";
+export {
+  BrowserHandoffStore,
+  validHandoffCommand,
+  handoffIdValid,
+  HANDOFF_TTL_MS,
+} from "./manual-handoff.js";
+export type { HandoffInfo, HandoffCommand } from "./manual-handoff.js";
 import { createHash, randomUUID } from "node:crypto";
 import { gunzipSync } from "node:zlib";
 import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
@@ -301,16 +309,27 @@ export function classifyBrowserFailure(error: unknown): {
   };
 }
 
-async function blocked(page: Page, signals: BrowserBlockSignals | undefined) {
+async function blocked(
+  page: Page,
+  signals: BrowserBlockSignals | undefined,
+  onCaptcha?: (page: Page, selector: string) => Promise<void>,
+) {
   for (const [key, status] of [
     ["login", "blocked_login"],
     ["captcha", "blocked_captcha"],
     ["robots", "blocked_robots"],
   ] as const) {
     const css = signals?.[key];
-    if (css && (await page.locator(css).count()))
+    if (css && (await page.locator(css).count())) {
+      if (key === "captcha" && onCaptcha) {
+        await onCaptcha(page, css);
+        await blocked(page, signals);
+        return true;
+      }
       throw new PlaywrightCrawlerError(status, status, false);
+    }
   }
+  return false;
 }
 const artifact = (
   kind: BrowserEvidenceArtifact["kind"],
@@ -615,10 +634,33 @@ export class PlaywrightCrawlerEngine {
       cookies?: BrowserCookie[];
       proxy?: { server: string; username?: string; password?: string };
       signal?: AbortSignal;
+      handoff?: { root: string; runId: string };
     } = {},
   ): Promise<BrowserRunResult> {
     const plan = validateBrowserPlan(planInput, this.limits),
       started = Date.now();
+    const guard = (page: Page) =>
+      blocked(
+        page,
+        plan.block_signals,
+        options.handoff && plan.amazon_delivery
+          ? async (page, selector) => {
+              try {
+                await waitForManualCaptcha({
+                  root: options.handoff!.root,
+                  runId: options.handoff!.runId,
+                  requestId: ids.requestId,
+                  page,
+                  captchaSelector: selector,
+                  allowedOrigins: plan.allowed_origins,
+                  ...(options.signal ? { signal: options.signal } : {}),
+                });
+              } catch {
+                throw new PlaywrightCrawlerError("blocked_captcha", "blocked_captcha", false);
+              }
+            }
+          : undefined,
+      );
     let context: BrowserContext | undefined,
       rateLimited = false,
       pageCount = 0,
@@ -654,14 +696,14 @@ export class PlaywrightCrawlerEngine {
       });
       const page = context.pages()[0] ?? (await context.newPage());
       stage = "initial_navigation";
-      await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error);
+      await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error, guard);
       stage = "initial_guard";
-      await blocked(page, plan.block_signals);
+      await guard(page);
       if (plan.amazon_delivery) {
         const assertSafe = async () => {
           if (httpUrl(page.url()).origin !== "https://www.amazon.com")
             throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
-          await blocked(page, plan.block_signals);
+          await guard(page);
         };
         await prepareAmazonDeliveryContext(
           page,
@@ -671,7 +713,13 @@ export class PlaywrightCrawlerEngine {
             stage = `amazon_delivery.${step}`;
           },
           async () => {
-            await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error);
+            await this.goto(
+              page,
+              plan.start_url,
+              plan.allowed_origins,
+              plan.fail_on_http_error,
+              guard,
+            );
           },
           this.limits.navigationTimeoutMs,
         );
@@ -690,7 +738,7 @@ export class PlaywrightCrawlerEngine {
         await page.waitForLoadState("domcontentloaded").catch(() => {});
         if (!plan.allowed_origins.includes(httpUrl(page.url()).origin))
           throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
-        await blocked(page, plan.block_signals);
+        await guard(page);
         await page
           .locator(plan.item_selector)
           .first()
@@ -700,7 +748,7 @@ export class PlaywrightCrawlerEngine {
       stage = "extract_items";
       for (let index = 0; index < plan.max_pages; index += 1) {
         if (rateLimited) throw new PlaywrightCrawlerError("rate_limited", "rate_limited", true);
-        await blocked(page, plan.block_signals);
+        await guard(page);
         pageCount += 1;
         for (let scroll = 0; scroll < plan.max_scrolls; scroll += 1) {
           await page.evaluate(() => window.scrollBy(0, Math.max(window.innerHeight, 600)));
@@ -741,8 +789,8 @@ export class PlaywrightCrawlerEngine {
             if (offerDetails.some((detail) => detail.offer.offer_id === item.offer_id)) continue;
             const detailPage = await context.newPage();
             try {
-              await this.goto(detailPage, item.canonical_url, plan.allowed_origins);
-              await blocked(detailPage, plan.block_signals);
+              await this.goto(detailPage, item.canonical_url, plan.allowed_origins, false, guard);
+              await guard(detailPage);
               const detail = await captureOfferDetailSnapshot(detailPage, plan, item);
               if (detail) offerDetails.push(detail);
               detailCount += 1;
@@ -764,8 +812,8 @@ export class PlaywrightCrawlerEngine {
             if (!plan.allowed_origins.includes(detail.origin)) continue;
             const detailPage = await context.newPage();
             try {
-              await this.goto(detailPage, detail.toString(), plan.allowed_origins);
-              await blocked(detailPage, plan.block_signals);
+              await this.goto(detailPage, detail.toString(), plan.allowed_origins, false, guard);
+              await guard(detailPage);
               detailCount += 1;
             } finally {
               await detailPage.close();
@@ -818,7 +866,16 @@ export class PlaywrightCrawlerEngine {
       const failure = classifyBrowserFailure(error);
       if (plan.amazon_delivery)
         console.warn(
-          JSON.stringify({ event: "amazon_browser_step_failed", stage, error_code: failure.code }),
+          JSON.stringify({
+            event: "amazon_browser_step_failed",
+            stage,
+            error_code: failure.code,
+            http_status: error instanceof Error && "httpStatus" in error ? error.httpStatus : null,
+            network_code:
+              error instanceof Error
+                ? (/net::(ERR_[A-Z0-9_]+)/.exec(error.message)?.[1] ?? null)
+                : null,
+          }),
         );
       return {
         status: failure.status,
@@ -844,7 +901,13 @@ export class PlaywrightCrawlerEngine {
       await context?.close().catch(() => {});
     }
   }
-  private async goto(page: Page, target: string, origins: string[], strict = false) {
+  private async goto(
+    page: Page,
+    target: string,
+    origins: string[],
+    strict = false,
+    guard?: (page: Page) => Promise<boolean>,
+  ) {
     const url = httpUrl(target);
     if (!origins.includes(url.origin))
       throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
@@ -853,7 +916,12 @@ export class PlaywrightCrawlerEngine {
     });
     if (!origins.includes(httpUrl(page.url()).origin))
       throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
-    if (strict && response && response.status() >= 400 && response.status() !== 429) {
+    if (response?.status() === 429)
+      throw new PlaywrightCrawlerError("rate_limited", "rate_limited", true);
+    // A challenge can itself be served with HTTP 503. Inspect it before treating
+    // the response as a transport failure; a successful human handoff replaces it.
+    if (await guard?.(page)) return;
+    if (strict && response && response.status() >= 400) {
       const status = response.status(),
         code =
           status >= 500
@@ -861,10 +929,10 @@ export class PlaywrightCrawlerEngine {
             : [404, 410].includes(status)
               ? "empty_result"
               : "permission_denied";
-      throw new PlaywrightCrawlerError(code, "dependency_failed", status >= 500);
+      throw Object.assign(new PlaywrightCrawlerError(code, "dependency_failed", status >= 500), {
+        httpStatus: status,
+      });
     }
-    if (response?.status() === 429)
-      throw new PlaywrightCrawlerError("rate_limited", "rate_limited", true);
   }
 }
 
@@ -1012,6 +1080,7 @@ export async function runWithEncryptedProfile(
     timezoneId?: string;
     signal?: AbortSignal;
     proxy?: { server: string; username?: string; password?: string };
+    handoff?: { root: string; runId: string };
   } = {},
 ) {
   return withMaterializedCredential(record, masterKey, tempRoot, (archivePath) =>

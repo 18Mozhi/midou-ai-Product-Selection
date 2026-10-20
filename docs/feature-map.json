@@ -1,4 +1,26 @@
 {
+  "selectionBrowserManualHandoff20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-browser-manual-handoff.md",
+    "sourceFiles": [
+      "packages/playwright-crawler/src/manual-handoff.ts",
+      "packages/playwright-crawler/src/index.ts",
+      "apps/api/src/browser-handoff-routes.ts",
+      "apps/api/src/crawler-runtime-routes.ts",
+      "apps/api/src/amazon-public-browser-health.ts",
+      "apps/api/src/server.ts",
+      "scripts/run-playwright-crawler.mjs",
+      "apps/crawler/scoutops_crawler/execution_runner.py",
+      "apps/web/src/components/CrawlerCaptchaHandoff.vue",
+      "apps/web/src/components/CollectionRuntimeCenter.vue"
+    ],
+    "testFiles": [
+      "tests/unit/browser-handoff.test.mjs",
+      "tests/m03-04/playwright-crawler.test.mjs",
+      "tests/integration/browser-handoff.test.mjs"
+    ],
+    "contract": "Inspect real CAPTCHA before HTTP 5xx classification, retain same public Amazon browser context for at most 300 seconds, expose bounded screenshot/input to one superadmin login session behind same-origin, live lease and audit checks, then automatically continue only after real guard clears. Preserve HTTP429, robots/login, parser, delivery and completion gates. Existing PLAYWRIGHT_RUN_TIMEOUT_SECONDS=600 accommodates handoff. No new service, dependency, database schema or external browser credential/CDP exposure. Node and Python BaoTa restart plus frontend refresh required; real source and 100/day acceptance remain separate."
+  },
   "selectionAnalysisWaitingCopy20261020": {
     "status": "implemented",
     "requirements": "docs/selection-analysis-waiting-copy.md",
