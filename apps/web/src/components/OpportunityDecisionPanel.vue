@@ -120,11 +120,11 @@ const recommendationCopy = computed(() =>
         role="status"
       >
         <span>
-          <b>{{ analysisCompletedAt ? "可查看分析结果" : "当前无需你处理" }}</b>
+          <b>{{ analysisCompletedAt ? "可查看分析结果" : "分析尚未完成" }}</b>
           <small>{{
             analysisCompletedAt
               ? "当前仍有采纳条件未满足，缺失项和判断依据继续保留。"
-              : "证据齐备并通过评分后，会更新选品建议；当前处理状态见下方。"
+              : "尚未生成完整分析结果，请查看下方判断条件与补证进度。"
           }}</small>
         </span>
         <details>

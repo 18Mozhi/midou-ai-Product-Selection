@@ -1,4 +1,11 @@
 {
+  "selectionAnalysisWaitingCopy20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-analysis-waiting-copy.md",
+    "sourceFiles": ["apps/web/src/components/OpportunityDecisionPanel.vue"],
+    "testFiles": ["tests/m04-02/opportunities.test.mjs", "tests/e2e/m04-02-opportunities.spec.ts"],
+    "contract": "Unfinished analysis no longer implies no intervention is needed. Preserve completed receipt, quality gates, decisions, permissions and all API/runtime contracts. Frontend rebuild and refresh required."
+  },
   "selectionLanItemDetail20261020": {
     "status": "implemented",
     "requirements": "docs/selection-lan-item-detail.md",

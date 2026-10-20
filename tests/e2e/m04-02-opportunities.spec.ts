@@ -1100,7 +1100,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   );
   await expect(page.getByText("暂无评分记录。")).toBeVisible();
   await expect(page.getByText("0/5 已通过", { exact: true })).toBeVisible();
-  await expect(page.getByText("当前无需你处理", { exact: true })).toBeVisible();
+  await expect(page.getByText("分析尚未完成", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "采纳建议" })).toHaveCount(0);
   await page.getByText("查看每项判断", { exact: true }).click();
   await expect(page.getByRole("list", { name: "五项质量门" })).toContainText(
@@ -1266,7 +1266,7 @@ test("P18 redecision link always lands on the available decision state", async (
   await redecisionLink.click();
   await expect(page).toHaveURL(/#opportunity-decision-actions$/);
   await expect(page.locator("#opportunity-decision-actions")).toBeInViewport();
-  await expect(page.locator("#opportunity-decision-actions")).toContainText("当前无需你处理");
+  await expect(page.locator("#opportunity-decision-actions")).toContainText("分析尚未完成");
 
   await ready(page, evidence, { redecision_ready: true }, ["opportunity:read"]);
   await page.goto(`/opportunities/${opportunityId}`);

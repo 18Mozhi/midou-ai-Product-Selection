@@ -314,7 +314,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(listWeb, /已识别 Amazon 主品，系统继续补齐五项质量门所需的证据/);
   assert.doesNotMatch(listWeb, /完成评分且结论为推荐/);
   assert.match(readinessWeb, /下一步：[\s\S]*查看五项配置状态/);
-  assert.match(decisionWeb, /采纳建议[\s\S]*当前无需你处理[\s\S]*提前人工处理/);
+  assert.match(decisionWeb, /采纳建议[\s\S]*分析尚未完成[\s\S]*提前人工处理/);
   assert.match(decisionWeb, /补证阻断项/);
   assert.doesNotMatch(decisionWeb, /采纳前还缺/);
   assert.match(listWeb, /评分、市场、竞争、成本和风险五项质量门均已通过/);
