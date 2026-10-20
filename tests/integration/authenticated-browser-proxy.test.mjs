@@ -101,6 +101,10 @@ test("private relay authenticates both hops, preserves opaque bytes, restricts t
       "www.amazon.com.evil.test:443",
       "evilamazon.com:443",
       "www.amazon.com:80",
+      "cloudfront.net:443",
+      "other.cloudfront.net:443",
+      "attacker.d2lbyuknrhysf9.cloudfront.net:443",
+      "d2lbyuknrhysf9.cloudfront.net.evil.test:443",
     ]) {
       const badTarget = await tunnel(target);
       assert.equal(badTarget.status, 403);
@@ -120,6 +124,9 @@ test("private relay authenticates both hops, preserves opaque bytes, restricts t
     good.socket.destroy();
     assert.equal(receipts[0].auth, upstreamAuth);
     assert.notEqual(receipts[0].auth, localAuth);
+    const cdn = await tunnel("d2lbyuknrhysf9.cloudfront.net:443");
+    assert.equal(cdn.status, 200);
+    cdn.socket.destroy();
     deny = true;
     const refused = await tunnel("www.amazon.com:443");
     assert.equal(refused.status, 502);
@@ -168,13 +175,20 @@ test("real Chromium negotiates local proxy authentication and reaches the opaque
   let browser;
   try {
     browser = await chromium.launch({ headless: true, proxy: relay.proxy });
-    for (const mode of ["browser", "request"]) {
+    for (const mode of ["browser", "request", "observed_cdn"]) {
       const before = receipts.length,
         context = await browser.newContext(),
         page = await context.newPage();
       if (mode === "request")
         await installNavigationRequestTransport(context, "https://www.amazon.com", 2000);
-      await assert.rejects(page.goto("https://www.amazon.com/", { timeout: 5000 }));
+      await assert.rejects(
+        page.goto(
+          mode === "observed_cdn"
+            ? "https://d2lbyuknrhysf9.cloudfront.net/"
+            : "https://www.amazon.com/",
+          { timeout: 5000 },
+        ),
+      );
       assert.ok(receipts.length > before, mode + " must reach the actual upstream tunnel");
       await context.close();
     }

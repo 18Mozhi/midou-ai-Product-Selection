@@ -9,6 +9,8 @@ const suffixes = [
   "images-amazon.com",
   "amazon-adsystem.com",
 ];
+// Observed in the real Amazon product HTML; do not permit arbitrary CloudFront tenants.
+const exactHosts = new Set(["d2lbyuknrhysf9.cloudfront.net"]);
 const digest = (s: string) => createHash("sha256").update(s).digest();
 const publicDnsName = (host: string) =>
   host.length <= 253 && /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(host);
@@ -89,7 +91,10 @@ export async function createAuthenticatedBrowserProxy(
     }
     const match = /^([a-z0-9.-]{1,253}):443$/i.exec(request.url ?? ""),
       host = match?.[1]?.toLowerCase();
-    if (!host || !suffixes.some((s) => host === s || host.endsWith("." + s))) {
+    if (
+      !host ||
+      (!exactHosts.has(host) && !suffixes.some((s) => host === s || host.endsWith("." + s)))
+    ) {
       report(
         403,
         host && publicDnsName(host) ? { hostname: host, reason: "target_not_allowed" } : undefined,

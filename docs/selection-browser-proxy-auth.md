@@ -46,3 +46,15 @@ AMAZON_PUBLIC_BROWSER_NAVIGATION_TRANSPORT设为browser核验原生路径，requ
 私有CONNECT代理区分本地target_not_allowed与upstream_response，仍沿用原允许范围，
 不得凭错误码猜测或直接放开任意域名。诊断仍最多10条，正常成功连接不输出。
 本次不改变代理允许域名、验证码处理、事实解析或完成计数；需要既有宝塔Node/Python重启。
+
+## 实际页面引用的单一CDN资源
+
+2026-10-20 23:00–23:02中国标准时间，以原失败业务执行请求保存的真实Amazon商品URL，
+沿用现有HTTPS上游代理、无Cookie和无请求头伪装进行只读GET。真实页面两次为200，
+静态script/src引用d2lbyuknrhysf9.cloudfront.net；该具体脚本经同一上游返回200/255619字节。
+本地私有浏览器代理对这个确切主机实际返回403/target_not_allowed，确认页面资源通路缺口。
+只在独立exactHosts集合加入此确切主机；整个cloudfront.net、其他发行主机、该主机下的
+任意子域及相似后缀仍拒绝，端口443和本地/上游鉴权、TLS透明与请求限制不变。
+真实Chromium测试只连接自有上游fixture并验证TLS边界，不访问实际CDN或解验证码。
+这修复已证实的资源拦截；它尚不足以证明先前未知脚本就是该主机，更不代表验证码循环
+和每日100个整链结果已经通过。无新API/配置/数据库/依赖，需正式重启既有Node/Python。
