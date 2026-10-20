@@ -1,4 +1,19 @@
 {
+  "selectionLanBoundedPagination20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-lan-bounded-pagination.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/lan-1688-image-search.ts",
+      "apps/worker/src/lan-1688-image-search.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/lan-1688-pagination.test.mjs",
+      "tests/unit/lan-1688-image-search.test.mjs",
+      "tests/unit/supply-title-classification.test.mjs"
+    ],
+    "contract": "Collect at most two actual advertised image-search pages, 60/page, deduplicate exact offer identity and retain original facts. Health remains one page/node. Reject page identity/boolean drift; retain original authentication, cancellation, size/rate/circuit/lease controls. Evaluator considers at most 120 candidates in original ten-title batches without relaxing matching or completion. No public API/env/schema/permission/dependency/frontend/Python change. BaoTa Node restart required."
+  },
   "selectionRetiredMemberStyles20261020": {
     "status": "implemented",
     "requirements": "docs/selection-retired-member-styles.md",

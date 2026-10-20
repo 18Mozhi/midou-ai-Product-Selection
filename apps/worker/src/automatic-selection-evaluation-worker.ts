@@ -29,7 +29,7 @@ import {
   type SupplyTitleClassifier,
   type SupplyTitleContext,
 } from "./supply-title-classification.js";
-import { LAN_1688_RESULT_LIMIT } from "./lan-1688-image-search.js";
+import { LAN_1688_COLLECTION_LIMIT } from "./lan-1688-image-search.js";
 import {
   selectionCandidateSql,
   automaticEvaluationCompleteSql,
@@ -289,7 +289,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           !isPhoneCase(item.title) &&
           genericTitleFactsCompatible(title, item.title),
       )
-      .slice(0, LAN_1688_RESULT_LIMIT)
+      .slice(0, LAN_1688_COLLECTION_LIMIT)
       .map((item) => ({ source_ref: `${item.externalId}:${item.evidenceId}`, title: item.title }));
     if (!candidates.length) return undefined;
     const context: SupplyTitleContext = {

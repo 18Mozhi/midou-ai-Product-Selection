@@ -650,16 +650,30 @@ test("a compatible quote after the first ten is found without classifying later 
   assert.equal(h.renewals[0].params[0].getTime() - h.renewals[0].params[1].getTime(), 120_000);
 });
 
-test("classification covers at most sixty offers in ten-title batches with bounded lease renewal", async () => {
-  const h = batchHarness(70, () => []);
+test("a second-page quote is classified with its own source and stops later batches", async () => {
+  const h = batchHarness(120, (value, batch) =>
+    batch === 8 ? [{ ...result, source_ref: value.candidates[2].source_ref }] : [],
+  );
   const value = await h.run();
-  assert.equal(h.calls.length, 6);
-  assert.equal(h.renewals.length, 5);
-  assert.equal(value.input.candidates.length, 60);
+  assert.equal(h.calls.length, 8);
+  assert.ok(h.calls.every((call) => call.candidates.length === 10));
+  assert.equal(h.renewals.length, 7);
+  const match = selectClassifiedSupplyQuote(input.product_ref, title, h.supplies, value);
+  assert.equal(match.item.externalId, "73");
+  assert.equal(match.item.evidenceId, "raw-73");
+  assert.equal(match.conservativePrice, offer.price);
+});
+
+test("classification covers at most 120 offers in ten-title batches with bounded lease renewal", async () => {
+  const h = batchHarness(130, () => []);
+  const value = await h.run();
+  assert.equal(h.calls.length, 12);
+  assert.equal(h.renewals.length, 11);
+  assert.equal(value.input.candidates.length, 120);
   assert.deepEqual(value.classifications, []);
   assert.equal(
     new Set(h.calls.flatMap((call) => call.candidates.map((item) => item.source_ref))).size,
-    60,
+    120,
   );
 });
 

@@ -11769,7 +11769,8 @@ x-scoutops-lan-1688:
   endpointRange: http://192.168.1.221-226:8880/1688/image-search
   method: POST
   requestFields: [image_url, begin_page, page_size, result_limit]
-  resultFields: [success, items, returned_count, total]
+  resultFields: [success, items, returned_count, total, begin_page, has_more]
+  collectionBounds: at most two explicitly advertised pages, 60 offers per page, deduplicated by offer identity; health uses one page per node
   authorization: Bearer token injected using LAN_1688_TOKEN; never sent to frontend
   timeoutEnvironment: LAN_1688_TIMEOUT_MS
   runbook: docs/selection-core-rebuild.md

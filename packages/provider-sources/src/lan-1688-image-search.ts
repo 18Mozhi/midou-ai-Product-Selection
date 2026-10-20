@@ -5,8 +5,10 @@ export const LAN_1688_ENDPOINTS = Object.freeze(
   Array.from({ length: 6 }, (_, index) => `http://192.168.1.${221 + index}:8880/1688/image-search`),
 );
 export const LAN_1688_PARSER_VERSION = "1688-lan-image-v1";
-// Verified service page capacity; retain one bounded request per collection.
+// Verified page capacity; normal collection may follow one explicitly advertised next page.
 export const LAN_1688_RESULT_LIMIT = 60;
+export const LAN_1688_MAX_PAGES = 2;
+export const LAN_1688_COLLECTION_LIMIT = LAN_1688_RESULT_LIMIT * LAN_1688_MAX_PAGES;
 const object = (value: unknown): Record<string, unknown> => {
   if (!value || typeof value !== "object" || Array.isArray(value))
     throw new ProviderAdapterFailure("invalid_payload", false);
@@ -136,7 +138,14 @@ export class Lan1688ImageSearch {
       const endpoint = LAN_1688_ENDPOINTS[(start + index) % LAN_1688_ENDPOINTS.length]!;
       if (this.busy.has(endpoint)) continue;
       try {
-        return await this.requestEndpoint(url, endpoint, heartbeat, signal);
+        const records = new Map<string, ProviderRawRecord>();
+        for (let page = 1; page <= LAN_1688_MAX_PAGES; page++) {
+          const batch = await this.requestEndpoint(url, endpoint, heartbeat, signal, page);
+          for (const record of batch.records)
+            if (!records.has(record.externalId)) records.set(record.externalId, record);
+          if (!batch.hasMore || !batch.records.length) break;
+        }
+        return { records: [...records.values()], nextCursor: null };
       } catch (error) {
         if (signal?.aborted) throw signal.reason;
         if (error instanceof ProviderAdapterFailure && !error.retryable) throw error;
@@ -187,6 +196,7 @@ export class Lan1688ImageSearch {
     endpoint: string,
     heartbeat: () => Promise<void>,
     signal?: AbortSignal,
+    page = 1,
   ) {
     if (this.busy.has(endpoint)) throw new ProviderAdapterFailure("dependency_unavailable", true);
     if (signal?.aborted) throw signal.reason;
@@ -201,7 +211,7 @@ export class Lan1688ImageSearch {
         headers: { Authorization: `Bearer ${this.token}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           image_url: url.toString(),
-          begin_page: 1,
+          begin_page: page,
           page_size: 60,
           result_limit: LAN_1688_RESULT_LIMIT,
         }),
@@ -243,8 +253,14 @@ export class Lan1688ImageSearch {
         throw new ProviderAdapterFailure("invalid_payload", false);
       }
       const records = parseLan1688Result(payload, new Date().toISOString());
+      const envelope = object(payload);
+      if (envelope.begin_page !== undefined && envelope.begin_page !== page)
+        throw new ProviderAdapterFailure("invalid_payload", false);
+      if (envelope.has_more !== undefined && typeof envelope.has_more !== "boolean")
+        throw new ProviderAdapterFailure("invalid_payload", false);
       await heartbeat();
-      return { records, nextCursor: null };
+      signal?.throwIfAborted();
+      return { records, hasMore: envelope.has_more === true };
     } finally {
       this.busy.delete(endpoint);
     }
