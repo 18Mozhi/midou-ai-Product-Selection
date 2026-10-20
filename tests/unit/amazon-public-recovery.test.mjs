@@ -193,6 +193,15 @@ test("opted-in handoff recovery excludes busy/denied sources and reuses only a f
   assert.equal(f.calls.find((c) => c.recover).recover.automaticRecovery.captchaHandoff, true);
   assert.match(f.calls[0].sql, /'captcha','blocked_captcha'/);
   assert.match(f.calls[0].sql, /NOT EXISTS \(SELECT 1 FROM crawler_profile_leases/);
+  assert.match(f.calls[0].sql, /busy\.expires_at>\?/);
+  assert.doesNotMatch(f.calls[0].sql, /UTC_TIMESTAMP/);
+  assert.deepEqual(amazonPublicHandoffRecoveryTarget.parameters("actor", now, opened), [
+    "actor",
+    now,
+    opened,
+    opened,
+    now,
+  ]);
   assert.match(f.calls[0].sql, /h.last_checked_at>=p.updated_at/);
   assert.match(
     f.calls[0].sql,

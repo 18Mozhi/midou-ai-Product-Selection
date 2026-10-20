@@ -43,7 +43,7 @@ export function pendingTaskRecoveryCandidatesSql(
       ? "AND c.last_error_code IN ('network_error','timeout','rate_limited','captcha','blocked_captcha') " +
         `AND ((${ready}) OR c.opened_at<=?) AND (h.last_checked_at IS NULL OR h.last_checked_at<=? OR (${ready})) ` +
         "AND (h.last_checked_at<c.opened_at OR h.last_error_code IS NULL OR h.last_error_code IN ('network_error','timeout','rate_limited','captcha','blocked_captcha','dependency_unavailable')) " +
-        "AND NOT EXISTS (SELECT 1 FROM crawler_profile_leases busy JOIN crawler_profiles busy_profile ON busy_profile.id=busy.crawler_profile_id WHERE busy_profile.provider_id=p.id AND busy.expires_at>UTC_TIMESTAMP(3)) "
+        "AND NOT EXISTS (SELECT 1 FROM crawler_profile_leases busy JOIN crawler_profiles busy_profile ON busy_profile.id=busy.crawler_profile_id WHERE busy_profile.provider_id=p.id AND busy.expires_at>?) "
       : "AND c.last_error_code IN ('network_error','timeout','rate_limited') AND c.opened_at<=? AND (h.last_checked_at IS NULL OR h.last_checked_at<=?) ") +
     "AND COALESCE(h.health_status='blocked' AND h.last_checked_at>=c.opened_at,0)=0 " +
     "ORDER BY t.created_at,t.id LIMIT 1"

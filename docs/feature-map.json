@@ -47,7 +47,7 @@
       "tests/unit/amazon-public-recovery.test.mjs",
       "tests/unit/public-rss-recovery.test.mjs"
     ],
-    "contract": "Explicit server-only AMAZON_PUBLIC_HANDOFF_RECOVERY_ENABLED opt-in with canonical profile and 600-second browser budget. Existing API loop may probe cooled public Amazon CAPTCHA incidents to create real human handoffs; active leases and fresh policy denials remain excluded. Reuse only fresh actual ready health after current incident/configuration, never business browser caches, to resume pending work without repeating a solved CAPTCHA. Atomic source/version/terms/incident/ready checks and audits remain mandatory. No terminal replay, credential change, new service/dependency/schema or public API field. RSS/LAN behavior unchanged. Config/schema/env example and Node restart required. Real source and 100/day still require acceptance."
+    "contract": "Explicit server-only AMAZON_PUBLIC_HANDOFF_RECOVERY_ENABLED opt-in with canonical profile and 600-second browser budget. Existing API loop may probe cooled public Amazon CAPTCHA incidents to create real human handoffs; active leases use the same bound application Date as lease producers and remain excluded alongside fresh policy denials. Reuse only fresh actual ready health after current incident/configuration, never business browser caches, to resume pending work without repeating a solved CAPTCHA. Atomic source/version/terms/incident/ready checks and audits remain mandatory. No terminal replay, credential change, new service/dependency/schema or public API field. RSS/LAN behavior unchanged. Config/schema/env example and Node restart required. Real source and 100/day still require acceptance."
   },
   "selectionPostalArrivalBudget20261020": {
     "status": "implemented",

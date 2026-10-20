@@ -15,6 +15,7 @@ export const amazonPublicRecoveryTarget: PublicSourceRecoveryTarget = {
 export const amazonPublicHandoffRecoveryTarget: PublicSourceRecoveryTarget = {
   ...amazonPublicRecoveryTarget,
   candidatesSql: pendingTaskRecoveryCandidatesSql("amazon_product", { captchaHandoff: true }),
+  parameters: (actorId, now, cooledAt) => [actorId, now, cooledAt, cooledAt, now],
   captchaHandoffRecovery: true,
 };
 
