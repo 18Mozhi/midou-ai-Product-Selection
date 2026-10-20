@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { completionReadySourcingTaskSql } from "../../apps/worker/dist/completion-sourcing-policy.js";
 import { MySqlCollectionTaskWorkerRepository } from "../../apps/worker/dist/collection-task-state-machine.js";
 import {
   activeCollectionScopeSql,
@@ -51,7 +52,7 @@ function setup(options = {}) {
     release: () => calls.push(["release"]),
     query: async (sql, args = []) => {
       calls.push([sql, args]);
-      assert.equal((sql.match(/\?/g) ?? []).length, args.length);
+      assert.equal((sql.replace(/'(?:''|\\.|[^'])*'/g, "").match(/\?/g) ?? []).length, args.length);
       if (sql.startsWith("SELECT slot_key"))
         return [options.activeLease ? [{ slot_key: "single-host" }] : []];
       if (isTaskRead(sql))
@@ -155,6 +156,7 @@ test("twenty alternating committed stage claims retain the shared FIFO escape an
     for (const [sql] of selections) {
       assert.equal(sql.includes("completion_event"), turn !== 20);
       assert.equal(sql.includes("product_search_event"), turn !== 20);
+      assert.equal(sql.includes(completionReadySourcingTaskSql), turn !== 20 && turn % 4 === 0);
       if (turn !== 20) {
         assert.ok(
           sql.includes("WHEN " + automaticCompletionTaskSql + " THEN " + (turn % 2 ? 2 : 1)),

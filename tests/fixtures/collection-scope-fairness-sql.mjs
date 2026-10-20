@@ -331,7 +331,7 @@ function table(columns, rows) {
     ")"
   );
 }
-function queryFor(scenario, policy) {
+function queryFor(scenario, policy, sourcePreferenceSql) {
   const events = scenario.events.map((row, index) => ({ task_id: uuid(900 + index), ...row }));
   for (const row of scenario.tasks) {
     if (row.lane === "intake")
@@ -359,6 +359,14 @@ function queryFor(scenario, policy) {
         actor_type: row.eventActor ?? "worker",
         occurred_at: stamp(1),
       });
+    if (row.lane === "sourcing")
+      events.push({
+        ...row,
+        task_id: row.id,
+        event_type: "sourcing.collection.auto_scheduled",
+        actor_type: "worker",
+        occurred_at: stamp(1),
+      });
   }
   const organizations = [
     ...new Set(Object.values(scopes).map((scope) => scope.organization_id)),
@@ -379,13 +387,18 @@ function queryFor(scenario, policy) {
     task_id: row.id,
     organization_id: row.organization_id,
     workspace_id: row.workspace_id,
-    provider_id: row.provider === "held" ? uuid(402) : uuid(401),
+    provider_id:
+      row.provider === "held" ? uuid(402) : row.lane === "sourcing" ? uuid(403) : uuid(401),
     is_required: row.required ?? 1,
     status: row.queryStatus ?? "pending",
     target_json: JSON.stringify({
       projection_type:
         row.projection ??
-        (row.lane === "completion" ? "competitor_snapshot" : "intelligence_product_discovery"),
+        (row.lane === "completion"
+          ? "competitor_snapshot"
+          : row.lane === "sourcing"
+            ? "sourcing_search"
+            : "intelligence_product_discovery"),
     }),
   }));
   const tables = {
@@ -448,6 +461,7 @@ function queryFor(scenario, policy) {
       ["id", "code", "status"],
       [
         { id: uuid(401), code: "amazon_product", status: "enabled" },
+        { id: uuid(403), code: "1688_search", status: "enabled" },
         {
           id: uuid(402),
           code: "fixture_held_source",
@@ -459,22 +473,34 @@ function queryFor(scenario, policy) {
       ["provider_id", "state"],
       [
         { provider_id: uuid(401), state: "closed" },
+        { provider_id: uuid(403), state: "closed" },
         { provider_id: uuid(402), state: scenario.heldSource === "open" ? "open" : "closed" },
       ],
     ),
     organizations: table(["id", "status"], organizations),
     workspaces: table(["id", "organization_id", "status"], workspaces),
   };
+  let order = policy.collectionReadyOrderSql(
+    scenario.completionFirst ?? true,
+    scenario.productSearchFirst ?? false,
+    scenario.sourcingFirst ?? false,
+  );
+  if (scenario.sourcingFirst && scenario.completionFirst !== false) {
+    if (!sourcePreferenceSql) throw Error("source_preference_predicate_required");
+    const ids = scenario.tasks.filter((row) => row.nearSource).map((row) => literal(row.id));
+    // Ordering-only proof: actual readiness is verified independently against real evidence.
+    order = order.replace(
+      sourcePreferenceSql,
+      ids.length ? `collection_tasks.id IN (${ids.join(",")})` : "0=1",
+    );
+  }
   const sql =
     "SELECT collection_tasks.id FROM collection_tasks" +
     policy.collectionScopeFairnessJoinSql +
     " WHERE status='queued' AND attempt_count<4 AND " +
     policy.activeCollectionScopeSql("collection_tasks") +
     policy.collectionRequiredSourcesReadySql +
-    policy.collectionReadyOrderSql(
-      scenario.completionFirst ?? true,
-      scenario.productSearchFirst ?? false,
-    );
+    order;
   const keywords = new Set(["WHERE", "GROUP", "LEFT", "JOIN", "ON", "ORDER"]);
   return sql.replace(
     /\b(FROM|JOIN) (collection_tasks|collection_task_events|collection_subqueries|browser_collection_jobs|providers|provider_runtime_circuits|organizations|workspaces)\b(\s+([A-Za-z_][A-Za-z0-9_]*))?/g,
@@ -486,10 +512,114 @@ function queryFor(scenario, policy) {
       suffix,
   );
 }
-export function collectionScopeFairnessSqlCases(policy) {
-  const result = scenarios.map((scenario) => ({
+export function collectionScopeFairnessSqlCases(policy, sourcePreferenceSql) {
+  const sourceCases = sourcePreferenceSql
+    ? [
+        {
+          name: "eligible sourcing turn precedes a ready Amazon browser result",
+          tasks: [
+            task(101, "a", { lane: "completion", browserResult: true }),
+            task(102, "a", { lane: "sourcing", nearSource: true }),
+          ],
+          events: [],
+          sourcingFirst: true,
+          expected: 102,
+        },
+        {
+          name: "other completion turn preserves browser result preference",
+          tasks: [
+            task(101, "a", { lane: "completion", browserResult: true }),
+            task(102, "a", { lane: "sourcing", nearSource: true }),
+          ],
+          events: [],
+          sourcingFirst: false,
+          expected: 101,
+        },
+        {
+          name: "unqualified source does not precede browser results",
+          tasks: [
+            task(101, "a", { lane: "sourcing" }),
+            task(102, "a", { lane: "completion", browserResult: true }),
+          ],
+          events: [],
+          sourcingFirst: true,
+          expected: 102,
+        },
+        {
+          name: "sourcing turn preserves raw intake precedence",
+          tasks: [
+            task(101, "a", { lane: "sourcing", nearSource: true }),
+            task(102, "a", { lane: "intake" }),
+          ],
+          events: [],
+          sourcingFirst: true,
+          expected: 102,
+        },
+        {
+          name: "sourcing turn preserves critical priority",
+          tasks: [
+            task(101, "a", { lane: "completion", priority: "critical" }),
+            task(102, "a", { lane: "sourcing", nearSource: true }),
+          ],
+          events: [],
+          sourcingFirst: true,
+          expected: 101,
+        },
+        {
+          name: "sourcing turn preserves scope fairness",
+          tasks: [
+            task(101, "b", { lane: "completion" }),
+            task(102, "a", { lane: "sourcing", nearSource: true }),
+          ],
+          events: [claim("a", 10), claim("b", 5)],
+          sourcingFirst: true,
+          expected: 101,
+        },
+        {
+          name: "held required source cannot use sourcing preference",
+          tasks: [
+            task(101, "a", { lane: "completion" }),
+            task(102, "a", { lane: "sourcing", nearSource: true, provider: "held" }),
+          ],
+          events: [],
+          heldSource: "disabled",
+          sourcingFirst: true,
+          expected: 101,
+        },
+        {
+          name: "FIFO escape ignores sourcing preference",
+          tasks: [task(101), task(102, "a", { lane: "sourcing", nearSource: true })],
+          events: [],
+          completionFirst: false,
+          sourcingFirst: true,
+          expected: 101,
+        },
+        {
+          name: "sourcing turn keeps FIFO within equally qualified sources",
+          tasks: [
+            task(101, "a", { lane: "sourcing", nearSource: true, available_at: stamp(8) }),
+            task(102, "a", { lane: "sourcing", nearSource: true }),
+          ],
+          events: [],
+          sourcingFirst: true,
+          expected: 102,
+        },
+        {
+          name: "product-search stage remains before sourcing when it owns the turn",
+          tasks: [
+            task(101, "a", { lane: "product_search" }),
+            task(102, "a", { lane: "sourcing", nearSource: true }),
+          ],
+          events: [],
+          productSearchFirst: true,
+          sourcingFirst: true,
+          expected: 101,
+        },
+      ]
+    : [];
+  const result = [...scenarios, ...sourceCases].map((scenario) => ({
     name: scenario.name,
-    sql: queryFor(scenario, policy),
+    sql: queryFor(scenario, policy, sourcePreferenceSql),
     expected: uuid(scenario.expected),
   }));
   const rotating = {

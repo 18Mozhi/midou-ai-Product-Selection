@@ -1,3 +1,5 @@
+import { completionReadySourcingTaskSql } from "./completion-sourcing-policy.js";
+
 /** Archived or mismatched tenant scopes retain history but cannot consume collection capacity. */
 export const activeCollectionScopeSql = (
   alias:
@@ -84,7 +86,11 @@ export const pendingBrowserResultSql =
   "AND result_job.status IN ('succeeded','succeeded_empty') AND result_job.result_json IS NOT NULL)";
 
 /** Priority, scope and alternating progress stages precede result consumption; FIFO stays unchanged. */
-export const collectionReadyOrderSql = (completionFirst: boolean, productSearchFirst = false) =>
+export const collectionReadyOrderSql = (
+  completionFirst: boolean,
+  productSearchFirst = false,
+  sourcingFirst = false,
+) =>
   " ORDER BY FIELD(CASE WHEN " +
   automaticIntelligenceTaskSql("collection_tasks") +
   " AND priority='normal' THEN 'high' ELSE priority END,'critical','high','normal','low')," +
@@ -103,6 +109,9 @@ export const collectionReadyOrderSql = (completionFirst: boolean, productSearchF
       " ELSE 3 "
     : "ELSE 1 ") +
   "END," +
+  (completionFirst && sourcingFirst
+    ? "CASE WHEN " + completionReadySourcingTaskSql + " THEN 0 ELSE 1 END,"
+    : "") +
   (completionFirst ? "CASE WHEN " + pendingBrowserResultSql + " THEN 0 ELSE 1 END," : "") +
   "available_at,id LIMIT 1";
 

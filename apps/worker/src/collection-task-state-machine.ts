@@ -34,6 +34,7 @@ export class MySqlCollectionTaskWorkerRepository {
     return collectionReadyOrderSql(
       this.successfulClaims % 21 !== 20,
       this.successfulClaims % 2 === 1,
+      this.successfulClaims % 4 === 0,
     );
   }
   constructor(

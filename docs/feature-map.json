@@ -1,4 +1,20 @@
 {
+  "selectionCompletionSourcingTurns20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-completion-sourcing-turns.md",
+    "sourceFiles": [
+      "apps/worker/src/completion-sourcing-policy.ts",
+      "apps/worker/src/collection-source-scheduling-policy.ts",
+      "apps/worker/src/collection-task-state-machine.ts"
+    ],
+    "testFiles": [
+      "tests/unit/completion-sourcing-priority.test.mjs",
+      "tests/unit/collection-completion-scheduling.test.mjs",
+      "tests/fixtures/completion-sourcing-priority-sql.mjs",
+      "tests/fixtures/collection-scope-fairness-sql.mjs"
+    ],
+    "contract": "Within unchanged priority, scope and progress stages, every other completion-preferred turn gives genuine scoped latest automatic1688 tasks with formal primary/five-competitor proof and missing current purchase input a source lookup preference before cached browser results. Other completion turn and21st FIFO unchanged. Original source/attempt/PK/lease/concurrency/capacity, quote/scoring/completion and LAN payload contracts remain. No API/env/schema/dependency/frontend/Python change; BaoTa Node restart."
+  },
   "selectionCollectedResultAdmission20261020": {
     "status": "implemented",
     "requirements": "docs/selection-collected-result-admission.md",
