@@ -46,3 +46,6 @@ Amazon 公开采集在同一 Playwright 上下文内识别验证码并暂停，�
 
 真实Chromium集成测试 `tests/integration/browser-handoff.test.mjs` 使用自有本地确认页，
 验证503到真实截图、后台接管及点击/输入/回车、原上下文Cookie续跑和清理。它不处理第三方验证码。
+
+正式前端的`apiBaseUrl`已包含`/api/v1`；接管组件调用相对`/platform/crawler-handoffs`，
+截图地址沿用相同前缀，不能再次拼接`/api/v1`。上线须核对真实空状态与接管画面，不能只检查后端路由。

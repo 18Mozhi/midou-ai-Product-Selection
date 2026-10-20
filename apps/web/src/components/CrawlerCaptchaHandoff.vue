@@ -21,7 +21,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
 let timer: ReturnType<typeof setTimeout> | undefined,
   active = false,
   reading = false;
-const base = "/api/v1/platform/crawler-handoffs";
+const base = "/platform/crawler-handoffs";
 async function refresh() {
   if (!active || reading || document.hidden || hidden.value) return;
   reading = true;
