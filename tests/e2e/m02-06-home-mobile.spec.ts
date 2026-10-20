@@ -177,6 +177,8 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   await expect(page.locator('a[href="/opportunities/start"]')).toHaveCount(0);
   await expect(page.getByText("竞品来源延迟")).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "推荐清单" })).toBeVisible();
+  if (testInfo.project.name === "mobile-390")
+    await page.locator(".home-library-details > summary").click();
   await expect(page.locator(".home-status-facts")).toContainText("4待你采纳");
   await expect(page.locator(".home-status-facts")).toContainText("5选品候选");
   await expect(page.locator(".home-status-facts")).toContainText("8待补证据");

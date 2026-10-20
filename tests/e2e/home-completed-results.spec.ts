@@ -155,6 +155,17 @@ test("completed products own the initial workspace, show actual facts and link d
     /from=\/home/,
   );
   await expect(results.getByRole("link", { name: /^审阅并采纳/ })).toHaveCount(0);
+  if (test.info().project.name === "mobile-390") {
+    await expect(page.locator(".home-library-details")).not.toHaveAttribute("open");
+    const title = await results
+      .getByRole("link", { name: product().name, exact: true })
+      .boundingBox();
+    expect(title!.y + 20).toBeLessThan(page.viewportSize()!.height - 80);
+    await page.locator(".home-library-details > summary").click();
+    await expect(page.getByRole("link", { name: "5 选品候选", exact: true })).toBeVisible();
+    await page.locator(".home-library-details > summary").click();
+    expect(counters.completed).toBe(1);
+  }
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);

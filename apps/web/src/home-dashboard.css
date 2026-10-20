@@ -107,6 +107,20 @@ html[data-design="commerce"] #app .home-command-bar nav .home-primary-action {
   flex-direction: column;
   min-width: 0;
 }
+.home-library-details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.home-library-details > summary::-webkit-details-marker {
+  display: none;
+}
+.home-library-details > summary::after {
+  content: "+";
+  color: var(--home-accent);
+}
+.home-library-details[open] > summary::after {
+  content: "−";
+}
 .home-status-facts {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -462,7 +476,10 @@ html[data-design="commerce"] #app .home-daily-completion dd {
     justify-content: flex-start;
   }
   .home-live-status {
-    flex: 1 0 100%;
+    flex: 0 0 auto;
+  }
+  .home-live-status > span {
+    display: none;
   }
   .home-command-bar h2 {
     font-size: 22px;

@@ -67,16 +67,19 @@ html[data-design="commerce"] #app .home-result-header button[aria-pressed="true"
 }
 @media (max-width: 640px) {
   .home-result-header {
-    flex-wrap: wrap;
-    gap: 0;
+    flex-wrap: nowrap;
+    gap: 12px;
     padding: 0 16px;
   }
   .home-result-header nav {
-    width: 100%;
-    gap: 24px;
+    width: auto;
+    gap: 14px;
   }
   .home-result-header > a {
-    padding: 0 0 12px;
+    max-width: 100px;
+    padding: 8px 0;
+    font-size: 12px;
+    white-space: normal;
   }
   .home-result-caption {
     padding: 12px 16px;
