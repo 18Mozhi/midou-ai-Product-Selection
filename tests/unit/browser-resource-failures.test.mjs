@@ -30,5 +30,8 @@ test("equal priority failures retain the latest ten, lower priority cannot displ
   const failures = [];
   for (let i = 0; i < 15; i++) recordResourceFailure(failures, { resource_type: "document", i });
   recordResourceFailure(failures, { resource_type: "proxy_connect", i: 99 });
-  assert.deepEqual(failures.map((item) => item.i), [5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+  assert.deepEqual(
+    failures.map((item) => item.i),
+    [5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+  );
 });

@@ -7,14 +7,14 @@ function priority(failure: ResourceFailure): number {
 }
 
 /** Keep bounded diagnostics without letting image/sync noise erase actionable failures. */
-export function recordResourceFailure(
-  failures: ResourceFailure[],
-  failure: ResourceFailure,
-): void {
+export function recordResourceFailure(failures: ResourceFailure[], failure: ResourceFailure): void {
   if (failures.length >= 10) {
     const lowest = Math.min(...failures.map(priority));
     if (priority(failure) < lowest) return;
-    failures.splice(failures.findIndex((item) => priority(item) === lowest), 1);
+    failures.splice(
+      failures.findIndex((item) => priority(item) === lowest),
+      1,
+    );
   }
   failures.push(failure);
 }
