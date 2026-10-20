@@ -9,6 +9,18 @@ export interface SourcingCandidate {
   moq: number | null;
   quoted_price: number;
   source_price_description?: string | null;
+  source_sku_pending?: boolean;
+  source_sku?: {
+    offer_id: string;
+    sku_id: string;
+    price_source: string | null;
+    price_amount: number | null;
+    price_unit: string | null;
+    properties: Array<{ name: string; value: string }>;
+    attributes: Array<{ name: string; value: string }>;
+    packages: Array<Record<string, number>>;
+    package_units: Record<string, string>;
+  } | null;
   currency: string;
   lead_time_days: number | null;
   location: string | null;

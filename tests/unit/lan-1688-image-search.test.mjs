@@ -373,8 +373,51 @@ test("LAN JSON evidence is never labelled as a browser DOM capture", async () =>
         },
       }),
     };
-    const client = new Lan1688ImageSearch("test-only", 1000, async (_url, options) => {
-      const page = JSON.parse(options.body).begin_page;
+    const client = new Lan1688ImageSearch("test-only", 1000, async (url, options) => {
+      const body = JSON.parse(options.body);
+      if (url.endsWith("/item-detail"))
+        return Response.json({
+          success: true,
+          complete: true,
+          partial: false,
+          failed: 0,
+          incomplete: 0,
+          total: body.offer_ids.length,
+          succeeded: body.offer_ids.length,
+          items: body.offer_ids.map((offerId) => {
+            const skuId = String(900000000000 + Number(offerId) - 835520608338);
+            return {
+              offer_id: offerId,
+              success: true,
+              data: {
+                offer_id: offerId,
+                title: "旅行化妆包",
+                product_url: `https://detail.1688.com/offer/${offerId}.html`,
+                complete: true,
+                status: "PUBLISHED",
+                missing_fields: [],
+                attributes: [],
+                shop: { companyName: "箱包厂" },
+                price: { min_order_quantity: 1, unit: "个" },
+                sku_count: 1,
+                skus: [
+                  {
+                    sku_id: skuId,
+                    price: "9",
+                    price_source: "original.price",
+                    price_amount: 1,
+                    stock: 5,
+                    spec_attrs: "黑色",
+                    properties: [{ name: "颜色", value: "黑色" }],
+                    packages: [],
+                    source_data: { skuId, price: "9" },
+                  },
+                ],
+              },
+            };
+          }),
+        });
+      const page = body.begin_page;
       return Response.json({
         ...fullPage,
         begin_page: page,
@@ -382,6 +425,7 @@ test("LAN JSON evidence is never labelled as a browser DOM capture", async () =>
         items: fullPage.items.map((item, index) => ({
           ...item,
           offerId: String(835520608338 + (page - 1) * 60 + index),
+          sku_id: String(900000000000 + (page - 1) * 60 + index),
         })),
       });
     });
@@ -412,18 +456,29 @@ test("LAN JSON evidence is never labelled as a browser DOM capture", async () =>
       },
       async () => {},
     );
-    assert.equal(stored.length, pages * 60);
+    assert.equal(stored.length, pages * 120);
     assert.equal(new Set(stored.map((row) => row.normalizedPayload.external_id)).size, pages * 60);
-    assert.equal(stored[0].parserVersion, "1688-lan-image-v1");
-    assert.equal(stored[0].adapterVersion, "1688-lan-image-v1");
+    assert.equal(stored[0].parserVersion, "1688-lan-image-detail-context-v1");
+    assert.equal(stored[0].adapterVersion, "1688-lan-image-detail-context-v1");
     assert.equal(stored[0].contentType, "application/json");
     assert.match(stored[0].content.toString(), /新人价/);
     for (const evidence of stored) {
       const price = evidence.provenance.find((item) => item.fieldPath === "quoted_price");
-      assert.equal(price.sourcePath, "$.price");
-      assert.equal(price.transformVersion, "1688-lan-image-v1");
+      assert.match(price.sourcePath, /price$/);
       assert.equal(
-        Number(JSON.parse(evidence.content).price),
+        price.transformVersion,
+        evidence.normalizedPayload.record_type === "offer_sku_detail"
+          ? "1688-lan-item-detail-v1"
+          : "1688-lan-image-detail-context-v1",
+      );
+      assert.equal(
+        Number(
+          price.sourcePath
+            .replace(/\[(\d+)\]/g, ".$1")
+            .split(".")
+            .slice(1)
+            .reduce((value, key) => value[key], JSON.parse(evidence.content)),
+        ),
         evidence.normalizedPayload.quoted_price,
       );
     }

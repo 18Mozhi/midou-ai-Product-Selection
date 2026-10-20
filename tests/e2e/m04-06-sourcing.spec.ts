@@ -1,5 +1,7 @@
 import { test, expect, type Locator, type Page } from "@playwright/test";
 
+// SKU fixture values come from the user-provided item-detail sample; this tests rendering, not live procurement.
+
 const searchId = "00000000-0000-4000-8000-000000000601";
 const envelope = (data: unknown) => ({
   data,
@@ -1359,4 +1361,65 @@ test("actual successful source task code is shown in Chinese", async ({ page }) 
   await expect(progress).toContainText("采集成功");
   await expect(progress).not.toContainText("succeeded");
   await expect(progress).toContainText("1 / 1 个来源已结束");
+});
+
+test("SKU-specific supplier facts preserve quote identity and distinguish package measurements", async ({
+  page,
+}) => {
+  await setup(page, ["task:read", "sourcing:read"]);
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({
+      json: envelope({
+        id: searchId,
+        input_type: "image",
+        input_ref: "image",
+        status: "completed_with_warnings",
+        candidate_count: 2,
+        missing_fields: [],
+        created_at: "2026-10-20T10:00:00Z",
+        candidates: [
+          {
+            ...incompleteCandidate,
+            id: readyCandidate.id,
+            supplier_name: "义乌市纳云箱包有限公司",
+            product_title: "亚马逊跨境化妆包PU 防水美妆包便携式洗漱包大容量多功能收纳包",
+            specification: "编织纹黑色",
+            quoted_price: 7.8,
+            moq: 1,
+            source_sku: {
+              offer_id: "835520608338",
+              sku_id: "5855334264481",
+              price_source: "discountPrice",
+              price_amount: 1,
+              price_unit: "个",
+              properties: [{ name: "颜色", value: "编织纹黑色" }],
+              attributes: [{ name: "材质", value: "pu" }],
+              packages: [{ length: 24, width: 13, height: 14, weight: 120 }],
+              package_units: { length: "cm", width: "cm", height: "cm", weight: "g" },
+            },
+          },
+          { ...incompleteCandidate, source_sku_pending: true },
+        ],
+      }),
+    }),
+  );
+  await page.goto("/sourcing");
+  const row = page
+    .locator(".supplier-offer-table tbody > tr")
+    .filter({ hasText: "SKU 5855334264481" });
+  await expect(row.getByText("CNY 7.8", { exact: true })).toBeVisible();
+  await expect(row.getByText("SKU 当前折扣报价", { exact: true })).toBeVisible();
+  const help = row.getByText("查看 SKU 属性与包装", { exact: true });
+  await expect(row.getByText("120 g", { exact: true })).toBeHidden();
+  await help.click();
+  await expect(row.getByText("120 g", { exact: true })).toBeVisible();
+  await expect(row.getByText("24 cm", { exact: true })).toBeVisible();
+  await expect(row.getByText("包装数据不等同于商品本体尺寸。", { exact: true })).toBeVisible();
+  await expect(row.getByText("pu", { exact: true })).toBeVisible();
+  await expect(page.getByText("图搜参考价，SKU 尚未绑定", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "确认报价" })).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await help.focus();
+  await page.keyboard.press("Enter");
+  await expect(row.getByText("120 g", { exact: true })).toBeHidden();
 });

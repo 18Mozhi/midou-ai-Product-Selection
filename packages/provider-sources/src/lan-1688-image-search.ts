@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto";
 import { ProviderAdapterFailure, type ProviderRawRecord } from "@scoutops/provider-adapters";
 
+import { parseLan1688ItemDetails, LAN_1688_DETAIL_BATCH_SIZE } from "./lan-1688-item-detail.js";
+
 export const LAN_1688_ENDPOINTS = Object.freeze(
   Array.from({ length: 6 }, (_, index) => `http://192.168.1.${221 + index}:8880/1688/image-search`),
 );
@@ -102,6 +104,7 @@ export function parseLan1688Result(payload: unknown, observedAt: string): Provid
 export class Lan1688ImageSearch {
   private next = 0;
   private readonly busy = new Set<string>();
+  private readonly releaseWaiters = new Set<() => void>();
   constructor(
     private readonly token: string,
     private readonly timeoutMs = 45_000,
@@ -136,7 +139,7 @@ export class Lan1688ImageSearch {
     for (let index = 0; index < LAN_1688_ENDPOINTS.length; index++) {
       if (signal?.aborted) throw signal.reason;
       const endpoint = LAN_1688_ENDPOINTS[(start + index) % LAN_1688_ENDPOINTS.length]!;
-      if (this.busy.has(endpoint)) continue;
+      if (this.busy.has(new URL(endpoint).origin)) continue;
       try {
         const records = new Map<string, ProviderRawRecord>();
         for (let page = 1; page <= LAN_1688_MAX_PAGES; page++) {
@@ -198,9 +201,228 @@ export class Lan1688ImageSearch {
     signal?: AbortSignal,
     page = 1,
   ) {
-    if (this.busy.has(endpoint)) throw new ProviderAdapterFailure("dependency_unavailable", true);
+    const payload = await this.requestPayload(
+      endpoint,
+      {
+        image_url: url.toString(),
+        begin_page: page,
+        page_size: 60,
+        result_limit: LAN_1688_RESULT_LIMIT,
+      },
+      heartbeat,
+      signal,
+    );
+    const records = parseLan1688Result(payload, new Date().toISOString());
+    const envelope = object(payload);
+    if (envelope.begin_page !== undefined && envelope.begin_page !== page)
+      throw new ProviderAdapterFailure("invalid_payload", false);
+    if (envelope.has_more !== undefined && typeof envelope.has_more !== "boolean")
+      throw new ProviderAdapterFailure("invalid_payload", false);
+    return { records, hasMore: envelope.has_more === true };
+  }
+
+  async collectItemDetails(
+    offerIds: string[],
+    heartbeat: () => Promise<void>,
+    signal?: AbortSignal,
+  ) {
+    if (!this.token) throw new ProviderAdapterFailure("permission_denied", false);
+    if (
+      offerIds.length > LAN_1688_COLLECTION_LIMIT ||
+      offerIds.some((id) => !/^\d{1,40}$/.test(id))
+    )
+      throw new ProviderAdapterFailure("invalid_payload", false);
+    const ids = [...new Set(offerIds)],
+      batches: string[][] = [];
+    for (let offset = 0; offset < ids.length; offset += LAN_1688_DETAIL_BATCH_SIZE)
+      batches.push(ids.slice(offset, offset + LAN_1688_DETAIL_BATCH_SIZE));
+    const controller = new AbortController();
+    const combined = signal ? AbortSignal.any([signal, controller.signal]) : controller.signal;
+    const results: ProviderRawRecord[][] = new Array(batches.length);
+    let nextBatch = 0;
+    const workers = Array.from(
+      { length: Math.min(LAN_1688_ENDPOINTS.length, batches.length) },
+      async () => {
+        while (nextBatch < batches.length) {
+          combined.throwIfAborted();
+          const index = nextBatch++,
+            batch = batches[index]!;
+          const start = this.next++ % LAN_1688_ENDPOINTS.length;
+          let failure: unknown = new ProviderAdapterFailure("dependency_unavailable", true);
+          let complete = false;
+          const attempted = new Set<string>();
+          while (attempted.size < LAN_1688_ENDPOINTS.length) {
+            combined.throwIfAborted();
+            const endpoint = Array.from(
+              { length: LAN_1688_ENDPOINTS.length },
+              (_, offset) => LAN_1688_ENDPOINTS[(start + offset) % LAN_1688_ENDPOINTS.length]!,
+            ).find(
+              (endpoint) => !attempted.has(endpoint) && !this.busy.has(new URL(endpoint).origin),
+            );
+            if (!endpoint) {
+              await this.waitForRelease(combined);
+              continue;
+            }
+            attempted.add(endpoint);
+            try {
+              const payload = await this.requestPayload(
+                endpoint.replace("/image-search", "/item-detail"),
+                { offer_ids: batch },
+                heartbeat,
+                combined,
+              );
+              results[index] = parseLan1688ItemDetails(payload, batch, new Date().toISOString());
+              complete = true;
+              break;
+            } catch (error) {
+              combined.throwIfAborted();
+              if (error instanceof ProviderAdapterFailure && !error.retryable) throw error;
+              if (!(failure instanceof ProviderAdapterFailure) || failure.code !== "rate_limited")
+                failure =
+                  error instanceof ProviderAdapterFailure
+                    ? error
+                    : new ProviderAdapterFailure("dependency_unavailable", true);
+            }
+          }
+          if (!complete) throw failure;
+        }
+      },
+    );
+    try {
+      await Promise.all(workers);
+      combined.throwIfAborted();
+      return { records: results.flat(), nextCursor: null };
+    } catch (error) {
+      controller.abort();
+      await Promise.allSettled(workers);
+      if (signal?.aborted) throw signal.reason;
+      throw error;
+    }
+  }
+
+  async collectEnriched(imageUrl: unknown, heartbeat: () => Promise<void>, signal?: AbortSignal) {
+    const image = await this.collect(imageUrl, heartbeat, signal);
+    const ids = image.records.map((record) =>
+      String((record.payload as { fields: { external_id: string } }).fields.external_id),
+    );
+    const details = await this.collectItemDetails(ids, heartbeat, signal);
+    const facts = (record: ProviderRawRecord) => object(object(record.payload).fields);
+    const matched: ProviderRawRecord[] = [];
+    for (const imageRecord of image.records) {
+      const fields = facts(imageRecord),
+        offerId = String(fields.external_id),
+        skuId = fields.sku_id;
+      const offerRecords = details.records.filter(
+        (record) => facts(record).external_id === offerId,
+      );
+      const chosen =
+        typeof skuId === "string" && /^\d{1,40}$/.test(skuId)
+          ? offerRecords.find((record) => facts(record).sku_id === skuId)
+          : undefined;
+      if (chosen) {
+        const imagePayload = object(imageRecord.payload),
+          payload = object(chosen.payload);
+        const context = object(JSON.parse(String(payload.raw_content)));
+        context.image_search = JSON.parse(String(imagePayload.raw_content));
+        const content = JSON.stringify(context);
+        matched.push({
+          ...chosen,
+          evidenceRef: `1688-detail:${createHash("sha256").update(content).digest("hex")}`,
+          payload: {
+            ...payload,
+            raw_content: content,
+            fields: { ...facts(chosen), price_description: fields.price_description ?? null },
+            source_paths: {
+              ...object(payload.source_paths),
+              price_description: Object.hasOwn(object(context.image_search), "price_description")
+                ? "$.image_search.price_description"
+                : "$",
+            },
+          },
+        });
+      } else if (offerRecords[0]) {
+        const first = offerRecords[0],
+          payload = object(first.payload),
+          common = facts(first);
+        const commonFields = {
+          ...common,
+          record_type: "offer_detail_unselected",
+          sku_id: null,
+          specification: null,
+          sku_properties: [],
+          packaging: [],
+          package_units: null,
+          stock: null,
+          price: null,
+          quoted_price: null,
+          price_amount: null,
+          detail_complete: false,
+          image_url: null,
+        };
+        matched.push({
+          ...first,
+          externalId: `1688-detail:${offerId}:unselected`,
+          payload: {
+            ...payload,
+            fields: commonFields,
+            source_paths: {
+              ...object(payload.source_paths),
+              ...Object.fromEntries(
+                [
+                  "record_type",
+                  "sku_id",
+                  "specification",
+                  "sku_properties",
+                  "packaging",
+                  "package_units",
+                  "stock",
+                  "price",
+                  "quoted_price",
+                  "price_amount",
+                  "detail_complete",
+                  "image_url",
+                ].map((key) => [key, "$"]),
+              ),
+            },
+          },
+        });
+      }
+      object(object(imageRecord.payload).fields).price_eligible = false;
+      object(object(imageRecord.payload).source_paths).price_eligible = "$";
+    }
+    return { records: [...image.records, ...matched], nextCursor: null };
+  }
+
+  private waitForRelease(signal: AbortSignal): Promise<void> {
+    signal.throwIfAborted();
+    return new Promise((resolve, reject) => {
+      const cleanup = () => {
+        this.releaseWaiters.delete(released);
+        signal.removeEventListener("abort", aborted);
+      };
+      const released = () => {
+        cleanup();
+        resolve();
+      };
+      const aborted = () => {
+        cleanup();
+        reject(signal.reason);
+      };
+      this.releaseWaiters.add(released);
+      signal.addEventListener("abort", aborted, { once: true });
+    });
+  }
+
+  private async requestPayload(
+    endpoint: string,
+    body: Record<string, unknown>,
+    heartbeat: () => Promise<void>,
+    signal?: AbortSignal,
+  ) {
+    if (this.busy.has(new URL(endpoint).origin))
+      throw new ProviderAdapterFailure("dependency_unavailable", true);
     if (signal?.aborted) throw signal.reason;
-    this.busy.add(endpoint);
+    this.busy.add(new URL(endpoint).origin);
     try {
       await heartbeat();
       const abort = AbortSignal.timeout(this.timeoutMs);
@@ -209,12 +431,7 @@ export class Lan1688ImageSearch {
         redirect: "error",
         signal: signal ? AbortSignal.any([signal, abort]) : abort,
         headers: { Authorization: `Bearer ${this.token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          image_url: url.toString(),
-          begin_page: page,
-          page_size: 60,
-          result_limit: LAN_1688_RESULT_LIMIT,
-        }),
+        body: JSON.stringify(body),
       });
       if (response.status === 401 || response.status === 403) {
         await response.body?.cancel();
@@ -252,17 +469,12 @@ export class Lan1688ImageSearch {
       } catch {
         throw new ProviderAdapterFailure("invalid_payload", false);
       }
-      const records = parseLan1688Result(payload, new Date().toISOString());
-      const envelope = object(payload);
-      if (envelope.begin_page !== undefined && envelope.begin_page !== page)
-        throw new ProviderAdapterFailure("invalid_payload", false);
-      if (envelope.has_more !== undefined && typeof envelope.has_more !== "boolean")
-        throw new ProviderAdapterFailure("invalid_payload", false);
       await heartbeat();
       signal?.throwIfAborted();
-      return { records, hasMore: envelope.has_more === true };
+      return payload;
     } finally {
-      this.busy.delete(endpoint);
+      this.busy.delete(new URL(endpoint).origin);
+      for (const notify of [...this.releaseWaiters]) notify();
     }
   }
 }

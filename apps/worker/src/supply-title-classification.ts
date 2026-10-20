@@ -1,4 +1,4 @@
-export type SupplyTitleCandidate = { source_ref: string; title: string };
+export type SupplyTitleCandidate = { source_ref: string; title: string; details?: string };
 export type SupplyTitleInput = {
   product_ref: string;
   product_title: string;
@@ -89,7 +89,10 @@ export function validateSupplyTitleClassifications(
         throw invalid();
       if (
         !input.product_title.includes(attribute.product_excerpt) ||
-        !candidate.title.includes(attribute.supply_excerpt)
+        !(
+          candidate.title.includes(attribute.supply_excerpt) ||
+          candidate.details?.includes(attribute.supply_excerpt)
+        )
       )
         invalidCitation = true;
       const productExcerpt = attribute.product_excerpt.trim().toLocaleLowerCase("en-US"),

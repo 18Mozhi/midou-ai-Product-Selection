@@ -2746,7 +2746,7 @@ paths:
   /sourcing/searches/{searchId}:
     get:
       summary: Read supplier candidates, ERP catalog references, evidence references and explicit missing fields
-      description: Each candidate includes nullable read-only source_price_description, trimmed to 200 characters from its exactly linked active 1688 normalized evidence. Missing or non-string conditions remain null. This describes the source observation, not a subsequent confirmed quote, and does not change quoted_price or cost confirmation rules.
+      description: Each candidate includes nullable read-only source_price_description, trimmed to 200 characters from its exactly linked active 1688 normalized evidence. Missing or non-string conditions remain null. This describes the source observation, not a subsequent confirmed quote, and does not change quoted_price or cost confirmation rules. Candidates additionally expose nullable read-only source_sku with offer_id, sku_id, price_source, price_amount, price_unit, properties, attributes, packages and package_units from exactly linked SKU evidence. source_sku_pending marks image-only reference prices awaiting SKU binding. Packaging is not product dimensions.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: sourcing:read
       parameters:
@@ -11833,3 +11833,17 @@ x-scoutops-lan-1688:
 # 2026-10-20 periodic detail turns prefer current scoped automatic primaries waiting for actual missing detail/sale facts.
 # Same event/payload, cooldown, source guards and fallback; no added endpoint or field.
 # See docs/selection-waiting-primary-refresh.md.
+
+
+x-scoutops-lan-1688-item-detail:
+  scope: backend-only supplier detail transport; existing sourcing read permissions
+  endpointRange: http://192.168.1.221-226:8880/1688/item-detail
+  method: POST
+  authorization: existing LAN_1688_TOKEN injected only on backend
+  requestFields: [offer_ids]
+  resultFields: [success, complete, partial, failed, incomplete, succeeded, total, items]
+  bounds: 2 offer IDs per batch; 120 distinct offers; 120 SKUs per offer; one shared in-flight request per node
+  parserVersion: 1688-lan-item-detail-v1
+  imageContextVersion: 1688-lan-image-detail-context-v1
+  quoteIdentity: exact image offer and SKU; no cheapest or first SKU substitution
+  runbook: docs/selection-lan-item-detail.md

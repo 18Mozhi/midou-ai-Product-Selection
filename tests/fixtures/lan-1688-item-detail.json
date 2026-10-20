@@ -1,0 +1,576 @@
+{
+  "complete": true,
+  "failed": 0,
+  "incomplete": 0,
+  "items": [
+    {
+      "data": {
+        "offer_id": "835520608338",
+        "title": "亚马逊跨境化妆包PU 防水美妆包便携式洗漱包大容量多功能收纳包",
+        "complete": true,
+        "status": "PUBLISHED",
+        "missing_fields": [],
+        "attributes": [
+          {
+            "name": "材质",
+            "value": "pu"
+          },
+          {
+            "name": "功能",
+            "value": "防水,多功能,便携,超轻,折叠,耐磨,扩容,可收纳"
+          },
+          {
+            "name": "里料质地",
+            "value": "涤纶"
+          },
+          {
+            "name": "品牌",
+            "value": "纳云"
+          },
+          {
+            "name": "流行元素",
+            "value": "纯色,编织,字母,车缝线,撞色,拼接,压花"
+          },
+          {
+            "name": "风格",
+            "value": "跨境风潮"
+          },
+          {
+            "name": "货号",
+            "value": "编织纹枕头包A"
+          },
+          {
+            "name": "适用场景",
+            "value": "日常搭配"
+          },
+          {
+            "name": "图案",
+            "value": "纯色"
+          },
+          {
+            "name": "颜色",
+            "value": "编织纹乳白色,编织纹黑色,编织纹粉红色,编织纹墨绿色,编织纹紫罗兰"
+          },
+          {
+            "name": "有可授权的自有品牌",
+            "value": "否"
+          },
+          {
+            "name": "上市年份季节",
+            "value": "2025年春季"
+          },
+          {
+            "name": "WASH BAG",
+            "value": "Pillow Makeup Bag Storage Bag"
+          },
+          {
+            "name": "洗漱包美妆工具收纳",
+            "value": "新款带手柄编织纹枕头包化妆品收纳包"
+          },
+          {
+            "name": "适用性别",
+            "value": "中性/男女均可"
+          },
+          {
+            "name": "结构造型",
+            "value": "U型"
+          },
+          {
+            "name": "箱装数量",
+            "value": "1"
+          }
+        ],
+        "price": {
+          "display": "7.60-7.80",
+          "max": "7.80",
+          "min": "7.60",
+          "min_order_quantity": 1,
+          "ranges": [
+            {
+              "beginAmount": 1,
+              "discountPrice": "7.80",
+              "endAmount": 1999,
+              "price": "7.80"
+            },
+            {
+              "beginAmount": 2000,
+              "discountPrice": "7.70",
+              "endAmount": 19999,
+              "price": "7.70"
+            },
+            {
+              "beginAmount": 20000,
+              "discountPrice": "7.60",
+              "endAmount": 0,
+              "price": "7.60"
+            }
+          ],
+          "unit": "个"
+        },
+        "product_url": "https://detail.1688.com/offer/835520608338.html",
+        "sku_count": 5,
+        "skus": [
+          {
+            "discount_price": "7.80",
+            "package_units": {
+              "height": "cm",
+              "length": "cm",
+              "volume": "cm³",
+              "weight": "g",
+              "width": "cm"
+            },
+            "packages": [
+              {
+                "height": 14.0,
+                "length": 24.0,
+                "sku1": "编织纹粉红色",
+                "skuId": "5855334264484",
+                "volume": 4368.0,
+                "weight": 120,
+                "width": 13.0
+              }
+            ],
+            "price": "7.80",
+            "price_amount": 1,
+            "price_source": "discountPrice",
+            "properties": [
+              {
+                "name": "颜色",
+                "value": "编织纹粉红色"
+              }
+            ],
+            "retail_price": null,
+            "sale_count": 0,
+            "sku_id": "5855334264484",
+            "source_data": {
+              "discountPrice": "7.80",
+              "skuId": "5855334264484"
+            },
+            "spec_attrs": "编织纹粉红色",
+            "spec_id": "f02d363a357609768fa521ea1a456d40",
+            "stock": 16584
+          },
+          {
+            "discount_price": "7.80",
+            "package_units": {
+              "height": "cm",
+              "length": "cm",
+              "volume": "cm³",
+              "weight": "g",
+              "width": "cm"
+            },
+            "packages": [
+              {
+                "height": 14.0,
+                "length": 24.0,
+                "sku1": "编织纹黑色",
+                "skuId": "5855334264481",
+                "volume": 4368.0,
+                "weight": 120,
+                "width": 13.0
+              }
+            ],
+            "price": "7.80",
+            "price_amount": 1,
+            "price_source": "discountPrice",
+            "properties": [
+              {
+                "name": "颜色",
+                "value": "编织纹黑色"
+              }
+            ],
+            "retail_price": null,
+            "sale_count": 0,
+            "sku_id": "5855334264481",
+            "source_data": {
+              "discountPrice": "7.80",
+              "skuId": "5855334264481"
+            },
+            "spec_attrs": "编织纹黑色",
+            "spec_id": "5aaa3472a7e33aa95446c4b22ccbaafa",
+            "stock": 11504
+          },
+          {
+            "discount_price": "7.80",
+            "package_units": {
+              "height": "cm",
+              "length": "cm",
+              "volume": "cm³",
+              "weight": "g",
+              "width": "cm"
+            },
+            "packages": [
+              {
+                "height": 14.0,
+                "length": 24.0,
+                "sku1": "编织纹乳白色",
+                "skuId": "5855334264479",
+                "volume": 4368.0,
+                "weight": 120,
+                "width": 13.0
+              }
+            ],
+            "price": "7.80",
+            "price_amount": 1,
+            "price_source": "discountPrice",
+            "properties": [
+              {
+                "name": "颜色",
+                "value": "编织纹乳白色"
+              }
+            ],
+            "retail_price": null,
+            "sale_count": 0,
+            "sku_id": "5855334264479",
+            "source_data": {
+              "discountPrice": "7.80",
+              "skuId": "5855334264479"
+            },
+            "spec_attrs": "编织纹乳白色",
+            "spec_id": "8ba8ec4ac191dc2da4bb485a10d8a249",
+            "stock": 15419
+          },
+          {
+            "discount_price": "7.80",
+            "package_units": {
+              "height": "cm",
+              "length": "cm",
+              "volume": "cm³",
+              "weight": "g",
+              "width": "cm"
+            },
+            "packages": [
+              {
+                "height": 14.0,
+                "length": 24.0,
+                "sku1": "编织纹紫罗兰",
+                "skuId": "5855334264483",
+                "volume": 4368.0,
+                "weight": 120,
+                "width": 13.0
+              }
+            ],
+            "price": "7.80",
+            "price_amount": 1,
+            "price_source": "discountPrice",
+            "properties": [
+              {
+                "name": "颜色",
+                "value": "编织纹紫罗兰"
+              }
+            ],
+            "retail_price": null,
+            "sale_count": 0,
+            "sku_id": "5855334264483",
+            "source_data": {
+              "discountPrice": "7.80",
+              "skuId": "5855334264483"
+            },
+            "spec_attrs": "编织纹紫罗兰",
+            "spec_id": "715a3282e777e7f41c8de8ebeeb26726",
+            "stock": 18792
+          },
+          {
+            "discount_price": "7.80",
+            "package_units": {
+              "height": "cm",
+              "length": "cm",
+              "volume": "cm³",
+              "weight": "g",
+              "width": "cm"
+            },
+            "packages": [
+              {
+                "height": 14.0,
+                "length": 24.0,
+                "sku1": "编织纹墨绿色",
+                "skuId": "5855334264485",
+                "volume": 4368.0,
+                "weight": 120,
+                "width": 13.0
+              }
+            ],
+            "price": "7.80",
+            "price_amount": 1,
+            "price_source": "discountPrice",
+            "properties": [
+              {
+                "name": "颜色",
+                "value": "编织纹墨绿色"
+              }
+            ],
+            "retail_price": null,
+            "sale_count": 0,
+            "sku_id": "5855334264485",
+            "source_data": {
+              "discountPrice": "7.80",
+              "skuId": "5855334264485"
+            },
+            "spec_attrs": "编织纹墨绿色",
+            "spec_id": "35f8214bf382bde00646e0ba3031ff48",
+            "stock": 18910
+          }
+        ],
+        "shop": {
+          "authCompanyName": "义乌市纳云箱包有限公司",
+          "companyName": "义乌市纳云箱包有限公司"
+        },
+        "shipping": {
+          "location": "浙江省金华市"
+        }
+      },
+      "offer_id": "835520608338",
+      "success": true
+    },
+    {
+      "data": {
+        "offer_id": "1046544158973",
+        "title": "铝合金PE材质户外旋转桌椅防水防锈庭院阳台民宿家用玻璃圆桌套装",
+        "complete": true,
+        "status": "PUBLISHED",
+        "missing_fields": [],
+        "attributes": [
+          {
+            "name": "材质",
+            "value": "铝"
+          },
+          {
+            "name": "品牌",
+            "value": "J&M Outdoor"
+          },
+          {
+            "name": "是否提供安装服务",
+            "value": "否"
+          },
+          {
+            "name": "是否配送上门",
+            "value": "送货至提货点"
+          },
+          {
+            "name": "风格",
+            "value": "简约风"
+          },
+          {
+            "name": "货号",
+            "value": "JM-PS-T721"
+          },
+          {
+            "name": "加工方式",
+            "value": "来图定制"
+          },
+          {
+            "name": "型号",
+            "value": "JM-PS-T721"
+          },
+          {
+            "name": "规格",
+            "value": "126.5*126.5*9cm"
+          },
+          {
+            "name": "颜色",
+            "value": "休闲桌椅套装【座椅可旋转】,椅子【单把】,桌子【单张】"
+          },
+          {
+            "name": "尺寸",
+            "value": "126.5*126.5*9cm"
+          },
+          {
+            "name": "是否跨境出口专供货源",
+            "value": "是"
+          },
+          {
+            "name": "主要下游平台",
+            "value": "ebay,亚马逊,wish,速卖通,独立站,LAZADA"
+          },
+          {
+            "name": "主要销售地区",
+            "value": "非洲,欧洲,南美,东南亚,北美,东北亚,中东"
+          },
+          {
+            "name": "有可授权的自有品牌",
+            "value": "是"
+          },
+          {
+            "name": "是否一般纳税人",
+            "value": "否"
+          },
+          {
+            "name": "适用场景",
+            "value": "户外"
+          },
+          {
+            "name": "组装与安装",
+            "value": "组装"
+          },
+          {
+            "name": "是否IP授权",
+            "value": "否"
+          }
+        ],
+        "price": {
+          "display": "389.00-1668.00",
+          "max": "1668.00",
+          "min": "389.00",
+          "min_order_quantity": 1,
+          "ranges": [],
+          "unit": "套"
+        },
+        "product_url": "https://detail.1688.com/offer/1046544158973.html",
+        "sku_count": 3,
+        "skus": [
+          {
+            "discount_price": "1668.00",
+            "package_units": {
+              "height": "cm",
+              "length": "cm",
+              "volume": "cm³",
+              "weight": "g",
+              "width": "cm"
+            },
+            "packages": [
+              {
+                "height": 9.0,
+                "length": 126.5,
+                "sku1": "休闲桌椅套装【座椅可旋转】",
+                "sku2": "126.5*126.5*9cm",
+                "skuId": "6073913001698",
+                "volume": 144020.25,
+                "weight": 66000,
+                "width": 126.5
+              }
+            ],
+            "price": "1668.00",
+            "price_amount": 1,
+            "price_source": "original.price",
+            "properties": [
+              {
+                "name": "颜色",
+                "value": "休闲桌椅套装【座椅可旋转】"
+              },
+              {
+                "name": "尺寸",
+                "value": "126.5*126.5*9cm"
+              }
+            ],
+            "retail_price": "",
+            "sale_count": 0,
+            "sku_id": "6073913001698",
+            "source_data": {
+              "price": "1668.00",
+              "discountPrice": "1668.00",
+              "skuId": "6073913001698"
+            },
+            "spec_attrs": "休闲桌椅套装【座椅可旋转】>126.5*126.5*9cm",
+            "spec_id": "d557f4f2ff228cedfdd4f88888774a3b",
+            "stock": 697
+          },
+          {
+            "discount_price": "489.00",
+            "package_units": {
+              "height": "cm",
+              "length": "cm",
+              "volume": "cm³",
+              "weight": "g",
+              "width": "cm"
+            },
+            "packages": [
+              {
+                "height": 74.0,
+                "length": 74.0,
+                "sku1": "桌子【单张】",
+                "sku2": "126.5*126.5*9cm",
+                "skuId": "6073913001700",
+                "volume": 668072.0,
+                "weight": 66000,
+                "width": 122.0
+              }
+            ],
+            "price": "489.00",
+            "price_amount": 1,
+            "price_source": "original.price",
+            "properties": [
+              {
+                "name": "颜色",
+                "value": "桌子【单张】"
+              },
+              {
+                "name": "尺寸",
+                "value": "126.5*126.5*9cm"
+              }
+            ],
+            "retail_price": "",
+            "sale_count": 0,
+            "sku_id": "6073913001700",
+            "source_data": {
+              "price": "489.00",
+              "discountPrice": "489.00",
+              "skuId": "6073913001700"
+            },
+            "spec_attrs": "桌子【单张】>126.5*126.5*9cm",
+            "spec_id": "0b9be7cc836af67f7e19b3c0de2de6d0",
+            "stock": 566
+          },
+          {
+            "discount_price": "389.00",
+            "package_units": {
+              "height": "cm",
+              "length": "cm",
+              "volume": "cm³",
+              "weight": "g",
+              "width": "cm"
+            },
+            "packages": [
+              {
+                "height": 108.0,
+                "length": 70.0,
+                "sku1": "椅子【单把】",
+                "sku2": "126.5*126.5*9cm",
+                "skuId": "6073913001699",
+                "volume": 457380.0,
+                "weight": 66000,
+                "width": 60.5
+              }
+            ],
+            "price": "389.00",
+            "price_amount": 1,
+            "price_source": "original.price",
+            "properties": [
+              {
+                "name": "颜色",
+                "value": "椅子【单把】"
+              },
+              {
+                "name": "尺寸",
+                "value": "126.5*126.5*9cm"
+              }
+            ],
+            "retail_price": "",
+            "sale_count": 0,
+            "sku_id": "6073913001699",
+            "source_data": {
+              "price": "389.00",
+              "discountPrice": "389.00",
+              "skuId": "6073913001699"
+            },
+            "spec_attrs": "椅子【单把】>126.5*126.5*9cm",
+            "spec_id": "590ae9e315dd7a4d4a32b08ca581c42e",
+            "stock": 796
+          }
+        ],
+        "shop": {
+          "authCompanyName": "义乌市骉马户外用品有限公司",
+          "companyName": "义乌市骉马户外用品有限公司"
+        },
+        "shipping": {
+          "location": "浙江省台州市"
+        }
+      },
+      "offer_id": "1046544158973",
+      "success": true
+    }
+  ],
+  "partial": false,
+  "succeeded": 2,
+  "success": true,
+  "total": 2
+}

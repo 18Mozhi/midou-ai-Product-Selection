@@ -7,3 +7,7 @@ export {
   parseLan1688Result,
   Lan1688ImageSearch,
 } from "@scoutops/provider-sources";
+export {
+  LAN_1688_DETAIL_VERSION,
+  LAN_1688_IMAGE_DETAIL_CONTEXT_VERSION,
+} from "@scoutops/provider-sources";

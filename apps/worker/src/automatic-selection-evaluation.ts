@@ -3,6 +3,13 @@ import {
   type SupplyTitleContext,
 } from "./supply-title-classification.js";
 import { iphoneCaseDeviceFit } from "./phone-case-device-fit.js";
+import {
+  supplyIdentityKey,
+  supplySourceRef,
+  supplyDetailText,
+  supplyDetailEligible,
+  supplySkuUseCompatible,
+} from "./supply-detail-facts.js";
 export const AUTOMATIC_SELECTION_FORMULA_VERSION = "crawler-evidence-v1";
 
 export interface ProductFacts {
@@ -26,6 +33,12 @@ export interface SupplyFacts {
   evidenceId: string;
   externalId: string;
   priceDescription?: string | null;
+  skuId?: string;
+  detailComplete?: boolean;
+  priceAmount?: number | null;
+  stock?: number | null;
+  attributes?: Array<{ name: string; value: string }>;
+  skuProperties?: Array<{ name: string; value: string }>;
 }
 
 export interface SupplyMatch {
@@ -212,10 +225,15 @@ export function selectConservativeSupplyMatch(
   // Repeated collections of one offer are observations, not independent supplier samples.
   const latestOffers = new Map<string, SupplyFacts>();
   for (const item of supplies) {
+    if (
+      item.skuId &&
+      (!isPhoneCase(productTitle) || !isPhoneCase(item.title) || !supplyDetailEligible(item))
+    )
+      continue;
     if (!item.externalId.trim() || !Number.isFinite(item.observedAt.getTime())) continue;
-    const current = latestOffers.get(item.externalId);
+    const current = latestOffers.get(supplyIdentityKey(item));
     if (!current || item.observedAt.getTime() > current.observedAt.getTime())
-      latestOffers.set(item.externalId, item);
+      latestOffers.set(supplyIdentityKey(item), item);
   }
   const matches = [...latestOffers.values()]
     .filter(
@@ -226,14 +244,30 @@ export function selectConservativeSupplyMatch(
         !item.priceDescription?.includes("新人价") &&
         item.evidenceId.length > 0,
     )
-    .map((item) => ({ item, confidence: productIdentityConfidence(productTitle, item.title) }))
+    .map((item) => ({
+      item,
+      confidence: productIdentityConfidence(
+        productTitle,
+        item.skuId ? `${supplyDetailText(item)} phone case` : item.title,
+      ),
+    }))
     .filter((item) => item.confidence >= minimumConfidence)
     .sort(
       (left, right) => right.confidence - left.confidence || right.item.price - left.item.price,
     );
-  if (matches.length < minimumSamples) return null;
+  // Several SKU colors from one offer remain one supplier observation. The
+  // conservative ordering above selects an actual, higher-priced matching SKU.
+  const independent = [
+    ...new Map(
+      matches
+        .map((match) => match.item.externalId)
+        .filter((value, index, values) => values.indexOf(value) === index)
+        .map((offerId) => [offerId, matches.find((match) => match.item.externalId === offerId)!]),
+    ).values(),
+  ];
+  if (independent.length < minimumSamples) return null;
   const strongest = matches[0]!.confidence,
-    cohort = matches.filter((item) => item.confidence >= strongest - 5).slice(0, 20);
+    cohort = independent.filter((item) => item.confidence >= strongest - 5).slice(0, 20);
   if (cohort.length < minimumSamples) return null;
   const prices = cohort.map((item) => item.item.price).sort((left, right) => left - right),
     percentileIndex = Math.min(prices.length - 1, Math.ceil(prices.length * 0.75) - 1),
@@ -274,22 +308,26 @@ export function selectClassifiedSupplyQuote(
   const latestOffers = new Map<string, SupplyFacts>();
   for (const item of supplies) {
     if (!item.externalId.trim() || !Number.isFinite(item.observedAt.getTime())) continue;
-    const current = latestOffers.get(item.externalId);
-    if (!current || item.observedAt > current.observedAt) latestOffers.set(item.externalId, item);
+    const current = latestOffers.get(supplyIdentityKey(item));
+    if (!current || item.observedAt > current.observedAt)
+      latestOffers.set(supplyIdentityKey(item), item);
   }
-  const candidates = new Map(context.input.candidates.map((item) => [item.source_ref, item.title]));
+  const candidates = new Map(context.input.candidates.map((item) => [item.source_ref, item]));
   for (const candidate of context.input.candidates) {
     const classification = classifications.find(
       (item) => item.source_ref === candidate.source_ref && item.relation === "compatible",
     );
     if (!classification) continue;
     const item = [...latestOffers.values()].find(
-      (offer) => `${offer.externalId}:${offer.evidenceId}` === classification.source_ref,
+      (offer) => supplySourceRef(offer) === classification.source_ref,
     );
     if (
       !item ||
-      candidates.get(classification.source_ref) !== item.title ||
-      !genericTitleFactsCompatible(productTitle, item.title) ||
+      candidates.get(classification.source_ref)?.title !== item.title ||
+      (candidates.get(classification.source_ref)?.details ?? "") !== supplyDetailText(item) ||
+      !supplyDetailEligible(item) ||
+      !supplySkuUseCompatible(productTitle, item) ||
+      !genericTitleFactsCompatible(productTitle, `${item.title} ${supplyDetailText(item)}`) ||
       isPhoneCase(item.title) ||
       item.currency !== "CNY" ||
       !Number.isFinite(item.price) ||

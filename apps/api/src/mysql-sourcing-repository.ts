@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { sourcingSkuFacts } from "./sourcing-sku-facts.js";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
   SourcingServiceError,
@@ -598,6 +599,8 @@ export class MySqlSourcingRepository implements SourcingRepository {
       supplier_name: String(r.supplier_name),
       product_title: String(r.product_title),
       specification: r.quote_specification ?? r.specification,
+      source_sku: sourcingSkuFacts(fields),
+      source_sku_pending: fields.price_eligible === false,
       moq: r.quote_moq == null ? (r.moq == null ? null : Number(r.moq)) : Number(r.quote_moq),
       quoted_price: Number(r.quote_price ?? r.quoted_price),
       source_price_description:

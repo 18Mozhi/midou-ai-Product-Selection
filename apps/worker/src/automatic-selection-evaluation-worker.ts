@@ -29,7 +29,15 @@ import {
   type SupplyTitleClassifier,
   type SupplyTitleContext,
 } from "./supply-title-classification.js";
+import { supplyFacts } from "./supply-facts-from-records.js";
 import { LAN_1688_COLLECTION_LIMIT } from "./lan-1688-image-search.js";
+import {
+  supplyIdentityKey,
+  supplySourceRef,
+  supplyDetailText,
+  supplyDetailEligible,
+  supplySkuUseCompatible,
+} from "./supply-detail-facts.js";
 import {
   selectionCandidateSql,
   automaticEvaluationCompleteSql,
@@ -99,25 +107,6 @@ const number = (value: unknown) => {
 const text = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 const fingerprint = (value: unknown) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
-const supplyFacts = (rows: RowDataPacket[]): SupplyFacts[] =>
-  rows.flatMap((row) => {
-    const item = normalizedProductFields(parse(row.payload_json, {})),
-      externalId = text(item.external_id);
-    return externalId
-      ? [
-          {
-            title: text(item.title),
-            price: number(item.price) ?? Number.NaN,
-            currency: text(item.currency).toUpperCase(),
-            observedAt: date(item.observed_at ?? row.created_at),
-            evidenceId: String(row.raw_evidence_id),
-            externalId,
-            priceDescription: text(item.price_description) || null,
-          },
-        ]
-      : [];
-  });
-
 export class AutomaticSelectionEvaluationError extends Error {
   constructor(
     readonly code: string,
@@ -269,12 +258,14 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     if (!snapshots[0]) return undefined;
     const [rows] = await this.pool.query<RowDataPacket[]>(automaticSupplyEvidenceSql, params),
       supplies = supplyFacts(rows);
-    if (selectConservativeSupplyMatch(title, supplies)) return undefined;
+    if (supplies.every((item) => !item.skuId) && selectConservativeSupplyMatch(title, supplies))
+      return undefined;
     const latest = new Map<string, SupplyFacts>();
     for (const item of supplies) {
       if (!Number.isFinite(item.observedAt.getTime())) continue;
-      const current = latest.get(item.externalId);
-      if (!current || item.observedAt > current.observedAt) latest.set(item.externalId, item);
+      const current = latest.get(supplyIdentityKey(item));
+      if (!current || item.observedAt > current.observedAt)
+        latest.set(supplyIdentityKey(item), item);
     }
     const candidates = [...latest.values()]
       .filter(
@@ -287,10 +278,17 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           item.evidenceId &&
           !item.priceDescription?.includes("新人价") &&
           !isPhoneCase(item.title) &&
-          genericTitleFactsCompatible(title, item.title),
+          supplyDetailEligible(item) &&
+          supplySkuUseCompatible(title, item) &&
+          supplyDetailText(item).length <= 4000 &&
+          genericTitleFactsCompatible(title, `${item.title} ${supplyDetailText(item)}`),
       )
       .slice(0, LAN_1688_COLLECTION_LIMIT)
-      .map((item) => ({ source_ref: `${item.externalId}:${item.evidenceId}`, title: item.title }));
+      .map((item) => ({
+        source_ref: supplySourceRef(item),
+        title: item.title,
+        ...(item.skuId ? { details: supplyDetailText(item) } : {}),
+      }));
     if (!candidates.length) return undefined;
     const context: SupplyTitleContext = {
       input: {
@@ -630,13 +628,12 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       ]);
       const supplies = supplyFacts(supplyRows),
         supplyMatch =
-          selectConservativeSupplyMatch(amazonTitle, supplies) ??
           selectClassifiedSupplyQuote(
             `amazon:${String(amazon.raw_evidence_id)}`,
             amazonTitle,
             supplies,
             classification,
-          );
+          ) ?? selectConservativeSupplyMatch(amazonTitle, supplies);
 
       if (!supplyMatch && isPhoneCase(amazonTitle)) {
         const retired = await retireUnmatchedAutomaticSupplyQuotes(connection, job);
@@ -677,9 +674,14 @@ export class MySqlAutomaticSelectionEvaluationWorker {
               type: "purchase_price",
               amount: supplyMatch.conservativePrice,
               currency: supplyMatch.item.currency,
-              sourceRef: supplyMatch.classification
-                ? `1688:${supplyMatch.item.externalId}:classified-title:v1`
-                : `1688:${supplyMatch.item.externalId}:p75:${supplyMatch.sampleCount}`,
+              sourceRef: supplyMatch.item.skuId
+                ? `1688:${supplyMatch.item.externalId}:sku:${supplyMatch.item.skuId}:` +
+                  (supplyMatch.classification
+                    ? "classified-details:v1"
+                    : `p75:${supplyMatch.sampleCount}`)
+                : supplyMatch.classification
+                  ? `1688:${supplyMatch.item.externalId}:classified-title:v1`
+                  : `1688:${supplyMatch.item.externalId}:p75:${supplyMatch.sampleCount}`,
               evidenceId: supplyMatch.item.evidenceId,
               observedAt: supplyMatch.item.observedAt,
               requestId,

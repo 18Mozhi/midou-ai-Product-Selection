@@ -1,4 +1,31 @@
 {
+  "selectionLanItemDetail20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-lan-item-detail.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/lan-1688-item-detail.ts",
+      "packages/provider-sources/src/lan-1688-image-search.ts",
+      "apps/worker/src/provider-source-executor.ts",
+      "apps/worker/src/supply-detail-facts.ts",
+      "apps/worker/src/supply-facts-from-records.ts",
+      "apps/worker/src/automatic-selection-evaluation.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/worker/src/automatic-supply-completion-guard.ts",
+      "apps/worker/src/sourcing-projection-worker.ts",
+      "apps/api/src/sourcing-sku-facts.ts",
+      "apps/api/src/mysql-sourcing-repository.ts",
+      "apps/web/src/components/SupplierSkuFacts.vue",
+      "apps/web/src/components/SupplierOfferList.vue",
+      "apps/web/src/components/OpportunitySupplyPanel.vue"
+    ],
+    "testFiles": [
+      "tests/unit/lan-1688-item-detail.test.mjs",
+      "tests/unit/lan-1688-image-search.test.mjs",
+      "tests/fixtures/lan-1688-item-detail.json",
+      "tests/e2e/m04-06-sourcing.spec.ts"
+    ],
+    "contract": "User supplied POST item-detail contract, fixed six appliances and existing backend token. Bind actual image SKU and scoped evidence; preserve literal specifications, units, source price conditions and original quote quantity. Do not price unmatched SKU, aggregate colors as independent offers, use packaging as product dimensions, or guess freight/fees. Read-only sourcing SKU facts; no schema, dependency, permission, Python or scheduler topology change. BaoTa Node restart and frontend upload required."
+  },
   "selectionLanBoundedPagination20261020": {
     "status": "implemented",
     "requirements": "docs/selection-lan-bounded-pagination.md",

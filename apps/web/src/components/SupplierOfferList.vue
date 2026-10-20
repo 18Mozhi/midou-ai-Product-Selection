@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SourcingCandidate } from "./sourcing-workspace-types";
+import SupplierSkuFacts from "./SupplierSkuFacts.vue";
 import "../supplier-offer-list.css";
 
 defineProps<{
@@ -45,6 +46,8 @@ const emit = defineEmits<{
           <td class="supplier-offer-product">
             <h4 :title="item.product_title">{{ item.product_title }}</h4>
             <p class="supplier-offer-name">{{ item.supplier_name }}</p>
+            <p v-if="item.source_sku">{{ item.specification || "SKU 规格未提供" }}</p>
+            <SupplierSkuFacts v-if="item.source_sku" :sku="item.source_sku" />
             <details>
               <summary :aria-label="'查看' + item.supplier_name + '的证据与详情'">
                 证据与详情
@@ -106,6 +109,7 @@ const emit = defineEmits<{
           </td>
           <td class="supplier-offer-price" data-label="原币报价">
             <strong>{{ item.currency }} {{ item.quoted_price }}</strong>
+            <small v-if="item.source_sku_pending && !item.quote">图搜参考价，SKU 尚未绑定</small>
             <span
               v-if="!item.quote && item.source_price_description"
               class="supplier-offer-price-note"

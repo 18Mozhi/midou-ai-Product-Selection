@@ -89,11 +89,41 @@ export class MySqlSourcingProjectionWorker {
         "SELECT n.*,e.canonical_url,e.captured_at FROM collection_task_evidence_links l JOIN normalized_records n ON n.id=l.normalized_record_id AND n.organization_id=l.organization_id AND n.workspace_id=l.workspace_id JOIN raw_evidence e ON e.id=l.raw_evidence_id WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=? AND n.status='active' AND (n.schema_version='product-supply-csv-v1' OR (n.schema_version='provider-source-v1' AND EXISTS (SELECT 1 FROM providers p WHERE p.id=n.provider_id AND p.code='1688_search')))",
         [s[0].collection_task_id, j.org, j.ws],
       );
+      const fieldsOf = (r: RowDataPacket) => {
+        const payload =
+          typeof r.payload_json === "string" ? JSON.parse(r.payload_json) : r.payload_json;
+        return payload.fields ?? payload;
+      };
+      const detailedOffers = new Set(
+        records
+          .filter((r) => fieldsOf(r).record_type === "offer_sku_detail")
+          .map((r) => String(fieldsOf(r).external_id)),
+      );
+      const allMissing = new Set<string>();
       let count = 0;
       for (const r of records) {
         const payload =
             typeof r.payload_json === "string" ? JSON.parse(r.payload_json) : r.payload_json,
           fields = payload.fields ?? payload;
+        if (fields.record_type === "search_offer" && detailedOffers.has(String(fields.external_id)))
+          continue;
+        const detail = fields.record_type === "offer_sku_detail";
+        const specification =
+          detail && typeof fields.specification === "string" && fields.specification.length <= 1000
+            ? fields.specification
+            : null;
+        const location =
+          detail && typeof fields.location === "string" && fields.location.length <= 255
+            ? fields.location
+            : null;
+        const missing = [
+          ...(!specification ? ["specification"] : []),
+          "lead_time_days",
+          ...(!location ? ["location"] : []),
+          "confidence_value",
+          "stability_status",
+          "risk_level",
+        ];
         if (
           !fields.external_id ||
           !fields.title ||
@@ -106,7 +136,11 @@ export class MySqlSourcingProjectionWorker {
         )
           continue;
         await c.query(
-          "INSERT IGNORE INTO sourcing_candidates (id,organization_id,workspace_id,search_id,provider_id,normalized_record_id,raw_evidence_id,external_id,supplier_name,product_title,specification,moq,quoted_price,currency,lead_time_days,location,original_url,observed_at,confidence_value,status,missing_fields_json,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,NULL,?,?,?,NULL,NULL,?,?,NULL,'incomplete',?,?)",
+          "INSERT IGNORE INTO sourcing_candidates (id,organization_id,workspace_id,search_id,provider_id,normalized_record_id,raw_evidence_id,external_id,supplier_name,product_title,specification,moq,quoted_price,currency,lead_time_days,location,original_url,observed_at,confidence_value,status,missing_fields_json,created_at) VALUES (?,?,?,?,?,?,?,?,?,?," +
+            (detail ? "?" : "NULL") +
+            ",?,?,?,NULL," +
+            (detail ? "?" : "NULL") +
+            ",?,?,NULL,'incomplete',?,?)",
           [
             randomUUID(),
             j.org,
@@ -118,35 +152,22 @@ export class MySqlSourcingProjectionWorker {
             fields.external_id,
             fields.supplier_name,
             fields.title,
+            ...(detail ? [specification] : []),
             fields.moq,
             fields.price,
             fields.currency,
+            ...(detail ? [location] : []),
             fields.canonical_url,
             fields.observed_at,
-            JSON.stringify([
-              "specification",
-              "lead_time_days",
-              "location",
-              "confidence_value",
-              "stability_status",
-              "risk_level",
-            ]),
+            JSON.stringify(missing),
             now,
           ],
         );
+        for (const field of missing) allMissing.add(field);
         count++;
       }
       const state = count ? "completed_with_warnings" : "succeeded_empty",
-        missing = count
-          ? [
-              "specification",
-              "lead_time_days",
-              "location",
-              "confidence_value",
-              "stability_status",
-              "risk_level",
-            ]
-          : [];
+        missing = [...allMissing];
       await c.query(
         "UPDATE sourcing_searches SET status=?,candidate_count=?,missing_fields_json=?,updated_at=? WHERE id=?",
         [state, count, JSON.stringify(missing), now, j.search],

@@ -2,6 +2,7 @@
 import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from "vue";
 import { createApiClient } from "../api-client";
 import type { SourcingSearch } from "./sourcing-workspace-types";
+import SupplierSkuFacts from "./SupplierSkuFacts.vue";
 import { formatOpportunityTime } from "./opportunity-workspace-presentation";
 
 const props = defineProps<{
@@ -152,10 +153,15 @@ function is1688(value: string) {
                 ><span>{{ item.product_title }}</span
                 ><small>{{ is1688(item.original_url) ? "1688" : "公开货源" }}</small>
               </th>
-              <td data-label="规格">{{ item.specification || "规格未提供" }}</td>
+              <td data-label="规格">
+                {{ item.specification || "规格未提供" }}
+                <SupplierSkuFacts v-if="item.source_sku" :sku="item.source_sku" />
+              </td>
               <td data-label="报价">
                 <strong>{{ item.currency }} {{ item.quoted_price }}</strong
                 ><small>{{ item.quote ? `已保存报价 v${item.quote.version}` : "采集报价" }}</small
+                ><small v-if="item.source_sku_pending && !item.quote"
+                  >图搜参考价，SKU 尚未绑定</small
                 ><span v-if="item.source_price_description"
                   >原始报价：{{ item.source_price_description }}</span
                 >

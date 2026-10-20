@@ -26,7 +26,12 @@ import {
 } from "./collection-task-worker.js";
 import { EvidencePersistenceError, MySqlEvidencePersistence } from "./evidence-persistence.js";
 import type { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
-import { LAN_1688_PARSER_VERSION, type Lan1688ImageSearch } from "./lan-1688-image-search.js";
+import {
+  LAN_1688_PARSER_VERSION,
+  LAN_1688_DETAIL_VERSION,
+  LAN_1688_IMAGE_DETAIL_CONTEXT_VERSION,
+  type Lan1688ImageSearch,
+} from "./lan-1688-image-search.js";
 import { amazonAsin } from "./competitor-discovery-policy.js";
 import { collectionFailureDiagnostic } from "./collection-failure-diagnostic.js";
 import {
@@ -49,6 +54,11 @@ export function providerEvidenceRecordKey(
   taskId: string,
   target: Record<string, unknown>,
 ) {
+  if (
+    provider.code === "1688_search" &&
+    /^1688-detail:\d{1,40}:(?:\d{1,40}|unselected)$/.test(externalId)
+  )
+    return `${externalId}:task:${taskId}`;
   if (provider.code !== "amazon_product" || !/^[A-Z0-9]{10}$/i.test(externalId)) return externalId;
   const asin = externalId.toUpperCase();
   if (typeof target.page_url === "string" && target.page_url) {
@@ -381,7 +391,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         },
         lanCollection =
           provider.code === "1688_search" && this.lan1688 && query.target.image_url
-            ? await this.lan1688.collect(query.target.image_url, heartbeat, signal)
+            ? await this.lan1688.collectEnriched(query.target.image_url, heartbeat, signal)
             : null,
         browserCollection =
           !lanCollection &&
@@ -445,6 +455,12 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         recordOrdinal += 1;
         const normalized = this.registry.normalize(provider.code, raw, context),
           source = sourceEvidencePayload(raw),
+          recordParserVersion =
+            lanCollection && raw.externalId.startsWith("1688-detail:")
+              ? LAN_1688_DETAIL_VERSION
+              : lanCollection
+                ? LAN_1688_IMAGE_DETAIL_CONTEXT_VERSION
+                : provider.parserVersion,
           recordKey = providerEvidenceRecordKey(
             provider,
             normalized.external_id,
@@ -454,7 +470,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           provenance = Object.entries(source.source_paths).map(([fieldPath, sourcePath]) => ({
             fieldPath,
             sourcePath,
-            transformVersion: provider.parserVersion,
+            transformVersion: recordParserVersion,
             sourceValueHash: sha(source.fields[fieldPath] ?? null),
           }));
         try {
@@ -469,7 +485,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
               sourceUrl: source.canonical_url,
               canonicalUrl: normalized.canonical_url ?? source.canonical_url,
               dedupeKey: providerEvidenceDedupeKey(
-                provider,
+                { ...provider, parserVersion: recordParserVersion },
                 normalized.external_id,
                 task.id,
                 source.raw_content,
@@ -479,9 +495,9 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
               contentType: source.content_type,
               content: Buffer.from(source.raw_content),
               capturedAt: new Date(normalized.observed_at),
-              parserVersion: provider.parserVersion,
+              parserVersion: recordParserVersion,
               adapterVersion: lanCollection
-                ? LAN_1688_PARSER_VERSION
+                ? recordParserVersion
                 : normalized.provenance.adapter_version,
               recordKey,
               recordSchemaVersion: "provider-source-v1",
@@ -500,6 +516,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
             signal,
           );
           available += 1;
+          if (recordOrdinal % 20 === 0) await heartbeat();
           if (persisted.deduplicated) deduplicated += 1;
           else fresh += 1;
         } catch (error) {
