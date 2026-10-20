@@ -11,6 +11,20 @@ import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService } from "@scoutops/authorization";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 import { sessionToken } from "./auth-routes.js";
+import type { Pool } from "mysql2/promise";
+
+export async function browserHandoffRunLive(
+  pool: Pick<Pool, "query">,
+  runId: string,
+  now = new Date(),
+) {
+  // Match the Date parameter serialization used by the lease producer/reaper.
+  const [rows] = await pool.query(
+    "SELECT r.id FROM crawler_browser_runs r JOIN crawler_profile_leases l ON l.run_id=r.id WHERE r.id=? AND r.status='running' AND l.expires_at>? LIMIT 1",
+    [runId, now],
+  );
+  return Array.isArray(rows) && rows.length > 0;
+}
 
 export interface BrowserHandoffRouteOptions {
   auth: LocalAuthService;

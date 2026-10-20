@@ -41,6 +41,7 @@ import { CredentialAssetService } from "./credential-asset-service.js";
 import { MySqlCredentialAssetRepository } from "./mysql-credential-asset-repository.js";
 import { ProviderAdapterRegistry } from "@scoutops/provider-adapters";
 import { CrawlerRuntimeService } from "./crawler-runtime-service.js";
+import { browserHandoffRunLive } from "./browser-handoff-routes.js";
 import { MySqlCrawlerRuntimeRepository } from "./mysql-crawler-runtime-repository.js";
 import { CollectionTaskService } from "./collection-task-service.js";
 import { MySqlCollectionTaskRepository } from "./mysql-collection-task-repository.js";
@@ -400,13 +401,7 @@ const app = buildApp({
   crawlerRuntime: {
     handoff: {
       root: join(config.storage.runtimeTempRoot, "browser-handoffs"),
-      isLive: async (runId) => {
-        const [rows] = await pool.query(
-          "SELECT r.id FROM crawler_browser_runs r JOIN crawler_profile_leases l ON l.run_id=r.id WHERE r.id=? AND r.status='running' AND l.expires_at>UTC_TIMESTAMP(3) LIMIT 1",
-          [runId],
-        );
-        return Array.isArray(rows) && rows.length > 0;
-      },
+      isLive: (runId) => browserHandoffRunLive(pool, runId),
       audit: (event) => new MySqlAuditRepository(pool).append(event),
     },
     service: new CrawlerRuntimeService(

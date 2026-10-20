@@ -12,6 +12,25 @@ import {
 } from "../../packages/playwright-crawler/dist/index.js";
 import { waitForManualCaptcha } from "../../packages/playwright-crawler/dist/manual-handoff.js";
 import { registerBrowserHandoffRoutes } from "../../apps/api/dist/browser-handoff-routes.js";
+import { browserHandoffRunLive } from "../../apps/api/dist/browser-handoff-routes.js";
+
+test("handoff lease checks use the same Date serialization as the lease producer", async () => {
+  const now = new Date("2026-10-20T13:52:00Z"),
+    id = randomUUID();
+  let rows = [{ id }];
+  const pool = {
+    query: async (sql, parameters) => {
+      assert.match(sql, /r\.status='running'/);
+      assert.match(sql, /l\.expires_at>\?/);
+      assert.doesNotMatch(sql, /UTC_TIMESTAMP|NOW\(/);
+      assert.deepEqual(parameters, [id, now]);
+      return [rows];
+    },
+  };
+  assert.equal(await browserHandoffRunLive(pool, id, now), true);
+  rows = [];
+  assert.equal(await browserHandoffRunLive(pool, id, now), false);
+});
 
 test("HTTP 503 guard precedes network failure, while 429 still stops immediately", async () => {
   const engine = new PlaywrightCrawlerEngine({}),
