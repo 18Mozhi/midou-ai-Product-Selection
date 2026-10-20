@@ -118,6 +118,19 @@ for (const sourceState of ["rejected", "unverified", "missing_origin"])
     );
   });
 
+for (const [field, value] of [
+  ["main_asin", "B000000001"],
+  ["intelligence_record_id", "other-news"],
+])
+  test(`completion proof cannot borrow support from another ${field}`, async () => {
+    const f = fixture({ ...proof, [field]: value });
+    assert.equal(
+      await recordSelectionPipelineCompletion(f.connection, scope, "worker", now),
+      false,
+    );
+    assert.equal(f.events.size, 0);
+  });
+
 for (const compatible of [false, true]) {
   test(`completion recorder independently checks legacy automatic P75 evidence, compatible=${compatible}`, async () => {
     const p = {

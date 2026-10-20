@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import mysql, { type Pool, type PoolConnection } from "mysql2/promise";
 import type { RuntimeConfig } from "@scoutops/config";
 export { currentProductVersionJoinSql } from "./current-product-version-sql.js";
+export { selectionCompletionSourceNotRejectedSql } from "./selection-completion-source-policy.js";
 export {
   selectionCandidateSql,
   selectionPrimaryAsinSql,

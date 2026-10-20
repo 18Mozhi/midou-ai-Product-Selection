@@ -28,7 +28,14 @@ export function completedFilterCases() {
           recommendation_status: "not_recommend",
         }),
       })
-        .map(([key, item]) => literal(item) + " " + key)
+        .map(
+          ([key, item]) =>
+            (key === "id" || key.endsWith("_id")
+              ? "CONVERT(" + literal(item) + " USING ascii)"
+              : literal(item)) +
+            " " +
+            key,
+        )
         .join(",")
     );
   };
@@ -111,12 +118,16 @@ export function completedFilterCases() {
     name,
     expected,
     sql:
-      "SELECT COUNT(*) actual FROM (SELECT 'org' organization_id,'ws' workspace_id," +
+      "SELECT COUNT(*) actual FROM (SELECT CONVERT('org' USING ascii) organization_id,CONVERT('ws' USING ascii) workspace_id," +
+      "CONVERT(" +
       literal(opportunity) +
+      " USING ascii)" +
       " id) o WHERE " +
-      opportunityCompletedFilterSql.replaceAll(
-        "FROM opportunity_events ",
-        "FROM (" + events.map(row).join(" UNION ALL ") + ") ",
-      ),
+      opportunityCompletedFilterSql
+        .replaceAll(
+          "FROM opportunity_events ",
+          "FROM (" + events.map(row).join(" UNION ALL ") + ") ",
+        )
+        .replaceAll("FROM trend_events ", "FROM (" + events.map(row).join(" UNION ALL ") + ") "),
   }));
 }

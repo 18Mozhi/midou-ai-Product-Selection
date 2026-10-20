@@ -1,11 +1,12 @@
 import { randomUUID } from "node:crypto";
-import { primarySourceSupportStatus } from "./primary-source-support.js";
+import { readPrimarySourceContext, readPrimarySourceVerdict } from "./primary-source-support.js";
 import type { PoolConnection, RowDataPacket, ResultSetHeader } from "mysql2/promise";
 import { MINIMUM_SELECTION_COMPETITORS } from "@scoutops/contracts";
 import { automaticSupplyCompletionQuoteValid } from "./automatic-supply-completion-guard.js";
 import {
   selectionPipelineCompletionProofSql,
   selectionCompletedCompetitorsSql,
+  selectionCompletionSourceNotRejectedSql,
 } from "@scoutops/database";
 
 export const PIPELINE_COMPLETION_EVENT = "opportunity.selection_pipeline_completed";
@@ -33,13 +34,21 @@ export async function recordSelectionPipelineCompletion(
   );
   const proof = proofs[0];
   if (!proof || !/^[A-Z0-9]{10}$/.test(String(proof.main_asin ?? ""))) return false;
-  const sourceSupport = await primarySourceSupportStatus(connection, scope);
-  if (!sourceSupport.applicable || !sourceSupport.supported) return false;
+  const sourceContext = await readPrimarySourceContext(connection, scope);
+  if (
+    !sourceContext ||
+    sourceContext.primary_asin !== proof.main_asin ||
+    sourceContext.intelligence_record_id !== proof.intelligence_record_id ||
+    !(await readPrimarySourceVerdict(connection, scope, sourceContext))?.supported
+  )
+    return false;
   if (!(await automaticSupplyCompletionQuoteValid(connection, parameters, proof))) return false;
   const [prior] = await connection.query<RowDataPacket[]>(
-    "SELECT id FROM opportunity_events WHERE organization_id=? AND workspace_id=? " +
+    "SELECT id FROM opportunity_events completion_prior WHERE organization_id=? AND workspace_id=? " +
       "AND resource_type=? AND resource_id=? AND event_type=? " +
-      "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.main_asin'))=BINARY ? LIMIT 1 FOR UPDATE",
+      "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.main_asin'))=BINARY ? AND " +
+      selectionCompletionSourceNotRejectedSql("completion_prior") +
+      " LIMIT 1 FOR UPDATE",
     [
       scope.organizationId,
       scope.workspaceId,

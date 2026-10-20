@@ -28,7 +28,14 @@ export function completionReceiptCases() {
           recommendation_status: "not_recommend",
         }),
       })
-        .map(([key, item]) => literal(item) + " " + key)
+        .map(
+          ([key, item]) =>
+            (key === "id" || key.endsWith("_id")
+              ? "CONVERT(" + literal(item) + " USING ascii)"
+              : literal(item)) +
+            " " +
+            key,
+        )
         .join(",")
     );
   };
@@ -79,10 +86,9 @@ export function completionReceiptCases() {
   return cases.map(([name, events, asin, expected]) => ({
     name,
     expected,
-    sql: opportunityAnalysisCompletedAtSql.replace(
-      "FROM opportunity_events receipt",
-      "FROM (" + events.map(row).join(" UNION ALL ") + ") receipt",
-    ),
+    sql: opportunityAnalysisCompletedAtSql
+      .replaceAll("FROM opportunity_events ", "FROM (" + events.map(row).join(" UNION ALL ") + ") ")
+      .replaceAll("FROM trend_events ", "FROM (" + events.map(row).join(" UNION ALL ") + ") "),
     params: ["org", "ws", "original", asin],
   }));
 }

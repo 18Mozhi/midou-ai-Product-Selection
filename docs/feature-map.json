@@ -1,4 +1,22 @@
 {
+  "selectionCompletionSourceRevocation20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-completion-source-revocation.md",
+    "sourceFiles": [
+      "packages/database/src/selection-completion-source-policy.ts",
+      "packages/database/src/selection-completion-policy.ts",
+      "packages/database/src/index.ts",
+      "apps/api/src/home-daily-selection.ts",
+      "apps/api/src/opportunity-completed-filter.ts",
+      "apps/worker/src/selection-pipeline-completion.ts"
+    ],
+    "testFiles": [
+      "tests/unit/selection-completion-source-policy.test.mjs",
+      "tests/fixtures/selection-completion-source-sql.mjs",
+      "tests/fixtures/opportunity-completion-receipt-sql.mjs"
+    ],
+    "contract": "Exclude historical completion only after a definite later worker source rejection for the same scope, opportunity, ASIN and original news. Missing, incomplete, earlier and unrelated checks cannot revoke. Daily, catalogue, detail and writer deduplication share the guard; corrected genuinely new completion can establish the first valid receipt. Keep original events, prices, scores, decisions, unknown-profit and quality rules. No API field/env/schema/dependency/frontend/Python change; BaoTa Node restart required."
+  },
   "selectionPersistedPrimarySourceSupport20261020": {
     "status": "implemented",
     "requirements": "docs/selection-persisted-primary-source-support.md",

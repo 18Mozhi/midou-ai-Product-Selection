@@ -8158,7 +8158,7 @@ components:
                   type: integer
                   minimum: 0
                   nullable: true
-                  description: First verified analyzed-product workspace ASIN completions on this Beijing date, including low scores, non-recommendations and explicitly unknown profit. Intelligence, primary, 5-10 detailed competitors, all non-profit scoring and a verified 1688 purchase quote remain required. Unknown profit retains reasons and is never replaced with zero or treated as a recommendation. Historical v1 and current v2 completion facts share first-ASIN deduplication. Repeated refreshes and duplicate opportunities do not count again. Absent or null is unmeasured, never inferred from other counts.
+                  description: First verified analyzed-product workspace ASIN completions on this Beijing date, including low scores, non-recommendations and explicitly unknown profit. Intelligence, primary, 5-10 detailed competitors, all non-profit scoring and a verified 1688 purchase quote remain required. Unknown profit retains reasons and is never replaced with zero or treated as a recommendation. Historical v1 and current v2 completion facts share first-valid-ASIN deduplication; a definite later scoped worker source rejection for the same original news invalidates the prior receipt without deleting it. Missing or unverified source checks cannot revoke history. Repeated refreshes and duplicate opportunities do not count again. Absent or null is unmeasured, never inferred from other counts.
                 discovered_count: { type: integer, minimum: 0 }
                 qualified_count: { type: integer, minimum: 0 }
                 target_minimum: { type: integer, enum: [100] }
@@ -11517,7 +11517,7 @@ components:
                   type: string
                   format: date-time
                   nullable: true
-                  description: First verified worker pipeline completion for this scoped opportunity and its current main ASIN; new completion writes independently require a current original-source support proof. Historical completion does not change current recommendation gates.
+                  description: First verified worker pipeline completion for this scoped opportunity and its current main ASIN; new completion writes independently require a current original-source support proof. A definite later same-source rejection removes the invalid historical receipt from this read. Historical completion does not change current recommendation gates.
                 lineage:
                   type: object
                   required: [freshness, failure_impact, request_ids, trace_ids, nodes]

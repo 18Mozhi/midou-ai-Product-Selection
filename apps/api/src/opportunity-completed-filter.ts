@@ -1,9 +1,12 @@
+import { selectionCompletionSourceNotRejectedSql } from "@scoutops/database";
+
 /** Code-owned aliases only. Completion is historical proof, independent of recommendation gates. */
 const validCompletion = (alias: string) =>
   `${alias}.resource_type='selection_pipeline' AND ` +
   `${alias}.event_type='opportunity.selection_pipeline_completed' AND ${alias}.actor_type='worker' AND ` +
   `JSON_UNQUOTE(JSON_EXTRACT(${alias}.payload_json,'$.contract')) IN ('selection-pipeline-v1','selection-pipeline-v2') AND ` +
-  `JSON_UNQUOTE(JSON_EXTRACT(${alias}.payload_json,'$.main_asin')) REGEXP '^[A-Za-z0-9]{10}$'`;
+  `JSON_UNQUOTE(JSON_EXTRACT(${alias}.payload_json,'$.main_asin')) REGEXP '^[A-Za-z0-9]{10}$' AND ` +
+  selectionCompletionSourceNotRejectedSql(alias);
 
 /** Historical completion belongs to this scoped opportunity and its current primary ASIN. */
 export const opportunityAnalysisCompletedAtSql =

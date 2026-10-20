@@ -167,7 +167,13 @@ export const selectionPipelineCompletionProofSql =
   "AND ss.workspace_id=o.workspace_id AND ss.input_type='opportunity' AND ss.input_ref=o.id AND ss.deleted_at IS NULL " +
   "JOIN trend_events ie ON ie.organization_id=o.organization_id AND ie.workspace_id=o.workspace_id " +
   "AND ie.event_type='trend.intelligence.primary_selected' " +
+  "AND ie.resource_type='trend_topic' AND ie.resource_id=o.source_ref_id " +
   "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(ie.payload_json,'$.opportunity_id'))=BINARY o.id " +
+  "AND NOT EXISTS (SELECT 1 FROM trend_events newer_primary WHERE newer_primary.organization_id=ie.organization_id " +
+  "AND newer_primary.workspace_id=ie.workspace_id AND newer_primary.resource_type=ie.resource_type " +
+  "AND newer_primary.resource_id=ie.resource_id AND newer_primary.event_type=ie.event_type " +
+  "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(newer_primary.payload_json,'$.opportunity_id'))=BINARY o.id " +
+  "AND (newer_primary.occurred_at>ie.occurred_at OR (newer_primary.occurred_at=ie.occurred_at AND newer_primary.id>ie.id))) " +
   "JOIN normalized_records news ON news.id=CONVERT(JSON_UNQUOTE(JSON_EXTRACT(ie.payload_json,'$.intelligence_source_record_id')) USING ascii) " +
   "AND news.organization_id=o.organization_id AND news.workspace_id=o.workspace_id AND news.status='active' " +
   "JOIN opportunity_evidence_links nl ON nl.opportunity_id=o.id AND nl.organization_id=o.organization_id " +
