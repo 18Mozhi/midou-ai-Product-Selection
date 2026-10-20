@@ -7732,6 +7732,6 @@
       "tests/unit/amazon-browser-contract.test.mjs",
       "tests/fixtures/cached-validation-result-cases.mjs"
     ],
-    "contract": "Keep original pending cached-result preference; include only ordinary queued/retry_scheduled validation_failed subqueries with a successful nonnull browser result in exact task/subquery/org/workspace/provider scope. Ordering only after priority, scope and stages; FIFO bytes and source/lease/retry/quality protections unchanged. No API/config/schema/dependency/Python change; release/natural/day100 pending."
+    "contract": "Keep original pending cached-result preference; include only ordinary queued/retry_scheduled validation_failed subqueries with a successful nonnull browser result in exact task/subquery/org/workspace/provider scope. Ordering only after priority, scope and stages; FIFO bytes and source/lease/retry/quality protections unchanged. No API/config/schema/dependency/Python change; deployed predicate verified, natural/day100 pending."
   }
 }

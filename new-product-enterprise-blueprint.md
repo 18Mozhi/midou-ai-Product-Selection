@@ -1,6 +1,6 @@
 > 2026-10-20：详情通过真实完成事件展示analysis_completed_at，已完成分析的状态和当前采纳条件前置，利润未知继续保留；未完成不因列表来源URL或评分误标完成。完成列表的非推荐商品入口为查看分析，见 docs/selection-analysis-completion-ui.md。
 
-> 2026-10-20：同范围成功浏览器结果在普通validation_failed重试中保留原结果处理排序偏好，原优先级/公平/阶段/FIFO/来源和校验保护不变；不复活死信或重放采集，见 docs/selection-cached-validation-result.md。尚未发布，日百品未验收。
+> 2026-10-20：同范围成功浏览器结果在普通validation_failed重试中保留原结果处理排序偏好，原优先级/公平/阶段/FIFO/来源和校验保护不变；不复活死信或重放采集，见 docs/selection-cached-validation-result.md。已正式发布并验证原任务偏好0到1，自然分类和日百品未验收。
 
 > 2026-10-20：竞品标题分类仅在模型传输层使用真实服务已验证的严格JSON Schema，防止rationable等拼错字段使整批失败；原相关性、引用、租约及全部校验保留，其他模型请求不变。见 docs/selection-competitor-structured-output.md，已正式发布，原失败任务自然重试与日百品未验收。
 
