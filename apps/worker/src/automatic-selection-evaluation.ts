@@ -2,6 +2,7 @@ import {
   validateSupplyTitleClassifications,
   type SupplyTitleContext,
 } from "./supply-title-classification.js";
+import { iphoneCaseDeviceFit } from "./phone-case-device-fit.js";
 export const AUTOMATIC_SELECTION_FORMULA_VERSION = "crawler-evidence-v1";
 
 export interface ProductFacts {
@@ -181,6 +182,7 @@ export function productIdentityConfidence(productTitle: string, supplyTitle: str
   if (phoneCase) {
     if (!isPhoneCase(productTitle) || !isPhoneCase(supplyTitle)) return 0;
     if (!productFamily || productFamily !== supplyFamily || !sharedModels.length) return 0;
+    if (productFamily === "iphone" && !iphoneCaseDeviceFit(productTitle, supplyTitle)) return 0;
     if (
       productVariants.size > 0 &&
       supplyVariants.size > 0 &&

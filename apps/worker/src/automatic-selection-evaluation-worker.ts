@@ -1,5 +1,10 @@
 import { enqueueMissingSelectionEvaluations } from "./automatic-selection-evaluation-admission.js";
 import { recoverSkippedSelectionEvaluations } from "./automatic-selection-skipped-recovery.js";
+import {
+  recoverDeviceFitEvaluations,
+  SUPPLY_DEVICE_FIT_REVISION,
+} from "./automatic-selection-device-fit-recovery.js";
+import { retireUnmatchedAutomaticSupplyQuotes } from "./automatic-supply-quote-retirement.js";
 import { recordSelectionPipelineCompletion } from "./selection-pipeline-completion.js";
 import {
   recoverSupplyClassifierEvaluations,
@@ -175,6 +180,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     if (this.supplyClassifier) await recoverSupplyClassifierEvaluations(this.pool, now);
     await enqueueMissingSelectionEvaluations(this.pool, now);
     await recoverSkippedSelectionEvaluations(this.pool, now);
+    await recoverDeviceFitEvaluations(this.pool, now);
   }
 
   private async claim(): Promise<EvaluationJob | null> {
@@ -575,6 +581,24 @@ export class MySqlAutomaticSelectionEvaluationWorker {
             classification,
           );
 
+      if (!supplyMatch && isPhoneCase(amazonTitle)) {
+        const retired = await retireUnmatchedAutomaticSupplyQuotes(connection, job);
+        if (retired.length)
+          await this.event(
+            connection,
+            job,
+            "opportunity.automatic_supply_quote_retired",
+            {
+              revision: SUPPLY_DEVICE_FIT_REVISION,
+              reason: "high_confidence_1688_match_missing",
+              retired_inputs: retired,
+              primary_evidence_id: String(amazon.raw_evidence_id),
+            },
+            requestId,
+            traceId,
+            now,
+          );
+      }
       // Product prices are source facts; category-specific fees only gate profit calculation.
       const saleChanged = await this.upsertCostInput(connection, {
           job,
@@ -1067,6 +1091,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       evidenceFingerprint,
       JSON.stringify({
         ...result,
+        supply_device_fit_revision: SUPPLY_DEVICE_FIT_REVISION,
         ...(this.supplyClassifier
           ? { supply_title_classifier_revision: SUPPLY_TITLE_CLASSIFIER_REVISION }
           : {}),

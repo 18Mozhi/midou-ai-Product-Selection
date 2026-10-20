@@ -149,6 +149,7 @@ export const selectionPipelineCompletionProofSql =
   "cost_score.missing_fields_json profit_missing_fields_json," +
   "news.id intelligence_record_id,news.raw_evidence_id intelligence_evidence_id," +
   "ci.id purchase_input_id,ci.amount_value purchase_price,ci.currency purchase_currency," +
+  "ci.source_type purchase_source_type,ci.source_ref_id purchase_source_ref_id,ci.confirmation_mode purchase_confirmation_mode," +
   "supply.id supply_record_id,supply.raw_evidence_id supply_evidence_id," +
   "JSON_UNQUOTE(JSON_EXTRACT(supply.payload_json,'$.external_id')) supply_offer_id " +
   "FROM opportunities o JOIN opportunity_score_runs sr ON sr.opportunity_id=o.id " +

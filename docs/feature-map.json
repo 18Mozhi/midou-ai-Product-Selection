@@ -7687,5 +7687,25 @@
       "tests/unit/automatic-sourcing-recovery.test.mjs"
     ],
     "contract": "Preserve existing20-claim historical-repair turn across empty/capacity idle polls; only committed repair progress clears debt. No-work retains due turn while fresh claims continue; exceptions retain existing next-fresh-turn behavior. Internal downstream helper returns committed-work boolean, cursor-only/no-source/no-capacity false. No change to admission thresholds, source protection, scope, task payload, quality, API/config/schema/dependencies. 107 related tests; real natural admission and daily100 pending."
+  },
+  "selectionPhoneCaseDeviceFit20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-phone-case-device-fit.md",
+    "sourceFiles": [
+      "apps/worker/src/phone-case-device-fit.ts",
+      "apps/worker/src/automatic-selection-evaluation.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/worker/src/automatic-selection-device-fit-recovery.ts",
+      "apps/worker/src/automatic-supply-quote-retirement.ts",
+      "apps/worker/src/automatic-supply-completion-guard.ts",
+      "apps/worker/src/selection-pipeline-completion.ts",
+      "packages/database/src/selection-completion-policy.ts"
+    ],
+    "testFiles": [
+      "tests/unit/phone-case-device-fit.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/unit/selection-pipeline-completion.test.mjs"
+    ],
+    "contract": "Bind iPhone generation to suffix and require identical explicit compatibility sets before original min80/min3/P75. Scoped automatic P75 retirement preserves history and human/classified prices; revision-bound pending unleased recovery and completion-time actual-primary quote recheck. No schema/API/config/dependency/Python change; daily100 unverified."
   }
 }

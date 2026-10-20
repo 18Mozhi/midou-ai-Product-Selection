@@ -1,4 +1,6 @@
 > 2026-10-20：详情通过真实完成事件展示analysis_completed_at，已完成分析的状态和当前采纳条件前置，利润未知继续保留；未完成不因列表来源URL或评分误标完成。完成列表的非推荐商品入口为查看分析，见 docs/selection-analysis-completion-ui.md。
+
+> 2026-10-20：手机壳自动进价绑定代数及后缀，拒绝混用不同设备SKU；同范围旧自动P75输入一次修订复核，完成前重验实际主品及报价。保留原3样本/80分/P75、人工价及历史事件，见 docs/selection-phone-case-device-fit.md；尚未发布，日百品未验收。
 > 2026-10-20：情报关联不得虚构需求前提；主品筛选同时读取同范围原情报复核旧查询，模型用候选短编号、后端严格映射真实ID。缺原文或无相关性走原无匹配流程，历史不删除不重放，见 docs/selection-intelligence-source-support.md。
 > 2026-10-20：Python内部成功空领取改用独立CRAWLER_IDLE_POLL_SECONDS（默认2秒、1–60），不再复用30秒租约心跳；API错误保持原退避，单并发、来源限流、租约和执行规则不变。需宝塔重启Python，见 docs/selection-crawler-idle-polling.md。
 > 2026-10-20：主品标题相关性必须覆盖查询要求的实物类型；不因学车者等共同人群词把磁贴当车罩，普通通用品不必重复人群词。保留原模型输出、无匹配消费者和历史数据，见 docs/selection-primary-product-type.md。

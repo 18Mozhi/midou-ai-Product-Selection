@@ -7,6 +7,11 @@ import {
 } from "../../packages/database/dist/index.js";
 import { dailySelectionCompletedSql } from "../../apps/api/dist/home-daily-selection.js";
 import { MySqlOpportunityScoringWorker } from "../../apps/worker/dist/opportunity-scoring-worker.js";
+import {
+  automaticPrimaryEvidenceSql,
+  automaticPrimaryDetailEvidenceSql,
+  automaticSupplyEvidenceSql,
+} from "../../apps/worker/dist/automatic-selection-evidence.js";
 const scope = {
   opportunityId: "op",
   organizationId: "org",
@@ -81,6 +86,58 @@ function fixture(p = proof, rows = competitors.slice(0, 5)) {
       },
     },
   };
+}
+
+for (const compatible of [false, true]) {
+  test(`completion recorder independently checks legacy automatic P75 evidence, compatible=${compatible}`, async () => {
+    const p = {
+      ...proof,
+      purchase_source_type: "automatic_crawler_evidence",
+      purchase_confirmation_mode: "automatic_evidence",
+      purchase_source_ref_id: "1688:123456789:p75:3",
+    };
+    const f = fixture(p),
+      originalQuery = f.connection.query;
+    f.connection.query = async (sql, values) => {
+      if (
+        [
+          automaticPrimaryEvidenceSql,
+          automaticPrimaryDetailEvidenceSql,
+          automaticSupplyEvidenceSql,
+        ].includes(sql)
+      ) {
+        assert.deepEqual(values, ["op", "org", "ws"]);
+        if (sql === automaticPrimaryEvidenceSql)
+          return [
+            [
+              {
+                payload_json: { title: "iPhone 17 Pro Max Case", price: 30, currency: "USD" },
+                observed_at: now,
+              },
+            ],
+          ];
+        if (sql === automaticPrimaryDetailEvidenceSql) return [[]];
+        return [
+          [1, 2, 3].map((id) => ({
+            raw_evidence_id: id === 3 ? "supply-raw" : `raw-${id}`,
+            created_at: now,
+            payload_json: {
+              external_id: id === 3 ? "123456789" : String(id),
+              price: id === 3 ? 9.5 : id,
+              currency: "CNY",
+              title: compatible ? "苹果17ProMax手机壳" : "苹果18ProMax苹果17Pro手机壳",
+            },
+          })),
+        ];
+      }
+      return originalQuery(sql, values);
+    };
+    assert.equal(
+      await recordSelectionPipelineCompletion(f.connection, scope, "worker", now),
+      compatible,
+    );
+    assert.equal(f.events.size, compatible ? 1 : 0);
+  });
 }
 
 test("low score and reject outcome still record a fully evidenced pipeline", async () => {

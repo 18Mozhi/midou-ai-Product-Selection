@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { PoolConnection, RowDataPacket, ResultSetHeader } from "mysql2/promise";
 import { MINIMUM_SELECTION_COMPETITORS } from "@scoutops/contracts";
+import { automaticSupplyCompletionQuoteValid } from "./automatic-supply-completion-guard.js";
 import {
   selectionPipelineCompletionProofSql,
   selectionCompletedCompetitorsSql,
@@ -31,6 +32,7 @@ export async function recordSelectionPipelineCompletion(
   );
   const proof = proofs[0];
   if (!proof || !/^[A-Z0-9]{10}$/.test(String(proof.main_asin ?? ""))) return false;
+  if (!(await automaticSupplyCompletionQuoteValid(connection, parameters, proof))) return false;
   const [prior] = await connection.query<RowDataPacket[]>(
     "SELECT id FROM opportunity_events WHERE organization_id=? AND workspace_id=? " +
       "AND resource_type=? AND resource_id=? AND event_type=? " +
