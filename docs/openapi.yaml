@@ -1,5 +1,6 @@
 openapi: 3.0.3
 # Postal dialog arrival reuses the existing navigation budget; safe internal diagnostics only, no HTTP contract change.
+# A postal fill timeout can reopen once only after an observed main-frame reload and repeated guards; external APIs unchanged.
 # Internal AI primary input now binds original intelligence title/summary with strict candidate aliases; external API and durable output fields unchanged.
 # Python successful-empty job polling uses CRAWLER_IDLE_POLL_SECONDS; existing internal acquire/heartbeat/complete payloads and leases unchanged.
 # Primary title-relevance prompt clarification preserves internal source_ref/rationale and nullable no-match handling; no API field change.

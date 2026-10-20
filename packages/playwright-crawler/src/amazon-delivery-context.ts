@@ -1,4 +1,4 @@
-import { errors, type Page } from "playwright";
+import { errors, type Page, type Frame } from "playwright";
 
 /** Public observation context only. Never operates a signed-in address book. */
 export async function prepareAmazonDeliveryContext(
@@ -47,18 +47,43 @@ export async function prepareAmazonDeliveryContext(
   reportStep("loaded_header");
   if (postal.test((await header.textContent()) ?? "")) return false;
   reportStep("open_location");
-  await page.locator("#nav-global-location-popover-link").click();
-  await assertSafe();
-  reportStep("fill_postal");
-  // Opening the asynchronously loaded location dialog can outlive an ordinary
-  // element action. Reuse the existing navigation budget for this one arrival,
-  // without retrying the link or accepting an unconfirmed postal header.
-  await page
-    .locator("#GLUXZipUpdateInput")
-    .fill(
-      postalCode,
-      navigationTimeoutMs === undefined ? undefined : { timeout: navigationTimeoutMs },
-    );
+  let locationReloaded = false;
+  const observeReload = (frame: Frame) => {
+    if (frame === page.mainFrame()) locationReloaded = true;
+  };
+  page.on?.("framenavigated", observeReload);
+  const fillPostal = () =>
+    page
+      .locator("#GLUXZipUpdateInput")
+      .fill(
+        postalCode,
+        navigationTimeoutMs === undefined ? undefined : { timeout: navigationTimeoutMs },
+      );
+  try {
+    await page.locator("#nav-global-location-popover-link").click();
+    await assertSafe();
+    reportStep("fill_postal");
+    try {
+      await fillPostal();
+    } catch (error) {
+      // An actual main-frame reload, not the absence of an input or a timeout
+      // alone, permits one guarded reopening of the asynchronous empty-href link.
+      if (!(error instanceof errors.TimeoutError) || !locationReloaded) throw error;
+      reportStep("location_reload_guard");
+      await page.waitForLoadState("load");
+      await assertAnonymous();
+      if (postal.test((await header.textContent()) ?? "")) return false;
+      if (!(await page.locator("#GLUXZipUpdateInput").isVisible())) {
+        reportStep("location_reload_reopen");
+        await page.locator("#nav-global-location-popover-link").click();
+        await assertSafe();
+      }
+      reportStep("fill_postal_retry");
+      await fillPostal();
+    }
+  } finally {
+    page.off?.("framenavigated", observeReload);
+  }
   reportStep("apply_postal");
   await page.locator("#GLUXZipUpdate input").click();
   reportStep("confirm_postal");

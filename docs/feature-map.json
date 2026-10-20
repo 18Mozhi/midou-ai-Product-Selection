@@ -4,14 +4,16 @@
     "requirements": "docs/amazon-us-observation-context.md",
     "sourceFiles": [
       "packages/playwright-crawler/src/amazon-delivery-context.ts",
-      "packages/playwright-crawler/src/index.ts"
+      "packages/playwright-crawler/src/index.ts",
+      "apps/web/src/components/CrawlerCaptchaHandoff.vue"
     ],
     "testFiles": [
       "tests/unit/amazon-delivery-context.test.mjs",
       "tests/integration/amazon-delivery-readiness.test.mjs",
-      "tests/integration/amazon-closed-postal-form.test.mjs"
+      "tests/integration/amazon-closed-postal-form.test.mjs",
+      "tests/integration/amazon-location-reload.test.mjs"
     ],
-    "contract": "Observed production fill_postal timeout reuses the existing caller navigation budget only for arrival/fill of the anonymous postal dialog. Preserve no retries, login/CAPTCHA/origin guards, actual Apply confirmation, reread and final postal header. Fixed boolean/enum failure diagnostics only; no raw content or credentials. No API/schema/dependency/new config/Python/frontend change. BaoTa Node and Python restart required; real source recovery and 100/day remain unaccepted."
+    "contract": "Postal arrival reuses the existing navigation budget. Only an observed main-frame location-link reload plus input TimeoutError permits at most one guarded reopen; no navigation evidence means no retry. Login, CAPTCHA, origin, Apply confirmation, reread and final postal header remain strict. Fixed safe diagnostics only. Handoff UI clears recovered transient read errors. No API/schema/dependency/new config/Python contract change; Node and Python BaoTa restart and frontend refresh required. Source and 100/day remain unaccepted."
   },
   "selectionBrowserManualHandoff20261020": {
     "status": "implemented",

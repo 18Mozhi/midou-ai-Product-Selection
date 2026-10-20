@@ -670,6 +670,11 @@ export class PlaywrightCrawlerEngine {
       void context?.close().catch(() => {});
     };
     let stage = "browser_launch";
+    const resourceFailures: Record<string, unknown>[] = [];
+    const recordResourceFailure = (failure: Record<string, unknown>) => {
+      if (resourceFailures.length === 10) resourceFailures.shift();
+      resourceFailures.push(failure);
+    };
     let artifacts: BrowserEvidenceArtifact[] = [];
     let searchSnapshot: BrowserSearchSnapshot | undefined;
     const offerDetails: BrowserOfferDetailSnapshot[] = [];
@@ -693,6 +698,22 @@ export class PlaywrightCrawlerEngine {
       context.setDefaultNavigationTimeout(this.limits.navigationTimeoutMs);
       context.on("response", (response) => {
         if (response.status() === 429) rateLimited = true;
+        if (plan.amazon_delivery && response.status() >= 400)
+          recordResourceFailure({
+            stage,
+            resource_type: response.request().resourceType(),
+            http_status: response.status(),
+          });
+      });
+      context.on("requestfailed", (request) => {
+        if (!plan.amazon_delivery) return;
+        const code = /net::(ERR_[A-Z0-9_]+)/.exec(request.failure()?.errorText ?? "")?.[1];
+        if (code && code !== "ERR_ABORTED")
+          recordResourceFailure({
+            stage,
+            resource_type: request.resourceType(),
+            network_code: code,
+          });
       });
       const page = context.pages()[0] ?? (await context.newPage());
       stage = "initial_navigation";
@@ -868,7 +889,10 @@ export class PlaywrightCrawlerEngine {
         networkCode =
           error instanceof Error ? /net::(ERR_[A-Z0-9_]+)/.exec(error.message)?.[1] : undefined;
       let deliveryState: Record<string, unknown> | null = null;
-      if (plan.amazon_delivery && stage === "amazon_delivery.fill_postal") {
+      if (
+        plan.amazon_delivery &&
+        ["amazon_delivery.fill_postal", "amazon_delivery.fill_postal_retry"].includes(stage)
+      ) {
         const current = context?.pages()[0];
         if (current && current.url().startsWith("https://www.amazon.com/")) {
           deliveryState = await current
@@ -900,6 +924,7 @@ export class PlaywrightCrawlerEngine {
               : {}),
             ...(networkCode ? { network_code: networkCode } : {}),
             ...(deliveryState ? { delivery_state: deliveryState } : {}),
+            ...(resourceFailures.length ? { resource_failures: resourceFailures } : {}),
           }),
         );
       return {

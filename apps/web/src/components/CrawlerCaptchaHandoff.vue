@@ -29,6 +29,7 @@ async function refresh() {
     const r = await request<{ items: Handoff[] }>(base);
     if (!active) return;
     items.value = r.data.items;
+    if (notice.value === "暂时无法读取验证码会话，请刷新页面重试。") notice.value = "";
     if (selected.value && !items.value.some((x) => x.id === selected.value?.id)) {
       selected.value = null;
       answer.value = "";
