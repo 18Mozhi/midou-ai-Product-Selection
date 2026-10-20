@@ -116,6 +116,8 @@ function repositoryFixture({
   error = "timeout",
   checked = now,
   state = "open",
+  providerCode = "google_trends_rss",
+  accessMode = "public_rss",
 } = {}) {
   const writes = [],
     reads = [];
@@ -145,6 +147,8 @@ function repositoryFixture({
               terms_version: "reviewed",
               terms_permanent: permanent,
               terms_expires_at: expires,
+              code: providerCode,
+              access_mode: accessMode,
             },
           ],
         ];
@@ -214,4 +218,57 @@ test("automatic recovery retains existing operation and platform audit writes", 
     f.writes.filter((call) => call.sql.startsWith("INSERT INTO platform_audit_events")).length,
     1,
   );
+});
+
+test("CAPTCHA recovery remains atomic and exclusive to the opted-in public Amazon path", async () => {
+  for (const error of ["captcha", "blocked_captcha"]) {
+    const good = repositoryFixture({
+      error,
+      providerCode: "amazon_product",
+      accessMode: "public_page",
+    });
+    assert.equal(
+      (
+        await good.repository.recoverProvider({
+          ...recoveryInput,
+          automaticRecovery: { ...recoveryInput.automaticRecovery, captchaHandoff: true },
+        })
+      ).recovered,
+      true,
+    );
+  }
+  for (const [change, enabled] of [
+    [{ error: "captcha", providerCode: "amazon_product", accessMode: "public_page" }, false],
+    [{ error: "captcha" }, true],
+    [
+      { error: "captcha", providerCode: "amazon_product", accessMode: "authenticated_browser" },
+      true,
+    ],
+    [
+      { error: "permission_denied", providerCode: "amazon_product", accessMode: "public_page" },
+      true,
+    ],
+    [
+      {
+        error: "captcha",
+        providerCode: "amazon_product",
+        accessMode: "public_page",
+        checked: openedAt,
+      },
+      true,
+    ],
+  ]) {
+    const f = repositoryFixture(change);
+    await assert.rejects(
+      f.repository.recoverProvider({
+        ...recoveryInput,
+        automaticRecovery: {
+          ...recoveryInput.automaticRecovery,
+          ...(enabled ? { captchaHandoff: true } : {}),
+        },
+      }),
+    );
+    assert.equal(f.writes.length, 0);
+    assert.deepEqual(f.state(), { committed: false, rolledBack: true });
+  }
 });

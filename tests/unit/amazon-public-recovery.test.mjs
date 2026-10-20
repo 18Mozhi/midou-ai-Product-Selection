@@ -4,6 +4,7 @@ import Fastify from "fastify";
 import { PublicRssRecovery } from "../../apps/api/dist/public-rss-recovery.js";
 import {
   amazonPublicRecoveryTarget,
+  amazonPublicHandoffRecoveryTarget,
   amazonPublicRecoveryCandidatesSql,
   resolveAmazonPublicRecoveryScope,
 } from "../../apps/api/dist/amazon-public-recovery.js";
@@ -17,6 +18,7 @@ const now = new Date("2026-10-18T07:00:00Z"),
 function fixture(
   status = "ready",
   rows = [{ id: "provider", version: 19, opened_at: opened, collection_task_id: task }],
+  target = amazonPublicRecoveryTarget,
 ) {
   const calls = [];
   const worker = new PublicRssRecovery(
@@ -42,7 +44,7 @@ function fixture(
     () => now,
     undefined,
     undefined,
-    amazonPublicRecoveryTarget,
+    target,
   );
   return { worker, calls };
 }
@@ -152,6 +154,16 @@ test("HTTP health input cannot inject the internal task or override authenticate
 test("Amazon recovery defaults are server-only and invalid timing fails closed", () => {
   const c = loadRuntimeConfig({ NODE_ENV: "test" }, "api");
   assert.equal(c.providerAdapters.amazonPublicRecoveryEnabled, true);
+  assert.equal(c.providerAdapters.amazonHandoffRecoveryEnabled, false);
+  assert.equal(
+    loadRuntimeConfig({ AMAZON_PUBLIC_HANDOFF_RECOVERY_ENABLED: "true" }, "api").providerAdapters
+      .amazonHandoffRecoveryEnabled,
+    true,
+  );
+  assert.throws(
+    () => loadRuntimeConfig({ AMAZON_PUBLIC_HANDOFF_RECOVERY_ENABLED: "yes" }, "api"),
+    /AMAZON_PUBLIC_HANDOFF_RECOVERY_ENABLED/,
+  );
   assert.equal(c.providerAdapters.amazonPublicRecoveryPollMs, 60000);
   assert.equal(c.providerAdapters.amazonPublicRecoveryCooldownMs, 300000);
   assert.equal(
@@ -163,6 +175,43 @@ test("Amazon recovery defaults are server-only and invalid timing fails closed",
     () => loadRuntimeConfig({ AMAZON_PUBLIC_AUTO_RECOVERY_COOLDOWN_MS: "0" }, "api"),
     /AMAZON_PUBLIC_AUTO_RECOVERY_COOLDOWN_MS/,
   );
+});
+
+test("opted-in handoff recovery excludes busy/denied sources and reuses only a fresh actual health receipt", async () => {
+  const row = {
+    id: "provider",
+    version: 19,
+    opened_at: opened,
+    collection_task_id: task,
+    recovery_health_status: "ready",
+    recovery_checked_at: new Date(now.getTime() - 1000),
+    recovery_provider_updated_at: opened,
+  };
+  const f = fixture("ready", [row], amazonPublicHandoffRecoveryTarget);
+  assert.equal((await f.worker.processOnce()).status, "recovered");
+  assert.equal(f.calls.filter((c) => c.probe).length, 0);
+  assert.equal(f.calls.find((c) => c.recover).recover.automaticRecovery.captchaHandoff, true);
+  assert.match(f.calls[0].sql, /'captcha','blocked_captcha'/);
+  assert.match(f.calls[0].sql, /NOT EXISTS \(SELECT 1 FROM crawler_profile_leases/);
+  assert.match(f.calls[0].sql, /h.last_checked_at>=p.updated_at/);
+  assert.match(
+    f.calls[0].sql,
+    /h.last_error_code IN \('network_error','timeout','rate_limited','captcha','blocked_captcha','dependency_unavailable'\)/,
+  );
+  for (const checked of [
+    opened,
+    new Date(now.getTime() - 600000),
+    new Date(now.getTime() + 1000),
+  ]) {
+    const stale = fixture(
+      "blocked",
+      [{ ...row, recovery_checked_at: checked }],
+      amazonPublicHandoffRecoveryTarget,
+    );
+    assert.equal((await stale.worker.processOnce()).status, "blocked");
+    assert.equal(stale.calls.filter((c) => c.probe).length, 1);
+    assert.equal(stale.calls.filter((c) => c.recover).length, 0);
+  }
 });
 
 test("automatic Amazon health cannot use the manual disabled-provider lease exception", async () => {

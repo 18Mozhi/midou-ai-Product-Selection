@@ -36,6 +36,7 @@ export type PublicSourceRecoveryTarget = {
   parameters: (actorId: string, now: Date, cooledAt: Date) => unknown[];
   taskContext: boolean;
   idempotencyPrefix: string;
+  captchaHandoffRecovery?: true;
 };
 
 /** One bounded probe in the existing API process; no additional production service. */
@@ -121,7 +122,23 @@ export class PublicRssRecovery {
         ? { automaticCollectionTaskId: String(candidate.collection_task_id) }
         : {}),
     };
-    const health = await this.health.probe(providerId, context);
+    const checked = new Date(candidate.recovery_checked_at).getTime(),
+      updated = new Date(candidate.recovery_provider_updated_at).getTime(),
+      opened = new Date(candidate.opened_at).getTime();
+    // Only a fresh, actual provider health result can finish an administrator's
+    // completed handoff. Historical business/browser caches never qualify.
+    const verified =
+      this.target?.captchaHandoffRecovery &&
+      candidate.recovery_health_status === "ready" &&
+      Number.isFinite(checked) &&
+      Number.isFinite(updated) &&
+      checked > opened &&
+      checked >= updated &&
+      checked >= cooledAt.getTime() &&
+      checked <= now.getTime();
+    const health = verified
+      ? { health_status: "ready" }
+      : await this.health.probe(providerId, context);
     if (health.health_status !== "ready")
       return { status: health.health_status, provider_id: providerId };
     const result = await this.recovery.recoverProvider({
@@ -131,6 +148,7 @@ export class PublicRssRecovery {
       automaticRecovery: {
         providerVersion: Number(candidate.version),
         openedAt: new Date(candidate.opened_at),
+        ...(this.target?.captchaHandoffRecovery ? { captchaHandoff: true as const } : {}),
       },
     });
     return { status: result.recovered ? "recovered" : "unchanged", provider_id: providerId };

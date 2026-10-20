@@ -12,6 +12,7 @@ import { MySqlProviderAdapterRepository } from "../mysql-provider-adapter-reposi
 import { CrawlerSchedulerRepository } from "../crawler-scheduler-repository.js";
 import {
   amazonPublicRecoveryTarget,
+  amazonPublicHandoffRecoveryTarget,
   resolveAmazonPublicRecoveryScope,
 } from "../amazon-public-recovery.js";
 import { lan1688RecoveryTarget } from "../lan-1688-recovery.js";
@@ -99,7 +100,10 @@ export function createProviderAdapterRuntime(
           ...result,
         }),
       ),
-    amazonPublicRecoveryTarget,
+    config.providerAdapters.amazonHandoffRecoveryEnabled &&
+      config.playwright.runTimeoutSeconds >= 600
+      ? amazonPublicHandoffRecoveryTarget
+      : amazonPublicRecoveryTarget,
   );
   const publicLan1688Recovery = new PublicRssRecovery(
     pool,

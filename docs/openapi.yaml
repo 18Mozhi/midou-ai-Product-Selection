@@ -1,4 +1,5 @@
 openapi: 3.0.3
+# Server-only opt-in can open human Amazon CAPTCHA handoffs and recover from fresh actual health; no HTTP input can set the internal exception. No public schema change.
 # Postal dialog arrival reuses the existing navigation budget; safe internal diagnostics only, no HTTP contract change.
 # A postal fill timeout can reopen once only after an observed main-frame reload and repeated guards; external APIs unchanged.
 # Internal AI primary input now binds original intelligence title/summary with strict candidate aliases; external API and durable output fields unchanged.

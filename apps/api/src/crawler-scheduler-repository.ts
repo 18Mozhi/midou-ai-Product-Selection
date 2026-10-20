@@ -378,7 +378,7 @@ export class CrawlerSchedulerRepository implements Contract {
         result = { provider_id: input.providerId, recovered: circuit?.state === "open" };
       if (input.automaticRecovery) {
         const [definitions] = await c.query<RowDataPacket[]>(
-          "SELECT version,terms_review_status,terms_version,terms_permanent,terms_expires_at FROM providers WHERE id=? FOR UPDATE",
+          "SELECT version,terms_review_status,terms_version,terms_permanent,terms_expires_at,code,access_mode FROM providers WHERE id=? FOR UPDATE",
           [input.providerId],
         );
         const definition = definitions[0];
@@ -404,7 +404,15 @@ export class CrawlerSchedulerRepository implements Contract {
           !circuit ||
           circuit.state !== "open" ||
           new Date(circuit.opened_at).getTime() !== input.automaticRecovery.openedAt.getTime() ||
-          !["network_error", "timeout", "rate_limited"].includes(String(errors[0]?.last_error_code))
+          !(
+            ["network_error", "timeout", "rate_limited"].includes(
+              String(errors[0]?.last_error_code),
+            ) ||
+            (input.automaticRecovery.captchaHandoff === true &&
+              definition.code === "amazon_product" &&
+              definition.access_mode === "public_page" &&
+              ["captcha", "blocked_captcha"].includes(String(errors[0]?.last_error_code)))
+          )
         )
           throw new CrawlerSchedulerError(
             "crawler_provider_recovery_circuit_changed",

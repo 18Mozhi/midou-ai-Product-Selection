@@ -112,6 +112,7 @@ export interface RuntimeConfig {
   };
   providerAdapters: {
     amazonPublicRecoveryEnabled: boolean;
+    amazonHandoffRecoveryEnabled: boolean;
     amazonPublicRecoveryPollMs: number;
     amazonPublicRecoveryCooldownMs: number;
     publicRssRecoveryEnabled: boolean;
@@ -597,6 +598,8 @@ export function loadRuntimeConfig(
     providerAdapters: {
       amazonPublicRecoveryEnabled:
         text(env, "AMAZON_PUBLIC_AUTO_RECOVERY_ENABLED", "true") === "true",
+      amazonHandoffRecoveryEnabled:
+        text(env, "AMAZON_PUBLIC_HANDOFF_RECOVERY_ENABLED", "false") === "true",
       amazonPublicRecoveryPollMs: integer(
         env,
         "AMAZON_PUBLIC_AUTO_RECOVERY_POLL_MS",
@@ -1000,6 +1003,8 @@ export function loadRuntimeConfig(
     );
   if (!["true", "false"].includes(text(env, "PLAYWRIGHT_HEADLESS", "true")))
     throw new ConfigError("PLAYWRIGHT_HEADLESS", "must be true or false");
+  if (!["true", "false"].includes(text(env, "AMAZON_PUBLIC_HANDOFF_RECOVERY_ENABLED", "false")))
+    throw new ConfigError("AMAZON_PUBLIC_HANDOFF_RECOVERY_ENABLED", "must be true or false");
   if (text(env, "NOTIFICATION_EMAIL_DELIVERY_MODE", "placeholder") !== "placeholder")
     throw new ConfigError(
       "NOTIFICATION_EMAIL_DELIVERY_MODE",

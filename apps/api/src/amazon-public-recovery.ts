@@ -12,6 +12,11 @@ export const amazonPublicRecoveryTarget: PublicSourceRecoveryTarget = {
   taskContext: true,
   idempotencyPrefix: "amazon-public-recovery",
 };
+export const amazonPublicHandoffRecoveryTarget: PublicSourceRecoveryTarget = {
+  ...amazonPublicRecoveryTarget,
+  candidatesSql: pendingTaskRecoveryCandidatesSql("amazon_product", { captchaHandoff: true }),
+  captchaHandoffRecovery: true,
+};
 
 /** Recheck before creating any health lease; no user login or tenant guess is needed. */
 export const amazonPublicRecoveryScopeSql =
