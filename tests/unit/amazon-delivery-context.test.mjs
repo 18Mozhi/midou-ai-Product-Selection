@@ -543,6 +543,38 @@ test("Amazon failure diagnostics omit private errors and preserve the result con
   }
 });
 
+test("async postal dialog uses the caller navigation budget and still requires a confirmed header", async () => {
+  const f = fixture(),
+    originalLocator = f.page.locator;
+  let actualTimeout;
+  f.page.locator = (...args) => {
+    const value = originalLocator(...args),
+      fill = value.fill;
+    return {
+      ...value,
+      fill: async (postal, options) => {
+        actualTimeout = options?.timeout;
+        if (!(actualTimeout >= 20_000)) throw new errors.TimeoutError("delayed postal modal");
+        return fill(postal);
+      },
+    };
+  };
+  await prepareAmazonDeliveryContext(f.page, "94404", f.safe, () => {}, f.reread, 60_000);
+  assert.equal(actualTimeout, 60_000);
+  assert.equal(f.location(), "Deliver to San Mateo 94404");
+  const rejected = fixture({ rejected: true });
+  await assert.rejects(
+    prepareAmazonDeliveryContext(
+      rejected.page,
+      "94404",
+      rejected.safe,
+      () => {},
+      rejected.reread,
+      60_000,
+    ),
+  );
+});
+
 test("Done without navigation or matching header retains the original timeout failure", async () => {
   const f = fixture({ doneWrongPostal: true });
   await assert.rejects(

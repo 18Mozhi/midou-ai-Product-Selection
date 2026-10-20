@@ -864,17 +864,42 @@ export class PlaywrightCrawlerEngine {
       };
     } catch (error) {
       const failure = classifyBrowserFailure(error);
+      const httpStatus = error instanceof Error && "httpStatus" in error ? error.httpStatus : null,
+        networkCode =
+          error instanceof Error ? /net::(ERR_[A-Z0-9_]+)/.exec(error.message)?.[1] : undefined;
+      let deliveryState: Record<string, unknown> | null = null;
+      if (plan.amazon_delivery && stage === "amazon_delivery.fill_postal") {
+        const current = context?.pages()[0];
+        if (current && current.url().startsWith("https://www.amazon.com/")) {
+          deliveryState = await current
+            .evaluate(() => {
+              const input = document.querySelector("#GLUXZipUpdateInput"),
+                location = document.querySelector("#nav-global-location-popover-link"),
+                href = location?.getAttribute("href");
+              return {
+                document_state: document.readyState,
+                postal_input_present: Boolean(input),
+                postal_input_visible:
+                  input instanceof HTMLElement && input.getClientRects().length > 0,
+                location_link_present: Boolean(location),
+                location_href_kind:
+                  href === "" ? "empty" : href?.startsWith("#") ? "fragment" : "other",
+              };
+            })
+            .catch(() => null);
+        }
+      }
       if (plan.amazon_delivery)
         console.warn(
           JSON.stringify({
             event: "amazon_browser_step_failed",
             stage,
             error_code: failure.code,
-            http_status: error instanceof Error && "httpStatus" in error ? error.httpStatus : null,
-            network_code:
-              error instanceof Error
-                ? (/net::(ERR_[A-Z0-9_]+)/.exec(error.message)?.[1] ?? null)
-                : null,
+            ...(typeof httpStatus === "number" && httpStatus >= 100 && httpStatus <= 599
+              ? { http_status: httpStatus }
+              : {}),
+            ...(networkCode ? { network_code: networkCode } : {}),
+            ...(deliveryState ? { delivery_state: deliveryState } : {}),
           }),
         );
       return {

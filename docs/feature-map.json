@@ -1,4 +1,18 @@
 {
+  "selectionPostalArrivalBudget20261020": {
+    "status": "implemented",
+    "requirements": "docs/amazon-us-observation-context.md",
+    "sourceFiles": [
+      "packages/playwright-crawler/src/amazon-delivery-context.ts",
+      "packages/playwright-crawler/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-delivery-context.test.mjs",
+      "tests/integration/amazon-delivery-readiness.test.mjs",
+      "tests/integration/amazon-closed-postal-form.test.mjs"
+    ],
+    "contract": "Observed production fill_postal timeout reuses the existing caller navigation budget only for arrival/fill of the anonymous postal dialog. Preserve no retries, login/CAPTCHA/origin guards, actual Apply confirmation, reread and final postal header. Fixed boolean/enum failure diagnostics only; no raw content or credentials. No API/schema/dependency/new config/Python/frontend change. BaoTa Node and Python restart required; real source recovery and 100/day remain unaccepted."
+  },
   "selectionBrowserManualHandoff20261020": {
     "status": "implemented",
     "requirements": "docs/selection-browser-manual-handoff.md",

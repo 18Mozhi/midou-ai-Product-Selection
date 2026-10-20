@@ -50,7 +50,15 @@ export async function prepareAmazonDeliveryContext(
   await page.locator("#nav-global-location-popover-link").click();
   await assertSafe();
   reportStep("fill_postal");
-  await page.locator("#GLUXZipUpdateInput").fill(postalCode);
+  // Opening the asynchronously loaded location dialog can outlive an ordinary
+  // element action. Reuse the existing navigation budget for this one arrival,
+  // without retrying the link or accepting an unconfirmed postal header.
+  await page
+    .locator("#GLUXZipUpdateInput")
+    .fill(
+      postalCode,
+      navigationTimeoutMs === undefined ? undefined : { timeout: navigationTimeoutMs },
+    );
   reportStep("apply_postal");
   await page.locator("#GLUXZipUpdate input").click();
   reportStep("confirm_postal");
