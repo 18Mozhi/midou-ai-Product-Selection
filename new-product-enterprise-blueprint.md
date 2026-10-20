@@ -1,3 +1,5 @@
+> 2026-10-20：补采所属领取轮在原范围/阶段/找货/缓存顺序之后，优先正式主品下仍缺原5个详细独立竞品的任务；入队、找品轮与第21轮FIFO不加重查询，原证据与完成门不变，见 docs/selection-competitor-completion-turns.md。需正式发布及自然队列验收，日100未完成。
+
 > 2026-10-20：首页默认展示现有完成接口返回的真实商品，独立推荐视图保留全部采纳门；日完成与全部日期结果分开，见 docs/selection-home-results-workspace.md。
 
 > 2026-10-20：详情通过真实完成事件展示analysis_completed_at，已完成分析的状态和当前采纳条件前置，利润未知继续保留；未完成不因列表来源URL或评分误标完成。完成列表的非推荐商品入口为查看分析，见 docs/selection-analysis-completion-ui.md。

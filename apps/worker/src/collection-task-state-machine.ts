@@ -30,11 +30,12 @@ const statement = (...parts: string[]) => parts.join("");
 
 export class MySqlCollectionTaskWorkerRepository {
   private successfulClaims = 0;
-  private readyOrder() {
+  private readyOrder(competitorFirst = true) {
     return collectionReadyOrderSql(
       this.successfulClaims % 21 !== 20,
       this.successfulClaims % 2 === 1,
       this.successfulClaims % 4 === 0,
+      competitorFirst,
     );
   }
   constructor(
@@ -88,7 +89,7 @@ export class MySqlCollectionTaskWorkerRepository {
           (this.taskId ? " AND id=?" : "") +
           " AND " +
           activeCollectionScopeSql("collection_tasks") +
-          this.readyOrder(),
+          this.readyOrder(false),
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [now, this.taskId] : [now]);
       const candidate = rows[0];
       if (!candidate) {

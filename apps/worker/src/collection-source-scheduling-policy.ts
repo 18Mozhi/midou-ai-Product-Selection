@@ -1,4 +1,5 @@
 import { completionReadySourcingTaskSql } from "./completion-sourcing-policy.js";
+import { completionReadyCompetitorTaskSql } from "./completion-competitor-policy.js";
 
 /** Archived or mismatched tenant scopes retain history but cannot consume collection capacity. */
 export const activeCollectionScopeSql = (
@@ -93,6 +94,7 @@ export const collectionReadyOrderSql = (
   completionFirst: boolean,
   productSearchFirst = false,
   sourcingFirst = false,
+  competitorFirst = true,
 ) =>
   " ORDER BY FIELD(CASE WHEN " +
   automaticIntelligenceTaskSql("collection_tasks") +
@@ -116,6 +118,9 @@ export const collectionReadyOrderSql = (
     ? "CASE WHEN " + completionReadySourcingTaskSql + " THEN 0 ELSE 1 END,"
     : "") +
   (completionFirst ? "CASE WHEN " + pendingBrowserResultSql + " THEN 0 ELSE 1 END," : "") +
+  (completionFirst && !productSearchFirst && competitorFirst
+    ? "CASE WHEN " + completionReadyCompetitorTaskSql + " THEN 0 ELSE 1 END,"
+    : "") +
   "available_at,id LIMIT 1";
 
 /** Shared admission threshold: count only unfinished collection work in active matching scopes. */

@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { completionReadySourcingTaskSql } from "../../apps/worker/dist/completion-sourcing-policy.js";
+import { completionReadyCompetitorTaskSql } from "../../apps/worker/dist/completion-competitor-policy.js";
 import { MySqlCollectionTaskWorkerRepository } from "../../apps/worker/dist/collection-task-state-machine.js";
 import {
   activeCollectionScopeSql,
@@ -151,7 +152,14 @@ test("twenty alternating committed stage claims retain the shared FIFO escape an
       assert.ok(sql.includes(activeCollectionScopeSql("collection_tasks")));
     assert.equal(
       selections[0][0].slice(selections[0][0].indexOf(" ORDER BY")),
-      selections[1][0].slice(selections[1][0].indexOf(" ORDER BY")),
+      selections[1][0]
+        .slice(selections[1][0].indexOf(" ORDER BY"))
+        .replace("CASE WHEN " + completionReadyCompetitorTaskSql + " THEN 0 ELSE 1 END,", ""),
+    );
+    assert.ok(!selections[0][0].includes(completionReadyCompetitorTaskSql));
+    assert.equal(
+      selections[1][0].includes(completionReadyCompetitorTaskSql),
+      turn !== 20 && turn % 2 === 0,
     );
     for (const [sql] of selections) {
       assert.equal(sql.includes("completion_event"), turn !== 20);

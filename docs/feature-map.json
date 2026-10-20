@@ -1,4 +1,19 @@
 {
+  "selectionCompetitorCompletionTurns": {
+    "requirements": "docs/selection-competitor-completion-turns.md",
+    "entrypoints": [
+      "apps/worker/src/completion-competitor-policy.ts",
+      "apps/worker/src/collection-source-scheduling-policy.ts",
+      "apps/worker/src/collection-task-state-machine.ts"
+    ],
+    "tests": [
+      "tests/unit/completion-competitor-priority.test.mjs",
+      "tests/unit/collection-completion-scheduling.test.mjs",
+      "tests/fixtures/completion-competitor-priority-sql.mjs",
+      "tests/fixtures/collection-scope-fairness-sql.mjs"
+    ],
+    "contract": "On existing completion-owned claim turns only, after priority/scope/stage/source-ready and durable browser results, prefer queued independent competitor details of scoped automatic products with a formally evidenced primary and fewer than the original five valid detailed competitors. Reuse unchanged primary/relevance/detail/competition proofs. Skip admission, product-search and FIFO turns; preserve locks, source protections, concurrency, prices, scoring and completion. No API/schema/env/dependency/frontend/Python change; BaoTa Node restart required."
+  },
   "selectionAnalysisCompletionUi20261020": {
     "status": "implemented",
     "requirements": "docs/selection-analysis-completion-ui.md",

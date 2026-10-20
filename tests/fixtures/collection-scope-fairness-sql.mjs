@@ -1,4 +1,5 @@
 // Synthetic SELECT-only MySQL 5.7 proof. No tables, fixtures or events are written.
+import { completionReadyCompetitorTaskSql } from "../../apps/worker/dist/completion-competitor-policy.js";
 const uuid = (n) => `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
 const scopes = {
   a: { organization_id: uuid(1), workspace_id: uuid(11) },
@@ -23,6 +24,90 @@ const claim = (scope, at, extra = {}) => ({
   ...extra,
 });
 const scenarios = [
+  {
+    name: "ordinary validation retry retains successful browser-result preference",
+    tasks: [
+      task(101, "a", { lane: "completion" }),
+      task(102, "a", {
+        lane: "completion",
+        queryStatus: "failed",
+        errorCode: "validation_failed",
+        browserResult: true,
+      }),
+    ],
+    events: [],
+    expected: 102,
+  },
+  {
+    name: "other failed subquery cannot gain retained-result preference",
+    tasks: [
+      task(101, "a", { lane: "completion" }),
+      task(102, "a", {
+        lane: "completion",
+        queryStatus: "failed",
+        errorCode: "source_failed",
+        browserResult: true,
+      }),
+    ],
+    events: [],
+    expected: 101,
+  },
+  {
+    name: "competitor preference preserves durable scope fairness",
+    tasks: [
+      task(101, "b", { lane: "completion" }),
+      task(102, "a", { lane: "completion", nearCompetitor: true }),
+    ],
+    events: [claim("b", 5), claim("a", 10)],
+    expected: 101,
+  },
+  {
+    name: "independent competitor detail precedes older primary detail within completion",
+    tasks: [
+      task(101, "a", { lane: "completion" }),
+      task(102, "a", { lane: "completion", nearCompetitor: true }),
+    ],
+    events: [],
+    expected: 102,
+  },
+  {
+    name: "already collected browser result precedes independent detail preference",
+    tasks: [
+      task(101, "a", { lane: "completion", browserResult: true }),
+      task(102, "a", { lane: "completion", nearCompetitor: true }),
+    ],
+    events: [],
+    expected: 101,
+  },
+  {
+    name: "competitor preference preserves product-search stage turn",
+    tasks: [
+      task(101, "a", { lane: "product_search" }),
+      task(102, "a", { lane: "completion", nearCompetitor: true }),
+    ],
+    events: [],
+    productSearchFirst: true,
+    expected: 101,
+  },
+  {
+    name: "competitor preference preserves shared FIFO escape",
+    tasks: [
+      task(101, "a", { lane: "completion" }),
+      task(102, "a", { lane: "completion", nearCompetitor: true }),
+    ],
+    events: [],
+    completionFirst: false,
+    expected: 101,
+  },
+  {
+    name: "competitor preference preserves critical priority",
+    tasks: [
+      task(101, "a", { lane: "completion", priority: "critical" }),
+      task(102, "a", { lane: "completion", nearCompetitor: true }),
+    ],
+    events: [],
+    expected: 101,
+  },
   {
     name: "product-search turn advances intelligence-derived Amazon queries",
     tasks: [task(101, "a", { lane: "completion" }), task(102, "a", { lane: "product_search" })],
@@ -391,6 +476,7 @@ function queryFor(scenario, policy, sourcePreferenceSql) {
       row.provider === "held" ? uuid(402) : row.lane === "sourcing" ? uuid(403) : uuid(401),
     is_required: row.required ?? 1,
     status: row.queryStatus ?? "pending",
+    error_code: row.errorCode ?? null,
     target_json: JSON.stringify({
       projection_type:
         row.projection ??
@@ -427,6 +513,7 @@ function queryFor(scenario, policy, sourcePreferenceSql) {
         "provider_id",
         "is_required",
         "status",
+        "error_code",
         "target_json",
       ],
       queries,
@@ -485,6 +572,13 @@ function queryFor(scenario, policy, sourcePreferenceSql) {
     scenario.productSearchFirst ?? false,
     scenario.sourcingFirst ?? false,
   );
+  const closeCompetitors = scenario.tasks
+    .filter((row) => row.nearCompetitor)
+    .map((row) => literal(row.id));
+  order = order.replace(
+    completionReadyCompetitorTaskSql,
+    closeCompetitors.length ? `collection_tasks.id IN (${closeCompetitors.join(",")})` : "0=1",
+  );
   if (scenario.sourcingFirst && scenario.completionFirst !== false) {
     if (!sourcePreferenceSql) throw Error("source_preference_predicate_required");
     const ids = scenario.tasks.filter((row) => row.nearSource).map((row) => literal(row.id));
@@ -515,6 +609,16 @@ function queryFor(scenario, policy, sourcePreferenceSql) {
 export function collectionScopeFairnessSqlCases(policy, sourcePreferenceSql) {
   const sourceCases = sourcePreferenceSql
     ? [
+        {
+          name: "eligible sourcing turn precedes independent competitor detail preference",
+          tasks: [
+            task(101, "a", { lane: "completion", nearCompetitor: true }),
+            task(102, "a", { lane: "sourcing", nearSource: true }),
+          ],
+          events: [],
+          sourcingFirst: true,
+          expected: 102,
+        },
         {
           name: "eligible sourcing turn precedes a ready Amazon browser result",
           tasks: [
