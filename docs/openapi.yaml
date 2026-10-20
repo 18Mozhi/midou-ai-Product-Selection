@@ -1,4 +1,5 @@
 openapi: 3.0.3
+# Python successful-empty job polling uses CRAWLER_IDLE_POLL_SECONDS; existing internal acquire/heartbeat/complete payloads and leases unchanged.
 # Primary title-relevance prompt clarification preserves internal source_ref/rationale and nullable no-match handling; no API field change.
 # Internal completion-ready sourcing preference affects collection ordering only; quote, scoring, API and LAN transport contracts unchanged.
 # Already-collected automatic Amazon result projection uses existing completion admission; API schemas, payloads and consumer validation unchanged.

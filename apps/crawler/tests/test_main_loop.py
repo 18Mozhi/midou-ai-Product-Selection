@@ -13,18 +13,18 @@ from scoutops_crawler.runtime_transport import RuntimeClientError
 
 class MainLoopHeartbeatTest(unittest.TestCase):
     def test_successful_empty_poll_waits_without_emitting_idle_heartbeat(self):
-        config = SimpleNamespace(heartbeat_seconds=30)
+        config = SimpleNamespace(heartbeat_seconds=30, idle_poll_seconds=2)
         stopped = threading.Event()
         events = []
         with patch("scoutops_crawler.main_loop.run_once", return_value=False) as cycle:
             with patch.object(stopped, "wait", side_effect=lambda _seconds: stopped.set()) as wait:
                 run_loop(config, stopped, False, lambda _config, status, **fields: events.append((status, fields)))
         cycle.assert_called_once_with(config, stopped, unittest.mock.ANY)
-        wait.assert_called_once_with(30)
+        wait.assert_called_once_with(2)
         self.assertEqual(events, [("stopped", {})])
 
     def test_failed_poll_never_emits_a_healthy_idle_event(self):
-        config = SimpleNamespace(heartbeat_seconds=30)
+        config = SimpleNamespace(heartbeat_seconds=30, idle_poll_seconds=2)
         events = []
         with patch("scoutops_crawler.main_loop.run_once", side_effect=RuntimeClientError("unavailable")):
             run_loop(config, threading.Event(), True, lambda _config, status, **fields: events.append((status, fields)))
@@ -33,6 +33,25 @@ class MainLoopHeartbeatTest(unittest.TestCase):
     def test_processed_cycle_is_not_reported_as_idle(self):
         events = []
         with patch("scoutops_crawler.main_loop.run_once", return_value=True):
-            run_loop(SimpleNamespace(heartbeat_seconds=30), threading.Event(), True,
+            run_loop(SimpleNamespace(heartbeat_seconds=30, idle_poll_seconds=2), threading.Event(), True,
                      lambda _config, status, **fields: events.append((status, fields)))
         self.assertEqual(events, [("stopped", {})])
+
+    def test_api_error_retains_heartbeat_backoff_instead_of_fast_empty_poll(self):
+        config = SimpleNamespace(heartbeat_seconds=30, idle_poll_seconds=2)
+        stopped = threading.Event()
+        events = []
+        with patch("scoutops_crawler.main_loop.run_once", side_effect=RuntimeClientError("unavailable")):
+            with patch.object(stopped, "wait", side_effect=lambda _seconds: stopped.set()) as wait:
+                run_loop(config, stopped, False, lambda _config, status, **fields: events.append((status, fields)))
+        wait.assert_called_once_with(30)
+        self.assertEqual(events, [("api_error", {"error_code": "unavailable"}), ("stopped", {})])
+
+    def test_completed_work_immediately_repolls_then_uses_configured_idle_wait(self):
+        config = SimpleNamespace(heartbeat_seconds=30, idle_poll_seconds=7)
+        stopped = threading.Event()
+        with patch("scoutops_crawler.main_loop.run_once", side_effect=[True, False]) as cycle:
+            with patch.object(stopped, "wait", side_effect=lambda _seconds: stopped.set()) as wait:
+                run_loop(config, stopped, False, lambda *_args, **_fields: None)
+        self.assertEqual(cycle.call_count, 2)
+        wait.assert_called_once_with(7)

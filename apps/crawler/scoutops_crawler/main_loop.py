@@ -67,13 +67,15 @@ def run_loop(
     event: EventWriter,
 ) -> None:
     while not stopped.is_set():
+        wait_seconds = config.idle_poll_seconds
         try:
             processed = run_once(config, stopped, event)
         except RuntimeClientError as error:
             event(config, "api_error", error_code=error.code)
             processed = False
+            wait_seconds = config.heartbeat_seconds
         if once:
             break
         if not processed:
-            stopped.wait(config.heartbeat_seconds)
+            stopped.wait(wait_seconds)
     event(config, "stopped")

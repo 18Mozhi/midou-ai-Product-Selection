@@ -1,3 +1,4 @@
+> 2026-10-20：Python内部成功空领取改用独立CRAWLER_IDLE_POLL_SECONDS（默认2秒、1–60），不再复用30秒租约心跳；API错误保持原退避，单并发、来源限流、租约和执行规则不变。需宝塔重启Python，见 docs/selection-crawler-idle-polling.md。
 > 2026-10-20：主品标题相关性必须覆盖查询要求的实物类型；不因学车者等共同人群词把磁贴当车罩，普通通用品不必重复人群词。保留原模型输出、无匹配消费者和历史数据，见 docs/selection-primary-product-type.md。
 > 2026-10-20：原优先级/范围/阶段之后，每两个补采偏好轮之一优先给具备正式主品与至少5竞品、但缺当前进货价的真实自动1688任务找货；另一轮及原FIFO保留，不改并发、来源、报价或评分门，见 docs/selection-completion-sourcing-turns.md。
 > 2026-10-20：真实成功自动Amazon找品结果按原1000补采阈值优先尝试投影，容量等待保留结果轮，处理后让回原修复/新增轮；原情报997准入及全部来源、主品、扇出和质量门保留，见 docs/selection-collected-result-admission.md。

@@ -1,4 +1,18 @@
 {
+  "selectionCrawlerIdlePolling20261020": {
+    "status": "implemented",
+    "requirements": "docs/selection-crawler-idle-polling.md",
+    "sourceFiles": [
+      "apps/crawler/scoutops_crawler/config.py",
+      "apps/crawler/scoutops_crawler/main_loop.py",
+      "config/env.example"
+    ],
+    "testFiles": [
+      "apps/crawler/tests/test_main_loop.py",
+      "apps/crawler/tests/test_idle_poll_config.py"
+    ],
+    "contract": "Separate successful-empty Python internal job polling from lease heartbeat: CRAWLER_IDLE_POLL_SECONDS defaults2, integer1..60, startup fingerprinted. RuntimeClientError keeps existing heartbeat backoff; completed work immediately repolls. Existing source/profile/global leases, concurrency, robots/rate limits, execution, completion and API schemas unchanged. No Node/frontend/database/dependency change; BaoTa Python restart required."
+  },
   "selectionPrimaryProductType20261020": {
     "status": "implemented",
     "requirements": "docs/selection-primary-product-type.md",

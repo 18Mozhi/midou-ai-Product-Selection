@@ -32,6 +32,7 @@ class CrawlerConfig:
     completion_spool_retention_days: int
     completion_spool_max_bytes: int
     completion_spool_minimum_free_disk_mb: int
+    idle_poll_seconds: int = 2
 
 
 def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
@@ -90,6 +91,12 @@ def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
         raise ConfigError("CRAWLER_HEARTBEAT_SECONDS", "must be an integer from 5 to 60") from error
     if heartbeat_seconds < 5 or heartbeat_seconds > 60:
         raise ConfigError("CRAWLER_HEARTBEAT_SECONDS", "must be an integer from 5 to 60")
+    try:
+        idle_poll_seconds = int(values.get("CRAWLER_IDLE_POLL_SECONDS", "2"))
+    except ValueError as error:
+        raise ConfigError("CRAWLER_IDLE_POLL_SECONDS", "must be an integer from 1 to 60") from error
+    if idle_poll_seconds < 1 or idle_poll_seconds > 60:
+        raise ConfigError("CRAWLER_IDLE_POLL_SECONDS", "must be an integer from 1 to 60")
     api_base_url = values.get("CRAWLER_API_BASE_URL", "http://127.0.0.1:4101").strip().rstrip("/")
     service_token = values.get("CRAWLER_SERVICE_TOKEN", "").strip()
     try:
@@ -105,6 +112,7 @@ def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
         "crawler_id": crawler_id,
         "evidence_root": evidence_root,
         "heartbeat_seconds": heartbeat_seconds,
+        "idle_poll_seconds": idle_poll_seconds,
         "master_key_present": bool(master_key),
         "master_key_version": master_key_version,
         "credential_temp_root": credential_temp_root,
@@ -136,4 +144,5 @@ def load_config(env: dict[str, str] | None = None) -> CrawlerConfig:
         completion_spool_retention_days,
         completion_spool_max_bytes,
         completion_spool_minimum_free_disk_mb,
+        idle_poll_seconds,
     )
