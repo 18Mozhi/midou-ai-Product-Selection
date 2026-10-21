@@ -37,6 +37,7 @@ test("primary refresh reads current scoped facts without losing the original lin
 
 import {
   calculateAutomaticScoreFacts,
+  calculateCompetitorMedian,
   productIdentityConfidence,
   selectConservativeSupplyMatch,
 } from "../../apps/worker/dist/automatic-selection-evaluation.js";
@@ -209,6 +210,7 @@ test("automatic evaluation binds primary identity and supply tasks to the curren
     release() {},
     query: async (sql, params) => {
       calls.push({ sql, params });
+      if (sql.includes("s_sample.id snapshot_id,s_sample.review_count")) return [[]];
       if (sql === primarySourceOriginSql) return [[]];
       if (sql.startsWith("SELECT o.*")) return [[{ market: "US" }]];
       if (sql.startsWith("SELECT id,version_code,dimensions_json")) return [[{ id: "score" }]];
@@ -369,7 +371,7 @@ test("automatic quality facts remain missing when source metrics are absent and 
     requiredFieldCount: 5,
   });
   assert.equal(missingRating.market_demand, null);
-  assert.notEqual(missingRating.competition, null);
+  assert.equal(missingRating.competition, null);
 });
 
 test("automatic worker preserves human costs and clears a stale recommendation on blocked evidence", async () => {
@@ -418,5 +420,27 @@ test("unknown inventory is not a low-risk fact even when a caller overcounts com
   assert.equal(facts.data_quality, 80);
   assert.equal(facts.profit, null);
   assert.equal(facts.market_demand, 98.46);
-  assert.equal(facts.competition, 13.54);
+  assert.equal(facts.competition, null);
+});
+
+test("competition median uses five to ten distinct real competitor inputs, never the primary", () => {
+  const rows = Array.from({ length: 10 }, (_, i) => ({
+    asin: `B0000000${String(i).padStart(2, "0")}`,
+    reviewCount: i < 5 ? 99 : 999,
+    evidenceId: `proof-${i}`,
+  }));
+  assert.equal(calculateCompetitorMedian(rows.slice(0, 4)).score, null);
+  assert.equal(calculateCompetitorMedian(rows.slice(0, 5)).score, 60);
+  assert.equal(calculateCompetitorMedian(rows).score, 50);
+  assert.equal(calculateCompetitorMedian([...rows, { ...rows[0], reviewCount: 0 }]).score, 50);
+  assert.equal(calculateCompetitorMedian(Array(5).fill(rows[0])).score, null);
+  for (const reviewCount of [null, -1, Infinity, 1.5])
+    assert.equal(
+      calculateCompetitorMedian([{ ...rows[0], reviewCount }, ...rows.slice(1)]).score,
+      null,
+    );
+  assert.deepEqual(
+    calculateCompetitorMedian(rows.slice(0, 5)).evidenceIds,
+    rows.slice(0, 5).map((r) => r.evidenceId),
+  );
 });

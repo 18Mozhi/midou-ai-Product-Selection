@@ -124,8 +124,28 @@ print("SCOUTOPS_RESULT="+json.dumps({"status":True,"message":"static upload path
             # Refuse hidden backend/runtime changes in this delivery.
             changed = api.run(["git", "diff", "--name-only", identity["build_sha"], sha], repo).splitlines()
             allowed = ("apps/web/", "docs/", "tests/", "scripts/", "new-product-enterprise-blueprint.md", "AGENTS.md", "BACKLOG.md")
+            runtime = {"apps/worker/src/automatic-selection-evaluation.ts", "apps/worker/src/automatic-selection-evaluation-worker.ts"}
             if any(not path.startswith(allowed) for path in changed):
-                raise RuntimeError("frontend-only release contains a non-UI runtime change")
+                if any(path not in runtime and not path.startswith(allowed) for path in changed):
+                    raise RuntimeError("frontend-only release contains a non-UI runtime change")
+                # Permit only an already verified scoring-only patch of this exact commit.
+                # Check installed bytes against both receipt and this local build, not a label alone.
+                from deploy_baota_scoring import MODULES
+                hashes = {name: hashlib.sha256((repo/"apps/worker/dist"/name).read_bytes()).hexdigest() for name in MODULES}
+                proof = api.remote_python(client, '''import hashlib,json
+from pathlib import Path
+r=Path("/www/wwwroot/ai选品/backend")
+m=r/"scoring-release.json"
+if r.resolve()!=r or m.is_symlink(): raise RuntimeError("scoring_proof_path_invalid")
+v=json.loads(m.read_text())
+for name,expected in v["modules"].items():
+    if name not in ("automatic-selection-evaluation.js","automatic-selection-evaluation-worker.js"): raise RuntimeError("scoring_proof_module_invalid")
+    p=r/"apps/worker/dist"/name
+    if p.is_symlink() or p.resolve()!=p or hashlib.sha256(p.read_bytes()).hexdigest()!=expected: raise RuntimeError("scoring_proof_hash_invalid")
+print("SCOUTOPS_RESULT="+json.dumps({"status":True,"sha":v["sha"],"modules":v["modules"]}))
+''', timeout=30)
+                if proof.get("sha") != sha or proof.get("modules") != hashes:
+                    raise RuntimeError("frontend_scoring_patch_not_verified")
             with client.open_sftp() as sftp:
                 upload_started = True
                 sftp.put(str(archive), remote)

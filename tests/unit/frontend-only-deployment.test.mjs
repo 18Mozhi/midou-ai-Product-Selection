@@ -91,3 +91,11 @@ print('static publisher: hash rejection, byte readback, pristine backup, runtime
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /static publisher: hash rejection/);
 });
+
+test("frontend runtime exception requires exact installed scoring commit and both real hashes", () => {
+  const source = readFileSync("scripts/deploy_baota_frontend.py", "utf8");
+  assert.match(source, /proof.get\("sha"\) != sha or proof.get\("modules"\) != hashes/);
+  assert.match(source, /scoring_proof_hash_invalid/);
+  assert.match(source, /frontend_scoring_patch_not_verified/);
+  assert.match(source, /path not in runtime and not path.startswith\(allowed\)/);
+});

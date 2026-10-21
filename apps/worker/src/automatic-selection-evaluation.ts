@@ -10,7 +10,7 @@ import {
   supplyDetailEligible,
   supplySkuUseCompatible,
 } from "./supply-detail-facts.js";
-export const AUTOMATIC_SELECTION_FORMULA_VERSION = "crawler-evidence-v2";
+export const AUTOMATIC_SELECTION_FORMULA_VERSION = "crawler-evidence-v3";
 
 export interface ProductFacts {
   title: string;
@@ -347,8 +347,41 @@ export function selectClassifiedSupplyQuote(
   return null;
 }
 
+/** Rows must first pass the shared independent, related, healthy detail evidence gate. */
+export function calculateCompetitorMedian(
+  rows: Array<{ asin: string; reviewCount: number | null; evidenceId: string }>,
+) {
+  const unique = new Map<string, { score: number; evidenceId: string }>();
+  for (const row of rows) {
+    const asin = row.asin.toUpperCase();
+    if (unique.has(asin)) continue;
+    if (
+      !/^[A-Z0-9]{10}$/.test(asin) ||
+      !row.evidenceId ||
+      row.reviewCount == null ||
+      !Number.isSafeInteger(row.reviewCount) ||
+      row.reviewCount < 0
+    )
+      return { score: null, evidenceIds: [] as string[] };
+    unique.set(asin, {
+      score: clamp(100 - (Math.log10(row.reviewCount + 1) / 5) * 100),
+      evidenceId: row.evidenceId,
+    });
+    if (unique.size === 10) break;
+  }
+  const values = [...unique.values()];
+  if (values.length < 5) return { score: null, evidenceIds: [] as string[] };
+  const sorted = values.map((row) => row.score).sort((a, b) => a - b);
+  const middle = Math.floor(sorted.length / 2);
+  return {
+    score: clamp(sorted.length % 2 ? sorted[middle]! : (sorted[middle - 1]! + sorted[middle]!) / 2),
+    evidenceIds: values.map((row) => row.evidenceId),
+  };
+}
+
 export function calculateAutomaticScoreFacts(input: {
   product: ProductFacts;
+  competitorScore?: number | null;
   netMarginPercent: number | null;
   evidenceAgeHours: number;
   requiredFieldsPresent: number;
@@ -361,10 +394,7 @@ export function calculateAutomaticScoreFacts(input: {
       reviewCount == null || ratingQuality == null
         ? null
         : clamp((Math.log10(Math.max(0, reviewCount) + 1) / 4) * 80 + ratingQuality * 0.2),
-    competition =
-      reviewCount == null
-        ? null
-        : clamp(100 - (Math.log10(Math.max(0, reviewCount) + 1) / 5) * 100),
+    competition = input.competitorScore ?? null,
     profit =
       input.netMarginPercent == null ? null : clamp(((input.netMarginPercent - 10) / 30) * 100),
     freshnessPenalty = input.evidenceAgeHours > 168 ? 45 : input.evidenceAgeHours > 72 ? 20 : 0,

@@ -40,6 +40,7 @@ import {
 } from "./supply-detail-facts.js";
 import {
   selectionCandidateSql,
+  selectionCompletedCompetitorsSql,
   automaticEvaluationCompleteSql,
   automaticEvaluationFailureSql,
   automaticEvaluationEnqueueUpdateSql,
@@ -54,6 +55,7 @@ import {
 import {
   AUTOMATIC_SELECTION_FORMULA_VERSION,
   calculateAutomaticScoreFacts,
+  calculateCompetitorMedian,
   genericTitleFactsCompatible,
   isPhoneCase,
   normalizedProductFields,
@@ -473,6 +475,23 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       if (!competitor)
         return await this.waiting(connection, job, "amazon_competitor_snapshot_missing", {}, now);
 
+      const competitionSql = selectionCompletedCompetitorsSql.replace(
+        "s_sample.id snapshot_id,s_sample.evidence_id FROM",
+        "s_sample.id snapshot_id,s_sample.review_count,s_sample.evidence_id FROM",
+      );
+      const [competitionRows] = await connection.query<RowDataPacket[]>(competitionSql, [
+        job.opportunityId,
+        job.organizationId,
+        job.workspaceId,
+      ]);
+      const competitionFacts = calculateCompetitorMedian(
+        competitionRows.map((row) => ({
+          asin: String(row.asin),
+          reviewCount: number(row.review_count),
+          evidenceId: String(row.evidence_id ?? ""),
+        })),
+      );
+
       // Evidence scoring is independent of category-specific cost eligibility.
       // Null profit is explicit missing data, never an assumed zero margin.
       const publishScores = async (
@@ -484,6 +503,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         const evidenceIds = [
             String(amazon.raw_evidence_id),
             ...currentCostEvidenceIds,
+            ...competitionFacts.evidenceIds,
             String(competitor.evidence_id),
           ],
           qualityBlocked = await this.qualityBlocked(connection, job, evidenceIds),
@@ -504,6 +524,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           },
           facts = calculateAutomaticScoreFacts({
             product,
+            competitorScore: competitionFacts.score,
             netMarginPercent,
             evidenceAgeHours: Math.max(
               0,
@@ -521,7 +542,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           dimensions = parse<ScoreDimension[]>(scoreRule.dimensions_json, []),
           scoreEvidence: Record<string, string[]> = {
             market_demand: [String(amazon.raw_evidence_id)],
-            competition: [String(competitor.evidence_id)],
+            competition: competitionFacts.evidenceIds,
             profit: currentCostEvidenceIds,
             risk: [String(amazon.raw_evidence_id), String(competitor.evidence_id)],
             data_quality: evidenceIds,
@@ -581,6 +602,19 @@ export class MySqlAutomaticSelectionEvaluationWorker {
               formula_version: AUTOMATIC_SELECTION_FORMULA_VERSION,
               evidence_fingerprint: costFingerprint,
               missing_profit_reason: missingProfitReason,
+              competition_analysis: {
+                method: "review-barrier-median-v1",
+                score: competitionFacts.score,
+                evidence_ids: competitionFacts.evidenceIds,
+                samples: competitionRows
+                  .filter((row) => competitionFacts.evidenceIds.includes(String(row.evidence_id)))
+                  .map((row) => ({
+                    asin: row.asin,
+                    snapshot_id: row.snapshot_id,
+                    evidence_id: row.evidence_id,
+                    review_count: row.review_count,
+                  })),
+              },
             },
             requestId,
             traceId,

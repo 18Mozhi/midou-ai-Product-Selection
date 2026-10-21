@@ -35,3 +35,11 @@ crawler-evidence-v1的输入公式（clamp为0–100且两位小数）：
 固定目录backups/scoring-提交号保存两个旧模块和保护哈希。字节、项目身份、Python PID及其源码、配置和其它运行文件哈希不符即拒绝；重启或验收失败恢复两文件并由宝塔重启Node。scoring-release.json单独标识此次有限评分补丁；health/version继续显示原整体后端版本，不伪装全量发布。没有新调节参数，规则继续由原规则页面管理。正式回执为.artifacts/verification/scoring-only-production-evidence.json。
 
 本轮验证：92项评分、自动输入、利润、推荐门与发布约束测试全部通过（0跳过）。真实生产只读快照确认主品availability=unknown，原公式实算risk85/data_quality100；同输入本地新公式risk=null/data_quality80，独立回退副本恢复旧输出且两个源码哈希等于原始。临时验证副本随TemporaryDirectory清理，无新测试常驻进程；既有verification/state.json不修改、不提交。
+
+## 2026-10-22：已确认的真实竞品中位数规则（v3）
+
+用户明确确认竞争分采用5–10个有效真实竞品的评价门槛分中位数。复用每日完成/推荐门的同租户独立相关竞品详情证明SQL，排除主品、禁用来源、非新鲜/非健康详情、缺价格/币种/星级/评价数或无相关性审计的记录。按详情新到旧选前10个独立ASIN，至少5个；评价数须为非负安全整数。不足5个或必要输入无效则null，不引用主品证据兜底。
+
+单品分=clamp(100−100×log10(竞品评价数+1)/5)，先保留两位小数，再取中位数（偶数取中间两项平均，最终两位小数）。这仅代表评价壁垒，不是销量/广告竞争模型；未知销量/广告不补分。权重、阈值、类目成本契约不变。competition证据只引用实际使用的竞品详情；公式版本crawler-evidence-v3，当前输入更换触发新历史评分，旧运行不改写。现有自动评估审计保留所用ASIN/快照/评价数/证据，页面解释范围、公式、未知和历史边界，竞品对比继续显示实际当前详情。
+
+发布顺序：干净已推送main运行 `python -B scripts/deploy-baota.py --scoring-only`，再运行 `python -B scripts/deploy-baota.py --frontend-only`。后者遇到评分源码差异时仅接受生产已安装同一提交、两个模块哈希同时匹配生产评分回执与本地build:worker的补丁；任何其它运行时差异仍拒绝。前者只由宝塔重启Node，后者静态发布不重启。Python/采集配置、任务和人工会话不修改。不新增依赖、环境变量、数据库或API字段，OpenAPI结构不变。

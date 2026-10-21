@@ -50,6 +50,12 @@ const analyzed = computed(
       );
     }).length,
 );
+const reviewBarrier = (item: OpportunityCompetitorSummary) => {
+  const count = item.latest_snapshot?.review_count;
+  return count == null || !Number.isSafeInteger(count) || count < 0
+    ? "未知"
+    : Math.min(100, Math.max(0, Math.round((100 - (Math.log10(count + 1) / 5) * 100) * 100) / 100));
+};
 const price = (item: OpportunityCompetitorSummary) => {
   const snapshot = item.latest_snapshot;
   return snapshot?.current_price != null && snapshot.currency
@@ -154,7 +160,10 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
             </th>
             <td data-label="售价">{{ price(item) }}</td>
             <td data-label="评分">{{ item.latest_snapshot?.rating_value ?? "未采集" }}</td>
-            <td data-label="评价数">{{ item.latest_snapshot?.review_count ?? "未采集" }}</td>
+            <td data-label="评价数">
+              {{ item.latest_snapshot?.review_count ?? "未知" }}
+              <small>当前评价门槛试算：{{ reviewBarrier(item) }}</small>
+            </td>
             <td
               data-label="购买提示"
               :title="item.latest_snapshot?.public_signals?.sales_badge?.text"
@@ -188,7 +197,9 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
       </table>
     </div>
     <p v-else>暂无相关竞品记录，请核对采集结果。</p>
-    <p>购买提示为页面展示的数量下限；精确销量、广告花费未采集。</p>
+    <p>
+      购买提示为页面展示的数量下限；精确销量、广告花费未知。评价门槛试算只使用当前评价数，不代表该竞品通过相关性及详情证据门，也不替代历史评分输入。
+    </p>
     <section class="selection-review-samples" aria-label="公开评价样本">
       <h4>评价样本</h4>
       <p>以下为商品页公开的部分评价节选，可能包含不同款式，不代表全部评价。</p>

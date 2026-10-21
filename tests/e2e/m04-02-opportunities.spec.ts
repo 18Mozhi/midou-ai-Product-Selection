@@ -663,6 +663,7 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     await expect(comparison.locator(".selection-comparison-primary")).toContainText("#222");
     await expect(comparison.locator("tbody tr").first()).toContainText("近月 ≥ 400");
     await expect(comparison.locator("tbody tr").first()).toContainText("已观察到广告位");
+    await expect(comparison.locator("tbody tr").first()).toContainText("当前评价门槛试算：");
     if ((page.viewportSize()?.width ?? 0) <= 760) {
       const advertisingCell = comparison
         .locator("tbody tr")
@@ -677,7 +678,9 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
       await expect(advertisingCell).toBeVisible();
     }
     await expect(
-      comparison.getByText("购买提示为页面展示的数量下限；精确销量、广告花费未采集。"),
+      comparison.getByText("购买提示为页面展示的数量下限；精确销量、广告花费未知。", {
+        exact: false,
+      }),
     ).toBeVisible();
     await expect(comparison.locator("tbody tr")).toHaveCount(competitorCount);
     await expect(
@@ -3418,3 +3421,24 @@ for (const from of [
     );
   });
 }
+
+test("competition basis explains approved median scope and unknown facts without collection writes", async ({
+  page,
+}) => {
+  await ready(page);
+  const writes = [];
+  page.on("request", (r) => {
+    if (r.method() === "POST") writes.push(r.url());
+  });
+  await page.goto(`/opportunities/${opportunityId}?tab=overview`);
+  await page.getByText("规则适用范围与竞争评分依据", { exact: true }).click();
+  const basis = page
+    .locator("details")
+    .filter({ has: page.getByText("规则适用范围与竞争评分依据", { exact: true }) });
+  await expect(basis).toContainText("主品评价数不参与竞争分");
+  await expect(basis).toContainText("至少5个");
+  await expect(basis).toContainText("中位数");
+  await expect(basis).toContainText("不按0分或默认分补齐");
+  await expect(basis).toContainText("不按名称判断商品类目");
+  expect(writes).toEqual([]);
+});

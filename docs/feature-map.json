@@ -8038,5 +8038,14 @@
       "tests/e2e/m02-02-auth-onboarding.spec.ts"
     ],
     "contract": "Product-first member workspace informed by authenticated ecom168 library. Eight factual columns, inline search/market, retained advanced filters and scoped list return, one native table (mobile same-data rows), no duplicate grid renderer. Flat shell, report overview and task-oriented detail. Keep all necessary platform/organization/account/provider/collection/operations functionality. No collector/API/schema/env/dependency/scoring/quality-gate changes. Official --frontend-only builds locally, publishes only static assets with index last, checks protected runtime hashes/PIDs, no restart/migration; frontend-release.json identifies UI independently from backend BUILD_SHA."
+  },
+  "competitionMedianScoring20261022": {
+    "sources": [
+      "apps/worker/src/automatic-selection-evaluation.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/web/src/components/OpportunityDetailInsights.vue",
+      "apps/web/src/components/ScoreRuleConsole.vue"
+    ],
+    "contract": "User-approved crawler-evidence-v3: shared scoped independent related healthy fresh detail proof; newest 5-10 distinct non-primary ASINs; median of existing per-competitor review barrier scores, null under five or invalid counts, only used detail evidence IDs. No primary review fallback or fabricated sales/ads. Existing rule weights/thresholds/cost scope/history preserved; no collection changes. See docs/selection-score-scope-audit.md."
   }
 }

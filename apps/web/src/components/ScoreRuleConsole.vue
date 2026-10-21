@@ -563,6 +563,13 @@ onActivated(() => {
       <button v-if="canDecide" type="button" @click="openCreate">新建规则版本</button>
       <span v-else-if="!canDecide" class="score-rule-readonly-note">当前身份仅可查看规则。</span>
     </header>
+    <details class="opportunity-insight-support">
+      <summary>规则适用范围与竞争计算方式</summary>
+      <p class="opportunity-insight-support">
+        适用范围：当前组织与工作区的已启用规则，不按规则名称推断类目。竞争维度自 crawler-evidence-v3
+        使用5–10个真实有效相关竞品的评价门槛分中位数；不足5个则未知。原有权重与推荐阈值不变，类目成本仍单独校验。
+      </p>
+    </details>
     <p v-if="message" class="opportunity-message" role="status">
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
     </p>

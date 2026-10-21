@@ -70,6 +70,14 @@ function fixture(options = {}) {
       }
       if (sql === selectionPipelineCompletionProofSql)
         return [options.completionProof ? [options.completionProof] : []];
+      if (sql.includes("s_sample.id snapshot_id,s_sample.review_count,s_sample.evidence_id FROM"))
+        return [
+          Array.from({ length: options.competitorCount ?? 5 }, (_, i) => ({
+            asin: `B0COUNT${String(i + 1).padStart(3, "0")}`,
+            review_count: 99,
+            evidence_id: `detail-${i}`,
+          })),
+        ];
       if (sql === selectionCompletedCompetitorsSql)
         return [
           Array.from({ length: 5 }, (_, index) => ({
@@ -465,7 +473,7 @@ for (const noCostRule of [false, true]) {
     ]);
     assert.deepEqual(JSON.parse(f.inputs.get("profit").evidence_ids_json), []);
     assert.deepEqual(JSON.parse(f.inputs.get("competition").evidence_ids_json), [
-      "snapshot-evidence",
+      ...Array.from({ length: 5 }, (_, i) => `detail-${i}`),
     ]);
     assert.equal(
       f.calls.filter(({ sql }) => sql.startsWith("INSERT INTO opportunity_score_jobs")).length,
@@ -504,14 +512,20 @@ test("blocked evidence stays missing across all dimensions without cost writes",
     ]);
   }
   const quality = f.calls.find(({ sql }) => sql.startsWith("SELECT COUNT(*) blocked"));
-  assert.deepEqual(quality.params, ["org", "workspace", "amazon-evidence", "snapshot-evidence"]);
+  assert.deepEqual(quality.params, [
+    "org",
+    "workspace",
+    "amazon-evidence",
+    ...Array.from({ length: 5 }, (_, i) => `detail-${i}`),
+    "snapshot-evidence",
+  ]);
 });
 
 test("missing review facts are not fabricated to make generic scoring complete", async () => {
   const f = fixture({ fields: { review_count: null, rating_value: null } });
   await f.worker.evaluate(job);
   assert.equal(f.inputs.get("market_demand").score_value, null);
-  assert.equal(f.inputs.get("competition").score_value, null);
+  assert.equal(f.inputs.get("competition").score_value, 60);
   assert.equal(f.inputs.get("profit").score_value, null);
   assert.ok(f.inputs.get("data_quality").score_value < 100);
 });
@@ -931,5 +945,18 @@ test("unknown availability stays missing instead of low risk or complete data qu
     "automatic_evaluation.risk.unsupported",
   ]);
   assert.equal(f.inputs.get("data_quality").score_value, 80);
-  assert.match(f.inputs.get("risk").source_ref_id, /crawler-evidence-v2/);
+  assert.match(f.inputs.get("risk").source_ref_id, /crawler-evidence-v3/);
+});
+
+test("competition with four detailed related competitors stays unknown, without primary fallback", async () => {
+  const f = fixture({ competitorCount: 4 });
+  await f.worker.evaluate(job);
+  assert.equal(f.inputs.get("competition").score_value, null);
+  assert.deepEqual(JSON.parse(f.inputs.get("competition").evidence_ids_json), []);
+  const query = f.calls.find(({ sql }) =>
+    sql.includes("s_sample.id snapshot_id,s_sample.review_count"),
+  );
+  assert.ok(query.sql.includes("opportunity.competitors_classified"));
+  assert.ok(query.sql.includes("s_sample.freshness='fresh'"));
+  assert.deepEqual(query.params, [job.opportunityId, job.organizationId, job.workspaceId]);
 });

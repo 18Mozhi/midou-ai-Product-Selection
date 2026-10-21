@@ -69,6 +69,23 @@ const emit = defineEmits<{
           </span>
           <span v-else class="opportunity-insight-support">暂无评分记录。</span>
         </div>
+        <details class="opportunity-insight-support">
+          <summary>规则适用范围与竞争评分依据</summary>
+          <p>
+            规则按当前组织、工作区的已启用版本适用，不按名称判断商品类目；auto-phone-case-v1
+            等历史名称不代表手机壳专用评分。类目专用成本规则另行校验，不能套用。
+          </p>
+          <p>
+            crawler-evidence-v3：仅使用独立于主品、相关性证明通过、来源启用且详情健康新鲜的真实竞品。按详情时间从新到旧取最多10个独立ASIN，至少5个；价格、币种、星级、评价数及详情证据必须完整。主品评价数不参与竞争分。
+          </p>
+          <p>
+            每个竞品门槛分 = 限定到0–100的（100 − 100 × log10(评价数 + 1) ÷
+            5），保留两位小数；竞争分取这些分数的中位数，偶数个取中间两项均值。高分仅表示评价壁垒较低，不代表销量、广告或综合市场竞争力。
+          </p>
+          <p>
+            不足5个有效竞品、评价数缺失或证据受阻，竞争分为未知，不按0分或默认分补齐。销量、广告数据未知时明确保留未知，不参与此公式。下表证据编号对应该次评分；竞品对比显示当前详情，可能晚于历史评分。历史评分不因公式升级自动改写。
+          </p>
+        </details>
         <div class="selection-score-table-wrap" tabindex="0" aria-label="评分维度明细滚动区域">
           <table class="selection-score-table">
             <caption>
@@ -87,7 +104,7 @@ const emit = defineEmits<{
               <tr v-for="item in detail.score_components" :key="item.dimension_code">
                 <th scope="row">{{ opportunityScoreDimensionLabel(item.dimension_code) }}</th>
                 <td>{{ item.weight_percent }}%</td>
-                <td>{{ item.input_score ?? "缺失" }}</td>
+                <td>{{ item.input_score ?? "未知" }}</td>
                 <td>{{ item.weighted_score ?? "—" }}</td>
                 <td>
                   <span>{{ item.evidence_ids.length }} 条证据</span>
