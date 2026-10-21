@@ -7631,6 +7631,7 @@
     "contract": "Existing production API runs one cooled probe for enabled approved unexpired builtin RSS with transient open circuits and active configured system actor. RSS health v2 checks actual robots before parsing. Existing audited recovery atomically rechecks definition version, approvals, same circuit and fresh ready health. No auto approval, private/browser sources, new service, schema or HTTP fields. Backend-only PUBLIC_RSS_AUTO_RECOVERY_ENABLED/POLL_MS/COOLDOWN_MS require BaoTa Node restart. Daily100 remains unproven."
   },
   "amazonObservedEmptySearch20261018": {
+    "observedSpanVariant20261021": "Stored run dc4dc980 proved genuine span no-results message with exact messaging-messages-no-results content-id and Search instead for /s?k= link. Accept only this bounded variant within existing main/message, succeeded_empty, artifact and no-product/no-challenge guards. Old parser auto-paused provider; preserve audited fresh-health recovery and historical terminal records. Stored replay returns zero facts, not selection completion.",
     "status": "implemented",
     "requirements": "docs/amazon-observed-empty-search.md",
     "sourceFiles": [

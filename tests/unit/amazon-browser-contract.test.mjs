@@ -84,6 +84,41 @@ test("observed ordinary Amazon empty search returns no facts without disabling t
   assert.throws(() => parseAmazonBrowserRunResult(result(emptySearch), { page_url: url }));
 });
 
+test("observed span no-results message with search-instead link remains a genuine empty search", () => {
+  // Structure observed in the production job that auto-paused the source on 2026-10-21.
+  const alternate =
+    '<div class="s-main-slot s-result-list"><div data-cel-widget="MAIN-MESSAGING-0" data-csa-c-content-id="messaging-messages-no-results"><div class="a-section a-spacing-none"><div class="s-no-outline"><span class="a-size-medium a-color-base">No results for your search query. </span><br><a class="a-link-normal" href="/s?k=fixture+phrase&amp;ref=a9_asc_1"><span class="a-size-base">Search instead for </span><span>fixture phrase</span></a></div></div></div></div>';
+  const source = "https://www.amazon.com/s?k=fixture+quoted+phrase";
+  const target = { query: "fixture quoted phrase" };
+  assert.deepEqual(
+    parseAmazonBrowserRunResult(
+      { ...result(alternate, source), status: "succeeded_empty" },
+      target,
+    ),
+    [],
+  );
+  for (const body of [
+    alternate.replace("messaging-messages-no-results", "unknown-message"),
+    alternate.replace("MAIN-MESSAGING-0", "unknown-slot"),
+    alternate.replace("s-main-slot", "unknown-main"),
+    alternate.replace("Search instead for", "unknown-link"),
+    alternate.replace("/s?k=", "/dp/B000000001?k="),
+    alternate + '<form action="/errors/validateCaptcha">Verify you are human</form>',
+    alternate + '<div data-component-type="s-search-result" data-asin="B000000001"></div>',
+    "<script>" + alternate + "</script>",
+  ])
+    assert.throws(() =>
+      parseAmazonBrowserRunResult({ ...result(body, source), status: "succeeded_empty" }, target),
+    );
+  assert.throws(() => parseAmazonBrowserRunResult(result(alternate, source), target));
+  assert.throws(() =>
+    parseAmazonBrowserRunResult(
+      { ...result(alternate), status: "succeeded_empty" },
+      { page_url: url },
+    ),
+  );
+});
+
 test("observed no-results featured carousel remains empty without supplying recommendation facts", () => {
   const source = "https://www.amazon.com/s?k=Waymo+vehicle+accessories";
   const target = { query: "Waymo vehicle accessories" };

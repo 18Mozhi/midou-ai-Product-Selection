@@ -213,9 +213,19 @@ function observedEmptySearch(html: string) {
   if (recommendations && recommendations.index < main.index + message.index + message[0].length)
     return false;
   const heading = /<h2\b[^>]*>([\s\S]*?)<\/h2>/i.exec(content)?.[1];
+  // Observed alternative from the stored 2026-10-21 empty-search job: no h2 or
+  // spelling advice, but an explicit no-results widget and search-instead link.
+  const alternateContent = content.slice(0, 4096);
+  const alternate =
+    /\sdata-csa-c-content-id=["']messaging-messages-no-results["']/i.test(message[0]) &&
+    /<span\b[^>]*>\s*No results for your search query\.\s*<\/span>/i.test(alternateContent) &&
+    /<a\b(?=[^>]*\shref=["']\/s\?k=[^"']+["'])[^>]*>\s*<span\b[^>]*>\s*Search instead for\s*<\/span>/i.test(
+      alternateContent,
+    );
   return (
-    heading?.replace(/<[^>]*>/g, "").trim() === "No results for your search query." &&
-    /<span\b[^>]*>Try checking your spelling or use more general terms<\/span>/i.test(content)
+    alternate ||
+    (heading?.replace(/<[^>]*>/g, "").trim() === "No results for your search query." &&
+      /<span\b[^>]*>Try checking your spelling or use more general terms<\/span>/i.test(content))
   );
 }
 

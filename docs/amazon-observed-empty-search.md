@@ -1,5 +1,20 @@
 # Amazon真实空搜索不再误停整个来源
 
+## 2026-10-21 span消息与替代搜索链接
+
+生产run dc4dc980-6eb4-45a4-8c65-6437ef1f522b保存的真实空页仍在s-main-slot及
+MAIN-MESSAGING-0中，但消息是span形式的“No results for your search query.”，
+没有旧h2/拼写建议，改为Search instead for链接；容器明确标记
+data-csa-c-content-id=messaging-messages-no-results。旧解析器报source_changed，
+02:13:06 UTC审计provider.parser_drift.auto_paused自动禁用来源，阻断327个在途待办。
+
+新增例外只接受这个已观察结构：原main及消息定位、容器精确content-id、前4096字符内
+精确span空提示，以及/s?k=目标的Search instead for链接。既有证据哈希/目标身份、
+succeeded_empty状态和验证码/商品ASIN/详情排除继续生效；未知布局仍失败关闭。
+回归先在旧构建复现source_changed，再验证修复和负例；原生产任务只读回放为0条事实。
+不修改历史终态、不生成商品或完成事件；无新增API/env/依赖/数据库。
+发布需既有宝塔Node/Python重启；来源仍须真实健康检查和带版本审计入口恢复，不自动启用。
+
 2026-10-18生产任务检索“luxury aircraft cabin door safety upgrade”时，浏览器正常到达同一Amazon搜索URL，保存DOM及截图并返回succeeded_empty。真实截图和DOM均显示“No results for your search query.”及拼写/通用关键词提示；没有商品卡片。旧消费端调用商品解析器得到source_changed，Worker因此自动停用整个Amazon来源。这会阻断其他有效关键词和商品的持续采集。
 
 浏览器消费端现在仅在两份证据的类型、哈希、时间、同源及目标身份全部通过，执行状态为succeeded_empty，目标为/s，且真实DOM同时包含s-main-slot、MAIN-MESSAGING-0、对应h2空搜索标题和原提示时，将商品解析器的source_changed转为零条结果。脚本、样式及注释中的文字不算证据；出现验证码、验证提示、验证参数、详情标题或非空ASIN时不能使用该例外。详情页、未知布局、泛化空页面及证据损坏仍失败关闭。不会生成商品、价格、评分、完成事件或把健康控制品当作目标结果。
