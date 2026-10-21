@@ -156,6 +156,10 @@ export async function waitForManualCaptcha(input: {
   captchaSelector: string;
   allowedOrigins: string[];
   isReady?: () => Promise<boolean>;
+  report?: (observation: {
+    event: "opened" | "command_applied" | "ready" | "expired";
+    command_kind?: HandoffCommand["kind"];
+  }) => void;
   signal?: AbortSignal;
 }) {
   const { page } = input,
@@ -175,6 +179,14 @@ export async function waitForManualCaptcha(input: {
   };
   try {
     await safe();
+    const report = (observation: Parameters<NonNullable<typeof input.report>>[0]) => {
+      try {
+        input.report?.(observation);
+      } catch {
+        // Observability cannot alter a live human session or its result.
+      }
+    };
+    report({ event: "opened" });
     // Fixed viewport keeps operator coordinates independent of their screen size.
     await page.setViewportSize({ width: 1280, height: 720 });
     while (Date.now() < expires) {
@@ -185,8 +197,10 @@ export async function waitForManualCaptcha(input: {
         if (
           !(await page.locator(input.captchaSelector).count()) &&
           (!input.isReady || (await input.isReady()))
-        )
+        ) {
+          report({ event: "ready" });
           return;
+        }
       }
       const frame = await page.screenshot({ type: "jpeg", quality: 75, timeout: 5000 });
       const info: HandoffInfo = {
@@ -246,10 +260,12 @@ export async function waitForManualCaptcha(input: {
           }
           if (command.kind === "key") await page.keyboard.press(command.key);
           if (command.kind === "scroll") await page.mouse.wheel(0, command.delta);
+          report({ event: "command_applied", command_kind: command.kind });
         }
       }
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
+    report({ event: "expired" });
     throw new Error("handoff_expired");
   } finally {
     await rm(directory, { recursive: true, force: true });

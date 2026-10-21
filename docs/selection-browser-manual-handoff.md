@@ -15,6 +15,17 @@ Amazon 公开采集在同一 Playwright 上下文内识别验证码并暂停，�
 普通503仍保留network_error。失败日志新增仅包含HTTP状态及Chromium标准网络错误码的诊断，
 不记录原始异常、URL、页面内容、代理或凭证。没有验证码时不制造人工会话。
 
+### 点击后再次出现验证页的诊断
+
+失败回执增加两个最多10条的受限序列：`handoff_observations`记录opened、command_applied、
+ready、expired及执行时长；命令只记click/text/key/scroll等种类，不记录坐标、键值或验证码。
+`main_document_responses`记录主框架实际文档响应的状态码、受限HTTPS DNS主机名、
+GET/POST/other方法和执行时长，不记录路径、查询、Cookie、请求或响应正文。
+两者可区分命令未执行、提交后收到HTTP失败、再次进入验证页与正常恢复；没有观察到ready，
+不得称验证通过。诊断回调失败不会打断人工会话；子资源仍使用原独立失败序列。
+复核应使用原run回执及审计，不因相同验证循环反复要求用户点击。需要人工操作时才通知。
+无新增API/env/数据库/依赖/权限或生产服务；需通过官方宝塔流程重启既有Node/Python。
+
 ## 运行与权限
 
 ### 旧验证码暂停后的自动接管与续跑

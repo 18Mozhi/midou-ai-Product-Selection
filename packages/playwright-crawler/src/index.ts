@@ -643,6 +643,8 @@ export class PlaywrightCrawlerEngine {
   ): Promise<BrowserRunResult> {
     const plan = validateBrowserPlan(planInput, this.limits),
       started = Date.now();
+    const handoffObservations: Record<string, unknown>[] = [];
+    const documentResponses: Record<string, unknown>[] = [];
     const guard = (page: Page) =>
       blocked(
         page,
@@ -657,6 +659,10 @@ export class PlaywrightCrawlerEngine {
                   page,
                   captchaSelector: selector,
                   allowedOrigins: plan.allowed_origins,
+                  report: (observation) => {
+                    if (handoffObservations.length === 10) handoffObservations.shift();
+                    handoffObservations.push({ ...observation, elapsed_ms: Date.now() - started });
+                  },
                   isReady: () =>
                     page
                       .getByRole("link", {
@@ -750,6 +756,21 @@ export class PlaywrightCrawlerEngine {
         );
       context.on("response", (response) => {
         if (response.status() === 429) rateLimited = true;
+        const request = response.request();
+        if (
+          plan.amazon_delivery &&
+          request.isNavigationRequest?.() &&
+          request.frame().parentFrame() === null
+        ) {
+          if (documentResponses.length === 10) documentResponses.shift();
+          documentResponses.push({
+            http_status: response.status(),
+            hostname: browserResourceHostname(response.url()),
+            method:
+              request.method() === "POST" ? "POST" : request.method() === "GET" ? "GET" : "other",
+            elapsed_ms: Date.now() - started,
+          });
+        }
         if (plan.amazon_delivery && response.status() >= 400)
           recordResourceFailure({
             stage,
@@ -983,6 +1004,8 @@ export class PlaywrightCrawlerEngine {
             ...(networkCode ? { network_code: networkCode } : {}),
             ...(deliveryState ? { delivery_state: deliveryState } : {}),
             ...(resourceFailures.length ? { resource_failures: resourceFailures } : {}),
+            ...(handoffObservations.length ? { handoff_observations: handoffObservations } : {}),
+            ...(documentResponses.length ? { main_document_responses: documentResponses } : {}),
             ...(localProxy ? { proxy_auth_relay: true } : {}),
             ...(options.navigationTransport === "request"
               ? { navigation_transport: "request" }

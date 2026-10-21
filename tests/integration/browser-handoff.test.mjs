@@ -61,6 +61,7 @@ test("real Chromium 503 manual fixture is operated through authenticated HTTP an
   const browser = await chromium.launch({ headless: true }),
     context = await browser.newContext(),
     page = await context.newPage();
+  const observations = [];
   try {
     await installNavigationRequestTransport(context, origin, 5000);
     const engine = new PlaywrightCrawlerEngine({}),
@@ -73,6 +74,7 @@ test("real Chromium 503 manual fixture is operated through authenticated HTTP an
           page: current,
           captchaSelector: "#manual-fixture",
           allowedOrigins: [origin],
+          report: (observation) => observations.push(observation),
         });
         return true;
       });
@@ -120,6 +122,20 @@ test("real Chromium 503 manual fixture is operated through authenticated HTTP an
       }
     }
     await navigation;
+    assert.equal(observations[0].event, "opened");
+    assert.equal(observations.at(-1).event, "ready");
+    assert.deepEqual(
+      observations
+        .filter((entry) => entry.event === "command_applied")
+        .map((entry) => entry.command_kind),
+      ["click", "text", "key"],
+    );
+    assert.ok(
+      observations.every((entry) =>
+        Object.keys(entry).every((key) => ["event", "command_kind"].includes(key)),
+      ),
+    );
+    assert.ok(!JSON.stringify(observations).includes("fixture"));
     assert.equal(await page.locator("#product").innerText(), "verified local fixture");
     await engine.goto(page, origin, [origin], true);
     assert.equal(await page.locator("#product").innerText(), "same context continued");

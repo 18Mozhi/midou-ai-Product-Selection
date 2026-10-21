@@ -547,6 +547,59 @@ test("Amazon failure diagnostics omit private errors and preserve the result con
   }
 });
 
+test("main document diagnostics retain bounded real statuses without URLs or subframe noise", async () => {
+  const { chromium } = await import("playwright");
+  const original = chromium.launchPersistentContext;
+  const originalWarn = console.warn;
+  const listeners = new Map();
+  const messages = [];
+  const response = (status, main = true) => ({
+    status: () => status,
+    url: () => "https://www.amazon.com/errors/validateCaptcha?private-token=secret",
+    request: () => ({
+      isNavigationRequest: () => true,
+      frame: () => ({ parentFrame: () => (main ? null : {}) }),
+      method: () => "POST",
+      resourceType: () => "document",
+    }),
+  });
+  const page = {
+    goto: async () => {
+      for (let i = 0; i < 15; i++) listeners.get("response")(response(200 + i));
+      listeners.get("response")(response(200, false));
+      throw new Error("net::ERR_FAILED private-token");
+    },
+  };
+  chromium.launchPersistentContext = async () => ({
+    pages: () => [page],
+    setDefaultTimeout() {},
+    setDefaultNavigationTimeout() {},
+    on: (event, handler) => listeners.set(event, handler),
+    close: async () => {},
+  });
+  console.warn = (message) => messages.push(JSON.parse(message));
+  try {
+    const { plan } = createAmazonBrowserExecutionRequest({ query: "private-query" });
+    await new PlaywrightCrawlerEngine(limits).run(plan, "not-created", {
+      requestId: "req",
+      traceId: "trace",
+    });
+    const documents = messages[0].main_document_responses;
+    assert.equal(documents.length, 10);
+    assert.deepEqual(
+      documents.map((entry) => entry.http_status),
+      [205, 206, 207, 208, 209, 210, 211, 212, 213, 214],
+    );
+    assert.ok(
+      documents.every((entry) => entry.hostname === "www.amazon.com" && entry.method === "POST"),
+    );
+    assert.doesNotMatch(JSON.stringify(messages), /private|token|secret|validateCaptcha/);
+  } finally {
+    chromium.launchPersistentContext = original;
+    console.warn = originalWarn;
+  }
+});
+
 test("navigation request transport is server-configured and rejects non-Amazon plans before launch", async () => {
   assert.equal(
     loadRuntimeConfig({}, "api").providerAdapters.amazonBrowserNavigationTransport,

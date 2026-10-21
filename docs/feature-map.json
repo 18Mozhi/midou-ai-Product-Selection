@@ -75,6 +75,7 @@
     "contract": "Derive collection_tasks outer scheduler timeout from existing browser run budget plus30 seconds, at least legacy300 seconds. Keep browser client run+10 seconds and derive stuck observation at2x outer budget. Other queues, concurrency, retries, leases and completion evidence gates unchanged. No new API/schema/dependency/config flag. Existing BaoTa Node Worker restart required. Real CAPTCHA and100/day still require acceptance."
   },
   "selectionBrowserManualHandoff20261020": {
+    "loopDiagnostics": "Bound handoff lifecycle/command-kind observations and real main-document status/HTTPS DNS hostname/method/timing to 10 entries each; never answers, coordinates, key values, URLs, cookies, bodies or credentials. Diagnostic callbacks cannot interrupt human sessions. Same CAPTCHA loop does not justify repeated operator requests; keep all acceptance gates.",
     "status": "implemented",
     "requirements": "docs/selection-browser-manual-handoff.md",
     "sourceFiles": [
