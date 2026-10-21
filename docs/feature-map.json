@@ -7972,6 +7972,25 @@
     ],
     "contract": "Keep original pending cached-result preference; include only ordinary queued/retry_scheduled validation_failed subqueries with a successful nonnull browser result in exact task/subquery/org/workspace/provider scope. Ordering only after priority, scope and stages; FIFO bytes and source/lease/retry/quality protections unchanged. No API/config/schema/dependency/Python change; deployed predicate verified, natural/day100 pending."
   },
+  "selectionMemberDeepFlowAudit20261021": {
+    "status": "implemented",
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityDetailInsights.vue",
+      "apps/web/src/components/SelectionProductComparison.vue",
+      "apps/web/src/components/OpportunitySupplyPanel.vue",
+      "apps/web/src/components/ScoreRuleConsole.vue",
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/scoring.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/e2e/m04-03-scoring.spec.ts",
+      "tests/e2e/m04-04-profit.spec.ts"
+    ],
+    "routes": ["/opportunities/:opportunityId", "/opportunities/scoring-rules"],
+    "contract": "Member deep-flow audit: Amazon-only primary identity and same-data mobile competitor fact rows; 20-at-a-time supply disclosure preserves all records and resets on search/identity invalidation; score evidence IDs and missing fields remain factual; rule inspection retains a validated opportunity return URL. Remove unused profit prop and superseded two-column detail CSS. No collector, API, schema, scoring rules, permissions or procurement decisions changed. Deploy static frontend only without service restart.",
+    "docs": ["docs/selection-commerce-rebuild.md"]
+  },
   "selectionCommerceRebuild20261021": {
     "status": "implemented",
     "requirements": "docs/selection-commerce-rebuild.md",

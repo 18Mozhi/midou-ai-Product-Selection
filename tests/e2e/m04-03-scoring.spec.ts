@@ -151,6 +151,7 @@ test("M04-03.A07/A08/A09/A15 score rule versions support audited responsive work
       () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
     ),
   ).toBe(true);
+  await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page).toHaveScreenshot("compact-scoring-rules-20261017.png", { fullPage: true });
   await capturePhase2Evidence(page, testInfo, "P17", "versions", [
     "active-and-draft-visible",
@@ -496,11 +497,13 @@ test("M04-03.A07/A08/A15 opportunity score explanation exposes inputs evidence m
   const demandRow = scoreTable
     .getByRole("row")
     .filter({ has: page.getByRole("rowheader", { name: "市场需求", exact: true }) });
-  await expect(demandRow.getByRole("cell")).toHaveText(["40%", "82", "32.8", "1 条证据"]);
+  await expect(demandRow.getByRole("cell")).toHaveText(["40%", "82", "32.8", /1 条证据/]);
   const competitionRow = scoreTable
     .getByRole("row")
     .filter({ has: page.getByRole("rowheader", { name: "竞争", exact: true }) });
-  await expect(competitionRow.getByRole("cell")).toHaveText(["30%", "70", "21", "1 条证据"]);
+  await expect(competitionRow.getByRole("cell")).toHaveText(["30%", "70", "21", /1 条证据/]);
+  await demandRow.getByText("证据编号", { exact: true }).click();
+  await expect(demandRow.locator("code")).toHaveText(ruleId);
   await expect(page.getByRole("link", { name: "规则版本" })).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
 });

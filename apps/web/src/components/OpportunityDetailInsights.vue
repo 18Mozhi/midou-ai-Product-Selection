@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { useRoute } from "vue-router";
 import SelectionProductComparison from "./SelectionProductComparison.vue";
 import type {
   OpportunityCompetitorSummary,
   OpportunityDetail,
   OpportunityPartialLoadState,
-  OpportunityProfitAnalysis,
   OpportunityTab,
 } from "./opportunity-workspace-types";
 import {
@@ -21,10 +21,10 @@ type DownstreamState = {
 };
 type DownstreamSource = keyof DownstreamState;
 
-const props = defineProps<{
+const route = useRoute();
+defineProps<{
   tab: OpportunityTab;
   detail: OpportunityDetail;
-  profit: OpportunityProfitAnalysis | null;
   downstream: { competitors: number; snapshots: number; searches: number; suppliers: number };
   downstreamState: DownstreamState;
   competitorItems: OpportunityCompetitorSummary[];
@@ -69,7 +69,7 @@ const emit = defineEmits<{
           </span>
           <span v-else class="opportunity-insight-support">暂无评分记录。</span>
         </div>
-        <div class="selection-score-table-wrap">
+        <div class="selection-score-table-wrap" tabindex="0" aria-label="评分维度明细滚动区域">
           <table class="selection-score-table">
             <caption>
               评分维度明细
@@ -91,6 +91,14 @@ const emit = defineEmits<{
                 <td>{{ item.weighted_score ?? "—" }}</td>
                 <td>
                   <span>{{ item.evidence_ids.length }} 条证据</span>
+                  <details v-if="item.evidence_ids.length">
+                    <summary>证据编号</summary>
+                    <ul class="selection-score-evidence">
+                      <li v-for="id in item.evidence_ids" :key="id">
+                        <code>{{ id }}</code>
+                      </li>
+                    </ul>
+                  </details>
                   <details v-if="item.missing_fields.length">
                     <summary>缺失项</summary>
                     <span>{{
@@ -111,7 +119,10 @@ const emit = defineEmits<{
           }}
         </p>
         <div class="opportunity-insight-actions">
-          <RouterLink to="/opportunities/scoring-rules">规则版本</RouterLink>
+          <RouterLink
+            :to="{ path: '/opportunities/scoring-rules', query: { from: route.fullPath } }"
+            >规则版本</RouterLink
+          >
           <button
             v-if="canDecide"
             type="button"
@@ -590,6 +601,13 @@ const emit = defineEmits<{
   min-height: 32px;
   color: var(--so-primary);
 }
+.selection-score-evidence {
+  margin: 6px 0;
+  padding-left: 18px;
+  max-width: 320px;
+  overflow-wrap: anywhere;
+}
+.selection-score-table-wrap:focus-visible,
 .selection-score-table summary:focus-visible {
   outline: 2px solid var(--so-primary);
   outline-offset: 2px;
@@ -661,15 +679,6 @@ const emit = defineEmits<{
 .opportunity-status-pair > div {
   padding: 10px;
   background: var(--so-opportunity-review-canvas);
-}
-
-@media (min-width: 1280px) {
-  .opportunity-insight-grid {
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  }
-  .opportunity-insight-grid > article:nth-child(odd) {
-    border-right: 1px solid var(--so-opportunity-review-line);
-  }
 }
 
 @media (max-width: 760px) {

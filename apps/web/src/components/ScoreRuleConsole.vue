@@ -8,11 +8,20 @@ import {
   reactive,
   ref,
 } from "vue";
+import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../opportunities.css";
 import "../scoring.css";
+const route = useRoute();
+const returnPath = computed(() => {
+  const value = typeof route.query.from === "string" ? route.query.from : "";
+  return /^\/opportunities(?:[/?#]|$)/.test(value) &&
+    !/^\/opportunities\/scoring-rules(?:[/?#]|$)/.test(value)
+    ? value
+    : "/opportunities";
+});
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type Action = "submit" | "approve" | "reject" | "activate" | "rollback";
 type CreateField = "version_code" | "name" | "recommend_min" | "observe_min" | "dimensions";
@@ -543,6 +552,9 @@ onActivated(() => {
 </script>
 <template>
   <section class="score-rules score-rules--review">
+    <nav class="score-rule-return" aria-label="评分规则返回路径">
+      <RouterLink :to="returnPath">← 返回选品</RouterLink>
+    </nav>
     <header class="score-rules-toolbar">
       <div>
         <h2>评分规则</h2>

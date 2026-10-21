@@ -637,6 +637,12 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) =>
       route.fulfill({
         json: envelope([
+          {
+            ...product(0),
+            id: "foreign-primary",
+            source_site: "other",
+            title: "非Amazon同编号商品",
+          },
           product(0),
           ...Array.from({ length: competitorCount }, (_, index) => product(index + 1)),
           product(1),
@@ -650,6 +656,7 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     await page.goto(`/opportunities/${opportunityId}?tab=competition`);
     const comparison = page.getByRole("region", { name: "Amazon 主品与竞品" });
     await expect(comparison.getByRole("heading", { name: "主要商品示例" })).toBeVisible();
+    await expect(comparison.getByText("非Amazon同编号商品")).toHaveCount(0);
     await expect(comparison.locator(".selection-comparison-primary")).toContainText(
       "近月 ≥ 10,000",
     );
@@ -663,13 +670,10 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
         .locator("td")
         .filter({ hasText: "已观察到广告位" });
       await advertisingCell.scrollIntoViewIfNeeded();
-      await expect
-        .poll(() =>
-          comparison
-            .locator(".selection-comparison-scroll")
-            .evaluate((element) => element.scrollLeft),
-        )
-        .toBeGreaterThan(0);
+      const box = (await advertisingCell.boundingBox())!;
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+      await expect(advertisingCell).toHaveAttribute("data-label", "广告标记");
       await expect(advertisingCell).toBeVisible();
     }
     await expect(
@@ -762,7 +766,9 @@ test("selection detail presents product identity and factual score rows without 
   );
   await expect(header.locator(".selection-product-header__score > div").first()).toContainText("—");
   const table = page.getByRole("table", { name: "评分维度明细" });
-  await expect(table.getByRole("row", { name: "市场需求 25% 75 18.75 1 条证据" })).toBeVisible();
+  await expect(table.getByRole("row", { name: /市场需求 25% 75 18.75 1 条证据/ })).toBeVisible();
+  await table.getByText("证据编号", { exact: true }).click();
+  await expect(table.getByText("evidence-1", { exact: true })).toBeVisible();
   await expect(table.getByRole("row", { name: /数据质量/ })).toContainText("缺失");
   await table.getByText("缺失项", { exact: true }).click();
   await expect(table.getByText("评价明细", { exact: true })).toBeVisible();
@@ -3335,3 +3341,80 @@ test("detail sections lead with their own content and keep decisions in product 
   await expect(page.locator(".opportunity-decision-summary")).toHaveCount(1);
   await expect(page.locator(".opportunity-collection-tools")).toHaveCount(0);
 });
+
+test("product supply batches retain every quote and reset when switching records", async ({
+  page,
+}) => {
+  await ready(page, evidence, {}, supplyCapabilities);
+  await page.route("**/api/v1/sourcing/searches", (route) =>
+    route.fulfill({ json: envelope([supplySearch("many"), supplySearch("other")]) }),
+  );
+  let reads = 0;
+  await page.route("**/api/v1/sourcing/searches/*", (route) => {
+    reads++;
+    const id = new URL(route.request().url()).pathname.split("/").at(-1)!;
+    return route.fulfill({
+      json: envelope({
+        ...supplySearch(id),
+        candidates: Array.from({ length: 41 }, (_, index) => ({
+          ...supplyCandidate,
+          id: `${id}-${index}`,
+          supplier_name: `工厂 ${index + 1}`,
+        })),
+      }),
+    });
+  });
+  await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+  const panel = page.getByRole("region", { name: "当前商品货源报价" });
+  await expect(panel.locator("tbody tr")).toHaveCount(20);
+  await panel.getByRole("button", { name: "继续显示 20 个货源" }).click();
+  await expect(panel.locator("tbody tr")).toHaveCount(40);
+  await panel.getByRole("button", { name: "继续显示 1 个货源" }).click();
+  await expect(panel.locator("tbody tr")).toHaveCount(41);
+  await expect(panel.getByText("工厂 41", { exact: true })).toBeVisible();
+  await panel.getByRole("button", { name: "收起到前 20 个" }).click();
+  await expect(panel.locator("tbody tr")).toHaveCount(20);
+  await panel.getByRole("button", { name: "继续显示 20 个货源" }).click();
+  await panel.getByLabel("找货记录").selectOption("other");
+  await expect(panel.locator("tbody tr")).toHaveCount(20);
+  await expect(panel.getByRole("status")).toHaveText("已显示 20 / 41 个候选");
+  expect(reads).toBe(2);
+  await expect(page.locator(".opportunity-profit")).toContainText("利润未知");
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
+});
+
+test("score rule inspection returns to the exact product and original list context", async ({
+  page,
+}) => {
+  await ready(page);
+  const original = `/opportunities/${opportunityId}?from=${encodeURIComponent("/opportunities?view=all&page=2&q=风扇")}`;
+  await page.goto(original);
+  await page.getByRole("link", { name: "规则版本", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp("/opportunities/scoring-rules\\?from="));
+  await page.getByRole("link", { name: "← 返回选品", exact: true }).click();
+  expect(new URL(page.url()).pathname + new URL(page.url()).search).toBe(original);
+  await expect(page.getByRole("heading", { name: "评分与采集进度" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "← 返回来源列表" })).toHaveAttribute(
+    "href",
+    "/opportunities?view=all&page=2&q=风扇",
+  );
+});
+
+for (const from of [
+  "https://example.test/",
+  "//example.test/",
+  "/opportunities/scoring-rules?from=loop",
+]) {
+  test(`score rule return rejects an invalid or self-referencing source: ${from}`, async ({
+    page,
+  }) => {
+    await ready(page);
+    await page.goto(`/opportunities/scoring-rules?from=${encodeURIComponent(from)}`);
+    await expect(page.getByRole("link", { name: "← 返回选品", exact: true })).toHaveAttribute(
+      "href",
+      "/opportunities",
+    );
+  });
+}

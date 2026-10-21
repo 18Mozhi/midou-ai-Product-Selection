@@ -7,8 +7,11 @@ import { formatOpportunityTime } from "./opportunity-workspace-presentation";
 const props = defineProps<{ mainAsin?: string | null; items: OpportunityCompetitorSummary[] }>();
 const main = computed(
   () =>
-    props.items.find((item) => item.external_id.toUpperCase() === props.mainAsin?.toUpperCase()) ??
-    null,
+    props.items.find(
+      (item) =>
+        item.source_site.toLowerCase() === "amazon" &&
+        item.external_id.toUpperCase() === props.mainAsin?.toUpperCase(),
+    ) ?? null,
 );
 const competitors = computed(() => {
   const seen = new Set<string>(props.mainAsin ? [props.mainAsin.toUpperCase()] : []);
@@ -72,7 +75,7 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
         <span>主要商品</span>
         <h4>{{ main?.title ?? (mainAsin ? "主品详情待采集" : "主品待识别") }}</h4>
         <a
-          v-if="mainAsin && /^[A-Z0-9]{10}$/.test(mainAsin)"
+          v-if="mainAsin && /^[A-Z0-9]{10}$/i.test(mainAsin)"
           :href="`https://www.amazon.com/dp/${mainAsin}`"
           target="_blank"
           rel="noopener noreferrer"
@@ -149,23 +152,29 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
                 >{{ item.external_id }} ↗</a
               >
             </th>
-            <td>{{ price(item) }}</td>
-            <td>{{ item.latest_snapshot?.rating_value ?? "未采集" }}</td>
-            <td>{{ item.latest_snapshot?.review_count ?? "未采集" }}</td>
-            <td :title="item.latest_snapshot?.public_signals?.sales_badge?.text">
+            <td data-label="售价">{{ price(item) }}</td>
+            <td data-label="评分">{{ item.latest_snapshot?.rating_value ?? "未采集" }}</td>
+            <td data-label="评价数">{{ item.latest_snapshot?.review_count ?? "未采集" }}</td>
+            <td
+              data-label="购买提示"
+              :title="item.latest_snapshot?.public_signals?.sales_badge?.text"
+            >
               {{ purchaseLabel(item) }}
             </td>
-            <td :title="item.latest_snapshot?.public_signals?.best_seller_rank?.text">
+            <td
+              data-label="类目排名"
+              :title="item.latest_snapshot?.public_signals?.best_seller_rank?.text"
+            >
               {{ rankLabel(item) }}
             </td>
-            <td>
+            <td data-label="广告标记">
               {{
                 item.latest_snapshot?.public_signals?.sponsored === true
                   ? "已观察到广告位"
                   : "未采集"
               }}
             </td>
-            <td>
+            <td data-label="采集时间">
               {{
                 item.latest_snapshot
                   ? formatOpportunityTime(item.latest_snapshot.captured_at)
@@ -219,7 +228,7 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
   color: var(--so-text);
   background: var(--so-panel);
   border: 1px solid var(--so-border);
-  border-radius: 7px;
+  border-radius: 4px;
   overflow: hidden;
 }
 .selection-comparison-primary {
@@ -315,6 +324,48 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
   color: var(--so-warning);
 }
 @media (max-width: 760px) {
+  .selection-comparison-scroll {
+    overflow: visible;
+  }
+  .selection-comparison table {
+    display: block;
+    min-width: 0;
+  }
+  .selection-comparison thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .selection-comparison tbody {
+    display: block;
+  }
+  .selection-comparison tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid var(--so-border);
+    padding: 12px;
+    gap: 12px;
+  }
+  .selection-comparison tbody th {
+    grid-column: 1 / -1;
+    width: auto;
+  }
+  .selection-comparison :is(th, td) {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .selection-comparison td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--so-text-muted);
+    margin-bottom: 5px;
+  }
+
   .selection-comparison-primary {
     flex-direction: column;
     align-items: stretch;

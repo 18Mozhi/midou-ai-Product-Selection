@@ -19,11 +19,14 @@ const related = computed(() =>
   ),
 );
 const selectedId = ref("");
+const CANDIDATE_BATCH_SIZE = 20;
+const visibleCount = ref(CANDIDATE_BATCH_SIZE);
 const selected = ref<SourcingSearch | null>(null);
 const state = ref<"loading" | "ready" | "error">("loading");
 let controller: AbortController | null = null;
 let generation = 0;
 function invalidate() {
+  visibleCount.value = CANDIDATE_BATCH_SIZE;
   generation += 1;
   controller?.abort();
   controller = null;
@@ -86,6 +89,7 @@ onActivated(() => {
   }
 });
 const candidates = computed(() => selected.value?.candidates ?? []);
+const visibleCandidates = computed(() => candidates.value.slice(0, visibleCount.value));
 function sourceLink(value: string) {
   try {
     const url = new URL(value);
@@ -147,7 +151,7 @@ function is1688(value: string) {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in candidates" :key="item.id">
+            <tr v-for="item in visibleCandidates" :key="item.id">
               <th scope="row">
                 <strong>{{ item.supplier_name }}</strong
                 ><span>{{ item.product_title }}</span
@@ -195,6 +199,30 @@ function is1688(value: string) {
           </tbody>
         </table>
       </div>
+      <footer
+        v-if="candidates.length > CANDIDATE_BATCH_SIZE"
+        class="selection-supply-pagination"
+        aria-label="货源显示范围"
+      >
+        <span role="status"
+          >已显示 {{ visibleCandidates.length }} / {{ candidates.length }} 个候选</span
+        >
+        <button
+          v-if="visibleCount > CANDIDATE_BATCH_SIZE"
+          type="button"
+          @click="visibleCount = CANDIDATE_BATCH_SIZE"
+        >
+          收起到前 20 个
+        </button>
+        <button
+          v-if="visibleCandidates.length < candidates.length"
+          type="button"
+          @click="visibleCount += CANDIDATE_BATCH_SIZE"
+        >
+          继续显示
+          {{ Math.min(CANDIDATE_BATCH_SIZE, candidates.length - visibleCandidates.length) }} 个货源
+        </button>
+      </footer>
       <p>报价保留原币种与采集时间；未统一规格、计量单位或币种前，不按金额排序或换算为进货价。</p>
     </template>
   </section>
@@ -243,6 +271,14 @@ function is1688(value: string) {
   background: var(--so-panel);
   color: var(--so-text);
   font: inherit;
+  font-size: 13px;
+}
+.selection-supply-pagination {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 0;
   font-size: 13px;
 }
 .selection-supply-scroll {

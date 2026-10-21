@@ -344,7 +344,6 @@ useOpportunityWorkspaceLifecycle({
                 v-if="['overview', 'competition', 'risk'].includes(tab)"
                 :tab="tab"
                 :detail="detail"
-                :profit="profit"
                 :downstream="downstream"
                 :downstream-state="downstreamLoadState"
                 :competitor-items="competitorItems"

@@ -242,6 +242,7 @@ test("M04-04.A07/A08/A09/A15 cost rule console exposes explicit fees and dual ap
       () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
     ),
   ).toBe(true);
+  await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page).toHaveScreenshot("compact-cost-rules-workbench-20261017.png", {
     fullPage: true,
   });
