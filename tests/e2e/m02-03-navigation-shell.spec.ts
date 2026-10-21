@@ -384,8 +384,11 @@ for (const item of [
     await page.goto(item.path);
     const navigation = page.getByRole("navigation", { name: "移动快捷导航" });
     const themeButton = page.getByRole("button", { name: "切换界面主题" });
-    await expect(themeButton).toBeVisible();
-    await expect(themeButton).toBeInViewport();
+    if (item.shell === "member") await expect(themeButton).toHaveCount(0);
+    else {
+      await expect(themeButton).toBeVisible();
+      await expect(themeButton).toBeInViewport();
+    }
     await expect(page.locator(".role-context-rail")).toHaveCount(0);
     await expect(page.locator(".role-context-drawer")).toHaveCount(0);
     await expect(navigation.locator(":scope > *")).toHaveCount(5);

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from "vue";
+import { computed, reactive, watch } from "vue";
 import { useRoute } from "vue-router";
-import { opportunityProfitStatusLabel } from "./opportunity-workspace-presentation";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import AutomaticSelectionReadinessPanel from "./AutomaticSelectionReadinessPanel.vue";
 import OpportunityCatalogueList from "./OpportunityCatalogueList.vue";
@@ -26,7 +25,6 @@ interface OpportunityFilters {
   lifecycle_status: string;
 }
 type Opportunity = OpportunitySummary;
-const displayMode = ref<"grid" | "list">("list");
 const viewOptions: Array<{ value: SelectionView; label: string }> = [
   { value: "completed", label: "已完成分析" },
   { value: "recommended", label: "推荐商品" },
@@ -212,6 +210,14 @@ watch(imageFailureResetSources, (items) => {
 </script>
 
 <template>
+  <header class="catalogue-page-heading">
+    <div>
+      <p>商品研究 / 选品库</p>
+      <h2>选品库</h2>
+      <span>从情报到商品，把比较和判断放在一张表里。</span>
+    </div>
+    <button type="button" class="so-action-secondary" @click="emit('apply')">更新结果</button>
+  </header>
   <section class="catalogue-controls" aria-label="选品结果视图">
     <nav>
       <button
@@ -236,11 +242,21 @@ watch(imageFailureResetSources, (items) => {
             v-model="filters.q"
             aria-label="商品名称"
             maxlength="200"
-            placeholder="搜索商品名称"
+            placeholder="输入商品名称搜索"
           />
         </label>
         <button class="so-action-secondary" type="submit">搜索</button>
       </form>
+      <label class="catalogue-market-filter"
+        >市场<input
+          v-model="filters.market"
+          maxlength="40"
+          placeholder="全部市场"
+          @keydown.enter="emit('apply')"
+      /></label>
+      <button v-if="hasFiltersToClear" type="button" class="catalogue-clear" @click="emit('reset')">
+        清除条件
+      </button>
       <ResponsiveFilterDrawer mode="dialog" label="高级筛选" :active-count="activeFilterCount">
         <form
           class="opportunity-filters catalogue-advanced-filters"
@@ -329,7 +345,7 @@ watch(imageFailureResetSources, (items) => {
     "
     @secondary="state === 'empty' ? clearOrShowAll() : emit('reset')"
   />
-  <section v-else class="product-catalog" :data-display="displayMode">
+  <section v-else class="product-catalog">
     <header>
       <div>
         <h2>{{ viewCopy.title }}</h2>
@@ -337,21 +353,12 @@ watch(imageFailureResetSources, (items) => {
           viewCopy.description
         }}</small>
       </div>
-      <div class="catalog-display" role="group" aria-label="商品展示方式">
-        <span>按更新时间排序</span>
-        <button type="button" :aria-pressed="displayMode === 'grid'" @click="displayMode = 'grid'">
-          图卡
-        </button>
-        <button type="button" :aria-pressed="displayMode === 'list'" @click="displayMode = 'list'">
-          列表
-        </button>
-      </div>
+      <span class="catalogue-sort-note">最近更新优先 · 每页 20 个</span>
     </header>
     <p class="catalog-data-note">
       购买提示为公开下限，不等于精确销量；进货价为已有采集记录，不含其他成本；候选数量不代表可用货源。
     </p>
     <OpportunityCatalogueList
-      v-if="displayMode === 'list'"
       :items="items"
       :return-path="route.fullPath"
       :completed-view="selectionView === 'completed'"
@@ -364,91 +371,6 @@ watch(imageFailureResetSources, (items) => {
       :image-fallback-label="imageFallbackLabel"
       @image-error="onImageError"
     />
-    <div v-else class="catalog-products">
-      <article v-for="item in items" :key="item.id" class="catalog-product">
-        <RouterLink
-          :to="{
-            path: `/opportunities/${item.id}`,
-            query: { from: route.fullPath },
-          }"
-          ><span
-            class="opportunity-picture"
-            :class="{ 'is-placeholder': !hasUsableImage(item) }"
-            :role="imageFallbackLabel(item) ? 'img' : undefined"
-            :aria-label="imageFallbackLabel(item)"
-            ><img
-              v-if="hasUsableImage(item)"
-              :src="item.image_url ?? undefined"
-              :alt="`${item.name} 商品图`"
-              loading="lazy"
-              referrerpolicy="no-referrer"
-              @error="onImageError(item)"
-            /><span v-else aria-hidden="true">{{ imageFallbackLabel(item) }}</span></span
-          ><span class="catalog-product-identity"
-            ><span class="catalog-product-key">
-              <small v-if="item.main_asin" :title="`ASIN ${item.main_asin}`"
-                >ASIN <span>{{ item.main_asin }}</span></small
-              >
-              <small v-else>主品待确认</small>
-              <em>{{ sourceLabel(item) }}</em>
-            </span>
-            <strong>{{ item.name }}</strong
-            ><small :title="catalogMeta(item)">{{ catalogMeta(item) }}</small></span
-          >
-          <div class="catalog-public-facts" :aria-label="`${item.name} 商品资料`">
-            <dl>
-              <div
-                v-for="fact in productFacts(item)"
-                :key="fact.label"
-                :class="{
-                  'is-price': ['售价', '1688进货价'].includes(fact.label),
-                  'is-missing': ['未采集', '未取得'].includes(fact.value),
-                }"
-              >
-                <dt>{{ fact.label }}</dt>
-                <dd>{{ fact.value }}</dd>
-              </div>
-            </dl>
-            <p v-if="item.primary_product">
-              <span>{{
-                item.primary_product.public_signals?.sponsored
-                  ? "已观察到广告标记"
-                  : "广告标记未提供"
-              }}</span
-              ><time :datetime="item.primary_product.captured_at"
-                >资料 {{ freshness(item.primary_product.captured_at) }}</time
-              >
-            </p>
-            <p v-else>商品资料待采集</p>
-          </div>
-          <dl class="catalog-product-metrics" :aria-label="`${item.name} 决策摘要`">
-            <div v-for="fact in rowFacts(item)" :key="fact.label">
-              <dt>{{ fact.label }}</dt>
-              <dd>{{ fact.value }}</dd>
-            </div>
-          </dl>
-          <div class="catalog-product-coverage">
-            <span
-              >竞品候选 <strong>{{ item.competitor_count }}</strong></span
-            >
-            <span
-              >货源候选 <strong>{{ item.supplier_candidate_count }}</strong></span
-            >
-            <span>{{ opportunityProfitStatusLabel(item.profit_status) }}</span>
-          </div>
-          <b :data-status="item.decision_status"
-            >{{
-              selectionStage(item) === "recommended"
-                ? "审阅并采纳"
-                : selectionView === "completed"
-                  ? "查看分析"
-                  : "查看进度"
-            }}
-            →</b
-          ></RouterLink
-        >
-      </article>
-    </div>
     <footer class="opportunity-pagination" aria-label="选品分页">
       <button type="button" :disabled="page <= 1" @click="emit('page', page - 1)">上一页</button>
       <span>第 {{ page }} / {{ pageCount }} 页</span>

@@ -316,7 +316,7 @@ test("a completed return URL without an API receipt cannot claim analysis comple
   await expect(page.getByRole("button", { name: "采纳建议", exact: true })).toHaveCount(0);
 });
 
-test("completed catalogue table and cards open analysis rather than claim ongoing collection", async ({
+test("completed catalogue opens analysis rather than claim ongoing collection", async ({
   page,
 }) => {
   await ready(page);
@@ -339,9 +339,8 @@ test("completed catalogue table and cards open analysis rather than claim ongoin
   await expect(
     page.getByRole("link", { name: `查看分析：${recommendedBase.name}`, exact: true }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "图卡", exact: true }).click();
-  await expect(page.locator(".catalog-product > a")).toContainText("查看分析");
-  await expect(page.locator(".catalog-product > a")).not.toContainText("查看进度");
+  await expect(page.getByRole("button", { name: "图卡", exact: true })).toHaveCount(0);
+  await expect(page.locator(".selection-product-action-cell")).not.toContainText("查看进度");
 });
 
 test("historical evidence task retains blocker facts without restoring the retired task surface", async ({
@@ -778,88 +777,34 @@ test("selection detail presents product identity and factual score rows without 
   await page.screenshot({ path: testInfo.outputPath("selection-detail.png") });
 });
 
-test("commerce catalogue switches layouts and keeps product navigation and missing images", async ({
+test("commerce catalogue is a product-first eight-column research table", async ({
   page,
 }, testInfo) => {
+  if (testInfo.project.name === "desktop-chromium")
+    await page.setViewportSize({ width: 1920, height: 1080 });
   await ready(page);
   await page.goto("/opportunities");
-  const catalogue = page.locator(".product-catalog");
-  await expect(catalogue).toHaveAttribute("data-display", "list");
-  await expect(page.getByRole("button", { name: "列表", exact: true })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
-  await expect(page.locator(":is(.catalog-product,.selection-product-row)")).toHaveCount(1);
-  await expect(page.locator(".opportunity-hero, .opportunity-view-bar")).toHaveCount(0);
-  await expect(page.locator(".catalogue-toolbar")).toHaveCount(0);
-  await expect(
-    catalogue.getByRole("heading", { name: "1 个商品已完成分析", level: 2 }),
-  ).toBeVisible();
-  const firstProduct = await page
-    .locator(":is(.catalog-product,.selection-product-row)")
-    .first()
-    .boundingBox();
-  expect(firstProduct!.y).toBeLessThan(page.viewportSize()!.height);
-  await expect(
-    page.locator(".catalogue-controls").getByRole("button", { name: "已完成分析", exact: true }),
-  ).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("group", { name: "商品展示方式" })).toBeVisible();
-  const layoutButton = await page.getByRole("button", { name: "图卡", exact: true }).boundingBox();
-  expect(layoutButton!.height).toBeGreaterThanOrEqual(44);
-  expect(layoutButton!.height).toBeLessThan(50);
-  expect(layoutButton!.width).toBeGreaterThanOrEqual(44);
-  await page.getByRole("button", { name: "列表", exact: true }).click();
-  await expect(catalogue).toHaveAttribute("data-display", "list");
-  const product = page.locator(":is(.catalog-product,.selection-product-row)").first();
-  const facts = await product
-    .locator(":is(.catalog-public-facts,.selection-product-facts-cell)")
-    .boundingBox();
-  const metrics = await product.locator(".selection-product-result-cell").boundingBox();
-  const identity = await product.locator(".selection-product-name").boundingBox();
-  if ((page.viewportSize()?.width ?? 0) > 1100) {
-    await expect(page.getByRole("table", { name: "选品商品列表" })).toBeVisible();
-    await expect(page.getByRole("columnheader")).toHaveCount(4);
-    const heading = await page
-      .getByRole("columnheader", { name: "Amazon 公开资料 / 1688 进货价", exact: true })
-      .boundingBox();
-    expect(Math.abs(heading!.x - facts!.x)).toBeLessThan(2);
-    expect(facts!.x).toBeGreaterThan(identity!.x);
-    expect(metrics!.x).toBeGreaterThan(facts!.x);
-    expect(Math.abs(facts!.y - metrics!.y)).toBeLessThan(2);
-    expect((await product.boundingBox())!.height).toBeLessThan(210);
-  } else {
-    await expect(page.getByRole("table", { name: "选品商品列表" })).toBeVisible();
-    expect(facts!.y).toBeGreaterThan(metrics!.y);
-  }
+  await expect(page.getByRole("table", { name: "选品商品列表" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "图卡", exact: true })).toHaveCount(0);
+  const row = page.locator(".selection-product-row").first();
+  await expect(row.getByRole("cell")).toHaveCount(8);
+  await expect(page.locator(".catalogue-page-heading h2")).toHaveText("选品库");
+  await expect(page.getByRole("textbox", { name: "商品名称" })).toBeVisible();
+  if ((page.viewportSize()?.width ?? 0) > 640)
+    await expect(page.getByRole("columnheader")).toHaveCount(8);
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);
-  await expect(page.locator(".selection-product-name a")).toHaveAttribute(
-    "href",
-    new RegExp(`/opportunities/${opportunityId}`),
-  );
-  await expect(product.getByRole("cell")).toHaveCount(4);
-  const actionBounds = await product.locator(".selection-product-action-cell a").boundingBox();
-  expect(actionBounds!.height).toBeGreaterThanOrEqual(44);
-  expect(actionBounds!.height).toBeLessThan(50);
-  const titleLink = page.locator(".selection-product-name a");
-  await titleLink.focus();
-  await expect(titleLink).toBeFocused();
-  await page.screenshot({ path: testInfo.outputPath("native-product-table.png"), fullPage: true });
-  await page.getByRole("button", { name: "图卡", exact: true }).click();
-  await expect(catalogue).toHaveAttribute("data-display", "grid");
-  await expect(page.getByRole("table", { name: "选品商品列表" })).toHaveCount(0);
-  await expect
-    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
-    .toBe(true);
-  if ((page.viewportSize()?.width ?? 0) > 840) {
-    await expect(page.getByRole("complementary", { name: "工作区导航" })).toBeVisible();
-    const sidebar = await page.locator(".commerce-sidebar").boundingBox();
-    const content = await page.locator(".role-content").boundingBox();
-    expect(content!.x).toBeGreaterThanOrEqual(sidebar!.width);
-  }
-  await page.evaluate(() => scrollTo(0, 0));
-  await page.screenshot({ path: testInfo.outputPath("commerce-catalogue.png"), fullPage: true });
+  const title = page.locator(".selection-product-name a").first();
+  await title.focus();
+  await expect(title).toBeFocused();
+  await expect(title).toHaveAttribute("href", new RegExp(`/opportunities/${opportunityId}`));
+  const action = row.locator(".selection-product-action-cell a");
+  expect((await action.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await page.screenshot({
+    path: testInfo.outputPath("research-product-table.png"),
+    fullPage: true,
+  });
 });
 
 test("catalogue shows original primary facts without inventing sales or private ads", async ({
@@ -904,78 +849,20 @@ test("catalogue shows original primary facts without inventing sales or private 
     }),
   );
   await page.goto("/opportunities");
-  const facts = page
-    .locator(":is(.catalog-product,.selection-product-row)")
-    .first()
-    .locator(":is(.catalog-public-facts,.selection-product-facts-cell)");
-  const nativePrice = page
-    .locator(".selection-product-facts .is-price")
-    .filter({ hasText: "售价" })
-    .first()
-    .locator("dd");
-  await expect(nativePrice).toHaveText("USD 29.00");
-  expect(
-    await nativePrice.evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)),
-  ).toBeGreaterThanOrEqual(20);
-  await page.getByRole("button", { name: "图卡", exact: true }).click();
-  await expect(facts).toContainText("USD 29.00");
-  await expect
-    .poll(() =>
-      facts
-        .locator("dl")
-        .evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(" ").length),
-    )
-    .toBe(2);
-  await expect(facts).toContainText("4.7 / 1200 条");
-  await expect(facts).toContainText("近月 ≥ 100");
-  await expect(facts).toContainText("#123");
-  await expect(facts).toContainText("已观察到广告标记");
+  const row = page.locator(".selection-product-row").first();
+  await expect(row).toContainText("USD 29.00");
+  await expect(row).toContainText("4.7 / 1200 条");
+  await expect(row).toContainText("近月 ≥ 100");
+  await expect(row).toContainText("#123");
+  await expect(row).toContainText("观察到广告标记");
   await expect(page.locator(".catalog-data-note")).toContainText("不等于精确销量");
-  await expect(page.locator(".catalog-data-note")).toHaveCount(1);
-  const missingFacts = page
-    .locator(":is(.catalog-product,.selection-product-row)")
-    .nth(1)
-    .locator(":is(.catalog-public-facts,.selection-product-facts-cell)");
-  await expect(missingFacts).toContainText("商品资料待采集");
-  await expect(missingFacts.locator("dl > div")).toHaveCount(6);
-  await expect(missingFacts.locator(".is-price").filter({ hasText: "售价" })).toContainText(
-    "未采集",
-  );
-  await expect(missingFacts.locator(".is-price").filter({ hasText: "1688进货价" })).toContainText(
-    "未取得",
-  );
-  const priceSize = await facts
-    .locator(".is-price")
-    .filter({ hasText: "售价" })
-    .locator("dd")
-    .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
-  expect(priceSize).toBeGreaterThanOrEqual(18);
-  const factTops = await page
-    .locator(":is(.catalog-public-facts,.selection-product-facts-cell)")
-    .evaluateAll((els) => els.map((el) => el.getBoundingClientRect().top));
-  expect(Math.abs(factTops[0] - factTops[1])).toBeLessThan(2);
-  const decisionTops = await page
-    .locator(":is(.catalog-product-metrics,.selection-product-results)")
-    .evaluateAll((els) =>
-      els.map((el) => ({
-        top: el.getBoundingClientRect().top,
-        margin: getComputedStyle(el).marginTop,
-        anchorHeight: el.parentElement?.getBoundingClientRect().height,
-        cardHeight: el.parentElement?.parentElement?.getBoundingClientRect().height,
-        parentDisplay: getComputedStyle(el.parentElement!).display,
-      })),
-    );
-  expect(
-    Math.abs(decisionTops[0].top - decisionTops[1].top),
-    JSON.stringify(decisionTops),
-  ).toBeLessThan(2);
-  await page.getByRole("button", { name: "列表", exact: true }).click();
-  await expect(facts).toBeVisible();
+  const missing = page.locator(".selection-product-row").nth(1);
+  await expect(missing).toContainText("未采集");
+  await expect(missing).toContainText("未取得");
+  await expect(missing).not.toContainText("USD 0");
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);
-  await page.getByRole("button", { name: "图卡", exact: true }).click();
-  await page.evaluate(() => scrollTo(0, 0));
   await page.screenshot({
     path: testInfo.outputPath("catalogue-primary-facts.png"),
     fullPage: true,
@@ -1055,12 +942,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   await expect(scorePanel).toBeVisible();
   const scoreBounds = (await scorePanel.boundingBox())!;
   const collectionBounds = (await collectionPanel.boundingBox())!;
-  if (page.viewportSize()!.width >= 1280) {
-    expect(Math.abs(scoreBounds.y - collectionBounds.y)).toBeLessThan(2);
-    expect(collectionBounds.x).toBeGreaterThan(scoreBounds.x + scoreBounds.width - 2);
-  } else {
-    expect(collectionBounds.y).toBeGreaterThanOrEqual(scoreBounds.y + scoreBounds.height - 2);
-  }
+  expect(collectionBounds.y).toBeGreaterThanOrEqual(scoreBounds.y + scoreBounds.height - 2);
   const insightsBounds = (await page.locator(".opportunity-insights").boundingBox())!;
   expect((await decisionSurface.boundingBox())!.y).toBeGreaterThanOrEqual(
     insightsBounds.y + insightsBounds.height - 2,
@@ -2982,7 +2864,7 @@ test("compact catalogue exposes the first product title above the fold with twen
   });
   await page.goto("/opportunities");
   await expect(page.locator(":is(.catalog-product,.selection-product-row)")).toHaveCount(20);
-  await expect(page.locator(".product-catalog")).toHaveAttribute("data-display", "list");
+  await expect(page.getByRole("table", { name: "选品商品列表" })).toBeVisible();
   await expect(page.locator(".catalogue-readiness")).toHaveCount(0);
   const firstTitle = page
     .locator(":is(.catalog-product-identity,.selection-product-name) > strong")

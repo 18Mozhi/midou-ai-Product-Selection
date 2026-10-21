@@ -295,7 +295,7 @@ onUnmounted(() => {
               ? '/org-admin'
               : '/platform-admin'
         "
-        ><span aria-hidden="true">S</span><b>SCOUTOPS</b
+        ><span aria-hidden="true">选</span><b>SCOUTOPS</b
         ><em>{{
           shell === "platform_admin"
             ? "管理员"
@@ -327,7 +327,7 @@ onUnmounted(() => {
         <span v-else>平台工作区</span>
       </div>
       <div class="role-top-actions">
-        <div class="role-theme-switcher">
+        <div v-if="shell !== 'member'" class="role-theme-switcher">
           <button type="button" aria-label="切换界面主题" @click="themeOpen = !themeOpen">
             <AppIcon name="theme" /> <span>主题</span>
           </button>
@@ -375,6 +375,12 @@ onUnmounted(() => {
         </RouterLink>
       </section>
       <footer>
+        <RouterLink v-if="shell === 'member'" to="/select-context" class="commerce-workspace-switch"
+          ><AppIcon name="box" :size="18" /><span
+            >{{ contextName(guard?.workspace_name, "当前工作区")
+            }}<small>{{ contextName(guard?.organization_name, "切换组织与工作区") }}</small></span
+          ></RouterLink
+        >
         <RouterLink
           v-if="shell === 'member' && guard?.roles?.includes('organization_admin')"
           to="/org-admin"

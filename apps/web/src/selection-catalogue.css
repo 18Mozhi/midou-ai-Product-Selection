@@ -1,3 +1,82 @@
+.catalogue-page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 20px;
+}
+.catalogue-page-heading p {
+  font-size: 12px;
+  color: var(--so-text-muted);
+  margin: 0 0 6px;
+}
+.catalogue-page-heading h2 {
+  font-size: 24px;
+  line-height: 1.4;
+  letter-spacing: 0;
+  margin: 0 0 6px;
+  font-weight: 650;
+}
+.catalogue-page-heading span {
+  font-size: 13px;
+  color: var(--so-text-muted);
+}
+.catalogue-market-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--so-text-muted);
+}
+.catalogue-market-filter input {
+  width: 120px;
+  min-height: 44px;
+  border: 1px solid var(--so-border);
+  border-radius: 4px;
+  padding: 8px;
+  background: var(--so-panel);
+  color: var(--so-text);
+}
+.catalogue-clear {
+  background: transparent;
+  border: 0;
+  color: var(--so-primary);
+  font-size: 13px;
+  min-height: 44px;
+}
+.catalogue-sort-note {
+  font-size: 12px;
+  color: var(--so-text-muted);
+  white-space: nowrap;
+}
+.catalog-data-note {
+  margin: 0;
+  color: var(--so-text-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+@media (max-width: 760px) {
+  .catalogue-page-heading {
+    align-items: flex-start;
+  }
+  .catalogue-page-heading h2 {
+    font-size: 22px;
+  }
+  .catalogue-page-heading span {
+    display: block;
+    max-width: 240px;
+  }
+  .catalogue-querybar {
+    flex-wrap: wrap;
+  }
+  .catalogue-search {
+    flex-basis: 100% !important;
+    max-width: none !important;
+  }
+  .catalogue-sort-note {
+    display: none;
+  }
+}
 /* Catalogue controls are independent of the retired promotional hero styles. */
 html[data-design="commerce"] #app .catalogue-readonly {
   color: var(--so-text-muted);
@@ -5,9 +84,9 @@ html[data-design="commerce"] #app .catalogue-readonly {
 }
 html[data-design="commerce"] #app .catalogue-controls {
   display: grid;
-  gap: 10px;
+  gap: 18px;
   margin: 0;
-  padding: 10px 12px;
+  padding: 0 20px 18px;
   border: 1px solid var(--so-border);
   border-radius: 4px;
   background: var(--so-panel);
@@ -17,16 +96,6 @@ html[data-design="commerce"] #app .catalogue-controls {
   flex-wrap: wrap;
   gap: 4px;
   border-bottom: 1px solid var(--so-border);
-}
-@media (min-width: 1101px) {
-  html[data-design="commerce"] #app .catalogue-controls {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
-    align-items: center;
-  }
-  .catalogue-controls > nav {
-    flex-wrap: nowrap;
-    border-bottom: 0;
-  }
 }
 html[data-design="commerce"] #app .catalogue-controls > nav button {
   padding: 10px 16px;
@@ -53,7 +122,7 @@ html[data-design="commerce"] #app .catalogue-search {
   flex: 1;
   align-items: center;
   gap: 8px;
-  max-width: 440px;
+  max-width: 540px;
   min-width: 0;
 }
 html[data-design="commerce"] #app .catalogue-search label {

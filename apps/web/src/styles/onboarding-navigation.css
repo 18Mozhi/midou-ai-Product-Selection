@@ -1,27 +1,16 @@
 .identity-page {
-  background:
-    radial-gradient(circle at 22% 48%, var(--so-glow), transparent 32%),
-    radial-gradient(
-      circle at 78% 16%,
-      color-mix(in srgb, var(--so-primary-strong) 15%, transparent),
-      transparent 28%
-    ),
-    var(--so-bg);
+  background: var(--so-bg);
   color: var(--so-text);
 }
 .identity-shell {
   border-color: var(--so-border);
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--so-bg-elevated) 84%, transparent),
-    var(--so-bg)
-  );
-  box-shadow: var(--so-shadow);
+  background: var(--so-panel);
+  box-shadow: none;
 }
 .identity-card {
   border-color: var(--so-border);
   background: var(--so-panel);
-  box-shadow: var(--so-shadow);
+  box-shadow: none;
 }
 .identity-card input {
   border-color: var(--so-border);
@@ -43,7 +32,7 @@
   color: var(--so-primary);
 }
 .identity-primary {
-  background: linear-gradient(100deg, var(--so-primary), var(--so-primary-strong) 68%);
+  background: var(--so-primary);
   color: var(--so-on-primary);
 }
 .identity-notice small {
@@ -432,7 +421,7 @@
     var(--so-panel),
     color-mix(in srgb, var(--so-bg-elevated) 88%, transparent)
   );
-  box-shadow: var(--so-shadow);
+  box-shadow: none;
 }
 .role-ready-hero {
   min-height: 220px;
@@ -642,7 +631,7 @@
     height: calc(100vh - 64px);
     transform: translateX(-105%);
     transition: transform var(--so-transition);
-    box-shadow: var(--so-shadow);
+    box-shadow: none;
   }
   .role-sidebar.is-open {
     transform: translateX(0);
@@ -817,7 +806,7 @@
     var(--so-panel),
     color-mix(in srgb, var(--so-bg-elevated) 88%, transparent)
   );
-  box-shadow: var(--so-shadow);
+  box-shadow: none;
   overflow: hidden;
 }
 .state-stage > aside > p:first-child {

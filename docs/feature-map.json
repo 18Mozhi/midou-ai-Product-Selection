@@ -364,7 +364,7 @@
       "tests/e2e/m04-02-opportunities.spec.ts",
       "tests/e2e/m04-10-selection-http.spec.ts"
     ],
-    "contract": "Replace the default simulated whole-row anchor layout with a native four-column product table. Same facts, image-failure state, grid toggle, filters, pagination and scoped detail return links. Responsive same-data rows, explicit title/action links; remove26 obsolete list CSS rules. No API/env/schema/dependency/worker/Python change; static frontend rebuild and refresh."
+    "contract": "Historical four-column baseline superseded by selectionCommerceRebuild20261021; native semantics, factual data and independent detail links retained; duplicate card renderer retired."
   },
   "selectionWaitingPrimaryRefresh20261020": {
     "status": "implemented",
@@ -7971,5 +7971,37 @@
       "tests/fixtures/cached-validation-result-cases.mjs"
     ],
     "contract": "Keep original pending cached-result preference; include only ordinary queued/retry_scheduled validation_failed subqueries with a successful nonnull browser result in exact task/subquery/org/workspace/provider scope. Ordering only after priority, scope and stages; FIFO bytes and source/lease/retry/quality protections unchanged. No API/config/schema/dependency/Python change; deployed predicate verified, natural/day100 pending."
+  },
+  "selectionCommerceRebuild20261021": {
+    "status": "implemented",
+    "requirements": "docs/selection-commerce-rebuild.md",
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityCatalogueList.vue",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/SelectionProductHeader.vue",
+      "apps/web/src/components/TrendDashboard.vue",
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/commerce-workspace.css",
+      "apps/web/src/selection-catalogue.css",
+      "apps/web/src/home-dashboard.css",
+      "apps/web/src/design/commerce-tokens.css",
+      "scripts/deploy-baota.py",
+      "scripts/deploy_baota_frontend.py",
+      "apps/web/src/trends.css",
+      "apps/web/src/sourcing.css",
+      "apps/web/src/opportunities.css",
+      "apps/web/src/styles/onboarding-navigation.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/e2e/m02-06-home-mobile.spec.ts",
+      "tests/unit/frontend-only-deployment.test.mjs",
+      "tests/e2e/m02-03-navigation-shell.spec.ts",
+      "tests/e2e/m04-01-trends.spec.ts",
+      "tests/e2e/m04-06-sourcing.spec.ts",
+      "tests/e2e/m02-02-auth-onboarding.spec.ts"
+    ],
+    "contract": "Product-first member workspace informed by authenticated ecom168 library. Eight factual columns, inline search/market, retained advanced filters and scoped list return, one native table (mobile same-data rows), no duplicate grid renderer. Flat shell, report overview and task-oriented detail. Keep all necessary platform/organization/account/provider/collection/operations functionality. No collector/API/schema/env/dependency/scoring/quality-gate changes. Official --frontend-only builds locally, publishes only static assets with index last, checks protected runtime hashes/PIDs, no restart/migration; frontend-release.json identifies UI independently from backend BUILD_SHA."
   }
 }

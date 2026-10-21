@@ -28,19 +28,27 @@ const rows = computed(() =>
 </script>
 
 <template>
-  <div class="selection-product-list">
+  <div class="selection-product-list" tabindex="0" aria-label="商品数据表，可横向滚动">
     <table aria-label="选品商品列表">
       <colgroup>
         <col class="product-column" />
-        <col class="facts-column" />
+        <col />
+        <col />
+        <col />
+        <col />
+        <col />
         <col class="result-column" />
         <col class="action-column" />
       </colgroup>
       <thead>
         <tr>
-          <th scope="col">商品</th>
-          <th scope="col">Amazon 公开资料 / 1688 进货价</th>
-          <th scope="col">分析结果</th>
+          <th scope="col">商品信息</th>
+          <th scope="col">Amazon 售价</th>
+          <th scope="col">购买 / 排名</th>
+          <th scope="col">评分 / 评价</th>
+          <th scope="col">1688 进货价</th>
+          <th scope="col">竞品 / 货源</th>
+          <th scope="col">选品结论</th>
           <th scope="col">操作</th>
         </tr>
       </thead>
@@ -56,72 +64,86 @@ const rows = computed(() =>
                 class="selection-product-picture"
                 :role="imageFallbackLabel(item) ? 'img' : undefined"
                 :aria-label="imageFallbackLabel(item)"
-              >
-                <img
+                ><img
                   v-if="hasUsableImage(item)"
                   :src="item.image_url ?? undefined"
                   :alt="`${item.name} 商品图`"
                   loading="lazy"
                   referrerpolicy="no-referrer"
                   @error="emit('imageError', item)"
-                />
-                <span v-else aria-hidden="true">{{ imageFallbackLabel(item) }}</span>
-              </span>
+                /><span v-else aria-hidden="true">{{ imageFallbackLabel(item) }}</span></span
+              >
               <div class="selection-product-name">
-                <small>
-                  <span v-if="item.main_asin"
-                    >ASIN <span>{{ item.main_asin }}</span></span
-                  >
-                  <span v-else>主品待确认</span>
-                  <span>{{ sourceLabel(item) }}</span>
-                </small>
                 <strong
                   ><RouterLink :to="to" :title="item.name">{{ item.name }}</RouterLink></strong
+                ><small
+                  ><span class="catalogue-market">{{ item.market }}</span
+                  ><span>{{ item.main_asin || "主品待确认" }}</span></small
+                ><small :title="catalogMeta(item)"
+                  >{{ item.category || "未分类" }} · {{ sourceLabel(item) }}</small
                 >
-                <small :title="catalogMeta(item)">{{ catalogMeta(item) }}</small>
               </div>
             </div>
           </td>
-          <td class="selection-product-facts-cell">
-            <dl class="selection-product-facts" :aria-label="`${item.name} 商品资料`">
-              <div
-                v-for="fact in facts"
-                :key="fact.label"
-                :class="{
-                  'is-price': ['售价', '1688进货价'].includes(fact.label),
-                  'is-missing': ['未采集', '未取得'].includes(fact.value),
-                }"
-              >
-                <dt>{{ fact.label }}</dt>
-                <dd>{{ fact.value }}</dd>
+          <td data-label="Amazon 售价">
+            <strong
+              class="catalogue-price"
+              :class="{ 'is-missing': !item.primary_product || item.primary_product.price == null }"
+              >{{ facts[0]?.value }}</strong
+            ><small class="catalogue-cell-note">{{
+              item.primary_product ? freshness(item.primary_product.captured_at) : "等待资料"
+            }}</small
+            ><small class="catalogue-cell-note">{{
+              item.primary_product?.public_signals?.sponsored ? "观察到广告标记" : "广告标记未提供"
+            }}</small>
+          </td>
+          <td data-label="购买 / 排名">
+            <strong class="catalogue-number">{{ facts[3]?.value }}</strong
+            ><small class="catalogue-cell-note">类目 {{ facts[4]?.value }}</small
+            ><small class="catalogue-cell-note">公开购买下限</small>
+          </td>
+          <td data-label="评分 / 评价">
+            <strong class="catalogue-number">{{ facts[2]?.value }}</strong
+            ><small class="catalogue-cell-note">平台公开评价</small>
+          </td>
+          <td data-label="1688 进货价">
+            <strong
+              class="catalogue-price catalogue-cost"
+              :class="{ 'is-missing': !item.automatic_purchase_price }"
+              >{{ facts[1]?.value }}</strong
+            ><small class="catalogue-cell-note">{{ facts[5]?.value }}</small
+            ><small class="catalogue-cell-note">{{
+              opportunityProfitStatusLabel(item.profit_status)
+            }}</small>
+          </td>
+          <td data-label="竞品 / 货源">
+            <dl class="catalogue-counts">
+              <div>
+                <dt>竞品候选</dt>
+                <dd>{{ item.competitor_count }}</dd>
+              </div>
+              <div>
+                <dt>货源候选</dt>
+                <dd>{{ item.supplier_candidate_count }}</dd>
               </div>
             </dl>
-            <p v-if="item.primary_product" class="selection-product-observation">
-              <span>{{
-                item.primary_product.public_signals?.sponsored
-                  ? "已观察到广告标记"
-                  : "广告标记未提供"
-              }}</span
-              ><time :datetime="item.primary_product.captured_at"
-                >资料 {{ freshness(item.primary_product.captured_at) }}</time
-              >
-            </p>
-            <p v-else class="selection-product-observation">商品资料待采集</p>
           </td>
-          <td class="selection-product-result-cell">
+          <td data-label="选品结论">
+            <span class="catalogue-verdict" :data-stage="item.selection_stage">{{
+              completedView
+                ? "分析完成"
+                : item.selection_stage === "recommended"
+                  ? "建议采纳"
+                  : item.selection_stage === "rule_candidate"
+                    ? "选品候选"
+                    : "待补证据"
+            }}</span>
             <dl class="selection-product-results" :aria-label="`${item.name} 决策摘要`">
               <div v-for="fact in result" :key="fact.label">
                 <dt>{{ fact.label }}</dt>
                 <dd>{{ fact.value }}</dd>
               </div>
             </dl>
-            <div class="selection-product-coverage">
-              <span
-                >竞品候选 <strong>{{ item.competitor_count }}</strong></span
-              ><span
-                >货源候选 <strong>{{ item.supplier_candidate_count }}</strong></span
-              ><span>{{ opportunityProfitStatusLabel(item.profit_status) }}</span>
-            </div>
           </td>
           <td class="selection-product-action-cell">
             <RouterLink
@@ -134,71 +156,71 @@ const rows = computed(() =>
                     ? "查看分析"
                     : "查看进度"
               }}<span aria-hidden="true"> →</span></RouterLink
-            >
+            ><time :datetime="item.updated_at">{{ freshness(item.updated_at) }}</time>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
-
 <style scoped>
 .selection-product-list {
+  overflow-x: auto;
   border: 1px solid var(--so-border);
-  border-radius: 4px;
   background: var(--so-panel);
+  border-radius: 4px;
 }
-.selection-product-list table {
+table {
   width: 100%;
+  min-width: 1280px;
   table-layout: fixed;
   border-collapse: collapse;
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 1.6;
 }
 .product-column {
-  width: 34%;
-}
-.facts-column {
-  width: 33%;
+  width: 28%;
 }
 .result-column {
-  width: 22%;
+  width: 16%;
 }
 .action-column {
   width: 112px;
 }
-.selection-product-list th {
-  padding: 10px 14px;
+th {
+  height: 46px;
+  padding: 10px 12px;
   text-align: left;
-  font-weight: 500;
   color: var(--so-text-muted);
+  font-weight: 500;
   background: var(--so-panel-soft);
   border-bottom: 1px solid var(--so-border);
+  white-space: nowrap;
 }
-.selection-product-list td {
-  padding: 14px;
+td {
+  padding: 18px 12px;
   vertical-align: top;
   border-bottom: 1px solid var(--so-border);
   overflow-wrap: anywhere;
 }
-.selection-product-list tbody tr:last-child td {
+tbody tr:last-child td {
   border-bottom: 0;
 }
-.selection-product-row:hover {
+tbody tr:hover {
   background: var(--so-primary-soft);
 }
 .selection-product-identity {
   display: grid;
-  grid-template-columns: 76px minmax(0, 1fr);
+  grid-template-columns: 80px minmax(0, 1fr);
   gap: 14px;
 }
 .selection-product-picture {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 76px;
+  display: grid;
+  place-items: center;
+  width: 80px;
   height: 90px;
-  background: var(--so-panel);
+  border: 1px solid var(--so-border);
+  background: #fff;
   color: var(--so-text-muted);
   font-size: 12px;
   text-align: center;
@@ -207,154 +229,220 @@ const rows = computed(() =>
   width: 100%;
   height: 100%;
   object-fit: contain;
+  padding: 4px;
 }
 .selection-product-name {
-  min-width: 0;
   display: grid;
   align-content: start;
-  gap: 6px;
-}
-.selection-product-name small {
-  color: var(--so-text-muted);
-  font-size: 12px;
-}
-.selection-product-name small:first-child {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 12px;
+  gap: 7px;
+  min-width: 0;
 }
 .selection-product-name strong {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 22px;
+  font-weight: 500;
 }
 .selection-product-name a {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 44px;
   color: var(--so-text);
   text-decoration: none;
+  min-height: 44px;
 }
 .selection-product-name a:hover {
   color: var(--so-primary);
   text-decoration: underline;
 }
-.selection-product-facts,
-.selection-product-results {
-  display: grid;
-  gap: 8px 12px;
-  margin: 0;
-  padding: 0;
-}
-.selection-product-facts {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.selection-product-results {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.selection-product-list dt {
+.selection-product-name small {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 11px;
 }
-.selection-product-list dd {
-  margin: 2px 0 0;
+.catalogue-market {
+  color: var(--so-primary);
+  background: var(--so-primary-soft);
+  padding: 0 5px;
+  border-radius: 2px;
+}
+.catalogue-price {
+  display: block;
   color: var(--so-text);
-  font-weight: 600;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 24px;
   font-variant-numeric: tabular-nums;
 }
-#app .selection-product-facts .is-price:not(.is-missing) dd {
-  font-size: max(20px, var(--so-font-body));
-  line-height: 1.35;
+.catalogue-cost {
+  color: #b55316;
 }
-.selection-product-facts .is-missing dd {
+.is-missing {
+  font-size: 12px;
   color: var(--so-text-muted);
   font-weight: 400;
-  font-size: 14px;
 }
-.selection-product-observation {
+.catalogue-number {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 24px;
+  font-variant-numeric: tabular-nums;
+}
+.catalogue-cell-note {
+  display: block;
+  color: var(--so-text-muted);
+  font-size: 11px;
+  margin-top: 5px;
+}
+.catalogue-counts {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.catalogue-counts div {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  gap: 4px 12px;
-  margin: 8px 0 0;
-  color: var(--so-text-muted);
-  font-size: 12px;
+  gap: 6px;
 }
-.selection-product-coverage {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px solid var(--so-border);
+.catalogue-counts dt {
+  white-space: nowrap;
   color: var(--so-text-muted);
-  font-size: 12px;
+}
+.catalogue-counts dd {
+  margin: 0;
+  font-weight: 600;
+}
+.catalogue-verdict {
+  display: inline-block;
+  padding: 2px 7px;
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+  border-radius: 2px;
+  font-size: 11px;
+}
+.catalogue-verdict[data-stage="recommended"] {
+  background: #edf7f1;
+  color: #267147;
+}
+.catalogue-verdict[data-stage="rule_candidate"] {
+  color: var(--so-primary);
+  background: var(--so-primary-soft);
+}
+.selection-product-results {
+  display: grid;
+  gap: 3px;
+  margin: 8px 0 0;
+}
+.selection-product-results div {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+.selection-product-results dt {
+  color: var(--so-text-muted);
+}
+.selection-product-results dd {
+  margin: 0;
+  font-weight: 500;
 }
 .selection-product-action-cell a {
-  font-size: 13px;
-  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   color: var(--so-primary);
   text-decoration: none;
+  font-size: 12px;
+  white-space: nowrap;
 }
-.selection-product-list a:focus-visible {
+.selection-product-action-cell time {
+  display: block;
+  font-size: 11px;
+  color: var(--so-text-muted);
+}
+a:focus-visible {
   outline: 2px solid var(--so-primary);
   outline-offset: 3px;
 }
-@media (max-width: 1100px) {
-  .selection-product-list table,
-  .selection-product-list tbody {
+th:last-child,
+.selection-product-action-cell {
+  position: sticky;
+  right: 0;
+  background: var(--so-panel);
+  border-left: 1px solid var(--so-border);
+  z-index: 1;
+}
+th:last-child {
+  background: var(--so-panel-soft);
+  z-index: 2;
+}
+tbody tr:hover .selection-product-action-cell {
+  background: var(--so-primary-soft);
+}
+@media (max-width: 640px) {
+  table,
+  tbody {
     display: block;
+    min-width: 0;
   }
-  .selection-product-list colgroup {
+  colgroup {
     display: none;
   }
-  .selection-product-list thead {
+  thead {
     position: absolute;
+    clip-path: inset(50%);
     width: 1px;
     height: 1px;
-    padding: 0;
     overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
-  .selection-product-list .selection-product-row {
+  tbody tr {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    padding: 14px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
+    padding: 16px;
     border-bottom: 1px solid var(--so-border);
   }
-  .selection-product-list .selection-product-row:last-child {
-    border-bottom: 0;
-  }
-  .selection-product-list td {
+  td {
     display: block;
     padding: 0;
     border: 0;
   }
-  .selection-product-name a {
-    min-height: 44px;
+  td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--so-text-muted);
+    font-size: 11px;
+    margin-bottom: 3px;
   }
-  .selection-product-facts {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    padding-block: 10px;
-    border-block: 1px solid var(--so-border);
+  .selection-product-identity-cell {
+    grid-column: 1/-1;
   }
-  .selection-product-action-cell a {
-    padding-inline: 10px;
-    border: 1px solid var(--so-border);
-    border-radius: 4px;
+  .selection-product-action-cell {
+    position: static;
+    border-left: 0;
+    grid-column: 1/-1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
-  .selection-product-list .selection-product-facts-cell {
-    grid-row: 3;
+  .selection-product-picture {
+    width: 80px;
+    height: 90px;
   }
-  .selection-product-list .selection-product-result-cell {
-    grid-row: 2;
+  .selection-product-results div {
+    justify-content: flex-start;
+  }
+  .catalogue-price {
+    font-size: 16px;
+  }
+  .catalogue-counts div {
+    justify-content: flex-start;
+  }
+  .catalogue-counts dd {
+    margin-left: 8px;
   }
 }
 </style>

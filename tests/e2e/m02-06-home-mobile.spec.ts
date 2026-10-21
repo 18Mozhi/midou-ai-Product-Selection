@@ -699,12 +699,7 @@ test.describe("daily snapshots retain Beijing time in overseas browsers", () => 
       const daily = page.getByRole("region", { name: "每日选品产出" });
       const dailyBox = await daily.boundingBox();
       const cumulativeBox = await page.locator(".home-automation-overview").boundingBox();
-      if (test.info().project.name === "mobile-390") {
-        expect(dailyBox!.y).toBeLessThan(cumulativeBox!.y);
-      } else {
-        expect(Math.abs(dailyBox!.y - cumulativeBox!.y)).toBeLessThanOrEqual(1);
-        expect(dailyBox!.x + dailyBox!.width).toBeLessThanOrEqual(cumulativeBox!.x + 1);
-      }
+      expect(dailyBox!.y + dailyBox!.height).toBeLessThanOrEqual(cumulativeBox!.y + 1);
       await expect(page.getByText("采集调度已配置", { exact: true }).first()).toBeVisible();
       if (completed === null) {
         await expect(

@@ -21,13 +21,13 @@
   margin: 0 0 7px;
   color: var(--so-primary);
   font-size: 13px;
-  font-weight: 850;
-  letter-spacing: 0.16em;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 .trend-message {
   padding: 11px 14px;
   border-left: 3px solid var(--so-info);
-  border-radius: 9px;
+  border-radius: 4px;
   color: var(--so-text-muted);
   background: color-mix(in srgb, var(--so-info) 8%, transparent);
 }
@@ -43,7 +43,7 @@
   align-items: end;
   gap: 10px;
   border: 1px solid var(--so-border);
-  border-radius: 14px;
+  border-radius: 4px;
   background: var(--so-panel);
 }
 .trend-filters label {
@@ -58,7 +58,7 @@
   min-height: var(--so-touch-target);
   padding: 9px 11px;
   border: 1px solid var(--so-border);
-  border-radius: 9px;
+  border-radius: 4px;
   color: var(--so-text);
   background: var(--so-bg);
 }
@@ -66,7 +66,7 @@
   min-height: var(--so-touch-target);
   padding: 0 15px;
   border: 0;
-  border-radius: 9px;
+  border-radius: 4px;
   color: var(--so-on-primary);
   background: var(--so-primary-strong);
 }
@@ -132,7 +132,7 @@
   align-items: center;
   gap: 9px;
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: 4px;
   color: var(--so-text);
   background: transparent;
   text-align: left;
@@ -223,7 +223,7 @@
   margin-top: 14px;
   padding: 16px;
   border: 1px solid var(--so-border);
-  border-radius: 14px;
+  border-radius: 4px;
 }
 .trend-evidence > header {
   display: flex;
@@ -245,7 +245,7 @@
   justify-content: space-between;
   gap: 16px;
   border: 1px solid var(--so-border);
-  border-radius: 10px;
+  border-radius: 4px;
   background: var(--so-panel-soft);
 }
 .trend-evidence-item strong,
@@ -290,7 +290,7 @@
   min-height: 220px;
   padding: 16px;
   border: 1px solid var(--so-border);
-  border-radius: 14px;
+  border-radius: 4px;
 }
 .timeline-bars {
   width: 100%;
@@ -343,7 +343,7 @@
   min-width: 0;
   padding: 10px 12px;
   border: 1px solid var(--so-border);
-  border-radius: 12px;
+  border-radius: 4px;
   color: var(--so-chart-2);
   background: color-mix(in srgb, var(--so-chart-2) 8%, transparent);
   font-size: 13px;

@@ -121,7 +121,9 @@ const pendingMessage = computed(() => {
   <section class="sourcing-workspace sourcing-workspace--review">
     <header class="sourcing-head">
       <div>
+        <p class="sourcing-section-label">商品研究 / 1688 找货</p>
         <h1 id="sourcing-page-title" tabindex="-1">供应链找货</h1>
+        <p class="sourcing-section-description">从选品详情查看匹配货源、规格报价与成本依据。</p>
       </div>
       <div class="sourcing-heading-actions">
         <RouterLink

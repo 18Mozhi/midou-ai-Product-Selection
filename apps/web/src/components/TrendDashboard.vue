@@ -376,6 +376,7 @@ onBeforeUnmount(() => {
   <section class="trend-dashboard trend-dashboard--review">
     <header class="trend-market-heading">
       <div>
+        <p class="trend-section-label">商品研究 / 市场情报</p>
         <h2>
           市场情报 <span v-if="state === 'ready' || state === 'empty'">{{ total }} 个主题</span>
         </h2>

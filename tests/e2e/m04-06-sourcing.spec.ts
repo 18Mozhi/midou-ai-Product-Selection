@@ -707,7 +707,7 @@ test("returning to sourcing reads profit again and ignores the pre-deactivation 
   await expect(summary).not.toContainText("999");
 });
 
-test("commerce sourcing keeps white surfaces while changing the selected accent", async ({
+test("commerce sourcing keeps white surfaces with a persisted accent preference", async ({
   page,
 }) => {
   await setup(page);
@@ -720,8 +720,9 @@ test("commerce sourcing keeps white surfaces while changing the selected accent"
       .locator("html")
       .evaluate((element) => getComputedStyle(element).getPropertyValue("--so-primary").trim());
   const previousAccent = await primary();
-  await page.getByRole("button", { name: "切换界面主题" }).click();
-  await page.getByRole("button", { name: /青蓝/ }).click();
+  await expect(page.getByRole("button", { name: "切换界面主题" })).toHaveCount(0);
+  await page.addInitScript(() => localStorage.setItem("scoutops:ui-theme", "cloud-white"));
+  await page.reload();
   await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe("cloud-white");
   await expect.poll(primary).not.toBe(previousAccent);
   await expect(surface).toHaveCSS("background-color", "rgb(255, 255, 255)");

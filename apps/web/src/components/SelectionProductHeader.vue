@@ -129,17 +129,18 @@ const asin = computed(() =>
 <style scoped>
 .selection-product-header {
   display: grid;
-  grid-template-columns: 112px minmax(0, 1fr) 150px;
+  grid-template-columns: 132px minmax(0, 1fr) 160px;
   grid-template-areas: "image identity score" "image facts score" "image utility score";
   align-items: start;
   gap: 0 20px;
-  padding: 20px;
+  padding: 24px;
   background: var(--so-panel);
   color: var(--so-text);
 }
 .selection-product-header__image {
   grid-area: image;
   aspect-ratio: 1;
+  width: 132px;
   display: grid;
   place-items: center;
   padding: 8px;
@@ -284,6 +285,9 @@ const asin = computed(() =>
     grid-template-areas: "image identity" "facts facts" "utility utility" "score score";
     gap: 14px;
     padding: 16px;
+  }
+  .selection-product-header__image {
+    width: 84px;
   }
   .selection-product-header h1 {
     font-size: 17px;
