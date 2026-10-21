@@ -10,7 +10,7 @@ import {
   supplyDetailEligible,
   supplySkuUseCompatible,
 } from "./supply-detail-facts.js";
-export const AUTOMATIC_SELECTION_FORMULA_VERSION = "crawler-evidence-v1";
+export const AUTOMATIC_SELECTION_FORMULA_VERSION = "crawler-evidence-v2";
 
 export interface ProductFacts {
   title: string;
@@ -368,26 +368,36 @@ export function calculateAutomaticScoreFacts(input: {
     profit =
       input.netMarginPercent == null ? null : clamp(((input.netMarginPercent - 10) / 30) * 100),
     freshnessPenalty = input.evidenceAgeHours > 168 ? 45 : input.evidenceAgeHours > 72 ? 20 : 0,
-    risk = clamp(
-      100 -
-        freshnessPenalty -
-        (input.product.providerHealthy ? 0 : 35) -
-        (input.product.qualityBlocked ? 70 : 0) -
-        (input.product.availability === "out_of_stock"
-          ? 55
-          : input.product.availability === "unknown"
-            ? 15
-            : 0),
-    ),
-    completeness = input.requiredFieldCount
-      ? (input.requiredFieldsPresent / input.requiredFieldCount) * 100
-      : 0,
+    risk =
+      input.product.availability === "unknown"
+        ? null
+        : clamp(
+            100 -
+              freshnessPenalty -
+              (input.product.providerHealthy ? 0 : 35) -
+              (input.product.qualityBlocked ? 70 : 0) -
+              (input.product.availability === "out_of_stock" ? 55 : 0),
+          ),
+    observedFields =
+      input.product.availability === "unknown"
+        ? Math.min(input.requiredFieldsPresent, Math.max(0, input.requiredFieldCount - 1))
+        : input.requiredFieldsPresent,
+    completeness = input.requiredFieldCount ? (observedFields / input.requiredFieldCount) * 100 : 0,
     dataQuality = clamp(
       completeness -
         (input.product.providerHealthy ? 0 : 25) -
         (input.product.qualityBlocked ? 60 : 0),
     ),
-    riskLevel = risk >= 80 ? "low" : risk >= 60 ? "medium" : risk > 0 ? "high" : "unknown";
+    riskLevel =
+      risk == null
+        ? "unknown"
+        : risk >= 80
+          ? "low"
+          : risk >= 60
+            ? "medium"
+            : risk > 0
+              ? "high"
+              : "unknown";
   return {
     market_demand: demand,
     competition,

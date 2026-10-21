@@ -393,3 +393,30 @@ test("bulk automatic reevaluation uses the same primary identity policy as the w
     assert.doesNotMatch(source, /o\.source_count>=r\.recommendation_min_source_count/);
   }
 });
+
+test("unknown inventory is not a low-risk fact even when a caller overcounts completeness", () => {
+  const facts = calculateAutomaticScoreFacts({
+    product: {
+      title: "Temperature Control Smart Mug",
+      price: 89.99,
+      currency: "USD",
+      reviewCount: 21034,
+      rating: 4.2,
+      availability: "unknown",
+      observedAt: new Date(),
+      evidenceId: "real-evidence-fixture",
+      providerHealthy: true,
+      qualityBlocked: false,
+    },
+    netMarginPercent: null,
+    evidenceAgeHours: 1,
+    requiredFieldsPresent: 5,
+    requiredFieldCount: 5,
+  });
+  assert.equal(facts.risk, null);
+  assert.equal(facts.riskLevel, "unknown");
+  assert.equal(facts.data_quality, 80);
+  assert.equal(facts.profit, null);
+  assert.equal(facts.market_demand, 98.46);
+  assert.equal(facts.competition, 13.54);
+});

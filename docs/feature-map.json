@@ -1,4 +1,20 @@
 {
+  "selectionScoreScopeAudit20261021": {
+    "status": "implemented",
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-evaluation.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "scripts/deploy-baota.py",
+      "scripts/deploy_baota_scoring.py"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/unit/automatic-evidence-scoring.test.mjs",
+      "tests/unit/scoring-only-deployment.test.mjs"
+    ],
+    "contract": "Score rules are selected by organization/workspace active status, not version name or category; existing weights and thresholds are retained. crawler-evidence-v2 keeps unknown availability risk null/unknown and excludes unknown inventory from product-field completeness. Original score runs remain immutable; normal reevaluation creates versioned inputs/runs. Official --scoring-only publishes only two Worker modules and restarts only the existing BaoTa Node project; frontend, config and Python hashes/PIDs are guarded; no collection code/config/schema/API changes.",
+    "docs": ["docs/selection-score-scope-audit.md"]
+  },
   "selectionBrowserProxyAuth20261020": {
     "status": "implemented",
     "requirements": "docs/selection-browser-proxy-auth.md",

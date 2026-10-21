@@ -514,7 +514,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
               amazonPrice,
               product.reviewCount,
               product.rating,
-              competitor.availability,
+              competitor.availability === "unknown" ? null : competitor.availability,
             ].filter((item) => item != null && item !== "").length,
             requiredFieldCount: 5,
           }),

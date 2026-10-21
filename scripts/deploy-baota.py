@@ -1104,7 +1104,10 @@ def main() -> None:
     parser.add_argument("--rollback-drill", action="store_true", help="verify previous packages then restore this build on the same BaoTa projects; additive migrations only")
     parser.add_argument("--reverify-rollback", action="store_true", help="rebuild the proven runtime-identical historical package and perform a real rollback/recovery without deployment migrations or data backups")
     parser.add_argument("--frontend-only", action="store_true", help="publish verified static UI only; never restart Node/Python or run migrations")
+    parser.add_argument("--scoring-only", action="store_true", help="publish the two verified scoring Worker modules; preserve Python, frontend and configuration")
     args = parser.parse_args()
+    if args.scoring_only and (args.frontend_only or args.initialize_layout or args.rollback_drill or args.reverify_rollback or args.skip_build):
+        parser.error("--scoring-only cannot be combined with other deployment modes")
     if args.frontend_only and (args.initialize_layout or args.rollback_drill or args.reverify_rollback or args.skip_build):
         parser.error("--frontend-only cannot be combined with runtime or build-reuse flags")
     if args.reverify_rollback and (args.rollback_drill or args.skip_build or args.initialize_layout):
@@ -1119,6 +1122,11 @@ def main() -> None:
     if len(build_sha) != 40:
         raise RuntimeError("full Git build identity is unavailable")
     verify_release_change_ownership(repo)
+
+    if args.scoring_only:
+        from deploy_baota_scoring import deploy_scoring
+        deploy_scoring(sys.modules[__name__], repo, source_identity)
+        return
 
     if args.frontend_only:
         from deploy_baota_frontend import deploy_frontend

@@ -138,7 +138,7 @@ function fixture(options = {}) {
             : [
                 {
                   evidence_id: "snapshot-evidence",
-                  availability: "in_stock",
+                  availability: options.availability ?? "in_stock",
                   source_status: "healthy",
                   freshness: "fresh",
                 },
@@ -921,4 +921,15 @@ test("evaluation rechecks primary detail after preflight rather than trusting it
     f.calls.some((x) => /INSERT INTO opportunity_(cost|score)_inputs/.test(x.sql)),
     false,
   );
+});
+
+test("unknown availability stays missing instead of low risk or complete data quality", async () => {
+  const f = fixture({ availability: "unknown", noCostRule: true });
+  await f.worker.evaluate(job);
+  assert.equal(f.inputs.get("risk").score_value, null);
+  assert.deepEqual(JSON.parse(f.inputs.get("risk").missing_fields_json), [
+    "automatic_evaluation.risk.unsupported",
+  ]);
+  assert.equal(f.inputs.get("data_quality").score_value, 80);
+  assert.match(f.inputs.get("risk").source_ref_id, /crawler-evidence-v2/);
 });
