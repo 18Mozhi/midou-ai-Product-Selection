@@ -17,6 +17,7 @@ def frontend_remote_source(values: dict) -> str:
     return r'''import hashlib, json, os, shutil, sys, tarfile, tempfile
 from pathlib import Path
 sys.path.insert(0, "/www/server/panel")
+sys.path.insert(0, "/www/server/panel/class")
 import public
 v=json.loads(PAYLOAD)
 root=Path("/www/wwwroot/ai选品")
@@ -78,8 +79,9 @@ except Exception:
     for rel in old_files: shutil.copy2(backup/rel,front/rel)
     raise
 finally:
-    for temporary in temporaries: temporary.unlink(missing_ok=True)
-    archive.unlink(missing_ok=True)
+    for temporary in temporaries:
+        if temporary.exists() or temporary.is_symlink(): temporary.unlink()
+    if archive.exists() or archive.is_symlink(): archive.unlink()
 print("SCOUTOPS_RESULT="+json.dumps({"status":True,"message":"frontend published without runtime restart","frontend_sha":v["build_sha"],"index_sha256":hashlib.sha256((front/"index.html").read_bytes()).hexdigest(),"protected_runtime_unchanged":True,"runtime_pids_unchanged":True,"backup":str(backup)}))
 '''.replace("PAYLOAD", repr(json.dumps(values, ensure_ascii=False)))
 
@@ -147,7 +149,7 @@ print("SCOUTOPS_RESULT="+json.dumps({"status":True,"message":"static upload path
             try:
                 # Exact generated file only; never sweep runtime data or sessions.
                 if upload_started:
-                    api.remote_python(client, f"from pathlib import Path\nimport json\np=Path({remote!r})\nif p.parent.resolve()!=Path('/www/wwwroot/ai选品/runtime/tmp'): raise RuntimeError('frontend_cleanup_path_invalid')\np.unlink(missing_ok=True)\nprint('SCOUTOPS_RESULT='+json.dumps({{'status':True}}))", timeout=30)
+                    api.remote_python(client, f"from pathlib import Path\nimport json\np=Path({remote!r})\nif p.parent.resolve()!=Path('/www/wwwroot/ai选品/runtime/tmp'): raise RuntimeError('frontend_cleanup_path_invalid')\nif p.exists() or p.is_symlink(): p.unlink()\nprint('SCOUTOPS_RESULT='+json.dumps({{'status':True}}))", timeout=30)
                 if acquired:
                     api.remote_python(client, api.deployment_lock_source(owner, True), timeout=30)
             finally:

@@ -16,6 +16,23 @@ test("frontend-only mode rejects runtime flags and never restarts services", () 
   );
 });
 
+test("static helper supports the existing BaoTa panel Python and class imports", () => {
+  const source = readFileSync("scripts/deploy_baota_frontend.py", "utf8");
+  assert.match(source, /sys\.path\.insert\(0, "\/www\/server\/panel\/class"\)/);
+  assert.doesNotMatch(source, /\.unlink\(missing_ok=/);
+  const result = spawnSync(
+    "python",
+    [
+      "-B",
+      "-c",
+      "import sys,ast;sys.path.insert(0,'scripts');from deploy_baota_frontend import frontend_remote_source;ast.parse(frontend_remote_source({}),feature_version=(3,7));print('panel helper syntax: Python 3.7 compatible')",
+    ],
+    { encoding: "utf8" },
+  );
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Python 3.7 compatible/);
+});
+
 test("static publisher executes real byte readback, backup and wrong-hash refusal", () => {
   const code = String.raw`
 import sys, tempfile, types, tarfile, hashlib, io, json
