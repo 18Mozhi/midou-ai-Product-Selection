@@ -8189,5 +8189,14 @@
       "tests/e2e/m04-03-scoring.spec.ts"
     ],
     "contract": "Existing primary token replaces the legacy gradient; local opportunity modal backdrop filter none. Preserve colors, focus/keyboard/reason validation, APIs, scoring, collection and permissions. Static frontend, no runtime restart."
+  },
+  "researchStyleCleanup20261022": {
+    "implementationFiles": ["apps/web/src/trends.css", "apps/web/src/sourcing.css"],
+    "verificationFiles": [
+      "tests/unit/research-style-cleanup.test.mjs",
+      "tests/e2e/m04-06-sourcing.spec.ts",
+      "tests/e2e/m04-01-trends.spec.ts"
+    ],
+    "contract": "Remove exactly two unused trend class families, three rules. Comparison tray uses opaque semantic panel with no blur/shadow; preserve fixed geometry, mobile safe-area, selection, quote, save, source/collection and permission contracts. CSS only, static release without runtime restart."
   }
 }

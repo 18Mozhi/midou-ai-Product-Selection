@@ -423,6 +423,10 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await page.getByRole("button", { name: "关闭报价编辑" }).click();
   await supplierCandidates.getByLabel("加入对比").check();
   await expect(page.getByText("已选 1 / 5 家供应商")).toBeVisible();
+  const tray = page.locator(".sourcing-compare-tray");
+  await expect(tray).toHaveCSS("backdrop-filter", "none");
+  await expect(tray).toHaveCSS("box-shadow", "none");
+  await expect(tray).toHaveCSS("background-image", "none");
   await expect(page.getByRole("button", { name: "保存报价对比" })).toBeDisabled();
 });
 

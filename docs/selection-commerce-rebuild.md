@@ -104,3 +104,7 @@ MySqlOpportunityRepository.detail 实际 evidence.id 是 opportunity_evidence_li
 ## 现行弹窗实色与遮罩
 
 共用opportunities.css的末位主要按钮改用既有so-primary实色，opportunity-modal遮罩显式backdrop-filter:none，不再继承全局模糊。保留原遮罩色、按钮语义、尺寸、焦点、原因必填和所有写入/权限校验。评分规则与选品决定共用此基础，双端验证；无需配置，静态部署刷新生效，不重启服务、不改采集。
+
+## 情报旧入口样式与找货对比栏
+
+删除无Vue/TypeScript引用的trend-width-control及trend-rules三条旧规则，当前筛选与情报订阅后台不改。找货对比栏移除基础背景模糊及基础/评审阴影，使用既有实色面板，保留边框、固定位置、手机安全区、选择计数和保存报价对比合同。只改两份CSS，不改组件脚本、报价数据、采集、接口或权限；静态部署刷新生效、无需重启。

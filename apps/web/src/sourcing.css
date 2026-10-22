@@ -149,9 +149,9 @@
   border: 1px solid var(--so-primary-border);
   border-radius: var(--so-card-radius);
   color: var(--so-text);
-  background: color-mix(in srgb, var(--so-panel) 94%, transparent);
-  box-shadow: var(--so-shadow-card);
-  backdrop-filter: blur(12px);
+  background: var(--so-panel);
+  box-shadow: none;
+  backdrop-filter: none;
 }
 .sourcing-compare-tray span {
   color: var(--so-text-muted);
@@ -507,7 +507,7 @@
   border: 1px solid var(--so-sourcing-review-blue);
   border-radius: 0;
   background: var(--so-sourcing-review-white);
-  box-shadow: 0 10px 24px var(--so-sourcing-review-shadow);
+  box-shadow: none;
 }
 #app .sourcing-workspace--review .sourcing-modal {
   background: transparent;
