@@ -235,7 +235,7 @@ html[data-design="commerce"] #app .home-daily-production dd {
   color: var(--so-text);
 }
 .home-runtime-panel p {
-  font-size: 12px;
+  font-size: 13px;
 }
 .home-review-row {
   display: grid;

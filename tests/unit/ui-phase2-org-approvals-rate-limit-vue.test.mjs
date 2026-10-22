@@ -1,3 +1,4 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import {
@@ -6,7 +7,7 @@ import {
 } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { beforeP34OwnerPath } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { undoAuditPageDelta } from "../../scripts/lib/ui-phase2-audit-page-delta.mjs";

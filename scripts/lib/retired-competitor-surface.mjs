@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { readLegacyCssFile as readFile } from "./retired-runtime-css.mjs";
 import { resolve, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../../", import.meta.url));

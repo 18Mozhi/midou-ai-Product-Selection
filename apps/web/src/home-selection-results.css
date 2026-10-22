@@ -78,7 +78,7 @@ html[data-design="commerce"] #app .home-result-header button[aria-pressed="true"
   .home-result-header > a {
     max-width: 100px;
     padding: 8px 0;
-    font-size: 12px;
+    font-size: 13px;
     white-space: normal;
   }
   .home-result-caption {

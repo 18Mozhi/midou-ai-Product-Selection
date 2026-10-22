@@ -1,8 +1,9 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 
 const output = "output/playwright/p35-parent-read-states";

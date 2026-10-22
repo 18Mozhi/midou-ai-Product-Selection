@@ -1,8 +1,9 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+
 import { execFileSync } from "node:child_process";
 import { parse } from "@vue/compiler-sfc";
 import { assertRetainedProposalSources } from "../../scripts/lib/ui-phase2-org-approvals-retained-sources.mjs";

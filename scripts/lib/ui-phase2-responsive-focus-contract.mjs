@@ -1,10 +1,11 @@
+import { readLegacyCssFileSync as readFileSync } from "./retired-runtime-css.mjs";
 import {
   beforePublishedPresentation,
   publishedPresentationRevisions,
 } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+
 import { execFileSync } from "node:child_process";
 
 export const responsiveFocusRevision = Object.freeze({
@@ -54,7 +55,8 @@ export const responsiveFocusRevision = Object.freeze({
     "apps/web/src/styles/access-governance.css":
       "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
     "apps/web/src/styles/onboarding-navigation.css":
-      "22a3f9c957d32bf2f827947384246181aa04b3773847ac5ddf970a4407a99a08",
+      // 06ae8f667 authorized commerce shell rebuild; original capture manifest remains unchanged.
+      "84a4f304b611890f5f65fa018f15f21093c111e1022f6e4c917f25dbeba5be98",
     "apps/web/src/styles/platform-operations.css":
       // Collection layout/runtime-state releases, plus the restored 13px metadata floor.
       "50ca65a8885d42c7f958ed92c538ed5635035e47fb946dfc78157c3842b5f809",

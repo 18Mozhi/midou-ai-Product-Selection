@@ -1,10 +1,11 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import { adminHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-historical-capture.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import {
   assertCaptureSourceRevision,

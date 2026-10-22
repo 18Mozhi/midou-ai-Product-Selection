@@ -1,3 +1,4 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import {
   beforePublishedPresentation,
@@ -12,7 +13,7 @@ import {
   assertCaptureSourceRevision,
   readEvidenceSourceBytes,
 } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
-import { readFileSync, readdirSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import postcss from "postcss";
 import {
   adminRoleFactsRevision,

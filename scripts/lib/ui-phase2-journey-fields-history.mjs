@@ -1,9 +1,10 @@
+import { readLegacyCssFile as readFile } from "./retired-runtime-css.mjs";
 import { readEvidenceSourceBytes } from "./ui-phase2-token-copy-baseline.mjs";
 import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { readFile } from "node:fs/promises";
+
 import path from "node:path";
 
 const packet = "output/playwright/p16-c-r2-fields-review";

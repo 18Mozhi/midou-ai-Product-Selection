@@ -1,6 +1,11 @@
+import {
+  readLegacyCssFile as readFile,
+  assertLegacyCssPreviewReadOnly,
+} from "./lib/retired-runtime-css.mjs";
+assertLegacyCssPreviewReadOnly();
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createServer as reservePort } from "node:net";
 import { chromium } from "playwright";

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
+import { readLegacyCssFileSync as readFileSync } from "./retired-runtime-css.mjs";
 import { resolve, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { readCompetitorReviewFile } from "./retired-competitor-surface.mjs";

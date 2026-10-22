@@ -86,7 +86,7 @@
   line-height: 1.5;
 }
 .supplier-offer-table code {
-  font-size: 11px;
+  font-size: 12px;
 }
 .supplier-offer-price strong {
   display: block;
@@ -101,7 +101,7 @@
   color: var(--so-text-muted);
 }
 .supplier-offer-price-note small {
-  font-size: 11px;
+  font-size: 12px;
 }
 .supplier-offer-terms > span {
   display: block;
@@ -116,7 +116,7 @@
 }
 .supplier-offer-state time {
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
 .supplier-offer-status {
@@ -185,7 +185,7 @@ html[data-design="commerce"] #app .supplier-offer-actions input[type="checkbox"]
     display: block;
     margin-bottom: 7px;
     color: var(--so-text-muted);
-    font-size: 11px;
+    font-size: 12px;
   }
   .supplier-offer-product {
     grid-column: 1 / -1;

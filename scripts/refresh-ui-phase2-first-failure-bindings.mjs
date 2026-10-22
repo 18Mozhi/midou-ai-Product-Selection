@@ -1,7 +1,8 @@
+import { readLegacyCssFile as readFile } from "./lib/retired-runtime-css.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { readFile, writeFile, readdir } from "node:fs/promises";
+import { writeFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import {
   firstFailureBaseline,

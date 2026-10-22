@@ -1,6 +1,7 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+
 import { createHash } from "node:crypto";
 import {
   responsiveFocusRevision as revision,

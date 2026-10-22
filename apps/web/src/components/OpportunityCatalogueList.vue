@@ -175,7 +175,7 @@ table {
   min-width: 1280px;
   table-layout: fixed;
   border-collapse: collapse;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.6;
 }
 .product-column {
@@ -260,7 +260,7 @@ tbody tr:hover {
   gap: 8px;
   flex-wrap: wrap;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 12px;
 }
 .catalogue-market {
   color: var(--so-primary);
@@ -294,7 +294,7 @@ tbody tr:hover {
 .catalogue-cell-note {
   display: block;
   color: var(--so-text-muted);
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 5px;
 }
 .catalogue-counts {
@@ -322,7 +322,7 @@ tbody tr:hover {
   background: var(--so-panel-soft);
   color: var(--so-text-muted);
   border-radius: 2px;
-  font-size: 11px;
+  font-size: 12px;
 }
 .catalogue-verdict[data-stage="recommended"] {
   background: var(--so-success-soft);
@@ -355,12 +355,12 @@ tbody tr:hover {
   min-height: 44px;
   color: var(--so-primary);
   text-decoration: none;
-  font-size: 12px;
+  font-size: 13px;
   white-space: nowrap;
 }
 .selection-product-action-cell time {
   display: block;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--so-text-muted);
 }
 a:focus-visible {
@@ -414,7 +414,7 @@ tbody tr:hover .selection-product-action-cell {
     content: attr(data-label);
     display: block;
     color: var(--so-text-muted);
-    font-size: 11px;
+    font-size: 12px;
     margin-bottom: 3px;
   }
   .selection-product-identity-cell {

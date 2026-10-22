@@ -1,7 +1,8 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+
 import { createHash } from "node:crypto";
 import {
   assertCaptureSourceRevision,

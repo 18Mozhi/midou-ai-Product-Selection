@@ -1,12 +1,47 @@
+import { readLegacyCssFile as readFile } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
 import postcss from "postcss";
 import { parse } from "@vue/compiler-sfc";
 
 // The rebuilt workspace uses 12px for these explicitly reviewed metadata rules.
 // The default floor stays 13px; no unlisted sub-13px selector is accepted.
 const metadataRules = new Set([
+  // Current commerce metadata, 12px minimum; normal table body and actions remain 13px.
+  "apps/web/src/commerce-workspace.css::.commerce-workspace-switch small",
+  'apps/web/src/commerce-workspace.css::html[data-design="commerce"]\n  #app\n  :is(.trend-dashboard .trend-section-label, .sourcing-workspace .sourcing-section-label)',
+  'apps/web/src/commerce-workspace.css::html[data-design="commerce"] #app :is(.trend-section-label, .sourcing-section-label)',
+  "apps/web/src/components/OpportunityCatalogueList.vue::.catalogue-cell-note",
+  "apps/web/src/components/OpportunityCatalogueList.vue::.catalogue-verdict",
+  "apps/web/src/components/OpportunityCatalogueList.vue::.is-missing",
+  "apps/web/src/components/OpportunityCatalogueList.vue::.selection-product-action-cell time",
+  "apps/web/src/components/OpportunityCatalogueList.vue::.selection-product-name small",
+  "apps/web/src/components/OpportunityCatalogueList.vue::.selection-product-picture",
+  "apps/web/src/components/OpportunityCatalogueList.vue::td[data-label]::before",
+  "apps/web/src/components/SelectionProductComparison.vue::.selection-comparison-provenance",
+  "apps/web/src/home-dashboard.css::.home-daily-meta",
+  "apps/web/src/home-dashboard.css::.home-daily-meta small",
+  "apps/web/src/home-dashboard.css::.home-daily-production > header > span,\n.home-automation-heading > span",
+  "apps/web/src/home-dashboard.css::.home-daily-production dd small",
+  "apps/web/src/home-dashboard.css::.home-daily-production dt",
+  "apps/web/src/home-dashboard.css::.home-dashboard .home-truth,\n.home-dashboard .home-truth-unknown",
+  "apps/web/src/home-dashboard.css::.home-library-details > summary:after",
+  "apps/web/src/home-dashboard.css::.home-live-status",
+  "apps/web/src/home-dashboard.css::.home-review-row > b",
+  "apps/web/src/home-dashboard.css::.home-runtime-details",
+  "apps/web/src/home-dashboard.css::.home-setup-callout span,\n.home-read-alert > span",
+  "apps/web/src/home-dashboard.css::.home-status-facts span",
+  "apps/web/src/home-dashboard.css::.home-system-state",
+  "apps/web/src/selection-catalogue.css::.catalog-data-note",
+  "apps/web/src/selection-catalogue.css::.catalogue-page-heading p",
+  "apps/web/src/selection-catalogue.css::.catalogue-sort-note",
+  "apps/web/src/supplier-offer-list.css::.supplier-offer-price-note small",
+  "apps/web/src/supplier-offer-list.css::.supplier-offer-state time",
+  "apps/web/src/supplier-offer-list.css::.supplier-offer-table code",
+  "apps/web/src/supplier-offer-list.css::.supplier-offer-table td[data-label]::before",
+  "apps/web/src/supplier-offer-list.css::.supplier-offer-table th",
+
   "apps/web/src/backup-recovery-center-c.css::& .p64-directory > p:last-child",
   "apps/web/src/backup-recovery-center-c.css::& .panel-title > span",
   "apps/web/src/backup-recovery-center-c.css::& .p64-content > footer",

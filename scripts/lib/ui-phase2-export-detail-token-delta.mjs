@@ -1,6 +1,7 @@
+import { readLegacyCssFileSync as readFileSync } from "./retired-runtime-css.mjs";
 import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+
 import { createHash } from "node:crypto";
 import postcss from "postcss";
 

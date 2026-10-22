@@ -1,5 +1,6 @@
+import { readLegacyCssFile as readFile } from "../../scripts/lib/retired-runtime-css.mjs";
 import assert from "node:assert/strict";
-import { readFile, access } from "node:fs/promises";
+import { access } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
 test("home uses its actual Vue and one layout owner without legacy template injection", async () => {
@@ -21,7 +22,7 @@ test("home uses its actual Vue and one layout owner without legacy template inje
   assert.doesNotMatch(dashboard, /01 \/|02 \/|p12-hero/);
   assert.doesNotMatch(commerce, /\.home-/);
   assert.doesNotMatch(ledger, /\.home-/);
-  assert.match(css, /font-family: var\(--so-font-ui\)/);
+  assert.match(css, /font:\s*13px\/1\.6 var\(--so-font-ui\)/);
   await assert.rejects(access("scripts/lib/home-page-preview.mjs"));
 });
 test("retired home preview cannot create servers or generated captures", () => {

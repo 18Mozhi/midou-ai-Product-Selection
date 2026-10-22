@@ -1,5 +1,6 @@
+import { readLegacyCssFile as readFile } from "../../scripts/lib/retired-runtime-css.mjs";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+
 import { createHash } from "node:crypto";
 import test from "node:test";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";

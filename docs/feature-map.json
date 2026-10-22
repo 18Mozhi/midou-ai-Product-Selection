@@ -2428,8 +2428,7 @@
     "sourceFiles": [
       "apps/web/src/components/HomeDashboard.vue",
       "apps/web/src/home-dashboard.css",
-      "apps/web/src/commerce-workspace.css",
-      "apps/web/src/signal-ledger.css"
+      "apps/web/src/commerce-workspace.css"
     ],
     "testFiles": ["tests/e2e/m02-06-home-mobile.spec.ts", "tests/unit/home-page-preview.test.mjs"],
     "contract": "Compact white toolbar, top-level actual statistics and primary recommendation queue. Remove old home theme overrides and template/CSS preview injection. Existing reads, writes, polling, RBAC, daily data and unknown states retained; no API or configuration change."
@@ -3628,7 +3627,6 @@
         "../apps/api/src/ui-preference-routes.ts",
         "../apps/web/src/design/theme.ts",
         "../apps/web/src/design/tokens.css",
-        "../apps/web/src/signal-ledger.css",
         "../apps/web/src/accessibility.css",
         "../apps/web/src/use-modal-dialog.ts",
         "../apps/web/src/components/ConfirmDialog.vue",
@@ -3649,7 +3647,7 @@
       "apiClientBoundary": "standalone theme settings and shell theme controls share the same frontend API client and preserve version conflict, scope, correlation and rollback behavior",
       "densityRuntime": "standard and compact are session-only presentation modes with no API, database or additional browser storage contract; organization and platform shells default to compact, member shell restores the in-memory member choice",
       "tableViewBoundary": "all current desktop table surfaces share session-only column visibility, first-visible-column freeze and local standard or compact density controls through TableViewControls; at least one column always remains visible, mobile summary cards and detail drawers remain unchanged, and no API database or browser storage contract is added",
-      "styleBoundary": "all production CSS and Vue scoped styles consume semantic theme tokens directly or component-local semantic aliases; the compatible theme ids deep-ocean aurora-purple and cloud-white render as Signal Paper Archive Paper and Clean White paper variants with ink text vermilion primary actions acid-lime attention signals and verified green states; the signal-ledger root removes rounded floating card walls blue-purple gradients and decorative glow, uses rule lines and paper shifts for depth, bounds authenticated content to 1440px, gives shell titles a 36px to 66px editorial scale, and presents confirmations as impact manifests with sign-off; the unit gate rejects raw component hex rgb rgba hsl and hsla colors outside tokens plus every !important override and unscoped visual button or heading selectors",
+      "styleBoundary": "Current runtime uses the commerce root and shared semantic theme roles; retired Signal Ledger CSS is available only through pinned historical review readers. Current UI source, layout and accessibility assertions must use current files, not historical captures.",
       "accessibility": "status icon plus text; charts include value, period, source and freshness; keyboard radiogroups and visible focus; body copy and form controls have a computed 16px floor and metadata or auxiliary copy has a 13px floor; all density and breakpoint targets retain a computed 44px by 44px floor without !important",
       "modalAccessibility": "all native business dialogs use one showModal top-layer controller with Escape handling and invoking-control focus return; custom confirmation and responsive filter surfaces explicitly trap focus and restore it when closed",
       "async": "not applicable; preference reads and writes are synchronous and create no Worker, Crawler, queue, file, export, SSE or provider work",
@@ -5169,7 +5167,6 @@
         "../apps/web/src/components/OrganizationApprovalPanel.vue",
         "../apps/web/src/components/OrganizationApprovalFirstFailure.vue",
         "../apps/web/src/approval-read-failure.css",
-        "../apps/web/src/design/approval-read-failure-tokens.css",
         "../apps/web/src/components/OrganizationDataPanel.vue",
         "../apps/web/src/components/OrganizationTokenPanel.vue",
         "../apps/web/src/components/OrganizationAuditPanel.vue",
@@ -7514,7 +7511,6 @@
     "implementationFiles": [
       "apps/web/src/styles/tenancy-workspace.css",
       "apps/web/src/styles.css",
-      "apps/web/src/signal-ledger.css",
       "apps/web/src/components/onboarding-page-c.css",
       "apps/web/src/components/onboarding-guide/steps.ts"
     ],
@@ -8126,5 +8122,32 @@
       "tests/unit/platform-palette-contract.test.mjs"
     ],
     "contract": "Remove nine runtime-unreferenced legacy source/identity palette styles. Current home palette uses semantic roles; product row and handoff fallback colors use existing theme roles; replace five important declarations with scoped cascade. Handoff script/API/session behavior unchanged; no collection/config/schema/permission or dependency changes. Historical Git palette reconstruction and immutable receipts retained."
+  },
+  "retiredRuntimeCss20261022": {
+    "sourceFiles": [
+      "scripts/lib/retired-runtime-css.mjs",
+      "apps/web/src/commerce-workspace.css",
+      "apps/web/src/components/OpportunityCatalogueList.vue",
+      "apps/web/src/home-dashboard.css",
+      "apps/web/src/home-selection-results.css",
+      "apps/web/src/supplier-offer-list.css"
+    ],
+    "testFiles": [
+      "tests/unit/retired-runtime-css.test.mjs",
+      "tests/unit/design-quality-gate.test.mjs",
+      "tests/unit/home-page-preview.test.mjs",
+      "tests/unit/responsive-detail-palette-contract.test.mjs"
+    ],
+    "retiredStyles": [
+      "apps/web/src/navigation-shell-scoped.css",
+      "apps/web/src/signal-ledger.css",
+      "apps/web/src/design/approval-filter-tokens.css",
+      "apps/web/src/design/approval-read-failure-tokens.css",
+      "apps/web/src/design/export-detail-tokens.css",
+      "apps/web/src/design/organization-audit-tokens.css",
+      "apps/web/src/design/tenancy-tokens.css",
+      "apps/web/src/design/token-filter-tokens.css"
+    ],
+    "contract": "No current runtime imports; remove eight historical CSS files from web source. Explicit fixed-revision hash-checked review readers only; unrelated paths read current bytes. Preserve existing historical records. Retired visual capture/smoke/refresh-source commands fail closed before starting preview services. No production API/permission/schema/config/session or collection changes. Current commerce metadata has an explicit 12px minimum allowlist; table body/actions stay at 13px. Legacy dependency binding updates only the already-published 06ae8f667 onboarding shell SHA, original captured records immutable."
   }
 }

@@ -1,7 +1,8 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFileSync, readdirSync } from "node:fs";
+import { readdirSync } from "node:fs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");

@@ -1,3 +1,4 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
@@ -8,7 +9,7 @@ import {
   assertCaptureSourceRevision,
   readEvidenceSourceBytes,
 } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
-import { readFileSync, readdirSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import vm from "node:vm";
 import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
