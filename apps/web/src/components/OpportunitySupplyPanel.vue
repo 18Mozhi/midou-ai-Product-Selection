@@ -20,6 +20,12 @@ const related = computed(() =>
   ),
 );
 const selectedId = ref("");
+const canRefreshCurrent = computed(
+  () =>
+    props.canRead &&
+    props.listState === "ready" &&
+    related.value.some((item) => item.id === selectedId.value),
+);
 const CANDIDATE_BATCH_SIZE = 20;
 const visibleCount = ref(CANDIDATE_BATCH_SIZE);
 const selected = ref<SourcingSearch | null>(null);
@@ -65,6 +71,10 @@ async function load() {
     if (readController.signal.aborted || current !== generation) return;
     state.value = "error";
   }
+}
+function refreshCurrentRecord() {
+  if (state.value === "loading") return;
+  void load();
 }
 watch(
   () => [props.opportunityId, props.searches, props.canRead, props.listState],
@@ -122,20 +132,8 @@ function is1688(value: string) {
         </select>
       </label>
     </header>
-    <p v-if="!canRead" role="status">暂无供应链查看权限。</p>
-    <p v-else-if="listState === 'loading'" role="status">正在读取关联找货记录…</p>
-    <div v-else-if="listState === 'error'" role="alert">
-      <p>关联找货记录暂不可用，利润数据仍可查看。</p>
-      <button type="button" @click="emit('retryList')">重试读取找货记录</button>
-    </div>
-    <p v-else-if="!related.length">暂无当前商品的找货记录。</p>
-    <p v-else-if="state === 'loading'" role="status">正在读取货源报价…</p>
-    <div v-else-if="state === 'error'" role="alert">
-      <p>货源报价暂不可用，利润数据仍可查看。</p>
-      <button type="button" @click="load">重试读取货源报价</button>
-    </div>
-    <template v-else>
-      <section v-if="selected" aria-label="当前找货状态">
+    <section v-if="canRefreshCurrent" aria-label="当前找货状态">
+      <template v-if="state === 'ready' && selected">
         <p>记录状态：{{ sourcingRecordStatusText(selected.status) }}</p>
         <p v-if="selected.collection_progress">
           关联任务状态：{{ sourcingRecordStatusText(selected.collection_progress.status) }} · 成功
@@ -150,8 +148,34 @@ function is1688(value: string) {
             <li v-for="field in selected.missing_fields" :key="field">{{ field }}</li>
           </ul>
         </details>
-        <button type="button" @click="load">重新读取找货记录</button>
-      </section>
+      </template>
+      <button
+        type="button"
+        :aria-busy="state === 'loading'"
+        :aria-disabled="state === 'loading'"
+        @click="refreshCurrentRecord"
+      >
+        {{
+          state === "loading"
+            ? "读取中…"
+            : state === "error"
+              ? "重试读取货源报价"
+              : "重新读取找货记录"
+        }}
+      </button>
+    </section>
+    <p v-if="!canRead" role="status">暂无供应链查看权限。</p>
+    <p v-else-if="listState === 'loading'" role="status">正在读取关联找货记录…</p>
+    <div v-else-if="listState === 'error'" role="alert">
+      <p>关联找货记录暂不可用，利润数据仍可查看。</p>
+      <button type="button" @click="emit('retryList')">重试读取找货记录</button>
+    </div>
+    <p v-else-if="!related.length">暂无当前商品的找货记录。</p>
+    <p v-else-if="state === 'loading'" role="status">正在读取货源报价…</p>
+    <div v-else-if="state === 'error'" role="alert">
+      <p>货源报价暂不可用，利润数据仍可查看。</p>
+    </div>
+    <template v-else>
       <p v-if="!candidates.length">当前找货记录暂无候选报价。</p>
       <div v-else class="selection-supply-scroll" tabindex="0" aria-label="货源报价明细">
         <table>

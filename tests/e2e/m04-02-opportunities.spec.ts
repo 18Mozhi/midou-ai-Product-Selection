@@ -3636,3 +3636,89 @@ for (const scenario of [
     expect(writes).toEqual([]);
   });
 }
+
+test("supplier refresh preserves keyboard focus after successful GET", async ({ page }) => {
+  await ready(page, evidence, {}, supplyCapabilities);
+  const record = {
+    ...supplySearch("focus-record"),
+    status: "succeeded_empty",
+    candidate_count: 0,
+    candidates: [],
+  };
+  await page.route("**/api/v1/sourcing/searches", (r) => r.fulfill({ json: envelope([record]) }));
+  let reads = 0;
+  await page.route("**/api/v1/sourcing/searches/focus-record", (r) => {
+    reads++;
+    return r.fulfill({ json: envelope(record) });
+  });
+  await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+  const button = page.getByRole("button", { name: "重新读取找货记录", exact: true });
+  await expect(button).toBeVisible();
+  await button.focus();
+  await page.keyboard.press("Enter");
+  await expect.poll(() => reads).toBe(2);
+  await expect(button).toBeVisible();
+  console.log(
+    "REFRESH_FOCUS " +
+      JSON.stringify({
+        focused: await button.evaluate((el) => el === document.activeElement),
+        reads,
+      }),
+  );
+  await expect(button).toBeFocused();
+});
+
+for (const fail of [false, true]) {
+  test(`supplier refresh keeps focus and guards pending requests (${fail ? "retry" : "success"})`, async ({
+    page,
+  }) => {
+    await ready(page, evidence, {}, supplyCapabilities);
+    const record = {
+      ...supplySearch("focus-pending"),
+      status: "succeeded_empty",
+      candidate_count: 0,
+      candidates: [],
+    };
+    await page.route("**/api/v1/sourcing/searches", (route) =>
+      route.fulfill({ json: envelope([record]) }),
+    );
+    let reads = 0;
+    let allowRecovery = false;
+    let release!: () => void;
+    const pending = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await page.route("**/api/v1/sourcing/searches/focus-pending", async (route) => {
+      reads++;
+      if (reads === 2) {
+        await pending;
+      }
+      if (fail && reads >= 2 && !allowRecovery) {
+        await route.fulfill({ status: 503, body: "Unavailable" });
+        return;
+      }
+      await route.fulfill({ json: envelope(record) });
+    });
+    await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+    const button = page.getByRole("button", { name: "重新读取找货记录", exact: true });
+    await expect(button).toBeVisible();
+    await button.focus();
+    await page.keyboard.press("Enter");
+    const busy = page.getByRole("button", { name: "读取中…", exact: true });
+    await expect(busy).toHaveAttribute("aria-disabled", "true");
+    await expect(busy).toBeFocused();
+    await page.keyboard.press("Enter");
+    await page.keyboard.press("Space");
+    expect(reads).toBe(2);
+    release();
+    if (fail) {
+      const retry = page.getByRole("button", { name: "重试读取货源报价", exact: true });
+      await expect(retry).toBeFocused();
+      expect(reads).toBe(4);
+      allowRecovery = true;
+      await page.keyboard.press("Enter");
+      await expect.poll(() => reads).toBe(5);
+    }
+    await expect(button).toBeFocused();
+  });
+}
