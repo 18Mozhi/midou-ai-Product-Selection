@@ -26,7 +26,7 @@
   border: 0;
   border-radius: 4px;
   color: var(--so-on-primary);
-  background: linear-gradient(120deg, var(--so-primary-strong), var(--so-primary));
+  background: var(--so-primary);
   font-weight: 750;
   text-decoration: none;
 }
@@ -183,7 +183,7 @@
 }
 .opportunity-modal::backdrop {
   background: var(--so-overlay);
-  backdrop-filter: blur(14px);
+  backdrop-filter: none;
 }
 .opportunity-modal form {
   width: min(620px, 100%);

@@ -53,3 +53,13 @@ test("active opportunity filters, modal and evidence rules survive retirement", 
   assert.match(review, /\.opportunity-workspace--review \.opportunity-modal button/);
   assert.match(review, /opportunity-technical-details summary/);
 });
+
+test("current opportunity dialogs keep solid actions and an unblurred backdrop", async () => {
+  const css = await readFile("apps/web/src/opportunities.css", "utf8");
+  assert.doesNotMatch(css, /linear-gradient|radial-gradient|backdrop-filter:\s*blur/);
+  assert.match(css, /\.opportunity-modal::backdrop\s*\{[^}]*backdrop-filter:\s*none/s);
+  assert.match(
+    css,
+    /\.opportunity-modal footer button:last-child\s*\{[^}]*background:\s*var\(--so-primary\)/s,
+  );
+});

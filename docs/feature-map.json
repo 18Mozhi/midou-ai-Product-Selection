@@ -8180,5 +8180,14 @@
       "tests/e2e/m04-02-opportunities.spec.ts"
     ],
     "contract": "Remove seven exact unused opportunity class families only; preserve live mixed-selector branches and declaration bytes. Current Vue/TS token audit excludes prefix matches; no component/API/collection/scoring/permission/config changes. Static frontend release, no runtime restart."
+  },
+  "flatOpportunityDialogs20261022": {
+    "implementationFiles": ["apps/web/src/opportunities.css"],
+    "verificationFiles": [
+      "tests/unit/retired-opportunity-selectors.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/e2e/m04-03-scoring.spec.ts"
+    ],
+    "contract": "Existing primary token replaces the legacy gradient; local opportunity modal backdrop filter none. Preserve colors, focus/keyboard/reason validation, APIs, scoring, collection and permissions. Static frontend, no runtime restart."
   }
 }

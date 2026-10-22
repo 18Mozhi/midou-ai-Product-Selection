@@ -1292,6 +1292,15 @@ test("P18 adoption dialog exposes the required-reason error without posting", as
   await page.getByRole("button", { name: "采纳建议" }).click();
   const dialog = page.getByRole("dialog", { name: "记录采纳决定" });
   const reason = dialog.getByLabel("原因（必填）");
+  await expect(dialog.getByRole("button", { name: "确认记录" })).toHaveCSS(
+    "background-image",
+    "none",
+  );
+  await expect
+    .poll(() =>
+      dialog.evaluate((element) => getComputedStyle(element, "::backdrop").backdropFilter),
+    )
+    .toBe("none");
   await dialog.getByRole("button", { name: "确认记录" }).click();
 
   await expect(reason).toHaveAttribute("aria-invalid", "true");

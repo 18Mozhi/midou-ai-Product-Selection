@@ -100,3 +100,7 @@ MySqlOpportunityRepository.detail 实际 evidence.id 是 opportunity_evidence_li
 ## 旧选品布局选择器退出
 
 实际Vue/TypeScript中没有overview、section、downstream、competitor-facts、partial-error、tabs、score这7个opportunity类名。删除opportunities.css及automatic-selection.css中对应旧概览/评分卡/页签/竞品卡规则，混合选择器仅去掉无入口分支，现行弹窗、筛选、证据、决策和分页声明保留。不删除组件或接口，不改变采集、评分、权限与数据。现行页面双端验证，静态部署无需运行服务重启。
+
+## 现行弹窗实色与遮罩
+
+共用opportunities.css的末位主要按钮改用既有so-primary实色，opportunity-modal遮罩显式backdrop-filter:none，不再继承全局模糊。保留原遮罩色、按钮语义、尺寸、焦点、原因必填和所有写入/权限校验。评分规则与选品决定共用此基础，双端验证；无需配置，静态部署刷新生效，不重启服务、不改采集。
