@@ -4432,7 +4432,6 @@
         "../apps/worker/src/trend-projection-alerts.ts",
         "../apps/worker/src/automatic-source-scheduler.ts",
         "../apps/web/src/components/TrendDashboard.vue",
-        "../apps/web/src/components/shared/MonitoringReadinessStrip.vue",
         "../apps/web/src/components/shared/monitoring-readiness.ts",
         "../apps/web/src/components/TrendFilterPanel.vue",
         "../apps/web/src/components/TrendDetailPanel.vue",
@@ -4712,7 +4711,6 @@
         "../apps/worker/src/business-task-projection-worker.ts",
         "../apps/worker/src/notification-outbox-worker.ts",
         "../apps/web/src/components/SelectionProductComparison.vue",
-        "../apps/web/src/components/shared/MonitoringReadinessStrip.vue",
         "../apps/web/src/components/shared/monitoring-readiness.ts"
       ],
       "routes": [

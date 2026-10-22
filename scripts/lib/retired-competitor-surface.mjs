@@ -7,6 +7,7 @@ const root = fileURLToPath(new URL("../../", import.meta.url));
 export const competitorArchiveRevision = "dc7c862a725249d67b29011de508664ae3714432";
 const files = new Set([
   "apps/web/src/components/CompetitorMonitor.vue",
+  "apps/web/src/components/shared/MonitoringReadinessStrip.vue",
   "apps/web/src/competitor.css",
   "apps/web/src/design/competitor-review-tokens.css",
   "tests/e2e/m04-05-competitors.spec.ts",

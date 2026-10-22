@@ -70,3 +70,7 @@ MySqlOpportunityRepository.detail 实际 evidence.id 是 opportunity_evidence_li
 ## 决策记录原始审计信息
 
 决策记录改为五列原生表，保留接口原顺序、完整原因、原始created_at、原商品版本（含0）和完整actor_id；不再截断操作者，不把历史决定当作当前评分。手机同字段纵排，空列表明确无记录。删除对应旧article卡片样式，不更改决策接口、权限、写入、采集或评分。刷新商品详情→决策记录即可查看；仅前端发布，无需Node/Python重启。
+
+## 无入口旧样式与旧监控状态卡清理
+
+删除无任何当前引用的selection-journey-enhancements.css（旧手工流程渐变/阴影样式）和无运行入口的MonitoringReadinessStrip.vue。旧竞品来源测试继续通过原显式归档白名单读取dc7c862a历史源码，不恢复旧组件到生产、不把历史验证当作当前UI验收；当前monitoring-readiness.ts及后台/情报组件保留。删除前后比较完整JS/CSS/index构建字节，不更改路由、接口、功能、权限、采集或配置，无需重启服务。
