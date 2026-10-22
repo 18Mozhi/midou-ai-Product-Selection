@@ -32,7 +32,7 @@ export const catalogueProductFacts = (item: Opportunity) => {
         : "未取得",
     },
     {
-      label: "评分 / 评价",
+      label: "星级 / 评价",
       value: `${p?.rating_value != null ? p.rating_value.toFixed(1) : "—"} / ${p?.review_count != null ? `${p.review_count} 条` : "未采集"}`,
     },
     {

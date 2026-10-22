@@ -8198,5 +8198,18 @@
       "tests/e2e/m04-01-trends.spec.ts"
     ],
     "contract": "Remove exactly two unused trend class families, three rules. Comparison tray uses opaque semantic panel with no blur/shadow; preserve fixed geometry, mobile safe-area, selection, quote, save, source/collection and permission contracts. CSS only, static release without runtime restart."
+  },
+  "platformRatingLabels20261022": {
+    "implementationFiles": [
+      "apps/web/src/components/OpportunityCatalogueList.vue",
+      "apps/web/src/components/opportunity-catalogue-facts.ts",
+      "apps/web/src/components/SelectionProductHeader.vue",
+      "apps/web/src/components/SelectionProductComparison.vue"
+    ],
+    "verificationFiles": [
+      "tests/unit/opportunity-catalogue-facts.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "contract": "Label existing primary/snapshot rating_value as star rating, distinct from internal overall_score. Preserve values, null/zero/review counts, formulas, APIs, permissions and collection. Update desktop/mobile labels consistently. Reference research does not import competitor sales/ads assumptions or new business filters; static frontend only."
   }
 }

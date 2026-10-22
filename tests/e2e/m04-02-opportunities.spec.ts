@@ -793,6 +793,7 @@ test("selection detail presents product identity and factual score rows without 
   await page.goto(`/opportunities/${opportunityId}`);
   const header = page.locator(".selection-product-header");
   await expect(header.getByRole("heading", { name: "便携式桌面风扇" })).toBeVisible();
+  await expect(header.locator("dt").filter({ hasText: /^星级 \/ 评价$/ })).toHaveCount(1);
   await expect(header.getByText("图片暂不可用", { exact: true })).toBeVisible();
   await expect(header.getByRole("link", { name: "B000000001" })).toHaveAttribute(
     "href",
@@ -892,6 +893,8 @@ test("catalogue shows original primary facts without inventing sales or private 
   const row = page.locator(".selection-product-row").first();
   await expect(row).toContainText("USD 29.00");
   await expect(row).toContainText("4.7 / 1200 条");
+  await expect(row.locator('td[data-label="星级 / 评价"]')).toContainText("4.7 / 1200 条");
+  await expect(row.locator('td[data-label="评分 / 评价"]')).toHaveCount(0);
   await expect(row).toContainText("近月 ≥ 100");
   await expect(row).toContainText("#123");
   await expect(row).toContainText("观察到广告标记");

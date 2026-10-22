@@ -72,7 +72,7 @@ const asin = computed(() =>
         </dd>
       </div>
       <div>
-        <dt>评分 / 评价</dt>
+        <dt>星级 / 评价</dt>
         <dd>
           {{ product?.rating_value != null ? product.rating_value.toFixed(1) : "—" }} /
           {{ product?.review_count != null ? `${product.review_count} 条` : "未采集" }}

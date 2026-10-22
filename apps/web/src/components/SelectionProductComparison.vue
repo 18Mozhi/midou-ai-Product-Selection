@@ -129,7 +129,7 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
           <tr>
             <th scope="col">商品 / ASIN</th>
             <th scope="col">售价</th>
-            <th scope="col">评分</th>
+            <th scope="col">星级</th>
             <th scope="col">评价数</th>
             <th scope="col">购买提示</th>
             <th scope="col">类目排名</th>
@@ -186,7 +186,7 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
               </details>
             </th>
             <td data-label="售价">{{ price(item) }}</td>
-            <td data-label="评分">{{ item.latest_snapshot?.rating_value ?? "未采集" }}</td>
+            <td data-label="星级">{{ item.latest_snapshot?.rating_value ?? "未采集" }}</td>
             <td data-label="评价数">
               {{ item.latest_snapshot?.review_count ?? "未知" }}
               <small v-if="role === 'competitor'"

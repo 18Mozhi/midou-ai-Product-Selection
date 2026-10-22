@@ -28,7 +28,8 @@ test("shared catalogue facts preserve actual prices, observed lower bounds and m
   assert.equal(result["1688进货价"], "CNY 3.25");
   assert.equal(result.购买提示, "近月 ≥ 100");
   assert.equal(result.类目排名, "#42");
-  assert.equal(result["评分 / 评价"], "4.3 / 125 条");
+  assert.equal(result["星级 / 评价"], "4.3 / 125 条");
+  assert.equal(result["评分 / 评价"], undefined);
   assert.equal(
     result.采价时间,
     facts.catalogueFreshness(item.automatic_purchase_price.observed_at),

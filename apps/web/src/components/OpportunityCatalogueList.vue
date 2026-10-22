@@ -45,7 +45,7 @@ const rows = computed(() =>
           <th scope="col">商品信息</th>
           <th scope="col">Amazon 售价</th>
           <th scope="col">购买 / 排名</th>
-          <th scope="col">评分 / 评价</th>
+          <th scope="col">星级 / 评价</th>
           <th scope="col">1688 进货价</th>
           <th scope="col">竞品 / 货源</th>
           <th scope="col">选品结论</th>
@@ -102,7 +102,7 @@ const rows = computed(() =>
             ><small class="catalogue-cell-note">类目 {{ facts[4]?.value }}</small
             ><small class="catalogue-cell-note">公开购买下限</small>
           </td>
-          <td data-label="评分 / 评价">
+          <td data-label="星级 / 评价">
             <strong class="catalogue-number">{{ facts[2]?.value }}</strong
             ><small class="catalogue-cell-note">平台公开评价</small>
           </td>

@@ -108,3 +108,9 @@ MySqlOpportunityRepository.detail 实际 evidence.id 是 opportunity_evidence_li
 ## 情报旧入口样式与找货对比栏
 
 删除无Vue/TypeScript引用的trend-width-control及trend-rules三条旧规则，当前筛选与情报订阅后台不改。找货对比栏移除基础背景模糊及基础/评审阴影，使用既有实色面板，保留边框、固定位置、手机安全区、选择计数和保存报价对比合同。只改两份CSS，不改组件脚本、报价数据、采集、接口或权限；静态部署刷新生效、无需重启。
+
+## 同行公开参考复核与指标标签
+
+补看FindNiche公开Shopify页的网格及横向列表：筛选与结果分区、商品身份紧邻价格/信号，但其列表不是原生table，不复制其销量/销售额业务口径。趋品AI公开首页明确称工作台界面示意，只作信息分组参考，不声称进入真实登录列表，也不照搬营销数字、AI角色、内容工厂或投流。ecom168仍为主要已实查视觉基准，当前维持单套八列研究表。
+
+实际primary_product.rating_value及竞品快照rating_value是平台星级，而非overall_score内部评分。列表/主品原“评分 / 评价”统一为“星级 / 评价”，竞品列“评分”改“星级”，同步手机data-label及事实helper；数值、未知、评价数、内部综合/竞争评分公式和API字段完全不变。静态部署刷新生效，无采集或运行服务重启。
