@@ -2778,14 +2778,14 @@ test("opportunity evidence uses progressive batches instead of rendering every r
   await ready(page, manyEvidence);
   await page.goto(`/opportunities/${opportunityId}?tab=evidence`);
   const evidencePanel = page.locator(".opportunity-evidence");
-  await expect(evidencePanel.locator(":scope > a")).toHaveCount(20);
+  await expect(evidencePanel.locator("tbody tr")).toHaveCount(20);
   await expect(evidencePanel.getByText("已显示 20 / 45 条")).toBeVisible();
   await evidencePanel.getByRole("button", { name: "继续显示 20 条（剩余 25 条）" }).click();
-  await expect(evidencePanel.locator(":scope > a")).toHaveCount(40);
+  await expect(evidencePanel.locator("tbody tr")).toHaveCount(40);
   await evidencePanel.getByRole("button", { name: "继续显示 5 条（剩余 5 条）" }).click();
-  await expect(evidencePanel.locator(":scope > a")).toHaveCount(45);
+  await expect(evidencePanel.locator("tbody tr")).toHaveCount(45);
   await evidencePanel.getByRole("button", { name: "收起到最新 20 条" }).click();
-  await expect(evidencePanel.locator(":scope > a")).toHaveCount(20);
+  await expect(evidencePanel.locator("tbody tr")).toHaveCount(20);
 });
 
 test("source prices remain visible when generic product profit has not been calculated", async ({
@@ -3971,6 +3971,65 @@ for (const status of ["calculated", "insufficient_data"] as const) {
       await expect(panel.locator(".profit-summary")).toHaveCount(0);
     }
     expect(reads).toBe(1);
+    expect(writes).toBe(0);
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+      .toBe(true);
+  });
+}
+
+for (const missing of [false, true]) {
+  test(`intelligence evidence table separates association and raw identifiers (${missing})`, async ({
+    page,
+  }) => {
+    const record = {
+      ...evidence[0],
+      id: "association-provenance-123",
+      raw_evidence_id: missing ? undefined : "raw-provenance-456",
+      title: "关联情报原文样例",
+      publisher: missing ? "" : "原文发布方",
+      observed_at: missing ? null : "2026-10-17T01:02:03.000Z",
+      canonical_url: "https://example.test/original-article",
+    };
+    await ready(page, [record]);
+    let writes = 0;
+    page.on("request", (request) => {
+      if (request.url().includes("/api/v1/") && request.method() !== "GET") writes++;
+    });
+    await page.goto(`/opportunities/${opportunityId}?tab=evidence`);
+    const panel = page.locator(".opportunity-evidence");
+    await expect(panel).toContainText("关联情报原文样例");
+    console.log(
+      "EVIDENCE_TABLE " +
+        JSON.stringify({
+          tables: await panel.locator("table").count(),
+          cardLinks: await panel.locator(":scope > a").count(),
+        }),
+    );
+    const table = panel.getByRole("table", { name: "当前选品关联情报原文与证据编号" });
+    await expect(table).toBeVisible();
+    await expect(table.locator("thead th")).toHaveCount(5);
+    const row = table.locator("tbody tr");
+    await expect(row).toHaveCount(1);
+    await expect(row).toContainText("关联情报原文样例");
+    await row.getByText("查看编号", { exact: true }).click();
+    await expect(row).toContainText("关联编号：");
+    await expect(row).toContainText("association-provenance-123");
+    await expect(row).toContainText("原始证据编号：");
+    if (missing) {
+      await expect(row).toContainText("未知");
+      await expect(row.locator("time")).toHaveCount(0);
+    } else {
+      await expect(row).toContainText("raw-provenance-456");
+      await expect(row.locator("time")).toHaveAttribute("datetime", "2026-10-17T01:02:03.000Z");
+    }
+    const link = row.getByRole("link", { name: "查看原文：关联情报原文样例", exact: true });
+    await expect(link).toHaveAttribute("href", "https://example.test/original-article");
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    await expect(panel.locator(":scope > a")).toHaveCount(0);
+    await expect(panel).not.toContainText("证据新鲜度");
+    await expect(panel).not.toContainText("证据管理");
     expect(writes).toBe(0);
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))

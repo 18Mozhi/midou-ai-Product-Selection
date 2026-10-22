@@ -115,6 +115,7 @@ export interface OpportunityDetail extends OpportunitySummary {
   }>;
   evidence: Array<{
     id: string;
+    raw_evidence_id?: string | null;
     title: string;
     publisher: string;
     canonical_url: string;

@@ -11823,12 +11823,22 @@ components:
                           ],
                         properties:
                           {
-                            id: { type: string, format: uuid },
+                            id:
+                              {
+                                type: string,
+                                format: uuid,
+                                description: "Opportunity evidence association id, distinct from raw_evidence_id; not proof of scoring use.",
+                              },
                             title: { type: string },
                             publisher: { type: string },
                             canonical_url: { type: string, format: uri },
                             provider_id: { type: string, format: uuid },
-                            raw_evidence_id: { type: string, format: uuid },
+                            raw_evidence_id:
+                              {
+                                type: string,
+                                format: uuid,
+                                description: "Existing raw evidence identifier, distinct from the association id.",
+                              },
                             observed_at: { type: string, format: date-time },
                           },
                       },

@@ -289,31 +289,9 @@
 .opportunity-section.warning {
   border-left: 3px solid var(--so-warning);
 }
-.opportunity-evidence > a {
-  margin-top: 9px;
-  padding: 12px;
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  border: 1px solid var(--so-border);
-  border-radius: 4px;
-  color: var(--so-text);
-  background: var(--so-panel);
-  text-decoration: none;
-}
-.opportunity-evidence a strong,
-.opportunity-evidence a small {
-  display: block;
-}
-.opportunity-evidence a small,
 .opportunity-decisions article small {
   margin-top: 5px;
   color: var(--so-text-muted);
-  font-size: 13px;
-}
-.opportunity-evidence a b {
-  align-self: center;
-  color: var(--so-primary);
   font-size: 13px;
 }
 .opportunity-decisions > article {
@@ -496,13 +474,6 @@
   }
   .opportunity-overview {
     grid-template-columns: 1fr;
-  }
-  .opportunity-evidence > a {
-    display: block;
-  }
-  .opportunity-evidence a b {
-    display: block;
-    margin-top: 8px;
   }
   .opportunity-modal form {
     width: 100%;

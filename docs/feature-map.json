@@ -1,4 +1,16 @@
 {
+  "selectionIntelligenceEvidenceTable20261022": {
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityEvidencePanel.vue",
+      "apps/web/src/components/opportunity-workspace-types.ts",
+      "apps/web/src/opportunities.css"
+    ],
+    "producerFiles": ["apps/api/src/mysql-opportunity-repository.ts"],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "pageRoutes": ["/opportunities/{opportunityId}"],
+    "apiRoutes": ["/api/v1/opportunities/{opportunityId}"],
+    "contract": "Native five-column intelligence source table separates association id from existing raw_evidence_id, preserves original observed_at and explicit source link, unknown metadata stays unknown. Native reference disclosure performs no requests/writes; 20-row progressive batches unchanged. Remove sole-component unused full-card anchor styles while preserving shared decision declarations. No automatic scoring-use inference, URL rewriting, API/config/schema/permission/collection changes; frontend-only deployment without Node/Python restart."
+  },
   "selectionProfitRunProvenance20261022": {
     "sourceFiles": ["apps/web/src/components/OpportunityProfitPanel.vue"],
     "producerFiles": ["apps/api/src/mysql-profit-repository.ts"],
