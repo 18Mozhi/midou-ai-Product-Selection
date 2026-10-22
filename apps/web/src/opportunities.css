@@ -12,8 +12,6 @@
   font: inherit;
 }
 .opportunity-detail p,
-.opportunity-overview p,
-.opportunity-section p,
 .opportunity-evidence header p,
 .opportunity-decisions header p,
 .opportunity-modal header p {
@@ -77,60 +75,6 @@
   color: var(--so-on-primary);
   background: var(--so-primary-strong);
 }
-.opportunity-downstream {
-  grid-column: 1/-1;
-}
-.opportunity-downstream footer,
-.opportunity-section footer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
-  margin-top: 16px;
-}
-.opportunity-downstream footer a,
-.opportunity-section footer a {
-  padding: 9px 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 4px;
-  color: var(--so-primary);
-  text-decoration: none;
-}
-.opportunity-competitor-facts {
-  display: grid;
-  gap: 8px;
-  margin-top: 14px;
-}
-.opportunity-competitor-facts > article {
-  display: grid;
-  grid-template-columns: minmax(220px, 1fr) auto auto;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 4px;
-  background: var(--so-panel-soft);
-}
-.opportunity-competitor-facts div,
-.opportunity-competitor-facts div small {
-  display: grid;
-  gap: 4px;
-}
-.opportunity-competitor-facts small {
-  color: var(--so-text-muted);
-}
-.opportunity-partial-error {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border: 1px solid color-mix(in srgb, var(--so-danger) 45%, var(--so-border));
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--so-danger) 7%, var(--so-panel));
-}
-.opportunity-partial-error span {
-  flex: 1;
-  color: var(--so-text-muted);
-}
 .opportunity-detail {
   margin-top: 14px;
   padding: 18px 18px 104px;
@@ -189,28 +133,6 @@
 .opportunity-detail > header > div:last-child small {
   color: var(--so-text-muted);
 }
-.opportunity-tabs {
-  margin: 14px 0;
-  padding: 5px;
-  display: flex;
-  gap: 4px;
-  border: 1px solid var(--so-border);
-  border-radius: 4px;
-  background: var(--so-panel-soft);
-  overflow: auto;
-}
-.opportunity-tabs button {
-  padding: 10px 13px;
-  border: 0;
-  border-radius: 8px;
-  color: var(--so-text-muted);
-  background: transparent;
-  white-space: nowrap;
-}
-.opportunity-tabs button[aria-current="page"] {
-  color: var(--so-text);
-  background: color-mix(in srgb, var(--so-primary) 14%, var(--so-panel));
-}
 .opportunity-pagination {
   margin-top: 12px;
   padding-top: 12px;
@@ -228,13 +150,6 @@
   color: var(--so-text);
   background: var(--so-panel-soft);
 }
-.opportunity-overview {
-  display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
-  gap: 12px;
-}
-.opportunity-overview > article,
-.opportunity-section,
 .opportunity-evidence,
 .opportunity-decisions {
   min-height: 180px;
@@ -243,51 +158,9 @@
   border-radius: 4px;
   background: var(--so-panel-soft);
 }
-.opportunity-score {
-  grid-row: span 2;
-}
-.opportunity-overview h4,
-.opportunity-section h4,
 .opportunity-evidence h4,
 .opportunity-decisions h4 {
   font-size: 18px;
-}
-.opportunity-overview article > strong,
-.opportunity-section > strong {
-  display: block;
-  margin: 16px 0 6px;
-  font-size: 22px;
-}
-.opportunity-overview article > span,
-.opportunity-section > span {
-  color: var(--so-text-muted);
-  line-height: 1.6;
-}
-.opportunity-score > strong {
-  color: var(--so-chart-4);
-  font-size: 42px;
-}
-.opportunity-score dl {
-  margin: 20px 0 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-.opportunity-score dl div {
-  padding: 11px;
-  border-radius: 4px;
-  background: var(--so-panel);
-}
-.opportunity-score dt {
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.opportunity-score dd {
-  margin: 5px 0 0;
-  font-size: 13px;
-}
-.opportunity-section.warning {
-  border-left: 3px solid var(--so-warning);
 }
 .opportunity-modal {
   position: fixed;
@@ -384,19 +257,6 @@
   .opportunity-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .opportunity-overview {
-    grid-template-columns: 1fr;
-  }
-  .opportunity-competitor-facts > article {
-    grid-template-columns: 1fr;
-  }
-  .opportunity-partial-error {
-    align-items: stretch;
-    flex-direction: column;
-  }
-  .opportunity-score {
-    grid-row: auto;
-  }
 }
 @media (max-width: 640px) {
   .responsive-filter-drawer--overlay .opportunity-filters {
@@ -445,13 +305,6 @@
   .opportunity-detail > header {
     display: grid;
     gap: 12px;
-  }
-  .opportunity-tabs {
-    margin-left: -5px;
-    margin-right: -5px;
-  }
-  .opportunity-overview {
-    grid-template-columns: 1fr;
   }
   .opportunity-modal form {
     width: 100%;

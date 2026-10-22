@@ -8169,5 +8169,16 @@
     "implementationFiles": ["apps/web/src/components/OpportunityDetailInsights.vue"],
     "verificationFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
     "contract": "Visible saved-run boundary only when latest_score_run exists; no inference of its formula version, no rescoring or history rewrite. Current competitors are not proof of historical participation. No collection/API/schema/config changes; static frontend only."
+  },
+  "retiredOpportunitySelectors20261022": {
+    "implementationFiles": [
+      "apps/web/src/opportunities.css",
+      "apps/web/src/automatic-selection.css"
+    ],
+    "verificationFiles": [
+      "tests/unit/retired-opportunity-selectors.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "contract": "Remove seven exact unused opportunity class families only; preserve live mixed-selector branches and declaration bytes. Current Vue/TS token audit excludes prefix matches; no component/API/collection/scoring/permission/config changes. Static frontend release, no runtime restart."
   }
 }

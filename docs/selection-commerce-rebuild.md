@@ -96,3 +96,7 @@ MySqlOpportunityRepository.detail 实际 evidence.id 是 opportunity_evidence_li
 ## 进货价缺失提示去重
 
 选品库没有automatic_purchase_price时只显示一次“未取得”，不再把缺失的报价时间重复渲染为第二个“未取得”；利润未知仍独立保留。有采购记录时原价格及原观测时间保持不变。仅渲染条件调整，不改变采集、评分、接口、权限或持久化数据；静态发布无需重启服务。
+
+## 旧选品布局选择器退出
+
+实际Vue/TypeScript中没有overview、section、downstream、competitor-facts、partial-error、tabs、score这7个opportunity类名。删除opportunities.css及automatic-selection.css中对应旧概览/评分卡/页签/竞品卡规则，混合选择器仅去掉无入口分支，现行弹窗、筛选、证据、决策和分页声明保留。不删除组件或接口，不改变采集、评分、权限与数据。现行页面双端验证，静态部署无需运行服务重启。
