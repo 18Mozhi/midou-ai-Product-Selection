@@ -8111,5 +8111,20 @@
     ],
     "tests": ["tests/e2e/m04-02-opportunities.spec.ts"],
     "contract": "Read-only five-column native decision history table; preserve original order, reason, full actor_id, original created_at and opportunity_version including zero. No decision mutation, permission, API or collection change."
+  },
+  "legacyCssCleanup20261022": {
+    "sourceFiles": [
+      "apps/web/src/commerce-workspace.css",
+      "apps/web/src/home-dashboard.css",
+      "apps/web/src/selection-catalogue.css",
+      "apps/web/src/components/OpportunityCatalogueList.vue",
+      "apps/web/src/components/CrawlerCaptchaHandoff.vue"
+    ],
+    "testFiles": [
+      "tests/unit/retired-ui-residue.test.mjs",
+      "tests/unit/theme-and-icon-completion.test.mjs",
+      "tests/unit/platform-palette-contract.test.mjs"
+    ],
+    "contract": "Remove nine runtime-unreferenced legacy source/identity palette styles. Current home palette uses semantic roles; product row and handoff fallback colors use existing theme roles; replace five important declarations with scoped cascade. Handoff script/API/session behavior unchanged; no collection/config/schema/permission or dependency changes. Historical Git palette reconstruction and immutable receipts retained."
   }
 }

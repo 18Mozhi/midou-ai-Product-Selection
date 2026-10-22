@@ -380,24 +380,12 @@ test("credential asset palette resolves P50 component, modal and status colors i
   assert.doesNotMatch(pageCss, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("home dashboard palette uses semantic names for its approved white and attention accents", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/home-dashboard-tokens.css", "utf8"),
-    readFile("apps/web/src/home-dashboard.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(/(--home-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set(
-    [...css.matchAll(/var\((--home-(?:white|attention))\)/g)].map((match) => match[1]),
-  );
-
-  assert.equal(names.size, 2);
-  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(), /^\.home-dashboard\s*\{[\s\S]*\}$/);
-  assert.ok(css.startsWith('@import "./design/home-dashboard-tokens.css";'));
-  assertPaletteUsage(references, names);
+test("commerce home dashboard uses current semantic roles without the retired palette import", async () => {
+  const css = await readFile("apps/web/src/home-dashboard.css", "utf8");
+  assert.match(css, /--home-accent:\s*var\(--so-primary\)/);
+  assert.match(css, /--home-positive:\s*var\(--so-success\)/);
+  assert.match(css, /--home-hairline:\s*var\(--so-border\)/);
+  assert.doesNotMatch(css, /home-dashboard-tokens|--home-white|--home-attention/);
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 

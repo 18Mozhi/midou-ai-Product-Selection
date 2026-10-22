@@ -74,3 +74,11 @@ MySqlOpportunityRepository.detail 实际 evidence.id 是 opportunity_evidence_li
 ## 无入口旧样式与旧监控状态卡清理
 
 删除无任何当前引用的selection-journey-enhancements.css（旧手工流程渐变/阴影样式）和无运行入口的MonitoringReadinessStrip.vue。旧竞品来源测试继续通过原显式归档白名单读取dc7c862a历史源码，不恢复旧组件到生产、不把历史验证当作当前UI验收；当前monitoring-readiness.ts及后台/情报组件保留。删除前后比较完整JS/CSS/index构建字节，不更改路由、接口、功能、权限、采集或配置，无需重启服务。
+
+## 第二批无运行引用样式清理
+
+删除provider-sources.css及approval-read-feedback、identity-mfa/recovery/registration/reset/verification、local-identity-login这7份旧tokens样式；实际采集来源后台组件、当前身份页面及语义主题tokens不变。已核对源码/脚本/测试引用，旧tokens仅由历史发布重建映射及遍历式历史配色检查提及，固定Git归档和静态历史回执保留，不改历史批准记录或把它们当当前页面。保留8份仍需迁移历史预览依赖的候选，不因未被主入口加载就删除。无新运行配置或重启要求。
+
+复测发现3项原基线已有样式门失败：旧首页配色断言不再对应当前首页、情报/找货标签遗留!important、接管面板2处颜色fallback硬编码。首页断言改验当前语义角色并删除已不使用的home-dashboard-tokens.css；移除不必要!important；接管面板仅把颜色fallback改为已有--so-border/--so-primary，不改脚本、接口、权限、会话或采集流程。上述变化需定向视觉/流程回归，不再声称整包所有字节不变。
+
+同一全量样式门继续检出首页2处!important、手机搜索栏2处!important及产品表4处硬编码色。改用现有语义颜色，并用局部选择器优先级保持原间距/760px搜索栏布局，不更改字段、筛选、分页或任何采集行为。

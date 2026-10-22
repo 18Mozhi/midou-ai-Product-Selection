@@ -220,7 +220,7 @@ tbody tr:hover {
   width: 80px;
   height: 90px;
   border: 1px solid var(--so-border);
-  background: #fff;
+  background: var(--so-panel);
   color: var(--so-text-muted);
   font-size: 12px;
   text-align: center;
@@ -277,7 +277,7 @@ tbody tr:hover {
   font-variant-numeric: tabular-nums;
 }
 .catalogue-cost {
-  color: #b55316;
+  color: var(--so-warning);
 }
 .is-missing {
   font-size: 12px;
@@ -325,8 +325,8 @@ tbody tr:hover {
   font-size: 11px;
 }
 .catalogue-verdict[data-stage="recommended"] {
-  background: #edf7f1;
-  color: #267147;
+  background: var(--so-success-soft);
+  color: var(--so-success);
 }
 .catalogue-verdict[data-stage="rule_candidate"] {
   color: var(--so-primary);

@@ -288,14 +288,14 @@ html[data-design="commerce"] #app .home-daily-production dd {
   display: inline-flex;
   align-items: center;
 }
-.home-setup-callout,
-.home-read-alert {
+.home-dashboard .home-setup-callout,
+.home-dashboard .home-read-alert {
   display: flex;
   gap: 12px;
   align-items: center;
   flex-wrap: wrap;
   padding: 14px 18px;
-  margin: 16px 0 !important;
+  margin: 16px 0;
   background: var(--so-panel);
   border: 1px solid var(--so-border);
   border-left: 3px solid var(--so-primary);
@@ -310,9 +310,9 @@ html[data-design="commerce"] #app .home-daily-production dd {
   font-size: 12px;
   color: var(--so-text-muted);
 }
-.home-truth,
-.home-truth-unknown {
-  margin-top: 18px !important;
+.home-dashboard .home-truth,
+.home-dashboard .home-truth-unknown {
+  margin-top: 18px;
   font-size: 12px;
   color: var(--so-text-muted);
 }

@@ -26,3 +26,33 @@ test("retired monitoring card historical evidence remains explicit and read-only
   assert.match(source, /MonitoringReadinessFact/);
   assert.match(source, /monitoring-readiness__summary/);
 });
+
+const retiredStyles = [
+  "apps/web/src/design/home-dashboard-tokens.css",
+  "apps/web/src/provider-sources.css",
+  "apps/web/src/design/approval-read-feedback-tokens.css",
+  "apps/web/src/design/identity-mfa-tokens.css",
+  "apps/web/src/design/identity-recovery-tokens.css",
+  "apps/web/src/design/identity-registration-tokens.css",
+  "apps/web/src/design/identity-reset-tokens.css",
+  "apps/web/src/design/identity-verification-tokens.css",
+  "apps/web/src/design/local-identity-login-tokens.css",
+];
+test("unreferenced legacy source and identity palette styles stay outside runtime source", () => {
+  for (const p of retiredStyles) assert.equal(existsSync(p), false, p);
+  for (const file of files("apps/web/src")) {
+    if (!/\.(?:vue|ts|css)$/.test(file)) continue;
+    const source = readFileSync(file, "utf8");
+    for (const p of retiredStyles)
+      assert.ok(!source.includes(p.split("/").at(-1)), `${file} imports retired style ${p}`);
+  }
+});
+
+test("commerce section labels keep scoped precedence without important", () => {
+  const source = readFileSync("apps/web/src/commerce-workspace.css", "utf8");
+  assert.match(source, /\.trend-dashboard \.trend-section-label/);
+  assert.match(source, /\.sourcing-workspace \.sourcing-section-label/);
+  assert.doesNotMatch(source, /!important/);
+  const qualified = source.slice(source.indexOf(".trend-dashboard .trend-section-label"));
+  assert.equal(qualified.match(/\{([^}]*)\}/)[1].trim(), "font-size: 12px;");
+});

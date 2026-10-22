@@ -69,9 +69,9 @@
   .catalogue-querybar {
     flex-wrap: wrap;
   }
-  .catalogue-search {
-    flex-basis: 100% !important;
-    max-width: none !important;
+  html[data-design="commerce"] #app .catalogue-querybar .catalogue-search {
+    flex-basis: 100%;
+    max-width: none;
   }
   .catalogue-sort-note {
     display: none;

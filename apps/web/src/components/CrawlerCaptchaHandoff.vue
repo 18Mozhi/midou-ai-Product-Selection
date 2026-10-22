@@ -168,7 +168,7 @@ onBeforeUnmount(stop);
 <style scoped>
 .captcha-handoff {
   padding: 20px;
-  border: 1px solid var(--border-color, #d4d8df);
+  border: 1px solid var(--border-color, var(--so-border));
   border-radius: 8px;
   margin-block: 16px;
 }
@@ -206,7 +206,7 @@ onBeforeUnmount(stop);
   gap: 6px;
 }
 .captcha-handoff :focus-visible {
-  outline: 3px solid var(--accent-color, #186bb0);
+  outline: 3px solid var(--accent-color, var(--so-primary));
   outline-offset: 3px;
 }
 </style>

@@ -366,9 +366,14 @@ html[data-design="commerce"] #app :is(.trend-market-heading h2, .sourcing-head h
   letter-spacing: 0;
 }
 html[data-design="commerce"] #app :is(.trend-section-label, .sourcing-section-label) {
-  font-size: 12px !important;
+  font-size: 12px;
   color: var(--so-text-muted);
   margin: 0 0 6px;
+}
+html[data-design="commerce"]
+  #app
+  :is(.trend-dashboard .trend-section-label, .sourcing-workspace .sourcing-section-label) {
+  font-size: 12px;
 }
 html[data-design="commerce"] #app :is(.trend-market-heading p, .sourcing-section-description) {
   font-size: 13px;
