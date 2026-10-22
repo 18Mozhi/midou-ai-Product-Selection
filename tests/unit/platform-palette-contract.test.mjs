@@ -476,7 +476,8 @@ test("sourcing palette resolves only current colors and overrides without import
     [...css.matchAll(/var\((--so-sourcing-review-[a-z-]+)\)/g)].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 11);
+  assert.equal(names.size, 10);
+  assert.ok(!names.has("--so-sourcing-review-shadow"));
   assert.ok(!names.has("--so-sourcing-review-pale-blue"));
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(

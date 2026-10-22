@@ -3373,7 +3373,12 @@
       "liveGateCredentialBoundary": "Fixed BaoTa SSH execution; Redis credentials remain in the server restricted environment file.",
       "purposes": ["cache", "queue", "rate", "sse"],
       "keyScope": "scoutops:v1:<purpose>:org:<organization_id>:ws:<workspace_id>:...",
-      "ttlPolicy": { "cache": 300, "queue": 86400, "rate": 60, "sse": 86400 },
+      "ttlPolicy": {
+        "cache": 300,
+        "queue": 86400,
+        "rate": 60,
+        "sse": 86400
+      },
       "runtimeEndpoint": "/api/v1/platform/operations/redis",
       "status": "verified",
       "statusDetail": "module_verified"
@@ -6640,7 +6645,12 @@
       "loading": "profile is loaded and rendered first from the valid account session even without organization context; authorization, sessions, notifications and assets settle independently in the background with explicit partial-failure feedback, and tenant-owned sections remain unavailable until a real organization and workspace are selected",
       "status": "implemented"
     },
-    { "path": "/home", "view": "HomeDashboard", "domain": "work", "status": "implemented" },
+    {
+      "path": "/home",
+      "view": "HomeDashboard",
+      "domain": "work",
+      "status": "implemented"
+    },
     {
       "path": "/work",
       "view": "Redirect",
@@ -8211,5 +8221,20 @@
       "tests/e2e/m04-02-opportunities.spec.ts"
     ],
     "contract": "Label existing primary/snapshot rating_value as star rating, distinct from internal overall_score. Preserve values, null/zero/review counts, formulas, APIs, permissions and collection. Update desktop/mobile labels consistently. Reference research does not import competitor sales/ads assumptions or new business filters; static frontend only."
+  },
+  "retiredAdminLayouts20261022": {
+    "implementationFiles": [
+      "apps/web/src/organization-admin.css",
+      "apps/web/src/mysql-resilience.css",
+      "apps/web/src/design/sourcing-tokens.css"
+    ],
+    "verificationFiles": [
+      "tests/unit/retired-admin-layouts.test.mjs",
+      "tests/unit/mysql-page-preview.test.mjs",
+      "tests/e2e/m06-01-organization-admin.spec.ts",
+      "tests/e2e/m08-03-mysql-resilience.spec.ts",
+      "tests/unit/platform-palette-contract.test.mjs"
+    ],
+    "contract": "Retire 18 exact unused organization/MySQL class families only; preserve live mixed selector branches/declarations, state/refresh-error/tenant/token/audit/permission/runtime contracts. Frozen historical review evidence remains separate from current Vue E2E. No API/schema/config/collection/backend changes; static frontend without restart. Also remove the now-unused sourcing shadow alias from the previous flat-tray change; exact palette declaration/use equality remains mandatory."
   }
 }

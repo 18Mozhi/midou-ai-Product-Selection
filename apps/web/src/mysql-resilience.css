@@ -7,41 +7,11 @@
   color: var(--ink);
   font-family: "Noto Sans SC", system-ui, sans-serif;
 }
-.mysql-resilience__hero,
-.mysql-resilience__verdict,
-.mysql-resilience__panel,
 .mysql-resilience__state,
-.mysql-resilience__refresh-notice,
-.mysql-resilience__metrics article {
+.mysql-resilience__refresh-notice {
   border: 1px solid var(--line);
   background: linear-gradient(145deg, var(--so-bg), var(--so-bg-elevated));
   box-shadow: var(--so-shadow);
-}
-.mysql-resilience__hero {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  padding: 26px;
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at 80% 10%, var(--so-glow), transparent 42%),
-    linear-gradient(145deg, var(--so-bg), var(--so-bg-elevated));
-}
-.mysql-resilience__hero p,
-.mysql-resilience__panel header p {
-  margin: 0;
-  color: var(--so-primary);
-  font-size: 13px;
-  letter-spacing: 0.18em;
-}
-.mysql-resilience__hero h2 {
-  margin: 7px 0 8px;
-  font-size: 28px;
-}
-.mysql-resilience__hero span,
-.mysql-resilience__verdict p,
-.mysql-resilience__panel small {
-  color: var(--muted);
 }
 .mysql-resilience button {
   border: 1px solid var(--so-primary-border);
@@ -103,148 +73,6 @@
   font-size: 26px;
   color: var(--so-danger);
 }
-.mysql-resilience__verdict {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  padding: 20px 22px;
-  border-radius: 14px;
-  border-left: 4px solid var(--so-success);
-}
-.mysql-resilience__verdict[data-verdict="warning"] {
-  border-left-color: var(--so-warning);
-}
-.mysql-resilience__verdict[data-verdict="blocked"] {
-  border-left-color: var(--so-danger);
-}
-.mysql-resilience__verdict div {
-  display: grid;
-}
-.mysql-resilience__verdict small {
-  color: var(--so-primary);
-}
-.mysql-resilience__verdict strong {
-  font-size: 20px;
-}
-.mysql-resilience__verdict p {
-  flex: 1;
-}
-.mysql-resilience__verdict em {
-  font-style: normal;
-  color: var(--so-success);
-}
-.mysql-resilience__metrics {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-}
-.mysql-resilience__metrics article {
-  display: grid;
-  gap: 5px;
-  padding: 18px;
-  border-radius: 14px;
-}
-.mysql-resilience__metrics span {
-  color: var(--muted);
-  font-size: 13px;
-}
-.mysql-resilience__metrics strong {
-  font-size: 24px;
-  color: var(--so-text);
-}
-.mysql-resilience__metrics small {
-  color: var(--so-text-muted);
-}
-.mysql-resilience__layout {
-  display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  gap: 14px;
-}
-.mysql-resilience__panel {
-  padding: 20px;
-  border-radius: 16px;
-}
-.mysql-resilience__panel header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 12px;
-}
-.mysql-resilience__panel h3 {
-  margin: 4px 0 0;
-}
-.mysql-resilience__panel dl {
-  margin: 14px 0 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-.mysql-resilience__panel dl div {
-  padding: 11px;
-  background: var(--so-panel-soft);
-  border-radius: 9px;
-}
-.mysql-resilience__panel dt {
-  font-size: 13px;
-  color: var(--muted);
-}
-.mysql-resilience__panel dd {
-  margin: 5px 0 0;
-  color: var(--so-text);
-}
-.mysql-resilience__impact > div {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-.mysql-resilience__impact article {
-  display: grid;
-  gap: 6px;
-  padding: 14px;
-  border: 1px solid var(--so-border-strong);
-  border-radius: 12px;
-  background: var(--so-panel-soft);
-}
-.mysql-resilience__impact article[data-severity="warning"] {
-  border-color: var(--so-warning);
-}
-.mysql-resilience__impact article[data-severity="blocked"] {
-  border-color: var(--so-danger);
-}
-.mysql-resilience__impact article span {
-  color: var(--muted);
-  font-size: 13px;
-}
-.mysql-resilience__findings > div {
-  display: grid;
-  gap: 8px;
-  margin-top: 14px;
-}
-.mysql-resilience__findings article {
-  display: grid;
-  grid-template-columns: 34px 240px 1fr;
-  gap: 10px;
-  padding: 11px;
-  border-left: 3px solid var(--so-warning);
-  background: var(--so-panel-soft);
-}
-.mysql-resilience__findings article[data-severity="blocked"] {
-  border-color: var(--so-danger-border);
-}
-.mysql-resilience__findings p {
-  margin: 0;
-  color: var(--muted);
-}
-.mysql-resilience .mysql-resilience__clear {
-  padding: 18px;
-  background: var(--so-success-soft);
-}
-.mysql-resilience__clear span {
-  display: block;
-  color: var(--muted);
-  margin-top: 5px;
-}
 .mysql-resilience__footer {
   display: flex;
   flex-wrap: wrap;
@@ -260,62 +88,13 @@
     transform: rotate(360deg);
   }
 }
-@media (max-width: 900px) {
-  .mysql-resilience__metrics {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .mysql-resilience__layout {
-    grid-template-columns: 1fr;
-  }
-  .mysql-resilience__impact > div {
-    grid-template-columns: 1fr;
-  }
-}
 @media (max-width: 520px) {
   .mysql-resilience {
     gap: 12px;
   }
-  .mysql-resilience__hero {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 18px;
-    padding: 19px;
-  }
   .mysql-resilience__refresh-notice {
     align-items: stretch;
     flex-direction: column;
-  }
-  .mysql-resilience__hero h2 {
-    font-size: 23px;
-  }
-  .mysql-resilience__metrics {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .mysql-resilience__metrics article {
-    padding: 13px;
-  }
-  .mysql-resilience__metrics strong {
-    font-size: 20px;
-  }
-  .mysql-resilience__verdict {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .mysql-resilience__panel dl {
-    grid-template-columns: 1fr;
-  }
-  .mysql-resilience__panel header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .mysql-resilience__findings article {
-    grid-template-columns: 28px 1fr;
-  }
-  .mysql-resilience__findings article p {
-    grid-column: 2;
   }
   .mysql-resilience__footer {
     display: grid;

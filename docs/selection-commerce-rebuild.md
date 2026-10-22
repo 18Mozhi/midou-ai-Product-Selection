@@ -114,3 +114,9 @@ MySqlOpportunityRepository.detail 实际 evidence.id 是 opportunity_evidence_li
 补看FindNiche公开Shopify页的网格及横向列表：筛选与结果分区、商品身份紧邻价格/信号，但其列表不是原生table，不复制其销量/销售额业务口径。趋品AI公开首页明确称工作台界面示意，只作信息分组参考，不声称进入真实登录列表，也不照搬营销数字、AI角色、内容工厂或投流。ecom168仍为主要已实查视觉基准，当前维持单套八列研究表。
 
 实际primary_product.rating_value及竞品快照rating_value是平台星级，而非overall_score内部评分。列表/主品原“评分 / 评价”统一为“星级 / 评价”，竞品列“评分”改“星级”，同步手机data-label及事实helper；数值、未知、评价数、内部综合/竞争评分公式和API字段完全不变。静态部署刷新生效，无采集或运行服务重启。
+
+## 必要后台旧布局规则清理
+
+组织页10个旧角色/比较/模板/摘要/密钥布局类、MySQL运维页8个旧hero/结论/指标/面板类，实际Vue/TypeScript均无精确类名引用。仅从organization-admin.css/mysql-resilience.css删除对应旧规则，混合选择器保留实际加载/刷新错误/证据分支，现行审计、令牌、组织与运维功能及权限不改。历史MySQL预览使用原冻结组件及专用review CSS，不改历史记录；现行验收采用实际Vue双端E2E。无API/配置/依赖/数据库或采集变更，静态部署刷新生效、无需重启。
+
+配色回归另检出上轮对比栏去阴影后遗留的so-sourcing-review-shadow声明，全仓当前CSS、脚本与历史预览均无引用。删除该单条声明，声明数量11→10并显式断言无该变量，保持完整声明/使用集合相等；不恢复阴影或放宽配色门。

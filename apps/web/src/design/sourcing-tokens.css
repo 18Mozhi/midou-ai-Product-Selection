@@ -8,6 +8,5 @@ html:has(body #app .sourcing-workspace--review) {
   --so-sourcing-review-danger: #b42318;
   --so-sourcing-review-soft: #f3f6fb;
   --so-sourcing-review-control-border: var(--glass-border);
-  --so-sourcing-review-shadow: rgba(24, 45, 74, 0.18);
   --so-sourcing-review-scrim: rgba(24, 45, 74, 0.5);
 }

@@ -395,114 +395,9 @@
   color: var(--so-text-muted);
   font-size: 13px;
 }
-.org-admin-role-grid {
-  margin-top: 2px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-.org-admin-comparison {
-  display: grid;
-  min-width: 720px;
-}
-.org-admin-comparison [role="row"] {
-  display: grid;
-  grid-template-columns: minmax(190px, 1.4fr) repeat(5, minmax(110px, 1fr));
-  border-top: 1px solid var(--so-border);
-}
-.org-admin-comparison [role="cell"],
-.org-admin-comparison [role="columnheader"] {
-  padding: 10px;
-  text-align: center;
-}
-.org-admin-comparison [role="cell"]:first-child,
-.org-admin-comparison [role="columnheader"]:first-child {
-  text-align: left;
-}
 .org-admin-matrix-head {
   color: var(--so-text-muted);
   background: var(--so-panel-soft);
-}
-.org-admin-template-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin: 14px 0;
-}
-.org-admin-template-grid article {
-  display: grid;
-  gap: 7px;
-  padding: 14px;
-  border: 1px solid var(--so-border);
-  border-radius: 10px;
-}
-.org-admin-template-grid article i {
-  width: fit-content;
-}
-.org-admin-template-diff {
-  margin-top: 6px;
-  padding-top: 10px;
-  border-top: 1px solid var(--so-border);
-}
-.org-admin-template-diff summary {
-  cursor: pointer;
-  color: var(--so-primary);
-  font-weight: 700;
-}
-.org-admin-template-change {
-  display: grid;
-  gap: 6px;
-  margin-top: 9px;
-  padding: 10px;
-  border-radius: 8px;
-  background: var(--so-panel-soft);
-}
-.org-admin-template-change[data-kind="added"] {
-  border-left: 3px solid var(--so-success);
-}
-.org-admin-template-change[data-kind="removed"] {
-  border-left: 3px solid var(--so-danger);
-}
-.org-admin-template-change dl,
-.org-admin-template-change dl > div {
-  display: grid;
-  gap: 4px;
-  margin: 0;
-}
-.org-admin-template-change dl > div {
-  grid-template-columns: minmax(90px, 0.7fr) 1fr;
-}
-.org-admin-template-change dt {
-  color: var(--so-text-muted);
-}
-.org-admin-template-change dd {
-  margin: 0;
-  overflow-wrap: anywhere;
-}
-.org-admin-card .org-admin-subheading {
-  margin-top: 24px;
-}
-.org-admin-comparison {
-  overflow-x: auto;
-}
-.org-admin-comparison [role="row"] {
-  grid-template-columns: minmax(220px, 1.5fr) repeat(4, minmax(100px, 1fr));
-}
-.org-admin-comparison span small {
-  display: block;
-}
-.org-admin-secret-warning {
-  display: block;
-  margin-bottom: 12px;
-  color: var(--so-warning);
-  line-height: 1.5;
-}
-.org-admin-audit-filters {
-  grid-template-columns: 1fr 1fr 1fr auto;
-}
-.org-admin-audit-filters button {
-  align-self: end;
-  min-height: 44px;
 }
 .org-admin-chips {
   display: flex;
@@ -515,30 +410,6 @@
   color: var(--so-info);
   background: var(--so-primary-soft);
   font-size: 13px;
-}
-.org-admin-summary-row {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-}
-.org-admin-summary-row span {
-  padding: 14px;
-  border-radius: 12px;
-  background: var(--so-panel-soft);
-}
-.org-admin-summary-row b,
-.org-admin-summary-row small {
-  display: block;
-}
-.org-admin-summary-row b {
-  font-size: 25px;
-}
-.org-admin-secret {
-  display: block;
-  padding: 14px;
-  word-break: break-all;
-  color: var(--so-success);
-  background: var(--so-bg);
 }
 .org-admin-state {
   min-height: 410px;
@@ -646,12 +517,6 @@
   border-color: var(--so-roles-danger);
   color: var(--so-roles-danger);
 }
-
-@media (max-width: 980px) {
-  .org-admin-role-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 @media (max-width: 620px) {
   .org-admin-center {
     margin: 12px -8px 70px;
@@ -669,20 +534,12 @@
   .org-admin-refresh small {
     order: 2;
   }
-  .org-admin-role-grid {
-    grid-template-columns: 1fr;
-  }
-  .org-admin-filters,
-  .org-admin-audit-filters,
-  .org-admin-template-grid {
+  .org-admin-filters {
     grid-template-columns: 1fr;
   }
   .org-admin-section-header {
     align-items: flex-start;
     flex-direction: column;
-  }
-  .org-admin-summary-row {
-    grid-template-columns: repeat(2, 1fr);
   }
   .org-admin-notice code {
     float: none;
