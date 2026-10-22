@@ -28,6 +28,10 @@ const competitors = computed(() => {
     })
     .slice(0, MAXIMUM_SELECTION_COMPETITORS);
 });
+const comparisonRows = computed(() => [
+  ...(main.value ? [{ item: main.value, role: "primary" as const }] : []),
+  ...competitors.value.map((item) => ({ item, role: "competitor" as const })),
+]);
 const reviewItems = computed(() =>
   (main.value ? [main.value, ...competitors.value] : competitors.value).filter(
     (item) => item.latest_snapshot?.public_signals?.review_samples?.length,
@@ -87,42 +91,15 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
 <template>
   <section class="selection-comparison" aria-label="Amazon 主品与竞品">
     <header class="selection-comparison-primary">
-      <div>
-        <span>主要商品</span>
-        <h4>{{ main?.title ?? (mainAsin ? "主品详情待采集" : "主品待识别") }}</h4>
-        <a
-          v-if="mainAsin && /^[A-Z0-9]{10}$/i.test(mainAsin)"
-          :href="`https://www.amazon.com/dp/${mainAsin}`"
-          target="_blank"
-          rel="noopener noreferrer"
-          >{{ mainAsin }} ↗</a
-        >
-      </div>
-      <dl v-if="main">
-        <div>
-          <dt>售价</dt>
-          <dd>{{ price(main) }}</dd>
-        </div>
-        <div>
-          <dt>星级 / 评价数</dt>
-          <dd>
-            {{ main.latest_snapshot?.rating_value ?? "—" }} /
-            {{ main.latest_snapshot?.review_count ?? "—" }}
-          </dd>
-        </div>
-        <div>
-          <dt>购买提示</dt>
-          <dd :title="main.latest_snapshot?.public_signals?.sales_badge?.text">
-            {{ purchaseLabel(main) }}
-          </dd>
-        </div>
-        <div>
-          <dt>类目排名</dt>
-          <dd :title="main.latest_snapshot?.public_signals?.best_seller_rank?.text">
-            {{ rankLabel(main) }}
-          </dd>
-        </div>
-      </dl>
+      <span>对照主品</span>
+      <a
+        v-if="mainAsin && /^[A-Z0-9]{10}$/i.test(mainAsin)"
+        :href="`https://www.amazon.com/dp/${mainAsin}`"
+        target="_blank"
+        rel="noopener noreferrer"
+        >{{ mainAsin }} ↗</a
+      >
+      <span v-if="!main">{{ mainAsin ? "主品详情待采集" : "主品待识别" }}</span>
     </header>
     <header class="selection-comparison-heading">
       <h4>
@@ -139,14 +116,14 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
       竞品数据尚不完整，继续采集后再判断竞争情况。
     </p>
     <div
-      v-if="competitors.length"
+      v-if="comparisonRows.length"
       class="selection-comparison-scroll"
       tabindex="0"
       aria-label="横向滚动竞品对比表"
     >
       <table>
         <caption class="so-visually-hidden">
-          独立竞品的价格、评价、购买提示、类目排名、广告标记和采集时间
+          主品与独立竞品的价格、评价、购买提示、类目排名、广告标记和采集时间
         </caption>
         <thead>
           <tr>
@@ -161,7 +138,11 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in competitors" :key="item.id">
+          <tr
+            v-for="{ item, role } in comparisonRows"
+            :key="`${role}-${item.id}`"
+            :data-product-role="role"
+          >
             <th scope="row">
               <strong>{{ item.title }}</strong
               ><a
@@ -205,7 +186,9 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
             <td data-label="评分">{{ item.latest_snapshot?.rating_value ?? "未采集" }}</td>
             <td data-label="评价数">
               {{ item.latest_snapshot?.review_count ?? "未知" }}
-              <small>当前评价门槛试算：{{ reviewBarrier(item) }}</small>
+              <small v-if="role === 'competitor'"
+                >当前评价门槛试算：{{ reviewBarrier(item) }}</small
+              >
             </td>
             <td
               data-label="购买提示"
@@ -239,7 +222,7 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
         </tbody>
       </table>
     </div>
-    <p v-else>暂无相关竞品记录，请核对采集结果。</p>
+    <p v-if="!competitors.length">暂无相关竞品记录，请核对采集结果。</p>
     <p>
       购买提示为页面展示的数量下限；精确销量、广告花费未知。评价门槛试算只使用当前评价数，不代表该竞品通过相关性及详情证据门，也不替代历史评分输入。
     </p>
@@ -287,10 +270,10 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
 }
 .selection-comparison-primary {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 20px;
-  padding: 20px;
+  gap: 8px 14px;
+  padding: 12px 20px;
   border-bottom: 1px solid var(--so-border);
   background: var(--so-panel-soft);
 }
@@ -299,8 +282,7 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
   font-size: 16px;
 }
 .selection-comparison span,
-.selection-comparison small,
-.selection-comparison dt {
+.selection-comparison small {
   color: var(--so-text-muted);
   font-size: 13px;
 }
@@ -309,19 +291,6 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
   color: var(--so-primary);
   font-size: 13px;
   text-decoration: none;
-}
-.selection-comparison-primary dl {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px 24px;
-  min-width: 220px;
-  margin: 0;
-  flex-shrink: 0;
-}
-.selection-comparison dd {
-  margin: 6px 0 0;
-  font-size: 16px;
-  font-variant-numeric: tabular-nums;
 }
 .selection-comparison-heading {
   display: flex;
@@ -378,6 +347,16 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
 .selection-comparison thead {
   color: var(--so-text-muted);
   background: var(--so-panel-soft);
+}
+.selection-comparison tr[data-product-role="primary"] {
+  background: var(--so-panel-soft);
+}
+.selection-comparison-role {
+  display: inline-block;
+  margin-bottom: 5px;
+  padding: 1px 6px;
+  border: 1px solid var(--so-border);
+  border-radius: 2px;
 }
 .selection-comparison tbody th {
   width: 38%;
@@ -440,10 +419,6 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
     margin-bottom: 5px;
   }
 
-  .selection-comparison-primary {
-    flex-direction: column;
-    align-items: stretch;
-  }
   .selection-comparison-heading {
     flex-wrap: wrap;
   }

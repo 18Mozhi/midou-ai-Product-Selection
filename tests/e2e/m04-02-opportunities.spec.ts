@@ -656,18 +656,37 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     await page.goto(`/opportunities/${opportunityId}?tab=competition`);
     const comparison = page.getByRole("region", { name: "Amazon 主品与竞品" });
     await expect(comparison).toContainText("不代表相关性证明通过或已参与评分");
-    await expect(comparison.getByRole("heading", { name: "主要商品示例" })).toBeVisible();
-    await expect(comparison.getByText("非Amazon同编号商品")).toHaveCount(0);
-    await expect(comparison.locator(".selection-comparison-primary")).toContainText(
-      "近月 ≥ 10,000",
+    console.log(
+      "COMPARISON_LAYOUT " +
+        JSON.stringify({
+          primaryRows: await comparison.locator('tr[data-product-role="primary"]').count(),
+          competitorRows: await comparison.locator('tr[data-product-role="competitor"]').count(),
+          duplicatedCard:
+            (await comparison.locator(".selection-comparison-primary dl").count()) > 0,
+        }),
     );
-    await expect(comparison.locator(".selection-comparison-primary")).toContainText("#222");
-    await expect(comparison.locator("tbody tr").first()).toContainText("近月 ≥ 400");
-    await expect(comparison.locator("tbody tr").first()).toContainText("已观察到广告位");
-    await expect(comparison.locator("tbody tr").first()).toContainText("当前评价门槛试算：");
+    const mainRow = comparison.locator('tr[data-product-role="primary"]');
+    await expect(mainRow).toHaveCount(1);
+    await expect(mainRow).toContainText("主要商品示例");
+    await expect(mainRow.locator("th")).toHaveCount(1);
+    await expect(mainRow.locator("td")).toHaveCount(7);
+    await expect(mainRow).not.toContainText("当前评价门槛试算");
+    await expect(comparison.locator(".selection-comparison-primary dl")).toHaveCount(0);
+    await expect(comparison.getByText("非Amazon同编号商品")).toHaveCount(0);
+    await expect(mainRow).toContainText("近月 ≥ 10,000");
+    await expect(mainRow).toContainText("#222");
+    await expect(
+      comparison.locator('tbody tr[data-product-role="competitor"]').first(),
+    ).toContainText("近月 ≥ 400");
+    await expect(
+      comparison.locator('tbody tr[data-product-role="competitor"]').first(),
+    ).toContainText("已观察到广告位");
+    await expect(
+      comparison.locator('tbody tr[data-product-role="competitor"]').first(),
+    ).toContainText("当前评价门槛试算：");
     if ((page.viewportSize()?.width ?? 0) <= 760) {
       const advertisingCell = comparison
-        .locator("tbody tr")
+        .locator('tbody tr[data-product-role="competitor"]')
         .first()
         .locator("td")
         .filter({ hasText: "已观察到广告位" });
@@ -683,7 +702,9 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
         exact: false,
       }),
     ).toBeVisible();
-    await expect(comparison.locator("tbody tr")).toHaveCount(competitorCount);
+    await expect(comparison.locator('tbody tr[data-product-role="competitor"]')).toHaveCount(
+      competitorCount,
+    );
     await expect(
       comparison.getByText(
         `详情齐备快照 ${detailCollected && sourceEnabled ? competitorCount : 0} / 至少 5 个`,
@@ -692,7 +713,9 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
         },
       ),
     ).toBeVisible();
-    await expect(comparison.locator("tbody").getByText("主要商品示例")).toHaveCount(0);
+    await expect(
+      comparison.locator('tbody tr[data-product-role="competitor"]').getByText("主要商品示例"),
+    ).toHaveCount(0);
     if (competitorCount === 4 || !detailCollected || !sourceEnabled)
       await expect(
         comparison.getByText("竞品数据尚不完整，继续采集后再判断竞争情况。"),
@@ -3768,7 +3791,10 @@ for (const hasSnapshot of [true, false]) {
       }),
     );
     await page.goto(`/opportunities/${opportunityId}?tab=competition`);
-    const row = page.getByRole("region", { name: "Amazon 主品与竞品" }).locator("tbody tr").first();
+    const row = page
+      .getByRole("region", { name: "Amazon 主品与竞品" })
+      .locator('tbody tr[data-product-role="competitor"]')
+      .first();
     await expect(row).toContainText("证据可核对竞品");
     console.log(
       "PROVENANCE " +
@@ -3802,5 +3828,57 @@ for (const hasSnapshot of [true, false]) {
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
       .toBe(true);
+  });
+}
+
+for (const hasMainRecord of [true, false]) {
+  test(`comparison keeps missing competitor facts honest with main record ${hasMainRecord}`, async ({
+    page,
+  }) => {
+    await ready(page, evidence, { main_asin: "B000000000" }, [
+      "opportunity:read",
+      "competitor:read",
+    ]);
+    let writes = 0;
+    page.on("request", (request) => {
+      if (request.url().includes("/api/v1/") && request.method() !== "GET") writes++;
+    });
+    await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) =>
+      route.fulfill({
+        json: envelope(
+          hasMainRecord
+            ? [
+                {
+                  id: "primary-only",
+                  opportunity_id: opportunityId,
+                  market: "US",
+                  source_site: "amazon",
+                  external_id: "B000000000",
+                  title: "只有主品记录",
+                  snapshot_count: 0,
+                  latest_snapshot: null,
+                },
+              ]
+            : [],
+        ),
+      }),
+    );
+    await page.goto(`/opportunities/${opportunityId}?tab=competition`);
+    const comparison = page.getByRole("region", { name: "Amazon 主品与竞品" });
+    await expect(comparison.locator('tr[data-product-role="primary"]')).toHaveCount(
+      hasMainRecord ? 1 : 0,
+    );
+    await expect(comparison.locator('tr[data-product-role="competitor"]')).toHaveCount(0);
+    await expect(comparison).toContainText("竞品对比 0 个");
+    await expect(comparison).toContainText("详情齐备快照 0 / 至少 5 个");
+    await expect(comparison).toContainText("暂无相关竞品记录，请核对采集结果。");
+    if (hasMainRecord) {
+      const row = comparison.locator('tr[data-product-role="primary"]');
+      await expect(row.locator("td")).toHaveCount(7);
+      await expect(row).toContainText("未采集");
+      await expect(row).toContainText("未知");
+      await expect(row).not.toContainText("当前评价门槛试算");
+    } else await expect(comparison).toContainText("主品详情待采集");
+    expect(writes).toBe(0);
   });
 }

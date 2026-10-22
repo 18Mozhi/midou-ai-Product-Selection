@@ -1,4 +1,10 @@
 {
+  "selectionPrimaryCompetitorTable20261022": {
+    "sourceFiles": ["apps/web/src/components/SelectionProductComparison.vue"],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "pageRoutes": ["/opportunities/{opportunityId}"],
+    "contract": "Primary snapshot and independent competitors use the same eight comparison columns, explicitly labeled primary/competitor. Remove duplicate expanded primary facts card and its unused styles. Primary is never counted among competitors or trial-scored as one. Missing primary or competitor data remain unknown/empty; same existing scoped GET, evidence disclosure, ordering, 10-competitor display cap and scoring gates. No API/config/schema/permissions/collection changes; frontend-only publish without Node/Python restart."
+  },
   "selectionCompetitorProvenance20261022": {
     "sourceFiles": [
       "apps/web/src/components/SelectionProductComparison.vue",
