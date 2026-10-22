@@ -154,7 +154,7 @@ const pendingMessage = computed(() => {
           <dd>{{ summary.total }}</dd>
         </div>
         <div>
-          <dt>采集中</dt>
+          <dt title="按找货记录状态统计，不代表当前存活的采集会话">排队或采集中</dt>
           <dd>{{ summary.running }}</dd>
         </div>
         <div>

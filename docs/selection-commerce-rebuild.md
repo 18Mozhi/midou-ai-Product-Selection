@@ -136,3 +136,7 @@ modal-dialog-keyboard.ts仅包含旧trapModalTab，当前Vue/TypeScript/CSS及�
 ## 找货到商品分析的完整返回上下文
 
 SourcingProfitSummary原查看商品分析链接固定from=/sourcing，丢失record和q，详情刷新后返回可能选中第一条或清空搜索。父页面传入当前route.fullPath作为内部必需returnPath属性，RouterLink对象的query负责编码，详情继续使用原safeOpportunityReturnPath和返回来源列表。保留原商品编号和profit分区，不改数据、API、查询条件语义、权限、计算、采集或配置。双端覆盖找货→详情→刷新→返回的同一记录及搜索，GET以外零请求；官方frontend-only部署刷新生效，无需重启。
+
+## 找货汇总不冒充实时执行会话
+
+useSourcingWorkspace.summary.running原本合计queued与running两类记录，而页面只标“采集中”，会把排队也读成正在执行。仅将标签明确为“排队或采集中”，原生说明注明按找货记录状态统计、不代表当前存活采集会话；原合计、筛选、来源进度与后台调度不变。双端以queued/running/completed三条记录验证3条总数、2条合计和零写入。无API/配置/权限/依赖/采集变更，刷新找货页即可，无调节参数；官方frontend-only发布，无需重启服务。

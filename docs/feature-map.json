@@ -8262,5 +8262,13 @@
     ],
     "tests": ["tests/e2e/m04-06-sourcing.spec.ts"],
     "contract": "Pass existing sourcing route.fullPath into the profit-summary product-analysis RouterLink as encoded from query, preserving selected record and q through a detail reload and explicit return. Reuse existing local-path return guard; no data/API/permissions/collection/profit/calculation changes. Internal required prop only. Frontend-only deployment, no service restart."
+  },
+  "sourcingQueuedRecordSummary20261023": {
+    "sources": [
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/composables/useSourcingWorkspace.ts"
+    ],
+    "tests": ["tests/e2e/m04-06-sourcing.spec.ts"],
+    "contract": "Existing summary.running counts queued OR running sourcing records, not only executing jobs. Label as queued-or-collecting and describe record-state scope, not live sessions. Counts, filters, scheduler, APIs, permissions and collection unchanged; frontend-only release, no runtime restart."
   }
 }

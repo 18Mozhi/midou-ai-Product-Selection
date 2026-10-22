@@ -1504,3 +1504,42 @@ test("sourcing product analysis roundtrip preserves record and search after a de
   ).toContainText("当前商品");
   expect(writes).toEqual([]);
 });
+
+test("sourcing queued and running record total does not claim all records are actively collecting", async ({
+  page,
+}) => {
+  await setup(page);
+  const records = ["queued", "running", "completed"].map((status, index) => ({
+    id: index === 0 ? searchId : `00000000-0000-4000-8000-${String(700 + index).padStart(12, "0")}`,
+    input_type: "keyword",
+    input_ref: `状态测试 ${index}`,
+    status,
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: "2026-08-08T12:00:00.000Z",
+  }));
+  await page.route("**/api/v1/sourcing/searches", (route) =>
+    route.fulfill({ json: envelope(records) }),
+  );
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/") && request.method() !== "GET")
+      writes.push(request.url());
+  });
+  await page.goto("/sourcing");
+  const metric = page.locator(".sourcing-summary > div").filter({ hasText: "排队或采集中" });
+  await expect(metric.locator("dd")).toHaveText("2");
+  await expect(metric.locator("dt")).toHaveAttribute(
+    "title",
+    "按找货记录状态统计，不代表当前存活的采集会话",
+  );
+  await expect(page.locator(".sourcing-summary dt")).toHaveText([
+    "找货任务",
+    "排队或采集中",
+    "真实候选",
+    "已有结果",
+  ]);
+  await expect(page.locator(".sourcing-summary dd")).toHaveText(["3", "2", "0", "0"]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect(writes).toEqual([]);
+});
