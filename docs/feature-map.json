@@ -8149,5 +8149,15 @@
       "apps/web/src/design/token-filter-tokens.css"
     ],
     "contract": "No current runtime imports; remove eight historical CSS files from web source. Explicit fixed-revision hash-checked review readers only; unrelated paths read current bytes. Preserve existing historical records. Retired visual capture/smoke/refresh-source commands fail closed before starting preview services. No production API/permission/schema/config/session or collection changes. Current commerce metadata has an explicit 12px minimum allowlist; table body/actions stay at 13px. Legacy dependency binding updates only the already-published 06ae8f667 onboarding shell SHA, original captured records immutable."
+  },
+  "retainedAdminUiVerification20261022": {
+    "testFiles": [
+      "tests/e2e/m06-01-platform-accounts.spec.ts",
+      "tests/e2e/m06-01-organization-admin.spec.ts",
+      "tests/e2e/m03-01-provider-registry.spec.ts",
+      "tests/e2e/m06-03-collection-console.spec.ts",
+      "tests/e2e/m08-01-single-server.spec.ts"
+    ],
+    "contract": "Local mock-HTTP admin preservation checks only, not live collection or production health acceptance. Topology capture preserves anchor and layout assertions, then scrolls to document origin and asserts zero for deterministic full-page desktop/mobile snapshots matching current commerce shell. Test-only change; no runtime frontend, backend, collection, permission or config changes and no repeat production deployment."
   }
 }

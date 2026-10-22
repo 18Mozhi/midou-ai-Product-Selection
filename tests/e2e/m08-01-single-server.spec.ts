@@ -372,12 +372,24 @@ test("M08-01.A07/A08/A15 desktop and 390 single-server truth", async ({ page }) 
     contentBox = await content.boundingBox();
   expect(scopeBox && contentBox && scopeBox.y + scopeBox.height <= contentBox.y).toBeTruthy();
   expect(Math.abs(scopeBox!.width - contentBox!.width)).toBeLessThan(2);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  console.log(
+    "TOPOLOGY_SCREENSHOT_ORIGIN",
+    JSON.stringify(await page.evaluate(() => ({ scrollY: window.scrollY, width: innerWidth }))),
+  );
   await expect(page).toHaveScreenshot("m08-01-single-server-desktop.png", { fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.getByText("huizhou-single-host")).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
+  );
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  console.log(
+    "TOPOLOGY_SCREENSHOT_ORIGIN",
+    JSON.stringify(await page.evaluate(() => ({ scrollY: window.scrollY, width: innerWidth }))),
   );
   await expect(page).toHaveScreenshot("m08-01-single-server-mobile-390.png", { fullPage: true });
 });
