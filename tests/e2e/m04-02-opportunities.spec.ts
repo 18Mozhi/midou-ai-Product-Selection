@@ -4027,6 +4027,9 @@ for (const missing of [false, true]) {
     await expect(link).toHaveAttribute("href", "https://example.test/original-article");
     await expect(link).toHaveAttribute("target", "_blank");
     await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    await expect(link).toHaveCSS("white-space", "nowrap");
+    if ((page.viewportSize()?.width ?? 0) > 760)
+      await expect(row.locator('td[data-label="发布方"]')).toHaveCSS("white-space", "nowrap");
     await expect(panel.locator(":scope > a")).toHaveCount(0);
     await expect(panel).not.toContainText("证据新鲜度");
     await expect(panel).not.toContainText("证据管理");

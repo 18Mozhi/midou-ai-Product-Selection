@@ -155,6 +155,7 @@ watch([() => props.opportunityId, () => props.evidence], () => collapse());
   font-weight: 500;
 }
 .evidence-table-scroll a {
+  white-space: nowrap;
   color: var(--so-primary);
   text-underline-offset: 3px;
 }
@@ -175,6 +176,11 @@ watch([() => props.opportunityId, () => props.evidence], () => collapse());
 }
 .opportunity-evidence footer {
   flex-wrap: wrap;
+}
+@media (min-width: 761px) {
+  .evidence-table-scroll td[data-label="发布方"] {
+    white-space: nowrap;
+  }
 }
 @media (max-width: 760px) {
   .evidence-table-scroll {

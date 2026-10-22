@@ -64,3 +64,5 @@ python scripts/deploy-baota.py --frontend-only
 MySqlOpportunityRepository.detail 实际 evidence.id 是 opportunity_evidence_links.id，raw_evidence_id 是原始证据编号。两类编号在原生折叠项分开展示，不改名混用，不把记录关联、相同标题/网址或关联条数当成评分已使用证据的证明。时间保留接口ISO原值，不由前端当前时刻补造新鲜度；缺字段显示未知。原文地址保持原值、新标签/安全rel不变；不增加URL筛选或改写规则。
 
 沿用20条分批展开/收起、原顺序、范围与权限；展开编号不发请求、不重采、不评分、不写数据库。API字段与OpenAPI原有字段一致，仅补充两种ID语义说明；无需迁移、依赖、配置或后台改动。通过官方 --frontend-only 发布，无需重启Node/Python，刷新进入情报证据后展开“查看编号”即可使用。
+
+线上展开原始编号后，发布方及原文操作列曾被挤断行；桌面发布方和原文操作文字保持整行，手机发布方仍可换行，不改写文本、不截断完整编号。回归补充对应排版断言。
