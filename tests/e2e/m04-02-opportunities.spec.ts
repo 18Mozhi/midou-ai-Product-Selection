@@ -668,6 +668,13 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     const mainRow = comparison.locator('tr[data-product-role="primary"]');
     await expect(mainRow).toHaveCount(1);
     await expect(mainRow).toContainText("主要商品示例");
+    await expect(mainRow.getByText("主品", { exact: true })).toBeVisible();
+    await expect(
+      comparison
+        .locator('tr[data-product-role="competitor"]')
+        .first()
+        .getByText("竞品", { exact: true }),
+    ).toBeVisible();
     await expect(mainRow.locator("th")).toHaveCount(1);
     await expect(mainRow.locator("td")).toHaveCount(7);
     await expect(mainRow).not.toContainText("当前评价门槛试算");
@@ -3875,6 +3882,7 @@ for (const hasMainRecord of [true, false]) {
     if (hasMainRecord) {
       const row = comparison.locator('tr[data-product-role="primary"]');
       await expect(row.locator("td")).toHaveCount(7);
+      await expect(row.getByText("主品", { exact: true })).toBeVisible();
       await expect(row).toContainText("未采集");
       await expect(row).toContainText("未知");
       await expect(row).not.toContainText("当前评价门槛试算");

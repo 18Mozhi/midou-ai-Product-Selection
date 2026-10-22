@@ -144,6 +144,9 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
             :data-product-role="role"
           >
             <th scope="row">
+              <span class="selection-comparison-role">{{
+                role === "primary" ? "主品" : "竞品"
+              }}</span>
               <strong>{{ item.title }}</strong
               ><a
                 :href="`https://www.amazon.com/dp/${item.external_id}`"
