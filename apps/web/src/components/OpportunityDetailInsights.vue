@@ -69,6 +69,13 @@ const emit = defineEmits<{
           </span>
           <span v-else class="opportunity-insight-support">暂无评分记录。</span>
         </div>
+        <p
+          v-if="detail.latest_score_run"
+          class="opportunity-insight-note"
+          data-score-history-notice
+        >
+          以下为已保存的评分记录，不代表已按当前公式重新计算；当前竞品详情也不代表参与了该次评分。历史评分不会因公式升级自动改写。
+        </p>
         <details class="opportunity-insight-support">
           <summary>规则适用范围与竞争评分依据</summary>
           <p>

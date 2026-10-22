@@ -4087,3 +4087,38 @@ for (const populated of [false, true]) {
     expect(writes).toBe(0);
   });
 }
+
+for (const hasRun of [true, false]) {
+  test(`saved score history is explicit without claiming a current formula run: ${hasRun}`, async ({
+    page,
+  }) => {
+    await ready(page, evidence, {
+      latest_score_run: hasRun
+        ? {
+            id: "saved-score",
+            status: "completed",
+            coverage_percent: 40,
+            confidence_score: null,
+            recommendation_status: "insufficient_data",
+            missing_fields: [],
+            scored_at: "2026-08-07T00:00:00.000Z",
+          }
+        : null,
+    });
+    const writes: string[] = [];
+    page.on("request", (request) => {
+      if (request.method() !== "GET") writes.push(request.method() + " " + request.url());
+    });
+    await page.goto(`/opportunities/${opportunityId}?tab=overview`);
+    const notice = page.locator("[data-score-history-notice]");
+    if (hasRun) {
+      await expect(notice).toBeVisible();
+      await expect(notice).toContainText("不代表已按当前公式重新计算");
+      await expect(notice).toContainText("当前竞品详情也不代表参与了该次评分");
+    } else {
+      await expect(notice).toHaveCount(0);
+      await expect(page.getByText("暂无评分记录。", { exact: true })).toBeVisible();
+    }
+    expect(writes).toEqual([]);
+  });
+}

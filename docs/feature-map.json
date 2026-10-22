@@ -8164,5 +8164,10 @@
     "implementationFiles": ["apps/web/src/components/OpportunityCatalogueList.vue"],
     "verificationFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
     "contract": "Render the original acquisition timestamp only when automatic_purchase_price exists; missing price appears once and unknown profit remains visible. Preserve present prices/times, APIs, collection, scoring, permissions and data. Static frontend only, no runtime restart."
+  },
+  "savedScoreHistoryNotice20261022": {
+    "implementationFiles": ["apps/web/src/components/OpportunityDetailInsights.vue"],
+    "verificationFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "contract": "Visible saved-run boundary only when latest_score_run exists; no inference of its formula version, no rescoring or history rewrite. Current competitors are not proof of historical participation. No collection/API/schema/config changes; static frontend only."
   }
 }
