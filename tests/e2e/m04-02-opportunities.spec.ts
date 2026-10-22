@@ -3823,6 +3823,32 @@ for (const hasSnapshot of [true, false]) {
       .locator('tbody tr[data-product-role="competitor"]')
       .first();
     await expect(row).toContainText("证据可核对竞品");
+    if (test.info().project.name === "desktop-chromium") {
+      await page.setViewportSize({ width: 1000, height: 900 });
+      const scroller = page.locator(".selection-comparison-scroll");
+      const identity = row.locator('th[scope="row"]');
+      const before = await identity.boundingBox();
+      const scrollLeft = await scroller.evaluate((el) => {
+        el.scrollLeft = el.scrollWidth - el.clientWidth;
+        return el.scrollLeft;
+      });
+      const after = await identity.boundingBox();
+      console.log(
+        "COMPARISON_SCROLL " + JSON.stringify({ scrollLeft, before: before?.x, after: after?.x }),
+      );
+      expect(scrollLeft).toBeGreaterThan(0);
+      expect(Math.abs(after!.x - before!.x)).toBeLessThan(2);
+      await expect(identity).toHaveCSS("position", "sticky");
+      await expect(page.locator(".selection-comparison thead th").first()).toHaveCSS(
+        "position",
+        "sticky",
+      );
+    } else {
+      await expect(row.locator('th[scope="row"]')).toHaveCSS("position", "static");
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+      ).toBe(true);
+    }
     console.log(
       "PROVENANCE " +
         JSON.stringify({ hasSnapshot, hasEvidence: (await row.innerText()).includes("详情依据") }),

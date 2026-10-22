@@ -361,6 +361,18 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
   border: 1px solid var(--so-border);
   border-radius: 2px;
 }
+/* Keep each metric tied to its product while browsing the wide comparison. */
+.selection-comparison thead th:first-child,
+.selection-comparison tbody th {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--so-panel);
+}
+.selection-comparison thead th:first-child,
+.selection-comparison tr[data-product-role="primary"] > th {
+  background: var(--so-panel-soft);
+}
 .selection-comparison tbody th {
   width: 38%;
   font-weight: 400;
@@ -405,6 +417,10 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
     gap: 12px;
   }
   .selection-comparison tbody th {
+    position: static;
+    left: auto;
+    z-index: auto;
+    background: transparent;
     grid-column: 1 / -1;
     width: auto;
   }

@@ -8231,5 +8231,10 @@
     "implementationFiles": ["apps/web/src/components/OpportunityCatalogueList.vue"],
     "verificationFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
     "contract": "CSS-only left sticky product identity and header within existing horizontal overflow table; existing right action pin remains. Opaque semantic backgrounds and unchanged hover; <=640px identity returns static with original same-data stacked layout. Preserve template/script, eight columns, widths, links, filters, APIs, scoring, permissions and collection. Static frontend, no restart."
+  },
+  "comparisonPinnedIdentity20261023": {
+    "sources": ["apps/web/src/components/SelectionProductComparison.vue"],
+    "tests": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "contract": "Keep existing comparison product row identities and first header sticky during desktop horizontal browsing; preserve primary-row background and native provenance disclosure. At 760px and below restore static same-data stacked rows. No facts, scoring, API, permissions, collector or config changes. Frontend-only deploy; no runtime restart."
   }
 }
