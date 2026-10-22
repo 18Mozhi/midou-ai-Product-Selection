@@ -3775,6 +3775,14 @@ for (const hasSnapshot of [true, false]) {
         JSON.stringify({ hasSnapshot, hasEvidence: (await row.innerText()).includes("详情依据") }),
     );
     await row.getByText("详情依据", { exact: true }).click();
+    const fact = row.locator(".selection-comparison-provenance p").first();
+    await expect(fact).toHaveCSS("font-weight", "400");
+    const bodyFont = await page.evaluate(() => getComputedStyle(document.body).fontSize);
+    await expect(fact).toHaveCSS("font-size", bodyFont);
+    const textColor = await page
+      .getByRole("region", { name: "Amazon 主品与竞品" })
+      .evaluate((el) => getComputedStyle(el).color);
+    await expect(fact).toHaveCSS("color", textColor);
     if (hasSnapshot) {
       await expect(row).toContainText("snapshot-proof-123");
       await expect(row).toContainText("evidence-proof-456");

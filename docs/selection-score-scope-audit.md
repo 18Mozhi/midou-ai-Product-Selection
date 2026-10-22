@@ -61,3 +61,5 @@ crawler-evidence-v1的输入公式（clamp为0–100且两位小数）：
 竞品对比每行新增原生“详情依据”折叠项，直接展示既有 GET /api/v1/competitors 的 latest_snapshot.id / evidence_id，以及 source_status、detail_collected、source_enabled 和 freshness。生产者是 MySqlCompetitorRepository.dto；OpenAPI 补记已存在的快照 id（非新增返回字段）。没有值明确显示未知，false 与缺失分开，不将停用或过期包装为健康。
 
 这些编号供与历史评分证据逐一核对，不能据当前快照和评价数推断其曾参与历史评分。相关性证明与评分证据门仍以原 Worker/评分记录为准；展开不增加网络请求，也不触发采集、评分或任何写入。原最多10个独立竞品、显示顺序、公式、权重、权限、成本和后台功能不变。浏览器刷新后展开每个竞品的“详情依据”即可，无配置项；官方 --frontend-only 静态发布，无需重启 Node/Python。
+
+线上视觉复核另发现旧opportunity段落规则将展开依据染为蓝色粗体；依据段落局部固定为正文色、400字重、正常字距，保留全局可读字号，不修改全局旧样式以免影响无关后台。桌面/手机回归同时断言字号、字重及正文颜色。

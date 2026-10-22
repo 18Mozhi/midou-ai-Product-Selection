@@ -359,8 +359,12 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
   cursor: pointer;
   color: var(--so-primary);
 }
-.selection-comparison-provenance p {
+.selection-comparison .selection-comparison-provenance p {
   margin: 6px 0;
+  color: var(--so-text);
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.6;
 }
 .selection-comparison-provenance code {
   white-space: normal;
