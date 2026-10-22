@@ -8047,5 +8047,13 @@
       "apps/web/src/components/ScoreRuleConsole.vue"
     ],
     "contract": "User-approved crawler-evidence-v3: shared scoped independent related healthy fresh detail proof; newest 5-10 distinct non-primary ASINs; median of existing per-competitor review barrier scores, null under five or invalid counts, only used detail evidence IDs. No primary review fallback or fabricated sales/ads. Comparison detail-ready counts explicitly do not assert relevance or scoring participation. Existing rule weights/thresholds/cost scope/history preserved; no collection changes. See docs/selection-score-scope-audit.md."
+  },
+  "selectionCurrentPurchaseInput20261022": {
+    "sources": [
+      "apps/web/src/components/OpportunityProfitPanel.vue",
+      "apps/api/src/mysql-profit-repository.ts"
+    ],
+    "tests": ["tests/e2e/m04-02-opportunities.spec.ts", "tests/e2e/m04-04-profit.spec.ts"],
+    "contract": "Present existing scoped profit-analysis current_inputs filtered by purchase_price, preserve all platforms and currencies separately, never choose a supplier candidate or historical run as current purchase input. Missing after successful read stays unknown; failed/pending reads do not assert absence. confirmation_mode labels record provenance only, not completed dual review. No API/schema/collector/scoring/permission/config changes. Frontend-only release without service restart."
   }
 }

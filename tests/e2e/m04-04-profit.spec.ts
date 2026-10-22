@@ -867,7 +867,8 @@ for (const currentStatus of ["calculated", "insufficient_data"]) {
       panel.getByText("汇率快照 00000000-0000-4000-8000-000000000446", { exact: true }),
     ).toBeVisible();
     await expect(panel.locator(".profit-current-inputs")).toContainText("40 CNY");
-    await expect(panel.locator(".profit-current-inputs")).toContainText("爬虫证据自动确认");
+    await expect(panel.locator(".profit-current-inputs")).toContainText("自动证据记录");
+    await expect(panel.locator(".profit-current-inputs")).toContainText("当前成本输入");
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
       .toBe(true);

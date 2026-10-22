@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import type { OpportunityProfitAnalysis as ProfitAnalysis } from "./opportunity-workspace-types";
 import {
   opportunityProfitComponentLabel,
   opportunityStatusLabel,
 } from "./opportunity-workspace-presentation";
-withDefaults(
+const props = withDefaults(
   defineProps<{
     profit: ProfitAnalysis | null;
     profitStatus?: string | null;
@@ -14,6 +15,9 @@ withDefaults(
     busy: boolean;
   }>(),
   { profitStatus: null, profitLoadState: "ready", profitErrorMessage: "", profitRequestId: "" },
+);
+const purchaseInputs = computed(
+  () => props.profit?.current_inputs.filter((item) => item.input_type === "purchase_price") ?? [],
 );
 defineEmits<{ retryProfit: [] }>();
 const inputLabel = (value: string) =>
@@ -40,6 +44,34 @@ const inputLabel = (value: string) =>
       <span v-else>选品详情仍可查看；利润数据尚未成功读取。</span>
       <button type="button" :disabled="busy" @click="$emit('retryProfit')">重新读取利润数据</button>
     </aside>
+    <section
+      v-if="profitLoadState === 'ready'"
+      class="profit-current-input"
+      aria-label="当前采购输入"
+    >
+      <h5>当前采购输入</h5>
+      <template v-if="purchaseInputs.length">
+        <div
+          v-for="purchaseInput in purchaseInputs"
+          :key="`${purchaseInput.platform}:${purchaseInput.input_version}:${purchaseInput.evidence_id}`"
+        >
+          <span>{{ purchaseInput.platform }} · </span>
+          <strong>{{ purchaseInput.currency }} {{ purchaseInput.amount_value }}</strong>
+          <span
+            >{{
+              purchaseInput.confirmation_mode === "automatic_evidence" ? "自动证据记录" : "人工记录"
+            }}
+            · v{{ purchaseInput.input_version }}</span
+          >
+          <details>
+            <summary>采购输入依据</summary>
+            <p>来源 {{ purchaseInput.source_ref_id }} · 证据 {{ purchaseInput.evidence_id }}</p>
+            <p>记录类型不代表双人复核已完成；是否进入利润计算以下方计算依据为准。</p>
+          </details>
+        </div>
+      </template>
+      <p v-else>采购输入未知：尚无当前采购价。货源候选报价不等于已匹配进货价。</p>
+    </section>
     <div
       v-if="profit?.latest_run?.status === 'calculated' && profitStatus === 'calculated'"
       class="profit-summary"
@@ -108,15 +140,13 @@ const inputLabel = (value: string) =>
         </article>
       </div>
       <section v-if="profit?.current_inputs.length" class="profit-current-inputs">
-        <h5>已生效成本</h5>
+        <h5>当前成本输入</h5>
         <article v-for="item in profit.current_inputs" :key="`${item.platform}:${item.input_type}`">
           <strong>{{ inputLabel(item.input_type) }}</strong>
           <span>{{ item.amount_value }} {{ item.currency }} · {{ item.platform }}</span>
           <small
             >v{{ item.input_version }} ·
-            {{
-              item.confirmation_mode === "automatic_evidence" ? "爬虫证据自动确认" : "人工双人复核"
-            }}
+            {{ item.confirmation_mode === "automatic_evidence" ? "自动证据记录" : "人工记录" }}
             · {{ item.source_ref_id }}</small
           >
         </article>
@@ -124,3 +154,21 @@ const inputLabel = (value: string) =>
     </details>
   </section>
 </template>
+
+<style scoped>
+.profit-current-input {
+  padding: 12px 0;
+  margin: 12px 0;
+  border-block: 1px solid var(--so-border);
+}
+.profit-current-input h5 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+.profit-current-input > strong {
+  margin-right: 12px;
+}
+.profit-current-input p {
+  overflow-wrap: anywhere;
+}
+</style>

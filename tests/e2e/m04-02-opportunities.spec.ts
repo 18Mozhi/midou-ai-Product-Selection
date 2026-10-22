@@ -2280,6 +2280,7 @@ test("profit analysis failure stays local and retries only the profit read", asy
   await expect(panel.getByRole("alert")).toContainText("利润与成本暂不可用");
   await expect(panel.getByRole("alert")).toContainText("请稍后重新读取利润与成本。");
   await expect(panel.getByRole("alert")).toContainText("profit-read-failed-request");
+  await expect(panel.getByRole("region", { name: "当前采购输入" })).toHaveCount(0);
   const detailReadsBeforeRetry = detailReads;
   const profitReadsBeforeRetry = profitReads;
 
@@ -3442,4 +3443,95 @@ test("competition basis explains approved median scope and unknown facts without
   await expect(basis).toContainText("不按0分或默认分补齐");
   await expect(basis).toContainText("不按名称判断商品类目");
   expect(writes).toEqual([]);
+});
+
+for (const mode of ["automatic_evidence", "human_review", "missing"]) {
+  test(`current purchase input stays separate from supplier candidates: ${mode}`, async ({
+    page,
+  }) => {
+    await ready(page, evidence, {}, supplyCapabilities);
+    await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
+      route.fulfill({
+        json: envelope({
+          latest_run: null,
+          current_inputs:
+            mode === "missing"
+              ? []
+              : [
+                  {
+                    input_type: "purchase_price",
+                    amount_value: 18.6,
+                    currency: "CNY",
+                    source_type: "crawler",
+                    source_ref_id: "offer-current",
+                    evidence_id: "purchase-proof",
+                    observed_at: "2026-08-08T00:00:00.000Z",
+                    input_version: 3,
+                    platform: "amazon",
+                    confirmation_mode: mode,
+                  },
+                ],
+          cost_input_reviews: [],
+        }),
+      }),
+    );
+    const writes = [];
+    page.on("request", (r) => {
+      if (r.method() === "POST") writes.push(r.url());
+    });
+    await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+    const current = page.getByRole("region", { name: "当前采购输入" });
+    if (mode === "missing") await expect(current).toContainText("货源候选报价不等于已匹配进货价");
+    else {
+      await expect(current).toContainText("CNY 18.6");
+      await expect(current).toContainText(mode === "human_review" ? "人工记录" : "自动证据记录");
+      await current.getByText("采购输入依据", { exact: true }).click();
+      await expect(current).toContainText("purchase-proof");
+      await expect(current).toContainText("不代表双人复核已完成");
+    }
+    await expect(page.getByText("人工双人复核", { exact: true })).toHaveCount(0);
+    expect(writes).toEqual([]);
+  });
+}
+
+test("current purchase facts preserve distinct platforms without choosing or merging a price", async ({
+  page,
+}) => {
+  await ready(page, evidence, {}, supplyCapabilities);
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
+    route.fulfill({
+      json: envelope({
+        latest_run: null,
+        current_inputs: [
+          {
+            input_type: "purchase_price",
+            amount_value: 18.6,
+            currency: "CNY",
+            source_ref_id: "first",
+            evidence_id: "first-evidence",
+            input_version: 1,
+            platform: "amazon",
+            confirmation_mode: "human_review",
+          },
+          {
+            input_type: "purchase_price",
+            amount_value: 8,
+            currency: "USD",
+            source_ref_id: "second",
+            evidence_id: "second-evidence",
+            input_version: 1,
+            platform: "PLATFORM",
+            confirmation_mode: "automatic_evidence",
+          },
+        ],
+      }),
+    }),
+  );
+  await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+  const current = page.getByRole("region", { name: "当前采购输入" });
+  await expect(current).toContainText("amazon");
+  await expect(current).toContainText("PLATFORM");
+  await expect(current).toContainText("CNY 18.6");
+  await expect(current).toContainText("USD 8");
+  await expect(current.getByText("采购输入依据", { exact: true })).toHaveCount(2);
 });
