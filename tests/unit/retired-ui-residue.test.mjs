@@ -56,3 +56,16 @@ test("commerce section labels keep scoped precedence without important", () => {
   const qualified = source.slice(source.indexOf(".trend-dashboard .trend-section-label"));
   assert.equal(qualified.match(/\{([^}]*)\}/)[1].trim(), "font-size: 12px;");
 });
+
+test("unused legacy modal trap stays removed while the active dialog focus helper remains", () => {
+  assert.equal(existsSync("apps/web/src/modal-dialog-keyboard.ts"), false);
+  assert.equal(existsSync("apps/web/src/ui/contain-dialog-tab.ts"), true);
+  for (const file of files("apps/web/src")) {
+    if (!/\.(?:vue|ts|css)$/.test(file)) continue;
+    const source = readFileSync(file, "utf8");
+    assert.ok(!source.includes("modal-dialog-keyboard"), `${file} retains old modal helper`);
+    assert.ok(!source.includes("trapModalTab"), `${file} retains old modal trap`);
+  }
+  const active = readFileSync("apps/web/src/components/OpportunityWorkspaceDialogs.vue", "utf8");
+  assert.match(active, /containDialogTab\(\$event, decisionDialog\)/);
+});

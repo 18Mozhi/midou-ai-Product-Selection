@@ -128,3 +128,7 @@ MySqlOpportunityRepository.detail 实际 evidence.id 是 opportunity_evidence_li
 ## 竞品宽表保留商品身份
 
 1000px定向实测竞品表横滚286px后商品身份x259→-27。沿用现有38%身份列宽，仅固定首列表头和主品/竞品行标题，使用实色背景保留主品区分，不添加阴影或第二套数据；760px以下仍是同字段纵排，重置定位。证据折叠仍可用，未知值、竞品数和评分参与边界不变。无接口/配置/依赖/采集变化，官方frontend-only部署刷新即可，无需重启。
+
+## 无入口旧弹窗键盘辅助清理
+
+modal-dialog-keyboard.ts仅包含旧trapModalTab，当前Vue/TypeScript/CSS及脚本/测试均无调用；旧设计基线的路径和哈希仅作历史证据保留。现行OpportunityWorkspaceDialogs.vue继续调用ui/contain-dialog-tab.ts的containDialogTab，不改弹窗、焦点、快捷键或保存流程。删除旧文件并新增防回流回归。以正式9fcc0fa45干净构建为基线逐文件比较当前JS/CSS/index字节；若完全一致不重复发布相同前端，不重启任何服务。无配置/接口/依赖/schema/权限/采集变化，用户无需调整。

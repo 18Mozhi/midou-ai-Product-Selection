@@ -8244,5 +8244,14 @@
     ],
     "tests": ["tests/e2e/m04-06-sourcing.spec.ts"],
     "contract": "Saved comparisons reference quote IDs, and listComparisons does not filter is_current. Label as quote records, not current quotations; explain no assertion of newest quote or purchase cost. Preserve original quotes, terms, evidence, scope, writes, API and collection. Frontend-only release; no runtime restart."
+  },
+  "unusedModalHelperRemoval20261023": {
+    "sources": [
+      "apps/web/src/ui/contain-dialog-tab.ts",
+      "apps/web/src/components/OpportunityWorkspaceDialogs.vue"
+    ],
+    "tests": ["tests/unit/retired-ui-residue.test.mjs"],
+    "removedFiles": ["apps/web/src/modal-dialog-keyboard.ts"],
+    "contract": "Remove runtime-unreferenced trapModalTab module only. Preserve active containDialogTab and historical design evidence. Verify production JS/CSS/index bytes unchanged against the clean9fcc0fa45 build. No UI/API/config/dependency/permission/collector behavior changes; no unchanged frontend republish or runtime restart."
   }
 }
