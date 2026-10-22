@@ -3535,3 +3535,104 @@ test("current purchase facts preserve distinct platforms without choosing or mer
   await expect(current).toContainText("USD 8");
   await expect(current.getByText("采购输入依据", { exact: true })).toHaveCount(2);
 });
+
+for (const scenario of [
+  {
+    record: "queued",
+    task: "blocked_captcha",
+    recordLabel: "等待采集",
+    taskLabel: "验证受阻",
+    blocked: 1,
+    active: 0,
+    hasCandidate: false,
+  },
+  {
+    record: "queued",
+    task: "running",
+    recordLabel: "等待采集",
+    taskLabel: "采集中",
+    blocked: 0,
+    active: 1,
+    hasCandidate: false,
+  },
+  {
+    record: "succeeded_empty",
+    task: "succeeded",
+    recordLabel: "未找到可用候选",
+    taskLabel: "采集成功",
+    blocked: 0,
+    active: 0,
+    hasCandidate: false,
+  },
+  {
+    record: "completed_with_warnings",
+    task: "failed_terminal",
+    recordLabel: "已完成但有缺失",
+    taskLabel: "采集失败",
+    blocked: 0,
+    active: 0,
+    hasCandidate: true,
+  },
+]) {
+  test(`supplier record status and task facts are separate: ${scenario.task}`, async ({ page }) => {
+    await ready(page, evidence, {}, supplyCapabilities);
+    await page.route("**/api/v1/sourcing/searches", (r) =>
+      r.fulfill({
+        json: envelope([
+          {
+            ...supplySearch("state-proof"),
+            status: scenario.record,
+            candidate_count: scenario.hasCandidate ? 1 : 0,
+          },
+        ]),
+      }),
+    );
+    let reads = 0;
+    const writes = [];
+    page.on("request", (r) => {
+      if (r.method() === "POST") writes.push(r.url());
+    });
+    await page.route("**/api/v1/sourcing/searches/state-proof", (r) => {
+      reads++;
+      return r.fulfill({
+        json: envelope({
+          ...supplySearch("state-proof"),
+          status: scenario.record,
+          candidate_count: scenario.hasCandidate ? 1 : 0,
+          candidates: scenario.hasCandidate ? [supplyCandidate] : [],
+          missing_fields: ["specification"],
+          collection_progress: {
+            status: scenario.task,
+            total_subqueries: 1,
+            successful_subqueries: scenario.task === "succeeded" ? 1 : 0,
+            failed_subqueries: scenario.task === "failed_terminal" ? 1 : 0,
+            blocked_subqueries: scenario.blocked,
+            active_subqueries: scenario.active,
+            available_at: "2026-08-08T00:00:00.000Z",
+          },
+        }),
+      });
+    });
+    await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+    const facts = page.getByRole("region", { name: "当前找货状态" });
+    await expect(facts).toContainText(`记录状态：${scenario.recordLabel}`);
+    await expect(facts).toContainText(`关联任务状态：${scenario.taskLabel}`);
+    await expect(facts).toContainText(`受阻 ${scenario.blocked}`);
+    await expect(facts).toContainText(`待处理/执行中 ${scenario.active}`);
+    await facts.getByText("记录缺失项", { exact: true }).click();
+    await expect(facts).toContainText("specification");
+    const previous = reads;
+    await facts.getByRole("button", { name: "重新读取找货记录", exact: true }).click();
+    await expect.poll(() => reads).toBe(previous + 1);
+    await expect(page.getByRole("region", { name: "当前找货状态" })).toContainText(
+      scenario.taskLabel,
+    );
+    if (scenario.hasCandidate)
+      await expect(
+        page
+          .getByRole("region", { name: "当前商品货源报价" })
+          .getByText(supplyCandidate.supplier_name, { exact: true }),
+      ).toBeVisible();
+    expect(writes).toEqual([]);
+  });
+}

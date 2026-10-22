@@ -711,7 +711,13 @@ test("commerce sourcing keeps white surfaces with a persisted accent preference"
   page,
 }) => {
   await setup(page);
+  const initialPreferenceRead = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/api/v1/me/ui-preferences") && response.request().method() === "GET",
+  );
   await page.goto("/sourcing");
+  await initialPreferenceRead;
+  await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe("deep-ocean");
   const surface = page.locator(".sourcing-detail");
   await expect(surface).toBeVisible();
   await expect(surface).toHaveCSS("background-color", "rgb(255, 255, 255)");
@@ -722,7 +728,17 @@ test("commerce sourcing keeps white surfaces with a persisted accent preference"
   const previousAccent = await primary();
   await expect(page.getByRole("button", { name: "切换界面主题" })).toHaveCount(0);
   await page.addInitScript(() => localStorage.setItem("scoutops:ui-theme", "cloud-white"));
+  // The account preference is authoritative; keep the persisted server fixture
+  // consistent with the cached preference instead of racing deep-ocean against it.
+  await page.route("**/api/v1/me/ui-preferences", (route) =>
+    route.fulfill({ json: envelope({ theme: "cloud-white", version: 2 }) }),
+  );
+  const cachedPreferenceRead = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/api/v1/me/ui-preferences") && response.request().method() === "GET",
+  );
   await page.reload();
+  await cachedPreferenceRead;
   await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe("cloud-white");
   await expect.poll(primary).not.toBe(previousAccent);
   await expect(surface).toHaveCSS("background-color", "rgb(255, 255, 255)");

@@ -2,6 +2,7 @@
 import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from "vue";
 import { createApiClient } from "../api-client";
 import type { SourcingSearch } from "./sourcing-workspace-types";
+import { sourcingRecordStatusText } from "./sourcing-record-status";
 import SupplierSkuFacts from "./SupplierSkuFacts.vue";
 import { formatOpportunityTime } from "./opportunity-workspace-presentation";
 
@@ -134,6 +135,23 @@ function is1688(value: string) {
       <button type="button" @click="load">重试读取货源报价</button>
     </div>
     <template v-else>
+      <section v-if="selected" aria-label="当前找货状态">
+        <p>记录状态：{{ sourcingRecordStatusText(selected.status) }}</p>
+        <p v-if="selected.collection_progress">
+          关联任务状态：{{ sourcingRecordStatusText(selected.collection_progress.status) }} · 成功
+          {{ selected.collection_progress.successful_subqueries }} · 失败
+          {{ selected.collection_progress.failed_subqueries }} · 受阻
+          {{ selected.collection_progress.blocked_subqueries }} · 待处理/执行中
+          {{ selected.collection_progress.active_subqueries }}
+        </p>
+        <details v-if="selected.missing_fields.length">
+          <summary>记录缺失项</summary>
+          <ul>
+            <li v-for="field in selected.missing_fields" :key="field">{{ field }}</li>
+          </ul>
+        </details>
+        <button type="button" @click="load">重新读取找货记录</button>
+      </section>
       <p v-if="!candidates.length">当前找货记录暂无候选报价。</p>
       <div v-else class="selection-supply-scroll" tabindex="0" aria-label="货源报价明细">
         <table>

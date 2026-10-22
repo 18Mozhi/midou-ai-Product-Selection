@@ -1,3 +1,4 @@
+import { sourcingRecordStatusText } from "../components/sourcing-record-status";
 import {
   computed,
   onActivated,
@@ -149,32 +150,7 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
         .toISOString()
         .slice(0, 16);
     },
-    statusText = (value: string) =>
-      ({
-        scheduled: "等待调度",
-        queued: "等待采集",
-        leased: "准备采集",
-        parsing: "解析中",
-        validating: "校验中",
-        persisted: "结果已保存",
-        retry_scheduled: "等待重试",
-        rate_limited: "等待限流恢复",
-        blocked: "采集受阻",
-        blocked_login: "登录受阻",
-        blocked_captcha: "验证受阻",
-        blocked_robots: "来源规则受阻",
-        succeeded: "采集成功",
-        failed_terminal: "采集失败",
-        dead_letter: "等待处理",
-        cancelled: "已取消",
-        running: "采集中",
-        completed: "已完成",
-        completed_with_warnings: "已完成但有缺失",
-        ready: "可确认",
-        incomplete: "待补齐",
-        failed: "采集失败",
-        succeeded_empty: "未找到可用候选",
-      })[value] ?? value,
+    statusText = sourcingRecordStatusText,
     stabilityText = (value: string | undefined) =>
       ({ stable: "稳定", volatile: "波动", unknown: "待确认" })[value ?? ""] ?? (value || "缺失"),
     riskText = (value: string | undefined) =>

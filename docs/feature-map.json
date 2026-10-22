@@ -8055,5 +8055,18 @@
     ],
     "tests": ["tests/e2e/m04-02-opportunities.spec.ts", "tests/e2e/m04-04-profit.spec.ts"],
     "contract": "Present existing scoped profit-analysis current_inputs filtered by purchase_price, preserve all platforms and currencies separately, never choose a supplier candidate or historical run as current purchase input. Missing after successful read stays unknown; failed/pending reads do not assert absence. confirmation_mode labels record provenance only, not completed dual review. No API/schema/collector/scoring/permission/config changes. Frontend-only release without service restart."
+  },
+  "selectionSourcingRecordState20261022": {
+    "sources": [
+      "apps/web/src/components/OpportunitySupplyPanel.vue",
+      "apps/web/src/components/sourcing-record-status.ts",
+      "apps/web/src/composables/useSourcingWorkspace.ts"
+    ],
+    "tests": [
+      "tests/unit/sourcing-record-status.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/e2e/m04-06-sourcing.spec.ts"
+    ],
+    "contract": "Shared existing labels for sourcing record and associated collection task statuses, show actual persisted counters separately, preserve empty and partial candidate results. Manual refresh reuses selected scoped record GET only: no collection start/retry, source config changes, session actions or new polling. Frontend-only deployment, no restart; no API/schema/env/dependency/permissions changes."
   }
 }
