@@ -2868,6 +2868,11 @@ test("unknown current profit stays explicit even when a historical calculated ru
   await expect(panel).toContainText("下方保留上次计算明细，不作为当前利润");
   await expect(panel.locator(".profit-summary")).toHaveCount(0);
   await expect(panel).not.toContainText("12.34");
+  await panel.getByText("查看计算依据", { exact: true }).click();
+  const record = panel.getByRole("region", { name: "利润计算记录", exact: true });
+  await expect(record).toContainText("未知");
+  await expect(record.locator("time")).toHaveCount(0);
+  await expect(record).not.toContainText("12.34");
 });
 
 // Actual Vue with twenty isolated rows; not real inventory or a production collection result.
@@ -3888,5 +3893,87 @@ for (const hasMainRecord of [true, false]) {
       await expect(row).not.toContainText("当前评价门槛试算");
     } else await expect(comparison).toContainText("主品详情待采集");
     expect(writes).toBe(0);
+  });
+}
+
+for (const status of ["calculated", "insufficient_data"] as const) {
+  test(`profit calculation provenance is readable without recalculation (${status})`, async ({
+    page,
+  }) => {
+    await ready(page, evidence, { profit_status: status });
+    let writes = 0;
+    let reads = 0;
+    page.on("request", (request) => {
+      if (request.url().includes("/api/v1/") && request.method() !== "GET") writes++;
+    });
+    await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) => {
+      reads++;
+      return route.fulfill({
+        json: envelope({
+          latest_run: {
+            id: "profit-run-provenance-001",
+            status: "calculated",
+            rule_version_code: "preserved-rule-r4",
+            platform: "amazon",
+            market: "US",
+            currency: "USD",
+            sale_price: 100,
+            total_cost: 70,
+            net_profit: 30,
+            net_margin_percent: 30,
+            missing_fields: [],
+            calculated_at: "2026-10-17T03:04:05.000Z",
+            components: [],
+          },
+          current_inputs: [
+            {
+              input_type: "purchase_price",
+              amount_value: 18.6,
+              currency: "CNY",
+              platform: "amazon",
+              source_type: "automatic_crawler_evidence",
+              source_ref_id: "1688:provenance-offer",
+              evidence_id: "cost-provenance-evidence",
+              observed_at: "2026-10-18T08:09:10.000Z",
+              input_version: 3,
+              confirmation_mode: "automatic_evidence",
+            },
+          ],
+          cost_input_reviews: [],
+        }),
+      });
+    });
+    await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+    const panel = page.locator(".opportunity-profit");
+    await panel.getByText("查看计算依据", { exact: true }).click();
+    console.log(
+      "PROFIT_PROVENANCE " +
+        JSON.stringify({
+          runRecordRegions: await panel
+            .getByRole("region", { name: "利润计算记录", exact: true })
+            .count(),
+          reads,
+        }),
+    );
+    const record = panel.getByRole("region", { name: "利润计算记录", exact: true });
+    await expect(record).toBeVisible();
+    await expect(record).toContainText("profit-run-provenance-001");
+    await expect(record).toContainText("preserved-rule-r4");
+    await expect(record).toContainText("amazon");
+    await expect(record).toContainText("US");
+    await expect(record.locator("time")).toHaveAttribute("datetime", "2026-10-17T03:04:05.000Z");
+    await expect(record).toContainText("不代表已按当前输入重新计算");
+    const current = panel.getByRole("region", { name: "当前采购输入" });
+    await expect(current.locator("time")).toHaveAttribute("datetime", "2026-10-18T08:09:10.000Z");
+    await expect(current).toContainText("CNY 18.6");
+    if (status === "insufficient_data") {
+      await expect(panel.getByText("利润未知", { exact: true })).toBeVisible();
+      await expect(panel.locator(".profit-summary")).toHaveCount(0);
+    }
+    expect(reads).toBe(1);
+    expect(writes).toBe(0);
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+      .toBe(true);
   });
 }

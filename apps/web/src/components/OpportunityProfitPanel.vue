@@ -63,6 +63,13 @@ const inputLabel = (value: string) =>
             }}
             · v{{ purchaseInput.input_version }}</span
           >
+          <small class="profit-observed-at"
+            >观测时间：<time
+              v-if="purchaseInput.observed_at"
+              :datetime="purchaseInput.observed_at"
+              >{{ purchaseInput.observed_at }}</time
+            ><span v-else>未知</span></small
+          >
           <details>
             <summary>采购输入依据</summary>
             <p>来源 {{ purchaseInput.source_ref_id }} · 证据 {{ purchaseInput.evidence_id }}</p>
@@ -123,6 +130,53 @@ const inputLabel = (value: string) =>
       class="profit-calculation-evidence"
     >
       <summary>查看计算依据</summary>
+      <section v-if="profit?.latest_run" class="profit-run-record" aria-label="利润计算记录">
+        <h5>已保存的计算记录</h5>
+        <p class="profit-run-record-note">
+          这是已保存的计算运行，不代表已按当前输入重新计算；当前利润是否可用以上方状态为准。
+        </p>
+        <dl>
+          <div>
+            <dt>运行编号</dt>
+            <dd>
+              <code>{{ profit.latest_run.id || "未知" }}</code>
+            </dd>
+          </div>
+          <div>
+            <dt>计算时间（原始时间）</dt>
+            <dd>
+              <time
+                v-if="profit.latest_run.calculated_at"
+                :datetime="profit.latest_run.calculated_at"
+                >{{ profit.latest_run.calculated_at }}</time
+              ><span v-else>未知</span>
+            </dd>
+          </div>
+          <div>
+            <dt>平台</dt>
+            <dd>{{ profit.latest_run.platform || "未知" }}</dd>
+          </div>
+          <div>
+            <dt>市场</dt>
+            <dd>{{ profit.latest_run.market || "未知" }}</dd>
+          </div>
+          <div>
+            <dt>规则版本</dt>
+            <dd>{{ profit.latest_run.rule_version_code || "未知" }}</dd>
+          </div>
+          <div>
+            <dt>运行状态</dt>
+            <dd>{{ opportunityStatusLabel(profit.latest_run.status) }}</dd>
+          </div>
+          <div>
+            <dt>计算币种</dt>
+            <dd>{{ profit.latest_run.currency || "未知" }}</dd>
+          </div>
+        </dl>
+      </section>
+      <p v-else class="profit-run-record-note">
+        暂无保存的利润计算记录；下列为当前成本输入，不代表已有利润结果。
+      </p>
       <div v-if="profit?.latest_run" class="profit-components">
         <article
           v-for="item in profit.latest_run.components"
@@ -149,6 +203,13 @@ const inputLabel = (value: string) =>
             {{ item.confirmation_mode === "automatic_evidence" ? "自动证据记录" : "人工记录" }}
             · {{ item.source_ref_id }}</small
           >
+          <small>证据 {{ item.evidence_id || "未知" }}</small>
+          <small class="profit-observed-at"
+            >观测时间：<time v-if="item.observed_at" :datetime="item.observed_at">{{
+              item.observed_at
+            }}</time
+            ><span v-else>未知</span></small
+          >
         </article>
       </section>
     </details>
@@ -156,6 +217,48 @@ const inputLabel = (value: string) =>
 </template>
 
 <style scoped>
+.profit-run-record {
+  margin: 12px 0;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--so-border);
+  overflow-wrap: anywhere;
+}
+.profit-run-record h5 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+.opportunity-profit .profit-run-record-note {
+  color: var(--so-text-muted);
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.6;
+}
+.profit-run-record dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 20px;
+  margin: 12px 0 0;
+}
+.profit-run-record :is(dt, dd) {
+  min-width: 0;
+  margin: 0;
+  font-weight: 400;
+}
+.profit-run-record dt {
+  margin-bottom: 4px;
+  color: var(--so-text-muted);
+}
+.profit-observed-at {
+  display: block;
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .profit-run-record dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .profit-current-input {
   padding: 12px 0;
   margin: 12px 0;
