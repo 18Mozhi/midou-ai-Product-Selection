@@ -289,28 +289,6 @@
 .opportunity-section.warning {
   border-left: 3px solid var(--so-warning);
 }
-.opportunity-decisions article small {
-  margin-top: 5px;
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.opportunity-decisions > article {
-  margin-top: 9px;
-  padding: 12px;
-  display: grid;
-  grid-template-columns: 75px 1fr;
-  gap: 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 4px;
-  background: var(--so-panel);
-}
-.opportunity-decisions article > b {
-  color: var(--so-primary);
-}
-.opportunity-decisions article strong,
-.opportunity-decisions article small {
-  display: block;
-}
 .opportunity-modal {
   position: fixed;
   z-index: 130;

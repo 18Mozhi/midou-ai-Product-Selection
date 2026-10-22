@@ -2,6 +2,9 @@
 import { computed, defineAsyncComponent, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
+const OpportunityDecisionHistory = defineAsyncComponent(
+  () => import("./OpportunityDecisionHistory.vue"),
+);
 const OpportunityListPanel = defineAsyncComponent(() => import("./OpportunityListPanel.vue"));
 const OpportunityDecisionPanel = defineAsyncComponent(
   () => import("./OpportunityDecisionPanel.vue"),
@@ -26,7 +29,6 @@ import SelectionProductHeader from "./SelectionProductHeader.vue";
 import { opportunityAnalysisCompletedAt } from "./opportunity-decision-presentation";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import {
-  formatOpportunityTime as freshness,
   opportunityStatusLabel,
   opportunityTabs as detailTabs,
 } from "./opportunity-workspace-presentation";
@@ -381,26 +383,7 @@ useOpportunityWorkspaceLifecycle({
                 :evidence="detail.evidence"
                 :opportunity-id="detail.id"
               />
-              <section v-else class="opportunity-decisions">
-                <header>
-                  <div>
-                    <p>决策历史</p>
-                    <h4>决策历史</h4>
-                  </div>
-                  <span>{{ detail.decisions.length }} 条</span>
-                </header>
-                <p v-if="!detail.decisions.length" class="opportunity-empty-copy">尚无决策记录。</p>
-                <article v-for="item in detail.decisions" :key="item.id">
-                  <b>{{ opportunityStatusLabel(item.action) }}</b>
-                  <div>
-                    <strong>{{ item.reason }}</strong
-                    ><small
-                      >{{ freshness(item.created_at) }} · 版本 v{{ item.opportunity_version }} ·
-                      操作者 {{ item.actor_id.slice(0, 8) }}…</small
-                    >
-                  </div>
-                </article>
-              </section>
+              <OpportunityDecisionHistory v-else :decisions="detail.decisions" />
             </div>
             <OpportunityDecisionPanel
               v-if="tab === 'overview' && !completedAnalysisAt"

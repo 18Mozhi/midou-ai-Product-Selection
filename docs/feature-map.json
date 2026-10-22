@@ -8105,5 +8105,13 @@
       "tests/e2e/m04-06-sourcing.spec.ts"
     ],
     "contract": "Shared existing labels for sourcing record and associated collection task statuses, show actual persisted counters separately, preserve empty and partial candidate results. Manual refresh keeps the same button mounted through loading/error/success, preserves keyboard focus without forced refocus and guards duplicate activation while pending. Manual refresh reuses selected scoped record GET only: no collection start/retry, source config changes, session actions or new polling. Frontend-only deployment, no restart; no API/schema/env/dependency/permissions changes."
+  },
+  "selectionDecisionHistory20261022": {
+    "sources": [
+      "apps/web/src/components/OpportunityDecisionHistory.vue",
+      "apps/web/src/components/OpportunityWorkspace.vue"
+    ],
+    "tests": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "contract": "Read-only five-column native decision history table; preserve original order, reason, full actor_id, original created_at and opportunity_version including zero. No decision mutation, permission, API or collection change."
   }
 }

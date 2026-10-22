@@ -4039,3 +4039,48 @@ for (const missing of [false, true]) {
       .toBe(true);
   });
 }
+
+for (const populated of [false, true]) {
+  test(`decision history preserves complete audit identity (${populated})`, async ({ page }) => {
+    const actor = "00000000-0000-4000-8000-000000009999";
+    const created = "2026-10-22T00:05:00.000Z";
+    await ready(page, evidence, {
+      decisions: populated
+        ? [
+            {
+              id: "decision-identity",
+              action: "observe",
+              reason: "等待真实竞品资料",
+              actor_id: actor,
+              created_at: created,
+              opportunity_version: 0,
+            },
+          ]
+        : [],
+    });
+    let writes = 0;
+    page.on("request", (request) => {
+      if (request.method() !== "GET") writes += 1;
+    });
+    await page.goto(`/opportunities/${opportunityId}?tab=decisions`);
+    const panel = page.locator(".opportunity-decisions");
+    await expect(panel.getByRole("heading", { name: "决策记录" })).toBeVisible();
+    if (populated) {
+      await expect(panel.locator("thead th")).toHaveCount(5);
+      expect(
+        await panel.locator("caption").evaluate((e) => e.getBoundingClientRect().width),
+      ).toBeGreaterThan(200);
+      await expect(panel.locator("tbody tr")).toHaveCount(1);
+      await expect(panel.locator("code")).toHaveText(actor);
+      await expect(panel.locator("time")).toHaveAttribute("datetime", created);
+      await expect(panel.locator("time")).toHaveText(created);
+      await expect(panel.getByText("v0", { exact: true })).toBeVisible();
+      await expect(panel.getByText("等待真实竞品资料", { exact: true })).toBeVisible();
+      await expect(panel.locator(":scope > article")).toHaveCount(0);
+    } else await expect(panel.getByText("尚无决策记录。", { exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+    expect(writes).toBe(0);
+  });
+}
