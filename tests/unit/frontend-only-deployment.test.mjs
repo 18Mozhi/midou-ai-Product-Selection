@@ -94,8 +94,33 @@ print('static publisher: hash rejection, byte readback, pristine backup, runtime
 
 test("frontend runtime exception requires exact installed scoring commit and both real hashes", () => {
   const source = readFileSync("scripts/deploy_baota_frontend.py", "utf8");
-  assert.match(source, /proof.get\("sha"\) != sha or proof.get\("modules"\) != hashes/);
+  assert.match(source, /proof.get\("modules"\) != hashes/);
+  assert.match(source, /merge-base.*--is-ancestor/);
+  assert.match(source, /frontend_scoring_source_changed_since_patch/);
+  assert.match(source, /re.fullmatch/);
   assert.match(source, /scoring_proof_hash_invalid/);
   assert.match(source, /frontend_scoring_patch_not_verified/);
   assert.match(source, /path not in runtime and not path.startswith\(allowed\)/);
+});
+
+test("installed scoring proof accepts unchanged ancestor but rejects untrusted or changed runtime", () => {
+  const script = `import sys
+sys.path.insert(0,'scripts')
+from deploy_baota_frontend import verify_installed_scoring_patch
+class API:
+ def __init__(self,ancestor=True,changed=''): self.ancestor=ancestor; self.changed=changed
+ def run(self,args,repo):
+  if 'merge-base' in args and not self.ancestor: raise RuntimeError('not_ancestor')
+  return self.changed if 'diff' in args else ''
+hashes={'a.js':'digest-a','b.js':'digest-b'}
+proof={'sha':'a'*40,'modules':hashes}
+verify_installed_scoring_patch(API(),None,'b'*40,proof,hashes,{'a.ts','b.ts'})
+for api,p in [(API(),{**proof,'sha':'--bad'}),(API(),{**proof,'modules':{}}),(API(False),proof),(API(changed='a.ts'),proof)]:
+ try: verify_installed_scoring_patch(api,None,'b'*40,p,hashes,{'a.ts','b.ts'})
+ except RuntimeError: pass
+ else: raise AssertionError('invalid proof accepted')
+print('accepted unchanged ancestor; rejected malformed hash, module mismatch, non-ancestor and changed source')`;
+  const result = spawnSync("python", ["-B", "-c", script], { encoding: "utf8" });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /accepted unchanged ancestor/);
 });

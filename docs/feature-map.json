@@ -8046,6 +8046,6 @@
       "apps/web/src/components/OpportunityDetailInsights.vue",
       "apps/web/src/components/ScoreRuleConsole.vue"
     ],
-    "contract": "User-approved crawler-evidence-v3: shared scoped independent related healthy fresh detail proof; newest 5-10 distinct non-primary ASINs; median of existing per-competitor review barrier scores, null under five or invalid counts, only used detail evidence IDs. No primary review fallback or fabricated sales/ads. Existing rule weights/thresholds/cost scope/history preserved; no collection changes. See docs/selection-score-scope-audit.md."
+    "contract": "User-approved crawler-evidence-v3: shared scoped independent related healthy fresh detail proof; newest 5-10 distinct non-primary ASINs; median of existing per-competitor review barrier scores, null under five or invalid counts, only used detail evidence IDs. No primary review fallback or fabricated sales/ads. Comparison detail-ready counts explicitly do not assert relevance or scoring participation. Existing rule weights/thresholds/cost scope/history preserved; no collection changes. See docs/selection-score-scope-audit.md."
   }
 }

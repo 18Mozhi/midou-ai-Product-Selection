@@ -655,6 +655,7 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     });
     await page.goto(`/opportunities/${opportunityId}?tab=competition`);
     const comparison = page.getByRole("region", { name: "Amazon 主品与竞品" });
+    await expect(comparison).toContainText("不代表相关性证明通过或已参与评分");
     await expect(comparison.getByRole("heading", { name: "主要商品示例" })).toBeVisible();
     await expect(comparison.getByText("非Amazon同编号商品")).toHaveCount(0);
     await expect(comparison.locator(".selection-comparison-primary")).toContainText(
@@ -685,7 +686,7 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     await expect(comparison.locator("tbody tr")).toHaveCount(competitorCount);
     await expect(
       comparison.getByText(
-        `有效快照 ${detailCollected && sourceEnabled ? competitorCount : 0} / 至少 5 个`,
+        `详情齐备快照 ${detailCollected && sourceEnabled ? competitorCount : 0} / 至少 5 个`,
         {
           exact: true,
         },

@@ -5,12 +5,22 @@ No service, configuration, queue, database or crawler mutation is permitted.
 
 import hashlib
 import json
+import re
 from pathlib import Path
 import subprocess
 import tarfile
 import tempfile
 import urllib.request
 from uuid import uuid4
+
+
+def verify_installed_scoring_patch(api, repo, sha, proof, hashes, runtime):
+    patch_sha = proof.get("sha", "")
+    if not isinstance(patch_sha, str) or not re.fullmatch(r"[0-9a-f]{40}", patch_sha) or proof.get("modules") != hashes:
+        raise RuntimeError("frontend_scoring_patch_not_verified")
+    api.run(["git", "merge-base", "--is-ancestor", patch_sha, sha], repo)
+    if api.run(["git", "diff", "--name-only", patch_sha, sha, "--", *sorted(runtime)], repo).strip():
+        raise RuntimeError("frontend_scoring_source_changed_since_patch")
 
 
 def frontend_remote_source(values: dict) -> str:
@@ -128,7 +138,7 @@ print("SCOUTOPS_RESULT="+json.dumps({"status":True,"message":"static upload path
             if any(not path.startswith(allowed) for path in changed):
                 if any(path not in runtime and not path.startswith(allowed) for path in changed):
                     raise RuntimeError("frontend-only release contains a non-UI runtime change")
-                # Permit only an already verified scoring-only patch of this exact commit.
+                # Permit only an already verified scoring-only patch of this commit or an ancestor with identical scoring sources.
                 # Check installed bytes against both receipt and this local build, not a label alone.
                 from deploy_baota_scoring import MODULES
                 hashes = {name: hashlib.sha256((repo/"apps/worker/dist"/name).read_bytes()).hexdigest() for name in MODULES}
@@ -144,8 +154,7 @@ for name,expected in v["modules"].items():
     if p.is_symlink() or p.resolve()!=p or hashlib.sha256(p.read_bytes()).hexdigest()!=expected: raise RuntimeError("scoring_proof_hash_invalid")
 print("SCOUTOPS_RESULT="+json.dumps({"status":True,"sha":v["sha"],"modules":v["modules"]}))
 ''', timeout=30)
-                if proof.get("sha") != sha or proof.get("modules") != hashes:
-                    raise RuntimeError("frontend_scoring_patch_not_verified")
+                verify_installed_scoring_patch(api, repo, sha, proof, hashes, runtime)
             with client.open_sftp() as sftp:
                 upload_started = True
                 sftp.put(str(archive), remote)

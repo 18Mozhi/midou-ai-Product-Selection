@@ -119,9 +119,12 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
         竞品对比 <small>{{ competitors.length }} 个</small>
       </h4>
       <span :data-ready="analyzed >= MINIMUM_SELECTION_COMPETITORS"
-        >有效快照 {{ analyzed }} / 至少 {{ MINIMUM_SELECTION_COMPETITORS }} 个</span
+        >详情齐备快照 {{ analyzed }} / 至少 {{ MINIMUM_SELECTION_COMPETITORS }} 个</span
       >
     </header>
+    <p>
+      详情齐备仅核对字段、来源及新鲜度，不代表相关性证明通过或已参与评分；实际竞争分以“商品与评分”的证据为准。
+    </p>
     <p v-if="analyzed < MINIMUM_SELECTION_COMPETITORS" class="selection-comparison-pending">
       竞品数据尚不完整，继续采集后再判断竞争情况。
     </p>
