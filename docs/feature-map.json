@@ -1,4 +1,15 @@
 {
+  "selectionCompetitorProvenance20261022": {
+    "sourceFiles": [
+      "apps/web/src/components/SelectionProductComparison.vue",
+      "apps/web/src/components/opportunity-workspace-types.ts"
+    ],
+    "producerFiles": ["apps/api/src/mysql-competitor-repository.ts"],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "apiRoutes": ["/api/v1/competitors"],
+    "pageRoutes": ["/opportunities/{opportunityId}"],
+    "contract": "Read-only per-competitor disclosure uses existing latest_snapshot id/evidence_id/source_status/detail_collected/source_enabled/freshness. Missing values remain unknown. No new request on expansion; not proof of historical scoring participation. Existing API and persistence unchanged; frontend-only deployment without Node/Python restart or collection actions."
+  },
   "selectionScoreScopeAudit20261021": {
     "status": "implemented",
     "sourceFiles": [

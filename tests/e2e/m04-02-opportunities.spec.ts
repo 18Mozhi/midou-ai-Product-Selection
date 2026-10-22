@@ -3722,3 +3722,77 @@ for (const fail of [false, true]) {
     await expect(button).toBeFocused();
   });
 }
+
+for (const hasSnapshot of [true, false]) {
+  test(`comparison exposes current snapshot provenance without inferring score membership (${hasSnapshot})`, async ({
+    page,
+  }) => {
+    await ready(page, evidence, { main_asin: "B000000000" }, [
+      "opportunity:read",
+      "competitor:read",
+    ]);
+    const reads: string[] = [];
+    let writes = 0;
+    page.on("request", (request) => {
+      if (request.url().includes("/api/v1/competitors")) reads.push(request.url());
+      if (request.url().includes("/api/v1/") && request.method() !== "GET") writes++;
+    });
+    await page.route(/\/api\/v1\/competitors(?:\?.*)?$/, (route) =>
+      route.fulfill({
+        json: envelope([
+          {
+            id: "provenance-competitor",
+            opportunity_id: opportunityId,
+            market: "US",
+            source_site: "amazon",
+            external_id: "B000000001",
+            title: "证据可核对竞品",
+            snapshot_count: hasSnapshot ? 1 : 0,
+            latest_snapshot: hasSnapshot
+              ? {
+                  id: "snapshot-proof-123",
+                  evidence_id: "evidence-proof-456",
+                  current_price: 19.99,
+                  currency: "USD",
+                  review_count: 200,
+                  rating_value: 4.3,
+                  captured_at: "2026-10-17T00:00:00Z",
+                  freshness: "stale",
+                  source_status: "degraded",
+                  detail_collected: false,
+                  source_enabled: false,
+                }
+              : null,
+          },
+        ]),
+      }),
+    );
+    await page.goto(`/opportunities/${opportunityId}?tab=competition`);
+    const row = page.getByRole("region", { name: "Amazon 主品与竞品" }).locator("tbody tr").first();
+    await expect(row).toContainText("证据可核对竞品");
+    console.log(
+      "PROVENANCE " +
+        JSON.stringify({ hasSnapshot, hasEvidence: (await row.innerText()).includes("详情依据") }),
+    );
+    await row.getByText("详情依据", { exact: true }).click();
+    if (hasSnapshot) {
+      await expect(row).toContainText("snapshot-proof-123");
+      await expect(row).toContainText("evidence-proof-456");
+      await expect(row).toContainText("来源状态：降级");
+      await expect(row).toContainText("详情证据：未通过");
+      await expect(row).toContainText("新鲜度：已过期");
+      await expect(row).toContainText("来源启用：已停用");
+    } else {
+      await expect(row).toContainText("快照编号：未知");
+      await expect(row).toContainText("证据编号：未知");
+      await expect(row).toContainText("来源状态：未知");
+      await expect(row).toContainText("详情证据：未知");
+    }
+    await expect(row).toContainText("仅为当前快照资料，不代表该快照或评价数参与历史评分。");
+    expect(reads).toHaveLength(1);
+    expect(writes).toBe(0);
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+      .toBe(true);
+  });
+}

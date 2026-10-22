@@ -14,6 +14,8 @@ export interface OpportunityCompetitorSummary {
   title: string;
   snapshot_count: number;
   latest_snapshot: null | {
+    id?: string;
+    evidence_id?: string;
     current_price: number | null;
     currency: string | null;
     review_count: number | null;

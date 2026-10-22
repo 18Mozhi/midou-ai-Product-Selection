@@ -7887,6 +7887,11 @@ components:
             - $ref: "#/components/schemas/CompetitorSnapshotInput"
             - type: object
               properties:
+                id:
+                  type: string
+                  format: uuid
+                  readOnly: true
+                  description: Existing persisted latest snapshot identifier, displayed read-only for provenance; not proof of scoring participation.
                 detail_collected:
                   type: boolean
                   readOnly: true

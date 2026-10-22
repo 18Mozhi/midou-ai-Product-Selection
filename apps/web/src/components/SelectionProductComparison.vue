@@ -56,6 +56,16 @@ const reviewBarrier = (item: OpportunityCompetitorSummary) => {
     ? "未知"
     : Math.min(100, Math.max(0, Math.round((100 - (Math.log10(count + 1) / 5) * 100) * 100) / 100));
 };
+const sourceHealth = (status?: string) =>
+  status === "healthy"
+    ? "健康"
+    : status === "degraded"
+      ? "降级"
+      : status === "unavailable"
+        ? "不可用"
+        : "未知";
+const observedFlag = (value: boolean | undefined, yes: string, no: string) =>
+  value === true ? yes : value === false ? no : "未知";
 const price = (item: OpportunityCompetitorSummary) => {
   const snapshot = item.latest_snapshot;
   return snapshot?.current_price != null && snapshot.currency
@@ -160,6 +170,36 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
                 rel="noopener noreferrer"
                 >{{ item.external_id }} ↗</a
               >
+              <details class="selection-comparison-provenance">
+                <summary>详情依据</summary>
+                <p>
+                  快照编号：<code>{{ item.latest_snapshot?.id || "未知" }}</code>
+                </p>
+                <p>
+                  证据编号：<code>{{ item.latest_snapshot?.evidence_id || "未知" }}</code>
+                </p>
+                <p>来源状态：{{ sourceHealth(item.latest_snapshot?.source_status) }}</p>
+                <p>
+                  详情证据：{{
+                    observedFlag(item.latest_snapshot?.detail_collected, "已通过", "未通过")
+                  }}
+                </p>
+                <p>
+                  来源启用：{{
+                    observedFlag(item.latest_snapshot?.source_enabled, "已启用", "已停用")
+                  }}
+                </p>
+                <p>
+                  新鲜度：{{
+                    item.latest_snapshot?.freshness === "fresh"
+                      ? "新鲜"
+                      : item.latest_snapshot?.freshness === "stale"
+                        ? "已过期"
+                        : "未知"
+                  }}
+                </p>
+                <p>仅为当前快照资料，不代表该快照或评价数参与历史评分。</p>
+              </details>
             </th>
             <td data-label="售价">{{ price(item) }}</td>
             <td data-label="评分">{{ item.latest_snapshot?.rating_value ?? "未采集" }}</td>
@@ -308,6 +348,22 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
   border-collapse: collapse;
   font-size: 13px;
   text-align: left;
+}
+.selection-comparison-provenance {
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.selection-comparison-provenance summary {
+  cursor: pointer;
+  color: var(--so-primary);
+}
+.selection-comparison-provenance p {
+  margin: 6px 0;
+}
+.selection-comparison-provenance code {
+  white-space: normal;
 }
 .selection-comparison th,
 .selection-comparison td {
