@@ -8159,5 +8159,10 @@
       "tests/e2e/m08-01-single-server.spec.ts"
     ],
     "contract": "Local mock-HTTP admin preservation checks only, not live collection or production health acceptance. Topology capture preserves anchor and layout assertions, then scrolls to document origin and asserts zero for deterministic full-page desktop/mobile snapshots matching current commerce shell. Test-only change; no runtime frontend, backend, collection, permission or config changes and no repeat production deployment."
+  },
+  "catalogueMissingCostNote20261022": {
+    "implementationFiles": ["apps/web/src/components/OpportunityCatalogueList.vue"],
+    "verificationFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "contract": "Render the original acquisition timestamp only when automatic_purchase_price exists; missing price appears once and unknown profit remains visible. Preserve present prices/times, APIs, collection, scoring, permissions and data. Static frontend only, no runtime restart."
   }
 }

@@ -899,6 +899,9 @@ test("catalogue shows original primary facts without inventing sales or private 
   const missing = page.locator(".selection-product-row").nth(1);
   await expect(missing).toContainText("未采集");
   await expect(missing).toContainText("未取得");
+  const missingCost = missing.locator('td[data-label="1688 进货价"]');
+  await expect(missingCost.getByText("未取得", { exact: true })).toHaveCount(1);
+  await expect(missingCost).toContainText("利润未知");
   await expect(missing).not.toContainText("USD 0");
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))

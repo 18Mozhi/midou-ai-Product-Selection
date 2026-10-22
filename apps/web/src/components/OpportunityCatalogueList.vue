@@ -111,7 +111,9 @@ const rows = computed(() =>
               class="catalogue-price catalogue-cost"
               :class="{ 'is-missing': !item.automatic_purchase_price }"
               >{{ facts[1]?.value }}</strong
-            ><small class="catalogue-cell-note">{{ facts[5]?.value }}</small
+            ><small v-if="item.automatic_purchase_price" class="catalogue-cell-note">{{
+              facts[5]?.value
+            }}</small
             ><small class="catalogue-cell-note">{{
               opportunityProfitStatusLabel(item.profit_status)
             }}</small>
