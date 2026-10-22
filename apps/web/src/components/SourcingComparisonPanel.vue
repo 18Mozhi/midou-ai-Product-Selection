@@ -70,8 +70,9 @@ const specificationHint = (quotes: SourcingComparisonQuote[]) => {
             new Date(comparison.created_at).toLocaleString("zh-CN", { hour12: false })
           }}</small>
         </div>
-        <strong>{{ comparison.quotes.length }} 家现行报价</strong>
+        <strong>{{ comparison.quotes.length }} 条报价记录</strong>
       </header>
+      <p>保存时引用的报价记录，不代表当前最新报价或已作为进货价。</p>
       <aside
         class="sourcing-specification-hint"
         :data-status="specificationHint(comparison.quotes).status"

@@ -1444,3 +1444,25 @@ test("SKU-specific supplier facts preserve quote identity and distinguish packag
   await page.keyboard.press("Enter");
   await expect(row.getByText("120 g", { exact: true })).toBeHidden();
 });
+
+test("saved sourcing comparison identifies historical quote references without asserting current purchase cost", async ({
+  page,
+}) => {
+  await setup(page);
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/sourcing/") && request.method() !== "GET")
+      writes.push(request.url());
+  });
+  await page.goto("/sourcing");
+  const history = page.locator(".sourcing-comparisons");
+  await expect(history.getByRole("heading", { name: "供应商报价对比历史" })).toBeVisible();
+  await expect(history.getByText("2 条报价记录", { exact: true })).toBeVisible();
+  await expect(history).toContainText("保存时引用的报价记录，不代表当前最新报价或已作为进货价。");
+  await expect(history).not.toContainText("家现行报价");
+  await expect(history.locator(".sourcing-comparison-grid > section")).toHaveCount(2);
+  await expect(history).toContainText(readyCandidate.supplier_name);
+  await expect(history).toContainText(comparisonQuote.supplier_name);
+  await expect(history.getByLabel("规格归一化提示")).toBeVisible();
+  expect(writes).toEqual([]);
+});
