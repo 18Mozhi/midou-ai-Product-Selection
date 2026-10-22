@@ -369,6 +369,13 @@ a:focus-visible {
   outline: 2px solid var(--so-primary);
   outline-offset: 3px;
 }
+th:first-child,
+.selection-product-identity-cell {
+  position: sticky;
+  left: 0;
+  background: var(--so-panel);
+  z-index: 1;
+}
 th:last-child,
 .selection-product-action-cell {
   position: sticky;
@@ -377,10 +384,12 @@ th:last-child,
   border-left: 1px solid var(--so-border);
   z-index: 1;
 }
+th:first-child,
 th:last-child {
   background: var(--so-panel-soft);
   z-index: 2;
 }
+tbody tr:hover .selection-product-identity-cell,
 tbody tr:hover .selection-product-action-cell {
   background: var(--so-primary-soft);
 }
@@ -420,6 +429,9 @@ tbody tr:hover .selection-product-action-cell {
     margin-bottom: 3px;
   }
   .selection-product-identity-cell {
+    position: static;
+    left: auto;
+    z-index: auto;
     grid-column: 1/-1;
   }
   .selection-product-action-cell {

@@ -4134,3 +4134,55 @@ for (const hasRun of [true, false]) {
     expect(writes).toEqual([]);
   });
 }
+
+test("catalogue keeps product identity visible across horizontal research scroll", async ({
+  page,
+}, testInfo) => {
+  if (testInfo.project.name === "desktop-chromium")
+    await page.setViewportSize({ width: 1000, height: 900 });
+  await ready(page);
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (["POST", "PUT", "PATCH", "DELETE"].includes(request.method())) writes.push(request.url());
+  });
+  await page.goto("/opportunities?view=all");
+  const region = page.locator(".selection-product-list");
+  const identity = page.locator(".selection-product-identity-cell").first();
+  await expect(identity).toBeVisible();
+  if (testInfo.project.name === "desktop-chromium") {
+    const before = await identity.boundingBox();
+    await region.evaluate((element) => {
+      element.scrollLeft = element.scrollWidth - element.clientWidth;
+    });
+    await expect.poll(() => region.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+    const after = await identity.boundingBox();
+    const bounds = await region.boundingBox();
+    const action = await page.locator(".selection-product-action-cell").first().boundingBox();
+    console.log(
+      "CATALOGUE_IDENTITY_SCROLL",
+      JSON.stringify({
+        beforeLeft: before!.x,
+        afterLeft: after!.x,
+        viewportLeft: bounds!.x,
+        scrollLeft: await region.evaluate((element) => element.scrollLeft),
+      }),
+    );
+    expect(Math.abs(after!.x - before!.x)).toBeLessThanOrEqual(2);
+    expect(action!.x + action!.width).toBeLessThanOrEqual(bounds!.x + bounds!.width + 2);
+    await expect(identity).toHaveCSS("position", "sticky");
+    await identity.getByRole("link").focus();
+    await expect(identity.getByRole("link")).toBeFocused();
+    await expect.poll(() => region.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+    await expect(page.locator('table[aria-label="选品商品列表"] thead th').first()).toHaveCSS(
+      "position",
+      "sticky",
+    );
+  } else {
+    await expect(identity).toHaveCSS("position", "static");
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+      .toBe(true);
+  }
+  expect(writes).toEqual([]);
+  await page.screenshot({ path: testInfo.outputPath("catalogue-identity-scroll.png") });
+});
