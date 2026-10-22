@@ -132,3 +132,7 @@ MySqlOpportunityRepository.detail 实际 evidence.id 是 opportunity_evidence_li
 ## 无入口旧弹窗键盘辅助清理
 
 modal-dialog-keyboard.ts仅包含旧trapModalTab，当前Vue/TypeScript/CSS及脚本/测试均无调用；旧设计基线的路径和哈希仅作历史证据保留。现行OpportunityWorkspaceDialogs.vue继续调用ui/contain-dialog-tab.ts的containDialogTab，不改弹窗、焦点、快捷键或保存流程。删除旧文件并新增防回流回归。以正式9fcc0fa45干净构建为基线逐文件比较当前JS/CSS/index字节；若完全一致不重复发布相同前端，不重启任何服务。无配置/接口/依赖/schema/权限/采集变化，用户无需调整。
+
+## 找货到商品分析的完整返回上下文
+
+SourcingProfitSummary原查看商品分析链接固定from=/sourcing，丢失record和q，详情刷新后返回可能选中第一条或清空搜索。父页面传入当前route.fullPath作为内部必需returnPath属性，RouterLink对象的query负责编码，详情继续使用原safeOpportunityReturnPath和返回来源列表。保留原商品编号和profit分区，不改数据、API、查询条件语义、权限、计算、采集或配置。双端覆盖找货→详情→刷新→返回的同一记录及搜索，GET以外零请求；官方frontend-only部署刷新生效，无需重启。

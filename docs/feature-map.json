@@ -8253,5 +8253,14 @@
     "tests": ["tests/unit/retired-ui-residue.test.mjs"],
     "removedFiles": ["apps/web/src/modal-dialog-keyboard.ts"],
     "contract": "Remove runtime-unreferenced trapModalTab module only. Preserve active containDialogTab and historical design evidence. Verify production JS/CSS/index bytes unchanged against the clean9fcc0fa45 build. No UI/API/config/dependency/permission/collector behavior changes; no unchanged frontend republish or runtime restart."
+  },
+  "sourcingProductReturnContext20261023": {
+    "sources": [
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/SourcingProfitSummary.vue",
+      "apps/web/src/components/opportunity-workspace-presentation.ts"
+    ],
+    "tests": ["tests/e2e/m04-06-sourcing.spec.ts"],
+    "contract": "Pass existing sourcing route.fullPath into the profit-summary product-analysis RouterLink as encoded from query, preserving selected record and q through a detail reload and explicit return. Reuse existing local-path return guard; no data/API/permissions/collection/profit/calculation changes. Internal required prop only. Frontend-only deployment, no service restart."
   }
 }

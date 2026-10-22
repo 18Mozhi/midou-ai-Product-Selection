@@ -3,7 +3,7 @@ import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } fro
 import { ApiClientError, createApiClient } from "../api-client";
 import type { OpportunityProfitAnalysis } from "./opportunity-workspace-types";
 
-const props = defineProps<{ apiBaseUrl: string; opportunityId: string }>();
+const props = defineProps<{ apiBaseUrl: string; opportunityId: string; returnPath: string }>();
 const request = createApiClient(props.apiBaseUrl);
 const state = ref<"loading" | "ready" | "error">("loading");
 const profit = ref<OpportunityProfitAnalysis | null>(null);
@@ -64,7 +64,11 @@ onBeforeUnmount(() => {
   <section class="sourcing-profit-summary" aria-label="成本与利润摘要">
     <header>
       <h4>成本与利润</h4>
-      <RouterLink :to="`/opportunities/${opportunityId}?tab=profit&from=/sourcing`"
+      <RouterLink
+        :to="{
+          path: `/opportunities/${opportunityId}`,
+          query: { tab: 'profit', from: returnPath },
+        }"
         >查看商品分析</RouterLink
       >
     </header>

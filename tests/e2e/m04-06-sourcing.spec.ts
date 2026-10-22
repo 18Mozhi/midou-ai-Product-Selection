@@ -460,8 +460,9 @@ async function opportunitySetup(
   page: Page,
   analysis: unknown,
   currentStatus = "insufficient_data",
+  capabilities?: string[],
 ) {
-  await setup(page);
+  await setup(page, capabilities);
   const opportunityId = "00000000-0000-4000-8000-000000000612";
   const search = {
     id: searchId,
@@ -1464,5 +1465,42 @@ test("saved sourcing comparison identifies historical quote references without a
   await expect(history).toContainText(readyCandidate.supplier_name);
   await expect(history).toContainText(comparisonQuote.supplier_name);
   await expect(history.getByLabel("规格归一化提示")).toBeVisible();
+  expect(writes).toEqual([]);
+});
+
+test("sourcing product analysis roundtrip preserves record and search after a detail reload", async ({
+  page,
+}) => {
+  const { opportunityId } = await opportunitySetup(page, calculatedProfit(80), "calculated", [
+    "task:read",
+    "sourcing:read",
+    "opportunity:read",
+  ]);
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/") && request.method() !== "GET")
+      writes.push(request.url());
+  });
+  await page.goto(`/sourcing?record=${searchId}&q=${encodeURIComponent("当前商品")}`);
+  const link = page
+    .getByRole("region", { name: "成本与利润摘要" })
+    .getByRole("link", { name: "查看商品分析" });
+  await expect(link).toBeVisible();
+  const source = new URL(page.url());
+  const returnPath = source.pathname + source.search;
+  const destination = new URL((await link.getAttribute("href"))!, page.url());
+  expect(destination.pathname).toBe(`/opportunities/${opportunityId}`);
+  expect(destination.searchParams.get("tab")).toBe("profit");
+  expect(destination.searchParams.get("from")).toBe(returnPath);
+  await link.click();
+  await expect(page).toHaveURL(destination.href);
+  await page.reload();
+  const back = page.getByRole("navigation", { name: "选品详情返回路径" }).getByRole("link");
+  await expect(back).toHaveAttribute("href", returnPath);
+  await back.click();
+  await expect(page).toHaveURL(source.href);
+  await expect(
+    page.getByRole("complementary", { name: "找货记录" }).getByRole("button", { pressed: true }),
+  ).toContainText("当前商品");
   expect(writes).toEqual([]);
 });

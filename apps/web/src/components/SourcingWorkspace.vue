@@ -340,6 +340,7 @@ const pendingMessage = computed(() => {
           :key="selected.input_ref"
           :api-base-url="apiBaseUrl"
           :opportunity-id="selected.input_ref"
+          :return-path="route.fullPath"
         />
         <SourcingComparisonPanel
           :comparisons="comparisons"
