@@ -93,16 +93,17 @@ test("[real-api] catalogue renders returned primary identity and public facts", 
   await expect(page.getByText("B0HTTP0000", { exact: true })).toBeVisible();
   await expect(page.getByText("USD 19.95", { exact: true })).toBeVisible();
   await expect(page.getByText("CNY 3.25", { exact: true })).toBeVisible();
+  const rows = page.getByRole("table", { name: "选品商品列表" }).locator("tbody tr");
   await expect(
-    page.locator(":is(.catalog-product-coverage,.selection-product-coverage)").first(),
-  ).toContainText("货源候选 60");
-  await expect(
-    page.locator(":is(.catalog-public-facts,.selection-product-facts-cell)").nth(1),
-  ).toContainText("未取得");
+    rows
+      .first()
+      .locator('td[data-label="竞品 / 货源"] dl > div')
+      .filter({ hasText: "货源候选" })
+      .locator("dd"),
+  ).toHaveText("60");
+  await expect(rows.nth(1).locator('td[data-label="1688 进货价"]')).toContainText("未取得");
   await expect(page.getByText("HTTP 验证旅行收纳袋", { exact: true })).toBeVisible();
-  await expect(
-    page.locator(":is(.catalog-product-coverage,.selection-product-coverage)").first(),
-  ).toContainText("利润未知");
+  await expect(rows.first().locator('td[data-label="1688 进货价"]')).toContainText("利润未知");
   png(await page.screenshot({ fullPage: true }), page);
 });
 
@@ -133,11 +134,8 @@ test("[real-api] list presentation keeps the same actual server product facts", 
 }) => {
   await login(page);
   await catalogue(page);
-  await page.getByRole("button", { name: "列表", exact: true }).click();
-  await expect(page.getByRole("button", { name: "列表", exact: true })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(page.getByRole("table", { name: "选品商品列表" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "列表", exact: true })).toHaveCount(0);
   await expect(page.getByText("USD 19.95", { exact: true })).toBeVisible();
   await expect(page.getByText("B0HTTP0010", { exact: true })).toBeVisible();
   png(await page.screenshot({ fullPage: true }), page);

@@ -4,7 +4,12 @@
       "apps/web/src/components/SourcingComparisonPanel.vue",
       "apps/web/src/sourcing.css"
     ],
-    "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts", "tests/m04-06/sourcing.test.mjs"],
+    "testFiles": [
+      "tests/e2e/m04-06-sourcing.spec.ts",
+      "tests/m04-06/sourcing.test.mjs",
+      "tests/e2e/m04-06-sourcing-http.spec.ts",
+      "tests/fixtures/selection-http-stack.mjs"
+    ],
     "pageRoutes": ["/sourcing"],
     "contract": "Replace saved quote card grids with one native five-column table retaining supplier/product, raw specification, MOQ, original-currency price and lead time. Mobile stacks the same rows with labels; desktop keeps supplier identity while horizontally scrolling. Remove obsolete global comparison-grid rules. Preserve normalization hints, historical/current boundary, loading/error retention, permissions and read-only behavior. No API, source data, procurement input, scoring or collector changes; frontend-only publish without runtime restart."
   },

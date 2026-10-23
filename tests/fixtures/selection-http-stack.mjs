@@ -24,6 +24,7 @@ import { HomeDashboardService } from "../../apps/api/dist/home-dashboard-service
 import { ScoringService } from "../../apps/api/dist/scoring-service.js";
 import { ProfitService } from "../../apps/api/dist/profit-service.js";
 import { CompetitorService } from "../../apps/api/dist/competitor-service.js";
+import { SourcingService, SourcingServiceError } from "../../apps/api/dist/sourcing-service.js";
 
 // Synthetic, process-local data. These credentials and records never enter production.
 export const selectionHttpAccounts = {
@@ -31,6 +32,7 @@ export const selectionHttpAccounts = {
   viewer: "selection-viewer@example.test",
   foreign: "selection-foreign@example.test",
   operator: "selection-operator@example.test",
+  quoteReader: "selection-quote-reader@example.test",
   password: "Local-Selection-Only-42!",
 };
 export const selectionHttpIds = {
@@ -66,7 +68,7 @@ export async function createSelectionHttpStack(webOrigin) {
   const repository = new FixtureAuthRepository();
   const hasher = createArgon2PasswordHasher({ memoryCost: 19456, timeCost: 2, parallelism: 1 });
   const passwordHash = await hasher.hash(selectionHttpAccounts.password);
-  for (const role of ["member", "viewer", "foreign", "operator"]) {
+  for (const role of ["member", "viewer", "foreign", "operator", "quoteReader"]) {
     const id = randomUUID(),
       foreign = role === "foreign";
     const organization = foreign ? randomUUID() : selectionHttpIds.organization;
@@ -100,7 +102,9 @@ export async function createSelectionHttpStack(webOrigin) {
       capabilities:
         role === "viewer"
           ? ["task:read"]
-          : ["task:read", "opportunity:read", "opportunity:decide", "competitor:read"],
+          : role === "quoteReader"
+            ? ["task:read", "sourcing:read"]
+            : ["task:read", "opportunity:read", "opportunity:decide", "competitor:read"],
       scopes: role === "operator" ? [{ scope: "platform" }] : [{ scope: "organization" }],
       platform_role_codes: role === "operator" ? ["platform_operations_admin"] : [],
       platform_capabilities: role === "operator" ? ["platform:operate"] : [],
@@ -330,6 +334,52 @@ export async function createSelectionHttpStack(webOrigin) {
       public_signals: null,
     },
   }));
+  // Read-only sourcing fixture: real auth/routes/services, synthetic process-local records.
+  // It never calls a collector, a database, or any external supplier.
+  const quoteSearch = {
+    id: "00000000-0000-4000-8000-000000009120",
+    input_type: "keyword",
+    input_ref: "HTTP 报价联调样例",
+    display_name: "HTTP 报价联调样例",
+    status: "completed",
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: observed,
+    updated_at: observed,
+    candidates: [],
+  };
+  const savedQuotes = [
+    {
+      id: "00000000-0000-4000-8000-000000009121",
+      supplier_name: "HTTP 样例供应商甲",
+      product_title: "HTTP 样例杯甲",
+      specification: "500ml / 蓝色",
+      moq: 100,
+      quoted_price: 12.8,
+      currency: "CNY",
+      lead_time_days: 7,
+    },
+    {
+      id: "00000000-0000-4000-8000-000000009122",
+      supplier_name: "HTTP 样例供应商乙",
+      product_title: "HTTP 样例杯乙",
+      specification: "600ml / 绿色",
+      moq: 300,
+      quoted_price: 11.9,
+      currency: "CNY",
+      lead_time_days: 12,
+    },
+  ].map((quote) => ({
+    ...quote,
+    location: "HTTP 本地样例",
+    confidence_value: 80,
+    stability_status: "unknown",
+    risk_level: "unknown",
+    evidence_id: quote.id,
+  }));
+  const sourcingReadOnly = async () => {
+    throw new SourcingServiceError("fixture_sourcing_read_only", 403, "只允许读取本地样例。");
+  };
   return {
     collectionConsole: {
       ...scope,
@@ -349,6 +399,38 @@ export async function createSelectionHttpStack(webOrigin) {
       auth,
       webOrigin,
       secureCookie: false,
+    },
+    sourcing: {
+      ...scope,
+      service: new SourcingService({
+        list: async (input) => (inScope(input) ? [structuredClone(quoteSearch)] : []),
+        detail: async (input) => {
+          if (!inScope(input) || input.searchId !== quoteSearch.id)
+            throw new SourcingServiceError(
+              "sourcing_search_not_found",
+              404,
+              "选择当前工作区记录。",
+            );
+          return structuredClone(quoteSearch);
+        },
+        listComparisons: async (input) =>
+          inScope(input)
+            ? [
+                {
+                  id: "00000000-0000-4000-8000-000000009123",
+                  name: "HTTP 保存的报价对比",
+                  quotes: structuredClone(savedQuotes),
+                  created_at: observed,
+                },
+              ]
+            : [],
+        createSearch: sourcingReadOnly,
+        confirmQuote: sourcingReadOnly,
+        createComparison: sourcingReadOnly,
+        createPurchaseTask: sourcingReadOnly,
+        refresh: sourcingReadOnly,
+        remove: sourcingReadOnly,
+      }),
     },
     opportunities: { ...scope, service: opportunities },
     scoring: { ...scope, service: new ScoringService({ list: async () => [] }) },

@@ -38,7 +38,7 @@ test("[real-api] collection overview renders authorized HTTP facts with the rebu
       .locator(".collection-health-note")
       .evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize)),
   ).toBeGreaterThanOrEqual(13);
-  await expect(page).toHaveScreenshot("collection-overview-readable-20261019.png", {
+  await expect(page).toHaveScreenshot("collection-overview-global-shell-20261023.png", {
     fullPage: true,
   });
 });
