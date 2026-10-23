@@ -358,6 +358,7 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
 }
 /* Column names remain attached to facts while browsing all ten competitors. */
 .selection-comparison thead th {
+  white-space: nowrap;
   position: sticky;
   top: 0;
   z-index: 2;

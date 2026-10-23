@@ -745,6 +745,7 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
         console.log("COMPARISON_VERTICAL " + JSON.stringify(scroll));
         expect(scroll.top).toBeGreaterThan(0);
         const header = comparison.locator("thead th").last();
+        await expect(header).toHaveCSS("white-space", "nowrap");
         const bounds = (await scroller.boundingBox())!;
         const headingBounds = (await header.boundingBox())!;
         expect(headingBounds.y).toBeGreaterThanOrEqual(bounds.y - 1);
