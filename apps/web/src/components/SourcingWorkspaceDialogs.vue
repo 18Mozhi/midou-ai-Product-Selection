@@ -78,6 +78,19 @@ watch(
           ×
         </button>
       </header>
+      <section class="sourcing-quote-context" aria-label="当前确认报价对象">
+        <h4>{{ quoteCandidate.product_title }}</h4>
+        <dl>
+          <div>
+            <dt>供应商</dt>
+            <dd>{{ quoteCandidate.supplier_name }}</dd>
+          </div>
+          <div>
+            <dt>候选报价（原币）</dt>
+            <dd>{{ quoteCandidate.currency }} {{ quoteCandidate.quoted_price }}</dd>
+          </div>
+        </dl>
+      </section>
       <label>规格<input v-model="quote.specification" required /></label>
       <div class="form-grid">
         <label>最小起订量<input v-model.number="quote.moq" type="number" min="1" required /></label>
@@ -141,3 +154,36 @@ watch(
     </form>
   </dialog>
 </template>
+
+<style scoped>
+.sourcing-quote-context {
+  margin: 16px 0;
+  padding: 14px 0;
+  border-block: 1px solid var(--so-border);
+}
+.sourcing-quote-context h4 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.sourcing-quote-context dl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  margin: 0;
+}
+.sourcing-quote-context dt {
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.sourcing-quote-context dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 480px) {
+  .sourcing-quote-context dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+</style>

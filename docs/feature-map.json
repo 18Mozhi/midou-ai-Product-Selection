@@ -1,4 +1,10 @@
 {
+  "sourcingQuoteContext20261023": {
+    "sourceFiles": ["apps/web/src/components/SourcingWorkspaceDialogs.vue"],
+    "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],
+    "pageRoutes": ["/sourcing"],
+    "contract": "Quote confirmation dialog displays current candidate product title, supplier and original currency quote as read-only context. Editable draft, submit payload, permissions and historical/current price boundaries unchanged. No new API/config/collection changes; frontend-only publish without runtime restart."
+  },
   "sourcingSavedQuoteMatrix20261023": {
     "sourceFiles": [
       "apps/web/src/components/SourcingComparisonPanel.vue",

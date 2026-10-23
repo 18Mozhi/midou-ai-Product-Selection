@@ -806,10 +806,21 @@ test("quote write failure retains draft and request ID inside the surviving dial
   await page.goto("/sourcing");
   await page.getByRole("button", { name: "确认报价", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "确认完整供应商报价" });
+  const context = dialog.getByRole("region", { name: "当前确认报价对象" });
+  await expect(context.getByRole("heading")).toHaveText(incompleteCandidate.product_title);
+  await expect(context).toContainText(incompleteCandidate.supplier_name);
+  await expect(context).toContainText("CNY 10.6");
+  await expect(context.locator("input, select, button")).toHaveCount(0);
+  const box = await context.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box!.x).toBeGreaterThanOrEqual(0);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
   await dialog.getByLabel("规格").fill("420ml / 黑色 / 单只盒装");
   await dialog.getByLabel("所在地").fill("浙江宁波");
   await dialog.getByRole("button", { name: "确认新版本" }).click();
   await expect(dialog.getByRole("alert")).toContainText("p21-quote-fail-503");
+  await expect(context).toContainText(incompleteCandidate.supplier_name);
+  await expect(dialog.getByLabel("规格")).toHaveValue("420ml / 黑色 / 单只盒装");
   await dialog.getByRole("button", { name: "取消" }).click();
 });
 
