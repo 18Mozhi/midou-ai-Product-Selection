@@ -162,7 +162,6 @@
       "m04-04-profit.spec.ts",
       "m04-05-competitors.spec.ts",
       "m04-06-sourcing.spec.ts",
-      "m04-06-sourcing-http.spec.ts",
       "m04-07-ai-analysis.spec.ts",
       "m04-10-selection-http.spec.ts"
     ],

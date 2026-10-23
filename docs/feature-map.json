@@ -7,7 +7,7 @@
     "testFiles": [
       "tests/e2e/m04-06-sourcing.spec.ts",
       "tests/m04-06/sourcing.test.mjs",
-      "tests/e2e/m04-06-sourcing-http.spec.ts",
+      "tests/e2e/m04-10-selection-http.spec.ts",
       "tests/fixtures/selection-http-stack.mjs"
     ],
     "pageRoutes": ["/sourcing"],
