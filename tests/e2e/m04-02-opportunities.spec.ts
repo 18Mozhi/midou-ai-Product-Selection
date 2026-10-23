@@ -3452,6 +3452,31 @@ test("product supply batches retain every quote and reset when switching records
   await page.goto(`/opportunities/${opportunityId}?tab=profit`);
   const panel = page.getByRole("region", { name: "当前商品货源报价" });
   await expect(panel.locator("tbody tr")).toHaveCount(20);
+  const viewport = panel.locator(".selection-supply-scroll");
+  if (page.viewportSize()!.width > 760) {
+    const dimensions = await viewport.evaluate((element) => ({
+      height: element.clientHeight,
+      scrollHeight: element.scrollHeight,
+    }));
+    expect(dimensions.height).toBeLessThanOrEqual(560);
+    expect(dimensions.scrollHeight).toBeGreaterThan(dimensions.height);
+    await viewport.focus();
+    await page.keyboard.press("PageDown");
+    await expect.poll(() => viewport.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+    const header = panel.locator("thead th").nth(2);
+    expect(await header.evaluate((element) => getComputedStyle(element).position)).toBe("sticky");
+    const bounds = await viewport.boundingBox();
+    const head = await header.boundingBox();
+    expect(head!.y).toBeGreaterThanOrEqual(bounds!.y);
+    expect(head!.y).toBeLessThan(bounds!.y + 5);
+    await page.keyboard.press("Home");
+  } else {
+    expect(await viewport.evaluate((element) => getComputedStyle(element).maxHeight)).toBe("none");
+    expect(await viewport.evaluate((element) => getComputedStyle(element).overflowY)).toBe(
+      "visible",
+    );
+  }
+
   await panel.getByRole("button", { name: "继续显示 20 个货源" }).click();
   await expect(panel.locator("tbody tr")).toHaveCount(40);
   await panel.getByRole("button", { name: "继续显示 1 个货源" }).click();

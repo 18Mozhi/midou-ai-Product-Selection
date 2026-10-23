@@ -1,4 +1,10 @@
 {
+  "selectionSupplyViewport20261024": {
+    "sourceFiles": ["apps/web/src/components/OpportunitySupplyPanel.vue"],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "pageRoutes": ["/opportunities/:id"],
+    "contract": "Desktop supplier quote table uses bounded keyboard-scrollable viewport and sticky headers with supplier identity/intersection layering. Mobile remains unbounded stacked facts. Preserve all rows,20-row progressive batches,record scope,raw currencies,evidence and unknowns; no runtime script/template/API/config/collection changes. Frontend-only publish without Node/Python restart."
+  },
   "sourcingQuoteContext20261023": {
     "sourceFiles": ["apps/web/src/components/SourcingWorkspaceDialogs.vue"],
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],

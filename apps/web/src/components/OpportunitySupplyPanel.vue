@@ -324,7 +324,9 @@ function is1688(value: string) {
   font-size: 13px;
 }
 .selection-supply-scroll {
-  overflow-x: auto;
+  max-height: 560px;
+  overflow: auto;
+  scrollbar-width: thin;
   position: relative;
   border: 1px solid var(--so-border);
 }
@@ -348,13 +350,16 @@ function is1688(value: string) {
   overflow-wrap: anywhere;
 }
 .selection-supply thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   background: var(--so-panel);
   white-space: nowrap;
 }
 .selection-supply thead th:first-child {
   position: sticky;
   left: 0;
-  z-index: 2;
+  z-index: 3;
   border-right: 1px solid var(--so-border);
 }
 .selection-supply tbody th {
@@ -404,6 +409,7 @@ function is1688(value: string) {
     margin-bottom: 12px;
   }
   .selection-supply-scroll {
+    max-height: none;
     overflow: visible;
     border: 0;
   }
