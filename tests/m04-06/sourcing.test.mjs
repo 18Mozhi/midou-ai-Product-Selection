@@ -166,7 +166,14 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
   assert.doesNotMatch(uiSurface, /结构化采购创建|创建采购任务|purchaseCandidate|purchaseForm/);
   assert.doesNotMatch(uiSurface, /window\.prompt/);
   assert.match(costRuleUi, /route\.query\.from[\s\S]*返回当前找货记录/);
-  assert.match(css, /sourcing-comparison-grid[\s\S]*sourcing-compare-tray/);
+  assert.doesNotMatch(css, /sourcing-comparison-grid/);
+  assert.doesNotMatch(comparisonPanel, /sourcing-comparison-grid/);
+  assert.match(
+    comparisonPanel,
+    /<table class="sourcing-quote-table">[\s\S]*scope="col"[\s\S]*<tbody>[\s\S]*scope="row"/,
+  );
+  assert.match(comparisonPanel, /@media \(max-width: 760px\)/);
+  assert.match(css, /sourcing-compare-tray/);
   assert.match(architecture, /blocked_login[\s\S]*不伪造登录续期入口/);
   assert.match(feature, /sourcingDiscovery[\s\S]*pageFlow/);
   assert.match(runbook, /四阶段导航[\s\S]*390px/);

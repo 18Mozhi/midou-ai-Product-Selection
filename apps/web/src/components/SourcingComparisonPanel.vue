@@ -81,29 +81,35 @@ const specificationHint = (quotes: SourcingComparisonQuote[]) => {
         <strong>{{ specificationHint(comparison.quotes).title }}</strong>
         <span>{{ specificationHint(comparison.quotes).detail }}</span>
       </aside>
-      <div class="sourcing-comparison-grid" aria-label="规格、最小起订量与交期对比">
-        <section v-for="item in comparison.quotes" :key="item.id">
-          <b>{{ item.supplier_name }}</b
-          ><small>{{ item.product_title }}</small>
-          <dl>
-            <div>
-              <dt>规格</dt>
-              <dd>{{ item.specification }}</dd>
-            </div>
-            <div>
-              <dt>最小起订量</dt>
-              <dd>{{ item.moq }}</dd>
-            </div>
-            <div>
-              <dt>报价</dt>
-              <dd>{{ item.currency }} {{ item.quoted_price }}</dd>
-            </div>
-            <div>
-              <dt>交期</dt>
-              <dd>{{ item.lead_time_days }} 天</dd>
-            </div>
-          </dl>
-        </section>
+      <div class="sourcing-quote-scroll" tabindex="0" aria-label="规格、最小起订量与交期对比">
+        <table class="sourcing-quote-table">
+          <caption class="so-visually-hidden">
+            {{
+              comparison.name
+            }}：保存时引用的报价明细
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">商品 / 供应商</th>
+              <th scope="col">规格</th>
+              <th scope="col">最小起订量</th>
+              <th scope="col">报价</th>
+              <th scope="col">交期</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in comparison.quotes" :key="item.id">
+              <th scope="row">
+                <strong>{{ item.supplier_name }}</strong
+                ><span>{{ item.product_title }}</span>
+              </th>
+              <td data-label="规格">{{ item.specification }}</td>
+              <td data-label="最小起订量">{{ item.moq }}</td>
+              <td data-label="报价">{{ item.currency }} {{ item.quoted_price }}</td>
+              <td data-label="交期">{{ item.lead_time_days }} 天</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </article>
     <p v-if="!comparisons.length && !failure && !loading">
@@ -111,3 +117,115 @@ const specificationHint = (quotes: SourcingComparisonQuote[]) => {
     </p>
   </section>
 </template>
+
+<style scoped>
+.sourcing-quote-scroll {
+  margin-top: 12px;
+  overflow-x: auto;
+}
+.sourcing-quote-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.sourcing-quote-table :is(th, td) {
+  padding: 12px;
+  border-bottom: 1px solid var(--so-border);
+  vertical-align: top;
+}
+.sourcing-quote-table thead th {
+  background: var(--so-panel-soft);
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--so-text-muted);
+}
+.sourcing-quote-table thead th:first-child,
+.sourcing-quote-table tbody th {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+.sourcing-quote-table tbody th {
+  width: 32%;
+  background: var(--so-panel);
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.sourcing-quote-table tbody :is(strong, span) {
+  display: block;
+}
+.sourcing-quote-table strong {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.sourcing-quote-table tbody span {
+  color: var(--so-text-muted);
+}
+.sourcing-quote-table td {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sourcing-quote-table td[data-label="规格"] {
+  width: 28%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.sourcing-quote-scroll:focus-visible {
+  outline: 2px solid var(--so-primary);
+  outline-offset: 2px;
+}
+@media (max-width: 760px) {
+  .sourcing-quote-scroll {
+    overflow: visible;
+  }
+  .sourcing-quote-table {
+    display: block;
+    min-width: 0;
+  }
+  .sourcing-quote-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .sourcing-quote-table tbody {
+    display: block;
+  }
+  .sourcing-quote-table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--so-border);
+  }
+  .sourcing-quote-table tbody :is(th, td) {
+    width: auto;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .sourcing-quote-table tbody th {
+    position: static;
+    z-index: auto;
+    grid-column: 1 / -1;
+    background: transparent;
+  }
+  .sourcing-quote-table td[data-label="规格"] {
+    width: auto;
+    grid-column: 1 / -1;
+  }
+  .sourcing-quote-table td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 5px;
+    color: var(--so-text-muted);
+  }
+}
+</style>

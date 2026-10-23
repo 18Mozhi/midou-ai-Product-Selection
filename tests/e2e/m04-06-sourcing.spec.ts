@@ -1126,7 +1126,7 @@ test("SC-G02 comparison history failure preserves the sourcing list and retries 
   );
 
   await page.getByRole("button", { name: "重新读取对比历史" }).click();
-  await expect(page.getByText("恢复后的报价对比")).toBeVisible();
+  await expect(page.getByText("恢复后的报价对比", { exact: true })).toBeVisible();
   await expect(page.getByText("宁波澄净户外用品厂")).toBeVisible();
   expect(attempts).toBe(2);
   expect(writes).toEqual([]);
@@ -1244,7 +1244,7 @@ test("P21 KeepAlive return reloads list, detail and comparisons and ignores pre-
 
   await navigateMemberMenu(page, "1688 找货");
   await expect(page.locator(".sourcing-detail h3")).toHaveText("返回后的找货快照");
-  await expect(page.getByText("返回后重新读取的对比")).toBeVisible();
+  await expect(page.getByText("返回后重新读取的对比", { exact: true })).toBeVisible();
   expect(listReads).toBe(2);
   expect(comparisonReads).toBe(2);
   await expect(page.getByText("离页前的对比快照")).toHaveCount(0);
@@ -1448,7 +1448,9 @@ test("SKU-specific supplier facts preserve quote identity and distinguish packag
 
 test("saved sourcing comparison identifies historical quote references without asserting current purchase cost", async ({
   page,
-}) => {
+}, testInfo) => {
+  if (testInfo.project.name === "desktop-chromium")
+    await page.setViewportSize({ width: 1440, height: 900 });
   await setup(page);
   const writes: string[] = [];
   page.on("request", (request) => {
@@ -1461,10 +1463,31 @@ test("saved sourcing comparison identifies historical quote references without a
   await expect(history.getByText("2 条报价记录", { exact: true })).toBeVisible();
   await expect(history).toContainText("保存时引用的报价记录，不代表当前最新报价或已作为进货价。");
   await expect(history).not.toContainText("家现行报价");
-  await expect(history.locator(".sourcing-comparison-grid > section")).toHaveCount(2);
+  await expect(history.locator(".sourcing-comparison-grid")).toHaveCount(0);
+  const table = history.getByRole("table");
+  await expect(table.locator("thead th")).toHaveText([
+    "商品 / 供应商",
+    "规格",
+    "最小起订量",
+    "报价",
+    "交期",
+  ]);
+  await expect(table.locator("tbody tr")).toHaveCount(2);
+  const row = table.locator("tbody tr").filter({ hasText: readyCandidate.supplier_name });
+  await expect(row.getByRole("rowheader")).toContainText(readyCandidate.product_title);
+  await expect(row.locator('td[data-label="报价"]')).toHaveText("CNY 12.8");
+  await expect(row.locator('td[data-label="最小起订量"]')).toHaveText("100");
+  await expect(row.locator('td[data-label="交期"]')).toHaveText("7 天");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await expect(history).toContainText(readyCandidate.supplier_name);
   await expect(history).toContainText(comparisonQuote.supplier_name);
   await expect(history.getByLabel("规格归一化提示")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 0) <= 760) {
+    const rowBox = (await row.boundingBox())!;
+    const specBox = (await row.locator('td[data-label="规格"]').boundingBox())!;
+    expect(specBox.width).toBeGreaterThan(rowBox.width * 0.9);
+  }
+  await expect(table).toHaveScreenshot("saved-quote-matrix-20261023.png");
   expect(writes).toEqual([]);
 });
 

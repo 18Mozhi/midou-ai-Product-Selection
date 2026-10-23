@@ -382,41 +382,6 @@
   flex: 0 0 auto;
   min-height: 44px;
 }
-.sourcing-comparison-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 10px;
-  margin-top: 12px;
-}
-.sourcing-comparison-grid > section {
-  min-width: 0;
-  padding: 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 4px;
-  background: var(--so-panel);
-}
-.sourcing-comparison-grid dl {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin: 10px 0 0;
-}
-.sourcing-comparison-grid dl div {
-  min-width: 0;
-  padding: 8px;
-  background: var(--so-panel-soft);
-}
-.sourcing-comparison-grid dt {
-  color: var(--so-text-muted);
-  font-size: 13px;
-}
-.sourcing-comparison-grid dd {
-  margin: 5px 0 0;
-  overflow-wrap: anywhere;
-  color: var(--so-text);
-  font-weight: 700;
-}
-
 /* P21 C direction: production sourcing workbench aligned with the approved ledger. */
 #app .sourcing-workspace--review {
   display: grid;
@@ -546,10 +511,6 @@
 }
 @media (max-width: 520px) {
   .form-grid {
-    grid-template-columns: 1fr;
-  }
-  .sourcing-comparison-grid,
-  .sourcing-comparison-grid dl {
     grid-template-columns: 1fr;
   }
   .sourcing-erp-reference {
