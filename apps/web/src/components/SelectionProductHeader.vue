@@ -129,18 +129,18 @@ const asin = computed(() =>
 <style scoped>
 .selection-product-header {
   display: grid;
-  grid-template-columns: 132px minmax(0, 1fr) 160px;
-  grid-template-areas: "image identity score" "image facts score" "image utility score";
+  grid-template-columns: 88px minmax(0, 4fr) minmax(0, 3fr);
+  grid-template-areas: "image identity identity" "facts facts score" "utility utility utility";
   align-items: start;
-  gap: 0 20px;
-  padding: 24px;
+  gap: 14px 20px;
+  padding: 20px 24px;
   background: var(--so-panel);
   color: var(--so-text);
 }
 .selection-product-header__image {
   grid-area: image;
   aspect-ratio: 1;
-  width: 132px;
+  width: 88px;
   display: grid;
   place-items: center;
   padding: 8px;
@@ -177,9 +177,9 @@ const asin = computed(() =>
 }
 .selection-product-header h1 {
   margin: 6px 0;
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 650;
-  line-height: 1.5;
+  line-height: 1.45;
   overflow-wrap: anywhere;
 }
 .selection-product-header a {
@@ -191,8 +191,8 @@ const asin = computed(() =>
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
-  margin: 10px 0 6px;
-  padding-top: 10px;
+  margin: 0;
+  padding: 14px 0;
   border-top: 1px solid var(--so-border);
 }
 .selection-product-header__facts dt {
@@ -254,10 +254,12 @@ const asin = computed(() =>
 .selection-product-header__score {
   grid-area: score;
   display: grid;
-  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
   margin: 0;
-  padding-left: 24px;
-  border-left: 1px solid var(--so-border);
+  padding: 12px 16px;
+  border: 1px solid var(--so-border);
+  background: var(--so-panel-soft);
 }
 .selection-product-header__score dt {
   font-size: 13px;
@@ -269,7 +271,7 @@ const asin = computed(() =>
   font-weight: 600;
 }
 .selection-product-header__score > div:first-child dd {
-  font-size: 30px;
+  font-size: 23px;
   line-height: 1.2;
   color: var(--so-primary);
   font-variant-numeric: tabular-nums;

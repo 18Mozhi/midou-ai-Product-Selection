@@ -325,11 +325,14 @@ function is1688(value: string) {
 }
 .selection-supply-scroll {
   overflow-x: auto;
+  position: relative;
+  border: 1px solid var(--so-border);
 }
 .selection-supply table {
   width: 100%;
   min-width: 860px;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 13px;
   text-align: left;
 }
@@ -348,9 +351,21 @@ function is1688(value: string) {
   background: var(--so-panel);
   white-space: nowrap;
 }
+.selection-supply thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  border-right: 1px solid var(--so-border);
+}
 .selection-supply tbody th {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  width: 230px;
   max-width: 240px;
   min-width: 180px;
+  background: var(--so-panel);
+  border-right: 1px solid var(--so-border);
   font-weight: 400;
 }
 .selection-supply :is(td, th) :is(strong, span, small) {
@@ -390,6 +405,7 @@ function is1688(value: string) {
   }
   .selection-supply-scroll {
     overflow: visible;
+    border: 0;
   }
   .selection-supply table {
     min-width: 0;
@@ -419,6 +435,11 @@ function is1688(value: string) {
     min-width: 0;
     max-width: none;
     padding: 12px 0;
+  }
+  .selection-supply tbody th {
+    position: static;
+    width: auto;
+    border-right: 0;
   }
   .selection-supply tbody th,
   .selection-supply td:last-child {

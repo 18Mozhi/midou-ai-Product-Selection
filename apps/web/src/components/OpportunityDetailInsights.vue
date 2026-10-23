@@ -230,7 +230,11 @@ const emit = defineEmits<{
               <span>候选数量按关联搜索汇总，未去重。</span>
             </template>
             <div class="opportunity-insight-actions">
-              <RouterLink v-if="canOpenSourcingWorkspace" to="/sourcing">供应链工作台</RouterLink>
+              <RouterLink
+                v-if="canOpenSourcingWorkspace"
+                :to="{ path: route.path, query: { ...route.query, tab: 'profit' } }"
+                >查看当前商品货源</RouterLink
+              >
             </div>
           </section>
         </div>

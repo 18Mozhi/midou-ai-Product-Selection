@@ -752,7 +752,7 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     expect(reads.length).toBe(beforeExpand);
     if (competitorCount === 5 && detailCollected && sourceEnabled)
       await expect(reviewRegion).toHaveScreenshot(
-        "compact-recommendation-review-samples-20261017.png",
+        "compact-recommendation-review-samples-20261023.png",
       );
     await page.getByRole("button", { name: "商品与评分", exact: true }).click();
     await expect(page.getByText(`${competitorCount} 个关联竞品`, { exact: true })).toBeVisible();
@@ -995,7 +995,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   );
   await expect(page.locator(".opportunity-collection-tools")).toHaveCount(0);
   await expect(collectionPanel).not.toContainText("正在读取");
-  await expect(page).toHaveScreenshot("selection-detail-overview-20261019.png", {
+  await expect(page).toHaveScreenshot("selection-detail-overview-20261023.png", {
     fullPage: false,
   });
   const gateFontSize = await decisionSurface
@@ -1117,7 +1117,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(page).toHaveScreenshot("selection-detail-decisions-20261019.png", {
+  await expect(page).toHaveScreenshot("selection-detail-decisions-20261023.png", {
     fullPage: true,
   });
 });
@@ -1610,7 +1610,7 @@ test("P18 insight sections distinguish unavailable permissions from empty facts"
   await expect(page.getByText("暂无竞品查看权限。", { exact: true })).toBeVisible();
   await expect(page.getByText("暂无供应链查看权限。", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "查看竞品对比", exact: true })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "查看当前商品货源", exact: true })).toHaveCount(0);
   expect(competitorReads).toBe(0);
   expect(sourcingReads).toBe(0);
 
@@ -1663,7 +1663,7 @@ test("P18 discovery actions require their matching manage capabilities", async (
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
   await expect(page.getByRole("button", { name: "查看竞品对比", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "查看当前商品货源", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "采集 Amazon 竞品" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "采集公开供应商" })).toHaveCount(0);
   expect(discoveryWrites).toBe(0);
@@ -1797,7 +1797,7 @@ test("P18 overview competition action stays in the detail and respects read perm
     await expect(page.getByRole("button", { name: "查看竞品对比", exact: true })).toHaveCount(
       scenario.competitor ? 1 : 0,
     );
-    await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toHaveCount(
+    await expect(page.getByRole("link", { name: "查看当前商品货源", exact: true })).toHaveCount(
       scenario.sourcing ? 1 : 0,
     );
     if (scenario.competitor) {
@@ -4211,4 +4211,46 @@ test("catalogue keeps product identity visible across horizontal research scroll
   }
   expect(writes).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath("catalogue-identity-scroll.png") });
+});
+
+test("detail workbench keeps seven facts readable and section navigation keyboard reachable", async ({
+  page,
+}) => {
+  await ready(page, evidence);
+  await page.goto(`/opportunities/${opportunityId}`);
+  const header = page.locator(".selection-product-header");
+  await expect(header.getByRole("definition")).toHaveCount(7);
+  const nav = page.getByRole("navigation", { name: "选品详情分区", exact: true });
+  const buttons = nav.getByRole("button");
+  await expect(buttons).toHaveCount(6);
+  await buttons.first().focus();
+  await page.keyboard.press("End");
+  await expect(buttons.last()).toBeFocused();
+  await page.keyboard.press("Home");
+  await expect(buttons.first()).toBeFocused();
+  await page.keyboard.press("ArrowRight");
+  await expect(buttons.nth(1)).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/tab=competition/);
+  await expect(buttons.nth(1)).toHaveAttribute("aria-current", "page");
+  const boxes = await buttons.evaluateAll((nodes) =>
+    nodes.map((n) => ({ y: n.getBoundingClientRect().y })),
+  );
+  expect(new Set(boxes.map((b) => Math.round(b.y))).size).toBe(1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("supplier shortcut stays in the current product and preserves the return context", async ({
+  page,
+}) => {
+  await ready(page, evidence, {}, ["opportunity:read", "sourcing:read"]);
+  const from = "/opportunities?q=thermos&view=all";
+  await page.goto(`/opportunities/${opportunityId}?from=${encodeURIComponent(from)}`);
+  await page.getByRole("link", { name: "查看当前商品货源", exact: true }).click();
+  expect(new URL(page.url()).pathname).toBe(`/opportunities/${opportunityId}`);
+  expect(new URL(page.url()).searchParams.get("tab")).toBe("profit");
+  expect(new URL(page.url()).searchParams.get("from")).toBe(from);
+  await expect(page.getByRole("region", { name: "当前商品货源报价" })).toBeVisible();
+  await page.getByRole("link", { name: "返回来源列表" }).click();
+  await expect(page).toHaveURL(new RegExp("q=thermos"));
 });

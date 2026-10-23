@@ -1,4 +1,16 @@
 {
+  "selectionDetailWorkbench20261023": {
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityDetailInsights.vue",
+      "apps/web/src/components/SelectionProductHeader.vue",
+      "apps/web/src/components/OpportunityDetailNavigation.vue",
+      "apps/web/src/components/OpportunitySupplyPanel.vue",
+      "apps/web/src/automatic-selection.css"
+    ],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "pageRoutes": ["/opportunities/{opportunityId}"],
+    "contract": "Presentation-only fact ledger, single-row keyboard-reachable section navigation and desktop supplier identity column. Seven original facts and unknowns preserved; arrows/Home/End move focus without changing tab until activation. Existing route/query, scoring, sourcing read and permissions unchanged. Remove obsolete direct-child blue hero styles. Frontend-only deploy; no collector or Node/Python restart."
+  },
   "selectionIntelligenceEvidenceTable20261022": {
     "sourceFiles": [
       "apps/web/src/components/OpportunityEvidencePanel.vue",
