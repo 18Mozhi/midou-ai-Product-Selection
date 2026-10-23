@@ -553,6 +553,7 @@ test("empty all-products view refreshes without exposing manual creation", async
 
 for (const [competitorCount, detailCollected, sourceEnabled] of [
   [4, true, true],
+  [10, true, true],
   [5, true, true],
   [5, false, true],
   [5, true, false],
@@ -731,6 +732,34 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
       .toBe(true);
+    if (competitorCount === 10) {
+      const scroller = comparison.locator(".selection-comparison-scroll");
+      const lastRow = comparison.locator("tbody tr").last();
+      if ((page.viewportSize()?.width ?? 0) > 760) {
+        await scroller.scrollIntoViewIfNeeded();
+        const beforeReads = reads.length;
+        const scroll = await scroller.evaluate((el) => {
+          el.scrollTop = el.scrollHeight;
+          return { top: el.scrollTop, height: el.clientHeight, total: el.scrollHeight };
+        });
+        console.log("COMPARISON_VERTICAL " + JSON.stringify(scroll));
+        expect(scroll.top).toBeGreaterThan(0);
+        const header = comparison.locator("thead th").last();
+        const bounds = (await scroller.boundingBox())!;
+        const headingBounds = (await header.boundingBox())!;
+        expect(headingBounds.y).toBeGreaterThanOrEqual(bounds.y - 1);
+        expect(headingBounds.y).toBeLessThan(bounds.y + 4);
+        await expect(lastRow).toBeInViewport();
+        expect(reads.length).toBe(beforeReads);
+        await scroller.evaluate((el) => {
+          el.scrollTop = 0;
+        });
+      } else {
+        expect(await scroller.evaluate((el) => getComputedStyle(el).maxHeight)).toBe("none");
+        await lastRow.scrollIntoViewIfNeeded();
+        await expect(lastRow).toBeInViewport();
+      }
+    }
     const reviewRegion = comparison.getByRole("region", { name: "公开评价样本" });
     await expect(reviewRegion.locator("details")).toHaveCount(2);
     expect(reads.length).toBeGreaterThan(0);

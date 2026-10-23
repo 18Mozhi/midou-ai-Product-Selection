@@ -119,7 +119,7 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
       v-if="comparisonRows.length"
       class="selection-comparison-scroll"
       tabindex="0"
-      aria-label="横向滚动竞品对比表"
+      aria-label="滚动浏览主品与竞品对比表"
     >
       <table>
         <caption class="so-visually-hidden">
@@ -312,12 +312,17 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
   color: var(--so-text-muted);
 }
 .selection-comparison-scroll {
-  overflow-x: auto;
+  max-height: min(640px, 70vh);
+  overflow: auto;
+  position: relative;
+  isolation: isolate;
+  scrollbar-gutter: stable;
 }
 .selection-comparison table {
   width: 100%;
   min-width: 960px;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 13px;
   text-align: left;
 }
@@ -351,6 +356,17 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
   color: var(--so-text-muted);
   background: var(--so-panel-soft);
 }
+/* Column names remain attached to facts while browsing all ten competitors. */
+.selection-comparison thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--so-panel-soft);
+  border-bottom: 1px solid var(--so-border);
+}
+.selection-comparison thead th:first-child {
+  z-index: 3;
+}
 .selection-comparison tr[data-product-role="primary"] {
   background: var(--so-panel-soft);
 }
@@ -366,7 +382,6 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
 .selection-comparison tbody th {
   position: sticky;
   left: 0;
-  z-index: 1;
   background: var(--so-panel);
 }
 .selection-comparison thead th:first-child,
@@ -374,6 +389,7 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
   background: var(--so-panel-soft);
 }
 .selection-comparison tbody th {
+  z-index: 1;
   width: 38%;
   font-weight: 400;
 }
@@ -393,7 +409,9 @@ const rankLabel = (item: OpportunityCompetitorSummary) => {
 }
 @media (max-width: 760px) {
   .selection-comparison-scroll {
+    max-height: none;
     overflow: visible;
+    scrollbar-gutter: auto;
   }
   .selection-comparison table {
     display: block;

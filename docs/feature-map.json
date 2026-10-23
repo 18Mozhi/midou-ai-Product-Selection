@@ -1,4 +1,10 @@
 {
+  "selectionComparisonLongTable20261023": {
+    "sourceFiles": ["apps/web/src/components/SelectionProductComparison.vue"],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "pageRoutes": ["/opportunities/{opportunityId}"],
+    "contract": "Desktop bounded two-axis comparison viewport with sticky column headers and product identities, including top-left intersection layering. All main plus up to ten competitor rows and native evidence disclosures preserved. Mobile remains unrestricted vertical facts. No request, score, filtering, permission, API, data, collection or configuration changes; frontend-only publish with no runtime restart."
+  },
   "selectionDetailWorkbench20261023": {
     "sourceFiles": [
       "apps/web/src/components/OpportunityDetailInsights.vue",
