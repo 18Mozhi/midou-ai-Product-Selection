@@ -1,4 +1,6 @@
 import { prepareAmazonDeliveryContext } from "./amazon-delivery-context.js";
+import { AmazonDeliveryRequestError } from "./amazon-delivery-request.js";
+import { installPublicHttpTransport } from "./public-http-transport.js";
 import { recordResourceFailure as retainResourceFailure } from "./resource-failures.js";
 import { waitForManualCaptcha } from "./manual-handoff.js";
 import { installNavigationRequestTransport } from "./navigation-transport.js";
@@ -297,7 +299,7 @@ export function classifyBrowserFailure(error: unknown): {
   code: string;
   retryable: boolean;
 } {
-  if (error instanceof PlaywrightCrawlerError)
+  if (error instanceof PlaywrightCrawlerError || error instanceof AmazonDeliveryRequestError)
     return {
       status: error.status,
       code: error.code,
@@ -639,6 +641,7 @@ export class PlaywrightCrawlerEngine {
       signal?: AbortSignal;
       handoff?: { root: string; runId: string };
       navigationTransport?: "browser" | "request";
+      publicHttpRuntime?: { executable: string; script: string };
     } = {},
   ): Promise<BrowserRunResult> {
     const plan = validateBrowserPlan(planInput, this.limits),
@@ -748,7 +751,17 @@ export class PlaywrightCrawlerEngine {
       if (options.cookies?.length) await context.addCookies(options.cookies);
       context.setDefaultTimeout(this.limits.actionTimeoutMs);
       context.setDefaultNavigationTimeout(this.limits.navigationTimeoutMs);
-      if (options.navigationTransport === "request")
+      if (options.publicHttpRuntime && !plan.amazon_delivery)
+        throw new PlaywrightCrawlerError("public_http_scope_invalid", "dependency_failed", false);
+      if (options.publicHttpRuntime)
+        await installPublicHttpTransport(
+          context,
+          options.publicHttpRuntime.executable,
+          options.publicHttpRuntime.script,
+          this.limits.navigationTimeoutMs,
+          options.proxy,
+        );
+      else if (options.navigationTransport === "request")
         await installNavigationRequestTransport(
           context,
           "https://www.amazon.com",
@@ -1218,6 +1231,7 @@ export async function runWithEncryptedProfile(
     proxy?: { server: string; username?: string; password?: string; connectTimeoutMs?: number };
     handoff?: { root: string; runId: string };
     navigationTransport?: "browser" | "request";
+    publicHttpRuntime?: { executable: string; script: string };
   } = {},
 ) {
   return withMaterializedCredential(record, masterKey, tempRoot, (archivePath) =>

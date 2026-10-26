@@ -1,4 +1,24 @@
 {
+  "amazonPublicRequestProtocol20261026": {
+    "sourceFiles": [
+      "apps/crawler/scoutops_crawler/public_http.py",
+      "apps/crawler/scoutops_crawler/playwright_bridge.py",
+      "packages/playwright-crawler/src/public-http-transport.ts",
+      "scripts/run-playwright-crawler.mjs",
+      "scripts/deploy-baota.py",
+      "packages/playwright-crawler/src/amazon-delivery-request.ts",
+      "packages/playwright-crawler/src/amazon-delivery-context.ts",
+      "packages/playwright-crawler/src/index.ts"
+    ],
+    "testFiles": [
+      "apps/crawler/tests/test_public_http.py",
+      "tests/unit/public-http-transport.test.mjs",
+      "tests/unit/amazon-delivery-request.test.mjs",
+      "tests/unit/amazon-delivery-context.test.mjs"
+    ],
+    "docs": ["docs/amazon-public-request-migration.md"],
+    "contract": "Port provider-issued anonymous modal/CSRF/request-jar mechanism from Xingxing, retaining Midou request-style source semantics without copying account cookies or hard-coded browser fingerprints. Request200 must pass original document reread, exact anonymous and postal guards. Missing modal/token falls back before POST to existing browser UI; blocked responses fail closed with existing status semantics. User-approved isolated curl-cffi0.7.4 dependency drives same-context main-document transport through bounded Python stdio, preserving actual status/body/Set-Cookie/proxy. No new env/public API/schema/frontend or login bypass. Official stage-local dependency install precedes service stop. Normal-page live source/day100 acceptance remains pending."
+  },
   "selectionSupplyViewport20261024": {
     "sourceFiles": ["apps/web/src/components/OpportunitySupplyPanel.vue"],
     "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],

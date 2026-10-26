@@ -3,6 +3,8 @@ import re
 import subprocess
 import threading
 import time
+import sys
+from pathlib import Path
 from dataclasses import dataclass
 from typing import Any
 
@@ -45,6 +47,11 @@ class PlaywrightBridge:
             raise PlaywrightBridgeError("crawler_correlation_missing")
         payload = dict(request)
         payload["temp_root"] = self.config.credential_temp_root
+        if payload.get("purpose") == "amazon_public":
+            payload["public_http_runtime"] = {
+                "executable": sys.executable,
+                "script": str(Path(__file__).with_name("public_http.py").resolve()),
+            }
         try:
             process = subprocess.Popen(
                 [self.config.playwright_node_binary, self.config.playwright_runner_path],

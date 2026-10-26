@@ -677,6 +677,27 @@ try:
         for source, destination in archive_pairs:
             source.rename(destination)
 
+    # Install only into the staged project package before stopping any service.
+    # Never mutate BaoTa's shared Python or another project's dependencies.
+    if (stage / "python/scoutops_crawler/public_http.py").is_file():
+        dependencies = stage / "python/.runtime-deps"
+        ensure_inside(dependencies)
+        installed = subprocess.run(
+            [v["python_bin"], "-m", "pip", "install", "--no-input",
+             "--disable-pip-version-check", "--only-binary=:all:",
+             "--target", str(dependencies), "curl-cffi==0.7.4"],
+            capture_output=True, timeout=180,
+        )
+        if installed.returncode != 0:
+            raise RuntimeError("isolated public HTTP dependency installation failed")
+        verified = subprocess.run(
+            [v["python_bin"], "-c",
+             "import sys; sys.path.insert(0,sys.argv[1]); import curl_cffi; assert curl_cffi.__version__ == '0.7.4'",
+             str(dependencies)], capture_output=True, timeout=30,
+        )
+        if verified.returncode != 0:
+            raise RuntimeError("isolated public HTTP dependency verification failed")
+
     node = NodeModel()
     python_model = PythonModel()
     stop_get = public.dict_obj(); stop_get.project_name = v["node_project"]

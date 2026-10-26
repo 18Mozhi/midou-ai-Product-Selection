@@ -1,4 +1,5 @@
 import { errors, type Page, type Frame } from "playwright";
+import { requestAmazonDeliveryContext } from "./amazon-delivery-request.js";
 
 /** Public observation context only. Never operates a signed-in address book. */
 export async function prepareAmazonDeliveryContext(
@@ -30,6 +31,18 @@ export async function prepareAmazonDeliveryContext(
   const header = page.locator("#glow-ingress-block");
   const postal = new RegExp(`\\b${postalCode}\\b`);
   if (postal.test((await header.textContent()) ?? "")) return false;
+  if (reread && navigationTimeoutMs !== undefined) {
+    reportStep("request_delivery_context");
+    if (await requestAmazonDeliveryContext(page, postalCode, navigationTimeoutMs)) {
+      await assertAnonymous();
+      reportStep("request_delivery_reread");
+      await reread();
+      await assertAnonymous();
+      await header.filter({ hasText: postal }).waitFor({ state: "visible" });
+      await assertSafe();
+      return true;
+    }
+  }
   // The visible empty-href link can precede its async modal handler. An early
   // click reloads the page; use the existing navigation budget before acting.
   reportStep("page_load");

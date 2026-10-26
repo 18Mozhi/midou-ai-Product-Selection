@@ -122,6 +122,9 @@ try {
     {
       locale: input.locale,
       timezoneId: input.timezone,
+      ...(input.purpose === "amazon_public" && input.public_http_runtime
+        ? { publicHttpRuntime: input.public_http_runtime }
+        : {}),
       ...(input.purpose === "amazon_public"
         ? { navigationTransport: config.providerAdapters.amazonBrowserNavigationTransport }
         : {}),
