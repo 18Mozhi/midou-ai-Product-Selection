@@ -683,7 +683,7 @@ try:
         dependencies = stage / "python/.runtime-deps"
         ensure_inside(dependencies)
         installed = subprocess.run(
-            [v["python_bin"], "-m", "pip", "install", "--no-input",
+            [v["python_bin"], "-m", "pip", "install", "--no-input", "--no-cache-dir",
              "--disable-pip-version-check", "--only-binary=:all:",
              "--target", str(dependencies), "curl-cffi==0.7.4"],
             capture_output=True, timeout=180,
