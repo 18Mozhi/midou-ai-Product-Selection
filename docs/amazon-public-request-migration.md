@@ -16,7 +16,7 @@
 
 仅新增用户已允许的Python依赖curl-cffi==0.7.4；不新增环境变量、公开API字段、权限、数据库结构或前端控件，OpenAPI与.env示例不涉及。继续使用既有AMAZON_PUBLIC_DELIVERY_POSTAL_CODE、navigationTimeoutMs和代理/会话配置；来源原配置不改，不把星星10001覆盖本项目邮编。请求均有界超时，maxRedirects=0/maxRetries=0；不读取或记录令牌/HTML/账号Cookie。不涉及AI节点、账号/组织或原项目生产运维。
 
-地区协议可被Node健康检查及Python启动的Node子进程使用。Python PlaywrightBridge对amazon_public自行绑定当前解释器和同包public_http.py，经私有stdin字段传入Node；Node只对Amazon主文档用有界子进程curl传输，保留响应状态、挑战正文及多条Set-Cookie，继续在原BrowserContext解析和接管。其他来源/子资源不变，配置代理保持同一出口，无隐式环境代理或失败直连回退。Node API独立健康检查仍是原浏览器检查，不代表curl传输已验收。正式发布需既有官方宝塔运行包，不能用frontend-only/scoring-only伪装。官方部署在停止服务前，仅向当前stage/python/.runtime-deps安装并验证依赖，helper只从该项目目录加载；不写共享解释器。新子进程加载新文件；Node常驻健康检查加载新模块需要宝塔Node重启。不得为此中断仍存活人工会话，部署前核对它和当前生产任务。此文不表示已部署或已完成503/验证码循环验收。
+地区协议可被Node健康检查及Python启动的Node子进程使用。Python PlaywrightBridge对amazon_public自行绑定当前解释器和同包public_http.py，经私有stdin字段传入Node；Node只对Amazon主文档用有界子进程curl传输，保留响应状态、挑战正文及多条Set-Cookie，继续在原BrowserContext解析和接管。其他来源/子资源不变，配置代理保持同一出口，无隐式环境代理或失败直连回退。Node API独立健康检查仍是原浏览器检查，不代表curl传输已验收。正式发布需既有官方宝塔运行包，不能用frontend-only/scoring-only伪装。官方部署在停止服务前，仅向当前stage/python/.runtime-deps安装并验证依赖，helper只从该项目目录加载；不写共享解释器。Node子进程加载新模块；常驻Python循环已导入PlaywrightBridge，因此正式激活还需宝塔Python项目重启，Node常驻健康检查加载新模块需宝塔Node项目重启。不得为此中断仍存活人工会话，部署前核对它和当前生产任务。此文不表示已部署或已完成503/验证码循环验收。
 
 ## 验证及已知边界
 
