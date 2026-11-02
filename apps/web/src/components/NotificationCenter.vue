@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppIcon from "./AppIcon.vue";
 import { computed, nextTick, onActivated, onDeactivated, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
@@ -534,6 +535,7 @@ watch(
     <header>
       <div>
         <h1>通知中心</h1>
+        <p>汇总选品相关的系统通知、任务动态、审批进展与竞品监控更新。</p>
       </div>
       <div>
         <span class="realtime-badge" :data-state="realtimeState">{{
@@ -547,6 +549,14 @@ watch(
         ><button :disabled="busy" @click="markAll">全部已读</button>
       </div>
     </header>
+    <aside class="midou-notification-preference" aria-label="通知偏好快捷入口">
+      <h2>通知偏好</h2>
+      <p>管理通知接收方式与消息范围。</p>
+      <div><AppIcon name="bell" /><span>站内通知</span></div>
+      <button type="button" class="secondary" :disabled="busy" @click="showPreferences = true">
+        <AppIcon name="settings" />管理偏好<AppIcon name="chevron" />
+      </button>
+    </aside>
     <div v-if="notice" class="notification-notice" aria-live="polite">
       {{ notice }}
       <details v-if="requestId">
@@ -636,7 +646,14 @@ watch(
         :disabled="busy"
         @click="open(item)"
       >
-        <i :data-category="item.category">{{ label(item.category).slice(0, 1) }}</i
+        <i :data-category="item.category"
+          ><AppIcon
+            :name="
+              { task: 'list', approval: 'check', competitor: 'target', system: 'bell' }[
+                item.category
+              ] || 'bell'
+            "
+            :size="24" /></i
         ><span
           ><strong>{{ item.title }}</strong
           ><small>{{ displayBody(item) }}</small></span

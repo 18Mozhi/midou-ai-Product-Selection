@@ -17,6 +17,8 @@ export const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
+  if (to.path === "/settings/theme")
+    return { path: "/me", query: { section: "appearance" }, replace: true };
   if (to.meta.sessionRequired !== true) return true;
   try {
     const response = await apiRequest<{ authenticated: boolean }>("/auth/session-status");
@@ -35,6 +37,6 @@ router.beforeEach(async (to) => {
 
 router.afterEach((to) => {
   const title = typeof to.meta.title === "string" ? to.meta.title : "";
-  document.title = title ? `${title} · 智能选品` : "智能选品";
+  document.title = title ? `${title} · 米兜智能选品` : "米兜智能选品";
   if (to.meta.notFound !== true) rememberValidRoute(to.fullPath);
 });

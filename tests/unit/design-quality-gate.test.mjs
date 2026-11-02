@@ -148,7 +148,7 @@ test("design tokens keep the signal-ledger contract and all shells share it", as
   assert.match(signalLedger, /data-design="signal-ledger"/);
   assert.match(signalLedger, /\.confirm-dialog[\s\S]*border-top:\s*8px solid var\(--so-primary\)/);
   assert.doesNotMatch(`${shell}\n${account}`, /applyTheme\("cloud-white"\)/);
-  assert.match(shell, /SCOUTOPS/);
+  assert.match(shell, /米兜智能选品/);
   assert.match(shell, /<h1>\{\{ pageTitle \}\}<\/h1>/);
   assert.match(shell, /class="commerce-sidebar"/);
   assert.doesNotMatch(shell, /class="role-page-title"/);

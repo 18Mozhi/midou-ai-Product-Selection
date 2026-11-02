@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import AutomaticSelectionReadinessPanel from "./AutomaticSelectionReadinessPanel.vue";
 import OpportunityCatalogueList from "./OpportunityCatalogueList.vue";
+import AppIcon from "./AppIcon.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import type { OpportunitySummary } from "./opportunity-workspace-types";
@@ -212,7 +213,6 @@ watch(imageFailureResetSources, (items) => {
 <template>
   <header class="catalogue-page-heading">
     <div>
-      <p>商品研究 / 选品库</p>
       <h2>选品库</h2>
       <span>从情报到商品，把比较和判断放在一张表里。</span>
     </div>
@@ -313,8 +313,46 @@ watch(imageFailureResetSources, (items) => {
     v-if="showAutomationReadiness && automationReadiness"
     :readiness="automationReadiness"
   />
+  <section
+    v-if="state === 'empty' && selectionView === 'completed'"
+    class="midou-completed-empty"
+    aria-label="已完成分析空状态"
+  >
+    <div class="midou-completed-illustration"><AppIcon name="box" :size="58" /></div>
+    <h3>{{ hasFiltersToClear ? "当前筛选下暂无已完成分析的商品" : "暂无已完成分析的商品" }}</h3>
+    <p>系统正在补齐分析证据，可先查看候选商品。</p>
+    <div class="midou-completed-actions">
+      <button type="button" class="so-action-primary" @click="emit('view', 'rule_candidates')">
+        查看候选商品</button
+      ><button type="button" class="so-action-secondary" @click="emit('apply')">刷新结果</button>
+    </div>
+    <ol class="midou-analysis-flow" aria-label="分析流程说明">
+      <li
+        v-for="step in [
+          { icon: 'target', label: '识别主品', description: '匹配商品关键信息' },
+          { icon: 'chart', label: '补齐评分', description: '汇总多维分析证据' },
+          { icon: 'users', label: '对比竞品', description: '识别差异与机会' },
+          { icon: 'box', label: '匹配货源', description: '对接供应渠道' },
+          { icon: 'database', label: '评估利润', description: '测算成本与利润空间' },
+        ]"
+        :key="step.label"
+      >
+        <AppIcon :name="step.icon" :size="24" /><span
+          ><b>{{ step.label }}</b
+          ><small>{{ step.description }}</small></span
+        >
+      </li>
+    </ol>
+    <details v-if="requestId" class="midou-analysis-diagnostics">
+      <summary>诊断信息</summary>
+      <p>
+        本次读取关联编号：<code>{{ requestId }}</code
+        >。图示仅说明分析流程，不代表这些步骤已经完成。
+      </p>
+    </details>
+  </section>
   <UiStatePanel
-    v-if="state !== 'ready'"
+    v-else-if="state !== 'ready'"
     :kind="state"
     :request-id="requestId"
     :title="state === 'empty' ? '暂无选品结果' : ''"

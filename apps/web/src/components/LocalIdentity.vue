@@ -362,7 +362,7 @@ onBeforeUnmount(() => clearMfaMaterial());
     :data-request-state="requestState"
   >
     <header class="p07-mfa-top">
-      <RouterLink class="p07-mfa-brand" to="/">ScoutOps</RouterLink>
+      <RouterLink class="p07-mfa-brand" to="/">米兜智能选品</RouterLink>
       <span>账号安全</span>
       <small>认证器管理 · 受登录会话保护</small>
     </header>
@@ -571,7 +571,9 @@ onBeforeUnmount(() => clearMfaMaterial());
     "
   >
     <header class="p02-login-top">
-      <RouterLink to="/" aria-label="ScoutOps 首页" class="p02-login-brand">ScoutOps</RouterLink>
+      <RouterLink to="/" aria-label="米兜智能选品 首页" class="p02-login-brand"
+        >米兜智能选品</RouterLink
+      >
       <strong>账号登录</strong>
     </header>
     <div class="p02-login-shell">
@@ -821,7 +823,7 @@ onBeforeUnmount(() => clearMfaMaterial());
     :aria-busy="requestState === 'loading'"
   >
     <header class="p06-reset-top">
-      <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
+      <RouterLink to="/" aria-label="米兜智能选品 首页">米兜智能选品</RouterLink>
       <strong>设置新密码</strong>
     </header>
     <section class="p06-reset-hero" aria-labelledby="p06-reset-title">
@@ -931,7 +933,7 @@ onBeforeUnmount(() => clearMfaMaterial());
     :aria-busy="requestState === 'loading'"
   >
     <header class="p04-recovery-top">
-      <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
+      <RouterLink to="/" aria-label="米兜智能选品 首页">米兜智能选品</RouterLink>
       <strong>账号恢复</strong>
     </header>
     <section class="p04-recovery-shell">
@@ -998,7 +1000,7 @@ onBeforeUnmount(() => clearMfaMaterial());
     :aria-busy="requestState === 'loading'"
   >
     <header class="p03-registration-top">
-      <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
+      <RouterLink to="/" aria-label="米兜智能选品 首页">米兜智能选品</RouterLink>
       <strong>注册账号</strong>
       <small>邮箱验证后方可继续</small>
     </header>
@@ -1100,7 +1102,7 @@ onBeforeUnmount(() => clearMfaMaterial());
     :aria-busy="requestState === 'loading'"
   >
     <header class="p05-verification-top">
-      <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
+      <RouterLink to="/" aria-label="米兜智能选品 首页">米兜智能选品</RouterLink>
       <strong>邮箱验证</strong>
     </header>
     <section class="p05-verification-hero">
@@ -1183,7 +1185,7 @@ onBeforeUnmount(() => clearMfaMaterial());
   </main>
   <main v-else class="identity-page" :data-mode="mode" :data-state="requestState">
     <header class="identity-header">
-      <RouterLink class="identity-brand" to="/"><span>S</span>SCOUTOPS / 智能选品</RouterLink>
+      <RouterLink class="identity-brand" to="/"><span>S</span>米兜智能选品</RouterLink>
     </header>
     <section class="identity-shell">
       <section class="identity-card" aria-live="polite">

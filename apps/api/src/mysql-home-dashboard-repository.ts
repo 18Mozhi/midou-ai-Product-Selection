@@ -17,7 +17,9 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
     private readonly now: () => Date = () => new Date(),
   ) {}
   async automaticSelection(input: { organizationId: string; workspaceId: string }) {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
+    const measuredAt = this.now(),
+      window = dailySelectionWindow(measuredAt);
+    const rowsRead = this.pool.query<RowDataPacket[]>(
       `SELECT
          (SELECT COUNT(*) FROM trend_monitoring_rules r
           JOIN collection_tasks t ON t.id=r.last_collection_task_id
@@ -67,7 +69,7 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
         input.workspaceId,
       ],
     );
-    const [schedules] = await this.pool.query<RowDataPacket[]>(
+    const schedulesRead = this.pool.query<RowDataPacket[]>(
       "SELECT s.last_task_id,s.last_scheduled_at,s.next_scheduled_at,t.blocked_subquery_count,t.failed_subquery_count,t.status task_status," +
         "EXISTS (SELECT 1 FROM providers WHERE status='enabled' AND terms_review_status='approved' " +
         "AND terms_version IS NOT NULL AND (terms_permanent=1 OR terms_expires_at>NOW(3)) " +
@@ -77,9 +79,7 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
         "WHERE s.organization_id=? AND s.workspace_id=? LIMIT 1",
       [input.organizationId, input.workspaceId],
     );
-    const measuredAt = this.now(),
-      window = dailySelectionWindow(measuredAt);
-    const [productionRows] = await this.pool.query<RowDataPacket[]>(dailySelectionProductionSql, [
+    const productionRead = this.pool.query<RowDataPacket[]>(dailySelectionProductionSql, [
       input.organizationId,
       input.workspaceId,
       window.start,
@@ -88,11 +88,17 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
       input.workspaceId,
       window.start,
     ]);
-    const [completedRows] = await this.pool.query<RowDataPacket[]>(dailySelectionCompletedSql, [
+    const completedRead = this.pool.query<RowDataPacket[]>(dailySelectionCompletedSql, [
       input.organizationId,
       input.workspaceId,
       window.start,
       window.end,
+    ]);
+    const [[rows], [schedules], [productionRows], [completedRows]] = await Promise.all([
+      rowsRead,
+      schedulesRead,
+      productionRead,
+      completedRead,
     ]);
     const completed = completedRows[0]?.completed_count;
     const production = productionRows[0] ?? ({} as RowDataPacket);

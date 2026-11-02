@@ -30,7 +30,6 @@ const TenancyChooser = asyncSurface(() => import("./components/TenancyChooser.vu
 const AuthorizationCenter = asyncSurface(() => import("./components/AuthorizationCenter.vue"));
 const ResourceGrantCenter = asyncSurface(() => import("./components/ResourceGrantCenter.vue"));
 const AuditSecurityCenter = asyncSurface(() => import("./components/AuditSecurityCenter.vue"));
-const ThemeStudio = asyncSurface(() => import("./components/ThemeStudio.vue"));
 const OnboardingGuide = asyncSurface(() => import("./components/OnboardingGuide.vue"));
 const NavigationShell = asyncSurface(() => import("./components/NavigationShell.vue"));
 const AccountShell = asyncSurface(() => import("./components/AccountShell.vue"));
@@ -89,7 +88,6 @@ const isNotFoundRoute = computed(
   <AuthorizationCenter v-else-if="selectedView === 'authorization'" :api-base-url="apiBase" />
   <ResourceGrantCenter v-else-if="selectedView === 'resource-grants'" :api-base-url="apiBase" />
   <AuditSecurityCenter v-else-if="selectedView === 'audit-security'" :api-base-url="apiBase" />
-  <ThemeStudio v-else-if="selectedView === 'theme'" :api-base-url="apiBase" />
   <OnboardingGuide v-else-if="selectedView === 'onboarding'" />
   <component
     :is="VerificationFramework"

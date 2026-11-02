@@ -15,7 +15,7 @@ const emit = defineEmits<{ retry: [] }>();
   <main class="landing-redirect" :data-state="props.state" aria-live="polite">
     <div class="landing-frame">
       <header class="p01-top">
-        <span class="p01-brand">ScoutOps</span>
+        <span class="p01-brand">米兜智能选品</span>
       </header>
 
       <section class="p01-hero" aria-labelledby="landing-title">

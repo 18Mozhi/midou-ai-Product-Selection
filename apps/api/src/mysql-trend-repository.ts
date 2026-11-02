@@ -135,7 +135,27 @@ export class MySqlTrendRepository implements TrendRepository {
         [input.actorId, ...params, input.pageSize, offset],
       ),
     ]);
-    return { items: rows.map(topic), total: Number(count[0]?.total ?? 0) };
+    const [media] = rows.length
+      ? await this.pool.query<RowDataPacket[]>(
+          "SELECT s.topic_id,s.canonical_url,s.publisher,JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url')) image_url " +
+            "FROM trend_signals s LEFT JOIN normalized_records n ON n.id=s.normalized_record_id AND n.raw_evidence_id=s.raw_evidence_id AND n.provider_id=s.provider_id AND n.organization_id=s.organization_id AND n.workspace_id=s.workspace_id AND n.status IN ('active','superseded') " +
+            "WHERE s.organization_id=? AND s.workspace_id=? AND s.topic_id IN (?) AND s.id=(SELECT s2.id FROM trend_signals s2 WHERE s2.topic_id=s.topic_id AND s2.organization_id=s.organization_id AND s2.workspace_id=s.workspace_id ORDER BY s2.observed_at DESC,s2.id DESC LIMIT 1)",
+          [input.organizationId, input.workspaceId, rows.map((row) => String(row.id))],
+        )
+      : [[]];
+    const byTopic = new Map(media.map((row) => [String(row.topic_id), row]));
+    return {
+      items: rows.map((row) => {
+        const image = byTopic.get(String(row.id));
+        return {
+          ...topic(row),
+          image_url: image?.image_url ?? null,
+          source_url: image?.canonical_url ?? null,
+          source_name: image?.publisher ?? null,
+        };
+      }),
+      total: Number(count[0]?.total ?? 0),
+    };
   }
 
   async get(input: Parameters<TrendRepository["get"]>[0]) {

@@ -4309,3 +4309,42 @@ test("supplier shortcut stays in the current product and preserves the return co
   await page.getByRole("link", { name: "返回来源列表" }).click();
   await expect(page).toHaveURL(new RegExp("q=thermos"));
 });
+
+for (const view of ["completed", "rule_candidates"]) {
+  test(
+    "midou reference catalogue " + view + " keeps single breadcrumb and scoped list",
+    async ({ page }) => {
+      await ready(page);
+      await page.route("**/api/v1/opportunities?**", (r) =>
+        r.fulfill({
+          json: {
+            ...envelope(view === "completed" ? [] : [base]),
+            meta: { page: 1, page_size: 20, total: view === "completed" ? 0 : 1 },
+          },
+        }),
+      );
+      await page.goto("/opportunities?view=" + view);
+      await expect(page.locator(".catalogue-page-heading")).toBeVisible();
+      await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+      if (view === "rule_candidates") await expect(page.locator(".product-catalog")).toBeVisible();
+      else
+        await expect(
+          page.getByRole("heading", { name: "暂无已完成分析的商品", exact: true }),
+        ).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+        true,
+      );
+      if (process.env.MIDOU_SCREENSHOT_DIR)
+        await page.screenshot({
+          path:
+            process.env.MIDOU_SCREENSHOT_DIR +
+            "/catalogue-" +
+            view +
+            "-" +
+            page.viewportSize()?.width +
+            ".png",
+          fullPage: true,
+        });
+    },
+  );
+}

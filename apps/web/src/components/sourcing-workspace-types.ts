@@ -41,6 +41,7 @@ export interface SourcingCandidate {
 }
 
 export interface SourcingSearch {
+  image_url?: string | null;
   id: string;
   input_type: string;
   input_ref: string;

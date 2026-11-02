@@ -205,13 +205,13 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
             ...values,
           ]
         : values,
-      [count] = await this.pool.query<RowDataPacket[]>(
+      countRead = this.pool.query<RowDataPacket[]>(
         `SELECT COUNT(*) total FROM ${source} WHERE ${sql}`,
         filterValues,
       ),
       // LIMIT prevents MySQL 5.7 derived merging: resolve identity once per paged row,
       // rather than once per candidate evidence record. The outer sort preserves paging order.
-      [rows] = await this.pool.query<RowDataPacket[]>(
+      rowsRead = this.pool.query<RowDataPacket[]>(
         sqlText(
           `SELECT o.*,${opportunityListPrimaryRecordsSql},${reuseListPrimaryIdentitySql(opportunityCountsSql)},${opportunityLifecycleSql},${opportunityListSelectionProjectionSql}`,
           `FROM (SELECT o.*,${opportunityListPrimaryAsinSql} primary_fact_asin FROM (SELECT o.* FROM ${source} WHERE ${sql} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
@@ -227,6 +227,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           (input.page - 1) * input.pageSize,
         ],
       );
+    const [[count], [rows]] = await Promise.all([countRead, rowsRead]);
     const prices = await readOpportunityPurchasePrices(
       this.pool,
       input,

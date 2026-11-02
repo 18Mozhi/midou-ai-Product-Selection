@@ -32,9 +32,9 @@ function previous() {
 <template>
   <main class="onboarding-page onboarding-page--c" data-testid="onboarding">
     <header class="p09-header">
-      <RouterLink class="p09-brand" to="/" aria-label="ScoutOps 首页">
+      <RouterLink class="p09-brand" to="/" aria-label="米兜智能选品 首页">
         <span aria-hidden="true">S</span>
-        <span>ScoutOps <i>/</i> 快速引导</span>
+        <span>米兜智能选品 <i>/</i> 快速引导</span>
       </RouterLink>
       <RouterLink class="p09-skip" to="/">跳过引导</RouterLink>
     </header>

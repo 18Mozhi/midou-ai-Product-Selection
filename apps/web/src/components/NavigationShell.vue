@@ -287,7 +287,7 @@ onUnmounted(() => {
     <header class="role-topbar">
       <RouterLink
         class="role-brand"
-        aria-label="SCOUTOPS 智能选品"
+        aria-label="米兜智能选品"
         :to="
           shell === 'member'
             ? '/home'
@@ -295,7 +295,7 @@ onUnmounted(() => {
               ? '/org-admin'
               : '/platform-admin'
         "
-        ><span aria-hidden="true">选</span><b>SCOUTOPS</b
+        ><img class="midou-brand-mark" src="/midou-logo.jpg" alt="" /><b>米兜智能选品</b
         ><em>{{
           shell === "platform_admin"
             ? "管理员"
@@ -363,6 +363,24 @@ onUnmounted(() => {
       </div>
     </header>
     <aside v-if="state === 'ready'" class="commerce-sidebar" aria-label="工作区导航">
+      <nav class="midou-area-tabs" aria-label="工作台类型">
+        <RouterLink v-if="shell === 'member'" to="/home" aria-current="page">选品</RouterLink>
+        <RouterLink v-else :to="memberReturnPath()">选品</RouterLink>
+        <RouterLink
+          v-if="shell === 'organization_admin' || guard?.roles?.includes('organization_admin')"
+          to="/org-admin"
+          :aria-current="shell === 'organization_admin' ? 'page' : undefined"
+          >组织</RouterLink
+        >
+        <span v-else aria-disabled="true">组织</span>
+        <RouterLink
+          v-if="shell === 'platform_admin' || guard?.platform_roles?.length"
+          to="/platform-admin"
+          :aria-current="shell === 'platform_admin' ? 'page' : undefined"
+          >平台</RouterLink
+        >
+        <span v-else aria-disabled="true">平台</span>
+      </nav>
       <section v-for="group in menuGroups" :key="group.label">
         <h2>{{ group.label }}</h2>
         <RouterLink
@@ -590,7 +608,7 @@ onUnmounted(() => {
           ></span
         >
       </button>
-      <RouterLink to="/settings/theme">更多外观设置</RouterLink>
+      <RouterLink to="/me?section=appearance">更多外观设置</RouterLink>
     </div>
     <p v-if="themeNotice" class="role-theme-notice" role="status">
       {{ themeNotice }}

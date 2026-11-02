@@ -26,7 +26,7 @@ const freshness = (value: string) =>
     <header>
       <div>
         <button class="trend-detail-back so-action-quiet" type="button" @click="emit('back')">
-          返回趋势列表
+          关闭详情 · 返回情报列表
         </button>
         <p v-if="busy !== 'detail'">
           {{ statusLabel(detail.status) }} · {{ detail.market }} · {{ detail.language }}

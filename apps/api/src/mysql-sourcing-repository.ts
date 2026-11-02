@@ -13,7 +13,7 @@ export class MySqlSourcingRepository implements SourcingRepository {
   constructor(private readonly pool: Pool) {}
   async list(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT s.*,CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE " +
+      "SELECT s.*,(SELECT JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) FROM collection_subqueries image_query JOIN providers image_provider ON image_provider.id=image_query.provider_id AND image_provider.code='1688_search' WHERE image_query.task_id=s.collection_task_id AND image_query.organization_id=s.organization_id AND image_query.workspace_id=s.workspace_id AND s.input_type='opportunity' AND JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) LIKE 'https://%' ORDER BY image_query.ordinal LIMIT 1) image_url,CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE " +
         "s.input_ref END display_name FROM sourcing_searches s LEFT JOIN opportunities o ON s.input_type='opportunity' " +
         "AND s.input_ref=CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_unicode_ci AND o.organization_id=s.organization_id " +
         "AND o.workspace_id=s.workspace_id AND o.lifecycle_status<>'deleted' WHERE s.organization_id=? " +
@@ -25,7 +25,7 @@ export class MySqlSourcingRepository implements SourcingRepository {
   }
   async detail(i: any) {
     const [searches] = await this.pool.query<RowDataPacket[]>(
-      "SELECT s.*,CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE " +
+      "SELECT s.*,(SELECT JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) FROM collection_subqueries image_query JOIN providers image_provider ON image_provider.id=image_query.provider_id AND image_provider.code='1688_search' WHERE image_query.task_id=s.collection_task_id AND image_query.organization_id=s.organization_id AND image_query.workspace_id=s.workspace_id AND s.input_type='opportunity' AND JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) LIKE 'https://%' ORDER BY image_query.ordinal LIMIT 1) image_url,CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE " +
         "s.input_ref END display_name FROM sourcing_searches s LEFT JOIN opportunities o ON s.input_type='opportunity' " +
         "AND s.input_ref=CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_unicode_ci AND o.organization_id=s.organization_id " +
         "AND o.workspace_id=s.workspace_id AND o.lifecycle_status<>'deleted' WHERE s.id=? AND " +
@@ -91,22 +91,24 @@ export class MySqlSourcingRepository implements SourcingRepository {
       "SELECT * FROM sourcing_comparisons WHERE organization_id=? AND workspace_id=? ORDER BY created_at DESC",
       [i.organizationId, i.workspaceId],
     );
-    const result = [];
-    for (const row of rows) {
-      const ids = parse<string[]>(row.quote_ids_json),
-        [quotes] = await this.pool.query<RowDataPacket[]>(
+    const ids = [...new Set(rows.flatMap((row) => parse<string[]>(row.quote_ids_json)))];
+    const [quotes] = ids.length
+      ? await this.pool.query<RowDataPacket[]>(
           "SELECT * FROM supplier_quotes WHERE organization_id=? AND workspace_id=? AND id IN (?)",
           [i.organizationId, i.workspaceId, ids],
-        );
-      result.push({
+        )
+      : [[]];
+    return rows.map((row) => {
+      const selected = new Set(parse<string[]>(row.quote_ids_json));
+      return {
         id: String(row.id),
         name: String(row.name),
-        quotes: quotes.map((r) => this.quote(r)),
+        quotes: quotes.filter((q) => selected.has(String(q.id))).map((q) => this.quote(q)),
         created_at: iso(row.created_at),
-      });
-    }
-    return result;
+      };
+    });
   }
+
   async createSearch(i: any) {
     const old = await this.operation(i);
     if (old) return old;
@@ -581,6 +583,7 @@ export class MySqlSourcingRepository implements SourcingRepository {
       input_type: r.input_type,
       input_ref: String(r.input_ref),
       display_name: String(r.display_name ?? r.input_ref),
+      image_url: r.image_url == null ? null : String(r.image_url),
       status: r.status,
       candidate_count: Number(r.candidate_count),
       missing_fields: parse(r.missing_fields_json),

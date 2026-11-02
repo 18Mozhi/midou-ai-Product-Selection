@@ -32,14 +32,9 @@ test("production strips development imports while preserving real account and ad
     assert.ok(result.includes(`const ${name} = null;`));
     assert.ok(!result.includes(`./components/${name}.vue`));
   }
-  for (const name of [
-    "ThemeStudio",
-    "NavigationShell",
-    "LocalIdentity",
-    "AuditSecurityCenter",
-    "AccountShell",
-  ])
+  for (const name of ["NavigationShell", "LocalIdentity", "AuditSecurityCenter", "AccountShell"])
     assert.ok(result.includes(`./components/${name}.vue`));
+  assert.ok(!result.includes("./components/ThemeStudio.vue"));
   assert.equal(
     result.slice(result.indexOf("<template>")),
     source.slice(source.indexOf("<template>")),

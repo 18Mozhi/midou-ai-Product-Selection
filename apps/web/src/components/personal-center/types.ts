@@ -77,4 +77,5 @@ export interface ActionFeedback {
 export type ProfileField = keyof PersonalProfileDraft;
 export type PasswordField = "current_password" | "new_password" | "confirm_password";
 export type PasswordDraft = Record<PasswordField, string>;
-export type PersonalSection = "profile" | "permissions" | "security" | "notifications" | "assets";
+export type PersonalSection =
+  "profile" | "permissions" | "security" | "notifications" | "assets" | "appearance";

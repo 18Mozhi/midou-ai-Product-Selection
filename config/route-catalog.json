@@ -182,8 +182,8 @@
       "name": "theme-settings",
       "title": "外观偏好",
       "breadcrumb": ["账号", "外观偏好"],
-      "shell": null,
-      "view": "theme",
+      "shell": "account",
+      "view": "account",
       "capabilities": [],
       "notFound": false,
       "surface": "theme-settings",
@@ -191,11 +191,12 @@
       "acceptance": "public",
       "featureMap": {
         "path": "/settings/theme",
-        "view": "ThemeStudio",
+        "view": "AccountShell",
         "domain": "personal-preferences",
         "status": "verified",
-        "statusDetail": "M02-01_module_verified"
-      }
+        "statusDetail": "Legacy bookmark redirects to /me?section=appearance; no standalone theme page"
+      },
+      "sessionRequired": true
     },
     {
       "path": "/me",

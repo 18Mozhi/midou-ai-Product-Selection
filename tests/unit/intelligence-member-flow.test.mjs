@@ -77,7 +77,7 @@ const envelope = (data) => ({
 });
 const tick = () => new Promise(setImmediate);
 
-test("market intelligence loads list and evidence without calling retired management APIs", async () => {
+test("market intelligence loads list alone by default without calling retired management APIs", async () => {
   const calls = [];
   const app = await component("TrendDashboard", async (path, options) => {
     calls.push([path, options?.method ?? "GET"]);
@@ -87,12 +87,12 @@ test("market intelligence loads list and evidence without calling retired manage
   });
   await app.surface.load();
   assert.equal(app.surface.state, "ready");
-  assert.equal(app.surface.selected.id, "topic");
+  assert.equal(app.surface.selected, null);
   assert.deepEqual(
     calls.map((c) => c[1]),
-    ["GET", "GET"],
+    ["GET"],
   );
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 1);
   assert.doesNotMatch(
     app.source,
     /monitoring-rules|change-requests|provider-sources\/refresh|\/follow|TrendRuleDialog|TrendChangeQueue/,
@@ -139,7 +139,7 @@ test("scope change aborts the old intelligence read and cannot restore another w
   assert.equal(oldSignal.aborted, true);
   releaseOld(envelope([{ id: "old-topic" }]));
   await old;
-  assert.equal(app.surface.selected.id, "new-topic");
+  assert.equal(app.surface.selected, null);
   assert.equal(app.surface.topics[0].id, "new-topic");
 });
 

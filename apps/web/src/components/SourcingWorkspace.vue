@@ -4,6 +4,7 @@ import {
   useSourcingWorkspace,
   type SourcingWorkspaceProps,
 } from "../composables/useSourcingWorkspace";
+import ResearchThumbnail from "./ResearchThumbnail.vue";
 import SourcingComparisonPanel from "./SourcingComparisonPanel.vue";
 import SupplierOfferList from "./SupplierOfferList.vue";
 import SourcingProfitSummary from "./SourcingProfitSummary.vue";
@@ -121,7 +122,6 @@ const pendingMessage = computed(() => {
   <section class="sourcing-workspace sourcing-workspace--review">
     <header class="sourcing-head">
       <div>
-        <p class="sourcing-section-label">商品研究 / 1688 找货</p>
         <h1 id="sourcing-page-title" tabindex="-1">供应链找货</h1>
         <p class="sourcing-section-description">从选品详情查看匹配货源、规格报价与成本依据。</p>
       </div>
@@ -207,6 +207,7 @@ const pendingMessage = computed(() => {
             :class="{ selected: selected?.id === item.id }"
             @click="detail(item)"
           >
+            <ResearchThumbnail :src="item.image_url" :alt="searchName(item)" />
             <b :title="searchName(item)">{{ searchName(item) }}</b
             ><span class="sourcing-record-meta"
               ><small>{{ inputTypeText(item.input_type) }} · {{ statusText(item.status) }}</small
@@ -233,6 +234,7 @@ const pendingMessage = computed(() => {
       </aside>
       <section v-if="selected" class="sourcing-detail" aria-label="找货记录详情">
         <header>
+          <ResearchThumbnail :src="selected.image_url" :alt="searchName(selected)" />
           <div>
             <p>{{ inputTypeText(selected.input_type) }}</p>
             <h3>{{ searchName(selected) }}</h3>

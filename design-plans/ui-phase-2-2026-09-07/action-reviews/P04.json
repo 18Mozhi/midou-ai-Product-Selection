@@ -1,12 +1,11 @@
 {
   "schemaVersion": 1,
   "pageId": "P04",
-  "visualApproval": "user-approved-remaining-pages-auto",
   "route": "/forgot-password",
-  "status": "implemented-user-approved-production-smoke-verified-not-formally-accepted",
+  "status": "implemented-local-brand-refresh-production-and-visual-acceptance-pending",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/LocalIdentity.vue": "a5313a00020009bbd0ed2d5bb92cb978cd2c8240f0d3c66feaae8162e9f450f3"
+    "apps/web/src/components/LocalIdentity.vue": "4c0414b993710958ee8e9ac79c9f04ebc2a3998edeecac05432984a91a80e0e9"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -30,19 +29,17 @@
       "kind": "navigation",
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#d545c6b53ab2b2a8.1",
-        "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.1",
-        "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.2",
-        "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.3",
-        "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.4",
-        "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.5",
-        "apps/web/src/components/LocalIdentity.vue#9b4b982bf643379f.1"
+        "apps/web/src/components/LocalIdentity.vue#0745aa28a410d999.1",
+        "apps/web/src/components/LocalIdentity.vue#ddb48b7134de397b.1",
+        "apps/web/src/components/LocalIdentity.vue#ddb48b7134de397b.2",
+        "apps/web/src/components/LocalIdentity.vue#ddb48b7134de397b.3",
+        "apps/web/src/components/LocalIdentity.vue#ddb48b7134de397b.4",
+        "apps/web/src/components/LocalIdentity.vue#ddb48b7134de397b.5",
+        "apps/web/src/components/LocalIdentity.vue#180807d467549eb8.1"
       ],
       "condition": "全部局部模式的RouterLink",
       "handler": "RouterLink /",
-      "variants": [
-        "all-modes"
-      ],
+      "variants": ["all-modes"],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -77,37 +74,37 @@
       "remaining": "最终落点由根页解析；本页图不能证明鉴权或最近成员路径。",
       "sourceCandidateApplicability": [
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#d545c6b53ab2b2a8.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#0745aa28a410d999.1",
           "classification": "cross-route-reference-only",
           "reason": "常规 MFA 管理只在独立安全路由显示；此路径仅作跨路由参考。"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#ddb48b7134de397b.1",
           "classification": "route-mode-family",
           "reason": "属于当前身份路由或其真实局部模式转换；按源条件保留。"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.2",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#ddb48b7134de397b.2",
           "classification": "route-mode-family",
           "reason": "属于当前身份路由或其真实局部模式转换；按源条件保留。"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.3",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#ddb48b7134de397b.3",
           "classification": "route-mode-family",
           "reason": "属于当前身份路由或其真实局部模式转换；按源条件保留。"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.4",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#ddb48b7134de397b.4",
           "classification": "route-mode-family",
           "reason": "属于当前身份路由或其真实局部模式转换；按源条件保留。"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.5",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#ddb48b7134de397b.5",
           "classification": "route-mode-family",
           "reason": "属于当前身份路由或其真实局部模式转换；按源条件保留。"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#9b4b982bf643379f.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#180807d467549eb8.1",
           "classification": "route-mode-family",
           "reason": "属于当前身份路由或其真实局部模式转换；按源条件保留。"
         }
@@ -251,9 +248,7 @@
       ],
       "condition": "mode=login，无busy禁用",
       "handler": "switchMode('forgot')只改mode/反馈，不改URL、不清敏感ref",
-      "variants": [
-        "login-to-forgot"
-      ],
+      "variants": ["login-to-forgot"],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -320,11 +315,7 @@
       ],
       "condition": "verify正文、安全设置完成区及非login页脚三入口",
       "handler": "switchMode('login')，URL不变；不自动触发confirmEmail/loadMfa",
-      "variants": [
-        "verify-result",
-        "seed-complete",
-        "footer"
-      ],
+      "variants": ["verify-result", "seed-complete", "footer"],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -419,10 +410,7 @@
       ],
       "condition": "security-setup.must_change_password；原生表单校验；同步单飞且提交期间字段/按钮禁用",
       "handler": "changeSeedPassword -> POST /me/password；首次 await 前固定密码快照并单飞；成功将已提交的新密码带回登录并清理敏感字段",
-      "variants": [
-        "security-setup-change",
-        "relogin"
-      ],
+      "variants": ["security-setup-change", "relogin"],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -489,10 +477,7 @@
       ],
       "condition": "首次设置需绑定且无secret；普通mfa未启用且无secret；均无busy锁",
       "handler": "startMfa -> POST /me/mfa/totp/enrollment {current_password} -> secret",
-      "variants": [
-        "security-setup-enrollment",
-        "mfa-management-enrollment"
-      ],
+      "variants": ["security-setup-enrollment", "mfa-management-enrollment"],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -569,10 +554,7 @@
       ],
       "condition": "首次设置或普通mfa有secret；form外button，无busy/原生required保护",
       "handler": "confirmMfa -> POST /me/mfa/totp/confirm {code} -> enabled/recoveryCodes",
-      "variants": [
-        "security-setup-confirm",
-        "mfa-management-confirm"
-      ],
+      "variants": ["security-setup-confirm", "mfa-management-confirm"],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -651,11 +633,7 @@
       ],
       "condition": "mode=mfa且mfaEnabled；无busy禁用；仅P07初始管理分支",
       "handler": "disableMfa -> DELETE /me/mfa/totp {current_password,code}；成功enabled=false，无跳转",
-      "variants": [
-        "enabled",
-        "recovery-visible",
-        "disable"
-      ],
+      "variants": ["enabled", "recovery-visible", "disable"],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -714,14 +692,10 @@
       "label": "旧会话撤销模板",
       "kind": "excluded",
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#f29375268246ac09.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#f29375268246ac09.1"],
       "condition": "sessions不在pathModes或publicQueryModes，模板无switchMode('sessions')入口",
       "handler": "revoke(id) -> DELETE /me/sessions/{id} -> loadSessions，仅保留源定义",
-      "variants": [
-        "legacy-sessions-not-public"
-      ],
+      "variants": ["legacy-sessions-not-public"],
       "scenes": [],
       "testReferences": [
         {
@@ -768,9 +742,7 @@
       ],
       "condition": "mode非register；按钮无busy禁用",
       "handler": "switchMode('register')，只改局部模式与反馈",
-      "variants": [
-        "all-non-register-modes"
-      ],
+      "variants": ["all-non-register-modes"],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -832,9 +804,7 @@
       ],
       "condition": "全部局部模式固定RouterLink",
       "handler": "RouterLink /me?section=security",
-      "variants": [
-        "footer-security"
-      ],
+      "variants": ["footer-security"],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -894,15 +864,10 @@
       "label": "重新读取 MFA 状态",
       "kind": "read",
       "routeApplicability": "cross-route-reference-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#9734082c2e28b39f.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#9734082c2e28b39f.1"],
       "condition": "仅P07读取失败时显示；当前身份页不可达",
       "handler": "loadMfa -> GET /me/mfa",
-      "variants": [
-        "read-failure",
-        "retry"
-      ],
+      "variants": ["read-failure", "retry"],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -927,14 +892,10 @@
       "label": "停用后手动返回登录",
       "kind": "navigation",
       "routeApplicability": "cross-route-reference-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#e4840b8a830571e2.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/LocalIdentity.vue#e4840b8a830571e2.1"],
       "condition": "P07明确登录入口；当前身份页不可达",
       "handler": "RouterLink /login",
-      "variants": [
-        "P07-footer"
-      ],
+      "variants": ["P07-footer"],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -969,9 +930,7 @@
       ],
       "condition": "全部局部模式固定RouterLink",
       "handler": "RouterLink /security/mfa；App按routePath重挂载",
-      "variants": [
-        "footer-mfa"
-      ],
+      "variants": ["footer-mfa"],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -1053,9 +1012,7 @@
       "sourceCandidateIds": [],
       "condition": "mode=login且requestState=success；与是否拿到落点分开",
       "handler": "RouterLink /select-context",
-      "variants": [
-        "login-success-no-route"
-      ],
+      "variants": ["login-success-no-route"],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -1095,9 +1052,7 @@
     "inputScope": "reviewed-subset-of-shared-source",
     "containerScope": "reviewed-subset-of-shared-source",
     "status": "production-readonly-smoke-verified-not-formally-accepted",
-    "files": [
-      "apps/web/src/components/LocalIdentity.vue"
-    ],
+    "files": ["apps/web/src/components/LocalIdentity.vue"],
     "includeStructuralContainers": true,
     "dependencyHashes": {
       "apps/web/src/components/LocalIdentity.vue": "a5313a00020009bbd0ed2d5bb92cb978cd2c8240f0d3c66feaae8162e9f450f3",
@@ -1295,13 +1250,7 @@
   ],
   "modeReachability": {
     "initialMode": "forgot",
-    "publicQueryModes": [
-      "login",
-      "register",
-      "forgot",
-      "verify",
-      "reset"
-    ],
+    "publicQueryModes": ["login", "register", "forgot", "verify", "reset"],
     "reachableModes": [
       "login",
       "register",
@@ -1311,10 +1260,7 @@
       "mfa-challenge",
       "security-setup"
     ],
-    "excludedModes": [
-      "mfa",
-      "sessions"
-    ],
+    "excludedModes": ["mfa", "sessions"],
     "scope": "one-mounted-path-plus-local-mode-transitions-not-authorized-security-state",
     "automaticActions": [
       {
@@ -1337,5 +1283,13 @@
         ]
       }
     ]
-  }
+  },
+  "priorPresentation20261103": {
+    "sourceHashes": {
+      "apps/web/src/components/LocalIdentity.vue": "a5313a00020009bbd0ed2d5bb92cb978cd2c8240f0d3c66feaae8162e9f450f3"
+    },
+    "status": "implemented-user-approved-production-smoke-verified-not-formally-accepted",
+    "visualApproval": "user-approved-remaining-pages-auto"
+  },
+  "currentPresentationNote": "2026-11-03 user requested 米兜智能选品 branding. Identity script bytes and existing routes/actions/permissions unchanged; only current brand candidate bindings refreshed. Prior approval and production outcome belong exclusively to priorPresentation20261103; no new production or 95% visual claim."
 }

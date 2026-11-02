@@ -6,6 +6,9 @@ export type TrendTopicChangeOperation = "merge" | "split";
 export type TrendTopicChangeStatus = "pending" | "confirmed" | "rejected";
 
 export interface TrendTopicSummary {
+  image_url?: string | null;
+  source_url?: string | null;
+  source_name?: string | null;
   id: string;
   title: string;
   category: string | null;

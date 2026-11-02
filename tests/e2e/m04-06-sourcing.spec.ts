@@ -1577,3 +1577,39 @@ test("sourcing queued and running record total does not claim all records are ac
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(writes).toEqual([]);
 });
+
+test("midou reference sourcing displays the task Amazon reference image in list and detail", async ({
+  page,
+}) => {
+  await setup(page);
+  const image = "/midou-logo.jpg"; // deterministic local asset, not evidence of a real Amazon request.
+  const record = {
+    id: searchId,
+    input_type: "opportunity",
+    input_ref: "00000000-0000-4000-8000-000000000001",
+    display_name: "Amazon 参考商品",
+    image_url: "https://m.media-amazon.com/images/fixture.jpg",
+    status: "succeeded_empty",
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: "2026-11-03T00:00:00Z",
+  };
+  await page.route("https://m.media-amazon.com/images/fixture.jpg", async (r) => {
+    const bytes = await page.request.get(image);
+    await r.fulfill({ body: await bytes.body(), contentType: "image/jpeg" });
+  });
+  await page.route("**/api/v1/sourcing/searches", (r) => r.fulfill({ json: envelope([record]) }));
+  await page.route("**/api/v1/sourcing/searches/" + searchId, (r) =>
+    r.fulfill({ json: envelope({ ...record, candidates: [] }) }),
+  );
+  await page.goto("/sourcing");
+  await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toBeVisible();
+  await expect(page.locator(".sourcing-detail > header .research-thumbnail img")).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  if (process.env.MIDOU_SCREENSHOT_DIR)
+    await page.screenshot({
+      path: process.env.MIDOU_SCREENSHOT_DIR + "/sourcing-" + page.viewportSize()?.width + ".png",
+      fullPage: true,
+    });
+});
