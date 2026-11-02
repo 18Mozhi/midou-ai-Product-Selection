@@ -695,12 +695,7 @@ test("midou reference notification layout keeps original workflow and preference
   await expect(page.locator(".notification-list > button svg")).toBeVisible();
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  if (process.env.MIDOU_SCREENSHOT_DIR)
-    await page.screenshot({
-      path:
-        process.env.MIDOU_SCREENSHOT_DIR + "/notifications-" + page.viewportSize()?.width + ".png",
-      fullPage: true,
-    });
+
   await page.getByRole("button", { name: "通知偏好", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "通知偏好", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "取消", exact: true }).click();

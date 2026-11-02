@@ -716,11 +716,6 @@ test("M02-03 personal center uses an account shell without the organization navi
   await expect(page.getByRole("complementary", { name: "个人中心分区" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "选品成员" })).toBeVisible();
   await expect(page.locator(".midou-profile-grid")).toBeVisible();
-  if (process.env.MIDOU_SCREENSHOT_DIR)
-    await page.screenshot({
-      path: process.env.MIDOU_SCREENSHOT_DIR + "/profile-" + page.viewportSize()?.width + ".png",
-      fullPage: true,
-    });
 });
 
 test("commerce organization overview fits phone tablet and desktop widths", async ({ page }) => {
@@ -859,16 +854,5 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );
-    if (process.env.MIDOU_SCREENSHOT_DIR)
-      await page.screenshot({
-        path:
-          process.env.MIDOU_SCREENSHOT_DIR +
-          "/" +
-          shell +
-          "-" +
-          page.viewportSize()?.width +
-          ".png",
-        fullPage: true,
-      });
   });
 }

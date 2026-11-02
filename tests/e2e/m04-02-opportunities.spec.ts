@@ -4334,17 +4334,6 @@ for (const view of ["completed", "rule_candidates"]) {
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
         true,
       );
-      if (process.env.MIDOU_SCREENSHOT_DIR)
-        await page.screenshot({
-          path:
-            process.env.MIDOU_SCREENSHOT_DIR +
-            "/catalogue-" +
-            view +
-            "-" +
-            page.viewportSize()?.width +
-            ".png",
-          fullPage: true,
-        });
     },
   );
 }
