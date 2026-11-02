@@ -8348,7 +8348,8 @@
       "apps/web/src/components/LocalIdentity.vue",
       "apps/web/src/components/LandingRedirectSurface.vue",
       "apps/web/src/components/NotFoundPage.vue",
-      "apps/web/src/components/OnboardingGuide.vue"
+      "apps/web/src/components/OnboardingGuide.vue",
+      "apps/web/src/components/SourcingWorkspaceDialogs.vue"
     ],
     "testFiles": [
       "tests/unit/workspace-read-performance.test.mjs",

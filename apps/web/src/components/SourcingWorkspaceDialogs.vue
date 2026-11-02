@@ -175,7 +175,7 @@ watch(
 }
 .sourcing-quote-context dt {
   color: var(--so-text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 .sourcing-quote-context dd {
   margin: 4px 0 0;
