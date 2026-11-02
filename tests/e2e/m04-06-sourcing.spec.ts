@@ -1607,9 +1607,4 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   await expect(page.locator(".sourcing-detail > header .research-thumbnail img")).toBeVisible();
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  if (process.env.MIDOU_SCREENSHOT_DIR)
-    await page.screenshot({
-      path: process.env.MIDOU_SCREENSHOT_DIR + "/sourcing-" + page.viewportSize()?.width + ".png",
-      fullPage: true,
-    });
 });

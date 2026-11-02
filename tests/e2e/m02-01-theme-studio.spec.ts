@@ -182,9 +182,4 @@ test("midou reference appearance stays in the account shell and legacy bookmark 
   await expect(page.locator(".theme-c-topbar")).toHaveCount(0);
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   await expect(page.getByRole("heading", { name: "界面外观", exact: true })).toBeVisible();
-  if (process.env.MIDOU_SCREENSHOT_DIR)
-    await page.screenshot({
-      path: process.env.MIDOU_SCREENSHOT_DIR + "/appearance-" + page.viewportSize()?.width + ".png",
-      fullPage: true,
-    });
 });

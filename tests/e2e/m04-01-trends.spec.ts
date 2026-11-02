@@ -761,12 +761,6 @@ test("midou reference list defaults closed, opens and closes detail without list
   await expect(page.locator(".trend-list")).toBeVisible();
   expect(lists).toBe(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  if (process.env.MIDOU_SCREENSHOT_DIR)
-    await page.screenshot({
-      path:
-        process.env.MIDOU_SCREENSHOT_DIR + "/intelligence-" + page.viewportSize()?.width + ".png",
-      fullPage: true,
-    });
 });
 test("midou reference source icon fallback is bounded on image failures", async ({ page }) => {
   await ready(page, [
