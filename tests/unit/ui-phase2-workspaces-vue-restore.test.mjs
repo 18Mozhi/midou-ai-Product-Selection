@@ -1,8 +1,9 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import vm from "node:vm";
 import ts from "typescript";
-import { readFileSync } from "node:fs";
+
 import { createHash } from "node:crypto";
 import { computed, ref } from "vue";
 import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";

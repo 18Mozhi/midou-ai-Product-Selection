@@ -1,10 +1,12 @@
+import { readArchivedApprovalsParent } from "../../scripts/lib/ui-phase2-approvals-parent-baseline.mjs";
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import {
   beforeP34OwnerPath,
   assertP34EvidenceSourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { parse, compileTemplate } from "@vue/compiler-sfc";
@@ -79,9 +81,9 @@ test("loading driver preserves previous assertions and validates command modes",
     visit(ast);
     return result;
   };
-  const driver = loadingVueDriver(read(approvalsParentBase)),
+  const driver = loadingVueDriver(readArchivedApprovalsParent()),
     current = checks(driver);
-  for (const check of checks(readFeedbackVueDriver(read(approvalsParentBase))))
+  for (const check of checks(readFeedbackVueDriver(readArchivedApprovalsParent())))
     assert.ok(current.includes(check), check);
   for (const args of [["--unknown"], ["--smoke", "--capture"], ["--smoke", "--smoke"]]) {
     const run = spawnSync(
@@ -167,7 +169,7 @@ test("loading capture refuses existing evidence before starting services", () =>
   );
   assert.equal(run.status, 1);
   assert.equal(run.stdout, "");
-  assert.match(run.stderr, /EEXIST/);
+  assert.match(run.stderr, /legacy_css_preview_retired/);
 });
 
 test("r1 typography comparison remains an immutable historical packet", () => {

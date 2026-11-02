@@ -1,7 +1,9 @@
+import { readArchivedApprovalsParent } from "../../scripts/lib/ui-phase2-approvals-parent-baseline.mjs";
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import vm from "node:vm";
@@ -40,8 +42,8 @@ test("route driver preserves all original checks and exact Vue/CSS composition",
     visit(ast);
     return result;
   };
-  const before = readOrderVueDriver(read(approvalsParentBase)),
-    after = routeLifecycleVueDriver(read(approvalsParentBase)),
+  const before = readOrderVueDriver(readArchivedApprovalsParent()),
+    after = routeLifecycleVueDriver(readArchivedApprovalsParent()),
     current = checks(after);
   for (const check of checks(before)) assert.ok(current.includes(check), check);
   for (const pattern of [
@@ -204,5 +206,5 @@ test("route capture refuses overwrite before services start", () => {
   );
   assert.equal(run.status, 1);
   assert.equal(run.stdout, "");
-  assert.match(run.stderr, /EEXIST/);
+  assert.match(run.stderr, /legacy_css_preview_retired/);
 });

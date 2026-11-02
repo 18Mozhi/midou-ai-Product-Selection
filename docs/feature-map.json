@@ -1,4 +1,33 @@
 {
+  "fullUnitFailureRepair20261103": {
+    "sourceFiles": [
+      "scripts/lib/retired-runtime-css.mjs",
+      "scripts/lib/ui-phase2-approvals-parent-baseline.mjs",
+      "infra/baota/production-acceptance-manifest.json",
+      "verification/api-operation-evidence.schema.json",
+      "apps/web/src/components/SourcingComparisonPanel.vue",
+      "apps/web/src/components/sourcing-comparison-specification.ts",
+      "apps/web/src/sourcing-comparison-table.css",
+      "apps/web/src/components/SourcingWorkspaceDialogs.vue"
+    ],
+    "testFiles": [
+      "tests/unit/retired-runtime-css.test.mjs",
+      "tests/unit/sourcing-comparison-specification.test.mjs",
+      "tests/unit/production-acceptance-contract.test.mjs",
+      "tests/unit/production-acceptance-preflight-isolation.test.mjs"
+    ],
+    "docs": ["docs/full-unit-failure-repair-20261103.md"],
+    "contract": "Repair the 31 observed full-unit failures without lowering gates or rewriting historical captures. Existing pinned archived CSS reader serves only registered retired files; P34/P37 captured driver bytes remain hash-bound. Synchronize acceptance inventory to actual 229 paths/262 operations, retaining 60 protected routes, six roles and read-only preflight. Preserve scheduler order and retired controls. Extract quote display hint and scoped CSS without changing data or DOM; restore existing 13px label floor. No API/env/schema migration/dependency/source enablement/deployment. Local verification is not production collection or selection acceptance."
+  },
+  "amazonDetailReadiness20261103": {
+    "sourceFiles": ["packages/playwright-crawler/src/index.ts"],
+    "testFiles": [
+      "tests/integration/amazon-detail-readiness.test.mjs",
+      "tests/fixtures/amazon-detail-readiness.mjs"
+    ],
+    "docs": ["docs/amazon-detail-readiness.md"],
+    "contract": "Amazon detail pages wait within the existing action timeout for a nonempty productTitle and the configured item selector before counting or capturing evidence. A missing title remains timeout, not empty success; recheck original challenge guards on timeout and readiness. Search empty-result parsing, evidence identity/hash checks, parser-drift auto-pause, retry budgets and source approvals remain unchanged. No new env/API/schema/dependency. Local intercepted Chromium fixtures are not live source acceptance; official runtime release and source recovery remain separate."
+  },
   "amazonPublicRequestProtocol20261026": {
     "sourceFiles": [
       "apps/crawler/scoutops_crawler/public_http.py",
