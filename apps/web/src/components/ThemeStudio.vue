@@ -14,7 +14,7 @@ import {
   type ThemeId,
 } from "../design/theme";
 
-const props = defineProps<{ apiBaseUrl: string }>();
+const props = defineProps<{ apiBaseUrl: string; embedded?: boolean }>();
 const request = createApiClient(props.apiBaseUrl);
 type State =
   | "loading"
@@ -137,11 +137,15 @@ onMounted(load);
 </script>
 
 <template>
-  <main class="theme-page theme-page--c" data-testid="theme-studio">
-    <header class="theme-c-topbar">
-      <RouterLink class="theme-c-brand" to="/" aria-label="ScoutOps 首页">
+  <main
+    class="theme-page theme-page--c"
+    :class="{ 'is-embedded': embedded }"
+    data-testid="theme-studio"
+  >
+    <header v-if="!embedded" class="theme-c-topbar">
+      <RouterLink class="theme-c-brand" to="/" aria-label="米兜智能选品 首页">
         <span class="theme-c-brand__mark" aria-hidden="true">S</span>
-        <span>ScoutOps <i>/</i> 个人设置</span>
+        <span>米兜智能选品 <i>/</i> 个人设置</span>
       </RouterLink>
       <nav aria-label="个人设置">
         <RouterLink to="/me">个人资料</RouterLink>

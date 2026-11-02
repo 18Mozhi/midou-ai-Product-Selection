@@ -6672,10 +6672,10 @@
   "routes": [
     {
       "path": "/settings/theme",
-      "view": "ThemeStudio",
+      "view": "AccountShell",
       "domain": "personal-preferences",
       "status": "verified",
-      "statusDetail": "M02-01_module_verified"
+      "statusDetail": "Legacy bookmark redirects to /me?section=appearance; no standalone theme page"
     },
     {
       "path": "/me",
@@ -8314,5 +8314,69 @@
     ],
     "tests": ["tests/e2e/m04-06-sourcing.spec.ts"],
     "contract": "Existing summary.running counts queued OR running sourcing records, not only executing jobs. Label as queued-or-collecting and describe record-state scope, not live sessions. Counts, filters, scheduler, APIs, permissions and collection unchanged; frontend-only release, no runtime restart."
+  },
+  "midouReferenceWorkspace20261103": {
+    "sourceFiles": [
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/api/src/mysql-home-dashboard-repository.ts",
+      "apps/api/src/mysql-sourcing-repository.ts",
+      "apps/api/src/trend-service.ts",
+      "apps/api/src/mysql-trend-repository.ts",
+      "apps/web/index.html",
+      "apps/web/src/router.ts",
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/AccountShell.vue",
+      "apps/web/src/components/ThemeStudio.vue",
+      "apps/web/src/components/PersonalCenter.vue",
+      "apps/web/src/components/personal-center/types.ts",
+      "apps/web/src/components/trend-workspace-types.ts",
+      "apps/web/src/components/sourcing-workspace-types.ts",
+      "apps/web/src/components/ResearchThumbnail.vue",
+      "apps/web/src/components/TrendDashboard.vue",
+      "apps/web/src/components/TrendDetailPanel.vue",
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/NotificationCenter.vue",
+      "apps/web/src/App.vue",
+      "apps/web/src/main.ts",
+      "apps/web/src/midou-workspace.css",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/route-catalog.generated.json",
+      "apps/web/src/ui/lucide-icons.ts",
+      "apps/web/src/components/AppIcon.vue",
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/design/commerce-tokens.css",
+      "apps/web/src/components/LocalIdentity.vue",
+      "apps/web/src/components/LandingRedirectSurface.vue",
+      "apps/web/src/components/NotFoundPage.vue",
+      "apps/web/src/components/OnboardingGuide.vue"
+    ],
+    "testFiles": [
+      "tests/unit/workspace-read-performance.test.mjs",
+      "tests/e2e/m04-01-trends.spec.ts",
+      "tests/unit/design-quality-gate.test.mjs",
+      "tests/unit/platform-completion.test.mjs",
+      "tests/unit/internal-surface-build.test.mjs",
+      "tests/unit/intelligence-member-flow.test.mjs",
+      "tests/e2e/m02-01-theme-studio.spec.ts",
+      "tests/e2e/m04-06-sourcing.spec.ts",
+      "tests/unit/ui-phase2-contract-audit.test.mjs",
+      "tests/unit/ui-phase2-account-app-lifecycle.test.mjs",
+      "tests/e2e/m05-03-notifications.spec.ts",
+      "tests/e2e/m02-03-navigation-shell.spec.ts",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "docs": [
+      "docs/openapi.yaml",
+      "docs/midou-reference-workspace-20261103.md",
+      "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
+      "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
+      "design-plans/ui-phase-2-2026-09-07/action-reviews/P02.json",
+      "design-plans/ui-phase-2-2026-09-07/action-reviews/P03.json",
+      "design-plans/ui-phase-2-2026-09-07/action-reviews/P04.json",
+      "design-plans/ui-phase-2-2026-09-07/action-reviews/P05.json",
+      "design-plans/ui-phase-2-2026-09-07/action-reviews/P06.json",
+      "design-plans/ui-phase-2-2026-09-07/action-reviews/P07.json"
+    ],
+    "contract": "Read-only parallel home/count/page reads; scoped saved-quote batch. No collection throughput or 95% visual acceptance claim. Original queued Amazon sourcing image; latest exact signal media with same-origin favicon fallback. Default-closed cancellable intelligence detail; embedded account appearance, legacy bookmark redirected; single shell breadcrumb. No schema/env/dependency/deployment or evidence/permission/scoring changes."
   }
 }

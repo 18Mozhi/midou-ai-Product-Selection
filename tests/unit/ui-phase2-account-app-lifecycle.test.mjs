@@ -188,5 +188,12 @@ test("current account presentation preserves the captured identity and lifecycle
     assert.ok(match, "account script must exist");
     return match[1];
   };
-  assert.equal(script(read(file)), script(readPreSelectionRebuild(file)));
+  const current = script(read(file));
+  assert.match(current, /import ThemeStudio from/);
+  assert.match(current, /key: "appearance"/);
+  const priorLifecycle = current
+    .replace(/import ThemeStudio from "\.\/ThemeStudio.vue";\s*/, "")
+    .replace(/\{ key: "appearance", label: "外观偏好", description: "主题与密度" \},?\s*/, "");
+  const compact = (value) => value.replace(/\s+/g, "").replace(/,\]/g, "]");
+  assert.equal(compact(priorLifecycle), compact(script(readPreSelectionRebuild(file))));
 });

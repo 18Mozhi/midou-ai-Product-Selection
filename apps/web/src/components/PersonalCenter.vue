@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import ThemeStudio from "./ThemeStudio.vue";
 import PersonalAssetsPanel from "./personal-center/PersonalAssetsPanel.vue";
 import PersonalNotificationsPanel from "./personal-center/PersonalNotificationsPanel.vue";
 import PersonalPermissionsPanel from "./personal-center/PersonalPermissionsPanel.vue";
@@ -20,6 +21,7 @@ const validSections: PersonalSection[] = [
   "security",
   "notifications",
   "assets",
+  "appearance",
 ];
 const normalizeSection = (value: string): PersonalSection =>
   validSections.includes(value as PersonalSection) ? (value as PersonalSection) : "profile";
@@ -39,6 +41,7 @@ const sectionItems = [
   { key: "security" as const, label: "安全与设备" },
   { key: "notifications" as const, label: "通知偏好" },
   { key: "assets" as const, label: "我的资产" },
+  { key: "appearance" as const, label: "外观偏好" },
 ];
 </script>
 
@@ -101,15 +104,45 @@ const sectionItems = [
         </button>
       </nav>
 
-      <PersonalProfilePanel
-        v-if="section === 'profile' && center.profile.value"
-        :profile="center.profile.value"
-        :draft="center.profileDraft"
-        :saving="center.profileSaving.value"
-        :feedback="center.profileFeedback.value"
-        @update-field="center.updateProfileField"
-        @submit="center.saveProfile"
-      />
+      <div v-if="section === 'profile' && center.profile.value" class="midou-profile-grid">
+        <aside class="midou-profile-summary">
+          <section>
+            <span class="midou-profile-avatar">{{
+              (center.profile.value.display_name || center.profile.value.email).slice(0, 2)
+            }}</span>
+            <strong class="midou-profile-name">{{ center.profile.value.display_name }}</strong>
+            <p>{{ center.profile.value.email }}</p>
+            <small>{{
+              center.profile.value.email_verified_at ? "邮箱已验证" : "邮箱尚未验证"
+            }}</small>
+          </section>
+          <section>
+            <h3>安全信息</h3>
+            <p>
+              邮箱 <b>{{ center.profile.value.email_verified_at ? "已验证" : "未验证" }}</b>
+            </p>
+            <p>
+              手机号
+              <b>{{
+                center.profile.value.phone_verified_at
+                  ? "已验证"
+                  : center.profile.value.phone
+                    ? "未验证"
+                    : "未绑定"
+              }}</b>
+            </p>
+            <RouterLink to="/me?section=security">管理安全设置</RouterLink>
+          </section>
+        </aside>
+        <PersonalProfilePanel
+          :profile="center.profile.value"
+          :draft="center.profileDraft"
+          :saving="center.profileSaving.value"
+          :feedback="center.profileFeedback.value"
+          @update-field="center.updateProfileField"
+          @submit="center.saveProfile"
+        />
+      </div>
       <PersonalPermissionsPanel
         v-else-if="section === 'permissions'"
         :resource="center.authorization.value"
@@ -140,6 +173,7 @@ const sectionItems = [
         @update-preference="center.updatePreference"
         @submit="center.savePreferences"
       />
+      <ThemeStudio v-else-if="section === 'appearance'" :api-base-url="apiBaseUrl" embedded />
       <PersonalAssetsPanel
         v-else
         :resource="center.assets.value"

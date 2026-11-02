@@ -121,3 +121,26 @@ html[data-design="commerce"] {
   --commerce-color-7: #a2aab4;
   --commerce-color-8: #edf0f4;
 }
+
+/* 2026-11-03 user-provided Midou reference palette. */
+html[data-design="commerce"] {
+  --so-bg: #f3f6fb;
+  --so-text: #101d36;
+  --so-text-muted: #61718b;
+  --so-border: #dfe6f1;
+  --so-card-radius: 12px;
+  --so-control-radius: 7px;
+  --so-primary: #145bff;
+  --so-primary-strong: #0951ed;
+  --so-primary-soft: #eaf1ff;
+}
+html[data-design="commerce"][data-theme="aurora-purple"] {
+  --so-primary: #465365;
+  --so-primary-strong: #303d50;
+  --so-primary-soft: #eef1f5;
+}
+html[data-design="commerce"][data-theme="cloud-white"] {
+  --so-primary: #147e97;
+  --so-primary-strong: #09667c;
+  --so-primary-soft: #eaf7fa;
+}

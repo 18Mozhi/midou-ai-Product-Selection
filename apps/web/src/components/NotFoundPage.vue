@@ -44,7 +44,7 @@ watch(() => route.fullPath, focusHeading);
   <main class="not-found-page not-found-page--review" aria-labelledby="not-found-title">
     <header class="p73-top">
       <RouterLink to="/home" aria-label="返回选品工作台">
-        <span aria-hidden="true">选</span><b>ScoutOps</b>
+        <span aria-hidden="true">选</span><b>米兜智能选品</b>
       </RouterLink>
     </header>
     <section class="p73-hero">

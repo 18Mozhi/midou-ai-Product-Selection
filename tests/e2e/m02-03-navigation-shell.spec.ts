@@ -715,6 +715,12 @@ test("M02-03 personal center uses an account shell without the organization navi
   }
   await expect(page.getByRole("complementary", { name: "个人中心分区" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "选品成员" })).toBeVisible();
+  await expect(page.locator(".midou-profile-grid")).toBeVisible();
+  if (process.env.MIDOU_SCREENSHOT_DIR)
+    await page.screenshot({
+      path: process.env.MIDOU_SCREENSHOT_DIR + "/profile-" + page.viewportSize()?.width + ".png",
+      fullPage: true,
+    });
 });
 
 test("commerce organization overview fits phone tablet and desktop widths", async ({ page }) => {
@@ -747,3 +753,122 @@ test("commerce organization overview fits phone tablet and desktop widths", asyn
     expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(width);
   }
 });
+
+for (const shell of ["member", "organization_admin", "platform_admin"] as const) {
+  test("midou reference shell smoke " + shell, async ({ page }) => {
+    await allow(page, shell);
+    if (shell === "member") {
+      await page.route("**/api/v1/opportunities?**", (r) =>
+        r.fulfill({
+          json: {
+            data: [],
+            meta: { page: 1, page_size: 5, total: 0 },
+            request_id: "reference-empty-catalogue",
+            trace_id: "reference-empty-catalogue",
+          },
+        }),
+      );
+      await page.route("**/api/v1/me/home-dashboard", (r) =>
+        r.fulfill({
+          json: {
+            data: {
+              actions: [],
+              changes: [],
+              follows: [],
+              health: [],
+              automatic_selection: {
+                state: "running",
+                enabled_rule_count: 1,
+                candidate_count: 0,
+                rule_candidate_count: 0,
+                recommended_count: 0,
+                awaiting_evidence_count: 0,
+                adopted_count: 0,
+                recommended_items: [],
+                last_collection_at: null,
+                next_collection_at: null,
+                daily_production: {
+                  date: "2026-11-03",
+                  timezone: "Asia/Shanghai",
+                  completed_count: 0,
+                  discovered_count: 0,
+                  qualified_count: 0,
+                  target_minimum: 100,
+                  measured_at: "2026-11-03T00:00:00Z",
+                },
+              },
+              scope: {
+                organization_id: "00000000-0000-4000-8000-000000000103",
+                workspace_id: "00000000-0000-4000-8000-000000000104",
+              },
+              generated_at: "2026-11-03T00:00:00Z",
+            },
+            request_id: "reference-home-not-production",
+            trace_id: "reference-home-not-production",
+          },
+        }),
+      );
+    }
+    if (shell === "platform_admin")
+      await page.route("**/api/v1/platform/dashboard?**", (r) =>
+        r.fulfill({
+          json: {
+            data: {
+              window: "24h",
+              summary: {
+                active_organizations: 1,
+                active_users: 1,
+                enabled_providers: 0,
+                task_success_rate: null,
+                queue_backlog: 0,
+                open_alerts: 0,
+                storage_bytes: 0,
+                file_growth_bytes: 0,
+              },
+              queues: [],
+              provider_health: [],
+              task_trend: [],
+              health_signals: [],
+              alerts: [],
+              activity: [],
+              observed_at: "2026-11-03T00:00:00Z",
+            },
+            request_id: "reference-fixture-not-production",
+            trace_id: "reference-fixture-not-production",
+          },
+        }),
+      );
+    await page.goto(
+      shell === "member"
+        ? "/home"
+        : shell === "organization_admin"
+          ? "/org-admin"
+          : "/platform-admin",
+    );
+    await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
+    if (shell === "member") {
+      await expect(page.locator(".home-command-bar")).toBeVisible();
+      await expect(page.locator(".home-daily-production dl > div")).toHaveCount(3);
+      await expect(
+        page.locator(".home-quiet-empty").getByText("暂无已完成分析的商品", { exact: true }),
+      ).toBeVisible();
+    } else if (shell === "organization_admin")
+      await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+    else await expect(page.locator(".platform-facts")).toBeVisible();
+    await expect(page.locator(".role-brand")).toHaveAccessibleName("米兜智能选品");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+    if (process.env.MIDOU_SCREENSHOT_DIR)
+      await page.screenshot({
+        path:
+          process.env.MIDOU_SCREENSHOT_DIR +
+          "/" +
+          shell +
+          "-" +
+          page.viewportSize()?.width +
+          ".png",
+        fullPage: true,
+      });
+  });
+}

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute } from "vue-router";
+import ThemeStudio from "./ThemeStudio.vue";
 import PersonalCenter from "./PersonalCenter.vue";
 import SessionLogout from "./SessionLogout.vue";
 
@@ -13,6 +14,7 @@ const sections = [
   { key: "security", label: "安全与设备", description: "密码与会话" },
   { key: "notifications", label: "通知偏好", description: "五项通知设置" },
   { key: "assets", label: "我的资产", description: "关注、决策与任务" },
+  { key: "appearance", label: "外观偏好", description: "主题与密度" },
 ];
 
 const activeSection = computed(() => {
@@ -24,15 +26,31 @@ const activeSection = computed(() => {
 <template>
   <main class="account-shell p11-account-review">
     <header class="account-topbar p11-top">
-      <RouterLink to="/" class="account-brand p11-brand" aria-label="ScoutOps 应用入口">
-        ScoutOps
+      <RouterLink to="/" class="account-brand p11-brand" aria-label="米兜智能选品应用入口">
+        <img class="midou-brand-mark" src="/midou-logo.jpg" alt="" /> 米兜智能选品
       </RouterLink>
       <span class="p11-current-page">个人中心</span>
       <RouterLink class="p11-scope-link" to="/select-context">组织与工作区</RouterLink>
       <SessionLogout :api-base-url="apiBaseUrl" />
     </header>
 
+    <aside class="midou-account-navigation" aria-label="工作区导航">
+      <nav class="midou-area-tabs">
+        <RouterLink to="/home">选品</RouterLink><RouterLink to="/org-admin">组织</RouterLink
+        ><RouterLink to="/platform-admin">平台</RouterLink>
+      </nav>
+      <RouterLink to="/home">选品工作台</RouterLink><RouterLink to="/trends">市场情报</RouterLink
+      ><RouterLink to="/opportunities">选品库</RouterLink
+      ><RouterLink to="/sourcing">1688 找货</RouterLink
+      ><RouterLink to="/notifications">通知中心</RouterLink
+      ><RouterLink to="/me" aria-current="page">个人中心</RouterLink>
+      <RouterLink class="midou-account-context" to="/select-context">切换组织与工作区</RouterLink>
+    </aside>
     <section class="p11-page-heading" aria-labelledby="p11-title">
+      <nav class="account-breadcrumb p11-crumb" aria-label="面包屑">
+        <RouterLink to="/">应用入口</RouterLink><span aria-hidden="true">/</span
+        ><span aria-current="page">个人中心</span>
+      </nav>
       <h1 id="p11-title">个人中心</h1>
     </section>
 
@@ -47,19 +65,16 @@ const activeSection = computed(() => {
         <b>{{ item.label }}</b>
         <small>{{ activeSection === item.key ? "当前分区" : item.description }}</small>
       </RouterLink>
-      <RouterLink class="p11-theme-link" to="/settings/theme" aria-label="外观偏好：主题与密度">
-        <b>外观偏好</b>
-        <small>主题与密度</small>
-      </RouterLink>
     </nav>
 
     <section class="account-content p11-content">
-      <nav class="account-breadcrumb p11-crumb" aria-label="面包屑">
-        <RouterLink to="/">应用入口</RouterLink>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">个人中心</span>
-      </nav>
-      <PersonalCenter :api-base-url="apiBaseUrl" :initial-section="activeSection" account-shell />
+      <ThemeStudio v-if="activeSection === 'appearance'" :api-base-url="apiBaseUrl" embedded />
+      <PersonalCenter
+        v-else
+        :api-base-url="apiBaseUrl"
+        :initial-section="activeSection"
+        account-shell
+      />
     </section>
   </main>
 </template>

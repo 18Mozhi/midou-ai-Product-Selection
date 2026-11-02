@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, onActivated, onDeactivated, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import type { DailySelectionProduction } from "@scoutops/contracts";
+import AppIcon from "./AppIcon.vue";
 import HomeAutomationOverview from "./HomeAutomationOverview.vue";
 import HomeSelectionResults from "./HomeSelectionResults.vue";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -187,114 +188,147 @@ onBeforeUnmount(deactivate);
       primary-label="重新读取"
       @primary="load"
     /><template v-else>
-      <header class="home-command-bar">
-        <div>
-          <span class="home-system-state" :data-state="selection?.state ?? 'unknown'">
-            <i></i>
-            {{
-              selection?.state === "running"
-                ? "采集调度已配置"
-                : selection?.state === "attention"
-                  ? "自动选品需检查"
-                  : selection?.state === "not_configured"
-                    ? "自动选品未配置"
-                    : "自动选品状态暂不可用"
-            }}
-          </span>
-          <h2>选品工作台</h2>
-        </div>
-        <nav>
-          <div class="home-live-status" role="status" aria-live="off">
-            <span>{{
-              refreshing ? "正在更新" : lastRefreshedAt ? `已更新 ${lastRefreshedAt}` : "等待数据"
-            }}</span>
-            <button type="button" :disabled="refreshing" @click="load(true)">刷新</button>
-          </div>
-          <RouterLink class="home-secondary-action so-action-secondary" to="/trends"
-            >市场情报</RouterLink
-          >
-          <RouterLink class="home-primary-action so-action-primary" to="/opportunities"
-            >查看选品库</RouterLink
-          >
-        </nav>
-      </header>
-      <div class="home-overview-panel">
-        <section class="home-daily-production" aria-label="每日选品产出">
-          <header>
-            <h3>今日选品产出</h3>
-            <span
-              >{{ selection?.daily_production?.date ?? "日期未读取" }} · 北京时间 · 当前工作区</span
-            >
+      <div class="midou-home-grid">
+        <div class="midou-home-main">
+          <header class="home-command-bar">
+            <div>
+              <span class="home-system-state" :data-state="selection?.state ?? 'unknown'">
+                <i></i>
+                {{
+                  selection?.state === "running"
+                    ? "采集调度已配置"
+                    : selection?.state === "attention"
+                      ? "自动选品需检查"
+                      : selection?.state === "not_configured"
+                        ? "自动选品未配置"
+                        : "自动选品状态暂不可用"
+                }}
+              </span>
+              <h2>选品工作台</h2>
+            </div>
+            <nav>
+              <div class="home-live-status" role="status" aria-live="off">
+                <span>{{
+                  refreshing
+                    ? "正在更新"
+                    : lastRefreshedAt
+                      ? `已更新 ${lastRefreshedAt}`
+                      : "等待数据"
+                }}</span>
+                <button type="button" :disabled="refreshing" @click="load(true)">刷新</button>
+              </div>
+              <RouterLink class="home-secondary-action so-action-secondary" to="/trends"
+                >市场情报</RouterLink
+              >
+              <RouterLink class="home-primary-action so-action-primary" to="/opportunities"
+                >查看选品库</RouterLink
+              >
+            </nav>
           </header>
-          <template v-if="selection?.daily_production">
-            <dl>
-              <div class="home-daily-completion">
-                <dt>完成整条流程</dt>
-                <dd v-if="selection.daily_production.completed_count != null">
-                  {{ selection.daily_production.completed_count }}
-                  <small>/ {{ selection.daily_production.target_minimum }} 目标</small>
-                </dd>
-                <dd v-else>未读取</dd>
-                <progress
-                  v-if="selection.daily_production.completed_count != null"
-                  :value="selection.daily_production.completed_count"
-                  :max="selection.daily_production.target_minimum"
-                  aria-label="今日完成整条选品流程目标进度"
-                ></progress>
-              </div>
-              <div>
-                <dt>新增主品 ASIN</dt>
-                <dd>{{ selection.daily_production.discovered_count }}</dd>
-              </div>
-              <div>
-                <dt>新增合格推荐</dt>
-                <dd>{{ selection.daily_production.qualified_count }}</dd>
-              </div>
-            </dl>
-            <p v-if="selection.daily_production.completed_count == null" class="home-read-hint">
-              完成流程数尚未读取，不使用新增数或推荐数代替。
-            </p>
-            <footer class="home-daily-meta">
-              <small>统计时间 {{ dailyTime(selection.daily_production.measured_at) }}</small>
-              <RouterLink to="/opportunities?view=completed">查看已完成分析（全部日期）</RouterLink>
-            </footer>
-          </template>
-          <p v-else>每日产出尚未读取，暂不显示数量或目标达成状态。</p>
-        </section>
-        <HomeAutomationOverview v-if="selection" :selection="selection" />
-      </div>
-
-      <section v-if="selection?.state === 'not_configured'" class="home-setup-callout">
-        <div>
-          <b>等待采集来源就绪</b
-          ><span>来源和采集调度由后台管理；可用来源开始采集后，系统会自动分析情报并寻找商品。</span>
-        </div>
-      </section>
-      <HomeSelectionResults
-        :key="`${data?.scope?.organization_id}:${data?.scope?.workspace_id}`"
-        :api-base-url="apiBaseUrl"
-        :capabilities="capabilities"
-        :selection="selection"
-        :items="decisionActions"
-        :completed-count="selection?.daily_production?.completed_count"
-        :refresh-version="resultRefreshVersion"
-      />
-
-      <details v-if="selection" class="home-truth">
-        <summary>数据说明</summary>
-        <div class="home-truth-body">
-          <p v-if="selection.daily_production">
-            目标包含低分、不推荐及明确标注利润未知的已分析商品；按首次核验完成的主品 ASIN
-            去重，重复刷新不重复计数。
-          </p>
-          <p v-if="selection.daily_production">当前快照不能证明全天不间断运行。</p>
-          <div class="home-truth-meta">
-            <span>当前工作区快照</span><span>生成时间 {{ date(data?.generated_at ?? null) }}</span
-            ><span>推荐需人工采纳</span>
+          <div class="home-overview-panel">
+            <section class="home-daily-production" aria-label="每日选品产出">
+              <header>
+                <h3>今日选品产出</h3>
+                <span
+                  >{{ selection?.daily_production?.date ?? "日期未读取" }} · 北京时间 ·
+                  当前工作区</span
+                >
+              </header>
+              <template v-if="selection?.daily_production">
+                <dl>
+                  <div class="home-daily-completion">
+                    <dt>完成整条流程</dt>
+                    <dd v-if="selection.daily_production.completed_count != null">
+                      {{ selection.daily_production.completed_count }}
+                      <small>/ {{ selection.daily_production.target_minimum }} 目标</small>
+                    </dd>
+                    <dd v-else>未读取</dd>
+                    <progress
+                      v-if="selection.daily_production.completed_count != null"
+                      :value="selection.daily_production.completed_count"
+                      :max="selection.daily_production.target_minimum"
+                      aria-label="今日完成整条选品流程目标进度"
+                    ></progress>
+                  </div>
+                  <div>
+                    <dt>新增主品 ASIN</dt>
+                    <dd>{{ selection.daily_production.discovered_count }}</dd>
+                  </div>
+                  <div>
+                    <dt>新增合格推荐</dt>
+                    <dd>{{ selection.daily_production.qualified_count }}</dd>
+                  </div>
+                </dl>
+                <p v-if="selection.daily_production.completed_count == null" class="home-read-hint">
+                  完成流程数尚未读取，不使用新增数或推荐数代替。
+                </p>
+                <footer class="home-daily-meta">
+                  <small>统计时间 {{ dailyTime(selection.daily_production.measured_at) }}</small>
+                  <RouterLink to="/opportunities?view=completed"
+                    >查看已完成分析（全部日期）</RouterLink
+                  >
+                </footer>
+              </template>
+              <p v-else>每日产出尚未读取，暂不显示数量或目标达成状态。</p>
+            </section>
+            <HomeAutomationOverview v-if="selection" :selection="selection" />
           </div>
+
+          <section v-if="selection?.state === 'not_configured'" class="home-setup-callout">
+            <div>
+              <b>等待采集来源就绪</b
+              ><span
+                >来源和采集调度由后台管理；可用来源开始采集后，系统会自动分析情报并寻找商品。</span
+              >
+            </div>
+          </section>
+          <HomeSelectionResults
+            :key="`${data?.scope?.organization_id}:${data?.scope?.workspace_id}`"
+            :api-base-url="apiBaseUrl"
+            :capabilities="capabilities"
+            :selection="selection"
+            :items="decisionActions"
+            :completed-count="selection?.daily_production?.completed_count"
+            :refresh-version="resultRefreshVersion"
+          />
+
+          <details v-if="selection" class="home-truth">
+            <summary>数据说明</summary>
+            <div class="home-truth-body">
+              <p v-if="selection.daily_production">
+                目标包含低分、不推荐及明确标注利润未知的已分析商品；按首次核验完成的主品 ASIN
+                去重，重复刷新不重复计数。
+              </p>
+              <p v-if="selection.daily_production">当前快照不能证明全天不间断运行。</p>
+              <div class="home-truth-meta">
+                <span>当前工作区快照</span
+                ><span>生成时间 {{ date(data?.generated_at ?? null) }}</span
+                ><span>推荐需人工采纳</span>
+              </div>
+            </div>
+          </details>
+          <p v-else class="home-truth-unknown">自动选品统计暂不可用。</p>
         </div>
-      </details>
-      <p v-else class="home-truth-unknown">自动选品统计暂不可用。</p>
+        <aside class="midou-home-quick" aria-label="待办与快捷入口">
+          <h3>待办与快捷入口</h3>
+          <RouterLink
+            v-if="capabilities.includes('opportunity:read')"
+            to="/opportunities?view=evidence_pending"
+            ><AppIcon name="list" />补齐证据
+            <b>{{ selection?.awaiting_evidence_count ?? "未读取" }}</b
+            ><AppIcon name="chevron"
+          /></RouterLink>
+          <RouterLink
+            v-if="capabilities.includes('opportunity:read')"
+            to="/opportunities?view=rule_candidates"
+            ><AppIcon name="box" />查看候选 <b>{{ selection?.rule_candidate_count ?? "未读取" }}</b
+            ><AppIcon name="chevron"
+          /></RouterLink>
+          <RouterLink v-if="capabilities.includes('trend:read')" to="/trends"
+            ><AppIcon name="trend" />市场情报<AppIcon name="chevron"
+          /></RouterLink>
+        </aside>
+      </div>
     </template>
   </section>
 </template>

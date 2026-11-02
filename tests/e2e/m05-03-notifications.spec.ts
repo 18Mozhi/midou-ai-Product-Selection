@@ -685,3 +685,25 @@ test("P26 preference failure announces and focuses its modal error without losin
   await error.getByText("查看本次操作编号").click();
   await expect(error.getByText("p26-preference-conflict")).toBeVisible();
 });
+
+test("midou reference notification layout keeps original workflow and preferences reachable", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/notifications");
+  await expect(page.locator(".notification-summary article")).toHaveCount(4);
+  await expect(page.locator(".notification-list > button svg")).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  if (process.env.MIDOU_SCREENSHOT_DIR)
+    await page.screenshot({
+      path:
+        process.env.MIDOU_SCREENSHOT_DIR + "/notifications-" + page.viewportSize()?.width + ".png",
+      fullPage: true,
+    });
+  await page.getByRole("button", { name: "通知偏好", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "通知偏好", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "取消", exact: true }).click();
+  await page.locator(".notification-list > button").click();
+  await expect(page.getByRole("dialog", { name: "消息详情", exact: true })).toBeVisible();
+});

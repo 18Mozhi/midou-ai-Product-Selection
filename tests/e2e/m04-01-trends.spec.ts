@@ -735,3 +735,51 @@ test("metric help opens without retired member styles or horizontal overflow", a
   await expect(help).not.toHaveAttribute("open");
   await expect(help.locator("ol")).toBeHidden();
 });
+
+test("midou reference list defaults closed, opens and closes detail without list reload", async ({
+  page,
+}) => {
+  await ready(page);
+  let reads = 0,
+    lists = 0;
+  page.on("request", (r) => {
+    const u = new URL(r.url());
+    if (u.pathname === "/api/v1/trends/" + topicId) reads++;
+    if (u.pathname === "/api/v1/trends") lists++;
+  });
+  await page.goto("/trends");
+  await expect(page.locator(".trend-list > button")).toHaveCount(1);
+  await expect(page.locator(".trend-detail")).toHaveCount(0);
+  expect(reads).toBe(0);
+  await expect(page.getByRole("link", { name: "米兜智能选品", exact: true })).toBeVisible();
+  expect(await page.getByRole("navigation", { name: "面包屑", exact: true }).count()).toBe(1);
+  await page.locator(".trend-list > button").first().click();
+  await expect(page.locator(".trend-detail")).toBeVisible();
+  expect(reads).toBe(1);
+  await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
+  await expect(page.locator(".trend-detail")).toHaveCount(0);
+  await expect(page.locator(".trend-list")).toBeVisible();
+  expect(lists).toBe(1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  if (process.env.MIDOU_SCREENSHOT_DIR)
+    await page.screenshot({
+      path:
+        process.env.MIDOU_SCREENSHOT_DIR + "/intelligence-" + page.viewportSize()?.width + ".png",
+      fullPage: true,
+    });
+});
+test("midou reference source icon fallback is bounded on image failures", async ({ page }) => {
+  await ready(page, [
+    {
+      ...topic,
+      image_url: "https://m.media-amazon.com/images/test.jpg",
+      source_url: "https://example.test/news",
+      source_name: "Example News",
+    },
+  ] as any);
+  await page.route("https://m.media-amazon.com/**", (r) => r.abort());
+  await page.route("https://example.test/favicon.ico", (r) => r.abort());
+  await page.goto("/trends");
+  await expect(page.locator(".trend-list .research-thumbnail svg")).toBeVisible();
+  await expect(page.locator(".trend-detail")).toHaveCount(0);
+});

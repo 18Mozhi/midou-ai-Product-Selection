@@ -11,6 +11,7 @@ import {
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import ResearchThumbnail from "./ResearchThumbnail.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import TrendDetailPanel from "./TrendDetailPanel.vue";
 import TrendRelatedProducts from "./TrendRelatedProducts.vue";
@@ -154,10 +155,13 @@ async function load() {
     const requestedTopic = typeof route.query.topic === "string" ? route.query.topic : "";
     const currentId =
       requestedTopic ||
-      topics.value.find((item) => item.id === selected.value?.id)?.id ||
-      topics.value[0]?.id;
+      (mobileDetailOpen.value
+        ? topics.value.find((item) => item.id === selected.value?.id)?.id
+        : undefined);
     if (!currentId) {
-      state.value = "empty";
+      selected.value = null;
+      mobileDetailOpen.value = false;
+      state.value = topics.value.length ? "ready" : "empty";
       return;
     }
     const detailController = new AbortController();
@@ -215,6 +219,8 @@ async function selectTopic(topic: Topic) {
 
 function returnToTopicList() {
   mobileDetailOpen.value = false;
+  selected.value = null;
+  void router.replace({ query: { ...route.query, topic: undefined } });
 }
 function syncFromRoute() {
   filters.q = typeof route.query.q === "string" ? route.query.q : "";
@@ -288,6 +294,8 @@ watch(
 watch(
   () => route.query.topic,
   async (topicId) => {
+    mobileDetailOpen.value = typeof topicId === "string";
+    if (!mobileDetailOpen.value) selected.value = null;
     const generation = ++topicDetailReadGeneration;
     topicDetailReadController?.abort();
     topicDetailReadController = null;
@@ -376,7 +384,6 @@ onBeforeUnmount(() => {
   <section class="trend-dashboard trend-dashboard--review">
     <header class="trend-market-heading">
       <div>
-        <p class="trend-section-label">商品研究 / 市场情报</p>
         <h2>
           市场情报 <span v-if="state === 'ready' || state === 'empty'">{{ total }} 个主题</span>
         </h2>
@@ -413,7 +420,11 @@ onBeforeUnmount(() => {
       :hide-secondary="true"
       @primary="recoverTopics"
     />
-    <div v-else class="trend-workbench" :class="{ 'is-mobile-detail-open': mobileDetailOpen }">
+    <div
+      v-else
+      class="trend-workbench"
+      :class="{ 'is-mobile-detail-open': mobileDetailOpen, 'is-detail-open': mobileDetailOpen }"
+    >
       <section id="trend-list" class="trend-list">
         <header>
           <div>
@@ -428,6 +439,11 @@ onBeforeUnmount(() => {
           :aria-pressed="selected?.id === topic.id"
           @click="selectTopic(topic)"
         >
+          <ResearchThumbnail
+            :src="topic.image_url"
+            :source-url="topic.source_url"
+            :alt="topic.title"
+          />
           <span class="topic-index" aria-hidden="true">{{ (page - 1) * 20 + index + 1 }}</span
           ><span
             ><strong>{{ topic.title }}</strong
@@ -437,7 +453,10 @@ onBeforeUnmount(() => {
             ><small
               >{{ topic.source_count }} 个来源 · 新鲜度
               {{ freshness(topic.source_fresh_at) }}</small
-            ><small>{{ confidenceLabel(topic) }}</small></span
+            ><small
+              >{{ confidenceLabel(topic) }} · {{ topic.language }} ·
+              {{ topic.source_name || "来源未提供" }}</small
+            ></span
           ><span class="topic-heat"
             ><b>{{ topic.heat.value }}</b
             ><small>条信号</small></span
@@ -451,7 +470,12 @@ onBeforeUnmount(() => {
           </button>
         </footer>
       </section>
-      <TrendDetailPanel v-if="selected" :detail="selected" :busy="busy" @back="returnToTopicList">
+      <TrendDetailPanel
+        v-if="selected && mobileDetailOpen"
+        :detail="selected"
+        :busy="busy"
+        @back="returnToTopicList"
+      >
         <template #related-products>
           <TrendRelatedProducts
             v-if="capabilities.includes('opportunity:read')"

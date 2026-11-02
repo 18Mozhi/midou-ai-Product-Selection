@@ -1110,7 +1110,7 @@ test("current P11 parent map covers refresh, section navigation and all child ev
       record.currentLine !== null &&
       record.claim.includes("PC-CENTER-CURRENT-"),
   );
-  assert.equal(candidates.length, 8);
+  assert.equal(candidates.length, 9);
   assert.deepEqual(
     [...new Set(currentRows.map((record) => record.candidateId))].sort(),
     candidates.map((candidate) => candidate.candidateId).sort(),
@@ -2342,13 +2342,22 @@ test("current P11 account shell maps brand, section and theme navigation sites",
       record.temporalScope !== "historical",
   );
   const expectedCurrentIds = [
-    "b832de42f3091adf.1",
+    "8aab273323c85fb8.1",
     "0f58e919e43acff5.1",
-    "257559b0b0a3692f.1",
+    "15b9757569cc17f2.1",
+    "c6782808e812207a.1",
+    "ad6cfd9c92df38fa.1",
+    "ae9623c4f5969ad6.1",
+    "a07717820a8cd567.1",
+    "1f19d2ec6d0c0efb.1",
+    "d4fefb061f17a1de.1",
+    "e1f5296c68058a15.1",
+    "7cdcfb8d3dad4f71.1",
+    "313f1b192c5bb9a4.1",
     "aa62e5d933afce98.1",
-    "2ea362a7d2584a88.1",
+    "257559b0b0a3692f.1",
   ].map((signature) => `${file}#${signature}`);
-  assert.equal(candidates.length, 5);
+  assert.equal(candidates.length, 14);
   assert.deepEqual(
     currentRows.map((record) => record.candidateId).sort(),
     expectedCurrentIds.sort(),

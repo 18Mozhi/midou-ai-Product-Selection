@@ -10606,6 +10606,21 @@ components:
           version,
         ]
       properties:
+        image_url:
+          {
+            type: string,
+            nullable: true,
+            description: Image from the latest same-scope signal's exact normalized record,
+          }
+        source_url:
+          {
+            type: string,
+            nullable: true,
+            description: Canonical URL of the same latest signal; used only for official-origin favicon fallback,
+          }
+        source_name:
+          { type: string, nullable: true, description: Publisher of the same latest signal }
+
         id: { type: string, format: uuid }
         title: { type: string, maxLength: 500 }
         category: { type: string, nullable: true, maxLength: 80 }
@@ -12005,3 +12020,9 @@ x-scoutops-lan-1688-item-detail:
   imageContextVersion: 1688-lan-image-detail-context-v1
   quoteIdentity: exact image offer and SKU; no cheapest or first SKU substitution
   runbook: docs/selection-lan-item-detail.md
+
+# 2026-11-03 display additions (no new writes/permissions): /trends list items add nullable
+# image_url, source_url, source_name from the latest same-scope signal and its exact
+# normalized evidence. /sourcing/searches and /sourcing/searches/{searchId} add nullable
+# image_url from that search task's same-scope original 1688 image-query target.
+# The reference image is not a refreshed primary observation or evidence of quotation.

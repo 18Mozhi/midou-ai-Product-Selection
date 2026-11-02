@@ -1,5 +1,17 @@
 import { expect, test, type Page } from "@playwright/test";
 
+test.beforeEach(async ({ page }) => {
+  await page.route("**/api/v1/auth/session-status", (route) =>
+    route.fulfill({
+      json: {
+        data: { authenticated: true },
+        request_id: "account-session-fixture",
+        trace_id: "account-session-fixture",
+      },
+    }),
+  );
+});
+
 const org = "00000000-0000-4000-8000-000000000221";
 const workspace = "00000000-0000-4000-8000-000000000222";
 const envelope = (data: unknown) => ({
@@ -158,4 +170,21 @@ test("M02-01 density is immediate, session-only and keyboard accessible", async 
   await expect(compact).toBeFocused();
   await expect(compact).toHaveAttribute("aria-checked", "true");
   await expect(page.locator("html")).toHaveAttribute("data-density", "compact");
+});
+
+test("midou reference appearance stays in the account shell and legacy bookmark redirects", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.goto("/settings/theme");
+  await expect(page).toHaveURL(/\/me\?section=appearance$/);
+  await expect(page.locator(".account-shell")).toBeVisible();
+  await expect(page.locator(".theme-c-topbar")).toHaveCount(0);
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  await expect(page.getByRole("heading", { name: "界面外观", exact: true })).toBeVisible();
+  if (process.env.MIDOU_SCREENSHOT_DIR)
+    await page.screenshot({
+      path: process.env.MIDOU_SCREENSHOT_DIR + "/appearance-" + page.viewportSize()?.width + ".png",
+      fullPage: true,
+    });
 });

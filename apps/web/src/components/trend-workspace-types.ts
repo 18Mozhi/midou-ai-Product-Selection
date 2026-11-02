@@ -2,6 +2,9 @@ export type TrendWorkspaceState =
   "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 
 export interface TrendTopic {
+  image_url?: string | null;
+  source_url?: string | null;
+  source_name?: string | null;
   id: string;
   title: string;
   category: string | null;
