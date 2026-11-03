@@ -649,6 +649,8 @@
   margin-inline: 0;
 }
 .theme-page--c.is-embedded .theme-c-pagehead {
+  min-height: 0;
+  align-items: center;
   padding: 12px 0 16px;
   gap: 16px;
 }
