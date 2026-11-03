@@ -68,7 +68,7 @@ test("saved theme and session density are applied before Vue mounts", async () =
   assert.match(theme, /localStorage\.getItem/);
   assert.match(main, /applyShellDensity\(false\)/);
   assert.match(theme, /densityIds = \["standard", "compact"\]/);
-  assert.match(theme, /applyShellDensity\(administrative: boolean\)/);
+  assert.match(theme, /applyShellDensity\(_administrative: boolean\)/);
   assert.match(studio, /label="页面密度"/);
   assert.match(shell, /applyShellDensity\(props\.shell !== "member"\)/);
   assert.match(shellTheme, /\/me\/ui-preferences/);
@@ -567,5 +567,30 @@ test("theme palette has no self references and material colors stay independent 
     if (path === "commerce-tokens.css") {
       assert.doesNotMatch(source, /--glass-[a-z-]+:\s*[^;]*var\(--so-/);
     }
+  }
+});
+
+test("route density follows user preference instead of the administrative shell", async () => {
+  const { readFile: readSource } = await import("node:fs/promises");
+  const { default: ts } = await import("typescript");
+  const source = await readSource("apps/web/src/design/theme.ts", "utf8");
+  const code = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.ESNext },
+  }).outputText;
+  const previous = globalThis.document;
+  globalThis.document = { documentElement: { dataset: {} } };
+  try {
+    const theme = await import(
+      `data:text/javascript;base64,${Buffer.from(code).toString("base64")}`
+    );
+    theme.applyDensity("standard");
+    theme.applyShellDensity(true);
+    assert.equal(document.documentElement.dataset.density, "standard");
+    theme.applyDensity("compact");
+    theme.applyShellDensity(false);
+    assert.equal(document.documentElement.dataset.density, "compact");
+  } finally {
+    if (previous === undefined) delete globalThis.document;
+    else globalThis.document = previous;
   }
 });

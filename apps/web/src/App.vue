@@ -114,8 +114,14 @@ const isNotFoundRoute = computed(
     v-else-if="DeploymentFoundation && selectedView === 'deployment'"
     :api-base-url="apiBase"
   />
-  <NavigationShell v-else-if="navigationShell" :shell="navigationShell" :api-base-url="apiBase" />
-  <AccountShell v-else-if="selectedView === 'account'" :api-base-url="apiBase" />
+  <NavigationShell
+    v-else-if="navigationShell || selectedView === 'account'"
+    :shell="navigationShell ?? 'member'"
+    :account="selectedView === 'account'"
+    :api-base-url="apiBase"
+  >
+    <AccountShell v-if="selectedView === 'account'" :api-base-url="apiBase" />
+  </NavigationShell>
   <component :is="UiStateShowcase" v-else-if="UiStateShowcase && isUiStatesView" />
   <NotFoundPage v-else-if="isNotFoundRoute" />
 </template>

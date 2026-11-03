@@ -49,8 +49,9 @@ export function applyDensity(density: DensityId) {
   document.documentElement.dataset.density = density;
 }
 
-export function applyShellDensity(administrative: boolean) {
-  document.documentElement.dataset.density = administrative ? "compact" : preferredDensity;
+export function applyShellDensity(_administrative: boolean) {
+  // Routing must not silently override the density explicitly selected by the user.
+  document.documentElement.dataset.density = preferredDensity;
 }
 
 export function applyCachedTheme() {
