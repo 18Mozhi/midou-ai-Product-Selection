@@ -183,3 +183,24 @@ test("midou reference appearance stays in the account shell and legacy bookmark 
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   await expect(page.getByRole("heading", { name: "界面外观", exact: true })).toBeVisible();
 });
+
+test("embedded appearance fills account content without a second main or oversized page title", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.goto("/me?section=appearance");
+  await expect(
+    page.getByRole("heading", { name: "界面外观", exact: true, level: 2 }),
+  ).toBeVisible();
+  await expect(page.locator("main")).toHaveCount(1);
+  const layout = await page.locator(".theme-c-settings").evaluate((el) => ({
+    width: el.getBoundingClientRect().width,
+    parentWidth: el.closest(".p11-content")!.getBoundingClientRect().width,
+    titleSize: getComputedStyle(document.querySelector(".theme-c-pagehead h2")!).fontSize,
+  }));
+  expect(Math.abs(layout.width - layout.parentWidth)).toBeLessThan(2);
+  expect(layout.titleSize).toBe("20px");
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
+});

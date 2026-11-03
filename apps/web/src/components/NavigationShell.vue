@@ -269,7 +269,7 @@ watch(
   (fullPath) => {
     closeDiscovery();
     menuOpen.value = false;
-    if (props.shell === "member") rememberMemberRoute(fullPath);
+    if (props.shell === "member" && !props.account) rememberMemberRoute(fullPath);
   },
   { immediate: true },
 );

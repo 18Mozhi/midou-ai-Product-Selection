@@ -137,7 +137,8 @@ onMounted(load);
 </script>
 
 <template>
-  <main
+  <component
+    :is="embedded ? 'section' : 'main'"
     class="theme-page theme-page--c"
     :class="{ 'is-embedded': embedded }"
     data-testid="theme-studio"
@@ -158,8 +159,8 @@ onMounted(load);
 
     <section class="theme-c-pagehead">
       <div>
-        <p class="theme-c-eyebrow">PREFERENCES <span>·</span> 外观偏好</p>
-        <h1>界面外观</h1>
+        <p v-if="!embedded" class="theme-c-eyebrow">PREFERENCES <span>·</span> 外观偏好</p>
+        <component :is="embedded ? 'h2' : 'h1'">界面外观</component>
         <p class="theme-c-intro">选择主题即时预览；确认保存后才会更新服务器偏好。</p>
       </div>
       <div class="theme-c-context">
@@ -280,7 +281,7 @@ onMounted(load);
       <section class="theme-c-settings" aria-label="外观设置">
         <div class="theme-c-section-head">
           <div>
-            <p class="theme-c-eyebrow">01 <span>·</span> COLOR</p>
+            <p v-if="!embedded" class="theme-c-eyebrow">01 <span>·</span> COLOR</p>
             <h2>主题</h2>
           </div>
         </div>
@@ -294,7 +295,7 @@ onMounted(load);
 
         <div class="theme-c-section-head theme-c-section-head--density">
           <div>
-            <p class="theme-c-eyebrow">02 <span>·</span> SPACING</p>
+            <p v-if="!embedded" class="theme-c-eyebrow">02 <span>·</span> SPACING</p>
             <h2>页面密度</h2>
           </div>
           <p>仅在当前会话生效，不会保存到服务器。</p>
@@ -333,5 +334,5 @@ onMounted(load);
         </footer>
       </section>
     </template>
-  </main>
+  </component>
 </template>

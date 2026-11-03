@@ -635,3 +635,56 @@
     animation: none;
   }
 }
+
+/* Embedded preferences are a normal account panel, not a second full-page canvas. */
+.theme-page--c.is-embedded
+  :is(
+    .theme-c-pagehead,
+    .theme-c-save-status,
+    .theme-c-settings,
+    .theme-c-boundary,
+    .theme-c-message
+  ) {
+  width: 100%;
+  margin-inline: 0;
+}
+.theme-page--c.is-embedded .theme-c-pagehead {
+  padding: 12px 0 16px;
+  gap: 16px;
+}
+.theme-page--c.is-embedded .theme-c-pagehead h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  line-height: 1.4;
+}
+.theme-page--c.is-embedded .theme-c-intro {
+  margin: 0;
+  font-size: 13px;
+}
+.theme-page--c.is-embedded .theme-c-settings {
+  padding: 18px 20px 0;
+  border-radius: 12px;
+}
+.theme-page--c.is-embedded .theme-c-section-head h2 {
+  font-size: 16px;
+}
+.theme-page--c.is-embedded .theme-c-save-status {
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+.theme-page--c.is-embedded .theme-c-save-status :is(p, .theme-c-save-status__label) {
+  font-size: 13px;
+}
+.theme-page--c.is-embedded .theme-c-actions {
+  margin-inline: -20px;
+  padding-inline: 20px;
+}
+@media (max-width: 600px) {
+  .theme-page--c.is-embedded .theme-c-settings {
+    padding-inline: 14px;
+  }
+  .theme-page--c.is-embedded .theme-c-actions {
+    margin-inline: -14px;
+    padding-inline: 14px;
+  }
+}
