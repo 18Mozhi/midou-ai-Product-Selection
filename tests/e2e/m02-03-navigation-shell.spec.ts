@@ -844,6 +844,18 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
     if (shell === "member") {
       await expect(page.locator(".home-command-bar")).toBeVisible();
       await expect(page.locator(".home-daily-production dl > div")).toHaveCount(3);
+      const iconContentWidth = await page
+        .locator(".home-daily-production dt svg")
+        .first()
+        .evaluate((svg) => {
+          const style = getComputedStyle(svg);
+          return (
+            svg.getBoundingClientRect().width -
+            parseFloat(style.paddingLeft) -
+            parseFloat(style.paddingRight)
+          );
+        });
+      expect(iconContentWidth).toBeGreaterThanOrEqual(18);
       await expect(page.getByRole("region", { name: "选品任务流程", exact: true })).toBeVisible();
       await expect(page.locator(".midou-home-flow li")).toHaveCount(5);
       await expect(page.locator(".midou-member-utility a")).toHaveCount(2);

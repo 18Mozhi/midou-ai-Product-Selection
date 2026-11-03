@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import ThemeStudio from "./ThemeStudio.vue";
 import PersonalCenter from "./PersonalCenter.vue";
 import SessionLogout from "./SessionLogout.vue";
+import AppIcon from "./AppIcon.vue";
 
 defineProps<{ apiBaseUrl: string }>();
 
@@ -39,11 +40,12 @@ const activeSection = computed(() => {
         <RouterLink to="/home">选品</RouterLink><RouterLink to="/org-admin">组织</RouterLink
         ><RouterLink to="/platform-admin">平台</RouterLink>
       </nav>
-      <RouterLink to="/home">选品工作台</RouterLink><RouterLink to="/trends">市场情报</RouterLink
-      ><RouterLink to="/opportunities">选品库</RouterLink
-      ><RouterLink to="/sourcing">1688 找货</RouterLink
-      ><RouterLink to="/notifications">通知中心</RouterLink
-      ><RouterLink to="/me" aria-current="page">个人中心</RouterLink>
+      <RouterLink to="/home"><AppIcon name="home" />选品工作台</RouterLink
+      ><RouterLink to="/trends"><AppIcon name="trend" />市场情报</RouterLink
+      ><RouterLink to="/opportunities"><AppIcon name="diamond" />选品库</RouterLink
+      ><RouterLink to="/sourcing"><AppIcon name="box" />1688 找货</RouterLink
+      ><RouterLink to="/notifications"><AppIcon name="bell" />通知中心</RouterLink
+      ><RouterLink to="/me" aria-current="page"><AppIcon name="person" />个人中心</RouterLink>
       <RouterLink class="midou-account-context" to="/select-context">切换组织与工作区</RouterLink>
     </aside>
     <section class="p11-page-heading" aria-labelledby="p11-title">
