@@ -998,8 +998,9 @@ html[data-design="commerce"] #app .home-daily-production dt svg {
   position: absolute;
   left: 20px;
   top: 24px;
-  width: 24px;
-  height: 24px;
+  width: 44px;
+  height: 44px;
+  box-sizing: border-box;
   padding: 10px;
   border-radius: 10px;
   background: var(--so-primary-soft);
@@ -1118,5 +1119,75 @@ html[data-design="commerce"] #app .organization-profile-editor {
     padding: 12px;
     grid-template-columns: 24px minmax(0, 1fr);
     column-gap: 6px;
+  }
+}
+
+/* Follow-up against real deployed pages: retain controls without oversized empty rows. */
+html[data-design="commerce"] #app .home-daily-production > header {
+  display: none;
+}
+html[data-design="commerce"] #app .home-library-details {
+  position: relative;
+}
+html[data-design="commerce"] #app .home-runtime-details:not([open]) {
+  position: absolute;
+  top: 12px;
+  right: 74px;
+  border: 0;
+  padding: 0;
+}
+html[data-design="commerce"] #app .home-status-facts > a {
+  padding-block: 10px;
+}
+html[data-design="commerce"] #app .midou-home-quick {
+  min-height: calc(100dvh - 140px);
+}
+html[data-design="commerce"] #app .midou-notification-filters {
+  margin: 16px 0;
+}
+html[data-design="commerce"] #app .midou-notification-filters button {
+  border: 0;
+  border-radius: 8px;
+}
+html[data-design="commerce"]
+  #app
+  :is(
+    .org-admin-center--profile-review > .org-admin-hero h1,
+    .platform-dashboard > .platform-page-header h2
+  ) {
+  font-size: 24px;
+  line-height: 1.35;
+}
+html[data-design="commerce"] #app .midou-account-navigation > a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+html[data-design="commerce"] #app .midou-profile-grid .p11-form {
+  gap: 14px 24px;
+}
+html[data-design="commerce"] #app .midou-profile-grid .p11-form textarea {
+  min-height: 54px;
+}
+@media (min-width: 1051px) {
+  html[data-design="commerce"] #app .account-shell .p11-center {
+    position: relative;
+  }
+  html[data-design="commerce"] #app .account-shell .p11-center-head {
+    position: absolute;
+    top: -56px;
+    right: 0;
+  }
+}
+@media (max-width: 1150px) {
+  html[data-design="commerce"] #app .midou-home-quick {
+    min-height: 0;
+  }
+}
+@media (max-width: 640px) {
+  html[data-design="commerce"] #app .home-runtime-details:not([open]) {
+    position: static;
+    padding: 8px 12px;
+    border-top: 1px solid var(--so-border);
   }
 }
