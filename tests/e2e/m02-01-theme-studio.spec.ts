@@ -197,9 +197,11 @@ test("embedded appearance fills account content without a second main or oversiz
     width: el.getBoundingClientRect().width,
     parentWidth: el.closest(".p11-content")!.getBoundingClientRect().width,
     titleSize: getComputedStyle(document.querySelector(".theme-c-pagehead h2")!).fontSize,
+    headMinHeight: getComputedStyle(document.querySelector(".theme-c-pagehead")!).minHeight,
   }));
   expect(Math.abs(layout.width - layout.parentWidth)).toBeLessThan(2);
   expect(layout.titleSize).toBe("20px");
+  expect(layout.headMinHeight).toBe("0px");
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);
