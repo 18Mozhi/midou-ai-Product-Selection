@@ -844,12 +844,19 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
     if (shell === "member") {
       await expect(page.locator(".home-command-bar")).toBeVisible();
       await expect(page.locator(".home-daily-production dl > div")).toHaveCount(3);
+      await expect(page.getByRole("region", { name: "选品任务流程", exact: true })).toBeVisible();
+      await expect(page.locator(".midou-home-flow li")).toHaveCount(5);
+      await expect(page.locator(".midou-member-utility a")).toHaveCount(2);
       await expect(
         page.locator(".home-quiet-empty").getByText("暂无已完成分析的商品", { exact: true }),
       ).toBeVisible();
-    } else if (shell === "organization_admin")
+    } else if (shell === "organization_admin") {
       await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
-    else await expect(page.locator(".platform-facts")).toBeVisible();
+      await expect(
+        page.getByRole("complementary", { name: "治理快捷入口与组织状态" }),
+      ).toBeVisible();
+      await expect(page.locator(".midou-governance-side a")).toHaveCount(4);
+    } else await expect(page.locator(".platform-facts")).toBeVisible();
     await expect(page.locator(".role-brand")).toHaveAccessibleName("米兜智能选品");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,

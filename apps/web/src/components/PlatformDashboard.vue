@@ -232,7 +232,7 @@ onUnmounted(() => {
     aria-live="polite"
     :aria-busy="pending"
   >
-    <PlatformPageHeader title="平台运行概览">
+    <PlatformPageHeader title="平台运行概览" description="平台整体运行状态与采集来源健康情况一览">
       <label
         >查看范围<select v-model="windowCode" :disabled="pending" @change="changeWindow">
           <option value="15m">最近 15 分钟</option>

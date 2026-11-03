@@ -95,7 +95,14 @@ test("sourcing list projects the original same-task image without product expans
       assert.match(sql, /image_query.organization_id=s.organization_id/);
       assert.match(sql, /image_query.workspace_id=s.workspace_id/);
       assert.match(sql, /image_provider.code='1688_search'/);
-      assert.deepEqual(args, [scope.organizationId, scope.workspaceId]);
+      assert.deepEqual(args, [
+        scope.organizationId,
+        scope.workspaceId,
+        scope.organizationId,
+        scope.workspaceId,
+      ]);
+      assert.match(sql, /CONVERT\(id USING utf8mb4\) COLLATE utf8mb4_unicode_ci lookup_ref/);
+      assert.match(sql, /s.input_ref=o.lookup_ref/);
       return [
         [
           {

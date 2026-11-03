@@ -110,7 +110,7 @@ const sectionItems = [
             <span class="midou-profile-avatar">{{
               (center.profile.value.display_name || center.profile.value.email).slice(0, 2)
             }}</span>
-            <strong class="midou-profile-name">{{ center.profile.value.display_name }}</strong>
+            <h2 class="midou-profile-name">{{ center.profile.value.display_name }}</h2>
             <p>{{ center.profile.value.email }}</p>
             <small>{{
               center.profile.value.email_verified_at ? "邮箱已验证" : "邮箱尚未验证"

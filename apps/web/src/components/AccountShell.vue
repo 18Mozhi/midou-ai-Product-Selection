@@ -52,6 +52,7 @@ const activeSection = computed(() => {
         ><span aria-current="page">个人中心</span>
       </nav>
       <h1 id="p11-title">个人中心</h1>
+      <p class="midou-account-description">管理你的账号信息、权限、安全与偏好设置。</p>
     </section>
 
     <nav class="account-sidebar p11-directory" aria-label="个人中心分区">
