@@ -660,7 +660,7 @@ watch(
           ><strong>{{ item.title }}</strong
           ><small>{{ displayBody(item) }}</small></span
         ><em>{{ time(item.created_at) }}</em
-        ><b>
+        ><b :data-workflow="item.workflow_status">
           <small>{{ item.read_at ? "已读" : "未读" }} · </small
           >{{ statusLabel(item.workflow_status) }}
           <small v-if="item.group_count > 1">

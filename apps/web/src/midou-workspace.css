@@ -237,11 +237,12 @@ html[data-design="commerce"] #app .notification-list {
   border: 0;
 }
 html[data-design="commerce"] #app .notification-list > button {
+  position: relative;
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr) auto auto;
   gap: 18px;
   align-items: center;
-  padding: 18px;
+  padding: 18px 18px 18px 30px;
   border: 1px solid var(--so-border);
   border-radius: 12px;
   background: var(--so-panel);
@@ -250,7 +251,24 @@ html[data-design="commerce"] #app .notification-list > button {
   text-align: left;
 }
 html[data-design="commerce"] #app .notification-list > button.unread {
-  border-left: 3px solid var(--so-primary);
+  border-left: 1px solid var(--so-border);
+}
+html[data-design="commerce"] #app .notification-list > button.unread::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: calc(50% - 3px);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--so-info);
+}
+html[data-design="commerce"] #app .notification-list > button:hover {
+  background: var(--so-panel-soft);
+}
+html[data-design="commerce"] #app .notification-list > button:focus-visible {
+  outline: 2px solid var(--so-focus);
+  outline-offset: 2px;
 }
 html[data-design="commerce"] #app .notification-list i {
   display: grid;
@@ -271,14 +289,27 @@ html[data-design="commerce"] #app .notification-list small {
   line-height: 1.6;
 }
 html[data-design="commerce"] #app .notification-list em {
+  font-weight: 400;
   font-size: 13px;
   font-style: normal;
   color: var(--so-text-muted);
 }
 html[data-design="commerce"] #app .notification-list > button > b {
+  justify-self: start;
+  padding: 4px 10px;
+  border-radius: 6px;
   font-size: 13px;
   color: var(--so-warning);
+  background: var(--so-warning-soft);
   font-weight: 500;
+}
+html[data-design="commerce"] #app .notification-list > button > b[data-workflow="in_progress"] {
+  color: var(--so-info);
+  background: var(--so-info-soft);
+}
+html[data-design="commerce"] #app .notification-list > button > b[data-workflow="closed"] {
+  color: var(--so-success);
+  background: var(--so-success-soft);
 }
 html[data-design="commerce"] #app .theme-page.is-embedded {
   width: 100%;
