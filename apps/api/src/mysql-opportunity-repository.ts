@@ -1,5 +1,6 @@
 import {
   opportunityRecommendedListSourceSql,
+  opportunityPendingListSourceSql,
   reuseRecommendedFilterIdentitySql,
 } from "./opportunity-recommended-list-scope.js";
 import {
@@ -192,11 +193,17 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       values.push(input.ownerId);
     }
     const recommended = input.selectionView === "recommended",
-      source = recommended ? opportunityRecommendedListSourceSql : "opportunities o",
-      sql = recommended
+      pendingIdentity =
+        recommended || ["rule_candidates", "evidence_pending"].includes(input.selectionView ?? ""),
+      source = recommended
+        ? opportunityRecommendedListSourceSql
+        : pendingIdentity
+          ? opportunityPendingListSourceSql
+          : "opportunities o",
+      sql = pendingIdentity
         ? reuseRecommendedFilterIdentitySql(where.join(" AND "))
         : where.join(" AND "),
-      filterValues = recommended
+      filterValues = pendingIdentity
         ? [
             input.organizationId,
             input.workspaceId,
@@ -213,15 +220,14 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       // rather than once per candidate evidence record. The outer sort preserves paging order.
       rowsRead = this.pool.query<RowDataPacket[]>(
         sqlText(
-          `SELECT o.*,${opportunityListPrimaryRecordsSql},${reuseListPrimaryIdentitySql(opportunityCountsSql)},${opportunityLifecycleSql},${opportunityListSelectionProjectionSql}`,
-          `FROM (SELECT o.*,${opportunityListPrimaryAsinSql} primary_fact_asin FROM (SELECT o.* FROM ${source} WHERE ${sql} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
+          `SELECT o.*,${reuseListPrimaryIdentitySql(opportunityListPrimaryRecordsSql)},${reuseListPrimaryIdentitySql(opportunityCountsSql)},${opportunityLifecycleSql},${opportunityListSelectionProjectionSql}`,
+          `FROM (SELECT o.*,${pendingIdentity ? "o.filter_primary_asin" : opportunityListPrimaryAsinSql} primary_fact_asin FROM (SELECT o.* FROM ${source} WHERE ${sql} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
           "ORDER BY o.updated_at DESC,o.id DESC",
         ),
         [
           input.organizationId,
           input.workspaceId,
-          input.organizationId,
-          input.workspaceId,
+          ...(pendingIdentity ? [] : [input.organizationId, input.workspaceId]),
           ...filterValues,
           input.pageSize,
           (input.page - 1) * input.pageSize,

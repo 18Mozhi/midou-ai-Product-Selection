@@ -692,7 +692,9 @@ test("midou reference notification layout keeps original workflow and preference
   await setup(page);
   await page.goto("/notifications");
   await expect(page.locator(".notification-summary article")).toHaveCount(4);
-  await expect(page.locator(".notification-list > button svg")).toBeVisible();
+  await expect(page.locator(".notification-list > button > i svg")).toBeVisible();
+  await expect(page.locator(".midou-notification-filters > nav")).toHaveCount(2);
+  await expect(page.locator(".midou-notification-open")).toContainText("查看记录");
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 

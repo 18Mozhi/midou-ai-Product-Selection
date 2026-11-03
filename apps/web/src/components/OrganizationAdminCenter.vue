@@ -36,6 +36,7 @@ const OrganizationWorkspacePanel = defineAsyncComponent(
   () => import("./OrganizationWorkspacePanel.vue"),
 );
 import "../organization-admin.css";
+import AppIcon from "./AppIcon.vue";
 type OrganizationAuditFilters = {
   action: string;
   outcome: string;
@@ -1508,6 +1509,62 @@ onMounted(() => void load());
             ><button :disabled="busy">{{ busy ? "正在保存…" : "保存" }}</button>
           </fieldset>
         </form>
+        <aside class="midou-governance-side" aria-label="治理快捷入口与组织状态">
+          <section>
+            <h3>治理快捷入口</h3>
+            <RouterLink
+              v-for="entry in [
+                {
+                  path: '/org-admin/members',
+                  icon: 'users',
+                  title: '成员与邀请',
+                  note: '邀请成员加入，管理成员状态与信息',
+                },
+                {
+                  path: '/org-admin/roles',
+                  icon: 'shield',
+                  title: '角色与权限',
+                  note: '配置角色权限，管理成员访问范围',
+                },
+                {
+                  path: '/org-admin/workspaces',
+                  icon: 'building',
+                  title: '工作区管理',
+                  note: '管理工作区，划分业务与协作范围',
+                },
+                {
+                  path: '/org-admin/approvals',
+                  icon: 'list',
+                  title: '审批模板',
+                  note: '配置审批模板与流程',
+                },
+              ]"
+              :key="entry.path"
+              :to="entry.path"
+              ><AppIcon :name="entry.icon" /><span
+                ><b>{{ entry.title }}</b
+                ><small>{{ entry.note }}</small></span
+              ><AppIcon name="chevron"
+            /></RouterLink>
+          </section>
+          <section>
+            <h3>组织状态</h3>
+            <dl>
+              <div>
+                <dt>组织使用状态</dt>
+                <dd>{{ statusText(data?.status) }}</dd>
+              </div>
+              <div>
+                <dt>数据保留天数</dt>
+                <dd>{{ data?.data_retention_days }} 天</dd>
+              </div>
+              <div>
+                <dt>默认工作区</dt>
+                <dd>{{ workspaceName(data?.default_workspace_id) }}</dd>
+              </div>
+            </dl>
+          </section>
+        </aside>
       </section>
       <OrganizationMemberPanel
         v-else-if="view === 'members'"

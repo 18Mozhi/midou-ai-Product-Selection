@@ -14,6 +14,15 @@ export const opportunityRecommendedListSourceSql =
   opportunityRecommendationFactsSql +
   " LIMIT 18446744073709551615) o LIMIT 18446744073709551615) o";
 
+/** Candidate and missing-evidence views share pending scope, not recommendation facts. */
+export const opportunityPendingListSourceSql =
+  "(SELECT o.*," +
+  opportunityListPrimaryAsinSql +
+  " filter_primary_asin FROM " +
+  "(SELECT o.* FROM opportunities o WHERE o.organization_id=? AND o.workspace_id=? " +
+  "AND o.decision_status='pending' LIMIT 18446744073709551615) o " +
+  "LIMIT 18446744073709551615) o";
+
 /** Fixed internal predicate only: each repeated identity retains exactly the same proof. */
 export const reuseRecommendedFilterIdentitySql = (sql: string) =>
   sql.replaceAll(opportunityPrimaryAsinSql, "o.filter_primary_asin");

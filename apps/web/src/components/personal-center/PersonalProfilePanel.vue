@@ -27,7 +27,7 @@ function update(field: ProfileField, event: Event) {
   <form class="p11-panel p11-form" @submit.prevent="emit('submit')">
     <header class="p11-panel-heading">
       <p>基本资料</p>
-      <h3>可保存的账号资料</h3>
+      <h3>基本资料</h3>
       <span>邮箱暂不支持修改。</span>
     </header>
 

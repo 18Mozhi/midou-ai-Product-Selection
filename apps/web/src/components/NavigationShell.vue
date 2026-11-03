@@ -392,6 +392,14 @@ onUnmounted(() => {
           <AppIcon :name="item.icon" :size="18" /><span>{{ item.label }}</span>
         </RouterLink>
       </section>
+      <section v-if="shell === 'member'" class="midou-member-utility">
+        <RouterLink
+          to="/notifications"
+          :aria-current="routePath === '/notifications' ? 'page' : undefined"
+          ><AppIcon name="bell" :size="18" />通知中心</RouterLink
+        >
+        <RouterLink to="/me"><AppIcon name="person" :size="18" />个人中心</RouterLink>
+      </section>
       <footer>
         <RouterLink v-if="shell === 'member'" to="/select-context" class="commerce-workspace-switch"
           ><AppIcon name="box" :size="18" /><span

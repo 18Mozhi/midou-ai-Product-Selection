@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   opportunityRecommendedListSourceSql,
+  opportunityPendingListSourceSql,
   reuseRecommendedFilterIdentitySql,
 } from "../../apps/api/dist/opportunity-recommended-list-scope.js";
 import {
@@ -66,7 +67,7 @@ test("count and page retain the entire original eligibility filter with one scop
     ),
   );
   assert.deepEqual(count.params, ["org", "ws", "org", "ws", "org", "ws"]);
-  assert.deepEqual(page.params.slice(4, -2), count.params);
+  assert.deepEqual(page.params.slice(2, -2), count.params);
   assert.deepEqual(page.params.slice(-2), [20, 20]);
   for (const q of [count, page])
     assert.equal((q.sql.replace(/'(?:''|[^'])*'/g, "").match(/\?/g) || []).length, q.params.length);
@@ -86,11 +87,29 @@ test("explicit archived status and bound filters remain outer predicates instead
   assert.ok(count.params.includes("%quoted ' value%"));
   assert.ok(!count.sql.includes("quoted ' value"));
 });
-for (const selectionView of [undefined, "completed", "all", "rule_candidates", "evidence_pending"])
+for (const selectionView of [undefined, "completed", "all"])
   test(`other view stays outside recommended materialization: ${selectionView}`, async () => {
     const [count] = await opportunityListSql({ ...scope, selectionView });
     assert.ok(!count.sql.includes("filter_primary_asin"));
     assert.deepEqual(count.params, ["org", "ws"]);
+  });
+
+for (const selectionView of ["rule_candidates", "evidence_pending"])
+  test(`pending view reuses identity without imposing recommendation facts: ${selectionView}`, async () => {
+    const [count, page] = await opportunityListSql({ ...scope, selectionView });
+    assert.ok(
+      count.sql.startsWith("SELECT COUNT(*) total FROM " + opportunityPendingListSourceSql),
+    );
+    assert.ok(!opportunityPendingListSourceSql.includes(opportunityRecommendationFactsSql));
+    assert.deepEqual(count.params, ["org", "ws", "org", "ws", "org", "ws"]);
+    for (const query of [count, page])
+      assert.equal(
+        (query.sql.replace(/'(?:''|[^'])*'/g, "").match(/\?/g) || []).length,
+        query.params.length,
+      );
+    assert.ok(
+      !page.sql.includes("AND BINARY UPPER(c.external_id)=BINARY " + opportunityPrimaryAsinSql),
+    );
   });
 test("identity substitution preserves literal regexp suffixes instead of expanding JavaScript replacement tokens", () => {
   const restored = reuseRecommendedFilterIdentitySql(opportunityRecommendedSql).replaceAll(

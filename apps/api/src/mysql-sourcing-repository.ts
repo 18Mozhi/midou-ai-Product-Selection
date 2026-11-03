@@ -14,12 +14,14 @@ export class MySqlSourcingRepository implements SourcingRepository {
   async list(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT s.*,(SELECT JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) FROM collection_subqueries image_query JOIN providers image_provider ON image_provider.id=image_query.provider_id AND image_provider.code='1688_search' WHERE image_query.task_id=s.collection_task_id AND image_query.organization_id=s.organization_id AND image_query.workspace_id=s.workspace_id AND s.input_type='opportunity' AND JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) LIKE 'https://%' ORDER BY image_query.ordinal LIMIT 1) image_url,CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE " +
-        "s.input_ref END display_name FROM sourcing_searches s LEFT JOIN opportunities o ON s.input_type='opportunity' " +
-        "AND s.input_ref=CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_unicode_ci AND o.organization_id=s.organization_id " +
+        "s.input_ref END display_name FROM sourcing_searches s LEFT JOIN " +
+        "(SELECT id,name,organization_id,workspace_id,lifecycle_status,CONVERT(id USING utf8mb4) COLLATE utf8mb4_unicode_ci lookup_ref " +
+        "FROM opportunities WHERE organization_id=? AND workspace_id=? LIMIT 18446744073709551615) o ON s.input_type='opportunity' " +
+        "AND s.input_ref=o.lookup_ref AND o.organization_id=s.organization_id " +
         "AND o.workspace_id=s.workspace_id AND o.lifecycle_status<>'deleted' WHERE s.organization_id=? " +
         "AND s.workspace_id=? AND s.deleted_at IS NULL ORDER BY s.created_at DESC," +
         "s.id DESC",
-      [i.organizationId, i.workspaceId],
+      [i.organizationId, i.workspaceId, i.organizationId, i.workspaceId],
     );
     return rows.map((r) => this.search(r));
   }

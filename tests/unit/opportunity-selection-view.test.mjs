@@ -51,7 +51,12 @@ test("evidence-pending view retains products without a verified primary identity
   for (const { sql } of statements) {
     assert.doesNotMatch(sql, /orm_view/);
     assert.match(sql, /o\.decision_status='pending'/);
-    assert.match(sql, /NOT \(\(SELECT UPPER/);
+    assert.match(sql, /NOT \(o\.filter_primary_asin IS NOT NULL\)/);
+    assert.match(
+      sql,
+      /ORDER BY l_primary\.created_at,n_primary\.created_at DESC LIMIT 1\) filter_primary_asin/,
+    );
+    assert.match(sql, /n_primary_current\.status='active'/);
   }
 });
 

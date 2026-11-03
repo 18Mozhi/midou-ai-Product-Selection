@@ -237,7 +237,7 @@ onBeforeUnmount(deactivate);
               <template v-if="selection?.daily_production">
                 <dl>
                   <div class="home-daily-completion">
-                    <dt>完成整条流程</dt>
+                    <dt><AppIcon name="target" />完成整条流程</dt>
                     <dd v-if="selection.daily_production.completed_count != null">
                       {{ selection.daily_production.completed_count }}
                       <small>/ {{ selection.daily_production.target_minimum }} 目标</small>
@@ -251,11 +251,11 @@ onBeforeUnmount(deactivate);
                     ></progress>
                   </div>
                   <div>
-                    <dt>新增主品 ASIN</dt>
+                    <dt><AppIcon name="diamond" />新增主品 ASIN</dt>
                     <dd>{{ selection.daily_production.discovered_count }}</dd>
                   </div>
                   <div>
-                    <dt>新增合格推荐</dt>
+                    <dt><AppIcon name="shield" />新增合格推荐</dt>
                     <dd>{{ selection.daily_production.qualified_count }}</dd>
                   </div>
                 </dl>
@@ -281,6 +281,27 @@ onBeforeUnmount(deactivate);
                 >来源和采集调度由后台管理；可用来源开始采集后，系统会自动分析情报并寻找商品。</span
               >
             </div>
+          </section>
+          <section class="midou-home-flow" aria-label="选品任务流程">
+            <header>
+              <h3>选品任务流程</h3>
+              <span>按步骤查看选品证据，不代表已完成</span>
+            </header>
+            <ol>
+              <li
+                v-for="(step, index) in [
+                  { name: '情报发现', route: '/trends' },
+                  { name: '主品识别', route: '/opportunities?view=rule_candidates' },
+                  { name: '竞品分析', route: '/opportunities?view=rule_candidates' },
+                  { name: '1688匹配', route: '/sourcing' },
+                  { name: '综合评估', route: '/opportunities?view=completed' },
+                ]"
+                :key="step.name"
+              >
+                <b>{{ index + 1 }}</b
+                ><RouterLink :to="step.route">{{ step.name }}<small>查看进度</small></RouterLink>
+              </li>
+            </ol>
           </section>
           <HomeSelectionResults
             :key="`${data?.scope?.organization_id}:${data?.scope?.workspace_id}`"

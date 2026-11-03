@@ -5,6 +5,7 @@ import {
   opportunityListPrimaryRecordsSql,
   opportunityListSelectionProjectionSql,
   reuseListPrimaryIdentitySql,
+  scopedActiveVersionsSql,
 } from "../../apps/api/dist/opportunity-list-projection.js";
 import { opportunityPrimaryRecordsSql } from "../../apps/api/dist/opportunity-primary-product.js";
 import {
@@ -13,9 +14,36 @@ import {
 } from "../../apps/api/dist/opportunity-selection-policy.js";
 import { opportunityListSql } from "../fixtures/opportunity-list-sql.mjs";
 
-const active = (alias) =>
-  "(SELECT active_version.* FROM normalized_records active_version FORCE INDEX (idx_normalized_scope_status) WHERE active_version.organization_id=? AND active_version.workspace_id=? AND active_version.status='active' LIMIT 18446744073709551615) " +
-  alias;
+const active = scopedActiveVersionsSql;
+
+test("materialized payload contains every referenced fact but no unrelated review bodies", () => {
+  const facts = active("n"),
+    identity = active("n_primary_current");
+  assert.doesNotMatch(facts, /active_version\.\*|reviews|description/);
+  for (const field of [
+    "asin",
+    "canonical_url",
+    "price",
+    "currency",
+    "rating_value",
+    "review_count",
+    "image_url",
+    "sales_badge_text",
+    "sales_badge_quantity_lower_bound",
+    "sales_badge_period",
+    "sponsored",
+    "best_seller_rank",
+    "best_seller_rank_text",
+  ])
+    assert.ok(facts.includes(`JSON_EXTRACT(active_version.payload_json,'$.${field}')`));
+  assert.ok(identity.includes("'$.asin'"));
+  assert.ok(identity.includes("'$.canonical_url'"));
+  assert.ok(!identity.includes("'$.price'"));
+  for (const sql of [facts, identity]) {
+    assert.match(sql, /organization_id=\? AND active_version.workspace_id=\?/);
+    assert.match(sql, /status='active' LIMIT 18446744073709551615/);
+  }
+});
 
 test("list identity changes join strategy without removing any evidence, current-version or ordering proof", () => {
   const restored = opportunityListPrimaryAsinSql
@@ -77,20 +105,29 @@ for (const selectionView of ["all", "recommended", "rule_candidates", "evidence_
       ownerId: "owner-a",
     };
     const [count, rows] = await opportunityListSql(input);
-    assert.deepEqual(rows.params.slice(0, 4), [
-      input.organizationId,
-      input.workspaceId,
-      input.organizationId,
-      input.workspaceId,
-    ]);
-    assert.deepEqual(rows.params.slice(4, -2), count.params);
+    const pendingIdentity = ["recommended", "rule_candidates", "evidence_pending"].includes(
+      selectionView,
+    );
+    const prefix = pendingIdentity ? 2 : 4;
+    assert.deepEqual(
+      rows.params.slice(0, prefix),
+      pendingIdentity
+        ? [input.organizationId, input.workspaceId]
+        : [input.organizationId, input.workspaceId, input.organizationId, input.workspaceId],
+    );
+    assert.deepEqual(rows.params.slice(prefix, -2), count.params);
     assert.deepEqual(rows.params.slice(-2), [20, 40]);
     assert.equal(rows.params.includes("%quoted ' name%"), true);
     assert.equal(rows.sql.includes("quoted ' name"), false);
-    assert.ok(rows.sql.includes(opportunityListPrimaryAsinSql + " primary_fact_asin"));
-    assert.ok(rows.sql.includes(opportunityListPrimaryRecordsSql));
+    assert.ok(
+      rows.sql.includes(
+        (pendingIdentity ? "o.filter_primary_asin" : opportunityListPrimaryAsinSql) +
+          " primary_fact_asin",
+      ),
+    );
+    assert.ok(rows.sql.includes(reuseListPrimaryIdentitySql(opportunityListPrimaryRecordsSql)));
     assert.ok(rows.sql.endsWith("ORDER BY o.updated_at DESC,o.id DESC"));
-    if (selectionView === "recommended") {
+    if (["recommended", "rule_candidates", "evidence_pending"].includes(selectionView)) {
       assert.match(count.sql, /filter_primary_asin/);
       assert.deepEqual(count.params.slice(0, 4), [
         input.organizationId,

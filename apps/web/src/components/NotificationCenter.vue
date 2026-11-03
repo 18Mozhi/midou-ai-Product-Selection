@@ -566,51 +566,53 @@ watch(
     </div>
     <section class="notification-summary">
       <article>
-        <span>未读</span><b>{{ summary.unread }}</b>
+        <AppIcon name="bell" /><span>未读</span><b>{{ summary.unread }}</b>
       </article>
       <article>
-        <span>未处理</span><b>{{ summary.open }}</b>
+        <AppIcon name="list" /><span>未处理</span><b>{{ summary.open }}</b>
       </article>
       <article>
-        <span>处理中</span><b>{{ summary.in_progress }}</b>
+        <AppIcon name="automation" /><span>处理中</span><b>{{ summary.in_progress }}</b>
       </article>
       <article>
-        <span>已关闭</span><b>{{ summary.closed }}</b>
+        <AppIcon name="check" /><span>已关闭</span><b>{{ summary.closed }}</b>
       </article>
     </section>
-    <nav>
-      <button
-        v-for="x in [
-          { v: '', t: '全部' },
-          { v: 'task', t: '任务' },
-          { v: 'approval', t: '审批' },
-          { v: 'competitor', t: '竞品' },
-          { v: 'system', t: '系统' },
-        ]"
-        :key="x.v"
-        :aria-pressed="category === x.v"
-        @click="setFilters({ category: x.v })"
-      >
-        {{ x.t }}</button
-      ><label
-        ><input v-model="unread" type="checkbox" @change="setFilters({ unread })" /> 仅未读</label
-      >
-    </nav>
-    <nav aria-label="处理状态筛选">
-      <button
-        v-for="item in [
-          { v: '', t: '全部状态' },
-          { v: 'open', t: '未处理' },
-          { v: 'in_progress', t: '处理中' },
-          { v: 'closed', t: '已关闭' },
-        ]"
-        :key="item.v"
-        :aria-pressed="workflowStatus === item.v"
-        @click="setFilters({ status: item.v })"
-      >
-        {{ item.t }}
-      </button>
-    </nav>
+    <div class="midou-notification-filters">
+      <nav>
+        <button
+          v-for="x in [
+            { v: '', t: '全部' },
+            { v: 'task', t: '任务' },
+            { v: 'approval', t: '审批' },
+            { v: 'competitor', t: '竞品' },
+            { v: 'system', t: '系统' },
+          ]"
+          :key="x.v"
+          :aria-pressed="category === x.v"
+          @click="setFilters({ category: x.v })"
+        >
+          {{ x.t }}</button
+        ><label
+          ><input v-model="unread" type="checkbox" @change="setFilters({ unread })" /> 仅未读</label
+        >
+      </nav>
+      <nav aria-label="处理状态筛选">
+        <button
+          v-for="item in [
+            { v: '', t: '全部状态' },
+            { v: 'open', t: '未处理' },
+            { v: 'in_progress', t: '处理中' },
+            { v: 'closed', t: '已关闭' },
+          ]"
+          :key="item.v"
+          :aria-pressed="workflowStatus === item.v"
+          @click="setFilters({ status: item.v })"
+        >
+          {{ item.t }}
+        </button>
+      </nav>
+    </div>
     <section v-if="state === 'loading'" class="notification-state">正在读取通知…</section>
     <section
       v-else-if="
@@ -665,6 +667,7 @@ watch(
             · 已合并 {{ item.group_count }} 条同根因通知</small
           ></b
         >
+        <span class="midou-notification-open">查看记录<AppIcon name="chevron" :size="14" /></span>
       </button>
     </div>
     <nav v-if="total > pageSize" class="notification-pagination" aria-label="通知分页">

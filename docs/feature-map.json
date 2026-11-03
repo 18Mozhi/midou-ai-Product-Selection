@@ -8379,5 +8379,33 @@
       "design-plans/ui-phase-2-2026-09-07/action-reviews/P07.json"
     ],
     "contract": "Read-only parallel home/count/page reads; scoped saved-quote batch. No collection throughput or 95% visual acceptance claim. Original queued Amazon sourcing image; latest exact signal media with same-origin favicon fallback. Default-closed cancellable intelligence detail; embedded account appearance, legacy bookmark redirected; single shell breadcrumb. No schema/env/dependency/deployment or evidence/permission/scoring changes."
+  },
+  "midouLiveAcceptance20261103": {
+    "sourceFiles": [
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/api/src/opportunity-recommended-list-scope.ts",
+      "apps/api/src/opportunity-list-projection.ts",
+      "apps/api/src/mysql-sourcing-repository.ts",
+      "apps/web/src/midou-workspace.css",
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/components/HomeAutomationOverview.vue",
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/components/PlatformDashboard.vue",
+      "apps/web/src/components/NotificationCenter.vue",
+      "apps/web/src/components/AccountShell.vue",
+      "apps/web/src/components/personal-center/PersonalProfilePanel.vue",
+      "apps/web/src/components/PersonalCenter.vue"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-list-projection.test.mjs",
+      "tests/unit/opportunity-recommended-list-scope.test.mjs",
+      "tests/unit/workspace-read-performance.test.mjs",
+      "tests/e2e/m02-03-navigation-shell.spec.ts",
+      "tests/e2e/m05-03-notifications.spec.ts",
+      "tests/unit/opportunity-selection-view.test.mjs"
+    ],
+    "docs": ["docs/midou-live-acceptance-20261103.md"],
+    "contract": "Live 331b6ba9 investigation: materialize unchanged pending identities; narrow temporary active payload to referenced facts; scoped UTF8MB4 sourcing lookup preserving exact collation and fallbacks. Same facts/order/gates; no schema/index/env/API/dependency/collector/model changes. Reference workflow/governance/sidebar corrections do not assert pipeline progress or 95 percent visual acceptance. Official isolated release and postpublish checks remain distinct from read-only candidate probes."
   }
 }
