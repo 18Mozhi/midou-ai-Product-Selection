@@ -8411,6 +8411,7 @@
   "midouNavigationContinuity20261104": {
     "sourceFiles": [
       "apps/web/src/App.vue",
+      "apps/web/src/components/NotificationCenter.vue",
       "apps/web/src/components/ThemeStudio.vue",
       "apps/web/src/components/theme-studio-c.css",
       "apps/web/src/components/NavigationShell.vue",
@@ -8420,6 +8421,7 @@
     ],
     "testFiles": [
       "tests/e2e/m02-03-navigation-shell.spec.ts",
+      "tests/e2e/m05-03-notifications.spec.ts",
       "tests/e2e/m02-01-theme-studio.spec.ts",
       "tests/unit/theme-and-icon-completion.test.mjs"
     ],
