@@ -205,20 +205,16 @@ const stateCopy = computed(
 let navigationSequence = 0;
 let navigationRead: AbortController | null = null;
 async function load() {
-  if (props.account) {
-    ++navigationSequence;
-    navigationRead?.abort();
-    if (guard.value?.shell !== props.shell) guard.value = null;
-    state.value = "ready";
-    return;
-  }
   const current = ++navigationSequence,
-    shell = props.shell;
+    shell = props.shell,
+    account = Boolean(props.account);
   navigationRead?.abort();
   const controller = new AbortController();
   navigationRead = controller;
-  state.value = "loading";
-  guard.value = null;
+  // Personal content is session-only and never waits for organization approval.
+  // The optional read only restores the same authorized links/context on reload.
+  state.value = account ? "ready" : "loading";
+  if (!account || guard.value?.shell !== shell) guard.value = null;
   requestId.value = "";
   traceId.value = "";
   actionHint.value = "";
@@ -235,6 +231,7 @@ async function load() {
   } catch (error) {
     if (current !== navigationSequence || controller.signal.aborted || shell !== props.shell)
       return;
+    if (account) return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       traceId.value = error.traceId;

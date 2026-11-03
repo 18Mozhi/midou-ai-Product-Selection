@@ -656,7 +656,7 @@ test("theme continuity and real-height layout hold at 768, 1024 and 1440", async
   }
 });
 
-test("M02-03 personal center uses an account shell without the organization navigation guard", async ({
+test("M02-03 personal center shares chrome without depending on organization navigation approval", async ({
   page,
 }) => {
   await allow(page, "member");
@@ -720,7 +720,7 @@ test("M02-03 personal center uses an account shell without the organization navi
   await expect(page.getByRole("complementary", { name: "个人中心分区" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "选品成员" })).toBeVisible();
   await expect(page.locator(".midou-profile-grid")).toBeVisible();
-  expect(accountGuardReads).toBe(0);
+  expect(accountGuardReads).toBe(1);
 });
 
 test("commerce organization overview fits phone tablet and desktop widths", async ({ page }) => {
@@ -957,9 +957,9 @@ test("session-only account does not bypass a forbidden member destination", asyn
   });
   await page.goto("/me");
   await expect(page.getByRole("navigation", { name: "个人中心分区" })).toBeVisible();
-  expect(reads).toBe(0);
+  await expect.poll(() => reads).toBe(1);
   await page.locator(".role-brand").click();
   await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "forbidden");
-  expect(reads).toBe(1);
+  expect(reads).toBe(2);
   await expect(page.locator(".account-shell")).toHaveCount(0);
 });

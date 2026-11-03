@@ -8424,6 +8424,6 @@
       "tests/unit/theme-and-icon-completion.test.mjs"
     ],
     "docs": ["docs/midou-navigation-continuity-20261104.md"],
-    "contract": "Account and embedded appearance reuse the live member navigation shell without remounting header/sidebar. Direct account entry remains session-only and does not require organization navigation approval; business destination guards are unchanged. Route changes no longer override user density. No API/env/schema/dependency/collector changes."
+    "contract": "Account and embedded appearance reuse the live member navigation shell without remounting header/sidebar. Direct account entry remains session-only: optional non-blocking navigation reads restore authorized links/context on reload, failures never block personal content; business destination guards are unchanged. Route changes no longer override user density. No API/env/schema/dependency/collector changes."
   }
 }
