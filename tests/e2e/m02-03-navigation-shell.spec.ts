@@ -928,6 +928,9 @@ test("member navigation survives account appearance and back without replacing c
   await expect(page.getByRole("heading", { name: "界面外观", exact: true })).toBeVisible();
   expect(await header?.evaluate((el) => el.isConnected)).toBe(true);
   expect(await metrics()).toEqual(baseline);
+  expect(
+    await page.evaluate(() => localStorage.getItem("scoutops:navigation:last-member-route")),
+  ).toBe("/home");
   await page.locator(".role-brand").click();
   await expect(page).toHaveURL(/\/home$/);
   expect(await header?.evaluate((el) => el.isConnected)).toBe(true);

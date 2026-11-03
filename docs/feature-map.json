@@ -8411,6 +8411,8 @@
   "midouNavigationContinuity20261104": {
     "sourceFiles": [
       "apps/web/src/App.vue",
+      "apps/web/src/components/ThemeStudio.vue",
+      "apps/web/src/components/theme-studio-c.css",
       "apps/web/src/components/NavigationShell.vue",
       "apps/web/src/components/AccountShell.vue",
       "apps/web/src/design/theme.ts",
@@ -8418,6 +8420,7 @@
     ],
     "testFiles": [
       "tests/e2e/m02-03-navigation-shell.spec.ts",
+      "tests/e2e/m02-01-theme-studio.spec.ts",
       "tests/unit/theme-and-icon-completion.test.mjs"
     ],
     "docs": ["docs/midou-navigation-continuity-20261104.md"],
