@@ -18,7 +18,7 @@ import {
   surfaceProps,
   type NavigationShellKind,
 } from "../navigation-shell-route-state";
-import type { ShellNavigationItem } from "../route-catalog";
+import { navigationItemsFor, type ShellNavigationItem } from "../route-catalog";
 import { useNavigationDiscovery } from "../use-navigation-discovery";
 import { useNavigationShellTheme } from "../use-navigation-shell-theme";
 import { useNavigationShellDrawer } from "../use-navigation-shell-drawer";
@@ -44,7 +44,7 @@ interface GuardSummary {
   platform_capabilities: string[];
   guard_reason: string;
 }
-const props = defineProps<{ shell: Shell; apiBaseUrl: string }>();
+const props = defineProps<{ shell: Shell; apiBaseUrl: string; account?: boolean }>();
 const request = createApiClient(props.apiBaseUrl);
 const route = useRoute();
 const routePath = computed(() => route.path.replace(/\/$/, "") || "/");
@@ -66,7 +66,11 @@ const {
 } = useNavigationShellDrawer(menuOpen);
 const allCapabilities = computed(() => shellCapabilities(props.shell, guard.value));
 const items = computed(() =>
-  authorizedNavigation(props.shell, allCapabilities.value, guard.value?.roles ?? []),
+  // Personal routes remain session-only. These links do not grant access: each destination
+  // still performs its normal server navigation guard.
+  props.account && !guard.value
+    ? navigationItemsFor("member")
+    : authorizedNavigation(props.shell, allCapabilities.value, guard.value?.roles ?? []),
 );
 const navigationParentPath = computed(() => resolveNavigationParentPath(routePath.value));
 const activeItem = computed(
@@ -119,13 +123,15 @@ const requiredCapabilities = computed(() =>
     ? route.meta.capabilities.filter((item): item is string => typeof item === "string")
     : [],
 );
-const routeAllowed = computed(() =>
-  canOpenRoute(
-    requiredCapabilities.value,
-    allCapabilities.value,
-    props.shell,
-    guard.value?.roles ?? [],
-  ),
+const routeAllowed = computed(
+  () =>
+    props.account ||
+    canOpenRoute(
+      requiredCapabilities.value,
+      allCapabilities.value,
+      props.shell,
+      guard.value?.roles ?? [],
+    ),
 );
 const roleSummary = computed(() => shellRoleSummary(props.shell, guard.value));
 const primaryItems = computed(() => items.value.slice(0, 4));
@@ -199,6 +205,13 @@ const stateCopy = computed(
 let navigationSequence = 0;
 let navigationRead: AbortController | null = null;
 async function load() {
+  if (props.account) {
+    ++navigationSequence;
+    navigationRead?.abort();
+    if (guard.value?.shell !== props.shell) guard.value = null;
+    state.value = "ready";
+    return;
+  }
   const current = ++navigationSequence,
     shell = props.shell;
   navigationRead?.abort();
@@ -255,9 +268,18 @@ watch(
   () => route.fullPath,
   (fullPath) => {
     closeDiscovery();
+    menuOpen.value = false;
     if (props.shell === "member") rememberMemberRoute(fullPath);
   },
   { immediate: true },
+);
+watch(
+  () => props.account,
+  () => {
+    closeDiscovery();
+    menuOpen.value = false;
+    void load();
+  },
 );
 watch(
   () => props.shell,
@@ -398,7 +420,9 @@ onUnmounted(() => {
           :aria-current="routePath === '/notifications' ? 'page' : undefined"
           ><AppIcon name="bell" :size="18" />通知中心</RouterLink
         >
-        <RouterLink to="/me"><AppIcon name="person" :size="18" />个人中心</RouterLink>
+        <RouterLink to="/me" :aria-current="account ? 'page' : undefined"
+          ><AppIcon name="person" :size="18" />个人中心</RouterLink
+        >
       </section>
       <footer>
         <RouterLink v-if="shell === 'member'" to="/select-context" class="commerce-workspace-switch"
@@ -571,14 +595,19 @@ onUnmounted(() => {
             >{{ item.label }}</RouterLink
           >
         </nav>
+        <slot v-if="account" />
         <KeepAlive :max="12">
           <component
             :is="selectedSurfaceComponent"
-            v-if="selectedSurfaceComponent"
+            v-if="!account && selectedSurfaceComponent"
             :key="surfaceCacheKey"
             v-bind="selectedSurfaceProps"
           />
-          <NavigationAccessPanel v-else state="missing" :home-path="items[0]?.path || '/'" />
+          <NavigationAccessPanel
+            v-else-if="!account"
+            state="missing"
+            :home-path="items[0]?.path || '/'"
+          />
         </KeepAlive>
       </template>
       <NavigationAccessPanel v-else state="forbidden" :home-path="items[0]?.path || '/home'" />

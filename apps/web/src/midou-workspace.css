@@ -291,7 +291,7 @@ html[data-design="commerce"] #app .theme-page.is-embedded {
 html[data-design="commerce"] #app .theme-page.is-embedded .theme-c-pagehead {
   padding: 16px 0;
 }
-html[data-design="commerce"] #app .account-shell {
+html[data-design="commerce"] #app .account-shell:not(.account-content-only) {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);
   grid-template-rows: 56px auto auto 1fr;
@@ -309,7 +309,10 @@ html[data-design="commerce"] #app .p11-brand {
   align-items: center;
   gap: 10px;
 }
-html[data-design="commerce"] #app :is(.p11-page-heading, .p11-directory, .p11-content) {
+html[data-design="commerce"]
+  #app
+  .account-shell:not(.account-content-only)
+  :is(.p11-page-heading, .p11-directory, .p11-content) {
   grid-column: 2;
   width: 100%;
   padding: 16px 24px 0;
@@ -401,10 +404,13 @@ html[data-design="commerce"][data-density="compact"] #app .role-content {
   html[data-design="commerce"] #app .notification-list > button > :is(em, b) {
     grid-column: 2;
   }
-  html[data-design="commerce"] #app .account-shell {
+  html[data-design="commerce"] #app .account-shell:not(.account-content-only) {
     grid-template-columns: minmax(0, 1fr);
   }
-  html[data-design="commerce"] #app :is(.p11-page-heading, .p11-directory, .p11-content) {
+  html[data-design="commerce"]
+    #app
+    .account-shell:not(.account-content-only)
+    :is(.p11-page-heading, .p11-directory, .p11-content) {
     grid-column: 1;
     padding-inline: 16px;
   }

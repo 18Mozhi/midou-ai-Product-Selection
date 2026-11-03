@@ -699,6 +699,10 @@ test("M02-03 personal center uses an account shell without the organization navi
   await page.route("**/api/v1/me/assets", (route) =>
     route.fulfill({ json: envelope({ followed_trends: [], decisions: [], tasks: [] }) }),
   );
+  let accountGuardReads = 0;
+  page.on("request", (request) => {
+    if (request.url().includes("/me/navigation?")) accountGuardReads++;
+  });
   await page.goto("/me");
   await expect(page.locator(".account-shell")).toBeVisible();
   const accountDirectory = page.getByRole("navigation", { name: "个人中心分区" });
@@ -716,6 +720,7 @@ test("M02-03 personal center uses an account shell without the organization navi
   await expect(page.getByRole("complementary", { name: "个人中心分区" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "选品成员" })).toBeVisible();
   await expect(page.locator(".midou-profile-grid")).toBeVisible();
+  expect(accountGuardReads).toBe(0);
 });
 
 test("commerce organization overview fits phone tablet and desktop widths", async ({ page }) => {
@@ -875,3 +880,83 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
     );
   });
 }
+
+test("member navigation survives account appearance and back without replacing chrome", async ({
+  page,
+}) => {
+  await allow(page, "member");
+  await page.route("**/api/v1/auth/session-status", (route) =>
+    route.fulfill({
+      json: { data: { authenticated: true }, request_id: "session", trace_id: "session" },
+    }),
+  );
+  await page.route("**/api/v1/me/ui-preferences", (route) =>
+    route.fulfill({
+      json: {
+        data: { theme: "deep-ocean", version: 1 },
+        request_id: "preference",
+        trace_id: "preference",
+      },
+    }),
+  );
+  await page.goto("/home");
+  await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
+  const header = await page.locator(".role-topbar").elementHandle();
+  const sidebar = await page.locator(".commerce-sidebar").elementHandle();
+  const metrics = () =>
+    page.locator(".role-topbar").evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        height: el.getBoundingClientRect().height,
+        font: s.fontFamily,
+        background: s.backgroundColor,
+        density: document.documentElement.dataset.density,
+      };
+    });
+  const baseline = await metrics();
+  if ((page.viewportSize()?.width ?? 1000) <= 840) {
+    await page.getByRole("button", { name: "打开导航菜单" }).click();
+    await page.locator('.role-sidebar-utility a[href="/me"]').click();
+    await expect(page.getByRole("dialog", { name: "工作台导航" })).toBeHidden();
+  } else await page.locator('.role-topbar a[href="/me"]').click();
+  await expect(page.getByRole("navigation", { name: "个人中心分区" })).toBeVisible();
+  expect(await header?.evaluate((el) => el.isConnected)).toBe(true);
+  expect(await sidebar?.evaluate((el) => el.isConnected)).toBe(true);
+  expect(await metrics()).toEqual(baseline);
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  await page.getByRole("link", { name: "外观偏好：主题与密度", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "界面外观", exact: true })).toBeVisible();
+  expect(await header?.evaluate((el) => el.isConnected)).toBe(true);
+  expect(await metrics()).toEqual(baseline);
+  await page.locator(".role-brand").click();
+  await expect(page).toHaveURL(/\/home$/);
+  expect(await header?.evaluate((el) => el.isConnected)).toBe(true);
+  expect(await metrics()).toEqual(baseline);
+});
+
+test("session-only account does not bypass a forbidden member destination", async ({ page }) => {
+  await page.route("**/api/v1/auth/session-status", (route) =>
+    route.fulfill({
+      json: { data: { authenticated: true }, request_id: "session", trace_id: "session" },
+    }),
+  );
+  let reads = 0;
+  await page.route("**/api/v1/me/navigation?**", (route) => {
+    reads++;
+    return route.fulfill({
+      status: 403,
+      json: {
+        error: { code: "forbidden", message: "forbidden" },
+        request_id: "denied",
+        trace_id: "denied",
+      },
+    });
+  });
+  await page.goto("/me");
+  await expect(page.getByRole("navigation", { name: "个人中心分区" })).toBeVisible();
+  expect(reads).toBe(0);
+  await page.locator(".role-brand").click();
+  await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "forbidden");
+  expect(reads).toBe(1);
+  await expect(page.locator(".account-shell")).toHaveCount(0);
+});
