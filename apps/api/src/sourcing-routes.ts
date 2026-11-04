@@ -47,9 +47,15 @@ export function registerSourcingRoutes(app: FastifyInstance, o: SourcingRouteOpt
         idempotencyKey: requireIdempotencyKey(r),
       };
     };
-  app.get("/api/v1/sourcing/searches", async (r) =>
-    env(await o.service.list(await scope(r, "sourcing:read")), r),
-  );
+  app.get("/api/v1/sourcing/searches", async (r) => {
+    const context = await scope(r, "sourcing:read"),
+      query = r.query as Record<string, unknown>;
+    if (["page", "page_size", "q", "record"].some((key) => query[key] !== undefined)) {
+      const result = await o.service.listPage(context, query);
+      return { ...env(result.items, r), meta: result.meta };
+    }
+    return env(await o.service.list(context), r);
+  });
   app.get("/api/v1/sourcing/searches/:id", async (r) =>
     env(
       await o.service.detail({

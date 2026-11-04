@@ -8477,5 +8477,27 @@
     "docs": ["docs/selection-loading-ui-20261104.md"],
     "routes": ["/home", "/opportunities", "/sourcing"],
     "contract": "Optimize existing scoped read plans without removing any identity, classification or completion proof. Aggregate home counts once; skip daily identity history only when no same-day opportunity exists, never skip actual completion receipts. Shell owns the sole topbar breadcrumb across routes. Stable 14px member controls and independent sourcing detail loading, abort superseded reads and deduplicate the current read. No collection test/recovery/concurrency, API/env/schema/dependency/Python changes. Read-only database samples are not deployed HTTP/P95 acceptance."
+  },
+  "sourcingPagination20261104": {
+    "sourceFiles": [
+      "packages/contracts/src/sourcing-list.ts",
+      "packages/contracts/src/index.ts",
+      "apps/api/src/sourcing-service.ts",
+      "apps/api/src/sourcing-routes.ts",
+      "apps/api/src/mysql-sourcing-repository.ts",
+      "apps/web/src/composables/useSourcingWorkspace.ts",
+      "apps/web/src/components/SourcingWorkspace.vue"
+    ],
+    "testFiles": [
+      "tests/unit/sourcing-pagination.test.mjs",
+      "tests/e2e/sourcing-pagination.spec.ts",
+      "tests/e2e/m04-06-sourcing.spec.ts",
+      "tests/e2e/selection-loading-navigation.spec.ts",
+      "tests/m04-06/sourcing.test.mjs"
+    ],
+    "docs": ["docs/sourcing-pagination-20261104.md", "docs/openapi.yaml"],
+    "apiRoutes": ["/api/v1/sourcing/searches"],
+    "pageRoutes": ["/sourcing"],
+    "contract": "Authorized opt-in server pagination: original unpaged array envelope unchanged when page/page_size/q/record absent.20-row UI, literal scoped server search, filtered total vs global original summary, LIMIT before image hydration. Preserve created_at/id DESC, source evidence relations, authorization and all writes. Page/query/record URL restoration,300ms debounced cancellable reads and legacy no-meta fallback. No source tests/recovery/concurrency/env/dependency/database-schema/Python changes; SQL samples are not deployed HTTP/P95 acceptance."
   }
 }

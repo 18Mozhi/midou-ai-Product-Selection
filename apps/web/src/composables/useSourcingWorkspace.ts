@@ -1,3 +1,4 @@
+import type { SourcingListPageMeta, SourcingListSummary } from "@scoutops/contracts";
 import { sourcingRecordStatusText } from "../components/sourcing-record-status";
 import {
   computed,
@@ -44,6 +45,10 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     notice = ref(""),
     busy = ref(false),
     query = ref(""),
+    serverPaging = ref(true),
+    recordPage = ref(1),
+    recordTotal = ref(0),
+    serverSummary = ref<SourcingListSummary | null>(null),
     dialogGeneration = reactive<Record<SourcingDialogName, number>>({
       quote: 0,
     }),
@@ -77,6 +82,10 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     refreshOnActivation = false;
   let listReadController: AbortController | null = null,
     detailReadController: AbortController | null = null;
+  let syncingListRoute = false;
+  let listTargetRecord: string | undefined;
+  let queryTimer: ReturnType<typeof setTimeout> | null = null;
+  const recordPageSize = 20;
   const missingLabels: Record<string, string> = {
       supplier_listing: "供应商商品资料",
       moq: "最小起订量",
@@ -97,6 +106,7 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     searchName = (item: Search | null | undefined) =>
       item?.display_name || item?.input_ref || "供应商",
     filteredItems = computed(() => {
+      if (serverPaging.value) return items.value;
       const needle = query.value.trim().toLowerCase();
       return needle
         ? items.value.filter((item) =>
@@ -104,12 +114,15 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
           )
         : items.value;
     }),
-    summary = computed(() => ({
-      total: items.value.length,
-      running: items.value.filter((item) => ["queued", "running"].includes(item.status)).length,
-      candidates: items.value.reduce((sum, item) => sum + item.candidate_count, 0),
-      ready: items.value.filter((item) => item.candidate_count > 0).length,
-    })),
+    summary = computed(
+      () =>
+        serverSummary.value ?? {
+          total: items.value.length,
+          running: items.value.filter((item) => ["queued", "running"].includes(item.status)).length,
+          candidates: items.value.reduce((sum, item) => sum + item.candidate_count, 0),
+          ready: items.value.filter((item) => item.candidate_count > 0).length,
+        },
+    ),
     missingText = computed(() =>
       (selected.value?.missing_fields ?? []).map((x) => missingLabels[x] ?? x).join("、"),
     ),
@@ -165,30 +178,110 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
         : kind === "blocked" || kind === "rate_limited"
           ? "blocked"
           : "error";
-  async function load() {
+  const matchingTotal = computed(() =>
+    serverPaging.value ? recordTotal.value : filteredItems.value.length,
+  );
+  const recordPages = computed(() => Math.max(1, Math.ceil(matchingTotal.value / recordPageSize)));
+  const visibleRecords = computed(() =>
+    serverPaging.value
+      ? items.value
+      : filteredItems.value.slice(
+          (recordPage.value - 1) * recordPageSize,
+          recordPage.value * recordPageSize,
+        ),
+  );
+  async function replaceListRoute(query: Record<string, any>) {
+    syncingListRoute = true;
+    try {
+      await router.replace({ query });
+    } finally {
+      syncingListRoute = false;
+    }
+  }
+  function changeRecordPage(next: number) {
+    const page = Math.max(1, Math.min(next, recordPages.value));
+    if (serverPaging.value) {
+      void router.push({
+        query: {
+          ...route.query,
+          q: query.value.trim() || undefined,
+          page: String(
+            query.value.trim() !== (typeof route.query.q === "string" ? route.query.q.trim() : "")
+              ? 1
+              : page,
+          ),
+          record: undefined,
+          create: undefined,
+        },
+      });
+    } else {
+      recordPage.value = page;
+      const first = visibleRecords.value[0];
+      if (first) void detail(first);
+    }
+  }
+  async function load(locateRecord: unknown = false) {
     if (!pageActive) return;
     listReadController?.abort();
+    detailReadController?.abort();
+    detailReadGeneration += 1;
+    detailLoading.value = false;
     const controller = new AbortController();
     listReadController = controller;
     const generation = ++listReadGeneration,
       lifecycle = lifecycleGeneration,
       detailGenerationAtStart = detailReadGeneration;
+    listTargetRecord = typeof route.query.record === "string" ? route.query.record : undefined;
     listReadPending = true;
     state.value = "loading";
     notice.value = "";
     selectedQuotes.value = [];
     try {
-      const response = await request<Search[]>("/sourcing/searches", { signal: controller.signal });
+      const requestedRecord = typeof route.query.record === "string" ? route.query.record : "";
+      const page =
+        typeof route.query.page === "string" && /^[1-9][0-9]*$/.test(route.query.page)
+          ? Number(route.query.page)
+          : 1;
+      const q = typeof route.query.q === "string" ? route.query.q.trim() : "";
+      const params = new URLSearchParams({ page_size: String(recordPageSize) });
+      if (requestedRecord && (!route.query.page || locateRecord === true))
+        params.set("record", requestedRecord);
+      else params.set("page", String(page));
+      if (q) params.set("q", q);
+      const response = await request<Search[]>(`/sourcing/searches?${params}`, {
+        signal: controller.signal,
+      });
       if (!ownsListRead(generation, lifecycle)) return;
       requestId.value = response.request_id;
+      const meta = response.meta as SourcingListPageMeta | undefined;
+      if (
+        meta &&
+        (!Number.isSafeInteger(meta.page) ||
+          meta.page < 1 ||
+          meta.page_size !== recordPageSize ||
+          !Number.isSafeInteger(meta.total) ||
+          meta.total < 0 ||
+          !meta.summary)
+      )
+        throw new Error("invalid_sourcing_page_meta");
+      serverPaging.value = Boolean(meta);
+      serverSummary.value = meta?.summary ?? null;
+      recordTotal.value = meta?.total ?? response.data.length;
+      recordPage.value = meta?.page ?? page;
       items.value = response.data;
       state.value = items.value.length ? "ready" : "empty";
       void loadComparisons();
+      if (meta && !items.value.length && route.query.page !== String(meta.page))
+        await replaceListRoute({
+          ...route.query,
+          page: String(meta.page),
+          record: undefined,
+          create: undefined,
+        });
       if (detailReadGeneration !== detailGenerationAtStart) {
         if (!items.value.some((item) => item.id === selected.value?.id)) selected.value = null;
         return;
       }
-      const requestedRecord = typeof route.query.record === "string" ? route.query.record : "";
       selected.value =
         items.value.find((x) => x.id === requestedRecord) ??
         items.value.find((x) => x.id === selected.value?.id) ??
@@ -200,10 +293,14 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
         if (
           ownsListRead(generation, lifecycle) &&
           selected.value?.id === selectedId &&
-          route.query.record !== selectedId
+          (route.query.record !== selectedId ||
+            (serverPaging.value && route.query.page !== String(recordPage.value)))
         )
-          await router.replace({
-            query: { ...route.query, record: selectedId, create: undefined },
+          await replaceListRoute({
+            ...route.query,
+            record: selectedId,
+            page: serverPaging.value ? String(recordPage.value) : route.query.page,
+            create: undefined,
           });
       }
     } catch (error) {
@@ -211,6 +308,12 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
       if (error instanceof ApiClientError) {
         requestId.value = error.requestId;
         notice.value = error.actionHint;
+        if (error.kind === "expired" || error.kind === "forbidden") {
+          items.value = [];
+          selected.value = null;
+          serverSummary.value = null;
+          recordTotal.value = 0;
+        }
         state.value = stateFrom(error.kind);
       } else state.value = "blocked";
     } finally {
@@ -258,6 +361,8 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     return pageActive && lifecycle === lifecycleGeneration && generation === detailReadGeneration;
   }
   function invalidatePageReads() {
+    if (queryTimer) clearTimeout(queryTimer);
+    queryTimer = null;
     listReadController?.abort();
     detailReadController?.abort();
     listReadController = detailReadController = null;
@@ -321,7 +426,8 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     query.value = "";
   }
   function handleStatePrimary() {
-    void load();
+    if (state.value === "empty" && query.value.trim()) resetQuery();
+    else void load();
   }
   function handleStateSecondary() {
     if (state.value === "empty") resetQuery();
@@ -440,22 +546,66 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     },
   );
   watch(
+    () => [route.query.page, route.query.q],
+    () => {
+      if (!pageActive || route.path !== "/sourcing" || syncingListRoute) return;
+      if (queryTimer) clearTimeout(queryTimer);
+      queryTimer = null;
+      query.value = typeof route.query.q === "string" ? route.query.q : "";
+      if (serverPaging.value) void load();
+    },
+    { flush: "sync" },
+  );
+  watch(
     () => route.query.record,
     (value) => {
-      if (!pageActive || listReadPending) return;
+      if (!pageActive || syncingListRoute) return;
       const requestedRecord = typeof value === "string" ? value : "",
         next =
           items.value.find((item) => item.id === requestedRecord) ??
           (!requestedRecord ? items.value[0] : null);
+      if (listReadPending) {
+        if (
+          (requestedRecord || undefined) !== listTargetRecord &&
+          requestedRecord !== selected.value?.id
+        )
+          void load(true);
+        return;
+      }
       if (next?.id === selected.value?.id) return;
       if (next) void detail(next, !requestedRecord);
-      else if (requestedRecord) void load();
+      else if (requestedRecord) void load(true);
       else selected.value = null;
     },
     { flush: "sync" },
   );
   watch(query, (value) => {
-    void router.replace({ query: { ...route.query, q: value || undefined, create: undefined } });
+    if (
+      !pageActive ||
+      route.path !== "/sourcing" ||
+      syncingListRoute ||
+      value.trim() === (typeof route.query.q === "string" ? route.query.q.trim() : "")
+    )
+      return;
+    if (queryTimer) clearTimeout(queryTimer);
+    if (!serverPaging.value) {
+      void replaceListRoute({ ...route.query, q: value || undefined, create: undefined });
+      return;
+    }
+    invalidatePageReads();
+    queryTimer = setTimeout(() => {
+      queryTimer = null;
+      if (pageActive)
+        void router.replace({
+          query: {
+            ...route.query,
+            q: value.trim() || undefined,
+            page: "1",
+            record: undefined,
+            create: undefined,
+          },
+        });
+    }, 300);
   });
 
   return {
@@ -469,6 +619,12 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     notice,
     busy,
     query,
+    serverPaging,
+    recordPage,
+    recordPages,
+    visibleRecords,
+    matchingTotal,
+    changeRecordPage,
     comparisons,
     comparisonFailure,
     comparisonLoading,

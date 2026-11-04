@@ -1,3 +1,4 @@
+import type { SourcingListPageMeta } from "@scoutops/contracts";
 import { randomUUID } from "node:crypto";
 export type SourcingContext = {
   organizationId: string;
@@ -98,6 +99,7 @@ export function validateComparison(v: any) {
 }
 export interface SourcingRepository {
   list(i: any): Promise<any>;
+  listPage?(i: any): Promise<{ items: any[]; meta: SourcingListPageMeta }>;
   detail(i: any): Promise<any>;
   listComparisons(i: any): Promise<any>;
   createSearch(i: any): Promise<any>;
@@ -111,6 +113,60 @@ export class SourcingService {
   constructor(private readonly repo: SourcingRepository) {}
   list(i: any) {
     return this.repo.list(i);
+  }
+  async listPage(i: any, raw: Record<string, unknown>) {
+    const integer = (value: unknown, fallback: number, maximum: number) => {
+      if (value === undefined) return fallback;
+      if (typeof value !== "string" || !/^[1-9][0-9]*$/.test(value) || Number(value) > maximum)
+        throw new SourcingServiceError(
+          "sourcing_pagination_invalid",
+          400,
+          "使用有效页码和每页1至100条记录。",
+        );
+      return Number(value);
+    };
+    const page = integer(raw.page, 1, 1000000),
+      pageSize = integer(raw.page_size, 20, 100);
+    if (raw.q !== undefined && (typeof raw.q !== "string" || raw.q.length > 200))
+      throw new SourcingServiceError("sourcing_query_invalid", 400, "搜索词最多200个字符。");
+    const query = typeof raw.q === "string" ? raw.q.trim() : "";
+    const locateRecord = raw.record === undefined ? undefined : uuid(raw.record, "record");
+    const input = {
+      ...i,
+      page,
+      pageSize,
+      query,
+      locateRecord: raw.page === undefined ? locateRecord : undefined,
+    };
+    if (this.repo.listPage) return this.repo.listPage(input);
+    // Compatibility for existing non-SQL repository implementations; production uses listPage SQL.
+    const all = await this.repo.list(i);
+    const filtered = all.filter((item: any) =>
+      `${item.display_name || item.input_ref} ${item.input_ref} ${item.status}`
+        .toLowerCase()
+        .includes(query.toLowerCase()),
+    );
+    const index = input.locateRecord
+      ? filtered.findIndex((item: any) => item.id === input.locateRecord)
+      : -1;
+    const actualPage = Math.min(
+      index >= 0 ? Math.floor(index / pageSize) + 1 : page,
+      Math.max(1, Math.ceil(filtered.length / pageSize)),
+    );
+    return {
+      items: filtered.slice((actualPage - 1) * pageSize, actualPage * pageSize),
+      meta: {
+        page: actualPage,
+        page_size: pageSize,
+        total: filtered.length,
+        summary: {
+          total: all.length,
+          running: all.filter((item: any) => ["queued", "running"].includes(item.status)).length,
+          candidates: all.reduce((sum: number, item: any) => sum + Number(item.candidate_count), 0),
+          ready: all.filter((item: any) => item.candidate_count > 0).length,
+        },
+      },
+    };
   }
   detail(i: any) {
     return this.repo.detail({ ...i, searchId: uuid(i.searchId, "search_id") });

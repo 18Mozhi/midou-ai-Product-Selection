@@ -2,6 +2,7 @@ import { test, expect, type Locator, type Page } from "@playwright/test";
 
 // SKU fixture values come from the user-provided item-detail sample; this tests rendering, not live procurement.
 
+const searchesRoute = /\/api\/v1\/sourcing\/searches(?:\?.*)?$/;
 const searchId = "00000000-0000-4000-8000-000000000601";
 const envelope = (data: unknown) => ({
   data,
@@ -121,9 +122,7 @@ async function setup(
       json: envelope({ ...summary, candidates: [readyCandidate, incompleteCandidate] }),
     }),
   );
-  await page.route("**/api/v1/sourcing/searches", (route) =>
-    route.fulfill({ json: envelope([summary]) }),
-  );
+  await page.route(searchesRoute, (route) => route.fulfill({ json: envelope([summary]) }));
   await page.route("**/api/v1/sourcing/comparisons", (route) =>
     route.fulfill({
       json: envelope([
@@ -216,9 +215,7 @@ for (const scenario of [
       missing_fields: ["supplier_listing"],
       created_at: "2026-08-08T12:00:00.000Z",
     };
-    await page.route("**/api/v1/sourcing/searches", (route) =>
-      route.fulfill({ json: envelope([search]) }),
-    );
+    await page.route(searchesRoute, (route) => route.fulfill({ json: envelope([search]) }));
     await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
       route.fulfill({
         json: envelope({
@@ -474,9 +471,7 @@ async function opportunitySetup(
     missing_fields: [],
     created_at: "2026-08-08T12:00:00.000Z",
   };
-  await page.route("**/api/v1/sourcing/searches", (route) =>
-    route.fulfill({ json: envelope([search]) }),
-  );
+  await page.route(searchesRoute, (route) => route.fulfill({ json: envelope([search]) }));
   await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
     route.fulfill({ json: envelope({ ...search, candidates: [readyCandidate] }) }),
   );
@@ -542,9 +537,7 @@ test("late profit reads cannot replace the selected supplier record", async ({ p
   const secondId = "00000000-0000-4000-8000-000000000614";
   const secondSearchId = "00000000-0000-4000-8000-000000000615";
   const second = { ...search, id: secondSearchId, input_ref: secondId, display_name: "另一个商品" };
-  await page.route("**/api/v1/sourcing/searches", (route) =>
-    route.fulfill({ json: envelope([search, second]) }),
-  );
+  await page.route(searchesRoute, (route) => route.fulfill({ json: envelope([search, second]) }));
   await page.route(`**/api/v1/sourcing/searches/${secondSearchId}`, (route) =>
     route.fulfill({ json: envelope({ ...second, candidates: [] }) }),
   );
@@ -628,9 +621,7 @@ test("hundreds of sourcing records and supplier offers stay bounded and selectab
     supplier_name: `供应商${i + 1}`,
     quote: { ...readyCandidate.quote, id: `quote-${i}` },
   }));
-  await page.route("**/api/v1/sourcing/searches", (route) =>
-    route.fulfill({ json: envelope(records) }),
-  );
+  await page.route(searchesRoute, (route) => route.fulfill({ json: envelope(records) }));
   await page.route("**/api/v1/sourcing/searches/*", (route) => {
     const id = route.request().url().split("/").pop();
     return route.fulfill({ json: envelope({ ...records.find((r) => r.id === id), candidates }) });
@@ -757,8 +748,8 @@ test("empty automatic sourcing state refreshes facts without creating work", asy
   page.on("request", (r) => {
     if (r.method() !== "GET" && r.url().includes("/api/v1/sourcing/")) writes.push(r.url());
   });
-  await page.unroute("**/api/v1/sourcing/searches");
-  await page.route("**/api/v1/sourcing/searches", (route) => {
+  await page.unroute(searchesRoute);
+  await page.route(searchesRoute, (route) => {
     reads += 1;
     return route.fulfill({ json: envelope([]) });
   });
@@ -921,8 +912,8 @@ test("a delayed quote failure is not attached to a newly opened draft", async ({
 
 test("loading and blocked dependency remain explicit and retryable", async ({ page }) => {
   await setup(page);
-  await page.unroute("**/api/v1/sourcing/searches");
-  await page.route("**/api/v1/sourcing/searches", async (route) => {
+  await page.unroute(searchesRoute);
+  await page.route(searchesRoute, async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 800));
     await route.fulfill({
       status: 503,
@@ -1168,9 +1159,7 @@ test("P21 stale detail responses cannot replace the record selected while they a
   let releaseFirst!: () => void, markFirstStarted!: () => void;
   const firstGate = new Promise<void>((resolve) => (releaseFirst = resolve)),
     firstStarted = new Promise<void>((resolve) => (markFirstStarted = resolve));
-  await page.route("**/api/v1/sourcing/searches", (route) =>
-    route.fulfill({ json: envelope([first, second]) }),
-  );
+  await page.route(searchesRoute, (route) => route.fulfill({ json: envelope([first, second]) }));
   await page.route("**/api/v1/sourcing/searches/*", async (route) => {
     if (route.request().method() !== "GET") return route.fallback();
     const id = new URL(route.request().url()).pathname.split("/").at(-1);
@@ -1216,7 +1205,7 @@ test("P21 KeepAlive return reloads list, detail and comparisons and ignores pre-
     missing_fields: [],
     created_at: "2026-08-08T12:00:00.000Z",
   };
-  await page.route("**/api/v1/sourcing/searches", (route) => {
+  await page.route(searchesRoute, (route) => {
     listReads += 1;
     const current = {
       ...record,
@@ -1552,9 +1541,7 @@ test("sourcing queued and running record total does not claim all records are ac
     missing_fields: [],
     created_at: "2026-08-08T12:00:00.000Z",
   }));
-  await page.route("**/api/v1/sourcing/searches", (route) =>
-    route.fulfill({ json: envelope(records) }),
-  );
+  await page.route(searchesRoute, (route) => route.fulfill({ json: envelope(records) }));
   const writes: string[] = [];
   page.on("request", (request) => {
     if (request.url().includes("/api/v1/") && request.method() !== "GET")
@@ -1598,7 +1585,7 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     const bytes = await page.request.get(image);
     await r.fulfill({ body: await bytes.body(), contentType: "image/jpeg" });
   });
-  await page.route("**/api/v1/sourcing/searches", (r) => r.fulfill({ json: envelope([record]) }));
+  await page.route(searchesRoute, (r) => r.fulfill({ json: envelope([record]) }));
   await page.route("**/api/v1/sourcing/searches/" + searchId, (r) =>
     r.fulfill({ json: envelope({ ...record, candidates: [] }) }),
   );
