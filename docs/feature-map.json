@@ -8450,5 +8450,32 @@
     ],
     "contract": "Only 21-line Amazon detail readiness mechanism is reused, excluding unshipped request transport. Observed HTTP409/error_code=verification_required is bounded and mapped to existing nonretryable manual-verification captcha state; LAN health becomes blocked and existing recovery exclusion applies. Unknown409/429/detail cooldown/auth/abort/contracts and all concurrency limits remain unchanged. Node/Python official full-package restart; enable/recover only after fresh real health, never direct database resets or CAPTCHA bypass.",
     "configFiles": ["config/env.example"]
+  },
+  "selectionLoadingUi20261104": {
+    "sourceFiles": [
+      "apps/api/src/selection-read-query-plan.ts",
+      "apps/api/src/mysql-home-dashboard-repository.ts",
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/api/src/opportunity-list-projection.ts",
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/composables/useSourcingWorkspace.ts",
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/member-workspace-polish.css",
+      "apps/web/src/midou-workspace.css"
+    ],
+    "testFiles": [
+      "tests/unit/selection-read-query-plan.test.mjs",
+      "tests/unit/home-selection-query.test.mjs",
+      "tests/unit/opportunity-list-projection.test.mjs",
+      "tests/unit/workspace-read-performance.test.mjs",
+      "tests/e2e/home-completed-results.spec.ts",
+      "tests/e2e/selection-loading-navigation.spec.ts",
+      "tests/unit/home-daily-selection.test.mjs",
+      "tests/unit/opportunity-recommended-list-scope.test.mjs",
+      "tests/e2e/m04-06-sourcing.spec.ts"
+    ],
+    "docs": ["docs/selection-loading-ui-20261104.md"],
+    "routes": ["/home", "/opportunities", "/sourcing"],
+    "contract": "Optimize existing scoped read plans without removing any identity, classification or completion proof. Aggregate home counts once; skip daily identity history only when no same-day opportunity exists, never skip actual completion receipts. Shell owns the sole topbar breadcrumb across routes. Stable 14px member controls and independent sourcing detail loading, abort superseded reads and deduplicate the current read. No collection test/recovery/concurrency, API/env/schema/dependency/Python changes. Read-only database samples are not deployed HTTP/P95 acceptance."
   }
 }

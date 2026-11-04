@@ -38,6 +38,7 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     state = ref<State>("loading"),
     items = ref<Search[]>([]),
     selected = ref<Search | null>(null),
+    detailLoading = ref(false),
     requestId = ref(""),
     dialogFailure = ref<SourcingDialogFailure | null>(null),
     notice = ref(""),
@@ -74,6 +75,8 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     pageActive = false,
     mounted = false,
     refreshOnActivation = false;
+  let listReadController: AbortController | null = null,
+    detailReadController: AbortController | null = null;
   const missingLabels: Record<string, string> = {
       supplier_listing: "供应商商品资料",
       moq: "最小起订量",
@@ -164,6 +167,9 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
           : "error";
   async function load() {
     if (!pageActive) return;
+    listReadController?.abort();
+    const controller = new AbortController();
+    listReadController = controller;
     const generation = ++listReadGeneration,
       lifecycle = lifecycleGeneration,
       detailGenerationAtStart = detailReadGeneration;
@@ -172,7 +178,7 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     notice.value = "";
     selectedQuotes.value = [];
     try {
-      const response = await request<Search[]>("/sourcing/searches");
+      const response = await request<Search[]>("/sourcing/searches", { signal: controller.signal });
       if (!ownsListRead(generation, lifecycle)) return;
       requestId.value = response.request_id;
       items.value = response.data;
@@ -217,12 +223,19 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
   }
   async function detail(item: Search, syncRoute = true) {
     if (!pageActive) return;
+    if (detailLoading.value && selected.value?.id === item.id) return;
+    detailReadController?.abort();
+    const controller = new AbortController();
+    detailReadController = controller;
+    detailLoading.value = true;
     const generation = ++detailReadGeneration,
       lifecycle = lifecycleGeneration;
     if (selected.value?.id !== item.id) selectedQuotes.value = [];
     selected.value = item;
     try {
-      const response = await request<Search>(`/sourcing/searches/${item.id}`);
+      const response = await request<Search>(`/sourcing/searches/${item.id}`, {
+        signal: controller.signal,
+      });
       if (!ownsDetailRead(generation, lifecycle)) return;
       requestId.value = response.request_id;
       selected.value = response.data;
@@ -234,12 +247,21 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
         requestId.value = error.requestId;
         notice.value = error.actionHint;
       } else notice.value = "详情暂不可用，列表状态未被覆盖。";
+    } finally {
+      if (detailReadController === controller) {
+        detailReadController = null;
+        detailLoading.value = false;
+      }
     }
   }
   function ownsDetailRead(generation: number, lifecycle: number) {
     return pageActive && lifecycle === lifecycleGeneration && generation === detailReadGeneration;
   }
   function invalidatePageReads() {
+    listReadController?.abort();
+    detailReadController?.abort();
+    listReadController = detailReadController = null;
+    detailLoading.value = false;
     lifecycleGeneration += 1;
     listReadGeneration += 1;
     detailReadGeneration += 1;
@@ -441,6 +463,7 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     state,
     items,
     selected,
+    detailLoading,
     requestId,
     dialogFailure,
     notice,

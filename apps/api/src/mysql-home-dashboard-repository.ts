@@ -1,9 +1,10 @@
+import { optimizeSelectionReadSql } from "./selection-read-query-plan.js";
 import {
   dailySelectionWindow,
   dailySelectionProductionSql,
   dailySelectionCompletedSql,
 } from "./home-daily-selection.js";
-import type { Pool, RowDataPacket } from "mysql2/promise";
+import type { Pool, RowDataPacket, FieldPacket } from "mysql2/promise";
 import type { HomeDashboardItem } from "@scoutops/contracts";
 import type { HomeDashboardRepository } from "./home-dashboard-service.js";
 import {
@@ -20,7 +21,7 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
     const measuredAt = this.now(),
       window = dailySelectionWindow(measuredAt);
     const rowsRead = this.pool.query<RowDataPacket[]>(
-      `SELECT
+      optimizeSelectionReadSql(`SELECT
          (SELECT COUNT(*) FROM trend_monitoring_rules r
           JOIN collection_tasks t ON t.id=r.last_collection_task_id
             AND t.organization_id=r.organization_id AND t.workspace_id=r.workspace_id
@@ -33,21 +34,20 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
           WHERE r.organization_id=? AND r.workspace_id=? AND r.status='enabled') last_collection_at,
          (SELECT MIN(r.next_collection_at) FROM trend_monitoring_rules r
           WHERE r.organization_id=? AND r.workspace_id=? AND r.status='enabled') next_collection_at,
-         (SELECT COUNT(DISTINCT o.id) FROM opportunities o
-         WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
-            AND o.lifecycle_status<>'archived') candidate_count,
-         (SELECT COUNT(*) FROM opportunities o
-          WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
-            AND o.lifecycle_status<>'archived' AND ${opportunityCandidateSql}
-            AND NOT ${opportunityQualityGateSql}) rule_candidate_count,
-         (SELECT COUNT(DISTINCT o.id) FROM opportunities o
-          WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
-            AND ${opportunityRecommendedSql} AND o.lifecycle_status<>'archived') recommended_count,
-         (SELECT COUNT(DISTINCT o.id) FROM opportunities o
-          WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending'
-            AND NOT ${opportunityCandidateSql} AND o.lifecycle_status<>'archived') awaiting_evidence_count,
-         (SELECT COUNT(DISTINCT o.id) FROM opportunities o
-          WHERE o.organization_id=? AND o.workspace_id=? AND o.decision_status='adopted') adopted_count`,
+         home_counts.*,
+         EXISTS (SELECT 1 FROM opportunities o WHERE o.organization_id=? AND o.workspace_id=?
+           AND o.created_at>=? AND o.created_at<? AND o.lifecycle_status NOT IN ('archived','deleted')) daily_has_opportunities
+       FROM (SELECT
+         COALESCE(SUM(decision_status='pending' AND lifecycle_status<>'archived'),0) candidate_count,
+         COALESCE(SUM(decision_status='pending' AND lifecycle_status<>'archived' AND candidate_ready AND NOT quality_ready),0) rule_candidate_count,
+         COALESCE(SUM(decision_status='pending' AND lifecycle_status<>'archived' AND candidate_ready AND quality_ready),0) recommended_count,
+         COALESCE(SUM(decision_status='pending' AND lifecycle_status<>'archived' AND NOT candidate_ready),0) awaiting_evidence_count,
+         COALESCE(SUM(decision_status='adopted'),0) adopted_count
+       FROM (SELECT o.decision_status,o.lifecycle_status,
+         CASE WHEN o.decision_status='pending' AND o.lifecycle_status<>'archived' THEN ${opportunityCandidateSql} ELSE 0 END candidate_ready,
+         CASE WHEN o.decision_status='pending' AND o.lifecycle_status<>'archived' THEN ${opportunityQualityGateSql} ELSE 0 END quality_ready
+         FROM opportunities o WHERE o.organization_id=? AND o.workspace_id=?
+         LIMIT 18446744073709551615) home_classified) home_counts`),
       [
         input.organizationId,
         input.workspaceId,
@@ -59,12 +59,8 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
         input.workspaceId,
         input.organizationId,
         input.workspaceId,
-        input.organizationId,
-        input.workspaceId,
-        input.organizationId,
-        input.workspaceId,
-        input.organizationId,
-        input.workspaceId,
+        window.start,
+        window.end,
         input.organizationId,
         input.workspaceId,
       ],
@@ -79,15 +75,19 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
         "WHERE s.organization_id=? AND s.workspace_id=? LIMIT 1",
       [input.organizationId, input.workspaceId],
     );
-    const productionRead = this.pool.query<RowDataPacket[]>(dailySelectionProductionSql, [
-      input.organizationId,
-      input.workspaceId,
-      window.start,
-      window.end,
-      input.organizationId,
-      input.workspaceId,
-      window.start,
-    ]);
+    const productionRead = rowsRead.then(([rows]) =>
+      Number(rows[0]?.daily_has_opportunities) === 0
+        ? ([[{ discovered_count: 0, qualified_count: 0 }], []] as [RowDataPacket[], FieldPacket[]])
+        : this.pool.query<RowDataPacket[]>(optimizeSelectionReadSql(dailySelectionProductionSql), [
+            input.organizationId,
+            input.workspaceId,
+            window.start,
+            window.end,
+            input.organizationId,
+            input.workspaceId,
+            window.start,
+          ]),
+    );
     const completedRead = this.pool.query<RowDataPacket[]>(dailySelectionCompletedSql, [
       input.organizationId,
       input.workspaceId,

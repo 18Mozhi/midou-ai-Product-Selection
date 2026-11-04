@@ -291,3 +291,37 @@ for (const status of [401, 403, 500]) {
     }
   });
 }
+
+test("workspace breadcrumb stays exclusively in the topbar across list routes", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route(completedRoute, (route) => route.fulfill({ json: envelope([]) }));
+  await page.route(/\/api\/v1\/opportunities\?/, (route) =>
+    route.fulfill({ json: { ...envelope([]), meta: { total: 0 } } }),
+  );
+  await page.goto("/home");
+  const crumb = page.getByRole("navigation", { name: "面包屑", exact: true });
+  await expect(crumb).toHaveCount(1);
+  await expect(
+    page.locator(".role-topbar").getByRole("navigation", { name: "面包屑", exact: true }),
+  ).toBeVisible();
+  await expect(page.locator(".role-content .role-page-breadcrumb")).toHaveCount(0);
+  if (test.info().project.name === "mobile-390") {
+    await page.getByRole("button", { name: "打开导航菜单", exact: true }).click();
+    await page
+      .locator("#role-navigation")
+      .getByRole("link", { name: "选品库", exact: true })
+      .click();
+  } else
+    await page
+      .locator(".commerce-sidebar")
+      .getByRole("link", { name: "选品库", exact: true })
+      .click();
+  await expect(crumb).toContainText("选品库");
+  await expect(crumb).toHaveCount(1);
+  await expect(page.locator(".role-content")).toHaveCSS("font-size", "14px");
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
+});

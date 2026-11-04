@@ -1,13 +1,13 @@
 .role-shell[data-shell="member"] {
   font-family: "Microsoft YaHei UI", "PingFang SC", "Noto Sans CJK SC", "Segoe UI", sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.6;
 }
 .role-shell[data-shell="member"] .role-content {
-  font-size: 16px;
+  font-size: 14px;
 }
 .role-shell[data-shell="member"] .role-page-head h1 {
-  font-size: clamp(28px, 3vw, 38px);
+  font-size: 24px;
 }
 .role-shell[data-shell="member"] .role-page-head > div > p,
 .role-shell[data-shell="member"] .role-page-head > div > span {
@@ -21,7 +21,7 @@
 .role-shell[data-shell="member"] input,
 .role-shell[data-shell="member"] select,
 .role-shell[data-shell="member"] textarea {
-  font-size: 16px;
+  font-size: 14px;
 }
 .role-context span {
   max-width: 220px;

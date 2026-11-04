@@ -1498,7 +1498,7 @@ test("saved sourcing comparison identifies historical quote references without a
     const specBox = (await row.locator('td[data-label="规格"]').boundingBox())!;
     expect(specBox.width).toBeGreaterThan(rowBox.width * 0.9);
   }
-  await expect(table).toHaveScreenshot("saved-quote-matrix-20261023.png");
+  await expect(table).toHaveScreenshot("saved-quote-matrix-20261104.png");
   expect(writes).toEqual([]);
 });
 

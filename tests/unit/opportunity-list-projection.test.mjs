@@ -41,7 +41,10 @@ test("materialized payload contains every referenced fact but no unrelated revie
   assert.ok(!identity.includes("'$.price'"));
   for (const sql of [facts, identity]) {
     assert.match(sql, /organization_id=\? AND active_version.workspace_id=\?/);
-    assert.match(sql, /status='active' LIMIT 18446744073709551615/);
+    assert.match(
+      sql,
+      /status='active' AND active_version.provider_id=\(SELECT id FROM providers WHERE code='amazon_product'\) LIMIT 18446744073709551615/,
+    );
   }
 });
 

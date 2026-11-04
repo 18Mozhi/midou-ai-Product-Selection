@@ -54,7 +54,8 @@ test("workspace identical scoped reads overlap without changing results", async 
   assert.equal(result.daily_production.completed_count, null);
   assert.equal(p.stats().queries, 4);
   console.log("HOME " + JSON.stringify(p.stats()) + " completed=null candidate_count=0");
-  if (!process.env.WORKSPACE_BASELINE_DIR) assert.equal(p.stats().max_parallel, 4);
+  // Daily identity work depends on the summary's necessary same-day presence flag.
+  if (!process.env.WORKSPACE_BASELINE_DIR) assert.equal(p.stats().max_parallel, 3);
   const { MySqlOpportunityRepository } = await repository("mysql-opportunity-repository");
   const listPool = pool();
   const list = await new MySqlOpportunityRepository(listPool).list(scope);

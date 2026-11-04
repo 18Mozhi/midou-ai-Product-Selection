@@ -1,3 +1,4 @@
+import { optimizeSelectionReadSql } from "../../apps/api/dist/selection-read-query-plan.js";
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
@@ -60,7 +61,7 @@ test("repository binds current tenant and UTC boundaries and forwards measured c
       query: async (sql, params) => {
         calls.push({ sql, params });
         if (sql === dailySelectionCompletedSql) return [[{ completed_count: "93" }]];
-        if (sql === dailySelectionProductionSql)
+        if (sql === optimizeSelectionReadSql(dailySelectionProductionSql))
           return [[{ discovered_count: "120", qualified_count: "87" }]];
         if (sql.includes("FROM automatic_source_schedules s")) return [[]];
         return [[{}]];
@@ -81,7 +82,9 @@ test("repository binds current tenant and UTC boundaries and forwards measured c
     target_minimum: 100,
     measured_at: now.toISOString(),
   });
-  const read = calls.find((call) => call.sql === dailySelectionProductionSql);
+  const read = calls.find(
+    (call) => call.sql === optimizeSelectionReadSql(dailySelectionProductionSql),
+  );
   assert.deepEqual(read.params, [
     "org",
     "workspace",
@@ -105,7 +108,7 @@ test("missing completion measurement remains unknown instead of using discovery 
   const repository = new MySqlHomeDashboardRepository(
     {
       query: async (sql) =>
-        sql === dailySelectionProductionSql
+        sql === optimizeSelectionReadSql(dailySelectionProductionSql)
           ? [[{ discovered_count: 120, qualified_count: 87 }]]
           : [[]],
     },

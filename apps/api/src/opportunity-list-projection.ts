@@ -37,7 +37,9 @@ export const scopedActiveVersionsSql = (alias: "n" | "n_primary_current") => {
     payload +
     " FROM normalized_records active_version FORCE INDEX (idx_normalized_scope_status) " +
     "WHERE active_version.organization_id=? AND active_version.workspace_id=? " +
-    "AND active_version.status='active' LIMIT 18446744073709551615) " +
+    "AND active_version.status='active' " +
+    "AND active_version.provider_id=(SELECT id FROM providers WHERE code='amazon_product') " +
+    "LIMIT 18446744073709551615) " +
     alias
   );
 };

@@ -1,3 +1,4 @@
+import { optimizeSelectionReadSql } from "../../apps/api/dist/selection-read-query-plan.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -64,7 +65,7 @@ test("home summary and recommendation rows both use the bounded full proof", asy
     capabilities: ["opportunity:read"],
   });
   assert.ok(calls[0].sql.includes(homeCandidateSql));
-  assert.ok(calls[0].sql.includes(homeQualityGateSql));
+  assert.ok(calls[0].sql.includes(optimizeSelectionReadSql(homeQualityGateSql)));
   const recommendation = calls.find((c) => c.sql.startsWith("SELECT o.id,o.name"));
   assert.ok(recommendation.sql.includes(homeRecommendedSql));
   assert.deepEqual(recommendation.params, ["org", "ws", "actor"]);

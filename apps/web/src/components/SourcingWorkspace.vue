@@ -18,6 +18,7 @@ const {
   state,
   items,
   selected,
+  detailLoading,
   requestId,
   dialogFailure,
   notice,
@@ -232,7 +233,12 @@ const pendingMessage = computed(() => {
           </button>
         </nav>
       </aside>
-      <section v-if="selected" class="sourcing-detail" aria-label="找货记录详情">
+      <section
+        v-if="selected"
+        class="sourcing-detail"
+        :aria-busy="detailLoading"
+        aria-label="找货记录详情"
+      >
         <header>
           <ResearchThumbnail :src="selected.image_url" :alt="searchName(selected)" />
           <div>
@@ -243,7 +249,13 @@ const pendingMessage = computed(() => {
             >
           </div>
         </header>
-        <p v-if="candidates.length && selected.missing_fields.length" class="sourcing-missing">
+        <p v-if="detailLoading" class="sourcing-detail-loading" role="status">
+          正在读取货源报价与采集进度…
+        </p>
+        <p
+          v-if="!detailLoading && candidates.length && selected.missing_fields.length"
+          class="sourcing-missing"
+        >
           待补齐：{{ missingText }}
         </p>
         <section
@@ -310,7 +322,7 @@ const pendingMessage = computed(() => {
             </footer>
           </div>
         </section>
-        <section v-if="!candidates.length" class="sourcing-pending">
+        <section v-if="!detailLoading && !candidates.length" class="sourcing-pending">
           <h4>供应商报价</h4>
           <p>{{ pendingMessage }}</p>
           <span v-if="selected.missing_fields.length" class="sourcing-missing"
