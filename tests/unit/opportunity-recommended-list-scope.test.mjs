@@ -1,3 +1,4 @@
+import { optimizeSelectionReadSql } from "../../apps/api/dist/selection-read-query-plan.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -53,9 +54,11 @@ test("count and page retain the entire original eligibility filter with one scop
   const restored = filter.replaceAll("o.filter_primary_asin", () => opportunityPrimaryAsinSql);
   assert.equal(
     restored,
-    "o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending' AND " +
-      opportunityRecommendedSql +
-      " AND o.lifecycle_status<>'archived'",
+    optimizeSelectionReadSql(
+      "o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending' AND " +
+        opportunityRecommendedSql +
+        " AND o.lifecycle_status<>'archived'",
+    ),
   );
   assert.ok(
     page.sql.includes(

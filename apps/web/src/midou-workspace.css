@@ -1228,3 +1228,116 @@ html[data-design="commerce"] #app .midou-profile-grid .p11-form textarea {
     border-top: 1px solid var(--so-border);
   }
 }
+
+/* The topbar owns one persistent breadcrumb across all workspace routes. */
+html[data-design="commerce"] #app .role-topbar .role-top-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+html[data-design="commerce"] #app .role-top-breadcrumb > :is(a, span) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+html[data-design="commerce"] #app .role-top-breadcrumb b {
+  font-weight: 400;
+  color: var(--so-text-muted);
+}
+html[data-design="commerce"] #app .role-topbar .role-workspace-identity {
+  gap: 16px;
+}
+html[data-design="commerce"] #app .role-topbar .role-workspace-identity > a {
+  order: -1;
+}
+html[data-design="commerce"] #app .role-shell[data-shell="member"] .role-content {
+  font-size: 14px;
+}
+html[data-design="commerce"]
+  #app
+  :is(.catalogue-page-heading h2, .sourcing-head h1, .home-command-bar h2) {
+  font-size: 24px;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+html[data-design="commerce"] #app :is(.catalogue-controls, .sourcing-overview) {
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+html[data-design="commerce"] #app :is(.selection-product-row td, .sourcing-record-items > button) {
+  font-variant-numeric: tabular-nums;
+}
+html[data-design="commerce"] #app .sourcing-detail-loading {
+  padding: 18px;
+  margin: 0;
+  background: var(--so-panel-soft);
+  border-radius: 8px;
+  color: var(--so-text-muted);
+}
+@media (max-width: 760px) {
+  html[data-design="commerce"] #app .role-topbar .role-workspace-identity {
+    flex: 1;
+    min-width: 0;
+    gap: 0;
+  }
+  html[data-design="commerce"] #app .role-topbar .role-top-breadcrumb {
+    font-size: 12px;
+    gap: 4px;
+  }
+  html[data-design="commerce"] #app .role-top-breadcrumb > :is(a, span, b) {
+    flex-shrink: 0;
+  }
+  html[data-design="commerce"] #app .role-topbar .role-top-breadcrumb {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .role-shell[data-shell="member"] :is(input, select, textarea) {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .midou-home-main {
+    display: flex;
+    flex-direction: column;
+  }
+  .midou-home-main > .home-result-workspace {
+    order: 2;
+  }
+  .midou-home-main > .midou-home-flow {
+    order: 3;
+  }
+  .midou-home-main > .home-truth {
+    order: 4;
+  }
+  html[data-design="commerce"] #app .home-daily-production dl {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  html[data-design="commerce"] #app .home-daily-production dl > div {
+    padding: 12px 10px;
+  }
+  html[data-design="commerce"] #app .home-daily-production dt {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  html[data-design="commerce"] #app .home-daily-production dt svg {
+    display: none;
+  }
+  html[data-design="commerce"] #app .home-daily-production dd {
+    font-size: 22px;
+  }
+  html[data-design="commerce"] #app .home-daily-production dd small {
+    font-size: 11px;
+  }
+  html[data-design="commerce"] #app .home-command-bar nav {
+    gap: 8px;
+  }
+  html[data-design="commerce"] #app .home-live-status {
+    flex-basis: auto;
+  }
+}

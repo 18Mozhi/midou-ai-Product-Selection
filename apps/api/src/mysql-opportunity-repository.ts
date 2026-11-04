@@ -1,3 +1,4 @@
+import { optimizeSelectionReadSql } from "./selection-read-query-plan.js";
 import {
   opportunityRecommendedListSourceSql,
   opportunityPendingListSourceSql,
@@ -213,16 +214,18 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           ]
         : values,
       countRead = this.pool.query<RowDataPacket[]>(
-        `SELECT COUNT(*) total FROM ${source} WHERE ${sql}`,
+        optimizeSelectionReadSql(`SELECT COUNT(*) total FROM ${source} WHERE ${sql}`),
         filterValues,
       ),
       // LIMIT prevents MySQL 5.7 derived merging: resolve identity once per paged row,
       // rather than once per candidate evidence record. The outer sort preserves paging order.
       rowsRead = this.pool.query<RowDataPacket[]>(
-        sqlText(
-          `SELECT o.*,${reuseListPrimaryIdentitySql(opportunityListPrimaryRecordsSql)},${reuseListPrimaryIdentitySql(opportunityCountsSql)},${opportunityLifecycleSql},${opportunityListSelectionProjectionSql}`,
-          `FROM (SELECT o.*,${pendingIdentity ? "o.filter_primary_asin" : opportunityListPrimaryAsinSql} primary_fact_asin FROM (SELECT o.* FROM ${source} WHERE ${sql} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
-          "ORDER BY o.updated_at DESC,o.id DESC",
+        optimizeSelectionReadSql(
+          sqlText(
+            `SELECT o.*,${reuseListPrimaryIdentitySql(opportunityListPrimaryRecordsSql)},${reuseListPrimaryIdentitySql(opportunityCountsSql)},${opportunityLifecycleSql},${opportunityListSelectionProjectionSql}`,
+            `FROM (SELECT o.*,${pendingIdentity ? "o.filter_primary_asin" : opportunityListPrimaryAsinSql} primary_fact_asin FROM (SELECT o.* FROM ${source} WHERE ${sql} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
+            "ORDER BY o.updated_at DESC,o.id DESC",
+          ),
         ),
         [
           input.organizationId,

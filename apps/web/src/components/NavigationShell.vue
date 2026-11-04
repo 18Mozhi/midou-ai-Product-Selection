@@ -334,7 +334,15 @@ onUnmounted(() => {
         <AppIcon name="menu" /> <span>菜单</span>
       </button>
       <div class="role-workspace-identity">
-        <h1>{{ pageTitle }}</h1>
+        <nav class="role-page-breadcrumb role-top-breadcrumb" aria-label="面包屑">
+          <template v-for="(item, index) in breadcrumbs" :key="`${item}-${index}`">
+            <RouterLink v-if="item.path" :to="item.path">{{ item.label }}</RouterLink
+            ><span v-else :aria-current="index === breadcrumbs.length - 1 ? 'page' : undefined">{{
+              item.label
+            }}</span
+            ><b v-if="index < breadcrumbs.length - 1">/</b>
+          </template>
+        </nav>
         <RouterLink
           v-if="shell !== 'platform_admin'"
           to="/select-context"
@@ -570,15 +578,6 @@ onUnmounted(() => {
         ><button v-else-if="state !== 'loading'" type="button" @click="load">重新检查</button>
       </section>
       <template v-else-if="routeAllowed">
-        <nav v-if="!opportunityId" class="role-page-breadcrumb" aria-label="面包屑">
-          <template v-for="(item, index) in breadcrumbs" :key="`${item}-${index}`">
-            <RouterLink v-if="item.path" :to="item.path">{{ item.label }}</RouterLink
-            ><span v-else :aria-current="index === breadcrumbs.length - 1 ? 'page' : undefined">{{
-              item.label
-            }}</span
-            ><b v-if="index < breadcrumbs.length - 1">/</b>
-          </template>
-        </nav>
         <nav
           v-if="isPlatformOperationsRoute"
           class="platform-secondary-nav"
