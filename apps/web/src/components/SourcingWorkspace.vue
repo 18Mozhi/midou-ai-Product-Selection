@@ -24,6 +24,12 @@ const {
   notice,
   busy,
   query,
+  serverPaging,
+  recordPage,
+  recordPages,
+  visibleRecords,
+  matchingTotal,
+  changeRecordPage,
   comparisons,
   comparisonFailure,
   comparisonLoading,
@@ -60,19 +66,9 @@ const {
 } = useSourcingWorkspace(props);
 const recordPageSize = 20,
   supplierPageSize = 10;
-const recordPage = ref(1),
-  supplierPage = ref(1);
-const recordPages = computed(() =>
-  Math.max(1, Math.ceil(filteredItems.value.length / recordPageSize)),
-);
+const supplierPage = ref(1);
 const supplierPages = computed(() =>
   Math.max(1, Math.ceil(candidates.value.length / supplierPageSize)),
-);
-const visibleRecords = computed(() =>
-  filteredItems.value.slice(
-    (recordPage.value - 1) * recordPageSize,
-    recordPage.value * recordPageSize,
-  ),
 );
 const visibleCandidates = computed(() =>
   candidates.value.slice(
@@ -81,6 +77,7 @@ const visibleCandidates = computed(() =>
   ),
 );
 watch([filteredItems, () => selected.value?.id], () => {
+  if (serverPaging.value) return;
   const index = filteredItems.value.findIndex((item) => item.id === selected.value?.id);
   if (index >= 0) recordPage.value = Math.floor(index / recordPageSize) + 1;
   else {
@@ -98,11 +95,6 @@ watch(
 watch(supplierPages, (count) => {
   supplierPage.value = Math.min(supplierPage.value, count);
 });
-function changeRecordPage(next: number) {
-  recordPage.value = Math.max(1, Math.min(next, recordPages.value));
-  const first = visibleRecords.value[0];
-  if (first) void detail(first);
-}
 const pendingMessage = computed(() => {
   const progress = selected.value?.collection_progress;
   if (progress?.active_subqueries && progress.status === "running")
@@ -146,10 +138,15 @@ const pendingMessage = computed(() => {
           >搜索找货记录<input
             v-model="query"
             type="search"
+            maxlength="200"
             placeholder="关键词、选品编号或状态" /></label
-        ><span>共 {{ filteredItems.length }} 条结果</span>
+        ><span v-if="!['expired', 'forbidden'].includes(state)">共 {{ matchingTotal }} 条结果</span>
       </div>
-      <dl class="sourcing-summary" aria-label="供应链找货数据总览">
+      <dl
+        v-if="!['expired', 'forbidden'].includes(state)"
+        class="sourcing-summary"
+        aria-label="供应链找货数据总览"
+      >
         <div>
           <dt>找货任务</dt>
           <dd>{{ summary.total }}</dd>
@@ -173,14 +170,16 @@ const pendingMessage = computed(() => {
       :kind="state"
       :request-id="requestId"
       :action-hint="notice"
-      :title="state === 'empty' ? '尚无找货记录' : ''"
+      :title="state === 'empty' ? (query.trim() ? '没有匹配的找货记录' : '尚无找货记录') : ''"
       :description="
         state === 'empty'
-          ? '自动选品产生货源查询后，结果将在这里显示。可刷新记录查看最新状态。'
+          ? query.trim()
+            ? '当前搜索没有匹配记录，可清空搜索查看其他找货结果。'
+            : '自动选品产生货源查询后，结果将在这里显示。可刷新记录查看最新状态。'
           : ''
       "
       :hide-secondary="state === 'empty'"
-      :primary-label="state === 'empty' ? '刷新记录' : ''"
+      :primary-label="state === 'empty' ? (query.trim() ? '清空搜索' : '刷新记录') : ''"
       @primary="handleStatePrimary"
       @secondary="handleStateSecondary"
     />
@@ -197,7 +196,7 @@ const pendingMessage = computed(() => {
     <div v-else class="sourcing-layout">
       <aside aria-label="找货记录" :data-short="visibleRecords.length <= 2">
         <header class="sourcing-record-heading">
-          <b>找货记录</b><span>{{ filteredItems.length }} 条</span>
+          <b>找货记录</b><span>{{ matchingTotal }} 条</span>
         </header>
         <div class="sourcing-record-items">
           <button

@@ -2851,10 +2851,27 @@ paths:
   /sourcing/searches:
     get:
       summary: List sourcing searches with opportunity display names and traceable input references
+      description: Without page, page_size, q or record, retain the original unpaged data array and envelope. Supplying any of these opts into server pagination (default20, max100) with an optional meta object. total is the filtered record count; summary is the complete active organization/workspace aggregate, unaffected by the search/page. Search is a case-insensitive literal substring of display name, input reference and raw status separated by spaces; percent, underscore and equals are literal. Sort remains created_at DESC,id DESC. record locates its page only when page is omitted; stale page numbers clamp to the last page. No collection, source recovery or write is triggered.
+      parameters:
+        - { name: page, in: query, schema: { type: integer, minimum: 1, maximum: 1000000, default: 1 } }
+        - { name: page_size, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+        - { name: q, in: query, schema: { type: string, maxLength: 200 } }
+        - { name: record, in: query, schema: { type: string, format: uuid }, description: Locate a same-scope record using the current filter and sort when page is omitted. }
       security: [{ HttpOnlySession: [] }]
       x-required-capability: sourcing:read
       responses:
-        "200": { $ref: "#/components/responses/Success" }
+        "200":
+          description: Original array data with optional page metadata; existing row fields are unchanged.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: "#/components/schemas/SuccessEnvelope" }
+                  - type: object
+                    properties:
+                      data: { type: array, items: { type: object } }
+                      meta: { $ref: "#/components/schemas/SourcingListPageMeta" }
+        "400": { $ref: "#/components/responses/Error" }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
     post:
@@ -7680,6 +7697,21 @@ components:
       properties:
         outcome: { type: string, enum: [approved, rejected] }
         notes: { type: string, minLength: 1, maxLength: 1000 }
+    SourcingListPageMeta:
+      type: object
+      required: [page, page_size, total, summary]
+      properties:
+        page: { type: integer, minimum: 1 }
+        page_size: { type: integer, minimum: 1, maximum: 100 }
+        total: { type: integer, minimum: 0, description: Filtered record count. }
+        summary:
+          type: object
+          required: [total, running, candidates, ready]
+          properties:
+            total: { type: integer, minimum: 0, description: All non-deleted sourcing records in the selected scope. }
+            running: { type: integer, minimum: 0, description: Queued or running records; not a live-session count. }
+            candidates: { type: integer, minimum: 0, description: Sum of the original stored candidate_count field. }
+            ready: { type: integer, minimum: 0, description: Records with stored candidate_count greater than zero. }
     SourcingSearchInput:
       type: object
       additionalProperties: false

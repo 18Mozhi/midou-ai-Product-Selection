@@ -1,3 +1,4 @@
+export type { SourcingListPageMeta, SourcingListSummary } from "./sourcing-list.js";
 export const FOUNDATION_MODULE_ID = "M00-01" as const;
 
 export type OrganizationId = string & { readonly __brand: "OrganizationId" };

@@ -135,6 +135,8 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
     feature,
     runbook,
     offers,
+    specification,
+    comparisonCss,
   ] = await Promise.all(
     [
       "apps/web/src/components/SourcingWorkspace.vue",
@@ -147,9 +149,11 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
       "docs/feature-map.json",
       "docs/runbooks/m04-06-sourcing.md",
       "apps/web/src/components/SupplierOfferList.vue",
+      "apps/web/src/components/sourcing-comparison-specification.ts",
+      "apps/web/src/sourcing-comparison-table.css",
     ].map((path) => readFile(path, "utf8")),
   );
-  const uiSurface = `${offers}\n${ui}\n${comparisonPanel}\n${dialogs}`;
+  const uiSurface = `${offers}\n${ui}\n${comparisonPanel}\n${dialogs}\n${specification}`;
   assert.match(uiSurface, /规格、最小起订量与交期对比[\s\S]*最小起订量[\s\S]*报价[\s\S]*交期/);
   assert.match(uiSurface, /规格归一化提示/);
   assert.match(uiSurface, /系统不会自动换算或判断等价/);
@@ -172,7 +176,13 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
     comparisonPanel,
     /<table class="sourcing-quote-table">[\s\S]*scope="col"[\s\S]*<tbody>[\s\S]*scope="row"/,
   );
-  assert.match(comparisonPanel, /@media \(max-width: 760px\)/);
+  assert.match(
+    comparisonPanel,
+    /import \{ specificationHint \} from "\.\/sourcing-comparison-specification"/,
+  );
+  assert.match(comparisonPanel, /specificationHint\(comparison.quotes\)\.detail/);
+  assert.match(comparisonPanel, /<style scoped src="\.\.\/sourcing-comparison-table.css">/);
+  assert.match(comparisonCss, /@media \(max-width: 760px\)/);
   assert.match(css, /sourcing-compare-tray/);
   assert.match(architecture, /blocked_login[\s\S]*不伪造登录续期入口/);
   assert.match(feature, /sourcingDiscovery[\s\S]*pageFlow/);

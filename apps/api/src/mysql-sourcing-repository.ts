@@ -25,6 +25,97 @@ export class MySqlSourcingRepository implements SourcingRepository {
     );
     return rows.map((r) => this.search(r));
   }
+  async listPage(i: any) {
+    const name =
+      "CASE WHEN s.input_type='opportunity' THEN COALESCE(NULLIF(o.name,''),s.input_ref) ELSE s.input_ref END";
+    const displayName =
+      "CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE s.input_ref END";
+    const join =
+      " FROM sourcing_searches s LEFT JOIN " +
+      "(SELECT id,name,organization_id,workspace_id,lifecycle_status,CONVERT(id USING utf8mb4) COLLATE utf8mb4_unicode_ci lookup_ref " +
+      "FROM opportunities WHERE organization_id=? AND workspace_id=? LIMIT 18446744073709551615) o " +
+      "ON s.input_type='opportunity' AND s.input_ref=o.lookup_ref AND o.organization_id=s.organization_id " +
+      "AND o.workspace_id=s.workspace_id AND o.lifecycle_status<>'deleted' ";
+    const scope = "s.organization_id=? AND s.workspace_id=? AND s.deleted_at IS NULL";
+    const pattern =
+      "%" + i.query.toLowerCase().replace(/[=%_]/g, (value: string) => "=" + value) + "%";
+    const filter =
+      scope +
+      (i.query
+        ? ` AND BINARY LOWER(CONCAT(${name},' ',s.input_ref,' ',s.status)) LIKE BINARY ? ESCAPE '='`
+        : "");
+    const values = [
+      i.organizationId,
+      i.workspaceId,
+      i.organizationId,
+      i.workspaceId,
+      ...(i.query ? [pattern] : []),
+    ];
+    const [[totals], [summaries]] = await Promise.all([
+      this.pool.query<RowDataPacket[]>(
+        i.query
+          ? "SELECT COUNT(*) total" + join + "WHERE " + filter
+          : "SELECT COUNT(*) total FROM sourcing_searches s WHERE " + scope,
+        i.query ? values : [i.organizationId, i.workspaceId],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT COUNT(*) total,COALESCE(SUM(status IN ('queued','running')),0) running," +
+          "COALESCE(SUM(candidate_count),0) candidates,COALESCE(SUM(candidate_count>0),0) ready FROM sourcing_searches " +
+          "WHERE organization_id=? AND workspace_id=? AND deleted_at IS NULL",
+        [i.organizationId, i.workspaceId],
+      ),
+    ]);
+    const total = Number(totals[0]?.total ?? 0),
+      lastPage = Math.max(1, Math.ceil(total / i.pageSize));
+    let page = Math.min(i.page, lastPage);
+    if (i.locateRecord && total) {
+      const [positions] = await this.pool.query<RowDataPacket[]>(
+        "SELECT COUNT(*) preceding_count" +
+          join +
+          "JOIN sourcing_searches target ON target.id=? " +
+          "AND target.organization_id=s.organization_id AND target.workspace_id=s.workspace_id AND target.deleted_at IS NULL " +
+          "WHERE " +
+          filter +
+          " AND (s.created_at>target.created_at OR (s.created_at=target.created_at AND s.id>target.id))",
+        [...values.slice(0, 2), i.locateRecord, ...values.slice(2)],
+      );
+      page = Math.min(
+        Math.floor(Number(positions[0]?.preceding_count ?? 0) / i.pageSize) + 1,
+        lastPage,
+      );
+    }
+    const [rows] = total
+      ? await this.pool.query<RowDataPacket[]>(
+          "SELECT s.*,(SELECT JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) FROM collection_subqueries image_query " +
+            "JOIN providers image_provider ON image_provider.id=image_query.provider_id AND image_provider.code='1688_search' " +
+            "WHERE image_query.task_id=s.collection_task_id AND image_query.organization_id=s.organization_id AND image_query.workspace_id=s.workspace_id " +
+            "AND s.input_type='opportunity' AND JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) LIKE 'https://%' " +
+            "ORDER BY image_query.ordinal LIMIT 1) image_url FROM (SELECT s.*," +
+            displayName +
+            " display_name" +
+            join +
+            "WHERE " +
+            filter +
+            " ORDER BY s.created_at DESC,s.id DESC LIMIT ? OFFSET ?) s ORDER BY s.created_at DESC,s.id DESC",
+          [...values, i.pageSize, (page - 1) * i.pageSize],
+        )
+      : [[]];
+    const summary = summaries[0] ?? ({} as RowDataPacket);
+    return {
+      items: rows.map((row) => this.search(row)),
+      meta: {
+        page,
+        page_size: i.pageSize,
+        total,
+        summary: {
+          total: Number(summary.total ?? 0),
+          running: Number(summary.running ?? 0),
+          candidates: Number(summary.candidates ?? 0),
+          ready: Number(summary.ready ?? 0),
+        },
+      },
+    };
+  }
   async detail(i: any) {
     const [searches] = await this.pool.query<RowDataPacket[]>(
       "SELECT s.*,(SELECT JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) FROM collection_subqueries image_query JOIN providers image_provider ON image_provider.id=image_query.provider_id AND image_provider.code='1688_search' WHERE image_query.task_id=s.collection_task_id AND image_query.organization_id=s.organization_id AND image_query.workspace_id=s.workspace_id AND s.input_type='opportunity' AND JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) LIKE 'https://%' ORDER BY image_query.ordinal LIMIT 1) image_url,CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE " +
