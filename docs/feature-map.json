@@ -8427,5 +8427,28 @@
     ],
     "docs": ["docs/midou-navigation-continuity-20261104.md"],
     "contract": "Account and embedded appearance reuse the live member navigation shell without remounting header/sidebar. Direct account entry remains session-only: optional non-blocking navigation reads restore authorized links/context on reload, failures never block personal content; business destination guards are unchanged. Route changes no longer override user density. No API/env/schema/dependency/collector changes."
+  },
+  "sourceRecovery20261104": {
+    "sourceFiles": [
+      "packages/playwright-crawler/src/index.ts",
+      "packages/provider-sources/src/lan-1688-image-search.ts",
+      "packages/provider-sources/src/lan-1688-health-adapter.ts"
+    ],
+    "testFiles": [
+      "tests/integration/amazon-detail-readiness.test.mjs",
+      "tests/fixtures/amazon-detail-readiness.mjs",
+      "tests/unit/lan-1688-verification-required.test.mjs",
+      "tests/unit/lan-1688-image-search.test.mjs",
+      "tests/unit/lan-1688-item-detail.test.mjs",
+      "tests/unit/source-transport-health.test.mjs",
+      "tests/unit/lan-1688-recovery.test.mjs"
+    ],
+    "docs": [
+      "docs/source-recovery-20261104.md",
+      "docs/amazon-detail-readiness.md",
+      "docs/openapi.yaml"
+    ],
+    "contract": "Only 21-line Amazon detail readiness mechanism is reused, excluding unshipped request transport. Observed HTTP409/error_code=verification_required is bounded and mapped to existing nonretryable manual-verification captcha state; LAN health becomes blocked and existing recovery exclusion applies. Unknown409/429/detail cooldown/auth/abort/contracts and all concurrency limits remain unchanged. Node/Python official full-package restart; enable/recover only after fresh real health, never direct database resets or CAPTCHA bypass.",
+    "configFiles": ["config/env.example"]
   }
 }

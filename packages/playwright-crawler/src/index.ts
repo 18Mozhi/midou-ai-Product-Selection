@@ -845,6 +845,27 @@ export class PlaywrightCrawlerEngine {
           .waitFor({ state: "attached", timeout: this.limits.actionTimeoutMs })
           .catch(() => {});
       }
+      // A detail page has no legitimate empty-success state. Wait for its actual
+      // title before counting/capturing; images alone are not product evidence.
+      if (plan.amazon_delivery && new URL(plan.start_url).pathname !== "/s") {
+        stage = "amazon_detail_ready";
+        try {
+          await page.waitForFunction(
+            (itemSelector) =>
+              Boolean(
+                document.querySelector(itemSelector) &&
+                document.querySelector("#productTitle")?.textContent?.trim(),
+              ),
+            plan.item_selector,
+            { timeout: this.limits.actionTimeoutMs },
+          );
+        } catch (error) {
+          // A challenge appearing during the wait retains its original blocked state.
+          await guard(page);
+          throw error;
+        }
+        await guard(page);
+      }
       stage = "extract_items";
       for (let index = 0; index < plan.max_pages; index += 1) {
         if (rateLimited) throw new PlaywrightCrawlerError("rate_limited", "rate_limited", true);
