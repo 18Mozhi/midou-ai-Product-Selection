@@ -11,6 +11,35 @@ export const LAN_1688_PARSER_VERSION = "1688-lan-image-v1";
 export const LAN_1688_RESULT_LIMIT = 60;
 export const LAN_1688_MAX_PAGES = 2;
 export const LAN_1688_COLLECTION_LIMIT = LAN_1688_RESULT_LIMIT * LAN_1688_MAX_PAGES;
+// Observed 409 contract: a manual verification gate is not a network failure.
+// Never retain its message/body, and never read an unbounded error payload.
+async function lanVerificationRequired(response: Response): Promise<boolean> {
+  const reader = response.body?.getReader();
+  if (!reader) return false;
+  const chunks: Uint8Array[] = [];
+  let bytes = 0;
+  try {
+    while (true) {
+      const part = await reader.read();
+      if (part.done) break;
+      bytes += part.value.length;
+      if (bytes > 4096) return false;
+      chunks.push(part.value);
+    }
+    const value: unknown = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+    return Boolean(
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      (value as Record<string, unknown>).error_code === "verification_required",
+    );
+  } catch {
+    return false;
+  } finally {
+    await reader.cancel().catch(() => {});
+    reader.releaseLock();
+  }
+}
 const object = (value: unknown): Record<string, unknown> => {
   if (!value || typeof value !== "object" || Array.isArray(value))
     throw new ProviderAdapterFailure("invalid_payload", false);
@@ -461,6 +490,8 @@ export class Lan1688ImageSearch {
         await response.body?.cancel();
         throw new ProviderAdapterFailure("rate_limited", true);
       }
+      if (response.status === 409 && (await lanVerificationRequired(response)))
+        throw new ProviderAdapterFailure("captcha", false);
       if (!response.ok) {
         await response.body?.cancel();
         throw new ProviderAdapterFailure("dependency_unavailable", true);
