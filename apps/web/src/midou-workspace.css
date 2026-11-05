@@ -2543,14 +2543,17 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
   }
   html[data-design="commerce"] #app .notification-center > .midou-notification-preference {
     margin-block-start: 6px;
-    padding-block: 14px 24px;
+    padding-block: 14px 27px;
+  }
+  html[data-design="commerce"] #app .midou-notification-preference > h2 {
+    margin-block-end: 10px;
   }
   html[data-design="commerce"] #app .midou-notification-preference > p {
     font-size: 15px;
     line-height: 1.6;
   }
   html[data-design="commerce"] #app .midou-notification-preference > div {
-    min-height: 70px;
+    min-height: 73px;
     font-size: 16px;
   }
   html[data-design="commerce"] #app .midou-notification-preference > button {
