@@ -1337,6 +1337,11 @@ test("platform cockpit gives live operations the full workspace and accessible a
     expect(Math.abs(bounds.width - bounds.available)).toBeLessThan(2);
     expect(Math.abs(bounds.sources.top - bounds.trend.top)).toBeLessThan(2);
     expect(bounds.sources.left).toBeGreaterThan(bounds.trend.right);
+    expect(
+      Math.abs(
+        bounds.sources.right - bounds.sources.left - (bounds.trend.right - bounds.trend.left),
+      ),
+    ).toBeLessThan(2);
     await expect(alerts).toHaveCSS("overflow-y", "auto");
     await alerts.focus();
     await alerts.press("End");
@@ -1370,6 +1375,10 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
   }
   await expect(page.getByText("数据库", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: /检查来源是否启用/ })).toBeVisible();
+  await expect(page.locator(".platform-trend-empty")).toContainText("暂无趋势数据");
+  const emptyIcon = await page.locator(".platform-trend-empty > svg").boundingBox();
+  expect(emptyIcon!.width).toBeLessThan(60);
+  await expect(facts.locator("article > span > svg")).toHaveCount(5);
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();

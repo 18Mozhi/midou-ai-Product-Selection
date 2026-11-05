@@ -539,3 +539,117 @@
     border-right: 1px solid var(--pd-border);
   }
 }
+
+/* Platform overview: distinguish operational shortcuts, facts and drill-down panels. */
+#app .platform-dashboard--review .platform-action-summary {
+  border-radius: 12px;
+  background: var(--so-panel);
+  padding-block: 10px;
+}
+#app .platform-dashboard--review .platform-action-summary a {
+  padding: 4px 22px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 12px;
+}
+#app .platform-action-summary a > span,
+#app .platform-facts article > span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+#app .platform-action-summary a > span {
+  color: var(--so-text);
+  font-weight: 650;
+}
+#app .platform-action-summary a > span svg,
+#app .platform-facts article > span svg {
+  flex-shrink: 0;
+  color: var(--so-text-muted);
+}
+#app .platform-action-summary a > small {
+  padding-inline-start: 31px;
+}
+#app .platform-dashboard--review .platform-facts > div {
+  overflow: hidden;
+  border-radius: 10px;
+}
+#app .platform-trend-empty {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 7px;
+  min-height: 153px;
+  text-align: center;
+}
+#app .platform-trend-empty > svg {
+  box-sizing: content-box;
+  padding: 11px;
+  border-radius: 10px;
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
+#app .platform-trend-empty > strong {
+  color: var(--so-text);
+  font-size: 15px;
+}
+#app .platform-dashboard--review .platform-source-health th {
+  background: var(--so-panel-soft);
+}
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .platform-dashboard--review {
+    gap: 18px;
+  }
+  html[data-design="commerce"] #app .platform-dashboard--review > .platform-page-header h2 {
+    font-size: 29px;
+  }
+  html[data-design="commerce"] #app .platform-dashboard--review .platform-dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  #app .platform-dashboard--review .platform-facts article {
+    padding: 12px 18px;
+  }
+  #app .platform-dashboard--review .platform-facts article > :is(strong, a, small) {
+    margin-inline-start: 31px;
+  }
+}
+@media (max-width: 700px) {
+  #app .platform-dashboard--review .platform-action-summary a {
+    padding: 9px 14px;
+  }
+}
+
+#app .platform-trend-empty {
+  padding: 12px;
+}
+#app .platform-system-checks .platform-signals {
+  gap: 0;
+}
+#app .platform-system-checks .platform-signals li {
+  align-items: center;
+  padding: 5px 4px;
+  border-radius: 0;
+  border-bottom: 1px solid var(--so-border);
+  background: transparent;
+}
+#app .platform-system-checks .platform-storage {
+  margin-block-start: 10px;
+}
+#app .platform-source-health td > i[data-health] {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 99px;
+  background: var(--so-panel-soft);
+}
+#app .platform-source-health td > i[data-health="healthy"] {
+  background: var(--so-success-soft);
+}
+#app .platform-source-health td > i:is([data-health="degraded"], [data-health="unknown"]) {
+  color: var(--so-warning);
+  background: var(--so-warning-soft);
+}
+@media (min-width: 1440px) {
+  #app .platform-dashboard--review .platform-source-health {
+    align-self: stretch;
+  }
+}

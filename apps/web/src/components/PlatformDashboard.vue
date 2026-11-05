@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppIcon from "./AppIcon.vue";
 import PlatformPageHeader from "./PlatformPageHeader.vue";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -264,11 +265,13 @@ onUnmounted(() => {
       </div>
       <div class="platform-action-summary">
         <RouterLink to="/platform-admin/collection">
-          <span>等待处理</span><strong>{{ data.summary.queue_backlog }}</strong
+          <span><AppIcon name="target" :size="22" />等待处理</span
+          ><strong>{{ data.summary.queue_backlog }}</strong
           ><small>查看排队、运行或受阻的采集任务 →</small>
         </RouterLink>
         <RouterLink to="/platform-admin/collection/overview?root_cause=1">
-          <span>需要关注</span><strong>{{ data.summary.open_alerts }}</strong
+          <span><AppIcon name="shield" :size="22" />需要关注</span
+          ><strong>{{ data.summary.open_alerts }}</strong
           ><small>按错误根因查看异常 →</small>
         </RouterLink>
       </div>
@@ -280,7 +283,8 @@ onUnmounted(() => {
         </header>
         <div>
           <article>
-            <span>活跃组织</span><strong>{{ data.summary.active_organizations }}</strong
+            <span><AppIcon name="users" :size="22" />活跃组织</span
+            ><strong>{{ data.summary.active_organizations }}</strong
             ><RouterLink
               v-if="capabilities?.includes('platform:superadmin')"
               to="/platform-admin/organizations"
@@ -288,7 +292,8 @@ onUnmounted(() => {
             ><small v-else>仅超级管理员可查看明细</small>
           </article>
           <article>
-            <span>活跃用户</span><strong>{{ data.summary.active_users }}</strong
+            <span><AppIcon name="person" :size="22" />活跃用户</span
+            ><strong>{{ data.summary.active_users }}</strong
             ><RouterLink
               v-if="capabilities?.includes('platform:superadmin')"
               to="/platform-admin/users"
@@ -296,15 +301,18 @@ onUnmounted(() => {
             ><small v-else>仅超级管理员可查看明细</small>
           </article>
           <article>
-            <span>启用来源</span><strong>{{ data.summary.enabled_providers }}</strong
+            <span><AppIcon name="box" :size="22" />启用来源</span
+            ><strong>{{ data.summary.enabled_providers }}</strong
             ><RouterLink to="/platform-admin/providers/sources">查看来源</RouterLink>
           </article>
           <article>
-            <span>任务成功率</span><strong>{{ successRateText }}</strong
+            <span><AppIcon name="target" :size="22" />任务成功率</span
+            ><strong>{{ successRateText }}</strong
             ><RouterLink to="/platform-admin/collection">查看任务</RouterLink>
           </article>
           <article>
-            <span>窗内文件增长</span><strong>{{ bytes(data.summary.file_growth_bytes) }}</strong
+            <span><AppIcon name="list" :size="22" />窗内文件增长</span
+            ><strong>{{ bytes(data.summary.file_growth_bytes) }}</strong
             ><RouterLink to="/platform-admin/data">查看数据</RouterLink>
           </article>
         </div>
@@ -320,10 +328,14 @@ onUnmounted(() => {
               {{ data.task_trend.length }} 个时间点</span
             >
           </header>
-          <div v-if="!data.task_trend.length" class="platform-inline-empty">
-            当前时间范围还没有趋势数据。<RouterLink to="/platform-admin/providers/sources"
-              >检查来源是否启用</RouterLink
-            >，或<RouterLink to="/platform-admin/collection/overview">查看采集队列</RouterLink>。
+          <div v-if="!data.task_trend.length" class="platform-inline-empty platform-trend-empty">
+            <AppIcon name="chart" :size="24" /><strong>暂无趋势数据</strong
+            ><span>
+              当前时间范围还没有趋势数据。<RouterLink to="/platform-admin/providers/sources"
+                >检查来源是否启用</RouterLink
+              >，或<RouterLink to="/platform-admin/collection/overview">查看采集队列</RouterLink
+              >。</span
+            >
           </div>
           <svg
             v-else
@@ -546,7 +558,7 @@ onUnmounted(() => {
   </section>
 </template>
 <style scoped>
-.platform-trend-chart svg {
+.platform-trend-chart > svg {
   display: block;
   width: 100%;
   height: 190px;
