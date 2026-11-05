@@ -545,6 +545,7 @@ test("empty opportunity offers show the same profit summary without refetching o
 });
 
 test("empty sourcing offers keep unconfirmed cost rows distinct from real profit", async ({ page }) => {
+  if (page.viewportSize()!.width >= 1101) await page.setViewportSize({ width: 1672, height: 941 });
   const { search } = await opportunitySetup(
     page,
     { latest_run: null, current_inputs: [], cost_input_reviews: [] },
@@ -558,6 +559,12 @@ test("empty sourcing offers keep unconfirmed cost rows distinct from real profit
   const breakdown = offers.locator(".sourcing-profit-unconfirmed-breakdown");
   await expect(breakdown.locator("dt")).toHaveText(["采购成本", "头程费用", "平台费用", "预计利润"]);
   await expect(breakdown.locator("dd")).toHaveText(["—", "—", "—", "—"]);
+  if (page.viewportSize()!.width >= 1440) {
+    const heading = offers.locator(".sourcing-profit-summary > header > div");
+    await expect(heading).toHaveCSS("display", "flex");
+    await expect(heading).toHaveCSS("align-items", "baseline");
+    await expect(offers.locator(".sourcing-quote-empty")).toHaveCSS("min-height", "169px");
+  }
   const basis = offers.locator(".sourcing-profit-basis");
   await expect(basis).not.toHaveAttribute("open", "");
   await basis.locator("summary").click();

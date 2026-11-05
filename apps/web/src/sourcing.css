@@ -1264,6 +1264,20 @@ html[data-design="commerce"] #app .sourcing-empty-offers--with-profit .sourcing-
     grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
   }
 }
+@media (min-width: 1440px) {
+  .sourcing-empty-offers--with-profit > .sourcing-quote-empty {
+    min-height: 169px;
+  }
+  .sourcing-empty-offers--with-profit .sourcing-profit-summary:has(.sourcing-profit-unconfirmed) > header > div {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+  }
+  .sourcing-empty-offers--with-profit .sourcing-profit-unconfirmed {
+    margin: 0;
+  }
+}
 .sourcing-detail [role="tabpanel"] > :is(.sourcing-profit-summary, .sourcing-comparisons) {
   margin-block-start: 0;
 }
