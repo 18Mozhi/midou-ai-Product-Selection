@@ -399,7 +399,7 @@ onUnmounted(() => {
           <kbd>Ctrl K</kbd>
         </button>
         <details ref="navigationHelp" class="midou-navigation-help">
-          <summary aria-label="导航帮助"><span aria-hidden="true">?</span></summary>
+          <summary aria-label="导航帮助"><AppIcon name="help" :size="22" /></summary>
           <div class="midou-account-menu-panel midou-help-panel">
             <strong>导航帮助</strong>
             <p v-if="shell === 'member'">按 Ctrl 或 ⌘ + K 搜索功能、商品和 ASIN。</p>
@@ -509,7 +509,7 @@ onUnmounted(() => {
           </a>
         </RouterLink>
         <button type="button" class="midou-sidebar-help" @click="openNavigationHelp">
-          <span aria-hidden="true">?</span>帮助
+          <AppIcon name="help" :size="18" />帮助
         </button>
         <RouterLink
           v-if="shell === 'organization_admin'"

@@ -1095,6 +1095,9 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
     "rgba(0, 0, 0, 0)",
   );
   const contextBounds = await context.boundingBox();
+  const topHelp = page.getByLabel("导航帮助");
+  await expect(topHelp.locator("svg")).toHaveAttribute("width", "22");
+  await expect(topHelp).toHaveCSS("min-height", "44px");
   for (const [label, path] of [
     ["市场情报", "/trends"],
     ["选品库", "/opportunities"],
@@ -1106,7 +1109,9 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
     await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
     expect(await context.boundingBox()).toEqual(contextBounds);
   }
-  await sidebar.getByRole("button", { name: "帮助", exact: true }).click();
+  const sidebarHelp = sidebar.getByRole("button", { name: "帮助", exact: true });
+  await expect(sidebarHelp.locator("svg")).toHaveAttribute("width", "18");
+  await sidebarHelp.click();
   await expect(page.locator(".midou-navigation-help")).toHaveAttribute("open", "");
   await expect(page.getByText("使用侧栏顶部切换工作台，在个人中心调整外观。")).toBeVisible();
 });

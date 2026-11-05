@@ -1630,16 +1630,9 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
 .midou-navigation-help summary::-webkit-details-marker {
   display: none;
 }
-.midou-navigation-help summary > span,
-.midou-sidebar-help > span {
-  display: inline-grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
-  border: 1.5px solid currentColor;
-  border-radius: 50%;
-  font-size: 13px;
-  line-height: 1;
+.midou-navigation-help summary > svg,
+.midou-sidebar-help > svg {
+  flex-shrink: 0;
 }
 .midou-help-panel {
   width: 230px;
