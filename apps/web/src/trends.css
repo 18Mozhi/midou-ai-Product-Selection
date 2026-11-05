@@ -713,6 +713,23 @@
       minmax(120px, 0.9fr) auto;
   }
 }
+@media (min-width: 1600px) {
+  .trend-dashboard--review .trend-filters {
+    grid-template-columns:
+      minmax(0, 207fr) minmax(0, 215fr) minmax(0, 175fr) minmax(0, 297fr)
+      minmax(0, 194fr) auto;
+    column-gap: 14px;
+  }
+  .trend-dashboard--review .trend-filter-actions {
+    gap: 14px;
+  }
+  #app .trend-dashboard--review .trend-filter-actions > button {
+    min-inline-size: 94px;
+  }
+  #app .trend-dashboard--review .trend-filter-actions > button[type="submit"] {
+    min-inline-size: 97px;
+  }
+}
 @media (max-width: 1100px) {
   .trend-dashboard--review .trend-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));

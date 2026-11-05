@@ -822,6 +822,20 @@ test("midou reference list defaults closed, opens and closes detail without list
       await expect(heading.locator("h2 > span")).toHaveCSS("font-size", "15px");
       await expect(heading.locator("p")).toHaveCSS("font-size", "16px");
       expect(Math.abs(filters.y - 216)).toBeLessThanOrEqual(4);
+      const filterBar = page.locator(".trend-filters");
+      const fields = await filterBar.locator(":scope > label").evaluateAll((nodes) =>
+        nodes.map((node) => node.getBoundingClientRect().width),
+      );
+      expect(fields).toHaveLength(5);
+      for (const [index, width] of [207, 215, 175, 297, 194].entries()) {
+        expect(Math.abs(fields[index] - width)).toBeLessThanOrEqual(9);
+      }
+      const [apply, reset] = await filterBar.locator(".trend-filter-actions > button")
+        .evaluateAll((nodes) => nodes.map((node) => {
+          const { x, width } = node.getBoundingClientRect();
+          return { x, width };
+        }));
+      expect([apply.width, reset.width, reset.x - apply.x - apply.width]).toEqual([97, 94, 14]);
       await expect(page.locator(".trend-filter-field svg:visible")).toHaveCount(4);
       await expect(page.getByRole("combobox", { name: "市场", exact: true })).toHaveCSS("padding-left", "40px");
       const listBox = (await list.boundingBox())!;
