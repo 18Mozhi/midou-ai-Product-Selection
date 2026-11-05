@@ -739,9 +739,12 @@ watch(
           <i :data-category="item.category"
             ><AppIcon
               :name="
-                { task: 'list', approval: 'check', competitor: 'target', system: 'bell' }[
-                  item.category
-                ] || 'bell'
+                {
+                  task: 'notification-clipboard',
+                  approval: 'check',
+                  competitor: 'notification-trophy',
+                  system: 'bell',
+                }[item.category] || 'bell'
               "
               :size="24" /></i
           ><span

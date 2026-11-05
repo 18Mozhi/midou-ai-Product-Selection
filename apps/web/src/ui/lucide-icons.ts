@@ -26,6 +26,15 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ["rect", { x: "8", y: "2", width: "8", height: "4", rx: "1" }],
     ["path", { d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2m1 10 2 2 4-4" }],
   ],
+  // Local notification glyphs, drawn on the same 24px outline grid.
+  "notification-clipboard": [
+    ["rect", { x: "8", y: "2", width: "8", height: "4", rx: "1" }],
+    ["path", { d: "M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2M8 11h8m-8 4h8" }],
+  ],
+  "notification-trophy": [
+    ["path", { d: "M7 3h10v7a5 5 0 0 1-10 0V3Z" }],
+    ["path", { d: "M7 5H3v2a4 4 0 0 0 4 4m10-6h4v2a4 4 0 0 1-4 4m-5 4v6m-5 0h10" }],
+  ],
   "loader-circle-dots": [
     ["circle", { cx: "12", cy: "12", r: "9", "stroke-dasharray": "0.5 6.57", "stroke-width": "3" }],
   ],

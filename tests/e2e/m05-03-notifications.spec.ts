@@ -770,6 +770,25 @@ test("P26 preference failure announces and focuses its modal error without losin
   await expect(error.getByText("p26-preference-conflict")).toBeVisible();
 });
 
+test("notification cards distinguish task and competitor categories with decorative glyphs", async ({ page }) => {
+  await setup(page);
+  const rows = [
+    { ...item, category: "task", title: "任务状态更新" },
+    { ...item, id: "00000000-0000-4000-8000-000000000984", category: "competitor", title: "竞品监控更新" },
+  ];
+  await page.route("**/api/v1/notifications?*", (route) =>
+    route.fulfill({ json: { ...env(rows), meta: { total: rows.length } } }),
+  );
+  await page.goto("/notifications");
+  const task = page.locator(".notification-record > i[data-category='task'] svg");
+  const competitor = page.locator(".notification-record > i[data-category='competitor'] svg");
+  await expect(task).toHaveAttribute("aria-hidden", "true");
+  await expect(competitor).toHaveAttribute("aria-hidden", "true");
+  await expect(task.locator("rect")).toHaveCount(1);
+  await expect(competitor.locator("path")).toHaveCount(2);
+  await expect(competitor.locator("circle")).toHaveCount(0);
+});
+
 test("midou reference notification layout keeps original workflow and preferences reachable", async ({
   page,
 }, testInfo) => {
