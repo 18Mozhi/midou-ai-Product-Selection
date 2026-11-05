@@ -230,6 +230,15 @@ test("workbench completed empty action fits in the reference desktop first fold"
   await expect(facts.nth(1)).toHaveAttribute("href", "/opportunities?view=rule_candidates");
   const steps = page.getByRole("region", { name: "选品任务流程" }).getByRole("listitem");
   await expect(steps).toHaveCount(5);
+  const stepMarkers = await steps.locator(":scope > b").evaluateAll((markers) =>
+    markers.map((marker) => {
+      const box = marker.getBoundingClientRect();
+      return { x: box.x, y: box.y, width: box.width };
+    }),
+  );
+  expect(stepMarkers.every(({ y, width }) => y === stepMarkers[0].y && width === 30)).toBe(true);
+  expect(Math.abs(stepMarkers[0].x - 345)).toBeLessThanOrEqual(5);
+  expect(Math.abs(stepMarkers[4].x - 1218)).toBeLessThanOrEqual(12);
   expect(
     await steps.evaluateAll((items) =>
       items.map((item) => getComputedStyle(item, "::after").content),
