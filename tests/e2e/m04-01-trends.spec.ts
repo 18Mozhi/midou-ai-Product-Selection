@@ -409,6 +409,8 @@ test("trend view URL restores filters, sorting and direct topic navigation", asy
     await page.getByRole("button", { name: /筛选趋势/ }).click();
   await expect(page.getByRole("textbox", { name: "关键词", exact: true })).toHaveValue("skin");
   await expect(page.getByLabel("排序")).toHaveValue("latest");
+  await expect(page.getByRole("button", { name: "筛选", exact: true }).locator("svg")).toBeVisible();
+  await expect(page.getByRole("button", { name: "重置", exact: true }).locator("svg")).toBeVisible();
   await expect(page.getByRole("heading", { name: detail.title })).toBeVisible();
   await page.getByRole("textbox", { name: "分类", exact: true }).fill("beauty");
   await page.getByRole("button", { name: "筛选", exact: true }).click();

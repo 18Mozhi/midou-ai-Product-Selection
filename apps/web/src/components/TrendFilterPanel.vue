@@ -56,14 +56,28 @@ const updateFilter = (key: keyof TrendFilters, event: Event) =>
         </select></label
       >
       <div class="trend-filter-actions">
-        <button class="filter-apply-action secondary" type="submit">筛选</button>
-        <button type="button" class="secondary" @click="emit('clear')">清除</button>
+        <button class="filter-apply-action secondary" type="submit">
+          <AppIcon name="funnel" :size="16" />筛选
+        </button>
+        <button type="button" class="secondary trend-filter-reset" @click="emit('clear')">
+          <AppIcon name="refresh" :size="16" />重置
+        </button>
       </div>
     </form>
   </ResponsiveFilterDrawer>
 </template>
 
 <style scoped>
+.trend-filter-actions > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.trend-filter-actions > button > svg {
+  flex-shrink: 0;
+}
 .filter-apply-action {
   border-color: var(--so-border);
   color: var(--so-text);

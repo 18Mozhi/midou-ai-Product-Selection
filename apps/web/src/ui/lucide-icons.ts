@@ -10,6 +10,7 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ],
   ],
   check: [["path", { d: "M20 6 9 17l-5-5" }]],
+  funnel: [["path", { d: "M3 4h18l-7 8v7l-4-2v-5Z" }]],
   globe: [
     ["circle", { cx: "12", cy: "12", r: "10" }],
     ["path", { d: "M2 12h20M12 2c5 5 5 15 0 20-5-5-5-15 0-20Z" }],
