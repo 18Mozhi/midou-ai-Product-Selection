@@ -504,3 +504,17 @@
     padding-block: 5px;
   }
 }
+
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .org-admin-center--profile-review
+    > header[data-profile-overview="true"] .org-admin-refresh {
+    column-gap: 20px;
+  }
+  #app .org-overview-actions > button {
+    min-inline-size: 114px;
+    padding-inline: 12px;
+  }
+  #app .org-overview-actions > .org-overview-invite {
+    min-inline-size: 125px;
+  }
+}

@@ -2517,6 +2517,15 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   await page.setViewportSize({ width: 1672, height: 941 });
   await setup(page);
   await page.goto("/org-admin");
+  const actions = page.locator(".org-overview-actions");
+  const refresh = actions.getByRole("button", { name: "刷新数据", exact: true });
+  const invite = actions.getByRole("link", { name: "邀请成员", exact: true });
+  await expect(invite).toHaveAttribute("href", "/org-admin/members");
+  const [refreshBox, inviteBox] = await Promise.all([refresh.boundingBox(), invite.boundingBox()]);
+  expect(refreshBox!.width).toBe(114);
+  expect(inviteBox!.width).toBe(125);
+  expect(inviteBox!.x - refreshBox!.x - refreshBox!.width).toBe(20);
+  expect(Math.abs(inviteBox!.y + inviteBox!.height / 2 - refreshBox!.y - refreshBox!.height / 2)).toBeLessThanOrEqual(1);
   const editor = page.locator(".organization-profile-editor");
   const nameField = editor.getByLabel("名称", { exact: true });
   const save = editor.getByRole("button", { name: "保存", exact: true });
