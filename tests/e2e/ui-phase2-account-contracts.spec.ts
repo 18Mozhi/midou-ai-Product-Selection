@@ -262,6 +262,32 @@ test("UI2-A03 theme conflict requires fresh preference before the next versioned
   ]);
 });
 
+test("profile shows saved avatar but never loads an unsaved URL", async ({ page }) => {
+  await accountSession(page);
+  const savedUrl = "https://avatar.example.test/saved.svg";
+  let draftReads = 0;
+  await page.route("https://avatar.example.test/**", (route) => {
+    if (route.request().url() !== savedUrl) draftReads++;
+    return route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><rect width="24" height="24" fill="blue"/></svg>',
+    });
+  });
+  await page.route("**/api/v1/me/profile", (route) =>
+    route.fulfill({ json: envelope({ ...profile, avatar_url: savedUrl }) }),
+  );
+  await page.goto("/me");
+  const preview = page.locator(".p11-avatar-preview img");
+  await preview.scrollIntoViewIfNeeded();
+  await expect
+    .poll(() => preview.evaluate((image: HTMLImageElement) => image.naturalWidth))
+    .toBe(24);
+  await page.getByLabel("头像 HTTPS 地址").fill("https://avatar.example.test/draft.svg");
+  await expect(preview).toHaveAttribute("src", savedUrl);
+  await expect(page.locator(".midou-profile-avatar img")).toHaveAttribute("src", savedUrl);
+  expect(draftReads).toBe(0);
+});
+
 test("UI2-A04 profile remains writable when tenant sections and optional navigation fail", async ({
   page,
 }) => {

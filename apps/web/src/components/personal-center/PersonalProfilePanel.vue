@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ActionFeedback, PersonalProfile, PersonalProfileDraft, ProfileField } from "./types";
+import ProfileAvatar from "./ProfileAvatar.vue";
 
 const props = defineProps<{
   profile: PersonalProfile;
@@ -77,16 +78,22 @@ function update(field: ProfileField, event: Event) {
     <div class="p11-field-group">
       <label for="p11-avatar">头像 HTTPS 地址</label>
       <div class="p11-field-value">
-        <input
-          id="p11-avatar"
-          :value="props.draft.avatar_url ?? ''"
-          type="url"
-          inputmode="url"
-          placeholder="请输入 HTTPS 图片地址"
-          :disabled="props.saving"
-          @input="update('avatar_url', $event)"
-        />
-        <small>请输入 HTTPS 图片地址。</small>
+        <div class="p11-avatar-field">
+          <input
+            id="p11-avatar"
+            :value="props.draft.avatar_url ?? ''"
+            type="url"
+            inputmode="url"
+            placeholder="请输入 HTTPS 图片地址"
+            :disabled="props.saving"
+            @input="update('avatar_url', $event)"
+          />
+          <ProfileAvatar
+            class="p11-avatar-preview"
+            :name="props.profile.display_name || props.profile.email"
+            :url="props.profile.avatar_url"
+          />
+        </div>
       </div>
     </div>
 
@@ -167,3 +174,18 @@ function update(field: ProfileField, event: Event) {
     </footer>
   </form>
 </template>
+
+<style scoped>
+.p11-avatar-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 10px;
+}
+.p11-avatar-preview {
+  width: 40px;
+  height: 40px;
+  justify-self: center;
+  box-shadow: 0 0 0 1px var(--so-border);
+}
+</style>

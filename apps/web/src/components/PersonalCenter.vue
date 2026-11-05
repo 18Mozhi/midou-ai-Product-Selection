@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ProfileAvatar from "./personal-center/ProfileAvatar.vue";
 import { ref, watch } from "vue";
 import AppIcon from "./AppIcon.vue";
 import ThemeStudio from "./ThemeStudio.vue";
@@ -114,9 +115,11 @@ const sectionItems = [
       <div v-if="section === 'profile' && center.profile.value" class="midou-profile-grid">
         <aside class="midou-profile-summary">
           <section>
-            <span class="midou-profile-avatar">{{
-              (center.profile.value.display_name || center.profile.value.email).slice(0, 2)
-            }}</span>
+            <ProfileAvatar
+              class="midou-profile-avatar"
+              :name="center.profile.value.display_name || center.profile.value.email"
+              :url="center.profile.value.avatar_url"
+            />
             <h2 class="midou-profile-name">{{ center.profile.value.display_name }}</h2>
             <div class="midou-profile-email">
               <span>{{ center.profile.value.email }}</span>
