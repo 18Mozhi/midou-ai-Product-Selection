@@ -1729,6 +1729,10 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     expect(Math.abs(records!.width - 332)).toBeLessThanOrEqual(3);
     expect(Math.abs(detail!.x - 606)).toBeLessThanOrEqual(4);
     expect(Math.abs(detail!.y - 301)).toBeLessThanOrEqual(3);
+    await expect(page.locator(".sourcing-record-items > button").first()).toHaveCSS("column-gap", "15px");
+    const warning = page.locator(".sourcing-pending[data-attention='true']");
+    await expect(warning.locator("h4")).toHaveCSS("column-gap", "12px");
+    await expect(warning.locator("p")).toHaveCSS("padding-inline-start", "34px");
     expect(Math.abs(records!.y + records!.height - detail!.y - detail!.height)).toBeLessThanOrEqual(3);
     const rules = actions.getByRole("link", { name: "费用与利润规则" });
     const refresh = actions.getByRole("button", { name: "刷新记录", exact: true });

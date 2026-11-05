@@ -1066,7 +1066,7 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   }
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items > button {
     grid-template-columns: 68px minmax(0, 1fr);
-    column-gap: 12px;
+    column-gap: 15px;
     padding: 10px;
   }
   html[data-design="commerce"]
@@ -1084,6 +1084,19 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   }
 }
 @media (min-width: 1440px) {
+  .sourcing-pending[data-attention="true"] > div {
+    --sourcing-notice-icon: 22px;
+    --sourcing-notice-gap: 12px;
+  }
+  .sourcing-pending[data-attention="true"] h4 {
+    gap: var(--sourcing-notice-gap);
+  }
+  .sourcing-pending[data-attention="true"] h4 > svg {
+    flex: 0 0 var(--sourcing-notice-icon);
+  }
+  .sourcing-pending[data-attention="true"] > div > :is(p, .sourcing-missing) {
+    padding-inline-start: calc(var(--sourcing-notice-icon) + var(--sourcing-notice-gap));
+  }
   #app .sourcing-workspace--review .sourcing-detail > header h3 {
     font-size: 22px;
     line-height: 1.3;
