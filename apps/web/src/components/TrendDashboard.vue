@@ -407,6 +407,7 @@ onBeforeUnmount(() => {
           :disabled="state === 'loading'"
           @click="load"
         >
+          <AppIcon name="refresh" :size="17" />
           刷新情报
         </button>
       </div>

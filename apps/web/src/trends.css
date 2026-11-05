@@ -468,7 +468,7 @@
   border: 1px solid var(--trend-line);
   border-radius: 4px;
 }
-.trend-market-actions .trend-view-sources {
+.trend-market-actions button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1054,6 +1054,17 @@
   }
   html[data-design="commerce"] #app .trend-market-heading {
     padding-block-end: 12px;
+  }
+  html[data-design="commerce"] #app .trend-market-heading > div {
+    position: relative;
+    inset-block-start: 4px;
+  }
+  html[data-design="commerce"] #app .trend-market-actions .so-action-secondary {
+    border-radius: 7px;
+    background: var(--so-panel);
+  }
+  html[data-design="commerce"] #app .trend-market-actions .so-action-secondary:hover:not(:disabled) {
+    background: var(--so-panel-soft);
   }
   html[data-design="commerce"] #app .trend-market-heading h2 {
     font-size: 30px;

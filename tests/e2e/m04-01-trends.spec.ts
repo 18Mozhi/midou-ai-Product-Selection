@@ -819,6 +819,14 @@ test("midou reference list defaults closed, opens and closes detail without list
     if (page.viewportSize()!.width >= 1600 && page.viewportSize()!.height >= 916) {
       const filters = (await page.locator(".trend-filters").boundingBox())!;
       const heading = page.locator(".trend-market-heading");
+      const actions = heading.locator(".trend-market-actions");
+      const refresh = actions.getByRole("button", { name: "刷新情报" });
+      await expect(refresh.locator("svg")).toHaveAttribute("aria-hidden", "true");
+      await expect(refresh).toHaveCSS("background-color", "rgb(255, 255, 255)");
+      await expect(actions.getByRole("button", { name: "查看来源" })).toHaveCSS(
+        "border-radius", "7px",
+      );
+      expect(Math.abs((await refresh.boundingBox())!.y - 143)).toBeLessThanOrEqual(3);
       await expect(heading.locator("h2 > span")).toHaveCSS("font-size", "15px");
       await expect(heading.locator("p")).toHaveCSS("font-size", "16px");
       expect(Math.abs(filters.y - 216)).toBeLessThanOrEqual(2);
