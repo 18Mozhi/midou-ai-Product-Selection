@@ -32,7 +32,8 @@ html[data-design="commerce"] #app .home-result-header button {
 }
 html[data-design="commerce"] #app .home-result-header button[aria-pressed="true"] {
   border-bottom-color: var(--home-accent);
-  color: var(--so-text);
+  color: var(--home-accent);
+  font-weight: 600;
 }
 .home-result-header button span {
   margin-left: 5px;

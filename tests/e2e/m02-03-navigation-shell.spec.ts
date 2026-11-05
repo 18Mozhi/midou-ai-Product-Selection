@@ -860,7 +860,12 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
             parseFloat(style.paddingRight)
           );
         });
-      expect(iconContentWidth).toBeGreaterThanOrEqual(18);
+      if (page.viewportSize()!.width <= 640) {
+        // The approved compact phone layout prioritizes results and hides KPI artwork.
+        await expect(page.locator(".home-daily-production dt svg").first()).not.toBeVisible();
+      } else {
+        expect(iconContentWidth).toBeGreaterThanOrEqual(18);
+      }
       await expect(page.getByRole("region", { name: "选品任务流程", exact: true })).toBeVisible();
       await expect(page.locator(".midou-home-flow li")).toHaveCount(5);
       await expect(page.locator(".midou-member-utility a")).toHaveCount(2);
