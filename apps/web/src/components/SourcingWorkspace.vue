@@ -143,6 +143,17 @@ const pendingMessage = computed(() => {
     return "采集任务仍在等待处理，尚未取得供应商报价。可刷新记录查看最新进度。";
   return "当前记录尚无供应商候选，可刷新记录查看自动找货进度。";
 });
+const offerNeedsAttention = computed(() => {
+  const progress = selected.value?.collection_progress;
+  return Boolean(
+    progress?.failed_subqueries ||
+    progress?.blocked_subqueries ||
+    ["failed", "cancelled", "dead_letter"].includes(progress?.status ?? ""),
+  );
+});
+const showCollectionLinkInNotice = computed(
+  () => offerNeedsAttention.value && !detailLoading.value && !candidates.value.length,
+);
 </script>
 <template>
   <section class="sourcing-workspace sourcing-workspace--review">
@@ -320,7 +331,9 @@ const pendingMessage = computed(() => {
                 </div>
               </dl>
               <RouterLink
-                v-if="canInspectCollection"
+                v-if="
+                  canInspectCollection && selected.collection_task_id && !showCollectionLinkInNotice
+                "
                 :to="`/platform-admin/collection?task=${selected.collection_task_id}`"
                 >查看采集任务明细</RouterLink
               >
@@ -360,17 +373,39 @@ const pendingMessage = computed(() => {
         <section
           v-if="!detailLoading && !candidates.length"
           class="sourcing-pending"
-          :data-attention="
-            Boolean(
-              selected.collection_progress?.failed_subqueries ||
-              selected.collection_progress?.blocked_subqueries,
-            )
-          "
+          :data-attention="offerNeedsAttention"
         >
-          <h4><AppIcon name="box" />供应商报价</h4>
-          <p>{{ pendingMessage }}</p>
-          <span v-if="selected.missing_fields.length" class="sourcing-missing"
-            >待补齐：{{ missingText }}</span
+          <div>
+            <h4>
+              <svg
+                v-if="offerNeedsAttention"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M10.3 4.2 2.6 17.7A1.6 1.6 0 0 0 4 20h16a1.6 1.6 0 0 0 1.4-2.3L13.7 4.2a2 2 0 0 0-3.4 0ZM12 9v4m0 3h.01"
+                />
+              </svg>
+              <AppIcon v-else name="box" />
+              {{ offerNeedsAttention ? "未获得供应商报价" : "供应商报价" }}
+            </h4>
+            <p>{{ pendingMessage }}</p>
+            <span v-if="selected.missing_fields.length" class="sourcing-missing"
+              >待补齐：{{ missingText }}</span
+            >
+          </div>
+          <RouterLink
+            v-if="canInspectCollection && selected.collection_task_id && showCollectionLinkInNotice"
+            class="so-action-secondary sourcing-notice-task"
+            :to="`/platform-admin/collection?task=${selected.collection_task_id}`"
+            >查看采集任务明细</RouterLink
           >
         </section>
         <div class="sourcing-detail-tabs" role="tablist" aria-label="找货详情视图">

@@ -955,6 +955,12 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
 }
 #app .sourcing-workspace--review .sourcing-pending {
   border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 14px;
+  padding-block: 10px;
 }
 #app .sourcing-workspace--review .sourcing-pending[data-attention="true"] {
   border-color: color-mix(in srgb, var(--so-warning) 25%, var(--so-border));
@@ -967,6 +973,18 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
 }
 .sourcing-pending[data-attention="true"] h4 svg {
   color: var(--so-warning);
+}
+.sourcing-pending[data-attention="true"] h4 {
+  font-size: 17px;
+}
+.sourcing-pending > div > p {
+  margin-block: 4px 0;
+}
+.sourcing-pending .sourcing-notice-task {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  white-space: nowrap;
 }
 @media (min-width: 1101px) {
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-head {

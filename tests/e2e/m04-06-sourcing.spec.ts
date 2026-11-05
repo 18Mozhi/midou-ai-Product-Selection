@@ -205,7 +205,11 @@ for (const scenario of [
   },
 ]) {
   test(`empty sourcing status remains factual for ${scenario.name}`, async ({ page }) => {
-    await setup(page);
+    const taskId = "00000000-0000-4000-8000-000000000612";
+    await setup(
+      page,
+      scenario.name === "failed" ? ["sourcing:read", "platform:operate"] : undefined,
+    );
     const search = {
       id: searchId,
       input_type: "keyword",
@@ -221,6 +225,7 @@ for (const scenario of [
         json: envelope({
           ...search,
           candidates: [],
+          collection_task_id: taskId,
           collection_progress:
             scenario.name === "unknown"
               ? null
@@ -243,6 +248,16 @@ for (const scenario of [
     });
     await page.goto("/sourcing");
     await expect(page.locator(".sourcing-pending")).toContainText(scenario.text);
+    const notice = page.locator(".sourcing-pending");
+    await expect(notice.getByRole("heading")).toHaveText(
+      scenario.failed || scenario.blocked ? "未获得供应商报价" : "供应商报价",
+    );
+    if (scenario.name === "failed") {
+      await expect(notice.getByRole("link", { name: "查看采集任务明细" })).toHaveAttribute(
+        "href",
+        `/platform-admin/collection?task=${taskId}`,
+      );
+    } else await expect(notice.getByRole("link", { name: "查看采集任务明细" })).toHaveCount(0);
     await expect(page.locator(".sourcing-pending")).not.toContainText(
       "正在采集供应商信息，完成后将显示候选",
     );
