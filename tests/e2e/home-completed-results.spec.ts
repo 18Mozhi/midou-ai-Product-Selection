@@ -554,6 +554,9 @@ test("catalogue empty workflow leads to the real candidate list without writes",
     const search = page.getByRole("search", { name: "搜索商品" });
     const searchInput = (await search.getByRole("textbox", { name: "商品名称" }).boundingBox())!;
     expect(Math.abs(searchInput.width - 392)).toBeLessThanOrEqual(4);
+    expect(Math.abs(searchInput.y - 310)).toBeLessThanOrEqual(3);
+    const tabs = (await page.locator(".catalogue-controls > nav").boundingBox())!;
+    expect(Math.abs(tabs.y + tabs.height - 284)).toBeLessThanOrEqual(3);
     await expect(search.getByRole("button", { name: "搜索", exact: true })).toBeVisible();
     const card = (await empty.boundingBox())!;
     expect(Math.abs(card.y - 400)).toBeLessThanOrEqual(3);

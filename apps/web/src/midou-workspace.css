@@ -2283,7 +2283,8 @@ html[data-design="commerce"] #app .catalogue-querybar .catalogue-search label > 
     .opportunity-workspace
     > .catalogue-page-heading[data-view="completed"]
     + .catalogue-controls {
-    padding-block-end: 38px;
+    padding-block: 10px 22px;
+    row-gap: 26px;
   }
   html[data-design="commerce"]
     #app
