@@ -399,3 +399,24 @@ for (const palette of [
       expect(counters.writes).toBe(0);
     },
   );
+
+test("catalogue empty workflow leads to the real candidate list without writes", async ({
+  page,
+}) => {
+  const { counters } = await setup(page);
+  await page.route(/\/api\/v1\/opportunities\?/, (route) => {
+    const view = new URL(route.request().url()).searchParams.get("selection_view");
+    const data = view === "rule_candidates" ? [product("候选商品视觉夹具")] : [];
+    return route.fulfill({ json: { ...envelope(data), meta: { total: data.length } } });
+  });
+  await page.goto("/opportunities?view=completed");
+  const empty = page.getByRole("region", { name: "已完成分析空状态" });
+  await expect(empty).toBeVisible();
+  await expect(empty.getByRole("list", { name: "分析流程说明" }).locator("li")).toHaveCount(5);
+  await expect(page.locator(".catalogue-title-line [role=note]")).toHaveText("当前为只读权限。");
+  await empty.getByRole("button", { name: "查看候选商品" }).click();
+  await expect(page).toHaveURL(/view=rule_candidates/);
+  await expect(page.locator(".product-catalog")).toContainText("候选商品视觉夹具");
+  await expect(page.locator(".catalog-data-note")).toContainText("不等于精确销量");
+  expect(counters.writes).toBe(0);
+});

@@ -44,6 +44,7 @@ const filterQueryKeys = [
 
 const props = defineProps<{
     items: Opportunity[];
+    readOnly: boolean;
     total: number;
     state: State;
     requestId: string;
@@ -211,9 +212,12 @@ watch(imageFailureResetSources, (items) => {
 </script>
 
 <template>
-  <header class="catalogue-page-heading">
+  <header class="catalogue-page-heading" :data-view="selectionView">
     <div>
-      <h2>选品库</h2>
+      <div class="catalogue-title-line">
+        <h2>选品库</h2>
+        <span v-if="readOnly" class="catalogue-readonly" role="note">当前为只读权限。</span>
+      </div>
       <span>从情报到商品，把比较和判断放在一张表里。</span>
     </div>
     <button type="button" class="so-action-secondary" @click="emit('apply')">更新结果</button>
@@ -238,6 +242,7 @@ watch(imageFailureResetSources, (items) => {
         @submit.prevent="emit('apply')"
       >
         <label>
+          <AppIcon name="search" :size="18" />
           <input
             v-model="filters.q"
             aria-label="商品名称"
@@ -308,17 +313,27 @@ watch(imageFailureResetSources, (items) => {
       </ResponsiveFilterDrawer>
     </div>
   </section>
-  <AutomaticSelectionReadinessPanel
-    class="catalogue-readiness"
-    v-if="showAutomationReadiness && automationReadiness"
-    :readiness="automationReadiness"
-  />
   <section
     v-if="state === 'empty' && selectionView === 'completed'"
     class="midou-completed-empty"
     aria-label="已完成分析空状态"
   >
-    <div class="midou-completed-illustration"><AppIcon name="box" :size="58" /></div>
+    <div class="midou-completed-illustration" aria-hidden="true">
+      <svg viewBox="0 0 80 80" width="80" height="80" fill="none">
+        <path
+          d="M16 38v24l24 9 24-9V38M40 47v24M11 40l5-10 24-8 24 8 5 10-22 8-7-11-7 11zM16 30l24 7 24-7"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M26 16l-4-6M40 14V5M54 16l4-6"
+          stroke="var(--so-primary)"
+          stroke-width="2.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </div>
     <h3>{{ hasFiltersToClear ? "当前筛选下暂无已完成分析的商品" : "暂无已完成分析的商品" }}</h3>
     <p>系统正在补齐分析证据，可先查看候选商品。</p>
     <div class="midou-completed-actions">
@@ -326,23 +341,26 @@ watch(imageFailureResetSources, (items) => {
         查看候选商品</button
       ><button type="button" class="so-action-secondary" @click="emit('apply')">刷新结果</button>
     </div>
-    <ol class="midou-analysis-flow" aria-label="分析流程说明">
-      <li
-        v-for="step in [
-          { icon: 'target', label: '识别主品', description: '匹配商品关键信息' },
-          { icon: 'chart', label: '补齐评分', description: '汇总多维分析证据' },
-          { icon: 'users', label: '对比竞品', description: '识别差异与机会' },
-          { icon: 'box', label: '匹配货源', description: '对接供应渠道' },
-          { icon: 'database', label: '评估利润', description: '测算成本与利润空间' },
-        ]"
-        :key="step.label"
-      >
-        <AppIcon :name="step.icon" :size="24" /><span
-          ><b>{{ step.label }}</b
-          ><small>{{ step.description }}</small></span
+    <div class="midou-analysis-guide">
+      <h4 id="midou-analysis-flow-heading">分析流程说明</h4>
+      <ol class="midou-analysis-flow" aria-labelledby="midou-analysis-flow-heading">
+        <li
+          v-for="step in [
+            { icon: 'target', label: '识别主品', description: '匹配商品关键信息' },
+            { icon: 'chart', label: '补齐评分', description: '汇总多维分析证据' },
+            { icon: 'users', label: '对比竞品', description: '识别差异与机会' },
+            { icon: 'box', label: '匹配货源', description: '对接供应渠道' },
+            { icon: 'database', label: '评估利润', description: '测算成本与利润空间' },
+          ]"
+          :key="step.label"
         >
-      </li>
-    </ol>
+          <AppIcon :name="step.icon" :size="24" /><span
+            ><b>{{ step.label }}</b
+            ><small>{{ step.description }}</small></span
+          >
+        </li>
+      </ol>
+    </div>
     <details v-if="requestId" class="midou-analysis-diagnostics">
       <summary>诊断信息</summary>
       <p>
@@ -417,6 +435,11 @@ watch(imageFailureResetSources, (items) => {
       </button>
     </footer>
   </section>
+  <AutomaticSelectionReadinessPanel
+    class="catalogue-readiness"
+    v-if="showAutomationReadiness && automationReadiness"
+    :readiness="automationReadiness"
+  />
 </template>
 
 <style scoped>

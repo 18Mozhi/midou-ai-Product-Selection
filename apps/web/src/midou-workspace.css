@@ -1780,3 +1780,162 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
     padding-bottom: 12px;
   }
 }
+
+/* Catalogue: match the reference's separated filter, results and workflow surfaces. */
+html[data-design="commerce"] #app .catalogue-search label {
+  position: relative;
+}
+.catalogue-search label > svg {
+  position: absolute;
+  inset: 50% auto auto 12px;
+  transform: translateY(-50%);
+  color: var(--so-text-muted);
+  pointer-events: none;
+}
+html[data-design="commerce"] #app .catalogue-querybar .catalogue-search label > input {
+  padding-inline-start: 40px;
+}
+.midou-completed-illustration {
+  width: 120px;
+  height: 102px;
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
+.midou-analysis-guide {
+  border-top: 1px solid var(--so-border);
+  text-align: left;
+}
+.midou-analysis-guide h4 {
+  margin: 0;
+  font-size: 15px;
+}
+.midou-analysis-guide .midou-analysis-flow {
+  border: 0;
+  padding: 16px 0 22px;
+}
+.midou-analysis-flow li > svg {
+  box-sizing: content-box;
+  padding: 10px;
+  border-radius: 9px;
+  background: var(--so-primary-soft);
+}
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .catalogue-page-heading h2 {
+    font-size: 29px;
+  }
+  .catalogue-page-heading span {
+    font-size: 15px;
+  }
+  html[data-design="commerce"] #app .catalogue-controls {
+    padding: 0 20px 24px;
+    gap: 20px;
+    border-radius: 11px;
+  }
+  html[data-design="commerce"] #app .catalogue-controls > nav button {
+    min-height: 55px;
+    padding-inline: 21px;
+    font-size: 16px;
+  }
+  html[data-design="commerce"] #app .catalogue-querybar {
+    gap: 18px;
+    padding-inline: 4px;
+  }
+  html[data-design="commerce"] #app .catalogue-querybar .catalogue-market-filter > input {
+    width: clamp(120px, 11vw, 190px);
+  }
+  html[data-design="commerce"] #app .midou-completed-empty {
+    padding: 32px 24px 16px;
+  }
+  html[data-design="commerce"] #app .midou-completed-empty h3 {
+    font-size: 24px;
+  }
+  html[data-design="commerce"] #app .midou-completed-actions > button {
+    min-width: 145px;
+    min-height: 46px;
+  }
+  .midou-analysis-guide {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 20px;
+    padding: 20px 0 34px;
+  }
+  .midou-analysis-guide h4 {
+    padding-block-start: 6px;
+    white-space: nowrap;
+  }
+  .midou-analysis-guide .midou-analysis-flow {
+    padding: 0;
+  }
+  .midou-analysis-flow li:not(:last-child)::after {
+    content: "";
+    margin-inline-start: auto;
+    flex: 0 0 7px;
+    width: 7px;
+    height: 7px;
+    border-block-start: 1px solid var(--so-text-muted);
+    border-inline-end: 1px solid var(--so-text-muted);
+    transform: rotate(45deg);
+  }
+}
+@media (max-width: 760px) {
+  .midou-analysis-guide {
+    padding-block-start: 16px;
+  }
+  .midou-analysis-flow li > svg {
+    padding: 6px;
+  }
+}
+
+.catalogue-title-line {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+html[data-design="commerce"] #app .catalogue-title-line .catalogue-readonly {
+  display: inline-flex;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: var(--so-panel-soft);
+  font-size: 12px;
+}
+html[data-design="commerce"] #app .product-catalog > .catalog-data-note {
+  margin-inline: 16px;
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--so-warning) 20%, var(--so-border));
+  border-radius: 7px;
+  background: var(--so-warning-soft);
+  color: var(--so-warning);
+}
+@media (min-width: 1101px) {
+  .opportunity-workspace:has(> .catalogue-page-heading) {
+    padding: 12px 3px 0 6px;
+  }
+  html[data-design="commerce"] #app .opportunity-workspace > .catalogue-page-heading {
+    margin-block-end: 12px;
+  }
+  html[data-design="commerce"] #app .opportunity-workspace > .midou-completed-empty {
+    margin-block-start: 8px;
+  }
+  html[data-design="commerce"] #app .opportunity-workspace > .catalogue-controls {
+    padding-block-end: 30px;
+    border-radius: 11px;
+  }
+}
+
+@media (min-width: 1101px) {
+  html[data-design="commerce"]
+    #app
+    .opportunity-workspace
+    > .catalogue-page-heading[data-view="rule_candidates"] {
+    margin-block-end: 0;
+  }
+  html[data-design="commerce"]
+    #app
+    .opportunity-workspace
+    > .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls {
+    padding-block-end: 16px;
+  }
+}
