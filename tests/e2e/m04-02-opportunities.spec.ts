@@ -355,6 +355,9 @@ test("candidate page buttons navigate server results without resetting the curre
     }),
   );
   await page.goto("/opportunities?view=rule_candidates");
+  const refresh = page.getByRole("button", { name: "更新结果" });
+  await expect(refresh.locator("svg")).toBeVisible();
+  await expect(refresh).toHaveClass(/catalogue-refresh--primary/);
   const pagination = page.getByRole("navigation", { name: "选品分页" });
   await expect(pagination.getByRole("button", { name: "第 1 页", exact: true })).toHaveAttribute(
     "aria-current",

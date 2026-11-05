@@ -231,7 +231,14 @@ watch(imageFailureResetSources, (items) => {
       </div>
       <span>从情报到商品，把比较和判断放在一张表里。</span>
     </div>
-    <button type="button" class="so-action-secondary" @click="emit('apply')">更新结果</button>
+    <button
+      type="button"
+      class="catalogue-refresh"
+      :class="selectionView === 'rule_candidates' ? 'catalogue-refresh--primary' : 'so-action-secondary'"
+      @click="emit('apply')"
+    >
+      <AppIcon name="refresh" :size="17" />更新结果
+    </button>
   </header>
   <section class="catalogue-controls" aria-label="选品结果视图">
     <nav>
@@ -508,6 +515,24 @@ watch(imageFailureResetSources, (items) => {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+.catalogue-page-heading > .catalogue-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding-inline: 14px;
+  border-radius: 7px;
+}
+.catalogue-page-heading > .catalogue-refresh--primary {
+  color: var(--so-on-primary);
+  background: var(--so-primary);
+  border-color: var(--so-primary);
+}
+.catalogue-page-heading[data-view="rule_candidates"] + .catalogue-controls .catalogue-search > button {
+  color: var(--so-primary);
+  background: var(--so-primary-soft);
+  border-color: var(--so-border);
 }
 .candidate-page-numbers button {
   min-width: 34px;
