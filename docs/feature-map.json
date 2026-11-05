@@ -1,4 +1,10 @@
 {
+  "referenceNotificationPreferenceBadge": {
+    "sourceFiles": ["apps/web/src/components/NotificationCenter.vue", "apps/web/src/midou-workspace.css"],
+    "testFiles": ["tests/e2e/m05-03-notifications.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Preference shortcut badge reflects confirmed in-app notification preference, not its mutable draft. No new API calls or notification behavior."
+  },
   "referenceWorkbenchCompletedEmpty": {
     "sourceFiles": ["apps/web/src/components/HomeCompletedProducts.vue", "apps/web/src/home-selection-results.css"],
     "testFiles": ["tests/e2e/home-completed-results.spec.ts"],

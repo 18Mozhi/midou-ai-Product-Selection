@@ -76,6 +76,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   preferencesErrorRequestId = ref(""),
   preferencesErrorElement = ref<HTMLElement | null>(null),
   showPreferences = ref(false),
+  savedInAppPreference = ref<boolean | null>(null),
   preferences = ref<any>({
     in_app_enabled: true,
     email_enabled: false,
@@ -253,8 +254,11 @@ async function load() {
     if (!owner.current()) return;
     items.value = list;
     summary.value = sum;
-    if (!showPreferences.value && preferenceWindow === preferenceGeneration)
+    if (!showPreferences.value && preferenceWindow === preferenceGeneration) {
       preferences.value = { ...pref, email_enabled: false };
+      savedInAppPreference.value =
+        typeof pref.in_app_enabled === "boolean" ? pref.in_app_enabled : null;
+    }
     state.value = list.length ? "ready" : "empty";
     const notificationId =
       typeof route.query.notification === "string"
@@ -427,6 +431,7 @@ async function savePreferences() {
       "preferences",
     );
     if (!owner.current()) return;
+    if (typeof saved.in_app_enabled === "boolean") savedInAppPreference.value = saved.in_app_enabled;
     if (revision !== preferenceRevision) {
       preferences.value.version = saved.version;
       notice.value = "已保存提交时的偏好；后续修改尚未保存。";
@@ -552,7 +557,15 @@ watch(
     <aside class="midou-notification-preference" aria-label="通知偏好快捷入口">
       <h2>通知偏好</h2>
       <p>管理通知接收方式与消息范围。</p>
-      <div><AppIcon name="bell" /><span>站内通知</span></div>
+      <div>
+        <AppIcon name="bell" /><span>站内通知</span>
+        <small
+          v-if="savedInAppPreference !== null"
+          class="midou-notification-preference-status"
+          :data-enabled="savedInAppPreference"
+          >{{ savedInAppPreference ? "已开启" : "已关闭" }}</small
+        >
+      </div>
       <button type="button" class="secondary" :disabled="busy" @click="showPreferences = true">
         <AppIcon name="settings" />管理偏好<AppIcon name="chevron" />
       </button>

@@ -848,6 +848,7 @@ html[data-design="commerce"] #app .notification-center > .midou-notification-pre
   margin: 0 0 10px;
 }
 .midou-notification-preference p {
+  margin: 0 0 10px;
   font-size: 13px;
   line-height: 1.7;
   color: var(--so-text-muted);
@@ -856,8 +857,21 @@ html[data-design="commerce"] #app .notification-center > .midou-notification-pre
   display: flex;
   gap: 12px;
   align-items: center;
-  padding: 20px 0;
+  min-height: 62px;
+  padding: 12px 0;
   border-bottom: 1px solid var(--so-border);
+}
+.midou-notification-preference-status {
+  margin-inline-start: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+  white-space: nowrap;
+}
+.midou-notification-preference-status[data-enabled="true"] {
+  background: var(--so-success-soft);
+  color: var(--so-success);
 }
 html[data-design="commerce"] #app .midou-notification-preference button {
   display: flex;

@@ -486,6 +486,35 @@ for (const outcome of ["success", "failure"] as const) {
     }
   });
 }
+test("notification shortcut shows confirmed in-app preference, not an unsaved draft", async ({
+  page,
+}) => {
+  await setup(page);
+  let enabled = true;
+  await page.route("**/api/v1/me/notification-preferences", (route) => {
+    if (route.request().method() === "PUT") enabled = route.request().postDataJSON().in_app_enabled;
+    return route.fulfill({
+      json: env({
+        in_app_enabled: enabled,
+        email_enabled: false,
+        task_enabled: true,
+        approval_enabled: true,
+        competitor_enabled: true,
+        version: enabled ? 1 : 2,
+      }),
+    });
+  });
+  await page.goto("/notifications");
+  const badge = page.locator(".midou-notification-preference-status");
+  await expect(badge).toHaveText("已开启");
+  await page.getByRole("button", { name: "通知偏好", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "通知偏好", exact: true });
+  await dialog.getByRole("checkbox", { name: "站内通知" }).uncheck();
+  await expect(badge).toHaveText("已开启");
+  await dialog.getByRole("button", { name: "保存", exact: true }).click();
+  await expect(badge).toHaveText("已关闭");
+});
+
 test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on desktop and 390", async ({
   page,
 }) => {
