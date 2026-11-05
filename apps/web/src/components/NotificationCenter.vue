@@ -603,7 +603,7 @@ watch(
       <h2>通知偏好</h2>
       <p>管理通知接收方式与消息范围。</p>
       <div>
-        <AppIcon name="bell" /><span>站内通知</span>
+        <AppIcon name="monitor" /><span>站内通知</span>
         <small
           v-if="savedInAppPreference !== null"
           class="midou-notification-preference-status"
@@ -624,16 +624,16 @@ watch(
     </div>
     <section class="notification-summary">
       <article>
-        <AppIcon name="bell" /><span>未读</span><b>{{ summary.unread }}</b>
+        <AppIcon name="mail" /><span>未读</span><b>{{ summary.unread }}</b>
       </article>
       <article>
-        <AppIcon name="list" /><span>未处理</span><b>{{ summary.open }}</b>
+        <AppIcon name="clipboard-check" /><span>未处理</span><b>{{ summary.open }}</b>
       </article>
       <article>
-        <AppIcon name="automation" /><span>处理中</span><b>{{ summary.in_progress }}</b>
+        <AppIcon name="loader-circle-dots" /><span>处理中</span><b>{{ summary.in_progress }}</b>
       </article>
       <article>
-        <AppIcon name="check" /><span>已关闭</span><b>{{ summary.closed }}</b>
+        <AppIcon name="circle-check" /><span>已关闭</span><b>{{ summary.closed }}</b>
       </article>
     </section>
     <div class="midou-notification-filters">

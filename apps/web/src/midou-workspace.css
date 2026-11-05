@@ -2334,6 +2334,17 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
   html[data-design="commerce"] #app .notification-center .notification-summary article > span {
     font-size: 16px;
   }
+  html[data-design="commerce"] #app .notification-center .notification-summary article {
+    gap: 13px;
+  }
+  html[data-design="commerce"] #app .notification-center .notification-summary article > svg {
+    width: 24px;
+    height: 24px;
+    flex: none;
+  }
+  html[data-design="commerce"] #app .notification-center .notification-summary article > b {
+    font-size: 27px;
+  }
   html[data-design="commerce"] #app .notification-list .notification-record > span > strong {
     font-size: 20px;
     line-height: 1.35;

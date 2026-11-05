@@ -14,6 +14,21 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ["circle", { cx: "12", cy: "12", r: "10" }],
     ["path", { d: "M12 16v-4m0-4h.01" }],
   ],
+  "circle-check": [
+    ["circle", { cx: "12", cy: "12", r: "10" }],
+    ["path", { d: "m9 12 2 2 4-4" }],
+  ],
+  "clipboard-check": [
+    ["rect", { x: "8", y: "2", width: "8", height: "4", rx: "1" }],
+    ["path", { d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2m1 10 2 2 4-4" }],
+  ],
+  "loader-circle-dots": [
+    ["circle", { cx: "12", cy: "12", r: "9", "stroke-dasharray": "0.5 6.57", "stroke-width": "3" }],
+  ],
+  monitor: [
+    ["rect", { x: "2", y: "3", width: "20", height: "14", rx: "2" }],
+    ["path", { d: "M12 17v4m-4 0h8" }],
+  ],
   help: [
     ["circle", { cx: "12", cy: "12", r: "10" }],
     ["path", { d: "M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4m.1 3h.01" }],

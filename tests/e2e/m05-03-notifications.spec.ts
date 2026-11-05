@@ -772,7 +772,8 @@ test("P26 preference failure announces and focuses its modal error without losin
 
 test("midou reference notification layout keeps original workflow and preferences reachable", async ({
   page,
-}) => {
+}, testInfo) => {
+  if (page.viewportSize()!.width >= 1101) await page.setViewportSize({ width: 1717, height: 916 });
   await setup(page);
   await page.route("**/api/v1/notifications?*", (route) =>
     route.fulfill({ json: { ...env([{ ...item, read_at: null }]), meta: { total: 1 } } }),
@@ -790,6 +791,10 @@ test("midou reference notification layout keeps original workflow and preference
   await expect(page.locator(".midou-notification-open")).toContainText("查看记录");
   const wide = (page.viewportSize()?.width ?? 0) >= 1450;
   if (wide) {
+    const summary = page.locator(".notification-summary");
+    await expect(summary.locator("svg[aria-hidden='true']")).toHaveCount(4);
+    for (const icon of await summary.locator("svg").all()) await expect(icon).toHaveCSS("width", "24px");
+    await expect(summary.locator("b").first()).toHaveCSS("font-size", "27px");
     await expect(page.locator(".notification-record")).toHaveCSS("padding-left", "52px");
     expect(
       await page.locator(".midou-notification-open").evaluate(
@@ -819,6 +824,7 @@ test("midou reference notification layout keeps original workflow and preference
 
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  if (wide) await page.screenshot({ path: testInfo.outputPath("notification-reference.png") });
 
   await page.getByRole("button", { name: "通知偏好", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "通知偏好", exact: true })).toBeVisible();
