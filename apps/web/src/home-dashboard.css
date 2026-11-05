@@ -155,6 +155,31 @@ html[data-design="commerce"] #app .home-daily-production dd {
 .home-daily-meta small {
   font-size: 12px;
 }
+@media (min-width: 1440px) {
+  .home-daily-meta:has(> small) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    padding-inline: 14px;
+  }
+  #app .home-daily-meta > small {
+    grid-area: 1 / 1;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .home-daily-meta:has(> small) > .home-system-state {
+    grid-area: 1 / 2;
+  }
+  .home-daily-meta > a {
+    grid-area: 1 / 3;
+    justify-self: end;
+    color: var(--so-text-muted);
+    font-size: 14px;
+  }
+  .home-daily-meta > a:is(:hover, :focus-visible) {
+    color: var(--so-primary);
+    text-decoration: underline;
+  }
+}
 .home-automation-overview {
   border-top: 1px solid var(--home-hairline);
 }

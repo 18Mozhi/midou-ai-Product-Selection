@@ -223,6 +223,17 @@ test("workbench completed empty action fits in the reference desktop first fold"
   const progress = page.getByRole("progressbar", { name: "今日完成整条选品流程目标进度" });
   await expect(progress).toHaveCSS("height", "9px");
   await expect(progress).toHaveAttribute("max", "100");
+  const meta = page.locator(".home-daily-meta");
+  const timestamp = meta.locator("small");
+  const sourceState = meta.locator(".home-system-state");
+  const history = meta.getByRole("link", { name: "查看已完成分析（全部日期）" });
+  await expect(timestamp).toHaveCSS("font-size", "14px");
+  await expect(history).toHaveAttribute("href", "/opportunities?view=completed");
+  const [dateBox, stateBox, historyBox] = await Promise.all(
+    [timestamp, sourceState, history].map((part) => part.boundingBox()),
+  );
+  expect(dateBox!.x).toBeLessThan(stateBox!.x);
+  expect(stateBox!.x + stateBox!.width).toBeLessThan(historyBox!.x);
   const facts = page.locator(".home-status-facts > a");
   await expect(facts).toHaveCount(4);
   await expect(facts.first().locator("span")).toHaveCSS("font-size", "14px");
