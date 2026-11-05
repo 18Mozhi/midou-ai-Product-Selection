@@ -2270,6 +2270,23 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
 }
 
 @media (min-width: 1450px) {
+  html[data-design="commerce"] #app .notification-list .notification-record {
+    padding-inline-start: 52px;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record.unread::before {
+    inset-inline-start: 21px;
+  }
+  html[data-design="commerce"] #app .midou-notification-open {
+    position: relative;
+    margin-inline-start: 14px;
+  }
+  html[data-design="commerce"] #app .midou-notification-open::before {
+    content: "";
+    position: absolute;
+    inset-block: 4px;
+    inset-inline-start: -18px;
+    border-inline-start: 1px solid var(--so-border);
+  }
   html[data-design="commerce"] #app .notification-center > .midou-notification-preference {
     margin-block-start: 6px;
     padding-block: 14px 24px;
