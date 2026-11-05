@@ -1,4 +1,10 @@
 {
+  "referencePlatformFirstFold": {
+    "sourceFiles": ["apps/web/src/components/PlatformDashboard.vue", "apps/web/src/styles/platform-dashboard.css"],
+    "testFiles": ["tests/e2e/m06-02-platform-dashboard.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "System checks retain all live health signals. The existing storage figures are disclosed under Background Tasks; desktop card spacing is tightened without limiting rows or adding requests."
+  },
   "referenceTrendDetailFacts": {
     "sourceFiles": ["apps/web/src/components/TrendDetailPanel.vue", "apps/web/src/trends.css"],
     "testFiles": ["tests/e2e/m04-01-trends.spec.ts"],

@@ -632,8 +632,17 @@
   border-bottom: 1px solid var(--so-border);
   background: transparent;
 }
-#app .platform-system-checks .platform-storage {
-  margin-block-start: 10px;
+.platform-storage-details {
+  margin-block-start: 12px;
+  border-block-start: 1px solid var(--so-border);
+}
+.platform-storage-details > summary {
+  padding-block: 10px;
+  cursor: pointer;
+  color: var(--so-text-muted);
+}
+.platform-storage-details .platform-storage {
+  margin-block-start: 0;
 }
 #app .platform-source-health td > i[data-health] {
   display: inline-block;
@@ -651,5 +660,14 @@
 @media (min-width: 1440px) {
   #app .platform-dashboard--review .platform-source-health {
     align-self: stretch;
+  }
+  #app .platform-dashboard--review .platform-system-checks {
+    padding-block: 12px;
+  }
+  #app .platform-dashboard--review .platform-system-checks > header {
+    margin-block-end: 8px;
+  }
+  #app .platform-dashboard--review .platform-system-checks .platform-signals li {
+    padding-block: 4px;
   }
 }

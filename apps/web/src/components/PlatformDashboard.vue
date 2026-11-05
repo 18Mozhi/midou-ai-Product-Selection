@@ -484,16 +484,6 @@ onUnmounted(() => {
               ><strong>{{ signalValue(s.code, s.value) }}</strong>
             </li>
           </ul>
-          <dl class="platform-storage">
-            <div>
-              <dt>活动文件体积</dt>
-              <dd>{{ bytes(data.summary.storage_bytes) }}</dd>
-            </div>
-            <div>
-              <dt>窗内文件增长</dt>
-              <dd>+{{ bytes(data.summary.file_growth_bytes) }}</dd>
-            </div>
-          </dl>
         </section>
         <section class="platform-background-tasks">
           <header>
@@ -512,6 +502,19 @@ onUnmounted(() => {
             </div>
             <p v-if="!data.queues.length">当前没有积压或失败任务</p>
           </div>
+          <details class="platform-storage-details">
+            <summary>存储统计</summary>
+            <dl class="platform-storage">
+              <div>
+                <dt>活动文件体积</dt>
+                <dd>{{ bytes(data.summary.storage_bytes) }}</dd>
+              </div>
+              <div>
+                <dt>窗内文件增长</dt>
+                <dd>+{{ bytes(data.summary.file_growth_bytes) }}</dd>
+              </div>
+            </dl>
+          </details>
         </section>
         <section class="platform-attention">
           <header>

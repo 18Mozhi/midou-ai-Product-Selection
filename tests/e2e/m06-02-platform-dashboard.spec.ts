@@ -1353,6 +1353,28 @@ test("platform cockpit gives live operations the full workspace and accessible a
   await expect(page).toHaveScreenshot("platform-overview-workbench.png", { fullPage: false });
 });
 
+test("platform reference first fold fits system checks and source health without hiding storage data", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await nav(page);
+  await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
+  await page.goto("/platform-admin");
+  const signals = page.locator(".platform-system-checks");
+  const sources = page.locator(".platform-source-health");
+  await expect(signals).toBeVisible();
+  await expect(signals.locator(".platform-signals li")).toHaveCount(dashboard.health_signals.length);
+  for (const card of [signals, sources]) {
+    const bounds = await card.boundingBox();
+    expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(925);
+  }
+  const storage = page.locator(".platform-storage-details");
+  await expect(storage.locator("dl")).toBeHidden();
+  await storage.getByText("存储统计", { exact: true }).click();
+  await expect(storage.locator("dl")).toContainText("活动文件体积");
+  await expect(storage.locator("dl")).toContainText("窗内文件增长");
+});
+
 test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ page }) => {
   await nav(page);
   await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
