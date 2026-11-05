@@ -544,6 +544,9 @@ test("M06-01.A07/A08/A15 desktop organization dashboard", async ({ page }) => {
   await setup(page);
   await page.goto("/org-admin");
   await expect(page.getByRole("heading", { name: "治理概览", level: 1 }).first()).toBeVisible();
+  await expect(page.locator(".org-identity-mark")).toHaveText("G");
+  await expect(page.getByLabel("组织标识")).toHaveText("global-goods");
+  await expect(page.locator(".organization-profile-metrics article > span > svg")).toHaveCount(6);
   await expect(page.getByText("128")).toBeVisible();
   await expect(page.getByText("1238")).toBeVisible();
   await expect(page.getByText("新品决策工作区").first()).toBeVisible();
@@ -2469,7 +2472,7 @@ for (const route of [
   });
 }
 
-test("organization profile uses a full-width facts and editing workspace", async ({
+test("organization profile aligns facts, editor and governance sidebar", async ({
   page,
 }, testInfo) => {
   await setup(page);
@@ -2479,7 +2482,8 @@ test("organization profile uses a full-width facts and editing workspace", async
   const metrics = page.locator(".organization-profile-metrics");
   const editor = page.locator(".organization-profile-editor");
   await expect(facts.locator("h3")).toHaveText(profile.name);
-  await expect(facts.locator("dl > div")).toHaveCount(4);
+  await expect(facts.locator("dl > div")).toHaveCount(3);
+  await expect(facts.getByLabel("组织标识")).toHaveText(profile.slug);
   await expect(metrics.locator("article")).toHaveCount(6);
   for (const region of [facts, metrics, editor]) {
     await expect(region).toHaveCSS("background-image", "none");
@@ -2489,9 +2493,19 @@ test("organization profile uses a full-width facts and editing workspace", async
   expect(boxes.every(Boolean)).toBe(true);
   expect(boxes[0]!.y + boxes[0]!.height).toBeLessThanOrEqual(boxes[1]!.y);
   expect(boxes[1]!.y + boxes[1]!.height).toBeLessThanOrEqual(boxes[2]!.y);
-  expect(Math.abs(boxes[0]!.width - boxes[2]!.width)).toBeLessThanOrEqual(1);
+  const side = (await page
+    .getByRole("complementary", { name: "治理快捷入口与组织状态" })
+    .boundingBox())!;
+  const width = page.viewportSize()!.width;
+  if (width > 1000) {
+    expect(side.x).toBeGreaterThanOrEqual(boxes[2]!.x + boxes[2]!.width);
+    expect(Math.abs(side.y - boxes[2]!.y)).toBeLessThanOrEqual(1);
+  } else {
+    expect(side.y).toBeGreaterThanOrEqual(boxes[2]!.y + boxes[2]!.height);
+    expect(Math.abs(boxes[0]!.width - boxes[2]!.width)).toBeLessThanOrEqual(1);
+  }
   for (const control of await editor.locator("input, select, textarea, button").all()) {
-    expect((await control.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    expect((await control.boundingBox())!.height).toBeGreaterThanOrEqual(width >= 1200 ? 36 : 44);
   }
   await expect(editor.getByRole("button", { name: "保存", exact: true })).toHaveCSS(
     "color",

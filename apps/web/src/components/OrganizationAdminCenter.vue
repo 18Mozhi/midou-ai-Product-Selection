@@ -1215,7 +1215,7 @@ onMounted(() => void load());
       state === 'loading' || refreshing || teamRecoveryRefreshing || (view === 'audit' && busy)
     "
   >
-    <header class="org-admin-hero">
+    <header class="org-admin-hero" :data-profile-overview="view === 'summary'">
       <div>
         <p>组织后台</p>
         <component
@@ -1225,6 +1225,9 @@ onMounted(() => void load());
               : 'h2'
           "
           >{{ title }}</component
+        >
+        <span v-if="view === 'summary'" class="org-overview-description"
+          >查看组织资料、成员和工作区，以及权限与审计情况。</span
         >
       </div>
       <div class="org-admin-refresh">
@@ -1403,15 +1406,19 @@ onMounted(() => void load());
           <header>
             <div>
               <p>组织基本资料</p>
-              <h3>{{ data?.name }}</h3>
+              <div class="org-identity-name">
+                <span class="org-identity-mark" aria-hidden="true">{{
+                  Array.from(data?.name?.trim() || "组")[0]
+                }}</span>
+                <div>
+                  <h3>{{ data?.name }}</h3>
+                  <small aria-label="组织标识">{{ data?.slug }}</small>
+                </div>
+              </div>
             </div>
             <i :data-status="data?.status">{{ statusText(data?.status) }}</i>
           </header>
           <dl>
-            <div>
-              <dt>组织标识</dt>
-              <dd>{{ data?.slug }}</dd>
-            </div>
             <div>
               <dt>时区</dt>
               <dd>{{ data?.timezone }}</dd>
@@ -1428,27 +1435,33 @@ onMounted(() => void load());
         </article>
         <section class="organization-profile-metrics" aria-label="组织运行摘要">
           <article>
-            <span>活动成员</span><b>{{ summary?.members?.active ?? 0 }}</b
+            <span><AppIcon name="users" :size="18" />活动成员</span
+            ><b>{{ summary?.members?.active ?? 0 }}</b
             ><small>共 {{ summary?.members?.total ?? 0 }}</small>
           </article>
           <article>
-            <span>活动工作区</span><b>{{ summary?.workspaces?.active ?? 0 }}</b
+            <span><AppIcon name="box" :size="18" />活动工作区</span
+            ><b>{{ summary?.workspaces?.active ?? 0 }}</b
             ><small>共 {{ summary?.workspaces?.total ?? 0 }}</small>
           </article>
           <article>
-            <span>团队</span><b>{{ summary?.teams?.active ?? 0 }}</b
+            <span><AppIcon name="building" :size="18" />团队</span
+            ><b>{{ summary?.teams?.active ?? 0 }}</b
             ><small>共 {{ summary?.teams?.total ?? 0 }}</small>
           </article>
           <article>
-            <span>待处理审批</span><b>{{ summary?.pending_approvals ?? 0 }}</b
+            <span><AppIcon name="list" :size="18" />待处理审批</span
+            ><b>{{ summary?.pending_approvals ?? 0 }}</b
             ><small>实时汇总</small>
           </article>
           <article>
-            <span>有效令牌</span><b>{{ summary?.active_tokens ?? 0 }}</b
+            <span><AppIcon name="key" :size="18" />有效令牌</span
+            ><b>{{ summary?.active_tokens ?? 0 }}</b
             ><small>不展示明文</small>
           </article>
           <article>
-            <span>近 7 日审计</span><b>{{ summary?.recent_audit_events ?? 0 }}</b
+            <span><AppIcon name="shield" :size="18" />近 7 日审计</span
+            ><b>{{ summary?.recent_audit_events ?? 0 }}</b
             ><small>组织范围</small>
           </article>
         </section>

@@ -231,3 +231,139 @@
     white-space: nowrap;
   }
 }
+
+#app .org-overview-description {
+  display: block;
+  margin-block-start: 5px;
+  color: var(--so-text-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+#app .org-identity-name {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+#app .org-identity-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 54px;
+  height: 54px;
+  border-radius: 11px;
+  color: var(--so-on-primary);
+  background: var(--so-primary);
+  font-size: 24px;
+  font-weight: 650;
+}
+#app .org-identity-name small {
+  color: var(--so-text-muted);
+}
+#app .organization-profile-facts dl {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+#app .organization-profile-metrics article > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#app .organization-profile-metrics article > span > svg {
+  flex-shrink: 0;
+}
+#app .midou-governance-side a > svg:first-child {
+  box-sizing: content-box;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--so-primary);
+  background: var(--so-primary-soft);
+}
+#app .midou-governance-side a:last-child,
+#app .midou-governance-side dl > div:last-child {
+  border-bottom: 0;
+}
+@media (min-width: 1200px) {
+  html[data-design="commerce"]
+    #app
+    .org-admin-center--profile-review
+    > header[data-profile-overview="true"]
+    h1 {
+    font-size: 29px;
+  }
+  html[data-design="commerce"] #app .organization-profile-workspace {
+    gap: 18px 22px;
+  }
+  html[data-design="commerce"] #app .organization-profile-facts {
+    grid-template-columns: minmax(260px, 30%) minmax(0, 1fr);
+    min-height: 119px;
+    padding: 12px 24px;
+  }
+  #app .organization-profile-facts dl > div {
+    padding-inline-start: 18px;
+    border-inline-start: 1px solid var(--so-border);
+  }
+  #app .organization-profile-editor {
+    margin-block-start: 8px;
+    padding: 14px 26px 16px;
+    gap: 12px;
+  }
+  #app .organization-profile-fields {
+    gap: 12px 24px;
+  }
+  #app .organization-profile-fields :is(input, select) {
+    min-height: 36px;
+    padding-block: 5px;
+  }
+  #app .organization-profile-fields textarea {
+    min-height: 68px;
+  }
+  #app :is(.organization-profile-editor, .midou-governance-side) h3 {
+    font-size: 18px;
+  }
+  #app .midou-governance-side {
+    margin-block-start: 8px;
+  }
+  #app .midou-governance-side > section {
+    padding: 14px 24px;
+  }
+  #app .midou-governance-side a {
+    padding-block: 7px;
+  }
+}
+@container (max-width: 520px) {
+  #app .organization-profile-facts dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  html[data-design="commerce"]
+    #app
+    .org-admin-center--profile-review
+    > header[data-profile-overview="true"] {
+    min-height: 66px;
+    margin-block-start: -7px;
+    padding-block-end: 0;
+  }
+  html[data-design="commerce"]
+    #app
+    .org-admin-center--profile-review
+    > header[data-profile-overview="true"]
+    .org-admin-refresh {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  html[data-design="commerce"]
+    #app
+    .org-admin-center--profile-review
+    > header[data-profile-overview="true"]
+    .org-admin-refresh
+    button {
+    background: var(--so-panel);
+    color: var(--so-text);
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+  }
+  #app .midou-governance-side a {
+    padding-block: 5px;
+  }
+}
