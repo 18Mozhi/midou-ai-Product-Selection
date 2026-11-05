@@ -1123,18 +1123,21 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   }
   .sourcing-workspace--review .sourcing-summary {
     display: grid;
-    grid-template-columns: repeat(4, minmax(max-content, 1fr));
-    flex: 0 1 600px;
-    gap: 0 14px;
+    grid-template-columns: repeat(4, minmax(0, max-content));
+    flex: 0 1 auto;
+    gap: 0 18px;
   }
   .sourcing-workspace--review .sourcing-summary > div {
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 10px;
+    min-width: 0;
   }
   .sourcing-workspace--review .sourcing-summary dt {
     font-size: 14px;
   }
   .sourcing-workspace--review .sourcing-summary dd {
     font-size: 19px;
+    overflow-wrap: anywhere;
   }
 }
 @media (max-width: 760px) {

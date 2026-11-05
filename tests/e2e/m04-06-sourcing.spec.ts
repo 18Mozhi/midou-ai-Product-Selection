@@ -1721,6 +1721,12 @@ test("wide sourcing toolbar balances search and four metrics without changing mo
       .locator(".sourcing-summary")
       .evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(" ").length);
   await expect.poll(columns).toBe(4);
+  const labelToValueGaps = await overview.locator(".sourcing-summary > div").evaluateAll((groups) =>
+    groups.map((group) => group.querySelector("dd")!.getBoundingClientRect().left -
+      group.querySelector("dt")!.getBoundingClientRect().right),
+  );
+  expect(labelToValueGaps).toEqual([10, 10, 10, 10]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect.poll(columns).toBe(2);
   await expect(search).toBeVisible();
