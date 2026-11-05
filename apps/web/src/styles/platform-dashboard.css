@@ -623,8 +623,14 @@
   border: 0;
 }
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .role-shell.role-shell--c .role-content:has(> .platform-dashboard--review) {
+    padding-inline-start: 12px;
+  }
   html[data-design="commerce"] #app .platform-dashboard--review {
     gap: 18px;
+  }
+  html[data-design="commerce"] #app .platform-dashboard--review > .platform-facts {
+    padding-inline: 19px;
   }
   html[data-design="commerce"] #app .platform-dashboard--review > .platform-page-header h2 {
     font-size: 29px;

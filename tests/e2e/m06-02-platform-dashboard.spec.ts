@@ -1387,6 +1387,13 @@ test("platform reference first fold fits system checks and source health without
   );
   await expect(signals.locator(".platform-signal-ok")).toHaveText("正常");
   await expect(signals.locator(".platform-signal-icon[data-health='critical']")).toHaveCount(1);
+  const facts = page.getByRole("region", { name: "平台指标" });
+  const [factsBox, metricRow, checksBox] = await Promise.all(
+    [facts, facts.locator(":scope > div"), signals].map((part) => part.boundingBox()),
+  );
+  expect(Math.abs(factsBox!.x - 273)).toBeLessThanOrEqual(2);
+  expect(Math.abs(metricRow!.x - 293)).toBeLessThanOrEqual(2);
+  expect(checksBox!.x).toBe(factsBox!.x);
   for (const card of [signals, sources]) {
     const bounds = await card.boundingBox();
     expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(925);
