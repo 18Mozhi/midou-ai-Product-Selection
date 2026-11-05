@@ -314,6 +314,32 @@
 #app .organization-profile-metrics article > span > svg {
   flex-shrink: 0;
 }
+@media (min-width: 1440px) {
+  #app .organization-profile-metrics article {
+    position: relative;
+    padding: 14px 12px 14px clamp(50px, 4vw, 72px);
+    border-right: 0;
+  }
+  #app .organization-profile-metrics article:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    inset-block: 17px;
+    inset-inline-end: 0;
+    border-inline-end: 1px solid var(--so-border);
+  }
+  #app .organization-profile-metrics article > span > svg {
+    position: absolute;
+    inset-block-start: 17px;
+    inset-inline-start: clamp(18px, 1.6vw, 28px);
+    width: 22px;
+    height: 22px;
+  }
+  #app .organization-profile-metrics article > b {
+    margin-block: 4px;
+    font-size: 26px;
+    font-variant-numeric: tabular-nums;
+  }
+}
 #app .midou-governance-side a > svg:first-child {
   box-sizing: content-box;
   padding: 8px;

@@ -2455,8 +2455,16 @@ for (const route of [
     await expect(hero).toBeVisible();
     await expect(hero).toHaveCSS("background-image", "none");
     await expect(hero).toHaveCSS("flex-direction", "row");
-    await expect(hero).toHaveCSS("background-color", "rgb(255, 255, 255)");
-    await expect(hero.locator("h1,h2")).toHaveCSS("font-size", "22px");
+    const overview = route === "/org-admin";
+    const width = page.viewportSize()!.width;
+    await expect(hero).toHaveCSS(
+      "background-color",
+      overview ? "rgba(0, 0, 0, 0)" : "rgb(255, 255, 255)",
+    );
+    await expect(hero.locator("h1,h2")).toHaveCSS(
+      "font-size",
+      overview ? (width >= 1200 ? "29px" : "24px") : "22px",
+    );
     await expect(hero.locator("h1,h2")).not.toHaveCSS("color", "rgb(255, 255, 255)");
     await expect(hero.getByRole("button", { name: "刷新数据", exact: true })).toBeVisible();
     expect(await hero.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
@@ -2503,6 +2511,37 @@ test("organization sidebar groups context and utility links without altering mob
   expect(settingsBox!.y).toBe(helpBox!.y);
   expect(settingsBox!.x + settingsBox!.width).toBeLessThan(helpBox!.x);
   expect(settingsBox!.y + settingsBox!.height).toBeLessThanOrEqual(backBox!.y);
+});
+
+test("wide governance metrics align labels, values and notes beside the icon", async ({ page }) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await setup(page);
+  await page.goto("/org-admin");
+  const metrics = page.getByRole("region", { name: "组织运行摘要" });
+  await expect(metrics.locator("article")).toHaveCount(6);
+  const items = await metrics.locator("article").evaluateAll((articles) =>
+    articles.map((article) => {
+      const box = (selector: string) => article.querySelector(selector)!.getBoundingClientRect();
+      const range = document.createRange();
+      range.selectNodeContents(article.querySelector("span")!);
+      const text = [...range.getClientRects()].at(-1)!;
+      return {
+        iconRight: box("svg").right,
+        iconWidth: box("svg").width,
+        titleX: text.x,
+        valueX: box("b").x,
+        noteX: box("small").x,
+        separator: getComputedStyle(article, "::after").content,
+      };
+    }),
+  );
+  for (const [index, item] of items.entries()) {
+    expect(item.iconWidth).toBe(22);
+    expect(item.titleX - item.iconRight).toBeGreaterThanOrEqual(8);
+    expect(Math.abs(item.titleX - item.valueX)).toBeLessThan(1);
+    expect(item.noteX).toBe(item.valueX);
+    expect(item.separator).toBe(index < 5 ? '""' : "none");
+  }
 });
 
 test("organization profile aligns facts, editor and governance sidebar", async ({
