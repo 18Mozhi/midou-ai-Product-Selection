@@ -2606,12 +2606,21 @@ html[data-design="commerce"] #app .notification-center .realtime-badge[data-stat
   background: currentColor;
 }
 @media (min-width: 1440px) {
-  html[data-design="commerce"] #app .notification-center .realtime-badge[data-state="connected"] {
+  html[data-design="commerce"] #app .notification-center .realtime-badge {
     min-inline-size: 118px;
     min-block-size: 32px;
     justify-content: center;
     border-radius: 7px;
     font-size: 14px;
+  }
+  html[data-design="commerce"] #app .notification-center > header > div:last-child {
+    gap: 14px;
+  }
+  html[data-design="commerce"] #app .notification-center > header button.secondary {
+    min-inline-size: 116px;
+  }
+  html[data-design="commerce"] #app .notification-center > header button:not(.secondary) {
+    min-inline-size: 110px;
   }
   html[data-design="commerce"] #app .notification-center .realtime-badge[data-state="connected"]::before {
     width: 9px;

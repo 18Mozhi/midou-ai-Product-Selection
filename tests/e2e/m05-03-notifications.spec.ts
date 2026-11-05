@@ -815,6 +815,15 @@ test("midou reference notification layout keeps original workflow and preference
   await expect(viewAction).not.toHaveCSS("border-top-color", readBorder);
   const wide = (page.viewportSize()?.width ?? 0) >= 1450;
   if (wide) {
+    const header = page.locator(".notification-center > header");
+    const preferenceAction = (await header.getByRole("button", { name: "通知偏好" }).boundingBox())!;
+    const markAll = (await header.getByRole("button", { name: "全部已读" }).boundingBox())!;
+    const badge = (await header.locator(".realtime-badge").boundingBox())!;
+    expect(preferenceAction.width).toBe(116);
+    expect(markAll.width).toBe(110);
+    expect(markAll.x - preferenceAction.x - preferenceAction.width).toBe(14);
+    expect(badge.width).toBe(118);
+    expect(badge.height).toBe(32);
     const categories = page.locator(".midou-notification-filters > nav > button");
     const categoryBoxes = await categories.evaluateAll((nodes) =>
       nodes.map((node) => {
