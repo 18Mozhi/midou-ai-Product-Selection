@@ -1527,6 +1527,15 @@ html[data-design="commerce"]
   margin-left: auto;
   white-space: nowrap;
 }
+.role-quick-action[data-navigation-search] > :is(svg, kbd) {
+  flex-shrink: 0;
+}
+.role-quick-action[data-navigation-search] > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .midou-account-menu {
   position: relative;
   flex: none;

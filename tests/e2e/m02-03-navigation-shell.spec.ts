@@ -1129,4 +1129,19 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
   await sidebarHelp.click();
   await expect(page.locator(".midou-navigation-help")).toHaveAttribute("open", "");
   await expect(page.getByText("使用侧栏顶部切换工作台，在个人中心调整外观。")).toBeVisible();
+  await page.setViewportSize({ width: 1120, height: 900 });
+  const search = page.getByRole("button", { name: "全局搜索", exact: true });
+  const icon = search.locator("svg");
+  const shortcut = search.locator("kbd");
+  const text = search.locator("span");
+  await expect(icon).toHaveCSS("flex-shrink", "0");
+  await expect(shortcut).toHaveCSS("flex-shrink", "0");
+  await expect(text).toHaveCSS("text-overflow", "ellipsis");
+  const [trigger, iconBox, shortcutBox] = await Promise.all(
+    [search, icon, shortcut].map((part) => part.boundingBox()),
+  );
+  expect(iconBox!.width).toBe(18);
+  expect(shortcutBox!.x + shortcutBox!.width).toBeLessThan(trigger!.x + trigger!.width);
+  await search.click();
+  await expect(page.getByRole("dialog")).toBeVisible();
 });
