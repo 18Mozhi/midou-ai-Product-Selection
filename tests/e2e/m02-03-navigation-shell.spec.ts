@@ -1157,6 +1157,7 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
   await expect(topHelp).toHaveCSS("min-height", "44px");
   const search = page.getByRole("button", { name: "全局搜索", exact: true });
   const segments = sidebar.locator(".midou-area-tabs");
+  const selectedArea = segments.getByRole("link", { name: "选品", exact: true });
   const [searchBounds, segmentBounds] = await Promise.all([
     search.boundingBox(),
     segments.boundingBox(),
@@ -1184,6 +1185,9 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
     expect(await context.boundingBox()).toEqual(contextBounds);
     expect(await search.boundingBox()).toEqual(searchBounds);
     expect(await segments.boundingBox()).toEqual(segmentBounds);
+    await expect(selectedArea).toHaveCSS("color", "rgb(255, 255, 255)");
+    await expect(selectedArea).toHaveCSS("background-color", "rgb(20, 91, 255)");
+    expect(await sidebar.boundingBox()).toEqual(bounds);
   }
   const sidebarHelp = sidebar.getByRole("button", { name: "帮助", exact: true });
   await expect(sidebarHelp.locator("svg")).toHaveAttribute("width", "18");

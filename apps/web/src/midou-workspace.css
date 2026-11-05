@@ -1904,14 +1904,6 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     border-inline-start: 1px solid var(--so-border);
     pointer-events: none;
   }
-  html[data-design="commerce"]
-    #app
-    .role-shell[data-shell="member"]
-    .midou-area-tabs
-    a[aria-current="page"] {
-    color: var(--so-primary);
-    background: var(--so-primary-soft);
-  }
   html[data-design="commerce"] #app .role-shell[data-shell="member"] .commerce-sidebar section a {
     min-height: 44px;
     padding-inline: 17px;
