@@ -365,6 +365,27 @@ async function markAll() {
     busy.value = false;
   }
 }
+async function markOneRead(item: Item) {
+  if (disposed || suspended || busy.value || item.read_at) return;
+  busy.value = true;
+  notice.value = "";
+  const owner = { current: () => !disposed && !suspended };
+  try {
+    await api(
+      `/notifications/${item.id}/actions`,
+      { method: "POST", body: { action: "read", expected_version: item.version } },
+      false,
+      undefined,
+      owner,
+    );
+    if (!owner.current()) return;
+    await load();
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  } finally {
+    if (!disposed) busy.value = false;
+  }
+}
 async function updateWorkflow(action: "start" | "close" | "reopen") {
   if (disposed || !selected.value || busy.value) return;
   const detail = selected.value;
@@ -431,7 +452,8 @@ async function savePreferences() {
       "preferences",
     );
     if (!owner.current()) return;
-    if (typeof saved.in_app_enabled === "boolean") savedInAppPreference.value = saved.in_app_enabled;
+    if (typeof saved.in_app_enabled === "boolean")
+      savedInAppPreference.value = saved.in_app_enabled;
     if (revision !== preferenceRevision) {
       preferences.value.version = saved.version;
       notice.value = "已保存提交时的偏好；后续修改尚未保存。";
@@ -656,34 +678,46 @@ watch(
       <p>与你相关的业务事件产生后，通知将显示在这里。</p>
     </section>
     <div v-else class="notification-list">
-      <button
-        v-for="item in items"
-        :key="item.id"
-        :class="{ unread: !item.read_at }"
-        :disabled="busy"
-        @click="open(item)"
-      >
-        <i :data-category="item.category"
-          ><AppIcon
-            :name="
-              { task: 'list', approval: 'check', competitor: 'target', system: 'bell' }[
-                item.category
-              ] || 'bell'
-            "
-            :size="24" /></i
-        ><span
-          ><strong>{{ item.title }}</strong
-          ><small>{{ displayBody(item) }}</small></span
-        ><em>{{ time(item.created_at) }}</em
-        ><b :data-workflow="item.workflow_status">
-          <small>{{ item.read_at ? "已读" : "未读" }} · </small
-          >{{ statusLabel(item.workflow_status) }}
-          <small v-if="item.group_count > 1">
-            · 已合并 {{ item.group_count }} 条同根因通知</small
-          ></b
+      <div v-for="item in items" :key="item.id" class="notification-row">
+        <button
+          type="button"
+          class="notification-record"
+          :class="{ unread: !item.read_at }"
+          :disabled="busy"
+          @click="open(item)"
         >
-        <span class="midou-notification-open">查看记录<AppIcon name="chevron" :size="14" /></span>
-      </button>
+          <i :data-category="item.category"
+            ><AppIcon
+              :name="
+                { task: 'list', approval: 'check', competitor: 'target', system: 'bell' }[
+                  item.category
+                ] || 'bell'
+              "
+              :size="24" /></i
+          ><span
+            ><strong>{{ item.title }}</strong
+            ><small>{{ displayBody(item) }}</small></span
+          ><em>{{ time(item.created_at) }}</em
+          ><b :data-workflow="item.workflow_status">
+            <small>{{ item.read_at ? "已读" : "未读" }} · </small
+            >{{ statusLabel(item.workflow_status) }}
+            <small v-if="item.group_count > 1">
+              · 已合并 {{ item.group_count }} 条同根因通知</small
+            ></b
+          >
+          <span class="midou-notification-open">查看记录<AppIcon name="chevron" :size="14" /></span>
+        </button>
+        <button
+          v-if="!item.read_at"
+          type="button"
+          class="notification-mark-read"
+          :aria-label="`标为已读：${item.title}`"
+          :disabled="busy"
+          @click="markOneRead(item)"
+        >
+          标为已读
+        </button>
+      </div>
     </div>
     <nav v-if="total > pageSize" class="notification-pagination" aria-label="通知分页">
       <button :disabled="page <= 1" @click="setFilters({ page: page - 1 })">上一页</button>

@@ -569,6 +569,33 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
     .toBe(true);
 });
 
+test("mark one notification read from its row without opening detail", async ({ page }) => {
+  await setup(page);
+  let readAt: string | null = null;
+  let detailReads = 0;
+  const actions: unknown[] = [];
+  await page.route(`**/api/v1/notifications/${id}`, (route) => {
+    detailReads++;
+    return route.fulfill({ json: env(item) });
+  });
+  await page.route("**/api/v1/notifications?*", (route) =>
+    route.fulfill({ json: { ...env([{ ...item, read_at: readAt }]), meta: { total: 1 } } }),
+  );
+  await page.route(`**/api/v1/notifications/${id}/actions`, (route) => {
+    actions.push(route.request().postDataJSON());
+    readAt = "2026-08-08T10:01:00.000Z";
+    return route.fulfill({ json: env({ ...item, read_at: readAt, version: item.version + 1 }) });
+  });
+  await page.goto("/notifications");
+  const action = page.getByRole("button", { name: `标为已读：${item.title}` });
+  await action.click();
+  await expect(action).toHaveCount(0);
+  await expect(page.locator(".notification-record")).toContainText("已读");
+  await expect(page.getByRole("dialog", { name: "消息详情" })).toHaveCount(0);
+  expect(detailReads).toBe(0);
+  expect(actions).toEqual([{ action: "read", expected_version: item.version }]);
+});
+
 test("notification filters and detail restore from the URL", async ({ page }) => {
   await setup(page);
   await page.goto(`/notifications?category=approval&status=open&notification=${id}`);
@@ -721,7 +748,7 @@ test("midou reference notification layout keeps original workflow and preference
   );
   await page.goto("/notifications");
   await expect(page.locator(".notification-summary article")).toHaveCount(4);
-  await expect(page.locator(".notification-list > button > i svg")).toBeVisible();
+  await expect(page.locator(".notification-list .notification-record > i svg")).toBeVisible();
   await expect(page.locator(".midou-notification-filters > nav")).toHaveCount(1);
   await expect(page.getByRole("combobox", { name: "处理状态筛选" })).toHaveValue("");
   await page.getByRole("checkbox", { name: "仅未读" }).focus();
@@ -730,10 +757,12 @@ test("midou reference notification layout keeps original workflow and preference
   await page.getByRole("checkbox", { name: "仅未读" }).uncheck();
   await expect(page).not.toHaveURL(/unread=1/);
   await expect(page.locator(".midou-notification-open")).toContainText("查看记录");
-  await expect(page.locator('.notification-list > button > b[data-workflow="open"]')).toBeVisible();
+  await expect(
+    page.locator('.notification-list .notification-record > b[data-workflow="open"]'),
+  ).toBeVisible();
   expect(
     await page
-      .locator(".notification-list > button.unread")
+      .locator(".notification-list .notification-record.unread")
       .evaluate((el) => getComputedStyle(el, "::before").width),
   ).toBe((page.viewportSize()?.width ?? 0) >= 1151 ? "10px" : "6px");
 
@@ -743,6 +772,6 @@ test("midou reference notification layout keeps original workflow and preference
   await page.getByRole("button", { name: "通知偏好", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "通知偏好", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "取消", exact: true }).click();
-  await page.locator(".notification-list > button").click();
+  await page.locator(".notification-list .notification-record").click();
   await expect(page.getByRole("dialog", { name: "消息详情", exact: true })).toBeVisible();
 });

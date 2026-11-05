@@ -245,7 +245,7 @@ html[data-design="commerce"] #app .notification-list {
   background: transparent;
   border: 0;
 }
-html[data-design="commerce"] #app .notification-list > button {
+html[data-design="commerce"] #app .notification-list .notification-record {
   position: relative;
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr) auto auto;
@@ -259,10 +259,10 @@ html[data-design="commerce"] #app .notification-list > button {
   box-shadow: none;
   text-align: left;
 }
-html[data-design="commerce"] #app .notification-list > button.unread {
+html[data-design="commerce"] #app .notification-list .notification-record.unread {
   border-left: 1px solid var(--so-border);
 }
-html[data-design="commerce"] #app .notification-list > button.unread::before {
+html[data-design="commerce"] #app .notification-list .notification-record.unread::before {
   content: "";
   position: absolute;
   left: 11px;
@@ -272,10 +272,10 @@ html[data-design="commerce"] #app .notification-list > button.unread::before {
   border-radius: 50%;
   background: var(--so-info);
 }
-html[data-design="commerce"] #app .notification-list > button:hover {
+html[data-design="commerce"] #app .notification-list .notification-record:hover {
   background: var(--so-panel-soft);
 }
-html[data-design="commerce"] #app .notification-list > button:focus-visible {
+html[data-design="commerce"] #app .notification-list .notification-record:focus-visible {
   outline: 2px solid var(--so-focus);
   outline-offset: 2px;
 }
@@ -303,7 +303,7 @@ html[data-design="commerce"] #app .notification-list em {
   font-style: normal;
   color: var(--so-text-muted);
 }
-html[data-design="commerce"] #app .notification-list > button > b {
+html[data-design="commerce"] #app .notification-list .notification-record > b {
   justify-self: start;
   padding: 4px 10px;
   border-radius: 6px;
@@ -312,11 +312,11 @@ html[data-design="commerce"] #app .notification-list > button > b {
   background: var(--so-warning-soft);
   font-weight: 500;
 }
-html[data-design="commerce"] #app .notification-list > button > b[data-workflow="in_progress"] {
+html[data-design="commerce"] #app .notification-list .notification-record > b[data-workflow="in_progress"] {
   color: var(--so-info);
   background: var(--so-info-soft);
 }
-html[data-design="commerce"] #app .notification-list > button > b[data-workflow="closed"] {
+html[data-design="commerce"] #app .notification-list .notification-record > b[data-workflow="closed"] {
   color: var(--so-success);
   background: var(--so-success-soft);
 }
@@ -437,11 +437,11 @@ html[data-design="commerce"][data-density="compact"] #app .role-content {
   html[data-design="commerce"] #app .trend-workbench.is-detail-open .trend-list {
     display: none;
   }
-  html[data-design="commerce"] #app .notification-list > button {
+  html[data-design="commerce"] #app .notification-list .notification-record {
     grid-template-columns: 40px minmax(0, 1fr);
     gap: 10px;
   }
-  html[data-design="commerce"] #app .notification-list > button > :is(em, b) {
+  html[data-design="commerce"] #app .notification-list .notification-record > :is(em, b) {
     grid-column: 2;
   }
   html[data-design="commerce"] #app .account-shell:not(.account-content-only) {
@@ -982,7 +982,7 @@ html[data-design="commerce"] #app .notification-summary article > svg {
 html[data-design="commerce"] #app .notification-summary article > b {
   margin-left: auto;
 }
-html[data-design="commerce"] #app .notification-list > button {
+html[data-design="commerce"] #app .notification-list .notification-record {
   grid-template-columns: 42px minmax(0, 1fr) auto auto auto;
 }
 html[data-design="commerce"] #app .midou-notification-open {
@@ -996,7 +996,7 @@ html[data-design="commerce"] #app .midou-notification-open {
   white-space: nowrap;
 }
 @media (max-width: 1000px) {
-  html[data-design="commerce"] #app .notification-list > button {
+  html[data-design="commerce"] #app .notification-list .notification-record {
     grid-template-columns: 42px minmax(0, 1fr);
   }
   html[data-design="commerce"] #app .midou-notification-open {
@@ -2045,7 +2045,7 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
     padding-block: 14px;
     min-height: 74px;
   }
-  html[data-design="commerce"] #app .notification-list > button {
+  html[data-design="commerce"] #app .notification-list .notification-record {
     grid-template-columns: 56px minmax(0, 1fr) auto auto auto;
     min-height: 98px;
   }
@@ -2054,12 +2054,12 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
     height: 56px;
     border-radius: 11px;
   }
-  html[data-design="commerce"] #app .notification-list > button.unread::before {
+  html[data-design="commerce"] #app .notification-list .notification-record.unread::before {
     width: 10px;
     height: 10px;
     top: calc(50% - 5px);
   }
-  html[data-design="commerce"] #app .notification-list > button > b {
+  html[data-design="commerce"] #app .notification-list .notification-record > b {
     border-radius: 999px;
   }
 }
@@ -2107,6 +2107,41 @@ html[data-design="commerce"] #app .midou-notification-preference > button {
 }
 .midou-notification-preference > button svg:last-child {
   margin-inline-start: auto;
+}
+html[data-design="commerce"] #app .notification-list > .notification-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel);
+}
+html[data-design="commerce"] #app .notification-row > .notification-record {
+  grid-column: 1 / -1;
+  min-width: 0;
+  border: 0;
+}
+html[data-design="commerce"] #app .notification-row:has(> .notification-mark-read) > .notification-record {
+  grid-column: 1;
+}
+html[data-design="commerce"] #app .notification-row > .notification-mark-read {
+  min-height: 44px;
+  margin-inline-end: 16px;
+  padding: 6px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 6px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  white-space: nowrap;
+}
+@media (max-width: 1000px) {
+  html[data-design="commerce"] #app .notification-list > .notification-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html[data-design="commerce"] #app .notification-row > .notification-mark-read {
+    justify-self: end;
+    margin-block-end: 12px;
+  }
 }
 @media (min-width: 1440px) {
   html[data-design="commerce"] #app .notification-center {
