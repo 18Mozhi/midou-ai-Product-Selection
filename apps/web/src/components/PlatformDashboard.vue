@@ -241,7 +241,8 @@ onUnmounted(() => {
         ><AppIcon name="plus" :size="17" />新建组织</RouterLink
       >
       <label
-        >查看范围<select v-model="windowCode" :disabled="pending" @change="changeWindow">
+        ><span class="platform-overview-window-label">查看范围</span
+        ><select v-model="windowCode" :disabled="pending" @change="changeWindow">
           <option value="15m">最近 15 分钟</option>
           <option value="24h">最近 24 小时</option>
           <option value="7d">最近 7 天</option>

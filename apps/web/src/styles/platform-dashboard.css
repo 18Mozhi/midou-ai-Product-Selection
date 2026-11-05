@@ -464,6 +464,26 @@
 }
 
 @media (min-width: 1440px) {
+  #app .platform-dashboard--review > .platform-page-header .platform-page-header__actions {
+    gap: 16px;
+  }
+  #app .platform-dashboard--review .platform-overview-window-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  #app .platform-dashboard--review .platform-page-header__actions > .platform-overview-create {
+    min-inline-size: 122px;
+  }
+  #app .platform-dashboard--review .platform-page-header__actions > label > select {
+    min-inline-size: 145px;
+  }
+  #app .platform-dashboard--review .platform-page-header__actions > button {
+    min-inline-size: 92px;
+  }
   .platform-dashboard--review .platform-dashboard-grid {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     grid-template-areas: "trend sources" "signals sources" "queue alerts";

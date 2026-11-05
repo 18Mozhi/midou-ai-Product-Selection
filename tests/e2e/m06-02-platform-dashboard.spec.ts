@@ -1356,11 +1356,20 @@ test("platform cockpit gives live operations the full workspace and accessible a
 test("platform overview has one create organization action in its page header", async ({
   page,
 }) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
   await nav(page, "platform_super_admin", "platform:superadmin");
   await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
   await page.goto("/platform-admin");
   const create = page.getByRole("link", { name: "新建组织", exact: true });
   await expect(create).toHaveCount(1);
+  const header = page.locator(".platform-page-header");
+  const range = header.getByRole("combobox", { name: "查看范围", exact: true });
+  const refresh = header.getByRole("button", { name: "刷新", exact: true });
+  await expect(refresh).toBeEnabled();
+  const [a, b, c] = await Promise.all([create, range, refresh].map((part) => part.boundingBox()));
+  expect([a!.width, b!.width, c!.width]).toEqual([122, 145, 92]);
+  expect(b!.x - a!.x - a!.width).toBe(16);
+  expect(c!.x - b!.x - b!.width).toBe(16);
   await expect(
     page.locator(".platform-page-header").getByRole("link", { name: "新建组织", exact: true }),
   ).toHaveAttribute("href", "/platform-admin/organizations/new");
