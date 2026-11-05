@@ -1,4 +1,10 @@
 {
+  "referenceCandidatePagination": {
+    "sourceFiles": ["apps/web/src/components/OpportunityListPanel.vue"],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Candidate catalogue exposes direct numbered navigation on desktop with actual totals and preserves existing 20-row server pagination, filters and narrow-screen controls."
+  },
   "referenceTrendSourceShortcut": {
     "sourceFiles": ["apps/web/src/components/TrendDashboard.vue", "apps/web/src/components/TrendDetailPanel.vue", "apps/web/src/trends.css"],
     "testFiles": ["tests/e2e/m04-01-trends.spec.ts"],

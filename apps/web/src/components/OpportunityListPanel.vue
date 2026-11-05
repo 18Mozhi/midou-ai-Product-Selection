@@ -75,6 +75,17 @@ const props = defineProps<{
   }>(),
   route = useRoute(),
   pageCount = computed(() => Math.max(1, Math.ceil(props.total / 20))),
+  numberedPages = computed(() => {
+    const last = pageCount.value;
+    const start = Math.max(1, Math.min(props.page - 2, last - 4));
+    const end = Math.min(last, start + 4);
+    const window = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    return [
+      ...(start > 2 ? [1, "leading-gap"] : start === 2 ? [1] : []),
+      ...window,
+      ...(end < last - 1 ? ["trailing-gap", last] : end === last - 1 ? [last] : []),
+    ];
+  }),
   activeFilterCount = computed(
     () =>
       filterQueryKeys.filter((key) => {
@@ -428,13 +439,32 @@ watch(imageFailureResetSources, (items) => {
       :image-fallback-label="imageFallbackLabel"
       @image-error="onImageError"
     />
-    <footer class="opportunity-pagination" aria-label="选品分页">
+    <nav class="opportunity-pagination" aria-label="选品分页">
+      <span v-if="selectionView === 'rule_candidates'" class="candidate-page-total"
+        >共 {{ total }} 条</span
+      >
       <button type="button" :disabled="page <= 1" @click="emit('page', page - 1)">上一页</button>
-      <span>第 {{ page }} / {{ pageCount }} 页</span>
+      <span :class="{ 'candidate-page-position': selectionView === 'rule_candidates' }">
+        第 {{ page }} / {{ pageCount }} 页
+      </span>
+      <div v-if="selectionView === 'rule_candidates'" class="candidate-page-numbers">
+        <template v-for="entry in numberedPages" :key="entry">
+          <button
+            v-if="typeof entry === 'number'"
+            type="button"
+            :aria-label="`第 ${entry} 页`"
+            :aria-current="entry === page ? 'page' : undefined"
+            @click="entry !== page && emit('page', entry)"
+          >
+            {{ entry }}
+          </button>
+          <span v-else aria-hidden="true">…</span>
+        </template>
+      </div>
       <button type="button" :disabled="page >= pageCount" @click="emit('page', page + 1)">
         下一页
       </button>
-    </footer>
+    </nav>
   </section>
   <AutomaticSelectionReadinessPanel
     class="catalogue-readiness"
@@ -444,6 +474,34 @@ watch(imageFailureResetSources, (items) => {
 </template>
 
 <style scoped>
+.candidate-page-numbers {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.candidate-page-numbers button {
+  min-width: 34px;
+  min-height: 36px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.candidate-page-numbers button[aria-current="page"] {
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-on-primary, white);
+}
+.candidate-page-position {
+  display: none;
+}
+@media (max-width: 1100px) {
+  .candidate-page-total,
+  .candidate-page-numbers {
+    display: none;
+  }
+  .candidate-page-position {
+    display: inline;
+  }
+}
 .filter-apply-action {
   border-color: var(--so-border);
   color: var(--so-text);

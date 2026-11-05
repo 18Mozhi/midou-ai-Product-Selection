@@ -344,6 +344,42 @@ test("completed catalogue opens analysis rather than claim ongoing collection", 
   await expect(page.locator(".catalogue-gate-track")).toHaveCount(0);
 });
 
+test("candidate page buttons navigate server results without resetting the current view", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1717, height: 916 });
+  await ready(page);
+  await page.route("**/api/v1/opportunities?*", (route) =>
+    route.fulfill({
+      json: envelope([recommendedBase], { page: 1, page_size: 20, total: 324 }),
+    }),
+  );
+  await page.goto("/opportunities?view=rule_candidates");
+  const pagination = page.getByRole("navigation", { name: "选品分页" });
+  await expect(pagination.getByRole("button", { name: "第 1 页", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(pagination).toContainText("共 324 条");
+  const request = page.waitForRequest((r) => {
+    const url = new URL(r.url());
+    return (
+      url.pathname.endsWith("/opportunities") &&
+      url.searchParams.get("selection_view") === "rule_candidates" &&
+      url.searchParams.get("page") === "17"
+    );
+  });
+  await pagination.getByRole("button", { name: "第 17 页", exact: true }).click();
+  await request;
+  await expect(pagination.getByRole("button", { name: "第 17 页", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(pagination.getByRole("button", { name: "下一页" })).toBeDisabled();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(pagination.getByText("第 17 / 17 页")).toBeVisible();
+});
+
 test("candidate table shows five progress segments from the existing gate count", async ({
   page,
 }) => {
