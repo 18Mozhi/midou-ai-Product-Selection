@@ -755,3 +755,148 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Reference intelligence: readable list first, a balanced evidence panel only on selection. */
+.trend-filter-search {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+.trend-filter-search > svg {
+  position: absolute;
+  inset: 50% auto auto 12px;
+  transform: translateY(-50%);
+  color: var(--so-text-muted);
+  pointer-events: none;
+}
+#app .trend-dashboard--review .trend-filters .trend-filter-search > input {
+  width: 100%;
+  padding-inline-start: 36px;
+}
+#app .trend-dashboard--review .trend-filters :is(input, select, button) {
+  border-radius: 7px;
+}
+#app .trend-dashboard--review .trend-list > header {
+  padding: 0 8px 14px;
+  border-bottom: 1px solid var(--so-border);
+}
+#app .trend-dashboard--review .trend-list > .trend-topic-row {
+  grid-template-columns: 22px 48px minmax(0, 1fr) 48px auto;
+  padding: 10px 8px;
+  gap: 10px;
+  min-height: 88px;
+  border-bottom: 1px solid var(--so-border);
+  border-radius: 7px;
+}
+.trend-topic-row > .topic-index {
+  grid-column: 1;
+  grid-row: 1;
+}
+.trend-topic-row > .research-thumbnail {
+  grid-column: 2;
+  grid-row: 1;
+  width: 48px;
+  height: 48px;
+}
+.trend-topic-row .topic-copy {
+  min-width: 0;
+}
+#app .trend-dashboard--review .trend-topic-row > em[data-status="active"] {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--so-success-soft);
+  color: var(--so-success);
+}
+.trend-detail-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 6px;
+}
+#app .trend-detail-badges > span {
+  padding: 3px 9px;
+  border-radius: 6px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+#app .trend-detail-badges > span[data-status="active"] {
+  color: var(--so-success);
+  background: var(--so-success-soft);
+}
+#app .trend-detail .trend-detail-facts {
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+}
+.trend-detail-facts dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .trend-dashboard--review {
+    margin-top: 9px;
+  }
+  html[data-design="commerce"] #app .trend-market-heading h2 {
+    font-size: 29px;
+    line-height: 1.3;
+  }
+  html[data-design="commerce"] #app .trend-market-heading {
+    margin-bottom: 3px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open {
+    grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
+  }
+  #app .trend-detail .trend-detail-facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  #app .trend-detail .trend-detail-facts div:not(:nth-child(3n + 1)) {
+    padding-inline-start: 12px;
+    border-inline-start: 1px solid var(--so-border);
+  }
+}
+@media (max-width: 640px) {
+  #app .trend-dashboard--review .trend-list > .trend-topic-row {
+    grid-template-columns: 42px minmax(0, 1fr) 38px;
+    gap: 8px;
+  }
+  .trend-topic-row > .topic-index {
+    display: none;
+  }
+  .trend-topic-row > .research-thumbnail {
+    grid-column: 1;
+    width: 42px;
+    height: 42px;
+  }
+}
+
+#app .trend-dashboard--review .trend-topic-row .topic-copy small {
+  line-height: 1.45;
+}
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .trend-dashboard--review {
+    margin-top: 16px;
+    padding-inline-start: 14px;
+  }
+  html[data-design="commerce"] #app .trend-market-heading {
+    margin-bottom: -12px;
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-filters {
+    padding-block: 10px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open > :is(.trend-list, .trend-detail) {
+    height: clamp(450px, calc(100dvh - 356px), 740px);
+    overflow-y: auto;
+  }
+  #app .trend-dashboard--review .trend-detail > header {
+    position: relative;
+  }
+  #app .trend-dashboard--review .trend-detail-badges {
+    padding-inline-end: 196px;
+  }
+  #app .trend-dashboard--review .trend-detail-back {
+    position: absolute;
+    inset: 0 0 auto auto;
+  }
+}

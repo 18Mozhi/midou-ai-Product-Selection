@@ -226,20 +226,17 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await expect(page.getByRole("button", { name: "刷新情报", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "新建监控", exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  if ((page.viewportSize()?.width ?? 0) > 1100) {
-    const metric = await page.locator(".trend-detail-facts div").first().boundingBox();
-    expect(metric?.width).toBeGreaterThan(90);
-  }
   await expect(page).toHaveScreenshot("m04-01-market-list.png", { fullPage: true });
   const trendList = page.locator(".trend-list");
   await expect(trendList.getByText("2 个来源")).toBeVisible();
   await expect(trendList.getByText(/新鲜度/)).toBeVisible();
   await expect(trendList.getByText("可信度 数据不足")).toBeVisible();
-  if ((page.viewportSize()?.width ?? 0) <= 1100) {
-    await trendList.locator(":scope > button").first().click();
+  await expect(page.locator(".trend-detail")).toHaveCount(0);
+  await trendList.locator(":scope > button").first().click();
+  if ((page.viewportSize()?.width ?? 0) <= 840) {
     await expect(trendList).toBeHidden();
     await expect(page.locator(".trend-detail")).toBeVisible();
-    await expect(page.getByRole("button", { name: "返回趋势列表" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "关闭详情 · 返回情报列表" })).toBeVisible();
   } else {
     await expect(trendList).toHaveCSS("overflow-y", "auto");
     await expect(page.locator(".trend-detail")).toHaveCSS("overflow-y", "auto");
@@ -310,8 +307,7 @@ test("long trend timelines scroll inside the detail card without widening the pa
   }));
   await ready(page, [topic], { detailData: { ...detail, timeline, timeline_sources: [] } });
   await page.goto("/trends");
-  if ((page.viewportSize()?.width ?? 0) <= 1100)
-    await page.locator(".trend-list > button").first().click();
+  await page.locator(".trend-list > button").first().click();
   await expect
     .poll(() =>
       page.evaluate(
@@ -368,8 +364,7 @@ test("trend:read-only loads intelligence and evidence without requesting managem
 
   await page.goto("/trends?section=governance");
   await expect(page).not.toHaveURL(/section=governance/);
-  if ((page.viewportSize()?.width ?? 0) <= 1100)
-    await page.locator(".trend-list > button").first().click();
+  await page.locator(".trend-list > button").first().click();
   await expect(page.getByRole("heading", { name: topic.title })).toBeVisible();
   await expect(page.getByRole("button", { name: "刷新情报" })).toBeVisible();
   await expect(page.getByRole("button", { name: /合并与拆分/ })).toHaveCount(0);
@@ -415,9 +410,7 @@ test("trend view URL restores filters, sorting and direct topic navigation", asy
   await expect(page.getByRole("heading", { name: detail.title })).toBeVisible();
   await page.getByRole("textbox", { name: "分类", exact: true }).fill("beauty");
   await page.getByRole("button", { name: "筛选", exact: true }).click();
-  await expect(page).toHaveURL(
-    new RegExp(`/trends\\?q=skin&sort=latest&category=beauty&topic=${topicId}$`),
-  );
+  await expect(page).toHaveURL(/\/trends\?q=skin&sort=latest&category=beauty$/);
 });
 
 test("all-status selection survives the URL and reload without adding an API status filter", async ({
@@ -476,16 +469,21 @@ test("switching topics hides previous evidence until the requested detail arrive
     await route.fulfill({ json: envelope({ ...detail, ...mergeTopic, evidence: [] }) });
   });
   await page.goto("/trends");
+  await page.locator(".trend-list > button").filter({ hasText: topic.title }).first().click();
   await expect(page.locator('.trend-list > button[aria-pressed="true"]')).toContainText(
     topic.title,
   );
+  if ((page.viewportSize()?.width ?? 0) <= 840) {
+    await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
+    await expect(page).toHaveURL(/\/trends$/);
+  }
   try {
     await page.locator(".trend-list > button").filter({ hasText: mergeTopic.title }).click();
     await expect(page.getByRole("heading", { name: "正在读取情报证据" })).toBeVisible();
     await expect(page.locator(".trend-detail h3")).toHaveCount(0);
     await expect(page.locator(".trend-detail-facts, .trend-detail .trend-evidence")).toHaveCount(0);
-    if ((page.viewportSize()?.width ?? 0) <= 1100) {
-      await page.getByRole("button", { name: "返回趋势列表" }).click();
+    if ((page.viewportSize()?.width ?? 0) <= 840) {
+      await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
       await expect(page.locator(".trend-list")).toBeVisible();
       await page.locator(".trend-list > button").filter({ hasText: mergeTopic.title }).click();
     }
@@ -513,9 +511,8 @@ test("empty trend filters expose a one-step recovery action", async ({ page }) =
   });
   await page.goto("/trends?q=no-match");
   await page.getByRole("button", { name: "清除筛选并恢复" }).click();
-  await expect(page).toHaveURL(new RegExp(`/trends\\?topic=${topicId}$`));
-  if ((page.viewportSize()?.width ?? 0) <= 1100)
-    await page.locator(".trend-list > button").first().click();
+  await expect(page).toHaveURL(/\/trends$/);
+  await page.locator(".trend-list > button").first().click();
   await expect(page.getByRole("heading", { name: detail.title })).toBeVisible();
 });
 
@@ -700,7 +697,7 @@ test("a late related product response cannot replace the newly selected topic", 
   await started;
   try {
     if ((page.viewportSize()?.width ?? 0) <= 1100)
-      await page.getByRole("button", { name: "返回趋势列表" }).click();
+      await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
     await page.locator(".trend-list > button").filter({ hasText: mergeTopic.title }).click();
     const region = page.getByRole("region", { name: "关联选品", exact: true });
     await expect(region).toContainText("新主题关联选品");
@@ -756,6 +753,8 @@ test("midou reference list defaults closed, opens and closes detail without list
   await page.locator(".trend-list > button").first().click();
   await expect(page.locator(".trend-detail")).toBeVisible();
   expect(reads).toBe(1);
+  await expect(page.locator(".trend-detail-badges")).toContainText("en-US");
+  await expect(page.getByLabel("情报资料").locator("dt svg")).toHaveCount(4);
   await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
   await expect(page.locator(".trend-detail")).toHaveCount(0);
   await expect(page.locator(".trend-list")).toBeVisible();

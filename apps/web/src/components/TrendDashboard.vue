@@ -434,6 +434,7 @@ onBeforeUnmount(() => {
         </header>
         <button
           v-for="(topic, index) in sortedTopics"
+          class="trend-topic-row"
           :key="topic.id"
           type="button"
           :aria-pressed="selected?.id === topic.id"
@@ -445,7 +446,7 @@ onBeforeUnmount(() => {
             :alt="topic.title"
           />
           <span class="topic-index" aria-hidden="true">{{ (page - 1) * 20 + index + 1 }}</span
-          ><span
+          ><span class="topic-copy"
             ><strong>{{ topic.title }}</strong
             ><small
               >{{ topic.market }} · {{ topic.category || "未分类" }} ·
@@ -471,14 +472,14 @@ onBeforeUnmount(() => {
         </footer>
       </section>
       <TrendDetailPanel
-        v-if="selected && mobileDetailOpen"
+        v-if="mobileDetailOpen"
         :detail="selected"
         :busy="busy"
         @back="returnToTopicList"
       >
         <template #related-products>
           <TrendRelatedProducts
-            v-if="capabilities.includes('opportunity:read')"
+            v-if="selected && capabilities.includes('opportunity:read')"
             :api-base-url="apiBaseUrl"
             :topic-id="selected.id"
             :organization-id="organizationId"

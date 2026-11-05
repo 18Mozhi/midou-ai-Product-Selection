@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppIcon from "./AppIcon.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import type { TrendFilters, TrendSort } from "./trend-workspace-types";
 
@@ -38,11 +39,12 @@ const updateFilter = (key: keyof TrendFilters, event: Event) =>
           <option value="">全部状态</option>
         </select></label
       ><label class="search"
-        >关键词<input
-          :value="filters.q"
-          maxlength="200"
-          placeholder="搜索主题或关键词"
-          @input="updateFilter('q', $event)" /></label
+        >关键词<span class="trend-filter-search"
+          ><AppIcon name="search" :size="16" /><input
+            :value="filters.q"
+            maxlength="200"
+            placeholder="搜索主题或关键词"
+            @input="updateFilter('q', $event)" /></span></label
       ><label
         >排序<select
           :value="sort"

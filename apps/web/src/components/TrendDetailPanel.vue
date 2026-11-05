@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { statusLabel } from "../ui/status-labels";
+import AppIcon from "./AppIcon.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import TrendEvidenceTimeline from "./TrendEvidenceTimeline.vue";
 import type { TrendDetail } from "./trend-workspace-types";
 
 defineProps<{
-  detail: TrendDetail;
+  detail: TrendDetail | null;
   busy: string;
 }>();
 const emit = defineEmits<{
@@ -28,11 +29,13 @@ const freshness = (value: string) =>
         <button class="trend-detail-back so-action-quiet" type="button" @click="emit('back')">
           关闭详情 · 返回情报列表
         </button>
-        <p v-if="busy !== 'detail'">
-          {{ statusLabel(detail.status) }} · {{ detail.market }} · {{ detail.language }}
-        </p>
-        <h3 v-if="busy !== 'detail'">{{ detail.title }}</h3>
-        <span v-if="busy !== 'detail'"
+        <div v-if="detail && busy !== 'detail'" class="trend-detail-badges">
+          <span>{{ detail.market }}</span
+          ><span>{{ detail.language }}</span
+          ><span :data-status="detail.status">{{ statusLabel(detail.status) }}</span>
+        </div>
+        <h3 v-if="detail && busy !== 'detail'">{{ detail.title }}</h3>
+        <span v-if="detail && busy !== 'detail'"
           >首次 {{ freshness(detail.first_seen_at) }} · 最近来源
           {{ freshness(detail.source_fresh_at) }}</span
         >
@@ -46,21 +49,21 @@ const freshness = (value: string) =>
       :compact="true"
       :hide-secondary="true"
     />
-    <dl v-else class="trend-detail-facts" aria-label="情报资料">
+    <dl v-else-if="detail" class="trend-detail-facts" aria-label="情报资料">
       <div>
-        <dt>信号</dt>
+        <dt><AppIcon name="trend" :size="16" />信号</dt>
         <dd>{{ detail.signal_count }} 条</dd>
       </div>
       <div>
-        <dt>来源</dt>
+        <dt><AppIcon name="list" :size="16" />来源</dt>
         <dd>{{ detail.source_count }} 个</dd>
       </div>
       <div>
-        <dt>证据覆盖</dt>
+        <dt><AppIcon name="database" :size="16" />证据覆盖</dt>
         <dd>{{ detail.data_quality.evidence_count }} 条</dd>
       </div>
       <div>
-        <dt>可信度</dt>
+        <dt><AppIcon name="shield" :size="16" />可信度</dt>
         <dd>
           {{
             detail.confidence.status === "insufficient_data"
@@ -88,7 +91,8 @@ const freshness = (value: string) =>
         </dd>
       </div>
     </dl>
-    <slot v-if="busy !== 'detail'" name="related-products" />
-    <TrendEvidenceTimeline v-if="busy !== 'detail'" :detail="detail" />
+    <p v-else>未取得情报详情，可关闭后重新选择该主题。</p>
+    <slot v-if="detail && busy !== 'detail'" name="related-products" />
+    <TrendEvidenceTimeline v-if="detail && busy !== 'detail'" :detail="detail" />
   </article>
 </template>
