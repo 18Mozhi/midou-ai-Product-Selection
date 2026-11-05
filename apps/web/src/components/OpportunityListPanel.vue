@@ -439,11 +439,29 @@ watch(imageFailureResetSources, (items) => {
       :image-fallback-label="imageFallbackLabel"
       @image-error="onImageError"
     />
-    <nav class="opportunity-pagination" aria-label="选品分页">
+    <nav
+      class="opportunity-pagination"
+      :class="{ 'candidate-pagination': selectionView === 'rule_candidates' }"
+      aria-label="选品分页"
+    >
       <span v-if="selectionView === 'rule_candidates'" class="candidate-page-total"
         >共 {{ total }} 条</span
       >
-      <button type="button" :disabled="page <= 1" @click="emit('page', page - 1)">上一页</button>
+      <button
+        type="button"
+        class="candidate-page-step"
+        aria-label="上一页"
+        :disabled="page <= 1"
+        @click="emit('page', page - 1)"
+      >
+        <span>上一页</span>
+        <AppIcon
+          v-if="selectionView === 'rule_candidates'"
+          class="candidate-page-arrow candidate-page-arrow--back"
+          name="chevron"
+          :size="16"
+        />
+      </button>
       <span :class="{ 'candidate-page-position': selectionView === 'rule_candidates' }">
         第 {{ page }} / {{ pageCount }} 页
       </span>
@@ -461,8 +479,20 @@ watch(imageFailureResetSources, (items) => {
           <span v-else aria-hidden="true">…</span>
         </template>
       </div>
-      <button type="button" :disabled="page >= pageCount" @click="emit('page', page + 1)">
-        下一页
+      <button
+        type="button"
+        class="candidate-page-step"
+        aria-label="下一页"
+        :disabled="page >= pageCount"
+        @click="emit('page', page + 1)"
+      >
+        <span>下一页</span>
+        <AppIcon
+          v-if="selectionView === 'rule_candidates'"
+          class="candidate-page-arrow"
+          name="chevron"
+          :size="16"
+        />
       </button>
     </nav>
   </section>
@@ -492,6 +522,29 @@ watch(imageFailureResetSources, (items) => {
 }
 .candidate-page-position {
   display: none;
+}
+.candidate-page-arrow {
+  display: none;
+}
+.candidate-page-arrow--back {
+  transform: rotate(180deg);
+}
+@media (min-width: 1101px) {
+  .candidate-pagination .candidate-page-step {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border-radius: 6px;
+  }
+  .candidate-pagination .candidate-page-step > span {
+    display: none;
+  }
+  .candidate-pagination .candidate-page-arrow {
+    display: block;
+  }
 }
 @media (max-width: 1100px) {
   .candidate-page-total,
