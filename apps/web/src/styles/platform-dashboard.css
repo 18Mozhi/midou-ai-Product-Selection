@@ -601,6 +601,13 @@
 #app .platform-dashboard--review .platform-source-health th {
   background: var(--so-panel-soft);
 }
+#app .platform-source-health .table-view-controls__content {
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+}
+#app .platform-source-health .table-view-controls__content table {
+  border: 0;
+}
 @media (min-width: 1440px) {
   html[data-design="commerce"] #app .platform-dashboard--review {
     gap: 18px;

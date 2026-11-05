@@ -373,6 +373,7 @@ onUnmounted(() => {
             :rows="visibleProviderHealth"
             :row-key="(item) => item.id"
             title="来源健康"
+            toolbar-icons
             :detail-title="(item) => item.name"
           >
             <template #desktop>

@@ -1388,6 +1388,21 @@ test("platform reference first fold fits system checks and source health without
   }
   const cell = sources.locator("tbody td").first();
   const density = sources.getByLabel("表格密度");
+  await expect(sources.locator(".table-view-controls__toolbar svg[aria-hidden='true']")).toHaveCount(3);
+  await expect(sources.locator(".table-view-controls__content")).toHaveCSS("border-radius", "10px");
+  const freeze = sources.getByRole("button", { name: "首列已冻结" });
+  await expect(freeze).toHaveAttribute("aria-pressed", "true");
+  await freeze.click();
+  await expect(cell).not.toHaveClass(/table-view-controls__frozen/);
+  await sources.getByRole("button", { name: "首列未冻结" }).click();
+  await expect(cell).toHaveClass(/table-view-controls__frozen/);
+  await sources.getByText("列设置", { exact: true }).click();
+  const statusColumn = sources.getByRole("checkbox", { name: "切换第 2 列" });
+  await statusColumn.uncheck();
+  await expect(sources.locator("th").nth(1)).toBeHidden();
+  await statusColumn.check();
+  await expect(sources.locator("th").nth(1)).toBeVisible();
+  await sources.getByText("列设置", { exact: true }).click();
   await expect(cell).toHaveCSS("padding-top", "8px");
   await density.selectOption("compact");
   await expect(cell).toHaveCSS("padding-top", "6px");
