@@ -1,4 +1,10 @@
 {
+  "referenceTrendRelatedCards": {
+    "sourceFiles": ["apps/web/src/components/TrendRelatedProducts.vue"],
+    "testFiles": ["tests/e2e/m04-01-trends.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Related product cards use four metric columns in a wide detail panel and two in a narrow panel without changing facts, links, permissions or pagination."
+  },
   "referenceWorkbenchFlowRhythm": {
     "sourceFiles": ["apps/web/src/components/HomeDashboard.vue", "apps/web/src/midou-workspace.css"],
     "testFiles": ["tests/e2e/home-completed-results.spec.ts"],

@@ -563,6 +563,23 @@ test("related products use exact topic scope, preserve unknowns and paginate wit
     .toBe(true);
 });
 
+test("related product cards adapt metric columns to available width", async ({ page }) => {
+  await ready(page, [topic], { capabilities: [...managerCapabilities, "opportunity:read"] });
+  await page.route("**/api/v1/opportunities?*", (route) =>
+    route.fulfill({ json: envelope([relatedProduct], { total: 1 }) }),
+  );
+  await page.setViewportSize({ width: 1717, height: 916 });
+  await page.goto(`/trends?topic=${topicId}`);
+  const card = page.getByRole("region", { name: "关联选品", exact: true }).locator("li");
+  await expect(card).toBeVisible();
+  const columns = () =>
+    card.locator("dl").evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").length);
+  await expect.poll(columns).toBe(4);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(columns).toBe(2);
+  await expect(card.getByRole("link", { name: relatedProduct.name })).toBeVisible();
+});
+
 test("related products never read without opportunity permission", async ({ page }) => {
   await ready(page);
   let reads = 0;

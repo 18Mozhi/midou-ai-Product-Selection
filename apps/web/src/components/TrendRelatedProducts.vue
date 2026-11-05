@@ -205,24 +205,31 @@ onBeforeUnmount(() => {
   letter-spacing: normal;
 }
 .trend-related-products ul {
+  container-type: inline-size;
+  display: grid;
+  gap: 8px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .trend-related-products li {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 1fr);
-  gap: 16px;
-  padding: 14px 0;
-  border-top: 1px solid var(--so-border);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 12px 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  background: var(--so-panel);
 }
 .trend-related-products a {
   min-width: 0;
-  color: var(--so-primary);
+  color: var(--so-text);
   text-decoration: none;
   overflow-wrap: anywhere;
 }
 .trend-related-products a:hover {
+  color: var(--so-primary);
   text-decoration: underline;
 }
 .trend-related-products small {
@@ -248,15 +255,15 @@ onBeforeUnmount(() => {
 .trend-related-products button {
   min-height: 44px;
 }
-@media (max-width: 1100px) {
+@container (min-width: 620px) {
   .trend-related-products li {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  }
+  .trend-related-products dl {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 @media (max-width: 640px) {
-  .trend-related-products dl {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
   .trend-related-products nav {
     justify-content: space-between;
   }
