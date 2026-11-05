@@ -908,6 +908,20 @@
     height: clamp(450px, calc(100dvh - 356px), 740px);
     overflow-y: auto;
   }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row {
+    padding-block: 8px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .topic-copy > strong {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .topic-copy > small {
+    margin-block-start: 2px;
+  }
   #app .trend-dashboard--review .trend-detail > header {
     position: relative;
   }

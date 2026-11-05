@@ -762,7 +762,14 @@ test("metric help opens without retired member styles or horizontal overflow", a
 test("midou reference list defaults closed, opens and closes detail without list reload", async ({
   page,
 }) => {
-  await ready(page);
+  await ready(page, [
+    topic,
+    ...[1, 2, 3].map((index) => ({
+      ...topic,
+      id: `00000000-0000-4000-8000-0000000009${index}0`,
+      title: `Long market intelligence product title for comparison, sourcing and analysis ${index}`,
+    })),
+  ]);
   let reads = 0,
     lists = 0;
   page.on("request", (r) => {
@@ -771,13 +778,26 @@ test("midou reference list defaults closed, opens and closes detail without list
     if (u.pathname === "/api/v1/trends") lists++;
   });
   await page.goto("/trends");
-  await expect(page.locator(".trend-list > button")).toHaveCount(1);
+  await expect(page.locator(".trend-list > button")).toHaveCount(4);
   await expect(page.locator(".trend-detail")).toHaveCount(0);
   expect(reads).toBe(0);
   await expect(page.getByRole("link", { name: "米兜智能选品", exact: true })).toBeVisible();
   expect(await page.getByRole("navigation", { name: "面包屑", exact: true }).count()).toBe(1);
   await page.locator(".trend-list > button").first().click();
   await expect(page.locator(".trend-detail")).toBeVisible();
+  if ((page.viewportSize()?.width ?? 0) >= 1101) {
+    const list = page.locator(".trend-list");
+    await expect(list.locator(".topic-copy > strong").last()).toHaveCSS("-webkit-line-clamp", "2");
+    if (page.viewportSize()!.width >= 1600 && page.viewportSize()!.height >= 916) {
+      expect(
+        await list.evaluate(
+          (el) =>
+            el.querySelector(".trend-topic-row:last-of-type")!.getBoundingClientRect().bottom -
+            el.getBoundingClientRect().bottom,
+        ),
+      ).toBeLessThanOrEqual(0);
+    }
+  }
   expect(reads).toBe(1);
   await expect(page.locator(".trend-detail-badges")).toContainText("en-US");
   await expect(page.getByLabel("情报资料").locator("dt svg")).toHaveCount(4);
