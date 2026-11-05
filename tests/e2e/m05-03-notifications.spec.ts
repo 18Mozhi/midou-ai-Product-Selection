@@ -827,6 +827,14 @@ test("midou reference notification layout keeps original workflow and preference
     expect(categoryBoxes[4].x - categoryBoxes[0].x).toBeCloseTo(332, 0);
     const searchBox = (await page.getByRole("searchbox").boundingBox())!;
     expect(Math.abs(searchBox.y + searchBox.height / 2 - categoryBoxes[0].y - 21)).toBeLessThanOrEqual(3);
+    const searchForm = page.getByRole("search");
+    const initialSearch = (await searchForm.boundingBox())!;
+    expect(initialSearch.width).toBe(268);
+    await page.getByRole("searchbox").fill("更新");
+    await page.getByRole("searchbox").press("Enter");
+    await expect(page.getByRole("button", { name: "清除", exact: true })).toBeVisible();
+    expect(await searchForm.boundingBox()).toEqual(initialSearch);
+    await page.getByRole("button", { name: "清除", exact: true }).click();
     const summary = page.locator(".notification-summary");
     await expect(summary.locator("svg[aria-hidden='true']")).toHaveCount(4);
     for (const icon of await summary.locator("svg").all()) await expect(icon).toHaveCSS("width", "24px");

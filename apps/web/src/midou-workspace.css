@@ -2698,6 +2698,14 @@ html[data-design="commerce"] #app .notification-row > .notification-mark-read {
 }
 
 @media (min-width: 1600px) {
+  .midou-notification-search {
+    box-sizing: border-box;
+    inline-size: 268px;
+  }
+  html[data-design="commerce"] #app .midou-notification-search input {
+    flex: 1 1 0;
+    inline-size: 0;
+  }
   html[data-design="commerce"] #app .midou-notification-filters > nav {
     gap: 5px;
     padding-inline-start: 4px;
