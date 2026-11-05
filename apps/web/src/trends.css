@@ -727,7 +727,7 @@
 
 .trend-detail-facts {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px 18px;
   margin: 18px 0 0;
   padding: 14px 0;
@@ -744,16 +744,6 @@
   margin: 5px 0 0;
   font-size: 14px;
   font-weight: 600;
-}
-@media (min-width: 1440px) {
-  .trend-detail-facts {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-}
-@media (max-width: 760px) {
-  .trend-detail-facts {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 /* Reference intelligence: readable list first, a balanced evidence panel only on selection. */
@@ -827,7 +817,30 @@
   padding: 14px;
   border: 1px solid var(--so-border);
   border-radius: 10px;
-  background: var(--so-panel-soft);
+  background: var(--so-panel);
+}
+.trend-detail-facts dd[data-insufficient="true"] {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: var(--so-warning);
+  background: var(--so-warning-soft);
+}
+.trend-detail-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 12px 0 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.trend-detail-secondary > div {
+  display: flex;
+  gap: 6px;
+}
+.trend-detail-secondary dd {
+  margin: 0;
+  color: var(--so-text);
 }
 .trend-detail-facts dt {
   display: flex;
@@ -849,9 +862,9 @@
     grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
   }
   #app .trend-detail .trend-detail-facts {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  #app .trend-detail .trend-detail-facts div:not(:nth-child(3n + 1)) {
+  #app .trend-detail .trend-detail-facts > div + div {
     padding-inline-start: 12px;
     border-inline-start: 1px solid var(--so-border);
   }

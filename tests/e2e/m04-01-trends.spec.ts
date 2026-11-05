@@ -795,11 +795,14 @@ test("intelligence detail tabs default to overview and support keyboard navigati
   const tabs = page.getByRole("tablist", { name: "情报详情视图" });
   const overview = tabs.getByRole("tab", { name: "情报概览" });
   await expect(overview).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator(".trend-detail-facts dt")).toHaveText(["信号", "来源", "证据", "可信度"]);
+  await expect(page.locator(".trend-detail-secondary dt")).toHaveText(["数据状态", "环比"]);
   await expect(page.getByRole("heading", { name: "主要证据" })).toBeHidden();
   await overview.focus();
   await page.keyboard.press("ArrowRight");
   await expect(tabs.getByRole("tab", { name: "来源证据" })).toBeFocused();
   await expect(page.getByRole("heading", { name: "主要证据" })).toBeVisible();
+  await expect(page.locator(".trend-detail-secondary")).toHaveCount(0);
   await page.keyboard.press("End");
   await expect(page.getByRole("tabpanel", { name: "关联选品" })).toContainText("不可查看关联选品");
   await page.keyboard.press("Home");

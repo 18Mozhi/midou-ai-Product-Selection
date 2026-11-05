@@ -88,35 +88,17 @@ const freshness = (value: string) =>
         <dd>{{ detail.source_count }} 个</dd>
       </div>
       <div>
-        <dt><AppIcon name="database" :size="16" />证据覆盖</dt>
+        <dt><AppIcon name="database" :size="16" />证据</dt>
         <dd>{{ detail.data_quality.evidence_count }} 条</dd>
       </div>
       <div>
         <dt><AppIcon name="shield" :size="16" />可信度</dt>
-        <dd>
+        <dd :data-insufficient="detail.confidence.status === 'insufficient_data'">
           {{
             detail.confidence.status === "insufficient_data"
               ? "数据不足"
               : `${detail.confidence.score} / 100`
           }}
-        </dd>
-      </div>
-      <div>
-        <dt>数据状态</dt>
-        <dd>
-          {{
-            detail.data_quality.coverage_status === "covered"
-              ? "已覆盖"
-              : detail.data_quality.coverage_status === "insufficient_data"
-                ? "数据不足"
-                : detail.data_quality.coverage_status
-          }}
-        </dd>
-      </div>
-      <div>
-        <dt>环比</dt>
-        <dd>
-          {{ detail.momentum_percent == null ? "数据不足" : `${detail.momentum_percent}%` }}
         </dd>
       </div>
     </dl>
@@ -153,6 +135,26 @@ const freshness = (value: string) =>
         <p v-else-if="activeTab === 'overview' && !canReadRelated" class="trend-panel-note">
           可切换到「来源证据」查看该主题的原始资料。
         </p>
+        <dl v-if="activeTab === 'overview'" class="trend-detail-secondary" aria-label="补充指标">
+          <div>
+            <dt>数据状态</dt>
+            <dd>
+              {{
+                detail.data_quality.coverage_status === "covered"
+                  ? "已覆盖"
+                  : detail.data_quality.coverage_status === "insufficient_data"
+                    ? "数据不足"
+                    : detail.data_quality.coverage_status
+              }}
+            </dd>
+          </div>
+          <div>
+            <dt>环比</dt>
+            <dd>
+              {{ detail.momentum_percent == null ? "数据不足" : `${detail.momentum_percent}%` }}
+            </dd>
+          </div>
+        </dl>
       </div>
       <div
         v-show="activeTab === 'evidence'"
