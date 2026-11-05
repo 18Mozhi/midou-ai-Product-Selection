@@ -1034,6 +1034,17 @@
 }
 
 @media (min-width: 1440px) {
+  #app .trend-dashboard--review .trend-list > header {
+    padding-block-end: 12px;
+  }
+  #app .trend-dashboard--review .trend-list > header strong {
+    font-size: 20px;
+    line-height: 24px;
+  }
+  #app .trend-dashboard--review .trend-list > header span {
+    font-size: 14px;
+    line-height: 20px;
+  }
   #app .trend-dashboard--review .trend-workbench.is-detail-open .topic-copy > strong {
     font-size: 16px;
     line-height: 1.25;
@@ -1042,7 +1053,7 @@
     padding-block: 7px;
   }
   html[data-design="commerce"] #app .trend-market-heading {
-    padding-block-end: 16px;
+    padding-block-end: 12px;
   }
   html[data-design="commerce"] #app .trend-market-heading h2 {
     font-size: 30px;

@@ -786,7 +786,7 @@ test("metric help opens without retired member styles or horizontal overflow", a
 
 test("midou reference list defaults closed, opens and closes detail without list reload", async ({
   page,
-}) => {
+}, testInfo) => {
   if (page.viewportSize()!.width >= 1101) {
     await page.setViewportSize({ width: 1717, height: 916 });
   }
@@ -821,7 +821,7 @@ test("midou reference list defaults closed, opens and closes detail without list
       const heading = page.locator(".trend-market-heading");
       await expect(heading.locator("h2 > span")).toHaveCSS("font-size", "15px");
       await expect(heading.locator("p")).toHaveCSS("font-size", "16px");
-      expect(Math.abs(filters.y - 216)).toBeLessThanOrEqual(4);
+      expect(Math.abs(filters.y - 216)).toBeLessThanOrEqual(2);
       const filterBar = page.locator(".trend-filters");
       const fields = await filterBar.locator(":scope > label").evaluateAll((nodes) =>
         nodes.map((node) => node.getBoundingClientRect().width),
@@ -839,6 +839,10 @@ test("midou reference list defaults closed, opens and closes detail without list
       await expect(page.locator(".trend-filter-field svg:visible")).toHaveCount(4);
       await expect(page.getByRole("combobox", { name: "市场", exact: true })).toHaveCSS("padding-left", "40px");
       const listBox = (await list.boundingBox())!;
+      expect(Math.abs(listBox.y - 334)).toBeLessThanOrEqual(2);
+      const listHeader = list.locator(":scope > header");
+      await expect(listHeader.getByText("情报列表", { exact: true })).toHaveCSS("font-size", "20px");
+      await expect(listHeader.getByText("共 4 个主题", { exact: true })).toHaveCSS("font-size", "14px");
       expect(listBox.y - filters.y - filters.height).toBeCloseTo(21, 0);
       await expect(list.locator(".topic-copy > strong").first()).toHaveCSS("font-size", "16px");
       await expect(list.locator(".trend-topic-row").first()).toHaveCSS("padding-top", "7px");
@@ -875,6 +879,7 @@ test("midou reference list defaults closed, opens and closes detail without list
       items.map((item) => item.getBoundingClientRect().width),
     );
     expect(Math.max(...widths) - Math.min(...widths)).toBeLessThan(1);
+    await page.screenshot({ path: testInfo.outputPath("intelligence-reference.png") });
   }
   await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
   await expect(page.locator(".trend-detail")).toHaveCount(0);
