@@ -252,6 +252,11 @@ for (const scenario of [
     await expect(notice.getByRole("heading")).toHaveText(
       scenario.failed || scenario.blocked ? "未获得供应商报价" : "供应商报价",
     );
+    await expect(page.locator(".sourcing-empty-offers .sourcing-quote-empty")).toContainText(
+      scenario.failed || scenario.blocked
+        ? "本次采集未获得供应商报价，请核对来源采集状态。"
+        : "报价返回后将在这里展示。",
+    );
     if (scenario.name === "failed") {
       await expect(notice.getByRole("link", { name: "查看采集任务明细" })).toHaveAttribute(
         "href",
@@ -1731,6 +1736,8 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     expect(Math.abs(detail!.y - 301)).toBeLessThanOrEqual(3);
     await expect(page.locator(".sourcing-record-items > button").first()).toHaveCSS("column-gap", "15px");
     const warning = page.locator(".sourcing-pending[data-attention='true']");
+    const emptyIcon = page.locator(".sourcing-empty-offers .sourcing-quote-empty > svg");
+    await expect(emptyIcon).toHaveCSS("stroke-width", "1.2px");
     await expect(warning.locator("h4")).toHaveCSS("column-gap", "12px");
     await expect(warning.locator("p")).toHaveCSS("padding-inline-start", "34px");
     expect(Math.abs(records!.y + records!.height - detail!.y - detail!.height)).toBeLessThanOrEqual(3);

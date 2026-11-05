@@ -464,7 +464,11 @@ const showCollectionLinkInNotice = computed(
             <div class="sourcing-quote-empty">
               <AppIcon name="box-open" :size="44" />
               <strong>暂无供应商报价</strong>
-              <span>报价返回后将在这里展示。</span>
+              <span>{{
+                offerNeedsAttention
+                  ? "本次采集未获得供应商报价，请核对来源采集状态。"
+                  : "报价返回后将在这里展示。"
+              }}</span>
             </div>
             <div v-show="showProfitBesideEmptyOffers" ref="emptyOffersProfitTarget"></div>
           </div>

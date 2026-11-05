@@ -87,7 +87,7 @@
     "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/sourcing.css"],
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
-    "contract": "Empty offers distinguish failed or blocked collection; existing task inspection link moves into the notice only for authorized users with an actual task identifier. No new collection action."
+    "contract": "Empty offers distinguish failed or blocked collection in both the notice and the empty offer card; existing task inspection link moves into the notice only for authorized users with an actual task identifier. No new collection action."
   },
   "referenceTrendRelatedCards": {
     "sourceFiles": ["apps/web/src/components/TrendRelatedProducts.vue"],

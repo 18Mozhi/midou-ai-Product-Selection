@@ -1322,6 +1322,10 @@ html[data-design="commerce"] #app .sourcing-empty-offers--with-profit .sourcing-
   .sourcing-empty-offers--with-profit > .sourcing-quote-empty {
     min-height: 169px;
   }
+  .sourcing-empty-offers > .sourcing-quote-empty > svg {
+    inline-size: 54px;
+    stroke-width: 1.2;
+  }
   .sourcing-empty-offers--with-profit .sourcing-profit-summary:has(.sourcing-profit-unconfirmed) > header > div {
     display: flex;
     align-items: baseline;
