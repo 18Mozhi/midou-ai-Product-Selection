@@ -2613,12 +2613,23 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
 @media (min-width: 1450px) {
   html[data-design="commerce"] #app .notification-list .notification-record {
     padding-inline-start: 52px;
+    grid-template-columns: 60px minmax(0, 1fr) auto auto auto;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > i {
+    width: 60px;
+    margin-inline-end: 0;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > span {
+    padding-inline-start: 3px;
   }
   html[data-design="commerce"] #app .notification-row:has(> .notification-mark-read) > .notification-record {
     padding-inline-end: 14px;
   }
   html[data-design="commerce"] #app .notification-list .notification-record.unread::before {
-    inset-inline-start: 21px;
+    inset-inline-start: 20px;
+    width: 14px;
+    height: 14px;
+    top: calc(50% - 7px);
   }
   html[data-design="commerce"] #app .midou-notification-open {
     position: relative;
@@ -2629,6 +2640,7 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
   html[data-design="commerce"] #app .notification-list .notification-row > .notification-mark-read {
     min-inline-size: 104px;
     margin-inline-end: 18px;
+    font-weight: 500;
   }
   html[data-design="commerce"] #app .midou-notification-open::before {
     content: "";

@@ -866,6 +866,10 @@ test("midou reference notification layout keeps original workflow and preference
     for (const icon of await summary.locator("svg").all()) await expect(icon).toHaveCSS("width", "24px");
     await expect(summary.locator("b").first()).toHaveCSS("font-size", "27px");
     await expect(page.locator(".notification-record")).toHaveCSS("padding-left", "52px");
+    await expect(page.locator(".notification-record > i")).toHaveCSS("width", "60px");
+    await expect(readAction).toHaveCSS("font-weight", "500");
+    const title = (await page.locator(".notification-record > span > strong").boundingBox())!;
+    expect(Math.abs(title.x - 424)).toBeLessThanOrEqual(3);
     expect(
       await page.locator(".midou-notification-open").evaluate(
         (element) => getComputedStyle(element, "::before").borderInlineStartWidth,
@@ -897,7 +901,7 @@ test("midou reference notification layout keeps original workflow and preference
     await page
       .locator(".notification-list .notification-record.unread")
       .evaluate((el) => getComputedStyle(el, "::before").width),
-  ).toBe((page.viewportSize()?.width ?? 0) >= 1151 ? "10px" : "6px");
+  ).toBe(wide ? "14px" : (page.viewportSize()?.width ?? 0) >= 1151 ? "10px" : "6px");
 
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
