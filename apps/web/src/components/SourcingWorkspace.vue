@@ -75,6 +75,14 @@ const detailTabs = [
 ] as const;
 const detailTab = ref<(typeof detailTabs)[number]["key"]>("offers");
 const detailTabId = useId();
+const emptyOffersProfitTarget = ref<HTMLElement | null>(null);
+const showProfitBesideEmptyOffers = computed(
+  () =>
+    detailTab.value === "offers" &&
+    !detailLoading.value &&
+    !candidates.value.length &&
+    selected.value?.input_type === "opportunity",
+);
 function handleDetailTabKey(event: KeyboardEvent, index: number) {
   const count = detailTabs.length;
   const destinations: Record<string, number> = {
@@ -413,10 +421,17 @@ const pendingMessage = computed(() => {
               下一页
             </button>
           </nav>
-          <div v-if="!detailLoading && !candidates.length" class="sourcing-quote-empty">
-            <AppIcon name="box" :size="36" />
-            <strong>暂无供应商报价</strong>
-            <span>报价返回后将在这里展示。</span>
+          <div
+            v-show="!detailLoading && !candidates.length"
+            class="sourcing-empty-offers"
+            :class="{ 'sourcing-empty-offers--with-profit': showProfitBesideEmptyOffers }"
+          >
+            <div class="sourcing-quote-empty">
+              <AppIcon name="box" :size="36" />
+              <strong>暂无供应商报价</strong>
+              <span>报价返回后将在这里展示。</span>
+            </div>
+            <div v-show="showProfitBesideEmptyOffers" ref="emptyOffersProfitTarget"></div>
           </div>
         </div>
         <div
@@ -426,13 +441,18 @@ const pendingMessage = computed(() => {
           :id="detailTabId + '-panel-profit'"
           :aria-labelledby="detailTabId + '-tab-profit'"
         >
-          <SourcingProfitSummary
+          <Teleport
             v-if="selected.input_type === 'opportunity'"
-            :key="selected.input_ref"
-            :api-base-url="apiBaseUrl"
-            :opportunity-id="selected.input_ref"
-            :return-path="route.fullPath"
-          />
+            :to="emptyOffersProfitTarget ?? undefined"
+            :disabled="!showProfitBesideEmptyOffers || !emptyOffersProfitTarget"
+          >
+            <SourcingProfitSummary
+              :key="selected.input_ref"
+              :api-base-url="apiBaseUrl"
+              :opportunity-id="selected.input_ref"
+              :return-path="route.fullPath"
+            />
+          </Teleport>
           <p v-else class="sourcing-quote-empty">当前找货记录未关联选品，暂无成本与利润可查看。</p>
         </div>
         <div

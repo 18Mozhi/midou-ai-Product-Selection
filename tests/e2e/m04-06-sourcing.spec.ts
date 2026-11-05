@@ -505,6 +505,29 @@ const calculatedProfit = (amount: number, rule = "current-rule") => ({
   cost_input_reviews: [],
 });
 
+test("empty opportunity offers show the same profit summary without refetching on tab changes", async ({
+  page,
+}) => {
+  const { search } = await opportunitySetup(page, calculatedProfit(80), "calculated");
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({ json: envelope({ ...search, candidate_count: 0, candidates: [] }) }),
+  );
+  let profitReads = 0;
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.endsWith("/profit-analysis")) profitReads++;
+  });
+  await page.goto("/sourcing");
+  const offers = page.getByRole("tabpanel", { name: "供应商报价" });
+  const summary = offers.getByRole("region", { name: "成本与利润摘要" });
+  await expect(offers.getByText("暂无供应商报价")).toBeVisible();
+  await expect(summary).toContainText("80 USD");
+  await page.getByRole("tab", { name: "成本与利润" }).click();
+  await expect(page.getByRole("tabpanel", { name: "成本与利润" })).toContainText("80 USD");
+  await page.getByRole("tab", { name: "供应商报价" }).click();
+  await expect(summary).toContainText("80 USD");
+  expect(profitReads).toBe(1);
+});
+
 test("opportunity sourcing shows read-only current profit without old cost forms or reviewer calls", async ({
   page,
 }) => {
