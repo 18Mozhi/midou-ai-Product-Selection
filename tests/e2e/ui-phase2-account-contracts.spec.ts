@@ -262,7 +262,9 @@ test("UI2-A03 theme conflict requires fresh preference before the next versioned
   ]);
 });
 
-test("profile shows saved avatar but never loads an unsaved URL", async ({ page }) => {
+test("profile shows saved avatar but never loads an unsaved URL", async ({ page }, testInfo) => {
+  const wide = page.viewportSize()!.width >= 1101;
+  if (wide) await page.setViewportSize({ width: 1717, height: 916 });
   await accountSession(page);
   const savedUrl = "https://avatar.example.test/saved.svg";
   let draftReads = 0;
@@ -295,6 +297,19 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
   await page.getByRole("button", { name: "取消", exact: true }).click();
   await expect(displayName).toHaveValue(profile.display_name);
   await expect(page.getByLabel("头像 HTTPS 地址")).toHaveValue(savedUrl);
+  if (wide) {
+    const form = page.locator(".midou-profile-grid .p11-form");
+    const avatar = form.locator(".p11-avatar-frame");
+    await expect(form).toHaveCSS("row-gap", "18px");
+    await expect(avatar).toHaveCSS("border-radius", "8px");
+    const [input, frame] = await Promise.all([
+      page.getByLabel("头像 HTTPS 地址").boundingBox(),
+      avatar.boundingBox(),
+    ]);
+    expect(Math.abs(input!.y + input!.height / 2 - frame!.y - frame!.height / 2)).toBeLessThan(1);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({ path: testInfo.outputPath("personal-profile-reference.png") });
+  }
   expect(writes).toBe(0);
   const security = page.locator(".midou-profile-security");
   const email = page.getByLabel("邮箱", { exact: true });

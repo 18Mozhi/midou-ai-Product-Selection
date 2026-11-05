@@ -90,11 +90,13 @@ function update(field: ProfileField, event: Event) {
             :disabled="props.saving"
             @input="update('avatar_url', $event)"
           />
-          <ProfileAvatar
-            class="p11-avatar-preview"
-            :name="props.profile.display_name || props.profile.email"
-            :url="props.profile.avatar_url"
-          />
+          <span class="p11-avatar-frame">
+            <ProfileAvatar
+              class="p11-avatar-preview"
+              :name="props.profile.display_name || props.profile.email"
+              :url="props.profile.avatar_url"
+            />
+          </span>
         </div>
       </div>
     </div>
@@ -202,5 +204,25 @@ function update(field: ProfileField, event: Event) {
   height: 40px;
   justify-self: center;
   box-shadow: 0 0 0 1px var(--so-border);
+}
+.p11-avatar-frame {
+  display: grid;
+  place-items: center;
+}
+@media (min-width: 1440px) {
+  .p11-avatar-field {
+    grid-template-columns: minmax(0, 1fr) 46px;
+  }
+  .p11-avatar-frame {
+    box-sizing: border-box;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel-soft);
+  }
+  .p11-avatar-preview {
+    box-shadow: none;
+  }
 }
 </style>

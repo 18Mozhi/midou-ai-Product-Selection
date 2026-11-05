@@ -2572,7 +2572,7 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
   }
   html[data-design="commerce"] #app .midou-profile-grid .p11-form {
     padding: 22px 28px;
-    gap: 12px 28px;
+    gap: 18px 30px;
   }
   html[data-design="commerce"] #app .midou-profile-grid .midou-profile-reason {
     grid-column: auto;
@@ -2593,7 +2593,7 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
   }
   html[data-design="commerce"] #app .midou-profile-grid .p11-form-footer {
     justify-content: flex-start;
-    padding-top: 12px;
+    padding-top: 16px;
   }
 }
 
