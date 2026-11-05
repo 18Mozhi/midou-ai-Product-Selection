@@ -8564,7 +8564,7 @@
     "contract": "Optimize existing scoped read plans without removing any identity, classification or completion proof. Aggregate home counts once; skip daily identity history only when no same-day opportunity exists, never skip actual completion receipts. Shell owns the sole topbar breadcrumb across routes. Stable 14px member controls and independent sourcing detail loading, abort superseded reads and deduplicate the current read. No collection test/recovery/concurrency, API/env/schema/dependency/Python changes. Read-only database samples are not deployed HTTP/P95 acceptance."
   },
   "sourcingPagination20261104": {
-    "referenceLayout": "Separate desktop records and detail cards, enlarged real thumbnail, progress by title, status-based missing-quote warning and preserved mobile controls. No sourcing requests, pagination or authorization changes.",
+    "referenceLayout": "Separate desktop records and detail cards, enlarged real thumbnail, progress by title, status-based missing-quote warning and keyboard-accessible offer/profit/history tabs. Default to offers on record changes; tab switches retain existing mounted reads and authorization. No sourcing requests, pagination or authorization changes.",
     "sourceFiles": [
       "packages/contracts/src/sourcing-list.ts",
       "packages/contracts/src/index.ts",

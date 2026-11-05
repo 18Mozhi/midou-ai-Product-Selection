@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref, useId, watch } from "vue";
 import {
   useSourcingWorkspace,
   type SourcingWorkspaceProps,
@@ -68,6 +68,29 @@ const {
 const recordPageSize = 20,
   supplierPageSize = 10;
 const supplierPage = ref(1);
+const detailTabs = [
+  { key: "offers", label: "供应商报价" },
+  { key: "profit", label: "成本与利润" },
+  { key: "history", label: "报价历史" },
+] as const;
+const detailTab = ref<(typeof detailTabs)[number]["key"]>("offers");
+const detailTabId = useId();
+function handleDetailTabKey(event: KeyboardEvent, index: number) {
+  const count = detailTabs.length;
+  const destinations: Record<string, number> = {
+    ArrowLeft: (index + count - 1) % count,
+    ArrowRight: (index + 1) % count,
+    Home: 0,
+    End: count - 1,
+  };
+  const next = destinations[event.key];
+  if (next === undefined || !Object.hasOwn(destinations, event.key)) return;
+  const tab = detailTabs[next];
+  if (!tab) return;
+  event.preventDefault();
+  detailTab.value = tab.key;
+  (event.currentTarget as HTMLElement).parentElement?.querySelectorAll("button")[next]?.focus();
+}
 const supplierPages = computed(() =>
   Math.max(1, Math.ceil(candidates.value.length / supplierPageSize)),
 );
@@ -91,6 +114,7 @@ watch(
   () => selected.value?.id,
   () => {
     supplierPage.value = 1;
+    detailTab.value = "offers";
   },
 );
 watch(supplierPages, (count) => {
@@ -341,39 +365,90 @@ const pendingMessage = computed(() => {
             >待补齐：{{ missingText }}</span
           >
         </section>
-        <SupplierOfferList
-          :candidates="visibleCandidates"
-          :selected-quotes="selectedQuotes"
-          :can-manage="canManage"
-          :status-text="statusText"
-          :time-text="timeText"
-          :stability-text="stabilityText"
-          :risk-text="riskText"
-          :missing-text="candidateMissingText"
-          @choose="choose"
-          @confirm-quote="openQuote"
-        />
-        <nav v-if="supplierPages > 1" class="sourcing-pagination" aria-label="货源报价分页">
-          <button type="button" :disabled="supplierPage === 1" @click="supplierPage--">
-            上一页</button
-          ><span>{{ supplierPage }} / {{ supplierPages }} · 共 {{ candidates.length }} 个候选</span
-          ><button type="button" :disabled="supplierPage === supplierPages" @click="supplierPage++">
-            下一页
+        <div class="sourcing-detail-tabs" role="tablist" aria-label="找货详情视图">
+          <button
+            v-for="(tab, index) in detailTabs"
+            :id="`${detailTabId}-tab-${tab.key}`"
+            :key="tab.key"
+            type="button"
+            role="tab"
+            :aria-selected="detailTab === tab.key"
+            :aria-controls="`${detailTabId}-panel-${tab.key}`"
+            :tabindex="detailTab === tab.key ? 0 : -1"
+            @click="detailTab = tab.key"
+            @keydown="handleDetailTabKey($event, index)"
+          >
+            {{ tab.label }}
           </button>
-        </nav>
-        <SourcingProfitSummary
-          v-if="selected.input_type === 'opportunity'"
-          :key="selected.input_ref"
-          :api-base-url="apiBaseUrl"
-          :opportunity-id="selected.input_ref"
-          :return-path="route.fullPath"
-        />
-        <SourcingComparisonPanel
-          :comparisons="comparisons"
-          :failure="comparisonFailure"
-          :loading="comparisonLoading"
-          @retry="loadComparisons"
-        />
+        </div>
+        <div
+          role="tabpanel"
+          tabindex="0"
+          v-show="detailTab === 'offers'"
+          :id="detailTabId + '-panel-offers'"
+          :aria-labelledby="detailTabId + '-tab-offers'"
+        >
+          <SupplierOfferList
+            :candidates="visibleCandidates"
+            :selected-quotes="selectedQuotes"
+            :can-manage="canManage"
+            :status-text="statusText"
+            :time-text="timeText"
+            :stability-text="stabilityText"
+            :risk-text="riskText"
+            :missing-text="candidateMissingText"
+            @choose="choose"
+            @confirm-quote="openQuote"
+          />
+          <nav v-if="supplierPages > 1" class="sourcing-pagination" aria-label="货源报价分页">
+            <button type="button" :disabled="supplierPage === 1" @click="supplierPage--">
+              上一页</button
+            ><span
+              >{{ supplierPage }} / {{ supplierPages }} · 共 {{ candidates.length }} 个候选</span
+            ><button
+              type="button"
+              :disabled="supplierPage === supplierPages"
+              @click="supplierPage++"
+            >
+              下一页
+            </button>
+          </nav>
+          <div v-if="!detailLoading && !candidates.length" class="sourcing-quote-empty">
+            <AppIcon name="box" :size="36" />
+            <strong>暂无供应商报价</strong>
+            <span>报价返回后将在这里展示。</span>
+          </div>
+        </div>
+        <div
+          role="tabpanel"
+          tabindex="0"
+          v-show="detailTab === 'profit'"
+          :id="detailTabId + '-panel-profit'"
+          :aria-labelledby="detailTabId + '-tab-profit'"
+        >
+          <SourcingProfitSummary
+            v-if="selected.input_type === 'opportunity'"
+            :key="selected.input_ref"
+            :api-base-url="apiBaseUrl"
+            :opportunity-id="selected.input_ref"
+            :return-path="route.fullPath"
+          />
+          <p v-else class="sourcing-quote-empty">当前找货记录未关联选品，暂无成本与利润可查看。</p>
+        </div>
+        <div
+          role="tabpanel"
+          tabindex="0"
+          v-show="detailTab === 'history'"
+          :id="detailTabId + '-panel-history'"
+          :aria-labelledby="detailTabId + '-tab-history'"
+        >
+          <SourcingComparisonPanel
+            :comparisons="comparisons"
+            :failure="comparisonFailure"
+            :loading="comparisonLoading"
+            @retry="loadComparisons"
+          />
+        </div>
       </section>
     </div>
     <aside

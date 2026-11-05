@@ -1062,3 +1062,58 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
     overflow: hidden;
   }
 }
+
+.sourcing-detail-tabs {
+  display: flex;
+  gap: 8px;
+  margin-block: 18px 14px;
+  border-bottom: 1px solid var(--so-border);
+}
+#app .sourcing-workspace--review .sourcing-detail-tabs > button {
+  flex: 0 1 auto;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--so-text-muted);
+  background: transparent;
+  font-size: 14px;
+}
+#app .sourcing-workspace--review .sourcing-detail-tabs > button[aria-selected="true"] {
+  border-bottom-color: var(--so-primary);
+  color: var(--so-primary);
+  font-weight: 650;
+}
+.sourcing-quote-empty {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  min-height: 145px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+  text-align: center;
+}
+.sourcing-quote-empty strong {
+  color: var(--so-text);
+}
+.sourcing-detail [role="tabpanel"] > :is(.sourcing-profit-summary, .sourcing-comparisons) {
+  margin-block-start: 0;
+}
+@media (max-width: 760px) {
+  .sourcing-detail-tabs {
+    gap: 0;
+  }
+  #app .sourcing-workspace--review .sourcing-detail-tabs > button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: 4px;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+}

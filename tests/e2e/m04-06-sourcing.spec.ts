@@ -407,6 +407,7 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
     "href",
     new RegExp(`from=/sourcing\\?record=${searchId}`),
   );
+  await page.getByRole("tab", { name: "报价历史" }).click();
   const comparison = page.getByLabel("规格、最小起订量与交期对比");
   const specificationHint = page.getByLabel("规格归一化提示");
   await expect(specificationHint).toContainText("存在 2 种规格文本，尚未归一");
@@ -415,6 +416,7 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await expect(comparison.getByText("600ml / 绿色 / 双滤芯")).toBeVisible();
   await expect(comparison.getByText("300", { exact: true })).toBeVisible();
   await expect(comparison.getByText("12 天", { exact: true })).toBeVisible();
+  await page.getByRole("tab", { name: "供应商报价" }).click();
   await page.getByRole("button", { name: "确认报价" }).click();
   await expect(page.getByRole("heading", { name: "确认完整供应商报价" })).toBeVisible();
   await page.getByRole("button", { name: "关闭报价编辑" }).click();
@@ -516,6 +518,7 @@ test("opportunity sourcing shows read-only current profit without old cost forms
       forbiddenRequests.push(r.url());
   });
   await page.goto("/sourcing");
+  await page.getByRole("tab", { name: "成本与利润" }).click();
   const summary = page.getByRole("region", { name: "成本与利润摘要" });
   await expect(summary).toContainText("80 USD");
   await expect(summary).toContainText("80%");
@@ -563,6 +566,7 @@ test("late profit reads cannot replace the selected supplier record", async ({ p
     .getByRole("complementary", { name: "找货记录" })
     .getByRole("button", { name: /另一个商品/ })
     .click();
+  await page.getByRole("tab", { name: "成本与利润" }).click();
   const summary = page.getByRole("region", { name: "成本与利润摘要" });
   await expect(summary).toContainText("80 USD");
   release();
@@ -592,6 +596,7 @@ test("profit read errors retry without writes and historical calculations stay e
     if (r.url().includes("/api/v1/") && r.method() !== "GET") writes.push(r.url());
   });
   await page.goto("/sourcing");
+  await page.getByRole("tab", { name: "成本与利润" }).click();
   const summary = page.getByRole("region", { name: "成本与利润摘要" });
   await expect(summary.getByRole("alert")).toContainText("profit-read-failed");
   await summary.getByRole("button", { name: "重新读取利润资料" }).click();
@@ -698,6 +703,7 @@ test("returning to sourcing reads profit again and ignores the pre-deactivation 
   await expect(page).toHaveURL(/\/home/);
   release();
   await navigateMemberMenu(page, "1688 找货");
+  await page.getByRole("tab", { name: "成本与利润" }).click();
   const summary = page.getByRole("region", { name: "成本与利润摘要" });
   await expect(summary).toContainText("90 USD");
   await expect(summary).not.toContainText("999");
@@ -951,6 +957,7 @@ test("read-only sourcing role sees facts without write controls", async ({ page 
   await setup(page, ["task:read", "sourcing:read"]);
   // Let the lazy page module finish loading before starting business assertions.
   await page.goto("/sourcing", { waitUntil: "networkidle" });
+  await page.getByRole("tab", { name: "报价历史" }).click();
   await expect(page.getByText("供应商报价对比历史")).toBeVisible();
   await expect(page.getByRole("button", { name: "发起供应商找货" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "重新采集" })).toHaveCount(0);
@@ -1119,8 +1126,9 @@ test("SC-G02 comparison history failure preserves the sourcing list and retries 
   });
 
   await page.goto("/sourcing");
-  await expect(page.locator(".sourcing-comparison-error")).toContainText("对比历史暂未读取");
   await expect(page.getByText("宁波澄净户外用品厂")).toBeVisible();
+  await page.getByRole("tab", { name: "报价历史" }).click();
+  await expect(page.locator(".sourcing-comparison-error")).toContainText("对比历史暂未读取");
   await expect(page.locator(".sourcing-layout")).toBeVisible();
   await expect(page.getByText("选择两家以上已确认报价后，可保存对比记录。")).toHaveCount(0);
   await expect(page.locator(".sourcing-comparison-error")).toContainText(
@@ -1129,6 +1137,7 @@ test("SC-G02 comparison history failure preserves the sourcing list and retries 
 
   await page.getByRole("button", { name: "重新读取对比历史" }).click();
   await expect(page.getByText("恢复后的报价对比", { exact: true })).toBeVisible();
+  await page.getByRole("tab", { name: "供应商报价" }).click();
   await expect(page.getByText("宁波澄净户外用品厂")).toBeVisible();
   expect(attempts).toBe(2);
   expect(writes).toEqual([]);
@@ -1244,6 +1253,7 @@ test("P21 KeepAlive return reloads list, detail and comparisons and ignores pre-
 
   await navigateMemberMenu(page, "1688 找货");
   await expect(page.locator(".sourcing-detail h3")).toHaveText("返回后的找货快照");
+  await page.getByRole("tab", { name: "报价历史" }).click();
   await expect(page.getByText("返回后重新读取的对比", { exact: true })).toBeVisible();
   expect(listReads).toBe(2);
   expect(comparisonReads).toBe(2);
@@ -1458,6 +1468,7 @@ test("saved sourcing comparison identifies historical quote references without a
       writes.push(request.url());
   });
   await page.goto("/sourcing");
+  await page.getByRole("tab", { name: "报价历史" }).click();
   const history = page.locator(".sourcing-comparisons");
   await expect(history.getByRole("heading", { name: "供应商报价对比历史" })).toBeVisible();
   await expect(history.getByText("2 条报价记录", { exact: true })).toBeVisible();
@@ -1505,6 +1516,7 @@ test("sourcing product analysis roundtrip preserves record and search after a de
       writes.push(request.url());
   });
   await page.goto(`/sourcing?record=${searchId}&q=${encodeURIComponent("当前商品")}`);
+  await page.getByRole("tab", { name: "成本与利润" }).click();
   const link = page
     .getByRole("region", { name: "成本与利润摘要" })
     .getByRole("link", { name: "查看商品分析" });
@@ -1594,4 +1606,25 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   await expect(page.locator(".sourcing-detail > header .research-thumbnail img")).toBeVisible();
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("sourcing detail tabs switch by keyboard and expose only the active panel", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/sourcing");
+  const tabs = page.getByRole("tablist", { name: "找货详情视图" });
+  const offers = tabs.getByRole("tab", { name: "供应商报价" });
+  await expect(offers).toHaveAttribute("aria-selected", "true");
+  await offers.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(tabs.getByRole("tab", { name: "成本与利润" })).toBeFocused();
+  await expect(page.getByRole("tabpanel", { name: "成本与利润" })).toContainText("未关联选品");
+  await page.keyboard.press("End");
+  await expect(tabs.getByRole("tab", { name: "报价历史" })).toBeFocused();
+  await expect(page.getByRole("tabpanel", { name: "报价历史" })).toBeVisible();
+  await expect(page.getByRole("tabpanel", { name: "供应商报价" })).toBeHidden();
+  await page.keyboard.press("Home");
+  await expect(offers).toBeFocused();
+  await expect(page.getByRole("tabpanel", { name: "供应商报价" })).toBeVisible();
 });
