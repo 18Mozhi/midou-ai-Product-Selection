@@ -367,9 +367,9 @@ watch(imageFailureResetSources, (items) => {
       <ol class="midou-analysis-flow" aria-labelledby="midou-analysis-flow-heading">
         <li
           v-for="step in [
-            { icon: 'target', label: '识别主品', description: '匹配商品关键信息' },
+            { icon: 'product-scan', label: '识别主品', description: '匹配商品关键信息' },
             { icon: 'chart', label: '补齐评分', description: '汇总多维分析证据' },
-            { icon: 'users', label: '对比竞品', description: '识别差异与机会' },
+            { icon: 'comparison-scales', label: '对比竞品', description: '识别差异与机会' },
             { icon: 'box', label: '匹配货源', description: '对接供应渠道' },
             { icon: 'database', label: '评估利润', description: '测算成本与利润空间' },
           ]"

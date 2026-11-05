@@ -2266,6 +2266,10 @@ html[data-design="commerce"] #app .catalogue-querybar .catalogue-search label > 
   .midou-analysis-diagnostics > summary {
     font-size: 15px;
   }
+  .midou-analysis-diagnostics {
+    padding-block: 10px;
+    background: color-mix(in srgb, var(--so-panel) 58%, var(--so-panel-soft));
+  }
   .midou-analysis-flow li:not(:last-child)::after {
     content: "";
     margin-inline-start: auto;

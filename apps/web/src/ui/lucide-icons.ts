@@ -15,6 +15,15 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ["path", { d: "M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z" }],
   ],
   activity: [["path", { d: "M2 12h4l3-8 5 16 3-8h5" }]],
+  // Local analysis glyphs on the same 24px outline grid.
+  "product-scan": [
+    ["path", { d: "M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" }],
+    ["path", { d: "m12 8 4 4-4 4-4-4z" }],
+  ],
+  "comparison-scales": [
+    ["path", { d: "M12 3v18m-4 0h8M4 6h16" }],
+    ["path", { d: "m6 6-3 8h6L6 6Zm12 0-3 8h6l-3-8ZM3 14a3 3 0 0 0 6 0m6 0a3 3 0 0 0 6 0" }],
+  ],
   info: [
     ["circle", { cx: "12", cy: "12", r: "10" }],
     ["path", { d: "M12 16v-4m0-4h.01" }],

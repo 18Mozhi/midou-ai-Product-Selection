@@ -562,6 +562,12 @@ test("catalogue empty workflow leads to the real candidate list without writes",
     expect(Math.abs(card.y - 400)).toBeLessThanOrEqual(3);
     expect(card.y + card.height).toBeLessThanOrEqual(916);
     const flowIcons = empty.getByRole("list", { name: "分析流程说明" }).locator("li > svg");
+    await expect(flowIcons.nth(0).locator("path").last()).toHaveAttribute("d", /m12 8 4 4/);
+    await expect(flowIcons.nth(2).locator("path").first()).toHaveAttribute("d", /M12 3v18/);
+    await expect(diagnostics).toHaveCSS("padding-block-start", "10px");
+    const diagnosticBox = (await diagnostics.boundingBox())!;
+    expect(Math.abs(diagnosticBox.y - 834)).toBeLessThanOrEqual(4);
+    expect(Math.abs(diagnosticBox.height - 45)).toBeLessThanOrEqual(3);
     const [firstIcon, lastIcon] = await Promise.all([
       flowIcons.first().boundingBox(),
       flowIcons.last().boundingBox(),
