@@ -2029,6 +2029,10 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
 }
 
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .home-status-facts > a {
+    grid-template-columns: 38px minmax(0, 1fr);
+    padding-inline: 32px 20px;
+  }
   html[data-design="commerce"] #app .home-command-bar > div {
     padding-inline-start: 8px;
   }
