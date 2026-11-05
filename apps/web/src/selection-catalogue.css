@@ -152,6 +152,23 @@ html[data-design="commerce"] #app .catalogue-querybar .responsive-filter-drawer_
   min-height: 44px;
   gap: 8px;
 }
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .catalogue-querybar .responsive-filter-drawer__trigger {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 14px;
+    gap: 10px;
+    border-radius: 7px;
+  }
+  html[data-design="commerce"] #app .catalogue-querybar .responsive-filter-drawer__icon {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    background: transparent;
+    color: var(--so-text-muted);
+  }
+}
 html[data-design="commerce"] .catalogue-advanced-filters {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

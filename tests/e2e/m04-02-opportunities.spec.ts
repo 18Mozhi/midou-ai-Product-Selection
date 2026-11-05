@@ -4430,6 +4430,12 @@ for (const view of ["completed", "rule_candidates"]) {
         await expect(catalog.locator(".catalog-data-note svg[aria-hidden='true']")).toBeVisible();
         await expect(catalog.locator(".catalog-data-note")).toContainText("候选数量不代表可用货源");
         if (wideCandidates) {
+          const trigger = page.getByRole("button", { name: "高级筛选", exact: true });
+          const search = page.getByRole("textbox", { name: "商品名称" });
+          const [filterBox, searchBox] = await Promise.all([trigger.boundingBox(), search.boundingBox()]);
+          expect(Math.abs(filterBox!.height - searchBox!.height)).toBeLessThanOrEqual(2);
+          expect(Math.abs(filterBox!.y + filterBox!.height / 2 - searchBox!.y - searchBox!.height / 2)).toBeLessThanOrEqual(2);
+          await expect(trigger.locator(".responsive-filter-drawer__icon")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
           await expect(catalog.locator("tbody tr")).toHaveCount(2);
           const title = (await catalog.locator("header h2").boundingBox())!;
           const sort = (await catalog.locator(".catalogue-sort-note").boundingBox())!;
