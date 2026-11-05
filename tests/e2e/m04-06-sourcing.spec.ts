@@ -1656,7 +1656,9 @@ test("sourcing queued and running record total does not claim all records are ac
 
 test("midou reference sourcing displays the task Amazon reference image in list and detail", async ({
   page,
-}) => {
+}, testInfo) => {
+  const wide = page.viewportSize()!.width >= 1101;
+  if (wide) await page.setViewportSize({ width: 1672, height: 941 });
   await setup(page);
   const image = "/midou-logo.jpg"; // deterministic local asset, not evidence of a real Amazon request.
   const record = {
@@ -1676,11 +1678,28 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   });
   await page.route(searchesRoute, (r) => r.fulfill({ json: envelope([record]) }));
   await page.route("**/api/v1/sourcing/searches/" + searchId, (r) =>
-    r.fulfill({ json: envelope({ ...record, candidates: [] }) }),
+    r.fulfill({ json: envelope({
+      ...record, candidates: [],
+      collection_progress: {
+        status: "failed", total_subqueries: 1, successful_subqueries: 0,
+        failed_subqueries: 1, blocked_subqueries: 0, active_subqueries: 0,
+      },
+    }) }),
   );
   await page.goto("/sourcing");
   await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toBeVisible();
   await expect(page.locator(".sourcing-detail > header .research-thumbnail img")).toBeVisible();
+  const progress = page.getByRole("region", { name: "来源采集进度" });
+  await expect(progress).toContainText("采集失败");
+  await expect(progress).toContainText("1 / 1 个来源已结束");
+  if (wide) {
+    await expect(page.locator(".sourcing-detail > header h3")).toHaveCSS("font-size", "22px");
+    const ended = (await progress.getByText("1 / 1 个来源已结束").boundingBox())!;
+    const counts = (await progress.locator("dl").boundingBox())!;
+    expect(Math.abs(ended.y + ended.height / 2 - counts.y - counts.height / 2)).toBeLessThanOrEqual(4);
+    expect(ended.x).toBeGreaterThanOrEqual(counts.x + counts.width);
+    await page.screenshot({ path: testInfo.outputPath("sourcing-progress-reference.png") });
+  }
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
