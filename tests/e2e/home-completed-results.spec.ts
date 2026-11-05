@@ -209,6 +209,10 @@ test("workbench completed empty action fits in the reference desktop first fold"
   await expect(result.locator(".home-completed-empty svg")).toHaveAttribute("aria-hidden", "true");
   const bounds = await result.boundingBox();
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(941);
+  const quickCandidate = page.locator(".midou-home-quick .home-quick-candidates");
+  await expect(quickCandidate).toHaveCSS("font-size", "16px");
+  await expect(quickCandidate).toHaveAttribute("href", "/opportunities?view=rule_candidates");
+  await expect(quickCandidate.locator("b")).toHaveCSS("font-weight", "700");
   const facts = page.locator(".home-status-facts > a");
   await expect(facts).toHaveCount(4);
   await expect(facts.first().locator("span")).toHaveCSS("font-size", "14px");

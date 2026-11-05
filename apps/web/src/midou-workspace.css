@@ -1867,6 +1867,16 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
     min-height: 52px;
     padding-inline: 14px 10px;
     gap: 12px;
+    font-size: 16px;
+    font-weight: 550;
+    margin-block-end: 9px;
+  }
+  .midou-home-quick a > svg {
+    flex-shrink: 0;
+  }
+  .midou-home-quick :is(.home-quick-evidence, .home-quick-candidates) > b {
+    font-weight: 700;
+    background: color-mix(in srgb, currentColor 11%, var(--so-panel));
   }
   .midou-home-quick a > svg:last-child {
     margin-inline-start: auto;
