@@ -791,6 +791,9 @@ test("midou reference list defaults closed, opens and closes detail without list
     const list = page.locator(".trend-list");
     await expect(list.locator(".topic-copy > strong").last()).toHaveCSS("-webkit-line-clamp", "2");
     if (page.viewportSize()!.width >= 1600 && page.viewportSize()!.height >= 916) {
+      const filters = (await page.locator(".trend-filters").boundingBox())!;
+      const listBox = (await list.boundingBox())!;
+      expect(listBox.y - filters.y - filters.height).toBeCloseTo(21, 0);
       expect(
         await list.evaluate(
           (el) =>

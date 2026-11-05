@@ -906,10 +906,13 @@
     padding-inline-start: 14px;
   }
   html[data-design="commerce"] #app .trend-market-heading {
-    margin-bottom: -12px;
+    margin-bottom: -7px;
   }
   html[data-design="commerce"] #app .trend-dashboard--review .trend-filters {
-    padding-block: 10px;
+    padding-block: 8px;
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-workbench {
+    margin-block-start: 7px;
   }
   #app .trend-dashboard--review .trend-workbench.is-detail-open > :is(.trend-list, .trend-detail) {
     height: clamp(450px, calc(100dvh - 356px), 740px);
