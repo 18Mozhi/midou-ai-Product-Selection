@@ -2191,6 +2191,13 @@ html[data-design="commerce"] #app .catalogue-querybar .catalogue-search label > 
     + .catalogue-controls {
     padding-block-end: 38px;
   }
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls
+    .catalogue-search {
+    max-inline-size: 462px;
+  }
   .midou-analysis-guide {
     grid-template-columns: minmax(128px, max-content) minmax(0, 1fr);
     padding-block-start: 24px;
