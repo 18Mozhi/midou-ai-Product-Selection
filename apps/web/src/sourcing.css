@@ -1265,6 +1265,13 @@ html[data-design="commerce"] #app .sourcing-empty-offers--with-profit .sourcing-
   }
 }
 @media (min-width: 1440px) {
+  .sourcing-detail-tabs {
+    gap: 10px;
+    margin-block-start: 14px;
+  }
+  #app .sourcing-workspace--review .sourcing-detail-tabs > button {
+    font-size: 16px;
+  }
   .sourcing-empty-offers--with-profit > .sourcing-quote-empty {
     min-height: 169px;
   }

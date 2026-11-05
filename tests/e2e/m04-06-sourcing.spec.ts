@@ -1742,11 +1742,18 @@ test("wide sourcing toolbar balances search and four metrics without changing mo
 test("sourcing detail tabs switch by keyboard and expose only the active panel", async ({
   page,
 }) => {
+  const wide = page.viewportSize()!.width >= 1101;
+  if (wide) await page.setViewportSize({ width: 1672, height: 941 });
   await setup(page);
   await page.goto("/sourcing");
   const tabs = page.getByRole("tablist", { name: "找货详情视图" });
   const offers = tabs.getByRole("tab", { name: "供应商报价" });
   await expect(offers).toHaveAttribute("aria-selected", "true");
+  await expect(offers).toHaveCSS("font-size", wide ? "16px" : "13px");
+  if (wide) {
+    await expect(tabs).toHaveCSS("margin-block-start", "14px");
+    await expect(tabs).toHaveCSS("column-gap", "10px");
+  }
   await offers.focus();
   await page.keyboard.press("ArrowRight");
   await expect(tabs.getByRole("tab", { name: "成本与利润" })).toBeFocused();
