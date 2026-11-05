@@ -220,6 +220,15 @@ test("workbench completed empty action fits in the reference desktop first fold"
   ).toBeLessThanOrEqual(1);
   await expect(heading).toHaveCSS("font-size", "30px");
   await expect(page.locator(".home-command-bar nav")).toHaveCSS("column-gap", "10px");
+  const command = page.locator(".home-command-bar");
+  const tools = command.locator("nav :is(a, button)");
+  for (const [index, width] of [88, 118, 132].entries()) {
+    await expect(tools.nth(index)).toHaveCSS("min-inline-size", width + "px");
+    const box = (await tools.nth(index).boundingBox())!;
+    expect(Math.abs(box.width - width)).toBeLessThanOrEqual(2);
+    expect(Math.abs(box.y - 124)).toBeLessThanOrEqual(5);
+  }
+  await expect(command.locator(".home-live-status > span")).toHaveCSS("font-size", "14px");
   const flow = (await page.getByRole("region", { name: "选品任务流程" }).boundingBox())!;
   expect(Math.abs(overview.y - 378), "library overview top").toBeLessThanOrEqual(5);
   expect(Math.abs(flow.y - 529), "workflow top").toBeLessThanOrEqual(5);

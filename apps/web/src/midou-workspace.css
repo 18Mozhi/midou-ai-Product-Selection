@@ -2088,9 +2088,23 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
   }
   html[data-design="commerce"] #app .home-command-bar nav {
     gap: 10px;
+    padding-inline-end: 3px;
   }
   html[data-design="commerce"] #app .home-command-bar :is(a, button) {
     font-size: 14px;
+  }
+  .home-command-bar .home-live-status {
+    gap: 20px;
+    font-size: 14px;
+  }
+  html[data-design="commerce"] #app .home-command-bar .home-live-status > button {
+    min-inline-size: 88px;
+  }
+  html[data-design="commerce"] #app .home-command-bar .home-secondary-action {
+    min-inline-size: 118px;
+  }
+  html[data-design="commerce"] #app .home-command-bar .home-primary-action {
+    min-inline-size: 132px;
   }
   html[data-design="commerce"] #app .home-daily-production dt > svg {
     inset-block-start: 21px;
