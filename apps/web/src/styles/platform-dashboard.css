@@ -667,6 +667,9 @@
   #app .platform-dashboard--review .platform-source-health {
     align-self: stretch;
   }
+  #app .platform-dashboard--review .platform-source-health table[data-table-density="standard"] :is(th, td) {
+    padding-block: 8px;
+  }
   #app .platform-dashboard--review .platform-system-checks {
     padding-block: 12px;
   }

@@ -1386,6 +1386,13 @@ test("platform reference first fold fits system checks and source health without
     const bounds = await card.boundingBox();
     expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(925);
   }
+  const cell = sources.locator("tbody td").first();
+  const density = sources.getByLabel("表格密度");
+  await expect(cell).toHaveCSS("padding-top", "8px");
+  await density.selectOption("compact");
+  await expect(cell).toHaveCSS("padding-top", "6px");
+  await density.selectOption("standard");
+  await expect(cell).toHaveCSS("padding-top", "8px");
   const storage = page.locator(".platform-storage-details");
   await expect(storage.locator("dl")).toBeHidden();
   await storage.getByText("存储统计", { exact: true }).click();
