@@ -1163,6 +1163,11 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
     overflow-wrap: anywhere;
   }
 }
+@media (min-width: 1600px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review {
+    margin-inline-start: -24px;
+  }
+}
 @media (max-width: 760px) {
   .sourcing-search-input {
     flex-basis: 100%;
