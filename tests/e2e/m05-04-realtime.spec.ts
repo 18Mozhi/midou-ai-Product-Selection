@@ -72,9 +72,19 @@ async function setup(page: Page) {
 test("M05-04.A07/A08/A09/A15 reconnects and stores Last-Event-ID on desktop and 390", async ({
   page,
 }) => {
+  const wide = page.viewportSize()!.width >= 1101;
+  if (wide) await page.setViewportSize({ width: 1717, height: 916 });
   await setup(page);
   await page.goto("/notifications");
-  await expect(page.getByText("实时已连接")).toBeVisible();
+  const badge = page.locator(".notification-center .realtime-badge");
+  await expect(badge).toHaveAttribute("data-state", "connected");
+  await expect(badge).toHaveText("实时已连接");
+  if (wide) {
+    const box = (await badge.boundingBox())!;
+    expect(box.width).toBeGreaterThanOrEqual(118);
+    expect(box.height).toBe(32);
+    expect(await badge.evaluate((node) => getComputedStyle(node, "::before").width)).toBe("9px");
+  }
   await expect
     .poll(() => page.evaluate(() => sessionStorage.getItem("scoutops:last-event-id")))
     .toBe("42");
