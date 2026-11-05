@@ -2529,6 +2529,9 @@ test("organization profile aligns facts, editor and governance sidebar", async (
   const side = (await page
     .getByRole("complementary", { name: "治理快捷入口与组织状态" })
     .boundingBox())!;
+  const status = page.locator(".midou-governance-status");
+  await expect(status.locator("dt > svg[aria-hidden='true']")).toHaveCount(3);
+  await expect(status.locator(".midou-governance-status-badge[data-status='active']")).toHaveText("正常使用");
   const width = page.viewportSize()!.width;
   if (width > 1000) {
     expect(side.x).toBeGreaterThanOrEqual(boxes[2]!.x + boxes[2]!.width);

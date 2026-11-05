@@ -1570,17 +1570,21 @@ onMounted(() => void load());
           </section>
           <section>
             <h3>组织状态</h3>
-            <dl>
+            <dl class="midou-governance-status">
               <div>
-                <dt>组织使用状态</dt>
-                <dd>{{ statusText(data?.status) }}</dd>
+                <dt><AppIcon name="check" :size="18" />组织使用状态</dt>
+                <dd>
+                  <span class="midou-governance-status-badge" :data-status="data?.status">
+                    {{ statusText(data?.status) }}
+                  </span>
+                </dd>
               </div>
               <div>
-                <dt>数据保留天数</dt>
+                <dt><AppIcon name="database" :size="18" />数据保留天数</dt>
                 <dd>{{ data?.data_retention_days }} 天</dd>
               </div>
               <div>
-                <dt>默认工作区</dt>
+                <dt><AppIcon name="layers" :size="18" />默认工作区</dt>
                 <dd>{{ workspaceName(data?.default_workspace_id) }}</dd>
               </div>
             </dl>
