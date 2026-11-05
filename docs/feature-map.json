@@ -1,4 +1,10 @@
 {
+  "referenceWorkbenchCompletedEmpty": {
+    "sourceFiles": ["apps/web/src/components/HomeCompletedProducts.vue", "apps/web/src/home-selection-results.css"],
+    "testFiles": ["tests/e2e/home-completed-results.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Successful workbench empty results use a compact illustrated state with the existing candidate link. Loading, failures, data requests and result semantics stay unchanged."
+  },
   "referencePlatformFirstFold": {
     "sourceFiles": ["apps/web/src/components/PlatformDashboard.vue", "apps/web/src/styles/platform-dashboard.css"],
     "testFiles": ["tests/e2e/m06-02-platform-dashboard.spec.ts"],

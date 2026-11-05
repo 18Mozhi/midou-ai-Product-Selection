@@ -66,6 +66,39 @@ html[data-design="commerce"] #app .home-result-header button[aria-pressed="true"
 .home-completed-products .home-read-alert {
   margin: 0 16px 12px;
 }
+.home-result-workspace .home-completed-empty {
+  min-height: 195px;
+  padding: 12px 20px 16px;
+  gap: 6px;
+}
+.home-completed-empty > svg {
+  color: var(--so-text-muted);
+  opacity: 0.6;
+}
+.home-result-workspace .home-completed-empty b {
+  font-size: 17px;
+  font-weight: 650;
+}
+.home-result-workspace .home-completed-empty a {
+  justify-content: center;
+  padding-inline: 20px;
+  border: 1px solid var(--home-accent);
+  border-radius: 7px;
+  font-weight: 600;
+}
+@media (min-width: 1101px) {
+  .midou-home-main > .home-result-workspace {
+    margin-block-start: 6px;
+    border-radius: 12px;
+  }
+  html[data-design="commerce"] #app .midou-home-main > .midou-home-flow {
+    margin-block-end: 6px;
+  }
+  html[data-design="commerce"] #app .home-result-header button {
+    min-height: 44px;
+    padding-block: 8px;
+  }
+}
 @media (max-width: 640px) {
   .home-result-header {
     flex-wrap: nowrap;

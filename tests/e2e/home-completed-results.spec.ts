@@ -198,6 +198,19 @@ test("home polling does not repeat unchanged product queries; manual refresh and
   await expect.poll(() => h.counters.completed).toBe(3);
 });
 
+test("workbench completed empty action fits in the reference desktop first fold", async ({ page }) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await setup(page);
+  await page.route(completedRoute, (route) => route.fulfill({ json: envelope([]) }));
+  await page.goto("/home");
+  const result = page.getByRole("region", { name: "选品结果" });
+  const link = result.getByRole("link", { name: "查看候选进度" });
+  await expect(link).toHaveAttribute("href", "/opportunities?view=rule_candidates");
+  await expect(result.locator(".home-completed-empty svg")).toHaveAttribute("aria-hidden", "true");
+  const bounds = await result.boundingBox();
+  expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(941);
+});
+
 for (const status of [200, 401, 403, 500]) {
   test(`completed list distinguishes empty success from ${status} access or read failure`, async ({
     page,
