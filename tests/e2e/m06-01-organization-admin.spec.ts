@@ -2517,6 +2517,13 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   await page.setViewportSize({ width: 1672, height: 941 });
   await setup(page);
   await page.goto("/org-admin");
+  const editor = page.locator(".organization-profile-editor");
+  const nameField = editor.getByLabel("名称", { exact: true });
+  const save = editor.getByRole("button", { name: "保存", exact: true });
+  await expect(nameField).toHaveCSS("min-height", "44px");
+  await expect(editor.locator(".organization-profile-fields")).toHaveCSS("row-gap", "7px");
+  const saveBox = (await save.boundingBox())!;
+  expect(Math.abs(saveBox.y - 875)).toBeLessThanOrEqual(6);
   const identity = page.locator(".organization-profile-facts > header");
   const status = identity.locator("i");
   await expect(status).toBeVisible();

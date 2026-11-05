@@ -454,6 +454,9 @@
 }
 
 @media (min-width: 1440px) {
+  #app .organization-profile-editor .organization-profile-fields {
+    row-gap: 7px;
+  }
   #app .organization-profile-facts > header {
     justify-content: flex-start;
     gap: clamp(16px, 3.7vw, 62px);
