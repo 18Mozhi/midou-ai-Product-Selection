@@ -66,8 +66,8 @@ const freshness = (value: string) =>
           关闭详情 · 返回情报列表
         </button>
         <div v-if="detail && busy !== 'detail'" class="trend-detail-badges">
-          <span>{{ detail.market }}</span
-          ><span>{{ detail.language }}</span
+          <span><AppIcon name="map-pin" :size="16" />{{ detail.market }}</span
+          ><span><AppIcon name="globe" :size="16" />{{ detail.language }}</span
           ><span :data-status="detail.status">{{ statusLabel(detail.status) }}</span>
         </div>
         <h3 v-if="detail && busy !== 'detail'">{{ detail.title }}</h3>

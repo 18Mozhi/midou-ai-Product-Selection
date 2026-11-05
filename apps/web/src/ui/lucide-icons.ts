@@ -10,6 +10,14 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ],
   ],
   check: [["path", { d: "M20 6 9 17l-5-5" }]],
+  globe: [
+    ["circle", { cx: "12", cy: "12", r: "10" }],
+    ["path", { d: "M2 12h20M12 2c5 5 5 15 0 20-5-5-5-15 0-20Z" }],
+  ],
+  "map-pin": [
+    ["path", { d: "M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" }],
+    ["circle", { cx: "12", cy: "10", r: "2.5" }],
+  ],
   trend: [
     ["path", { d: "M16 7h6v6" }],
     ["path", { d: "m22 7-8.5 8.5-5-5L2 17" }],

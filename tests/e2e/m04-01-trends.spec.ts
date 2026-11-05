@@ -800,6 +800,11 @@ test("midou reference list defaults closed, opens and closes detail without list
   }
   expect(reads).toBe(1);
   await expect(page.locator(".trend-detail-badges")).toContainText("en-US");
+  await expect(page.locator(".trend-detail-badges > span > svg")).toHaveCount(2);
+  await expect(page.locator(".trend-detail > header h3")).toHaveCSS(
+    "font-size",
+    (page.viewportSize()?.width ?? 0) >= 1101 ? "27px" : "22px",
+  );
   await expect(page.getByLabel("情报资料").locator("dt svg")).toHaveCount(4);
   await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
   await expect(page.locator(".trend-detail")).toHaveCount(0);
