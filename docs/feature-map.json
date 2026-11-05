@@ -1,4 +1,10 @@
 {
+  "referenceNotificationSearch": {
+    "sourceFiles": ["apps/web/src/components/NotificationCenter.vue", "apps/web/src/midou-workspace.css", "apps/api/src/notification-routes.ts", "apps/api/src/notification-service.ts", "apps/api/src/mysql-notification-repository.ts"],
+    "testFiles": ["tests/e2e/m05-03-notifications.spec.ts", "tests/m05-03/notifications.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/reference-navigation-polish.md"],
+    "contract": "Optional notifications q is a bounded literal title/body substring matched within the active recipient and workspace before grouping and paging. Existing filters compose and summary remains workspace-wide."
+  },
   "referencePlatformSidebarDensity": {
     "sourceFiles": ["apps/web/src/midou-workspace.css"],
     "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts"],

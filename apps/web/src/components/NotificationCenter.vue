@@ -65,6 +65,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
       : "",
   ),
   unread = ref(route.query.unread === "1"),
+  keyword = ref(typeof route.query.q === "string" ? route.query.q.slice(0, 100).trim() : ""),
+  keywordDraft = ref(keyword.value),
   page = ref(Math.max(1, Number(route.query.page) || 1)),
   total = ref(0),
   notice = ref(""),
@@ -238,6 +240,7 @@ async function load() {
     if (category.value) q.set("category", category.value);
     if (unread.value) q.set("unread", "true");
     if (workflowStatus.value) q.set("workflow_status", workflowStatus.value);
+    if (keyword.value) q.set("q", keyword.value);
     const [list, sum, pref] = await Promise.all([
       api<Item[]>(
         `/notifications?${q}`,
@@ -333,7 +336,13 @@ async function closeDetail() {
   });
 }
 async function setFilters(
-  values: Partial<{ category: string; status: string; unread: boolean; page: number }>,
+  values: Partial<{
+    category: string;
+    status: string;
+    unread: boolean;
+    page: number;
+    keyword: string;
+  }>,
 ) {
   await router.replace({
     query: {
@@ -341,6 +350,10 @@ async function setFilters(
       category: values.category === undefined ? route.query.category : values.category || undefined,
       status: values.status === undefined ? route.query.status : values.status || undefined,
       unread: values.unread === undefined ? route.query.unread : values.unread ? "1" : undefined,
+      q:
+        values.keyword === undefined
+          ? route.query.q
+          : values.keyword.slice(0, 100).trim() || undefined,
       page:
         values.page === undefined
           ? undefined
@@ -524,8 +537,14 @@ onUnmounted(() => {
   connection?.close();
 });
 watch(
-  () => [route.query.category, route.query.status, route.query.unread, route.query.page],
-  ([nextCategory, nextStatus, nextUnread, nextPage], previous) => {
+  () => [
+    route.query.category,
+    route.query.status,
+    route.query.unread,
+    route.query.page,
+    route.query.q,
+  ],
+  ([nextCategory, nextStatus, nextUnread, nextPage, nextKeyword], previous) => {
     category.value = ["task", "approval", "competitor", "system"].includes(
       String(nextCategory ?? ""),
     )
@@ -536,6 +555,10 @@ watch(
       : "";
     unread.value = nextUnread === "1";
     page.value = Math.max(1, Number(nextPage) || 1);
+    const normalizedKeyword =
+      typeof nextKeyword === "string" ? nextKeyword.slice(0, 100).trim() : "";
+    if (normalizedKeyword !== keyword.value) keywordDraft.value = normalizedKeyword;
+    keyword.value = normalizedKeyword;
     if (previous) void load();
   },
 );
@@ -648,6 +671,31 @@ watch(
           <input v-model="unread" type="checkbox" @change="setFilters({ unread })" />
           <span>仅未读</span>
         </label>
+        <form
+          class="midou-notification-search"
+          role="search"
+          @submit.prevent="setFilters({ keyword: keywordDraft })"
+        >
+          <AppIcon name="search" :size="18" />
+          <input
+            v-model="keywordDraft"
+            type="search"
+            aria-label="搜索通知标题或正文"
+            placeholder="搜索通知标题或正文"
+            maxlength="100"
+          />
+          <button type="submit" aria-label="提交通知搜索">搜索</button>
+          <button
+            v-if="keyword"
+            type="button"
+            @click="
+              keywordDraft = '';
+              setFilters({ keyword: '' });
+            "
+          >
+            清除
+          </button>
+        </form>
       </div>
     </div>
     <section v-if="state === 'loading'" class="notification-state">正在读取通知…</section>
@@ -674,8 +722,10 @@ watch(
       <button @click="load">重新加载</button>
     </section>
     <section v-else-if="!items.length" class="notification-state">
-      <h3>当前没有通知</h3>
-      <p>与你相关的业务事件产生后，通知将显示在这里。</p>
+      <h3>{{ keyword ? "未找到匹配的通知" : "当前没有通知" }}</h3>
+      <p>
+        {{ keyword ? "可更换关键词或清除搜索。" : "与你相关的业务事件产生后，通知将显示在这里。" }}
+      </p>
     </section>
     <div v-else class="notification-list">
       <div v-for="item in items" :key="item.id" class="notification-row">

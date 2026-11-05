@@ -2012,6 +2012,53 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   flex-wrap: wrap;
   gap: 16px;
 }
+.midou-notification-search {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 42px;
+  padding-inline: 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  background: var(--so-panel);
+}
+.midou-notification-search > svg {
+  flex-shrink: 0;
+}
+html[data-design="commerce"] #app .midou-notification-search input {
+  min-width: 0;
+  width: clamp(115px, 10vw, 172px);
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--so-text);
+}
+html[data-design="commerce"] #app .midou-notification-search button {
+  min-height: 40px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--so-primary);
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .midou-notification-status-controls {
+    width: 100%;
+    row-gap: 8px;
+  }
+  .midou-notification-search {
+    flex-basis: 100%;
+  }
+  html[data-design="commerce"] #app .midou-notification-search input {
+    flex: 1;
+  }
+  html[data-design="commerce"] #app .notification-center--review .notification-list {
+    margin-block-start: 4px;
+  }
+}
 html[data-design="commerce"] #app .midou-notification-status select {
   min-height: 40px;
   min-width: 116px;

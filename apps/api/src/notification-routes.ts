@@ -57,6 +57,7 @@ export function registerNotificationRoutes(app: FastifyInstance, o: Notification
         unread: q.unread,
         workflowStatus: q.workflow_status,
         category: q.category,
+        keyword: q.q,
       });
     return env(x.items, r, {
       page: x.page,

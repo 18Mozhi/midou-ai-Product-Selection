@@ -596,6 +596,37 @@ test("mark one notification read from its row without opening detail", async ({ 
   expect(actions).toEqual([{ action: "read", expected_version: item.version }]);
 });
 
+test("notification title or body search uses server pagination and clears independently", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/notifications?*", (route) => {
+    const q = new URL(route.request().url()).searchParams;
+    const rows =
+      q.get("q") === "条款" && q.get("page") === "2" ? [{ ...item, title: "第二页通知" }] : [item];
+    return route.fulfill({ json: { ...env(rows), meta: { total: 151 } } });
+  });
+  await page.goto("/notifications?category=approval&page=3");
+  const search = page.getByRole("searchbox", { name: "搜索通知标题或正文" });
+  await search.fill("条款");
+  const first = page.waitForRequest((r) => {
+    const url = new URL(r.url());
+    return (
+      url.pathname.endsWith("/notifications") &&
+      url.searchParams.get("q") === "条款" &&
+      url.searchParams.get("page") === "1"
+    );
+  });
+  await search.press("Enter");
+  expect(new URL((await first).url()).searchParams.get("category")).toBe("approval");
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page.getByText("第二页通知", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "清除", exact: true }).click();
+  await expect(search).toHaveValue("");
+  await expect(page).not.toHaveURL(/[?&]q=/);
+  await expect(page).toHaveURL(/category=approval/);
+});
+
 test("notification filters and detail restore from the URL", async ({ page }) => {
   await setup(page);
   await page.goto(`/notifications?category=approval&status=open&notification=${id}`);

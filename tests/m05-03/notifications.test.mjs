@@ -11,6 +11,37 @@ import { MySqlNotificationRepository } from "../../apps/api/dist/mysql-notificat
 import { registerNotificationRoutes } from "../../apps/api/dist/notification-routes.js";
 import { notificationBody } from "../../apps/worker/dist/notification-outbox-worker.js";
 import Fastify from "fastify";
+test("notification keyword is bound literally inside recipient scope before grouping and paging", async () => {
+  const calls = [];
+  const repository = new MySqlNotificationRepository({
+    query: async (sql, args) => {
+      calls.push({ sql, args });
+      return [sql.includes("COUNT(*) total FROM") ? [{ total: 0 }] : []];
+    },
+  });
+  const service = new NotificationService(repository);
+  await service.list({
+    organizationId: "org",
+    workspaceId: "workspace",
+    actorId: "recipient",
+    page: 2,
+    pageSize: 20,
+    keyword: "  50%_off  ",
+  });
+  assert.equal(calls.length, 2);
+  for (const { sql, args } of calls) {
+    assert.match(
+      sql,
+      /organization_id=\?.*workspace_id=\?.*recipient_id=\?.*INSTR\(title, \?\).*INSTR\(body, \?\)/,
+    );
+    assert.ok(sql.indexOf("INSTR(title") < sql.indexOf("GROUP BY"));
+    assert.deepEqual(args.slice(0, 5), ["org", "workspace", "recipient", "50%_off", "50%_off"]);
+  }
+  assert.deepEqual(calls[1].args.slice(-2), [20, 20]);
+  assert.throws(() => service.list({ keyword: "x".repeat(101) }), {
+    code: "notification_keyword_invalid",
+  });
+});
 test("M05-03.A01/A02/A04/A12 locks self notification actions and preferences", () => {
   assert.equal(validateNotificationAction({ action: "read", expected_version: 1 }).action, "read");
   assert.equal(
@@ -85,7 +116,7 @@ test("M05-03 forwards the workflow status query through the HTTP route", async (
   });
   const response = await app.inject({
     method: "GET",
-    url: "/api/v1/notifications?workflow_status=closed",
+    url: "/api/v1/notifications?workflow_status=closed&q=50%25_off",
     headers: {
       cookie: "scoutops_session=route-token",
       "x-request-id": "request-route",
@@ -95,6 +126,7 @@ test("M05-03 forwards the workflow status query through the HTTP route", async (
   await app.close();
   assert.equal(response.statusCode, 200);
   assert.equal(calls[0].workflowStatus, "closed");
+  assert.equal(calls[0].keyword, "50%_off");
 });
 test("M05-03 keeps internal event codes out of notification copy", () => {
   const body = notificationBody("approval");

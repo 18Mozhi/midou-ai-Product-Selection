@@ -34,6 +34,10 @@ export class MySqlNotificationRepository implements NotificationRepository {
       where.push("category=?");
       args.push(i.category);
     }
+    if (i.keyword) {
+      where.push("(INSTR(title, ?) > 0 OR INSTR(body, ?) > 0)");
+      args.push(i.keyword, i.keyword);
+    }
     const baseWhere = where.join(" AND "),
       groupedSql = `
         SELECT ${notificationGroupKeySql} group_key,
