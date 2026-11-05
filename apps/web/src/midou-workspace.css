@@ -1917,6 +1917,9 @@ html[data-design="commerce"] #app .product-catalog > .catalog-data-note {
   background: var(--so-warning-soft);
   color: var(--so-warning);
 }
+html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] > .catalog-data-note {
+  margin-inline: 0;
+}
 @media (min-width: 1101px) {
   .opportunity-workspace:has(> .catalogue-page-heading) {
     padding: 12px 3px 0 6px;
@@ -1945,7 +1948,13 @@ html[data-design="commerce"] #app .product-catalog > .catalog-data-note {
     .opportunity-workspace
     > .catalogue-page-heading[data-view="rule_candidates"]
     + .catalogue-controls {
-    padding-block-end: 16px;
+    padding-block-end: 12px;
+  }
+  html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] {
+    margin-block-start: 0;
+  }
+  html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] > header h2 {
+    font-size: 22px;
   }
 }
 

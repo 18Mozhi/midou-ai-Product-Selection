@@ -401,7 +401,7 @@ watch(imageFailureResetSources, (items) => {
     "
     @secondary="state === 'empty' ? clearOrShowAll() : emit('reset')"
   />
-  <section v-else class="product-catalog">
+  <section v-else class="product-catalog" :data-view="selectionView">
     <header>
       <div>
         <h2>{{ viewCopy.title }}</h2>
@@ -418,6 +418,7 @@ watch(imageFailureResetSources, (items) => {
       :items="items"
       :return-path="route.fullPath"
       :completed-view="selectionView === 'completed'"
+      :candidate-gate-count="selectionView === 'rule_candidates' ? passedGateCount : undefined"
       :product-facts="productFacts"
       :row-facts="rowFacts"
       :catalog-meta="catalogMeta"

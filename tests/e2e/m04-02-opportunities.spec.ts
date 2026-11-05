@@ -341,6 +341,41 @@ test("completed catalogue opens analysis rather than claim ongoing collection", 
   ).toBeVisible();
   await expect(page.getByRole("button", { name: "图卡", exact: true })).toHaveCount(0);
   await expect(page.locator(".selection-product-action-cell")).not.toContainText("查看进度");
+  await expect(page.locator(".catalogue-gate-track")).toHaveCount(0);
+});
+
+test("candidate table shows five progress segments from the existing gate count", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.route("**/api/v1/opportunities?*", (route) =>
+    route.fulfill({
+      json: envelope(
+        [
+          {
+            ...recommendedBase,
+            selection_stage: "rule_candidate",
+            quality_gates: {
+              score: true,
+              market: false,
+              competition: true,
+              cost: false,
+              risk: false,
+              all_passed: false,
+            },
+          },
+        ],
+        { page: 1, page_size: 20, total: 1 },
+      ),
+    }),
+  );
+  await page.goto("/opportunities?view=rule_candidates");
+  await expect(page.getByRole("columnheader", { name: "分析进度" })).toHaveCount(1);
+  const track = page.locator(".catalogue-gate-track");
+  await expect(track).toHaveAttribute("aria-hidden", "true");
+  await expect(track.locator("span")).toHaveCount(5);
+  await expect(track.locator('[data-passed="true"]')).toHaveCount(2);
+  await expect(page.getByRole("table", { name: "选品商品列表" })).toContainText("2/5");
 });
 
 test("historical evidence task retains blocker facts without restoring the retired task surface", async ({

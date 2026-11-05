@@ -1,4 +1,10 @@
 {
+  "referenceCandidateProgress": {
+    "sourceFiles": ["apps/web/src/components/OpportunityCatalogueList.vue", "apps/web/src/components/OpportunityListPanel.vue", "apps/web/src/midou-workspace.css"],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Candidate view only: compact table, square thumbnail and five-segment display of the existing passed quality-gate count, with unchanged textual facts and list query."
+  },
   "referenceNavigationPolish": {
     "sourceFiles": [
       "apps/web/src/components/NavigationShell.vue",

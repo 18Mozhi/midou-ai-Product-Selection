@@ -8,6 +8,7 @@ const props = defineProps<{
   items: OpportunitySummary[];
   returnPath: string;
   completedView?: boolean;
+  candidateGateCount?: (item: OpportunitySummary) => number;
   productFacts: (item: OpportunitySummary) => Fact[];
   rowFacts: (item: OpportunitySummary) => Fact[];
   catalogMeta: (item: OpportunitySummary) => string;
@@ -22,13 +23,19 @@ const rows = computed(() =>
     item,
     facts: props.productFacts(item),
     result: props.rowFacts(item),
+    passedGates: props.candidateGateCount?.(item),
     to: { path: `/opportunities/${item.id}`, query: { from: props.returnPath } },
   })),
 );
 </script>
 
 <template>
-  <div class="selection-product-list" tabindex="0" aria-label="商品数据表，可横向滚动">
+  <div
+    class="selection-product-list"
+    :class="{ 'selection-candidate-list': candidateGateCount }"
+    tabindex="0"
+    aria-label="商品数据表，可横向滚动"
+  >
     <table aria-label="选品商品列表">
       <colgroup>
         <col class="product-column" />
@@ -48,13 +55,13 @@ const rows = computed(() =>
           <th scope="col">星级 / 评价</th>
           <th scope="col">1688 进货价</th>
           <th scope="col">竞品 / 货源</th>
-          <th scope="col">选品结论</th>
+          <th scope="col">{{ candidateGateCount ? "分析进度" : "选品结论" }}</th>
           <th scope="col">操作</th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="{ item, facts, result, to } in rows"
+          v-for="{ item, facts, result, passedGates, to } in rows"
           :key="item.id"
           class="selection-product-row"
         >
@@ -130,8 +137,11 @@ const rows = computed(() =>
               </div>
             </dl>
           </td>
-          <td data-label="选品结论">
-            <span class="catalogue-verdict" :data-stage="item.selection_stage">{{
+          <td :data-label="candidateGateCount ? '分析进度' : '选品结论'">
+            <span v-if="passedGates !== undefined" class="catalogue-gate-track" aria-hidden="true">
+              <span v-for="gate in 5" :key="gate" :data-passed="gate <= passedGates"></span>
+            </span>
+            <span v-else class="catalogue-verdict" :data-stage="item.selection_stage">{{
               completedView
                 ? "分析完成"
                 : item.selection_stage === "recommended"
@@ -350,6 +360,47 @@ tbody tr:hover {
 .selection-product-results dd {
   margin: 0;
   font-weight: 500;
+}
+.selection-candidate-list {
+  border-radius: 9px;
+}
+.selection-candidate-list th {
+  height: 37px;
+  padding-block: 6px;
+}
+.selection-candidate-list td {
+  padding-block: 12px;
+}
+.selection-candidate-list .selection-product-identity {
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 10px;
+}
+.selection-candidate-list .selection-product-picture {
+  width: 76px;
+  height: 76px;
+  border-radius: 5px;
+}
+.selection-candidate-list .selection-product-name {
+  gap: 4px;
+}
+.selection-candidate-list .selection-product-name a {
+  min-height: 0;
+  line-height: 1.45;
+}
+.catalogue-gate-track {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 3px;
+  max-width: 120px;
+  margin-block: 4px 0;
+}
+.catalogue-gate-track > span {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--so-border);
+}
+.catalogue-gate-track > [data-passed="true"] {
+  background: var(--so-primary);
 }
 .selection-product-action-cell a {
   display: inline-flex;
