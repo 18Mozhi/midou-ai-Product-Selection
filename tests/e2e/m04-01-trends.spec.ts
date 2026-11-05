@@ -841,6 +841,12 @@ test("midou reference list defaults closed, opens and closes detail without list
   await expect(page.getByLabel("情报资料").locator("dt svg")).toHaveCount(4);
   if (page.viewportSize()!.width >= 1440) {
     const facts = page.getByLabel("情报资料");
+    const panel = page.locator(".trend-detail");
+    const [panelBox, titleBox, factsBox] = await Promise.all(
+      [panel, panel.locator("h3"), facts].map((part) => part.boundingBox()),
+    );
+    expect(factsBox!.x - panelBox!.x).toBeCloseTo(23, 0);
+    expect(titleBox!.x - factsBox!.x).toBeCloseTo(8, 0);
     await expect(facts).toHaveCSS("min-height", "93px");
     await expect(facts.locator("dt").first()).toHaveCSS("font-size", "14px");
     await expect(facts.locator("dd").first()).toHaveCSS("font-size", "20px");

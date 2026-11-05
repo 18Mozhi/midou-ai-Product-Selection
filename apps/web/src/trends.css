@@ -1017,6 +1017,12 @@
 }
 
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-detail {
+    padding-inline: 22px;
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-detail > header {
+    padding-inline-start: 8px;
+  }
   #app .trend-detail .trend-detail-facts {
     min-height: 93px;
     align-items: center;
