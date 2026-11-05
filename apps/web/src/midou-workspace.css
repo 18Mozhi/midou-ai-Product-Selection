@@ -2411,6 +2411,10 @@ html[data-design="commerce"] #app .notification-row > .notification-mark-read {
   margin-block: 12px 0;
   color: var(--so-text-muted);
 }
+.midou-profile-email > span,
+.midou-profile-context dd {
+  overflow-wrap: anywhere;
+}
 .midou-profile-badge {
   display: inline-flex;
   align-items: center;
@@ -2421,6 +2425,7 @@ html[data-design="commerce"] #app .notification-row > .notification-mark-read {
   color: var(--so-warning);
   font-size: 12px;
   white-space: nowrap;
+  gap: 4px;
 }
 .midou-profile-badge[data-verified="true"] {
   background: var(--so-success-soft);
@@ -2440,7 +2445,7 @@ html[data-design="commerce"] #app .notification-row > .notification-mark-read {
 .midou-profile-security-facts > div {
   justify-content: space-between;
 }
-.midou-profile-summary .midou-profile-security-facts svg {
+.midou-profile-summary .midou-profile-security-facts dt > svg {
   color: var(--so-text-muted);
 }
 .midou-profile-summary a {
@@ -2453,6 +2458,12 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
   color: var(--so-success);
 }
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .midou-profile-email > span {
+    font-size: 16px;
+  }
+  html[data-design="commerce"] #app .midou-profile-context dt {
+    font-size: 15px;
+  }
   html[data-design="commerce"] #app .midou-profile-security > h3 {
     font-size: 22px;
     line-height: 1.35;

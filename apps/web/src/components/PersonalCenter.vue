@@ -127,6 +127,7 @@ const sectionItems = [
                 class="midou-profile-badge"
                 :data-verified="Boolean(center.profile.value.email_verified_at)"
               >
+                <AppIcon v-if="center.profile.value.email_verified_at" name="check" :size="12" />
                 {{ center.profile.value.email_verified_at ? "邮箱已验证" : "邮箱尚未验证" }}
               </small>
             </div>
@@ -150,6 +151,7 @@ const sectionItems = [
                   class="midou-profile-badge"
                   :data-verified="Boolean(center.profile.value.email_verified_at)"
                 >
+                  <AppIcon v-if="center.profile.value.email_verified_at" name="check" :size="12" />
                   {{ center.profile.value.email_verified_at ? "已验证" : "未验证" }}
                 </dd>
               </div>
@@ -159,6 +161,7 @@ const sectionItems = [
                   class="midou-profile-badge"
                   :data-verified="Boolean(center.profile.value.phone_verified_at)"
                 >
+                  <AppIcon v-if="center.profile.value.phone_verified_at" name="check" :size="12" />
                   {{
                     center.profile.value.phone_verified_at
                       ? "已验证"
