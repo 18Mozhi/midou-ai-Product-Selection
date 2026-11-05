@@ -1,4 +1,10 @@
 {
+  "referenceOrganizationOverviewActions": {
+    "sourceFiles": ["apps/web/src/components/NavigationShell.vue", "apps/web/src/components/OrganizationAdminCenter.vue", "apps/web/src/navigation-shell-route-state.ts", "apps/web/src/organization-admin.css"],
+    "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Organization overview displays its existing role-gated invite link beside refresh without duplicating the global action or changing its destination."
+  },
   "referencePlatformOverviewActions": {
     "sourceFiles": ["apps/web/src/components/NavigationShell.vue", "apps/web/src/components/PlatformDashboard.vue", "apps/web/src/styles/platform-dashboard.css"],
     "testFiles": ["tests/e2e/m06-02-platform-dashboard.spec.ts"],

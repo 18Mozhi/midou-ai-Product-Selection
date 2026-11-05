@@ -67,6 +67,7 @@ const props = defineProps<{
     apiBaseUrl: string;
     routePath: string;
     organizationId: string;
+    roles?: string[];
   }>(),
   request = createApiClient(props.apiBaseUrl),
   requestTimeoutMs = 12_000,
@@ -1230,7 +1231,7 @@ onMounted(() => void load());
           >查看组织资料、成员和工作区，以及权限与审计情况。</span
         >
       </div>
-      <div class="org-admin-refresh">
+      <div class="org-admin-refresh" :class="{ 'org-overview-actions': view === 'summary' }">
         <small v-if="summary?.observed_at">
           {{
             teamRecoveryRefreshing
@@ -1245,8 +1246,15 @@ onMounted(() => void load());
           :disabled="state === 'loading' || refreshing || teamRecoveryRefreshing"
           @click="load({ background: true })"
         >
+          <AppIcon v-if="view === 'summary'" name="refresh" :size="16" />
           {{ refreshing ? "正在刷新…" : "刷新数据" }}
         </button>
+        <RouterLink
+          v-if="view === 'summary' && roles?.includes('organization_admin')"
+          class="org-overview-invite"
+          to="/org-admin/members"
+          ><AppIcon name="plus" :size="16" />邀请成员</RouterLink
+        >
       </div>
     </header>
     <section

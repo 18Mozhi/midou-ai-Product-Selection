@@ -82,6 +82,27 @@
   color: var(--so-text-muted);
   font-size: var(--so-font-meta);
 }
+.org-admin-refresh.org-overview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+.org-overview-actions > :is(button, .org-overview-invite) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+#app .org-overview-actions > .org-overview-invite {
+  min-height: 44px;
+  padding: 7px 14px;
+  border-radius: 7px;
+  background: var(--so-primary);
+  color: var(--so-on-primary, white);
+  font-weight: 600;
+  text-decoration: none;
+}
 .org-admin-hero button,
 .org-admin-card button,
 .org-admin-state button {

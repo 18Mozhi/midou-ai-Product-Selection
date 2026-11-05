@@ -544,6 +544,13 @@ test("M06-01.A07/A08/A15 desktop organization dashboard", async ({ page }) => {
   await setup(page);
   await page.goto("/org-admin");
   await expect(page.getByRole("heading", { name: "治理概览", level: 1 }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "邀请成员", exact: true })).toHaveCount(1);
+  await expect(
+    page.locator(".org-overview-actions").getByRole("link", { name: "邀请成员", exact: true }),
+  ).toHaveAttribute("href", "/org-admin/members");
+  await expect(
+    page.locator(".role-topbar").getByRole("link", { name: "邀请成员", exact: true }),
+  ).toHaveCount(0);
   await expect(page.locator(".org-identity-mark")).toHaveText("G");
   await expect(page.getByLabel("组织标识")).toHaveText("global-goods");
   await expect(page.locator(".organization-profile-metrics article > span > svg")).toHaveCount(6);

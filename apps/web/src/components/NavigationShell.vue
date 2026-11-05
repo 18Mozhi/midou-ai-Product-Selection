@@ -389,7 +389,7 @@ onUnmounted(() => {
           ><AppIcon name="plus" /> <span>新建组织</span></RouterLink
         >
         <RouterLink
-          v-else-if="shell === 'organization_admin'"
+          v-else-if="shell === 'organization_admin' && routePath !== '/org-admin'"
           class="role-quick-action"
           v-show="guard?.roles?.includes('organization_admin')"
           to="/org-admin/members"
