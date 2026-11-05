@@ -2763,7 +2763,13 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
     padding: 24px 26px;
   }
   .midou-profile-summary section:first-child {
-    padding-block: 30px;
+    padding-block: 30px 37px;
+  }
+  .midou-profile-summary {
+    gap: 19px;
+  }
+  .midou-profile-security > a {
+    margin-block-start: 24px;
   }
   .midou-profile-avatar {
     width: 76px;
