@@ -554,6 +554,17 @@ test("catalogue empty workflow leads to the real candidate list without writes",
     expect(Math.abs(results!.x - heading!.x)).toBeLessThanOrEqual(1);
     expect(Math.abs(filters!.y - 210)).toBeLessThanOrEqual(6);
     expect(Math.abs(results!.y - 361)).toBeLessThanOrEqual(3);
+    const table = page.getByRole("table", { name: "选品商品列表" });
+    const [price, progress, action] = await Promise.all(
+      ["Amazon 售价", "分析进度", "操作"].map((name) =>
+        table.getByRole("columnheader", { name, exact: true }).evaluate(
+          (cell) => cell.getBoundingClientRect().x + parseFloat(getComputedStyle(cell).paddingLeft),
+        ),
+      ),
+    );
+    expect(Math.abs(price - 683)).toBeLessThanOrEqual(10);
+    expect(Math.abs(progress - 1392)).toBeLessThanOrEqual(10);
+    expect(Math.abs(action - 1585)).toBeLessThanOrEqual(8);
     await page.screenshot({ path: testInfo.outputPath("candidates-reference.png") });
   }
   expect(counters.writes).toBe(0);

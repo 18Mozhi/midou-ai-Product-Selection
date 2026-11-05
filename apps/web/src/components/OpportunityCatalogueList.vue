@@ -364,6 +364,17 @@ tbody tr:hover {
 .selection-candidate-list {
   border-radius: 9px;
 }
+@media (min-width: 1440px) {
+  .selection-candidate-list .product-column {
+    width: 27.2%;
+  }
+  .selection-candidate-list .result-column {
+    width: 13%;
+  }
+  .selection-candidate-list .action-column {
+    width: 104px;
+  }
+}
 .selection-candidate-list th {
   height: 37px;
   padding-block: 6px;
