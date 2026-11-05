@@ -295,7 +295,7 @@ onUnmounted(() => {
             ><RouterLink
               v-if="capabilities?.includes('platform:superadmin')"
               to="/platform-admin/organizations"
-              >查看组织</RouterLink
+              >查看组织<AppIcon name="arrow-right" :size="14" /></RouterLink
             ><small v-else>仅超级管理员可查看明细</small>
           </article>
           <article>
@@ -304,23 +304,23 @@ onUnmounted(() => {
             ><RouterLink
               v-if="capabilities?.includes('platform:superadmin')"
               to="/platform-admin/users"
-              >查看用户</RouterLink
+              >查看用户<AppIcon name="arrow-right" :size="14" /></RouterLink
             ><small v-else>仅超级管理员可查看明细</small>
           </article>
           <article>
             <span><AppIcon name="layers" :size="22" />启用来源</span
             ><strong>{{ data.summary.enabled_providers }}</strong
-            ><RouterLink to="/platform-admin/providers/sources">查看来源</RouterLink>
+            ><RouterLink to="/platform-admin/providers/sources">查看来源<AppIcon name="arrow-right" :size="14" /></RouterLink>
           </article>
           <article>
             <span><AppIcon name="target" :size="22" />任务成功率</span
             ><strong>{{ successRateText }}</strong
-            ><RouterLink to="/platform-admin/collection">查看任务</RouterLink>
+            ><RouterLink to="/platform-admin/collection">查看任务<AppIcon name="arrow-right" :size="14" /></RouterLink>
           </article>
           <article>
             <span><AppIcon name="file" :size="22" />窗内文件增长</span
             ><strong>{{ bytes(data.summary.file_growth_bytes) }}</strong
-            ><RouterLink to="/platform-admin/data">查看数据</RouterLink>
+            ><RouterLink to="/platform-admin/data">查看数据<AppIcon name="arrow-right" :size="14" /></RouterLink>
           </article>
         </div>
       </section>

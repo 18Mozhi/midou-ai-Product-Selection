@@ -10,6 +10,7 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ],
   ],
   check: [["path", { d: "M20 6 9 17l-5-5" }]],
+  "arrow-right": [["path", { d: "M4 12h15m-6-6 6 6-6 6" }]],
   "category-grid": [
     ["path", { d: "M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z" }],
   ],

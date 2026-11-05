@@ -1394,6 +1394,10 @@ test("platform reference first fold fits system checks and source health without
   expect(Math.abs(factsBox!.x - 273)).toBeLessThanOrEqual(2);
   expect(Math.abs(metricRow!.x - 293)).toBeLessThanOrEqual(2);
   expect(checksBox!.x).toBe(factsBox!.x);
+  const sourceLink = facts.getByRole("link", { name: "查看来源", exact: true });
+  await expect(sourceLink).toHaveAttribute("href", "/platform-admin/providers/sources");
+  await expect(sourceLink.locator("svg")).toHaveAttribute("aria-hidden", "true");
+  await expect(sourceLink).toHaveCSS("column-gap", "6px");
   for (const card of [signals, sources]) {
     const bounds = await card.boundingBox();
     expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(925);

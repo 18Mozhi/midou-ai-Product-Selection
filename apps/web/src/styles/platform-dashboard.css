@@ -593,6 +593,15 @@
   overflow: hidden;
   border-radius: 10px;
 }
+#app .platform-dashboard--review .platform-facts article > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--so-text-muted);
+}
+#app .platform-dashboard--review .platform-facts article > a:is(:hover, :focus-visible) {
+  color: var(--so-primary);
+}
 #app .platform-trend-empty {
   display: grid;
   place-items: center;
