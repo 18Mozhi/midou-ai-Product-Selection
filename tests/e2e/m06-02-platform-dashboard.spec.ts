@@ -1353,6 +1353,22 @@ test("platform cockpit gives live operations the full workspace and accessible a
   await expect(page).toHaveScreenshot("platform-overview-workbench.png", { fullPage: false });
 });
 
+test("platform overview has one create organization action in its page header", async ({
+  page,
+}) => {
+  await nav(page, "platform_super_admin", "platform:superadmin");
+  await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
+  await page.goto("/platform-admin");
+  const create = page.getByRole("link", { name: "新建组织", exact: true });
+  await expect(create).toHaveCount(1);
+  await expect(
+    page.locator(".platform-page-header").getByRole("link", { name: "新建组织", exact: true }),
+  ).toHaveAttribute("href", "/platform-admin/organizations/new");
+  await expect(
+    page.locator(".role-topbar").getByRole("link", { name: "新建组织", exact: true }),
+  ).toHaveCount(0);
+});
+
 test("platform reference first fold fits system checks and source health without hiding storage data", async ({
   page,
 }) => {
@@ -1363,7 +1379,9 @@ test("platform reference first fold fits system checks and source health without
   const signals = page.locator(".platform-system-checks");
   const sources = page.locator(".platform-source-health");
   await expect(signals).toBeVisible();
-  await expect(signals.locator(".platform-signals li")).toHaveCount(dashboard.health_signals.length);
+  await expect(signals.locator(".platform-signals li")).toHaveCount(
+    dashboard.health_signals.length,
+  );
   for (const card of [signals, sources]) {
     const bounds = await card.boundingBox();
     expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(925);
@@ -1380,6 +1398,7 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
   await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
   await page.goto("/platform-admin");
   await expect(page.getByRole("heading", { name: "平台运行概览", level: 2 })).toBeVisible();
+  await expect(page.getByRole("link", { name: "新建组织", exact: true })).toHaveCount(0);
   await expect(page.getByRole("link", { name: /等待处理 7/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /需要关注 2/ })).toBeVisible();
   const facts = page.getByRole("region", { name: "平台指标" });

@@ -9,6 +9,12 @@
   outline: 2px solid var(--so-primary);
   outline-offset: 3px;
 }
+#app .platform-dashboard .platform-page-header__actions > .platform-overview-create {
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-on-primary, white);
+  font-weight: 600;
+}
 .platform-dashboard :is(strong, td, dd) {
   font-variant-numeric: tabular-nums;
 }

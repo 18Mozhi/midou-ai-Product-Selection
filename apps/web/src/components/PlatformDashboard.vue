@@ -234,6 +234,12 @@ onUnmounted(() => {
     :aria-busy="pending"
   >
     <PlatformPageHeader title="平台运行概览" description="平台整体运行状态与采集来源健康情况一览">
+      <RouterLink
+        v-if="capabilities?.includes('platform:superadmin')"
+        class="platform-overview-create"
+        to="/platform-admin/organizations/new"
+        ><AppIcon name="plus" :size="17" />新建组织</RouterLink
+      >
       <label
         >查看范围<select v-model="windowCode" :disabled="pending" @change="changeWindow">
           <option value="15m">最近 15 分钟</option>
@@ -242,6 +248,7 @@ onUnmounted(() => {
           <option value="30d">最近 30 天</option>
         </select></label
       ><button type="button" :disabled="pending" @click="load">
+        <AppIcon name="refresh" :size="17" />
         {{ pending ? "刷新中…" : "刷新" }}
       </button>
     </PlatformPageHeader>

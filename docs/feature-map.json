@@ -1,4 +1,10 @@
 {
+  "referencePlatformOverviewActions": {
+    "sourceFiles": ["apps/web/src/components/NavigationShell.vue", "apps/web/src/components/PlatformDashboard.vue", "apps/web/src/styles/platform-dashboard.css"],
+    "testFiles": ["tests/e2e/m06-02-platform-dashboard.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Platform overview places the existing superadmin create-organization link in its page actions, with no duplicate global action on that route. Permissions and target remain unchanged."
+  },
   "referenceCandidatePagination": {
     "sourceFiles": ["apps/web/src/components/OpportunityListPanel.vue"],
     "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],

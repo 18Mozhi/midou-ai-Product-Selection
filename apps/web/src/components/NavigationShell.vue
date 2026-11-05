@@ -378,7 +378,11 @@ onUnmounted(() => {
           <AppIcon name="search" /> <span>搜索功能、商品、ASIN等</span><kbd>Ctrl K</kbd>
         </button>
         <RouterLink
-          v-if="shell === 'platform_admin' && allCapabilities.includes('platform:superadmin')"
+          v-if="
+            shell === 'platform_admin' &&
+            routePath !== '/platform-admin' &&
+            allCapabilities.includes('platform:superadmin')
+          "
           class="role-quick-action"
           to="/platform-admin/organizations/new"
           :aria-label="quickActionLabel"
