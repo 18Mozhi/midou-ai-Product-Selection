@@ -1,4 +1,10 @@
 {
+  "referenceWorkbenchFlowRhythm": {
+    "sourceFiles": ["apps/web/src/components/HomeDashboard.vue", "apps/web/src/midou-workspace.css"],
+    "testFiles": ["tests/e2e/home-completed-results.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Wide workbench flow connects existing steps visually and styles progress links without asserting execution state or changing destinations."
+  },
   "referenceNotificationSearch": {
     "sourceFiles": ["apps/web/src/components/NotificationCenter.vue", "apps/web/src/midou-workspace.css", "apps/api/src/notification-routes.ts", "apps/api/src/notification-service.ts", "apps/api/src/mysql-notification-repository.ts"],
     "testFiles": ["tests/e2e/m05-03-notifications.spec.ts", "tests/m05-03/notifications.test.mjs"],

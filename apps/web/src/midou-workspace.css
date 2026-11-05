@@ -1070,6 +1070,34 @@ html[data-design="commerce"] #app .midou-home-flow {
 .midou-home-flow small {
   font-weight: 400;
 }
+.midou-home-flow a > small {
+  justify-self: start;
+  padding-inline: 9px;
+  border-radius: 999px;
+  background: var(--so-panel-muted);
+  line-height: 22px;
+}
+.midou-home-flow a:is(:hover, :focus-visible) > small {
+  color: var(--so-primary);
+  background: var(--so-primary-soft);
+}
+@media (min-width: 1440px) {
+  .midou-home-flow ol {
+    padding-inline: clamp(12px, 2vw, 36px);
+  }
+  .midou-home-flow li {
+    display: grid;
+    grid-template-columns: 28px max-content minmax(0, 1fr);
+  }
+  .midou-home-flow li:not(:last-child)::after {
+    content: "";
+    align-self: start;
+    height: 2px;
+    margin-block-start: 16px;
+    background: var(--so-border);
+    pointer-events: none;
+  }
+}
 html[data-design="commerce"] #app .home-daily-production dl > div {
   position: relative;
   padding-left: 76px;

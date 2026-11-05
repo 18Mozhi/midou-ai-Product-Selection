@@ -209,6 +209,18 @@ test("workbench completed empty action fits in the reference desktop first fold"
   await expect(result.locator(".home-completed-empty svg")).toHaveAttribute("aria-hidden", "true");
   const bounds = await result.boundingBox();
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(941);
+  const steps = page.getByRole("region", { name: "选品任务流程" }).getByRole("listitem");
+  await expect(steps).toHaveCount(5);
+  expect(
+    await steps.evaluateAll((items) =>
+      items.map((item) => getComputedStyle(item, "::after").content),
+    ),
+  ).toEqual(['""', '""', '""', '""', "none"]);
+  await expect(steps.first().getByRole("link")).toHaveAttribute("href", "/trends");
+  await expect(steps.last().getByRole("link")).toHaveAttribute(
+    "href",
+    "/opportunities?view=completed",
+  );
 });
 
 for (const status of [200, 401, 403, 500]) {
