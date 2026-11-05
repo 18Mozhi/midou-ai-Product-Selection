@@ -2667,16 +2667,16 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
     font-size: 28px;
   }
   html[data-design="commerce"] #app .account-content-only .p11-directory {
-    margin-block: 26px 34px;
-    gap: 12px;
+    margin-block: 32px 28px;
+    gap: 19px;
     box-shadow: inset 0 -1px var(--so-border);
   }
   html[data-design="commerce"] #app .account-content-only .p11-directory a {
     padding: 11px 10px;
   }
   html[data-design="commerce"] #app .account-content-only .p11-directory a > b {
-    font-size: 16px;
-    line-height: 1.5;
+    font-size: 17px;
+    line-height: 24px;
     font-weight: 500;
   }
   html[data-design="commerce"] #app .account-content-only .p11-directory a[aria-current="page"] > b {

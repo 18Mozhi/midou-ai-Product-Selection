@@ -300,6 +300,9 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
   if (wide) {
     const form = page.locator(".midou-profile-grid .p11-form");
     const avatar = form.locator(".p11-avatar-frame");
+    const tabs = page.locator(".account-content-only .p11-directory");
+    await expect(tabs).toHaveCSS("column-gap", "19px");
+    await expect(tabs.locator("a[aria-current='page'] > b")).toHaveCSS("font-size", "17px");
     await expect(form).toHaveCSS("row-gap", "18px");
     await expect(avatar).toHaveCSS("border-radius", "8px");
     const [input, frame] = await Promise.all([
@@ -308,6 +311,9 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
     ]);
     expect(Math.abs(input!.y + input!.height / 2 - frame!.y - frame!.height / 2)).toBeLessThan(1);
     await page.evaluate(() => window.scrollTo(0, 0));
+    const [tabsBox, formBox] = await Promise.all([tabs.boundingBox(), form.boundingBox()]);
+    expect(Math.abs(tabsBox!.y + tabsBox!.height - 272)).toBeLessThanOrEqual(3);
+    expect(Math.abs(formBox!.y - 301)).toBeLessThanOrEqual(3);
     await page.screenshot({ path: testInfo.outputPath("personal-profile-reference.png") });
   }
   expect(writes).toBe(0);
