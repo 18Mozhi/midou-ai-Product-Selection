@@ -331,8 +331,8 @@ onUnmounted(() => {
             <h3>采集任务趋势</h3>
             <span
               ><i data-series="success"></i>成功 {{ trendTotals.succeeded }}
-              <i data-series="failed"></i>失败 {{ trendTotals.failed }} ·
-              {{ data.task_trend.length }} 个时间点</span
+              <i data-series="failed"></i>失败 {{ trendTotals.failed }}
+              <i data-series="samples"></i>{{ data.task_trend.length }} 个时间点</span
             >
           </header>
           <div v-if="!data.task_trend.length" class="platform-inline-empty platform-trend-empty">
@@ -583,7 +583,7 @@ onUnmounted(() => {
   vector-effect: non-scaling-stroke;
 }
 .platform-trend-chart svg polyline[data-series="success"] {
-  stroke: var(--so-primary);
+  stroke: var(--so-success);
 }
 .platform-trend-chart svg polyline[data-series="failed"] {
   stroke: var(--so-danger);
@@ -596,10 +596,13 @@ onUnmounted(() => {
   border-radius: 50%;
 }
 .platform-trend-chart header i[data-series="success"] {
-  background: var(--so-primary);
+  background: var(--so-success);
 }
 .platform-trend-chart header i[data-series="failed"] {
   background: var(--so-danger);
+}
+.platform-trend-chart header i[data-series="samples"] {
+  background: var(--so-text-muted);
 }
 .platform-trend-chart footer {
   display: flex;

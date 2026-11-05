@@ -1420,6 +1420,13 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
   await expect(page.locator(".platform-trend-empty")).toContainText("暂无趋势数据");
   const emptyIcon = await page.locator(".platform-trend-empty > svg").boundingBox();
   expect(emptyIcon!.width).toBeLessThan(60);
+  const legend = page.locator(".platform-trend-chart header");
+  await expect(legend.locator("i[data-series]")).toHaveCount(3);
+  await expect(legend).toContainText("0 个时间点");
+  const colors = await legend.locator("i[data-series]").evaluateAll((dots) =>
+    dots.map((dot) => getComputedStyle(dot).backgroundColor),
+  );
+  expect(new Set(colors).size).toBe(3);
   await expect(facts.locator("article > span > svg")).toHaveCount(5);
 
   await page.setViewportSize({ width: 390, height: 844 });
