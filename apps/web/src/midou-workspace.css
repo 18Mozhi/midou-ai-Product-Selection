@@ -1757,11 +1757,28 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     .role-quick-action[data-navigation-search] {
     width: clamp(210px, 19.38vw, 324px);
     min-height: 44px;
+    position: relative;
+    isolation: isolate;
     font-size: 15px;
     padding-inline: 11px 8px;
     gap: 8px;
-    background: var(--so-panel-soft);
+    background: transparent;
+    border-color: transparent;
     color: var(--so-text-muted);
+  }
+  html[data-design="commerce"] #app .role-quick-action[data-navigation-search]::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    inset-inline: -1px;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+    box-sizing: border-box;
+    block-size: 37px;
+    border: 1px solid var(--so-border);
+    border-radius: inherit;
+    background: var(--so-panel-soft);
   }
   html[data-design="commerce"] #app .role-top-actions > a[aria-label="通知中心"] {
     border-color: transparent;
