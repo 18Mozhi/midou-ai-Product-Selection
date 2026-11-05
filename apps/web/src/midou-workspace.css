@@ -2046,6 +2046,13 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
 }
 
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .midou-home-quick h3 {
+    margin-block-end: 25px;
+  }
+  .midou-home-quick a > svg:first-child {
+    width: 20px;
+    height: 20px;
+  }
   html[data-design="commerce"] #app .home-status-facts > a {
     grid-template-columns: 38px minmax(0, 1fr);
     padding-inline: 32px 20px;

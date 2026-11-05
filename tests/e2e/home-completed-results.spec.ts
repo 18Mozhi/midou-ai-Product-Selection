@@ -225,6 +225,10 @@ test("workbench completed empty action fits in the reference desktop first fold"
   expect(Math.abs(flow.y - 529), "workflow top").toBeLessThanOrEqual(5);
   expect(Math.abs(bounds!.y - flow.y - flow.height - 18), "workflow-to-results gap").toBeLessThanOrEqual(2);
   const quickCandidate = page.locator(".midou-home-quick .home-quick-candidates");
+  const quickEvidence = page.locator(".midou-home-quick .home-quick-evidence");
+  await expect(quickEvidence.locator("svg").first()).toHaveCSS("width", "20px");
+  const evidenceBox = (await quickEvidence.boundingBox())!;
+  expect(Math.abs(evidenceBox.y - 175)).toBeLessThanOrEqual(4);
   await expect(quickCandidate).toHaveCSS("font-size", "16px");
   await expect(quickCandidate).toHaveAttribute("href", "/opportunities?view=rule_candidates");
   await expect(quickCandidate.locator("b")).toHaveCSS("font-weight", "700");
