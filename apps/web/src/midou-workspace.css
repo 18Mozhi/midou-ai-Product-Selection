@@ -1247,6 +1247,29 @@ html[data-design="commerce"] #app .home-runtime-details:not([open]) {
 html[data-design="commerce"] #app .home-status-facts > a {
   padding-block: 10px;
 }
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .home-automation-overview .home-automation-heading h3 {
+    font-size: 17px;
+  }
+  html[data-design="commerce"] #app .home-status-facts > a {
+    position: relative;
+    align-content: center;
+    row-gap: 3px;
+    min-height: 82px;
+    border-inline-end: 0;
+  }
+  html[data-design="commerce"] #app .home-status-facts > a:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    inset-block: 13px;
+    inset-inline-end: 0;
+    width: 1px;
+    background: var(--so-border);
+  }
+  html[data-design="commerce"] #app .home-status-facts > a > span {
+    font-size: 14px;
+  }
+}
 html[data-design="commerce"] #app .midou-home-quick {
   min-height: calc(100dvh - 140px);
 }

@@ -1,4 +1,10 @@
 {
+  "referenceWorkbenchLibraryDensity": {
+    "sourceFiles": ["apps/web/src/components/HomeAutomationOverview.vue", "apps/web/src/midou-workspace.css"],
+    "testFiles": ["tests/e2e/home-completed-results.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Wide workbench library summary uses compact metric spacing and inset separators without changing counts, routes, disclosures or narrow-screen layout."
+  },
   "referenceBreadcrumbHierarchy": {
     "sourceFiles": ["apps/web/src/midou-workspace.css"],
     "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts", "tests/e2e/home-completed-results.spec.ts"],

@@ -209,6 +209,11 @@ test("workbench completed empty action fits in the reference desktop first fold"
   await expect(result.locator(".home-completed-empty svg")).toHaveAttribute("aria-hidden", "true");
   const bounds = await result.boundingBox();
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(941);
+  const facts = page.locator(".home-status-facts > a");
+  await expect(facts).toHaveCount(4);
+  await expect(facts.first().locator("span")).toHaveCSS("font-size", "14px");
+  expect(await facts.first().evaluate((el) => getComputedStyle(el, "::after").content)).toBe('""');
+  await expect(facts.nth(1)).toHaveAttribute("href", "/opportunities?view=rule_candidates");
   const steps = page.getByRole("region", { name: "选品任务流程" }).getByRole("listitem");
   await expect(steps).toHaveCount(5);
   expect(
