@@ -36,6 +36,7 @@ for (const status of [204, 401]) {
       await route.fulfill({ status });
     });
     await page.goto("/me");
+    await page.getByLabel("账号菜单", { exact: true }).click();
     await page.getByRole("button", { name: "退出登录", exact: true }).click();
     await expect(page).toHaveURL(/\/login$/);
     await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
@@ -63,6 +64,7 @@ test("logout does not repeat a pending POST or claim success after failure", asy
     } else await route.fulfill({ status: 204 });
   });
   await page.goto("/me");
+  await page.getByLabel("账号菜单", { exact: true }).click();
   const logout = page.getByRole("button", { name: "退出登录", exact: true });
   await logout.click();
   await expect(page.getByRole("button", { name: "正在退出…" })).toBeDisabled();

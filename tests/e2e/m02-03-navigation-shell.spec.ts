@@ -879,6 +879,16 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
       ).toBeVisible();
       await expect(page.locator(".midou-governance-side a")).toHaveCount(4);
     } else await expect(page.locator(".platform-facts")).toBeVisible();
+    const account = page.getByLabel("账号菜单", { exact: true });
+    await expect(account).toBeVisible();
+    const logout = page.getByRole("button", { name: "退出登录", exact: true });
+    await expect(logout).toBeHidden();
+    await account.click();
+    await expect(logout).toBeVisible();
+    await account.press("Escape");
+    await expect(logout).toBeHidden();
+    await expect(account).toBeFocused();
+    await expect(page.getByRole("navigation", { name: "面包屑" })).toHaveCount(1);
     await expect(page.locator(".role-brand")).toHaveAccessibleName("米兜智能选品");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
