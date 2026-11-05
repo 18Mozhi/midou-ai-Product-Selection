@@ -2717,8 +2717,23 @@ html[data-design="commerce"] #app .notification-row > .notification-mark-read {
   .midou-notification-status-controls {
     column-gap: 22px;
   }
-  .midou-notification-status > select {
+  html[data-design="commerce"] #app .midou-notification-status select {
     min-inline-size: 130px;
+  }
+}
+
+@media (min-width: 1680px) {
+  .midou-notification-status-controls {
+    display: grid;
+    grid-template-columns: 178px 132px 268px;
+    column-gap: 24px;
+  }
+  .midou-notification-status {
+    gap: 14px;
+  }
+  html[data-design="commerce"] #app .midou-notification-unread input {
+    width: 44px;
+    height: 24px;
   }
 }
 

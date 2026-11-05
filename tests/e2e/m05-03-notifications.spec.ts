@@ -830,6 +830,13 @@ test("midou reference notification layout keeps original workflow and preference
     const searchForm = page.getByRole("search");
     const initialSearch = (await searchForm.boundingBox())!;
     expect(initialSearch.width).toBe(268);
+    const status = (await page.getByRole("combobox", { name: "处理状态筛选" }).boundingBox())!;
+    const unread = (await page.getByRole("checkbox", { name: "仅未读" }).boundingBox())!;
+    expect(status.width).toBe(130);
+    expect(unread.width).toBe(44);
+    expect(Math.abs(status.x - 837)).toBeLessThanOrEqual(10);
+    expect(Math.abs(unread.x - 991)).toBeLessThanOrEqual(6);
+    expect(Math.abs(initialSearch.x - 1147)).toBeLessThanOrEqual(6);
     await page.getByRole("searchbox").fill("更新");
     await page.getByRole("searchbox").press("Enter");
     await expect(page.getByRole("button", { name: "清除", exact: true })).toBeVisible();
