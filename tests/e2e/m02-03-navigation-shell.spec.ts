@@ -52,6 +52,23 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
   });
 }
 
+test("desktop platform sidebar fits grouped navigation and footer at reference size", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await allow(page, "platform_admin");
+  await page.goto("/platform-admin");
+  const sidebar = page.getByRole("complementary", { name: "工作区导航" });
+  await expect(sidebar.locator("section a").first()).toHaveCSS("min-height", "32px");
+  await expect(sidebar.getByRole("button", { name: "帮助", exact: true })).toBeInViewport();
+  await expect(
+    sidebar.getByRole("link", { name: "选择组织与工作区后进入用户工作台" }),
+  ).toBeInViewport();
+  await sidebar.getByRole("link", { name: "组织管理", exact: true }).click();
+  await expect(sidebar.locator("section a").first()).toHaveCSS("min-height", "32px");
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+});
+
 test("core member titles and breadcrumbs use the current navigation names", async ({ page }) => {
   await allow(page, "member");
   for (const [path, title, heading = title] of [

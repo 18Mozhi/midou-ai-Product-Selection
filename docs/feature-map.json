@@ -1,4 +1,10 @@
 {
+  "referencePlatformSidebarDensity": {
+    "sourceFiles": ["apps/web/src/midou-workspace.css"],
+    "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Platform administration desktop sidebar uses 32px navigation rows and compact group separators while preserving all authorized links, footer and narrower viewport scrolling."
+  },
   "referenceNotificationRowRead": {
     "sourceFiles": ["apps/web/src/components/NotificationCenter.vue", "apps/web/src/notification-center.css", "apps/web/src/midou-workspace.css"],
     "testFiles": ["tests/e2e/m05-03-notifications.spec.ts"],
