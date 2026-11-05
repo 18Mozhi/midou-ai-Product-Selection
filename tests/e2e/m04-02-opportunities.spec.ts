@@ -4404,20 +4404,41 @@ test("supplier shortcut stays in the current product and preserves the return co
 for (const view of ["completed", "rule_candidates"]) {
   test(
     "midou reference catalogue " + view + " keeps single breadcrumb and scoped list",
-    async ({ page }) => {
+    async ({ page }, testInfo) => {
+      const wideCandidates = view === "rule_candidates" && page.viewportSize()!.width >= 1101;
+      if (wideCandidates) await page.setViewportSize({ width: 1717, height: 916 });
       await ready(page);
       await page.route("**/api/v1/opportunities?**", (r) =>
         r.fulfill({
           json: {
-            ...envelope(view === "completed" ? [] : [base]),
-            meta: { page: 1, page_size: 20, total: view === "completed" ? 0 : 1 },
+            ...envelope(
+              view === "completed" ? [] : [
+                base,
+                { ...base, id: "00000000-0000-4000-8000-000000000489", name: "双层收纳盒 · 候选商品" },
+              ],
+            ),
+            meta: { page: 1, page_size: 20, total: view === "completed" ? 0 : 324 },
           },
         }),
       );
       await page.goto("/opportunities?view=" + view);
       await expect(page.locator(".catalogue-page-heading")).toBeVisible();
       await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
-      if (view === "rule_candidates") await expect(page.locator(".product-catalog")).toBeVisible();
+      if (view === "rule_candidates") {
+        const catalog = page.locator(".product-catalog");
+        await expect(catalog.getByRole("heading", { name: "324 个选品候选" })).toBeVisible();
+        await expect(catalog.locator(".catalog-data-note svg[aria-hidden='true']")).toBeVisible();
+        await expect(catalog.locator(".catalog-data-note")).toContainText("候选数量不代表可用货源");
+        if (wideCandidates) {
+          await expect(catalog.locator("tbody tr")).toHaveCount(2);
+          const title = (await catalog.locator("header h2").boundingBox())!;
+          const sort = (await catalog.locator(".catalogue-sort-note").boundingBox())!;
+          expect(Math.abs(title.y - sort.y)).toBeLessThan(8);
+          const second = (await catalog.locator("tbody tr").nth(1).boundingBox())!;
+          expect(second.y + second.height).toBeLessThan(916);
+          await page.screenshot({ path: testInfo.outputPath("candidate-reference.png") });
+        }
+      }
       else
         await expect(
           page.getByRole("heading", { name: "暂无已完成分析的商品", exact: true }),

@@ -430,7 +430,8 @@ watch(imageFailureResetSources, (items) => {
       <span class="catalogue-sort-note">最近更新优先 · 每页 20 个</span>
     </header>
     <p class="catalog-data-note">
-      购买提示为公开下限，不等于精确销量；进货价为已有采集记录，不含其他成本；候选数量不代表可用货源。
+      <AppIcon v-if="selectionView === 'rule_candidates'" name="info" :size="18" />
+      <span>购买提示为公开下限，不等于精确销量；进货价为已有采集记录，不含其他成本；候选数量不代表可用货源。</span>
     </p>
     <OpportunityCatalogueList
       :items="items"
