@@ -1176,7 +1176,11 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
   ]) {
     await sidebar.getByRole("link", { name: label, exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`${path}$`));
-    await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+    const breadcrumb = page.getByRole("navigation", { name: "面包屑", exact: true });
+    await expect(breadcrumb).toHaveCount(1);
+    await expect(breadcrumb).toHaveCSS("font-size", "15px");
+    await expect(breadcrumb).toHaveCSS("column-gap", "12px");
+    await expect(breadcrumb.locator("b").first()).toHaveAttribute("aria-hidden", "true");
     expect(await context.boundingBox()).toEqual(contextBounds);
     expect(await search.boundingBox()).toEqual(searchBounds);
     expect(await segments.boundingBox()).toEqual(segmentBounds);
