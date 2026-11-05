@@ -592,26 +592,28 @@ watch(
           :aria-pressed="category === x.v"
           @click="setFilters({ category: x.v })"
         >
-          {{ x.t }}</button
-        ><label
-          ><input v-model="unread" type="checkbox" @change="setFilters({ unread })" /> 仅未读</label
-        >
-      </nav>
-      <nav aria-label="处理状态筛选">
-        <button
-          v-for="item in [
-            { v: '', t: '全部状态' },
-            { v: 'open', t: '未处理' },
-            { v: 'in_progress', t: '处理中' },
-            { v: 'closed', t: '已关闭' },
-          ]"
-          :key="item.v"
-          :aria-pressed="workflowStatus === item.v"
-          @click="setFilters({ status: item.v })"
-        >
-          {{ item.t }}
+          {{ x.t }}
         </button>
       </nav>
+      <div class="midou-notification-status-controls">
+        <label class="midou-notification-status">
+          <span>状态</span>
+          <select
+            aria-label="处理状态筛选"
+            :value="workflowStatus"
+            @change="setFilters({ status: ($event.target as HTMLSelectElement).value })"
+          >
+            <option value="">全部状态</option>
+            <option value="open">未处理</option>
+            <option value="in_progress">处理中</option>
+            <option value="closed">已关闭</option>
+          </select>
+        </label>
+        <label class="midou-notification-unread">
+          <input v-model="unread" type="checkbox" @change="setFilters({ unread })" />
+          <span>仅未读</span>
+        </label>
+      </div>
     </div>
     <section v-if="state === 'loading'" class="notification-state">正在读取通知…</section>
     <section

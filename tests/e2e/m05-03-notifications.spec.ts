@@ -230,7 +230,7 @@ test("P26 KeepAlive suspends notification reads and SSE, then refreshes on retur
       )
       .toBe(1);
 
-    await page.getByRole("link", { name: "SCOUTOPS 智能选品" }).click();
+    await page.getByRole("link", { name: "米兜智能选品" }).click();
     await expect(page).toHaveURL(/\/home$/);
     await expect
       .poll(() =>
@@ -533,7 +533,7 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
   await page.getByRole("button", { name: "关闭", exact: true }).click();
   await expect(page.getByText("通知已关闭。")).toBeVisible();
   await page.getByRole("button", { name: "关闭消息详情" }).click();
-  await page.getByRole("button", { name: "处理中", exact: true }).click();
+  await page.getByRole("combobox", { name: "处理状态筛选" }).selectOption("in_progress");
   await expect(page).toHaveURL(/status=in_progress/);
   await expect
     .poll(() => listRequests.some((url) => url.includes("workflow_status=in_progress")))
@@ -547,10 +547,7 @@ test("notification filters and detail restore from the URL", async ({ page }) =>
     "aria-pressed",
     "true",
   );
-  await expect(page.getByRole("button", { name: "未处理", exact: true })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(page.getByRole("combobox", { name: "处理状态筛选" })).toHaveValue("open");
   await expect(page.getByRole("heading", { name: "审批状态更新" })).toBeVisible();
   await expect(page.getByRole("button", { name: "系统", exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
@@ -696,14 +693,20 @@ test("midou reference notification layout keeps original workflow and preference
   await page.goto("/notifications");
   await expect(page.locator(".notification-summary article")).toHaveCount(4);
   await expect(page.locator(".notification-list > button > i svg")).toBeVisible();
-  await expect(page.locator(".midou-notification-filters > nav")).toHaveCount(2);
+  await expect(page.locator(".midou-notification-filters > nav")).toHaveCount(1);
+  await expect(page.getByRole("combobox", { name: "处理状态筛选" })).toHaveValue("");
+  await page.getByRole("checkbox", { name: "仅未读" }).focus();
+  await page.keyboard.press("Space");
+  await expect(page).toHaveURL(/unread=1/);
+  await page.getByRole("checkbox", { name: "仅未读" }).uncheck();
+  await expect(page).not.toHaveURL(/unread=1/);
   await expect(page.locator(".midou-notification-open")).toContainText("查看记录");
   await expect(page.locator('.notification-list > button > b[data-workflow="open"]')).toBeVisible();
   expect(
     await page
       .locator(".notification-list > button.unread")
       .evaluate((el) => getComputedStyle(el, "::before").width),
-  ).toBe("6px");
+  ).toBe((page.viewportSize()?.width ?? 0) >= 1151 ? "10px" : "6px");
 
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
