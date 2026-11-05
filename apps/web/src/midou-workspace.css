@@ -1676,3 +1676,107 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
     color: var(--so-text);
   }
 }
+
+/* Reference workbench: headline and actions above a broader first metric and a full-height rail. */
+.midou-home-intro {
+  color: var(--so-text-muted);
+  font-size: 14px;
+}
+html[data-design="commerce"] #app .home-command-bar > div {
+  flex-direction: column;
+  gap: 3px;
+}
+
+html[data-design="commerce"] #app .home-command-bar :is(a, button) {
+  gap: 8px;
+  border-radius: 8px;
+}
+@media (min-width: 1151px) {
+  .midou-home-grid {
+    grid-template-columns: minmax(0, 1fr) clamp(218px, 15.35vw, 257px);
+    margin-inline: 2px -15px;
+    gap: 20px;
+  }
+  html[data-design="commerce"] #app .midou-home-quick {
+    margin-block-start: -18px;
+    min-height: calc(100dvh - 128px);
+    padding: 14px 10px;
+  }
+  html[data-design="commerce"] #app .midou-home-quick h3 {
+    margin: 0 7px 22px;
+    font-size: 19px;
+  }
+  .midou-home-quick a {
+    min-height: 52px;
+    padding-inline: 14px 10px;
+    gap: 12px;
+  }
+  .midou-home-quick a > svg:last-child {
+    margin-inline-start: auto;
+  }
+  .midou-home-quick a > b + svg:last-child {
+    margin-inline-start: 0;
+  }
+  html[data-design="commerce"] #app .home-command-bar {
+    padding-bottom: 10px;
+    align-items: start;
+  }
+  html[data-design="commerce"] #app .home-command-bar h2 {
+    font-size: 29px;
+    line-height: 1.25;
+  }
+  html[data-design="commerce"] #app .home-command-bar nav {
+    margin-block-start: 1px;
+  }
+  html[data-design="commerce"] #app .home-command-bar :is(a, button) {
+    min-height: 40px;
+  }
+  html[data-design="commerce"] #app .home-daily-production dl {
+    grid-template-columns: minmax(0, 1.24fr) repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  html[data-design="commerce"] #app .home-daily-production dl > div {
+    position: relative;
+    min-height: 124px;
+    padding: 18px 21px 18px 98px;
+  }
+  html[data-design="commerce"] #app .home-daily-production dt {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .home-daily-production dt > svg {
+    position: absolute;
+    inset: 21px auto auto 27px;
+    box-sizing: content-box;
+    width: 22px;
+    height: 22px;
+    padding: 12px;
+    border-radius: 11px;
+    color: var(--so-primary);
+    background: var(--so-primary-soft);
+  }
+  .home-daily-production progress {
+    height: 9px;
+    border: 0;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--so-border);
+  }
+  .home-daily-production progress::-webkit-progress-bar {
+    background: var(--so-border);
+    border-radius: 999px;
+  }
+  .home-daily-production progress::-webkit-progress-value {
+    background: var(--so-primary);
+    border-radius: 999px;
+  }
+}
+
+@media (max-width: 640px) {
+  .midou-home-intro {
+    display: none;
+  }
+  html[data-design="commerce"] #app .home-command-bar {
+    padding-bottom: 12px;
+  }
+}

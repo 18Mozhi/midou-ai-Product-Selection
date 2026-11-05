@@ -192,19 +192,8 @@ onBeforeUnmount(deactivate);
         <div class="midou-home-main">
           <header class="home-command-bar">
             <div>
-              <span class="home-system-state" :data-state="selection?.state ?? 'unknown'">
-                <i></i>
-                {{
-                  selection?.state === "running"
-                    ? "采集调度已配置"
-                    : selection?.state === "attention"
-                      ? "自动选品需检查"
-                      : selection?.state === "not_configured"
-                        ? "自动选品未配置"
-                        : "自动选品状态暂不可用"
-                }}
-              </span>
               <h2>选品工作台</h2>
+              <p class="midou-home-intro">集中查看自动选品进度、候选商品与分析结果。</p>
             </div>
             <nav>
               <div class="home-live-status" role="status" aria-live="off">
@@ -215,13 +204,20 @@ onBeforeUnmount(deactivate);
                       ? `已更新 ${lastRefreshedAt}`
                       : "等待数据"
                 }}</span>
-                <button type="button" :disabled="refreshing" @click="load(true)">刷新</button>
+                <button
+                  class="so-action-secondary"
+                  type="button"
+                  :disabled="refreshing"
+                  @click="load(true)"
+                >
+                  刷新
+                </button>
               </div>
               <RouterLink class="home-secondary-action so-action-secondary" to="/trends"
-                >市场情报</RouterLink
+                ><AppIcon name="trend" />市场情报</RouterLink
               >
               <RouterLink class="home-primary-action so-action-primary" to="/opportunities"
-                >查看选品库</RouterLink
+                ><AppIcon name="box" />查看选品库</RouterLink
               >
             </nav>
           </header>
@@ -262,14 +258,28 @@ onBeforeUnmount(deactivate);
                 <p v-if="selection.daily_production.completed_count == null" class="home-read-hint">
                   完成流程数尚未读取，不使用新增数或推荐数代替。
                 </p>
-                <footer class="home-daily-meta">
-                  <small>统计时间 {{ dailyTime(selection.daily_production.measured_at) }}</small>
-                  <RouterLink to="/opportunities?view=completed"
-                    >查看已完成分析（全部日期）</RouterLink
-                  >
-                </footer>
               </template>
               <p v-else>每日产出尚未读取，暂不显示数量或目标达成状态。</p>
+              <footer class="home-daily-meta">
+                <span class="home-system-state" :data-state="selection?.state ?? 'unknown'">
+                  <i></i>
+                  {{
+                    selection?.state === "running"
+                      ? "采集调度已配置"
+                      : selection?.state === "attention"
+                        ? "自动选品需检查"
+                        : selection?.state === "not_configured"
+                          ? "自动选品未配置"
+                          : "自动选品状态暂不可用"
+                  }}
+                </span>
+                <small v-if="selection?.daily_production"
+                  >统计时间 {{ dailyTime(selection.daily_production.measured_at) }}</small
+                >
+                <RouterLink v-if="selection?.daily_production" to="/opportunities?view=completed"
+                  >查看已完成分析（全部日期）</RouterLink
+                >
+              </footer>
             </section>
             <HomeAutomationOverview v-if="selection" :selection="selection" />
           </div>

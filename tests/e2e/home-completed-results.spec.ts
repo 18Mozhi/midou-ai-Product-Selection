@@ -292,7 +292,7 @@ for (const status of [401, 403, 500]) {
   });
 }
 
-test("workspace breadcrumb stays exclusively in the topbar across list routes", async ({
+test("workspace breadcrumb stays exclusively above page content across list routes", async ({
   page,
 }) => {
   await setup(page);
@@ -303,10 +303,8 @@ test("workspace breadcrumb stays exclusively in the topbar across list routes", 
   await page.goto("/home");
   const crumb = page.getByRole("navigation", { name: "面包屑", exact: true });
   await expect(crumb).toHaveCount(1);
-  await expect(
-    page.locator(".role-topbar").getByRole("navigation", { name: "面包屑", exact: true }),
-  ).toBeVisible();
-  await expect(page.locator(".role-content .role-page-breadcrumb")).toHaveCount(0);
+  await expect(page.locator(".role-content > .role-top-breadcrumb")).toBeVisible();
+  await expect(page.locator(".role-topbar .role-page-breadcrumb")).toHaveCount(0);
   if (test.info().project.name === "mobile-390") {
     await page.getByRole("button", { name: "打开导航菜单", exact: true }).click();
     await page
