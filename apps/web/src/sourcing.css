@@ -903,3 +903,162 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
     padding: 10px 12px;
   }
 }
+
+/* Separate the search, record list and detail like the sourcing reference. */
+.sourcing-search-input {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.sourcing-search-input > svg {
+  position: absolute;
+  inset: 50% auto auto 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+#app .sourcing-workspace--review .sourcing-toolbar .sourcing-search-input > input {
+  width: 100%;
+  padding-inline-start: 35px;
+  border-radius: 8px;
+}
+#app .sourcing-workspace--review .sourcing-heading-actions > :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--so-primary);
+  border-color: var(--so-primary-border);
+  background: var(--so-panel);
+}
+.sourcing-detail > header > div:last-child {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.sourcing-detail > header .sourcing-progress {
+  margin: 12px 0 0;
+  padding: 10px 0 0;
+  border-bottom: 0;
+}
+.sourcing-progress h4[data-status] {
+  padding: 2px 7px;
+  border-radius: 6px;
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
+.sourcing-progress h4:is([data-status="failed"], [data-status="blocked"]) {
+  color: var(--so-warning);
+  background: var(--so-warning-soft);
+}
+.sourcing-progress dt[data-fail]:not([data-fail="0"]),
+.sourcing-progress dt[data-fail]:not([data-fail="0"]) + dd {
+  color: var(--so-danger);
+}
+#app .sourcing-workspace--review .sourcing-pending {
+  border-radius: 10px;
+}
+#app .sourcing-workspace--review .sourcing-pending[data-attention="true"] {
+  border-color: color-mix(in srgb, var(--so-warning) 25%, var(--so-border));
+  background: var(--so-warning-soft);
+}
+.sourcing-pending h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sourcing-pending[data-attention="true"] h4 svg {
+  color: var(--so-warning);
+}
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-head {
+    margin-block-end: -7px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-head h1 {
+    font-size: 29px;
+    line-height: 1.25;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-overview {
+    min-height: 74px;
+    padding: 12px 18px;
+  }
+  .sourcing-summary > div + div {
+    padding-inline-start: 14px;
+    border-inline-start: 1px solid var(--so-border);
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout {
+    grid-template-columns: minmax(280px, 24%) minmax(0, 1fr);
+    gap: 15px;
+    border: 0;
+    background: transparent;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout > aside {
+    height: clamp(460px, calc(100dvh - 314px), 760px);
+    border: 1px solid var(--so-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-layout
+    > aside[data-short="true"] {
+    height: auto;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-detail {
+    min-width: 0;
+    padding: 18px 16px;
+    border: 1px solid var(--so-border);
+    border-radius: 12px;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-detail
+    > header
+    .research-thumbnail {
+    width: clamp(135px, 11.1vw, 186px);
+    height: clamp(135px, 11.1vw, 186px);
+    flex-shrink: 0;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items {
+    padding: 6px 8px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items > button {
+    grid-template-columns: 68px minmax(0, 1fr);
+    column-gap: 12px;
+    padding: 10px;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-record-items
+    > button.selected {
+    border-radius: 8px;
+    border-left-color: transparent;
+    background: var(--so-primary-soft);
+  }
+  .sourcing-record-items .research-thumbnail {
+    width: 68px;
+    height: 68px;
+  }
+}
+@media (max-width: 760px) {
+  .sourcing-search-input {
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-head {
+    margin-block-end: 0;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout {
+    gap: 12px;
+    border: 0;
+    background: transparent;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout > aside {
+    border: 1px solid var(--so-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}

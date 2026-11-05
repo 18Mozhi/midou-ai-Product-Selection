@@ -4,6 +4,7 @@ import {
   useSourcingWorkspace,
   type SourcingWorkspaceProps,
 } from "../composables/useSourcingWorkspace";
+import AppIcon from "./AppIcon.vue";
 import ResearchThumbnail from "./ResearchThumbnail.vue";
 import SourcingComparisonPanel from "./SourcingComparisonPanel.vue";
 import SupplierOfferList from "./SupplierOfferList.vue";
@@ -122,10 +123,10 @@ const pendingMessage = computed(() => {
         <RouterLink
           class="sourcing-cost-link"
           :to="{ path: '/sourcing/cost-rules', query: { from: route.fullPath } }"
-          >费用与利润规则</RouterLink
+          ><AppIcon name="chart" />费用与利润规则</RouterLink
         >
         <button type="button" class="ghost" :disabled="state === 'loading' || busy" @click="load">
-          刷新记录
+          <AppIcon name="refresh" />刷新记录
         </button>
       </div>
     </header>
@@ -135,11 +136,12 @@ const pendingMessage = computed(() => {
     <div class="sourcing-overview">
       <div class="sourcing-toolbar">
         <label
-          >搜索找货记录<input
-            v-model="query"
-            type="search"
-            maxlength="200"
-            placeholder="关键词、选品编号或状态" /></label
+          >搜索找货记录<span class="sourcing-search-input"
+            ><AppIcon name="search" :size="16" /><input
+              v-model="query"
+              type="search"
+              maxlength="200"
+              placeholder="关键词、选品编号或状态" /></span></label
         ><span v-if="!['expired', 'forbidden'].includes(state)">共 {{ matchingTotal }} 条结果</span>
       </div>
       <dl
@@ -246,6 +248,51 @@ const pendingMessage = computed(() => {
             <code v-if="selected.input_type === 'opportunity'"
               >选品编号 {{ selected.input_ref }}</code
             >
+            <section
+              v-if="selected.collection_progress"
+              class="sourcing-progress"
+              aria-label="来源采集进度"
+            >
+              <header>
+                <div>
+                  <small>来源采集</small>
+                  <h4 :data-status="selected.collection_progress.status">
+                    {{ statusText(selected.collection_progress.status) }}
+                  </h4>
+                </div>
+                <span
+                  >{{
+                    selected.collection_progress.successful_subqueries +
+                    selected.collection_progress.failed_subqueries +
+                    selected.collection_progress.blocked_subqueries
+                  }}
+                  / {{ selected.collection_progress.total_subqueries }} 个来源已结束</span
+                >
+              </header>
+              <dl>
+                <div>
+                  <dt>成功</dt>
+                  <dd>{{ selected.collection_progress.successful_subqueries }}</dd>
+                </div>
+                <div>
+                  <dt>执行中 / 等待</dt>
+                  <dd>{{ selected.collection_progress.active_subqueries }}</dd>
+                </div>
+                <div>
+                  <dt :data-fail="selected.collection_progress.failed_subqueries">失败</dt>
+                  <dd>{{ selected.collection_progress.failed_subqueries }}</dd>
+                </div>
+                <div>
+                  <dt>受阻</dt>
+                  <dd>{{ selected.collection_progress.blocked_subqueries }}</dd>
+                </div>
+              </dl>
+              <RouterLink
+                v-if="canInspectCollection"
+                :to="`/platform-admin/collection?task=${selected.collection_task_id}`"
+                >查看采集任务明细</RouterLink
+              >
+            </section>
           </div>
         </header>
         <p v-if="detailLoading" class="sourcing-detail-loading" role="status">
@@ -257,49 +304,6 @@ const pendingMessage = computed(() => {
         >
           待补齐：{{ missingText }}
         </p>
-        <section
-          v-if="selected.collection_progress"
-          class="sourcing-progress"
-          aria-label="来源采集进度"
-        >
-          <header>
-            <div>
-              <small>来源采集</small>
-              <h4>{{ statusText(selected.collection_progress.status) }}</h4>
-            </div>
-            <span
-              >{{
-                selected.collection_progress.successful_subqueries +
-                selected.collection_progress.failed_subqueries +
-                selected.collection_progress.blocked_subqueries
-              }}
-              / {{ selected.collection_progress.total_subqueries }} 个来源已结束</span
-            >
-          </header>
-          <dl>
-            <div>
-              <dt>成功</dt>
-              <dd>{{ selected.collection_progress.successful_subqueries }}</dd>
-            </div>
-            <div>
-              <dt>执行中 / 等待</dt>
-              <dd>{{ selected.collection_progress.active_subqueries }}</dd>
-            </div>
-            <div>
-              <dt>失败</dt>
-              <dd>{{ selected.collection_progress.failed_subqueries }}</dd>
-            </div>
-            <div>
-              <dt>受阻</dt>
-              <dd>{{ selected.collection_progress.blocked_subqueries }}</dd>
-            </div>
-          </dl>
-          <RouterLink
-            v-if="canInspectCollection"
-            :to="`/platform-admin/collection?task=${selected.collection_task_id}`"
-            >查看采集任务明细</RouterLink
-          >
-        </section>
         <section v-if="selected.erp_reference" class="sourcing-erp-reference">
           <img
             v-if="selected.erp_reference.image_url"
@@ -321,8 +325,17 @@ const pendingMessage = computed(() => {
             </footer>
           </div>
         </section>
-        <section v-if="!detailLoading && !candidates.length" class="sourcing-pending">
-          <h4>供应商报价</h4>
+        <section
+          v-if="!detailLoading && !candidates.length"
+          class="sourcing-pending"
+          :data-attention="
+            Boolean(
+              selected.collection_progress?.failed_subqueries ||
+              selected.collection_progress?.blocked_subqueries,
+            )
+          "
+        >
+          <h4><AppIcon name="box" />供应商报价</h4>
           <p>{{ pendingMessage }}</p>
           <span v-if="selected.missing_fields.length" class="sourcing-missing"
             >待补齐：{{ missingText }}</span

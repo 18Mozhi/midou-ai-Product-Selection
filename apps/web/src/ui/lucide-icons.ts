@@ -114,6 +114,7 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ["circle", { cx: "17", cy: "17", r: "3" }],
     ["circle", { cx: "7", cy: "7", r: "3" }],
   ],
+  refresh: [["path", { d: "M20 7v5h-5M4 17v-5h5M6 8a7 7 0 0 1 11-2l3 6M4 12l3 6a7 7 0 0 0 11-2" }]],
   search: [
     ["path", { d: "m21 21-4.34-4.34" }],
     ["circle", { cx: "11", cy: "11", r: "8" }],

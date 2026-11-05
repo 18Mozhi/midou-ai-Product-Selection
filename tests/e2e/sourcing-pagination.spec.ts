@@ -111,6 +111,17 @@ test("paged records request only20 rows, retain whole-workspace counts and suppo
   const list = page.getByRole("complementary", { name: "找货记录", exact: true });
   await expect(list.getByRole("button").filter({ hasText: "找货记录21" })).toBeVisible();
   await expect(list.locator(".sourcing-record-items > button")).toHaveCount(20);
+  await expect(page.getByRole("searchbox", { name: "搜索找货记录" })).toBeVisible();
+  const detail = page.getByRole("region", { name: "找货记录详情" });
+  await expect(detail).toBeVisible();
+  const listBox = (await list.boundingBox())!;
+  const detailBox = (await detail.boundingBox())!;
+  if ((page.viewportSize()?.width ?? 0) >= 1101) {
+    expect(detailBox.x - (listBox.x + listBox.width)).toBeGreaterThanOrEqual(12);
+    expect(Math.abs(detailBox.y - listBox.y)).toBeLessThan(2);
+  } else if ((page.viewportSize()?.width ?? 0) <= 760) {
+    expect(detailBox.y).toBeGreaterThanOrEqual(listBox.y + listBox.height);
+  }
   await expect(
     list.getByRole("button").filter({ hasText: "找货记录1", hasNotText: "找货记录2" }),
   ).toHaveCount(0);
