@@ -261,6 +261,15 @@
 #app .organization-profile-facts dl {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
+.organization-profile-facts dt {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.organization-profile-facts dt > svg {
+  flex-shrink: 0;
+  color: var(--so-text-muted);
+}
 #app .organization-profile-metrics article > span {
   display: flex;
   align-items: center;
@@ -317,8 +326,15 @@
     padding: 12px 24px;
   }
   #app .organization-profile-facts dl > div {
-    padding-inline-start: 18px;
+    position: relative;
+    padding-inline-start: 50px;
     border-inline-start: 1px solid var(--so-border);
+  }
+  #app .organization-profile-facts dt > svg {
+    position: absolute;
+    inset-inline-start: 18px;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
   }
   #app .organization-profile-editor {
     margin-block-start: 8px;

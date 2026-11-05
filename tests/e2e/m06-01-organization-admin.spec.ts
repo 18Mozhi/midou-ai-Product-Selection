@@ -2516,6 +2516,7 @@ test("organization profile aligns facts, editor and governance sidebar", async (
   const editor = page.locator(".organization-profile-editor");
   await expect(facts.locator("h3")).toHaveText(profile.name);
   await expect(facts.locator("dl > div")).toHaveCount(3);
+  await expect(facts.locator("dt > svg[aria-hidden='true']")).toHaveCount(3);
   await expect(facts.getByLabel("组织标识")).toHaveText(profile.slug);
   await expect(metrics.locator("article")).toHaveCount(6);
   for (const region of [facts, metrics, editor]) {

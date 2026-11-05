@@ -1428,15 +1428,15 @@ onMounted(() => void load());
           </header>
           <dl>
             <div>
-              <dt>时区</dt>
+              <dt><AppIcon name="globe" :size="21" />时区</dt>
               <dd>{{ data?.timezone }}</dd>
             </div>
             <div>
-              <dt>数据保留</dt>
+              <dt><AppIcon name="database" :size="21" />数据保留</dt>
               <dd>{{ data?.data_retention_days }} 天</dd>
             </div>
             <div>
-              <dt>默认工作区</dt>
+              <dt><AppIcon name="layers" :size="21" />默认工作区</dt>
               <dd>{{ workspaceName(data?.default_workspace_id) }}</dd>
             </div>
           </dl>
