@@ -59,14 +59,69 @@ test("desktop platform sidebar fits grouped navigation and footer at reference s
   await allow(page, "platform_admin");
   await page.goto("/platform-admin");
   const sidebar = page.getByRole("complementary", { name: "工作区导航" });
+  const context = page.locator(".role-topbar").getByRole("link", { name: "切换组织与工作区" });
+  const sidebarContext = sidebar.getByRole("link", { name: "选择组织与工作区后进入用户工作台" });
+  await expect(context).toBeVisible();
+  await expect(context).toHaveText("选择组织与工作区");
+  await expect(context).toHaveAttribute("href", await sidebarContext.getAttribute("href") ?? "");
+  await expect(context).toHaveAttribute("href", /from=%2Fplatform-admin$/);
+  const top = page.locator(".role-topbar");
+  const controls = await Promise.all(
+    [
+      top.getByRole("button", { name: "搜索后台功能" }),
+      top.getByLabel("导航帮助"),
+      top.getByRole("button", { name: "切换界面主题" }),
+      top.getByLabel("账号菜单"),
+    ].map((control) => control.boundingBox()),
+  );
+  expect(controls.every(Boolean)).toBe(true);
+  for (let i = 1; i < controls.length; i++)
+    expect(controls[i - 1]!.x + controls[i - 1]!.width).toBeLessThanOrEqual(controls[i]!.x);
+  expect(controls[2]!.width).toBe(44);
   await expect(sidebar.locator("section a").first()).toHaveCSS("min-height", "32px");
   await expect(sidebar.getByRole("button", { name: "帮助", exact: true })).toBeInViewport();
   await expect(
     sidebar.getByRole("link", { name: "选择组织与工作区后进入用户工作台" }),
   ).toBeInViewport();
   await sidebar.getByRole("link", { name: "组织管理", exact: true }).click();
+  await expect(context).toHaveAttribute("href", /from=%2Fplatform-admin%2Forganizations$/);
+  const create = top.getByRole("link", { name: "新建组织" });
+  const search = top.getByRole("button", { name: "搜索后台功能" });
+  await expect(create).toBeVisible();
+  await expect(search).toBeVisible();
+  const after = (await search.boundingBox())!;
+  expect(after.x).toBeCloseTo(controls[0]!.x, 0);
+  expect(after.width).toBeCloseTo(controls[0]!.width, 0);
+  const action = (await create.boundingBox())!;
+  expect(action.x + action.width).toBeLessThanOrEqual(after.x);
   await expect(sidebar.locator("section a").first()).toHaveCSS("min-height", "32px");
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+});
+
+test("platform top search finds only available navigation without a member search request", async ({
+  page,
+}) => {
+  await allow(page, "platform_admin");
+  const searches: string[] = [];
+  await page.route("**/api/v1/me/global-search?**", (route) => {
+    searches.push(route.request().url());
+    return route.abort();
+  });
+  await page.goto("/platform-admin");
+  const trigger = page.getByRole("button", { name: "搜索后台功能" });
+  await expect(trigger).toBeVisible();
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "搜索后台功能" });
+  const input = dialog.getByRole("searchbox");
+  await expect(input).toBeFocused();
+  await input.fill("候选商品");
+  await expect(dialog.getByRole("status")).toHaveText("没有匹配的后台功能。");
+  await input.press("Enter");
+  await input.fill("组织管理");
+  await dialog.getByRole("link", { name: /组织管理/ }).click();
+  await expect(page).toHaveURL(/\/platform-admin\/organizations$/);
+  await expect(dialog).toBeHidden();
+  expect(searches).toEqual([]);
 });
 
 test("core member titles and breadcrumbs use the current navigation names", async ({ page }) => {

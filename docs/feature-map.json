@@ -1,9 +1,27 @@
 {
+  "referenceAdminNavigationSearch": {
+    "sourceFiles": ["apps/web/src/components/NavigationShell.vue", "apps/web/src/components/DiscoveryOverlay.vue", "apps/web/src/use-navigation-discovery.ts"],
+    "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Ready admin shells search their permission-filtered menu labels and groups locally; no member search or entity API is used."
+  },
   "referenceSourcingUnconfirmedCosts": {
     "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/components/SourcingProfitSummary.vue", "apps/web/src/sourcing.css"],
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Empty sourcing offers retain the reference cost row structure using unconfirmed placeholders, without changing calculated values, inputs, or requests."
+  },
+  "referencePlatformTopContext": {
+    "sourceFiles": ["apps/web/src/components/NavigationShell.vue"],
+    "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "The ready desktop platform shell reuses its existing workspace selection destination in the top bar without assuming an organization context or exposing member search."
+  },
+  "referenceOrganizationSidebarFooter": {
+    "sourceFiles": ["apps/web/src/components/NavigationShell.vue", "apps/web/src/midou-workspace.css"],
+    "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Organization desktop sidebar mirrors the existing top context destination and groups settings and help above the unchanged member return link."
   },
   "referenceSourcingToolbarBalance": {
     "sourceFiles": ["apps/web/src/sourcing.css"],

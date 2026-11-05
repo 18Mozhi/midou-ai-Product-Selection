@@ -2479,6 +2479,32 @@ for (const route of [
   });
 }
 
+test("organization sidebar groups context and utility links without altering mobile navigation", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/org-admin");
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+  const footer = page.locator(".commerce-sidebar footer");
+  if (page.viewportSize()!.width <= 840) {
+    await expect(footer).toBeHidden();
+    return;
+  }
+  const context = footer.getByRole("link", { name: "侧栏切换工作区" });
+  const settings = footer.getByRole("link", { name: "设置" });
+  const help = footer.getByRole("button", { name: "帮助" });
+  const back = footer.getByRole("link", { name: "返回成员工作台" });
+  await expect(context).toHaveAttribute("href", "/select-context");
+  await expect(back).toHaveAttribute("href", "/home");
+  const [contextBox, settingsBox, helpBox, backBox] = await Promise.all(
+    [context, settings, help, back].map((item) => item.boundingBox()),
+  );
+  expect(contextBox!.y + contextBox!.height).toBeLessThanOrEqual(settingsBox!.y);
+  expect(settingsBox!.y).toBe(helpBox!.y);
+  expect(settingsBox!.x + settingsBox!.width).toBeLessThan(helpBox!.x);
+  expect(settingsBox!.y + settingsBox!.height).toBeLessThanOrEqual(backBox!.y);
+});
+
 test("organization profile aligns facts, editor and governance sidebar", async ({
   page,
 }, testInfo) => {

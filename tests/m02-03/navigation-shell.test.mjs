@@ -186,12 +186,13 @@ test("M02-03 shell presents business labels grouped search and collapsed failure
 });
 
 test("M02-03 route shell lazily imports only registered surfaces and page-owned dashboard CSS", async () => {
-  const [shell, registry, main, dashboard, catalogRaw] = await Promise.all([
+  const [shell, registry, main, dashboard, catalogRaw, router] = await Promise.all([
     read("apps/web/src/components/NavigationShell.vue"),
     read("apps/web/src/components/navigation-surface-registry.ts"),
     read("apps/web/src/main.ts"),
     read("apps/web/src/components/PlatformDashboard.vue"),
     read("config/route-catalog.json"),
+    read("apps/web/src/router.ts"),
   ]);
   const imports = new Set(
     [...registry.matchAll(/import\("\.\/([^"]+\.vue)"\)/gu)].map((match) => match[1]),
@@ -199,9 +200,11 @@ test("M02-03 route shell lazily imports only registered surfaces and page-owned 
   const lazyNames = new Set(
     [...registry.matchAll(/lazy\("([^"]+)"\)/gu)].map((match) => `${match[1]}.vue`),
   );
+  // The legacy appearance bookmark is redirected by the router before a shell mounts.
+  assert.match(router, /if \(to\.path === "\/settings\/theme"\)\s*return \{ path: "\/me", query: \{ section: "appearance" \}, replace: true \}/);
   const routeSurfaces = new Set(
     JSON.parse(catalogRaw)
-      .routes.filter((route) => route.shell && route.acceptance !== "internal" && !route.redirect)
+      .routes.filter((route) => route.shell && route.acceptance !== "internal" && !route.redirect && route.path !== "/settings/theme")
       .map((route) => route.surface),
   );
   const surfaceBindings = new Set(
@@ -238,7 +241,7 @@ test("M02-03 aggregate surfaces defer their inactive route views and dialogs", a
       staticChildImports,
       name === "OpportunityWorkspace.vue"
         ? ["UiStatePanel.vue", "SelectionProductHeader.vue"]
-        : name === "PlatformAccountCenter.vue"
+        : ["PlatformAccountCenter.vue", "OrganizationAdminCenter.vue"].includes(name)
           ? ["AppIcon.vue"]
           : [],
       `${name} should defer its route-owned child views`,
@@ -424,16 +427,20 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
 });
 
 test("M02-03 admin shells keep their quick actions while member manual creation is retired in the top bar", async () => {
-  const component = await read("apps/web/src/components/NavigationShell.vue");
+  const [component, platform, organization] = await Promise.all([
+    read("apps/web/src/components/NavigationShell.vue"),
+    read("apps/web/src/components/PlatformDashboard.vue"),
+    read("apps/web/src/components/OrganizationAdminCenter.vue"),
+  ]);
   const platformCreatePattern = [
-    `v-if="shell === 'platform_admin' && allCapabilities\\.includes\\('platform:superadmin'\\)"`,
+    `v-if="\\s*shell === 'platform_admin' &&\\s*routePath !== '/platform-admin' &&\\s*allCapabilities\\.includes\\('platform:superadmin'\\)\\s*"`,
     `\\s+class="role-quick-action"\\s+to="/platform-admin/organizations/new"[\\s\\S]*?新建组织`,
   ].join("");
   assert.match(component, new RegExp(platformCreatePattern));
-  assert.match(component, /v-else-if="shell === 'organization_admin'"/);
-  assert.match(component, /guard\?\.roles\?\.includes\('organization_admin'\)/);
-  assert.match(component, /to="\/org-admin\/members"/);
+  assert.match(component, /v-else-if="shell === 'organization_admin' && routePath !== '\/org-admin'"\s+class="role-quick-action"\s+v-show="guard\?\.roles\?\.includes\('organization_admin'\)"\s+to="\/org-admin\/members"/);
   assert.match(component, /<span>邀请成员<\/span>/);
+  assert.match(platform, /v-if="capabilities\?\.includes\('platform:superadmin'\)"\s+[^>]*to="\/platform-admin\/organizations\/new"/);
+  assert.match(organization, /v-if="view === 'summary' && roles\?\.includes\('organization_admin'\)"\s+class="org-overview-invite"\s+to="\/org-admin\/members"/);
   assert.doesNotMatch(
     component,
     /v-else-if="shell === 'member'"\s+type="button"\s+class="role-quick-action"[\s\S]*?创建选品/,
@@ -448,7 +455,7 @@ test("M02-03 context selection stays outside the cached shell boundary", async (
     read("apps/web/src/components/NavigationShell.vue"),
   ]);
   assert.match(app, /TenancyChooser v-else-if="selectedView === 'tenancy'"/);
-  assert.match(app, /NavigationShell v-else-if="navigationShell"/);
+  assert.match(app, /<NavigationShell\s+v-else-if="navigationShell \|\| selectedView === 'account'"/);
   assert.match(shell, /<KeepAlive :max="12">/);
   assert.match(chooser, /<RouterLink\b[^>]*:to="safeReturnTo"/);
   assert.doesNotMatch(app, /<KeepAlive[\s\S]*TenancyChooser/);

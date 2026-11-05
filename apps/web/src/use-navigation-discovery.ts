@@ -1,13 +1,16 @@
 import { ref } from "vue";
 import type { NavigationShellKind } from "./navigation-shell-route-state";
 
-export function useNavigationDiscovery(shell: () => NavigationShellKind) {
+export function useNavigationDiscovery(
+  shell: () => NavigationShellKind,
+  adminReady: () => boolean = () => false,
+) {
   const discoveryMode = ref<"search" | null>(null);
   const openDiscovery = (mode: "search") => (discoveryMode.value = mode);
   const closeDiscovery = () => (discoveryMode.value = null);
   const handleDiscoveryShortcut = (event: KeyboardEvent) => {
     if (
-      shell() === "member" &&
+      (shell() === "member" || adminReady()) &&
       (event.metaKey || event.ctrlKey) &&
       event.key.toLowerCase() === "k"
     ) {

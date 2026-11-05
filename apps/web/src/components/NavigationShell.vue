@@ -70,7 +70,7 @@ const state = ref<State>("loading"),
 const { themeOpen, activeTheme, themeNotice, loadThemePreference, chooseTheme } =
   useNavigationShellTheme(request);
 const { discoveryMode, openDiscovery, closeDiscovery, handleDiscoveryShortcut } =
-  useNavigationDiscovery(() => props.shell);
+  useNavigationDiscovery(() => props.shell, () => state.value === "ready");
 const {
   navigationDialog,
   compact: compactNavigation,
@@ -349,34 +349,24 @@ onUnmounted(() => {
       </button>
       <div class="role-workspace-identity">
         <RouterLink
-          v-if="shell !== 'platform_admin'"
-          to="/select-context"
+          v-if="shell !== 'platform_admin' || state === 'ready'"
+          :to="shell === 'platform_admin' ? contextSwitchTarget : '/select-context'"
           class="midou-top-context"
           aria-label="切换组织与工作区"
         >
-          <span class="midou-top-context-label">
+          <span
+            v-if="shell !== 'platform_admin' || (guard?.organization_name && guard?.workspace_name)"
+            class="midou-top-context-label"
+          >
             {{ contextName(guard?.organization_name, "当前组织") }} /
             {{ contextName(guard?.workspace_name, "当前工作区") }}
           </span>
+          <span v-else class="midou-top-context-label">选择组织与工作区</span>
           <AppIcon name="chevron" :size="14" />
         </RouterLink>
         <span v-else>平台工作区</span>
       </div>
       <div class="role-top-actions">
-        <div v-if="shell !== 'member'" class="role-theme-switcher">
-          <button type="button" aria-label="切换界面主题" @click="themeOpen = !themeOpen">
-            <AppIcon name="theme" /> <span>主题</span>
-          </button>
-        </div>
-        <button
-          v-if="shell === 'member'"
-          type="button"
-          aria-label="全局搜索"
-          class="role-quick-action"
-          @click="openDiscovery('search')"
-        >
-          <AppIcon name="search" /> <span>搜索功能、商品、ASIN等</span><kbd>Ctrl K</kbd>
-        </button>
         <RouterLink
           v-if="
             shell === 'platform_admin' &&
@@ -396,14 +386,37 @@ onUnmounted(() => {
           :aria-label="quickActionLabel"
           ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink
         >
+        <button
+          v-if="shell === 'member' || state === 'ready'"
+          type="button"
+          :aria-label="shell === 'member' ? '全局搜索' : '搜索后台功能'"
+          data-navigation-search
+          class="role-quick-action"
+          @click="openDiscovery('search')"
+        >
+          <AppIcon name="search" />
+          <span>{{ shell === 'member' ? '搜索功能、商品、ASIN等' : '搜索后台功能' }}</span>
+          <kbd>Ctrl K</kbd>
+        </button>
         <details ref="navigationHelp" class="midou-navigation-help">
           <summary aria-label="导航帮助"><span aria-hidden="true">?</span></summary>
           <div class="midou-account-menu-panel midou-help-panel">
             <strong>导航帮助</strong>
             <p v-if="shell === 'member'">按 Ctrl 或 ⌘ + K 搜索功能、商品和 ASIN。</p>
+            <p v-else>按 Ctrl 或 ⌘ + K 搜索当前后台功能。</p>
             <p>使用侧栏顶部切换工作台，在个人中心调整外观。</p>
           </div>
         </details>
+        <div v-if="shell !== 'member'" class="role-theme-switcher">
+          <button
+            type="button"
+            aria-label="切换界面主题"
+            :aria-expanded="themeOpen"
+            @click="themeOpen = !themeOpen"
+          >
+            <AppIcon name="theme" /> <span>主题</span>
+          </button>
+        </div>
         <RouterLink v-if="shell === 'member'" to="/notifications" aria-label="通知中心"
           ><AppIcon name="bell"
         /></RouterLink>
@@ -466,9 +479,9 @@ onUnmounted(() => {
           ><AppIcon name="person" :size="18" />个人中心</RouterLink
         >
       </section>
-      <footer>
+      <footer :class="{ 'midou-organization-footer': shell === 'organization_admin' }">
         <RouterLink
-          v-if="shell === 'member'"
+          v-if="shell === 'member' || shell === 'organization_admin'"
           to="/select-context"
           class="commerce-workspace-switch"
           aria-label="侧栏切换工作区"
@@ -477,12 +490,6 @@ onUnmounted(() => {
             {{ contextName(guard?.organization_name, "当前组织") }}</span
           ><AppIcon name="chevron" :size="14"
         /></RouterLink>
-        <RouterLink
-          v-if="shell === 'organization_admin'"
-          :to="memberReturnPath()"
-          aria-label="返回成员工作台"
-          >返回选品工作台</RouterLink
-        >
         <RouterLink
           v-if="shell === 'platform_admin'"
           :to="contextSwitchTarget"
@@ -497,6 +504,13 @@ onUnmounted(() => {
         <button type="button" class="midou-sidebar-help" @click="openNavigationHelp">
           <span aria-hidden="true">?</span>帮助
         </button>
+        <RouterLink
+          v-if="shell === 'organization_admin'"
+          :to="memberReturnPath()"
+          class="midou-organization-return"
+          aria-label="返回成员工作台"
+          ><span aria-hidden="true">←</span>返回选品工作台</RouterLink
+        >
       </footer>
     </aside>
     <dialog
@@ -702,6 +716,7 @@ onUnmounted(() => {
       :api-base-url="apiBaseUrl"
       :organization-name="guard?.organization_name ?? null"
       :workspace-name="guard?.workspace_name ?? null"
+      :navigation-items="items"
       @close="closeDiscovery"
     />
   </main>

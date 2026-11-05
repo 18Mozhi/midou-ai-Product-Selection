@@ -1482,14 +1482,14 @@ html[data-design="commerce"]
   #app
   .role-shell.role-shell--c
   .role-top-actions
-  .role-quick-action[aria-label="全局搜索"] {
+  .role-quick-action[data-navigation-search] {
   width: clamp(180px, 19vw, 320px);
   min-height: 36px;
   justify-content: flex-start;
   color: var(--so-text-muted);
   background: var(--so-panel-soft);
 }
-.role-quick-action[aria-label="全局搜索"] kbd {
+.role-quick-action[data-navigation-search] kbd {
   margin-left: auto;
   white-space: nowrap;
 }
@@ -1552,6 +1552,32 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
 .commerce-workspace-switch > svg:last-child {
   margin-left: auto;
 }
+.commerce-sidebar footer.midou-organization-footer {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding-top: 6px;
+}
+.midou-organization-footer > :is(.commerce-workspace-switch, .midou-organization-return) {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-footer .commerce-workspace-switch {
+  min-height: 42px;
+  margin-bottom: 0;
+  padding-inline: 14px;
+}
+.midou-organization-footer .commerce-workspace-switch > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.midou-organization-footer .commerce-workspace-switch > svg {
+  flex-shrink: 0;
+}
+.commerce-sidebar .midou-organization-footer > .midou-organization-return {
+  border-top: 1px solid var(--so-border);
+  border-radius: 0;
+  padding-inline: 12px;
+}
 @media (max-width: 1100px) {
   html[data-design="commerce"] #app .role-topbar .midou-top-context {
     display: none;
@@ -1566,7 +1592,7 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
     #app
     .role-shell.role-shell--c
     .role-top-actions
-    .role-quick-action[aria-label="全局搜索"] {
+    .role-quick-action[data-navigation-search] {
     width: 44px;
     min-height: 44px;
     justify-content: center;
@@ -1679,7 +1705,7 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
     #app
     .role-shell.role-shell--c
     .role-top-actions
-    .role-quick-action[aria-label="全局搜索"] {
+    .role-quick-action[data-navigation-search] {
     width: clamp(210px, 19.38vw, 324px);
     min-height: 37px;
     font-size: 15px;
@@ -1691,6 +1717,21 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
   html[data-design="commerce"] #app .role-top-actions > a[aria-label="通知中心"] {
     border-color: transparent;
     background: transparent;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c
+    .role-top-actions
+    .role-theme-switcher > button {
+    width: 44px;
+    min-height: 44px;
+    padding: 0;
+    justify-content: center;
+    border-color: transparent;
+    background: transparent;
+  }
+  .role-top-actions .role-theme-switcher > button > span {
+    display: none;
   }
   .midou-navigation-help,
   .midou-account-menu {
