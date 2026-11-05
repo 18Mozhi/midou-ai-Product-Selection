@@ -47,6 +47,12 @@ interface GuardSummary {
 const props = defineProps<{ shell: Shell; apiBaseUrl: string; account?: boolean }>();
 const request = createApiClient(props.apiBaseUrl);
 const route = useRoute();
+const navigationHelp = ref<HTMLDetailsElement | null>(null);
+function openNavigationHelp() {
+  if (!navigationHelp.value) return;
+  navigationHelp.value.open = true;
+  navigationHelp.value.querySelector("summary")?.focus();
+}
 const accountMenu = ref<HTMLDetailsElement | null>(null);
 function closeAccountMenu(restoreFocus = false) {
   if (!accountMenu.value) return;
@@ -271,6 +277,7 @@ watch(
   () => route.fullPath,
   (fullPath) => {
     closeAccountMenu();
+    if (navigationHelp.value) navigationHelp.value.open = false;
     closeDiscovery();
     menuOpen.value = false;
     if (props.shell === "member" && !props.account) rememberMemberRoute(fullPath);
@@ -392,6 +399,14 @@ onUnmounted(() => {
           :aria-label="quickActionLabel"
           ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink
         >
+        <details ref="navigationHelp" class="midou-navigation-help">
+          <summary aria-label="导航帮助"><span aria-hidden="true">?</span></summary>
+          <div class="midou-account-menu-panel midou-help-panel">
+            <strong>导航帮助</strong>
+            <p v-if="shell === 'member'">按 Ctrl 或 ⌘ + K 搜索功能、商品和 ASIN。</p>
+            <p>使用侧栏顶部切换工作台，在个人中心调整外观。</p>
+          </div>
+        </details>
         <RouterLink v-if="shell === 'member'" to="/notifications" aria-label="通知中心"
           ><AppIcon name="bell"
         /></RouterLink>
@@ -461,22 +476,10 @@ onUnmounted(() => {
           class="commerce-workspace-switch"
           aria-label="侧栏切换工作区"
           ><AppIcon name="box" :size="18" /><span
-            >{{ contextName(guard?.workspace_name, "当前工作区")
-            }}<small>{{ contextName(guard?.organization_name, "切换组织与工作区") }}</small></span
-          ></RouterLink
-        >
-        <RouterLink
-          v-if="shell === 'member' && guard?.roles?.includes('organization_admin')"
-          to="/org-admin"
-          aria-label="进入组织管理后台"
-          >组织后台</RouterLink
-        >
-        <RouterLink
-          v-if="shell === 'member' && guard?.platform_roles?.length"
-          to="/platform-admin"
-          aria-label="进入管理后台"
-          >平台后台</RouterLink
-        >
+            >{{ contextName(guard?.workspace_name, "当前工作区") }} ·
+            {{ contextName(guard?.organization_name, "当前组织") }}</span
+          ><AppIcon name="chevron" :size="14"
+        /></RouterLink>
         <RouterLink
           v-if="shell === 'organization_admin'"
           :to="memberReturnPath()"
@@ -492,6 +495,9 @@ onUnmounted(() => {
         <RouterLink to="/me?section=appearance" class="midou-sidebar-settings">
           <AppIcon name="settings" :size="18" />设置
         </RouterLink>
+        <button type="button" class="midou-sidebar-help" @click="openNavigationHelp">
+          <span aria-hidden="true">?</span>帮助
+        </button>
       </footer>
     </aside>
     <dialog

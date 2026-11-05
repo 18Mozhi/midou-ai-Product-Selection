@@ -6,7 +6,7 @@
     ],
     "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts", "tests/e2e/session-logout.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
-    "contract": "Reference-style context, search, account disclosure and sidebar footer; retain one top breadcrumb, mobile drawer, role guards and existing logout/search actions. Frontend-only."
+    "contract": "1672px desktop reference geometry: 61px topbar, 261px sidebar, 44px rows with 3px gaps, aligned search and footer. Functional navigation help and no duplicate desktop administration links; retain context, search and account disclosure; retain one top breadcrumb, mobile drawer, role guards and existing logout/search actions. Frontend-only."
   },
   "selectionReferenceColors20261105": {
     "sourceFiles": [

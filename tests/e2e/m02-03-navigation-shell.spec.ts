@@ -573,7 +573,13 @@ test("M02-03 platform return requires a target context and preserves the member 
   await page.goto("/opportunities?status=watching");
   if ((page.viewportSize()?.width ?? 1000) <= 840)
     await page.getByRole("button", { name: "更多" }).click();
-  await page.getByRole("link", { name: "进入管理后台" }).click();
+  if ((page.viewportSize()?.width ?? 1000) <= 840)
+    await page.getByRole("link", { name: "进入管理后台" }).click();
+  else
+    await page
+      .getByRole("navigation", { name: "工作台类型" })
+      .getByRole("link", { name: "平台", exact: true })
+      .click();
   await expect(page).toHaveURL(/\/platform-admin$/);
   if ((page.viewportSize()?.width ?? 1000) <= 840)
     await page.getByRole("button", { name: "更多" }).click();
@@ -977,4 +983,22 @@ test("session-only account does not bypass a forbidden member destination", asyn
   await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "forbidden");
   expect(reads).toBe(2);
   await expect(page.locator(".account-shell")).toHaveCount(0);
+});
+
+test("desktop reference geometry and navigation help stay usable", async ({ page }) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await allow(page, "member");
+  await page.goto("/home");
+  const sidebar = page.getByRole("complementary", { name: "工作区导航" });
+  await expect(sidebar).toBeVisible();
+  const header = await page.locator(".role-topbar").boundingBox();
+  const bounds = await sidebar.boundingBox();
+  const row = await sidebar.getByRole("link", { name: "选品工作台", exact: true }).boundingBox();
+  expect(header?.height).toBe(61);
+  expect(Math.round(bounds!.width)).toBe(261);
+  expect(row?.y).toBe(153);
+  expect(row?.height).toBe(44);
+  await sidebar.getByRole("button", { name: "帮助", exact: true }).click();
+  await expect(page.locator(".midou-navigation-help")).toHaveAttribute("open", "");
+  await expect(page.getByText("使用侧栏顶部切换工作台，在个人中心调整外观。")).toBeVisible();
 });

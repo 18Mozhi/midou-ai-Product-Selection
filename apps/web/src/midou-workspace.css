@@ -1490,3 +1490,183 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
     max-width: 100%;
   }
 }
+
+/* Desktop reference grid: 1672×941 workbench, with the approved single top breadcrumb. */
+.midou-navigation-help {
+  display: none;
+  position: relative;
+}
+.midou-navigation-help summary,
+.midou-sidebar-help {
+  cursor: pointer;
+}
+.midou-navigation-help summary {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-height: 44px;
+  list-style: none;
+}
+.midou-navigation-help summary::-webkit-details-marker {
+  display: none;
+}
+.midou-navigation-help summary > span,
+.midou-sidebar-help > span {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  font-size: 13px;
+  line-height: 1;
+}
+.midou-help-panel {
+  width: 230px;
+  padding: 12px;
+}
+.midou-help-panel p {
+  margin: 4px 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.commerce-sidebar footer .midou-sidebar-help {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--so-text);
+  font-size: 14px;
+}
+.commerce-sidebar footer .midou-sidebar-help:hover {
+  background: var(--so-panel-soft);
+}
+@media (min-width: 841px) {
+  .midou-navigation-help {
+    display: block;
+  }
+}
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .role-shell.role-shell--c {
+    grid-template: 61px minmax(0, 1fr) / clamp(220px, 15.61vw, 261px) minmax(0, 1fr);
+  }
+  html[data-design="commerce"] #app .role-shell.role-shell--c .role-topbar {
+    height: 61px;
+    min-height: 61px;
+    padding-inline: 28px 25px;
+    gap: 24px;
+  }
+  html[data-design="commerce"] #app .role-shell.role-shell--c .role-brand {
+    gap: 14px;
+    padding-right: 33px;
+    border-right: 1px solid var(--so-border);
+  }
+  html[data-design="commerce"] #app .role-shell.role-shell--c .role-brand > b {
+    font-size: 21px;
+    letter-spacing: 0;
+  }
+  .midou-brand-mark {
+    width: 37px;
+    height: 37px;
+  }
+  html[data-design="commerce"] #app .role-topbar .midou-top-context {
+    border-color: transparent;
+    font-size: 15px;
+  }
+  .midou-top-context > svg,
+  .midou-account-menu summary > svg {
+    transform: rotate(90deg);
+  }
+  html[data-design="commerce"] #app .role-shell.role-shell--c .role-top-actions {
+    gap: 12px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c
+    .role-top-actions
+    .role-quick-action[aria-label="全局搜索"] {
+    width: clamp(210px, 19.38vw, 324px);
+    min-height: 37px;
+    font-size: 15px;
+  }
+  html[data-design="commerce"] #app .role-top-actions > a[aria-label="通知中心"] {
+    border-color: transparent;
+    background: transparent;
+  }
+  .midou-navigation-help,
+  .midou-account-menu {
+    padding-left: 12px;
+    border-left: 1px solid var(--so-border);
+  }
+  .midou-navigation-help {
+    margin-left: 11px;
+  }
+  .midou-account-menu {
+    margin-left: 18px;
+  }
+  .midou-top-avatar {
+    width: 36px;
+    height: 36px;
+  }
+  html[data-design="commerce"] #app .commerce-sidebar {
+    top: 61px;
+    height: calc(100dvh - 61px);
+    padding: 28px 15px 31px;
+    gap: 22px;
+  }
+  html[data-design="commerce"] #app .midou-area-tabs {
+    height: 42px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    padding: 2px;
+  }
+  html[data-design="commerce"] #app .midou-area-tabs :is(a, span) {
+    min-height: 36px;
+    font-size: 16px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="member"]
+    .midou-area-tabs
+    a[aria-current="page"] {
+    color: var(--so-primary);
+    background: var(--so-primary-soft);
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .commerce-sidebar section a {
+    min-height: 44px;
+    padding-inline: 17px;
+    gap: 22px;
+    font-size: 16px;
+    color: var(--so-text);
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-sidebar
+    section
+    a[aria-current="page"] {
+    color: var(--so-primary);
+  }
+  html[data-design="commerce"] #app .midou-member-utility {
+    margin-top: -19px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .commerce-sidebar footer {
+    padding-top: 0;
+    border-top: 0;
+  }
+  html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-switch {
+    min-height: 51px;
+    margin-bottom: 10px;
+    padding-inline: 16px;
+    color: var(--so-text);
+    background: var(--so-panel);
+  }
+  html[data-design="commerce"] #app .commerce-sidebar footer .midou-sidebar-settings {
+    padding-inline: 16px;
+    color: var(--so-text);
+  }
+}
