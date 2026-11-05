@@ -789,6 +789,11 @@ test("midou reference notification layout keeps original workflow and preference
   await page.getByRole("checkbox", { name: "仅未读" }).uncheck();
   await expect(page).not.toHaveURL(/unread=1/);
   await expect(page.locator(".midou-notification-open")).toContainText("查看记录");
+  const viewAction = page.locator(".midou-notification-open");
+  const readAction = page.locator(".notification-mark-read");
+  await expect(viewAction).toHaveCSS("min-height", "44px");
+  const readBorder = await readAction.evaluate((button) => getComputedStyle(button).borderTopColor);
+  await expect(viewAction).not.toHaveCSS("border-top-color", readBorder);
   const wide = (page.viewportSize()?.width ?? 0) >= 1450;
   if (wide) {
     const summary = page.locator(".notification-summary");

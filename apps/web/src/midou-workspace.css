@@ -1007,12 +1007,18 @@ html[data-design="commerce"] #app .notification-list .notification-record {
 html[data-design="commerce"] #app .midou-notification-open {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  min-height: 44px;
   padding: 8px 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--so-primary) 70%, var(--so-border));
+  border-radius: 8px;
+  background: var(--so-panel);
   color: var(--so-primary);
   white-space: nowrap;
+}
+html[data-design="commerce"] #app .notification-record:is(:hover, :focus-visible) .midou-notification-open {
+  background: var(--so-primary-soft);
 }
 @media (max-width: 1000px) {
   html[data-design="commerce"] #app .notification-list .notification-record {
@@ -2362,6 +2368,7 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
   html[data-design="commerce"] #app .midou-notification-open {
     position: relative;
     margin-inline-start: 14px;
+    min-inline-size: 104px;
   }
   html[data-design="commerce"] #app .midou-notification-open::before {
     content: "";
@@ -2476,7 +2483,7 @@ html[data-design="commerce"] #app .notification-row > .notification-mark-read {
   margin-inline-end: 16px;
   padding: 6px 12px;
   border: 1px solid var(--so-border);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--so-panel);
   color: var(--so-text);
   white-space: nowrap;
