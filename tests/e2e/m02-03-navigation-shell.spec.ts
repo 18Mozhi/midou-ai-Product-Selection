@@ -65,6 +65,47 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
   });
 }
 
+test("compact desktop keeps the workspace switch beside the brand across member and admin routes", async ({
+  page,
+}) => {
+  for (const [shell, start, next] of [
+    ["member", "/home", "/opportunities"],
+    ["organization_admin", "/org-admin", "/org-admin/members"],
+    ["platform_admin", "/platform-admin", "/platform-admin/organizations"],
+  ] as const) {
+    await page.setViewportSize({ width: 960, height: 900 });
+    await allow(page, shell, {
+      organization_name: "组织名称".repeat(8),
+      workspace_name: "工作区名称".repeat(8),
+    });
+    await page.goto(start);
+    const top = page.locator(".role-topbar");
+    const context = top.getByRole("link", { name: "切换组织与工作区" });
+    const sidebar = page.locator(".commerce-sidebar");
+    await expect(sidebar).toBeVisible();
+    const before = await context.boundingBox();
+    expect(before).not.toBeNull();
+    await sidebar.locator(`a[href="${next}"]`).click();
+    await expect(page).toHaveURL(new RegExp(`${next}$`));
+    await expect.poll(() => context.boundingBox()).toEqual(before);
+    for (const width of [960, 1100, 1101]) {
+      await page.setViewportSize({ width, height: 900 });
+      await expect(context).toBeVisible();
+      await expect(context).toHaveCSS("min-height", "40px");
+      await expect(context.locator("svg")).toHaveCSS("flex-shrink", "0");
+      const bounds = (await context.boundingBox())!;
+      const brand = (await top.locator(".role-brand").boundingBox())!;
+      const actions = (await top.locator(".role-top-actions").boundingBox())!;
+      expect(bounds.x).toBeGreaterThanOrEqual(brand.x + brand.width);
+      expect(bounds.x + bounds.width).toBeLessThanOrEqual(actions.x);
+      expect(actions.x + actions.width).toBeLessThanOrEqual(width);
+    }
+    await page.setViewportSize({ width: 959, height: 900 });
+    await expect(context).toBeHidden();
+    await expect(sidebar).toBeVisible();
+  }
+});
+
 test("desktop platform sidebar fits grouped navigation and footer at reference size", async ({
   page,
 }) => {

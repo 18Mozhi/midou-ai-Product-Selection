@@ -1656,9 +1656,21 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
   border-radius: 0;
   padding-inline: 12px;
 }
-@media (max-width: 1100px) {
+@media (max-width: 959px) {
   html[data-design="commerce"] #app .role-topbar .midou-top-context {
     display: none;
+  }
+}
+@media (min-width: 960px) and (max-width: 1100px) {
+  html[data-design="commerce"] #app .role-topbar .midou-top-context {
+    display: inline-flex;
+    min-height: 40px;
+    max-width: 190px;
+    gap: 8px;
+    background: var(--so-panel);
+  }
+  .midou-top-context > svg {
+    transform: rotate(90deg);
   }
 }
 @media (max-width: 840px) {
