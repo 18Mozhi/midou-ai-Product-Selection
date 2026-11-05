@@ -1017,6 +1017,22 @@
 }
 
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .trend-market-heading {
+    padding-block-end: 16px;
+  }
+  html[data-design="commerce"] #app .trend-market-heading h2 {
+    font-size: 30px;
+    line-height: 38px;
+  }
+  .trend-market-heading h2 span {
+    margin-inline-start: 16px;
+    font-size: 15px;
+  }
+  html[data-design="commerce"] #app .trend-market-heading > div > p {
+    margin-block-start: 5px;
+    font-size: 16px;
+    line-height: 22px;
+  }
   html[data-design="commerce"] #app .trend-dashboard--review .trend-detail {
     padding-inline: 22px;
   }
