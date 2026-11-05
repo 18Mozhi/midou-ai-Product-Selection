@@ -818,6 +818,8 @@ test("midou reference list defaults closed, opens and closes detail without list
     await expect(list.locator(".topic-copy > strong").last()).toHaveCSS("-webkit-line-clamp", "2");
     if (page.viewportSize()!.width >= 1600 && page.viewportSize()!.height >= 916) {
       const filters = (await page.locator(".trend-filters").boundingBox())!;
+      await expect(page.locator(".trend-filter-field svg:visible")).toHaveCount(4);
+      await expect(page.getByRole("combobox", { name: "市场", exact: true })).toHaveCSS("padding-left", "40px");
       const listBox = (await list.boundingBox())!;
       expect(listBox.y - filters.y - filters.height).toBeCloseTo(21, 0);
       expect(

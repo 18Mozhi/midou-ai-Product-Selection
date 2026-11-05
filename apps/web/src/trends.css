@@ -758,6 +758,33 @@
   display: block;
   min-width: 0;
 }
+.trend-filter-field {
+  display: block;
+  min-width: 0;
+}
+.trend-filter-field > :is(input, select) {
+  width: 100%;
+}
+.trend-filter-field > svg {
+  display: none;
+}
+@media (min-width: 1440px) {
+  .trend-filter-field {
+    position: relative;
+  }
+  .trend-filter-field > svg {
+    position: absolute;
+    display: block;
+    inset-block-start: 50%;
+    inset-inline-start: 12px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--so-text-muted);
+  }
+  #app .trend-dashboard--review .trend-filter-field > :is(input, select) {
+    padding-inline-start: 40px;
+  }
+}
 .trend-filter-search > svg {
   position: absolute;
   inset: 50% auto auto 12px;

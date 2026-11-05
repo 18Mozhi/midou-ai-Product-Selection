@@ -10,6 +10,10 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ],
   ],
   check: [["path", { d: "M20 6 9 17l-5-5" }]],
+  "category-grid": [
+    ["path", { d: "M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z" }],
+  ],
+  activity: [["path", { d: "M2 12h4l3-8 5 16 3-8h5" }]],
   info: [
     ["circle", { cx: "12", cy: "12", r: "10" }],
     ["path", { d: "M12 16v-4m0-4h.01" }],
