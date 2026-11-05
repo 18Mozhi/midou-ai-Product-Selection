@@ -468,6 +468,12 @@
   border: 1px solid var(--trend-line);
   border-radius: 4px;
 }
+.trend-market-actions .trend-view-sources {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
 .trend-dashboard--review .monitoring-readiness {
   margin: 0;
   padding: 16px;

@@ -807,7 +807,13 @@ test("intelligence detail tabs default to overview and support keyboard navigati
   page,
 }) => {
   await ready(page);
+  let detailReads = 0;
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.endsWith(`/trends/${topicId}`)) detailReads++;
+  });
   await page.goto("/trends");
+  const sources = page.getByRole("button", { name: "查看来源", exact: true });
+  await expect(sources).toHaveCount(0);
   await page.locator(".trend-list > button").first().click();
   const tabs = page.getByRole("tablist", { name: "情报详情视图" });
   const overview = tabs.getByRole("tab", { name: "情报概览" });
@@ -824,4 +830,9 @@ test("intelligence detail tabs default to overview and support keyboard navigati
   await expect(page.getByRole("tabpanel", { name: "关联选品" })).toContainText("不可查看关联选品");
   await page.keyboard.press("Home");
   await expect(overview).toBeFocused();
+  const readsBeforeShortcut = detailReads;
+  await sources.click();
+  await expect(tabs.getByRole("tab", { name: "来源证据" })).toBeFocused();
+  await expect(page.getByRole("heading", { name: "主要证据" })).toBeVisible();
+  expect(detailReads).toBe(readsBeforeShortcut);
 });

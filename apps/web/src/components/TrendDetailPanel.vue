@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, useId, watch } from "vue";
+import { nextTick, ref, useId, watch } from "vue";
 import { statusLabel } from "../ui/status-labels";
 import AppIcon from "./AppIcon.vue";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -20,6 +20,13 @@ const tabs = [
   { key: "related", label: "关联选品" },
 ] as const;
 const activeTab = ref<(typeof tabs)[number]["key"]>("overview");
+const tabList = ref<HTMLElement | null>(null);
+async function showSources() {
+  activeTab.value = "evidence";
+  await nextTick();
+  tabList.value?.querySelector<HTMLElement>('button[aria-selected="true"]')?.focus();
+}
+defineExpose({ showSources });
 const tabId = useId();
 const panelId = (key: string) => tabId + (key === "evidence" ? "-evidence" : "-related");
 watch(
@@ -104,7 +111,7 @@ const freshness = (value: string) =>
     </dl>
     <p v-else>未取得情报详情，可关闭后重新选择该主题。</p>
     <template v-if="detail && busy !== 'detail'">
-      <div class="trend-detail-tabs" role="tablist" aria-label="情报详情视图">
+      <div ref="tabList" class="trend-detail-tabs" role="tablist" aria-label="情报详情视图">
         <button
           v-for="(tab, index) in tabs"
           :id="tabId + '-' + tab.key"

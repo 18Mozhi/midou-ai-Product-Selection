@@ -12,6 +12,7 @@ import {
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import ResearchThumbnail from "./ResearchThumbnail.vue";
+import AppIcon from "./AppIcon.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import TrendDetailPanel from "./TrendDetailPanel.vue";
 import TrendRelatedProducts from "./TrendRelatedProducts.vue";
@@ -39,6 +40,7 @@ const props = defineProps<{
   state = ref<State>("loading"),
   topics = ref<Topic[]>([]),
   selected = ref<Detail | null>(null),
+  detailPanel = ref<InstanceType<typeof TrendDetailPanel> | null>(null),
   mobileDetailOpen = ref(typeof route.query.topic === "string"),
   requestId = ref(""),
   message = ref(""),
@@ -391,6 +393,15 @@ onBeforeUnmount(() => {
       </div>
       <div class="trend-market-actions">
         <button
+          v-if="mobileDetailOpen && selected && busy !== 'detail'"
+          type="button"
+          class="so-action-secondary trend-view-sources"
+          @click="detailPanel?.showSources()"
+        >
+          <AppIcon name="list" :size="17" />
+          查看来源
+        </button>
+        <button
           type="button"
           class="so-action-secondary"
           :disabled="state === 'loading'"
@@ -473,6 +484,7 @@ onBeforeUnmount(() => {
       </section>
       <TrendDetailPanel
         v-if="mobileDetailOpen"
+        ref="detailPanel"
         :detail="selected"
         :busy="busy"
         :can-read-related="capabilities.includes('opportunity:read')"

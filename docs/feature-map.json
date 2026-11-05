@@ -1,4 +1,10 @@
 {
+  "referenceTrendSourceShortcut": {
+    "sourceFiles": ["apps/web/src/components/TrendDashboard.vue", "apps/web/src/components/TrendDetailPanel.vue", "apps/web/src/trends.css"],
+    "testFiles": ["tests/e2e/m04-01-trends.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "An open topic exposes a source shortcut that selects and focuses the existing evidence tab without new requests or default selection."
+  },
   "referenceProfileAvatar": {
     "sourceFiles": ["apps/web/src/components/PersonalCenter.vue", "apps/web/src/components/personal-center/PersonalProfilePanel.vue", "apps/web/src/components/personal-center/ProfileAvatar.vue"],
     "testFiles": ["tests/e2e/ui-phase2-account-contracts.spec.ts"],
