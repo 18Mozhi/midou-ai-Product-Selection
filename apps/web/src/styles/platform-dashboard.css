@@ -734,6 +734,24 @@
   #app .platform-dashboard--review .platform-source-health table[data-table-density="standard"] :is(th, td) {
     padding-block: 8px;
   }
+  #app .platform-dashboard--review .platform-source-health {
+    padding-inline: 22px 18px;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(1) {
+    width: 43%;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(2) {
+    width: 16%;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(3) {
+    width: 18%;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) :is(th, td) {
+    padding-inline: 14px;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) td:last-child {
+    white-space: nowrap;
+  }
   #app .platform-dashboard--review .platform-system-checks {
     padding-block: 12px;
   }

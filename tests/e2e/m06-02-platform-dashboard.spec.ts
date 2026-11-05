@@ -1343,6 +1343,16 @@ test("platform cockpit gives live operations the full workspace and accessible a
       ),
     ).toBeLessThan(2);
     await expect(alerts).toHaveCSS("overflow-y", "auto");
+    const timestamps = page.locator(".platform-source-health tbody td:last-child");
+    expect(await timestamps.count()).toBe(8);
+    expect(await timestamps.evaluateAll((cells) =>
+      cells.every((cell) => {
+        const range = document.createRange();
+        range.selectNodeContents(cell);
+        const text = range.getBoundingClientRect();
+        return range.getClientRects().length === 1 && text.right <= cell.getBoundingClientRect().right;
+      }),
+    )).toBe(true);
     await alerts.focus();
     await alerts.press("End");
     await expect.poll(() => alerts.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
@@ -1380,7 +1390,7 @@ test("platform overview has one create organization action in its page header", 
 
 test("platform reference first fold fits system checks and source health without hiding storage data", async ({
   page,
-}) => {
+}, testInfo) => {
   await page.setViewportSize({ width: 1672, height: 941 });
   await nav(page);
   await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
@@ -1412,6 +1422,15 @@ test("platform reference first fold fits system checks and source health without
     expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(925);
   }
   const cell = sources.locator("tbody td").first();
+  const sourceTable = sources.locator("table");
+  await expect(sourceTable).toHaveCSS("table-layout", "auto");
+  const sourceHeaders = await sourceTable.locator("th").evaluateAll((headers) =>
+    headers.map((header) => header.getBoundingClientRect().left + parseFloat(getComputedStyle(header).paddingLeft)),
+  );
+  expect(Math.abs(sourceHeaders[0] - 1008)).toBeLessThanOrEqual(6);
+  expect(sourceHeaders[1] - sourceHeaders[0]).toBeGreaterThanOrEqual(220);
+  expect(sourceHeaders[2] - sourceHeaders[1]).toBeGreaterThanOrEqual(75);
+  await expect(sourceTable.locator("tbody td:last-child").first()).toHaveCSS("white-space", "nowrap");
   await expect(sources.getByRole("heading", { name: "来源健康" })).toHaveCSS("font-size", "18px");
   await expect(signals.getByRole("heading", { name: "系统检查" })).toHaveCSS("font-size", "18px");
   await expect(cell).toHaveCSS("font-variant-numeric", "tabular-nums");
@@ -1438,6 +1457,7 @@ test("platform reference first fold fits system checks and source health without
   await expect(cell).toHaveCSS("padding-top", "8px");
   const storage = page.locator(".platform-storage-details");
   await expect(storage.locator("dl")).toBeHidden();
+  await page.screenshot({ path: testInfo.outputPath("platform-reference.png") });
   await storage.getByText("存储统计", { exact: true }).click();
   await expect(storage.locator("dl")).toContainText("活动文件体积");
   await expect(storage.locator("dl")).toContainText("窗内文件增长");
