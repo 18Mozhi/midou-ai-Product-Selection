@@ -815,6 +815,10 @@ test("midou reference notification layout keeps original workflow and preference
   await expect(viewAction).not.toHaveCSS("border-top-color", readBorder);
   const wide = (page.viewportSize()?.width ?? 0) >= 1450;
   if (wide) {
+    const [viewBox, readBox] = await Promise.all([viewAction.boundingBox(), readAction.boundingBox()]);
+    expect([viewBox!.width, readBox!.width]).toEqual([104, 104]);
+    expect(Math.abs(viewBox!.y - readBox!.y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(readBox!.x - viewBox!.x - viewBox!.width - 14)).toBeLessThanOrEqual(2);
     const header = page.locator(".notification-center > header");
     const preferenceAction = (await header.getByRole("button", { name: "通知偏好" }).boundingBox())!;
     const markAll = (await header.getByRole("button", { name: "全部已读" }).boundingBox())!;

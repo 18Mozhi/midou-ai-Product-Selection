@@ -2526,6 +2526,9 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
   html[data-design="commerce"] #app .notification-list .notification-record {
     padding-inline-start: 52px;
   }
+  html[data-design="commerce"] #app .notification-row:has(> .notification-mark-read) > .notification-record {
+    padding-inline-end: 14px;
+  }
   html[data-design="commerce"] #app .notification-list .notification-record.unread::before {
     inset-inline-start: 21px;
   }
@@ -2533,6 +2536,11 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
     position: relative;
     margin-inline-start: 14px;
     min-inline-size: 104px;
+    padding-inline: 8px;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-row > .notification-mark-read {
+    min-inline-size: 104px;
+    margin-inline-end: 18px;
   }
   html[data-design="commerce"] #app .midou-notification-open::before {
     content: "";
