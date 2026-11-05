@@ -1546,19 +1546,20 @@ html[data-design="commerce"] #app .midou-member-utility {
   margin-top: -14px;
 }
 html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-switch {
+  min-width: 0;
   border: 1px solid var(--so-border);
   background: var(--so-panel-soft);
 }
 .commerce-workspace-switch > svg:last-child {
   margin-left: auto;
 }
-.midou-platform-workspace-switch > span {
+.commerce-workspace-switch > span {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.midou-platform-workspace-switch > svg {
+.commerce-workspace-switch > svg {
   flex-shrink: 0;
 }
 .commerce-sidebar footer.midou-organization-footer {
@@ -1573,14 +1574,6 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
   min-height: 42px;
   margin-bottom: 0;
   padding-inline: 14px;
-}
-.midou-organization-footer .commerce-workspace-switch > span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.midou-organization-footer .commerce-workspace-switch > svg {
-  flex-shrink: 0;
 }
 .commerce-sidebar .midou-organization-footer > .midou-organization-return {
   border-top: 1px solid var(--so-border);

@@ -177,13 +177,17 @@ const summary = (shell: "member" | "organization_admin" | "platform_admin") => (
   guard_reason: `navigation_${shell}_allowed`,
 });
 
-async function allow(page: any, shell: "member" | "organization_admin" | "platform_admin") {
+async function allow(
+  page: any,
+  shell: "member" | "organization_admin" | "platform_admin",
+  names?: { organization_name: string; workspace_name: string },
+) {
   await page.route("**/api/v1/me/navigation?**", (route: any) =>
     route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
-        data: summary(shell),
+        data: { ...summary(shell), ...names },
         request_id: "m02-03-e2e-request",
         trace_id: "m02-03-e2e-trace",
       }),
@@ -1077,7 +1081,10 @@ test("session-only account does not bypass a forbidden member destination", asyn
 
 test("desktop reference geometry and navigation help stay usable", async ({ page }) => {
   await page.setViewportSize({ width: 1672, height: 941 });
-  await allow(page, "member");
+  await allow(page, "member", {
+    organization_name: "组织名称".repeat(8),
+    workspace_name: "工作区名称".repeat(8),
+  });
   await page.goto("/home");
   const sidebar = page.getByRole("complementary", { name: "工作区导航" });
   await expect(sidebar).toBeVisible();
@@ -1095,6 +1102,14 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
     "rgba(0, 0, 0, 0)",
   );
   const contextBounds = await context.boundingBox();
+  const workspace = sidebar.getByRole("link", { name: "侧栏切换工作区" });
+  const workspaceLabel = workspace.locator("span");
+  await expect(workspaceLabel).toHaveCSS("text-overflow", "ellipsis");
+  expect(await workspaceLabel.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
+  const arrow = (await workspace.locator("svg").last().boundingBox())!;
+  const workspaceBounds = (await workspace.boundingBox())!;
+  expect(arrow.width).toBe(14);
+  expect(arrow.x + arrow.width).toBeLessThan(workspaceBounds.x + workspaceBounds.width);
   const topHelp = page.getByLabel("导航帮助");
   await expect(topHelp.locator("svg")).toHaveAttribute("width", "22");
   await expect(topHelp).toHaveCSS("min-height", "44px");

@@ -200,6 +200,12 @@ const pageFolio = computed(() =>
 );
 const contextName = (value: string | null | undefined, fallback: string) =>
   value?.trim() || fallback;
+const workspaceChipLabel = computed(() =>
+  props.shell === "platform_admin" &&
+  (!guard.value?.organization_name?.trim() || !guard.value?.workspace_name?.trim())
+    ? "选择组织与工作区"
+    : `${contextName(guard.value?.workspace_name, "当前工作区")} · ${contextName(guard.value?.organization_name, "当前组织")}`,
+);
 const stateCopy = computed(
   () =>
     (
@@ -485,11 +491,11 @@ onUnmounted(() => {
           to="/select-context"
           class="commerce-workspace-switch"
           aria-label="侧栏切换工作区"
-          ><AppIcon name="box" :size="18" /><span
-            >{{ contextName(guard?.workspace_name, "当前工作区") }} ·
-            {{ contextName(guard?.organization_name, "当前组织") }}</span
-          ><AppIcon name="chevron" :size="14"
-        /></RouterLink>
+        >
+          <AppIcon name="layers" :size="18" />
+          <span :title="workspaceChipLabel">{{ workspaceChipLabel }}</span>
+          <AppIcon name="chevron" :size="14" />
+        </RouterLink>
         <RouterLink
           v-if="shell === 'platform_admin'"
           :to="contextSwitchTarget"
@@ -497,10 +503,7 @@ onUnmounted(() => {
           aria-label="选择组织与工作区后进入用户工作台"
         >
           <AppIcon name="layers" :size="18" />
-          <span v-if="guard?.organization_name && guard?.workspace_name">
-            {{ guard.workspace_name }} · {{ guard.organization_name }}
-          </span>
-          <span v-else>选择组织与工作区</span>
+          <span :title="workspaceChipLabel">{{ workspaceChipLabel }}</span>
           <AppIcon name="chevron" :size="14" />
         </RouterLink>
         <RouterLink v-slot="{ href, navigate }" to="/me?section=appearance" custom>
