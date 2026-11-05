@@ -1700,6 +1700,13 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   await expect(progress).toContainText("采集失败");
   await expect(progress).toContainText("1 / 1 个来源已结束");
   if (wide) {
+    const actions = page.locator(".sourcing-heading-actions");
+    const rules = actions.getByRole("link", { name: "费用与利润规则" });
+    const refresh = actions.getByRole("button", { name: "刷新记录", exact: true });
+    await expect(rules).toHaveAttribute("href", /^\/sourcing\/cost-rules\?/);
+    const [rulesBox, refreshBox] = await Promise.all([rules.boundingBox(), refresh.boundingBox()]);
+    expect([rulesBox!.width, refreshBox!.width]).toEqual([176, 132]);
+    expect(refreshBox!.x - rulesBox!.x - rulesBox!.width).toBe(16);
     await expect(page.locator(".sourcing-detail > header h3")).toHaveCSS("font-size", "22px");
     await expect(progress.locator("dt").first()).toHaveCSS("font-size", "14px");
     await expect(progress.locator("dd").first()).toHaveCSS("font-size", "16px");

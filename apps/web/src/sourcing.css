@@ -930,6 +930,21 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   border-color: var(--so-primary-border);
   background: var(--so-panel);
 }
+@media (min-width: 1440px) {
+  #app .sourcing-workspace--review .sourcing-heading-actions {
+    gap: 16px;
+  }
+  #app .sourcing-workspace--review .sourcing-heading-actions > :is(a, button) {
+    justify-content: center;
+    font-size: 15px;
+  }
+  #app .sourcing-workspace--review .sourcing-heading-actions > a {
+    min-inline-size: 176px;
+  }
+  #app .sourcing-workspace--review .sourcing-heading-actions > button {
+    min-inline-size: 132px;
+  }
+}
 .sourcing-detail > header > div:last-child {
   flex: 1 1 0;
   min-width: 0;
