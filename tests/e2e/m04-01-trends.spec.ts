@@ -826,6 +826,8 @@ test("midou reference list defaults closed, opens and closes detail without list
       await expect(page.getByRole("combobox", { name: "市场", exact: true })).toHaveCSS("padding-left", "40px");
       const listBox = (await list.boundingBox())!;
       expect(listBox.y - filters.y - filters.height).toBeCloseTo(21, 0);
+      await expect(list.locator(".topic-copy > strong").first()).toHaveCSS("font-size", "16px");
+      await expect(list.locator(".trend-topic-row").first()).toHaveCSS("padding-top", "7px");
       expect(
         await list.evaluate(
           (el) =>

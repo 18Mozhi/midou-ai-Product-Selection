@@ -1017,6 +1017,13 @@
 }
 
 @media (min-width: 1440px) {
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .topic-copy > strong {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row {
+    padding-block: 7px;
+  }
   html[data-design="commerce"] #app .trend-market-heading {
     padding-block-end: 16px;
   }
