@@ -266,6 +266,19 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
   const wide = page.viewportSize()!.width >= 1101;
   if (wide) await page.setViewportSize({ width: 1717, height: 916 });
   await accountSession(page);
+  await page.route("**/api/v1/me/navigation?shell=member", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "member",
+        organization_name: "组织夹具",
+        workspace_name: "默认工作区",
+        roles: ["member"],
+        capabilities: [],
+        platform_roles: [],
+        platform_capabilities: [],
+      }),
+    }),
+  );
   const savedUrl = "https://avatar.example.test/saved.svg";
   let draftReads = 0;
   await page.route("https://avatar.example.test/**", (route) => {
@@ -287,6 +300,9 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
   await page.getByLabel("头像 HTTPS 地址").fill("https://avatar.example.test/draft.svg");
   await expect(preview).toHaveAttribute("src", savedUrl);
   await expect(page.locator(".midou-profile-avatar img")).toHaveAttribute("src", savedUrl);
+  const context = page.locator(".midou-profile-context");
+  await expect(context).toContainText("组织夹具");
+  await expect(context).toContainText("默认工作区");
   let writes = 0;
   page.on("request", (request) => {
     if (request.method() === "PATCH" && new URL(request.url()).pathname.endsWith("/me/profile"))
@@ -301,6 +317,9 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
     const form = page.locator(".midou-profile-grid .p11-form");
     const avatar = form.locator(".p11-avatar-frame");
     const tabs = page.locator(".account-content-only .p11-directory");
+    const heading = page.getByRole("heading", { name: "个人中心", level: 1 });
+    await expect(heading).toHaveCSS("margin-top", "16px");
+    await expect(tabs).toHaveCSS("margin-top", "29px");
     await expect(tabs).toHaveCSS("column-gap", "19px");
     await expect(tabs.locator("a[aria-current='page'] > b")).toHaveCSS("font-size", "17px");
     await expect(form).toHaveCSS("row-gap", "18px");
