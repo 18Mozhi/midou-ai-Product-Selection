@@ -1895,6 +1895,12 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
   html[data-design="commerce"] #app .home-command-bar nav {
     margin-block-start: 1px;
   }
+  html[data-design="commerce"] #app .home-command-bar .home-live-status > span {
+    min-inline-size: 13ch;
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
   html[data-design="commerce"] #app .home-command-bar :is(a, button) {
     min-height: 40px;
   }

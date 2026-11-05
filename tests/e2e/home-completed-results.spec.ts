@@ -191,7 +191,9 @@ test("home polling does not repeat unchanged product queries; manual refresh and
   await page.clock.runFor(5100);
   await expect.poll(() => h.counters.home).toBe(2);
   expect(h.counters.completed).toBe(1);
-  await page.getByRole("button", { name: "刷新", exact: true }).click();
+  const refresh = page.getByRole("button", { name: "刷新", exact: true });
+  await expect(refresh.locator("svg")).toBeVisible();
+  await refresh.click();
   await expect.poll(() => h.counters.completed).toBe(2);
   h.setSummary(summary(2));
   await page.clock.runFor(5100);

@@ -210,7 +210,7 @@ onBeforeUnmount(deactivate);
                   :disabled="refreshing"
                   @click="load(true)"
                 >
-                  刷新
+                  <AppIcon name="refresh" :size="17" />刷新
                 </button>
               </div>
               <RouterLink class="home-secondary-action so-action-secondary" to="/trends"
