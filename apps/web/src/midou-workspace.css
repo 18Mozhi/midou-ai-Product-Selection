@@ -2387,6 +2387,43 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   }
 }
 
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"] > .catalogue-refresh {
+    min-inline-size: 128px;
+    justify-content: center;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"] > .catalogue-refresh {
+    min-inline-size: 134px;
+    justify-content: center;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls .catalogue-search {
+    max-inline-size: 552px;
+    gap: 10px;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls .catalogue-search > button {
+    min-inline-size: 69px;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls .catalogue-market-filter > input {
+    inline-size: 138px;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls > nav {
+    padding-inline-start: 6px;
+    column-gap: 17px;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls .catalogue-querybar {
+    column-gap: 22px;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls .catalogue-market-filter {
+    gap: 13px;
+  }
+}
+
 /* Reference notification inbox: compact filter controls and separate card rhythm. */
 .midou-notification-status-controls,
 .midou-notification-status,

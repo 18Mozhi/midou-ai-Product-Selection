@@ -364,6 +364,7 @@ test("candidate page buttons navigate server results without resetting the curre
     "page",
   );
   await expect(pagination).toContainText("共 324 条");
+  await expect(pagination.getByText("每页 20 条", { exact: true })).toBeVisible();
   const previous = pagination.getByRole("button", { name: "上一页" });
   await expect(previous).toBeDisabled();
   await expect(previous).toHaveCSS("width", "44px");
@@ -385,6 +386,7 @@ test("candidate page buttons navigate server results without resetting the curre
   await expect(pagination.getByRole("button", { name: "下一页" })).toBeDisabled();
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(pagination.getByText("第 17 / 17 页")).toBeVisible();
+  await expect(pagination.getByText("每页 20 条", { exact: true })).toBeHidden();
   await expect(previous.getByText("上一页")).toBeVisible();
   await expect(previous.locator("svg")).toBeHidden();
 });

@@ -538,10 +538,12 @@ test("catalogue empty workflow leads to the real candidate list without writes",
   const diagnostics = empty.locator("details");
   await expect(diagnostics).not.toHaveAttribute("open");
   await diagnostics.getByText("诊断信息", { exact: true }).click();
+  await expect(page.locator(".catalogue-refresh")).toHaveCSS("white-space", "nowrap");
   await expect(diagnostics).toHaveAttribute("open", "");
   await diagnostics.getByText("诊断信息", { exact: true }).click();
   if (wide) {
     await expect(empty.getByRole("button", { name: "查看候选商品" })).toHaveCSS("min-width", "193px");
+    await expect(page.locator(".catalogue-refresh")).toHaveCSS("min-inline-size", "128px");
     const search = page.getByRole("search", { name: "搜索商品" });
     const searchInput = (await search.getByRole("textbox", { name: "商品名称" }).boundingBox())!;
     expect(Math.abs(searchInput.width - 392)).toBeLessThanOrEqual(4);
@@ -565,6 +567,22 @@ test("catalogue empty workflow leads to the real candidate list without writes",
   await expect(page.locator(".product-catalog")).toContainText("候选商品视觉夹具");
   await expect(page.locator(".catalog-data-note")).toContainText("不等于精确销量");
   if (wide) {
+    await expect(page.locator(".catalogue-refresh")).toHaveCSS("min-inline-size", "134px");
+    const search = page.getByRole("search", { name: "搜索商品" });
+    const [query, submit, market] = await Promise.all([
+      search.getByRole("textbox", { name: "商品名称" }).boundingBox(),
+      search.getByRole("button", { name: "搜索", exact: true }).boundingBox(),
+      page.locator(".catalogue-market-filter > input").boundingBox(),
+    ]);
+    expect([query!.width, submit!.width, market!.width]).toEqual([473, 69, 138]);
+    expect(submit!.x - query!.x - query!.width).toBe(10);
+    expect(Math.abs(market!.x - 918)).toBeLessThanOrEqual(4);
+    const tabs = page.locator(".catalogue-controls > nav");
+    await expect(tabs).toHaveCSS("column-gap", "17px");
+    await expect(tabs).toHaveCSS("padding-inline-start", "6px");
+    await expect(tabs.getByRole("button", { name: /^候选商品/ })).toHaveAttribute(
+      "aria-current", "page",
+    );
     const [heading, filters, results] = await Promise.all(
       [".catalogue-page-heading", ".catalogue-controls", ".product-catalog"].map((selector) =>
         page.locator(selector).boundingBox(),
@@ -576,6 +594,20 @@ test("catalogue empty workflow leads to the real candidate list without writes",
     expect(Math.abs(filters!.y - 210)).toBeLessThanOrEqual(6);
     expect(Math.abs(results!.y - 361)).toBeLessThanOrEqual(3);
     const table = page.getByRole("table", { name: "选品商品列表" });
+    await expect(table.getByRole("columnheader", { name: "商品信息" })).toHaveCSS("font-size", "14px");
+    const productName = table.getByRole("link", { name: "候选商品视觉夹具", exact: true });
+    await expect(productName).toHaveCSS("font-size", "14px");
+    await expect(productName).toHaveCSS("font-weight", "600");
+    await expect(productName).toHaveCSS("-webkit-line-clamp", "2");
+    const actionCell = table.locator(".selection-product-action-cell").first();
+    const progressLink = actionCell.getByRole("link", { name: /^查看进度/ });
+    await expect(actionCell).toHaveCSS("vertical-align", "middle");
+    await expect(progressLink).toHaveCSS("font-size", "14px");
+    await expect(progressLink).toHaveCSS("font-weight", "600");
+    await expect(progressLink).toHaveCSS("min-height", "44px");
+    await expect(progressLink).toHaveAttribute("href", /^\/opportunities\/[^?]+\?from=/);
+    await expect(actionCell.locator("time")).toBeVisible();
+    await expect(table.locator(".selection-product-name small").first()).toHaveCSS("font-size", "13px");
     const [price, progress, action] = await Promise.all(
       ["Amazon 售价", "分析进度", "操作"].map((name) =>
         table.getByRole("columnheader", { name, exact: true }).evaluate(

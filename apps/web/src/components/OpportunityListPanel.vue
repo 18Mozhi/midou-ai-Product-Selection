@@ -74,7 +74,8 @@ const props = defineProps<{
     reset: [];
   }>(),
   route = useRoute(),
-  pageCount = computed(() => Math.max(1, Math.ceil(props.total / 20))),
+  candidatePageSize = 20,
+  pageCount = computed(() => Math.max(1, Math.ceil(props.total / candidatePageSize))),
   numberedPages = computed(() => {
     const last = pageCount.value;
     const start = Math.max(1, Math.min(props.page - 2, last - 4));
@@ -429,7 +430,7 @@ watch(imageFailureResetSources, (items) => {
           viewCopy.description
         }}</small>
       </div>
-      <span class="catalogue-sort-note">最近更新优先 · 每页 20 个</span>
+      <span class="catalogue-sort-note">最近更新优先 · 每页 {{ candidatePageSize }} 个</span>
     </header>
     <p class="catalog-data-note">
       <AppIcon v-if="selectionView === 'rule_candidates'" name="info" :size="18" />
@@ -457,6 +458,9 @@ watch(imageFailureResetSources, (items) => {
       <span v-if="selectionView === 'rule_candidates'" class="candidate-page-total"
         >共 {{ total }} 条</span
       >
+      <span v-if="selectionView === 'rule_candidates'" class="candidate-page-size">
+        每页 {{ candidatePageSize }} 条
+      </span>
       <button
         type="button"
         class="candidate-page-step"
@@ -522,6 +526,8 @@ watch(imageFailureResetSources, (items) => {
 .catalogue-page-heading > .catalogue-refresh {
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
   gap: 8px;
   min-height: 44px;
   padding-inline: 14px;
@@ -551,6 +557,12 @@ watch(imageFailureResetSources, (items) => {
 .candidate-page-position {
   display: none;
 }
+.candidate-page-size {
+  margin-inline: 14px 6px;
+  color: var(--so-text);
+  font-weight: 500;
+  white-space: nowrap;
+}
 .candidate-page-arrow {
   display: none;
 }
@@ -576,6 +588,7 @@ watch(imageFailureResetSources, (items) => {
 }
 @media (max-width: 1100px) {
   .candidate-page-total,
+  .candidate-page-size,
   .candidate-page-numbers {
     display: none;
   }

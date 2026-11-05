@@ -374,6 +374,24 @@ tbody tr:hover {
   .selection-candidate-list .action-column {
     width: 104px;
   }
+  .selection-candidate-list th {
+    font-size: 14px;
+  }
+  .selection-candidate-list .selection-product-name strong {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .selection-candidate-list .selection-product-name small {
+    font-size: 13px;
+  }
+  .selection-candidate-list .selection-product-action-cell {
+    vertical-align: middle;
+  }
+  .selection-candidate-list .selection-product-action-cell a {
+    gap: 4px;
+    font-size: 14px;
+    font-weight: 600;
+  }
 }
 .selection-candidate-list th {
   height: 37px;
