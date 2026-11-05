@@ -2422,6 +2422,14 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"] > .catalogue-refresh {
     min-inline-size: 128px;
     justify-content: center;
+    background: var(--so-panel);
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"] > .catalogue-refresh:hover {
+    background: var(--so-panel-soft);
+  }
+  .midou-completed-illustration {
+    color: color-mix(in srgb, var(--so-text-muted) 68%, var(--so-panel));
+    background: color-mix(in srgb, var(--so-panel-soft) 58%, var(--so-panel));
   }
   html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"] > .catalogue-refresh {
     min-inline-size: 134px;
