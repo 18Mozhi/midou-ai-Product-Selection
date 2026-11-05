@@ -304,6 +304,13 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
     await expect(tabs).toHaveCSS("column-gap", "19px");
     await expect(tabs.locator("a[aria-current='page'] > b")).toHaveCSS("font-size", "17px");
     await expect(form).toHaveCSS("row-gap", "18px");
+    const footer = form.locator(".p11-form-footer");
+    const save = (await footer.getByRole("button", { name: "保存资料" }).boundingBox())!;
+    const cancel = (await footer.getByRole("button", { name: "取消", exact: true }).boundingBox())!;
+    expect(save.width).toBe(126);
+    expect(cancel.width).toBe(94);
+    expect(cancel.x - save.x - save.width).toBe(20);
+    expect(cancel.y).toBe(save.y);
     await expect(avatar).toHaveCSS("border-radius", "8px");
     const [input, frame] = await Promise.all([
       page.getByLabel("头像 HTTPS 地址").boundingBox(),

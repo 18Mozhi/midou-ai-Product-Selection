@@ -2856,6 +2856,13 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
   html[data-design="commerce"] #app .midou-profile-grid .p11-form-footer {
     justify-content: flex-start;
     padding-top: 16px;
+    gap: 20px;
+  }
+  html[data-design="commerce"] #app .midou-profile-grid .p11-form-footer > button[type="submit"] {
+    min-inline-size: 126px;
+  }
+  html[data-design="commerce"] #app .midou-profile-grid .p11-form-footer > button[type="button"] {
+    min-inline-size: 94px;
   }
 }
 
