@@ -286,6 +286,9 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
   await expect(preview).toHaveAttribute("src", savedUrl);
   await expect(page.locator(".midou-profile-avatar img")).toHaveAttribute("src", savedUrl);
   const security = page.locator(".midou-profile-security");
+  const email = page.getByLabel("邮箱", { exact: true });
+  await expect(email).toBeDisabled();
+  await expect(email).toHaveAccessibleDescription(/邮箱暂不支持修改/);
   await expect(security.locator("dt > svg[aria-hidden='true']")).toHaveCount(2);
   await expect(page.locator('.midou-profile-email [data-verified="true"] > svg')).toHaveCount(1);
   await expect(security.locator('[data-verified="false"] > svg')).toHaveCount(0);

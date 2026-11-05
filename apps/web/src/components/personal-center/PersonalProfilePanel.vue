@@ -29,18 +29,19 @@ function update(field: ProfileField, event: Event) {
     <header class="p11-panel-heading">
       <p>基本资料</p>
       <h3>基本资料</h3>
-      <span>邮箱暂不支持修改。</span>
     </header>
 
     <div class="p11-field-group">
       <label for="p11-email">邮箱</label>
       <div class="p11-field-value">
-        <input id="p11-email" :value="props.profile.email" disabled />
-        <small
-          class="midou-profile-form-verification"
-          :data-verified="Boolean(props.profile.email_verified_at)"
-          >{{ props.profile.email_verified_at ? "已验证" : "尚未验证" }}</small
-        >
+        <input id="p11-email" :value="props.profile.email" aria-describedby="p11-email-note" disabled />
+        <small id="p11-email-note" class="p11-email-note">
+          <span
+            class="midou-profile-form-verification"
+            :data-verified="Boolean(props.profile.email_verified_at)"
+          >{{ props.profile.email_verified_at ? "已验证" : "尚未验证" }}</span>
+          <span>邮箱暂不支持修改。</span>
+        </small>
       </div>
     </div>
 
@@ -176,6 +177,11 @@ function update(field: ProfileField, event: Event) {
 </template>
 
 <style scoped>
+.p11-email-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+}
 .p11-avatar-field {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 44px;
