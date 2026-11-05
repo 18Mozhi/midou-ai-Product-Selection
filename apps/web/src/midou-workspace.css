@@ -1759,6 +1759,9 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     padding-inline: 28px 25px;
     gap: 24px;
   }
+  html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="member"] .role-topbar {
+    padding-inline-end: 20px;
+  }
   html[data-design="commerce"] #app .role-shell.role-shell--c .role-brand {
     gap: 14px;
     min-width: 211px;

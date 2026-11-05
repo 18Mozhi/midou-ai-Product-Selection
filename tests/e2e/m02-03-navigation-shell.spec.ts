@@ -1213,6 +1213,8 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
     segments.boundingBox(),
   ]);
   expect(searchBounds!.height).toBe(44);
+  expect(Math.abs(searchBounds!.x - 1089)).toBeLessThanOrEqual(3);
+  expect(Math.abs(workspaceBounds.y - 757)).toBeLessThanOrEqual(3);
   expect(await search.evaluate((node) => getComputedStyle(node, "::before").height)).toBe("37px");
   await search.click({ position: { x: 12, y: 1 } });
   await expect(page.getByRole("dialog").getByRole("textbox", { name: "搜索关键词" })).toBeVisible();
