@@ -453,6 +453,21 @@
   }
 }
 
+@media (min-width: 1440px) {
+  #app .organization-profile-facts > header {
+    justify-content: flex-start;
+    gap: clamp(16px, 3.7vw, 62px);
+  }
+  #app .organization-profile-facts > header > div {
+    min-width: 0;
+  }
+  #app .organization-profile-facts > header > i {
+    flex: none;
+    align-self: end;
+    margin-block-end: 16px;
+  }
+}
+
 @media (min-width: 1200px) {
   html[data-design="commerce"]
     #app
