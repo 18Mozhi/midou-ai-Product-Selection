@@ -518,7 +518,16 @@ test("catalogue empty workflow leads to the real candidate list without writes",
   if (wide) {
     await expect(empty.getByRole("button", { name: "查看候选商品" })).toHaveCSS("min-width", "193px");
     const card = (await empty.boundingBox())!;
+    expect(Math.abs(card.y - 400)).toBeLessThanOrEqual(3);
     expect(card.y + card.height).toBeLessThanOrEqual(916);
+    const flowIcons = empty.getByRole("list", { name: "分析流程说明" }).locator("li > svg");
+    const [firstIcon, lastIcon] = await Promise.all([
+      flowIcons.first().boundingBox(),
+      flowIcons.last().boundingBox(),
+    ]);
+    expect(Math.abs(firstIcon!.x - 462)).toBeLessThanOrEqual(3);
+    expect(Math.abs(firstIcon!.y - 747)).toBeLessThanOrEqual(5);
+    expect(Math.abs(lastIcon!.x - 1448)).toBeLessThanOrEqual(18);
     await page.screenshot({ path: testInfo.outputPath("completed-empty-reference.png") });
   }
   await expect(page.locator(".catalogue-title-line [role=note]")).toHaveText("当前为只读权限。");

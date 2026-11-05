@@ -2147,6 +2147,19 @@ html[data-design="commerce"] #app .catalogue-querybar .catalogue-search label > 
     transform: rotate(45deg);
   }
 }
+@media (min-width: 1440px) {
+  html[data-design="commerce"]
+    #app
+    .opportunity-workspace
+    > .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls {
+    padding-block-end: 38px;
+  }
+  .midou-analysis-guide {
+    grid-template-columns: minmax(128px, max-content) minmax(0, 1fr);
+    padding-block-start: 24px;
+  }
+}
 @media (max-width: 760px) {
   .midou-analysis-guide {
     padding-block-start: 16px;
