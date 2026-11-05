@@ -212,6 +212,14 @@ test("workbench completed empty action fits in the reference desktop first fold"
   const bounds = await result.boundingBox();
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(941);
   const overview = (await page.locator(".home-automation-overview").boundingBox())!;
+  const heading = page.getByRole("heading", { name: "选品工作台", exact: true });
+  const headingBox = (await heading.boundingBox())!;
+  expect(
+    Math.abs(headingBox.x - overview.x - 8),
+    "heading inset relative to card",
+  ).toBeLessThanOrEqual(1);
+  await expect(heading).toHaveCSS("font-size", "30px");
+  await expect(page.locator(".home-command-bar nav")).toHaveCSS("column-gap", "10px");
   const flow = (await page.getByRole("region", { name: "选品任务流程" }).boundingBox())!;
   expect(Math.abs(overview.y - 378), "library overview top").toBeLessThanOrEqual(5);
   expect(Math.abs(flow.y - 529), "workflow top").toBeLessThanOrEqual(5);
@@ -221,6 +229,10 @@ test("workbench completed empty action fits in the reference desktop first fold"
   await expect(quickCandidate).toHaveAttribute("href", "/opportunities?view=rule_candidates");
   await expect(quickCandidate.locator("b")).toHaveCSS("font-weight", "700");
   const progress = page.getByRole("progressbar", { name: "今日完成整条选品流程目标进度" });
+  await expect(page.locator(".home-daily-production dt > svg").first()).toHaveCSS(
+    "padding-inline-start",
+    "13px",
+  );
   await expect(progress).toHaveCSS("height", "9px");
   await expect(progress).toHaveAttribute("max", "100");
   const meta = page.locator(".home-daily-meta");

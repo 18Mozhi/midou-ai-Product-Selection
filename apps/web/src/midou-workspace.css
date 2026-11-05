@@ -1996,6 +1996,34 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
   }
 }
 
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .home-command-bar > div {
+    padding-inline-start: 8px;
+  }
+  html[data-design="commerce"] #app .home-command-bar h2 {
+    font-size: 30px;
+    line-height: 36px;
+  }
+  .midou-home-intro {
+    font-size: 15px;
+    line-height: 21px;
+  }
+  html[data-design="commerce"] #app .home-command-bar nav {
+    gap: 10px;
+  }
+  html[data-design="commerce"] #app .home-command-bar :is(a, button) {
+    font-size: 14px;
+  }
+  html[data-design="commerce"] #app .home-daily-production dt > svg {
+    inset-block-start: 21px;
+    inset-inline-start: 28px;
+    padding: 13px;
+  }
+  html[data-design="commerce"] #app .home-daily-production dd {
+    line-height: 1.25;
+  }
+}
+
 @media (max-width: 640px) {
   .midou-home-intro {
     display: none;
