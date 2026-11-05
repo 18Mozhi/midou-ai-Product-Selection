@@ -989,6 +989,37 @@
   }
 }
 
+@media (min-width: 1440px) {
+  #app .trend-detail .trend-detail-facts {
+    min-height: 93px;
+    align-items: center;
+    gap: 0;
+    padding: 14px 0;
+  }
+  #app .trend-detail .trend-detail-facts > div {
+    min-height: 56px;
+    padding-inline: clamp(12px, 1.5vw, 26px) 8px;
+  }
+  #app .trend-detail .trend-detail-facts dt {
+    gap: 8px;
+    font-size: 14px;
+  }
+  #app .trend-detail .trend-detail-facts dd {
+    margin-inline-start: 24px;
+    font-size: 20px;
+    line-height: 1.25;
+    font-variant-numeric: tabular-nums;
+  }
+  #app .trend-detail .trend-detail-facts dd[data-insufficient="true"] {
+    margin-inline-start: 0;
+    padding: 4px 9px;
+    font-size: 14px;
+  }
+  #app .trend-detail-tabs {
+    margin-block-start: 14px;
+  }
+}
+
 .trend-detail [data-overview="true"] .trend-related-products > ul > li:nth-child(n + 3),
 .trend-detail [data-overview="true"] .trend-related-products > nav {
   display: none;

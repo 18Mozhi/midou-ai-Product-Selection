@@ -97,7 +97,7 @@ test("UI2-TR08 responsive trend filters preserve desktop grouping and mobile foc
   await trigger.click();
   const drawer = page.getByRole("dialog", { name: "筛选趋势" });
   const close = drawer.getByRole("button", { name: "关闭筛选条件" });
-  const lastAction = drawer.getByRole("button", { name: "清除", exact: true });
+  const lastAction = drawer.getByRole("button", { name: "重置", exact: true });
   await expect(drawer).toBeVisible();
   await expect(drawer).toHaveAttribute("aria-modal", "true");
   await expect(close).toBeFocused();
@@ -156,7 +156,7 @@ test("UI2-TR13 trend filter badge counts only non-default filter fields", async 
   await filters.getByRole("combobox", { name: "状态" }).selectOption("");
   await expect(badge).toHaveText("4 项已选");
 
-  await filters.getByRole("button", { name: "清除", exact: true }).click();
+  await filters.getByRole("button", { name: "重置", exact: true }).click();
   await expect(badge).toHaveCount(0);
 });
 
@@ -348,7 +348,7 @@ test("UI2-TR10 route topic reads cancel superseded success and failure requests"
   const mobile = (page.viewportSize()?.width ?? 1440) <= 760;
   const chooseTopic = async (title: string) => {
     if (mobile && !(await page.locator("#trend-list").isVisible()))
-      await page.getByRole("button", { name: "返回趋势列表" }).click();
+      await page.getByRole("button", { name: "关闭详情 · 返回情报列表", exact: true }).click();
     await page.locator("#trend-list > button").filter({ hasText: title }).click();
   };
 

@@ -764,6 +764,9 @@ test("metric help opens without retired member styles or horizontal overflow", a
 test("midou reference list defaults closed, opens and closes detail without list reload", async ({
   page,
 }) => {
+  if (page.viewportSize()!.width >= 1101) {
+    await page.setViewportSize({ width: 1717, height: 916 });
+  }
   await ready(page, [
     topic,
     ...[1, 2, 3].map((index) => ({
@@ -811,6 +814,17 @@ test("midou reference list defaults closed, opens and closes detail without list
     (page.viewportSize()?.width ?? 0) >= 1101 ? "27px" : "22px",
   );
   await expect(page.getByLabel("情报资料").locator("dt svg")).toHaveCount(4);
+  if (page.viewportSize()!.width >= 1440) {
+    const facts = page.getByLabel("情报资料");
+    await expect(facts).toHaveCSS("min-height", "93px");
+    await expect(facts.locator("dt").first()).toHaveCSS("font-size", "14px");
+    await expect(facts.locator("dd").first()).toHaveCSS("font-size", "20px");
+    await expect(facts.locator("dd[data-insufficient='true']")).toHaveCSS("font-size", "14px");
+    const widths = await facts.locator(":scope > div").evaluateAll((items) =>
+      items.map((item) => item.getBoundingClientRect().width),
+    );
+    expect(Math.max(...widths) - Math.min(...widths)).toBeLessThan(1);
+  }
   await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
   await expect(page.locator(".trend-detail")).toHaveCount(0);
   await expect(page.locator(".trend-list")).toBeVisible();
