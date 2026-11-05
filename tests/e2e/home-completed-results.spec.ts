@@ -215,6 +215,9 @@ test("workbench completed empty action fits in the reference desktop first fold"
   await expect(quickCandidate).toHaveCSS("font-size", "16px");
   await expect(quickCandidate).toHaveAttribute("href", "/opportunities?view=rule_candidates");
   await expect(quickCandidate.locator("b")).toHaveCSS("font-weight", "700");
+  const progress = page.getByRole("progressbar", { name: "今日完成整条选品流程目标进度" });
+  await expect(progress).toHaveCSS("height", "9px");
+  await expect(progress).toHaveAttribute("max", "100");
   const facts = page.locator(".home-status-facts > a");
   await expect(facts).toHaveCount(4);
   await expect(facts.first().locator("span")).toHaveCSS("font-size", "14px");

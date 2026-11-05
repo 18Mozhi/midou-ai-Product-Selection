@@ -1928,18 +1928,18 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
     color: var(--so-primary);
     background: var(--so-primary-soft);
   }
-  .home-daily-production progress {
+  html[data-design="commerce"] #app .home-daily-production progress {
     height: 9px;
     border: 0;
     border-radius: 999px;
     overflow: hidden;
     background: var(--so-border);
   }
-  .home-daily-production progress::-webkit-progress-bar {
+  html[data-design="commerce"] #app .home-daily-production progress::-webkit-progress-bar {
     background: var(--so-border);
     border-radius: 999px;
   }
-  .home-daily-production progress::-webkit-progress-value {
+  html[data-design="commerce"] #app .home-daily-production progress::-webkit-progress-value {
     background: var(--so-primary);
     border-radius: 999px;
   }
