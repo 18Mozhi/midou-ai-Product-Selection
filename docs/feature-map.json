@@ -1,4 +1,16 @@
 {
+  "selectionPendingPresenceRead20261105": {
+    "sourceFiles": [
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/api/src/home-selection-sql.ts"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-list-projection.test.mjs",
+      "tests/unit/opportunity-recommended-list-scope.test.mjs"
+    ],
+    "docs": ["docs/selection-loading-ui-20261105.md"],
+    "contract": "Filter candidate/pending views with the original scoped presence proof before page-only scalar identity hydration. Candidate quality uses the existing conservative snapshot upper bound and the unchanged full gate. Recommended materialization, all/completed views, facts/order/permissions remain unchanged. No API/env/schema/dependency/collection changes. Release and real HTTP/UI acceptance tracked separately."
+  },
   "selectionSupplyViewport20261024": {
     "sourceFiles": ["apps/web/src/components/OpportunitySupplyPanel.vue"],
     "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],

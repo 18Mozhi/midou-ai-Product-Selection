@@ -1,4 +1,5 @@
 import { optimizeSelectionReadSql } from "../../apps/api/dist/selection-read-query-plan.js";
+import { homeCandidateSql, homeQualityGateSql } from "../../apps/api/dist/home-selection-sql.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -98,13 +99,18 @@ for (const selectionView of [undefined, "completed", "all"])
   });
 
 for (const selectionView of ["rule_candidates", "evidence_pending"])
-  test(`pending view reuses identity without imposing recommendation facts: ${selectionView}`, async () => {
+  test(`pending view filters presence before paged scalar identity: ${selectionView}`, async () => {
     const [count, page] = await opportunityListSql({ ...scope, selectionView });
-    assert.ok(
-      count.sql.startsWith("SELECT COUNT(*) total FROM " + opportunityPendingListSourceSql),
-    );
+    assert.ok(count.sql.startsWith("SELECT COUNT(*) total FROM opportunities o WHERE "));
     assert.ok(!opportunityPendingListSourceSql.includes(opportunityRecommendationFactsSql));
-    assert.deepEqual(count.params, ["org", "ws", "org", "ws", "org", "ws"]);
+    assert.deepEqual(count.params, ["org", "ws"]);
+    assert.ok(count.sql.includes(homeCandidateSql));
+    assert.doesNotMatch(count.sql, /filter_primary_asin|active_version/);
+    assert.equal(
+      count.sql.includes(optimizeSelectionReadSql(homeQualityGateSql)),
+      selectionView === "rule_candidates",
+    );
+    assert.ok(page.sql.includes(opportunityListPrimaryAsinSql + " primary_fact_asin"));
     for (const query of [count, page])
       assert.equal(
         (query.sql.replace(/'(?:''|[^'])*'/g, "").match(/\?/g) || []).length,
