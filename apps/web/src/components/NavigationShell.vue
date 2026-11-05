@@ -483,8 +483,10 @@ onUnmounted(() => {
           aria-label="选择组织与工作区后进入用户工作台"
           >返回选品工作台</RouterLink
         >
-        <RouterLink to="/me?section=appearance" class="midou-sidebar-settings">
-          <AppIcon name="settings" :size="18" />设置
+        <RouterLink v-slot="{ href, navigate }" to="/me?section=appearance" custom>
+          <a :href="href" class="midou-sidebar-settings" @click="navigate">
+            <AppIcon name="settings" :size="18" />设置
+          </a>
         </RouterLink>
         <button type="button" class="midou-sidebar-help" @click="openNavigationHelp">
           <span aria-hidden="true">?</span>帮助
@@ -629,7 +631,11 @@ onUnmounted(() => {
             >{{ item.label }}</RouterLink
           >
         </nav>
-        <slot v-if="account" />
+        <slot
+          v-if="account"
+          :organization-name="guard?.organization_name"
+          :workspace-name="guard?.workspace_name"
+        />
         <KeepAlive :max="12">
           <component
             :is="selectedSurfaceComponent"

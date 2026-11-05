@@ -35,7 +35,11 @@ function update(field: ProfileField, event: Event) {
       <label for="p11-email">邮箱</label>
       <div class="p11-field-value">
         <input id="p11-email" :value="props.profile.email" disabled />
-        <small>{{ props.profile.email_verified_at ? "已验证" : "尚未验证" }}</small>
+        <small
+          class="midou-profile-form-verification"
+          :data-verified="Boolean(props.profile.email_verified_at)"
+          >{{ props.profile.email_verified_at ? "已验证" : "尚未验证" }}</small
+        >
       </div>
     </div>
 
@@ -78,6 +82,7 @@ function update(field: ProfileField, event: Event) {
           :value="props.draft.avatar_url ?? ''"
           type="url"
           inputmode="url"
+          placeholder="请输入 HTTPS 图片地址"
           :disabled="props.saving"
           @input="update('avatar_url', $event)"
         />
@@ -127,7 +132,7 @@ function update(field: ProfileField, event: Event) {
       </div>
     </div>
 
-    <div class="p11-field-group p11-wide">
+    <div class="p11-field-group p11-wide midou-profile-reason">
       <label for="p11-profile-reason">修改原因</label>
       <div class="p11-field-value">
         <textarea

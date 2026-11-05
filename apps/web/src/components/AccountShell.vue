@@ -4,7 +4,11 @@ import { useRoute } from "vue-router";
 import ThemeStudio from "./ThemeStudio.vue";
 import PersonalCenter from "./PersonalCenter.vue";
 
-defineProps<{ apiBaseUrl: string }>();
+defineProps<{
+  apiBaseUrl: string;
+  organizationName?: string | null;
+  workspaceName?: string | null;
+}>();
 
 const route = useRoute();
 const sections = [
@@ -47,6 +51,8 @@ const activeSection = computed(() => {
         v-else
         :api-base-url="apiBaseUrl"
         :initial-section="activeSection"
+        :organization-name="organizationName"
+        :workspace-name="workspaceName"
         account-shell
       />
     </section>
