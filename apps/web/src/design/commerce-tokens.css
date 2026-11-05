@@ -133,6 +133,10 @@ html[data-design="commerce"] {
   --so-primary: #145bff;
   --so-primary-strong: #0951ed;
   --so-primary-soft: #eaf1ff;
+  --so-warning-soft: #fff3d6;
+  --so-warning-border: #f2d293;
+  --so-success-soft: #e4f8eb;
+  --so-success-border: #b9e6c6;
 }
 html[data-design="commerce"][data-theme="aurora-purple"] {
   --so-primary: #465365;

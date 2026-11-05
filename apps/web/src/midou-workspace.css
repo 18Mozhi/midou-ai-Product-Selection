@@ -37,6 +37,15 @@ html[data-design="commerce"] #app .commerce-sidebar a[aria-current="page"] {
 html[data-design="commerce"] #app .role-page-breadcrumb {
   margin-bottom: 14px;
 }
+/* Mobile menu must use the same theme accent as the desktop navigation. */
+html[data-design="commerce"]
+  #app
+  .role-shell.role-shell--c
+  .role-nav-menu
+  > a[aria-current="page"] {
+  color: var(--so-primary);
+  background: var(--so-primary-soft);
+}
 /* Shell owns the single breadcrumb; remove redundant page-level trails at their source. */
 html[data-design="commerce"] #app :is(.trend-section-label, .sourcing-section-label) {
   display: none;
@@ -561,6 +570,26 @@ html[data-design="commerce"] #app .role-workspace-identity h1 {
 .midou-home-quick b {
   margin-left: auto;
   color: var(--so-primary);
+}
+
+/* Match the reference's evidence-warning and candidate-action color hierarchy. */
+.midou-home-quick .home-quick-evidence {
+  background: var(--so-warning-soft);
+}
+.midou-home-quick .home-quick-evidence > :is(svg, b) {
+  color: var(--so-warning);
+}
+.midou-home-quick .home-quick-candidates {
+  background: var(--so-primary-soft);
+}
+.midou-home-quick .home-quick-candidates > :is(svg, b) {
+  color: var(--so-primary);
+}
+.midou-home-quick :is(.home-quick-evidence, .home-quick-candidates) > b {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+  background: var(--so-panel);
 }
 html[data-design="commerce"] #app .home-overview-panel {
   background: transparent;

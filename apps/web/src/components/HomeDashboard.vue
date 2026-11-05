@@ -335,6 +335,7 @@ onBeforeUnmount(deactivate);
           <RouterLink
             v-if="capabilities.includes('opportunity:read')"
             to="/opportunities?view=evidence_pending"
+            class="home-quick-evidence"
             ><AppIcon name="list" />补齐证据
             <b>{{ selection?.awaiting_evidence_count ?? "未读取" }}</b
             ><AppIcon name="chevron"
@@ -342,6 +343,7 @@ onBeforeUnmount(deactivate);
           <RouterLink
             v-if="capabilities.includes('opportunity:read')"
             to="/opportunities?view=rule_candidates"
+            class="home-quick-candidates"
             ><AppIcon name="box" />查看候选 <b>{{ selection?.rule_candidate_count ?? "未读取" }}</b
             ><AppIcon name="chevron"
           /></RouterLink>

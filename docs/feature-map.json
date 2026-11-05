@@ -1,4 +1,18 @@
 {
+  "selectionReferenceColors20261105": {
+    "sourceFiles": [
+      "apps/web/src/design/commerce-tokens.css",
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/midou-workspace.css",
+      "apps/web/src/home-selection-results.css"
+    ],
+    "testFiles": [
+      "tests/e2e/home-completed-results.spec.ts",
+      "tests/e2e/m02-03-navigation-shell.spec.ts"
+    ],
+    "docs": ["docs/selection-reference-colors-20261105.md"],
+    "contract": "Match user reference accents using existing semantic tokens: evidence quick link warning, candidate quick link primary, selected result tab primary. Reference amber/green soft semantic panels and theme-aware mobile active navigation replace grey washes/fixed old blue. Account had persisted graphite theme; user-requested blue is saved through existing appearance UI, not a forced global theme or API/default change. Preserve neutral secondary text, other themes, statuses, layout and all business reads/writes. Frontend-only deployment; no Node/Python restart."
+  },
   "selectionPendingPresenceRead20261105": {
     "sourceFiles": [
       "apps/api/src/mysql-opportunity-repository.ts",

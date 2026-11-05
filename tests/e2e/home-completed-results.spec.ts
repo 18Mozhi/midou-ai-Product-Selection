@@ -325,3 +325,79 @@ test("workspace breadcrumb stays exclusively in the topbar across list routes", 
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
     .toBe(true);
 });
+
+for (const palette of [
+  {
+    theme: "deep-ocean",
+    primary: "rgb(20, 91, 255)",
+    soft: "rgb(234, 241, 255)",
+    warning: "rgb(154, 91, 0)",
+  },
+  {
+    theme: "aurora-purple",
+    primary: "rgb(70, 83, 101)",
+    soft: "rgb(238, 241, 245)",
+    warning: "rgb(146, 85, 0)",
+  },
+  {
+    theme: "cloud-white",
+    primary: "rgb(20, 126, 151)",
+    soft: "rgb(234, 247, 250)",
+    warning: "rgb(143, 87, 0)",
+  },
+])
+  test(
+    "reference semantic accents keep evidence amber and selected controls themed: " + palette.theme,
+    async ({ page }) => {
+      const { counters } = await setup(page);
+      await page.addInitScript(
+        (theme) => localStorage.setItem("scoutops:ui-theme", theme),
+        palette.theme,
+      );
+      await page.route("**/api/v1/me/theme", (route) =>
+        route.fulfill({ json: envelope({ theme: palette.theme, version: 1 }) }),
+      );
+      await page.route(completedRoute, (route) => route.fulfill({ json: envelope([]) }));
+      await page.goto("/home");
+      await expect(page.locator("html")).toHaveAttribute("data-theme", palette.theme);
+      const quick = page.getByRole("complementary", { name: "待办与快捷入口" });
+      const evidence = quick.locator(".home-quick-evidence");
+      const candidate = quick.locator(".home-quick-candidates");
+      await expect(evidence).toHaveAttribute("href", "/opportunities?view=evidence_pending");
+      await expect(candidate).toHaveAttribute("href", "/opportunities?view=rule_candidates");
+      await expect(evidence).toHaveCSS("background-color", "rgb(255, 243, 214)");
+      await expect(evidence.locator("b")).toHaveCSS("color", palette.warning);
+      await expect(evidence.locator("svg").first()).toHaveCSS("color", palette.warning);
+      await expect(candidate).toHaveCSS("background-color", palette.soft);
+      await expect(candidate.locator("b")).toHaveCSS("color", palette.primary);
+      await expect(candidate.locator("svg").first()).toHaveCSS("color", palette.primary);
+      await expect(candidate.locator("b")).toHaveCSS("background-color", "rgb(255, 255, 255)");
+      const neutral = await quick
+        .getByRole("link", { name: "市场情报", exact: true })
+        .evaluate((el) => getComputedStyle(el).backgroundColor);
+      await expect(evidence).not.toHaveCSS("background-color", neutral);
+      await expect(candidate).not.toHaveCSS("background-color", neutral);
+      await expect(page.locator(".home-primary-action")).toHaveCSS(
+        "background-color",
+        palette.primary,
+      );
+      const mobile = page.viewportSize()!.width <= 840;
+      if (mobile) await page.getByRole("button", { name: "打开导航菜单", exact: true }).click();
+      const activeNavigation = page
+        .locator(mobile ? ".role-navigation-frame" : ".commerce-sidebar")
+        .getByRole("link", { name: "选品工作台", exact: true });
+      await expect(activeNavigation).toBeVisible();
+      await expect(activeNavigation).toHaveCSS("color", palette.primary);
+      if (mobile) await page.getByRole("button", { name: "关闭导航菜单", exact: true }).click();
+      await expect(page.locator('.home-result-header button[aria-pressed="true"]')).toHaveCSS(
+        "color",
+        palette.primary,
+      );
+      await expect(page.locator('.home-result-header button[aria-pressed="true"]')).toHaveCSS(
+        "font-weight",
+        "600",
+      );
+      await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+      expect(counters.writes).toBe(0);
+    },
+  );
