@@ -543,6 +543,26 @@ test("empty opportunity offers show the same profit summary without refetching o
   expect(profitReads).toBe(1);
 });
 
+test("empty sourcing offers keep unconfirmed cost rows distinct from real profit", async ({ page }) => {
+  const { search } = await opportunitySetup(
+    page,
+    { latest_run: null, current_inputs: [], cost_input_reviews: [] },
+    "insufficient_data",
+  );
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({ json: envelope({ ...search, candidate_count: 0, candidates: [] }) }),
+  );
+  await page.goto("/sourcing");
+  const offers = page.getByRole("tabpanel", { name: "供应商报价" });
+  const breakdown = offers.locator(".sourcing-profit-unconfirmed-breakdown");
+  await expect(breakdown.locator("dt")).toHaveText(["采购成本", "头程费用", "平台费用", "预计利润"]);
+  await expect(breakdown.locator("dd")).toHaveText(["—", "—", "—", "—"]);
+  await page.getByRole("tab", { name: "成本与利润" }).click();
+  const profit = page.getByRole("tabpanel", { name: "成本与利润" });
+  await expect(profit).toContainText("利润未知");
+  await expect(profit.locator(".sourcing-profit-unconfirmed-breakdown")).toHaveCount(0);
+});
+
 test("opportunity sourcing shows read-only current profit without old cost forms or reviewer calls", async ({
   page,
 }) => {

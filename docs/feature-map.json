@@ -1,4 +1,10 @@
 {
+  "referenceSourcingUnconfirmedCosts": {
+    "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/components/SourcingProfitSummary.vue", "apps/web/src/sourcing.css"],
+    "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Empty sourcing offers retain the reference cost row structure using unconfirmed placeholders, without changing calculated values, inputs, or requests."
+  },
   "referenceSourcingToolbarBalance": {
     "sourceFiles": ["apps/web/src/sourcing.css"],
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],

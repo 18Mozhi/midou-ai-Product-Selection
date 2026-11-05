@@ -3,7 +3,12 @@ import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } fro
 import { ApiClientError, createApiClient } from "../api-client";
 import type { OpportunityProfitAnalysis } from "./opportunity-workspace-types";
 
-const props = defineProps<{ apiBaseUrl: string; opportunityId: string; returnPath: string }>();
+const props = defineProps<{
+  apiBaseUrl: string;
+  opportunityId: string;
+  returnPath: string;
+  besideEmptyOffers?: boolean;
+}>();
 const request = createApiClient(props.apiBaseUrl);
 const state = ref<"loading" | "ready" | "error">("loading");
 const profit = ref<OpportunityProfitAnalysis | null>(null);
@@ -63,7 +68,14 @@ onBeforeUnmount(() => {
 <template>
   <section class="sourcing-profit-summary" aria-label="成本与利润摘要">
     <header>
-      <h4>成本与利润</h4>
+      <div>
+        <h4>成本与利润</h4>
+        <p v-if="state === 'ready' && !calculated && besideEmptyOffers" class="sourcing-profit-unconfirmed">
+          当前利润结果未知<span v-if="profit?.latest_run?.missing_fields.length">
+            · {{ profit.latest_run.missing_fields.join("、") }}</span
+          >
+        </p>
+      </div>
       <RouterLink
         :to="{
           path: `/opportunities/${opportunityId}`,
@@ -104,6 +116,14 @@ onBeforeUnmount(() => {
           </dd>
         </div>
       </dl>
+      <template v-else-if="besideEmptyOffers">
+        <dl class="sourcing-profit-unconfirmed-breakdown" aria-label="未确认的成本与利润">
+          <div v-for="label in ['采购成本', '头程费用', '平台费用', '预计利润']" :key="label">
+            <dt>{{ label }}</dt>
+            <dd aria-label="未确认">—</dd>
+          </div>
+        </dl>
+      </template>
       <p v-else>
         <strong>利润未知</strong> ·
         {{ profit?.latest_run?.missing_fields.join("、") || "尚无可确认的当前利润结果" }}

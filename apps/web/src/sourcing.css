@@ -1167,6 +1167,21 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   grid-template-columns: minmax(0, 1fr);
   gap: 0;
 }
+.sourcing-profit-unconfirmed {
+  margin: 2px 0 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.sourcing-empty-offers--with-profit .sourcing-profit-summary:has(.sourcing-profit-unconfirmed) > header {
+  margin-bottom: 2px;
+}
+.sourcing-empty-offers--with-profit .sourcing-profit-summary .sourcing-profit-unconfirmed-breakdown {
+  margin-block: 0;
+}
+.sourcing-empty-offers--with-profit .sourcing-profit-summary .sourcing-profit-unconfirmed-breakdown > div {
+  padding-block: 3px;
+  line-height: 18px;
+}
 .sourcing-empty-offers--with-profit .sourcing-profit-summary dl > div {
   display: flex;
   justify-content: space-between;

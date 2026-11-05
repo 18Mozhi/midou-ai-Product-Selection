@@ -486,6 +486,7 @@ const showCollectionLinkInNotice = computed(
               :api-base-url="apiBaseUrl"
               :opportunity-id="selected.input_ref"
               :return-path="route.fullPath"
+              :beside-empty-offers="showProfitBesideEmptyOffers"
             />
           </Teleport>
           <p v-else class="sourcing-quote-empty">当前找货记录未关联选品，暂无成本与利润可查看。</p>
