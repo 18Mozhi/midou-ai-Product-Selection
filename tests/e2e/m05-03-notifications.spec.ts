@@ -788,6 +788,15 @@ test("midou reference notification layout keeps original workflow and preference
   await page.getByRole("checkbox", { name: "仅未读" }).uncheck();
   await expect(page).not.toHaveURL(/unread=1/);
   await expect(page.locator(".midou-notification-open")).toContainText("查看记录");
+  const wide = (page.viewportSize()?.width ?? 0) >= 1450;
+  await expect(page.locator(".notification-record > span > strong")).toHaveCSS(
+    "font-size",
+    wide ? "20px" : "16px",
+  );
+  await expect(page.locator(".notification-record > em")).toHaveCSS(
+    "font-size",
+    wide ? "16px" : "13px",
+  );
   await expect(
     page.locator('.notification-list .notification-record > b[data-workflow="open"]'),
   ).toBeVisible();

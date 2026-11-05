@@ -2253,6 +2253,21 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
   }
 }
 
+@media (min-width: 1450px) {
+  html[data-design="commerce"] #app .notification-center .notification-summary article > span {
+    font-size: 16px;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > span > strong {
+    font-size: 20px;
+    line-height: 1.35;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > span > small,
+  html[data-design="commerce"] #app .notification-list .notification-record > em {
+    font-size: 16px;
+    line-height: 1.45;
+  }
+}
+
 html[data-design="commerce"] #app .notification-center.notification-center--review > header {
   min-height: 0;
   padding: 0;
@@ -2267,6 +2282,15 @@ html[data-design="commerce"] #app .notification-center > header > div:last-child
 html[data-design="commerce"] #app .notification-center .realtime-badge[data-state="connected"] {
   background: var(--so-success-soft);
   border-color: transparent;
+}
+html[data-design="commerce"] #app .notification-center .realtime-badge[data-state="connected"]::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-inline-end: 6px;
+  border-radius: 50%;
+  background: currentColor;
 }
 @media (max-width: 1150px) {
   html[data-design="commerce"] #app .notification-center > .midou-notification-preference {
