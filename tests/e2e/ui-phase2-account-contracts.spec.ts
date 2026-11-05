@@ -285,6 +285,14 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
   await page.getByLabel("头像 HTTPS 地址").fill("https://avatar.example.test/draft.svg");
   await expect(preview).toHaveAttribute("src", savedUrl);
   await expect(page.locator(".midou-profile-avatar img")).toHaveAttribute("src", savedUrl);
+  const security = page.locator(".midou-profile-security");
+  await expect(security.locator("dt > svg[aria-hidden='true']")).toHaveCount(2);
+  await expect(security.getByRole("link", { name: "管理安全设置" })).toHaveAttribute(
+    "href",
+    "/me?section=security",
+  );
+  if ((page.viewportSize()?.width ?? 0) >= 1440)
+    await expect(security.getByRole("heading", { name: "安全信息" })).toHaveCSS("font-size", "22px");
   expect(draftReads).toBe(0);
 });
 

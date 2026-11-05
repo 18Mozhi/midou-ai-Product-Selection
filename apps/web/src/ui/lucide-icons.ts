@@ -10,6 +10,14 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ],
   ],
   check: [["path", { d: "M20 6 9 17l-5-5" }]],
+  mail: [
+    ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2" }],
+    ["path", { d: "m3 6 9 7 9-7" }],
+  ],
+  smartphone: [
+    ["rect", { x: "6", y: "2", width: "12", height: "20", rx: "2" }],
+    ["path", { d: "M12 18h.01" }],
+  ],
   clock: [
     ["circle", { cx: "12", cy: "12", r: "10" }],
     ["path", { d: "M12 6v6l4 2" }],

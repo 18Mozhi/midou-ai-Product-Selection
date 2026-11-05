@@ -2453,6 +2453,14 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
   color: var(--so-success);
 }
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .midou-profile-security > h3 {
+    font-size: 22px;
+    line-height: 1.35;
+  }
+  html[data-design="commerce"] #app .midou-profile-security dt,
+  html[data-design="commerce"] #app .midou-profile-security > a {
+    font-size: 16px;
+  }
   html[data-design="commerce"] #app .account-content-only {
     padding-inline: 4px;
   }

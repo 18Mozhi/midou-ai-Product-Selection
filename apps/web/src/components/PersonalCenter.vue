@@ -141,11 +141,11 @@ const sectionItems = [
               </div>
             </dl>
           </section>
-          <section>
+          <section class="midou-profile-security">
             <h3>安全信息</h3>
             <dl class="midou-profile-security-facts">
               <div>
-                <dt><AppIcon name="check" />邮箱</dt>
+                <dt><AppIcon name="mail" />邮箱</dt>
                 <dd
                   class="midou-profile-badge"
                   :data-verified="Boolean(center.profile.value.email_verified_at)"
@@ -154,7 +154,7 @@ const sectionItems = [
                 </dd>
               </div>
               <div>
-                <dt><AppIcon name="key" />手机号</dt>
+                <dt><AppIcon name="smartphone" />手机号</dt>
                 <dd
                   class="midou-profile-badge"
                   :data-verified="Boolean(center.profile.value.phone_verified_at)"
