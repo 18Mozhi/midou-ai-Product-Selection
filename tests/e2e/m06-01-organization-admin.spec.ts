@@ -2513,7 +2513,7 @@ test("organization sidebar groups context and utility links without altering mob
   expect(settingsBox!.y + settingsBox!.height).toBeLessThanOrEqual(backBox!.y);
 });
 
-test("wide governance metrics align labels, values and notes beside the icon", async ({ page }) => {
+test("wide governance metrics align labels, values and notes beside the icon", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1672, height: 941 });
   await setup(page);
   await page.goto("/org-admin");
@@ -2566,6 +2566,18 @@ test("wide governance metrics align labels, values and notes beside the icon", a
     expect(item.noteX).toBe(item.valueX);
     expect(item.separator).toBe(index < 5 ? '""' : "none");
   }
+  const sidebar = page.getByRole("complementary", { name: "治理快捷入口与组织状态" });
+  const [shortcuts, statusCard] = await sidebar.locator(":scope > section").evaluateAll((cards) =>
+    cards.map((card) => {
+      const { top, bottom } = card.getBoundingClientRect();
+      return { top, bottom };
+    }),
+  );
+  expect(Math.abs(shortcuts.top - 472)).toBeLessThanOrEqual(3);
+  expect(Math.abs(shortcuts.bottom - 729)).toBeLessThanOrEqual(3);
+  expect(Math.abs(statusCard.top - 746)).toBeLessThanOrEqual(3);
+  expect(Math.abs(statusCard.bottom - 926)).toBeLessThanOrEqual(5);
+  await page.screenshot({ path: testInfo.outputPath("organization-reference.png") });
 });
 
 test("organization profile aligns facts, editor and governance sidebar", async ({

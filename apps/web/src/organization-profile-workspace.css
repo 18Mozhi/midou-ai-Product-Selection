@@ -506,6 +506,12 @@
 }
 
 @media (min-width: 1440px) {
+  #app .midou-governance-side > section:first-child {
+    padding-block: 12px 11px;
+  }
+  #app .midou-governance-side .midou-governance-status > div {
+    padding-block: 10px;
+  }
   html[data-design="commerce"] #app .org-admin-center--profile-review
     > header[data-profile-overview="true"] .org-admin-refresh {
     column-gap: 20px;
