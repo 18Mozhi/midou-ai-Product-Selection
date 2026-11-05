@@ -520,6 +520,29 @@ test("empty trend filters expose a one-step recovery action", async ({ page }) =
   await expect(page.getByRole("heading", { name: detail.title })).toBeVisible();
 });
 
+test("wide related product cards align identity and four metrics in one row", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1717, height: 916 });
+  await ready(page, [topic], { capabilities: [...managerCapabilities, "opportunity:read"] });
+  await page.route("**/api/v1/opportunities?*", (route) =>
+    route.fulfill({ json: envelope([{ ...relatedProduct, name: "带收纳空间的轻便家居用品 · 示例商品" }], { total: 1 }) }),
+  );
+  await page.goto(`/trends?topic=${topicId}`);
+  const card = page.getByRole("region", { name: "关联选品", exact: true }).locator("li");
+  const icon = card.locator("svg");
+  await expect(icon).toBeVisible();
+  await expect(icon).toHaveAttribute("aria-hidden", "true");
+  await expect(card.locator("dd")).toHaveCount(4);
+  await expect(card.locator("dd").first()).toHaveText("未知");
+  const [identity, metrics] = await Promise.all([card.locator("a").boundingBox(), card.locator("dl").boundingBox()]);
+  expect(metrics!.x).toBeGreaterThan(identity!.x + identity!.width);
+  expect(Math.abs(metrics!.y - identity!.y)).toBeLessThan(1);
+  const positions = await card.locator("dt").evaluateAll((labels) => labels.map((label) => label.getBoundingClientRect().y));
+  expect(Math.max(...positions) - Math.min(...positions)).toBeLessThan(1);
+  if (testInfo.project.name === "desktop-chromium") {
+    await page.screenshot({ path: testInfo.outputPath("wide-related-products.png") });
+  }
+});
+
 test("related products use exact topic scope, preserve unknowns and paginate without writes", async ({
   page,
 }) => {

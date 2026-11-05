@@ -3,6 +3,7 @@ import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } fro
 import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import { sanitizeCorrelationId } from "../ui/state-contract";
+import AppIcon from "./AppIcon.vue";
 import type { OpportunitySummary } from "./opportunity-workspace-types";
 
 const props = defineProps<{
@@ -124,11 +125,11 @@ onBeforeUnmount(() => {
     <ul v-else>
       <li v-for="item in items" :key="item.id">
         <RouterLink :to="{ path: `/opportunities/${item.id}`, query: { from: route.fullPath } }">
-          <strong>{{ item.name }}</strong
-          ><small
-            >{{ item.main_asin ? `ASIN ${item.main_asin}` : "主品待确认" }} ·
-            {{ item.market }}</small
-          >
+          <AppIcon class="trend-related-icon" name="box" :size="20" />
+          <span>
+            <strong>{{ item.name }}</strong>
+            <small>{{ item.main_asin ? `ASIN ${item.main_asin}` : "主品待确认" }} · {{ item.market }}</small>
+          </span>
         </RouterLink>
         <dl>
           <div>
@@ -232,6 +233,9 @@ onBeforeUnmount(() => {
   color: var(--so-primary);
   text-decoration: underline;
 }
+.trend-related-icon {
+  display: none;
+}
 .trend-related-products small {
   display: block;
   margin-top: 6px;
@@ -257,10 +261,33 @@ onBeforeUnmount(() => {
 }
 @container (min-width: 620px) {
   .trend-related-products li {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    padding: 14px 16px;
+    background: color-mix(in srgb, var(--so-panel-soft) 35%, var(--so-panel));
+  }
+  .trend-related-products a {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+    line-height: 1.45;
+  }
+  .trend-related-icon {
+    display: block;
+    margin-block-start: 4px;
+    color: var(--so-text-muted);
+  }
+  .trend-related-products small {
+    margin-top: 3px;
   }
   .trend-related-products dl {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .trend-related-products dd {
+    font-size: 17px;
   }
 }
 @media (max-width: 640px) {
