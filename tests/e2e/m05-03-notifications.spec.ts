@@ -796,6 +796,18 @@ test("midou reference notification layout keeps original workflow and preference
   await expect(viewAction).not.toHaveCSS("border-top-color", readBorder);
   const wide = (page.viewportSize()?.width ?? 0) >= 1450;
   if (wide) {
+    const categories = page.locator(".midou-notification-filters > nav > button");
+    const categoryBoxes = await categories.evaluateAll((nodes) =>
+      nodes.map((node) => {
+        const { x, y, width } = node.getBoundingClientRect();
+        return { x, y, width };
+      }),
+    );
+    expect(categoryBoxes).toHaveLength(5);
+    expect(categoryBoxes.every(({ y, width }) => y === categoryBoxes[0].y && width === 78)).toBe(true);
+    expect(categoryBoxes[4].x - categoryBoxes[0].x).toBeCloseTo(332, 0);
+    const searchBox = (await page.getByRole("searchbox").boundingBox())!;
+    expect(Math.abs(searchBox.y + searchBox.height / 2 - categoryBoxes[0].y - 21)).toBeLessThanOrEqual(3);
     const summary = page.locator(".notification-summary");
     await expect(summary.locator("svg[aria-hidden='true']")).toHaveCount(4);
     for (const icon of await summary.locator("svg").all()) await expect(icon).toHaveCSS("width", "24px");
