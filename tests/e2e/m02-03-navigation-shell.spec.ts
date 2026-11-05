@@ -947,7 +947,10 @@ test("member navigation survives account appearance and back without replacing c
     await page.getByRole("button", { name: "打开导航菜单" }).click();
     await page.locator('.role-sidebar-utility a[href="/me"]').click();
     await expect(page.getByRole("dialog", { name: "工作台导航" })).toBeHidden();
-  } else await page.locator('.role-topbar a[href="/me"]').click();
+  } else {
+    await page.locator('.role-topbar summary[aria-label="账号菜单"]').click();
+    await page.locator('.role-topbar a[href="/me"]').click();
+  }
   await expect(page.getByRole("navigation", { name: "个人中心分区" })).toBeVisible();
   expect(await header?.evaluate((el) => el.isConnected)).toBe(true);
   expect(await sidebar?.evaluate((el) => el.isConnected)).toBe(true);
@@ -1006,6 +1009,24 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
   expect(Math.round(bounds!.width)).toBe(261);
   expect(row?.y).toBe(153);
   expect(row?.height).toBe(44);
+  const context = page.getByRole("link", { name: "切换组织与工作区" });
+  await expect(context).toHaveCSS("border-top-style", "solid");
+  await expect(context).toHaveCSS("min-height", "40px");
+  expect(await context.evaluate((el) => getComputedStyle(el).borderTopColor)).not.toBe(
+    "rgba(0, 0, 0, 0)",
+  );
+  const contextBounds = await context.boundingBox();
+  for (const [label, path] of [
+    ["市场情报", "/trends"],
+    ["选品库", "/opportunities"],
+    ["1688 找货", "/sourcing"],
+    ["选品工作台", "/home"],
+  ]) {
+    await sidebar.getByRole("link", { name: label, exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`${path}$`));
+    await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+    expect(await context.boundingBox()).toEqual(contextBounds);
+  }
   await sidebar.getByRole("button", { name: "帮助", exact: true }).click();
   await expect(page.locator(".midou-navigation-help")).toHaveAttribute("open", "");
   await expect(page.getByText("使用侧栏顶部切换工作台，在个人中心调整外观。")).toBeVisible();

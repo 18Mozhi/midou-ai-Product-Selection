@@ -1393,6 +1393,11 @@ html[data-design="commerce"] #app .role-topbar .midou-top-context {
 .midou-account-menu summary svg {
   flex-shrink: 0;
 }
+.midou-top-context-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 html[data-design="commerce"]
   #app
   .role-shell.role-shell--c
@@ -1576,7 +1581,11 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
     height: 37px;
   }
   html[data-design="commerce"] #app .role-topbar .midou-top-context {
-    border-color: transparent;
+    box-sizing: border-box;
+    min-height: 40px;
+    gap: 12px;
+    padding-inline: 12px;
+    background: var(--so-panel);
     font-size: 15px;
   }
   .midou-top-context > svg,

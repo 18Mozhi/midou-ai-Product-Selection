@@ -354,9 +354,11 @@ onUnmounted(() => {
           class="midou-top-context"
           aria-label="切换组织与工作区"
         >
-          {{ contextName(guard?.organization_name, "当前组织") }}<span>/</span
-          >{{ contextName(guard?.workspace_name, "当前工作区")
-          }}<AppIcon name="chevron" :size="14" />
+          <span class="midou-top-context-label">
+            {{ contextName(guard?.organization_name, "当前组织") }} /
+            {{ contextName(guard?.workspace_name, "当前工作区") }}
+          </span>
+          <AppIcon name="chevron" :size="14" />
         </RouterLink>
         <span v-else>平台工作区</span>
       </div>
