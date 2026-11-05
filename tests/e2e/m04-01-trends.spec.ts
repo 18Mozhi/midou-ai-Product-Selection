@@ -245,6 +245,7 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await expect(facts).toBeVisible();
   await expect(page.getByLabel("情报资料")).toContainText("可信度数据不足");
   await expect(page.locator(".heat-summary, .trend-conclusion")).toHaveCount(0);
+  await page.getByRole("tab", { name: "来源证据" }).click();
   const evidence = page.locator(".trend-evidence-item").filter({
     hasText: "AI Skin Care Demand Rises",
   });
@@ -315,6 +316,7 @@ test("long trend timelines scroll inside the detail card without widening the pa
       ),
     )
     .toBe(true);
+  await page.getByRole("tab", { name: "来源证据" }).click();
   await expect
     .poll(() =>
       page
@@ -550,6 +552,7 @@ test("related products use exact topic scope, preserve unknowns and paginate wit
   await expect(page).toHaveScreenshot("intelligence-related-products-20261019.png", {
     fullPage: false,
   });
+  await page.getByRole("tab", { name: "关联选品", exact: true }).click();
   await region.getByRole("button", { name: "下一页" }).click();
   await expect(region).toContainText("第二页关联选品");
   await region.getByRole("button", { name: "上一页" }).click();
@@ -568,6 +571,7 @@ test("related products never read without opportunity permission", async ({ page
     return route.fulfill({ json: envelope([], { total: 0 }) });
   });
   await page.goto(`/trends?topic=${topicId}`);
+  await page.getByRole("tab", { name: "来源证据" }).click();
   await expect(page.getByRole("heading", { name: "主要证据", exact: true })).toBeVisible();
   await expect(page.getByRole("region", { name: "关联选品", exact: true })).toHaveCount(0);
   expect(reads).toBe(0);
@@ -592,7 +596,9 @@ test("related product failure is local and retry reads only related products", a
   await page.goto(`/trends?topic=${topicId}`);
   const region = page.getByRole("region", { name: "关联选品", exact: true });
   await expect(region).toContainText("读取失败");
+  await page.getByRole("tab", { name: "来源证据" }).click();
   await expect(page.getByRole("heading", { name: "主要证据", exact: true })).toBeVisible();
+  await page.getByRole("tab", { name: "关联选品", exact: true }).click();
   await region.getByRole("button", { name: "重试关联选品" }).click();
   await expect(region).toContainText(relatedProduct.name);
   expect(reads).toBe(2);
@@ -618,6 +624,7 @@ test("related product permission denial preserves evidence without offering a bl
   const region = page.getByRole("region", { name: "关联选品", exact: true });
   await expect(region).toContainText("无权读取关联选品");
   await expect(region.getByRole("button")).toHaveCount(0);
+  await page.getByRole("tab", { name: "来源证据" }).click();
   await expect(page.getByRole("heading", { name: "主要证据", exact: true })).toBeVisible();
   expect(reads).toBe(1);
 });
@@ -637,6 +644,7 @@ test("related products recover from a page that disappears without hiding existi
   await page.goto(`/trends?topic=${topicId}`);
   const region = page.getByRole("region", { name: "关联选品", exact: true });
   await expect(region).toContainText(relatedProduct.name);
+  await page.getByRole("tab", { name: "关联选品", exact: true }).click();
   await region.getByRole("button", { name: "下一页" }).click();
   await expect(region).toContainText("1 个未归档记录");
   await expect(region).toContainText(relatedProduct.name);
@@ -654,6 +662,7 @@ test("related products empty state does not claim discovery is running", async (
   await expect(region).toContainText("尚无已关联的未归档选品记录");
   await expect(region).not.toContainText("正在读取");
   await expect(region.getByRole("link")).toHaveCount(0);
+  await page.getByRole("tab", { name: "来源证据" }).click();
   await expect(page.getByRole("heading", { name: "主要证据", exact: true })).toBeVisible();
 });
 
@@ -775,4 +784,24 @@ test("midou reference source icon fallback is bounded on image failures", async 
   await page.goto("/trends");
   await expect(page.locator(".trend-list .research-thumbnail svg")).toBeVisible();
   await expect(page.locator(".trend-detail")).toHaveCount(0);
+});
+
+test("intelligence detail tabs default to overview and support keyboard navigation", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.goto("/trends");
+  await page.locator(".trend-list > button").first().click();
+  const tabs = page.getByRole("tablist", { name: "情报详情视图" });
+  const overview = tabs.getByRole("tab", { name: "情报概览" });
+  await expect(overview).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("heading", { name: "主要证据" })).toBeHidden();
+  await overview.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(tabs.getByRole("tab", { name: "来源证据" })).toBeFocused();
+  await expect(page.getByRole("heading", { name: "主要证据" })).toBeVisible();
+  await page.keyboard.press("End");
+  await expect(page.getByRole("tabpanel", { name: "关联选品" })).toContainText("不可查看关联选品");
+  await page.keyboard.press("Home");
+  await expect(overview).toBeFocused();
 });

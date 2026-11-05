@@ -475,6 +475,7 @@ onBeforeUnmount(() => {
         v-if="mobileDetailOpen"
         :detail="selected"
         :busy="busy"
+        :can-read-related="capabilities.includes('opportunity:read')"
         @back="returnToTopicList"
       >
         <template #related-products>

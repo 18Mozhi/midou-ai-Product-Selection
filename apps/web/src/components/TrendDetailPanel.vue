@@ -1,17 +1,46 @@
 <script setup lang="ts">
+import { ref, useId, watch } from "vue";
 import { statusLabel } from "../ui/status-labels";
 import AppIcon from "./AppIcon.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import TrendEvidenceTimeline from "./TrendEvidenceTimeline.vue";
 import type { TrendDetail } from "./trend-workspace-types";
 
-defineProps<{
+const props = defineProps<{
   detail: TrendDetail | null;
   busy: string;
+  canReadRelated: boolean;
 }>();
 const emit = defineEmits<{
   back: [];
 }>();
+const tabs = [
+  { key: "overview", label: "情报概览" },
+  { key: "evidence", label: "来源证据" },
+  { key: "related", label: "关联选品" },
+] as const;
+const activeTab = ref<(typeof tabs)[number]["key"]>("overview");
+const tabId = useId();
+const panelId = (key: string) => tabId + (key === "evidence" ? "-evidence" : "-related");
+watch(
+  () => props.detail?.id,
+  () => (activeTab.value = "overview"),
+);
+function moveTab(event: KeyboardEvent, index: number) {
+  const offsets: Record<string, number> = {
+    ArrowLeft: (index + tabs.length - 1) % tabs.length,
+    ArrowRight: (index + 1) % tabs.length,
+    Home: 0,
+    End: tabs.length - 1,
+  };
+  const next = offsets[event.key];
+  if (!Object.hasOwn(offsets, event.key) || next === undefined) return;
+  const tab = tabs[next];
+  if (!tab) return;
+  event.preventDefault();
+  activeTab.value = tab.key;
+  (event.currentTarget as HTMLElement).parentElement?.querySelectorAll("button")[next]?.focus();
+}
 const freshness = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
     month: "2-digit",
@@ -92,7 +121,48 @@ const freshness = (value: string) =>
       </div>
     </dl>
     <p v-else>未取得情报详情，可关闭后重新选择该主题。</p>
-    <slot v-if="detail && busy !== 'detail'" name="related-products" />
-    <TrendEvidenceTimeline v-if="detail && busy !== 'detail'" :detail="detail" />
+    <template v-if="detail && busy !== 'detail'">
+      <div class="trend-detail-tabs" role="tablist" aria-label="情报详情视图">
+        <button
+          v-for="(tab, index) in tabs"
+          :id="tabId + '-' + tab.key"
+          :key="tab.key"
+          type="button"
+          role="tab"
+          :aria-selected="activeTab === tab.key"
+          :aria-controls="panelId(tab.key)"
+          :tabindex="activeTab === tab.key ? 0 : -1"
+          @click="activeTab = tab.key"
+          @keydown="moveTab($event, index)"
+        >
+          {{ tab.label }}
+        </button>
+      </div>
+      <div
+        v-show="activeTab !== 'evidence'"
+        :data-overview="activeTab === 'overview'"
+        :id="panelId('related')"
+        :aria-labelledby="tabId + '-' + (activeTab === 'related' ? 'related' : 'overview')"
+        role="tabpanel"
+        tabindex="0"
+      >
+        <slot name="related-products" />
+        <p v-if="activeTab === 'related' && !canReadRelated" class="trend-panel-note">
+          当前权限下不可查看关联选品。
+        </p>
+        <p v-else-if="activeTab === 'overview' && !canReadRelated" class="trend-panel-note">
+          可切换到「来源证据」查看该主题的原始资料。
+        </p>
+      </div>
+      <div
+        v-show="activeTab === 'evidence'"
+        :id="panelId('evidence')"
+        :aria-labelledby="tabId + '-evidence'"
+        role="tabpanel"
+        tabindex="0"
+      >
+        <TrendEvidenceTimeline :detail="detail" />
+      </div>
+    </template>
   </article>
 </template>

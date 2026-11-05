@@ -900,3 +900,48 @@
     inset: 0 0 auto auto;
   }
 }
+
+#app .trend-detail-tabs {
+  display: flex;
+  gap: 10px;
+  margin-block-start: 12px;
+  border-bottom: 1px solid var(--so-border);
+}
+#app .trend-detail-tabs > button {
+  min-height: 44px;
+  padding: 7px 14px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--so-text-muted);
+}
+#app .trend-detail-tabs > button[aria-selected="true"] {
+  border-bottom-color: var(--so-primary);
+  color: var(--so-primary);
+  font-weight: 650;
+}
+#app .trend-detail [role="tabpanel"] {
+  min-width: 0;
+}
+#app .trend-detail .trend-panel-note {
+  padding-block: 16px;
+  color: var(--so-text-muted);
+  font-weight: 400;
+}
+@media (max-width: 640px) {
+  #app .trend-detail-tabs {
+    gap: 0;
+  }
+  #app .trend-detail-tabs > button {
+    flex: 1;
+    padding-inline: 4px;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+}
+
+.trend-detail [data-overview="true"] .trend-related-products > ul > li:nth-child(n + 3),
+.trend-detail [data-overview="true"] .trend-related-products > nav {
+  display: none;
+}
