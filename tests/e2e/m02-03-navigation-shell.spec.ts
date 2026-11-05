@@ -61,6 +61,9 @@ test("desktop platform sidebar fits grouped navigation and footer at reference s
   const sidebar = page.getByRole("complementary", { name: "工作区导航" });
   const context = page.locator(".role-topbar").getByRole("link", { name: "切换组织与工作区" });
   const sidebarContext = sidebar.getByRole("link", { name: "选择组织与工作区后进入用户工作台" });
+  await expect(sidebarContext).toHaveText("选择组织与工作区");
+  await expect(sidebarContext.locator("svg")).toHaveCount(2);
+  await expect(sidebarContext).toHaveCSS("min-height", "40px");
   await expect(context).toBeVisible();
   await expect(context).toHaveText("选择组织与工作区");
   await expect(context).toHaveAttribute("href", await sidebarContext.getAttribute("href") ?? "");

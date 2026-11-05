@@ -1552,6 +1552,15 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
 .commerce-workspace-switch > svg:last-child {
   margin-left: auto;
 }
+.midou-platform-workspace-switch > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.midou-platform-workspace-switch > svg {
+  flex-shrink: 0;
+}
 .commerce-sidebar footer.midou-organization-footer {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   padding-top: 6px;
@@ -1827,6 +1836,13 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     padding-inline: 16px;
     color: var(--so-text);
     background: var(--so-panel);
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar footer .midou-platform-workspace-switch {
+    min-height: 40px;
+    margin-bottom: 2px;
   }
   html[data-design="commerce"] #app .commerce-sidebar footer .midou-sidebar-settings {
     padding-inline: 16px;

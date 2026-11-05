@@ -493,9 +493,16 @@ onUnmounted(() => {
         <RouterLink
           v-if="shell === 'platform_admin'"
           :to="contextSwitchTarget"
+          class="commerce-workspace-switch midou-platform-workspace-switch"
           aria-label="选择组织与工作区后进入用户工作台"
-          >返回选品工作台</RouterLink
         >
+          <AppIcon name="layers" :size="18" />
+          <span v-if="guard?.organization_name && guard?.workspace_name">
+            {{ guard.workspace_name }} · {{ guard.organization_name }}
+          </span>
+          <span v-else>选择组织与工作区</span>
+          <AppIcon name="chevron" :size="14" />
+        </RouterLink>
         <RouterLink v-slot="{ href, navigate }" to="/me?section=appearance" custom>
           <a :href="href" class="midou-sidebar-settings" @click="navigate">
             <AppIcon name="settings" :size="18" />设置
