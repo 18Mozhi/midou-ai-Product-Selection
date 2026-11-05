@@ -47,6 +47,12 @@ interface GuardSummary {
 const props = defineProps<{ shell: Shell; apiBaseUrl: string; account?: boolean }>();
 const request = createApiClient(props.apiBaseUrl);
 const route = useRoute();
+const accountMenu = ref<HTMLDetailsElement | null>(null);
+function closeAccountMenu(restoreFocus = false) {
+  if (!accountMenu.value) return;
+  accountMenu.value.open = false;
+  if (restoreFocus) accountMenu.value.querySelector("summary")?.focus();
+}
 const routePath = computed(() => route.path.replace(/\/$/, "") || "/");
 const state = ref<State>("loading"),
   guard = ref<GuardSummary | null>(null),
@@ -264,6 +270,7 @@ onMounted(() => {
 watch(
   () => route.fullPath,
   (fullPath) => {
+    closeAccountMenu();
     closeDiscovery();
     menuOpen.value = false;
     if (props.shell === "member" && !props.account) rememberMemberRoute(fullPath);
@@ -346,10 +353,12 @@ onUnmounted(() => {
         <RouterLink
           v-if="shell !== 'platform_admin'"
           to="/select-context"
+          class="midou-top-context"
           aria-label="切换组织与工作区"
         >
           {{ contextName(guard?.organization_name, "当前组织") }}<span>/</span
-          >{{ contextName(guard?.workspace_name, "当前工作区") }}
+          >{{ contextName(guard?.workspace_name, "当前工作区")
+          }}<AppIcon name="chevron" :size="14" />
         </RouterLink>
         <span v-else>平台工作区</span>
       </div>
@@ -366,7 +375,7 @@ onUnmounted(() => {
           class="role-quick-action"
           @click="openDiscovery('search')"
         >
-          <AppIcon name="search" /> <span>搜索</span><kbd>快捷键</kbd>
+          <AppIcon name="search" /> <span>搜索功能、商品、ASIN等</span><kbd>Ctrl K</kbd>
         </button>
         <RouterLink
           v-if="shell === 'platform_admin' && allCapabilities.includes('platform:superadmin')"
@@ -384,9 +393,25 @@ onUnmounted(() => {
           ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink
         >
         <RouterLink v-if="shell === 'member'" to="/notifications" aria-label="通知中心"
-          ><AppIcon name="bell" /></RouterLink
-        ><RouterLink to="/me" aria-label="个人中心"><AppIcon name="person" /></RouterLink>
-        <SessionLogout :api-base-url="apiBaseUrl" />
+          ><AppIcon name="bell"
+        /></RouterLink>
+        <details
+          ref="accountMenu"
+          class="midou-account-menu"
+          @keydown.esc.stop.prevent="closeAccountMenu(true)"
+        >
+          <summary aria-label="账号菜单">
+            <span class="midou-top-avatar"><AppIcon name="person" :size="18" /></span>
+            <AppIcon name="chevron" :size="14" />
+          </summary>
+          <div class="midou-account-menu-panel">
+            <RouterLink to="/me" @click="closeAccountMenu()">个人中心</RouterLink>
+            <RouterLink to="/me?section=appearance" @click="closeAccountMenu()"
+              >外观偏好</RouterLink
+            >
+            <SessionLogout :api-base-url="apiBaseUrl" />
+          </div>
+        </details>
       </div>
     </header>
     <aside v-if="state === 'ready'" class="commerce-sidebar" aria-label="工作区导航">
@@ -430,7 +455,11 @@ onUnmounted(() => {
         >
       </section>
       <footer>
-        <RouterLink v-if="shell === 'member'" to="/select-context" class="commerce-workspace-switch"
+        <RouterLink
+          v-if="shell === 'member'"
+          to="/select-context"
+          class="commerce-workspace-switch"
+          aria-label="侧栏切换工作区"
           ><AppIcon name="box" :size="18" /><span
             >{{ contextName(guard?.workspace_name, "当前工作区")
             }}<small>{{ contextName(guard?.organization_name, "切换组织与工作区") }}</small></span
@@ -460,6 +489,9 @@ onUnmounted(() => {
           aria-label="选择组织与工作区后进入用户工作台"
           >返回选品工作台</RouterLink
         >
+        <RouterLink to="/me?section=appearance" class="midou-sidebar-settings">
+          <AppIcon name="settings" :size="18" />设置
+        </RouterLink>
       </footer>
     </aside>
     <dialog

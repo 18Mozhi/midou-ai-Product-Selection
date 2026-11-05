@@ -1,4 +1,13 @@
 {
+  "referenceNavigationPolish": {
+    "sourceFiles": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/midou-workspace.css"
+    ],
+    "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts", "tests/e2e/session-logout.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Reference-style context, search, account disclosure and sidebar footer; retain one top breadcrumb, mobile drawer, role guards and existing logout/search actions. Frontend-only."
+  },
   "selectionReferenceColors20261105": {
     "sourceFiles": [
       "apps/web/src/design/commerce-tokens.css",

@@ -163,6 +163,8 @@ async function verifySessionLogout(profile, session) {
   assert(landing, `${profile.key} has no cataloged logout entry`);
   await session.page.goto(`${baseUrl}${landing}`, { waitUntil: "networkidle" });
   const logoutButton = session.page.getByRole("button", { name: "退出登录", exact: true });
+  const accountMenu = session.page.getByLabel("账号菜单", { exact: true });
+  if (await accountMenu.isVisible()) await accountMenu.click();
   await logoutButton.waitFor();
   const response = session.page.waitForResponse(
     (item) => item.url() === `${baseUrl}/api/v1/auth/logout` && item.request().method() === "POST",
