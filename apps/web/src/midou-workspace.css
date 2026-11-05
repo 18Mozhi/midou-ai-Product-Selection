@@ -2239,6 +2239,30 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   }
 }
 
+@media (min-width: 1440px) {
+  .opportunity-workspace:has(> .catalogue-page-heading[data-view="rule_candidates"]) {
+    padding-inline: 0;
+    margin-inline-start: -9px;
+    padding-block-start: 0;
+  }
+  html[data-design="commerce"]
+    #app
+    .opportunity-workspace
+    > .catalogue-page-heading[data-view="rule_candidates"] {
+    margin-block-end: 8px;
+  }
+  html[data-design="commerce"]
+    #app
+    .opportunity-workspace
+    > .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls {
+    padding-block-end: 17px;
+  }
+  html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] {
+    margin-block-start: 6px;
+  }
+}
+
 /* Reference notification inbox: compact filter controls and separate card rhythm. */
 .midou-notification-status-controls,
 .midou-notification-status,

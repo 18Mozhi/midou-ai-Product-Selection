@@ -526,5 +526,18 @@ test("catalogue empty workflow leads to the real candidate list without writes",
   await expect(page).toHaveURL(/view=rule_candidates/);
   await expect(page.locator(".product-catalog")).toContainText("候选商品视觉夹具");
   await expect(page.locator(".catalog-data-note")).toContainText("不等于精确销量");
+  if (wide) {
+    const [heading, filters, results] = await Promise.all(
+      [".catalogue-page-heading", ".catalogue-controls", ".product-catalog"].map((selector) =>
+        page.locator(selector).boundingBox(),
+      ),
+    );
+    expect(Math.abs(heading!.x - 274)).toBeLessThanOrEqual(3);
+    expect(Math.abs(filters!.x - heading!.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(results!.x - heading!.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(filters!.y - 210)).toBeLessThanOrEqual(6);
+    expect(Math.abs(results!.y - 361)).toBeLessThanOrEqual(3);
+    await page.screenshot({ path: testInfo.outputPath("candidates-reference.png") });
+  }
   expect(counters.writes).toBe(0);
 });
