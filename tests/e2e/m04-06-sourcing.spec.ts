@@ -1646,6 +1646,28 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
+test("wide sourcing toolbar balances search and four metrics without changing mobile layout", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await page.goto("/sourcing");
+  const overview = page.locator(".sourcing-overview");
+  const search = overview.getByRole("searchbox");
+  const stats = overview.getByRole("term");
+  await expect(stats).toHaveCount(4);
+  await expect(search).toHaveCSS("min-height", "40px");
+  expect((await search.boundingBox())!.width).toBeLessThanOrEqual(304);
+  const columns = () =>
+    overview
+      .locator(".sourcing-summary")
+      .evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(" ").length);
+  await expect.poll(columns).toBe(4);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(columns).toBe(2);
+  await expect(search).toBeVisible();
+});
+
 test("sourcing detail tabs switch by keyboard and expose only the active panel", async ({
   page,
 }) => {

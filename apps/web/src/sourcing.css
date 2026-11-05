@@ -1059,6 +1059,36 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
     height: 68px;
   }
 }
+@media (min-width: 1440px) {
+  .sourcing-workspace--review .sourcing-toolbar label {
+    flex: 0 1 420px;
+    max-width: 420px;
+    gap: 14px;
+  }
+  .sourcing-workspace--review .sourcing-search-input {
+    max-width: 304px;
+  }
+  #app .sourcing-workspace--review .sourcing-toolbar .sourcing-search-input > input {
+    min-height: 40px;
+    padding-block: 6px;
+    border-radius: 8px;
+  }
+  .sourcing-workspace--review .sourcing-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(max-content, 1fr));
+    flex: 0 1 600px;
+    gap: 0 14px;
+  }
+  .sourcing-workspace--review .sourcing-summary > div {
+    justify-content: space-between;
+  }
+  .sourcing-workspace--review .sourcing-summary dt {
+    font-size: 14px;
+  }
+  .sourcing-workspace--review .sourcing-summary dd {
+    font-size: 19px;
+  }
+}
 @media (max-width: 760px) {
   .sourcing-search-input {
     flex-basis: 100%;

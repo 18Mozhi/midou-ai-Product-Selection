@@ -1,4 +1,10 @@
 {
+  "referenceSourcingToolbarBalance": {
+    "sourceFiles": ["apps/web/src/sourcing.css"],
+    "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Wide sourcing toolbar uses a compact search control and four evenly distributed metrics without changing reads, filters or narrow-screen layout."
+  },
   "referenceWorkbenchLibraryDensity": {
     "sourceFiles": ["apps/web/src/components/HomeAutomationOverview.vue", "apps/web/src/midou-workspace.css"],
     "testFiles": ["tests/e2e/home-completed-results.spec.ts"],
