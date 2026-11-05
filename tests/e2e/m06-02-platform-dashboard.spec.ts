@@ -1382,6 +1382,11 @@ test("platform reference first fold fits system checks and source health without
   await expect(signals.locator(".platform-signals li")).toHaveCount(
     dashboard.health_signals.length,
   );
+  await expect(signals.locator(".platform-signal-icon[aria-hidden='true']")).toHaveCount(
+    dashboard.health_signals.length,
+  );
+  await expect(signals.locator(".platform-signal-ok")).toHaveText("正常");
+  await expect(signals.locator(".platform-signal-icon[data-health='critical']")).toHaveCount(1);
   for (const card of [signals, sources]) {
     const bounds = await card.boundingBox();
     expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(925);

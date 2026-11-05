@@ -488,8 +488,16 @@ onUnmounted(() => {
           </header>
           <ul class="platform-signals">
             <li v-for="s in data.health_signals" :key="s.code">
-              <i :data-health="s.status"></i><span>{{ signalText(s.code) }}</span
-              ><strong>{{ signalValue(s.code, s.value) }}</strong>
+              <AppIcon
+                class="platform-signal-icon"
+                :data-health="s.status"
+                :name="s.status === 'healthy' ? 'circle-check' : s.status === 'critical' || s.status === 'warning' ? 'warning' : 'info'"
+                :size="18"
+              />
+              <span>{{ signalText(s.code) }}</span>
+              <strong :class="{ 'platform-signal-ok': s.status === 'healthy' && signalValue(s.code, s.value) === '正常' }">
+                {{ signalValue(s.code, s.value) }}
+              </strong>
             </li>
           </ul>
         </section>
