@@ -1092,6 +1092,9 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   .sourcing-progress > header > div {
     grid-area: 1 / 1 / 2 / -1;
   }
+  .sourcing-progress > header small {
+    font-size: 15px;
+  }
   .sourcing-progress > header > span {
     grid-area: 2 / 2;
     font-size: 14px;
@@ -1099,10 +1102,15 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   .sourcing-progress dl {
     grid-area: 2 / 1;
     margin: 0;
-    column-gap: 24px;
+    column-gap: 28px;
   }
-  .sourcing-progress :is(dt, dd) {
+  .sourcing-progress dt {
     font-size: 14px;
+  }
+  .sourcing-progress dd {
+    font-size: 16px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
   }
   .sourcing-progress > a {
     grid-column: 1 / -1;

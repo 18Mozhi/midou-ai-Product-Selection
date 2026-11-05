@@ -1701,6 +1701,9 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   await expect(progress).toContainText("1 / 1 个来源已结束");
   if (wide) {
     await expect(page.locator(".sourcing-detail > header h3")).toHaveCSS("font-size", "22px");
+    await expect(progress.locator("dt").first()).toHaveCSS("font-size", "14px");
+    await expect(progress.locator("dd").first()).toHaveCSS("font-size", "16px");
+    await expect(progress.locator("dl")).toHaveCSS("column-gap", "28px");
     const ended = (await progress.getByText("1 / 1 个来源已结束").boundingBox())!;
     const counts = (await progress.locator("dl").boundingBox())!;
     expect(Math.abs(ended.y + ended.height / 2 - counts.y - counts.height / 2)).toBeLessThanOrEqual(4);
