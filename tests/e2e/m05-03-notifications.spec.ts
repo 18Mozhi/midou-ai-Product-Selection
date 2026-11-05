@@ -789,6 +789,9 @@ test("midou reference notification layout keeps original workflow and preference
   await expect(page).not.toHaveURL(/unread=1/);
   await expect(page.locator(".midou-notification-open")).toContainText("查看记录");
   const wide = (page.viewportSize()?.width ?? 0) >= 1450;
+  const preference = page.getByRole("complementary", { name: "通知偏好快捷入口" });
+  await expect(preference.locator("p")).toHaveCSS("font-size", wide ? "15px" : "16px");
+  await expect(preference.locator(":scope > div")).toHaveCSS("min-height", wide ? "70px" : "62px");
   await expect(page.locator(".notification-record > span > strong")).toHaveCSS(
     "font-size",
     wide ? "20px" : "16px",
