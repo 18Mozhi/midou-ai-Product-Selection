@@ -1548,9 +1548,21 @@ onMounted(() => void load());
                 </option>
               </select></label
             >
-            <label
-              >变更原因<textarea v-model="form.reason" required maxlength="500"></textarea></label
-            ><button :disabled="busy">{{ busy ? "正在保存…" : "保存" }}</button>
+            <div class="organization-profile-reason">
+              <label for="organization-profile-change-reason">变更原因</label>
+              <div>
+                <textarea
+                  id="organization-profile-change-reason"
+                  v-model="form.reason"
+                  placeholder="请输入变更原因（必填）"
+                  aria-describedby="organization-profile-reason-count"
+                  required
+                  maxlength="500"
+                ></textarea>
+                <small id="organization-profile-reason-count">{{ form.reason?.length ?? 0 }} / 500</small>
+              </div>
+            </div>
+            <button :disabled="busy">{{ busy ? "正在保存…" : "保存" }}</button>
           </fieldset>
         </form>
         <aside class="midou-governance-side" aria-label="治理快捷入口与组织状态">

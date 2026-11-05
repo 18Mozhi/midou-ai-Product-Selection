@@ -2553,6 +2553,13 @@ test("organization profile aligns facts, editor and governance sidebar", async (
   const facts = page.locator(".organization-profile-facts");
   const metrics = page.locator(".organization-profile-metrics");
   const editor = page.locator(".organization-profile-editor");
+  const reason = editor.getByLabel("变更原因", { exact: true });
+  await expect(reason).toHaveAttribute("required", "");
+  await expect(reason).toHaveAttribute("maxlength", "500");
+  await expect(reason).toHaveAccessibleDescription("0 / 500");
+  await reason.fill("调整组织资料");
+  await expect(reason).toHaveAccessibleDescription("6 / 500");
+  await reason.clear();
   const logo = editor.getByLabel("Logo HTTPS 地址");
   const preview = editor.getByRole("button", { name: "预览", exact: true });
   const logoUrl = "https://preview.example.test/organization.svg";

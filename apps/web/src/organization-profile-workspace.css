@@ -177,6 +177,27 @@
     outline-offset: 2px;
   }
 }
+.organization-profile-reason {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 6px;
+  min-width: 0;
+}
+.organization-profile-reason > div {
+  position: relative;
+}
+#app .organization-profile-reason textarea {
+  display: block;
+  padding-block-end: 26px;
+}
+.organization-profile-reason small {
+  position: absolute;
+  inset-inline-end: 17px;
+  inset-block-end: 6px;
+  pointer-events: none;
+  background: var(--so-panel);
+  font-variant-numeric: tabular-nums;
+}
 .organization-logo-field {
   display: grid;
   grid-column: 1 / -1;
