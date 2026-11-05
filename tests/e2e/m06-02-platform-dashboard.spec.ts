@@ -1403,6 +1403,9 @@ test("platform reference first fold fits system checks and source health without
     expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(925);
   }
   const cell = sources.locator("tbody td").first();
+  await expect(sources.getByRole("heading", { name: "来源健康" })).toHaveCSS("font-size", "18px");
+  await expect(signals.getByRole("heading", { name: "系统检查" })).toHaveCSS("font-size", "18px");
+  await expect(cell).toHaveCSS("font-variant-numeric", "tabular-nums");
   const density = sources.getByLabel("表格密度");
   await expect(sources.locator(".table-view-controls__toolbar svg[aria-hidden='true']")).toHaveCount(3);
   await expect(sources.locator(".table-view-controls__content")).toHaveCSS("border-radius", "10px");

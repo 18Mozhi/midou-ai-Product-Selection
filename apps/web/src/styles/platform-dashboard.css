@@ -700,8 +700,16 @@
   background: var(--so-warning-soft);
 }
 @media (min-width: 1440px) {
+  #app .platform-dashboard--review
+    :is(.platform-trend-chart, .platform-source-health, .platform-system-checks) > header h3 {
+    font-size: 18px;
+    line-height: 21px;
+  }
   #app .platform-dashboard--review .platform-source-health {
     align-self: stretch;
+  }
+  #app .platform-dashboard--review .platform-source-health tbody {
+    font-variant-numeric: tabular-nums;
   }
   #app .platform-dashboard--review .platform-source-health table[data-table-density="standard"] :is(th, td) {
     padding-block: 8px;
