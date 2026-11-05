@@ -1127,6 +1127,10 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
   const sidebar = page.getByRole("complementary", { name: "工作区导航" });
   await expect(sidebar).toBeVisible();
   const header = await page.locator(".role-topbar").boundingBox();
+  const accountBadge = page.getByLabel("账号菜单").locator(".midou-top-avatar");
+  await expect(accountBadge).toHaveText("组");
+  await expect(accountBadge).toHaveCSS("width", "36px");
+  const badgeBounds = await accountBadge.boundingBox();
   const bounds = await sidebar.boundingBox();
   const row = await sidebar.getByRole("link", { name: "选品工作台", exact: true }).boundingBox();
   expect(header?.height).toBe(61);
@@ -1188,6 +1192,8 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
     await expect(selectedArea).toHaveCSS("color", "rgb(255, 255, 255)");
     await expect(selectedArea).toHaveCSS("background-color", "rgb(20, 91, 255)");
     expect(await sidebar.boundingBox()).toEqual(bounds);
+    await expect(accountBadge).toHaveText("组");
+    expect(await accountBadge.boundingBox()).toEqual(badgeBounds);
   }
   const sidebarHelp = sidebar.getByRole("button", { name: "帮助", exact: true });
   await expect(sidebarHelp.locator("svg")).toHaveAttribute("width", "18");

@@ -432,7 +432,12 @@ onUnmounted(() => {
           @keydown.esc.stop.prevent="closeAccountMenu(true)"
         >
           <summary aria-label="账号菜单">
-            <span class="midou-top-avatar"><AppIcon name="person" :size="18" /></span>
+            <span class="midou-top-avatar" aria-hidden="true">
+              <template v-if="guard?.organization_name?.trim()">
+                {{ Array.from(guard.organization_name.trim())[0] }}
+              </template>
+              <AppIcon v-else name="person" :size="18" />
+            </span>
             <AppIcon name="chevron" :size="14" />
           </summary>
           <div class="midou-account-menu-panel">

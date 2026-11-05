@@ -1585,6 +1585,9 @@ html[data-design="commerce"]
   border-radius: 50%;
   background: var(--so-primary);
   color: var(--so-on-primary);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
 }
 .midou-account-menu-panel {
   position: absolute;
@@ -1842,6 +1845,9 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
   }
   .midou-account-menu {
     margin-left: 18px;
+  }
+  .midou-account-menu summary {
+    gap: 10px;
   }
   .midou-top-avatar {
     width: 36px;
