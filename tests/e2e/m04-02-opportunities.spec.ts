@@ -412,6 +412,17 @@ test("candidate table shows five progress segments from the existing gate count"
   await expect(track.locator("span")).toHaveCount(5);
   await expect(track.locator('[data-passed="true"]')).toHaveCount(2);
   await expect(page.getByRole("table", { name: "选品商品列表" })).toContainText("2/5");
+  const facts = page.locator(".selection-candidate-list .selection-product-results > div");
+  await expect(facts).toHaveCount(3);
+  await expect(facts.first()).toHaveCSS("display", "grid");
+  const valueOffsets = await facts.evaluateAll((rows) =>
+    rows.map((row) =>
+      row.querySelector("dd")!.getBoundingClientRect().left - row.getBoundingClientRect().left,
+    ),
+  );
+  expect(valueOffsets[0]).toBeGreaterThan(30);
+  expect(valueOffsets[0]).toBeLessThan(75);
+  expect(new Set(valueOffsets).size).toBe(1);
 });
 
 test("historical evidence task retains blocker facts without restoring the retired task surface", async ({

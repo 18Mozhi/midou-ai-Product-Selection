@@ -402,6 +402,22 @@ tbody tr:hover {
 .catalogue-gate-track > [data-passed="true"] {
   background: var(--so-primary);
 }
+.selection-candidate-list .selection-product-results {
+  gap: 2px;
+  margin-block-start: 6px;
+}
+.selection-candidate-list .selection-product-results > div {
+  display: grid;
+  grid-template-columns: 3.5em minmax(0, 1fr);
+  column-gap: 8px;
+  justify-content: start;
+  line-height: 1.35;
+}
+.selection-candidate-list .selection-product-results dd {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
 .selection-product-action-cell a {
   display: inline-flex;
   align-items: center;
