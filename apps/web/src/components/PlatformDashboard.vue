@@ -272,12 +272,12 @@ onUnmounted(() => {
       </div>
       <div class="platform-action-summary">
         <RouterLink to="/platform-admin/collection">
-          <span><AppIcon name="target" :size="22" />等待处理</span
+          <span><AppIcon name="clock" :size="22" />等待处理</span
           ><strong>{{ data.summary.queue_backlog }}</strong
           ><small>查看排队、运行或受阻的采集任务 →</small>
         </RouterLink>
         <RouterLink to="/platform-admin/collection/overview?root_cause=1">
-          <span><AppIcon name="shield" :size="22" />需要关注</span
+          <span><AppIcon name="warning" :size="22" />需要关注</span
           ><strong>{{ data.summary.open_alerts }}</strong
           ><small>按错误根因查看异常 →</small>
         </RouterLink>
@@ -308,7 +308,7 @@ onUnmounted(() => {
             ><small v-else>仅超级管理员可查看明细</small>
           </article>
           <article>
-            <span><AppIcon name="box" :size="22" />启用来源</span
+            <span><AppIcon name="layers" :size="22" />启用来源</span
             ><strong>{{ data.summary.enabled_providers }}</strong
             ><RouterLink to="/platform-admin/providers/sources">查看来源</RouterLink>
           </article>
@@ -318,7 +318,7 @@ onUnmounted(() => {
             ><RouterLink to="/platform-admin/collection">查看任务</RouterLink>
           </article>
           <article>
-            <span><AppIcon name="list" :size="22" />窗内文件增长</span
+            <span><AppIcon name="file" :size="22" />窗内文件增长</span
             ><strong>{{ bytes(data.summary.file_growth_bytes) }}</strong
             ><RouterLink to="/platform-admin/data">查看数据</RouterLink>
           </article>

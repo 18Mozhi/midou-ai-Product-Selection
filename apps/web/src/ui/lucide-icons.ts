@@ -10,6 +10,13 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ],
   ],
   check: [["path", { d: "M20 6 9 17l-5-5" }]],
+  clock: [
+    ["circle", { cx: "12", cy: "12", r: "10" }],
+    ["path", { d: "M12 6v6l4 2" }],
+  ],
+  warning: [["path", { d: "M12 3 2 21h20L12 3ZM12 9v5m0 3h.01" }]],
+  layers: [["path", { d: "m12 2 10 5-10 5L2 7l10-5Zm-10 10 10 5 10-5M2 17l10 5 10-5" }]],
+  file: [["path", { d: "M5 2h9l5 5v15H5V2Zm9 0v6h5" }]],
   funnel: [["path", { d: "M3 4h18l-7 8v7l-4-2v-5Z" }]],
   globe: [
     ["circle", { cx: "12", cy: "12", r: "10" }],

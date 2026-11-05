@@ -1401,6 +1401,7 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
   await expect(page.getByRole("link", { name: "新建组织", exact: true })).toHaveCount(0);
   await expect(page.getByRole("link", { name: /等待处理 7/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /需要关注 2/ })).toBeVisible();
+  await expect(page.locator(".platform-action-summary a > span > svg[aria-hidden='true']")).toHaveCount(2);
   const facts = page.getByRole("region", { name: "平台指标" });
   await expect(facts).toContainText("活跃组织42");
   await expect(facts).toContainText("活跃用户318");
