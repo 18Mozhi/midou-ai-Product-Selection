@@ -1023,7 +1023,11 @@ test("member navigation survives account appearance and back without replacing c
     await page.locator('.role-topbar summary[aria-label="账号菜单"]').click();
     await page.locator('.role-topbar a[href="/me"]').click();
   }
-  await expect(page.getByRole("navigation", { name: "个人中心分区" })).toBeVisible();
+  const directory = page.getByRole("navigation", { name: "个人中心分区" });
+  await expect(directory).toBeVisible();
+  if ((page.viewportSize()?.width ?? 0) >= 1440) {
+    await expect(directory.locator('a[aria-current="page"] > b')).toHaveCSS("font-size", "16px");
+  }
   expect(await header?.evaluate((el) => el.isConnected)).toBe(true);
   expect(await sidebar?.evaluate((el) => el.isConnected)).toBe(true);
   expect(await metrics()).toEqual(baseline);
