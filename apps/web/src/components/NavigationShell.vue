@@ -630,7 +630,7 @@ onUnmounted(() => {
           ><span v-else :aria-current="index === breadcrumbs.length - 1 ? 'page' : undefined">{{
             item.label
           }}</span
-          ><b aria-hidden="true" v-if="index < breadcrumbs.length - 1">›</b>
+          ><b aria-hidden="true" v-if="index < breadcrumbs.length - 1"></b>
         </template>
       </nav>
       <section v-if="state !== 'ready'" class="role-gate-state" aria-live="polite">

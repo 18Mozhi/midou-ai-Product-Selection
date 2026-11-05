@@ -1191,6 +1191,11 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
     await expect(breadcrumb).toHaveCSS("font-size", "15px");
     await expect(breadcrumb).toHaveCSS("column-gap", "12px");
     await expect(breadcrumb.locator("b").first()).toHaveAttribute("aria-hidden", "true");
+    const separator = (await breadcrumb.locator("b").first().boundingBox())!;
+    const currentCrumb = (await breadcrumb.locator('[aria-current="page"]').boundingBox())!;
+    expect(separator.height).toBeLessThanOrEqual(8);
+    expect(Math.abs(separator.y + separator.height / 2 - currentCrumb.y - currentCrumb.height / 2))
+      .toBeLessThanOrEqual(1);
     expect(await context.boundingBox()).toEqual(contextBounds);
     expect(await search.boundingBox()).toEqual(searchBounds);
     expect(await segments.boundingBox()).toEqual(segmentBounds);

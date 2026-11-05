@@ -1397,6 +1397,9 @@ html[data-design="commerce"] #app .role-top-breadcrumb b {
   font-weight: 400;
   color: var(--so-text-muted);
 }
+html[data-design="commerce"] #app .role-top-breadcrumb > b::before {
+  content: "›";
+}
 @media (min-width: 1440px) {
   html[data-design="commerce"] #app .role-content > .role-top-breadcrumb {
     font-size: 15px;
