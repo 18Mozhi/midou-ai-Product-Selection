@@ -2088,6 +2088,10 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
 }
 
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .role-content:has(> .home-dashboard) > .role-top-breadcrumb {
+    /* Match the home grid's 2px inset plus its title's 8px inset. */
+    margin-inline-start: 10px;
+  }
   html[data-design="commerce"] #app .midou-home-quick h3 {
     margin-block-end: 25px;
   }
@@ -2119,6 +2123,13 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
   }
   html[data-design="commerce"] #app .home-command-bar :is(a, button) {
     font-size: 14px;
+  }
+  html[data-design="commerce"] #app .home-command-bar .so-action-secondary {
+    background: var(--so-panel);
+    font-weight: 600;
+  }
+  html[data-design="commerce"] #app .home-command-bar .so-action-secondary:hover:not(:disabled) {
+    background: var(--so-panel-soft);
   }
   .home-command-bar .home-live-status {
     gap: 20px;

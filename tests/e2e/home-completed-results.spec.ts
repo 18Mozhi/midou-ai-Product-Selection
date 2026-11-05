@@ -221,6 +221,9 @@ test("workbench completed empty action fits in the reference desktop first fold"
   expect(Math.abs(firstMetric.y - 204), "daily cards top").toBeLessThanOrEqual(2);
   const heading = page.getByRole("heading", { name: "选品工作台", exact: true });
   const headingBox = (await heading.boundingBox())!;
+  const breadcrumb = page.getByRole("navigation", { name: "面包屑", exact: true });
+  await expect(breadcrumb).toHaveCount(1);
+  expect(Math.abs((await breadcrumb.boundingBox())!.x - headingBox.x)).toBeLessThanOrEqual(1);
   expect(
     Math.abs(headingBox.x - overview.x - 8),
     "heading inset relative to card",
@@ -236,6 +239,10 @@ test("workbench completed empty action fits in the reference desktop first fold"
     expect(Math.abs(box.y - 124)).toBeLessThanOrEqual(5);
   }
   await expect(command.locator(".home-live-status > span")).toHaveCSS("font-size", "14px");
+  for (const control of [tools.nth(0), tools.nth(1)]) {
+    await expect(control).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    await expect(control).toHaveCSS("font-weight", "600");
+  }
   const flow = (await page.getByRole("region", { name: "选品任务流程" }).boundingBox())!;
   expect(Math.abs(overview.y - 378), "library overview top").toBeLessThanOrEqual(5);
   expect(Math.abs(flow.y - 529), "workflow top").toBeLessThanOrEqual(5);
