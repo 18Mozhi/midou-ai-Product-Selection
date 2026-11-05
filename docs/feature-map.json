@@ -1,4 +1,10 @@
 {
+  "referenceOrganizationLogoPreview": {
+    "sourceFiles": ["apps/web/src/components/OrganizationAdminCenter.vue", "apps/web/src/organization-profile-workspace.css"],
+    "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Logo draft loads an HTTPS image only on explicit preview and does not submit the organization profile."
+  },
   "referenceProfileCancel": {
     "sourceFiles": ["apps/web/src/components/PersonalCenter.vue", "apps/web/src/components/personal-center/PersonalProfilePanel.vue", "apps/web/src/components/personal-center/usePersonalCenter.ts"],
     "testFiles": ["tests/e2e/ui-phase2-account-contracts.spec.ts"],

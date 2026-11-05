@@ -2514,6 +2514,23 @@ test("organization profile aligns facts, editor and governance sidebar", async (
   const facts = page.locator(".organization-profile-facts");
   const metrics = page.locator(".organization-profile-metrics");
   const editor = page.locator(".organization-profile-editor");
+  const logo = editor.getByLabel("Logo HTTPS 地址");
+  const preview = editor.getByRole("button", { name: "预览", exact: true });
+  const logoUrl = "https://preview.example.test/organization.svg";
+  let logoReads = 0;
+  await page.route(logoUrl, (route) => {
+    logoReads++;
+    return route.fulfill({ contentType: "image/svg+xml", body: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"/>' });
+  });
+  await logo.fill(logoUrl);
+  await expect(editor.getByRole("img", { name: "组织 Logo 预览" })).toHaveCount(0);
+  expect(logoReads).toBe(0);
+  await preview.click();
+  await expect.poll(() => logoReads).toBe(1);
+  await expect(editor.getByRole("img", { name: "组织 Logo 预览" })).toHaveAttribute("src", logoUrl);
+  await logo.fill("http://preview.example.test/unsafe.svg");
+  await preview.click();
+  await expect(editor.getByRole("img", { name: "组织 Logo 预览" })).toHaveCount(0);
   await expect(facts.locator("h3")).toHaveText(profile.name);
   await expect(facts.locator("dl > div")).toHaveCount(3);
   await expect(facts.locator("dt > svg[aria-hidden='true']")).toHaveCount(3);

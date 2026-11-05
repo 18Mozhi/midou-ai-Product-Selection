@@ -222,6 +222,20 @@ function validateHttps(event: Event) {
 function clearFieldValidity(event: Event) {
   (event.currentTarget as HTMLInputElement).setCustomValidity("");
 }
+const logoPreview = ref("");
+watch([view, () => form.value.logo_url, () => data.value?.id], () => {
+  logoPreview.value = "";
+});
+function previewOrganizationLogo() {
+  logoPreview.value = "";
+  try {
+    const url = new URL(form.value.logo_url?.trim() ?? "");
+    if (url.protocol === "https:" && !url.username && !url.password)
+      logoPreview.value = url.href;
+  } catch {
+    // Empty or incomplete draft: retain the organization initials.
+  }
+}
 async function readView(currentView: string) {
   if (currentView === "summary") {
     const [profile, workspaces] = await Promise.all([
@@ -1491,8 +1505,11 @@ onMounted(() => void load());
                 required
                 maxlength="64"
             /></label>
-            <label
-              >Logo HTTPS 地址<input
+            <div class="organization-logo-field">
+              <label for="organization-logo-url">Logo HTTPS 地址</label>
+              <div class="organization-logo-controls">
+              <input
+                id="organization-logo-url"
                 v-model="form.logo_url"
                 type="url"
                 pattern="https://.*"
@@ -1502,8 +1519,14 @@ onMounted(() => void load());
                 @invalid="validateHttps"
                 @input="clearFieldValidity"
               />
-              <small>仅支持 HTTPS；留空表示暂不设置 Logo。</small></label
-            >
+              <span class="organization-logo-preview">
+                <img v-if="logoPreview" :src="logoPreview" alt="组织 Logo 预览" referrerpolicy="no-referrer" @error="logoPreview = ''" />
+                <span v-else aria-hidden="true">{{ Array.from(form.name?.trim() ?? "")[0] || "?" }}</span>
+              </span>
+              <button type="button" :disabled="!form.logo_url?.trim()" @click="previewOrganizationLogo">预览</button>
+              </div>
+              <small>仅支持 HTTPS；留空表示暂不设置 Logo。</small>
+            </div>
             <label
               >数据保留天数<input
                 v-model.number="form.data_retention_days"
