@@ -211,6 +211,11 @@ test("workbench completed empty action fits in the reference desktop first fold"
   await expect(result.locator(".home-completed-empty svg")).toHaveAttribute("aria-hidden", "true");
   const bounds = await result.boundingBox();
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(941);
+  const overview = (await page.locator(".home-automation-overview").boundingBox())!;
+  const flow = (await page.getByRole("region", { name: "选品任务流程" }).boundingBox())!;
+  expect(Math.abs(overview.y - 378), "library overview top").toBeLessThanOrEqual(5);
+  expect(Math.abs(flow.y - 529), "workflow top").toBeLessThanOrEqual(5);
+  expect(Math.abs(bounds!.y - flow.y - flow.height - 18), "workflow-to-results gap").toBeLessThanOrEqual(2);
   const quickCandidate = page.locator(".midou-home-quick .home-quick-candidates");
   await expect(quickCandidate).toHaveCSS("font-size", "16px");
   await expect(quickCandidate).toHaveAttribute("href", "/opportunities?view=rule_candidates");
@@ -417,7 +422,16 @@ for (const palette of [
       await expect(candidate).toHaveCSS("background-color", palette.soft);
       await expect(candidate.locator("b")).toHaveCSS("color", palette.primary);
       await expect(candidate.locator("svg").first()).toHaveCSS("color", palette.primary);
-      await expect(candidate.locator("b")).toHaveCSS("background-color", "rgb(255, 255, 255)");
+      const desktopBadge = page.viewportSize()!.width >= 1101;
+      for (const row of [candidate, evidence]) {
+        const badge = row.locator("b");
+        if (desktopBadge) {
+          await expect(badge).toHaveCSS("background-color", /^color\(srgb /);
+          await expect(badge).not.toHaveCSS("background-color", await row.evaluate((el) => getComputedStyle(el).backgroundColor));
+        } else {
+          await expect(badge).toHaveCSS("background-color", "rgb(255, 255, 255)");
+        }
+      }
       const neutral = await quick
         .getByRole("link", { name: "市场情报", exact: true })
         .evaluate((el) => getComputedStyle(el).backgroundColor);

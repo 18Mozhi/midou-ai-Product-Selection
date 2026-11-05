@@ -1248,6 +1248,12 @@ html[data-design="commerce"] #app .home-status-facts > a {
   padding-block: 10px;
 }
 @media (min-width: 1101px) {
+  html[data-design="commerce"] #app .home-overview-panel {
+    gap: 8px;
+  }
+  html[data-design="commerce"] #app .home-automation-overview .home-automation-heading {
+    padding-block: 11px;
+  }
   html[data-design="commerce"] #app .home-automation-overview .home-automation-heading h3 {
     font-size: 17px;
   }
