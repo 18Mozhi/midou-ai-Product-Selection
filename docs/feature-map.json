@@ -1,4 +1,10 @@
 {
+  "referenceBreadcrumbHierarchy": {
+    "sourceFiles": ["apps/web/src/midou-workspace.css"],
+    "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts", "tests/e2e/home-completed-results.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "The single shared top breadcrumb uses neutral parent links and an emphasized current page, preserving keyboard navigation and responsive overflow."
+  },
   "referenceOrganizationOverviewActions": {
     "sourceFiles": ["apps/web/src/components/NavigationShell.vue", "apps/web/src/components/OrganizationAdminCenter.vue", "apps/web/src/navigation-shell-route-state.ts", "apps/web/src/organization-admin.css"],
     "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],

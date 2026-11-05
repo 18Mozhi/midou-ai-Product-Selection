@@ -343,6 +343,15 @@ test("workspace breadcrumb stays exclusively above page content across list rout
       .click();
   await expect(crumb).toContainText("选品库");
   await expect(crumb).toHaveCount(1);
+  const currentCrumb = crumb.locator('[aria-current="page"]');
+  const parentCrumb = crumb.getByRole("link", { name: "选品工作区" });
+  await expect(currentCrumb).toHaveCSS("font-weight", "650");
+  await expect(parentCrumb).toHaveCSS("text-decoration-line", "none");
+  expect(await parentCrumb.evaluate((el) => getComputedStyle(el).color)).not.toBe(
+    await currentCrumb.evaluate((el) => getComputedStyle(el).color),
+  );
+  await parentCrumb.focus();
+  await expect(parentCrumb).toBeFocused();
   await expect(page.locator(".role-content")).toHaveCSS("font-size", "14px");
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
