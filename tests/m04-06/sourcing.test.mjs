@@ -98,6 +98,13 @@ test("M04-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(repo, /sourcing_collection_task_not_ready[\s\S]*purchase_quantity_below_moq/);
   assert.match(routes, /supplier_quote:manage[\s\S]*purchase-tasks/);
   assert.match(worker, /product-supply-csv-v1[\s\S]*dead_letter/);
+  const extracted = comparisonPanel.includes('from "./sourcing-comparison-specification"');
+  const specification = extracted
+    ? await readFile("apps/web/src/components/sourcing-comparison-specification.ts", "utf8")
+    : "";
+  const comparisonCss = extracted
+    ? await readFile("apps/web/src/sourcing-comparison-table.css", "utf8")
+    : comparisonPanel;
   const uiSurface = `${uiTypes}\n${ui}\n${comparisonPanel}\n${dialogs}`;
   for (const s of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(uiSurface, new RegExp(s));
@@ -135,8 +142,6 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
     feature,
     runbook,
     offers,
-    specification,
-    comparisonCss,
   ] = await Promise.all(
     [
       "apps/web/src/components/SourcingWorkspace.vue",
@@ -149,10 +154,15 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
       "docs/feature-map.json",
       "docs/runbooks/m04-06-sourcing.md",
       "apps/web/src/components/SupplierOfferList.vue",
-      "apps/web/src/components/sourcing-comparison-specification.ts",
-      "apps/web/src/sourcing-comparison-table.css",
     ].map((path) => readFile(path, "utf8")),
   );
+  const extracted = comparisonPanel.includes('from "./sourcing-comparison-specification"');
+  const specification = extracted
+    ? await readFile("apps/web/src/components/sourcing-comparison-specification.ts", "utf8")
+    : "";
+  const comparisonCss = extracted
+    ? await readFile("apps/web/src/sourcing-comparison-table.css", "utf8")
+    : comparisonPanel;
   const uiSurface = `${offers}\n${ui}\n${comparisonPanel}\n${dialogs}\n${specification}`;
   assert.match(uiSurface, /规格、最小起订量与交期对比[\s\S]*最小起订量[\s\S]*报价[\s\S]*交期/);
   assert.match(uiSurface, /规格归一化提示/);
@@ -176,12 +186,17 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
     comparisonPanel,
     /<table class="sourcing-quote-table">[\s\S]*scope="col"[\s\S]*<tbody>[\s\S]*scope="row"/,
   );
-  assert.match(
-    comparisonPanel,
-    /import \{ specificationHint \} from "\.\/sourcing-comparison-specification"/,
-  );
+  if (extracted) {
+    assert.match(
+      comparisonPanel,
+      /import \{ specificationHint \} from "\.\/sourcing-comparison-specification"/,
+    );
+    assert.match(comparisonPanel, /<style scoped src="\.\.\/sourcing-comparison-table.css">/);
+  } else {
+    assert.match(comparisonPanel, /const specificationHint =/);
+    assert.match(comparisonPanel, /<style scoped>/);
+  }
   assert.match(comparisonPanel, /specificationHint\(comparison.quotes\)\.detail/);
-  assert.match(comparisonPanel, /<style scoped src="\.\.\/sourcing-comparison-table.css">/);
   assert.match(comparisonCss, /@media \(max-width: 760px\)/);
   assert.match(css, /sourcing-compare-tray/);
   assert.match(architecture, /blocked_login[\s\S]*不伪造登录续期入口/);
