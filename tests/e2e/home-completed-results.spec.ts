@@ -200,7 +200,7 @@ test("home polling does not repeat unchanged product queries; manual refresh and
   await expect.poll(() => h.counters.completed).toBe(3);
 });
 
-test("workbench completed empty action fits in the reference desktop first fold", async ({ page }) => {
+test("workbench completed empty action fits in the reference desktop first fold", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1672, height: 941 });
   await setup(page);
   await page.route(completedRoute, (route) => route.fulfill({ json: envelope([]) }));
@@ -208,10 +208,17 @@ test("workbench completed empty action fits in the reference desktop first fold"
   const result = page.getByRole("region", { name: "选品结果" });
   const link = result.getByRole("link", { name: "查看候选进度" });
   await expect(link).toHaveAttribute("href", "/opportunities?view=rule_candidates");
+  await expect(link).toHaveCSS("font-size", "14px");
+  const actionBounds = (await link.boundingBox())!;
+  expect(actionBounds.width).toBe(142);
+  expect(actionBounds.height).toBeGreaterThanOrEqual(44);
+  expect(await link.evaluate((element) => getComputedStyle(element, "::before").top)).toBe("4px");
   await expect(result.locator(".home-completed-empty svg")).toHaveAttribute("aria-hidden", "true");
   const bounds = await result.boundingBox();
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(941);
   const overview = (await page.locator(".home-automation-overview").boundingBox())!;
+  const firstMetric = (await page.locator(".home-daily-production dl > div").first().boundingBox())!;
+  expect(Math.abs(firstMetric.y - 204), "daily cards top").toBeLessThanOrEqual(2);
   const heading = page.getByRole("heading", { name: "选品工作台", exact: true });
   const headingBox = (await heading.boundingBox())!;
   expect(
@@ -289,6 +296,7 @@ test("workbench completed empty action fits in the reference desktop first fold"
     "href",
     "/opportunities?view=completed",
   );
+  await page.screenshot({ path: testInfo.outputPath("workbench-reference.png") });
 });
 
 for (const status of [200, 401, 403, 500]) {

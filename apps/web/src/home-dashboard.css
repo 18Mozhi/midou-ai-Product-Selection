@@ -7,7 +7,7 @@
   color: var(--so-text);
   font: 13px/1.6 var(--so-font-ui);
 }
-.home-dashboard :is(h2, h3, p, dl) {
+.home-dashboard :is(h1, h2, h3, p, dl) {
   margin: 0;
 }
 .home-dashboard :is(a, button, summary):focus-visible {
@@ -26,7 +26,7 @@
   flex-direction: column-reverse;
   gap: 6px;
 }
-.home-command-bar h2 {
+.home-command-bar h1 {
   font-size: 24px;
   font-weight: 650;
   letter-spacing: 0;
@@ -160,6 +160,8 @@ html[data-design="commerce"] #app .home-daily-production dd {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     padding-inline: 14px;
+    padding-block: 8px;
+    border-top-color: transparent;
   }
   #app .home-daily-meta > small {
     grid-area: 1 / 1;
@@ -368,7 +370,7 @@ html[data-design="commerce"] #app .home-daily-production dd {
     align-items: flex-start;
     flex-wrap: wrap;
   }
-  .home-command-bar h2 {
+  .home-command-bar h1 {
     font-size: 22px;
   }
   .home-command-bar nav {

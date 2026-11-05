@@ -2236,6 +2236,9 @@ test("P18 keeps a shared write locked across cached route deactivation and refre
   const scoreWriteStarted = new Promise<void>((resolve) => (markScoreWriteStarted = resolve));
   let detailReadCount = 0;
   await ready(page);
+  await page.route("**/api/v1/me/home-dashboard", (route) =>
+    route.fulfill({ json: envelope({ actions: [], changes: [], follows: [], health: [] }) }),
+  );
   await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) => {
     detailReadCount += 1;
     return route.fallback();

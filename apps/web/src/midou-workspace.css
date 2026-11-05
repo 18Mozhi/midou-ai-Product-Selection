@@ -56,6 +56,7 @@ html[data-design="commerce"]
     .trend-market-heading h2,
     .sourcing-head h1,
     .home-dashboard h2,
+    .home-command-bar h1,
     .notification-center h1,
     .platform-dashboard h1
   ) {
@@ -1431,7 +1432,7 @@ html[data-design="commerce"] #app .role-shell[data-shell="member"] .role-content
 }
 html[data-design="commerce"]
   #app
-  :is(.catalogue-page-heading h2, .sourcing-head h1, .home-command-bar h2) {
+  :is(.catalogue-page-heading h2, .sourcing-head h1, .home-command-bar h1) {
   font-size: 24px;
   line-height: 1.35;
   text-wrap: balance;
@@ -2014,7 +2015,7 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
     padding-bottom: 10px;
     align-items: start;
   }
-  html[data-design="commerce"] #app .home-command-bar h2 {
+  html[data-design="commerce"] #app .home-command-bar h1 {
     font-size: 29px;
     line-height: 1.25;
   }
@@ -2086,7 +2087,10 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
   html[data-design="commerce"] #app .home-command-bar > div {
     padding-inline-start: 8px;
   }
-  html[data-design="commerce"] #app .home-command-bar h2 {
+  html[data-design="commerce"] #app .home-command-bar {
+    padding-block-end: 15px;
+  }
+  html[data-design="commerce"] #app .home-command-bar h1 {
     font-size: 30px;
     line-height: 36px;
   }

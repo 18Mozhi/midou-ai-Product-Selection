@@ -192,7 +192,7 @@ onBeforeUnmount(deactivate);
         <div class="midou-home-main">
           <header class="home-command-bar">
             <div>
-              <h2>选品工作台</h2>
+              <h1>选品工作台</h1>
               <p class="midou-home-intro">集中查看自动选品进度、候选商品与分析结果。</p>
             </div>
             <nav>
