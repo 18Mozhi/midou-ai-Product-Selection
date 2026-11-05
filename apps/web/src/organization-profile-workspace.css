@@ -189,6 +189,14 @@
   gap: 10px;
   align-items: center;
 }
+#app .organization-profile-fields .organization-logo-controls > button {
+  grid-column: auto;
+  min-height: 44px;
+  padding-inline: 14px;
+  border: 1px solid var(--so-border);
+  background: var(--so-panel);
+  color: var(--so-text);
+}
 .organization-logo-preview {
   display: grid;
   place-items: center;

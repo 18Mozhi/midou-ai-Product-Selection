@@ -2523,6 +2523,10 @@ test("organization profile aligns facts, editor and governance sidebar", async (
     return route.fulfill({ contentType: "image/svg+xml", body: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"/>' });
   });
   await logo.fill(logoUrl);
+  const inputBounds = (await logo.boundingBox())!;
+  const previewBounds = (await preview.boundingBox())!;
+  expect(previewBounds.x).toBeGreaterThan(inputBounds.x + inputBounds.width);
+  expect(Math.abs(previewBounds.y + previewBounds.height / 2 - inputBounds.y - inputBounds.height / 2)).toBeLessThan(1);
   await expect(editor.getByRole("img", { name: "组织 Logo 预览" })).toHaveCount(0);
   expect(logoReads).toBe(0);
   await preview.click();
