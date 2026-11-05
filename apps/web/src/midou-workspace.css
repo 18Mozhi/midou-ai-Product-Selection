@@ -823,6 +823,25 @@ html[data-design="commerce"] #app .midou-completed-empty {
   background: var(--so-panel-soft);
   font-size: 13px;
 }
+.midou-analysis-diagnostics > summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  list-style: none;
+  cursor: pointer;
+}
+.midou-analysis-diagnostics > summary::-webkit-details-marker {
+  display: none;
+}
+.midou-analysis-diagnostics[open] > summary > svg {
+  transform: rotate(90deg);
+}
+.midou-completed-actions > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
 html[data-design="commerce"] #app .notification-center {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 220px;
@@ -2040,8 +2059,15 @@ html[data-design="commerce"] #app .catalogue-querybar .catalogue-search label > 
     font-size: 24px;
   }
   html[data-design="commerce"] #app .midou-completed-actions > button {
-    min-width: 145px;
-    min-height: 46px;
+    min-width: 164px;
+    min-height: 49px;
+  }
+  html[data-design="commerce"] #app .midou-completed-actions {
+    gap: 24px;
+    margin-block-end: 36px;
+  }
+  html[data-design="commerce"] #app .midou-completed-actions > .so-action-primary {
+    min-width: 193px;
   }
   .midou-analysis-guide {
     display: grid;
@@ -2056,6 +2082,16 @@ html[data-design="commerce"] #app .catalogue-querybar .catalogue-search label > 
   }
   .midou-analysis-guide .midou-analysis-flow {
     padding: 0;
+  }
+  .midou-analysis-guide h4 {
+    font-size: 16px;
+  }
+  .midou-analysis-guide .midou-analysis-flow li > svg {
+    box-sizing: content-box;
+    padding: 13px;
+  }
+  .midou-analysis-diagnostics > summary {
+    font-size: 15px;
   }
   .midou-analysis-flow li:not(:last-child)::after {
     content: "";

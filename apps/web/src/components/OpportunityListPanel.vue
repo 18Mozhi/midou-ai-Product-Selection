@@ -357,7 +357,9 @@ watch(imageFailureResetSources, (items) => {
     <div class="midou-completed-actions">
       <button type="button" class="so-action-primary" @click="emit('view', 'rule_candidates')">
         查看候选商品</button
-      ><button type="button" class="so-action-secondary" @click="emit('apply')">刷新结果</button>
+      ><button type="button" class="so-action-secondary" @click="emit('apply')">
+        <AppIcon name="refresh" :size="18" />刷新结果
+      </button>
     </div>
     <div class="midou-analysis-guide">
       <h4 id="midou-analysis-flow-heading">分析流程说明</h4>
@@ -380,7 +382,7 @@ watch(imageFailureResetSources, (items) => {
       </ol>
     </div>
     <details v-if="requestId" class="midou-analysis-diagnostics">
-      <summary>诊断信息</summary>
+      <summary><AppIcon name="chevron" :size="16" />诊断信息</summary>
       <p>
         本次读取关联编号：<code>{{ requestId }}</code
         >。图示仅说明分析流程，不代表这些步骤已经完成。

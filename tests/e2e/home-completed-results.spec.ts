@@ -473,7 +473,9 @@ for (const palette of [
 
 test("catalogue empty workflow leads to the real candidate list without writes", async ({
   page,
-}) => {
+}, testInfo) => {
+  const wide = page.viewportSize()!.width >= 1101;
+  if (wide) await page.setViewportSize({ width: 1717, height: 916 });
   const { counters } = await setup(page);
   await page.route(/\/api\/v1\/opportunities\?/, (route) => {
     const view = new URL(route.request().url()).searchParams.get("selection_view");
@@ -484,6 +486,18 @@ test("catalogue empty workflow leads to the real candidate list without writes",
   const empty = page.getByRole("region", { name: "已完成分析空状态" });
   await expect(empty).toBeVisible();
   await expect(empty.getByRole("list", { name: "分析流程说明" }).locator("li")).toHaveCount(5);
+  await expect(empty.getByRole("button", { name: "刷新结果" }).locator("svg")).toHaveAttribute("aria-hidden", "true");
+  const diagnostics = empty.locator("details");
+  await expect(diagnostics).not.toHaveAttribute("open");
+  await diagnostics.getByText("诊断信息", { exact: true }).click();
+  await expect(diagnostics).toHaveAttribute("open", "");
+  await diagnostics.getByText("诊断信息", { exact: true }).click();
+  if (wide) {
+    await expect(empty.getByRole("button", { name: "查看候选商品" })).toHaveCSS("min-width", "193px");
+    const card = (await empty.boundingBox())!;
+    expect(card.y + card.height).toBeLessThanOrEqual(916);
+    await page.screenshot({ path: testInfo.outputPath("completed-empty-reference.png") });
+  }
   await expect(page.locator(".catalogue-title-line [role=note]")).toHaveText("当前为只读权限。");
   await empty.getByRole("button", { name: "查看候选商品" }).click();
   await expect(page).toHaveURL(/view=rule_candidates/);
