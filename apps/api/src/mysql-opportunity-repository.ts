@@ -1,7 +1,7 @@
+import { homeCandidateSql, homeQualityGateSql } from "./home-selection-sql.js";
 import { optimizeSelectionReadSql } from "./selection-read-query-plan.js";
 import {
   opportunityRecommendedListSourceSql,
-  opportunityPendingListSourceSql,
   reuseRecommendedFilterIdentitySql,
 } from "./opportunity-recommended-list-scope.js";
 import {
@@ -148,13 +148,9 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     } else if (input.selectionView === "recommended") {
       where.push("o.decision_status='pending'", opportunityRecommendedSql);
     } else if (input.selectionView === "rule_candidates") {
-      where.push(
-        "o.decision_status='pending'",
-        opportunityCandidateSql,
-        `NOT ${opportunityQualityGateSql}`,
-      );
+      where.push("o.decision_status='pending'", homeCandidateSql, `NOT ${homeQualityGateSql}`);
     } else if (input.selectionView === "evidence_pending") {
-      where.push("o.decision_status='pending'", `NOT ${opportunityCandidateSql}`);
+      where.push("o.decision_status='pending'", `NOT ${homeCandidateSql}`);
     } else if (input.selectionView !== "all" && input.scope !== "all")
       where.push(
         sqlText(
@@ -194,13 +190,10 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       values.push(input.ownerId);
     }
     const recommended = input.selectionView === "recommended",
-      pendingIdentity =
-        recommended || ["rule_candidates", "evidence_pending"].includes(input.selectionView ?? ""),
-      source = recommended
-        ? opportunityRecommendedListSourceSql
-        : pendingIdentity
-          ? opportunityPendingListSourceSql
-          : "opportunities o",
+      // Presence filtering needs no sorted scalar identity for every scoped product.
+      // Only the recommended view materializes its identity before filtering.
+      pendingIdentity = recommended,
+      source = recommended ? opportunityRecommendedListSourceSql : "opportunities o",
       sql = pendingIdentity
         ? reuseRecommendedFilterIdentitySql(where.join(" AND "))
         : where.join(" AND "),

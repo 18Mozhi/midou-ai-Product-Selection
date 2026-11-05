@@ -1,3 +1,5 @@
+import { homeCandidateSql, homeQualityGateSql } from "../../apps/api/dist/home-selection-sql.js";
+import { optimizeSelectionReadSql } from "../../apps/api/dist/selection-read-query-plan.js";
 import assert from "node:assert/strict";
 import test from "node:test";
 
@@ -42,7 +44,8 @@ test("candidate view contains identified products that have not passed every qua
   for (const { sql } of statements) {
     assert.match(sql, /n_primary.payload_json/);
     assert.match(sql, /o\.decision_status='pending'/);
-    assert.match(sql, /NOT \(o\.recommendation_status='recommend'/);
+    assert.ok(sql.includes("NOT " + optimizeSelectionReadSql(homeQualityGateSql)));
+    assert.ok(sql.includes(homeCandidateSql));
   }
 });
 
@@ -51,11 +54,8 @@ test("evidence-pending view retains products without a verified primary identity
   for (const { sql } of statements) {
     assert.doesNotMatch(sql, /orm_view/);
     assert.match(sql, /o\.decision_status='pending'/);
-    assert.match(sql, /NOT \(o\.filter_primary_asin IS NOT NULL\)/);
-    assert.match(
-      sql,
-      /ORDER BY l_primary\.created_at,n_primary\.created_at DESC LIMIT 1\) filter_primary_asin/,
-    );
+    assert.ok(sql.includes("NOT " + homeCandidateSql));
+    assert.doesNotMatch(sql, /filter_primary_asin/);
     assert.match(sql, /n_primary_current\.status='active'/);
   }
 });

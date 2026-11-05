@@ -108,9 +108,7 @@ for (const selectionView of ["all", "recommended", "rule_candidates", "evidence_
       ownerId: "owner-a",
     };
     const [count, rows] = await opportunityListSql(input);
-    const pendingIdentity = ["recommended", "rule_candidates", "evidence_pending"].includes(
-      selectionView,
-    );
+    const pendingIdentity = selectionView === "recommended";
     const prefix = pendingIdentity ? 2 : 4;
     assert.deepEqual(
       rows.params.slice(0, prefix),
@@ -130,7 +128,7 @@ for (const selectionView of ["all", "recommended", "rule_candidates", "evidence_
     );
     assert.ok(rows.sql.includes(reuseListPrimaryIdentitySql(opportunityListPrimaryRecordsSql)));
     assert.ok(rows.sql.endsWith("ORDER BY o.updated_at DESC,o.id DESC"));
-    if (["recommended", "rule_candidates", "evidence_pending"].includes(selectionView)) {
+    if (selectionView === "recommended") {
       assert.match(count.sql, /filter_primary_asin/);
       assert.deepEqual(count.params.slice(0, 4), [
         input.organizationId,
