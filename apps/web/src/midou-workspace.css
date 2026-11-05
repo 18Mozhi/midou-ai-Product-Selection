@@ -1258,13 +1258,13 @@ html[data-design="commerce"] #app .midou-profile-grid .p11-form textarea {
   }
 }
 
-/* The topbar owns one persistent breadcrumb across all workspace routes. */
-html[data-design="commerce"] #app .role-topbar .role-top-breadcrumb {
+/* One shared breadcrumb at the top of the page, outside global controls. */
+html[data-design="commerce"] #app .role-content > .role-top-breadcrumb {
   display: flex;
   align-items: center;
   gap: 8px;
   min-width: 0;
-  margin: 0;
+  margin: 0 0 14px;
   font-size: 13px;
   white-space: nowrap;
   overflow: hidden;
@@ -1313,14 +1313,14 @@ html[data-design="commerce"] #app .sourcing-detail-loading {
     min-width: 0;
     gap: 0;
   }
-  html[data-design="commerce"] #app .role-topbar .role-top-breadcrumb {
+  html[data-design="commerce"] #app .role-content > .role-top-breadcrumb {
     font-size: 12px;
     gap: 4px;
   }
   html[data-design="commerce"] #app .role-top-breadcrumb > :is(a, span, b) {
     flex-shrink: 0;
   }
-  html[data-design="commerce"] #app .role-topbar .role-top-breadcrumb {
+  html[data-design="commerce"] #app .role-content > .role-top-breadcrumb {
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -1486,7 +1486,7 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
     min-height: 44px;
     justify-content: center;
   }
-  html[data-design="commerce"] #app .role-topbar .role-top-breadcrumb {
+  html[data-design="commerce"] #app .role-content > .role-top-breadcrumb {
     max-width: 100%;
   }
 }
@@ -1562,12 +1562,14 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
   }
   html[data-design="commerce"] #app .role-shell.role-shell--c .role-brand {
     gap: 14px;
-    padding-right: 33px;
+    min-width: 211px;
+    padding-right: 20px;
     border-right: 1px solid var(--so-border);
   }
   html[data-design="commerce"] #app .role-shell.role-shell--c .role-brand > b {
-    font-size: 21px;
-    letter-spacing: 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.015em;
   }
   .midou-brand-mark {
     width: 37px;
@@ -1592,6 +1594,10 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
     width: clamp(210px, 19.38vw, 324px);
     min-height: 37px;
     font-size: 15px;
+    padding-inline: 11px 8px;
+    gap: 8px;
+    background: var(--so-panel-soft);
+    color: var(--so-text-muted);
   }
   html[data-design="commerce"] #app .role-top-actions > a[aria-label="通知中心"] {
     border-color: transparent;

@@ -12,12 +12,20 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
           ? "/org-admin"
           : "/platform-admin",
     );
+    await expect(page.getByRole("navigation", { name: "面包屑" })).toHaveCount(1);
+    await expect(page.locator(".role-content > nav").first()).toHaveAttribute(
+      "aria-label",
+      "面包屑",
+    );
+    await expect(page.locator(".role-topbar nav")).toHaveCount(0);
     const mobile = (page.viewportSize()?.width ?? 1000) <= 840;
     if (mobile) await page.getByRole("button", { name: "打开导航菜单" }).click();
     const nav = page.locator(mobile ? ".role-sidebar" : ".commerce-sidebar");
     await expect(nav).toBeVisible();
     if (shell === "member") {
-      await expect(nav.locator(mobile ? ".role-nav-menu a" : "section a")).toHaveCount(4);
+      await expect(nav.locator(mobile ? ".role-nav-menu a" : "section a")).toHaveCount(
+        mobile ? 4 : 6,
+      );
       await expect(nav.getByRole("link", { name: "选品库", exact: true })).toHaveAttribute(
         "href",
         "/opportunities",
@@ -46,13 +54,13 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
 
 test("core member titles and breadcrumbs use the current navigation names", async ({ page }) => {
   await allow(page, "member");
-  for (const [path, title] of [
+  for (const [path, title, heading = title] of [
     ["/trends", "市场情报"],
     ["/opportunities", "选品库"],
-    ["/sourcing", "1688 找货"],
+    ["/sourcing", "1688 找货", "供应链找货"],
   ]) {
     await page.goto(path);
-    await expect(page.getByRole("heading", { name: title, exact: true, level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: heading, exact: true })).toBeVisible();
     const breadcrumb = page.getByRole("navigation", { name: "面包屑" });
     await expect(breadcrumb).toContainText(title);
     await expect(breadcrumb.getByRole("link", { name: "选品工作区", exact: true })).toHaveAttribute(

@@ -348,15 +348,6 @@ onUnmounted(() => {
         <AppIcon name="menu" /> <span>菜单</span>
       </button>
       <div class="role-workspace-identity">
-        <nav class="role-page-breadcrumb role-top-breadcrumb" aria-label="面包屑">
-          <template v-for="(item, index) in breadcrumbs" :key="`${item}-${index}`">
-            <RouterLink v-if="item.path" :to="item.path">{{ item.label }}</RouterLink
-            ><span v-else :aria-current="index === breadcrumbs.length - 1 ? 'page' : undefined">{{
-              item.label
-            }}</span
-            ><b v-if="index < breadcrumbs.length - 1">/</b>
-          </template>
-        </nav>
         <RouterLink
           v-if="shell !== 'platform_admin'"
           to="/select-context"
@@ -596,6 +587,15 @@ onUnmounted(() => {
       </nav>
     </dialog>
     <section class="role-content">
+      <nav class="role-page-breadcrumb role-top-breadcrumb" aria-label="面包屑">
+        <template v-for="(item, index) in breadcrumbs" :key="`${item}-${index}`">
+          <RouterLink v-if="item.path" :to="item.path">{{ item.label }}</RouterLink
+          ><span v-else :aria-current="index === breadcrumbs.length - 1 ? 'page' : undefined">{{
+            item.label
+          }}</span
+          ><b aria-hidden="true" v-if="index < breadcrumbs.length - 1">›</b>
+        </template>
+      </nav>
       <section v-if="state !== 'ready'" class="role-gate-state" aria-live="polite">
         <span class="role-state-mark" aria-hidden="true">{{
           state === "loading" ? "···" : state === "forbidden" ? "×" : "!"
