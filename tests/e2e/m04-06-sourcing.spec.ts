@@ -557,6 +557,11 @@ test("empty sourcing offers keep unconfirmed cost rows distinct from real profit
   const breakdown = offers.locator(".sourcing-profit-unconfirmed-breakdown");
   await expect(breakdown.locator("dt")).toHaveText(["采购成本", "头程费用", "平台费用", "预计利润"]);
   await expect(breakdown.locator("dd")).toHaveText(["—", "—", "—", "—"]);
+  const basis = offers.locator(".sourcing-profit-basis");
+  await expect(basis).not.toHaveAttribute("open", "");
+  await basis.locator("summary").click();
+  await expect(basis).toContainText("暂无已保存的成本输入或利润计算记录。");
+  await expect(basis.locator("p")).toBeVisible();
   await page.getByRole("tab", { name: "成本与利润" }).click();
   const profit = page.getByRole("tabpanel", { name: "成本与利润" });
   await expect(profit).toContainText("利润未知");

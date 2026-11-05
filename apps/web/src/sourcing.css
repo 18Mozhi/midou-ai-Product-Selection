@@ -1191,6 +1191,15 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   padding-block: 3px;
   line-height: 18px;
 }
+.sourcing-empty-offers--with-profit .sourcing-profit-basis {
+  margin-block-start: 1px;
+  border-block-start: 1px solid var(--so-border);
+}
+@media (min-width: 1101px) {
+  .sourcing-empty-offers--with-profit .sourcing-profit-summary:has(.sourcing-profit-basis) {
+    padding-block: 6px;
+  }
+}
 .sourcing-empty-offers--with-profit .sourcing-profit-summary dl > div {
   display: flex;
   justify-content: space-between;

@@ -128,13 +128,19 @@ onBeforeUnmount(() => {
         <strong>利润未知</strong> ·
         {{ profit?.latest_run?.missing_fields.join("、") || "尚无可确认的当前利润结果" }}
       </p>
-      <details v-if="profit?.current_inputs.length || profit?.latest_run">
+      <details
+        v-if="besideEmptyOffers || profit?.current_inputs.length || profit?.latest_run"
+        class="sourcing-profit-basis"
+      >
         <summary>查看计算依据</summary>
-        <p v-if="profit.latest_run">
+        <p v-if="!profit?.latest_run && !profit?.current_inputs.length">
+          暂无已保存的成本输入或利润计算记录。
+        </p>
+        <p v-if="profit?.latest_run">
           规则 {{ profit.latest_run.rule_version_code }} · {{ profit.latest_run.calculated_at
           }}<span v-if="!calculated"> · 历史结果不作为当前利润</span>
         </p>
-        <ul>
+        <ul v-if="profit?.current_inputs.length">
           <li v-for="item in profit.current_inputs" :key="`${item.platform}:${item.input_type}`">
             <b>{{
               { sale_price: "含税售价", purchase_price: "采购价", logistics: "物流" }[
