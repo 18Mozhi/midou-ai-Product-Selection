@@ -11,6 +11,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   updateField: [field: ProfileField, value: string];
   submit: [];
+  cancel: [];
 }>();
 
 function update(field: ProfileField, event: Event) {
@@ -171,6 +172,14 @@ function update(field: ProfileField, event: Event) {
       </p>
       <button class="p11-primary" type="submit" :disabled="props.saving">
         {{ props.saving ? "正在保存…" : "保存资料" }}
+      </button>
+      <button
+        class="so-action-secondary"
+        type="button"
+        :disabled="props.saving"
+        @click="emit('cancel')"
+      >
+        取消
       </button>
     </footer>
   </form>

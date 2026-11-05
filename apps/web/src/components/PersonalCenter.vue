@@ -182,6 +182,7 @@ const sectionItems = [
           :feedback="center.profileFeedback.value"
           @update-field="center.updateProfileField"
           @submit="center.saveProfile"
+          @cancel="center.cancelProfileEdit"
         />
       </div>
       <PersonalPermissionsPanel

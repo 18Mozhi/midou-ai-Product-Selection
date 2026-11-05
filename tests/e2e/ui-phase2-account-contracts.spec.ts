@@ -285,6 +285,17 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
   await page.getByLabel("头像 HTTPS 地址").fill("https://avatar.example.test/draft.svg");
   await expect(preview).toHaveAttribute("src", savedUrl);
   await expect(page.locator(".midou-profile-avatar img")).toHaveAttribute("src", savedUrl);
+  let writes = 0;
+  page.on("request", (request) => {
+    if (request.method() === "PATCH" && new URL(request.url()).pathname.endsWith("/me/profile"))
+      writes++;
+  });
+  const displayName = page.getByLabel("显示名称");
+  await displayName.fill("尚未保存的显示名称");
+  await page.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(displayName).toHaveValue(profile.display_name);
+  await expect(page.getByLabel("头像 HTTPS 地址")).toHaveValue(savedUrl);
+  expect(writes).toBe(0);
   const security = page.locator(".midou-profile-security");
   const email = page.getByLabel("邮箱", { exact: true });
   await expect(email).toBeDisabled();
