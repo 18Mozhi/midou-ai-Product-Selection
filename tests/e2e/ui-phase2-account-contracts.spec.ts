@@ -318,8 +318,10 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
     const avatar = form.locator(".p11-avatar-frame");
     const tabs = page.locator(".account-content-only .p11-directory");
     const heading = page.getByRole("heading", { name: "个人中心", level: 1 });
-    await expect(heading).toHaveCSS("margin-top", "16px");
-    await expect(tabs).toHaveCSS("margin-top", "29px");
+    await expect(heading).toHaveCSS("margin-top", "21px");
+    await expect(tabs).toHaveCSS("margin-top", "24px");
+    const intro = page.locator(".account-content-only .p11-page-heading p");
+    expect((await intro.boundingBox())!.x).toBe((await heading.boundingBox())!.x);
     await expect(tabs).toHaveCSS("column-gap", "19px");
     await expect(tabs.locator("a[aria-current='page'] > b")).toHaveCSS("font-size", "17px");
     await expect(form).toHaveCSS("row-gap", "18px");
@@ -330,6 +332,8 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
     expect(cancel.width).toBe(94);
     expect(cancel.x - save.x - save.width).toBe(20);
     expect(cancel.y).toBe(save.y);
+    const fieldBorder = await page.getByLabel("显示名称").evaluate((node) => getComputedStyle(node).borderTopColor);
+    await expect(footer.getByRole("button", { name: "取消", exact: true })).toHaveCSS("border-top-color", fieldBorder);
     await expect(avatar).toHaveCSS("border-radius", "8px");
     const [input, frame] = await Promise.all([
       page.getByLabel("头像 HTTPS 地址").boundingBox(),
