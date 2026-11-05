@@ -1141,6 +1141,11 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
   expect(Math.round(bounds!.width)).toBe(261);
   expect(row?.y).toBe(153);
   expect(row?.height).toBe(44);
+  const homeLink = sidebar.getByRole("link", { name: "选品工作台", exact: true });
+  await expect(homeLink.locator("svg")).toHaveCSS("width", "20px");
+  await expect(homeLink).toHaveCSS("column-gap", "18px");
+  const label = (await homeLink.locator("span").boundingBox())!;
+  expect(label.x).toBeCloseTo(70, 0);
   const context = page.getByRole("link", { name: "切换组织与工作区" });
   await expect(context).toHaveCSS("border-top-style", "solid");
   await expect(context).toHaveCSS("min-height", "40px");

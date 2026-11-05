@@ -1913,9 +1913,14 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
   html[data-design="commerce"] #app .role-shell[data-shell="member"] .commerce-sidebar section a {
     min-height: 44px;
     padding-inline: 17px;
-    gap: 22px;
+    gap: 18px;
     font-size: 16px;
     color: var(--so-text);
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .commerce-sidebar section a > svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
   }
   html[data-design="commerce"]
     #app
