@@ -1003,13 +1003,14 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
     border-inline-start: 1px solid var(--so-border);
   }
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout {
+    --sourcing-record-panel-height: clamp(460px, calc(100dvh - 314px), 760px);
     grid-template-columns: minmax(280px, 24%) minmax(0, 1fr);
     gap: 15px;
     border: 0;
     background: transparent;
   }
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout > aside {
-    height: clamp(460px, calc(100dvh - 314px), 760px);
+    height: var(--sourcing-record-panel-height);
     border: 1px solid var(--so-border);
     border-radius: 12px;
     overflow: hidden;
@@ -1026,6 +1027,14 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
     padding: 18px 16px;
     border: 1px solid var(--so-border);
     border-radius: 12px;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-layout
+    > aside[data-short="false"]
+    + .sourcing-detail {
+    min-height: var(--sourcing-record-panel-height);
   }
   html[data-design="commerce"]
     #app

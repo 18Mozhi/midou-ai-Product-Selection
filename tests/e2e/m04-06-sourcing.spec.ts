@@ -703,6 +703,16 @@ test("hundreds of sourcing records and supplier offers stay bounded and selectab
     );
   expect(rowsContainContent).toBe(true);
   await expect(page.locator(".supplier-offer-table tbody > tr")).toHaveCount(10);
+  const panels = await page.locator(".sourcing-layout").evaluate((layout) => {
+    const list = layout.querySelector("aside")!;
+    const detail = layout.querySelector<HTMLElement>(".sourcing-detail")!;
+    return {
+      wide: matchMedia("(min-width: 1101px)").matches,
+      listHeight: list.getBoundingClientRect().height,
+      detailMinHeight: Number.parseFloat(getComputedStyle(detail).minHeight),
+    };
+  });
+  if (panels.wide) expect(panels.detailMinHeight).toBeCloseTo(panels.listHeight, 0);
   expect(
     await page
       .getByRole("complementary", { name: "找货记录" })
@@ -724,6 +734,9 @@ test("hundreds of sourcing records and supplier offers stay bounded and selectab
   await expect(page.locator(".supplier-offer-list")).toContainText("供应商21");
   await page.getByRole("searchbox", { name: "搜索找货记录" }).fill("长标题商品记录628用于");
   await expect(page.locator(".sourcing-record-items > button")).toHaveCount(1);
+  if (panels.wide) {
+    await expect(page.locator(".sourcing-detail")).not.toHaveCSS("min-height", `${panels.listHeight}px`);
+  }
   await expect(
     page
       .getByRole("region", { name: "找货记录详情" })
