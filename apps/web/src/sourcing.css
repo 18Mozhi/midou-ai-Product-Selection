@@ -1167,6 +1167,12 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   html[data-design="commerce"] #app .sourcing-workspace--review {
     margin-inline-start: -24px;
   }
+  .sourcing-workspace--review .sourcing-summary {
+    flex-basis: 592px;
+    grid-template-columns:
+      minmax(max-content, 1fr) minmax(max-content, 1.35fr)
+      minmax(max-content, 1fr) minmax(max-content, 0.95fr);
+  }
 }
 @media (max-width: 760px) {
   .sourcing-search-input {

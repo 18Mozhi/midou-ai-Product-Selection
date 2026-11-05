@@ -1683,7 +1683,22 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     const bytes = await page.request.get(image);
     await r.fulfill({ body: await bytes.body(), contentType: "image/jpeg" });
   });
-  await page.route(searchesRoute, (r) => r.fulfill({ json: envelope([record]) }));
+  const recordsFixture = [
+    record,
+    ...[2, 3, 4, 5].map((index) => ({
+      ...record,
+      id: `00000000-0000-4000-8000-00000000900${index}`,
+      display_name: `Amazon 参考商品 ${index}`,
+      image_url: undefined,
+    })),
+  ];
+  await page.route(searchesRoute, (r) => r.fulfill({ json: envelope(recordsFixture) }));
+  await page.route(`**/api/v1/opportunities/${record.input_ref}`, (r) =>
+    r.fulfill({ json: envelope({ id: record.input_ref, profit_status: "insufficient_data" }) }),
+  );
+  await page.route(`**/api/v1/opportunities/${record.input_ref}/profit-analysis`, (r) =>
+    r.fulfill({ json: envelope({ latest_run: null, current_inputs: [], cost_input_reviews: [] }) }),
+  );
   await page.route("**/api/v1/sourcing/searches/" + searchId, (r) =>
     r.fulfill({ json: envelope({
       ...record, candidates: [],
@@ -1695,10 +1710,12 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   );
   await page.goto("/sourcing");
   await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toBeVisible();
+  await expect(page.locator(".sourcing-record-items > button")).toHaveCount(5);
   await expect(page.locator(".sourcing-detail > header .research-thumbnail img")).toBeVisible();
   const progress = page.getByRole("region", { name: "来源采集进度" });
   await expect(progress).toContainText("采集失败");
   await expect(progress).toContainText("1 / 1 个来源已结束");
+  await expect(page.locator(".sourcing-profit-unconfirmed-breakdown")).toBeVisible();
   if (wide) {
     const actions = page.locator(".sourcing-heading-actions");
     const [title, toolbar, records, detail] = await Promise.all(
@@ -1712,6 +1729,7 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     expect(Math.abs(records!.width - 332)).toBeLessThanOrEqual(3);
     expect(Math.abs(detail!.x - 606)).toBeLessThanOrEqual(4);
     expect(Math.abs(detail!.y - 301)).toBeLessThanOrEqual(3);
+    expect(Math.abs(records!.y + records!.height - detail!.y - detail!.height)).toBeLessThanOrEqual(3);
     const rules = actions.getByRole("link", { name: "费用与利润规则" });
     const refresh = actions.getByRole("button", { name: "刷新记录", exact: true });
     await expect(rules).toHaveAttribute("href", /^\/sourcing\/cost-rules\?/);
@@ -1749,6 +1767,9 @@ test("wide sourcing toolbar balances search and four metrics without changing mo
       .locator(".sourcing-summary")
       .evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(" ").length);
   await expect.poll(columns).toBe(4);
+  const statsBox = (await overview.locator(".sourcing-summary").boundingBox())!;
+  expect(Math.abs(statsBox.x - 1037)).toBeLessThanOrEqual(6);
+  expect(statsBox.width).toBe(592);
   const labelToValueGaps = await overview.locator(".sourcing-summary > div").evaluateAll((groups) =>
     groups.map((group) => group.querySelector("dd")!.getBoundingClientRect().left -
       group.querySelector("dt")!.getBoundingClientRect().right),
