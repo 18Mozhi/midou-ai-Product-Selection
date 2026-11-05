@@ -1645,8 +1645,13 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     .role-top-actions
     .role-quick-action[data-navigation-search] {
     width: 44px;
+    min-width: 44px;
     min-height: 44px;
+    padding: 0;
     justify-content: center;
+  }
+  html[data-design="commerce"] #app .role-quick-action[data-navigation-search] > :is(span, kbd) {
+    display: none;
   }
   html[data-design="commerce"] #app .role-content > .role-top-breadcrumb {
     max-width: 100%;
@@ -1751,7 +1756,7 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     .role-top-actions
     .role-quick-action[data-navigation-search] {
     width: clamp(210px, 19.38vw, 324px);
-    min-height: 37px;
+    min-height: 44px;
     font-size: 15px;
     padding-inline: 11px 8px;
     gap: 8px;
@@ -1779,8 +1784,21 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
   }
   .midou-navigation-help,
   .midou-account-menu {
+    position: relative;
     padding-left: 12px;
-    border-left: 1px solid var(--so-border);
+    border-left: 1px solid transparent;
+  }
+  .midou-navigation-help::before,
+  .midou-account-menu::before {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: -1px;
+    width: 1px;
+    height: 22px;
+    transform: translateY(-50%);
+    background: var(--so-border);
+    pointer-events: none;
+    content: "";
   }
   .midou-navigation-help {
     margin-left: 11px;
@@ -1825,15 +1843,29 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
   html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar footer :is(a, button) {
     min-height: 32px;
   }
+  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar footer button {
+    min-height: 44px;
+  }
   html[data-design="commerce"] #app .midou-area-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     height: 42px;
     box-sizing: border-box;
     flex-shrink: 0;
     padding: 2px;
   }
   html[data-design="commerce"] #app .midou-area-tabs :is(a, span) {
+    position: relative;
     min-height: 36px;
     font-size: 16px;
+  }
+  .midou-area-tabs > :not([aria-current="page"]) + :not([aria-current="page"])::before {
+    content: "";
+    position: absolute;
+    inset-block: 8px;
+    inset-inline-start: -1px;
+    border-inline-start: 1px solid var(--so-border);
+    pointer-events: none;
   }
   html[data-design="commerce"]
     #app

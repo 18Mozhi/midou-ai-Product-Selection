@@ -22,6 +22,19 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
     if (mobile) await page.getByRole("button", { name: "打开导航菜单" }).click();
     const nav = page.locator(mobile ? ".role-sidebar" : ".commerce-sidebar");
     await expect(nav).toBeVisible();
+    if (!mobile && page.viewportSize()!.width >= 1101) {
+      const tabs = nav.getByRole("navigation", { name: "工作台类型" });
+      await expect(tabs.locator("[aria-current='page']")).toHaveCount(1);
+      const cells = await tabs.locator(":scope > *").evaluateAll((items) =>
+        items.map((item) => ({
+          width: item.getBoundingClientRect().width,
+          divider: getComputedStyle(item, "::before").content,
+        })),
+      );
+      expect(cells).toHaveLength(3);
+      expect(Math.max(...cells.map((item) => item.width)) - Math.min(...cells.map((item) => item.width))).toBeLessThan(1);
+      expect(cells.filter((item) => item.divider === '""')).toHaveLength(shell === "organization_admin" ? 0 : 1);
+    }
     if (shell === "member") {
       await expect(nav.locator(mobile ? ".role-nav-menu a" : "section a")).toHaveCount(
         mobile ? 4 : 6,
@@ -335,6 +348,12 @@ for (const item of [
     page,
   }, testInfo) => {
     await allow(page, item.shell);
+    if (item.shell === "member") {
+      await page.clock.setFixedTime(new Date("2026-08-08T00:00:00.000Z"));
+      await page.route("**/api/v1/opportunities?**", (route) =>
+        route.fulfill({ json: { data: [], meta: { total: 0 }, request_id: "shell-empty-results" } }),
+      );
+    }
     await page.goto(item.path);
     await expect(page.getByRole("heading", { name: item.heading }).first()).toBeVisible();
     await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
@@ -347,6 +366,14 @@ for (const item of [
     await expect(page.locator(".role-nav-groups details[open]")).not.toHaveCount(0);
     await expect(page.locator(".role-topbar .role-context")).toHaveCount(0);
     if (testInfo.project.name === "mobile-390") {
+      const search = page.locator(".role-topbar [data-navigation-search]");
+      await expect(search.locator("kbd")).toBeHidden();
+      const [buttonBox, iconBox] = await Promise.all([
+        search.boundingBox(),
+        search.locator("svg").boundingBox(),
+      ]);
+      expect(buttonBox!.width).toBe(44);
+      expect(Math.abs(buttonBox!.x + buttonBox!.width / 2 - iconBox!.x - iconBox!.width / 2)).toBeLessThan(1);
       await expect(page.locator(".role-context-rail")).toBeHidden();
       await expect(page.locator(".role-context-drawer")).toHaveCount(0);
     } else {
@@ -455,7 +482,7 @@ test("mobile navigation closes and restores focus when crossing to desktop", asy
   await expect(page.locator(".role-navigation-frame")).toHaveJSProperty("open", false);
   await expect(page.locator(".commerce-sidebar")).toBeVisible();
   await expect(toggle).toBeHidden();
-  await expect(page.getByRole("link", { name: "SCOUTOPS 智能选品" })).toBeFocused();
+  await expect(page.getByRole("link", { name: "米兜智能选品", exact: true })).toBeFocused();
 });
 
 for (const item of [
@@ -587,18 +614,24 @@ test("M02-03 platform shell exposes management navigation without member-only sh
 }) => {
   await allow(page, "platform_admin");
   await page.goto("/platform-admin");
-  const sidebar = page.locator(
-    (page.viewportSize()?.width ?? 1000) <= 840 ? ".role-sidebar" : ".commerce-sidebar",
-  );
-  if ((page.viewportSize()?.width ?? 1000) <= 840)
+  const compact = (page.viewportSize()?.width ?? 1000) <= 840;
+  const sidebar = page.locator(compact ? ".role-sidebar" : ".commerce-sidebar");
+  if (compact)
     await page.getByRole("button", { name: "更多" }).click();
-  await expect(page.getByRole("button", { name: /搜索/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "全局搜索", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "搜索后台功能", exact: true })).toHaveCount(1);
   await expect(page.getByRole("link", { name: "通知中心" })).toHaveCount(0);
   await expect(sidebar.getByRole("link", { name: /通知运营/ })).toHaveAttribute(
     "href",
     "/platform-admin/notifications",
   );
-  await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("href", "/me");
+  if (!compact) await page.getByLabel("账号菜单", { exact: true }).click();
+  await expect(
+    (compact ? sidebar : page.locator(".midou-account-menu")).getByRole("link", {
+      name: "个人中心",
+      exact: true,
+    }),
+  ).toHaveAttribute("href", "/me");
   await expect(sidebar.getByRole("link", { name: "组织管理" })).toHaveAttribute(
     "href",
     "/platform-admin/organizations",
@@ -1033,7 +1066,7 @@ test("member navigation survives account appearance and back without replacing c
   const directory = page.getByRole("navigation", { name: "个人中心分区" });
   await expect(directory).toBeVisible();
   if ((page.viewportSize()?.width ?? 0) >= 1440) {
-    await expect(directory.locator('a[aria-current="page"] > b')).toHaveCSS("font-size", "16px");
+    await expect(directory.locator('a[aria-current="page"] > b')).toHaveCSS("font-size", "17px");
   }
   expect(await header?.evaluate((el) => el.isConnected)).toBe(true);
   expect(await sidebar?.evaluate((el) => el.isConnected)).toBe(true);
@@ -1081,6 +1114,11 @@ test("session-only account does not bypass a forbidden member destination", asyn
 
 test("desktop reference geometry and navigation help stay usable", async ({ page }) => {
   await page.setViewportSize({ width: 1672, height: 941 });
+  await page.route("**/api/v1/auth/session-status", (route) =>
+    route.fulfill({
+      json: { data: { authenticated: true }, request_id: "session", trace_id: "session" },
+    }),
+  );
   await allow(page, "member", {
     organization_name: "组织名称".repeat(8),
     workspace_name: "工作区名称".repeat(8),
@@ -1092,6 +1130,10 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
   const bounds = await sidebar.boundingBox();
   const row = await sidebar.getByRole("link", { name: "选品工作台", exact: true }).boundingBox();
   expect(header?.height).toBe(61);
+  const topbarDividers = await page
+    .locator(".role-topbar :is(.midou-navigation-help, .midou-account-menu)")
+    .evaluateAll((nodes) => nodes.map((node) => getComputedStyle(node, "::before").height));
+  expect(topbarDividers).toEqual(["22px", "22px"]);
   expect(Math.round(bounds!.width)).toBe(261);
   expect(row?.y).toBe(153);
   expect(row?.height).toBe(44);
@@ -1113,16 +1155,26 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
   const topHelp = page.getByLabel("导航帮助");
   await expect(topHelp.locator("svg")).toHaveAttribute("width", "22");
   await expect(topHelp).toHaveCSS("min-height", "44px");
+  const search = page.getByRole("button", { name: "全局搜索", exact: true });
+  const segments = sidebar.locator(".midou-area-tabs");
+  const [searchBounds, segmentBounds] = await Promise.all([
+    search.boundingBox(),
+    segments.boundingBox(),
+  ]);
   for (const [label, path] of [
     ["市场情报", "/trends"],
     ["选品库", "/opportunities"],
     ["1688 找货", "/sourcing"],
+    ["通知中心", "/notifications"],
+    ["个人中心", "/me"],
     ["选品工作台", "/home"],
   ]) {
     await sidebar.getByRole("link", { name: label, exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`${path}$`));
     await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
     expect(await context.boundingBox()).toEqual(contextBounds);
+    expect(await search.boundingBox()).toEqual(searchBounds);
+    expect(await segments.boundingBox()).toEqual(segmentBounds);
   }
   const sidebarHelp = sidebar.getByRole("button", { name: "帮助", exact: true });
   await expect(sidebarHelp.locator("svg")).toHaveAttribute("width", "18");
@@ -1130,7 +1182,6 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
   await expect(page.locator(".midou-navigation-help")).toHaveAttribute("open", "");
   await expect(page.getByText("使用侧栏顶部切换工作台，在个人中心调整外观。")).toBeVisible();
   await page.setViewportSize({ width: 1120, height: 900 });
-  const search = page.getByRole("button", { name: "全局搜索", exact: true });
   const icon = search.locator("svg");
   const shortcut = search.locator("kbd");
   const text = search.locator("span");
