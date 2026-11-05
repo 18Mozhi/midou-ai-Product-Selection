@@ -1159,6 +1159,12 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
 .sourcing-quote-empty strong {
   color: var(--so-text);
 }
+.sourcing-empty-offers > .sourcing-quote-empty {
+  background: color-mix(in srgb, var(--so-panel-soft) 45%, var(--so-panel));
+}
+.sourcing-empty-offers > .sourcing-quote-empty > svg {
+  color: color-mix(in srgb, var(--so-text-muted) 68%, var(--so-border));
+}
 .sourcing-empty-offers--with-profit {
   display: grid;
   gap: 12px;

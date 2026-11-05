@@ -10,6 +10,9 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ],
   ],
   check: [["path", { d: "M20 6 9 17l-5-5" }]],
+  "box-open": [
+    ["path", { d: "m12 4 7 3.5 3-2L15 2l-3 2Zm0 0L5 7.5l-3-2L9 2l3 2Zm-7 3.5 7 3.5 7-3.5M5 7.5l-3 4 7 3.5 3-4 3 4 7-3.5-3-4M5 13v5l7 4 7-4v-5m-7-2v11" }],
+  ],
   mail: [
     ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2" }],
     ["path", { d: "m3 6 9 7 9-7" }],

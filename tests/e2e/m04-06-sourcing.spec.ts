@@ -535,6 +535,7 @@ test("empty opportunity offers show the same profit summary without refetching o
   const offers = page.getByRole("tabpanel", { name: "供应商报价" });
   const summary = offers.getByRole("region", { name: "成本与利润摘要" });
   await expect(offers.getByText("暂无供应商报价")).toBeVisible();
+  await expect(offers.locator(".sourcing-quote-empty > svg")).toHaveAttribute("width", "44");
   await expect(summary).toContainText("80 USD");
   await page.getByRole("tab", { name: "成本与利润" }).click();
   await expect(page.getByRole("tabpanel", { name: "成本与利润" })).toContainText("80 USD");

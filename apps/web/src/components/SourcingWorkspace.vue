@@ -462,7 +462,7 @@ const showCollectionLinkInNotice = computed(
             :class="{ 'sourcing-empty-offers--with-profit': showProfitBesideEmptyOffers }"
           >
             <div class="sourcing-quote-empty">
-              <AppIcon name="box" :size="36" />
+              <AppIcon name="box-open" :size="44" />
               <strong>暂无供应商报价</strong>
               <span>报价返回后将在这里展示。</span>
             </div>
