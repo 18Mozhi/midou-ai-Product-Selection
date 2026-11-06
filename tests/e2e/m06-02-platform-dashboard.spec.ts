@@ -1414,6 +1414,13 @@ test("platform reference first fold fits system checks and source health without
   expect(Math.abs(factsBox!.y - 303)).toBeLessThanOrEqual(3);
   const workQueue = (await page.locator(".platform-action-summary").boundingBox())!;
   expect(Math.abs(workQueue.y - 208)).toBeLessThanOrEqual(2);
+  const queueLinks = page.locator(".platform-action-summary > a");
+  const pending = (await queueLinks.first().boundingBox())!;
+  const alerts = (await queueLinks.last().boundingBox())!;
+  expect(Math.abs(pending.x + pending.width - 940)).toBeLessThanOrEqual(3);
+  expect(Math.abs(alerts.x - 940)).toBeLessThanOrEqual(3);
+  await expect(queueLinks.first().locator("svg")).toHaveCSS("width", "28px");
+  await expect(queueLinks.first().locator("small")).toHaveCSS("padding-inline-start", "46px");
   const headingActions = page.locator(".platform-page-header__actions");
   const rangeBorder = await headingActions.locator("select").evaluate((node) => getComputedStyle(node).borderTopColor);
   await expect(headingActions.getByRole("button", { name: "刷新", exact: true })).toHaveCSS("border-top-color", rangeBorder);

@@ -663,6 +663,28 @@
     gap: 18px;
     margin-block-start: -4px;
   }
+  #app .platform-dashboard--review .platform-action-summary {
+    grid-template-columns: minmax(0, 48.5fr) minmax(0, 51.5fr);
+  }
+  #app .platform-dashboard--review .platform-action-summary a {
+    row-gap: 0;
+  }
+  #app .platform-dashboard--review .platform-action-summary a:first-child {
+    padding-inline-end: 37px;
+  }
+  #app .platform-dashboard--review .platform-action-summary a:last-child {
+    padding-inline-start: 37px;
+  }
+  #app .platform-dashboard--review .platform-action-summary a > span {
+    gap: 18px;
+  }
+  #app .platform-dashboard--review .platform-action-summary a > span svg {
+    width: 28px;
+    height: 28px;
+  }
+  #app .platform-dashboard--review .platform-action-summary a > small {
+    padding-inline-start: 46px;
+  }
   html[data-design="commerce"] #app .platform-dashboard--review > .platform-facts {
     padding-inline: 19px;
   }
