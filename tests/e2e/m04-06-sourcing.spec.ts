@@ -283,7 +283,7 @@ for (const scenario of [
         ["成功", scenario.name === "empty" ? 1 : 0],
         ["受阻", scenario.blocked],
         ["失败", scenario.failed],
-        ["执行中 / 等待", scenario.active],
+        ["执行 / 等待", scenario.active],
       ] as const)
         await expect(
           progress.locator("dl div").filter({ hasText: label }).locator("dd"),
@@ -1815,7 +1815,7 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     await expect(page.locator(".sourcing-detail > header h3")).toHaveCSS("font-size", "22px");
     await expect(progress.locator("dt").first()).toHaveCSS("font-size", "14px");
     await expect(progress.locator("dd").first()).toHaveCSS("font-size", "16px");
-    await expect(progress.locator("dl")).toHaveCSS("column-gap", "28px");
+    await expect(progress.locator("dl")).toHaveCSS("column-gap", "32px");
     const ended = (await progress.getByText("1 / 1 个来源已结束").boundingBox())!;
     const counts = (await progress.locator("dl").boundingBox())!;
     expect(Math.abs(ended.y + ended.height / 2 - counts.y - counts.height / 2)).toBeLessThanOrEqual(4);

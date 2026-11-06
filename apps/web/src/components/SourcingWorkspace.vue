@@ -299,7 +299,7 @@ const showCollectionLinkInNotice = computed(
             >
               <header>
                 <div>
-                  <small>来源采集</small>
+                  <small>采集进度</small>
                   <h4 :data-status="selected.collection_progress.status">
                     {{ statusText(selected.collection_progress.status) }}
                   </h4>
@@ -319,7 +319,7 @@ const showCollectionLinkInNotice = computed(
                   <dd>{{ selected.collection_progress.successful_subqueries }}</dd>
                 </div>
                 <div>
-                  <dt>执行中 / 等待</dt>
+                  <dt>执行 / 等待</dt>
                   <dd>{{ selected.collection_progress.active_subqueries }}</dd>
                 </div>
                 <div>

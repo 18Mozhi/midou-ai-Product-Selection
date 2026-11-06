@@ -1170,7 +1170,7 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   .sourcing-progress dl {
     grid-area: 2 / 1;
     margin: 0;
-    column-gap: 28px;
+    column-gap: 32px;
   }
   .sourcing-progress dt {
     font-size: 14px;
