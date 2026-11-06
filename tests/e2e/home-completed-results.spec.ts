@@ -279,7 +279,14 @@ test("workbench completed empty action fits in the reference desktop first fold"
   expect(stateBox!.x + stateBox!.width).toBeLessThan(historyBox!.x);
   const facts = page.locator(".home-status-facts > a");
   await expect(facts).toHaveCount(4);
-  await expect(facts.first()).toHaveCSS("padding-inline-start", "32px");
+  await expect(facts.first()).toHaveCSS("padding-inline-start", "44px");
+  const factLabels = await facts.locator("span").evaluateAll((labels) =>
+    labels.map((label) => label.getBoundingClientRect().x),
+  );
+  for (const [index, x] of [384, 652, 916, 1190].entries()) {
+    expect(Math.abs(factLabels[index] - x)).toBeLessThanOrEqual(5);
+  }
+  await expect(facts.first().locator("strong")).toHaveCSS("font-size", "26px");
   await expect(facts.last().locator("svg > circle")).toHaveCount(1);
   const shapes = await facts.locator("svg").evaluateAll((icons) => icons.map((icon) => icon.innerHTML));
   expect(new Set(shapes).size).toBe(4);
