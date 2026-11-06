@@ -274,6 +274,11 @@ test("workbench completed empty action fits in the reference desktop first fold"
   expect(Math.abs(bounds!.y - flow.y - flow.height - 18), "workflow-to-results gap").toBeLessThanOrEqual(2);
   const quickCandidate = page.locator(".midou-home-quick .home-quick-candidates");
   const quickEvidence = page.locator(".midou-home-quick .home-quick-evidence");
+  for (const row of [quickCandidate, quickEvidence]) {
+    await expect(row).toHaveCSS("background-color", /^color\(srgb /);
+    const rowColor = await row.evaluate((el) => getComputedStyle(el).backgroundColor);
+    await expect(row.locator("b")).not.toHaveCSS("background-color", rowColor);
+  }
   await expect(quickEvidence.locator("b")).toHaveCSS("width", "59px");
   await expect(quickCandidate.locator("b")).toHaveCSS("width", "50px");
   await expect(quickCandidate.locator("b")).toHaveCSS("text-align", "center");

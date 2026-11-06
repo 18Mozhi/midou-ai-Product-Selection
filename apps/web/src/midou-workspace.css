@@ -2220,13 +2220,21 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
     width: 20px;
     height: 20px;
   }
+  .midou-home-quick .home-quick-evidence {
+    background: color-mix(in srgb, var(--so-warning-soft) 58%, var(--so-panel));
+  }
+  .midou-home-quick .home-quick-candidates {
+    background: color-mix(in srgb, var(--so-primary-soft) 62%, var(--so-panel));
+  }
   .midou-home-quick :is(.home-quick-evidence, .home-quick-candidates) > b {
     box-sizing: border-box;
     min-inline-size: 50px;
     text-align: center;
+    background: color-mix(in srgb, var(--so-primary) 9%, var(--so-primary-soft));
   }
   .midou-home-quick .home-quick-evidence > b {
     min-inline-size: 59px;
+    background: color-mix(in srgb, var(--so-warning) 8%, var(--so-warning-soft));
   }
   html[data-design="commerce"] #app .home-status-facts {
     grid-template-columns: minmax(0, 1.04fr) repeat(2, minmax(0, 1fr)) minmax(0, 1.065fr);
