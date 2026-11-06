@@ -1693,7 +1693,7 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     id: searchId,
     input_type: "opportunity",
     input_ref: "00000000-0000-4000-8000-000000000001",
-    display_name: "Amazon 参考商品",
+    display_name: "Amazon 参考商品：用于验证宽屏长标题折行、图片尺寸和采集进度对齐的供应链找货测试样品",
     image_url: "https://m.media-amazon.com/images/fixture.jpg",
     status: "succeeded_empty",
     candidate_count: 0,
@@ -1745,11 +1745,12 @@ test("midou reference sourcing displays the task Amazon reference image in list 
         (selector) => page.locator(selector).boundingBox(),
       ),
     );
-    for (const box of [title, toolbar, records]) {
-      expect(Math.abs(box!.x - 259)).toBeLessThanOrEqual(3);
-    }
+    const breadcrumb = (await page.getByRole("navigation", { name: "面包屑", exact: true }).boundingBox())!;
+    const sidebar = (await page.getByRole("complementary", { name: "工作区导航" }).boundingBox())!;
+    expect(title!.x - sidebar.x - sidebar.width).toBeCloseTo(22, 0);
+    for (const box of [title, toolbar, records]) expect(box!.x).toBeCloseTo(breadcrumb.x, 0);
     expect(Math.abs(records!.width - 332)).toBeLessThanOrEqual(3);
-    expect(Math.abs(detail!.x - 606)).toBeLessThanOrEqual(4);
+    expect(detail!.x - records!.x - records!.width).toBeCloseTo(15, 0);
     expect(Math.abs(detail!.y - 301)).toBeLessThanOrEqual(3);
     await expect(page.locator(".sourcing-record-items > button").first()).toHaveCSS("column-gap", "15px");
     const warning = page.locator(".sourcing-pending[data-attention='true']");

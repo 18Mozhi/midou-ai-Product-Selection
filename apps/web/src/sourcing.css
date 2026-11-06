@@ -1177,8 +1177,14 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   }
 }
 @media (min-width: 1600px) {
-  html[data-design="commerce"] #app .sourcing-workspace--review {
-    margin-inline-start: -24px;
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout {
+    grid-template-columns: clamp(300px, 19.86vw, 360px) minmax(0, 1fr);
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-detail > header {
+    padding-block-end: 14px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-heading-actions {
+    padding-inline-end: 8px;
   }
   .sourcing-workspace--review .sourcing-summary {
     flex-basis: 592px;
