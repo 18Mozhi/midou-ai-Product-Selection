@@ -845,6 +845,10 @@ test("midou reference list defaults closed, opens and closes detail without list
       await expect(heading.locator("p")).toHaveCSS("font-size", "16px");
       expect(Math.abs(filters.y - 216)).toBeLessThanOrEqual(2);
       const filterBar = page.locator(".trend-filters");
+      const marketControl = filterBar.getByRole("combobox", { name: "市场", exact: true });
+      const marketBounds = (await marketControl.boundingBox())!;
+      expect(Math.abs(marketBounds.y - 257)).toBeLessThanOrEqual(3);
+      expect(Math.abs(marketBounds.height - 40)).toBeLessThanOrEqual(1);
       const fields = await filterBar.locator(":scope > label").evaluateAll((nodes) =>
         nodes.map((node) => node.getBoundingClientRect().width),
       );
