@@ -1395,6 +1395,9 @@ test("platform reference first fold fits system checks and source health without
   await nav(page, "platform_super_admin", "platform:superadmin");
   await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
   await page.goto("/platform-admin");
+  await expect(page.locator(".platform-dashboard--review")).toHaveCSS(
+    "background-color", "rgba(0, 0, 0, 0)",
+  );
   const sidebar = page.getByRole("complementary", { name: "工作区导航" });
   const overview = sidebar.getByRole("link", { name: "平台概览", exact: true });
   await expect(sidebar.getByRole("link", { name: "组织管理", exact: true })).toBeVisible();

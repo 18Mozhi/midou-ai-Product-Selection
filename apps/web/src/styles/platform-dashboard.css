@@ -393,6 +393,9 @@
   color: var(--pd-ink);
   background: var(--pd-canvas);
 }
+html[data-design="commerce"] #app .platform-dashboard--review {
+  background: transparent;
+}
 
 .platform-dashboard--review .platform-refresh-feedback,
 .platform-dashboard--review .platform-facts,
