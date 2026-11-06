@@ -703,6 +703,18 @@
   }
 }
 @media (min-width: 1536px) and (max-width: 1750px) {
+  html[data-design="commerce"] #app .platform-dashboard--review .platform-page-header__actions {
+    position: relative;
+    inset-inline-end: 3px;
+    inset-block-start: -2px;
+  }
+  html[data-design="commerce"] #app .platform-dashboard--review .platform-page-header__actions
+    :is(a, button, select) {
+    --so-control-height: 38px;
+    block-size: 38px;
+    min-height: 38px;
+    padding-block: 4px;
+  }
   html[data-design="commerce"] #app .platform-dashboard--review .platform-dashboard-grid {
     grid-template-columns: minmax(0, 1.01fr) minmax(0, 1fr);
     column-gap: 19px;
