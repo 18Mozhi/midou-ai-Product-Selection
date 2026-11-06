@@ -376,8 +376,23 @@ tbody tr:hover {
   .selection-candidate-list .product-column {
     width: 27.2%;
   }
+  .selection-candidate-list col:nth-child(2) {
+    width: 10.9%;
+  }
+  .selection-candidate-list col:nth-child(3) {
+    width: 10.7%;
+  }
+  .selection-candidate-list col:nth-child(4) {
+    width: 9.65%;
+  }
+  .selection-candidate-list col:nth-child(5) {
+    width: 9.8%;
+  }
+  .selection-candidate-list col:nth-child(6) {
+    width: 10.2%;
+  }
   .selection-candidate-list .result-column {
-    width: 13%;
+    width: auto;
   }
   .selection-candidate-list .action-column {
     width: 104px;

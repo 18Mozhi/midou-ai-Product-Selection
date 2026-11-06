@@ -4472,6 +4472,12 @@ for (const view of ["completed", "rule_candidates"]) {
           expect(Math.abs(filterBox!.y + filterBox!.height / 2 - searchBox!.y - searchBox!.height / 2)).toBeLessThanOrEqual(2);
           await expect(trigger.locator(".responsive-filter-drawer__icon")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
           await expect(catalog.locator("tbody tr")).toHaveCount(2);
+          const headerPositions = await catalog.getByRole("columnheader").evaluateAll((cells) =>
+            cells.map((cell) => cell.getBoundingClientRect().x + parseFloat(getComputedStyle(cell).paddingLeft)),
+          );
+          for (const [index, position] of [683, 834, 982, 1115, 1251, 1392].entries()) {
+            expect(Math.abs(headerPositions[index + 1] - position)).toBeLessThanOrEqual(5);
+          }
           const rated = catalog.locator('tbody tr').first().locator('td[data-label="星级 / 评价"]');
           await expect(rated.locator(".catalogue-number")).toHaveText(/4\.1.*28/);
           await expect(rated.locator(".catalogue-number")).toHaveCSS("font-size", "15px");
