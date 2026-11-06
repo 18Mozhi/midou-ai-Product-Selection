@@ -1850,17 +1850,17 @@ test(withRichRecords
     );
     const breadcrumb = (await page.getByRole("navigation", { name: "面包屑", exact: true }).boundingBox())!;
     const sidebar = (await page.getByRole("complementary", { name: "工作区导航" }).boundingBox())!;
-    expect(title!.x - sidebar.x - sidebar.width).toBeCloseTo(14, 0);
+    expect(title!.x - sidebar.x - sidebar.width).toBeCloseTo(8, 0);
     for (const box of [title, toolbar, records]) expect(box!.x).toBeCloseTo(breadcrumb.x, 0);
-    expect(records!.width).toBeGreaterThanOrEqual(315);
+    expect(records!.width).toBeGreaterThanOrEqual(321);
     expect(Math.abs(detail!.x - 606)).toBeLessThanOrEqual(3);
     expect(detail!.x - records!.x - records!.width).toBeCloseTo(15, 0);
     expect(Math.abs(detail!.y - 301)).toBeLessThanOrEqual(3);
     await expect(page.locator(".sourcing-record-items > button").first()).toHaveCSS("column-gap", "16px");
     const recordPhoto = (await page.locator(".sourcing-record-items .research-thumbnail").first().boundingBox())!;
-    expect(recordPhoto.x - records!.x).toBeLessThanOrEqual(8);
+    expect(Math.abs(recordPhoto.x - 280)).toBeLessThanOrEqual(3);
     const rowTitle = (await page.locator(".sourcing-record-items > button > b").first().boundingBox())!;
-    expect(rowTitle.x - records!.x).toBeLessThanOrEqual(95);
+    expect(Math.abs(rowTitle.x - 364)).toBeLessThanOrEqual(3);
     const recordRows = page.locator(".sourcing-record-items > button");
     const firstRecord = (await recordRows.first().boundingBox())!;
     const lastRecord = (await recordRows.last().boundingBox())!;
@@ -1985,7 +1985,7 @@ test("wide sourcing toolbar balances search and four metrics without changing mo
   const searchBox = (await search.boundingBox())!;
   const overviewBox = (await overview.boundingBox())!;
   expect(searchBox.width).toBeLessThanOrEqual(304);
-  expect(searchBox.x - overviewBox.x).toBeCloseTo(114, 0);
+  expect(searchBox.x - overviewBox.x).toBeCloseTo(120, 0);
   const columns = () =>
     overview
       .locator(".sourcing-summary")
