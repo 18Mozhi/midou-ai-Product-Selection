@@ -442,6 +442,12 @@ tbody tr:hover {
   .selection-candidate-list th {
     height: 35px;
   }
+  .selection-candidate-list th:first-child {
+    padding-inline-start: 68px;
+  }
+  .selection-candidate-list .selection-product-identity-cell {
+    padding-inline-start: 58px;
+  }
   .selection-candidate-list td {
     padding-block: 11px;
   }

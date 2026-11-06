@@ -4482,6 +4482,7 @@ for (const view of ["completed", "rule_candidates"]) {
           const headerPositions = await catalog.getByRole("columnheader").evaluateAll((cells) =>
             cells.map((cell) => cell.getBoundingClientRect().x + parseFloat(getComputedStyle(cell).paddingLeft)),
           );
+          expect(Math.abs(headerPositions[0]! - 360)).toBeLessThanOrEqual(3);
           for (const [index, position] of [683, 834, 982, 1115, 1251, 1392].entries()) {
             expect(Math.abs(headerPositions[index + 1] - position)).toBeLessThanOrEqual(5);
           }
