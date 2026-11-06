@@ -1062,6 +1062,9 @@
   #app .trend-dashboard--review .trend-list > header {
     padding-block-end: 12px;
   }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-list > header {
+    padding-block-end: 18px;
+  }
   #app .trend-dashboard--review .trend-list > header strong {
     font-size: 20px;
     line-height: 24px;
@@ -1075,7 +1078,13 @@
     line-height: 1.25;
   }
   #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row {
+    grid-template-columns: 22px 48px minmax(0, 1fr) 64px 54px;
     padding-block: 7px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row > em {
+    box-sizing: border-box;
+    inline-size: 100%;
+    text-align: center;
   }
   html[data-design="commerce"] #app .trend-market-heading {
     padding-block-end: 12px;

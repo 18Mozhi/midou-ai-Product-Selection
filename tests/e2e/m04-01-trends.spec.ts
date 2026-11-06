@@ -226,6 +226,8 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await expect(page.getByRole("button", { name: "刷新情报", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "新建监控", exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await expect(page.locator(".trend-list > .trend-topic-row")).toHaveCount(1);
+  await expect(page.locator(".trend-pagination")).toHaveCount(0);
   await expect(page).toHaveScreenshot("m04-01-market-list.png", { fullPage: true });
   const trendList = page.locator(".trend-list");
   await expect(trendList.getByText("2 个来源")).toBeVisible();
@@ -850,6 +852,8 @@ test("midou reference list defaults closed, opens and closes detail without list
       const listBox = (await list.boundingBox())!;
       expect(Math.abs(listBox.y - 334)).toBeLessThanOrEqual(2);
       const listHeader = list.locator(":scope > header");
+      const headerBox = (await listHeader.boundingBox())!;
+      expect(Math.abs(headerBox.y + headerBox.height - 416)).toBeLessThanOrEqual(2);
       await expect(listHeader.getByText("情报列表", { exact: true })).toHaveCSS("font-size", "20px");
       await expect(listHeader.getByText("共 4 个主题", { exact: true })).toHaveCSS("font-size", "14px");
       expect(listBox.y - filters.y - filters.height).toBeCloseTo(21, 0);
@@ -857,6 +861,8 @@ test("midou reference list defaults closed, opens and closes detail without list
       await expect(list.locator(".trend-topic-row").first()).toHaveCSS("padding-top", "7px");
       const heat = list.locator(".topic-heat").first();
       const [count, unit] = await Promise.all([heat.locator("b").boundingBox(), heat.locator("small").boundingBox()]);
+      expect(Math.abs(count!.x + count!.width / 2 - 735)).toBeLessThanOrEqual(4);
+      await expect(list.locator(".trend-topic-row > em").first()).toHaveCSS("width", "54px");
       expect(Math.abs(count!.x + count!.width / 2 - unit!.x - unit!.width / 2)).toBeLessThanOrEqual(1);
       expect(Math.abs(unit!.y - count!.y - count!.height - 2)).toBeLessThanOrEqual(1);
       expect(
