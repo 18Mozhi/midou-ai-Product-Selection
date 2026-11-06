@@ -152,9 +152,6 @@ const moreActive = computed(
     routePath.value !== activeItem.value?.path ||
     !primaryItems.value.some((item) => item.path === activeItem.value?.path),
 );
-const quickActionLabel = computed(() =>
-  props.shell === "organization_admin" ? "邀请成员" : "新建组织",
-);
 const memberReturnPath = () => {
   return getLastMemberRoute();
 };
@@ -373,25 +370,6 @@ onUnmounted(() => {
         <span v-else>平台工作区</span>
       </div>
       <div class="role-top-actions">
-        <RouterLink
-          v-if="
-            shell === 'platform_admin' &&
-            routePath !== '/platform-admin' &&
-            allCapabilities.includes('platform:superadmin')
-          "
-          class="role-quick-action"
-          to="/platform-admin/organizations/new"
-          :aria-label="quickActionLabel"
-          ><AppIcon name="plus" /> <span>新建组织</span></RouterLink
-        >
-        <RouterLink
-          v-else-if="shell === 'organization_admin' && routePath !== '/org-admin'"
-          class="role-quick-action"
-          v-show="guard?.roles?.includes('organization_admin')"
-          to="/org-admin/members"
-          :aria-label="quickActionLabel"
-          ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink
-        >
         <button
           v-if="shell === 'member' || state === 'ready'"
           type="button"
@@ -444,6 +422,26 @@ onUnmounted(() => {
             <RouterLink to="/me" @click="closeAccountMenu()">个人中心</RouterLink>
             <RouterLink to="/me?section=appearance" @click="closeAccountMenu()"
               >外观偏好</RouterLink
+            >
+            <RouterLink
+              v-if="
+                shell === 'platform_admin' &&
+                routePath !== '/platform-admin' &&
+                allCapabilities.includes('platform:superadmin')
+              "
+              to="/platform-admin/organizations/new"
+              @click="closeAccountMenu()"
+              >新建组织</RouterLink
+            >
+            <RouterLink
+              v-else-if="
+                shell === 'organization_admin' &&
+                routePath !== '/org-admin' &&
+                guard?.roles?.includes('organization_admin')
+              "
+              to="/org-admin/members"
+              @click="closeAccountMenu()"
+              >邀请成员</RouterLink
             >
             <SessionLogout :api-base-url="apiBaseUrl" />
           </div>

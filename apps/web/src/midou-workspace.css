@@ -1784,10 +1784,11 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     padding-inline-end: 20px;
   }
   html[data-design="commerce"] #app .role-shell.role-shell--c .role-brand {
+    position: relative;
     gap: 14px;
     min-width: 211px;
     padding-right: 20px;
-    border-right: 1px solid var(--so-border);
+    border-inline-end: 1px solid transparent;
   }
   html[data-design="commerce"] #app .role-shell.role-shell--c .role-brand > b {
     font-size: 22px;
@@ -1868,6 +1869,7 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     padding-left: 12px;
     border-left: 1px solid transparent;
   }
+  html[data-design="commerce"] #app .role-shell.role-shell--c .role-brand::before,
   .midou-navigation-help::before,
   .midou-account-menu::before {
     position: absolute;
@@ -1879,6 +1881,10 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     background: var(--so-border);
     pointer-events: none;
     content: "";
+  }
+  html[data-design="commerce"] #app .role-shell.role-shell--c .role-brand::before {
+    inset-inline-start: auto;
+    inset-inline-end: -1px;
   }
   .midou-navigation-help {
     margin-left: 11px;
@@ -1994,6 +2000,16 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
   html[data-design="commerce"] #app .commerce-sidebar footer .midou-sidebar-settings {
     padding-inline: 16px;
     color: var(--so-text);
+  }
+}
+
+@media (min-width: 1101px) and (min-height: 860px) and (max-height: 920px) {
+  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar {
+    gap: 5px;
+    padding-block: 13px 8px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar > section + section {
+    padding-block-start: 6px;
   }
 }
 

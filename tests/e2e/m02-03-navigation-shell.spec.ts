@@ -85,9 +85,12 @@ test("compact desktop keeps the workspace switch beside the brand across member 
     await expect(sidebar).toBeVisible();
     const before = await context.boundingBox();
     expect(before).not.toBeNull();
+    const globalActions = top.locator(".role-top-actions");
+    const actionsBefore = await globalActions.boundingBox();
     await sidebar.locator(`a[href="${next}"]`).click();
     await expect(page).toHaveURL(new RegExp(`${next}$`));
     await expect.poll(() => context.boundingBox()).toEqual(before);
+    await expect.poll(() => globalActions.boundingBox()).toEqual(actionsBefore);
     for (const width of [960, 1100, 1101]) {
       await page.setViewportSize({ width, height: 900 });
       await expect(context).toBeVisible();
@@ -144,13 +147,15 @@ test("desktop platform sidebar fits grouped navigation and footer at reference s
   await expect(context).toHaveAttribute("href", /from=%2Fplatform-admin%2Forganizations$/);
   const create = top.getByRole("link", { name: "新建组织" });
   const search = top.getByRole("button", { name: "搜索后台功能" });
-  await expect(create).toBeVisible();
+  await expect(create).toBeHidden();
   await expect(search).toBeVisible();
   const after = (await search.boundingBox())!;
   expect(after.x).toBeCloseTo(controls[0]!.x, 0);
   expect(after.width).toBeCloseTo(controls[0]!.width, 0);
-  const action = (await create.boundingBox())!;
-  expect(action.x + action.width).toBeLessThanOrEqual(after.x);
+  await top.getByLabel("账号菜单").click();
+  await expect(create).toBeVisible();
+  await expect(create).toHaveAttribute("href", "/platform-admin/organizations/new");
+  expect(await search.boundingBox()).toEqual(after);
   await expect(sidebar.locator("section a").first()).toHaveCSS("min-height", "32px");
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
 });
@@ -814,6 +819,12 @@ test("theme continuity and real-height layout hold at 768, 1024 and 1440", async
     await page.goto("/platform-admin");
     await expect(page.locator("html")).toHaveAttribute("data-theme", "aurora-purple");
     await expect(page.getByRole("heading", { name: "平台运行概览", level: 2 })).toBeVisible();
+    if (width === 1440) {
+      const sidebar = page.getByRole("complementary", { name: "工作区导航" });
+      const help = sidebar.getByRole("button", { name: "帮助", exact: true });
+      await expect(help).toBeInViewport({ ratio: 1 });
+      expect(await sidebar.evaluate((node) => node.scrollHeight - node.clientHeight)).toBe(0);
+    }
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
       .toBe(true);
@@ -1176,9 +1187,9 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
   const row = await sidebar.getByRole("link", { name: "选品工作台", exact: true }).boundingBox();
   expect(header?.height).toBe(61);
   const topbarDividers = await page
-    .locator(".role-topbar :is(.midou-navigation-help, .midou-account-menu)")
+    .locator(".role-topbar :is(.role-brand, .midou-navigation-help, .midou-account-menu)")
     .evaluateAll((nodes) => nodes.map((node) => getComputedStyle(node, "::before").height));
-  expect(topbarDividers).toEqual(["22px", "22px"]);
+  expect(topbarDividers).toEqual(["22px", "22px", "22px"]);
   expect(Math.round(bounds!.width)).toBe(261);
   expect(row?.y).toBe(153);
   expect(row?.height).toBe(44);
