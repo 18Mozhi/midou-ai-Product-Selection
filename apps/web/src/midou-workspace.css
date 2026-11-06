@@ -3289,3 +3289,12 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
   min-width: 0;
   text-align: end;
 }
+@media (min-width: 1440px) {
+  .midou-profile-context:has(> div + div) {
+    gap: 18px;
+    padding-block-start: 16px;
+  }
+  .midou-profile-summary section:first-child:has(.midou-profile-context > div + div) {
+    padding-block-end: 33px;
+  }
+}
