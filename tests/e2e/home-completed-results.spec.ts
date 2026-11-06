@@ -94,7 +94,7 @@ function summary(count = 1, scopedWorkspace = workspace) {
     },
   };
 }
-async function setup(page: Page, canRead = true) {
+async function setup(page: Page, canRead = true, additionalCapabilities: string[] = []) {
   const counters = { home: 0, completed: 0, writes: 0 };
   let home = summary();
   await page.route("**/api/v1/me/navigation?**", (route) =>
@@ -104,7 +104,12 @@ async function setup(page: Page, canRead = true) {
         organization_id: org,
         workspace_id: workspace,
         roles: ["member"],
-        capabilities: ["task:read", "trend:read", ...(canRead ? ["opportunity:read"] : [])],
+        capabilities: [
+          "task:read",
+          "trend:read",
+          ...(canRead ? ["opportunity:read"] : []),
+          ...additionalCapabilities,
+        ],
         platform_roles: [],
         platform_capabilities: [],
         guard_reason: "navigation_member_allowed",
@@ -202,9 +207,14 @@ test("home polling does not repeat unchanged product queries; manual refresh and
 
 test("workbench completed empty action fits in the reference desktop first fold", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1672, height: 941 });
-  await setup(page);
+  await setup(page, true, ["sourcing:read"]);
   await page.route(completedRoute, (route) => route.fulfill({ json: envelope([]) }));
   await page.goto("/home");
+  await expect(
+    page
+      .getByRole("complementary", { name: "工作区导航" })
+      .getByRole("link", { name: "1688 找货", exact: true }),
+  ).toHaveAttribute("href", "/sourcing");
   const result = page.getByRole("region", { name: "选品结果" });
   const link = result.getByRole("link", { name: "查看候选进度" });
   const resultTabs = result.locator(".home-result-header nav");
@@ -274,7 +284,7 @@ test("workbench completed empty action fits in the reference desktop first fold"
   await expect(dailyIcons.nth(2).locator("circle")).toHaveAttribute("r", "7");
   await expect(page.locator(".home-daily-production dt > svg").first()).toHaveCSS(
     "padding-inline-start",
-    "13px",
+    "12px",
   );
   await expect(progress).toHaveCSS("height", "9px");
   expect(Math.abs((await progress.boundingBox())!.y - 295)).toBeLessThanOrEqual(2);
