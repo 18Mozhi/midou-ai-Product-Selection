@@ -1224,6 +1224,12 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-section-description {
     line-height: 21px;
   }
+  #app .sourcing-workspace--review .sourcing-toolbar label {
+    flex-basis: 402px;
+    max-inline-size: 402px;
+    gap: 11px;
+    font-size: 14px;
+  }
   html[data-design="commerce"] #app .sourcing-workspace--review
     :is(.sourcing-toolbar > span, .sourcing-record-heading > span) {
     font-variant-numeric: tabular-nums;

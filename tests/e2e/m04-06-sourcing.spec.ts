@@ -1857,7 +1857,10 @@ test("wide sourcing toolbar balances search and four metrics without changing mo
     await expect(value).toHaveCSS("font-weight", "700");
   }
   await expect(search).toHaveCSS("min-height", "40px");
-  expect((await search.boundingBox())!.width).toBeLessThanOrEqual(304);
+  const searchBox = (await search.boundingBox())!;
+  const overviewBox = (await overview.boundingBox())!;
+  expect(searchBox.width).toBeLessThanOrEqual(304);
+  expect(searchBox.x - overviewBox.x).toBeCloseTo(114, 0);
   const columns = () =>
     overview
       .locator(".sourcing-summary")
