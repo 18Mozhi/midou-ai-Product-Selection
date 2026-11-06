@@ -837,10 +837,10 @@ html[data-design="commerce"] #app .platform-dashboard--review {
     padding-inline: 22px 18px;
   }
   #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(1) {
-    width: 43%;
+    width: 45%;
   }
   #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(2) {
-    width: 16%;
+    width: 17%;
   }
   #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(3) {
     width: 18%;
