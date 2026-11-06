@@ -4483,6 +4483,9 @@ for (const view of ["completed", "rule_candidates"]) {
           const [nextBox, tableBox] = await Promise.all([next.boundingBox(), catalog.getByRole("table").boundingBox()]);
           expect(Math.abs(nextBox!.x + nextBox!.width - tableBox!.x - tableBox!.width)).toBeLessThanOrEqual(2);
           const title = (await catalog.locator("header h2").boundingBox())!;
+          const note = (await catalog.locator(".catalog-data-note").boundingBox())!;
+          expect(Math.abs(title.x - 300)).toBeLessThanOrEqual(2);
+          expect(Math.abs(note.x - title.x)).toBeLessThanOrEqual(1);
           const sort = (await catalog.locator(".catalogue-sort-note").boundingBox())!;
           expect(Math.abs(title.y - sort.y)).toBeLessThan(8);
           const second = (await catalog.locator("tbody tr").nth(1).boundingBox())!;

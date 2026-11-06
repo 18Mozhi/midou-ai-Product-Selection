@@ -2633,7 +2633,19 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] {
     margin-block-start: 6px;
   }
+  html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] > header {
+    padding-inline-start: 5px;
+  }
+  html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] > header > div {
+    position: relative;
+    inset-block-start: -3px;
+  }
+  html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] > header small {
+    position: relative;
+    inset-block-start: -3px;
+  }
   html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] > .catalog-data-note {
+    margin-inline-start: 5px;
     font-size: 15px;
     line-height: 22px;
     background: color-mix(in srgb, var(--so-warning-soft) 72%, var(--so-panel));
