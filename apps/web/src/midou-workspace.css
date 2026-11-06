@@ -1030,6 +1030,20 @@ html[data-design="commerce"] #app .notification-record:is(:hover, :focus-visible
     justify-self: start;
   }
 }
+@media (max-width: 760px) {
+  html[data-design="commerce"] #app .notification-list .notification-record {
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > span:not(.midou-notification-open) {
+    grid-column: 2 / -1;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > b {
+    grid-area: 2 / 3;
+  }
+  html[data-design="commerce"] #app .midou-notification-open {
+    grid-area: 2 / 2;
+  }
+}
 html[data-design="commerce"]
   #app
   .role-shell[data-shell="member"]
@@ -2718,6 +2732,9 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
   html[data-design="commerce"] #app .notification-list .notification-record > em {
     font-size: 16px;
     line-height: 1.45;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > span > .notification-group-note {
+    font-size: 13px;
   }
 }
 

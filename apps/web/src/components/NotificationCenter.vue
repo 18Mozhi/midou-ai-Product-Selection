@@ -749,15 +749,13 @@ watch(
               :size="24" /></i
           ><span
             ><strong>{{ item.title }}</strong
-            ><small>{{ displayBody(item) }}</small></span
+            ><small>{{ displayBody(item) }}</small>
+            <span class="so-visually-hidden">{{ item.read_at ? "已读" : "未读" }}</span>
+            <small v-if="item.group_count > 1" class="notification-group-note">
+              已合并 {{ item.group_count }} 条同根因通知
+            </small></span
           ><em>{{ time(item.created_at) }}</em
-          ><b :data-workflow="item.workflow_status">
-            <small>{{ item.read_at ? "已读" : "未读" }} · </small
-            >{{ statusLabel(item.workflow_status) }}
-            <small v-if="item.group_count > 1">
-              · 已合并 {{ item.group_count }} 条同根因通知</small
-            ></b
-          >
+          ><b :data-workflow="item.workflow_status">{{ statusLabel(item.workflow_status) }}</b>
           <span class="midou-notification-open">查看记录<AppIcon name="chevron" :size="14" /></span>
         </button>
         <button

@@ -900,7 +900,11 @@ test("midou reference notification layout keeps original workflow and preference
   );
   await expect(
     page.locator('.notification-list .notification-record > b[data-workflow="open"]'),
-  ).toBeVisible();
+  ).toHaveText("未处理");
+  await expect(page.locator(".notification-record .notification-group-note")).toHaveText(
+    "已合并 3 条同根因通知",
+  );
+  await expect(page.locator(".notification-record")).toHaveAccessibleName(/未读/);
   expect(
     await page
       .locator(".notification-list .notification-record.unread")
