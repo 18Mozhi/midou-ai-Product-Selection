@@ -4,7 +4,7 @@
 
 用户已确认原始 PNG 已删除。现阶段使用聊天参考图目视对照，并记录同尺寸浏览器截图中的可复测几何；不把目视或局部坐标检查换算成整页 95%。
 
-使用同一个提交、同一轮桌面 Chromium 测试输出九张 `*-reference.png`。在 Windows PowerShell 7 运行：
+使用同一个提交、同一轮桌面 Chromium 测试输出九张 `*-reference.png`，仅将桌面截图放入比对目录；不要混入手机项目的同名输出。候选表格取 `candidate-reference.png`，通知列表取 `notification-two-row-reference.png`。在 Windows PowerShell 7 运行：
 
 ```powershell
 ./scripts/compare-ui-references.ps1 -ReferenceDirectory <原图目录> -CaptureDirectory <截图输出目录>

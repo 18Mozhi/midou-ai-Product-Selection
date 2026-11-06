@@ -35,10 +35,10 @@ $pairs = [ordered]@{
   '市场情报与选品详情-2.png' = 'intelligence-reference.png'
   '选品库已完成分析空状态-3.png' = 'completed-empty-reference.png'
   '1688找货任务详情-4.png' = 'sourcing-progress-reference.png'
-  '选品库候选商品列表-5.png' = 'candidates-reference.png'
+  '选品库候选商品列表-5.png' = 'candidate-reference.png'
   '米兜组织治理概览-6.png' = 'organization-reference.png'
   'SCOUTOPS平台运行概览-7.png' = 'platform-reference.png'
-  'SCOUTOPS 通知中心仪表盘-8.png' = 'notification-reference.png'
+  'SCOUTOPS 通知中心仪表盘-8.png' = 'notification-two-row-reference.png'
   '个人中心·基本资料与安全-9.png' = 'personal-profile-reference.png'
 }
 $captures = @(Get-ChildItem -LiteralPath $CaptureDirectory -Recurse -File -Filter '*.png')
@@ -51,6 +51,12 @@ $results = foreach ($entry in $pairs.GetEnumerator()) {
     $result.status = 'missing_or_ambiguous'
     $result.referenceCount = $reference.Count
     $result.captureCount = $capture.Count
+    if ($capture.Count -eq 1) {
+      $result.captureSha256 = (Get-FileHash -LiteralPath $capture[0].FullName).Hash
+      $bitmap = [Drawing.Bitmap]::new($capture[0].FullName)
+      try { $result.captureSize = "$($bitmap.Width)x$($bitmap.Height)" }
+      finally { $bitmap.Dispose() }
+    }
     [pscustomobject]$result
     continue
   }
