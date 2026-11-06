@@ -2717,6 +2717,18 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
     min-height: 36px;
     border-radius: 6px;
   }
+  html[data-design="commerce"] #app .product-catalog .candidate-pagination
+    button:not(:disabled):not([aria-current="page"]):not(:hover) {
+    color: var(--so-text);
+    background: var(--so-panel);
+  }
+  html[data-design="commerce"] #app .candidate-pagination .candidate-page-numbers > span {
+    min-inline-size: 30px;
+    text-align: center;
+  }
+  html[data-design="commerce"] #app .candidate-pagination .candidate-page-total {
+    margin-inline-end: 16px;
+  }
 }
 
 /* Reference notification inbox: compact filter controls and separate card rhythm. */
