@@ -1587,8 +1587,18 @@ html[data-design="commerce"]
   background: var(--so-panel-soft);
 }
 .role-quick-action[data-navigation-search] kbd {
-  margin-left: auto;
+  margin-inline-start: auto;
   white-space: nowrap;
+}
+html[data-design="commerce"] #app .role-shell.role-shell--c
+  .role-top-actions .role-quick-action[data-navigation-search] > kbd {
+  padding: 4px 5px;
+  border-radius: 6px;
+  background: var(--so-panel);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
 }
 .role-quick-action[data-navigation-search] > :is(svg, kbd) {
   flex-shrink: 0;

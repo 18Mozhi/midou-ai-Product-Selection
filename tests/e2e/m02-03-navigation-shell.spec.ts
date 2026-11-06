@@ -1225,6 +1225,7 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
     getComputedStyle(node, "::before").insetInlineStart,
   )).toBe("-14px");
   const search = page.getByRole("button", { name: "全局搜索", exact: true });
+  const searchKey = search.locator("kbd");
   const segments = sidebar.locator(".midou-area-tabs");
   const selectedArea = segments.getByRole("link", { name: "选品", exact: true });
   const [searchBounds, segmentBounds] = await Promise.all([
@@ -1260,6 +1261,9 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
       .toBeLessThanOrEqual(1);
     expect(await context.boundingBox()).toEqual(contextBounds);
     expect(await search.boundingBox()).toEqual(searchBounds);
+    await expect(searchKey).toHaveText("Ctrl K");
+    await expect(searchKey).toHaveCSS("border-radius", "6px");
+    await expect(searchKey).toHaveCSS("font-weight", "600");
     expect(await bell.boundingBox()).toEqual(bellBounds);
     expect(await segments.boundingBox()).toEqual(segmentBounds);
     await expect(selectedArea).toHaveCSS("color", "rgb(255, 255, 255)");
