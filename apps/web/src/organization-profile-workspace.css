@@ -457,6 +457,13 @@
   #app .organization-profile-editor .organization-profile-fields {
     row-gap: 7px;
   }
+  #app .organization-profile-editor .organization-logo-controls {
+    max-inline-size: 758px;
+    column-gap: 14px;
+  }
+  #app .organization-profile-editor .organization-logo-controls > button {
+    min-inline-size: 76px;
+  }
   #app .organization-profile-facts > header {
     justify-content: flex-start;
     gap: clamp(16px, 3.7vw, 62px);
