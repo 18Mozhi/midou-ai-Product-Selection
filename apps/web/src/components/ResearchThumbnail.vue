@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import AppIcon from "./AppIcon.vue";
-const props = defineProps<{ src?: string | null; sourceUrl?: string | null; alt?: string }>();
+const props = defineProps<{ src?: string | null; sourceUrl?: string | null; alt?: string; priority?: boolean }>();
 const failed = ref(false),
   iconFailed = ref(false);
 const safe = (value?: string | null) => {
@@ -31,7 +31,8 @@ watch(
       v-if="photo && !failed"
       :src="photo"
       :alt="alt || '商品图片'"
-      loading="lazy"
+      :loading="priority ? 'eager' : 'lazy'"
+      :fetchpriority="priority ? 'high' : undefined"
       decoding="async"
       referrerpolicy="no-referrer"
       @error="failed = true"

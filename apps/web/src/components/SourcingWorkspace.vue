@@ -285,7 +285,7 @@ const showCollectionLinkInNotice = computed(
         aria-label="找货记录详情"
       >
         <header>
-          <ResearchThumbnail :src="selected.image_url" :alt="searchName(selected)" />
+          <ResearchThumbnail :src="selected.image_url" :alt="searchName(selected)" priority />
           <div>
             <p>{{ inputTypeText(selected.input_type) }}</p>
             <h3>{{ searchName(selected) }}</h3>

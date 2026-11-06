@@ -1743,6 +1743,9 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   await expect(page.locator(".sourcing-record-items > button")).toHaveCount(5);
   const detailPhoto = page.locator(".sourcing-detail > header .research-thumbnail img");
   await expect(detailPhoto).toBeVisible();
+  await expect(detailPhoto).toHaveAttribute("loading", "eager");
+  await expect(detailPhoto).toHaveAttribute("fetchpriority", "high");
+  await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toHaveAttribute("loading", "lazy");
   await expect.poll(() => detailPhoto.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
   await expect(page.getByRole("heading", { name: "供应链找货", exact: true })).not.toBeFocused();
   const progress = page.getByRole("region", { name: "来源采集进度" });
