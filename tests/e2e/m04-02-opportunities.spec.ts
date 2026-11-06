@@ -367,7 +367,7 @@ test("candidate page buttons navigate server results without resetting the curre
   await expect(pagination.getByText("每页 20 条", { exact: true })).toBeVisible();
   const previous = pagination.getByRole("button", { name: "上一页" });
   await expect(previous).toBeDisabled();
-  await expect(previous).toHaveCSS("width", "44px");
+  await expect(previous).toHaveCSS("width", "36px");
   await expect(previous.locator("svg")).toBeVisible();
   const request = page.waitForRequest((r) => {
     const url = new URL(r.url());
@@ -4413,12 +4413,18 @@ for (const view of ["completed", "rule_candidates"]) {
       const wideCandidates = view === "rule_candidates" && page.viewportSize()!.width >= 1101;
       if (wideCandidates) await page.setViewportSize({ width: 1717, height: 916 });
       await ready(page);
+      await page.route("**/fixtures/candidate-reference-product.svg", (route) =>
+        route.fulfill({
+          contentType: "image/svg+xml",
+          body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" fill="#eef3f9"/><rect x="26" y="35" width="68" height="50" rx="9" fill="#6795c5"/><path d="M26 48h68" stroke="#385d86" stroke-width="4"/></svg>',
+        }),
+      );
       await page.route("**/api/v1/opportunities?**", (r) =>
         r.fulfill({
           json: {
             ...envelope(
               view === "completed" ? [] : [
-                base,
+                { ...base, image_url: "/fixtures/candidate-reference-product.svg" },
                 { ...base, id: "00000000-0000-4000-8000-000000000489", name: "双层收纳盒 · 候选商品" },
               ],
             ),
@@ -4442,6 +4448,12 @@ for (const view of ["completed", "rule_candidates"]) {
           expect(Math.abs(filterBox!.y + filterBox!.height / 2 - searchBox!.y - searchBox!.height / 2)).toBeLessThanOrEqual(2);
           await expect(trigger.locator(".responsive-filter-drawer__icon")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
           await expect(catalog.locator("tbody tr")).toHaveCount(2);
+          await expect(catalog.getByRole("img", { name: `${base.name} 商品图`, exact: true })).toBeVisible();
+          await expect(catalog.getByRole("img", { name: "商品主图待采集" })).toBeVisible();
+          const next = catalog.getByRole("button", { name: "下一页", exact: true });
+          await expect(next).toHaveCSS("min-height", "36px");
+          const [nextBox, tableBox] = await Promise.all([next.boundingBox(), catalog.getByRole("table").boundingBox()]);
+          expect(Math.abs(nextBox!.x + nextBox!.width - tableBox!.x - tableBox!.width)).toBeLessThanOrEqual(2);
           const title = (await catalog.locator("header h2").boundingBox())!;
           const sort = (await catalog.locator(".catalogue-sort-note").boundingBox())!;
           expect(Math.abs(title.y - sort.y)).toBeLessThan(8);

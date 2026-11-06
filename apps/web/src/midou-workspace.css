@@ -2622,6 +2622,16 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
     + .catalogue-controls .catalogue-market-filter {
     gap: 13px;
   }
+  html[data-design="commerce"] #app .product-catalog .candidate-pagination {
+    gap: 8px;
+    padding-inline: 0;
+  }
+  html[data-design="commerce"] #app .product-catalog .candidate-pagination button {
+    width: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 6px;
+  }
 }
 
 /* Reference notification inbox: compact filter controls and separate card rhythm. */
