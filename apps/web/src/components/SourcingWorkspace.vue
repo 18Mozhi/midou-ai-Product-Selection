@@ -391,8 +391,10 @@ const showCollectionLinkInNotice = computed(
                 aria-hidden="true"
               >
                 <path
-                  d="M10.3 4.2 2.6 17.7A1.6 1.6 0 0 0 4 20h16a1.6 1.6 0 0 0 1.4-2.3L13.7 4.2a2 2 0 0 0-3.4 0ZM12 9v4m0 3h.01"
+                  class="sourcing-notice-icon-surface"
+                  d="M10.3 4.2 2.6 17.7A1.6 1.6 0 0 0 4 20h16a1.6 1.6 0 0 0 1.4-2.3L13.7 4.2a2 2 0 0 0-3.4 0Z"
                 />
+                <path d="M12 9v4m0 3h.01" />
               </svg>
               <AppIcon v-else name="box" />
               {{ offerNeedsAttention ? "未获得供应商报价" : "供应商报价" }}

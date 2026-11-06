@@ -267,6 +267,17 @@ for (const scenario of [
       );
       await expect(action).toHaveCSS("min-height", "42px");
       await expect(action).toHaveCSS("border-top-style", "solid");
+      await expect(notice.locator(".sourcing-notice-icon-surface")).not.toHaveCSS("fill", "none");
+      const [messageBox, actionBox] = await Promise.all([
+        notice.locator(":scope > div").boundingBox(),
+        action.boundingBox(),
+      ]);
+      if (testInfo.project.name === "desktop-chromium") {
+        expect(actionBox!.x).toBeGreaterThan(messageBox!.x + messageBox!.width);
+        expect(Math.abs(actionBox!.y + actionBox!.height / 2 - messageBox!.y - messageBox!.height / 2)).toBeLessThan(2);
+      } else {
+        expect(actionBox!.y).toBeGreaterThan(messageBox!.y + messageBox!.height);
+      }
       if (testInfo.project.name === "desktop-chromium")
         await notice.screenshot({ path: testInfo.outputPath("sourcing-authorized-failure.png") });
     } else await expect(notice.getByRole("link", { name: "查看采集任务明细" })).toHaveCount(0);

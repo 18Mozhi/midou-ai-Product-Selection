@@ -988,15 +988,25 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
 }
 .sourcing-pending[data-attention="true"] h4 svg {
   color: var(--so-warning);
+  flex-shrink: 0;
+}
+.sourcing-notice-icon-surface {
+  fill: color-mix(in srgb, currentColor 22%, transparent);
 }
 .sourcing-pending[data-attention="true"] h4 {
   font-size: 17px;
+}
+#app .sourcing-workspace--review .sourcing-pending:has(> .sourcing-notice-task) > div {
+  flex: 1 1 16rem;
+  min-inline-size: 0;
 }
 .sourcing-pending > div > p {
   margin-block: 4px 0;
 }
 #app .sourcing-workspace--review .sourcing-pending .sourcing-notice-task {
   display: inline-flex;
+  flex: 0 0 auto;
+  max-inline-size: 100%;
   align-items: center;
   justify-content: center;
   min-height: 42px;
@@ -1006,7 +1016,7 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   color: var(--so-primary);
   background: var(--so-panel);
   font-weight: 600;
-  white-space: nowrap;
+  text-align: center;
 }
 #app .sourcing-workspace--review .sourcing-pending .sourcing-notice-task:hover {
   background: var(--so-primary-soft);
