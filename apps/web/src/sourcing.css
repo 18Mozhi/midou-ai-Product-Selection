@@ -1243,11 +1243,14 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
     grid-template-columns: clamp(308px, calc(18.42vw + 8px), 344px) minmax(0, 1fr);
   }
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items {
-    padding-inline-start: 4px;
+    padding-inline-start: 0;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-heading {
+    padding-inline-start: 10px;
   }
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items > button {
-    column-gap: 10px;
-    padding-inline-start: 6px;
+    column-gap: 16px;
+    padding-inline-start: 2px;
   }
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-meta {
     flex-wrap: nowrap;

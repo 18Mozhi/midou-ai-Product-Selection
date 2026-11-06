@@ -1772,7 +1772,9 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     expect(Math.abs(detail!.x - 606)).toBeLessThanOrEqual(3);
     expect(detail!.x - records!.x - records!.width).toBeCloseTo(15, 0);
     expect(Math.abs(detail!.y - 301)).toBeLessThanOrEqual(3);
-    await expect(page.locator(".sourcing-record-items > button").first()).toHaveCSS("column-gap", "10px");
+    await expect(page.locator(".sourcing-record-items > button").first()).toHaveCSS("column-gap", "16px");
+    const recordPhoto = (await page.locator(".sourcing-record-items .research-thumbnail").first().boundingBox())!;
+    expect(recordPhoto.x - records!.x).toBeLessThanOrEqual(8);
     const rowTitle = (await page.locator(".sourcing-record-items > button > b").first().boundingBox())!;
     expect(rowTitle.x - records!.x).toBeLessThanOrEqual(95);
     const recordRows = page.locator(".sourcing-record-items > button");
