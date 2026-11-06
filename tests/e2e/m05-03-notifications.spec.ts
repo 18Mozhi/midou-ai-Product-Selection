@@ -770,12 +770,17 @@ test("P26 preference failure announces and focuses its modal error without losin
   await expect(error.getByText("p26-preference-conflict")).toBeVisible();
 });
 
-test("notification cards distinguish task and competitor categories with decorative glyphs", async ({ page }) => {
+test("notification cards distinguish task and competitor categories with decorative glyphs", async ({ page }, testInfo) => {
+  const wide = page.viewportSize()!.width >= 1101;
+  if (wide) await page.setViewportSize({ width: 1717, height: 916 });
   await setup(page);
   const rows = [
-    { ...item, category: "task", title: "任务状态更新" },
-    { ...item, id: "00000000-0000-4000-8000-000000000984", category: "competitor", title: "竞品监控更新" },
+    { ...item, id: "00000000-0000-4000-8000-000000000984", category: "competitor", title: "竞品监控更新", body: "竞品监控状态已变化，请查看关联记录。", group_count: 1, read_at: null },
+    { ...item, category: "task", title: "任务状态更新", body: "任务状态已变化，请查看关联记录。", created_at: "2026-08-07T10:00:00Z", group_count: 1, read_at: null },
   ];
+  await page.route("**/api/v1/notifications/summary", (r) =>
+    r.fulfill({ json: env({ total: 2, unread: 2, task: 1, approval: 0, competitor: 1, system: 0, open: 2, in_progress: 0, closed: 0 }) }),
+  );
   await page.route("**/api/v1/notifications?*", (route) =>
     route.fulfill({ json: { ...env(rows), meta: { total: rows.length } } }),
   );
@@ -787,6 +792,21 @@ test("notification cards distinguish task and competitor categories with decorat
   await expect(task.locator("rect")).toHaveCount(1);
   await expect(competitor.locator("path")).toHaveCount(2);
   await expect(competitor.locator("circle")).toHaveCount(0);
+  if (wide) {
+    const records = page.locator(".notification-record");
+    await expect(records).toHaveCount(2);
+    const [first, second] = await records.evaluateAll((nodes) => nodes.map((row) => {
+      const rect = row.getBoundingClientRect();
+      return { top: rect.top, bottom: rect.bottom, time: row.querySelector("em")!.getBoundingClientRect().x,
+        status: row.querySelector("b")!.getBoundingClientRect().x,
+        action: row.querySelector(".midou-notification-open")!.getBoundingClientRect().x };
+    }));
+    expect([first.time, first.status, first.action]).toEqual([second.time, second.status, second.action]);
+    expect(Math.abs(first.time - 875)).toBeLessThanOrEqual(8);
+    expect(Math.abs(first.status - 1050)).toBeLessThanOrEqual(8);
+    expect(Math.abs(second.top - first.bottom - 11)).toBeLessThanOrEqual(3);
+    await page.screenshot({ path: testInfo.outputPath("notification-two-row-reference.png") });
+  }
 });
 
 test("midou reference notification layout keeps original workflow and preferences reachable", async ({

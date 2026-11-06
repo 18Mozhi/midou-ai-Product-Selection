@@ -2774,7 +2774,16 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
 @media (min-width: 1450px) {
   html[data-design="commerce"] #app .notification-list .notification-record {
     padding-inline-start: 52px;
-    grid-template-columns: 60px minmax(0, 1fr) auto auto auto;
+    min-block-size: 100px;
+    grid-template-columns: 60px minmax(0, 1fr) 160px 106px auto;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > em {
+    font-variant-numeric: tabular-nums;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > b {
+    box-sizing: border-box;
+    min-inline-size: 75px;
+    text-align: center;
   }
   html[data-design="commerce"] #app .notification-list .notification-record > i {
     width: 60px;
