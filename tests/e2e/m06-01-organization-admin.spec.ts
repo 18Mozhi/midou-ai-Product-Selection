@@ -2532,6 +2532,7 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   expect(refreshBox!.width).toBe(114);
   expect(Math.abs(refreshBox!.y - 122)).toBeLessThanOrEqual(2);
   expect(inviteBox!.width).toBe(125);
+  expect(Math.abs(inviteBox!.x + inviteBox!.width - 1645)).toBeLessThanOrEqual(2);
   expect(inviteBox!.x - refreshBox!.x - refreshBox!.width).toBe(20);
   expect(Math.abs(inviteBox!.y + inviteBox!.height / 2 - refreshBox!.y - refreshBox!.height / 2)).toBeLessThanOrEqual(1);
   const editor = page.locator(".organization-profile-editor");

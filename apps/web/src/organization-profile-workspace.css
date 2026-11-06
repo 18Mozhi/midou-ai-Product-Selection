@@ -617,6 +617,9 @@
 }
 
 @media (min-width: 1536px) {
+  html[data-design="commerce"] #app .org-admin-center--profile-review > header[data-profile-overview="true"] {
+    padding-inline-end: 4px;
+  }
   html[data-design="commerce"] #app .organization-profile-facts > dl {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.08fr);
   }
