@@ -1422,6 +1422,8 @@ test("platform reference first fold fits system checks and source health without
   );
   await expect(sidebar.getByRole("button", { name: "帮助", exact: true })).toBeInViewport({ ratio: 1 });
   expect((await sidebar.boundingBox())!.width).toBeCloseTo(248, 0);
+  await expect(sidebar.locator(".midou-area-tabs")).toHaveCSS("inset-block-start", "-3px");
+  await expect(sidebar).toHaveCSS("padding-block-end", "9px");
   expect((await overview.boundingBox())!.y).toBeCloseTo(170, 0);
   const organizations = sidebar.getByRole("link", { name: "组织管理", exact: true });
   expect((await organizations.boundingBox())!.y - (await overview.boundingBox())!.y).toBe(33);
