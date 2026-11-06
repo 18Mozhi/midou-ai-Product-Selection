@@ -903,6 +903,10 @@ test("midou reference list defaults closed, opens and closes detail without list
     expect((await close.boundingBox())!.height).toBeGreaterThanOrEqual(36);
     const facts = page.getByLabel("情报资料");
     const panel = page.locator(".trend-detail");
+    const badges = panel.locator(".trend-detail-badges");
+    await expect(badges).toHaveCSS("column-gap", "12px");
+    await expect(badges.locator(":scope > span").first()).toHaveCSS("min-height", "30px");
+    await expect(panel.locator("h3")).toHaveCSS("margin-top", "12px");
     const detailTabs = panel.getByRole("tablist");
     await expect(detailTabs).toHaveCSS("column-gap", "8px");
     for (const tab of await detailTabs.getByRole("tab").all()) {
