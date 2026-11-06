@@ -1411,6 +1411,12 @@ test("platform reference first fold fits system checks and source health without
     [facts, facts.locator(":scope > div"), signals].map((part) => part.boundingBox()),
   );
   expect(Math.abs(factsBox!.x - 273)).toBeLessThanOrEqual(2);
+  expect(Math.abs(factsBox!.y - 303)).toBeLessThanOrEqual(3);
+  const workQueue = (await page.locator(".platform-action-summary").boundingBox())!;
+  expect(Math.abs(workQueue.y - 208)).toBeLessThanOrEqual(2);
+  const headingActions = page.locator(".platform-page-header__actions");
+  const rangeBorder = await headingActions.locator("select").evaluate((node) => getComputedStyle(node).borderTopColor);
+  await expect(headingActions.getByRole("button", { name: "刷新", exact: true })).toHaveCSS("border-top-color", rangeBorder);
   expect(Math.abs(metricRow!.x - 293)).toBeLessThanOrEqual(2);
   expect(checksBox!.x).toBe(factsBox!.x);
   const sourceLink = facts.getByRole("link", { name: "查看来源", exact: true });

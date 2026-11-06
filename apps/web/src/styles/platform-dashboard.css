@@ -484,6 +484,10 @@
   #app .platform-dashboard--review .platform-page-header__actions > button {
     min-inline-size: 92px;
   }
+  html[data-design="commerce"] #app .platform-dashboard--review .platform-page-header__actions > label > select,
+  html[data-design="commerce"] #app .platform-dashboard--review .platform-page-header__actions > button {
+    border-color: var(--so-border);
+  }
   .platform-dashboard--review .platform-dashboard-grid {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     grid-template-areas: "trend sources" "signals sources" "queue alerts";
@@ -657,6 +661,7 @@
   }
   html[data-design="commerce"] #app .platform-dashboard--review {
     gap: 18px;
+    margin-block-start: -4px;
   }
   html[data-design="commerce"] #app .platform-dashboard--review > .platform-facts {
     padding-inline: 19px;
