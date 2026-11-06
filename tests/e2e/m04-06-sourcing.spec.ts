@@ -1742,12 +1742,18 @@ test("sourcing keeps the list image when the same record detail omits it", async
   await expect(detail.getByRole("img", { name: item.display_name, exact: true })).toHaveAttribute("src", image);
 });
 
-test("midou reference sourcing displays the task Amazon reference image in list and detail", async ({
+for (const withRichRecords of [false, true]) {
+test(withRichRecords
+  ? "midou reference sourcing compares multiple images and authorized task detail"
+  : "midou reference sourcing displays the task Amazon reference image in list and detail", async ({
   page,
 }, testInfo) => {
   const wide = page.viewportSize()!.width >= 1101;
   if (wide) await page.setViewportSize({ width: 1672, height: 941 });
-  await setup(page);
+  const taskId = "00000000-0000-4000-8000-000000009008";
+  await setup(page, withRichRecords
+    ? ["task:read", "trend:read", "opportunity:read", "sourcing:read", "platform:operate"]
+    : undefined);
   const record = {
     id: searchId,
     input_type: "opportunity",
@@ -1771,10 +1777,28 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     ...[2, 3, 4, 5].map((index) => ({
       ...record,
       id: `00000000-0000-4000-8000-00000000900${index}`,
-      display_name: `Amazon 参考商品 ${index}`,
-      image_url: undefined,
+      display_name: withRichRecords
+        ? ["Home camera · graphite", "Adventure game for handheld consoles", "Colorful puzzle adventure", "Die-cast roadster"][index - 2]
+        : `Amazon 参考商品 ${index}`,
+      image_url: withRichRecords ? `https://m.media-amazon.com/images/sourcing-fixture-${index}.svg` : undefined,
     })),
   ];
+  if (withRichRecords) {
+    const silhouettes = [
+      '<circle cx="32" cy="29" r="17" fill="#98a1a8"/><circle cx="32" cy="29" r="11" fill="#28343f"/><path d="M19 51h26" stroke="#7e868c" stroke-width="8"/>',
+      '<rect x="12" y="6" width="40" height="52" rx="3" fill="#efbd4c"/><path d="m16 44 13-23 15 19 5 8" fill="#ce653c"/>',
+      '<rect x="13" y="6" width="38" height="52" rx="3" fill="#80b97a"/><circle cx="32" cy="32" r="13" fill="#f3d66c"/>',
+      '<path d="M6 39v-8l11-3 9-10h20l11 11 3 3v7Z" fill="#b92d31"/><circle cx="18" cy="39" r="6" fill="#28343f"/><circle cx="49" cy="39" r="6" fill="#28343f"/>',
+    ];
+    await page.route("https://m.media-amazon.com/images/sourcing-fixture-*.svg", (r) => {
+      const match = /sourcing-fixture-([2-5])\.svg$/.exec(r.request().url());
+      expect(match).not.toBeNull();
+      return r.fulfill({
+        contentType: "image/svg+xml",
+        body: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">${silhouettes[Number(match![1]) - 2]}</svg>`,
+      });
+    });
+  }
   await page.route(searchesRoute, (r) => r.fulfill({ json: envelope(recordsFixture) }));
   await page.route(`**/api/v1/opportunities/${record.input_ref}`, (r) =>
     r.fulfill({ json: envelope({ id: record.input_ref, profit_status: "insufficient_data" }) }),
@@ -1785,6 +1809,7 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   await page.route("**/api/v1/sourcing/searches/" + searchId, (r) =>
     r.fulfill({ json: envelope({
       ...record, candidates: [],
+      ...(withRichRecords ? { collection_task_id: taskId } : {}),
       collection_progress: {
         status: "failed", total_subqueries: 1, successful_subqueries: 0,
         failed_subqueries: 1, blocked_subqueries: 0, active_subqueries: 0,
@@ -1792,13 +1817,20 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     }) }),
   );
   await page.goto("/sourcing");
-  await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toBeVisible();
+  const recordImages = page.locator(".sourcing-record-items .research-thumbnail img");
+  await expect(recordImages).toHaveCount(withRichRecords ? 5 : 1);
+  await expect(recordImages.first()).toBeVisible();
+  if (withRichRecords) {
+    await expect(page.getByRole("link", { name: "查看采集任务明细" })).toHaveAttribute(
+      "href", `/platform-admin/collection?task=${taskId}`,
+    );
+  }
   await expect(page.locator(".sourcing-record-items > button")).toHaveCount(5);
   const detailPhoto = page.locator(".sourcing-detail > header .research-thumbnail img");
   await expect(detailPhoto).toBeVisible();
   await expect(detailPhoto).toHaveAttribute("loading", "eager");
   await expect(detailPhoto).toHaveAttribute("fetchpriority", "high");
-  await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toHaveAttribute("loading", "lazy");
+  await expect(recordImages.first()).toHaveAttribute("loading", "lazy");
   await expect.poll(() => detailPhoto.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
   await expect(page.getByRole("heading", { name: "供应链找货", exact: true })).not.toBeFocused();
   const progress = page.getByRole("region", { name: "来源采集进度" });
@@ -1807,7 +1839,7 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   await expect(page.locator(".sourcing-profit-unconfirmed-breakdown")).toBeVisible();
   if (wide) {
     const actions = page.locator(".sourcing-heading-actions");
-    await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toHaveCSS("padding", "5px");
+    await expect(recordImages.first()).toHaveCSS("padding", "5px");
     await expect(detailPhoto).toHaveCSS("padding", "12px");
     await expect(page.locator(".sourcing-head > div:first-child")).toHaveCSS("top", "4px");
     const [title, toolbar, records, detail] = await Promise.all(
@@ -1887,7 +1919,13 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     const counts = (await progress.locator("dl").boundingBox())!;
     expect(Math.abs(ended.y + ended.height / 2 - counts.y - counts.height / 2)).toBeLessThanOrEqual(4);
     expect(ended.x).toBeGreaterThanOrEqual(counts.x + counts.width);
-    await page.screenshot({ path: testInfo.outputPath("sourcing-progress-reference.png") });
+    if (withRichRecords) {
+      await expect.poll(() => recordImages.evaluateAll((images) =>
+        images.every((img) => (img as HTMLImageElement).naturalWidth > 0),
+      )).toBe(true);
+    }
+    await page.screenshot({ path: testInfo.outputPath(withRichRecords
+      ? "sourcing-progress-rich-content.png" : "sourcing-progress-reference.png") });
   } else {
     const [success, waiting, failed, blocked] = await Promise.all(
       (await progress.locator("dl > div").all()).map((metric) => metric.boundingBox()),
@@ -1902,6 +1940,7 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
+}
 
 test("wide sourcing toolbar balances search and four metrics without changing mobile layout", async ({
   page,
