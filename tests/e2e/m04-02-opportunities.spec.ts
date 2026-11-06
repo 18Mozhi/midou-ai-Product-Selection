@@ -4496,6 +4496,8 @@ for (const view of ["completed", "rule_candidates"]) {
           await expect(catalog.getByRole("img", { name: "商品主图待采集" })).toBeVisible();
           const next = catalog.getByRole("button", { name: "下一页", exact: true });
           const pagination = catalog.getByRole("navigation", { name: "选品分页" });
+          await expect(pagination.locator(".candidate-page-numbers")).toHaveCSS("column-gap", "7px");
+          await expect(catalog.locator(".selection-product-name strong a").first()).toHaveCSS("min-block-size", "36px");
           await expect(pagination.getByRole("button", { name: "第 1 页" })).toHaveAttribute("aria-current", "page");
           await expect(pagination.getByRole("button", { name: "第 2 页" })).toHaveCSS("background-color", "rgb(255, 255, 255)");
           await expect(pagination.locator(".candidate-page-numbers > span")).toHaveCSS("min-inline-size", "30px");

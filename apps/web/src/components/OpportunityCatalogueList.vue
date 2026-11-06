@@ -468,6 +468,12 @@ tbody tr:hover {
   min-height: 0;
   line-height: 1.45;
 }
+@media (min-width: 1440px) {
+  .selection-candidate-list .selection-product-name a {
+    min-block-size: 36px;
+    line-height: 18px;
+  }
+}
 .catalogue-gate-track {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));

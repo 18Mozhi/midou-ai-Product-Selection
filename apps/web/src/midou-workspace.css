@@ -2771,6 +2771,12 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   html[data-design="commerce"] #app .candidate-pagination .candidate-page-total {
     margin-inline-end: 16px;
   }
+  html[data-design="commerce"] #app .candidate-pagination .candidate-page-numbers {
+    gap: 7px;
+  }
+  html[data-design="commerce"] #app .candidate-pagination .candidate-page-size {
+    margin-inline: 20px 12px;
+  }
 }
 
 /* Reference notification inbox: compact filter controls and separate card rhythm. */
