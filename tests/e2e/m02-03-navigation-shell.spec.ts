@@ -114,7 +114,27 @@ test("desktop platform sidebar fits grouped navigation and footer at reference s
 }) => {
   await page.setViewportSize({ width: 1672, height: 941 });
   await allow(page, "platform_admin");
+  let releaseNavigation!: () => void;
+  const pending = new Promise<void>((resolve) => { releaseNavigation = resolve; });
+  await page.route("**/api/v1/me/navigation?**", async (route) => {
+    await pending;
+    await route.fallback();
+  });
   await page.goto("/platform-admin");
+  const placeholder = page.locator(".midou-search-loading");
+  const searchControl = page.getByRole("button", { name: "搜索后台功能" });
+  const pendingBox = await (async () => {
+    try {
+      await expect(placeholder).toBeVisible();
+      await expect(placeholder).toHaveAttribute("aria-hidden", "true");
+      await expect(searchControl).toHaveCount(0);
+      return await placeholder.boundingBox();
+    } finally {
+      releaseNavigation();
+    }
+  })();
+  await expect(searchControl).toBeVisible();
+  expect(await searchControl.boundingBox()).toEqual(pendingBox);
   const sidebar = page.getByRole("complementary", { name: "工作区导航" });
   const context = page.locator(".role-topbar").getByRole("link", { name: "切换组织与工作区" });
   const sidebarContext = sidebar.getByRole("link", { name: "选择组织与工作区后进入用户工作台" });

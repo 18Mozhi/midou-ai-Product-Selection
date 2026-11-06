@@ -1609,6 +1609,11 @@ html[data-design="commerce"] #app .role-shell.role-shell--c
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.midou-search-loading {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  pointer-events: none;
+}
 .midou-account-menu {
   position: relative;
   flex: none;

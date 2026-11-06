@@ -382,6 +382,12 @@ onUnmounted(() => {
           <span>{{ shell === 'member' ? '搜索功能、商品、ASIN等' : '搜索后台功能' }}</span>
           <kbd>Ctrl K</kbd>
         </button>
+        <span
+          v-else-if="state === 'loading'"
+          class="role-quick-action midou-search-loading"
+          data-navigation-search
+          aria-hidden="true"
+        ></span>
         <details ref="navigationHelp" class="midou-navigation-help">
           <summary aria-label="导航帮助"><AppIcon name="help" :size="22" /></summary>
           <div class="midou-account-menu-panel midou-help-panel">
