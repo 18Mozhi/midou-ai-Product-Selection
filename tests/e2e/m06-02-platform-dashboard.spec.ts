@@ -1441,6 +1441,11 @@ test("platform reference first fold fits system checks and source health without
   const rangeBorder = await headingActions.locator("select").evaluate((node) => getComputedStyle(node).borderTopColor);
   await expect(headingActions.getByRole("button", { name: "刷新", exact: true })).toHaveCSS("border-top-color", rangeBorder);
   expect(Math.abs(metricRow!.x - 293)).toBeLessThanOrEqual(2);
+  const metricValues = await facts.locator("article > strong").evaluateAll((nodes) =>
+    nodes.map((node) => node.getBoundingClientRect().x),
+  );
+  for (const [index, x] of [356, 623, 887, 1155, 1426].entries())
+    expect(Math.abs(metricValues[index] - x)).toBeLessThanOrEqual(5);
   expect(Math.abs(metricRow!.y + metricRow!.height - 463)).toBeLessThanOrEqual(3);
   const trendCard = (await page.locator(".platform-trend-chart").boundingBox())!;
   const sourceCard = (await sources.boundingBox())!;
