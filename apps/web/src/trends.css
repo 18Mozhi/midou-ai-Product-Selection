@@ -962,6 +962,16 @@
     height: clamp(450px, calc(100dvh - 356px), 740px);
     overflow-y: auto;
   }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-pagination {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 1;
+    padding-block: 8px;
+    background: var(--trend-surface);
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-list:has(> .trend-pagination) {
+    scroll-padding-block-end: 60px;
+  }
   #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row {
     padding-block: 8px;
   }

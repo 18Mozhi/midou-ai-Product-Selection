@@ -475,7 +475,7 @@ onBeforeUnmount(() => {
             ><small>条信号</small></span
           ><em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
         </button>
-        <footer class="trend-pagination" aria-label="趋势分页">
+        <footer v-if="pageCount > 1" class="trend-pagination" aria-label="趋势分页">
           <button type="button" :disabled="page <= 1" @click="goPage(page - 1)">上一页</button>
           <span>第 {{ page }} / {{ pageCount }} 页</span>
           <button type="button" :disabled="page >= pageCount" @click="goPage(page + 1)">

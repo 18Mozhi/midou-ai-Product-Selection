@@ -143,6 +143,12 @@
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Four primary facts in the intelligence detail header; coverage and momentum remain in Overview. No change to topic selection, evidence access, or API reads."
   },
+  "referenceTrendListPagination": {
+    "sourceFiles": ["apps/web/src/components/TrendDashboard.vue", "apps/web/src/trends.css"],
+    "testFiles": ["tests/e2e/m04-01-trends.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Render list pagination only when there is more than one page; keep it visible in the desktop split-view list without changing the 20-row page size, filters or URL contract."
+  },
   "referenceSourcingEmptyOffers": {
     "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/components/SourcingProfitSummary.vue", "apps/web/src/sourcing.css"],
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],

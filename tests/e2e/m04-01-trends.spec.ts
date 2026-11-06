@@ -807,6 +807,7 @@ test("midou reference list defaults closed, opens and closes detail without list
   });
   await page.goto("/trends");
   await expect(page.locator(".trend-list > button")).toHaveCount(4);
+  await expect(page.locator(".trend-pagination")).toHaveCount(0);
   await expect(page.locator(".trend-detail")).toHaveCount(0);
   expect(reads).toBe(0);
   await expect(page.getByRole("link", { name: "米兜智能选品", exact: true })).toBeVisible();
@@ -895,6 +896,37 @@ test("midou reference list defaults closed, opens and closes detail without list
   expect(lists).toBe(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
+test("desktop intelligence pagination stays fully visible beside an open detail", async ({ page }) => {
+  await page.setViewportSize({ width: 1717, height: 916 });
+  await ready(page);
+  const topics = [topic, ...Array.from({ length: 19 }, (_, index) => ({
+    ...topic,
+    id: `00000000-0000-4000-8000-000000000${index + 700}`,
+  }))];
+  await page.route(/\/api\/v1\/trends\?/, (route) => {
+    const secondPage = new URL(route.request().url()).searchParams.get("page") === "2";
+    return route.fulfill({ json: envelope(secondPage ? topics.slice(-1) : topics, { total: 21 }) });
+  });
+  await page.goto("/trends");
+  const list = page.locator(".trend-list");
+  await expect(list.locator(".trend-topic-row")).toHaveCount(20);
+  await list.locator(".trend-topic-row").first().click();
+  await expect(page.locator(".trend-detail")).toBeVisible();
+  const pager = list.locator(".trend-pagination");
+  const bounds = (await list.boundingBox())!;
+  const footer = (await pager.boundingBox())!;
+  expect(footer.y).toBeGreaterThan(bounds.y);
+  expect(footer.y + footer.height).toBeLessThanOrEqual(bounds.y + bounds.height);
+  await list.evaluate((element) => { element.scrollTop = element.scrollHeight; });
+  const last = (await list.locator(".trend-topic-row").last().boundingBox())!;
+  expect(last.y + last.height).toBeLessThanOrEqual((await pager.boundingBox())!.y + 1);
+  await pager.getByRole("button", { name: "下一页" }).click();
+  await expect(page).toHaveURL(/page=2/);
+  await expect(list.locator(".trend-topic-row")).toHaveCount(1);
+  await expect(pager).toContainText("第 2 / 2 页");
+  await expect(pager.getByRole("button", { name: "下一页" })).toBeDisabled();
+});
+
 test("midou reference source icon fallback is bounded on image failures", async ({ page }) => {
   await ready(page, [
     {
