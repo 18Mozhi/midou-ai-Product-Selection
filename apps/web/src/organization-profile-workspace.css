@@ -564,12 +564,15 @@
   }
   #app .organization-profile-editor button[type="submit"] {
     min-inline-size: 97px;
+    min-block-size: 38px;
   }
   #app .org-overview-actions > button {
     min-inline-size: 114px;
+    min-block-size: 40px;
     padding-inline: 12px;
   }
   #app .org-overview-actions > .org-overview-invite {
     min-inline-size: 125px;
+    min-block-size: 40px;
   }
 }
