@@ -2593,6 +2593,11 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] {
     margin-block-start: 6px;
   }
+  html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] > .catalog-data-note {
+    font-size: 15px;
+    line-height: 22px;
+    background: color-mix(in srgb, var(--so-warning-soft) 72%, var(--so-panel));
+  }
 }
 
 @media (min-width: 1440px) {

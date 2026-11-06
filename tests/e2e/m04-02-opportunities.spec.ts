@@ -4412,7 +4412,14 @@ for (const view of ["completed", "rule_candidates"]) {
     async ({ page }, testInfo) => {
       const wideCandidates = view === "rule_candidates" && page.viewportSize()!.width >= 1101;
       if (wideCandidates) await page.setViewportSize({ width: 1717, height: 916 });
-      await ready(page);
+      await ready(page, evidence, {}, [
+        "task:read",
+        "trend:read",
+        "trend:manage",
+        "opportunity:read",
+        "opportunity:decide",
+        "sourcing:read",
+      ]);
       await page.route("**/fixtures/candidate-reference-product.svg", (route) =>
         route.fulfill({
           contentType: "image/svg+xml",
@@ -4441,6 +4448,12 @@ for (const view of ["completed", "rule_candidates"]) {
         await expect(catalog.locator(".catalog-data-note svg[aria-hidden='true']")).toBeVisible();
         await expect(catalog.locator(".catalog-data-note")).toContainText("候选数量不代表可用货源");
         if (wideCandidates) {
+          await expect(
+            page
+              .getByRole("complementary", { name: "工作区导航" })
+              .getByRole("link", { name: "1688 找货", exact: true }),
+          ).toBeVisible();
+          await expect(catalog.locator(".catalog-data-note")).toHaveCSS("font-size", "15px");
           const trigger = page.getByRole("button", { name: "高级筛选", exact: true });
           const search = page.getByRole("textbox", { name: "商品名称" });
           const [filterBox, searchBox] = await Promise.all([trigger.boundingBox(), search.boundingBox()]);
