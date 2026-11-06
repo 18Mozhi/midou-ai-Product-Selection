@@ -392,6 +392,9 @@
   background: var(--so-success-soft);
   color: var(--so-success);
 }
+.midou-governance-status > div:has(.midou-governance-status-badge[data-status="active"]) dt > svg {
+  color: var(--so-success);
+}
 @media (min-width: 1200px) {
   html[data-design="commerce"]
     #app

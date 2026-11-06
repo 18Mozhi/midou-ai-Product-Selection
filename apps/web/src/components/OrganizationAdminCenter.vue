@@ -1590,7 +1590,7 @@ onMounted(() => void load());
                 },
                 {
                   path: '/org-admin/approvals',
-                  icon: 'list',
+                  icon: 'clipboard-check',
                   title: '审批模板',
                   note: '配置审批模板与流程',
                 },
@@ -1607,7 +1607,10 @@ onMounted(() => void load());
             <h3>组织状态</h3>
             <dl class="midou-governance-status">
               <div>
-                <dt><AppIcon name="check" :size="18" />组织使用状态</dt>
+                <dt>
+                  <AppIcon :name="data?.status === 'active' ? 'circle-check' : 'info'" :size="18" />
+                  组织使用状态
+                </dt>
                 <dd>
                   <span class="midou-governance-status-badge" :data-status="data?.status">
                     {{ statusText(data?.status) }}

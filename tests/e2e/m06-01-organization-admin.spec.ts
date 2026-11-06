@@ -2583,6 +2583,10 @@ test("wide governance metrics align labels, values and notes beside the icon", a
     expect(item.separator).toBe(index < 5 ? '""' : "none");
   }
   const sidebar = page.getByRole("complementary", { name: "治理快捷入口与组织状态" });
+  await expect(sidebar.getByRole("link", { name: /审批模板/ }).locator("svg rect")).toHaveCount(1);
+  const statusIcon = sidebar.getByRole("term").filter({ hasText: "组织使用状态" }).locator("svg");
+  await expect(statusIcon.locator("circle")).toHaveCount(1);
+  await expect(statusIcon).toHaveAttribute("aria-hidden", "true");
   const [shortcuts, statusCard] = await sidebar.locator(":scope > section").evaluateAll((cards) =>
     cards.map((card) => {
       const { top, bottom } = card.getBoundingClientRect();
