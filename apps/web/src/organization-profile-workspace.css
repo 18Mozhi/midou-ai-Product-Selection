@@ -485,6 +485,10 @@
     row-gap: 15px;
     column-gap: 32px;
   }
+  html[data-design="commerce"] #app .organization-profile-editor .organization-profile-fields
+    :is(input, select, textarea):not(:focus):not(:user-invalid):not(:disabled) {
+    border-color: color-mix(in srgb, var(--so-border-strong) 78%, var(--so-border));
+  }
   #app .organization-profile-metrics article {
     padding-block: 15px 17px;
   }

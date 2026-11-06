@@ -2540,6 +2540,10 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   const timezoneField = editor.getByLabel("时区", { exact: true });
   const save = editor.getByRole("button", { name: "保存", exact: true });
   await expect(nameField).toHaveCSS("min-height", "34px");
+  const idleBorder = await nameField.evaluate((el) => getComputedStyle(el).borderTopColor);
+  await nameField.focus();
+  await expect(nameField).not.toHaveCSS("border-top-color", idleBorder);
+  await nameField.blur();
   expect(Math.abs((await nameField.boundingBox())!.y - 554)).toBeLessThanOrEqual(3);
   expect(Math.abs((await timezoneField.boundingBox())!.x - 753)).toBeLessThanOrEqual(2);
   await expect(editor.locator(".organization-profile-fields")).toHaveCSS("row-gap", "15px");
