@@ -879,6 +879,11 @@ test("midou reference list defaults closed, opens and closes detail without list
   if (page.viewportSize()!.width >= 1440) {
     const facts = page.getByLabel("情报资料");
     const panel = page.locator(".trend-detail");
+    const detailTabs = panel.getByRole("tablist");
+    await expect(detailTabs).toHaveCSS("column-gap", "8px");
+    for (const tab of await detailTabs.getByRole("tab").all()) {
+      await expect(tab).toHaveCSS("width", "116px");
+    }
     const [panelBox, titleBox, factsBox] = await Promise.all(
       [panel, panel.locator("h3"), facts].map((part) => part.boundingBox()),
     );

@@ -1137,6 +1137,10 @@
   }
   #app .trend-detail-tabs {
     margin-block-start: 14px;
+    gap: 8px;
+  }
+  #app .trend-detail-tabs > button {
+    min-inline-size: 116px;
   }
 }
 
