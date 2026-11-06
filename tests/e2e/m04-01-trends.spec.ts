@@ -855,6 +855,10 @@ test("midou reference list defaults closed, opens and closes detail without list
       expect(listBox.y - filters.y - filters.height).toBeCloseTo(21, 0);
       await expect(list.locator(".topic-copy > strong").first()).toHaveCSS("font-size", "16px");
       await expect(list.locator(".trend-topic-row").first()).toHaveCSS("padding-top", "7px");
+      const heat = list.locator(".topic-heat").first();
+      const [count, unit] = await Promise.all([heat.locator("b").boundingBox(), heat.locator("small").boundingBox()]);
+      expect(Math.abs(count!.x + count!.width / 2 - unit!.x - unit!.width / 2)).toBeLessThanOrEqual(1);
+      expect(Math.abs(unit!.y - count!.y - count!.height - 2)).toBeLessThanOrEqual(1);
       expect(
         await list.evaluate(
           (el) =>
