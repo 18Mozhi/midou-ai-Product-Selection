@@ -434,6 +434,13 @@ test("candidate table shows five progress segments from the existing gate count"
   expect(valueOffsets[0]).toBeGreaterThan(30);
   expect(valueOffsets[0]).toBeLessThan(75);
   expect(new Set(valueOffsets).size).toBe(1);
+  await page.setViewportSize({ width: 1717, height: 916 });
+  const counts = page.locator(".selection-candidate-list .catalogue-counts dd");
+  await expect(counts).toHaveText(["5", "4"]);
+  const countPositions = await counts.evaluateAll((nodes) =>
+    nodes.map((node) => node.getBoundingClientRect().x),
+  );
+  expect(countPositions[0]).toBeCloseTo(countPositions[1]!, 0);
 });
 
 test("historical evidence task retains blocker facts without restoring the retired task surface", async ({

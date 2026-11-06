@@ -336,6 +336,17 @@ tbody tr:hover {
   margin: 0;
   font-weight: 600;
 }
+@media (min-width: 1440px) {
+  .product-catalog[data-view="rule_candidates"] .catalogue-counts div {
+    display: grid;
+    grid-template-columns: minmax(max-content, 68px) minmax(0, 1fr);
+    justify-content: start;
+  }
+  .product-catalog[data-view="rule_candidates"] .catalogue-counts dd {
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
+}
 .catalogue-verdict {
   display: inline-block;
   padding: 2px 7px;
