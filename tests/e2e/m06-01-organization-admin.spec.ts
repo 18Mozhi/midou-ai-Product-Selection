@@ -2564,6 +2564,7 @@ test("wide governance metrics align labels, values and notes beside the icon", a
     [identity, status, identity.locator(".org-identity-mark")].map((part) => part.boundingBox()),
   );
   expect(statusBox!.x + statusBox!.width).toBeLessThan(identityBox!.x + identityBox!.width - 30);
+  expect([markBox!.width, markBox!.height]).toEqual([58, 58]);
   expect(Math.abs(statusBox!.y + statusBox!.height / 2 - markBox!.y - markBox!.height / 2)).toBeLessThanOrEqual(6);
   const factIcons = await page.locator(".organization-profile-facts dt > svg").evaluateAll((nodes) =>
     nodes.map((node) => node.getBoundingClientRect().x),

@@ -522,10 +522,32 @@
   }
   #app .organization-profile-facts > header {
     justify-content: flex-start;
-    gap: clamp(16px, 3.7vw, 62px);
+    gap: clamp(16px, 1.3vw, 24px);
+  }
+  html[data-design="commerce"] #app .organization-profile-facts {
+    padding-block: 8px;
   }
   #app .organization-profile-facts > header > div {
     min-width: 0;
+  }
+  #app .organization-profile-facts > header p {
+    margin-block-end: 8px;
+    font-size: 15px;
+    line-height: 20px;
+  }
+  #app .organization-profile-facts .org-identity-name {
+    gap: 16px;
+  }
+  #app .organization-profile-facts .org-identity-name > div {
+    min-width: 0;
+  }
+  #app .organization-profile-facts .org-identity-mark {
+    flex-basis: 58px;
+    height: 58px;
+  }
+  #app .organization-profile-facts .org-identity-name h3 {
+    font-size: 22px;
+    line-height: 1.25;
   }
   #app .organization-profile-facts > header > i {
     flex: none;
