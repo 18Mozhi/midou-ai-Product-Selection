@@ -1108,8 +1108,15 @@ html[data-design="commerce"] #app .midou-home-flow {
   background: var(--so-primary-soft);
 }
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .midou-home-flow {
+    padding-block: 12px 23px;
+  }
+  .midou-home-flow header {
+    padding-inline-start: 4px;
+  }
   .midou-home-flow ol {
     grid-template-columns: repeat(4, minmax(0, 1fr)) max-content;
+    margin-block-start: 17px;
     padding-inline: clamp(28px, 2.3vw, 40px);
   }
   .midou-home-flow li {

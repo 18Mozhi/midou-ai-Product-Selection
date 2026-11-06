@@ -310,6 +310,9 @@ test("workbench completed empty action fits in the reference desktop first fold"
   );
   expect(stepMarkers.every(({ y, width }) => y === stepMarkers[0].y && width === 30)).toBe(true);
   expect(Math.abs(stepMarkers[0].x - 345)).toBeLessThanOrEqual(5);
+  expect(Math.abs(stepMarkers[0].y - 588)).toBeLessThanOrEqual(3);
+  const flowHeading = await page.getByRole("heading", { name: "选品任务流程", exact: true }).boundingBox();
+  expect(Math.abs(flowHeading!.x - 310)).toBeLessThanOrEqual(3);
   expect(Math.abs(stepMarkers[4].x - 1218)).toBeLessThanOrEqual(12);
   expect(
     await steps.evaluateAll((items) =>
