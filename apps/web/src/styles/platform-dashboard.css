@@ -841,5 +841,13 @@
   }
   #app .platform-dashboard--review .platform-system-checks .platform-signals li {
     padding-block: 4px;
+    padding-inline: 12px 8px;
+  }
+  #app .platform-dashboard--review .platform-system-checks .platform-signals strong {
+    font-variant-numeric: tabular-nums;
+  }
+  #app .platform-dashboard--review .platform-system-checks .platform-signal-ok {
+    min-inline-size: 54px;
+    text-align: center;
   }
 }

@@ -1488,6 +1488,9 @@ test("platform reference first fold fits system checks and source health without
   await expect(sourceTable.locator("tbody td:last-child").last()).toHaveText("无样本");
   await expect(sources.getByRole("heading", { name: "来源健康" })).toHaveCSS("font-size", "18px");
   await expect(signals.getByRole("heading", { name: "系统检查" })).toHaveCSS("font-size", "18px");
+  const signalRows = signals.locator(".platform-signals li");
+  await expect(signalRows.first()).toHaveCSS("padding-inline-start", "12px");
+  await expect(signalRows.first().locator(".platform-signal-ok")).toHaveCSS("min-inline-size", "54px");
   await expect(cell).toHaveCSS("font-variant-numeric", "tabular-nums");
   const density = sources.getByLabel("表格密度");
   await expect(sources.locator(".table-view-controls__toolbar svg[aria-hidden='true']")).toHaveCount(3);
