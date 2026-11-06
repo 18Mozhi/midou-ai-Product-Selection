@@ -995,11 +995,21 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
 .sourcing-pending > div > p {
   margin-block: 4px 0;
 }
-.sourcing-pending .sourcing-notice-task {
+#app .sourcing-workspace--review .sourcing-pending .sourcing-notice-task {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  justify-content: center;
+  min-height: 42px;
+  padding-inline: 14px;
+  border: 1px solid var(--so-primary-border);
+  border-radius: 8px;
+  color: var(--so-primary);
+  background: var(--so-panel);
+  font-weight: 600;
   white-space: nowrap;
+}
+#app .sourcing-workspace--review .sourcing-pending .sourcing-notice-task:hover {
+  background: var(--so-primary-soft);
 }
 @media (min-width: 1101px) {
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-head {

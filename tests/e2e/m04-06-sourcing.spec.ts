@@ -204,8 +204,10 @@ for (const scenario of [
     text: "当前记录尚无供应商候选",
   },
 ]) {
-  test(`empty sourcing status remains factual for ${scenario.name}`, async ({ page }) => {
+  test(`empty sourcing status remains factual for ${scenario.name}`, async ({ page }, testInfo) => {
     const taskId = "00000000-0000-4000-8000-000000000612";
+    if (scenario.name === "failed" && testInfo.project.name === "desktop-chromium")
+      await page.setViewportSize({ width: 1672, height: 941 });
     await setup(
       page,
       scenario.name === "failed" ? ["sourcing:read", "platform:operate"] : undefined,
@@ -258,10 +260,15 @@ for (const scenario of [
         : "报价返回后将在这里展示。",
     );
     if (scenario.name === "failed") {
-      await expect(notice.getByRole("link", { name: "查看采集任务明细" })).toHaveAttribute(
+      const action = notice.getByRole("link", { name: "查看采集任务明细" });
+      await expect(action).toHaveAttribute(
         "href",
         `/platform-admin/collection?task=${taskId}`,
       );
+      await expect(action).toHaveCSS("min-height", "42px");
+      await expect(action).toHaveCSS("border-top-style", "solid");
+      if (testInfo.project.name === "desktop-chromium")
+        await notice.screenshot({ path: testInfo.outputPath("sourcing-authorized-failure.png") });
     } else await expect(notice.getByRole("link", { name: "查看采集任务明细" })).toHaveCount(0);
     await expect(page.locator(".sourcing-pending")).not.toContainText(
       "正在采集供应商信息，完成后将显示候选",
