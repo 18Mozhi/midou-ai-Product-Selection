@@ -1502,6 +1502,7 @@ test("platform reference first fold fits system checks and source health without
   await expect(sources.locator("th").nth(1)).toBeVisible();
   await sources.getByText("列设置", { exact: true }).click();
   await expect(cell).toHaveCSS("padding-top", "8px");
+  await expect(cell).toHaveCSS("line-height", "20px");
   await density.selectOption("compact");
   await expect(cell).toHaveCSS("padding-top", "6px");
   await density.selectOption("standard");

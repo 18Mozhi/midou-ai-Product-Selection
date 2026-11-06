@@ -812,6 +812,9 @@
   #app .platform-source-health table:not(:has(thead th[hidden])) td:last-child {
     white-space: nowrap;
   }
+  #app .platform-source-health table[data-table-density="standard"] td {
+    line-height: 20px;
+  }
   #app .platform-dashboard--review .platform-system-checks {
     padding-block: 12px;
   }
