@@ -1401,6 +1401,8 @@ test("platform reference first fold fits system checks and source health without
   await expect(sidebar.getByRole("button", { name: "帮助", exact: true })).toBeInViewport({ ratio: 1 });
   expect((await sidebar.boundingBox())!.width).toBeCloseTo(248, 0);
   expect((await overview.boundingBox())!.y).toBeCloseTo(170, 0);
+  const organizations = sidebar.getByRole("link", { name: "组织管理", exact: true });
+  expect((await organizations.boundingBox())!.y - (await overview.boundingBox())!.y).toBe(33);
   expect((await overview.locator("span").boundingBox())!.x).toBeCloseTo(66, 0);
   const settings = (await sidebar.getByRole("link", { name: "设置", exact: true }).boundingBox())!;
   const help = (await sidebar.getByRole("button", { name: "帮助", exact: true }).boundingBox())!;

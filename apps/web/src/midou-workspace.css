@@ -2093,6 +2093,15 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     padding-inline: 8px;
   }
 }
+@media (min-width: 1536px) and (max-width: 1750px) and (min-height: 921px) {
+  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .midou-area-tabs + section {
+    row-gap: 1px;
+    margin-block-end: 6px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .midou-area-tabs + section h2 {
+    margin-block-end: 5px;
+  }
+}
 
 /* Reference workbench: headline and actions above a broader first metric and a full-height rail. */
 .midou-home-intro {
