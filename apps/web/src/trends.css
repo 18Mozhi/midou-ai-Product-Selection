@@ -894,6 +894,11 @@
   #app .trend-dashboard--review .trend-detail > header h3 {
     margin-block-start: 12px;
   }
+  #app .trend-dashboard--review .trend-detail > header .trend-detail-freshness {
+    font-size: 15px;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+  }
 }
 #app .trend-detail .trend-detail-facts {
   padding: 14px;
@@ -1161,6 +1166,7 @@
   }
   #app .trend-detail .trend-detail-facts {
     min-height: 93px;
+    margin-block-start: 30px;
     align-items: center;
     gap: 0;
     padding: 14px 0;

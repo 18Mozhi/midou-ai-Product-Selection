@@ -913,6 +913,9 @@ test("midou reference list defaults closed, opens and closes detail without list
     expect((await close.boundingBox())!.height).toBeGreaterThanOrEqual(36);
     const facts = page.getByLabel("情报资料");
     const panel = page.locator(".trend-detail");
+    await expect(panel.locator(".trend-detail-freshness")).toHaveCSS("font-size", "15px");
+    await expect(facts.locator("dt").nth(1).locator("path")).toHaveAttribute("d", /^m12 2 10 5/);
+    await expect(facts.locator("dt").nth(2).locator("path")).toHaveAttribute("d", /^M5 2h9/);
     const badges = panel.locator(".trend-detail-badges");
     await expect(badges).toHaveCSS("column-gap", "12px");
     await expect(badges.locator(":scope > span").first()).toHaveCSS("min-height", "30px");
@@ -928,6 +931,7 @@ test("midou reference list defaults closed, opens and closes detail without list
     expect(factsBox!.x - panelBox!.x).toBeCloseTo(23, 0);
     expect(titleBox!.x - factsBox!.x).toBeCloseTo(8, 0);
     await expect(facts).toHaveCSS("min-height", "93px");
+    await expect(facts).toHaveCSS("margin-top", "30px");
     await expect(facts.locator("dt").first()).toHaveCSS("font-size", "14px");
     await expect(facts.locator("dd").first()).toHaveCSS("font-size", "20px");
     await expect(facts.locator("dd[data-insufficient='true']")).toHaveCSS("font-size", "14px");

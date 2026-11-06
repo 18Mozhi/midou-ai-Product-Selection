@@ -71,7 +71,7 @@ const freshness = (value: string) =>
           ><span :data-status="detail.status">{{ statusLabel(detail.status) }}</span>
         </div>
         <h3 v-if="detail && busy !== 'detail'">{{ detail.title }}</h3>
-        <span v-if="detail && busy !== 'detail'"
+        <span v-if="detail && busy !== 'detail'" class="trend-detail-freshness"
           >首次 {{ freshness(detail.first_seen_at) }} · 最近来源
           {{ freshness(detail.source_fresh_at) }}</span
         >
@@ -87,15 +87,15 @@ const freshness = (value: string) =>
     />
     <dl v-else-if="detail" class="trend-detail-facts" aria-label="情报资料">
       <div>
-        <dt><AppIcon name="trend" :size="16" />信号</dt>
+        <dt><AppIcon name="activity" :size="16" />信号</dt>
         <dd>{{ detail.signal_count }} 条</dd>
       </div>
       <div>
-        <dt><AppIcon name="list" :size="16" />来源</dt>
+        <dt><AppIcon name="layers" :size="16" />来源</dt>
         <dd>{{ detail.source_count }} 个</dd>
       </div>
       <div>
-        <dt><AppIcon name="database" :size="16" />证据</dt>
+        <dt><AppIcon name="file" :size="16" />证据</dt>
         <dd>{{ detail.data_quality.evidence_count }} 条</dd>
       </div>
       <div>
