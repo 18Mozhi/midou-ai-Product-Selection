@@ -1741,6 +1741,20 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
 }
 
 /* Desktop reference grid: 1672×941 workbench, with the approved single top breadcrumb. */
+.midou-sidebar-loading > span {
+  display: block;
+  flex: none;
+  inline-size: 62%;
+  block-size: 14px;
+  margin-inline: 16px;
+  border-radius: 5px;
+  background: var(--so-panel-soft);
+}
+.midou-sidebar-loading > span:first-child {
+  inline-size: auto;
+  block-size: 40px;
+  margin-inline: 0;
+}
 .midou-navigation-help {
   display: none;
   position: relative;

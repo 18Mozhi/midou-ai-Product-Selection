@@ -1144,8 +1144,11 @@ test("session-only account does not bypass a forbidden member destination", asyn
     }),
   );
   let reads = 0;
-  await page.route("**/api/v1/me/navigation?**", (route) => {
+  let releaseGuard!: () => void;
+  const guardPending = new Promise<void>((resolve) => { releaseGuard = resolve; });
+  await page.route("**/api/v1/me/navigation?**", async (route) => {
     reads++;
+    if (reads === 2) await guardPending;
     return route.fulfill({
       status: 403,
       json: {
@@ -1158,8 +1161,21 @@ test("session-only account does not bypass a forbidden member destination", asyn
   await page.goto("/me");
   await expect(page.getByRole("navigation", { name: "个人中心分区" })).toBeVisible();
   await expect.poll(() => reads).toBe(1);
-  await page.locator(".role-brand").click();
+  const railBefore = await page.locator(".commerce-sidebar").boundingBox();
+  try {
+    await page.locator(".role-brand").click();
+    await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "loading");
+    const placeholder = page.locator(".midou-sidebar-loading");
+    await expect(placeholder).toHaveAttribute("aria-hidden", "true");
+    await expect(placeholder.locator("a, button, [tabindex]")).toHaveCount(0);
+    expect(await placeholder.boundingBox()).toEqual(railBefore);
+    await expect(page.getByRole("complementary", { name: "工作区导航" })).toHaveCount(0);
+    await expect(page.locator(".account-shell")).toHaveCount(0);
+  } finally {
+    releaseGuard();
+  }
   await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "forbidden");
+  await expect(page.locator(".midou-sidebar-loading")).toHaveCount(0);
   expect(reads).toBe(2);
   await expect(page.locator(".account-shell")).toHaveCount(0);
 });

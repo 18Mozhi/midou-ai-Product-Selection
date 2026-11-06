@@ -526,6 +526,9 @@ onUnmounted(() => {
         >
       </footer>
     </aside>
+    <div v-else-if="state === 'loading'" class="commerce-sidebar midou-sidebar-loading" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
     <dialog
       ref="navigationDialog"
       class="role-navigation-frame"
