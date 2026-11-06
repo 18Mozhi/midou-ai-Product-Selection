@@ -1217,6 +1217,17 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   }
 }
 @media (min-width: 1600px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review
+    :is(.sourcing-section-description, .sourcing-toolbar > span, .sourcing-record-heading > span) {
+    font-size: 15px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-section-description {
+    line-height: 21px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review
+    :is(.sourcing-toolbar > span, .sourcing-record-heading > span) {
+    font-variant-numeric: tabular-nums;
+  }
   html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="member"]
     .role-content:has(> .sourcing-workspace--review) {
     padding-inline-start: 14px;
