@@ -2014,6 +2014,27 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
 }
 
 @media (min-width: 1536px) {
+  html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="organization_admin"] {
+    grid-template-columns: calc(clamp(220px, 15.61vw, 261px) - 7px) minmax(0, 1fr);
+  }
+  html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="organization_admin"] > .role-content {
+    padding-inline-start: 32px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="organization_admin"] .commerce-sidebar {
+    padding: 26px 11px 16px 17px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="organization_admin"] .midou-area-tabs + section {
+    margin-block-start: 11px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="organization_admin"] .commerce-sidebar section {
+    gap: 0;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="organization_admin"] .commerce-sidebar section a {
+    min-height: 38px;
+    padding-inline: 19px 12px;
+    gap: 18px;
+    font-size: 15px;
+  }
   html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="platform_admin"] {
     --platform-rail-inset: 13px;
     grid-template-columns: calc(clamp(220px, 15.61vw, 261px) - var(--platform-rail-inset)) minmax(0, 1fr);

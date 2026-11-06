@@ -2517,6 +2517,13 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   await page.setViewportSize({ width: 1672, height: 941 });
   await setup(page);
   await page.goto("/org-admin");
+  const navigation = page.getByRole("complementary", { name: "工作区导航" });
+  const first = navigation.getByRole("link", { name: "治理概览", exact: true });
+  const last = navigation.getByRole("link", { name: "组织审计", exact: true });
+  expect((await navigation.boundingBox())!.width).toBeCloseTo(254, 0);
+  expect((await first.boundingBox())!.y).toBeCloseTo(187, 0);
+  expect((await last.boundingBox())!.y).toBeLessThan(700);
+  await expect(navigation.getByRole("link", { name: "返回成员工作台" })).toBeInViewport({ ratio: 1 });
   const actions = page.locator(".org-overview-actions");
   const refresh = actions.getByRole("button", { name: "刷新数据", exact: true });
   const invite = actions.getByRole("link", { name: "邀请成员", exact: true });
