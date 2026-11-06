@@ -1754,6 +1754,21 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     expect(Math.abs(detail!.y - 301)).toBeLessThanOrEqual(3);
     await expect(page.locator(".sourcing-record-items > button").first()).toHaveCSS("column-gap", "15px");
     const warning = page.locator(".sourcing-pending[data-attention='true']");
+    const warningBorder = await warning.evaluate((node) =>
+      getComputedStyle(node).getPropertyValue("--so-warning-border").trim(),
+    );
+    const borderColor = await warning.evaluate((node, color) => {
+      const probe = document.createElement("span");
+      probe.style.color = color;
+      node.append(probe);
+      const resolved = getComputedStyle(probe).color;
+      probe.remove();
+      return resolved;
+    }, warningBorder);
+    await expect(warning).toHaveCSS("border-top-color", borderColor);
+    const cost = page.getByRole("region", { name: "成本与利润摘要", exact: true });
+    await expect(cost.locator(":scope > header")).toHaveCSS("align-items", "flex-start");
+    await expect(cost.locator(".sourcing-profit-unconfirmed-breakdown dt").first()).toHaveCSS("font-size", "14px");
     const emptyIcon = page.locator(".sourcing-empty-offers .sourcing-quote-empty > svg");
     await expect(emptyIcon).toHaveCSS("stroke-width", "1.2px");
     await expect(warning.locator("h4")).toHaveCSS("column-gap", "12px");
