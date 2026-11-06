@@ -545,6 +545,7 @@ test("empty opportunity offers show the same profit summary without refetching o
   const basis = page.locator(".sourcing-profit-basis");
   const fullRow = offers.locator(".sourcing-empty-offers-basis");
   await expect(fullRow.locator("details")).toHaveCount(1);
+  await expect(fullRow.locator("summary svg")).toHaveAttribute("aria-hidden", "true");
   await expect(basis).toHaveCount(1);
   if (page.viewportSize()!.width >= 1101) {
     const [row, panel, profitBox] = await Promise.all(
@@ -555,6 +556,7 @@ test("empty opportunity offers show the same profit summary without refetching o
   }
   await basis.getByText("查看计算依据", { exact: true }).click();
   await expect(basis).toHaveAttribute("open", "");
+  await expect(fullRow.locator("summary svg")).toHaveCSS("transform", "matrix(0, 1, -1, 0, 0, 0)");
   await page.getByRole("tab", { name: "成本与利润" }).click();
   await expect(page.getByRole("tabpanel", { name: "成本与利润" })).toContainText("80 USD");
   await expect(page.getByRole("tabpanel", { name: "成本与利润" }).locator("details")).toHaveAttribute("open", "");
@@ -1820,7 +1822,8 @@ test("sourcing detail tabs switch by keyboard and expose only the active panel",
   await expect(offers).toHaveCSS("font-size", wide ? "16px" : "13px");
   if (wide) {
     await expect(tabs).toHaveCSS("margin-block-start", "14px");
-    await expect(tabs).toHaveCSS("column-gap", "10px");
+    await expect(tabs).toHaveCSS("column-gap", "4px");
+    for (const tab of await tabs.getByRole("tab").all()) await expect(tab).toHaveCSS("width", "122px");
   }
   await offers.focus();
   await page.keyboard.press("ArrowRight");

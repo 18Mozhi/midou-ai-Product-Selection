@@ -2,6 +2,7 @@
 import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import type { OpportunityProfitAnalysis } from "./opportunity-workspace-types";
+import AppIcon from "./AppIcon.vue";
 
 const props = defineProps<{
   apiBaseUrl: string;
@@ -134,7 +135,7 @@ onBeforeUnmount(() => {
           v-if="besideEmptyOffers || profit?.current_inputs.length || profit?.latest_run"
           class="sourcing-profit-basis"
         >
-          <summary>查看计算依据</summary>
+          <summary><AppIcon v-if="basisTarget" name="chevron" :size="16" />查看计算依据</summary>
           <p v-if="!profit?.latest_run && !profit?.current_inputs.length">
             暂无已保存的成本输入或利润计算记录。
           </p>
