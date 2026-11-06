@@ -1037,6 +1037,7 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   background: var(--so-panel);
   font-weight: 600;
   text-align: center;
+  text-decoration: none;
 }
 #app .sourcing-workspace--review .sourcing-pending .sourcing-notice-task:hover {
   background: var(--so-primary-soft);

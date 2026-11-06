@@ -281,6 +281,7 @@ for (const scenario of [
       );
       await expect(action).toHaveCSS("min-height", "42px");
       await expect(action).toHaveCSS("border-top-style", "solid");
+      await expect(action).toHaveCSS("text-decoration-line", "none");
       await expect(notice.locator(".sourcing-notice-icon-surface")).not.toHaveCSS("fill", "none");
       const [messageBox, actionBox] = await Promise.all([
         notice.locator(":scope > div").boundingBox(),
@@ -1899,6 +1900,7 @@ test(withRichRecords
     const rules = actions.getByRole("link", { name: "费用与利润规则" });
     const refresh = actions.getByRole("button", { name: "刷新记录", exact: true });
     await expect(rules).toHaveAttribute("href", /^\/sourcing\/cost-rules\?/);
+    await expect(rules.locator("svg rect")).toHaveAttribute("height", "20");
     const [rulesBox, refreshBox] = await Promise.all([rules.boundingBox(), refresh.boundingBox()]);
     expect([rulesBox!.width, refreshBox!.width]).toEqual([176, 132]);
     expect(refreshBox!.x - rulesBox!.x - rulesBox!.width).toBe(16);

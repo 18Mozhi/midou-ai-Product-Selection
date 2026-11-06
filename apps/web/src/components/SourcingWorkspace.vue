@@ -167,7 +167,7 @@ const showCollectionLinkInNotice = computed(
         <RouterLink
           class="sourcing-cost-link"
           :to="{ path: '/sourcing/cost-rules', query: { from: route.fullPath } }"
-          ><AppIcon name="chart" />费用与利润规则</RouterLink
+          ><AppIcon name="calculator" />费用与利润规则</RouterLink
         >
         <button type="button" class="ghost" :disabled="state === 'loading' || busy" @click="load">
           <AppIcon name="refresh" />刷新记录
