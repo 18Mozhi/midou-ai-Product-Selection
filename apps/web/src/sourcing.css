@@ -1084,6 +1084,14 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   }
 }
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-head > div:first-child {
+    position: relative;
+    inset-block-start: 4px;
+  }
+  html[data-design="commerce"] #app .sourcing-detail > header .research-thumbnail img,
+  html[data-design="commerce"] #app .sourcing-record-items .research-thumbnail img {
+    background: var(--so-panel-soft);
+  }
   .sourcing-workspace--review .sourcing-record-items .research-thumbnail img {
     box-sizing: border-box;
     padding: 5px;
@@ -1364,6 +1372,9 @@ html[data-design="commerce"] #app .sourcing-empty-offers--with-profit .sourcing-
   }
 }
 @media (min-width: 1440px) {
+  .sourcing-empty-offers--with-profit {
+    grid-template-columns: minmax(0, 1.29fr) minmax(0, 1fr);
+  }
   .sourcing-detail-tabs {
     gap: 4px;
     margin-block-start: 14px;

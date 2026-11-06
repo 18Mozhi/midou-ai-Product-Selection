@@ -1746,6 +1746,7 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     const actions = page.locator(".sourcing-heading-actions");
     await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toHaveCSS("padding", "5px");
     await expect(detailPhoto).toHaveCSS("padding", "12px");
+    await expect(page.locator(".sourcing-head > div:first-child")).toHaveCSS("top", "4px");
     const [title, toolbar, records, detail] = await Promise.all(
       [".sourcing-head", ".sourcing-overview", ".sourcing-layout > aside", ".sourcing-detail"].map(
         (selector) => page.locator(selector).boundingBox(),
@@ -1785,6 +1786,7 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     }, warningBorder);
     await expect(warning).toHaveCSS("border-top-color", borderColor);
     const cost = page.getByRole("region", { name: "成本与利润摘要", exact: true });
+    expect(Math.abs((await cost.boundingBox())!.x - 1209)).toBeLessThanOrEqual(4);
     await expect(cost.locator(":scope > header")).toHaveCSS("align-items", "flex-start");
     await expect(cost.locator(".sourcing-profit-unconfirmed-breakdown dt").first()).toHaveCSS("font-size", "14px");
     const emptyIcon = page.locator(".sourcing-empty-offers .sourcing-quote-empty > svg");
