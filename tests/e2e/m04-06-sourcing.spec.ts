@@ -1799,6 +1799,8 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     await expect(cost.locator(".sourcing-profit-unconfirmed-breakdown dt").first()).toHaveCSS("font-size", "14px");
     const emptyIcon = page.locator(".sourcing-empty-offers .sourcing-quote-empty > svg");
     await expect(emptyIcon).toHaveCSS("stroke-width", "1.2px");
+    await expect(emptyIcon).toHaveCSS("width", "72px");
+    await expect(emptyIcon).toHaveAttribute("aria-hidden", "true");
     await expect(warning.locator("h4")).toHaveCSS("column-gap", "12px");
     await expect(warning.locator("p")).toHaveCSS("padding-inline-start", "34px");
     expect(Math.abs(records!.y + records!.height - detail!.y - detail!.height)).toBeLessThanOrEqual(3);

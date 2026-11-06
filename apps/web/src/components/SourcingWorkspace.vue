@@ -463,7 +463,11 @@ const showCollectionLinkInNotice = computed(
             :class="{ 'sourcing-empty-offers--with-profit': showProfitBesideEmptyOffers }"
           >
             <div class="sourcing-quote-empty">
-              <AppIcon name="box-open" :size="44" />
+              <svg width="72" height="44" viewBox="0 0 72 44" fill="none"
+                stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" aria-hidden="true">
+                <path d="m15 18 21-8 21 8-21 9-21-9Zm0 12v4l21 8 21-8v-4M36 27v15" />
+                <path d="m15 18-13 9 21 9 13-9 13 9 21-9-13-9 8-6-21-8-8 6-8-6-21 8 8 6Z" />
+              </svg>
               <strong>暂无供应商报价</strong>
               <span>{{
                 offerNeedsAttention
