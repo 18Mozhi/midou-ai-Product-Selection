@@ -1818,6 +1818,12 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     expect([rulesBox!.width, refreshBox!.width]).toEqual([176, 132]);
     expect(refreshBox!.x - rulesBox!.x - rulesBox!.width).toBe(16);
     await expect(page.locator(".sourcing-detail > header h3")).toHaveCSS("font-size", "22px");
+    const [photoBox, headingBox] = await Promise.all([
+      detailPhoto.locator("..").boundingBox(),
+      page.locator(".sourcing-detail > header h3").boundingBox(),
+    ]);
+    expect([photoBox!.width, photoBox!.height]).toEqual([188, 188]);
+    expect(headingBox!.x - photoBox!.x - photoBox!.width).toBeCloseTo(16, 0);
     await expect(progress.locator("dt").first()).toHaveCSS("font-size", "14px");
     await expect(progress.locator("dd").first()).toHaveCSS("font-size", "16px");
     const countPositions = await progress.locator("dl > div").evaluateAll((items) =>
