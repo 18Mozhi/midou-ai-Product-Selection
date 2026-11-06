@@ -341,7 +341,12 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
       });
       if (!ownsDetailRead(generation, lifecycle)) return;
       requestId.value = response.request_id;
-      selected.value = response.data;
+      const result = response.data;
+      // Older detail responses may omit the optional image that the current list already supplied.
+      selected.value =
+        result.id === item.id && result.image_url === undefined && item.image_url
+          ? { ...result, image_url: item.image_url }
+          : result;
       if (syncRoute && route.query.record !== item.id)
         await router.replace({ query: { ...route.query, record: item.id, create: undefined } });
     } catch (error) {

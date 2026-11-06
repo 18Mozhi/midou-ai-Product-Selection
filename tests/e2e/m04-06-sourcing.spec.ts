@@ -1716,6 +1716,32 @@ test("sourcing queued and running record total does not claim all records are ac
   expect(writes).toEqual([]);
 });
 
+test("sourcing keeps the list image when the same record detail omits it", async ({ page }) => {
+  await setup(page);
+  const image = "https://m.media-amazon.com/images/sourcing-list-only.svg";
+  const item = {
+    id: searchId,
+    input_type: "opportunity",
+    input_ref: "00000000-0000-4000-8000-000000000001",
+    display_name: "列表已带商品图",
+    status: "succeeded_empty",
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: "2026-11-03T00:00:00Z",
+  };
+  await page.route(image, (r) => r.fulfill({ contentType: "image/svg+xml",
+    body: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="12" fill="blue"/></svg>',
+  }));
+  await page.route(searchesRoute, (r) => r.fulfill({ json: envelope([{ ...item, image_url: image }]) }));
+  await page.route("**/api/v1/sourcing/searches/" + searchId, (r) =>
+    r.fulfill({ json: envelope({ ...item, candidates: [] }) }),
+  );
+  await page.goto("/sourcing");
+  const detail = page.getByRole("region", { name: "找货记录详情" });
+  await expect(detail).toHaveAttribute("aria-busy", "false");
+  await expect(detail.getByRole("img", { name: item.display_name, exact: true })).toHaveAttribute("src", image);
+});
+
 test("midou reference sourcing displays the task Amazon reference image in list and detail", async ({
   page,
 }, testInfo) => {
