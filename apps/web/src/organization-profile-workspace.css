@@ -515,6 +515,19 @@
   html[data-design="commerce"] #app .org-admin-center--profile-review
     > header[data-profile-overview="true"] .org-admin-refresh {
     column-gap: 20px;
+    position: relative;
+    inset-block-start: -5px;
+  }
+  #app .org-admin-center--profile-review > header[data-profile-overview="true"] > div:first-child {
+    position: relative;
+    inset-block-start: -8px;
+  }
+  #app .org-admin-center--profile-review > header[data-profile-overview="true"] .org-overview-description {
+    position: relative;
+    inset-block-start: -4px;
+  }
+  #app .organization-profile-editor button[type="submit"] {
+    min-inline-size: 97px;
   }
   #app .org-overview-actions > button {
     min-inline-size: 114px;

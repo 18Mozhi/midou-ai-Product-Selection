@@ -1562,7 +1562,7 @@ onMounted(() => void load());
                 <small id="organization-profile-reason-count">{{ form.reason?.length ?? 0 }} / 500</small>
               </div>
             </div>
-            <button :disabled="busy">{{ busy ? "正在保存…" : "保存" }}</button>
+            <button type="submit" :disabled="busy">{{ busy ? "正在保存…" : "保存" }}</button>
           </fieldset>
         </form>
         <aside class="midou-governance-side" aria-label="治理快捷入口与组织状态">
