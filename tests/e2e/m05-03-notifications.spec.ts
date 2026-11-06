@@ -276,7 +276,7 @@ test("P26 KeepAlive suspends notification reads and SSE, then refreshes on retur
   }
 });
 
-async function setup(page: Page) {
+async function setup(page: Page, additionalCapabilities: string[] = []) {
   const listRequests: string[] = [],
     actionBodies: Array<{ action: string }> = [];
   let workflowStatus = item.workflow_status,
@@ -288,7 +288,7 @@ async function setup(page: Page) {
         organization_id: "00000000-0000-4000-8000-000000000933",
         workspace_id: "00000000-0000-4000-8000-000000000934",
         roles: ["selection_manager"],
-        capabilities: ["notification:read"],
+        capabilities: ["notification:read", ...additionalCapabilities],
         platform_roles: [],
         platform_capabilities: [],
         guard_reason: "navigation_member_allowed",
@@ -773,7 +773,7 @@ test("P26 preference failure announces and focuses its modal error without losin
 test("notification cards distinguish task and competitor categories with decorative glyphs", async ({ page }, testInfo) => {
   const wide = page.viewportSize()!.width >= 1101;
   if (wide) await page.setViewportSize({ width: 1717, height: 916 });
-  await setup(page);
+  await setup(page, ["task:read", "trend:read", "opportunity:read", "sourcing:read"]);
   const rows = [
     { ...item, id: "00000000-0000-4000-8000-000000000984", category: "competitor", title: "竞品监控更新", body: "竞品监控状态已变化，请查看关联记录。", group_count: 1, read_at: null },
     { ...item, category: "task", title: "任务状态更新", body: "任务状态已变化，请查看关联记录。", created_at: "2026-08-07T10:00:00Z", group_count: 1, read_at: null },
@@ -793,6 +793,12 @@ test("notification cards distinguish task and competitor categories with decorat
   await expect(competitor.locator("path")).toHaveCount(2);
   await expect(competitor.locator("circle")).toHaveCount(0);
   if (wide) {
+    const sidebar = page.getByRole("complementary", { name: "工作区导航" });
+    for (const name of ["选品工作台", "市场情报", "选品库", "1688 找货"]) {
+      await expect(sidebar.getByRole("link", { name, exact: true })).toBeVisible();
+    }
+    await expect(task).toHaveCSS("width", "30px");
+    await expect(competitor).toHaveCSS("height", "30px");
     const records = page.locator(".notification-record");
     await expect(records).toHaveCount(2);
     const [first, second] = await records.evaluateAll((nodes) => nodes.map((row) => {

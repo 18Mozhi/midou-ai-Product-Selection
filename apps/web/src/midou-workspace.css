@@ -2816,6 +2816,10 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
     width: 60px;
     margin-inline-end: 0;
   }
+  html[data-design="commerce"] #app .notification-list .notification-record > i > svg {
+    width: 30px;
+    height: 30px;
+  }
   html[data-design="commerce"] #app .notification-list .notification-record > span {
     padding-inline-start: 3px;
   }
