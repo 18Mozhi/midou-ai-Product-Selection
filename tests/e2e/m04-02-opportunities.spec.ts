@@ -4431,7 +4431,18 @@ for (const view of ["completed", "rule_candidates"]) {
           json: {
             ...envelope(
               view === "completed" ? [] : [
-                { ...base, image_url: "/fixtures/candidate-reference-product.svg" },
+                {
+                  ...base,
+                  image_url: "/fixtures/candidate-reference-product.svg",
+                  primary_product: {
+                    price: 21.95,
+                    currency: "USD",
+                    rating_value: 4.1,
+                    review_count: 28,
+                    captured_at: "2026-10-17T00:00:00Z",
+                    public_signals: null,
+                  },
+                },
                 { ...base, id: "00000000-0000-4000-8000-000000000489", name: "双层收纳盒 · 候选商品" },
               ],
             ),
@@ -4461,6 +4472,10 @@ for (const view of ["completed", "rule_candidates"]) {
           expect(Math.abs(filterBox!.y + filterBox!.height / 2 - searchBox!.y - searchBox!.height / 2)).toBeLessThanOrEqual(2);
           await expect(trigger.locator(".responsive-filter-drawer__icon")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
           await expect(catalog.locator("tbody tr")).toHaveCount(2);
+          const rated = catalog.locator('tbody tr').first().locator('td[data-label="星级 / 评价"]');
+          await expect(rated.locator(".catalogue-number")).toHaveText(/4\.1.*28/);
+          await expect(rated.locator(".catalogue-number")).toHaveCSS("font-size", "15px");
+          await expect(rated.locator(".catalogue-cell-note")).toHaveCSS("font-size", "13px");
           await expect(catalog.getByRole("img", { name: `${base.name} 商品图`, exact: true })).toBeVisible();
           await expect(catalog.getByRole("img", { name: "商品主图待采集" })).toBeVisible();
           const next = catalog.getByRole("button", { name: "下一页", exact: true });

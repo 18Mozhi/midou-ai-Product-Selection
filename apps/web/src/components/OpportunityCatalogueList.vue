@@ -309,6 +309,14 @@ tbody tr:hover {
   font-size: 12px;
   margin-top: 5px;
 }
+@media (min-width: 1440px) {
+  .product-catalog[data-view="rule_candidates"] .catalogue-number {
+    font-size: 15px;
+  }
+  .product-catalog[data-view="rule_candidates"] .catalogue-cell-note {
+    font-size: 13px;
+  }
+}
 .catalogue-counts {
   margin: 0;
   display: grid;
