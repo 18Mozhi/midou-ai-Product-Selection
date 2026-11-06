@@ -126,14 +126,13 @@ test("desktop platform sidebar fits grouped navigation and footer at reference s
   await expect(context).toHaveAttribute("href", await sidebarContext.getAttribute("href") ?? "");
   await expect(context).toHaveAttribute("href", /from=%2Fplatform-admin$/);
   const top = page.locator(".role-topbar");
-  const controls = await Promise.all(
-    [
-      top.getByRole("button", { name: "搜索后台功能" }),
-      top.getByLabel("导航帮助"),
-      top.getByRole("button", { name: "切换界面主题" }),
-      top.getByLabel("账号菜单"),
-    ].map((control) => control.boundingBox()),
-  );
+  const topControls = [
+    top.getByRole("button", { name: "搜索后台功能" }),
+    top.getByLabel("导航帮助"),
+    top.getByRole("button", { name: "切换界面主题" }),
+    top.getByLabel("账号菜单"),
+  ];
+  const controls = await Promise.all(topControls.map((control) => control.boundingBox()));
   expect(controls.every(Boolean)).toBe(true);
   for (let i = 1; i < controls.length; i++)
     expect(controls[i - 1]!.x + controls[i - 1]!.width).toBeLessThanOrEqual(controls[i]!.x);
@@ -145,6 +144,7 @@ test("desktop platform sidebar fits grouped navigation and footer at reference s
   ).toBeInViewport();
   await sidebar.getByRole("link", { name: "组织管理", exact: true }).click();
   await expect(context).toHaveAttribute("href", /from=%2Fplatform-admin%2Forganizations$/);
+  expect(await Promise.all(topControls.map((control) => control.boundingBox()))).toEqual(controls);
   const create = top.getByRole("link", { name: "新建组织" });
   const search = top.getByRole("button", { name: "搜索后台功能" });
   await expect(create).toBeHidden();
