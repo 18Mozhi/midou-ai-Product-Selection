@@ -1316,8 +1316,8 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   .sourcing-workspace--review .sourcing-summary {
     flex-basis: 592px;
     grid-template-columns:
-      minmax(max-content, 1fr) minmax(max-content, 1.35fr)
-      minmax(max-content, 1fr) minmax(max-content, 0.95fr);
+      minmax(max-content, 112fr) minmax(max-content, 156fr)
+      minmax(max-content, 147fr) minmax(max-content, 123fr);
   }
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-summary dd {
     font-size: 20px;

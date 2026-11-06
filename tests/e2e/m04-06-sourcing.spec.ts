@@ -1948,6 +1948,15 @@ test("wide sourcing toolbar balances search and four metrics without changing mo
   page,
 }) => {
   await setup(page);
+  await page.route(searchesRoute, (route) => route.fulfill({ json: {
+    ...envelope([{
+      id: searchId, input_type: "keyword", input_ref: "净水杯",
+      status: "queued", candidate_count: 0, missing_fields: [],
+      created_at: "2026-08-08T12:00:00Z",
+    }]),
+    meta: { page: 1, page_size: 20, total: 945,
+      summary: { total: 945, running: 138, candidates: 25100, ready: 343 } },
+  } }));
   await page.setViewportSize({ width: 1672, height: 941 });
   await page.goto("/sourcing");
   const overview = page.locator(".sourcing-overview");
@@ -1956,6 +1965,7 @@ test("wide sourcing toolbar balances search and four metrics without changing mo
   await expect(stats).toHaveCount(4);
   const values = overview.locator(".sourcing-summary dd");
   await expect(values).toHaveCount(4);
+  await expect(values).toHaveText(["945", "138", "25100", "343"]);
   for (const value of await values.all()) {
     await expect(value).toHaveCSS("font-size", "20px");
     await expect(value).toHaveCSS("font-weight", "700");
@@ -1973,6 +1983,12 @@ test("wide sourcing toolbar balances search and four metrics without changing mo
   const statsBox = (await overview.locator(".sourcing-summary").boundingBox())!;
   expect(Math.abs(statsBox.x - 1037)).toBeLessThanOrEqual(6);
   expect(statsBox.width).toBe(592);
+  const labelStarts = await stats.evaluateAll((labels) =>
+    labels.map((label) => Math.round(label.getBoundingClientRect().x)),
+  );
+  for (const [index, referenceX] of [1037, 1181, 1355, 1520].entries()) {
+    expect(Math.abs(labelStarts[index] - referenceX)).toBeLessThanOrEqual(6);
+  }
   const labelToValueGaps = await overview.locator(".sourcing-summary > div").evaluateAll((groups) =>
     groups.map((group) => group.querySelector("dd")!.getBoundingClientRect().left -
       group.querySelector("dt")!.getBoundingClientRect().right),
