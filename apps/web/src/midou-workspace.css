@@ -2099,6 +2099,14 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
     width: 20px;
     height: 20px;
   }
+  .midou-home-quick :is(.home-quick-evidence, .home-quick-candidates) > b {
+    box-sizing: border-box;
+    min-inline-size: 50px;
+    text-align: center;
+  }
+  .midou-home-quick .home-quick-evidence > b {
+    min-inline-size: 59px;
+  }
   html[data-design="commerce"] #app .home-status-facts {
     grid-template-columns: minmax(0, 1.04fr) repeat(2, minmax(0, 1fr)) minmax(0, 1.065fr);
   }
