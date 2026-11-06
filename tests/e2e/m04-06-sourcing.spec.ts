@@ -1688,7 +1688,6 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   const wide = page.viewportSize()!.width >= 1101;
   if (wide) await page.setViewportSize({ width: 1672, height: 941 });
   await setup(page);
-  const image = "/midou-logo.jpg"; // deterministic local asset, not evidence of a real Amazon request.
   const record = {
     id: searchId,
     input_type: "opportunity",
@@ -1700,10 +1699,13 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     missing_fields: [],
     created_at: "2026-11-03T00:00:00Z",
   };
-  await page.route("https://m.media-amazon.com/images/fixture.jpg", async (r) => {
-    const bytes = await page.request.get(image);
-    await r.fulfill({ body: await bytes.body(), contentType: "image/jpeg" });
-  });
+  // Product-shaped fixture only; no real Amazon network request is made.
+  await page.route("https://m.media-amazon.com/images/fixture.jpg", (r) =>
+    r.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120"><rect x="4" y="16" width="152" height="88" rx="7" fill="#162233"/><rect x="10" y="22" width="140" height="76" rx="3" fill="#244b76"/><rect x="20" y="34" width="68" height="50" rx="4" fill="#528ac3"/><rect x="96" y="34" width="43" height="22" rx="4" fill="#83a9c4"/><rect x="96" y="62" width="43" height="22" rx="4" fill="#316a88"/></svg>',
+    }),
+  );
   const recordsFixture = [
     record,
     ...[2, 3, 4, 5].map((index) => ({
@@ -1732,7 +1734,9 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   await page.goto("/sourcing");
   await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toBeVisible();
   await expect(page.locator(".sourcing-record-items > button")).toHaveCount(5);
-  await expect(page.locator(".sourcing-detail > header .research-thumbnail img")).toBeVisible();
+  const detailPhoto = page.locator(".sourcing-detail > header .research-thumbnail img");
+  await expect(detailPhoto).toBeVisible();
+  await expect.poll(() => detailPhoto.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
   await expect(page.getByRole("heading", { name: "供应链找货", exact: true })).not.toBeFocused();
   const progress = page.getByRole("region", { name: "来源采集进度" });
   await expect(progress).toContainText("采集失败");
@@ -1740,6 +1744,8 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   await expect(page.locator(".sourcing-profit-unconfirmed-breakdown")).toBeVisible();
   if (wide) {
     const actions = page.locator(".sourcing-heading-actions");
+    await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toHaveCSS("padding", "5px");
+    await expect(detailPhoto).toHaveCSS("padding", "12px");
     const [title, toolbar, records, detail] = await Promise.all(
       [".sourcing-head", ".sourcing-overview", ".sourcing-layout > aside", ".sourcing-detail"].map(
         (selector) => page.locator(selector).boundingBox(),

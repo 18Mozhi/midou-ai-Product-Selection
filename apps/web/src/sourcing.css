@@ -1084,6 +1084,14 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   }
 }
 @media (min-width: 1440px) {
+  .sourcing-workspace--review .sourcing-record-items .research-thumbnail img {
+    box-sizing: border-box;
+    padding: 5px;
+  }
+  .sourcing-workspace--review .sourcing-detail > header .research-thumbnail img {
+    box-sizing: border-box;
+    padding: 12px;
+  }
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items {
     padding-block-start: 10px;
   }
