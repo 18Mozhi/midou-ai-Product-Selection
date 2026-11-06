@@ -2569,7 +2569,7 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
 
 @media (min-width: 1440px) {
   .product-catalog > .catalogue-table-context {
-    min-block-size: 44px;
+    min-block-size: 30px;
   }
 }
 
@@ -2718,7 +2718,10 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   }
   html[data-design="commerce"] #app .product-catalog .candidate-pagination {
     gap: 8px;
+    margin-block-start: 0;
+    padding-block-start: 8px;
     padding-inline: 0;
+    border-block-start: 0;
   }
   html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"]
     > :is(.selection-product-list, .candidate-pagination) {

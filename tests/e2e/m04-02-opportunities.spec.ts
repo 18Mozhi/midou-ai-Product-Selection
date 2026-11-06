@@ -4494,6 +4494,8 @@ for (const view of ["completed", "rule_candidates"]) {
           await expect(next).toHaveCSS("min-height", "36px");
           const [nextBox, tableBox] = await Promise.all([next.boundingBox(), catalog.getByRole("table").boundingBox()]);
           expect(Math.abs(tableBox!.x - 291)).toBeLessThanOrEqual(2);
+          expect(Math.abs(tableBox!.y - 558)).toBeLessThanOrEqual(3);
+          expect(nextBox!.y - tableBox!.y - tableBox!.height).toBeLessThanOrEqual(27);
           expect(Math.abs(nextBox!.x + nextBox!.width - tableBox!.x - tableBox!.width)).toBeLessThanOrEqual(2);
           const title = (await catalog.locator("header h2").boundingBox())!;
           const note = (await catalog.locator(".catalog-data-note").boundingBox())!;
