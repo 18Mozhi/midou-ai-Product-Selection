@@ -1015,6 +1015,15 @@
   #app .trend-dashboard--review .trend-detail-back {
     position: absolute;
     inset: 0 0 auto auto;
+    align-items: center;
+    min-block-size: 36px;
+    padding-inline: 10px;
+    border: 1px solid var(--so-border);
+    border-radius: 7px;
+    background: var(--so-panel);
+  }
+  #app .trend-dashboard--review .trend-detail-back:hover {
+    background: var(--so-panel-soft);
   }
 }
 

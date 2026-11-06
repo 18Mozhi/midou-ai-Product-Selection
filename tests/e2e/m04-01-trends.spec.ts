@@ -886,6 +886,7 @@ test("midou reference list defaults closed, opens and closes detail without list
     }
   }
   expect(reads).toBe(1);
+  const close = page.getByRole("button", { name: "关闭详情 · 返回情报列表" });
   await expect(page.locator(".trend-detail-badges")).toContainText("en-US");
   await expect(page.locator(".trend-detail-badges > span > svg")).toHaveCount(2);
   await expect(page.locator(".trend-detail > header h3")).toHaveCSS(
@@ -894,6 +895,8 @@ test("midou reference list defaults closed, opens and closes detail without list
   );
   await expect(page.getByLabel("情报资料").locator("dt svg")).toHaveCount(4);
   if (page.viewportSize()!.width >= 1440) {
+    await expect(close).toHaveCSS("border-top-width", "1px");
+    expect((await close.boundingBox())!.height).toBeGreaterThanOrEqual(36);
     const facts = page.getByLabel("情报资料");
     const panel = page.locator(".trend-detail");
     const detailTabs = panel.getByRole("tablist");
@@ -916,7 +919,7 @@ test("midou reference list defaults closed, opens and closes detail without list
     expect(Math.max(...widths) - Math.min(...widths)).toBeLessThan(1);
     await page.screenshot({ path: testInfo.outputPath("intelligence-reference.png") });
   }
-  await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
+  await close.click();
   await expect(page.locator(".trend-detail")).toHaveCount(0);
   await expect(page.locator(".trend-list")).toBeVisible();
   expect(lists).toBe(1);
