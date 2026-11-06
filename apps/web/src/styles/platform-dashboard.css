@@ -703,6 +703,14 @@
   }
 }
 @media (min-width: 1536px) and (max-width: 1750px) {
+  #app .platform-dashboard--review .platform-action-summary a > span svg {
+    translate: 0 7px;
+  }
+  #app .platform-dashboard--review .platform-action-summary a > strong {
+    translate: 0 3px;
+    color: var(--so-primary);
+    font-variant-numeric: tabular-nums;
+  }
   html[data-design="commerce"] #app .platform-dashboard--review .platform-page-header__actions {
     position: relative;
     inset-inline-end: 3px;

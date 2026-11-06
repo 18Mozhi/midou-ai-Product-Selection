@@ -1433,6 +1433,8 @@ test("platform reference first fold fits system checks and source health without
   expect(Math.abs(pending.x + pending.width - 940)).toBeLessThanOrEqual(3);
   expect(Math.abs(alerts.x - 940)).toBeLessThanOrEqual(3);
   await expect(queueLinks.first().locator("svg")).toHaveCSS("width", "28px");
+  await expect(queueLinks.first().locator("svg")).toHaveCSS("translate", "0px 7px");
+  await expect(queueLinks.last().locator("strong")).toHaveCSS("font-variant-numeric", "tabular-nums");
   await expect(queueLinks.first().locator("small")).toHaveCSS("padding-inline-start", "46px");
   const headingActions = page.locator(".platform-page-header__actions");
   for (const action of await headingActions.locator("a, button, select").all()) {
