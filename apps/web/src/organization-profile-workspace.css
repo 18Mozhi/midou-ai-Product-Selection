@@ -521,7 +521,13 @@
 
 @media (min-width: 1440px) {
   #app .midou-governance-side > section:first-child {
-    padding-block: 12px 11px;
+    padding-block: 10px 7px;
+  }
+  #app .midou-governance-side > section:first-child > h3 {
+    padding-block-end: 6px;
+  }
+  #app .midou-governance-side > section:first-child > a {
+    column-gap: 22px;
   }
   #app .midou-governance-side .midou-governance-status > div {
     padding-block: 10px;
