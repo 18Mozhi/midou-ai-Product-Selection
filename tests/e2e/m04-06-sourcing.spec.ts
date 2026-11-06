@@ -1766,9 +1766,9 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     );
     const breadcrumb = (await page.getByRole("navigation", { name: "面包屑", exact: true }).boundingBox())!;
     const sidebar = (await page.getByRole("complementary", { name: "工作区导航" }).boundingBox())!;
-    expect(title!.x - sidebar.x - sidebar.width).toBeCloseTo(22, 0);
+    expect(title!.x - sidebar.x - sidebar.width).toBeCloseTo(14, 0);
     for (const box of [title, toolbar, records]) expect(box!.x).toBeCloseTo(breadcrumb.x, 0);
-    expect(records!.width).toBeGreaterThanOrEqual(300);
+    expect(records!.width).toBeGreaterThanOrEqual(315);
     expect(Math.abs(detail!.x - 606)).toBeLessThanOrEqual(3);
     expect(detail!.x - records!.x - records!.width).toBeCloseTo(15, 0);
     expect(Math.abs(detail!.y - 301)).toBeLessThanOrEqual(3);
