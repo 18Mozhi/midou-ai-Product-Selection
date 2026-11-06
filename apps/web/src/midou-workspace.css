@@ -2877,10 +2877,16 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
     position: relative;
     margin-inline-start: 14px;
     min-inline-size: 104px;
+    box-sizing: border-box;
+    block-size: 40px;
+    min-height: 40px;
     padding-inline: 8px;
   }
   html[data-design="commerce"] #app .notification-list .notification-row > .notification-mark-read {
     min-inline-size: 104px;
+    box-sizing: border-box;
+    block-size: 40px;
+    min-height: 40px;
     margin-inline-end: 18px;
     font-weight: 500;
   }

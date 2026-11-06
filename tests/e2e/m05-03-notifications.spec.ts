@@ -841,13 +841,15 @@ test("midou reference notification layout keeps original workflow and preference
   await expect(page.locator(".midou-notification-open")).toContainText("查看记录");
   const viewAction = page.locator(".midou-notification-open");
   const readAction = page.locator(".notification-mark-read");
-  await expect(viewAction).toHaveCSS("min-height", "44px");
+  const wide = (page.viewportSize()?.width ?? 0) >= 1450;
+  await expect(viewAction).toHaveCSS("min-height", wide ? "40px" : "44px");
+  await expect(readAction).toHaveCSS("min-height", wide ? "40px" : "44px");
   const readBorder = await readAction.evaluate((button) => getComputedStyle(button).borderTopColor);
   await expect(viewAction).not.toHaveCSS("border-top-color", readBorder);
-  const wide = (page.viewportSize()?.width ?? 0) >= 1450;
   if (wide) {
     const [viewBox, readBox] = await Promise.all([viewAction.boundingBox(), readAction.boundingBox()]);
     expect([viewBox!.width, readBox!.width]).toEqual([104, 104]);
+    expect([viewBox!.height, readBox!.height]).toEqual([40, 40]);
     expect(Math.abs(viewBox!.y - readBox!.y)).toBeLessThanOrEqual(1);
     expect(Math.abs(readBox!.x - viewBox!.x - viewBox!.width - 14)).toBeLessThanOrEqual(2);
     const header = page.locator(".notification-center > header");
