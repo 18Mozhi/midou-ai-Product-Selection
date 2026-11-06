@@ -1804,6 +1804,12 @@ test("wide sourcing toolbar balances search and four metrics without changing mo
   const search = overview.getByRole("searchbox");
   const stats = overview.getByRole("term");
   await expect(stats).toHaveCount(4);
+  const values = overview.locator(".sourcing-summary dd");
+  await expect(values).toHaveCount(4);
+  for (const value of await values.all()) {
+    await expect(value).toHaveCSS("font-size", "20px");
+    await expect(value).toHaveCSS("font-weight", "700");
+  }
   await expect(search).toHaveCSS("min-height", "40px");
   expect((await search.boundingBox())!.width).toBeLessThanOrEqual(304);
   const columns = () =>

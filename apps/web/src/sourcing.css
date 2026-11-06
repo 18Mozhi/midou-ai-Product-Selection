@@ -1192,6 +1192,11 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
       minmax(max-content, 1fr) minmax(max-content, 1.35fr)
       minmax(max-content, 1fr) minmax(max-content, 0.95fr);
   }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-summary dd {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
 }
 @media (max-width: 760px) {
   .sourcing-search-input {
