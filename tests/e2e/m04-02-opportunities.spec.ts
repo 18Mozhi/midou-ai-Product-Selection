@@ -4483,6 +4483,8 @@ for (const view of ["completed", "rule_candidates"]) {
           await expect(rated.locator(".catalogue-number")).toHaveCSS("font-size", "15px");
           await expect(rated.locator(".catalogue-cell-note")).toHaveCSS("font-size", "13px");
           await expect(catalog.getByRole("img", { name: `${base.name} 商品图`, exact: true })).toBeVisible();
+          const picture = await catalog.locator(".selection-product-picture").first().boundingBox();
+          expect(Math.abs(picture!.x - 350)).toBeLessThanOrEqual(3);
           await expect(catalog.getByRole("img", { name: "商品主图待采集" })).toBeVisible();
           const next = catalog.getByRole("button", { name: "下一页", exact: true });
           await expect(next).toHaveCSS("min-height", "36px");

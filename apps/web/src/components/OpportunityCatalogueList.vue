@@ -400,6 +400,10 @@ tbody tr:hover {
   .selection-candidate-list th {
     font-size: 14px;
   }
+  .selection-candidate-list th:first-child,
+  .selection-candidate-list .selection-product-identity-cell {
+    padding-inline-start: clamp(24px, 3.15vw, 54px);
+  }
   .selection-candidate-list .selection-product-name strong {
     font-size: 14px;
     font-weight: 600;
