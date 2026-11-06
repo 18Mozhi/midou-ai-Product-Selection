@@ -2558,6 +2558,11 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   );
   expect(statusBox!.x + statusBox!.width).toBeLessThan(identityBox!.x + identityBox!.width - 30);
   expect(Math.abs(statusBox!.y + statusBox!.height / 2 - markBox!.y - markBox!.height / 2)).toBeLessThanOrEqual(6);
+  const factIcons = await page.locator(".organization-profile-facts dt > svg").evaluateAll((nodes) =>
+    nodes.map((node) => node.getBoundingClientRect().x),
+  );
+  for (const [index, x] of [785, 1093, 1365].entries())
+    expect(Math.abs(factIcons[index] - x)).toBeLessThanOrEqual(8);
   const metrics = page.getByRole("region", { name: "组织运行摘要" });
   await expect(metrics.locator("article")).toHaveCount(6);
   const items = await metrics.locator("article").evaluateAll((articles) =>
