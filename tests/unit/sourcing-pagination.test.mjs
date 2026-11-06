@@ -51,6 +51,28 @@ test("SQL limits record rows before image hydration and retains global scoped su
   assert.match(rows.sql, /image_query.task_id=s.collection_task_id/);
   assert.match(rows.sql, /image_query.organization_id=s.organization_id/);
   assert.match(rows.sql, /image_query.workspace_id=s.workspace_id/);
+  assert.match(rows.sql, /CASE WHEN s.input_type='opportunity' THEN COALESCE\(\(SELECT[\s\S]+image_provider.code='1688_search'[\s\S]+LIMIT 1\),\(SELECT[\s\S]+p.code='amazon_product'/);
+  assert.match(rows.sql, /l.opportunity_id=s.image_opportunity_id AND l.organization_id=s.organization_id AND l.workspace_id=s.workspace_id/);
+  assert.match(rows.sql, /n.organization_id=l.organization_id AND n.workspace_id=l.workspace_id AND n.status='active'/);
+  assert.match(rows.sql, /o.id image_opportunity_id/);
+});
+test("legacy list and detail use the same scoped snapshot-first Amazon image projection", async () => {
+  const imageUrl = "https://m.media-amazon.com/images/I/fixture.jpg";
+  const queries = [];
+  const repo = new MySqlSourcingRepository({
+    query: async (sql) => {
+      queries.push(sql);
+      return [sql.startsWith("SELECT s.*") ? [{ ...record, image_url: imageUrl }] : []];
+    },
+  });
+  assert.equal((await repo.list(scope))[0].image_url, imageUrl);
+  assert.equal((await repo.detail({ ...scope, searchId: id })).image_url, imageUrl);
+  for (const sql of queries.filter((sql) => sql.startsWith("SELECT s.*"))) {
+    assert.match(sql, /image_provider.code='1688_search'[\s\S]+LIMIT 1\),\(SELECT[\s\S]+p.code='amazon_product'/);
+    assert.match(sql, /l.opportunity_id=o.id AND l.organization_id=s.organization_id AND l.workspace_id=s.workspace_id/);
+    assert.match(sql, /o.lifecycle_status<>'deleted'/);
+    assert.match(sql, /ORDER BY n.created_at DESC,n.id DESC LIMIT 1/);
+  }
 });
 test("server search is literal, parameterized, scoped, and does not zero global metrics", async () => {
   const p = pool(1),
