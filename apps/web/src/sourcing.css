@@ -1417,6 +1417,7 @@ html[data-design="commerce"] #app .sourcing-empty-offers--with-profit .sourcing-
   }
   .sourcing-empty-offers--with-profit > .sourcing-quote-empty {
     min-height: 169px;
+    background: color-mix(in srgb, var(--so-panel-soft) 65%, var(--so-panel));
   }
   .sourcing-empty-offers--with-profit .sourcing-profit-summary {
     padding-block: 10px;
@@ -1436,6 +1437,13 @@ html[data-design="commerce"] #app .sourcing-empty-offers--with-profit .sourcing-
   }
   .sourcing-empty-offers--with-profit .sourcing-profit-summary:has(.sourcing-profit-unconfirmed) > header {
     align-items: flex-start;
+  }
+  .sourcing-empty-offers--with-profit .sourcing-profit-summary:has(.sourcing-profit-unconfirmed) > header a {
+    min-height: 30px;
+    padding-block: 4px;
+  }
+  .sourcing-empty-offers--with-profit .sourcing-profit-summary .sourcing-profit-unconfirmed-breakdown > div {
+    padding-block: 4px;
   }
   .sourcing-empty-offers--with-profit .sourcing-profit-summary .sourcing-profit-unconfirmed-breakdown dt {
     font-size: 14px;
