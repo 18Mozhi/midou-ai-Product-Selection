@@ -7,10 +7,12 @@
 使用同一个提交、同一轮桌面 Chromium 测试输出九张 `*-reference.png`，仅将桌面截图放入比对目录；不要混入手机项目的同名输出。候选表格取 `candidate-reference.png`，通知列表取 `notification-two-row-reference.png`。在 Windows PowerShell 7 运行：
 
 ```powershell
-./scripts/compare-ui-references.ps1 -ReferenceDirectory <原图目录> -CaptureDirectory <截图输出目录>
+./scripts/compare-ui-references.ps1 -ReferenceDirectory <原图目录> -CaptureDirectory <截图输出目录> -Require95Percent
 ```
 
 工具按原文件名配对，输出尺寸、SHA-256 和整图 RGB 匹配率。尺寸不符、缺图或同名重复不计分；不裁切、不缩放、不遮罩。评分沿用历史导航对照的 RGB 通道差均不超过 32 的口径，但九张图必须分别检查，不能用平均分掩盖某一页。角色权限、业务数据、品牌替换及显式需求覆盖项应单独解释；像素分数不代替目视检查和行为验证。
+
+`-Require95Percent` 保留九页 JSON 输出；任一页未达到 95% 或无法测量时，向标准错误写出未通过页数并返回退出码 1。不带该开关仅生成报告，不作为放行依据。此开关仅用于本地验收，不影响应用或部署。
 
 顶部为品牌、独立工作区切换、现有全局搜索和账号入口；唯一面包屑在页面标题上方。账号使用原生折叠面板，支持 Escape、路由变化关闭；退出登录仍走原组件。侧栏压紧间隔，底部突出工作区与设置入口，移动端保留原导航抽屉。没有现成帮助页面或未读计数接入，本轮不添加假入口或数字，不改变权限或 API。
 仅前端静态发布，无需后端重启。

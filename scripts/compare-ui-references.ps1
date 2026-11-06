@@ -1,6 +1,7 @@
 param(
   [Parameter(Mandatory)][string]$ReferenceDirectory,
-  [Parameter(Mandatory)][string]$CaptureDirectory
+  [Parameter(Mandatory)][string]$CaptureDirectory,
+  [switch]$Require95Percent
 )
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
@@ -80,3 +81,12 @@ $results = foreach ($entry in $pairs.GetEnumerator()) {
   [pscustomobject]$result
 }
 ConvertTo-Json -Depth 4 -InputObject @($results)
+if ($Require95Percent) {
+  $notAccepted = @($results | Where-Object {
+    $_.status -ne 'measured' -or $_.matchPercent -lt 95
+  })
+  if ($notAccepted.Count -gt 0) {
+    [Console]::Error.WriteLine("Visual acceptance failed: $($notAccepted.Count) of $($pairs.Count) pages did not meet the 95% per-page gate.")
+    exit 1
+  }
+}
