@@ -780,6 +780,24 @@
   background: var(--so-warning-soft);
 }
 @media (min-width: 1440px) {
+  #app .platform-dashboard--review .platform-trend-empty {
+    gap: 9px;
+  }
+  #app .platform-dashboard--review .platform-trend-empty > svg {
+    padding-inline: 13px;
+  }
+  #app .platform-dashboard--review .platform-trend-empty > strong {
+    font-size: 16px;
+  }
+  #app .platform-dashboard--review .platform-trend-empty > span {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  #app .platform-dashboard--review .platform-trend-empty > span a {
+    color: var(--so-primary);
+    font-weight: 600;
+    text-underline-offset: 2px;
+  }
   #app .platform-dashboard--review
     :is(.platform-trend-chart, .platform-source-health, .platform-system-checks) > header h3 {
     font-size: 18px;

@@ -1448,6 +1448,10 @@ test("platform reference first fold fits system checks and source health without
     expect(Math.abs(metricValues[index] - x)).toBeLessThanOrEqual(5);
   expect(Math.abs(metricRow!.y + metricRow!.height - 463)).toBeLessThanOrEqual(3);
   const trendCard = (await page.locator(".platform-trend-chart").boundingBox())!;
+  const emptyTrend = page.locator(".platform-trend-empty");
+  await expect(emptyTrend.locator(":scope > strong")).toHaveCSS("font-size", "16px");
+  await expect(emptyTrend.locator(":scope > span")).toHaveCSS("font-size", "14px");
+  await expect(emptyTrend.getByRole("link", { name: "查看采集队列" })).toBeVisible();
   const sourceCard = (await sources.boundingBox())!;
   expect(Math.abs(trendCard.y - 499)).toBeLessThanOrEqual(2);
   expect(Math.abs(sourceCard.x - 974)).toBeLessThanOrEqual(3);
