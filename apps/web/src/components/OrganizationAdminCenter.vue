@@ -1470,17 +1470,17 @@ onMounted(() => void load());
             ><small>共 {{ summary?.members?.total ?? 0 }}</small>
           </article>
           <article>
-            <span><AppIcon name="box" :size="18" />活动工作区</span
+            <span><AppIcon name="layers" :size="18" />活动工作区</span
             ><b>{{ summary?.workspaces?.active ?? 0 }}</b
             ><small>共 {{ summary?.workspaces?.total ?? 0 }}</small>
           </article>
           <article>
-            <span><AppIcon name="building" :size="18" />团队</span
+            <span><AppIcon name="users" :size="18" />团队</span
             ><b>{{ summary?.teams?.active ?? 0 }}</b
             ><small>共 {{ summary?.teams?.total ?? 0 }}</small>
           </article>
           <article>
-            <span><AppIcon name="list" :size="18" />待处理审批</span
+            <span><AppIcon name="file" :size="18" />待处理审批</span
             ><b>{{ summary?.pending_approvals ?? 0 }}</b
             ><small>实时汇总</small>
           </article>

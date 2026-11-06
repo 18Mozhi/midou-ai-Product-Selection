@@ -484,6 +484,12 @@
     row-gap: 15px;
     column-gap: 32px;
   }
+  #app .organization-profile-metrics article {
+    padding-block: 15px 17px;
+  }
+  #app :is(.organization-profile-editor, .midou-governance-side) {
+    margin-block-start: 4px;
+  }
   #app .organization-profile-editor .organization-profile-fields :is(input, select) {
     min-height: 34px;
   }

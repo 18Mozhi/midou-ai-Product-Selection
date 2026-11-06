@@ -2569,6 +2569,8 @@ test("wide governance metrics align labels, values and notes beside the icon", a
     expect(Math.abs(factIcons[index] - x)).toBeLessThanOrEqual(8);
   const metrics = page.getByRole("region", { name: "组织运行摘要" });
   await expect(metrics.locator("article")).toHaveCount(6);
+  const metricsBounds = (await metrics.boundingBox())!;
+  expect(Math.abs(metricsBounds.y + metricsBounds.height - 449)).toBeLessThanOrEqual(3);
   const items = await metrics.locator("article").evaluateAll((articles) =>
     articles.map((article) => {
       const box = (selector: string) => article.querySelector(selector)!.getBoundingClientRect();
