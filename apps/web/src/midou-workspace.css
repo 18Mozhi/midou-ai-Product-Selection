@@ -2556,6 +2556,23 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   margin-inline: 0;
   border-color: color-mix(in srgb, var(--so-warning) 17%, var(--so-warning-soft));
 }
+.product-catalog > .catalogue-table-context {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-block-size: 32px;
+  margin: 0 0 4px;
+  padding-inline: 8px;
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+
+@media (min-width: 1440px) {
+  .product-catalog > .catalogue-table-context {
+    min-block-size: 44px;
+  }
+}
+
 .product-catalog[data-view="rule_candidates"] > .catalog-data-note > svg {
   flex: none;
   margin-block-start: 2px;
@@ -2603,10 +2620,6 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] > header small {
     display: block;
     color: var(--so-text-muted);
-    font-size: 14px;
-  }
-  .product-catalog[data-view="rule_candidates"] .catalogue-sort-note {
-    margin-block-start: 3px;
     font-size: 14px;
   }
 }

@@ -4499,8 +4499,11 @@ for (const view of ["completed", "rule_candidates"]) {
           const note = (await catalog.locator(".catalog-data-note").boundingBox())!;
           expect(Math.abs(title.x - 300)).toBeLessThanOrEqual(2);
           expect(Math.abs(note.x - title.x)).toBeLessThanOrEqual(1);
-          const sort = (await catalog.locator(".catalogue-sort-note").boundingBox())!;
-          expect(Math.abs(title.y - sort.y)).toBeLessThan(8);
+          const context = catalog.locator(".catalogue-table-context");
+          await expect(context).toHaveText("最近更新优先 · 每页 20 个");
+          const sort = (await context.boundingBox())!;
+          expect(sort.y).toBeGreaterThanOrEqual(note.y + note.height);
+          expect(sort.y + sort.height).toBeLessThanOrEqual(tableBox!.y);
           const second = (await catalog.locator("tbody tr").nth(1).boundingBox())!;
           expect(second.y + second.height).toBeLessThan(916);
           await page.screenshot({ path: testInfo.outputPath("candidate-reference.png") });
