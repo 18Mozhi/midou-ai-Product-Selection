@@ -1124,13 +1124,14 @@ html[data-design="commerce"] #app .midou-home-flow {
 @media (min-width: 1440px) {
   html[data-design="commerce"] #app .midou-home-flow {
     padding-block: 12px 23px;
+    margin-block-start: 19px;
   }
   .midou-home-flow header {
     padding-inline-start: 4px;
   }
   .midou-home-flow ol {
     grid-template-columns: repeat(4, minmax(0, 1fr)) max-content;
-    margin-block-start: 17px;
+    margin-block-start: 21px;
     padding-inline: clamp(28px, 2.3vw, 40px);
   }
   .midou-home-flow li {
@@ -2209,6 +2210,11 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
   html[data-design="commerce"] #app .home-status-facts > a {
     grid-template-columns: 38px minmax(0, 1fr);
     padding-inline: 37px 20px;
+    padding-block: 7px;
+    min-height: 76px;
+  }
+  html[data-design="commerce"] #app .home-status-facts > a:not(:last-child)::after {
+    inset-block: 11px;
   }
   html[data-design="commerce"] #app .home-status-facts > a:first-child {
     grid-template-columns: 42px minmax(0, 1fr);
@@ -2216,6 +2222,7 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
   }
   html[data-design="commerce"] #app .home-status-facts > a > strong {
     font-size: 26px;
+    line-height: 1.2;
     font-variant-numeric: tabular-nums;
   }
   html[data-design="commerce"] #app .home-command-bar > div {
@@ -2269,6 +2276,12 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
   }
   html[data-design="commerce"] #app .home-daily-production dd {
     line-height: 1.25;
+  }
+  html[data-design="commerce"] #app .home-daily-production progress {
+    margin-block-start: 2px;
+  }
+  html[data-design="commerce"] #app .home-daily-meta:has(> small) {
+    padding-block: 11px;
   }
 }
 

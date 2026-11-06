@@ -249,6 +249,7 @@ test("workbench completed empty action fits in the reference desktop first fold"
   }
   const flow = (await page.getByRole("region", { name: "选品任务流程" }).boundingBox())!;
   expect(Math.abs(overview.y - 378), "library overview top").toBeLessThanOrEqual(5);
+  expect(Math.abs(overview.y + overview.height - 512), "library overview bottom").toBeLessThanOrEqual(3);
   expect(Math.abs(flow.y - 529), "workflow top").toBeLessThanOrEqual(5);
   expect(Math.abs(bounds!.y - flow.y - flow.height - 18), "workflow-to-results gap").toBeLessThanOrEqual(2);
   const quickCandidate = page.locator(".midou-home-quick .home-quick-candidates");
@@ -272,6 +273,7 @@ test("workbench completed empty action fits in the reference desktop first fold"
     "13px",
   );
   await expect(progress).toHaveCSS("height", "9px");
+  expect(Math.abs((await progress.boundingBox())!.y - 295)).toBeLessThanOrEqual(2);
   await expect(progress).toHaveAttribute("max", "100");
   const meta = page.locator(".home-daily-meta");
   const timestamp = meta.locator("small");
