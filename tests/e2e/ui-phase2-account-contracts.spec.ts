@@ -322,7 +322,11 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
     await expect(tabs).toHaveCSS("margin-top", "24px");
     const intro = page.locator(".account-content-only .p11-page-heading p");
     expect((await intro.boundingBox())!.x).toBe((await heading.boundingBox())!.x);
-    await expect(tabs).toHaveCSS("column-gap", "19px");
+    await expect(tabs).toHaveCSS("column-gap", "22px");
+    const refresh = (await page.getByRole("button", { name: "刷新资料", exact: true }).boundingBox())!;
+    const tabRow = (await tabs.boundingBox())!;
+    expect(refresh.y + refresh.height).toBeLessThan(tabRow.y);
+    expect(Math.abs(refresh.y - 144)).toBeLessThanOrEqual(3);
     await expect(tabs.locator("a[aria-current='page'] > b")).toHaveCSS("font-size", "17px");
     await expect(form).toHaveCSS("row-gap", "18px");
     const footer = form.locator(".p11-form-footer");
