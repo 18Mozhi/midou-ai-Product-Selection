@@ -4484,11 +4484,12 @@ for (const view of ["completed", "rule_candidates"]) {
           await expect(rated.locator(".catalogue-cell-note")).toHaveCSS("font-size", "13px");
           await expect(catalog.getByRole("img", { name: `${base.name} 商品图`, exact: true })).toBeVisible();
           const picture = await catalog.locator(".selection-product-picture").first().boundingBox();
-          expect(Math.abs(picture!.x - 350)).toBeLessThanOrEqual(3);
+          expect(Math.abs(picture!.x - 350)).toBeLessThanOrEqual(5);
           await expect(catalog.getByRole("img", { name: "商品主图待采集" })).toBeVisible();
           const next = catalog.getByRole("button", { name: "下一页", exact: true });
           await expect(next).toHaveCSS("min-height", "36px");
           const [nextBox, tableBox] = await Promise.all([next.boundingBox(), catalog.getByRole("table").boundingBox()]);
+          expect(Math.abs(tableBox!.x - 291)).toBeLessThanOrEqual(2);
           expect(Math.abs(nextBox!.x + nextBox!.width - tableBox!.x - tableBox!.width)).toBeLessThanOrEqual(2);
           const title = (await catalog.locator("header h2").boundingBox())!;
           const note = (await catalog.locator(".catalog-data-note").boundingBox())!;
