@@ -1392,9 +1392,20 @@ test("platform reference first fold fits system checks and source health without
   page,
 }, testInfo) => {
   await page.setViewportSize({ width: 1672, height: 941 });
-  await nav(page);
+  await nav(page, "platform_super_admin", "platform:superadmin");
   await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
   await page.goto("/platform-admin");
+  const sidebar = page.getByRole("complementary", { name: "工作区导航" });
+  const overview = sidebar.getByRole("link", { name: "平台概览", exact: true });
+  await expect(sidebar.getByRole("link", { name: "组织管理", exact: true })).toBeVisible();
+  await expect(sidebar.getByRole("button", { name: "帮助", exact: true })).toBeInViewport({ ratio: 1 });
+  expect((await sidebar.boundingBox())!.width).toBeCloseTo(248, 0);
+  expect((await overview.boundingBox())!.y).toBeCloseTo(170, 0);
+  expect((await overview.locator("span").boundingBox())!.x).toBeCloseTo(66, 0);
+  const settings = (await sidebar.getByRole("link", { name: "设置", exact: true }).boundingBox())!;
+  const help = (await sidebar.getByRole("button", { name: "帮助", exact: true }).boundingBox())!;
+  expect(settings.y + settings.height / 2).toBeCloseTo(help.y + help.height / 2, 0);
+  expect(settings.x + settings.width).toBeLessThanOrEqual(help.x);
   const signals = page.locator(".platform-system-checks");
   const sources = page.locator(".platform-source-health");
   await expect(signals).toBeVisible();

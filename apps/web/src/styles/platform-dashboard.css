@@ -657,7 +657,7 @@
 }
 @media (min-width: 1440px) {
   html[data-design="commerce"] #app .role-shell.role-shell--c .role-content:has(> .platform-dashboard--review) {
-    padding-inline-start: 12px;
+    padding-inline-start: calc(12px + var(--platform-rail-inset, 0px));
   }
   html[data-design="commerce"] #app .platform-dashboard--review {
     gap: 18px;
