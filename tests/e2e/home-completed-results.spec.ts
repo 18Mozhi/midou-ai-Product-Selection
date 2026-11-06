@@ -210,7 +210,11 @@ test("workbench completed empty action fits in the reference desktop first fold"
   const resultTabs = result.locator(".home-result-header nav");
   await expect(resultTabs).toHaveCSS("column-gap", "26px");
   await expect(resultTabs.locator("button").first()).toHaveCSS("padding-inline-start", "8px");
+  await expect(resultTabs.locator("button").first()).toHaveCSS("padding-inline-end", "14px");
   await expect(result.locator(".home-completed-empty b")).toHaveCSS("font-size", "18px");
+  await expect(result.locator(".home-completed-empty > span")).toHaveCSS("font-size", "14px");
+  await expect(result.locator(".home-completed-empty > svg")).toHaveCSS("width", "56px");
+  await expect(page.locator(".home-daily-production dt").first()).toHaveCSS("font-size", "16px");
   await expect(link).toHaveAttribute("href", "/opportunities?view=rule_candidates");
   await expect(link).toHaveCSS("font-size", "14px");
   const actionBounds = (await link.boundingBox())!;

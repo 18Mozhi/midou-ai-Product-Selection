@@ -94,8 +94,19 @@ html[data-design="commerce"] #app .home-result-header button[aria-pressed="true"
     padding-inline: 8px;
     font-size: 16px;
   }
+  html[data-design="commerce"] #app .home-result-header button:first-child {
+    padding-inline-end: 14px;
+  }
+  .home-result-workspace .home-completed-empty > svg {
+    width: 56px;
+    height: 56px;
+  }
   .home-result-workspace .home-completed-empty b {
     font-size: 18px;
+  }
+  .home-result-workspace .home-completed-empty > span {
+    font-size: 14px;
+    line-height: 20px;
   }
   .home-result-workspace .home-completed-empty a {
     position: relative;
