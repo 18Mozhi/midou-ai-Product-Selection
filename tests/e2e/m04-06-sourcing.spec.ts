@@ -1717,6 +1717,7 @@ test("midou reference sourcing displays the task Amazon reference image in list 
   await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toBeVisible();
   await expect(page.locator(".sourcing-record-items > button")).toHaveCount(5);
   await expect(page.locator(".sourcing-detail > header .research-thumbnail img")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "供应链找货", exact: true })).not.toBeFocused();
   const progress = page.getByRole("region", { name: "来源采集进度" });
   await expect(progress).toContainText("采集失败");
   await expect(progress).toContainText("1 / 1 个来源已结束");

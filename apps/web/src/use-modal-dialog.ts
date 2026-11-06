@@ -49,7 +49,7 @@ export function useModalDialog(
 
   watch(
     isOpen,
-    async (open) => {
+    async (open, wasOpen) => {
       if (open) {
         const active = document.activeElement;
         returnFocus = active instanceof HTMLElement ? active : null;
@@ -59,6 +59,7 @@ export function useModalDialog(
         if (options.trapFocus) setTabTrap(dialogElement.value);
         return;
       }
+      if (!wasOpen) return;
       if (options.trapFocus) setTabTrap(null);
       if (dialogElement.value?.open) dialogElement.value.close();
       await nextTick();

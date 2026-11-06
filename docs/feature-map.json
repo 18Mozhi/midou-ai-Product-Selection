@@ -89,6 +89,12 @@
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Empty offers distinguish failed or blocked collection in both the notice and the empty offer card; existing task inspection link moves into the notice only for authorized users with an actual task identifier. No new collection action."
   },
+  "modalInitialFocus": {
+    "sourceFiles": ["apps/web/src/use-modal-dialog.ts"],
+    "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts", "tests/e2e/m05-03-notifications.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "An initially closed dialog does not move focus. A real close still restores the trigger or its existing fallback."
+  },
   "referenceTrendRelatedCards": {
     "sourceFiles": ["apps/web/src/components/TrendRelatedProducts.vue"],
     "testFiles": ["tests/e2e/m04-01-trends.spec.ts"],
