@@ -244,6 +244,7 @@ test("workbench completed empty action fits in the reference desktop first fold"
   const firstMetric = (await page.locator(".home-daily-production dl > div").first().boundingBox())!;
   expect(Math.abs(firstMetric.y - 204), "daily cards top").toBeLessThanOrEqual(2);
   const heading = page.getByRole("heading", { name: "选品工作台", exact: true });
+  await expect(page.locator(".home-command-bar > div")).toHaveCSS("top", "-5px");
   const headingBox = (await heading.boundingBox())!;
   const breadcrumb = page.getByRole("navigation", { name: "面包屑", exact: true });
   await expect(breadcrumb).toHaveCount(1);

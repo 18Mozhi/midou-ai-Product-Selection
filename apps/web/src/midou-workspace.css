@@ -2268,6 +2268,8 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
     font-variant-numeric: tabular-nums;
   }
   html[data-design="commerce"] #app .home-command-bar > div {
+    position: relative;
+    inset-block-start: -5px;
     padding-inline-start: 8px;
   }
   html[data-design="commerce"] #app .home-command-bar {
