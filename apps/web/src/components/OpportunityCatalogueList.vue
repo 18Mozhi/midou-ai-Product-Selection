@@ -438,6 +438,14 @@ tbody tr:hover {
 .selection-candidate-list td {
   padding-block: 12px;
 }
+@media (min-width: 1440px) {
+  .selection-candidate-list th {
+    height: 35px;
+  }
+  .selection-candidate-list td {
+    padding-block: 11px;
+  }
+}
 .selection-candidate-list .selection-product-identity {
   grid-template-columns: 76px minmax(0, 1fr);
   gap: 10px;
