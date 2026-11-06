@@ -2408,6 +2408,35 @@ html[data-design="commerce"] #app .catalogue-querybar .catalogue-search label > 
     padding-block: 10px 22px;
     row-gap: 26px;
   }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls > nav {
+    margin-inline-start: -2px;
+    column-gap: 0;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls > nav > button {
+    padding-inline: 23px;
+    justify-content: flex-start;
+    text-align: start;
+    font-size: 18px;
+    line-height: 26px;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls > nav > button:first-child {
+    min-inline-size: 162px;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls > nav > button:nth-child(2) {
+    min-inline-size: 134px;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls > nav > button:nth-child(3) {
+    min-inline-size: 157px;
+  }
+  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls > nav > button:nth-child(4) {
+    min-inline-size: 101px;
+  }
   html[data-design="commerce"]
     #app
     .catalogue-page-heading[data-view="completed"]
@@ -2552,6 +2581,7 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"] > .catalogue-refresh {
     min-inline-size: 134px;
     justify-content: center;
+    translate: 0 -7px;
   }
   html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
     + .catalogue-controls .catalogue-search {

@@ -580,6 +580,11 @@ test("catalogue empty workflow leads to the real candidate list without writes",
     expect(Math.abs(searchInput.y - 310)).toBeLessThanOrEqual(3);
     const tabs = (await page.locator(".catalogue-controls > nav").boundingBox())!;
     expect(Math.abs(tabs.y + tabs.height - 284)).toBeLessThanOrEqual(3);
+    const completed = page.getByRole("button", { name: "已完成分析", exact: true });
+    await expect(completed).toHaveCSS("font-size", "18px");
+    const completedTab = (await completed.boundingBox())!;
+    expect(Math.abs(completedTab.x - 308)).toBeLessThanOrEqual(2);
+    expect(Math.abs(completedTab.x + completedTab.width - 470)).toBeLessThanOrEqual(2);
     await expect(search.getByRole("button", { name: "搜索", exact: true })).toBeVisible();
     const card = (await empty.boundingBox())!;
     expect(Math.abs(card.y - 400)).toBeLessThanOrEqual(3);
@@ -607,6 +612,7 @@ test("catalogue empty workflow leads to the real candidate list without writes",
   await expect(page.locator(".catalog-data-note")).toContainText("不等于精确销量");
   if (wide) {
     await expect(page.locator(".catalogue-refresh")).toHaveCSS("min-inline-size", "134px");
+    expect(Math.abs((await page.locator(".catalogue-refresh").boundingBox())!.y - 126)).toBeLessThanOrEqual(2);
     const search = page.getByRole("search", { name: "搜索商品" });
     const [query, submit, market] = await Promise.all([
       search.getByRole("textbox", { name: "商品名称" }).boundingBox(),
