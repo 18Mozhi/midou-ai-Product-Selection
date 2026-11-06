@@ -954,6 +954,30 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   padding: 10px 0 0;
   border-bottom: 0;
 }
+@media (max-width: 600px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-detail > header {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    align-items: start;
+    gap: 4px 12px;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header > .research-thumbnail {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header > div:last-child {
+    display: contents;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header :is(p, h3, code) {
+    grid-column: 2;
+    overflow-wrap: anywhere;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header .sourcing-progress {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    margin-block-start: 8px;
+  }
+}
 .sourcing-progress h4[data-status] {
   padding: 2px 7px;
   border-radius: 6px;

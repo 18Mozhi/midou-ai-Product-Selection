@@ -1929,6 +1929,14 @@ test(withRichRecords
     await page.screenshot({ path: testInfo.outputPath(withRichRecords
       ? "sourcing-progress-rich-content.png" : "sourcing-progress-reference.png") });
   } else {
+    const photo = (await detailPhoto.locator("..").boundingBox())!;
+    const title = (await page.locator(".sourcing-detail > header h3").boundingBox())!;
+    const progressBox = (await progress.boundingBox())!;
+    expect(title.x - photo.x - photo.width).toBeCloseTo(12, 0);
+    expect(title.y).toBeLessThan(photo.y + photo.height);
+    expect(progressBox.x).toBeCloseTo(photo.x, 0);
+    expect(progressBox.width).toBeGreaterThan(title.width);
+    expect(progressBox.y).toBeGreaterThanOrEqual(photo.y + photo.height);
     const [success, waiting, failed, blocked] = await Promise.all(
       (await progress.locator("dl > div").all()).map((metric) => metric.boundingBox()),
     );
@@ -1938,6 +1946,9 @@ test(withRichRecords
     expect(blocked!.x).toBeCloseTo(waiting!.x, 0);
     expect(failed!.y).toBeGreaterThan(success!.y);
     await progress.screenshot({ path: testInfo.outputPath("sourcing-progress-mobile.png") });
+    await page.locator(".sourcing-detail > header").screenshot({
+      path: testInfo.outputPath("sourcing-identity-mobile.png"),
+    });
   }
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
