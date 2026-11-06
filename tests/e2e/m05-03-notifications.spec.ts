@@ -829,6 +829,7 @@ test("midou reference notification layout keeps original workflow and preference
     expect(badge.width).toBe(118);
     expect(badge.height).toBe(32);
     const categories = page.locator(".midou-notification-filters > nav > button");
+    await expect(categories.first()).toHaveCSS("font-weight", "650");
     const categoryBoxes = await categories.evaluateAll((nodes) =>
       nodes.map((node) => {
         const { x, y, width } = node.getBoundingClientRect();
@@ -847,6 +848,9 @@ test("midou reference notification layout keeps original workflow and preference
     const unread = (await page.getByRole("checkbox", { name: "仅未读" }).boundingBox())!;
     expect(status.width).toBe(130);
     expect(unread.width).toBe(44);
+    const toggle = page.getByRole("checkbox", { name: "仅未读" });
+    expect(await toggle.evaluate((node) => getComputedStyle(node, "::before").backgroundColor))
+      .toBe("rgb(255, 255, 255)");
     expect(Math.abs(status.x - 837)).toBeLessThanOrEqual(10);
     expect(Math.abs(unread.x - 991)).toBeLessThanOrEqual(6);
     expect(Math.abs(initialSearch.x - 1147)).toBeLessThanOrEqual(6);

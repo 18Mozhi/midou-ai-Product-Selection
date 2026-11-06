@@ -2893,6 +2893,15 @@ html[data-design="commerce"] #app .notification-row > .notification-mark-read {
     width: 44px;
     height: 24px;
   }
+  html[data-design="commerce"] #app .midou-notification-unread input:not(:checked) {
+    background: color-mix(in srgb, var(--so-text-muted) 44%, var(--so-panel));
+  }
+  .midou-notification-unread input:not(:checked)::before {
+    background: var(--so-panel);
+  }
+  html[data-design="commerce"] #app .midou-notification-filters > nav > button[aria-pressed="true"] {
+    font-weight: 650;
+  }
 }
 
 /* Profile reference: distinguish identity, verification facts, and editable fields. */
