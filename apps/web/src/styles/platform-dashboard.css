@@ -646,7 +646,17 @@
   font-size: 15px;
 }
 #app .platform-dashboard--review .platform-source-health th {
-  background: var(--so-panel-soft);
+  background: color-mix(in srgb, var(--so-panel-soft) 70%, var(--so-panel));
+}
+#app .platform-dashboard--review .platform-source-health tbody tr {
+  --platform-source-row: var(--so-panel);
+  background: var(--platform-source-row);
+}
+#app .platform-dashboard--review .platform-source-health tbody tr:nth-child(even) {
+  --platform-source-row: color-mix(in srgb, var(--so-panel-soft) 24%, var(--so-panel));
+}
+#app .platform-dashboard--review .platform-source-health td.table-view-controls__frozen {
+  background: var(--platform-source-row);
 }
 #app .platform-source-health .table-view-controls__content {
   border: 1px solid var(--so-border);

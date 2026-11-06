@@ -1503,6 +1503,9 @@ test("platform reference first fold fits system checks and source health without
   await expect(cell).not.toHaveClass(/table-view-controls__frozen/);
   await sources.getByRole("button", { name: "首列未冻结" }).click();
   await expect(cell).toHaveClass(/table-view-controls__frozen/);
+  const stripedRow = sourceTable.locator("tbody tr").nth(1);
+  const stripeColor = await stripedRow.evaluate((row) => getComputedStyle(row).backgroundColor);
+  await expect(stripedRow.locator("td").first()).toHaveCSS("background-color", stripeColor);
   await sources.getByText("列设置", { exact: true }).click();
   const statusColumn = sources.getByRole("checkbox", { name: "切换第 2 列" });
   await statusColumn.uncheck();
