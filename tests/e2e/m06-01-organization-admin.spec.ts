@@ -2641,6 +2641,19 @@ test("organization profile aligns facts, editor and governance sidebar", async (
   await logo.fill("http://preview.example.test/unsafe.svg");
   await preview.click();
   await expect(editor.getByRole("img", { name: "组织 Logo 预览" })).toHaveCount(0);
+  const profileRequests: string[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.endsWith("/org/admin/profile"))
+      profileRequests.push(request.method());
+  });
+  const name = editor.getByLabel("名称", { exact: true });
+  await name.fill("未保存的组织名称");
+  await reason.fill("未保存的原因");
+  await editor.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(name).toHaveValue(profile.name);
+  await expect(logo).toHaveValue(profile.logo_url ?? "");
+  await expect(reason).toHaveValue("");
+  expect(profileRequests).toEqual([]);
   await expect(facts.locator("h3")).toHaveText(profile.name);
   await expect(facts.locator("dl > div")).toHaveCount(3);
   await expect(facts.locator("dt > svg[aria-hidden='true']")).toHaveCount(3);

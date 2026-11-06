@@ -177,6 +177,22 @@
     outline-offset: 2px;
   }
 }
+.organization-profile-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+#app .organization-profile-fields .organization-profile-actions > button[type="reset"] {
+  min-inline-size: 78px;
+  border-color: var(--so-border);
+  background: var(--so-panel);
+  color: var(--so-text);
+}
+#app .organization-profile-fields .organization-profile-actions > button[type="reset"]:hover:not(:disabled) {
+  background: var(--so-panel-soft);
+}
 .organization-profile-reason {
   display: grid;
   grid-column: 1 / -1;
@@ -479,7 +495,7 @@
     min-inline-size: 76px;
     min-height: 36px;
   }
-  #app .organization-profile-editor .organization-profile-fields > button[type="submit"] {
+  #app .organization-profile-editor .organization-profile-actions {
     margin-block-start: -1px;
   }
   #app .organization-profile-editor .organization-profile-fields textarea {
@@ -564,6 +580,9 @@
   }
   #app .organization-profile-editor button[type="submit"] {
     min-inline-size: 97px;
+    min-block-size: 38px;
+  }
+  #app .organization-profile-fields .organization-profile-actions > button[type="reset"] {
     min-block-size: 38px;
   }
   #app .org-overview-actions > button {

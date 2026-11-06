@@ -1,4 +1,10 @@
 {
+  "referenceOrganizationProfileCancel": {
+    "sourceFiles": ["apps/web/src/components/OrganizationAdminCenter.vue", "apps/web/src/organization-profile-workspace.css"],
+    "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Cancel restores the last loaded organization profile locally, clears draft reason and preview, and does not issue a request."
+  },
   "referenceOrganizationLogoPreview": {
     "sourceFiles": ["apps/web/src/components/OrganizationAdminCenter.vue", "apps/web/src/organization-profile-workspace.css"],
     "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],

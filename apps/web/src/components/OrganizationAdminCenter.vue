@@ -223,6 +223,21 @@ function clearFieldValidity(event: Event) {
   (event.currentTarget as HTMLInputElement).setCustomValidity("");
 }
 const logoPreview = ref("");
+function resetOrganizationProfileDraft(event?: Event) {
+  if (!data.value || (event && busy.value)) return;
+  form.value = {
+    name: data.value.name,
+    logo_url: data.value.logo_url ?? "",
+    timezone: data.value.timezone,
+    data_retention_days: data.value.data_retention_days,
+    default_workspace_id: data.value.default_workspace_id,
+    reason: "",
+  };
+  logoPreview.value = "";
+  (event?.target as HTMLFormElement | undefined)
+    ?.querySelector<HTMLInputElement>("#organization-logo-url")
+    ?.setCustomValidity("");
+}
 watch([view, () => form.value.logo_url, () => data.value?.id], () => {
   logoPreview.value = "";
 });
@@ -357,14 +372,7 @@ async function load(
     data.value = viewResponse.value;
     requestId.value = viewResponse.requestId;
     if (currentView === "summary") {
-      form.value = {
-        name: data.value.name,
-        logo_url: data.value.logo_url ?? "",
-        timezone: data.value.timezone,
-        data_retention_days: data.value.data_retention_days,
-        default_workspace_id: data.value.default_workspace_id,
-        reason: "",
-      };
+      resetOrganizationProfileDraft();
       profileSaveReadFailure.value = null;
       if (profileSaveReceipt.value?.phase === "pending") {
         profileSaveReceipt.value = {
@@ -1489,6 +1497,7 @@ onMounted(() => void load());
         </section>
         <form
           class="organization-profile-editor"
+          @reset.prevent="resetOrganizationProfileDraft"
           @submit.prevent="
             submit('/org/admin/profile', { ...form, expected_version: data.version }, 'PATCH')
           "
@@ -1562,7 +1571,10 @@ onMounted(() => void load());
                 <small id="organization-profile-reason-count">{{ form.reason?.length ?? 0 }} / 500</small>
               </div>
             </div>
-            <button type="submit" :disabled="busy">{{ busy ? "正在保存…" : "保存" }}</button>
+            <div class="organization-profile-actions">
+              <button type="submit" :disabled="busy">{{ busy ? "正在保存…" : "保存" }}</button>
+              <button type="reset" :disabled="busy">取消</button>
+            </div>
           </fieldset>
         </form>
         <aside class="midou-governance-side" aria-label="治理快捷入口与组织状态">
