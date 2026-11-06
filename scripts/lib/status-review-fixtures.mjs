@@ -36,8 +36,12 @@ export async function statusReviewFixtures() {
   };
   const evaluate = (s, context = {}) =>
     JSON.parse(JSON.stringify(vm.runInNewContext(`(${s})`, context, { timeout: 1000 })));
+  const navHelpers = ast.statements.filter(
+    (node) => ts.isFunctionDeclaration(node) && node.name?.text === "nav",
+  );
+  assert.equal(navHelpers.length, 1, "shared platform navigation fixture helper");
   const navs = [];
-  visit(ast, (n) => {
+  visit(navHelpers[0], (n) => {
     if (
       ts.isObjectLiteralExpression(n) &&
       n.properties.some((p) => p.name?.getText(ast) === "platform_capabilities")

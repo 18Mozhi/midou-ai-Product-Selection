@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { CAPABILITIES } from "../../packages/authorization/src/index";
 import type { Locator, Page, Route } from "@playwright/test";
 import { verifyAuditedReasonFocus } from "./helpers/audited-reason-focus";
 import { capturePhase2Evidence, finalizePhase2Evidence } from "./helpers/ui-phase2-evidence";
@@ -1393,6 +1394,20 @@ test("platform reference first fold fits system checks and source health without
 }, testInfo) => {
   await page.setViewportSize({ width: 1672, height: 941 });
   await nav(page, "platform_super_admin", "platform:superadmin");
+  await page.route("**/api/v1/me/navigation?shell=platform_admin", (route) =>
+    route.fulfill({
+      json: env({
+        shell: "platform_admin",
+        organization_id: null,
+        workspace_id: null,
+        roles: [],
+        capabilities: [],
+        platform_roles: ["platform_super_admin"],
+        platform_capabilities: CAPABILITIES,
+        guard_reason: "navigation_platform_admin_allowed",
+      }),
+    }),
+  );
   await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
   await page.goto("/platform-admin");
   await expect(page.locator(".platform-dashboard--review")).toHaveCSS(
@@ -1401,6 +1416,10 @@ test("platform reference first fold fits system checks and source health without
   const sidebar = page.getByRole("complementary", { name: "工作区导航" });
   const overview = sidebar.getByRole("link", { name: "平台概览", exact: true });
   await expect(sidebar.getByRole("link", { name: "组织管理", exact: true })).toBeVisible();
+  await expect(sidebar.getByRole("link", { name: "开放平台", exact: true })).toHaveAttribute(
+    "href",
+    "/platform-admin/open-platform",
+  );
   await expect(sidebar.getByRole("button", { name: "帮助", exact: true })).toBeInViewport({ ratio: 1 });
   expect((await sidebar.boundingBox())!.width).toBeCloseTo(248, 0);
   expect((await overview.boundingBox())!.y).toBeCloseTo(170, 0);
@@ -1487,6 +1506,8 @@ test("platform reference first fold fits system checks and source health without
   expect(sourceHeaders[1] - sourceHeaders[0]).toBeGreaterThanOrEqual(220);
   expect(sourceHeaders[2] - sourceHeaders[1]).toBeGreaterThanOrEqual(75);
   await expect(sourceTable.locator("tbody td:last-child").first()).toHaveCSS("white-space", "nowrap");
+  await expect(sourceTable.getByRole("columnheader", { name: "最近观测" })).toHaveCSS("text-align", "center");
+  await expect(sourceTable.locator("tbody td:last-child").last()).toHaveCSS("text-align", "center");
   await expect(sourceTable.locator("tbody td:last-child").first()).toHaveText(
     /^\d{4}\/\d{1,2}\/\d{1,2}\s+\d{2}:\d{2}:\d{2}$/,
   );

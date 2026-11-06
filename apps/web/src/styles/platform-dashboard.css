@@ -851,6 +851,9 @@ html[data-design="commerce"] #app .platform-dashboard--review {
   #app .platform-source-health table:not(:has(thead th[hidden])) td:last-child {
     white-space: nowrap;
   }
+  #app .platform-source-health table :is(th, td):last-child {
+    text-align: center;
+  }
   #app .platform-source-health table[data-table-density="standard"] td {
     line-height: 20px;
   }
