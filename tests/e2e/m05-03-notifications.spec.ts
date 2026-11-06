@@ -792,6 +792,11 @@ test("notification cards distinguish task and competitor categories with decorat
   await expect(task.locator("rect")).toHaveCount(1);
   await expect(competitor.locator("path")).toHaveCount(2);
   await expect(competitor.locator("circle")).toHaveCount(0);
+  const timestamps = page.locator(".notification-record > em > time");
+  await expect(timestamps).toHaveCount(2);
+  await expect(timestamps.nth(1)).toHaveAttribute("datetime", rows[1].created_at);
+  await expect(timestamps.nth(1)).toHaveAttribute("title", /\d{2}:\d{2}:\d{2}$/);
+  await expect(timestamps.nth(1)).toHaveText(/^\d{4}\/\d{2}\/\d{2}\s+\d{2}:\d{2}$/);
   if (wide) {
     const sidebar = page.getByRole("complementary", { name: "工作区导航" });
     for (const name of ["选品工作台", "市场情报", "选品库", "1688 找货"]) {

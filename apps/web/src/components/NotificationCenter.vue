@@ -180,6 +180,18 @@ const pageSize = 20,
         }[item.category] ?? "业务状态已变化，请查看关联记录。")
       : item.body,
   time = (v: string) => new Date(v).toLocaleString("zh-CN", { hour12: false });
+const listTimeFormat = new Intl.DateTimeFormat("zh-CN", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+const listTime = (value: string) => {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? time(value) : listTimeFormat.format(date);
+};
 async function api<T>(
   path: string,
   options: { method?: string; body?: unknown } = {},
@@ -754,7 +766,10 @@ watch(
             <small v-if="item.group_count > 1" class="notification-group-note">
               已合并 {{ item.group_count }} 条同根因通知
             </small></span
-          ><em>{{ time(item.created_at) }}</em
+          ><em
+            ><time :datetime="item.created_at" :title="time(item.created_at)">{{
+              listTime(item.created_at)
+            }}</time></em
           ><b :data-workflow="item.workflow_status">{{ statusLabel(item.workflow_status) }}</b>
           <span class="midou-notification-open">查看记录<AppIcon name="chevron" :size="14" /></span>
         </button>
