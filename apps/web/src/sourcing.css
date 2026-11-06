@@ -1259,6 +1259,12 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-detail > header {
     padding-block-end: 14px;
   }
+  .sourcing-workspace--review .sourcing-detail > header .sourcing-progress dl {
+    display: grid;
+    grid-template-columns: minmax(max-content, 84px) minmax(max-content, 98px)
+      minmax(max-content, 84px) max-content;
+    column-gap: 0;
+  }
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-heading-actions {
     padding-inline-end: 8px;
   }
