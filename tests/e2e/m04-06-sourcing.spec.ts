@@ -1753,6 +1753,18 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     expect(detail!.x - records!.x - records!.width).toBeCloseTo(15, 0);
     expect(Math.abs(detail!.y - 301)).toBeLessThanOrEqual(3);
     await expect(page.locator(".sourcing-record-items > button").first()).toHaveCSS("column-gap", "15px");
+    const recordRows = page.locator(".sourcing-record-items > button");
+    const firstRecord = (await recordRows.first().boundingBox())!;
+    const lastRecord = (await recordRows.last().boundingBox())!;
+    expect(Math.abs(firstRecord.y - 363)).toBeLessThanOrEqual(4);
+    expect(Math.abs(lastRecord.y + lastRecord.height - 843)).toBeLessThanOrEqual(6);
+    for (const row of [recordRows.first(), recordRows.nth(1)]) {
+      const [name, meta] = await Promise.all([
+        row.locator("b").boundingBox(),
+        row.locator(".sourcing-record-meta").boundingBox(),
+      ]);
+      expect(meta!.y - name!.y - name!.height).toBeCloseTo(6, 0);
+    }
     const warning = page.locator(".sourcing-pending[data-attention='true']");
     const warningBorder = await warning.evaluate((node) =>
       getComputedStyle(node).getPropertyValue("--so-warning-border").trim(),

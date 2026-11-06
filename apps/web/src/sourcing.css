@@ -1084,6 +1084,20 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   }
 }
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items {
+    padding-block-start: 10px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items > button {
+    min-block-size: 96px;
+    align-content: center;
+  }
+  html[data-design="commerce"] #app .sourcing-record-items > button > b {
+    min-height: 0;
+    align-self: end;
+  }
+  html[data-design="commerce"] #app .sourcing-record-items .sourcing-record-meta {
+    align-self: start;
+  }
   .sourcing-pending[data-attention="true"] > div {
     --sourcing-notice-icon: 22px;
     --sourcing-notice-gap: 12px;
