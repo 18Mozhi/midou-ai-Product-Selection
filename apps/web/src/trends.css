@@ -714,7 +714,8 @@
   }
 }
 @media (min-width: 1600px) {
-  .trend-dashboard--review .trend-filters {
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-filters {
+    padding-inline: 22px 11px;
     grid-template-columns:
       minmax(0, 207fr) minmax(0, 215fr) minmax(0, 175fr) minmax(0, 297fr)
       minmax(0, 194fr) auto;
@@ -871,6 +872,17 @@
   background: var(--so-success-soft);
 }
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-filter-actions > button[type="submit"] {
+    border-color: var(--so-primary);
+    background: color-mix(in srgb, var(--so-primary-soft) 50%, var(--so-panel));
+    font-weight: 600;
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-filter-actions > button[type="submit"]:hover:not(:disabled) {
+    background: var(--so-primary-soft);
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-list > .trend-topic-row:not([aria-pressed="true"]) {
+    border-radius: 0;
+  }
   #app .trend-dashboard--review .trend-detail-badges {
     gap: 12px;
   }

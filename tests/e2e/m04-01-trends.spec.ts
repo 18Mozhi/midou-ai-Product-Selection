@@ -845,6 +845,15 @@ test("midou reference list defaults closed, opens and closes detail without list
       await expect(heading.locator("p")).toHaveCSS("font-size", "16px");
       expect(Math.abs(filters.y - 216)).toBeLessThanOrEqual(2);
       const filterBar = page.locator(".trend-filters");
+      const filterActions = filterBar.locator(".trend-filter-actions");
+      const resetBorder = await filterActions.getByRole("button", { name: "重置" })
+        .evaluate((el) => getComputedStyle(el).borderTopColor);
+      await expect(filterActions.getByRole("button", { name: "筛选" })).not.toHaveCSS(
+        "border-top-color", resetBorder,
+      );
+      await expect(list.locator('.trend-topic-row[aria-pressed="false"]').first()).toHaveCSS(
+        "border-radius", "0px",
+      );
       const marketControl = filterBar.getByRole("combobox", { name: "市场", exact: true });
       const marketBounds = (await marketControl.boundingBox())!;
       expect(Math.abs(marketBounds.y - 257)).toBeLessThanOrEqual(3);
@@ -862,6 +871,7 @@ test("midou reference list defaults closed, opens and closes detail without list
           return { x, width };
         }));
       expect([apply.width, reset.width, reset.x - apply.x - apply.width]).toEqual([97, 94, 14]);
+      expect(Math.abs(apply.x - 1478)).toBeLessThanOrEqual(3);
       await expect(page.locator(".trend-filter-field svg:visible")).toHaveCount(4);
       await expect(page.getByRole("combobox", { name: "市场", exact: true })).toHaveCSS("padding-left", "40px");
       const listBox = (await list.boundingBox())!;
