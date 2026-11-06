@@ -2537,9 +2537,11 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   expect(Math.abs(inviteBox!.y + inviteBox!.height / 2 - refreshBox!.y - refreshBox!.height / 2)).toBeLessThanOrEqual(1);
   const editor = page.locator(".organization-profile-editor");
   const nameField = editor.getByLabel("名称", { exact: true });
+  const timezoneField = editor.getByLabel("时区", { exact: true });
   const save = editor.getByRole("button", { name: "保存", exact: true });
   await expect(nameField).toHaveCSS("min-height", "34px");
   expect(Math.abs((await nameField.boundingBox())!.y - 554)).toBeLessThanOrEqual(3);
+  expect(Math.abs((await timezoneField.boundingBox())!.x - 753)).toBeLessThanOrEqual(2);
   await expect(editor.locator(".organization-profile-fields")).toHaveCSS("row-gap", "15px");
   const logoControls = editor.locator(".organization-logo-controls");
   const logoPreview = logoControls.getByRole("button", { name: "预览", exact: true });
