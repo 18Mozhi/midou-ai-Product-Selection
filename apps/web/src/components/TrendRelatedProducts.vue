@@ -262,14 +262,14 @@ onBeforeUnmount(() => {
 @container (min-width: 620px) {
   .trend-related-products li {
     grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
-    padding: 14px 16px;
+    padding: 14px 16px 14px 22px;
     background: color-mix(in srgb, var(--so-panel-soft) 35%, var(--so-panel));
   }
   .trend-related-products a {
     display: grid;
     grid-template-columns: 24px minmax(0, 1fr);
     align-items: start;
-    gap: 12px;
+    gap: 20px;
     line-height: 1.45;
   }
   .trend-related-icon {

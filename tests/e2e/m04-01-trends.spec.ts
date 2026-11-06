@@ -524,9 +524,16 @@ test("empty trend filters expose a one-step recovery action", async ({ page }) =
 
 test("wide related product cards align identity and four metrics in one row", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1717, height: 916 });
-  await ready(page, [topic], { capabilities: [...managerCapabilities, "opportunity:read"] });
+  await ready(page, [
+    topic,
+    ...[1, 2, 3].map((index) => ({
+      ...topic,
+      id: `00000000-0000-4000-8000-0000000009${index}0`,
+      title: `Market intelligence example with a longer product title for review ${index}`,
+    })),
+  ], { capabilities: [...managerCapabilities, "opportunity:read"] });
   await page.route("**/api/v1/opportunities?*", (route) =>
-    route.fulfill({ json: envelope([{ ...relatedProduct, name: "带收纳空间的轻便家居用品 · 示例商品" }], { total: 1 }) }),
+    route.fulfill({ json: envelope([{ ...relatedProduct, name: "Portable Home Storage Organizer with Stackable Compartments and a Removable Lid – Related Product Fixture" }], { total: 1 }) }),
   );
   await page.goto(`/trends?topic=${topicId}`);
   const card = page.getByRole("region", { name: "关联选品", exact: true }).locator("li");
@@ -536,6 +543,10 @@ test("wide related product cards align identity and four metrics in one row", as
   await expect(card.locator("dd")).toHaveCount(4);
   await expect(card.locator("dd").first()).toHaveText("未知");
   const [identity, metrics] = await Promise.all([card.locator("a").boundingBox(), card.locator("dl").boundingBox()]);
+  const title = (await card.locator("strong").boundingBox())!;
+  expect(Math.abs(title.x - 964)).toBeLessThanOrEqual(4);
+  expect(title.height).toBeGreaterThan(34);
+  await expect(page.locator(".trend-list > .trend-topic-row")).toHaveCount(4);
   expect(metrics!.x).toBeGreaterThan(identity!.x + identity!.width);
   expect(Math.abs(metrics!.y - identity!.y)).toBeLessThan(1);
   const positions = await card.locator("dt").evaluateAll((labels) => labels.map((label) => label.getBoundingClientRect().y));
