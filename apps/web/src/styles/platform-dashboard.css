@@ -702,6 +702,15 @@
     margin-inline-start: 31px;
   }
 }
+@media (min-width: 1536px) and (max-width: 1750px) {
+  html[data-design="commerce"] #app .platform-dashboard--review .platform-dashboard-grid {
+    grid-template-columns: minmax(0, 1.01fr) minmax(0, 1fr);
+    column-gap: 19px;
+  }
+  #app .platform-dashboard--review .platform-facts article {
+    padding-block-end: 16px;
+  }
+}
 @media (max-width: 700px) {
   #app .platform-dashboard--review .platform-action-summary a {
     padding: 9px 14px;
