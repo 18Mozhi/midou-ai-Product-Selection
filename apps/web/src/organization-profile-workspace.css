@@ -476,6 +476,7 @@
   #app .organization-profile-editor .organization-profile-fields {
     margin-block-start: 5px;
     row-gap: 15px;
+    column-gap: 32px;
   }
   #app .organization-profile-editor .organization-profile-fields :is(input, select) {
     min-height: 34px;
@@ -490,6 +491,9 @@
   #app .organization-profile-editor .organization-logo-controls {
     max-inline-size: 758px;
     column-gap: 14px;
+  }
+  #app .organization-profile-editor .organization-logo-controls > input {
+    inline-size: calc(100% - 16px);
   }
   #app .organization-profile-editor .organization-logo-controls > button {
     min-inline-size: 76px;

@@ -2551,6 +2551,10 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   expect(saveBox.width).toBe(97);
   expect(Math.abs(saveBox.y - 875)).toBeLessThanOrEqual(6);
   const identity = page.locator(".organization-profile-facts > header");
+  const profileFields = page.locator(".organization-profile-fields");
+  await expect(profileFields).toHaveCSS("column-gap", "32px");
+  const logoInput = (await logoControls.getByRole("textbox").boundingBox())!;
+  expect(Math.abs(logoInput.x + logoInput.width - 913)).toBeLessThanOrEqual(4);
   const status = identity.locator("i");
   await expect(status).toBeVisible();
   const [identityBox, statusBox, markBox] = await Promise.all(
