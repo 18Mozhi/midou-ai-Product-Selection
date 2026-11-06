@@ -3333,4 +3333,12 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
   .midou-profile-summary section:first-child:has(.midou-profile-context > div + div) {
     padding-block-end: 33px;
   }
+  .midou-profile-security-facts > div {
+    min-block-size: 32px;
+  }
+  html[data-design="commerce"] #app .midou-profile-security-facts .midou-profile-badge {
+    font-size: 13px;
+    line-height: 20px;
+    padding-block: 3px;
+  }
 }
