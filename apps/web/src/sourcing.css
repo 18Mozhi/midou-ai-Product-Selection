@@ -964,6 +964,26 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   color: var(--so-warning);
   background: var(--so-warning-soft);
 }
+.sourcing-progress h4[data-status="completed"] {
+  color: var(--so-success);
+  background: var(--so-success-soft);
+}
+@media (max-width: 520px) {
+  .sourcing-workspace--review .sourcing-detail .sourcing-progress dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 12px;
+  }
+  .sourcing-workspace--review .sourcing-detail .sourcing-progress dl > div {
+    flex-wrap: wrap;
+    gap: 2px 6px;
+  }
+  .sourcing-workspace--review .sourcing-detail .sourcing-progress dd {
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+    min-inline-size: 0;
+  }
+}
 .sourcing-progress dt[data-fail]:not([data-fail="0"]),
 .sourcing-progress dt[data-fail]:not([data-fail="0"]) + dd {
   color: var(--so-danger);

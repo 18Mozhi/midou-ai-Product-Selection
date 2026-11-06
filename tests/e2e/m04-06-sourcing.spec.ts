@@ -251,6 +251,20 @@ for (const scenario of [
     await page.goto("/sourcing");
     await expect(page.locator(".sourcing-pending")).toContainText(scenario.text);
     const notice = page.locator(".sourcing-pending");
+    if (scenario.name === "empty") {
+      const badge = page.getByRole("region", { name: "来源采集进度" }).locator("h4");
+      await expect(badge).toHaveAttribute("data-status", "completed");
+      const successTone = await badge.evaluate((element) => {
+        const probe = document.createElement("span");
+        probe.style.backgroundColor = "var(--so-success-soft)";
+        element.append(probe);
+        const color = getComputedStyle(probe).backgroundColor;
+        probe.remove();
+        return color;
+      });
+      expect(successTone).not.toBe("rgba(0, 0, 0, 0)");
+      await expect(badge).toHaveCSS("background-color", successTone);
+    }
     await expect(notice.getByRole("heading")).toHaveText(
       scenario.failed || scenario.blocked ? "未获得供应商报价" : "供应商报价",
     );
@@ -1848,6 +1862,16 @@ test("midou reference sourcing displays the task Amazon reference image in list 
     expect(Math.abs(ended.y + ended.height / 2 - counts.y - counts.height / 2)).toBeLessThanOrEqual(4);
     expect(ended.x).toBeGreaterThanOrEqual(counts.x + counts.width);
     await page.screenshot({ path: testInfo.outputPath("sourcing-progress-reference.png") });
+  } else {
+    const [success, waiting, failed, blocked] = await Promise.all(
+      (await progress.locator("dl > div").all()).map((metric) => metric.boundingBox()),
+    );
+    expect(waiting!.x).toBeGreaterThan(success!.x);
+    expect(waiting!.y).toBeCloseTo(success!.y, 0);
+    expect(failed!.x).toBeCloseTo(success!.x, 0);
+    expect(blocked!.x).toBeCloseTo(waiting!.x, 0);
+    expect(failed!.y).toBeGreaterThan(success!.y);
+    await progress.screenshot({ path: testInfo.outputPath("sourcing-progress-mobile.png") });
   }
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
