@@ -401,7 +401,7 @@ onUnmounted(() => {
                     <td>
                       {{
                         p.last_observed_at
-                          ? new Date(p.last_observed_at).toLocaleString()
+                          ? new Date(p.last_observed_at).toLocaleString("zh-CN", { hour12: false })
                           : "无样本"
                       }}
                     </td>
@@ -447,7 +447,7 @@ onUnmounted(() => {
                   <dd>
                     {{
                       row.last_observed_at
-                        ? new Date(row.last_observed_at).toLocaleString()
+                        ? new Date(row.last_observed_at).toLocaleString("zh-CN", { hour12: false })
                         : "无样本"
                     }}
                   </dd>

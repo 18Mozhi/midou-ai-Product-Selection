@@ -1468,6 +1468,10 @@ test("platform reference first fold fits system checks and source health without
   expect(sourceHeaders[1] - sourceHeaders[0]).toBeGreaterThanOrEqual(220);
   expect(sourceHeaders[2] - sourceHeaders[1]).toBeGreaterThanOrEqual(75);
   await expect(sourceTable.locator("tbody td:last-child").first()).toHaveCSS("white-space", "nowrap");
+  await expect(sourceTable.locator("tbody td:last-child").first()).toHaveText(
+    /^\d{4}\/\d{1,2}\/\d{1,2}\s+\d{2}:\d{2}:\d{2}$/,
+  );
+  await expect(sourceTable.locator("tbody td:last-child").last()).toHaveText("无样本");
   await expect(sources.getByRole("heading", { name: "来源健康" })).toHaveCSS("font-size", "18px");
   await expect(signals.getByRole("heading", { name: "系统检查" })).toHaveCSS("font-size", "18px");
   await expect(cell).toHaveCSS("font-variant-numeric", "tabular-nums");
