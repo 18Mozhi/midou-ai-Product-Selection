@@ -542,8 +542,22 @@ test("empty opportunity offers show the same profit summary without refetching o
   await expect(offers.getByText("暂无供应商报价")).toBeVisible();
   await expect(offers.locator(".sourcing-quote-empty > svg")).toHaveAttribute("width", "44");
   await expect(summary).toContainText("80 USD");
+  const basis = page.locator(".sourcing-profit-basis");
+  const fullRow = offers.locator(".sourcing-empty-offers-basis");
+  await expect(fullRow.locator("details")).toHaveCount(1);
+  await expect(basis).toHaveCount(1);
+  if (page.viewportSize()!.width >= 1101) {
+    const [row, panel, profitBox] = await Promise.all(
+      [fullRow, offers.locator(".sourcing-empty-offers"), summary].map((node) => node.boundingBox()),
+    );
+    expect(row!.width).toBeCloseTo(panel!.width, 0);
+    expect(row!.y).toBeGreaterThanOrEqual(profitBox!.y + profitBox!.height);
+  }
+  await basis.getByText("查看计算依据", { exact: true }).click();
+  await expect(basis).toHaveAttribute("open", "");
   await page.getByRole("tab", { name: "成本与利润" }).click();
   await expect(page.getByRole("tabpanel", { name: "成本与利润" })).toContainText("80 USD");
+  await expect(page.getByRole("tabpanel", { name: "成本与利润" }).locator("details")).toHaveAttribute("open", "");
   await page.getByRole("tab", { name: "供应商报价" }).click();
   await expect(summary).toContainText("80 USD");
   expect(profitReads).toBe(1);

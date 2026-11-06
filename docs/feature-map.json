@@ -159,7 +159,7 @@
     "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/components/SourcingProfitSummary.vue", "apps/web/src/sourcing.css"],
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
-    "contract": "Empty opportunity-linked supplier offers place the existing read-only profit summary beside the empty state on desktop and below on narrow screens. The same component moves back into the profit tab without a second request. Keyword records and nonempty supplier lists retain their existing behavior."
+    "contract": "Empty opportunity-linked supplier offers place the existing read-only profit summary beside the empty state on desktop and below on narrow screens, with one full-row calculation disclosure. The same component and disclosure move back into the profit tab without a second request. Keyword records and nonempty supplier lists retain their existing behavior."
   },
   "referenceCandidateProgress": {
     "sourceFiles": ["apps/web/src/components/OpportunityCatalogueList.vue", "apps/web/src/components/OpportunityListPanel.vue", "apps/web/src/midou-workspace.css"],

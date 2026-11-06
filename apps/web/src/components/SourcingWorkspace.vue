@@ -76,6 +76,7 @@ const detailTabs = [
 const detailTab = ref<(typeof detailTabs)[number]["key"]>("offers");
 const detailTabId = useId();
 const emptyOffersProfitTarget = ref<HTMLElement | null>(null);
+const emptyOffersBasisTarget = ref<HTMLElement | null>(null);
 const showProfitBesideEmptyOffers = computed(
   () =>
     detailTab.value === "offers" &&
@@ -471,6 +472,7 @@ const showCollectionLinkInNotice = computed(
               }}</span>
             </div>
             <div v-show="showProfitBesideEmptyOffers" ref="emptyOffersProfitTarget"></div>
+            <div ref="emptyOffersBasisTarget" class="sourcing-empty-offers-basis"></div>
           </div>
         </div>
         <div
@@ -491,6 +493,7 @@ const showCollectionLinkInNotice = computed(
               :opportunity-id="selected.input_ref"
               :return-path="route.fullPath"
               :beside-empty-offers="showProfitBesideEmptyOffers"
+              :basis-target="showProfitBesideEmptyOffers ? emptyOffersBasisTarget : null"
             />
           </Teleport>
           <p v-else class="sourcing-quote-empty">当前找货记录未关联选品，暂无成本与利润可查看。</p>

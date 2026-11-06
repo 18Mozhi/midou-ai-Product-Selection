@@ -1258,8 +1258,26 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   display: grid;
   gap: 12px;
 }
-.sourcing-empty-offers--with-profit > div:last-child {
+.sourcing-empty-offers--with-profit > div {
   min-width: 0;
+}
+.sourcing-empty-offers-basis {
+  grid-column: 1 / -1;
+}
+.sourcing-empty-offers-basis:empty {
+  display: none;
+}
+.sourcing-empty-offers-basis > .sourcing-profit-basis {
+  padding: 0 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  background: var(--so-panel);
+}
+.sourcing-empty-offers-basis > .sourcing-profit-basis > summary {
+  box-sizing: border-box;
+  padding-block: 8px;
+  min-height: 44px;
+  cursor: pointer;
 }
 .sourcing-empty-offers--with-profit .sourcing-profit-summary {
   height: 100%;
@@ -1285,15 +1303,6 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
 .sourcing-empty-offers--with-profit .sourcing-profit-summary .sourcing-profit-unconfirmed-breakdown > div {
   padding-block: 3px;
   line-height: 18px;
-}
-.sourcing-empty-offers--with-profit .sourcing-profit-basis {
-  margin-block-start: 1px;
-  border-block-start: 1px solid var(--so-border);
-}
-@media (min-width: 1101px) {
-  .sourcing-empty-offers--with-profit .sourcing-profit-summary:has(.sourcing-profit-basis) {
-    padding-block: 6px;
-  }
 }
 .sourcing-empty-offers--with-profit .sourcing-profit-summary dl > div {
   display: flex;
@@ -1321,6 +1330,12 @@ html[data-design="commerce"] #app .sourcing-empty-offers--with-profit .sourcing-
   }
   .sourcing-empty-offers--with-profit > .sourcing-quote-empty {
     min-height: 169px;
+  }
+  .sourcing-empty-offers--with-profit .sourcing-profit-summary {
+    padding-block: 10px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-detail:has(.sourcing-empty-offers--with-profit) {
+    padding-block-end: 12px;
   }
   .sourcing-empty-offers > .sourcing-quote-empty > svg {
     inline-size: 54px;
