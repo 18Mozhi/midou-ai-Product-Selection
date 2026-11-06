@@ -1222,6 +1222,13 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
        column to the available content width so the detail starts earlier. */
     grid-template-columns: clamp(300px, 18.42vw, 336px) minmax(0, 1fr);
   }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items {
+    padding-inline-start: 4px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items > button {
+    column-gap: 10px;
+    padding-inline-start: 6px;
+  }
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-meta {
     flex-wrap: nowrap;
   }
