@@ -364,6 +364,13 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
     ]);
     expect(securityBox!.y - identityBox!.y - identityBox!.height).toBeCloseTo(19, 0);
     expect(Math.abs(securityBox!.y - 647)).toBeLessThanOrEqual(3);
+    const facts = security.locator(".midou-profile-security-facts");
+    await expect(facts.locator("dt").first()).toHaveCSS("column-gap", "14px");
+    await expect(facts.locator("dt > svg").first()).toHaveCSS("width", "22px");
+    const securityAction = security.getByRole("link", { name: "管理安全设置" });
+    const actionBox = (await securityAction.boundingBox())!;
+    expect(Math.abs(actionBox.x - 312)).toBeLessThanOrEqual(2);
+    expect(Math.abs(actionBox.y - 817)).toBeLessThanOrEqual(3);
   }
   const email = page.getByLabel("邮箱", { exact: true });
   await expect(email).toBeDisabled();

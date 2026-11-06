@@ -3176,7 +3176,8 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
     gap: 19px;
   }
   .midou-profile-security > a {
-    margin-block-start: 24px;
+    margin-block-start: 28px;
+    border-color: color-mix(in srgb, var(--so-primary) 20%, var(--so-border));
   }
   .midou-profile-avatar {
     width: 76px;
@@ -3185,9 +3186,18 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
   }
   .midou-profile-summary .midou-profile-security {
     padding-block-start: 17px;
+    padding-inline: 24px;
   }
   .midou-profile-security-facts {
-    margin-block-start: 23px;
+    margin-block-start: 19px;
+    padding-inline-start: 7px;
+  }
+  .midou-profile-security-facts dt {
+    gap: 14px;
+  }
+  .midou-profile-summary .midou-profile-security-facts dt > svg {
+    width: 22px;
+    height: 22px;
   }
   .midou-profile-summary .midou-profile-name {
     font-size: 24px;
