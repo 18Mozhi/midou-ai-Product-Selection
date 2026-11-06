@@ -2185,6 +2185,19 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
 }
 
 @media (min-width: 1440px) {
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .role-top-actions > a[aria-label="通知中心"] {
+    padding-inline: 10px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .role-top-actions > a[aria-label="通知中心"] > svg {
+    width: 22px;
+    height: 22px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .midou-navigation-help::before {
+    inset-inline-start: -7px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .midou-account-menu::before {
+    inset-inline-start: -14px;
+  }
   html[data-design="commerce"] #app .role-content:has(> .home-dashboard) > .role-top-breadcrumb {
     /* Match the home grid's 2px inset plus its title's 8px inset. */
     margin-inline-start: 10px;

@@ -1216,6 +1216,14 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
   const topHelp = page.getByLabel("导航帮助");
   await expect(topHelp.locator("svg")).toHaveAttribute("width", "22");
   await expect(topHelp).toHaveCSS("min-height", "44px");
+  const bell = page.locator(".role-topbar").getByRole("link", { name: "通知中心", exact: true });
+  await expect(bell.locator("svg")).toHaveCSS("width", "22px");
+  const bellBounds = (await bell.boundingBox())!;
+  expect(bellBounds.width).toBeGreaterThanOrEqual(44);
+  expect(bellBounds.height).toBeGreaterThanOrEqual(44);
+  expect(await page.locator(".midou-account-menu").evaluate((node) =>
+    getComputedStyle(node, "::before").insetInlineStart,
+  )).toBe("-14px");
   const search = page.getByRole("button", { name: "全局搜索", exact: true });
   const segments = sidebar.locator(".midou-area-tabs");
   const selectedArea = segments.getByRole("link", { name: "选品", exact: true });
@@ -1252,6 +1260,7 @@ test("desktop reference geometry and navigation help stay usable", async ({ page
       .toBeLessThanOrEqual(1);
     expect(await context.boundingBox()).toEqual(contextBounds);
     expect(await search.boundingBox()).toEqual(searchBounds);
+    expect(await bell.boundingBox()).toEqual(bellBounds);
     expect(await segments.boundingBox()).toEqual(segmentBounds);
     await expect(selectedArea).toHaveCSS("color", "rgb(255, 255, 255)");
     await expect(selectedArea).toHaveCSS("background-color", "rgb(20, 91, 255)");
