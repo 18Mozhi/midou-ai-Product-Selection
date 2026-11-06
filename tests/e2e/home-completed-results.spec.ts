@@ -590,6 +590,13 @@ test("catalogue empty workflow leads to the real candidate list without writes",
     await expect(page.locator(".catalogue-refresh")).toHaveCSS("min-inline-size", "128px");
     await expect(page.locator(".catalogue-refresh")).toHaveCSS("background-color", "rgb(255, 255, 255)");
     await expect(empty.locator(".midou-completed-illustration")).toHaveCSS("color", /^color\(srgb/);
+    await expect(empty.locator(".midou-completed-illustration")).toHaveCSS("margin-bottom", "10px");
+    await expect(empty.getByRole("heading", { name: "暂无已完成分析的商品" })).toHaveCSS(
+      "margin-bottom",
+      "11px",
+    );
+    const emptyActions = (await empty.locator(".midou-completed-actions").boundingBox())!;
+    expect(Math.abs(emptyActions.y - 640)).toBeLessThanOrEqual(3);
     const search = page.getByRole("search", { name: "搜索商品" });
     const searchInput = (await search.getByRole("textbox", { name: "商品名称" }).boundingBox())!;
     expect(Math.abs(searchInput.width - 392)).toBeLessThanOrEqual(4);
