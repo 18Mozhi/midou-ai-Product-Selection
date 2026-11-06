@@ -1218,7 +1218,22 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
 }
 @media (min-width: 1600px) {
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout {
-    grid-template-columns: clamp(300px, 19.86vw, 360px) minmax(0, 1fr);
+    /* The shared member rail stays fixed across routes. Fit the records
+       column to the available content width so the detail starts earlier. */
+    grid-template-columns: clamp(300px, 18.42vw, 336px) minmax(0, 1fr);
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-meta {
+    flex-wrap: nowrap;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-meta > small {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-meta > em {
+    flex: none;
+    white-space: nowrap;
   }
   html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-detail > header {
     padding-block-end: 14px;
@@ -1424,6 +1439,11 @@ html[data-design="commerce"] #app .sourcing-empty-offers--with-profit .sourcing-
 }
 .sourcing-detail [role="tabpanel"] > :is(.sourcing-profit-summary, .sourcing-comparisons) {
   margin-block-start: 0;
+}
+@media (min-width: 1600px) {
+  .sourcing-empty-offers--with-profit {
+    grid-template-columns: minmax(0, 1.36fr) minmax(0, 1fr);
+  }
 }
 @media (max-width: 760px) {
   .sourcing-detail-tabs {
