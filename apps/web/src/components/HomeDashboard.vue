@@ -247,11 +247,11 @@ onBeforeUnmount(deactivate);
                     ></progress>
                   </div>
                   <div>
-                    <dt><AppIcon name="diamond" />新增主品 ASIN</dt>
+                    <dt><AppIcon name="asin-tag" />新增主品 ASIN</dt>
                     <dd>{{ selection.daily_production.discovered_count }}</dd>
                   </div>
                   <div>
-                    <dt><AppIcon name="shield" />新增合格推荐</dt>
+                    <dt><AppIcon name="recommendation-award" />新增合格推荐</dt>
                     <dd>{{ selection.daily_production.qualified_count }}</dd>
                   </div>
                 </dl>

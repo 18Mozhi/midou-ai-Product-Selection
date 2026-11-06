@@ -15,6 +15,14 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ["path", { d: "M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z" }],
   ],
   activity: [["path", { d: "M2 12h4l3-8 5 16 3-8h5" }]],
+  "asin-tag": [
+    ["path", { d: "M20 3h-7L3 13l8 8 10-10V4a1 1 0 0 0-1-1Z" }],
+    ["circle", { cx: "16.5", cy: "7.5", r: "1" }],
+  ],
+  "recommendation-award": [
+    ["circle", { cx: "12", cy: "9", r: "7" }],
+    ["path", { d: "m8 15-2 7 6-3 6 3-2-7M12 6v6M9 9h6" }],
+  ],
   // Local analysis glyphs on the same 24px outline grid.
   "product-scan": [
     ["path", { d: "M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" }],

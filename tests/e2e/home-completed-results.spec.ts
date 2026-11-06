@@ -256,6 +256,10 @@ test("workbench completed empty action fits in the reference desktop first fold"
   await expect(quickCandidate).toHaveAttribute("href", "/opportunities?view=rule_candidates");
   await expect(quickCandidate.locator("b")).toHaveCSS("font-weight", "700");
   const progress = page.getByRole("progressbar", { name: "今日完成整条选品流程目标进度" });
+  const dailyIcons = page.locator(".home-daily-production dt > svg");
+  for (const icon of await dailyIcons.all()) await expect(icon).toHaveCSS("width", "48px");
+  await expect(dailyIcons.nth(1).locator("path")).toHaveAttribute("d", /^M20 3h-7/);
+  await expect(dailyIcons.nth(2).locator("circle")).toHaveAttribute("r", "7");
   await expect(page.locator(".home-daily-production dt > svg").first()).toHaveCSS(
     "padding-inline-start",
     "13px",
