@@ -710,6 +710,10 @@
   #app .platform-dashboard--review .platform-facts article {
     padding-block-end: 16px;
   }
+  #app .platform-dashboard--review .platform-source-health .table-view-controls__toolbar {
+    padding-block-start: 4px;
+    margin-block-end: 13px;
+  }
 }
 @media (max-width: 700px) {
   #app .platform-dashboard--review .platform-action-summary a {

@@ -1453,6 +1453,13 @@ test("platform reference first fold fits system checks and source health without
   }
   const cell = sources.locator("tbody td").first();
   const sourceTable = sources.locator("table");
+  const sourceToolbar = sources.locator(".table-view-controls__toolbar");
+  const [densityBox, sourceTableBox] = await Promise.all([
+    sourceToolbar.locator("select").boundingBox(),
+    sourceTable.boundingBox(),
+  ]);
+  expect(Math.abs(densityBox!.y - 555)).toBeLessThanOrEqual(3);
+  expect(Math.abs(sourceTableBox!.y - 602)).toBeLessThanOrEqual(3);
   await expect(sourceTable).toHaveCSS("table-layout", "auto");
   const sourceHeaders = await sourceTable.locator("th").evaluateAll((headers) =>
     headers.map((header) => header.getBoundingClientRect().left + parseFloat(getComputedStyle(header).paddingLeft)),
