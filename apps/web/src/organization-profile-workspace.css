@@ -458,10 +458,18 @@
 
 @media (min-width: 1440px) {
   #app .organization-profile-editor .organization-profile-fields {
-    row-gap: 13px;
+    margin-block-start: 5px;
+    row-gap: 15px;
   }
   #app .organization-profile-editor .organization-profile-fields :is(input, select) {
-    min-height: 38px;
+    min-height: 34px;
+  }
+  #app .organization-profile-editor .organization-logo-field {
+    row-gap: 4px;
+  }
+  #app .organization-profile-editor > h3 {
+    position: relative;
+    inset-block-start: -3px;
   }
   #app .organization-profile-editor .organization-logo-controls {
     max-inline-size: 758px;
@@ -469,7 +477,15 @@
   }
   #app .organization-profile-editor .organization-logo-controls > button {
     min-inline-size: 76px;
-    min-height: 38px;
+    min-height: 36px;
+  }
+  #app .organization-profile-editor .organization-profile-fields > button[type="submit"] {
+    margin-block-start: -1px;
+  }
+  #app .organization-profile-editor .organization-profile-fields textarea {
+    box-sizing: border-box;
+    block-size: 66px;
+    min-height: 66px;
   }
   #app .organization-profile-facts > header {
     justify-content: flex-start;
