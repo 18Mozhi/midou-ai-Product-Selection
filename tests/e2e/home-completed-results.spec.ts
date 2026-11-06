@@ -235,6 +235,12 @@ test("workbench completed empty action fits in the reference desktop first fold"
   const bounds = await result.boundingBox();
   expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(941);
   const overview = (await page.locator(".home-automation-overview").boundingBox())!;
+  const overviewHeading = page.locator(".home-automation-heading");
+  await expect(overviewHeading).toHaveCSS("border-bottom-color", "rgba(0, 0, 0, 0)");
+  expect(await overviewHeading.evaluate((el) => {
+    const divider = getComputedStyle(el, "::before");
+    return [divider.insetInlineStart, divider.insetInlineEnd, divider.height];
+  })).toEqual(["24px", "24px", "1px"]);
   const firstMetric = (await page.locator(".home-daily-production dl > div").first().boundingBox())!;
   expect(Math.abs(firstMetric.y - 204), "daily cards top").toBeLessThanOrEqual(2);
   const heading = page.getByRole("heading", { name: "选品工作台", exact: true });

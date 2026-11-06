@@ -1309,7 +1309,18 @@ html[data-design="commerce"] #app .home-status-facts > a {
     gap: 8px;
   }
   html[data-design="commerce"] #app .home-automation-overview .home-automation-heading {
+    position: relative;
     padding-block: 11px;
+    border-block-end-color: transparent;
+  }
+  html[data-design="commerce"] #app .home-automation-overview .home-automation-heading::before {
+    content: "";
+    position: absolute;
+    inset-inline: 24px;
+    inset-block-end: -1px;
+    block-size: 1px;
+    background: var(--so-border);
+    pointer-events: none;
   }
   html[data-design="commerce"] #app .home-automation-overview .home-automation-heading h3 {
     font-size: 17px;
