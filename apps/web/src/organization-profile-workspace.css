@@ -455,7 +455,10 @@
 
 @media (min-width: 1440px) {
   #app .organization-profile-editor .organization-profile-fields {
-    row-gap: 7px;
+    row-gap: 13px;
+  }
+  #app .organization-profile-editor .organization-profile-fields :is(input, select) {
+    min-height: 38px;
   }
   #app .organization-profile-editor .organization-logo-controls {
     max-inline-size: 758px;
@@ -463,6 +466,7 @@
   }
   #app .organization-profile-editor .organization-logo-controls > button {
     min-inline-size: 76px;
+    min-height: 38px;
   }
   #app .organization-profile-facts > header {
     justify-content: flex-start;

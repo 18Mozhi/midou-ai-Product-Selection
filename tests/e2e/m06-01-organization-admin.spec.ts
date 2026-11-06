@@ -2537,10 +2537,11 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   const editor = page.locator(".organization-profile-editor");
   const nameField = editor.getByLabel("名称", { exact: true });
   const save = editor.getByRole("button", { name: "保存", exact: true });
-  await expect(nameField).toHaveCSS("min-height", "44px");
-  await expect(editor.locator(".organization-profile-fields")).toHaveCSS("row-gap", "7px");
+  await expect(nameField).toHaveCSS("min-height", "38px");
+  await expect(editor.locator(".organization-profile-fields")).toHaveCSS("row-gap", "13px");
   const logoControls = editor.locator(".organization-logo-controls");
   const logoPreview = logoControls.getByRole("button", { name: "预览", exact: true });
+  await expect(logoPreview).toHaveCSS("min-height", "38px");
   const [logoRow, previewBox] = await Promise.all([logoControls.boundingBox(), logoPreview.boundingBox()]);
   expect(logoRow!.width).toBe(758);
   expect(previewBox!.width).toBe(76);
