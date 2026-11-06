@@ -2594,6 +2594,8 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   }
   const sidebar = page.getByRole("complementary", { name: "治理快捷入口与组织状态" });
   const memberShortcut = sidebar.getByRole("link", { name: /成员与邀请/ });
+  await expect(sidebar.locator(":scope > section").first()).toHaveCSS("padding-inline-start", "26px");
+  await expect(sidebar.locator(":scope > section").last()).toHaveCSS("padding-block-start", "10px");
   await expect(memberShortcut).toHaveCSS("column-gap", "22px");
   expect(Math.abs((await memberShortcut.locator("b").boundingBox())!.x - 1285)).toBeLessThanOrEqual(4);
   await expect(sidebar.getByRole("link", { name: /审批模板/ }).locator("svg rect")).toHaveCount(1);
