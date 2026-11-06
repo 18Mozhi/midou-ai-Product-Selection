@@ -87,6 +87,16 @@ html[data-design="commerce"] #app .home-result-header button[aria-pressed="true"
   font-weight: 600;
 }
 @media (min-width: 1440px) {
+  .home-result-header nav {
+    gap: 26px;
+  }
+  html[data-design="commerce"] #app .home-result-header button {
+    padding-inline: 8px;
+    font-size: 16px;
+  }
+  .home-result-workspace .home-completed-empty b {
+    font-size: 18px;
+  }
   .home-result-workspace .home-completed-empty a {
     position: relative;
     min-inline-size: 142px;

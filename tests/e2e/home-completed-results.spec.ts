@@ -207,6 +207,10 @@ test("workbench completed empty action fits in the reference desktop first fold"
   await page.goto("/home");
   const result = page.getByRole("region", { name: "选品结果" });
   const link = result.getByRole("link", { name: "查看候选进度" });
+  const resultTabs = result.locator(".home-result-header nav");
+  await expect(resultTabs).toHaveCSS("column-gap", "26px");
+  await expect(resultTabs.locator("button").first()).toHaveCSS("padding-inline-start", "8px");
+  await expect(result.locator(".home-completed-empty b")).toHaveCSS("font-size", "18px");
   await expect(link).toHaveAttribute("href", "/opportunities?view=rule_candidates");
   await expect(link).toHaveCSS("font-size", "14px");
   const actionBounds = (await link.boundingBox())!;
