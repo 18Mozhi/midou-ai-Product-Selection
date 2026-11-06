@@ -2625,6 +2625,7 @@ test("organization profile aligns facts, editor and governance sidebar", async (
   const metrics = page.locator(".organization-profile-metrics");
   const editor = page.locator(".organization-profile-editor");
   const reason = editor.getByLabel("变更原因", { exact: true });
+  await expect(editor.locator("label .organization-required-mark[aria-hidden='true']")).toHaveCount(5);
   await expect(reason).toHaveAttribute("required", "");
   await expect(reason).toHaveAttribute("maxlength", "500");
   await expect(reason).toHaveAccessibleDescription("0 / 500");

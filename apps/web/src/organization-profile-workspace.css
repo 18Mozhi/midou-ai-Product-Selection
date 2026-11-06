@@ -177,6 +177,12 @@
     outline-offset: 2px;
   }
 }
+.organization-required-mark::after {
+  content: "*";
+  margin-inline-start: 4px;
+  color: var(--so-danger);
+  font-weight: 600;
+}
 .organization-profile-actions {
   grid-column: 1 / -1;
   display: flex;

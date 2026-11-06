@@ -1505,10 +1505,10 @@ onMounted(() => void load());
           <h3>更新组织资料</h3>
           <fieldset :disabled="Boolean(profileSaveReadFailure)" class="organization-profile-fields">
             <label
-              >名称<input v-model="form.name" :placeholder="data?.name" required maxlength="120"
+              ><span>名称<span class="organization-required-mark" aria-hidden="true"></span></span><input v-model="form.name" :placeholder="data?.name" required maxlength="120"
             /></label>
             <label
-              >时区<input
+              ><span>时区<span class="organization-required-mark" aria-hidden="true"></span></span><input
                 v-model="form.timezone"
                 :placeholder="data?.timezone"
                 required
@@ -1537,7 +1537,7 @@ onMounted(() => void load());
               <small>仅支持 HTTPS；留空表示暂不设置 Logo。</small>
             </div>
             <label
-              >数据保留天数<input
+              ><span>数据保留天数<span class="organization-required-mark" aria-hidden="true"></span></span><input
                 v-model.number="form.data_retention_days"
                 type="number"
                 min="30"
@@ -1546,7 +1546,7 @@ onMounted(() => void load());
                 :placeholder="String(data?.data_retention_days)"
             /></label>
             <label
-              >默认工作区<select v-model="form.default_workspace_id" required>
+              ><span>默认工作区<span class="organization-required-mark" aria-hidden="true"></span></span><select v-model="form.default_workspace_id" required>
                 <option disabled value="">请选择工作区</option>
                 <option
                   v-for="workspace in data?.workspace_options"
@@ -1558,7 +1558,7 @@ onMounted(() => void load());
               </select></label
             >
             <div class="organization-profile-reason">
-              <label for="organization-profile-change-reason">变更原因</label>
+              <label for="organization-profile-change-reason"><span>变更原因<span class="organization-required-mark" aria-hidden="true"></span></span></label>
               <div>
                 <textarea
                   id="organization-profile-change-reason"
