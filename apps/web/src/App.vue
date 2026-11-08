@@ -120,7 +120,13 @@ const isNotFoundRoute = computed(
     :account="selectedView === 'account'"
     :api-base-url="apiBase"
   >
-    <AccountShell v-if="selectedView === 'account'" :api-base-url="apiBase" />
+    <template #default="{ organizationName, workspaceName }"
+      ><AccountShell
+        v-if="selectedView === 'account'"
+        :api-base-url="apiBase"
+        :organization-name="organizationName"
+        :workspace-name="workspaceName"
+    /></template>
   </NavigationShell>
   <component :is="UiStateShowcase" v-else-if="UiStateShowcase && isUiStatesView" />
   <NotFoundPage v-else-if="isNotFoundRoute" />

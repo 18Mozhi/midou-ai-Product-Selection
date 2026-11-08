@@ -216,7 +216,9 @@ watch(imageFailureResetSources, (items) => {
       <h2>选品库</h2>
       <span>从情报到商品，把比较和判断放在一张表里。</span>
     </div>
-    <button type="button" class="so-action-secondary" @click="emit('apply')">更新结果</button>
+    <button type="button" class="so-action-secondary" @click="emit('apply')">
+      <AppIcon name="refresh" />更新结果
+    </button>
   </header>
   <section class="catalogue-controls" aria-label="选品结果视图">
     <nav>
@@ -237,7 +239,12 @@ watch(imageFailureResetSources, (items) => {
         aria-label="搜索商品"
         @submit.prevent="emit('apply')"
       >
-        <label>
+        <label class="catalogue-search-field">
+          <AppIcon
+            v-if="selectionView === 'rule_candidates'"
+            class="catalogue-search-icon"
+            name="search"
+          />
           <input
             v-model="filters.q"
             aria-label="商品名称"
@@ -318,31 +325,60 @@ watch(imageFailureResetSources, (items) => {
     class="midou-completed-empty"
     aria-label="已完成分析空状态"
   >
-    <div class="midou-completed-illustration"><AppIcon name="box" :size="58" /></div>
+    <div class="midou-completed-illustration">
+      <svg
+        viewBox="0 0 80 80"
+        width="76"
+        height="76"
+        fill="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path
+          d="m11 39 29-9 29 9-29 10-29-10Zm0 0-6 12 28 9 7-11 7 11 28-9-6-12M12 54v13l28 10 28-10V54M40 49v28"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          class="midou-completed-sparks"
+          d="M40 9v12M22 16l5 7m31-7-5 7"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+        />
+      </svg>
+    </div>
     <h3>{{ hasFiltersToClear ? "当前筛选下暂无已完成分析的商品" : "暂无已完成分析的商品" }}</h3>
     <p>系统正在补齐分析证据，可先查看候选商品。</p>
     <div class="midou-completed-actions">
       <button type="button" class="so-action-primary" @click="emit('view', 'rule_candidates')">
         查看候选商品</button
-      ><button type="button" class="so-action-secondary" @click="emit('apply')">刷新结果</button>
+      ><button type="button" class="so-action-secondary" @click="emit('apply')">
+        <AppIcon name="refresh" :size="20" />刷新结果
+      </button>
     </div>
-    <ol class="midou-analysis-flow" aria-label="分析流程说明">
-      <li
-        v-for="step in [
-          { icon: 'target', label: '识别主品', description: '匹配商品关键信息' },
-          { icon: 'chart', label: '补齐评分', description: '汇总多维分析证据' },
-          { icon: 'users', label: '对比竞品', description: '识别差异与机会' },
-          { icon: 'box', label: '匹配货源', description: '对接供应渠道' },
-          { icon: 'database', label: '评估利润', description: '测算成本与利润空间' },
-        ]"
-        :key="step.label"
-      >
-        <AppIcon :name="step.icon" :size="24" /><span
-          ><b>{{ step.label }}</b
-          ><small>{{ step.description }}</small></span
+    <div class="midou-analysis-flow-frame">
+      <strong class="midou-analysis-flow-heading" aria-hidden="true">分析流程说明</strong>
+      <ol class="midou-analysis-flow" aria-label="分析流程说明">
+        <li
+          v-for="step in [
+            { icon: 'target', label: '识别主品', description: '匹配商品关键信息' },
+            { icon: 'chart', label: '补齐评分', description: '汇总多维分析证据' },
+            { icon: 'users', label: '对比竞品', description: '识别差异与机会' },
+            { icon: 'box', label: '匹配货源', description: '对接供应渠道' },
+            { icon: 'database', label: '评估利润', description: '测算成本与利润空间' },
+          ]"
+          :key="step.label"
         >
-      </li>
-    </ol>
+          <AppIcon :name="step.icon" :size="24" /><span
+            ><b>{{ step.label }}</b
+            ><small>{{ step.description }}</small></span
+          >
+        </li>
+      </ol>
+    </div>
     <details v-if="requestId" class="midou-analysis-diagnostics">
       <summary>诊断信息</summary>
       <p>
@@ -383,7 +419,11 @@ watch(imageFailureResetSources, (items) => {
     "
     @secondary="state === 'empty' ? clearOrShowAll() : emit('reset')"
   />
-  <section v-else class="product-catalog">
+  <section
+    v-else
+    class="product-catalog"
+    :class="{ 'product-catalog--candidates': selectionView === 'rule_candidates' }"
+  >
     <header>
       <div>
         <h2>{{ viewCopy.title }}</h2>
@@ -394,12 +434,28 @@ watch(imageFailureResetSources, (items) => {
       <span class="catalogue-sort-note">最近更新优先 · 每页 20 个</span>
     </header>
     <p class="catalog-data-note">
-      购买提示为公开下限，不等于精确销量；进货价为已有采集记录，不含其他成本；候选数量不代表可用货源。
+      <AppIcon v-if="selectionView === 'rule_candidates'" name="info" :size="18" />
+      <span v-if="selectionView === 'rule_candidates'">
+        购买提示为公开下限，不等于精确销量；货源候选不代表可用货源。<span
+          class="catalogue-inline-cost-note"
+          >进货价为已有采集记录，不含其他成本。</span
+        >
+      </span>
+      <span v-else
+        >购买提示为公开下限，不等于精确销量；进货价为已有采集记录，不含其他成本；候选数量不代表可用货源。</span
+      >
     </p>
+    <div v-if="selectionView === 'rule_candidates'" class="catalogue-table-reading-band">
+      <div class="catalogue-table-context">
+        <span>当前页 {{ items.length }} 条</span>
+      </div>
+      <span class="catalogue-table-cost-note">进货价为已有采集记录，不含其他成本。</span>
+    </div>
     <OpportunityCatalogueList
       :items="items"
       :return-path="route.fullPath"
       :completed-view="selectionView === 'completed'"
+      :candidate-gate-count="selectionView === 'rule_candidates' ? passedGateCount : undefined"
       :product-facts="productFacts"
       :row-facts="rowFacts"
       :catalog-meta="catalogMeta"
@@ -410,16 +466,91 @@ watch(imageFailureResetSources, (items) => {
       @image-error="onImageError"
     />
     <footer class="opportunity-pagination" aria-label="选品分页">
-      <button type="button" :disabled="page <= 1" @click="emit('page', page - 1)">上一页</button>
-      <span>第 {{ page }} / {{ pageCount }} 页</span>
-      <button type="button" :disabled="page >= pageCount" @click="emit('page', page + 1)">
-        下一页
+      <span v-if="selectionView === 'rule_candidates'" class="catalogue-pager-total">
+        共 {{ total }} 条 · 每页 20 条
+      </span>
+      <button
+        type="button"
+        aria-label="上一页"
+        :disabled="page <= 1"
+        @click="emit('page', page - 1)"
+      >
+        <AppIcon
+          v-if="selectionView === 'rule_candidates'"
+          class="catalogue-pager-arrow is-previous"
+          name="chevron"
+        />
+        <span class="catalogue-pager-label">上一页</span>
+      </button>
+      <span v-if="selectionView === 'rule_candidates'" class="catalogue-pager-position"
+        ><span class="catalogue-pager-prefix">第 </span
+        ><span class="catalogue-pager-current" aria-current="page">{{ page }}</span
+        ><span> / {{ pageCount }} 页</span></span
+      >
+      <span v-else class="catalogue-pager-position">第 {{ page }} / {{ pageCount }} 页</span>
+      <button
+        type="button"
+        aria-label="下一页"
+        :disabled="page >= pageCount"
+        @click="emit('page', page + 1)"
+      >
+        <AppIcon
+          v-if="selectionView === 'rule_candidates'"
+          class="catalogue-pager-arrow"
+          name="chevron"
+        />
+        <span class="catalogue-pager-label">下一页</span>
       </button>
     </footer>
   </section>
 </template>
 
 <style scoped>
+.product-catalog--candidates .catalog-data-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 16px;
+  border: 1px solid color-mix(in srgb, var(--so-warning-border) 55%, var(--so-panel));
+  border-radius: 8px;
+  color: var(--so-warning);
+  background: color-mix(in srgb, var(--so-warning-soft) 70%, var(--so-panel));
+}
+
+.product-catalog--candidates .catalog-data-note > svg {
+  flex: 0 0 18px;
+  block-size: 1lh;
+}
+
+.product-catalog--candidates :deep(.selection-product-list) {
+  border-radius: 8px;
+}
+
+@media (min-width: 1100px) {
+  .product-catalog--candidates :deep(table) {
+    min-width: 960px;
+  }
+  .product-catalog--candidates :deep(.product-column) {
+    width: 24%;
+  }
+  .product-catalog--candidates :deep(th) {
+    height: 36px;
+    padding: 6px 8px;
+  }
+  .product-catalog--candidates :deep(td) {
+    padding: 10px 8px;
+  }
+  .product-catalog--candidates :deep(.selection-product-identity) {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 10px;
+  }
+  .product-catalog--candidates :deep(.selection-product-picture) {
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+  }
+}
+
 .filter-apply-action {
   border-color: var(--so-border);
   color: var(--so-text);

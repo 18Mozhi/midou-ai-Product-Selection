@@ -143,7 +143,7 @@
   margin-top: 5px;
   overflow-wrap: anywhere;
 }
-.notification-list > button {
+.notification-list .notification-record {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr) 180px minmax(120px, auto);
   align-items: center;
@@ -153,7 +153,7 @@
   text-align: left;
   color: var(--so-text);
 }
-.notification-list > button.unread {
+.notification-list .notification-record.unread {
   background: var(--so-panel-strong);
   border-color: var(--so-info-border);
 }
@@ -184,7 +184,7 @@
 .notification-list > b {
   color: var(--so-info);
 }
-.notification-list > button > b small {
+.notification-list .notification-record > b small {
   display: inline;
   color: var(--so-text-muted);
   font-weight: 500;
@@ -316,13 +316,13 @@
   .notification-center header button {
     flex: 1;
   }
-  .notification-list > button {
+  .notification-list .notification-record {
     grid-template-columns: 38px minmax(0, 1fr);
   }
   .notification-list em {
     display: none;
   }
-  .notification-list > button > b {
+  .notification-list .notification-record > b {
     grid-column: 2;
   }
   .notification-center nav {
@@ -454,7 +454,7 @@
   overflow: hidden;
 }
 
-.notification-center--review .notification-list > button {
+.notification-center--review .notification-list .notification-record {
   border: 0;
   border-bottom: 1px solid var(--review-line);
   border-radius: 0;
@@ -462,11 +462,11 @@
   color: var(--review-ink);
 }
 
-.notification-center--review .notification-list > button:last-child {
+.notification-center--review .notification-list .notification-record:last-child {
   border-bottom: 0;
 }
 
-.notification-center--review .notification-list > button.unread {
+.notification-center--review .notification-list .notification-record.unread {
   border-left: 4px solid var(--review-blue);
   background: var(--review-paper);
 }
@@ -486,7 +486,7 @@
   color: var(--review-muted);
 }
 
-.notification-center--review .notification-list > button > b {
+.notification-center--review .notification-list .notification-record > b {
   color: var(--review-blue);
 }
 

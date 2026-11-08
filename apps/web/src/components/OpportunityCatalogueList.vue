@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import AppIcon from "./AppIcon.vue";
 import type { OpportunitySummary } from "./opportunity-workspace-types";
 import { opportunityProfitStatusLabel } from "./opportunity-workspace-presentation";
 
@@ -8,6 +9,7 @@ const props = defineProps<{
   items: OpportunitySummary[];
   returnPath: string;
   completedView?: boolean;
+  candidateGateCount?: (item: OpportunitySummary) => number;
   productFacts: (item: OpportunitySummary) => Fact[];
   rowFacts: (item: OpportunitySummary) => Fact[];
   catalogMeta: (item: OpportunitySummary) => string;
@@ -28,7 +30,11 @@ const rows = computed(() =>
 </script>
 
 <template>
-  <div class="selection-product-list" tabindex="0" aria-label="商品数据表，可横向滚动">
+  <div
+    class="selection-product-list"
+    tabindex="0"
+    :aria-label="candidateGateCount ? '商品数据表，可滚动' : '商品数据表，可横向滚动'"
+  >
     <table aria-label="选品商品列表">
       <colgroup>
         <col class="product-column" />
@@ -48,7 +54,7 @@ const rows = computed(() =>
           <th scope="col">星级 / 评价</th>
           <th scope="col">1688 进货价</th>
           <th scope="col">竞品 / 货源</th>
-          <th scope="col">选品结论</th>
+          <th scope="col">{{ candidateGateCount ? "分析进度" : "选品结论" }}</th>
           <th scope="col">操作</th>
         </tr>
       </thead>
@@ -71,7 +77,20 @@ const rows = computed(() =>
                   loading="lazy"
                   referrerpolicy="no-referrer"
                   @error="emit('imageError', item)"
-                /><span v-else aria-hidden="true">{{ imageFallbackLabel(item) }}</span></span
+                /><span
+                  v-else
+                  aria-hidden="true"
+                  :class="{ 'catalogue-candidate-placeholder': candidateGateCount }"
+                >
+                  <AppIcon v-if="candidateGateCount" name="box" :size="20" />
+                  {{
+                    candidateGateCount
+                      ? item.image_url
+                        ? "加载失败"
+                        : "待采集"
+                      : imageFallbackLabel(item)
+                  }}
+                </span></span
               >
               <div class="selection-product-name">
                 <strong
@@ -130,16 +149,25 @@ const rows = computed(() =>
               </div>
             </dl>
           </td>
-          <td data-label="选品结论">
-            <span class="catalogue-verdict" :data-stage="item.selection_stage">{{
-              completedView
-                ? "分析完成"
-                : item.selection_stage === "recommended"
-                  ? "建议采纳"
-                  : item.selection_stage === "rule_candidate"
-                    ? "选品候选"
-                    : "待补证据"
-            }}</span>
+          <td :data-label="candidateGateCount ? '分析进度' : '选品结论'">
+            <div class="catalogue-progress-heading">
+              <span v-if="candidateGateCount" class="catalogue-gate-track" aria-hidden="true">
+                <i
+                  v-for="gate in 5"
+                  :key="gate"
+                  :data-passed="gate <= candidateGateCount(item)"
+                ></i>
+              </span>
+              <span class="catalogue-verdict" :data-stage="item.selection_stage">{{
+                completedView
+                  ? "分析完成"
+                  : item.selection_stage === "recommended"
+                    ? "建议采纳"
+                    : item.selection_stage === "rule_candidate"
+                      ? "选品候选"
+                      : "待补证据"
+              }}</span>
+            </div>
             <dl class="selection-product-results" :aria-label="`${item.name} 决策摘要`">
               <div v-for="fact in result" :key="fact.label">
                 <dt>{{ fact.label }}</dt>
@@ -233,6 +261,13 @@ tbody tr:hover {
   object-fit: contain;
   padding: 4px;
 }
+.catalogue-candidate-placeholder {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  font-size: 11px;
+  line-height: 1.3;
+}
 .selection-product-name {
   display: grid;
   align-content: start;
@@ -317,6 +352,9 @@ tbody tr:hover {
 .catalogue-counts dd {
   margin: 0;
   font-weight: 600;
+}
+.catalogue-progress-heading {
+  display: contents;
 }
 .catalogue-verdict {
   display: inline-block;

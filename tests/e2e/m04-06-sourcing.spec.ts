@@ -1,4 +1,4 @@
-import { test, expect, type Locator, type Page } from "@playwright/test";
+import { test, expect, chromium, type Locator, type Page } from "@playwright/test";
 
 // SKU fixture values come from the user-provided item-detail sample; this tests rendering, not live procurement.
 
@@ -172,6 +172,30 @@ for (const scenario of [
     text: "采集任务仍在等待处理",
   },
   {
+    name: "retry waiting after a failed source",
+    status: "retry_scheduled",
+    active: 1,
+    blocked: 0,
+    failed: 1,
+    text: "采集任务正在等待重试",
+  },
+  {
+    name: "retry waiting with all previous attempts counted",
+    status: "retry_scheduled",
+    active: 0,
+    blocked: 0,
+    failed: 1,
+    text: "采集任务正在等待重试",
+  },
+  {
+    name: "queued with a previously failed source",
+    status: "queued",
+    active: 1,
+    blocked: 0,
+    failed: 1,
+    text: "采集任务仍在等待处理",
+  },
+  {
     name: "blocked",
     status: "completed_with_warnings",
     active: 0,
@@ -181,6 +205,14 @@ for (const scenario of [
   },
   {
     name: "failed",
+    status: "failed",
+    active: 0,
+    blocked: 0,
+    failed: 1,
+    text: "本次采集已结束且未取得供应商报价",
+  },
+  {
+    name: "failed without collection permission",
     status: "failed",
     active: 0,
     blocked: 0,
@@ -204,8 +236,16 @@ for (const scenario of [
     text: "当前记录尚无供应商候选",
   },
 ]) {
-  test(`empty sourcing status remains factual for ${scenario.name}`, async ({ page }) => {
-    await setup(page);
+  test(`empty sourcing status remains factual for ${scenario.name}`, async ({ page }, testInfo) => {
+    const taskId = "00000000-0000-4000-8000-000000000612";
+    if (scenario.name === "failed" && testInfo.project.name === "desktop-chromium")
+      await page.setViewportSize({ width: 1672, height: 941 });
+    await setup(
+      page,
+      ["failed", "blocked"].includes(scenario.name)
+        ? ["sourcing:read", "platform:operate"]
+        : undefined,
+    );
     const search = {
       id: searchId,
       input_type: "keyword",
@@ -221,12 +261,16 @@ for (const scenario of [
         json: envelope({
           ...search,
           candidates: [],
+          collection_task_id: taskId,
           collection_progress:
             scenario.name === "unknown"
               ? null
               : {
                   status: scenario.status,
-                  total_subqueries: 1,
+                  total_subqueries: Math.max(
+                    1,
+                    scenario.active + scenario.failed + scenario.blocked,
+                  ),
                   successful_subqueries: scenario.name === "empty" ? 1 : 0,
                   failed_subqueries: scenario.failed,
                   blocked_subqueries: scenario.blocked,
@@ -243,6 +287,109 @@ for (const scenario of [
     });
     await page.goto("/sourcing");
     await expect(page.locator(".sourcing-pending")).toContainText(scenario.text);
+    const notice = page.locator(".sourcing-pending");
+    if (scenario.active) await expect(notice).not.toContainText("本次采集已结束");
+    const progress = page.getByRole("region", { name: "来源采集进度" });
+    const allSourcesEnded = ["failed", "failed without collection permission", "empty"].includes(
+      scenario.name,
+    );
+    const badge = progress.locator("h4");
+    if (allSourcesEnded) {
+      await expect(badge.getByText("来源已结束", { exact: true })).toBeVisible();
+      await expect(badge).toHaveAttribute("title", scenario.failed ? "采集失败" : "已完成");
+      const failure = progress.locator("dl > div").nth(2);
+      await expect(failure.locator("dt")).toHaveText("失败");
+      await expect(failure.locator("dd")).toHaveText(String(scenario.failed));
+    } else {
+      await expect(badge.getByText("来源已结束", { exact: true })).toHaveCount(0);
+    }
+    if (scenario.name === "empty") {
+      await expect(badge).toHaveAttribute("data-status", "completed");
+      const successTone = await badge.evaluate((element) => {
+        const probe = document.createElement("span");
+        probe.style.backgroundColor =
+          "var(--midou-status-positive-surface, var(--so-success-soft))";
+        element.append(probe);
+        const color = getComputedStyle(probe).backgroundColor;
+        probe.remove();
+        return color;
+      });
+      expect(successTone).not.toBe("rgba(0, 0, 0, 0)");
+      await expect(badge).toHaveCSS("background-color", successTone);
+    }
+    await expect(notice.getByRole("heading")).toHaveText(
+      scenario.failed || scenario.blocked ? "未获得供应商报价" : "供应商报价",
+    );
+    await expect(page.locator(".sourcing-empty-offers .sourcing-quote-empty")).toContainText(
+      scenario.failed || scenario.blocked
+        ? "本次采集未获得供应商报价，请核对来源采集状态。"
+        : "报价返回后将在这里展示。",
+    );
+    if (scenario.name === "failed") {
+      const action = notice.getByRole("link", { name: "查看失败原因", exact: true });
+      await expect(action).toHaveAttribute("href", `/platform-admin/collection?task=${taskId}`);
+      await expect(action).toHaveCSS("min-height", "42px");
+      await expect(action).toHaveCSS("border-top-style", "solid");
+      await expect(action).toHaveCSS("text-decoration-line", "none");
+      await expect(notice.locator(".sourcing-notice-icon-surface")).not.toHaveCSS("fill", "none");
+      const originalViewport = page.viewportSize()!;
+      if (originalViewport.width >= 1440)
+        await page.setViewportSize({ ...originalViewport, width: 1280 });
+      const rail = await notice.evaluate((node) => {
+        const lead = (el: Element) => {
+          const text = [...el.childNodes].find(
+            (child) => child.nodeType === 3 && child.textContent?.trim(),
+          )!;
+          const index = text.textContent!.search(/\S/);
+          const range = document.createRange();
+          range.setStart(text, index);
+          range.setEnd(text, index + 1);
+          return range.getBoundingClientRect().left;
+        };
+        return {
+          headline: lead(node.querySelector("h4")!),
+          explanation: lead(node.querySelector("p")!),
+          missing: lead(node.querySelector(".sourcing-missing")!),
+          icon: node.querySelector("h4 svg")!.getBoundingClientRect().width,
+        };
+      });
+      console.log("SOURCING_WARNING_RAIL", page.viewportSize()!.width, JSON.stringify(rail));
+      expect(Math.abs(rail.headline - rail.explanation)).toBeLessThanOrEqual(2);
+      expect(Math.abs(rail.headline - rail.missing)).toBeLessThanOrEqual(2);
+      if (originalViewport.width >= 1440) await page.setViewportSize(originalViewport);
+      const [messageBox, actionBox] = await Promise.all([
+        notice.locator(":scope > div").boundingBox(),
+        action.boundingBox(),
+      ]);
+      if (testInfo.project.name === "desktop-chromium") {
+        expect(actionBox!.x).toBeGreaterThan(messageBox!.x + messageBox!.width);
+        expect(
+          Math.abs(actionBox!.y + actionBox!.height / 2 - messageBox!.y - messageBox!.height / 2),
+        ).toBeLessThan(2);
+      } else {
+        expect(actionBox!.y).toBeGreaterThan(messageBox!.y + messageBox!.height);
+        const noticeBox = (await notice.boundingBox())!;
+        const endInset = await notice.evaluate((node) => {
+          const style = getComputedStyle(node);
+          return parseFloat(style.paddingInlineEnd) + parseFloat(style.borderInlineEndWidth);
+        });
+        expect(actionBox!.x + actionBox!.width).toBeCloseTo(
+          noticeBox.x + noticeBox.width - endInset,
+          0,
+        );
+      }
+      if (testInfo.project.name === "desktop-chromium")
+        await notice.screenshot({ path: testInfo.outputPath("sourcing-authorized-failure.png") });
+    } else if (scenario.name === "blocked") {
+      await expect(
+        notice.getByRole("link", { name: "查看采集任务明细", exact: true }),
+      ).toHaveAttribute("href", `/platform-admin/collection?task=${taskId}`);
+      await expect(notice.getByRole("link", { name: "查看失败原因", exact: true })).toHaveCount(0);
+    } else {
+      await expect(notice.getByRole("link", { name: /查看失败原因|查看采集任务明细/ })).toHaveCount(
+        0,
+      );
+    }
     await expect(page.locator(".sourcing-pending")).not.toContainText(
       "正在采集供应商信息，完成后将显示候选",
     );
@@ -256,7 +403,7 @@ for (const scenario of [
         ["成功", scenario.name === "empty" ? 1 : 0],
         ["受阻", scenario.blocked],
         ["失败", scenario.failed],
-        ["执行中 / 等待", scenario.active],
+        ["执行 / 等待", scenario.active],
       ] as const)
         await expect(
           progress.locator("dl div").filter({ hasText: label }).locator("dd"),
@@ -407,6 +554,7 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
     "href",
     new RegExp(`from=/sourcing\\?record=${searchId}`),
   );
+  await page.getByRole("tab", { name: "报价历史" }).click();
   const comparison = page.getByLabel("规格、最小起订量与交期对比");
   const specificationHint = page.getByLabel("规格归一化提示");
   await expect(specificationHint).toContainText("存在 2 种规格文本，尚未归一");
@@ -415,6 +563,7 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await expect(comparison.getByText("600ml / 绿色 / 双滤芯")).toBeVisible();
   await expect(comparison.getByText("300", { exact: true })).toBeVisible();
   await expect(comparison.getByText("12 天", { exact: true })).toBeVisible();
+  await page.getByRole("tab", { name: "供应商报价" }).click();
   await page.getByRole("button", { name: "确认报价" }).click();
   await expect(page.getByRole("heading", { name: "确认完整供应商报价" })).toBeVisible();
   await page.getByRole("button", { name: "关闭报价编辑" }).click();
@@ -503,6 +652,144 @@ const calculatedProfit = (amount: number, rule = "current-rule") => ({
   cost_input_reviews: [],
 });
 
+test("empty opportunity offers show the same profit summary without refetching on tab changes", async ({
+  page,
+}) => {
+  const { search } = await opportunitySetup(page, calculatedProfit(80), "calculated");
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({ json: envelope({ ...search, candidate_count: 0, candidates: [] }) }),
+  );
+  let profitReads = 0;
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.endsWith("/profit-analysis")) profitReads++;
+  });
+  await page.goto("/sourcing");
+  const offers = page.getByRole("tabpanel", { name: "供应商报价" });
+  const summary = offers.getByRole("region", { name: "成本与利润摘要" });
+  await expect(offers.getByText("暂无供应商报价")).toBeVisible();
+  const emptyIllustration = offers.locator(".sourcing-quote-empty > svg");
+  await expect(emptyIllustration).toHaveAttribute("width", "72");
+  await expect(emptyIllustration).toHaveAttribute("height", "44");
+  await expect(summary).toContainText("80 USD");
+  const basis = page.locator(".sourcing-profit-basis");
+  const fullRow = offers.locator(".sourcing-empty-offers-basis");
+  await expect(fullRow.locator("details")).toHaveCount(1);
+  await expect(fullRow.locator("summary svg")).toHaveAttribute("aria-hidden", "true");
+  await expect(basis).toHaveCount(1);
+  if (page.viewportSize()!.width >= 1101) {
+    const [row, panel, profitBox] = await Promise.all(
+      [fullRow, offers.locator(".sourcing-empty-offers"), summary].map((node) =>
+        node.boundingBox(),
+      ),
+    );
+    expect(row!.width).toBeCloseTo(panel!.width, 0);
+    expect(row!.y).toBeGreaterThanOrEqual(profitBox!.y + profitBox!.height);
+  }
+  await basis.getByText("计算依据", { exact: true }).click();
+  await expect(basis).toHaveAttribute("open", "");
+  await expect(fullRow.locator("summary svg")).toHaveCSS("transform", "matrix(0, 1, -1, 0, 0, 0)");
+  await page.getByRole("tab", { name: "成本与利润" }).click();
+  await expect(page.getByRole("tabpanel", { name: "成本与利润" })).toContainText("80 USD");
+  await expect(
+    page.getByRole("tabpanel", { name: "成本与利润" }).locator("details"),
+  ).toHaveAttribute("open", "");
+  await page.getByRole("tab", { name: "供应商报价" }).click();
+  await expect(summary).toContainText("80 USD");
+  expect(profitReads).toBe(1);
+});
+
+test("empty sourcing panels follow the usable detail width without squeezing the profit summary", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "verifies the desktop detail container");
+  const { search } = await opportunitySetup(
+    page,
+    { latest_run: null, current_inputs: [], cost_input_reviews: [] },
+    "insufficient_data",
+  );
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({ json: envelope({ ...search, candidate_count: 0, candidates: [] }) }),
+  );
+  await page.setViewportSize({ width: 1101, height: 900 });
+  await page.goto("/sourcing");
+  const offers = page.getByRole("tabpanel", { name: "供应商报价" });
+  const empty = offers.locator(".sourcing-quote-empty");
+  const profit = offers.getByRole("region", { name: "成本与利润摘要" });
+  const basis = offers.locator(".sourcing-empty-offers-basis");
+  await expect(empty).toBeVisible();
+  await expect(profit.locator(".sourcing-profit-unconfirmed-breakdown dd")).toHaveText([
+    "—",
+    "—",
+    "—",
+    "—",
+  ]);
+  const measure = async () => {
+    const [message, cost, disclosure] = await Promise.all(
+      [empty, profit, basis].map((locator) => locator.boundingBox()),
+    );
+    return { message: message!, cost: cost!, disclosure: disclosure! };
+  };
+  const narrow = await measure();
+  console.log(
+    "sourcing panel widths at 1101px",
+    narrow.message.width,
+    narrow.cost.width,
+    narrow.disclosure.width,
+  );
+  expect(narrow.cost.y).toBeGreaterThanOrEqual(narrow.message.y + narrow.message.height + 10);
+  expect(narrow.cost.x).toBeCloseTo(narrow.message.x, 0);
+  expect(narrow.cost.width).toBeCloseTo(narrow.disclosure.width, 0);
+  expect(narrow.message.width).toBeCloseTo(narrow.disclosure.width, 0);
+  expect(narrow.disclosure.y).toBeGreaterThanOrEqual(narrow.cost.y + narrow.cost.height + 10);
+  await basis.locator("summary").click();
+  await expect(basis.locator("details")).toHaveAttribute("open", "");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  const wide = await measure();
+  expect(wide.cost.y).toBeCloseTo(wide.message.y, 0);
+  expect(wide.cost.x - (wide.message.x + wide.message.width)).toBeCloseTo(12, 0);
+  expect(wide.cost.x + wide.cost.width).toBeCloseTo(wide.disclosure.x + wide.disclosure.width, 0);
+  await expect(basis.locator("details")).toHaveAttribute("open", "");
+});
+
+test("empty sourcing offers keep unconfirmed cost rows distinct from real profit", async ({
+  page,
+}) => {
+  if (page.viewportSize()!.width >= 1101) await page.setViewportSize({ width: 1672, height: 941 });
+  const { search } = await opportunitySetup(
+    page,
+    { latest_run: null, current_inputs: [], cost_input_reviews: [] },
+    "insufficient_data",
+  );
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({ json: envelope({ ...search, candidate_count: 0, candidates: [] }) }),
+  );
+  await page.goto("/sourcing");
+  const offers = page.getByRole("tabpanel", { name: "供应商报价" });
+  const breakdown = offers.locator(".sourcing-profit-unconfirmed-breakdown");
+  await expect(breakdown.locator("dt")).toHaveText([
+    "采购成本",
+    "头程费用",
+    "平台费用",
+    "预计利润",
+  ]);
+  await expect(breakdown.locator("dd")).toHaveText(["—", "—", "—", "—"]);
+  if (page.viewportSize()!.width >= 1440) {
+    const heading = offers.locator(".sourcing-profit-summary > header > div");
+    await expect(heading).toHaveCSS("display", "flex");
+    await expect(heading).toHaveCSS("align-items", "baseline");
+    await expect(offers.locator(".sourcing-quote-empty")).toHaveCSS("min-height", "169px");
+  }
+  const basis = offers.locator(".sourcing-profit-basis");
+  await expect(basis).not.toHaveAttribute("open", "");
+  await basis.locator("summary").click();
+  await expect(basis).toContainText("暂无已保存的成本输入或利润计算记录。");
+  await expect(basis.locator("p")).toBeVisible();
+  await page.getByRole("tab", { name: "成本与利润" }).click();
+  const profit = page.getByRole("tabpanel", { name: "成本与利润" });
+  await expect(profit).toContainText("利润未知");
+  await expect(profit.locator(".sourcing-profit-unconfirmed-breakdown")).toHaveCount(0);
+});
+
 test("opportunity sourcing shows read-only current profit without old cost forms or reviewer calls", async ({
   page,
 }) => {
@@ -516,6 +803,7 @@ test("opportunity sourcing shows read-only current profit without old cost forms
       forbiddenRequests.push(r.url());
   });
   await page.goto("/sourcing");
+  await page.getByRole("tab", { name: "成本与利润" }).click();
   const summary = page.getByRole("region", { name: "成本与利润摘要" });
   await expect(summary).toContainText("80 USD");
   await expect(summary).toContainText("80%");
@@ -563,6 +851,7 @@ test("late profit reads cannot replace the selected supplier record", async ({ p
     .getByRole("complementary", { name: "找货记录" })
     .getByRole("button", { name: /另一个商品/ })
     .click();
+  await page.getByRole("tab", { name: "成本与利润" }).click();
   const summary = page.getByRole("region", { name: "成本与利润摘要" });
   await expect(summary).toContainText("80 USD");
   release();
@@ -592,6 +881,7 @@ test("profit read errors retry without writes and historical calculations stay e
     if (r.url().includes("/api/v1/") && r.method() !== "GET") writes.push(r.url());
   });
   await page.goto("/sourcing");
+  await page.getByRole("tab", { name: "成本与利润" }).click();
   const summary = page.getByRole("region", { name: "成本与利润摘要" });
   await expect(summary.getByRole("alert")).toContainText("profit-read-failed");
   await summary.getByRole("button", { name: "重新读取利润资料" }).click();
@@ -640,6 +930,16 @@ test("hundreds of sourcing records and supplier offers stay bounded and selectab
     );
   expect(rowsContainContent).toBe(true);
   await expect(page.locator(".supplier-offer-table tbody > tr")).toHaveCount(10);
+  const panels = await page.locator(".sourcing-layout").evaluate((layout) => {
+    const list = layout.querySelector("aside")!;
+    const detail = layout.querySelector<HTMLElement>(".sourcing-detail")!;
+    return {
+      wide: matchMedia("(min-width: 1101px)").matches,
+      listHeight: list.getBoundingClientRect().height,
+      detailMinHeight: Number.parseFloat(getComputedStyle(detail).minHeight),
+    };
+  });
+  if (panels.wide) expect(panels.detailMinHeight).toBeCloseTo(panels.listHeight, 0);
   expect(
     await page
       .getByRole("complementary", { name: "找货记录" })
@@ -661,6 +961,12 @@ test("hundreds of sourcing records and supplier offers stay bounded and selectab
   await expect(page.locator(".supplier-offer-list")).toContainText("供应商21");
   await page.getByRole("searchbox", { name: "搜索找货记录" }).fill("长标题商品记录628用于");
   await expect(page.locator(".sourcing-record-items > button")).toHaveCount(1);
+  if (panels.wide) {
+    await expect(page.locator(".sourcing-detail")).not.toHaveCSS(
+      "min-height",
+      `${panels.listHeight}px`,
+    );
+  }
   await expect(
     page
       .getByRole("region", { name: "找货记录详情" })
@@ -698,6 +1004,7 @@ test("returning to sourcing reads profit again and ignores the pre-deactivation 
   await expect(page).toHaveURL(/\/home/);
   release();
   await navigateMemberMenu(page, "1688 找货");
+  await page.getByRole("tab", { name: "成本与利润" }).click();
   const summary = page.getByRole("region", { name: "成本与利润摘要" });
   await expect(summary).toContainText("90 USD");
   await expect(summary).not.toContainText("999");
@@ -951,6 +1258,7 @@ test("read-only sourcing role sees facts without write controls", async ({ page 
   await setup(page, ["task:read", "sourcing:read"]);
   // Let the lazy page module finish loading before starting business assertions.
   await page.goto("/sourcing", { waitUntil: "networkidle" });
+  await page.getByRole("tab", { name: "报价历史" }).click();
   await expect(page.getByText("供应商报价对比历史")).toBeVisible();
   await expect(page.getByRole("button", { name: "发起供应商找货" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "重新采集" })).toHaveCount(0);
@@ -958,7 +1266,7 @@ test("read-only sourcing role sees facts without write controls", async ({ page 
   await expect(page.getByRole("button", { name: "确认报价" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "创建采购任务" })).toHaveCount(0);
   await expect(page.getByLabel("加入对比")).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "查看采集任务明细" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /查看失败原因|查看采集任务明细/ })).toHaveCount(0);
 });
 
 test("opening another incomplete quote resets carried risk choices", async ({ page }) => {
@@ -1119,8 +1427,9 @@ test("SC-G02 comparison history failure preserves the sourcing list and retries 
   });
 
   await page.goto("/sourcing");
-  await expect(page.locator(".sourcing-comparison-error")).toContainText("对比历史暂未读取");
   await expect(page.getByText("宁波澄净户外用品厂")).toBeVisible();
+  await page.getByRole("tab", { name: "报价历史" }).click();
+  await expect(page.locator(".sourcing-comparison-error")).toContainText("对比历史暂未读取");
   await expect(page.locator(".sourcing-layout")).toBeVisible();
   await expect(page.getByText("选择两家以上已确认报价后，可保存对比记录。")).toHaveCount(0);
   await expect(page.locator(".sourcing-comparison-error")).toContainText(
@@ -1129,6 +1438,7 @@ test("SC-G02 comparison history failure preserves the sourcing list and retries 
 
   await page.getByRole("button", { name: "重新读取对比历史" }).click();
   await expect(page.getByText("恢复后的报价对比", { exact: true })).toBeVisible();
+  await page.getByRole("tab", { name: "供应商报价" }).click();
   await expect(page.getByText("宁波澄净户外用品厂")).toBeVisible();
   expect(attempts).toBe(2);
   expect(writes).toEqual([]);
@@ -1244,6 +1554,7 @@ test("P21 KeepAlive return reloads list, detail and comparisons and ignores pre-
 
   await navigateMemberMenu(page, "1688 找货");
   await expect(page.locator(".sourcing-detail h3")).toHaveText("返回后的找货快照");
+  await page.getByRole("tab", { name: "报价历史" }).click();
   await expect(page.getByText("返回后重新读取的对比", { exact: true })).toBeVisible();
   expect(listReads).toBe(2);
   expect(comparisonReads).toBe(2);
@@ -1458,6 +1769,7 @@ test("saved sourcing comparison identifies historical quote references without a
       writes.push(request.url());
   });
   await page.goto("/sourcing");
+  await page.getByRole("tab", { name: "报价历史" }).click();
   const history = page.locator(".sourcing-comparisons");
   await expect(history.getByRole("heading", { name: "供应商报价对比历史" })).toBeVisible();
   await expect(history.getByText("2 条报价记录", { exact: true })).toBeVisible();
@@ -1486,6 +1798,15 @@ test("saved sourcing comparison identifies historical quote references without a
     const rowBox = (await row.boundingBox())!;
     const specBox = (await row.locator('td[data-label="规格"]').boundingBox())!;
     expect(specBox.width).toBeGreaterThan(rowBox.width * 0.9);
+    await table.evaluate((element) => element.scrollIntoView({ block: "center" }));
+    const mobileNav = page.getByRole("navigation", { name: "移动快捷导航" });
+    const lastRow = table.locator("tbody tr").last();
+    await expect(lastRow).toBeInViewport({ ratio: 1 });
+    const [rowBounds, navBounds] = await Promise.all([
+      lastRow.boundingBox(),
+      mobileNav.boundingBox(),
+    ]);
+    expect(rowBounds!.y + rowBounds!.height).toBeLessThanOrEqual(navBounds!.y);
   }
   await expect(table).toHaveScreenshot("saved-quote-matrix-20261104.png");
   expect(writes).toEqual([]);
@@ -1505,6 +1826,7 @@ test("sourcing product analysis roundtrip preserves record and search after a de
       writes.push(request.url());
   });
   await page.goto(`/sourcing?record=${searchId}&q=${encodeURIComponent("当前商品")}`);
+  await page.getByRole("tab", { name: "成本与利润" }).click();
   const link = page
     .getByRole("region", { name: "成本与利润摘要" })
     .getByRole("link", { name: "查看商品分析" });
@@ -1565,33 +1887,1362 @@ test("sourcing queued and running record total does not claim all records are ac
   expect(writes).toEqual([]);
 });
 
-test("midou reference sourcing displays the task Amazon reference image in list and detail", async ({
-  page,
-}) => {
+test("sourcing keeps the list image when the same record detail omits it", async ({ page }) => {
   await setup(page);
-  const image = "/midou-logo.jpg"; // deterministic local asset, not evidence of a real Amazon request.
-  const record = {
+  const image = "https://m.media-amazon.com/images/sourcing-list-only.svg";
+  const item = {
     id: searchId,
     input_type: "opportunity",
     input_ref: "00000000-0000-4000-8000-000000000001",
-    display_name: "Amazon 参考商品",
-    image_url: "https://m.media-amazon.com/images/fixture.jpg",
+    display_name: "列表已带商品图",
     status: "succeeded_empty",
     candidate_count: 0,
     missing_fields: [],
     created_at: "2026-11-03T00:00:00Z",
   };
-  await page.route("https://m.media-amazon.com/images/fixture.jpg", async (r) => {
-    const bytes = await page.request.get(image);
-    await r.fulfill({ body: await bytes.body(), contentType: "image/jpeg" });
-  });
-  await page.route(searchesRoute, (r) => r.fulfill({ json: envelope([record]) }));
+  await page.route(image, (r) =>
+    r.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="12" fill="blue"/></svg>',
+    }),
+  );
+  await page.route(searchesRoute, (r) =>
+    r.fulfill({ json: envelope([{ ...item, image_url: image }]) }),
+  );
   await page.route("**/api/v1/sourcing/searches/" + searchId, (r) =>
-    r.fulfill({ json: envelope({ ...record, candidates: [] }) }),
+    r.fulfill({ json: envelope({ ...item, candidates: [] }) }),
   );
   await page.goto("/sourcing");
-  await expect(page.locator(".sourcing-record-items .research-thumbnail img")).toBeVisible();
-  await expect(page.locator(".sourcing-detail > header .research-thumbnail img")).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  const detail = page.getByRole("region", { name: "找货记录详情" });
+  await expect(detail).toHaveAttribute("aria-busy", "false");
+  await expect(detail.getByRole("img", { name: item.display_name, exact: true })).toHaveAttribute(
+    "src",
+    image,
+  );
+});
+
+test("sourcing list and detail show the same authorized image snapshot", async ({ page }) => {
+  await setup(page);
+  await page.setViewportSize({ width: 1672, height: 941 });
+  const firstImage = "https://m.media-amazon.com/images/sourcing-sync-initial.svg";
+  const detailImage = "https://m.media-amazon.com/images/sourcing-sync-detail.svg";
+  const record = {
+    id: searchId,
+    input_type: "opportunity",
+    input_ref: "00000000-0000-4000-8000-000000000001",
+    display_name: "Compact display with wide base",
+    image_url: null as string | null,
+    status: "succeeded_empty",
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: "2026-11-03T00:00:00Z",
+  };
+  let listReads = 0;
+  let detailReads = 0;
+  let returnedImage: string | null = detailImage;
+  await page.route("https://m.media-amazon.com/images/sourcing-sync-*.svg", (r) =>
+    r.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="80"><rect x="4" y="4" width="112" height="66" rx="6" fill="#426082"/><rect x="11" y="11" width="98" height="52" fill="#91acc3"/></svg>',
+    }),
+  );
+  await page.route(searchesRoute, (r) => {
+    listReads++;
+    return r.fulfill({ json: envelope([record]) });
+  });
+  await page.route("**/api/v1/sourcing/searches/" + searchId, (r) => {
+    detailReads++;
+    return r.fulfill({ json: envelope({ ...record, image_url: returnedImage, candidates: [] }) });
+  });
+  await page.goto("/sourcing");
+  const detail = page.getByRole("region", { name: "找货记录详情" });
+  const thumbnail = page.locator(".sourcing-record-items .research-thumbnail");
+  await expect(detail).toHaveAttribute("aria-busy", "false");
+  await expect(detail.locator(".research-thumbnail img")).toHaveAttribute("src", detailImage);
+  await expect(thumbnail.locator("img")).toHaveAttribute("src", detailImage, { timeout: 1500 });
+  expect([listReads, detailReads]).toEqual([1, 1]);
+
+  record.image_url = firstImage;
+  returnedImage = null;
+  await page.reload();
+  await expect(detail).toHaveAttribute("aria-busy", "false");
+  await expect(detail.locator(".research-thumbnail img")).toHaveCount(0);
+  await expect(thumbnail.locator("img")).toHaveCount(0);
+  expect([listReads, detailReads]).toEqual([2, 2]);
+});
+
+// The extra English-title case measures title wrapping with the same local image fixtures.
+for (const scenario of ["simple", "rich", "reference-titles"]) {
+  const withRichRecords = scenario !== "simple";
+  const withReferenceTitles = scenario === "reference-titles";
+  test(
+    withReferenceTitles
+      ? "wide sourcing reference title composition"
+      : withRichRecords
+        ? "midou reference sourcing compares multiple images and authorized task detail"
+        : "midou reference sourcing displays the task Amazon reference image in list and detail",
+    async ({ page }, testInfo) => {
+      const wide = page.viewportSize()!.width >= 1101;
+      if (wide) await page.setViewportSize({ width: 1672, height: 941 });
+      const taskId = "00000000-0000-4000-8000-000000009008";
+      await setup(
+        page,
+        withRichRecords
+          ? ["task:read", "trend:read", "opportunity:read", "sourcing:read", "platform:operate"]
+          : undefined,
+      );
+      const record = {
+        id: searchId,
+        input_type: "opportunity",
+        input_ref: "00000000-0000-4000-8000-000000000001",
+        display_name: withReferenceTitles
+          ? 'Amazon Echo Show 15 (newest model), Full HD 15.6" kitchen hub for home organization, with built-in Fire TV, Designed for Alexa+'
+          : "Amazon 参考商品：用于验证宽屏长标题折行、图片尺寸和采集进度对齐的供应链找货测试样品",
+        image_url: "https://m.media-amazon.com/images/fixture.jpg",
+        status: "succeeded_empty",
+        candidate_count: 0,
+        missing_fields: [],
+        created_at: "2026-11-03T00:00:00Z",
+      };
+      // Product-shaped fixture only; no real Amazon network request is made.
+      await page.route("https://m.media-amazon.com/images/fixture.jpg", (r) =>
+        r.fulfill({
+          contentType: "image/svg+xml",
+          body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120"><rect x="4" y="16" width="152" height="88" rx="7" fill="#162233"/><rect x="10" y="22" width="140" height="76" rx="3" fill="#244b76"/><rect x="20" y="34" width="68" height="50" rx="4" fill="#528ac3"/><rect x="96" y="34" width="43" height="22" rx="4" fill="#83a9c4"/><rect x="96" y="62" width="43" height="22" rx="4" fill="#316a88"/></svg>',
+        }),
+      );
+      const recordsFixture = [
+        record,
+        ...[2, 3, 4, 5].map((index) => ({
+          ...record,
+          id: `00000000-0000-4000-8000-00000000900${index}`,
+          display_name: withReferenceTitles
+            ? [
+                "HomeView - Space Gray",
+                "New Super Mario Bros. U Deluxe (Nintendo Switch)",
+                "Pikmin 4 - Nintendo Switch",
+                "Tesla Roadster",
+              ][index - 2]
+            : withRichRecords
+              ? [
+                  "Home camera · graphite",
+                  "Adventure game for handheld consoles",
+                  "Colorful puzzle adventure",
+                  "Die-cast roadster",
+                ][index - 2]
+              : `Amazon 参考商品 ${index}`,
+          image_url: withRichRecords
+            ? `https://m.media-amazon.com/images/sourcing-fixture-${index}.svg`
+            : undefined,
+        })),
+      ];
+      if (withRichRecords) {
+        const silhouettes = [
+          '<circle cx="32" cy="29" r="17" fill="#98a1a8"/><circle cx="32" cy="29" r="11" fill="#28343f"/><path d="M19 51h26" stroke="#7e868c" stroke-width="8"/>',
+          '<rect x="12" y="6" width="40" height="52" rx="3" fill="#efbd4c"/><path d="m16 44 13-23 15 19 5 8" fill="#ce653c"/>',
+          '<rect x="13" y="6" width="38" height="52" rx="3" fill="#80b97a"/><circle cx="32" cy="32" r="13" fill="#f3d66c"/>',
+          '<path d="M6 39v-8l11-3 9-10h20l11 11 3 3v7Z" fill="#b92d31"/><circle cx="18" cy="39" r="6" fill="#28343f"/><circle cx="49" cy="39" r="6" fill="#28343f"/>',
+        ];
+        await page.route("https://m.media-amazon.com/images/sourcing-fixture-*.svg", (r) => {
+          const match = /sourcing-fixture-([2-5])\.svg$/.exec(r.request().url());
+          expect(match).not.toBeNull();
+          return r.fulfill({
+            contentType: "image/svg+xml",
+            body: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">${silhouettes[Number(match![1]) - 2]}</svg>`,
+          });
+        });
+      }
+      await page.route(searchesRoute, (r) => r.fulfill({ json: envelope(recordsFixture) }));
+      await page.route(`**/api/v1/opportunities/${record.input_ref}`, (r) =>
+        r.fulfill({ json: envelope({ id: record.input_ref, profit_status: "insufficient_data" }) }),
+      );
+      await page.route(`**/api/v1/opportunities/${record.input_ref}/profit-analysis`, (r) =>
+        r.fulfill({
+          json: envelope({ latest_run: null, current_inputs: [], cost_input_reviews: [] }),
+        }),
+      );
+      await page.route("**/api/v1/sourcing/searches/" + searchId, (r) =>
+        r.fulfill({
+          json: envelope({
+            ...record,
+            candidates: [],
+            ...(withRichRecords ? { collection_task_id: taskId } : {}),
+            collection_progress: {
+              status: "failed",
+              total_subqueries: 1,
+              successful_subqueries: 0,
+              failed_subqueries: 1,
+              blocked_subqueries: 0,
+              active_subqueries: 0,
+            },
+          }),
+        }),
+      );
+      await page.goto("/sourcing");
+      const recordImages = page.locator(".sourcing-record-items .research-thumbnail img");
+      await expect(recordImages).toHaveCount(withRichRecords ? 5 : 1);
+      await expect(recordImages.first()).toBeVisible();
+      if (withRichRecords) {
+        await expect(page.getByRole("link", { name: "查看失败原因", exact: true })).toHaveAttribute(
+          "href",
+          `/platform-admin/collection?task=${taskId}`,
+        );
+      }
+      await expect(page.locator(".sourcing-record-items > button")).toHaveCount(5);
+      const detailPhoto = page.locator(".sourcing-detail > header .research-thumbnail img");
+      await expect(detailPhoto).toBeVisible();
+      await expect(detailPhoto).toHaveAttribute("loading", "eager");
+      await expect(detailPhoto).toHaveAttribute("fetchpriority", "high");
+      await expect(recordImages.first()).toHaveAttribute("loading", "lazy");
+      await expect
+        .poll(() => detailPhoto.evaluate((img: HTMLImageElement) => img.naturalWidth))
+        .toBeGreaterThan(0);
+      await expect(page.getByRole("heading", { name: "供应链找货", exact: true })).toBeVisible();
+      const progress = page.getByRole("region", { name: "来源采集进度" });
+      await expect(progress).toContainText("采集失败");
+      await expect(progress).toContainText("1 / 1 个来源已结束");
+      await expect(page.locator(".sourcing-profit-unconfirmed-breakdown")).toBeVisible();
+      if (wide) {
+        await expect(page.locator(".sourcing-workspace--review")).toHaveCSS(
+          "font-family",
+          /DengXian/,
+        );
+        const actions = page.locator(".sourcing-heading-actions");
+        await expect(page.locator(".sourcing-head h1")).toHaveCSS("translate", "0px -3px");
+        await expect(progress).toHaveCSS("translate", "0px -2px");
+        await expect(recordImages.first()).toHaveCSS("padding", "5px");
+        await expect(detailPhoto).toHaveCSS("padding", "14px");
+        await expect(detailPhoto).toHaveCSS("object-fit", "contain");
+        const imageSurface = await detailPhoto.evaluate(
+          (node) => getComputedStyle(node).backgroundColor,
+        );
+        await expect(recordImages.first()).toHaveCSS("background-color", imageSurface);
+        await expect(page.locator(".sourcing-head > div:first-child")).toHaveCSS("top", "4px");
+        await expect(page.locator(".sourcing-detail")).toHaveCSS("padding-inline-end", "18px");
+        const [title, toolbar, records, detail] = await Promise.all(
+          [
+            ".sourcing-head",
+            ".sourcing-overview",
+            ".sourcing-layout > aside",
+            ".sourcing-detail",
+          ].map((selector) => page.locator(selector).boundingBox()),
+        );
+        const breadcrumb = (await page
+          .getByRole("navigation", { name: "面包屑", exact: true })
+          .boundingBox())!;
+        const sidebar = (await page
+          .getByRole("complementary", { name: "工作区导航" })
+          .boundingBox())!;
+        expect(Math.abs(title!.x - 259)).toBeLessThanOrEqual(2);
+        expect(title!.x - sidebar.x - sidebar.width).toBeGreaterThanOrEqual(12);
+        expect(breadcrumb.y + breadcrumb.height).toBeLessThan(title!.y);
+        for (const box of [toolbar, records]) expect(box!.x).toBeCloseTo(title!.x, 0);
+        expect(records!.width).toBeGreaterThanOrEqual(321);
+        expect(Math.abs(detail!.x - 606)).toBeLessThanOrEqual(3);
+        expect(detail!.x - records!.x - records!.width).toBeCloseTo(15, 0);
+        expect(detail!.y - toolbar!.y - toolbar!.height).toBeCloseTo(14, 0);
+        await expect(page.locator(".sourcing-record-items > button").first()).toHaveCSS(
+          "column-gap",
+          "16px",
+        );
+        const recordPhoto = (await page
+          .locator(".sourcing-record-items .research-thumbnail")
+          .first()
+          .boundingBox())!;
+        expect(Math.abs(recordPhoto.x - 280)).toBeLessThanOrEqual(3);
+        const rowTitle = (await page
+          .locator(".sourcing-record-items > button > b")
+          .first()
+          .boundingBox())!;
+        expect(Math.abs(rowTitle.x - 364)).toBeLessThanOrEqual(3);
+        const recordRows = page.locator(".sourcing-record-items > button");
+        await expect(recordRows.first().locator("b")).toHaveCSS("font-family", /^"Segoe UI",/);
+        await expect(recordRows.first().locator("b")).toHaveCSS("font-weight", "600");
+        await expect(recordRows.first().locator(".sourcing-record-meta small")).toHaveCSS(
+          "line-height",
+          "19px",
+        );
+        await expect(progress.locator("h4")).toHaveCSS("border-radius", "7px");
+        await expect(page.locator(".sourcing-detail > header h3")).toHaveCSS("font-weight", "700");
+        const progressTones = await progress.evaluate((node) => {
+          const color = (selector: string) => getComputedStyle(node.querySelector(selector)!).color;
+          return {
+            context: color("small"),
+            successful: color("dt:first-child"),
+            failed: color("dt[data-fail]"),
+            failedCount: color("dt[data-fail] + dd"),
+          };
+        });
+        expect(progressTones.context).toBe(progressTones.successful);
+        expect(progressTones.failed).toBe(progressTones.failedCount);
+        expect(progressTones.failed).not.toBe(progressTones.successful);
+        const firstRecord = (await recordRows.first().boundingBox())!;
+        const lastRecord = (await recordRows.last().boundingBox())!;
+        expect(Math.abs(firstRecord.y - records!.y - 62)).toBeLessThanOrEqual(4);
+        expect(
+          Math.abs(lastRecord.y + lastRecord.height - firstRecord.y - 480),
+        ).toBeLessThanOrEqual(6);
+        const rowOffsets = await Promise.all(
+          [recordRows.first(), recordRows.nth(1)].map(async (row) => {
+            const [item, name, meta] = await Promise.all([
+              row.boundingBox(),
+              row.locator("b").boundingBox(),
+              row.locator(".sourcing-record-meta").boundingBox(),
+            ]);
+            expect(meta!.y - name!.y - name!.height).toBeGreaterThanOrEqual(6);
+            return {
+              titleCenter: name!.y + name!.height / 2 - item!.y,
+              titleHeight: name!.height,
+              metaTop: meta!.y - item!.y,
+            };
+          }),
+        );
+        expect(rowOffsets[0].titleCenter).toBeCloseTo(rowOffsets[1].titleCenter, 0);
+        expect(rowOffsets[0].metaTop).toBeCloseTo(rowOffsets[1].metaTop, 0);
+        expect(rowOffsets.map(({ titleHeight }) => titleHeight)).toEqual([42, 21]);
+        const searchField = page.locator(".sourcing-toolbar .sourcing-search-input");
+        const resultCount = page.locator(".sourcing-toolbar > span");
+        const [searchBounds, resultBounds] = await Promise.all([
+          searchField.boundingBox(),
+          resultCount.boundingBox(),
+        ]);
+        await expect(page.locator(".sourcing-toolbar")).toHaveCSS("translate", "0px -2px");
+        await expect(page.locator(".sourcing-summary")).toHaveCSS("translate", "-2px -1px");
+        await expect(searchField.locator("..")).toHaveCSS("column-gap", "18px");
+        expect(Math.abs(searchBounds!.x - 390)).toBeLessThanOrEqual(4);
+        expect(resultBounds!.x - searchBounds!.x - searchBounds!.width).toBeCloseTo(24, 0);
+        const warning = page.locator(".sourcing-pending[data-attention='true']");
+        const warningBorder = await warning.evaluate((node) =>
+          getComputedStyle(node).getPropertyValue("--so-warning-border").trim(),
+        );
+        const borderColor = await warning.evaluate((node, color) => {
+          const probe = document.createElement("span");
+          probe.style.color = color;
+          node.append(probe);
+          const resolved = getComputedStyle(probe).color;
+          probe.remove();
+          return resolved;
+        }, warningBorder);
+        await expect(warning).toHaveCSS("border-top-color", borderColor);
+        const cost = page.getByRole("region", { name: "成本与利润摘要", exact: true });
+        expect(Math.abs((await cost.boundingBox())!.x - 1209)).toBeLessThanOrEqual(4);
+        await expect(cost.locator(":scope > header")).toHaveCSS("align-items", "flex-start");
+        await expect(cost.locator(".sourcing-profit-unconfirmed-breakdown dt").first()).toHaveCSS(
+          "font-size",
+          "15px",
+        );
+        await expect(page.locator(".sourcing-summary dt").first()).toHaveCSS("font-size", "15px");
+        const emptyIcon = page.locator(".sourcing-empty-offers .sourcing-quote-empty > svg");
+        await expect(emptyIcon).toHaveCSS("stroke-width", "1.2px");
+        await expect(emptyIcon).toHaveCSS("width", "72px");
+        await expect(emptyIcon).toHaveCSS("translate", "-1px -7px");
+        await expect(emptyIcon).toHaveAttribute("aria-hidden", "true");
+        const emptyIconTone = await emptyIcon.evaluate((icon) => {
+          const probe = document.createElement("span");
+          probe.style.color = "color-mix(in srgb, var(--so-text-muted) 48%, var(--so-border))";
+          icon.parentElement!.append(probe);
+          const tones = {
+            actual: getComputedStyle(icon).color,
+            expected: getComputedStyle(probe).color,
+          };
+          probe.remove();
+          return tones;
+        });
+        console.log("SOURCING_EMPTY_ICON_TONE", JSON.stringify(emptyIconTone));
+        expect(emptyIconTone.actual).toBe(emptyIconTone.expected);
+        await expect(warning.locator("h4")).toHaveCSS("font-weight", "700");
+        await expect(warning.locator("h4")).toHaveCSS("translate", "-1px -1px");
+        await expect(warning.locator("p")).toBeVisible();
+        if (withRichRecords) {
+          const inspection = warning.getByRole("link", { name: "查看失败原因", exact: true });
+          await expect(inspection).toHaveCSS("min-inline-size", "126px");
+          await expect(inspection).toHaveCSS("min-height", "42px");
+          await expect(inspection).toHaveCSS("font-size", "14px");
+          await expect(inspection).toHaveAttribute(
+            "href",
+            "/platform-admin/collection?task=" + taskId,
+          );
+        }
+        await expect(cost.locator(".sourcing-profit-unconfirmed-breakdown dd").first()).toHaveCSS(
+          "font-variant-numeric",
+          "tabular-nums",
+        );
+        await expect(warning.locator("h4")).toHaveCSS("column-gap", "13px");
+        await expect(warning.locator("h4 > svg")).toHaveCSS("width", "24px");
+        await expect(warning.locator("h4 > svg")).toHaveAttribute("aria-hidden", "true");
+        await expect(warning.locator("p")).toHaveCSS("padding-inline-start", "37px");
+        expect(
+          Math.abs(records!.y + records!.height - detail!.y - detail!.height),
+        ).toBeLessThanOrEqual(3);
+        const rules = actions.getByRole("link", { name: "费用与利润规则" });
+        const refresh = actions.getByRole("button", { name: "刷新记录", exact: true });
+        await expect(rules).toHaveAttribute("href", /^\/sourcing\/cost-rules\?/);
+        await expect(rules.locator("svg rect")).toHaveAttribute("height", "20");
+        const [rulesBox, refreshBox] = await Promise.all([
+          rules.boundingBox(),
+          refresh.boundingBox(),
+        ]);
+        expect([rulesBox!.width, refreshBox!.width]).toEqual([176, 132]);
+        expect(refreshBox!.x - rulesBox!.x - rulesBox!.width).toBe(16);
+        await expect(page.locator(".sourcing-detail > header h3")).toHaveCSS("font-size", "22px");
+        const titleReading = await page.locator(".sourcing-detail > header h3").evaluate((node) => {
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          return {
+            column: node.getBoundingClientRect().width,
+            em: Number.parseFloat(getComputedStyle(node).fontSize),
+            lines: [...range.getClientRects()].map((rect) => rect.width),
+          };
+        });
+        expect(titleReading.lines).toHaveLength(2);
+        expect(titleReading.lines[0] / titleReading.column).toBeGreaterThan(0.9);
+        expect(titleReading.lines[1]).toBeGreaterThanOrEqual(4 * titleReading.em);
+        const appearance = await page
+          .locator(".sourcing-workspace--review")
+          .evaluate((workspace) => {
+            const css = getComputedStyle(workspace);
+            const color = document.createElement("canvas").getContext("2d")!;
+            const resolve = (value: string) => {
+              color.fillStyle = value.trim();
+              return color.fillStyle;
+            };
+            const panel = resolve(css.getPropertyValue("--so-panel"));
+            const frame = workspace.querySelector(".sourcing-detail > header .research-thumbnail")!;
+            return {
+              panel,
+              cards: [".sourcing-overview", ".sourcing-layout > aside", ".sourcing-detail"].map(
+                (selector) =>
+                  resolve(getComputedStyle(workspace.querySelector(selector)!).backgroundColor),
+              ),
+              frame: resolve(getComputedStyle(frame).backgroundColor),
+              image: getComputedStyle(frame.querySelector("img")!).backgroundColor,
+            };
+          });
+        expect(appearance.cards).toEqual(Array(3).fill(appearance.panel));
+        expect(appearance.frame).not.toBe(appearance.panel);
+        expect(appearance.image).toBe("rgba(0, 0, 0, 0)");
+        const surfaceTones = await page
+          .locator(".sourcing-empty-offers--with-profit")
+          .evaluate((paired) => {
+            const sample = document.createElement("span");
+            const expectedColor = (soft: number) => {
+              sample.style.backgroundColor =
+                "color-mix(in srgb, var(--so-panel-soft) " + soft + "%, var(--so-panel))";
+              return getComputedStyle(sample).backgroundColor;
+            };
+            const actualColor = (selector: string) =>
+              getComputedStyle(paired.querySelector(selector)!).backgroundColor;
+            paired.append(sample);
+            const actual = [
+              actualColor(":scope > .sourcing-quote-empty"),
+              actualColor(".sourcing-profit-summary"),
+            ];
+            const expected = [expectedColor(30), expectedColor(60)];
+            sample.remove();
+            return { actual, expected };
+          });
+        console.log("SOURCING_PAIRED_SURFACES", JSON.stringify(surfaceTones));
+        expect(surfaceTones.actual).toEqual(surfaceTones.expected);
+        expect(surfaceTones.actual[0]).not.toBe(surfaceTones.actual[1]);
+        await expect(recordRows.first().locator(":scope > b")).toHaveCSS("font-weight", "600");
+        const recordRhythm = await recordRows.evaluateAll((rows) =>
+          rows.map((row) => {
+            const rowBox = row.getBoundingClientRect();
+            const meta = row.querySelector(".sourcing-record-meta")!.getBoundingClientRect();
+            return {
+              minimum: getComputedStyle(row).minBlockSize,
+              height: rowBox.height,
+              metaInside: meta.top >= rowBox.top && meta.bottom <= rowBox.bottom,
+            };
+          }),
+        );
+        expect(
+          recordRhythm.every((row) => row.minimum === "95px" && row.height >= 95 && row.metaInside),
+        ).toBe(true);
+        console.log("SOURCING_RECORD_RHYTHM", JSON.stringify(recordRhythm));
+        const quoteCaption = page.locator(".sourcing-empty-offers > .sourcing-quote-empty > span");
+        for (const caption of [quoteCaption, warning.locator("p")]) {
+          const readingTone = await caption.evaluate((node) => {
+            const sample = document.createElement("span");
+            sample.style.color = "color-mix(in srgb, var(--so-text) 35%, var(--so-text-muted))";
+            node.append(sample);
+            const actual = getComputedStyle(node).color;
+            const expected = getComputedStyle(sample).color;
+            sample.remove();
+            return { actual, expected };
+          });
+          console.log("SOURCING_READING_TONE", JSON.stringify(readingTone));
+          expect(readingTone.actual).toBe(readingTone.expected);
+        }
+        const [photoBox, headingBox] = await Promise.all([
+          detailPhoto.locator("..").boundingBox(),
+          page.locator(".sourcing-detail > header h3").boundingBox(),
+        ]);
+        expect([photoBox!.width, photoBox!.height]).toEqual([188, 188]);
+        expect(headingBox!.x - photoBox!.x - photoBox!.width).toBeCloseTo(16, 0);
+        await expect(page.locator(".sourcing-detail > header code")).toHaveCSS("font-size", "15px");
+        const basisSummary = page.locator(".sourcing-empty-offers-basis summary");
+        await expect(basisSummary).toHaveCSS("min-height", "40px");
+        await expect(basisSummary).toHaveCSS("column-gap", "14px");
+        await expect(basisSummary).toHaveCSS("padding-inline-start", "10px");
+        await expect(basisSummary).toHaveCSS("padding-block", "5px 11px");
+        await expect(basisSummary).toBeEnabled();
+        await expect(basisSummary).toHaveCSS("font-weight", "600");
+        await expect(progress.locator("dt").first()).toHaveCSS("font-size", "15px");
+        await expect(progress.locator("dd").first()).toHaveCSS("font-size", "16px");
+        const countPositions = await progress
+          .locator("dl > div")
+          .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().x));
+        expect(countPositions.map((x) => Math.round(x - countPositions[0]!))).toEqual([
+          0, 84, 182, 264,
+        ]);
+        const endedLabel = progress.getByText("1 / 1 个来源已结束");
+        await expect(endedLabel).toHaveCSS("translate", "0px -4px");
+        const ended = (await endedLabel.boundingBox())!;
+        const counts = (await progress.locator("dl").boundingBox())!;
+        expect(
+          Math.abs(ended.y + ended.height / 2 - counts.y - counts.height / 2),
+        ).toBeLessThanOrEqual(4);
+        expect(ended.x).toBeGreaterThanOrEqual(counts.x + counts.width);
+        if (withRichRecords) {
+          const switcher = page.getByRole("link", { name: "侧栏切换工作区" });
+          const sidebarBox = (await page
+            .getByRole("complementary", { name: "工作区导航" })
+            .boundingBox())!;
+          const switcherBox = (await switcher.boundingBox())!;
+          const chevronBox = (await switcher.locator(".midou-workspace-chevron").boundingBox())!;
+          expect(chevronBox.x + chevronBox.width).toBeLessThan(switcherBox.x + switcherBox.width);
+          expect(switcherBox.x + switcherBox.width).toBeLessThan(sidebarBox.x + sidebarBox.width);
+          await expect
+            .poll(() =>
+              recordImages.evaluateAll((images) =>
+                images.every((img) => (img as HTMLImageElement).naturalWidth > 0),
+              ),
+            )
+            .toBe(true);
+        }
+        if (withReferenceTitles) {
+          const title = page.locator(".sourcing-detail > header h3");
+          await expect(title).toHaveText(record.display_name);
+          await expect(title).toHaveCSS("text-wrap-style", "auto");
+          await expect(title).toHaveCSS("letter-spacing", "-0.18px");
+          const rendered = await title.evaluate((node) => {
+            const range = document.createRange();
+            range.selectNodeContents(node);
+            const lines = [...range.getClientRects()];
+            const bounds = node.getBoundingClientRect();
+            return {
+              count: lines.length,
+              firstLineShare: (lines[0]?.width ?? 0) / bounds.width,
+              withinColumn: lines.every(
+                (line) => line.left >= bounds.left - 1 && line.right <= bounds.right + 1,
+              ),
+            };
+          });
+          expect(rendered.count).toBe(2);
+          expect(rendered.firstLineShare).toBeGreaterThan(0.94);
+          expect(rendered.withinColumn).toBe(true);
+        }
+        await expect(page.locator(".sourcing-record-heading")).toHaveCSS("min-height", "54px");
+        await expect(progress.locator("header > span")).toHaveCSS("inset-inline-end", "1px");
+        const tracks = {
+          completion: await progress
+            .locator("header > span")
+            .evaluate((node) => getComputedStyle(node).insetBlockStart),
+          warning: await warning
+            .locator("h4 > svg")
+            .evaluate((node) => getComputedStyle(node).translate),
+          costTitle: await cost
+            .locator("header > div")
+            .evaluate((node) => getComputedStyle(node).paddingInlineStart),
+          costValue: await cost
+            .locator(".sourcing-profit-unconfirmed-breakdown dd")
+            .first()
+            .evaluate((node) => getComputedStyle(node).fontSize),
+        };
+        console.log("SOURCING_REFERENCE_READING_TRACKS", JSON.stringify(tracks));
+        expect(tracks).toEqual({
+          completion: "0px",
+          warning: "2px 3px",
+          costTitle: "4px",
+          costValue: "15px",
+        });
+        await expect(page.getByRole("tab", { name: "成本与利润", exact: true })).toHaveCSS(
+          "text-indent",
+          "5px",
+        );
+        await expect(page.getByRole("tab", { name: "报价历史", exact: true })).toHaveCSS(
+          "text-indent",
+          "-2px",
+        );
+        await expect(cost.locator("header > div")).toHaveCSS("translate", "2px -1px");
+        if (withRichRecords) {
+          const noticeTask = warning.locator(".sourcing-notice-task");
+          await expect(noticeTask).toHaveCSS("inset-block-start", "2px");
+          await expect(noticeTask).toHaveAttribute(
+            "href",
+            "/platform-admin/collection?task=" + taskId,
+          );
+        }
+        await recordRows.first().focus();
+        await page.keyboard.press("Tab");
+        await expect(recordRows.nth(1)).toBeFocused();
+        await expect(recordRows.nth(1)).toHaveCSS("outline-offset", "-3px");
+        await expect(recordRows.nth(1)).toHaveCSS("outline-width", "3px");
+        await expect(recordRows.first()).toHaveAttribute("aria-pressed", "true");
+        await expect(recordRows.nth(1)).toHaveAttribute("aria-pressed", "false");
+      } else {
+        const photo = (await detailPhoto.locator("..").boundingBox())!;
+        const title = (await page.locator(".sourcing-detail > header h3").boundingBox())!;
+        const progressBox = (await progress.boundingBox())!;
+        expect(title.x - photo.x - photo.width).toBeCloseTo(12, 0);
+        expect(title.y).toBeLessThan(photo.y + photo.height);
+        expect(progressBox.x).toBeCloseTo(photo.x, 0);
+        expect(progressBox.width).toBeGreaterThan(title.width);
+        expect(progressBox.y).toBeGreaterThanOrEqual(photo.y + photo.height);
+        const [success, waiting, failed, blocked] = await Promise.all(
+          (await progress.locator("dl > div").all()).map((metric) => metric.boundingBox()),
+        );
+        expect(waiting!.x).toBeGreaterThan(success!.x);
+        expect(waiting!.y).toBeCloseTo(success!.y, 0);
+        expect(failed!.x).toBeCloseTo(success!.x, 0);
+        expect(blocked!.x).toBeCloseTo(waiting!.x, 0);
+        expect(failed!.y).toBeGreaterThan(success!.y);
+        await progress.screenshot({ path: testInfo.outputPath("sourcing-progress-mobile.png") });
+        await page.locator(".sourcing-detail > header").screenshot({
+          path: testInfo.outputPath("sourcing-identity-mobile.png"),
+        });
+      }
+      await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+        true,
+      );
+    },
+  );
+}
+
+test("search keeps the same record row width when the scrollbar disappears", async ({
+  baseURL,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop scroll gutter");
+  const nativeBrowser = await chromium.launch({ ignoreDefaultArgs: ["--hide-scrollbars"] });
+  try {
+    const page = await nativeBrowser.newPage({ baseURL, viewport: { width: 1672, height: 941 } });
+    await setup(page);
+    const records = Array.from({ length: 20 }, (_, i) => ({
+      id: i === 0 ? searchId : `00000000-0000-4000-8000-${String(7100 + i).padStart(12, "0")}`,
+      input_type: "keyword",
+      input_ref: `宽屏找货示例 ${i + 1}`,
+      display_name: `宽屏找货示例 ${i + 1}`,
+      status: "succeeded_empty",
+      candidate_count: 0,
+      missing_fields: [],
+      created_at: "2026-11-03T00:00:00Z",
+    }));
+    let filteredReads = 0;
+    await page.route(searchesRoute, (route) => {
+      const q = new URL(route.request().url()).searchParams.get("q");
+      if (q) filteredReads++;
+      const rows = q ? records.filter((record) => record.display_name === q) : records;
+      return route.fulfill({
+        json: {
+          ...envelope(rows),
+          meta: {
+            page: 1,
+            page_size: 20,
+            total: rows.length,
+            summary: { total: rows.length, running: 0, candidates: 0, ready: 0 },
+          },
+        },
+      });
+    });
+    await page.goto("/sourcing");
+    const pane = page.locator(".sourcing-record-items");
+    const rows = pane.getByRole("button");
+    const geometry = () =>
+      pane.evaluate((node) => {
+        const el = node as HTMLElement;
+        const row = el.querySelector("button")!;
+        const paneBox = el.getBoundingClientRect();
+        const rowBox = row.getBoundingClientRect();
+        return {
+          rowWidth: rowBox.width,
+          rightInset: paneBox.right - rowBox.right,
+          scrolls: el.scrollHeight > el.clientHeight,
+        };
+      });
+    await expect(rows).toHaveCount(20);
+    const long = await geometry();
+    expect(long.scrolls).toBe(true);
+    await page.getByRole("searchbox", { name: "搜索找货记录" }).fill(records[0]!.display_name);
+    await expect(rows).toHaveCount(1);
+    const short = await geometry();
+    expect(short.scrolls).toBe(false);
+    expect(filteredReads).toBe(1);
+    expect(short.rightInset).toBeCloseTo(long.rightInset, 0);
+    expect(short.rowWidth).toBeCloseTo(long.rowWidth, 0);
+    expect(short.rightInset).toBe(8);
+    await expect(rows.first()).toHaveAttribute("aria-pressed", "true");
+  } finally {
+    await nativeBrowser.close();
+  }
+});
+
+test("sourcing record keeps the full status and candidate count at narrow desktop rail widths", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop sourcing record rail");
+  await setup(page);
+  const records = [
+    {
+      id: searchId,
+      input_type: "product_url",
+      input_ref: "https://www.amazon.com/dp/B0B3RT92P5",
+      display_name: "用于确认完整状态的找货商品",
+      status: "succeeded_empty",
+      candidate_count: 999999999,
+      missing_fields: [],
+      created_at: "2026-08-08T12:00:00.000Z",
+    },
+    {
+      id: "00000000-0000-4000-8000-000000009002",
+      input_type: "keyword",
+      input_ref: "便携净水杯",
+      status: "succeeded_empty",
+      candidate_count: 0,
+      missing_fields: [],
+      created_at: "2026-08-08T12:00:00.000Z",
+    },
+  ];
+  await page.route(searchesRoute, (route) => route.fulfill({ json: envelope(records) }));
+  await page.route("**/api/v1/sourcing/searches/" + searchId, (route) =>
+    route.fulfill({ json: envelope({ ...records[0], candidates: [] }) }),
+  );
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await page.goto("/sourcing");
+  const rows = page.locator(".sourcing-record-items > button");
+  await expect(rows).toHaveCount(2);
+  for (const width of [1440, 1560, 1600, 1672]) {
+    await page.setViewportSize({ width, height: 900 });
+    const bounds = await rows.first().evaluate((row) => {
+      const meta = row.querySelector(".sourcing-record-meta")!;
+      const [state, count] = Array.from(meta.children);
+      const following = row.nextElementSibling!;
+      const a = state.getBoundingClientRect();
+      const b = count.getBoundingClientRect();
+      return {
+        statusClipped: state.scrollWidth > state.clientWidth + 1,
+        countClipped: b.right > meta.getBoundingClientRect().right + 1,
+        rowOverlap: Math.max(a.bottom, b.bottom) > following.getBoundingClientRect().top,
+      };
+    });
+    expect(bounds, `width=${width}`).toEqual({
+      statusClipped: false,
+      countClipped: false,
+      rowOverlap: false,
+    });
+  }
+});
+
+test("wide sourcing fills the title column without script-dependent wrapping", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide title measurements");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await setup(page);
+  const titles = [
+    "Amazon 参考商品：用于验证宽屏长标题折行、图片尺寸和采集进度对齐的供应链找货测试样品",
+    "家用桌面智能显示器全高清厨房触控屏带壁挂支架和内置音响支持家庭日程管理和食谱浏览支持语音控制与多房间连接",
+    "Amazon Echo Show 15 (newest model), Full HD 15.6 kitchen hub for home organization, with built-in Fire TV, Designed for Alexa+",
+  ];
+  const records = titles.map((title, index) => ({
+    id: index === 0 ? searchId : "00000000-0000-4000-8000-00000000751" + index,
+    input_type: "keyword",
+    input_ref: title,
+    display_name: title,
+    status: "succeeded_empty",
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: "2026-11-03T00:00:00Z",
+  }));
+  await page.route(searchesRoute, (route) => route.fulfill({ json: envelope(records) }));
+  for (const record of records) {
+    await page.route("**/api/v1/sourcing/searches/" + record.id, (route) =>
+      route.fulfill({ json: envelope({ ...record, candidates: [] }) }),
+    );
+  }
+  await page.goto("/sourcing");
+  const heading = page.locator(".sourcing-detail > header h3");
+  const buttons = page.locator(".sourcing-record-items > button");
+  await expect(buttons).toHaveCount(3);
+  const readings = [];
+  for (let i = 0; i < records.length; i++) {
+    await buttons.nth(i).click();
+    await expect(heading).toHaveText(titles[i]);
+    readings.push(
+      await heading.evaluate((node) => {
+        const column = node.getBoundingClientRect();
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        const rects = [...range.getClientRects()];
+        return {
+          style: getComputedStyle(node).textWrapStyle,
+          lines: rects.length,
+          firstLineShare: Number((rects[0].width / column.width).toFixed(4)),
+          within: rects.every((r) => r.left >= column.left - 1 && r.right <= column.right + 1),
+        };
+      }),
+    );
+  }
+  console.log("SOURCING_SCRIPT_TITLE_GEOMETRY", JSON.stringify(readings));
+  expect(
+    readings.every(
+      ({ lines, firstLineShare, within }) => lines === 2 && firstLineShare > 0.9 && within,
+    ),
+  ).toBe(true);
+});
+
+test("wide sourcing photo framing keeps landscape portrait square and fallback intact", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide and narrow image geometry");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await setup(page);
+  const formats = [
+    { name: "横图商品", size: [160, 100] },
+    { name: "竖图商品", size: [90, 160] },
+    { name: "方图商品", size: [120, 120] },
+    { name: "失效图商品", size: null },
+    { name: "无图商品", size: null },
+  ];
+  const records = formats.map(({ name }, index) => ({
+    id: index === 0 ? searchId : "00000000-0000-4000-8000-00000000787" + index,
+    input_type: "keyword",
+    input_ref: name,
+    display_name: name,
+    image_url:
+      index === 4 ? null : "https://m.media-amazon.com/images/sourcing-ratio-" + index + ".svg",
+    status: "succeeded_empty",
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: "2026-11-03T00:00:00Z",
+  }));
+  await page.route("https://m.media-amazon.com/images/sourcing-ratio-*.svg", (route) => {
+    const index = Number(/ratio-(\d+)\.svg$/.exec(route.request().url())?.[1]);
+    const size = formats[index].size;
+    if (!size) return route.fulfill({ status: 404, body: "" });
+    const [width, height] = size;
+    return route.fulfill({
+      contentType: "image/svg+xml",
+      body:
+        '<svg xmlns="http://www.w3.org/2000/svg" width="' +
+        width +
+        '" height="' +
+        height +
+        '"><rect width="100%" height="100%" fill="#426587"/></svg>',
+    });
+  });
+  await page.route(searchesRoute, (route) => route.fulfill({ json: envelope(records) }));
+  for (const record of records) {
+    await page.route("**/api/v1/sourcing/searches/" + record.id, (route) =>
+      route.fulfill({ json: envelope({ ...record, candidates: [] }) }),
+    );
+  }
+  await page.goto("/sourcing");
+  const rows = page.locator(".sourcing-record-items > button");
+  const preview = page.locator(".sourcing-detail > header .research-thumbnail");
+  await expect(rows).toHaveCount(5);
+  const readImage = (node: Element) => {
+    const photo = node.querySelector("img");
+    const { width, height } = node.getBoundingClientRect();
+    if (!photo) return { frame: [width, height], photo: false };
+    const css = getComputedStyle(photo);
+    const rect = photo.getBoundingClientRect();
+    const px = parseFloat(css.paddingInlineStart) + parseFloat(css.paddingInlineEnd);
+    const py = parseFloat(css.paddingBlockStart) + parseFloat(css.paddingBlockEnd);
+    const availableX = rect.width - px,
+      availableY = rect.height - py;
+    const scale = Math.min(availableX / photo.naturalWidth, availableY / photo.naturalHeight);
+    const paintedW = photo.naturalWidth * scale,
+      paintedH = photo.naturalHeight * scale;
+    const position = css.objectPosition.split(" ").map(parseFloat);
+    return {
+      frame: [width, height],
+      photo: true,
+      fit: css.objectFit,
+      position: css.objectPosition,
+      scale,
+      intact: paintedW <= availableX + 0.1 && paintedH <= availableY + 0.1,
+      offsetY: (availableY - paintedH) * ((position[1] ?? 50) / 100 - 0.5),
+    };
+  };
+  const measured = [];
+  for (let i = 0; i < formats.length; i++) {
+    await rows.nth(i).click();
+    await expect(page.locator(".sourcing-detail > header h3")).toHaveText(formats[i].name);
+    const thumb = rows.nth(i).locator(".research-thumbnail");
+    if (formats[i].size) {
+      await expect
+        .poll(() =>
+          preview.locator("img").evaluate((img) => (img as HTMLImageElement).naturalWidth),
+        )
+        .toBe(formats[i].size![0]);
+      await expect
+        .poll(() => thumb.locator("img").evaluate((img) => (img as HTMLImageElement).naturalWidth))
+        .toBe(formats[i].size![0]);
+    } else {
+      await expect(preview.locator("img")).toHaveCount(0);
+      await expect(thumb.locator("img")).toHaveCount(0);
+      await expect(preview.locator("svg")).toBeVisible();
+      await expect(thumb.locator("svg")).toBeVisible();
+    }
+    measured.push({
+      detail: await preview.evaluate(readImage),
+      list: await thumb.evaluate(readImage),
+    });
+  }
+  console.log("SOURCING_ASPECT_FRAMES", JSON.stringify(measured));
+  expect(measured.map((entry) => entry.detail.frame)).toEqual(Array(5).fill([188, 188]));
+  expect(measured.map((entry) => entry.list.frame)).toEqual(Array(5).fill([68, 68]));
+  expect(
+    measured
+      .slice(0, 3)
+      .every((entry) => entry.detail.fit === "contain" && entry.detail.intact && entry.list.intact),
+  ).toBe(true);
+  expect(measured[0].detail.offsetY).toBeGreaterThan(0);
+  expect(measured[0].detail.offsetY).toBeLessThan(9);
+  expect(measured[1].detail.offsetY).toBeCloseTo(0);
+  expect(measured[2].detail.offsetY).toBeCloseTo(0);
+  expect(measured[0].list.position).toBe("50% 50%");
+  await rows.first().click();
+  await expect(preview.locator("img")).toHaveCSS("object-fit", "contain");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(preview.locator("img")).toHaveCSS("object-position", "50% 50%");
+});
+
+test("sourcing detail title stays inside the panel between the mobile and desktop breakpoints", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Explicit sourcing breakpoint probes");
+  const title = "PortableStockKeepingIdentifier".repeat(6);
+  await page.setViewportSize({ width: 601, height: 941 });
+  await setup(page);
+  const record = {
+    id: searchId,
+    input_type: "keyword",
+    input_ref: title,
+    display_name: title,
+    status: "succeeded_empty",
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: "2026-11-03T00:00:00Z",
+  };
+  await page.route(searchesRoute, (route) => route.fulfill({ json: envelope([record]) }));
+  await page.route("**/api/v1/sourcing/searches/" + searchId, (route) =>
+    route.fulfill({ json: envelope({ ...record, candidates: [] }) }),
+  );
+  await page.goto("/sourcing");
+  const heading = page.locator(".sourcing-detail > header h3");
+  await expect(heading).toHaveText(title);
+  for (const width of [601, 700, 760, 761, 840, 1101, 1672, 390, 600]) {
+    await page.setViewportSize({ width, height: 941 });
+    const geometry = await heading.evaluate((node) => {
+      const bounds = node.closest("header")!.getBoundingClientRect();
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      const lines = [...range.getClientRects()];
+      return {
+        document: document.documentElement.scrollWidth,
+        lines: lines.length,
+        containsTitle: lines.every(
+          (line) => line.left >= bounds.left - 1 && line.right <= bounds.right + 1,
+        ),
+      };
+    });
+    console.log("sourcing title containment", width, JSON.stringify(geometry));
+    expect(geometry.document).toBeLessThanOrEqual(width);
+    expect(geometry.containsTitle).toBe(true);
+    expect(geometry.lines).toBeGreaterThan(1);
+  }
+});
+
+test("wide sourcing progress keeps large counts inside the detail panel", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide sourcing progress tracks");
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await setup(page);
+  const count = 999999999;
+  const search = {
+    id: searchId,
+    input_type: "keyword",
+    input_ref: "便携净水杯",
+    status: "succeeded_empty",
+    candidate_count: 0,
+    missing_fields: ["supplier_listing"],
+    created_at: "2026-08-08T12:00:00.000Z",
+  };
+  await page.route(searchesRoute, (route) =>
+    route.fulfill({ json: envelope([{ ...search, candidate_count: 0 }]) }),
+  );
+  await page.route("**/api/v1/sourcing/searches/" + searchId, (route) =>
+    route.fulfill({
+      json: envelope({
+        ...search,
+        candidates: [],
+        collection_progress: {
+          status: "failed",
+          total_subqueries: 4 * count,
+          successful_subqueries: count,
+          failed_subqueries: count,
+          blocked_subqueries: count,
+          active_subqueries: count,
+        },
+      }),
+    }),
+  );
+  await page.goto("/sourcing");
+  const detail = page.locator(".sourcing-detail");
+  const progress = page.getByRole("region", { name: "来源采集进度" });
+  await expect(progress.locator("dd")).toHaveText(Array(4).fill(String(count)));
+  for (const number of await progress.locator("dd").all()) {
+    await expect(number).toHaveCSS("white-space", "nowrap");
+  }
+  const positions = await progress.evaluate((node) => {
+    const bound = node.getBoundingClientRect();
+    const numberBoxes = Array.from(node.querySelectorAll("dd"), (value) =>
+      value.getBoundingClientRect(),
+    );
+    const ended = node.querySelector("header > span")!.getBoundingClientRect();
+    return {
+      right: bound.right,
+      endedLeft: ended.left,
+      endedRight: ended.right,
+      countsRight: Math.max(...numberBoxes.map((value) => value.right)),
+      contained: node.scrollWidth <= node.clientWidth + 1,
+    };
+  });
+  expect(positions.contained).toBe(true);
+  expect(positions.countsRight).toBeLessThan(positions.endedLeft);
+  expect(positions.endedRight).toBeLessThanOrEqual(positions.right + 1);
+  for (const width of [761, 840, 841, 950, 1000, 1100, 1101, 1280, 1440, 1560, 1600, 1672]) {
+    await page.setViewportSize({ width, height: 900 });
+    const geometry = await detail.evaluate((node) => {
+      const header = node.querySelector("header")!;
+      const progress = header.querySelector(".sourcing-progress")!;
+      const photo = header.querySelector(".research-thumbnail")!.getBoundingClientRect();
+      const bar = progress.getBoundingClientRect();
+      const label = progress.querySelector("header > span")!.getBoundingClientRect();
+      const number = Array.from(progress.querySelectorAll("dd"), (value) =>
+        value.getBoundingClientRect(),
+      );
+      return {
+        compact: header.clientWidth <= 650,
+        belowMedia: bar.top >= photo.bottom - 1,
+        panelCoverage: Math.round((100 * bar.width) / header.clientWidth),
+        identityGutter: header.querySelector("h3")!.getBoundingClientRect().left - photo.right,
+        completionVisible: label.right <= bar.right + 1,
+        valuesInside: number.every((box) => box.left >= bar.left - 1 && box.right <= bar.right + 1),
+        noOverlap: number.every(
+          (box) =>
+            box.right <= label.left + 1 ||
+            box.bottom <= label.top + 1 ||
+            box.top >= label.bottom - 1,
+        ),
+        noOverflow: progress.scrollWidth <= progress.clientWidth + 1,
+      };
+    });
+    expect(geometry.completionVisible, `width=${width}: completion label`).toBe(true);
+    expect(geometry.valuesInside, `width=${width}: metric bounds`).toBe(true);
+    expect(geometry.noOverlap, `width=${width}: no overlap`).toBe(true);
+    expect(geometry.noOverflow, `width=${width}: progress overflow`).toBe(true);
+    if (geometry.compact) {
+      console.log(
+        "sourcing progress uses full-width row",
+        width,
+        geometry.belowMedia,
+        geometry.panelCoverage,
+      );
+      expect(geometry.belowMedia, `width=${width}: progress uses full row`).toBe(true);
+      expect(geometry.panelCoverage, `width=${width}: progress width matches the header`).toBe(100);
+      expect(geometry.identityGutter, `width=${width}: media-title gutter`).toBeCloseTo(16, 0);
+    }
+  }
+  await expect(detail).toContainText("采集失败");
+});
+
+test("wide sourcing toolbar balances search and four metrics without changing mobile layout", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route(searchesRoute, (route) =>
+    route.fulfill({
+      json: {
+        ...envelope([
+          {
+            id: searchId,
+            input_type: "keyword",
+            input_ref: "净水杯",
+            status: "queued",
+            candidate_count: 0,
+            missing_fields: [],
+            created_at: "2026-08-08T12:00:00Z",
+          },
+        ]),
+        meta: {
+          page: 1,
+          page_size: 20,
+          total: 945,
+          summary: { total: 945, running: 138, candidates: 25100, ready: 343 },
+        },
+      },
+    }),
+  );
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await page.goto("/sourcing");
+  const overview = page.locator(".sourcing-overview");
+  const search = overview.getByRole("searchbox");
+  const stats = overview.getByRole("term");
+  await expect(stats).toHaveCount(4);
+  const values = overview.locator(".sourcing-summary dd");
+  await expect(values).toHaveCount(4);
+  await expect(values).toHaveText(["945", "138", "25100", "343"]);
+  for (const value of await values.all()) {
+    await expect(value).toHaveCSS("font-size", "20px");
+    await expect(value).toHaveCSS("font-weight", "700");
+  }
+  await expect(search).toHaveCSS("min-height", "40px");
+  const searchBox = (await search.boundingBox())!;
+  const overviewBox = (await overview.boundingBox())!;
+  expect(searchBox.width).toBeLessThanOrEqual(304);
+  // The 18px label gap shifts the control two pixels while preserving its width.
+  expect(searchBox.x - overviewBox.x).toBeCloseTo(127, 0);
+  const columns = () =>
+    overview
+      .locator(".sourcing-summary")
+      .evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(" ").length);
+  await expect.poll(columns).toBe(4);
+  const statsBox = (await overview.locator(".sourcing-summary").boundingBox())!;
+  expect(Math.abs(statsBox.x - 1037)).toBeLessThanOrEqual(6);
+  expect(statsBox.width).toBe(592);
+  const labelStarts = await stats.evaluateAll((labels) =>
+    labels.map((label) => Math.round(label.getBoundingClientRect().x)),
+  );
+  for (const [index, referenceX] of [1037, 1181, 1355, 1520].entries()) {
+    expect(Math.abs(labelStarts[index] - referenceX)).toBeLessThanOrEqual(6);
+  }
+  const labelToValueGaps = await overview
+    .locator(".sourcing-summary > div")
+    .evaluateAll((groups) =>
+      groups.map(
+        (group) =>
+          group.querySelector("dd")!.getBoundingClientRect().left -
+          group.querySelector("dt")!.getBoundingClientRect().right,
+      ),
+    );
+  expect(labelToValueGaps).toEqual([10, 10, 10, 10]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(columns).toBe(2);
+  await expect(search).toBeVisible();
+});
+
+test("sourcing wide toolbar keeps search usable with large metric values", async ({ page }) => {
+  await setup(page);
+  await page.setViewportSize({ width: 1600, height: 900 });
+  const large = Number.MAX_SAFE_INTEGER;
+  await page.route(searchesRoute, (route) =>
+    route.fulfill({
+      json: {
+        ...envelope([
+          {
+            id: searchId,
+            input_type: "keyword",
+            input_ref: "净水杯",
+            status: "queued",
+            candidate_count: 0,
+            missing_fields: [],
+            created_at: "2026-08-08T12:00:00Z",
+          },
+        ]),
+        meta: {
+          page: 1,
+          page_size: 20,
+          total: large,
+          summary: { total: large, running: large - 1, candidates: large, ready: large - 2 },
+        },
+      },
+    }),
+  );
+  await page.goto("/sourcing");
+  const overview = page.locator(".sourcing-overview");
+  const search = overview.getByRole("searchbox");
+  const summary = overview.locator(".sourcing-summary");
+  await expect(summary.locator("dd")).toHaveText([
+    String(large),
+    String(large - 1),
+    String(large),
+    String(large - 2),
+  ]);
+  const [box, searchBox, summaryBox] = await Promise.all([
+    overview.boundingBox(),
+    search.boundingBox(),
+    summary.boundingBox(),
+  ]);
+  expect(searchBox!.width).toBeGreaterThanOrEqual(220);
+  expect(summaryBox!.x + summaryBox!.width).toBeLessThan(box!.x + box!.width);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("sourcing detail tabs switch by keyboard and expose only the active panel", async ({
+  page,
+}) => {
+  const wide = page.viewportSize()!.width >= 1101;
+  if (wide) await page.setViewportSize({ width: 1672, height: 941 });
+  await setup(page);
+  await page.goto("/sourcing");
+  const tabs = page.getByRole("tablist", { name: "找货详情视图" });
+  const offers = tabs.getByRole("tab", { name: "供应商报价" });
+  await expect(offers).toHaveAttribute("aria-selected", "true");
+  await expect(offers).toHaveCSS("font-size", wide ? "16px" : "13px");
+  if (wide) {
+    await expect(tabs).toHaveCSS("margin-block-start", "14px");
+    await expect(tabs).toHaveCSS("column-gap", "4px");
+    const unselected = tabs.getByRole("tab", { name: "成本与利润" });
+    await expect(unselected).toHaveCSS("font-weight", "500");
+    await expect(offers).toHaveCSS("font-weight", /^(650|700)$/);
+    const selectedInk = await offers.evaluate((tab) => {
+      const style = getComputedStyle(tab);
+      return { color: style.color, underline: style.borderBottomColor };
+    });
+    expect(selectedInk.underline).toBe(selectedInk.color);
+    await expect(unselected).toHaveCSS("border-bottom-color", "rgba(0, 0, 0, 0)");
+    await expect(offers).toHaveCSS("line-height", "22px");
+    for (const tab of await tabs.getByRole("tab").all())
+      await expect(tab).toHaveCSS("width", "122px");
+  }
+  await offers.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(tabs.getByRole("tab", { name: "成本与利润" })).toBeFocused();
+  await expect(page.getByRole("tabpanel", { name: "成本与利润" })).toContainText("未关联选品");
+  await page.keyboard.press("End");
+  await expect(tabs.getByRole("tab", { name: "报价历史" })).toBeFocused();
+  await expect(page.getByRole("tabpanel", { name: "报价历史" })).toBeVisible();
+  await expect(page.getByRole("tabpanel", { name: "供应商报价" })).toBeHidden();
+  await page.keyboard.press("Home");
+  await expect(offers).toBeFocused();
+  await expect(page.getByRole("tabpanel", { name: "供应商报价" })).toBeVisible();
+});
+
+test("wide sourcing cost header wraps missing evidence without squeezing its analysis link", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide sourcing header layout");
+  const field = "estimated_first_leg_charge_for_supplier_package".repeat(5);
+  const profit = calculatedProfit(0);
+  const { search, opportunityId } = await opportunitySetup(page, {
+    ...profit,
+    latest_run: { ...profit.latest_run, status: "insufficient_data", missing_fields: [field] },
+  });
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({ json: envelope({ ...search, candidate_count: 0, candidates: [] }) }),
+  );
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await page.goto("/sourcing");
+  const panel = page.getByRole("tabpanel", { name: "供应商报价" });
+  const costs = panel.getByRole("region", { name: "成本与利润摘要" });
+  const unknown = costs.locator(".sourcing-profit-unconfirmed");
+  const action = costs.getByRole("link", { name: "查看商品分析" });
+  await expect(unknown).toContainText(field);
+  await expect(costs.locator(".sourcing-profit-unconfirmed-breakdown dd")).toHaveText([
+    "—",
+    "—",
+    "—",
+    "—",
+  ]);
+  await expect(action).toHaveAttribute(
+    "href",
+    new RegExp(`^/opportunities/${opportunityId}\\?tab=profit`),
+  );
+  for (const width of [1600, 1672]) {
+    await page.setViewportSize({ width, height: 941 });
+    const [header, text, link] = await Promise.all(
+      [costs.locator("header"), unknown, action].map((part) => part.boundingBox()),
+    );
+    expect(text!.height).toBeGreaterThan(40);
+    expect(text!.x + text!.width).toBeLessThan(link!.x);
+    expect(link!.x + link!.width).toBeLessThanOrEqual(header!.x + header!.width);
+    await expect(unknown).toHaveCSS("overflow-wrap", "anywhere");
+    await expect(action).toHaveCSS("white-space", "nowrap");
+    await action.focus();
+    await expect(action).toBeFocused();
+  }
+});
+
+test("tablet sourcing keeps the title beside the photo and the progress below both", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Tablet workbench layout");
+  await page.setViewportSize({ width: 601, height: 941 });
+  await setup(page);
+  const search = {
+    id: searchId,
+    input_type: "opportunity",
+    input_ref: "00000000-0000-4000-8000-000000000001",
+    display_name:
+      "Long Amazon item title for a sourcing detail that wraps and keeps the photo visible",
+    status: "succeeded_empty",
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: "2026-11-03T00:00:00Z",
+  };
+  const count = 999_999_999;
+  await page.route(searchesRoute, (route) => route.fulfill({ json: envelope([search]) }));
+  await page.route("**/api/v1/sourcing/searches/" + searchId, (route) =>
+    route.fulfill({
+      json: envelope({
+        ...search,
+        candidates: [],
+        collection_progress: {
+          status: "failed",
+          total_subqueries: count * 4,
+          successful_subqueries: count,
+          active_subqueries: count,
+          failed_subqueries: count,
+          blocked_subqueries: count,
+        },
+      }),
+    }),
+  );
+  await page.goto("/sourcing");
+  const detail = page.locator(".sourcing-detail");
+  await expect(detail.locator("h3")).toHaveText(search.display_name);
+  await expect(detail.locator(".sourcing-progress dd")).toHaveText(Array(4).fill(String(count)));
+  for (const width of [601, 700, 760]) {
+    await page.setViewportSize({ width, height: 941 });
+    const geometry = await detail.evaluate((node) => {
+      const header = node.querySelector("header")!.getBoundingClientRect();
+      const photo = node.querySelector(".research-thumbnail")!.getBoundingClientRect();
+      const title = node.querySelector("h3")!.getBoundingClientRect();
+      const progress = node.querySelector(".sourcing-progress")!.getBoundingClientRect();
+      const counts = [...node.querySelectorAll(".sourcing-progress dd")].map((el) =>
+        el.getBoundingClientRect(),
+      );
+      return {
+        gutter: title.left - photo.right,
+        photoWidth: photo.width,
+        headerWidth: header.width,
+        progressWidth: progress.width,
+        photoSharesRow: title.top < photo.bottom,
+        belowIdentity: progress.top >= Math.max(photo.bottom, title.bottom) - 1,
+        fits: counts.every((box) => box.left >= progress.left && box.right <= progress.right + 1),
+      };
+    });
+    console.log("TABLET_SOURCING_TRACKS", width, JSON.stringify(geometry));
+    expect(geometry.gutter).toBeCloseTo(16, 0);
+    expect(geometry.photoWidth).toBe(128);
+    expect(geometry.progressWidth).toBeCloseTo(geometry.headerWidth, 0);
+    expect(geometry.photoSharesRow && geometry.belowIdentity && geometry.fits).toBe(true);
+  }
+  await detail.screenshot({ path: testInfo.outputPath("sourcing-tablet-tracks.png") });
 });

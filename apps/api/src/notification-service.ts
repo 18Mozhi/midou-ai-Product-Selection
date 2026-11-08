@@ -58,6 +58,12 @@ export interface NotificationRepository {
 export class NotificationService {
   constructor(private readonly repo: NotificationRepository) {}
   list(i: any) {
+    if (i.keyword !== undefined && (typeof i.keyword !== "string" || i.keyword.length > 100))
+      throw new NotificationServiceError(
+        "notification_keyword_invalid",
+        400,
+        "搜索关键词最多 100 字符。",
+      );
     const page = Math.max(1, Number(i.page) || 1),
       pageSize = Math.min(200, Math.max(1, Number(i.pageSize) || 50)),
       workflowStatus = ["open", "in_progress", "closed"].includes(i.workflowStatus)
@@ -69,6 +75,7 @@ export class NotificationService {
       pageSize,
       unread: i.unread === "true",
       workflowStatus,
+      keyword: i.keyword?.trim() || null,
       category: ["task", "approval", "competitor", "system"].includes(i.category)
         ? i.category
         : null,

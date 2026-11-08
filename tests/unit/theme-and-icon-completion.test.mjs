@@ -42,9 +42,12 @@ test("body copy and interactive controls preserve the accessibility floor", asyn
     );
     assert.match(accessibility, new RegExp(`${property}: var\\(--so-touch-target\\)`));
   }
-  assert.match(member, /\.role-content\s*\{\s*font-size:\s*16px/);
-  assert.match(member, /textarea\s*\{\s*font-size:\s*16px/);
-  assert.doesNotMatch(member, /font-size:\s*(?:14|15)px/);
+  // The approved November reference uses 14px body/controls and 13px metadata.
+  // Keep touch-target assertions above; changing type density must not shrink targets.
+  assert.match(member, /\.role-content\s*\{\s*font-size:\s*14px/);
+  assert.match(member, /textarea\s*\{\s*font-size:\s*14px/);
+  assert.match(member, /small\s*\{\s*font-size:\s*13px/);
+  assert.doesNotMatch(member, /font-size:\s*(?:[0-9]|1[0-2])px/);
 });
 
 test("saved theme and session density are applied before Vue mounts", async () => {
@@ -324,7 +327,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     if (paths[index] === "apps/web/src/design/trend-dashboard-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html:has\(body #app \.trend-dashboard--review\)\s*\{(?:\s*--trend-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));)+\s*\}$/,
+        /^\.trend-dashboard--review\s*\{(?:\s*--trend-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\)|var\(--so-[a-z-]+\));)+\s*\}$/,
       );
       continue;
     }

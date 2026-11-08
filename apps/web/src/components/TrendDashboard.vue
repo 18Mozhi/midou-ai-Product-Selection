@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   computed,
+  nextTick,
   onActivated,
   onBeforeUnmount,
   onDeactivated,
@@ -11,6 +12,7 @@ import {
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import AppIcon from "./AppIcon.vue";
 import ResearchThumbnail from "./ResearchThumbnail.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import TrendDetailPanel from "./TrendDetailPanel.vue";
@@ -39,6 +41,9 @@ const props = defineProps<{
   state = ref<State>("loading"),
   topics = ref<Topic[]>([]),
   selected = ref<Detail | null>(null),
+  topicList = ref<HTMLElement | null>(null),
+  splitListOverflow = ref(false),
+  detailPanel = ref<InstanceType<typeof TrendDetailPanel> | null>(null),
   mobileDetailOpen = ref(typeof route.query.topic === "string"),
   requestId = ref(""),
   message = ref(""),
@@ -97,6 +102,10 @@ const activeFilterCount = computed(
       (left, right) => right.heat.value - left.heat.value || right.source_count - left.source_count,
     );
   });
+// The detail read does not include media on every record. Reuse only the matching list item.
+const selectedListMedia = computed(() =>
+  topics.value.find((topic) => topic.id === selected.value?.id),
+);
 async function read<T = any>(
   path: string,
   isCurrent: () => boolean = () => true,
@@ -217,10 +226,75 @@ async function selectTopic(topic: Topic) {
   await router.push({ query: { ...route.query, topic: topic.id, section: undefined } });
 }
 
-function returnToTopicList() {
+function topicButton(id: string) {
+  return topicList.value?.querySelector<HTMLButtonElement>(`[data-topic-id="${CSS.escape(id)}"]`);
+}
+
+watch(
+  [topicList, mobileDetailOpen, sortedTopics],
+  ([pane, open], _previous, onCleanup) => {
+    if (!open || !pane) {
+      splitListOverflow.value = false;
+      return;
+    }
+    const measure = () => {
+      const lastRow = pane.querySelector(":scope > .trend-topic-row:last-of-type");
+      // Decorative bottom padding can overflow even when all topic rows are visible.
+      splitListOverflow.value =
+        !!lastRow &&
+        pane.clientHeight > 0 &&
+        lastRow.getBoundingClientRect().bottom + pane.scrollTop >
+          pane.getBoundingClientRect().top + pane.clientTop + pane.clientHeight + 1;
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(pane);
+    for (const child of pane.children) observer.observe(child);
+    onCleanup(() => observer.disconnect());
+  },
+  { flush: "post" },
+);
+
+watch(
+  [() => route.query.topic, topicList, sortedTopics, splitListOverflow],
+  ([id, pane]) => {
+    if (
+      !pageActive ||
+      typeof id !== "string" ||
+      !pane?.clientHeight ||
+      getComputedStyle(pane).overflowY !== "auto"
+    )
+      return;
+    const row = topicButton(id);
+    if (!row) return;
+    const bounds = pane.getBoundingClientRect();
+    const footer = pane.querySelector(":scope > .trend-pagination");
+    const header = pane.querySelector(":scope > header");
+    const visibleTop =
+      header && getComputedStyle(header).position === "sticky"
+        ? Math.max(bounds.top, header.getBoundingClientRect().bottom)
+        : bounds.top;
+    const visibleBottom = Math.min(bounds.bottom, footer?.getBoundingClientRect().top ?? Infinity);
+    const selectedBounds = row.getBoundingClientRect();
+    if (selectedBounds.top < visibleTop || selectedBounds.height > visibleBottom - visibleTop) {
+      pane.scrollTop += selectedBounds.top - visibleTop;
+    } else if (selectedBounds.bottom > visibleBottom) {
+      pane.scrollTop += selectedBounds.bottom - visibleBottom;
+    }
+  },
+  { flush: "post" },
+);
+
+async function returnToTopicList() {
+  const id = route.query.topic;
   mobileDetailOpen.value = false;
   selected.value = null;
-  void router.replace({ query: { ...route.query, topic: undefined } });
+  await router.replace({ query: { ...route.query, topic: undefined } });
+  await nextTick();
+  if (!pageActive || route.query.topic !== undefined || typeof id !== "string") return;
+  const row = topicButton(id);
+  row?.focus({ preventScroll: true });
+  row?.scrollIntoView({ block: "nearest" });
 }
 function syncFromRoute() {
   filters.q = typeof route.query.q === "string" ? route.query.q : "";
@@ -396,7 +470,15 @@ onBeforeUnmount(() => {
           :disabled="state === 'loading'"
           @click="load"
         >
-          刷新情报
+          <AppIcon name="refresh" />刷新情报
+        </button>
+        <button
+          v-if="mobileDetailOpen && selected && busy !== 'detail'"
+          type="button"
+          class="so-action-secondary trend-view-sources"
+          @click="detailPanel?.showSources()"
+        >
+          <AppIcon name="list" :size="17" />查看来源
         </button>
       </div>
     </header>
@@ -425,44 +507,65 @@ onBeforeUnmount(() => {
       class="trend-workbench"
       :class="{ 'is-mobile-detail-open': mobileDetailOpen, 'is-detail-open': mobileDetailOpen }"
     >
-      <section id="trend-list" class="trend-list">
+      <section
+        id="trend-list"
+        ref="topicList"
+        class="trend-list"
+        :data-split-overflow="splitListOverflow || undefined"
+      >
         <header>
           <div>
             <strong>情报列表</strong><span>共 {{ total }} 个主题</span>
           </div>
-          <small>{{ sort === "impact" ? "按影响程度排序" : "按所选视图排序" }}</small>
+          <label class="trend-list-order">
+            <AppIcon name="arrow-down-up" :size="16" />
+            <select v-model="sort" aria-label="情报列表顺序">
+              <option value="impact">按影响程度排序</option>
+              <option value="latest">按最新信号排序</option>
+              <option value="momentum">按增长速度排序</option>
+            </select>
+            <AppIcon name="chevron" :size="14" />
+          </label>
         </header>
         <button
           v-for="(topic, index) in sortedTopics"
+          class="trend-topic-row"
           :key="topic.id"
           type="button"
-          :aria-pressed="selected?.id === topic.id"
+          :data-topic-id="topic.id"
+          :aria-pressed="route.query.topic === topic.id"
           @click="selectTopic(topic)"
         >
+          <span class="topic-index" aria-hidden="true">{{ (page - 1) * 20 + index + 1 }}</span>
           <ResearchThumbnail
             :src="topic.image_url"
             :source-url="topic.source_url"
             :alt="topic.title"
           />
-          <span class="topic-index" aria-hidden="true">{{ (page - 1) * 20 + index + 1 }}</span
-          ><span
-            ><strong>{{ topic.title }}</strong
-            ><small
+          <span class="topic-copy trend-topic-summary">
+            <strong>{{ topic.title }}</strong>
+            <small
               >{{ topic.market }} · {{ topic.category || "未分类" }} ·
               {{ statusLabel(topic.status) }}</small
-            ><small
-              >{{ topic.source_count }} 个来源 · 新鲜度
-              {{ freshness(topic.source_fresh_at) }}</small
-            ><small
-              >{{ confidenceLabel(topic) }} · {{ topic.language }} ·
-              {{ topic.source_name || "来源未提供" }}</small
-            ></span
-          ><span class="topic-heat"
+            >
+            <span class="trend-topic-provenance">
+              <small
+                >{{ topic.source_count }} 个来源 · 新鲜度
+                {{ freshness(topic.source_fresh_at) }}</small
+              >
+              <small
+                >{{ confidenceLabel(topic) }} · {{ topic.language }} ·
+                {{ topic.source_name || "来源未提供" }}</small
+              >
+            </span>
+          </span>
+          <span class="topic-heat"
             ><b>{{ topic.heat.value }}</b
             ><small>条信号</small></span
-          ><em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
+          >
+          <em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
         </button>
-        <footer class="trend-pagination" aria-label="趋势分页">
+        <footer v-if="pageCount > 1" class="trend-pagination" aria-label="趋势分页">
           <button type="button" :disabled="page <= 1" @click="goPage(page - 1)">上一页</button>
           <span>第 {{ page }} / {{ pageCount }} 页</span>
           <button type="button" :disabled="page >= pageCount" @click="goPage(page + 1)">
@@ -471,14 +574,17 @@ onBeforeUnmount(() => {
         </footer>
       </section>
       <TrendDetailPanel
-        v-if="selected && mobileDetailOpen"
+        v-if="mobileDetailOpen"
+        ref="detailPanel"
         :detail="selected"
+        :list-media="selectedListMedia"
         :busy="busy"
+        :can-read-related="capabilities.includes('opportunity:read')"
         @back="returnToTopicList"
       >
         <template #related-products>
           <TrendRelatedProducts
-            v-if="capabilities.includes('opportunity:read')"
+            v-if="selected && capabilities.includes('opportunity:read')"
             :api-base-url="apiBaseUrl"
             :topic-id="selected.id"
             :organization-id="organizationId"

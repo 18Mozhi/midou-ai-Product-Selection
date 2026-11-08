@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { chromium, expect, test } from "@playwright/test";
 
 for (const shell of ["member", "organization_admin", "platform_admin"] as const) {
   test(`commerce navigation retains ${shell} access and a usable responsive menu`, async ({
@@ -17,7 +17,9 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
     const nav = page.locator(mobile ? ".role-sidebar" : ".commerce-sidebar");
     await expect(nav).toBeVisible();
     if (shell === "member") {
-      await expect(nav.locator(mobile ? ".role-nav-menu a" : "section a")).toHaveCount(4);
+      await expect(nav.locator(mobile ? ".role-nav-menu a" : "section a")).toHaveCount(
+        mobile ? 4 : 6,
+      );
       await expect(nav.getByRole("link", { name: "选品库", exact: true })).toHaveAttribute(
         "href",
         "/opportunities",
@@ -44,15 +46,73 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
   });
 }
 
+for (const area of [
+  {
+    shell: "platform_admin",
+    home: "/platform-admin",
+    label: "组织管理",
+    target: "/platform-admin/organizations",
+  },
+  {
+    shell: "organization_admin",
+    home: "/org-admin",
+    label: "成员与邀请",
+    target: "/org-admin/members",
+  },
+] as const) {
+  test(`admin top bar stays stable and searches only its visible navigation: ${area.shell}`, async ({
+    page,
+  }) => {
+    const desktop = page.viewportSize()!.width > 840;
+    if (desktop) await page.setViewportSize({ width: 1672, height: 941 });
+    await allow(page, area.shell);
+    const reads: string[] = [];
+    await page.route(/\/api\/v1\/me\/(?:global-search|quick-actions)/, (route) => {
+      reads.push(route.request().url());
+      return route.abort();
+    });
+    await page.goto(area.home);
+    const top = page.locator(".role-topbar");
+    const trigger = top.getByRole("button", { name: "搜索后台功能" });
+    await expect(trigger).toBeVisible();
+    const before = (await trigger.boundingBox())!;
+    const topbar = await top.elementHandle();
+    if (desktop) {
+      await expect(top.getByRole("link", { name: "切换组织与工作区" })).toBeVisible();
+      await top.getByLabel("导航帮助").click();
+      await expect(top.getByText("使用侧栏切换工作台，在个人中心调整外观。")).toBeVisible();
+      await page.keyboard.press("Escape");
+      await page.keyboard.press("Control+k");
+    } else await trigger.click();
+    const dialog = page.getByRole("dialog", { name: "搜索后台功能" });
+    const input = dialog.getByRole("searchbox");
+    await expect(input).toBeFocused();
+    await input.fill("候选商品");
+    await expect(dialog.getByRole("status")).toHaveText("没有匹配的后台功能。");
+    await input.fill(area.label);
+    const match = dialog.getByRole("link", { name: new RegExp(area.label) });
+    await expect(match).toHaveAttribute("href", area.target);
+    await match.click();
+    await expect(page).toHaveURL(new RegExp(`${area.target}$`));
+    await expect(dialog).toBeHidden();
+    expect(await topbar?.evaluate((el) => el.isConnected)).toBe(true);
+    const after = (await trigger.boundingBox())!;
+    expect(after.width).toBe(before.width);
+    if (desktop) expect(after.x).toBe(before.x);
+    await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+    expect(reads).toEqual([]);
+  });
+}
+
 test("core member titles and breadcrumbs use the current navigation names", async ({ page }) => {
   await allow(page, "member");
-  for (const [path, title] of [
-    ["/trends", "市场情报"],
-    ["/opportunities", "选品库"],
-    ["/sourcing", "1688 找货"],
+  for (const [path, title, heading, level] of [
+    ["/trends", "市场情报", /^市场情报/, 2],
+    ["/opportunities", "选品库", /^选品库$/, 2],
+    ["/sourcing", "1688 找货", /^供应链找货$/, 1],
   ]) {
     await page.goto(path);
-    await expect(page.getByRole("heading", { name: title, exact: true, level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: heading, level })).toBeVisible();
     const breadcrumb = page.getByRole("navigation", { name: "面包屑" });
     await expect(breadcrumb).toContainText(title);
     await expect(breadcrumb.getByRole("link", { name: "选品工作区", exact: true })).toHaveAttribute(
@@ -368,7 +428,7 @@ test("mobile navigation closes and restores focus when crossing to desktop", asy
   await expect(page.locator(".role-navigation-frame")).toHaveJSProperty("open", false);
   await expect(page.locator(".commerce-sidebar")).toBeVisible();
   await expect(toggle).toBeHidden();
-  await expect(page.getByRole("link", { name: "SCOUTOPS 智能选品" })).toBeFocused();
+  await expect(page.getByRole("link", { name: "米兜智能选品" })).toBeFocused();
 });
 
 for (const item of [
@@ -505,13 +565,21 @@ test("M02-03 platform shell exposes management navigation without member-only sh
   );
   if ((page.viewportSize()?.width ?? 1000) <= 840)
     await page.getByRole("button", { name: "更多" }).click();
-  await expect(page.getByRole("button", { name: /搜索/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "全局搜索", exact: true })).toHaveCount(0);
+  await expect(
+    page.locator(".role-topbar").getByRole("button", { name: "搜索后台功能" }),
+  ).toHaveCount(1);
   await expect(page.getByRole("link", { name: "通知中心" })).toHaveCount(0);
   await expect(sidebar.getByRole("link", { name: /通知运营/ })).toHaveAttribute(
     "href",
     "/platform-admin/notifications",
   );
-  await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("href", "/me");
+  if ((page.viewportSize()?.width ?? 1000) > 840) {
+    await page.getByLabel("账号菜单", { exact: true }).click();
+    await expect(
+      page.locator(".midou-account-menu").getByRole("link", { name: "个人中心" }),
+    ).toHaveAttribute("href", "/me");
+  }
   await expect(sidebar.getByRole("link", { name: "组织管理" })).toHaveAttribute(
     "href",
     "/platform-admin/organizations",
@@ -639,6 +707,98 @@ test("real breadcrumbs are keyboard navigable and mobile secondary pages highlig
   ).toHaveAttribute("aria-current", "page");
 });
 
+test("desktop masthead search keeps icon and shortcut inside the field at narrow widths", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop topbar controls");
+  await page.setViewportSize({ width: 1101, height: 900 });
+  await allow(page, "member");
+  await page.goto("/home");
+  const bar = page.locator(".role-topbar");
+  const search = bar.getByRole("button", { name: "全局搜索", exact: true });
+  await expect(search).toBeVisible();
+  for (const width of [1101, 1200, 1280, 1440, 1600, 1717]) {
+    await page.setViewportSize({ width, height: 900 });
+    const bounds = await search.evaluate((node) => {
+      const icon = node.querySelector("svg")!.getBoundingClientRect();
+      const label = node.querySelector("span")!.getBoundingClientRect();
+      const key = node.querySelector("kbd")!.getBoundingClientRect();
+      const help = node
+        .parentElement!.querySelector(".midou-top-help > summary")!
+        .getBoundingClientRect();
+      const field = node.getBoundingClientRect();
+      return {
+        iconVisible: icon.width >= 16 && icon.left >= field.left,
+        labelRoom: label.width > 0 && label.right <= key.left + 1,
+        shortcutInside: key.right <= field.right + 1 && key.right <= help.left + 1,
+      };
+    });
+    expect(bounds, `width=${width}`).toEqual({
+      iconVisible: true,
+      labelRoom: true,
+      shortcutInside: true,
+    });
+  }
+  await search.click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+});
+
+test("long workspace names preserve the current desktop breadcrumb", async ({ page }) => {
+  await page.setViewportSize({ width: 1101, height: 850 });
+  await allow(page, "platform_admin");
+  await page.route("**/api/v1/me/navigation?**", (route) =>
+    route.fulfill({
+      json: {
+        data: {
+          ...summary("platform_admin"),
+          organization_name: "跨境选品业务数据与供应链管理组织".repeat(4),
+          workspace_name: "北美业务线年度商品研究工作区".repeat(4),
+        },
+        request_id: "long-context-reference",
+        trace_id: "long-context-reference",
+      },
+    }),
+  );
+  await page.goto("/platform-admin/providers/sources/1688-acceptance");
+  const breadcrumb = page.getByRole("navigation", { name: "面包屑", exact: true });
+  await expect(breadcrumb).toHaveCount(1);
+  const current = breadcrumb.locator('[aria-current="page"]');
+  await expect(current).toHaveText("1688 启用检查");
+  const measure = () =>
+    current.evaluate((node) => {
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      const text = range.getBoundingClientRect();
+      const nav = node.closest("nav")!.getBoundingClientRect();
+      return {
+        available: node.clientWidth,
+        needed: node.scrollWidth,
+        visible: text.right <= nav.right + 1,
+      };
+    });
+  const widths = await measure();
+  expect(widths.available).toBeGreaterThanOrEqual(widths.needed);
+  expect(widths.visible).toBe(true);
+  const context = page.locator(".midou-top-context");
+  await expect(context).toBeVisible();
+  const label = await context
+    .locator("span")
+    .evaluate((node) => [node.clientWidth, node.scrollWidth]);
+  expect(label[0]).toBeGreaterThan(0);
+  expect(label[0]).toBeLessThan(label[1]!);
+  const sidebarContext = page.getByRole("link", { name: "选择组织与工作区后进入用户工作台" });
+  await expect(sidebarContext).toHaveAttribute(
+    "title",
+    "北美业务线年度商品研究工作区".repeat(4) + " · " + "跨境选品业务数据与供应链管理组织".repeat(4),
+  );
+  await breadcrumb.getByRole("link", { name: "平台后台", exact: true }).click();
+  await expect(page).toHaveURL(/\/platform-admin$/);
+  await expect(current).toHaveText("平台概览");
+  expect((await measure()).visible).toBe(true);
+  await expect(page.getByRole("button", { name: "搜索后台功能", exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
 test("theme continuity and real-height layout hold at 768, 1024 and 1440", async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("scoutops:ui-theme", "aurora-purple"));
   await allow(page, "platform_admin");
@@ -754,8 +914,340 @@ test("commerce organization overview fits phone tablet and desktop widths", asyn
   }
 });
 
+test("wide masthead height stays constant across member organization and platform routes", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide masthead geometry");
+  await page.setViewportSize({ width: 1672, height: 900 });
+  await allow(page, "member");
+  await page.route("**/api/v1/me/navigation?**", (route) => {
+    const role = new URL(route.request().url()).searchParams.get("shell") as
+      "member" | "organization_admin" | "platform_admin";
+    const data = summary(role);
+    if (role !== "platform_admin") {
+      data.platform_roles = ["platform_super_admin"];
+      data.roles = ["organization_admin"];
+    }
+    return route.fulfill({ json: { data, request_id: "wide-shell", trace_id: "wide-shell" } });
+  });
+  await page.goto("/home");
+  const tabs = page.getByRole("navigation", { name: "工作台类型" });
+  const masthead = page.locator(".role-topbar");
+  const rail = page.getByRole("complementary", { name: "工作区导航" });
+  const check = async (expectedRole: "member" | "organization_admin" | "platform_admin") => {
+    const member = expectedRole === "member";
+    await expect(page.locator(".role-shell")).toHaveAttribute("data-shell", expectedRole);
+    await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
+    expect((await masthead.boundingBox())!.height).toBe(64);
+    await expect(rail).toHaveCSS("top", "64px");
+    const surfaces = await page.locator(".role-shell").evaluate((shell) => {
+      const color = (selector: string) =>
+        getComputedStyle(shell.querySelector(selector)!).backgroundColor;
+      return [color(".role-topbar"), color(".commerce-sidebar"), color(".role-content")];
+    });
+    expect(surfaces[0]).toMatch(/^color\(srgb /);
+    expect(surfaces[0]).toBe(surfaces[1]);
+    expect(surfaces[2]).not.toBe(surfaces[0]);
+    await expect(rail).toHaveCSS("font-family", /DengXian/);
+    await expect(masthead.locator("[data-navigation-search]")).toHaveCSS("font-family", /DengXian/);
+    await expect(masthead.getByRole("link", { name: "切换组织与工作区" })).toHaveCSS(
+      "min-height",
+      "40px",
+    );
+    const help = masthead.getByLabel("导航帮助", { exact: true });
+    await expect(help).toHaveCSS("min-height", "44px");
+    await expect(help.locator("svg")).toHaveAttribute("aria-hidden", "true");
+    const memberBell = masthead.getByRole("link", { name: "通知中心", exact: true });
+    if (member) {
+      await expect(memberBell).toHaveAttribute("href", "/notifications");
+      await expect(memberBell.locator("svg")).toHaveAttribute("aria-hidden", "true");
+    } else {
+      await expect(memberBell).toHaveCount(0);
+    }
+    const settings = rail.getByRole("link", { name: "设置", exact: true });
+    await expect(settings).toHaveAttribute("href", "/me?section=appearance");
+    const account = masthead.locator(".midou-account-menu > summary");
+    await expect(account).toHaveCSS("column-gap", "9px");
+    const chevron = account.locator(":scope > svg");
+    await expect(chevron).toHaveCSS("rotate", "90deg");
+    await account.focus();
+    await page.keyboard.press("Enter");
+    await expect(chevron).toHaveCSS("rotate", "-90deg");
+    await page.keyboard.press("Escape");
+    await expect(chevron).toHaveCSS("rotate", "90deg");
+    const switcher = rail.getByRole("link", { name: "侧栏切换工作区", exact: true });
+    if (await switcher.count()) {
+      await expect(switcher).toHaveText("切换工作区");
+      await expect(switcher.locator("small")).toHaveCount(0);
+      await expect(switcher.locator("svg").first().locator("path")).toHaveAttribute(
+        "d",
+        /^m12 2 10 5/,
+      );
+      await expect(switcher).toHaveAttribute("href", "/select-context");
+    }
+    await expect(tabs).toHaveCSS("border-radius", member ? "999px" : "9px");
+    const activeTab = tabs.locator('a[aria-current="page"]');
+    await expect(activeTab).toHaveCount(1);
+    await expect(activeTab).toHaveCSS("border-radius", member ? "999px" : "6px");
+    await expect(activeTab).toHaveCSS("font-weight", "600");
+    for (const tab of await tabs.locator("a, span").all()) {
+      await expect(tab).toHaveCSS("font-size", member ? "16px" : "15px");
+    }
+    for (const tab of await tabs.locator('a:not([aria-current="page"])').all()) {
+      await expect(tab).toHaveCSS("font-weight", "500");
+    }
+    await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  };
+  await check("member");
+  await tabs.getByRole("link", { name: "组织", exact: true }).click();
+  await expect(page).toHaveURL(/\/org-admin$/);
+  await check("organization_admin");
+  const tools = masthead.locator(".role-top-actions");
+  const adminTools = async () => {
+    await expect(tools).toHaveCSS("gap", "24px");
+    return Promise.all([
+      tools.locator(".midou-top-help > summary").boundingBox(),
+      tools.getByRole("button", { name: "切换界面主题", exact: true }).boundingBox(),
+      tools.locator(".midou-account-menu > summary").boundingBox(),
+    ]);
+  };
+  const organizationTools = await adminTools();
+  await tabs.getByRole("link", { name: "平台", exact: true }).click();
+  await expect(page).toHaveURL(/\/platform-admin$/);
+  await check("platform_admin");
+  const platformTools = await adminTools();
+  for (const [index, tool] of platformTools.entries())
+    expect(tool!.x).toBeCloseTo(organizationTools[index]!.x, 0);
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await check("platform_admin");
+});
+
+test("mid-width admin mastheads keep search geometry stable across roles and routes", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop masthead geometry");
+  await allow(page, "organization_admin");
+  await page.route("**/api/v1/me/navigation?**", (route) => {
+    const shell = new URL(route.request().url()).searchParams.get("shell") as
+      "member" | "organization_admin" | "platform_admin";
+    const data = summary(shell);
+    data.roles = ["organization_admin"];
+    data.platform_roles = ["platform_super_admin"];
+    return route.fulfill({
+      json: { data, request_id: "admin-mid-width", trace_id: "admin-mid-width" },
+    });
+  });
+  const masthead = page.locator(".role-topbar");
+  const rail = page.getByRole("complementary", { name: "工作区导航" });
+  const search = masthead.getByRole("button", { name: "搜索后台功能", exact: true });
+  const measure = async () => {
+    await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
+    await expect(search).toBeVisible();
+    await expect(masthead.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+    return search.evaluate((node) => {
+      const box = node.getBoundingClientRect();
+      return {
+        width: Math.round(box.width),
+        x: Math.round(box.x),
+        height: box.height,
+        radius: getComputedStyle(node).borderRadius,
+        gap: getComputedStyle(node.parentElement!).columnGap,
+      };
+    });
+  };
+  for (const width of [1560, 1599]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/org-admin");
+    const baseline = await measure();
+    expect(baseline).toMatchObject({
+      width: Math.round(width * 0.21),
+      height: 38,
+      radius: "8px",
+      gap: "20px",
+    });
+    await rail.getByRole("link", { name: "成员与邀请", exact: true }).click();
+    await expect(page).toHaveURL(/\/org-admin\/members$/);
+    expect(await measure()).toEqual(baseline);
+    await rail.getByRole("link", { name: "平台", exact: true }).click();
+    await expect(page).toHaveURL(/\/platform-admin$/);
+    expect(await measure()).toEqual(baseline);
+    await rail.getByRole("link", { name: "组织管理", exact: true }).click();
+    await expect(page).toHaveURL(/\/platform-admin\/organizations$/);
+    expect(await measure()).toEqual(baseline);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  }
+});
+
+test("native document scrollbar does not move shared navigation between short and long routes", async ({
+  baseURL,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Native desktop scrollbar");
+  const browser = await chromium.launch({
+    ...testInfo.project.use.launchOptions,
+    ignoreDefaultArgs: ["--hide-scrollbars"],
+  });
+  try {
+    const page = await browser.newPage({ baseURL, viewport: { width: 1672, height: 1000 } });
+    await allow(page, "organization_admin");
+    await page.goto("/org-admin");
+    const shell = page.locator(".role-shell");
+    const rail = page.getByRole("complementary", { name: "工作区导航" });
+    const top = page.locator(".role-topbar");
+    const read = () =>
+      page.evaluate(() => {
+        const root = document.documentElement;
+        const rect = (selector: string) => {
+          const { x, width } = document.querySelector(selector)!.getBoundingClientRect();
+          return { x, width };
+        };
+        return {
+          overflow: root.scrollHeight > innerHeight,
+          overflowsX: root.scrollWidth > root.clientWidth + 1,
+          nativeScrollbar: innerWidth - root.clientWidth,
+          gutter: innerWidth - rect(".role-shell").width,
+          top: rect(".role-topbar"),
+          search: rect("[data-navigation-search]"),
+          rail: rect(".commerce-sidebar"),
+          content: rect(".role-content"),
+        };
+      });
+    await expect(shell).toHaveAttribute("data-state", "ready");
+    await expect(page.getByRole("heading", { name: "更新组织资料", exact: true })).toBeVisible();
+    const short = await read();
+    await rail.getByRole("link", { name: "工作区管理", exact: true }).click();
+    await expect(page).toHaveURL(/\/org-admin\/workspaces$/);
+    await expect(
+      page.locator(".role-content").getByText("Shell Contract Workspace", { exact: true }).first(),
+    ).toBeVisible();
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollHeight))
+      .toBeGreaterThan(1000);
+    const long = await read();
+    console.log("native route geometry", JSON.stringify({ short, long }));
+    expect(short.overflow).toBe(false);
+    expect(long.overflow).toBe(true);
+    expect(short.nativeScrollbar).toBe(0);
+    expect(long.nativeScrollbar).toBeGreaterThan(0);
+    expect(long.gutter).toBe(long.nativeScrollbar);
+    expect(short.gutter).toBe(long.gutter);
+    for (const key of ["top", "search", "rail", "content"] as const) {
+      expect(short[key].x, key + " x").toBeCloseTo(long[key].x, 0);
+      expect(short[key].width, key + " width").toBeCloseTo(long[key].width, 0);
+    }
+    await expect(top.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+    await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+    await page.setViewportSize({ width: 1024, height: 1800 });
+    await rail.getByRole("link", { name: "治理概览", exact: true }).click();
+    await expect(page.getByRole("heading", { name: "更新组织资料", exact: true })).toBeVisible();
+    for (const width of [841, 1024, 1100]) {
+      await page.setViewportSize({ width, height: 1800 });
+      const tall = await read();
+      await page.setViewportSize({ width, height: 760 });
+      const short = await read();
+      console.log("native narrow desktop geometry", width, JSON.stringify({ tall, short }));
+      expect(tall.overflow).toBe(false);
+      expect(short.nativeScrollbar).toBeGreaterThan(0);
+      expect([tall.overflowsX, short.overflowsX]).toEqual([false, false]);
+      expect(tall.gutter).toBe(short.gutter);
+      for (const key of ["top", "search", "rail", "content"] as const) {
+        expect(tall[key].x, key + " x").toBeCloseTo(short[key].x, 0);
+        expect(tall[key].width, key + " width").toBeCloseTo(short[key].width, 0);
+      }
+      await expect(top.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+    }
+  } finally {
+    await browser.close();
+  }
+});
+
+test("narrow desktop admin keeps workspace tools pinned while opening the last route", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop rail breakpoint");
+  await page.setViewportSize({ width: 1024, height: 760 });
+  await allow(page, "platform_admin");
+  await page.goto("/platform-admin");
+  const rail = page.getByRole("complementary", { name: "工作区导航" });
+  const menu = rail.locator(".commerce-sidebar-menu");
+  const operation = menu.getByRole("link", { name: "系统运维", exact: true });
+  const footer = rail.locator("footer");
+  const settings = footer.getByRole("link", { name: "设置", exact: true });
+  await expect(operation).toBeAttached();
+  const measure = () =>
+    rail.evaluate((node) => {
+      const list = node.querySelector(".commerce-sidebar-menu")!;
+      return {
+        railOverflow: getComputedStyle(node).overflowY,
+        menuDisplay: getComputedStyle(list).display,
+        menuOverflow: list.scrollHeight > list.clientHeight,
+        footerBottom: node.querySelector("footer")!.getBoundingClientRect().bottom,
+      };
+    });
+  const before = await measure();
+  console.log("narrow desktop navigation", JSON.stringify(before));
+  expect(before.footerBottom).toBeLessThanOrEqual(760);
+  expect(before.menuDisplay).toBe("flex");
+  expect(before.menuOverflow).toBe(true);
+  const anchor = (await settings.boundingBox())!.y;
+  await operation.focus();
+  await expect(operation).toBeInViewport({ ratio: 1 });
+  expect(await menu.evaluate((node) => node.scrollTop)).toBeGreaterThan(0);
+  await page.keyboard.press("Enter");
+  await expect(operation).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  await expect(settings).toBeInViewport({ ratio: 1 });
+  expect((await settings.boundingBox())!.y).toBeCloseTo(anchor, 0);
+  const help = footer.locator(".midou-organization-help > summary");
+  await expect(help).toBeInViewport({ ratio: 1 });
+  await help.click();
+  const helpText = footer.getByText("从侧栏进入组织、采集和审计管理。", { exact: false });
+  await expect(helpText).toBeInViewport({ ratio: 1 });
+  await help.press("Escape");
+  await expect(helpText).toBeHidden();
+  await page.setViewportSize({ width: 1024, height: 941 });
+  await expect(settings).toBeInViewport({ ratio: 1 });
+  await expect(menu).toHaveCSS("display", "flex");
+  await page.setViewportSize({ width: 840, height: 760 });
+  await expect(rail).toBeHidden();
+  await expect(page.getByRole("button", { name: "打开导航菜单", exact: true })).toBeVisible();
+});
+
+test("short desktop platform navigation keeps workspace tools pinned across routes", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Short desktop rail uses desktop CSS");
+  await page.setViewportSize({ width: 1366, height: 900 });
+  await allow(page, "platform_admin");
+  await page.goto("/platform-admin");
+  const rail = page.getByRole("complementary", { name: "工作区导航" });
+  const settings = rail.getByRole("link", { name: "设置", exact: true });
+  const help = rail.getByText("帮助", { exact: true });
+  const switcher = rail.getByRole("link", { name: "选择组织与工作区后进入用户工作台" });
+  for (const control of [switcher, settings, help]) {
+    await expect(control).toBeInViewport({ ratio: 1, timeout: 2000 });
+  }
+  await page.setViewportSize({ width: 1366, height: 760 });
+  await expect(switcher).toBeInViewport({ ratio: 1 });
+  const anchor = (await settings.boundingBox())!.y;
+  const operation = rail.getByRole("link", { name: "系统运维", exact: true });
+  const routeMenu = rail.locator(".commerce-sidebar-menu");
+  expect(await routeMenu.evaluate((node) => node.scrollHeight > node.clientHeight)).toBe(true);
+  await operation.focus();
+  await expect(operation).toBeInViewport({ ratio: 1 });
+  expect(await routeMenu.evaluate((node) => node.scrollTop)).toBeGreaterThan(0);
+  await page.keyboard.press("Enter");
+  await expect(operation).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  await expect(settings).toBeInViewport({ ratio: 1 });
+  expect((await settings.boundingBox())!.y).toBeCloseTo(anchor, 0);
+});
+
 for (const shell of ["member", "organization_admin", "platform_admin"] as const) {
-  test("midou reference shell smoke " + shell, async ({ page }) => {
+  test("midou reference shell smoke " + shell, async ({ page }, testInfo) => {
+    const wideHome = shell === "member" && testInfo.project.name === "desktop-chromium";
+    if (wideHome) await page.setViewportSize({ width: 1672, height: 941 });
     await allow(page, shell);
     if (shell === "member") {
       await page.route("**/api/v1/opportunities?**", (r) =>
@@ -872,6 +1364,11 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
       await expect(
         page.locator(".home-quiet-empty").getByText("暂无已完成分析的商品", { exact: true }),
       ).toBeVisible();
+      if (wideHome) {
+        const stats = page.locator(".home-status-facts");
+        await expect(stats.getByRole("link")).toHaveCount(4);
+        await expect(stats.getByRole("link").first()).toHaveCSS("border-right-width", "0px");
+      }
     } else if (shell === "organization_admin") {
       await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
       await expect(
@@ -899,6 +1396,8 @@ for (const shell of ["member", "organization_admin", "platform_admin"] as const)
 test("member navigation survives account appearance and back without replacing chrome", async ({
   page,
 }) => {
+  const wide = (page.viewportSize()?.width ?? 0) > 840;
+  if (wide) await page.setViewportSize({ width: 1717, height: 916 });
   await allow(page, "member");
   await page.route("**/api/v1/auth/session-status", (route) =>
     route.fulfill({
@@ -908,7 +1407,14 @@ test("member navigation survives account appearance and back without replacing c
   await page.route("**/api/v1/me/ui-preferences", (route) =>
     route.fulfill({
       json: {
-        data: { theme: "deep-ocean", version: 1 },
+        data: {
+          theme: "deep-ocean",
+          source: "saved",
+          organization_id: "org-1",
+          workspace_id: "workspace-1",
+          version: 1,
+          updated_at: null,
+        },
         request_id: "preference",
         trace_id: "preference",
       },
@@ -923,17 +1429,68 @@ test("member navigation survives account appearance and back without replacing c
       const s = getComputedStyle(el);
       return {
         height: el.getBoundingClientRect().height,
+        brandFont: getComputedStyle(el.querySelector(".role-brand > b")!).fontSize,
+        brandMarkWidth: el.querySelector(".midou-brand-mark")!.getBoundingClientRect().width,
+        railWidth: document.querySelector(".commerce-sidebar")?.getBoundingClientRect().width,
+        workspaceTabs: document.querySelector(".midou-area-tabs")
+          ? (() => {
+              const tabs = document.querySelector(".midou-area-tabs")!;
+              const current = tabs.querySelector('[aria-current="page"]')!;
+              return {
+                radius: getComputedStyle(tabs).borderTopLeftRadius,
+                background: getComputedStyle(tabs).backgroundColor,
+                activeRadius: getComputedStyle(current).borderTopLeftRadius,
+                activeFontSize: getComputedStyle(current).fontSize,
+              };
+            })()
+          : null,
         font: s.fontFamily,
         background: s.backgroundColor,
         density: document.documentElement.dataset.density,
       };
     });
   const baseline = await metrics();
+  if (wide) {
+    expect(baseline).toMatchObject({
+      height: 64,
+      railWidth: 246,
+      brandFont: "24px",
+      brandMarkWidth: 40,
+    });
+    expect(baseline.workspaceTabs).toMatchObject({
+      radius: "999px",
+      activeRadius: "999px",
+      activeFontSize: "16px",
+    });
+    const workspaceTabs = page.getByRole("navigation", { name: "工作台类型", exact: true });
+    await expect(workspaceTabs).toHaveCSS("border-top-color", "rgba(0, 0, 0, 0)");
+    await expect(workspaceTabs.getByRole("link", { name: "选品", exact: true })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    await expect(page.locator(".midou-top-avatar")).toHaveCSS("width", "36px");
+    await expect(
+      page.getByRole("button", { name: "全局搜索", exact: true }).locator("svg"),
+    ).toHaveCSS("width", "18px");
+    const rail = (await page.locator(".commerce-sidebar").boundingBox())!;
+    expect(rail.y + rail.height).toBe(page.viewportSize()!.height);
+    const active = page.locator('.commerce-sidebar section a[aria-current="page"]');
+    await expect(active).toHaveCSS("font-size", "16px");
+    await expect(active).toHaveCSS("font-weight", "650");
+    const help = page.locator(".commerce-sidebar footer details");
+    await help.locator("summary").click();
+    await expect(help.locator("p")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(help.locator("p")).toBeHidden();
+  }
   if ((page.viewportSize()?.width ?? 1000) <= 840) {
     await page.getByRole("button", { name: "打开导航菜单" }).click();
     await page.locator('.role-sidebar-utility a[href="/me"]').click();
     await expect(page.getByRole("dialog", { name: "工作台导航" })).toBeHidden();
-  } else await page.locator('.role-topbar a[href="/me"]').click();
+  } else {
+    await page.getByLabel("账号菜单", { exact: true }).click();
+    await page.locator(".midou-account-menu").getByRole("link", { name: "个人中心" }).click();
+  }
   await expect(page.getByRole("navigation", { name: "个人中心分区" })).toBeVisible();
   expect(await header?.evaluate((el) => el.isConnected)).toBe(true);
   expect(await sidebar?.evaluate((el) => el.isConnected)).toBe(true);
@@ -977,4 +1534,649 @@ test("session-only account does not bypass a forbidden member destination", asyn
   await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "forbidden");
   expect(reads).toBe(2);
   await expect(page.locator(".account-shell")).toHaveCount(0);
+});
+
+test("platform source settings preserve the shared navigation styling", async ({ page }) => {
+  test.skip((page.viewportSize()?.width ?? 0) <= 840, "Desktop shared navigation");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await allow(page, "platform_admin");
+  await page.goto("/platform-admin");
+  const bar = page.locator(".role-topbar");
+  const navigationSearch = bar.locator("[data-navigation-search]");
+  const menu = page.locator(".commerce-sidebar");
+  const styles = () =>
+    navigationSearch.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        color: style.color,
+        background: style.backgroundColor,
+        border: style.borderColor,
+        radius: style.borderRadius,
+        font: style.fontFamily,
+        height: element.getBoundingClientRect().height,
+      };
+    });
+  const railStyle = () =>
+    menu.evaluate((element) => {
+      const tabs = element.querySelector(".midou-area-tabs")!;
+      const context = element.querySelector(".midou-platform-return")!;
+      const help = element.querySelector(".midou-organization-help")!;
+      return {
+        tabsSurface: getComputedStyle(tabs).backgroundColor,
+        tabsTop: tabs.getBoundingClientRect().y,
+        contextHeight: context.getBoundingClientRect().height,
+        contextInset: getComputedStyle(context).paddingInlineStart,
+        footerTop: context.closest("footer")!.getBoundingClientRect().top,
+        railWidth: element.getBoundingClientRect().width,
+        helpAlignment: getComputedStyle(help).justifySelf,
+      };
+    });
+  const baseline = await styles();
+  const railBaseline = await railStyle();
+  await menu.locator('a[href="/platform-admin/providers"]').click();
+  await expect(page.locator(".provider-registry")).toBeVisible();
+  expect(await styles()).toEqual(baseline);
+  expect(await railStyle()).toEqual(railBaseline);
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  await menu.getByRole("link", { name: "平台概览", exact: true }).click();
+  await expect(page).toHaveURL(/\/platform-admin$/);
+  expect(await styles()).toEqual(baseline);
+  expect(await railStyle()).toEqual(railBaseline);
+});
+
+test("admin appearance panel opens directly below the masthead and remains operable", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name !== "desktop-chromium",
+    "Check the desktop and mobile widths in Chromium",
+  );
+  await allow(page, "organization_admin");
+  await page.goto("/org-admin");
+  const masthead = page.locator(".role-topbar");
+  const button = masthead.getByRole("button", { name: "切换界面主题", exact: true });
+  const menu = page.locator(".role-theme-menu");
+  for (const width of [1672, 1024, 390]) {
+    await page.setViewportSize({ width, height: 941 });
+    await button.focus();
+    await page.keyboard.press("Enter");
+    await expect(button).toHaveAttribute("aria-expanded", "true");
+    await expect(menu).toBeVisible();
+    const [headerBox, panelBox] = await Promise.all([masthead.boundingBox(), menu.boundingBox()]);
+    const gap = panelBox!.y - (headerBox!.y + headerBox!.height);
+    console.log(
+      "appearance panel geometry",
+      JSON.stringify({
+        width,
+        headerBottom: headerBox!.y + headerBox!.height,
+        menuTop: panelBox!.y,
+        gap,
+      }),
+    );
+    expect(gap).toBeGreaterThanOrEqual(0);
+    expect(gap).toBeLessThanOrEqual(24);
+    await expect(menu).toBeInViewport({ ratio: 1 });
+    await expect(menu.getByRole("link", { name: "更多外观设置" })).toHaveAttribute(
+      "href",
+      "/me?section=appearance",
+    );
+    await expect(menu.getByRole("button").first()).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(menu).toHaveCount(0);
+    await expect(button).toBeFocused();
+    await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  }
+});
+
+test("platform route changes clear appearance and keep open-platform colors inside its page", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Use desktop sidebar navigation");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await allow(page, "platform_admin");
+  await page.route("**/api/v1/me/navigation?shell=platform_admin", (route) => {
+    const data = summary("platform_admin");
+    data.platform_capabilities.push("platform_token:manage");
+    return route.fulfill({
+      json: { data, request_id: "platform-chrome", trace_id: "platform-chrome" },
+    });
+  });
+  await page.goto("/platform-admin");
+  const header = page.locator(".role-topbar");
+  const sidebar = page.getByRole("complementary", { name: "工作区导航" });
+  const appearance = header.getByRole("button", { name: "切换界面主题", exact: true });
+  const read = () =>
+    header.evaluate((bar) => {
+      const search = bar.querySelector("[data-navigation-search]")!;
+      const style = getComputedStyle(search);
+      const rail = document.querySelector(".commerce-sidebar")!;
+      return {
+        legacyPalette: ["--text", "--surface", "--bg", "--border", "--primary"].map((key) =>
+          style.getPropertyValue(key).trim(),
+        ),
+        search: [
+          search.getBoundingClientRect().x,
+          search.getBoundingClientRect().width,
+          style.color,
+          style.backgroundColor,
+        ],
+        sidebar: [rail.getBoundingClientRect().width, getComputedStyle(rail).backgroundColor],
+      };
+    });
+  await expect(appearance).toBeVisible();
+  const before = await read();
+  await appearance.click();
+  await expect(appearance).toHaveAttribute("aria-expanded", "true");
+  await sidebar.getByRole("link", { name: "开放平台", exact: true }).click();
+  const surface = page.locator(".open-platform--c");
+  await expect(surface).toBeVisible();
+  const after = await read();
+  console.log(
+    "open platform shared navigation",
+    JSON.stringify({ before, after, expanded: await appearance.getAttribute("aria-expanded") }),
+  );
+  expect.soft(await appearance.getAttribute("aria-expanded")).toBe("false");
+  expect.soft(after).toEqual(before);
+  expect(
+    await surface.evaluate((el) => getComputedStyle(el).getPropertyValue("--p60-primary").trim()),
+  ).not.toBe("");
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  await sidebar.getByRole("link", { name: "平台概览", exact: true }).click();
+  await expect(page).toHaveURL(/\/platform-admin$/);
+  expect(await read()).toEqual(before);
+});
+
+test("wide masthead aligns utility glyphs without moving navigation controls", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide masthead glyphs");
+  await page.setViewportSize({ width: 1672, height: 900 });
+  await allow(page, "member");
+  await page.route("**/api/v1/me/navigation?**", (route) => {
+    const shell = new URL(route.request().url()).searchParams.get("shell") as
+      "member" | "organization_admin" | "platform_admin";
+    const data = summary(shell);
+    if (shell !== "platform_admin") {
+      data.platform_roles = ["platform_super_admin"];
+      data.roles = ["organization_admin"];
+    }
+    return route.fulfill({
+      json: { data, request_id: "masthead-glyph", trace_id: "masthead-glyph" },
+    });
+  });
+  await page.goto("/home");
+
+  const masthead = page.locator(".role-topbar");
+  const tabs = page.getByRole("navigation", { name: "工作台类型" });
+  const avatar = masthead.locator(".midou-top-avatar");
+  const help = masthead.getByLabel("导航帮助", { exact: true });
+  for (const [role, label] of [
+    ["member", null],
+    ["organization_admin", "组织"],
+    ["platform_admin", "平台"],
+  ] as const) {
+    if (label) await tabs.getByRole("link", { name: label, exact: true }).click();
+    await expect(page.locator(".role-shell")).toHaveAttribute("data-shell", role);
+    await expect(help).toHaveCSS("min-height", "44px");
+    await expect(help.locator("svg")).toHaveCSS("translate", "0px -2px");
+    await expect(masthead.locator("[data-navigation-search] > svg")).toHaveCSS(
+      "translate",
+      "0px -1px",
+    );
+    await expect(avatar).toHaveCSS("translate", role === "member" ? "none" : "-3px -1px");
+    await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  }
+  await page.setViewportSize({ width: 1599, height: 900 });
+  await expect(help.locator("svg")).toHaveCSS("translate", "none");
+  await expect(avatar).toHaveCSS("translate", "none");
+});
+
+test("wide member rail keeps its icon and label track between routes", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide member rail");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await allow(page, "member");
+  await page.goto("/home");
+  const rail = page.getByRole("complementary", { name: "工作区导航" });
+  const links = rail.locator(".commerce-sidebar-menu > section > a");
+  const workbench = rail.getByRole("link", { name: "选品工作台", exact: true });
+  const catalogue = rail.getByRole("link", { name: "选品库", exact: true });
+  await expect(workbench).toHaveAttribute("aria-current", "page");
+  console.log(
+    "SHARED_RAIL_LINK_GAP",
+    await links.first().evaluate((node) => getComputedStyle(node).columnGap),
+  );
+  await expect(links.first()).toHaveCSS("column-gap", "20px");
+  const searchLabel = page.locator(".role-topbar [data-navigation-search] > span");
+  const wideRailSize = await links.first().evaluate((node) => getComputedStyle(node).fontSize);
+  console.log("wide member navigation type", wideRailSize);
+  expect(wideRailSize).toBe("16px");
+  await expect(searchLabel).toHaveCSS("font-size", "14px");
+  await expect(searchLabel).toHaveCSS("letter-spacing", "0.2px");
+  await expect(links.first().locator("svg")).toHaveCSS("width", "20px");
+  const before = (await rail.boundingBox())!;
+  const iconBefore = (await workbench.locator("svg").boundingBox())!;
+  await catalogue.click();
+  await expect(catalogue).toHaveAttribute("aria-current", "page");
+  await expect(catalogue).toHaveCSS("column-gap", "20px");
+  await expect(catalogue).toHaveCSS("font-size", "16px");
+  await expect(searchLabel).toHaveCSS("font-size", "14px");
+  expect((await rail.boundingBox())!.width).toBe(before.width);
+  expect((await workbench.locator("svg").boundingBox())!.x).toBe(iconBefore.x);
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+
+  await page.setViewportSize({ width: 1599, height: 941 });
+  await expect(links.first()).not.toHaveCSS("column-gap", "20px");
+});
+
+test("release rail keeps navigation groups and pins footer during keyboard route changes", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop rail breakpoints");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await allow(page, "organization_admin");
+  await page.goto("/org-admin");
+  const rail = page.getByRole("complementary", { name: "工作区导航" });
+  const menu = rail.locator(":scope > .commerce-sidebar-menu");
+  await expect(rail).toBeVisible();
+  const org = await rail.evaluate((node) => ({
+    grouped: node.querySelectorAll(":scope > .commerce-sidebar-menu > section").length,
+    direct: node.querySelectorAll(":scope > section").length,
+  }));
+  console.log("RELEASE_RAIL_GROUPS_BASE", JSON.stringify(org));
+  expect(org.grouped).toBeGreaterThan(1);
+  expect(org.direct).toBe(0);
+  await expect(menu).toHaveCSS("display", "contents");
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+
+  await allow(page, "platform_admin");
+  await page.setViewportSize({ width: 1280, height: 620 });
+  await page.goto("/platform-admin");
+  await expect(menu.locator(":scope > section")).toHaveCount(4);
+  await expect(menu).toHaveCSS("display", "flex");
+  await expect(menu).toHaveCSS("overflow-y", "auto");
+  const settings = rail.locator(":scope > footer").getByRole("link", { name: "设置", exact: true });
+  const lastRoute = menu.getByRole("link", { name: "系统运维", exact: true });
+  await expect(settings).toBeInViewport({ ratio: 1 });
+  const y = (await settings.boundingBox())!.y;
+  await lastRoute.focus();
+  await expect(lastRoute).toBeInViewport({ ratio: 1 });
+  const scroll = await menu.evaluate((node) => node.scrollTop);
+  expect(scroll).toBeGreaterThan(0);
+  await page.keyboard.press("Enter");
+  await expect(lastRoute).toHaveAttribute("aria-current", "page");
+  await expect(settings).toBeInViewport({ ratio: 1 });
+  expect((await settings.boundingBox())!.y).toBeCloseTo(y, 0);
+  await expect(
+    page.locator(".role-topbar").getByRole("navigation", { name: "面包屑", exact: true }),
+  ).toHaveCount(1);
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  console.log("RELEASE_RAIL_KEYBOARD", JSON.stringify({ footerY: y, scroll, active: "系统运维" }));
+});
+
+test("wide platform rail keeps its label and utility hierarchy when changing routes", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide platform navigation");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await allow(page, "platform_admin");
+  await page.goto("/platform-admin");
+  const rail = page.locator(".commerce-sidebar");
+  const label = rail.locator(".commerce-sidebar-menu > section:first-child > h2");
+  const overview = rail.getByRole("link", { name: "平台概览", exact: true });
+  const context = rail.locator(".midou-platform-return");
+
+  await expect(label).toHaveCSS("translate", "0px -4px");
+  const activeRow = await overview.boundingBox();
+  const contextSurface = await context.evaluate((item) => getComputedStyle(item).backgroundColor);
+  const panelSoft = await context.evaluate((item) => {
+    const probe = document.createElement("span");
+    probe.style.backgroundColor = "var(--so-panel-soft)";
+    item.append(probe);
+    const color = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+    return color;
+  });
+  expect(contextSurface).toBe(panelSoft);
+
+  await rail.locator('a[href="/platform-admin/providers"]').click();
+  await expect(page.locator(".provider-registry")).toBeVisible();
+  await expect(label).toHaveCSS("translate", "0px -4px");
+  await expect(context).toHaveCSS("background-color", contextSurface);
+  expect(await overview.boundingBox()).toEqual(activeRow);
+  await expect(
+    page.locator(".role-topbar").getByRole("navigation", { name: "面包屑", exact: true }),
+  ).toHaveCount(1);
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+
+  await page.setViewportSize({ width: 1672, height: 900 });
+  await expect(label).not.toHaveCSS("translate", "0px -4px");
+});
+
+test("wide member footer stays anchored when navigating between member destinations", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide desktop member navigation");
+  await allow(page, "member");
+  await page.route("**/api/v1/auth/session-status", (route) =>
+    route.fulfill({
+      json: { data: { authenticated: true }, request_id: "session", trace_id: "session" },
+    }),
+  );
+  await page.setViewportSize({ width: 1717, height: 916 });
+  await page.goto("/home");
+  const rail = page.getByRole("complementary", { name: "工作区导航" });
+  const footer = rail.locator("footer");
+  const switcher = footer.getByRole("link", { name: "侧栏切换工作区", exact: true });
+  const settings = footer.getByRole("link", { name: "设置", exact: true });
+  const help = footer.locator("details");
+  const geometry = async () => {
+    const [r, f, w, s, h] = await Promise.all(
+      [rail, footer, switcher, settings, help.locator("summary")].map((item) => item.boundingBox()),
+    );
+    const top = await page.locator(".role-topbar").boundingBox();
+    const search = await page.locator(".role-topbar [data-navigation-search]").boundingBox();
+    return {
+      gutter: r!.y + r!.height - f!.y - f!.height,
+      rail: r,
+      footer: f,
+      switcher: w,
+      settings: s,
+      help: h,
+      top,
+      search,
+    };
+  };
+  await expect(switcher).toBeVisible();
+  await expect(rail).toHaveCSS("padding-block-end", "10px");
+  await expect(footer).toHaveCSS("padding-block-end", "0px");
+  const baseline = await geometry();
+  expect(baseline.gutter).toBeCloseTo(10, 0);
+  expect(baseline.switcher!.height).toBeGreaterThanOrEqual(50);
+  expect(baseline.settings!.height).toBeGreaterThanOrEqual(44);
+  expect(baseline.help!.height).toBeGreaterThanOrEqual(44);
+  console.log(
+    "SHARED_RAIL_ROUTE_GEOMETRY",
+    JSON.stringify({
+      gap: await rail
+        .locator(".commerce-sidebar-menu > section > a")
+        .first()
+        .evaluate((node) => getComputedStyle(node).columnGap),
+      top: baseline.top,
+      rail: baseline.rail,
+      search: baseline.search,
+      footer: baseline.footer,
+    }),
+  );
+  for (const route of [
+    "/trends",
+    "/opportunities",
+    "/sourcing",
+    "/notifications",
+    "/me",
+    "/home",
+  ]) {
+    await rail.locator(`.commerce-sidebar-menu a[href="${route}"]`).click();
+    await expect(page).toHaveURL(new RegExp(`${route}$`));
+    expect(await geometry()).toEqual(baseline);
+    await expect(
+      page.locator(".role-topbar").getByRole("navigation", { name: "面包屑", exact: true }),
+    ).toHaveCount(1);
+    await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  }
+  await help.locator("summary").click();
+  await expect(help.locator("p")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(help.locator("p")).toBeHidden();
+  await page.setViewportSize({ width: 1717, height: 600 });
+  expect((await geometry()).gutter).toBeCloseTo(10, 0);
+  await expect(switcher).toBeInViewport();
+  await expect(rail.locator(".commerce-sidebar-menu")).toHaveCSS("overflow-y", "auto");
+  await page.setViewportSize({ width: 1599, height: 916 });
+  await expect(rail).not.toHaveCSS("padding-block-end", "10px");
+});
+
+for (const [role, path, width] of [
+  ["platform_admin", "/platform-admin", 1672],
+  ["organization_admin", "/org-admin", 1560],
+] as const) {
+  test(`wide admin permission check reserves chrome without exposing protected navigation: ${role}`, async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== "desktop-chromium", "Wide desktop shell");
+    await page.setViewportSize({ width, height: 941 });
+    await allow(page, role);
+    let release!: () => void;
+    const held = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await page.route("**/api/v1/me/navigation?**", async (route) => {
+      await held;
+      await route.fulfill({
+        json: {
+          data: summary(role),
+          request_id: "pending-shell",
+          trace_id: "pending-shell",
+        },
+      });
+    });
+    const root = page.locator(".role-shell");
+    const header = root.locator(".role-topbar");
+    const slot = header.locator(".midou-pending-search");
+    const placeholder = root.locator(".midou-pending-rail");
+    const rail = page.getByRole("complementary", { name: "工作区导航" });
+    const search = header.getByRole("button", { name: "搜索后台功能" });
+    const before = async () => ({
+      search: (await slot.count()) ? await slot.boundingBox() : null,
+      rail: (await placeholder.count()) ? await placeholder.boundingBox() : null,
+      help: await header.locator(".midou-top-help > summary").boundingBox(),
+      account: await header.locator(".midou-account-menu > summary").boundingBox(),
+    });
+    await page.goto(path, { waitUntil: "domcontentloaded" });
+    await expect(root).toHaveAttribute("data-state", "loading");
+    await expect(rail).toHaveCount(0);
+    await expect(search).toHaveCount(0);
+    await expect(placeholder.locator("a, button")).toHaveCount(0);
+    const pending = await before();
+    console.log("SHELL_PENDING_CHROME", JSON.stringify(pending));
+    release();
+    await expect(root).toHaveAttribute("data-state", "ready");
+    const ready = {
+      search: await search.boundingBox(),
+      rail: await rail.boundingBox(),
+      help: await header.locator(".midou-top-help > summary").boundingBox(),
+      account: await header.locator(".midou-account-menu > summary").boundingBox(),
+    };
+    expect(pending).toEqual(ready);
+    await expect(placeholder).toHaveCount(0);
+    await expect(header.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  });
+}
+
+for (const [shell, path, theme] of [
+  ["member", "/home", "deep-ocean"],
+  ["organization_admin", "/org-admin", "aurora-purple"],
+  ["platform_admin", "/platform-admin", "cloud-white"],
+] as const) {
+  test(
+    "workspace canvas keeps its theme across desktop widths: " + shell,
+    async ({ page }, testInfo) => {
+      test.skip(testInfo.project.name !== "desktop-chromium", "Desktop workspace canvas");
+      await page.addInitScript((id) => localStorage.setItem("scoutops:ui-theme", id), theme);
+      await allow(page, shell);
+      await page.route("**/api/v1/me/ui-preferences", (route) =>
+        route.fulfill({
+          json: { data: { theme, version: 1 }, request_id: "canvas", trace_id: "canvas" },
+        }),
+      );
+      await page.goto(path);
+      const root = page.locator(".role-shell");
+      await expect(root).toHaveAttribute("data-shell", shell);
+      await expect(root).toHaveAttribute("data-state", "ready");
+      await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+      const surfaces = [];
+      for (const width of [1599, 1600, 1717]) {
+        await page.setViewportSize({ width, height: 941 });
+        surfaces.push(
+          await root.evaluate((node) => {
+            const shell = getComputedStyle(node);
+            return {
+              shell: shell.backgroundColor,
+              token: shell.getPropertyValue("--so-bg").trim(),
+              content: getComputedStyle(node.querySelector(".role-content")!).backgroundColor,
+            };
+          }),
+        );
+      }
+      console.log("WORKSPACE_CANVAS", shell, theme, JSON.stringify(surfaces));
+      for (const surface of surfaces) {
+        expect(surface).toEqual({
+          shell: "color(srgb 0.944039 0.956196 0.976588)",
+          token: "#f3f6fb",
+          content: "rgba(0, 0, 0, 0)",
+        });
+      }
+    },
+  );
+}
+
+test("wide masthead shares action tracks across all three workspaces", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide desktop action geometry");
+  await page.setViewportSize({ width: 1672, height: 900 });
+  await allow(page, "member");
+  await page.route("**/api/v1/me/navigation?**", (route) => {
+    const shell = new URL(route.request().url()).searchParams.get("shell") as
+      "member" | "organization_admin" | "platform_admin";
+    const data = summary(shell);
+    if (shell !== "platform_admin") {
+      data.platform_roles = ["platform_super_admin"];
+      data.roles = ["organization_admin"];
+    }
+    return route.fulfill({
+      json: { data, request_id: "shared-masthead", trace_id: "shared-masthead" },
+    });
+  });
+  await page.goto("/home");
+  const root = page.locator(".role-shell");
+  const header = root.locator(".role-topbar");
+  const tools = header.locator(".role-top-actions");
+  const tabs = page.getByRole("navigation", { name: "工作台类型" });
+  const read = async (role: string) => {
+    await expect(root).toHaveAttribute("data-shell", role);
+    await expect(root).toHaveAttribute("data-state", "ready");
+    await expect(header.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+    await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+    const result = await tools.evaluate((group) => {
+      const geometry = (selector: string) => {
+        const { x, y, width, height } = group.querySelector(selector)!.getBoundingClientRect();
+        return { x, y, width, height };
+      };
+      return {
+        search: geometry("[data-navigation-search]"),
+        help: geometry(".midou-top-help > summary"),
+        account: geometry(".midou-account-menu > summary"),
+        gap: getComputedStyle(group).columnGap,
+      };
+    });
+    console.log("SHARED_MASTHEAD", role, JSON.stringify(result));
+    return result;
+  };
+  const member = await read("member");
+  expect(member.search.width).toBeCloseTo(334.4, 1);
+  expect(member.gap).toBe("24px");
+  await expect(header.getByRole("link", { name: "通知中心", exact: true })).toBeVisible();
+  await tabs.getByRole("link", { name: "组织", exact: true }).click();
+  expect(await read("organization_admin")).toEqual(member);
+  await expect(header.getByRole("link", { name: "通知中心", exact: true })).toHaveCount(0);
+  await tabs.getByRole("link", { name: "平台", exact: true }).click();
+  expect(await read("platform_admin")).toEqual(member);
+  await expect(header.getByRole("link", { name: "通知中心", exact: true })).toHaveCount(0);
+  for (const width of [1600, 1717]) {
+    await page.setViewportSize({ width, height: 900 });
+    const layout = await read("platform_admin");
+    expect(layout.search.width).toBeCloseTo(Math.max(324, width * 0.2), 1);
+    expect(layout.gap).toBe("24px");
+  }
+});
+
+test("mid-desktop masthead keeps the same action grid across all roles", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop action grid");
+  await allow(page, "member");
+  await page.route("**/api/v1/me/navigation?**", (route) => {
+    const role = new URL(route.request().url()).searchParams.get("shell") as
+      "member" | "organization_admin" | "platform_admin";
+    const data = summary(role);
+    data.roles = ["organization_admin"];
+    data.platform_roles = ["platform_super_admin"];
+    return route.fulfill({
+      json: { data, request_id: "mid-action-grid", trace_id: "mid-action-grid" },
+    });
+  });
+  const shell = page.locator(".role-shell");
+  const header = shell.locator(".role-topbar");
+  const rail = page.getByRole("complementary", { name: "工作区导航" });
+  const tabs = rail.getByRole("navigation", { name: "工作台类型" });
+  const read = async (role: string) => {
+    await expect(shell).toHaveAttribute("data-shell", role);
+    await expect(shell).toHaveAttribute("data-state", "ready");
+    await expect(header.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+    await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+    return header.evaluate((node) => {
+      const box = (selector: string) => {
+        const { x, y, width, height } = node.querySelector(selector)!.getBoundingClientRect();
+        return [x, y, width, height].map((v) => Math.round(v * 10) / 10);
+      };
+      return {
+        height: node.getBoundingClientRect().height,
+        search: box("[data-navigation-search]"),
+        help: box(".midou-top-help > summary"),
+        account: box(".midou-account-menu > summary"),
+        gap: getComputedStyle(node.querySelector(".role-top-actions")!).columnGap,
+        railTop: document.querySelector(".commerce-sidebar")!.getBoundingClientRect().top,
+        pageFits: document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1,
+      };
+    });
+  };
+  const observed = [];
+  for (const [width, height] of [
+    [1101, 900],
+    [1280, 900],
+    [1440, 900],
+    [1560, 900],
+    [1599, 900],
+    [1560, 941],
+    [1599, 941],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await page.goto("/home");
+    const member = await read("member");
+    await tabs.getByRole("link", { name: "组织", exact: true }).click();
+    const organization = await read("organization_admin");
+    await tabs.getByRole("link", { name: "平台", exact: true }).click();
+    const platform = await read("platform_admin");
+    observed.push({ width, height, member, organization, platform });
+    if (height === 941) {
+      await rail.getByRole("link", { name: "组织管理", exact: true }).click();
+      await expect(page).toHaveURL(/\/platform-admin\/organizations$/);
+      expect(await read("platform_admin")).toEqual(platform);
+    }
+  }
+  console.log("MID_ACTION_GRID", JSON.stringify(observed));
+  for (const item of observed) {
+    expect(item.member.pageFits, "member viewport " + item.width).toBe(true);
+    if (item.width >= 1536) {
+      expect(item.member.search[2]).toBeCloseTo(item.width * 0.21, 1);
+      expect(item.member.search[3]).toBe(38);
+      expect(item.member.gap).toBe("20px");
+      expect(item.member.height).toBe(item.height >= 921 ? 64 : 56);
+      expect(item.member.railTop).toBe(item.member.height);
+    }
+    expect(item.organization, "organization viewport " + item.width).toEqual(item.member);
+    expect(item.platform, "platform viewport " + item.width).toEqual(item.member);
+  }
 });

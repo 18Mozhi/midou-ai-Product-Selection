@@ -4,7 +4,11 @@ import { useRoute } from "vue-router";
 import ThemeStudio from "./ThemeStudio.vue";
 import PersonalCenter from "./PersonalCenter.vue";
 
-defineProps<{ apiBaseUrl: string }>();
+defineProps<{
+  apiBaseUrl: string;
+  organizationName?: string | null;
+  workspaceName?: string | null;
+}>();
 
 const route = useRoute();
 const sections = [
@@ -47,6 +51,8 @@ const activeSection = computed(() => {
         v-else
         :api-base-url="apiBaseUrl"
         :initial-section="activeSection"
+        :organization-name="organizationName"
+        :workspace-name="workspaceName"
         account-shell
       />
     </section>
@@ -86,5 +92,27 @@ const activeSection = computed(() => {
 }
 .p11-directory small {
   display: none;
+}
+@media (min-width: 1600px) {
+  html[data-design="commerce"] #app .account-content-only {
+    padding-block-start: 55px;
+    padding-inline-start: calc(45px - var(--midou-member-rail-delta, 0px));
+  }
+  html[data-design="commerce"] #app .account-content-only .p11-page-heading h1 {
+    font-size: 29px;
+  }
+  .midou-account-description {
+    font-size: 16px;
+  }
+  html[data-design="commerce"] #app .account-content-only .p11-directory {
+    margin-block: 18px 30px;
+    padding-inline-start: 10px;
+    gap: clamp(30px, 2.65vw, 46px);
+    border-bottom: 1px solid var(--so-border);
+  }
+  html[data-design="commerce"] #app .account-content-only .p11-directory > a {
+    padding-block: 13px;
+    font-size: 16px;
+  }
 }
 </style>

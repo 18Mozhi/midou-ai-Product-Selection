@@ -1,5 +1,232 @@
 {
+  "referenceOrganizationRail": {
+    "sourceFiles": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/midou-workspace.css"
+    ],
+    "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Organization sidebar uses a layers icon for workspace switching and a left arrow for the existing member return. At >=1536px standard density, group headings align to the rail inset and link icons are 20px without moving the first route anchor. Routes and permissions remain unchanged."
+  },
+  "referenceCandidatePinnedSurface": {
+    "candidateCategoryReadingLine": "Above 640px keep the candidate category and source on a single ellipsized metadata line, with full text retained in the DOM and the existing tooltip. No changes to ASIN, image fallback, five-gate progress, action links, mobile cards or server pagination.",
+    "wideCandidateSupportingFactTracks": "At >=1600px standard density, align candidate headings, support notes for purchases, ratings and cost, and the existing progress link without resizing rows or columns. The summary caption uses slightly more letter spacing. Facts, pinned columns, focus, all controls and server pagination stay unchanged.",
+    "wideCandidateCostContext": "At >=1600px standard density, present the purchase and sourcing caveats in the candidate notice and place the existing cost limitation in the reading band immediately above the table. At narrower or compact layouts keep the cost caveat in the notice. Other catalogue tabs, metrics and actions are unchanged.",
+    "wideCandidateMediaAndCostTrack": "At >=1600px standard density use the same rounded thumbnail surface for image, missing and failed states. Keep the landed-cost body inset distinct from the heading, with original data, placeholders, pinned columns, actions and pagination.",
+    "wideCandidateGateMarks": "At >=1600px in standard density, use 6px gate segments. Preserve the five gates, verdict, row links and pagination.",
+    "candidateNoticeReadingStart": "The candidate disclosure icon follows the first text line when the notice wraps; the wide standard-density notice uses the theme warning surface. No disclosure text, controls, data or pagination changes.",
+    "wideCandidateViewControls": "At >=1600px standard density, give the existing refresh action a clear 18px icon, 8px icon gap and 16px label. Keep existing targets, query, server pagination, metrics and action set unchanged.",
+    "narrowCandidateIdentity": "Above 640px, when the candidate results container is 760px wide or narrower, use a 56px thumbnail and an 8px identity gap to free 30px for the product title and metadata. Keep pinned columns, images, action links, mobile cards and data unchanged.",
+    "wideCandidateTableAndPagerRhythm": "At >=1600px standard density, align the candidate column labels and existing progress action and separate the existing pager controls with a 10px gap and align the group inset with the result card. Preserve eight columns, pinned surfaces, focus, server pagination and the existing action set.",
+    "wideCandidatePendingEvidenceHierarchy": "At >=1600px standard density, show pending evidence beside the five-stage track as unboxed helper text. The explicit candidate and recommended stage colors, wording, metrics, row size, paging and actions remain unchanged.",
+    "wideCandidateTableContext": "At >=1600px standard density the candidate tabs are spaced 10px with a short active underline; sort stays beside the section heading and the actual current-page count sits above the rows. Align thumbnail and header, put the gate track and status on one line, and keep the existing pager close without adding batch actions.",
+    "wideCandidateTableViewport": "At >=1600px width and >=800px height in standard density, scroll the candidate table independently with sticky headers, keeping its existing pager in reach. All twenty records and their links remain keyboard-reachable without new API calls or batch actions.",
+    "candidatePinnedColumnBudget": "Above the mobile card breakpoint, cap the pinned product column when the candidate results container is 760px wide or narrower so all six intermediate columns can be read by scrolling between pinned identity and action cells. Wide standard-density filters, results and unavailable-image placeholders use subtle theme surfaces without changing real images, columns, pagination or actions.",
+    "wideCatalogueTypeface": "At >=1600px standard density, candidate filters and table use the local Segoe UI and DengXian stack with the existing fallback.",
+    "wideCandidatePageCaption": "At >=1600px in standard density apply the reference caption size and baseline to the rendered candidate subtitle span. Other catalogue views, query controls, table height, data and actions stay unchanged.",
+    "wideCandidateProgressFactTrack": "At >=1600px in standard density, tone the candidate header with the theme accent and align progress facts in a tighter label/value grid. Preserve the eight sticky-header table columns, theme and row surfaces, facts, actions and pagination.",
+    "wideCandidateEvidenceHierarchy": "At >=1600px standard density the candidate table aligns price and rating lead rows, uses 15px for main metrics and 13px for explanatory or missing-value text. Original eight columns, pagination and actions are unchanged.",
+    "wideFilterRhythm": "At >=1600px standard density, candidate filters share a 42px control height and 24px group gap, tabs use 16px text, and table headings use 14px text. The market remains a text field and no selection or batch actions are added.",
+    "wideCandidateReadingAlignment": "At >=1600px balance candidate tab spacing, align the summary and warning, and use consistent compact cell insets. At >=1600px standard density the alternating row surface has a stronger soft-panel tint; at >=1440px keyboard focus and hover highlight the same candidate row, including pinned cells. No batch controls, query or pagination changes.",
+    "wideCandidateProgressRhythm": "At >=1600px the catalogue title, candidate summary and warning share the reference alignment. The progress track gets more horizontal space without removing its status label, and summary rows use an 18px line height.",
+    "wideCandidateActionAlignment": "At >=1600px in standard density, align candidate action labels and links, emphasize the existing progress action and tighten the progress evidence spacing. No additional controls, API or query changes.",
+    "wideCandidateMeasuredReadingTracks": "At >=1600px standard density, tune the filter, summary, row identity and progress insets to the reference without changing the table or pager footprint. Existing filters, page size, keyboard access, facts and actions stay unchanged; no batch controls.",
+    "wideCandidateSurfaceAlignment": "At >=1600px in standard density, candidate controls and results share the outer inset. The warning follows the table edge and the existing sort and page context align with the reading rhythm. No batch controls or pagination behavior changes.",
+    "wideProgressLayout": "At >=1600px the wider table surface preserves the first-column inset, uses a consistent inset for metrics, and groups the five-stage track, 18px fact rows and 14px progress link without adding controls; the summary shares the notice inset.",
+    "sourceFiles": [
+      "apps/web/src/selection-catalogue.css",
+      "apps/web/src/components/OpportunityListPanel.vue"
+    ],
+    "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
+    "docs": ["docs/selection-commerce-rebuild.md"],
+    "contract": "Wide candidate table pinned identity and action cells retain an opaque surface matching normal, striped and hovered rows. Wide advanced filter is aligned with search and uses a neutral unboxed icon. At 1600px+ image slots are 76 by 78px. Preserve current eight columns, image fallback, actions and pagination."
+  },
+  "referenceGovernanceTypography": {
+    "wideGovernanceIdleFieldEdge": "At >=1600px standard density add a subtle theme-relative edge around idle organization profile fields. Focused, invalid and disabled states keep their original appearance; no geometry, labels, validation or write changes.",
+    "wideGovernanceSideReadingLines": "At >=1600px standard density align the governance shortcut titles, status label and badge and reinforce the status label contrast. Keep the original rows, card footprints, links and wrapping of long workspace names.",
+    "governanceReferenceGlyphs": "Use the reference approval label and the pinned Lucide building-complex mark for the workspace shortcut. Keep the existing metric, accessible link names and routes; no dependency or permission change.",
+    "governanceSaveLabel": "The existing organization profile submit action reads 保存更改, matching the reference while retaining audit reason, permissions, loading label and PATCH contract.",
+    "governanceApprovalDocumentGlyph": "Use local pinned Lucide file-check-corner for approval templates. Keep accessible text, permissions, links and dimensions.",
+    "wideGovernanceMetricCaption": "In wide standard density align all six metric captions to the shared reading line, retaining icon, value, note and card positions.",
+    "wideGovernanceFormAndShortcutRhythm": "At >=1600px standard density align editor labels, logo help, action row and shortcut glyphs to the reference. Preserve card positions, validation, visible content, links and permissions.",
+    "wideGovernanceAlignedBottomEdge": "At >=1600px in commerce standard density, align the profile editor and organization status card at their lower edge. Keep the shortcut card intrinsically sized and let multiline status content determine its own minimum height. No route or form contract changes.",
+    "wideGovernanceStatusReadingRhythm": "At >=1600px standard density, balance governance field-label baselines and status rows; retention uses tabular numerals and the semantic status tile lines up with its badge. Preserve form validation, all status values, action targets and wide card footprint.",
+    "wideGovernanceFormReadingInset": "At >=1600px standard density, give the organization editor a consistent leading inset for field labels and field text. Preserve form fields, focus, validation and persisted data.",
+    "wideGovernanceWorkspaceTrack": "At >=1600px in standard density, give the default workspace fact more width than the retention fact, retaining the timezone track and icon alignment. Keep all six metric values and notes with their existing tracks, and preserve full workspace names, permissions, data and actions.",
+    "wideGovernanceReadingEdges": "At >=1600px in commerce standard density, align the overview title and actions to the reference baseline and set a 32px end inset for organization status values. Card footprint, form controls, labels, data and routes are unchanged.",
+    "organizationTimezoneSuggestions": "The overview timezone field suggests the browser's IANA zones, UTC, and the exact stored spelling through a native datalist. It remains editable and submits the exact entered value through the existing versioned and audited profile save; no validation, permission or API change.",
+    "wideIdentityTypeface": "At >=1600px the governance overview adds the local DengXian Chinese fallback after Segoe UI; narrower layouts retain their original stack.",
+    "wideOrganizationStatusAlignment": "At >=1600px the organization status card shares the shortcut card inset and aligns labels with the first line of values, keeping multiline workspace names intact. Status semantics and writes are unchanged.",
+    "wideOrganizationEditorAndSideRhythm": "At >=1600px align organization editor help, action row and governance shortcut/status text to the reference. Keep form reason required, preserve focus, full values and business actions.",
+    "wideOrganizationHeadingAlignment": "At >=1600px align the overview heading, identity caption and editor title with their reference reading edges. Do not move form controls or change status, focus or persistence.",
+    "wideOrganizationRailInsets": "At >=1600px standard density, organization navigation uses a softer area switch surface, aligned icon-label gutters and balanced footer insets across routes. The rail width, menu order, permissions and routes are unchanged.",
+    "organizationMetricContainmentAndFieldShape": "Long organization metric values and notes wrap within their own card instead of covering neighbors. At >=1600px overview form controls share a 7px radius; borders, focus, validation, fields and persisted facts are unchanged.",
+    "wideOrganizationIdentityBadgeTrack": "At >=1600px the organization identity has a bounded minimum name track so the status chip does not touch short names. Long names can still wrap; the actual name, state, logo and controls are unchanged.",
+    "wideOrganizationFormAndShortcutFinish": "At >=1600px soften only idle enabled organization form borders and align shortcut titles with their descriptions. Preserve form focus, invalid and disabled styling, card dimensions, destination links and persistence.",
+    "wideOrganizationFormAndRailAlignment": "At >=1600px the organization profile aligns the Logo control row and gives the reason textarea a 67px minimum. The standard-density organization rail shares a 19px icon-label gutter across governance and member routes; fields, routing and permissions are unchanged.",
+    "wideOrganizationFactHierarchy": "At >=1600px overview facts use semibold labels and 17px values; editor labels use bold without resizing the inputs or changing validation.",
+    "wideEditorStatusRhythm": "At >=1600px governance uses stronger form label/action hierarchy, a 20px action gap, consistent 40px status row minimum and a semantic icon tile. Long workspace names wrap without hiding data; form validation and persistence are unchanged.",
+    "wideIdentityLabel": "At >=1600px the organization identifier uses 15px and the profile caption is raised 3px, without changing the identity fields or status.",
+    "identityFactReadability": "Organization and workspace names may wrap without forcing the organization status badge to break. At 1200-1439px the identity gaps are compact enough for the name and badge. At >=1536px, use 15px fact labels and 16px values without clipping long names or moving business actions.",
+    "overviewActionRhythm": "Wide governance refresh and invite align to a 40px baseline; the organization mark uses a gradient derived from the active theme.",
+    "wideTypeface": "At >=1536px governance overview text and form controls share the local Segoe UI stack with existing Chinese fallback; facts use tabular digits without altering field dimensions or values.",
+    "sourceFiles": ["apps/web/src/organization-profile-workspace.css"],
+    "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Wide governance form labels/actions, shortcut titles and status terms use 14px hierarchy; labels use weight 500 with 4px label gap and 13px row gap; helper text and existing field dimensions/validation remain unchanged."
+  },
+  "referenceWideMasthead": {
+    "midDesktopSharedActionGrid": "At 1536–1599px standard density, all three workspaces share the search geometry and action gaps. At height >=921px they also share the 64px masthead and sidebar offset. Compact, narrower and wide reference layouts, permissions and breadcrumbs are unchanged.",
+    "wideNavigationTypeScale": "At >=1600px in standard density, use 16px member route labels and 14px member and organization search labels with 0.2px tracking. Preserve hit areas, icon and text tracks, the only top breadcrumb, and platform typography and permissions.",
+    "wideMastheadGlyphAlignment": "At >=1600px standard density, align the help and search glyphs and the admin account glyphs within their original control boxes. Keep keyboard shortcuts, tool visibility, the single breadcrumb, shared masthead height and route geometry unchanged.",
+    "adminRouteSurfaceIsolation": "Close the existing appearance disclosure when the route changes, including within one admin shell. Scope open-platform legacy colors to its content so the shared masthead and rail inherit the same shell palette. Keep preferences, route guards, access and the single breadcrumb unchanged.",
+    "adminThemePanelAnchor": "Anchor the existing admin appearance panel to the sticky masthead, keep it inside the viewport, focus the first option on open and restore trigger focus on Escape. Wide standard-density appearance uses the same unboxed visual weight as the member notification icon. Existing theme persistence, routes, permissions and mobile layout remain.",
+    "memberRailSharedIconGap": "At >=1600px standard density, all member routes use one shared 20px icon-to-label gap. Preserve the rail width, topbar search and footer anchors, 20px glyphs, the active workspace tab, single top breadcrumb, permissions, and all existing route targets.",
+    "memberAreaSwitcherContinuity": "At >=1600px standard density, all member routes use the same soft workspace-switch track, 16px labels and a rounded blue active pill. No size change to the rail, no route-specific styles, no role or action changes.",
+    "sharedWorkspaceSwitchIcon": "The sidebar workspace switch uses the same existing layers mark in member, organization and platform navigation. Header controls, accessible names, routes and role permissions stay unchanged.",
+    "sharedWideHeight": "At >=1600px standard density all three roles use a shared 64px masthead and sidebar top offset. Organization and platform overview content keeps its existing first-fold baseline; compact and mobile are unchanged.",
+    "wideAdminControlGroup": "At >=1600px standard density organization and platform admin share 24px spacing for top controls and quiet separators. Admin help, appearance and account positions stay fixed when switching between these areas; member controls and routes are unchanged.",
+    "sidebarContextAffordance": "The desktop organization switcher shows its existing chevron at >=1536px; sidebar context links expose the full known name when labels are truncated. Routes and permission checks are unchanged.",
+    "sharedWideSwitcher": "At >=1600px standard density all three workspace tabs use the same 9px frame and 6px selected corners, 15px labels and distinct enabled, active and disabled states. Their sidebar placement, navigation and permissions are unchanged.",
+    "actionHierarchy": "At >=1600px standard density use a 36px avatar, 18px search glyph and a quiet keyboard badge. At >1100px long context labels yield space to the current top breadcrumb without adding a second trail.",
+    "sourceFiles": ["apps/web/src/midou-workspace.css", "apps/web/src/member-workspace-polish.css"],
+    "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "At >=1600px the shared masthead uses a 40px mark, 24px name and context divider; standard member navigation labels are 18px without changing rail/header dimensions or route ownership. Compact/mobile unchanged."
+  },
+  "referenceAdminNavigationSearch": {
+    "sourceFiles": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/DiscoveryOverlay.vue",
+      "apps/web/src/use-navigation-discovery.ts"
+    ],
+    "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Ready admin shells search their permission-filtered menu labels and groups locally; no member search or entity API is used."
+  },
+  "referencePlatformOverviewActions": {
+    "sourceHealthToolbarLevelAndDensity": "At >=1600px standard app density, the source toolbar uses a 9px horizontal gap; fine pointers use level 35px controls without reducing touch targets. The compact table density uses its existing 6px header padding rather than the standard override. The system-check reading values use 550 weight. No source data, status, permissions, keyboard scroll or requests change.",
+    "stablePlatformOverviewRefreshTrack": "At >=1440px keep the overview refresh action at 92px during its pending label. The other controls do not move. At >=1600px standard density, emphasize the empty trend heading and align the sources metric reading track. No permissions, requests, empty-state meaning or data change.",
+    "widePlatformStatusReading": "At >=1600px standard density, use a 15px source count and a 16px primary-text label for system lists with four or more checks. Keep the compact and short-list layouts, line height, wrapping of diagnostics, source controls and data unchanged.",
+    "sourceHealthShortCard": "At >=1440px standard density, let the source card fit fewer than six non-scrolling rows (including the empty case). Lists with at least six rows, scroll, or a disclosure preserve the full-height preview; no row, order, or control changes.",
+    "widePlatformStableSourceColumnTypography": "At >=1600px standard density, hiding any source-health column keeps the type size, numeric alignment, source padding and timestamp wrapping of the remaining columns. Auto column sizing and all column controls remain unchanged.",
+    "platformSuccessGoalGlyph": "Use the local pinned Lucide goal glyph for the task-success metric without changing the label, value, route or tile footprint.",
+    "wideSystemDiagnosticTracks": "At >=1600px standard density, keep system-check icon, label and actual diagnostic value on separate tracks. Wrap long diagnostic values in a bounded end column without truncation or overlap. No source or signal changes.",
+    "attentionCountTrack": "Platform attention cards reserve a bounded count track that wraps long values and leaves the label readable. At >=1600px standard density the queue counts and trend legend follow the reference hierarchy. Counts, links and first-fold source controls are unchanged.",
+    "sourceHealthRenderedOverflow": "At >=1440px, bound source-health tables by rendered height even at six rows or fewer. Wrapped names stay readable with a sticky header and a named keyboard-scroll region only when needed for the short list. Row data, disclosure and table controls stay unchanged.",
+    "widePlatformSourceScanTracks": "At >=1600px standard density, align source count and system status captions, give the visible first source column a matching 16px inset and a 15px source label, and use tabular numerals for counts and observation times. Preserve the full source dataset, column visibility, freeze, row density and timestamps.",
+    "widePlatformPanelReadingRhythm": "At >=1600px standard density, separate the trend legend entries and align the system-check values and recent-observation text within their panels. Preserve the first-fold layout, column widths, sticky controls, timestamps and every status.",
+    "wideSourceHealthDisclosureTone": "At >=1600px in standard density, use a quieter right-aligned full-width disclosure below source health. Preserve its 36px minimum height, visible keyboard focus, preview and expanded scroll bounds, all rows and existing controls.",
+    "widePlatformMetricActionRhythm": "At >=1600px standard density, give platform metric labels more contrast, align links inside the cards without moving the existing source controls. The two action summary counts use measured 36px and 24px end insets. Preserve links, focus, all rows, card dimensions and table preferences.",
+    "widePlatformHeadingHierarchy": "At >=1600px standard density, use secondary surfaces and muted utility text in the platform rail footer and a consistent heading weight in overview cards. At >=921px high the first group label sits 4px higher without moving links or hit areas. Preserve roles, navigation, breadcrumb location, panel dimensions and data.",
+    "widePlatformFirstFoldRhythm": "At >=1600px width and >=940px height in standard density, share unused end padding equally among four system-check rows (33px minimum), align the positive badge and use theme success colors. Preserve first-fold card bottoms, short and long lists, real signals, table controls, role navigation and compact behavior.",
+    "boundedExpandedSourceHealth": "At >=1440px keep the same bounded, keyboard-scrollable source table and sticky headers in preview and expanded modes. All rows remain reachable and column controls stay active. Collapse scrolls the preview back to its first row; dashboard card alignment, data and narrow layouts are unchanged.",
+    "widePlatformTypeface": "At >=1600px the overview uses local Segoe UI and DengXian with the existing theme fallback. System check labels use 20px leading and a 16px header gap to keep the first fold stable.",
+    "wideChecksAndStatusSpacing": "At >=1600px up to three system checks use 38px rows; longer lists keep their existing density. The source table balances source and status columns and uses rounded badges; all records and controls remain.",
+    "sourceNameWrapping": "Long unbroken names wrap only in the source column so status, counts and last observation remain visible without horizontal scrolling on wide desktop. Preserve name text, preview limit and table controls.",
+    "platformTrendLegendGrouping": "Keep each trend marker, label and live count together when the legend wraps. Wide standard-density group and marker gaps are 20px and 8px. Preserve the chart, colors, data and links.",
+    "wideTrendEmptyRhythm": "Wide platform trends use a 14px legend and a 17px empty-state title, with a theme-relative muted icon and unchanged chart and navigation actions.",
+    "sourceHealthFullSixRowPreview": "At the 1672x941 standard-density reference viewport the scrollable eight-row source preview has room for six complete normal rows and its sticky header, with expansion and compact density unchanged.",
+    "sourceHealthPreview": "Wide source health previews keep their existing eight rows and expansion, but use a labeled keyboard-scrollable table with a fixed header when there are more than six preview rows. Route catalog icons for source settings, collection, open platform and operations match the reference; permissions and routes are unchanged.",
+    "sourceHealthToolbar": "Target the column disclosure, freeze toggle and density label/select directly rather than button positions. Align the wide toolbar half a pixel higher without moving table rows, match control widths and gaps, and use a diamond column anchor for freezing and the existing grid icon for density. Native select and table behavior stay unchanged.",
+    "widePlatformRailBoundaryAndSourceText": "At >=1600px and >=921px height, the standard platform rail boundary is 5px closer to its reference while link width and content edge stay fixed across routes. Wide source names and success/failure typography retain semantic statuses, wrapping, controls and all rows.",
+    "widePlatformReadingAndRailInset": "At >=1600px align the platform title, indicator icon/action and empty trend copy. At >=921px height standard-density platform routes share the adjusted footer inset, with sidebar widths, menu order, click targets and permissions unchanged.",
+    "overviewComposition": "Queue links use grid areas for icon, label, note and count; wide panel header insets and healthy system markers follow the reference hierarchy without altering data, status classification or action destinations.",
+    "sourceFiles": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/PlatformDashboard.vue",
+      "apps/web/src/components/TableViewControls.vue",
+      "apps/web/src/styles/platform-dashboard.css"
+    ],
+    "testFiles": ["tests/e2e/m06-02-platform-dashboard.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Platform overview places the existing superadmin create-organization link in its page actions, with no duplicate global action on that route. Permissions and target remain unchanged."
+  },
+  "referenceOrganizationLogoPreview": {
+    "sourceFiles": [
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/organization-profile-workspace.css"
+    ],
+    "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Logo draft loads an HTTPS image only on explicit preview and does not submit the organization profile."
+  },
+  "referenceOrganizationOverviewActions": {
+    "sourceFiles": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/navigation-shell-route-state.ts",
+      "apps/web/src/organization-admin.css"
+    ],
+    "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Organization overview displays its existing role-gated invite link beside refresh without duplicating the global action or changing its destination."
+  },
+  "referenceOrganizationSidebarFooter": {
+    "sourceFiles": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/midou-workspace.css"
+    ],
+    "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Organization desktop sidebar mirrors the existing top context destination and groups settings and help above the unchanged member return link."
+  },
+  "referenceProfileAvatar": {
+    "sourceFiles": [
+      "apps/web/src/components/PersonalCenter.vue",
+      "apps/web/src/components/personal-center/PersonalProfilePanel.vue",
+      "apps/web/src/components/personal-center/ProfileAvatar.vue"
+    ],
+    "testFiles": ["tests/e2e/ui-phase2-account-contracts.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Profile form and summary display the confirmed HTTPS avatar or initials. Editing an unsubmitted URL does not cause a network request; profile save contract is unchanged."
+  },
+  "referenceProfileCancel": {
+    "sourceFiles": [
+      "apps/web/src/components/PersonalCenter.vue",
+      "apps/web/src/components/personal-center/PersonalProfilePanel.vue",
+      "apps/web/src/components/personal-center/usePersonalCenter.ts"
+    ],
+    "testFiles": ["tests/e2e/ui-phase2-account-contracts.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Cancel restores the loaded profile draft locally without requests and is unavailable during save."
+  },
+  "referenceNotificationSearch": {
+    "sourceFiles": [
+      "apps/web/src/components/NotificationCenter.vue",
+      "apps/web/src/midou-workspace.css",
+      "apps/api/src/notification-routes.ts",
+      "apps/api/src/notification-service.ts",
+      "apps/api/src/mysql-notification-repository.ts"
+    ],
+    "testFiles": ["tests/e2e/m05-03-notifications.spec.ts", "tests/m05-03/notifications.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/reference-navigation-polish.md"],
+    "contract": "Optional notifications q is a bounded literal title/body substring matched within the active recipient and workspace before grouping and paging. Existing filters compose and summary remains workspace-wide."
+  },
+  "referenceNotificationRowRead": {
+    "sourceFiles": [
+      "apps/web/src/components/NotificationCenter.vue",
+      "apps/web/src/notification-center.css",
+      "apps/web/src/midou-workspace.css"
+    ],
+    "testFiles": ["tests/e2e/m05-03-notifications.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Unread rows provide a separate mark-as-read action using the existing versioned endpoint, then refresh list and counts without opening detail. Workflow status is separate from the group count and the accessible read state."
+  },
+  "referenceNotificationPreferenceBadge": {
+    "sourceFiles": [
+      "apps/web/src/components/NotificationCenter.vue",
+      "apps/web/src/midou-workspace.css"
+    ],
+    "testFiles": ["tests/e2e/m05-03-notifications.spec.ts"],
+    "docs": ["docs/reference-navigation-polish.md"],
+    "contract": "Preference shortcut badge reflects confirmed in-app notification preference, not its mutable draft. No new API calls or notification behavior."
+  },
   "referenceNavigationPolish": {
+    "sharedWorkspaceCanvas": "Member, organization and platform workspaces use the shared theme canvas on the shell itself at desktop widths rather than painting a different content surface at 1600px. Header, sidebar, density and route permissions are unchanged.",
+    "sidebarMenuScrollRegion": "Member, organization and platform shells share a menu-group wrapper. In supported short desktops only route groups scroll, leaving area tabs and footer in reach. Tall layout, mobile navigation, permissions and breadcrumb behavior are unchanged.",
+    "wideAdminRailRhythm": "Align wide organization navigation group labels on a consistent reading inset and refine the platform workspace/settings icon insets in the tall rail. Do not alter group order, access, link size or the single masthead breadcrumb.",
+    "wideSharedActionGrid": "At >=1600px standard density member, organization and platform shells use the same 24px action gaps and 324–352px search width. At >=1536px standard density reserve noninteractive search and rail surfaces while permissions are pending. Keep the role-specific middle action, keyboard behavior, single top breadcrumb and authorized navigation. No route, preference or API changes.",
     "sourceFiles": [
       "apps/web/src/components/NavigationShell.vue",
       "apps/web/src/midou-workspace.css"
@@ -1135,6 +1362,7 @@
     "contract": "Keep existing full-load wait and budget. Only a real Playwright TimeoutError from that wait can proceed to unchanged anonymous/origin/challenge, modal, confirmation, original-URL reread and strict postal checks. No readiness assumed, extra retry, longer timeout, source/circuit writes or business facts from diagnostics. Other failures propagate. No API/env/schema/dependency/frontend/Python change."
   },
   "sourcingProgressFacts20261018": {
+    "sourceCompletionBadge": "Show the reference lifecycle chip only when the positive total exactly equals successful plus failed sources, there are no active or blocked sources, and the task result supports termination. Keep failed counts, the original accessible status, collection permission, retry behavior and API unchanged.",
     "status": "implemented",
     "requirements": "docs/selection-sourcing-progress-facts.md",
     "sourceFiles": [
@@ -2638,6 +2866,41 @@
     "contract": "Coalesce one internal leased evaluation wakeup in existing result_json, consume on claim, preserve on completion/failure via queued without lease takeover. All three producers share policy. Complete fixed terminal SQL statements are exported by database and called with 9/7 bound values; no direct Worker query template interpolation. Statement bytes, leases, wakeups and retry behavior are unchanged. No external API/schema/config change. No production writes or deployment."
   },
   "selectionSourcingLayout20261017": {
+    "sourcingAttentionActionAlignment": "Keep the existing authorized sourcing alert action at the row end, including after wrapping, and wrap long notice content within the card. At >=1600px standard density align secondary record count and metadata. Preserve access, links, facts, images and requests.",
+    "sourcingTabletProgressTracks": "At 601–760px keep title beside the 128px photo and progress in a full-width row underneath. Preserve all counts, permissions, images, and data; no wider desktop or smaller mobile layout changes.",
+    "sourcingNoticeReadingRail": "Below 1440px align the warning title, explanation and missing-fact text after a shared 20px icon and 10px gutter. Preserve the action target, permission, colors and collection state.",
+    "wideSourcingDetailReadingTracks": "At >=1600px standard density, align the warning marker, detail tab labels and unconfirmed cost header and values. Keep focus areas, real progress, permissions, cost facts, mobile layout and requests unchanged.",
+    "wideSourcingNoOfferCopyContrast": "Use a stronger theme-relative tone for explanations in the warning and empty quote surfaces at >=1600px standard density. No status, action or data changes.",
+    "wideSourcingPanelHierarchy": "Standard density wide sourcing uses the theme panel for primary cards and a separate neutral photo surface shared by loaded and fallback thumbnails. Record titles carry stronger weight than metadata, and the 95px minimum at standard density preserves the compact list rhythm without clipping wrapping metadata. No media or request contract changes.",
+    "sourcingEmptyOfferIllustration": "Use a lighter theme-relative stroke for the no-offer illustration, closer to the reference while retaining the original accessible title, warning, facts and controls.",
+    "wideSourcingPairedSurfaces": "At >=1600px in standard density, distinguish the no-offer explanation and adjacent cost facts using separate theme-relative surfaces; retain all facts, warnings, links, permissions and calculation controls.",
+    "wideSourcingCostReading": "At >=1600px standard density, align sourcing progress and quote typography; keep unconfirmed evidence wrapping within its cost title track and reserve a stable one-line link to the existing product analysis. Preserve quote state, missing facts, permission, focus, task links and requests.",
+    "wideSourcingReadingLines": "At >=1600px standard density, align the sourcing record heading, completed-source summary, authorized attention action and unconfirmed cost heading inside their existing cards. Preserve card dimensions, focus targets, data, routes and requests.",
+    "wideSourcingTypeface": "At >=1600px the sourcing workspace and record titles use local Segoe UI and DengXian, preserving the existing theme fallback.",
+    "wideHeaderAlignment": "At >=1600px vertically align the sourcing title, record metadata and detail progress without changing card dimensions, status or actions.",
+    "wideToolbarWrap": "At >=1600px retain usable sourcing search width and let the four-metric group wrap to the next row when needed; keep labels, counts and requests unchanged.",
+    "wideDetailTabsRhythm": "At >=1600px use a 22px text line and distinguish inactive (500) from selected (650) sourcing tabs without changing keyboard controls.",
+    "wideSourcingCompositionAlignment": "At >=1600px align the search and real task totals with the reference and tune the empty-offer illustration and calculation disclosure insets. Keep the existing search wrapping, available actions, metrics, data and permissions.",
+    "wideSourcingRecordScrollbarGutter": "At >=1600px preserve the sourcing record width when filtering changes whether its pane scrolls. A stable scrollbar gutter replaces the old end padding; Chromium uses an 8px thumb. Keep scrolling, keyboard focus, pagination, read scope and detail selection.",
+    "wideSourcingDetailReadingSurfaces": "At >=1600px standard sourcing uses a common theme-relative image surface, slightly tighter Latin-only title tracking, and clearer no-offer copy with its existing compact authorized link. Preserve image URLs/fallback, title text, permission and requests.",
+    "wideSourcingOfferAndBasisBaseline": "At >=1600px align the empty-offer heading, supporting copy, progress and unconfirmed cost text. Shift the calculation disclosure contents inside its original hit target; preserve the original native disclosure and data.",
+    "wideSourcingOfferPanelRhythm": "At >=1600px align the no-offer illustration and text, strengthen the attention banner, and compact the calculation disclosure spacing while preserving unconfirmed cost semantics and authorized links.",
+    "wideSourcingRecordMetaWrap": "At >=1440px allow sourcing record status and candidate count to wrap without clipping or overlapping the following row; usual values stay on one line. Static web only; no route, query, or sourcing execution change.",
+    "wideSourcingRecordReading": "At >=1600px the record list uses a medium-weight title and the completed-source label is raised to the reference reading line. No content, media, search, permissions or collection changes.",
+    "wideSourcingProgressReading": "At >=1600px compact the progress badge and tighten the spacing before the blocked metric. Keep the existing keyboard focus ring inside the scrollable record button, distinct from the selected state. No action, status or API changes.",
+    "adaptiveSourcingDetailProgress": "At desktop sizes when the detail pane is at most 650px wide, move the collection progress under both the image and identity. Preserve complete metrics and action scope.",
+    "wideDetailPhotoOpticalCenter": "At >=1600px standard density, sourcing detail photos use object-fit contain with an optical center at 50% 58%, moving only into available vertical space. Preserve frame size, padding, list thumbnails, all fallback states, narrow layouts, and source data.",
+    "wideDetailTitleWrap": "At >=1600px all sourcing detail titles fill the available text column before wrapping, without truncation. The existing Latin-only tracking is unchanged, as are the title, narrower layouts, picture, collection facts, task permissions and requests.",
+    "wideDetailPhotoInset": "At >=1600px use 14px of internal whitespace for the existing sourcing hero image; keep the frame, list thumbnails, contain sizing, source and loading behavior unchanged.",
+    "selectedImageSnapshot": "The current authorized detail response synchronizes an explicit image URL or null to its matching list row (record ID and input identity). An omitted image field preserves the existing list image. No extra API read or write.",
+    "wideProgressContainment": "At >=1600px sourcing detail allows count groups to wrap as units so long numbers are not split and keeps the completed-source total separate, without changing the displayed facts or actions.",
+    "wideDetailInset": "At >=1600px the detail uses an 18px end inset across its header, alert, quote and cost sections. Content, actions and collection behavior are unchanged.",
+    "wideDetailTypography": "At >=1600px product identifiers and progress text use a shared 15px scale; the existing calculation basis disclosure uses a 40px minimum height and clearer label.",
+    "wideAttentionRhythm": "At >=1600px the 24px warning icon and helper text align to one inset; summary and unconfirmed cost labels use 15px typography. No changes to quote facts, collection status or actions.",
+    "wideSourcingRecordRail": "At widths of 1600px and above, align the sourcing record heading and actions with the reference, keep the list header and pagination outside the scrolling record area, and preserve twenty-record server paging and read-only scrolling.",
+    "embeddedSourcingCalculationLabel": "The full-width disclosure below empty offers is labeled 计算依据, matching the reference. Inline profit details keep 查看计算依据. Both keep the same content and open state.",
+    "recordPaneAnchor": "Keep the selected sourcing record inside the independently scrolling record pane on deep link and pagination without moving the page, stealing focus or adding requests. Wide records and empty offer summaries use the reference's metadata hierarchy.",
+    "taskDisplay": "A scheduled retry or remaining pending/running sources take precedence over historical failure counters in empty-quote copy. Keep counters, alerts and authorized task links; no retry is dispatched. Wide titles and badge colors keep list text and task outcome distinct.",
     "status": "implemented",
     "statusDetail": "54_browser_cases_and_30_related_tests_passed_not_deployed",
     "requirements": "docs/selection-sourcing-layout.md",
@@ -2673,6 +2936,41 @@
     "contract": "Persist source sale and eligible matched procurement prices before category-specific fee gates. Preserve existing match rules, human-review protection and idempotency. Missing fees keep profit unknown and never queue profit. Existing current_inputs response and consumer remain unchanged."
   },
   "selectionMarketIntelligenceLayout20261017": {
+    "midWidthMixedTopicReadingTrack": "At 1101–1439px, the open split list with media stacks rank and thumbnail in a shared 38px track, leaving more room for topic text and keeping the signal count and status visible (stacked below 1280px). At the same breakpoint, the confidence chip uses compact insets without truncating its text. Default list, source icon fallback, close action and requests are unchanged.",
+    "shortSplitListScrollStability": "A short non-paginated split intelligence list with all rows fitting does not scroll for decorative padding. Actual overflowing rows and paginated lists retain their existing scroll and sort controls.",
+    "desktopSplitListStickySort": "At >=1101px, an open intelligence split list keeps its existing sort and heading anchored when its rows overflow, even for a single page of topics. Preserve the first-fold inset, mixed images, existing pager, selected-row focus and read requests.",
+    "intelligenceSourceMarkScale": "In list and detail, center the real source favicon up to 24px inside the unchanged media frame. Amazon photos still fill their original frame; preserve fallback order, interaction and request scope.",
+    "wideIntelligencePanelHierarchy": "Standard density wide intelligence uses the theme panel for filters, list and detail, preserving the blue selected row and semantic badge colors. No filters, topics, media, or requests change.",
+    "wideIntelligenceEvidenceWordWrap": "At >=1600px the overview evidence lead wraps unusually long unbroken source titles within its existing column while keeping its two visible lines, full tooltip, detail actions, and list-only default. No source text, API or requests change.",
+    "wideIntelligenceDetailReadingEdges": "At >=1600px standard density the active detail tab marker uses a 4px inline inset. Overview cards with at least 620px of card width give the final profit metric a 7px inline inset without moving the other metrics. The default list, labels, data, keyboard tabs, and requests remain unchanged.",
+    "wideIntelligenceMetadataHierarchy": "At >=1600px standard density, visible split-list context and source freshness use 14.5px type at the existing line height. Wide related product previews give the identity line 6px before the ASIN. Preserve thumbnail and source fallbacks, full data, actions and the default list-only state.",
+    "wideIntelligenceTitleGutter": "At >=1600px standard density, use 16.2px type and 0.1px tracking for split-view topic titles. For overview related cards at container widths >=620px, reserve an 8px inner title gutter before independent metrics. Preserve text, facts, images, title link, and default-closed interaction.",
+    "wideIntelligenceContextReadingLines": "At >=1600px standard density, align split-list context and selected signal count, space the detail tags 14px apart, and align source and confidence facts within their existing columns. Preserve the default list, thumbnail fallback, close action, facts and requests.",
+    "detailTopicMedia": "Keep the current topic photo or source favicon in the open detail's compact badge row. If the detail omits media, reuse the matching existing list item without another API read. Missing or invalid media reserves no slot. Preserve default list, close behavior, data and permission.",
+    "widePaginatedSplitListControls": "In a desktop split list with more than one page, keep the existing list heading and sort above the independently scrolling rows and the pager below. The selected row scrolls into the usable area between both controls. Default list, short unpaginated lists, narrow layouts, data and requests stay unchanged.",
+    "wideIntelligenceTypeface": "At >=1600px the workspace uses local Segoe UI and DengXian; split-view titles use Arial with the existing theme fallback. In the split list, omit the generic thumbnail only when no row has a media URL; mixed and failed media keep their layout and fallback, and the initial full-width list stays unchanged.",
+    "intelligenceRelatedCardAlignment": "Related cards share a media track when photos are mixed with placeholders; long factual counts wrap without obscuring adjacent metrics. At >=1600px the page and list headings, evidence summary and related title are optically aligned. Counts, imagery, default visibility and links stay unchanged.",
+    "wideIntelligenceRelatedMetricRhythm": "At >=1600px with a 620px or wider related-card container, distinguish metric values with 18px type, align their labels and the existing no-image icon. Keep full titles, long count wrapping, real image fallback, default list and all actions.",
+    "wideIntelligenceSelectedSurface": "At >=1600px inset the split-list selection surface 5px without reducing the row hit target, and use 13px/20px type for the still-visible related-selection disclosure under a populated overview. Preserve default list, detail controls and facts.",
+    "wideIntelligenceMeasuredReadingTracks": "At >=1600px align split-list index and status positions, limit evidence summary line width, and tune facts and related product insets. Preserve mixed media alignment, close action, full underlying facts and the default list-only state.",
+    "wideIntelligenceFactColumns": "At >=1600px align the four detail fact columns to the reference reading insets, cap insets by column width and wrap unusually long values within their own column. No fact, media, permission or query changes.",
+    "wideIntelligenceStableDetailHeader": "At >=1600px all loaded intelligence tabs use the same header grid, even when the optional overview evidence title is absent. Metadata, title and close button do not shift when selecting evidence or related products. Existing facts, tabs, open and close behavior, queries, and permissions are unchanged.",
+    "tabletIntelligenceFilterRows": "At 761–1100px the inline filters use two aligned rows, preserving field order and keeping submit/reset in the second row. Mobile drawer and wide single-row controls retain their original interaction.",
+    "narrowIntelligenceDetailReadingPane": "At viewport widths up to 1100px the open detail uses the full content width instead of reserving a column for the hidden list. Unbroken titles and locale badges wrap inside the pane without clipping; the wide split view, detail tabs, routes, data and permissions are unchanged.",
+    "intelligenceListSignalTrack": "Large signal totals remain complete and wrap inside the list's signal column in both full-list and split views. At >=1600px standard density the filters, list and detail share a light theme surface; selected rows, status colors, images, routes and data are unchanged.",
+    "wideSplitMixedMediaTrack": "At >=1440px, when a topic list alongside the open detail contains any image or source icon, use one shared rank and media column to keep titles aligned. Placeholder-only lists, actual media fallback, loading, sorting and detail visibility are unchanged.",
+    "wideSplitReadingGrid": "At >=1600px tighten the split list row floor to 109px and align overview tabs, related title and evidence. List-first behavior, metadata, images and detail controls are unchanged.",
+    "wideTitleRhythm": "At >=1600px reserve 12px between list titles and metrics, keep evidence lead copy at 18px and 24px line-height, and use 14px bold related product titles in wide overview cards. Preserve title text, three-line clamp, image fallbacks and interactions.",
+    "wideDetailTabStatusRhythm": "At >=1600px the intelligence detail tabs use a 17px label and inset active underline; the split list uses 27px centered status chips. Tab semantics, focus, status and detail visibility are unchanged.",
+    "wideFilterIconTrack": "At >=1600px the intelligence filter row uses a shared 20px icon size and aligned field text insets. Existing control sizes, real input/select types, submit/reset and narrow layouts are unchanged.",
+    "wideMetadataGrid": "At >=1600px the populated intelligence overview assigns badges, dates and close action separate grid tracks; long badges wrap without covering dates, with unchanged content and controls.",
+    "wideOverviewHierarchy": "At >=1600px the page subtitle sits closer to its heading without moving filters, tabs use a tighter gap, and the related-product card balances its vertical inset. Detail visibility, imagery and product evidence are unchanged.",
+    "wideDetailActionHierarchy": "On wide desktop, keep refresh neutral and emphasize the existing source-evidence action only after a topic is open. Keep keyboard order aligned with the visual order and preserve default-list requests, close behavior, and source-tab navigation.",
+    "wideSplitRowGeometry": "At >=1600px open detail uses the same 110px minimum for selected and unselected topic rows, inset separators, and a Segoe UI title with theme fallback; thumbnail, list-only mode, and source facts are unchanged.",
+    "wideSplitRowRhythm": "At >=1600px the split list emphasizes 14px topic and source freshness facts; extended provenance remains in the accessible row label and is displayed normally in the default full-width list. No source, image or detail lifecycle change.",
+    "wideIntelligenceRelatedReadingEdge": "Align the populated overview heading and four-metric track at >=1600px standard density. Cards at least 620px wide use equal 12px block padding; the association note remains separate and visible. Keep responsive image and title layout, full metrics, related links and requests.",
+    "topicAnchorAndRelatedMedia": "Keep the current topic inside the desktop split list, restore focus on close, and show already-projected related product images with a stable fallback. No new API call or source selection changes.",
+    "wideSplitTitle": "At >=1600px the opened split view uses a common three-line title clamp and 21px leading, independent of the thumbnail source or its load result. Default list and narrow layouts are unchanged.",
     "status": "implemented",
     "statusDetail": "market_layout_66_tests_18_browser_cases_plus_copy_retest_passed_not_deployed",
     "requirements": "docs/selection-market-intelligence-layout.md",
@@ -2681,6 +2979,7 @@
       "apps/web/src/components/TrendDetailPanel.vue",
       "apps/web/src/components/TrendFilterPanel.vue",
       "apps/web/src/components/TrendEvidenceTimeline.vue",
+      "apps/web/src/components/TrendRelatedProducts.vue",
       "apps/web/src/trends.css",
       "apps/web/src/design/trend-dashboard-tokens.css",
       "scripts/verify-trend-page-preview.mjs"
@@ -4489,6 +4788,9 @@
       "statusDetail": "module_verified"
     },
     "trendDomain": {
+      "wideDetailTypography": "At 1600px and above the detail title uses 26.5px system typography and the fact icons use 20px with balanced insets. At 1440px and above reset remains visually secondary. Default list, thumbnails, detail toggling and API behavior are unchanged.",
+      "paletteScope": "Trend color aliases are declared only on .trend-dashboard--review and inherit semantic so tokens for all three supported light themes; no HTML-level trend variables or navigation palette mutation.",
+      "listOrderControl": "TrendDashboard and TrendFilterPanel share the same sort state; the list header sorts only the loaded page, without issuing a request or selecting a detail.",
       "module": "M04-01",
       "uiPhase2TopicReadOwnership": "TrendDashboard 路由主题详情读取使用独立 AbortController 与代次归属；新主题选择、工作区刷新、KeepAlive 离页和卸载会中止旧详情 GET，迟到响应仍由代次校验兜底，不覆盖当前详情、错误提示、追踪编号或忙碌态。UI2-TR10 tests/e2e/ui-phase2-trend-contracts.spec.ts 桌面/390px覆盖过期请求取消；完整组织工作区端到端与真实服务验收仍待。无 API、权限、数据、依赖或运行配置变化。",
       "uiPhase2SharedReadOwnership": "P14 筛选列表、监控规则与治理队列 GET 共用可中止的当前工作区读取控制器；主题详情使用独立控制器。刷新/筛选、主题切换、KeepAlive 离页及卸载中止所属请求，并保留代次检查作为迟到回执兜底；离页恢复后同范围路由监听与 activated 刷新合并为单次读取。UI2-TR10 tests/e2e/ui-phase2-trend-contracts.spec.ts 真实 Vue 桌面/390px覆盖筛选、主题、规则/治理旧请求取消，P14 deactivation 覆盖离页取消及恢复单次读取。完整组织工作区切换端到端、其他动作/无障碍与真实服务验收仍待。",
@@ -4538,7 +4840,7 @@
       "layoutBoundary": "desktop uses one viewport-bounded 36/64 master-detail ledger with independent list and detail scrolling plus sticky neutral detail actions; the end-user width slider is removed so the evidence reading rhythm is stable, and long timelines stay bounded without widening the detail grid or page; at 1100px and below only one focus surface is visible at a time, topic selection opens detail and an explicit back action restores the list; empty filters expose an explicit recovery action",
       "timelineFilter": "trend detail returns aggregate timeline plus source-scoped points grouped by the real provider_id and publisher label so the browser can filter without inventing client-side attribution",
       "apiClientBoundary": "trend reads, follow/relevance writes, evidence-quality writes, monitoring-rule writes and source refresh use the shared frontend API client with correlation, idempotency and standardized recovery hints",
-      "frontendModuleBoundary": "TrendDashboard owns read-only intelligence route state, scoped list/detail reads and cancellation; TrendFilterPanel owns filters; TrendDetailPanel and TrendEvidenceTimeline expose source facts and timelines. Member monitoring, follow, governance and quality-ticket forms are retired; backend administrative contracts remain unchanged.",
+      "frontendModuleBoundary": "TrendDashboard owns read-only intelligence route state, scoped list/detail reads and cancellation; TrendFilterPanel owns filters; TrendDetailPanel owns overview, source evidence and linked product tabs; TrendEvidenceTimeline exposes source facts and timelines. List-first loads detail on selection, and closing detail keeps the existing list. Member monitoring, follow, governance and quality-ticket forms are retired; backend administrative contracts remain unchanged.",
       "evidenceQualityBoundary": "trend:manage can create a warning or critical data_quality_issues record only from a signal inside the current session organization workspace and topic; provider raw evidence normalized record and parser version are server-derived, and an existing open trend_evidence_anomaly issue is returned instead of duplicated",
       "projection": "Baota Node Worker scans normalized records, leases idempotent projection jobs and projects manual Google News plus every code-owned automatic Google/non-Google RSS, forum and fixed public marketplace source; Amazon public search records are admitted only from monitoring-rule collection subqueries, market language and category derive from the source catalog, while gnews region/topic fallback providers derive their topic category and product-discovery eligibility from the regex's sole topic capture group so product themes such as new_products are not dropped; unsupported records terminate as succeeded_empty",
       "projectionModuleBoundary": "trend-projection-worker owns queue recovery leasing retries and orchestration; trend-projection-calculation owns provider classification input validation and topic-key calculation; trend-projection-persistence owns the atomic topic signal keyword and job writes; trend-projection-alerts owns monitoring-rule matches plus trend and opportunity event/outbox writes without changing the existing queue or data contract",
@@ -4820,6 +5122,7 @@
       "statusDetail": "backend_retained_member_standalone_ui_retired_use_selection_comparison"
     },
     "sourcingDiscovery": {
+      "wideReferenceRhythm": "Center titles within the fixed two-line record slot and balance long detail titles at 1440px+, preserve metadata alignment. At 1600px+ align search and result spacing and distinguish empty-quote heading and explanation without altering data, actions or permissions.",
       "module": "M04-06",
       "uiPhase2CostControls": "design-plans/ui-phase-2-2026-09-07/SOURCING-COST-CONTROL-REVIEW.md adds80 dual-width PNG for eight cost/review variants. Package65 scenes/695 PNG/59 controls/544 dual-width instances; five semantic groups add26 slots (150 mapped/20 applicability slots pending). Cost busy is separate from sourcing; own in-flight aria-busy differs from sibling write lock, opportunity version7 versus review version3 and zero amount are exact synthetic samples, not production facts. Native required is distinct from reviewer/reason disabling. Cancel/open have no fabricated disabled/busy, keep sent request visible and cannot rewrite/withdraw its immutable intent; exact decision focus return is proposed. Source verifier13 groups includes actual review payload/reset and independent parent refs; source lacks function-level busy guard, offline dedup is not a Vue fix. SC-G01-08, read lifecycle/full variants/approval/production remain pending; no API/OpenAPI/env/schema/dependency/permission changes, deployment or restart.",
       "uiPhase2NavigationRecovery": "design-plans/ui-phase-2-2026-09-07/SOURCING-NAVIGATION-RECOVERY-REVIEW.md adds230 PNG (28 control variants x4 states x2 widths plus3 full scenes). Package65 scenes/615 PNG/51 variants/464 dual-width instances; eight navigation and two recovery groups gain40 representative slots, P21 now124 mapped/46 pending. Exact module/context/opportunity/collection/external targets and query/source variants do not inflate action denominator. Actual recovery handlers reload despite generic login/home/back/apply labels; offline wording is honest, manager versus readonly empty/search differs, loading hides prior records/detail actions without fake disabled/busy states. Source verifier adds two groups, now11; shared state component/copy fingerprints included. Source Vue/API/OpenAPI/env/schema/dependencies/permissions/deployment unchanged; actual router/lifecycle/full themes/approval pending, no restart.",
@@ -5399,6 +5702,14 @@
       "statusDetail": "account_overview_live_mysql_api_worker_crawler_permission_role_failure_refresh_and_responsive_verification_completed"
     },
     "platformDashboard": {
+      "wideProviderColumns": "At >=1600px four visible desktop source-health columns use a stable 43/16.5/17/remainder grid with readable timestamps; column hiding reflows automatically. No source records, filters, or expansion behavior change.",
+      "platformSourceTimestampFit": "At >=1440px an observation timestamp wraps when the actual table column is narrow and stays on one line when it fits. At >=1600px overview panel headings use a stronger 19px hierarchy without increasing their line box. No change to data, row count, permissions, or table controls.",
+      "widePlatformMeasuredReadingTracks": "At >=1600px align queue labels, KPI reading tracks, trend text, system-check labels and source controls to the reference without moving the card boundaries or changing facts, table controls, permissions or routes.",
+      "widePlatformHeadingAlignment": "At >=1600px align the overview title and section labels with the reference and use consistent 13px source-table column insets and semibold labels. The preview, density, permissions and factual states do not change.",
+      "wideSourceHealthStableGutter": "At >=1440px on browsers with a measured native scrollbar, the source-health table reserves the same gutter in preview and full-list views, so the four columns do not shift during expansion or collapse. At >=1600px, panel surfaces and source toolbar spacing follow the reference theme. No rows, table settings, data, routes or permissions change.",
+      "tabletPlatformMetricBalance": "At 761–1100px the five platform KPI cards form full-width three- and two-card rows with consistent dividers. Desktop and mobile metric layouts, factual values and access-controlled links are unchanged.",
+      "tallDesktopSourcePreview": "The standard source table preview grows with the desktop viewport height: six complete rows at 1672x941 and eight at 1858x1000 for standard-height rows. Source data, sort, expandable records and compact density are unchanged.",
+      "wideKpiReadingTrack": "At >=1600px KPI labels, values and links share the same 22px icon and 17px gap alignment; adjusted vertical padding keeps the five-card row footprint and existing factual values and permissions.",
       "uiPhase2ProviderDetailCProposal": "P38 provider-detail child proposal at design-plans/ui-phase-2-2026-09-07/design/platform-overview-provider-detail/README.md adds16 composition PNG:10 mobile preview/close/technical/unknown/long/short-height and6 desktop columns/last-selected-disabled/freeze/density.28 browser check groups and4 permanent evidence tests;original91 images,manifest,controller,data and three production Vue files unchanged.Non-target attention pixels match both widths.Exact original fields and native prototype focus/close/columns verified with no HTTP.New help,field grouping,blue focus and compound modal name remain proposals;unknown raw status disclosure retained from original C,not newly implemented runtime behavior.Mobile collapsed composition review requested,unanswered;no whole-page/actual Vue/RBAC/production approval.No API/OpenAPI/env/schema/permission/dependency/deployment change,no restart.P35 existing color-gate authorization pending,no commit;full73-page implementation remains active.",
       "module": "M06-02",
       "uiPhase2ApiCoverageActualVueReview": "Historical P63 batch69 design-stage evidence: review-only actual Vue transform and inert report fixtures preceded production implementation. It is not production-report, API-probe, SQL/RBAC or deployment proof.",
@@ -7452,10 +7763,13 @@
     "statusDetail": "local_layout_requires_release_and_remaining_organization_pages",
     "requirements": "docs/selection-organization-profile-layout.md",
     "routes": ["/org-admin"],
+    "identityLayout": "The commerce overview stacks organization identity and facts at available content widths up to 900px, after accounting for the shell rail. Wider containers keep side-by-side tracks with at least 260px for identity; unsupported container queries retain the stacked layout. The operating summary and save contract are unchanged.",
+    "wideGovernanceSurfaces": "At 1600px and wider, standard density governance identity, metrics, editor, shortcuts and status share a soft theme surface, while editable inputs keep the existing field background and focus treatment. Card geometry, compact density, data and permissions stay unchanged.",
     "sourceFiles": [
       "apps/web/src/components/OrganizationAdminCenter.vue",
       "apps/web/src/organization-admin.css",
       "apps/web/src/organization-profile-workspace.css",
+      "apps/web/src/midou-workspace.css",
       "scripts/build-ui-phase2-organization-profile-review.mjs"
     ],
     "testFiles": [
@@ -7906,6 +8220,8 @@
     "status": "implemented",
     "requirements": "docs/selection-sourcing-workbench-navigation.md",
     "routes": ["/sourcing"],
+    "detailRhythm": "From 761px viewport width, detail panes with at most 650px of content width reserve a full-width row for progress below the image and title and stack the empty quote and profit panels. At 1600px and above the product title and secondary facts use stronger theme contrast, retaining the distinct failure color.",
+    "detailTitleAndSurface": "Unbroken sourcing titles wrap inside the detail pane at every width, including the 601–760px gap between previous rules. At >=1600px standard density uses a consistent light theme surface for overview, record list and detail cards; image URLs, insets, progress states and actions are unchanged.",
     "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/sourcing.css"],
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts", "tests/unit/sourcing-page-preview.test.mjs"],
     "contract": "Combine search and four factual counters in one responsive control panel; unboxed title and 44px heading actions. Two-line record names retain full accessible text and inline metadata. Full-width mobile block-flow rows grow with content inside the bounded scroll pane, preventing grid rows from squeezing to the control minimum. Remove superseded styles; retain scripts, pagination, reads/writes, permissions, raw facts and unknown profit. No API, config, schema, dependency or Python change; daily100 and source recovery remain independently unproven."
@@ -8444,6 +8760,11 @@
     "contract": "Live 331b6ba9 investigation: materialize unchanged pending identities; narrow temporary active payload to referenced facts; scoped UTF8MB4 sourcing lookup preserving exact collation and fallbacks. Same facts/order/gates; no schema/index/env/API/dependency/collector/model changes. Reference workflow/governance/sidebar corrections do not assert pipeline progress or 95 percent visual acceptance. Official isolated release and postpublish checks remain distinct from read-only candidate probes."
   },
   "midouNavigationContinuity20261104": {
+    "wideStatusSemanticSurfaces": "At >=1600px standard density, unify green and amber badge surfaces across intelligence, sourcing, governance and platform overview using existing success and warning tokens. Preserve text contrast, status meaning, failure counts, layout, permissions and theme preference.",
+    "wideMemberFooterInset": "At >=1600px standard density, use one 10px bottom rail inset instead of cumulative rail and footer padding. Member destinations share the same anchored controls, touch targets and scroll behavior; other roles and densities are unchanged.",
+    "wideMemberRailReadingTrack": "At >=1600px in standard density, member rail menu icons use a 20px slot and a 19px label gap across routes. The rail width, link targets, active state and admin layouts stay unchanged.",
+    "sharedDesktopFrameRhythm": "From 841px (the desktop rail breakpoint), reserve native document scrollbar width only on browsers measured to have a classic scrollbar. At >=1600px, standard density commerce uses the same subtle theme tint for masthead and rail and a distinct canvas tint on all roles. Existing contrast tokens, layout dimensions, authorization and one top breadcrumb stay unchanged.",
+    "shortDesktopRail": "At width >=1101px and height 480-920px the route groups scroll independently, keeping role tabs and workspace/settings/help controls visible. Keep the full-height reference spacing, authorization, mobile drawer and single breadcrumb unchanged.",
     "sourceFiles": [
       "apps/web/src/App.vue",
       "apps/web/src/components/NotificationCenter.vue",
@@ -8461,6 +8782,11 @@
       "tests/unit/theme-and-icon-completion.test.mjs"
     ],
     "docs": ["docs/midou-navigation-continuity-20261104.md"],
+    "midWidthAdminSearchContinuity": "At standard density from 1536px through widths below 1600px, organization and platform share the same admin search width, 8px corner radius and 20px toolbar gap. Full-width reference layouts, compact and mobile are unchanged.",
+    "wideChromeTypography": "At >=1600px the shared commerce rail and search use the local Segoe UI and DengXian stack; platform menu text is 15px at standard density. The sidebar switcher shows known context names without a redundant placeholder, or a short action when no name is available.",
+    "wideMastheadDisclosureRhythm": "At >=1600px in standard density, the shared context target is at least 40px, and the account avatar and stateful disclosure chevron use a consistent gap across all roles. No route, authorization, density or keyboard changes.",
+    "desktopDiscoveryLabelContainment": "At >=841px truncate only the search caption when space is tight; keep the icon and shortcut inside the control. No search, keyboard, route or role changes.",
+    "widePlatformRailUtilityRhythm": "At >=1600px and >=921px in standard density, the platform area switch uses the soft theme surface, the workspace link retains a 40px target, and help aligns to the end of the rail. These styles are shared across platform routes and do not move menu routes or alter access.",
     "contract": "Account and embedded appearance reuse the live member navigation shell without remounting header/sidebar. Direct account entry remains session-only: optional non-blocking navigation reads restore authorized links/context on reload, failures never block personal content; business destination guards are unchanged. Route changes no longer override user density. No API/env/schema/dependency/collector changes."
   },
   "sourceRecovery20261104": {
@@ -8533,6 +8859,6 @@
     "docs": ["docs/sourcing-pagination-20261104.md", "docs/openapi.yaml"],
     "apiRoutes": ["/api/v1/sourcing/searches"],
     "pageRoutes": ["/sourcing"],
-    "contract": "Authorized opt-in server pagination: original unpaged array envelope unchanged when page/page_size/q/record absent.20-row UI, literal scoped server search, filtered total vs global original summary, LIMIT before image hydration. Preserve created_at/id DESC, source evidence relations, authorization and all writes. Page/query/record URL restoration,300ms debounced cancellable reads and legacy no-meta fallback. No source tests/recovery/concurrency/env/dependency/database-schema/Python changes; SQL samples are not deployed HTTP/P95 acceptance."
+    "contract": "Authorized opt-in server pagination: original unpaged array envelope unchanged when page/page_size/q/record absent.20-row UI, literal scoped server search, filtered total vs global original summary, LIMIT before image hydration. List and detail prefer the original scoped 1688 task image and otherwise read active scoped Amazon product evidence matching the primary ASIN and approved Amazon image host, linked to the same non-deleted opportunity; display only, no task writes. Preserve created_at/id DESC, source evidence relations, authorization and all writes. Page/query/record URL restoration,300ms debounced cancellable reads and legacy no-meta fallback. No source tests/recovery/concurrency/env/dependency/database-schema/Python changes; SQL samples are not deployed HTTP/P95 acceptance."
   }
 }

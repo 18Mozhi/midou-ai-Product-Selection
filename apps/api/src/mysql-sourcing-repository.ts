@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { selectionPrimaryAsinSql } from "@scoutops/database";
 import { sourcingSkuFacts } from "./sourcing-sku-facts.js";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
@@ -9,11 +10,32 @@ import {
 import { loadErpSourcingReference } from "./erp-sourcing-reference.js";
 const parse = <T>(v: unknown): T => (typeof v === "string" ? JSON.parse(v) : (v as T)),
   iso = (v: unknown) => (v instanceof Date ? v : new Date(String(v))).toISOString();
+const linkedPrimaryAsinSql = selectionPrimaryAsinSql.replaceAll("o.", "linked.");
+const searchImageProjection =
+  "CASE WHEN s.input_type='opportunity' THEN COALESCE(" +
+  "(SELECT JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) FROM collection_subqueries image_query " +
+  "JOIN providers image_provider ON image_provider.id=image_query.provider_id AND image_provider.code='1688_search' " +
+  "WHERE image_query.task_id=s.collection_task_id AND image_query.organization_id=s.organization_id " +
+  "AND image_query.workspace_id=s.workspace_id AND JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) LIKE 'https://%' " +
+  "ORDER BY image_query.ordinal LIMIT 1)," +
+  "(SELECT JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url')) " +
+  "FROM opportunity_evidence_links l JOIN opportunities linked ON linked.id=l.opportunity_id " +
+  "AND linked.organization_id=l.organization_id AND linked.workspace_id=l.workspace_id AND linked.lifecycle_status<>'deleted' " +
+  "JOIN normalized_records n ON n.raw_evidence_id=l.raw_evidence_id AND n.organization_id=l.organization_id " +
+  "AND n.workspace_id=l.workspace_id AND n.status='active' JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
+  "WHERE l.opportunity_id=CONVERT(s.input_ref USING ascii) AND l.organization_id=s.organization_id " +
+  "AND l.workspace_id=s.workspace_id AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY " +
+  linkedPrimaryAsinSql +
+  " " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url')) REGEXP '^https://(m[.]media-amazon[.]com|images-na[.]ssl-images-amazon[.]com)/' " +
+  "ORDER BY n.created_at DESC,n.id DESC LIMIT 1)) END";
 export class MySqlSourcingRepository implements SourcingRepository {
   constructor(private readonly pool: Pool) {}
   async list(i: any) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT s.*,(SELECT JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) FROM collection_subqueries image_query JOIN providers image_provider ON image_provider.id=image_query.provider_id AND image_provider.code='1688_search' WHERE image_query.task_id=s.collection_task_id AND image_query.organization_id=s.organization_id AND image_query.workspace_id=s.workspace_id AND s.input_type='opportunity' AND JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) LIKE 'https://%' ORDER BY image_query.ordinal LIMIT 1) image_url,CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE " +
+      "SELECT s.*," +
+        searchImageProjection +
+        " image_url,CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE " +
         "s.input_ref END display_name FROM sourcing_searches s LEFT JOIN " +
         "(SELECT id,name,organization_id,workspace_id,lifecycle_status,CONVERT(id USING utf8mb4) COLLATE utf8mb4_unicode_ci lookup_ref " +
         "FROM opportunities WHERE organization_id=? AND workspace_id=? LIMIT 18446744073709551615) o ON s.input_type='opportunity' " +
@@ -86,11 +108,9 @@ export class MySqlSourcingRepository implements SourcingRepository {
     }
     const [rows] = total
       ? await this.pool.query<RowDataPacket[]>(
-          "SELECT s.*,(SELECT JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) FROM collection_subqueries image_query " +
-            "JOIN providers image_provider ON image_provider.id=image_query.provider_id AND image_provider.code='1688_search' " +
-            "WHERE image_query.task_id=s.collection_task_id AND image_query.organization_id=s.organization_id AND image_query.workspace_id=s.workspace_id " +
-            "AND s.input_type='opportunity' AND JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) LIKE 'https://%' " +
-            "ORDER BY image_query.ordinal LIMIT 1) image_url FROM (SELECT s.*," +
+          "SELECT s.*," +
+            searchImageProjection +
+            " image_url FROM (SELECT s.*," +
             displayName +
             " display_name" +
             join +
@@ -118,7 +138,9 @@ export class MySqlSourcingRepository implements SourcingRepository {
   }
   async detail(i: any) {
     const [searches] = await this.pool.query<RowDataPacket[]>(
-      "SELECT s.*,(SELECT JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) FROM collection_subqueries image_query JOIN providers image_provider ON image_provider.id=image_query.provider_id AND image_provider.code='1688_search' WHERE image_query.task_id=s.collection_task_id AND image_query.organization_id=s.organization_id AND image_query.workspace_id=s.workspace_id AND s.input_type='opportunity' AND JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) LIKE 'https://%' ORDER BY image_query.ordinal LIMIT 1) image_url,CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE " +
+      "SELECT s.*," +
+        searchImageProjection +
+        " image_url,CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE " +
         "s.input_ref END display_name FROM sourcing_searches s LEFT JOIN opportunities o ON s.input_type='opportunity' " +
         "AND s.input_ref=CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_unicode_ci AND o.organization_id=s.organization_id " +
         "AND o.workspace_id=s.workspace_id AND o.lifecycle_status<>'deleted' WHERE s.id=? AND " +

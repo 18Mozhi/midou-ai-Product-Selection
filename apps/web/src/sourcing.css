@@ -442,6 +442,8 @@
 }
 #app .sourcing-workspace--review .sourcing-detail h3 {
   font-size: 20px;
+  /* Marketplace titles can contain long unbroken model or catalogue names. */
+  overflow-wrap: anywhere;
 }
 #app .sourcing-workspace--review .sourcing-erp-reference,
 #app .sourcing-workspace--review .sourcing-pending {
@@ -837,6 +839,15 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
 #app .sourcing-workspace--review .sourcing-record-items > button:hover {
   background: var(--so-panel-soft);
 }
+/* Keep keyboard focus visible inside the scrolling record list. */
+html[data-design="commerce"]
+  #app
+  .role-shell
+  .sourcing-workspace--review
+  .sourcing-record-items
+  > button:focus-visible {
+  outline-offset: -3px;
+}
 .sourcing-record-items b {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -901,5 +912,1308 @@ html[data-design="commerce"] #app .sourcing-profit-summary dd {
   }
   #app .sourcing-workspace--review .sourcing-record-items > button {
     padding: 10px 12px;
+  }
+}
+
+/* Separate the search, record list and detail like the sourcing reference. */
+.sourcing-search-input {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.sourcing-search-input > svg {
+  position: absolute;
+  inset: 50% auto auto 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+#app .sourcing-workspace--review .sourcing-toolbar .sourcing-search-input > input {
+  width: 100%;
+  padding-inline-start: 35px;
+  border-radius: 8px;
+}
+#app .sourcing-workspace--review .sourcing-heading-actions > :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--so-primary);
+  border-color: var(--so-primary-border);
+  background: var(--so-panel);
+}
+@media (min-width: 1440px) {
+  #app .sourcing-workspace--review .sourcing-heading-actions {
+    gap: 16px;
+  }
+  #app .sourcing-workspace--review .sourcing-heading-actions > :is(a, button) {
+    justify-content: center;
+    font-size: 15px;
+  }
+  #app .sourcing-workspace--review .sourcing-heading-actions > a {
+    min-inline-size: 176px;
+  }
+  #app .sourcing-workspace--review .sourcing-heading-actions > button {
+    min-inline-size: 132px;
+  }
+}
+.sourcing-detail > header > div:last-child {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.sourcing-detail > header .sourcing-progress {
+  margin: 12px 0 0;
+  padding: 10px 0 0;
+  border-bottom: 0;
+}
+@media (max-width: 760px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-detail > header {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    align-items: start;
+    gap: 4px 12px;
+
+    @media (min-width: 601px) {
+      grid-template-columns: 128px minmax(0, 1fr);
+      grid-template-rows: min-content min-content 1fr auto;
+      column-gap: 16px;
+    }
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header > .research-thumbnail {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header > div:last-child {
+    display: contents;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header :is(p, h3, code) {
+    grid-column: 2;
+    overflow-wrap: anywhere;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header .sourcing-progress {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    margin-block-start: 8px;
+  }
+}
+.sourcing-progress h4[data-status] {
+  padding: 2px 7px;
+  border-radius: 6px;
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
+.sourcing-progress
+  h4:is([data-status="failed"], [data-status="blocked"]):not([data-sources-ended]) {
+  color: var(--so-warning);
+  background: var(--so-warning-soft);
+}
+.sourcing-progress h4:is([data-status="completed"], [data-sources-ended="true"]) {
+  color: var(--so-success);
+  background: var(--so-success-soft);
+}
+@media (max-width: 520px) {
+  .sourcing-workspace--review .sourcing-detail .sourcing-progress dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 12px;
+  }
+  .sourcing-workspace--review .sourcing-detail .sourcing-progress dl > div {
+    flex-wrap: wrap;
+    gap: 2px 6px;
+  }
+  .sourcing-workspace--review .sourcing-detail .sourcing-progress dd {
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+    min-inline-size: 0;
+  }
+}
+.sourcing-progress dt[data-fail]:not([data-fail="0"]),
+.sourcing-progress dt[data-fail]:not([data-fail="0"]) + dd {
+  color: var(--so-danger);
+}
+#app .sourcing-workspace--review .sourcing-pending {
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 14px;
+  padding-block: 10px;
+}
+#app .sourcing-workspace--review .sourcing-pending[data-attention="true"] {
+  border-color: var(--so-warning-border);
+  background: color-mix(in srgb, var(--so-warning-soft) 78%, var(--so-panel));
+}
+.sourcing-pending h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sourcing-pending[data-attention="true"] h4 svg {
+  color: var(--so-warning);
+  flex-shrink: 0;
+}
+.sourcing-notice-icon-surface {
+  fill: color-mix(in srgb, currentColor 22%, transparent);
+}
+.sourcing-pending[data-attention="true"] h4 {
+  font-size: 17px;
+}
+#app .sourcing-workspace--review .sourcing-pending:has(> .sourcing-notice-task) > div {
+  flex: 1 1 16rem;
+  min-inline-size: 0;
+}
+.sourcing-pending > div > p {
+  margin-block: 4px 0;
+}
+#app .sourcing-workspace--review .sourcing-pending .sourcing-notice-task {
+  display: inline-flex;
+  flex: 0 0 auto;
+  max-inline-size: 100%;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding-inline: 14px;
+  border: 1px solid var(--so-primary-border);
+  border-radius: 8px;
+  color: var(--so-primary);
+  background: var(--so-panel);
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+#app .sourcing-workspace--review .sourcing-pending .sourcing-notice-task:hover {
+  background: var(--so-primary-soft);
+}
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-head {
+    margin-block-end: -7px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-head h1 {
+    font-size: 29px;
+    line-height: 1.25;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-overview {
+    min-height: 74px;
+    padding: 12px 18px;
+  }
+  .sourcing-summary > div + div {
+    padding-inline-start: 14px;
+    border-inline-start: 1px solid var(--so-border);
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout {
+    --sourcing-record-panel-height: clamp(460px, calc(100dvh - 314px), 760px);
+    grid-template-columns: minmax(280px, 24%) minmax(0, 1fr);
+    gap: 15px;
+    border: 0;
+    background: transparent;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout > aside {
+    height: var(--sourcing-record-panel-height);
+    border: 1px solid var(--so-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-layout
+    > aside[data-short="true"] {
+    height: auto;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-detail {
+    min-width: 0;
+    padding: 18px 16px;
+    border: 1px solid var(--so-border);
+    border-radius: 12px;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-layout
+    > aside[data-short="false"]
+    + .sourcing-detail {
+    min-height: var(--sourcing-record-panel-height);
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-detail
+    > header
+    .research-thumbnail {
+    width: clamp(135px, 11.1vw, 186px);
+    height: clamp(135px, 11.1vw, 186px);
+    flex-shrink: 0;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items {
+    padding: 6px 8px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items > button {
+    grid-template-columns: 68px minmax(0, 1fr);
+    column-gap: 15px;
+    padding: 10px;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-record-items
+    > button.selected {
+    border-radius: 8px;
+    border-left-color: transparent;
+    background: var(--so-primary-soft);
+  }
+  .sourcing-record-items .research-thumbnail {
+    width: 68px;
+    height: 68px;
+  }
+}
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-head > div:first-child {
+    position: relative;
+    inset-block-start: 4px;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    :is(.sourcing-detail > header, .sourcing-record-items)
+    .research-thumbnail
+    img {
+    background: color-mix(in srgb, var(--so-panel) 95%, var(--so-text));
+  }
+  .sourcing-workspace--review .sourcing-record-items .research-thumbnail img {
+    box-sizing: border-box;
+    padding: 5px;
+  }
+  .sourcing-workspace--review .sourcing-detail > header .research-thumbnail img {
+    box-sizing: border-box;
+    padding: 12px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items {
+    padding-block-start: 10px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items > button {
+    min-block-size: 96px;
+    /* Let long status/count pairs wrap without drawing into the next record. */
+    grid-template-rows: 42px minmax(20px, auto);
+    align-content: center;
+  }
+  html[data-design="commerce"] #app .sourcing-record-items > button > b {
+    min-height: 0;
+    align-self: center;
+    line-height: 21px;
+  }
+  html[data-design="commerce"] #app .sourcing-record-items .sourcing-record-meta {
+    align-self: start;
+  }
+  .sourcing-pending[data-attention="true"] > div {
+    --sourcing-notice-icon: 22px;
+    --sourcing-notice-gap: 12px;
+  }
+  .sourcing-pending[data-attention="true"] h4 {
+    gap: var(--sourcing-notice-gap);
+  }
+  .sourcing-pending[data-attention="true"] h4 > svg {
+    flex: 0 0 var(--sourcing-notice-icon);
+  }
+  .sourcing-pending[data-attention="true"] > div > :is(p, .sourcing-missing) {
+    padding-inline-start: calc(var(--sourcing-notice-icon) + var(--sourcing-notice-gap));
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header h3 {
+    font-size: 22px;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header code {
+    color: var(--so-text-muted);
+    font: inherit;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+  .sourcing-detail > header .sourcing-progress {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    padding-block-start: 14px;
+    gap: 2px 16px;
+  }
+  .sourcing-progress > header {
+    display: contents;
+  }
+  .sourcing-progress > header > div {
+    grid-area: 1 / 1 / 2 / -1;
+  }
+  .sourcing-progress > header small {
+    font-size: 15px;
+  }
+  .sourcing-progress > header > span {
+    grid-area: 2 / 2;
+    align-self: center;
+    font-size: 14px;
+  }
+  .sourcing-progress dl {
+    grid-area: 2 / 1;
+    margin: 0;
+    column-gap: 32px;
+  }
+  .sourcing-progress dt {
+    font-size: 14px;
+  }
+  .sourcing-progress dd {
+    font-size: 16px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .sourcing-progress > a {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+  .sourcing-workspace--review .sourcing-toolbar label {
+    flex: 0 1 420px;
+    max-width: 420px;
+    gap: 14px;
+  }
+  .sourcing-workspace--review .sourcing-search-input {
+    max-width: 304px;
+  }
+  #app .sourcing-workspace--review .sourcing-toolbar .sourcing-search-input > input {
+    min-height: 40px;
+    padding-block: 6px;
+    border-radius: 8px;
+  }
+  .sourcing-workspace--review .sourcing-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, max-content));
+    flex: 0 1 auto;
+    gap: 0 18px;
+  }
+  .sourcing-workspace--review .sourcing-summary > div {
+    justify-content: flex-start;
+    gap: 10px;
+    min-width: 0;
+  }
+  .sourcing-workspace--review .sourcing-summary dt {
+    font-size: 14px;
+  }
+  .sourcing-workspace--review .sourcing-summary dd {
+    font-size: 19px;
+    overflow-wrap: anywhere;
+  }
+}
+@media (min-width: 1600px) {
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    :is(.sourcing-section-description, .sourcing-toolbar > span, .sourcing-record-heading > span) {
+    font-size: 15px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-section-description {
+    line-height: 21px;
+  }
+  #app .sourcing-workspace--review .sourcing-overview {
+    flex-wrap: wrap;
+  }
+  #app .sourcing-workspace--review .sourcing-toolbar {
+    min-inline-size: min(100%, 24rem);
+    column-gap: 24px;
+    translate: 0 -2px;
+  }
+  #app .sourcing-workspace--review .sourcing-toolbar label {
+    flex-basis: 410px;
+    max-inline-size: 410px;
+    gap: 18px;
+    font-size: 15px;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    :is(.sourcing-toolbar > span, .sourcing-record-heading > span) {
+    font-variant-numeric: tabular-nums;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .role-content:has(> .sourcing-workspace--review) {
+    padding-inline-start: calc(40px - var(--midou-member-rail-delta, 0px));
+  }
+  html[data-design="commerce"]:not([data-density="compact"]) #app .sourcing-workspace--review {
+    padding-block-start: 49px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout {
+    /* Give the records the recovered gutter space without moving the detail. */
+    grid-template-columns: clamp(323px, calc(18.42vw + 23px), 359px) minmax(0, 1fr);
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items {
+    padding-inline-start: 7px;
+  }
+  @supports (scrollbar-gutter: stable) {
+    html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items {
+      /* Replace the old end padding with a gutter of the same width in Chromium. */
+      padding-inline-end: 0;
+      scrollbar-gutter: stable;
+      scrollbar-width: thin;
+    }
+    @supports selector(::-webkit-scrollbar) {
+      html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items {
+        scrollbar-width: auto;
+      }
+      html[data-design="commerce"]
+        #app
+        .sourcing-workspace--review
+        .sourcing-record-items::-webkit-scrollbar {
+        width: 8px;
+      }
+      html[data-design="commerce"]
+        #app
+        .sourcing-workspace--review
+        .sourcing-record-items::-webkit-scrollbar-thumb {
+        background: var(--so-border-strong);
+        border-radius: 8px;
+      }
+    }
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-heading {
+    box-sizing: border-box;
+    min-height: 54px;
+    padding-inline-start: 18px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items {
+    padding-block-start: 7px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-record-items > button {
+    column-gap: 16px;
+    padding-inline-start: 9px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-detail {
+    padding-inline-end: 18px;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-detail > header {
+    padding-block-end: 14px;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-detail
+    > header
+    .research-thumbnail {
+    inline-size: 188px;
+    block-size: 188px;
+    border-radius: 11px;
+  }
+  .sourcing-workspace--review .sourcing-detail > header .sourcing-progress {
+    grid-template-columns: minmax(0, 1fr) fit-content(35%);
+  }
+  .sourcing-workspace--review .sourcing-detail > header .sourcing-progress dl {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0;
+    row-gap: 2px;
+  }
+  .sourcing-workspace--review .sourcing-progress dl > div {
+    box-sizing: border-box;
+    min-inline-size: 84px;
+    max-inline-size: 100%;
+    padding-inline-end: 4px;
+  }
+  .sourcing-workspace--review .sourcing-progress dl > div:nth-child(2) {
+    min-inline-size: 98px;
+  }
+  .sourcing-workspace--review .sourcing-progress dl > div:nth-child(3) {
+    min-inline-size: 82px;
+  }
+  .sourcing-workspace--review .sourcing-progress dl > div:last-child {
+    min-inline-size: 0;
+  }
+  .sourcing-workspace--review .sourcing-progress dd {
+    white-space: nowrap;
+  }
+  .sourcing-workspace--review .sourcing-progress > header > span {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    text-align: end;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-heading-actions {
+    padding-inline-end: 8px;
+  }
+  .sourcing-workspace--review .sourcing-summary {
+    flex-basis: 592px;
+    translate: -2px -1px;
+    grid-template-columns:
+      minmax(max-content, 112fr) minmax(max-content, 156fr)
+      minmax(max-content, 147fr) minmax(max-content, 123fr);
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-summary dd {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+}
+@media (max-width: 760px) {
+  .sourcing-search-input {
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-head {
+    margin-block-end: 0;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout {
+    gap: 12px;
+    border: 0;
+    background: transparent;
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-layout > aside {
+    border: 1px solid var(--so-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}
+
+.sourcing-detail-tabs {
+  display: flex;
+  gap: 8px;
+  margin-block: 18px 14px;
+  border-bottom: 1px solid var(--so-border);
+}
+#app .sourcing-workspace--review .sourcing-detail-tabs > button {
+  flex: 0 1 auto;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--so-text-muted);
+  background: transparent;
+  font-size: 14px;
+}
+#app .sourcing-workspace--review .sourcing-detail-tabs > button[aria-selected="true"] {
+  border-bottom-color: var(--so-primary);
+  color: var(--so-primary);
+  font-weight: 650;
+}
+.sourcing-quote-empty {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  min-height: 145px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+  text-align: center;
+}
+.sourcing-quote-empty strong {
+  color: var(--so-text);
+}
+.sourcing-empty-offers > .sourcing-quote-empty {
+  background: color-mix(in srgb, var(--so-panel-soft) 45%, var(--so-panel));
+}
+.sourcing-empty-offers > .sourcing-quote-empty > svg {
+  color: color-mix(in srgb, var(--so-text-muted) 48%, var(--so-border));
+}
+.sourcing-empty-offers--with-profit {
+  display: grid;
+  gap: 12px;
+}
+.sourcing-empty-offers--with-profit > div {
+  min-width: 0;
+}
+.sourcing-empty-offers-basis {
+  grid-column: 1 / -1;
+}
+.sourcing-empty-offers-basis:empty {
+  display: none;
+}
+.sourcing-empty-offers-basis > .sourcing-profit-basis {
+  padding: 0 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  background: var(--so-panel);
+}
+.sourcing-empty-offers-basis > .sourcing-profit-basis > summary {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-block: 8px;
+  min-height: 44px;
+  list-style: none;
+  cursor: pointer;
+}
+.sourcing-empty-offers-basis > .sourcing-profit-basis > summary::-webkit-details-marker {
+  display: none;
+}
+.sourcing-empty-offers-basis > .sourcing-profit-basis[open] > summary > svg {
+  transform: rotate(90deg);
+}
+.sourcing-empty-offers--with-profit .sourcing-profit-summary {
+  height: 100%;
+  margin-block-start: 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+}
+.sourcing-empty-offers--with-profit .sourcing-profit-summary dl {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+.sourcing-profit-unconfirmed {
+  margin: 2px 0 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.sourcing-empty-offers--with-profit
+  .sourcing-profit-summary:has(.sourcing-profit-unconfirmed)
+  > header {
+  margin-bottom: 2px;
+}
+.sourcing-empty-offers--with-profit
+  .sourcing-profit-summary
+  .sourcing-profit-unconfirmed-breakdown {
+  margin-block: 0;
+}
+.sourcing-empty-offers--with-profit
+  .sourcing-profit-summary
+  .sourcing-profit-unconfirmed-breakdown
+  > div {
+  padding-block: 3px;
+  line-height: 18px;
+}
+.sourcing-empty-offers--with-profit .sourcing-profit-summary dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-block: 4px;
+  border-block-start: 1px solid var(--so-border);
+}
+html[data-design="commerce"] #app .sourcing-empty-offers--with-profit .sourcing-profit-summary dd {
+  margin: 0;
+  font-size: inherit;
+}
+@media (min-width: 1101px) {
+  .sourcing-empty-offers--with-profit {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  }
+}
+@media (min-width: 1440px) {
+  .sourcing-empty-offers--with-profit {
+    grid-template-columns: minmax(0, 1.29fr) minmax(0, 1fr);
+  }
+  .sourcing-detail-tabs {
+    gap: 4px;
+    margin-block-start: 14px;
+  }
+  #app .sourcing-workspace--review .sourcing-detail-tabs > button {
+    font-size: 16px;
+    min-inline-size: 122px;
+  }
+  .sourcing-empty-offers--with-profit > .sourcing-quote-empty {
+    min-height: 169px;
+    background: color-mix(in srgb, var(--so-panel-soft) 30%, var(--so-panel));
+  }
+  #app .sourcing-workspace--review .sourcing-quote-empty > strong {
+    transform: translateY(4px);
+  }
+  #app .sourcing-workspace--review .sourcing-empty-offers-basis > .sourcing-profit-basis {
+    background: color-mix(in srgb, var(--so-panel-soft) 24%, var(--so-panel));
+  }
+  .sourcing-empty-offers--with-profit .sourcing-profit-summary {
+    padding-block: 10px;
+    background: color-mix(in srgb, var(--so-panel-soft) 24%, var(--so-panel));
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-detail:has(.sourcing-empty-offers--with-profit) {
+    padding-block-end: 12px;
+  }
+  .sourcing-empty-offers > .sourcing-quote-empty > svg {
+    inline-size: 72px;
+    block-size: 44px;
+  }
+  .sourcing-empty-offers--with-profit
+    .sourcing-profit-summary:has(.sourcing-profit-unconfirmed)
+    > header
+    > div {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+  }
+  .sourcing-empty-offers--with-profit
+    .sourcing-profit-summary:has(.sourcing-profit-unconfirmed)
+    > header {
+    align-items: flex-start;
+  }
+  .sourcing-empty-offers--with-profit
+    .sourcing-profit-summary:has(.sourcing-profit-unconfirmed)
+    > header
+    a {
+    min-height: 30px;
+    padding-block: 4px;
+  }
+  .sourcing-empty-offers--with-profit
+    .sourcing-profit-summary
+    .sourcing-profit-unconfirmed-breakdown
+    > div {
+    padding-block: 4px;
+  }
+  .sourcing-empty-offers--with-profit
+    .sourcing-profit-summary
+    .sourcing-profit-unconfirmed-breakdown
+    dt {
+    font-size: 14px;
+  }
+  .sourcing-empty-offers--with-profit .sourcing-profit-unconfirmed {
+    margin: 0;
+  }
+}
+.sourcing-detail [role="tabpanel"] > :is(.sourcing-profit-summary, .sourcing-comparisons) {
+  margin-block-start: 0;
+}
+@media (min-width: 1600px) {
+  .sourcing-empty-offers--with-profit {
+    grid-template-columns: minmax(0, 1.36fr) minmax(0, 1fr);
+  }
+  #app .sourcing-workspace--review .sourcing-detail-tabs > button {
+    font-weight: 500;
+    line-height: 22px;
+  }
+}
+@media (max-width: 760px) {
+  .sourcing-detail-tabs {
+    gap: 0;
+  }
+  #app .sourcing-workspace--review .sourcing-detail-tabs > button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: 4px;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .sourcing-empty-offers--with-profit .sourcing-profit-summary:has(.sourcing-profit-unconfirmed) {
+    padding-block: 8px 10px;
+  }
+  .sourcing-empty-offers--with-profit
+    .sourcing-profit-summary
+    .sourcing-profit-unconfirmed-breakdown
+    > div {
+    padding-block: 5px;
+  }
+  #app .sourcing-workspace--review .sourcing-quote-empty > strong {
+    transform: translateY(6px);
+  }
+  #app .sourcing-workspace--review .sourcing-empty-offers-basis > .sourcing-profit-basis {
+    border-radius: 9px;
+  }
+}
+
+/* Match auxiliary type and the cost-disclosure row to the desktop reference. */
+@media (min-width: 1600px) {
+  #app .sourcing-workspace--review .sourcing-detail > header code {
+    font-size: 15px;
+  }
+  .sourcing-workspace--review .sourcing-progress > header > span {
+    font-size: 15px;
+    translate: 0 -4px;
+  }
+  .sourcing-workspace--review .sourcing-progress dt {
+    font-size: 15px;
+  }
+  #app .sourcing-workspace--review .sourcing-empty-offers-basis > .sourcing-profit-basis > summary {
+    min-height: 40px;
+    gap: 14px;
+    padding-inline-start: 10px;
+    padding-block: 5px 11px;
+    color: var(--so-text);
+    font-weight: 600;
+  }
+}
+
+/* Make the wide attention banner read as one message with a secondary action. */
+@media (min-width: 1600px) {
+  #app .sourcing-workspace--review .sourcing-pending[data-attention="true"] {
+    box-sizing: border-box;
+    min-block-size: 75px;
+  }
+  #app .sourcing-workspace--review .sourcing-pending[data-attention="true"] > div {
+    --sourcing-notice-icon: 24px;
+    --sourcing-notice-gap: 13px;
+    position: relative;
+    inset-block-start: -3px;
+  }
+  #app .sourcing-workspace--review .sourcing-pending[data-attention="true"] h4 {
+    font-size: 19px;
+    line-height: 26px;
+    font-weight: 700;
+    translate: -1px -1px;
+  }
+  #app .sourcing-workspace--review .sourcing-pending[data-attention="true"] h4 > svg {
+    inline-size: var(--sourcing-notice-icon);
+    block-size: var(--sourcing-notice-icon);
+  }
+  #app .sourcing-workspace--review .sourcing-notice-icon-surface {
+    fill: color-mix(in srgb, var(--so-warning-border) 67%, var(--so-warning-soft));
+  }
+  #app .sourcing-workspace--review .sourcing-pending[data-attention="true"] > div > p {
+    margin-block-start: 6px;
+    font-size: 15px;
+    line-height: 21px;
+    color: color-mix(in srgb, var(--so-text) 28%, var(--so-text-muted));
+  }
+  #app .sourcing-workspace--review .sourcing-pending .sourcing-notice-task {
+    min-height: 42px;
+    font-size: 14px;
+    padding-inline: 12px;
+    border-radius: 9px;
+  }
+  #app
+    .sourcing-workspace--review
+    .sourcing-pending
+    .sourcing-notice-task[data-failure-link="true"] {
+    min-inline-size: 126px;
+    translate: 0 -1.5px;
+  }
+}
+
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .sourcing-workspace--review
+    :is(.sourcing-overview, .sourcing-layout > aside, .sourcing-detail) {
+    background-color: color-mix(in srgb, var(--so-panel-soft) 28%, var(--so-panel));
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review {
+    font-family: "Segoe UI", "DengXian", var(--so-font-ui);
+  }
+  html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-head h1 {
+    translate: 0 -3px;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header p {
+    translate: 0 -4px;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header h3 {
+    color: var(--so-text);
+    font-weight: 700;
+  }
+  #app
+    .sourcing-workspace--review
+    .sourcing-detail
+    > header
+    :is(
+      p,
+      code,
+      .sourcing-progress small,
+      .sourcing-progress > header > span,
+      .sourcing-progress dt:not([data-fail]),
+      .sourcing-progress dt[data-fail="0"]
+    ) {
+    color: color-mix(in srgb, var(--so-text) 24%, var(--so-text-muted));
+  }
+  /* At this width, use the full detail column before wrapping any title. */
+  #app .sourcing-workspace--review .sourcing-detail > header h3 {
+    text-wrap: wrap;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header .sourcing-title--latin-tracking {
+    letter-spacing: -0.18px;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    :is(.sourcing-detail > header, .sourcing-record-items)
+    .research-thumbnail
+    img {
+    background: color-mix(in srgb, var(--so-panel) 93%, var(--so-text));
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header .research-thumbnail img {
+    padding: 14px;
+  }
+  #app .sourcing-workspace--review .sourcing-detail > header .sourcing-progress {
+    translate: 0 -2px;
+  }
+  #app .sourcing-workspace--review .sourcing-record-meta {
+    translate: 0 1px;
+  }
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-record-items
+    .research-thumbnail {
+    transform: translateY(2px);
+  }
+  #app .sourcing-workspace--review .sourcing-record-items > button > b {
+    font-family: "Segoe UI", "DengXian", var(--so-font-ui);
+    font-weight: 500;
+  }
+  #app .sourcing-workspace--review .sourcing-record-meta :is(small, em) {
+    font-size: 14px;
+    line-height: 19px;
+  }
+  #app .sourcing-workspace--review .sourcing-record-items > button > b {
+    transform: translateY(-3px);
+  }
+  #app .sourcing-workspace--review .sourcing-empty-offers > .sourcing-quote-empty > svg {
+    translate: -1px -7px;
+  }
+  #app .sourcing-workspace--review .sourcing-empty-offers > .sourcing-quote-empty > strong {
+    transform: translate(-1px, 2px);
+    font-weight: 700;
+  }
+  #app .sourcing-workspace--review .sourcing-empty-offers > .sourcing-quote-empty > span {
+    font-size: 15px;
+    line-height: 21px;
+    translate: -7px 0;
+  }
+  #app
+    .sourcing-workspace--review
+    .sourcing-empty-offers--with-profit
+    .sourcing-profit-unconfirmed {
+    font-size: 15px;
+  }
+  #app
+    .sourcing-workspace--review
+    .sourcing-empty-offers--with-profit
+    .sourcing-profit-unconfirmed-breakdown
+    dt {
+    padding-inline-start: 6px;
+    font-size: 15px;
+  }
+  #app .sourcing-workspace--review .sourcing-profit-unconfirmed-breakdown dd {
+    font-variant-numeric: tabular-nums;
+  }
+  #app .sourcing-workspace--review .sourcing-summary dt {
+    font-size: 15px;
+  }
+  #app .sourcing-workspace--review .sourcing-summary :is(dt, dd) {
+    position: relative;
+    inset-block-start: -2px;
+  }
+  #app
+    .sourcing-workspace--review
+    .sourcing-empty-offers--with-profit
+    .sourcing-profit-unconfirmed-breakdown
+    > div:last-child
+    > dt {
+    color: var(--so-text);
+    font-weight: 600;
+  }
+  #app .sourcing-workspace--review .sourcing-progress h4[data-status] {
+    padding-inline: 9px;
+    border-radius: 7px;
+  }
+  #app
+    .sourcing-workspace--review
+    .sourcing-progress
+    h4:is([data-status="failed"], [data-status="failed_terminal"]):not([data-sources-ended]) {
+    color: var(--so-danger);
+    background: var(--so-danger-soft);
+  }
+}
+
+/* Fit progress to the detail pane, not to the viewport or the product-name column. */
+@media (min-width: 761px) {
+  #app .sourcing-workspace--review .sourcing-detail {
+    container: sourcing-task / inline-size;
+  }
+  @container sourcing-task (max-width: 650px) {
+    #app .sourcing-workspace--review .sourcing-empty-offers--with-profit {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    html[data-design="commerce"] #app .sourcing-workspace--review .sourcing-detail > header {
+      display: grid;
+      grid-template-columns: clamp(104px, 24cqi, 135px) minmax(0, 1fr);
+      grid-template-rows: min-content min-content 1fr auto;
+      align-items: start;
+      gap: 4px 16px;
+    }
+    html[data-design="commerce"]
+      #app
+      .sourcing-workspace--review
+      .sourcing-detail
+      > header
+      > .research-thumbnail {
+      grid-area: 1 / 1 / span 3 / 2;
+      inline-size: 100%;
+      block-size: auto;
+      aspect-ratio: 1;
+    }
+    #app .sourcing-workspace--review .sourcing-detail > header > div:last-child {
+      display: contents;
+    }
+    #app .sourcing-workspace--review .sourcing-detail > header :is(p, h3, code) {
+      grid-column: 2;
+      overflow-wrap: anywhere;
+    }
+    #app .sourcing-workspace--review .sourcing-detail > header .sourcing-progress {
+      display: block;
+      grid-area: 4 / 1 / 5 / -1;
+      margin-block-start: 8px;
+    }
+    #app .sourcing-workspace--review .sourcing-progress > header {
+      display: flex;
+    }
+    #app .sourcing-workspace--review .sourcing-progress > header > span {
+      translate: none;
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
+    }
+    #app .sourcing-workspace--review .sourcing-progress dl {
+      flex-wrap: wrap;
+      gap: 4px 20px;
+      margin-block-start: 6px;
+    }
+    #app .sourcing-workspace--review .sourcing-progress dd {
+      white-space: nowrap;
+    }
+  }
+}
+
+/* Align the sourcing reading lines inside their existing cards. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .sourcing-workspace--review
+    .sourcing-progress
+    > header
+    > span {
+    position: relative;
+    inset-inline-end: 1px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .sourcing-workspace--review
+    .sourcing-pending[data-attention="true"]
+    > .sourcing-notice-task {
+    position: relative;
+    inset-inline-start: 2px;
+    inset-block-start: 2px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .sourcing-workspace--review
+    .sourcing-empty-offers--with-profit
+    .sourcing-profit-summary:has(.sourcing-profit-unconfirmed) {
+    > header > div {
+      min-inline-size: 0;
+      translate: 2px -1px;
+    }
+
+    > header > a {
+      flex: none;
+      white-space: nowrap;
+    }
+
+    .sourcing-profit-unconfirmed {
+      overflow-wrap: anywhere;
+    }
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"]) #app .sourcing-workspace--review {
+    .sourcing-progress > header > div {
+      position: relative;
+      inset-block-start: 1px;
+    }
+
+    .sourcing-progress > header > div > h4 {
+      margin-inline-start: 2px;
+    }
+
+    .sourcing-detail-tabs > button:not([aria-selected="true"]) {
+      color: color-mix(in srgb, var(--so-text) 45%, var(--so-text-muted));
+      font-weight: 500;
+    }
+
+    .sourcing-detail-tabs > button[aria-selected="true"] {
+      font-weight: 700;
+    }
+
+    .sourcing-quote-empty > span {
+      color: color-mix(in srgb, var(--so-text) 25%, var(--so-text-muted));
+    }
+
+    .sourcing-quote-empty > strong {
+      font-weight: 750;
+    }
+  }
+}
+
+/* Keep the authorized notice action at the end of its row after wrapping. */
+html[data-design="commerce"]
+  #app
+  .sourcing-workspace--review
+  .sourcing-pending[data-attention="true"]
+  > .sourcing-notice-task {
+  margin-inline-start: auto;
+}
+
+html[data-design="commerce"]
+  #app
+  .sourcing-workspace--review
+  .sourcing-pending[data-attention="true"]
+  > div {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1600px) {
+  /* A multiline notice should center its action on the whole message. */
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .sourcing-workspace--review
+    .sourcing-pending[data-attention="true"]:has(> div > .sourcing-missing)
+    > .sourcing-notice-task {
+    inset-block-start: 0;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .sourcing-workspace--review
+    .sourcing-record-heading
+    > span {
+    font-size: 14px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .sourcing-workspace--review
+    .sourcing-record-meta {
+    translate: 0 0;
+  }
+}
+
+@media (min-width: 1600px) {
+  html[data-design="commerce"] #app .sourcing-workspace--review {
+    .sourcing-heading-actions > :is(a, button) {
+      border-radius: 10px;
+    }
+
+    .sourcing-heading-actions > a {
+      font-weight: 600;
+    }
+
+    .sourcing-pagination button {
+      border-radius: var(--so-control-radius);
+    }
+
+    .sourcing-pagination button:not(:disabled) {
+      color: var(--so-primary-strong);
+    }
+  }
+}
+
+/* Separate the primary cards, product media and secondary facts on wide screens. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"]) #app .sourcing-workspace--review {
+    :is(.sourcing-overview, .sourcing-layout > aside, .sourcing-detail) {
+      background-color: var(--so-panel);
+    }
+
+    :is(.sourcing-detail > header, .sourcing-record-items) .research-thumbnail {
+      background-color: color-mix(in srgb, var(--so-panel) 95%, var(--so-text));
+
+      img {
+        background-color: transparent;
+      }
+    }
+
+    /* Match the lower visual center of the wide preview without cropping. */
+    .sourcing-detail > header .research-thumbnail img {
+      object-position: 50% 58%;
+    }
+
+    .sourcing-record-items > button {
+      /* Keep the five visible records on the reference's compact rhythm. */
+      min-block-size: 95px;
+    }
+
+    .sourcing-record-items > button > b {
+      font-weight: 600;
+    }
+  }
+}
+
+/* Distinguish the no-offer message from the adjacent cost facts with theme surfaces. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .sourcing-workspace--review
+    .sourcing-empty-offers--with-profit {
+    .sourcing-profit-summary {
+      background-color: color-mix(in srgb, var(--so-panel-soft) 60%, var(--so-panel));
+    }
+  }
+}
+
+/* Give explanation text the same reading contrast in both no-offer surfaces. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .sourcing-workspace--review
+    .sourcing-detail
+    :is(
+      .sourcing-empty-offers > .sourcing-quote-empty > span,
+      .sourcing-pending[data-attention="true"] > div > p
+    ) {
+    color: color-mix(in srgb, var(--so-text) 35%, var(--so-text-muted));
+  }
+}
+
+/* Align the warning icon, heading and body on smaller sourcing workbenches. */
+@media (max-width: 1439px) {
+  html[data-design="commerce"]
+    #app
+    .sourcing-workspace--review
+    .sourcing-pending[data-attention="true"]
+    > div {
+    --sourcing-notice-icon: 20px;
+    --sourcing-notice-gap: 10px;
+
+    h4 {
+      column-gap: var(--sourcing-notice-gap);
+      align-items: start;
+    }
+
+    h4 > svg {
+      flex: 0 0 var(--sourcing-notice-icon);
+      inline-size: var(--sourcing-notice-icon);
+      block-size: var(--sourcing-notice-icon);
+    }
+
+    > :is(p, .sourcing-missing) {
+      padding-inline-start: calc(var(--sourcing-notice-icon) + var(--sourcing-notice-gap));
+    }
+  }
+}
+
+/* Align notice, tabs and cost reading lines without moving their controls. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"]) #app .sourcing-workspace--review {
+    .sourcing-pending[data-attention="true"] h4 > svg {
+      translate: 2px 3px;
+    }
+
+    .sourcing-detail-tabs > button[aria-controls$="-panel-profit"] {
+      text-indent: 5px;
+    }
+
+    .sourcing-detail-tabs > button[aria-controls$="-panel-history"] {
+      text-indent: -2px;
+    }
+
+    .sourcing-empty-offers--with-profit .sourcing-profit-summary:has(.sourcing-profit-unconfirmed) {
+      > header > div {
+        padding-inline-start: 4px;
+      }
+
+      .sourcing-profit-unconfirmed-breakdown dd {
+        font-size: 15px;
+      }
+    }
   }
 }

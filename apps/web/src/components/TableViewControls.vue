@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUpdated, ref, useId, watch } from "vue";
+import AppIcon from "./AppIcon.vue";
 
 interface TableColumn {
   index: number;
   label: string;
 }
 
-const props = defineProps<{ columnLabels?: boolean; columnHelp?: string }>();
+const props = defineProps<{
+  columnLabels?: boolean;
+  columnHelp?: string;
+  toolbarIcons?: boolean;
+  scrollLabel?: string;
+}>();
 const root = ref<HTMLElement | null>(null),
   columns = ref<TableColumn[]>([]),
   hiddenColumns = ref<number[]>([]),
@@ -73,10 +79,14 @@ watch([hiddenColumns, freezeFirst, density], () => void nextTick(applySettings),
 </script>
 
 <template>
-  <section ref="root" class="table-view-controls">
+  <section
+    ref="root"
+    class="table-view-controls"
+    :class="{ 'table-view-controls--icons': toolbarIcons }"
+  >
     <header v-if="columns.length > 1" class="table-view-controls__toolbar">
       <details>
-        <summary>列设置</summary>
+        <summary><AppIcon v-if="toolbarIcons" name="list" :size="15" />列设置</summary>
         <fieldset>
           <legend>选择显示列</legend>
           <p v-if="props.columnHelp" class="table-view-controls__help">{{ props.columnHelp }}</p>
@@ -103,17 +113,26 @@ watch([hiddenColumns, freezeFirst, density], () => void nextTick(applySettings),
         </fieldset>
       </details>
       <button type="button" :aria-pressed="freezeFirst" @click="freezeFirst = !freezeFirst">
+        <AppIcon v-if="toolbarIcons" name="column-anchor" :size="15" />
         {{ freezeFirst ? "首列已冻结" : "首列未冻结" }}
       </button>
       <label>
-        表格密度
+        <span v-if="toolbarIcons"><AppIcon name="category-grid" :size="15" />表格密度</span>
+        <template v-else>表格密度</template>
         <select v-model="density">
           <option value="standard">标准</option>
           <option value="compact">紧凑</option>
         </select>
       </label>
     </header>
-    <div class="table-view-controls__content"><slot /></div>
+    <div
+      class="table-view-controls__content"
+      :role="scrollLabel ? 'region' : undefined"
+      :aria-label="scrollLabel"
+      :tabindex="scrollLabel ? 0 : undefined"
+    >
+      <slot />
+    </div>
   </section>
 </template>
 
@@ -192,6 +211,37 @@ watch([hiddenColumns, freezeFirst, density], () => void nextTick(applySettings),
   color: var(--so-text-muted);
 }
 
+.table-view-controls--icons .table-view-controls__toolbar :is(summary, button, label > span) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.table-view-controls--icons .table-view-controls__toolbar > label > span {
+  min-block-size: 33px;
+  padding: 6px 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+
+.table-view-controls--icons .table-view-controls__toolbar {
+  flex-wrap: wrap;
+  font-size: 13px;
+}
+
+.table-view-controls--icons .table-view-controls__toolbar :is(summary, button, select) {
+  --so-control-height: 33px;
+  min-height: 33px;
+  padding-block: 5px;
+  border-radius: 8px;
+}
+
+.table-view-controls--icons .table-view-controls__toolbar select {
+  background: var(--so-panel);
+}
+
 .table-view-controls__content {
   min-width: 0;
   overflow-x: auto;
@@ -216,6 +266,10 @@ watch([hiddenColumns, freezeFirst, density], () => void nextTick(applySettings),
 }
 
 @media (max-width: 760px), (pointer: coarse) {
+  .table-view-controls--icons .table-view-controls__toolbar :is(summary, button, select) {
+    --so-control-height: var(--so-touch-target);
+  }
+  .table-view-controls--icons .table-view-controls__toolbar :is(summary, button, select),
   .table-view-controls__toolbar button,
   .table-view-controls__toolbar summary,
   .table-view-controls__toolbar select,

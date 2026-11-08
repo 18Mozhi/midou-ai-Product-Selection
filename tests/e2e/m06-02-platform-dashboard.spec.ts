@@ -1,4 +1,5 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, chromium } from "@playwright/test";
+import { CAPABILITIES } from "../../packages/authorization/src/index";
 import type { Locator, Page, Route } from "@playwright/test";
 import { verifyAuditedReasonFocus } from "./helpers/audited-reason-focus";
 import { capturePhase2Evidence, finalizePhase2Evidence } from "./helpers/ui-phase2-evidence";
@@ -1337,7 +1338,36 @@ test("platform cockpit gives live operations the full workspace and accessible a
     expect(Math.abs(bounds.width - bounds.available)).toBeLessThan(2);
     expect(Math.abs(bounds.sources.top - bounds.trend.top)).toBeLessThan(2);
     expect(bounds.sources.left).toBeGreaterThan(bounds.trend.right);
+    expect(
+      Math.abs(
+        bounds.sources.right - bounds.sources.left - (bounds.trend.right - bounds.trend.left),
+      ),
+    ).toBeLessThan(2);
     await expect(alerts).toHaveCSS("overflow-y", "auto");
+    const timestamps = page.locator(".platform-source-health tbody td:last-child");
+    expect(await timestamps.count()).toBe(8);
+    const preview = page.locator(".platform-source-health .table-view-controls__content");
+    const lastRowVisible = await preview.evaluate((el) => {
+      const viewport = el.getBoundingClientRect();
+      const rows = el.querySelectorAll("tbody tr");
+      return (
+        rows[rows.length - 1]!.getBoundingClientRect().bottom <=
+        viewport.top + el.clientTop + el.clientHeight + 1
+      );
+    });
+    expect(lastRowVisible).toBe(true);
+    expect(
+      await timestamps.evaluateAll((cells) =>
+        cells.every((cell) => {
+          const range = document.createRange();
+          range.selectNodeContents(cell);
+          const text = range.getBoundingClientRect();
+          return (
+            range.getClientRects().length === 1 && text.right <= cell.getBoundingClientRect().right
+          );
+        }),
+      ),
+    ).toBe(true);
     await alerts.focus();
     await alerts.press("End");
     await expect.poll(() => alerts.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
@@ -1348,13 +1378,731 @@ test("platform cockpit gives live operations the full workspace and accessible a
   await expect(page).toHaveScreenshot("platform-overview-workbench.png", { fullPage: false });
 });
 
+test("platform overview has one create organization action in its page header", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await nav(page, "platform_super_admin", "platform:superadmin");
+  await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
+  await page.goto("/platform-admin");
+  const create = page.getByRole("link", { name: "新建组织", exact: true });
+  await expect(create).toHaveCount(1);
+  const header = page.locator(".platform-page-header");
+  const range = header.getByRole("combobox", { name: "查看范围", exact: true });
+  const refresh = header.getByRole("button", { name: "刷新", exact: true });
+  await expect(refresh).toBeEnabled();
+  const [a, b, c] = await Promise.all([create, range, refresh].map((part) => part.boundingBox()));
+  expect([a!.width, b!.width, c!.width]).toEqual([122, 145, 92]);
+  expect(b!.x - a!.x - a!.width).toBe(16);
+  expect(c!.x - b!.x - b!.width).toBe(16);
+  await expect(
+    page.locator(".platform-page-header").getByRole("link", { name: "新建组织", exact: true }),
+  ).toHaveAttribute("href", "/platform-admin/organizations/new");
+  await expect(
+    page.locator(".role-topbar").getByRole("link", { name: "新建组织", exact: true }),
+  ).toHaveCount(0);
+});
+
+test("tablet platform metric rows fill the card without empty cells", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Tablet platform grid");
+  await page.setViewportSize({ width: 900, height: 900 });
+  await nav(page, "platform_super_admin", "platform:superadmin");
+  await page.route("**/api/v1/platform/dashboard?**", (route) =>
+    route.fulfill({ json: env(dashboard) }),
+  );
+  await page.goto("/platform-admin");
+  const facts = page.getByRole("region", { name: "平台指标", exact: true });
+  const cells = facts.locator("article");
+  await expect(cells).toHaveCount(5);
+  for (const width of [900, 761, 841, 1100]) {
+    await page.setViewportSize({ width, height: 900 });
+    const [a, b, c, d, e] = await Promise.all(
+      (await cells.all()).map((cell) => cell.boundingBox()),
+    );
+    expect(Math.abs(a!.y - c!.y), `width=${width}: upper row alignment`).toBeLessThanOrEqual(1);
+    expect(Math.abs(d!.y - e!.y), `width=${width}: lower row alignment`).toBeLessThanOrEqual(1);
+    expect(Math.abs(d!.x - a!.x), `width=${width}: left edge`).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(e!.x + e!.width - c!.x - c!.width),
+      `width=${width}: right edge`,
+    ).toBeLessThanOrEqual(1);
+    expect(d!.width, `width=${width}: balanced lower row`).toBeCloseTo(e!.width, 0);
+    expect(d!.y).toBeGreaterThan(a!.y);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  }
+  await expect(cells.locator("> strong")).toHaveText(["42", "318", "3", "96.4%", "12.0 MB"]);
+  await expect(facts.getByRole("link", { name: "查看来源" })).toHaveAttribute(
+    "href",
+    "/platform-admin/providers/sources",
+  );
+  await page.setViewportSize({ width: 900, height: 900 });
+});
+
+test("platform metric cards share label, value and action baselines when one value wraps", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop and tablet metric tracks");
+  const large = 987654321012345;
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await nav(page, "platform_super_admin", "platform:superadmin");
+  await page.route("**/api/v1/platform/dashboard?**", (route) =>
+    route.fulfill({
+      json: env({ ...dashboard, summary: { ...dashboard.summary, active_organizations: large } }),
+    }),
+  );
+  await page.goto("/platform-admin");
+  const cards = page.getByRole("region", { name: "平台指标" }).locator("article");
+  await expect(cards).toHaveCount(5);
+  await expect(cards.first().locator("strong")).toHaveText(String(large));
+  for (const [width, cols] of [
+    [1672, 5],
+    [900, 3],
+  ] as const) {
+    await page.setViewportSize({ width, height: 941 });
+    const geometry = await cards.evaluateAll((cells) =>
+      cells.map((cell) => {
+        const value = cell.querySelector("strong")!;
+        const range = document.createRange();
+        range.selectNodeContents(value);
+        const bound = cell.getBoundingClientRect();
+        return {
+          labelY: cell.querySelector(":scope > span")!.getBoundingClientRect().top,
+          valueY: value.getBoundingClientRect().top,
+          actionY: cell.querySelector(":scope > a")!.getBoundingClientRect().top,
+          lines: range.getClientRects().length,
+          withinCell: [...range.getClientRects()].every(
+            (line) => line.left >= bound.left && line.right <= bound.right + 0.5,
+          ),
+        };
+      }),
+    );
+    console.log("platform metric tracks", width, JSON.stringify(geometry));
+    expect(geometry[0]!.lines).toBeGreaterThan(1);
+    expect(geometry.every((card) => card.withinCell)).toBe(true);
+    for (const group of [geometry.slice(0, cols), geometry.slice(cols)].filter(
+      (row) => row.length,
+    )) {
+      for (const card of group) {
+        expect(card.labelY).toBeCloseTo(group[0]!.labelY, 0);
+        expect(card.valueY).toBeCloseTo(group[0]!.valueY, 0);
+        expect(card.actionY).toBeCloseTo(group[0]!.actionY, 0);
+      }
+    }
+  }
+});
+
+test("platform attention cards keep large counts and labels in separate tracks", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Check several responsive widths");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await nav(page);
+  const count = 9007199254740991;
+  await page.route("**/api/v1/platform/dashboard?**", (route) =>
+    route.fulfill({
+      json: env({
+        ...dashboard,
+        summary: {
+          ...dashboard.summary,
+          queue_backlog: count,
+          open_alerts: count,
+        },
+      }),
+    }),
+  );
+  await page.goto("/platform-admin");
+  const cards = page.locator(".platform-action-summary > a");
+  await expect(cards.locator("strong")).toHaveText([String(count), String(count)]);
+  const insets = await cards.evaluateAll((links) =>
+    links.map((link) => getComputedStyle(link).paddingInlineEnd),
+  );
+  console.log("PLATFORM_SUMMARY_COUNT_INSETS", JSON.stringify(insets));
+  expect(insets).toEqual(["36px", "24px"]);
+  await expect(cards.first()).toHaveAttribute("href", "/platform-admin/collection");
+  await expect(cards.last()).toHaveAttribute(
+    "href",
+    "/platform-admin/collection/overview?root_cause=1",
+  );
+  for (const width of [1672, 1101, 390]) {
+    await page.setViewportSize({ width, height: 941 });
+    const layout = await cards.evaluateAll((rows) =>
+      rows.map((row) => {
+        const bounds = row.getBoundingClientRect();
+        const label = row.querySelector("span")!.getBoundingClientRect();
+        const number = row.querySelector("strong")!;
+        const numberBounds = number.getBoundingClientRect();
+        const range = document.createRange();
+        range.selectNodeContents(number);
+        const lines = [...range.getClientRects()];
+        return {
+          fraction: numberBounds.width / bounds.width,
+          labelWidth: label.width,
+          inside: lines.every(
+            (line) => line.left >= label.right && line.right <= bounds.right + 0.5,
+          ),
+        };
+      }),
+    );
+    console.log("platform attention layout", width, JSON.stringify(layout));
+    for (const card of layout) {
+      expect(card.fraction).toBeLessThanOrEqual(0.5);
+      expect(card.labelWidth).toBeGreaterThan(70);
+      expect(card.inside).toBe(true);
+    }
+  }
+});
+
+test("platform overview refresh keeps the action group fixed while a read is pending", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide action track");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await nav(page, "platform_super_admin", "platform:superadmin");
+  let reads = 0;
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/api/v1/platform/dashboard?**", async (route) => {
+    if (++reads === 2) await held;
+    await route.fulfill({ json: env(dashboard) });
+  });
+  await page.goto("/platform-admin");
+  const header = page.locator(".platform-dashboard > .platform-page-header");
+  const create = header.getByRole("link", { name: "新建组织", exact: true });
+  const period = header.getByRole("combobox", { name: "查看范围", exact: true });
+  const refresh = header.locator(".platform-page-header__actions > button");
+  const read = () => Promise.all([create, period, refresh].map((item) => item.boundingBox()));
+  await expect(refresh).toHaveText("刷新");
+  const baseline = await read();
+  await refresh.click();
+  try {
+    await expect(refresh).toHaveText("刷新中…");
+    await expect(refresh).toBeDisabled();
+    await expect(period).toBeDisabled();
+    const loading = await read();
+    const contentFits = await refresh.evaluate((node) => node.scrollWidth <= node.clientWidth + 1);
+    console.log(
+      "PLATFORM_PENDING_ACTION_TRACK",
+      JSON.stringify({ baseline, loading, contentFits }),
+    );
+    expect(loading).toEqual(baseline);
+    expect(contentFits).toBe(true);
+  } finally {
+    release();
+  }
+  await expect(refresh).toHaveText("刷新");
+  await expect(period).toBeEnabled();
+  expect(await read()).toEqual(baseline);
+  expect(reads).toBe(2);
+});
+
+test("platform reference first fold fits system checks and source health without hiding storage data", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await nav(page, "platform_super_admin", "platform:superadmin");
+  await page.route("**/api/v1/me/navigation?shell=platform_admin", (route) =>
+    route.fulfill({
+      json: env({
+        shell: "platform_admin",
+        organization_id: null,
+        workspace_id: null,
+        roles: [],
+        capabilities: [],
+        platform_roles: ["platform_super_admin"],
+        platform_capabilities: CAPABILITIES,
+        guard_reason: "navigation_platform_admin_allowed",
+      }),
+    }),
+  );
+  await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
+  await page.goto("/platform-admin");
+  await expect(page.locator(".platform-dashboard--review")).toHaveCSS(
+    "background-color",
+    "rgba(0, 0, 0, 0)",
+  );
+  const sidebar = page.getByRole("complementary", { name: "工作区导航" });
+  const overview = sidebar.getByRole("link", { name: "平台概览", exact: true });
+  await expect(sidebar.getByRole("link", { name: "组织管理", exact: true })).toBeVisible();
+  await expect(sidebar.getByRole("link", { name: "开放平台", exact: true })).toHaveAttribute(
+    "href",
+    "/platform-admin/open-platform",
+  );
+  await expect(sidebar.locator(".midou-organization-help summary")).toBeInViewport({ ratio: 1 });
+  await expect(
+    sidebar.getByRole("link", { name: "开放平台", exact: true }).locator("svg path").nth(2),
+  ).toHaveAttribute("d", "m14.5 4-5 16");
+  await expect(
+    sidebar.getByRole("link", { name: "来源设置", exact: true }).locator("svg path").first(),
+  ).toHaveAttribute("d", /^m12 2 10 5/);
+  await expect(
+    sidebar.getByRole("link", { name: "采集管理", exact: true }).locator("svg circle"),
+  ).toHaveAttribute("r", "3");
+  const areaTabs = sidebar.getByRole("navigation", { name: "工作台类型", exact: true });
+  const areaTabsBounds = (await areaTabs.boundingBox())!;
+  expect(areaTabsBounds.y).toBeCloseTo(82, 0);
+  await expect(areaTabs).toHaveCSS("translate", "0px -3px");
+  const contextLink = sidebar.getByRole("link", { name: "选择组织与工作区后进入用户工作台" });
+  expect((await contextLink.boundingBox())!.height).toBeGreaterThanOrEqual(40);
+  await expect(contextLink).toHaveCSS("padding-inline-start", "15px");
+  await expect(sidebar.locator("footer")).toHaveCSS("inset-block-start", "3px");
+  await expect(sidebar.locator(".midou-organization-help")).toHaveCSS("justify-self", "end");
+  expect((await sidebar.boundingBox())!.width).toBeCloseTo(243, 0);
+  await expect(sidebar).toHaveCSS("padding-inline-end", "16px");
+  expect((await overview.boundingBox())!.y).toBeCloseTo(170, 0);
+  const navGroups = sidebar.locator(".commerce-sidebar-menu > section");
+  await expect(navGroups).toHaveCount(4);
+  await expect(navGroups.nth(1)).toHaveCSS("padding-block-start", "3px");
+  await expect(navGroups.nth(3)).toHaveCSS("padding-block-start", "9px");
+  const organizations = sidebar.getByRole("link", { name: "组织管理", exact: true });
+  expect((await organizations.boundingBox())!.y - (await overview.boundingBox())!.y).toBe(33);
+  expect((await overview.locator("span").boundingBox())!.x).toBeCloseTo(66, 0);
+  const settings = (await sidebar.getByRole("link", { name: "设置", exact: true }).boundingBox())!;
+  const help = (await sidebar.locator(".midou-organization-help summary").boundingBox())!;
+  expect(settings.y + settings.height / 2).toBeCloseTo(help.y + help.height / 2, 0);
+  expect(settings.x + settings.width).toBeLessThanOrEqual(help.x);
+  await expect(page.locator(".platform-dashboard--review")).toHaveCSS(
+    "font-family",
+    /^"Segoe UI", "?DengXian"?,/,
+  );
+  const signals = page.locator(".platform-system-checks");
+  const sources = page.locator(".platform-source-health");
+  await expect(signals).toBeVisible();
+  await expect(signals.locator(".platform-signals li")).toHaveCount(
+    dashboard.health_signals.length,
+  );
+  await expect(signals.locator(".platform-signal-icon[aria-hidden='true']")).toHaveCount(
+    dashboard.health_signals.length,
+  );
+  await expect(signals.locator(".platform-signal-ok")).toHaveText("正常");
+  await expect(signals.locator(".platform-signal-icon[data-health='critical']")).toHaveCount(1);
+  const healthyIcon = signals.locator(".platform-signal-icon[data-health='healthy']").first();
+  await expect(healthyIcon).toHaveCSS("border-radius", "50%");
+  await expect(healthyIcon.locator("circle")).toHaveCount(0);
+  const facts = page.getByRole("region", { name: "平台指标" });
+  const [factsBox, metricRow, checksBox] = await Promise.all(
+    [facts, facts.locator(":scope > div"), signals].map((part) => part.boundingBox()),
+  );
+  expect(Math.abs(factsBox!.x - 273)).toBeLessThanOrEqual(2);
+  expect(Math.abs(factsBox!.y - 303)).toBeLessThanOrEqual(3);
+  const workQueue = (await page.locator(".platform-action-summary").boundingBox())!;
+  expect(Math.abs(workQueue.y - 208)).toBeLessThanOrEqual(2);
+  const queueLinks = page.locator(".platform-action-summary > a");
+  const pending = (await queueLinks.first().boundingBox())!;
+  const alerts = (await queueLinks.last().boundingBox())!;
+  expect(Math.abs(pending.x + pending.width - 940)).toBeLessThanOrEqual(3);
+  expect(Math.abs(alerts.x - 940)).toBeLessThanOrEqual(3);
+  await expect(queueLinks.first().locator("svg")).toHaveCSS("width", "28px");
+  await expect(queueLinks.first().locator("svg")).toHaveCSS("grid-area", "icon");
+  await expect(queueLinks.first().locator("svg")).toHaveCSS("translate", "none");
+  await expect(queueLinks.first().locator("span")).toHaveCSS("font-size", "17px");
+  const [iconBox, countBox, labelBox, noteBox] = await Promise.all(
+    ["svg", "strong", "span", "small"].map((selector) =>
+      queueLinks.first().locator(selector).boundingBox(),
+    ),
+  );
+  expect(iconBox!.y + iconBox!.height / 2).toBeCloseTo(countBox!.y + countBox!.height / 2, 0);
+  expect(labelBox!.x).toBe(noteBox!.x);
+  await expect(queueLinks.last().locator("strong")).toHaveCSS(
+    "font-variant-numeric",
+    "tabular-nums",
+  );
+  await expect(queueLinks.first().locator("small")).toHaveCSS("font-size", "14px");
+  await expect(page.locator(".platform-page-header h2")).toHaveCSS("inset-block-start", "-1px");
+  await expect(facts.locator(":scope > header")).toHaveCSS("padding-inline-start", "4px");
+  await expect(signals.locator("h3")).toHaveCSS("inset-inline-start", "0px");
+  await expect(signals.locator("h3")).toHaveCSS("inset-block-start", "-3px");
+  await expect(sources.locator("thead th").first()).toHaveCSS("padding-inline-start", "16px");
+  const headingActions = page.locator(".platform-page-header__actions");
+  await expect(headingActions).toHaveCSS("translate", "-1px 1px");
+  for (const action of await headingActions.locator("a, button, select").all()) {
+    expect((await action.boundingBox())!.height).toBe(38);
+  }
+  const rangeBorder = await headingActions
+    .locator("select")
+    .evaluate((node) => getComputedStyle(node).borderTopColor);
+  await expect(headingActions.getByRole("button", { name: "刷新", exact: true })).toHaveCSS(
+    "border-top-color",
+    rangeBorder,
+  );
+  expect(Math.abs(metricRow!.x - 293)).toBeLessThanOrEqual(2);
+  const metricTracks = await facts.locator("article").evaluateAll((cards) =>
+    cards.map((card) => {
+      const title = card.querySelector(":scope > span")!;
+      const titleText = Array.from(title.childNodes).find(
+        (node) => node.nodeType === Node.TEXT_NODE,
+      )!;
+      const range = document.createRange();
+      range.selectNodeContents(titleText);
+      const icon = title.querySelector("svg")!.getBoundingClientRect();
+      const label = range.getBoundingClientRect();
+      const value = card.querySelector(":scope > strong")!.getBoundingClientRect();
+      const action = card.querySelector(":scope > :is(a, small)")!.getBoundingClientRect();
+      return { value: value.x, label: label.x, action: action.x, gap: label.x - icon.right };
+    }),
+  );
+  for (const [index, x] of [356, 623, 887, 1155, 1426].entries()) {
+    const metric = metricTracks[index]!;
+    expect(Math.abs(metric.value - x)).toBeLessThanOrEqual(5);
+    expect(metric.value).toBeCloseTo(metric.label, 0);
+    expect(metric.action).toBeCloseTo(metric.label, 0);
+    expect(metric.gap).toBeCloseTo(13, 0);
+  }
+  expect(Math.abs(metricRow!.y + metricRow!.height - 463)).toBeLessThanOrEqual(3);
+  const trendCard = (await page.locator(".platform-trend-chart").boundingBox())!;
+  const emptyTrend = page.locator(".platform-trend-empty");
+  await expect(page.locator(".platform-trend-chart > header > span")).toHaveCSS(
+    "font-size",
+    "14px",
+  );
+  await expect(emptyTrend.locator(":scope > strong")).toHaveCSS("font-size", "18px");
+  await expect(emptyTrend.locator(":scope > span")).toHaveCSS("font-size", "14px");
+  await expect(emptyTrend.getByRole("link", { name: "查看采集队列" })).toBeVisible();
+  const sourceCard = (await sources.boundingBox())!;
+  expect(Math.abs(trendCard.y - 499)).toBeLessThanOrEqual(2);
+  expect(Math.abs(sourceCard.x - 974)).toBeLessThanOrEqual(3);
+  expect(sourceCard.x - trendCard.x - trendCard.width).toBeCloseTo(19, 0);
+  expect(checksBox!.x).toBe(factsBox!.x);
+  const sourceLink = facts.getByRole("link", { name: "查看来源", exact: true });
+  await expect(sourceLink).toHaveAttribute("href", "/platform-admin/providers/sources");
+  await expect(sourceLink.locator("svg")).toHaveAttribute("aria-hidden", "true");
+  await expect(sourceLink).toHaveCSS("column-gap", "6px");
+  for (const card of [signals, sources]) {
+    const bounds = await card.boundingBox();
+    expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(925);
+  }
+  await expect(sources.locator("tbody i[data-health]").first()).toHaveCSS("font-weight", "600");
+  await expect(sources.locator("tbody i[data-health]").first()).toHaveCSS("border-radius", "999px");
+  const cell = sources.locator("tbody td").first();
+  const sourceTable = sources.locator("table");
+  const sourceToolbar = sources.locator(".table-view-controls__toolbar");
+  await expect(sourceToolbar).toHaveCSS("translate", "none");
+  await expect(sourceToolbar).toHaveCSS("inset-block-start", "-1.5px");
+  await expect(sourceToolbar).toHaveCSS("padding-inline-end", "6px");
+  await expect(sourceToolbar).toHaveCSS("column-gap", "9px");
+  const columnControl = sourceToolbar.locator("details > summary");
+  const freezeControl = sourceToolbar.getByRole("button", { name: "首列已冻结" });
+  const densityCaption = sourceToolbar.locator("label > span");
+  await expect(columnControl).toHaveCSS("min-inline-size", "90px");
+  await expect(freezeControl).toHaveCSS("min-inline-size", "116px");
+  await expect(densityCaption).toHaveCSS("min-inline-size", "100px");
+  await expect(densityCaption.locator("path")).toHaveAttribute("d", /^M3 3h7v7H3/);
+  const toolbarParts = [
+    columnControl,
+    freezeControl,
+    densityCaption,
+    sourceToolbar.locator("select"),
+  ];
+  const toolbarBoxes = await Promise.all(toolbarParts.map((control) => control.boundingBox()));
+  expect(Math.abs(toolbarBoxes[0]!.x - 1212)).toBeLessThanOrEqual(4);
+  const centerY = toolbarBoxes[0]!.y + toolbarBoxes[0]!.height / 2;
+  for (const box of toolbarBoxes) expect(box!.y + box!.height / 2).toBeCloseTo(centerY, 0);
+  const [densityBox, sourceTableBox] = await Promise.all([
+    sourceToolbar.locator("select").boundingBox(),
+    sourceTable.boundingBox(),
+  ]);
+  expect(Math.abs(densityBox!.y - 555)).toBeLessThanOrEqual(3);
+  expect(Math.abs(sourceTableBox!.y - 602)).toBeLessThanOrEqual(3);
+  await expect(sourceTable).toHaveCSS("table-layout", "fixed");
+  const sourceHeaders = await sourceTable
+    .locator("th")
+    .evaluateAll((headers) =>
+      headers.map(
+        (header) =>
+          header.getBoundingClientRect().left + parseFloat(getComputedStyle(header).paddingLeft),
+      ),
+    );
+  expect(Math.abs(sourceHeaders[0] - 1008)).toBeLessThanOrEqual(6);
+  expect(sourceHeaders[1] - sourceHeaders[0]).toBeGreaterThanOrEqual(220);
+  expect(sourceHeaders[2] - sourceHeaders[1]).toBeGreaterThanOrEqual(75);
+  await expect(sourceTable.locator("tbody td:last-child").first()).toHaveCSS(
+    "white-space",
+    "normal",
+  );
+  await expect(sourceTable.getByRole("columnheader", { name: "最近观测" })).toHaveCSS(
+    "text-align",
+    "center",
+  );
+  await expect(sourceTable.locator("tbody td:last-child").last()).toHaveCSS("text-align", "center");
+  await expect(sourceTable.locator("tbody td:last-child").first()).toHaveText(
+    /^\d{4}\/\d{1,2}\/\d{1,2}\s+\d{2}:\d{2}:\d{2}$/,
+  );
+  await expect(sourceTable.locator("tbody td:last-child").last()).toHaveText("无样本");
+  await expect(sources.getByRole("heading", { name: "来源健康" })).toHaveCSS("font-size", "19px");
+  await expect(signals.getByRole("heading", { name: "系统检查" })).toHaveCSS("font-size", "19px");
+  await expect(signals.locator(":scope > header")).toHaveCSS("margin-block-end", "16px");
+  const signalRows = signals.locator(".platform-signals li");
+  await expect(signalRows.first()).toHaveCSS("padding-inline-start", "12px");
+  const checksRhythm = {
+    row: await signalRows.first().evaluate((el) => getComputedStyle(el).minBlockSize),
+    tail: await signals.evaluate((el) => getComputedStyle(el).paddingBlockEnd),
+    bottom: (await signals.boundingBox())!.y + (await signals.boundingBox())!.height,
+  };
+  console.log("PLATFORM_SYSTEM_CHECK_RHYTHM", JSON.stringify(checksRhythm));
+  expect(checksRhythm).toMatchObject({ row: "33px", tail: "0px" });
+  expect(checksRhythm.bottom).toBeLessThanOrEqual(925);
+  await expect(signals.locator(".platform-signal-ok")).toHaveCSS("margin-inline-end", "3px");
+  for (const row of await signalRows.all()) {
+    await expect(row).toHaveCSS("min-block-size", "33px");
+    await expect(row).toBeInViewport({ ratio: 1 });
+  }
+  await expect(signals).toBeInViewport({ ratio: 1 });
+  await expect(signalRows.first().locator(":scope > span")).toHaveCSS("line-height", "20px");
+  await expect(signalRows.first().locator(".platform-signal-ok")).toHaveCSS(
+    "min-inline-size",
+    "54px",
+  );
+  await expect(cell).toHaveCSS("font-variant-numeric", "tabular-nums");
+  await expect(cell.locator("b")).toHaveCSS("letter-spacing", "-0.12px");
+  await expect(cell.locator("b")).toHaveCSS("font-size", "15px");
+  await expect(sourceTable.locator("tbody td:nth-child(3)").first()).toHaveCSS("font-size", "16px");
+  const density = sources.getByLabel("表格密度");
+  await expect(
+    sources.locator(".table-view-controls__toolbar svg[aria-hidden='true']"),
+  ).toHaveCount(3);
+  const freezeGlyph = sources.getByRole("button", { name: "首列已冻结" }).locator("svg");
+  await expect(freezeGlyph).toHaveAttribute("focusable", "false");
+  await expect(freezeGlyph.locator(":scope > path").first()).toHaveAttribute(
+    "d",
+    "m12 2.75 9.25 9.25L12 21.25 2.75 12Z",
+  );
+  await expect(sources.locator(".table-view-controls__content")).toHaveCSS("border-radius", "10px");
+  const freeze = sources.getByRole("button", { name: "首列已冻结" });
+  await expect(freeze).toHaveAttribute("aria-pressed", "true");
+  await freeze.click();
+  await expect(cell).not.toHaveClass(/table-view-controls__frozen/);
+  await sources.getByRole("button", { name: "首列未冻结" }).click();
+  await expect(cell).toHaveClass(/table-view-controls__frozen/);
+  const stripedRow = sourceTable.locator("tbody tr").nth(1);
+  const stripeColor = await stripedRow.evaluate((row) => getComputedStyle(row).backgroundColor);
+  await expect(stripedRow.locator("td").first()).toHaveCSS("background-color", stripeColor);
+  await sources.getByText("列设置", { exact: true }).click();
+  const statusColumn = sources.getByRole("checkbox", { name: "切换第 2 列" });
+  const readVisibleFacts = () =>
+    sourceTable.evaluate((table) => {
+      const row = table.querySelector("tbody tr")!;
+      const cells = Array.from(row.querySelectorAll("td"));
+      const css = (index: number) => getComputedStyle(cells[index]!);
+      return {
+        sourceInset: css(0).paddingInlineStart,
+        countSize: css(2).fontSize,
+        countNumerals: css(2).fontVariantNumeric,
+        timeSize: css(3).fontSize,
+        timeNumerals: css(3).fontVariantNumeric,
+        timeWrap: css(3).overflowWrap,
+        timeWhiteSpace: css(3).whiteSpace,
+      };
+    });
+  const visibleFactsBefore = await readVisibleFacts();
+  await statusColumn.uncheck();
+  await expect(sources.locator("th").nth(1)).toBeHidden();
+  const visibleFactsAfter = await readVisibleFacts();
+  console.log(
+    "SOURCE_FACT_STYLES",
+    JSON.stringify({ before: visibleFactsBefore, after: visibleFactsAfter }),
+  );
+  expect(visibleFactsAfter).toEqual(visibleFactsBefore);
+  expect(visibleFactsBefore).toMatchObject({
+    timeSize: "14px",
+    timeNumerals: "tabular-nums",
+    timeWrap: "anywhere",
+    timeWhiteSpace: "normal",
+  });
+  await expect(sourceTable.locator("tbody td.platform-source-observation").first()).toBeVisible();
+  await expect(sourceTable).toHaveCSS("table-layout", "auto");
+  await statusColumn.check();
+  await expect(sources.locator("th").nth(1)).toBeVisible();
+  await expect(sourceTable).toHaveCSS("table-layout", "fixed");
+  await sources.getByText("列设置", { exact: true }).click();
+  await expect(cell).toHaveCSS("padding-top", "8px");
+  await expect(cell).toHaveCSS("line-height", "20px");
+  await density.selectOption("compact");
+  await expect(cell).toHaveCSS("padding-top", "6px");
+  await density.selectOption("standard");
+  await expect(cell).toHaveCSS("padding-top", "8px");
+  const storage = page.locator(".platform-storage-details");
+  await expect(storage.locator("dl")).toBeHidden();
+  const metricActions = page.locator(".platform-facts article > a");
+  await expect(metricActions.first()).toHaveCSS("padding-inline-start", "4px");
+  await expect(metricActions.last()).toHaveCSS("padding-inline-start", "6px");
+  const groupedLegend = page.locator(".platform-trend-chart > header > span");
+  const legendGeometry = await groupedLegend.evaluate((legend) => ({
+    keyCount: legend.querySelectorAll(":scope > .platform-trend-key").length,
+    wrap: getComputedStyle(legend).flexWrap,
+    gap: getComputedStyle(legend).columnGap,
+  }));
+  console.log("PLATFORM_TREND_LEGEND_GROUPING", JSON.stringify(legendGeometry));
+  expect(legendGeometry).toEqual({ keyCount: 3, wrap: "wrap", gap: "20px" });
+  const keys = groupedLegend.locator(":scope > .platform-trend-key");
+  await expect(keys).toHaveText(["成功 0", "失败 0", "0 个时间点"]);
+  for (const key of await keys.all()) {
+    await expect(key).toHaveCSS("font-size", "14px");
+    await expect(key).toHaveCSS("column-gap", "8px");
+    await expect(key.locator("i[data-series]")).toHaveAttribute("aria-hidden", "true");
+  }
+  await expect(page.locator(".platform-system-checks .platform-signals > li").first()).toHaveCSS(
+    "padding-inline-end",
+    "6px",
+  );
+  await expect(page.getByRole("columnheader", { name: "最近观测" })).toHaveCSS(
+    "padding-inline-end",
+    "21px",
+  );
+  const panelTitles = page.locator(
+    ".platform-dashboard--review :is(.platform-facts, .platform-trend-chart, .platform-source-health, .platform-system-checks) > header h3",
+  );
+  await expect(panelTitles).toHaveCount(4);
+  for (const title of await panelTitles.all()) await expect(title).toHaveCSS("font-weight", "750");
+  const sourceScan = page.locator(".platform-source-health");
+  const scanTable = sourceScan.locator("table");
+  await expect(sourceScan.locator(":scope > header > span")).toHaveCSS("translate", "-3px 1px");
+  await expect(page.locator(".platform-system-checks > header > span")).toHaveCSS(
+    "translate",
+    "-1px -2px",
+  );
+  await expect(scanTable.getByRole("columnheader", { name: "来源", exact: true })).toHaveCSS(
+    "padding-inline-start",
+    "16px",
+  );
+  await expect(scanTable.locator("tbody td:first-child").first()).toHaveCSS(
+    "padding-inline-start",
+    "16px",
+  );
+  for (const column of ["td:nth-child(3)", "td:last-child"]) {
+    const firstValue = scanTable.locator("tbody tr:first-child " + column);
+    await expect(firstValue).toHaveCSS("font-variant-numeric", "tabular-nums");
+    const contained = await firstValue.evaluate((cell) => {
+      const text = document.createRange();
+      text.selectNodeContents(cell);
+      const bounds = cell.getBoundingClientRect();
+      return [...text.getClientRects()].every(
+        (part) => part.left >= bounds.left && part.right <= bounds.right,
+      );
+    });
+    expect(contained).toBe(true);
+  }
+  const semanticBadges = page.locator(
+    ".platform-source-health td > i[data-health], .platform-system-checks .platform-signal-ok",
+  );
+  await expect(semanticBadges).toHaveCount(4);
+  const readableBadges = await semanticBadges.evaluateAll((badges) => {
+    const context = document.createElement("canvas").getContext("2d")!;
+    const rgb = (color: string) => {
+      context.clearRect(0, 0, 1, 1);
+      context.fillStyle = color;
+      context.fillRect(0, 0, 1, 1);
+      return [...context.getImageData(0, 0, 1, 1).data].slice(0, 3);
+    };
+    const luminance = (values: number[]) =>
+      values
+        .map((value) => value / 255)
+        .map((value) => (value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4))
+        .reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index]!, 0);
+    return badges.map((badge) => {
+      const positive = badge.matches('[data-health="healthy"], .platform-signal-ok');
+      const token = positive
+        ? "--midou-status-positive-surface"
+        : "--midou-status-attention-surface";
+      const style = getComputedStyle(badge);
+      const surface = style.backgroundColor;
+      const probe = document.createElement("span");
+      probe.style.backgroundColor = `var(${token})`;
+      badge.append(probe);
+      const matches = getComputedStyle(probe).backgroundColor === surface;
+      probe.remove();
+      const fg = luminance(rgb(style.color));
+      const bg = luminance(rgb(surface));
+      return { matches, contrast: (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05) };
+    });
+  });
+  for (const badge of readableBadges) {
+    expect(badge.matches).toBe(true);
+    expect(badge.contrast).toBeGreaterThanOrEqual(4.5);
+  }
+  const successMetric = page
+    .getByRole("region", { name: "平台指标" })
+    .locator("article")
+    .filter({ hasText: "任务成功率" });
+  await expect(successMetric.locator('span > svg path[d="M12 13V2l8 4-8 4"]')).toHaveCount(1);
+  await expect(successMetric.locator("span > svg")).toHaveAttribute("aria-hidden", "true");
+  await expect(successMetric.getByRole("link", { name: "查看任务" })).toHaveAttribute(
+    "href",
+    "/platform-admin/collection",
+  );
+  const sourceFooterGap = await sources.evaluate((card) => {
+    const content = card.querySelector(".table-view-controls__content")!;
+    return {
+      align: getComputedStyle(card).alignSelf,
+      rows: card.querySelectorAll("tbody tr").length,
+      gap: card.getBoundingClientRect().bottom - content.getBoundingClientRect().bottom,
+    };
+  });
+  console.log("PLATFORM_SHORT_SOURCE_CARD", JSON.stringify(sourceFooterGap));
+  expect(sourceFooterGap.rows).toBe(3);
+  expect(sourceFooterGap.align).toBe("start");
+  expect(sourceFooterGap.gap).toBeLessThanOrEqual(24);
+  const footer = sidebar.locator("footer");
+  const footerInsets = await footer.evaluate((node) =>
+    [".midou-platform-return", ".midou-sidebar-settings"].map(
+      (selector) => getComputedStyle(node.querySelector(selector)!).paddingInlineStart,
+    ),
+  );
+  console.log("PLATFORM_RAIL_FOOTER", JSON.stringify(footerInsets));
+  expect(footerInsets).toEqual(["15px", "14px"]);
+  await storage.getByText("存储统计", { exact: true }).click();
+  await expect(storage.locator("dl")).toContainText("活动文件体积");
+  await expect(storage.locator("dl")).toContainText("窗内文件增长");
+  await page.setViewportSize({ width: 1600, height: 941 });
+  await expect(sourceTable).toHaveCSS("table-layout", "fixed");
+  await expect(sourceTable.locator("tbody td:last-child").first()).toHaveCSS(
+    "white-space",
+    "normal",
+  );
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await expect(signalRows.first()).not.toHaveCSS("min-block-size", "33px");
+  await expect(signalRows).toHaveCount(dashboard.health_signals.length);
+  const sourceContent = sources.locator(".table-view-controls__content");
+  expect(
+    await sourceContent.evaluate((node) => node.scrollWidth - node.clientWidth),
+  ).toBeLessThanOrEqual(1);
+});
+
+test("wide platform system checks give a short list more room without hiding signals", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide system-check spacing");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await nav(page);
+  const health_signals = dashboard.health_signals.slice(0, 3);
+  await page.route("**/api/v1/platform/dashboard?**", (route) =>
+    route.fulfill({ json: env({ ...dashboard, health_signals }) }),
+  );
+  await page.goto("/platform-admin");
+  const rows = page.locator(".platform-system-checks .platform-signals > li");
+  await expect(rows).toHaveCount(3);
+  for (const row of await rows.all()) {
+    await expect(row).toHaveCSS("min-block-size", "38px");
+    await expect(row.locator(":scope > span")).toHaveCSS("translate", "1px 2px");
+    await expect(row).toBeInViewport({ ratio: 1 });
+  }
+});
+
 test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ page }) => {
   await nav(page);
   await page.route("**/api/v1/platform/dashboard?**", (r) => r.fulfill({ json: env(dashboard) }));
   await page.goto("/platform-admin");
   await expect(page.getByRole("heading", { name: "平台运行概览", level: 2 })).toBeVisible();
+  await expect(page.getByRole("link", { name: "新建组织", exact: true })).toHaveCount(0);
   await expect(page.getByRole("link", { name: /等待处理 7/ })).toBeVisible();
   await expect(page.getByRole("link", { name: /需要关注 2/ })).toBeVisible();
+  await expect(
+    page.locator(".platform-action-summary a > .platform-action-icon[aria-hidden='true']"),
+  ).toHaveCount(2);
   const facts = page.getByRole("region", { name: "平台指标" });
   await expect(facts).toContainText("活跃组织42");
   await expect(facts).toContainText("活跃用户318");
@@ -1370,6 +2118,22 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
   }
   await expect(page.getByText("数据库", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: /检查来源是否启用/ })).toBeVisible();
+  await expect(page.locator(".platform-trend-empty")).toContainText("暂无趋势数据");
+  const emptyIcon = await page.locator(".platform-trend-empty > svg").boundingBox();
+  expect(emptyIcon!.width).toBeLessThan(60);
+  const legend = page.locator(".platform-trend-chart header");
+  await expect(legend.locator("i[data-series]")).toHaveCount(3);
+  await expect(legend).toContainText("0 个时间点");
+  await expect(legend.locator(".platform-trend-key")).toHaveCount(3);
+  for (const key of await legend.locator(".platform-trend-key").all()) {
+    await expect(key).toHaveCSS("white-space", "nowrap");
+    await expect(key.locator("i[data-series]")).toBeVisible();
+  }
+  const colors = await legend
+    .locator("i[data-series]")
+    .evaluateAll((dots) => dots.map((dot) => getComputedStyle(dot).backgroundColor));
+  expect(new Set(colors).size).toBe(3);
+  await expect(facts.locator("article > span > svg")).toHaveCount(5);
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
@@ -1383,7 +2147,9 @@ test("M06-02.A07/A08/A15 desktop and 390 cockpit use factual states", async ({ p
 });
 test("platform cockpit prioritizes source exceptions and progressively reveals the full catalog", async ({
   page,
-}) => {
+}, testInfo) => {
+  const wideDesktop = testInfo.project.name === "desktop-chromium";
+  if (wideDesktop) await page.setViewportSize({ width: 1672, height: 941 });
   await nav(page);
   const providerHealth = Array.from({ length: 15 }, (_, index) => ({
     id: `provider-${index + 1}`,
@@ -1418,12 +2184,419 @@ test("platform cockpit prioritizes source exceptions and progressively reveals t
     ? sourceSection.locator(".responsive-data-view__mobile article:visible")
     : sourceSection.locator("tbody tr");
   await expect(visibleRows).toHaveCount(8);
+  const previewHeight = (await sourceSection.boundingBox())!.height;
   await sourceSection.getByRole("button", { name: /查看全部 15 个来源/ }).click();
   await expect(visibleRows).toHaveCount(15);
   await expect(sourceName("待观测来源 14")).toBeVisible();
+  if (wideDesktop) {
+    expect((await sourceSection.boundingBox())!.height).toBeCloseTo(previewHeight, 0);
+    const table = sourceSection.getByRole("region", { name: "来源健康表格", exact: true });
+    await table.focus();
+    await table.press("End");
+    await expect(visibleRows.last()).toBeInViewport({ ratio: 1 });
+  }
   await sourceSection.getByRole("button", { name: /收起来源/ }).click();
   await expect(visibleRows).toHaveCount(8);
 });
+for (const matchReferenceCounts of [false, true]) {
+  test(
+    matchReferenceCounts
+      ? "platform reference counts and complete source dataset render without fabricated samples"
+      : "wide source health six-row composition stays aligned with mixed names",
+    async ({ page }, testInfo) => {
+      test.skip(testInfo.project.name !== "desktop-chromium", "Wide table composition");
+      await page.setViewportSize({ width: 1672, height: 941 });
+      await nav(page, "platform_super_admin", "platform:superadmin");
+      const names = [
+        "1688 搜索",
+        "Amazon 美国畅销榜",
+        "Ars Technica",
+        "BBC Business",
+        "BigCommerce 电商资讯",
+        "DHgate 批发供应商搜索",
+      ];
+      const allNames = matchReferenceCounts
+        ? [...names, ...Array.from({ length: 193 }, (_, i) => "其他测试来源 " + (i + 1))]
+        : names;
+      const sources = allNames.map((name, index) => ({
+        ...dashboard.provider_health[2],
+        id: "six-provider-" + index,
+        code: "six_provider_" + index,
+        name,
+      }));
+      await page.route("**/api/v1/platform/dashboard?**", (r) =>
+        r.fulfill({
+          json: env({
+            ...dashboard,
+            summary: matchReferenceCounts
+              ? {
+                  ...dashboard.summary,
+                  active_organizations: 84,
+                  active_users: 104,
+                  enabled_providers: 199,
+                  task_success_rate: null,
+                  queue_backlog: 0,
+                  open_alerts: 0,
+                  file_growth_bytes: 0,
+                }
+              : { ...dashboard.summary, enabled_providers: sources.length },
+            provider_health: sources,
+            health_signals: matchReferenceCounts
+              ? [
+                  dashboard.health_signals[0],
+                  { ...dashboard.health_signals[1], value: 0 },
+                  { ...dashboard.health_signals[2], value: 0, status: "healthy" },
+                ]
+              : dashboard.health_signals.slice(0, 3),
+            queues: matchReferenceCounts ? [] : dashboard.queues,
+            alerts: matchReferenceCounts ? [] : dashboard.alerts,
+          }),
+        }),
+      );
+      await page.goto("/platform-admin");
+      const section = page.locator(".platform-source-health");
+      const table = section.locator("table");
+      const previewNames = allNames.slice(0, 8);
+      await expect(table.locator("tbody tr")).toHaveCount(previewNames.length);
+      await expect(table.locator("tbody td:first-child")).toHaveText(previewNames);
+      await expect(table.locator("tbody td:last-child")).toHaveText(
+        previewNames.map(() => "无样本"),
+      );
+      await expect(table).toHaveCSS("table-layout", "fixed");
+      const columnStarts = await table
+        .locator("th")
+        .evaluateAll((headers) =>
+          headers.map(
+            (header) =>
+              header.getBoundingClientRect().left +
+              parseFloat(getComputedStyle(header).paddingLeft),
+          ),
+        );
+      for (const [index, expected] of [1008, 1281, 1386].entries())
+        expect(Math.abs(columnStarts[index]! - expected)).toBeLessThanOrEqual(6);
+      await expect(section).toBeInViewport({ ratio: 1 });
+      if (matchReferenceCounts) {
+        const facts = page.getByRole("region", { name: "平台指标" });
+        await expect(facts.locator("article > strong")).toHaveText([
+          "84",
+          "104",
+          "199",
+          "暂无样本",
+          "0 B",
+        ]);
+        await expect(page.locator(".platform-action-summary strong")).toHaveText(["0", "0"]);
+      }
+      if (matchReferenceCounts) {
+        await expect(section.locator(":scope > header")).toContainText("199 个启用来源");
+        const checks = page.locator(".platform-system-checks");
+        const before = {
+          source: (await section.boundingBox())!,
+          checks: (await checks.boundingBox())!,
+        };
+        await section.getByRole("button", { name: /查看全部 199 个来源/ }).click();
+        await expect(table.locator("tbody tr")).toHaveCount(199);
+        const after = {
+          source: (await section.boundingBox())!,
+          checks: (await checks.boundingBox())!,
+        };
+        console.log(
+          "platform source expansion",
+          JSON.stringify({
+            preview: before.source.height,
+            expanded: after.source.height,
+            checksBeforeY: before.checks.y,
+            checksAfterY: after.checks.y,
+          }),
+        );
+        expect(after.source.height).toBeCloseTo(before.source.height, 0);
+        expect(after.checks.y).toBeCloseTo(before.checks.y, 0);
+        const scroller = section.getByRole("region", { name: "来源健康表格", exact: true });
+        await scroller.focus();
+        await scroller.press("End");
+        const last = table.locator("tbody tr").last();
+        await expect(last).toContainText(allNames.at(-1)!);
+        await expect(last).toBeInViewport({ ratio: 1 });
+        await expect(scroller.getByRole("columnheader", { name: "最近观测" })).toBeInViewport({
+          ratio: 1,
+        });
+        await section.getByRole("button", { name: /收起来源/ }).click();
+        await expect(table.locator("tbody tr")).toHaveCount(8);
+        expect(await scroller.evaluate((el) => el.scrollTop)).toBe(0);
+      }
+    },
+  );
+}
+
+test("source health bounds six wrapped rows by rendered height", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide source health layout");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await nav(page);
+  const health = Array.from({ length: 6 }, (_, index) => ({
+    ...dashboard.provider_health[2],
+    id: "wrapped-source-" + index,
+    code: "wrapped_source_" + index,
+    name: "AmazonSellerCatalogueSource".repeat(5) + (index + 1),
+  }));
+  let reads = 0;
+  await page.route("**/api/v1/platform/dashboard?**", (route) => {
+    reads += 1;
+    return route.fulfill({ json: env({ ...dashboard, provider_health: health }) });
+  });
+  await page.goto("/platform-admin");
+  const sources = page.locator(".platform-source-health");
+  const content = sources.locator(".table-view-controls__content");
+  await expect(content.locator("tbody tr")).toHaveCount(6);
+  await expect(content.getByText(health[5].name, { exact: true })).toHaveCount(1);
+  const layout = await content.evaluate((node) => ({
+    bottom: node.getBoundingClientRect().bottom,
+    overflow: node.scrollHeight - node.clientHeight,
+    pageScroll: window.scrollY,
+  }));
+  console.log("six wrapped source rows", JSON.stringify(layout));
+  await expect(sources).toHaveCSS("align-self", "stretch");
+  expect(layout.bottom).toBeLessThanOrEqual(941);
+  expect(layout.overflow).toBeGreaterThan(0);
+  const region = sources.getByRole("region", { name: "来源健康表格", exact: true });
+  await expect(region).toBeVisible();
+  await expect(content.locator("thead th").first()).toHaveCSS("position", "sticky");
+  await region.focus();
+  await region.press("End");
+  await expect.poll(() => content.evaluate((node) => node.scrollTop)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => window.scrollY)).toBe(layout.pageScroll);
+  await expect(region.getByRole("columnheader", { name: "来源", exact: true })).toBeInViewport({
+    ratio: 1,
+  });
+  await expect(sources.getByRole("button", { name: /查看全部|收起来源/ })).toHaveCount(0);
+  await sources.getByText("列设置", { exact: true }).click();
+  const firstColumn = sources.getByRole("checkbox", { name: "切换第 1 列" });
+  await firstColumn.uncheck();
+  await expect(region).toHaveCount(0);
+  await firstColumn.check();
+  await expect(region).toBeVisible();
+  expect(reads).toBe(1);
+});
+
+test("platform source controls stay aligned across short and wrapped tables", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide source toolbar geometry");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await nav(page);
+  let reads = 0;
+  const long = Array.from({ length: 8 }, (_, index) => ({
+    ...dashboard.provider_health[index % dashboard.provider_health.length],
+    id: "source-layout-" + index,
+    name: "供应链商品目录AmazonSourceFeed".repeat(6) + index,
+  }));
+  await page.route("**/api/v1/platform/dashboard?**", (route) =>
+    route.fulfill({
+      json: env({
+        ...dashboard,
+        provider_health: ++reads === 1 ? dashboard.provider_health : long,
+      }),
+    }),
+  );
+  await page.goto("/platform-admin");
+  const sources = page.locator(".platform-source-health");
+  const tools = sources.locator(".table-view-controls__toolbar");
+  const table = sources.locator("table");
+  const density = tools.getByRole("combobox", { name: "表格密度", exact: true });
+  const read = () =>
+    tools.evaluate((node) => {
+      const controls = [
+        ...node.querySelectorAll("details > summary, button[aria-pressed], label > span, select"),
+      ];
+      const rect = (item: Element) => {
+        const { x, y, width, height } = item.getBoundingClientRect();
+        return [x, y, width, height];
+      };
+      return {
+        box: rect(node),
+        controls: controls.map(rect),
+        gap: getComputedStyle(node).columnGap,
+      };
+    });
+  const headerPadding = () =>
+    table
+      .locator("thead th")
+      .first()
+      .evaluate((node) => {
+        const css = getComputedStyle(node);
+        return [css.paddingBlockStart, css.paddingBlockEnd];
+      });
+  await expect(table.locator("tbody tr")).toHaveCount(3);
+  const short = await read();
+  const standard = await headerPadding();
+  const freeze = tools.getByRole("button", { name: "首列已冻结", exact: true });
+  await freeze.click();
+  await expect(tools.getByRole("button", { name: "首列未冻结", exact: true })).toHaveAttribute(
+    "aria-pressed",
+    "false",
+  );
+  const unfrozen = await read();
+  await density.selectOption("compact");
+  await expect(table).toHaveAttribute("data-table-density", "compact");
+  const compact = await headerPadding();
+  const compactTrack = await read();
+  await density.selectOption("standard");
+  await page
+    .locator(".platform-page-header")
+    .getByRole("button", { name: "刷新", exact: true })
+    .click();
+  await expect(sources.getByText("8 个启用来源 · 异常优先", { exact: true })).toBeVisible();
+  await expect(sources.getByRole("region", { name: "来源健康表格", exact: true })).toBeVisible();
+  const wrapped = await read();
+  console.log(
+    "PLATFORM_SOURCE_CONTROL_TRACK",
+    JSON.stringify({ short, unfrozen, standard, compact, compactTrack, wrapped, reads }),
+  );
+  expect(short.controls.map((box) => box[3])).toEqual([35, 35, 35, 35]);
+  expect(short.gap).toBe("9px");
+  expect(unfrozen).toEqual(short);
+  expect(compactTrack).toEqual(short);
+  expect(wrapped).toEqual(short);
+  expect(standard).toEqual(["7px", "9px"]);
+  expect(compact).toEqual(["6px", "6px"]);
+  expect(reads).toBe(2);
+});
+
+test("wide source health keeps the preview in the first fold without dropping records", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await nav(page);
+  const longName = "AmazonSellerCatalogueSource".repeat(4);
+  const names = [
+    "1688 搜索",
+    "Amazon 美国畅销榜",
+    "Ars Technica",
+    "BBC Business",
+    "BigCommerce 电商资讯",
+    "DHgate 批发供应商搜索",
+    longName,
+    "来源 8",
+    "来源 9",
+  ];
+  const health = names.map((name, index) => ({
+    ...dashboard.provider_health[2],
+    id: `wide-provider-${index}`,
+    code: `wide_provider_${index}`,
+    name,
+  }));
+  await page.route("**/api/v1/platform/dashboard?**", (r) =>
+    r.fulfill({
+      json: env({
+        ...dashboard,
+        provider_health: health,
+        summary: { ...dashboard.summary, enabled_providers: health.length },
+      }),
+    }),
+  );
+  await page.goto("/platform-admin");
+  const sources = page.locator(".platform-source-health");
+  const content = sources.locator(".table-view-controls__content");
+  await expect(content.locator("tbody tr")).toHaveCount(8);
+  await expect(content.getByText(longName, { exact: true })).toHaveCount(1);
+  expect(await content.evaluate((el) => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+  await expect(content.getByRole("columnheader", { name: "最近观测" })).toBeInViewport({
+    ratio: 1,
+  });
+  expect(
+    (await sources.boundingBox())!.y + (await sources.boundingBox())!.height,
+  ).toBeLessThanOrEqual(941);
+  expect(await content.evaluate((el) => el.scrollHeight > el.clientHeight)).toBe(true);
+  await expect(sources.getByRole("region", { name: "来源健康表格" })).toBeVisible();
+  await expect(content.locator("thead th").first()).toHaveCSS("position", "sticky");
+  const disclosure = sources.getByRole("button", { name: /查看全部 9 个来源/ });
+  await expect(disclosure).toBeInViewport({ ratio: 1 });
+  await expect(disclosure).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(disclosure).toHaveCSS("text-align", "end");
+  await expect(disclosure).toHaveCSS("min-block-size", "36px");
+  await expect(disclosure).toHaveAttribute("aria-expanded", "false");
+  expect((await disclosure.boundingBox())!.width).toBeCloseTo(
+    (await content.boundingBox())!.width,
+    0,
+  );
+  const preview = await content.evaluate((el) => {
+    const rows = el.querySelectorAll("tbody tr");
+    const top = el.getBoundingClientRect().top + el.clientTop;
+    return {
+      sixthBottom: rows[5]!.getBoundingClientRect().bottom - top,
+      visibleBottom: el.clientHeight,
+    };
+  });
+  expect(preview.sixthBottom).toBeLessThanOrEqual(preview.visibleBottom + 0.5);
+  await content.focus();
+  await expect(content).toBeFocused();
+  await content.press("End");
+  await expect.poll(() => content.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+  await disclosure.focus();
+  await expect(disclosure).toBeFocused();
+  await expect(disclosure).toHaveCSS("outline-offset", "-2px");
+  await disclosure.press("Enter");
+  await expect(content.locator("tbody tr")).toHaveCount(9);
+  await expect(content.getByText("来源 9", { exact: true })).toBeVisible();
+  const collapse = sources.getByRole("button", { name: /收起来源/ });
+  await expect(collapse).toBeFocused();
+  await expect(collapse).toHaveAttribute("aria-expanded", "true");
+  await collapse.press("Enter");
+  await expect(disclosure).toHaveAttribute("aria-expanded", "false");
+  await expect(content.locator("tbody tr")).toHaveCount(8);
+});
+
+test("wide source health columns keep their position when native scrolling changes", async ({
+  baseURL,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop native scroll gutter");
+  const nativeBrowser = await chromium.launch({ ignoreDefaultArgs: ["--hide-scrollbars"] });
+  try {
+    const page = await nativeBrowser.newPage({ baseURL, viewport: { width: 1672, height: 941 } });
+    await nav(page);
+    const providerHealth = Array.from({ length: 12 }, (_, i) => ({
+      ...dashboard.provider_health[2],
+      id: `stable-source-${i}`,
+      code: `stable_source_${i}`,
+      name: `来源 ${i + 1}`,
+    }));
+    await page.route("**/api/v1/platform/dashboard?**", (r) =>
+      r.fulfill({
+        json: env({ ...dashboard, provider_health: providerHealth }),
+      }),
+    );
+    await page.goto("/platform-admin");
+    await expect(page.locator(".role-shell")).toHaveAttribute("data-native-scrollbar", "true");
+    const section = page.locator(".platform-source-health");
+    const content = section.locator(".table-view-controls__content");
+    const rows = content.locator("tbody tr");
+    const measure = () =>
+      content.evaluate((node) => {
+        const { left } = node.getBoundingClientRect();
+        return {
+          scrollable: node.scrollHeight > node.clientHeight,
+          usableWidth: node.clientWidth,
+          columns: [...node.querySelectorAll("thead th")].map(
+            (cell) => Math.round((cell.getBoundingClientRect().left - left) * 100) / 100,
+          ),
+        };
+      });
+    await expect(rows).toHaveCount(8);
+    const preview = await measure();
+    expect(preview.scrollable).toBe(true);
+    await section.getByRole("button", { name: /查看全部 12 个来源/ }).click();
+    await expect(rows).toHaveCount(12);
+    const expanded = await measure();
+    expect(expanded.scrollable).toBe(true);
+    console.log("platform native source columns", JSON.stringify({ preview, expanded }));
+    expect(expanded.usableWidth).toBe(preview.usableWidth);
+    expect(expanded.columns).toEqual(preview.columns);
+    await section.getByRole("button", { name: /收起来源/ }).click();
+    await expect(rows).toHaveCount(8);
+    expect(await measure()).toEqual(preview);
+  } finally {
+    await nativeBrowser.close();
+  }
+});
+
 test("M06-02.A08/A16 empty forbidden and dependency states recover truthfully", async ({
   page,
 }) => {
@@ -2266,4 +3439,108 @@ test("chain directory keeps two hundred returned traces bounded and keyboard rea
   const target = await last.getAttribute("aria-controls");
   await expect(page.locator(`#${target}`)).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("wide source health full timestamp wraps only when its column needs it", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop source health columns");
+  const observedAt = "2026-12-28T11:50:00.000Z";
+  await page.setViewportSize({ width: 1641, height: 941 });
+  await nav(page);
+  await page.route("**/api/v1/platform/dashboard?**", (r) =>
+    r.fulfill({
+      json: env({
+        ...dashboard,
+        provider_health: dashboard.provider_health.map((source) => ({
+          ...source,
+          last_observed_at: observedAt,
+        })),
+      }),
+    }),
+  );
+  await page.goto("/platform-admin");
+  const timestamp = page.locator(".platform-source-health tbody tr:first-child td:last-child");
+  const expected = await page.evaluate(
+    (date) => new Date(date).toLocaleString("zh-CN", { hour12: false }),
+    observedAt,
+  );
+  await expect(timestamp).toHaveText(expected);
+  for (const width of [1440, 1536, 1600, 1640, 1641, 1672, 1858]) {
+    await page.setViewportSize({ width, height: 941 });
+    const metrics = await timestamp.evaluate((cell) => {
+      const range = document.createRange();
+      range.selectNodeContents(cell);
+      const bounds = cell.getBoundingClientRect();
+      const style = getComputedStyle(cell);
+      const start = bounds.left + parseFloat(style.paddingInlineStart);
+      const end = bounds.right - parseFloat(style.paddingInlineEnd);
+      const lines = [...range.getClientRects()];
+      return {
+        lines: lines.length,
+        overflow: Math.max(...lines.map((part) => Math.max(start - part.left, part.right - end))),
+      };
+    });
+    expect(
+      metrics.overflow,
+      `width ${width}: timestamp crosses its cell padding`,
+    ).toBeLessThanOrEqual(1);
+    if (width === 1641 || width === 1672) expect(metrics.lines).toBe(2);
+    if (width === 1858) expect(metrics.lines).toBe(1);
+  }
+});
+
+test("wide system check values wrap without covering neighboring signals", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide system-check tracks");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await nav(page);
+  const diagnostic = "diagnostic-" + "uninterrupted".repeat(16);
+  const health_signals = dashboard.health_signals.map((signal, index) =>
+    index === 1 ? { ...signal, value: diagnostic, status: "warning" } : signal,
+  );
+  await page.route("**/api/v1/platform/dashboard?**", (route) =>
+    route.fulfill({ json: env({ ...dashboard, health_signals }) }),
+  );
+  await page.goto("/platform-admin");
+  const rows = page.locator(".platform-system-checks .platform-signals > li");
+  await expect(rows).toHaveCount(health_signals.length);
+  const row = rows.nth(1);
+  await expect(row.locator("strong")).toHaveText(diagnostic);
+  const reading = await page.evaluate(() => {
+    const label = document.querySelector(".platform-system-checks .platform-signals > li > span")!;
+    const tally = document.querySelector(".platform-source-health > header > span")!;
+    const labelStyle = getComputedStyle(label);
+    const sourceStyle = getComputedStyle(tally);
+    return { checkLabel: labelStyle.fontSize, sourceTally: sourceStyle.fontSize };
+  });
+  console.log("PLATFORM_WIDE_READING", JSON.stringify(reading));
+  expect(reading).toEqual({ checkLabel: "16px", sourceTally: "15px" });
+  const result = await row.evaluate((item) => {
+    const bounds = item.getBoundingClientRect();
+    const label = item.querySelector("span")!.getBoundingClientRect();
+    const value = item.querySelector("strong")!;
+    const valueRect = value.getBoundingClientRect();
+    const content = document.createRange();
+    content.selectNodeContents(value);
+    const lines = [...content.getClientRects()];
+    return {
+      labelWidth: label.width,
+      fraction: valueRect.width / bounds.width,
+      inside: lines.every(
+        ({ left, right, top, bottom }) =>
+          left >= label.right &&
+          right <= bounds.right &&
+          top >= bounds.top &&
+          bottom <= bounds.bottom,
+      ),
+      lines: lines.length,
+    };
+  });
+  console.log("SYSTEM_CHECK_TRACKS", JSON.stringify(result));
+  expect(result.inside).toBe(true);
+  expect(result.labelWidth).toBeGreaterThan(100);
+  expect(result.fraction).toBeLessThan(0.38);
+  expect(result.lines).toBeGreaterThan(1);
 });

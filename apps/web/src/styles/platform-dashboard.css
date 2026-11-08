@@ -9,6 +9,12 @@
   outline: 2px solid var(--so-primary);
   outline-offset: 3px;
 }
+#app .platform-dashboard .platform-page-header__actions > .platform-overview-create {
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-on-primary, white);
+  font-weight: 600;
+}
 .platform-dashboard :is(strong, td, dd) {
   font-variant-numeric: tabular-nums;
 }
@@ -161,26 +167,43 @@
   background: var(--so-bg-elevated);
   border-radius: 8px;
 }
-.platform-signals i,
 .platform-alerts i {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--so-panel-muted);
 }
-.platform-signals i[data-health="healthy"] {
-  background: var(--so-success);
-}
-.platform-signals i[data-health="warning"],
 .platform-alerts i[data-health="warning"] {
   background: var(--so-warning);
 }
-.platform-signals i[data-health="critical"],
 .platform-alerts i[data-health="critical"] {
   background: var(--so-danger);
 }
 .platform-signals span {
   flex: 1;
+}
+.platform-signal-icon {
+  flex: none;
+  color: var(--so-text-muted);
+}
+.platform-signal-icon[data-health="healthy"] {
+  padding: 3px;
+  border-radius: 50%;
+  color: var(--so-on-primary);
+  background: var(--so-success);
+}
+.platform-signal-icon[data-health="warning"] {
+  color: var(--so-warning);
+}
+.platform-signal-icon[data-health="critical"] {
+  color: var(--so-danger);
+}
+.platform-signals .platform-signal-ok {
+  padding-inline: 10px;
+  border-radius: 999px;
+  color: var(--so-success);
+  background: var(--so-success-soft);
+  font-size: 13px;
 }
 .platform-alerts small {
   display: block;
@@ -333,8 +356,11 @@
 .platform-action-summary a {
   padding: 18px;
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 6px 18px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "icon label value" ". note value";
+  align-items: center;
+  align-content: center;
+  gap: 6px 9px;
   border: 1px solid var(--so-border-strong);
   border-radius: 14px;
   color: var(--so-text);
@@ -349,12 +375,13 @@
   transform: translateY(-1px);
 }
 .platform-action-summary strong {
-  grid-row: 1/3;
-  grid-column: 2;
+  grid-area: value;
+  align-self: start;
   font-size: 30px;
   color: var(--so-warning);
 }
 .platform-action-summary small {
+  grid-area: note;
   color: var(--so-text-muted);
 }
 @media (max-width: 700px) {
@@ -372,6 +399,9 @@
   padding: 0;
   color: var(--pd-ink);
   background: var(--pd-canvas);
+}
+html[data-design="commerce"] #app .platform-dashboard--review {
+  background: transparent;
 }
 
 .platform-dashboard--review .platform-refresh-feedback,
@@ -444,6 +474,48 @@
 }
 
 @media (min-width: 1440px) {
+  #app .platform-dashboard--review > .platform-page-header .platform-page-header__actions {
+    gap: 16px;
+  }
+  #app .platform-dashboard--review .platform-overview-window-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  #app .platform-dashboard--review .platform-page-header__actions > .platform-overview-create {
+    min-inline-size: 122px;
+  }
+  #app .platform-dashboard--review .platform-page-header__actions > label > select {
+    min-inline-size: 145px;
+  }
+  #app .platform-dashboard--review .platform-page-header__actions > button {
+    inline-size: 92px;
+    min-inline-size: 92px;
+  }
+  #app .platform-dashboard--review .platform-page-header__actions > button:disabled {
+    column-gap: 4px;
+    padding-inline: 4px;
+    white-space: nowrap;
+  }
+  #app .platform-dashboard--review .platform-page-header__actions > button:disabled > svg {
+    flex-shrink: 0;
+  }
+  html[data-design="commerce"]
+    #app
+    .platform-dashboard--review
+    .platform-page-header__actions
+    > label
+    > select,
+  html[data-design="commerce"]
+    #app
+    .platform-dashboard--review
+    .platform-page-header__actions
+    > button {
+    border-color: var(--so-border);
+  }
   .platform-dashboard--review .platform-dashboard-grid {
     grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     grid-template-areas: "trend sources" "signals sources" "queue alerts";
@@ -537,5 +609,1045 @@
   }
   .platform-dashboard--review .platform-facts article:nth-child(odd):not(:last-child) {
     border-right: 1px solid var(--pd-border);
+  }
+}
+
+/* Platform overview: distinguish operational shortcuts, facts and drill-down panels. */
+#app .platform-dashboard--review .platform-action-summary {
+  border-radius: 12px;
+  background: var(--so-panel);
+  padding-block: 10px;
+}
+#app .platform-dashboard--review .platform-action-summary a {
+  padding: 4px 22px;
+  grid-template-columns: auto minmax(0, 1fr) fit-content(42%);
+}
+#app .platform-dashboard--review .platform-action-summary a > strong {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  text-align: end;
+}
+
+#app .platform-facts article > span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+#app .platform-action-summary a > span {
+  grid-area: label;
+  color: var(--so-text);
+  font-weight: 650;
+}
+#app .platform-action-summary .platform-action-icon,
+#app .platform-facts article > span svg {
+  flex-shrink: 0;
+  color: var(--so-text-muted);
+}
+#app .platform-action-summary .platform-action-icon {
+  grid-area: icon;
+}
+#app .platform-dashboard--review .platform-facts > div {
+  overflow: hidden;
+  border-radius: 10px;
+}
+#app .platform-dashboard--review .platform-facts article > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--so-text-muted);
+}
+#app .platform-dashboard--review .platform-facts article > a:is(:hover, :focus-visible) {
+  color: var(--so-primary);
+}
+#app .platform-trend-empty {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 7px;
+  min-height: 153px;
+  text-align: center;
+}
+#app .platform-trend-empty > svg {
+  box-sizing: content-box;
+  padding: 11px;
+  border-radius: 10px;
+  color: var(--so-text-muted);
+  background: var(--so-panel-soft);
+}
+#app .platform-trend-empty > strong {
+  color: var(--so-text);
+  font-size: 15px;
+}
+#app .platform-dashboard--review .platform-source-health th {
+  background: color-mix(in srgb, var(--so-panel-soft) 70%, var(--so-panel));
+}
+#app .platform-dashboard--review .platform-source-health tbody tr {
+  --platform-source-row: var(--so-panel);
+  background: var(--platform-source-row);
+}
+#app .platform-dashboard--review .platform-source-health tbody tr:nth-child(even) {
+  --platform-source-row: color-mix(in srgb, var(--so-panel-soft) 24%, var(--so-panel));
+}
+#app .platform-dashboard--review .platform-source-health td.table-view-controls__frozen {
+  background: var(--platform-source-row);
+}
+#app .platform-source-health .table-view-controls__content {
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+}
+#app .platform-source-health .table-view-controls__content table {
+  border: 0;
+}
+#app .platform-source-health tbody td:first-child > b {
+  overflow-wrap: anywhere;
+}
+@media (min-width: 1440px) {
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c
+    .role-content:has(> .platform-dashboard--review) {
+    padding-inline-start: calc(12px + var(--platform-rail-inset, 0px));
+  }
+  html[data-design="commerce"] #app .platform-dashboard--review {
+    gap: 18px;
+    margin-block-start: -4px;
+  }
+  #app .platform-dashboard--review .platform-action-summary {
+    grid-template-columns: minmax(0, 48.5fr) minmax(0, 51.5fr);
+  }
+  #app .platform-dashboard--review .platform-action-summary a {
+    min-block-size: 55px;
+    grid-template-areas: "icon label value" "icon note value";
+    gap: 4px 18px;
+    padding-block: 3px 5px;
+  }
+  #app .platform-dashboard--review .platform-action-summary a > strong {
+    align-self: center;
+  }
+  #app .platform-dashboard--review .platform-action-summary a:first-child {
+    padding-inline-end: 37px;
+  }
+  #app .platform-dashboard--review .platform-action-summary a:last-child {
+    padding-inline-start: 37px;
+  }
+  #app .platform-dashboard--review .platform-action-summary a > span {
+    font-size: 17px;
+    line-height: 22px;
+  }
+  #app .platform-dashboard--review .platform-action-summary .platform-action-icon {
+    width: 28px;
+    height: 28px;
+  }
+  #app .platform-dashboard--review .platform-action-summary a > small {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  html[data-design="commerce"] #app .platform-dashboard--review > .platform-facts {
+    padding-inline: 19px;
+  }
+  html[data-design="commerce"] #app .platform-dashboard--review > .platform-page-header h2 {
+    font-size: 29px;
+  }
+  html[data-design="commerce"] #app .platform-dashboard--review .platform-dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  #app .platform-dashboard--review .platform-facts article {
+    padding: 12px 18px;
+  }
+  #app .platform-dashboard--review .platform-facts article > :is(strong, a, small) {
+    margin-inline-start: 31px;
+  }
+}
+@media (min-width: 1536px) and (max-width: 1750px) {
+  #app .platform-dashboard--review .platform-action-summary a > strong {
+    color: var(--so-primary);
+    font-variant-numeric: tabular-nums;
+  }
+  html[data-design="commerce"] #app .platform-dashboard--review .platform-page-header__actions {
+    position: relative;
+    inset-inline-end: 3px;
+    inset-block-start: -2px;
+  }
+  html[data-design="commerce"]
+    #app
+    .platform-dashboard--review
+    .platform-page-header__actions
+    :is(a, button, select) {
+    --so-control-height: 38px;
+    block-size: 38px;
+    min-height: 38px;
+    padding-block: 4px;
+  }
+  html[data-design="commerce"] #app .platform-dashboard--review .platform-dashboard-grid {
+    grid-template-columns: minmax(0, 1.01fr) minmax(0, 1fr);
+    column-gap: 19px;
+  }
+  #app .platform-dashboard--review .platform-facts article {
+    padding: 12px 21px 16px;
+  }
+  #app .platform-dashboard--review .platform-facts article > span {
+    gap: 17px;
+    font-size: 15px;
+    line-height: 22px;
+  }
+  #app .platform-dashboard--review .platform-facts article > :is(strong, a, small) {
+    margin-inline-start: 39px;
+  }
+  #app .platform-dashboard--review .platform-source-health .table-view-controls__toolbar {
+    padding-block-start: 4px;
+    margin-block-end: 13px;
+    column-gap: 10px;
+  }
+  #app
+    .platform-dashboard--review
+    .platform-source-health
+    .table-view-controls__toolbar
+    :is(details > summary, button[aria-pressed], label > span) {
+    justify-content: center;
+    padding-inline: 10px;
+  }
+  #app
+    .platform-dashboard--review
+    .platform-source-health
+    .table-view-controls__toolbar
+    details
+    > summary {
+    min-inline-size: 90px;
+  }
+  #app
+    .platform-dashboard--review
+    .platform-source-health
+    .table-view-controls__toolbar
+    > button[aria-pressed] {
+    min-inline-size: 116px;
+  }
+  #app .platform-dashboard--review .platform-source-health .table-view-controls__toolbar > label {
+    gap: 11px;
+  }
+  #app
+    .platform-dashboard--review
+    .platform-source-health
+    .table-view-controls__toolbar
+    > label
+    > span {
+    min-inline-size: 100px;
+  }
+  #app .platform-dashboard--review .platform-source-health .table-view-controls__toolbar select {
+    min-inline-size: 80px;
+  }
+}
+@media (max-width: 700px) {
+  #app .platform-dashboard--review .platform-action-summary a {
+    padding: 9px 14px;
+  }
+}
+
+#app .platform-trend-empty {
+  padding: 12px;
+}
+#app .platform-system-checks .platform-signals {
+  gap: 0;
+}
+#app .platform-system-checks .platform-signals li {
+  align-items: center;
+  padding: 5px 4px;
+  border-radius: 0;
+  border-bottom: 1px solid var(--so-border);
+  background: transparent;
+}
+.platform-storage-details {
+  margin-block-start: 12px;
+  border-block-start: 1px solid var(--so-border);
+}
+.platform-storage-details > summary {
+  padding-block: 10px;
+  cursor: pointer;
+  color: var(--so-text-muted);
+}
+.platform-storage-details .platform-storage {
+  margin-block-start: 0;
+}
+#app .platform-source-health td > i[data-health] {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 99px;
+  background: var(--so-panel-soft);
+}
+#app .platform-source-health td > i[data-health="healthy"] {
+  background: var(--so-success-soft);
+}
+#app .platform-source-health td > i:is([data-health="degraded"], [data-health="unknown"]) {
+  color: var(--so-warning);
+  background: var(--so-warning-soft);
+}
+@media (min-width: 1440px) {
+  #app .platform-dashboard--review .platform-trend-empty {
+    gap: 9px;
+  }
+  #app .platform-dashboard--review .platform-trend-empty > svg {
+    padding-inline: 13px;
+    color: color-mix(in srgb, var(--so-text-muted) 53%, var(--so-border));
+    transform: translateY(-3px);
+  }
+  #app .platform-dashboard--review .platform-trend-empty > strong {
+    font-size: 17px;
+  }
+  #app .platform-dashboard--review .platform-trend-chart > header > span {
+    font-size: 14px;
+  }
+  #app .platform-dashboard--review .platform-trend-empty > span {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  #app .platform-dashboard--review .platform-trend-empty > span a {
+    color: var(--so-primary);
+    font-weight: 600;
+    text-underline-offset: 2px;
+  }
+  #app
+    .platform-dashboard--review
+    :is(.platform-trend-chart, .platform-source-health, .platform-system-checks)
+    > header
+    h3 {
+    font-size: 18px;
+    line-height: 21px;
+  }
+  #app .platform-dashboard--review .platform-source-health {
+    align-self: stretch;
+  }
+  #app .platform-dashboard--review :is(.platform-trend-chart, .platform-system-checks) > header {
+    padding-inline: 4px;
+  }
+  #app .platform-dashboard--review .platform-source-health > header {
+    padding-inline: 4px 2px;
+  }
+  #app .platform-dashboard--review .platform-source-health tbody {
+    font-variant-numeric: tabular-nums;
+  }
+  #app
+    .platform-dashboard--review
+    .platform-source-health
+    table[data-table-density="standard"]
+    :is(th, td) {
+    padding-block: 8px;
+  }
+  #app .platform-dashboard--review .platform-source-health {
+    padding-inline: 22px 21px;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(1) {
+    width: 47%;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(2) {
+    width: 17%;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(3) {
+    width: 16%;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) :is(th, td) {
+    padding-inline: 14px;
+  }
+  #app .platform-source-health table td.platform-source-observation {
+    /* The observation stays readable when columns change. */
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  #app .platform-source-health table :is(th, td):last-child {
+    text-align: center;
+  }
+  #app .platform-source-health table[data-table-density="standard"] td {
+    line-height: 20px;
+  }
+  #app .platform-dashboard--review .platform-system-checks {
+    padding-block: 12px;
+  }
+  #app .platform-dashboard--review .platform-system-checks > header {
+    margin-block-end: 12px;
+  }
+  #app .platform-dashboard--review .platform-system-checks .platform-signals li {
+    padding-block: 4px;
+    padding-inline: 12px 8px;
+  }
+  #app .platform-dashboard--review .platform-system-checks .platform-signals li > span {
+    font-size: 15px;
+  }
+  #app .platform-dashboard--review .platform-system-checks .platform-signals strong {
+    font-variant-numeric: tabular-nums;
+  }
+  #app .platform-dashboard--review .platform-system-checks .platform-signal-ok {
+    min-inline-size: 54px;
+    text-align: center;
+  }
+}
+
+@media (min-width: 1536px) {
+  /* Preserve the reference vertical baseline without a duplicate page breadcrumb. */
+  html[data-design="commerce"] #app .platform-dashboard--review {
+    padding-block-start: 49px;
+  }
+}
+
+/* Use semantic accents without moving the first-fold content. */
+@media (min-width: 1440px) {
+  #app .platform-dashboard--review .platform-facts article > strong {
+    color: var(--so-primary);
+  }
+  #app .platform-dashboard--review .platform-trend-empty > svg {
+    background: color-mix(in srgb, var(--so-primary-soft) 65%, var(--so-panel-soft));
+  }
+}
+
+@media (min-width: 1440px) {
+  #app .platform-source-health td > i[data-health] {
+    padding: 1px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 20px;
+    font-style: normal;
+  }
+  #app .platform-dashboard--review .platform-system-checks .platform-signal-ok {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    border-radius: 10px;
+  }
+}
+
+/* Keep both source modes and their existing disclosure in the desktop first fold. */
+@media (min-width: 1440px) {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-native-scrollbar="true"]
+    .platform-source-health
+    .table-view-controls__content {
+    scrollbar-gutter: stable;
+  }
+  #app .platform-source-health .table-view-controls__content {
+    /* Match the reference height; expansion changes the rows, never the surrounding cards. */
+    max-block-size: clamp(180px, calc(135dvh - 1000px), 352px);
+    overflow: auto;
+  }
+  #app
+    .platform-source-health
+    .table-view-controls__content:has(table[data-table-density="compact"]) {
+    max-block-size: clamp(168px, calc(100dvh - 670px), 232px);
+  }
+  #app .platform-source-health[data-source-scroll] thead th {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 3;
+  }
+  #app .platform-source-health[data-source-scroll] thead th.table-view-controls__frozen {
+    z-index: 4;
+  }
+  #app .platform-source-health[data-source-scroll] .platform-provider-disclosure {
+    margin-block-start: 8px;
+    min-block-size: 36px;
+    padding-block: 5px;
+    border-radius: 8px;
+  }
+}
+
+/* Let short system-check lists breathe without pushing longer lists below the fold. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"] #app .platform-dashboard--review {
+    font-family: "Segoe UI", "DengXian", var(--so-font-ui);
+  }
+  #app .platform-dashboard--review .platform-page-header :is(h2, p) {
+    position: relative;
+    inset-inline-start: -2px;
+    inset-block-start: -2px;
+  }
+  #app .platform-dashboard--review .platform-page-header h2 {
+    inset-inline-start: -3px;
+    inset-block-start: -1px;
+  }
+  #app .platform-dashboard--review .platform-page-header p {
+    inset-inline-start: -1px;
+  }
+  #app .platform-dashboard--review .platform-facts > header {
+    padding-inline-start: 4px;
+    position: relative;
+    inset-block-start: -2px;
+  }
+  #app .platform-system-checks > header h3 {
+    position: relative;
+    inset-inline-start: 0;
+    inset-block-start: -3px;
+  }
+  /* Share the title's icon track with the value and its associated link. */
+  #app .platform-dashboard--review .platform-facts article {
+    --platform-kpi-icon: 22px;
+    --platform-kpi-gap: 17px;
+    padding-block: 10px 18px;
+  }
+  #app .platform-dashboard--review .platform-facts article > span {
+    gap: var(--platform-kpi-gap);
+  }
+  #app .platform-dashboard--review .platform-facts article > span > svg {
+    inline-size: var(--platform-kpi-icon);
+    block-size: var(--platform-kpi-icon);
+  }
+  #app .platform-dashboard--review .platform-facts article > :is(strong, a, small) {
+    margin-inline-start: calc(var(--platform-kpi-icon) + var(--platform-kpi-gap));
+  }
+  #app .platform-dashboard--review .platform-system-checks > header {
+    margin-block-end: 16px;
+  }
+  #app
+    .platform-dashboard--review
+    .platform-system-checks
+    .platform-signals
+    li
+    > :is(span, strong) {
+    line-height: 20px;
+  }
+  #app
+    .platform-dashboard--review
+    .platform-system-checks
+    .platform-signals:not(:has(> li:nth-child(4)))
+    > li {
+    box-sizing: border-box;
+    min-block-size: 38px;
+  }
+  #app
+    .platform-source-health
+    .table-view-controls__content
+    table:not(:has(thead th[hidden]))
+    :is(th, td) {
+    padding-inline: 13px;
+  }
+  #app .platform-source-health .table-view-controls__content table tbody b {
+    font-weight: 650;
+  }
+  #app .platform-source-health .table-view-controls__content table thead th {
+    font-size: 13px;
+    font-weight: 650;
+  }
+  /* Stable scan columns: source names and timestamps must not resize other columns. */
+  #app .platform-source-health table:not(:has(thead th[hidden])) {
+    table-layout: fixed;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(1) {
+    width: 43%;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(2) {
+    width: 16.5%;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) th:nth-child(3) {
+    width: 17%;
+  }
+  #app .platform-source-health table:not(:has(thead th[hidden])) td:nth-child(3) {
+    overflow-wrap: anywhere;
+  }
+  #app .platform-source-health table td.platform-source-observation {
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  #app .platform-source-health td > i[data-health] {
+    padding-inline: 11px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+}
+
+/* Share the bottom space across all four rows without making the card taller. */
+@media (min-width: 1600px) and (min-height: 940px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-system-checks:has(.platform-signals > li:nth-child(4)):not(
+      :has(.platform-signals > li:nth-child(5))
+    ) {
+    padding-block-end: 0;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-system-checks
+    .platform-signals:has(> li:nth-child(4)):not(:has(> li:nth-child(5)))
+    > li {
+    box-sizing: border-box;
+    min-block-size: 33px;
+
+    > strong.platform-signal-ok {
+      margin-inline-end: 3px;
+      translate: 0 1px;
+    }
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-system-checks
+    .platform-signal-icon[data-health="healthy"] {
+    background-color: color-mix(in srgb, var(--so-success) 84%, var(--so-success-border));
+  }
+}
+
+/* Strengthen the overview panel hierarchy without enlarging the line boxes. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]
+    #app
+    .platform-dashboard--review
+    .platform-dashboard-grid
+    :is(.platform-trend-chart, .platform-source-health, .platform-system-checks)
+    > header
+    h3 {
+    font-size: 19px;
+    font-weight: 700;
+  }
+  html[data-design="commerce"]
+    #app
+    .platform-dashboard--review
+    :is(.platform-source-health, .platform-system-checks)
+    > header
+    span {
+    font-size: 14px;
+  }
+  html[data-design="commerce"]
+    #app
+    .platform-dashboard--review
+    .platform-trend-chart
+    .platform-trend-empty
+    > strong {
+    font-weight: 700;
+  }
+}
+
+/* Fill both tablet KPI rows while preserving the five-item desktop strip. */
+@media (761px <= width <= 1100px) {
+  #app .platform-dashboard--review .platform-facts > div {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  #app .platform-dashboard--review .platform-facts article {
+    grid-column: span 2;
+  }
+  #app .platform-dashboard--review .platform-facts article:nth-child(-n + 3) {
+    border-block-end: 1px solid var(--pd-border);
+  }
+  #app .platform-dashboard--review .platform-facts article:nth-child(3) {
+    border-inline-end: 0;
+  }
+  #app .platform-dashboard--review .platform-facts article:nth-child(n + 4) {
+    grid-column: span 3;
+  }
+}
+
+/* Align labels, values and actions across each visual row without clipping long values. */
+@supports (grid-template-rows: subgrid) {
+  @media (min-width: 761px) {
+    #app .platform-dashboard--review .platform-facts article {
+      grid-row: span 3;
+      grid-template-rows: subgrid;
+    }
+  }
+}
+
+@media (min-width: 1600px) {
+  html[data-design="commerce"]
+    #app
+    .platform-dashboard--review
+    :is(.platform-facts, .platform-trend-chart, .platform-source-health, .platform-system-checks) {
+    background: color-mix(in srgb, var(--so-panel-soft) 12%, var(--so-panel));
+  }
+  html[data-design="commerce"]
+    #app
+    .platform-dashboard--review
+    :is(.platform-facts article, .platform-action-summary a:not(:hover):not(:focus-visible)) {
+    background: color-mix(in srgb, var(--so-panel-soft) 8%, var(--so-panel));
+  }
+}
+
+/* Align wide overview text and controls to the reference without moving card boundaries. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"] #app .platform-dashboard--review {
+    .platform-page-header__actions {
+      translate: -1px 1px;
+    }
+    .platform-source-health .table-view-controls__toolbar {
+      column-gap: 8px;
+    }
+    .platform-source-health .table-view-controls__toolbar > button {
+      font-size: 14px;
+      font-weight: 550;
+    }
+    .platform-action-summary a:first-child > :is(span, small) {
+      translate: 1px 0;
+    }
+    .platform-action-summary a:last-child > :is(span, small) {
+      translate: 5px 0;
+    }
+    .platform-facts > header h3 {
+      translate: 1px 0;
+    }
+    .platform-facts article > :is(span, strong, a, small) {
+      translate: -2px -1px;
+    }
+    .platform-facts article:last-child > :is(span, strong, a, small) {
+      translate: 0 -1px;
+    }
+    .platform-facts article > span > svg {
+      translate: 4px 4px;
+    }
+    .platform-facts article > :is(a, small) {
+      position: relative;
+      inset-block-start: 2px;
+    }
+    .platform-trend-chart > header > span {
+      translate: -1px 1px;
+    }
+    .platform-trend-empty > svg {
+      translate: -1px 1px;
+    }
+    .platform-trend-empty > strong {
+      translate: -1px 0;
+    }
+    .platform-trend-empty > span {
+      translate: 1px -1px;
+    }
+    /* Align the icon, label and value to the same baseline. */
+    .platform-system-checks .platform-signals li > :is(svg, span, strong) {
+      translate: 0 3px;
+    }
+    .platform-system-checks
+      .platform-signals:not(:has(> li:nth-child(4)))
+      > li
+      > :is(svg, span, strong) {
+      translate: 1px 2px;
+    }
+    .platform-source-health > header h3 {
+      translate: -1px 0;
+    }
+    .platform-source-health .table-view-controls__toolbar {
+      column-gap: 8px;
+      padding-inline-end: 4px;
+      /* Do not create a stacking context below the sticky table headers. */
+      position: relative;
+      inset-block-start: -1px;
+    }
+    .platform-source-health .table-view-controls__content table thead th {
+      padding-inline-start: 14px;
+    }
+    .platform-source-health
+      .table-view-controls__content
+      table:not([data-table-density="compact"])
+      thead
+      th {
+      padding-block: 7px 9px;
+    }
+    .platform-source-health .table-view-controls__content table tbody td {
+      color: var(--so-text);
+    }
+    .platform-source-health .table-view-controls__content table tbody b {
+      letter-spacing: -0.12px;
+    }
+    .platform-source-health .table-view-controls__content table tbody td:first-child b {
+      font-size: 15px;
+    }
+    .platform-source-health table:not(:has(thead th[hidden])) td:nth-child(3) {
+      font-size: 16px;
+      letter-spacing: 0.18px;
+    }
+  }
+}
+
+/* Align source controls with the reference header while retaining the table and toolbar footprint. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-source-health
+    .table-view-controls__toolbar {
+    position: relative;
+    inset-block-start: -1.5px;
+    padding-inline-end: 6px;
+    column-gap: 9px;
+  }
+}
+
+/* Keep the labeled controls and native select level without reducing touch targets. */
+@media (min-width: 1600px) and (pointer: fine) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-source-health
+    .table-view-controls__toolbar
+    :is(details > summary, button[aria-pressed], label > span, select) {
+    box-sizing: border-box;
+    min-block-size: 35px;
+  }
+}
+
+/* Give the wide platform metrics a clearer label and action hierarchy. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-facts
+    article
+    > span {
+    color: color-mix(in srgb, var(--so-text) 30%, var(--so-text-muted));
+    font-weight: 500;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-facts
+    article
+    > a {
+    padding-inline-start: 4px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-facts
+    article:last-child
+    > a {
+    padding-inline-start: 6px;
+  }
+}
+
+/* Keep source expansion visibly secondary without shrinking the button. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-source-health[data-source-scroll]:has(> .platform-provider-disclosure) {
+    padding-block-end: 10px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-source-health[data-source-scroll]
+    > .platform-provider-disclosure {
+    margin-block-start: 4px;
+    border-color: transparent;
+    color: var(--so-primary);
+    background: transparent;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: end;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-source-health[data-source-scroll]
+    > .platform-provider-disclosure:is(:hover, :focus-visible) {
+    background: var(--so-panel-soft);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-source-health[data-source-scroll]
+    > .platform-provider-disclosure:focus-visible {
+    outline-offset: -2px;
+  }
+}
+
+/* Balance the trend legend and the reading edges of the two status panels. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-system-checks
+    .platform-signals
+    > li {
+    padding-inline-end: 6px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-system-checks
+    > header
+    > span {
+    translate: 0 -1px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-source-health
+    .table-view-controls__content
+    table:not(:has(thead th[hidden]))
+    :is(th, td):last-child {
+    padding-inline-end: 21px;
+  }
+}
+
+/* Give platform cards a consistent heading hierarchy without changing their height. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"]) #app .platform-dashboard--review {
+    :is(.platform-facts, .platform-trend-chart, .platform-source-health, .platform-system-checks)
+      > header
+      h3 {
+      color: var(--so-text);
+      font-weight: 750;
+    }
+
+    .platform-trend-empty > strong {
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .platform-facts article[data-metric="sources"] > :is(span, strong, a, small) {
+      translate: -4px -1px;
+    }
+  }
+}
+
+/* Keep the source counts and observation times on independent scan tracks. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"]) #app .platform-dashboard--review {
+    .platform-source-health > header > span {
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+      translate: -3px 1px;
+    }
+
+    /* Keep the labels legible where four or more checks share a compact card. */
+    .platform-system-checks .platform-signals:has(> li:nth-child(4)) > li > span {
+      color: var(--so-text);
+      font-size: 16px;
+    }
+
+    .platform-source-health .table-view-controls__content table:not(:has(thead th[hidden])) {
+      :is(th, td):first-child {
+        padding-inline-start: 16px;
+      }
+
+      td:is(:nth-child(3), :last-child) {
+        font-variant-numeric: tabular-nums;
+      }
+    }
+
+    .platform-system-checks > header > span {
+      translate: -1px -2px;
+    }
+
+    .platform-system-checks .platform-signals > li > strong {
+      font-variant-numeric: tabular-nums;
+    }
+  }
+}
+
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"]) #app .platform-dashboard--review {
+    .platform-action-summary a:first-child {
+      padding-inline-end: 36px;
+    }
+
+    .platform-action-summary a:last-child {
+      padding-inline-end: 24px;
+    }
+
+    .platform-action-summary a > strong {
+      font-size: 32px;
+    }
+
+    .platform-action-summary a:last-child > :is(span, small) {
+      translate: 6px 0;
+    }
+
+    .platform-trend-chart > header > span {
+      font-weight: 500;
+    }
+  }
+}
+
+/* System-check values may be diagnostic text; keep each in its own reading column. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-system-checks
+    .platform-signals
+    > li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) fit-content(38%);
+    align-items: center;
+
+    > :is(span, strong:not(.platform-signal-ok)) {
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
+    }
+
+    > strong:not(.platform-signal-ok) {
+      font-weight: 550;
+      text-align: end;
+    }
+  }
+}
+
+/* Column visibility changes sizing, not the typography of the remaining facts. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-source-health
+    .table-view-controls__content
+    table:has(thead th[hidden]) {
+    :is(th, td):first-child {
+      padding-inline-start: 16px;
+    }
+
+    td:nth-child(3) {
+      font-size: 16px;
+      font-variant-numeric: tabular-nums;
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
+/* Let a short, non-scrolling source list size itself; preserve the full preview rail. */
+@media (min-width: 1440px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .platform-dashboard--review
+    .platform-source-health:not([data-source-scroll]):not(
+      :has(tbody > tr:nth-child(6), .platform-provider-disclosure)
+    ) {
+    align-self: start;
+  }
+}
+
+/* Let the legend wrap between complete dot-and-label groups, not inside one. */
+.platform-dashboard--review .platform-trend-chart > header {
+  flex-wrap: wrap;
+}
+
+.platform-dashboard--review .platform-trend-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px 10px;
+}
+
+.platform-dashboard--review .platform-trend-legend > .platform-trend-key {
+  display: inline-flex;
+  align-items: center;
+  column-gap: 5px;
+  font-size: inherit;
+  white-space: nowrap;
+}
+
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"]) #app .platform-dashboard--review {
+    .platform-trend-legend {
+      column-gap: 20px;
+    }
+
+    .platform-trend-legend > .platform-trend-key {
+      column-gap: 8px;
+    }
   }
 }

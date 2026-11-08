@@ -65,6 +65,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
       : "",
   ),
   unread = ref(route.query.unread === "1"),
+  keyword = ref(typeof route.query.q === "string" ? route.query.q.slice(0, 100).trim() : ""),
+  keywordDraft = ref(keyword.value),
   page = ref(Math.max(1, Number(route.query.page) || 1)),
   total = ref(0),
   notice = ref(""),
@@ -76,6 +78,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   preferencesErrorRequestId = ref(""),
   preferencesErrorElement = ref<HTMLElement | null>(null),
   showPreferences = ref(false),
+  savedInAppPreference = ref<boolean | null>(null),
   preferences = ref<any>({
     in_app_enabled: true,
     email_enabled: false,
@@ -177,6 +180,18 @@ const pageSize = 20,
         }[item.category] ?? "业务状态已变化，请查看关联记录。")
       : item.body,
   time = (v: string) => new Date(v).toLocaleString("zh-CN", { hour12: false });
+const listTimeFormat = new Intl.DateTimeFormat("zh-CN", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+const listTime = (value: string) => {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? time(value) : listTimeFormat.format(date);
+};
 async function api<T>(
   path: string,
   options: { method?: string; body?: unknown } = {},
@@ -237,6 +252,7 @@ async function load() {
     if (category.value) q.set("category", category.value);
     if (unread.value) q.set("unread", "true");
     if (workflowStatus.value) q.set("workflow_status", workflowStatus.value);
+    if (keyword.value) q.set("q", keyword.value);
     const [list, sum, pref] = await Promise.all([
       api<Item[]>(
         `/notifications?${q}`,
@@ -253,8 +269,11 @@ async function load() {
     if (!owner.current()) return;
     items.value = list;
     summary.value = sum;
-    if (!showPreferences.value && preferenceWindow === preferenceGeneration)
+    if (!showPreferences.value && preferenceWindow === preferenceGeneration) {
       preferences.value = { ...pref, email_enabled: false };
+      savedInAppPreference.value =
+        typeof pref.in_app_enabled === "boolean" ? pref.in_app_enabled : null;
+    }
     state.value = list.length ? "ready" : "empty";
     const notificationId =
       typeof route.query.notification === "string"
@@ -329,7 +348,13 @@ async function closeDetail() {
   });
 }
 async function setFilters(
-  values: Partial<{ category: string; status: string; unread: boolean; page: number }>,
+  values: Partial<{
+    category: string;
+    status: string;
+    unread: boolean;
+    page: number;
+    keyword: string;
+  }>,
 ) {
   await router.replace({
     query: {
@@ -337,6 +362,10 @@ async function setFilters(
       category: values.category === undefined ? route.query.category : values.category || undefined,
       status: values.status === undefined ? route.query.status : values.status || undefined,
       unread: values.unread === undefined ? route.query.unread : values.unread ? "1" : undefined,
+      q:
+        values.keyword === undefined
+          ? route.query.q
+          : values.keyword.slice(0, 100).trim() || undefined,
       page:
         values.page === undefined
           ? undefined
@@ -359,6 +388,27 @@ async function markAll() {
     rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
+  }
+}
+async function markOneRead(item: Item) {
+  if (disposed || suspended || busy.value || item.read_at) return;
+  busy.value = true;
+  notice.value = "";
+  const owner = { current: () => !disposed && !suspended };
+  try {
+    await api(
+      `/notifications/${item.id}/actions`,
+      { method: "POST", body: { action: "read", expected_version: item.version } },
+      false,
+      undefined,
+      owner,
+    );
+    if (!owner.current()) return;
+    await load();
+  } catch (error) {
+    rethrowUnexpectedError(error);
+  } finally {
+    if (!disposed) busy.value = false;
   }
 }
 async function updateWorkflow(action: "start" | "close" | "reopen") {
@@ -427,6 +477,8 @@ async function savePreferences() {
       "preferences",
     );
     if (!owner.current()) return;
+    if (typeof saved.in_app_enabled === "boolean")
+      savedInAppPreference.value = saved.in_app_enabled;
     if (revision !== preferenceRevision) {
       preferences.value.version = saved.version;
       notice.value = "已保存提交时的偏好；后续修改尚未保存。";
@@ -497,8 +549,14 @@ onUnmounted(() => {
   connection?.close();
 });
 watch(
-  () => [route.query.category, route.query.status, route.query.unread, route.query.page],
-  ([nextCategory, nextStatus, nextUnread, nextPage], previous) => {
+  () => [
+    route.query.category,
+    route.query.status,
+    route.query.unread,
+    route.query.page,
+    route.query.q,
+  ],
+  ([nextCategory, nextStatus, nextUnread, nextPage, nextKeyword], previous) => {
     category.value = ["task", "approval", "competitor", "system"].includes(
       String(nextCategory ?? ""),
     )
@@ -509,6 +567,10 @@ watch(
       : "";
     unread.value = nextUnread === "1";
     page.value = Math.max(1, Number(nextPage) || 1);
+    const normalizedKeyword =
+      typeof nextKeyword === "string" ? nextKeyword.slice(0, 100).trim() : "";
+    if (normalizedKeyword !== keyword.value) keywordDraft.value = normalizedKeyword;
+    keyword.value = normalizedKeyword;
     if (previous) void load();
   },
 );
@@ -552,7 +614,15 @@ watch(
     <aside class="midou-notification-preference" aria-label="通知偏好快捷入口">
       <h2>通知偏好</h2>
       <p>管理通知接收方式与消息范围。</p>
-      <div><AppIcon name="bell" /><span>站内通知</span></div>
+      <div>
+        <AppIcon name="monitor" /><span>站内通知</span>
+        <small
+          v-if="savedInAppPreference !== null"
+          class="midou-notification-preference-status"
+          :data-enabled="savedInAppPreference"
+          >{{ savedInAppPreference ? "已开启" : "已关闭" }}</small
+        >
+      </div>
       <button type="button" class="secondary" :disabled="busy" @click="showPreferences = true">
         <AppIcon name="settings" />管理偏好<AppIcon name="chevron" />
       </button>
@@ -566,16 +636,16 @@ watch(
     </div>
     <section class="notification-summary">
       <article>
-        <AppIcon name="bell" /><span>未读</span><b>{{ summary.unread }}</b>
+        <AppIcon name="mail" /><span>未读</span><b>{{ summary.unread }}</b>
       </article>
       <article>
-        <AppIcon name="list" /><span>未处理</span><b>{{ summary.open }}</b>
+        <AppIcon name="clipboard-check" /><span>未处理</span><b>{{ summary.open }}</b>
       </article>
       <article>
-        <AppIcon name="automation" /><span>处理中</span><b>{{ summary.in_progress }}</b>
+        <AppIcon name="loader-circle-dots" /><span>处理中</span><b>{{ summary.in_progress }}</b>
       </article>
       <article>
-        <AppIcon name="check" /><span>已关闭</span><b>{{ summary.closed }}</b>
+        <AppIcon name="circle-check" /><span>已关闭</span><b>{{ summary.closed }}</b>
       </article>
     </section>
     <div class="midou-notification-filters">
@@ -592,26 +662,53 @@ watch(
           :aria-pressed="category === x.v"
           @click="setFilters({ category: x.v })"
         >
-          {{ x.t }}</button
-        ><label
-          ><input v-model="unread" type="checkbox" @change="setFilters({ unread })" /> 仅未读</label
-        >
-      </nav>
-      <nav aria-label="处理状态筛选">
-        <button
-          v-for="item in [
-            { v: '', t: '全部状态' },
-            { v: 'open', t: '未处理' },
-            { v: 'in_progress', t: '处理中' },
-            { v: 'closed', t: '已关闭' },
-          ]"
-          :key="item.v"
-          :aria-pressed="workflowStatus === item.v"
-          @click="setFilters({ status: item.v })"
-        >
-          {{ item.t }}
+          {{ x.t }}
         </button>
       </nav>
+      <div class="midou-notification-status-controls">
+        <label class="midou-notification-status">
+          <span>状态</span>
+          <select
+            aria-label="处理状态筛选"
+            :value="workflowStatus"
+            @change="setFilters({ status: ($event.target as HTMLSelectElement).value })"
+          >
+            <option value="">全部状态</option>
+            <option value="open">未处理</option>
+            <option value="in_progress">处理中</option>
+            <option value="closed">已关闭</option>
+          </select>
+        </label>
+        <label class="midou-notification-unread">
+          <input v-model="unread" type="checkbox" @change="setFilters({ unread })" />
+          <span>仅未读</span>
+        </label>
+        <form
+          class="midou-notification-search"
+          role="search"
+          @submit.prevent="setFilters({ keyword: keywordDraft })"
+        >
+          <AppIcon name="search" :size="18" />
+          <input
+            v-model="keywordDraft"
+            type="search"
+            aria-label="搜索通知标题或正文"
+            placeholder="搜索通知标题或正文"
+            maxlength="100"
+          />
+          <button type="submit" aria-label="提交通知搜索">搜索</button>
+          <button
+            v-if="keyword"
+            type="button"
+            @click="
+              keywordDraft = '';
+              setFilters({ keyword: '' });
+            "
+          >
+            清除
+          </button>
+        </form>
+      </div>
     </div>
     <section v-if="state === 'loading'" class="notification-state">正在读取通知…</section>
     <section
@@ -637,38 +734,56 @@ watch(
       <button @click="load">重新加载</button>
     </section>
     <section v-else-if="!items.length" class="notification-state">
-      <h3>当前没有通知</h3>
-      <p>与你相关的业务事件产生后，通知将显示在这里。</p>
+      <h3>{{ keyword ? "未找到匹配的通知" : "当前没有通知" }}</h3>
+      <p>
+        {{ keyword ? "可更换关键词或清除搜索。" : "与你相关的业务事件产生后，通知将显示在这里。" }}
+      </p>
     </section>
     <div v-else class="notification-list">
-      <button
-        v-for="item in items"
-        :key="item.id"
-        :class="{ unread: !item.read_at }"
-        :disabled="busy"
-        @click="open(item)"
-      >
-        <i :data-category="item.category"
-          ><AppIcon
-            :name="
-              { task: 'list', approval: 'check', competitor: 'target', system: 'bell' }[
-                item.category
-              ] || 'bell'
-            "
-            :size="24" /></i
-        ><span
-          ><strong>{{ item.title }}</strong
-          ><small>{{ displayBody(item) }}</small></span
-        ><em>{{ time(item.created_at) }}</em
-        ><b :data-workflow="item.workflow_status">
-          <small>{{ item.read_at ? "已读" : "未读" }} · </small
-          >{{ statusLabel(item.workflow_status) }}
-          <small v-if="item.group_count > 1">
-            · 已合并 {{ item.group_count }} 条同根因通知</small
-          ></b
+      <div v-for="item in items" :key="item.id" class="notification-row">
+        <button
+          type="button"
+          class="notification-record"
+          :class="{ unread: !item.read_at }"
+          :disabled="busy"
+          @click="open(item)"
         >
-        <span class="midou-notification-open">查看记录<AppIcon name="chevron" :size="14" /></span>
-      </button>
+          <i :data-category="item.category"
+            ><AppIcon
+              :name="
+                {
+                  task: 'notification-clipboard',
+                  approval: 'check',
+                  competitor: 'notification-trophy',
+                  system: 'bell',
+                }[item.category] || 'bell'
+              "
+              :size="24" /></i
+          ><span
+            ><strong>{{ item.title }}</strong
+            ><small>{{ displayBody(item) }}</small>
+            <span class="so-visually-hidden">{{ item.read_at ? "已读" : "未读" }}</span>
+            <small v-if="item.group_count > 1" class="notification-group-note">
+              已合并 {{ item.group_count }} 条同根因通知
+            </small></span
+          ><em
+            ><time :datetime="item.created_at" :title="time(item.created_at)">{{
+              listTime(item.created_at)
+            }}</time></em
+          ><b :data-workflow="item.workflow_status">{{ statusLabel(item.workflow_status) }}</b>
+          <span class="midou-notification-open">查看记录<AppIcon name="chevron" :size="14" /></span>
+        </button>
+        <button
+          v-if="!item.read_at"
+          type="button"
+          class="notification-mark-read"
+          :aria-label="`标为已读：${item.title}`"
+          :disabled="busy"
+          @click="markOneRead(item)"
+        >
+          标为已读
+        </button>
+      </div>
     </div>
     <nav v-if="total > pageSize" class="notification-pagination" aria-label="通知分页">
       <button :disabled="page <= 1" @click="setFilters({ page: page - 1 })">上一页</button>

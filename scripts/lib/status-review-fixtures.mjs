@@ -36,8 +36,12 @@ export async function statusReviewFixtures() {
   };
   const evaluate = (s, context = {}) =>
     JSON.parse(JSON.stringify(vm.runInNewContext(`(${s})`, context, { timeout: 1000 })));
+  const navDeclarations = ast.statements.filter(
+    (statement) => ts.isFunctionDeclaration(statement) && statement.name?.text === "nav",
+  );
+  assert.equal(navDeclarations.length, 1);
   const navs = [];
-  visit(ast, (n) => {
+  visit(navDeclarations[0], (n) => {
     if (
       ts.isObjectLiteralExpression(n) &&
       n.properties.some((p) => p.name?.getText(ast) === "platform_capabilities")

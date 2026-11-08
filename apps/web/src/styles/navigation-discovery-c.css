@@ -69,6 +69,31 @@
   overflow: auto;
   overscroll-behavior: contain;
 }
+.discovery-c-admin-results {
+  display: grid;
+  gap: 4px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.discovery-c-admin-results a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--so-text);
+  text-decoration: none;
+}
+.discovery-c-admin-results a:is(:hover, :focus-visible) {
+  background: var(--so-primary-soft);
+}
+.discovery-c-admin-results span {
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
 .discovery-c-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

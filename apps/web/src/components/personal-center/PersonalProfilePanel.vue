@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ActionFeedback, PersonalProfile, PersonalProfileDraft, ProfileField } from "./types";
+import ProfileAvatar from "./ProfileAvatar.vue";
 
 const props = defineProps<{
   profile: PersonalProfile;
@@ -10,6 +11,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   updateField: [field: ProfileField, value: string];
   submit: [];
+  cancel: [];
 }>();
 
 function update(field: ProfileField, event: Event) {
@@ -28,14 +30,25 @@ function update(field: ProfileField, event: Event) {
     <header class="p11-panel-heading">
       <p>基本资料</p>
       <h3>基本资料</h3>
-      <span>邮箱暂不支持修改。</span>
     </header>
 
     <div class="p11-field-group">
       <label for="p11-email">邮箱</label>
       <div class="p11-field-value">
-        <input id="p11-email" :value="props.profile.email" disabled />
-        <small>{{ props.profile.email_verified_at ? "已验证" : "尚未验证" }}</small>
+        <input
+          id="p11-email"
+          :value="props.profile.email"
+          aria-describedby="p11-email-note"
+          disabled
+        />
+        <small id="p11-email-note" class="p11-email-note">
+          <span
+            class="midou-profile-form-verification"
+            :data-verified="Boolean(props.profile.email_verified_at)"
+            >{{ props.profile.email_verified_at ? "已验证" : "尚未验证" }}</span
+          >
+          <span>邮箱暂不支持修改。</span>
+        </small>
       </div>
     </div>
 
@@ -73,15 +86,24 @@ function update(field: ProfileField, event: Event) {
     <div class="p11-field-group">
       <label for="p11-avatar">头像 HTTPS 地址</label>
       <div class="p11-field-value">
-        <input
-          id="p11-avatar"
-          :value="props.draft.avatar_url ?? ''"
-          type="url"
-          inputmode="url"
-          :disabled="props.saving"
-          @input="update('avatar_url', $event)"
-        />
-        <small>请输入 HTTPS 图片地址。</small>
+        <div class="p11-avatar-field">
+          <input
+            id="p11-avatar"
+            :value="props.draft.avatar_url ?? ''"
+            type="url"
+            inputmode="url"
+            placeholder="请输入 HTTPS 图片地址"
+            :disabled="props.saving"
+            @input="update('avatar_url', $event)"
+          />
+          <span class="p11-avatar-frame">
+            <ProfileAvatar
+              class="p11-avatar-preview"
+              :name="props.profile.display_name || props.profile.email"
+              :url="props.profile.avatar_url"
+            />
+          </span>
+        </div>
       </div>
     </div>
 
@@ -127,7 +149,7 @@ function update(field: ProfileField, event: Event) {
       </div>
     </div>
 
-    <div class="p11-field-group p11-wide">
+    <div class="p11-field-group p11-wide midou-profile-reason">
       <label for="p11-profile-reason">修改原因</label>
       <div class="p11-field-value">
         <textarea
@@ -159,6 +181,54 @@ function update(field: ProfileField, event: Event) {
       <button class="p11-primary" type="submit" :disabled="props.saving">
         {{ props.saving ? "正在保存…" : "保存资料" }}
       </button>
+      <button
+        class="so-action-secondary"
+        type="button"
+        :disabled="props.saving"
+        @click="emit('cancel')"
+      >
+        取消
+      </button>
     </footer>
   </form>
 </template>
+
+<style scoped>
+.p11-email-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+}
+.p11-avatar-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 10px;
+}
+.p11-avatar-preview {
+  width: 40px;
+  height: 40px;
+  justify-self: center;
+  box-shadow: 0 0 0 1px var(--so-border);
+}
+.p11-avatar-frame {
+  display: grid;
+  place-items: center;
+}
+@media (min-width: 1440px) {
+  .p11-avatar-field {
+    grid-template-columns: minmax(0, 1fr) 46px;
+  }
+  .p11-avatar-frame {
+    box-sizing: border-box;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--so-border);
+    border-radius: 8px;
+    background: var(--so-panel-soft);
+  }
+  .p11-avatar-preview {
+    box-shadow: none;
+  }
+}
+</style>

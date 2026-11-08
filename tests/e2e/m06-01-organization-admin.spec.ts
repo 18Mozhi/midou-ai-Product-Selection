@@ -544,6 +544,16 @@ test("M06-01.A07/A08/A15 desktop organization dashboard", async ({ page }) => {
   await setup(page);
   await page.goto("/org-admin");
   await expect(page.getByRole("heading", { name: "治理概览", level: 1 }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "邀请成员", exact: true })).toHaveCount(1);
+  await expect(
+    page.locator(".org-overview-actions").getByRole("link", { name: "邀请成员", exact: true }),
+  ).toHaveAttribute("href", "/org-admin/members");
+  await expect(
+    page.locator(".role-topbar").getByRole("link", { name: "邀请成员", exact: true }),
+  ).toHaveCount(0);
+  await expect(page.locator(".org-identity-mark")).toHaveText("G");
+  await expect(page.getByLabel("组织标识")).toHaveText("global-goods");
+  await expect(page.locator(".organization-profile-metrics article > span > svg")).toHaveCount(6);
   await expect(page.getByText("128")).toBeVisible();
   await expect(page.getByText("1238")).toBeVisible();
   await expect(page.getByText("新品决策工作区").first()).toBeVisible();
@@ -2445,8 +2455,16 @@ for (const route of [
     await expect(hero).toBeVisible();
     await expect(hero).toHaveCSS("background-image", "none");
     await expect(hero).toHaveCSS("flex-direction", "row");
-    await expect(hero).toHaveCSS("background-color", "rgb(255, 255, 255)");
-    await expect(hero.locator("h1,h2")).toHaveCSS("font-size", "22px");
+    const overview = route === "/org-admin";
+    const width = page.viewportSize()!.width;
+    await expect(hero).toHaveCSS(
+      "background-color",
+      overview ? "rgba(0, 0, 0, 0)" : "rgb(255, 255, 255)",
+    );
+    await expect(hero.locator("h1,h2")).toHaveCSS(
+      "font-size",
+      overview ? (width >= 1200 ? "29px" : "24px") : "22px",
+    );
     await expect(hero.locator("h1,h2")).not.toHaveCSS("color", "rgb(255, 255, 255)");
     await expect(hero.getByRole("button", { name: "刷新数据", exact: true })).toBeVisible();
     expect(await hero.evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
@@ -2469,17 +2487,593 @@ for (const route of [
   });
 }
 
-test("organization profile uses a full-width facts and editing workspace", async ({
+test("organization sidebar groups context and utility links without altering mobile navigation", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/org-admin");
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+  const footer = page.locator(".commerce-sidebar footer");
+  if (page.viewportSize()!.width <= 840) {
+    await expect(footer).toBeHidden();
+    return;
+  }
+  const context = footer.getByRole("link", { name: "侧栏切换工作区" });
+  const settings = footer.getByRole("link", { name: "设置" });
+  const help = footer.locator("summary").filter({ hasText: "帮助" });
+  const back = footer.getByRole("link", { name: "返回成员工作台" });
+  await expect(context).toHaveAttribute("href", "/select-context");
+  await expect(back).toHaveAttribute("href", "/home");
+  await expect(back.locator("svg")).toHaveAttribute("aria-hidden", "true");
+  await expect(context.locator("svg").first()).toHaveAttribute("aria-hidden", "true");
+  const [contextBox, settingsBox, helpBox, backBox] = await Promise.all(
+    [context, settings, help, back].map((item) => item.boundingBox()),
+  );
+  expect(contextBox!.y + contextBox!.height).toBeLessThanOrEqual(settingsBox!.y);
+  expect(settingsBox!.y).toBe(helpBox!.y);
+  expect(settingsBox!.x + settingsBox!.width).toBeLessThan(helpBox!.x);
+  expect(settingsBox!.y + settingsBox!.height).toBeLessThanOrEqual(backBox!.y);
+});
+
+test("wide governance metrics align labels, values and notes beside the icon", async ({ page }) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await setup(page);
+  await page.goto("/org-admin");
+  const navigation = page.getByRole("complementary", { name: "工作区导航" });
+  const first = navigation.getByRole("link", { name: "治理概览", exact: true });
+  const last = navigation.getByRole("link", { name: "组织审计", exact: true });
+  await expect(page.locator(".org-admin-center--profile-review")).toHaveCSS(
+    "font-family",
+    /^"Segoe UI",/,
+  );
+  await expect(page.locator(".org-admin-center--profile-review")).toHaveCSS(
+    "font-family",
+    /DengXian/,
+  );
+  expect((await navigation.boundingBox())!.width).toBeCloseTo(254, 0);
+  expect((await first.boundingBox())!.y).toBeCloseTo(187, 0);
+  expect((await last.boundingBox())!.y).toBeLessThan(700);
+  await expect(first.locator("svg")).toHaveCSS("width", "20px");
+  await expect(navigation.locator("section h2").first()).toHaveCSS("margin-inline-start", "0px");
+  await expect(navigation.locator(".midou-area-tabs a").first()).toHaveCSS("min-height", "32px");
+  await expect(navigation.locator(".midou-area-tabs")).toHaveCSS("margin-inline-end", "8px");
+  await expect(first).toHaveCSS("column-gap", "19px");
+  await expect(first.locator("svg")).toHaveCSS("translate", "1px 1px");
+  await expect(navigation.locator("footer")).toHaveCSS("padding-inline-end", "5px");
+  const workspaceSwitch = navigation.getByRole("link", { name: "侧栏切换工作区", exact: true });
+  const workspaceChevron = workspaceSwitch.locator(".midou-workspace-chevron");
+  await expect(workspaceChevron).toBeVisible();
+  await expect(workspaceChevron).toHaveCSS("width", "14px");
+  const [switchBox, chevronBox] = await Promise.all([
+    workspaceSwitch.boundingBox(),
+    workspaceChevron.boundingBox(),
+  ]);
+  expect(chevronBox!.x + chevronBox!.width).toBeLessThan(switchBox!.x + switchBox!.width);
+  await expect(navigation.getByRole("link", { name: "返回成员工作台" })).toHaveCSS(
+    "border-top-width",
+    "1px",
+  );
+  await expect(navigation.getByRole("link", { name: "返回成员工作台" })).toBeInViewport({
+    ratio: 1,
+  });
+  const actions = page.locator(".org-overview-actions");
+  const refresh = actions.getByRole("button", { name: "刷新数据", exact: true });
+  const invite = actions.getByRole("link", { name: "邀请成员", exact: true });
+  await expect(invite).toHaveAttribute("href", "/org-admin/members");
+  const [refreshBox, inviteBox] = await Promise.all([refresh.boundingBox(), invite.boundingBox()]);
+  expect(refreshBox!.width).toBe(114);
+  expect(refreshBox!.height).toBe(40);
+  await expect(invite).toHaveCSS("font-size", "14px");
+  expect(Math.abs(refreshBox!.y - 122)).toBeLessThanOrEqual(2);
+  expect(inviteBox!.width).toBe(125);
+  expect(Math.abs(inviteBox!.x + inviteBox!.width - 1645)).toBeLessThanOrEqual(2);
+  expect(inviteBox!.x - refreshBox!.x - refreshBox!.width).toBe(20);
+  expect(
+    Math.abs(inviteBox!.y + inviteBox!.height / 2 - refreshBox!.y - refreshBox!.height / 2),
+  ).toBeLessThanOrEqual(1);
+  const editor = page.locator(".organization-profile-editor");
+  const nameField = editor.getByLabel("名称", { exact: true });
+  const timezoneField = editor.getByLabel("时区", { exact: true });
+  const edge = await nameField.evaluate((input) => {
+    const sample = document.createElement("span");
+    sample.style.boxShadow =
+      "0 0 0 0.5px color-mix(in srgb, var(--so-border-strong) 27%, transparent)";
+    input.parentElement!.append(sample);
+    const current = getComputedStyle(input).boxShadow;
+    const expected = getComputedStyle(sample).boxShadow;
+    sample.remove();
+    return { current, expected };
+  });
+  console.log("GOVERNANCE_IDLE_FIELD_EDGE", JSON.stringify(edge));
+  expect(edge.current).toBe(edge.expected);
+  await expect(timezoneField).toHaveCSS("box-shadow", edge.expected);
+  await expect(editor.getByRole("textbox", { name: "变更原因", exact: true })).toHaveCSS(
+    "box-shadow",
+    edge.expected,
+  );
+  await nameField.focus();
+  await expect(nameField).not.toHaveCSS("box-shadow", edge.expected);
+  await nameField.blur();
+  await expect(nameField).toHaveCSS("box-shadow", edge.expected);
+  const save = editor.getByRole("button", { name: "保存更改", exact: true });
+  await expect(nameField).toHaveCSS("min-height", "34px");
+  await expect(nameField.locator("..").locator(":scope > span")).toHaveCSS(
+    "translate",
+    "-1px -1px",
+  );
+  await expect(nameField).toHaveCSS("border-radius", "7px");
+  await expect(timezoneField).toHaveCSS("border-radius", "7px");
+  await expect(nameField).toHaveCSS("font-family", /^"Segoe UI",/);
+  await expect(nameField.locator("..")).toHaveCSS("font-size", "14px");
+  await expect(nameField.locator("..")).toHaveCSS("row-gap", "4px");
+  await expect(nameField.locator("..").locator(":scope > span")).toHaveCSS("font-weight", "700");
+  const facts = page.locator(".organization-profile-facts dl");
+  await expect(facts.locator("dt").first()).toHaveCSS("font-weight", "600");
+  await expect(facts.locator("dd").first()).toHaveCSS("font-size", "17px");
+  await expect(save).toHaveCSS("font-size", "14px");
+  await expect(save).toHaveCSS("font-weight", "600");
+  await expect(editor.locator(".organization-profile-actions")).toHaveCSS("gap", "20px");
+  await expect(editor.locator(".organization-profile-actions")).toHaveCSS("translate", "-1px -3px");
+  const reason = editor.getByRole("textbox", { name: "变更原因", exact: true });
+  const count = editor.locator("#organization-profile-reason-count");
+  await expect(reason).toHaveCSS("min-height", "67px");
+  await expect(reason).toHaveAttribute("aria-describedby", "organization-profile-reason-count");
+  await expect(reason).toHaveAttribute("required", "");
+  await expect(count).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  const idleBorder = await nameField.evaluate((el) => getComputedStyle(el).borderTopColor);
+  const expectedBorder = await nameField.evaluate((el) => {
+    const sample = document.createElement("span");
+    sample.style.color = "color-mix(in srgb, var(--so-border-strong) 42%, var(--so-border))";
+    el.parentElement!.append(sample);
+    const color = getComputedStyle(sample).color;
+    sample.remove();
+    return color;
+  });
+  expect(idleBorder).toBe(expectedBorder);
+  await expect(timezoneField).toHaveCSS("border-top-color", expectedBorder);
+  await nameField.focus();
+  await expect(nameField).not.toHaveCSS("border-top-color", idleBorder);
+  await nameField.blur();
+  expect(Math.abs((await nameField.boundingBox())!.y - 554)).toBeLessThanOrEqual(3);
+  expect(Math.abs((await timezoneField.boundingBox())!.x - 753)).toBeLessThanOrEqual(2);
+  await expect(editor.locator(".organization-profile-fields")).toHaveCSS("row-gap", "13px");
+  const logoControls = editor.locator(".organization-logo-controls");
+  const logoPreview = logoControls.getByRole("button", { name: "预览", exact: true });
+  await expect(logoControls).toHaveCSS("inset-block-start", "1px");
+  await expect(logoPreview).toHaveCSS("min-height", "36px");
+  const [logoRow, previewBox] = await Promise.all([
+    logoControls.boundingBox(),
+    logoPreview.boundingBox(),
+  ]);
+  expect(logoRow!.width).toBe(758);
+  expect(previewBox!.width).toBe(76);
+  expect(Math.abs(previewBox!.x - 995)).toBeLessThanOrEqual(3);
+  const saveBox = (await save.boundingBox())!;
+  expect(saveBox.width).toBe(97);
+  expect(Math.abs(saveBox.y - 875)).toBeLessThanOrEqual(6);
+  const identity = page.locator(".organization-profile-facts > header");
+  const profileFields = page.locator(".organization-profile-fields");
+  await expect(profileFields).toHaveCSS("column-gap", "32px");
+  const logoInput = (await logoControls.getByRole("textbox").boundingBox())!;
+  expect(Math.abs(logoInput.x + logoInput.width - 913)).toBeLessThanOrEqual(4);
+  await expect(identity.locator(".org-identity-name small")).toHaveCSS("font-size", "15px");
+  await expect(identity.locator("p")).toHaveCSS("transform", "matrix(1, 0, 0, 1, 2, -5)");
+  await expect(page.locator('header[data-profile-overview="true"] > div:first-child')).toHaveCSS(
+    "inset-block-start",
+    "-9px",
+  );
+  const editorHeading = editor.locator(":scope > h3");
+  await expect(editorHeading).toHaveCSS("inset-inline-start", "3px");
+  await expect(editorHeading).toHaveCSS("inset-block-start", "-4px");
+  const status = identity.locator("i");
+  await expect(status).toBeVisible();
+  const [identityBox, statusBox, markBox] = await Promise.all(
+    [identity, status, identity.locator(".org-identity-mark")].map((part) => part.boundingBox()),
+  );
+  expect(statusBox!.x + statusBox!.width).toBeLessThan(identityBox!.x + identityBox!.width - 30);
+  expect([markBox!.width, markBox!.height]).toEqual([58, 58]);
+  expect(
+    Math.abs(statusBox!.y + statusBox!.height / 2 - markBox!.y - markBox!.height / 2),
+  ).toBeLessThanOrEqual(6);
+  const factIcons = await page
+    .locator(".organization-profile-facts dt > svg")
+    .evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().x));
+  for (const [index, x] of [785, 1093, 1365].entries())
+    expect(Math.abs(factIcons[index] - x)).toBeLessThanOrEqual(8);
+  const metrics = page.getByRole("region", { name: "组织运行摘要" });
+  await expect(metrics.locator("article")).toHaveCount(6);
+  const metricsBounds = (await metrics.boundingBox())!;
+  const metricCaptions = metrics.locator("article > span");
+  await expect(metricCaptions.first()).toHaveCSS("margin-block-start", "-1px");
+
+  expect(Math.abs(metricsBounds.y + metricsBounds.height - 449)).toBeLessThanOrEqual(3);
+  const items = await metrics.locator("article").evaluateAll((articles) =>
+    articles.map((article) => {
+      const box = (selector: string) => article.querySelector(selector)!.getBoundingClientRect();
+      const range = document.createRange();
+      range.selectNodeContents(article.querySelector("span")!);
+      const text = [...range.getClientRects()].at(-1)!;
+      return {
+        iconRight: box("svg").right,
+        iconWidth: box("svg").width,
+        titleX: text.x,
+        valueX: box("b").x,
+        noteX: box("small").x,
+        separator: getComputedStyle(article, "::after").content,
+      };
+    }),
+  );
+  for (const [index, item] of items.entries()) {
+    expect(item.iconWidth).toBe(22);
+    expect(item.titleX - item.iconRight).toBeGreaterThanOrEqual(8);
+    expect(Math.abs(item.titleX - item.valueX)).toBeLessThan(1);
+    expect(item.noteX).toBe(item.valueX);
+    expect(item.separator).toBe(index < 5 ? '""' : "none");
+  }
+  const sidebar = page.getByRole("complementary", { name: "治理快捷入口与组织状态" });
+  const memberShortcut = sidebar.getByRole("link", { name: /成员与邀请/ });
+  const readingLines = await sidebar.evaluate((card) => {
+    const css = (selector: string) => getComputedStyle(card.querySelector(selector)!);
+    const sample = document.createElement("span");
+    sample.style.color = "color-mix(in srgb, var(--so-text) 12%, var(--so-text-muted))";
+    card.append(sample);
+    const expectedTone = getComputedStyle(sample).color;
+    sample.remove();
+    return {
+      heading: css("section:first-child > a b").insetBlockStart,
+      status: css(".midou-governance-status > div:has(.midou-governance-status-badge) dt")
+        .translate,
+      lastIcon: css(".midou-governance-status > div:last-child dt > svg").translate,
+      badgeEnd: css(".midou-governance-status-badge").marginInlineEnd,
+      toneMatches: css(".midou-governance-status > div > dt").color === expectedTone,
+    };
+  });
+  console.log("GOVERNANCE_SIDE_READING_LINES", JSON.stringify(readingLines));
+  expect(readingLines).toEqual({
+    heading: "4px",
+    status: "-1px 4px",
+    lastIcon: "-1px 2px",
+    badgeEnd: "3px",
+    toneMatches: true,
+  });
+  await expect(memberShortcut.locator("svg circle")).toHaveCount(1);
+  await expect(memberShortcut.locator("svg").first().locator("path")).toHaveCount(3);
+  await expect(sidebar.locator(":scope > section").first()).toHaveCSS(
+    "padding-inline-start",
+    "26px",
+  );
+  await expect(sidebar.locator(":scope > section").last()).toHaveCSS("padding-block-start", "10px");
+  await expect(memberShortcut).toHaveCSS("column-gap", "22px");
+  await expect(memberShortcut).toHaveCSS("grid-template-columns", /^34px .+ 18px$/);
+  await expect(memberShortcut.locator("b")).toHaveCSS("font-size", "14px");
+  const shortcutTracks = await sidebar.locator("section:first-child > a").evaluateAll((rows) =>
+    rows.map((row) => {
+      const tile = row.querySelector("svg:first-child")!.getBoundingClientRect();
+      const copy = row.querySelector("span")!.getBoundingClientRect();
+      const arrow = row.querySelector("svg:last-child")!.getBoundingClientRect();
+      return {
+        tile: tile.x,
+        tileWidth: tile.width,
+        copy: copy.x,
+        arrow: arrow.x,
+        arrowWidth: arrow.width,
+      };
+    }),
+  );
+  for (const track of shortcutTracks) {
+    expect(track).toEqual(shortcutTracks[0]);
+    expect([track.tileWidth, track.arrowWidth]).toEqual([34, 18]);
+  }
+  await expect(memberShortcut.locator("b")).toHaveCSS("inset-block-start", "4px");
+  await expect(memberShortcut.locator("small")).toBeVisible();
+  await expect(memberShortcut).toHaveAttribute("href", "/org-admin/members");
+  await expect(memberShortcut.locator(":scope > span")).toHaveCSS(
+    "transform",
+    "matrix(1, 0, 0, 1, -1, -1)",
+  );
+  await expect(sidebar.getByRole("term").first()).toHaveCSS("font-size", "14px");
+  await expect(sidebar.getByRole("term").nth(1)).toHaveCSS("translate", "0px 2px");
+  await expect(sidebar.getByRole("definition").nth(1)).toHaveCSS(
+    "font-variant-numeric",
+    "tabular-nums",
+  );
+  expect(Math.abs((await memberShortcut.locator("b").boundingBox())!.x - 1285)).toBeLessThanOrEqual(
+    4,
+  );
+  const statusIcon = sidebar.getByRole("term").filter({ hasText: "组织使用状态" }).locator("svg");
+  await expect(statusIcon.locator("circle")).toHaveCount(1);
+  await expect(statusIcon).toHaveAttribute("aria-hidden", "true");
+  await expect(statusIcon).toHaveCSS("width", "36px");
+  await expect(statusIcon).not.toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  const statusRows = sidebar.locator(".midou-governance-status > div");
+  for (const row of await statusRows.all()) {
+    await expect(row).toHaveCSS("min-block-size", "40px");
+    await expect(row).toHaveCSS("align-items", "start");
+  }
+  await expect(sidebar.locator(":scope > section").last()).toHaveCSS(
+    "padding-inline-start",
+    "26px",
+  );
+  const [shortcuts, statusCard] = await sidebar.locator(":scope > section").evaluateAll((cards) =>
+    cards.map((card) => {
+      const { top, bottom } = card.getBoundingClientRect();
+      return { top, bottom };
+    }),
+  );
+  expect(Math.abs(shortcuts.top - 472)).toBeLessThanOrEqual(3);
+  expect(Math.abs(shortcuts.bottom - 729)).toBeLessThanOrEqual(3);
+  expect(Math.abs(statusCard.top - 746)).toBeLessThanOrEqual(3);
+  expect(Math.abs(statusCard.bottom - 926)).toBeLessThanOrEqual(5);
+  const editorBottom = (await editor.boundingBox())!;
+  const bottomGap = Math.abs(editorBottom.y + editorBottom.height - statusCard.bottom);
+  console.log("governance bottom alignment", bottomGap);
+  expect(bottomGap).toBeLessThanOrEqual(1);
+  const tones = await page.locator(".organization-profile-workspace").evaluate((workspace) => {
+    const probe = document.createElement("div");
+    probe.style.background = "color-mix(in srgb, var(--so-panel-soft) 28%, var(--so-panel))";
+    workspace.append(probe);
+    const panelTone = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+    return {
+      panelTone,
+      surfaces: [
+        ...workspace.querySelectorAll(
+          ".organization-profile-facts, .organization-profile-metrics, .organization-profile-editor, .midou-governance-side > section",
+        ),
+      ].map((el) => getComputedStyle(el).backgroundColor),
+      inputTone: getComputedStyle(workspace.querySelector("input")!).backgroundColor,
+    };
+  });
+  expect(tones.surfaces).toHaveLength(5);
+  expect(tones.surfaces.every((tone) => tone === tones.panelTone)).toBe(true);
+  expect(tones.inputTone).not.toBe(tones.panelTone);
+  const readingTracks = await page
+    .locator(".organization-profile-facts dl > div")
+    .evaluateAll((cells) => cells.map((cell) => cell.getBoundingClientRect().width));
+  expect(readingTracks).toHaveLength(3);
+  expect(readingTracks[2]! - readingTracks[1]!).toBeGreaterThan(60);
+  await expect(page.locator(".organization-profile-metrics article > small").first()).toHaveCSS(
+    "translate",
+    "0px -1px",
+  );
+  const readingStatusRows = sidebar.locator(".midou-governance-status > div");
+  const semanticState = sidebar.locator(
+    ".midou-governance-status > div:has(.midou-governance-status-badge)",
+  );
+  await expect(semanticState.locator("dt")).toHaveCSS("translate", "-1px 4px");
+  await expect(semanticState.locator(".midou-governance-status-badge")).toHaveText("正常使用");
+  await expect(readingStatusRows.nth(1).locator("dd")).toHaveCSS(
+    "font-variant-numeric",
+    "tabular-nums",
+  );
+  for (const row of await readingStatusRows.all()) {
+    await expect(row).toHaveCSS("padding-block-start", "6.5px");
+    const layout = await row.evaluate((item) => {
+      const bounds = item.getBoundingClientRect();
+      return [...item.querySelectorAll("dt, dd")].every((child) => {
+        const part = child.getBoundingClientRect();
+        return part.top >= bounds.top && part.bottom <= bounds.bottom && part.right <= bounds.right;
+      });
+    });
+    expect(layout).toBe(true);
+  }
+  await expect(
+    page.locator(".organization-profile-editor label > span:first-child").first(),
+  ).toHaveCSS("inset-block-start", "-1px");
+  const approvals = sidebar.getByRole("link", { name: /审批模板/ });
+  await expect(approvals.locator('svg path[d="m14 20 2 2 4-4"]')).toHaveCount(1);
+  await expect(approvals.locator("svg").first()).toHaveAttribute("aria-hidden", "true");
+  await expect(approvals).toHaveAttribute("href", "/org-admin/approvals");
+  const approvalMetric = page
+    .getByRole("region", { name: "组织运行摘要" })
+    .locator("article")
+    .nth(3);
+  const roleShortcut = sidebar.getByRole("link", { name: /角色与权限/ });
+  const workspaceShortcut = sidebar.getByRole("link", { name: /工作区管理/ });
+  const shieldCheck = roleShortcut.locator('svg path[d="m9 12 2 2 4-4"]');
+  const workspaceDoors = workspaceShortcut.locator('svg path[d="M14 21v-3a2 2 0 0 0-4 0v3"]');
+  console.log(
+    "GOVERNANCE_REFERENCE_GLYPHS",
+    JSON.stringify({
+      approvalsLabel: await approvalMetric.locator("span").textContent(),
+      shieldCheck: await shieldCheck.count(),
+      workspaceDoors: await workspaceDoors.count(),
+    }),
+  );
+  await expect(approvalMetric.locator("span")).toHaveText("待审批");
+  await expect(shieldCheck).toHaveCount(1);
+  await expect(workspaceDoors).toHaveCount(1);
+  await expect(roleShortcut).toHaveAttribute("href", "/org-admin/roles");
+  await expect(workspaceShortcut).toHaveAttribute("href", "/org-admin/workspaces");
+  await expect(roleShortcut.locator("svg").first()).toHaveAttribute("aria-hidden", "true");
+  await expect(workspaceShortcut.locator("svg").first()).toHaveAttribute("aria-hidden", "true");
+  const groupTitleStyles = () =>
+    navigation
+      .locator(".commerce-sidebar-menu > section > h2")
+      .evaluateAll((labels) => labels.map((label) => getComputedStyle(label).translate));
+  const groupTitles = await groupTitleStyles();
+  console.log("ORGANIZATION_RAIL_GROUPS", JSON.stringify(groupTitles));
+  expect(groupTitles.length).toBeGreaterThan(1);
+  expect(groupTitles).toEqual(["1px -2px", ...groupTitles.slice(1).map(() => "1px 2px")]);
+
+  const geometry = async () =>
+    navigation.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const tabs = element.querySelector(".midou-area-tabs")!;
+      const footer = element.querySelector("footer")!;
+      return {
+        width: element.getBoundingClientRect().width,
+        font: style.fontFamily,
+        tabsWidth: tabs.getBoundingClientRect().width,
+        tabsColor: getComputedStyle(tabs).backgroundColor,
+        footerEnd: getComputedStyle(footer).paddingInlineEnd,
+      };
+    });
+  const before = await geometry();
+  await navigation.getByRole("link", { name: "成员与邀请", exact: true }).click();
+  await expect(page).toHaveURL(/\/org-admin\/members$/);
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+  expect(await geometry()).toEqual(before);
+  expect(await groupTitleStyles()).toEqual(groupTitles);
+  await first.click();
+  await expect(page).toHaveURL(/\/org-admin$/);
+  expect(await geometry()).toEqual(before);
+  expect(await groupTitleStyles()).toEqual(groupTitles);
+});
+
+test("long organization and workspace names keep the governance status badge on one line", async ({
+  page,
+}) => {
+  const name = "GlobalProcurementAndProductResearch".repeat(3);
+  const workspace = "GlobalSourcingWorkspace".repeat(4);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await setup(page);
+  await page.route("**/api/v1/org/admin/profile", (r) =>
+    r.fulfill({ json: env({ ...profile, name }) }),
+  );
+  await page.route("**/api/v1/org/admin/workspaces", (r) =>
+    r.fulfill({ json: env([{ ...workspaces[0], name: workspace }]) }),
+  );
+  await page.goto("/org-admin");
+  const card = page.locator(".organization-profile-facts");
+  const badge = card.locator("header > i");
+  const nameHeading = card.getByRole("heading", { name, exact: true });
+  for (const width of [390, 1024, 1672]) {
+    await page.setViewportSize({ width, height: 844 });
+    await expect(nameHeading).toBeVisible();
+    await expect(card.getByText(workspace, { exact: true })).toBeVisible();
+    await expect(badge).toContainText("正常使用");
+    const [nameBox, badgeBox] = await Promise.all([nameHeading.boundingBox(), badge.boundingBox()]);
+    expect(badgeBox!.height).toBeLessThanOrEqual(32);
+    expect(nameBox!.x + nameBox!.width).toBeLessThanOrEqual(badgeBox!.x);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+      width,
+    );
+    if (width === 1672) {
+      const value = page.locator(".midou-governance-status").getByText(workspace, { exact: true });
+      await expect(value).toBeVisible();
+      await expect(value).toHaveCSS("overflow-wrap", "anywhere");
+      const term = value.locator("..").getByRole("term");
+      const [termBox, valueBox] = await Promise.all([term.boundingBox(), value.boundingBox()]);
+      expect(termBox!.x + termBox!.width).toBeLessThan(valueBox!.x);
+      expect(Math.abs(termBox!.y - valueBox!.y)).toBeLessThanOrEqual(2);
+    }
+  }
+});
+
+test("organization reference metrics and default workspace stay factual", async ({
   page,
 }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Reference overview layout");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await setup(page);
+  const matchedName = "米兜";
+  const matchedWorkspace = "默认工作区";
+  await page.route("**/api/v1/org/admin/profile", (r) =>
+    r.fulfill({
+      json: env({ ...profile, name: matchedName, slug: "midou", logo_url: null }),
+    }),
+  );
+  await page.route("**/api/v1/org/admin/workspaces", (r) =>
+    r.fulfill({
+      json: env([{ ...workspaces[0], name: matchedWorkspace, member_count: 2 }]),
+    }),
+  );
+  await page.route("**/api/v1/org/admin/summary", (r) =>
+    r.fulfill({
+      json: env({
+        ...summary,
+        organization: { ...summary.organization, name: matchedName },
+        members: { total: 2, active: 2 },
+        workspaces: { total: 2, active: 1 },
+        teams: { total: 0, active: 0 },
+        pending_approvals: 0,
+        active_tokens: 0,
+        recent_audit_events: 2,
+        observed_at: "2026-11-02T17:14:52.000Z",
+      }),
+    }),
+  );
+  await page.goto("/org-admin");
+  const identity = page.locator(".organization-profile-facts > header");
+  const name = identity.getByRole("heading", { name: matchedName, exact: true });
+  const badge = identity.locator('i[data-status="active"]');
+  await expect(name).toBeVisible();
+  await expect(badge).toContainText("正常使用");
+  const [label, mark, status] = await Promise.all([
+    name.boundingBox(),
+    identity.locator(".org-identity-mark").boundingBox(),
+    badge.boundingBox(),
+  ]);
+  expect(status!.x - mark!.x).toBeCloseTo(155, 0);
+  expect(status!.x - label!.x - label!.width).toBeGreaterThanOrEqual(24);
+  await expect(
+    page.getByRole("region", { name: "组织运行摘要" }).locator("article > b"),
+  ).toHaveText(["2", "1", "0", "0", "0", "2"]);
+  await expect(page.locator(".midou-governance-status dd").last()).toHaveText(matchedWorkspace);
+  await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
+});
+
+test("organization profile aligns facts, editor and governance sidebar", async ({ page }) => {
   await setup(page);
   await page.goto("/org-admin");
   await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
   const facts = page.locator(".organization-profile-facts");
   const metrics = page.locator(".organization-profile-metrics");
   const editor = page.locator(".organization-profile-editor");
+  const reason = editor.getByLabel("变更原因", { exact: true });
+  await expect(editor.locator("label .organization-required-mark[aria-hidden='true']")).toHaveCount(
+    5,
+  );
+  await expect(reason).toHaveAttribute("required", "");
+  await expect(reason).toHaveAttribute("maxlength", "500");
+  await expect(reason).toHaveAccessibleDescription("0 / 500");
+  await reason.fill("调整组织资料");
+  await expect(reason).toHaveAccessibleDescription("6 / 500");
+  await reason.clear();
+  const logo = editor.getByLabel("Logo HTTPS 地址");
+  const preview = editor.getByRole("button", { name: "预览", exact: true });
+  const logoUrl = "https://preview.example.test/organization.svg";
+  let logoReads = 0;
+  await page.route(logoUrl, (route) => {
+    logoReads++;
+    return route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"/>',
+    });
+  });
+  await logo.fill(logoUrl);
+  const inputBounds = (await logo.boundingBox())!;
+  const previewBounds = (await preview.boundingBox())!;
+  expect(previewBounds.x).toBeGreaterThan(inputBounds.x + inputBounds.width);
+  expect(
+    Math.abs(previewBounds.y + previewBounds.height / 2 - inputBounds.y - inputBounds.height / 2),
+  ).toBeLessThan(1);
+  await expect(editor.getByRole("img", { name: "组织 Logo 预览" })).toHaveCount(0);
+  expect(logoReads).toBe(0);
+  await preview.click();
+  await expect.poll(() => logoReads).toBe(1);
+  await expect(editor.getByRole("img", { name: "组织 Logo 预览" })).toHaveAttribute("src", logoUrl);
+  await logo.fill("http://preview.example.test/unsafe.svg");
+  await preview.click();
+  await expect(editor.getByRole("img", { name: "组织 Logo 预览" })).toHaveCount(0);
+  const profileRequests: string[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.endsWith("/org/admin/profile"))
+      profileRequests.push(request.method());
+  });
+  const name = editor.getByLabel("名称", { exact: true });
+  await name.fill("未保存的组织名称");
+  await reason.fill("未保存的原因");
+  await editor.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(name).toHaveValue(profile.name);
+  await expect(logo).toHaveValue(profile.logo_url ?? "");
+  await expect(reason).toHaveValue("");
+  expect(profileRequests).toEqual([]);
   await expect(facts.locator("h3")).toHaveText(profile.name);
-  await expect(facts.locator("dl > div")).toHaveCount(4);
+  await expect(facts.locator("dl > div")).toHaveCount(3);
+  await expect(facts.locator("dt > svg[aria-hidden='true']")).toHaveCount(3);
+  await expect(facts.getByLabel("组织标识")).toHaveText(profile.slug);
   await expect(metrics.locator("article")).toHaveCount(6);
   for (const region of [facts, metrics, editor]) {
     await expect(region).toHaveCSS("background-image", "none");
@@ -2489,11 +3083,26 @@ test("organization profile uses a full-width facts and editing workspace", async
   expect(boxes.every(Boolean)).toBe(true);
   expect(boxes[0]!.y + boxes[0]!.height).toBeLessThanOrEqual(boxes[1]!.y);
   expect(boxes[1]!.y + boxes[1]!.height).toBeLessThanOrEqual(boxes[2]!.y);
-  expect(Math.abs(boxes[0]!.width - boxes[2]!.width)).toBeLessThanOrEqual(1);
-  for (const control of await editor.locator("input, select, textarea, button").all()) {
-    expect((await control.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  const side = (await page
+    .getByRole("complementary", { name: "治理快捷入口与组织状态" })
+    .boundingBox())!;
+  const status = page.locator(".midou-governance-status");
+  await expect(status.locator("dt > svg[aria-hidden='true']")).toHaveCount(3);
+  await expect(status.locator(".midou-governance-status-badge[data-status='active']")).toHaveText(
+    "正常使用",
+  );
+  const width = page.viewportSize()!.width;
+  if (width > 1000) {
+    expect(side.x).toBeGreaterThanOrEqual(boxes[2]!.x + boxes[2]!.width);
+    expect(Math.abs(side.y - boxes[2]!.y)).toBeLessThanOrEqual(1);
+  } else {
+    expect(side.y).toBeGreaterThanOrEqual(boxes[2]!.y + boxes[2]!.height);
+    expect(Math.abs(boxes[0]!.width - boxes[2]!.width)).toBeLessThanOrEqual(1);
   }
-  await expect(editor.getByRole("button", { name: "保存", exact: true })).toHaveCSS(
+  for (const control of await editor.locator("input, select, textarea, button").all()) {
+    expect((await control.boundingBox())!.height).toBeGreaterThanOrEqual(width >= 1200 ? 36 : 44);
+  }
+  await expect(editor.getByRole("button", { name: "保存更改", exact: true })).toHaveCSS(
     "color",
     "rgb(255, 255, 255)",
   );
@@ -2919,3 +3528,252 @@ for (const firstFailureStatus of [500, 429]) {
     expect(reads).toBe(beforeDetails + 1);
   });
 }
+
+test("governance metric separators follow the actual number of columns", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name !== "desktop-chromium",
+    "Runs both compact viewport widths in one session",
+  );
+  await page.setViewportSize({ width: 390, height: 941 });
+  await setup(page);
+  await page.goto("/org-admin");
+  const metrics = page.getByRole("region", { name: "组织运行摘要" });
+  const cards = metrics.locator("article");
+  await expect(cards).toHaveCount(6);
+  for (const [width, columns] of [
+    [390, 2],
+    [900, 3],
+  ] as const) {
+    await page.setViewportSize({ width, height: 941 });
+    const geometry = await cards.evaluateAll((nodes) =>
+      nodes.map((card) => {
+        const style = getComputedStyle(card);
+        return {
+          y: card.getBoundingClientRect().top,
+          right: parseFloat(style.borderInlineEndWidth),
+          bottom: parseFloat(style.borderBlockEndWidth),
+        };
+      }),
+    );
+    const firstY = geometry[0]!.y;
+    expect(geometry.filter(({ y }) => Math.abs(y - firstY) < 1)).toHaveLength(columns);
+    const actual = geometry.map(({ right, bottom }) => `${right}/${bottom}`);
+    console.log(`governance separators at ${width}px (right/bottom): ${actual.join(",")}`);
+    expect(actual).toEqual(
+      Array.from(
+        { length: 6 },
+        (_, index) => `${(index + 1) % columns === 0 ? 0 : 1}/${index < 6 - columns ? 1 : 0}`,
+      ),
+    );
+  }
+});
+
+test("governance metric values stay inside their tracks at wide and compact widths", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name !== "desktop-chromium",
+    "Explicit wide and compact viewport probes",
+  );
+  const count = 123456789012345;
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await setup(page);
+  await page.route("**/api/v1/org/admin/summary", (r) =>
+    r.fulfill({
+      json: env({
+        ...summary,
+        members: { ...summary.members, active: count, total: count },
+        recent_audit_events: count,
+      }),
+    }),
+  );
+  await page.goto("/org-admin");
+  const metrics = page.getByRole("region", { name: "组织运行摘要" });
+  const value = metrics.locator("article > b").first();
+  await expect(value).toHaveText(String(count));
+  for (const width of [1672, 1440, 1024, 390]) {
+    await page.setViewportSize({ width, height: 941 });
+    if (width >= 761) {
+      const positions = await metrics.locator("article").evaluateAll((cells) =>
+        cells.map((cell) => {
+          const y = (selector: string) => cell.querySelector(selector)!.getBoundingClientRect().top;
+          return {
+            row: cell.getBoundingClientRect().top,
+            label: y("span"),
+            value: y("b"),
+            note: y("small"),
+          };
+        }),
+      );
+      console.log("organization metric tracks", width, JSON.stringify(positions));
+      for (const card of positions) {
+        const row = positions.find((item) => Math.abs(item.row - card.row) < 1)!;
+        expect(card.label).toBeCloseTo(row.label, 0);
+        expect(card.value).toBeCloseTo(row.value, 0);
+        expect(card.note).toBeCloseTo(row.note, 0);
+      }
+    }
+    const layout = await metrics.locator("article > :is(b, small)").evaluateAll((values) =>
+      values.map((node) => {
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        const lines = [...range.getClientRects()];
+        const card = node.closest("article")!.getBoundingClientRect();
+        return {
+          lines: lines.length,
+          fits: lines.every(
+            (line) => line.right <= card.right + 0.5 && line.left >= card.left - 0.5,
+          ),
+        };
+      }),
+    );
+    expect(layout[0]?.lines, `width ${width}: long count wraps`).toBeGreaterThan(1);
+    expect(
+      layout.every(({ fits }) => fits),
+      `width ${width}: metric text stays in its own cell`,
+    ).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  }
+});
+
+test("governance identity leaves the operating metrics in the first fold on intermediate screens", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Explicit intermediate viewport probes");
+  await page.setViewportSize({ width: 1024, height: 941 });
+  await setup(page);
+  await page.goto("/org-admin");
+  const facts = page.locator(".organization-profile-facts");
+  const metrics = page.getByRole("region", { name: "组织运行摘要" });
+  await expect(facts.getByRole("heading", { name: profile.name, exact: true })).toBeVisible();
+  await expect(facts.getByText(profile.slug, { exact: true })).toBeVisible();
+  await expect(facts.getByText("正常使用", { exact: true })).toBeVisible();
+  for (const width of [1000, 1001, 1024, 1100, 1164, 1165, 1200]) {
+    await page.setViewportSize({ width, height: 941 });
+    const { factsHeight, metricsTop, sameRow, titleFits, viewportFits } = await facts.evaluate(
+      (el) => {
+        const bounds = (selector: string) => el.querySelector(selector)!.getBoundingClientRect();
+        const name = el.querySelector("h3")!;
+        const range = document.createRange();
+        range.selectNodeContents(name);
+        const label = bounds("header p");
+        const chip = bounds("header > i");
+        const titleFits = [...range.getClientRects()].every(
+          (r) => r.right <= chip.left && r.left >= label.left,
+        );
+        return {
+          factsHeight: Math.round(el.getBoundingClientRect().height),
+          metricsTop: Math.round(el.nextElementSibling!.getBoundingClientRect().top),
+          sameRow: bounds("dl").left > bounds("header").left,
+          titleFits,
+          viewportFits: document.documentElement.scrollWidth <= innerWidth,
+        };
+      },
+    );
+    console.log("governance identity first fold", width, factsHeight, metricsTop, sameRow);
+    expect(factsHeight, `organization facts at width ${width}`).toBeLessThan(250);
+    expect(metricsTop, `operating metrics at width ${width}`).toBeLessThan(480);
+    expect(sameRow, `identity columns at width ${width}`).toBe(width >= 1165);
+    expect(titleFits).toBe(true);
+    expect(viewportFits).toBe(true);
+    await expect(metrics).toBeInViewport({ ratio: 1 });
+  }
+});
+
+test("organization timezone suggests recognized zones without rewriting saved aliases", async ({
+  page,
+}) => {
+  await setup(page);
+  const originalTimezone = "US/Eastern";
+  const selectedTimezone = "Etc/UTC";
+  let savedTimezone = originalTimezone;
+  const writes: Record<string, unknown>[] = [];
+  await page.route("**/api/v1/org/admin/profile", (route) => {
+    if (route.request().method() === "PATCH") {
+      const body = route.request().postDataJSON() as Record<string, unknown>;
+      writes.push(body);
+      savedTimezone = String(body.timezone);
+    }
+    return route.fulfill({ json: env({ ...profile, timezone: savedTimezone }) });
+  });
+  await page.goto("/org-admin");
+  const editor = page.locator(".organization-profile-editor");
+  const field = editor.getByLabel("时区", { exact: true });
+  await expect(field).toHaveValue(originalTimezone);
+  const options = editor.locator("datalist");
+  const listId = await options.getAttribute("id", { timeout: 2500 });
+  expect(listId).toBeTruthy();
+  await expect(field).toHaveAttribute("list", listId!);
+  await expect(options.locator('option[value="Asia/Shanghai"]')).toHaveCount(1);
+  await expect(options.locator('option[value="US/Eastern"]')).toHaveCount(1);
+  await expect(options.locator('option[value="UTC"]')).toHaveCount(1);
+  expect(writes).toHaveLength(0);
+
+  await field.fill(selectedTimezone);
+  await expect(field).toHaveValue(selectedTimezone);
+  await editor.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(field).toHaveValue(originalTimezone);
+  expect(writes).toHaveLength(0);
+  await field.fill(selectedTimezone);
+  await editor.getByLabel("变更原因", { exact: true }).fill("确认时区仍按原值提交");
+  await editor.getByRole("button", { name: "保存更改", exact: true }).click();
+  await expect(page.locator(".org-profile-receipt")).toHaveAttribute("data-phase", "ready");
+  expect(writes).toHaveLength(1);
+  expect(writes[0]).toMatchObject({
+    timezone: selectedTimezone,
+    reason: "确认时区仍按原值提交",
+    expected_version: profile.version,
+  });
+  await expect(field).toHaveValue(selectedTimezone);
+});
+
+test("wide governance aligns title actions and status reading edges", async ({ page }) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await setup(page);
+  await page.goto("/org-admin");
+
+  const hero = page.locator('header[data-profile-overview="true"]');
+  const title = hero.getByRole("heading", { name: "治理概览", exact: true });
+  const actions = hero.locator(".org-overview-actions");
+  const status = page.locator(".midou-governance-side > section").filter({
+    has: page.locator(".midou-governance-status"),
+  });
+
+  await expect(title).toHaveCSS("translate", "-1px -1px");
+  await expect(actions).toHaveCSS("translate", "0px -1px");
+  await expect(status).toHaveCSS("padding-inline-end", "32px");
+  await expect(actions.getByRole("link", { name: "邀请成员", exact: true })).toHaveAttribute(
+    "href",
+    "/org-admin/members",
+  );
+  await expect(status.getByText("默认工作区", { exact: true }).last()).toBeVisible();
+  await expect(page.getByLabel("变更原因", { exact: true })).toBeVisible();
+
+  await page.setViewportSize({ width: 1599, height: 941 });
+  await expect(status).not.toHaveCSS("padding-inline-end", "32px");
+});
+
+test("wide governance form uses a consistent text inset without changing validation", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide governance form");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await setup(page);
+  await page.goto("/org-admin");
+  const editor = page.locator(".organization-profile-editor");
+  const reason = editor.getByRole("textbox", { name: "变更原因", exact: true });
+  await expect(editor).toHaveCSS("padding-inline-start", "27px");
+  await expect(reason).toHaveAttribute("required", "");
+  for (const input of await editor
+    .locator(".organization-profile-fields :is(input, select, textarea)")
+    .all())
+    await expect(input).toHaveCSS("padding-inline-start", "13px");
+  await reason.focus();
+  await expect(reason).toBeFocused();
+  await page.setViewportSize({ width: 1599, height: 941 });
+  await expect(editor).not.toHaveCSS("padding-inline-start", "27px");
+});

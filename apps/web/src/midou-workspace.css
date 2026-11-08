@@ -1,4 +1,11 @@
 /* User-supplied November references. Semantic themes and compact/standard preference remain usable. */
+/* Keep the shared frame fixed when a route gains or loses a native scrollbar. */
+@media (min-width: 841px) {
+  html[data-design="commerce"]:has(#app .role-shell.role-shell--c[data-native-scrollbar="true"]) {
+    scrollbar-gutter: stable;
+  }
+}
+
 .midou-brand-mark {
   width: 32px;
   height: 32px;
@@ -97,8 +104,10 @@ html[data-design="commerce"] #app .trend-workbench {
   overflow: visible;
   background: transparent;
 }
-html[data-design="commerce"] #app .trend-workbench.is-detail-open {
-  grid-template-columns: minmax(320px, 40%) minmax(0, 1fr);
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .trend-workbench.is-detail-open {
+    grid-template-columns: minmax(320px, 40%) minmax(0, 1fr);
+  }
 }
 html[data-design="commerce"] #app :is(.trend-list, .trend-detail) {
   min-width: 0;
@@ -109,7 +118,7 @@ html[data-design="commerce"] #app :is(.trend-list, .trend-detail) {
 }
 html[data-design="commerce"] #app .trend-list > button {
   display: grid;
-  grid-template-columns: 52px 24px minmax(0, 1fr) 62px 56px;
+  grid-template-columns: 20px 44px minmax(0, 1fr) 52px 52px;
   gap: 12px;
   padding: 12px 8px;
   border: 0;
@@ -182,143 +191,6 @@ html[data-design="commerce"] #app .sourcing-detail > header {
 html[data-design="commerce"] #app .sourcing-detail h3 {
   font-size: 19px;
   line-height: 1.5;
-}
-html[data-design="commerce"] #app .notification-center > header {
-  margin-bottom: 18px;
-  align-items: center;
-}
-html[data-design="commerce"] #app .notification-center > header > div:first-child {
-  display: block;
-}
-html[data-design="commerce"] #app .notification-center > header p {
-  font: 400 13px/1.6 var(--so-font-ui);
-  letter-spacing: normal;
-  color: var(--so-text-muted);
-}
-html[data-design="commerce"] #app .notification-summary {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  padding: 14px 8px;
-  border: 1px solid var(--so-border);
-  border-radius: 12px;
-  background: var(--so-panel);
-  gap: 0;
-}
-html[data-design="commerce"] #app .notification-summary article {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  border: 0;
-  border-right: 1px solid var(--so-border);
-  background: transparent;
-  box-shadow: none;
-}
-html[data-design="commerce"] #app .notification-summary article:last-child {
-  border-right: 0;
-}
-html[data-design="commerce"] #app .notification-summary b {
-  font-size: 24px;
-  font-variant-numeric: tabular-nums;
-}
-html[data-design="commerce"] #app .notification-center > nav:not(.notification-pagination) {
-  padding: 10px 14px;
-  margin: 14px 0;
-  background: var(--so-panel);
-  border: 1px solid var(--so-border);
-  border-radius: 10px;
-  flex-wrap: wrap;
-}
-html[data-design="commerce"] #app .notification-center > nav button {
-  background: transparent;
-  border: 0;
-  font-weight: 500;
-  min-height: 34px;
-}
-html[data-design="commerce"] #app .notification-center > nav button[aria-pressed="true"] {
-  color: var(--so-primary);
-  background: var(--so-primary-soft);
-}
-html[data-design="commerce"] #app .notification-list {
-  display: grid;
-  gap: 10px;
-  background: transparent;
-  border: 0;
-}
-html[data-design="commerce"] #app .notification-list > button {
-  position: relative;
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) auto auto;
-  gap: 18px;
-  align-items: center;
-  padding: 18px 18px 18px 30px;
-  border: 1px solid var(--so-border);
-  border-radius: 12px;
-  background: var(--so-panel);
-  color: var(--so-text);
-  box-shadow: none;
-  text-align: left;
-}
-html[data-design="commerce"] #app .notification-list > button.unread {
-  border-left: 1px solid var(--so-border);
-}
-html[data-design="commerce"] #app .notification-list > button.unread::before {
-  content: "";
-  position: absolute;
-  left: 11px;
-  top: calc(50% - 3px);
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--so-info);
-}
-html[data-design="commerce"] #app .notification-list > button:hover {
-  background: var(--so-panel-soft);
-}
-html[data-design="commerce"] #app .notification-list > button:focus-visible {
-  outline: 2px solid var(--so-focus);
-  outline-offset: 2px;
-}
-html[data-design="commerce"] #app .notification-list i {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  background: var(--so-primary-soft);
-  color: var(--so-primary);
-  border-radius: 8px;
-}
-html[data-design="commerce"] #app .notification-list strong {
-  font-size: 16px;
-  line-height: 1.5;
-}
-html[data-design="commerce"] #app .notification-list small {
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.6;
-}
-html[data-design="commerce"] #app .notification-list em {
-  font-weight: 400;
-  font-size: 13px;
-  font-style: normal;
-  color: var(--so-text-muted);
-}
-html[data-design="commerce"] #app .notification-list > button > b {
-  justify-self: start;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 13px;
-  color: var(--so-warning);
-  background: var(--so-warning-soft);
-  font-weight: 500;
-}
-html[data-design="commerce"] #app .notification-list > button > b[data-workflow="in_progress"] {
-  color: var(--so-info);
-  background: var(--so-info-soft);
-}
-html[data-design="commerce"] #app .notification-list > button > b[data-workflow="closed"] {
-  color: var(--so-success);
-  background: var(--so-success-soft);
 }
 html[data-design="commerce"] #app .theme-page.is-embedded {
   width: 100%;
@@ -431,18 +303,8 @@ html[data-design="commerce"][data-density="compact"] #app .role-content {
     grid-column: 1;
     padding: 16px 14px 80px;
   }
-  html[data-design="commerce"] #app .trend-workbench.is-detail-open {
-    grid-template-columns: minmax(0, 1fr);
-  }
   html[data-design="commerce"] #app .trend-workbench.is-detail-open .trend-list {
     display: none;
-  }
-  html[data-design="commerce"] #app .notification-list > button {
-    grid-template-columns: 40px minmax(0, 1fr);
-    gap: 10px;
-  }
-  html[data-design="commerce"] #app .notification-list > button > :is(em, b) {
-    grid-column: 2;
   }
   html[data-design="commerce"] #app .account-shell:not(.account-content-only) {
     grid-template-columns: minmax(0, 1fr);
@@ -473,14 +335,6 @@ html[data-design="commerce"][data-density="compact"] #app .role-content {
   html[data-design="commerce"] #app .trend-list > button > em {
     grid-column: 2;
   }
-  html[data-design="commerce"] #app .notification-summary {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-  html[data-design="commerce"] #app .notification-center > header {
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
   .sourcing-detail > header .research-thumbnail {
     width: 72px;
     height: 72px;
@@ -500,6 +354,48 @@ html[data-design="commerce"] #app .trend-list > button {
 html[data-design="commerce"] #app .trend-list > button .topic-index {
   font-size: 13px;
   color: var(--so-text-muted);
+}
+@media (min-width: 601px) {
+  html[data-design="commerce"] #app .trend-list > button .research-thumbnail {
+    width: 44px;
+    height: 44px;
+  }
+}
+html[data-design="commerce"] #app .trend-topic-summary {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+html[data-design="commerce"] #app .trend-topic-summary small {
+  margin-top: 2px;
+  line-height: 1.4;
+}
+html[data-design="commerce"] #app .trend-market-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 8px;
+}
+html[data-design="commerce"] #app .trend-market-actions button svg {
+  width: 16px;
+  height: 16px;
+}
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .trend-workbench:not(.is-detail-open) .trend-list > button {
+    min-height: 72px;
+    padding-block: 8px;
+  }
+  html[data-design="commerce"] #app .trend-workbench:not(.is-detail-open) .trend-topic-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 32%);
+    column-gap: 20px;
+    align-items: start;
+  }
+  html[data-design="commerce"] #app .trend-workbench:not(.is-detail-open) .trend-topic-provenance {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
 }
 html[data-design="commerce"] #app .trend-filters {
   margin-top: 0;
@@ -673,82 +569,6 @@ html[data-design="commerce"] #app .catalogue-page-heading h2 {
   }
 }
 
-.midou-profile-grid {
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  gap: 18px;
-  align-items: start;
-  min-width: 0;
-}
-.midou-profile-summary {
-  display: grid;
-  gap: 16px;
-  min-width: 0;
-}
-.midou-profile-summary section {
-  padding: 24px;
-  background: var(--so-panel);
-  border: 1px solid var(--so-border);
-  border-radius: 12px;
-  overflow-wrap: anywhere;
-}
-.midou-profile-summary section:first-child {
-  text-align: center;
-}
-.midou-profile-avatar {
-  display: inline-grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  color: var(--so-on-primary);
-  background: var(--so-primary);
-  font-size: 24px;
-  margin-bottom: 16px;
-}
-.midou-profile-summary .midou-profile-name {
-  font-size: 20px;
-  margin: 0;
-}
-.midou-profile-summary p {
-  margin: 12px 0;
-  color: var(--so-text-muted);
-}
-.midou-profile-summary b {
-  float: right;
-  color: var(--so-text);
-  font-weight: 500;
-}
-.midou-profile-summary a {
-  display: block;
-  margin-top: 20px;
-  padding: 10px;
-  background: var(--so-primary-soft);
-  color: var(--so-primary);
-  border: 1px solid var(--so-border);
-  border-radius: 7px;
-  text-decoration: none;
-  text-align: center;
-}
-html[data-design="commerce"] #app .midou-profile-grid .p11-form {
-  border: 1px solid var(--so-border);
-  border-radius: 12px;
-  background: var(--so-panel);
-}
-@media (max-width: 1050px) {
-  .midou-profile-grid {
-    grid-template-columns: 1fr;
-  }
-  .midou-profile-summary {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (max-width: 600px) {
-  .midou-profile-summary {
-    grid-template-columns: 1fr;
-  }
-}
-
 html[data-design="commerce"] #app .midou-completed-empty {
   padding: 32px 24px 16px;
   background: var(--so-panel);
@@ -823,62 +643,6 @@ html[data-design="commerce"] #app .midou-completed-empty {
   background: var(--so-panel-soft);
   font-size: 13px;
 }
-html[data-design="commerce"] #app .notification-center {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 220px;
-  column-gap: 20px;
-  align-items: start;
-  width: 100%;
-  max-width: none;
-  margin: 0;
-}
-html[data-design="commerce"] #app .notification-center > * {
-  grid-column: 1;
-}
-html[data-design="commerce"] #app .notification-center > .midou-notification-preference {
-  grid-column: 2;
-  grid-row: 1 / span 4;
-  background: var(--so-panel);
-  border: 1px solid var(--so-border);
-  border-radius: 12px;
-  padding: 20px 16px;
-}
-.midou-notification-preference h2 {
-  font-size: 20px;
-  margin: 0 0 10px;
-}
-.midou-notification-preference p {
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--so-text-muted);
-}
-.midou-notification-preference > div {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--so-border);
-}
-html[data-design="commerce"] #app .midou-notification-preference button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  justify-content: space-between;
-  width: 100%;
-  background: transparent;
-  color: var(--so-text);
-  padding: 16px 0 0;
-  font-size: 13px;
-}
-@media (max-width: 1150px) {
-  html[data-design="commerce"] #app .notification-center {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  html[data-design="commerce"] #app .notification-center > .midou-notification-preference {
-    grid-column: 1;
-    grid-row: auto;
-  }
-}
 @media (max-width: 760px) {
   .midou-analysis-flow {
     grid-template-columns: 1fr 1fr;
@@ -886,15 +650,6 @@ html[data-design="commerce"] #app .midou-notification-preference button {
   .midou-completed-empty h3 {
     font-size: 20px;
   }
-}
-
-html[data-design="commerce"] #app .midou-notification-preference h2 {
-  font-size: 20px;
-  line-height: 1.4;
-}
-.midou-profile-summary .midou-profile-name {
-  display: block;
-  margin-bottom: 12px;
 }
 html[data-design="commerce"]
   #app
@@ -916,8 +671,7 @@ html[data-design="commerce"]
   font-size: 14px;
   line-height: 1.6;
 }
-html[data-design="commerce"] #app .account-shell .p11-center-head > div,
-html[data-design="commerce"] #app .midou-profile-grid .p11-panel-heading > p {
+html[data-design="commerce"] #app .account-shell .p11-center-head > div {
   display: none;
 }
 html[data-design="commerce"] #app .account-shell .p11-center-head {
@@ -927,73 +681,10 @@ html[data-design="commerce"] #app .account-shell .p11-center-head {
   border: 0;
   background: transparent;
 }
-html[data-design="commerce"] #app .midou-notification-filters {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 14px;
-  border: 1px solid var(--so-border);
-  border-radius: 10px;
-  background: var(--so-panel);
-}
-html[data-design="commerce"] #app .midou-notification-filters > nav {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  background: transparent;
-}
-html[data-design="commerce"] #app .midou-notification-filters button {
-  min-height: 34px;
-  padding: 8px 12px;
-  background: transparent;
-  color: var(--so-text-muted);
-  font-weight: 500;
-}
-html[data-design="commerce"] #app .midou-notification-filters button[aria-pressed="true"] {
-  color: var(--so-primary);
-  background: var(--so-primary-soft);
-}
-html[data-design="commerce"] #app .notification-summary article {
-  gap: 12px;
-}
-html[data-design="commerce"] #app .notification-summary article > svg {
-  color: var(--so-text-muted);
-}
-html[data-design="commerce"] #app .notification-summary article > b {
-  margin-left: auto;
-}
-html[data-design="commerce"] #app .notification-list > button {
-  grid-template-columns: 42px minmax(0, 1fr) auto auto auto;
-}
-html[data-design="commerce"] #app .midou-notification-open {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border: 1px solid var(--so-border);
-  border-radius: 6px;
-  color: var(--so-primary);
-  white-space: nowrap;
-}
-@media (max-width: 1000px) {
-  html[data-design="commerce"] #app .notification-list > button {
-    grid-template-columns: 42px minmax(0, 1fr);
-  }
-  html[data-design="commerce"] #app .midou-notification-open {
-    grid-column: 2;
-    justify-self: start;
-  }
-}
 html[data-design="commerce"]
   #app
   .role-shell[data-shell="member"]
-  .commerce-sidebar
+  .commerce-sidebar-menu
   > section
   > h2 {
   display: none;
@@ -1117,7 +808,7 @@ html[data-design="commerce"] #app :is(.organization-profile-facts, .organization
   border-radius: 12px;
 }
 html[data-design="commerce"] #app .organization-profile-facts {
-  grid-template-columns: minmax(180px, 1fr) minmax(0, 3fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
   min-height: 108px;
 }
@@ -1173,8 +864,11 @@ html[data-design="commerce"] #app .organization-profile-editor {
   html[data-design="commerce"] #app .organization-profile-workspace {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+/* The rail occupies space on desktop; use the remaining content width. */
+@container (width > 900px) {
   html[data-design="commerce"] #app .organization-profile-facts {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: minmax(260px, 30%) minmax(0, 1fr);
   }
 }
 @media (max-width: 640px) {
@@ -1208,13 +902,6 @@ html[data-design="commerce"] #app .home-status-facts > a {
 html[data-design="commerce"] #app .midou-home-quick {
   min-height: calc(100dvh - 140px);
 }
-html[data-design="commerce"] #app .midou-notification-filters {
-  margin: 16px 0;
-}
-html[data-design="commerce"] #app .midou-notification-filters button {
-  border: 0;
-  border-radius: 8px;
-}
 html[data-design="commerce"]
   #app
   :is(
@@ -1228,12 +915,6 @@ html[data-design="commerce"] #app .midou-account-navigation > a {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-html[data-design="commerce"] #app .midou-profile-grid .p11-form {
-  gap: 14px 24px;
-}
-html[data-design="commerce"] #app .midou-profile-grid .p11-form textarea {
-  min-height: 54px;
 }
 @media (min-width: 1051px) {
   html[data-design="commerce"] #app .account-shell .p11-center {
@@ -1288,7 +969,7 @@ html[data-design="commerce"] #app .role-shell[data-shell="member"] .role-content
 }
 html[data-design="commerce"]
   #app
-  :is(.catalogue-page-heading h2, .sourcing-head h1, .home-command-bar h2) {
+  :is(.catalogue-page-heading h2, .sourcing-head h1, .home-command-bar h1) {
   font-size: 24px;
   line-height: 1.35;
   text-wrap: balance;
@@ -1389,6 +1070,20 @@ html[data-design="commerce"] #app .role-topbar .midou-top-context {
   white-space: nowrap;
   overflow: hidden;
 }
+/* Prefer the current route over long workspace labels in the desktop masthead. */
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .role-topbar .midou-top-context {
+    max-inline-size: clamp(132px, 14vw, 240px);
+  }
+  html[data-design="commerce"]
+    #app
+    .role-topbar
+    .role-top-breadcrumb
+    > :is([aria-current="page"], b) {
+    flex-shrink: 0;
+    max-inline-size: 100%;
+  }
+}
 .midou-top-context svg,
 .midou-account-menu summary svg {
   flex-shrink: 0;
@@ -1397,14 +1092,14 @@ html[data-design="commerce"]
   #app
   .role-shell.role-shell--c
   .role-top-actions
-  .role-quick-action[aria-label="全局搜索"] {
+  .role-quick-action[data-navigation-search] {
   width: clamp(180px, 19vw, 320px);
-  min-height: 36px;
+  min-height: 44px;
   justify-content: flex-start;
   color: var(--so-text-muted);
   background: var(--so-panel-soft);
 }
-.role-quick-action[aria-label="全局搜索"] kbd {
+.role-quick-action[data-navigation-search] kbd {
   margin-left: auto;
   white-space: nowrap;
 }
@@ -1481,12 +1176,2522 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
     #app
     .role-shell.role-shell--c
     .role-top-actions
-    .role-quick-action[aria-label="全局搜索"] {
+    .role-quick-action[data-navigation-search] {
     width: 44px;
     min-height: 44px;
     justify-content: center;
   }
   html[data-design="commerce"] #app .role-topbar .role-top-breadcrumb {
     max-width: 100%;
+  }
+}
+/* Notification inbox reference layout and responsive controls. */
+html[data-design="commerce"] #app .notification-center > header {
+  margin-bottom: 18px;
+  align-items: center;
+}
+html[data-design="commerce"] #app .notification-center > header > div:first-child {
+  display: block;
+}
+html[data-design="commerce"] #app .notification-center > header p {
+  font: 400 13px/1.6 var(--so-font-ui);
+  letter-spacing: normal;
+  color: var(--so-text-muted);
+}
+html[data-design="commerce"] #app .notification-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 14px 8px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel);
+  gap: 0;
+}
+html[data-design="commerce"] #app .notification-summary article {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  border: 0;
+  border-right: 1px solid var(--so-border);
+  background: transparent;
+  box-shadow: none;
+}
+html[data-design="commerce"] #app .notification-summary article:last-child {
+  border-right: 0;
+}
+html[data-design="commerce"] #app .notification-summary b {
+  font-size: 24px;
+  font-variant-numeric: tabular-nums;
+}
+html[data-design="commerce"] #app .notification-center > nav:not(.notification-pagination) {
+  padding: 10px 14px;
+  margin: 14px 0;
+  background: var(--so-panel);
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+html[data-design="commerce"] #app .notification-center > nav button {
+  background: transparent;
+  border: 0;
+  font-weight: 500;
+  min-height: 34px;
+}
+html[data-design="commerce"] #app .notification-center > nav button[aria-pressed="true"] {
+  color: var(--so-primary);
+  background: var(--so-primary-soft);
+}
+html[data-design="commerce"] #app .notification-list {
+  display: grid;
+  gap: 10px;
+  background: transparent;
+  border: 0;
+}
+html[data-design="commerce"] #app .notification-list .notification-record {
+  position: relative;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto auto;
+  gap: 18px;
+  align-items: center;
+  padding: 18px 18px 18px 30px;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  box-shadow: none;
+  text-align: left;
+}
+html[data-design="commerce"] #app .notification-list .notification-record.unread {
+  border-left: 1px solid var(--so-border);
+}
+html[data-design="commerce"] #app .notification-list .notification-record.unread::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: calc(50% - 3px);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--so-info);
+}
+html[data-design="commerce"] #app .notification-list .notification-record:hover {
+  background: var(--so-panel-soft);
+}
+html[data-design="commerce"] #app .notification-list .notification-record:focus-visible {
+  outline: 2px solid var(--so-focus);
+  outline-offset: 2px;
+}
+html[data-design="commerce"] #app .notification-list i {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  background: var(--so-primary-soft);
+  color: var(--so-primary);
+  border-radius: 8px;
+}
+html[data-design="commerce"] #app .notification-list strong {
+  font-size: 16px;
+  line-height: 1.5;
+}
+html[data-design="commerce"] #app .notification-list small {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+html[data-design="commerce"] #app .notification-list em {
+  font-weight: 400;
+  font-size: 13px;
+  font-style: normal;
+  color: var(--so-text-muted);
+}
+html[data-design="commerce"] #app .notification-list .notification-record > b {
+  justify-self: start;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--so-warning);
+  background: var(--so-warning-soft);
+  font-weight: 500;
+}
+html[data-design="commerce"]
+  #app
+  .notification-list
+  .notification-record
+  > b[data-workflow="in_progress"] {
+  color: var(--so-info);
+  background: var(--so-info-soft);
+}
+html[data-design="commerce"]
+  #app
+  .notification-list
+  .notification-record
+  > b[data-workflow="closed"] {
+  color: var(--so-success);
+  background: var(--so-success-soft);
+}
+@media (max-width: 840px) {
+  html[data-design="commerce"] #app .notification-list .notification-record {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 10px;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > :is(em, b) {
+    grid-column: 2;
+  }
+}
+@media (max-width: 600px) {
+  html[data-design="commerce"] #app .notification-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  html[data-design="commerce"] #app .notification-center > header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
+html[data-design="commerce"] #app .notification-center {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  column-gap: 20px;
+  align-items: start;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+html[data-design="commerce"] #app .notification-center > * {
+  grid-column: 1;
+}
+html[data-design="commerce"] #app .notification-center > .midou-notification-preference {
+  grid-column: 2;
+  grid-row: 1 / span 4;
+  background: var(--so-panel);
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  padding: 20px 16px;
+}
+.midou-notification-preference h2 {
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+.midou-notification-preference p {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--so-text-muted);
+}
+.midou-notification-preference > div {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 62px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--so-border);
+}
+.midou-notification-preference-status {
+  margin-inline-start: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+  white-space: nowrap;
+}
+.midou-notification-preference-status[data-enabled="true"] {
+  background: var(--so-success-soft);
+  color: var(--so-success);
+}
+html[data-design="commerce"] #app .midou-notification-preference button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  width: 100%;
+  background: transparent;
+  color: var(--so-text);
+  padding: 16px 0 0;
+  font-size: 13px;
+}
+@media (max-width: 1150px) {
+  html[data-design="commerce"] #app .notification-center {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html[data-design="commerce"] #app .notification-center > .midou-notification-preference {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+html[data-design="commerce"] #app .midou-notification-preference h2 {
+  font-size: 20px;
+  line-height: 1.4;
+}
+html[data-design="commerce"] #app .midou-notification-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel);
+}
+html[data-design="commerce"] #app .midou-notification-filters > nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+html[data-design="commerce"] #app .midou-notification-filters button {
+  min-height: 34px;
+  padding: 8px 12px;
+  background: transparent;
+  color: var(--so-text-muted);
+  font-weight: 500;
+}
+html[data-design="commerce"] #app .midou-notification-filters button[aria-pressed="true"] {
+  color: var(--so-primary);
+  background: var(--so-primary-soft);
+}
+html[data-design="commerce"] #app .notification-summary article {
+  gap: 12px;
+}
+html[data-design="commerce"] #app .notification-summary article > svg {
+  color: var(--so-text-muted);
+}
+html[data-design="commerce"] #app .notification-summary article > b {
+  margin-left: auto;
+}
+html[data-design="commerce"] #app .notification-list .notification-record {
+  grid-template-columns: 42px minmax(0, 1fr) auto auto auto;
+}
+html[data-design="commerce"] #app .midou-notification-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--so-primary) 70%, var(--so-border));
+  border-radius: 8px;
+  background: var(--so-panel);
+  color: var(--so-primary);
+  white-space: nowrap;
+}
+html[data-design="commerce"]
+  #app
+  .notification-record:is(:hover, :focus-visible)
+  .midou-notification-open {
+  background: var(--so-primary-soft);
+}
+@media (max-width: 1000px) {
+  html[data-design="commerce"] #app .notification-list .notification-record {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+  html[data-design="commerce"] #app .midou-notification-open {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+@media (max-width: 760px) {
+  html[data-design="commerce"] #app .notification-list .notification-record {
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+  }
+  html[data-design="commerce"]
+    #app
+    .notification-list
+    .notification-record
+    > span:not(.midou-notification-open) {
+    grid-column: 2 / -1;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > b {
+    grid-area: 2 / 3;
+  }
+  html[data-design="commerce"] #app .midou-notification-open {
+    grid-area: 2 / 2;
+  }
+}
+html[data-design="commerce"] #app .midou-notification-filters {
+  margin: 16px 0;
+}
+html[data-design="commerce"] #app .midou-notification-filters button {
+  border: 0;
+  border-radius: 8px;
+}
+.midou-notification-status-controls,
+.midou-notification-status,
+.midou-notification-unread {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--so-text-muted);
+}
+.midou-notification-status-controls {
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.midou-notification-search {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 42px;
+  padding-inline: 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  background: var(--so-panel);
+}
+.midou-notification-search > svg {
+  flex-shrink: 0;
+}
+html[data-design="commerce"] #app .midou-notification-search input {
+  min-width: 0;
+  width: clamp(115px, 10vw, 172px);
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--so-text);
+}
+html[data-design="commerce"] #app .midou-notification-search button {
+  min-height: 40px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: var(--so-primary);
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .midou-notification-status-controls {
+    width: 100%;
+    row-gap: 8px;
+  }
+  .midou-notification-search {
+    flex-basis: 100%;
+  }
+  html[data-design="commerce"] #app .midou-notification-search input {
+    flex: 1;
+  }
+  html[data-design="commerce"] #app .notification-center--review .notification-list {
+    margin-block-start: 4px;
+  }
+}
+html[data-design="commerce"] #app .midou-notification-status select {
+  min-height: 40px;
+  min-width: 116px;
+  padding-inline: 9px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  color: var(--so-text);
+  background: var(--so-panel);
+}
+html[data-design="commerce"] #app .midou-notification-unread {
+  cursor: pointer;
+  min-height: 44px;
+}
+html[data-design="commerce"] #app .midou-notification-unread input {
+  appearance: none;
+  display: inline-grid;
+  place-items: center start;
+  width: 38px;
+  min-width: 38px;
+  height: 22px;
+  min-height: 22px;
+  margin: 0;
+  padding: 2px;
+  border: 1px solid var(--so-text-muted);
+  border-radius: 99px;
+  background: var(--so-panel-soft);
+  cursor: pointer;
+}
+.midou-notification-unread input::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--so-text-muted);
+}
+html[data-design="commerce"] #app .midou-notification-unread input:checked {
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+}
+.midou-notification-unread input:checked::before {
+  justify-self: end;
+  background: var(--so-on-primary);
+}
+.midou-notification-unread input:focus-visible {
+  outline: 2px solid var(--so-focus);
+  outline-offset: 3px;
+}
+@media (min-width: 1151px) {
+  html[data-design="commerce"] #app .notification-center {
+    grid-template-columns: minmax(0, 1fr) clamp(220px, 14.25vw, 245px);
+    column-gap: 26px;
+    padding-inline-start: 6px;
+  }
+  html[data-design="commerce"] #app .notification-center > .midou-notification-preference {
+    padding: 20px 17px;
+  }
+  html[data-design="commerce"] #app .notification-summary {
+    padding-block: 14px;
+    min-height: 74px;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record {
+    grid-template-columns: 56px minmax(0, 1fr) auto auto auto;
+    min-height: 98px;
+  }
+  html[data-design="commerce"] #app .notification-list i {
+    width: 56px;
+    height: 56px;
+    border-radius: 11px;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record.unread::before {
+    width: 10px;
+    height: 10px;
+    top: calc(50% - 5px);
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > b {
+    border-radius: 999px;
+  }
+}
+@media (forced-colors: active) {
+  html[data-design="commerce"] #app .midou-notification-unread input {
+    appearance: auto;
+  }
+  .midou-notification-unread input::before {
+    content: none;
+  }
+}
+
+@media (min-width: 1450px) {
+  html[data-design="commerce"] #app .notification-list .notification-record {
+    padding-inline-start: 52px;
+    min-block-size: 100px;
+    grid-template-columns: 60px minmax(0, 1fr) 160px 106px auto;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > em {
+    font-variant-numeric: tabular-nums;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > b {
+    box-sizing: border-box;
+    min-inline-size: 75px;
+    text-align: center;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > i {
+    width: 60px;
+    margin-inline-end: 0;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > i > svg {
+    width: 30px;
+    height: 30px;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > span {
+    padding-inline-start: 3px;
+  }
+  html[data-design="commerce"]
+    #app
+    .notification-row:has(> .notification-mark-read)
+    > .notification-record {
+    padding-inline-end: 14px;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record.unread::before {
+    inset-inline-start: 20px;
+    width: 14px;
+    height: 14px;
+    top: calc(50% - 7px);
+  }
+  html[data-design="commerce"] #app .midou-notification-open {
+    position: relative;
+    margin-inline-start: 14px;
+    min-inline-size: 104px;
+    box-sizing: border-box;
+    block-size: 40px;
+    min-height: 40px;
+    padding-inline: 8px;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-row > .notification-mark-read {
+    min-inline-size: 104px;
+    box-sizing: border-box;
+    block-size: 40px;
+    min-height: 40px;
+    margin-inline-end: 18px;
+    font-weight: 500;
+  }
+  html[data-design="commerce"] #app .midou-notification-open::before {
+    content: "";
+    position: absolute;
+    inset-block: 4px;
+    inset-inline-start: -18px;
+    border-inline-start: 1px solid var(--so-border);
+  }
+  html[data-design="commerce"] #app .notification-center > .midou-notification-preference {
+    margin-block-start: 6px;
+    padding-block: 14px 27px;
+  }
+  html[data-design="commerce"] #app .midou-notification-preference > h2 {
+    margin-block-end: 10px;
+  }
+  html[data-design="commerce"] #app .midou-notification-preference > p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  html[data-design="commerce"] #app .midou-notification-preference > div {
+    min-height: 73px;
+    font-size: 16px;
+  }
+  html[data-design="commerce"] #app .midou-notification-preference > button {
+    font-size: 15px;
+  }
+  html[data-design="commerce"] #app .notification-center .notification-summary article > span {
+    font-size: 16px;
+  }
+  html[data-design="commerce"] #app .notification-center .notification-summary article {
+    gap: 13px;
+  }
+  html[data-design="commerce"] #app .notification-center .notification-summary article > svg {
+    width: 24px;
+    height: 24px;
+    flex: none;
+  }
+  html[data-design="commerce"] #app .notification-center .notification-summary article > b {
+    font-size: 27px;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > span > strong {
+    font-size: 20px;
+    line-height: 1.35;
+  }
+  html[data-design="commerce"] #app .notification-list .notification-record > span > small,
+  html[data-design="commerce"] #app .notification-list .notification-record > em {
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  html[data-design="commerce"]
+    #app
+    .notification-list
+    .notification-record
+    > span
+    > .notification-group-note {
+    font-size: 13px;
+  }
+}
+
+html[data-design="commerce"] #app .notification-center.notification-center--review > header {
+  min-height: 0;
+  padding: 0;
+  margin-block-end: 12px;
+}
+html[data-design="commerce"] #app .notification-center.notification-center--review > header p {
+  margin: 3px 0 0;
+}
+html[data-design="commerce"] #app .notification-center > header > div:last-child {
+  align-items: center;
+}
+html[data-design="commerce"] #app .notification-center .realtime-badge[data-state="connected"] {
+  background: var(--so-success-soft);
+  border-color: transparent;
+}
+html[data-design="commerce"]
+  #app
+  .notification-center
+  .realtime-badge[data-state="connected"]::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-inline-end: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .notification-center .realtime-badge {
+    min-inline-size: 118px;
+    min-block-size: 32px;
+    justify-content: center;
+    border-radius: 7px;
+    font-size: 14px;
+  }
+  html[data-design="commerce"] #app .notification-center > header > div:last-child {
+    gap: 14px;
+  }
+  html[data-design="commerce"] #app .notification-center > header button.secondary {
+    min-inline-size: 116px;
+  }
+  html[data-design="commerce"] #app .notification-center > header button:not(.secondary) {
+    min-inline-size: 110px;
+  }
+  html[data-design="commerce"]
+    #app
+    .notification-center
+    .realtime-badge[data-state="connected"]::before {
+    width: 9px;
+    height: 9px;
+    margin-inline-end: 8px;
+  }
+}
+@media (max-width: 1150px) {
+  html[data-design="commerce"] #app .notification-center > .midou-notification-preference {
+    order: 1;
+  }
+}
+
+@media (max-width: 760px) {
+  html[data-design="commerce"] #app .notification-center.notification-center--review > header {
+    gap: 4px;
+  }
+}
+
+html[data-design="commerce"] #app .midou-notification-preference > button {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  justify-content: flex-start;
+}
+.midou-notification-preference > button svg:last-child {
+  margin-inline-start: auto;
+}
+html[data-design="commerce"] #app .notification-list > .notification-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel);
+}
+html[data-design="commerce"] #app .notification-row > .notification-record {
+  grid-column: 1 / -1;
+  min-width: 0;
+  border: 0;
+}
+html[data-design="commerce"]
+  #app
+  .notification-row:has(> .notification-mark-read)
+  > .notification-record {
+  grid-column: 1;
+}
+html[data-design="commerce"] #app .notification-row > .notification-mark-read {
+  min-height: 44px;
+  margin-inline-end: 16px;
+  padding: 6px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  white-space: nowrap;
+}
+@media (max-width: 1000px) {
+  html[data-design="commerce"] #app .notification-list > .notification-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html[data-design="commerce"] #app .notification-row > .notification-mark-read {
+    justify-self: end;
+    margin-block-end: 12px;
+  }
+}
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .notification-center {
+    padding-block-start: 24px;
+    padding-inline-end: 0;
+    margin-inline-end: -9px;
+    width: calc(100% + 9px);
+  }
+  html[data-design="commerce"] #app .notification-center.notification-center--review > header {
+    position: relative;
+    inset-block-start: -4px;
+    margin-block-end: 22px;
+  }
+  html[data-design="commerce"]
+    #app
+    .notification-center.notification-center--review
+    > header
+    button.secondary {
+    border-color: var(--so-border);
+  }
+  html[data-design="commerce"] #app .notification-center > .notification-summary {
+    margin-block-start: -4px;
+    min-height: 78px;
+  }
+  html[data-design="commerce"] #app .notification-center.notification-center--review > header h1 {
+    font-size: 29px;
+  }
+  html[data-design="commerce"] #app .notification-center.notification-center--review > header p {
+    font-size: 15px;
+  }
+  html[data-design="commerce"] #app .midou-notification-filters {
+    margin-block-start: 26px;
+    min-height: 74px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .midou-notification-search {
+    box-sizing: border-box;
+    inline-size: 268px;
+  }
+  html[data-design="commerce"] #app .midou-notification-search input {
+    flex: 1 1 0;
+    inline-size: 0;
+  }
+  html[data-design="commerce"] #app .midou-notification-filters > nav {
+    gap: 5px;
+    padding-inline-start: 4px;
+  }
+  html[data-design="commerce"] #app .midou-notification-filters > nav > button {
+    min-inline-size: 78px;
+    font-size: 17px;
+  }
+  .midou-notification-status-controls {
+    column-gap: 22px;
+  }
+  html[data-design="commerce"] #app .midou-notification-status select {
+    min-inline-size: 130px;
+  }
+}
+
+@media (min-width: 1680px) {
+  .midou-notification-status-controls {
+    display: grid;
+    grid-template-columns: 178px 132px 268px;
+    column-gap: 24px;
+  }
+  .midou-notification-status {
+    gap: 14px;
+  }
+  html[data-design="commerce"] #app .midou-notification-unread input {
+    width: 44px;
+    height: 24px;
+  }
+  html[data-design="commerce"] #app .midou-notification-unread input:not(:checked) {
+    background: color-mix(in srgb, var(--so-text-muted) 44%, var(--so-panel));
+  }
+  .midou-notification-unread input:not(:checked)::before {
+    background: var(--so-panel);
+  }
+  html[data-design="commerce"]
+    #app
+    .midou-notification-filters
+    > nav
+    > button[aria-pressed="true"] {
+    font-weight: 650;
+  }
+}
+
+@media (min-width: 1600px) {
+  /* Reserve the reference page inset while retaining a single top-bar breadcrumb. */
+  html[data-design="commerce"] #app .notification-center.notification-center--review {
+    padding-block-start: 73px;
+    padding-inline-start: calc(47px - var(--midou-member-rail-delta, 0px));
+  }
+}
+
+/* Personal profile reference layout. */
+
+.midou-profile-grid {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  min-width: 0;
+}
+.midou-profile-summary {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.midou-profile-summary section {
+  padding: 24px;
+  background: var(--so-panel);
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+}
+.midou-profile-summary section:first-child {
+  text-align: center;
+}
+.midou-profile-avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  color: var(--so-on-primary);
+  background: var(--so-primary);
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+.midou-profile-summary .midou-profile-name {
+  font-size: 20px;
+  margin: 0;
+}
+.midou-profile-summary p {
+  margin: 12px 0;
+  color: var(--so-text-muted);
+}
+.midou-profile-summary b {
+  float: right;
+  color: var(--so-text);
+  font-weight: 500;
+}
+.midou-profile-summary a {
+  display: block;
+  margin-top: 20px;
+  padding: 10px;
+  background: var(--so-primary-soft);
+  color: var(--so-primary);
+  border: 1px solid var(--so-border);
+  border-radius: 7px;
+  text-decoration: none;
+  text-align: center;
+}
+html[data-design="commerce"] #app .midou-profile-grid .p11-form {
+  border: 1px solid var(--so-border);
+  border-radius: 12px;
+  background: var(--so-panel);
+}
+@media (max-width: 1050px) {
+  .midou-profile-grid {
+    grid-template-columns: 1fr;
+  }
+  .midou-profile-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .midou-profile-summary {
+    grid-template-columns: 1fr;
+  }
+}
+.midou-profile-summary .midou-profile-name {
+  display: block;
+  margin-bottom: 12px;
+}
+html[data-design="commerce"] #app .midou-profile-grid .p11-panel-heading > p {
+  display: none;
+}
+html[data-design="commerce"] #app .midou-profile-grid .p11-form {
+  gap: 14px 24px;
+}
+html[data-design="commerce"] #app .midou-profile-grid .p11-form textarea {
+  min-height: 54px;
+}
+.midou-profile-email {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-block: 12px 0;
+  color: var(--so-text-muted);
+}
+.midou-profile-email > span,
+.midou-profile-context dd {
+  overflow-wrap: anywhere;
+}
+.midou-profile-badge {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--so-warning-soft);
+  color: var(--so-warning);
+  font-size: 12px;
+  white-space: nowrap;
+  gap: 4px;
+}
+.midou-profile-badge[data-verified="true"] {
+  background: var(--so-success-soft);
+  color: var(--so-success);
+}
+.midou-profile-security-facts {
+  display: grid;
+  gap: 12px;
+  margin-block: 16px 0;
+}
+.midou-profile-security-facts > div,
+.midou-profile-security-facts dt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.midou-profile-security-facts > div {
+  justify-content: space-between;
+}
+.midou-profile-summary .midou-profile-security-facts dt > svg {
+  color: var(--so-text-muted);
+}
+.midou-profile-summary a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+html[data-design="commerce"] #app .midou-profile-form-verification[data-verified="true"] {
+  color: var(--so-success);
+}
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .midou-profile-email > span {
+    font-size: 16px;
+  }
+  html[data-design="commerce"] #app .midou-profile-context dt {
+    font-size: 15px;
+  }
+  html[data-design="commerce"] #app .midou-profile-security > h3 {
+    font-size: 22px;
+    line-height: 1.35;
+  }
+  html[data-design="commerce"] #app .midou-profile-security dt,
+  html[data-design="commerce"] #app .midou-profile-security > a {
+    font-size: 16px;
+  }
+  .midou-profile-grid {
+    grid-template-columns: clamp(280px, 19.7vw, 338px) minmax(0, 1fr);
+    gap: 20px;
+  }
+  .midou-profile-summary section {
+    padding: 24px 26px;
+  }
+  .midou-profile-summary section:first-child {
+    padding-block: 30px;
+  }
+  .midou-profile-avatar {
+    width: 76px;
+    height: 76px;
+    margin-bottom: 12px;
+  }
+  .midou-profile-summary .midou-profile-name {
+    font-size: 24px;
+  }
+  html[data-design="commerce"] #app .midou-profile-grid .p11-form {
+    padding: 22px 28px;
+    gap: 18px 30px;
+  }
+  html[data-design="commerce"] #app .midou-profile-grid .midou-profile-reason {
+    grid-column: auto;
+  }
+  html[data-design="commerce"] #app .midou-profile-grid .p11-panel-heading h3 {
+    font-size: 22px;
+  }
+  html[data-design="commerce"] #app .midou-profile-grid .p11-panel-heading {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+  html[data-design="commerce"] #app .midou-profile-grid .p11-form .p11-field-value {
+    gap: 3px;
+  }
+  html[data-design="commerce"] #app .midou-profile-grid .midou-profile-reason textarea {
+    height: 52px;
+    min-height: 52px;
+  }
+  html[data-design="commerce"] #app .midou-profile-grid .p11-form-footer > .p11-primary {
+    min-inline-size: 124px;
+    font-weight: 600;
+  }
+  html[data-design="commerce"]
+    #app
+    .midou-profile-grid
+    .p11-form-footer
+    > .so-action-secondary:not(:hover) {
+    border-color: var(--so-border);
+  }
+  html[data-design="commerce"] #app .midou-profile-grid .p11-form-footer > .so-action-secondary {
+    min-inline-size: 94px;
+  }
+  html[data-design="commerce"] #app .midou-profile-grid .p11-form-footer {
+    justify-content: flex-start;
+    padding-top: 16px;
+  }
+}
+
+.midou-profile-context {
+  display: grid;
+  gap: 10px;
+  padding-block-start: 14px;
+  margin: 18px 0 0;
+  border-top: 1px solid var(--so-border);
+}
+.midou-profile-context > div,
+.midou-profile-context dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.midou-profile-context > div {
+  justify-content: space-between;
+  text-align: start;
+}
+.midou-profile-context dt {
+  flex-shrink: 0;
+  color: var(--so-text-muted);
+}
+.midou-profile-context dd {
+  margin: 0;
+  min-width: 0;
+  text-align: end;
+}
+
+html[data-design="commerce"] #app [data-shell="organization_admin"] .commerce-sidebar footer {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+html[data-design="commerce"]
+  #app
+  [data-shell="organization_admin"]
+  .commerce-sidebar
+  footer
+  > :is(.commerce-workspace-switch, .midou-organization-return) {
+  grid-column: 1 / -1;
+}
+.midou-organization-return > svg {
+  flex: none;
+  transform: rotate(180deg);
+}
+.midou-organization-help {
+  position: relative;
+}
+.midou-organization-help summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding-inline: 10px;
+  cursor: pointer;
+  list-style: none;
+}
+.midou-organization-help p {
+  position: absolute;
+  inset-block-end: 100%;
+  inset-inline-end: 0;
+  z-index: 2;
+  width: 200px;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  background: var(--so-panel);
+}
+@media (min-width: 1536px) {
+  html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="organization_admin"] {
+    grid-template-columns: calc(clamp(220px, 15.61vw, 261px) - 7px) minmax(0, 1fr);
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c[data-shell="organization_admin"]
+    > .role-content {
+    padding-inline-start: 32px;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="organization_admin"] .commerce-sidebar {
+    padding: 26px 11px 16px 17px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar-menu
+    > section:first-child {
+    margin-block-start: 26px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    section {
+    gap: 0;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar-menu
+    > section
+    + section {
+    margin-block-start: 8px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    section
+    h2 {
+    padding-inline-start: 7px;
+    font-size: 14px;
+    line-height: 19px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    section
+    a {
+    min-height: 38px;
+    padding-inline: 19px 12px;
+    gap: 20px;
+    font-size: 16px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c[data-shell="organization_admin"]
+    .role-top-actions {
+    gap: 18px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c[data-shell="organization_admin"]
+    .role-top-actions
+    .role-quick-action[data-navigation-search] {
+    width: clamp(320px, 22vw, 370px);
+    min-height: 38px;
+  }
+}
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar {
+    gap: 10px;
+    padding-block: 21px 14px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar-menu
+    > section {
+    flex-shrink: 0;
+    gap: 2px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar-menu
+    > section
+    + section {
+    padding-block-start: 9px;
+    border-block-start: 1px solid var(--so-border);
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar h2 {
+    margin-block-end: 4px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    section
+    a {
+    min-height: 32px;
+    padding-inline: 10px;
+    border-radius: 6px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer {
+    gap: 2px;
+    padding-block-start: 6px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer
+    :is(a, button) {
+    min-height: 32px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer
+    button {
+    min-height: 44px;
+  }
+}
+
+@media (min-width: 1101px) and (min-height: 860px) and (max-height: 920px) {
+  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar {
+    gap: 5px;
+    padding-block: 13px 8px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar-menu
+    > section
+    + section {
+    padding-block-start: 6px;
+  }
+}
+
+@media (min-width: 1536px) {
+  html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="platform_admin"] {
+    --platform-rail-inset: 13px;
+    grid-template-columns: calc(clamp(220px, 15.61vw, 261px) - var(--platform-rail-inset)) minmax(
+        0,
+        1fr
+      );
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    > .role-content {
+    padding-inline-start: calc(22px + var(--platform-rail-inset));
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar {
+    padding-inline: 17px 21px;
+  }
+}
+
+@media (min-width: 1536px) and (min-height: 921px) {
+  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar h2 {
+    margin-inline-start: 8px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    section
+    a {
+    padding-inline: 17px 10px;
+    gap: 14px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar-menu
+    > section:first-child {
+    margin-block-start: 22px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar-menu
+    > section
+    + section {
+    padding-block-start: 6px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer
+    :is(.midou-sidebar-settings, .midou-sidebar-help) {
+    padding-inline: 8px;
+  }
+}
+@media (min-width: 1536px) and (max-width: 1750px) and (min-height: 921px) {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar-menu
+    > section:first-child {
+    row-gap: 1px;
+    margin-block-end: 6px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar-menu
+    > section:first-child
+    h2 {
+    margin-block-end: 5px;
+  }
+}
+
+html[data-design="commerce"] #app [data-shell="platform_admin"] .commerce-sidebar footer {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+}
+html[data-design="commerce"]
+  #app
+  [data-shell="platform_admin"]
+  .commerce-sidebar
+  footer
+  > .midou-platform-return {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 14px;
+  align-items: center;
+  min-height: 40px;
+  padding-inline: 12px;
+  gap: 10px;
+  border: 1px solid var(--so-border);
+  background: var(--so-panel);
+  font-weight: 600;
+}
+.midou-platform-return > span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.midou-top-help {
+  position: relative;
+  flex: none;
+}
+.midou-top-help summary {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+}
+.midou-top-help .midou-account-menu-panel {
+  padding: 14px;
+}
+.midou-top-help .midou-account-menu-panel p {
+  margin: 6px 0 0;
+}
+html[data-design="commerce"] #app .role-topbar .midou-top-context > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+html[data-design="commerce"] #app .role-top-actions .role-theme-switcher > button {
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  justify-content: center;
+}
+.role-top-actions .role-theme-switcher > button > span {
+  display: none;
+}
+@media (max-width: 840px) {
+  .midou-top-help,
+  .role-top-actions [data-navigation-search] > :is(span, kbd) {
+    display: none;
+  }
+}
+
+.midou-workspace-chevron {
+  display: none;
+}
+
+/* Keep member navigation geometry stable across the wide workspaces. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"] {
+    --midou-member-rail-delta: 26px;
+    grid-template-columns: calc(220px + var(--midou-member-rail-delta)) minmax(0, 1fr);
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .role-content {
+    padding-block-start: 10px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-sidebar {
+    padding: 22px 14px 10px;
+    gap: 16px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-sidebar
+    a {
+    min-height: 44px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-sidebar
+    section
+    a {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--so-text);
+    gap: 18px;
+    padding-inline: 18px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-sidebar
+    section
+    a[aria-current="page"] {
+    color: var(--so-primary);
+    font-weight: 650;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-sidebar
+    footer
+    .midou-organization-help
+    summary {
+    min-height: 44px;
+    padding-inline: 14px;
+    gap: 10px;
+    font-size: 14px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-sidebar
+    > .commerce-sidebar-menu
+    > section:first-child {
+    margin-block-start: 7px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .midou-area-tabs
+    :is(a, span) {
+    min-height: 36px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-sidebar
+    footer
+    .commerce-workspace-switch {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr) 14px;
+    min-width: 0;
+    background: var(--so-panel);
+    gap: 8px;
+    padding-inline: 12px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-workspace-switch
+    > span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-workspace-switch
+    small {
+    display: inline;
+    color: inherit;
+    font: inherit;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-workspace-switch
+    small::before {
+    content: " · ";
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .midou-workspace-chevron {
+    display: block;
+    flex: none;
+  }
+  html[data-design="commerce"] #app .role-shell[data-shell="member"] .trend-dashboard--review {
+    padding-inline-start: calc(56px - var(--midou-member-rail-delta, 0px));
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .opportunity-workspace[data-catalogue-view="rule_candidates"] {
+    padding-inline-start: calc(clamp(20px, 1.9vw, 33px) - var(--midou-member-rail-delta, 0px));
+  }
+}
+
+@media (min-width: 1536px) {
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .role-top-actions {
+    gap: 22px;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .role-top-actions
+    .role-quick-action[data-navigation-search] {
+    width: clamp(320px, 20.85vw, 365px);
+    min-height: 38px;
+    border-radius: 8px;
+  }
+}
+
+@media (min-width: 1536px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .role-top-actions {
+    gap: 22px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .role-top-actions
+    > a[href="/notifications"] {
+    border-color: transparent;
+    background: transparent;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .role-top-actions
+    > a[href="/notifications"]:hover {
+    background: var(--so-panel-soft);
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .role-top-actions
+    > :is(.midou-top-help, .midou-account-menu)::before {
+    content: "";
+    position: absolute;
+    inset-block: 11px;
+    inset-inline-start: -11px;
+    border-inline-start: 1px solid var(--so-border);
+    pointer-events: none;
+  }
+}
+
+@media (min-width: 1536px) {
+  html[data-design="commerce"]
+    #app
+    [data-shell="organization_admin"]
+    .commerce-sidebar
+    footer
+    .commerce-workspace-switch {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr) 14px;
+    min-height: 42px;
+    gap: 8px;
+    background: var(--so-panel);
+  }
+  html[data-design="commerce"]
+    #app
+    [data-shell="organization_admin"]
+    .commerce-workspace-switch
+    > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  html[data-design="commerce"]
+    #app
+    [data-shell="organization_admin"]
+    .commerce-workspace-switch
+    small {
+    display: inline;
+    color: inherit;
+    font: inherit;
+  }
+  html[data-design="commerce"]
+    #app
+    [data-shell="organization_admin"]
+    .commerce-workspace-switch
+    small::before {
+    content: " · ";
+  }
+  html[data-design="commerce"]
+    #app
+    [data-shell="organization_admin"]
+    .commerce-workspace-switch
+    > .midou-workspace-chevron {
+    display: block;
+    flex: none;
+  }
+}
+
+@media (min-width: 1536px) and (min-height: 921px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"] {
+    --platform-topbar-size: var(--midou-wide-topbar-size, 64px);
+    grid-template-rows: var(--platform-topbar-size) minmax(0, 1fr);
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .role-topbar {
+    height: var(--platform-topbar-size);
+    min-height: var(--platform-topbar-size);
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar {
+    top: var(--platform-topbar-size);
+    height: calc(100dvh - var(--platform-topbar-size));
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar-menu
+    > section:first-child {
+    margin-block-start: 14px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .platform-dashboard--review {
+    padding-block-start: 41px;
+  }
+}
+
+@media (min-width: 1536px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-topbar {
+    padding-inline-start: 28px;
+  }
+}
+
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .role-top-actions {
+    gap: 28px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .role-top-actions
+    .role-quick-action[data-navigation-search] {
+    width: clamp(324px, 19.4vw, 352px);
+    min-height: 38px;
+    border-radius: 8px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-sidebar
+    footer {
+    border-block-start: 0;
+    padding-block: 0;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-sidebar
+    footer
+    .commerce-workspace-switch {
+    min-height: 50px;
+  }
+}
+
+/* Reference surfaces have restrained depth; avoid shadows on nested rows and controls. */
+@media (min-width: 1101px) {
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c
+    :is(
+      .home-daily-production dl > div,
+      .home-automation-overview,
+      .midou-home-flow,
+      .home-result-workspace,
+      .catalogue-controls,
+      .product-catalog,
+      .trend-filters,
+      .trend-list,
+      .trend-detail,
+      .sourcing-overview,
+      .sourcing-layout > aside,
+      .sourcing-detail,
+      .organization-profile-facts,
+      .organization-profile-metrics,
+      .organization-profile-editor,
+      .midou-governance-side > section,
+      .platform-facts,
+      .platform-action-summary,
+      .platform-dashboard-grid > section
+    ) {
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--so-text) 3%, transparent);
+  }
+}
+
+/* Match the reference masthead proportions without changing the navigation rail. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"] #app .role-shell.role-shell--c .role-brand {
+    gap: 12px;
+    padding-inline-end: 16px;
+    border-inline-end: 1px solid var(--so-border);
+  }
+  html[data-design="commerce"] #app .role-shell.role-shell--c .role-brand > b {
+    font-size: 24px;
+    line-height: 1.25;
+  }
+  html[data-design="commerce"] #app .role-topbar .midou-brand-mark {
+    inline-size: 40px;
+    block-size: 40px;
+  }
+}
+
+/* The same canvas stays under the transparent content at every desktop width. */
+@media (min-width: 841px) {
+  html[data-design="commerce"] #app .role-shell.role-shell--c {
+    background-color: color-mix(in srgb, var(--so-bg) 99%, var(--so-text));
+  }
+}
+
+/* Keep the desktop rail and search label in the same local type family across roles. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    :is(.role-topbar, .commerce-sidebar) {
+    background-color: color-mix(in srgb, var(--so-panel-soft) 12%, var(--so-panel));
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c
+    :is(.commerce-sidebar, .role-top-actions) {
+    font-family: "Segoe UI", "DengXian", var(--so-font-ui);
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c
+    .role-top-actions
+    [data-navigation-search] {
+    font-family: inherit;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .commerce-sidebar-menu
+    section
+    a {
+    font-size: 15px;
+    line-height: 20px;
+  }
+}
+
+/* A desktop role switch should not resize or restyle the admin search field. */
+@media (1536px <= width < 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c:is([data-shell="organization_admin"], [data-shell="platform_admin"])
+    .role-top-actions {
+    gap: 20px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c:is([data-shell="organization_admin"], [data-shell="platform_admin"])
+    .role-top-actions
+    .role-quick-action[data-navigation-search] {
+    width: clamp(320px, 21vw, 340px);
+    border-radius: 8px;
+  }
+}
+
+/* Shared wide header controls keep one visual weight across route and role changes. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c:is([data-shell="organization_admin"], [data-shell="platform_admin"])
+    .role-top-actions {
+    gap: 24px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c:is([data-shell="organization_admin"], [data-shell="platform_admin"])
+    .role-top-actions
+    > :is(.midou-top-help, .midou-account-menu)::before {
+    content: "";
+    position: absolute;
+    inset-block: 11px;
+    inset-inline-start: -10px;
+    border-inline-start: 1px solid var(--so-border);
+    pointer-events: none;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-topbar
+    .midou-top-avatar {
+    inline-size: 36px;
+    block-size: 36px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-topbar
+    .role-quick-action[data-navigation-search]
+    > svg {
+    inline-size: 18px;
+    block-size: 18px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-topbar
+    .role-quick-action[data-navigation-search]
+    kbd {
+    background: var(--so-panel);
+    border-radius: 6px;
+  }
+}
+
+/* Organization rail icon rhythm without moving the first route anchor. */
+@media (min-width: 1536px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    section
+    a
+    > svg {
+    inline-size: 20px;
+    block-size: 20px;
+    flex: none;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .midou-area-tabs
+    :is(a, span) {
+    min-height: 32px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar {
+    padding-block-start: 30px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar-menu
+    > section:first-child {
+    margin-block-start: 20px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    section
+    h2 {
+    margin-inline: 0;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar-menu
+    > section
+    + section {
+    margin-block-start: 7px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    section
+    a {
+    gap: 18px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .midou-organization-return {
+    border-block-start: 1px solid var(--so-border);
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
+    gap: 12px;
+  }
+}
+
+/* Preserve the reference layout at full height; on short desktops scroll only the route list. */
+.commerce-sidebar-menu {
+  display: contents;
+}
+@media (min-width: 1101px) and (min-height: 480px) and (max-height: 920px),
+  (841px <= width <= 1100px) and (min-height: 480px) {
+  html[data-design="commerce"] #app .role-shell.role-shell--c .commerce-sidebar {
+    overflow: hidden;
+  }
+  html[data-design="commerce"] #app .commerce-sidebar > :is(.midou-area-tabs, footer) {
+    flex: none;
+  }
+  html[data-design="commerce"] #app .commerce-sidebar-menu {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: inherit;
+    min-block-size: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  html[data-design="commerce"] #app .commerce-sidebar-menu > section {
+    flex: none;
+  }
+  @media (max-width: 1100px) {
+    html[data-design="commerce"] #app .commerce-sidebar footer {
+      position: relative;
+    }
+    html[data-design="commerce"] #app .commerce-sidebar footer .midou-organization-help {
+      position: static;
+    }
+    html[data-design="commerce"] #app .commerce-sidebar footer .midou-organization-help p {
+      inline-size: 100%;
+      inset-block-end: calc(100% + 4px);
+    }
+  }
+}
+
+/* A role change must not resize the shared desktop masthead or its sticky rail. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"]) #app .role-shell.role-shell--c {
+    --midou-wide-topbar-size: 64px;
+    grid-template-rows: var(--midou-wide-topbar-size) minmax(0, 1fr);
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-topbar {
+    height: var(--midou-wide-topbar-size);
+    min-height: var(--midou-wide-topbar-size);
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .commerce-sidebar {
+    top: var(--midou-wide-topbar-size);
+    height: calc(100dvh - var(--midou-wide-topbar-size));
+  }
+  /* Give appearance the same quiet utility treatment as the member notification icon. */
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-top-actions
+    .role-theme-switcher
+    > button {
+    border-color: transparent;
+    background: transparent;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-top-actions
+    .role-theme-switcher
+    > button:is(:hover, [aria-expanded="true"]) {
+    background: var(--so-panel-soft);
+  }
+  /* Keep the switcher's shape stable; route-list positions follow their respective layouts. */
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .midou-area-tabs {
+    border-radius: 9px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .midou-area-tabs
+    :is(a, span) {
+    font-size: 15px;
+    font-weight: 500;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .midou-area-tabs
+    a:not([aria-current="page"]) {
+    color: var(--so-text);
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .midou-area-tabs
+    a[aria-current="page"] {
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar {
+    padding-block-start: 22px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .platform-dashboard--review {
+    padding-block-start: 41px;
+  }
+}
+
+/* Match the platform rail boundary without moving its links or the content edge. */
+@media (min-width: 1600px) and (min-height: 921px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"] {
+    --platform-rail-inset: 18px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .commerce-sidebar {
+    padding-inline-end: 16px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .midou-area-tabs {
+    background: var(--so-panel-soft);
+    translate: 0 -3px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer {
+    border-block-start-color: transparent;
+    position: relative;
+    inset-block-start: 3px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer
+    > .midou-platform-return {
+    min-height: 40px;
+    padding-inline-start: 12px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer
+    .midou-sidebar-settings {
+    padding-inline-start: 12px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer
+    .midou-organization-help {
+    justify-self: end;
+  }
+}
+
+/* Shared wide masthead controls retain a readable click target and a clear disclosure direction. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-topbar
+    .midou-top-context {
+    box-sizing: border-box;
+    min-height: 40px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-topbar
+    .midou-account-menu
+    > summary {
+    column-gap: 9px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-topbar
+    .midou-account-menu
+    > summary
+    > svg {
+    rotate: 90deg;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-topbar
+    .midou-account-menu[open]
+    > summary
+    > svg {
+    rotate: -90deg;
+  }
+}
+
+/* Keep the discovery label from squeezing its icon or painting over adjacent tools. */
+@media (min-width: 841px) {
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c
+    .role-top-actions
+    .role-quick-action[data-navigation-search]
+    > span {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c
+    .role-top-actions
+    .role-quick-action[data-navigation-search]
+    > :is(svg, kbd) {
+    flex: none;
+  }
+}
+
+/* Refine organization rail insets without moving the active row or changing route ownership. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    .midou-area-tabs {
+    margin-inline-end: 8px;
+    background: var(--so-panel-soft);
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    section
+    a {
+    column-gap: 19px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    section
+    a
+    > svg {
+    translate: 1px 1px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    footer {
+    padding-block-start: 6px;
+    padding-inline-end: 5px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    footer
+    .midou-organization-return {
+    font-weight: 600;
+  }
+}
+
+/* Shared member switcher: a soft track with the same active pill on every member route. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .midou-area-tabs {
+    background: var(--so-panel-soft);
+    border-color: transparent;
+    border-radius: 999px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .midou-area-tabs
+    :is(a, span) {
+    border-radius: 999px;
+    font-size: 16px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .midou-area-tabs
+    a[aria-current="page"] {
+    border-radius: 999px;
+  }
+}
+
+/* Balance the full platform rail groups without moving the first group or the footer. */
+@media (min-width: 1600px) and (min-height: 921px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    .commerce-sidebar-menu:has(> section:nth-child(4))
+    > section:nth-child(2) {
+    padding-block-start: 3px;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    .commerce-sidebar-menu:has(> section:nth-child(4))
+    > section:nth-child(4) {
+    padding-block-start: 9px;
+  }
+}
+
+/* Align the masthead glyphs without changing its controls' hit areas. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .midou-top-help
+    > summary
+    > svg {
+    inline-size: 22px;
+    block-size: 22px;
+    translate: 0 -2px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-quick-action[data-navigation-search]
+    > :is(svg, span) {
+    translate: 0 -1px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c
+    .role-quick-action[data-navigation-search]
+    > span {
+    color: color-mix(in srgb, var(--so-text) 18%, var(--so-text-muted));
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c:is([data-shell="member"], [data-shell="organization_admin"])
+    .role-topbar
+    .role-quick-action[data-navigation-search]
+    > span {
+    font-size: 14px;
+    letter-spacing: 0.2px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c:is([data-shell="organization_admin"], [data-shell="platform_admin"])
+    .midou-account-menu
+    > summary
+    > :is(.midou-top-avatar, svg) {
+    translate: -3px -1px;
+  }
+}
+
+/* Keep the member rail's icon and label on a consistent reading track. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .commerce-sidebar
+    .commerce-sidebar-menu
+    > section
+    > a {
+    column-gap: 20px;
+    font-size: 16px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="member"]
+    .commerce-sidebar
+    .commerce-sidebar-menu
+    > section
+    > a
+    > svg {
+    inline-size: 20px;
+    block-size: 20px;
+  }
+}
+
+/* Keep the platform rail's section label and footer visually secondary to its links. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .commerce-sidebar {
+    footer > .midou-platform-return {
+      background-color: var(--so-panel-soft);
+    }
+
+    footer > :is(.midou-sidebar-settings, .midou-organization-help) {
+      color: var(--so-text-muted);
+      font-weight: 500;
+    }
+  }
+}
+
+@media (min-width: 1600px) and (min-height: 921px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .commerce-sidebar-menu
+    > section:first-child
+    > h2 {
+    translate: 0 -4px;
+  }
+}
+
+/* Keep positive and attention badges distinct from neutral cards on wide workspaces. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"]) #app {
+    --midou-status-positive-surface: color-mix(
+      in srgb,
+      var(--so-success-border) 8%,
+      var(--so-success-soft)
+    );
+    --midou-status-attention-surface: color-mix(
+      in srgb,
+      var(--so-warning-border) 10%,
+      var(--so-warning-soft)
+    );
+
+    .trend-dashboard--review .trend-topic-row > em[data-status="active"],
+    .trend-detail-badges > span[data-status="active"],
+    .sourcing-progress h4[data-sources-ended="true"],
+    .organization-profile-facts > header > i[data-status="active"],
+    .midou-governance-status-badge[data-status="active"],
+    .platform-source-health td > i[data-health="healthy"],
+    .platform-system-checks .platform-signal-ok {
+      background-color: var(--midou-status-positive-surface);
+    }
+
+    .trend-detail-facts dd[data-insufficient="true"],
+    .platform-source-health td > i:is([data-health="degraded"], [data-health="unknown"]) {
+      background-color: var(--midou-status-attention-surface);
+    }
+  }
+}
+
+/* Reserve desktop chrome while role links and search wait for the permission response. */
+html[data-design="commerce"]
+  #app
+  .role-shell.role-shell--c
+  :is(.midou-pending-search, .midou-pending-rail) {
+  display: none;
+}
+
+@media (min-width: 1536px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell] {
+    > .midou-pending-rail {
+      display: flex;
+    }
+
+    .role-top-actions > .midou-pending-search {
+      display: block;
+      box-sizing: border-box;
+      border: 1px solid var(--so-border);
+      background: var(--so-panel-soft);
+    }
+  }
+}
+
+/* Use one desktop action grid for member, organization and platform workspaces. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c:is(
+      [data-shell="member"],
+      [data-shell="organization_admin"],
+      [data-shell="platform_admin"]
+    )
+    .role-top-actions {
+    gap: 24px;
+
+    :is(.role-quick-action[data-navigation-search], .midou-pending-search) {
+      width: clamp(324px, 20vw, 352px);
+      min-height: 38px;
+      border-radius: 8px;
+    }
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c:is(
+      [data-shell="member"],
+      [data-shell="organization_admin"],
+      [data-shell="platform_admin"]
+    )
+    .role-topbar
+    .role-quick-action[data-navigation-search]
+    > span {
+    font-size: 14px;
+  }
+}
+
+/* Keep the desktop action track stable when moving between workspaces. */
+@media (1536px <= width < 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell]
+    .role-top-actions {
+    gap: 20px;
+
+    :is(.role-quick-action[data-navigation-search], .midou-pending-search) {
+      width: clamp(320px, 21vw, 340px);
+      min-height: 38px;
+      border-radius: 8px;
+    }
+  }
+}
+
+@media (1536px <= width < 1600px) and (min-height: 921px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell] {
+    --midou-wide-topbar-size: 64px;
+    grid-template-rows: var(--midou-wide-topbar-size) minmax(0, 1fr);
+
+    .role-topbar {
+      height: var(--midou-wide-topbar-size);
+      min-height: var(--midou-wide-topbar-size);
+    }
+
+    .commerce-sidebar {
+      top: var(--midou-wide-topbar-size);
+      height: calc(100dvh - var(--midou-wide-topbar-size));
+    }
+  }
+}
+
+/* Balance admin group labels and the platform footer's icon insets on wide desktops. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar-menu
+    > section {
+    > h2 {
+      translate: 1px 2px;
+    }
+
+    &:first-child > h2 {
+      translate: 1px -2px;
+    }
+  }
+}
+
+@media (min-width: 1600px) and (min-height: 921px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer {
+    > .midou-platform-return {
+      padding-inline-start: 15px;
+    }
+
+    > .midou-sidebar-settings {
+      padding-inline-start: 14px;
+    }
   }
 }

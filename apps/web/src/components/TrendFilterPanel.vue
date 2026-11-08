@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppIcon from "./AppIcon.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import type { TrendFilters, TrendSort } from "./trend-workspace-types";
 
@@ -20,48 +21,78 @@ const updateFilter = (key: keyof TrendFilters, event: Event) =>
   <ResponsiveFilterDrawer label="筛选趋势" :active-count="activeCount">
     <form class="trend-filters" @submit.prevent="emit('apply')">
       <label
-        >市场<select :value="filters.market" @change="updateFilter('market', $event)">
-          <option value="">全部市场</option>
-          <option value="US">US</option>
-        </select></label
+        ><span class="trend-filter-caption">市场</span
+        ><span class="trend-filter-field"
+          ><AppIcon name="globe" :size="18" /><select
+            :value="filters.market"
+            @change="updateFilter('market', $event)"
+          >
+            <option value="">全部市场</option>
+            <option value="US">US</option></select
+          ><AppIcon class="trend-filter-chevron" name="chevron" :size="15" /></span></label
       ><label
-        >分类<input
-          :value="filters.category"
-          maxlength="80"
-          placeholder="全部分类"
-          @input="updateFilter('category', $event)" /></label
+        ><span class="trend-filter-caption">分类</span
+        ><span class="trend-filter-field"
+          ><AppIcon name="category-grid" :size="18" /><input
+            :value="filters.category"
+            maxlength="80"
+            placeholder="全部分类"
+            @input="updateFilter('category', $event)" /></span></label
       ><label
-        >状态<select :value="filters.status" @change="updateFilter('status', $event)">
-          <option value="active">活跃</option>
-          <option value="irrelevant">已标记无关</option>
-          <option value="stale">已过期</option>
-          <option value="">全部状态</option>
-        </select></label
+        ><span class="trend-filter-caption">状态</span
+        ><span class="trend-filter-field"
+          ><AppIcon name="activity" :size="18" /><select
+            :value="filters.status"
+            @change="updateFilter('status', $event)"
+          >
+            <option value="active">活跃</option>
+            <option value="irrelevant">已标记无关</option>
+            <option value="stale">已过期</option>
+            <option value="">全部状态</option></select
+          ><AppIcon class="trend-filter-chevron" name="chevron" :size="15" /></span></label
       ><label class="search"
-        >关键词<input
-          :value="filters.q"
-          maxlength="200"
-          placeholder="搜索主题或关键词"
-          @input="updateFilter('q', $event)" /></label
+        ><span class="trend-filter-caption">关键词</span
+        ><span class="trend-filter-search"
+          ><AppIcon name="search" :size="16" /><input
+            :value="filters.q"
+            maxlength="200"
+            placeholder="搜索主题或关键词"
+            @input="updateFilter('q', $event)" /></span></label
       ><label
-        >排序<select
-          :value="sort"
-          @change="emit('updateSort', ($event.target as HTMLSelectElement).value as TrendSort)"
-        >
-          <option value="impact">影响程度</option>
-          <option value="latest">最新信号</option>
-          <option value="momentum">增长速度</option>
-        </select></label
-      >
+        ><span class="trend-filter-caption">排序</span
+        ><span class="trend-filter-field"
+          ><AppIcon name="layers" :size="18" /><select
+            :value="sort"
+            @change="emit('updateSort', ($event.target as HTMLSelectElement).value as TrendSort)"
+          >
+            <option value="impact">影响程度</option>
+            <option value="latest">最新信号</option>
+            <option value="momentum">增长速度</option></select
+          ><AppIcon class="trend-filter-chevron" name="chevron" :size="15" /></span
+      ></label>
       <div class="trend-filter-actions">
-        <button class="filter-apply-action secondary" type="submit">筛选</button>
-        <button type="button" class="secondary" @click="emit('clear')">清除</button>
+        <button class="filter-apply-action secondary" type="submit">
+          <AppIcon name="funnel" :size="16" />筛选
+        </button>
+        <button type="button" class="secondary trend-filter-reset" @click="emit('clear')">
+          <AppIcon name="refresh" :size="16" />重置
+        </button>
       </div>
     </form>
   </ResponsiveFilterDrawer>
 </template>
 
 <style scoped>
+.trend-filter-actions > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.trend-filter-actions > button > svg {
+  flex-shrink: 0;
+}
 .filter-apply-action {
   border-color: var(--so-border);
   color: var(--so-text);

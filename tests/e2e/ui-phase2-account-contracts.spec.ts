@@ -37,6 +37,21 @@ for (const section of ["profile", "permissions", "security", "notifications", "a
     page,
   }) => {
     await accountSession(page);
+    if (section === "profile") {
+      await page.route("**/api/v1/me/navigation?shell=member", (route) =>
+        route.fulfill({
+          json: envelope({
+            shell: "member",
+            organization_name: "组织夹具",
+            workspace_name: "工作区夹具",
+            roles: ["member"],
+            capabilities: [],
+            platform_roles: [],
+            platform_capabilities: [],
+          }),
+        }),
+      );
+    }
     let writes = 0;
     const resources: Record<string, unknown> = {
       profile,
@@ -93,6 +108,11 @@ for (const section of ["profile", "permissions", "security", "notifications", "a
     );
     expect((await page.locator(".p11-page-heading").boundingBox())!.height).toBeLessThan(80);
     const center = page.locator(".personal-center");
+    if (section === "profile") {
+      await expect(center.locator(".midou-profile-context")).toContainText("组织夹具");
+      await expect(center.locator(".midou-profile-context")).toContainText("工作区夹具");
+      await expect(center.locator(".midou-profile-security-facts")).toContainText("未绑定");
+    }
     if (section === "assets") {
       await expect(center.getByRole("heading", { name: "关注热点", exact: true })).toBeVisible();
       await expect(center.getByRole("heading", { name: "我的决策", exact: true })).toBeVisible();
@@ -117,7 +137,12 @@ for (const section of ["profile", "permissions", "security", "notifications", "a
         parent: item.parentElement!.getBoundingClientRect().width,
       })),
     );
-    for (const item of bounds) expect(Math.abs(item.width - item.parent)).toBeLessThan(3);
+    for (const item of bounds) {
+      if (section === "profile" && page.viewportSize()!.width > 1050) {
+        expect(item.width).toBeGreaterThan(item.parent * 0.6);
+        expect(item.width).toBeLessThan(item.parent);
+      } else expect(Math.abs(item.width - item.parent)).toBeLessThan(3);
+    }
     await expect(page.locator("body")).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
@@ -140,7 +165,9 @@ test("UI2-A01 theme preview and restore do not persist density or write preferen
     if (route.request().method() !== "GET") writes += 1;
     await route.fulfill({ json: envelope(preference()) });
   });
+  await accountSession(page);
   await page.goto("/settings/theme");
+  await expect(page).toHaveURL(/\/me\?section=appearance$/);
   const save = page.getByRole("button", { name: "保存主题偏好", exact: true });
   await page.getByRole("radio", { name: /紧凑/ }).click();
   await expect(save).toBeDisabled();
@@ -173,7 +200,9 @@ test("UI2-A02 theme saves exact versioned payloads and uses the returned revisio
     }
     await route.fulfill({ json: envelope(saved) });
   });
+  await accountSession(page);
   await page.goto("/settings/theme");
+  await expect(page).toHaveURL(/\/me\?section=appearance$/);
   await page.getByRole("radio", { name: /石墨/ }).click();
   await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
   await expect(page.getByRole("button", { name: "已保存", exact: true })).toBeVisible();
@@ -195,12 +224,10 @@ test("UI2-A03 theme conflict requires fresh preference before the next versioned
   page,
 }) => {
   const bodies: unknown[] = [];
-  let reads = 0;
   await page.route("**/api/v1/me/ui-preferences", async (route) => {
     if (route.request().method() === "GET") {
-      reads += 1;
       return route.fulfill({
-        json: envelope(reads === 1 ? preference() : preference("cloud-white", 9)),
+        json: envelope(bodies.length === 0 ? preference() : preference("cloud-white", 9)),
       });
     }
     const body = route.request().postDataJSON() as { theme: string; expected_version: number };
@@ -216,7 +243,9 @@ test("UI2-A03 theme conflict requires fresh preference before the next versioned
       });
     await route.fulfill({ json: envelope(preference(body.theme, 10)) });
   });
+  await accountSession(page);
   await page.goto("/settings/theme");
+  await expect(page).toHaveURL(/\/me\?section=appearance$/);
   await page.getByRole("radio", { name: /石墨/ }).click();
   await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
   await expect(page.getByText("偏好已在其他窗口更新", { exact: true })).toBeVisible();
@@ -233,15 +262,99 @@ test("UI2-A03 theme conflict requires fresh preference before the next versioned
   ]);
 });
 
-test("UI2-A04 profile remains writable when tenant sections fail without requesting member navigation", async ({
+test("profile shows saved avatar but never loads an unsaved URL", async ({ page }) => {
+  const wide = page.viewportSize()!.width >= 1101;
+  if (wide) await page.setViewportSize({ width: 1717, height: 916 });
+  await accountSession(page);
+  await page.route("**/api/v1/me/navigation?shell=member", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "member",
+        organization_name: "组织夹具",
+        workspace_name: "工作区夹具",
+        roles: ["member"],
+        capabilities: ["opportunity:read", "trend:read", "notification:read"],
+        platform_roles: [],
+        platform_capabilities: [],
+      }),
+    }),
+  );
+  const savedUrl = "https://avatar.example.test/saved.svg";
+  let draftReads = 0;
+  await page.route("https://avatar.example.test/**", (route) => {
+    if (route.request().url() !== savedUrl) draftReads++;
+    return route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><rect width="24" height="24" fill="blue"/></svg>',
+    });
+  });
+  await page.route("**/api/v1/me/profile", (route) =>
+    route.fulfill({ json: envelope({ ...profile, avatar_url: savedUrl }) }),
+  );
+  await page.goto("/me");
+  const preview = page.locator(".p11-avatar-preview img");
+  await preview.scrollIntoViewIfNeeded();
+  await expect
+    .poll(() => preview.evaluate((image: HTMLImageElement) => image.naturalWidth))
+    .toBe(24);
+  await page.getByLabel("头像 HTTPS 地址").fill("https://avatar.example.test/draft.svg");
+  await expect(preview).toHaveAttribute("src", savedUrl);
+  await expect(page.locator(".midou-profile-avatar img")).toHaveAttribute("src", savedUrl);
+  let writes = 0;
+  page.on("request", (request) => {
+    if (request.method() === "PATCH" && new URL(request.url()).pathname.endsWith("/me/profile"))
+      writes++;
+  });
+  const displayName = page.getByLabel("显示名称");
+  await displayName.fill("尚未保存的显示名称");
+  await page.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(displayName).toHaveValue(profile.display_name);
+  await expect(page.getByLabel("头像 HTTPS 地址")).toHaveValue(savedUrl);
+  if (wide) {
+    const form = page.locator(".midou-profile-grid .p11-form");
+    const avatar = form.locator(".p11-avatar-frame");
+    await expect(form).toHaveCSS("row-gap", "18px");
+    await expect(page.locator(".midou-profile-context")).toContainText("工作区夹具");
+    await expect(page.locator(".midou-sidebar-settings")).not.toHaveAttribute("aria-current");
+    expect((await form.boundingBox())!.x).toBeCloseTo(645, -1);
+    expect(Math.abs((await form.boundingBox())!.y - 301)).toBeLessThanOrEqual(6);
+    await expect(avatar).toHaveCSS("border-radius", "8px");
+    const [input, frame] = await Promise.all([
+      page.getByLabel("头像 HTTPS 地址").boundingBox(),
+      avatar.boundingBox(),
+    ]);
+    expect(Math.abs(input!.y + input!.height / 2 - frame!.y - frame!.height / 2)).toBeLessThan(1);
+    await page.evaluate(() => window.scrollTo(0, 0));
+  }
+  expect(writes).toBe(0);
+  const security = page.locator(".midou-profile-security");
+  const email = page.getByLabel("邮箱", { exact: true });
+  await expect(email).toBeDisabled();
+  await expect(email).toHaveAccessibleDescription(/邮箱暂不支持修改/);
+  await expect(security.locator("dt > svg[aria-hidden='true']")).toHaveCount(2);
+  await expect(page.locator('.midou-profile-email [data-verified="true"] > svg')).toHaveCount(1);
+  await expect(security.locator('[data-verified="false"] > svg')).toHaveCount(0);
+  await expect(security.getByRole("link", { name: "管理安全设置" })).toHaveAttribute(
+    "href",
+    "/me?section=security",
+  );
+  if ((page.viewportSize()?.width ?? 0) >= 1440)
+    await expect(security.getByRole("heading", { name: "安全信息" })).toHaveCSS(
+      "font-size",
+      "22px",
+    );
+  expect(draftReads).toBe(0);
+});
+
+test("UI2-A04 profile remains writable when tenant sections and optional navigation fail", async ({
   page,
 }) => {
   await accountSession(page);
   let saved = { ...profile };
   const bodies: unknown[] = [];
-  let navigationReads = 0;
+  const navigationMethods: string[] = [];
   await page.route("**/api/v1/me/navigation**", (route) => {
-    navigationReads += 1;
+    navigationMethods.push(route.request().method());
     return route.abort();
   });
   await page.route("**/api/v1/me/profile", async (route) => {
@@ -290,7 +403,8 @@ test("UI2-A04 profile remains writable when tenant sections fail without request
       expected_version: 3,
     },
   ]);
-  expect(navigationReads).toBe(0);
+  expect([...new Set(navigationMethods)]).toEqual(["GET"]);
+  await expect(page.locator(".midou-profile-context")).toHaveCount(0);
 });
 
 test("UI2-A05 notification preferences keep five booleans and the latest server version", async ({

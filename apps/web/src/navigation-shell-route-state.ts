@@ -79,7 +79,12 @@ export function surfaceProps(input: {
     case "approval-workspace":
       return { ...common, capabilities: input.capabilities };
     case "organization-admin-center":
-      return { ...common, routePath: input.path, organizationId: input.organizationId || "" };
+      return {
+        ...common,
+        routePath: input.path,
+        organizationId: input.organizationId || "",
+        roles: input.roles,
+      };
     case "platform-account-center":
       return {
         ...common,

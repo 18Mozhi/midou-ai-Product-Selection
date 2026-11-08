@@ -2,6 +2,7 @@
 import { reactive, watch } from "vue";
 import OpportunityCatalogueList from "./OpportunityCatalogueList.vue";
 import UiStatePanel from "./UiStatePanel.vue";
+import AppIcon from "./AppIcon.vue";
 import { useHomeCompletedProducts } from "./use-home-completed-products";
 import {
   catalogueProductFacts,
@@ -56,7 +57,7 @@ const rowFacts = (item: OpportunitySummary) => [
 
 <template>
   <div class="home-completed-products" :aria-busy="refreshing" aria-label="已完成商品">
-    <p class="home-result-caption">
+    <p v-if="state !== 'empty'" class="home-result-caption">
       全部日期 · 按更新时间展示前5个，包含低分、不推荐和利润未知的分析结果。
     </p>
     <p v-if="stale" class="home-read-alert" role="alert">
@@ -73,6 +74,7 @@ const rowFacts = (item: OpportunitySummary) => [
       @primary="load"
     />
     <div v-else-if="state === 'empty'" class="home-quiet-empty">
+      <AppIcon class="home-empty-tray" name="result-tray" :size="52" />
       <b>暂无已完成分析的商品</b>
       <span>系统会继续补齐主品、竞品、评分和1688货源；候选数量不计作已完成。</span>
       <RouterLink to="/opportunities?view=rule_candidates">查看候选进度</RouterLink>

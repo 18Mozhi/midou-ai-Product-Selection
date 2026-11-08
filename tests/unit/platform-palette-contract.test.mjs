@@ -754,11 +754,7 @@ test("P14 trend desk colors resolve from its route-scoped palette", async () => 
     readFile("apps/web/src/design/trend-dashboard-tokens.css", "utf8"),
     readFile("apps/web/src/trends.css", "utf8"),
   ]);
-  const declarations = [
-    ...tokens.matchAll(
-      /(--trend-[a-z-]+):\s*(?:(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\))|rgba?\([^;]+\));/gi,
-    ),
-  ];
+  const declarations = [...tokens.matchAll(/(--trend-[a-z-]+):\s*var\(--so-[a-z-]+\);/gi)];
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set(
     [...css.matchAll(/var\((--trend-[a-z-]+)\)/g)].map((match) => match[1]),
@@ -768,7 +764,7 @@ test("P14 trend desk colors resolve from its route-scoped palette", async () => 
   assert.equal(declarations.length, names.size, "no duplicate trend palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.trend-dashboard--review\)\s*\{[\s\S]*\}$/,
+    /^\.trend-dashboard--review\s*\{[\s\S]*\}$/,
   );
   assert.ok(css.startsWith('@import "./design/trend-dashboard-tokens.css";'));
   assertPaletteUsage(references, names);

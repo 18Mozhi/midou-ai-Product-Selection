@@ -51,6 +51,31 @@ test("SQL limits record rows before image hydration and retains global scoped su
   assert.match(rows.sql, /image_query.task_id=s.collection_task_id/);
   assert.match(rows.sql, /image_query.organization_id=s.organization_id/);
   assert.match(rows.sql, /image_query.workspace_id=s.workspace_id/);
+  assert.match(rows.sql, /CASE WHEN s.input_type='opportunity' THEN COALESCE\(/);
+  assert.match(rows.sql, /ORDER BY image_query.ordinal LIMIT 1\),\(SELECT/);
+  assert.match(rows.sql, /linked.lifecycle_status<>'deleted'/);
+  assert.match(
+    rows.sql,
+    /n.raw_evidence_id=l.raw_evidence_id AND n.organization_id=l.organization_id/,
+  );
+  assert.match(rows.sql, /n.workspace_id=l.workspace_id AND n.status='active'/);
+  assert.match(rows.sql, /p.code='amazon_product'/);
+  assert.match(
+    rows.sql,
+    /l.opportunity_id=CONVERT\(s.input_ref USING ascii\) AND l.organization_id=s.organization_id/,
+  );
+  assert.match(rows.sql, /l.workspace_id=s.workspace_id/);
+  assert.match(rows.sql, /JSON_EXTRACT\(n.payload_json,'\$.asin'\).*BINARY \(SELECT UPPER/);
+  assert.match(
+    rows.sql,
+    /l_primary.opportunity_id=linked.id AND l_primary.organization_id=linked.organization_id/,
+  );
+  assert.ok(
+    rows.sql.includes(
+      "REGEXP '^https://(m[.]media-amazon[.]com|images-na[.]ssl-images-amazon[.]com)/'",
+    ),
+  );
+  assert.match(rows.sql, /ORDER BY n.created_at DESC,n.id DESC LIMIT 1/);
 });
 test("server search is literal, parameterized, scoped, and does not zero global metrics", async () => {
   const p = pool(1),

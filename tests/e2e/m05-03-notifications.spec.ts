@@ -230,7 +230,7 @@ test("P26 KeepAlive suspends notification reads and SSE, then refreshes on retur
       )
       .toBe(1);
 
-    await page.getByRole("link", { name: "SCOUTOPS 智能选品" }).click();
+    await page.getByRole("link", { name: "米兜智能选品" }).click();
     await expect(page).toHaveURL(/\/home$/);
     await expect
       .poll(() =>
@@ -276,7 +276,7 @@ test("P26 KeepAlive suspends notification reads and SSE, then refreshes on retur
   }
 });
 
-async function setup(page: Page) {
+async function setup(page: Page, additionalCapabilities: string[] = []) {
   const listRequests: string[] = [],
     actionBodies: Array<{ action: string }> = [];
   let workflowStatus = item.workflow_status,
@@ -288,7 +288,7 @@ async function setup(page: Page) {
         organization_id: "00000000-0000-4000-8000-000000000933",
         workspace_id: "00000000-0000-4000-8000-000000000934",
         roles: ["selection_manager"],
-        capabilities: ["notification:read"],
+        capabilities: ["notification:read", ...additionalCapabilities],
         platform_roles: [],
         platform_capabilities: [],
         guard_reason: "navigation_member_allowed",
@@ -486,6 +486,35 @@ for (const outcome of ["success", "failure"] as const) {
     }
   });
 }
+test("notification shortcut shows confirmed in-app preference, not an unsaved draft", async ({
+  page,
+}) => {
+  await setup(page);
+  let enabled = true;
+  await page.route("**/api/v1/me/notification-preferences", (route) => {
+    if (route.request().method() === "PUT") enabled = route.request().postDataJSON().in_app_enabled;
+    return route.fulfill({
+      json: env({
+        in_app_enabled: enabled,
+        email_enabled: false,
+        task_enabled: true,
+        approval_enabled: true,
+        competitor_enabled: true,
+        version: enabled ? 1 : 2,
+      }),
+    });
+  });
+  await page.goto("/notifications");
+  const badge = page.locator(".midou-notification-preference-status");
+  await expect(badge).toHaveText("已开启");
+  await page.getByRole("button", { name: "通知偏好", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "通知偏好", exact: true });
+  await dialog.getByRole("checkbox", { name: "站内通知" }).uncheck();
+  await expect(badge).toHaveText("已开启");
+  await dialog.getByRole("button", { name: "保存", exact: true }).click();
+  await expect(badge).toHaveText("已关闭");
+});
+
 test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on desktop and 390", async ({
   page,
 }) => {
@@ -533,11 +562,69 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
   await page.getByRole("button", { name: "关闭", exact: true }).click();
   await expect(page.getByText("通知已关闭。")).toBeVisible();
   await page.getByRole("button", { name: "关闭消息详情" }).click();
-  await page.getByRole("button", { name: "处理中", exact: true }).click();
+  await page.getByRole("combobox", { name: "处理状态筛选" }).selectOption("in_progress");
   await expect(page).toHaveURL(/status=in_progress/);
   await expect
     .poll(() => listRequests.some((url) => url.includes("workflow_status=in_progress")))
     .toBe(true);
+});
+
+test("mark one notification read from its row without opening detail", async ({ page }) => {
+  await setup(page);
+  let readAt: string | null = null;
+  let detailReads = 0;
+  const actions: unknown[] = [];
+  await page.route(`**/api/v1/notifications/${id}`, (route) => {
+    detailReads++;
+    return route.fulfill({ json: env(item) });
+  });
+  await page.route("**/api/v1/notifications?*", (route) =>
+    route.fulfill({ json: { ...env([{ ...item, read_at: readAt }]), meta: { total: 1 } } }),
+  );
+  await page.route(`**/api/v1/notifications/${id}/actions`, (route) => {
+    actions.push(route.request().postDataJSON());
+    readAt = "2026-08-08T10:01:00.000Z";
+    return route.fulfill({ json: env({ ...item, read_at: readAt, version: item.version + 1 }) });
+  });
+  await page.goto("/notifications");
+  const action = page.getByRole("button", { name: `标为已读：${item.title}` });
+  await action.click();
+  await expect(action).toHaveCount(0);
+  await expect(page.locator(".notification-record")).toContainText("已读");
+  await expect(page.getByRole("dialog", { name: "消息详情" })).toHaveCount(0);
+  expect(detailReads).toBe(0);
+  expect(actions).toEqual([{ action: "read", expected_version: item.version }]);
+});
+
+test("notification title or body search uses server pagination and clears independently", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/notifications?*", (route) => {
+    const q = new URL(route.request().url()).searchParams;
+    const rows =
+      q.get("q") === "条款" && q.get("page") === "2" ? [{ ...item, title: "第二页通知" }] : [item];
+    return route.fulfill({ json: { ...env(rows), meta: { total: 151 } } });
+  });
+  await page.goto("/notifications?category=approval&page=3");
+  const search = page.getByRole("searchbox", { name: "搜索通知标题或正文" });
+  await search.fill("条款");
+  const first = page.waitForRequest((r) => {
+    const url = new URL(r.url());
+    return (
+      url.pathname.endsWith("/notifications") &&
+      url.searchParams.get("q") === "条款" &&
+      url.searchParams.get("page") === "1"
+    );
+  });
+  await search.press("Enter");
+  expect(new URL((await first).url()).searchParams.get("category")).toBe("approval");
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page.getByText("第二页通知", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "清除", exact: true }).click();
+  await expect(search).toHaveValue("");
+  await expect(page).not.toHaveURL(/[?&]q=/);
+  await expect(page).toHaveURL(/category=approval/);
 });
 
 test("notification filters and detail restore from the URL", async ({ page }) => {
@@ -547,10 +634,7 @@ test("notification filters and detail restore from the URL", async ({ page }) =>
     "aria-pressed",
     "true",
   );
-  await expect(page.getByRole("button", { name: "未处理", exact: true })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(page.getByRole("combobox", { name: "处理状态筛选" })).toHaveValue("open");
   await expect(page.getByRole("heading", { name: "审批状态更新" })).toBeVisible();
   await expect(page.getByRole("button", { name: "系统", exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
@@ -686,24 +770,232 @@ test("P26 preference failure announces and focuses its modal error without losin
   await expect(error.getByText("p26-preference-conflict")).toBeVisible();
 });
 
+test("notification cards distinguish task and competitor categories with decorative glyphs", async ({
+  page,
+}) => {
+  const wide = page.viewportSize()!.width >= 1101;
+  if (wide) await page.setViewportSize({ width: 1717, height: 916 });
+  await setup(page, ["task:read", "trend:read", "opportunity:read", "sourcing:read"]);
+  const rows = [
+    {
+      ...item,
+      id: "00000000-0000-4000-8000-000000000984",
+      category: "competitor",
+      title: "竞品监控更新",
+      body: "竞品监控状态已变化，请查看关联记录。",
+      group_count: 1,
+      read_at: null,
+    },
+    {
+      ...item,
+      category: "task",
+      title: "任务状态更新",
+      body: "任务状态已变化，请查看关联记录。",
+      created_at: "2026-08-07T10:00:00Z",
+      group_count: 1,
+      read_at: null,
+    },
+  ];
+  await page.route("**/api/v1/notifications/summary", (r) =>
+    r.fulfill({
+      json: env({
+        total: 2,
+        unread: 2,
+        task: 1,
+        approval: 0,
+        competitor: 1,
+        system: 0,
+        open: 2,
+        in_progress: 0,
+        closed: 0,
+      }),
+    }),
+  );
+  await page.route("**/api/v1/notifications?*", (route) =>
+    route.fulfill({ json: { ...env(rows), meta: { total: rows.length } } }),
+  );
+  await page.goto("/notifications");
+  const task = page.locator(".notification-record > i[data-category='task'] svg");
+  const competitor = page.locator(".notification-record > i[data-category='competitor'] svg");
+  await expect(task).toHaveAttribute("aria-hidden", "true");
+  await expect(competitor).toHaveAttribute("aria-hidden", "true");
+  await expect(task.locator("rect")).toHaveCount(1);
+  await expect(competitor.locator("path")).toHaveCount(2);
+  await expect(competitor.locator("circle")).toHaveCount(0);
+  const timestamps = page.locator(".notification-record > em > time");
+  await expect(timestamps).toHaveCount(2);
+  await expect(timestamps.nth(1)).toHaveAttribute("datetime", rows[1].created_at);
+  await expect(timestamps.nth(1)).toHaveAttribute("title", /\d{2}:\d{2}:\d{2}$/);
+  await expect(timestamps.nth(1)).toHaveText(/^\d{4}\/\d{2}\/\d{2}\s+\d{2}:\d{2}$/);
+  if (wide) {
+    const sidebar = page.getByRole("complementary", { name: "工作区导航" });
+    for (const name of ["选品工作台", "市场情报", "选品库", "1688 找货"]) {
+      await expect(sidebar.getByRole("link", { name, exact: true })).toBeVisible();
+    }
+    await expect(task).toHaveCSS("width", "30px");
+    await expect(competitor).toHaveCSS("height", "30px");
+    const records = page.locator(".notification-record");
+    await expect(records).toHaveCount(2);
+    const [first, second] = await records.evaluateAll((nodes) =>
+      nodes.map((row) => {
+        const rect = row.getBoundingClientRect();
+        return {
+          top: rect.top,
+          bottom: rect.bottom,
+          time: row.querySelector("em")!.getBoundingClientRect().x,
+          status: row.querySelector("b")!.getBoundingClientRect().x,
+          action: row.querySelector(".midou-notification-open")!.getBoundingClientRect().x,
+        };
+      }),
+    );
+    expect([first.time, first.status, first.action]).toEqual([
+      second.time,
+      second.status,
+      second.action,
+    ]);
+    expect(Math.abs(first.time - 875)).toBeLessThanOrEqual(8);
+    expect(Math.abs(first.status - 1050)).toBeLessThanOrEqual(8);
+    expect(Math.abs(second.top - first.bottom - 11)).toBeLessThanOrEqual(3);
+  }
+});
+
 test("midou reference notification layout keeps original workflow and preferences reachable", async ({
   page,
 }) => {
+  if (page.viewportSize()!.width >= 1101) await page.setViewportSize({ width: 1717, height: 916 });
   await setup(page);
   await page.route("**/api/v1/notifications?*", (route) =>
     route.fulfill({ json: { ...env([{ ...item, read_at: null }]), meta: { total: 1 } } }),
   );
   await page.goto("/notifications");
   await expect(page.locator(".notification-summary article")).toHaveCount(4);
-  await expect(page.locator(".notification-list > button > i svg")).toBeVisible();
-  await expect(page.locator(".midou-notification-filters > nav")).toHaveCount(2);
+  await expect(page.locator(".notification-list .notification-record > i svg")).toBeVisible();
+  await expect(page.locator(".midou-notification-filters > nav")).toHaveCount(1);
+  await expect(page.getByRole("combobox", { name: "处理状态筛选" })).toHaveValue("");
+  await page.getByRole("checkbox", { name: "仅未读" }).focus();
+  await page.keyboard.press("Space");
+  await expect(page).toHaveURL(/unread=1/);
+  await page.getByRole("checkbox", { name: "仅未读" }).uncheck();
+  await expect(page).not.toHaveURL(/unread=1/);
   await expect(page.locator(".midou-notification-open")).toContainText("查看记录");
-  await expect(page.locator('.notification-list > button > b[data-workflow="open"]')).toBeVisible();
+  const viewAction = page.locator(".midou-notification-open");
+  const readAction = page.locator(".notification-mark-read");
+  const wide = (page.viewportSize()?.width ?? 0) >= 1450;
+  await expect(viewAction).toHaveCSS("min-height", wide ? "40px" : "44px");
+  await expect(readAction).toHaveCSS("min-height", wide ? "40px" : "44px");
+  const readBorder = await readAction.evaluate((button) => getComputedStyle(button).borderTopColor);
+  await expect(viewAction).not.toHaveCSS("border-top-color", readBorder);
+  if (wide) {
+    const [viewBox, readBox] = await Promise.all([
+      viewAction.boundingBox(),
+      readAction.boundingBox(),
+    ]);
+    expect([viewBox!.width, readBox!.width]).toEqual([104, 104]);
+    expect([viewBox!.height, readBox!.height]).toEqual([40, 40]);
+    expect(Math.abs(viewBox!.y - readBox!.y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(readBox!.x - viewBox!.x - viewBox!.width - 14)).toBeLessThanOrEqual(2);
+    const header = page.locator(".notification-center > header");
+    const preferenceAction = (await header
+      .getByRole("button", { name: "通知偏好" })
+      .boundingBox())!;
+    const markAll = (await header.getByRole("button", { name: "全部已读" }).boundingBox())!;
+    const badge = (await header.locator(".realtime-badge").boundingBox())!;
+    expect(preferenceAction.width).toBe(116);
+    expect(markAll.width).toBe(110);
+    expect(markAll.x - preferenceAction.x - preferenceAction.width).toBe(14);
+    expect(badge.width).toBe(118);
+    expect(badge.height).toBe(32);
+    const categories = page.locator(".midou-notification-filters > nav > button");
+    await expect(categories.first()).toHaveCSS("font-weight", "650");
+    const categoryBoxes = await categories.evaluateAll((nodes) =>
+      nodes.map((node) => {
+        const { x, y, width } = node.getBoundingClientRect();
+        return { x, y, width };
+      }),
+    );
+    expect(categoryBoxes).toHaveLength(5);
+    expect(categoryBoxes.every(({ y, width }) => y === categoryBoxes[0].y && width === 78)).toBe(
+      true,
+    );
+    expect(categoryBoxes[4].x - categoryBoxes[0].x).toBeCloseTo(332, 0);
+    const searchBox = (await page.getByRole("searchbox").boundingBox())!;
+    expect(
+      Math.abs(searchBox.y + searchBox.height / 2 - categoryBoxes[0].y - 21),
+    ).toBeLessThanOrEqual(3);
+    const searchForm = page.getByRole("search");
+    const initialSearch = (await searchForm.boundingBox())!;
+    expect(initialSearch.width).toBe(268);
+    const status = (await page.getByRole("combobox", { name: "处理状态筛选" }).boundingBox())!;
+    const unread = (await page.getByRole("checkbox", { name: "仅未读" }).boundingBox())!;
+    expect(status.width).toBe(130);
+    expect(unread.width).toBe(44);
+    const toggle = page.getByRole("checkbox", { name: "仅未读" });
+    expect(
+      await toggle.evaluate((node) => getComputedStyle(node, "::before").backgroundColor),
+    ).toBe("rgb(255, 255, 255)");
+    expect(Math.abs(status.x - 837)).toBeLessThanOrEqual(10);
+    expect(Math.abs(unread.x - 991)).toBeLessThanOrEqual(6);
+    expect(Math.abs(initialSearch.x - 1147)).toBeLessThanOrEqual(6);
+    await page.getByRole("searchbox").fill("更新");
+    await page.getByRole("searchbox").press("Enter");
+    await expect(page.getByRole("button", { name: "清除", exact: true })).toBeVisible();
+    expect(await searchForm.boundingBox()).toEqual(initialSearch);
+    await page.getByRole("button", { name: "清除", exact: true }).click();
+    const summary = page.locator(".notification-summary");
+    const summaryBox = (await summary.boundingBox())!;
+    expect(Math.abs(summaryBox.y - 234)).toBeLessThanOrEqual(2);
+    expect(Math.abs(summaryBox.y + summaryBox.height - 312)).toBeLessThanOrEqual(2);
+    const headingBox = (await header.getByRole("heading", { name: "通知中心" }).boundingBox())!;
+    expect(Math.abs(headingBox.y - 143)).toBeLessThanOrEqual(4);
+    await expect(header.getByRole("button", { name: "通知偏好" })).toHaveCSS(
+      "border-top-color",
+      readBorder,
+    );
+    await expect(summary.locator("svg[aria-hidden='true']")).toHaveCount(4);
+    for (const icon of await summary.locator("svg").all())
+      await expect(icon).toHaveCSS("width", "24px");
+    await expect(summary.locator("b").first()).toHaveCSS("font-size", "27px");
+    await expect(page.locator(".notification-record")).toHaveCSS("padding-left", "52px");
+    await expect(page.locator(".notification-record > i")).toHaveCSS("width", "60px");
+    await expect(readAction).toHaveCSS("font-weight", "500");
+    const title = (await page.locator(".notification-record > span > strong").boundingBox())!;
+    expect(Math.abs(title.x - 424)).toBeLessThanOrEqual(3);
+    expect(
+      await page
+        .locator(".midou-notification-open")
+        .evaluate((element) => getComputedStyle(element, "::before").borderInlineStartWidth),
+    ).toBe("1px");
+  }
+  const preference = page.getByRole("complementary", { name: "通知偏好快捷入口" });
+  await expect(preference.locator("p")).toHaveCSS("font-size", wide ? "15px" : "16px");
+  const channel = preference.locator(":scope > div");
+  await expect(channel).toHaveCSS("min-height", wide ? "73px" : "62px");
+  if (wide) {
+    const [card, row] = await Promise.all([preference.boundingBox(), channel.boundingBox()]);
+    expect(Math.abs(card!.y - 154)).toBeLessThanOrEqual(3);
+    expect(Math.abs(row!.y + row!.height - 342)).toBeLessThanOrEqual(3);
+    expect(Math.abs(card!.y + card!.height - 415)).toBeLessThanOrEqual(3);
+  }
+  await expect(page.locator(".notification-record > span > strong")).toHaveCSS(
+    "font-size",
+    wide ? "20px" : "16px",
+  );
+  await expect(page.locator(".notification-record > em")).toHaveCSS(
+    "font-size",
+    wide ? "16px" : "13px",
+  );
+  await expect(
+    page.locator('.notification-list .notification-record > b[data-workflow="open"]'),
+  ).toHaveText("未处理");
+  await expect(page.locator(".notification-record .notification-group-note")).toHaveText(
+    "已合并 3 条同根因通知",
+  );
+  await expect(page.locator(".notification-record")).toHaveAccessibleName(/未读/);
   expect(
     await page
-      .locator(".notification-list > button.unread")
+      .locator(".notification-list .notification-record.unread")
       .evaluate((el) => getComputedStyle(el, "::before").width),
-  ).toBe("6px");
+  ).toBe(wide ? "14px" : (page.viewportSize()?.width ?? 0) >= 1151 ? "10px" : "6px");
 
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -711,6 +1003,6 @@ test("midou reference notification layout keeps original workflow and preference
   await page.getByRole("button", { name: "通知偏好", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "通知偏好", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "取消", exact: true }).click();
-  await page.locator(".notification-list > button").click();
+  await page.locator(".notification-list .notification-record").click();
   await expect(page.getByRole("dialog", { name: "消息详情", exact: true })).toBeVisible();
 });

@@ -234,6 +234,12 @@ export function usePersonalCenter(apiBaseUrl: string, initialSection: () => stri
     });
   }
 
+  function cancelProfileEdit() {
+    if (!profile.value || profileSaving.value) return;
+    hydrateProfile(profile.value);
+    profileFeedback.value = null;
+  }
+
   async function load() {
     if (writesBusy.value || profileRequestInFlight) return;
     profileRequestInFlight = true;
@@ -494,6 +500,7 @@ export function usePersonalCenter(apiBaseUrl: string, initialSection: () => stri
     retryProfile,
     retrySection,
     saveProfile,
+    cancelProfileEdit,
     savePreferences,
     changePassword,
     revokeSession,

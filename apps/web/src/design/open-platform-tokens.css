@@ -1,4 +1,5 @@
-.role-shell:has(.open-platform--c) {
+/* Keep open-platform colors on its content, not on shared navigation. */
+.open-platform--c {
   --p60-shell-ink: var(--glass-text);
   --p60-muted: var(--glass-text-muted);
   --p60-white: #fff;
@@ -24,9 +25,7 @@
   --primary: var(--p60-primary);
   --danger: var(--p60-danger);
   --warning: var(--p60-warning);
-}
 
-.open-platform--c {
   --so-primary: var(--p60-primary);
   --so-primary-strong: var(--p60-primary-strong);
   --so-border: var(--p60-border);

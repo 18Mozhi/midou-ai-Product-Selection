@@ -3,6 +3,8 @@ import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } fro
 import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import { sanitizeCorrelationId } from "../ui/state-contract";
+import AppIcon from "./AppIcon.vue";
+import ResearchThumbnail from "./ResearchThumbnail.vue";
 import type { OpportunitySummary } from "./opportunity-workspace-types";
 
 const props = defineProps<{
@@ -124,11 +126,21 @@ onBeforeUnmount(() => {
     <ul v-else>
       <li v-for="item in items" :key="item.id">
         <RouterLink :to="{ path: `/opportunities/${item.id}`, query: { from: route.fullPath } }">
-          <strong>{{ item.name }}</strong
-          ><small
-            >{{ item.main_asin ? `ASIN ${item.main_asin}` : "主品待确认" }} ·
-            {{ item.market }}</small
-          >
+          <ResearchThumbnail
+            v-if="item.image_url"
+            class="trend-related-picture"
+            :src="item.image_url"
+            :alt="item.name"
+            aria-hidden="true"
+          />
+          <AppIcon v-else class="trend-related-icon" name="box" :size="20" />
+          <span>
+            <strong>{{ item.name }}</strong>
+            <small
+              >{{ item.main_asin ? `ASIN ${item.main_asin}` : "主品待确认" }} ·
+              {{ item.market }}</small
+            >
+          </span>
         </RouterLink>
         <dl>
           <div>
@@ -205,25 +217,51 @@ onBeforeUnmount(() => {
   letter-spacing: normal;
 }
 .trend-related-products ul {
+  container-type: inline-size;
+  display: grid;
+  gap: 8px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .trend-related-products li {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 1fr);
-  gap: 16px;
-  padding: 14px 0;
-  border-top: 1px solid var(--so-border);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 12px 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 9px;
+  background: var(--so-panel);
 }
 .trend-related-products a {
   min-width: 0;
-  color: var(--so-primary);
+  color: var(--so-text);
   text-decoration: none;
   overflow-wrap: anywhere;
 }
 .trend-related-products a:hover {
+  color: var(--so-primary);
   text-decoration: underline;
+}
+.trend-related-products ul:has(.trend-related-picture) a {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+}
+.trend-related-products .trend-related-picture {
+  inline-size: 38px;
+  block-size: 38px;
+}
+.trend-related-icon {
+  display: none;
+}
+.trend-related-products ul:has(.trend-related-picture) .trend-related-icon {
+  display: block;
+  justify-self: center;
+  margin-block-start: 4px;
+  color: var(--so-text-muted);
 }
 .trend-related-products small {
   display: block;
@@ -234,6 +272,10 @@ onBeforeUnmount(() => {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin: 0;
+}
+.trend-related-products dl > div {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
 }
 .trend-related-products dd {
   margin: 6px 0 0;
@@ -248,15 +290,41 @@ onBeforeUnmount(() => {
 .trend-related-products button {
   min-height: 44px;
 }
-@media (max-width: 1100px) {
+@container (min-width: 620px) {
   .trend-related-products li {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    padding: 14px 16px 14px 22px;
+    background: color-mix(in srgb, var(--so-panel-soft) 35%, var(--so-panel));
+  }
+  .trend-related-products a {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    align-items: start;
+    gap: 20px;
+    line-height: 1.45;
+  }
+  .trend-related-products ul:has(.trend-related-picture) a {
+    column-gap: 6px;
+  }
+  .trend-related-icon {
+    display: block;
+    margin-block-start: 4px;
+    color: var(--so-text-muted);
+  }
+  .trend-related-products small {
+    margin-top: 3px;
+  }
+  .trend-related-products dl {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .trend-related-products dd {
+    font-size: 17px;
   }
 }
 @media (max-width: 640px) {
-  .trend-related-products dl {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
   .trend-related-products nav {
     justify-content: space-between;
   }

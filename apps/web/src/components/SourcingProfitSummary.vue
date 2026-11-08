@@ -2,8 +2,15 @@
 import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import type { OpportunityProfitAnalysis } from "./opportunity-workspace-types";
+import AppIcon from "./AppIcon.vue";
 
-const props = defineProps<{ apiBaseUrl: string; opportunityId: string; returnPath: string }>();
+const props = defineProps<{
+  apiBaseUrl: string;
+  opportunityId: string;
+  returnPath: string;
+  besideEmptyOffers?: boolean;
+  basisTarget?: HTMLElement | null;
+}>();
 const request = createApiClient(props.apiBaseUrl);
 const state = ref<"loading" | "ready" | "error">("loading");
 const profit = ref<OpportunityProfitAnalysis | null>(null);
@@ -63,7 +70,17 @@ onBeforeUnmount(() => {
 <template>
   <section class="sourcing-profit-summary" aria-label="成本与利润摘要">
     <header>
-      <h4>成本与利润</h4>
+      <div>
+        <h4>成本与利润</h4>
+        <p
+          v-if="state === 'ready' && !calculated && besideEmptyOffers"
+          class="sourcing-profit-unconfirmed"
+        >
+          当前利润结果未知<span v-if="profit?.latest_run?.missing_fields.length">
+            · {{ profit.latest_run.missing_fields.join("、") }}</span
+          >
+        </p>
+      </div>
       <RouterLink
         :to="{
           path: `/opportunities/${opportunityId}`,
@@ -104,28 +121,47 @@ onBeforeUnmount(() => {
           </dd>
         </div>
       </dl>
+      <template v-else-if="besideEmptyOffers">
+        <dl class="sourcing-profit-unconfirmed-breakdown" aria-label="未确认的成本与利润">
+          <div v-for="label in ['采购成本', '头程费用', '平台费用', '预计利润']" :key="label">
+            <dt>{{ label }}</dt>
+            <dd aria-label="未确认">—</dd>
+          </div>
+        </dl>
+      </template>
       <p v-else>
         <strong>利润未知</strong> ·
         {{ profit?.latest_run?.missing_fields.join("、") || "尚无可确认的当前利润结果" }}
       </p>
-      <details v-if="profit?.current_inputs.length || profit?.latest_run">
-        <summary>查看计算依据</summary>
-        <p v-if="profit.latest_run">
-          规则 {{ profit.latest_run.rule_version_code }} · {{ profit.latest_run.calculated_at
-          }}<span v-if="!calculated"> · 历史结果不作为当前利润</span>
-        </p>
-        <ul>
-          <li v-for="item in profit.current_inputs" :key="`${item.platform}:${item.input_type}`">
-            <b>{{
-              { sale_price: "含税售价", purchase_price: "采购价", logistics: "物流" }[
-                item.input_type
-              ]
-            }}</b>
-            {{ money(item.amount_value, item.currency) }} · {{ item.platform }} · 证据
-            {{ item.evidence_id }} · {{ item.observed_at }}
-          </li>
-        </ul>
-      </details>
+      <Teleport :to="basisTarget ?? undefined" :disabled="!basisTarget">
+        <details
+          v-if="besideEmptyOffers || profit?.current_inputs.length || profit?.latest_run"
+          class="sourcing-profit-basis"
+        >
+          <summary>
+            <AppIcon v-if="basisTarget" name="chevron" :size="16" />
+            {{ basisTarget ? "计算依据" : "查看计算依据" }}
+          </summary>
+          <p v-if="!profit?.latest_run && !profit?.current_inputs.length">
+            暂无已保存的成本输入或利润计算记录。
+          </p>
+          <p v-if="profit?.latest_run">
+            规则 {{ profit.latest_run.rule_version_code }} · {{ profit.latest_run.calculated_at
+            }}<span v-if="!calculated"> · 历史结果不作为当前利润</span>
+          </p>
+          <ul v-if="profit?.current_inputs.length">
+            <li v-for="item in profit.current_inputs" :key="`${item.platform}:${item.input_type}`">
+              <b>{{
+                { sale_price: "含税售价", purchase_price: "采购价", logistics: "物流" }[
+                  item.input_type
+                ]
+              }}</b>
+              {{ money(item.amount_value, item.currency) }} · {{ item.platform }} · 证据
+              {{ item.evidence_id }} · {{ item.observed_at }}
+            </li>
+          </ul>
+        </details>
+      </Teleport>
     </template>
   </section>
 </template>

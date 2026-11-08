@@ -40,22 +40,22 @@ onBeforeUnmount(() => viewport?.removeEventListener("change", syncViewport));
       </summary>
       <div class="home-status-facts">
         <RouterLink to="/opportunities?view=recommended" data-tone="positive">
-          <AppIcon name="check" />
+          <AppIcon name="selection-inbox" />
           <strong>{{ selection.recommended_count }}</strong>
           <span>待你采纳</span>
         </RouterLink>
         <RouterLink to="/opportunities?view=rule_candidates">
-          <AppIcon name="box" />
+          <AppIcon name="layers" />
           <strong>{{ selection.rule_candidate_count ?? 0 }}</strong>
           <span>选品候选</span>
         </RouterLink>
         <RouterLink to="/opportunities?view=evidence_pending">
-          <AppIcon name="list" />
+          <AppIcon name="file" />
           <strong>{{ selection.awaiting_evidence_count }}</strong>
           <span>待补证据</span>
         </RouterLink>
         <RouterLink to="/opportunities?view=all&decision_status=adopted">
-          <AppIcon name="check" />
+          <AppIcon name="circle-check" />
           <strong>{{ selection.adopted_count }}</strong>
           <span>累计采纳</span>
         </RouterLink>

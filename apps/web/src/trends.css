@@ -191,13 +191,29 @@
   justify-content: space-between;
   gap: 24px;
 }
+/* Below the split-view breakpoint, prevent identity text from widening the reading pane. */
+@media (max-width: 1100px) {
+  #app .trend-dashboard--review .trend-detail > header > div {
+    min-inline-size: 0;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-detail
+    > header
+    :is(h3, .trend-detail-badges > span, .trend-detail-freshness, .trend-overview-evidence-title) {
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    overflow-wrap: anywhere;
+  }
+}
 .trend-detail > header a {
   color: var(--so-text-muted);
   font-size: 13px;
   text-decoration: none;
 }
 
-.trend-detail-back {
+.trend-detail-back,
+.trend-detail-close-icon {
   display: none;
 }
 .trend-detail h3 {
@@ -468,6 +484,12 @@
   border: 1px solid var(--trend-line);
   border-radius: 4px;
 }
+.trend-market-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
 .trend-dashboard--review .monitoring-readiness {
   margin: 0;
   padding: 16px;
@@ -707,6 +729,62 @@
       minmax(120px, 0.9fr) auto;
   }
 }
+@media (min-width: 1600px) {
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-filters {
+    --trend-filter-icon-size: 20px;
+    --trend-filter-icon-inset: 14px;
+    padding-inline: 22px 11px;
+    grid-template-columns:
+      minmax(0, 207fr) minmax(0, 215fr) minmax(0, 175fr) minmax(0, 297fr)
+      minmax(0, 194fr) auto;
+    column-gap: 14px;
+  }
+  .trend-dashboard--review .trend-filter-actions {
+    gap: 14px;
+  }
+  #app .trend-dashboard--review .trend-filter-actions > button {
+    min-inline-size: 94px;
+  }
+  #app .trend-dashboard--review .trend-filter-actions > button[type="submit"] {
+    min-inline-size: 97px;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-filters
+    :is(.trend-filter-field > svg:not(.trend-filter-chevron), .trend-filter-search > svg) {
+    inset-inline-start: var(--trend-filter-icon-inset);
+    inline-size: var(--trend-filter-icon-size);
+    block-size: var(--trend-filter-icon-size);
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-filters
+    .trend-filter-field
+    > :is(input, select) {
+    padding-inline-start: calc(
+      var(--trend-filter-icon-inset) + var(--trend-filter-icon-size) + 10px
+    );
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-filters
+    .trend-filter-search
+    > input {
+    padding-inline-start: calc(
+      var(--trend-filter-icon-inset) + var(--trend-filter-icon-size) + 8px
+    );
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-filter-actions > button {
+    gap: 8px;
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-filter-actions > button > svg {
+    inline-size: var(--trend-filter-icon-size);
+    block-size: var(--trend-filter-icon-size);
+  }
+}
 @media (max-width: 1100px) {
   .trend-dashboard--review .trend-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -727,7 +805,7 @@
 
 .trend-detail-facts {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px 18px;
   margin: 18px 0 0;
   padding: 14px 0;
@@ -745,13 +823,1519 @@
   font-size: 14px;
   font-weight: 600;
 }
+
+/* Reference intelligence: readable list first, a balanced evidence panel only on selection. */
+.trend-filter-search {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+.trend-filter-field {
+  display: block;
+  min-width: 0;
+}
+.trend-filter-field > :is(input, select) {
+  width: 100%;
+}
+.trend-filter-field > svg {
+  display: none;
+}
 @media (min-width: 1440px) {
-  .trend-detail-facts {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+  .trend-filter-field {
+    position: relative;
+  }
+  .trend-filter-field > svg {
+    position: absolute;
+    display: block;
+    inset-block-start: 50%;
+    inset-inline-start: 12px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--so-text-muted);
+  }
+  #app .trend-dashboard--review .trend-filter-field > :is(input, select) {
+    padding-inline-start: 40px;
+  }
+  #app .trend-dashboard--review .trend-filter-field > select {
+    appearance: none;
+    padding-inline-end: 28px;
+  }
+  .trend-filter-field > svg.trend-filter-chevron {
+    inset-inline: auto 11px;
+    transform: translateY(-50%) rotate(90deg);
+  }
+  #app .trend-dashboard--review .trend-filter-caption {
+    position: relative;
+    inset-block-start: 4px;
+    padding-inline-start: 2px;
   }
 }
-@media (max-width: 760px) {
-  .trend-detail-facts {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+.trend-filter-search > svg {
+  position: absolute;
+  inset: 50% auto auto 12px;
+  transform: translateY(-50%);
+  color: var(--so-text-muted);
+  pointer-events: none;
+}
+#app .trend-dashboard--review .trend-filters .trend-filter-search > input {
+  width: 100%;
+  padding-inline-start: 36px;
+}
+#app .trend-dashboard--review .trend-filters :is(input, select, button) {
+  border-radius: 7px;
+}
+#app .trend-dashboard--review .trend-list > header {
+  padding: 0 8px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--so-border) 60%, var(--so-panel));
+}
+#app .trend-dashboard--review .trend-list-order {
+  position: relative;
+  align-self: start;
+  color: var(--so-text-muted);
+}
+.trend-list-order > svg {
+  position: absolute;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.trend-list-order > svg:first-child {
+  inset-inline-start: 10px;
+}
+.trend-list-order > svg:last-child {
+  inset-inline-end: 9px;
+  transform: translateY(-50%) rotate(90deg);
+}
+#app .trend-dashboard--review .trend-list-order select {
+  appearance: none;
+  min-height: 36px;
+  padding: 5px 29px 5px 32px;
+  border: 1px solid var(--so-border);
+  border-radius: 7px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  font: 550 13px/20px var(--so-font-ui);
+}
+@media (max-width: 640px) {
+  #app .trend-dashboard--review .trend-list-order select {
+    min-height: 44px;
+  }
+}
+@media (min-width: 1600px) {
+  #app .trend-dashboard--review .trend-list-order {
+    margin-inline-end: -7px;
+    margin-block-start: 2px;
+  }
+  #app .trend-dashboard--review .trend-list-order select {
+    inline-size: 158px;
+  }
+}
+
+#app .trend-dashboard--review .trend-list > .trend-topic-row {
+  grid-template-columns: 22px 48px minmax(0, 1fr) 48px auto;
+  padding: 10px 8px;
+  gap: 10px;
+  min-height: 88px;
+  border-bottom: 1px solid color-mix(in srgb, var(--so-border) 60%, var(--so-panel));
+  border-radius: 7px;
+}
+.trend-topic-row > .topic-index {
+  grid-column: 1;
+  grid-row: 1;
+}
+.trend-topic-row > .research-thumbnail {
+  grid-column: 2;
+  grid-row: 1;
+  width: 48px;
+  height: 48px;
+}
+.trend-topic-row .topic-copy {
+  min-width: 0;
+}
+/* Keep the full count readable without crossing into the status or title track. */
+.trend-topic-row > .topic-heat,
+.trend-topic-row > .topic-heat > b {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+#app .trend-dashboard--review .trend-topic-row > em[data-status="active"] {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--so-success-soft);
+  color: var(--so-success);
+}
+.trend-detail-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 6px;
+}
+#app .trend-detail-badges > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  color: var(--so-text);
+  background: var(--so-panel-soft);
+}
+.trend-detail-badges > span > svg {
+  flex-shrink: 0;
+  color: var(--so-text-muted);
+}
+#app .trend-detail-badges > span[data-status="active"] {
+  color: var(--so-success);
+  background: var(--so-success-soft);
+}
+@media (min-width: 1440px) {
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-filter-actions
+    > button[type="submit"] {
+    border-color: var(--so-primary);
+    background: color-mix(in srgb, var(--so-primary-soft) 50%, var(--so-panel));
+    font-weight: 600;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-filter-actions
+    > button[type="submit"]:hover:not(:disabled) {
+    background: var(--so-primary-soft);
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-filter-actions
+    > .trend-filter-reset {
+    color: var(--so-text-muted);
+  }
+  #app .trend-dashboard--review .trend-filter-actions > button > svg {
+    inline-size: 18px;
+    block-size: 18px;
+    flex: none;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-list
+    > .trend-topic-row:not([aria-pressed="true"]) {
+    border-radius: 0;
+  }
+  #app .trend-dashboard--review .trend-detail-badges {
+    gap: 12px;
+  }
+  #app .trend-dashboard--review .trend-detail-badges > span {
+    box-sizing: border-box;
+    min-block-size: 30px;
+    font-size: 15px;
+  }
+  #app .trend-dashboard--review .trend-detail > header h3 {
+    margin-block-start: 12px;
+  }
+  #app .trend-dashboard--review .trend-detail > header .trend-detail-freshness {
+    font-size: 15px;
+    line-height: 1.4;
+    font-variant-numeric: tabular-nums;
+  }
+}
+#app .trend-detail .trend-detail-facts {
+  padding: 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 10px;
+  background: var(--so-panel);
+}
+.trend-detail-facts dd[data-insufficient="true"] {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: var(--so-warning);
+  background: var(--so-warning-soft);
+}
+.trend-detail-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 12px 0 0;
+  color: var(--so-text-muted);
+  font-size: 13px;
+}
+.trend-detail-secondary > div {
+  display: flex;
+  gap: 6px;
+}
+.trend-detail-secondary dd {
+  margin: 0;
+  color: var(--so-text);
+}
+.trend-detail-facts dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+@media (min-width: 1101px) {
+  html[data-design="commerce"] #app .trend-dashboard--review {
+    margin-top: 9px;
+  }
+  html[data-design="commerce"] #app .trend-market-heading h2 {
+    font-size: 29px;
+    line-height: 1.3;
+  }
+  html[data-design="commerce"] #app .trend-market-heading {
+    margin-bottom: 3px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open {
+    grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
+  }
+  #app .trend-detail .trend-detail-facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  #app .trend-detail .trend-detail-facts > div + div {
+    padding-inline-start: 12px;
+    border-inline-start: 1px solid var(--so-border);
+  }
+}
+@media (max-width: 640px) {
+  #app .trend-dashboard--review .trend-list > .trend-topic-row {
+    grid-template-columns: 42px minmax(0, 1fr) 38px;
+    gap: 8px;
+  }
+  .trend-topic-row > .topic-index {
+    display: none;
+  }
+  .trend-topic-row > .research-thumbnail {
+    grid-column: 1;
+    width: 42px;
+    height: 42px;
+  }
+}
+
+#app .trend-dashboard--review .trend-topic-row .topic-copy small {
+  line-height: 1.45;
+}
+@media (min-width: 1101px) {
+  #app .trend-dashboard--review .trend-topic-row > .topic-heat {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    line-height: 1.15;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  #app .trend-dashboard--review .trend-topic-row > .topic-heat > b {
+    line-height: 1.15;
+  }
+  #app .trend-dashboard--review .trend-topic-row > .topic-heat > small {
+    margin-block-start: 0;
+    line-height: 1.25;
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review {
+    margin-top: 16px;
+    padding-inline-start: 14px;
+  }
+  html[data-design="commerce"] #app .trend-market-heading {
+    margin-bottom: -7px;
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-filters {
+    padding-block: 6px 16px;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-filters
+    :is(input, select, button) {
+    --so-control-height: 40px;
+    box-sizing: border-box;
+    block-size: 40px;
+    min-height: 40px;
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-workbench {
+    margin-block-start: 7px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open > :is(.trend-list, .trend-detail) {
+    height: clamp(450px, calc(100dvh - 356px), 740px);
+    overflow-y: auto;
+  }
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-native-scrollbar="true"]
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    > .trend-detail {
+    scrollbar-gutter: stable;
+  }
+  /* Bottom padding alone should not move a complete short list. */
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    > .trend-list:not([data-split-overflow]):not(:has(> .trend-pagination)) {
+    overflow: clip;
+  }
+  /* Keep sort anchored whether the split list has a next page or not. */
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    > .trend-list:is([data-split-overflow], :has(> .trend-pagination)) {
+    padding-block-start: 0;
+    scroll-padding-block-start: 88px;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    > .trend-list:is([data-split-overflow], :has(> .trend-pagination)):has(> header:focus-within) {
+    scroll-padding-block-start: 0;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    > .trend-list:is([data-split-overflow], :has(> .trend-pagination))
+    > header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    padding-block-start: 16px;
+    background: var(--trend-workbench-surface, var(--so-panel));
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list:has(> .trend-pagination) {
+    scroll-padding-block-end: 60px;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list:has(> .trend-pagination:focus-within) {
+    scroll-padding-block-end: 0;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-pagination {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 1;
+    padding-block: 8px;
+    background: var(--trend-workbench-surface, var(--so-panel));
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row {
+    padding-block: 8px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .topic-copy > strong {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .topic-copy > small {
+    margin-block-start: 2px;
+  }
+  #app .trend-dashboard--review .trend-detail > header {
+    position: relative;
+  }
+  #app .trend-dashboard--review .trend-detail > header h3 {
+    font-size: 27px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    max-inline-size: none;
+  }
+  #app .trend-dashboard--review .trend-detail-badges {
+    padding-inline-end: 196px;
+  }
+  #app .trend-dashboard--review .trend-detail-back {
+    position: absolute;
+    inset: 0 0 auto auto;
+    align-items: center;
+    min-block-size: 36px;
+    padding-inline: 10px;
+    border: 1px solid var(--so-border);
+    border-radius: 7px;
+    background: var(--so-panel);
+  }
+  #app .trend-dashboard--review .trend-detail-back:hover {
+    background: var(--so-panel-soft);
+  }
+}
+
+#app .trend-detail-tabs {
+  display: flex;
+  gap: 10px;
+  margin-block-start: 12px;
+  border-bottom: 1px solid var(--so-border);
+}
+#app .trend-detail-tabs > button {
+  min-height: 44px;
+  padding: 7px 14px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--so-text-muted);
+}
+#app .trend-detail-tabs > button[aria-selected="true"] {
+  border-bottom-color: var(--so-primary);
+  color: var(--so-primary);
+  font-weight: 650;
+}
+#app .trend-detail [role="tabpanel"] {
+  min-width: 0;
+}
+#app .trend-detail .trend-panel-note {
+  padding-block: 16px;
+  color: var(--so-text-muted);
+  font-weight: 400;
+}
+@media (max-width: 640px) {
+  #app .trend-detail-tabs {
+    gap: 0;
+  }
+  #app .trend-detail-tabs > button {
+    flex: 1;
+    padding-inline: 4px;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 1440px) {
+  #app .trend-dashboard--review .trend-list > header {
+    padding-block-end: 12px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-list > header {
+    padding-block-end: 18px;
+  }
+  #app .trend-dashboard--review .trend-list > header strong {
+    font-size: 20px;
+    line-height: 24px;
+  }
+  #app .trend-dashboard--review .trend-list > header span {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .topic-copy > strong {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row {
+    grid-template-columns: 22px 48px minmax(0, 1fr) 64px 54px;
+    min-height: 110px;
+    padding-block: 7px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .topic-copy small {
+    line-height: 16px;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-row:has(> .research-thumbnail[data-has-source="false"]) {
+    grid-template-columns: 16px 30px minmax(0, 1fr) 64px 54px;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-row
+    > .research-thumbnail[data-has-source="false"] {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row > em {
+    box-sizing: border-box;
+    inline-size: 100%;
+    text-align: center;
+  }
+  html[data-design="commerce"] #app .trend-market-heading {
+    padding-block-end: 12px;
+  }
+  html[data-design="commerce"] #app .trend-market-heading > div {
+    position: relative;
+    inset-block-start: 4px;
+  }
+  html[data-design="commerce"] #app .trend-market-actions .so-action-secondary {
+    border-radius: 7px;
+    background: var(--so-panel);
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-market-actions
+    .so-action-secondary:hover:not(:disabled) {
+    background: var(--so-panel-soft);
+  }
+  html[data-design="commerce"] #app .trend-market-heading h2 {
+    font-size: 30px;
+    line-height: 38px;
+  }
+  .trend-market-heading h2 span {
+    margin-inline-start: 16px;
+    font-size: 15px;
+  }
+  html[data-design="commerce"] #app .trend-market-heading > div > p {
+    margin-block-start: 5px;
+    font-size: 16px;
+    line-height: 22px;
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-detail {
+    padding-inline: 22px;
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-detail > header {
+    padding-inline-start: 8px;
+  }
+  #app .trend-dashboard--review .trend-detail > header:has(.trend-detail-badges) {
+    min-block-size: 142px;
+  }
+  #app .trend-dashboard--review .trend-overview-evidence-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    margin: 2px 0 4px;
+    color: var(--so-text-muted);
+    font-size: 16px;
+    line-height: 21px;
+  }
+  #app .trend-dashboard--review .trend-detail-back-suffix {
+    display: none;
+  }
+  #app .trend-dashboard--review .trend-detail-badges {
+    padding-inline-end: 96px;
+  }
+  #app .trend-detail .trend-detail-facts {
+    min-height: 93px;
+    margin-block-start: 12px;
+    align-items: center;
+    gap: 0;
+    padding: 14px 0;
+  }
+  #app .trend-detail .trend-detail-facts > div {
+    min-height: 56px;
+    padding-inline: clamp(12px, 1.5vw, 26px) 8px;
+  }
+  #app .trend-detail .trend-detail-facts > div + div {
+    padding-inline-start: clamp(16px, 2.3vw, 36px);
+  }
+  #app .trend-detail .trend-detail-facts > div:last-child {
+    padding-inline-start: clamp(16px, 2.6vw, 44px);
+  }
+  #app .trend-detail .trend-detail-facts dt {
+    gap: 8px;
+    font-size: 14px;
+  }
+  #app .trend-detail .trend-detail-facts dd {
+    margin-inline-start: 26px;
+    font-size: 20px;
+    line-height: 1.25;
+    font-variant-numeric: tabular-nums;
+  }
+  #app .trend-detail .trend-detail-facts dd[data-insufficient="true"] {
+    margin-inline-start: 0;
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+  #app .trend-detail-tabs {
+    margin-block-start: 15px;
+    gap: 8px;
+  }
+  #app .trend-detail-tabs > button {
+    min-inline-size: 116px;
+  }
+}
+
+@media (max-width: 1439px) {
+  .trend-overview-evidence-title {
+    display: none;
+  }
+}
+.trend-detail [data-overview="true"] .trend-related-products > ul > li:nth-child(n + 3),
+.trend-detail [data-overview="true"] .trend-related-products > nav {
+  display: none;
+}
+
+@media (min-width: 1600px) {
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .topic-copy > strong {
+    -webkit-line-clamp: 3;
+    line-height: 21px;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-row:has(> .research-thumbnail[data-has-source="false"]) {
+    position: relative;
+    grid-template-columns: 31px minmax(0, 1fr) 64px 54px;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-row
+    > .research-thumbnail[data-has-source="false"] {
+    position: absolute;
+    grid-column: 1;
+    inset-inline-start: 0;
+    inset-block-start: 40%;
+    width: 23px;
+    height: 23px;
+  }
+  /* Keep the reference content inset even with breadcrumbs in the shared top bar. */
+  html[data-design="commerce"] #app .trend-dashboard--review {
+    padding-block-start: 35px;
+    padding-inline-start: 56px;
+  }
+}
+
+@media (min-width: 1440px) {
+  #app .trend-detail [data-overview="true"] .trend-related-products:has(> ul) {
+    display: grid;
+    margin-block-start: 12px;
+    padding-block-start: 12px;
+    row-gap: 4px;
+  }
+  #app .trend-detail [data-overview="true"] .trend-related-products:has(> ul) > header {
+    grid-row: 1;
+  }
+  #app .trend-detail [data-overview="true"] .trend-related-products > ul {
+    grid-row: 2;
+  }
+  #app
+    .trend-detail
+    [data-overview="true"]
+    .trend-related-products:has(> ul)
+    > .trend-related-note {
+    margin-block: 4px 0;
+  }
+}
+
+@container (min-width: 620px) {
+  #app .trend-detail [data-overview="true"] .trend-related-products li {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    padding-block: 12px 18px;
+    background: color-mix(in srgb, var(--so-panel-soft) 15%, var(--so-panel));
+  }
+  #app .trend-detail [data-overview="true"] .trend-related-products li strong {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+  #app .trend-detail [data-overview="true"] .trend-related-products li dl {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 0.7fr);
+    column-gap: 10px;
+  }
+  #app .trend-detail [data-overview="true"] .trend-related-products li dt {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  #app .trend-detail [data-overview="true"] .trend-related-products li dd {
+    font-weight: 700;
+    margin-block-start: 8px;
+  }
+}
+
+/* Loaded details share their header grid across tabs; the optional summary does not own the layout. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"] #app .trend-dashboard--review {
+    font-family: "Segoe UI", "DengXian", var(--so-font-ui);
+  }
+  #app .trend-dashboard--review .trend-detail > header > div:has(> .trend-detail-badges) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, max-content) max-content;
+    column-gap: 22px;
+    align-content: start;
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-detail
+    > header
+    > div:has(> .trend-detail-badges)
+    .trend-detail-badges {
+    grid-area: 1 / 1;
+    align-self: end;
+    padding-inline-end: 0;
+    margin-block-start: 0;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-detail
+    > header
+    > div:has(> .trend-detail-badges)
+    .trend-detail-badges
+    > span {
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    overflow-wrap: anywhere;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-detail
+    > header
+    > div:has(> .trend-detail-badges)
+    .trend-detail-freshness {
+    grid-area: 1 / 2;
+    align-self: end;
+    margin-block-end: 3px;
+    text-align: end;
+    overflow-wrap: anywhere;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-detail
+    > header
+    > div:has(> .trend-detail-badges)
+    .trend-detail-back {
+    grid-area: 1 / 3;
+    position: static;
+    align-self: start;
+    margin-block-end: 0;
+    inline-size: 36px;
+    min-inline-size: 36px;
+    justify-content: center;
+    padding-inline: 0;
+    border-color: transparent;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-detail
+    > header
+    > div:has(> .trend-detail-badges)
+    .trend-detail-back
+    > span {
+    display: none;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-detail
+    > header
+    > div:has(> .trend-detail-badges)
+    .trend-detail-back
+    > .trend-detail-close-icon {
+    display: block;
+    flex: none;
+  }
+  #app .trend-dashboard--review .trend-detail .trend-detail-facts {
+    background: color-mix(in srgb, var(--so-panel-soft) 22%, var(--so-panel));
+  }
+  #app .trend-detail [data-overview="true"] .trend-related-products li {
+    background: color-mix(in srgb, var(--so-panel-soft) 34%, var(--so-panel));
+  }
+  #app
+    .trend-dashboard--review
+    .trend-detail
+    > header
+    > div:has(> .trend-detail-badges)
+    :is(h3, .trend-overview-evidence-title) {
+    grid-column: 1 / -1;
+  }
+  #app .trend-dashboard--review .trend-overview-evidence-title {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+    margin-block-start: 0;
+  }
+  #app .trend-dashboard--review .trend-detail > header:has(.trend-overview-evidence-title) h3 {
+    margin-block-end: 4px;
+  }
+  #app .trend-dashboard--review .trend-detail > header h3 {
+    margin-block-start: 9px;
+    font-family: "Segoe UI", "DengXian", var(--so-font-ui);
+    font-size: 26.5px;
+    line-height: 34px;
+  }
+}
+
+@media (min-width: 1600px) {
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list
+    > .trend-topic-row[aria-pressed="true"] {
+    inline-size: calc(100% + 8px);
+    margin-inline: -4px;
+    padding-inline: 12px;
+    position: relative;
+    isolation: isolate;
+    border-block-color: transparent;
+    box-shadow: none;
+    background: transparent;
+  }
+  /* Keep the full row hit target; only inset its selected background. */
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list
+    > .trend-topic-row[aria-pressed="true"]::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0 0 5px;
+    border-radius: inherit;
+    box-shadow: inset 3px 0 var(--trend-blue);
+    background: var(--trend-surface-selected);
+    content: "";
+    pointer-events: none;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-row[aria-pressed="true"]
+    > .research-thumbnail[data-has-source="false"] {
+    inset-inline-start: 4px;
+  }
+}
+
+@media (min-width: 1600px) {
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-row
+    > :is(.topic-heat, em) {
+    position: relative;
+    inset-block-start: -5px;
+  }
+}
+
+/* Keep the context tags and metric labels aligned with the details' reading grid. */
+@media (min-width: 1600px) {
+  #app .trend-dashboard--review .trend-detail-badges > span {
+    border-radius: 12px;
+    padding-inline: 11px 13px;
+  }
+  #app .trend-dashboard--review .trend-detail-badges > span[data-status] {
+    padding-inline: 13px;
+    font-weight: 600;
+  }
+  #app .trend-detail .trend-detail-facts > div:nth-child(1) {
+    padding-inline-start: min(32px, 26%);
+  }
+  #app .trend-detail .trend-detail-facts > div:nth-child(2) {
+    padding-inline-start: min(40px, 26%);
+  }
+  #app .trend-detail .trend-detail-facts > div:nth-child(3) {
+    padding-inline-start: min(48px, 26%);
+  }
+  #app .trend-detail .trend-detail-facts > div:last-child {
+    padding-inline-start: min(49px, 26%);
+  }
+  #app .trend-detail .trend-detail-facts dt svg {
+    inline-size: 20px;
+    block-size: 20px;
+    flex: none;
+  }
+  #app .trend-detail .trend-detail-facts dd {
+    margin-block-start: 6px;
+    font-weight: 650;
+    /* Preserve the full value without letting large counts cross the column separator. */
+    overflow-wrap: anywhere;
+  }
+  #app .trend-detail .trend-detail-facts dd[data-insufficient="true"] {
+    padding: 6px 16px;
+  }
+}
+
+/* The open panel supplies detail; keep the adjacent list readable at a glance. */
+@media (min-width: 1600px) {
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row {
+    min-height: 109px;
+    padding-block: 11px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row > em {
+    display: grid;
+    place-items: center;
+    min-block-size: 27px;
+    translate: 4px 1px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 19px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row .topic-copy {
+    translate: 1px 0;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-row:first-of-type
+    .topic-copy {
+    translate: 0 2px;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row .topic-copy small {
+    font-size: 14px;
+    line-height: 19px;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-row
+    .trend-topic-provenance
+    > small:last-child {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list
+    > .trend-topic-row:not([aria-pressed="true"]) {
+    position: relative;
+    border-block-end-color: transparent;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list
+    > .trend-topic-row:not([aria-pressed="true"])::after {
+    position: absolute;
+    inset-inline: 8px 3px;
+    inset-block-end: -1px;
+    block-size: 1px;
+    background: var(--so-border);
+    content: "";
+    pointer-events: none;
+  }
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row > .topic-index {
+    padding-inline-start: 5px;
+    padding-block-start: 1px;
+  }
+}
+
+@media (min-width: 1600px) {
+  #app .trend-dashboard--review .trend-workbench.is-detail-open .topic-copy > strong {
+    font-family: Arial, var(--so-font-ui);
+    color: var(--so-text);
+    padding-inline-end: 12px;
+  }
+}
+
+/* Tighten the wide heading and align the overview without shifting its panels. */
+@media (min-width: 1600px) {
+  #app :is(.trend-market-heading, .trend-dashboard--review .trend-list > header) > div {
+    translate: 1px -1px;
+  }
+  #app .trend-dashboard--review .trend-overview-evidence-title {
+    translate: -1px 0;
+  }
+  html[data-design="commerce"] #app .trend-market-heading > div > p {
+    position: relative;
+    inset-block-start: -5px;
+  }
+  #app .trend-detail-tabs {
+    gap: 4px;
+  }
+  #app .trend-detail-tabs > button {
+    position: relative;
+    align-content: center;
+    font-size: 17px;
+    line-height: 22px;
+    padding-block: 3px 8px;
+  }
+  #app .trend-detail-tabs > button[aria-selected="true"] {
+    border-block-end-color: transparent;
+  }
+  #app .trend-detail-tabs > button[aria-selected="true"]::after {
+    position: absolute;
+    inset-inline: 7px;
+    inset-block-end: -2px;
+    block-size: 2px;
+    border-radius: 2px 2px 0 0;
+    background: var(--so-primary);
+    content: "";
+    pointer-events: none;
+  }
+  @container (min-width: 620px) {
+    #app .trend-detail [data-overview="true"] .trend-related-products li {
+      padding-block: 12px;
+    }
+    #app
+      .trend-detail
+      [data-overview="true"]
+      .trend-related-products
+      li
+      a
+      > span:not(.trend-related-picture) {
+      translate: 2px 0;
+    }
+    #app .trend-detail [data-overview="true"] .trend-related-products li strong {
+      font-size: 14px;
+      line-height: 20.75px;
+      font-weight: 700;
+    }
+    #app .trend-detail [data-overview="true"] .trend-related-products li dl {
+      margin-block-start: 0;
+      position: relative;
+      inset-inline-start: -1px;
+    }
+    #app .trend-detail [data-overview="true"] .trend-related-products li dt {
+      font-weight: 500;
+      translate: 1px -1px;
+    }
+    #app .trend-detail [data-overview="true"] .trend-related-products li dd {
+      font-size: 18px;
+      translate: 2px 0;
+    }
+    #app .trend-detail [data-overview="true"] .trend-related-products li .trend-related-icon {
+      margin-block-start: 8px;
+    }
+    #app .trend-detail [data-overview="true"] .trend-related-products:has(> ul) > header {
+      padding-inline-start: 3px;
+    }
+  }
+}
+
+/* On wide screens, distinguish the selected topic's main action from a list refresh. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"] #app .trend-market-actions:has(> .trend-view-sources) {
+    column-gap: 16px;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-market-actions:has(> .trend-view-sources)
+    > button:first-child {
+    min-inline-size: 139px;
+  }
+  html[data-design="commerce"] #app .trend-market-actions > .trend-view-sources {
+    min-inline-size: 172px;
+    color: var(--so-on-primary);
+    background: var(--so-primary);
+    border-color: var(--so-primary);
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-market-actions
+    > .trend-view-sources:hover:not(:disabled) {
+    background: var(--so-primary-strong);
+  }
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-row
+    .topic-copy
+    > small {
+    margin-block-start: 5px;
+  }
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-provenance
+    > small:first-child {
+    padding-inline-start: 1px;
+  }
+}
+
+/* Keep the split list's text track aligned when only some topics have images. */
+@media (min-width: 1440px) {
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list:has(> .trend-topic-row > .research-thumbnail[data-has-source="true"])
+    > .trend-topic-row {
+    grid-template:
+      "rank copy heat status" max-content
+      "media copy heat status" minmax(0, 1fr)
+      / 42px minmax(0, 1fr) 64px 54px;
+    row-gap: 4px;
+
+    > .topic-index {
+      grid-area: rank;
+      padding: 0;
+    }
+    > .research-thumbnail {
+      grid-area: media;
+      position: static;
+      box-sizing: border-box;
+      width: 42px;
+      height: 42px;
+      align-self: start;
+      justify-self: center;
+    }
+    > .research-thumbnail[data-has-source="false"] {
+      width: 23px;
+      height: 23px;
+    }
+    > .topic-copy {
+      grid-area: copy;
+      translate: none;
+    }
+    > .topic-heat {
+      grid-area: heat;
+    }
+    > em {
+      grid-area: status;
+    }
+  }
+}
+
+/* Only the wide split list with no media URLs uses the reference's index-only rail. */
+@media (min-width: 1600px) {
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list:not(:has(> .trend-topic-row > .research-thumbnail[data-has-source="true"]))
+    > .trend-topic-row
+    > .research-thumbnail[data-has-source="false"] {
+    display: none;
+  }
+}
+
+/* The inline tablet form uses two rows; the mobile drawer keeps its own layout. */
+@media (761px <= width <= 1100px) {
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-market-heading {
+    min-block-size: 60px;
+    margin-block-end: 4px;
+  }
+  #app .trend-dashboard--review .trend-filters {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(170px, 1fr);
+  }
+  #app .trend-dashboard--review .trend-filters > :is(.search, .trend-filter-actions) {
+    grid-column: auto;
+  }
+  #app .trend-dashboard--review .trend-filters :is(label, input, select) {
+    min-inline-size: 0;
+  }
+}
+@media (min-width: 761px) {
+  #app .trend-dashboard--review .trend-filters input::placeholder {
+    color: var(--so-text-muted);
+    opacity: 1;
+  }
+}
+
+/* Balance the wide split-view tracks without resizing the detail panels or hit targets. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-dashboard--review
+    :is(.trend-filters, .trend-list, .trend-detail) {
+    --trend-workbench-surface: color-mix(in srgb, var(--so-panel-soft) 45%, var(--so-panel));
+    background-color: var(--trend-workbench-surface);
+  }
+  #app
+    .trend-dashboard--review
+    .trend-detail
+    [data-overview="true"]
+    .trend-related-products:has(> ul)
+    > .trend-related-note {
+    font-size: 13px;
+    line-height: 20px;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-row
+    > .topic-heat {
+    translate: 1px -1px;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list:not(:has(.research-thumbnail[data-has-source="true"]))
+    .trend-topic-row[aria-pressed="true"]
+    > .topic-copy {
+    translate: 1px -2px;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-detail
+    > header
+    .trend-overview-evidence-title {
+    max-inline-size: calc(100% - 24px);
+    overflow-wrap: anywhere;
+  }
+  html[data-design="commerce"] #app .trend-dashboard--review .trend-detail .trend-detail-facts dt {
+    translate: -2px -1px;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-detail
+    .trend-detail-facts
+    dd:not([data-insufficient="true"]) {
+    translate: 2px 1px;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-detail
+    .trend-detail-tabs
+    > button {
+    text-indent: -2px;
+  }
+}
+
+/* The selected topic's photo or source icon shares the badge row without moving the close control. */
+#app
+  .trend-dashboard--review
+  .trend-detail-badges:has(> .trend-detail-thumbnail[data-has-source="true"]) {
+  align-items: center;
+}
+#app .trend-dashboard--review .trend-detail-badges > .trend-detail-thumbnail {
+  box-sizing: border-box;
+  inline-size: 36px;
+  block-size: 36px;
+  padding: 0;
+  border-radius: 8px;
+}
+#app
+  .trend-dashboard--review
+  .trend-detail-badges
+  > .trend-detail-thumbnail[data-has-source="false"] {
+  display: none;
+}
+@media (min-width: 1101px) {
+  #app .trend-dashboard--review .trend-detail-badges > .trend-detail-thumbnail {
+    inline-size: 42px;
+    block-size: 42px;
+  }
+}
+
+/* Keep split-view context and metrics on consistent reading lines. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    :is(.topic-copy > small, .trend-topic-provenance) {
+    translate: -1px -1px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-topic-row[aria-pressed="true"]
+    > .topic-heat {
+    translate: 0 -3px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-dashboard--review
+    .trend-detail
+    .trend-detail-badges {
+    column-gap: 14px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-dashboard--review
+    .trend-detail
+    .trend-detail-badges
+    > span {
+    translate: 2px -1px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-dashboard--review
+    .trend-detail
+    .trend-detail-facts
+    > div:nth-child(2) {
+    padding-inline-start: min(42px, 26%);
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-dashboard--review
+    .trend-detail
+    .trend-detail-facts
+    dd[data-insufficient="true"] {
+    margin-inline-start: min(7px, 4%);
+    translate: 0 2px;
+  }
+}
+
+/* Give split-list titles more room on mid-width desktops with mixed media. */
+@media (1101px <= width < 1440px) {
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list:has(> .trend-topic-row > .research-thumbnail[data-has-source="true"])
+    > .trend-topic-row {
+    grid-template:
+      "rank copy heat status" max-content
+      "media copy heat status" minmax(0, 1fr)
+      / 38px minmax(0, 1fr) 48px auto;
+    row-gap: 4px;
+
+    > .topic-index {
+      grid-area: rank;
+      padding: 0;
+    }
+    > .research-thumbnail {
+      grid-area: media;
+      box-sizing: border-box;
+      inline-size: 38px;
+      block-size: 38px;
+      align-self: start;
+      justify-self: center;
+    }
+    > .research-thumbnail[data-has-source="false"] {
+      inline-size: 26px;
+      block-size: 26px;
+    }
+    > .topic-copy {
+      grid-area: copy;
+    }
+    > .topic-heat {
+      grid-area: heat;
+    }
+    > em {
+      grid-area: status;
+    }
+  }
+}
+
+/* At the split breakpoint, stack the short status under the count. */
+@media (1101px <= width < 1280px) {
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list:has(> .trend-topic-row > .research-thumbnail[data-has-source="true"])
+    > .trend-topic-row {
+    grid-template:
+      "rank copy heat" max-content
+      "media copy status" minmax(0, 1fr)
+      / 38px minmax(0, 1fr) 54px;
+
+    > em {
+      align-self: start;
+    }
+  }
+
+  #app .trend-dashboard--review .trend-detail .trend-detail-facts dd[data-insufficient="true"] {
+    padding-inline: 6px;
+    font-size: 14px;
+  }
+}
+
+/* Preserve a readable gutter between related titles and their independent metrics. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .topic-copy
+    > strong {
+    font-size: 16.2px;
+    letter-spacing: 0.1px;
+  }
+
+  @container (min-width: 620px) {
+    html[data-design="commerce"]:not([data-density="compact"])
+      #app
+      .trend-dashboard--review
+      .trend-detail
+      [data-overview="true"]
+      .trend-related-products
+      li
+      a
+      > span:not(.trend-related-picture) {
+      padding-inline-end: 8px;
+    }
+  }
+}
+
+/* Keep the related heading and metric track aligned with the overview card. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-detail
+    [data-overview="true"]
+    .trend-related-products:has(> ul)
+    > header {
+    padding-inline-start: 5px;
+  }
+
+  @container (min-width: 620px) {
+    html[data-design="commerce"]:not([data-density="compact"])
+      #app
+      .trend-detail
+      [data-overview="true"]
+      .trend-related-products
+      li
+      dl {
+      position: relative;
+      inset-inline-start: -2px;
+    }
+  }
+}
+
+/* Brighten the data cards without flattening the selected row or status chips. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-dashboard--review
+    :is(.trend-filters, .trend-list, .trend-detail) {
+    --trend-workbench-surface: var(--so-panel);
+    background-color: var(--trend-workbench-surface);
+  }
+}
+
+/* Source marks stay compact inside the same frame used by product photos. */
+#app .trend-dashboard--review .research-thumbnail > .research-thumbnail-favicon {
+  inline-size: min(60%, 24px);
+  block-size: min(60%, 24px);
+  background: transparent;
+}
+
+/* Make visible topic context easier to scan without changing its line boxes. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list
+    :is(.topic-copy > small, .trend-topic-provenance > small:first-child) {
+    font-size: 14.5px;
+  }
+
+  @container (min-width: 620px) {
+    html[data-design="commerce"]:not([data-density="compact"])
+      #app
+      .trend-dashboard--review
+      .trend-detail
+      [data-overview="true"]
+      .trend-related-products
+      li
+      a
+      small {
+      margin-block-start: 6px;
+    }
+  }
+}
+
+/* Give the active tab and the final overview metric their own reading edges. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .trend-dashboard--review
+    .trend-detail
+    .trend-detail-tabs
+    > button[aria-selected="true"]::after {
+    inset-inline: 4px;
+  }
+
+  @container (min-width: 620px) {
+    html[data-design="commerce"]:not([data-density="compact"])
+      #app
+      .trend-dashboard--review
+      .trend-detail
+      [data-overview="true"]
+      .trend-related-products
+      li
+      dl
+      > div:last-child {
+      padding-inline-start: 7px;
+    }
   }
 }

@@ -77,6 +77,7 @@ const props = defineProps<{
     apiBaseUrl: string;
     organizationName: string | null;
     workspaceName: string | null;
+    navigationItems?: readonly { path: string; label: string; group: string }[];
   }>(),
   emit = defineEmits<{ close: [] }>(),
   request = createApiClient(props.apiBaseUrl);
@@ -95,6 +96,12 @@ const query = ref(""),
   assigneeApplicable = computed(() => resourceType.value === "opportunity"),
   organizationLabel = computed(() => props.organizationName?.trim() || "当前组织"),
   workspaceLabel = computed(() => props.workspaceName?.trim() || "当前工作区");
+const navigationResults = computed(() => {
+  const needle = query.value.trim().toLocaleLowerCase();
+  return (props.navigationItems ?? []).filter((item) =>
+    `${item.label} ${item.group}`.toLocaleLowerCase().includes(needle),
+  );
+});
 const { dialogElement, handleCancel } = useModalDialog(
   () => props.open,
   () => emit("close"),
@@ -112,6 +119,7 @@ watch(
   async ([open]) => {
     const opening = invalidateRead();
     if (!open) return;
+    if (props.shell !== "member") query.value = "";
     state.value = "idle";
     requestId.value = "";
     traceId.value = "";
@@ -162,6 +170,7 @@ async function get<T>(path: string, apply: (data: T) => void): Promise<void> {
   }
 }
 async function search() {
+  if (props.shell !== "member") return;
   const value = query.value.trim();
   if (value.length < 2) {
     invalidateRead();
@@ -221,7 +230,7 @@ watch(resourceType, () => {
       v-if="open"
       ref="dialogElement"
       class="discovery-c-backdrop"
-      aria-label="全局搜索"
+      :aria-label="shell === 'member' ? '全局搜索' : '搜索后台功能'"
       @cancel="handleCancel"
       @mousedown.self.prevent="emit('close')"
       @keydown="handleTab"
@@ -229,13 +238,34 @@ watch(resourceType, () => {
       <section class="discovery-c-dialog">
         <header class="discovery-c-header">
           <div>
-            <h2>搜索当前工作区</h2>
+            <h2>{{ shell === "member" ? "搜索当前工作区" : "搜索后台功能" }}</h2>
           </div>
           <button type="button" aria-label="关闭" @click="emit('close')">
             关闭 <span aria-hidden="true">×</span>
           </button>
         </header>
-        <div class="discovery-c-scroll">
+        <div v-if="shell !== 'member'" class="discovery-c-scroll discovery-c-scope">
+          <div class="discovery-c-field">
+            <label for="admin-discovery-query">按功能或菜单分组搜索</label>
+            <input
+              id="admin-discovery-query"
+              ref="input"
+              v-model="query"
+              type="search"
+              autocomplete="off"
+            />
+          </div>
+          <ul v-if="navigationResults.length" class="discovery-c-admin-results">
+            <li v-for="item in navigationResults" :key="item.path">
+              <RouterLink :to="item.path" @click="navigateAway">
+                <strong>{{ item.label }}</strong
+                ><span>{{ item.group }}</span>
+              </RouterLink>
+            </li>
+          </ul>
+          <p v-else role="status">没有匹配的后台功能。</p>
+        </div>
+        <div v-else class="discovery-c-scroll">
           <div class="discovery-c-layout">
             <aside class="discovery-c-scope" aria-label="当前范围与搜索条件">
               <p class="discovery-c-context">

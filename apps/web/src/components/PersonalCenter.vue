@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import ProfileAvatar from "./personal-center/ProfileAvatar.vue";
 import { ref, watch } from "vue";
+import AppIcon from "./AppIcon.vue";
 import ThemeStudio from "./ThemeStudio.vue";
 import PersonalAssetsPanel from "./personal-center/PersonalAssetsPanel.vue";
 import PersonalNotificationsPanel from "./personal-center/PersonalNotificationsPanel.vue";
@@ -11,7 +13,13 @@ import type { PersonalSection } from "./personal-center/types";
 import "./personal-center/personal-center.css";
 
 const props = withDefaults(
-  defineProps<{ apiBaseUrl: string; initialSection?: string; accountShell?: boolean }>(),
+  defineProps<{
+    apiBaseUrl: string;
+    initialSection?: string;
+    accountShell?: boolean;
+    organizationName?: string | null;
+    workspaceName?: string | null;
+  }>(),
   { initialSection: "profile", accountShell: false },
 );
 
@@ -107,31 +115,64 @@ const sectionItems = [
       <div v-if="section === 'profile' && center.profile.value" class="midou-profile-grid">
         <aside class="midou-profile-summary">
           <section>
-            <span class="midou-profile-avatar">{{
-              (center.profile.value.display_name || center.profile.value.email).slice(0, 2)
-            }}</span>
+            <ProfileAvatar
+              class="midou-profile-avatar"
+              :name="center.profile.value.display_name || center.profile.value.email"
+              :url="center.profile.value.avatar_url"
+            />
             <h2 class="midou-profile-name">{{ center.profile.value.display_name }}</h2>
-            <p>{{ center.profile.value.email }}</p>
-            <small>{{
-              center.profile.value.email_verified_at ? "邮箱已验证" : "邮箱尚未验证"
-            }}</small>
+            <div class="midou-profile-email">
+              <span>{{ center.profile.value.email }}</span>
+              <small
+                class="midou-profile-badge"
+                :data-verified="Boolean(center.profile.value.email_verified_at)"
+              >
+                <AppIcon v-if="center.profile.value.email_verified_at" name="check" :size="12" />
+                {{ center.profile.value.email_verified_at ? "邮箱已验证" : "邮箱尚未验证" }}
+              </small>
+            </div>
+            <dl v-if="organizationName || workspaceName" class="midou-profile-context">
+              <div v-if="organizationName">
+                <dt><AppIcon name="building" />所属组织</dt>
+                <dd>{{ organizationName }}</dd>
+              </div>
+              <div v-if="workspaceName">
+                <dt><AppIcon name="box" />工作区</dt>
+                <dd>{{ workspaceName }}</dd>
+              </div>
+            </dl>
           </section>
-          <section>
+          <section class="midou-profile-security">
             <h3>安全信息</h3>
-            <p>
-              邮箱 <b>{{ center.profile.value.email_verified_at ? "已验证" : "未验证" }}</b>
-            </p>
-            <p>
-              手机号
-              <b>{{
-                center.profile.value.phone_verified_at
-                  ? "已验证"
-                  : center.profile.value.phone
-                    ? "未验证"
-                    : "未绑定"
-              }}</b>
-            </p>
-            <RouterLink to="/me?section=security">管理安全设置</RouterLink>
+            <dl class="midou-profile-security-facts">
+              <div>
+                <dt><AppIcon name="mail" />邮箱</dt>
+                <dd
+                  class="midou-profile-badge"
+                  :data-verified="Boolean(center.profile.value.email_verified_at)"
+                >
+                  <AppIcon v-if="center.profile.value.email_verified_at" name="check" :size="12" />
+                  {{ center.profile.value.email_verified_at ? "已验证" : "未验证" }}
+                </dd>
+              </div>
+              <div>
+                <dt><AppIcon name="smartphone" />手机号</dt>
+                <dd
+                  class="midou-profile-badge"
+                  :data-verified="Boolean(center.profile.value.phone_verified_at)"
+                >
+                  <AppIcon v-if="center.profile.value.phone_verified_at" name="check" :size="12" />
+                  {{
+                    center.profile.value.phone_verified_at
+                      ? "已验证"
+                      : center.profile.value.phone
+                        ? "未验证"
+                        : "未绑定"
+                  }}
+                </dd>
+              </div>
+            </dl>
+            <RouterLink to="/me?section=security"><AppIcon name="shield" />管理安全设置</RouterLink>
           </section>
         </aside>
         <PersonalProfilePanel
@@ -141,6 +182,7 @@ const sectionItems = [
           :feedback="center.profileFeedback.value"
           @update-field="center.updateProfileField"
           @submit="center.saveProfile"
+          @cancel="center.cancelProfileEdit"
         />
       </div>
       <PersonalPermissionsPanel

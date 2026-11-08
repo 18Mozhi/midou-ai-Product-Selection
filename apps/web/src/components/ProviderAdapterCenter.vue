@@ -337,6 +337,7 @@ onMounted(load);
       class="adapter-heading"
       tabindex="-1"
       title="采集诊断目录"
+      :heading-level="1"
       description="健康检查不改变来源启停状态；采集结果请查看任务。"
     >
       <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>

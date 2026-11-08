@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { chromium, test, expect, type Page } from "@playwright/test";
 
 const opportunityId = "00000000-0000-4000-8000-000000000424",
   topicId = "00000000-0000-4000-8000-000000000425";
@@ -469,7 +469,7 @@ test("M04-02.A07/A08/A15 automatic opportunity list ignores retired creation and
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page).toHaveScreenshot("catalogue-data-list-first-screen-20261019.png", {
-    fullPage: true,
+    fullPage: false,
   });
   await page.getByRole("button", { name: "全部商品" }).click();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(0);
@@ -780,10 +780,12 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     await expect(reviewRegion.getByText("有用票数未展示", { exact: true })).toBeVisible();
     await expect(reviewRegion.getByText("星级未展示", { exact: true })).toBeVisible();
     expect(reads.length).toBe(beforeExpand);
-    if (competitorCount === 5 && detailCollected && sourceEnabled)
+    if (competitorCount === 5 && detailCollected && sourceEnabled) {
+      await reviewRegion.evaluate((region) => region.scrollIntoView({ block: "center" }));
       await expect(reviewRegion).toHaveScreenshot(
         "compact-recommendation-review-samples-20261023.png",
       );
+    }
     await page.getByRole("button", { name: "商品与评分", exact: true }).click();
     await expect(page.getByText(`${competitorCount} 个关联竞品`, { exact: true })).toBeVisible();
     await expect(page.getByText(`${competitorCount}个快照`, { exact: true })).toBeVisible();
@@ -2145,6 +2147,21 @@ test("P18 keeps a shared write locked across cached route deactivation and refre
   const scoreWriteStarted = new Promise<void>((resolve) => (markScoreWriteStarted = resolve));
   let detailReadCount = 0;
   await ready(page);
+  await page.route("**/api/v1/me/home-dashboard", (route) =>
+    route.fulfill({
+      json: envelope({
+        actions: [],
+        changes: [],
+        follows: [],
+        health: [],
+        scope: {
+          organization_id: "00000000-0000-4000-8000-000000000421",
+          workspace_id: "00000000-0000-4000-8000-000000000422",
+        },
+        generated_at: "2026-08-07T20:00:00.000Z",
+      }),
+    }),
+  );
   await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) => {
     detailReadCount += 1;
     return route.fallback();
@@ -4313,7 +4330,9 @@ test("supplier shortcut stays in the current product and preserves the return co
 for (const view of ["completed", "rule_candidates"]) {
   test(
     "midou reference catalogue " + view + " keeps single breadcrumb and scoped list",
-    async ({ page }) => {
+    async ({ page }, testInfo) => {
+      const wideEmpty = view === "completed" && testInfo.project.name === "desktop-chromium";
+      if (wideEmpty) await page.setViewportSize({ width: 1717, height: 916 });
       await ready(page);
       await page.route("**/api/v1/opportunities?**", (r) =>
         r.fulfill({
@@ -4326,8 +4345,16 @@ for (const view of ["completed", "rule_candidates"]) {
       await page.goto("/opportunities?view=" + view);
       await expect(page.locator(".catalogue-page-heading")).toBeVisible();
       await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
-      if (view === "rule_candidates") await expect(page.locator(".product-catalog")).toBeVisible();
-      else
+      if (view === "rule_candidates") {
+        const catalogue = page.locator(".product-catalog--candidates");
+        await expect(catalogue.locator(".catalog-data-note")).toHaveCSS("border-top-width", "1px");
+        const thumbnail = catalogue.locator(".selection-product-picture").first();
+        const wide = page.viewportSize()!.width >= 1100;
+        await expect(thumbnail).toHaveCSS("width", wide ? "64px" : "80px");
+        await expect(thumbnail).toHaveCSS("height", wide ? "64px" : "90px");
+        await expect(catalogue.getByRole("checkbox")).toHaveCount(0);
+        await expect(catalogue.getByRole("button", { name: /^\u6279\u91cf/ })).toHaveCount(0);
+      } else
         await expect(
           page.getByRole("heading", { name: "暂无已完成分析的商品", exact: true }),
         ).toBeVisible();
@@ -4337,3 +4364,916 @@ for (const view of ["completed", "rule_candidates"]) {
     },
   );
 }
+
+test("candidate notice keeps its icon beside the first line when disclosure wraps", async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await ready(page);
+  await page.route("**/api/v1/opportunities?**", (route) =>
+    route.fulfill({ json: { ...envelope([base]), meta: { page: 1, page_size: 20, total: 1 } } }),
+  );
+  await page.goto("/opportunities?view=rule_candidates");
+  const note = page.locator(".product-catalog--candidates .catalog-data-note");
+  await expect(note).toBeVisible();
+  await expect(note).toContainText("购买提示为公开下限");
+  await expect(note).toContainText("不含其他成本");
+  await expect(note).toContainText("货源候选不代表可用货源");
+  const layout = await note.evaluate((node) => {
+    const text = node.querySelector("span")!;
+    const icon = node.querySelector("svg")!.getBoundingClientRect();
+    const bounds = text.getBoundingClientRect();
+    const lineHeight = Number.parseFloat(getComputedStyle(text).lineHeight);
+    return {
+      lines: Math.round(bounds.height / lineHeight),
+      iconOffsetFromFirstLine: Math.abs(icon.y + icon.height / 2 - bounds.y - lineHeight / 2),
+      disclosureWithinCard: bounds.right <= node.getBoundingClientRect().right,
+    };
+  });
+  expect(layout.lines).toBeGreaterThanOrEqual(2);
+  expect(layout.disclosureWithinCard).toBe(true);
+  expect(layout.iconOffsetFromFirstLine).toBeLessThanOrEqual(1);
+  console.log("candidate notice layout", JSON.stringify(layout));
+  if (testInfo.project.name === "mobile-390") {
+    await note.screenshot({ path: testInfo.outputPath("candidate-mobile-disclosure.png") });
+  }
+});
+
+test("candidate pager retains scope and boundaries across two server pages", async ({ page }) => {
+  const wide = page.viewportSize()!.width >= 1100;
+  if (wide) await page.setViewportSize({ width: 1717, height: 916 });
+  await ready(page);
+  const second = {
+    ...base,
+    id: "00000000-0000-4000-8000-000000008911",
+    name: "Second candidate fixture",
+  };
+  const third = {
+    ...base,
+    id: "00000000-0000-4000-8000-000000008912",
+    name: "Last candidate fixture",
+    quality_gates: { score: true, market: false, competition: true, cost: false, risk: false },
+  };
+  const queries: URLSearchParams[] = [];
+  await page.route("**/api/v1/opportunities?**", (route) => {
+    const params = new URL(route.request().url()).searchParams;
+    queries.push(params);
+    const pageNumber = Number(params.get("page") ?? 1);
+    return route.fulfill({
+      json: {
+        ...envelope(pageNumber === 1 ? [base, second] : [third]),
+        meta: { page: pageNumber, page_size: 20, total: 21 },
+      },
+    });
+  });
+  await page.goto("/opportunities?view=rule_candidates");
+  const catalogue = page.locator(".product-catalog--candidates");
+  const pager = catalogue.locator(".opportunity-pagination");
+  const previous = pager.getByRole("button", { name: "\u4e0a\u4e00\u9875" });
+  const next = pager.getByRole("button", { name: "\u4e0b\u4e00\u9875" });
+  await expect(catalogue.locator("tbody tr")).toHaveCount(2);
+  await expect(previous).toBeDisabled();
+  await expect(next).toBeEnabled();
+  const currentPage = pager.locator('.catalogue-pager-current[aria-current="page"]');
+  await expect(pager.getByRole("button")).toHaveCount(2);
+  await expect(currentPage).toHaveText("1");
+  await expect(pager.locator(".catalogue-pager-position")).toHaveText(/1 \/ 2/);
+  if (wide) {
+    const colors = await currentPage.evaluate((node) => {
+      const style = getComputedStyle(node);
+      const token = document.createElement("span");
+      token.style.color = "var(--so-primary)";
+      node.append(token);
+      const primary = getComputedStyle(token).color;
+      token.style.color = "var(--so-primary-soft)";
+      const primarySoft = getComputedStyle(token).color;
+      token.remove();
+      return { background: style.backgroundColor, color: style.color, primary, primarySoft };
+    });
+    expect(colors.background).toBe(colors.primarySoft);
+    expect(colors.color).toBe(colors.primary);
+    await expect(currentPage).not.toHaveCSS("box-shadow", "none");
+    await expect(currentPage).toHaveCSS("min-inline-size", "36px");
+    await expect(pager.locator(".catalogue-pager-prefix")).toBeHidden();
+  } else {
+    await expect(pager.locator(".catalogue-pager-prefix")).toBeVisible();
+  }
+  if (wide) {
+    await expect(pager.locator(".catalogue-pager-total")).toBeVisible();
+    await expect(catalogue.locator(".catalogue-gate-track > i").first()).toHaveCSS("height", "6px");
+  } else await expect(pager.locator(".catalogue-pager-total")).toBeHidden();
+  if (wide) {
+    await expect(catalogue).toHaveCSS("font-family", /DengXian/);
+    const summary = catalogue.locator(":scope > header");
+    await expect(summary.getByRole("heading")).toHaveCSS("font-size", "22px");
+    await expect(summary.locator("small")).toHaveCSS("font-size", "15px");
+    await expect(summary.locator(".catalogue-sort-note")).toHaveText("最近更新优先 · 每页 20 个");
+    await expect(summary.locator(".catalogue-sort-note")).toBeVisible();
+    const tableContext = catalogue.locator(".catalogue-table-context");
+    await expect(tableContext).toBeVisible();
+    await expect(tableContext).toContainText("当前页 2 条");
+    await expect(pager).toHaveCSS("padding-block-start", "8px");
+    await expect(tableContext).not.toContainText("最近更新优先");
+    await expect(catalogue.locator(".catalogue-progress-heading").first()).toHaveCSS(
+      "display",
+      "grid",
+    );
+    await expect(summary).toHaveCSS("align-items", "flex-start");
+    await expect(catalogue.locator(".selection-product-name").first()).toHaveCSS("gap", "4px");
+    await expect(catalogue.locator(".selection-product-picture").first()).toHaveCSS(
+      "width",
+      "76px",
+    );
+    const table = catalogue.locator(".selection-product-list");
+    await expect(table).toHaveCSS("margin-inline-start", "-5px");
+    await expect(table).toHaveCSS("border-radius", "10px");
+    const tracks = await table.evaluate((element) => {
+      const note = (label: string) =>
+        element.querySelector('tbody td[data-label="' + label + '"] .catalogue-cell-note')!;
+      return {
+        review: getComputedStyle(note("星级 / 评价")).translate,
+        cost: getComputedStyle(note("1688 进货价")).translate,
+        purchase: getComputedStyle(note("购买 / 排名")).translate,
+        price: getComputedStyle(note("Amazon 售价")).translate,
+        actionTop: getComputedStyle(element.querySelector(".selection-product-action-cell a")!)
+          .insetBlockStart,
+      };
+    });
+    console.log("CANDIDATE_EVIDENCE_TRACKS", JSON.stringify(tracks));
+    expect(tracks).toEqual({
+      review: "2px 1px",
+      cost: "2px 1px",
+      purchase: "0px 1px",
+      price: "none",
+      actionTop: "1px",
+    });
+    await expect(summary.locator("small")).toHaveCSS("letter-spacing", "0.25px");
+    await expect(table.locator("thead th").first()).toHaveCSS("padding-inline-start", "71px");
+    await expect(table.locator("thead th").nth(2)).toHaveCSS("text-indent", "0px");
+    await expect(table.locator("th").last()).toHaveCSS("padding-inline-start", "14px");
+    await expect(table.locator(".selection-product-action-cell").first()).toHaveCSS(
+      "padding-inline-start",
+      "14px",
+    );
+    await expect(table.locator("th").nth(1)).toHaveCSS("padding-inline-start", "8px");
+    await expect(table.locator("tbody tr").first().locator("td").nth(1)).toHaveCSS(
+      "padding-inline-start",
+      "8px",
+    );
+    const progressFacts = table.locator(".selection-product-results").first();
+    await expect(progressFacts).toHaveCSS("line-height", "18px");
+    await expect(progressFacts).toHaveCSS("translate", "-1px -1px");
+    const labelWidth = await progressFacts
+      .locator("div")
+      .first()
+      .evaluate((node) => Number.parseFloat(getComputedStyle(node).gridTemplateColumns));
+    expect(labelWidth).toBeCloseTo(59.5, 0);
+    await expect(summary.locator(":scope > div").first()).toHaveCSS("translate", "0px -2px");
+    await expect(catalogue.locator(".catalogue-progress-heading").first()).toHaveCSS(
+      "column-gap",
+      "3px",
+    );
+    await expect(catalogue.locator(".catalogue-gate-track").first()).toHaveCSS("column-gap", "2px");
+    await expect(summary).toHaveCSS("padding-inline-start", "6px");
+    await expect(catalogue.locator(".catalog-data-note")).toHaveCSS("padding-inline-start", "16px");
+    const [controlsBox, catalogueBox, noteBox, tableBox] = await Promise.all([
+      page.locator(".catalogue-controls").boundingBox(),
+      catalogue.boundingBox(),
+      catalogue.locator(".catalog-data-note").boundingBox(),
+      table.boundingBox(),
+    ]);
+    expect(controlsBox!.x).toBeCloseTo(catalogueBox!.x, 0);
+    expect(controlsBox!.width).toBeCloseTo(catalogueBox!.width, 0);
+    expect(tableBox!.x + tableBox!.width - (noteBox!.x + noteBox!.width)).toBeLessThanOrEqual(6);
+    await expect(catalogue.locator(".catalogue-sort-note")).toHaveCSS("translate", "-6px -3px");
+    await expect(pager).toHaveCSS("translate", "-14px -1px");
+    await expect(pager).toBeInViewport({ ratio: 1 });
+    await expect(table.locator(".selection-product-name").first()).toHaveCSS(
+      "padding-inline-start",
+      "4px",
+    );
+    await expect(table.locator(".catalogue-progress-heading").first()).toHaveCSS(
+      "translate",
+      "-1px -3px",
+    );
+    await expect(catalogue.getByRole("checkbox")).toHaveCount(0);
+    const action = table.locator(".selection-product-action-cell a").first();
+    await expect(action).toHaveCSS("font-size", "15px");
+    await expect(action).toHaveCSS("font-weight", "700");
+    const [actionBox, headerBox] = await Promise.all([
+      action.boundingBox(),
+      table
+        .locator("th")
+        .last()
+        .evaluate((header) => {
+          const text = document.createRange();
+          text.selectNodeContents(header);
+          return { x: text.getBoundingClientRect().x };
+        }),
+    ]);
+    expect(actionBox!.x).toBeCloseTo(headerBox.x, 0);
+    const querybar = page.locator(".catalogue-querybar");
+    await expect(querybar.locator(".catalogue-search")).toHaveCSS("translate", "-1px");
+    await expect(querybar.locator(".catalogue-market-filter")).toHaveCSS("translate", "2px");
+    await expect(querybar).toHaveCSS("column-gap", "24px");
+    await expect(querybar).toHaveCSS("inset-block-start", "2px");
+    await expect(querybar.locator(".catalogue-market-filter")).toHaveCSS("column-gap", "12px");
+    const advanced = querybar.getByRole("button", { name: "高级筛选", exact: true });
+    const [searchBox, advancedBox] = await Promise.all([
+      querybar.locator(".catalogue-search input").boundingBox(),
+      advanced.boundingBox(),
+    ]);
+    expect(Math.abs(advancedBox!.y - searchBox!.y)).toBeLessThanOrEqual(1);
+    await expect(advanced.locator(".responsive-filter-drawer__icon")).toHaveCSS(
+      "background-color",
+      "rgba(0, 0, 0, 0)",
+    );
+    const search = querybar.getByRole("textbox", { name: "商品名称" });
+    const market = querybar.locator(".catalogue-market-filter input");
+    const searchButton = querybar.getByRole("button", { name: "搜索", exact: true });
+    for (const control of [search, market, searchButton, advanced]) {
+      await expect(control).toHaveCSS("height", "42px");
+    }
+    const pageCaption = page.locator(".catalogue-page-heading > div > span");
+    await expect(pageCaption).toHaveText("从情报到商品，把比较和判断放在一张表里。");
+    await expect(pageCaption).toHaveCSS("font-size", "16px");
+    await expect(pageCaption).toHaveCSS("letter-spacing", "0.22px");
+    await expect(pageCaption).toHaveCSS("inset-block-start", "-2px");
+    const metricHeading = table.locator("th").nth(1);
+    await expect(metricHeading).toHaveCSS("font-size", "14px");
+    const headerSurface = await metricHeading.evaluate((node) => {
+      const style = getComputedStyle(node);
+      const sample = document.createElement("span");
+      sample.style.color = style.getPropertyValue("--so-panel-soft");
+      node.append(sample);
+      const softPanel = getComputedStyle(sample).color;
+      sample.remove();
+      return { header: style.backgroundColor, softPanel };
+    });
+    expect(headerSurface.header).not.toBe(headerSurface.softPanel);
+    await expect(table.locator("th").first()).toHaveCSS("background-color", headerSurface.header);
+    await expect(table.locator("th").last()).toHaveCSS("background-color", headerSurface.header);
+    const tabs = page.locator(".catalogue-controls > nav");
+    await expect(tabs).toHaveCSS("column-gap", "14px");
+    const activeTab = tabs.locator('button[aria-current="page"]');
+    await expect(activeTab).toHaveCSS("font-size", "16px");
+    expect(await activeTab.evaluate((node) => getComputedStyle(node, "::after").height)).toBe(
+      "2px",
+    );
+    expect(await market.evaluate((node) => (node as HTMLInputElement).type)).toBe("text");
+    await expect(catalogue.getByRole("checkbox")).toHaveCount(0);
+    const stripedRow = catalogue.locator("tbody tr").nth(1);
+    const pinned = stripedRow.locator(
+      ".selection-product-identity-cell, .selection-product-action-cell",
+    );
+    const rowColor = () => stripedRow.evaluate((row) => getComputedStyle(row).backgroundColor);
+    const stripeColor = await rowColor();
+    const expectedStripe = await stripedRow.evaluate((row) => {
+      const sample = document.createElement("span");
+      sample.style.backgroundColor =
+        "color-mix(in srgb, var(--so-panel-soft) 70%, var(--so-panel))";
+      row.closest("table")!.parentElement!.append(sample);
+      const expected = getComputedStyle(sample).backgroundColor;
+      sample.remove();
+      return expected;
+    });
+    const unstripedColor = await catalogue
+      .locator("tbody tr")
+      .first()
+      .evaluate((row) => getComputedStyle(row).backgroundColor);
+    expect(stripeColor).toBe(expectedStripe);
+    expect(stripeColor).not.toBe(unstripedColor);
+    console.log("CANDIDATE_ROW_TONES", JSON.stringify({ stripeColor, unstripedColor }));
+    for (const cell of await pinned.all())
+      await expect(cell).toHaveCSS("background-color", stripeColor);
+    await stripedRow.hover();
+    const hoverColor = await rowColor();
+    expect(hoverColor).not.toBe(stripeColor);
+    for (const cell of await pinned.all())
+      await expect(cell).toHaveCSS("background-color", hoverColor);
+    await page.mouse.move(0, 0);
+    const rowAction = stripedRow.locator(".selection-product-action-cell a").first();
+    await rowAction.focus();
+    await expect(rowAction).toBeFocused();
+    await expect(stripedRow).toHaveCSS("background-color", hoverColor);
+    for (const cell of await pinned.all())
+      await expect(cell).toHaveCSS("background-color", hoverColor);
+    await rowAction.blur();
+    await expect(stripedRow).toHaveCSS("background-color", stripeColor);
+    const pending = stripedRow.locator(".catalogue-verdict");
+    await expect(pending).toHaveText("待补证据");
+    await expect(pending).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+    await expect(stripedRow.locator(".catalogue-gate-track > i")).toHaveCount(5);
+    await expect(catalogue.locator("thead th").first()).toHaveCSS("text-indent", "-1px");
+    await expect(stripedRow.locator(".selection-product-action-cell a").first()).toHaveCSS(
+      "translate",
+      "-1px",
+    );
+    await expect(pager).toHaveCSS("column-gap", "10px");
+    const refreshCandidate = page
+      .locator(".catalogue-page-heading")
+      .getByRole("button", { name: "更新结果", exact: true });
+    await expect(refreshCandidate).toHaveCSS("column-gap", "8px");
+    await expect(refreshCandidate).toHaveCSS("font-size", "16px");
+    await expect(refreshCandidate.locator("svg")).toHaveCSS("width", "18px");
+    const candidateView = page.locator('.catalogue-controls nav button[aria-current="page"]');
+    await expect(candidateView).toHaveText("候选商品");
+    await expect(page.locator(".product-catalog--candidates tbody tr:first-child td")).toHaveCount(
+      8,
+    );
+    await expect(table.locator('tbody tr:first-child td[data-label="1688 进货价"]')).toHaveCSS(
+      "padding-inline-start",
+      "12px",
+    );
+  }
+  await next.click();
+  await expect(catalogue.getByText(third.name, { exact: true })).toBeVisible();
+  await expect(catalogue.locator(".catalogue-gate-track > i")).toHaveCount(5);
+  await expect(catalogue.locator('.catalogue-gate-track > i[data-passed="true"]')).toHaveCount(2);
+  await expect(next).toBeDisabled();
+  await expect(previous).toBeEnabled();
+  await expect(currentPage).toHaveText("2");
+  await expect(pager.locator(".catalogue-pager-position")).toHaveText(/2 \/ 2/);
+  expect(new URL(page.url()).searchParams.get("view")).toBe("rule_candidates");
+  expect(queries.at(-1)?.get("page")).toBe("2");
+  expect(queries.at(-1)?.get("page_size")).toBe("20");
+  await previous.click();
+  await expect(catalogue.locator("tbody tr")).toHaveCount(2);
+  await expect(previous).toBeDisabled();
+});
+
+test("wide candidate table keeps pagination visible with twenty keyboard-reachable rows", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide candidate reference layout");
+  await page.setViewportSize({ width: 1717, height: 916 });
+  await ready(page);
+  const rows = Array.from({ length: 20 }, (_, i) => ({
+    ...recommendedBase,
+    id: `00000000-0000-4000-8000-${String(7000 + i).padStart(12, "0")}`,
+    name: `候选样品 ${i + 1}`,
+    selection_stage: "rule_candidate",
+  }));
+  const reads: number[] = [];
+  await page.route("**/api/v1/opportunities?**", (route) => {
+    const params = new URL(route.request().url()).searchParams;
+    const current = Number(params.get("page") || "1");
+    reads.push(current);
+    return route.fulfill({
+      json: envelope(current === 1 ? rows : [{ ...rows[0], name: "第二页候选" }], {
+        page: current,
+        page_size: 20,
+        total: 21,
+      }),
+    });
+  });
+  await page.goto("/opportunities?view=rule_candidates");
+  const panel = page.locator(".product-catalog--candidates");
+  const table = panel.locator(".selection-product-list");
+  const next = panel.getByRole("button", { name: "下一页" });
+  await expect(table.locator("tbody tr")).toHaveCount(20);
+  await expect(next).toBeInViewport({ ratio: 1, timeout: 2500 });
+  await page.setViewportSize({ width: 1600, height: 800 });
+  await expect(next).toBeInViewport({ ratio: 1 });
+  await page.setViewportSize({ width: 1717, height: 916 });
+  const tableTop =
+    (await table.boundingBox())!.y + (await table.evaluate((node) => node.clientTop));
+  const last = table.getByRole("link", { name: "候选样品 20", exact: true });
+  await last.focus();
+  await expect(last).toBeInViewport({ ratio: 1 });
+  await expect(last).toBeFocused();
+  expect(await table.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+  const header = table.getByRole("columnheader", { name: "商品信息" });
+  await expect(header).toBeInViewport({ ratio: 1 });
+  expect((await header.boundingBox())!.y).toBeCloseTo(tableTop, 0);
+  await expect(next).toBeInViewport({ ratio: 1 });
+  await next.click();
+  await expect(table.getByRole("link", { name: "第二页候选", exact: true })).toBeVisible();
+  expect(await table.evaluate((element) => element.scrollTop)).toBe(0);
+  expect(reads).toEqual([1, 2]);
+});
+
+test("native candidate table columns do not shift between full and short pages", async ({
+  baseURL,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop native scrollbar");
+  const browser = await chromium.launch({
+    ...testInfo.project.use.launchOptions,
+    ignoreDefaultArgs: ["--hide-scrollbars"],
+  });
+  try {
+    const page = await browser.newPage({ baseURL, viewport: { width: 1717, height: 916 } });
+    await ready(page);
+    const rows = Array.from({ length: 20 }, (_, index) => ({
+      ...recommendedBase,
+      id: `00000000-0000-4000-8000-${String(7900 + index).padStart(12, "0")}`,
+      name: `候选样品 ${index + 1}`,
+      selection_stage: "rule_candidate",
+    }));
+    await page.route("**/api/v1/opportunities?**", (route) => {
+      const pageNumber = Number(new URL(route.request().url()).searchParams.get("page") || "1");
+      return route.fulfill({
+        json: envelope(pageNumber === 1 ? rows : [{ ...rows[0], name: "第二页候选" }], {
+          page: pageNumber,
+          page_size: 20,
+          total: 21,
+        }),
+      });
+    });
+    await page.goto("/opportunities?view=rule_candidates");
+    const panel = page.locator(".product-catalog--candidates");
+    const table = panel.locator(".selection-product-list");
+    const measure = () =>
+      table.evaluate((node) => ({
+        hasOverflow: node.scrollHeight > node.clientHeight,
+        gutter: node.offsetWidth - node.clientWidth - node.clientLeft * 2,
+        columns: Array.from(node.querySelectorAll("thead th"), (cell) => {
+          const { x, width } = cell.getBoundingClientRect();
+          return [x, width];
+        }),
+      }));
+    await expect(table.locator("tbody tr")).toHaveCount(20);
+    await expect(page.locator(".role-shell")).toHaveAttribute("data-native-scrollbar", "true");
+    const full = await measure();
+    await panel.getByRole("button", { name: "下一页", exact: true }).click();
+    await expect(table.getByRole("link", { name: "第二页候选", exact: true })).toBeVisible();
+    const short = await measure();
+    console.log("native candidate geometry", JSON.stringify({ full, short }));
+    expect(full.hasOverflow).toBe(true);
+    expect(short.hasOverflow).toBe(false);
+    expect(full.gutter).toBeGreaterThan(0);
+    expect(short.gutter).toBe(full.gutter);
+    expect(short.columns).toEqual(full.columns);
+    await expect(panel.getByRole("button", { name: "上一页", exact: true })).toBeVisible();
+  } finally {
+    await browser.close();
+  }
+});
+
+test("wide candidate counts and progress remain readable inside their columns", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide candidate table");
+  await page.setViewportSize({ width: 1717, height: 916 });
+  await ready(page);
+  const count = 99_999_999;
+  await page.route("**/api/v1/opportunities?**", (route) =>
+    route.fulfill({
+      json: envelope(
+        [
+          {
+            ...base,
+            competitor_count: count,
+            supplier_candidate_count: count - 1,
+            selection_stage: "rule_candidate",
+            quality_gates: {
+              score: true,
+              market: false,
+              competition: true,
+              cost: false,
+              risk: false,
+            },
+          },
+        ],
+        { page: 1, page_size: 20, total: 1 },
+      ),
+    }),
+  );
+  await page.goto("/opportunities?view=rule_candidates");
+  const row = page.locator(".product-catalog--candidates tbody tr").first();
+  const counts = row.locator(".catalogue-counts dd");
+  await expect(counts).toHaveText([String(count), String(count - 1)]);
+  await expect(row.locator(".catalogue-verdict")).toHaveText("选品候选");
+  await expect(row.locator(".catalogue-verdict")).not.toHaveCSS(
+    "background-color",
+    "rgba(0, 0, 0, 0)",
+  );
+  await expect(row.locator(".catalogue-gate-track > i")).toHaveCount(5);
+  await expect(row.locator('.catalogue-gate-track > i[data-passed="true"]')).toHaveCount(2);
+  const [track, badge] = await Promise.all(
+    [".catalogue-gate-track", ".catalogue-verdict"].map((selector) =>
+      row.locator(selector).boundingBox(),
+    ),
+  );
+  expect(track!.width).toBeGreaterThanOrEqual(105);
+  expect(badge!.x - track!.x - track!.width).toBeGreaterThanOrEqual(2);
+  const contained = await counts.evaluateAll((items) =>
+    items.every((item) => {
+      const text = document.createRange();
+      text.selectNodeContents(item);
+      const cell = item.closest("td")!.getBoundingClientRect();
+      return [...text.getClientRects()].every(
+        (rect) => rect.left >= cell.left && rect.right <= cell.right + 0.5,
+      );
+    }),
+  );
+  expect(contained).toBe(true);
+  await expect(row.getByRole("link", { name: /查看进度/ })).toBeVisible();
+  const table = page.locator(".product-catalog--candidates .selection-product-list");
+  for (const width of [641, 760, 840, 841, 900, 1000, 1100, 1440, 1717]) {
+    await page.setViewportSize({ width, height: 916 });
+    const geometry = await table.evaluate((pane) => {
+      const bounds = pane.getBoundingClientRect();
+      const columns = Array.from(pane.querySelectorAll("tbody tr:first-child td"));
+      const [identity, action] = [columns[0]!, columns.at(-1)!];
+      const left = bounds.left + pane.clientLeft + identity.getBoundingClientRect().width;
+      const right =
+        bounds.left + pane.clientLeft + pane.clientWidth - action.getBoundingClientRect().width;
+      const blockedColumns = columns.slice(1, -1).flatMap((cell, index) => {
+        pane.scrollLeft = 0;
+        pane.scrollLeft = Math.max(0, cell.getBoundingClientRect().left - left);
+        const box = cell.getBoundingClientRect();
+        return box.left < left - 1 || box.right > right + 1 ? [index + 2] : [];
+      });
+      pane.scrollLeft = 0;
+      return {
+        pane: pane.clientWidth,
+        clearWidth: Math.round(right - left),
+        pinned: [identity, action].every((cell) => getComputedStyle(cell).position === "sticky"),
+        blockedColumns,
+      };
+    });
+    console.log("candidate column reach", width, JSON.stringify(geometry));
+    expect(geometry.pinned).toBe(true);
+    expect(
+      geometry.blockedColumns,
+      `width ${width}: each metric column can be read clear of the pinned cells`,
+    ).toEqual([]);
+  }
+});
+
+test("wide candidate separates the sales caveat from cost context without losing either", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop candidate title reading");
+  await page.setViewportSize({ width: 1717, height: 916 });
+  await ready(page);
+  const media = "/fixtures/candidate-title-reading.svg";
+  await page.route("**" + media, (route) =>
+    route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><circle cx="40" cy="40" r="33" fill="#82a5cf"/><path d="M12 36Q40 13 67 38M17 56Q41 70 63 54" fill="none" stroke="#eef4ff" stroke-width="4"/></svg>',
+    }),
+  );
+  const row = {
+    ...base,
+    selection_stage: "rule_candidate",
+    category: "ecommerce",
+    main_asin: "B06GTYQYP5",
+    name: "Icon Sports Licensed AFA Messi #10 Soccer Ball - Argentina Light Blue & White",
+    image_url: media,
+    competitor_count: 10,
+    supplier_candidate_count: 0,
+    quality_gates: {
+      score: false,
+      market: true,
+      competition: false,
+      cost: false,
+      risk: false,
+      all_passed: false,
+    },
+    primary_product: {
+      price: 21.95,
+      currency: "USD",
+      rating_value: 4.1,
+      review_count: 28,
+      captured_at: "2026-10-27T18:23:00Z",
+      public_signals: {
+        sales_badge: {
+          text: "100+ bought in past month",
+          period: "past_month",
+          quantity_lower_bound: 100,
+        },
+        best_seller_rank: { text: "#22159", rank: 22159 },
+        sponsored: null,
+      },
+    },
+  };
+  await page.route("**/api/v1/opportunities?**", (route) =>
+    route.fulfill({
+      json: envelope(
+        [
+          row,
+          { ...row, id: "00000000-0000-4000-8000-000000008914", name: "Compact kitchen scale" },
+        ],
+        { page: 1, page_size: 20, total: 2 },
+      ),
+    }),
+  );
+  await page.goto("/opportunities?view=rule_candidates");
+  const rows = page.locator(".product-catalog--candidates tbody tr");
+  await expect(rows).toHaveCount(2);
+  await expect
+    .poll(() =>
+      rows
+        .locator("img")
+        .evaluateAll((nodes) => nodes.map((image) => (image as HTMLImageElement).naturalWidth)),
+    )
+    .toEqual([80, 80]);
+  await expect(rows.first()).toContainText("USD 21.95");
+  await expect(rows.first()).toContainText("近月 ≥ 100");
+  await expect(rows.first()).toContainText("类目 #22159");
+  await expect(rows.first()).toContainText("4.1 / 28 条");
+  await expect(rows.first().locator(".catalogue-counts dd")).toHaveText(["10", "0"]);
+  await expect(rows.first().locator('.catalogue-gate-track > i[data-passed="true"]')).toHaveCount(
+    1,
+  );
+  const layout = await rows.evaluateAll((items) =>
+    items.map((item) => {
+      const anchor = item.querySelector(".selection-product-name a")!;
+      const metadata = item.querySelector(".selection-product-name small")!;
+      const photo = item.querySelector(".selection-product-picture")!;
+      const a = anchor.getBoundingClientRect();
+      const m = metadata.getBoundingClientRect();
+      return {
+        titleHeight: a.height,
+        titleToMetadata: m.top - a.bottom,
+        photoHeight: photo.getBoundingClientRect().height,
+      };
+    }),
+  );
+  console.log("CANDIDATE_TITLE_LAYOUT", JSON.stringify(layout));
+  expect(layout.map((value) => value.titleHeight)).toEqual([38, 38]);
+  expect(layout.map((value) => value.titleToMetadata)).toEqual([4, 4]);
+  expect(layout.map((value) => value.photoHeight)).toEqual([78, 78]);
+  await expect(page.locator(".product-catalog--candidates").getByRole("checkbox")).toHaveCount(0);
+  const banner = page.locator(".product-catalog--candidates .catalog-data-note");
+  const inlineCost = banner.locator(".catalogue-inline-cost-note");
+  const tableCost = page.locator(".catalogue-table-cost-note");
+  const cost = "进货价为已有采集记录，不含其他成本。";
+  console.log(
+    "CANDIDATE_COST_CONTEXT",
+    JSON.stringify({
+      inline: await inlineCost.isVisible(),
+      table: await tableCost.isVisible(),
+      banner: (await banner.innerText()).trim(),
+    }),
+  );
+  await expect(banner).toContainText("货源候选不代表可用货源");
+  await expect(inlineCost).toBeHidden();
+  await expect(tableCost).toBeVisible();
+  await expect(tableCost).toHaveText(cost);
+  await page.setViewportSize({ width: 1440, height: 916 });
+  await expect(tableCost).toBeHidden();
+  await expect(inlineCost).toBeVisible();
+  await expect(inlineCost).toHaveText(cost);
+});
+
+test("candidate identity keeps long categories on their own reading line", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Desktop candidate reading tracks");
+  await page.setViewportSize({ width: 1100, height: 916 });
+  await ready(page);
+  const media = "/fixtures/identity-reading.svg";
+  await page.route("**" + media, (route) =>
+    route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><circle cx="24" cy="24" r="20" fill="#8aa5c8"/></svg>',
+    }),
+  );
+  const category =
+    "Home & Kitchen › Storage and Organization › Specialty Containers › Cabinet and Countertop Storage";
+  const product = {
+    ...base,
+    selection_stage: "rule_candidate",
+    category,
+    main_asin: "B06GTYQYP5",
+    name: "Icon Sports Licensed AFA Messi #10 Soccer Ball - Argentina Light Blue & White",
+  };
+  await page.route("**/api/v1/opportunities?**", (route) =>
+    route.fulfill({
+      json: envelope(
+        [
+          { ...product, image_url: media },
+          {
+            ...product,
+            id: "00000000-0000-4000-8000-000000008915",
+            name: "Compact kitchen scale",
+            category: "ecommerce",
+            image_url: null,
+          },
+        ],
+        { page: 1, page_size: 20, total: 2 },
+      ),
+    }),
+  );
+  await page.goto("/opportunities?view=rule_candidates");
+  const rows = page.locator(".product-catalog--candidates tbody tr");
+  await expect(rows).toHaveCount(2);
+  await expect
+    .poll(() =>
+      rows
+        .first()
+        .locator("img")
+        .evaluate((image) => (image as HTMLImageElement).naturalWidth),
+    )
+    .toBe(48);
+  await expect(rows.last().locator(".selection-product-picture")).toHaveAccessibleName(/待采集/);
+  for (const width of [900, 1100, 1717]) {
+    await page.setViewportSize({ width, height: 916 });
+    const reading = await rows.evaluateAll((items) =>
+      items.map((item) => {
+        const identity = item.querySelector(".selection-product-identity")!;
+        const category = item.querySelector(".selection-product-name small:last-child")!;
+        const code = item.querySelector(
+          ".selection-product-name small:first-of-type span:last-child",
+        )!;
+        const cell = item.querySelector('td[data-label="分析进度"]')!;
+        const track = cell.querySelector(".catalogue-gate-track")!;
+        return {
+          row: item.getBoundingClientRect().height,
+          category: category.getBoundingClientRect().height,
+          code: code.getBoundingClientRect().right <= identity.getBoundingClientRect().right,
+          progress: track.getBoundingClientRect().right <= cell.getBoundingClientRect().right,
+          full: category.getAttribute("title"),
+        };
+      }),
+    );
+    console.log("CANDIDATE_IDENTITY_READING", width, JSON.stringify(reading));
+    expect(reading[0].full).toContain(category);
+    expect(reading.every((entry) => entry.code && entry.progress)).toBe(true);
+    expect(reading[0].category).toBe(reading[1].category);
+  }
+});
+
+test("desktop candidate table preserves hierarchy with populated and missing product evidence", async ({
+  page,
+}) => {
+  test.skip(page.viewportSize()!.width < 1100, "Desktop reference comparison");
+  await page.setViewportSize({ width: 1717, height: 916 });
+  await ready(page);
+  const rows = [
+    { ...base, name: "Compact kitchen scale with stainless steel platform and backlit display" },
+    {
+      ...base,
+      id: "00000000-0000-4000-8000-000000008913",
+      name: "Digital kitchen thermometer with protective case",
+    },
+  ];
+  let populated = false;
+  await page.route("**/fixtures/opportunity-candidate-preview.svg", (route) =>
+    route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80"><rect x="10" y="8" width="60" height="64" rx="6" fill="#a8b6c6"/><rect x="15" y="13" width="50" height="36" rx="3" fill="#dbe4ee"/><rect x="24" y="54" width="32" height="10" rx="2" fill="#405c75"/></svg>',
+    }),
+  );
+  await page.route("**/api/v1/opportunities?**", (route) =>
+    route.fulfill({
+      json: envelope(
+        rows.map((row) => ({
+          ...row,
+          image_url: populated ? "/fixtures/opportunity-candidate-preview.svg" : null,
+          main_asin: populated ? "B000000001" : null,
+          primary_product: populated
+            ? {
+                price: 29,
+                currency: "USD",
+                rating_value: 4.7,
+                review_count: 1200,
+                captured_at: "2026-10-17T00:00:00Z",
+              }
+            : null,
+        })),
+        { page: 1, page_size: 20, total: 2 },
+      ),
+    }),
+  );
+  await page.goto("/opportunities?view=rule_candidates");
+  const table = page.locator(".product-catalog--candidates .selection-product-list");
+  const first = table.locator("tbody tr").first();
+  await expect(first.getByRole("img", { name: "商品主图待采集" })).toBeVisible();
+  await expect(first).toContainText("未采集");
+  await expect(first.locator(".catalogue-price.is-missing").first()).toHaveCSS("font-size", "13px");
+
+  populated = true;
+  await page.reload();
+  const image = first.getByRole("img", { name: /商品图$/ });
+  await expect.poll(() => image.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBe(80);
+  await expect(first).toContainText("USD 29.00");
+  await expect(first.locator(".catalogue-price").first()).toHaveCSS("font-size", "18px");
+  await expect(first).toContainText("4.7 / 1200 条");
+  await expect(first).toContainText("B000000001");
+  const rating = first.locator('td[data-label="星级 / 评价"]');
+  const ratingValue = rating.locator(".catalogue-number");
+  const ratingCaption = rating.locator(".catalogue-cell-note");
+  await expect(ratingValue).toHaveCSS("font-size", "15px");
+  await expect(ratingCaption).toHaveCSS("font-size", "13px");
+  await expect(ratingCaption).toHaveCSS("margin-block-start", "3px");
+  const [priceBox, ratingBox, captionBox] = await Promise.all([
+    first.locator(".catalogue-price").first().boundingBox(),
+    ratingValue.boundingBox(),
+    ratingCaption.boundingBox(),
+  ]);
+  expect(ratingBox!.y).toBeCloseTo(priceBox!.y, 0);
+  expect(captionBox!.y - ratingBox!.y - ratingBox!.height).toBeCloseTo(4, 0);
+  await expect(table.getByRole("checkbox")).toHaveCount(0);
+
+  await page.unroute("**/fixtures/opportunity-candidate-preview.svg");
+  await page.route("**/fixtures/opportunity-candidate-preview.svg", (route) =>
+    route.fulfill({ status: 404, body: "" }),
+  );
+  await page.reload();
+  const failed = first.getByRole("img", { name: "商品主图加载失败" });
+  await expect(failed).toBeVisible();
+  await expect(failed).toContainText("加载失败");
+});
+
+test("narrow candidate identity gives the title room without changing the row actions", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Candidate table and card breakpoints");
+  await page.setViewportSize({ width: 641, height: 916 });
+  await ready(page);
+  await page.route("**/api/v1/opportunities?**", (route) =>
+    route.fulfill({
+      json: envelope([{ ...base, selection_stage: "rule_candidate" }], {
+        page: 1,
+        page_size: 20,
+        total: 1,
+      }),
+    }),
+  );
+  await page.goto("/opportunities?view=rule_candidates");
+
+  const row = page.locator(".product-catalog--candidates tbody tr").first();
+  const identity = row.locator(".selection-product-identity");
+  const title = row.locator(".selection-product-name strong a");
+  const picture = row.locator(".selection-product-picture");
+  const progress = row.getByRole("link", { name: /查看进度/ });
+  await expect(title).toHaveText(base.name);
+  const target = await title.getAttribute("href");
+  await expect(progress).toHaveAttribute("href", target!);
+
+  for (const width of [641, 841]) {
+    await page.setViewportSize({ width, height: 916 });
+    await expect(picture).toHaveCSS("width", "56px");
+    await expect(identity).toHaveCSS("column-gap", "8px");
+    const { titleWidth, cellWidth } = await identity.evaluate((node) => ({
+      titleWidth: node.querySelector(".selection-product-name")!.getBoundingClientRect().width,
+      cellWidth: node.getBoundingClientRect().width,
+    }));
+    expect(titleWidth).toBeCloseTo(cellWidth - 64, 1);
+    await expect(row.locator("td")).toHaveCount(8);
+    await expect(row.locator(".selection-product-identity-cell")).toHaveCSS("position", "sticky");
+    await expect(row.locator(".selection-product-action-cell")).toHaveCSS("position", "sticky");
+    await expect(progress).toBeVisible();
+    console.log("candidate identity reading width", width, titleWidth, cellWidth);
+  }
+
+  await page.setViewportSize({ width: 640, height: 916 });
+  await expect(picture).not.toHaveCSS("width", "56px");
+  await expect(row.locator(".selection-product-identity-cell")).toHaveCSS("position", "static");
+  await page.setViewportSize({ width: 1717, height: 916 });
+  await expect(picture).toHaveCSS("width", "76px");
+});
+
+test("wide candidate thumbnail frame stays stable when media loads or fails", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium", "Wide thumbnail frame");
+  await page.setViewportSize({ width: 1717, height: 916 });
+  await ready(page);
+  const src = "/fixtures/candidate-frame.svg";
+  let fails = false;
+  await page.route("**" + src, (route) =>
+    fails
+      ? route.fulfill({ status: 404, body: "" })
+      : route.fulfill({
+          contentType: "image/svg+xml",
+          body: '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="60"><rect x="6" y="6" width="68" height="48" rx="4" fill="#355d80"/></svg>',
+        }),
+  );
+  await page.route("**/api/v1/opportunities?**", (route) =>
+    route.fulfill({
+      json: envelope(
+        [
+          { ...base, image_url: src },
+          { ...base, id: "00000000-0000-4000-8000-000000008977", image_url: null },
+        ],
+        { page: 1, page_size: 20, total: 2 },
+      ),
+    }),
+  );
+  await page.goto("/opportunities?view=rule_candidates");
+  const table = page.locator(".product-catalog--candidates");
+  const frames = table.locator(".selection-product-picture");
+  const photo = frames.first().locator("img");
+  await expect.poll(() => photo.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBe(80);
+  const geometry = (index: number) =>
+    frames.nth(index).evaluate((el) => {
+      const { width, height } = el.getBoundingClientRect();
+      const css = getComputedStyle(el);
+      return { width, height, background: css.backgroundColor, radius: css.borderRadius };
+    });
+  const missing = await geometry(1);
+  const loaded = await geometry(0);
+  console.log("CANDIDATE_FRAMES", JSON.stringify({ loaded, missing }));
+  expect(loaded).toEqual(missing);
+  expect([loaded.width, loaded.height]).toEqual([76, 78]);
+  await expect(table.getByRole("checkbox")).toHaveCount(0);
+  fails = true;
+  await page.reload();
+  await expect(frames.first()).toContainText("加载失败");
+  expect(await geometry(0)).toEqual(loaded);
+});

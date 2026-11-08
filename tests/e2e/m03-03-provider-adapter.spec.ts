@@ -403,15 +403,15 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
     }),
   );
   await page.goto("/platform-admin/providers/adapters");
-  await expect(page.getByRole("heading", { name: "采集程序", level: 1 })).toBeVisible();
-  await expect(page.locator(".adapter-heading h2")).toHaveText("采集诊断目录");
+  await expect(page.getByRole("heading", { name: "采集诊断目录", level: 1 })).toBeVisible();
+  await expect(page.locator(".adapter-heading h1")).toHaveText("采集诊断目录");
   const semanticText = await page.evaluate(() => {
     const probe = document.createElement("span");
     probe.style.color = "var(--p47-ink)";
     document.body.append(probe);
     const expected = getComputedStyle(probe).color,
       actual = [
-        document.querySelector(".adapter-heading h2"),
+        document.querySelector(".adapter-heading h1"),
         document.querySelector(".adapter-metrics strong"),
         document.querySelector(".adapter-table-wrap td"),
       ].map((element) => (element ? getComputedStyle(element).color : null));

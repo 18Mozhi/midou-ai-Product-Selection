@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  margin: 0 0 20px;
+  margin: 0 0 14px;
 }
 .catalogue-page-heading p {
   font-size: 12px;
@@ -16,6 +16,17 @@
   letter-spacing: 0;
   margin: 0 0 6px;
   font-weight: 650;
+}
+.catalogue-page-heading > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border-radius: 7px;
+}
+.catalogue-page-heading > button svg {
+  width: 16px;
+  height: 16px;
 }
 .catalogue-page-heading span {
   font-size: 13px;
@@ -249,5 +260,1037 @@ html[data-design="commerce"] #app .catalogue-readiness .automatic-selection-read
   }
   html[data-design="commerce"] .catalogue-advanced-filters {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Wide candidate composition; leave the completed and detail layouts unchanged. */
+@media (min-width: 1440px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .opportunity-workspace[data-catalogue-view="rule_candidates"] {
+    padding: 38px 0 0 clamp(20px, 1.9vw, 33px);
+    row-gap: 20px;
+  }
+
+  html[data-design="commerce"]
+    #app
+    [data-catalogue-view="rule_candidates"]
+    .catalogue-page-heading
+    h2 {
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  html[data-design="commerce"]
+    #app
+    [data-catalogue-view="rule_candidates"]
+    .catalogue-page-heading
+    span {
+    font-size: 15px;
+  }
+
+  html[data-design="commerce"] #app [data-catalogue-view="rule_candidates"] > .catalogue-controls {
+    gap: 16px;
+    padding: 0 20px 12px;
+    border-radius: 12px;
+  }
+
+  html[data-design="commerce"]
+    #app
+    [data-catalogue-view="rule_candidates"]
+    .catalogue-controls
+    > nav
+    button {
+    min-height: 48px;
+    padding-inline: 21px;
+    font-size: 15px;
+  }
+
+  html[data-design="commerce"]
+    #app
+    [data-catalogue-view="rule_candidates"]
+    > .product-catalog--candidates {
+    margin-block-start: 0;
+  }
+}
+
+.midou-analysis-flow-heading {
+  display: none;
+}
+.midou-completed-sparks {
+  color: var(--so-primary);
+}
+html[data-design="commerce"] #app .midou-completed-actions > button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .opportunity-workspace[data-catalogue-view="completed"] {
+    padding: 54px 4px 0 max(0px, calc(47px - var(--midou-member-rail-delta, 0px)));
+    row-gap: 18px;
+  }
+  html[data-design="commerce"] #app [data-catalogue-view="completed"] .catalogue-page-heading h2 {
+    font-size: 30px;
+    font-weight: 700;
+  }
+  html[data-design="commerce"] #app [data-catalogue-view="completed"] .catalogue-page-heading span {
+    font-size: 16px;
+  }
+  html[data-design="commerce"] #app [data-catalogue-view="completed"] > .catalogue-controls {
+    border-radius: 12px;
+    padding: 0 20px 19px;
+    gap: 22px;
+  }
+  html[data-design="commerce"]
+    #app
+    [data-catalogue-view="completed"]
+    .catalogue-controls
+    > nav
+    button {
+    min-height: 56px;
+    padding-inline: 22px;
+  }
+  .midou-completed-illustration {
+    width: 120px;
+    height: 102px;
+    color: color-mix(in srgb, var(--so-text-muted) 64%, var(--so-border));
+    background: color-mix(in srgb, var(--so-primary-soft) 50%, var(--so-panel));
+  }
+  .midou-completed-empty h3 {
+    font-size: 24px;
+  }
+  .midou-completed-empty > p {
+    font-size: 16px;
+  }
+  html[data-design="commerce"] #app .midou-completed-empty .midou-completed-actions > button {
+    min-width: 164px;
+    min-height: 48px;
+  }
+  html[data-design="commerce"] #app .midou-completed-empty .midou-completed-actions {
+    gap: 24px;
+    margin-block: 28px 34px;
+  }
+  html[data-design="commerce"]
+    #app
+    .midou-completed-empty
+    .midou-completed-actions
+    > button:first-child {
+    min-width: 194px;
+  }
+  .midou-analysis-flow-frame {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    gap: 16px;
+    border-block-start: 1px solid var(--so-border);
+    text-align: start;
+  }
+  .midou-analysis-flow-heading {
+    display: block;
+    padding-block-start: 24px;
+    font-size: 16px;
+  }
+  .midou-analysis-flow {
+    border-block-start: 0;
+    padding-block: 22px 36px;
+    gap: 12px;
+  }
+  .midou-analysis-flow li:not(:last-child)::after {
+    content: "→";
+    margin-inline-start: auto;
+    color: var(--so-text-muted);
+  }
+  .midou-analysis-flow svg {
+    box-sizing: content-box;
+    padding: 12px;
+    border-radius: 9px;
+    background: var(--so-primary-soft);
+  }
+}
+
+@media (min-width: 1440px) {
+  html[data-design="commerce"]
+    #app
+    [data-catalogue-view="rule_candidates"]
+    > .product-catalog--candidates {
+    margin-block-start: -4px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .catalog-data-note {
+    margin-inline: 4px;
+    padding-block: 7px;
+  }
+}
+
+.catalogue-pager-arrow,
+.catalogue-pager-total {
+  display: none;
+}
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .product-catalog--candidates .opportunity-pagination {
+    gap: 8px;
+    align-items: center;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .opportunity-pagination > button {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0;
+    border-radius: 7px;
+    display: grid;
+    place-items: center;
+  }
+  .product-catalog--candidates .catalogue-pager-label {
+    display: none;
+  }
+  .product-catalog--candidates .catalogue-pager-arrow,
+  .product-catalog--candidates .catalogue-pager-total {
+    display: inline-block;
+  }
+  .catalogue-pager-arrow.is-previous {
+    transform: rotate(180deg);
+  }
+  .product-catalog--candidates .catalogue-pager-total {
+    margin-inline-end: 12px;
+    color: var(--so-text-muted);
+    font-size: 14px;
+  }
+  .product-catalog--candidates .catalogue-pager-position {
+    border-radius: 6px;
+    background: var(--so-primary-soft);
+    color: var(--so-primary);
+    padding: 6px 10px;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .product-catalog--candidates
+    .catalogue-pager-position {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    background: transparent;
+    color: var(--so-text-muted);
+    white-space: nowrap;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .product-catalog--candidates
+    .catalogue-pager-prefix {
+    display: none;
+  }
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .product-catalog--candidates
+    .catalogue-pager-current {
+    display: inline-grid;
+    place-items: center;
+    min-inline-size: 36px;
+    min-block-size: 36px;
+    padding-inline: 6px;
+    border-radius: 7px;
+    background-color: var(--so-primary-soft);
+    color: var(--so-primary);
+    box-shadow: inset 0 0 0 1px var(--so-primary-border);
+    font-weight: 700;
+  }
+}
+
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-results {
+    margin-block-start: 4px;
+    gap: 2px;
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+.catalogue-search-icon {
+  display: none;
+}
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app [data-catalogue-view="rule_candidates"] {
+    .catalogue-querybar {
+      align-items: flex-start;
+      min-block-size: 54px;
+    }
+    .catalogue-querybar .responsive-filter-drawer__trigger {
+      gap: 10px;
+      padding: 7px 14px;
+    }
+    .catalogue-querybar .responsive-filter-drawer__icon {
+      inline-size: 20px;
+      block-size: 20px;
+      color: var(--so-text-muted);
+      background: transparent;
+    }
+    .catalogue-search-field {
+      position: relative;
+    }
+    .catalogue-search-icon {
+      display: block;
+      position: absolute;
+      inset-inline-start: 12px;
+      inset-block-start: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--so-text-muted);
+    }
+    .catalogue-search input {
+      padding-inline-start: 42px;
+    }
+    .catalogue-search button {
+      min-width: 68px;
+      color: var(--so-primary);
+      background: var(--so-primary-soft);
+    }
+    .catalogue-market-filter input {
+      width: 136px;
+    }
+    .catalogue-page-heading > button {
+      min-width: 132px;
+      color: var(--so-on-primary);
+      background: var(--so-primary);
+      border-color: var(--so-primary);
+    }
+    .catalogue-page-heading > button:hover {
+      background: var(--so-primary-strong);
+    }
+  }
+}
+
+.catalogue-gate-track {
+  display: none;
+}
+/* The sidebar changes the space left to the table, independently of the window width. */
+@media (min-width: 641px) {
+  @container candidate-catalogue (max-width: 760px) {
+    html[data-design="commerce"]
+      #app
+      .product-catalog--candidates
+      .selection-product-list
+      .product-column {
+      width: min(38cqi, 250px);
+    }
+  }
+}
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .product-catalog--candidates .catalogue-gate-track {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 3px;
+    max-width: 120px;
+    margin-block: 1px 5px;
+  }
+  .catalogue-gate-track > i {
+    block-size: 5px;
+    border-radius: 999px;
+    background: var(--so-border);
+  }
+  .catalogue-gate-track > i[data-passed="true"] {
+    background: var(--so-primary);
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-results > div {
+    display: grid;
+    grid-template-columns: 4.5em minmax(0, 1fr);
+    gap: 6px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates tbody tr {
+    --candidate-row-surface: var(--so-panel);
+    background: var(--candidate-row-surface);
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates tbody tr:nth-child(even) {
+    --candidate-row-surface: color-mix(
+      in srgb,
+      var(--so-panel-soft) var(--candidate-stripe-strength, 40%),
+      var(--so-panel)
+    );
+  }
+  html[data-design="commerce"]
+    #app
+    .product-catalog--candidates
+    tbody
+    tr:is(:hover, :focus-within) {
+    --candidate-row-surface: var(--so-primary-soft);
+  }
+  html[data-design="commerce"]
+    #app
+    .product-catalog--candidates
+    tbody
+    tr
+    > :is(.selection-product-identity-cell, .selection-product-action-cell) {
+    background: var(--candidate-row-surface);
+  }
+}
+
+/* Match the reference's spacing using only the existing candidate controls. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    [data-catalogue-view="rule_candidates"] {
+    :is(.catalogue-controls, .product-catalog--candidates) {
+      font-family: "Segoe UI", "DengXian", "Microsoft YaHei", sans-serif;
+      /* Share the reference inset instead of letting the results card drift from the filters. */
+      margin-inline: -1px -3px;
+    }
+    .catalogue-controls {
+      margin-block: -3px 3px;
+      padding-inline: 24px;
+    }
+    .catalogue-controls > nav {
+      column-gap: 14px;
+    }
+    .catalogue-controls > nav button {
+      position: relative;
+      translate: 4px 1px;
+      font-size: 16px;
+      padding-inline: 18px;
+    }
+    .catalogue-controls > nav button[aria-current="page"] {
+      border-block-end-color: transparent;
+    }
+    .catalogue-controls > nav button[aria-current="page"]::after {
+      position: absolute;
+      inset-inline: 11px;
+      inset-block-end: -2px;
+      block-size: 2px;
+      border-radius: 2px 2px 0 0;
+      background: var(--so-primary);
+      content: "";
+      pointer-events: none;
+    }
+    .catalogue-querybar {
+      position: relative;
+      inset-block-start: 2px;
+      gap: 24px;
+    }
+    .catalogue-search {
+      max-width: 552px;
+      gap: 10px;
+    }
+    .catalogue-querybar .catalogue-search button {
+      font-weight: 600;
+    }
+    .catalogue-search input {
+      font-size: 14px;
+      padding-inline-start: 44px;
+    }
+    .catalogue-market-filter {
+      font-size: 14px;
+      gap: 12px;
+    }
+    .catalogue-market-filter input {
+      width: 138px;
+      padding-inline: 12px;
+    }
+    .catalogue-querybar
+      :is(
+        .catalogue-search input,
+        .catalogue-search button,
+        .catalogue-market-filter input,
+        .responsive-filter-drawer__trigger
+      ) {
+      box-sizing: border-box;
+      height: 42px;
+      min-height: 42px;
+    }
+    .product-catalog--candidates .selection-product-list th {
+      font-size: 14px;
+      font-weight: 500;
+      background: color-mix(in srgb, var(--so-primary-soft) 30%, var(--so-panel-soft));
+    }
+  }
+}
+
+/* Preserve the reference's scan columns without adding a selection column. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"] #app .product-catalog--candidates col:nth-child(1) {
+    width: 27.7%;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates col:nth-child(2) {
+    width: 10.9%;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates col:nth-child(3) {
+    width: 10.7%;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates col:nth-child(4) {
+    width: 9.6%;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates col:nth-child(5) {
+    width: 9.7%;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates col:nth-child(6) {
+    width: 10.1%;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates col:nth-child(7) {
+    width: auto;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates col:nth-child(8) {
+    width: 108px;
+  }
+}
+
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-action-cell {
+    vertical-align: middle;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-action-cell a {
+    font-weight: 600;
+  }
+  html[data-design="commerce"]
+    #app
+    .product-catalog--candidates
+    .selection-product-action-cell
+    time {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .product-catalog--candidates .catalogue-counts {
+    gap: 6px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .catalogue-counts > div {
+    display: grid;
+    grid-template-columns: 4.8em minmax(0, 1fr);
+    align-items: baseline;
+  }
+  html[data-design="commerce"]
+    #app
+    .product-catalog--candidates
+    :is(.catalogue-counts, .selection-product-results)
+    dd {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (min-width: 1440px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    [data-catalogue-view="rule_candidates"]
+    .catalogue-page-heading
+    > div {
+    position: relative;
+    inset-block-start: 7px;
+  }
+}
+
+/* Keep the candidate summary legible without reserving room for absent batch actions. */
+@media (min-width: 1440px) {
+  html[data-design="commerce"] #app .product-catalog.product-catalog--candidates > header {
+    align-items: flex-start;
+  }
+  html[data-design="commerce"] #app .product-catalog.product-catalog--candidates > header h2 {
+    font-size: 22px;
+    line-height: 26px;
+    font-weight: 700;
+    margin-block-end: 2px;
+  }
+  html[data-design="commerce"] #app .product-catalog.product-catalog--candidates > header small {
+    display: block;
+    font-size: 15px;
+    line-height: 20px;
+    color: var(--so-text-muted);
+  }
+  html[data-design="commerce"]
+    #app
+    .product-catalog.product-catalog--candidates
+    .catalogue-sort-note {
+    font-size: 14px;
+    line-height: 26px;
+    padding-inline-end: 4px;
+  }
+}
+
+/* Give the thumbnail and product identity a clear reading rhythm in the wide table. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]
+    #app
+    .product-catalog--candidates
+    :is(th:first-child, .selection-product-identity-cell) {
+    padding-inline-start: 20px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-identity {
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 10px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-picture {
+    inline-size: 76px;
+    block-size: 78px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .catalog-data-note {
+    margin-block-start: 6px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-name {
+    gap: 4px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-name strong {
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 19px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-name a {
+    min-height: 38px;
+  }
+}
+
+/* Keep the progress track, facts and row action readable in the wide research table. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]
+    #app
+    [data-catalogue-view="rule_candidates"]
+    .catalogue-page-heading
+    > div {
+    translate: -2px 0;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates > header {
+    padding-inline-start: 6px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates > header > div:first-child {
+    translate: 0 -2px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .catalog-data-note {
+    padding-inline-start: 16px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .catalog-data-note > span {
+    translate: 1px -1px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-list {
+    margin-inline: -5px;
+    border-radius: 10px;
+  }
+  html[data-design="commerce"]
+    #app
+    .product-catalog--candidates
+    .selection-product-list
+    :is(th, td):not(:first-child) {
+    padding-inline: 8px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .catalogue-gate-track {
+    margin-block: 3px 6px;
+    gap: 2px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-results {
+    line-height: 18px;
+    row-gap: 0;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-action-cell a {
+    font-size: 14px;
+  }
+  html[data-design="commerce"] #app .product-catalog--candidates .catalogue-price:not(.is-missing) {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+/* Keep the pager in reach without reducing the number of candidates per page. */
+@media (min-width: 1600px) and (min-height: 800px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell[data-native-scrollbar="true"]
+    .product-catalog--candidates
+    .selection-product-list {
+    scrollbar-gutter: stable;
+  }
+  html[data-design="commerce"]:not([data-density="compact"]) #app .product-catalog--candidates {
+    .catalog-data-note {
+      margin-block-end: 4px;
+    }
+    .selection-product-list {
+      max-block-size: clamp(180px, calc(100dvh - 604px), 480px);
+      overflow: auto;
+      scroll-padding-block-start: 38px;
+    }
+    .selection-product-list th {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 3;
+      background: var(--so-panel-soft);
+    }
+    .selection-product-list th:is(:first-child, :last-child) {
+      z-index: 4;
+    }
+    .selection-product-list tbody td {
+      padding-block: 13px;
+    }
+  }
+}
+
+.catalogue-table-context {
+  display: none;
+}
+
+/* Use real result context, rather than an empty batch toolbar, above the wide table. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"]) #app .product-catalog--candidates {
+    .selection-product-list {
+      .catalogue-number {
+        font-size: 15px;
+        font-weight: 650;
+        line-height: 24px;
+      }
+      .catalogue-cell-note {
+        margin-block-start: 3px;
+        font-size: 13px;
+        line-height: 18px;
+      }
+      .catalogue-price.is-missing {
+        font-size: 13px;
+      }
+    }
+    .catalogue-table-context {
+      display: flex;
+      min-block-size: 30px;
+      align-items: center;
+      margin-inline: 4px;
+      font-size: 14px;
+      color: var(--so-text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .selection-product-list .selection-product-identity-cell {
+      padding-inline-start: 58px;
+    }
+    .selection-product-list thead th:first-child {
+      padding-inline-start: 69px;
+    }
+    .selection-product-list :is(th, td):last-child {
+      padding-inline-start: 14px;
+    }
+    .selection-product-action-cell a {
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .selection-product-results {
+      margin-block-start: 2px;
+    }
+    .opportunity-pagination {
+      margin-block-start: 0;
+      padding-block-start: 8px;
+      border-block-start: 0;
+    }
+    .catalogue-progress-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      column-gap: 3px;
+      translate: 0 -2px;
+    }
+    .catalogue-progress-heading .catalogue-gate-track {
+      margin-block: 0;
+    }
+    .catalogue-progress-heading .catalogue-verdict {
+      padding-inline: 4px;
+      white-space: nowrap;
+    }
+  }
+}
+@media (min-width: 1600px) and (min-height: 800px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .product-catalog--candidates
+    .selection-product-list {
+    max-block-size: clamp(146px, calc(100dvh - 638px), 446px);
+    tbody td {
+      padding-block: 11px;
+    }
+  }
+}
+
+/* Keep the wide candidate notice and summary aligned with the result surface. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    [data-catalogue-view="rule_candidates"]
+    .product-catalog--candidates {
+    .catalog-data-note {
+      margin-inline-end: 0;
+    }
+    .catalogue-sort-note {
+      translate: -6px -3px;
+    }
+    .catalogue-table-context {
+      translate: 0 -1px;
+    }
+  }
+}
+
+/* Align the wide candidate reading tracks without changing the table or pager footprint. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    [data-catalogue-view="rule_candidates"] {
+    > :is(.catalogue-controls, .product-catalog--candidates) {
+      background: color-mix(in srgb, var(--so-panel-soft) 12%, var(--so-panel));
+    }
+    .catalogue-page-heading > div > span {
+      position: relative;
+      inset-inline-start: 2px;
+      inset-block-start: -2px;
+      font-size: 16px;
+      letter-spacing: 0.22px;
+    }
+    .catalogue-querybar > .catalogue-search {
+      translate: -1px;
+    }
+    .catalogue-querybar :is(.catalogue-market-filter, .responsive-filter-drawer__trigger) {
+      translate: 2px;
+    }
+    .product-catalog--candidates {
+      > header h2 {
+        translate: 3px -2px;
+      }
+      > header small {
+        translate: 2px 2px;
+      }
+      .selection-product-name {
+        padding-inline-start: 4px;
+        translate: 0 -1px;
+      }
+      .selection-product-picture:not(:has(img)) {
+        border-radius: 5px;
+        background: var(--so-panel-soft);
+      }
+      .catalogue-candidate-placeholder {
+        font-weight: 600;
+      }
+      .catalogue-counts {
+        margin-block-start: 3px;
+        translate: -1px 0;
+      }
+      .catalogue-progress-heading {
+        translate: -1px -3px;
+      }
+      .selection-product-results {
+        translate: -1px -1px;
+      }
+      .selection-product-results > div {
+        grid-template-columns: 4.25em minmax(0, 1fr);
+      }
+      .selection-product-action-cell a {
+        position: relative;
+        inset-block-start: 2px;
+      }
+      .opportunity-pagination {
+        translate: -14px -1px;
+      }
+    }
+  }
+}
+
+/* Keep pending evidence readable without giving it the weight of a positive decision. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .product-catalog--candidates
+    .catalogue-verdict:not([data-stage="rule_candidate"]):not([data-stage="recommended"]) {
+    background: transparent;
+  }
+}
+
+/* Keep the candidate header, row action and pager comfortable to scan. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .product-catalog--candidates
+    .selection-product-list
+    thead
+    th {
+    text-indent: -1px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .product-catalog--candidates
+    .selection-product-action-cell
+    a {
+    translate: -1px 0;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .product-catalog--candidates
+    .opportunity-pagination {
+    column-gap: 10px;
+  }
+
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .product-catalog--candidates
+    .catalogue-pager-position {
+    column-gap: 7px;
+  }
+}
+
+/* Keep long category paths from changing the table row rhythm. */
+@media (min-width: 641px) {
+  html[data-design="commerce"] #app .product-catalog--candidates .selection-product-name {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html[data-design="commerce"]
+    #app
+    .product-catalog--candidates
+    .selection-product-name
+    small:last-child {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* Give product names more room inside the narrow pinned identity column. */
+@media (min-width: 641px) {
+  html[data-design="commerce"] #app .product-catalog--candidates {
+    container: candidate-catalogue / inline-size;
+  }
+
+  @container candidate-catalogue (max-width: 760px) {
+    html[data-design="commerce"] #app .product-catalog--candidates {
+      .selection-product-identity {
+        grid-template-columns: 56px minmax(0, 1fr);
+        align-items: start;
+        gap: 8px;
+      }
+
+      .selection-product-picture {
+        inline-size: 56px;
+        block-size: 62px;
+        border-radius: 6px;
+      }
+
+      .selection-product-name {
+        gap: 4px;
+      }
+
+      .selection-product-name small {
+        column-gap: 5px;
+      }
+    }
+  }
+}
+
+/* Make the existing candidate refresh icon and label easy to scan. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    [data-catalogue-view="rule_candidates"] {
+    .catalogue-page-heading > button {
+      gap: 8px;
+      min-block-size: 42px;
+      border-radius: 7px;
+      font-size: 16px;
+      font-weight: 650;
+    }
+
+    .catalogue-page-heading > button > svg {
+      flex: none;
+      inline-size: 18px;
+      block-size: 18px;
+    }
+
+    .product-catalog--candidates .catalog-data-note {
+      background: color-mix(in srgb, var(--so-warning-soft) 76%, var(--so-panel));
+    }
+  }
+}
+
+/* Keep the five progress segments legible without changing the row height. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .product-catalog--candidates
+    .catalogue-gate-track
+    > i {
+    block-size: 6px;
+  }
+}
+
+/* Keep candidate media frames stable and give the cost facts a clear reading inset. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"]) #app .product-catalog--candidates {
+    .selection-product-picture {
+      border-radius: 5px;
+      background: var(--so-panel-soft);
+      overflow: hidden;
+    }
+
+    .selection-product-list tbody td[data-label="1688 进货价"] {
+      padding-inline-start: 12px;
+    }
+  }
+}
+
+/* Separate the existing cost caveat from the candidate notice on wide layouts. */
+.catalogue-table-reading-band {
+  display: none;
+}
+
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"]) #app .product-catalog--candidates {
+    .catalogue-inline-cost-note {
+      display: none;
+    }
+
+    .catalogue-table-reading-band {
+      display: flex;
+      min-block-size: 30px;
+      align-items: center;
+      gap: 16px;
+      padding-inline-end: 8px;
+      color: var(--so-text-muted);
+      font-size: 14px;
+    }
+
+    .catalogue-table-cost-note {
+      margin-inline-start: auto;
+      text-align: end;
+      translate: 0 -1px;
+    }
+  }
+}
+
+/* Separate candidate lead facts and evidence notes without resizing the reading tracks. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    [data-catalogue-view="rule_candidates"]
+    .product-catalog--candidates {
+    --candidate-stripe-strength: 70%;
+
+    > header small {
+      letter-spacing: 0.25px;
+    }
+
+    .selection-product-list {
+      thead th:first-child {
+        padding-inline-start: 71px;
+      }
+
+      thead th:is(:nth-child(3), :nth-child(7)) {
+        text-indent: 0;
+      }
+
+      td[data-label="购买 / 排名"] .catalogue-cell-note {
+        translate: 0 1px;
+      }
+
+      td:is([data-label="星级 / 评价"], [data-label="1688 进货价"]) .catalogue-cell-note {
+        translate: 2px 1px;
+      }
+
+      .selection-product-action-cell a {
+        position: relative;
+        inset-block-start: 1px;
+      }
+    }
   }
 }

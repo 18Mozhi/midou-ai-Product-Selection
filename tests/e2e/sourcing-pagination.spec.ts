@@ -158,6 +158,36 @@ test("deep-link and oversized page normalization are server authoritative", asyn
   await expect(page).toHaveURL(/page=5/);
   await expect(page.locator(".sourcing-record-items > button")).toHaveCount(15);
 });
+test("deep-linked late record stays visible inside the record pane", async ({ page, baseURL }) => {
+  const h = await setup(page, baseURL!);
+  await page.goto(`/sourcing?record=${row(20).id}`);
+  await expect(page.locator(".sourcing-detail h3")).toHaveText("找货记录20");
+  await expect(page).toHaveURL(/page=1/);
+  const pane = page.locator(".sourcing-record-items");
+  const pressed = pane.getByRole("button", { pressed: true });
+  await expect(pressed).toContainText("找货记录20");
+  await expect
+    .poll(
+      () =>
+        pressed.evaluate((item) => {
+          const itemBounds = item.getBoundingClientRect();
+          const paneBounds = item.parentElement!.getBoundingClientRect();
+          return itemBounds.top >= paneBounds.top - 1 && itemBounds.bottom <= paneBounds.bottom + 1;
+        }),
+      { timeout: 2500 },
+    )
+    .toBe(true);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  expect(h.reads).toEqual([{ page: null, q: "", record: row(20).id }]);
+  expect(h.writes).toEqual([]);
+  await page
+    .getByRole("navigation", { name: "找货记录分页" })
+    .getByRole("button", { name: "下一页" })
+    .click();
+  await expect(pressed).toContainText("找货记录21");
+  await expect.poll(() => pane.evaluate((element) => element.scrollTop)).toBe(0);
+});
+
 test("a slow superseded search cannot replace a newer result", async ({ page, baseURL }) => {
   const h = await setup(page, baseURL!);
   await page.goto("/sourcing");
@@ -208,4 +238,38 @@ test("browser back cancels an uncommitted debounce and restores the page filter"
   await expect(page.locator(".sourcing-record-items > button").first()).toContainText("找货记录21");
   await expect(page.getByRole("searchbox", { name: "搜索找货记录" })).toHaveValue("");
   expect(h.reads.filter((r) => r.q)).toEqual([]);
+});
+
+test("wide sourcing keeps the reference list header and visible pager while records scroll", async ({
+  page,
+  baseURL,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop-chromium");
+  await page.setViewportSize({ width: 1672, height: 941 });
+  const h = await setup(page, baseURL!);
+  await page.goto("/sourcing");
+  const list = page.getByRole("complementary", { name: "找货记录", exact: true });
+  const heading = list.locator(".sourcing-record-heading");
+  const scroller = list.locator(".sourcing-record-items");
+  const rows = scroller.locator(":scope > button");
+  const pager = list.getByRole("navigation", { name: "找货记录分页" });
+  await expect(rows).toHaveCount(20);
+  await expect(heading).toHaveCSS("min-height", "54px");
+  await expect(pager).toBeInViewport({ ratio: 1 });
+  const start = await heading.boundingBox();
+  const pageStart = await pager.boundingBox();
+  const bodyStart = await page.evaluate(() => window.scrollY);
+  const reads = h.reads.length;
+  await scroller.hover();
+  await page.mouse.wheel(0, 520);
+  await expect.poll(() => scroller.evaluate((node) => node.scrollTop)).toBeGreaterThan(0);
+  expect(await heading.boundingBox()).toEqual(start);
+  expect(await pager.boundingBox()).toEqual(pageStart);
+  expect(await page.evaluate(() => window.scrollY)).toBe(bodyStart);
+  expect(h.reads).toHaveLength(reads);
+  await pager.getByRole("button", { name: "下一页" }).click();
+  await expect(rows.first()).toContainText("找货记录21");
+  await expect.poll(() => scroller.evaluate((node) => node.scrollTop)).toBe(0);
+  expect(h.reads).toHaveLength(reads + 1);
+  expect(h.writes).toEqual([]);
 });

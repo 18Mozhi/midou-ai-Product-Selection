@@ -7,6 +7,7 @@ import {
   onDeactivated,
   onMounted,
   ref,
+  useId,
   watch,
 } from "vue";
 import {
@@ -51,6 +52,7 @@ type ProfileSaveReceipt = {
   writeRequestId: string;
   readRequestId: string;
 };
+const timezoneListId = `organization-timezones-${useId()}`;
 const initialAuditFilters = (): OrganizationAuditFilters => {
   const query = new URLSearchParams(window.location.search);
   return {
@@ -67,6 +69,7 @@ const props = defineProps<{
     apiBaseUrl: string;
     routePath: string;
     organizationId: string;
+    roles?: string[];
   }>(),
   request = createApiClient(props.apiBaseUrl),
   requestTimeoutMs = 12_000,
@@ -109,6 +112,16 @@ const props = defineProps<{
     reason: "",
     expires_at: "",
   });
+
+const supportedTimezones = computed(() => {
+  const zones =
+    typeof Intl.supportedValuesOf === "function" ? Intl.supportedValuesOf("timeZone") : [];
+  // A browser's canonical list may omit UTC or a valid spelling already stored for this organization.
+  const saved = data.value?.timezone;
+  return [
+    ...new Set(["UTC", ...zones, ...(typeof saved === "string" && saved ? [saved] : [])]),
+  ].sort();
+});
 let loadSequence = 0;
 let teamRecoverySequence = 0;
 let tokenSecretGeneration = 0;
@@ -220,6 +233,34 @@ function validateHttps(event: Event) {
 }
 function clearFieldValidity(event: Event) {
   (event.currentTarget as HTMLInputElement).setCustomValidity("");
+}
+const logoPreview = ref("");
+function resetOrganizationProfileDraft(event?: Event) {
+  if (!data.value || (event && busy.value)) return;
+  form.value = {
+    name: data.value.name,
+    logo_url: data.value.logo_url ?? "",
+    timezone: data.value.timezone,
+    data_retention_days: data.value.data_retention_days,
+    default_workspace_id: data.value.default_workspace_id,
+    reason: "",
+  };
+  logoPreview.value = "";
+  (event?.target as HTMLFormElement | undefined)
+    ?.querySelector<HTMLInputElement>("#organization-logo-url")
+    ?.setCustomValidity("");
+}
+watch([view, () => form.value.logo_url, () => data.value?.id], () => {
+  logoPreview.value = "";
+});
+function previewOrganizationLogo() {
+  logoPreview.value = "";
+  try {
+    const url = new URL(form.value.logo_url?.trim() ?? "");
+    if (url.protocol === "https:" && !url.username && !url.password) logoPreview.value = url.href;
+  } catch {
+    // Empty or incomplete draft: retain the organization initials.
+  }
 }
 async function readView(currentView: string) {
   if (currentView === "summary") {
@@ -342,14 +383,7 @@ async function load(
     data.value = viewResponse.value;
     requestId.value = viewResponse.requestId;
     if (currentView === "summary") {
-      form.value = {
-        name: data.value.name,
-        logo_url: data.value.logo_url ?? "",
-        timezone: data.value.timezone,
-        data_retention_days: data.value.data_retention_days,
-        default_workspace_id: data.value.default_workspace_id,
-        reason: "",
-      };
+      resetOrganizationProfileDraft();
       profileSaveReadFailure.value = null;
       if (profileSaveReceipt.value?.phase === "pending") {
         profileSaveReceipt.value = {
@@ -1215,7 +1249,7 @@ onMounted(() => void load());
       state === 'loading' || refreshing || teamRecoveryRefreshing || (view === 'audit' && busy)
     "
   >
-    <header class="org-admin-hero">
+    <header class="org-admin-hero" :data-profile-overview="view === 'summary'">
       <div>
         <p>组织后台</p>
         <component
@@ -1226,8 +1260,11 @@ onMounted(() => void load());
           "
           >{{ title }}</component
         >
+        <span v-if="view === 'summary'" class="org-overview-description"
+          >查看组织基础信息、成员与工作区、权限与审计等治理情况，维护组织资料与安全合规配置。</span
+        >
       </div>
-      <div class="org-admin-refresh">
+      <div class="org-admin-refresh" :class="{ 'org-overview-actions': view === 'summary' }">
         <small v-if="summary?.observed_at">
           {{
             teamRecoveryRefreshing
@@ -1242,8 +1279,15 @@ onMounted(() => void load());
           :disabled="state === 'loading' || refreshing || teamRecoveryRefreshing"
           @click="load({ background: true })"
         >
+          <AppIcon v-if="view === 'summary'" name="refresh" :size="16" />
           {{ refreshing ? "正在刷新…" : "刷新数据" }}
         </button>
+        <RouterLink
+          v-if="view === 'summary' && roles?.includes('organization_admin')"
+          class="org-overview-invite"
+          to="/org-admin/members"
+          ><AppIcon name="user-round-plus" :size="16" />邀请成员</RouterLink
+        >
       </div>
     </header>
     <section
@@ -1403,57 +1447,71 @@ onMounted(() => void load());
           <header>
             <div>
               <p>组织基本资料</p>
-              <h3>{{ data?.name }}</h3>
+              <div class="org-identity-name">
+                <span class="org-identity-mark" aria-hidden="true">{{
+                  Array.from(data?.name?.trim() || "组")[0]
+                }}</span>
+                <div>
+                  <h3>{{ data?.name }}</h3>
+                  <small aria-label="组织标识">{{ data?.slug }}</small>
+                </div>
+              </div>
             </div>
-            <i :data-status="data?.status">{{ statusText(data?.status) }}</i>
+            <i :data-status="data?.status">
+              <AppIcon v-if="data?.status === 'active'" name="circle-check" :size="14" />
+              {{ statusText(data?.status) }}
+            </i>
           </header>
           <dl>
             <div>
-              <dt>组织标识</dt>
-              <dd>{{ data?.slug }}</dd>
-            </div>
-            <div>
-              <dt>时区</dt>
+              <dt><AppIcon name="globe" :size="21" />时区</dt>
               <dd>{{ data?.timezone }}</dd>
             </div>
             <div>
-              <dt>数据保留</dt>
+              <dt><AppIcon name="database" :size="21" />数据保留</dt>
               <dd>{{ data?.data_retention_days }} 天</dd>
             </div>
             <div>
-              <dt>默认工作区</dt>
+              <dt><AppIcon name="layers" :size="21" />默认工作区</dt>
               <dd>{{ workspaceName(data?.default_workspace_id) }}</dd>
             </div>
           </dl>
         </article>
         <section class="organization-profile-metrics" aria-label="组织运行摘要">
           <article>
-            <span>活动成员</span><b>{{ summary?.members?.active ?? 0 }}</b
+            <span><AppIcon name="users" :size="18" />活动成员</span
+            ><b>{{ summary?.members?.active ?? 0 }}</b
             ><small>共 {{ summary?.members?.total ?? 0 }}</small>
           </article>
           <article>
-            <span>活动工作区</span><b>{{ summary?.workspaces?.active ?? 0 }}</b
+            <span><AppIcon name="layers" :size="18" />活动工作区</span
+            ><b>{{ summary?.workspaces?.active ?? 0 }}</b
             ><small>共 {{ summary?.workspaces?.total ?? 0 }}</small>
           </article>
           <article>
-            <span>团队</span><b>{{ summary?.teams?.active ?? 0 }}</b
+            <span><AppIcon name="users" :size="18" />团队</span
+            ><b>{{ summary?.teams?.active ?? 0 }}</b
             ><small>共 {{ summary?.teams?.total ?? 0 }}</small>
           </article>
           <article>
-            <span>待处理审批</span><b>{{ summary?.pending_approvals ?? 0 }}</b
+            <span><AppIcon name="file" :size="18" />待审批</span
+            ><b>{{ summary?.pending_approvals ?? 0 }}</b
             ><small>实时汇总</small>
           </article>
           <article>
-            <span>有效令牌</span><b>{{ summary?.active_tokens ?? 0 }}</b
+            <span><AppIcon name="key" :size="18" />有效令牌</span
+            ><b>{{ summary?.active_tokens ?? 0 }}</b
             ><small>不展示明文</small>
           </article>
           <article>
-            <span>近 7 日审计</span><b>{{ summary?.recent_audit_events ?? 0 }}</b
+            <span><AppIcon name="shield" :size="18" />近 7 日审计</span
+            ><b>{{ summary?.recent_audit_events ?? 0 }}</b
             ><small>组织范围</small>
           </article>
         </section>
         <form
           class="organization-profile-editor"
+          @reset.prevent="resetOrganizationProfileDraft"
           @submit.prevent="
             submit('/org/admin/profile', { ...form, expected_version: data.version }, 'PATCH')
           "
@@ -1461,30 +1519,64 @@ onMounted(() => void load());
           <h3>更新组织资料</h3>
           <fieldset :disabled="Boolean(profileSaveReadFailure)" class="organization-profile-fields">
             <label
-              >名称<input v-model="form.name" :placeholder="data?.name" required maxlength="120"
+              ><span>名称<span class="organization-required-mark" aria-hidden="true"></span></span
+              ><input v-model="form.name" :placeholder="data?.name" required maxlength="120"
             /></label>
             <label
-              >时区<input
+              ><span>时区<span class="organization-required-mark" aria-hidden="true"></span></span
+              ><input
                 v-model="form.timezone"
                 :placeholder="data?.timezone"
+                :list="timezoneListId"
                 required
                 maxlength="64"
             /></label>
+            <datalist :id="timezoneListId">
+              <option v-for="zone in supportedTimezones" :key="zone" :value="zone" />
+            </datalist>
+            <div class="organization-logo-field">
+              <label for="organization-logo-url">Logo HTTPS 地址</label>
+              <div class="organization-logo-controls">
+                <input
+                  id="organization-logo-url"
+                  v-model="form.logo_url"
+                  type="url"
+                  pattern="https://.*"
+                  maxlength="2048"
+                  title="请输入以 https:// 开头的地址"
+                  placeholder="https://…"
+                  @invalid="validateHttps"
+                  @input="clearFieldValidity"
+                />
+                <span class="organization-logo-preview">
+                  <img
+                    v-if="logoPreview"
+                    :src="logoPreview"
+                    alt="组织 Logo 预览"
+                    referrerpolicy="no-referrer"
+                    @error="logoPreview = ''"
+                  />
+                  <span v-else aria-hidden="true">{{
+                    Array.from(form.name?.trim() ?? "")[0] || "?"
+                  }}</span>
+                </span>
+                <button
+                  type="button"
+                  :disabled="!form.logo_url?.trim()"
+                  @click="previewOrganizationLogo"
+                >
+                  预览
+                </button>
+              </div>
+              <small>仅支持 HTTPS；留空表示暂不设置 Logo。</small>
+            </div>
             <label
-              >Logo HTTPS 地址<input
-                v-model="form.logo_url"
-                type="url"
-                pattern="https://.*"
-                maxlength="2048"
-                title="请输入以 https:// 开头的地址"
-                placeholder="https://…"
-                @invalid="validateHttps"
-                @input="clearFieldValidity"
-              />
-              <small>仅支持 HTTPS；留空表示暂不设置 Logo。</small></label
-            >
-            <label
-              >数据保留天数<input
+              ><span
+                >数据保留天数<span
+                  class="organization-required-mark"
+                  aria-hidden="true"
+                ></span></span
+              ><input
                 v-model.number="form.data_retention_days"
                 type="number"
                 min="30"
@@ -1493,7 +1585,9 @@ onMounted(() => void load());
                 :placeholder="String(data?.data_retention_days)"
             /></label>
             <label
-              >默认工作区<select v-model="form.default_workspace_id" required>
+              ><span
+                >默认工作区<span class="organization-required-mark" aria-hidden="true"></span></span
+              ><select v-model="form.default_workspace_id" required>
                 <option disabled value="">请选择工作区</option>
                 <option
                   v-for="workspace in data?.workspace_options"
@@ -1504,9 +1598,29 @@ onMounted(() => void load());
                 </option>
               </select></label
             >
-            <label
-              >变更原因<textarea v-model="form.reason" required maxlength="500"></textarea></label
-            ><button :disabled="busy">{{ busy ? "正在保存…" : "保存" }}</button>
+            <div class="organization-profile-reason">
+              <label for="organization-profile-change-reason"
+                ><span
+                  >变更原因<span class="organization-required-mark" aria-hidden="true"></span></span
+              ></label>
+              <div>
+                <textarea
+                  id="organization-profile-change-reason"
+                  v-model="form.reason"
+                  placeholder="请输入变更原因（必填）"
+                  aria-describedby="organization-profile-reason-count"
+                  required
+                  maxlength="500"
+                ></textarea>
+                <small id="organization-profile-reason-count"
+                  >{{ form.reason?.length ?? 0 }} / 500</small
+                >
+              </div>
+            </div>
+            <div class="organization-profile-actions">
+              <button type="submit" :disabled="busy">{{ busy ? "正在保存…" : "保存更改" }}</button>
+              <button type="reset" :disabled="busy">取消</button>
+            </div>
           </fieldset>
         </form>
         <aside class="midou-governance-side" aria-label="治理快捷入口与组织状态">
@@ -1516,7 +1630,7 @@ onMounted(() => void load());
               v-for="entry in [
                 {
                   path: '/org-admin/members',
-                  icon: 'users',
+                  icon: 'user-round-plus',
                   title: '成员与邀请',
                   note: '邀请成员加入，管理成员状态与信息',
                 },
@@ -1528,13 +1642,13 @@ onMounted(() => void load());
                 },
                 {
                   path: '/org-admin/workspaces',
-                  icon: 'building',
+                  icon: 'building-complex',
                   title: '工作区管理',
                   note: '管理工作区，划分业务与协作范围',
                 },
                 {
                   path: '/org-admin/approvals',
-                  icon: 'list',
+                  icon: 'file-check-corner',
                   title: '审批模板',
                   note: '配置审批模板与流程',
                 },
@@ -1549,17 +1663,24 @@ onMounted(() => void load());
           </section>
           <section>
             <h3>组织状态</h3>
-            <dl>
+            <dl class="midou-governance-status">
               <div>
-                <dt>组织使用状态</dt>
-                <dd>{{ statusText(data?.status) }}</dd>
+                <dt>
+                  <AppIcon :name="data?.status === 'active' ? 'circle-check' : 'info'" :size="18" />
+                  组织使用状态
+                </dt>
+                <dd>
+                  <span class="midou-governance-status-badge" :data-status="data?.status">
+                    {{ statusText(data?.status) }}
+                  </span>
+                </dd>
               </div>
               <div>
-                <dt>数据保留天数</dt>
+                <dt><AppIcon name="database" :size="18" />数据保留天数</dt>
                 <dd>{{ data?.data_retention_days }} 天</dd>
               </div>
               <div>
-                <dt>默认工作区</dt>
+                <dt><AppIcon name="layers" :size="18" />默认工作区</dt>
                 <dd>{{ workspaceName(data?.default_workspace_id) }}</dd>
               </div>
             </dl>

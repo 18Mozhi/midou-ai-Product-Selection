@@ -382,7 +382,8 @@ test("core list pages expose explicit detail and operational actions", async () 
   assert.match(opportunities, /OpportunitySupplyPanel/);
   assert.match(competitors, /MAXIMUM_SELECTION_COMPETITORS/);
   assert.match(competitors, /Amazon 主品与竞品/);
-  assert.match(sourcing, /重新采集.*删除找货记录/s);
+  assert.doesNotMatch(sourcing, /重新采集|删除找货记录|发起供应商找货/);
+  assert.match(sourcing, /刷新记录/);
   assert.match(sourcing, /供应商报价对比历史/);
 });
 
@@ -427,7 +428,10 @@ test("sourcing lists show opportunity names while retaining internal trace ids",
   );
   assert.match(workspace, /<b :title="searchName\(item\)">\{\{ searchName\(item\) \}\}/);
   assert.match(workspace, /选品编号 \{\{ selected\.input_ref \}\}/);
-  assert.match(logic, /opportunity: "选品"[\s\S]*succeeded_empty: "未找到可用候选"/);
+  assert.match(logic, /opportunity: "选品"/);
+  assert.match(logic, /statusText = sourcingRecordStatusText/);
+  const status = await readFile("apps/web/src/components/sourcing-record-status.ts", "utf8");
+  assert.match(status, /succeeded_empty: "未找到可用候选"/);
 });
 
 test("collection worker quarantines exhausted queue entries without blocking fresh crawls", async () => {

@@ -341,7 +341,19 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
       });
       if (!ownsDetailRead(generation, lifecycle)) return;
       requestId.value = response.request_id;
-      selected.value = response.data;
+      const result = response.data;
+      const matchesInput = (row: Search) =>
+        row.id === item.id &&
+        row.input_type === item.input_type &&
+        row.input_ref === item.input_ref;
+      const sameRecord = matchesInput(result);
+      const row = sameRecord ? items.value.find(matchesInput) : undefined;
+      // An omitted field preserves the list image; explicit null is the detail's current absence.
+      if (row && result.image_url !== undefined) row.image_url = result.image_url;
+      selected.value =
+        sameRecord && result.image_url === undefined && item.image_url
+          ? { ...result, image_url: item.image_url }
+          : result;
       if (syncRoute && route.query.record !== item.id)
         await router.replace({ query: { ...route.query, record: item.id, create: undefined } });
     } catch (error) {

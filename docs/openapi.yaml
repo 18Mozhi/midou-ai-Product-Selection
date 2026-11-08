@@ -3365,7 +3365,7 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /notifications:
     get:
-      summary: List root-cause-grouped current recipient notifications with server-side workflow filtering
+      summary: List root-cause-grouped current recipient notifications with workflow filtering and literal title or body search
       x-required-capability: notification:read
       parameters:
         [
@@ -3376,6 +3376,12 @@ paths:
             schema: { type: integer, minimum: 1, maximum: 200, default: 50 },
           },
           { name: unread, in: query, schema: { type: boolean } },
+          {
+            name: q,
+            in: query,
+            description: Literal substring of stored title or body before grouping and pagination. Blank values are ignored.,
+            schema: { type: string, maxLength: 100 },
+          },
           {
             name: workflow_status,
             in: query,
@@ -3390,6 +3396,7 @@ paths:
       responses:
         "200": { $ref: "#/components/responses/PaginatedSuccess" }
         "403": { $ref: "#/components/responses/Error" }
+        "400": { $ref: "#/components/responses/Error" }
   /notifications/summary:
     get:
       summary: Get current recipient unread category and workflow counts
@@ -12056,5 +12063,5 @@ x-scoutops-lan-1688-item-detail:
 # 2026-11-03 display additions (no new writes/permissions): /trends list items add nullable
 # image_url, source_url, source_name from the latest same-scope signal and its exact
 # normalized evidence. /sourcing/searches and /sourcing/searches/{searchId} add nullable
-# image_url from that search task's same-scope original 1688 image-query target.
+# image_url from that search task's same-scope original 1688 image-query target, or when absent from active Amazon product evidence matching the primary ASIN and approved Amazon image host, linked to the same non-deleted opportunity in that organization and workspace.
 # The reference image is not a refreshed primary observation or evidence of quotation.

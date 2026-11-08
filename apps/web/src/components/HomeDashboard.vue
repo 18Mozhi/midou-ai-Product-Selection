@@ -204,7 +204,8 @@ onBeforeUnmount(deactivate);
                         : "自动选品状态暂不可用"
                 }}
               </span>
-              <h2>选品工作台</h2>
+              <h1>选品工作台</h1>
+              <p class="home-command-description">集中管理选品流程、候选与分析</p>
             </div>
             <nav>
               <div class="home-live-status" role="status" aria-live="off">
@@ -215,14 +216,21 @@ onBeforeUnmount(deactivate);
                       ? `已更新 ${lastRefreshedAt}`
                       : "等待数据"
                 }}</span>
-                <button type="button" :disabled="refreshing" @click="load(true)">刷新</button>
+                <button
+                  class="so-action-secondary"
+                  type="button"
+                  :disabled="refreshing"
+                  @click="load(true)"
+                >
+                  <AppIcon name="refresh" :size="18" />刷新
+                </button>
               </div>
-              <RouterLink class="home-secondary-action so-action-secondary" to="/trends"
-                >市场情报</RouterLink
-              >
-              <RouterLink class="home-primary-action so-action-primary" to="/opportunities"
-                >查看选品库</RouterLink
-              >
+              <RouterLink class="home-secondary-action so-action-secondary" to="/trends">
+                <AppIcon name="chart" :size="18" />市场情报
+              </RouterLink>
+              <RouterLink class="home-primary-action so-action-primary" to="/opportunities">
+                <AppIcon name="box" :size="18" />查看选品库
+              </RouterLink>
             </nav>
           </header>
           <div class="home-overview-panel">
@@ -251,11 +259,11 @@ onBeforeUnmount(deactivate);
                     ></progress>
                   </div>
                   <div>
-                    <dt><AppIcon name="diamond" />新增主品 ASIN</dt>
+                    <dt><AppIcon name="selection-tag" />新增主品 ASIN</dt>
                     <dd>{{ selection.daily_production.discovered_count }}</dd>
                   </div>
                   <div>
-                    <dt><AppIcon name="shield" />新增合格推荐</dt>
+                    <dt><AppIcon name="selection-award" />新增合格推荐</dt>
                     <dd>{{ selection.daily_production.qualified_count }}</dd>
                   </div>
                 </dl>
