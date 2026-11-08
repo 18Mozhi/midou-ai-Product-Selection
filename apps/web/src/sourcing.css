@@ -2135,6 +2135,26 @@ html[data-design="commerce"]
     .sourcing-record-items > button > b {
       font-weight: 600;
     }
+
+    .sourcing-record-meta :is(small, em) {
+      color: color-mix(in srgb, var(--so-text) 20%, var(--so-text-muted));
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sourcing-detail > header .sourcing-progress {
+      dl > div:not(:last-child) {
+        min-inline-size: 82px;
+      }
+
+      dl > div:nth-child(2) {
+        min-inline-size: 96px;
+      }
+
+      dd {
+        font-weight: 650;
+      }
+    }
   }
 }
 

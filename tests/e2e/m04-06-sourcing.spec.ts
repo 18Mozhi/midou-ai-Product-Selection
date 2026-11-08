@@ -2162,6 +2162,12 @@ for (const scenario of ["simple", "rich", "reference-titles"]) {
           "line-height",
           "19px",
         );
+        const readingMeta = recordRows.first().locator(".sourcing-record-meta");
+        for (const fact of [readingMeta.locator("small"), readingMeta.locator("em")]) {
+          await expect(fact).toHaveCSS("font-size", "13px");
+          await expect(fact).toHaveCSS("font-variant-numeric", "tabular-nums");
+        }
+        await expect(progress.locator("dd").first()).toHaveCSS("font-weight", "650");
         await expect(progress.locator("h4")).toHaveCSS("border-radius", "7px");
         await expect(page.locator(".sourcing-detail > header h3")).toHaveCSS("font-weight", "700");
         const progressTones = await progress.evaluate((node) => {
@@ -2394,7 +2400,7 @@ for (const scenario of ["simple", "rich", "reference-titles"]) {
           .locator("dl > div")
           .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().x));
         expect(countPositions.map((x) => Math.round(x - countPositions[0]!))).toEqual([
-          0, 84, 182, 264,
+          0, 82, 178, 260,
         ]);
         const endedLabel = progress.getByText("1 / 1 个来源已结束");
         await expect(endedLabel).toHaveCSS("translate", "0px -4px");
@@ -2484,6 +2490,7 @@ for (const scenario of ["simple", "rich", "reference-titles"]) {
             "/platform-admin/collection?task=" + taskId,
           );
         }
+
         await recordRows.first().focus();
         await page.keyboard.press("Tab");
         await expect(recordRows.nth(1)).toBeFocused();

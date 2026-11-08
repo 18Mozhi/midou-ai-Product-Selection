@@ -1363,6 +1363,7 @@
     "contract": "Keep existing full-load wait and budget. Only a real Playwright TimeoutError from that wait can proceed to unchanged anonymous/origin/challenge, modal, confirmation, original-URL reread and strict postal checks. No readiness assumed, extra retry, longer timeout, source/circuit writes or business facts from diagnostics. Other failures propagate. No API/env/schema/dependency/frontend/Python change."
   },
   "sourcingProgressFacts20261018": {
+    "wideSourcingReadingRhythm": "At >=1600px in standard density, record metadata uses compact 13px tabular numerals with stronger semantic contrast. The detail progress facts use narrower first reading tracks and a moderate value weight, keeping actual source states, links, images and pagination unchanged.",
     "sourceCompletionBadge": "Show the reference lifecycle chip only when the positive total exactly equals successful plus failed sources, there are no active or blocked sources, and the task result supports termination. Keep failed counts, the original accessible status, collection permission, retry behavior and API unchanged.",
     "status": "implemented",
     "requirements": "docs/selection-sourcing-progress-facts.md",
