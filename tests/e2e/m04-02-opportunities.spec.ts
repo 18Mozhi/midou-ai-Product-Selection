@@ -4613,8 +4613,23 @@ test("candidate pager retains scope and boundaries across two server pages", asy
     expect(headerSurface.header).not.toBe(headerSurface.softPanel);
     await expect(table.locator("th").first()).toHaveCSS("background-color", headerSurface.header);
     await expect(table.locator("th").last()).toHaveCSS("background-color", headerSurface.header);
+    const searchDraft = page.getByRole("textbox", { name: "商品名称", exact: true });
+    const anchoredAdvanced = page.getByRole("button", { name: "高级筛选", exact: true });
+    const reset = page.getByRole("button", { name: "清除条件", exact: true });
+    const before = (await anchoredAdvanced.boundingBox())!.x;
+    await expect(reset).toHaveCount(0);
+    await searchDraft.fill("candidate draft");
+    await expect(reset).toBeVisible();
+    const withDraft = (await anchoredAdvanced.boundingBox())!.x;
+    await searchDraft.fill("");
+    await expect(reset).toHaveCount(0);
+    const after = (await anchoredAdvanced.boundingBox())!.x;
+    expect(Math.abs(withDraft - before)).toBeLessThan(1);
+    expect(Math.abs(after - before)).toBeLessThan(1);
+    await searchDraft.evaluate((element) => element.blur());
     const tabs = page.locator(".catalogue-controls > nav");
-    await expect(tabs).toHaveCSS("column-gap", "14px");
+    await expect(tabs).toHaveCSS("column-gap", "13px");
+    await expect(market).toHaveCSS("padding-inline-start", "16px");
     const activeTab = tabs.locator('button[aria-current="page"]');
     await expect(activeTab).toHaveCSS("font-size", "16px");
     expect(await activeTab.evaluate((node) => getComputedStyle(node, "::after").height)).toBe(

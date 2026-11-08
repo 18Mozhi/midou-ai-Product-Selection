@@ -644,7 +644,7 @@ html[data-design="commerce"] #app .midou-completed-actions > button {
       padding-inline: 24px;
     }
     .catalogue-controls > nav {
-      column-gap: 14px;
+      column-gap: 13px;
     }
     .catalogue-controls > nav button {
       position: relative;
@@ -687,7 +687,7 @@ html[data-design="commerce"] #app .midou-completed-actions > button {
     }
     .catalogue-market-filter input {
       width: 138px;
-      padding-inline: 12px;
+      padding-inline: 16px;
     }
     .catalogue-querybar
       :is(

@@ -261,9 +261,6 @@ watch(imageFailureResetSources, (items) => {
           placeholder="全部市场"
           @keydown.enter="emit('apply')"
       /></label>
-      <button v-if="hasFiltersToClear" type="button" class="catalogue-clear" @click="emit('reset')">
-        清除条件
-      </button>
       <ResponsiveFilterDrawer mode="dialog" label="高级筛选" :active-count="activeFilterCount">
         <form
           class="opportunity-filters catalogue-advanced-filters"
@@ -313,6 +310,9 @@ watch(imageFailureResetSources, (items) => {
           </footer>
         </form>
       </ResponsiveFilterDrawer>
+      <button v-if="hasFiltersToClear" type="button" class="catalogue-clear" @click="emit('reset')">
+        清除条件
+      </button>
     </div>
   </section>
   <AutomaticSelectionReadinessPanel
