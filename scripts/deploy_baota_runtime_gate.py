@@ -44,6 +44,9 @@ def node_term_only(get=None,pids=None):
     if restart<1000 or float(parent.environ().get("BACKEND_RESTART_MAX_DELAY_MS","30000"))<1000:
         raise RuntimeError("graceful_node_restart_window_too_short")
     worker,api=workers[0],apis[0]
+    final_drain = globals().get("verify_final_drain")
+    if final_drain is not None:
+        final_drain(worker)
     worker.terminate()
     last_worker_alive=until_exit(worker,65)
     if time.monotonic()-last_worker_alive>0.15 or set(p.pid for p in parent.children() if live(p))!={api.pid}:
@@ -175,47 +178,93 @@ def claims_command(root: str, node: str, action: str, owner: str = "") -> str:
 
 DRAIN_PROBE = r'''
 const fs=require("node:fs"), mysql=require("mysql2/promise"), e=process.env;
-const [root, owner] = process.argv.slice(1);
+const path=require("node:path");
+const [root, owner, workerStartedMs] = process.argv.slice(1);
 if(e.DB_HOST!=="127.0.0.1" || e.DB_NAME!=="product_scout" || e.DB_USER!=="product_scout") throw Error("release_drain_identity_mismatch");
 function assertOwner() {
   const file=root+"/runtime/verification/collection-claims.pause";
   if(!fs.lstatSync(file).isFile() || JSON.parse(fs.readFileSync(file,"utf8")).maintenanceId!==owner) throw Error("release_drain_owner_mismatch");
 }
+function readWorkerActivity() {
+  const file=path.resolve(root+"/backend",e.WORKER_SCHEDULER_STATE_FILE || "./runtime/worker-scheduler.json");
+  if(![path.resolve(root,"runtime"),path.resolve(root,"backend","runtime")].some(base=>file.startsWith(base+path.sep)) ||
+      fs.realpathSync(file)!==file) throw Error("release_worker_snapshot_path_invalid");
+  const fd=fs.openSync(file,fs.constants.O_RDONLY|fs.constants.O_NOFOLLOW);
+  try {
+    const stat=fs.fstatSync(fd);
+    if(!stat.isFile() || stat.size<1 || stat.size>1024*1024) throw Error("release_worker_snapshot_invalid");
+    const data=JSON.parse(fs.readFileSync(fd,"utf8"));
+    const tick=Number(e.WORKER_SCHEDULER_TICK_MS||250);
+    const observed=Date.parse(data.observed_at);
+    const age=Date.now()-observed;
+    if(!Number.isInteger(tick)||tick<100||tick>5000||!Number.isFinite(age)||age<0||
+        age>Math.max(2000,tick*3)||observed<Number(workerStartedMs||0))
+      throw Error("release_worker_snapshot_stale");
+    const count=n=>Number.isSafeInteger(n)&&n>=0;
+    if(data.status!=="running" || !Array.isArray(data.queues) ||
+       !data.queues.some(q=>q.name==="trend_projection") ||
+       !data.queues.some(q=>q.name==="collection_tasks") ||
+       new Set(data.queues.map(q=>q.name)).size!==data.queues.length ||
+       !data.queues.every(q=>typeof q.name==="string"&&count(q.active_runs)) ||
+       !count(data.active_runs)||data.active_runs!==data.queues.reduce((n,q)=>n+q.active_runs,0))
+      throw Error("release_worker_snapshot_invalid");
+    return { worker_active: data.active_runs,
+      intelligence_active: data.queues.find(q=>q.name==="trend_projection").active_runs };
+  } finally {fs.closeSync(fd);}
+}
+const leasedTables=[
+  ["trend_projection_jobs","'leased'"],
+  ["opportunity_refresh_jobs","'leased','running'"],
+  ...["outbox_events","opportunity_score_jobs","opportunity_profit_jobs",
+      "competitor_snapshot_jobs","sourcing_projection_jobs","ai_analysis_requests",
+      "approval_escalation_jobs","automation_executions","report_exports","webhook_deliveries",
+      "automatic_selection_evaluations"].map(table=>[table,"'leased'"]),
+];
 (async()=>{
   assertOwner();
   const c=await mysql.createConnection({host:e.DB_HOST,port:Number(e.DB_PORT||3306),user:e.DB_USER,password:e.DB_PASSWORD,database:e.DB_NAME,connectTimeout:4000});
   try {
+    await c.query("START TRANSACTION READ ONLY");
     const sql = "SELECT (SELECT COUNT(*) FROM collection_tasks WHERE status IN ('leased','running','parsing','validating','persisted')) in_flight," +
       "(SELECT COUNT(*) FROM crawler_scheduler_leases WHERE expires_at>LEAST(NOW(3),CAST(? AS DATETIME(3)))) scheduler_leases," +
       "(SELECT COUNT(*) FROM crawler_profile_leases WHERE expires_at>LEAST(NOW(3),CAST(? AS DATETIME(3)))) profile_leases," +
-      "(SELECT COUNT(*) FROM browser_collection_jobs WHERE status='leased') browser_leased";
+      "(SELECT COUNT(*) FROM browser_collection_jobs WHERE status='leased') browser_leased," +
+      "(" + leasedTables.map(([table,status])=>"(SELECT COUNT(*) FROM "+table+
+        " WHERE status IN ("+status+") AND (lease_expires_at IS NULL OR lease_expires_at>LEAST(NOW(3),CAST(? AS DATETIME(3)))))").join("+") +
+      ") business_leases";
     const now=new Date();
-    const [[d]]=await c.query({sql,timeout:4000},[now,now]);
+    const [[d]]=await c.query({sql,timeout:4000},Array(2+leasedTables.length).fill(now));
     assertOwner();
-    console.log(JSON.stringify(d));
-  } finally {await c.end();}
-})().catch(()=>{console.error("release_drain_probe_failed");process.exitCode=1;});
+    console.log(JSON.stringify({...d,...readWorkerActivity()}));
+  } finally {try {await c.rollback();} finally {await c.end();}}
+})().catch(error=>{console.error(/^release_[a-z_]+$/.test(error.message)?error.message:"release_drain_probe_failed");process.exitCode=1;});
 '''
 
 
+def drain_argv(root: str, node: str, owner: str) -> list[str]:
+    return [node, f"--env-file={root}/config/product_scout.env", "-e", DRAIN_PROBE, root, owner]
+
+
 def drain_command(root: str, node: str, owner: str) -> str:
-    argv = [node, f"--env-file={root}/config/product_scout.env", "-e", DRAIN_PROBE, root, owner]
-    return f"cd {shlex.quote(root + '/backend')} && {shlex.join(argv)}"
+    return f"cd {shlex.quote(root + '/backend')} && {shlex.join(drain_argv(root, node, owner))}"
+
+
+DRAIN_KEYS = frozenset({"in_flight", "scheduler_leases", "profile_leases", "browser_leased",
+                        "business_leases", "worker_active", "intelligence_active"})
 
 
 def verify_collection_drained(probe, *, attempts=65, sleep=time.sleep):
     consecutive = 0
-    keys = {"in_flight", "scheduler_leases", "profile_leases", "browser_leased"}
     for index in range(attempts):
         state = probe()
-        if set(state) != keys or any(type(value) is not int or value < 0 for value in state.values()):
+        if set(state) != DRAIN_KEYS or any(type(value) is not int or value < 0 for value in state.values()):
             raise RuntimeError("release_drain_sample_invalid")
         consecutive = consecutive + 1 if all(value == 0 for value in state.values()) else 0
         if consecutive == 4:
             return
         if index + 1 < attempts:
             sleep(2)
-    raise RuntimeError("release_collection_drain_timeout")
+    raise RuntimeError(f"release_worker_drain_timeout: {json.dumps(state, sort_keys=True)}")
 
 
 def verify_after_claims_resume(health, witness, *, duration=600, interval=5, max_gap=20,

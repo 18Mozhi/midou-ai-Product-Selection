@@ -1,8 +1,14 @@
 import inspect
+import json
+import os
 import runpy
+import subprocess
 import sys
+import tempfile
+import time
 import types
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -47,13 +53,16 @@ class GateTests(unittest.TestCase):
             self.window([healthy]*4, health=Mock(side_effect=[None, RuntimeError("503")]))
 
     def test_drain_requires_four_consecutive_all_zero_samples(self):
-        zero = dict(in_flight=0, scheduler_leases=0, profile_leases=0, browser_leased=0)
-        busy = {**zero, "browser_leased": 1}
-        probe = Mock(side_effect=[zero, zero, busy, zero, zero, zero, zero])
-        gate.verify_collection_drained(probe, attempts=7, sleep=lambda _: None)
-        self.assertEqual(probe.call_count, 7)
-        with self.assertRaisesRegex(RuntimeError, "drain_timeout"):
-            gate.verify_collection_drained(lambda: busy, attempts=4, sleep=lambda _: None)
+        zero = dict.fromkeys(gate.DRAIN_KEYS, 0)
+        for key in ("browser_leased", "worker_active", "business_leases", "intelligence_active"):
+            busy = {**zero, key: 1}
+            probe = Mock(side_effect=[zero, zero, busy, zero, zero, zero, zero])
+            gate.verify_collection_drained(probe, attempts=7, sleep=lambda _: None)
+            self.assertEqual(probe.call_count, 7)
+            with self.assertRaisesRegex(RuntimeError, f'drain_timeout.*"{key}": 1'):
+                gate.verify_collection_drained(lambda: busy, attempts=4, sleep=lambda _: None)
+        with self.assertRaisesRegex(RuntimeError, "drain_sample_invalid"):
+            gate.verify_collection_drained(lambda: {"in_flight": 0}, sleep=lambda _: None)
 
     def test_node_terminates_worker_before_api_and_supervisor_and_never_escalates(self):
         class Process:
@@ -95,8 +104,58 @@ class GateTests(unittest.TestCase):
                         scope["node_term_only"](pids=[1,2,3])
                     self.assertEqual(signals, [3])
                 else:
+                    scope["verify_final_drain"] = Mock(side_effect=RuntimeError("late active job"))
+                    with self.assertRaisesRegex(RuntimeError, "late active job"):
+                        scope["node_term_only"](pids=[1,2,3])
+                    self.assertEqual(signals, [])
+                    scope["verify_final_drain"] = Mock()
                     scope["node_term_only"](pids=[1,2,3])
+                    scope["verify_final_drain"].assert_called_once_with(worker)
                     self.assertEqual(signals, [3,2,1])
+
+    def test_remote_drain_probe_reads_actual_snapshot_and_uses_readonly_lease_queries(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            root = Path(scratch).resolve()
+            (root/"backend").mkdir()
+            verification = root/"runtime"/"verification"
+            verification.mkdir(parents=True)
+            marker = verification/"collection-claims.pause"
+            marker.write_text(json.dumps({"maintenanceId": "my-release"}))
+            state = root/"runtime"/"worker-scheduler.json"
+            mock = r'''{
+              createConnection:async()=>({
+                query:async(q,args)=>{
+                  if (q==="START TRANSACTION READ ONLY") return [];
+                  if (!q.sql.includes("trend_projection_jobs") || !q.sql.includes("report_exports") ||
+                      !q.sql.includes("browser_collection_jobs") ||
+                      args.length !== (q.sql.match(/\?/g)||[]).length) throw Error("missing leases");
+                  return [[{in_flight:0,scheduler_leases:0,profile_leases:0,browser_leased:0,business_leases:2}]];
+                },rollback:async()=>{},end:async()=>{},
+              }),
+            }'''
+            source = gate.DRAIN_PROBE.replace('require("mysql2/promise")', mock)
+            env = {**os.environ, "DB_HOST":"127.0.0.1","DB_NAME":"product_scout",
+                   "DB_USER":"product_scout","WORKER_SCHEDULER_STATE_FILE":str(state),
+                   "WORKER_SCHEDULER_TICK_MS":"5000"}
+            queues = [{"name":"trend_projection","active_runs":1},{"name":"collection_tasks","active_runs":0}]
+            snapshot = {"status":"running","queues":queues,"active_runs":1}
+
+            def probe(delta=0, start="0", owner="my-release"):
+                state.write_text(json.dumps({**snapshot,
+                    "observed_at":(datetime.now(timezone.utc)+timedelta(seconds=delta)).isoformat()}))
+                return subprocess.run(["node","-e",source,str(root),owner,start], env=env, cwd=root/"backend",
+                    capture_output=True,text=True,timeout=10)
+
+            result = probe()
+            self.assertEqual(result.returncode, 0, result.stderr)
+            output = json.loads(result.stdout)
+            self.assertEqual(set(output), gate.DRAIN_KEYS)
+            self.assertEqual((output["worker_active"],output["intelligence_active"],output["business_leases"]), (1,1,2))
+            self.assertIn("release_worker_snapshot_stale", probe(delta=-20).stderr)
+            self.assertIn("release_worker_snapshot_stale", probe(start=str(int(time.time()*1000)+2000)).stderr)
+            snapshot["active_runs"] = 0
+            self.assertIn("release_worker_snapshot_invalid", probe().stderr)
+            self.assertIn("release_drain_owner_mismatch", probe(owner="other-release").stderr)
 
     def test_python_timeout_does_not_escalate(self):
         from pathlib import PurePosixPath
@@ -123,11 +182,15 @@ class GateTests(unittest.TestCase):
 
     def test_wiring_compiles_both_remote_paths_without_native_restart(self):
         deploy = runpy.run_path(str(ROOT / "scripts/deploy-baota.py"))
-        node = deploy["panel_node_action_source"]("stop")
+        node = deploy["panel_node_action_source"]("stop", "fixture-owner")
         python = deploy["panel_deploy_source"]("a"*40, False)
+        backup = deploy["backup_preflight_source"](deploy["PROJECT_ROOT"], "fixture-owner", False)
         compile(node, "node_remote", "exec")
         compile(python, "python_remote", "exec")
+        compile(backup, "backup_remote", "exec")
         self.assertIn("install_node_term_only(model", node)
+        self.assertIn("release_final_worker_not_drained", node)
+        self.assertNotIn("archive_rollbacks", python)
         self.assertIn("PythonModel.kill_pids=staticmethod(python_term_only)", python)
         self.assertNotIn("script/restart_project.py", python)
         self.assertNotIn(".kill()", node+python)
@@ -137,9 +200,11 @@ class GateTests(unittest.TestCase):
         source = inspect.getsource(deploy["main"])
         full = source[source.index('with tempfile.TemporaryDirectory(prefix="scoutops-deploy-")'):]
         tokens = (
+            'backup_preflight_source(PROJECT_ROOT, lock_owner',
+            'verify_public_runtime_sample(production_identity["build_sha"])',
             'release_claims(client, "pause", lock_owner)',
             'verify_collection_drained(',
-            'panel_node_action_source("stop")',
+            'panel_node_action_source("stop", lock_owner',
             'ssh_exec(client, migrate',
             'remote_python(client, panel_deploy_source',
             'resume_owned_release_claims(client, lock_owner)',

@@ -32,10 +32,13 @@ from pathlib import Path
 import paramiko
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from deploy_baota_backup_gate import backup_preflight_source
 from deploy_baota_runtime_gate import (
+    DRAIN_KEYS,
     NODE_TERM_ONLY,
     PYTHON_TERM_ONLY,
     claims_command,
+    drain_argv,
     drain_command,
     verify_after_claims_resume,
     verify_collection_drained,
@@ -492,14 +495,16 @@ def remote_python(client: paramiko.SSHClient, source: str, timeout: int = 120) -
     return result
 
 
-def panel_node_action_source(action: str) -> str:
+def panel_node_action_source(action: str, drain_owner: str | None = None) -> str:
     if action not in {"stop", "start"}:
         raise ValueError("unsupported Node project action")
     values = json.dumps(
-        {"root": PROJECT_ROOT, "node_project": NODE_PROJECT, "action": action, "node_start": NODE_START_COMMAND},
+        {"root": PROJECT_ROOT, "node_project": NODE_PROJECT, "action": action, "node_start": NODE_START_COMMAND,
+         "drain_argv": drain_argv(PROJECT_ROOT, NODE_BIN, drain_owner) if drain_owner else None,
+         "drain_keys": sorted(DRAIN_KEYS)},
         ensure_ascii=False,
     )
-    return f'''import json, sys, time
+    return f'''import json, subprocess, sys, time
 from pathlib import Path
 sys.path.insert(0, "/www/server/panel")
 sys.path.insert(0, "/www/server/panel/class")
@@ -527,6 +532,17 @@ def project_processes():
 
 model=NodeModel(); request=public.dict_obj(); request.project_name=v["node_project"]
 {NODE_TERM_ONLY if action == "stop" else ""}
+if v["drain_argv"]:
+    def verify_final_drain(worker):
+        checked=subprocess.run(
+            [*v["drain_argv"], str(int(worker.create_time()*1000))], cwd=root/"backend",
+            capture_output=True, text=True, timeout=8,
+        )
+        if checked.returncode:
+            raise RuntimeError("release_final_worker_drain_probe_failed")
+        state=json.loads(checked.stdout)
+        if set(state)!=set(v["drain_keys"]) or any(type(value) is not int or value!=0 for value in state.values()):
+            raise RuntimeError("release_final_worker_not_drained: "+json.dumps(state,sort_keys=True))
 if v["action"] == "stop": install_node_term_only(model, v["node_project"], v["node_start"])
 response=model.stop_project(request) if v["action"] == "stop" else model.start_project(request)
 text=json.dumps(response, ensure_ascii=False)
@@ -635,12 +651,7 @@ try:
     if not chromium_executable.is_file() or not os.access(chromium_executable, os.X_OK):
         raise RuntimeError("configured production Chromium is unavailable")
 
-    stale_rollbacks = {{
-        child for child in root.iterdir()
-        if re.fullmatch(r"\\.deploy-rollback-([0-9a-f]{{40}})", child.name)
-        and child.name != rollback.name
-    }}
-    permitted_entries = allowed | {{stage.name, rollback.name, upload.name}} | {{child.name for child in stale_rollbacks}}
+    permitted_entries = allowed | {{stage.name, upload.name}}
     if v["initialize"]:
         permitted_entries.add("shared")
     unsupported_entries = {{child.name for child in root.iterdir()}} - permitted_entries
@@ -668,32 +679,11 @@ try:
             if not (root / name).exists():
                 raise RuntimeError("fixed layout is incomplete; run --initialize-layout")
 
-    if stale_rollbacks:
-        backups = root / "backups"
-        ensure_inside(backups)
-        if backups.is_symlink() or not backups.is_dir():
-            raise RuntimeError("fixed backups directory is unavailable")
-        archive_pairs = []
-        for source in sorted(stale_rollbacks, key=lambda child: child.name):
-            ensure_inside(source)
-            match = re.fullmatch(r"\\.deploy-rollback-([0-9a-f]{{40}})", source.name)
-            if source.is_symlink() or not source.is_dir() or not match:
-                raise RuntimeError("stale rollback entry is not a regular directory: " + source.name)
-            destination = backups / ("deploy-rollback-" + match.group(1))
-            ensure_inside(destination)
-            if destination.exists() or destination.is_symlink():
-                raise RuntimeError("rollback archive destination already exists: " + destination.name)
-            archive_pairs.append((source, destination))
-        for source, destination in archive_pairs:
-            source.rename(destination)
-
     node = NodeModel()
     install_node_term_only(node, v["node_project"], v["node_start"])
     python_model = PythonModel()
     stop_get = public.dict_obj(); stop_get.project_name = v["node_project"]
     panel_ok(node.stop_project(stop_get), "stop Node", ("项目未启动",))
-    if rollback.exists():
-        shutil.rmtree(rollback)
     rollback.mkdir(mode=0o750)
     swapped = True
     for name in ("frontend", "backend", "python"):
@@ -1254,6 +1244,9 @@ def main() -> None:
             production_identity = remote_python(client, production_identity_source(), timeout=30)
             verify_production_sha_history(repo, production_identity.get("build_sha"), build_sha)
             verify_opportunity_identity_migration_base(repo, production_identity)
+            backup_preflight = remote_python(client, backup_preflight_source(PROJECT_ROOT, lock_owner, args.initialize_layout), timeout=600)
+            print(json.dumps({"gate": "pre_stop_backup", "archived": backup_preflight["archived"],
+                              "cross_device": backup_preflight["cross_device"]}))
             if args.rollback_drill and (production_identity.get("migration_version") not in ("0073_automatic_selection_migration_timestamp_timezone.up.sql", DEPLOYMENT_MIGRATION_VERSION) or DEPLOYMENT_MIGRATION_VERSION != "0074_provider_terms_permanent.up.sql" or production_identity.get("build_sha") == build_sha):
                 raise RuntimeError("rollback drill requires a different known prior build with the explicitly compatible 0073/0074 schema")
             sftp = client.open_sftp()
@@ -1282,12 +1275,13 @@ def main() -> None:
                     raise RuntimeError("live migration does not support the release claim-maintenance gate")
                 if release_claims(client, "status").get("paused") is not False:
                     raise RuntimeError("claims already paused; do not take another operator's pause")
+                verify_public_runtime_sample(production_identity["build_sha"])
                 claim_pause_attempted = True
                 paused = release_claims(client, "pause", lock_owner)
                 if paused.get("paused") is not True or paused.get("maintenanceId") != lock_owner:
                     raise RuntimeError("release_claim_pause_not_confirmed")
                 verify_collection_drained(lambda: json.loads(ssh_exec(client, drain_command(PROJECT_ROOT, NODE_BIN, lock_owner), timeout=12)))
-            remote_python(client, panel_node_action_source("stop"), timeout=90)
+            remote_python(client, panel_node_action_source("stop", lock_owner if claim_pause_attempted else None), timeout=100)
             node_stopped_for_migration = True
             ssh_exec(client, migrate, timeout=120)
             remote_python(client, panel_deploy_source(build_sha, args.initialize_layout), timeout=300)
