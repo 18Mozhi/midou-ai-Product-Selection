@@ -20,6 +20,14 @@ UI第二阶段的来源空态修复仅更新Web条件渲染，未改后端、配
 
 ## 取消指定快照的未开跑采集积压
 
+### 维护暂停领取
+
+- 部署包含维护开关的运行包后，SSH 进入固定生产 `/www/wwwroot/ai选品/backend`，使用既有 Node 和受限配置运行 `node --env-file=/www/wwwroot/ai选品/config/product_scout.env scripts/collection-claim-maintenance.mjs status`。默认未暂停，不新增环境变量。
+- 用本次维护 UUID 执行同一命令的 `pause UUID`，核对返回 `paused:true`；同一 UUID 可重试。标记固定在 `/www/wwwroot/ai选品/runtime/verification/collection-claims.pause`，不直接手建、删除或替换。领取事务和开关共享 MySQL 会话互斥锁；暂停确认返回后，已提交的领取仍算在途，不会被中止。
+- Node Worker 暂停新采集领取轮询；独立浏览器领取暂停。Python 仍可领取有同组织、工作区、有效 Worker 父租约的浏览器子作业；已领取作业的执行、心跳、回写和释放不经过开关。Amazon 浏览器健康检查若因维护不能领取，返回 409，不覆盖来源健康记录。暂停不更新任务行、不中断进程、不修改来源熔断。
+- 确认在途采集、调度租约、档案租约、已领浏览器作业和人工接管均排空，再进入正式发布或取消流程；只用原清单和 SHA。标记不随固定目录切换丢失。确认取消审计后用同一 UUID 执行 `resume UUID`，再用 `status` 核对 `paused:false` 并观察后续正常领取；切换开关本身不重启。
+- 首次上线开关仍需正式发布并由宝塔加载 Node API/Worker；Python 代码及接口字段不变。**未安装开关的旧运行包不会识别该标记**，不得先写标记并据此宣称旧 Worker 已排空。首次发布前仍须取得安全空窗。回退到不识别开关的版本会恢复领取，不得在要求保持暂停时无提示回退。
+
 - 先在固定生产根目录的 `runtime/verification` 内保存权限为 `0600` 的冻结清单 `collection-backlog-<batch_uuid>.json`，内容包括 `schema: 1`、`batch_id`、UTC `captured_at`，及 `rows` 中的任务 `id`、`organization_id`、`workspace_id`、`version`、`status`。冻结时仅选经批准的活动范围及未开跑任务；清单不导出生产，记录 SHA-256 后不再更新。一次最多 2,000 条。
 - 通过正式发布链先上 `0076_collection_backlog_cancellation.up.sql` 和同版本 Node/Web。迁移只追加 `cancelled`，MySQL 5.7 不支持在线变更时失败关闭，不回退到表复制。发布前检查真实在途租约和浏览器接管会话为空；不能为了取消待办而中断在途。工具执行本身不需要重启，也不自动执行取消。
 - SSH 进入固定 `backend` 目录，沿用运行时 Node 和受限环境，先执行 `node --env-file=/www/wwwroot/ai选品/config/product_scout.env scripts/cancel-collection-backlog.mjs SNAPSHOT SHA256`。无 `--apply` 只读。批准范围与预览一致后，使用**同一**文件、哈希追加 `--apply`。

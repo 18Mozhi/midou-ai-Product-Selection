@@ -1,4 +1,16 @@
 {
+  "collectionClaimMaintenance": {
+    "requirements": "docs/runbooks/m06-03-collection-console.md",
+    "sourceFiles": [
+      "scripts/collection-claim-maintenance.mjs",
+      "packages/database/src/collection-claim-maintenance.ts",
+      "apps/worker/src/collection-task-worker.ts",
+      "apps/api/src/mysql-crawler-runtime-repository.ts",
+      "apps/api/src/provider-adapter-service.ts"
+    ],
+    "testFiles": ["tests/unit/collection-claim-maintenance.test.mjs"],
+    "contract": "Production SSH operator toggles a fixed runtime marker under the same MySQL session fence as admission. No new top-level collection or standalone browser claims while paused; an actively leased, scoped Worker parent can still acquire a browser child. Heartbeats, execution, completion and source circuits are unchanged. Old runtime does not observe the marker; first installation requires a safe release window."
+  },
   "collectionFrozenBacklogCancellation": {
     "requirements": "docs/runbooks/m06-03-collection-console.md",
     "sourceFiles": [

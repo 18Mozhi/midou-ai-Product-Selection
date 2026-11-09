@@ -1,6 +1,13 @@
 import { createHash } from "node:crypto";
 import mysql, { type Pool, type PoolConnection } from "mysql2/promise";
 import type { RuntimeConfig } from "@scoutops/config";
+export {
+  COLLECTION_CLAIM_PAUSE_FILE,
+  changeCollectionClaimPause,
+  createCollectionClaimFence,
+  withCollectionClaimFence,
+  type CollectionClaimFence,
+} from "./collection-claim-maintenance.js";
 export { currentProductVersionJoinSql } from "./current-product-version-sql.js";
 export { selectionCompletionSourceNotRejectedSql } from "./selection-completion-source-policy.js";
 export {

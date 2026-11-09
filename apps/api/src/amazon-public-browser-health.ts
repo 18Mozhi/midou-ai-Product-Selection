@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { RuntimeConfig } from "@scoutops/config";
+import { COLLECTION_CLAIM_PAUSE_FILE } from "@scoutops/database";
 import { PlaywrightCrawlerEngine, runWithEncryptedProfile } from "@scoutops/playwright-crawler";
 import { join } from "node:path";
 import { ProviderAdapterFailure, type AdapterHealthSignal } from "@scoutops/provider-adapters";
@@ -12,7 +13,7 @@ import {
 } from "@scoutops/provider-sources";
 import { MySqlCredentialAssetRepository } from "./mysql-credential-asset-repository.js";
 import { MySqlCrawlerRuntimeRepository } from "./mysql-crawler-runtime-repository.js";
-import { CrawlerRuntimeService } from "./crawler-runtime-service.js";
+import { CrawlerRuntimeError, CrawlerRuntimeService } from "./crawler-runtime-service.js";
 import type { AdapterProviderRecord, ProviderProbeContext } from "./provider-adapter-service.js";
 
 export class AmazonPublicBrowserHealth {
@@ -65,6 +66,7 @@ export class AmazonPublicBrowserHealth {
           context.automaticCollectionTaskId
             ? ""
             : this.config.providerAdapters.amazonBrowserProfileId,
+          this.config.nodeEnv === "production" ? COLLECTION_CLAIM_PAUSE_FILE : undefined,
         ),
       );
       const record = await new MySqlCredentialAssetRepository(this.pool).getCipherRecord(
@@ -190,6 +192,8 @@ export class AmazonPublicBrowserHealth {
         message: "匿名浏览器搜索与同一商品详情均已实际解析。",
       };
     } catch (error) {
+      if (error instanceof CrawlerRuntimeError && error.code === "crawler_claims_paused")
+        throw error;
       return {
         status: "degraded",
         latencyMs: Date.now() - started,

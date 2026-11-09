@@ -1,4 +1,5 @@
 import { anonymousAmazonFingerprint } from "@scoutops/provider-sources";
+import { withCollectionClaimFence } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import { setTimeout as delay } from "node:timers/promises";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
@@ -32,12 +33,35 @@ const run = (row: RowDataPacket): CrawlerRunSummary => ({
   started_at: new Date(row.started_at).toISOString(),
   finished_at: row.finished_at == null ? null : new Date(row.finished_at).toISOString(),
 });
+const activeWorkerParentSql =
+  "FROM collection_tasks t JOIN crawler_scheduler_leases owner " +
+  "ON owner.task_id=t.id AND owner.organization_id=t.organization_id AND owner.workspace_id=t.workspace_id " +
+  "WHERE t.status='running' AND t.lease_expires_at>NOW(3) AND owner.slot_type='worker' " +
+  "AND owner.lease_owner=t.lease_owner AND owner.lease_token_hash=t.lease_token_hash AND owner.expires_at>NOW(3)";
+const browserJobActiveParentSql =
+  `AND EXISTS (SELECT 1 ${activeWorkerParentSql} AND t.id=j.collection_task_id ` +
+  "AND t.organization_id=j.organization_id AND t.workspace_id=j.workspace_id) ";
 export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
   constructor(
     private readonly pool: Pool,
     private readonly amazonPublicProfileId = "",
     private readonly amazonHealthProfileId = "",
+    private readonly claimPausePath?: string,
   ) {}
+  private async claimConnection<T>(
+    work: (connection: PoolConnection, paused: boolean) => Promise<T>,
+  ): Promise<T> {
+    const connection = await this.pool.getConnection();
+    try {
+      return this.claimPausePath
+        ? await withCollectionClaimFence(connection, this.claimPausePath, (paused) =>
+            work(connection, paused),
+          )
+        : await work(connection, false);
+    } finally {
+      connection.release();
+    }
+  }
   async list(input: Parameters<CrawlerRuntimeRepository["list"]>[0]) {
     const conditions: string[] = [],
       parameters: unknown[] = [];
@@ -148,7 +172,16 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
   async acquire(input: Parameters<CrawlerRuntimeRepository["acquire"]>[0]) {
     for (let attempt = 0; ; attempt++) {
       try {
-        return await this.acquireOnce(input);
+        const result = await this.claimConnection((c, paused) =>
+          this.acquireOnce(input, c, paused),
+        );
+        if (result.replayed) return result;
+        // Readback is after commit and after the admission fence, as before.
+        const [rows] = await this.pool.query<RowDataPacket[]>(
+          "SELECT * FROM crawler_browser_runs WHERE id=?",
+          [input.runId],
+        );
+        return { run: run(rows[0]!), replayed: false };
       } catch (error) {
         if (!(error instanceof RolledBackCrawlerLeaseDeadlock)) throw error;
         if (attempt === 2) throw error.original;
@@ -156,9 +189,12 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       }
     }
   }
-  private async acquireOnce(input: Parameters<CrawlerRuntimeRepository["acquire"]>[0]) {
-    const c = await this.pool.getConnection(),
-      route = "/internal/crawler-runtime/acquire";
+  private async acquireOnce(
+    input: Parameters<CrawlerRuntimeRepository["acquire"]>[0],
+    c: PoolConnection,
+    paused: boolean,
+  ) {
+    const route = "/internal/crawler-runtime/acquire";
     let committed = false;
     try {
       await c.beginTransaction();
@@ -171,8 +207,14 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       );
       if (replays[0]) {
         await c.commit();
-        return { run: run(replays[0]), replayed: true };
+        return { run: run(replays[0]), replayed: true as const };
       }
+      if (paused)
+        throw new CrawlerRuntimeError(
+          "crawler_claims_paused",
+          409,
+          "采集领取处于维护暂停；已有作业可以继续心跳和回写。",
+        );
       await c.query(
         "DELETE FROM crawler_scheduler_leases WHERE slot_type='crawler' AND expires_at<=?",
         [input.now],
@@ -326,11 +368,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       );
       await c.commit();
       committed = true;
-      const [rows] = await this.pool.query<RowDataPacket[]>(
-        "SELECT * FROM crawler_browser_runs WHERE id=?",
-        [input.runId],
-      );
-      return { run: run(rows[0]!), replayed: false };
+      return { replayed: false as const };
     } catch (error) {
       if (!committed) {
         await c.rollback();
@@ -340,8 +378,6 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       if ((error as { code?: string }).code === "ER_DUP_ENTRY")
         throw new CrawlerRuntimeError("crawler_runtime_conflict", 409, "刷新采集运行状态后重试。");
       throw error;
-    } finally {
-      c.release();
     }
   }
   async heartbeat(input: Parameters<CrawlerRuntimeRepository["heartbeat"]>[0]) {
@@ -538,7 +574,14 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     }
   }
   async acquireJob(input: Parameters<CrawlerRuntimeRepository["acquireJob"]>[0]) {
-    const c = await this.pool.getConnection();
+    return this.claimConnection((c, paused) => this.acquireJobOnce(input, c, paused));
+  }
+  private async acquireJobOnce(
+    input: Parameters<CrawlerRuntimeRepository["acquireJob"]>[0],
+    c: PoolConnection,
+    parentOnly: boolean,
+  ) {
+    const parentFilter = parentOnly ? browserJobActiveParentSql : "";
     try {
       await c.beginTransaction();
       await c.query(
@@ -575,15 +618,15 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           "UPDATE crawler_browser_runs r JOIN browser_collection_jobs j ON j.crawler_run_id=r.id SET ",
           "r.status='timed_out',r.error_code='lease_expired',r.finished_at=? WHERE j.status='leased' AND ",
           "j.lease_expires_at<=? AND r.status='running'",
-        ].join(""),
+        ].join("") + (parentOnly ? ` ${parentFilter}` : ""),
         [input.now, input.now],
       );
       await c.query(
         [
-          "UPDATE browser_collection_jobs SET status='queued',crawler_profile_id=NULL,crawler_run_id=NULL,lease",
+          "UPDATE browser_collection_jobs j SET status='queued',crawler_profile_id=NULL,crawler_run_id=NULL,lease",
           "_owner=NULL,lease_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL,error_code=",
           "'lease_expired',updated_at=? WHERE status='leased' AND lease_expires_at<=?",
-        ].join(""),
+        ].join("") + (parentOnly ? ` ${parentFilter}` : ""),
         [input.now, input.now],
       );
       await c.query("DELETE FROM crawler_profile_leases WHERE expires_at<=?", [input.now]);
@@ -611,6 +654,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           "p.provider_id=j.provider_id AND p.status='active' JOIN credential_assets a ON ",
           "a.id=p.credential_asset_id AND a.status='active' AND a.kind IN ('browser_profile','cookie_bundle') ",
           "WHERE j.status='queued' " +
+            parentFilter +
             (this.amazonPublicProfileId
               ? "AND (v.access_mode='authenticated_browser' OR (v.code='amazon_product' AND p.id=? AND a.kind='browser_profile' AND a.fingerprint=? AND JSON_UNQUOTE(JSON_EXTRACT(j.execution_request_json,'$.purpose'))='amazon_public')) "
               : "") +
@@ -625,6 +669,16 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       if (!row) {
         await c.commit();
         return null;
+      }
+      if (parentOnly) {
+        const [parents] = await c.query<RowDataPacket[]>(
+          `SELECT t.id ${activeWorkerParentSql} AND t.id=? AND t.organization_id=? AND t.workspace_id=? FOR UPDATE`,
+          [row.collection_task_id, row.organization_id, row.workspace_id],
+        );
+        if (!parents[0]) {
+          await c.commit();
+          return null;
+        }
       }
       if (row.expires_at != null && new Date(row.expires_at) <= input.now) {
         await c.query(
@@ -795,8 +849,6 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       await c.rollback();
       if ((error as { code?: string }).code === "ER_DUP_ENTRY") return null;
       throw error;
-    } finally {
-      c.release();
     }
   }
   async heartbeatJob(input: Parameters<CrawlerRuntimeRepository["heartbeatJob"]>[0]) {

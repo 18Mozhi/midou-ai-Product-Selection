@@ -9,6 +9,7 @@ import {
   type ProviderAdapterRegistry,
   type ProviderRuntimeDefinition,
 } from "@scoutops/provider-adapters";
+import { CrawlerRuntimeError } from "./crawler-runtime-service.js";
 
 export class ProviderAdapterServiceError extends Error {
   constructor(
@@ -189,6 +190,8 @@ export class ProviderAdapterService {
                 traceId: context.traceId,
               });
       } catch (error) {
+        if (error instanceof CrawlerRuntimeError && error.code === "crawler_claims_paused")
+          throw new ProviderAdapterServiceError(error.code, error.statusCode, error.actionHint);
         const failure = classifyProviderAdapterFailure(error);
         signal = {
           status: failure.status,
