@@ -4546,7 +4546,9 @@ test("candidate pager retains scope and boundaries across two server pages", asy
     expect(controlsBox!.width).toBeCloseTo(catalogueBox!.width, 0);
     expect(tableBox!.x + tableBox!.width - (noteBox!.x + noteBox!.width)).toBeLessThanOrEqual(6);
     await expect(catalogue.locator(".catalogue-sort-note")).toHaveCSS("translate", "-6px -3px");
-    await expect(pager).toHaveCSS("translate", "-14px -1px");
+    const nextBox = (await next.boundingBox())!;
+    expect(nextBox.x + nextBox.width).toBeCloseTo(tableBox!.x + tableBox!.width, 0);
+    await expect(pager).toHaveCSS("translate", "0px -1px");
     await expect(pager).toBeInViewport({ ratio: 1 });
     await expect(table.locator(".selection-product-name").first()).toHaveCSS(
       "padding-inline-start",
@@ -4632,8 +4634,9 @@ test("candidate pager retains scope and boundaries across two server pages", asy
     await expect(market).toHaveCSS("padding-inline-start", "16px");
     const activeTab = tabs.locator('button[aria-current="page"]');
     await expect(activeTab).toHaveCSS("font-size", "16px");
+    await expect(activeTab).toHaveCSS("font-weight", "700");
     expect(await activeTab.evaluate((node) => getComputedStyle(node, "::after").height)).toBe(
-      "2px",
+      "3px",
     );
     expect(await market.evaluate((node) => (node as HTMLInputElement).type)).toBe("text");
     await expect(catalogue.getByRole("checkbox")).toHaveCount(0);

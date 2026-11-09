@@ -654,12 +654,14 @@ html[data-design="commerce"] #app .midou-completed-actions > button {
     }
     .catalogue-controls > nav button[aria-current="page"] {
       border-block-end-color: transparent;
+      color: var(--so-primary-strong);
+      font-weight: 700;
     }
     .catalogue-controls > nav button[aria-current="page"]::after {
       position: absolute;
       inset-inline: 11px;
       inset-block-end: -2px;
-      block-size: 2px;
+      block-size: 3px;
       border-radius: 2px 2px 0 0;
       background: var(--so-primary);
       content: "";
@@ -863,8 +865,11 @@ html[data-design="commerce"] #app .midou-completed-actions > button {
   html[data-design="commerce"] #app .product-catalog--candidates .catalog-data-note > span {
     translate: 1px -1px;
   }
+  html[data-design="commerce"] #app .product-catalog--candidates {
+    --candidate-table-edge-bleed: 5px;
+  }
   html[data-design="commerce"] #app .product-catalog--candidates .selection-product-list {
-    margin-inline: -5px;
+    margin-inline: calc(-1 * var(--candidate-table-edge-bleed));
     border-radius: 10px;
   }
   html[data-design="commerce"]
@@ -1048,7 +1053,7 @@ html[data-design="commerce"] #app .midou-completed-actions > button {
         translate: 3px -2px;
       }
       > header small {
-        translate: 2px 2px;
+        translate: 5px 1px;
       }
       .selection-product-name {
         padding-inline-start: 4px;
@@ -1079,7 +1084,9 @@ html[data-design="commerce"] #app .midou-completed-actions > button {
         inset-block-start: 2px;
       }
       .opportunity-pagination {
-        translate: -14px -1px;
+        margin-inline: calc(-1 * var(--candidate-table-edge-bleed));
+        padding-inline-end: 0;
+        translate: 0 -1px;
       }
     }
   }
