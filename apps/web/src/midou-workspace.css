@@ -2571,6 +2571,18 @@ html[data-design="commerce"] #app .role-top-actions .role-theme-switcher > butto
   display: none;
 }
 
+/* Use one readable inset for the shared workspace switcher without resizing its box. */
+@media (min-width: 1600px) {
+  html[data-design="commerce"]:not([data-density="compact"])
+    #app
+    .role-shell.role-shell--c:is([data-shell="member"], [data-shell="organization_admin"])
+    .commerce-sidebar
+    footer
+    .commerce-workspace-switch {
+    padding-inline: 14px;
+  }
+}
+
 /* Keep member navigation geometry stable across the wide workspaces. */
 @media (min-width: 1600px) {
   html[data-design="commerce"]:not([data-density="compact"])

@@ -978,6 +978,8 @@ test("wide masthead height stays constant across member organization and platfor
     const switcher = rail.getByRole("link", { name: "侧栏切换工作区", exact: true });
     if (await switcher.count()) {
       await expect(switcher).toHaveText("切换工作区");
+      await expect(switcher).toHaveCSS("padding-inline-start", "14px");
+      await expect(switcher).toHaveCSS("padding-inline-end", "14px");
       await expect(switcher.locator("small")).toHaveCount(0);
       await expect(switcher.locator("svg").first().locator("path")).toHaveAttribute(
         "d",

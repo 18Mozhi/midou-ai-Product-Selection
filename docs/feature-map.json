@@ -226,6 +226,7 @@
     "contract": "Preference shortcut badge reflects confirmed in-app notification preference, not its mutable draft. No new API calls or notification behavior."
   },
   "referenceNavigationPolish": {
+    "sharedWideWorkspaceSwitcherInset": "At >=1600px standard density, the member and organization sidebar workspace switchers use the same 14px inline inset. Preserve the hit box, long-name ellipsis, platform return, single breadcrumb, routes, permissions and preferences.",
     "sharedWorkspaceCanvas": "Member, organization and platform workspaces use the shared theme canvas on the shell itself at desktop widths rather than painting a different content surface at 1600px. Header, sidebar, density and route permissions are unchanged.",
     "sidebarMenuScrollRegion": "Member, organization and platform shells share a menu-group wrapper. In supported short desktops only route groups scroll, leaving area tabs and footer in reach. Tall layout, mobile navigation, permissions and breadcrumb behavior are unchanged.",
     "wideAdminRailRhythm": "Align wide organization navigation group labels on a consistent reading inset and refine the platform workspace/settings icon insets in the tall rail. Do not alter group order, access, link size or the single masthead breadcrumb.",
