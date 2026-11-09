@@ -65,3 +65,4 @@ Playwright 默认继续使用本地开发端口 4101/5173；宝塔模块验收�
 `0027a_release_rollout_attempts_m07_05.up.sql` 将 `(stage, build_sha)` 唯一键替换为普通查询索引，允许同一构建的多次发布尝试保留独立审计。它兼容 MySQL 5.7/utf8mb4；down 迁移只有在不存在重复 stage/build 时才能恢复唯一键，否则必须保留 0027a。完整逆序为 0027a → 0027 → 0026，执行前先导出发布审计。
 
 迁移 `0026_release_rollout_m07_05.up.sql`、`0027_release_write_probe_m07_05.up.sql` 与 `0027a_release_rollout_attempts_m07_05.up.sql` 兼容 MySQL 5.7/utf8mb4。应用回滚不删除 gate/event/probe 审计。只有确认无发布记录依赖后才能按 `0027a`、`0027`、`0026` 的逆序执行 down migration；执行前必须先导出发布审计。回滚配置时由宝塔任务写入 0% candidate 分流、执行 Nginx `-t` 后由宝塔 Nginx reload，不使用 systemd、独立 PM2、宿主 crontab 或面板外服务。
+0076 取消积压迁移为候选运行包追加 `collection_tasks.status=cancelled`，不迁移历史记录、不自动执行取消。运行包回退只允许 0075/0076 边界，保留数据库枚举和审计；不得把本地候选或包回退当作实际生产批次验收。见 [采集运维](../runbooks/m06-03-collection-console.md#取消指定快照的未开跑采集积压)。

@@ -1,4 +1,15 @@
 {
+  "collectionFrozenBacklogCancellation": {
+    "requirements": "docs/runbooks/m06-03-collection-console.md",
+    "sourceFiles": [
+      "scripts/cancel-collection-backlog.mjs",
+      "database/migrations/0076_collection_backlog_cancellation.up.sql",
+      "packages/collection-tasks/src/index.ts",
+      "apps/web/src/components/CollectionTaskCenter.vue"
+    ],
+    "testFiles": ["tests/unit/collection-backlog-cancellation.test.mjs"],
+    "contract": "Explicit SSH maintenance command defaults to read-only. A hash-pinned set of scoped IDs excludes post-snapshot tasks; row locks recheck unstarted eligibility. Append cancelled in MySQL 5.7; status and per-task batch audit commit together. Retain in-flight work, evidence and history; never automatically run or down-migrate the cancellation."
+  },
   "referenceOrganizationRail": {
     "sourceFiles": [
       "apps/web/src/components/NavigationShell.vue",

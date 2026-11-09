@@ -17,3 +17,11 @@
 UI第二阶段的来源空态修复仅更新Web条件渲染，未改后端、配置、排序、分页或批量重放；不需要新增环境项/迁移，也不要求单独重启Worker/Python。由既有宝塔发布链上线，整体部署的停启和既有迁移预检仍需执行。
 
 回滚：模块级数据库回退才在备份与授权后先回退 Web/API，再执行 `0021_collection_console_m06_03.down.sql`；单纯回退上述Web空态改动不执行数据库down迁移。已有来源、任务、尝试、死信、质量事实与平台审计不删除。
+
+## 取消指定快照的未开跑采集积压
+
+- 先在固定生产根目录的 `runtime/verification` 内保存权限为 `0600` 的冻结清单 `collection-backlog-<batch_uuid>.json`，内容包括 `schema: 1`、`batch_id`、UTC `captured_at`，及 `rows` 中的任务 `id`、`organization_id`、`workspace_id`、`version`、`status`。冻结时仅选经批准的活动范围及未开跑任务；清单不导出生产，记录 SHA-256 后不再更新。一次最多 2,000 条。
+- 通过正式发布链先上 `0076_collection_backlog_cancellation.up.sql` 和同版本 Node/Web。迁移只追加 `cancelled`，MySQL 5.7 不支持在线变更时失败关闭，不回退到表复制。发布前检查真实在途租约和浏览器接管会话为空；不能为了取消待办而中断在途。工具执行本身不需要重启，也不自动执行取消。
+- SSH 进入固定 `backend` 目录，沿用运行时 Node 和受限环境，先执行 `node --env-file=/www/wwwroot/ai选品/config/product_scout.env scripts/cancel-collection-backlog.mjs SNAPSHOT SHA256`。无 `--apply` 只读。批准范围与预览一致后，使用**同一**文件、哈希追加 `--apply`。
+- 只遍历清单内 ID，按行锁实时检查状态、版本、作用域、尝试、租约、浏览器任务、子查询和采集证据。清单生成后的新任务不进入；已启动或已产出则跳过。每 50 条一个事务，任务终态与 `collection.task.cancelled` 审计同事务，包含原状态、批次和快照哈希；不删除任务、历史或证据。中途失败只用原批次重跑，已提交记录不会重复取消。验收看 `cancelled` 的去重审计回执数和 `eligible_remaining=0`，另报受保护数；不是把全局队列长期保持为零。
+- 回滚运行包仅允许保留 0075/0076 兼容边界，不回退 0076 数据库枚举、不改写已取消记录、不自动重排。若操作中止，先停止执行并核对同批次回执，不清审计或做逆向批量 UPDATE。

@@ -7980,6 +7980,7 @@ components:
                 dead_letter,
                 manually_replayed,
                 automatically_replayed,
+                cancelled,
               ],
           }
         last_error_code: { type: string, nullable: true }
@@ -9715,6 +9716,7 @@ components:
           dead_letter,
           manually_replayed,
           automatically_replayed,
+          cancelled,
         ]
     CoverageStatus:
       type: string

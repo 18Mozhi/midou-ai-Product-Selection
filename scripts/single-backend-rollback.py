@@ -5,6 +5,13 @@ import inspect
 
 def validate_identity_rollback_target(current_migration, target_migration, target_sha):
     identity_migration = "0075_competitor_opportunity_identity.up.sql"
+    cancellation_migration = "0076_collection_backlog_cancellation.up.sql"
+    if current_migration == cancellation_migration:
+        if target_migration not in (identity_migration, cancellation_migration):
+            raise RuntimeError("rollback_target_lacks_collection_cancellation_compatible_schema")
+        return
+    if target_migration == cancellation_migration:
+        target_migration = identity_migration
     if identity_migration not in (current_migration, target_migration):
         return
     if target_migration == identity_migration:
