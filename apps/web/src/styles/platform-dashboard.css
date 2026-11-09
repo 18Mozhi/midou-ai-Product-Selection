@@ -1304,7 +1304,7 @@ html[data-design="commerce"] #app .platform-dashboard--review {
       translate: -1px 0;
     }
     .platform-trend-empty > span {
-      translate: 1px -1px;
+      translate: 1px -2px;
     }
     /* Align the icon, label and value to the same baseline. */
     .platform-system-checks .platform-signals li > :is(svg, span, strong) {
@@ -1496,6 +1496,10 @@ html[data-design="commerce"] #app .platform-dashboard--review {
     .platform-trend-empty > strong {
       font-size: 18px;
       font-weight: 750;
+    }
+
+    .platform-facts article > span {
+      font-weight: 600;
     }
 
     .platform-facts article[data-metric="sources"] > :is(span, strong, a, small) {

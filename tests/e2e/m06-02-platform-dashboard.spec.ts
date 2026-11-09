@@ -1762,6 +1762,13 @@ test("platform reference first fold fits system checks and source health without
   );
   await expect(emptyTrend.locator(":scope > strong")).toHaveCSS("font-size", "18px");
   await expect(emptyTrend.locator(":scope > span")).toHaveCSS("font-size", "14px");
+  await expect(emptyTrend.locator(":scope > span")).toHaveCSS("translate", "1px -2px");
+  const metricLabels = page.getByRole("region", { name: "平台指标" }).locator("article > span");
+  await expect(metricLabels).toHaveCount(5);
+  for (const label of await metricLabels.all()) {
+    await expect(label).toHaveCSS("font-weight", "600");
+    await expect(label).toHaveCSS("line-height", "22px");
+  }
   await expect(emptyTrend.getByRole("link", { name: "查看采集队列" })).toBeVisible();
   const sourceCard = (await sources.boundingBox())!;
   expect(Math.abs(trendCard.y - 499)).toBeLessThanOrEqual(2);
@@ -2054,6 +2061,7 @@ test("platform reference first fold fits system checks and source health without
   );
   console.log("PLATFORM_RAIL_FOOTER", JSON.stringify(footerInsets));
   expect(footerInsets).toEqual(["15px", "14px"]);
+
   await storage.getByText("存储统计", { exact: true }).click();
   await expect(storage.locator("dl")).toContainText("活动文件体积");
   await expect(storage.locator("dl")).toContainText("窗内文件增长");
