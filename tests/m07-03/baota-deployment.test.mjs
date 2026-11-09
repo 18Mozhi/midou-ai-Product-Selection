@@ -93,7 +93,14 @@ test("M07-03 deployer runs source and built-artifact gates before remote credent
     main.indexOf("verify_local_source_preflight(repo)") <
       main.indexOf("release_source_identity(repo)"),
   );
-  assert.ok(main.indexOf("build_package(") < main.indexOf("read_windows_credential()"));
+  const fullDeploy = main.slice(
+    main.indexOf('with tempfile.TemporaryDirectory(prefix="scoutops-deploy-")'),
+  );
+  assert.match(
+    fullDeploy,
+    /archive = build_package\([\s\S]*client, password = connect_production\(\)/,
+  );
+  assert.match(deployer, /def connect_production\(\):\s*password = read_windows_credential\(\)/);
   assert.match(deployer, /verify-baota-deployment\.mjs", "--preflight"/);
   assert.match(deployer, /config \/ "nginx-spa-routes\.conf"/);
   assert.match(deployer, /route\.get\("acceptance"\) == "fallback"/);
@@ -111,17 +118,21 @@ test("M07-03 deployer runs source and built-artifact gates before remote credent
   );
   assert.match(deployer, /nginx", "-t"/);
   assert.match(deployer, /unknown_route_status == 404/);
+  const graceful = await readFile("scripts/deploy_baota_runtime_gate.py", "utf8");
+  assert.match(deployer, /\{PYTHON_TERM_ONLY\}/);
+  assert.match(graceful, /def fixed_python_manager\(\):[\s\S]*project_type"\)!="Python"/);
   assert.match(
-    deployer,
-    /def restart_python_project\(\):[\s\S]*project_type\"\) != \"Python\"[\s\S]*restart_project\.py\", \"python\", v\[\"python_project\"\]/,
+    graceful,
+    /def restart_python_project\(\):\s*stop_python_project\(\)\s*start_python_project\(\)/,
   );
+  assert.doesNotMatch(graceful, /restart_project\.py|\.kill\(/);
   assert.match(
     deployer,
     /panel_ok\(python_model\.ChangeProjectConf\(change\), \"update Python project\"\)[\s\S]*restart_python_project\(\)/,
   );
   assert.match(
     deployer,
-    /panel_ok\(node\.start_project\(recovery_get\), \"restore Node\"\)[\s\S]*restart_python_project\(\)/,
+    /panel_ok\(node\.start_project\(recovery_get\), \"restore Node\"\)[\s\S]*start_python_project\(\)/,
   );
 });
 

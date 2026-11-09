@@ -88,7 +88,10 @@ test("M01-03.A07/A08/A15 UI implements reference-backed desktop and 390 states",
   assert.match(component, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   assert.match(entrypoint, /import\s+["']\.\/styles\/tenancy-workspace\.css["']/);
-  assert.match(styles, /@media\s*\(\s*max-width:\s*760px\s*\)/);
+  assert.match(
+    styles,
+    /@media\s*\(\s*max-width:\s*540px\s*\)[\s\S]*?\.p08-workspace-row\s*\{\s*grid-template-columns:\s*minmax\(0,\s*1fr\)/,
+  );
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(e2e, /keyboard\.press\(["']Enter["']\)/);
 });
@@ -109,9 +112,12 @@ test("P08 production Vue uses the reviewed C scope layout and ignores superseded
   assert.match(component, /if \(sequence !== organizationLoadSequence\) return/);
   assert.match(component, /if \(sequence !== contextWriteSequence\) return/);
   assert.doesNotMatch(component, /class="tenancy-account"/);
-  assert.match(styles, /P08: production C-direction organization\/workspace scope selector/);
-  assert.match(styles, /@media\s*\(max-width:\s*760px\)/);
-  assert.match(styles, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
+  assert.match(styles, /\.p08-layout\s*\{/);
+  assert.match(
+    styles,
+    /@media\s*\(max-width:\s*540px\)[\s\S]*?\.p08-actions\s*\{[^}]*flex-direction:\s*column/,
+  );
+  assert.doesNotMatch(styles, /(?:animation|transition)(?:-[a-z]+)?\s*:/);
 });
 
 test("M01-03.A01/A05/A10/A11/A17 docs and machine map state exact non-goals and operations", async () => {

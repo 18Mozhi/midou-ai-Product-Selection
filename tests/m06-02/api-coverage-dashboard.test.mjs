@@ -20,53 +20,63 @@ test("API coverage joins the complete current catalog only to a matching schema-
     read("config/api-coverage-metadata.json"),
   ]);
   const parsed = parseOpenApiCoverage(openapiSource);
-  assert.equal(parsed.paths.length, 225);
-  assert.equal(parsed.operations.length, 258);
-  assert.equal(new Set(parsed.operations.map(apiOperationId)).size, 258);
-  const sample = parsed.operations.slice(0, 4).map((operation, index) => ({
-    operation_id: apiOperationId(operation),
-    method: operation.method,
-    path_template: operation.path,
-    role: index === 3 ? "member" : "platform_operations_admin",
-    status: [200, 200, 403, 422][index],
-    outcome: ["success", "empty", "unauthorized", "blocked"][index],
-    request_id: `request-${index}`,
-    trace_id: `trace-${index}`,
-    probes: [],
-    evidence: {
-      normal: {
-        applicable: true,
-        status: index < 2 ? "passed" : "failed",
-        test_id: `normal-${index}`,
-        latest_result: `${[200, 200, 403, 422][index]}`,
+  assert.equal(parsed.paths.length, 229);
+  assert.equal(parsed.operations.length, 262);
+  assert.equal(new Set(parsed.operations.map(apiOperationId)).size, 262);
+  const operationIds = [
+    "get_health_live",
+    "get_health_ready",
+    "get_health_version",
+    "get_health_nodes",
+  ];
+  const sample = operationIds.map((id, index) => {
+    const operation = parsed.operations.find((entry) => apiOperationId(entry) === id);
+    assert.ok(operation, `missing named evidence operation ${id}`);
+    return {
+      operation_id: apiOperationId(operation),
+      method: operation.method,
+      path_template: operation.path,
+      role: index === 3 ? "member" : "platform_operations_admin",
+      status: [200, 200, 403, 422][index],
+      outcome: ["success", "empty", "unauthorized", "blocked"][index],
+      request_id: `request-${index}`,
+      trace_id: `trace-${index}`,
+      probes: [],
+      evidence: {
+        normal: {
+          applicable: true,
+          status: index < 2 ? "passed" : "failed",
+          test_id: `normal-${index}`,
+          latest_result: `${[200, 200, 403, 422][index]}`,
+        },
+        authorization: {
+          applicable: !operation.is_public,
+          status: operation.is_public ? "not_applicable" : "not_run",
+          test_id: null,
+          latest_result: null,
+        },
+        parameters: {
+          applicable: operation.has_parameters || operation.has_request_body,
+          status:
+            operation.has_parameters || operation.has_request_body ? "not_run" : "not_applicable",
+          test_id: null,
+          latest_result: null,
+        },
+        idempotency: {
+          applicable: operation.has_idempotency_key,
+          status: operation.has_idempotency_key ? "not_run" : "not_applicable",
+          test_id: null,
+          latest_result: null,
+        },
+        fault: {
+          applicable: true,
+          status: "not_run",
+          test_id: null,
+          latest_result: null,
+        },
       },
-      authorization: {
-        applicable: !operation.is_public,
-        status: operation.is_public ? "not_applicable" : "not_run",
-        test_id: null,
-        latest_result: null,
-      },
-      parameters: {
-        applicable: operation.has_parameters || operation.has_request_body,
-        status:
-          operation.has_parameters || operation.has_request_body ? "not_run" : "not_applicable",
-        test_id: null,
-        latest_result: null,
-      },
-      idempotency: {
-        applicable: operation.has_idempotency_key,
-        status: operation.has_idempotency_key ? "not_run" : "not_applicable",
-        test_id: null,
-        latest_result: null,
-      },
-      fault: {
-        applicable: true,
-        status: "not_run",
-        test_id: null,
-        latest_result: null,
-      },
-    },
-  }));
+    };
+  });
   const report = {
     schema_version: 3,
     operation_id_policy: "method_path_v1",
@@ -87,7 +97,10 @@ test("API coverage joins the complete current catalog only to a matching schema-
   assert.equal(result.summary.verified, 4);
   assert.equal(result.by_role.length, 6);
   assert.equal(result.by_outcome.find((item) => item.key === "unauthorized").count, 1);
-  assert.equal(result.operations[0].operation_id, "get_health_live");
+  assert.equal(
+    result.operations.find((entry) => entry.operation_id === "get_health_live")?.outcome,
+    "success",
+  );
   assert.equal(result.evidence_dimensions.find((item) => item.key === "normal").passed, 2);
   assert.ok(result.by_data_source.some((item) => item.key === "runtime_health"));
   assert.ok(result.by_ui_consumer.some((item) => item.key === "/platform-admin/status"));

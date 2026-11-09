@@ -46,6 +46,7 @@ export async function buildOrganizationProfileDesignData(repo) {
       "applyFailure",
       "validateHttps",
       "clearFieldValidity",
+      "resetOrganizationProfileDraft",
     ]
       .map((n) => extract(vue, n, "function"))
       .join("\n");
@@ -78,6 +79,7 @@ export async function buildOrganizationProfileDesignData(repo) {
           "teamRecoveryRefreshing",
           "lastReadFailureStatus",
           "secret",
+          "logoPreview",
         ].map((k) => [
           k,
           {

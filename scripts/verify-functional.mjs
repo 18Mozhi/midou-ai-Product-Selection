@@ -1,9 +1,13 @@
 import { spawnSync } from "node:child_process";
 import { mkdir, readdir, writeFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
+import {
+  nodeVerificationBatches,
+  nodeVerificationBatchTimeoutMs,
+} from "./lib/node-verification-batches.mjs";
 
 const root = process.cwd();
-const timeout = 900_000;
+const timeout = nodeVerificationBatchTimeoutMs;
 const npm = "npm";
 async function collectNodeTests(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -21,31 +25,7 @@ async function collectNodeTests(directory) {
 
 const nodeTests = await collectNodeTests(resolve(root, "tests"));
 const nodeTestCommandPrefix = ["--experimental-strip-types", "--test", "--test-concurrency=4"];
-const nodeTestArgumentLimit = 12_000;
-const nodeTestBatches = [];
-let currentNodeTestBatch = [...nodeTestCommandPrefix];
-let currentNodeTestArgumentLength =
-  process.execPath.length +
-  1 +
-  nodeTestCommandPrefix.reduce((length, argument) => length + argument.length + 1, 0);
-for (const file of nodeTests) {
-  const argumentLength = file.length + 1;
-  if (
-    currentNodeTestBatch.length > nodeTestCommandPrefix.length &&
-    currentNodeTestArgumentLength + argumentLength > nodeTestArgumentLimit
-  ) {
-    nodeTestBatches.push(currentNodeTestBatch);
-    currentNodeTestBatch = [...nodeTestCommandPrefix];
-    currentNodeTestArgumentLength =
-      process.execPath.length +
-      1 +
-      nodeTestCommandPrefix.reduce((length, argument) => length + argument.length + 1, 0);
-  }
-  currentNodeTestBatch.push(file);
-  currentNodeTestArgumentLength += argumentLength;
-}
-if (currentNodeTestBatch.length > nodeTestCommandPrefix.length)
-  nodeTestBatches.push(currentNodeTestBatch);
+const nodeTestBatches = nodeVerificationBatches(process.execPath, nodeTestCommandPrefix, nodeTests);
 const steps = [
   {
     id: "verify-code-style",

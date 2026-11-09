@@ -1,10 +1,12 @@
+import { readArchivedApprovalsParent } from "../../scripts/lib/ui-phase2-approvals-parent-baseline.mjs";
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import {
   beforeP34OwnerPath,
   assertP34EvidenceSourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import vm from "node:vm";
@@ -42,8 +44,8 @@ function capturedPreview(evidence, file, exportName) {
 }
 const original = previewApprovalsParentFrame(read(approvalsParentFile));
 const revised = previewApprovalsPermission(original);
-const baseDriver = approvalsParentCurrentDriver(read(approvalsParentBase));
-const driver = permissionVueDriver(read(approvalsParentBase));
+const baseDriver = approvalsParentCurrentDriver(readArchivedApprovalsParent());
+const driver = permissionVueDriver(readArchivedApprovalsParent());
 const copy = [
   "查看权限提示",
   "当前无法查看审批内容",
@@ -217,7 +219,7 @@ test("permission capture refuses to overwrite a completed packet", () => {
   );
   assert.equal(run.status, 1);
   assert.equal(run.stdout, "");
-  assert.match(run.stderr, /EEXIST/);
+  assert.match(run.stderr, /legacy_css_preview_retired/);
 });
 
 test("user approval pins only the displayed mobile permission region", () => {

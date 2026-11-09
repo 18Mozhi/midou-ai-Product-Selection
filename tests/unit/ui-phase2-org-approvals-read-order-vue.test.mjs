@@ -1,8 +1,10 @@
+import { readArchivedApprovalsParent } from "../../scripts/lib/ui-phase2-approvals-parent-baseline.mjs";
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import { assertP34EvidenceSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import ts from "typescript";
@@ -28,8 +30,8 @@ test("read-order driver preserves earlier assertions and exact Vue/CSS compositi
     visit(ast);
     return result;
   };
-  const original = loadingVueDriver(read(approvalsParentBase)),
-    revised = readOrderVueDriver(read(approvalsParentBase));
+  const original = loadingVueDriver(readArchivedApprovalsParent()),
+    revised = readOrderVueDriver(readArchivedApprovalsParent());
   const current = checks(revised);
   for (const check of checks(original)) assert.ok(current.includes(check), check);
   for (const pattern of [
@@ -149,5 +151,5 @@ test("read-order capture refuses to overwrite evidence", () => {
   );
   assert.equal(run.status, 1);
   assert.equal(run.stdout, "");
-  assert.match(run.stderr, /EEXIST/);
+  assert.match(run.stderr, /legacy_css_preview_retired/);
 });

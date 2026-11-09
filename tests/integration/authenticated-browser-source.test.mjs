@@ -121,7 +121,7 @@ test("encrypted logged-in source runs through real Chromium and captures evidenc
     assert.deepEqual(await readdir(tempRoot), []);
   } finally {
     await close(server).catch(() => {});
-    await rm(tempRoot, { recursive: true, force: true });
+    await rm(tempRoot, { recursive: true, force: true, maxRetries: 6, retryDelay: 100 });
   }
 });
 
@@ -216,7 +216,7 @@ test("real Chromium submits a dynamic search form and emits a bounded search sna
     assert.ok(Buffer.byteLength(JSON.stringify(result)) < 2 * 1024 * 1024);
   } finally {
     await close(server).catch(() => {});
-    await rm(tempRoot, { recursive: true, force: true });
+    await rm(tempRoot, { recursive: true, force: true, maxRetries: 6, retryDelay: 100 });
   }
 });
 
@@ -344,6 +344,6 @@ test("real Chromium merges two 1688-style pages and emits a detail snapshot", as
     assert.match(result.snapshots.offer_details[0].offer.dom_fragment, /跨境手持打蛋器/);
   } finally {
     await close(server).catch(() => {});
-    await rm(tempRoot, { recursive: true, force: true });
+    await rm(tempRoot, { recursive: true, force: true, maxRetries: 6, retryDelay: 100 });
   }
 });

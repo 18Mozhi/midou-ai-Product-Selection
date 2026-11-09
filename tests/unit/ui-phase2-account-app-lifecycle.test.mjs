@@ -188,12 +188,24 @@ test("current account presentation preserves the captured identity and lifecycle
     assert.ok(match, "account script must exist");
     return match[1];
   };
-  const current = script(read(file));
+  const currentSource = read(file);
+  const current = script(currentSource);
   assert.match(current, /import ThemeStudio from/);
   assert.match(current, /key: "appearance"/);
   const priorLifecycle = current
     .replace(/import ThemeStudio from "\.\/ThemeStudio.vue";\s*/, "")
-    .replace(/\{ key: "appearance", label: "外观偏好", description: "主题与密度" \},?\s*/, "");
+    .replace(/\{ key: "appearance", label: "外观偏好", description: "主题与密度" \},?\s*/, "")
+    .replace(
+      'import PersonalCenter from "./PersonalCenter.vue";',
+      'import PersonalCenter from "./PersonalCenter.vue";\nimport SessionLogout from "./SessionLogout.vue";',
+    )
+    .replace(/;\s*organizationName\?: string \| null;\s*workspaceName\?: string \| null;/, "");
   const compact = (value) => value.replace(/\s+/g, "").replace(/,\]/g, "]");
   assert.equal(compact(priorLifecycle), compact(script(readPreSelectionRebuild(file))));
+  assert.match(currentSource, /<ThemeStudio v-if="activeSection === 'appearance'"/);
+  assert.match(
+    currentSource,
+    /:organization-name="organizationName"\s+:workspace-name="workspaceName"/,
+  );
+  assert.doesNotMatch(currentSource, /<SessionLogout\b/);
 });

@@ -1,9 +1,11 @@
+import { readEvidenceSourceBytes } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { capturedExportDetailHash } from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
 import ts from "typescript";
@@ -63,7 +65,7 @@ test("P37 captured parent/child/browser evidence binds62 checks and exact16 PNG"
   const captureTransform = (file, source) =>
     capturedExportDetailHash(file, historicalTokenCopySource(file, source));
   for (const [f, sha] of Object.entries(e.sourceHashes)) {
-    assertCaptureSource(f, readPreSelectionRebuild(f), sha);
+    assertCaptureSource(f, readEvidenceSourceBytes(f, sha), sha);
   }
   for (const s of e.screenshots) {
     assert.equal(hash(readFileSync(dir + s.file)), s.sha256);

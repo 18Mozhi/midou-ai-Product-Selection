@@ -1,10 +1,11 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import {
   readPreSelectionRebuild,
   preSelectionRebuildSourceFiles,
 } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+
 import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
 import { validateActionReview } from "../../scripts/lib/ui-phase2-action-coverage.mjs";
 import { validateReviewSurfaces } from "../../scripts/lib/ui-phase2-review-surfaces.mjs";

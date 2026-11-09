@@ -322,7 +322,10 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   assert.match(openapi, /\/me\/quick-actions:/);
   assert.match(openapi, /name: shell[\s\S]*required: true/);
   assert.match(overlay, /createApiClient/);
-  assert.match(overlay, /机会[\s\S]*证据[\s\S]*采集任务/);
+  assert.match(
+    overlay,
+    /opportunity:\s*"选品",\s*evidence:\s*"证据",\s*collection_task:\s*"采集任务"/,
+  );
   assert.doesNotMatch(overlay, /option value="task"/);
   assert.match(overlay, /对象类型[\s\S]*状态[\s\S]*负责人/);
   assert.doesNotMatch(
@@ -334,7 +337,8 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   for (const state of ["loading", "empty", "expired", "forbidden", "blocked"])
     assert.match(overlay, new RegExp(state));
   assert.match(discovery, /event\.metaKey\s*\|\|\s*event\.ctrlKey/);
-  assert.match(shell, /role-mobile-nav/);
+  assert.match(shell, /<NavigationMobileBar\b/);
+  assert.match(await read("apps/web/src/components/NavigationMobileBar.vue"), /role-mobile-nav/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(e2e, /Control\+K/);
   assert.doesNotMatch(env, /SEARCH_INDEX_|QUICK_CREATE_/);

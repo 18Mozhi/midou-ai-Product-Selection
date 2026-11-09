@@ -91,3 +91,7 @@ UI2-RS66使用当前Worker策略注册表生成隔离响应，验证全部列表
 4. 保留运行节点、心跳、平台审计与生产证据。
 5. 旧版不读取 `runtime_process_restart_observations` 时可先保留新表；只有确认不再需要重启趋势历史后才执行 `0062_runtime_process_restart_observations.down.sql`。`0030` down 迁移只用于完全撤销且没有下游依赖的情况；执行前必须完成备份，并由宝塔有限任务运行。
 6. 旧版不读取 `runtime_health_endpoint_probes` 时可先保留样本表；只有明确放弃连续健康历史并完成备份后才执行 `0063_runtime_health_endpoint_probes.down.sql`。
+
+## Worker 心跳年龄的比较基准
+
+Worker 快照必须以读取返回后的 API 时钟计算年龄；请求开始后正常落盘的新快照不得被当作未来时间。读取时仍在未来、时间无效、超过既有过期阈值或未运行的快照仍按原规则判定；背压和真实业务失败告警不被抑制。API 重新发布后生效，不需修改环境值。

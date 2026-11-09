@@ -308,6 +308,7 @@ test("[real-api] saved quote matrix renders authenticated HTTP facts without sup
   const payload = await response.json();
   expect(payload.data).toHaveLength(1);
   expect(payload.data[0].quotes).toHaveLength(2);
+  await page.getByRole("tab", { name: "报价历史" }).click();
   const table = page.locator(".sourcing-comparisons").getByRole("table");
   await expect(table.locator("tbody tr")).toHaveCount(payload.data[0].quotes.length);
   for (const quote of payload.data[0].quotes) {

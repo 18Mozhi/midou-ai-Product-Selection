@@ -15,7 +15,7 @@
 
 核心工作台增强发布还必须按顺序应用 `0044b_sourcing_soft_delete.up.sql`、`0044c_truthful_missing_metrics.up.sql` 和 `0044e_core_collection_projection.up.sql`。平台管理员种子任务成功后会立即同步代码目录，API 启动时也会再次同步并登记 `dhgate_supplier_search`、`made_in_china_search` 与 `ec21_supplier_search`；不需要官方 API 密钥。公开页在 Worker 执行前仍必须具备已批准且未过期的来源条款记录。变更代码后必须在宝塔重启 Node API 与 Node Worker，不得创建 systemd、独立 PM2 或其他面板外服务。
 
-`verify-sourcing-live.mjs` 使用随机 `m04-06-…@example.test` 范围，并为两条合成规范记录写入当前任务的 `collection_task_evidence_links`。验收不创建第二个队列消费者，而是等待宝塔管理的生产 Worker 投影；查询只允许使用本次 `job_id + organization_id + workspace_id` 精确范围，禁止领取或读取任意其他生产任务。清理时必须先删除该随机组织的证据关联，再删除规范记录、原始证据和任务。若本次 job 没有在 10 秒内进入受控终态，验收必须失败关闭，不能把其他队列项的结果当成本模块证据。
+`verify-sourcing-live.mjs` 使用随机 `m04-06-…@example.test` 范围，并为两条合成规范记录写入当前任务的 `collection_task_evidence_links`。正式宝塔探针使用 [M07-01 隔离验收配置](m07-01-release-matrix.md)，仅在双存储隔离证明及本地库标识通过后，在同一有限进程调用一次实际投影 Worker，核对领取 ID 必须是本次合成 job；不会创建常驻消费者或访问生产找货队列。结果查询仍按 `job_id + organization_id + workspace_id` 精确范围，10 秒内未进入受控终态仍阻断。先清理隔离组织的证据关联，再删除规范记录、原始证据和任务。无需重启生产服务。
 
 发布成本双人复核时在备份后执行 `0064_governed_workflow_confirmations.up.sql`，通过宝塔重启统一 Node 后端以同时加载 API 和通知 Worker。验收使用两个不同的活动成员：提交后确认利润仍读取旧的当前成本，指定复核人批准后再确认新成本生效并排队重算；驳回、截止前提醒和逾期升级均不得激活成本。down 会把每个机会/平台/类型的最新成本恢复为当前并删除复核历史，因此只有在停止写入、导出审批审计且业务接受该退化语义后才能执行；Python、MySQL 和 Redis 无需重启。
 
@@ -34,7 +34,6 @@
 ## 回滚
 
 先停用页面写入口并导出搜索、候选、报价版本、对比、采购任务、事件和 Outbox；在宝塔停止 Worker 后才执行 down 迁移。down 会删除本模块业务数据，必须确认备份可恢复。已被 P05 消费的任务不能由本迁移撤销，应按任务模块 Runbook 处理。回退应用后在宝塔重启 API/Worker。
-
 
 ## 2026-10-17 找货界面重制
 

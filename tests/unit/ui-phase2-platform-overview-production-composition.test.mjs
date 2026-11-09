@@ -1,9 +1,17 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import {
+  expandPlatformDashboardCss,
+  platformDashboardCss,
+  platformDashboardLayoutCss,
+} from "../../scripts/lib/platform-dashboard-css.mjs";
 
 const panel = await readFile("apps/web/src/components/PlatformDashboard.vue", "utf8");
-const styles = await readFile("apps/web/src/styles/platform-dashboard.css", "utf8");
+const styles = expandPlatformDashboardCss(
+  await readFile(platformDashboardCss, "utf8"),
+  await readFile(platformDashboardLayoutCss, "utf8"),
+);
 const header = await readFile("apps/web/src/components/PlatformPageHeader.vue", "utf8");
 
 test("P38 production dashboard opts into the scoped C composition", () => {

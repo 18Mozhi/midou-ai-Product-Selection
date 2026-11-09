@@ -1,10 +1,12 @@
+import { readArchivedApprovalsParent } from "../../scripts/lib/ui-phase2-approvals-parent-baseline.mjs";
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import {
   beforeP34OwnerPath,
   assertP34EvidenceSourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { parse, compileTemplate } from "@vue/compiler-sfc";
@@ -54,9 +56,13 @@ test("expired preview preserves runtime, permission branch and existing login in
   assert.match(approvalsExpiredReplacement, /view === 'approvals' && state === 'expired'/);
   assert.doesNotMatch(approvalsExpiredReplacement, /!data|v-html|RouterLink|href=/);
   assert.ok(
-    read("apps/web/src/components/NavigationShell.vue").includes(
+    read("apps/web/src/components/NavigationShellGate.vue").includes(
       'expired: ["登录已失效", "重新登录后返回当前页面。"]',
     ),
+  );
+  assert.match(
+    read("apps/web/src/components/NavigationShell.vue"),
+    /<NavigationShellGate\s+v-if="state !== 'ready'"\s+:state="state"/,
   );
   assert.match(
     approvalsExpiredReplacement,
@@ -78,9 +84,9 @@ test("expired driver retains every permission assertion and rejects invalid mode
     visit(ast);
     return result;
   };
-  const driver = expiredVueDriver(read(approvalsParentBase)),
+  const driver = expiredVueDriver(readArchivedApprovalsParent()),
     current = checks(driver);
-  for (const check of checks(permissionVueDriver(read(approvalsParentBase))))
+  for (const check of checks(permissionVueDriver(readArchivedApprovalsParent())))
     assert.ok(current.includes(check), check);
   assert.match(driver, /\.org-approval-expired-c"/);
   assert.doesNotMatch(driver, /\.org-approval-expired-copy/);
@@ -171,5 +177,5 @@ test("expired capture refuses to overwrite its evidence", () => {
   );
   assert.equal(run.status, 1);
   assert.equal(run.stdout, "");
-  assert.match(run.stderr, /EEXIST/);
+  assert.match(run.stderr, /legacy_css_preview_retired/);
 });

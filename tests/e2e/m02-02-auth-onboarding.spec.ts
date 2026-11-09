@@ -192,7 +192,7 @@ test("M02-02.A07/A15 login brand and mobile auxiliary actions keep compact touch
   page,
 }) => {
   await page.goto("/login");
-  const brand = page.getByRole("link", { name: "ScoutOps 首页" });
+  const brand = page.getByRole("link", { name: "米兜智能选品 首页" });
   await expect(brand).toBeVisible();
   expect((await brand.boundingBox())?.height).toBeGreaterThanOrEqual(44);
 

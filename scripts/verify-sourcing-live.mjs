@@ -4,6 +4,7 @@ import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import { createDatabasePool } from "../packages/database/dist/index.js";
 import { SourcingService, SourcingServiceError } from "../apps/api/dist/sourcing-service.js";
 import { MySqlSourcingRepository } from "../apps/api/dist/mysql-sourcing-repository.js";
+import { MySqlSourcingProjectionWorker } from "../apps/worker/dist/sourcing-projection-worker.js";
 const requestId = randomUUID(),
   traceId = randomUUID(),
   now = new Date(),
@@ -26,6 +27,24 @@ async function assertSchemaReady() {
     "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='sourcing_searches'",
   );
   if (!Number(rows[0].count)) throw new Error("M04-06 schema is not applied");
+}
+async function assertIsolatedProjection() {
+  const marker = process.env.VERIFY_ISOLATION_ID ?? "";
+  if (
+    !/^[a-f0-9]{32}$/.test(marker) ||
+    process.env.DB_HOST !== "127.0.0.1" ||
+    !/^[0-9]{4,5}$/.test(process.env.DB_PORT ?? "") ||
+    Number(process.env.DB_PORT) <= 1024 ||
+    Number(process.env.DB_PORT) >= 65536 ||
+    Number(process.env.DB_PORT) === 3306 ||
+    process.env.DB_READ_HOST ||
+    process.env.DB_WRITE_HOST
+  )
+    throw new Error("sourcing projection requires an isolated fixture store");
+  const [rows] = await pool.execute("SELECT name FROM schema_migrations WHERE name=?", [
+    `scoutops-isolated-${marker}`,
+  ]);
+  if (rows.length !== 1) throw new Error("sourcing fixture isolation attestation failed");
 }
 async function cleanup() {
   try {
@@ -58,7 +77,7 @@ async function cleanup() {
     "DELETE FROM collection_tasks WHERE id=?",
   ])
     try {
-      await pool.query(sql, sql.includes("task") ? [ids.task] : [ids.org]);
+      await pool.query(sql, sql.includes("organization_id=?") ? [ids.org] : [ids.task]);
     } catch {}
   for (const [sql, id] of [
     ["DELETE FROM providers WHERE id=?", ids.provider],
@@ -189,7 +208,10 @@ async function seed() {
     );
   }
 }
+let fixtureAttested = false;
 try {
+  await assertIsolatedProjection();
+  fixtureAttested = true;
   const [vr] = await pool.query(
       "SELECT VERSION() version,@@character_set_server charset,DATABASE() database_name,CURRENT_USER() account_name",
     ),
@@ -213,6 +235,13 @@ try {
       value: { collection_task_id: ids.task, input_type: "keyword", input_ref: "净水杯" },
     });
   if (search.id !== replay.id) throw new Error("search idempotency failed");
+  const workerResult = await new MySqlSourcingProjectionWorker(
+    pool,
+    "m04-06-isolated-probe",
+    120,
+  ).processOnce();
+  if (workerResult.job_id !== search.job_id || workerResult.status !== "succeeded")
+    throw new Error("isolated projection did not process the expected fixture job");
   let projected = null;
   for (let i = 0; i < 40; i++) {
     const [rows] = await pool.query(
@@ -312,7 +341,7 @@ try {
       module: "M04-06",
       mysql: runtime.version,
       provider_projection: "product-supply-csv-v1",
-      production_worker_projection: "passed",
+      worker_projection: "deployed_worker_on_isolated_fixture",
       projection_job_id: search.job_id,
       incomplete_candidates: 2,
       confirmed_quote_versions: 2,
@@ -342,6 +371,9 @@ try {
   );
   process.exitCode = 2;
 } finally {
-  await cleanup();
-  await pool.end();
+  try {
+    if (fixtureAttested) await cleanup();
+  } finally {
+    await pool.end();
+  }
 }

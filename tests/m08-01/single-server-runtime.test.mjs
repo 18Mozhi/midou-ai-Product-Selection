@@ -15,7 +15,7 @@ const requiredFiles = [
   "apps/api/src/mysql-runtime-topology-repository.ts",
   "apps/api/src/runtime-topology-routes.ts",
   "apps/web/src/components/RuntimeTopologyCenter.vue",
-  "apps/web/src/runtime-topology.css",
+  "apps/web/src/runtime-topology-c.css",
   "infra/baota/single-server-manifest.json",
   "verification/single-server-production-evidence.schema.json",
   "scripts/verify-single-server-production.mjs",

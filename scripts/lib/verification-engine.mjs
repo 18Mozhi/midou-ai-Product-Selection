@@ -3,6 +3,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { isAbsolute, relative, resolve, sep } from "node:path";
+import { releaseMatrixNodeBatches } from "./node-verification-batches.mjs";
 
 const MODULE_PATTERN = /^M\d{2}-\d{2}$/;
 const PHASE_PATTERN = /^P\d{2}$/;
@@ -298,6 +299,25 @@ async function writeReport(report, config) {
   return file;
 }
 
+export async function expandVerificationCommands(moduleId, commands, root) {
+  if (moduleId !== "M07-01") return commands;
+  const expanded = [];
+  for (const command of commands) {
+    if (command === "node scripts/verify-release-matrix.mjs --node") {
+      const { batches } = await releaseMatrixNodeBatches(root);
+      if (!batches.length)
+        throw new VerificationError("M07-01 Node matrix is empty", { code: "matrix_empty" });
+      expanded.push(
+        ...batches.map(
+          (_, index) =>
+            `node scripts/verify-release-matrix.mjs --node-batch ${index + 1}/${batches.length}`,
+        ),
+      );
+    } else expanded.push(command);
+  }
+  return expanded;
+}
+
 export async function runModule(moduleId, options = {}) {
   const root = options.root ?? process.cwd();
   const config = options.config ?? verificationConfig(root, options.env ?? process.env);
@@ -310,7 +330,7 @@ export async function runModule(moduleId, options = {}) {
   let status = "passed";
   let failure = null;
 
-  for (const command of registry.commands) {
+  for (const command of await expandVerificationCommands(moduleId, registry.commands, root)) {
     console.log(`[${moduleId}] RUN ${redactVerificationOutput(command)}`);
     const result = runVerificationCommand(command, { root, timeoutMs: config.timeoutMs });
     commands.push(result);

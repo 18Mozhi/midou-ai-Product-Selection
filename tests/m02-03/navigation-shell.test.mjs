@@ -166,17 +166,19 @@ test("M02-03 no-organization accounts land in account settings while members sti
 });
 
 test("M02-03 shell presents business labels grouped search and collapsed failure identifiers", async () => {
-  const [shell, permissions, catalogRaw, generatedCatalogRaw] = await Promise.all([
+  const [shell, permissions, catalogRaw, generatedCatalogRaw, accessGate] = await Promise.all([
     read("apps/web/src/components/NavigationShell.vue"),
     read("apps/web/src/navigation-shell-permissions.ts"),
     read("config/route-catalog.json"),
     read("apps/web/src/route-catalog.generated.json"),
+    read("apps/web/src/components/NavigationShellGate.vue"),
   ]);
   const catalog = JSON.parse(catalogRaw);
   const generatedCatalog = JSON.parse(generatedCatalogRaw);
   assert.match(`${shell}\n${permissions}`, /普通成员[\s\S]*平台超级管理员/);
   assert.match(shell, /搜索导航菜单[\s\S]*没有匹配的菜单或分组/);
-  assert.match(shell, /role-gate-technical[\s\S]*故障详情[\s\S]*关联编号/);
+  assert.match(shell, /<NavigationShellGate\b[^>]*:request-id="requestId"/);
+  assert.match(accessGate, /role-gate-technical[\s\S]*故障详情[\s\S]*关联编号/);
   const navigationGroups = new Set(
     catalog.routes.flatMap((route) => (route.navigation?.group ? [route.navigation.group] : [])),
   );
@@ -380,12 +382,14 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
     styles,
     /role-mobile-nav\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/,
   );
-  assert.match(component, /v-for="item in primaryItems"/);
-  assert.match(component, /aria-controls="role-navigation"[\s\S]*?<span>更多<\/span>/);
-  assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>新建组织<\/span>/);
-  assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>邀请成员<\/span>/);
-  assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>创建选品<\/span>/);
-  assert.match(component, /aria-current/);
+  const mobile = await read("apps/web/src/components/NavigationMobileBar.vue");
+  assert.match(component, /<NavigationMobileBar\b/);
+  assert.match(mobile, /v-for="item in primaryItems"/);
+  assert.match(mobile, /aria-controls="role-navigation"[\s\S]*?<span>更多<\/span>/);
+  assert.doesNotMatch(mobile, /class="role-mobile-nav"[\s\S]*?<span>新建组织<\/span>/);
+  assert.doesNotMatch(mobile, /class="role-mobile-nav"[\s\S]*?<span>邀请成员<\/span>/);
+  assert.doesNotMatch(mobile, /class="role-mobile-nav"[\s\S]*?<span>创建选品<\/span>/);
+  assert.match(mobile, /aria-current/);
   assert.match(componentEvidence, /navigationItemsFor/);
   assert.doesNotMatch(componentEvidence, /const\s+(memberMenu|orgMenu|platformMenu)/);
   assert.match(routeCatalog, /generatedCatalog/);

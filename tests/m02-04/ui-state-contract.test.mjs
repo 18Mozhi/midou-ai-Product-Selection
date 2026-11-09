@@ -111,7 +111,14 @@ test("M02-04 internal routes are registered only by development builds", async (
   assert.match(app, /import\.meta\.env\.DEV[\s\S]*VerificationFramework/);
   assert.match(vite, /scoutops-strip-internal-surfaces/);
   assert.match(vite, /internal_surface_production_strip_contract_missing/);
-  assert.match(vite, /generateBundle[\s\S]*UiStateShowcase\|VerificationFramework/);
+  assert.match(
+    vite,
+    /internalSurfaceNames\s*=\s*\[[^\]]*"VerificationFramework"[^\]]*"UiStateShowcase"/,
+  );
+  assert.match(
+    vite,
+    /generateBundle[\s\S]*internalSurfaceNames\.some[\s\S]*internal_surface_production_chunk_remaining/,
+  );
   assert.doesNotMatch(registry, /UiStateShowcase|VerificationFramework/);
 });
 test("M02-04.A07/A15/A16/A17 visual recovery and delivery evidence exists", async () => {

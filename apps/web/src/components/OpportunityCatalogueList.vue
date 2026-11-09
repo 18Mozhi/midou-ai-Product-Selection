@@ -265,7 +265,7 @@ tbody tr:hover {
   display: grid;
   justify-items: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.3;
 }
 .selection-product-name {

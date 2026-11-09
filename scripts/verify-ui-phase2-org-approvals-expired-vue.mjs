@@ -1,6 +1,8 @@
+import { assertLegacyCssPreviewReadOnly } from "./lib/retired-runtime-css.mjs";
+assertLegacyCssPreviewReadOnly();
+import { readArchivedApprovalsParent } from "./lib/ui-phase2-approvals-parent-baseline.mjs";
 import assert from "node:assert/strict";
-import { readFile, mkdir } from "node:fs/promises";
-import { approvalsParentBase } from "./lib/ui-phase2-org-approvals-parent-current-driver.mjs";
+import { mkdir } from "node:fs/promises";
 import { expiredVueDriver, expiredOutput } from "./lib/ui-phase2-org-approvals-expired-driver.mjs";
 
 const args = process.argv.slice(2);
@@ -13,7 +15,7 @@ if (args.includes("--capture")) await mkdir(expiredOutput);
 try {
   await import(
     "data:text/javascript;base64," +
-      Buffer.from(expiredVueDriver(await readFile(approvalsParentBase, "utf8"))).toString("base64")
+      Buffer.from(expiredVueDriver(readArchivedApprovalsParent())).toString("base64")
   );
 } catch (error) {
   console.error(

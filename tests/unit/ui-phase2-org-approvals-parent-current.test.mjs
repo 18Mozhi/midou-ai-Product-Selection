@@ -1,10 +1,12 @@
+import { readArchivedApprovalsParent } from "../../scripts/lib/ui-phase2-approvals-parent-baseline.mjs";
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import test from "node:test";
 import {
   beforeP34OwnerPath,
   assertP34EvidenceSourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { assertP34HistoricalPacket } from "../../scripts/lib/ui-phase2-p34-packet-history.mjs";
@@ -39,7 +41,7 @@ function capturedPreview(evidence, file, exportName) {
   vm.runInNewContext(`${source}\nglobalThis.preview = ${exportName};`, context);
   return context.preview;
 }
-const base = read(approvalsParentBase),
+const base = readArchivedApprovalsParent(),
   source = approvalsParentCurrentDriver(base);
 function nodes(text, predicate) {
   const ast = ts.createSourceFile("driver.mjs", text, ts.ScriptTarget.Latest, true),
@@ -236,5 +238,5 @@ test("current parent packet cannot be overwritten by capture", () => {
   );
   assert.equal(result.status, 1);
   assert.equal(result.stdout, "");
-  assert.match(result.stderr, /EEXIST/);
+  assert.match(result.stderr, /legacy_css_preview_retired/);
 });

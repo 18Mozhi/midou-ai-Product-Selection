@@ -200,8 +200,8 @@ try {
   if (compared.status !== "succeeded" || compared.change_count !== 4)
     throw new Error(`comparison mismatch ${JSON.stringify(compared)}`);
   await pool.query(
-    "UPDATE competitor_outbox SET available_at=NOW(3) WHERE organization_id=? AND workspace_id=? AND status='pending'",
-    [ids.org, ids.ws],
+    "UPDATE competitor_outbox SET available_at=? WHERE organization_id=? AND workspace_id=? AND status='pending'",
+    [new Date(), ids.org, ids.ws],
   );
   for (let attempt = 0; attempt < 20; attempt += 1) {
     await projectBusinessTaskOnce(pool, "worker-m0405", 120);

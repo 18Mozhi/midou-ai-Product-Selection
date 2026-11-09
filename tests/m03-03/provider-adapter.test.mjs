@@ -142,6 +142,8 @@ test("M03-03.A10 runtime limits use validated Baota-configurable bounds", () => 
     lan1688TimeoutMs: 45000,
     amazonBrowserProfileId: "",
     amazonBrowserNavigationTimeoutMs: 60000,
+    amazonBrowserNavigationTransport: "browser",
+    amazonHandoffRecoveryEnabled: false,
     healthTimeoutMs: 7000,
     maxResponseBytes: 2048,
     maxItemsPerBatch: 25,

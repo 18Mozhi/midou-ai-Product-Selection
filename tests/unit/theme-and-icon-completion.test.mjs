@@ -285,7 +285,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     if (paths[index] === "apps/web/src/design/open-platform-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^\.role-shell:has\(\.open-platform--c\)\s*\{(?:\s*--p60-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*--(?:text|text-muted|surface|bg|border|primary|danger|warning):\s*var\(--p60-[a-z-]+\);(?:\s*--(?:text|text-muted|surface|bg|border|primary|danger|warning):\s*var\(--p60-[a-z-]+\);)*\s*\}\s*\.open-platform--c\s*\{(?:\s*--so-[a-z-]+:\s*var\(--p60-[a-z-]+\);)+\s*\}$/,
+        /^\.open-platform--c\s*\{(?:\s*--p60-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\)|var\(--glass-[a-z-]+\));){17}(?:\s*--(?:text|text-muted|surface|bg|border|primary|danger|warning):\s*var\(--p60-[a-z-]+\);){8}(?:\s*--so-[a-z-]+:\s*var\(--p60-[a-z-]+\);){3}\s*\}$/,
       );
       continue;
     }

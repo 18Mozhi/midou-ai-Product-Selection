@@ -84,7 +84,9 @@ for version,sha in [('0074_provider_terms_permanent.up.sql','d7789c6dacdf7ab1d37
     else: raise AssertionError('unsafe rollback accepted')
 source=d['exchange_source']('/www/wwwroot/ai选品','a'*40,'b'*40)
 compile(source,'rollback_generated','exec')
-assert source.index("validate_identity_rollback_target(migration(release)")<source.index("action(python,'StopProject'")
+guard=source.index("validate_identity_rollback_target(migration(release)")
+assert guard<source.index("action(node,'stop_project'")
+assert guard<source.index("\\n stop_python_project()")
 print('passed')
 `,
     ],

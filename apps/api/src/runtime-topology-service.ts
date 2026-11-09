@@ -195,6 +195,7 @@ export class RuntimeTopologyService {
     const supervisor = (await this.policy.supervisorSnapshot?.().catch(() => null)) ?? null;
     const rawWorkerScheduler =
       (await this.policy.workerSchedulerSnapshot?.().catch(() => null)) ?? null;
+    const workerSnapshotReadAt = this.now();
     const workerScheduler = rawWorkerScheduler
       ? {
           ...rawWorkerScheduler,
@@ -218,7 +219,7 @@ export class RuntimeTopologyService {
     });
     const workerSchedulerRequired = Boolean(this.policy.workerSchedulerSnapshot);
     const workerSchedulerAgeMs = workerScheduler
-      ? observedAt.getTime() - Date.parse(workerScheduler.observed_at)
+      ? workerSnapshotReadAt.getTime() - Date.parse(workerScheduler.observed_at)
       : Number.POSITIVE_INFINITY;
     const workerSchedulerFresh =
       !workerSchedulerRequired ||

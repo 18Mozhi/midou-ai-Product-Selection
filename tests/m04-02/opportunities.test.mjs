@@ -298,7 +298,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(service, /OpportunitySelectionView[\s\S]*evidence_pending/);
   assert.match(
     repository,
-    /selectionView === "recommended"[\s\S]*opportunityRecommendedSql[\s\S]*selectionView === "rule_candidates"[\s\S]*opportunityCandidateSql/,
+    /selectionView === "recommended"[\s\S]*opportunityRecommendedSql[\s\S]*selectionView === "rule_candidates"[\s\S]*homeCandidateSql,\s*\x60NOT \$\{homeQualityGateSql\}/,
   );
   assert.match(routes, /coverage_status[\s\S]*blocking_reason/);
   assert.match(routes, /selection_view/);
@@ -319,7 +319,10 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.doesNotMatch(decisionWeb, /采纳前还缺/);
   assert.match(listWeb, /评分、市场、竞争、成本和风险五项质量门均已通过/);
   assert.doesNotMatch(detailInsightsWeb, /达到来源门槛即可进入推荐/);
-  assert.match(evidenceWeb, /证据新鲜度：观测于/);
+  assert.match(
+    evidenceWeb,
+    /<time v-if="item\.observed_at" :datetime="item\.observed_at">\{\{\s*item\.observed_at/,
+  );
   assert.match(listWeb, /阶段[\s\S]*已归档/);
   assert.doesNotMatch(webContract, /批量指派|批量复核|批量归档|filters.owner_id|memberOptions/);
   assert.doesNotMatch(webContract, /创建补采任务/);

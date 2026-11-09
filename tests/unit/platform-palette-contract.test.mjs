@@ -5,6 +5,11 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readdir } from "node:fs/promises";
 import { readTaskReviewFile as readFile } from "../../scripts/lib/retired-task-surface.mjs";
+import {
+  expandPlatformDashboardCss,
+  platformDashboardCss,
+  platformDashboardLayoutCss,
+} from "../../scripts/lib/platform-dashboard-css.mjs";
 
 // Retained exclusively for archived sidebar review styles. Production no longer
 // renders those rules; every live reference must still resolve exactly.
@@ -437,7 +442,7 @@ test("notification inbox palette resolves approved P26 colors in its review scop
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("open platform palette resolves the approved P60 page and shell colors", async () => {
+test("open platform palette resolves the approved P60 colors without leaking into the shell", async () => {
   const [tokens, css] = await Promise.all([
     readFile("apps/web/src/design/open-platform-tokens.css", "utf8"),
     readFile("apps/web/src/open-platform-c.css", "utf8"),
@@ -448,14 +453,13 @@ test("open platform palette resolves the approved P60 page and shell colors", as
     ),
   ];
   const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p60-[a-z-]+)\)/g)].map((match) => match[1]));
+  const references = new Set(
+    [...(tokens + css).matchAll(/var\((--p60-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
 
   assert.equal(names.size, 17);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^\.role-shell:has\(\.open-platform--c\)\s*\{[\s\S]*\}\s*\.open-platform--c\s*\{[\s\S]*\}$/,
-  );
+  assert.match(tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(), /^\.open-platform--c\s*\{[^{}]+\}$/);
   assert.ok(css.startsWith('@import "./design/open-platform-tokens.css";'));
   assertPaletteUsage(references, names);
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
@@ -767,15 +771,30 @@ test("P14 trend desk colors resolve from its route-scoped palette", async () => 
     /^\.trend-dashboard--review\s*\{[\s\S]*\}$/,
   );
   assert.ok(css.startsWith('@import "./design/trend-dashboard-tokens.css";'));
+  // These three live inside the responsive workbench, not the shared color-role file.
+  for (const [name, value] of [
+    ["--trend-filter-icon-inset", "14px"],
+    ["--trend-filter-icon-size", "20px"],
+  ]) {
+    assert.equal(css.match(new RegExp(`${name}:\\s*${value};`, "g"))?.length, 1);
+    names.add(name);
+  }
+  assert.deepEqual(
+    [...css.matchAll(/--trend-workbench-surface:\s*([^;]+);/g)].map((entry) => entry[1]),
+    ["color-mix(in srgb, var(--so-panel-soft) 45%, var(--so-panel))", "var(--so-panel)"],
+  );
+  names.add("--trend-workbench-surface");
   assertPaletteUsage(references, names);
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
 test("P38 platform dashboard colors resolve from its route-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
+  const [tokens, entry, layout] = await Promise.all([
     readFile("apps/web/src/design/platform-dashboard-tokens.css", "utf8"),
-    readFile("apps/web/src/styles/platform-dashboard.css", "utf8"),
+    readFile(platformDashboardCss, "utf8"),
+    readFile(platformDashboardLayoutCss, "utf8"),
   ]);
+  const css = expandPlatformDashboardCss(entry, layout);
   const declarations = [
     ...tokens.matchAll(/(--pd-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi),
   ];

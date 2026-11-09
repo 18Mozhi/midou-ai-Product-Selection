@@ -230,6 +230,35 @@ function topicButton(id: string) {
   return topicList.value?.querySelector<HTMLButtonElement>(`[data-topic-id="${CSS.escape(id)}"]`);
 }
 
+function keepSelectedTopicVisible(id: unknown, pane: HTMLElement | null) {
+  if (
+    !pageActive ||
+    typeof id !== "string" ||
+    !pane?.clientHeight ||
+    getComputedStyle(pane).overflowY !== "auto"
+  )
+    return;
+  const row = topicButton(id);
+  if (!row) return;
+  const bounds = pane.getBoundingClientRect();
+  const footer = pane.querySelector(":scope > .trend-pagination");
+  const header = pane.querySelector(":scope > header");
+  const visibleTop =
+    header && getComputedStyle(header).position === "sticky"
+      ? Math.max(bounds.top, header.getBoundingClientRect().bottom)
+      : bounds.top;
+  const visibleBottom = Math.min(
+    bounds.top + pane.clientTop + pane.clientHeight,
+    footer?.getBoundingClientRect().top ?? Infinity,
+  );
+  const selectedBounds = row.getBoundingClientRect();
+  if (selectedBounds.top < visibleTop || selectedBounds.height > visibleBottom - visibleTop) {
+    pane.scrollTop += selectedBounds.top - visibleTop;
+  } else if (selectedBounds.bottom > visibleBottom) {
+    pane.scrollTop += selectedBounds.bottom - visibleBottom;
+  }
+}
+
 watch(
   [topicList, mobileDetailOpen, sortedTopics],
   ([pane, open], _previous, onCleanup) => {
@@ -237,51 +266,37 @@ watch(
       splitListOverflow.value = false;
       return;
     }
+    let frame: number | undefined;
     const measure = () => {
-      const lastRow = pane.querySelector(":scope > .trend-topic-row:last-of-type");
+      const rows = pane.querySelectorAll(":scope > .trend-topic-row");
+      const lastRow = rows.item(rows.length - 1);
       // Decorative bottom padding can overflow even when all topic rows are visible.
       splitListOverflow.value =
         !!lastRow &&
         pane.clientHeight > 0 &&
         lastRow.getBoundingClientRect().bottom + pane.scrollTop >
           pane.getBoundingClientRect().top + pane.clientTop + pane.clientHeight + 1;
+      if (frame !== undefined) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        frame = undefined;
+        if (topicList.value === pane) keepSelectedTopicVisible(route.query.topic, pane);
+      });
     };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(pane);
     for (const child of pane.children) observer.observe(child);
-    onCleanup(() => observer.disconnect());
+    onCleanup(() => {
+      observer.disconnect();
+      if (frame !== undefined) cancelAnimationFrame(frame);
+    });
   },
   { flush: "post" },
 );
 
 watch(
   [() => route.query.topic, topicList, sortedTopics, splitListOverflow],
-  ([id, pane]) => {
-    if (
-      !pageActive ||
-      typeof id !== "string" ||
-      !pane?.clientHeight ||
-      getComputedStyle(pane).overflowY !== "auto"
-    )
-      return;
-    const row = topicButton(id);
-    if (!row) return;
-    const bounds = pane.getBoundingClientRect();
-    const footer = pane.querySelector(":scope > .trend-pagination");
-    const header = pane.querySelector(":scope > header");
-    const visibleTop =
-      header && getComputedStyle(header).position === "sticky"
-        ? Math.max(bounds.top, header.getBoundingClientRect().bottom)
-        : bounds.top;
-    const visibleBottom = Math.min(bounds.bottom, footer?.getBoundingClientRect().top ?? Infinity);
-    const selectedBounds = row.getBoundingClientRect();
-    if (selectedBounds.top < visibleTop || selectedBounds.height > visibleBottom - visibleTop) {
-      pane.scrollTop += selectedBounds.top - visibleTop;
-    } else if (selectedBounds.bottom > visibleBottom) {
-      pane.scrollTop += selectedBounds.bottom - visibleBottom;
-    }
-  },
+  ([id, pane]) => keepSelectedTopicVisible(id, pane),
   { flush: "post" },
 );
 

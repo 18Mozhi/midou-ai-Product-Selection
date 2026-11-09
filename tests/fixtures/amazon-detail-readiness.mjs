@@ -55,6 +55,6 @@ export async function runAmazonDetailFixture(Engine, mode) {
     return { result, requests };
   } finally {
     chromium.launchPersistentContext = launch;
-    await rm(root, { recursive: true, force: true });
+    await rm(root, { recursive: true, force: true, maxRetries: 6, retryDelay: 100 });
   }
 }

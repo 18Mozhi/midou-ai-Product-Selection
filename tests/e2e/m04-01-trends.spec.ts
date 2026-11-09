@@ -240,7 +240,11 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
     await expect(page.locator(".trend-detail")).toBeVisible();
     await expect(page.getByRole("button", { name: "关闭详情 · 返回情报列表" })).toBeVisible();
   } else {
-    await expect(trendList).toHaveCSS("overflow-y", "auto");
+    // A single fully visible row needs no scrollbar; the detail pane still scrolls.
+    await expect(trendList).not.toHaveAttribute("data-split-overflow", "true");
+    await expect(trendList.locator(":scope > .trend-topic-row")).toBeInViewport({ ratio: 1 });
+    if ((page.viewportSize()?.width ?? 0) >= 1101)
+      await expect(trendList).toHaveCSS("overflow-y", "clip");
     await expect(page.locator(".trend-detail")).toHaveCSS("overflow-y", "auto");
   }
   const facts = page.getByRole("definition").filter({ hasText: "4 条" });
@@ -1194,11 +1198,20 @@ test("a late-page intelligence topic stays visible and regains focus after closi
       .poll(() =>
         selected.evaluate((node) => {
           const row = node.getBoundingClientRect();
-          const pane = node.closest(".trend-list")!.getBoundingClientRect();
-          return row.top >= pane.top && row.bottom <= pane.bottom + 1;
+          const list = node.closest<HTMLElement>(".trend-list")!;
+          const pane = list.getBoundingClientRect();
+          return {
+            visible: row.top >= pane.top && row.bottom <= pane.bottom + 1,
+            rowTop: Math.round(row.top),
+            rowBottom: Math.round(row.bottom),
+            paneTop: Math.round(pane.top),
+            paneBottom: Math.round(pane.bottom),
+            scrollTop: list.scrollTop,
+            overflow: getComputedStyle(list).overflowY,
+          };
         }),
       )
-      .toBe(true);
+      .toMatchObject({ visible: true });
   }
   await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
   await expect(page.locator(".trend-detail")).toHaveCount(0);

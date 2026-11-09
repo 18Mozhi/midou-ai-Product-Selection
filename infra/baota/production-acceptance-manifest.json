@@ -13,8 +13,8 @@
   },
   "baseline": {
     "openapiFile": "docs/openapi.yaml",
-    "pathCount": 225,
-    "operationCount": 258,
+    "pathCount": 229,
+    "operationCount": 262,
     "apiReportSchemaVersion": 3,
     "operationIdPolicy": "method_path_v1",
     "protectedRouteCount": 60,

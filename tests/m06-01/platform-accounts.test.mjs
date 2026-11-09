@@ -407,7 +407,13 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(routes, /users\/:userId\/password/);
   assert.match(routes, /users\/:userId\/sessions\/revoke/);
   assert.match(routes, /users\/:userId\/memberships/);
-  assert.match(web, /组织管理.*用户管理.*管理员管理/s);
+  assert.match(accountShell, /PlatformAccountDirectoryWorkspace/);
+  assert.match(accountDirectory, /<PlatformAccountGlobalRail\b/);
+  const globalRail = await readFile(
+    "apps/web/src/components/PlatformAccountGlobalRail.vue",
+    "utf8",
+  );
+  assert.match(globalRail, /组织管理.*用户管理.*管理员管理/s);
   assert.match(web, /创建组织步骤/);
   assert.match(web, /下一步：选择管理员/);
   assert.match(web, /同时创建默认工作区和组织级数据范围/);

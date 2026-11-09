@@ -36,7 +36,7 @@ test("read-only acceptance preflight never imports production runtime packages",
   assert.equal(report.production_verified, false);
   assert.deepEqual(
     [report.paths, report.operations, report.protected_routes, report.roles],
-    [225, 258, 60, 6],
+    [229, 262, 60, 6],
   );
 });
 

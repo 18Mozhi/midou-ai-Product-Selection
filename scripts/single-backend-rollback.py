@@ -1,6 +1,11 @@
 """Generate a bounded BaoTa panel operation; no independent runtime service."""
 import json
 import inspect
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from deploy_baota_runtime_gate import NODE_TERM_ONLY, PYTHON_TERM_ONLY
 
 
 def validate_identity_rollback_target(current_migration, target_migration, target_sha):
@@ -66,6 +71,8 @@ v=json.loads(PAYLOAD)
 root=Path(v['root'])
 if str(root)!='/www/wwwroot/ai选品' or root.is_symlink() or not root.is_dir(): raise RuntimeError('rollback_root_invalid')
 backup=root/('.deploy-rollback-'+v['build'])
+rollback=backup
+v['python_project']='ai选品-python'
 scratch=root/'runtime'/'tmp'/('single-backend-exchange-'+v['build'])
 if scratch.exists(): raise RuntimeError('rollback_exchange_requires_recovery')
 for name,typ,folder in [('ai选品','Node','backend'),('ai选品-python','Python','python')]:
@@ -83,15 +90,17 @@ for live,old in pairs:
  for p in (live,old):
   if not p.exists() or p.is_symlink() or root not in p.resolve().parents: raise RuntimeError('rollback_path_invalid')
 node=NodeModel();python=PythonModel()
+GRACEFUL_HELPERS
+install_node_term_only(node,'ai选品','node --env-file='+str(root)+'/config/product_scout.env --env-file='+str(root)+'/config/release.env apps/backend/dist/server.js')
 def action(model,method,name):
  req=public.dict_obj();req.project_name=name;req.name=name
  r=getattr(model,method)(req)
  if not isinstance(r,dict) or not r.get('status'):
   text=json.dumps(r,ensure_ascii=False)
-  allowed=('项目未启动','already stopped') if method in ('StopProject','stop_project') else ('项目已启动','already started')
+  allowed=('项目未启动','already stopped') if method=='stop_project' else ('项目已启动','already started')
   if not any(message in text for message in allowed): raise RuntimeError('rollback_panel_action_failed')
-action(python,'StopProject','ai选品-python')
 action(node,'stop_project','ai选品')
+stop_python_project()
 deadline=time.time()+45
 while True:
  active=[]
@@ -105,8 +114,11 @@ while True:
  time.sleep(1)
 exchange_pairs(pairs,scratch)
 print('SCOUTOPS_RESULT='+json.dumps({'status':True,'message':'single backend packages exchanged','build_sha':sha(release)}))
-'''.replace('PAYLOAD', repr(values))
-    start = source.index("action(python,'StopProject'")
+'''.replace('PAYLOAD', repr(values)).replace('GRACEFUL_HELPERS', NODE_TERM_ONLY + PYTHON_TERM_ONLY)
+    source = source.replace('def action(model,method,name):', '''def panel_ok(response, operation):
+ if not isinstance(response,dict) or not response.get('status'): raise RuntimeError(operation+' failed')
+def action(model,method,name):''')
+    start = source.index("action(node,'stop_project'")
     end = source.index("print('SCOUTOPS_RESULT='")
     body = source[start:end]
     restart = """finally:

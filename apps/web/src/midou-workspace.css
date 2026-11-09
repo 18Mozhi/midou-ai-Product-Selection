@@ -911,6 +911,14 @@ html[data-design="commerce"]
   font-size: 24px;
   line-height: 1.35;
 }
+/* A failed first read uses the compact platform error header, not the factual dashboard title. */
+html[data-design="commerce"]
+  #app
+  .platform-dashboard:has(> .platform-dashboard-state[data-kind="blocked"])
+  > .platform-page-header
+  h2 {
+  font-size: 22px;
+}
 html[data-design="commerce"] #app .midou-account-navigation > a {
   display: flex;
   align-items: center;
@@ -995,7 +1003,7 @@ html[data-design="commerce"] #app .sourcing-detail-loading {
     gap: 0;
   }
   html[data-design="commerce"] #app .role-topbar .role-top-breadcrumb {
-    font-size: 12px;
+    font-size: 13px;
     gap: 4px;
   }
   html[data-design="commerce"] #app .role-top-breadcrumb > :is(a, span, b) {
@@ -1032,7 +1040,7 @@ html[data-design="commerce"] #app .sourcing-detail-loading {
     padding: 12px 10px;
   }
   html[data-design="commerce"] #app .home-daily-production dt {
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.45;
   }
   html[data-design="commerce"] #app .home-daily-production dt svg {
@@ -1042,7 +1050,7 @@ html[data-design="commerce"] #app .sourcing-detail-loading {
     font-size: 22px;
   }
   html[data-design="commerce"] #app .home-daily-production dd small {
-    font-size: 11px;
+    font-size: 13px;
   }
   html[data-design="commerce"] #app .home-command-bar nav {
     gap: 8px;
@@ -2099,7 +2107,7 @@ html[data-design="commerce"] #app .midou-profile-grid .p11-form textarea {
   border-radius: 999px;
   background: var(--so-warning-soft);
   color: var(--so-warning);
-  font-size: 12px;
+  font-size: 13px;
   white-space: nowrap;
   gap: 4px;
 }

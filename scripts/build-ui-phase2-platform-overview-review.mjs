@@ -1,5 +1,6 @@
+import { readLegacyCssFileSync as readFileSync } from "./lib/retired-runtime-css.mjs";
 import assert from "node:assert/strict";
-import { readFileSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";

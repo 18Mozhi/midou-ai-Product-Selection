@@ -43,6 +43,7 @@ test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and tru
     onboarding,
     foundationStyles,
     loginStyles,
+    identityStyles,
     navigationStyles,
     onboardingStyles,
     e2e,
@@ -55,6 +56,7 @@ test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and tru
       "apps/web/src/components/OnboardingGuide.vue",
       "apps/web/src/styles.css",
       "apps/web/src/components/local-identity-login.css",
+      "apps/web/src/components/identity-workspace.css",
       "apps/web/src/styles/onboarding-navigation.css",
       "apps/web/src/components/onboarding-page-c.css",
       "tests/e2e/m02-02-auth-onboarding.spec.ts",
@@ -69,15 +71,18 @@ test("M02-02.A07/A08/A11/A15/A16 pages expose responsive keyboard visual and tru
   assert.match(identity, /id="p02-login-title">安全登录/);
   assert.match(identity, /id="p02-challenge-title">验证你的身份/);
   assert.doesNotMatch(identity, /AI SELECTION ACCOUNT|SECURITY CENTER/);
-  assert.match(styles, /p02-login-brand[\s\S]*min-height:\s*44px/);
+  assert.match(identity, /class="p02-login-top"[\s\S]*?class="p02-login-brand"/);
+  assert.match(loginStyles, /@import "\.\/identity-workspace\.css"/);
+  assert.match(identityStyles, /\.p02-login-top,[\s\S]*?& a\s*\{[^}]*min-height:\s*44px/);
   assert.match(
-    styles,
-    /@media\s*\(\s*max-width:\s*760px\s*\)[\s\S]*p02-login-actions[\s\S]*min-height:\s*44px/,
+    identityStyles,
+    /\.p02-login-actions,[\s\S]*?& :is\(button, a\)\s*\{[^}]*min-height:\s*44px/,
   );
   for (const state of ["empty", "forbidden", "expired", "selected"])
     assert.match(tenancy, new RegExp(state));
   assert.match(onboarding, /aria-current/);
-  assert.match(styles, /@media\s*\(\s*max-width:\s*760px\s*\)/);
+  assert.match(identityStyles, /@media\s*\(\s*max-width:\s*540px\s*\)[\s\S]*?\.p02-login-actions/);
+  assert.match(styles, /@media\s*\(max-width:/);
   assert.match(e2e, /keyboard\.press/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(runbook, /python scripts\/deploy-baota\.py/);

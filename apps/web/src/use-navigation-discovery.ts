@@ -6,7 +6,13 @@ export function useNavigationDiscovery(
   adminReady: () => boolean = () => false,
 ) {
   const discoveryMode = ref<"search" | null>(null);
-  const openDiscovery = (mode: "search") => (discoveryMode.value = mode);
+  // Do not render the async overlay's inline loading panel before anyone opens it.
+  // Keep the overlay mounted after first use so close can abort reads and restore focus.
+  const discoveryActivated = ref(false);
+  const openDiscovery = (mode: "search") => {
+    discoveryActivated.value = true;
+    discoveryMode.value = mode;
+  };
   const closeDiscovery = () => (discoveryMode.value = null);
   const handleDiscoveryShortcut = (event: KeyboardEvent) => {
     if (
@@ -18,5 +24,11 @@ export function useNavigationDiscovery(
       openDiscovery("search");
     }
   };
-  return { discoveryMode, openDiscovery, closeDiscovery, handleDiscoveryShortcut };
+  return {
+    discoveryActivated,
+    discoveryMode,
+    openDiscovery,
+    closeDiscovery,
+    handleDiscoveryShortcut,
+  };
 }

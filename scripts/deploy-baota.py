@@ -31,6 +31,17 @@ from pathlib import Path
 
 import paramiko
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from deploy_baota_runtime_gate import (
+    NODE_TERM_ONLY,
+    PYTHON_TERM_ONLY,
+    claims_command,
+    drain_command,
+    verify_after_claims_resume,
+    verify_collection_drained,
+    witness_command,
+)
+
 
 HOST = "192.168.1.220"
 SSH_USER = "root"
@@ -50,6 +61,7 @@ PUBLIC_BASE_URL = "https://midouai.medouai.com"
 EXPECTED_GITHUB_REPOSITORY = "18Mozhi/midou-ai-Product-Selection"
 OPPORTUNITY_IDENTITY_MIGRATION_VERSION = "0075_competitor_opportunity_identity.up.sql"
 DEPLOYMENT_MIGRATION_VERSION = "0076_collection_backlog_cancellation.up.sql"
+CLAIM_MAINTENANCE_MIN_MIGRATION = 76
 OPPORTUNITY_IDENTITY_PREPARATION_SHA = "59bbc39a4954d19342a95de8a2fc0508bffd5a80"
 NODE_START_COMMAND = (
     f"node --env-file={PROJECT_ROOT}/config/product_scout.env "
@@ -324,9 +336,11 @@ def verify_local_source_preflight(repo: Path) -> None:
     npm = local_npm_executable()
     for script in ("format:check", "verify:runtime-docs", "verify:release-matrix"):
         subprocess.run([npm, "run", script], cwd=repo, check=True)
+    subprocess.run([sys.executable, "-B", "-m", "unittest", "discover", "-s", "tests/m07-03"], cwd=repo, check=True)
 
 
 def verify_local_build_preflight(repo: Path) -> None:
+    subprocess.run([local_node_executable(), "--test", "tests/unit/worker-scheduler.test.mjs"], cwd=repo, check=True)
     subprocess.run(
         [local_node_executable(), "scripts/verify-baota-deployment.mjs", "--preflight"],
         cwd=repo,
@@ -482,7 +496,7 @@ def panel_node_action_source(action: str) -> str:
     if action not in {"stop", "start"}:
         raise ValueError("unsupported Node project action")
     values = json.dumps(
-        {"root": PROJECT_ROOT, "node_project": NODE_PROJECT, "action": action},
+        {"root": PROJECT_ROOT, "node_project": NODE_PROJECT, "action": action, "node_start": NODE_START_COMMAND},
         ensure_ascii=False,
     )
     return f'''import json, sys, time
@@ -512,6 +526,8 @@ def project_processes():
     return found
 
 model=NodeModel(); request=public.dict_obj(); request.project_name=v["node_project"]
+{NODE_TERM_ONLY if action == "stop" else ""}
+if v["action"] == "stop": install_node_term_only(model, v["node_project"], v["node_start"])
 response=model.stop_project(request) if v["action"] == "stop" else model.start_project(request)
 text=json.dumps(response, ensure_ascii=False)
 allowed=("项目未启动", "项目已启动", "already stopped", "already started")
@@ -571,17 +587,8 @@ def panel_ok(response, operation, allow_messages=()):
         return
     raise RuntimeError(operation + " failed: " + text)
 
-def restart_python_project():
-    row = public.M("sites").where("name=?", (v["python_project"],)).find()
-    if not row or row.get("project_type") != "Python" or row.get("path") != str(root / "python"):
-        raise RuntimeError("Python project identity or path mismatch")
-    restarted = subprocess.run(
-        ["/www/server/panel/pyenv/bin/python", "/www/server/panel/script/restart_project.py", "python", v["python_project"]],
-        capture_output=True,
-        text=True,
-    )
-    if restarted.returncode != 0:
-        raise RuntimeError("BaoTa Python project restart failed")
+{NODE_TERM_ONLY}
+{PYTHON_TERM_ONLY}
 
 def ensure_inside(path):
     resolved = path.resolve(strict=False)
@@ -681,6 +688,7 @@ try:
             source.rename(destination)
 
     node = NodeModel()
+    install_node_term_only(node, v["node_project"], v["node_start"])
     python_model = PythonModel()
     stop_get = public.dict_obj(); stop_get.project_name = v["node_project"]
     panel_ok(node.stop_project(stop_get), "stop Node", ("项目未启动",))
@@ -928,6 +936,10 @@ except Exception as error:
             recovery_errors.append("Nginx rollback failed: " + str(nginx_error))
     if swapped:
         try:
+            recovery_get = public.dict_obj(); recovery_get.project_name = v["node_project"]
+            panel_ok(node.stop_project(recovery_get), "stop Node before rollback", ("项目未启动",))
+            if python_row:
+                stop_python_project()
             for name in ("frontend", "backend", "python"):
                 restored = rollback / name
                 if not restored.exists():
@@ -946,7 +958,7 @@ except Exception as error:
                 previous_release.replace(release_file)
             recovery_get = public.dict_obj(); recovery_get.project_name = v["node_project"]
             panel_ok(node.start_project(recovery_get), "restore Node")
-            restart_python_project()
+            start_python_project()
             if rollback.exists():
                 shutil.rmtree(rollback)
         except Exception as runtime_error:
@@ -1100,6 +1112,71 @@ def verify_public(build_sha: str) -> dict:
     raise RuntimeError(f"production health did not reach build {build_sha}: {last_error}")
 
 
+def verify_public_runtime_sample(build_sha: str) -> None:
+    expected = {
+        "live": ("status", {"ok"}),
+        "ready": ("status", {"ready", "healthy"}),
+        "available": ("status", {"available"}),
+        "version": ("build_sha", {build_sha}),
+    }
+    for endpoint, (field, allowed) in expected.items():
+        try:
+            with urllib.request.urlopen(f"{PUBLIC_BASE_URL}/api/v1/health/{endpoint}", timeout=4) as response:
+                payload = json.load(response)
+                if response.status != 200 or payload.get("data", payload).get(field) not in allowed:
+                    raise RuntimeError(f"release_runtime_sample_failed:{endpoint}")
+        except urllib.error.HTTPError as error:
+            raise RuntimeError(f"release_runtime_sample_failed:{endpoint}:http_{error.code}") from error
+
+
+def verify_resumed_runtime(client, build_sha: str) -> dict:
+    def witness(since):
+        command = witness_command(PROJECT_ROOT, NODE_BIN, build_sha, DEPLOYMENT_MIGRATION_VERSION, since)
+        return json.loads(ssh_exec(client, command, timeout=12))
+
+    return verify_after_claims_resume(lambda: verify_public_runtime_sample(build_sha), witness)
+
+
+def release_claims(client, action: str, owner: str = "") -> dict:
+    command = claims_command(PROJECT_ROOT, NODE_BIN, action, owner)
+    return json.loads(ssh_exec(client, command, timeout=15))
+
+
+def resume_owned_release_claims(client, owner: str) -> None:
+    state = release_claims(client, "status")
+    if state.get("paused") is False:
+        return
+    if state.get("paused") is not True or state.get("maintenanceId") != owner:
+        raise RuntimeError("release_pause_owner_changed; do not resume another operator's pause")
+    if release_claims(client, "resume", owner).get("paused") is not False or release_claims(client, "status").get("paused") is not False:
+        raise RuntimeError("release_claim_resume_not_confirmed")
+
+
+def write_runtime_release_state(repo: Path, build_sha: str, status: str, **evidence) -> None:
+    directory = repo / ".artifacts/verification"
+    directory.mkdir(parents=True, exist_ok=True)
+    path = directory / f"baota-runtime-{build_sha}.json"
+    temporary = path.with_suffix(".tmp")
+    try:
+        temporary.write_text(json.dumps({"buildSha": build_sha, "status": status,
+            "recordedAt": datetime.now(timezone.utc).isoformat(), **evidence}, ensure_ascii=False) + "\n", encoding="utf-8")
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def connect_production():
+    password = read_windows_credential()
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.RejectPolicy())
+    known_hosts = Path.home() / ".ssh/known_hosts"
+    if not known_hosts.is_file():
+        raise RuntimeError("SSH known_hosts is missing; refusing an unverified server identity")
+    client.load_host_keys(str(known_hosts))
+    client.connect(HOST, username=SSH_USER, password=password, timeout=15)
+    return client, password
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Deploy this repository to its fixed BaoTa layout")
     parser.add_argument("--initialize-layout", action="store_true", help="initialize the fixed layout and migrate the bounded shared directory")
@@ -1108,7 +1185,10 @@ def main() -> None:
     parser.add_argument("--reverify-rollback", action="store_true", help="rebuild the proven runtime-identical historical package and perform a real rollback/recovery without deployment migrations or data backups")
     parser.add_argument("--frontend-only", action="store_true", help="publish verified static UI only; never restart Node/Python or run migrations")
     parser.add_argument("--scoring-only", action="store_true", help="publish the two verified scoring Worker modules; preserve Python, frontend and configuration")
+    parser.add_argument("--verify-live", action="store_true", help="read-only recheck of the live exact build after claims resume; no upload, migration or restart")
     args = parser.parse_args()
+    if args.verify_live and any((args.scoring_only, args.frontend_only, args.initialize_layout, args.rollback_drill, args.reverify_rollback, args.skip_build)):
+        parser.error("--verify-live cannot be combined with deployment flags")
     if args.scoring_only and (args.frontend_only or args.initialize_layout or args.rollback_drill or args.reverify_rollback or args.skip_build):
         parser.error("--scoring-only cannot be combined with other deployment modes")
     if args.frontend_only and (args.initialize_layout or args.rollback_drill or args.reverify_rollback or args.skip_build):
@@ -1119,11 +1199,29 @@ def main() -> None:
     repo = Path(__file__).resolve().parents[1]
     if run(["git", "status", "--porcelain"], repo):
         raise RuntimeError("Git worktree must be clean before production deployment")
-    verify_local_source_preflight(repo)
+    if not args.verify_live:
+        verify_local_source_preflight(repo)
     source_identity = release_source_identity(repo)
     build_sha = source_identity["local_sha"]
     if len(build_sha) != 40:
         raise RuntimeError("full Git build identity is unavailable")
+    if args.verify_live:
+        client, _ = connect_production()
+        try:
+            identity = remote_python(client, production_identity_source(), timeout=30)
+            if identity.get("build_sha") != build_sha or identity.get("migration_version") != DEPLOYMENT_MIGRATION_VERSION:
+                raise RuntimeError("verification requires the exact live release and migration")
+            try:
+                health = verify_public(build_sha)
+                resumed = verify_resumed_runtime(client, build_sha)
+            except Exception:
+                write_runtime_release_state(repo, build_sha, "deployed_verification_failed")
+                raise
+            write_runtime_release_state(repo, build_sha, "runtime_verified", health=health, postResume=resumed)
+            print(json.dumps({"status": "runtime_verified", "build_sha": build_sha, "post_resume": resumed}))
+        finally:
+            client.close()
+        return
     verify_release_change_ownership(repo)
 
     if args.scoring_only:
@@ -1143,18 +1241,11 @@ def main() -> None:
 
     with tempfile.TemporaryDirectory(prefix="scoutops-deploy-") as temp:
         archive = build_package(repo, source_identity, args.skip_build, Path(temp))
-        password = read_windows_credential()
-        client = paramiko.SSHClient()
-        client.set_missing_host_key_policy(paramiko.RejectPolicy())
-        known_hosts = Path.home() / ".ssh/known_hosts"
-        if known_hosts.is_file():
-            client.load_host_keys(str(known_hosts))
-        else:
-            raise RuntimeError("SSH known_hosts is missing; refusing an unverified server identity")
-        client.connect(HOST, username=SSH_USER, password=password, timeout=15)
+        client, password = connect_production()
         remote_archive = f"{PROJECT_ROOT}/.deploy-upload-{build_sha}.tar.gz"
         remote_stage = f"{PROJECT_ROOT}/.deploy-stage-{build_sha}"
         node_stopped_for_migration = False
+        claim_pause_attempted = False
         lock_owner = str(uuid4())
         lock_acquired = False
         try:
@@ -1185,15 +1276,33 @@ def main() -> None:
                 f"'{NODE_BIN}' --env-file='{PROJECT_ROOT}/config/product_scout.env' "
                 "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql 0059_selection_journey_candidates.up.sql 0060_opportunity_workflow_visibility.up.sql 0061_crawler_completion_spool_status.up.sql 0062_runtime_process_restart_observations.up.sql 0063_runtime_health_endpoint_probes.up.sql 0064_governed_workflow_confirmations.up.sql 0065_opportunity_operating_feedback.up.sql 0066_automation_task_source_restore.up.sql 0067_usernames_login.up.sql 0068_automatic_selection_rule_matches.up.sql 0069_rule_based_recommendations.up.sql 0070_rule_candidates_quality_gate.up.sql 0071_opportunity_migration_timestamp_timezone.up.sql 0072_automatic_quality_evaluation.up.sql 0073_automatic_selection_migration_timestamp_timezone.up.sql 0074_provider_terms_permanent.up.sql 0075_competitor_opportunity_identity.up.sql 0076_collection_backlog_cancellation.up.sql"
             )
+            if not args.initialize_layout:
+                live_migration = production_identity.get("migration_version") or ""
+                if not live_migration[:4].isdigit() or int(live_migration[:4]) < CLAIM_MAINTENANCE_MIN_MIGRATION:
+                    raise RuntimeError("live migration does not support the release claim-maintenance gate")
+                if release_claims(client, "status").get("paused") is not False:
+                    raise RuntimeError("claims already paused; do not take another operator's pause")
+                claim_pause_attempted = True
+                paused = release_claims(client, "pause", lock_owner)
+                if paused.get("paused") is not True or paused.get("maintenanceId") != lock_owner:
+                    raise RuntimeError("release_claim_pause_not_confirmed")
+                verify_collection_drained(lambda: json.loads(ssh_exec(client, drain_command(PROJECT_ROOT, NODE_BIN, lock_owner), timeout=12)))
             remote_python(client, panel_node_action_source("stop"), timeout=90)
             node_stopped_for_migration = True
             ssh_exec(client, migrate, timeout=120)
             remote_python(client, panel_deploy_source(build_sha, args.initialize_layout), timeout=300)
             node_stopped_for_migration = False
-            client.close()
-            release_health = verify_public(build_sha)
-
-            client.connect(HOST, username=SSH_USER, password=password, timeout=15)
+            write_runtime_release_state(repo, build_sha, "deployed_verification_pending")
+            try:
+                if claim_pause_attempted:
+                    resume_owned_release_claims(client, lock_owner)
+                    claim_pause_attempted = False
+                release_health = verify_public(build_sha)
+                post_resume = verify_resumed_runtime(client, build_sha)
+            except Exception:
+                write_runtime_release_state(repo, build_sha, "deployed_verification_failed")
+                raise
+            write_runtime_release_state(repo, build_sha, "runtime_verified", health=release_health, postResume=post_resume)
             rollback_health = None
             recovery_health = None
             if args.rollback_drill:
@@ -1225,6 +1334,8 @@ def main() -> None:
                 if node_stopped_for_migration:
                     remote_python(client, panel_node_action_source("start"), timeout=60)
                     node_stopped_for_migration = False
+                if claim_pause_attempted:
+                    resume_owned_release_claims(client, lock_owner)
                 if lock_acquired:
                     remote_python(client, transient_cleanup_source(build_sha), timeout=180)
                 if lock_acquired and not (args.rollback_drill and original_error is not None):
@@ -1248,6 +1359,7 @@ def main() -> None:
         "node": f"{PROJECT_ROOT}/backend",
         "python": f"{PROJECT_ROOT}/python",
         "temporary_artifacts": "deleted",
+        "post_resume": post_resume,
     }, ensure_ascii=False))
 
 

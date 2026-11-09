@@ -1036,7 +1036,7 @@ test("current P11 profile panel map covers controlled field events and parent-ow
       record.currentLine !== null &&
       record.claim.includes("PC-CURRENT-"),
   );
-  assert.equal(candidates.length, 9);
+  assert.equal(candidates.length, 10);
   assert.deepEqual(
     [...new Set(currentRows.map((record) => record.candidateId))].sort(),
     candidates.map((candidate) => candidate.candidateId).sort(),
@@ -2341,23 +2341,15 @@ test("current P11 account shell maps brand, section and theme navigation sites",
       record.currentLine !== null &&
       record.temporalScope !== "historical",
   );
-  const expectedCurrentIds = [
-    "8aab273323c85fb8.1",
-    "0f58e919e43acff5.1",
-    "15b9757569cc17f2.1",
-    "c6782808e812207a.1",
-    "ad6cfd9c92df38fa.1",
-    "ae9623c4f5969ad6.1",
-    "a07717820a8cd567.1",
-    "1f19d2ec6d0c0efb.1",
-    "d4fefb061f17a1de.1",
-    "e1f5296c68058a15.1",
-    "7cdcfb8d3dad4f71.1",
-    "313f1b192c5bb9a4.1",
-    "aa62e5d933afce98.1",
-    "257559b0b0a3692f.1",
-  ].map((signature) => `${file}#${signature}`);
-  assert.equal(candidates.length, 14);
+  const expectedCurrentIds = [file + "#257559b0b0a3692f.1"];
+  assert.equal(candidates.length, 1);
+  const sections = /const sections = \[([\s\S]+?)\];/.exec(source)?.[1] ?? "";
+  assert.deepEqual(
+    [...sections.matchAll(/key: "([^"]+)"/g)].map((match) => match[1]),
+    ["profile", "permissions", "security", "notifications", "assets", "appearance"],
+  );
+  assert.match(source, /:to="\{ path: '\/me', query: \{ section: item\.key \} \}"/);
+  assert.match(source, /<ThemeStudio v-if="activeSection === 'appearance'"/);
   assert.deepEqual(
     currentRows.map((record) => record.candidateId).sort(),
     expectedCurrentIds.sort(),
@@ -3140,7 +3132,7 @@ test("retired P23 export history cannot count as current source approval", () =>
 test("shared contract input inventory is separate from static actions and preserves approval state", () => {
   const inputs = {
     NavigationShell: ["menuQuery"],
-    DiscoveryOverlay: ["query", "resourceType", "status", "assignee"],
+    DiscoveryOverlay: ["query", "query", "resourceType", "status", "assignee"],
     OrganizationRolePanel: [
       "roleQuery",
       "capabilityQuery",
@@ -3164,6 +3156,10 @@ test("shared contract input inventory is separate from static actions and preser
       "utf8",
     );
     const actual = [...text.matchAll(/\bv-model(?:\.[\w-]+)*="([^"]+)"/g)].map((match) => match[1]);
+    if (name === "DiscoveryOverlay") {
+      for (const id of ["admin-discovery-query", "discovery-c-query"])
+        assert.match(text, new RegExp('id="' + id + '"\\s+ref="input"\\s+v-model="query"'));
+    }
     assert.deepEqual(actual.sort(), [...expected].sort(), name);
   }
   const coveragePath = new URL(

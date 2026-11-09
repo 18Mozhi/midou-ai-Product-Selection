@@ -24,6 +24,7 @@ for (const [problems, expected] of [
           [
             {
               enabled_rule_count: 2,
+              daily_has_opportunities: 0,
               next_collection_at: "2026-10-16T12:00:00Z",
               last_task_problem_count: problems,
             },
@@ -44,8 +45,17 @@ for (const [problems, expected] of [
       captured.sql,
       /t\.organization_id=r\.organization_id AND t\.workspace_id=r\.workspace_id/,
     );
-    for (let i = 0; i < captured.parameters.length; i += 2)
-      assert.deepEqual(captured.parameters.slice(i, i + 2), ["organization-a", "workspace-a"]);
+    assert.deepEqual(
+      captured.parameters.slice(0, 10),
+      Array.from({ length: 5 }, () => ["organization-a", "workspace-a"]).flat(),
+    );
+    assert.match(captured.sql, /o\.created_at>=\? AND o\.created_at<\?/);
+    assert.ok(
+      captured.parameters
+        .slice(10, 12)
+        .every((value) => value instanceof Date && !Number.isNaN(value.getTime())),
+    );
+    assert.deepEqual(captured.parameters.slice(12), ["organization-a", "workspace-a"]);
   });
 }
 

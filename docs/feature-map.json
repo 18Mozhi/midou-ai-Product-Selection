@@ -16,6 +16,8 @@
     "sourceFiles": [
       "scripts/cancel-collection-backlog.mjs",
       "database/migrations/0076_collection_backlog_cancellation.up.sql",
+      "database/migrations/0076_collection_backlog_cancellation.down.sql",
+      "scripts/verify-0076-rollback-isolated.mjs",
       "packages/collection-tasks/src/index.ts",
       "apps/web/src/components/CollectionTaskCenter.vue"
     ],
@@ -4142,7 +4144,7 @@
       ],
       "shells": ["member", "organization_admin", "platform_admin", "account"],
       "guard": "root and successful authentication resolve an audited role-aware landing before the selected shell performs its own server-side role and tenancy guard; a missing context with at least one active organization membership lands on context selection, while an account with no active organization membership lands on the account shell and retains only session-level profile and security access; the organization shell admits an active auditor only when audit:read is present, and the frontend then exposes only capability-gated organization audit navigation while empty-capability management routes stay denied",
-      "frontendModuleBoundary": "NavigationShell owns shell layout guard loading and component mounting; its lazy-component catalog excludes account, landing, identity, not-found, onboarding, tenancy, theme, nested automatic-selection readiness, the approval workspace's route-internal queue panel and development-only state surfaces that are owned outside the shell route catalog, so the shell does not ship duplicate loader mappings; navigation-shell-permissions filters the server-owned capability facts, navigation-shell-route-state resolves route aliases page summaries and surface props, use-navigation-shell-theme owns versioned preference state and rollback, and use-navigation-discovery owns search and quick-create state plus the keyboard shortcut",
+      "frontendModuleBoundary": "NavigationShell owns shell layout guard loading and component mounting; its lazy-component catalog excludes account, landing, identity, not-found, onboarding, tenancy, theme, nested automatic-selection readiness, the approval workspace's route-internal queue panel and development-only state surfaces that are owned outside the shell route catalog, so the shell does not ship duplicate loader mappings; navigation-shell-permissions filters the server-owned capability facts, navigation-shell-route-state resolves route aliases page summaries and surface props, use-navigation-shell-theme owns versioned preference state and rollback, and use-navigation-discovery owns search and quick-create state plus the keyboard shortcut; the search overlay loads only on its first open and remains mounted afterwards so close aborts reads and restores focus",
       "imageEvidence": [
         "concepts 11, 15-17, 55-71",
         "high-resolution 01 member",
@@ -5981,10 +5983,13 @@
         "../scripts/verify-production-core-e2e.mjs",
         "../tests/e2e/helpers/mobile-occlusion.ts",
         "../scripts/lib/typescript-test-loader.mjs",
-        "../scripts/verify-live-baota.py"
+        "../scripts/verify-live-baota.py",
+        "../scripts/baota_probe_isolation.py",
+        "../scripts/verify-fixture-isolation.mjs"
       ],
       "scope": "P00-P06 role source collection task quality desktop mobile performance and security regression matrix",
       "runtimeBoundary": "local CI or Baota-controlled release task only; no production API table page permission daemon or multi-node claim",
+      "liveFixtureBoundary": "Mutation-capable BaoTa runtime fixtures require VERIFY_ISOLATION_ID and dedicated loopback MySQL 5.7 and Redis. BaoTa deployed packages and production read-only schema/Redis checks remain required; worker fixtures use attested ephemeral SSH reverse loopback ports, never the business queue. The production provider catalog keeps its original target; platform overview checks production facts in a read-only consistent snapshot and verifies exact fixture deltas and audit separately.",
       "browserGroups": ["p00", "p01", "p02", "p03", "p04", "p05", "p06"],
       "e2eTruthBoundary": "two local real API screenshot cases reach Fastify without page.route and cover readiness plus release identity; the finite production acceptance adds four interception-free core screenshots after real MySQL and Redis readiness for source-decision-task desktop, task mobile secondary actions, the approval decision desk and sourcing-cost-profit; mocked-file screenshots are 19 of 39 or 48.72 percent and remain visual-only; member and platform mobile shells share a zero-overlap bottom-navigation probe",
       "performanceTargets": {
@@ -6389,6 +6394,14 @@
       }
     },
     "runtimeTopology": {
+      "heartbeatReadClock": "Compare Worker snapshot time with the API clock after reading it; preserve future, expiry and non-running rejection, real backpressure and business-result alerts.",
+      "fullBaoTaReleaseGate": {
+        "entry": "scripts/deploy-baota.py",
+        "implementation": "scripts/deploy_baota_runtime_gate.py",
+        "runbook": "docs/runbooks/m07-03-baota-deployment.md",
+        "regression": "tests/m07-03/test_runtime_release_gate.py",
+        "contract": "Own-pause and four stable drain reads before SIGTERM-only panel stop; restore owned pause then require ten minutes of public runtime health and a naturally leased task with a persisted result. --verify-live rechecks the exact deployed build without restart, migrations or cancellation. Failed acceptance retains rollback material; no full functional acceptance is inferred."
+      },
       "uiPhase2TopologyCProposal": "P66 TOPOLOGY-C-r1 at design-plans/ui-phase-2-2026-09-07/design/topology-direction-c/README.md: 81 scenes, 181 PNGs, blue context and white source-separated node/process/probe/19-queue/alert workspace; timestamp/count/delta/reset restart details, zero samples not measured zero availability, three request-ID disclosure and simulated-copy consumers. Four source-execution/static groups and nine unchanged related B3b source hashes; no real Vue mounting, SQL/RBAC/audit/probe/server abort/deployment proof. Source ready with supervisor blocker or critical alert remains ready; future node/worker asymmetry and generic-error stale request-ID are reproduced, not business-rule fixes. Pending concrete design approval, production Vue/preserve lifecycle/themes and whole-site deployment/signoff. Existing due=false wording below does not mean running=false; this proposal distinguishes running non-due queues without changing scheduling policy.",
       "uiPhase2Contract": "P66 and runtime-resilience-contract-review.md under design-plans/ui-phase-2-2026-09-07 map read-only controls, native disclosures, GET audit effects, sampled restart history, health windows and cache lifecycle gaps. The Web list no longer truncates all or exceptional queues at 18; UI2-RS66 uses the current 19-policy Worker registry and isolated actual-Vue responses to verify keyboard disclosure, unknown queue identity, known/unknown blocker labels and server hints, and idle/running-not-due semantics. M08-01 desktop and mobile each pass 5/5 without changing scheduling policy. Full formal design, remaining state semantics, real backend and production remain pending.",
       "module": "M08-01",

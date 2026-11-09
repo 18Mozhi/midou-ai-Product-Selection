@@ -889,7 +889,7 @@ for (const width of [1440, 1024, 768, 390]) {
     if (compact && !(await homeLink.isVisible())) {
       await homeLink.locator("xpath=ancestor::details").locator("summary").click();
     }
-    await expect(homeLink).toHaveText("选品工作台");
+    await expect(homeLink).toHaveText(compact ? "选品工作台" : "选品");
     await homeLink.click();
     await expect(page).toHaveURL(/\/home$/);
     if (compact) await page.getByRole("button", { name: "打开导航菜单" }).click();

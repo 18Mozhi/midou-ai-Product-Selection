@@ -124,7 +124,7 @@ test("M06-06 create dialog C composition, native code constraint and pending/den
   expect(await dialog.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
   expect(
     await dialog.locator("header").evaluate((element) => getComputedStyle(element).backgroundColor),
-  ).toBe("rgb(24, 86, 181)");
+  ).toBe("rgb(9, 81, 237)"); // Current commerce --so-primary-strong token.
 
   const code = dialog.getByLabel("内部标识");
   await code.fill("bad code");

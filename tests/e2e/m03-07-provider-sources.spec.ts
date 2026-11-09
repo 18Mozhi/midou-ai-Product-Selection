@@ -1603,33 +1603,29 @@ test("1688 acceptance refresh keeps verified facts and suppresses duplicate read
   expect(reads).toBeGreaterThanOrEqual(2);
 });
 
-test("M03-07.A08/A09 member can manually schedule immediate hotspot refresh", async ({ page }) => {
+test("M03-07.A08/A09 member can reread intelligence without manually queuing collection", async ({
+  page,
+}) => {
   await nav(page, "member");
-  await page.route("**/api/v1/trends?**", (route) =>
-    route.fulfill({
+  let reads = 0;
+  await page.route("**/api/v1/trends?**", (route) => {
+    expect(route.request().method()).toBe("GET");
+    reads += 1;
+    return route.fulfill({
       json: { ...envelope([]), meta: { page: 1, page_size: 20, total: 0 } },
-    }),
-  );
-  await page.route("**/api/v1/trends/monitoring-rules", (route) =>
-    route.fulfill({ json: envelope([]) }),
-  );
-  let body: any = null;
-  await page.route("**/api/v1/provider-sources/refresh", async (route) => {
-    body = route.request().postDataJSON();
-    expect(route.request().headers()["idempotency-key"]).toBeTruthy();
-    await route.fulfill({
-      status: 202,
-      json: envelope({
-        task_id: "00000000-0000-4000-8000-000000000b75",
-        source_count: 138,
-        status: "scheduled",
-      }),
     });
   });
+  let writes = 0;
+  await page.route("**/api/v1/provider-sources/refresh", (route) => {
+    writes += 1;
+    return route.abort();
+  });
   await page.goto("/trends");
-  await page.getByRole("button", { name: /立即刷新来源/ }).click();
-  await expect.poll(() => body).toEqual({ organization_id: org, workspace_id: ws });
-  await expect(page.getByText(/已开始从 138 个实时频道获取热点/)).toBeVisible();
+  await expect.poll(() => reads).toBe(1);
+  await page.getByRole("button", { name: "刷新情报", exact: true }).click();
+  await expect.poll(() => reads).toBe(2);
+  await expect(page.getByText("当前范围内暂无结果。")).toBeVisible();
+  expect(writes).toBe(0);
 });
 
 test("M03-07.A08/A16 forbidden and dependency states are truthful", async ({ page }) => {

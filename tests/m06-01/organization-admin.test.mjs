@@ -287,7 +287,7 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
     "搜索团队",
     "团队状态",
     "团队分页",
-    "协作边界",
+    "说明团队职责、使用范围和创建目的",
   ])
     assert.match(web, new RegExp(copy));
   assert.match(center, /value: \{ workspaces: response\.data \}/);

@@ -1,5 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import {
+  expandPlatformDashboardCss,
+  platformDashboardCss,
+  platformDashboardLayoutCss,
+} from "../../scripts/lib/platform-dashboard-css.mjs";
 import { readFile } from "node:fs/promises";
 import {
   PlatformDashboardService,
@@ -184,19 +189,32 @@ test("M06-02.A06/A07/A08/A10/A13/A17 contracts frontend config and handoff stay 
   assert.equal(JSON.parse(feature).implementation.platformDashboard.module, "M06-02");
 });
 test("M06-02.A14 production probe is routed through fixed BaoTa MySQL", async () => {
-  const [manifest, runner, probe] = await Promise.all([
+  const [manifest, runner, probe, liveRead] = await Promise.all([
     readFile("verification/modules/M06-02.json", "utf8"),
     readFile("scripts/verify-live-baota.py", "utf8"),
     readFile("scripts/verify-platform-dashboard-live.mjs", "utf8"),
+    readFile("scripts/verify-platform-dashboard-readonly.mjs", "utf8"),
   ]);
   assert.match(manifest, /python scripts\/verify-live-baota\.py platform-dashboard/);
   assert.match(runner, /m06_probes\s*=\s*\{[^}]*"platform-dashboard"/);
-  assert.match(probe, /data\.provider_health\.find\(\(provider\)\s*=>\s*provider\.code===/);
+  assert.match(probe, /data\.provider_health\.find\(\s*\(provider\)\s*=>\s*provider\.code\s*===/);
+  assert.match(probe, /successes:\s*baseline\.successes\s*\+\s*1/);
+  assert.match(probe, /failures:\s*baseline\.failures\s*\+\s*1/);
+  assert.match(probe, /growth:\s*baseline\.growth\s*\+\s*4096/);
+  assert.match(probe, /platform_aggregate_changed_during_probe/);
+  assert.match(probe, /data\.summary\.task_success_rate\s*!==\s*expectedRate/);
+  assert.match(probe, /await assertFixtureReady\(\);\s*fixtureAttested = true/);
+  assert.match(runner, /production_dashboard_readonly_snapshot/);
+  assert.match(liveRead, /START TRANSACTION WITH CONSISTENT SNAPSHOT, READ ONLY/);
+  assert.match(liveRead, /readPlatformCollectionMetrics\(connection/);
+  assert.doesNotMatch(liveRead, /INSERT INTO|DELETE FROM|UPDATE\s+[a-z_]+\s+SET/i);
 });
 test("M06-02 platform overview gives administrators clear next actions", async () => {
   const [web, styles] = await Promise.all([
     readFile("apps/web/src/components/PlatformDashboard.vue", "utf8"),
-    readFile("apps/web/src/styles/platform-dashboard.css", "utf8"),
+    Promise.all(
+      [platformDashboardCss, platformDashboardLayoutCss].map((path) => readFile(path, "utf8")),
+    ).then(([entry, layout]) => expandPlatformDashboardCss(entry, layout)),
   ]);
   for (const copy of [
     "平台运行概览",

@@ -8,10 +8,22 @@
 2. 复制 `verification/release-change-ownership.example.json` 为 Git 忽略的 `.artifacts/release-change-ownership.json`，把 `baseSha` 设为上次已发布 commit、`headSha` 设为当前 HEAD，并按实际工作包填写负责人、commit 与变更路径。路径清单须覆盖区间内每个 commit 触及的路径，包括随后在同一区间删除或恢复的文件。运行 `npm run verify:release-ownership`；漏项、重复归属、区间外变更、同一路径跨工作包或 HEAD 漂移必须先修正，禁止把未知并行变更统归到当前任务。
 3. 在宝塔确认网站、Node 项目“ai选品”和 Python 项目“ai选品-python”均由面板创建和管理；不得保留独立 API、Worker、Canary 或面板外常驻项目，也不要用 systemd、独立 PM2、宿主 crontab或屏外 Docker Compose代替。
 4. Node/Python 只读取 `/www/wwwroot/ai选品/config/product_scout.env` 受限环境；秘密只填宝塔受限配置，检查页面、项目环境、日志和任务输出均无秘密。2026-09-07 已完成生产目录及两个宝塔项目名称的 UTF-8 规范化；部署器在上传前校验远端根目录文件名字节，编码漂移时失败关闭，禁止通过 SSH 手工重命名绕过面板记录。
-5. 本地使用锁文件完整安装依赖，然后运行 `python scripts/deploy-baota.py` 上传运行包；不得在服务器执行 Git 或源码构建。脚本在 Git fetch 和构建前自动执行格式、运行文档与发布矩阵门，构建后自动执行固定宝塔产物 preflight；任一失败都不会读取 Windows 凭据或连接服务器。随后脚本校验发布归属清单，只允许执行内置白名单中的升序迁移，校验迁移校验值后切换固定目录，并通过宝塔接口更新或重启“ai选品”和“ai选品-python”；既有 Python 项目配置更新后，必须按固定名称/路径二次核对并通过宝塔 `restart_project.py python ai选品-python` 重启，避免旧解释器继续加载上一版代码。部署失败回滚 Python 运行包时也会重启既有 Python 项目；不会创建面板外服务。机会详情依赖的 `0065_opportunity_operating_feedback.up.sql` 必须位于 `0064` 与 `0066` 之间执行并登记，缺少时不得继续签发生产机会路由。
+5. 本地使用锁文件依赖，运行 `python scripts/deploy-baota.py`；不得在服务器执行 Git 或源码构建。先执行格式、运行文档、发布矩阵、发布归属及门禁单测，再构建并运行心跳回归和固定宝塔产物 preflight。任一失败都不会读取 Windows 凭据或连接服务器。只执行内置白名单中的升序迁移并校验迁移值，`0065_opportunity_operating_feedback.up.sql` 必须位于 `0064` 与 `0066` 之间执行并登记。通过宝塔项目模型管理固定的 Node 和 Python 服务，不创建面板外服务。
 6. 部署器只在网站 ID 29、域名与固定路径全部匹配后更新宝塔 Nginx：由当前路由目录生成 `/www/wwwroot/ai选品/config/nginx-spa-routes.conf`，登记的 SPA 深链返回 200，随机未登记路径返回应用 fallback 正文并保留 HTTP 404。为避免宝塔默认 `error_page 404 /404.html` 抢先返回静态错误页，部署器只移除其 `#ERROR-PAGE-START` 块中的精确默认映射；修改前备份，随后执行 `nginx -t` 和 reload，失败从 `/www/wwwroot/ai选品/backups/nginx` 的同提交备份恢复。继续确认 `/api/`、`/open/` 与 SSE 不受 SPA 错误页拦截。TLS 由宝塔网站签发，DNS/NAT 未完成时不得宣称公网可用。
 
 ## 生产验收
+
+### 0076 回退演练（仅隔离环境）
+
+- 在专用回环 MySQL 5.7、Redis 非默认端口使用受限 `product_scout` 账号；将现有 `DB_NAME` 指向预建空库 `scoutops_0076_probe_<标识>`，不接正式库。执行 `node scripts/verify-0076-rollback-isolated.mjs`。探针复用真实任务/审计表定义，验证无取消可回退、仅取消状态/仅回执/两者同时存在均拒绝；检查行、ENUM 序号、审计和 Redis 哨兵，收尾只移除本次夹具。
+- `.down.sql` 必须在单一专用连接中按顺序执行，首错即停止并关闭连接，禁止使用 `--force`。先锁定任务表及审计表，有取消状态或审计回执时以会话临时表的 1062 错误拒绝，不能到达 DDL。无记录时按 MySQL 严格模式执行排他 DDL，仅恢复旧 ENUM，不动迁移台账。日常宝塔发布和代码回滚都不执行该 SQL，正式端保留 0076 和既有审计；没有新的运行时配置或额外服务重启要求。
+
+### 全量运行包自动门禁
+
+- 已部署 0076 的例行更新：持发布锁，用本次 UUID 暂停采集领取；四次连续核对在途任务、调度租约、配置租约和已领取浏览器任务归零后才停机。已有外部暂停不得接管。失败恢复时只解除本次暂停；确认不了归属或恢复失败就保留发布锁，不能手工抹掉暂停文件继续。部署器不取消任务、不停共享 MySQL/Redis、不改变供应商熔断。
+- 核对宝塔项目和精确进程树，Worker 先正常退出，再停止 API 和 Node 监督进程；Python 只发送 `SIGTERM` 并等退出，不调用带 `SIGKILL` 的宝塔 Python 通用重启。超时、进程替换或身份漂移都中止，不升级为强杀。回滚时在替换目录前确认候选服务已退出。首次初始化没有旧版领取维护步骤。
+- 切换后恢复本次暂停并读回。现有站点、浏览器助手和公网健康检查保留，再连续抽样至少 10 分钟（目标间隔 5 秒、单次间隔最多 20 秒）：精确 SHA、`live/ready/available`、0076 迁移登记及未暂停每次均须通过；且至少有一个活动工作区任务在窗口内真实领取、完成并有可用结果。没有自然任务结果不能签发，也不自动创建任务。不以这项门禁替代 M07-06、权限、模型和各供应商的专项验收。
+- 运行包已切换但验收未通过时，本地 `.artifacts/verification/baota-runtime-<SHA>.json` 标记 `deployed_verification_failed`，生产回退目录保留。确认同提交本地干净 `main` 后，执行 `python scripts/deploy-baota.py --verify-live` 只读复查同版本，不重新上传、迁移、停机、恢复他人暂停或清队列。该命令不会删除回退材料。静态前端和专用历史演练不是全量运行包验收。
 
 ### 2026-10-15 已确认的运维边界
 

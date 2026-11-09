@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { sanitizeCorrelationId } from "../ui/state-contract";
 import type { SourcingComparisonFailure } from "../composables/useSourcingComparisons";
-import type { SourcingComparison, SourcingComparisonQuote } from "./sourcing-workspace-types";
+import { specificationHint } from "./sourcing-comparison-specification";
+import type { SourcingComparison } from "./sourcing-workspace-types";
 
 defineProps<{
   comparisons: SourcingComparison[];
@@ -9,29 +10,6 @@ defineProps<{
   loading: boolean;
 }>();
 const emit = defineEmits<{ retry: [] }>();
-const specificationHint = (quotes: SourcingComparisonQuote[]) => {
-  const raw = [...new Set(quotes.map((item) => item.specification.trim()))];
-  const formatted = new Set(
-    raw.map((value) => value.normalize("NFKC").replace(/\s+/g, " ").toLocaleLowerCase()),
-  );
-  if (raw.length === 1)
-    return {
-      status: "aligned",
-      title: "规格文本一致",
-      detail: "仍需按各自证据核对型号、容量、包装和计量单位。",
-    };
-  if (formatted.size === 1)
-    return {
-      status: "format_only",
-      title: "规格仅存在格式差异",
-      detail: "大小写、空格或全半角不同；保存新报价时可统一书写。",
-    };
-  return {
-    status: "needs_review",
-    title: `存在 ${raw.length} 种规格文本，尚未归一`,
-    detail: "请先统一型号、容量、包装和计量单位再比较价格；系统不会自动换算或判断等价。",
-  };
-};
 </script>
 
 <template>
@@ -118,114 +96,4 @@ const specificationHint = (quotes: SourcingComparisonQuote[]) => {
   </section>
 </template>
 
-<style scoped>
-.sourcing-quote-scroll {
-  margin-top: 12px;
-  overflow-x: auto;
-}
-.sourcing-quote-table {
-  width: 100%;
-  min-width: 720px;
-  border-collapse: separate;
-  border-spacing: 0;
-  text-align: left;
-  font-size: 13px;
-  line-height: 1.6;
-}
-.sourcing-quote-table :is(th, td) {
-  padding: 12px;
-  border-bottom: 1px solid var(--so-border);
-  vertical-align: top;
-}
-.sourcing-quote-table thead th {
-  background: var(--so-panel-soft);
-  white-space: nowrap;
-  font-weight: 600;
-  color: var(--so-text-muted);
-}
-.sourcing-quote-table thead th:first-child,
-.sourcing-quote-table tbody th {
-  position: sticky;
-  left: 0;
-  z-index: 1;
-}
-.sourcing-quote-table tbody th {
-  width: 32%;
-  background: var(--so-panel);
-  font-weight: 400;
-  overflow-wrap: anywhere;
-}
-.sourcing-quote-table tbody :is(strong, span) {
-  display: block;
-}
-.sourcing-quote-table strong {
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-.sourcing-quote-table tbody span {
-  color: var(--so-text-muted);
-}
-.sourcing-quote-table td {
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-.sourcing-quote-table td[data-label="规格"] {
-  width: 28%;
-  white-space: normal;
-  overflow-wrap: anywhere;
-}
-.sourcing-quote-scroll:focus-visible {
-  outline: 2px solid var(--so-primary);
-  outline-offset: 2px;
-}
-@media (max-width: 760px) {
-  .sourcing-quote-scroll {
-    overflow: visible;
-  }
-  .sourcing-quote-table {
-    display: block;
-    min-width: 0;
-  }
-  .sourcing-quote-table thead {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-  }
-  .sourcing-quote-table tbody {
-    display: block;
-  }
-  .sourcing-quote-table tbody tr {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--so-border);
-  }
-  .sourcing-quote-table tbody :is(th, td) {
-    width: auto;
-    min-width: 0;
-    padding: 0;
-    border: 0;
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-  .sourcing-quote-table tbody th {
-    position: static;
-    z-index: auto;
-    grid-column: 1 / -1;
-    background: transparent;
-  }
-  .sourcing-quote-table td[data-label="规格"] {
-    width: auto;
-    grid-column: 1 / -1;
-  }
-  .sourcing-quote-table td::before {
-    content: attr(data-label);
-    display: block;
-    margin-bottom: 5px;
-    color: var(--so-text-muted);
-  }
-}
-</style>
+<style scoped src="../sourcing-comparison-table.css"></style>

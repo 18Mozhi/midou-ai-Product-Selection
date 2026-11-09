@@ -1,3 +1,4 @@
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import {
   readPreSelectionRebuild,
   preSelectionRebuildSourceFiles,
@@ -6,7 +7,7 @@ import {
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readEvidenceSourceBytes } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
-import { readFileSync } from "node:fs";
+
 import vm from "node:vm";
 import ts from "typescript";
 import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";

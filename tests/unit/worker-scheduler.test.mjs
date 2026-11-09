@@ -1,6 +1,52 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+test("health uses the snapshot read time without accepting expired or future Worker heartbeats", async () => {
+  const { RuntimeTopologyService } =
+    await import("../../apps/api/dist/runtime-topology-service.js");
+  const start = Date.parse("2026-11-09T04:00:00.000Z");
+  for (const [offset, backpressure, expected] of [
+    [20, false, "available"],
+    [20, true, "degraded"],
+    [-90_001, false, "unavailable"],
+    [31, false, "unavailable"],
+  ]) {
+    let now = start;
+    const service = new RuntimeTopologyService(
+      {
+        snapshot: async () => ({
+          nodes: [
+            {
+              nodeId: "api-primary",
+              hostId: "huizhou-single-host",
+              role: "api",
+              status: "ready",
+              lastHeartbeatAt: new Date(start),
+            },
+          ],
+        }),
+      },
+      {
+        expectedNodeId: "api-primary",
+        expectedHostId: "huizhou-single-host",
+        staleAfterMs: 90_000,
+        workerSchedulerStaleAfterMs: 90_000,
+        workerSchedulerSnapshot: async () => {
+          now = start + 30;
+          return {
+            status: "running",
+            backpressure,
+            queues: [],
+            observed_at: new Date(start + offset).toISOString(),
+          };
+        },
+      },
+      () => new Date(now),
+    );
+    assert.equal((await service.businessHealth()).status, expected, `offset=${offset}`);
+  }
+});
+
 const waitFor = async (condition, timeoutMs = 1000) => {
   const startedAt = Date.now();
   while (!condition()) {

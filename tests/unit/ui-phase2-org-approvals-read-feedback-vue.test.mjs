@@ -1,7 +1,9 @@
+import { readArchivedApprovalsParent } from "../../scripts/lib/ui-phase2-approvals-parent-baseline.mjs";
+import { readLegacyCssFileSync as readFileSync } from "../../scripts/lib/retired-runtime-css.mjs";
 import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { parse, compileTemplate } from "@vue/compiler-sfc";
@@ -85,9 +87,9 @@ test("remaining feedback retains every previous check and rejects invalid option
     visit(ast);
     return result;
   };
-  const driver = readFeedbackVueDriver(read(approvalsParentBase)),
+  const driver = readFeedbackVueDriver(readArchivedApprovalsParent()),
     current = checks(driver);
-  const expiredChecks = checks(expiredVueDriver(read(approvalsParentBase))),
+  const expiredChecks = checks(expiredVueDriver(readArchivedApprovalsParent())),
     expiredComponentChecks = new Set([
       'check(name + ": approved permission copy", await permission.locator(".org-approval-permission-copy").textContent(), "当前权限还不能读取这些内容。权限调整后，可以重新加载。")',
       'check(name + ": hidden content is not empty catalog", await permission.locator(".org-approval-permission-boundary").textContent(), "审批内容目前未显示，不代表记录或模板为空。")',
@@ -220,5 +222,5 @@ test("read-feedback capture cannot overwrite existing evidence", () => {
   );
   assert.equal(run.status, 1);
   assert.equal(run.stdout, "");
-  assert.match(run.stderr, /EEXIST/);
+  assert.match(run.stderr, /legacy_css_preview_retired/);
 });

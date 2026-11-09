@@ -74,9 +74,16 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
   assert.match(deploy, /deploy-rollback-" \+ match\.group\(1\)/);
   assert.match(deploy, /source\.rename\(destination\)/);
   assert.match(deploy, /rollback archive destination already exists/);
+  const fullDeploy = deploy.slice(
+    deploy.indexOf('with tempfile.TemporaryDirectory(prefix="scoutops-deploy-")'),
+  );
+  assert.match(
+    fullDeploy,
+    /archive = build_package\([\s\S]*client, password = connect_production\(\)/,
+  );
   assert.ok(
-    deploy.lastIndexOf("verify_release_change_ownership(repo)") <
-      deploy.lastIndexOf("read_windows_credential()"),
+    deploy.indexOf("verify_release_change_ownership(repo)", deploy.indexOf("def main()")) <
+      deploy.indexOf(fullDeploy),
   );
   assert.match(deploy, /remote_python\(client, panel_deploy_source/);
   assert.ok(

@@ -47,7 +47,11 @@ import { MySqlTrendProjectionWorker } from "./trend-projection-worker.js";
 import { WebhookDeliveryWorker } from "./webhook-delivery-worker.js";
 import { WorkerPollers } from "./worker-pollers.js";
 import { workerQueues } from "./worker-queue-registry.js";
-import { WorkerSchedulerStateWriter } from "./worker-scheduler-state.js";
+import {
+  reportWorkerSchedulerHeartbeat,
+  reportWorkerSchedulerSnapshotError,
+  WorkerSchedulerStateWriter,
+} from "./worker-scheduler-state.js";
 
 const config = loadRuntimeConfig(process.env, "worker");
 const pool = createDatabasePool(config);
@@ -227,18 +231,13 @@ const persistSchedulerState = async () => {
 };
 
 const heartbeat = () => {
-  console.log(
-    JSON.stringify({
-      service: "product-scout-worker",
-      status: pollers.isStopping ? "stopping" : "idle",
-      worker_id: config.identity.workerId,
-      registered_sources: registry.describe().map((item) => item.key),
-      registered_queues: scheduler?.snapshot().queues.map((queue) => queue.name) ?? [],
-      scheduler: scheduler?.snapshot() ?? null,
-      config_fingerprint: config.configFingerprint,
-      observed_at: new Date().toISOString(),
-    }),
-  );
+  reportWorkerSchedulerHeartbeat({
+    stopping: pollers.isStopping,
+    workerId: config.identity.workerId,
+    sources: registry.describe().map((item) => item.key),
+    snapshot: scheduler?.snapshot() ?? null,
+    configFingerprint: config.configFingerprint,
+  });
   void persistSchedulerState();
 };
 
@@ -376,15 +375,7 @@ scheduler = new QueueScheduler({
   maxConcurrency: config.runtime.workerMaxConcurrency,
   tickMs: config.runtime.workerSchedulerTickMs,
   onSnapshot: (snapshot) => schedulerStateWriter.write(snapshot),
-  onSnapshotError: (error) =>
-    console.error(
-      JSON.stringify({
-        service: "product-scout-worker",
-        status: "scheduler_state_write_failed",
-        error: error instanceof Error ? error.message.slice(0, 240) : "unknown",
-        observed_at: new Date().toISOString(),
-      }),
-    ),
+  onSnapshotError: reportWorkerSchedulerSnapshotError,
 });
 for (const queue of queues) scheduler.register(queue);
 scheduler.start();

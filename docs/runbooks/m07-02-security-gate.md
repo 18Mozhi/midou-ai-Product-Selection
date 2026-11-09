@@ -4,6 +4,8 @@
 
 在本地、CI 或宝塔面板创建的受限发布任务中运行 `npm run verify:module -- M07-02`。网络需允许 npm 依赖公告查询；MySQL 5.7 与 Redis 使用 P00 已验证的受限连接。通过时保存模块报告的 `run_id` / `trace_id`，失败时按报告中的 check、file 和 code 修复后完整重跑，不可手工放行。
 
+安全扫描后的 RBAC 和安全操作集成检查还须通过 `verify-fixture-isolation.mjs` 的双存储隔离证明，沿用 [M07-01 的隔离验收配置](m07-01-release-matrix.md)。证明缺失或不匹配时停止，不改生产账号、队列或权限。
+
 宝塔网站发布前，把 `infra/baota/nginx/scoutops.conf.template` 合并到站点配置并执行面板内的 Nginx 配置检查和重载。CSP 如需新增外部来源，必须先证明页面实际需要并同步策略测试；不要通过通配符放宽。
 
 ## 故障与恢复

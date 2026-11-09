@@ -1,0 +1,24 @@
+.trend-filter-actions > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.trend-filter-actions > button > svg {
+  flex-shrink: 0;
+}
+.filter-apply-action {
+  border-color: var(--so-border);
+  color: var(--so-text);
+  background-color: transparent;
+  background-image: none;
+}
+
+@media (max-width: 760px) {
+  .filter-apply-action {
+    border-color: var(--so-primary);
+    color: var(--so-on-primary);
+    background-color: var(--so-primary);
+  }
+}

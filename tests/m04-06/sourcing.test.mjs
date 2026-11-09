@@ -127,7 +127,11 @@ test("M04-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     live,
     /SELECT status,last_error_code FROM sourcing_projection_jobs WHERE id=\? AND organization_id=\? AND workspace_id=\?/,
   );
-  assert.doesNotMatch(live, /new MySqlSourcingProjectionWorker/);
+  assert.match(live, /await assertIsolatedProjection\(\);\s*fixtureAttested = true/);
+  assert.match(live, /if \(fixtureAttested\) await cleanup\(\)/);
+  assert.match(live, /scoutops-isolated-/);
+  assert.match(live, /new MySqlSourcingProjectionWorker/);
+  assert.match(live, /workerResult\.job_id !== search\.job_id/);
   assert.match(blueprint, /M04-06 实现合同/);
 });
 test("M04-06 saved comparisons align specification MOQ price and lead time without inventing login renewal", async () => {
