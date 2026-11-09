@@ -1827,14 +1827,15 @@
     inset-block-start: -5px;
   }
   #app .trend-detail-tabs {
-    gap: 4px;
+    gap: 8px;
   }
   #app .trend-detail-tabs > button {
     position: relative;
     align-content: center;
     font-size: 17px;
     line-height: 22px;
-    padding-block: 3px 8px;
+    padding-block: 2px 9px;
+    padding-inline: 10px 14px;
   }
   #app .trend-detail-tabs > button[aria-selected="true"] {
     border-block-end-color: transparent;

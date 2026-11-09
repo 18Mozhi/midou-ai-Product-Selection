@@ -1085,7 +1085,7 @@ test("midou reference list defaults closed, opens and closes detail without list
       page.viewportSize()!.width >= 1600 ? "9px" : "12px",
     );
     const detailTabs = panel.getByRole("tablist");
-    await expect(detailTabs).toHaveCSS("column-gap", "4px");
+    await expect(detailTabs).toHaveCSS("column-gap", "8px");
     for (const tab of await detailTabs.getByRole("tab").all()) {
       await expect(tab).toHaveCSS("width", "116px");
     }
@@ -1778,7 +1778,11 @@ test("reference intelligence opens the fourth topic with related selection", asy
     "inset-block-start",
     "-5px",
   );
-  await expect(page.locator(".trend-detail-tabs")).toHaveCSS("column-gap", "4px");
+  await expect(page.locator(".trend-detail-tabs")).toHaveCSS("column-gap", "8px");
+  for (const tab of await page.locator(".trend-detail-tabs").getByRole("tab").all()) {
+    await expect(tab).toHaveCSS("padding-inline-start", "10px");
+    expect((await tab.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  }
   const overviewCard = related.locator("li").first();
   await expect(overviewCard).toHaveCSS("padding-block-start", "12px");
   await expect(overviewCard).toHaveCSS("padding-block-end", "12px");
@@ -1809,7 +1813,7 @@ test("reference intelligence opens the fourth topic with related selection", asy
   const detailTabs = page.locator(".trend-detail-tabs");
   const activeDetailTab = detailTabs.getByRole("tab", { selected: true });
   await expect(activeDetailTab).toHaveCSS("font-size", "17px");
-  await expect(activeDetailTab).toHaveCSS("padding-block-end", "8px");
+  await expect(activeDetailTab).toHaveCSS("padding-block-end", "9px");
   expect(await activeDetailTab.evaluate((node) => getComputedStyle(node, "::after").height)).toBe(
     "2px",
   );
@@ -1869,6 +1873,7 @@ test("reference intelligence opens the fourth topic with related selection", asy
   };
   console.log("INTELLIGENCE_METADATA_READING", JSON.stringify(metadataReading));
   expect(metadataReading).toEqual({ context: "14.5px", provenance: "14.5px", identityGap: "6px" });
+
   const scrollProbe = await page.locator(".trend-list").evaluate((pane) => {
     const before = pane.scrollTop;
     pane.scrollTop = 100;
