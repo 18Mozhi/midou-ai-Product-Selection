@@ -4,6 +4,8 @@ import { readPreSelectionRebuild } from "./pre-selection-rebuild-snapshot.mjs";
 // The retired P33 registry includes later, independently audited shared-focus
 // revisions. Freeze the rebuilt page inputs without replacing those shared bytes.
 const rebuiltFiles = new Set([
+  "apps/api/src/organization-admin-routes.ts",
+  "apps/api/src/mysql-organization-admin-repository.ts",
   "apps/web/src/components/OrganizationAdminCenter.vue",
   "apps/web/src/components/OrganizationTeamPanel.vue",
   "apps/web/src/organization-admin.css",

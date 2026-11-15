@@ -8,6 +8,10 @@ import { fileURLToPath } from "node:url";
 // the old UI review to claim acceptance of the automatic-selection rebuild.
 export const preSelectionRebuildRevision = "c26e2b522bc616cbc2a67b01185d832f93789174";
 const root = fileURLToPath(new URL("../../", import.meta.url));
+const archivedOrganizationApiFiles = [
+  "apps/api/src/organization-admin-routes.ts",
+  "apps/api/src/mysql-organization-admin-repository.ts",
+];
 let snapshot;
 
 function loadSnapshot() {
@@ -19,6 +23,7 @@ function loadSnapshot() {
       "--name-only",
       preSelectionRebuildRevision,
       "--",
+      ...archivedOrganizationApiFiles,
       "apps/web/src",
       "apps/web/vite.config.ts",
       "tests/e2e",
@@ -31,6 +36,7 @@ function loadSnapshot() {
     .split("\0")
     .filter(
       (file) =>
+        archivedOrganizationApiFiles.includes(file) ||
         (file.startsWith("apps/web/src/") && /\.(vue|ts|css|json|js|mjs)$/.test(file)) ||
         file === "apps/web/vite.config.ts" ||
         (file.startsWith("tests/e2e/") && file.endsWith(".ts")) ||

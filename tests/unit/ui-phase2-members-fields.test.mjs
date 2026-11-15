@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { preSelectionRebuildRevision } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import vm from "node:vm";
 import ts from "typescript";
 import { parse } from "@vue/compiler-sfc";
@@ -21,6 +22,8 @@ const controls = JSON.parse(
 );
 const sources = Object.fromEntries(dependencies.map((file) => [file, readFileSync(file, "utf8")]));
 const captureRevisions = new Map([
+  ["apps/api/src/organization-admin-routes.ts", preSelectionRebuildRevision],
+  ["apps/api/src/mysql-organization-admin-repository.ts", preSelectionRebuildRevision],
   [dependencies[0], "f872f957c50d1fdf185d272ae4bebc2e6eea8efc"],
   [dependencies[1], "ceead68d0da163f93abb0d618936989020a2f02c"],
   [dependencies[2], "ed5d8be4a67b8934418074d55d7cd9ed8df8323e"],
