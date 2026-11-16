@@ -12,7 +12,7 @@ const task = {
   request_id: "request",
   trace_id: "trace",
 };
-function harness({ candidate, locked, overflow = false, denyRangeLock = false }) {
+function harness({ candidate, locked, overflow = false, denyRangeLock = false, native = false }) {
   const calls = [],
     events = [];
   const c = {
@@ -22,6 +22,8 @@ function harness({ candidate, locked, overflow = false, denyRangeLock = false })
     release: () => calls.push({ sql: "release" }),
     query: async (sql, values) => {
       calls.push({ sql, values });
+      if (sql.startsWith("SHOW COLUMNS FROM collection_tasks"))
+        return [native ? [{Field:"account_id"}] : [{Field:"organization_id"},{Field:"workspace_id"}]];
       if (sql.startsWith("SELECT * FROM collection_tasks")) {
         if (sql.includes("WHERE id=?")) return [locked ? [locked] : []];
         if (denyRangeLock)
@@ -57,6 +59,18 @@ test("empty expiry and overflow scans do not lock the task status ranges", async
     ["commit", "release"],
   );
 });
+
+test("account expiry locks the original scoped task and does not write if the owner guard stops the lock", async () => {
+  const h = harness({native:true,candidate:{id:task.id,account_id:"original-account"},locked:null,denyRangeLock:true});
+  assert.equal(await recoverExpiredCollectionTasks(h.context, now), 0);
+  const lock = h.calls.find((c) => c.sql.startsWith("SELECT * FROM collection_tasks WHERE id=?"));
+  assert.deepEqual(lock.values,[task.id,"original-account",now]);
+  assert.match(lock.sql,/o\.source_id=collection_tasks\.id AND o\.account_id=collection_tasks\.account_id/);
+  assert.match(lock.sql,/lease_expires_at<=\? FOR UPDATE$/);
+  assert.doesNotMatch(lock.sql,/organization_id|workspace_id/);
+  assert.equal(h.events.length,0);
+  assert.ok(!h.calls.some(({sql})=>/^(UPDATE|INSERT|DELETE)\b/.test(sql)));
+});
 test("heartbeat renewal between discovery and primary lock prevents false timeout recovery", async () => {
   const h = harness({ candidate: task, locked: null });
   assert.equal(await recoverExpiredCollectionTasks(h.context, now), 0);
@@ -74,7 +88,11 @@ test("expired task still follows the existing timeout state machine using the lo
   assert.equal(write.values[0], "dead_letter");
   assert.equal(write.values[2], "timeout");
   assert.equal(h.events[0][3], "dead_letter");
-  assert.ok(h.calls.some((c) => c.sql.startsWith("INSERT INTO collection_dead_letters")));
+  const dead = h.calls.find((c) => c.sql.startsWith("INSERT INTO collection_dead_letters"));
+  assert.match(dead.sql, /id,task_id,attempt_id,error_code/);
+  assert.doesNotMatch(dead.sql, /organization_id|workspace_id/);
+  assert.equal(dead.values[1], task.id);
+  assert.equal(dead.values[3], "timeout");
 });
 test("overflow candidates changed by another writer are rechecked before quarantine", async () => {
   const h = harness({

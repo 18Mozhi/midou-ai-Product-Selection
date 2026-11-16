@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { collectionTaskScope } from "@scoutops/database";
 import {
   assertTaskTransition,
   classifyCollectionFailure,
@@ -45,15 +46,25 @@ export async function recoverExpiredCollectionTasks(
   let recovered = 0;
   try {
     await c.beginTransaction();
+    const account = await collectionTaskScope(c) === "account";
+    const recoveryScope = account
+      ? "account_id=? AND EXISTS (SELECT 1 FROM account_owned_records o " +
+        "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+        "WHERE o.source_table='collection_tasks' AND o.source_id=collection_tasks.id " +
+        "AND o.account_id=collection_tasks.account_id AND (o.reason='exclusive_owner' OR " +
+        "(o.reason IN ('shared','unassigned') AND o.account_id=cut.primary_account_id)) LOCK IN SHARE MODE) "
+      : "organization_id=? AND workspace_id=? ";
+    const coordinates = (row: RowDataPacket) =>
+      account ? [row.account_id] : [row.organization_id, row.workspace_id];
     const sql =
         "SELECT * FROM collection_tasks WHERE status IN ('leased','running') AND lease_expires_at<=?" +
         (context.taskId ? " AND id=?" : ""),
       [rows] = await c.query<RowDataPacket[]>(sql, context.taskId ? [now, context.taskId] : [now]);
     for (const candidate of rows) {
       const [locked] = await c.query<RowDataPacket[]>(
-        "SELECT * FROM collection_tasks WHERE id=? AND organization_id=? AND workspace_id=? " +
+        "SELECT * FROM collection_tasks WHERE id=? AND " + recoveryScope +
           "AND status IN ('leased','running') AND lease_expires_at<=? FOR UPDATE",
-        [candidate.id, candidate.organization_id, candidate.workspace_id, now],
+        [candidate.id, ...coordinates(candidate), now],
       );
       const row = locked[0];
       if (!row) continue;
@@ -113,9 +124,9 @@ export async function recoverExpiredCollectionTasks(
       );
     for (const candidate of overflowRows) {
       const [locked] = await c.query<RowDataPacket[]>(
-        "SELECT * FROM collection_tasks WHERE id=? AND organization_id=? AND workspace_id=? " +
+        "SELECT * FROM collection_tasks WHERE id=? AND " + recoveryScope +
           "AND status='queued' AND attempt_count>=4 FOR UPDATE",
-        [candidate.id, candidate.organization_id, candidate.workspace_id],
+        [candidate.id, ...coordinates(candidate)],
       );
       const row = locked[0];
       if (!row) continue;
@@ -281,10 +292,10 @@ export async function writeCollectionDeadLetter(
   await c.query(
     statement(
       "INSERT INTO collection_dead_letters ",
-      "(id,task_id,attempt_id,organization_id,workspace_id,error_code,",
+      "(id,task_id,attempt_id,error_code,",
       "failure_summary_json,status,replayed_by,replay_reason,replayed_at,",
       "request_id,trace_id,created_at) ",
-      "VALUES (?,?,?,?,?,?,?,'open',NULL,NULL,NULL,?,?,?) ",
+      "VALUES (?,?,?,?,?,'open',NULL,NULL,NULL,?,?,?) ",
       "ON DUPLICATE KEY UPDATE error_code=VALUES(error_code),",
       "failure_summary_json=VALUES(failure_summary_json),",
       "request_id=VALUES(request_id),trace_id=VALUES(trace_id)",
@@ -293,8 +304,6 @@ export async function writeCollectionDeadLetter(
       randomUUID(),
       row.id,
       attempts[0]!.id,
-      row.organization_id,
-      row.workspace_id,
       errorCode,
       JSON.stringify({ attempt_count: Number(row.attempt_count), error_code: errorCode }),
       row.request_id,

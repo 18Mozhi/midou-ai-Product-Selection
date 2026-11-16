@@ -26,35 +26,29 @@ export class ScopedRedisCollectionCoordinator implements CollectionQueueCoordina
       workspace_id: task.workspaceId as WorkspaceId,
     };
   }
-  async signal(task: {
-    id: string;
-    organizationId: string;
-    workspaceId: string;
-    requestId: string;
-    traceId: string;
-  }) {
+  async signal(task: Parameters<CollectionQueueCoordinator["signal"]>[0]) {
+    const payload = { task_id: task.id, request_id: task.requestId, trace_id: task.traceId };
+    if (task.accountId !== undefined) {
+      await this.store.writeAccountCollectionSignal(
+        { account_id: task.accountId, resource: "collection-ready", task_id: task.id }, payload,
+      );
+      return;
+    }
     await this.store.writeJson(
-      {
-        ...this.scope(task),
-        purpose: "queue",
-        resource: "collection-ready",
-        identifiers: [task.id],
-      },
-      { task_id: task.id, request_id: task.requestId, trace_id: task.traceId },
+      { ...this.scope(task), purpose: "queue", resource: "collection-ready", identifiers: [task.id] },
+      payload,
     );
+  }
+  private leaseKey(task: ClaimedCollectionTask) {
+    return task.accountId === undefined
+      ? { ...this.scope(task), resource: "collection-task", identifiers: [task.id] }
+      : { account_id: task.accountId, resource: "collection-task" as const, task_id: task.id };
   }
   acquire(task: ClaimedCollectionTask, ttlSeconds: number) {
-    return this.store.acquireLease(
-      { ...this.scope(task), resource: "collection-task", identifiers: [task.id] },
-      task.leaseToken,
-      ttlSeconds,
-    );
+    return this.store.acquireLease(this.leaseKey(task), task.leaseToken, ttlSeconds);
   }
   async release(task: ClaimedCollectionTask) {
-    await this.store.releaseLease(
-      { ...this.scope(task), resource: "collection-task", identifiers: [task.id] },
-      task.leaseToken,
-    );
+    await this.store.releaseLease(this.leaseKey(task), task.leaseToken);
   }
 }
 

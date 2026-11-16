@@ -10,6 +10,8 @@ import {
   completionReadyCompetitorRowsSql as rows,
   completionReadyCompetitorTaskSql as preferred,
   completionCompetitorApprovedSourceSql as sourceProof,
+  nativeCompletionReadyCompetitorRowsSql as nativeRows,
+  nativeCompletionReadyCompetitorTaskSql as nativePreferred,
 } from "../../apps/worker/dist/completion-competitor-policy.js";
 import {
   PRIMARY_SOURCE_SUPPORT_EVENT,
@@ -79,7 +81,7 @@ test("source proof counterfactuals retain literal JSON boolean SQL and only prod
     cases
       .find((c) => c.name === "rejected original source cannot retain preference")
       .sql.includes(
-        "JSON_SET(payload_json,'$.supported',JSON_EXTRACT('false','$')) payload_json FROM opportunity_events) source_approval",
+        "JSON_SET(payload_json,'$.supported',JSON_EXTRACT('false','$')) payload_json FROM (SELECT ev.id",
       ),
   );
   for (const c of cases) {
@@ -102,6 +104,24 @@ test("only completion preference follows cached results, without changing the FI
     policy.collectionReadyOrderSql(false, true, true),
     policy.collectionReadyOrderSql(false),
   );
+});
+
+test("native task preference keeps the same rank and five-detail gate while fencing all task references", () => {
+  const legacy = policy.collectionReadyOrderSql(true, false, false);
+  const native = policy.collectionReadyOrderSql(true, false, false, true, false, true);
+  assert.equal(native.replace(nativePreferred, () => preferred), legacy);
+  assert.doesNotMatch(nativeRows, /\b(?:t|source_news)\.(?:organization_id|workspace_id)\b/);
+  for (const fragment of [
+    "rank_owner.source_table='collection_tasks'",
+    "rank_owner.source_table='collection_subqueries'",
+    "rank_owner.source_table='collection_task_events'",
+    "rank_owner.source_table='competitors'",
+    "rank_owner.source_table='opportunities'",
+    "pending.account_id=o.account_id",
+    "source_news.account_id=o.account_id",
+    "COUNT(DISTINCT UPPER(c_sample.external_id))",
+    ")>=5)",
+  ]) assert.ok(nativeRows.includes(fragment), fragment);
 });
 
 test("ordering scenarios cover independent details, cache, source turns, priority and FIFO without real tables", () => {

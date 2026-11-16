@@ -1,3 +1,4 @@
+import { opportunityEventReadRelation, trendTopicEventReadRelation } from "../../packages/database/dist/index.js";
 // SELECT-only counterfactual views of actual queued rows. No task, table or evidence is written.
 export function completionCompetitorGateCases(sql) {
   const wrongId =
@@ -21,7 +22,7 @@ export function completionCompetitorGateCases(sql) {
     sql.replaceAll("JOIN competitor_snapshots s_main ON", `JOIN ${mainView(changes)} s_main ON`);
   const sourceApproval = (changes) =>
     sql.replaceAll(
-      "FROM opportunity_events source_approval",
+      "FROM " + opportunityEventReadRelation + " source_approval",
       () =>
         "FROM (SELECT id," +
         (changes.organization_id ?? "organization_id") +
@@ -31,13 +32,13 @@ export function completionCompetitorGateCases(sql) {
         (changes.actor_type ?? "actor_type") +
         " actor_type,occurred_at," +
         (changes.payload ?? "payload_json") +
-        " payload_json FROM opportunity_events) source_approval",
+        " payload_json FROM " + opportunityEventReadRelation + " event_src) source_approval",
     );
   const sourcePayload = (path, value) =>
     sourceApproval({ payload: `JSON_SET(payload_json,'$.${path}',${value})` });
   const sourceOrigin = (changes) =>
     sql.replaceAll(
-      "JOIN trend_events source_origin ON",
+      "JOIN " + trendTopicEventReadRelation + " source_origin ON",
       () =>
         "JOIN (SELECT id,organization_id,workspace_id," +
         (changes.resource_id ?? "resource_id") +
@@ -45,7 +46,7 @@ export function completionCompetitorGateCases(sql) {
         (changes.event_type ?? "event_type") +
         " event_type,occurred_at," +
         (changes.payload ?? "payload_json") +
-        " payload_json FROM trend_events) source_origin ON",
+        " payload_json FROM " + trendTopicEventReadRelation + " topic_event) source_origin ON",
     );
   const news = (changes) =>
     sql.replaceAll(
@@ -61,19 +62,19 @@ export function completionCompetitorGateCases(sql) {
     );
   const newerApproval = (actor) =>
     sql.replaceAll(
-      "FROM opportunity_events newer_source",
+      "FROM " + opportunityEventReadRelation + " newer_source",
       () =>
         "FROM (SELECT id,organization_id,workspace_id,resource_id,resource_type,event_type," +
         actor +
-        " actor_type,DATE_ADD(occurred_at,INTERVAL 1 SECOND) occurred_at FROM opportunity_events) newer_source",
+        " actor_type,DATE_ADD(occurred_at,INTERVAL 1 SECOND) occurred_at FROM " + opportunityEventReadRelation + " event_src) newer_source",
     );
   const newerOrigin = (payload = "payload_json") =>
     sql.replaceAll(
-      "FROM trend_events newer_origin",
+      "FROM " + trendTopicEventReadRelation + " newer_origin",
       () =>
         "FROM (SELECT id,organization_id,workspace_id,resource_id,resource_type,event_type," +
         payload +
-        " payload_json,DATE_ADD(occurred_at,INTERVAL 1 SECOND) occurred_at FROM trend_events) newer_origin",
+        " payload_json,DATE_ADD(occurred_at,INTERVAL 1 SECOND) occurred_at FROM " + trendTopicEventReadRelation + " topic_event) newer_origin",
     );
   return [
     { name: "actual independent detail candidates exist", sql, minimum: 1 },
@@ -231,8 +232,8 @@ export function completionCompetitorGateCases(sql) {
     {
       name: "invalid classification fingerprint cannot gain preference",
       sql: sql.replaceAll(
-        "JOIN opportunity_events e_relation ON",
-        "JOIN (SELECT id,organization_id,workspace_id,resource_id,resource_type,event_type,occurred_at,JSON_SET(payload_json,'$.model_fingerprint','invalid') payload_json FROM opportunity_events) e_relation ON",
+        "JOIN " + opportunityEventReadRelation + " e_relation ON",
+        "JOIN (SELECT id,organization_id,workspace_id,resource_id,resource_type,event_type,occurred_at,JSON_SET(payload_json,'$.model_fingerprint','invalid') payload_json FROM " + opportunityEventReadRelation + " event_src) e_relation ON",
       ),
       expected: 0,
     },

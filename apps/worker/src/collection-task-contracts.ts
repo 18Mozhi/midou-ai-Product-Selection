@@ -3,6 +3,7 @@ import type { CollectionErrorCode, SubqueryOutcome } from "@scoutops/collection-
 export interface ClaimedCollectionTask {
   id: string;
   accountId?: string;
+  nativeAccountScope?: true;
   organizationId: string;
   workspaceId: string;
   attemptCount: number;
@@ -39,6 +40,7 @@ export interface CollectionTaskExecutor {
 export interface CollectionQueueCoordinator {
   signal(task: {
     id: string;
+    accountId?: string;
     organizationId: string;
     workspaceId: string;
     requestId: string;

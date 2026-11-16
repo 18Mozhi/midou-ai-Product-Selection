@@ -1,4 +1,25 @@
 {
+  "accountCollectionWorkerRuntime": {
+    "sourceFiles": [
+      "apps/worker/src/collection-task-state-machine.ts",
+      "apps/worker/src/collection-task-worker.ts",
+      "apps/worker/src/collection-task-contracts.ts",
+      "apps/worker/src/collection-source-scheduling-policy.ts",
+      "apps/worker/src/collection-history-ownership.ts",
+      "apps/worker/src/collection-task-dead-letter.ts",
+      "apps/worker/src/completion-sourcing-policy.ts",
+      "apps/worker/src/completion-competitor-policy.ts",
+      "packages/redis/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/collection-completion-scheduling.test.mjs",
+      "tests/unit/collection-history-account-owner.test.mjs",
+      "tests/unit/collection-account-redis.test.mjs",
+      "tests/unit/collection-task-account-recovery.test.mjs"
+    ],
+    "docs": ["docs/runbooks/account-collection-task-replay.md"],
+    "contract": "Native collection scheduling checks the original task owner, exact owned subqueries and active attempt. Status events and deliveries inherit the sealed owner; Redis coordination is account scoped, with existing retry, priority and capacity limits."
+  },
   "accountIntelligenceWorkerProjection": {
     "sourceFiles": [
       "apps/worker/src/trend-projection-account-queue.ts",

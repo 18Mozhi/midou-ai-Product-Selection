@@ -5,6 +5,8 @@ import {
   latestCompetitorDetailSnapshotSql,
 } from "../../packages/database/dist/index.js";
 import {
+  accountCompletionReadySourcingRowsSql,
+  accountCompletionReadySourcingTaskSql,
   completionReadySourcingRowsSql,
   completionReadySourcingTaskSql,
 } from "../../apps/worker/dist/completion-sourcing-policy.js";
@@ -14,6 +16,25 @@ import {
 } from "../../apps/worker/dist/collection-source-scheduling-policy.js";
 import * as schedulingPolicy from "../../apps/worker/dist/collection-source-scheduling-policy.js";
 import { collectionScopeFairnessSqlCases } from "../fixtures/collection-scope-fairness-sql.mjs";
+
+test("sealed sourcing priority uses original account references without search scope columns", () => {
+  const sql = accountCompletionReadySourcingRowsSql;
+  assert.doesNotMatch(sql, /(?:ss|newer)\.(organization_id|workspace_id)/);
+  for (const fragment of [
+    "tor.source_id=t.id AND tor.account_id=so.account_id",
+    "qo.source_id=q.id AND qo.account_id=so.account_id",
+    "ao.source_id=a.id AND ao.account_id=so.account_id",
+    "oo.source_id=o.id AND oo.account_id=candidate.account_id",
+    "no.source_id=newer.id AND no.account_id=so.account_id",
+    "so.account_id=cut.primary_account_id",
+    "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id'))=BINARY ss.id",
+    selectionCompetitionGateSql(5, "materialized"),
+  ]) assert.ok(sql.includes(fragment), fragment);
+  assert.equal(
+    collectionReadyOrderSql(true, false, true, true, true).replace(accountCompletionReadySourcingTaskSql, () => completionReadySourcingTaskSql),
+    collectionReadyOrderSql(true, false, true),
+  );
+});
 
 test("source preference reuses original five-competitor and formal primary proof", () => {
   assert.ok(

@@ -89,7 +89,10 @@ test("real persistence lock failures carry only the failing internal step and re
       beginTransaction: async () => {
         if (failAt === 0) throw error;
       },
-      query: async () => {
+      query: async (sql) => {
+        if (sql.startsWith("SELECT cut.primary_account_id")) return [[]];
+        if (sql.startsWith("SHOW COLUMNS FROM file_assets"))
+          return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
         calls++;
         if (calls === failAt) throw error;
         return calls === 1 ? [[{ retention_days: 30 }]] : [[]];
