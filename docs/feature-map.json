@@ -1,4 +1,15 @@
 {
+  "accountCollectionClaimMaintenance": {
+    "sourceFiles": [
+      "apps/worker/src/collection-task-worker.ts",
+      "apps/api/src/mysql-crawler-runtime-repository.ts",
+      "packages/database/src/collection-claim-maintenance.ts",
+      "scripts/collection-claim-maintenance.mjs"
+    ],
+    "testFiles": ["tests/unit/collection-claim-maintenance.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-collection-task-replay.md"],
+    "contract": "Retain live production hot pause under the same SQL fence. Already-issued tasks and exact browser child leases can drain, with sealed account ownership unchanged."
+  },
   "accountNativeCostRuleApproval": {
     "sourceFiles": ["apps/api/src/mysql-profit-repository.ts", "apps/api/src/server.ts"],
     "testFiles": ["tests/m04-04/account-cost-rule-native-approval.test.mjs"],

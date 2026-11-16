@@ -4699,7 +4699,7 @@ paths:
   /internal/crawler-runtime/jobs/acquire:
     post:
       summary: Claim the next authenticated-browser business subquery
-      x-account-runtime: Account-native jobs require matching sealed task and subquery ownership and a live parent lease. The run reports account_id instead of legacy coordinates.
+      x-account-runtime: Account-native jobs require matching sealed task and subquery ownership and a live parent lease. The run reports account_id instead of legacy coordinates. During a maintenance pause, a browser job is runnable only for its original running parent with a matching unexpired Worker lease; otherwise no assignment is issued. Existing heartbeats and completion continue.
       description: The BaoTa Python Crawler first reports sanitized completion-spool counts, byte watermarks, retention policy and free-disk facts, then receives one business-linked browser job, the scoped execution plan, profile locale/timezone, encrypted credential record and a one-time lease token. The spool observation is persisted even when a 204 response means there is no runnable job. Paths, file names, receipt contents and plaintext credentials are never returned or stored by this contract.
       security: [{ CrawlerServiceBearer: [] }]
       requestBody:

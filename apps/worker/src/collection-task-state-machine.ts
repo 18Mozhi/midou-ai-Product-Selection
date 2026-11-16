@@ -106,11 +106,11 @@ export class MySqlCollectionTaskWorkerRepository {
       ],
     );
   }
-  async recoverExpired(now: Date, actorId = "collection-scheduler") {
-    return recoverExpiredCollectionTasks(this, now, actorId);
+  async recoverExpired(now: Date, actorId = "collection-scheduler", admission?: PoolConnection) {
+    return recoverExpiredCollectionTasks(this, now, actorId, admission);
   }
-  async queueReady(now: Date, actorId = "collection-scheduler") {
-    const c = await this.pool.getConnection();
+  async queueReady(now: Date, actorId = "collection-scheduler", admission?: PoolConnection) {
+    const c = admission ?? await this.pool.getConnection();
     try {
       await c.beginTransaction();
       const accountMode = await hasCalculationAccountCutover(c);
@@ -167,15 +167,16 @@ export class MySqlCollectionTaskWorkerRepository {
       await c.rollback();
       throw error;
     } finally {
-      c.release();
+      if (!admission) c.release();
     }
   }
   async claim(
     workerId: string,
     now: Date,
     leaseSeconds: number,
+    admission?: PoolConnection,
   ): Promise<ClaimedCollectionTask | null> {
-    const c = await this.pool.getConnection(),
+    const c = admission ?? await this.pool.getConnection(),
       leaseToken = token();
     try {
       await c.beginTransaction();
@@ -312,7 +313,7 @@ export class MySqlCollectionTaskWorkerRepository {
       if ((error as { code?: string }).code === "ER_DUP_ENTRY") return null;
       throw error;
     } finally {
-      c.release();
+      if (!admission) c.release();
     }
   }
   async start(task: ClaimedCollectionTask, now: Date) {

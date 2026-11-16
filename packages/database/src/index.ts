@@ -2,6 +2,10 @@ import { createHash } from "node:crypto";
 import mysql, { type Pool, type PoolConnection } from "mysql2/promise";
 import type { RuntimeConfig } from "@scoutops/config";
 export { assertAccountCutoverReady } from "./account-cutover-startup.js";
+export {
+  COLLECTION_CLAIM_PAUSE_FILE, changeCollectionClaimPause, createCollectionClaimFence,
+  withCollectionClaimFence, type CollectionClaimFence,
+} from "./collection-claim-maintenance.js";
 export { appendTrendOutbox } from "./trend-outbox-storage.js";
 export { appendTrendEvent, trendTopicEventReadRelation } from "./trend-event-storage.js";
 export { appendOpportunityOutbox } from "./opportunity-outbox-storage.js";

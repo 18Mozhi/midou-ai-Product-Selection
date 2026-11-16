@@ -129,6 +129,7 @@ test("M03-03.A10 runtime limits use validated Baota-configurable bounds", () => 
   });
   assert.deepEqual(config.providerAdapters, {
     amazonPublicRecoveryEnabled: true,
+    amazonHandoffRecoveryEnabled: false,
     amazonPublicRecoveryPollMs: 60000,
     amazonPublicRecoveryCooldownMs: 300000,
     amazonPublicDeliveryPostalCode: "94404",
@@ -141,6 +142,7 @@ test("M03-03.A10 runtime limits use validated Baota-configurable bounds", () => 
     lan1688Token: "",
     lan1688TimeoutMs: 45000,
     amazonBrowserProfileId: "",
+    amazonBrowserNavigationTransport: "browser",
     amazonBrowserNavigationTimeoutMs: 60000,
     healthTimeoutMs: 7000,
     maxResponseBytes: 2048,

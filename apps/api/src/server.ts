@@ -4,7 +4,7 @@ import { buildApp } from "./app.js";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { loadRuntimeConfig } from "@scoutops/config";
-import { createDatabasePool } from "@scoutops/database";
+import { COLLECTION_CLAIM_PAUSE_FILE, createDatabasePool } from "@scoutops/database";
 import {
   createRedisConnection,
   createRedisProbeConnection,
@@ -394,7 +394,10 @@ const app = buildApp({
         }
       : {}),
     service: new CrawlerRuntimeService(
-      new MySqlCrawlerRuntimeRepository(pool, config.providerAdapters.amazonBrowserProfileId),
+      new MySqlCrawlerRuntimeRepository(
+        pool, config.providerAdapters.amazonBrowserProfileId, "",
+        config.nodeEnv === "production" ? COLLECTION_CLAIM_PAUSE_FILE : undefined,
+      ),
     ),
     authorization,
     auth: localAuth,

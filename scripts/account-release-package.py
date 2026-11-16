@@ -11,7 +11,7 @@ import subprocess
 import tarfile
 
 ENTRYPOINTS = (
-    "serve-account-production-cutover.mjs", "run-playwright-crawler.mjs",
+    "serve-account-production-cutover.mjs", "run-playwright-crawler.mjs", "collection-claim-maintenance.mjs",
     "production-route-catalog.mjs", "verify-production-product.mjs",
     "verify-production-api-coverage.mjs", "verify-production-core-e2e.mjs",
     "run-baota-production-acceptance.mjs", "run-baota-selection-acceptance.mjs",

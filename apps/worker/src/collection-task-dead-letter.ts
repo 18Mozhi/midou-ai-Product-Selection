@@ -41,8 +41,9 @@ export async function recoverExpiredCollectionTasks(
   context: CollectionTaskDeadLetterContext,
   now: Date,
   actorId = "collection-scheduler",
+  admission?: PoolConnection,
 ) {
-  const c = await context.pool.getConnection();
+  const c = admission ?? await context.pool.getConnection();
   let recovered = 0;
   try {
     await c.beginTransaction();
@@ -166,7 +167,7 @@ export async function recoverExpiredCollectionTasks(
     await c.rollback();
     throw error;
   } finally {
-    c.release();
+    if (!admission) c.release();
   }
 }
 

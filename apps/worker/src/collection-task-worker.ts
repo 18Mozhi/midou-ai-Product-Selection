@@ -1,4 +1,6 @@
 import { collectionQueueDatabaseContext } from "./collection-task-database-context.js";
+import type { CollectionClaimFence } from "@scoutops/database";
+import type { PoolConnection } from "mysql2/promise";
 import { collectionFailureDiagnostic } from "./collection-failure-diagnostic.js";
 import type { OrganizationId, WorkspaceId } from "@scoutops/contracts";
 import { ScopedRedisStore } from "@scoutops/redis";
@@ -58,6 +60,7 @@ export async function processCollectionTaskOnce(input: {
   executor: CollectionTaskExecutor;
   workerId: string;
   leaseSeconds: number;
+  claimFence?: CollectionClaimFence;
   signal?: AbortSignal;
   resourceProbe?: {
     inspect(): Promise<{
@@ -72,8 +75,7 @@ export async function processCollectionTaskOnce(input: {
   };
   now?: () => Date;
 }) {
-  const clock = input.now ?? (() => new Date()),
-    now = clock();
+  const clock = input.now ?? (() => new Date());
   if (input.resourceProbe) {
     const resource = await input.resourceProbe.inspect();
     if (!resource.allowed) {
@@ -94,16 +96,24 @@ export async function processCollectionTaskOnce(input: {
       return { status: "resource_blocked" as const, recovered: 0 };
     }
   }
-  const recovered = await collectionQueueDatabaseContext("recover_expired", () =>
-    input.repository.recoverExpired(now),
-  );
-  const queued = await collectionQueueDatabaseContext("queue_ready", () =>
-    input.repository.queueReady(now),
-  );
-  if (queued) await input.coordinator.signal(queued);
-  const claimed = await collectionQueueDatabaseContext("claim", () =>
-    input.repository.claim(input.workerId, now, input.leaseSeconds),
-  );
+  const admit = async (paused: boolean, connection?: PoolConnection) => {
+    if (paused) return null;
+    const now = clock();
+    const recovered = await collectionQueueDatabaseContext("recover_expired", () =>
+      input.repository.recoverExpired(now, undefined, connection),
+    );
+    const queued = await collectionQueueDatabaseContext("queue_ready", () =>
+      input.repository.queueReady(now, undefined, connection),
+    );
+    if (queued) await input.coordinator.signal(queued);
+    const claimed = await collectionQueueDatabaseContext("claim", () =>
+      input.repository.claim(input.workerId, now, input.leaseSeconds, connection),
+    );
+    return { recovered, claimed, now };
+  };
+  const admission = input.claimFence ? await input.claimFence(admit) : await admit(false);
+  if (!admission) return { status: "idle" as const, recovered: 0, claim_paused: true };
+  const { recovered, claimed, now } = admission;
   if (!claimed) return { status: "idle" as const, recovered };
   if (!(await input.coordinator.acquire(claimed, input.leaseSeconds))) {
     const result = await input.repository.releaseCoordinationConflict(claimed, now);

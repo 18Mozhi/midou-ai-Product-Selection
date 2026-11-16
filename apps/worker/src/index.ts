@@ -1,7 +1,9 @@
 import { loadRuntimeConfig } from "@scoutops/config";
 import { PRIMARY_COST_APPROVER_EMAIL } from "@scoutops/auth";
 import { Lan1688ImageSearch } from "./lan-1688-image-search.js";
-import { assertAccountCutoverReady, createDatabasePool } from "@scoutops/database";
+import {
+  assertAccountCutoverReady, COLLECTION_CLAIM_PAUSE_FILE, createCollectionClaimFence, createDatabasePool,
+} from "@scoutops/database";
 import { ProviderAdapterRegistry } from "@scoutops/provider-adapters";
 import {
   AUTOMATIC_PROVIDER_SOURCE_HOSTS,
@@ -70,6 +72,10 @@ const registry = new ProviderAdapterRegistry({
 for (const adapter of createBuiltinSourceAdapters(providerFetch)) registry.register(adapter);
 
 const collectionRepository = new MySqlCollectionTaskWorkerRepository(pool);
+const collectionClaimFence =
+  config.nodeEnv === "production"
+    ? createCollectionClaimFence(COLLECTION_CLAIM_PAUSE_FILE, () => pool.getConnection())
+    : undefined;
 const collectionResourceProbe = new SingleHostResourceProbe(
   config.storage.evidenceRoot,
   config.crawlerScheduler,
@@ -244,6 +250,7 @@ const queues = workerQueues(
           executor,
           workerId: config.identity.workerId,
           leaseSeconds: config.collectionTasks.leaseSeconds,
+          ...(collectionClaimFence ? { claimFence: collectionClaimFence } : {}),
           signal,
           resourceProbe: collectionResourceProbe,
         });
