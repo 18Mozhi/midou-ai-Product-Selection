@@ -1,4 +1,10 @@
 {
+  "accountReleaseStageAndActivation": {
+    "sourceFiles": ["scripts/baota-account-release-stage.py", "scripts/serve-account-production-cutover.mjs", "scripts/baota-account-cutover-control.py"],
+    "testFiles": ["tests/unit/test_baota_account_release_stage.py", "tests/unit/account-production-session.test.mjs", "tests/unit/test_baota_account_cutover_control.py"],
+    "docs": ["docs/runbooks/account-release-stage-and-activation.md"],
+    "contract": "Verify upload SHA and archive membership into an exact private temporary candidate, keep a single MySQL session locked across approved review, migration and install fencing, then start BaoTa Node and confirm the candidate SHA and readiness before starting Python. No backup copies or standalone deployment target."
+  },
   "accountProductionRuntimeInstall": {
     "sourceFiles": ["scripts/baota-account-runtime-install.py"],
     "testFiles": ["tests/unit/test_baota_account_runtime_install.py"],

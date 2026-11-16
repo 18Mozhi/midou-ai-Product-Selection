@@ -26,7 +26,8 @@ class AccountReleasePackageTest(unittest.TestCase):
         release = PACKAGE["release_metadata"](SOURCE, "1.2.3", PLAN)
         files = {name: b"example" for name in (
             "frontend/index.html", "backend/apps/backend/dist/server.js", "backend/apps/worker/dist/index.js",
-            "backend/scripts/run-account-production-cutover.mjs", "python/scoutops_crawler/__main__.py",
+            "backend/scripts/run-account-production-cutover.mjs", "backend/scripts/serve-account-production-cutover.mjs",
+            "python/scoutops_crawler/__main__.py",
             "backend/database/migrations/" + PACKAGE["MIGRATION"],
         )}
         files["release.env"] = "".join(f"{key}={value}\n" for key, value in release.items()).encode()
@@ -47,7 +48,7 @@ class AccountReleasePackageTest(unittest.TestCase):
             return PACKAGE["verify_account_archive"](path, BUILD, PLAN)
 
     def test_reopens_archive_and_checks_member_hashes(self):
-        self.assertEqual(self.verify_fixture()["files"], 7)
+        self.assertEqual(self.verify_fixture()["files"], 8)
         with self.assertRaisesRegex(RuntimeError, "identity_or_checksum_mismatch"):
             self.verify_fixture(bad_hash=True)
 

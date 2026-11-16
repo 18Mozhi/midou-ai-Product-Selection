@@ -13,10 +13,11 @@ from unittest.mock import patch
 CONTROL = runpy.run_path(str(pathlib.Path(__file__).parents[2] / "scripts/baota-account-cutover-control.py"))
 
 
-def run_panel(action, *, active_backup=False, valid_site=True):
+def run_panel(action, *, active_backup=False, valid_site=True, installed_sha=None):
     root = '/www/wwwroot/ai选品'
     calls = []
-    running = {'node': True, 'python': True}
+    running = {'node': action != 'activate', 'python': action != 'activate'}
+    build = 'a' * 40
     rows = {
         ('sites', 29): dict(name='midouai.medouai.com', project_type='PHP', path=root + ('/frontend' if valid_site else '/wrong')),
         ('sites', 'ai选品'): dict(project_type='Node', path=root + '/backend'),
@@ -31,6 +32,12 @@ def run_panel(action, *, active_backup=False, valid_site=True):
 
         def is_dir(self):
             return True
+
+        def is_file(self):
+            return True
+
+        def read_text(self, encoding):
+            return f'BUILD_SHA={installed_sha or build}\nACCOUNT_SCOPE_MODE=retired\nRELEASE_SOURCE_MIGRATION_VERSION=0197_retire_tenancy_roots.up.sql\n'
 
         def resolve(self, strict):
             return self
@@ -53,9 +60,24 @@ def run_panel(action, *, active_backup=False, valid_site=True):
         def stop_project(self, request):
             return stop('node', request)
 
+        def start_project(self, request):
+            calls.append(request.project_name)
+            running['node'] = True
+            return {'status': True}
+
     class Crawler:
         def StopProject(self, request):
             return stop('python', request)
+
+        def StartProject(self, request):
+            calls.append(request.project_name)
+            running['python'] = True
+            return {'status': True}
+
+    @contextlib.contextmanager
+    def http(url, timeout):
+        calls.append(url.rsplit('/', 1)[-1])
+        yield io.StringIO(json.dumps({'data': {'build_sha': build, 'status': 'ready'}}))
 
     @contextlib.contextmanager
     def socket():
@@ -70,13 +92,15 @@ def run_panel(action, *, active_backup=False, valid_site=True):
         'socket': types.SimpleNamespace(socket=socket),
         'projectModel.nodejsModel': types.SimpleNamespace(main=Node),
         'projectModel.pythonModel': types.SimpleNamespace(main=Crawler),
+        'urllib.request': types.SimpleNamespace(urlopen=http),
     }
     output = io.StringIO()
     with patch.dict(sys.modules, modules), patch.object(sys, 'path', sys.path.copy()), \
             patch.object(os, 'chdir'), patch.object(os, 'readlink', return_value=root + '/backend'), \
             contextlib.redirect_stdout(output):
         try:
-            exec(compile(CONTROL['writer_control_source'](action), '<test-panel>', 'exec'), {})
+            sha = build if action == 'activate' else None
+            exec(compile(CONTROL['writer_control_source'](action, sha), '<test-panel>', 'exec'), {})
         except RuntimeError as error:
             return calls, str(error)
     return calls, json.loads(output.getvalue().removeprefix('SCOUTOPS_RESULT='))
@@ -97,6 +121,12 @@ class PanelControlTest(unittest.TestCase):
         calls, result = run_panel('quiesce')
         self.assertEqual(calls, ['ai选品-python', 'ai选品'])
         self.assertEqual(result['after'], {'writers': {'node': 0, 'python': 0}, 'node_listener': False})
+
+    def test_activation_binds_installed_version_and_starts_python_after_node_is_ready(self):
+        self.assertEqual(run_panel('activate', installed_sha='b' * 40), ([], 'account_release_installed_identity_mismatch'))
+        calls, result = run_panel('activate')
+        self.assertEqual(calls, ['ai选品', 'version', 'ready', 'ai选品-python'])
+        self.assertEqual(result['after']['writers'], {'node': 1, 'python': 1})
 
 
 if __name__ == '__main__':

@@ -84,9 +84,13 @@ def check_install_layout(stage, expected_build_sha, expected_previous_sha):
         raise RuntimeError("account_install_bad_build_binding")
     if expected_build_sha == expected_previous_sha:
         raise RuntimeError("account_install_same_build_is_not_cutover")
-    if stage != ROOT / "runtime/tmp" / ("account-release-" + expected_build_sha):
+    if stage != ROOT / "config" / ("account-release-" + expected_build_sha):
         raise RuntimeError("account_install_unexpected_stage_path")
     root_device = canonical_directory(ROOT).st_dev
+    for path in (ROOT, ROOT / "config"):
+        metadata = canonical_directory(path)
+        if metadata.st_uid != os.geteuid() or stat.S_IMODE(metadata.st_mode) & 0o022:
+            raise RuntimeError("account_install_untrusted_stage_parent")
     stage_stat = canonical_directory(stage)
     if stage_stat.st_uid != os.geteuid() or stat.S_IMODE(stage_stat.st_mode) != 0o700:
         raise RuntimeError("account_install_stage_is_not_private")

@@ -8,10 +8,14 @@ import runpy
 import paramiko
 
 
-def writer_control_source(action: str) -> str:
-    if action not in {"inspect", "quiesce"}:
+def writer_control_source(action: str, build_sha=None) -> str:
+    import re
+    if (action not in {"inspect", "quiesce", "activate"} or
+            (action == "activate" and not isinstance(build_sha, str)) or
+            (action == "activate" and not re.fullmatch(r"[0-9a-f]{40}", build_sha)) or
+            (action != "activate" and build_sha is not None)):
         raise ValueError("account_release_invalid_baota_action")
-    return f"action={action!r}\n" + r'''
+    return f"action={action!r}\nbuild_sha={build_sha!r}\n" + r'''
 import json, os, socket, sys, time
 from pathlib import Path
 
@@ -74,7 +78,7 @@ def observe():
         node_listener = sock.connect_ex(('127.0.0.1', 4101)) == 0
     return {'writers': counts, 'node_listener': node_listener}
 
-def stop(model, method, key):
+def panel_action(model, method, key):
     name = projects[key][0]
     request = public.dict_obj()
     request.project_name = name
@@ -82,25 +86,68 @@ def stop(model, method, key):
     response = getattr(model, method)(request)
     if not isinstance(response, dict) or not response.get('status'):
         messages = {str(response.get(field, '')) for field in ('msg', 'error_msg', 'data')} if isinstance(response, dict) else set()
-        if not messages.intersection({'项目未启动', 'already stopped'}):
-            raise RuntimeError('account_release_stop_' + key + '_failed')
+        if method.lower().startswith('start') or not messages.intersection({'项目未启动', 'already stopped'}):
+            raise RuntimeError('account_release_panel_action_' + key + '_failed')
 
 methods = {
     'node_stop': callable(getattr(NodeModel, 'stop_project', None)),
     'python_stop': callable(getattr(PythonModel, 'StopProject', None)),
+    'node_start': callable(getattr(NodeModel, 'start_project', None)),
+    'python_start': callable(getattr(PythonModel, 'StartProject', None)),
 }
 before = observe()
 after = before
 if action == 'quiesce':
-    if any(backup_task_status.values()) or not all(methods.values()):
+    if any(backup_task_status.values()) or not (methods['node_stop'] and methods['python_stop']):
         raise RuntimeError('account_release_writer_shutdown_preflight_failed')
-    stop(PythonModel(), 'StopProject', 'python')
-    stop(NodeModel(), 'stop_project', 'node')
+    panel_action(PythonModel(), 'StopProject', 'python')
+    panel_action(NodeModel(), 'stop_project', 'node')
     deadline = time.monotonic() + 45
     after = observe()
     while any(after['writers'].values()) or after['node_listener']:
         if time.monotonic() >= deadline:
             raise RuntimeError('account_release_writers_still_active')
+        time.sleep(1)
+        after = observe()
+
+if action == 'activate':
+    # Internal use only, after DB and runtime install evidence from the same release.
+    from urllib.request import urlopen
+    release = root / 'config/release.env'
+    if release.is_symlink() or not release.is_file():
+        raise RuntimeError('account_release_installed_identity_missing')
+    lines = release.read_text(encoding='utf-8').splitlines()
+    for key, expected in [('BUILD_SHA', build_sha), ('ACCOUNT_SCOPE_MODE', 'retired'),
+                          ('RELEASE_SOURCE_MIGRATION_VERSION', '0197_retire_tenancy_roots.up.sql')]:
+        if [line for line in lines if line.startswith(key + '=')] != [key + '=' + expected]:
+            raise RuntimeError('account_release_installed_identity_mismatch')
+    if (any(backup_task_status.values()) or not all(methods.values()) or
+            any(before['writers'].values()) or before['node_listener']):
+        raise RuntimeError('account_release_activation_not_quiesced')
+    panel_action(NodeModel(), 'start_project', 'node')
+    deadline = time.monotonic() + 60
+    healthy = False
+    while time.monotonic() < deadline:
+        try:
+            with urlopen('http://127.0.0.1:4101/api/v1/health/version', timeout=2) as response:
+                current = json.load(response).get('data', {}).get('build_sha')
+            with urlopen('http://127.0.0.1:4101/api/v1/health/ready', timeout=2) as response:
+                body = json.load(response)
+                readiness = body.get('data', {}).get('status') or body.get('status')
+            healthy = current == build_sha and readiness in ('ready', 'healthy')
+            if healthy:
+                break
+        except (OSError, ValueError):
+            pass
+        time.sleep(1)
+    if not healthy:
+        raise RuntimeError('account_release_new_node_not_ready')
+    panel_action(PythonModel(), 'StartProject', 'python')
+    deadline = time.monotonic() + 30
+    after = observe()
+    while not after['writers']['node'] or not after['writers']['python'] or not after['node_listener']:
+        if time.monotonic() >= deadline:
+            raise RuntimeError('account_release_new_writers_not_running')
         time.sleep(1)
         after = observe()
 

@@ -11,7 +11,7 @@ import subprocess
 import tarfile
 
 ENTRYPOINTS = (
-    "run-account-production-cutover.mjs", "run-playwright-crawler.mjs",
+    "serve-account-production-cutover.mjs", "run-playwright-crawler.mjs",
     "production-route-catalog.mjs", "verify-production-product.mjs",
     "verify-production-api-coverage.mjs", "verify-production-core-e2e.mjs",
     "run-baota-production-acceptance.mjs", "run-baota-selection-acceptance.mjs",
@@ -145,13 +145,13 @@ def build_account_archive(repo, expected_plan_sha, output):
     return write_account_archive(repo, identity, plan_sha, output)
 
 
-def verify_account_archive(path, expected_build_sha, expected_plan_sha):
+def verify_account_archive(path, expected_build_sha, expected_plan_sha, *, fileobj=None, visit=None):
     if not HEX40.fullmatch(expected_build_sha) or not HEX64.fullmatch(expected_plan_sha):
         raise RuntimeError("account_release_archive_binding_invalid")
     hashes = {}
     manifest = metadata = None
     size = 0
-    with tarfile.open(path, mode="r|gz") as archive:
+    with tarfile.open(path, mode="r|gz", fileobj=fileobj) as archive:
         for entry in archive:
             path_parts = entry.name.split("/")
             if (not entry.isfile() or entry.name in hashes or len(hashes) >= MAX_PACKAGE_FILES or
@@ -170,6 +170,8 @@ def verify_account_archive(path, expected_build_sha, expected_plan_sha):
             if len(data) != entry.size:
                 raise RuntimeError("account_release_archive_short_member")
             hashes[entry.name] = hashlib.sha256(data).hexdigest()
+            if visit is not None:
+                visit(entry.name, data)
             if entry.name == "manifest.json":
                 manifest = json.loads(data)
             if entry.name == "release.env":
@@ -188,7 +190,8 @@ def verify_account_archive(path, expected_build_sha, expected_plan_sha):
         raise RuntimeError("account_release_archive_identity_or_checksum_mismatch")
     required = {
         "frontend/index.html", "backend/apps/backend/dist/server.js", "backend/apps/worker/dist/index.js",
-        "backend/scripts/run-account-production-cutover.mjs", "python/scoutops_crawler/__main__.py",
+        "backend/scripts/run-account-production-cutover.mjs", "backend/scripts/serve-account-production-cutover.mjs",
+        "python/scoutops_crawler/__main__.py",
         f"backend/database/migrations/{MIGRATION}", "release.env",
     }
     if not required.issubset(hashes):
