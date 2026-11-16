@@ -2646,7 +2646,7 @@ paths:
   /opportunities/{opportunityId}/competitor-discovery:
     post:
       summary: Crawl public Amazon search results and project competitors with immutable evidence
-      description: Member opportunity-detail manual collection controls are retired. Automatic discovery keeps its existing Worker flow; this API retains its current authentication, capability and idempotency contract.
+      description: Legacy tenant mode only; the route is not registered in retired account mode. Member manual collection controls are retired. Automatic discovery keeps its existing Worker flow.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:manage
       parameters:
@@ -2660,7 +2660,7 @@ paths:
   /competitors:
     get:
       summary: List workspace-scoped competitors with latest source snapshot
-      description: Without opportunity_id the list omits review excerpts. A scoped opportunity list and individual competitor detail may include public review samples. Tenant scope always comes from the authenticated session.
+      description: Without opportunity_id the list omits review excerpts. A scoped opportunity list and individual competitor detail may include public review samples. Production scope comes from the authenticated session. Retired account mode uses the verified session account and its ownership ledger without changing the response.
       parameters:
         - in: query
           name: opportunity_id
@@ -2693,8 +2693,10 @@ paths:
           }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     post:
       summary: Create a competitor and either accept a supplied baseline or queue public-page collection
+      description: Legacy tenant mode only; the route is not registered in retired account mode.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:manage
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
@@ -2714,7 +2716,7 @@ paths:
   /competitors/{competitorId}:
     get:
       summary: Read competitor snapshots and change-linked evidence alert and task delivery state
-      description: Each alert includes change_id and rule_id so clients can place the persisted impact conclusion, notification state and downstream task state on one factual timeline without inferring an alert for unmatched changes. The detail also returns the latest public-page collection attempt so the page can distinguish queued, running, retrying, blocked and terminal failure states without guessing from a missing snapshot.
+      description: Each alert includes change_id and rule_id so clients can place the persisted impact conclusion, notification state and downstream task state on one factual timeline without inferring an alert for unmatched changes. The detail also returns the latest public-page collection attempt so the page can distinguish queued, running, retrying, blocked and terminal failure states without guessing from a missing snapshot. Retired account mode filters child rows by ownership and returns 404 for a foreign competitor.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:read
       parameters:
@@ -2723,8 +2725,10 @@ paths:
         "200": { $ref: "#/components/responses/Success" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     delete:
       summary: Soft-delete competitor monitoring while preserving snapshots and audit history
+      description: Legacy tenant mode only; the route is not registered in retired account mode.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:manage
       parameters:
@@ -2748,6 +2752,7 @@ paths:
   /competitors/{competitorId}/collect:
     post:
       summary: Queue a fresh public Amazon product-page collection and evidence projection
+      description: Legacy tenant mode only; the route is not registered in retired account mode.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:manage
       parameters:
@@ -2761,6 +2766,7 @@ paths:
   /competitors/{competitorId}/snapshots:
     post:
       summary: Accept a complete Provider-backed snapshot for asynchronous comparison
+      description: Legacy tenant mode only; the route is not registered in retired account mode.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:manage
       parameters:
@@ -2784,6 +2790,7 @@ paths:
   /competitors/{competitorId}/actions:
     post:
       summary: Pause or resume monitoring with revision lock
+      description: Retired account mode checks the verified account owns the competitor, including on replay. After 0194 the native competitor account must match the sealed ledger; the status event and its outbox row inherit that owner without writing legacy coordinates. Legacy mode retains its workspace authorization.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:manage
       parameters:
@@ -2815,16 +2822,20 @@ paths:
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /competitor-monitor-rules:
     get:
       summary: List workspace-scoped competitor thresholds
+      description: Retired account mode filters rules by the verified session account and requires a current ownership backfill. Legacy mode retains its workspace authorization.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:read
       responses:
         "200": { $ref: "#/components/responses/Success" }
         "403": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     post:
       summary: Create an explicit price rank review or availability threshold
+      description: After migration 0165, retired account mode accepts the verified session account instead of a workspace. A specified competitor must belong to that account; an untargeted rule applies only to that account's competitors. Exact retries revalidate the original rule owner. A different threshold, metric or direction under the same key returns 409. Legacy mode retains its workspace authorization.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:manage
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
@@ -2839,6 +2850,8 @@ paths:
         "400": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /opportunities/{opportunityId}/ai-analyses:
     get:
       summary: List immutable AI-assisted analysis requests, results and human reviews

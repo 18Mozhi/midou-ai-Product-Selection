@@ -1,4 +1,11 @@
+import { appendCollectionSubquery } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
+import {
+  appendCompetitorEvent,
+  appendCompetitorOutbox,
+  hasLegacyCompetitorEventScope,
+  hasLegacyCompetitorRuleScope,
+} from "@scoutops/database";
 import {
   amazonPublicSignalJoinSql,
   amazonPublicSignalSelectSql,
@@ -6,6 +13,7 @@ import {
   readAmazonPublicSignals,
 } from "./amazon-public-signals.js";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { requireAccountReadRehearsal } from "./account-read-rehearsal.js";
 import {
   competitorDetailEvidenceSql,
   opportunityPrimaryAsinSql,
@@ -18,58 +26,216 @@ import {
 const parse = <T>(v: unknown): T => (typeof v === "string" ? (JSON.parse(v) as T) : (v as T)),
   iso = (v: unknown) =>
     v == null ? null : (v instanceof Date ? v : new Date(String(v))).toISOString();
+const owned = (table: string, idSql: string, accountSql = "?") =>
+  `EXISTS (SELECT 1 FROM account_owned_records owner WHERE owner.source_table='${table}' AND owner.source_id=${idSql} AND owner.account_id=${accountSql})`;
+const sameScope = (child: string, parent: string) =>
+  `${child}.organization_id=${parent}.organization_id AND ${child}.workspace_id=${parent}.workspace_id`;
+async function nativeCompetitorStorage(db: Pick<PoolConnection, "query">) {
+  const [columns] = await db.query<RowDataPacket[]>(
+    "SHOW COLUMNS FROM competitors WHERE Field IN ('organization_id','workspace_id','account_id')",
+  );
+  const shape = columns
+    .map(({ Field }) => Field)
+    .sort()
+    .join(",");
+  if (shape === "account_id") return true;
+  if (shape === "organization_id,workspace_id") return false;
+  throw new Error("competitor_scope_schema_invalid");
+}
+const sealedCompetitorOwner = (alias: "o" | "co") =>
+  `AND (${alias}.reason='exclusive_owner' OR (${alias}.reason IN ('shared','unassigned') AND ${alias}.account_id=cut.primary_account_id)) `;
+const nativeEvidenceOrigin = (record: "n_signal" | "n_detail", parent: "c" | "t_detail") =>
+  `EXISTS (SELECT 1 FROM raw_evidence proof_e STRAIGHT_JOIN collection_tasks proof_t ON proof_t.id=proof_e.collection_task_id
+    WHERE proof_e.id=${record}.raw_evidence_id AND proof_e.provider_id=${record}.provider_id
+      AND proof_e.account_id=${record}.account_id AND ${sameScope("proof_t", parent)}
+      AND ${owned("collection_tasks", "proof_t.id", `${record}.account_id`)})`;
+const nativeSignalJoin = amazonPublicSignalJoinSql.replace(
+  `AND ${sameScope("n_signal", "c")}`,
+  `AND n_signal.account_id=co.account_id AND ${nativeEvidenceOrigin("n_signal", "c")}`,
+);
+const nativeDetailProof = competitorDetailEvidenceSql("s")
+  .replace(`AND ${sameScope("n_detail", "t_detail")} `, "")
+  .replace(
+    "WHERE LEFT(s.source_ref_id,11)",
+    `WHERE n_detail.account_id=co.account_id AND ${nativeEvidenceOrigin("n_detail", "t_detail")}
+    AND ${owned("normalized_records", "n_detail.id", "co.account_id")}
+    AND ${owned("collection_subqueries", "q_detail.id", "co.account_id")}
+    AND ${owned("collection_task_evidence_links", "l_detail.id", "co.account_id")}
+    AND LEFT(s.source_ref_id,11)`,
+  );
+const accountOrigin = (record: "n_signal" | "n_detail") =>
+  `EXISTS (SELECT 1 FROM raw_evidence proof_e JOIN collection_tasks proof_t ON proof_t.id=proof_e.collection_task_id
+    WHERE proof_e.id=${record}.raw_evidence_id AND proof_e.provider_id=${record}.provider_id
+    AND proof_e.account_id=co.account_id AND proof_t.account_id=co.account_id
+    AND ${owned("collection_tasks", "proof_t.id", "co.account_id")})`;
+const accountSignalJoin = nativeSignalJoin.replace(
+  nativeEvidenceOrigin("n_signal", "c"),
+  accountOrigin("n_signal"),
+);
+const accountDetailProof = nativeDetailProof
+  .replace(nativeEvidenceOrigin("n_detail", "t_detail"), accountOrigin("n_detail"))
+  .replace(sameScope("c_detail", "t_detail"), "c_detail.account_id=t_detail.account_id")
+  .replace(
+    "WHERE n_detail.account_id=co.account_id",
+    "WHERE t_detail.account_id=co.account_id AND n_detail.account_id=co.account_id",
+  );
 export class MySqlCompetitorRepository implements CompetitorRepository {
   constructor(private readonly pool: Pool) {}
-  async list(i: any) {
+  private async accountReadLayout() {
     const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT TABLE_NAME,COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() " +
+        "AND TABLE_NAME IN ('raw_evidence','normalized_records','competitors','collection_tasks') AND COLUMN_NAME IN ('account_id','organization_id','workspace_id')",
+    );
+    const shape = (table: string) =>
+      rows
+        .filter((r) => r.TABLE_NAME === table)
+        .map((r) => r.COLUMN_NAME)
+        .sort()
+        .join(",");
+    const records = shape("normalized_records"),
+      evidence = shape("raw_evidence");
+    if (records !== evidence || !["account_id", "organization_id,workspace_id"].includes(records))
+      throw new Error("competitor_evidence_scope_schema_invalid");
+    const competitor = shape("competitors"),
+      task = shape("collection_tasks");
+    if (
+      ![competitor, task].every((value) =>
+        ["account_id", "organization_id,workspace_id"].includes(value),
+      ) ||
+      (task === "account_id" && records !== "account_id") ||
+      (competitor === "account_id" && task !== "account_id")
+    )
+      throw new Error("competitor_account_read_schema_invalid");
+    return {
+      nativeEvidence: records === "account_id",
+      nativeCompetitor: competitor === "account_id",
+      nativeTask: task === "account_id",
+    };
+  }
+  private async readSummaries(
+    i: Parameters<CompetitorRepository["list"]>[0] & { competitorId?: string },
+  ) {
+    const accountId = "accountId" in i ? i.accountId : null;
+    if (accountId !== null) await requireAccountReadRehearsal(this.pool);
+    const account = accountId !== null;
+    const layout = account ? await this.accountReadLayout() : null;
+    const native = layout?.nativeEvidence;
+    const accountProof = Boolean(layout?.nativeCompetitor);
+    const signalJoin = accountProof
+      ? accountSignalJoin
+      : layout?.nativeTask
+        ? nativeSignalJoin.replace(nativeEvidenceOrigin("n_signal", "c"), accountOrigin("n_signal"))
+        : nativeSignalJoin;
+    const detailProof = accountProof
+      ? accountDetailProof
+      : layout?.nativeTask
+        ? nativeDetailProof
+            .replace(nativeEvidenceOrigin("n_detail", "t_detail"), accountOrigin("n_detail"))
+            .replace(`AND ${sameScope("c_detail", "t_detail")} `, "")
+            .replace(
+              "WHERE n_detail.account_id=co.account_id",
+              "WHERE t_detail.account_id=co.account_id AND n_detail.account_id=co.account_id",
+            )
+        : nativeDetailProof;
+    const scopeParams = "organizationId" in i ? [i.organizationId, i.workspaceId] : [i.accountId];
+    const snapshots = account
+      ? ` AND ${owned("competitor_snapshots", "history.id", "co.account_id")}`
+      : "";
+    const latestSnapshot = account
+      ? ` AND s.competitor_id=c.id AND ${owned("competitor_snapshots", "s.id", "co.account_id")}`
+      : " AND s.competitor_id=c.id";
+    const rawProof = account ? owned("raw_evidence", "s.evidence_id", "co.account_id") : "";
+    const signal = account
+      ? `AND ${owned("normalized_records", "n_signal.id", "co.account_id")} AND ${rawProof} `
+      : "";
+    const detail = account
+      ? `(${native ? detailProof : competitorDetailEvidenceSql("s")} AND n_signal.id IS NOT NULL AND ${owned("collection_tasks", "CONVERT(SUBSTRING(s.source_ref_id,12,36) USING ascii)", "co.account_id")})`
+      : competitorDetailEvidenceSql("s");
+    const result = await this.pool.query<RowDataPacket[]>(
       "SELECT c.*,p_snapshot.status provider_status,s.current_price,s.currency,s.rank_value,s.review_count,s.rating_value," +
-        (i.opportunityId ? amazonPublicSignalsWithReviewsSelectSql : amazonPublicSignalSelectSql) +
+        (i.opportunityId || i.competitorId
+          ? amazonPublicSignalsWithReviewsSelectSql
+          : amazonPublicSignalSelectSql) +
         "s.availability,s.captured_at,s.freshness,s.source_status,s.source_ref_id," +
-        `s.evidence_id,${competitorDetailEvidenceSql("s")} detail_collected,(SELECT COUNT(*) FROM competitor_snapshots history WHERE history.competitor_id=c.id) ` +
-        "snapshot_count FROM competitors c LEFT JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id " +
+        `s.evidence_id,s.id visible_snapshot_id,${detail} detail_collected,(SELECT COUNT(*) FROM competitor_snapshots history WHERE history.competitor_id=c.id${snapshots}) ` +
+        "snapshot_count FROM competitors c " +
+        (account
+          ? "JOIN account_owned_records co ON co.source_table='competitors' AND co.source_id=c.id " +
+            "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 "
+          : "") +
+        `LEFT JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id${latestSnapshot} ` +
         "LEFT JOIN providers p_snapshot ON p_snapshot.id=c.provider_id " +
-        amazonPublicSignalJoinSql +
-        "WHERE c.organization_id=? AND c.workspace_id=? AND c.deleted_at IS NULL " +
+        (native ? signalJoin : amazonPublicSignalJoinSql) +
+        signal +
+        (i.competitorId ? "WHERE c.id=? AND " : "WHERE ") +
+        (account
+          ? `co.account_id=? ${sealedCompetitorOwner("co")}${accountProof ? "AND c.account_id=co.account_id " : ""}AND (c.opportunity_id IS NULL OR ${owned("opportunities", "c.opportunity_id", "co.account_id")}) `
+          : "c.organization_id=? AND c.workspace_id=? ") +
+        "AND c.deleted_at IS NULL " +
         (i.opportunityId ? "AND c.opportunity_id=? " : "") +
         "ORDER BY c.updated_at " +
         "DESC,c.id DESC",
-      [i.organizationId, i.workspaceId, ...(i.opportunityId ? [i.opportunityId] : [])],
+      [
+        ...(i.competitorId ? [i.competitorId] : []),
+        ...scopeParams,
+        ...(i.opportunityId ? [i.opportunityId] : []),
+      ],
     );
+    if (account) for (const row of result[0]) row.latest_snapshot_id = row.visible_snapshot_id;
+    return { rows: result[0], layout };
+  }
+  async list(i: Parameters<CompetitorRepository["list"]>[0]) {
+    const { rows } = await this.readSummaries(i);
     return rows.map((r) => this.dto(r));
   }
-  async get(i: any) {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT c.*,p_snapshot.status provider_status,s.current_price,s.currency,s.rank_value,s.review_count,s.rating_value," +
-        amazonPublicSignalsWithReviewsSelectSql +
-        "s.availability,s.captured_at,s.freshness,s.source_status,s.source_ref_id," +
-        `s.evidence_id,${competitorDetailEvidenceSql("s")} detail_collected,(SELECT COUNT(*) FROM competitor_snapshots history WHERE history.competitor_id=c.id) ` +
-        "snapshot_count FROM competitors c LEFT JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id " +
-        "LEFT JOIN providers p_snapshot ON p_snapshot.id=c.provider_id " +
-        amazonPublicSignalJoinSql +
-        "WHERE c.id=? AND c.organization_id=? AND c.workspace_id=? AND c.deleted_at IS NULL",
-      [i.competitorId, i.organizationId, i.workspaceId],
-    );
+  async get(i: Parameters<CompetitorRepository["get"]>[0]) {
+    const { rows, layout } = await this.readSummaries(i);
     if (!rows[0]) throw new CompetitorServiceError("competitor_not_found", 404, "刷新竞品列表。");
+    const accountId = "accountId" in i ? i.accountId : null;
+    const organizationId =
+      "organizationId" in i ? i.organizationId : String(rows[0].organization_id);
+    const workspaceId = "workspaceId" in i ? i.workspaceId : String(rows[0].workspace_id);
+    const params = accountId !== null ? [i.competitorId, accountId] : [i.competitorId];
+    const childFilter = (table: string) =>
+      accountId !== null ? ` AND ${owned(table, `${table}.id`)}` : "";
     const [snapshots] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM competitor_snapshots WHERE competitor_id=? ORDER BY captured_at DESC,id DESC LIMIT 100",
-      [i.competitorId],
+      `SELECT * FROM competitor_snapshots WHERE competitor_id=?${childFilter("competitor_snapshots")} ORDER BY captured_at DESC,id DESC LIMIT 100`,
+      params,
     );
     const [changes] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM competitor_changes WHERE competitor_id=? ORDER BY changed_at DESC,id DESC LIMIT 200",
-      [i.competitorId],
+      `SELECT * FROM competitor_changes WHERE competitor_id=?${childFilter("competitor_changes")} ORDER BY changed_at DESC,id DESC LIMIT 200`,
+      params,
     );
     const [alerts] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM competitor_alerts WHERE competitor_id=? ORDER BY created_at DESC,id DESC LIMIT 100",
-      [i.competitorId],
+      `SELECT * FROM competitor_alerts WHERE competitor_id=?${childFilter("competitor_alerts")} ORDER BY created_at DESC,id DESC LIMIT 100`,
+      params,
     );
+    const legacyEventScope = await hasLegacyCompetitorEventScope(this.pool);
+    const nativeTask = layout?.nativeTask;
+    if (nativeTask && legacyEventScope) throw new Error("competitor_event_scope_schema_invalid");
+    const eventScope = legacyEventScope ? "e" : "parent_competitor";
     const [collectionAttempts] = await this.pool.query<RowDataPacket[]>(
       "SELECT t.id,t.status,t.last_error_code,t.attempt_count,t.available_result_count,t.updated_at " +
-        "FROM competitor_events e JOIN collection_tasks t ON " +
+        "FROM competitor_events e " +
+        (legacyEventScope || nativeTask
+          ? ""
+          : "JOIN competitors parent_competitor ON parent_competitor.id=e.competitor_id ") +
+        "JOIN collection_tasks t ON " +
         "t.id=CONVERT(JSON_UNQUOTE(JSON_EXTRACT(e.payload_json,'$.task_id')) USING ascii) " +
-        "WHERE e.competitor_id=? AND e.organization_id=? AND e.workspace_id=? AND " +
+        "WHERE e.competitor_id=? AND " +
+        (nativeTask
+          ? "t.account_id=? AND "
+          : `${eventScope}.organization_id=? AND ${eventScope}.workspace_id=? AND `) +
         "e.event_type IN ('competitor.created','competitor.collection.scheduled') " +
+        (accountId !== null
+          ? `AND ${nativeTask ? "" : sameScope("t", eventScope) + " AND "}${owned("competitor_events", "e.id")} AND ${owned("collection_tasks", "t.id")} `
+          : "") +
         "ORDER BY e.created_at DESC,e.id DESC LIMIT 1",
-      [i.competitorId, i.organizationId, i.workspaceId],
+      [
+        i.competitorId,
+        ...(nativeTask ? [accountId] : [organizationId, workspaceId]),
+        ...(accountId !== null ? [accountId, accountId] : []),
+      ],
     );
     return {
       ...this.dto(rows[0]),
@@ -106,11 +272,27 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
       })),
     };
   }
-  async listRules(i: any) {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM competitor_monitor_rules WHERE organization_id=? AND workspace_id=? ORDER BY updated_at DESC,id DESC",
-      [i.organizationId, i.workspaceId],
-    );
+  async listRules(i: Parameters<CompetitorRepository["listRules"]>[0]) {
+    if ("accountId" in i) await requireAccountReadRehearsal(this.pool);
+    else if (!(await hasLegacyCompetitorRuleScope(this.pool)))
+      throw new CompetitorServiceError(
+        "competitor_account_scope_required",
+        403,
+        "请使用账号规则列表。",
+      );
+    const [rows] =
+      "accountId" in i
+        ? await this.pool.query<RowDataPacket[]>(
+            `SELECT r.* FROM competitor_monitor_rules r JOIN account_owned_records co
+        ON co.source_table='competitor_monitor_rules' AND co.source_id=r.id
+        JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25
+        WHERE co.account_id=? ${sealedCompetitorOwner("co")}AND (r.competitor_id IS NULL OR ${owned("competitors", "r.competitor_id", "co.account_id")}) ORDER BY r.updated_at DESC,r.id DESC`,
+            [i.accountId],
+          )
+        : await this.pool.query<RowDataPacket[]>(
+            "SELECT * FROM competitor_monitor_rules WHERE organization_id=? AND workspace_id=? ORDER BY updated_at DESC,id DESC",
+            [i.organizationId, i.workspaceId],
+          );
     return rows.map((r) => ({
       id: String(r.id),
       competitor_id: r.competitor_id ? String(r.competitor_id) : null,
@@ -275,7 +457,14 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
       c.release();
     }
   }
-  async createRule(i: any) {
+  async createRule(i: Parameters<CompetitorRepository["createRule"]>[0]) {
+    if ("accountOwnedRule" in i) return this.createAccountRule(i);
+    if (!(await hasLegacyCompetitorRuleScope(this.pool)))
+      throw new CompetitorServiceError(
+        "competitor_account_scope_required",
+        403,
+        "旧工作区规则入口已停用。",
+      );
     const old = await this.operation(i);
     if (old) return old;
     const c = await this.pool.getConnection(),
@@ -319,19 +508,159 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
       c.release();
     }
   }
-  async setStatus(i: any) {
-    const old = await this.operation(i);
-    if (old) return old;
+  private async createAccountRule(
+    i: Extract<Parameters<CompetitorRepository["createRule"]>[0], { accountOwnedRule: true }>,
+  ) {
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      await requireAccountReadRehearsal(c, { lockForTransaction: true });
+      if (await hasLegacyCompetitorRuleScope(c))
+        throw new CompetitorServiceError(
+          "competitor_rule_migration_required",
+          503,
+          "先完成账号规则迁移。",
+        );
+      const target = i.value.competitor_id;
+      if (target) {
+        const native = await nativeCompetitorStorage(c);
+        const [rows] = await c.query<RowDataPacket[]>(
+          "SELECT x.id FROM competitors x JOIN account_owned_records o ON o.source_table='competitors' " +
+            "AND o.source_id=x.id " +
+            (native ? "AND x.account_id=o.account_id " : "") +
+            "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+            "WHERE x.id=? AND o.account_id=? " +
+            sealedCompetitorOwner("o") +
+            "AND x.deleted_at IS NULL LOCK IN SHARE MODE",
+          [target, i.actorId],
+        );
+        if (!rows[0])
+          throw new CompetitorServiceError("competitor_not_found", 404, "选择本人竞品。");
+      }
+      const old = await this.operation(i, c);
+      if (old) {
+        const prior = old as Partial<typeof i.value> & { id?: unknown };
+        if (
+          typeof prior.id !== "string" ||
+          !prior.id ||
+          (prior.competitor_id ?? null) !== (target ?? null) ||
+          prior.metric !== i.value.metric ||
+          prior.direction !== i.value.direction ||
+          prior.threshold_value !== i.value.threshold_value
+        )
+          throw new CompetitorServiceError(
+            "competitor_rule_idempotency_conflict",
+            409,
+            "使用完全相同的规则重试，或为新规则使用新的幂等键。",
+          );
+        const [rule] = await c.query<RowDataPacket[]>(
+          "SELECT r.id FROM competitor_monitor_rules r JOIN account_owned_records co " +
+            "ON co.source_table='competitor_monitor_rules' AND co.source_id=r.id " +
+            "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+            "WHERE r.id=? AND co.account_id=? AND r.competitor_id <=> ? " +
+            sealedCompetitorOwner("co") +
+            "LOCK IN SHARE MODE",
+          [prior.id, i.actorId, target ?? null],
+        );
+        if (!rule[0])
+          throw new CompetitorServiceError(
+            "competitor_rule_idempotency_conflict",
+            409,
+            "原规则归属未能核对。",
+          );
+        await c.commit();
+        return old;
+      }
+      const now = new Date(),
+        eventId = randomUUID();
+      const result = { id: i.id, status: "enabled", revision: 1, ...i.value };
+      await c.query(
+        "INSERT INTO competitor_monitor_rules (id,historical_context,competitor_id,metric,direction," +
+          "threshold_value,status,revision,created_by,created_at,updated_at) VALUES (?,JSON_OBJECT(),?,?,?,?,'enabled',1,?,?,?)",
+        [
+          i.id,
+          target,
+          i.value.metric,
+          i.value.direction,
+          i.value.threshold_value,
+          i.actorId,
+          now,
+          now,
+        ],
+      );
+      const event = {
+        id: eventId,
+        parentId: i.id,
+        eventType: "competitor.rule.created",
+        actorId: i.actorId,
+        payloadJson: JSON.stringify(result),
+        requestId: i.requestId,
+        traceId: i.traceId,
+        createdAt: now,
+      };
+      await appendCompetitorEvent(c, event);
+      await appendCompetitorOutbox(c, event);
+      await c.query(
+        "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) " +
+          "VALUES ('competitor_monitor_rules',?,?,'exclusive_owner'),('competitor_events',?,?,'exclusive_owner'),('competitor_outbox',?,?,'exclusive_owner')",
+        [i.id, i.actorId, eventId, i.actorId, eventId, i.actorId],
+      );
+      await this.save(c, i, i.id, result, now);
+      await c.commit();
+      return result;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  async setStatus(command: Parameters<CompetitorRepository["setStatus"]>[0]) {
+    const accountMode = "accountOwnedStatus" in command;
+    if (!accountMode) {
+      const old = await this.operation(command);
+      if (old) return old;
+    }
     const c = await this.pool.getConnection(),
       now = new Date();
     try {
       await c.beginTransaction();
+      if (accountMode) await requireAccountReadRehearsal(c, { lockForTransaction: true });
+      const native = accountMode && (await nativeCompetitorStorage(c));
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT revision FROM competitors WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",
-        [i.competitorId, i.organizationId, i.workspaceId],
+        accountMode
+          ? "SELECT x.revision," +
+              (native ? "" : "x.organization_id,x.workspace_id,") +
+              "o.reason ownership_reason FROM competitors x " +
+              "JOIN account_owned_records o ON o.source_table='competitors' AND o.source_id=x.id " +
+              (native ? "AND x.account_id=o.account_id " : "") +
+              "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+              "WHERE x.id=? AND o.account_id=? " +
+              sealedCompetitorOwner("o") +
+              "AND x.deleted_at IS NULL FOR UPDATE"
+          : "SELECT revision FROM competitors WHERE id=? AND organization_id=? AND workspace_id=? AND deleted_at IS NULL FOR UPDATE",
+        accountMode
+          ? [command.competitorId, command.actorId]
+          : [command.competitorId, command.organizationId, command.workspaceId],
       );
-      if (!rows[0]) throw new CompetitorServiceError("competitor_not_found", 404, "刷新竞品列表。");
-      if (Number(rows[0].revision) !== i.expectedRevision)
+      const row = rows[0];
+      if (!row) throw new CompetitorServiceError("competitor_not_found", 404, "刷新竞品列表。");
+      const i =
+        accountMode && !native
+          ? {
+              ...command,
+              organizationId: String(row.organization_id),
+              workspaceId: String(row.workspace_id),
+            }
+          : command;
+      if (accountMode) {
+        const old = await this.operation(i, c);
+        if (old) {
+          await c.commit();
+          return old;
+        }
+      }
+      if (Number(row.revision) !== i.expectedRevision)
         throw new CompetitorServiceError(
           "competitor_revision_conflict",
           409,
@@ -343,7 +672,13 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
         i.competitorId,
       ]);
       const result = { id: i.competitorId, status: i.status, revision: i.expectedRevision + 1 };
-      await this.event(c, i, i.competitorId, `competitor.${i.status}`, result, now);
+      const eventId = await this.event(c, i, i.competitorId, `competitor.${i.status}`, result, now);
+      if (accountMode)
+        await c.query(
+          "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES " +
+            "('competitor_events',?,?,?),('competitor_outbox',?,?,?)",
+          [eventId, eventId].flatMap((id) => [id, i.actorId, row.ownership_reason]),
+        );
       await this.save(c, i, i.competitorId, result, now);
       await c.commit();
       return result;
@@ -511,32 +846,24 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
         now,
       ],
     );
+    await appendCollectionSubquery(c, {
+      id: i.subqueryId,
+      taskId: i.taskId,
+      providerId,
+      ordinal: 1,
+      targetJson: JSON.stringify(target),
+      required: true,
+      status: "pending",
+      now,
+    });
     await c.query(
-      "INSERT INTO collection_subqueries(id,task_id,organization_id,workspace_id," +
-        "provider_id,ordinal,target_json,is_required,status,available_result_count," +
-        "missing_fields_json,error_code,retryable,version,created_at,updated_at) VALUES(?," +
-        "?,?,?,?,1,?,1,'pending',0,'[]',NULL,0,1,?,?)",
-      [
-        i.subqueryId,
-        i.taskId,
-        i.organizationId,
-        i.workspaceId,
-        providerId,
-        JSON.stringify(target),
-        now,
-        now,
-      ],
-    );
-    await c.query(
-      "INSERT INTO collection_task_events(id,task_id,organization_id,workspace_id," +
+      "INSERT INTO collection_task_events(id,task_id," +
         "event_type,from_status,to_status,actor_type,actor_id,request_id,trace_id," +
-        "metadata_json,occurred_at) VALUES(?,?,?,?,?,NULL,'scheduled','user',?,?," +
+        "metadata_json,occurred_at) VALUES(?,?,?,NULL,'scheduled','user',?,?," +
         "?,?,?)",
       [
         randomUUID(),
         i.taskId,
-        i.organizationId,
-        i.workspaceId,
         "core.collection.scheduled",
         i.actorId,
         i.requestId,
@@ -555,10 +882,10 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
     now: Date,
   ) {
     await c.query(
-      "INSERT INTO competitor_snapshots (id,competitor_id,organization_id,workspace_id," +
+      "INSERT INTO competitor_snapshots (id,competitor_id," +
         "provider_id,current_price,currency,rank_value,review_count,rating_value," +
         "availability,captured_at,freshness,source_status,source_ref_id,evidence_id," +
-        "request_id,trace_id,created_at) SELECT ?,id,organization_id,workspace_id," +
+        "request_id,trace_id,created_at) SELECT ?,id," +
         "provider_id,?,?,?,?,?,?,?,?,?,?,?,?,?,? FROM competitors WHERE id=?",
       [
         id,
@@ -580,21 +907,10 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
       ],
     );
     await c.query(
-      "INSERT INTO competitor_snapshot_jobs (id,organization_id,workspace_id,competitor_id," +
+      "INSERT INTO competitor_snapshot_jobs (id,competitor_id," +
         "snapshot_id,status,attempt_count,available_at,request_id,trace_id,created_at," +
-        "updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
-      [
-        randomUUID(),
-        i.organizationId,
-        i.workspaceId,
-        competitorId,
-        id,
-        now,
-        i.requestId,
-        i.traceId,
-        now,
-        now,
-      ],
+        "updated_at) VALUES (?,?,?,'queued',0,?,?,?,?,?)",
+      [randomUUID(), competitorId, id, now, i.requestId, i.traceId, now, now],
     );
   }
   private async provider(c: PoolConnection, id: string) {
@@ -660,16 +976,20 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
       evidence_id: String(r.evidence_id),
     };
   }
-  private async operation(i: CompetitorWriteContext & { route: string }) {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT result_json FROM competitor_operations WHERE actor_id=? AND route=? AND idempotency_key=?",
+  private async operation(
+    i: Pick<CompetitorWriteContext, "actorId" | "idempotencyKey"> & { route: string },
+    connection: Pick<Pool, "query"> = this.pool,
+  ) {
+    const [rows] = await connection.query<RowDataPacket[]>(
+      "SELECT result_json FROM competitor_operations WHERE actor_id=? AND route=? AND idempotency_key=?" +
+        (connection === this.pool ? "" : " FOR UPDATE"),
       [i.actorId, i.route, i.idempotencyKey],
     );
     return rows[0] ? parse(rows[0].result_json) : null;
   }
   private save(
     c: PoolConnection,
-    i: CompetitorWriteContext & { route: string },
+    i: Pick<CompetitorWriteContext, "actorId" | "idempotencyKey"> & { route: string },
     resourceId: string,
     result: unknown,
     now: Date,
@@ -682,44 +1002,37 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
   }
   private async event(
     c: PoolConnection,
-    i: CompetitorWriteContext,
+    i: Pick<CompetitorWriteContext, "actorId" | "requestId" | "traceId"> &
+      Partial<Pick<CompetitorWriteContext, "organizationId" | "workspaceId">>,
     resourceId: string,
     eventType: string,
     payload: unknown,
     now: Date,
   ) {
     const id = randomUUID();
-    await c.query(
-      "INSERT INTO competitor_events (id,organization_id,workspace_id,competitor_id," +
-        "event_type,actor_id,payload_json,request_id,trace_id,created_at) VALUES (?," +
-        "?,?,?,?,?,?,?,?,?)",
-      [
-        id,
-        i.organizationId,
-        i.workspaceId,
-        resourceId,
-        eventType,
-        i.actorId,
-        JSON.stringify(payload),
-        i.requestId,
-        i.traceId,
-        now,
-      ],
-    );
-    await c.query(
-      "INSERT INTO competitor_outbox (id,organization_id,workspace_id,aggregate_id," +
-        "event_type,payload_json,status,available_at,created_at) VALUES (?,?,?,?," +
-        "?,?,'pending',?,?)",
-      [
-        id,
-        i.organizationId,
-        i.workspaceId,
-        resourceId,
-        eventType,
-        JSON.stringify(payload),
-        now,
-        now,
-      ],
-    );
+    const scope = {
+      ...(i.organizationId === undefined ? {} : { organizationId: i.organizationId }),
+      ...(i.workspaceId === undefined ? {} : { workspaceId: i.workspaceId }),
+    };
+    await appendCompetitorEvent(c, {
+      id,
+      ...scope,
+      parentId: resourceId,
+      eventType,
+      actorId: i.actorId,
+      payloadJson: JSON.stringify(payload),
+      requestId: i.requestId,
+      traceId: i.traceId,
+      createdAt: now,
+    });
+    await appendCompetitorOutbox(c, {
+      id,
+      ...scope,
+      parentId: resourceId,
+      eventType,
+      payloadJson: JSON.stringify(payload),
+      createdAt: now,
+    });
+    return id;
   }
 }

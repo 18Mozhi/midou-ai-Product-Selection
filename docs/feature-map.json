@@ -1,4 +1,10 @@
 {
+  "accountCompetitorOriginalHistory": {
+    "sourceFiles": ["apps/api/src/mysql-competitor-repository.ts", "apps/api/src/competitor-routes.ts", "apps/api/src/amazon-public-signals.ts", "apps/web/src/components/AccountCompetitorRules.vue"],
+    "testFiles": ["tests/m04-05/account-competitor-read-rehearsal.test.mjs", "tests/m04-05/account-competitor-status-rehearsal.test.mjs", "tests/unit/competitor-account-migration.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-competitor-original-history.md"],
+    "contract": "Keep original competitor IDs, latest and historical snapshots, evidence, and rule ownership. Only the sealed primary account can see shared or unassigned rows. Rule replay rechecks the exact originally submitted fields and persisted owner; conflicting requests create no extra rule or delivery."
+  },
   "accountIntelligenceTopicPresentation": {
     "sourceFiles": ["apps/api/src/mysql-trend-repository.ts", "apps/api/src/trend-routes.ts", "apps/web/src/components/TrendDashboard.vue", "apps/web/src/components/TrendDetailPanel.vue"],
     "testFiles": ["tests/m04-01/account-trend-list-rehearsal.test.mjs", "tests/unit/account-trend-preservation.test.mjs"],

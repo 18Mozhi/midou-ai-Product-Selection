@@ -9,6 +9,12 @@ export type CompetitorWriteContext = {
   traceId: string;
   idempotencyKey: string;
 };
+export type CompetitorStatusContext =
+  | CompetitorWriteContext
+  | (Omit<CompetitorWriteContext, "organizationId" | "workspaceId"> & { accountOwnedStatus: true });
+export type CompetitorRuleWriteContext =
+  | CompetitorWriteContext
+  | (Omit<CompetitorWriteContext, "organizationId" | "workspaceId"> & { accountOwnedRule: true });
 export class CompetitorServiceError extends Error {
   constructor(
     readonly code: string,
@@ -124,14 +130,12 @@ export function validateRule(v: any) {
       : number(v.threshold_value, "threshold_value", 999999999999),
   };
 }
+export type CompetitorReadScope =
+  { organizationId: string; workspaceId: string } | { accountId: string };
 export interface CompetitorRepository {
-  list(i: {
-    organizationId: string;
-    workspaceId: string;
-    opportunityId?: string;
-  }): Promise<unknown>;
-  get(i: { organizationId: string; workspaceId: string; competitorId: string }): Promise<unknown>;
-  listRules(i: { organizationId: string; workspaceId: string }): Promise<unknown>;
+  list(i: CompetitorReadScope & { opportunityId?: string }): Promise<unknown>;
+  get(i: CompetitorReadScope & { competitorId: string }): Promise<unknown>;
+  listRules(i: CompetitorReadScope): Promise<unknown>;
   create(
     i: CompetitorWriteContext & {
       id: string;
@@ -150,14 +154,14 @@ export interface CompetitorRepository {
     },
   ): Promise<unknown>;
   createRule(
-    i: CompetitorWriteContext & {
+    i: CompetitorRuleWriteContext & {
       id: string;
       value: ReturnType<typeof validateRule>;
       route: string;
     },
   ): Promise<unknown>;
   setStatus(
-    i: CompetitorWriteContext & {
+    i: CompetitorStatusContext & {
       competitorId: string;
       status: "active" | "paused";
       expectedRevision: number;
@@ -170,7 +174,7 @@ export interface CompetitorRepository {
 }
 export class CompetitorService {
   constructor(private readonly repo: CompetitorRepository) {}
-  list(i: { organizationId: string; workspaceId: string; opportunityId?: unknown }) {
+  list(i: CompetitorReadScope & { opportunityId?: unknown }) {
     const { opportunityId, ...scope } = i;
     return this.repo.list({
       ...scope,
@@ -179,10 +183,10 @@ export class CompetitorService {
         : { opportunityId: uuid(opportunityId, "opportunity_id") }),
     });
   }
-  get(i: { organizationId: string; workspaceId: string; competitorId: string }) {
+  get(i: CompetitorReadScope & { competitorId: string }) {
     return this.repo.get({ ...i, competitorId: uuid(i.competitorId, "competitor_id") });
   }
-  listRules(i: { organizationId: string; workspaceId: string }) {
+  listRules(i: CompetitorReadScope) {
     return this.repo.listRules(i);
   }
   create(i: CompetitorWriteContext & { value: any }) {
@@ -205,16 +209,18 @@ export class CompetitorService {
       route: `POST:/api/v1/competitors/${id}/snapshots`,
     });
   }
-  createRule(i: CompetitorWriteContext & { value: any }) {
+  createRule(i: CompetitorRuleWriteContext & { value: any }) {
     return this.repo.createRule({
       ...i,
       id: randomUUID(),
       value: validateRule(i.value),
-      route: "POST:/api/v1/competitor-monitor-rules",
+      route: `POST:/api/v1/competitor-monitor-rules${"accountOwnedRule" in i ? ":account" : ""}`,
     });
   }
-  setStatus(i: CompetitorWriteContext & { competitorId: string; value: any }) {
-    const id = uuid(i.competitorId, "competitor_id");
+  setStatus(i: CompetitorStatusContext & { competitorId: string; value: any }) {
+    const account = "accountOwnedStatus" in i;
+    const parsed = uuid(i.competitorId, "competitor_id");
+    const id = account ? parsed.toLowerCase() : parsed;
     if (
       !["active", "paused"].includes(i.value?.status) ||
       !Number.isSafeInteger(i.value?.expected_revision) ||
@@ -230,7 +236,7 @@ export class CompetitorService {
       competitorId: id,
       status: i.value.status,
       expectedRevision: i.value.expected_revision,
-      route: `POST:/api/v1/competitors/${id}/actions`,
+      route: `POST:/api/v1/competitors/${id}/actions${account ? ":account" : ""}`,
     });
   }
   collect(i: CompetitorWriteContext & { competitorId: string }) {

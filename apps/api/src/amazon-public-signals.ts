@@ -4,8 +4,7 @@ export const amazonPublicSignalJoinSql =
   "LEFT JOIN normalized_records n_signal ON LEFT(s.source_ref_id,11)='collection:' " +
   "AND n_signal.id=CONVERT(RIGHT(s.source_ref_id,36) USING ascii) " +
   "AND n_signal.organization_id=c.organization_id AND n_signal.workspace_id=c.workspace_id " +
-  "AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id " +
-  "AND n_signal.provider_id=c.provider_id AND n_signal.raw_evidence_id=s.evidence_id " +
+  "AND s.competitor_id=c.id AND n_signal.provider_id=c.provider_id AND n_signal.raw_evidence_id=s.evidence_id " +
   "AND p_snapshot.code='amazon_product' AND c.source_site='Amazon' " +
   "AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n_signal.payload_json,'$.asin')))=BINARY UPPER(c.external_id) ";
 
