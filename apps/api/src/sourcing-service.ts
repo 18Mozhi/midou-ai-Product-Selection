@@ -1,5 +1,6 @@
 import type { SourcingListPageMeta } from "@scoutops/contracts";
 import { randomUUID } from "node:crypto";
+import type { AccountReadScope } from "./account-read-rehearsal.js";
 export type SourcingContext = {
   organizationId: string;
   workspaceId: string;
@@ -8,6 +9,18 @@ export type SourcingContext = {
   traceId: string;
   idempotencyKey: string;
 };
+export type SourcingQuoteContext =
+  | SourcingContext
+  | (Omit<SourcingContext, "organizationId" | "workspaceId"> & { accountOwnedQuote: true });
+export type SourcingSearchContext =
+  | SourcingContext
+  | (Omit<SourcingContext, "organizationId" | "workspaceId"> & { accountOwnedSearch: true });
+export type SourcingComparisonContext =
+  | SourcingContext
+  | (Omit<SourcingContext, "organizationId" | "workspaceId"> & { accountOwnedComparison: true });
+export type SourcingPurchaseContext =
+  | SourcingContext
+  | (Omit<SourcingContext, "organizationId" | "workspaceId"> & { accountOwnedPurchase: true });
 export class SourcingServiceError extends Error {
   constructor(
     readonly code: string,
@@ -97,11 +110,19 @@ export function validateComparison(v: any) {
     quote_ids: v.quote_ids.map((x: unknown) => uuid(x, "quote_id")),
   };
 }
+export type SourcingReadScope =
+  AccountReadScope | Pick<SourcingContext, "organizationId" | "workspaceId">;
+export type SourcingPageRead = SourcingReadScope & {
+  page: number;
+  pageSize: number;
+  query: string;
+  locateRecord?: string | undefined;
+};
 export interface SourcingRepository {
-  list(i: any): Promise<any>;
-  listPage?(i: any): Promise<{ items: any[]; meta: SourcingListPageMeta }>;
-  detail(i: any): Promise<any>;
-  listComparisons(i: any): Promise<any>;
+  list(i: SourcingReadScope): Promise<any>;
+  listPage?(i: SourcingPageRead): Promise<{ items: any[]; meta: SourcingListPageMeta }>;
+  detail(i: SourcingReadScope & { searchId: string }): Promise<any>;
+  listComparisons(i: SourcingReadScope): Promise<any>;
   createSearch(i: any): Promise<any>;
   confirmQuote(i: any): Promise<any>;
   createComparison(i: any): Promise<any>;
@@ -111,10 +132,10 @@ export interface SourcingRepository {
 }
 export class SourcingService {
   constructor(private readonly repo: SourcingRepository) {}
-  list(i: any) {
+  list(i: SourcingReadScope) {
     return this.repo.list(i);
   }
-  async listPage(i: any, raw: Record<string, unknown>) {
+  async listPage(i: SourcingReadScope, raw: Record<string, unknown>) {
     const integer = (value: unknown, fallback: number, maximum: number) => {
       if (value === undefined) return fallback;
       if (typeof value !== "string" || !/^[1-9][0-9]*$/.test(value) || Number(value) > maximum)
@@ -168,40 +189,75 @@ export class SourcingService {
       },
     };
   }
-  detail(i: any) {
+  detail(i: SourcingReadScope & { searchId: string }) {
     return this.repo.detail({ ...i, searchId: uuid(i.searchId, "search_id") });
   }
-  listComparisons(i: any) {
+  listComparisons(i: SourcingReadScope) {
     return this.repo.listComparisons(i);
   }
-  createSearch(i: SourcingContext & { value: any }) {
+  createSearch(i: SourcingSearchContext & { value: any }) {
+    const value = validateSearch(i.value);
+    const accountMode = "accountOwnedSearch" in i;
+    if (accountMode && !value.collection_task_id)
+      throw new SourcingServiceError(
+        "sourcing_collection_task_required",
+        409,
+        "演练只允许使用本账号已完成的供应商采集任务。",
+      );
+    if (accountMode && value.input_type === "opportunity")
+      value.input_ref = uuid(value.input_ref, "input_ref").toLowerCase();
     return this.repo.createSearch({
       ...i,
       id: randomUUID(),
       taskId: randomUUID(),
       subqueryId: randomUUID(),
-      value: validateSearch(i.value),
-      route: "POST:/api/v1/sourcing/searches",
+      value,
+      route: accountMode
+        ? "POST:/api/v1/sourcing/searches:account"
+        : "POST:/api/v1/sourcing/searches",
     });
   }
-  confirmQuote(i: SourcingContext & { value: any }) {
+  confirmQuote(i: SourcingQuoteContext & { value: any }) {
+    const value = validateQuote(i.value);
+    const accountMode = "accountOwnedQuote" in i;
+    if (accountMode) {
+      value.candidate_id = value.candidate_id.toLowerCase();
+      value.evidence_id = value.evidence_id.toLowerCase();
+    }
     return this.repo.confirmQuote({
       ...i,
       id: randomUUID(),
-      value: validateQuote(i.value),
-      route: "POST:/api/v1/sourcing/quotes",
+      value,
+      route: accountMode
+        ? `POST:/api/v1/sourcing/quotes/${value.candidate_id}:account`
+        : "POST:/api/v1/sourcing/quotes",
     });
   }
-  createComparison(i: SourcingContext & { value: any }) {
+  createComparison(i: SourcingComparisonContext & { value: any }) {
+    const value = validateComparison(i.value);
+    const accountMode = "accountOwnedComparison" in i;
+    if (accountMode) {
+      value.quote_ids = value.quote_ids.map((id: string) => id.toLowerCase());
+      if (new Set(value.quote_ids).size !== value.quote_ids.length)
+        throw new SourcingServiceError(
+          "sourcing_comparison_size_invalid",
+          400,
+          "选择 2–5 家不重复报价。",
+        );
+    }
     return this.repo.createComparison({
       ...i,
       id: randomUUID(),
-      value: validateComparison(i.value),
-      route: "POST:/api/v1/sourcing/comparisons",
+      value,
+      route: accountMode
+        ? "POST:/api/v1/sourcing/comparisons:account"
+        : "POST:/api/v1/sourcing/comparisons",
     });
   }
-  createPurchaseTask(i: SourcingContext & { value: any }) {
-    const quoteId = uuid(i.value?.quote_id, "quote_id"),
+  createPurchaseTask(i: SourcingPurchaseContext & { value: any }) {
+    const accountMode = "accountOwnedPurchase" in i,
+      parsedQuote = uuid(i.value?.quote_id, "quote_id"),
+      quoteId = accountMode ? parsedQuote.toLowerCase() : parsedQuote,
       quantity = num(i.value?.quantity, "quantity", 4294967295, true),
       reason = text(i.value?.reason, "reason", 1000);
     if (quantity < 1)
@@ -212,7 +268,9 @@ export class SourcingService {
       quoteId,
       quantity,
       reason,
-      route: "POST:/api/v1/sourcing/purchase-tasks",
+      route: accountMode
+        ? `POST:/api/v1/sourcing/purchase-tasks/${quoteId}:account`
+        : "POST:/api/v1/sourcing/purchase-tasks",
     });
   }
   refresh(i: SourcingContext & { searchId: string }) {
@@ -225,14 +283,16 @@ export class SourcingService {
       route: `POST:/api/v1/sourcing/searches/${id}/refresh`,
     });
   }
-  remove(i: SourcingContext & { searchId: string; value: any }) {
-    const id = uuid(i.searchId, "search_id"),
+  remove(i: SourcingSearchContext & { searchId: string; value: any }) {
+    const accountMode = "accountOwnedSearch" in i;
+    const parsed = uuid(i.searchId, "search_id"),
+      id = accountMode ? parsed.toLowerCase() : parsed,
       reason = text(i.value?.reason, "reason", 500);
     return this.repo.remove({
       ...i,
       searchId: id,
       reason,
-      route: `DELETE:/api/v1/sourcing/searches/${id}`,
+      route: `DELETE:/api/v1/sourcing/searches/${id}${accountMode ? ":account" : ""}`,
     });
   }
 }

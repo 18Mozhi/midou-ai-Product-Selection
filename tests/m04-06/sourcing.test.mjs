@@ -121,11 +121,11 @@ test("M04-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(live, /comparison_max_five/);
   assert.match(
     live,
-    /INSERT INTO collection_task_evidence_links[\s\S]*VALUES \(\?,\?,\?,\?,\?,\?,\?,\?,'captured',\?,\?,\?,\?\)/,
+    /INSERT INTO collection_task_evidence_links[\s\S]*VALUES \(\?,\?,\?,\?,\?,\?,'captured',\?,\?,\?,\?\)/,
   );
   assert.match(
     live,
-    /SELECT status,last_error_code FROM sourcing_projection_jobs WHERE id=\? AND organization_id=\? AND workspace_id=\?/,
+    /SELECT j\.status,j\.last_error_code FROM sourcing_projection_jobs j JOIN sourcing_searches s ON s\.id=j\.search_id WHERE j\.id=\? AND s\.organization_id=\? AND s\.workspace_id=\?/,
   );
   assert.doesNotMatch(live, /new MySqlSourcingProjectionWorker/);
   assert.match(blueprint, /M04-06 实现合同/);

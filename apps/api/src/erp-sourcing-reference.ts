@@ -1,4 +1,5 @@
 import type { Pool, RowDataPacket } from "mysql2/promise";
+import { rehearsalOwns } from "./account-read-rehearsal.js";
 
 export interface ErpSourcingReference {
   normalized_record_id: string;
@@ -49,15 +50,27 @@ const iso = (value: unknown) => {
 
 export async function loadErpSourcingReference(
   pool: Pool,
-  input: {
-    organizationId: string;
-    workspaceId: string;
-    opportunityId: string;
-  },
+  input: { opportunityId: string } & (
+    { accountId: string } | { organizationId: string; workspaceId: string }
+  ),
 ): Promise<ErpSourcingReference | null> {
+  const account = "accountId" in input;
   const [rows] = await pool.query<RowDataPacket[]>(
-    "SELECT n.id normalized_record_id,n.payload_json,e.id evidence_id,e.captured_at FROM opportunities o JOIN trend_signals s ON s.topic_id=o.source_ref_id JOIN normalized_records n ON n.id=s.normalized_record_id AND n.status='active' JOIN raw_evidence e ON e.id=n.raw_evidence_id JOIN providers p ON p.id=n.provider_id AND p.code='erp_product_catalog' WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? ORDER BY n.record_version DESC,n.created_at DESC LIMIT 1",
-    [input.opportunityId, input.organizationId, input.workspaceId],
+    "SELECT n.id normalized_record_id,n.payload_json,e.id evidence_id,e.captured_at FROM opportunities o JOIN trend_signals s ON s.topic_id=o.source_ref_id JOIN normalized_records n ON n.id=s.normalized_record_id AND n.status='active' JOIN raw_evidence e ON e.id=n.raw_evidence_id JOIN providers p ON p.id=n.provider_id AND p.code='erp_product_catalog' " +
+      (account
+        ? "JOIN account_owned_records oo ON oo.source_table='opportunities' AND oo.source_id=o.id "
+        : "") +
+      "WHERE o.id=? " +
+      (account
+        ? `AND oo.account_id=?
+           AND s.raw_evidence_id=e.id AND s.provider_id=n.provider_id AND e.provider_id=n.provider_id
+           AND ${rehearsalOwns("trend_topics", "o.source_ref_id", "oo.account_id")} AND ${rehearsalOwns("trend_signals", "s.id", "oo.account_id")} AND ${rehearsalOwns("normalized_records", "n.id", "oo.account_id")} AND ${rehearsalOwns("raw_evidence", "e.id", "oo.account_id")} `
+        : "AND o.organization_id=? AND o.workspace_id=? ") +
+      "ORDER BY n.record_version DESC,n.created_at DESC LIMIT 1",
+    [
+      input.opportunityId,
+      ...(account ? [input.accountId] : [input.organizationId, input.workspaceId]),
+    ],
   );
   const row = rows[0];
   if (!row) return null;

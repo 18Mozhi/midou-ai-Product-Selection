@@ -30,7 +30,11 @@ type SourcingDialogAttempt = {
   generation: number;
   routeGeneration: number;
 };
-export type SourcingWorkspaceProps = { apiBaseUrl: string; capabilities?: string[] };
+export type SourcingWorkspaceProps = {
+  apiBaseUrl: string;
+  capabilities?: string[];
+  accountRehearsal?: boolean;
+};
 
 export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilities: string[] }) {
   const route = useRoute(),
@@ -96,7 +100,11 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
       stability_status: "稳定性",
       risk_level: "风险",
     },
-    canManage = computed(() => props.capabilities.includes("supplier_quote:manage")),
+    canManage = computed(
+      () => !props.accountRehearsal && props.capabilities.includes("supplier_quote:manage"),
+    ),
+    canConfirmQuote = computed(() => canManage.value || props.accountRehearsal === true),
+    canSaveComparison = computed(() => canManage.value || props.accountRehearsal === true),
     canInspectCollection = computed(
       () =>
         props.capabilities.includes("platform:operate") ||
@@ -439,7 +447,7 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     else void load();
   }
   async function confirm() {
-    if (!quoteCandidate.value || busy.value) return;
+    if (!canConfirmQuote.value || !quoteCandidate.value || busy.value) return;
     const attempt = startDialogAttempt("quote"),
       candidateId = quoteCandidate.value.id,
       routeAtSubmit = route.fullPath;
@@ -470,6 +478,7 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     }
   }
   function choose(candidate: Candidate, event: Event) {
+    if (!canSaveComparison.value) return;
     if (!candidate.quote) return;
     const id = candidate.quote.id,
       index = selectedQuotes.value.indexOf(id);
@@ -480,6 +489,7 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     if (checkbox instanceof HTMLInputElement) checkbox.checked = selectedQuotes.value.includes(id);
   }
   function openQuote(candidate: Candidate) {
+    if (!canConfirmQuote.value) return;
     dialogGeneration.quote += 1;
     if (dialogFailure.value?.dialog === "quote") dialogFailure.value = null;
     quoteCandidate.value = candidate;
@@ -494,7 +504,7 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     quote.evidence_id = candidate.evidence_id;
   }
   async function compare() {
-    if (busy.value) return;
+    if (!canSaveComparison.value || busy.value || selectedQuotes.value.length < 2) return;
     const selectedCount = selectedQuotes.value.length;
     const selectedIds = [...selectedQuotes.value],
       searchIdAtSubmit = selected.value?.id,
@@ -637,7 +647,8 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     quoteCandidate,
     selectedQuotes,
     quote,
-    canManage,
+    canSaveComparison,
+    canConfirmQuote,
     canInspectCollection,
     candidates,
     searchName,

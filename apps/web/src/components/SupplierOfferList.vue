@@ -6,7 +6,8 @@ import "../supplier-offer-list.css";
 defineProps<{
   candidates: SourcingCandidate[];
   selectedQuotes: string[];
-  canManage: boolean;
+  canCompare: boolean;
+  canConfirmQuote: boolean;
   statusText: (value: string) => string;
   timeText: (value: string) => string;
   stabilityText: (value: string | undefined) => string;
@@ -142,7 +143,7 @@ const emit = defineEmits<{
               aria-label="打开外部原始商品页（新窗口）"
               >原商品 ↗</a
             >
-            <label v-if="canManage && item.quote"
+            <label v-if="canCompare && item.quote"
               ><input
                 type="checkbox"
                 :checked="selectedQuotes.includes(item.quote.id)"
@@ -150,7 +151,7 @@ const emit = defineEmits<{
               />加入对比</label
             >
             <button
-              v-if="canManage && !item.quote"
+              v-if="canConfirmQuote && !item.quote"
               type="button"
               class="ghost"
               @click="emit('confirmQuote', item)"

@@ -38,7 +38,8 @@ const {
   quoteCandidate,
   selectedQuotes,
   quote,
-  canManage,
+  canSaveComparison,
+  canConfirmQuote,
   canInspectCollection,
   candidates,
   searchName,
@@ -437,7 +438,8 @@ const showCollectionLinkInNotice = computed(
           <SupplierOfferList
             :candidates="visibleCandidates"
             :selected-quotes="selectedQuotes"
-            :can-manage="canManage"
+            :can-compare="canSaveComparison"
+            :can-confirm-quote="canConfirmQuote"
             :status-text="statusText"
             :time-text="timeText"
             :stability-text="stabilityText"
@@ -465,8 +467,16 @@ const showCollectionLinkInNotice = computed(
             :class="{ 'sourcing-empty-offers--with-profit': showProfitBesideEmptyOffers }"
           >
             <div class="sourcing-quote-empty">
-              <svg width="72" height="44" viewBox="0 0 72 44" fill="none"
-                stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" aria-hidden="true">
+              <svg
+                width="72"
+                height="44"
+                viewBox="0 0 72 44"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
                 <path d="m15 18 21-8 21 8-21 9-21-9Zm0 12v4l21 8 21-8v-4M36 27v15" />
                 <path d="m15 18-13 9 21 9 13-9 13 9 21-9-13-9 8-6-21-8-8 6-8-6-21 8 8 6Z" />
               </svg>
@@ -521,7 +531,7 @@ const showCollectionLinkInNotice = computed(
       </section>
     </div>
     <aside
-      v-if="canManage && selectedQuotes.length"
+      v-if="canSaveComparison && selectedQuotes.length"
       class="sourcing-compare-tray"
       aria-live="polite"
     >
@@ -532,7 +542,7 @@ const showCollectionLinkInNotice = computed(
       </button>
     </aside>
     <SourcingWorkspaceDialogs
-      v-if="canManage"
+      v-if="canConfirmQuote"
       :quote-candidate="quoteCandidate"
       :quote="quote"
       :evidence-options="evidenceOptions"

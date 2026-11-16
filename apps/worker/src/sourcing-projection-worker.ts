@@ -1,9 +1,19 @@
 import { randomUUID } from "node:crypto";
-import type { Pool, RowDataPacket } from "mysql2/promise";
+import { appendSourcingEvent, appendSourcingOutbox } from "@scoutops/database";
+import type { Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";
+import {
+  registerCalculationOwners,
+  resolveCalculationOwnership,
+} from "./opportunity-calculation-ownership.js";
+import {
+  registerSourcingCandidate,
+  requireSourcingOwners,
+  requireSourcingRecordsOwner,
+} from "./sourcing-projection-ownership.js";
 type Job = {
   id: string;
-  org: string;
-  ws: string;
+  scope: { organizationId: string; workspaceId: string } | null;
+  accountId: string | null;
   search: string;
   request: string;
   trace: string;
@@ -30,10 +40,14 @@ export class MySqlSourcingProjectionWorker {
     try {
       return { status: "succeeded" as const, job_id: job.id, ...(await this.project(job)) };
     } catch (e) {
+      const code = (e as { code?: string })?.code;
       const x =
           e instanceof SourcingProjectionError
             ? e
-            : new SourcingProjectionError("sourcing_projection_internal_error", true),
+            : code === "sourcing_projection_owner_mismatch" ||
+                code === "sourcing_candidate_source_mismatch"
+              ? new SourcingProjectionError(code, false)
+              : new SourcingProjectionError("sourcing_projection_internal_error", true),
         status = !x.retryable ? "failed_terminal" : job.attempt >= 4 ? "dead_letter" : "scheduled";
       await this.finish(job, status, x.code);
       return { status, job_id: job.id, error_code: x.code };
@@ -54,6 +68,23 @@ export class MySqlSourcingProjectionWorker {
         await c.commit();
         return null;
       }
+      const ownership = await resolveCalculationOwnership(
+        c,
+        String(r.search_id),
+        "sourcing_searches",
+      );
+      let scope: Job["scope"] = null;
+      if (!ownership) {
+        const [[parent]] = await c.query<RowDataPacket[]>(
+          "SELECT organization_id,workspace_id FROM sourcing_searches WHERE id=?",
+          [r.search_id],
+        );
+        if (!parent) throw new Error("sourcing_projection_jobs_parent_missing");
+        scope = {
+          organizationId: String(parent.organization_id),
+          workspaceId: String(parent.workspace_id),
+        };
+      }
       await c.query(
         "UPDATE sourcing_projection_jobs SET status='leased',attempt_count=attempt_count+1,lease_owner=?,lease_expires_at=?,updated_at=? WHERE id=?",
         [this.workerId, expires, now, r.id],
@@ -61,8 +92,8 @@ export class MySqlSourcingProjectionWorker {
       await c.commit();
       return {
         id: String(r.id),
-        org: String(r.organization_id),
-        ws: String(r.workspace_id),
+        scope,
+        accountId: ownership?.owner?.account_id ?? null,
         search: String(r.search_id),
         request: String(r.request_id),
         trace: String(r.trace_id),
@@ -80,15 +111,54 @@ export class MySqlSourcingProjectionWorker {
       now = this.now();
     try {
       await c.beginTransaction();
+      const ownership = await resolveCalculationOwnership(c, j.search, "sourcing_searches");
+      if (
+        (!ownership && !j.scope) ||
+        (ownership && (!ownership.owner || j.scope || ownership.owner.account_id !== j.accountId))
+      )
+        throw new SourcingProjectionError("sourcing_projection_owner_mismatch", false);
+      const scopeParams = j.scope ? [j.scope.organizationId, j.scope.workspaceId] : [];
+      if (ownership) {
+        const [lease] = await c.query<RowDataPacket[]>(
+          "SELECT id FROM sourcing_projection_jobs WHERE id=? AND search_id=? AND status='leased' AND lease_owner=? AND lease_expires_at>? AND attempt_count=? FOR UPDATE",
+          [j.id, j.search, this.workerId, now, j.attempt],
+        );
+        if (!lease[0]) throw new SourcingProjectionError("sourcing_projection_lease_lost", true);
+        await requireSourcingOwners(c, ownership, [["sourcing_projection_jobs", j.id]], true);
+      }
       const [s] = await c.query<RowDataPacket[]>(
-        "SELECT collection_task_id FROM sourcing_searches WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
-        [j.search, j.org, j.ws],
+        "SELECT collection_task_id,input_type,input_ref FROM sourcing_searches WHERE id=? " +
+          (j.scope ? "AND organization_id=? AND workspace_id=? " : "") +
+          "AND deleted_at IS NULL FOR UPDATE",
+        [j.search, ...scopeParams],
       );
       if (!s[0]) throw new SourcingProjectionError("sourcing_search_missing", false);
+      if (ownership) {
+        await requireSourcingOwners(c, ownership, [
+          ["collection_tasks", String(s[0].collection_task_id)],
+          ...(s[0].input_type === "opportunity"
+            ? [["opportunities", String(s[0].input_ref)] as const]
+            : []),
+        ]);
+      }
       const [records] = await c.query<RowDataPacket[]>(
-        "SELECT n.*,e.canonical_url,e.captured_at FROM collection_task_evidence_links l JOIN normalized_records n ON n.id=l.normalized_record_id AND n.organization_id=l.organization_id AND n.workspace_id=l.workspace_id JOIN raw_evidence e ON e.id=l.raw_evidence_id WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=? AND n.status='active' AND (n.schema_version='product-supply-csv-v1' OR (n.schema_version='provider-source-v1' AND EXISTS (SELECT 1 FROM providers p WHERE p.id=n.provider_id AND p.code='1688_search')))",
-        [s[0].collection_task_id, j.org, j.ws],
+        "SELECT n.*,e.canonical_url,e.captured_at,l.id evidence_link_id,l.collection_subquery_id " +
+          "FROM collection_task_evidence_links l JOIN collection_tasks link_task ON link_task.id=l.collection_task_id " +
+          "JOIN collection_subqueries sq ON sq.id=l.collection_subquery_id AND sq.task_id=link_task.id AND sq.provider_id=l.provider_id " +
+          "JOIN normalized_records n ON n.id=l.normalized_record_id AND n.raw_evidence_id=l.raw_evidence_id AND n.provider_id=l.provider_id " +
+          (ownership?.owner
+            ? ""
+            : "AND n.organization_id=link_task.organization_id AND n.workspace_id=link_task.workspace_id ") +
+          "JOIN raw_evidence e ON e.id=l.raw_evidence_id AND e.provider_id=l.provider_id " +
+          "WHERE l.collection_task_id=? " +
+          (ownership?.owner
+            ? ""
+            : "AND link_task.organization_id=? AND link_task.workspace_id=? ") +
+          "AND n.status='active' AND (n.schema_version='product-supply-csv-v1' OR " +
+          "(n.schema_version='provider-source-v1' AND EXISTS (SELECT 1 FROM providers p WHERE p.id=n.provider_id AND p.code='1688_search')))",
+        [s[0].collection_task_id, ...scopeParams],
       );
+      if (ownership) await requireSourcingRecordsOwner(c, ownership, records);
       const fieldsOf = (r: RowDataPacket) => {
         const payload =
           typeof r.payload_json === "string" ? JSON.parse(r.payload_json) : r.payload_json;
@@ -135,16 +205,15 @@ export class MySqlSourcingProjectionWorker {
           !fields.observed_at
         )
           continue;
-        await c.query(
-          "INSERT IGNORE INTO sourcing_candidates (id,organization_id,workspace_id,search_id,provider_id,normalized_record_id,raw_evidence_id,external_id,supplier_name,product_title,specification,moq,quoted_price,currency,lead_time_days,location,original_url,observed_at,confidence_value,status,missing_fields_json,created_at) VALUES (?,?,?,?,?,?,?,?,?,?," +
+        const candidateId = randomUUID();
+        const [insert] = await c.query<ResultSetHeader>(
+          "INSERT IGNORE INTO sourcing_candidates (id,search_id,provider_id,normalized_record_id,raw_evidence_id,external_id,supplier_name,product_title,specification,moq,quoted_price,currency,lead_time_days,location,original_url,observed_at,confidence_value,status,missing_fields_json,created_at) VALUES (?,?,?,?,?,?,?,?," +
             (detail ? "?" : "NULL") +
             ",?,?,?,NULL," +
             (detail ? "?" : "NULL") +
             ",?,?,NULL,'incomplete',?,?)",
           [
-            randomUUID(),
-            j.org,
-            j.ws,
+            candidateId,
             j.search,
             r.provider_id,
             r.id,
@@ -162,6 +231,14 @@ export class MySqlSourcingProjectionWorker {
             JSON.stringify(missing),
             now,
           ],
+        );
+        await registerSourcingCandidate(
+          c,
+          ownership,
+          j.search,
+          r,
+          candidateId,
+          Boolean(insert.affectedRows),
         );
         for (const field of missing) allMissing.add(field);
         count++;
@@ -183,34 +260,29 @@ export class MySqlSourcingProjectionWorker {
           missing_fields: missing,
         },
         event = randomUUID();
-      await c.query(
-        "INSERT INTO sourcing_events (id,organization_id,workspace_id,event_type,resource_id,actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
-        [
-          event,
-          j.org,
-          j.ws,
-          "sourcing.search.projected",
-          j.search,
-          this.workerId,
-          JSON.stringify(payload),
-          j.request,
-          j.trace,
-          now,
-        ],
-      );
-      await c.query(
-        "INSERT INTO sourcing_outbox (id,organization_id,workspace_id,event_type,resource_id,payload_json,status,available_at,created_at) VALUES (?,?,?,?,?,?,'queued',?,?)",
-        [
-          event,
-          j.org,
-          j.ws,
-          "sourcing.search.projected",
-          j.search,
-          JSON.stringify(payload),
-          now,
-          now,
-        ],
-      );
+      await appendSourcingEvent(c, {
+        id: event,
+        ...j.scope,
+        eventType: "sourcing.search.projected",
+        resourceId: j.search,
+        actorId: this.workerId,
+        payloadJson: JSON.stringify(payload),
+        requestId: j.request,
+        traceId: j.trace,
+        createdAt: now,
+      });
+      await appendSourcingOutbox(c, {
+        id: event,
+        ...j.scope,
+        eventType: "sourcing.search.projected",
+        resourceId: j.search,
+        payloadJson: JSON.stringify(payload),
+        createdAt: now,
+      });
+      await registerCalculationOwners(c, ownership, [
+        ["sourcing_events", event],
+        ["sourcing_outbox", event],
+      ]);
       await c.commit();
       return { candidate_count: count, projection_status: state };
     } catch (e) {
@@ -232,8 +304,8 @@ export class MySqlSourcingProjectionWorker {
           ? new Date(now.getTime() + [60000, 300000, 900000][Math.min(j.attempt - 1, 2)]!)
           : now;
     await this.pool.query(
-      "UPDATE sourcing_projection_jobs SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=?,updated_at=? WHERE id=? AND lease_owner=?",
-      [stored, available, code, now, j.id, this.workerId],
+      "UPDATE sourcing_projection_jobs SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=?,updated_at=? WHERE id=? AND lease_owner=? AND attempt_count=?",
+      [stored, available, code, now, j.id, this.workerId, j.attempt],
     );
   }
 }

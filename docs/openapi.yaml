@@ -2875,7 +2875,7 @@ paths:
   /sourcing/searches:
     get:
       summary: List sourcing searches with opportunity display names and traceable input references
-      description: Without page, page_size, q or record, retain the original unpaged data array and envelope. Supplying any of these opts into server pagination (default20, max100) with an optional meta object. total is the filtered record count; summary is the complete active organization/workspace aggregate, unaffected by the search/page. Search is a case-insensitive literal substring of display name, input reference and raw status separated by spaces; percent, underscore and equals are literal. Sort remains created_at DESC,id DESC. record locates its page only when page is omitted; stale page numbers clamp to the last page. No collection, source recovery or write is triggered.
+      description: Without page, page_size, q or record, retain the original unpaged data array and envelope. Supplying any of these opts into server pagination (default20, max100) with an optional meta object. total is the filtered record count; summary is the complete active organization/workspace aggregate, unaffected by the search/page. Search is a case-insensitive literal substring of display name, input reference and raw status separated by spaces; percent, underscore and equals are literal. Sort remains created_at DESC,id DESC. record locates its page only when page is omitted; stale page numbers clamp to the last page. No collection, source recovery or write is triggered. In retired account mode the verified session account scopes the list, summary and record lookup.
       parameters:
         - { name: page, in: query, schema: { type: integer, minimum: 1, maximum: 1000000, default: 1 } }
         - { name: page_size, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
@@ -2898,10 +2898,11 @@ paths:
         "400": { $ref: "#/components/responses/Error" }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     post:
       summary: Queue public supplier-page collection or project a completed same-workspace task
       security: [{ HttpOnlySession: [] }]
-      description: Member opportunity-detail manual collection controls are retired. Existing search clients and backend operations retain the current request fields, source rules, authentication, capability and idempotency contract.
+      description: Member opportunity-detail manual collection controls are retired. In retired account mode, a verified account may project its own completed 1688 task only; the audit-only historical tasks cannot be reused, and this endpoint does not start new collection. Existing non-rehearsal source, capability and idempotency rules are unchanged.
       x-required-capability: supplier_quote:manage
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       requestBody:
@@ -2918,7 +2919,7 @@ paths:
   /sourcing/searches/{searchId}:
     get:
       summary: Read supplier candidates, ERP catalog references, evidence references and explicit missing fields
-      description: Each candidate includes nullable read-only source_price_description, trimmed to 200 characters from its exactly linked active 1688 normalized evidence. Missing or non-string conditions remain null. This describes the source observation, not a subsequent confirmed quote, and does not change quoted_price or cost confirmation rules. Candidates additionally expose nullable read-only source_sku with offer_id, sku_id, price_source, price_amount, price_unit, properties, attributes, packages and package_units from exactly linked SKU evidence. source_sku_pending marks image-only reference prices awaiting SKU binding. Packaging is not product dimensions.
+      description: Each candidate includes nullable read-only source_price_description, trimmed to 200 characters from its exactly linked active 1688 normalized evidence. Missing or non-string conditions remain null. This describes the source observation, not a subsequent confirmed quote, and does not change quoted_price or cost confirmation rules. Candidates additionally expose nullable read-only source_sku with offer_id, sku_id, price_source, price_amount, price_unit, properties, attributes, packages and package_units from exactly linked SKU evidence. source_sku_pending marks image-only reference prices awaiting SKU binding. Packaging is not product dimensions. Retired account mode checks the record owner before reading any candidate, quote, task or ERP evidence. Historical opportunity searches with non-UUID input, no candidates and an owned task matching the original scope, request and trace are read-only and do not resolve an ERP opportunity.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: sourcing:read
       parameters:
@@ -2927,8 +2928,10 @@ paths:
         "200": { $ref: "#/components/responses/Success" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     delete:
       summary: Soft-delete a sourcing search while preserving candidates and audit history
+      description: In retired account mode, requires the verified owner and original owned task and, for opportunity searches, the actual owned opportunity. Read-only history is not eligible for deletion.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: supplier_quote:manage
       parameters:
@@ -2949,6 +2952,7 @@ paths:
   /sourcing/searches/{searchId}/refresh:
     post:
       summary: Re-run public supplier-page collection for an existing sourcing search
+      description: Legacy tenant mode only; this route is not registered in retired account mode. Read-only history is never re-run.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: supplier_quote:manage
       parameters:
@@ -2962,6 +2966,7 @@ paths:
   /sourcing/quotes:
     post:
       summary: Confirm a complete immutable supplier quote version with evidence
+      description: Retired account mode checks the verified account owns the candidate, evidence, search, original collection task and any linked opportunity. The native task owner must match the ledger. Read-only historical sourcing references are not writable. Replay also checks persisted quote ownership. Legacy mode retains workspace authorization.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: supplier_quote:manage
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
@@ -2977,16 +2982,21 @@ paths:
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /sourcing/comparisons:
     get:
+      x-account-native-evidence: When the rehearsal evidence schema is account-native, each quote and its original candidate evidence must match the verified account in both storage and the ownership ledger. Mixed evidence layouts fail closed.
       summary: List immutable comparisons with two to five confirmed quotes
+      description: In retired account mode, the comparison and displayed quote versions are checked against the verified account, including the original task, any linked opportunity, candidate and evidence. Quotes can come from different former workspaces. Stored references are retained even when a quote fails the read check. The anchor is internal and is not an authorization grant. Legacy mode retains workspace authorization.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: sourcing:read
       responses:
         "200": { $ref: "#/components/responses/Success" }
         "403": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     post:
       summary: Compare two to five current confirmed supplier quotes
+      description: Retired account mode accepts current quotes owned by the verified account across former workspaces. Before writing or replaying it checks the quote, its original task, any linked opportunity, candidate and evidence. A successful replay returns the original snapshot even after a quote version is superseded. Legacy mode retains workspace authorization.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: supplier_quote:manage
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
@@ -3003,11 +3013,15 @@ paths:
         "201": { $ref: "#/components/responses/Success" }
         "400": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
   /sourcing/purchase-tasks:
     post:
-      description: 保留既有采购任务API及权限合同。成员找货页已退休采购创建入口与提交代码，当前自动选品流程不调用该接口。
       summary: Queue a purchase task from a current quote without bypassing MOQ
+      description: 旧模式保留原工作区权限。正式账号模式允许用同账号的现行原报价、原采集任务、关联选品（如有）、候选及证据入队；重放仍验证归属，低于 MOQ 不写入。202 只表示待投影，不执行外部采购。成员页面和自动选品流程不调用该接口。
       security: [{ HttpOnlySession: [] }]
       x-required-capability: supplier_quote:manage
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
@@ -3026,6 +3040,7 @@ paths:
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /tasks:
     get:
       summary: List scoped business tasks
