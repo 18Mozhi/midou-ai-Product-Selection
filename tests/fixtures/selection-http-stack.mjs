@@ -42,7 +42,7 @@ export const selectionHttpIds = {
   secondaryProduct: "00000000-0000-4000-8000-000000009104",
 };
 
-export async function createSelectionHttpStack(webOrigin) {
+export async function createSelectionHttpStack(webOrigin, { accountRehearsal = false } = {}) {
   if (!/^http:\/\/127\.0\.0\.1:\d+$/.test(webOrigin))
     throw new Error("selection_http_fixture_loopback_only");
   const now = new Date(),
@@ -53,6 +53,7 @@ export async function createSelectionHttpStack(webOrigin) {
   class FixtureAuthRepository extends InMemoryAuthRepository {
     async createSession(session) {
       await super.createSession(session);
+      if (accountRehearsal) return;
       const owner = users.get(session.user_id);
       authorizationRepository.contexts.set(session.id, {
         user_id: session.user_id,
@@ -74,7 +75,7 @@ export async function createSelectionHttpStack(webOrigin) {
       foreign = role === "foreign";
     const organization = foreign ? randomUUID() : selectionHttpIds.organization;
     const workspace = foreign ? randomUUID() : selectionHttpIds.workspace;
-    users.set(id, { organization, workspace });
+    users.set(id, { organization, workspace, role });
     await repository.createUser({
       id,
       email: selectionHttpAccounts[role],
@@ -139,8 +140,10 @@ export async function createSelectionHttpStack(webOrigin) {
     return value;
   };
   const inScope = (input) =>
-    input.organizationId === selectionHttpIds.organization &&
-    input.workspaceId === selectionHttpIds.workspace;
+    accountRehearsal
+      ? ["member", "quoteReader"].includes(users.get(input.accountId)?.role)
+      : input.organizationId === selectionHttpIds.organization &&
+        input.workspaceId === selectionHttpIds.workspace;
   const primary = (price) => ({
     price,
     currency: "USD",
@@ -393,16 +396,27 @@ export async function createSelectionHttpStack(webOrigin) {
       idempotency: { execute, executeSensitive: execute },
       webOrigin,
       secureCookie: false,
+      accountReadRehearsal: accountRehearsal,
     },
-    authorization: { service: authorization, auth, secureCookie: false },
-    uiPreferences: {
-      service: new UiPreferenceService(preferences),
+    authorization: {
+      service: authorization,
       auth,
-      webOrigin,
       secureCookie: false,
+      ...(accountRehearsal ? { accountRehearsalReady: async () => {} } : {}),
     },
+    ...(!accountRehearsal
+      ? {
+          uiPreferences: {
+            service: new UiPreferenceService(preferences),
+            auth,
+            webOrigin,
+            secureCookie: false,
+          },
+        }
+      : {}),
     sourcing: {
       ...scope,
+      accountReadRehearsal: accountRehearsal,
       service: new SourcingService({
         list: async (input) => (inScope(input) ? [structuredClone(quoteSearch)] : []),
         detail: async (input) => {
@@ -433,7 +447,7 @@ export async function createSelectionHttpStack(webOrigin) {
         remove: sourcingReadOnly,
       }),
     },
-    opportunities: { ...scope, service: opportunities },
+    opportunities: { ...scope, service: opportunities, accountReadRehearsal: accountRehearsal },
     scoring: { ...scope, service: new ScoringService({ list: async () => [] }) },
     profit: {
       ...scope,

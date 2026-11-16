@@ -13,6 +13,7 @@ const available = (name) => ({
 const app = buildApp({
   ...(await createSelectionHttpStack(
     `http://127.0.0.1:${process.env.PLAYWRIGHT_WEB_PORT ?? 5173}`,
+    { accountRehearsal: process.env.SCOUTOPS_E2E_ACCOUNT_HTTP === "1" },
   )),
   version: "playwright-e2e",
   buildSha: "0123456789abcdef0123456789abcdef01234567",
