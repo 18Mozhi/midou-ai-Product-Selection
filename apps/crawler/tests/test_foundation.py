@@ -11,7 +11,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scoutops_crawler.foundation import FoundationTask, validate_task
+import scoutops_crawler
 from scoutops_crawler.config import ConfigError, load_config
 from scoutops_crawler.completion_receipts import CompletionReceiptClient
 from scoutops_crawler.playwright_bridge import PlaywrightBridge, PlaywrightBridgeError, sanitize_stderr
@@ -20,14 +20,9 @@ from scoutops_crawler.runtime_client import CrawlerLease, CrawlerRuntimeClient, 
 
 
 class FoundationTaskTest(unittest.TestCase):
-    def test_accepts_scoped_task(self) -> None:
-        task = FoundationTask("task-1", "org-1", "workspace-1", "req-1", "trace-1")
-        self.assertEqual(validate_task(task), task)
-
-    def test_rejects_missing_organization(self) -> None:
-        task = FoundationTask("task-1", "", "workspace-1", "req-1", "trace-1")
-        with self.assertRaisesRegex(ValueError, "organization_id"):
-            validate_task(task)
+    def test_retired_organization_task_validator_is_not_exported(self) -> None:
+        self.assertFalse(hasattr(scoutops_crawler, "FoundationTask"))
+        self.assertFalse(hasattr(scoutops_crawler, "validate_task"))
 
     def test_production_requires_master_key_without_echoing_value(self) -> None:
         with self.assertRaises(ConfigError) as raised:
@@ -330,7 +325,12 @@ class FoundationTaskTest(unittest.TestCase):
                         "id": "job-1",
                         "execution_request": {"plan": {"start_url": "https://s.1688.com/"}},
                     },
-                    "run": {"id": "run-1", "request_id": "request-1", "trace_id": "trace-1"},
+                    "run": {
+                        "id": "run-1",
+                        "account_id": "account-1",
+                        "request_id": "request-1",
+                        "trace_id": "trace-1",
+                    },
                     "profile": {"id": "profile-1", "locale": "zh-CN", "timezone": "Asia/Shanghai"},
                     "credential": {"asset_id": "asset-1", "kind": "cookie_bundle"},
                     "lease_token": "x" * 64,
@@ -340,6 +340,9 @@ class FoundationTaskTest(unittest.TestCase):
                 lease = client.acquire()
             self.assertIsNotNone(lease)
             self.assertEqual(lease.job_id, "job-1")
+            self.assertEqual(lease.run_id, "run-1")
+            self.assertEqual(lease.request_id, "request-1")
+            self.assertEqual(lease.trace_id, "trace-1")
             self.assertEqual(lease.execution_request["plan"]["start_url"], "https://s.1688.com/")
             self.assertEqual(post.call_args.args[0], "/api/v1/internal/crawler-runtime/jobs/acquire")
             spool = post.call_args.args[1]["completion_spool"]
