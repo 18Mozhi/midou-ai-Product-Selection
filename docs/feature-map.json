@@ -1,4 +1,10 @@
 {
+  "accountNativeCostRuleApproval": {
+    "sourceFiles": ["apps/api/src/mysql-profit-repository.ts", "apps/api/src/server.ts"],
+    "testFiles": ["tests/m04-04/account-cost-rule-native-approval.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-approval-notifications.md"],
+    "contract": "Retired cost-rule worklist and both decision slots require matching native and sealed owners before listing, deciding or replaying."
+  },
   "accountProviderSampleLineage": {
     "sourceFiles": [
       "apps/api/src/mysql-provider-source-sample-lineage.ts",

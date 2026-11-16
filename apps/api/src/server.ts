@@ -466,7 +466,9 @@ const app = buildApp({
   },
   profit: {
     accountReadRehearsal,
-    service: new ProfitService(new MySqlProfitRepository(pool)),
+    service: new ProfitService(
+      new MySqlProfitRepository(pool, undefined, accountApiMode === "retired"),
+    ),
     authorization,
     auth: localAuth,
     secureCookie: config.nodeEnv === "production",

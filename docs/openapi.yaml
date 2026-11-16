@@ -2411,7 +2411,7 @@ paths:
   /cost-rules:
     get:
       summary: List versioned cost rules and pending assigned decisions
-      description: In retired account mode, the verified session sees its own rules and pending unsigned manager work only where both the exact rule grant and read permission exist. Other accounts' history is not exposed. In legacy mode the active workspace still scopes the list.
+      description: In retired account mode, the verified session sees its own rules and pending unsigned manager work only where both the exact rule grant and read permission exist. The native rule account must agree with the sealed owner. Other accounts' history is not exposed. In legacy mode the active workspace still scopes the list.
       security: [{ HttpOnlySession: [] }]
       responses:
         "200":
@@ -2494,7 +2494,7 @@ paths:
       x-account-cost-rule-submit: Submission by the primary account requires a readable grant for an independent active manager on that exact rule, otherwise it returns 409 without changing state.
       x-account-cost-rule-distinct-signers: An account that already signed either slot cannot sign the other slot on the same rule; the API returns 409 without adding an approval.
       x-account-cost-rule-switch: After 0183 the verified primary account may publish or roll back only its own rules. Both independently signed approvals must be present on the destination version even when replaying an existing switch receipt; missing or non-independent approval records return 409 without writes. Only owned, unarchived opportunities in the matching market with owned current inputs for the rule platform are queued for profit recalculation.
-      description: The primary_account slot is restricted to the verified primary account. In retired account mode the sealed owner is required; the independent selection_manager slot uses the exact active rule grant without a workspace session. Ownership is not a manager grant. Historical actors, decisions and reasons remain unchanged. Both signers must be different; conflicting replays or mismatched historical ownership return 409. In legacy mode the existing workspace and approval capability are still checked.
+      description: The primary_account slot is restricted to the verified primary account. In retired account mode the locked rule's native account must agree with its sealed owner before approval, rejection or replay; a mismatch returns 404. The independent selection_manager slot uses the exact active rule grant without a workspace session. Ownership is not a manager grant. Historical actors, decisions and reasons remain unchanged. Both signers must be different; conflicting replays or mismatched historical ownership return 409. In legacy mode the existing workspace and approval capability are still checked.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: costRuleId, in: path, required: true, schema: { type: string, format: uuid } }

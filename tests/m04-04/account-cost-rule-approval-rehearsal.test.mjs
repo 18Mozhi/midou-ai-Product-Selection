@@ -671,8 +671,7 @@ for (const [verb, decision, status] of [
     let operationReads = 0;
     const row = () => ({
       id: own,
-      organization_id: "legacy-org",
-      workspace_id: "legacy-space",
+      account_id: owner,
       ownership_reason: "shared",
       revision,
       status: state,
@@ -801,11 +800,15 @@ for (const [verb, decision, status] of [
         webOrigin: origin,
         secureCookie: false,
         service: new ProfitService(
-          new MySqlProfitRepository({
-            async getConnection() {
-              return connection;
+          new MySqlProfitRepository(
+            {
+              async getConnection() {
+                return connection;
+              },
             },
-          }),
+            undefined,
+            true,
+          ),
         ),
         auth: {
           async authenticate(id) {

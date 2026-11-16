@@ -31,6 +31,7 @@ export class MySqlProfitRepository implements ProfitRepository {
   constructor(
     private readonly pool: Pool,
     private readonly now: () => Date = () => new Date(),
+    private readonly nativeAccountScope = false,
   ) {}
   async isAccountPrimaryApprover(accountId: string) {
     return this.matchesPrimaryApprovalAccount(this.pool, accountId);
@@ -60,6 +61,7 @@ export class MySqlProfitRepository implements ProfitRepository {
           `SELECT r.*,GROUP_CONCAT(CASE WHEN a.decision='approved' THEN a.approval_role END) approvals,
            MAX(ro.account_id=?) owned_by_session, MAX(g.manager_id IS NOT NULL) can_decide_as_manager
          FROM cost_rules r JOIN account_owned_records ro ON ro.source_table='cost_rules' AND ro.source_id=r.id
+         ${this.nativeAccountScope ? "AND ro.account_id=r.account_id" : ""}
          ${sealedRuleOwner("ro")}
          LEFT JOIN account_cost_rule_manager_grants g
            ON g.cost_rule_id=r.id AND g.manager_id=? AND g.can_read=1 AND r.status='pending_approval'
@@ -504,7 +506,10 @@ export class MySqlProfitRepository implements ProfitRepository {
       if (!row) throw new ProfitServiceError("cost_rule_not_found", 404, "刷新费用规则。");
       const input = command;
       const ruleOwner = manager ? String(row.ownership_account_id) : input.actorId;
-      if (accountLifecycle && row.account_id !== ruleOwner)
+      // 0183 makes the rule's native account authoritative as well as the sealed
+      // ledger. Check the locked rule before consulting an approval or a receipt.
+      if ((accountLifecycle || (accountOwned && this.nativeAccountScope)) &&
+          row.account_id !== ruleOwner)
         throw new ProfitServiceError("cost_rule_not_found", 404, "刷新费用规则。");
       if (
         "accountOwnedApproval" in input &&

@@ -6,4 +6,6 @@ An inbox mutation requires ownership and the original deliverable item before re
 
 Worker delivery verifies the original event, approval resource, template and active approver. In overdue cost review the verified primary replaces the former organization-admin escalation where authorized; the named reviewer is not replaced. This check neither approves the underlying item nor replays historical audit-only deliveries.
 
+In the retired API, the cost-rule worklist and both decision slots require the native rule account to agree with its sealed owner. Both main-account and named-manager actions check the locked rule before using an idempotency receipt. A mismatch is hidden from the worklist and returns 404 on a direct decision, without overwriting any historical signature, event, or delivery.
+
 Build API and Worker and run the notification, realtime and account approval fixtures. No new settings. Restart API and Worker via the approved BaoTa coordinator. After deployment validate a historical inbox entry and route and observe the next real eligible approval notification; local fixtures do not establish production delivery.
