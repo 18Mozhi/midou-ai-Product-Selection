@@ -1,4 +1,10 @@
 {
+  "accountCrawlerCompletionSpoolAudit": {
+    "sourceFiles": ["scripts/verify-orphan-crawler-completion-spool.mjs"],
+    "testFiles": ["tests/unit/orphan-crawler-completion-spool.test.mjs"],
+    "docs": ["docs/runbooks/account-crawler-completion-audit.md"],
+    "contract": "Read-only, fixed BaoTa host and loopback business schema. Correlate stranded crawler runs to pending or quarantined completion receipts by exact run ID. Report counts only; no inference of terminal outcome, replay, deletion, or production release."
+  },
   "referenceOrganizationProfileCancel": {
     "sourceFiles": ["apps/web/src/components/OrganizationAdminCenter.vue", "apps/web/src/organization-profile-workspace.css"],
     "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
