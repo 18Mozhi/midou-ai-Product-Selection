@@ -1,15 +1,17 @@
-import type { FastifyInstance, FastifyRequest } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService, Capability } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
+import { authenticatedRehearsalAccount } from "./account-read-rehearsal.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
-import type { BusinessTaskService } from "./business-task-service.js";
+import type { BusinessTaskService, TaskMutationContext } from "./business-task-service.js";
 export interface BusinessTaskRouteOptions {
   service: BusinessTaskService;
   authorization: AuthorizationService;
   auth: LocalAuthService;
   secureCookie: boolean;
   webOrigin: string;
+  accountReadRehearsal?: boolean;
 }
 const ids = (r: FastifyRequest) => ({
     requestId: String(r.headers["x-request-id"]),
@@ -48,10 +50,32 @@ export function registerBusinessTaskRoutes(app: FastifyInstance, o: BusinessTask
         idempotencyKey: requireIdempotencyKey(r),
       };
     };
-  app.get("/api/v1/tasks", async (r) => {
+  const readScope = (r: FastifyRequest, reply: FastifyReply) => {
+    if (!o.accountReadRehearsal) return scope(r, "task:read");
+    reply.header("cache-control", "private, no-store");
+    return authenticatedRehearsalAccount(r, o.auth, o.secureCookie);
+  };
+  const ownedWrite = async (
+    r: FastifyRequest,
+    reply: FastifyReply,
+    capability: Capability,
+  ): Promise<TaskMutationContext> => {
+    if (!o.accountReadRehearsal) return write(r, capability);
+    if (r.headers.origin !== o.webOrigin)
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
+    reply.header("cache-control", "private, no-store");
+    const { accountId } = await authenticatedRehearsalAccount(r, o.auth, o.secureCookie);
+    return {
+      actorId: accountId,
+      accountOwnedMutation: true,
+      ...ids(r),
+      idempotencyKey: requireIdempotencyKey(r),
+    };
+  };
+  app.get("/api/v1/tasks", async (r, reply) => {
     const q = r.query as any,
       x = await o.service.list({
-        ...(await scope(r, "task:read")),
+        ...(await readScope(r, reply)),
         page: q.page,
         pageSize: q.page_size,
         status: q.status,
@@ -65,43 +89,45 @@ export function registerBusinessTaskRoutes(app: FastifyInstance, o: BusinessTask
       total: x.total,
     });
   });
-  app.get("/api/v1/tasks/summary", async (r) =>
-    env(await o.service.summary(await scope(r, "task:read")), r),
+  app.get("/api/v1/tasks/summary", async (r, reply) =>
+    env(await o.service.summary(await readScope(r, reply)), r),
   );
-  app.get("/api/v1/tasks/member-options", async (r) =>
-    env(await o.service.memberOptions(await scope(r, "task:read")), r),
-  );
-  app.get("/api/v1/tasks/:id", async (r) =>
+  if (!o.accountReadRehearsal) {
+    app.get("/api/v1/tasks/member-options", async (r) =>
+      env(await o.service.memberOptions(await scope(r, "task:read")), r),
+    );
+    app.post("/api/v1/tasks", async (r, reply) => {
+      const x = await o.service.create({
+        ...(await write(r, "task:create")),
+        value: r.body,
+      });
+      reply.code(201);
+      return env(x, r);
+    });
+  }
+  app.get("/api/v1/tasks/:id", async (r, reply) =>
     env(
       await o.service.detail({
-        ...(await scope(r, "task:read")),
+        ...(await readScope(r, reply)),
         taskId: (r.params as any).id,
       }),
       r,
     ),
   );
-  app.post("/api/v1/tasks", async (r, reply) => {
-    const x = await o.service.create({
-      ...(await write(r, "task:create")),
-      value: r.body,
-    });
-    reply.code(201);
-    return env(x, r);
-  });
-  app.patch("/api/v1/tasks/:id", async (r) =>
+  app.patch("/api/v1/tasks/:id", async (r, reply) =>
     env(
       await o.service.update({
-        ...(await write(r, "task:update")),
+        ...(await ownedWrite(r, reply, "task:update")),
         taskId: (r.params as any).id,
         value: r.body,
       }),
       r,
     ),
   );
-  app.delete("/api/v1/tasks/:id", async (r) =>
+  app.delete("/api/v1/tasks/:id", async (r, reply) =>
     env(
       await o.service.remove({
-        ...(await write(r, "task:update")),
+        ...(await ownedWrite(r, reply, "task:update")),
         taskId: (r.params as any).id,
         value: r.body,
       }),
@@ -110,7 +136,7 @@ export function registerBusinessTaskRoutes(app: FastifyInstance, o: BusinessTask
   );
   app.post("/api/v1/tasks/:id/comments", async (r, reply) => {
     const x = await o.service.comment({
-      ...(await write(r, "task:update")),
+      ...(await ownedWrite(r, reply, "task:update")),
       taskId: (r.params as any).id,
       value: r.body,
     });
@@ -120,7 +146,7 @@ export function registerBusinessTaskRoutes(app: FastifyInstance, o: BusinessTask
   app.post("/api/v1/tasks/:id/actions", async (r, reply) => {
     const cap = (r.body as any)?.action === "transfer" ? "task:assign" : "task:update",
       x = await o.service.action({
-        ...(await write(r, cap)),
+        ...(await ownedWrite(r, reply, cap)),
         taskId: (r.params as any).id,
         value: r.body,
       });

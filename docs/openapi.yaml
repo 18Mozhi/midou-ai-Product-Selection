@@ -3028,7 +3028,8 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /tasks:
     get:
-      summary: List organization and workspace scoped business tasks
+      summary: List scoped business tasks
+      description: In retired account mode, results and totals require ledger ownership by the verified session account. Shared or unassigned ownership must also match the primary account in the version 25 cutover receipt. The mine filter still matches the original assignee. The account task history page reads paginated owned results without the mine filter.
       parameters:
         - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
         - {
@@ -3067,8 +3068,10 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "400": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     post:
       summary: Create an assigned business task
+      description: Legacy tenant mode only; the route is not registered in retired account mode.
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       requestBody:
         {
@@ -3087,11 +3090,14 @@ paths:
   /tasks/summary:
     get:
       summary: Get current assignee task and truthful SLA counts
+      description: In retired account mode, count tasks both owned by and assigned to the verified session account using the same cutover receipt check as the task list.
       responses:
         "200": { $ref: "#/components/responses/Success" }
+        "503": { $ref: "#/components/responses/Error" }
   /tasks/member-options:
     get:
       summary: List active organization members eligible for the current workspace
+      description: Legacy tenant mode only; the organization member-directory route is not registered in retired account mode.
       x-required-capability: task:read
       responses:
         "200":
@@ -3110,13 +3116,16 @@ paths:
   /tasks/{taskId}:
     get:
       summary: Get scoped task detail comments and immutable events
+      description: In retired account mode, a foreign, missing or incorrectly assigned shared or unassigned task returns 404 before comments or events are read. With 0193 the native task account must also match the sealed ledger. Comments and events must independently satisfy the same ownership check and are linked by their original task ID without duplicate scope coordinates. The account task page retains the original assignee, source references and historical actors without a legacy member-directory lookup, and reads the current version before an explicit action.
       parameters:
         [{ name: taskId, in: path, required: true, schema: { type: string, format: uuid } }]
       responses:
         "200": { $ref: "#/components/responses/Success" }
         "404": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     patch:
       summary: Edit a versioned task and preserve an immutable audit event
+      description: In retired account mode, verify and lock ownership before looking up a task-specific idempotency receipt. Omit assignee_id to retain the original assignee; a different assignee is rejected. Scope, actor and audit history cannot be reassigned by this operation.
       parameters:
         - { name: taskId, in: path, required: true, schema: { type: string, format: uuid } }
         - { $ref: "#/components/parameters/IdempotencyKey" }
@@ -3130,6 +3139,7 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
     delete:
       summary: Soft-delete a versioned task while retaining audit history
+      description: In retired account mode, the current account must still own the task for an idempotent retry to replay a successful deletion. A fresh operation on an already-deleted task returns 404. Comments and events are not deleted.
       parameters:
         - { name: taskId, in: path, required: true, schema: { type: string, format: uuid } }
         - { $ref: "#/components/parameters/IdempotencyKey" }
@@ -3149,6 +3159,7 @@ paths:
   /tasks/{taskId}/comments:
     post:
       summary: Add immutable task comment
+      description: In retired account mode the verified session account must own the task, and shared or unassigned ownership must match the primary account in the version 25 cutover receipt. Ownership is checked under lock before idempotent replay and the comment and event inherit that ownership. The account task page reuses the key on an unchanged retry after an uncertain result. Legacy mode continues to use its existing workspace authorization.
       parameters:
         [
           { name: taskId, in: path, required: true, schema: { type: string, format: uuid } },
@@ -3172,10 +3183,14 @@ paths:
         }
       responses:
         "201": { $ref: "#/components/responses/Success" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /tasks/{taskId}/actions:
     post:
       summary: Start pause resume complete cancel delay transfer or update progress on a versioned task
+      description: In retired account mode the verified session account must own the task under the same cutover receipt check as comments, including on idempotent replay. Native task actions record account-only audit and delivery metadata without creating legacy coordinates; the delivery consumer notifies the original assignee only if that assignee is also the verified task owner. Transfer is unavailable. Completing an evidence task checks the original opportunity against sealed ownership and selects the most recently activated eligible rule for that account, independent of the former workspace. After each parent moves to native account storage, its stored account must agree with sealed ownership. A mismatched opportunity rejects completion; a mismatched rule is ineligible. If no eligible rule exists, completion returns waiting_for_active_rule. Legacy mode continues to use its existing workspace authorization.
       parameters:
         [
           { name: taskId, in: path, required: true, schema: { type: string, format: uuid } },
@@ -3194,7 +3209,9 @@ paths:
         "200": { $ref: "#/components/responses/Success" }
         "400": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /tasks/approval-templates:
     get:
       x-account-retirement-note: Account rehearsal returns private meta.can_manage when the account schema is ready and the verified account is active. Legacy responses are unchanged.

@@ -7,6 +7,9 @@ export type TaskContext = {
   traceId: string;
   idempotencyKey: string;
 };
+export type TaskMutationContext =
+  | TaskContext
+  | (Omit<TaskContext, "organizationId" | "workspaceId"> & { accountOwnedMutation: true });
 export class BusinessTaskError extends Error {
   constructor(
     readonly code: string,
@@ -36,7 +39,7 @@ const text = (v: unknown, n: string, max: number) => {
       throw new BusinessTaskError("task_due_at_invalid", 400, "提交有效截止时间。");
     return x;
   };
-export function validateTask(v: any) {
+export function validateTask(v: any, preserveOmittedAssignee = false) {
   if (!["low", "normal", "high", "critical"].includes(v?.priority))
     throw new BusinessTaskError("task_priority_invalid", 400, "选择有效优先级。");
   return {
@@ -48,7 +51,7 @@ export function validateTask(v: any) {
             throw new BusinessTaskError("task_input_invalid", 400, "修正 description。");
           })(),
     priority: v.priority,
-    assignee_id: uuid(v?.assignee_id, "assignee_id"),
+    assignee_id: preserveOmittedAssignee && v?.assignee_id == null ? null : uuid(v?.assignee_id, "assignee_id"),
     due_at: date(v?.due_at),
   };
 }
@@ -82,11 +85,11 @@ export function validateAction(v: any) {
     progress_note: action === "progress" ? text(v?.progress_note, "progress_note", 500) : null,
   };
 }
-export function validateUpdate(v: any) {
+export function validateUpdate(v: any, preserveOmittedAssignee = false) {
   const expected = Number(v?.expected_version);
   if (!Number.isSafeInteger(expected) || expected < 1)
     throw new BusinessTaskError("task_version_invalid", 400, "提交当前任务版本。");
-  return { ...validateTask(v), expected_version: expected, reason: text(v?.reason, "reason", 500) };
+  return { ...validateTask(v, preserveOmittedAssignee), expected_version: expected, reason: text(v?.reason, "reason", 500) };
 }
 export function validateDelete(v: any) {
   const expected = Number(v?.expected_version);
@@ -146,37 +149,53 @@ export class BusinessTaskService {
       route: "POST:/api/v1/tasks",
     });
   }
-  update(i: TaskContext & { taskId: string; value: any }) {
+  update(i: TaskMutationContext & { taskId: string; value: any }) {
+    const account = "accountOwnedMutation" in i;
+    const parsed = uuid(i.taskId, "task_id"), taskId = account ? parsed.toLowerCase() : parsed;
     return this.repo.update({
       ...i,
-      taskId: uuid(i.taskId, "task_id"),
-      value: validateUpdate({ ...i.value, assignee_id: i.value?.assignee_id ?? i.actorId }),
-      route: "PATCH:/api/v1/tasks/:id",
+      taskId,
+      value: account ? validateUpdate(i.value, true)
+        : validateUpdate({ ...i.value, assignee_id: i.value?.assignee_id ?? i.actorId }),
+      route: account ? `PATCH:/api/v1/tasks/${taskId}:account` : "PATCH:/api/v1/tasks/:id",
     });
   }
-  remove(i: TaskContext & { taskId: string; value: any }) {
+  remove(i: TaskMutationContext & { taskId: string; value: any }) {
+    const account = "accountOwnedMutation" in i;
+    const parsed = uuid(i.taskId, "task_id"), taskId = account ? parsed.toLowerCase() : parsed;
     return this.repo.remove({
       ...i,
-      taskId: uuid(i.taskId, "task_id"),
+      taskId,
       value: validateDelete(i.value),
-      route: "DELETE:/api/v1/tasks/:id",
+      route: account ? `DELETE:/api/v1/tasks/${taskId}:account` : "DELETE:/api/v1/tasks/:id",
     });
   }
-  action(i: TaskContext & { taskId: string; value: any }) {
+  action(i: TaskMutationContext & { taskId: string; value: any }) {
+    const accountMode = "accountOwnedMutation" in i;
+    const parsedId = uuid(i.taskId, "task_id");
+    const taskId = accountMode ? parsedId.toLowerCase() : parsedId;
+    const value = validateAction(i.value);
+    if (accountMode && value.action === "transfer")
+      throw new BusinessTaskError("task_account_transfer_unavailable", 403, "账号演练不支持转交。");
     return this.repo.action({
       ...i,
-      taskId: uuid(i.taskId, "task_id"),
-      value: validateAction(i.value),
-      route: "POST:/api/v1/tasks/:id/actions",
+      taskId,
+      value,
+      route: accountMode ? `POST:/api/v1/tasks/${taskId}/actions:account` : "POST:/api/v1/tasks/:id/actions",
     });
   }
-  comment(i: TaskContext & { taskId: string; value: any }) {
+  comment(i: TaskMutationContext & { taskId: string; value: any }) {
+    const accountMode = "accountOwnedMutation" in i;
+    const parsedId = uuid(i.taskId, "task_id");
+    const taskId = accountMode ? parsedId.toLowerCase() : parsedId;
     return this.repo.comment({
       ...i,
-      taskId: uuid(i.taskId, "task_id"),
+      taskId,
       id: randomUUID(),
       body: text(i.value?.body, "body", 2000),
-      route: "POST:/api/v1/tasks/:id/comments",
+      route: accountMode
+        ? `POST:/api/v1/tasks/${taskId}/comments:account`
+        : "POST:/api/v1/tasks/:id/comments",
     });
   }
 }

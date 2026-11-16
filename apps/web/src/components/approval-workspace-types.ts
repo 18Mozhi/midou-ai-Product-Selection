@@ -8,6 +8,8 @@ export type ApprovalViewState =
   | "rate_limited"
   | "version_conflict";
 
+export type ApprovalQueue = "all" | "decidable" | "requested";
+
 export type ApprovalTemplate = {
   id: string;
   name: string;

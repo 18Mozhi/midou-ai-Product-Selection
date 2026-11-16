@@ -1,4 +1,10 @@
 {
+  "accountBusinessTaskRuntime": {
+    "sourceFiles": ["apps/api/src/business-task-routes.ts", "apps/api/src/mysql-business-task-repository.ts", "apps/worker/src/business-task-projection-worker.ts", "apps/web/src/components/AccountTaskHistory.vue"],
+    "testFiles": ["tests/m05-01/account-business-task-read-rehearsal.test.mjs", "tests/m05-01/account-business-task-write-rehearsal.test.mjs", "tests/unit/account-retired-task-projection.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-business-task-runtime.md"],
+    "contract": "Expose preserved task IDs, comments, events and original assignees to the verified owner. Bind native purchase and competitor projections to the exact event and original parent ownership; the retired worker never falls back to legacy workspace projection. Replays retain one task."
+  },
   "accountPrimaryApprovalRuntime": {
     "sourceFiles": ["apps/api/src/profit-routes.ts", "apps/api/src/approval-routes.ts", "apps/api/src/mysql-profit-repository.ts", "apps/api/src/mysql-approval-repository.ts", "apps/web/src/components/CostRuleConsole.vue"],
     "testFiles": ["tests/m04-04/account-cost-rule-approval-rehearsal.test.mjs", "tests/m05-02/account-approval-decision-rehearsal.test.mjs"],

@@ -4,16 +4,26 @@ import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
 import ApprovalQueuePanel from "./ApprovalQueuePanel.vue";
+import AccountTaskHistory from "./AccountTaskHistory.vue";
 import type {
   ApprovalItem,
   ApprovalMemberOption,
   ApprovalRequestForm,
+  ApprovalQueue,
   ApprovalTemplate,
   ApprovalTemplateForm,
   ApprovalViewState,
 } from "./approval-workspace-types";
 import "../approval-workspace.css";
-const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(),
+function approvalQueue(view: unknown, account = false): ApprovalQueue {
+  if (view === "requested") return "requested";
+  return !account || view === "decidable" ? "decidable" : "all";
+}
+const props = defineProps<{
+    apiBaseUrl: string;
+    capabilities?: string[];
+    accountRehearsal?: boolean;
+  }>(),
   route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
@@ -21,17 +31,19 @@ const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(),
   approvals = ref<ApprovalItem[]>([]),
   templates = ref<ApprovalTemplate[]>([]),
   memberOptions = ref<ApprovalMemberOption[]>([]),
+  accountTemplateReady = ref(false),
+  formNotice = ref(""),
   selected = ref<ApprovalItem | null>(null),
   detailBusy = ref(false),
   detailNotice = ref(""),
   decisionNotice = ref(""),
-  queue = ref<"decidable" | "requested">(
-    route.query.view === "requested" ? "requested" : "decidable",
-  ),
+  queue = ref(approvalQueue(route.query.view, props.accountRehearsal)),
   filter = ref(
     ["pending", "approved", "rejected", "cancelled", ""].includes(String(route.query.status ?? ""))
-      ? String(route.query.status ?? "pending")
-      : "pending",
+      ? String(route.query.status ?? (props.accountRehearsal ? "" : "pending"))
+      : props.accountRehearsal
+        ? ""
+        : "pending",
   ),
   page = ref(Math.max(1, Number(route.query.page) || 1)),
   total = ref(0),
@@ -60,7 +72,20 @@ const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(),
 let listController: AbortController | null = null,
   detailController: AbortController | null = null,
   listSequence = 0,
-  detailSequence = 0;
+  detailSequence = 0,
+  active = false;
+const showTaskHistory = computed(
+  () => props.accountRehearsal && route.name === "approvals" && route.query.view === "account-tasks",
+);
+const approvalResourceRoute = computed(() => {
+  const resource = selected.value?.decision_context?.resource;
+  if (!resource) return null;
+  if (!props.accountRehearsal || resource.type === "opportunity") return resource.route;
+  if (resource.type === "task" && selected.value?.resource_type === "task" &&
+      resource.id === selected.value.resource_id && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(resource.id))
+    return { path: "/tasks/approvals", query: { view: "account-tasks", task: resource.id } };
+  return null;
+});
 const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
     () => Boolean(selected.value),
     () => void closeDetail(),
@@ -80,8 +105,10 @@ const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } =
       publishReason.value = "";
     },
   );
-const canManage = computed(() => props.capabilities?.includes("task:assign") ?? false),
-  mineCount = computed(() => approvals.value.filter((x) => x.can_decide).length),
+const canManage = computed(
+    () => props.accountRehearsal ? accountTemplateReady.value : (props.capabilities?.includes("task:assign") ?? false),
+  ),
+  mineCount = computed(() => approvals.value.filter((x) => x.status === "pending" && x.can_decide).length),
   overdueCount = computed(
     () =>
       approvals.value.filter(
@@ -92,6 +119,7 @@ const canManage = computed(() => props.capabilities?.includes("task:assign") ?? 
   pageSize = 20,
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
   notificationReturn = computed(() => {
+    if (props.accountRehearsal) return "";
     const value = typeof route.query.from === "string" ? route.query.from : "";
     return value === "/notifications" || value.startsWith("/notifications?") ? value : "";
   }),
@@ -99,6 +127,15 @@ const canManage = computed(() => props.capabilities?.includes("task:assign") ?? 
     published.value.find((item) => item.id === requestForm.value.template_id),
   ),
   focusSummary = computed(() => {
+    if (props.accountRehearsal)
+      return {
+        tone: "quiet",
+        eyebrow: "账号归属",
+        title: "已归属的审批记录",
+        detail: canManage.value
+          ? "可管理本账号的模板、发起审批，并处理当前指派给你的节点。"
+          : "可查看原审批节点和历史意见，并处理当前指派给你的节点。",
+      };
     if (overdueCount.value > 0)
       return {
         tone: "danger",
@@ -201,11 +238,14 @@ async function load() {
   try {
     const [listResponse, templatesResponse, membersResponse] = await Promise.all([
       request<ApprovalItem[]>(
-        `/tasks/approvals?page=${page.value}&page_size=${pageSize}&involvement=${queue.value}${filter.value ? `&status=${filter.value}` : ""}`,
+        `/tasks/approvals?page=${page.value}&page_size=${pageSize}${queue.value === "all" ? "" : `&involvement=${queue.value}`}${filter.value ? `&status=${filter.value}` : ""}`,
         { signal: controller.signal },
       ),
-      request<ApprovalTemplate[]>("/tasks/approval-templates", { signal: controller.signal }),
-      canManage.value
+      request<ApprovalTemplate[]>("/tasks/approval-templates", { signal: controller.signal }).catch((error) => {
+        if (!props.accountRehearsal || !(error instanceof ApiClientError)) throw error;
+        return null;
+      }),
+      !props.accountRehearsal && canManage.value
         ? request<ApprovalMemberOption[]>("/tasks/member-options", { signal: controller.signal })
         : Promise.resolve(null),
     ]);
@@ -213,7 +253,8 @@ async function load() {
     const list = listResponse.data ?? [];
     requestId.value = listResponse.request_id;
     approvals.value = list;
-    templates.value = templatesResponse.data ?? [];
+    templates.value = templatesResponse?.data ?? [];
+    accountTemplateReady.value = (templatesResponse?.meta as { can_manage?: boolean } | undefined)?.can_manage === true;
     memberOptions.value = membersResponse?.data ?? [];
     total.value = Number(
       (listResponse.meta as { total?: number } | undefined)?.total ?? list.length,
@@ -319,7 +360,20 @@ function keepDetailFocus(event: KeyboardEvent) {
     first.focus();
   }
 }
-async function setQueue(value: "decidable" | "requested") {
+async function setQueue(value: ApprovalQueue) {
+  if (props.accountRehearsal) {
+    if (queue.value === value) return;
+    await router.replace({
+      query: {
+        ...route.query,
+        view: value === "all" ? undefined : value,
+        page: undefined,
+        approval: undefined,
+      },
+    });
+    return;
+  }
+  if (value === "all") return;
   detailSequence += 1;
   detailController?.abort("scope_changed");
   detailController = null;
@@ -362,7 +416,8 @@ async function setPage(value: number) {
   await load();
 }
 async function decide(action: "approve" | "reject") {
-  if (busy.value || !selected.value || !reason.value.trim()) return;
+  if (busy.value || selected.value?.status !== "pending" || !selected.value.can_decide || !reason.value.trim() ||
+      (!props.accountRehearsal && !canManage.value)) return;
   const ownerSequence = detailSequence,
     approvalId = selected.value.id,
     body = {
@@ -397,7 +452,8 @@ async function decide(action: "approve" | "reject") {
   }
 }
 async function createTemplate() {
-  if (busy.value) return;
+  if (!canManage.value || busy.value) return;
+  formNotice.value = "";
   busy.value = true;
   try {
     await api(
@@ -410,9 +466,9 @@ async function createTemplate() {
           nodes: [
             {
               name: templateForm.value.node_name,
-              approver_id: templateForm.value.approver_id,
+              approver_id: templateForm.value.approver_id.trim(),
               sla_minutes: Number(templateForm.value.sla_minutes),
-              escalation_assignee_id: templateForm.value.escalation_assignee_id,
+              escalation_assignee_id: templateForm.value.escalation_assignee_id.trim(),
             },
           ],
         },
@@ -423,17 +479,22 @@ async function createTemplate() {
     notice.value = "审批模板草稿已创建；发布前不会用于新审批。";
     await load();
   } catch (error) {
+    if (error instanceof ApiClientError) formNotice.value = error.actionHint || error.userMessage;
     rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
   }
 }
 function openPublish(t: ApprovalTemplate) {
+  if (!canManage.value) return;
+  formNotice.value = "";
   publishTarget.value = t;
   publishReason.value = "";
 }
 async function publish() {
-  if (busy.value || !publishTarget.value || !publishReason.value.trim()) return;
+  if (!canManage.value || busy.value || !publishTarget.value || !publishReason.value.trim())
+    return;
+  formNotice.value = "";
   const target = publishTarget.value;
   busy.value = true;
   try {
@@ -450,13 +511,15 @@ async function publish() {
     publishReason.value = "";
     await load();
   } catch (error) {
+    if (error instanceof ApiClientError) formNotice.value = error.actionHint || error.userMessage;
     rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
   }
 }
 async function createRequest() {
-  if (busy.value) return;
+  if (!canManage.value || busy.value || !selectedTemplate.value) return;
+  formNotice.value = "";
   busy.value = true;
   try {
     await api(
@@ -475,12 +538,13 @@ async function createRequest() {
     notice.value = "审批已发起；第一节点 SLA 已开始计时。";
     await load();
   } catch (error) {
+    if (error instanceof ApiClientError) formNotice.value = error.actionHint || error.userMessage;
     rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
   }
 }
-function suspendReads(reason: "deactivated" | "unmounted") {
+function suspendReads(reason: "deactivated" | "unmounted" | "task_history" | "scope_changed") {
   listSequence += 1;
   listController?.abort(reason);
   listController = null;
@@ -492,13 +556,34 @@ function suspendReads(reason: "deactivated" | "unmounted") {
   detailNotice.value = "";
 }
 onActivated(() => {
-  if (route.path === "/tasks/approvals") void load();
+  active = true;
+  if (props.accountRehearsal) {
+    queue.value = approvalQueue(route.query.view, true);
+    page.value = Math.max(1, Number(route.query.page) || 1);
+  }
+  if (route.path === "/tasks/approvals" && !showTaskHistory.value) void load();
 });
-onDeactivated(() => suspendReads("deactivated"));
+onDeactivated(() => {
+  active = false;
+  suspendReads("deactivated");
+});
 onBeforeUnmount(() => suspendReads("unmounted"));
+watch(() => route.query.view, () => {
+  if (!active || !props.accountRehearsal || route.name !== "approvals") return;
+  if (showTaskHistory.value) {
+    suspendReads("task_history");
+    return;
+  }
+  suspendReads("scope_changed");
+  decisionNotice.value = "";
+  queue.value = approvalQueue(route.query.view, true);
+  page.value = Math.max(1, Number(route.query.page) || 1);
+  void load();
+});
 watch(
   () => route.query.approval,
   (value) => {
+    if (showTaskHistory.value) return;
     if (typeof value === "string" && value !== selected.value?.id) void openById(value, false);
     else if (!value) {
       detailSequence += 1;
@@ -520,19 +605,32 @@ watch(
 );
 </script>
 <template>
-  <section class="approval-workspace approval-workspace--review">
+  <nav v-if="accountRehearsal" class="opportunity-detail-return" aria-label="账号工作记录">
+    <RouterLink to="/opportunities">返回选品库</RouterLink>
+    <RouterLink to="/tasks/approvals" :aria-current="showTaskHistory ? undefined : 'page'">
+      审批历史
+    </RouterLink>
+    <RouterLink
+      to="/tasks/approvals?view=account-tasks"
+      :aria-current="showTaskHistory ? 'page' : undefined"
+    >
+      业务任务
+    </RouterLink>
+  </nav>
+  <AccountTaskHistory v-if="showTaskHistory" :api-base-url="apiBaseUrl" />
+  <section v-else class="approval-workspace approval-workspace--review">
     <header class="approval-header">
       <div>
         <h1>审批中心</h1>
       </div>
       <div v-if="canManage" class="approval-header-actions">
-        <button v-if="published.length" class="secondary" @click="showTemplate = true">
+        <button v-if="published.length" class="secondary" @click="formNotice = ''; showTemplate = true">
           管理模板
         </button>
-        <button v-if="published.length" @click="showRequest = true">＋ 发起审批</button>
-        <button v-else @click="showTemplate = true">配置第一个模板</button>
+        <button v-if="published.length" @click="formNotice = ''; showRequest = true">＋ 发起审批</button>
+        <button v-else @click="formNotice = ''; showTemplate = true">配置第一个模板</button>
       </div>
-      <p v-else class="approval-readonly-badge">只读权限</p>
+      <p v-else class="approval-readonly-badge">{{ accountRehearsal ? "仅可处理当前指派给你的节点" : "只读权限" }}</p>
     </header>
     <div v-if="notice" class="approval-notice" aria-live="polite">
       {{ notice }}
@@ -547,7 +645,13 @@ watch(
         <strong>{{ focusSummary.title }}</strong>
         <p>{{ focusSummary.detail }}</p>
       </div>
-      <dl>
+      <dl v-if="accountRehearsal">
+        <div>
+          <dt>符合筛选的记录</dt>
+          <dd>{{ total }}</dd>
+        </div>
+      </dl>
+      <dl v-else>
         <div>
           <dt>待我处理</dt>
           <dd>{{ mineCount }}</dd>
@@ -592,14 +696,15 @@ watch(
       :filter="filter"
       :can-manage="canManage"
       :published-count="published.length"
+      :account-rehearsal="accountRehearsal"
       :status-text="statusText"
       :resource-text="resourceText"
       :time="time"
       @queue="setQueue"
       @filter="setFilter"
       @open="open"
-      @create-request="showRequest = true"
-      @manage-templates="showTemplate = true"
+      @create-request="formNotice = ''; showRequest = true"
+      @manage-templates="formNotice = ''; showTemplate = true"
     />
     <section v-if="detailBusy" class="approval-detail-state" aria-live="polite">
       正在读取审批详情…
@@ -628,9 +733,9 @@ watch(
       <p>{{ selected.template_name }} / 模板 v{{ selected.approval_template_version ?? "—" }}</p>
       <h3 id="approval-detail-title">{{ selected.title }}</h3>
       <RouterLink
-        v-if="selected.decision_context?.resource"
+        v-if="approvalResourceRoute && selected.decision_context?.resource"
         class="approval-resource-link"
-        :to="selected.decision_context.resource.route"
+        :to="approvalResourceRoute"
         >查看{{ selected.decision_context.resource.label }} →</RouterLink
       >
       <RouterLink v-if="notificationReturn" class="approval-resource-link" :to="notificationReturn"
@@ -837,7 +942,7 @@ watch(
           <p>{{ action.reason }}</p>
         </article>
       </section>
-      <section v-if="selected.can_decide && canManage">
+      <section v-if="selected.status === 'pending' && selected.can_decide && (accountRehearsal || canManage)">
         <p v-if="decisionNotice" class="approval-notice" role="alert">{{ decisionNotice }}</p>
         <p
           v-if="
@@ -906,17 +1011,20 @@ watch(
             max="43200"
             required
         /></label>
-        <details class="approval-form-technical">
+        <details class="approval-form-technical" :open="accountRehearsal || undefined">
           <summary>技术配置：审批人与超时接收人</summary>
+          <p v-if="accountRehearsal">请向拟指派人确认账号 ID；此处不列出其他账号。</p>
           <label
-            >审批人<select v-model="templateForm.approver_id" required>
+            >审批人<input v-if="accountRehearsal" v-model="templateForm.approver_id" required maxlength="36" placeholder="已验证账号 ID" />
+            <select v-else v-model="templateForm.approver_id" required>
               <option value="" disabled>请选择当前工作区成员</option>
               <option v-for="member in memberOptions" :key="member.id" :value="member.id">
                 {{ member.label }}
               </option>
             </select></label
           ><label
-            >超时接收人<select v-model="templateForm.escalation_assignee_id" required>
+            >超时接收人<input v-if="accountRehearsal" v-model="templateForm.escalation_assignee_id" required maxlength="36" placeholder="已验证账号 ID" />
+            <select v-else v-model="templateForm.escalation_assignee_id" required>
               <option value="" disabled>请选择当前工作区成员</option>
               <option v-for="member in memberOptions" :key="member.id" :value="member.id">
                 {{ member.label }}
@@ -925,6 +1033,7 @@ watch(
           >
         </details>
         <p>草稿必须显式发布；超时只升级审批人，不会自动批准或驳回。</p>
+        <p v-if="formNotice && !publishTarget" role="alert">{{ formNotice }}</p>
         <div>
           <button type="button" class="secondary" @click="showTemplate = false">取消</button
           ><button :disabled="busy">保存草稿</button>
@@ -956,6 +1065,7 @@ watch(
             placeholder="说明本次发布的依据、适用范围或变更原因"
           ></textarea>
         </label>
+        <p v-if="formNotice" role="alert">{{ formNotice }}</p>
         <div>
           <button type="button" class="secondary" @click="publishTarget = null">返回</button>
           <button type="submit" :disabled="busy">确认发布</button>
@@ -978,11 +1088,12 @@ watch(
             resourceText(selectedTemplate.resource_type)
           }}。资源类型由模板锁定，不能单独改写。
         </p>
-        <details class="approval-form-technical">
+        <details class="approval-form-technical" :open="accountRehearsal || undefined">
           <summary>技术配置：关联资源编号</summary>
           <label>资源编号<input v-model="requestForm.resource_id" required /></label>
         </details>
         <label>审批标题<input v-model="requestForm.title" required maxlength="200" /></label>
+        <p v-if="formNotice" role="alert">{{ formNotice }}</p>
         <div>
           <button type="button" class="secondary" @click="showRequest = false">取消</button
           ><button :disabled="busy || !published.length">发起</button>

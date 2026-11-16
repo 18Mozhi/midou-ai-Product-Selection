@@ -1,6 +1,7 @@
 import { loadRuntimeConfig } from "@scoutops/config";
+import { PRIMARY_COST_APPROVER_EMAIL } from "@scoutops/auth";
 import { Lan1688ImageSearch } from "./lan-1688-image-search.js";
-import { createDatabasePool } from "@scoutops/database";
+import { assertAccountCutoverReady, createDatabasePool } from "@scoutops/database";
 import { ProviderAdapterRegistry } from "@scoutops/provider-adapters";
 import {
   AUTOMATIC_PROVIDER_SOURCE_HOSTS,
@@ -41,12 +42,19 @@ import { SingleHostResourceProbe } from "./single-host-resource-probe.js";
 import { MySqlSourcingProjectionWorker } from "./sourcing-projection-worker.js";
 import { MySqlTrendProjectionWorker } from "./trend-projection-worker.js";
 import { WebhookDeliveryWorker } from "./webhook-delivery-worker.js";
-import { WorkerPollers } from "./worker-pollers.js";
+import { assertWorkerDatabaseIsNotRehearsal, WorkerPollers } from "./worker-pollers.js";
 import { workerQueues } from "./worker-queue-registry.js";
 import { WorkerSchedulerStateWriter } from "./worker-scheduler-state.js";
 
 const config = loadRuntimeConfig(process.env, "worker");
+assertWorkerDatabaseIsNotRehearsal(config.database.name);
 const pool = createDatabasePool(config);
+if (config.app.accountScopeMode === "retired") {
+  await assertAccountCutoverReady(config, pool, PRIMARY_COST_APPROVER_EMAIL).catch(async (error) => {
+    await pool.end().catch(() => undefined);
+    throw error;
+  });
+}
 const redisClient = createRedisConnection(config);
 const redisStore = new ScopedRedisStore(redisClient);
 const providerFetch = createProviderSourceFetch(
@@ -271,7 +279,7 @@ const queues = workerQueues(
       "business_task_projection",
       config.businessTasks.pollMs,
       pollers.create("business_task_projection", () =>
-        projectBusinessTaskOnce(pool, config.identity.workerId, config.businessTasks.leaseSeconds),
+        projectBusinessTaskOnce(pool, config.identity.workerId, config.businessTasks.leaseSeconds, config),
       ),
     ],
     [

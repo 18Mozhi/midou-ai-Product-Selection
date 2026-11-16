@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import type { ApprovalItem } from "./approval-workspace-types";
+import type { ApprovalItem, ApprovalQueue } from "./approval-workspace-types";
 
 defineProps<{
   approvals: ApprovalItem[];
-  queue: "decidable" | "requested";
+  queue: ApprovalQueue;
   filter: string;
   canManage: boolean;
   publishedCount: number;
+  accountRehearsal?: boolean;
   statusText: (value: string) => string;
   resourceText: (value: string) => string;
   time: (value: string | null) => string;
 }>();
 
 defineEmits<{
-  queue: [value: "decidable" | "requested"];
+  queue: [value: ApprovalQueue];
   filter: [value: string];
   open: [item: ApprovalItem];
   createRequest: [];
@@ -32,6 +33,9 @@ const statusOptions = [
   <section class="approval-queue-panel" aria-label="审批队列">
     <div class="approval-queue-toolbar">
       <nav class="approval-inbox-tabs" aria-label="审批范围">
+        <button v-if="accountRehearsal" :aria-pressed="queue === 'all'" @click="$emit('queue', 'all')">
+          全部记录
+        </button>
         <button :aria-pressed="queue === 'decidable'" @click="$emit('queue', 'decidable')">
           待我处理
         </button>
@@ -51,8 +55,17 @@ const statusOptions = [
       </nav>
     </div>
     <section v-if="!approvals.length" class="approval-state">
-      <h3>{{ queue === "decidable" ? "目前没有需要你审批的事项" : "你发起的审批暂未有记录" }}</h3>
-      <p v-if="queue === 'decidable'">新审批到达当前节点后会出现在这里。</p>
+      <h3>
+        {{
+          accountRehearsal && queue === "all"
+            ? "没有符合筛选的审批记录"
+            : queue === "decidable"
+              ? "目前没有需要你审批的事项"
+              : "你发起的审批暂未有记录"
+        }}
+      </h3>
+      <p v-if="accountRehearsal">此处显示本账号的审批记录和当前指派给你的待审批事项。</p>
+      <p v-else-if="queue === 'decidable'">新审批到达当前节点后会出现在这里。</p>
       <p v-else-if="publishedCount">需要复核任务或机会决策时，可以从已发布模板发起。</p>
       <p v-else>先发布一个审批模板，再发起需要人工判断的流程。</p>
       <div v-if="canManage" class="approval-empty-actions">
