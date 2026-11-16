@@ -14,6 +14,7 @@ const props = defineProps<{
   busy: boolean;
   state: "loading" | "ready" | "empty" | "error";
   tab: AccountTab;
+  accountRehearsal?: boolean;
   organizationListRoute: boolean;
   organizationEmptyState: boolean;
   adminListRoute: boolean;
@@ -55,6 +56,7 @@ const emit = defineEmits<{
     <PlatformAccountGlobalRail
       :data="props.data"
       :tab="props.tab"
+      :account-rehearsal="props.accountRehearsal"
       :organization-list-route="props.organizationListRoute"
     />
     <div class="account-page-main">
@@ -86,7 +88,7 @@ const emit = defineEmits<{
         </header>
         <header v-if="props.tab === 'users'" class="user-directory-heading">
           <h3>用户目录</h3>
-          <p>按邮箱、组织关系、平台角色和账号状态核对用户；全平台总量与当前筛选相互独立。</p>
+          <p>{{ props.accountRehearsal ? "按邮箱、平台角色和账号状态核对用户。" : "按邮箱、组织关系、平台角色和账号状态核对用户；全平台总量与当前筛选相互独立。" }}</p>
         </header>
         <header v-if="props.organizationListRoute" class="organization-directory-heading">
           <div>
@@ -119,7 +121,7 @@ const emit = defineEmits<{
         <p class="account-updated" aria-live="polite">{{ props.updatedText }}</p>
         <p v-if="props.message" class="account-message">{{ props.message }}</p>
         <section v-if="props.state === 'loading'" class="account-state">
-          {{ props.adminListRoute ? "正在读取可授权账号…" : "正在读取真实组织与用户…" }}
+          {{ props.adminListRoute || props.accountRehearsal ? "正在读取可授权账号…" : "正在读取真实组织与用户…" }}
         </section>
         <section v-else-if="props.state === 'error'" class="account-state">
           {{ props.adminListRoute ? "暂时无法读取可授权账号。" : "暂时无法读取。" }}
@@ -153,6 +155,7 @@ const emit = defineEmits<{
           />
           <PlatformUserRecords
             v-else-if="props.tab === 'users'"
+            :account-rehearsal="props.accountRehearsal"
             :rows="props.rows"
             :status-text="props.statusText"
             :role-text="props.roleText"

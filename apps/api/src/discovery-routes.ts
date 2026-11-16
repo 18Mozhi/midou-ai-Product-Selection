@@ -4,6 +4,7 @@ import type { AuthorizationService, NavigationShell } from "@scoutops/authorizat
 import type { DiscoveryService } from "./discovery-service.js";
 import { sessionToken } from "./auth-routes.js";
 export interface DiscoveryRouteOptions {
+  accountReadRehearsal?: boolean;
   service: DiscoveryService;
   authorization: AuthorizationService;
   auth: LocalAuthService;
@@ -34,7 +35,7 @@ export function registerDiscoveryRoutes(app: FastifyInstance, options: Discovery
     });
     return resolved;
   };
-  app.get(
+  if (!options.accountReadRehearsal) app.get(
     "/api/v1/me/global-search",
     {
       schema: {

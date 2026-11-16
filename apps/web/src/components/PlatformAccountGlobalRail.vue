@@ -6,6 +6,7 @@ const props = defineProps<{
   data: AccountData | null;
   tab: AccountTab;
   organizationListRoute: boolean;
+  accountRehearsal?: boolean;
 }>();
 </script>
 
@@ -25,7 +26,7 @@ const props = defineProps<{
       </p>
     </header>
     <div v-if="props.data" class="account-metrics">
-      <article>
+      <article v-if="!props.accountRehearsal">
         <small>组织</small
         ><strong
           >{{ props.data.summary.active_organizations }} /
@@ -42,8 +43,9 @@ const props = defineProps<{
         ><span>拥有平台后台权限</span>
       </article>
     </div>
-    <nav class="account-tabs" aria-label="账号与组织二级导航">
+    <nav class="account-tabs" :aria-label="props.accountRehearsal ? '平台账号二级导航' : '账号与组织二级导航'">
       <RouterLink
+        v-if="!props.accountRehearsal"
         to="/platform-admin/organizations"
         :class="{ on: props.tab === 'organizations' }"
         :aria-current="props.tab === 'organizations' ? 'page' : undefined"

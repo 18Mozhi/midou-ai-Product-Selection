@@ -15,6 +15,7 @@ const props = defineProps<{
   createUserOpen: boolean;
   createUserError: string;
   accountOverviewRoute: boolean;
+  accountRehearsal?: boolean;
   tab: AccountTab;
   userForm: UserForm;
   organizations: any[];
@@ -114,7 +115,7 @@ const { dialogElement: createUserDialogElement, handleCancel: handleCreateUserCa
         <section :class="{ 'p44-admin-create-group': tab === 'admins' }">
           <header v-if="tab === 'admins'" class="p44-admin-create-group-head">
             <h4>权限与归属</h4>
-            <p>平台角色与组织角色分别设置；可暂不加入组织。</p>
+            <p>{{ accountRehearsal ? "可按需设置平台角色。" : "平台角色与组织角色分别设置；可暂不加入组织。" }}</p>
           </header>
           <label
             >平台角色<select
@@ -130,7 +131,7 @@ const { dialogElement: createUserDialogElement, handleCancel: handleCreateUserCa
           <small v-if="tab === 'admins'" id="p44-platform-role-help" class="p44-admin-create-help"
             >从管理员页打开时默认运营管理员；选择普通用户则不授予平台角色。</small
           >
-          <label
+          <label v-if="!accountRehearsal"
             >加入组织<select v-model="userForm.organization_id">
               <option value="">暂不加入组织</option>
               <option
@@ -143,7 +144,7 @@ const { dialogElement: createUserDialogElement, handleCancel: handleCreateUserCa
               </option>
             </select></label
           >
-          <label v-if="userForm.organization_id"
+          <label v-if="!accountRehearsal && userForm.organization_id"
             >组织角色<select v-model="userForm.organization_role_code">
               <option value="member">普通成员</option>
               <option value="organization_admin">组织管理员</option>

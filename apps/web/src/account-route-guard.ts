@@ -23,7 +23,8 @@ export function createSessionRouteGuard(
         ? to.redirectedFrom
         : null;
     const protectedRoute = to.meta.sessionRequired === true;
-    if (!protectedRoute && !retiredTarget) return true;
+    const oldHome = to.path === "/home";
+    if (!protectedRoute && !retiredTarget && !oldHome) return true;
     try {
       const session = await readSession();
       if (typeof session?.authenticated !== "boolean" ||
@@ -32,6 +33,7 @@ export function createSessionRouteGuard(
       if (session.account_rehearsal === true) {
         for (const name of legacyScopeRouteNames) if (router.hasRoute(name)) router.removeRoute(name);
         if (retiredTarget) return { path: retiredTarget.path, query: retiredTarget.query, hash: retiredTarget.hash, replace: true };
+        if (oldHome) return { path: "/opportunities", replace: true };
       }
       if (session.authenticated || !protectedRoute) return true;
     } catch {

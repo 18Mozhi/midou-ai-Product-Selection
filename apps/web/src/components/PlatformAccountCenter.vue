@@ -30,6 +30,7 @@ const props = withDefaults(
       initialTab?: AccountTab;
       routePath?: string;
       organizationId?: string;
+      accountRehearsal?: boolean;
     }>(),
     {
       initialTab: "organizations",
@@ -547,14 +548,15 @@ function closeCreateUser() {
 }
 async function createUser() {
   const isCurrent = createUserOwner.capture();
+  const { organization_id, organization_role_code, ...accountFields } = userForm;
   let accountListReloaded = true;
   createUserError.value = "";
   if (
     await write(
       "/platform/accounts/users",
       {
-        ...userForm,
-        organization_id: userForm.organization_id || null,
+        ...accountFields,
+        ...(props.accountRehearsal ? {} : { organization_id: organization_id || null, organization_role_code }),
         platform_role_code: userForm.platform_role_code || null,
       },
       "POST",
@@ -644,7 +646,7 @@ onMounted(load);
     <PlatformPageHeader
       :title="
         accountOverviewRoute
-          ? '组织与用户'
+          ? (accountRehearsal ? '平台账号' : '组织与用户')
           : permissionsRoute
             ? '角色权限'
             : props.routePath === '/platform-admin/organizations/new'
@@ -666,6 +668,7 @@ onMounted(load);
       </template>
       <template v-else>
         <button
+          v-if="!accountRehearsal"
           ref="createOrganizationButton"
           type="button"
           :class="{ 'is-primary': organizationListRoute || accountOverviewRoute }"
@@ -728,6 +731,7 @@ onMounted(load);
         :busy="Boolean(busy)"
         :state="state"
         :tab="tab"
+        :account-rehearsal="accountRehearsal"
         :organization-list-route="organizationListRoute"
         :organization-empty-state="organizationEmptyState"
         :admin-list-route="adminListRoute"
@@ -752,6 +756,7 @@ onMounted(load);
       />
     </template>
     <OrganizationCreationWizard
+      v-if="!accountRehearsal"
       :open="createOpen"
       :busy="Boolean(busy)"
       :error-message="createError"
@@ -762,6 +767,7 @@ onMounted(load);
       @submit="createOrganization"
     />
     <PlatformAccountDialogs
+      :account-rehearsal="accountRehearsal"
       :create-user-open="createUserOpen"
       :create-user-error="createUserError"
       :account-overview-route="accountOverviewRoute"
@@ -784,6 +790,7 @@ onMounted(load);
       @update:reason-text="reasonText = $event"
     />
     <PlatformOrganizationDetailDialog
+      v-if="!accountRehearsal"
       :open="organizationDetailOpen"
       :organization="selected"
       :form="organizationForm"
@@ -801,6 +808,7 @@ onMounted(load);
       @toggle-status="toggleOrganization"
     />
     <PlatformUserDetailDialog
+      :account-rehearsal="accountRehearsal"
       :open="detailOpen"
       :detail="detail"
       :selected="selected"

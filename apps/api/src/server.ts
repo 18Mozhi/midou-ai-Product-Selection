@@ -340,6 +340,7 @@ const app = buildApp({
     secureCookie: config.nodeEnv === "production",
   },
   discovery: {
+    accountReadRehearsal,
     service: new DiscoveryService(new MySqlDiscoveryRepository(pool)),
     authorization,
     auth: localAuth,

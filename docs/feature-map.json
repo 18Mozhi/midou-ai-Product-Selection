@@ -1,4 +1,20 @@
 {
+  "accountBusinessNavigation": {
+    "sourceFiles": [
+      "apps/api/src/authorization-routes.ts",
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/account-route-guard.ts",
+      "apps/web/src/navigation-shell-route-state.ts",
+      "apps/web/src/components/OpportunityWorkspace.vue"
+    ],
+    "testFiles": [
+      "tests/unit/account-shell-surface-routing.test.mjs",
+      "tests/unit/account-route-guard.test.mjs",
+      "tests/m01-03/account-landing-rehearsal.test.mjs"
+    ],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-business-navigation.md"],
+    "contract": "Account navigation reconnects retained selection and approval surfaces and carries real platform grants only. Old home bookmarks lead to the selection library; retired organization and workspace controls do not render."
+  },
   "accountPersonalCenterRuntime": {
     "sourceFiles": [
       "apps/api/src/mysql-personal-center-repository.ts",

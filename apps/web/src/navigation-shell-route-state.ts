@@ -16,6 +16,7 @@ export const platformOperationsNavigation = [
 const breadcrumbRoutes: Record<string, string> = {
   工作台: "/home",
   选品工作区: "/home",
+  账号首页: "/opportunities",
   选品库: "/opportunities",
   "1688 找货": "/sourcing",
   组织后台: "/org-admin",
@@ -28,9 +29,21 @@ const breadcrumbRoutes: Record<string, string> = {
   系统运维: "/platform-admin/status",
 };
 
-export function breadcrumbTrail(labels: string[], currentPath: string) {
-  return labels.map((label, index) => {
-    const path = index === labels.length - 1 ? undefined : breadcrumbRoutes[label];
+export function breadcrumbTrail(labels: string[], currentPath: string, retiredScope = false) {
+  const trail = retiredScope
+    ? labels
+        .filter((label) => !(label === "选品工作区" && labels.includes("选品库")))
+        .filter((label) => !(label === "账号与组织" && labels.includes("用户管理")))
+        .map((label) => {
+          if (label === "选品工作区" || label === "工作台") return "账号首页";
+          if (label === "账号与组织") return "用户管理";
+          return label;
+        })
+    : labels;
+  return trail.map((label, index) => {
+    const link =
+      retiredScope && label === "用户管理" ? "/platform-admin/users" : breadcrumbRoutes[label];
+    const path = index === trail.length - 1 ? undefined : link;
     return { label, path: path && path !== currentPath ? path : undefined };
   });
 }
@@ -70,14 +83,21 @@ export function surfaceProps(input: {
   workspaceId?: string | null;
   capabilities: string[];
   roles: string[];
+  accountRehearsal?: boolean;
 }) {
   const common = { apiBaseUrl: input.apiBaseUrl },
     ids = routeEntityIds(input.path);
   switch (input.surface) {
     case "home-dashboard":
       return { ...common, capabilities: input.capabilities };
+    case "notification-center":
+      return { ...common, accountRehearsal: input.accountRehearsal };
     case "approval-workspace":
-      return { ...common, capabilities: input.capabilities };
+      return {
+        ...common,
+        capabilities: input.capabilities,
+        accountRehearsal: input.accountRehearsal,
+      };
     case "organization-admin-center":
       return {
         ...common,
@@ -90,18 +110,29 @@ export function surfaceProps(input: {
         ...common,
         routePath: input.path,
         organizationId: ids.platformOrganizationId || undefined,
+        ...(input.accountRehearsal ? { accountRehearsal: true } : {}),
         initialTab: ["/platform-admin/admins", "/platform-admin/permissions"].includes(input.path)
           ? "admins"
-          : input.path === "/platform-admin/users"
+          : input.path === "/platform-admin/users" || input.accountRehearsal
             ? "users"
             : "organizations",
       };
     case "platform-dashboard":
-      return { ...common, capabilities: input.capabilities };
+      return {
+        ...common,
+        capabilities: input.capabilities,
+        ...(input.accountRehearsal ? { accountRehearsal: true } : {}),
+      };
     case "release-rollout-center":
       return { ...common, capabilities: input.capabilities };
     case "platform-management-center":
-      return { ...common, domain: input.path.split("/").pop() || "status" };
+      return { ...common, domain: input.path.split("/").pop() || "status", accountRehearsal: input.accountRehearsal };
+    case "platform-data-center":
+    case "platform-governance-center":
+      return { ...common, accountRehearsal: input.accountRehearsal };
+    case "commercial-operations-center":
+    case "open-platform-center":
+      return { ...common, ...(input.accountRehearsal ? { accountRehearsal: true } : {}) };
     case "trend-dashboard":
       return {
         ...common,
@@ -114,17 +145,31 @@ export function surfaceProps(input: {
         ...common,
         opportunityId: ids.opportunityId || undefined,
         capabilities: input.capabilities,
+        accountRehearsal: input.accountRehearsal,
       };
     case "score-rule-console":
-      return { ...common, capabilities: input.capabilities };
+      return {
+        ...common,
+        capabilities: input.capabilities,
+        accountRehearsal: input.accountRehearsal,
+      };
     case "sourcing-workspace":
-      return { ...common, capabilities: input.capabilities };
+      return {
+        ...common,
+        capabilities: input.capabilities,
+        accountRehearsal: input.accountRehearsal,
+      };
     case "cost-rule-console":
-      return { ...common, roles: input.roles, capabilities: input.capabilities };
+      return {
+        ...common,
+        roles: input.roles,
+        capabilities: input.capabilities,
+        accountRehearsal: input.accountRehearsal,
+      };
     case "provider-runtime-surface":
       return { ...common, routePath: input.path, capabilities: input.capabilities };
     case "collection-runtime-surface":
-      return { ...common, routePath: input.path };
+      return { ...common, routePath: input.path, accountRehearsal: input.accountRehearsal };
     default:
       return common;
   }

@@ -5,6 +5,7 @@ import type * as OpportunityTypes from "./opportunity-workspace-types";
 
 interface OpportunityWorkspaceAccessOptions {
   capabilities: () => string[] | undefined;
+  accountRehearsal: () => boolean | undefined;
   route: { fullPath: string; query: Record<string, unknown> };
   router: Pick<Router, "push">;
   state: Ref<OpportunityTypes.OpportunityWorkspaceState>;
@@ -12,11 +13,12 @@ interface OpportunityWorkspaceAccessOptions {
 }
 
 export function useOpportunityWorkspaceAccess(options: OpportunityWorkspaceAccessOptions) {
-  const { capabilities, route, router, state, load } = options;
+  const { capabilities, accountRehearsal, route, router, state, load } = options;
   const canDecide = computed(() => capabilities()?.includes("opportunity:decide") ?? false);
 
   const canReadCompetitors = computed(
     () =>
+      accountRehearsal() === true ||
       capabilities()?.includes("competitor:read") ||
       capabilities()?.includes("competitor:manage") ||
       false,
@@ -24,15 +26,16 @@ export function useOpportunityWorkspaceAccess(options: OpportunityWorkspaceAcces
 
   const canReadSourcing = computed(
     () =>
+      accountRehearsal() === true ||
       capabilities()?.includes("sourcing:read") ||
       capabilities()?.includes("supplier_quote:manage") ||
       false,
   );
   const canOpenCompetitorComparison = computed(
-    () => capabilities()?.includes("competitor:read") ?? false,
+    () => accountRehearsal() === true || capabilities()?.includes("competitor:read") === true,
   );
   const canOpenSourcingWorkspace = computed(
-    () => capabilities()?.includes("sourcing:read") ?? false,
+    () => accountRehearsal() === true || capabilities()?.includes("sourcing:read") === true,
   );
   const returnPath = computed(() => safeOpportunityReturnPath(route.query.from));
   const statePanelKind = computed(() => (state.value === "ready" ? "empty" : state.value));

@@ -106,12 +106,14 @@ export function registerAuthorizationRoutes(
         }
         await options.accountRehearsalReady();
         const reason = "navigation_account_rehearsal";
+        const {
+          roles, capabilities, platform_roles, platform_capabilities,
+        } = await options.service.describeAccount(authenticated.user.id);
         await options.service.recordAccountRehearsalNavigation(authenticated.user.id, reason, ids(request));
         return envelope({
           shell,
           organization_id: null, workspace_id: null, organization_name: null, workspace_name: null,
-          roles: [], platform_roles: [], platform_capabilities: [],
-          capabilities: ["opportunity:read", "trend:read", "sourcing:read"],
+          roles, capabilities, platform_roles, platform_capabilities,
           guard_reason: reason,
         }, request);
       }

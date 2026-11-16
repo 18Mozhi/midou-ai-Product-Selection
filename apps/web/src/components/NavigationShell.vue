@@ -6,6 +6,7 @@ import { applyCachedTheme, applyShellDensity, themes } from "../design/theme";
 import { getLastMemberRoute, rememberMemberRoute } from "../navigation-memory";
 import {
   authorizedNavigation,
+  canOpenAccountRehearsalRoute,
   canOpenRoute,
   shellCapabilities,
   shellRoleSummary,
@@ -18,7 +19,7 @@ import {
   surfaceProps,
   type NavigationShellKind,
 } from "../navigation-shell-route-state";
-import { navigationItemsFor, type ShellNavigationItem } from "../route-catalog";
+import { legacyScopePaths, navigationItemsFor, type ShellNavigationItem } from "../route-catalog";
 import { useNavigationDiscovery } from "../use-navigation-discovery";
 import { useNavigationShellTheme } from "../use-navigation-shell-theme";
 import { useNavigationShellDrawer } from "../use-navigation-shell-drawer";
@@ -43,6 +44,7 @@ interface GuardSummary {
   platform_roles: string[];
   platform_capabilities: string[];
   guard_reason: string;
+  account_rehearsal?: true;
 }
 const props = defineProps<{ shell: Shell; apiBaseUrl: string; account?: boolean }>();
 const request = createApiClient(props.apiBaseUrl);
@@ -67,10 +69,12 @@ const state = ref<State>("loading"),
   actionHint = ref(""),
   menuOpen = ref(false),
   menuQuery = ref("");
+const accountRehearsal = computed(() => guard.value?.guard_reason === "navigation_account_rehearsal");
+const retiredScope = computed(() => accountRehearsal.value || guard.value?.account_rehearsal === true);
 const { themeOpen, activeTheme, themeNotice, loadThemePreference, chooseTheme } =
   useNavigationShellTheme(request);
 const { discoveryMode, openDiscovery, closeDiscovery, handleDiscoveryShortcut } =
-  useNavigationDiscovery(() => props.shell, () => state.value === "ready");
+  useNavigationDiscovery(() => props.shell, () => state.value === "ready" && !accountRehearsal.value);
 const {
   navigationDialog,
   compact: compactNavigation,
@@ -80,9 +84,19 @@ const allCapabilities = computed(() => shellCapabilities(props.shell, guard.valu
 const items = computed(() =>
   // Personal routes remain session-only. These links do not grant access: each destination
   // still performs its normal server navigation guard.
-  props.account && !guard.value
-    ? navigationItemsFor("member")
-    : authorizedNavigation(props.shell, allCapabilities.value, guard.value?.roles ?? []),
+  accountRehearsal.value
+    ? [
+        ...navigationItemsFor("member").filter((item) => canOpenAccountRehearsalRoute(item.path))
+          .map((item) => ({ ...item, group: "选品" })),
+        { label: "任务与审批", path: "/tasks/approvals", icon: "task", group: "账号记录", capabilities: [] },
+      ]
+    : props.account && !guard.value
+      ? navigationItemsFor("member")
+      : authorizedNavigation(props.shell, allCapabilities.value, guard.value?.roles ?? [])
+          .filter((item) => !retiredScope.value || !legacyScopePaths.has(item.path))
+          .map((item) => retiredScope.value && item.path === "/platform-admin/accounts"
+            ? { ...item, label: "平台账号" }
+            : item),
 );
 const navigationParentPath = computed(() => resolveNavigationParentPath(routePath.value));
 const activeItem = computed(
@@ -128,6 +142,7 @@ const breadcrumbs = computed(() =>
       ? route.meta.breadcrumb.filter((item): item is string => typeof item === "string")
       : [pageTitle.value],
     routePath.value,
+    retiredScope.value,
   ),
 );
 const requiredCapabilities = computed(() =>
@@ -138,14 +153,18 @@ const requiredCapabilities = computed(() =>
 const routeAllowed = computed(
   () =>
     props.account ||
-    canOpenRoute(
-      requiredCapabilities.value,
-      allCapabilities.value,
-      props.shell,
-      guard.value?.roles ?? [],
-    ),
+    (accountRehearsal.value
+      ? canOpenAccountRehearsalRoute(routePath.value)
+      : canOpenRoute(
+          requiredCapabilities.value,
+          allCapabilities.value,
+          props.shell,
+          guard.value?.roles ?? [],
+        )),
 );
-const roleSummary = computed(() => shellRoleSummary(props.shell, guard.value));
+const roleSummary = computed(() =>
+  accountRehearsal.value ? "个人账号" : shellRoleSummary(props.shell, guard.value),
+);
 const primaryItems = computed(() => items.value.slice(0, 4));
 const moreActive = computed(
   () =>
@@ -153,6 +172,7 @@ const moreActive = computed(
     !primaryItems.value.some((item) => item.path === activeItem.value?.path),
 );
 const memberReturnPath = () => {
+  if (retiredScope.value) return "/opportunities";
   return getLastMemberRoute();
 };
 const contextSwitchTarget = computed(
@@ -185,6 +205,7 @@ const selectedSurfaceProps = computed<Record<string, unknown>>(() =>
     workspaceId: guard.value?.workspace_id,
     capabilities: allCapabilities.value,
     roles: guard.value?.roles ?? [],
+    accountRehearsal: retiredScope.value,
   }),
 );
 const pageFolio = computed(() =>
@@ -296,6 +317,12 @@ watch(
   },
 );
 watch(
+  accountRehearsal,
+  (enabled) => {
+    if (enabled && props.shell === "platform_admin") void loadThemePreference(false);
+  },
+);
+watch(
   () => props.shell,
   (shell) => {
     closeDiscovery();
@@ -305,7 +332,7 @@ watch(
     void load();
     applyShellDensity(shell !== "member");
     applyCachedTheme();
-    if (shell !== "platform_admin") void loadThemePreference(false);
+    if (shell !== "platform_admin" || accountRehearsal.value) void loadThemePreference(false);
   },
 );
 onUnmounted(() => {
@@ -326,7 +353,7 @@ onUnmounted(() => {
         aria-label="米兜智能选品"
         :to="
           shell === 'member'
-            ? '/home'
+            ? (accountRehearsal ? '/opportunities' : '/home')
             : shell === 'organization_admin'
               ? '/org-admin'
               : '/platform-admin'
@@ -350,7 +377,7 @@ onUnmounted(() => {
       >
         <AppIcon name="menu" /> <span>菜单</span>
       </button>
-      <div class="role-workspace-identity">
+      <div v-if="guard && !retiredScope" class="role-workspace-identity">
         <RouterLink
           v-if="shell !== 'platform_admin' || state === 'ready'"
           :to="shell === 'platform_admin' ? contextSwitchTarget : '/select-context'"
@@ -371,7 +398,7 @@ onUnmounted(() => {
       </div>
       <div class="role-top-actions">
         <button
-          v-if="shell === 'member' || state === 'ready'"
+          v-if="!accountRehearsal && (shell === 'member' || state === 'ready')"
           type="button"
           :aria-label="shell === 'member' ? '全局搜索' : '搜索后台功能'"
           data-navigation-search
@@ -431,7 +458,7 @@ onUnmounted(() => {
             >
             <RouterLink
               v-if="
-                shell === 'platform_admin' &&
+                !retiredScope && shell === 'platform_admin' &&
                 routePath !== '/platform-admin' &&
                 allCapabilities.includes('platform:superadmin')
               "
@@ -454,17 +481,21 @@ onUnmounted(() => {
         </details>
       </div>
     </header>
-    <aside v-if="state === 'ready'" class="commerce-sidebar" aria-label="工作区导航">
-      <nav class="midou-area-tabs" aria-label="工作台类型">
-        <RouterLink v-if="shell === 'member'" to="/home" aria-current="page">选品</RouterLink>
+    <aside
+      v-if="state === 'ready'"
+      class="commerce-sidebar"
+      :aria-label="retiredScope ? '账号导航' : '工作区导航'"
+    >
+      <nav v-if="!accountRehearsal" class="midou-area-tabs" aria-label="工作台类型">
+        <RouterLink v-if="shell === 'member'" :to="retiredScope ? '/opportunities' : '/home'" aria-current="page">选品</RouterLink>
         <RouterLink v-else :to="memberReturnPath()">选品</RouterLink>
         <RouterLink
-          v-if="shell === 'organization_admin' || guard?.roles?.includes('organization_admin')"
+          v-if="!retiredScope && (shell === 'organization_admin' || guard?.roles?.includes('organization_admin'))"
           to="/org-admin"
           :aria-current="shell === 'organization_admin' ? 'page' : undefined"
           >组织</RouterLink
         >
-        <span v-else aria-disabled="true">组织</span>
+        <span v-else-if="!retiredScope" aria-disabled="true">组织</span>
         <RouterLink
           v-if="shell === 'platform_admin' || guard?.platform_roles?.length"
           to="/platform-admin"
@@ -496,7 +527,7 @@ onUnmounted(() => {
       </section>
       <footer :class="{ 'midou-organization-footer': shell === 'organization_admin' }">
         <RouterLink
-          v-if="shell === 'member' || shell === 'organization_admin'"
+          v-if="guard && !retiredScope && (shell === 'member' || shell === 'organization_admin')"
           to="/select-context"
           class="commerce-workspace-switch"
           aria-label="侧栏切换工作区"
@@ -506,7 +537,7 @@ onUnmounted(() => {
           <AppIcon name="chevron" :size="14" />
         </RouterLink>
         <RouterLink
-          v-if="shell === 'platform_admin'"
+          v-if="shell === 'platform_admin' && !retiredScope"
           :to="contextSwitchTarget"
           class="commerce-workspace-switch midou-platform-workspace-switch"
           aria-label="选择组织与工作区后进入用户工作台"
@@ -598,25 +629,25 @@ onUnmounted(() => {
           <RouterLink v-if="compactNavigation" to="/me" aria-label="个人中心"
             ><AppIcon name="person" />个人中心</RouterLink
           >
-          <div v-if="shell === 'member' && compactNavigation" class="role-discovery-actions">
+          <div v-if="!accountRehearsal && shell === 'member' && compactNavigation" class="role-discovery-actions">
             <button type="button" @click="openDiscovery('search')">
               <AppIcon name="search" /><span>全局搜索</span>
             </button>
           </div>
           <RouterLink
             v-if="shell === 'platform_admin'"
-            :to="contextSwitchTarget"
-            aria-label="选择组织与工作区后进入用户工作台"
+            :to="retiredScope ? memberReturnPath() : contextSwitchTarget"
+            :aria-label="retiredScope ? '返回用户工作台' : '选择组织与工作区后进入用户工作台'"
             ><AppIcon name="switch" />返回用户工作台</RouterLink
           >
           <RouterLink
-            v-else-if="shell === 'organization_admin'"
+            v-else-if="!retiredScope && shell === 'organization_admin'"
             :to="memberReturnPath()"
             aria-label="返回成员工作台"
             ><AppIcon name="switch" />返回成员工作台</RouterLink
           >
           <RouterLink
-            v-else-if="guard?.roles?.includes('organization_admin')"
+            v-else-if="!retiredScope && guard?.roles?.includes('organization_admin')"
             to="/org-admin"
             aria-label="进入组织管理后台"
             ><AppIcon name="switch" />进入组织后台</RouterLink
@@ -654,9 +685,9 @@ onUnmounted(() => {
           ><code v-if="traceId && traceId !== requestId">链路编号：{{ traceId }}</code>
         </details>
         <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
-        ><RouterLink v-else-if="state === 'context_required'" to="/select-context"
+        ><RouterLink v-else-if="!retiredScope && state === 'context_required'" to="/select-context"
           >选择组织与工作区</RouterLink
-        ><RouterLink v-else-if="state === 'forbidden'" to="/home">返回成员工作台</RouterLink
+        ><RouterLink v-else-if="state === 'forbidden'" :to="retiredScope ? '/opportunities' : '/home'">返回成员工作台</RouterLink
         ><button v-else-if="state !== 'loading'" type="button" @click="load">重新检查</button>
       </section>
       <template v-else-if="routeAllowed">
@@ -673,11 +704,7 @@ onUnmounted(() => {
             >{{ item.label }}</RouterLink
           >
         </nav>
-        <slot
-          v-if="account"
-          :organization-name="guard?.organization_name"
-          :workspace-name="guard?.workspace_name"
-        />
+        <slot v-if="account" />
         <KeepAlive :max="12">
           <component
             :is="selectedSurfaceComponent"
@@ -717,7 +744,7 @@ onUnmounted(() => {
         :key="theme.id"
         type="button"
         :aria-pressed="activeTheme === theme.id"
-        @click="chooseTheme(theme.id, shell !== 'platform_admin')"
+        @click="chooseTheme(theme.id, shell !== 'platform_admin' || accountRehearsal)"
       >
         <i :data-theme-dot="theme.id"></i
         ><span
@@ -733,6 +760,7 @@ onUnmounted(() => {
       {{ themeNotice }}
     </p>
     <DiscoveryOverlay
+      v-if="!accountRehearsal"
       :open="Boolean(discoveryMode)"
       :shell="shell"
       :api-base-url="apiBaseUrl"

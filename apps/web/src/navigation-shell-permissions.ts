@@ -8,6 +8,20 @@ export interface NavigationGuardFacts {
   platform_capabilities: string[];
 }
 
+export function canOpenAccountRehearsalRoute(path: string) {
+  return (
+    [
+      "/opportunities",
+      "/opportunities/scoring-rules",
+      "/trends",
+      "/sourcing",
+      "/sourcing/cost-rules",
+      "/tasks/approvals",
+      "/notifications",
+    ].includes(path) || /^\/opportunities\/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(path)
+  );
+}
+
 export function shellCapabilities(shell: NavigationShellKind, guard: NavigationGuardFacts | null) {
   return shell === "platform_admin"
     ? (guard?.platform_capabilities ?? [])

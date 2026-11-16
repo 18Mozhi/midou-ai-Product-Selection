@@ -950,6 +950,7 @@ paths:
   /me/navigation:
     get:
       summary: Guard and describe one authenticated navigation shell
+      x-account-runtime: Account mode omits organization and workspace context. The member response includes only actual platform grants for the same account. Navigation is not a write authorization.
       description: The server derives shell access from active organization membership or platform role and writes an authorization decision. The organization shell accepts organization administrators and an active auditor with audit:read; the auditor receives only capability-gated audit navigation and cannot open unscoped organization management routes. Platform administrators do not require an organization context.
       security: [{ HttpOnlySession: [] }]
       parameters:
@@ -990,6 +991,7 @@ paths:
   /me/global-search:
     get:
       summary: Search indexed resources in the selected organization and workspace
+      x-account-runtime: Retired account mode does not register this legacy workspace search. Use retained business list routes.
       description: Requires an active selected context and task:read. Results are additionally filtered by each document's required capability. Retired member business tasks and their search_documents projections are excluded before pagination; legacy resource_type=task remains accepted and returns empty. Opportunity, evidence and collection_task search remain. Optional resource_type and exact persisted status filters apply before pagination; assignee matches an opportunity owner by id or display label and never treats a creator as an owner. Historical task CRUD and organization approvals are retained.
       security: [{ HttpOnlySession: [] }]
       parameters:

@@ -9,6 +9,7 @@ import {
   recordRealtimeOpen,
 } from "../realtime-client-metrics";
 import { useModalDialog } from "../use-modal-dialog";
+import { canOpenAccountRehearsalRoute } from "../navigation-shell-permissions";
 import "../notification-center.css";
 import { statusLabel } from "../ui/status-labels";
 type State =
@@ -36,7 +37,7 @@ type Item = {
   version: number;
   created_at: string;
 };
-const props = defineProps<{ apiBaseUrl: string }>(),
+const props = defineProps<{ apiBaseUrl: string; accountRehearsal?: boolean }>(),
   route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
@@ -139,11 +140,12 @@ const pageSize = 20,
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
   hasSourceRoute = computed(() => {
     const target = selected.value?.action_route ?? "";
-    return target.startsWith("/") && !target.startsWith("//");
+    return target.startsWith("/") && !target.startsWith("//") &&
+      (!props.accountRehearsal || canOpenAccountRehearsalRoute(target.split(/[?#]/,1)[0] ?? ""));
   }),
   sourceRoute = computed(() => {
     const target = selected.value?.action_route ?? "";
-    if (!target.startsWith("/") || target.startsWith("//")) return "/notifications";
+    if (!hasSourceRoute.value) return "/notifications";
     const separator = target.includes("?") ? "&" : "?";
     return `${target}${separator}from=${encodeURIComponent(route.fullPath)}`;
   }),
@@ -495,7 +497,7 @@ async function savePreferences() {
 }
 function connectRealtime() {
   if (disposed || suspended || stream) return;
-  const cursor = sessionStorage.getItem("scoutops:last-event-id") ?? "0";
+  const cursor = props.accountRehearsal ? "0" : (sessionStorage.getItem("scoutops:last-event-id") ?? "0");
   const connection = new EventSource(
     `${props.apiBaseUrl}/realtime/events?last_event_id=${cursor}`,
     {
@@ -518,7 +520,7 @@ function connectRealtime() {
   connection.addEventListener("notification.changed", (event) => {
     if (disposed || suspended || stream !== connection) return;
     const message = event as MessageEvent;
-    if (message.lastEventId) sessionStorage.setItem("scoutops:last-event-id", message.lastEventId);
+    if (!props.accountRehearsal && message.lastEventId) sessionStorage.setItem("scoutops:last-event-id", message.lastEventId);
     void load();
   });
 }

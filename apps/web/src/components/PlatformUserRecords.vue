@@ -3,6 +3,7 @@ import ResponsiveDataView from "./ResponsiveDataView.vue";
 
 defineProps<{
   rows: any[];
+  accountRehearsal?: boolean;
   statusText: (value: string) => string;
   roleText: (value: string) => string;
 }>();
@@ -23,7 +24,7 @@ const emit = defineEmits<{ openUser: [item: any] }>();
         <thead>
           <tr>
             <th>用户</th>
-            <th>所在组织</th>
+            <th v-if="!accountRehearsal">所在组织</th>
             <th>平台角色</th>
             <th>状态</th>
             <th>操作</th>
@@ -35,7 +36,7 @@ const emit = defineEmits<{ openUser: [item: any] }>();
               <strong>{{ item.email }}</strong
               ><small>注册于 {{ new Date(item.created_at).toLocaleDateString() }}</small>
             </td>
-            <td>{{ item.organization_names || "尚未加入组织" }}</td>
+            <td v-if="!accountRehearsal">{{ item.organization_names || "尚未加入组织" }}</td>
             <td>{{ item.platform_roles.map(roleText).join("、") || "普通用户" }}</td>
             <td>
               <b :data-status="item.status">{{ statusText(item.status) }}</b>
@@ -49,13 +50,13 @@ const emit = defineEmits<{ openUser: [item: any] }>();
       ><span class="responsive-record-summary"
         ><strong>{{ row.email }}</strong
         ><small
-          >{{ statusText(row.status) }} · {{ row.organization_names || "尚未加入组织" }}</small
+          >{{ statusText(row.status) }}<template v-if="!accountRehearsal"> · {{ row.organization_names || "尚未加入组织" }}</template></small
         ></span
       ></template
     >
     <template #detail="{ row, close }">
       <dl>
-        <div>
+        <div v-if="!accountRehearsal">
           <dt>所在组织</dt>
           <dd>{{ row.organization_names || "尚未加入组织" }}</dd>
         </div>

@@ -56,3 +56,14 @@ test("legacy entries fail closed when mode is unknown, but are untouched on a va
   await router.push("/select-context");
   assert.equal(router.currentRoute.value.name, "select-context");
 });
+
+test("an old home bookmark lands on the owned selection library in account mode", async () => {
+  for (const path of ["/home","/work"]) {
+    const {router}=fixture(async () => ({authenticated:true,account_rehearsal:true}));
+    await router.push(path);
+    assert.equal(router.currentRoute.value.path,"/opportunities");
+  }
+  const {router}=fixture(async () => ({authenticated:true}));
+  await router.push("/home");
+  assert.equal(router.currentRoute.value.path,"/home");
+});

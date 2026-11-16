@@ -6,6 +6,7 @@ const OpportunityDecisionHistory = defineAsyncComponent(
   () => import("./OpportunityDecisionHistory.vue"),
 );
 const OpportunityListPanel = defineAsyncComponent(() => import("./OpportunityListPanel.vue"));
+const AccountCompetitorRules = defineAsyncComponent(() => import("./AccountCompetitorRules.vue"));
 const OpportunityDecisionPanel = defineAsyncComponent(
   () => import("./OpportunityDecisionPanel.vue"),
 );
@@ -53,6 +54,7 @@ const props = defineProps<{
     apiBaseUrl: string;
     opportunityId?: string;
     capabilities?: string[];
+    accountRehearsal?: boolean;
   }>(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<OpportunityTypes.OpportunityWorkspaceState>("loading"),
@@ -115,11 +117,13 @@ const {
   handleStatePrimary,
 } = useOpportunityWorkspaceAccess({
   capabilities: () => props.capabilities,
+  accountRehearsal: () => props.accountRehearsal,
   route,
   router,
   state,
   load: () => load(),
 });
+const canSingleDecide = computed(() => canDecide.value || props.accountRehearsal === true);
 const {
   invalidateReads,
   load,
@@ -187,7 +191,9 @@ async function write(path: string, body: unknown) {
       if (workspaceActive && scopeKey === writeScopeKey()) {
         requestId.value = response.request_id;
         await load();
-        message.value = "页面切换期间写入回执已到达；已刷新当前工作区，请核对最新状态。";
+        message.value = props.accountRehearsal
+          ? "页面切换期间写入回执已到达；已刷新当前选品页面，请核对最新状态。"
+          : "页面切换期间写入回执已到达；已刷新当前工作区，请核对最新状态。";
       }
       return null;
     }
@@ -200,9 +206,12 @@ async function write(path: string, body: unknown) {
         await load();
         if (apiError) {
           requestId.value = apiError.requestId;
-          message.value = `页面切换期间未能确认写入结果；已重新读取当前工作区。${apiError.actionHint}`;
+          const scope = props.accountRehearsal ? "当前选品页面" : "当前工作区";
+          message.value = `页面切换期间未能确认写入结果；已重新读取${scope}。${apiError.actionHint}`;
         } else {
-          message.value = "页面切换期间未能确认写入结果；已重新读取当前工作区，且不会自动重试。";
+          message.value = props.accountRehearsal
+            ? "页面切换期间未能确认写入结果；已重新读取当前选品页面，且不会自动重试。"
+            : "页面切换期间未能确认写入结果；已重新读取当前工作区，且不会自动重试。";
         }
       }
       return null;
@@ -217,12 +226,13 @@ async function write(path: string, body: unknown) {
   }
 }
 function startDecision(action: "adopt" | "observe" | "reject") {
+  if (!canSingleDecide.value) return;
   decisionAction.value = action;
   decisionReason.value = "";
   showDecision.value = true;
 }
 async function decide() {
-  if (busy.value || !detail.value) return;
+  if (!canSingleDecide.value || busy.value || !detail.value) return;
   const submitted = {
     opportunityId: detail.value.id,
     action: decisionAction.value,
@@ -251,8 +261,9 @@ async function queueScore() {
     await load();
     const queueReceipt = "评分任务已进入宝塔 Node Worker 队列；完成后刷新可见新运行记录。";
     if (state.value !== "ready") {
-      const refreshFailure = message.value || "工作区暂时无法刷新。";
-      message.value = `${queueReceipt} 工作区刷新失败：${refreshFailure}`;
+      const scope = props.accountRehearsal ? "选品页面" : "工作区";
+      const refreshFailure = message.value || `${scope}暂时无法刷新。`;
+      message.value = `${queueReceipt} ${scope}刷新失败：${refreshFailure}`;
       return;
     }
     message.value = queueReceipt;
@@ -297,6 +308,14 @@ useOpportunityWorkspaceLifecycle({
     <nav v-if="opportunityId" class="opportunity-detail-return" aria-label="选品详情返回路径">
       <RouterLink :to="returnPath">← 返回来源列表</RouterLink>
     </nav>
+    <nav v-else-if="accountRehearsal" class="opportunity-detail-return" aria-label="账号工作记录">
+      <RouterLink :to="{ path: '/opportunities/scoring-rules', query: { from: route.fullPath } }">
+        查看评分规则
+      </RouterLink>
+      <RouterLink to="/tasks/approvals">查看审批历史</RouterLink>
+      <RouterLink to="/tasks/approvals?view=account-tasks">查看业务任务</RouterLink>
+    </nav>
+    <AccountCompetitorRules v-if="accountRehearsal && !opportunityId" :api-base-url="apiBaseUrl" />
     <p v-if="message" class="opportunity-message" role="status">
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
     </p>
@@ -336,7 +355,7 @@ useOpportunityWorkspaceLifecycle({
               v-if="tab === 'overview' && completedAnalysisAt"
               :detail="detail"
               :busy="busy"
-              :can-decide="canDecide"
+              :can-decide="canSingleDecide"
               @decide="startDecision"
             />
             <div class="opportunity-detail-section-content">
@@ -387,14 +406,14 @@ useOpportunityWorkspaceLifecycle({
               v-if="tab === 'overview' && !completedAnalysisAt"
               :detail="detail"
               :busy="busy"
-              :can-decide="canDecide"
+              :can-decide="canSingleDecide"
               @decide="startDecision"
             />
           </div>
         </main></article
     ></template>
     <OpportunityWorkspaceDialogs
-      v-if="canDecide"
+      v-if="canSingleDecide"
       v-model:decision-open="showDecision"
       v-model:decision-reason="decisionReason"
       :busy="busy"

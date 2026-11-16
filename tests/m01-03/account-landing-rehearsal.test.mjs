@@ -426,6 +426,13 @@ test("an old authenticated organization session cannot reopen legacy routes in a
         decisions.map((decision) => decision.outcome),
         ["allowed", "denied"],
       );
+      if (rehearsal) {
+        const member = await app.inject({ url:"/api/v1/me/navigation?shell=member", headers });
+        assert.equal(member.statusCode, 200, member.body);
+        assert.deepEqual(member.json().data.platform_capabilities, ["platform:operate"]);
+        assert.deepEqual(member.json().data.roles, []);
+        assert.equal(member.json().data.organization_id, null);
+      }
       assert.ok(
         decisions.every(
           (decision) =>
