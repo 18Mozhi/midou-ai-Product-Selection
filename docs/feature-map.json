@@ -1,4 +1,10 @@
 {
+  "accountProductionRuntimeInstall": {
+    "sourceFiles": ["scripts/baota-account-runtime-install.py"],
+    "testFiles": ["tests/unit/test_baota_account_runtime_install.py"],
+    "docs": ["docs/runbooks/account-production-runtime-install.md"],
+    "contract": "Prepare pinned candidate-only Python dependencies and reuse unchanged Node workspace dependencies. Replace only the fixed runtime directories after 121 migration receipts, preserved business data and the retired schema are verified, while writers remain stopped. No backup or rollback-copy creation."
+  },
   "accountProductionRuntimePackage": {
     "sourceFiles": ["scripts/account-release-package.py"],
     "testFiles": ["tests/unit/test_account_release_package.py"],
