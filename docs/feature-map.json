@@ -1,4 +1,14 @@
 {
+  "accountSelectionJourneyHistory": {
+    "sourceFiles": [
+      "apps/api/src/mysql-selection-journey-repository.ts",
+      "apps/api/src/selection-journey-routes.ts",
+      "apps/api/src/server.ts"
+    ],
+    "testFiles": ["tests/m07-06/account-selection-journey-history.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-selection-journey-history.md"],
+    "contract": "Historical journey read keeps original task, selection, evidence, decision, actor and trace references. Native and sealed owners must both match; no workspace lookup or account-mode replay."
+  },
   "accountReportExportRuntime": {
     "sourceFiles": [
       "apps/api/src/mysql-report-repository.ts",

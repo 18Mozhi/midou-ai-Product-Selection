@@ -1,3 +1,5 @@
+import { appendCollectionSubquery } from "@scoutops/database";
+import { appendOpportunityEvent, appendProviderSourceReplayRun } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type {
@@ -6,6 +8,7 @@ import type {
   SelectionJourneyState,
 } from "./selection-journey-service.js";
 import { SelectionJourneyError } from "./selection-journey-service.js";
+import { requireAccountReadRehearsal } from "./account-read-rehearsal.js";
 import {
   evaluateOpportunitySelection,
   opportunitySelectionProjectionSql,
@@ -47,6 +50,58 @@ function state(
 
 export class MySqlSelectionJourneyRepository implements SelectionJourneyRepository {
   constructor(private readonly pool: Pool) {}
+  async getAccountHistory({ journeyId, accountId }: { journeyId: string; accountId: string }) {
+    await requireAccountReadRehearsal(this.pool);
+    const owns = (source: string, id: string, account: string) =>
+      `EXISTS (SELECT 1 FROM account_owned_records a JOIN account_ownership_cutover c ` +
+      `ON c.slot='current' AND c.contract_version=25 WHERE a.source_table='${source}' AND a.source_id=${id} ` +
+      `AND a.account_id=${account} AND (a.reason='exclusive_owner' OR ` +
+      `(a.reason IN ('shared','unassigned') AND a.account_id=c.primary_account_id)))`;
+    const [columns] = await this.pool.query<RowDataPacket[]>(
+      "SELECT TABLE_NAME table_name,COLUMN_NAME column_name FROM information_schema.COLUMNS " +
+        "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN ('collection_tasks','opportunities','raw_evidence') " +
+        "AND COLUMN_NAME IN ('account_id','organization_id','workspace_id')",
+    );
+    const native = (table: "collection_tasks" | "opportunities" | "raw_evidence") => {
+      const shape = columns.filter(row => row.table_name === table).map(row => row.column_name).sort().join(",");
+      if (shape === "account_id") return true;
+      if (shape === "organization_id,workspace_id") return false;
+      throw new SelectionJourneyError("selection_journey_account_schema_invalid", 503, "账号历史结构尚未就绪。");
+    };
+    const taskScope = native("collection_tasks") ? " AND t.account_id=jo.account_id" : "";
+    const opportunityScope = native("opportunities") ? " AND o.account_id=jo.account_id" : "";
+    const evidenceScope = native("raw_evidence") ? " AND e.account_id=jo.account_id" : "";
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      `SELECT j.id,j.input_kind,j.input_value,j.provider_code,j.task_id,t.status task_status,j.state,
+         j.created_by,j.created_at,j.decided_at,j.request_id,j.trace_id,
+         o.id opportunity_id,
+         d.id decision_id,d.action,d.reason,d.actor_id,d.created_at decision_at,
+         e.id selected_raw_evidence_id
+       FROM selection_journeys j
+       JOIN account_owned_records jo ON jo.source_table='selection_journeys' AND jo.source_id=j.id
+       JOIN collection_tasks t ON t.id=j.task_id${taskScope} AND ${owns("collection_tasks", "t.id", "jo.account_id")}
+       LEFT JOIN opportunities o ON o.id=j.opportunity_id${opportunityScope}
+         AND ${owns("opportunities", "o.id", "jo.account_id")}
+       LEFT JOIN selection_journey_decisions d ON d.journey_id=j.id
+         AND ${owns("selection_journey_decisions", "d.id", "jo.account_id")}
+       LEFT JOIN raw_evidence e ON e.id=d.selected_raw_evidence_id${evidenceScope}
+         AND ${owns("raw_evidence", "e.id", "jo.account_id")}
+       WHERE j.id=? AND jo.account_id=? AND ${owns("selection_journeys", "j.id", "jo.account_id")} LIMIT 1`,
+      [journeyId, accountId],
+    );
+    const r = rows[0];
+    if (!r) return null;
+    return {
+      id: r.id, input_kind: r.input_kind, input_value: r.input_value, provider_code: r.provider_code,
+      task_id: r.task_id, task_status: r.task_status, state: r.state, opportunity_id: r.opportunity_id,
+      created_by: r.created_by, accepted_at: iso(r.created_at), decided_at: iso(r.decided_at),
+      request_id: r.request_id, trace_id: r.trace_id, read_only: true,
+      decision: r.decision_id == null ? null : {
+        id: r.decision_id, action: r.action, reason: r.reason, actor_id: r.actor_id,
+        created_at: iso(r.decision_at), selected_raw_evidence_id: r.selected_raw_evidence_id,
+      },
+    };
+  }
   async create(i: Parameters<SelectionJourneyRepository["create"]>[0]) {
     const c = await this.pool.getConnection(),
       route = "POST:/api/v1/selection-journeys";
@@ -125,53 +180,21 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           i.now,
         ],
       );
+      await appendCollectionSubquery(c, {
+        id: i.subqueryId, taskId: i.taskId, providerId: String(provider.id), ordinal: 1,
+        targetJson: JSON.stringify(target), required: true, status: "pending", now: i.now,
+      });
+      await appendProviderSourceReplayRun(c, {
+        ...i, runId: randomUUID(), providerId: String(provider.id), sourceCode: String(provider.code),
+      });
       await c.query(
-        "INSERT INTO collection_subqueries (id,task_id,organization_id,workspace_id," +
-          "provider_id,ordinal,target_json,is_required,status,available_result_count," +
-          "missing_fields_json,error_code,retryable,started_at,finished_at,version," +
-          "created_at,updated_at) VALUES (?,?,?,?,?,1,?,1,'pending',0,'[]',NULL,0,NULL," +
-          "NULL,1,?,?)",
-        [
-          i.subqueryId,
-          i.taskId,
-          i.organizationId,
-          i.workspaceId,
-          provider.id,
-          JSON.stringify(target),
-          i.now,
-          i.now,
-        ],
-      );
-      await c.query(
-        "INSERT INTO provider_source_replay_runs (id,organization_id,workspace_id," +
-          "provider_id,source_code,task_id,input_sha256,status,item_count,error_code," +
-          "request_id,trace_id,created_by,created_at,updated_at) VALUES (?,?,?,?,?," +
-          "?,?,'scheduled',0,NULL,?,?,?,?,?)",
-        [
-          randomUUID(),
-          i.organizationId,
-          i.workspaceId,
-          provider.id,
-          provider.code,
-          i.taskId,
-          i.inputSha256,
-          i.requestId,
-          i.traceId,
-          i.actorId,
-          i.now,
-          i.now,
-        ],
-      );
-      await c.query(
-        "INSERT INTO collection_task_events (id,task_id,organization_id,workspace_id," +
+        "INSERT INTO collection_task_events (id,task_id," +
           "event_type,from_status,to_status,actor_type,actor_id,request_id,trace_id," +
-          "metadata_json,occurred_at) VALUES (?,?,?,?,?,NULL,'scheduled','user',?,?," +
+          "metadata_json,occurred_at) VALUES (?,?,?,NULL,'scheduled','user',?,?," +
           "?,?,?)",
         [
           randomUUID(),
           i.taskId,
-          i.organizationId,
-          i.workspaceId,
           "collection.task.scheduled",
           i.actorId,
           i.requestId,
@@ -185,15 +208,13 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         ],
       );
       await c.query(
-        "INSERT INTO collection_task_outbox (id,task_id,organization_id,workspace_id," +
+        "INSERT INTO collection_task_outbox (id,task_id," +
           "event_type,payload_json,status,attempt_count,available_at,lease_owner,lease_expires_at," +
-          "request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,'queued'," +
+          "request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,'queued'," +
           "0,?,NULL,NULL,?,?,?,?)",
         [
           randomUUID(),
           i.taskId,
-          i.organizationId,
-          i.workspaceId,
           "collection.task.scheduled",
           JSON.stringify({
             task_id: i.taskId,
@@ -289,14 +310,12 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           [i.now, i.journeyId],
         );
         await c.query(
-          "INSERT INTO selection_journey_events (id,journey_id,organization_id,workspace_id," +
+          "INSERT INTO selection_journey_events (id,journey_id," +
             "event_type,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES " +
-            "(?,?,?,?,?,'system','selection-timeout-monitor',?,?,?,?)",
+            "(?,?,?,'system','selection-timeout-monitor',?,?,?,?)",
           [
             eventId,
             i.journeyId,
-            i.organizationId,
-            i.workspaceId,
             "selection.journey.blocked",
             row.request_id,
             row.trace_id,
@@ -305,14 +324,12 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           ],
         );
         await c.query(
-          "INSERT INTO selection_journey_outbox (id,journey_id,organization_id,workspace_id," +
+          "INSERT INTO selection_journey_outbox (id,journey_id," +
             "event_type,payload_json,status,attempt_count,available_at,request_id,trace_id," +
-            "created_at,updated_at) VALUES (?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
+            "created_at,updated_at) VALUES (?,?,?,?,'queued',0,?,?,?,?,?)",
           [
             eventId,
             i.journeyId,
-            i.organizationId,
-            i.workspaceId,
             "selection.journey.blocked",
             payload,
             i.now,
@@ -380,10 +397,11 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         );
       const [signals] = await c.query<RowDataPacket[]>(
           "SELECT s.id,s.topic_id,s.title,s.provider_id,s.raw_evidence_id,s.observed_at," +
-            "t.market FROM collection_task_evidence_links l JOIN raw_evidence e ON e.id=l.raw_evidence_id " +
+            "t.market FROM collection_task_evidence_links l JOIN collection_tasks link_task ON link_task.id=l.collection_task_id " +
+            "JOIN raw_evidence e ON e.id=l.raw_evidence_id " +
             "JOIN normalized_records n ON n.id=l.normalized_record_id LEFT JOIN trend_signals s ON " +
             "s.normalized_record_id=n.id LEFT JOIN trend_topics t ON t.id=s.topic_id WHERE l.collection_task_id=? " +
-            "AND l.organization_id=? AND l.workspace_id=? AND l.raw_evidence_id=? ORDER BY l.created_at,e.captured_at," +
+            "AND link_task.organization_id=? AND link_task.workspace_id=? AND l.raw_evidence_id=? ORDER BY l.created_at,e.captured_at," +
             "s.observed_at LIMIT 1",
           [journey.task_id, i.organizationId, i.workspaceId, i.selectedRawEvidenceId],
         ),
@@ -426,13 +444,11 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
             i.action === "adopt" ? "adopted" : i.action === "observe" ? "observing" : "rejected",
           version = Number(opportunity.version) + 1;
         await c.query(
-          "INSERT INTO opportunity_decisions (id,organization_id,workspace_id,opportunity_id," +
+          "INSERT INTO opportunity_decisions (id,opportunity_id," +
             "action,reason,previous_status,resulting_status,opportunity_version,actor_id," +
-            "request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
           [
             decisionId,
-            i.organizationId,
-            i.workspaceId,
             opportunityId,
             i.action,
             i.reason,
@@ -461,39 +477,28 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
             i.workspaceId,
           ],
         );
-        await c.query(
-          "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type," +
-            "resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json," +
-            "occurred_at) VALUES (?,?,?,?,? ,?,'user',?,?,?,?,?)",
-          [
-            randomUUID(),
-            i.organizationId,
-            i.workspaceId,
-            "opportunity.decision.changed",
-            "opportunity",
-            opportunityId,
-            i.actorId,
-            i.requestId,
-            i.traceId,
-            JSON.stringify({
-              action: i.action,
-              selection_journey_id: i.journeyId,
-              selected_raw_evidence_id: i.selectedRawEvidenceId,
-            }),
-            i.now,
-          ],
-        );
+        await appendOpportunityEvent(c, {
+          id: randomUUID(),
+          organizationId: i.organizationId,
+          workspaceId: i.workspaceId,
+          eventType: "opportunity.decision.changed",
+          resourceType: "opportunity",
+          resourceId: opportunityId,
+          actorType: "user",
+          actorId: i.actorId,
+          requestId: i.requestId,
+          traceId: i.traceId,
+          payloadJson: JSON.stringify({ action: i.action, selection_journey_id: i.journeyId, selected_raw_evidence_id: i.selectedRawEvidenceId }),
+          occurredAt: i.now,
+        });
       }
       const decisionId = randomUUID();
       await c.query(
-        "INSERT INTO selection_journey_decisions (id,journey_id,organization_id,workspace_id," +
-          "opportunity_id,selected_raw_evidence_id,action,reason,actor_id,request_id,trace_id,created_at) VALUES (?," +
-          "?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO selection_journey_decisions (id,journey_id," +
+          "opportunity_id,selected_raw_evidence_id,action,reason,actor_id,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
         [
           decisionId,
           i.journeyId,
-          i.organizationId,
-          i.workspaceId,
           opportunityId,
           i.selectedRawEvidenceId,
           i.action,
@@ -528,13 +533,11 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
       );
       if (createdVerification.affectedRows === 1)
         await c.query(
-          "INSERT INTO task_events (id,organization_id,workspace_id,task_id,event_type," +
-            "actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?," +
+          "INSERT INTO task_events (id,task_id,event_type," +
+            "actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?,?," +
             "?,?,?,?,?)",
           [
             randomUUID(),
-            i.organizationId,
-            i.workspaceId,
             verificationTaskId,
             "task.created",
             i.actorId,
@@ -591,7 +594,7 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
     const [journeys, results, decisions, events, verificationTasks] = await Promise.all([
       db.query<RowDataPacket[]>(
         "SELECT j.*,p.owner_label,(SELECT e.payload_json FROM selection_journey_events e " +
-          "WHERE e.journey_id=j.id AND e.organization_id=j.organization_id AND e.workspace_id=j.workspace_id " +
+          "WHERE e.journey_id=j.id " +
           "AND e.event_type='selection.journey.blocked' ORDER BY e.occurred_at DESC,e.id DESC LIMIT 1) blocked_payload," +
           "t.status task_status,t.coverage_status,t.available_result_count," +
           "t.last_error_code,t.finished_at FROM selection_journeys j JOIN providers p ON p.id=j.provider_id " +
@@ -607,8 +610,9 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           "o.score_rule_version,o.coverage_status,o.trend_score,o.competition_score,o.profit_status," +
           opportunitySelectionProjectionSql +
           " FROM selection_journeys " +
-          "j JOIN collection_task_evidence_links l ON l.collection_task_id=j.task_id AND l.organization_id=j.organization_id " +
-          "AND l.workspace_id=j.workspace_id JOIN raw_evidence e ON e.id=l.raw_evidence_id JOIN " +
+          "j JOIN collection_tasks link_task ON link_task.id=j.task_id AND link_task.organization_id=j.organization_id " +
+          "AND link_task.workspace_id=j.workspace_id JOIN collection_task_evidence_links l ON l.collection_task_id=link_task.id " +
+          "JOIN raw_evidence e ON e.id=l.raw_evidence_id JOIN " +
           "normalized_records n ON n.id=l.normalized_record_id LEFT JOIN trend_signals s ON s.normalized_record_id=n.id " +
           "LEFT JOIN opportunities o ON o.organization_id=j.organization_id AND o.workspace_id=j.workspace_id " +
           "AND o.source_type='trend_topic' AND o.source_ref_id=s.topic_id " +
@@ -617,8 +621,9 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         [id, organizationId, workspaceId],
       ),
       db.query<RowDataPacket[]>(
-        "SELECT action,reason,selected_raw_evidence_id,actor_id,created_at FROM selection_journey_decisions WHERE journey_id=? " +
-          "AND organization_id=? AND workspace_id=? LIMIT 1",
+        "SELECT d.action,d.reason,d.selected_raw_evidence_id,d.actor_id,d.created_at FROM selection_journey_decisions d " +
+          "JOIN selection_journeys j ON j.id=d.journey_id WHERE d.journey_id=? " +
+          "AND j.organization_id=? AND j.workspace_id=? LIMIT 1",
         [id, organizationId, workspaceId],
       ),
       db.query<RowDataPacket[]>(
@@ -784,14 +789,12 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
   ) {
     const id = randomUUID();
     await c.query(
-      "INSERT INTO selection_journey_events (id,journey_id,organization_id,workspace_id," +
+      "INSERT INTO selection_journey_events (id,journey_id," +
         "event_type,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES " +
-        "(?,?,?,?,?,'user',?,?,?,?,?)",
+        "(?,?,?,'user',?,?,?,?,?)",
       [
         id,
         i.journeyId,
-        i.organizationId,
-        i.workspaceId,
         eventType,
         i.actorId,
         i.requestId,
@@ -801,14 +804,12 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
       ],
     );
     await c.query(
-      "INSERT INTO selection_journey_outbox (id,journey_id,organization_id,workspace_id," +
+      "INSERT INTO selection_journey_outbox (id,journey_id," +
         "event_type,payload_json,status,attempt_count,available_at,request_id,trace_id," +
-        "created_at,updated_at) VALUES (?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
+        "created_at,updated_at) VALUES (?,?,?,?,'queued',0,?,?,?,?,?)",
       [
         id,
         i.journeyId,
-        i.organizationId,
-        i.workspaceId,
         eventType,
         JSON.stringify(payload),
         now,

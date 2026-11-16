@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService, Capability } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
+import { authenticatedRehearsalAccount } from "./account-read-rehearsal.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 import type { SelectionJourneyService } from "./selection-journey-service.js";
 export interface SelectionJourneyRouteOptions {
@@ -10,6 +11,7 @@ export interface SelectionJourneyRouteOptions {
   auth: LocalAuthService;
   secureCookie: boolean;
   webOrigin: string;
+  accountReadRehearsal?: boolean;
 }
 const ids = (r: FastifyRequest) => ({
     requestId: r.headers["x-request-id"]!.toString(),
@@ -24,6 +26,14 @@ export function registerSelectionJourneyRoutes(
   app: FastifyInstance,
   o: SelectionJourneyRouteOptions,
 ) {
+  if (o.accountReadRehearsal) {
+    app.get("/api/v1/selection-journeys/:id", async (r, reply) => {
+      reply.header("cache-control", "private, no-store");
+      const scope = await authenticatedRehearsalAccount(r, o.auth, o.secureCookie);
+      return envelope(await o.service.getAccountHistory({ ...scope, journeyId: (r.params as { id: string }).id }), r);
+    });
+    return;
+  }
   const scope = async (r: FastifyRequest, capability: Capability) => {
     const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
       x = await o.authorization.resolveSession(a.user.id, a.session.id);

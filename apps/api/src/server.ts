@@ -444,6 +444,7 @@ const app = buildApp({
     webOrigin: config.app.webOrigin,
   },
   selectionJourneys: {
+    accountReadRehearsal,
     service: new SelectionJourneyService(
       new MySqlSelectionJourneyRepository(pool),
       config.selectionAcceptance.deadlineMs,

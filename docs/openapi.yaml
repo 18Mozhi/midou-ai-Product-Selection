@@ -6131,6 +6131,7 @@ paths:
   /selection-journeys:
     post:
       summary: Start a member-scoped real selection journey
+      x-account-runtime: Retired account mode does not register this legacy creation route.
       description: POST /api/v1/selection-journeys selects the enabled and currently compliant google_news_search source server-side; an unapproved, incomplete or expired public-source review is rejected before any task, subquery, event or outbox row is written. Members never submit provider IDs, proxy settings or organization/workspace IDs. Repeated real inputs may reuse immutable evidence, but the server always records a tenant-scoped association to the newly accepted task. When only an unconsumed RSS wrapper changes, evidence.linked records content_changed plus existing_content_sha256 and observed_content_sha256; any canonical URL, parser, adapter, schema or normalized payload change still fails with an evidence dedupe conflict.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: task:create
@@ -6161,6 +6162,7 @@ paths:
   /selection-journeys/{journeyId}:
     get:
       summary: Read resumable task progress, candidate results, decision and evidence state
+      x-account-runtime: Verified account history preserves the original task, decision, signer, request and trace. Optional selection and evidence references are only shown for exact records with matching sealed and native owners.
       description: Up to 20 candidates are resolved through the current task's organization/workspace-scoped evidence associations, including safely deduplicated evidence captured by an earlier task.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: opportunity:read
@@ -6182,6 +6184,7 @@ paths:
   /selection-journeys/{journeyId}/decisions:
     post:
       summary: Record the audited human decision after comparing candidate results
+      x-account-runtime: Retired account mode does not register this legacy decision route.
       description: selected_raw_evidence_id is required for adopt and must belong to the current journey. Adopt requires an existing scoped trend-topic opportunity with selection_stage recommended and all five quality gates passed, rechecked under lock using the opportunity-detail policy. Missing or ineligible opportunities return 409 opportunity_adopt_evidence_insufficient before writes. No unassessed opportunity is created and no assessed evidence or coverage is rewritten. Observe, reject and completed idempotent replays retain their existing behavior.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: opportunity:decide
