@@ -12,7 +12,7 @@ const valid = {
   expectedReviewSha256: "0".repeat(64),
 };
 
-function connection({ locked = 1, receipts = plan.prerequisites, runs = [] } = {}) {
+function connection({ locked = 1, receipts = plan.prerequisites, runs = [], crawler = null } = {}) {
   const calls = [];
   return {
     calls,
@@ -26,6 +26,7 @@ function connection({ locked = 1, receipts = plan.prerequisites, runs = [] } = {
       if (sql.startsWith("SELECT name,checksum"))
         return [receipts.map((r) => ({ name: r.name, checksum: r.candidate_sha256 }))];
       if (sql.startsWith("SELECT id FROM account_retirement_runs")) return [runs];
+      if (sql.includes(" standalone_running,")) return [[crawler]];
       assert.fail(`unexpected SQL: ${sql}`);
     },
   };
@@ -74,5 +75,21 @@ test("prepare stops before prerequisite work if a forward receipt already exists
     );
     assert.equal(db.calls.length, 3);
     assert.ok(db.calls.every((sql) => sql.startsWith("SELECT ")));
+  }
+});
+
+test("legacy crawler states that would reject the new runtime stop prepare and apply before writes", async () => {
+  for (const crawler of [
+    { standalone_running: "4", standalone_active_leases: 0 },
+    { standalone_running: 0, standalone_active_leases: "1" },
+  ]) {
+    for (const options of [valid, { phase: "prepare", expectedPlanSha256: plan.plan_sha256 }]) {
+      const db = connection({ crawler, runs: [{ id: runId }] });
+      await assert.rejects(
+        runAccountProductionCutover(db, options),
+        /standalone_crawler_not_drained/,
+      );
+      assert.ok(db.calls.every((sql) => /^SELECT\s/.test(sql)));
+    }
   }
 });

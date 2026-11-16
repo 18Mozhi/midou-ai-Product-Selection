@@ -1,4 +1,5 @@
 import { applyAccountProductionForward } from "./apply-account-production-forward.mjs";
+import { assertStandaloneCrawlerCutoverPreflight } from "./lib/account-crawler-cutover-preflight.mjs";
 import { backfillAccountProductionOwnedRecords } from "./backfill-account-owned-records.mjs";
 import {
   assertAccountProductionFence,
@@ -63,6 +64,7 @@ export async function runAccountProductionCutover(
     const starting = inspectAccountReleaseReceiptPrefix(compiled.plan, rows);
     if (starting.status !== "verified_receipt_prefix" || starting.applied > 3)
       throw new Error("account_cutover_prepare_receipt_boundary_invalid");
+    await assertStandaloneCrawlerCutoverPreflight(connection);
     const schema = await prepareAccountProductionPrerequisites(connection, compiled);
     if (schema.status !== "ready") return { status: "blocked", phase: "schema", schema };
     await prefix();
@@ -80,6 +82,7 @@ export async function runAccountProductionCutover(
   await prefix();
   if ((await existingStage(connection)) !== runId)
     throw new Error("account_cutover_expected_staged_run");
+  await assertStandaloneCrawlerCutoverPreflight(connection);
   const backfill = await backfillAccountProductionOwnedRecords(
     connection,
     runId,

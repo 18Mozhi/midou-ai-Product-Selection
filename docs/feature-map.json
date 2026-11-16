@@ -5,6 +5,12 @@
     "docs": ["docs/runbooks/account-production-migration-source.md"],
     "contract": "Version the exact 0076 live baseline bytes, 0077–0197 reversible migration source, and direct session import closure independently from unrelated worktree changes. Compiling and verifying these files does not authorize database writes, make a release package, or replace business readback."
   },
+  "accountCrawlerCutoverPreflight": {
+    "sourceFiles": ["scripts/lib/account-crawler-cutover-preflight.mjs", "scripts/run-account-production-cutover.mjs", "scripts/deploy-account-baota.py"],
+    "testFiles": ["tests/unit/account-production-cutover.test.mjs", "tests/unit/test_baota_account_release_coordinator.py"],
+    "docs": ["docs/runbooks/account-production-coordinated-release.md"],
+    "contract": "Evaluate retired runtime crawler startup conditions before upload and before any production prerequisite DDL or backfill. Read-only inspection reports standalone running rows and active profile leases separately; no historical state normalization or deletion."
+  },
   "accountProductionCoordinatedRelease": {
     "sourceFiles": ["scripts/deploy-account-baota.py", "scripts/baota-account-release-coordinator.py"],
     "testFiles": ["tests/unit/test_baota_account_release_coordinator.py"],

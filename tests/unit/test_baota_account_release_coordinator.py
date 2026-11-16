@@ -58,6 +58,12 @@ class Steps:
 
 
 class CoordinatorTest(unittest.TestCase):
+    def test_standalone_crawler_probe_gate_refuses_orphan_runs_and_live_leases(self):
+        for counts in ({"running": 4, "leases": 0}, {"running": 0, "leases": 1}):
+            with self.assertRaisesRegex(RuntimeError, "standalone_crawler_not_drained"):
+                LOCAL["require_drained_crawler"](counts)
+        self.assertIsNone(LOCAL["require_drained_crawler"]({"running": 0, "leases": 0}))
+
     def test_activation_waits_for_migration_install_and_locked_session_release(self):
         steps = Steps()
         self.assertEqual(COORD["coordinate_account_release"](steps)["migration_receipts"], 121)
