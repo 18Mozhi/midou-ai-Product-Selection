@@ -12,7 +12,8 @@ test("permanent public-page approval still enforces robots and retains its match
     release: () => {},
     query: async (sql, values = []) => {
       if (sql.startsWith("SELECT state,consecutive_failures")) return [[]];
-      if (sql.includes("INSERT INTO collection_task_events")) completed.push(JSON.parse(values[8]));
+      if (sql.startsWith("SELECT cut.primary_account_id")) return [[]];
+      if (sql.includes("INSERT INTO collection_task_events")) completed.push(JSON.parse(values[6]));
       return [{ affectedRows: 1 }];
     },
   };
@@ -423,4 +424,91 @@ test("a provider reaches its configured failure threshold and opens its runtime 
   assert.equal(opened.values[2], 3);
   assert.equal(opened.values[3], 3);
   assert.equal(opened.values[4], "network_error");
+});
+
+for (const drift of [false, true]) {
+  test(`subquery completion inherits the exact task owner atomically (drift=${drift})`, async () => {
+    const calls = [];
+    const conn = {
+      beginTransaction: async () => calls.push(["begin"]),
+      commit: async () => calls.push(["commit"]),
+      rollback: async () => calls.push(["rollback"]),
+      release: () => calls.push(["release"]),
+      query: async (sql, values) => {
+        calls.push([sql, values]);
+        if (sql.startsWith("SELECT cut.primary_account_id")) {
+          assert.deepEqual(values, ["subquery-parent"]);
+          return [[{ primary_account_id: "primary", account_id: "original",
+            reason: drift ? "shared" : "exclusive_owner" }]];
+        }
+        return [{ affectedRows: 1 }];
+      },
+    };
+    const executor = new ProviderSourceExecutor({
+      getConnection: async () => conn,
+      query: async (sql) => sql.startsWith("SELECT p.id")
+        ? [[{ id: "provider", status: "disabled" }]] : [{ affectedRows: 1 }],
+    }, {}, {}, "actor-not-owner");
+    const execution = executor.execute({
+      id: "subquery-parent", requestId: "request", traceId: "trace",
+      subqueries: [{ id: "subquery", providerId: "provider", required: false, target: {} }],
+    }, async () => {});
+    if (drift) await assert.rejects(execution, { message: "collection_history_owner_mismatch" });
+    else await execution;
+    const [, event] = calls.find(([sql]) => sql.includes("'collection.subquery.completed'"));
+    assert.deepEqual(event.slice(1, 6), ["subquery-parent", "blocked", "actor-not-owner", "request", "trace"]);
+    assert.equal(JSON.parse(event[6]).subquery_id, "subquery");
+    const writes = calls.filter(([sql]) => sql.startsWith("INSERT INTO account_owned_records"));
+    assert.deepEqual(writes.map(([, values]) => values), drift
+      ? [] : [["collection_task_events", event[0], "original", "exclusive_owner"]]);
+    assert.deepEqual(calls.slice(-2), [[drift ? "rollback" : "commit"], ["release"]]);
+  });
+}
+
+for (const mode of ["valid","stale_lease","foreign_subquery","missing_owner"]) {
+  test(`account Provider completion keeps exact query and lease: ${mode}`, async()=>{
+    const calls=[], transitions=[];
+    const c={beginTransaction:async()=>transitions.push("begin"),commit:async()=>transitions.push("commit"),
+      rollback:async()=>transitions.push("rollback"),release:()=>transitions.push("release"),
+      query:async(sql,params)=> {
+        calls.push([sql,params]);
+        assert.doesNotMatch(sql,/organization_id|workspace_id/);
+        if(sql.startsWith("SELECT t.id FROM collection_tasks")) {
+          assert.match(sql,/t.attempt_count=\? AND t.status='running'/);
+          assert.match(sql,/t.lease_expires_at>UTC_TIMESTAMP\(3\)/);
+          assert.deepEqual(params.slice(0,3),["original-task","original-account",2]);
+          assert.match(params[3],/^[a-f0-9]{64}$/);
+          return [mode==="stale_lease"?[]:[{id:"original-task"}]];
+        }
+        if(sql.startsWith("UPDATE collection_subqueries")) {
+          assert.match(sql,/provider_id=\?.*a.source_id=collection_subqueries.id AND a.account_id=\?/);
+          assert.deepEqual(params.slice(-4),["original-query","original-task","original-provider","original-account"]);
+          return [{affectedRows:mode==="foreign_subquery"?0:1}];
+        }
+        if(sql.startsWith("SELECT cut.primary_account_id")) return [mode==="missing_owner"?[]:
+          [{account_id:"original-account",reason:"exclusive_owner"}]];
+        return [{affectedRows:1}];
+      }};
+    const w=new ProviderSourceExecutor({getConnection:async()=>c},{},{},"worker");
+    const task={id:"original-task",accountId:"original-account",nativeAccountScope:true,leaseToken:"private-token",
+      attemptCount:2,requestId:"original-request",traceId:"original-trace"};
+    const pending=w.persistSubqueryOutcome(task,"original-provider",{id:"original-query",status:"succeeded",
+      availableResultCount:1,required:true,missingFields:[],errorCode:null});
+    if(mode==="valid") await pending;
+    else await assert.rejects(pending,{message:{stale_lease:"collection_task_lease_invalid",
+      foreign_subquery:"collection_subquery_result_mismatch",missing_owner:"collection_history_owner_mismatch"}[mode]});
+    assert.deepEqual(transitions,["begin",mode==="valid"?"commit":"rollback","release"]);
+    assert.equal(calls.some(([s])=>s.startsWith("INSERT INTO account_owned_records")),mode==="valid");
+    if(mode==="stale_lease" || mode==="foreign_subquery") assert.ok(!calls.some(([s])=>s.startsWith("INSERT")));
+  });
+}
+
+test("account replay status does not advance when the original lease is gone", async()=>{
+  const calls=[];
+  const c={beginTransaction:async()=>{},rollback:async()=>calls.push("rollback"),release:()=>calls.push("release"),
+    query:async(sql)=>{assert.match(sql,/^SELECT t.id FROM collection_tasks/);return [[]];}};
+  const w=new ProviderSourceExecutor({getConnection:async()=>c},{},{},"worker");
+  await assert.rejects(w.execute({id:"task",accountId:"account",nativeAccountScope:true,attemptCount:1,leaseToken:"token"},
+    async()=>{}),{message:"collection_task_lease_invalid"});
+  assert.deepEqual(calls,["rollback","release"]);
 });

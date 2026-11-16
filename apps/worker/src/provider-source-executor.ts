@@ -1,5 +1,7 @@
+import { inheritCollectionHistoryOwner } from "./collection-history-ownership.js";
+import { appendPlatformAudit } from "@scoutops/database";
 import { createHash, randomUUID } from "node:crypto";
-import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import {
   classifyProviderAdapterFailure,
   ProviderAdapterFailure,
@@ -170,7 +172,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
     private readonly amazonBrowserEnabled = false,
   ) {}
   async execute(task: ClaimedCollectionTask, heartbeat: () => Promise<void>, signal?: AbortSignal) {
-    await this.pool.query(
+    await this.updateReplay(task,
       "UPDATE provider_source_replay_runs SET status='running',updated_at=NOW(3) WHERE task_id=? AND status='scheduled'",
       [task.id],
     );
@@ -223,7 +225,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         : available
           ? "succeeded"
           : "succeeded_empty";
-    await this.pool.query(
+    await this.updateReplay(task,
       "UPDATE provider_source_replay_runs SET status=?,item_count=?,error_code=?,updated_at=NOW(3) WHERE task_id=?",
       [status, available, failed?.errorCode ?? null, task.id],
     );
@@ -240,6 +242,40 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
     }
     return outcomes;
   }
+  private async lockNativeTask(connection: PoolConnection, task: ClaimedCollectionTask) {
+    if (!task.nativeAccountScope) return;
+    if (!task.accountId || !task.leaseToken) throw new Error("collection_task_lease_invalid");
+    const tokenHash = createHash("sha256").update("scoutops:collection-task-lease:v1\0")
+      .update(task.leaseToken).digest("hex");
+    const [[parent]] = await connection.query<RowDataPacket[]>(
+      "SELECT t.id FROM collection_tasks t JOIN account_owned_records a " +
+        "ON a.source_table='collection_tasks' AND a.source_id=t.id AND a.account_id=t.account_id " +
+        "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+        "WHERE t.id=? AND t.account_id=? AND t.attempt_count=? AND t.status='running' " +
+        "AND t.lease_token_hash=UNHEX(?) AND t.lease_expires_at>UTC_TIMESTAMP(3) " +
+        "AND (a.reason='exclusive_owner' OR (a.reason IN ('shared','unassigned') AND a.account_id=cut.primary_account_id)) FOR UPDATE",
+      [task.id, task.accountId, task.attemptCount, tokenHash],
+    );
+    if (!parent) throw new Error("collection_task_lease_invalid");
+  }
+  private async updateReplay(task: ClaimedCollectionTask, sql: string, params: unknown[]) {
+    if (!task.nativeAccountScope) {
+      await this.pool.query(sql, params);
+      return;
+    }
+    const connection = await this.pool.getConnection();
+    try {
+      await connection.beginTransaction();
+      await this.lockNativeTask(connection, task);
+      await connection.query(sql, params);
+      await connection.commit();
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+  }
 
   private async persistSubqueryOutcome(
     task: ClaimedCollectionTask,
@@ -247,15 +283,20 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
     outcome: PersistedSubqueryOutcome,
   ) {
     const connection = await this.pool.getConnection(),
-      now = new Date();
+      now = new Date(),
+      eventId = randomUUID();
     try {
       await connection.beginTransaction();
-      await connection.query(
+      await this.lockNativeTask(connection, task);
+      const [updated] = await connection.query<ResultSetHeader>(
         [
           "UPDATE collection_subqueries SET status=?,available_result_count=?,missing_fields_json=?,",
           "error_code=?,retryable=0,started_at=COALESCE(started_at,?),finished_at=?,version=version+1,",
           "updated_at=? WHERE id=? AND task_id=?",
-        ].join(""),
+        ].join("") + (task.nativeAccountScope
+          ? " AND provider_id=? AND EXISTS (SELECT 1 FROM account_owned_records a " +
+            "WHERE a.source_table='collection_subqueries' AND a.source_id=collection_subqueries.id AND a.account_id=?)"
+          : ""),
         [
           outcome.status,
           outcome.availableResultCount,
@@ -266,19 +307,20 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           now,
           outcome.id,
           task.id,
+          ...(task.nativeAccountScope ? [providerId, task.accountId] : []),
         ],
       );
+      if (task.nativeAccountScope && updated.affectedRows !== 1)
+        throw new Error("collection_subquery_result_mismatch");
       await connection.query(
         [
-          "INSERT INTO collection_task_events(id,task_id,organization_id,workspace_id,event_type,from_status,",
-          "to_status,actor_type,actor_id,request_id,trace_id,metadata_json,occurred_at) VALUES(?,?,?,?,",
+          "INSERT INTO collection_task_events(id,task_id,event_type,from_status,",
+          "to_status,actor_type,actor_id,request_id,trace_id,metadata_json,occurred_at) VALUES(?,?,",
           "'collection.subquery.completed','running',?,'worker',?,?,?,?,?)",
         ].join(""),
         [
-          randomUUID(),
+          eventId,
           task.id,
-          task.organizationId,
-          task.workspaceId,
           outcome.status,
           this.workerId,
           task.requestId,
@@ -297,6 +339,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           now,
         ],
       );
+      await inheritCollectionHistoryOwner(connection, "collection_task_events", eventId, task.id,
+        task.nativeAccountScope ? task.accountId : undefined);
       await connection.commit();
     } catch (error) {
       await connection.rollback();
@@ -404,6 +448,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
                   organizationId: task.organizationId,
                   workspaceId: task.workspaceId,
                   taskId: task.id,
+                  ...(task.accountId === undefined ? {} : { accountId: task.accountId }),
                   attemptCount: task.attemptCount,
                   leaseToken: task.leaseToken,
                   onHistoricalResult: () => {
@@ -430,6 +475,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           await this.evidence.persistBrowserArtifact({
             organizationId: task.organizationId,
             workspaceId: task.workspaceId,
+            ...(task.accountId === undefined ? {} : { taskFence: { accountId: task.accountId, leaseToken: task.leaseToken } }),
             taskId: task.id,
             subqueryId: query.id,
             providerId: provider.id,
@@ -479,6 +525,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
             {
               organizationId: task.organizationId,
               workspaceId: task.workspaceId,
+              ...(task.accountId === undefined ? {} : { taskFence: { accountId: task.accountId, leaseToken: task.leaseToken } }),
               taskId: task.id,
               subqueryId: query.id,
               providerId: provider.id,
@@ -736,6 +783,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       now = new Date();
     try {
       await connection.beginTransaction();
+      await this.lockNativeTask(connection, task);
       const [rows] = await connection.query<RowDataPacket[]>(
           "SELECT * FROM providers WHERE id=? FOR UPDATE",
           [provider.id],
@@ -799,16 +847,16 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         now,
       ],
     );
-    await connection.query(
-      [
+    await appendPlatformAudit(connection,
+        [
         "INSERT INTO platform_audit_events (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,",
         "outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES ",
         "(?,?,?,?,'provider.parser_drift.auto_paused','provider',?,'succeeded',?,?,?,?,1)",
       ].join(""),
       [
         randomUUID(),
-        task.organizationId,
-        task.workspaceId,
+        task.nativeAccountScope ? null : task.organizationId,
+        task.nativeAccountScope ? null : task.workspaceId,
         actorId,
         provider.id,
         task.requestId,
@@ -818,6 +866,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           parser_version: provider.parserVersion,
           error_code: failure.code,
           retryable: failure.retryable,
+          ...(task.nativeAccountScope ? { account_id: task.accountId, collection_task_id: task.id } : {}),
         }),
         now,
       ],

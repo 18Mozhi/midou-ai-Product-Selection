@@ -185,7 +185,7 @@ test("queued genuine empty search has no parse error and retains both evidence a
   const client = new MySqlAuthenticatedBrowserJobClient(
     {
       query: async (sql) =>
-        sql.startsWith("SELECT id,status") ? [[terminal]] : [{ affectedRows: 1 }],
+        sql.startsWith("SHOW COLUMNS FROM browser_collection_jobs") ? [[]] : sql.startsWith("SELECT j.id,j.status") ? [[terminal]] : [{ affectedRows: 1 }],
     },
     1,
     async () => assert.fail("terminal empty search must not poll"),
@@ -308,8 +308,9 @@ test("queued Amazon job carries target, returns evidence and does not retry perm
   let terminal = { id: "job", status: "succeeded", result_json: result() };
   const pool = {
     query: async (sql, values) => {
+      if (sql.startsWith("SHOW COLUMNS FROM browser_collection_jobs")) return [[]];
       calls.push({ sql, values });
-      return sql.startsWith("SELECT id,status") ? [[terminal]] : [{ affectedRows: 1 }];
+      return sql.startsWith("SELECT j.id,j.status") ? [[terminal]] : [{ affectedRows: 1 }];
     },
   };
   const input = {
@@ -331,7 +332,7 @@ test("queued Amazon job carries target, returns evidence and does not retry perm
     assert.fail("terminal jobs must not poll again"),
   );
   const collected = await client.collect(input, async () => {});
-  assert.equal(JSON.parse(calls[0].values[6]).purpose, "amazon_public");
+  assert.equal(JSON.parse(calls[0].values[1]).purpose, "amazon_public");
   assert.equal(collected.records[0].externalId, asin);
   assert.equal(collected.parseError, null);
   assert.equal(collected.artifacts.length, 2);
@@ -379,9 +380,10 @@ test("cached captcha remains blocked without counting a new source failure", asy
       created_by: "actor",
     };
     const query = async (sql, values) => {
+      if (sql.startsWith("SHOW COLUMNS FROM browser_collection_jobs")) return [[]];
       statements.push({ sql, values });
       if (sql.includes("FROM providers p")) return [[provider]];
-      if (sql.startsWith("SELECT id,status"))
+      if (sql.startsWith("SELECT j.id,j.status"))
         return [
           [
             {
@@ -451,12 +453,12 @@ test("cached captcha remains blocked without counting a new source failure", asy
       assert.equal(circuit.values[2], 1);
     }
     const outcome = statements.find(({ sql }) =>
-      sql.includes("INSERT INTO collection_task_events"),
+      sql.includes("'collection.subquery.completed'"),
     );
     assert.ok(outcome);
-    assert.equal(outcome.values[4], "blocked");
-    assert.equal(JSON.parse(outcome.values[8]).error_code, "captcha");
-    assert.equal(JSON.parse(outcome.values[8]).available_result_count, 0);
+    assert.equal(outcome.values[2], "blocked");
+    assert.equal(JSON.parse(outcome.values[6]).error_code, "captcha");
+    assert.equal(JSON.parse(outcome.values[6]).available_result_count, 0);
     assert.ok(statements.every(({ sql }) => !sql.includes("SET status='disabled'")));
   }
 });
@@ -465,6 +467,7 @@ test("historical success is consumed but cannot reset the source failure counter
   for (const historical of [false, true]) {
     const writes = [];
     const query = async (sql, values) => {
+      if (sql.startsWith("SHOW COLUMNS FROM browser_collection_jobs")) return [[]];
       if (sql.includes("FROM providers p"))
         return [
           [
@@ -549,6 +552,7 @@ test("historical browser classification uses the scoped live attempt, including 
     let observation;
     const client = new MySqlAuthenticatedBrowserJobClient({
       query: async (sql, values) => {
+      if (sql.startsWith("SHOW COLUMNS FROM browser_collection_jobs")) return [[]];
         if (sql.startsWith("SELECT")) {
           observation = { sql, values };
           return [
@@ -586,14 +590,14 @@ test("historical browser classification uses the scoped live attempt, including 
     assert.equal(collected.records[0].externalId, asin);
     assert.equal(notices, historical === 1 ? 1 : 0);
     for (const guard of [
-      "t.organization_id=j.organization_id",
-      "t.workspace_id=j.workspace_id",
+      "parent.organization_id=?",
+      "parent.workspace_id=?",
       "t.status='running'",
       "t.lease_expires_at>NOW(3)",
       "a.status='running'",
       "a.started_at>j.finished_at",
       "a.attempt_number=t.attempt_count",
-      "collection_task_id=? AND provider_id=?",
+      "j.collection_task_id=? AND j.provider_id=?",
     ])
       assert.ok(observation.sql.includes(guard), guard);
     assert.deepEqual(observation.values, [
@@ -617,6 +621,7 @@ test("crawler claim only permits the configured canonical empty Amazon profile a
       rollback: async () => {},
       release: () => {},
       query: async (sql, values) => {
+      if (sql.startsWith("SHOW COLUMNS FROM browser_collection_jobs")) return [[]];
         calls.push({ sql, values });
         return sql.startsWith("SELECT") ? [[]] : [{ affectedRows: 1 }];
       },
