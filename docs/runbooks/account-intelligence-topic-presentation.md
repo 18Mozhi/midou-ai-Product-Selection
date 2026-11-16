@@ -4,6 +4,8 @@
 
 分组只用于列表。展开后可从各自原 ID 打开独立情报，包括原证据、来源链接和分页。标题相似但主题键不同的记录不做合并；筛选条件只影响展示，不修改库。账号模式不使用旧合并／拆分入口，旧历史仍保留。
 
+合并正式端情报详情导航后，关闭详情会回到刚查看的原记录按钮，而不是分组代表记录。详情若从列表补充图片或来源，只能使用同一原 ID 的列表项，不能借用同组其他记录。证据翻页保留新旧记录的原链接；回退到概览时仍使用当前记录的首页来源标题，而非用较早页标题覆盖。无 API、配置或后端重启变更，随正式前端包发布。
+
 账号版 Worker 扫描并领取情报时同时核对采集任务、原始证据、标准化记录和投影作业归属。新作业与归属记录同事务写入；发现已有作业时不重复生成。投影校验领取次数与有效租约，再写入同账号主题与原证据关联；既有信号优先沿用原主题，历史重复主题不合并。刷新、找货及补采保留原判定规则及阈值。没有新增配置，由正式协调发布启动新版 Worker。验证见 `tests/unit/trend-projection-worker-scheduling.test.mjs`、`tests/unit/trend-projection-account-owner.test.mjs` 与 `tests/unit/collected-product-projection.test.mjs`。
 
 自动来源和监控规则保留原游标、间隔、来源配置和预算数值。账号模式用任务原生归属与封存归属一致的活动任务计算预算；已有的 `AUTOMATIC_SOURCE_TENANT_ACTIVE_TASK_BUDGET` 配置名不变，切换后预算按账号计算。新任务、子查询、回执和原游标必须同时提交；共享游标归到其他账号或更新不到原游标时整批拒绝。测试见 `tests/unit/automatic-source-schedule-account.test.mjs`、`tests/unit/automatic-source-fairness.test.mjs` 与 `tests/unit/trend-rule-scheduler.test.mjs`。不重跑现有任务，无新增开关或手工重启步骤。

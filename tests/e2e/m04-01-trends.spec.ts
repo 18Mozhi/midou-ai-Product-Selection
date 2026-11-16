@@ -97,6 +97,28 @@ const envelope = (data: unknown, meta?: unknown) => ({
   trace_id: "m04-01-e2e-trace",
 });
 const managerCapabilities = ["task:read", "trend:read", "trend:manage"];
+test("grouped intelligence returns focus to the original variant and preserves its reference", async ({ page }) => {
+  const representative = { ...topic, topic_variants: [mergeTopic] };
+  const canonical = "https://example.test/news/original-variant";
+  await ready(page, [representative]);
+  await page.route(`**/api/v1/trends/${mergeTopic.id}`, (route) =>
+    route.fulfill({ json: envelope({
+      ...detail, ...mergeTopic,
+      evidence: [{ ...detail.evidence[0], canonical_url: canonical, title: "Original variant source" }],
+    }) }),
+  );
+  await page.goto("/trends");
+  await page.getByText("查看 1 条原始情报", { exact: true }).click();
+  const variant = page.locator(`[data-topic-id="${mergeTopic.id}"]`);
+  await variant.click();
+  await expect(page.locator(".trend-detail h3")).toHaveText(mergeTopic.title);
+  await page.getByRole("tab", { name: "来源证据" }).click();
+  const evidence = page.locator("article").filter({ has: page.getByText("Original variant source", { exact: true }) }).last();
+  await expect(evidence.getByRole("link", { name: /查看原文/ })).toHaveAttribute("href", canonical);
+  await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
+  await expect(variant).toBeFocused();
+});
+
 const relatedProduct = {
   id: "00000000-0000-4000-8000-000000000488",
   name: "情报对应的收纳盒",

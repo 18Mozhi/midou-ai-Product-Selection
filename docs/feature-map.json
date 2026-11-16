@@ -425,6 +425,7 @@
       "apps/api/src/mysql-trend-repository.ts",
       "apps/api/src/trend-routes.ts",
       "apps/web/src/components/TrendDashboard.vue",
+      "apps/web/src/components/TrendDetailHeader.vue",
       "apps/web/src/components/TrendDetailPanel.vue"
     ],
     "testFiles": [
@@ -432,7 +433,7 @@
       "tests/unit/account-trend-preservation.test.mjs"
     ],
     "docs": ["docs/openapi.yaml", "docs/runbooks/account-intelligence-topic-presentation.md"],
-    "contract": "Filter owned topics before display-only grouping and count groups before pagination. A wrong shared owner is not visible in the grouped list or by original ID. Preserve each displayed variant, evidence reference and follow without merge or deletion."
+    "contract": "Filter owned topics before display-only grouping and count groups before pagination. A wrong shared owner is not visible in the grouped list or by original ID. Preserve each displayed variant, evidence reference and follow without merge or deletion. Closing details returns focus to the original record, and list media is reused only for that exact ID."
   },
   "accountSourcingQuoteRuntime": {
     "sourceFiles": [

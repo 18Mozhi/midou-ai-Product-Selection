@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { nextTick, ref, useId, watch } from "vue";
-import { statusLabel } from "../ui/status-labels";
-import AppIcon from "./AppIcon.vue";
-import UiStatePanel from "./UiStatePanel.vue";
+import TrendDetailHeader from "./TrendDetailHeader.vue";
 import TrendEvidenceTimeline from "./TrendEvidenceTimeline.vue";
-import type { TrendDetail } from "./trend-workspace-types";
+import type { TrendDetail, TrendTopic } from "./trend-workspace-types";
 
 const props = defineProps<{
   detail: TrendDetail | null;
@@ -12,6 +10,7 @@ const props = defineProps<{
   canReadRelated: boolean;
   evidencePageBusy?: boolean;
   evidencePageError?: string;
+  listMedia?: Pick<TrendTopic, "image_url" | "source_url">;
 }>();
 const emit = defineEmits<{
   back: [];
@@ -62,79 +61,18 @@ function moveTab(event: KeyboardEvent, index: number) {
   activeTab.value = tab.key;
   (event.currentTarget as HTMLElement).parentElement?.querySelectorAll("button")[next]?.focus();
 }
-const freshness = (value: string) =>
-  new Intl.DateTimeFormat("zh-CN", {
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).format(new Date(value));
 </script>
 
 <template>
   <article class="trend-detail" :aria-busy="busy === 'detail'">
-    <header>
-      <div>
-        <button
-          class="trend-detail-back so-action-quiet"
-          type="button"
-          aria-label="关闭详情 · 返回情报列表"
-          @click="emit('back')"
-        >
-          关闭详情<span class="trend-detail-back-context"> · 返回情报列表</span>
-        </button>
-        <div v-if="detail && busy !== 'detail'" class="trend-detail-badges">
-          <span><AppIcon name="map-pin" :size="16" />{{ detail.market }}</span
-          ><span><AppIcon name="globe" :size="16" />{{ detail.language }}</span
-          ><span :data-status="detail.status">{{ statusLabel(detail.status) }}</span>
-        </div>
-        <h3 v-if="detail && busy !== 'detail'">{{ detail.title }}</h3>
-        <p
-          v-if="leadEvidenceTitle && busy !== 'detail' && activeTab !== 'evidence'"
-          class="trend-detail-source-title"
-        >
-          <span>来源标题</span> {{ leadEvidenceTitle }}
-        </p>
-        <span v-if="detail && busy !== 'detail'" class="trend-detail-freshness"
-          >首次 {{ freshness(detail.first_seen_at) }} · 最近来源
-          {{ freshness(detail.source_fresh_at) }}</span
-        >
-      </div>
-    </header>
-    <UiStatePanel
-      v-if="busy === 'detail'"
-      kind="loading"
-      title="正在读取情报证据"
-      description="读取完成后显示所选情报的详情。"
-      :compact="true"
-      :hide-secondary="true"
+    <TrendDetailHeader
+      :detail="detail"
+      :busy="busy"
+      :list-media="listMedia"
+      :show-overview-title="activeTab !== 'evidence'"
+      :overview-evidence-title="leadEvidenceTitle"
+      @back="emit('back')"
     />
-    <dl v-else-if="detail" class="trend-detail-facts" aria-label="情报资料">
-      <div>
-        <dt><AppIcon name="activity" :size="16" />信号</dt>
-        <dd>{{ detail.signal_count }} 条</dd>
-      </div>
-      <div>
-        <dt><AppIcon name="layers" :size="16" />来源</dt>
-        <dd>{{ detail.source_count }} 个</dd>
-      </div>
-      <div>
-        <dt><AppIcon name="file" :size="16" />证据</dt>
-        <dd>{{ detail.data_quality.evidence_count }} 条</dd>
-      </div>
-      <div>
-        <dt><AppIcon name="shield" :size="16" />可信度</dt>
-        <dd :data-insufficient="detail.confidence.status === 'insufficient_data'">
-          {{
-            detail.confidence.status === "insufficient_data"
-              ? "数据不足"
-              : `${detail.confidence.score} / 100`
-          }}
-        </dd>
-      </div>
-    </dl>
-    <p v-else>未取得情报详情，可关闭后重新选择该主题。</p>
     <template v-if="detail && busy !== 'detail'">
       <div ref="tabList" class="trend-detail-tabs" role="tablist" aria-label="情报详情视图">
         <button

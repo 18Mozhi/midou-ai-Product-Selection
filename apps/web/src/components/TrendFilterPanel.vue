@@ -21,24 +21,26 @@ const updateFilter = (key: keyof TrendFilters, event: Event) =>
   <ResponsiveFilterDrawer label="筛选趋势" :active-count="activeCount">
     <form class="trend-filters" @submit.prevent="emit('apply')">
       <label
-        >市场<span class="trend-filter-field"
+        ><span class="trend-filter-caption">市场</span
+        ><span class="trend-filter-field"
           ><AppIcon name="globe" :size="18" /><select
             :value="filters.market"
             @change="updateFilter('market', $event)"
           >
             <option value="">全部市场</option>
-            <option value="US">US</option>
-          </select></span
-        ></label
+            <option value="US">US</option></select
+          ><AppIcon class="trend-filter-chevron" name="chevron" :size="15" /></span></label
       ><label
-        >分类<span class="trend-filter-field"
+        ><span class="trend-filter-caption">分类</span
+        ><span class="trend-filter-field"
           ><AppIcon name="category-grid" :size="18" /><input
             :value="filters.category"
             maxlength="80"
             placeholder="全部分类"
             @input="updateFilter('category', $event)" /></span></label
       ><label
-        >状态<span class="trend-filter-field"
+        ><span class="trend-filter-caption">状态</span
+        ><span class="trend-filter-field"
           ><AppIcon name="activity" :size="18" /><select
             :value="filters.status"
             @change="updateFilter('status', $event)"
@@ -46,28 +48,28 @@ const updateFilter = (key: keyof TrendFilters, event: Event) =>
             <option value="active">活跃</option>
             <option value="irrelevant">已标记无关</option>
             <option value="stale">已过期</option>
-            <option value="">全部状态</option>
-          </select></span
-        ></label
+            <option value="">全部状态</option></select
+          ><AppIcon class="trend-filter-chevron" name="chevron" :size="15" /></span></label
       ><label class="search"
-        >关键词<span class="trend-filter-search"
+        ><span class="trend-filter-caption">关键词</span
+        ><span class="trend-filter-search"
           ><AppIcon name="search" :size="16" /><input
             :value="filters.q"
             maxlength="200"
             placeholder="搜索主题或关键词"
             @input="updateFilter('q', $event)" /></span></label
       ><label
-        >排序<span class="trend-filter-field"
+        ><span class="trend-filter-caption">排序</span
+        ><span class="trend-filter-field"
           ><AppIcon name="layers" :size="18" /><select
             :value="sort"
             @change="emit('updateSort', ($event.target as HTMLSelectElement).value as TrendSort)"
           >
             <option value="impact">影响程度</option>
             <option value="latest">最新信号</option>
-            <option value="momentum">增长速度</option>
-          </select></span
-        ></label
-      >
+            <option value="momentum">增长速度</option></select
+          ><AppIcon class="trend-filter-chevron" name="chevron" :size="15" /></span
+      ></label>
       <div class="trend-filter-actions">
         <button class="filter-apply-action secondary" type="submit">
           <AppIcon name="funnel" :size="16" />筛选
@@ -80,29 +82,4 @@ const updateFilter = (key: keyof TrendFilters, event: Event) =>
   </ResponsiveFilterDrawer>
 </template>
 
-<style scoped>
-.trend-filter-actions > button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  white-space: nowrap;
-}
-.trend-filter-actions > button > svg {
-  flex-shrink: 0;
-}
-.filter-apply-action {
-  border-color: var(--so-border);
-  color: var(--so-text);
-  background-color: transparent;
-  background-image: none;
-}
-
-@media (max-width: 760px) {
-  .filter-apply-action {
-    border-color: var(--so-primary);
-    color: var(--so-on-primary);
-    background-color: var(--so-primary);
-  }
-}
-</style>
+<style scoped src="./trend-filter-actions.css"></style>

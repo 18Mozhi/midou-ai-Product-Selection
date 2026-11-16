@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   computed,
+  nextTick,
   onActivated,
   onBeforeUnmount,
   onDeactivated,
@@ -40,6 +41,8 @@ const props = defineProps<{
   state = ref<State>("loading"),
   topics = ref<Topic[]>([]),
   selected = ref<Detail | null>(null),
+  topicList = ref<HTMLElement | null>(null),
+  splitListOverflow = ref(false),
   detailPanel = ref<InstanceType<typeof TrendDetailPanel> | null>(null),
   mobileDetailOpen = ref(typeof route.query.topic === "string"),
   requestId = ref(""),
@@ -102,6 +105,9 @@ const activeFilterCount = computed(
       (left, right) => right.heat.value - left.heat.value || right.source_count - left.source_count,
     );
   });
+const selectedListMedia = computed(() =>
+  topics.value.find((topic) => topic.id === selected.value?.id),
+);
 async function read<T = any>(
   path: string,
   isCurrent: () => boolean = () => true,
@@ -222,10 +228,67 @@ async function selectTopic(topic: Pick<Topic, "id">) {
   await router.push({ query: { ...route.query, topic: topic.id, section: undefined } });
 }
 
-function returnToTopicList() {
+function topicButton(id: string) {
+  const row = topicList.value?.querySelector<HTMLButtonElement>(`[data-topic-id="${CSS.escape(id)}"]`);
+  const group = row?.closest("details");
+  if (group) group.open = true;
+  return row;
+}
+
+function updateSplitList(pane: HTMLElement, id: unknown) {
+  if (!pageActive || !pane.clientHeight) return;
+  const bounds = pane.getBoundingClientRect();
+  const viewportBottom = bounds.top + pane.clientTop + pane.clientHeight;
+  const rows = pane.querySelectorAll(":scope > :is(.trend-topic-row, .trend-topic-variants)");
+  const last = rows.item(rows.length - 1);
+  splitListOverflow.value = !!last &&
+    last.getBoundingClientRect().bottom + pane.scrollTop > viewportBottom + 1;
+  if (typeof id !== "string" || getComputedStyle(pane).overflowY !== "auto") return;
+  const row = topicButton(id);
+  if (!row) return;
+  const header = pane.querySelector(":scope > header");
+  const footer = pane.querySelector(":scope > .trend-pagination");
+  const visibleTop = header && getComputedStyle(header).position === "sticky"
+    ? Math.max(bounds.top, header.getBoundingClientRect().bottom)
+    : bounds.top;
+  const visibleBottom = Math.min(viewportBottom, footer?.getBoundingClientRect().top ?? Infinity);
+  const selectedBounds = row.getBoundingClientRect();
+  if (selectedBounds.top < visibleTop || selectedBounds.height > visibleBottom - visibleTop)
+    pane.scrollTop += selectedBounds.top - visibleTop;
+  else if (selectedBounds.bottom > visibleBottom)
+    pane.scrollTop += selectedBounds.bottom - visibleBottom;
+}
+
+watch([topicList, mobileDetailOpen, sortedTopics, () => route.query.topic], ([pane, open, , id], _, cleanup) => {
+  if (!open || !pane) {
+    splitListOverflow.value = false;
+    return;
+  }
+  let frame = 0;
+  const measure = () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => updateSplitList(pane, id));
+  };
+  const observer = new ResizeObserver(measure);
+  observer.observe(pane);
+  for (const child of pane.children) observer.observe(child);
+  measure();
+  cleanup(() => {
+    observer.disconnect();
+    cancelAnimationFrame(frame);
+  });
+}, { flush: "post" });
+
+async function returnToTopicList() {
+  const id = route.query.topic;
   mobileDetailOpen.value = false;
   selected.value = null;
-  void router.replace({ query: { ...route.query, topic: undefined } });
+  await router.replace({ query: { ...route.query, topic: undefined } });
+  await nextTick();
+  if (!pageActive || route.query.topic !== undefined || typeof id !== "string") return;
+  const row = topicButton(id);
+  row?.focus({ preventScroll: true });
+  row?.scrollIntoView({ block: "nearest" });
 }
 function syncFromRoute() {
   filters.q = typeof route.query.q === "string" ? route.query.q : "";
@@ -490,23 +553,26 @@ onBeforeUnmount(() => {
       class="trend-workbench"
       :class="{ 'is-mobile-detail-open': mobileDetailOpen, 'is-detail-open': mobileDetailOpen }"
     >
-      <section id="trend-list" class="trend-list">
+      <section id="trend-list" ref="topicList" class="trend-list" :data-split-overflow="splitListOverflow || undefined">
         <header>
           <div>
             <strong>情报列表</strong><span>共 {{ total }} 个主题</span>
           </div>
-          <small class="trend-list-sort-summary">{{
-            sort === "impact"
-              ? "按影响程度排序"
-              : sort === "latest"
-                ? "按最新时间排序"
-                : "按热度变化排序"
-          }}</small>
+          <label class="trend-list-order">
+            <AppIcon name="arrow-down-up" :size="16" />
+            <select v-model="sort" aria-label="情报列表顺序">
+              <option value="impact">按影响程度排序</option>
+              <option value="latest">按最新信号排序</option>
+              <option value="momentum">按增长速度排序</option>
+            </select>
+            <AppIcon name="chevron" :size="14" />
+          </label>
         </header>
         <template v-for="(topic, index) in sortedTopics" :key="topic.id">
           <button
             class="trend-topic-row"
             type="button"
+            :data-topic-id="topic.id"
             :aria-pressed="selected?.id === topic.id"
             @click="selectTopic(topic)"
           >
@@ -537,7 +603,7 @@ onBeforeUnmount(() => {
             <summary>查看 {{ topic.topic_variants.length }} 条原始情报</summary>
             <ul>
               <li v-for="variant in topic.topic_variants" :key="variant.id">
-                <button type="button" @click="selectTopic(variant)">
+                <button type="button" :data-topic-id="variant.id" :aria-pressed="selected?.id === variant.id" @click="selectTopic(variant)">
                   {{ variant.title }} · {{ statusLabel(variant.status) }} ·
                   {{ freshness(variant.last_seen_at) }}
                 </button>
@@ -557,6 +623,7 @@ onBeforeUnmount(() => {
         v-if="mobileDetailOpen"
         ref="detailPanel"
         :detail="selected"
+        :list-media="selectedListMedia"
         :busy="busy"
         :evidence-page-busy="evidencePageBusy"
         :evidence-page-error="evidencePageError"
@@ -578,3 +645,4 @@ onBeforeUnmount(() => {
     <TrendMetricExplainer />
   </section>
 </template>
+<style src="./trend-account-reconciliation.css"></style>

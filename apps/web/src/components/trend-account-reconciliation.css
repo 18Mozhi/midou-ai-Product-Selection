@@ -1,0 +1,99 @@
+#app .trend-dashboard--review .trend-list-order {
+  position: relative;
+  align-self: start;
+  color: var(--so-text-muted);
+}
+.trend-list-order > svg {
+  position: absolute;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.trend-list-order > svg:first-child {
+  inset-inline-start: 10px;
+}
+.trend-list-order > svg:last-child {
+  inset-inline-end: 9px;
+  transform: translateY(-50%) rotate(90deg);
+}
+#app .trend-dashboard--review .trend-list-order select {
+  appearance: none;
+  min-height: 36px;
+  padding: 5px 29px 5px 32px;
+  border: 1px solid var(--so-border);
+  border-radius: 7px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  font: 550 13px/20px var(--so-font-ui);
+}
+@media (max-width: 640px) {
+  #app .trend-dashboard--review .trend-list-order select {
+    min-height: 44px;
+  }
+}
+@media (min-width: 1600px) {
+  #app .trend-dashboard--review .trend-list-order {
+    margin-inline-end: -7px;
+    margin-block-start: 2px;
+  }
+  #app .trend-dashboard--review .trend-list-order select {
+    inline-size: 158px;
+  }
+}
+
+@media (min-width: 1101px) {
+  /* Keep sort anchored whether the split list has a next page or not. */
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    > .trend-list:is([data-split-overflow], :has(> .trend-pagination)) {
+    padding-block-start: 0;
+    scroll-padding-block-start: 88px;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    > .trend-list:is([data-split-overflow], :has(> .trend-pagination)):has(> header:focus-within) {
+    scroll-padding-block-start: 0;
+  }
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    > .trend-list:is([data-split-overflow], :has(> .trend-pagination))
+    > header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    padding-block-start: 16px;
+    background: var(--trend-workbench-surface, var(--so-panel));
+  }
+}
+
+/* The selected topic's photo or source icon shares the badge row without moving the close control. */
+#app
+  .trend-dashboard--review
+  .trend-detail-badges:has(> .trend-detail-thumbnail[data-has-source="true"]) {
+  align-items: center;
+}
+#app .trend-dashboard--review .trend-detail-badges > .trend-detail-thumbnail {
+  box-sizing: border-box;
+  inline-size: 36px;
+  block-size: 36px;
+  padding: 0;
+  border-radius: 8px;
+}
+#app
+  .trend-dashboard--review
+  .trend-detail-badges
+  > .trend-detail-thumbnail[data-has-source="false"] {
+  display: none;
+}
+@media (min-width: 1101px) {
+  #app .trend-dashboard--review .trend-detail-badges > .trend-detail-thumbnail {
+    inline-size: 42px;
+    block-size: 42px;
+  }
+}
