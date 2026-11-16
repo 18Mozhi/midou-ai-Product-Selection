@@ -39,6 +39,7 @@ export const selectionHttpIds = {
   organization: "00000000-0000-4000-8000-000000009101",
   workspace: "00000000-0000-4000-8000-000000009102",
   product: "00000000-0000-4000-8000-000000009103",
+  secondaryProduct: "00000000-0000-4000-8000-000000009104",
 };
 
 export async function createSelectionHttpStack(webOrigin) {
@@ -205,14 +206,14 @@ export async function createSelectionHttpStack(webOrigin) {
     },
     {
       ...base,
-      id: "00000000-0000-4000-8000-000000009104",
+      id: selectionHttpIds.secondaryProduct,
       main_asin: "B0HTTP0010",
       name: "HTTP 验证旅行收纳袋",
       market: "DE",
       primary_product: primary(12.5),
     },
   ];
-  const decisions = [];
+  const decisions = new Map(products.map(({ id }) => [id, []]));
   const opportunities = new OpportunityService({
     async list(input) {
       if (!inScope(input)) return { items: [], total: 0 };
@@ -247,7 +248,7 @@ export async function createSelectionHttpStack(webOrigin) {
             latest_score_run: null,
             score_components: [],
             evidence: [],
-            decisions,
+            decisions: decisions.get(product.id),
             section_status: {
               market: "insufficient_data",
               competition: "covered",
@@ -301,7 +302,7 @@ export async function createSelectionHttpStack(webOrigin) {
         trace_id: input.traceId,
         route: input.route,
       };
-      decisions.push(decision);
+      decisions.get(product.id).push(decision);
       const value = {
         opportunity_id: product.id,
         decision_status: product.decision_status,

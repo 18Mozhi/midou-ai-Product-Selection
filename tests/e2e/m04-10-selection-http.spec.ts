@@ -174,32 +174,41 @@ test("[real-api] detail comparison reads five independent competitors from its s
   ).toBeVisible();
 });
 
-test("[real-api] observed decision saves through HTTP and survives reopening", async ({ page }) => {
+test("[real-api] observed decision saves through HTTP and survives reopening", async ({
+  page,
+}, testInfo) => {
   await login(page);
-  await page.goto(`/opportunities/${ids.product}`);
+  // The projects share one synthetic HTTP process; give each an independent write target.
+  const product = testInfo.project.name === "mobile-390" ? ids.secondaryProduct : ids.product;
+  await page.goto(`/opportunities/${product}`);
   await page.getByText("提前人工处理", { exact: true }).click();
   await page.getByRole("button", { name: "继续观察", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "记录继续观察决定" });
-  const reason = "HTTP 集成验证：继续采集，不虚构利润";
+  const reason = `HTTP 集成验证：继续采集，不虚构利润 ${randomUUID()}`;
   await dialog.getByLabel("原因（必填）").fill(reason);
   const saved = page.waitForResponse(
     (response) =>
-      response.url().endsWith(`/opportunities/${ids.product}/decisions`) &&
+      response.url().endsWith(`/opportunities/${product}/decisions`) &&
       response.request().method() === "POST",
   );
   await dialog.getByRole("button", { name: "确认记录" }).click();
-  expect((await saved).status()).toBe(200);
+  const response = await saved;
+  expect(response.status()).toBe(200);
+  const persisted = (await response.json()).data;
+  expect(persisted.version).toBe(response.request().postDataJSON().expected_version + 1);
   await expect(page.locator(".opportunity-message")).toContainText(
     "决策已记录；原始评分与证据未被改写。",
   );
   const reopened = page.waitForResponse(
-    (response) => new URL(response.url()).pathname === `/api/v1/opportunities/${ids.product}`,
+    (response) => new URL(response.url()).pathname === `/api/v1/opportunities/${product}`,
   );
-  await page.goto(`/opportunities/${ids.product}?tab=decisions`);
+  await page.goto(`/opportunities/${product}?tab=decisions`);
   const detail = (await (await reopened).json()).data;
   expect(detail.decision_status).toBe("observing");
-  expect(detail.version).toBe(2);
-  expect(detail.decisions).toHaveLength(1);
+  expect(detail.version).toBeGreaterThanOrEqual(persisted.version);
+  expect(
+    detail.decisions.filter((decision: { id: string }) => decision.id === persisted.decision_id),
+  ).toEqual([expect.objectContaining({ reason, opportunity_version: persisted.version })]);
   await expect(page.locator(".opportunity-decisions")).toContainText(reason);
   png(await page.screenshot({ fullPage: true }), page);
 });
@@ -308,6 +317,7 @@ test("[real-api] saved quote matrix renders authenticated HTTP facts without sup
   const payload = await response.json();
   expect(payload.data).toHaveLength(1);
   expect(payload.data[0].quotes).toHaveLength(2);
+  await page.getByRole("tab", { name: "报价历史", exact: true }).click();
   const table = page.locator(".sourcing-comparisons").getByRole("table");
   await expect(table.locator("tbody tr")).toHaveCount(payload.data[0].quotes.length);
   for (const quote of payload.data[0].quotes) {
