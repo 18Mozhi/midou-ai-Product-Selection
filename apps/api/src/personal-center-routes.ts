@@ -4,6 +4,7 @@ import type { AuthorizationService } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 import type { PersonalCenterService } from "./personal-center-service.js";
+import { authenticatedRehearsalAccount } from "./account-read-rehearsal.js";
 
 export function registerPersonalCenterRoutes(
   app: FastifyInstance,
@@ -13,6 +14,7 @@ export function registerPersonalCenterRoutes(
     auth: LocalAuthService;
     secureCookie: boolean;
     webOrigin: string;
+    accountReadRehearsal?: boolean;
   },
 ) {
   const ids = (request: FastifyRequest) => ({
@@ -61,8 +63,12 @@ export function registerPersonalCenterRoutes(
     );
   });
   app.get("/api/v1/me/assets", async (request, reply) => {
-    const current = await scope(request);
     reply.header("cache-control", "private, no-store");
+    if (options.accountReadRehearsal) {
+      const { accountId } = await authenticatedRehearsalAccount(request, options.auth, options.secureCookie);
+      return envelope(await options.service.accountAssets(accountId), request);
+    }
+    const current = await scope(request);
     return envelope(
       await options.service.assets(current.userId, current.organizationId, current.workspaceId),
       request,

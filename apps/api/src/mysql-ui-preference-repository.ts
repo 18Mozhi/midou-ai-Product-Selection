@@ -9,20 +9,37 @@ import type {
   UiPreferenceRepository,
 } from "@scoutops/preferences";
 
-const columns = "id,user_id,organization_id,workspace_id,theme,version,created_at,updated_at";
+const baseColumns = "id,user_id,theme,version,created_at,updated_at";
 const map = (row: RowDataPacket): UiPreference => ({
   id: String(row.id),
   user_id: String(row.user_id),
-  organization_id: String(row.organization_id),
-  workspace_id: String(row.workspace_id),
+  ...(row.organization_id && row.workspace_id
+    ? { organization_id: String(row.organization_id), workspace_id: String(row.workspace_id) }
+    : {}),
   theme: String(row.theme) as ThemeId,
   version: Number(row.version),
   created_at: new Date(row.created_at),
   updated_at: new Date(row.updated_at),
 });
 export class MySqlUiPreferenceRepository implements UiPreferenceRepository {
-  constructor(private readonly pool: Pool) {}
+  constructor(private readonly pool: Pool, private readonly accountOnly = false) {}
+  private get columns() {
+    return this.accountOnly ? baseColumns : baseColumns + ",organization_id,workspace_id";
+  }
+  private get scopeColumns() {
+    return this.accountOnly ? "" : ",organization_id,workspace_id";
+  }
+  private scopeWhere(alias = "") {
+    return this.accountOnly ? "" : ` AND ${alias}organization_id=? AND ${alias}workspace_id=?`;
+  }
+  private scopeValues(organizationId?: string, workspaceId?: string) {
+    if (this.accountOnly) return [];
+    if (!organizationId || !workspaceId) throw new Error("legacy_preference_scope_required");
+    return [organizationId, workspaceId];
+  }
   async resolveScope(sessionId: string, userId: string) {
+    // The route has authenticated the session; no client-supplied scope or identity is used.
+    if (this.accountOnly) return { userId };
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT c.user_id,c.organization_id,c.workspace_id FROM user_session_contexts c JOIN " +
         "memberships m ON m.user_id=c.user_id AND m.organization_id=c.organization_id AND m.status='active' " +
@@ -41,22 +58,22 @@ export class MySqlUiPreferenceRepository implements UiPreferenceRepository {
   }
   async find(scope: PreferenceScope) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      `SELECT ${columns} FROM user_ui_preferences WHERE user_id=? AND organization_id=? AND workspace_id=? LIMIT 1`,
-      [scope.userId, scope.organizationId, scope.workspaceId],
+      `SELECT ${this.columns} FROM user_ui_preferences WHERE user_id=?${this.scopeWhere()} LIMIT 1`,
+      [scope.userId, ...this.scopeValues(scope.organizationId, scope.workspaceId)],
     );
     return rows[0] ? map(rows[0]) : null;
   }
   async findOperation(scope: PreferenceScope, keyHash: string) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      `SELECT o.request_hash,${columns
+      `SELECT o.request_hash,${this.columns
         .split(",")
         .map((value) => `p.${value}`)
         .join(",")}
          FROM user_ui_preference_operations o
-         JOIN user_ui_preferences p ON p.id=o.preference_id
-         WHERE o.user_id=? AND o.organization_id=? AND o.workspace_id=?
+         JOIN user_ui_preferences p ON p.id=o.preference_id AND p.user_id=o.user_id
+         WHERE o.user_id=?${this.scopeWhere("o.")}
           AND o.key_hash=? LIMIT 1`,
-      [scope.userId, scope.organizationId, scope.workspaceId, keyHash],
+      [scope.userId, ...this.scopeValues(scope.organizationId, scope.workspaceId), keyHash],
     );
     return rows[0]
       ? { request_hash: String(rows[0].request_hash), preference: map(rows[0]) }
@@ -75,13 +92,12 @@ export class MySqlUiPreferenceRepository implements UiPreferenceRepository {
       if (expectedVersion === null) {
         try {
           await connection.query(
-            "INSERT INTO user_ui_preferences (id,user_id,organization_id,workspace_id," +
-              "theme,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?)",
+            `INSERT INTO user_ui_preferences (id,user_id${this.scopeColumns},` +
+              `theme,version,created_at,updated_at) VALUES (?,?${this.accountOnly ? "" : ",?,?"},?,?,?,?)`,
             [
               preference.id,
               preference.user_id,
-              preference.organization_id,
-              preference.workspace_id,
+              ...this.scopeValues(preference.organization_id, preference.workspace_id),
               preference.theme,
               preference.version,
               preference.created_at,
@@ -101,15 +117,14 @@ export class MySqlUiPreferenceRepository implements UiPreferenceRepository {
       } else {
         const [result] = await connection.query<ResultSetHeader>(
           "UPDATE user_ui_preferences SET theme=?,version=?,updated_at=? WHERE id=? AND user_id=? " +
-            "AND organization_id=? AND workspace_id=? AND version=?",
+            `${this.scopeWhere()} AND version=?`,
           [
             preference.theme,
             preference.version,
             preference.updated_at,
             preference.id,
             preference.user_id,
-            preference.organization_id,
-            preference.workspace_id,
+            ...this.scopeValues(preference.organization_id, preference.workspace_id),
             expectedVersion,
           ],
         );
@@ -121,14 +136,12 @@ export class MySqlUiPreferenceRepository implements UiPreferenceRepository {
       }
       await this.insertAudit(connection, audit);
       await connection.query(
-        "INSERT INTO user_ui_preference_operations (id,user_id,organization_id,workspace_id," +
-          "key_hash,request_hash,preference_id,preference_version,created_at) VALUES (?," +
-          "?,?,?,?,?,?,?,?)",
+        `INSERT INTO user_ui_preference_operations (id,user_id${this.scopeColumns},` +
+          `key_hash,request_hash,preference_id,preference_version,created_at) VALUES (?,?${this.accountOnly ? "" : ",?,?"},?,?,?,?,?)`,
         [
           randomUUID(),
           operation.user_id,
-          operation.organization_id,
-          operation.workspace_id,
+          ...this.scopeValues(operation.organization_id, operation.workspace_id),
           operation.key_hash,
           operation.request_hash,
           operation.preference_id,
@@ -147,15 +160,13 @@ export class MySqlUiPreferenceRepository implements UiPreferenceRepository {
   }
   private insertAudit(connection: PoolConnection, event: PreferenceAudit) {
     return connection.query(
-      "INSERT INTO user_ui_preference_audit_events (id,preference_id,user_id,organization_id," +
-        "workspace_id,action,previous_theme,theme,request_id,trace_id,occurred_at," +
-        "schema_version) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+      `INSERT INTO user_ui_preference_audit_events (id,preference_id,user_id${this.scopeColumns},` +
+        `action,previous_theme,theme,request_id,trace_id,occurred_at,schema_version) VALUES (?,?,?${this.accountOnly ? "" : ",?,?"},?,?,?,?,?,?,?)`,
       [
         event.id,
         event.preference_id,
         event.user_id,
-        event.organization_id,
-        event.workspace_id,
+        ...this.scopeValues(event.organization_id, event.workspace_id),
         event.action,
         event.previous_theme,
         event.theme,

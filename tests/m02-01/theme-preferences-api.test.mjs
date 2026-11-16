@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { buildApp } from "../../apps/api/dist/app.js";
+import { MySqlUiPreferenceRepository } from "../../apps/api/dist/mysql-ui-preference-repository.js";
 import {
   InMemoryUiPreferenceRepository,
   UiPreferenceService,
@@ -78,4 +79,61 @@ test("M02-01.A08/A16 missing selected context returns explicit recovery code", a
   assert.equal(response.json().error.code, "preference_scope_required");
   assert.match(response.json().error.action_hint, /组织与工作区/);
   await app.close();
+});
+
+test("account theme uses only authenticated identity, omits legacy scope and preserves idempotency", async () => {
+  const rows = new Map(), operations = new Map(), audits = [];
+  const query = async (sql, args) => {
+    assert.doesNotMatch(sql, /organization_id|workspace_id|user_session_contexts/);
+    assert.equal((sql.match(/\?/g) ?? []).length, args.length, sql);
+    if (sql.startsWith("SELECT o.request_hash")) {
+      const op = operations.get(args.join(":"));
+      return [op ? [{ ...rows.get(args[0]), request_hash: op }] : []];
+    }
+    if (sql.startsWith("SELECT")) return [rows.has(args[0]) ? [rows.get(args[0])] : []];
+    if (sql.startsWith("INSERT INTO user_ui_preferences ")) {
+      const [id, user_id, theme, version, created_at, updated_at] = args;
+      rows.set(user_id, { id, user_id, theme, version, created_at, updated_at });
+    } else if (sql.startsWith("UPDATE")) {
+      const [theme, version, updated_at, id, actor, expected] = args;
+      const old = rows.get(actor);
+      assert.equal(old.id, id);
+      assert.equal(old.version, expected);
+      rows.set(actor, { ...old, theme, version, updated_at });
+      return [{ affectedRows: 1 }];
+    } else if (sql.startsWith("INSERT INTO user_ui_preference_audit_events")) audits.push(args);
+    else if (sql.startsWith("INSERT INTO user_ui_preference_operations"))
+      operations.set(args.slice(1, 3).join(":"), args[3]);
+    else assert.fail(sql);
+    return [{}];
+  };
+  const pool = { query, async getConnection() {
+    return { query, async beginTransaction() {}, async commit() {}, async rollback() {}, release() {} };
+  } };
+  const app = buildApp({ uiPreferences: {
+    service: new UiPreferenceService(new MySqlUiPreferenceRepository(pool, true)),
+    auth: { async authenticate(token) { return { user: { id: token }, session: { id: "session" } }; } },
+    webOrigin: "http://127.0.0.1:5173", secureCookie: false,
+  } });
+  const invoke = (method, actor, key, payload) => app.inject({
+    method, url: "/api/v1/me/ui-preferences", payload,
+    headers: { ...headers, cookie: `scoutops_session=${actor}`, "idempotency-key": key },
+  });
+  try {
+    const first = { theme: "cloud-white", expected_version: 0 };
+    const created = await invoke("PUT", "account-a", "same-key", first);
+    assert.equal(created.statusCode, 200, created.body);
+    assert.deepEqual(Object.keys(created.json().data).sort(), ["source", "theme", "updated_at", "version"]);
+    assert.deepEqual((await invoke("PUT", "account-a", "same-key", first)).json().data, created.json().data);
+    assert.equal((await invoke("PUT", "account-a", "same-key", { ...first, theme: "deep-ocean" })).statusCode, 409);
+    assert.equal((await invoke("GET", "account-b", "unused")).json().data.source, "default");
+    assert.equal((await invoke("PUT", "account-b", "same-key", first)).statusCode, 200);
+    const updated = await invoke("PUT", "account-a", "next-key", { theme: "aurora-purple", expected_version: 1 });
+    assert.equal(updated.statusCode, 200, updated.body);
+    assert.equal(updated.json().data.version, 2);
+    assert.equal((await invoke("GET", "account-b", "unused")).json().data.theme, "cloud-white");
+    assert.equal(audits.length, 3);
+  } finally {
+    await app.close();
+  }
 });

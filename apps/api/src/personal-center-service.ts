@@ -1,6 +1,10 @@
 import { ApiError } from "./api-foundation.js";
 import { normalizeUsername } from "@scoutops/auth";
 
+export type PersonalAssetsScope =
+  | { userId: string }
+  | { userId: string; organizationId: string; workspaceId: string };
+
 export interface PersonalCenterRepository {
   profile(input: { userId: string }): Promise<unknown>;
   updateProfile(input: {
@@ -19,7 +23,7 @@ export interface PersonalCenterRepository {
     traceId: string;
     now: Date;
   }): Promise<unknown>;
-  assets(input: { userId: string; organizationId: string; workspaceId: string }): Promise<unknown>;
+  assets(input: PersonalAssetsScope): Promise<unknown>;
 }
 
 export class PersonalCenterError extends ApiError {
@@ -48,6 +52,10 @@ export class PersonalCenterService {
 
   assets(userId: string, organizationId: string, workspaceId: string) {
     return this.repository.assets({ userId, organizationId, workspaceId });
+  }
+
+  accountAssets(userId: string) {
+    return this.repository.assets({ userId });
   }
 
   update(

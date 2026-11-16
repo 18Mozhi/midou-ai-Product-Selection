@@ -1,7 +1,16 @@
+import { appendPlatformAudit } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
-import type { PersonalCenterRepository } from "./personal-center-service.js";
+import type { PersonalAssetsScope, PersonalCenterRepository } from "./personal-center-service.js";
 import { PersonalCenterError } from "./personal-center-service.js";
+import { requireAccountReadRehearsal } from "./account-read-rehearsal.js";
+
+function ownsPersonalAsset(table: string, id: string, account: string) {
+  return `EXISTS (SELECT 1 FROM account_owned_records own JOIN account_ownership_cutover cut
+    ON cut.slot='current' AND cut.contract_version=25 WHERE own.source_table='${table}'
+    AND own.source_id=${id} AND own.account_id=${account}
+    AND (own.reason='exclusive_owner' OR (own.reason IN ('shared','unassigned') AND own.account_id=cut.primary_account_id)))`;
+}
 
 const iso = (value: unknown) => (value ? new Date(value as string | Date).toISOString() : null);
 
@@ -112,7 +121,7 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
         version,
         updated_at: input.now.toISOString(),
       };
-      await connection.query(
+      await appendPlatformAudit(connection,
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action," +
           "resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
           "schema_version) VALUES (?,NULL,NULL,?,'user.profile.updated','user_profile',?," +
@@ -164,18 +173,37 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
     }
   }
 
-  async assets(input: { userId: string; organizationId: string; workspaceId: string }) {
-    const [followed, decisions, tasks] = await Promise.all([
+  async assets(input: PersonalAssetsScope) {
+    const scoped = "organizationId" in input;
+    let nativeTrend = "", nativeOpportunity = "", nativeTask = "";
+    if (!scoped) {
+      await requireAccountReadRehearsal(this.pool);
+      const [columns] = await this.pool.query<RowDataPacket[]>(
+        "SELECT TABLE_NAME table_name,COLUMN_NAME column_name FROM information_schema.COLUMNS " +
+          "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN ('trend_topics','opportunities','tasks') " +
+          "AND COLUMN_NAME IN ('account_id','organization_id','workspace_id')",
+      );
+      const native = (table: string, alias: string, recipient: string) => {
+        const shape = columns.filter(c => c.table_name === table).map(c => c.column_name).sort().join(",");
+        if (shape === "account_id") return ` AND ${alias}.account_id=${recipient}`;
+        if (shape === "organization_id,workspace_id") return "";
+        throw new PersonalCenterError("personal_asset_scope_schema_invalid", 503, "账号资产尚未就绪。");
+      };
+      nativeTrend = native("trend_topics", "t", "f.account_id");
+      nativeOpportunity = native("opportunities", "o", "d.actor_id");
+      nativeTask = native("tasks", "t", "t.assignee_id");
+    }
+    const [followed, decisions, tasks] = await Promise.all(scoped ? [
       this.pool.query<RowDataPacket[]>(
-        "SELECT t.id,t.title,t.market,t.category,t.status,f.created_at FROM trend_topic_follows " +
-          "f JOIN trend_topics t ON t.id=f.topic_id WHERE f.user_id=? AND f.organization_id=? AND " +
-          "f.workspace_id=? ORDER BY f.created_at DESC LIMIT 20",
+        "SELECT t.id,t.title,t.market,t.category,t.status,f.created_at FROM account_trend_topic_follows " +
+          "f JOIN trend_topics t ON t.id=f.topic_id WHERE f.account_id=? AND t.organization_id=? AND " +
+          "t.workspace_id=? ORDER BY f.created_at DESC LIMIT 20",
         [input.userId, input.organizationId, input.workspaceId],
       ),
       this.pool.query<RowDataPacket[]>(
         "SELECT d.id,d.action,d.reason,d.resulting_status,d.created_at,o.id opportunity_id," +
           "o.name opportunity_name FROM opportunity_decisions d JOIN opportunities o ON o.id=d.opportunity_id " +
-          "WHERE d.actor_id=? AND d.organization_id=? AND d.workspace_id=? ORDER BY d.created_at " +
+          "WHERE d.actor_id=? AND o.organization_id=? AND o.workspace_id=? ORDER BY d.created_at " +
           "DESC LIMIT 20",
         [input.userId, input.organizationId, input.workspaceId],
       ),
@@ -184,6 +212,28 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
           "organization_id=? AND workspace_id=? AND deleted_at IS NULL ORDER BY updated_at DESC " +
           "LIMIT 20",
         [input.userId, input.organizationId, input.workspaceId],
+      ),
+    ] : [
+      this.pool.query<RowDataPacket[]>(
+        "SELECT t.id,t.title,t.market,t.category,t.status,f.created_at FROM account_trend_topic_follows " +
+          "f JOIN trend_topics t ON t.id=f.topic_id WHERE f.account_id=? AND " +
+          ownsPersonalAsset("trend_topics", "t.id", "f.account_id") + nativeTrend +
+          " ORDER BY f.created_at DESC LIMIT 20",
+        [input.userId],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT d.id,d.action,d.reason,d.resulting_status,d.created_at,o.id opportunity_id," +
+          "o.name opportunity_name FROM opportunity_decisions d JOIN opportunities o ON o.id=d.opportunity_id " +
+          "WHERE d.actor_id=? AND " + ownsPersonalAsset("opportunities", "o.id", "d.actor_id") +
+          " AND " + ownsPersonalAsset("opportunity_decisions", "d.id", "d.actor_id") + nativeOpportunity +
+          " ORDER BY d.created_at DESC LIMIT 20",
+        [input.userId],
+      ),
+      this.pool.query<RowDataPacket[]>(
+        "SELECT id,title,status,priority,due_at,updated_at FROM tasks t WHERE t.assignee_id=? AND " +
+          ownsPersonalAsset("tasks", "t.id", "t.assignee_id") + nativeTask +
+          " AND t.deleted_at IS NULL ORDER BY t.updated_at DESC LIMIT 20",
+        [input.userId],
       ),
     ]);
     return {

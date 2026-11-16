@@ -1,4 +1,18 @@
 {
+  "accountPersonalCenterRuntime": {
+    "sourceFiles": [
+      "apps/api/src/mysql-personal-center-repository.ts",
+      "apps/api/src/mysql-ui-preference-repository.ts",
+      "packages/preferences/src/index.ts",
+      "apps/web/src/components/PersonalCenter.vue"
+    ],
+    "testFiles": [
+      "tests/unit/personal-center.test.mjs",
+      "tests/m02-01/theme-preferences-api.test.mjs"
+    ],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-personal-center.md"],
+    "contract": "Followed topics, decisions and assigned tasks use the verified account with matching native and sealed ownership. Theme preferences are account-scoped and the profile omits retired organization/workspace context."
+  },
   "accountImportAnalysisHistory": {
     "sourceFiles": [
       "apps/api/src/erp-product-import-service.ts",

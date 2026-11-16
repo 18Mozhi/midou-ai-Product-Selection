@@ -17,8 +17,6 @@ const props = withDefaults(
     apiBaseUrl: string;
     initialSection?: string;
     accountShell?: boolean;
-    organizationName?: string | null;
-    workspaceName?: string | null;
   }>(),
   { initialSection: "profile", accountShell: false },
 );
@@ -131,16 +129,6 @@ const sectionItems = [
                 {{ center.profile.value.email_verified_at ? "邮箱已验证" : "邮箱尚未验证" }}
               </small>
             </div>
-            <dl v-if="organizationName || workspaceName" class="midou-profile-context">
-              <div v-if="organizationName">
-                <dt><AppIcon name="building" />所属组织</dt>
-                <dd>{{ organizationName }}</dd>
-              </div>
-              <div v-if="workspaceName">
-                <dt><AppIcon name="box" />工作区</dt>
-                <dd>{{ workspaceName }}</dd>
-              </div>
-            </dl>
           </section>
           <section class="midou-profile-security">
             <h3>安全信息</h3>

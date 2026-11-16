@@ -334,7 +334,7 @@ const app = buildApp({
     secureCookie: config.nodeEnv === "production",
   },
   uiPreferences: {
-    service: new UiPreferenceService(new MySqlUiPreferenceRepository(pool)),
+    service: new UiPreferenceService(new MySqlUiPreferenceRepository(pool, accountReadRehearsal)),
     auth: localAuth,
     webOrigin: config.app.webOrigin,
     secureCookie: config.nodeEnv === "production",

@@ -3,16 +3,18 @@ import { createHash, randomUUID } from "node:crypto";
 export const THEME_IDS = ["deep-ocean", "aurora-purple", "cloud-white"] as const;
 export type ThemeId = (typeof THEME_IDS)[number];
 export type PreferenceSource = "default" | "saved";
-export interface PreferenceScope {
+export interface PreferenceCoordinates {
+  organizationId?: string;
+  workspaceId?: string;
+}
+export interface PreferenceScope extends PreferenceCoordinates {
   userId: string;
-  organizationId: string;
-  workspaceId: string;
 }
 export interface UiPreference {
   id: string;
   user_id: string;
-  organization_id: string;
-  workspace_id: string;
+  organization_id?: string;
+  workspace_id?: string;
   theme: ThemeId;
   version: number;
   created_at: Date;
@@ -21,8 +23,8 @@ export interface UiPreference {
 export interface UiPreferenceView {
   theme: ThemeId;
   source: PreferenceSource;
-  organization_id: string;
-  workspace_id: string;
+  organization_id?: string;
+  workspace_id?: string;
   version: number;
   updated_at: string | null;
 }
@@ -30,8 +32,8 @@ export interface PreferenceAudit {
   id: string;
   preference_id: string;
   user_id: string;
-  organization_id: string;
-  workspace_id: string;
+  organization_id?: string;
+  workspace_id?: string;
   action: "ui_preference.created" | "ui_preference.updated";
   previous_theme: ThemeId | null;
   theme: ThemeId;
@@ -42,8 +44,8 @@ export interface PreferenceAudit {
 }
 export interface PreferenceOperation {
   user_id: string;
-  organization_id: string;
-  workspace_id: string;
+  organization_id?: string;
+  workspace_id?: string;
   key_hash: string;
   request_hash: string;
   preference_id: string;
@@ -81,6 +83,12 @@ export interface PreferenceContext extends PreferenceScope {
   idempotencyKey: string;
 }
 const hash = (value: string) => createHash("sha256").update(value).digest("hex");
+const coordinates = (scope: PreferenceCoordinates) => scope.organizationId && scope.workspaceId
+  ? { organization_id: scope.organizationId, workspace_id: scope.workspaceId }
+  : {};
+const viewCoordinates = (value: UiPreference) => value.organization_id && value.workspace_id
+  ? { organization_id: value.organization_id, workspace_id: value.workspace_id }
+  : {};
 export function isThemeId(value: unknown): value is ThemeId {
   return typeof value === "string" && THEME_IDS.includes(value as ThemeId);
 }
@@ -106,8 +114,7 @@ export class UiPreferenceService {
       : {
           theme: "deep-ocean",
           source: "default",
-          organization_id: scope.organizationId,
-          workspace_id: scope.workspaceId,
+          ...coordinates(scope),
           version: 0,
           updated_at: null,
         };
@@ -158,8 +165,7 @@ export class UiPreferenceService {
         : {
             id: randomUUID(),
             user_id: context.userId,
-            organization_id: context.organizationId,
-            workspace_id: context.workspaceId,
+            ...coordinates(context),
             theme: input.theme,
             version: 1,
             created_at: now,
@@ -169,8 +175,7 @@ export class UiPreferenceService {
       id: randomUUID(),
       preference_id: preference.id,
       user_id: context.userId,
-      organization_id: context.organizationId,
-      workspace_id: context.workspaceId,
+      ...coordinates(context),
       action: current ? "ui_preference.updated" : "ui_preference.created",
       previous_theme: current?.theme ?? null,
       theme: preference.theme,
@@ -181,8 +186,7 @@ export class UiPreferenceService {
     };
     const operation: PreferenceOperation = {
       user_id: context.userId,
-      organization_id: context.organizationId,
-      workspace_id: context.workspaceId,
+      ...coordinates(context),
       key_hash: keyHash,
       request_hash: requestHash,
       preference_id: preference.id,
@@ -205,8 +209,7 @@ export class UiPreferenceService {
     return {
       theme: value.theme,
       source,
-      organization_id: value.organization_id,
-      workspace_id: value.workspace_id,
+      ...viewCoordinates(value),
       version: value.version,
       updated_at: value.updated_at.toISOString(),
     };
@@ -242,8 +245,8 @@ export class InMemoryUiPreferenceRepository implements UiPreferenceRepository {
   ) {
     const key = this.scopeKey({
         userId: preference.user_id,
-        organizationId: preference.organization_id,
-        workspaceId: preference.workspace_id,
+        ...(preference.organization_id && preference.workspace_id
+          ? { organizationId: preference.organization_id, workspaceId: preference.workspace_id } : {}),
       }),
       current = this.preferences.get(key);
     if ((current?.version ?? null) !== expectedVersion) return false;

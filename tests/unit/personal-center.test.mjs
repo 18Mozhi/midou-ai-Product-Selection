@@ -4,6 +4,67 @@ import { readFile } from "node:fs/promises";
 import Fastify from "fastify";
 import { PersonalCenterService } from "../../apps/api/dist/personal-center-service.js";
 import { registerPersonalCenterRoutes } from "../../apps/api/dist/personal-center-routes.js";
+import { MySqlPersonalCenterRepository } from "../../apps/api/dist/mysql-personal-center-repository.js";
+
+test("account assets use verified session identity and sealed ownership without resolving tenancy", async (t) => {
+  const queries = [];
+  let sealed = true, mixed = false;
+  const repository = new MySqlPersonalCenterRepository({
+    query: async (sql, params) => {
+      queries.push({ sql, params });
+      if (sql.includes("information_schema.COLUMNS"))
+        return [["trend_topics","opportunities","tasks"].flatMap(table_name =>
+          (mixed ? ["account_id","workspace_id"] : ["account_id"]).map(column_name=>({table_name,column_name})))];
+      return [sql.startsWith("SELECT slot") && sealed ? [{ slot: "current" }] : []];
+    },
+  });
+  const app = Fastify({ logger: false });
+  t.after(() => app.close());
+  app.setErrorHandler((error, _request, reply) => reply.code(error.statusCode ?? 500).send({ code: error.code }));
+  let verified = true;
+  registerPersonalCenterRoutes(app, {
+    service: new PersonalCenterService(repository),
+    authorization: { resolveSession: async () => assert.fail("must not resolve legacy scope") },
+    auth: { authenticate: async () => ({ user: { id: "verified-account", email_verified_at: verified ? "2026-10-15" : null } }) },
+    accountReadRehearsal: true,
+    secureCookie: false,
+    webOrigin: "https://app.example.test",
+  });
+  const fetch = () => app.inject({
+    url: "/api/v1/me/assets?account_id=foreign",
+    headers: { cookie: "scoutops_session=session-token", "x-workspace-id": "foreign" },
+  });
+  const result = await fetch();
+  assert.equal(result.statusCode, 200);
+  assert.deepEqual(result.json().data, { followed_trends: [], decisions: [], tasks: [] });
+  assert.equal(result.headers["cache-control"], "private, no-store");
+  assert.match(queries[0].sql, /contract_version=25/);
+  assert.equal(queries.length, 5);
+  for (const { sql, params } of queries.slice(2)) {
+    assert.deepEqual(params, ["verified-account"]);
+    assert.match(sql, /account_owned_records/);
+    assert.match(sql, /own.reason IN \('shared','unassigned'\) AND own.account_id=cut.primary_account_id/);
+    assert.doesNotMatch(sql, /organization_id|workspace_id/);
+  }
+  assert.match(queries[2].sql, /source_table='trend_topics'[\s\S]*t.account_id=f.account_id/);
+  assert.match(queries[3].sql, /source_table='opportunities'[\s\S]*source_table='opportunity_decisions'[\s\S]*o.account_id=d.actor_id/);
+  assert.match(queries[4].sql, /source_table='tasks'[\s\S]*t.account_id=t.assignee_id/);
+
+  mixed = true;
+  const mismatch = await fetch();
+  assert.equal(mismatch.statusCode,503);
+  assert.equal(mismatch.json().code,"personal_asset_scope_schema_invalid");
+  assert.equal(queries.length,7);
+
+  sealed = false;
+  const unavailable = await fetch();
+  assert.equal(unavailable.statusCode, 503);
+  assert.equal(unavailable.json().code, "account_ownership_not_ready");
+  assert.equal(queries.length, 8);
+  verified = false;
+  assert.equal((await fetch()).statusCode, 403);
+  assert.equal(queries.length, 8);
+});
 
 test("personal center validates versioned account-level profile changes", async () => {
   const calls = [];

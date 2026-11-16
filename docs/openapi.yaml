@@ -3663,6 +3663,7 @@ paths:
   /me/assets:
     get:
       summary: Get current-user followed trends, decisions and assigned tasks in selected scope
+      x-account-runtime: Account mode uses only the verified session. The original followed topics, decisions and tasks must match native and sealed ownership.
       responses:
         "200": { $ref: "#/components/responses/Success" }
   /realtime/events:
@@ -5045,6 +5046,7 @@ paths:
   /me/ui-preferences:
     get:
       summary: Read the signed-in user's preference for the selected organization and workspace
+      x-account-runtime: Account-mode theme preferences are scoped by the authenticated account and omit legacy scope coordinates from the response.
       responses:
         "200":
           {
@@ -9084,7 +9086,7 @@ components:
       enum: [deep-ocean, aurora-purple, cloud-white]
     UiPreference:
       type: object
-      required: [theme, source, organization_id, workspace_id, version, updated_at]
+      required: [theme, source, version, updated_at]
       properties:
         theme: { $ref: "#/components/schemas/ThemeId" }
         source: { type: string, enum: [default, saved] }

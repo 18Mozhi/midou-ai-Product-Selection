@@ -181,7 +181,7 @@ test("r8 capture duplicate is rejected before starting a browser or server", () 
   assert.equal(hash(readFileSync(`${currentRoot}/evidence.json`)), hash(bytes));
 });
 
-test("current account presentation preserves the captured identity and lifecycle script", () => {
+test("current account keeps the captured section routing without legacy scope or duplicate logout", () => {
   const file = "apps/web/src/components/AccountShell.vue";
   const script = (source) => {
     const match = source.match(/<script setup lang="ts">([\s\S]*?)<\/script>/);
@@ -195,5 +195,13 @@ test("current account presentation preserves the captured identity and lifecycle
     .replace(/import ThemeStudio from "\.\/ThemeStudio.vue";\s*/, "")
     .replace(/\{ key: "appearance", label: "外观偏好", description: "主题与密度" \},?\s*/, "");
   const compact = (value) => value.replace(/\s+/g, "").replace(/,\]/g, "]");
-  assert.equal(compact(priorLifecycle), compact(script(readPreSelectionRebuild(file))));
+  const captured = script(readPreSelectionRebuild(file));
+  assert.match(captured, /import SessionLogout from/);
+  assert.equal(compact(priorLifecycle), compact(
+    captured.replace(/import SessionLogout from "\.\/SessionLogout.vue";\s*/, ""),
+  ));
+  assert.doesNotMatch(read(file), /organizationName|workspaceName|organization-name|workspace-name/);
+  const center = read("apps/web/src/components/PersonalCenter.vue");
+  assert.doesNotMatch(center, /organizationName|workspaceName|midou-profile-context/);
+  assert.match(read("apps/web/src/components/NavigationShell.vue"), /<SessionLogout :api-base-url="apiBaseUrl"/);
 });

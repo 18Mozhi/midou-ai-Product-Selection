@@ -43,6 +43,7 @@ export function registerWorkflowDomainRoutes(context: ApiDomainContext) {
   });
   registerPersonalCenterRoutes(context.app, {
     service: new PersonalCenterService(new MySqlPersonalCenterRepository(context.pool)),
+    accountReadRehearsal: context.accountReadRehearsal,
     ...common,
   });
   registerRealtimeRoutes(context.app, {
