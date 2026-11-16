@@ -1,4 +1,10 @@
 {
+  "accountProductionCoordinatedRelease": {
+    "sourceFiles": ["scripts/deploy-account-baota.py", "scripts/baota-account-release-coordinator.py"],
+    "testFiles": ["tests/unit/test_baota_account_release_coordinator.py"],
+    "docs": ["docs/runbooks/account-production-coordinated-release.md"],
+    "contract": "Fixed-host strict SSH, clean approved main, exclusive upload, private verified candidate, stop writers, lock and migrate, install and validate before activation. The original runtime can resume only on a proven unchanged schema before the destructive phase. A journal blocks blind replay; no backups or isolation."
+  },
   "accountReleaseStageAndActivation": {
     "sourceFiles": ["scripts/baota-account-release-stage.py", "scripts/serve-account-production-cutover.mjs", "scripts/baota-account-cutover-control.py"],
     "testFiles": ["tests/unit/test_baota_account_release_stage.py", "tests/unit/account-production-session.test.mjs", "tests/unit/test_baota_account_cutover_control.py"],

@@ -8,14 +8,17 @@ import runpy
 import paramiko
 
 
-def writer_control_source(action: str, build_sha=None) -> str:
+def writer_control_source(action: str, build_sha=None, baseline=None) -> str:
     import re
-    if (action not in {"inspect", "quiesce", "activate"} or
-            (action == "activate" and not isinstance(build_sha, str)) or
-            (action == "activate" and not re.fullmatch(r"[0-9a-f]{40}", build_sha)) or
-            (action != "activate" and build_sha is not None)):
+    start = action in {"activate", "resume_baseline"}
+    if (action not in {"inspect", "quiesce", "activate", "resume_baseline"} or
+            (start and (not isinstance(build_sha, str) or not re.fullmatch(r"[0-9a-f]{40}", build_sha))) or
+            (not start and build_sha is not None) or
+            (action == "resume_baseline" and (not isinstance(baseline, dict) or set(baseline) != {"node", "python"}
+                                             or not all(type(x) is bool for x in baseline.values()))) or
+            (action != "resume_baseline" and baseline is not None)):
         raise ValueError("account_release_invalid_baota_action")
-    return f"action={action!r}\nbuild_sha={build_sha!r}\n" + r'''
+    return f"action={action!r}\nbuild_sha={build_sha!r}\nbaseline={baseline!r}\n" + r'''
 import json, os, socket, sys, time
 from pathlib import Path
 
@@ -148,6 +151,29 @@ if action == 'activate':
     while not after['writers']['node'] or not after['writers']['python'] or not after['node_listener']:
         if time.monotonic() >= deadline:
             raise RuntimeError('account_release_new_writers_not_running')
+        time.sleep(1)
+        after = observe()
+
+if action == 'resume_baseline':
+    release = root / 'config/release.env'
+    if release.is_symlink() or not release.is_file():
+        raise RuntimeError('account_release_baseline_identity_missing')
+    lines = release.read_text(encoding='utf-8').splitlines()
+    if ([line for line in lines if line.startswith('BUILD_SHA=')] != ['BUILD_SHA=' + build_sha] or
+            [line for line in lines if line.startswith('RELEASE_SOURCE_MIGRATION_VERSION=')] !=
+            ['RELEASE_SOURCE_MIGRATION_VERSION=0076_collection_backlog_cancellation.up.sql'] or
+            'ACCOUNT_SCOPE_MODE=retired' in lines):
+        raise RuntimeError('account_release_baseline_identity_mismatch')
+    if baseline['node'] and not (before['writers']['node'] or before['node_listener']):
+        panel_action(NodeModel(), 'start_project', 'node')
+    if baseline['python'] and not before['writers']['python']:
+        panel_action(PythonModel(), 'StartProject', 'python')
+    deadline = time.monotonic() + 45
+    after = observe()
+    while ((baseline['node'] and not (after['writers']['node'] and after['node_listener'])) or
+           (baseline['python'] and not after['writers']['python'])):
+        if time.monotonic() >= deadline:
+            raise RuntimeError('account_release_baseline_resume_not_ready')
         time.sleep(1)
         after = observe()
 
