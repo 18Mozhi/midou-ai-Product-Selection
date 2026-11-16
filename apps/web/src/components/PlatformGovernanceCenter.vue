@@ -7,7 +7,7 @@ import { useModalDialog } from "../use-modal-dialog";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import ResponsiveFilterDrawer from "./ResponsiveFilterDrawer.vue";
 import TechnicalDetails from "./TechnicalDetails.vue";
-const props = defineProps<{ apiBaseUrl: string }>();
+const props = defineProps<{ apiBaseUrl: string; accountRehearsal?: boolean }>();
 const request = createApiClient(props.apiBaseUrl);
 type Section =
   "score_rules" | "cost_rules" | "approval_templates" | "automation_rules" | "releases";
@@ -142,7 +142,7 @@ const sectionDescription = computed(
   () =>
     ({
       score_rules: "核对评分口径、版本与归属，再进入评分规则工作台处理。",
-      cost_rules: "核对费用和风险规则的市场范围、版本与责任组织。",
+      cost_rules: "核对费用和风险规则的市场范围与版本。",
       approval_templates: "核对已发布或归档的审批模板及其业务资源范围。",
       automation_rules: "核对触发条件、执行动作、频率限制与当前版本。",
       releases: "核对发布阶段、构建标识与回滚状态，不在本页执行发布。",
@@ -151,10 +151,10 @@ const sectionDescription = computed(
 const searchPlaceholder = computed(
   () =>
     ({
-      score_rules: "搜索规则、版本、组织或工作区",
-      cost_rules: "搜索名称、版本、市场、平台或组织",
-      approval_templates: "搜索名称、资源类型、组织或工作区",
-      automation_rules: "搜索名称、触发事件、动作标题或组织",
+      score_rules: "搜索规则或版本",
+      cost_rules: "搜索名称、版本、市场或平台",
+      approval_templates: "搜索名称或资源类型",
+      automation_rules: "搜索名称、触发事件或动作标题",
       releases: "搜索应用版本、构建标识或发布阶段",
     })[section.value],
 );
@@ -370,7 +370,7 @@ onBeforeUnmount(() => {
       <button type="button" :disabled="refreshing" @click="load()">
         {{ refreshing ? "刷新中…" : "刷新事实" }}
       </button>
-      <RouterLink v-if="current.href" class="is-primary" :to="current.href">
+      <RouterLink v-if="current.href && !(accountRehearsal && current.value === 'approval_templates')" class="is-primary" :to="current.href">
         {{ current.action }}
       </RouterLink>
     </PlatformPageHeader>
@@ -378,7 +378,7 @@ onBeforeUnmount(() => {
       <div class="governance-directory__intro">
         <p>平台治理</p>
         <h2>治理版本目录</h2>
-        <span>跨组织事实 · 不切换当前组织</span>
+        <span>{{ accountRehearsal ? "平台治理记录" : "跨组织事实 · 不切换当前组织" }}</span>
       </div>
       <nav aria-label="治理数据类型">
         <button
@@ -475,7 +475,7 @@ onBeforeUnmount(() => {
             state === "forbidden"
               ? "当前权限还不能读取这些内容。权限调整后，可以重新加载。"
               : state === "loading"
-                ? "正在核对版本、组织归属与当前状态。"
+                ? "正在核对版本与当前状态。"
                 : "请根据提示重试。"
           }}
         </p>
@@ -525,7 +525,7 @@ onBeforeUnmount(() => {
                 <thead>
                   <tr>
                     <th>记录与版本</th>
-                    <th>组织与类型</th>
+                    <th>{{ accountRehearsal ? "类型" : "组织与类型" }}</th>
                     <th>状态</th>
                     <th>更新时间</th>
                     <th>操作</th>
@@ -544,8 +544,8 @@ onBeforeUnmount(() => {
                       <span class="governance-version">{{ versionText(item) }}</span>
                     </td>
                     <td>
-                      <strong>{{ item.organization_name || "平台全局" }}</strong>
-                      <small>{{ item.workspace_name || item.stage || "—" }}</small>
+                      <strong v-if="!accountRehearsal">{{ item.organization_name || "平台全局" }}</strong>
+                      <small v-if="!accountRehearsal || item.stage">{{ item.workspace_name || item.stage || "—" }}</small>
                       <small>
                         {{
                           typeName(
@@ -570,7 +570,7 @@ onBeforeUnmount(() => {
                     <td>
                       <div class="governance-row-actions">
                         <button type="button" @click="selected = item">查看详情</button>
-                        <RouterLink v-if="recordSection !== 'automation_rules'" :to="editHref()">
+                        <RouterLink v-if="recordSection !== 'automation_rules' && !(accountRehearsal && recordSection === 'approval_templates')" :to="editHref()">
                           进入工作台
                         </RouterLink>
                       </div>
@@ -586,7 +586,7 @@ onBeforeUnmount(() => {
             <template #summary="{ row }">
               <span class="responsive-record-summary">
                 <strong>{{ row.name }} · {{ statusName(row.status) }}</strong>
-                <small>{{ versionText(row) }} · {{ row.organization_name || "平台全局" }}</small>
+                <small>{{ versionText(row) }}<template v-if="!accountRehearsal"> · {{ row.organization_name || "平台全局" }}</template></small>
               </span>
             </template>
             <template #detail="{ row }">
@@ -599,12 +599,12 @@ onBeforeUnmount(() => {
                   </span>
                 </div>
                 <dl>
-                  <div>
+                  <div v-if="!accountRehearsal">
                     <dt>所属组织</dt>
                     <dd>{{ row.organization_name || "平台全局" }}</dd>
                   </div>
                   <div>
-                    <dt>工作区或阶段</dt>
+                    <dt>{{ accountRehearsal ? "阶段" : "工作区或阶段" }}</dt>
                     <dd>{{ row.workspace_name || row.stage || "—" }}</dd>
                   </div>
                   <div>
@@ -660,7 +660,7 @@ onBeforeUnmount(() => {
                   </dl>
                 </details>
                 <RouterLink
-                  v-if="recordSection !== 'automation_rules'"
+                  v-if="recordSection !== 'automation_rules' && !(accountRehearsal && recordSection === 'approval_templates')"
                   class="governance-detail-action"
                   :to="editHref()"
                 >
@@ -737,12 +737,12 @@ onBeforeUnmount(() => {
           </span>
         </div>
         <dl>
-          <div>
+          <div v-if="!accountRehearsal">
             <dt>所属组织</dt>
             <dd>{{ selected.organization_name || "平台全局" }}</dd>
           </div>
           <div>
-            <dt>工作区或阶段</dt>
+            <dt>{{ accountRehearsal ? "阶段" : "工作区或阶段" }}</dt>
             <dd>{{ selected.workspace_name || selected.stage || "—" }}</dd>
           </div>
           <div>
@@ -802,7 +802,7 @@ onBeforeUnmount(() => {
         <footer>
           <button @click="selected = null">关闭</button
           ><RouterLink
-            v-if="recordSection !== 'automation_rules'"
+            v-if="recordSection !== 'automation_rules' && !(accountRehearsal && recordSection === 'approval_templates')"
             class="governance-detail-action"
             :to="editHref()"
             >进入所属工作台</RouterLink

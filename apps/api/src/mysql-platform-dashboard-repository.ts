@@ -12,6 +12,61 @@ import { readPlatformStorageMetrics } from "./mysql-platform-dashboard-storage-m
 import { readApiCoverageDashboard } from "./api-coverage-dashboard.js";
 const n = (v: any) => Number(v ?? 0),
   iso = (v: any) => (v ? new Date(v).toISOString() : null);
+const platformOwns = (table: string, id: string, account: string) =>
+  "EXISTS (SELECT 1 FROM account_owned_records own WHERE own.source_table='" + table +
+  "' AND own.source_id=" + id + " AND own.account_id=" + account + ")";
+
+function accountData(entity: string, filter: string, status: string) {
+  const queries: Record<string, {sql: string; params: string[]}> = {
+    trends: {
+      sql: "SELECT t.id,t.title,t.category,t.market,t.status,t.signal_count metric_primary," +
+        "t.source_count metric_secondary,t.last_seen_at updated_at FROM trend_topics t WHERE " +
+        platformOwns("trend_topics","t.id","t.account_id") +
+        " AND t.title LIKE ? AND t.status LIKE ? ORDER BY t.last_seen_at DESC LIMIT 100", params: [filter,status],
+    },
+    opportunities: {
+      sql: "SELECT p.id,p.name title,p.category,p.market,p.decision_status status,p.evidence_count " +
+        "metric_primary,p.source_count metric_secondary,p.updated_at FROM opportunities p WHERE " +
+        platformOwns("opportunities","p.id","p.account_id") +
+        " AND p.name LIKE ? AND p.decision_status LIKE ? ORDER BY p.updated_at DESC LIMIT 100", params: [filter,status],
+    },
+    competitors: {
+      sql: "SELECT c.id,c.title,c.source_site category,c.market,c.status,c.revision metric_primary," +
+        "COUNT(ch.id) metric_secondary,c.updated_at FROM competitors c LEFT JOIN competitor_changes ch " +
+        "ON ch.competitor_id=c.id AND " + platformOwns("competitor_changes","ch.id","c.account_id") +
+        " WHERE " + platformOwns("competitors","c.id","c.account_id") +
+        " AND c.title LIKE ? AND c.status LIKE ? GROUP BY c.id,c.title,c.source_site,c.market,c.status,c.revision,c.updated_at " +
+        "ORDER BY c.updated_at DESC LIMIT 100", params: [filter,status],
+    },
+    suppliers: {
+      sql: "SELECT s.id,s.product_title title,s.supplier_name category,s.location market,s.status,s.moq metric_primary," +
+        "s.quoted_price metric_secondary,s.observed_at updated_at FROM sourcing_candidates s " +
+        "JOIN sourcing_searches q ON q.id=s.search_id JOIN collection_tasks task ON task.id=q.collection_task_id WHERE " +
+        platformOwns("sourcing_candidates","s.id","task.account_id") + " AND " +
+        platformOwns("sourcing_searches","q.id","task.account_id") + " AND " +
+        platformOwns("collection_tasks","task.id","task.account_id") +
+        " AND (s.product_title LIKE ? OR s.supplier_name LIKE ?) AND s.status LIKE ? ORDER BY s.observed_at DESC LIMIT 100",
+      params: [filter,filter,status],
+    },
+  };
+  if (!Object.hasOwn(queries,entity)) throw new Error("invalid_platform_data_entity");
+  return queries[entity]!;
+}
+
+function accountGovernance(section: string, filter: string, status: string) {
+  const shapes: Record<string, {fields: string; terms: string[]}> = {
+    score_rules: { fields:"r.id,r.name,r.version_code,r.status,r.revision,r.updated_at", terms:["name","version_code"] },
+    cost_rules: { fields:"r.id,r.name,r.version_code,r.market,r.platform,r.status,r.revision,r.updated_at", terms:["name","version_code","market","platform"] },
+    approval_templates: { fields:"r.id,r.name,r.resource_type,r.status,r.current_version,r.revision,r.updated_at", terms:["name","resource_type"] },
+    automation_rules: { fields:"r.id,r.name,r.trigger_event_type,r.condition_severity,r.action_type,r.owner_id,r.action_assignee_id,r.action_title,r.rate_limit_count,r.rate_limit_window_minutes,r.status,r.version,r.updated_at", terms:["name","trigger_event_type","action_title"] },
+  };
+  if (!Object.hasOwn(shapes,section)) throw new Error("invalid_platform_governance_section");
+  const shape = shapes[section]!;
+  const searchable = shape.terms.map(term => "CONVERT(r." + term + " USING utf8mb4) COLLATE utf8mb4_unicode_ci LIKE ?").join(" OR ");
+  const from = " FROM " + section + " r WHERE " + platformOwns(section,"r.id","r.account_id") + " AND (" + searchable + ") AND r.status LIKE ?";
+  return { count:"SELECT COUNT(*) total"+from, select:"SELECT "+shape.fields+from+" ORDER BY r.updated_at DESC,r.id DESC LIMIT ? OFFSET ?", parameters:[...shape.terms.map(()=>filter),status] };
+}
+
 export class MySqlPlatformDashboardRepository implements PlatformDashboardRepository {
   constructor(
     private readonly pool: Pool,
@@ -230,7 +285,10 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     }
     if (i.domain === "data") {
       let rows: RowDataPacket[] = [];
-      if (i.entity === "trends") {
+      if (this.accountOnly) {
+        const spec = accountData(i.entity, filter, status);
+        [rows] = await this.pool.query<RowDataPacket[]>(spec.sql, spec.params);
+      } else if (i.entity === "trends") {
         [rows] = await this.pool.query<RowDataPacket[]>(
           "SELECT t.id,t.title,t.category,t.market,t.status,t.signal_count metric_primary," +
             "t.source_count metric_secondary,t.last_seen_at updated_at,o.name organization_name," +
@@ -364,13 +422,15 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           parameters: [filter, filter, filter, status],
         },
       };
-      const sectionQuery = sectionQueries[i.section]!;
+      const sectionQuery = this.accountOnly && i.section !== "releases"
+        ? accountGovernance(i.section, filter, status)
+        : sectionQueries[i.section]!;
+      const ruleTotal = (table: string) => this.accountOnly
+        ? "(SELECT COUNT(*) FROM "+table+" r WHERE "+platformOwns(table,"r.id","r.account_id")+") "+table
+        : "(SELECT COUNT(*) FROM "+table+") "+table;
       const [[summaryRows], [countRows]] = await Promise.all([
         this.pool.query<RowDataPacket[]>(
-          "SELECT (SELECT COUNT(*) FROM score_rules) score_rules," +
-            "(SELECT COUNT(*) FROM cost_rules) cost_rules," +
-            "(SELECT COUNT(*) FROM approval_templates) approval_templates," +
-            "(SELECT COUNT(*) FROM automation_rules) automation_rules," +
+          "SELECT " + ["score_rules","cost_rules","approval_templates","automation_rules"].map(ruleTotal).join(",") + "," +
             "(SELECT COUNT(*) FROM deployment_releases) releases," +
             "(SELECT COUNT(*) FROM provider_versions) provider_versions," +
             "(SELECT MAX(created_at) FROM provider_versions) provider_versions_latest_at",
@@ -1445,10 +1505,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
   }
   async exportData(i: any) {
     const data: any = await this.readManagement({ ...i, domain: "data" });
+    const scopeCols = this.accountOnly ? "historical_context" : "organization_id,workspace_id";
+    const scopeVals = this.accountOnly ? "NULL" : "NULL,NULL";
     await this.pool.query(
-      "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+      "INSERT INTO platform_audit_events(id," + scopeCols + ",actor_id," +
         "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
-        "schema_version) VALUES(?,NULL,NULL,?,'platform.data.export','platform_data'," +
+        "schema_version) VALUES(?," + scopeVals + ",?,'platform.data.export','platform_data'," +
         "NULL,'succeeded',?,?,?,?,1)",
       [
         randomUUID(),
@@ -1465,7 +1527,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         i.now,
       ],
     );
-    return data;
+    return { ...data, retired_account_scope: this.accountOnly };
   }
   async exportLogs(i: any) {
     const data: any = await this.readManagement({

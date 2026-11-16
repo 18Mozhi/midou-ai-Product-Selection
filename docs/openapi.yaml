@@ -5231,7 +5231,7 @@ paths:
   /platform/management/data/exports:
     post:
       summary: Export the current cross-organization platform data filter as an audited CSV
-      description: Requires platform:operate and a same-origin request. Exports at most the 100 most recent rows from the same factual query used by the platform data page. The actor, entity, filter, reason and row count are written to platform audit; no raw evidence or credential secret is included.
+      description: Requires platform:operate and a same-origin request. Exports at most the 100 most recent rows from the same factual query used by the platform data page. The actor, entity, filter, reason and row count are written to platform audit; no raw evidence or credential secret is included. Retired account mode omits legacy organization and workspace columns.
       security: [{ HttpOnlySession: [] }]
       requestBody:
         required: true

@@ -433,3 +433,32 @@ for (const accountOnly of [true, false]) test(`platform overview preserves facts
  else{assert.match(writes[1][0],/id,organization_id,workspace_id,actor_id/);assert.equal(payload.summary.active_organizations,2);assert.equal(payload.alerts[0].workspace_id,'old-ws');}
  assert.deepEqual(toPlain(writes[1][1]).slice(1,4),['actor-original','req-original','trace-original']);
 });
+
+async function verifyRetiredPlatformGovernance(Repository,assert) {
+ const queries=[];
+ const pool={query:async(sql,args=[])=>{
+  assert.doesNotMatch(sql,/\b(?:organizations|workspaces|organization_id|workspace_id)\b/);
+  queries.push({sql,args});
+  if(sql.startsWith('INSERT'))return [[]];
+  if(sql.startsWith('SELECT COUNT'))return [[{total:2}]];
+  return [[{id:'original',status:'active',updated_at:'2026-11-17T00:00:00Z'}]];
+ }};
+ const r=new Repository(pool,undefined,undefined,undefined,undefined,true);
+ for(const entity of ['trends','opportunities','competitors','suppliers']){
+  const v=await r.readManagement({domain:'data',entity,query:'needle',status:'active'});
+  assert.equal(v.items[0].id,'original');assert.match(queries.at(-1).sql,/account_owned_records/);
+  assert.equal((queries.at(-1).sql.match(/\?/g)||[]).length,queries.at(-1).args.length);
+ }
+ for(const section of ['score_rules','cost_rules','approval_templates','automation_rules']){
+  const v=await r.readManagement({domain:'governance',section,page:1,pageSize:20,query:'needle',status:'active'});
+  assert.equal(v.items[0].id,'original');assert.equal(v.pagination.total,2);
+  assert(queries.slice(-3).every(x=>x.sql.includes('account_owned_records')));
+  assert.equal((queries.at(-1).sql.match(/\?/g)||[]).length,queries.at(-1).args.length);
+ }
+ const data=await r.exportData({entity:'suppliers',query:'needle',status:'active',requestId:'req',traceId:'trace',actorId:'actor',now:new Date()});
+ assert.equal(data.retired_account_scope,true);assert.equal(data.items[0].id,'original');
+ assert.match(queries.at(-1).sql,/historical_context/);assert.match(queries.at(-1).sql,/platform\.data\.export/);
+ assert.equal((queries.at(-1).sql.match(/\?/g)||[]).length,queries.at(-1).args.length);
+}
+test("retired platform management retains original rows, matching ownership, pagination and export audit", () =>
+  verifyRetiredPlatformGovernance(MySqlPlatformDashboardRepository, assert));

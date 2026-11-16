@@ -170,8 +170,7 @@ export function registerPlatformDashboardRoutes(
         columns = [
           "id",
           "title",
-          "organization_name",
-          "workspace_name",
+          ...(data.retired_account_scope ? [] : ["organization_name", "workspace_name"]),
           "category",
           "market",
           "status",

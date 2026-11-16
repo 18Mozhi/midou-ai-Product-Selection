@@ -53,7 +53,7 @@ const statusLabels: Record<Entity, Record<string, string>> = {
   competitors: { active: "监控中", paused: "已暂停" },
   suppliers: { incomplete: "信息不完整", ready: "可评估", quarantined: "已隔离" },
 };
-const props = defineProps<{ apiBaseUrl: string }>(),
+const props = defineProps<{ apiBaseUrl: string; accountRehearsal?: boolean }>(),
   request = createApiClient(props.apiBaseUrl),
   requestResponse = createApiResponseClient(props.apiBaseUrl),
   route = useRoute(),
@@ -518,10 +518,10 @@ onActivated(() => {
         <ResponsiveFilterDrawer label="筛选近期数据" :active-count="activeFilterCount">
           <form class="platform-data-filter" @submit.prevent="applyFilters">
             <label
-              >搜索名称、组织或工作区
+              >{{ accountRehearsal ? "搜索名称或供应商" : "搜索名称、组织或工作区" }}
               <input
                 v-model="queryDraft"
-                placeholder="搜索名称、组织或工作区"
+                :placeholder="accountRehearsal ? '搜索名称或供应商' : '搜索名称、组织或工作区'"
                 maxlength="120"
                 :disabled="operationLocked"
                 @keydown.enter.prevent="applyFilters"
@@ -639,7 +639,7 @@ onActivated(() => {
                   <thead>
                     <tr>
                       <th>{{ current.label }}</th>
-                      <th>组织 / 工作区</th>
+                      <th v-if="!accountRehearsal">组织 / 工作区</th>
                       <th>{{ current.value === "suppliers" ? "供应商 / 地点" : "分类 / 市场" }}</th>
                       <th>状态</th>
                       <th>{{ current.primary }} / {{ current.secondary }}</th>
@@ -659,7 +659,7 @@ onActivated(() => {
                           查看记录
                         </button>
                       </td>
-                      <td>
+                      <td v-if="!accountRehearsal">
                         {{ item.organization_name }}<small>{{ item.workspace_name }}</small>
                       </td>
                       <td>
@@ -685,16 +685,16 @@ onActivated(() => {
               <template #summary="{ row }">
                 <span class="responsive-record-summary">
                   <strong>{{ row.title }} · {{ statusName(row.status, current.value) }}</strong>
-                  <small>{{ row.organization_name }} · {{ row.workspace_name }}</small>
+                  <small v-if="!accountRehearsal">{{ row.organization_name }} · {{ row.workspace_name }}</small>
                 </span>
               </template>
               <template #detail="{ row }">
                 <dl>
-                  <div>
+                  <div v-if="!accountRehearsal">
                     <dt>所属组织</dt>
                     <dd>{{ row.organization_name }}</dd>
                   </div>
-                  <div>
+                  <div v-if="!accountRehearsal">
                     <dt>工作区</dt>
                     <dd>{{ row.workspace_name }}</dd>
                   </div>
