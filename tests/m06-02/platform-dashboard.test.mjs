@@ -729,3 +729,70 @@ async function testRetiredPlatformMessages(Repo, assert) {
 }
 test("retired platform messaging preserves original audience history and attributes new in-app delivery", () =>
   testRetiredPlatformMessages(MySqlPlatformDashboardRepository, assert));
+
+async function verifyRetiredOperations(Repo, assert) {
+  const queries = [];
+  let saved = null;
+  const stamp = new Date("2026-11-17T08:30:00Z");
+  const query = async (sql, args = []) => {
+    queries.push({ sql, args });
+    assert.doesNotMatch(sql, /\b(?:organizations|workspaces|organization_id|workspace_id)\b/);
+    assert.equal((sql.match(/\?/g) || []).length, args.length);
+    if (sql.includes("active_users")) return [[{ active_users: 2 }]];
+    if (sql.includes(") operational_logs"))
+      return [
+        [{ id: "original-log", source: "api", trace_id: "original-trace", occurred_at: stamp }],
+      ];
+    if (sql.includes("GET_LOCK")) return [[{ acquired: 1 }]];
+    if (sql.includes("SELECT result_json")) return [saved ? [{ result_json: saved }] : []];
+    if (sql.startsWith("INSERT INTO platform_management_operations")) saved = args[5];
+    return [[]];
+  };
+  const pool = {
+    query,
+    getConnection: async () => ({
+      query,
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release: () => {},
+    }),
+  };
+  const r = new Repo(pool, undefined, undefined, () => stamp, undefined, true);
+  const status = await r.readManagement({
+    domain: "status",
+    query: "",
+    status: "",
+    windowMinutes: 60,
+  });
+  assert.equal(status.summary.active_users, 2);
+  assert.equal(Object.hasOwn(status.summary, "active_organizations"), false);
+  const args = {
+    actorId: "actor",
+    query: "",
+    source: "",
+    reason: "operator note",
+    requestId: "request",
+    traceId: "trace",
+    idempotencyKey: "key",
+    route: "export",
+    now: stamp,
+  };
+  const first = await r.exportLogs(args);
+  assert.equal(first.items[0].id, "original-log");
+  assert.equal(first.items[0].trace_id, "original-trace");
+  const audit = queries.filter((q) => q.sql.startsWith("INSERT INTO platform_audit_events"));
+  assert.equal(audit.length, 1);
+  assert.match(audit[0].sql, /historical_context/);
+  assert.match(audit[0].sql, /platform\.logs\.export/);
+  assert.equal(audit[0].args[2], "request");
+  assert.equal(audit[0].args[3], "trace");
+  const replay = await r.exportLogs(args);
+  assert.equal(replay.items[0].id, "original-log");
+  assert.equal(
+    queries.filter((q) => q.sql.startsWith("INSERT INTO platform_audit_events")).length,
+    1,
+  );
+}
+test("retired operational status and log export preserve original facts and correlated audit", () =>
+  verifyRetiredOperations(MySqlPlatformDashboardRepository, assert));

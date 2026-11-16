@@ -42,7 +42,7 @@
     ],
     "testFiles": ["tests/m06-02/platform-dashboard.test.mjs"],
     "docs": ["docs/openapi.yaml", "docs/runbooks/m06-02-platform-dashboard.md"],
-    "contract": "Retired account platform dashboard does not query removed scope tables or columns, retains original operational facts and writes request-correlated audits without historical coordinates."
+    "contract": "Retired account platform dashboard does not query removed scope tables or columns, retains original operational facts and writes request-correlated audits without historical coordinates. System status and log export use the same retired account shape; log exports retain their original trace and audit linkage."
   },
   "accountCollectionClaimMaintenance": {
     "sourceFiles": [

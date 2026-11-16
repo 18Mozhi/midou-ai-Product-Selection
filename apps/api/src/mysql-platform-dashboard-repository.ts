@@ -829,8 +829,10 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         "SELECT status,COUNT(*) total FROM providers GROUP BY status",
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT (SELECT COUNT(*) FROM organizations WHERE status='active') active_organizations," +
-          "(SELECT COUNT(*) FROM users WHERE status='active') active_users",
+        this.accountOnly
+          ? "SELECT COUNT(*) active_users FROM users WHERE status='active'"
+          : "SELECT (SELECT COUNT(*) FROM organizations WHERE status='active') active_organizations," +
+              "(SELECT COUNT(*) FROM users WHERE status='active') active_users",
       ),
       this.pool.query<RowDataPacket[]>(
         "SELECT node_id,role,status,build_sha,app_version,last_heartbeat_at FROM runtime_nodes " +
@@ -869,7 +871,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         api: serviceState(runtime),
         database: "healthy",
         dashboard_reads: n(views[0]?.recent_views),
-        active_organizations: n(accounts[0]?.active_organizations),
+        ...(!this.accountOnly
+          ? { active_organizations: n(accounts[0]?.active_organizations) }
+          : {}),
         active_users: n(accounts[0]?.active_users),
       },
       services: [
@@ -1848,10 +1852,18 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         await c.commit();
         return savedData;
       }
+      const auditScopeColumns = this.accountOnly
+        ? "historical_context"
+        : "organization_id,workspace_id";
+      const auditScopeValues = this.accountOnly ? "NULL" : "NULL,NULL";
       await c.query(
-        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+        "INSERT INTO platform_audit_events(id," +
+          auditScopeColumns +
+          ",actor_id," +
           "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
-          "schema_version) VALUES(?,NULL,NULL,?,'platform.logs.export','operational_logs'," +
+          "schema_version) VALUES(?," +
+          auditScopeValues +
+          ",?,'platform.logs.export','operational_logs'," +
           "NULL,'succeeded',?,?,?,?,1)",
         [
           randomUUID(),

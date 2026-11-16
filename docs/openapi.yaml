@@ -5263,7 +5263,7 @@ paths:
   /platform/management/logs/exports:
     post:
       summary: Export the current bounded operational log filter as an audited CSV
-      description: Requires platform:operate, a same-origin request and Idempotency-Key. Exports at most the same 200 normalized API audit, Worker task and Crawler run events returned by the logs page for the submitted query and source filter. Repeating the same key and payload replays the first CSV without a second audit record; reusing the key with different filters or reason returns 409. The actor, exact filter, reason and row count are written to platform audit. CSV cells are formula-injection protected and contain no raw metadata, payload, stderr, credential or cookie.
+      description: Requires platform:operate, a same-origin request and Idempotency-Key. Exports at most the same 200 normalized API audit, Worker task and Crawler run events returned by the logs page for the submitted query and source filter. Repeating the same key and payload replays the first CSV without a second audit record; reusing the key with different filters or reason returns 409. The actor, exact filter, reason and row count are written to platform audit. CSV cells are formula-injection protected and contain no raw metadata, payload, stderr, credential or cookie. Retired account mode preserves the existing audit and does not fabricate historical tenant coordinates.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { $ref: "#/components/parameters/IdempotencyKey" }
