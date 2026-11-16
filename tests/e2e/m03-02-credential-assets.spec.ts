@@ -117,10 +117,9 @@ async function evictCredentialSurface(page: any) {
   for (const path of credentialCacheEvictionRoutes) await navigatePlatform(page, path);
 }
 async function stubUnrelatedPlatformReads(page: any) {
-  await page.route("**/api/v1/**", async (route) => {
+  await page.route("**/api/v1/platform/**", async (route) => {
     const path = new URL(route.request().url()).pathname;
     if (
-      path === "/api/v1/me/navigation" ||
       path.startsWith("/api/v1/platform/credential-") ||
       path === "/api/v1/platform/crawler-profiles"
     ) {
@@ -128,9 +127,13 @@ async function stubUnrelatedPlatformReads(page: any) {
       return;
     }
     await route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ data: [], request_id: "ui2-p50-cache-eviction" }),
+      // These routes only drive eviction. A successful array would violate several read DTOs.
+      status: 503,
+      json: {
+        error: { code: "platform_dependency_unavailable", message: "测试依赖暂不可用" },
+        request_id: "ui2-p50-cache-eviction",
+        trace_id: "ui2-p50-cache-eviction",
+      },
     });
   });
 }
@@ -1653,6 +1656,8 @@ test("UI2-SC50 detached login profile unknown rereads before any manual recovery
 test("UI2-SC50 settles an in-flight login chain into a replacement evicted page", async ({
   page,
 }) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
   await nav(page, [provider, secondProvider]);
   await stubUnrelatedPlatformReads(page);
   const savedAsset = {
@@ -1754,6 +1759,7 @@ test("UI2-SC50 settles an in-flight login chain into a replacement evicted page"
     profileReads: 3,
     providerReads: 3,
   });
+  expect(pageErrors).toEqual([]);
 });
 
 test("UI2-SC50 native field errors are visible, associated and cleared when corrected", async ({

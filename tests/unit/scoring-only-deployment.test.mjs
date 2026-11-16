@@ -3,10 +3,13 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
-test("scoring release is limited to two modules and official Node restart", () => {
+test("scoring release is limited to two modules and graceful BaoTa Node restart", () => {
   const source = readFileSync("scripts/deploy_baota_scoring.py", "utf8");
-  assert.match(source, /restart_project.py nodejs ai选品/);
-  assert.doesNotMatch(source, /restart_project.py python|apply-deployment-migrations|npm.*ci/);
+  assert.match(
+    source,
+    /panel_node_action_source\("stop"\)[\s\S]*panel_node_action_source\("start"\)/,
+  );
+  assert.doesNotMatch(source, /restart_project\.py|apply-deployment-migrations|npm.*ci/);
   assert.match(source, /scoring_unrelated_runtime_change/);
   assert.match(source, /python_pids\(\)!=state\["python_pids"\]/);
   const run = spawnSync(

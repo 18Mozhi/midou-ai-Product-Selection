@@ -1029,7 +1029,7 @@
       },
       "navigation": {
         "label": "来源设置",
-        "icon": "settings",
+        "icon": "layers",
         "group": "采集与数据"
       }
     },
@@ -1159,7 +1159,7 @@
       },
       "navigation": {
         "label": "采集管理",
-        "icon": "automation",
+        "icon": "settings-gear",
         "group": "采集与数据"
       }
     },
@@ -1354,7 +1354,7 @@
       },
       "navigation": {
         "label": "开放平台",
-        "icon": "key",
+        "icon": "code-xml",
         "group": "治理与安全"
       }
     },
@@ -1379,7 +1379,7 @@
       },
       "navigation": {
         "label": "系统运维",
-        "icon": "target",
+        "icon": "box",
         "group": "高级运维"
       }
     },

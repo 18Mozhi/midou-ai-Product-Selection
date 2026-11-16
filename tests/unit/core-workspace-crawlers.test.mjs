@@ -384,6 +384,7 @@ test("core list pages expose explicit detail and operational actions", async () 
   assert.match(competitors, /Amazon 主品与竞品/);
   assert.doesNotMatch(sourcing, /重新采集|删除找货记录/);
   assert.match(sourcing, /SourcingWorkspaceDialogs/);
+  assert.match(sourcing, /刷新记录/);
   assert.match(sourcing, /供应商报价对比历史/);
 });
 

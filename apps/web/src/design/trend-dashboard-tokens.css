@@ -1,16 +1,17 @@
-html:has(body #app .trend-dashboard--review) {
-  --trend-blue: var(--glass-primary);
-  --trend-ink: var(--glass-text);
-  --trend-muted: var(--glass-text-muted);
-  --trend-line: var(--glass-border);
-  --trend-focus: var(--glass-focus);
-  --trend-surface: #fff;
-  --trend-surface-selected: #edf3fc;
-  --trend-surface-info: #edf4ff;
-  --trend-info-border: var(--glass-border);
-  --trend-control-border: var(--glass-border);
-  --trend-selected-border: #d5e1f2;
-  --trend-pagination-border: #b9c9df;
-  --trend-pagination-surface: #f4f7fb;
-  --trend-subtle-surface: #f8fbff;
+/* Keep intelligence colors inside the workspace and inherit the active semantic theme. */
+.trend-dashboard--review {
+  --trend-blue: var(--so-primary);
+  --trend-ink: var(--so-text);
+  --trend-muted: var(--so-text-muted);
+  --trend-line: var(--so-border);
+  --trend-focus: var(--so-focus);
+  --trend-surface: var(--so-panel);
+  --trend-surface-selected: var(--so-primary-soft);
+  --trend-surface-info: var(--so-info-soft);
+  --trend-info-border: var(--so-border);
+  --trend-control-border: var(--so-border);
+  --trend-selected-border: var(--so-primary-border);
+  --trend-pagination-border: var(--so-border);
+  --trend-pagination-surface: var(--so-panel-soft);
+  --trend-subtle-surface: var(--so-panel-soft);
 }

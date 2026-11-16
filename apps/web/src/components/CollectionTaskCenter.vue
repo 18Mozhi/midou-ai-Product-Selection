@@ -99,6 +99,7 @@ const route = useRoute(),
     "dead_letter",
     "manually_replayed",
     "automatically_replayed",
+    "cancelled",
   ] as const;
 const state = ref<ViewState>("loading"),
   tasks = ref<Task[]>([]),
@@ -203,6 +204,7 @@ const label = (value: string | null) =>
         dead_letter: "死信",
         manually_replayed: "已人工重放",
         automatically_replayed: "凭证续期后已自动重放",
+        cancelled: "未开跑，已取消",
         complete: "完整",
         partial: "部分",
         insufficient: "不足",
@@ -673,6 +675,7 @@ onActivated(() => {
                 <option value="dead_letter">死信</option>
                 <option value="manually_replayed">已人工重放</option>
                 <option value="automatically_replayed">凭证续期后已自动重放</option>
+                <option value="cancelled">未开跑，已取消</option>
               </optgroup>
             </select>
           </div>

@@ -72,7 +72,10 @@ onBeforeUnmount(() => {
     <header>
       <div>
         <h4>成本与利润</h4>
-        <p v-if="state === 'ready' && !calculated && besideEmptyOffers" class="sourcing-profit-unconfirmed">
+        <p
+          v-if="state === 'ready' && !calculated && besideEmptyOffers"
+          class="sourcing-profit-unconfirmed"
+        >
           当前利润结果未知<span v-if="profit?.latest_run?.missing_fields.length">
             · {{ profit.latest_run.missing_fields.join("、") }}</span
           >
@@ -135,7 +138,10 @@ onBeforeUnmount(() => {
           v-if="besideEmptyOffers || profit?.current_inputs.length || profit?.latest_run"
           class="sourcing-profit-basis"
         >
-          <summary><AppIcon v-if="basisTarget" name="chevron" :size="16" />查看计算依据</summary>
+          <summary>
+            <AppIcon v-if="basisTarget" name="chevron" :size="16" />
+            {{ basisTarget ? "计算依据" : "查看计算依据" }}
+          </summary>
           <p v-if="!profit?.latest_run && !profit?.current_inputs.length">
             暂无已保存的成本输入或利润计算记录。
           </p>

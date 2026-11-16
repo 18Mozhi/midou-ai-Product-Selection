@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import pathlib
 import re
 import runpy
@@ -10,6 +11,27 @@ import shlex
 import sys
 import uuid
 from urllib.parse import quote
+
+from baota_probe_isolation import isolation_config, run_isolated_probe
+
+
+def rewrite_runtime_imports(source, backend):
+    imports = re.findall(
+        r"(['\"])(\.\./(?:packages|apps)/(?:api|worker|[a-z0-9-]+)/dist/[^'\"]+)\1",
+        source,
+    )
+    if not imports:
+        raise RuntimeError("local live probe runtime imports are missing")
+    for quote_char, import_path in imports:
+        if source.count(f"{quote_char}{import_path}{quote_char}") != 1:
+            raise RuntimeError("ambiguous live probe import")
+        remote_path = f"{backend}/{import_path.removeprefix('../')}"
+        source = source.replace(
+            f"{quote_char}{import_path}{quote_char}",
+            json.dumps("file://" + quote(remote_path, safe="/")),
+            1,
+        )
+    return source
 
 
 def main() -> int:
@@ -62,6 +84,13 @@ def main() -> int:
     stage = "host_key"
 
     try:
+        # Preserve the production-specific read-only/provider/performance checks.
+        # All other runtime fixtures are kept out of the production DB and Redis.
+        isolation = None
+        if probe in runtime_probes - {"provider-sources"}:
+            stage = "fixture_isolation_config"
+            isolation = isolation_config(os.environ)
+        stage = "host_key"
         known_hosts = pathlib.Path.home() / ".ssh" / "known_hosts"
         if not known_hosts.is_file():
             raise RuntimeError("verified SSH host key is unavailable")
@@ -94,6 +123,8 @@ def main() -> int:
             package_names.append("database")
         if probe == "theme-preferences":
             package_names.append("preferences")
+        if probe == "home-dashboard":
+            package_names.append("contracts")
         if probe in {"redis", "api"}:
             package_names.append("redis")
         if probe in {"local-auth", "mfa"}:
@@ -129,26 +160,12 @@ def main() -> int:
             source = source.replace(old, new, 1)
 
         if probe in runtime_probes:
-            runtime_imports = re.findall(
-                r"(['\"])(\.\./(?:packages|apps)/(?:api|worker|[a-z0-9-]+)/dist/[^'\"]+)\1",
-                source,
+            migration_names = sorted(
+                set(re.findall(r"database/migrations/([A-Za-z0-9_.-]+\.sql)", source))
             )
-            if not runtime_imports:
-                raise RuntimeError("local live probe runtime imports are missing")
-            for quote_char, import_path in runtime_imports:
-                if source.count(f"{quote_char}{import_path}{quote_char}") != 1:
-                    raise RuntimeError(f"ambiguous live probe import: {import_path}")
-                remote_path = f"/www/wwwroot/ai选品/backend/{import_path.removeprefix('../')}"
-                source = source.replace(
-                    f"{quote_char}{import_path}{quote_char}",
-                    json.dumps("file://" + quote(remote_path, safe="/")),
-                    1,
-                )
+            source = rewrite_runtime_imports(source, backend)
 
             if probe in m06_probes:
-                migration_names = sorted(
-                    set(re.findall(r"database/migrations/([A-Za-z0-9_.-]+\.sql)", source))
-                )
                 for migration_name in migration_names:
                     migration = repo / "database" / "migrations" / migration_name
                     if not migration.is_file():
@@ -162,7 +179,7 @@ def main() -> int:
                     if replacements != 1:
                         raise RuntimeError(f"live probe migration read mismatch: {migration_name}")
 
-            if probe == "reports":
+            if probe == "reports" and not isolation:
                 local_temp_root = "resolve(tmpdir(), `scoutops-m05-06-${requestId}`)"
                 remote_temp_root = (
                     f"resolve({json.dumps(f'{project_root}/runtime/verification')}, "
@@ -172,10 +189,15 @@ def main() -> int:
                     raise RuntimeError("local report probe temporary root mismatch")
                 source = source.replace(local_temp_root, remote_temp_root, 1)
 
-            migration_names = sorted(
-                set(re.findall(r"database/migrations/([A-Za-z0-9_.-]+\.sql)", source))
-            )
             required_tables: set[str] = set()
+            probe_migrations = {
+                "ai-analysis": "0017g_ai_assist_m04_07.up.sql",
+                "competitors": "0017e_competitor_monitoring_m04_05.up.sql",
+                "sourcing": "0017f_sourcing_m04_06.up.sql",
+                "platform-dashboard": "0020_platform_dashboard_m06_02.up.sql",
+            }
+            if probe in probe_migrations:
+                migration_names.append(probe_migrations[probe])
             for migration_name in migration_names:
                 migration = repo / "database" / "migrations" / migration_name
                 if not migration.is_file():
@@ -183,21 +205,28 @@ def main() -> int:
                 required_tables.update(
                     re.findall(r"CREATE\s+TABLE\s+`([^`]+)`", migration.read_text(encoding="utf-8"), re.I)
                 )
-            if required_tables:
+            if required_tables or isolation:
                 config_url = "file:///www/wwwroot/ai选品/backend/packages/config/dist/index.js"
                 database_url = "file:///www/wwwroot/ai选品/backend/packages/database/dist/index.js"
+                redis_url = "file:///www/wwwroot/ai选品/backend/packages/redis/dist/index.js"
                 preflight = (
                     f"import {{loadRuntimeConfig}} from {json.dumps(config_url)};"
                     f"import {{createDatabasePool}} from {json.dumps(database_url)};"
-                    "const pool=createDatabasePool(loadRuntimeConfig(process.env,'api'));"
+                    f"import {{createRedisProbeConnection}} from {json.dumps(redis_url)};"
+                    "const config=loadRuntimeConfig(process.env,'api'),pool=createDatabasePool(config);"
+                    f"const checkRedis={json.dumps(bool(isolation))},redis=checkRedis?createRedisProbeConnection(config):null;"
+                    "if(redis)redis.on('error',()=>{});"
                     f"const required={json.dumps(sorted(required_tables), ensure_ascii=False)};"
-                    "try{const marks=required.map(()=>'?').join(',');"
-                    "const [rows]=await pool.query(`SELECT table_name FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN (${marks})`,required);"
+                    "try{const [[v]]=await pool.query('SELECT VERSION() version,DATABASE() db,CURRENT_USER() account');"
+                    "if(!String(v.version).startsWith('5.7.') || v.db!=='product_scout' || !String(v.account).startsWith('product_scout@'))throw Error('production MySQL identity mismatch');"
+                    "const marks=required.map(()=>'?').join(',');"
+                    "const [rows]=required.length?await pool.query(`SELECT table_name FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN (${marks})`,required):[[]];"
                     "const present=new Set(rows.map(row=>row.table_name));"
                     "const missing=required.filter(name=>!present.has(name));"
                     "if(missing.length){console.error(JSON.stringify({status:'blocked',code:'schema_preflight_missing',missing}));process.exitCode=2;}"
-                    "else console.log(JSON.stringify({status:'passed',schema_preflight:'read_only',tables:required.length}));"
-                    "}finally{await pool.end();}"
+                    "else {if(redis){await redis.connect();if(await redis.ping()!=='PONG')throw Error('production Redis PING failed');}"
+                    "console.log(JSON.stringify({status:'passed',schema_preflight:'read_only',tables:required.length,redis:checkRedis?'ping_verified':'not_required'}));}"
+                    "}finally{try{await pool.end();}finally{if(redis?.isOpen)await redis.quit();}}"
                 )
                 stage = "production_schema_preflight"
                 preflight_command = (
@@ -215,6 +244,24 @@ def main() -> int:
                     sys.stderr.write(preflight_errors)
                 if preflight_status != 0:
                     return preflight_status
+            if probe == "platform-dashboard":
+                stage = "production_dashboard_readonly_snapshot"
+                snapshot = rewrite_runtime_imports(
+                    (repo / "scripts" / "verify-platform-dashboard-readonly.mjs").read_text(
+                        encoding="utf-8"
+                    ),
+                    backend,
+                )
+                command = (
+                    f"cd {shlex.quote(backend)} && {shlex.quote(deployer['NODE_BIN'])} "
+                    f"--env-file={shlex.quote(env_file)} --input-type=module -e {shlex.quote(snapshot)}"
+                )
+                _, out, err = client.exec_command(command, timeout=60)
+                sys.stdout.write(out.read().decode("utf-8", "replace"))
+                sys.stderr.write(err.read().decode("utf-8", "replace"))
+                status = out.channel.recv_exit_status()
+                if status:
+                    return status
 
         if probe in {"local-auth", "mfa"}:
             app_imports = (
@@ -306,6 +353,14 @@ def main() -> int:
 
         stage = "remote_probe"
         target_var = f"SCOUTOPS_{probe.upper().replace('-', '_')}_LIVE_TARGET"
+        if isolation:
+            stage = "isolated_remote_probe"
+            status, output, errors = run_isolated_probe(
+                client, backend, deployer["NODE_BIN"], target_var, source, isolation
+            )
+            sys.stdout.write(output)
+            sys.stderr.write(errors)
+            return status
         command = (
             f"cd {shlex.quote(backend)} && "
             f"{target_var}=local "

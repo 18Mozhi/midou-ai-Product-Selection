@@ -15,7 +15,12 @@ import {
 } from "../../scripts/lib/ui-phase2-shell-access-preview.mjs";
 
 const file = "apps/web/src/components/NavigationShell.vue";
-const source = (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
+// The original access composition is replayed against its exact captured shell,
+// not the current runtime, whose access panel is now an independent component.
+const source = readCaptureSourceRevision(
+  file,
+  "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
+);
 test("access preview changes only six copy pairs and focus wrapper in original C script", () => {
   const prior = parse(previewShellVue(source)).descriptor;
   const current = parse(previewShellAccess(source)).descriptor;

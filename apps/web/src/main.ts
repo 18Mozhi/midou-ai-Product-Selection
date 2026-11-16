@@ -8,7 +8,6 @@ import "./design/tokens.css";
 import "./accessibility.css";
 import "./responsive-baselines.css";
 import "./commerce-workspace.css";
-import "./midou-workspace.css";
 import { applyCachedTheme, applyShellDensity } from "./design/theme";
 import { router } from "./router";
 

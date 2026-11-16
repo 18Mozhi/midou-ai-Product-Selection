@@ -133,12 +133,14 @@ test("design quality gate keeps metadata readable and removes unscoped visual se
 });
 
 test("design tokens keep the signal-ledger contract and all shells share it", async () => {
-  const [tokens, shellStyles, shell, account, signalLedger] = await Promise.all([
+  const [tokens, shellStyles, shell, account, signalLedger, sidebar, access] = await Promise.all([
     read("apps/web/src/design/tokens.css"),
     read("apps/web/src/styles/onboarding-navigation.css"),
     read("apps/web/src/components/NavigationShell.vue"),
     read("apps/web/src/components/AccountShell.vue"),
     read("apps/web/src/signal-ledger.css"),
+    read("apps/web/src/components/NavigationWorkspaceSidebar.vue"),
+    read("apps/web/src/components/NavigationShellGate.vue"),
   ]);
   assert.match(tokens, /--so-font-ui:\s*"Microsoft YaHei UI"/);
   assert.match(tokens, /--so-font-meta:\s*0\.8125rem/);
@@ -149,8 +151,13 @@ test("design tokens keep the signal-ledger contract and all shells share it", as
   assert.match(signalLedger, /\.confirm-dialog[\s\S]*border-top:\s*8px solid var\(--so-primary\)/);
   assert.doesNotMatch(`${shell}\n${account}`, /applyTheme\("cloud-white"\)/);
   assert.match(shell, /米兜智能选品/);
-  assert.match(shell, /<h1>\{\{ pageTitle \}\}<\/h1>/);
-  assert.match(shell, /class="commerce-sidebar"/);
+  assert.match(
+    shell,
+    /aria-label="面包屑"[\s\S]*:aria-current="index === breadcrumbs.length - 1 \? 'page' : undefined"/,
+  );
+  assert.match(access, /<h1>\{\{ stateCopy\[0\] \}\}<\/h1>/);
+  assert.match(shell, /<NavigationWorkspaceSidebar\s+v-if="state === 'ready'"/);
+  assert.match(sidebar, /<aside class="commerce-sidebar" aria-label="工作区导航"/);
   assert.doesNotMatch(shell, /class="role-page-title"/);
   assert.doesNotMatch(shell, /<aside\s+id="role-navigation"/);
   assert.match(account, /<nav class="account-sidebar(?:\s|[">])/);

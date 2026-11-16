@@ -1,6 +1,230 @@
-import{randomUUID}from"node:crypto";import{readFile}from"node:fs/promises";import{loadRuntimeConfig}from"../packages/config/dist/index.js";import{createDatabasePool}from"../packages/database/dist/index.js";import{PlatformDashboardService}from"../apps/api/dist/platform-dashboard-service.js";import{MySqlPlatformDashboardRepository}from"../apps/api/dist/mysql-platform-dashboard-repository.js";
-const pool=createDatabasePool(loadRuntimeConfig(process.env,"api")),now=new Date(),requestId=randomUUID(),traceId=randomUUID(),id={user:randomUUID(),org:randomUUID(),ws:randomUUID(),provider:randomUUID(),task1:randomUUID(),task2:randomUUID(),sub:randomUUID(),file:randomUUID()};
-async function migrate(){const[r]=await pool.query("SELECT COUNT(*) n FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='platform_dashboard_views'");if(Number(r[0].n))return;for(const s of(await readFile("database/migrations/0020_platform_dashboard_m06_02.up.sql","utf8")).split(";").map(x=>x.trim()).filter(Boolean))await pool.query(s);}
-async function cleanup(){for(const[sql,p]of[["DELETE FROM platform_dashboard_views WHERE actor_id=?",[id.user]],["DELETE FROM platform_audit_events WHERE actor_id=?",[id.user]],["DELETE FROM file_assets WHERE id=?",[id.file]],["DELETE FROM collection_subqueries WHERE id=?",[id.sub]],["DELETE FROM collection_tasks WHERE id IN (?,?)",[id.task1,id.task2]],["DELETE FROM providers WHERE id=?",[id.provider]],["UPDATE organizations SET default_workspace_id=NULL WHERE id=?",[id.org]],["DELETE FROM workspaces WHERE id=?",[id.ws]],["DELETE FROM organizations WHERE id=?",[id.org]],["DELETE FROM users WHERE id=?",[id.user]]])try{await pool.query(sql,p);}catch{}}
-async function seed(){const e=`m0602-${requestId.slice(0,8)}@test.local`;await pool.query("INSERT INTO users(id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES(?,?,?,'probe','active',?,?,1,?,?)",[id.user,e,e,now,now,now,now]);await pool.query("INSERT INTO organizations(id,name,slug,status,timezone,data_retention_days,default_workspace_id,created_by,version,created_at,updated_at) VALUES(?,?,?,'active','Asia/Shanghai',365,NULL,?,1,?,?)",[id.org,"M06 Dashboard",`m0602-${requestId.slice(0,8)}`,id.user,now,now]);await pool.query("INSERT INTO workspaces(id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES(?,?,?,'Default','active',?,1,?,?)".replace("?,?,?,'Default'","?,?,?,'default'"),[id.ws,id.org,"Default",id.user,now,now]);await pool.query("UPDATE organizations SET default_workspace_id=? WHERE id=?",[id.ws,id.org]);await pool.query("INSERT INTO providers(id,code,name,target_url,access_mode,markets_json,languages_json,fields_json,schedule_minutes,concurrency_limit,timeout_ms,retry_limit,circuit_failure_threshold,dedupe_key,retention_days,failure_rules_json,parser_version,healthcheck_url,owner_label,status,version,created_by,updated_by,created_at,updated_at) VALUES(?,?,?,'https://example.test/rss','public_rss','[\"CN\"]','[\"zh\"]','[\"title\"]',60,1,10000,2,3,'canonical_url',30,'{}','v1',NULL,'verification','enabled',1,?,?,?,?)",[id.provider,`m0602_${requestId.slice(0,8)}`,"M06 Source",id.user,id.user,now,now]);const taskSql="INSERT INTO collection_tasks(id,organization_id,workspace_id,status,coverage_status,priority,scheduled_at,available_at,leased_at,lease_owner,lease_token_hash,lease_expires_at,started_at,finished_at,attempt_count,successful_subquery_count,failed_subquery_count,blocked_subquery_count,available_result_count,missing_fields_json,last_error_code,rate_limit_reset_at,replay_of_task_id,replay_reason,request_id,trace_id,version,created_by,created_at,updated_at) VALUES(?,?,?,?,'complete','normal',?,?,NULL,NULL,NULL,NULL,?,?,1,1,0,0,1,'[]',?,NULL,NULL,NULL,?,?,1,?,?,?)";await pool.query(taskSql,[id.task1,id.org,id.ws,"succeeded",now,now,now,now,null,requestId,traceId,id.user,now,now]);await pool.query(taskSql,[id.task2,id.org,id.ws,"failed_terminal",now,now,now,now,"probe_failed",requestId,traceId,id.user,now,now]);await pool.query("INSERT INTO collection_subqueries(id,task_id,organization_id,workspace_id,provider_id,ordinal,target_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,started_at,finished_at,version,created_at,updated_at) VALUES(?,?,?,?,?,1,'{}',1,'succeeded',1,'[]',NULL,0,?,?,1,?,?)",[id.sub,id.task1,id.org,id.ws,id.provider,now,now,now,now]);await pool.query("INSERT INTO file_assets(id,organization_id,workspace_id,category,relative_path,content_sha256,size_bytes,status,created_by,created_at,updated_at) VALUES(?,?,?,'evidence',?,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',4096,'active',?,?,?)",[id.file,id.org,id.ws,`m0602/${id.file}.json`,id.user,now,now]);}
-try{const[v]=await pool.query("SELECT VERSION() version,@@character_set_server charset,CURRENT_USER() account");if(!String(v[0].version).startsWith("5.7.")||v[0].charset!=="utf8mb4"||!String(v[0].account).startsWith("product_scout@"))throw new Error("mysql57 business account required");await migrate();await cleanup();await seed();const service=new PlatformDashboardService(new MySqlPlatformDashboardRepository(pool,1000,20,()=>now)),data=await service.read({actorId:id.user,window:"24h",requestId,traceId}),probeProvider=data.provider_health.find((provider)=>provider.code===`m0602_${requestId.slice(0,8)}`);if(data.summary.task_success_rate!==50||data.summary.file_growth_bytes<4096||probeProvider?.status!=="healthy")throw new Error(`factual aggregate mismatch: ${JSON.stringify({task_success_rate:data.summary.task_success_rate,file_growth_bytes:data.summary.file_growth_bytes,probe_provider_status:probeProvider?.status??"missing"})}`);if(data.summary.active_organizations<1||data.summary.active_users<1)throw new Error("platform totals missing");const[audit]=await pool.query("SELECT COUNT(*) n FROM platform_audit_events WHERE actor_id=? AND action='platform.dashboard.read' AND request_id=?",[id.user,requestId]);const[view]=await pool.query("SELECT COUNT(*) n FROM platform_dashboard_views WHERE actor_id=? AND trace_id=?",[id.user,traceId]);if(Number(audit[0].n)!==1||Number(view[0].n)!==1)throw new Error("read audit missing");await cleanup();console.log(JSON.stringify({status:"passed",module:"M06-02",mysql:v[0].version,terminal_success_rate:"50_percent",provider_health:"factual",file_growth:"factual",read_audit:"passed",cleanup:"passed",request_id:requestId,trace_id:traceId},null,2));}catch(e){await cleanup();throw e;}finally{await pool.end();}
+import { randomUUID } from "node:crypto";
+import { loadRuntimeConfig } from "../packages/config/dist/index.js";
+import { createDatabasePool } from "../packages/database/dist/index.js";
+import { PlatformDashboardService } from "../apps/api/dist/platform-dashboard-service.js";
+import { MySqlPlatformDashboardRepository } from "../apps/api/dist/mysql-platform-dashboard-repository.js";
+const pool = createDatabasePool(loadRuntimeConfig(process.env, "api")),
+  now = new Date(),
+  requestId = randomUUID(),
+  traceId = randomUUID(),
+  id = {
+    user: randomUUID(),
+    org: randomUUID(),
+    ws: randomUUID(),
+    provider: randomUUID(),
+    task1: randomUUID(),
+    task2: randomUUID(),
+    sub: randomUUID(),
+    file: randomUUID(),
+  };
+async function assertFixtureReady() {
+  const marker = process.env.VERIFY_ISOLATION_ID ?? "";
+  if (
+    !/^[a-f0-9]{32}$/.test(marker) ||
+    process.env.DB_HOST !== "127.0.0.1" ||
+    Number(process.env.DB_PORT) <= 1024 ||
+    Number(process.env.DB_PORT) >= 65536 ||
+    !/^[0-9]{4,5}$/.test(process.env.DB_PORT ?? "") ||
+    Number(process.env.DB_PORT) === 3306 ||
+    process.env.DB_READ_HOST ||
+    process.env.DB_WRITE_HOST
+  )
+    throw new Error("platform dashboard fixture requires an isolated store");
+  const [markers] = await pool.execute("SELECT name FROM schema_migrations WHERE name=?", [
+    `scoutops-isolated-${marker}`,
+  ]);
+  if (markers.length !== 1) throw new Error("platform dashboard isolation attestation failed");
+  const [r] = await pool.query(
+    "SELECT COUNT(*) n FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='platform_dashboard_views'",
+  );
+  if (!Number(r[0].n)) throw new Error("M06-02 schema is not applied");
+}
+async function cleanup() {
+  for (const [sql, p] of [
+    ["DELETE FROM platform_dashboard_views WHERE actor_id=?", [id.user]],
+    ["DELETE FROM platform_audit_events WHERE actor_id=?", [id.user]],
+    ["DELETE FROM file_assets WHERE id=?", [id.file]],
+    ["DELETE FROM collection_subqueries WHERE id=?", [id.sub]],
+    ["DELETE FROM collection_tasks WHERE id IN (?,?)", [id.task1, id.task2]],
+    ["DELETE FROM providers WHERE id=?", [id.provider]],
+    ["UPDATE organizations SET default_workspace_id=NULL WHERE id=?", [id.org]],
+    ["DELETE FROM workspaces WHERE id=?", [id.ws]],
+    ["DELETE FROM organizations WHERE id=?", [id.org]],
+    ["DELETE FROM users WHERE id=?", [id.user]],
+  ])
+    try {
+      await pool.query(sql, p);
+    } catch {}
+}
+async function seed() {
+  const e = `m0602-${requestId.slice(0, 8)}@test.local`;
+  await pool.query(
+    "INSERT INTO users(id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES(?,?,?,'probe','active',?,?,1,?,?)",
+    [id.user, e, e, now, now, now, now],
+  );
+  await pool.query(
+    "INSERT INTO organizations(id,name,slug,status,timezone,data_retention_days,default_workspace_id,created_by,version,created_at,updated_at) VALUES(?,?,?,'active','Asia/Shanghai',365,NULL,?,1,?,?)",
+    [id.org, "M06 Dashboard", `m0602-${requestId.slice(0, 8)}`, id.user, now, now],
+  );
+  await pool.query(
+    "INSERT INTO workspaces(id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES(?,?,?,'Default','active',?,1,?,?)".replace(
+      "?,?,?,'Default'",
+      "?,?,?,'default'",
+    ),
+    [id.ws, id.org, "Default", id.user, now, now],
+  );
+  await pool.query("UPDATE organizations SET default_workspace_id=? WHERE id=?", [id.ws, id.org]);
+  await pool.query(
+    "INSERT INTO providers(id,code,name,target_url,access_mode,markets_json,languages_json,fields_json,schedule_minutes,concurrency_limit,timeout_ms,retry_limit,circuit_failure_threshold,dedupe_key,retention_days,failure_rules_json,parser_version,healthcheck_url,owner_label,status,version,created_by,updated_by,created_at,updated_at) VALUES(?,?,?,'https://example.test/rss','public_rss','[\"CN\"]','[\"zh\"]','[\"title\"]',60,1,10000,2,3,'canonical_url',30,'{}','v1',NULL,'verification','enabled',1,?,?,?,?)",
+    [id.provider, `m0602_${requestId.slice(0, 8)}`, "M06 Source", id.user, id.user, now, now],
+  );
+  const taskSql =
+    "INSERT INTO collection_tasks(id,organization_id,workspace_id,status,coverage_status,priority,scheduled_at,available_at,leased_at,lease_owner,lease_token_hash,lease_expires_at,started_at,finished_at,attempt_count,successful_subquery_count,failed_subquery_count,blocked_subquery_count,available_result_count,missing_fields_json,last_error_code,rate_limit_reset_at,replay_of_task_id,replay_reason,request_id,trace_id,version,created_by,created_at,updated_at) VALUES(?,?,?,?,'complete','normal',?,?,NULL,NULL,NULL,NULL,?,?,1,1,0,0,1,'[]',?,NULL,NULL,NULL,?,?,1,?,?,?)";
+  await pool.query(taskSql, [
+    id.task1,
+    id.org,
+    id.ws,
+    "succeeded",
+    now,
+    now,
+    now,
+    now,
+    null,
+    requestId,
+    traceId,
+    id.user,
+    now,
+    now,
+  ]);
+  await pool.query(taskSql, [
+    id.task2,
+    id.org,
+    id.ws,
+    "failed_terminal",
+    now,
+    now,
+    now,
+    now,
+    "probe_failed",
+    requestId,
+    traceId,
+    id.user,
+    now,
+    now,
+  ]);
+  await pool.query(
+    "INSERT INTO collection_subqueries(id,task_id,organization_id,workspace_id,provider_id,ordinal,target_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,started_at,finished_at,version,created_at,updated_at) VALUES(?,?,?,?,?,1,'{}',1,'succeeded',1,'[]',NULL,0,?,?,1,?,?)",
+    [id.sub, id.task1, id.org, id.ws, id.provider, now, now, now, now],
+  );
+  await pool.query(
+    "INSERT INTO file_assets(id,organization_id,workspace_id,category,relative_path,content_sha256,size_bytes,status,created_by,created_at,updated_at) VALUES(?,?,?,'evidence',?,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',4096,'active',?,?,?)",
+    [id.file, id.org, id.ws, `m0602/${id.file}.json`, id.user, now, now],
+  );
+}
+async function measuredWindow() {
+  const since = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const [[tasks], [storage]] = await Promise.all([
+    pool.query(
+      "SELECT status,COUNT(*) AS total FROM collection_tasks WHERE updated_at>=? GROUP BY status",
+      [since],
+    ),
+    pool.query(
+      "SELECT COALESCE(SUM(size_bytes),0) AS growth FROM file_assets WHERE status='active' AND created_at>=?",
+      [since],
+    ),
+  ]);
+  const count = (states) =>
+    tasks
+      .filter((row) => states.includes(row.status))
+      .reduce((sum, row) => sum + Number(row.total), 0);
+  return {
+    successes: count(["succeeded", "succeeded_empty", "completed_with_warnings"]),
+    failures: count(["failed_terminal", "dead_letter"]),
+    growth: Number(storage[0].growth),
+  };
+}
+let fixtureAttested = false;
+try {
+  await assertFixtureReady();
+  fixtureAttested = true;
+  const [v] = await pool.query(
+    "SELECT VERSION() version,@@character_set_server charset,CURRENT_USER() account",
+  );
+  if (
+    !String(v[0].version).startsWith("5.7.") ||
+    v[0].charset !== "utf8mb4" ||
+    !String(v[0].account).startsWith("product_scout@")
+  )
+    throw new Error("mysql57 business account required");
+  await cleanup();
+  const baseline = await measuredWindow();
+  await seed();
+  const service = new PlatformDashboardService(
+      new MySqlPlatformDashboardRepository(pool, 1000, 20, () => now),
+    ),
+    data = await service.read({ actorId: id.user, window: "24h", requestId, traceId }),
+    probeProvider = data.provider_health.find(
+      (provider) => provider.code === `m0602_${requestId.slice(0, 8)}`,
+    );
+  const measured = await measuredWindow();
+  const expected = {
+    successes: baseline.successes + 1,
+    failures: baseline.failures + 1,
+    growth: baseline.growth + 4096,
+  };
+  if (
+    measured.successes !== expected.successes ||
+    measured.failures !== expected.failures ||
+    measured.growth !== expected.growth
+  )
+    throw new Error("platform_aggregate_changed_during_probe");
+  const expectedRate =
+    Math.round((expected.successes * 10000) / (expected.successes + expected.failures)) / 100;
+  if (
+    data.summary.task_success_rate !== expectedRate ||
+    data.summary.file_growth_bytes !== expected.growth ||
+    probeProvider?.status !== "healthy" ||
+    probeProvider.observed_count !== 1 ||
+    probeProvider.success_count !== 1 ||
+    probeProvider.failed_count !== 0
+  )
+    throw new Error(
+      `factual aggregate mismatch: ${JSON.stringify({ task_success_rate: data.summary.task_success_rate, file_growth_bytes: data.summary.file_growth_bytes, probe_provider_status: probeProvider?.status ?? "missing" })}`,
+    );
+  if (data.summary.active_organizations < 1 || data.summary.active_users < 1)
+    throw new Error("platform totals missing");
+  const [audit] = await pool.query(
+    "SELECT COUNT(*) n FROM platform_audit_events WHERE actor_id=? AND action='platform.dashboard.read' AND request_id=?",
+    [id.user, requestId],
+  );
+  const [view] = await pool.query(
+    "SELECT COUNT(*) n FROM platform_dashboard_views WHERE actor_id=? AND trace_id=?",
+    [id.user, traceId],
+  );
+  if (Number(audit[0].n) !== 1 || Number(view[0].n) !== 1) throw new Error("read audit missing");
+  await cleanup();
+  console.log(
+    JSON.stringify(
+      {
+        status: "passed",
+        module: "M06-02",
+        mysql: v[0].version,
+        terminal_success_rate: expectedRate,
+        fixture_delta: { successes: 1, failures: 1, file_bytes: 4096 },
+        provider_health: "factual",
+        file_growth: "factual",
+        read_audit: "passed",
+        cleanup: "passed",
+        request_id: requestId,
+        trace_id: traceId,
+      },
+      null,
+      2,
+    ),
+  );
+} catch (e) {
+  if (fixtureAttested) await cleanup();
+  throw e;
+} finally {
+  await pool.end();
+}

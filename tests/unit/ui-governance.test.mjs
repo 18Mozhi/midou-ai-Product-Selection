@@ -36,7 +36,8 @@ test("UI governance keeps responsive, status, dialog and error boundaries shared
   assert.match(apiClient, /rethrowUnexpectedError/);
   assert.match(routeCatalog, /surface[\s\S]*cachePolicy/);
   assert.match(shell, /selectedSurfaceComponent[\s\S]*surfaceCacheKey/);
-  assert.match(shell, /class="role-workspace-identity"[\s\S]*<h1>{{ pageTitle }}<\/h1>/);
+  assert.match(shell, /class="role-workspace-identity"\s*>\s*<nav[^>]*aria-label="面包屑"/);
+  assert.match(shell, /:aria-current="index === breadcrumbs.length - 1 \? 'page' : undefined"/);
   assert.doesNotMatch(shell, /role-page-folio|SIGNAL LEDGER|role-signal-status/);
   assert.match(shell, /aria-controls="role-navigation"/);
   assert.match(shell, /<nav id="role-navigation" class="role-sidebar"/);
@@ -50,6 +51,7 @@ test("UI governance keeps responsive, status, dialog and error boundaries shared
     "apps/web/src/styles/onboarding-navigation.css",
     "apps/web/src/styles/platform-operations.css",
     "apps/web/src/styles/platform-dashboard.css",
+    "apps/web/src/styles/platform-dashboard-layout.css",
   ]) {
     const source = await readFile(stylesheet, "utf8");
     assert.ok(source.split(/\r?\n/u).length < 1_500, `${stylesheet} must stay bounded`);

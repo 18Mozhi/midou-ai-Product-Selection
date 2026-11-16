@@ -47,7 +47,11 @@ html
 html body:has(#app .provider-registry) #app .role-nav-groups details[open] > summary {
   background: var(--p46-accent-soft);
 }
-html body:has(#app .provider-registry) #app .role-mobile-nav :is(a, button, i) {
+html:not([data-design="commerce"])
+  body:has(#app .provider-registry)
+  #app
+  .role-mobile-nav
+  :is(a, button, i) {
   color: var(--p46-accent);
 }
 html body:has(#app .provider-registry) #app .provider-registry {
@@ -163,7 +167,7 @@ html body:has(#app .provider-registry) #app .responsive-data-view {
   }
 }
 
-html:has(#app .provider-registry) {
+html:not([data-design="commerce"]):has(#app .provider-registry) {
   --so-font-ui: "Microsoft YaHei", sans-serif;
   --so-font-display: "Microsoft YaHei", sans-serif;
 }
@@ -178,15 +182,23 @@ html body:has(#app .provider-registry) #app {
   margin: 0;
   padding: 0;
 }
-html body:has(#app .provider-registry) #app .role-top-actions :is(button, a),
-html body:has(#app .provider-registry) #app .role-menu-toggle {
+html:not([data-design="commerce"])
+  body:has(#app .provider-registry)
+  #app
+  .role-top-actions
+  :is(button, a),
+html:not([data-design="commerce"]) body:has(#app .provider-registry) #app .role-menu-toggle {
   min-height: 44px;
   border: 1px solid var(--p46-border);
   border-radius: 6px;
   color: var(--p46-accent);
   background: var(--p46-panel);
 }
-html body:has(#app .provider-registry) #app .role-sidebar :is(input, summary, a) {
+html:not([data-design="commerce"])
+  body:has(#app .provider-registry)
+  #app
+  .role-sidebar
+  :is(input, summary, a) {
   color: var(--p46-secondary-ink);
 }
 html body:has(#app .provider-registry) #app .provider-registry :is(h2, h3),
@@ -194,7 +206,11 @@ html body:has(#app .provider-registry) .responsive-data-view__drawer > header st
   font-family: "Microsoft YaHei", sans-serif;
   font-weight: 700;
 }
-html body:has(#app .provider-registry) #app .role-mobile-nav :is(a, button) {
+html:not([data-design="commerce"])
+  body:has(#app .provider-registry)
+  #app
+  .role-mobile-nav
+  :is(a, button) {
   border: 0;
 }
 html

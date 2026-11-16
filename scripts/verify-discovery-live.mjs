@@ -28,6 +28,7 @@ if (process.argv.includes("--baota-production")) {
       otherWorkspace: randomUUID(),
       visible: randomUUID(),
       second: randomUUID(),
+      retiredTask: randomUUID(),
       forbidden: randomUUID(),
       crossScope: randomUUID(),
     },
@@ -110,14 +111,27 @@ if (process.argv.includes("--baota-production")) {
         ids.second,
         ids.org,
         ids.workspace,
-        "task",
+        "opportunity",
         randomUUID(),
         "户外_照明!% 复核",
         "当前范围第二条",
-        "/tasks/second",
+        "/opportunities/second",
         "task:read",
         2,
         new Date(now.getTime() + 2000),
+      ],
+      [
+        ids.retiredTask,
+        ids.org,
+        ids.workspace,
+        "task",
+        randomUUID(),
+        "户外_照明!% 旧任务",
+        "旧任务投影不可见",
+        "/tasks/retired",
+        "task:read",
+        4,
+        new Date(now.getTime() + 4000),
       ],
       [
         ids.forbidden,
@@ -169,8 +183,17 @@ if (process.argv.includes("--baota-production")) {
       limit: 1,
       cursor: first.next_cursor,
     });
-    if (second.items.length !== 1 || second.items[0].id !== ids.second)
+    if (second.items.length !== 1 || second.items[0].id !== ids.second || second.next_cursor)
       throw new Error("cursor page mismatch");
+    const retired = await service.search({
+      organizationId: ids.org,
+      workspaceId: ids.workspace,
+      query: "_照明!%",
+      capabilities: ["task:read"],
+      resourceType: "task",
+    });
+    if (retired.items.length !== 0 || retired.next_cursor)
+      throw new Error("retired task projection leak");
     const forbidden = await service.search({
       organizationId: ids.org,
       workspaceId: ids.workspace,
@@ -196,6 +219,7 @@ if (process.argv.includes("--baota-production")) {
         capability: "document_filter_passed",
         literal_escape: "percent_underscore_bang_passed",
         cursor: "stable_scope_cursor",
+        retired_task_projection: "excluded",
         cleanup: "passed",
         request_id: requestId,
         trace_id: traceId,

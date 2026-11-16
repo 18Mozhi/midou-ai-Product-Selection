@@ -34,6 +34,7 @@ export function registerPlatformDomainRoutes(context: PlatformDomainContext) {
         context.config.platformDashboard.errorLimit,
         () => new Date(),
         context.config.platformDashboard.apiCoverageReportFile,
+        accountOnly,
       ),
       context.config.platformDashboard.defaultWindow,
     ),

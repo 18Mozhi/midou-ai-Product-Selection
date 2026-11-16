@@ -2,21 +2,25 @@
 
 ## 使用与宝塔边界
 
+Node 测试按最多 36 个文件和保守的 Windows 命令行长度分批，文件清单按原顺序完整覆盖；正式模块逐批记录退出状态，任一失败或超时都不签发。`--node-batch` 只用于引擎执行或排障，单批通过不是模块签发。既有每条命令超时配置范围、测试断言与浏览器预算不变。
+
 先运行 `npm run verify:route-artifacts` 和 `npm run verify:release-matrix` 校验路由生成物、清单和 E2E 真实性比例，再运行 Node、live 和 `node scripts/verify-release-matrix.mjs --browser all`；排障时也可把 `all` 换成 `p00` 至 `p06`。P37 组织审计 URL/历史/KeepAlive 恢复回归位于 p06 组的独立 `m06-01-organization-audit-history.spec.ts`。新增或修改路由时只编辑 `config/route-catalog.json`，随后执行 `npm run generate:route-artifacts`，不得手工编辑 `apps/web/src/route-catalog.generated.json` 或 `docs/feature-map.json` 的 `routes` 段。`npm run verify:e2e-realism` 可单独输出截图总数、位于 Mock 文件的截图数和比例；该比例必须低于 50%，当前为 19/39（48.72%），其中四张核心业务截图只能由一次性生产验收的真实 Fastify/MySQL/Redis 脚本贡献，覆盖来源决策任务、任务移动端次要操作、审批决策台和供应链成本利润；被其替代的机会详情与找货 Mock 以及匿名鉴权 MFA 场景只保留行为断言。移动端还必须复用遮挡 helper 检查成员与平台壳层末端内容不被固定底栏覆盖。模块正式入口仍为 `npm run verify:module -- M07-01`。完整矩阵耗时可能超过默认单命令上限，宝塔受限发布任务可临时设置 `VERIFY_COMMAND_TIMEOUT_MS=900000`；报告继续写到 `VERIFY_REPORT_DIR`。这两个变量均已在 `config/env.example` 和配置 schema 中登记，无新增配置。
 
 `npm run test:e2e`、`npm run verify:functional` 和发布矩阵浏览器门都会先完整执行桌面项目并关闭其 API/Web 服务，再重新启动服务执行 390px 项目。日志中应出现两次独立的 Playwright 运行；第二次端口占用通常表示第一次服务未正常退出，必须先清理对应测试进程再重跑，不得启用 `reuseExistingServer` 掩盖生命周期泄漏。`node scripts/run-playwright-projects.mjs --self-test` 只校验编排合同，不启动服务。
 
 该执行器只用于本地、CI 或宝塔面板创建的受限发布任务，不暴露 HTTP API，不启动常驻服务，不在面板外创建生产任务。运行前确认宝塔 MySQL 为 5.7、业务账号和库名为 `product_scout`，Redis 可用，且预发布数据允许隔离创建与清理。浏览器分组固定使用 4 worker，会短暂启动本地 API/Web 服务，Playwright 结束后自动关闭；不得把测试 worker 数解释为生产容量。
 
+正式业务探针仍在经指纹验证的宝塔节点运行当前已部署的 Node 和运行包，并先验证生产 MySQL schema 与 Redis PING。会变更任务、租约或工作流的探针只连独立验收库与 Redis：用已有 MySQL 5.7 和 Redis 启动**仅监听本机回环、非默认端口**的专用实例，应用完整迁移及验收种子，业务账号与库名保持 `product_scout`，两端使用各自生成的至少 24 字符临时密码。仅在此隔离库的 `schema_migrations` 插入 `scoutops-isolated-<标识>`（校验和用标识的 SHA-256，时间用 UTC），在隔离 Redis 写入 `scoutops:verify-isolation:<标识>`，值为相同标识。将 32 位小写十六进制标识与该隔离实例的连接环境注入本次门禁进程，**不得在生产库、共享测试库或生产 Redis 设置标识**。宝塔侧临时 SSH 反向端口仅监听回环，双存储标识核验后才执行原探针，关闭后无持久服务或生产队列变更。无隔离配置或握手失败直接阻断，不回退生产连接；不修改测试阈值。生产来源目录保留原检查对象；平台概览在生产只读一致性快照对账，原精确增量和审计改在隔离实例验证；隔离证据不代替发布后的业务验收。不需要重启任何生产服务。
+
 软件矩阵通过且生产版本已就绪后，在包含完整源码和开发依赖的本地受限发布工作区按 `config/env.example` 注入六组 `SCOUTOPS_QA_*` 临时账号，并以生产 HTTPS 根地址运行 `npm run verify:production-product`。生产服务器的固定运行包不包含源码验证脚本，不得临时上传脚本或在服务器安装开发依赖。账号必须分别只有 `member`、`selection_manager`、`organization_admin`、`platform_operations_admin`、`platform_security_admin`、`platform_super_admin` 一个角色；成员侧三个账号使用同一隔离验收组织和工作区。验收组织必须至少保留一条可打开的机会和任务记录，否则动态详情路由无法实测并会失败。密码只放本地受限环境，报告和截图不得包含登录表单值或 Cookie。
 
 报告中的 `route_catalog_count` 必须与 `covered_route_templates` 数量一致，六个角色都必须有独立 `route_count`、`allow_count`、`deny_count` 和长度等于 `route_catalog_count` 的 `route_matrix`，且 `api_failures`、`console_errors` 为空。`must have exactly` 表示账号角色叠加；`contains a forbidden capability` 表示生产权限目录漂移；`has no persisted acceptance record` 表示补齐隔离验收数据后重跑；`authorized route catalog is not fully covered` 表示新增受保护路由没有任何验收角色可达。路由目录和验收变量都不是常驻运行配置，修改后不需要重启 API、Worker 或 Crawler；重新生成路由产物并运行有限验收即可。
 
-完整的一次性生产验收在宝塔计划任务中按 `infra/baota/production-acceptance-manifest.json` 创建 `product-scout-production-acceptance`，手工执行 `node scripts/run-baota-production-acceptance.mjs --production`。只在该任务的受限环境配置 `SCOUTOPS_ACCEPTANCE_PASSWORD`；其余地址和报告路径可沿用 `config/env.example`。任务会从同一一次性密码派生六个产品矩阵账号和一个隔离 `auditor` 负向鉴权账号，不需要另配账号变量；其来源决策任务链会创建一条达到显式来源门槛、精确命中启用监控规则且评分、市场、竞争、成本、风险五项质量门全部通过的隔离商品，页面必须显示“建议采纳”，再由浏览器填写原因并执行“采纳建议”。先在本地或发布预检执行 `npm run verify:production-acceptance`，应只输出 225/258/60/6 产品基线且不连接数据库、不创建账号。
+完整的一次性生产验收在宝塔计划任务中按 `infra/baota/production-acceptance-manifest.json` 创建 `product-scout-production-acceptance`，手工执行 `node scripts/run-baota-production-acceptance.mjs --production`。只在该任务的受限环境配置 `SCOUTOPS_ACCEPTANCE_PASSWORD`；其余地址和报告路径可沿用 `config/env.example`。任务会从同一一次性密码派生六个产品矩阵账号和一个隔离 `auditor` 负向鉴权账号，不需要另配账号变量；其来源决策任务链会创建一条达到显式来源门槛、精确命中启用监控规则且评分、市场、竞争、成本、风险五项质量门全部通过的隔离商品，页面必须显示“建议采纳”，再由浏览器填写原因并执行“采纳建议”。先在本地或发布预检执行 `npm run verify:production-acceptance`，应只输出 229/262/60/6 产品基线且不连接数据库、不创建账号。
 
 生产机无法使用 Playwright 自带浏览器包时，在同一宝塔有限任务的受限环境设置 `SCOUTOPS_PLAYWRIGHT_EXECUTABLE_PATH`，值必须是当前主机上由 `www` 可执行的 Chromium/Chrome 绝对路径；当前 Debian 11 主机使用面板内已安装的 `/usr/bin/chromium`。验收脚本在启动浏览器前检查绝对路径和执行权限，不通过时失败关闭。该配置仅影响两段生产浏览器验收，不改变网站、Node API、Worker 或 Crawler；修改后直接重新手工执行有限任务，不需要重启常驻服务，也不得在服务器升级 npm 锁定依赖来绕过平台不兼容。
 
-生产任务成功报告必须同时满足：`operation_count=258`、`route_catalog_count=60`、`matrix_cells=360`、六个产品矩阵单角色账号、一个隔离鉴权单角色账号、一个组织、一个工作区、三条 `core_e2e` 链路、四张真实栈截图，以及 `cleanup.status=passed`、`cleanup.remaining_rows=0`、`cleanup_failure=null`。报告中的 `baseline.role_count` 仍必须为 6，`seed.verified_users` 与 `seed.single_role_accounts` 必须为 7。`core_e2e.dependencies` 中 MySQL 与 Redis 都必须为 `available`；`cleanup.tables` 是逐表删除清单。任务失败但清理成功时仍返回非零，禁止把清理成功冒充验收成功；主失败与清理失败同时发生时必须分别写入报告。进程被主机强制终止时 `finally` 无法保证执行，应先按报告中的 run/trace 标记核对残留，不得使用宽泛邮箱或组织条件删除生产数据。
+生产任务成功报告必须同时满足：`operation_count=262`、`route_catalog_count=60`、`matrix_cells=360`、六个产品矩阵单角色账号、一个隔离鉴权单角色账号、一个组织、一个工作区、三条 `core_e2e` 链路、四张真实栈截图，以及 `cleanup.status=passed`、`cleanup.remaining_rows=0`、`cleanup_failure=null`。报告中的 `baseline.role_count` 仍必须为 6，`seed.verified_users` 与 `seed.single_role_accounts` 必须为 7。`core_e2e.dependencies` 中 MySQL 与 Redis 都必须为 `available`；`cleanup.tables` 是逐表删除清单。任务失败但清理成功时仍返回非零，禁止把清理成功冒充验收成功；主失败与清理失败同时发生时必须分别写入报告。进程被主机强制终止时 `finally` 无法保证执行，应先按报告中的 run/trace 标记核对残留，不得使用宽泛邮箱或组织条件删除生产数据。
 
 ## 故障定位
 

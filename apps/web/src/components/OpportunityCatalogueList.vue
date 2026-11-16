@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import AppIcon from "./AppIcon.vue";
 import type { OpportunitySummary } from "./opportunity-workspace-types";
 import { opportunityProfitStatusLabel } from "./opportunity-workspace-presentation";
 
@@ -34,7 +35,7 @@ const rows = computed(() =>
     class="selection-product-list"
     :class="{ 'selection-candidate-list': candidateGateCount }"
     tabindex="0"
-    aria-label="商品数据表，可横向滚动"
+    :aria-label="candidateGateCount ? '商品数据表，可滚动' : '商品数据表，可横向滚动'"
   >
     <table aria-label="选品商品列表">
       <colgroup>
@@ -78,7 +79,20 @@ const rows = computed(() =>
                   loading="lazy"
                   referrerpolicy="no-referrer"
                   @error="emit('imageError', item)"
-                /><span v-else aria-hidden="true">{{ imageFallbackLabel(item) }}</span></span
+                /><span
+                  v-else
+                  aria-hidden="true"
+                  :class="{ 'catalogue-candidate-placeholder': candidateGateCount }"
+                >
+                  <AppIcon v-if="candidateGateCount" name="box" :size="20" />
+                  {{
+                    candidateGateCount
+                      ? item.image_url
+                        ? "加载失败"
+                        : "待采集"
+                      : imageFallbackLabel(item)
+                  }}
+                </span></span
               >
               <div class="selection-product-name">
                 <strong
@@ -242,6 +256,13 @@ tbody tr:hover {
   height: 100%;
   object-fit: contain;
   padding: 4px;
+}
+.catalogue-candidate-placeholder {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  font-size: 13px;
+  line-height: 1.3;
 }
 .selection-product-name {
   display: grid;

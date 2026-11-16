@@ -7,7 +7,12 @@ interface TableColumn {
   label: string;
 }
 
-const props = defineProps<{ columnLabels?: boolean; columnHelp?: string; toolbarIcons?: boolean }>();
+const props = defineProps<{
+  columnLabels?: boolean;
+  columnHelp?: string;
+  toolbarIcons?: boolean;
+  scrollLabel?: string;
+}>();
 const root = ref<HTMLElement | null>(null),
   columns = ref<TableColumn[]>([]),
   hiddenColumns = ref<number[]>([]),
@@ -74,7 +79,11 @@ watch([hiddenColumns, freezeFirst, density], () => void nextTick(applySettings),
 </script>
 
 <template>
-  <section ref="root" class="table-view-controls" :class="{ 'table-view-controls--icons': toolbarIcons }">
+  <section
+    ref="root"
+    class="table-view-controls"
+    :class="{ 'table-view-controls--icons': toolbarIcons }"
+  >
     <header v-if="columns.length > 1" class="table-view-controls__toolbar">
       <details>
         <summary><AppIcon v-if="toolbarIcons" name="list" :size="15" />列设置</summary>
@@ -104,11 +113,11 @@ watch([hiddenColumns, freezeFirst, density], () => void nextTick(applySettings),
         </fieldset>
       </details>
       <button type="button" :aria-pressed="freezeFirst" @click="freezeFirst = !freezeFirst">
-        <AppIcon v-if="toolbarIcons" name="switch" :size="15" />
+        <AppIcon v-if="toolbarIcons" name="column-anchor" :size="15" />
         {{ freezeFirst ? "首列已冻结" : "首列未冻结" }}
       </button>
       <label>
-        <span v-if="toolbarIcons"><AppIcon name="layers" :size="15" />表格密度</span>
+        <span v-if="toolbarIcons"><AppIcon name="category-grid" :size="15" />表格密度</span>
         <template v-else>表格密度</template>
         <select v-model="density">
           <option value="standard">标准</option>
@@ -116,7 +125,14 @@ watch([hiddenColumns, freezeFirst, density], () => void nextTick(applySettings),
         </select>
       </label>
     </header>
-    <div class="table-view-controls__content"><slot /></div>
+    <div
+      class="table-view-controls__content"
+      :role="scrollLabel ? 'region' : undefined"
+      :aria-label="scrollLabel"
+      :tabindex="scrollLabel ? 0 : undefined"
+    >
+      <slot />
+    </div>
   </section>
 </template>
 

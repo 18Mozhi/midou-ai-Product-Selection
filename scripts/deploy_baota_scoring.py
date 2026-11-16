@@ -106,7 +106,9 @@ def deploy_scoring(api, repo: Path, identity: dict) -> None:
         owner=str(uuid4()); locked=False; applied=False
         name="scoring-"+sha+"-"+owner+".tar.gz"
         values={"sha":sha,"action":"apply","archive_name":name,"archive_hash":hashlib.sha256(archive.read_bytes()).hexdigest(),"hashes":hashes}
-        restart=f"{api.PANEL_PYTHON} /www/server/panel/script/restart_project.py nodejs ai选品"
+        def restart():
+            api.remote_python(client,api.panel_node_action_source("stop"),timeout=90)
+            api.remote_python(client,api.panel_node_action_source("start"),timeout=60)
         try:
             api.remote_python(client,api.deployment_lock_source(owner),timeout=30);locked=True
             current=api.remote_python(client,api.production_identity_source(),timeout=30)
@@ -118,7 +120,7 @@ def deploy_scoring(api, repo: Path, identity: dict) -> None:
             api.remote_python(client, "import json\nfrom pathlib import Path\nr=Path('/www/wwwroot/ai选品')\nassert r.resolve()==r and not r.is_symlink()\nassert all((r/p).is_dir() and (r/p).resolve()==r/p for p in ('runtime','runtime/tmp','backups','backend'))\nprint('SCOUTOPS_RESULT='+json.dumps({'status':True}))",timeout=30)
             with client.open_sftp() as sftp: sftp.put(str(archive),f"{api.PROJECT_ROOT}/runtime/tmp/{name}")
             api.remote_python(client,scoring_remote_source(values),timeout=90);applied=True
-            api.ssh_exec(client,restart,timeout=120)
+            restart()
             api.verify_public(current["build_sha"])
             result=api.remote_python(client,scoring_remote_source({**values,"action":"verify"}),timeout=90)
             receipt=repo/".artifacts/verification/scoring-only-production-evidence.json"
@@ -128,7 +130,7 @@ def deploy_scoring(api, repo: Path, identity: dict) -> None:
         except Exception:
             if applied:
                 api.remote_python(client,scoring_remote_source({**values,"action":"rollback"}),timeout=90)
-                api.ssh_exec(client,restart,timeout=120)
+                restart()
             raise
         finally:
             try:

@@ -323,9 +323,11 @@ def verify_local_source_preflight(repo: Path) -> None:
     npm = local_npm_executable()
     for script in ("format:check", "verify:runtime-docs", "verify:release-matrix"):
         subprocess.run([npm, "run", script], cwd=repo, check=True)
+    subprocess.run([sys.executable, "-B", "-m", "unittest", "discover", "-s", "tests/m07-03"], cwd=repo, check=True)
 
 
 def verify_local_build_preflight(repo: Path) -> None:
+    subprocess.run([local_node_executable(), "--test", "tests/unit/worker-scheduler.test.mjs"], cwd=repo, check=True)
     subprocess.run(
         [local_node_executable(), "scripts/verify-baota-deployment.mjs", "--preflight"],
         cwd=repo,
@@ -1119,6 +1121,13 @@ def verify_public(build_sha: str) -> dict:
 
 
 def main() -> None:
+    # Historical release helpers remain importable by the coordinated publisher,
+    # but the old command can never start backup, isolation or rollback operations.
+    raise SystemExit("Legacy deployment disabled. Use scripts/deploy-account-baota.py.")
+
+def _retired_additive_deployment() -> None:
+    if (Path(__file__).resolve().parents[1] / "database/migrations/0197_retire_tenancy_roots.up.sql").is_file():
+        raise SystemExit("Legacy deployment disabled. Use scripts/deploy-account-baota.py.")
     parser = argparse.ArgumentParser(description="Deploy this repository to its fixed BaoTa layout")
     parser.add_argument("--initialize-layout", action="store_true", help="initialize the fixed layout and migrate the bounded shared directory")
     parser.add_argument("--skip-build", action="store_true", help="reuse existing local dist outputs")

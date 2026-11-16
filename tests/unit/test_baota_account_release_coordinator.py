@@ -63,6 +63,13 @@ class Steps:
 
 
 class CoordinatorTest(unittest.TestCase):
+    def test_old_release_cli_cannot_start_backup_or_runtime_operations(self):
+        legacy = runpy.run_path(str(SCRIPTS / "deploy-baota.py"))
+        for options in ([], ["--backup-tools-only", "apply"], ["--initialize-layout"], ["--rollback-drill"]):
+            with patch("sys.argv", ["deploy-baota.py", *options]):
+                with self.assertRaisesRegex(SystemExit, "Legacy deployment disabled"):
+                    legacy["main"]()
+
     def test_worker_drain_restarts_zero_window_after_activity_and_fails_closed(self):
         empty = dict.fromkeys(DRAIN["DRAIN_KEYS"], 0)
         busy = dict(empty, intelligence_active=1, worker_active=1)

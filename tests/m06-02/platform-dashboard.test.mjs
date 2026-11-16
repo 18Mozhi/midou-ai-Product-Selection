@@ -1,5 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import {
+  expandPlatformDashboardCss,
+  platformDashboardCss,
+  platformDashboardLayoutCss,
+} from "../../scripts/lib/platform-dashboard-css.mjs";
 import { readFile } from "node:fs/promises";
 import {
   PlatformDashboardService,
@@ -184,19 +189,32 @@ test("M06-02.A06/A07/A08/A10/A13/A17 contracts frontend config and handoff stay 
   assert.equal(JSON.parse(feature).implementation.platformDashboard.module, "M06-02");
 });
 test("M06-02.A14 production probe is routed through fixed BaoTa MySQL", async () => {
-  const [manifest, runner, probe] = await Promise.all([
+  const [manifest, runner, probe, liveRead] = await Promise.all([
     readFile("verification/modules/M06-02.json", "utf8"),
     readFile("scripts/verify-live-baota.py", "utf8"),
     readFile("scripts/verify-platform-dashboard-live.mjs", "utf8"),
+    readFile("scripts/verify-platform-dashboard-readonly.mjs", "utf8"),
   ]);
   assert.match(manifest, /python scripts\/verify-live-baota\.py platform-dashboard/);
   assert.match(runner, /m06_probes\s*=\s*\{[^}]*"platform-dashboard"/);
-  assert.match(probe, /data\.provider_health\.find\(\(provider\)\s*=>\s*provider\.code===/);
+  assert.match(probe, /data\.provider_health\.find\(\s*\(provider\)\s*=>\s*provider\.code\s*===/);
+  assert.match(probe, /successes:\s*baseline\.successes\s*\+\s*1/);
+  assert.match(probe, /failures:\s*baseline\.failures\s*\+\s*1/);
+  assert.match(probe, /growth:\s*baseline\.growth\s*\+\s*4096/);
+  assert.match(probe, /platform_aggregate_changed_during_probe/);
+  assert.match(probe, /data\.summary\.task_success_rate\s*!==\s*expectedRate/);
+  assert.match(probe, /await assertFixtureReady\(\);\s*fixtureAttested = true/);
+  assert.match(runner, /production_dashboard_readonly_snapshot/);
+  assert.match(liveRead, /START TRANSACTION WITH CONSISTENT SNAPSHOT, READ ONLY/);
+  assert.match(liveRead, /readPlatformCollectionMetrics\(connection/);
+  assert.doesNotMatch(liveRead, /INSERT INTO|DELETE FROM|UPDATE\s+[a-z_]+\s+SET/i);
 });
 test("M06-02 platform overview gives administrators clear next actions", async () => {
   const [web, styles] = await Promise.all([
     readFile("apps/web/src/components/PlatformDashboard.vue", "utf8"),
-    readFile("apps/web/src/styles/platform-dashboard.css", "utf8"),
+    Promise.all(
+      [platformDashboardCss, platformDashboardLayoutCss].map((path) => readFile(path, "utf8")),
+    ).then(([entry, layout]) => expandPlatformDashboardCss(entry, layout)),
   ]);
   for (const copy of [
     "平台运行概览",
@@ -394,4 +412,24 @@ test("M06-02 audited log export preserves the active production filters", async 
   assert.match(routes, /platform\/management\/logs\/exports[\s\S]*requireIdempotencyKey/);
   assert.match(routes, /\^\[=\+\\-@\]/);
   assert.match(web, /导出当前筛选[\s\S]*填写日志导出原因/);
+});
+
+const toPlain=x=>JSON.parse(JSON.stringify(x));
+for (const accountOnly of [true, false]) test(`platform overview preserves facts and audit in ${accountOnly ? 'retired' : 'legacy'} mode`, async()=>{
+ const queries=[],writes=[],events=[];
+ const connection={beginTransaction:async()=>events.push('begin'),commit:async()=>events.push('commit'),rollback:async()=>events.push('rollback'),release:()=>events.push('release'),query:async(sql,args)=>{writes.push([sql,args]);return [[]];}};
+ const pool={getConnection:async()=>connection,query:async (sql)=>{
+   queries.push(sql);
+   if(accountOnly)assert.doesNotMatch(sql,/\b(?:organizations|workspaces|organization_id|workspace_id)\b/);
+   if(sql.includes("kind,severity,metric_code"))return [[{id:'issue-original',kind:'quality',severity:'warning',observed_at:'2026-11-17T00:00:00Z',...(!accountOnly?{organization_id:'old-org',workspace_id:'old-ws'}:{})}]];
+   if(sql.includes('FROM users'))return [[{total:3}]];
+   if(sql.includes('FROM organizations'))return [[{total:2}]];
+   return [[]];
+ }};
+ const payload=await new MySqlPlatformDashboardRepository(pool,1000,20,()=>new Date('2026-11-17T00:00:00Z'),undefined,accountOnly).read({actorId:'actor-original',requestId:'req-original',traceId:'trace-original',window:'24h',windowMinutes:1440});
+ assert.deepEqual(events,['begin','commit','release']);assert.equal(payload.summary.active_users,3);assert.equal(payload.alerts[0].id,'issue-original');assert.equal(writes.length,2);
+ assert.equal(Object.hasOwn(payload.summary,'active_organizations'),!accountOnly);assert.equal(Object.hasOwn(payload.alerts[0],'organization_id'),!accountOnly);
+ if(accountOnly){assert.match(writes[1][0],/id,historical_context,actor_id/);assert.match(writes[1][0],/VALUES\(\?,NULL,\?,/);assert.doesNotMatch(writes[1][0],/organization_id|workspace_id/);}
+ else{assert.match(writes[1][0],/id,organization_id,workspace_id,actor_id/);assert.equal(payload.summary.active_organizations,2);assert.equal(payload.alerts[0].workspace_id,'old-ws');}
+ assert.deepEqual(toPlain(writes[1][1]).slice(1,4),['actor-original','req-original','trace-original']);
 });

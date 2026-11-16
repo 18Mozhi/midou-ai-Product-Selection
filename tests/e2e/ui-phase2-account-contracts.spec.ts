@@ -262,7 +262,7 @@ test("UI2-A03 theme conflict requires fresh preference before the next versioned
   ]);
 });
 
-test("profile shows saved avatar but never loads an unsaved URL", async ({ page }, testInfo) => {
+test("profile shows saved avatar but never loads an unsaved URL", async ({ page }) => {
   const wide = page.viewportSize()!.width >= 1101;
   if (wide) await page.setViewportSize({ width: 1717, height: 916 });
   await accountSession(page);
@@ -270,10 +270,11 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
     route.fulfill({
       json: envelope({
         shell: "member",
+        account_rehearsal: true,
         organization_name: "组织夹具",
-        workspace_name: "默认工作区",
+        workspace_name: "工作区夹具",
         roles: ["member"],
-        capabilities: [],
+        capabilities: ["opportunity:read", "trend:read", "notification:read"],
         platform_roles: [],
         platform_capabilities: [],
       }),
@@ -300,9 +301,8 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
   await page.getByLabel("头像 HTTPS 地址").fill("https://avatar.example.test/draft.svg");
   await expect(preview).toHaveAttribute("src", savedUrl);
   await expect(page.locator(".midou-profile-avatar img")).toHaveAttribute("src", savedUrl);
-  const context = page.locator(".midou-profile-context");
-  await expect(context).toContainText("组织夹具");
-  await expect(context).toContainText("默认工作区");
+  await expect(page.locator(".midou-profile-context")).toHaveCount(0);
+  await expect(page.locator(".midou-profile-summary")).not.toContainText(/组织夹具|工作区夹具/);
   let writes = 0;
   page.on("request", (request) => {
     if (request.method() === "PATCH" && new URL(request.url()).pathname.endsWith("/me/profile"))
@@ -316,28 +316,8 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
   if (wide) {
     const form = page.locator(".midou-profile-grid .p11-form");
     const avatar = form.locator(".p11-avatar-frame");
-    const tabs = page.locator(".account-content-only .p11-directory");
-    const heading = page.getByRole("heading", { name: "个人中心", level: 1 });
-    await expect(heading).toHaveCSS("margin-top", "21px");
-    await expect(tabs).toHaveCSS("margin-top", "24px");
-    const intro = page.locator(".account-content-only .p11-page-heading p");
-    expect((await intro.boundingBox())!.x).toBe((await heading.boundingBox())!.x);
-    await expect(tabs).toHaveCSS("column-gap", "22px");
-    const refresh = (await page.getByRole("button", { name: "刷新资料", exact: true }).boundingBox())!;
-    const tabRow = (await tabs.boundingBox())!;
-    expect(refresh.y + refresh.height).toBeLessThan(tabRow.y);
-    expect(Math.abs(refresh.y - 144)).toBeLessThanOrEqual(3);
-    await expect(tabs.locator("a[aria-current='page'] > b")).toHaveCSS("font-size", "17px");
     await expect(form).toHaveCSS("row-gap", "18px");
-    const footer = form.locator(".p11-form-footer");
-    const save = (await footer.getByRole("button", { name: "保存资料" }).boundingBox())!;
-    const cancel = (await footer.getByRole("button", { name: "取消", exact: true }).boundingBox())!;
-    expect(save.width).toBe(126);
-    expect(cancel.width).toBe(94);
-    expect(cancel.x - save.x - save.width).toBe(20);
-    expect(cancel.y).toBe(save.y);
-    const fieldBorder = await page.getByLabel("显示名称").evaluate((node) => getComputedStyle(node).borderTopColor);
-    await expect(footer.getByRole("button", { name: "取消", exact: true })).toHaveCSS("border-top-color", fieldBorder);
+    await expect(page.locator(".midou-sidebar-settings")).not.toHaveAttribute("aria-current");
     await expect(avatar).toHaveCSS("border-radius", "8px");
     const [input, frame] = await Promise.all([
       page.getByLabel("头像 HTTPS 地址").boundingBox(),
@@ -345,39 +325,9 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
     ]);
     expect(Math.abs(input!.y + input!.height / 2 - frame!.y - frame!.height / 2)).toBeLessThan(1);
     await page.evaluate(() => window.scrollTo(0, 0));
-    const [tabsBox, formBox] = await Promise.all([tabs.boundingBox(), form.boundingBox()]);
-    expect(Math.abs(tabsBox!.y + tabsBox!.height - 272)).toBeLessThanOrEqual(3);
-    expect(Math.abs(formBox!.y - 301)).toBeLessThanOrEqual(3);
-    await page.screenshot({ path: testInfo.outputPath("personal-profile-reference.png") });
   }
   expect(writes).toBe(0);
   const security = page.locator(".midou-profile-security");
-  if (wide) {
-    const summary = page.locator(".midou-profile-summary");
-    await expect(summary.locator("section").first()).toHaveCSS("padding-bottom", "33px");
-    await expect(context).toHaveCSS("row-gap", "18px");
-    await expect(context).toHaveCSS("padding-top", "16px");
-    await expect(summary.locator(".midou-profile-avatar")).toHaveCSS("margin-bottom", "6px");
-    await expect(summary.locator(".midou-profile-email")).toHaveCSS("margin-top", "8px");
-    await expect(security).toHaveCSS("padding-top", "17px");
-    const [identityBox, securityBox] = await Promise.all([
-      summary.locator("section").first().boundingBox(),
-      security.boundingBox(),
-    ]);
-    expect(securityBox!.y - identityBox!.y - identityBox!.height).toBeCloseTo(19, 0);
-    expect(Math.abs(securityBox!.y - 647)).toBeLessThanOrEqual(3);
-    const facts = security.locator(".midou-profile-security-facts");
-    await expect(facts.locator("dt").first()).toHaveCSS("column-gap", "14px");
-    await expect(facts.locator("dt > svg").first()).toHaveCSS("width", "22px");
-    for (const badge of await facts.locator(".midou-profile-badge").all()) {
-      await expect(badge).toHaveCSS("font-size", "13px");
-      expect((await badge.boundingBox())!.height).toBe(26);
-    }
-    const securityAction = security.getByRole("link", { name: "管理安全设置" });
-    const actionBox = (await securityAction.boundingBox())!;
-    expect(Math.abs(actionBox.x - 312)).toBeLessThanOrEqual(2);
-    expect(Math.abs(actionBox.y - 817)).toBeLessThanOrEqual(3);
-  }
   const email = page.getByLabel("邮箱", { exact: true });
   await expect(email).toBeDisabled();
   await expect(email).toHaveAccessibleDescription(/邮箱暂不支持修改/);
@@ -389,7 +339,10 @@ test("profile shows saved avatar but never loads an unsaved URL", async ({ page 
     "/me?section=security",
   );
   if ((page.viewportSize()?.width ?? 0) >= 1440)
-    await expect(security.getByRole("heading", { name: "安全信息" })).toHaveCSS("font-size", "22px");
+    await expect(security.getByRole("heading", { name: "安全信息" })).toHaveCSS(
+      "font-size",
+      "22px",
+    );
   expect(draftReads).toBe(0);
 });
 

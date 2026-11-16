@@ -608,7 +608,7 @@ test("platform permission page reads only the real role catalog and preserves co
     if (request.url().includes("/api/v1/platform/accounts")) accountRequests += 1;
   });
   await page.goto("/platform-admin/permissions");
-  await expect(page).toHaveTitle("角色权限 · 智能选品");
+  await expect(page).toHaveTitle("角色权限 · 米兜智能选品");
   await expect(
     page.locator(".platform-page-header").getByRole("heading", { name: "角色权限" }),
   ).toBeVisible();
@@ -963,7 +963,9 @@ test("account overview exposes a recoverable empty filter state", async ({ page 
   if (mobile) {
     await page.getByRole("button", { name: "账号筛选" }).click();
   }
-  const filters = mobile ? page.getByRole("dialog", { name: "账号筛选" }) : page;
+  const filters = mobile
+    ? page.getByRole("dialog", { name: "账号筛选" })
+    : page.locator("form.account-filter:visible");
   await filters.getByPlaceholder("搜索组织名称或用户邮箱").fill("不存在的组织");
   await filters.getByRole("button", { name: "搜索" }).click();
   await expect(page.getByText("没有符合当前条件的组织", { exact: true })).toBeVisible();
@@ -1043,7 +1045,9 @@ test("organization list uses organization-specific filters and a recoverable emp
   ).toHaveCount(0);
   const mobile = (page.viewportSize()?.width ?? 0) <= 760;
   if (mobile) await page.getByRole("button", { name: "组织筛选" }).click();
-  const filters = mobile ? page.getByRole("dialog", { name: "组织筛选" }) : page;
+  const filters = mobile
+    ? page.getByRole("dialog", { name: "组织筛选" })
+    : organizationLayout.locator("form.account-filter:visible");
   await expect(filters.getByPlaceholder("搜索组织名称或标识")).toBeVisible();
   await expect(filters.getByLabel("组织名称或标识")).toHaveAttribute(
     "aria-describedby",
@@ -1545,7 +1549,12 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
     await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("href", "/me");
     await page.getByRole("button", { name: "关闭导航菜单" }).click();
   } else {
-    await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("title", "个人中心");
+    const accountMenu = page.locator('summary[aria-label="账号菜单"]');
+    await accountMenu.click();
+    const profile = page.getByRole("link", { name: "个人中心", exact: true });
+    await expect(profile).toHaveAttribute("href", "/me");
+    await page.keyboard.press("Escape");
+    await expect(profile).toBeHidden();
   }
   await page.getByRole("button", { name: "新建用户" }).click();
   const createDialog = page.getByRole("dialog").filter({
@@ -1616,7 +1625,9 @@ test("administrator list persists filters and exposes a desktop and mobile empty
   await expect(page.getByRole("heading", { name: "平台管理员" })).toBeVisible();
   const mobile = (page.viewportSize()?.width ?? 0) <= 760;
   if (mobile) await page.getByRole("button", { name: "管理员筛选" }).click();
-  const filters = mobile ? page.getByRole("dialog", { name: "管理员筛选" }) : page;
+  const filters = mobile
+    ? page.getByRole("dialog", { name: "管理员筛选" })
+    : page.locator("form.account-filter:visible");
   const search = filters.getByPlaceholder("搜索管理员邮箱");
   await search.fill("missing-admin@example.test");
   await filters.getByRole("button", { name: "搜索" }).click();

@@ -7,7 +7,7 @@ import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import TechnicalDetails from "./TechnicalDetails.vue";
 import "../styles/platform-dashboard.css";
-const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>();
+const props = defineProps<{ apiBaseUrl: string; capabilities?: string[]; accountRehearsal?: boolean }>();
 const request = createApiClient(props.apiBaseUrl);
 type State = "loading" | "ready" | "empty" | "expired" | "forbidden" | "rate_limited" | "blocked";
 type WindowCode = "15m" | "24h" | "7d" | "30d";
@@ -22,7 +22,9 @@ const state = ref<State>("loading"),
   hint = ref(""),
   pending = ref(false),
   refreshError = ref(""),
-  providerHealthExpanded = ref(false);
+  providerHealthExpanded = ref(false),
+  sourceHealthPanel = ref<HTMLElement | null>(null),
+  sourceHealthOverflow = ref(false);
 let disposed = false;
 let activeController: AbortController | null = null;
 const isDashboardRoute = () => ["/platform-admin", "/platform-admin/"].includes(route.path);
@@ -43,15 +45,48 @@ const providerHealthLimit = 8,
       ? providerHealthRows.value
       : providerHealthRows.value.slice(0, providerHealthLimit),
   ),
+  sourceHealthScrollable = computed(
+    () => visibleProviderHealth.value.length > 6 || sourceHealthOverflow.value,
+  ),
   hiddenProviderHealthCount = computed(() =>
     Math.max(0, providerHealthRows.value.length - visibleProviderHealth.value.length),
   );
+watch(
+  [sourceHealthPanel, visibleProviderHealth],
+  ([panel], _previous, onCleanup) => {
+    const viewport = panel?.querySelector<HTMLElement>(".table-view-controls__content");
+    const table = viewport?.querySelector("table");
+    if (!viewport || !table) {
+      sourceHealthOverflow.value = false;
+      return;
+    }
+    const measure = () => {
+      sourceHealthOverflow.value =
+        viewport.clientHeight > 0 && viewport.scrollHeight > viewport.clientHeight + 1;
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(viewport);
+    observer.observe(table);
+    onCleanup(() => observer.disconnect());
+  },
+  { flush: "post" },
+);
+function toggleProviderHealth() {
+  if (providerHealthExpanded.value) {
+    const scroller = sourceHealthPanel.value?.querySelector<HTMLElement>(
+      ".table-view-controls__content",
+    );
+    if (scroller) scroller.scrollTop = 0;
+  }
+  providerHealthExpanded.value = !providerHealthExpanded.value;
+}
 const stateText = computed(
   () =>
     (
       ({
-        loading: ["正在准备管理首页", "正在核对组织、用户、热点来源和采集进度。"],
-        empty: ["平台还没有可展示的业务事实", "先检查来源配置与采集任务，或创建组织。"],
+        loading: ["正在准备管理首页", props.accountRehearsal ? "正在核对用户、热点来源和采集进度。" : "正在核对组织、用户、热点来源和采集进度。"],
+        empty: ["平台还没有可展示的业务事实", props.accountRehearsal ? "先检查来源配置与采集任务。" : "先检查来源配置与采集任务，或创建组织。"],
         expired: ["登录已失效", "重新登录后会回到管理首页。"],
         forbidden: ["当前账号不能进入平台管理后台", "请联系超级管理员分配平台管理权限。"],
         rate_limited: ["刷新太频繁了", "稍等片刻再刷新，不会影响后台自动采集。"],
@@ -235,7 +270,7 @@ onUnmounted(() => {
   >
     <PlatformPageHeader title="平台运行概览" description="平台整体运行状态与采集来源健康情况一览">
       <RouterLink
-        v-if="capabilities?.includes('platform:superadmin')"
+        v-if="!accountRehearsal && capabilities?.includes('platform:superadmin')"
         class="platform-overview-create"
         to="/platform-admin/organizations/new"
         ><AppIcon name="plus" :size="17" />新建组织</RouterLink
@@ -273,14 +308,16 @@ onUnmounted(() => {
       </div>
       <div class="platform-action-summary">
         <RouterLink to="/platform-admin/collection">
-          <span><AppIcon name="clock" :size="22" />等待处理</span
-          ><strong>{{ data.summary.queue_backlog }}</strong
-          ><small>查看排队、运行或受阻的采集任务 →</small>
+          <AppIcon name="clock" :size="22" class="platform-action-icon" />
+          <span>等待处理</span>
+          <strong>{{ data.summary.queue_backlog }}</strong>
+          <small>查看排队、运行或受阻的采集任务 →</small>
         </RouterLink>
         <RouterLink to="/platform-admin/collection/overview?root_cause=1">
-          <span><AppIcon name="warning" :size="22" />需要关注</span
-          ><strong>{{ data.summary.open_alerts }}</strong
-          ><small>按错误根因查看异常 →</small>
+          <AppIcon name="warning" :size="22" class="platform-action-icon" />
+          <span>需要关注</span>
+          <strong>{{ data.summary.open_alerts }}</strong>
+          <small>按错误根因查看异常 →</small>
         </RouterLink>
       </div>
       <section class="platform-facts" aria-labelledby="platform-facts-heading">
@@ -290,7 +327,7 @@ onUnmounted(() => {
           </div>
         </header>
         <div>
-          <article>
+          <article v-if="!accountRehearsal && data.summary.active_organizations !== undefined">
             <span><AppIcon name="users" :size="22" />活跃组织</span
             ><strong>{{ data.summary.active_organizations }}</strong
             ><RouterLink
@@ -308,20 +345,26 @@ onUnmounted(() => {
               >查看用户<AppIcon name="arrow-right" :size="14" /></RouterLink
             ><small v-else>仅超级管理员可查看明细</small>
           </article>
-          <article>
+          <article data-metric="sources">
             <span><AppIcon name="layers" :size="22" />启用来源</span
             ><strong>{{ data.summary.enabled_providers }}</strong
-            ><RouterLink to="/platform-admin/providers/sources">查看来源<AppIcon name="arrow-right" :size="14" /></RouterLink>
+            ><RouterLink to="/platform-admin/providers/sources"
+              >查看来源<AppIcon name="arrow-right" :size="14"
+            /></RouterLink>
           </article>
           <article>
-            <span><AppIcon name="target" :size="22" />任务成功率</span
+            <span><AppIcon name="goal" :size="22" />任务成功率</span
             ><strong>{{ successRateText }}</strong
-            ><RouterLink to="/platform-admin/collection">查看任务<AppIcon name="arrow-right" :size="14" /></RouterLink>
+            ><RouterLink to="/platform-admin/collection"
+              >查看任务<AppIcon name="arrow-right" :size="14"
+            /></RouterLink>
           </article>
           <article>
             <span><AppIcon name="file" :size="22" />窗内文件增长</span
             ><strong>{{ bytes(data.summary.file_growth_bytes) }}</strong
-            ><RouterLink to="/platform-admin/data">查看数据<AppIcon name="arrow-right" :size="14" /></RouterLink>
+            ><RouterLink to="/platform-admin/data"
+              >查看数据<AppIcon name="arrow-right" :size="14"
+            /></RouterLink>
           </article>
         </div>
       </section>
@@ -330,11 +373,18 @@ onUnmounted(() => {
         <section class="platform-trend-chart">
           <header>
             <h3>采集任务趋势</h3>
-            <span
-              ><i data-series="success"></i>成功 {{ trendTotals.succeeded }}
-              <i data-series="failed"></i>失败 {{ trendTotals.failed }}
-              <i data-series="samples"></i>{{ data.task_trend.length }} 个时间点</span
-            >
+            <span class="platform-trend-legend">
+              <span class="platform-trend-key">
+                <i data-series="success" aria-hidden="true"></i>成功 {{ trendTotals.succeeded }}
+              </span>
+              <span class="platform-trend-key">
+                <i data-series="failed" aria-hidden="true"></i>失败 {{ trendTotals.failed }}
+              </span>
+              <span class="platform-trend-key">
+                <i data-series="samples" aria-hidden="true"></i
+                >{{ data.task_trend.length }} 个时间点
+              </span>
+            </span>
           </header>
           <div v-if="!data.task_trend.length" class="platform-inline-empty platform-trend-empty">
             <AppIcon name="chart" :size="24" /><strong>暂无趋势数据</strong
@@ -363,7 +413,11 @@ onUnmounted(() => {
             }}</span>
           </footer>
         </section>
-        <section class="platform-source-health">
+        <section
+          ref="sourceHealthPanel"
+          class="platform-source-health"
+          :data-source-scroll="sourceHealthScrollable || undefined"
+        >
           <header>
             <h3>来源健康</h3>
             <span>{{ data.provider_health.length }} 个启用来源 · 异常优先</span>
@@ -375,6 +429,7 @@ onUnmounted(() => {
             :row-key="(item) => item.id"
             title="来源健康"
             toolbar-icons
+            :table-scroll-label="sourceHealthScrollable ? '来源健康表格' : undefined"
             :detail-title="(item) => item.name"
           >
             <template #desktop>
@@ -398,7 +453,7 @@ onUnmounted(() => {
                       }}</i>
                     </td>
                     <td>{{ p.success_count }} / {{ p.failed_count }}</td>
-                    <td>
+                    <td class="platform-source-observation">
                       {{
                         p.last_observed_at
                           ? new Date(p.last_observed_at).toLocaleString("zh-CN", { hour12: false })
@@ -473,7 +528,7 @@ onUnmounted(() => {
             type="button"
             class="platform-provider-disclosure"
             :aria-expanded="providerHealthExpanded"
-            @click="providerHealthExpanded = !providerHealthExpanded"
+            @click="toggleProviderHealth"
           >
             {{
               providerHealthExpanded
@@ -492,11 +547,22 @@ onUnmounted(() => {
               <AppIcon
                 class="platform-signal-icon"
                 :data-health="s.status"
-                :name="s.status === 'healthy' ? 'circle-check' : s.status === 'critical' || s.status === 'warning' ? 'warning' : 'info'"
+                :name="
+                  s.status === 'healthy'
+                    ? 'check'
+                    : s.status === 'critical' || s.status === 'warning'
+                      ? 'warning'
+                      : 'info'
+                "
                 :size="18"
               />
               <span>{{ signalText(s.code) }}</span>
-              <strong :class="{ 'platform-signal-ok': s.status === 'healthy' && signalValue(s.code, s.value) === '正常' }">
+              <strong
+                :class="{
+                  'platform-signal-ok':
+                    s.status === 'healthy' && signalValue(s.code, s.value) === '正常',
+                }"
+              >
                 {{ signalValue(s.code, s.value) }}
               </strong>
             </li>
@@ -543,8 +609,8 @@ onUnmounted(() => {
               <i :data-health="a.severity"></i>
               <div>
                 <b>{{ alertText(a.kind, a.code) }}</b
-                ><small>已关联组织与工作区 · {{ new Date(a.observed_at).toLocaleString() }}</small>
-                <details>
+                ><small><template v-if="!accountRehearsal">已关联组织与工作区 · </template>{{ new Date(a.observed_at).toLocaleString() }}</small>
+                <details v-if="!accountRehearsal">
                   <summary>技术详情</summary>
                   <small>组织 ID {{ a.organization_id }} · 工作区 ID {{ a.workspace_id }}</small>
                 </details>
@@ -562,8 +628,9 @@ onUnmounted(() => {
         <div>
           <RouterLink
             v-if="capabilities?.includes('platform:superadmin')"
-            to="/platform-admin/organizations"
-            ><b>管理组织和用户</b><span>新建组织、停用账号、分配管理员</span></RouterLink
+            :to="accountRehearsal ? '/platform-admin/users' : '/platform-admin/organizations'"
+            ><b>{{ accountRehearsal ? "管理平台用户" : "管理组织和用户" }}</b>
+            <span>{{ accountRehearsal ? "查看账号、停用账号、分配管理员" : "新建组织、停用账号、分配管理员" }}</span></RouterLink
           ><RouterLink to="/platform-admin/providers/sources"
             ><b>查看热点来源</b><span>确认自动来源、待配置来源和手动来源</span></RouterLink
           ><RouterLink to="/platform-admin/collection/overview"
@@ -602,7 +669,8 @@ onUnmounted(() => {
   display: inline-block;
   width: 9px;
   height: 9px;
-  margin: 0 4px 0 10px;
+  margin: 0;
+  flex: none;
   border-radius: 50%;
 }
 .platform-trend-chart header i[data-series="success"] {

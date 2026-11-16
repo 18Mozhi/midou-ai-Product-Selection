@@ -11,9 +11,7 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
   ],
   check: [["path", { d: "M20 6 9 17l-5-5" }]],
   "arrow-right": [["path", { d: "M4 12h15m-6-6 6 6-6 6" }]],
-  "category-grid": [
-    ["path", { d: "M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z" }],
-  ],
+  "category-grid": [["path", { d: "M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z" }]],
   activity: [["path", { d: "M2 12h4l3-8 5 16 3-8h5" }]],
   "asin-tag": [
     ["path", { d: "M20 3h-7L3 13l8 8 10-10V4a1 1 0 0 0-1-1Z" }],
@@ -23,9 +21,13 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ["circle", { cx: "12", cy: "9", r: "7" }],
     ["path", { d: "m8 15-2 7 6-3 6 3-2-7M12 6v6M9 9h6" }],
   ],
-  // Local analysis glyphs on the same 24px outline grid.
   "product-scan": [
-    ["path", { d: "M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" }],
+    [
+      "path",
+      {
+        d: "M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3",
+      },
+    ],
     ["path", { d: "m12 8 4 4-4 4-4-4z" }],
   ],
   "comparison-scales": [
@@ -42,12 +44,21 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
   ],
   "clipboard-check": [
     ["rect", { x: "8", y: "2", width: "8", height: "4", rx: "1" }],
-    ["path", { d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2m1 10 2 2 4-4" }],
+    [
+      "path",
+      {
+        d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2m1 10 2 2 4-4",
+      },
+    ],
   ],
-  // Local notification glyphs, drawn on the same 24px outline grid.
   "notification-clipboard": [
     ["rect", { x: "8", y: "2", width: "8", height: "4", rx: "1" }],
-    ["path", { d: "M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2M8 11h8m-8 4h8" }],
+    [
+      "path",
+      {
+        d: "M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2M8 11h8m-8 4h8",
+      },
+    ],
   ],
   "notification-trophy": [
     ["path", { d: "M7 3h10v7a5 5 0 0 1-10 0V3Z" }],
@@ -65,7 +76,12 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ["path", { d: "M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4m.1 3h.01" }],
   ],
   "box-open": [
-    ["path", { d: "m12 4 7 3.5 3-2L15 2l-3 2Zm0 0L5 7.5l-3-2L9 2l3 2Zm-7 3.5 7 3.5 7-3.5M5 7.5l-3 4 7 3.5 3-4 3 4 7-3.5-3-4M5 13v5l7 4 7-4v-5m-7-2v11" }],
+    [
+      "path",
+      {
+        d: "m12 4 7 3.5 3-2L15 2l-3 2Zm0 0L5 7.5l-3-2L9 2l3 2Zm-7 3.5 7 3.5 7-3.5M5 7.5l-3 4 7 3.5 3-4 3 4 7-3.5-3-4M5 13v5l7 4 7-4v-5m-7-2v11",
+      },
+    ],
   ],
   mail: [
     ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2" }],
@@ -146,7 +162,12 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
   ],
   calculator: [
     ["rect", { x: "4", y: "2", width: "16", height: "20", rx: "2" }],
-    ["path", { d: "M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" }],
+    [
+      "path",
+      {
+        d: "M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01",
+      },
+    ],
   ],
   chart: [
     ["path", { d: "M3 3v16a2 2 0 0 0 2 2h16" }],
@@ -202,7 +223,12 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ["circle", { cx: "17", cy: "17", r: "3" }],
     ["circle", { cx: "7", cy: "7", r: "3" }],
   ],
-  refresh: [["path", { d: "M20 7v5h-5M4 17v-5h5M6 8a7 7 0 0 1 11-2l3 6M4 12l3 6a7 7 0 0 0 11-2" }]],
+  refresh: [
+    [
+      "path",
+      { d: "M20 7v5h-5M4 17v-5h5M5.7 8a7 7 0 0 1 11.5-2.5L20 8m-16 8 2.8 2.5A7 7 0 0 0 18.3 16" },
+    ],
+  ],
   search: [
     ["path", { d: "m21 21-4.34-4.34" }],
     ["circle", { cx: "11", cy: "11", r: "8" }],
@@ -235,4 +261,72 @@ export const lucideIcons: Record<string, Array<[string, Record<string, string>]>
     ["path", { d: "M20 17H4" }],
   ],
   chevron: [["path", { d: "m9 18 6-6-6-6" }]],
+  "selection-tag": [
+    ["path", { d: "M20 13 11 22l-9-9 9-9h9v9Z" }],
+    ["circle", { cx: "16", cy: "8", r: "1" }],
+  ],
+  "selection-award": [
+    ["circle", { cx: "12", cy: "9", r: "7" }],
+    ["path", { d: "m7 14-2 7 4-2 3 2 3-2 4 2-2-7M12 6v6m-3-3h6" }],
+  ],
+  "selection-inbox": [["path", { d: "M4 12v8h16v-8M12 3v12m-4-4 4 4 4-4" }]],
+  "result-tray": [
+    ["path", { d: "M3 16 6 9h12l3 7v5H3zM3 16h5l1.5 2h5l1.5-2h5M12 2v3M6 4l2 2m10-2-2 2" }],
+  ],
+  x: [
+    ["path", { d: "m18 6-12 12" }],
+    ["path", { d: "m6 6 12 12" }],
+  ],
+  goal: [
+    ["path", { d: "M12 13V2l8 4-8 4" }],
+    ["path", { d: "M20.561 10.222a9 9 0 1 1-12.55-5.29" }],
+    ["path", { d: "M8.002 9.997a5 5 0 1 0 8.9 2.02" }],
+  ],
+  "file-check-corner": [
+    [
+      "path",
+      {
+        d: "M10.5 22H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v6",
+      },
+    ],
+    ["path", { d: "M14 2v5a1 1 0 0 0 1 1h5" }],
+    ["path", { d: "m14 20 2 2 4-4" }],
+  ],
+  "arrow-down-up": [
+    ["path", { d: "m3 16 4 4 4-4" }],
+    ["path", { d: "M7 20V4" }],
+    ["path", { d: "m21 8-4-4-4 4" }],
+    ["path", { d: "M17 4v16" }],
+  ],
+  "building-complex": [
+    ["path", { d: "M10 12h4" }],
+    ["path", { d: "M10 8h4" }],
+    ["path", { d: "M14 21v-3a2 2 0 0 0-4 0v3" }],
+    ["path", { d: "M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" }],
+    ["path", { d: "M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" }],
+  ],
+  "user-round-plus": [
+    ["path", { d: "M2 21a8 8 0 0 1 13.292-6" }],
+    ["circle", { cx: "10", cy: "8", r: "5" }],
+    ["path", { d: "M19 16v6" }],
+    ["path", { d: "M22 19h-6" }],
+  ],
+  "code-xml": [
+    ["path", { d: "m18 16 4-4-4-4" }],
+    ["path", { d: "m6 8-4 4 4 4" }],
+    ["path", { d: "m14.5 4-5 16" }],
+  ],
+  "settings-gear": [
+    [
+      "path",
+      {
+        d: "M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915",
+      },
+    ],
+    ["circle", { cx: "12", cy: "12", r: "3" }],
+  ],
+  "column-anchor": [
+    ["path", { d: "m12 2.75 9.25 9.25L12 21.25 2.75 12Z" }],
+    ["path", { d: "M12 7v10m-5-5h10" }],
+  ],
 };

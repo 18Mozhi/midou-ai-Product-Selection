@@ -9,7 +9,7 @@ test("M02-04 fallback renders a dedicated truthful 404 without internal tools", 
   });
 
   await page.goto("/catalog/deleted-entry?filter=qa-only#details");
-  await expect(page).toHaveTitle("页面不存在 · 智能选品");
+  await expect(page).toHaveTitle("页面不存在 · 米兜智能选品");
   await expect(page.getByRole("heading", { name: "没有找到这个页面" })).toBeVisible();
   await expect(page.getByText("/catalog/deleted-entry", { exact: true })).toBeVisible();
   await expect(page.getByText("filter=qa-only")).toHaveCount(0);

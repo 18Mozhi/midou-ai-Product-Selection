@@ -1194,7 +1194,8 @@ export async function withExtractedProfileArchive<T>(
   } finally {
     compressed?.fill(0);
     tar?.fill(0);
-    await rm(directory, { recursive: true, force: true });
+    // Chromium may still be releasing its profile handles on Windows after close.
+    await rm(directory, { recursive: true, force: true, maxRetries: 6, retryDelay: 100 });
   }
 }
 export function hashLeaseToken(token: string) {
@@ -1234,7 +1235,7 @@ export async function withCookieProfileFile<T>(
     const content = await readFile(cookiePath, "utf8");
     return await use(directory, parseCookieBundle(content));
   } finally {
-    await rm(directory, { recursive: true, force: true });
+    await rm(directory, { recursive: true, force: true, maxRetries: 6, retryDelay: 100 });
   }
 }
 export async function runWithEncryptedProfile(

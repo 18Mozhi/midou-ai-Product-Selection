@@ -3,11 +3,15 @@
 /* P47 C composition, active only while its component is mounted. */
 /* Local C identity tokens; existing theme IDs/preferences and non-P47 palettes remain unchanged. */
 /* Approved P47 frame and source directory, scoped to the active adapter page. */
-html body:has(#app .adapter-center--c) #app .role-mobile-nav :is(a, button, i) {
+html:not([data-design="commerce"])
+  body:has(#app .adapter-center--c)
+  #app
+  .role-mobile-nav
+  :is(a, button, i) {
   color: var(--p47-accent);
 }
 
-html:has(body #app .adapter-center--c) {
+html:not([data-design="commerce"]):has(body #app .adapter-center--c) {
   --so-font-ui: "Microsoft YaHei", sans-serif;
   --so-font-display: "Microsoft YaHei", sans-serif;
 }
@@ -22,18 +26,30 @@ html body:has(#app .adapter-center--c) #app {
   margin: 0;
   padding: 0;
 }
-html body:has(#app .adapter-center--c) #app .role-top-actions :is(button, a),
-html body:has(#app .adapter-center--c) #app .role-menu-toggle {
+html:not([data-design="commerce"])
+  body:has(#app .adapter-center--c)
+  #app
+  .role-top-actions
+  :is(button, a),
+html:not([data-design="commerce"]) body:has(#app .adapter-center--c) #app .role-menu-toggle {
   min-height: 44px;
   border: 1px solid var(--p47-border);
   border-radius: 6px;
   color: var(--p47-accent);
   background: var(--p47-panel);
 }
-html body:has(#app .adapter-center--c) #app .role-sidebar :is(input, summary, a) {
+html:not([data-design="commerce"])
+  body:has(#app .adapter-center--c)
+  #app
+  .role-sidebar
+  :is(input, summary, a) {
   color: var(--p47-secondary-ink);
 }
-html body:has(#app .adapter-center--c) #app .role-mobile-nav :is(a, button) {
+html:not([data-design="commerce"])
+  body:has(#app .adapter-center--c)
+  #app
+  .role-mobile-nav
+  :is(a, button) {
   border: 0;
 }
 
@@ -861,4 +877,9 @@ html
   html body:has(#app .adapter-center--c) #app .adapter-center--c {
     gap: 16px;
   }
+}
+
+/* Keep the provider page title on the local palette, not the shared shell. */
+#app .adapter-center--c .adapter-heading .platform-page-header__title {
+  color: var(--p47-ink);
 }

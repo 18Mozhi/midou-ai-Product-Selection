@@ -2,11 +2,45 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir, access } from "node:fs/promises";
 import { resolve } from "node:path";
+import { spawnSync } from "node:child_process";
+import {
+  nodeVerificationBatches,
+  nodeVerificationBatchFileLimit,
+  releaseMatrixNodeBatches,
+} from "../../scripts/lib/node-verification-batches.mjs";
+import { expandVerificationCommands } from "../../scripts/lib/verification-engine.mjs";
 
 const root = process.cwd();
 const matrix = JSON.parse(
   await readFile(resolve(root, "verification/release-matrix.json"), "utf8"),
 );
+
+test("mutation-capable BaoTa probes refuse to reach SSH without isolated stores", () => {
+  const env = { ...process.env, VERIFY_ISOLATION_ID: "", PYTHONDONTWRITEBYTECODE: "1" };
+  for (const probe of ["playwright-crawler", "collection-task", "ai-analysis", "automation"]) {
+    const result = spawnSync("python", ["scripts/verify-live-baota.py", probe], {
+      encoding: "utf8",
+      env,
+      windowsHide: true,
+      timeout: 15_000,
+    });
+    assert.ifError(result.error);
+    assert.equal(result.status, 2, result.stderr);
+    assert.equal(JSON.parse(result.stderr).stage, "fixture_isolation_config");
+    assert.equal(result.stdout, "");
+  }
+  const local = spawnSync(process.execPath, ["scripts/verify-fixture-isolation.mjs"], {
+    encoding: "utf8",
+    env,
+    timeout: 15_000,
+  });
+  assert.ifError(local.error);
+  assert.equal(local.status, 2, local.stderr);
+  assert.deepEqual(JSON.parse(local.stderr), {
+    status: "blocked",
+    code: "fixture_isolation_config",
+  });
+});
 
 test("M07-01.A01/A02/A11/A12 release matrix has frozen scope, dimensions and observable ids", () => {
   assert.equal(matrix.moduleId, "M07-01");
@@ -28,10 +62,46 @@ test("M07-01.A01/A02/A11/A12 release matrix has frozen scope, dimensions and obs
 });
 
 test("M07-01.A04 node matrix uses native strip-types or the project TypeScript loader", async () => {
-  const verifier = await readFile(resolve(root, "scripts/verify-release-matrix.mjs"), "utf8");
+  const verifier = await readFile(
+    resolve(root, "scripts/lib/node-verification-batches.mjs"),
+    "utf8",
+  );
   assert.match(verifier, /process\.allowedNodeEnvironmentFlags\.has\(stripTypes\)/);
   assert.match(verifier, /typescript-test-loader\.mjs/);
   await access(resolve(root, "scripts/lib/typescript-test-loader.mjs"));
+});
+
+test("Windows-safe Node batches preserve every test and every non-Node release command", async () => {
+  const sample = Array.from({ length: 115 }, (_, index) => `tests/含 空格/${index}.test.mjs`);
+  const prefix = ["--test", "--test-concurrency=4"];
+  const batches = nodeVerificationBatches(process.execPath, prefix, sample);
+  assert.deepEqual(
+    batches.flatMap((args) => args.slice(prefix.length)),
+    sample,
+  );
+  assert.ok(batches.every((args) => args.length <= prefix.length + nodeVerificationBatchFileLimit));
+  const real = await releaseMatrixNodeBatches(root);
+  assert.deepEqual(
+    real.batches.flatMap((args) => args.slice(real.prefix.length)),
+    real.files,
+  );
+  assert.ok(real.files.length > sample.length);
+  const commands = [
+    "npm run build",
+    "node scripts/verify-release-matrix.mjs --node",
+    "node scripts/verify-release-matrix.mjs --live",
+    "node scripts/verify-release-matrix.mjs --browser all",
+  ];
+  const expanded = await expandVerificationCommands("M07-01", commands, root);
+  assert.deepEqual(
+    expanded.slice(1, -2),
+    real.batches.map(
+      (_, index) =>
+        `node scripts/verify-release-matrix.mjs --node-batch ${index + 1}/${real.batches.length}`,
+    ),
+  );
+  assert.deepEqual([expanded[0], ...expanded.slice(-2)], [commands[0], ...commands.slice(-2)]);
+  assert.deepEqual(await expandVerificationCommands("M07-02", commands, root), commands);
 });
 
 test("M07-01 release validation fails closed when current documentation drifts from the BaoTa topology", async () => {
@@ -60,11 +130,14 @@ test("M07-01.A03/A04/A05/A14/A16 matrix invokes existing reversible MySQL Redis 
     ["verify-automation-live", "automation"],
     ["verify-reports-live", "reports"],
   ]) {
-    assert.deepEqual(matrix.liveScenarios.find((scenario) => scenario.id === id), {
-      id,
-      program: "python",
-      args: ["scripts/verify-live-baota.py", probe],
-    });
+    assert.deepEqual(
+      matrix.liveScenarios.find((scenario) => scenario.id === id),
+      {
+        id,
+        program: "python",
+        args: ["scripts/verify-live-baota.py", probe],
+      },
+    );
   }
   const runner = await readFile(resolve(root, "scripts/verify-live-baota.py"), "utf8");
   assert.match(runner, /m05_probes\s*=\s*\{[\s\S]*"business-tasks"[\s\S]*"reports"/);
@@ -86,6 +159,24 @@ test("M07-01.A03/A04/A05/A14/A16 matrix invokes existing reversible MySQL Redis 
   assert.ok(ups.length >= 24);
   for (const up of ups)
     assert.ok(migrations.includes(up.replace(".up.sql", ".down.sql")), `${up} lacks rollback`);
+});
+
+test("0076 refuses both cancellation footprints while holding locks and restores the previous ENUM only", async () => {
+  const readMigration = (name) =>
+    readFile(resolve(root, `database/migrations/${name}.sql`), "utf8");
+  const [previous, down] = await Promise.all([
+    readMigration("0049_credential_renewal_auto_replay.up"),
+    readMigration("0076_collection_backlog_cancellation.down"),
+  ]);
+  const enumDefinition = /ENUM\([^\r\n]+\) NOT NULL/.exec(previous)?.[0];
+  assert.ok(enumDefinition);
+  assert.equal(/ENUM\([^\r\n]+\) NOT NULL/.exec(down)?.[0], enumDefinition);
+  assert.match(down, /STRICT_ALL_TABLES/);
+  assert.match(
+    down,
+    /LOCK TABLES `collection_tasks` WRITE, `collection_task_events` READ;[\s\S]*?WHERE EXISTS \(SELECT 1 FROM `collection_tasks` WHERE `status` = 'cancelled'\)[\s\S]*?`event_type` = 'collection\.task\.cancelled' OR `to_status` = 'cancelled'[\s\S]*?ALGORITHM=COPY, LOCK=EXCLUSIVE;\s*UNLOCK TABLES;/,
+  );
+  assert.doesNotMatch(down, /\b(?:UPDATE|DELETE FROM|TRUNCATE)\b/i);
 });
 
 test("M07-01 live data-quality drill distinguishes wrapper drift from normalized fact conflicts", async () => {

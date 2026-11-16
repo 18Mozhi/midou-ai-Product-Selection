@@ -3,6 +3,10 @@ import { readdir, readFile, access } from "node:fs/promises";
 import { resolve, relative } from "node:path";
 import { spawnSync } from "node:child_process";
 import { verifyRuntimeDocumentation } from "./verify-runtime-doc-consistency.mjs";
+import {
+  releaseMatrixNodeBatches,
+  nodeVerificationBatchTimeoutMs,
+} from "./lib/node-verification-batches.mjs";
 
 const root = process.cwd();
 const matrixPath = resolve(root, "verification/release-matrix.json");
@@ -98,14 +102,43 @@ function run(program, args, id) {
 await validate();
 run("node", ["scripts/verify-e2e-realism.mjs"], "e2e-realism");
 const mode = process.argv[2] ?? "--validate";
-if (mode === "--node") {
-  const tests = await filesUnder(resolve(root, "tests"), ".test.mjs");
-  const stripTypes = "--experimental-strip-types";
-  const nodeTestArgs = process.allowedNodeEnvironmentFlags.has(stripTypes)
-    ? [stripTypes, "--test", ...tests]
-    : ["--loader", resolve(root, "scripts/lib/typescript-test-loader.mjs"), "--test", ...tests];
-  run("node", nodeTestArgs, "node-test-matrix");
+if (mode === "--node" || mode === "--node-batch") {
+  const { prefix, batches } = await releaseMatrixNodeBatches(root);
+  if (!batches.length) fail("node-test-matrix has no tests");
+  const selection = process.argv[3];
+  const batchNumber = Number(selection?.split("/")[0]);
+  if (
+    mode === "--node-batch" &&
+    (!Number.isInteger(batchNumber) ||
+      batchNumber < 1 ||
+      batchNumber > batches.length ||
+      selection !== `${batchNumber}/${batches.length}`)
+  )
+    fail("node-test-matrix batch selection does not match the current inventory");
+  const failures = [];
+  for (const [index, args] of batches.entries()) {
+    if (mode === "--node-batch" && index + 1 !== batchNumber) continue;
+    console.log(
+      `[M07-01] NODE BATCH ${index + 1}/${batches.length} files=${args.length - prefix.length}`,
+    );
+    const result = spawnSync(process.execPath, args, {
+      cwd: root,
+      env: process.env,
+      stdio: "inherit",
+      shell: false,
+      timeout: nodeVerificationBatchTimeoutMs,
+    });
+    if (result.error || result.status !== 0)
+      failures.push({
+        batch: index + 1,
+        error: result.error?.code ?? null,
+        status: result.status,
+        signal: result.signal,
+      });
+  }
+  if (failures.length) fail(`node-test-matrix: ${JSON.stringify(failures)}`);
 } else if (mode === "--live") {
+  run("node", ["scripts/verify-fixture-isolation.mjs"], "fixture-isolation");
   for (const scenario of matrix.liveScenarios) run(scenario.program, scenario.args, scenario.id);
 } else if (mode === "--browser") {
   const group = process.argv[3];
@@ -121,5 +154,11 @@ if (mode === "--node") {
   fail(`unknown mode: ${mode}`);
 }
 console.log(
-  JSON.stringify({ module_id: "M07-01", mode, status: "passed", run_id: runId, trace_id: traceId }),
+  JSON.stringify({
+    module_id: "M07-01",
+    mode,
+    status: mode === "--node-batch" ? "batch_passed" : "passed",
+    run_id: runId,
+    trace_id: traceId,
+  }),
 );

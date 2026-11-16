@@ -11,6 +11,7 @@ const props = defineProps<{
   columnLabels?: boolean;
   columnHelp?: string;
   toolbarIcons?: boolean;
+  tableScrollLabel?: string;
   appearance?: "default" | "governance" | "content" | "security";
   focusFallback?: () => HTMLElement | null;
 }>();
@@ -157,6 +158,7 @@ function handleTab(event: KeyboardEvent) {
       :column-labels="columnLabels"
       :column-help="columnHelp"
       :toolbar-icons="toolbarIcons"
+      :scroll-label="tableScrollLabel"
       ><slot name="desktop" :show="show"
     /></TableViewControls>
     <div ref="mobileList" class="responsive-data-view__mobile" :aria-label="title" tabindex="-1">

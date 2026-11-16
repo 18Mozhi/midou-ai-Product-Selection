@@ -1,5 +1,10 @@
 import { readLegacyCssFileSync as readFileSync } from "./retired-runtime-css.mjs";
 import {
+  expandPlatformDashboardCss,
+  platformDashboardCss,
+  platformDashboardLayoutCss,
+} from "./platform-dashboard-css.mjs";
+import {
   beforePublishedPresentation,
   publishedPresentationRevisions,
 } from "./ui-phase2-published-presentation-baseline.mjs";
@@ -21,13 +26,14 @@ export const responsiveFocusRevision = Object.freeze({
   paletteBaseline: "af239b08b69f7d97cd0372f9840a70009eeef0c7",
   paletteCommit: "699ac3f3",
   paletteAfter: "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
-  currentAfter: "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
+  // Published a7dbd797 reference UI; current desktop/mobile focus replay passed.
+  currentAfter: "340c316e2cf7a560f1ea0c252812960e5cc472c89afb16ac154ed817b45317dc",
   paletteFile: "apps/web/src/design/platform-overlay-tokens.css",
   paletteBeforeNotifications: "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
   paletteSha256: "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5",
   focusCapture: "635e5538a96493fcf62e95938c78fb07aebcc9b7",
   tableControlsFile: "apps/web/src/components/TableViewControls.vue",
-  tableControlsAfter: "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+  tableControlsAfter: "f77a6b5b32f2eb850c50987e942ef4e81404e7d36fb4d7cb1f879ff60dc93122",
   reasonFile: "apps/web/src/components/AuditedReasonDialog.vue",
   // Async first-mount focus fix; desktop/mobile account regressions recorded in
   // docs/selection-backend-preservation.md. Original capture stays immutable.
@@ -36,9 +42,9 @@ export const responsiveFocusRevision = Object.freeze({
     "scripts/verify-responsive-data-view-focus.mjs":
       "f891a55fde3c5732f05e19266a4396a25280308d322cdbd3aba5bf2bfd6ae2ef",
     "apps/web/src/components/ResponsiveDataView.vue":
-      "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
+      "340c316e2cf7a560f1ea0c252812960e5cc472c89afb16ac154ed817b45317dc",
     "apps/web/src/components/TableViewControls.vue":
-      "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+      "f77a6b5b32f2eb850c50987e942ef4e81404e7d36fb4d7cb1f879ff60dc93122",
     "apps/web/src/components/ConfirmDialog.vue":
       "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
     "apps/web/src/components/AuditedReasonDialog.vue":
@@ -48,9 +54,9 @@ export const responsiveFocusRevision = Object.freeze({
     "apps/web/src/ui/state-contract.ts":
       // 0711899a only renamed the not-found return action to the selection workspace.
       "42b528ffdc2a267624971f65b972fca61aac7d6d87c44e843f83a15cd297e1e5",
-    // Current entrypoint from c42a0996: commerce styling and its default density.
+    // Current entrypoint from a7dbd797: removed the retired global CSS import.
     // Capture-time source hashes above remain bound to their original Git revision.
-    "apps/web/src/main.ts": "bfb3d22235e4eca1e2c0561631ae8f236782a6b2e3662081163ddcd2dd9496a9",
+    "apps/web/src/main.ts": "e45e9dafaa6d839ad40b2d2d00ae3bb664d3a2a05c3444eb1c17614f7d08b3ab",
     "apps/web/src/styles.css": "e6ba0f5c4b3c06fa231cfb825ea08f3dc99a41ce8670c9e4f5bfb266480c6a43",
     "apps/web/src/styles/access-governance.css":
       "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
@@ -61,8 +67,8 @@ export const responsiveFocusRevision = Object.freeze({
       // Collection layout/runtime-state releases, plus the restored 13px metadata floor.
       "50ca65a8885d42c7f958ed92c538ed5635035e47fb946dfc78157c3842b5f809",
     "apps/web/src/styles/platform-dashboard.css":
-      // d193e638 rebuilt the platform overview; original capture stays immutable.
-      "113322d944d2e6ca74c948e352fa3f1fa87016cce277bce71161f40eaac35dfe",
+      // a7dbd797 published the reference overview; original capture stays immutable.
+      "1931fd4ba9ffa040e6a1a99cbb64b2018e618aaae1805e772a75a4cff1d61cb0",
     "apps/web/src/design/tokens.css":
       "e519e16a6983f5cb1eb67cdb939efabe429a4dbbed4fe07b0f13a69bd3ce4278",
     "apps/web/src/accessibility.css":
@@ -139,7 +145,11 @@ export function verifyResponsiveFocusDependencies(source = read) {
           : file === revision.reasonFile
             ? revision.reasonAfter
             : (revision.currentDependencyHashes[file] ?? fingerprint);
-    assert.equal(hash(source(file)), currentExpected, `${file}: unreviewed current dependency`);
+    const actual =
+      file === platformDashboardCss
+        ? expandPlatformDashboardCss(source(file), source(platformDashboardLayoutCss))
+        : source(file);
+    assert.equal(hash(actual), currentExpected, `${file}: unreviewed current dependency`);
   }
   return Object.keys(evidence.sourceHashes).length;
 }

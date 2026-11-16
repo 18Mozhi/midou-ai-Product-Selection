@@ -247,12 +247,19 @@ watch(resourceType, () => {
         <div v-if="shell !== 'member'" class="discovery-c-scroll discovery-c-scope">
           <div class="discovery-c-field">
             <label for="admin-discovery-query">按功能或菜单分组搜索</label>
-            <input id="admin-discovery-query" ref="input" v-model="query" type="search" autocomplete="off" />
+            <input
+              id="admin-discovery-query"
+              ref="input"
+              v-model="query"
+              type="search"
+              autocomplete="off"
+            />
           </div>
           <ul v-if="navigationResults.length" class="discovery-c-admin-results">
             <li v-for="item in navigationResults" :key="item.path">
               <RouterLink :to="item.path" @click="navigateAway">
-                <strong>{{ item.label }}</strong><span>{{ item.group }}</span>
+                <strong>{{ item.label }}</strong
+                ><span>{{ item.group }}</span>
               </RouterLink>
             </li>
           </ul>

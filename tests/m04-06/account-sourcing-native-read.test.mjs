@@ -21,7 +21,7 @@ test("retired sourcing lists and locates the original account records with both 
     async query(sql, args = []) {
       if (sql.startsWith("SELECT slot")) return [[{ slot: "current" }]];
       calls.push({ sql, args });
-      assert.equal((sql.match(/\?/g) || []).length, args.length);
+      assert.equal((sql.replace(/'(?:''|[^'])*'/g, '').match(/\?/g) || []).length, args.length);
       assert.doesNotMatch(sql, /organization_id|workspace_id/);
       assert.match(
         sql,
@@ -46,6 +46,9 @@ test("retired sourcing lists and locates the original account records with both 
       }
       if (sql.includes("SUM(")) return [[{ total: 2, ready: 0 }]];
       if (sql.startsWith("SELECT COUNT(*)")) return [[{ total: 2 }]];
+      assert.match(sql, /n_primary.account_id=op.account_id/);
+      assert.match(sql, /source_current_task.account_id=n_primary.account_id/);
+      assert.match(sql, /m\[\.\]media-amazon\[\.\]com/);
       assert.match(sql, /image_task\.account_id=(?:so\.account_id|s\.account_owner)/);
       assert.match(sql, /image_evidence\.account_id=(?:so\.account_id|s\.account_owner)/);
       if (args.includes("another-account")) return [[]];

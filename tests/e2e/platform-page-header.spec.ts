@@ -73,6 +73,8 @@ for (const [path, title, theme] of routes)
     const header = page.locator(".platform-page-header");
     await expect(header).toHaveCount(1);
     await expect(header.getByRole("heading", { name: title, exact: true })).toBeVisible();
+    if (path === "/platform-admin")
+      await expect(page.locator(".platform-dashboard-state[data-kind=blocked]")).toBeVisible();
     await expect(header).toHaveCSS("background-image", "none");
     const metrics = await header.evaluate((element) => ({
       left: element.getBoundingClientRect().left,

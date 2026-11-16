@@ -28,7 +28,7 @@ test("identity migration changes only the key and down never deletes conflicting
   ]);
   assert.ok(runner.includes(`"${migration}"`));
   assert.ok(deploy.includes(`0074_provider_terms_permanent.up.sql ${migration}`));
-  assert.equal(JSON.parse(manifest).migrationVersion, migration);
+  assert.equal(JSON.parse(manifest).opportunityIdentityMigrationVersion, migration);
   assert.equal(JSON.parse(manifest).migrationPrerequisiteBuild, prepared);
 });
 
@@ -72,13 +72,21 @@ current='${migration}'
 verify(current,current,'a'*40)
 verify(current,'0074_provider_terms_permanent.up.sql','${prepared}')
 verify('0074_provider_terms_permanent.up.sql',current,'a'*40)
+cancel='0076_collection_backlog_cancellation.up.sql'
+verify(cancel,current,'a'*40)
+verify(cancel,cancel,'a'*40)
+try: verify(cancel,'0074_provider_terms_permanent.up.sql','${prepared}')
+except RuntimeError: pass
+else: raise AssertionError('0076 accepted a pre-0075 package')
 for version,sha in [('0074_provider_terms_permanent.up.sql','d7789c6dacdf7ab1d373f89ddc96224f8806f309'),(None,'a'*40),('unknown','a'*40)]:
     try: verify(current,version,sha)
     except RuntimeError: pass
     else: raise AssertionError('unsafe rollback accepted')
 source=d['exchange_source']('/www/wwwroot/ai选品','a'*40,'b'*40)
 compile(source,'rollback_generated','exec')
-assert source.index("validate_identity_rollback_target(migration(release)")<source.index("action(python,'StopProject'")
+guard=source.index("validate_identity_rollback_target(migration(release)")
+assert guard<source.index("action(node,'stop_project'")
+assert guard<source.index("\\n stop_python_project()")
 print('passed')
 `,
     ],

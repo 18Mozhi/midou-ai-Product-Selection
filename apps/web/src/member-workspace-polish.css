@@ -35,9 +35,13 @@
 .role-theme-menu {
   position: absolute;
   z-index: 50;
-  top: calc(100% + 10px);
-  right: 0;
+  /* The popover is a direct child of the masthead, not of the full-height shell. */
+  top: calc(100% + 8px);
+  right: 22px;
+  box-sizing: border-box;
   width: 310px;
+  max-height: calc(100dvh - 86px);
+  overflow: auto;
   padding: 12px;
   display: grid;
   gap: 8px;
@@ -93,11 +97,6 @@
     left: 12px;
     width: auto;
   }
-}
-.role-shell[data-shell="member"] > .role-theme-menu {
-  position: fixed;
-  top: 70px;
-  right: 20px;
 }
 .role-theme-menu > button[aria-pressed="true"] {
   border-color: var(--so-primary);

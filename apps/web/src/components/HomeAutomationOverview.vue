@@ -40,7 +40,7 @@ onBeforeUnmount(() => viewport?.removeEventListener("change", syncViewport));
       </summary>
       <div class="home-status-facts">
         <RouterLink to="/opportunities?view=recommended" data-tone="positive">
-          <AppIcon name="inbox-download" />
+          <AppIcon name="selection-inbox" />
           <strong>{{ selection.recommended_count }}</strong>
           <span>待你采纳</span>
         </RouterLink>

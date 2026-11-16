@@ -66,6 +66,14 @@ const {
   openQuote,
   compare,
 } = useSourcingWorkspace(props);
+const selectedTitle = computed(() => (selected.value ? searchName(selected.value) : ""));
+const usesLatinTitleTracking = computed(
+  () =>
+    /\p{Script=Latin}/u.test(selectedTitle.value) &&
+    !/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u.test(
+      selectedTitle.value,
+    ),
+);
 const recordPageSize = 20,
   supplierPageSize = 10;
 const supplierPage = ref(1);
@@ -76,6 +84,7 @@ const detailTabs = [
 ] as const;
 const detailTab = ref<(typeof detailTabs)[number]["key"]>("offers");
 const detailTabId = useId();
+const recordPane = ref<HTMLElement | null>(null);
 const emptyOffersProfitTarget = ref<HTMLElement | null>(null);
 const emptyOffersBasisTarget = ref<HTMLElement | null>(null);
 const showProfitBesideEmptyOffers = computed(
@@ -127,13 +136,50 @@ watch(
     detailTab.value = "offers";
   },
 );
+// Move the inner pane only; opening a deep link must not move the workspace or steal focus.
+watch(
+  [recordPane, visibleRecords, () => selected.value?.id],
+  ([pane]) => {
+    const row = pane?.querySelector<HTMLButtonElement>('button[aria-pressed="true"]');
+    if (!pane || !row) return;
+    const paneBounds = pane.getBoundingClientRect();
+    const rowBounds = row.getBoundingClientRect();
+    const top = paneBounds.top + pane.clientTop;
+    const bottom = top + pane.clientHeight;
+    if (rowBounds.top < top) pane.scrollTop += rowBounds.top - top;
+    else if (rowBounds.bottom > bottom) pane.scrollTop += rowBounds.bottom - bottom;
+  },
+  { flush: "post" },
+);
 watch(supplierPages, (count) => {
   supplierPage.value = Math.min(supplierPage.value, count);
 });
+// Lifecycle and result are separate: every source may have stopped without yielding a quote.
+const allSourcesEnded = computed(() => {
+  const progress = selected.value?.collection_progress;
+  if (
+    !progress ||
+    !progress.total_subqueries ||
+    progress.active_subqueries ||
+    progress.blocked_subqueries
+  )
+    return false;
+  if (progress.successful_subqueries + progress.failed_subqueries !== progress.total_subqueries)
+    return false;
+  return (
+    ["completed", "succeeded"].includes(progress.status) ||
+    (progress.failed_subqueries > 0 &&
+      ["failed", "failed_terminal", "completed_with_warnings"].includes(progress.status))
+  );
+});
 const pendingMessage = computed(() => {
   const progress = selected.value?.collection_progress;
-  if (progress?.active_subqueries && progress.status === "running")
-    return "采集任务正在执行或等待来源返回，尚未取得供应商报价。可刷新记录查看最新进度。";
+  if (progress?.status === "retry_scheduled")
+    return "采集任务正在等待重试，尚未取得供应商报价。可刷新记录查看最新进度。";
+  if (progress?.active_subqueries)
+    return progress.status === "running"
+      ? "采集任务正在执行或等待来源返回，尚未取得供应商报价。可刷新记录查看最新进度。"
+      : "采集任务仍在等待处理，尚未取得供应商报价。可刷新记录查看最新进度。";
   if (progress?.blocked_subqueries)
     return "来源采集受阻，尚未取得供应商报价。请核对采集进度，来源恢复后再查看结果。";
   if (
@@ -141,8 +187,6 @@ const pendingMessage = computed(() => {
     ["failed", "cancelled", "dead_letter"].includes(progress?.status ?? "")
   )
     return "本次采集已结束且未取得供应商报价，请核对来源采集状态。";
-  if (progress?.active_subqueries)
-    return "采集任务仍在等待处理，尚未取得供应商报价。可刷新记录查看最新进度。";
   return "当前记录尚无供应商候选，可刷新记录查看自动找货进度。";
 });
 const offerNeedsAttention = computed(() => {
@@ -156,6 +200,15 @@ const offerNeedsAttention = computed(() => {
 const showCollectionLinkInNotice = computed(
   () => offerNeedsAttention.value && !detailLoading.value && !candidates.value.length,
 );
+const terminalCollectionFailure = computed(() => {
+  const progress = selected.value?.collection_progress;
+  return Boolean(
+    progress &&
+    !progress.active_subqueries &&
+    !progress.blocked_subqueries &&
+    ["failed", "failed_terminal", "dead_letter"].includes(progress.status),
+  );
+});
 </script>
 <template>
   <section class="sourcing-workspace sourcing-workspace--review">
@@ -245,7 +298,7 @@ const showCollectionLinkInNotice = computed(
         <header class="sourcing-record-heading">
           <b>找货记录</b><span>{{ matchingTotal }} 条</span>
         </header>
-        <div class="sourcing-record-items">
+        <div ref="recordPane" class="sourcing-record-items">
           <button
             v-for="item in visibleRecords"
             :key="item.id"
@@ -286,10 +339,12 @@ const showCollectionLinkInNotice = computed(
         aria-label="找货记录详情"
       >
         <header>
-          <ResearchThumbnail :src="selected.image_url" :alt="searchName(selected)" priority />
+          <ResearchThumbnail :src="selected.image_url" :alt="selectedTitle" priority />
           <div>
             <p>{{ inputTypeText(selected.input_type) }}</p>
-            <h3>{{ searchName(selected) }}</h3>
+            <h3 :class="{ 'sourcing-title--latin-tracking': usesLatinTitleTracking }">
+              {{ selectedTitle }}
+            </h3>
             <code v-if="selected.input_type === 'opportunity'"
               >选品编号 {{ selected.input_ref }}</code
             >
@@ -301,8 +356,22 @@ const showCollectionLinkInNotice = computed(
               <header>
                 <div>
                   <small>采集进度</small>
-                  <h4 :data-status="selected.collection_progress.status">
-                    {{ statusText(selected.collection_progress.status) }}
+                  <h4
+                    :data-status="selected.collection_progress.status"
+                    :data-sources-ended="allSourcesEnded || undefined"
+                    :title="
+                      allSourcesEnded ? statusText(selected.collection_progress.status) : undefined
+                    "
+                  >
+                    <template v-if="allSourcesEnded">
+                      <span>来源已结束</span>
+                      <span class="so-visually-hidden"
+                        >：{{ statusText(selected.collection_progress.status) }}</span
+                      >
+                    </template>
+                    <template v-else>{{
+                      statusText(selected.collection_progress.status)
+                    }}</template>
                   </h4>
                 </div>
                 <span
@@ -408,8 +477,9 @@ const showCollectionLinkInNotice = computed(
           <RouterLink
             v-if="canInspectCollection && selected.collection_task_id && showCollectionLinkInNotice"
             class="so-action-secondary sourcing-notice-task"
+            :data-failure-link="terminalCollectionFailure || undefined"
             :to="`/platform-admin/collection?task=${selected.collection_task_id}`"
-            >查看采集任务明细</RouterLink
+            >{{ terminalCollectionFailure ? "查看失败原因" : "查看采集任务明细" }}</RouterLink
           >
         </section>
         <div class="sourcing-detail-tabs" role="tablist" aria-label="找货详情视图">

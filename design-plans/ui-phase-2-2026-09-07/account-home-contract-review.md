@@ -129,49 +129,50 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 
 ### 2.2 P11 PersonalProfilePanel 当前源码位置（2026-09-24）
 
-旧P11表描述PersonalCenter父级行为；本节只登记当前资料子组件的9个静态候选。表单阻止浏览器原生提交并向父级发出submit，字段只发updateField；实际PATCH仍归PersonalCenter/composable，未在此子组件发请求。邮箱是只读事实，不作为候选或资料更新字段；手机号验证状态也只展示当前服务端事实，不表示本次输入已验证。
+旧P11表描述PersonalCenter父级行为；本节只登记当前资料子组件的10个静态候选。表单阻止浏览器原生提交并向父级发出submit，字段只发updateField；实际PATCH仍归PersonalCenter/composable，未在此子组件发请求。邮箱是只读事实，不作为候选或资料更新字段；手机号验证状态也只展示当前服务端事实，不表示本次输入已验证。
 
 #### apps/web/src/components/personal-center/PersonalProfilePanel.vue
 
 | 当前签名.序号      |  行 | 类型          | 当前语义归属                                                      |
 | ------------------ | --: | ------------- | ----------------------------------------------------------------- |
-| edf117b7ec0498f3.1 |  27 | form-event    | PC-CURRENT-SAVE / 阻止原生表单提交并向父级发出submit意图          |
-| a009961494d9e9f6.1 |  45 | event-binding | PC-CURRENT-USERNAME / 更新登录用户名草稿；保存中禁用              |
-| 85e98ee3a227ab53.1 |  62 | event-binding | PC-CURRENT-DISPLAY-NAME / 更新必填显示名称草稿；保存中禁用        |
-| c3282a4a6e5e0694.1 |  76 | event-binding | PC-CURRENT-AVATAR / 更新头像HTTPS地址草稿；保存中禁用             |
-| 606f704e56cefdda.1 |  91 | event-binding | PC-CURRENT-PHONE / 更新手机号草稿；验证状态单独显示且不由输入伪造 |
-| 710e66a207790a9d.1 | 106 | event-binding | PC-CURRENT-LOCALE / 更新当前语言选项草稿；保存中禁用              |
-| dabba198cd2f2993.1 | 120 | event-binding | PC-CURRENT-TIMEZONE / 更新必填时区草稿；保存中禁用                |
-| 927fb4495afb35c9.1 | 133 | event-binding | PC-CURRENT-REASON / 更新必填修改原因草稿，输入上限300字符         |
-| 9f646e1e9f714001.1 | 159 | control       | PC-CURRENT-SAVE / 提交资料；保存中禁用并显示处理中状态            |
+| bdfb829b2d8935d8.1 |  29 | form-event    | PC-CURRENT-SAVE / 阻止原生表单提交并向父级发出submit意图          |
+| a009961494d9e9f6.1 |  58 | event-binding | PC-CURRENT-USERNAME / 更新登录用户名草稿；保存中禁用              |
+| 85e98ee3a227ab53.1 |  75 | event-binding | PC-CURRENT-DISPLAY-NAME / 更新必填显示名称草稿；保存中禁用        |
+| 4f097c4b3c2dd6e7.1 |  90 | event-binding | PC-CURRENT-AVATAR / 更新头像HTTPS地址草稿；保存中禁用             |
+| 606f704e56cefdda.1 | 113 | event-binding | PC-CURRENT-PHONE / 更新手机号草稿；验证状态单独显示且不由输入伪造 |
+| 710e66a207790a9d.1 | 128 | event-binding | PC-CURRENT-LOCALE / 更新当前语言选项草稿；保存中禁用              |
+| dabba198cd2f2993.1 | 142 | event-binding | PC-CURRENT-TIMEZONE / 更新必填时区草稿；保存中禁用                |
+| 927fb4495afb35c9.1 | 155 | event-binding | PC-CURRENT-REASON / 更新必填修改原因草稿，输入上限300字符         |
+| 9f646e1e9f714001.1 | 181 | control       | PC-CURRENT-SAVE / 提交资料；保存中禁用并显示处理中状态            |
+| 21dc66851e4332f6.1 | 184 | control | PC-CURRENT-CANCEL / 保存中禁用；取消只向父级发出草稿恢复意图，不写入资料 |
 
 | 当前源文件                                                       | 当前LF SHA-256                                                   |
 | ---------------------------------------------------------------- | ---------------------------------------------------------------- |
-| apps/web/src/components/personal-center/PersonalProfilePanel.vue | 09de3d84ed5c17072838183399084a31eb076a349cf25767c9b474b27b85bb4f |
+| apps/web/src/components/personal-center/PersonalProfilePanel.vue | 039cfc1ff1d32a0bb57d958095d2aa7394eec7625067e43ee0b160554c73d096 |
 
 本节只提供当前静态位置和既有父子事件边界；API字段、expected_version、服务端验证与资料读写合同仍以第3节和真实路由/服务为准，不由子组件映射推导新业务行为。
 
 ### 2.3 P11 PersonalCenter 当前父级源码位置（2026-09-24）
 
-旧P11表保留首批父组件动作的历史签名；以下8项补齐当前 `PersonalCenter.vue` 的操作和五分区子组件交接。分区按钮是一组模板重复实例，子组件props/events只连接composable既有状态/handler；不据此重复计算资料、偏好、改密或会话API动作。
+旧P11表保留首批父组件动作的历史签名；以下9项补齐当前 `PersonalCenter.vue` 的操作和五分区子组件交接。分区按钮是一组模板重复实例，子组件props/events只连接composable既有状态/handler；不据此重复计算资料、偏好、改密或会话API动作。
 
 #### apps/web/src/components/PersonalCenter.vue
 
 | 当前签名.序号 |  行 | 类型               | 当前语义归属  |
 | ------------- | --: | ------------------ | ------------- |
-| P             |  55 | 71a3428b56c7ab21.1 | control       | PC-CENTER-CURRENT-LOAD / 顶部重读资料；读取中或任一写操作忙碌时禁用               |
-| P             |  84 | c68e6bb8fa382242.1 | control       | PC-CENTER-CURRENT-PROFILE-RETRY / profile读取失败时调用独立重试                   |
-| P             |  96 | bdd76d306d559c2e.1 | control       | PC-CENTER-CURRENT-SECTION / 五个query分区之一的本地切换按钮实例                   |
-| P             | 134 | 2b56b169bbfa48c5.1 | control       | PC-CENTER-CURRENT-4 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变     |
-| P             | 137 | da5e50ee2a202adc.1 | event-binding | PC-CENTER-CURRENT-5 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变     |
-| P             | 146 | 97130ec443ea7f94.1 | event-binding | PC-CENTER-CURRENT-PERMISSIONS / 传递授权分区状态与token管理能力，转发重读         |
-| P             | 152 | 9de3424951fed3cd.1 | event-binding | PC-CENTER-CURRENT-SECURITY / 传递会话/密码及忙碌状态，转发读取和写入意图          |
-| P             | 166 | c0f9f5a7f78f133b.1 | event-binding | PC-CENTER-CURRENT-NOTIFICATIONS / 传递偏好状态/草稿并转发重读、字段更新及保存意图 |
-| P             | 177 | efda8df42e4c8c1a.1 | event-binding | PC-CENTER-CURRENT-ASSETS / 传递本人资产分区状态并转发重读                         |
+| P             |  63 | 71a3428b56c7ab21.1 | control       | PC-CENTER-CURRENT-LOAD / 顶部重读资料；读取中或任一写操作忙碌时禁用               |
+| P             |  92 | c68e6bb8fa382242.1 | control       | PC-CENTER-CURRENT-PROFILE-RETRY / profile读取失败时调用独立重试                   |
+| P             | 104 | bdd76d306d559c2e.1 | control       | PC-CENTER-CURRENT-SECTION / 五个query分区之一的本地切换按钮实例                   |
+| P             | 175 | 2b56b169bbfa48c5.1 | control       | PC-CENTER-CURRENT-4 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变     |
+| P             | 178 | f9c21d17647a5b05.1 | event-binding | PC-CENTER-CURRENT-PROFILE / 父级接线字段更新、保存和取消草稿     |
+| P             | 188 | 97130ec443ea7f94.1 | event-binding | PC-CENTER-CURRENT-PERMISSIONS / 传递授权分区状态与token管理能力，转发重读         |
+| P             | 194 | 9de3424951fed3cd.1 | event-binding | PC-CENTER-CURRENT-SECURITY / 传递会话/密码及忙碌状态，转发读取和写入意图          |
+| P             | 208 | c0f9f5a7f78f133b.1 | event-binding | PC-CENTER-CURRENT-NOTIFICATIONS / 传递偏好状态/草稿并转发重读、字段更新及保存意图 |
+| P             | 219 | efda8df42e4c8c1a.1 | event-binding | PC-CENTER-CURRENT-ASSETS / 传递本人资产分区状态并转发重读                         |
 
 | 当前源文件                                 | 当前LF SHA-256                                                   |
 | ------------------------------------------ | ---------------------------------------------------------------- |
-| apps/web/src/components/PersonalCenter.vue | f53625e27f4c95014679d2a5a9264d4dbac061e3b967059cbb346f31f51b4d64 |
+| apps/web/src/components/PersonalCenter.vue | 8676f2b637d3230d614feb63545ced30c083ac1268de97840638eca1ae8cdb97 |
 
 这组位置描述父级的本地导航/状态接线，不宣称query深链、浏览器历史、异步竞态或服务端权限已由静态映射验收。
 
@@ -276,22 +277,22 @@ P11多个子面板复用该共享反馈组件。它在error状态下显示“重
 
 | 当前位置键 | candidate sig | 类型 / 行          | 当前语义      |
 | ---------- | ------------- | ------------------ | ------------- |
-| T          | 146           | ddb48b7134de397b.1 | control       | TH-CURRENT-1 / 当前内联外观及工作区导航；权限与数据契约不变 |
-| T          | 151           | 4a092ea79d6c2f5a.1 | control       | TH-CURRENT-PROFILE 导航至本人资料                           |
-| T          | 152           | ad505ab637ba2e57.1 | control       | TH-CURRENT-MFA 导航至安全设置/MFA                           |
-| T          | 153           | 9c6219bf774c7860.1 | control       | TH-CURRENT-ROUTE 当前外观偏好入口及aria-current             |
-| T          | 219           | 6bb5f6a1584a9db0.1 | control       | TH-CURRENT-TRACE 展开当前主题偏好关联编号                   |
-| T          | 223           | 5587941412d5210f.1 | control       | TH-CURRENT-LOGIN 仅expired状态导航登录                      |
-| T          | 229           | 78d551a8e1f6be17.1 | control       | TH-CURRENT-CONTEXT blocked状态选择工作区                    |
-| T          | 235           | abd6f3613ef299ad.1 | control       | TH-CURRENT-READ 其它可重读错误状态请求刷新偏好              |
-| T          | 287           | e08941698ff33588.1 | event-binding | TH-CURRENT-PREVIEW 主题radio选择转给即时预览handler         |
-| T          | 302           | 0ddae1cee09564f0.1 | event-binding | TH-CURRENT-DENSITY 密度radio选择只更新当前会话              |
-| T          | 316           | 1aa1d23b0fd6f31f.1 | control       | TH-CURRENT-RESTORE 仅恢复已保存主题预览，不恢复密度         |
-| T          | 324           | b77160ecd730473a.1 | control       | TH-CURRENT-SAVE 主题dirty时保存偏好；密度不在PUT字段中      |
+| T          | 147 | ddb48b7134de397b.1 | control       | TH-CURRENT-1 / 当前内联外观及工作区导航；权限与数据契约不变 |
+| T          | 152 | 4a092ea79d6c2f5a.1 | control       | TH-CURRENT-PROFILE 导航至本人资料                           |
+| T          | 153 | ad505ab637ba2e57.1 | control       | TH-CURRENT-MFA 导航至安全设置/MFA                           |
+| T          | 154 | 9c6219bf774c7860.1 | control       | TH-CURRENT-ROUTE 当前外观偏好入口及aria-current             |
+| T          | 220 | 6bb5f6a1584a9db0.1 | control       | TH-CURRENT-TRACE 展开当前主题偏好关联编号                   |
+| T          | 224 | 5587941412d5210f.1 | control       | TH-CURRENT-LOGIN 仅expired状态导航登录                      |
+| T          | 230 | 78d551a8e1f6be17.1 | control       | TH-CURRENT-CONTEXT blocked状态选择工作区                    |
+| T          | 236 | abd6f3613ef299ad.1 | control       | TH-CURRENT-READ 其它可重读错误状态请求刷新偏好              |
+| T          | 288 | e08941698ff33588.1 | event-binding | TH-CURRENT-PREVIEW 主题radio选择转给即时预览handler         |
+| T          | 303 | 0ddae1cee09564f0.1 | event-binding | TH-CURRENT-DENSITY 密度radio选择只更新当前会话              |
+| T          | 317 | 1aa1d23b0fd6f31f.1 | control       | TH-CURRENT-RESTORE 仅恢复已保存主题预览，不恢复密度         |
+| T          | 325 | b77160ecd730473a.1 | control       | TH-CURRENT-SAVE 主题dirty时保存偏好；密度不在PUT字段中      |
 
 | 当前源文件                              | 当前LF SHA-256                                                   |
 | --------------------------------------- | ---------------------------------------------------------------- |
-| apps/web/src/components/ThemeStudio.vue | ac6f0c176c81f42c503af78ee6cd0d4ae7c2d9d5bb9a55825ccf3548c43e3621 |
+| apps/web/src/components/ThemeStudio.vue | e51a572d052efa7f1afc966aeecb8032f671a088382aee1f791842616eebaa81 |
 
 该映射只证明源码位置与既有状态/请求边界；不代表错误态、焦点、radio方向键、保存竞态、主题完整浏览器验收或生产验收已关闭。
 
@@ -311,28 +312,28 @@ P11多个子面板复用该共享反馈组件。它在error状态下显示“重
 
 #### A
 
-`AccountShell`提供P11个人中心壳层和分区导航。品牌入口、五分区循环链接及外观偏好链接在当前模板中均为独立候选；已有组织/工作区链接保持旧映射，面包屑应用入口仍是原身份但行号已移动。
+`AccountShell`提供P11个人中心壳层和分区导航。现行六个分区由一个模板链接循环生成；外观加载独立 ThemeStudio。品牌、工作区切换、主题入口、面包屑和退出已由成员 NavigationShell 提供；以下旧壳层身份留作历史追溯，不当作当前交互验收。
 
 | 当前签名.序号 |  行 | 类型               | 当前语义归属 |
 | ------------- | --: | ------------------ | ------------ |
-| A             |  29 | 8aab273323c85fb8.1 | control      | AC-CURRENT-1 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变        |
-| A             |  33 | 0f58e919e43acff5.1 | control      | AC-CURRENT-CONTEXT / 导航至现有组织与工作区选择页                             |
-| A             |  39 | 15b9757569cc17f2.1 | control      | AC-CURRENT-3 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变        |
-| A             |  39 | c6782808e812207a.1 | control      | AC-CURRENT-4 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变        |
-| A             |  40 | ad6cfd9c92df38fa.1 | control      | AC-CURRENT-5 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变        |
-| A             |  42 | ae9623c4f5969ad6.1 | control      | AC-CURRENT-6 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变        |
-| A             |  42 | a07717820a8cd567.1 | control      | AC-CURRENT-7 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变        |
-| A             |  43 | 1f19d2ec6d0c0efb.1 | control      | AC-CURRENT-8 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变        |
-| A             |  44 | d4fefb061f17a1de.1 | control      | AC-CURRENT-9 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变        |
-| A             |  45 | e1f5296c68058a15.1 | control      | AC-CURRENT-10 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变       |
-| A             |  46 | 7cdcfb8d3dad4f71.1 | control      | AC-CURRENT-11 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变       |
-| A             |  47 | 313f1b192c5bb9a4.1 | control      | AC-CURRENT-12 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变       |
-| A             |  51 | aa62e5d933afce98.1 | control      | AC-CURRENT-BREADCRUMB / 面包屑导航至应用首页                                  |
-| A             |  58 | 257559b0b0a3692f.1 | control      | AC-CURRENT-SECTIONS / 按个人中心分区数据生成`/me?section=…`导航并标记当前分区 |
+| A             |  29 | 8aab273323c85fb8.1 | control      | AC-CURRENT-1 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变         [历史身份，仅追溯] |
+| A             |  33 | 0f58e919e43acff5.1 | control      | AC-CURRENT-CONTEXT / 导航至现有组织与工作区选择页                              [历史身份，仅追溯] |
+| A             |  39 | 15b9757569cc17f2.1 | control      | AC-CURRENT-3 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变         [历史身份，仅追溯] |
+| A             |  39 | c6782808e812207a.1 | control      | AC-CURRENT-4 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变         [历史身份，仅追溯] |
+| A             |  40 | ad6cfd9c92df38fa.1 | control      | AC-CURRENT-5 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变         [历史身份，仅追溯] |
+| A             |  42 | ae9623c4f5969ad6.1 | control      | AC-CURRENT-6 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变         [历史身份，仅追溯] |
+| A             |  42 | a07717820a8cd567.1 | control      | AC-CURRENT-7 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变         [历史身份，仅追溯] |
+| A             |  43 | 1f19d2ec6d0c0efb.1 | control      | AC-CURRENT-8 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变         [历史身份，仅追溯] |
+| A             |  44 | d4fefb061f17a1de.1 | control      | AC-CURRENT-9 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变         [历史身份，仅追溯] |
+| A             |  45 | e1f5296c68058a15.1 | control      | AC-CURRENT-10 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变        [历史身份，仅追溯] |
+| A             |  46 | 7cdcfb8d3dad4f71.1 | control      | AC-CURRENT-11 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变        [历史身份，仅追溯] |
+| A             |  47 | 313f1b192c5bb9a4.1 | control      | AC-CURRENT-12 / 当前用户授权的内联外观或工作区导航；原API与权限边界不变        [历史身份，仅追溯] |
+| A             |  51 | aa62e5d933afce98.1 | control      | AC-CURRENT-BREADCRUMB / 面包屑导航至应用首页                                   [历史身份，仅追溯] |
+| A             |  36 | 257559b0b0a3692f.1 | control      | AC-CURRENT-SECTIONS / 按个人中心分区数据生成`/me?section=…`导航并标记当前分区 |
 
 | 当前源文件                               | 当前LF SHA-256                                                   |
 | ---------------------------------------- | ---------------------------------------------------------------- |
-| apps/web/src/components/AccountShell.vue | 2313dd88b53b192efbdca421fddac42c45ef285146a2acbf5daaaf90571f2c67 |
+| apps/web/src/components/AccountShell.vue | e6257f6261c7811c37c5447b90930acac00a75db633427cad16c262605f57f7e |
 
 2026-10-17仅重制账号壳层样式及页头class，五个导航候选的身份、行号、路由和脚本保持原样，当前源码指纹随样式更新；历史截图与审批不变。
 
@@ -392,4 +393,4 @@ PersonalCenter先请求profile，成功立即ready，再Promise.allSettled等四
 | ------------------------------------------------------------ | --- | ------- | ------------------------------------------------------------------------------------------- | ---- | -------- |
 | apps/web/src/components/HomeDashboard.vue#2acf0c9a00edf394.1 | 374 | control | HD-CURRENT-LIVE-REFRESH / 用户手动刷新当前工作台摘要；可见页面每5秒自动读取；不触发采集写入 |
 
-2026-11-03 用户授权米兜品牌、账号内联外观与工作区导航。以上仅重新定位当前源码行、签名及LF哈希；历史身份行、捕获输入与历史图像不改写。当前候选数：PersonalCenter 9、ThemeStudio 12、AccountShell 14。新增链接不绕过服务端路由权限。
+2026-11-03 用户授权米兜品牌、账号内联外观与工作区导航。以上仅重新定位当前源码行、签名及LF哈希；历史身份行、捕获输入与历史图像不改写。当前候选数：PersonalCenter 9、ThemeStudio 12、AccountShell 1（循环生成六个分区）；旧壳层其他动作由共享导航承接。新增链接不绕过服务端路由权限。

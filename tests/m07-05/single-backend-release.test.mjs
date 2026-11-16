@@ -81,7 +81,11 @@ test("active M07-05 commands cannot demand legacy candidate production evidence"
     !m.commands.some((x) => /verify-release-rollout-production|run-baota-release-rollout/.test(x)),
   );
   const script = await readFile("scripts/single-backend-rollback.py", "utf8");
-  assert.match(script, /StopProject/);
+  const graceful = await readFile("scripts/deploy_baota_runtime_gate.py", "utf8");
+  const deploy = await readFile("scripts/deploy-baota.py", "utf8");
+  assert.match(graceful, /def stop_python_project\(\):[\s\S]*only_stop_main_project/);
+  assert.match(deploy, /stop_python_project/);
+  assert.doesNotMatch(graceful, /signal\.SIGKILL/);
   assert.match(script, /stop_project/);
   assert.match(script, /rollback_processes_still_running/);
   assert.doesNotMatch(script, /4103|CreateProject|systemctl|nohup/);

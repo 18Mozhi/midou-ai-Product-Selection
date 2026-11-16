@@ -1,4 +1,4 @@
-import { appendCollectionSubquery, collectionTaskScope } from "@scoutops/database";
+import { appendCollectionSubquery, collectionTaskScope, selectionPrimaryAsinSql } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import {
   appendSourcingEvent,
@@ -91,7 +91,38 @@ async function comparisonUsesQuoteAnchor(connection: Pick<PoolConnection, "query
   if (shape === "organization_id,workspace_id") return false;
   throw new Error("partial_inherited_scope_schema:sourcing_comparisons");
 }
-const amazonEvidenceImageSql = (where: string, accountScoped = false) =>
+// Preserve the published primary-ASIN proof without using retired coordinates.
+const sourcingPrimaryLegacy = selectionPrimaryAsinSql.replaceAll("o.", "op.");
+const sourcingPrimaryNative = sourcingPrimaryLegacy
+  .replace(
+    "n_primary_current.organization_id=n_primary.organization_id AND n_primary_current.workspace_id=n_primary.workspace_id",
+    "n_primary_current.account_id=n_primary.account_id",
+  )
+  .replace(
+    "WHERE l_primary.opportunity_id=op.id AND n_primary.organization_id=op.organization_id AND n_primary.workspace_id=op.workspace_id",
+    "JOIN raw_evidence source_seed ON source_seed.id=n_primary.raw_evidence_id AND source_seed.provider_id=n_primary.provider_id AND source_seed.account_id=n_primary.account_id " +
+      "JOIN raw_evidence source_current ON source_current.id=n_primary_current.raw_evidence_id AND source_current.provider_id=n_primary_current.provider_id AND source_current.account_id=n_primary.account_id " +
+      "JOIN collection_tasks source_seed_task ON source_seed_task.id=source_seed.collection_task_id AND source_seed_task.account_id=n_primary.account_id " +
+      "JOIN collection_tasks source_current_task ON source_current_task.id=source_current.collection_task_id AND source_current_task.account_id=n_primary.account_id " +
+      "WHERE l_primary.opportunity_id=op.id AND n_primary.account_id=op.account_id AND " +
+      ([
+        ["opportunity_evidence_links", "l_primary.id"],
+        ["normalized_records", "n_primary.id"],
+        ["normalized_records", "n_primary_current.id"],
+        ["raw_evidence", "source_seed.id"],
+        ["raw_evidence", "source_current.id"],
+        ["collection_tasks", "source_seed_task.id"],
+        ["collection_tasks", "source_current_task.id"],
+      ] as const).map(([table, id]) => rehearsalOwns(table, id, "n_primary.account_id")).join(" AND ") + " ",
+  );
+if (/\b\w+\.(?:organization_id|workspace_id)\b/.test(sourcingPrimaryNative))
+  throw new Error("sourcing_primary_image_scope_projection_invalid");
+
+const amazonEvidenceImageSql = (
+  where: string,
+  accountScoped = false,
+  thumbnailPrimary?: "native" | "legacy",
+) =>
   "SELECT JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url')) image_url " +
   "FROM opportunity_evidence_links l JOIN opportunities op ON op.id=l.opportunity_id JOIN normalized_records n ON n.raw_evidence_id=l.raw_evidence_id " +
   (accountScoped
@@ -101,7 +132,11 @@ const amazonEvidenceImageSql = (where: string, accountScoped = false) =>
   "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
   "WHERE " +
   where +
-  " AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url')) LIKE 'https://%' " +
+  (thumbnailPrimary
+    ? " AND op.lifecycle_status<>'deleted' AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY " +
+      (thumbnailPrimary === "native" ? sourcingPrimaryNative : sourcingPrimaryLegacy) +
+      " AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url')) REGEXP '^https://(m[.]media-amazon[.]com|images-na[.]ssl-images-amazon[.]com)/' "
+    : " AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url')) LIKE 'https://%' ") +
   "ORDER BY n.created_at DESC,n.id DESC LIMIT 1";
 const searchImageSql = (
   opportunityId: "o.id" | "s.image_opportunity_id",
@@ -127,6 +162,7 @@ const searchImageSql = (
                  AND image_evidence.provider_id=n.provider_id AND image_evidence.account_id=${account})` : ""}`
         : " AND op.organization_id=s.organization_id AND op.workspace_id=s.workspace_id"),
     Boolean(account),
+    native ? "native" : "legacy",
   ) +
   ")) END image_url";
 const ownedSearchSource =

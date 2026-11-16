@@ -35,12 +35,18 @@ function update(field: ProfileField, event: Event) {
     <div class="p11-field-group">
       <label for="p11-email">邮箱</label>
       <div class="p11-field-value">
-        <input id="p11-email" :value="props.profile.email" aria-describedby="p11-email-note" disabled />
+        <input
+          id="p11-email"
+          :value="props.profile.email"
+          aria-describedby="p11-email-note"
+          disabled
+        />
         <small id="p11-email-note" class="p11-email-note">
           <span
             class="midou-profile-form-verification"
             :data-verified="Boolean(props.profile.email_verified_at)"
-          >{{ props.profile.email_verified_at ? "已验证" : "尚未验证" }}</span>
+            >{{ props.profile.email_verified_at ? "已验证" : "尚未验证" }}</span
+          >
           <span>邮箱暂不支持修改。</span>
         </small>
       </div>

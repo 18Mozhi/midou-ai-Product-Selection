@@ -37,7 +37,7 @@
   - `/www/wwwroot/ai选品/python`：Python 3.12 采集运行包，也是宝塔 Python 项目 `ai选品-python` 的项目目录。
   - `/www/wwwroot/ai选品/config`：宝塔受限环境文件；不得提交、上传到其他目录或在输出中展示秘密。
   - `/www/wwwroot/ai选品/runtime`：`evidence`、`exports`、`credential-tmp`、`tmp`、`verification` 等运行数据。
-- 服务器不得执行 Git clone、pull、checkout 或 build。代码只在本地构建并用 `python scripts/deploy-baota.py` 上传运行包；该命令会排除 `tests`、截图、文档、计划、源码缓存和本地临时文件，上传完成后删除临时包。
+- 服务器不得执行 Git clone、pull、checkout 或 build。代码只在本地构建并通过 `scripts/deploy-account-baota.py` 的正式协调发布入口上传固定运行包；不上传测试、截图、源码缓存或临时文件，不创建备份。
 - 宝塔网站对象：`ai选品网站` / 域名 `midouai.medouai.com` / 目录 `/www/wwwroot/ai选品/frontend`。
 - 宝塔 Node 对象：`ai选品` / 目录 `/www/wwwroot/ai选品/backend` / Node `v20.19.6` / 启动命令 `node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js`。这是宝塔面板中的直接 Node 命令，不得配置项目自带 Bash 启动器。
 - 宝塔 Python 对象：`ai选品-python` / 目录 `/www/wwwroot/ai选品/python` / Python `3.12.13` / 命令模式 / 启动命令 `python -m scoutops_crawler --env-file=/www/wwwroot/ai选品/config/product_scout.env`。由 Python 直接解析受限 `KEY=VALUE` 文件，不使用 Bash；Python 项目只允许由宝塔创建、启动、停止、重启和查看日志。

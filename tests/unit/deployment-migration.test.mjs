@@ -66,17 +66,22 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     deploy,
     /upload = root \/ \("\.deploy-upload-" \+ v\["build_sha"\] \+ "\.tar\.gz"\)/,
   );
+  assert.match(deploy, /permitted_entries = allowed \| \{\{stage\.name, upload\.name\}\}/);
   assert.match(
     deploy,
-    /permitted_entries = allowed \| \{\{stage\.name, rollback\.name, upload\.name\}\}/,
+    /backup_preflight_source\(PROJECT_ROOT, lock_owner, args\.initialize_layout\)/,
   );
-  assert.match(deploy, /stale_rollbacks = \{\{/);
-  assert.match(deploy, /deploy-rollback-" \+ match\.group\(1\)/);
-  assert.match(deploy, /source\.rename\(destination\)/);
-  assert.match(deploy, /rollback archive destination already exists/);
+  assert.doesNotMatch(deploy, /stale_rollbacks/);
+  const fullDeploy = deploy.slice(
+    deploy.indexOf('with tempfile.TemporaryDirectory(prefix="scoutops-deploy-")'),
+  );
+  assert.match(
+    fullDeploy,
+    /archive = build_package\([\s\S]*client, password = connect_production\(\)/,
+  );
   assert.ok(
-    deploy.lastIndexOf("verify_release_change_ownership(repo)") <
-      deploy.lastIndexOf("read_windows_credential()"),
+    deploy.indexOf("verify_release_change_ownership(repo)", deploy.indexOf("def main()")) <
+      deploy.indexOf(fullDeploy),
   );
   assert.match(deploy, /remote_python\(client, panel_deploy_source/);
   assert.ok(

@@ -52,8 +52,9 @@ test("M07-02.A14-A17 contracts include Baota edge hardening, operational rollbac
 test("M07-02 browser storage gate allows only exact validated non-sensitive records", async () => {
   const gate = await readFile(resolve(root, "scripts/verify-security-gate.mjs"), "utf8");
   const theme = await readFile(resolve(root, "apps/web/src/design/theme.ts"), "utf8");
-  const journey = await readFile(
-    resolve(root, "apps/web/src/components/SelectionJourney.vue"),
+  // The retired manual journey no longer ships. The active selection workspace must not restore its browser record.
+  const selectionWorkspace = await readFile(
+    resolve(root, "apps/web/src/components/OpportunityWorkspace.vue"),
     "utf8",
   );
   const realtime = await readFile(resolve(root, "apps/web/src/realtime-client-metrics.ts"), "utf8");
@@ -77,7 +78,7 @@ test("M07-02 browser storage gate allows only exact validated non-sensitive reco
   assert.match(navigationMemory, /value\.startsWith\("\/"\).*!value\.startsWith\("\/\/"\)/);
   assert.match(navigationMemory, /slice\(0, 5\)/);
   assert.doesNotMatch(theme, /token|secret|session|credential/i);
-  assert.match(journey, /journeyIdPattern/);
+  assert.doesNotMatch(selectionWorkspace, /localStorage|progressStorageKey|journeyIdPattern/);
   assert.doesNotMatch(realtime, /token|secret|credential|request_id|user_id/i);
   assert.doesNotMatch(navigationMemory, /token|secret|credential|request_id|user_id/i);
 });

@@ -22,7 +22,7 @@
 
 浏览器历史由 Vue Router 管理，`apps/web/src/route-catalog.ts` 是页面标题、壳层、面包屑、前端能力提示、页面组件标识 `surface`、缓存策略 `cachePolicy` 和侧栏目录的单一配置；侧栏能力直接从对应路由元数据派生，不能维护第二份权限表。导航壳按 `surface` 选择页面组件并统一传入作用域参数，不再维护逐页面的巨型渲染条件链。成员与组织页面使用 `reset_on_scope`，平台页面使用 `preserve`，公开和账号页面使用 `none`；业务组件按路由名称和当前租户生成缓存键，并由最大 12 项的 `KeepAlive` 保留有界页面状态。同源业务跳转显式使用 `RouterLink` 或 `router.push/replace`，入口不再使用全局点击拦截兼容普通 `<a>`。未知地址只进入专用 404 状态且不得默认高亮第一个菜单。`docs/feature-map.json` 的前端路由路径必须唯一；采集调度菜单与页面一级标题统一为“采集调度”，页面内部模块标题不得冒充第二个页面标题。
 
-壳层内部按权限、路由装配、主题和发现状态拆分：`navigation-shell-permissions.ts` 只消费服务端 Guard 返回的能力并过滤路由目录；`navigation-shell-route-state.ts` 解析兼容路由、页面摘要、实体参数和页面组件属性；`use-navigation-shell-theme.ts` 管理带版本锁的主题读取、保存和失败回滚；`use-navigation-discovery.ts` 管理搜索、快捷创建和 Ctrl/Cmd+K。`NavigationShell.vue` 继续拥有 Guard 请求、壳层布局与页面挂载，但懒加载候选不重复注册已经由 `App.vue` 独立加载的账号、登录、租户选择、引导、主题、404 和开发态页面，避免把无用加载映射打入导航壳 chunk；该拆分不增加第二份权限表或路由目录。
+壳层内部按权限、路由装配、主题和发现状态拆分：`navigation-shell-permissions.ts` 只消费服务端 Guard 返回的能力并过滤路由目录；`navigation-shell-route-state.ts` 解析兼容路由、页面摘要、实体参数和页面组件属性；`use-navigation-shell-theme.ts` 管理带版本锁的主题读取、保存和失败回滚；`use-navigation-discovery.ts` 管理搜索、快捷创建和 Ctrl/Cmd+K。`NavigationShell.vue` 继续拥有 Guard 请求、壳层布局与页面挂载，但懒加载候选不重复注册已经由 `App.vue` 独立加载的账号、登录、租户选择、引导、主题、404 和开发态页面，避免把无用加载映射打入导航壳 chunk；该拆分不增加第二份权限表或路由目录。 搜索浮层只在首次打开时加载，未使用时不渲染加载占位；首次挂载后保留实例，以便关闭时取消在途搜索并恢复焦点。
 
 成员、组织和平台模块索引按任务域分组；平台后台收敛为“业务运营、采集与数据、治理与安全、高级运维”四组，让日常业务入口与基础设施运维入口分层，索引和平台首页快捷入口都按服务端返回的能力过滤。账号与组织拆为 `/platform-admin/organizations`、`/platform-admin/users`、`/platform-admin/admins` 三个可深链页面，组织创建与详情继续使用独立地址，旧地址继续兼容。凭证入口只在来源管理上下文出现；采集与系统运维继续复用各自二级索引。组织、平台和个人中心继承当前纸张主题，后台只切换紧凑密度。`/me` 使用独立横向账号分区索引，不要求组织上下文；个人资料读写、设备会话和 MFA 属于账号级能力，其余权限与数据边界不变。
 

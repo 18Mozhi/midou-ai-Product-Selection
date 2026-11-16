@@ -327,13 +327,13 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
       liveProbe.includes(prerequisite),
       `home dashboard live probe must seed ${prerequisite}`,
     );
-  for (const cleanup of [
-    "DELETE FROM opportunities WHERE id=?",
-    "DELETE FROM score_rules WHERE id=?",
-    "DELETE FROM trend_monitoring_rules WHERE id=?",
-    "DELETE FROM trend_topics WHERE id=?",
-  ])
-    assert.ok(liveProbe.includes(cleanup), `home dashboard live probe must clean ${cleanup}`);
+  assert.match(liveProbe, /await db\.beginTransaction\(\)/);
+  assert.match(liveProbe, /new MySqlHomeDashboardRepository\(db\)/);
+  assert.doesNotMatch(liveProbe, /\.commit\(|DELETE FROM/i);
+  assert.match(liveProbe, /await db\.rollback\(\)/);
+  assert.match(liveProbe, /fixture rollback readback failed/);
+  assert.match(liveProbe, /admitted without source evidence/);
+  assert.match(liveProbe, /admitted below the valid competitor minimum/);
   assert.match(openapi, /\/me\/home-dashboard:/);
   assert.match(home, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);

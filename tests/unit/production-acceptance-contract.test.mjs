@@ -231,7 +231,16 @@ test("production logout stays in each role shell and confirms server revocation 
         waitForURL: async (predicate) => {
           assert.ok(predicate(new URL("https://app.example/login")));
         },
-        getByLabel: () => ({ waitFor: async () => {} }),
+        getByLabel: (label) => {
+          if (label === "账号菜单") {
+            return {
+              isVisible: async () => true,
+              click: async () => events.push("account_menu"),
+            };
+          }
+          assert.equal(label, "账号（邮箱或用户名）");
+          return { waitFor: async () => {} };
+        },
       },
       context: {
         request: {
@@ -243,7 +252,7 @@ test("production logout stays in each role shell and confirms server revocation 
         },
       },
     });
-    assert.deepEqual(events, ["shell", "logout", "revocation"]);
+    assert.deepEqual(events, ["shell", "account_menu", "logout", "revocation"]);
     assert.equal(result.logout_status, 204);
     assert.equal(result.protected_read_status, 401);
   }

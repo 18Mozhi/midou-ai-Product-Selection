@@ -14,34 +14,10 @@ const captured = (file) =>
     encoding: "utf8",
   }).replaceAll("\r\n", "\n");
 const evidence = () => JSON.parse(read(`${root}/evidence.json`));
-function loadTs(file, dependencies = {}) {
-  const exports = {};
-  vm.runInNewContext(
-    ts.transpileModule(read(file), {
-      compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS },
-    }).outputText,
-    {
-      exports,
-      Buffer,
-      Date,
-      AbortController,
-      DOMException,
-      setTimeout,
-      clearTimeout,
-      require: (name) => {
-        assert.ok(name in dependencies, name);
-        return dependencies[name];
-      },
-    },
-  );
-  return exports;
-}
-
 test("P47 current service and registry permit distinct-key checks before either result is recorded", async () => {
-  const registryModule = loadTs("packages/provider-adapters/src/index.ts");
-  const { ProviderAdapterService } = loadTs("apps/api/src/provider-adapter-service.ts", {
-    "@scoutops/provider-adapters": registryModule,
-  });
+  const registryModule = await import("../../packages/provider-adapters/dist/index.js");
+  const { ProviderAdapterService } =
+    await import("../../apps/api/dist/provider-adapter-service.js");
   const fixtureFile = "tests/m03-03/provider-adapter.test.mjs",
     ast = ts.createSourceFile(fixtureFile, read(fixtureFile), ts.ScriptTarget.Latest, true),
     matches = [];

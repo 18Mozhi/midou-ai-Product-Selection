@@ -9,7 +9,7 @@ const required = [
   "apps/api/src/capacity-boundary-repository.ts",
   "apps/api/src/capacity-boundary-routes.ts",
   "apps/web/src/components/CapacityBoundaryCenter.vue",
-  "apps/web/src/capacity-boundary.css",
+  "apps/web/src/capacity-boundary-c.css",
   "infra/baota/capacity-boundary-manifest.json",
   "verification/capacity-boundary-production-evidence.schema.json",
   "scripts/verify-capacity-boundary-production.mjs",

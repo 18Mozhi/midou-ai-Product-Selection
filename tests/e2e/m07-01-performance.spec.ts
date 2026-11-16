@@ -6,6 +6,11 @@ const workspaceId = "00000000-0000-4000-8000-000000000702";
 test("M07-01.A07/A08/A15 representative home meets browser budgets on desktop and 390px", async ({
   page,
 }) => {
+  const unopenedSearchLoads: string[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname.endsWith("/DiscoveryOverlay.vue"))
+      unopenedSearchLoads.push(request.url());
+  });
   await page.addInitScript(() => {
     const metrics = { cls: 0, lcp: 0 };
     Object.defineProperty(window, "__m0701Metrics", { value: metrics });
@@ -76,8 +81,9 @@ test("M07-01.A07/A08/A15 representative home meets browser budgets on desktop an
     }),
   );
   await page.goto("/home");
-  await expect(page.getByRole("heading", { name: "选品控制台" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "选品工作台", exact: true })).toBeVisible();
   await expect(page.getByText("自动选品未配置", { exact: true })).toBeVisible();
+  expect(unopenedSearchLoads).toEqual([]);
   await page.waitForTimeout(250);
   const resourceBudget = await page.evaluate(() => {
     const resources = performance.getEntriesByType("resource") as PerformanceResourceTiming[];

@@ -2,6 +2,7 @@
 import { reactive, watch } from "vue";
 import OpportunityCatalogueList from "./OpportunityCatalogueList.vue";
 import UiStatePanel from "./UiStatePanel.vue";
+import AppIcon from "./AppIcon.vue";
 import { useHomeCompletedProducts } from "./use-home-completed-products";
 import {
   catalogueProductFacts,
@@ -73,15 +74,7 @@ const rowFacts = (item: OpportunitySummary) => [
       @primary="load"
     />
     <div v-else-if="state === 'empty'" class="home-quiet-empty home-completed-empty">
-      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden="true">
-        <path
-          d="M3 29 10 16a4 4 0 0 1 4-2h24a4 4 0 0 1 4 2l7 13v12a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V29Zm0 0h13l4 5h12l4-5h13M15 8l-3-4m14 3V2m11 6 3-4"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+      <AppIcon class="home-empty-tray" name="result-tray" :size="52" />
       <b>暂无已完成分析的商品</b>
       <span>系统会继续补齐主品、竞品、评分和1688货源；候选数量不计作已完成。</span>
       <RouterLink to="/opportunities?view=rule_candidates">查看候选进度</RouterLink>

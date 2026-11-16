@@ -84,15 +84,21 @@ test("all frontend business modules keep direct fetch inside the shared transpor
 });
 
 test("core shell error surfaces preserve request and trace correlation", async () => {
-  const [navigation, discovery, home] = await Promise.all([
+  const [navigation, navigationGate, discovery, home] = await Promise.all([
     read("apps/web/src/components/NavigationShell.vue"),
+    read("apps/web/src/components/NavigationShellGate.vue"),
     read("apps/web/src/components/DiscoveryOverlay.vue"),
     read("apps/web/src/components/HomeDashboard.vue"),
   ]);
 
   assert.match(navigation, /error\.requestId/);
   assert.match(navigation, /error\.traceId/);
-  assert.match(navigation, /链路编号/);
+  assert.match(
+    navigation,
+    /<NavigationShellGate[\s\S]*:request-id="requestId"\s+:trace-id="traceId"/,
+  );
+  assert.match(navigationGate, /关联编号：\{\{ requestId \}\}/);
+  assert.match(navigationGate, /链路编号：\{\{ traceId \}\}/);
   for (const source of [discovery, home]) {
     assert.match(source, /error\.actionHint/);
     assert.match(source, /:request-id="requestId"/);

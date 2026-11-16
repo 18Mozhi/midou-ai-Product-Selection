@@ -22,14 +22,15 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       process.cwd(),
       ".artifacts/verification/production-api-coverage.json",
     ),
+    private readonly accountOnly = false,
   ) {}
   async read(i: any) {
     const since = new Date(this.now().getTime() - i.windowMinutes * 60000),
       now = this.now();
     const [scale, collection, risk, storage] = await Promise.all([
-        readPlatformScaleMetrics(this.pool),
+        readPlatformScaleMetrics(this.pool, this.accountOnly),
         readPlatformCollectionMetrics(this.pool, { since, now, windowMinutes: i.windowMinutes }),
-        readPlatformRiskMetrics(this.pool, this.errorLimit),
+        readPlatformRiskMetrics(this.pool, this.errorLimit, this.accountOnly),
         readPlatformStorageMetrics(this.pool, since),
       ]),
       orgs = scale.organizations,
@@ -62,7 +63,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     const result = {
       window: i.window,
       summary: {
-        active_organizations: n(orgs?.total),
+        ...(!this.accountOnly ? { active_organizations: n(orgs?.total) } : {}),
         active_users: n(users?.total),
         enabled_providers: n(providers?.total),
         task_success_rate: terminal
@@ -120,10 +121,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         "INSERT INTO platform_dashboard_views(id,actor_id,window_code,request_id,trace_id,observed_at) VALUES(?,?,?,?,?,?)",
         [randomUUID(), i.actorId, i.window, i.requestId, i.traceId, now],
       );
+      const auditScopeColumns = this.accountOnly ? "historical_context" : "organization_id,workspace_id";
+      const auditScopeValues = this.accountOnly ? "NULL" : "NULL,NULL";
       await c.query(
-        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+        `INSERT INTO platform_audit_events(id,${auditScopeColumns},actor_id,` +
           "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
-          "schema_version) VALUES(?,NULL,NULL,?,'platform.dashboard.read','platform_dashboard'," +
+          `schema_version) VALUES(?,${auditScopeValues},?,'platform.dashboard.read','platform_dashboard',` +
           "NULL,'succeeded',?,?,?, ?,1)",
         [
           randomUUID(),

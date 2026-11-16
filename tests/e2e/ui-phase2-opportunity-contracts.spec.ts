@@ -200,7 +200,9 @@ for (const canCollect of [false, true]) {
     await page.reload();
     await openOpportunitySection(page, "商品与评分");
     await expect(page.getByRole("button", { name: "查看竞品对比", exact: true })).toBeVisible();
-    await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toBeVisible();
+    const sourcing = page.getByRole("link", { name: "查看当前商品货源", exact: true });
+    await expect(sourcing).toBeVisible();
+    await expect(sourcing).toHaveAttribute("href", `/opportunities/${opportunityId}?tab=profit`);
     expect(collectionWrites).toBe(0);
     expect(data.writes).toHaveLength(0);
     expect(
@@ -273,7 +275,9 @@ test("completed analysis view survives refresh and view navigation without requi
   expect(requests.at(-1)).toBe("completed");
   data.queryRows = [];
   await page.goto("/opportunities?view=completed&q=no-results");
-  await expect(page.getByRole("heading", { name: "暂无选品结果" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "当前筛选下暂无已完成分析的商品", exact: true }),
+  ).toBeVisible();
   await expect(page.getByRole("button", { name: "完善自动推荐配置", exact: true })).toHaveCount(0);
   expect(data.writes).toHaveLength(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(

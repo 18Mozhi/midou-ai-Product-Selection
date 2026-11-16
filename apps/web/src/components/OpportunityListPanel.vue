@@ -278,9 +278,6 @@ watch(imageFailureResetSources, (items) => {
           placeholder="全部市场"
           @keydown.enter="emit('apply')"
       /></label>
-      <button v-if="hasFiltersToClear" type="button" class="catalogue-clear" @click="emit('reset')">
-        清除条件
-      </button>
       <ResponsiveFilterDrawer mode="dialog" label="高级筛选" :active-count="activeFilterCount">
         <form
           class="opportunity-filters catalogue-advanced-filters"
@@ -330,6 +327,9 @@ watch(imageFailureResetSources, (items) => {
           </footer>
         </form>
       </ResponsiveFilterDrawer>
+      <button v-if="hasFiltersToClear" type="button" class="catalogue-clear" @click="emit('reset')">
+        清除条件
+      </button>
     </div>
   </section>
   <section
@@ -422,7 +422,7 @@ watch(imageFailureResetSources, (items) => {
     "
     @secondary="state === 'empty' ? clearOrShowAll() : emit('reset')"
   />
-  <section v-else class="product-catalog" :data-view="selectionView">
+  <section v-else class="product-catalog" :class="{ 'product-catalog--candidates': selectionView === 'rule_candidates' }" :data-view="selectionView">
     <header>
       <div>
         <h2>{{ viewCopy.title }}</h2>
@@ -439,6 +439,12 @@ watch(imageFailureResetSources, (items) => {
     <p v-if="selectionView === 'rule_candidates'" class="catalogue-table-context">
       最近更新优先 · 每页 {{ candidatePageSize }} 个
     </p>
+    <div v-if="selectionView === 'rule_candidates'" class="catalogue-table-reading-band">
+      <div class="catalogue-table-context">
+        <span>当前页 {{ items.length }} 条</span>
+      </div>
+      <span class="catalogue-table-cost-note">进货价为已有采集记录，不含其他成本。</span>
+    </div>
     <OpportunityCatalogueList
       :items="items"
       :return-path="route.fullPath"
@@ -599,6 +605,52 @@ watch(imageFailureResetSources, (items) => {
     display: inline;
   }
 }
+
+.product-catalog--candidates .catalog-data-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 16px;
+  border: 1px solid color-mix(in srgb, var(--so-warning-border) 55%, var(--so-panel));
+  border-radius: 8px;
+  color: var(--so-warning);
+  background: color-mix(in srgb, var(--so-warning-soft) 70%, var(--so-panel));
+}
+
+.product-catalog--candidates .catalog-data-note > svg {
+  flex: 0 0 18px;
+  block-size: 1lh;
+}
+
+.product-catalog--candidates :deep(.selection-product-list) {
+  border-radius: 8px;
+}
+
+@media (min-width: 1100px) {
+  .product-catalog--candidates :deep(table) {
+    min-width: 960px;
+  }
+  .product-catalog--candidates :deep(.product-column) {
+    width: 24%;
+  }
+  .product-catalog--candidates :deep(th) {
+    height: 36px;
+    padding: 6px 8px;
+  }
+  .product-catalog--candidates :deep(td) {
+    padding: 10px 8px;
+  }
+  .product-catalog--candidates :deep(.selection-product-identity) {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 10px;
+  }
+  .product-catalog--candidates :deep(.selection-product-picture) {
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+  }
+}
+
 .filter-apply-action {
   border-color: var(--so-border);
   color: var(--so-text);

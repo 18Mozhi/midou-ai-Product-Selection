@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import { sanitizeCorrelationId } from "../ui/state-contract";
 import AppIcon from "./AppIcon.vue";
+import ResearchThumbnail from "./ResearchThumbnail.vue";
 import type { OpportunitySummary } from "./opportunity-workspace-types";
 
 const props = defineProps<{
@@ -125,10 +126,20 @@ onBeforeUnmount(() => {
     <ul v-else>
       <li v-for="item in items" :key="item.id">
         <RouterLink :to="{ path: `/opportunities/${item.id}`, query: { from: route.fullPath } }">
-          <AppIcon class="trend-related-icon" name="box" :size="20" />
+          <ResearchThumbnail
+            v-if="item.image_url"
+            class="trend-related-picture"
+            :src="item.image_url"
+            :alt="item.name"
+            aria-hidden="true"
+          />
+          <AppIcon v-else class="trend-related-icon" name="box" :size="20" />
           <span>
             <strong>{{ item.name }}</strong>
-            <small>{{ item.main_asin ? `ASIN ${item.main_asin}` : "主品待确认" }} · {{ item.market }}</small>
+            <small
+              >{{ item.main_asin ? `ASIN ${item.main_asin}` : "主品待确认" }} ·
+              {{ item.market }}</small
+            >
           </span>
         </RouterLink>
         <dl>
@@ -233,8 +244,24 @@ onBeforeUnmount(() => {
   color: var(--so-primary);
   text-decoration: underline;
 }
+.trend-related-products ul:has(.trend-related-picture) a {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+}
+.trend-related-products .trend-related-picture {
+  inline-size: 38px;
+  block-size: 38px;
+}
 .trend-related-icon {
   display: none;
+}
+.trend-related-products ul:has(.trend-related-picture) .trend-related-icon {
+  display: block;
+  justify-self: center;
+  margin-block-start: 4px;
+  color: var(--so-text-muted);
 }
 .trend-related-products small {
   display: block;
@@ -245,6 +272,10 @@ onBeforeUnmount(() => {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin: 0;
+}
+.trend-related-products dl > div {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
 }
 .trend-related-products dd {
   margin: 6px 0 0;
@@ -271,6 +302,9 @@ onBeforeUnmount(() => {
     align-items: start;
     gap: 20px;
     line-height: 1.45;
+  }
+  .trend-related-products ul:has(.trend-related-picture) a {
+    column-gap: 6px;
   }
   .trend-related-icon {
     display: block;

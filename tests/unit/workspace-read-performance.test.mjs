@@ -15,6 +15,10 @@ async function repository(name) {
       /(from |import )(["'])(\.\/[^"']+)\2/g,
       (_, prefix, quote, specifier) =>
         prefix + quote + pathToFileURL(resolve("apps/api/dist", specifier)).href + quote,
+    )
+    .replace(
+      /(from |import )(["'])(@scoutops\/[^"']+)\2/g,
+      (_, prefix, quote, specifier) => prefix + quote + import.meta.resolve(specifier) + quote,
     );
   return import("data:text/javascript;base64," + Buffer.from(code).toString("base64"));
 }

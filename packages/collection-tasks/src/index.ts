@@ -19,6 +19,7 @@ export const COLLECTION_TASK_STATUSES = [
   "dead_letter",
   "manually_replayed",
   "automatically_replayed",
+  "cancelled",
 ] as const;
 export type CollectionTaskStatus = (typeof COLLECTION_TASK_STATUSES)[number];
 export type CoverageStatus = "complete" | "partial" | "insufficient";
@@ -69,8 +70,8 @@ export class CollectionTaskError extends Error {
 }
 const transitions: Record<CollectionTaskStatus, readonly CollectionTaskStatus[]> = {
   draft: ["scheduled"],
-  scheduled: ["queued"],
-  queued: ["leased"],
+  scheduled: ["queued", "cancelled"],
+  queued: ["leased", "cancelled"],
   leased: ["running", "retry_scheduled", "dead_letter"],
   running: [
     "parsing",
@@ -115,6 +116,7 @@ const transitions: Record<CollectionTaskStatus, readonly CollectionTaskStatus[]>
   dead_letter: ["manually_replayed"],
   manually_replayed: [],
   automatically_replayed: [],
+  cancelled: [],
 };
 export function assertTaskTransition(from: CollectionTaskStatus, to: CollectionTaskStatus) {
   if (!transitions[from]?.includes(to))
@@ -224,5 +226,6 @@ export function isTerminalTaskStatus(status: CollectionTaskStatus) {
     "dead_letter",
     "manually_replayed",
     "automatically_replayed",
+    "cancelled",
   ].includes(status);
 }

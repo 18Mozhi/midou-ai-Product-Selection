@@ -955,7 +955,7 @@
         "status": "implemented",
         "statusDetail": "provider_registry_live_mysql_api_worker_crawler_truthful_admission_search_filter_sort_pagination_create_version_idempotency_concurrency_permission_offline_refresh_and_responsive_verification_completed"
       },
-      "navigation": { "label": "来源设置", "icon": "settings", "group": "采集与数据" }
+      "navigation": { "label": "来源设置", "icon": "layers", "group": "采集与数据" }
     },
     {
       "path": "/platform-admin/providers/adapters",
@@ -1077,7 +1077,7 @@
         "status": "verified",
         "statusDetail": "M06-03_module_verified"
       },
-      "navigation": { "label": "采集管理", "icon": "automation", "group": "采集与数据" }
+      "navigation": { "label": "采集管理", "icon": "settings-gear", "group": "采集与数据" }
     },
     {
       "path": "/platform-admin/collection/browser-runtime",
@@ -1244,7 +1244,7 @@
         "status": "verified",
         "statusDetail": "M06-05_permission_pagination_filter_sort_and_worker_feedback_verified"
       },
-      "navigation": { "label": "开放平台", "icon": "key", "group": "治理与安全" }
+      "navigation": { "label": "开放平台", "icon": "code-xml", "group": "治理与安全" }
     },
     {
       "path": "/platform-admin/status",
@@ -1265,7 +1265,7 @@
         "status": "verified",
         "statusDetail": "M06-02_status_live_mysql_api_worker_crawler_permission_failure_timeout_empty_refresh_and_responsive_verification_completed"
       },
-      "navigation": { "label": "系统运维", "icon": "target", "group": "高级运维" }
+      "navigation": { "label": "系统运维", "icon": "box", "group": "高级运维" }
     },
     {
       "path": "/platform-admin/logs",

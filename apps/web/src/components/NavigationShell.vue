@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
-import { applyCachedTheme, applyShellDensity, themes } from "../design/theme";
+import { applyCachedTheme, applyShellDensity, themes, type ThemeId } from "../design/theme";
 import { getLastMemberRoute, rememberMemberRoute } from "../navigation-memory";
 import {
   authorizedNavigation,
@@ -27,6 +27,9 @@ import "../styles/platform-operations.css";
 import AppIcon from "./AppIcon.vue";
 import SessionLogout from "./SessionLogout.vue";
 import NavigationAccessPanel from "./NavigationAccessPanel.vue";
+import NavigationMobileBar from "./NavigationMobileBar.vue";
+import NavigationShellGate from "./NavigationShellGate.vue";
+import NavigationWorkspaceSidebar from "./NavigationWorkspaceSidebar.vue";
 import { DiscoveryOverlay, surfaceComponents } from "./navigation-surface-registry";
 import "../member-workspace-polish.css";
 
@@ -56,6 +59,19 @@ function openNavigationHelp() {
   navigationHelp.value.querySelector("summary")?.focus();
 }
 const accountMenu = ref<HTMLDetailsElement | null>(null);
+const nativeScrollbar = ref(false);
+function hasClassicScrollbar() {
+  const probe = document.createElement("div");
+  probe.setAttribute("aria-hidden", "true");
+  probe.style.cssText =
+    "position:fixed;inline-size:64px;block-size:64px;overflow:scroll;visibility:hidden";
+  document.body.append(probe);
+  try {
+    return probe.offsetWidth > probe.clientWidth;
+  } finally {
+    probe.remove();
+  }
+}
 function closeAccountMenu(restoreFocus = false) {
   if (!accountMenu.value) return;
   accountMenu.value.open = false;
@@ -73,8 +89,31 @@ const accountRehearsal = computed(() => guard.value?.guard_reason === "navigatio
 const retiredScope = computed(() => accountRehearsal.value || guard.value?.account_rehearsal === true);
 const { themeOpen, activeTheme, themeNotice, loadThemePreference, chooseTheme } =
   useNavigationShellTheme(request);
-const { discoveryMode, openDiscovery, closeDiscovery, handleDiscoveryShortcut } =
-  useNavigationDiscovery(() => props.shell, () => state.value === "ready" && !accountRehearsal.value);
+const themeTrigger = ref<HTMLButtonElement | null>(null);
+const themePanel = ref<HTMLElement | null>(null);
+function closeThemePanel() {
+  themeOpen.value = false;
+  themeTrigger.value?.focus();
+}
+async function toggleThemePanel() {
+  if (themeOpen.value) {
+    closeThemePanel();
+    return;
+  }
+  themeOpen.value = true;
+  await nextTick();
+  themePanel.value?.querySelector("button")?.focus();
+}
+function selectTheme(theme: ThemeId) {
+  themeTrigger.value?.focus();
+  return chooseTheme(theme, props.shell !== "platform_admin" || retiredScope.value);
+}
+const discovery = useNavigationDiscovery(
+  () => props.shell,
+  () => state.value === "ready",
+  () => state.value === "ready" && !retiredScope.value,
+);
+const { discoveryMode, openDiscovery, closeDiscovery, handleDiscoveryShortcut } = discovery;
 const {
   navigationDialog,
   compact: compactNavigation,
@@ -208,36 +247,8 @@ const selectedSurfaceProps = computed<Record<string, unknown>>(() =>
     accountRehearsal: retiredScope.value,
   }),
 );
-const pageFolio = computed(() =>
-  String(
-    Math.max(
-      0,
-      items.value.findIndex((item) => item.path === activeItem.value?.path),
-    ) + 1,
-  ).padStart(2, "0"),
-);
 const contextName = (value: string | null | undefined, fallback: string) =>
   value?.trim() || fallback;
-const workspaceChipLabel = computed(() =>
-  props.shell === "platform_admin" &&
-  (!guard.value?.organization_name?.trim() || !guard.value?.workspace_name?.trim())
-    ? "选择组织与工作区"
-    : `${contextName(guard.value?.workspace_name, "当前工作区")} · ${contextName(guard.value?.organization_name, "当前组织")}`,
-);
-const stateCopy = computed(
-  () =>
-    (
-      ({
-        expired: ["登录已失效", "重新登录后返回当前页面。"],
-        forbidden: ["无权进入此工作台", "服务端已拒绝该壳层；返回有权访问的工作台。"],
-        context_required: ["尚未选择组织与工作区", "完成租户选择后才能进入成员或组织后台。"],
-        rate_limited: ["请求过于频繁", "稍后重试；不要连续刷新。"],
-        blocked: ["导航服务暂不可用", "检查网络后重试；运维可在宝塔查看 Node API。"],
-        loading: ["正在核验工作台权限", "菜单只会在服务端确认后显示。"],
-        ready: ["", ""],
-      }) as Record<State, [string, string]>
-    )[state.value],
-);
 let navigationSequence = 0;
 let navigationRead: AbortController | null = null;
 async function load() {
@@ -291,6 +302,7 @@ async function load() {
   }
 }
 onMounted(() => {
+  nativeScrollbar.value = hasClassicScrollbar();
   void load();
   applyShellDensity(props.shell !== "member");
   applyCachedTheme();
@@ -301,6 +313,7 @@ watch(
   () => route.fullPath,
   (fullPath) => {
     closeAccountMenu();
+    themeOpen.value = false;
     if (navigationHelp.value) navigationHelp.value.open = false;
     closeDiscovery();
     menuOpen.value = false;
@@ -346,7 +359,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="role-shell role-shell--c" :data-shell="shell" :data-state="state">
+  <main
+    class="role-shell role-shell--c"
+    :data-shell="shell"
+    :data-state="state"
+    :data-native-scrollbar="nativeScrollbar || undefined"
+  >
     <header class="role-topbar">
       <RouterLink
         class="role-brand"
@@ -397,8 +415,20 @@ onUnmounted(() => {
         <span v-else>平台工作区</span>
       </div>
       <div class="role-top-actions">
+        <RouterLink
+          v-if="!retiredScope && shell === 'platform_admin' && routePath !== '/platform-admin' && allCapabilities.includes('platform:superadmin')"
+          class="role-quick-action"
+          to="/platform-admin/organizations/new"
+          aria-label="新建组织"
+        ><AppIcon name="plus" /> <span>新建组织</span></RouterLink>
+        <RouterLink
+          v-else-if="!retiredScope && shell === 'organization_admin' && routePath !== '/org-admin' && guard?.roles?.includes('organization_admin')"
+          class="role-quick-action"
+          to="/org-admin/members"
+          aria-label="邀请成员"
+        ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink>
         <button
-          v-if="!accountRehearsal && (shell === 'member' || state === 'ready')"
+          v-if="!retiredScope && (shell === 'member' || state === 'ready')"
           type="button"
           :aria-label="shell === 'member' ? '全局搜索' : '搜索后台功能'"
           data-navigation-search
@@ -419,17 +449,20 @@ onUnmounted(() => {
           <summary aria-label="导航帮助"><AppIcon name="help" :size="22" /></summary>
           <div class="midou-account-menu-panel midou-help-panel">
             <strong>导航帮助</strong>
-            <p v-if="shell === 'member'">按 Ctrl 或 ⌘ + K 搜索功能、商品和 ASIN。</p>
+            <p v-if="retiredScope">使用侧栏进入选品、情报和任务，在个人中心调整外观。</p>
+            <p v-else-if="shell === 'member'">按 Ctrl 或 ⌘ + K 搜索功能、商品和 ASIN。</p>
             <p v-else>按 Ctrl 或 ⌘ + K 搜索当前后台功能。</p>
-            <p>使用侧栏顶部切换工作台，在个人中心调整外观。</p>
+            <p v-if="!retiredScope">使用侧栏顶部切换工作台，在个人中心调整外观。</p>
           </div>
         </details>
         <div v-if="shell !== 'member'" class="role-theme-switcher">
           <button
+            ref="themeTrigger"
             type="button"
             aria-label="切换界面主题"
             :aria-expanded="themeOpen"
-            @click="themeOpen = !themeOpen"
+            :aria-controls="themeOpen ? 'role-theme-panel' : undefined"
+            @click="toggleThemePanel"
           >
             <AppIcon name="theme" /> <span>主题</span>
           </button>
@@ -480,92 +513,51 @@ onUnmounted(() => {
           </div>
         </details>
       </div>
-    </header>
-    <aside
-      v-if="state === 'ready'"
-      class="commerce-sidebar"
-      :aria-label="retiredScope ? '账号导航' : '工作区导航'"
-    >
-      <nav v-if="!accountRehearsal" class="midou-area-tabs" aria-label="工作台类型">
-        <RouterLink v-if="shell === 'member'" :to="retiredScope ? '/opportunities' : '/home'" aria-current="page">选品</RouterLink>
-        <RouterLink v-else :to="memberReturnPath()">选品</RouterLink>
-        <RouterLink
-          v-if="!retiredScope && (shell === 'organization_admin' || guard?.roles?.includes('organization_admin'))"
-          to="/org-admin"
-          :aria-current="shell === 'organization_admin' ? 'page' : undefined"
-          >组织</RouterLink
+      <div
+        v-if="themeOpen"
+        id="role-theme-panel"
+        ref="themePanel"
+        class="role-theme-menu"
+        role="group"
+        aria-label="界面主题"
+        @keydown.esc.stop.prevent="closeThemePanel"
+      >
+        <button
+          v-for="theme in themes"
+          :key="theme.id"
+          type="button"
+          :aria-pressed="activeTheme === theme.id"
+          @click="selectTheme(theme.id)"
         >
-        <span v-else-if="!retiredScope" aria-disabled="true">组织</span>
-        <RouterLink
-          v-if="shell === 'platform_admin' || guard?.platform_roles?.length"
-          to="/platform-admin"
-          :aria-current="shell === 'platform_admin' ? 'page' : undefined"
-          >平台</RouterLink
-        >
-        <span v-else aria-disabled="true">平台</span>
-      </nav>
-      <section v-for="group in menuGroups" :key="group.label">
-        <h2>{{ group.label }}</h2>
-        <RouterLink
-          v-for="item in group.items"
-          :key="item.path"
-          :to="item.path"
-          :aria-current="activeItem?.path === item.path ? 'page' : undefined"
-        >
-          <AppIcon :name="item.icon" :size="18" /><span>{{ item.label }}</span>
-        </RouterLink>
-      </section>
-      <section v-if="shell === 'member'" class="midou-member-utility">
-        <RouterLink
-          to="/notifications"
-          :aria-current="routePath === '/notifications' ? 'page' : undefined"
-          ><AppIcon name="bell" :size="18" />通知中心</RouterLink
-        >
-        <RouterLink to="/me" :aria-current="account ? 'page' : undefined"
-          ><AppIcon name="person" :size="18" />个人中心</RouterLink
-        >
-      </section>
-      <footer :class="{ 'midou-organization-footer': shell === 'organization_admin' }">
-        <RouterLink
-          v-if="guard && !retiredScope && (shell === 'member' || shell === 'organization_admin')"
-          to="/select-context"
-          class="commerce-workspace-switch"
-          aria-label="侧栏切换工作区"
-        >
-          <AppIcon name="layers" :size="18" />
-          <span :title="workspaceChipLabel">{{ workspaceChipLabel }}</span>
-          <AppIcon name="chevron" :size="14" />
-        </RouterLink>
-        <RouterLink
-          v-if="shell === 'platform_admin' && !retiredScope"
-          :to="contextSwitchTarget"
-          class="commerce-workspace-switch midou-platform-workspace-switch"
-          aria-label="选择组织与工作区后进入用户工作台"
-        >
-          <AppIcon name="layers" :size="18" />
-          <span :title="workspaceChipLabel">{{ workspaceChipLabel }}</span>
-          <AppIcon name="chevron" :size="14" />
-        </RouterLink>
-        <RouterLink v-slot="{ href, navigate }" to="/me?section=appearance" custom>
-          <a :href="href" class="midou-sidebar-settings" @click="navigate">
-            <AppIcon name="settings" :size="18" />设置
-          </a>
-        </RouterLink>
-        <button type="button" class="midou-sidebar-help" @click="openNavigationHelp">
-          <AppIcon name="help" :size="18" />帮助
+          <i :data-theme-dot="theme.id"></i
+          ><span
+            ><b>{{ theme.name }}</b
+            ><small
+              >{{ activeTheme === theme.id ? "当前主题 · " : "" }}{{ theme.caption }}</small
+            ></span
+          >
         </button>
-        <RouterLink
-          v-if="shell === 'organization_admin'"
-          :to="memberReturnPath()"
-          class="midou-organization-return"
-          aria-label="返回成员工作台"
-          ><span aria-hidden="true">←</span>返回选品工作台</RouterLink
-        >
-      </footer>
-    </aside>
-    <div v-else-if="state === 'loading'" class="commerce-sidebar midou-sidebar-loading" aria-hidden="true">
-      <span></span><span></span><span></span><span></span>
-    </div>
+        <RouterLink to="/me?section=appearance" @click="themeOpen = false">更多外观设置</RouterLink>
+      </div>
+    </header>
+    <NavigationWorkspaceSidebar
+      v-if="state === 'ready'"
+      :shell="shell"
+      :guard="guard"
+      :menu-groups="menuGroups"
+      :active-path="activeItem?.path"
+      :route-path="routePath"
+      :account="account"
+      :retired-scope="retiredScope"
+      @open-help="openNavigationHelp"
+      :context-switch-target="contextSwitchTarget"
+      :member-return-path="memberReturnPath"
+    />
+    <div
+      v-else-if="state === 'loading'"
+      class="commerce-sidebar midou-pending-rail"
+      aria-hidden="true"
+    ></div>
     <dialog
       ref="navigationDialog"
       class="role-navigation-frame"
@@ -629,7 +621,7 @@ onUnmounted(() => {
           <RouterLink v-if="compactNavigation" to="/me" aria-label="个人中心"
             ><AppIcon name="person" />个人中心</RouterLink
           >
-          <div v-if="!accountRehearsal && shell === 'member' && compactNavigation" class="role-discovery-actions">
+          <div v-if="!retiredScope && shell === 'member' && compactNavigation" class="role-discovery-actions">
             <button type="button" @click="openDiscovery('search')">
               <AppIcon name="search" /><span>全局搜索</span>
             </button>
@@ -671,25 +663,15 @@ onUnmounted(() => {
           ><b aria-hidden="true" v-if="index < breadcrumbs.length - 1"></b>
         </template>
       </nav>
-      <section v-if="state !== 'ready'" class="role-gate-state" aria-live="polite">
-        <span class="role-state-mark" aria-hidden="true">{{
-          state === "loading" ? "···" : state === "forbidden" ? "×" : "!"
-        }}</span>
-        <p>访问保护</p>
-        <h1>{{ stateCopy[0] }}</h1>
-        <p>{{ stateCopy[1] }}</p>
-        <small v-if="actionHint">{{ actionHint }}</small>
-        <details v-if="requestId || traceId" class="role-gate-technical">
-          <summary>故障详情</summary>
-          <code v-if="requestId">关联编号：{{ requestId }}</code
-          ><code v-if="traceId && traceId !== requestId">链路编号：{{ traceId }}</code>
-        </details>
-        <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
-        ><RouterLink v-else-if="!retiredScope && state === 'context_required'" to="/select-context"
-          >选择组织与工作区</RouterLink
-        ><RouterLink v-else-if="state === 'forbidden'" :to="retiredScope ? '/opportunities' : '/home'">返回成员工作台</RouterLink
-        ><button v-else-if="state !== 'loading'" type="button" @click="load">重新检查</button>
-      </section>
+      <NavigationShellGate
+        v-if="state !== 'ready'"
+        :state="state"
+        :retired-scope="retiredScope"
+        :action-hint="actionHint"
+        :request-id="requestId"
+        :trace-id="traceId"
+        @retry="load"
+      />
       <template v-else-if="routeAllowed">
         <nav
           v-if="isPlatformOperationsRoute"
@@ -704,7 +686,11 @@ onUnmounted(() => {
             >{{ item.label }}</RouterLink
           >
         </nav>
-        <slot v-if="account" />
+        <slot
+          v-if="account"
+          :organization-name="guard?.organization_name"
+          :workspace-name="guard?.workspace_name"
+        />
         <KeepAlive :max="12">
           <component
             :is="selectedSurfaceComponent"
@@ -721,52 +707,25 @@ onUnmounted(() => {
       </template>
       <NavigationAccessPanel v-else state="forbidden" :home-path="items[0]?.path || '/home'" />
     </section>
-    <nav v-if="state === 'ready'" class="role-mobile-nav" aria-label="移动快捷导航">
-      <RouterLink
-        v-for="item in primaryItems"
-        :key="item.path"
-        :to="item.path"
-        :aria-current="activeItem?.path === item.path ? 'page' : undefined"
-        ><i><AppIcon :name="item.icon" /></i><span>{{ item.label }}</span></RouterLink
-      ><button
-        type="button"
-        :aria-current="moreActive ? 'page' : undefined"
-        aria-controls="role-navigation"
-        :aria-expanded="menuOpen"
-        @click="menuOpen = true"
-      >
-        <i><AppIcon name="menu" /></i><span>更多</span>
-      </button>
-    </nav>
-    <div v-if="themeOpen" class="role-theme-menu">
-      <button
-        v-for="theme in themes"
-        :key="theme.id"
-        type="button"
-        :aria-pressed="activeTheme === theme.id"
-        @click="chooseTheme(theme.id, shell !== 'platform_admin' || accountRehearsal)"
-      >
-        <i :data-theme-dot="theme.id"></i
-        ><span
-          ><b>{{ theme.name }}</b
-          ><small
-            >{{ activeTheme === theme.id ? "当前主题 · " : "" }}{{ theme.caption }}</small
-          ></span
-        >
-      </button>
-      <RouterLink to="/me?section=appearance">更多外观设置</RouterLink>
-    </div>
+    <NavigationMobileBar
+      v-if="state === 'ready'"
+      :primary-items="primaryItems"
+      :active-path="activeItem?.path"
+      :more-active="moreActive"
+      :menu-open="menuOpen"
+      @open-menu="menuOpen = true"
+    />
     <p v-if="themeNotice" class="role-theme-notice" role="status">
       {{ themeNotice }}
     </p>
     <DiscoveryOverlay
-      v-if="!accountRehearsal"
+      v-if="!retiredScope && discovery.discoveryActivated.value"
       :open="Boolean(discoveryMode)"
       :shell="shell"
       :api-base-url="apiBaseUrl"
       :organization-name="guard?.organization_name ?? null"
       :workspace-name="guard?.workspace_name ?? null"
-      :navigation-items="items"
+      :navigation-items="state === 'ready' ? items : []"
       @close="closeDiscovery"
     />
   </main>
@@ -774,3 +733,4 @@ onUnmounted(() => {
 
 <style src="../signal-ledger-workflows.css"></style>
 <style src="../navigation-shell-c.css"></style>
+<style src="../midou-workspace.css"></style>

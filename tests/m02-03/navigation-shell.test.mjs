@@ -166,17 +166,19 @@ test("M02-03 no-organization accounts land in account settings while members sti
 });
 
 test("M02-03 shell presents business labels grouped search and collapsed failure identifiers", async () => {
-  const [shell, permissions, catalogRaw, generatedCatalogRaw] = await Promise.all([
+  const [shell, permissions, catalogRaw, generatedCatalogRaw, accessGate] = await Promise.all([
     read("apps/web/src/components/NavigationShell.vue"),
     read("apps/web/src/navigation-shell-permissions.ts"),
     read("config/route-catalog.json"),
     read("apps/web/src/route-catalog.generated.json"),
+    read("apps/web/src/components/NavigationShellGate.vue"),
   ]);
   const catalog = JSON.parse(catalogRaw);
   const generatedCatalog = JSON.parse(generatedCatalogRaw);
   assert.match(`${shell}\n${permissions}`, /普通成员[\s\S]*平台超级管理员/);
   assert.match(shell, /搜索导航菜单[\s\S]*没有匹配的菜单或分组/);
-  assert.match(shell, /role-gate-technical[\s\S]*故障详情[\s\S]*关联编号/);
+  assert.match(shell, /<NavigationShellGate\b[^>]*:request-id="requestId"/);
+  assert.match(accessGate, /role-gate-technical[\s\S]*故障详情[\s\S]*关联编号/);
   const navigationGroups = new Set(
     catalog.routes.flatMap((route) => (route.navigation?.group ? [route.navigation.group] : [])),
   );
@@ -204,7 +206,13 @@ test("M02-03 route shell lazily imports only registered surfaces and page-owned 
   assert.match(router, /if \(to\.path === "\/settings\/theme"\)\s*return \{ path: "\/me", query: \{ section: "appearance" \}, replace: true \}/);
   const routeSurfaces = new Set(
     JSON.parse(catalogRaw)
-      .routes.filter((route) => route.shell && route.acceptance !== "internal" && !route.redirect && route.path !== "/settings/theme")
+      .routes.filter(
+        (route) =>
+          route.shell &&
+          route.acceptance !== "internal" &&
+          !route.redirect &&
+          route.path !== "/settings/theme",
+      )
       .map((route) => route.surface),
   );
   const surfaceBindings = new Set(
@@ -377,12 +385,14 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
     styles,
     /role-mobile-nav\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/,
   );
-  assert.match(component, /v-for="item in primaryItems"/);
-  assert.match(component, /aria-controls="role-navigation"[\s\S]*?<span>更多<\/span>/);
-  assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>新建组织<\/span>/);
-  assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>邀请成员<\/span>/);
-  assert.doesNotMatch(component, /class="role-mobile-nav"[\s\S]*?<span>创建选品<\/span>/);
-  assert.match(component, /aria-current/);
+  const mobile = await read("apps/web/src/components/NavigationMobileBar.vue");
+  assert.match(component, /<NavigationMobileBar\b/);
+  assert.match(mobile, /v-for="item in primaryItems"/);
+  assert.match(mobile, /aria-controls="role-navigation"[\s\S]*?<span>更多<\/span>/);
+  assert.doesNotMatch(mobile, /class="role-mobile-nav"[\s\S]*?<span>新建组织<\/span>/);
+  assert.doesNotMatch(mobile, /class="role-mobile-nav"[\s\S]*?<span>邀请成员<\/span>/);
+  assert.doesNotMatch(mobile, /class="role-mobile-nav"[\s\S]*?<span>创建选品<\/span>/);
+  assert.match(mobile, /aria-current/);
   assert.match(componentEvidence, /navigationItemsFor/);
   assert.doesNotMatch(componentEvidence, /const\s+(memberMenu|orgMenu|platformMenu)/);
   assert.match(routeCatalog, /generatedCatalog/);
@@ -432,12 +442,8 @@ test("M02-03 admin shells keep their quick actions while member manual creation 
     read("apps/web/src/components/PlatformDashboard.vue"),
     read("apps/web/src/components/OrganizationAdminCenter.vue"),
   ]);
-  const platformCreatePattern = [
-    `v-if="\\s*shell === 'platform_admin' &&\\s*routePath !== '/platform-admin' &&\\s*allCapabilities\\.includes\\('platform:superadmin'\\)\\s*"`,
-    `\\s+class="role-quick-action"\\s+to="/platform-admin/organizations/new"[\\s\\S]*?新建组织`,
-  ].join("");
-  assert.match(component, new RegExp(platformCreatePattern));
-  assert.match(component, /v-else-if="shell === 'organization_admin' && routePath !== '\/org-admin'"\s+class="role-quick-action"\s+v-show="guard\?\.roles\?\.includes\('organization_admin'\)"\s+to="\/org-admin\/members"/);
+  assert.match(component, /v-if="!retiredScope && shell === 'platform_admin'[^"]*"\s+class="role-quick-action"\s+to="\/platform-admin\/organizations\/new"/);
+  assert.match(component, /v-else-if="!retiredScope && shell === 'organization_admin'[^"]*"\s+class="role-quick-action"\s+to="\/org-admin\/members"/);
   assert.match(component, /<span>邀请成员<\/span>/);
   assert.match(platform, /v-if="capabilities\?\.includes\('platform:superadmin'\)"\s+[^>]*to="\/platform-admin\/organizations\/new"/);
   assert.match(organization, /v-if="view === 'summary' && roles\?\.includes\('organization_admin'\)"\s+class="org-overview-invite"\s+to="\/org-admin\/members"/);
@@ -455,8 +461,24 @@ test("M02-03 context selection stays outside the cached shell boundary", async (
     read("apps/web/src/components/NavigationShell.vue"),
   ]);
   assert.match(app, /TenancyChooser v-else-if="selectedView === 'tenancy'"/);
-  assert.match(app, /<NavigationShell\s+v-else-if="navigationShell \|\| selectedView === 'account'"/);
+  assert.match(
+    app,
+    /NavigationShell\s+v-else-if="navigationShell \|\| selectedView === 'account'"/,
+  );
   assert.match(shell, /<KeepAlive :max="12">/);
   assert.match(chooser, /<RouterLink\b[^>]*:to="safeReturnTo"/);
   assert.doesNotMatch(app, /<KeepAlive[\s\S]*TenancyChooser/);
+});
+
+test("retired navigation no longer links to the removed scope selector", async () => {
+  const [shell, sidebar, gate] = await Promise.all([
+    read("apps/web/src/components/NavigationShell.vue"),
+    read("apps/web/src/components/NavigationWorkspaceSidebar.vue"),
+    read("apps/web/src/components/NavigationShellGate.vue"),
+  ]);
+  assert.match(shell, /:retired-scope="retiredScope"/);
+  assert.match(shell, /!retiredScope && discovery.discoveryActivated.value/);
+  assert.match(sidebar, /v-if="!retiredScope && guard[^"]*"\s+to="\/select-context"/);
+  assert.match(gate, /v-else-if="!retiredScope && state === 'context_required'" to="\/select-context"/);
+  assert.match(gate, /:to="retiredScope \? '\/opportunities' : '\/home'"/);
 });

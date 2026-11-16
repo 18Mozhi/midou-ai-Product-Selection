@@ -304,7 +304,13 @@ useOpportunityWorkspaceLifecycle({
 });
 </script>
 <template>
-  <section class="opportunity-workspace opportunity-workspace--review">
+  <section
+    class="opportunity-workspace opportunity-workspace--review"
+    :data-catalogue-view="opportunityId ? undefined : selectionView"
+  >
+    <p v-if="!opportunityId && !canDecide" class="catalogue-readonly" role="note">
+      当前为只读权限。
+    </p>
     <nav v-if="opportunityId" class="opportunity-detail-return" aria-label="选品详情返回路径">
       <RouterLink :to="returnPath">← 返回来源列表</RouterLink>
     </nav>

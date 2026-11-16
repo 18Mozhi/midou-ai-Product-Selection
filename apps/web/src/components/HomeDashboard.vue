@@ -210,15 +210,15 @@ onBeforeUnmount(deactivate);
                   :disabled="refreshing"
                   @click="load(true)"
                 >
-                  <AppIcon name="refresh" :size="17" />刷新
+                  <AppIcon name="refresh" :size="18" />刷新
                 </button>
               </div>
-              <RouterLink class="home-secondary-action so-action-secondary" to="/trends"
-                ><AppIcon name="trend" />市场情报</RouterLink
-              >
-              <RouterLink class="home-primary-action so-action-primary" to="/opportunities"
-                ><AppIcon name="box" />查看选品库</RouterLink
-              >
+              <RouterLink class="home-secondary-action so-action-secondary" to="/trends">
+                <AppIcon name="chart" :size="18" />市场情报
+              </RouterLink>
+              <RouterLink class="home-primary-action so-action-primary" to="/opportunities">
+                <AppIcon name="box" :size="18" />查看选品库
+              </RouterLink>
             </nav>
           </header>
           <div class="home-overview-panel">
@@ -247,11 +247,11 @@ onBeforeUnmount(deactivate);
                     ></progress>
                   </div>
                   <div>
-                    <dt><AppIcon name="asin-tag" />新增主品 ASIN</dt>
+                    <dt><AppIcon name="selection-tag" />新增主品 ASIN</dt>
                     <dd>{{ selection.daily_production.discovered_count }}</dd>
                   </div>
                   <div>
-                    <dt><AppIcon name="recommendation-award" />新增合格推荐</dt>
+                    <dt><AppIcon name="selection-award" />新增合格推荐</dt>
                     <dd>{{ selection.daily_production.qualified_count }}</dd>
                   </div>
                 </dl>

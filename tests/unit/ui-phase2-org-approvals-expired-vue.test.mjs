@@ -56,9 +56,13 @@ test("expired preview preserves runtime, permission branch and existing login in
   assert.match(approvalsExpiredReplacement, /view === 'approvals' && state === 'expired'/);
   assert.doesNotMatch(approvalsExpiredReplacement, /!data|v-html|RouterLink|href=/);
   assert.ok(
-    read("apps/web/src/components/NavigationShell.vue").includes(
+    read("apps/web/src/components/NavigationShellGate.vue").includes(
       'expired: ["登录已失效", "重新登录后返回当前页面。"]',
     ),
+  );
+  assert.match(
+    read("apps/web/src/components/NavigationShell.vue"),
+    /<NavigationShellGate\s+v-if="state !== 'ready'"\s+:state="state"/,
   );
   assert.match(
     approvalsExpiredReplacement,

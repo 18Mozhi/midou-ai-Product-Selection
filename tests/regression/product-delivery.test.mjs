@@ -15,7 +15,7 @@ test("production root resolves the authenticated role landing instead of the fou
     read("apps/web/src/route-catalog.ts"),
   ]);
 
-  assert.match(html, /<title>智能选品<\/title>/);
+  assert.match(html, /<title>米兜智能选品<\/title>/);
   assert.doesNotMatch(html, /ScoutOps|FOUNDATION|M00-01/);
   assert.match(app, /<LandingRedirect\s+v-if="selectedView === 'landing'"/);
   assert.doesNotMatch(app, /FOUNDATION\s*\/\s*M00-01/);

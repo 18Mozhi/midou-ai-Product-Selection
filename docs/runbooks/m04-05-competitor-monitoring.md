@@ -6,6 +6,8 @@
 2. 在宝塔 Node Worker 环境配置 `COMPETITOR_MONITOR_POLL_MS` 与 `COMPETITOR_MONITOR_LEASE_SECONDS`，随后重启 Node API 和 Node Worker；Vue 静态站点重新构建发布。
 3. 运行 `npm run verify:module -- M04-05`，确认 MySQL 5.7、组织隔离、幂等、阈值告警、重试和页面视觉门均通过。
 
+正式探针使用 [M07-01 的隔离验收配置](m07-01-release-matrix.md)。探针仅对本轮组织的合成 outbox 使用与 Worker 一致的驱动时间参数，避免宝塔与隔离 MySQL 时区差异；生产告警阈值、时间规则和任务状态不变。
+
 核心工作台增强发布还必须按顺序应用 `0044a_competitor_soft_delete.up.sql`、`0044d_nullable_competitor_metrics.up.sql`、`0044e_core_collection_projection.up.sql`、`0044f_enable_amazon_public_crawler.up.sql`。这些迁移由 `scripts/deploy-baota.py` 在宝塔重启前执行。发布后必须在宝塔重启 Node API 与 Node Worker；公开页面适配器和投影 Worker 都随 Node Worker 加载，不创建新服务。
 
 ## 诊断与调节
@@ -26,11 +28,9 @@
 
 先暂停写入并导出竞品身份、不可变快照、规则、变化、告警、事件和 outbox，再停止宝塔 Node Worker。应用 down 迁移会删除本模块全部表和 `competitor:manage` 授权，属于破坏性回滚；确认导出可恢复后才执行。回退代码与静态资源，最后在宝塔重启 Node API/Worker。P05 已消费的外部通知或任务不能通过本模块迁移自动撤回，应按其模块 Runbook 处理。
 
-
 ## 2026-10-17 公开评价读取
 
 选品详情通过可选 `opportunity_id` UUID 限定竞品读取，组织/工作区仍取会话；普通列表不返回评价正文，限定列表及单品详情可返回最多 10 条公开节选。版本、缺失值、匿名单页验证与宝塔 Node 重启要求见 `docs/amazon-public-review-samples.md`。本轮未部署，不代表持续采集通过。
-
 
 ## 2026-10-17 成员独立监控页面退役
 
