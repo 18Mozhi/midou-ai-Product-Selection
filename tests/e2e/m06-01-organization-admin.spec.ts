@@ -2513,7 +2513,9 @@ test("organization sidebar groups context and utility links without altering mob
   expect(settingsBox!.y + settingsBox!.height).toBeLessThanOrEqual(backBox!.y);
 });
 
-test("wide governance metrics align labels, values and notes beside the icon", async ({ page }, testInfo) => {
+test("wide governance metrics align labels, values and notes beside the icon", async ({
+  page,
+}, testInfo) => {
   await page.setViewportSize({ width: 1672, height: 941 });
   await setup(page);
   await page.goto("/org-admin");
@@ -2523,7 +2525,9 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   expect((await navigation.boundingBox())!.width).toBeCloseTo(254, 0);
   expect((await first.boundingBox())!.y).toBeCloseTo(187, 0);
   expect((await last.boundingBox())!.y).toBeLessThan(700);
-  await expect(navigation.getByRole("link", { name: "返回成员工作台" })).toBeInViewport({ ratio: 1 });
+  await expect(navigation.getByRole("link", { name: "返回成员工作台" })).toBeInViewport({
+    ratio: 1,
+  });
   const actions = page.locator(".org-overview-actions");
   const refresh = actions.getByRole("button", { name: "刷新数据", exact: true });
   const invite = actions.getByRole("link", { name: "邀请成员", exact: true });
@@ -2534,7 +2538,9 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   expect(inviteBox!.width).toBe(125);
   expect(Math.abs(inviteBox!.x + inviteBox!.width - 1645)).toBeLessThanOrEqual(2);
   expect(inviteBox!.x - refreshBox!.x - refreshBox!.width).toBe(20);
-  expect(Math.abs(inviteBox!.y + inviteBox!.height / 2 - refreshBox!.y - refreshBox!.height / 2)).toBeLessThanOrEqual(1);
+  expect(
+    Math.abs(inviteBox!.y + inviteBox!.height / 2 - refreshBox!.y - refreshBox!.height / 2),
+  ).toBeLessThanOrEqual(1);
   const editor = page.locator(".organization-profile-editor");
   const nameField = editor.getByLabel("名称", { exact: true });
   const timezoneField = editor.getByLabel("时区", { exact: true });
@@ -2550,7 +2556,10 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   const logoControls = editor.locator(".organization-logo-controls");
   const logoPreview = logoControls.getByRole("button", { name: "预览", exact: true });
   await expect(logoPreview).toHaveCSS("min-height", "36px");
-  const [logoRow, previewBox] = await Promise.all([logoControls.boundingBox(), logoPreview.boundingBox()]);
+  const [logoRow, previewBox] = await Promise.all([
+    logoControls.boundingBox(),
+    logoPreview.boundingBox(),
+  ]);
   expect(logoRow!.width).toBe(758);
   expect(previewBox!.width).toBe(76);
   expect(Math.abs(previewBox!.x - 995)).toBeLessThanOrEqual(3);
@@ -2569,10 +2578,12 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   );
   expect(statusBox!.x + statusBox!.width).toBeLessThan(identityBox!.x + identityBox!.width - 30);
   expect([markBox!.width, markBox!.height]).toEqual([58, 58]);
-  expect(Math.abs(statusBox!.y + statusBox!.height / 2 - markBox!.y - markBox!.height / 2)).toBeLessThanOrEqual(6);
-  const factIcons = await page.locator(".organization-profile-facts dt > svg").evaluateAll((nodes) =>
-    nodes.map((node) => node.getBoundingClientRect().x),
-  );
+  expect(
+    Math.abs(statusBox!.y + statusBox!.height / 2 - markBox!.y - markBox!.height / 2),
+  ).toBeLessThanOrEqual(6);
+  const factIcons = await page
+    .locator(".organization-profile-facts dt > svg")
+    .evaluateAll((nodes) => nodes.map((node) => node.getBoundingClientRect().x));
   for (const [index, x] of [785, 1093, 1365].entries())
     expect(Math.abs(factIcons[index] - x)).toBeLessThanOrEqual(8);
   const metrics = page.getByRole("region", { name: "组织运行摘要" });
@@ -2604,10 +2615,15 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   }
   const sidebar = page.getByRole("complementary", { name: "治理快捷入口与组织状态" });
   const memberShortcut = sidebar.getByRole("link", { name: /成员与邀请/ });
-  await expect(sidebar.locator(":scope > section").first()).toHaveCSS("padding-inline-start", "26px");
+  await expect(sidebar.locator(":scope > section").first()).toHaveCSS(
+    "padding-inline-start",
+    "26px",
+  );
   await expect(sidebar.locator(":scope > section").last()).toHaveCSS("padding-block-start", "10px");
   await expect(memberShortcut).toHaveCSS("column-gap", "22px");
-  expect(Math.abs((await memberShortcut.locator("b").boundingBox())!.x - 1285)).toBeLessThanOrEqual(4);
+  expect(Math.abs((await memberShortcut.locator("b").boundingBox())!.x - 1285)).toBeLessThanOrEqual(
+    4,
+  );
   await expect(sidebar.getByRole("link", { name: /审批模板/ }).locator("svg rect")).toHaveCount(1);
   const statusIcon = sidebar.getByRole("term").filter({ hasText: "组织使用状态" }).locator("svg");
   await expect(statusIcon.locator("circle")).toHaveCount(1);
@@ -2622,7 +2638,6 @@ test("wide governance metrics align labels, values and notes beside the icon", a
   expect(Math.abs(shortcuts.bottom - 729)).toBeLessThanOrEqual(3);
   expect(Math.abs(statusCard.top - 746)).toBeLessThanOrEqual(3);
   expect(Math.abs(statusCard.bottom - 926)).toBeLessThanOrEqual(5);
-  await page.screenshot({ path: testInfo.outputPath("organization-reference.png") });
 });
 
 test("organization profile aligns facts, editor and governance sidebar", async ({
@@ -2635,7 +2650,9 @@ test("organization profile aligns facts, editor and governance sidebar", async (
   const metrics = page.locator(".organization-profile-metrics");
   const editor = page.locator(".organization-profile-editor");
   const reason = editor.getByLabel("变更原因", { exact: true });
-  await expect(editor.locator("label .organization-required-mark[aria-hidden='true']")).toHaveCount(5);
+  await expect(editor.locator("label .organization-required-mark[aria-hidden='true']")).toHaveCount(
+    5,
+  );
   await expect(reason).toHaveAttribute("required", "");
   await expect(reason).toHaveAttribute("maxlength", "500");
   await expect(reason).toHaveAccessibleDescription("0 / 500");
@@ -2648,13 +2665,18 @@ test("organization profile aligns facts, editor and governance sidebar", async (
   let logoReads = 0;
   await page.route(logoUrl, (route) => {
     logoReads++;
-    return route.fulfill({ contentType: "image/svg+xml", body: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"/>' });
+    return route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"/>',
+    });
   });
   await logo.fill(logoUrl);
   const inputBounds = (await logo.boundingBox())!;
   const previewBounds = (await preview.boundingBox())!;
   expect(previewBounds.x).toBeGreaterThan(inputBounds.x + inputBounds.width);
-  expect(Math.abs(previewBounds.y + previewBounds.height / 2 - inputBounds.y - inputBounds.height / 2)).toBeLessThan(1);
+  expect(
+    Math.abs(previewBounds.y + previewBounds.height / 2 - inputBounds.y - inputBounds.height / 2),
+  ).toBeLessThan(1);
   await expect(editor.getByRole("img", { name: "组织 Logo 预览" })).toHaveCount(0);
   expect(logoReads).toBe(0);
   await preview.click();
@@ -2694,7 +2716,9 @@ test("organization profile aligns facts, editor and governance sidebar", async (
     .boundingBox())!;
   const status = page.locator(".midou-governance-status");
   await expect(status.locator("dt > svg[aria-hidden='true']")).toHaveCount(3);
-  await expect(status.locator(".midou-governance-status-badge[data-status='active']")).toHaveText("正常使用");
+  await expect(status.locator(".midou-governance-status-badge[data-status='active']")).toHaveText(
+    "正常使用",
+  );
   const width = page.viewportSize()!.width;
   if (width > 1000) {
     expect(side.x).toBeGreaterThanOrEqual(boxes[2]!.x + boxes[2]!.width);

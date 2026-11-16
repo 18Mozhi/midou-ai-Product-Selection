@@ -770,16 +770,46 @@ test("P26 preference failure announces and focuses its modal error without losin
   await expect(error.getByText("p26-preference-conflict")).toBeVisible();
 });
 
-test("notification cards distinguish task and competitor categories with decorative glyphs", async ({ page }, testInfo) => {
+test("notification cards distinguish task and competitor categories with decorative glyphs", async ({
+  page,
+}, testInfo) => {
   const wide = page.viewportSize()!.width >= 1101;
   if (wide) await page.setViewportSize({ width: 1717, height: 916 });
   await setup(page, ["task:read", "trend:read", "opportunity:read", "sourcing:read"]);
   const rows = [
-    { ...item, id: "00000000-0000-4000-8000-000000000984", category: "competitor", title: "竞品监控更新", body: "竞品监控状态已变化，请查看关联记录。", group_count: 1, read_at: null },
-    { ...item, category: "task", title: "任务状态更新", body: "任务状态已变化，请查看关联记录。", created_at: "2026-08-07T10:00:00Z", group_count: 1, read_at: null },
+    {
+      ...item,
+      id: "00000000-0000-4000-8000-000000000984",
+      category: "competitor",
+      title: "竞品监控更新",
+      body: "竞品监控状态已变化，请查看关联记录。",
+      group_count: 1,
+      read_at: null,
+    },
+    {
+      ...item,
+      category: "task",
+      title: "任务状态更新",
+      body: "任务状态已变化，请查看关联记录。",
+      created_at: "2026-08-07T10:00:00Z",
+      group_count: 1,
+      read_at: null,
+    },
   ];
   await page.route("**/api/v1/notifications/summary", (r) =>
-    r.fulfill({ json: env({ total: 2, unread: 2, task: 1, approval: 0, competitor: 1, system: 0, open: 2, in_progress: 0, closed: 0 }) }),
+    r.fulfill({
+      json: env({
+        total: 2,
+        unread: 2,
+        task: 1,
+        approval: 0,
+        competitor: 1,
+        system: 0,
+        open: 2,
+        in_progress: 0,
+        closed: 0,
+      }),
+    }),
   );
   await page.route("**/api/v1/notifications?*", (route) =>
     route.fulfill({ json: { ...env(rows), meta: { total: rows.length } } }),
@@ -806,17 +836,26 @@ test("notification cards distinguish task and competitor categories with decorat
     await expect(competitor).toHaveCSS("height", "30px");
     const records = page.locator(".notification-record");
     await expect(records).toHaveCount(2);
-    const [first, second] = await records.evaluateAll((nodes) => nodes.map((row) => {
-      const rect = row.getBoundingClientRect();
-      return { top: rect.top, bottom: rect.bottom, time: row.querySelector("em")!.getBoundingClientRect().x,
-        status: row.querySelector("b")!.getBoundingClientRect().x,
-        action: row.querySelector(".midou-notification-open")!.getBoundingClientRect().x };
-    }));
-    expect([first.time, first.status, first.action]).toEqual([second.time, second.status, second.action]);
+    const [first, second] = await records.evaluateAll((nodes) =>
+      nodes.map((row) => {
+        const rect = row.getBoundingClientRect();
+        return {
+          top: rect.top,
+          bottom: rect.bottom,
+          time: row.querySelector("em")!.getBoundingClientRect().x,
+          status: row.querySelector("b")!.getBoundingClientRect().x,
+          action: row.querySelector(".midou-notification-open")!.getBoundingClientRect().x,
+        };
+      }),
+    );
+    expect([first.time, first.status, first.action]).toEqual([
+      second.time,
+      second.status,
+      second.action,
+    ]);
     expect(Math.abs(first.time - 875)).toBeLessThanOrEqual(8);
     expect(Math.abs(first.status - 1050)).toBeLessThanOrEqual(8);
     expect(Math.abs(second.top - first.bottom - 11)).toBeLessThanOrEqual(3);
-    await page.screenshot({ path: testInfo.outputPath("notification-two-row-reference.png") });
   }
 });
 
@@ -847,13 +886,18 @@ test("midou reference notification layout keeps original workflow and preference
   const readBorder = await readAction.evaluate((button) => getComputedStyle(button).borderTopColor);
   await expect(viewAction).not.toHaveCSS("border-top-color", readBorder);
   if (wide) {
-    const [viewBox, readBox] = await Promise.all([viewAction.boundingBox(), readAction.boundingBox()]);
+    const [viewBox, readBox] = await Promise.all([
+      viewAction.boundingBox(),
+      readAction.boundingBox(),
+    ]);
     expect([viewBox!.width, readBox!.width]).toEqual([104, 104]);
     expect([viewBox!.height, readBox!.height]).toEqual([40, 40]);
     expect(Math.abs(viewBox!.y - readBox!.y)).toBeLessThanOrEqual(1);
     expect(Math.abs(readBox!.x - viewBox!.x - viewBox!.width - 14)).toBeLessThanOrEqual(2);
     const header = page.locator(".notification-center > header");
-    const preferenceAction = (await header.getByRole("button", { name: "通知偏好" }).boundingBox())!;
+    const preferenceAction = (await header
+      .getByRole("button", { name: "通知偏好" })
+      .boundingBox())!;
     const markAll = (await header.getByRole("button", { name: "全部已读" }).boundingBox())!;
     const badge = (await header.locator(".realtime-badge").boundingBox())!;
     expect(preferenceAction.width).toBe(116);
@@ -870,10 +914,14 @@ test("midou reference notification layout keeps original workflow and preference
       }),
     );
     expect(categoryBoxes).toHaveLength(5);
-    expect(categoryBoxes.every(({ y, width }) => y === categoryBoxes[0].y && width === 78)).toBe(true);
+    expect(categoryBoxes.every(({ y, width }) => y === categoryBoxes[0].y && width === 78)).toBe(
+      true,
+    );
     expect(categoryBoxes[4].x - categoryBoxes[0].x).toBeCloseTo(332, 0);
     const searchBox = (await page.getByRole("searchbox").boundingBox())!;
-    expect(Math.abs(searchBox.y + searchBox.height / 2 - categoryBoxes[0].y - 21)).toBeLessThanOrEqual(3);
+    expect(
+      Math.abs(searchBox.y + searchBox.height / 2 - categoryBoxes[0].y - 21),
+    ).toBeLessThanOrEqual(3);
     const searchForm = page.getByRole("search");
     const initialSearch = (await searchForm.boundingBox())!;
     expect(initialSearch.width).toBe(268);
@@ -882,8 +930,9 @@ test("midou reference notification layout keeps original workflow and preference
     expect(status.width).toBe(130);
     expect(unread.width).toBe(44);
     const toggle = page.getByRole("checkbox", { name: "仅未读" });
-    expect(await toggle.evaluate((node) => getComputedStyle(node, "::before").backgroundColor))
-      .toBe("rgb(255, 255, 255)");
+    expect(
+      await toggle.evaluate((node) => getComputedStyle(node, "::before").backgroundColor),
+    ).toBe("rgb(255, 255, 255)");
     expect(Math.abs(status.x - 837)).toBeLessThanOrEqual(10);
     expect(Math.abs(unread.x - 991)).toBeLessThanOrEqual(6);
     expect(Math.abs(initialSearch.x - 1147)).toBeLessThanOrEqual(6);
@@ -898,9 +947,13 @@ test("midou reference notification layout keeps original workflow and preference
     expect(Math.abs(summaryBox.y + summaryBox.height - 312)).toBeLessThanOrEqual(2);
     const headingBox = (await header.getByRole("heading", { name: "通知中心" }).boundingBox())!;
     expect(Math.abs(headingBox.y - 143)).toBeLessThanOrEqual(4);
-    await expect(header.getByRole("button", { name: "通知偏好" })).toHaveCSS("border-top-color", readBorder);
+    await expect(header.getByRole("button", { name: "通知偏好" })).toHaveCSS(
+      "border-top-color",
+      readBorder,
+    );
     await expect(summary.locator("svg[aria-hidden='true']")).toHaveCount(4);
-    for (const icon of await summary.locator("svg").all()) await expect(icon).toHaveCSS("width", "24px");
+    for (const icon of await summary.locator("svg").all())
+      await expect(icon).toHaveCSS("width", "24px");
     await expect(summary.locator("b").first()).toHaveCSS("font-size", "27px");
     await expect(page.locator(".notification-record")).toHaveCSS("padding-left", "52px");
     await expect(page.locator(".notification-record > i")).toHaveCSS("width", "60px");
@@ -908,9 +961,9 @@ test("midou reference notification layout keeps original workflow and preference
     const title = (await page.locator(".notification-record > span > strong").boundingBox())!;
     expect(Math.abs(title.x - 424)).toBeLessThanOrEqual(3);
     expect(
-      await page.locator(".midou-notification-open").evaluate(
-        (element) => getComputedStyle(element, "::before").borderInlineStartWidth,
-      ),
+      await page
+        .locator(".midou-notification-open")
+        .evaluate((element) => getComputedStyle(element, "::before").borderInlineStartWidth),
     ).toBe("1px");
   }
   const preference = page.getByRole("complementary", { name: "通知偏好快捷入口" });
@@ -946,7 +999,6 @@ test("midou reference notification layout keeps original workflow and preference
 
   await expect(page.getByRole("navigation", { name: "面包屑", exact: true })).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  if (wide) await page.screenshot({ path: testInfo.outputPath("notification-reference.png") });
 
   await page.getByRole("button", { name: "通知偏好", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "通知偏好", exact: true })).toBeVisible();

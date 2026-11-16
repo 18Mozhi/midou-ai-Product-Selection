@@ -205,7 +205,9 @@ test("home polling does not repeat unchanged product queries; manual refresh and
   await expect.poll(() => h.counters.completed).toBe(3);
 });
 
-test("workbench completed empty action fits in the reference desktop first fold", async ({ page }, testInfo) => {
+test("workbench completed empty action fits in the reference desktop first fold", async ({
+  page,
+}, testInfo) => {
   await page.setViewportSize({ width: 1672, height: 941 });
   await setup(page, true, ["sourcing:read"]);
   await page.route(completedRoute, (route) => route.fulfill({ json: envelope([]) }));
@@ -237,11 +239,16 @@ test("workbench completed empty action fits in the reference desktop first fold"
   const overview = (await page.locator(".home-automation-overview").boundingBox())!;
   const overviewHeading = page.locator(".home-automation-heading");
   await expect(overviewHeading).toHaveCSS("border-bottom-color", "rgba(0, 0, 0, 0)");
-  expect(await overviewHeading.evaluate((el) => {
-    const divider = getComputedStyle(el, "::before");
-    return [divider.insetInlineStart, divider.insetInlineEnd, divider.height];
-  })).toEqual(["24px", "24px", "1px"]);
-  const firstMetric = (await page.locator(".home-daily-production dl > div").first().boundingBox())!;
+  expect(
+    await overviewHeading.evaluate((el) => {
+      const divider = getComputedStyle(el, "::before");
+      return [divider.insetInlineStart, divider.insetInlineEnd, divider.height];
+    }),
+  ).toEqual(["24px", "24px", "1px"]);
+  const firstMetric = (await page
+    .locator(".home-daily-production dl > div")
+    .first()
+    .boundingBox())!;
   expect(Math.abs(firstMetric.y - 204), "daily cards top").toBeLessThanOrEqual(2);
   const heading = page.getByRole("heading", { name: "选品工作台", exact: true });
   await expect(page.locator(".home-command-bar > div")).toHaveCSS("top", "-5px");
@@ -270,9 +277,15 @@ test("workbench completed empty action fits in the reference desktop first fold"
   }
   const flow = (await page.getByRole("region", { name: "选品任务流程" }).boundingBox())!;
   expect(Math.abs(overview.y - 378), "library overview top").toBeLessThanOrEqual(5);
-  expect(Math.abs(overview.y + overview.height - 512), "library overview bottom").toBeLessThanOrEqual(3);
+  expect(
+    Math.abs(overview.y + overview.height - 512),
+    "library overview bottom",
+  ).toBeLessThanOrEqual(3);
   expect(Math.abs(flow.y - 529), "workflow top").toBeLessThanOrEqual(5);
-  expect(Math.abs(bounds!.y - flow.y - flow.height - 18), "workflow-to-results gap").toBeLessThanOrEqual(2);
+  expect(
+    Math.abs(bounds!.y - flow.y - flow.height - 18),
+    "workflow-to-results gap",
+  ).toBeLessThanOrEqual(2);
   const quickCandidate = page.locator(".midou-home-quick .home-quick-candidates");
   const quickEvidence = page.locator(".midou-home-quick .home-quick-evidence");
   for (const row of [quickCandidate, quickEvidence]) {
@@ -315,15 +328,17 @@ test("workbench completed empty action fits in the reference desktop first fold"
   const facts = page.locator(".home-status-facts > a");
   await expect(facts).toHaveCount(4);
   await expect(facts.first()).toHaveCSS("padding-inline-start", "44px");
-  const factLabels = await facts.locator("span").evaluateAll((labels) =>
-    labels.map((label) => label.getBoundingClientRect().x),
-  );
+  const factLabels = await facts
+    .locator("span")
+    .evaluateAll((labels) => labels.map((label) => label.getBoundingClientRect().x));
   for (const [index, x] of [384, 652, 916, 1190].entries()) {
     expect(Math.abs(factLabels[index] - x)).toBeLessThanOrEqual(5);
   }
   await expect(facts.first().locator("strong")).toHaveCSS("font-size", "26px");
   await expect(facts.last().locator("svg > circle")).toHaveCount(1);
-  const shapes = await facts.locator("svg").evaluateAll((icons) => icons.map((icon) => icon.innerHTML));
+  const shapes = await facts
+    .locator("svg")
+    .evaluateAll((icons) => icons.map((icon) => icon.innerHTML));
   expect(new Set(shapes).size).toBe(4);
   await expect(facts.first().locator("span")).toHaveCSS("font-size", "14px");
   expect(await facts.first().evaluate((el) => getComputedStyle(el, "::after").content)).toBe('""');
@@ -339,7 +354,9 @@ test("workbench completed empty action fits in the reference desktop first fold"
   expect(stepMarkers.every(({ y, width }) => y === stepMarkers[0].y && width === 30)).toBe(true);
   expect(Math.abs(stepMarkers[0].x - 345)).toBeLessThanOrEqual(5);
   expect(Math.abs(stepMarkers[0].y - 588)).toBeLessThanOrEqual(3);
-  const flowHeading = await page.getByRole("heading", { name: "选品任务流程", exact: true }).boundingBox();
+  const flowHeading = await page
+    .getByRole("heading", { name: "选品任务流程", exact: true })
+    .boundingBox();
   expect(Math.abs(flowHeading!.x - 310)).toBeLessThanOrEqual(3);
   expect(Math.abs(stepMarkers[4].x - 1218)).toBeLessThanOrEqual(12);
   expect(
@@ -352,7 +369,6 @@ test("workbench completed empty action fits in the reference desktop first fold"
     "href",
     "/opportunities?view=completed",
   );
-  await page.screenshot({ path: testInfo.outputPath("workbench-reference.png") });
 });
 
 for (const status of [200, 401, 403, 500]) {
@@ -540,7 +556,10 @@ for (const palette of [
         const badge = row.locator("b");
         if (desktopBadge) {
           await expect(badge).toHaveCSS("background-color", /^color\(srgb /);
-          await expect(badge).not.toHaveCSS("background-color", await row.evaluate((el) => getComputedStyle(el).backgroundColor));
+          await expect(badge).not.toHaveCSS(
+            "background-color",
+            await row.evaluate((el) => getComputedStyle(el).backgroundColor),
+          );
         } else {
           await expect(badge).toHaveCSS("background-color", "rgb(255, 255, 255)");
         }
@@ -590,7 +609,10 @@ test("catalogue empty workflow leads to the real candidate list without writes",
   const empty = page.getByRole("region", { name: "已完成分析空状态" });
   await expect(empty).toBeVisible();
   await expect(empty.getByRole("list", { name: "分析流程说明" }).locator("li")).toHaveCount(5);
-  await expect(empty.getByRole("button", { name: "刷新结果" }).locator("svg")).toHaveAttribute("aria-hidden", "true");
+  await expect(empty.getByRole("button", { name: "刷新结果" }).locator("svg")).toHaveAttribute(
+    "aria-hidden",
+    "true",
+  );
   const diagnostics = empty.locator("details");
   await expect(diagnostics).not.toHaveAttribute("open");
   await diagnostics.getByText("诊断信息", { exact: true }).click();
@@ -598,9 +620,15 @@ test("catalogue empty workflow leads to the real candidate list without writes",
   await expect(diagnostics).toHaveAttribute("open", "");
   await diagnostics.getByText("诊断信息", { exact: true }).click();
   if (wide) {
-    await expect(empty.getByRole("button", { name: "查看候选商品" })).toHaveCSS("min-width", "193px");
+    await expect(empty.getByRole("button", { name: "查看候选商品" })).toHaveCSS(
+      "min-width",
+      "193px",
+    );
     await expect(page.locator(".catalogue-refresh")).toHaveCSS("min-inline-size", "128px");
-    await expect(page.locator(".catalogue-refresh")).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    await expect(page.locator(".catalogue-refresh")).toHaveCSS(
+      "background-color",
+      "rgb(255, 255, 255)",
+    );
     await expect(empty.locator(".midou-completed-illustration")).toHaveCSS("color", /^color\(srgb/);
     await expect(empty.locator(".midou-completed-illustration")).toHaveCSS("margin-bottom", "10px");
     await expect(empty.getByRole("heading", { name: "暂无已完成分析的商品" })).toHaveCSS(
@@ -638,7 +666,6 @@ test("catalogue empty workflow leads to the real candidate list without writes",
     expect(Math.abs(firstIcon!.x - 462)).toBeLessThanOrEqual(3);
     expect(Math.abs(firstIcon!.y - 747)).toBeLessThanOrEqual(5);
     expect(Math.abs(lastIcon!.x - 1448)).toBeLessThanOrEqual(18);
-    await page.screenshot({ path: testInfo.outputPath("completed-empty-reference.png") });
   }
   await expect(page.locator(".catalogue-title-line [role=note]")).toHaveText("当前为只读权限。");
   await empty.getByRole("button", { name: "查看候选商品" }).click();
@@ -647,7 +674,9 @@ test("catalogue empty workflow leads to the real candidate list without writes",
   await expect(page.locator(".catalog-data-note")).toContainText("不等于精确销量");
   if (wide) {
     await expect(page.locator(".catalogue-refresh")).toHaveCSS("min-inline-size", "134px");
-    expect(Math.abs((await page.locator(".catalogue-refresh").boundingBox())!.y - 126)).toBeLessThanOrEqual(2);
+    expect(
+      Math.abs((await page.locator(".catalogue-refresh").boundingBox())!.y - 126),
+    ).toBeLessThanOrEqual(2);
     const search = page.getByRole("search", { name: "搜索商品" });
     const [query, submit, market] = await Promise.all([
       search.getByRole("textbox", { name: "商品名称" }).boundingBox(),
@@ -661,7 +690,8 @@ test("catalogue empty workflow leads to the real candidate list without writes",
     await expect(tabs).toHaveCSS("column-gap", "17px");
     await expect(tabs).toHaveCSS("padding-inline-start", "6px");
     await expect(tabs.getByRole("button", { name: /^候选商品/ })).toHaveAttribute(
-      "aria-current", "page",
+      "aria-current",
+      "page",
     );
     const [heading, filters, results] = await Promise.all(
       [".catalogue-page-heading", ".catalogue-controls", ".product-catalog"].map((selector) =>
@@ -674,7 +704,10 @@ test("catalogue empty workflow leads to the real candidate list without writes",
     expect(Math.abs(filters!.y - 210)).toBeLessThanOrEqual(6);
     expect(Math.abs(results!.y - 361)).toBeLessThanOrEqual(3);
     const table = page.getByRole("table", { name: "选品商品列表" });
-    await expect(table.getByRole("columnheader", { name: "商品信息" })).toHaveCSS("font-size", "14px");
+    await expect(table.getByRole("columnheader", { name: "商品信息" })).toHaveCSS(
+      "font-size",
+      "14px",
+    );
     const productName = table.getByRole("link", { name: "候选商品视觉夹具", exact: true });
     await expect(productName).toHaveCSS("font-size", "14px");
     await expect(productName).toHaveCSS("font-weight", "600");
@@ -687,18 +720,23 @@ test("catalogue empty workflow leads to the real candidate list without writes",
     await expect(progressLink).toHaveCSS("min-height", "44px");
     await expect(progressLink).toHaveAttribute("href", /^\/opportunities\/[^?]+\?from=/);
     await expect(actionCell.locator("time")).toBeVisible();
-    await expect(table.locator(".selection-product-name small").first()).toHaveCSS("font-size", "13px");
+    await expect(table.locator(".selection-product-name small").first()).toHaveCSS(
+      "font-size",
+      "13px",
+    );
     const [price, progress, action] = await Promise.all(
       ["Amazon 售价", "分析进度", "操作"].map((name) =>
-        table.getByRole("columnheader", { name, exact: true }).evaluate(
-          (cell) => cell.getBoundingClientRect().x + parseFloat(getComputedStyle(cell).paddingLeft),
-        ),
+        table
+          .getByRole("columnheader", { name, exact: true })
+          .evaluate(
+            (cell) =>
+              cell.getBoundingClientRect().x + parseFloat(getComputedStyle(cell).paddingLeft),
+          ),
       ),
     );
     expect(Math.abs(price - 683)).toBeLessThanOrEqual(10);
     expect(Math.abs(progress - 1392)).toBeLessThanOrEqual(10);
     expect(Math.abs(action - 1585)).toBeLessThanOrEqual(8);
-    await page.screenshot({ path: testInfo.outputPath("candidates-reference.png") });
   }
   expect(counters.writes).toBe(0);
 });

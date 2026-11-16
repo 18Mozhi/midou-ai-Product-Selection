@@ -4574,7 +4574,6 @@ for (const view of ["completed", "rule_candidates"]) {
           expect(sort.y + sort.height).toBeLessThanOrEqual(tableBox!.y);
           const second = (await catalog.locator("tbody tr").nth(1).boundingBox())!;
           expect(Math.abs(second.y + second.height - 810)).toBeLessThanOrEqual(4);
-          await page.screenshot({ path: testInfo.outputPath("candidate-reference.png") });
         }
       } else
         await expect(
