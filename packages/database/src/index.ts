@@ -27,6 +27,7 @@ export {
   selectionRiskGateSql,
   selectionCompetitionGateSql,
   selectionCompetitorRelevanceSql,
+  accountCompetitorClassificationScopeProof,
   competitorDetailEvidenceSql,
   latestCompetitorDetailSnapshotSql,
   selectionCompletedCompetitorsSql,

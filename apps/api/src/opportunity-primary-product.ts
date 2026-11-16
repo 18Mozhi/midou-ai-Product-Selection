@@ -28,12 +28,12 @@ const identity =
 export const opportunityPrimaryRecordsSql =
   `(SELECT ${projection("n.created_at")} FROM opportunity_evidence_links l ` +
   currentProductVersionJoinSql("l", "n") +
-  "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' WHERE l.opportunity_id=o.id AND l.organization_id=o.organization_id AND l.workspace_id=o.workspace_id " +
+  "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' WHERE l.opportunity_id=o.id AND n_seed.organization_id=o.organization_id AND n_seed.workspace_id=o.workspace_id " +
   identity +
   "ORDER BY l.observed_at DESC,n.created_at DESC,n.id DESC LIMIT 1) primary_linked_record," +
-  `(SELECT ${projection("s.captured_at")} FROM competitors c JOIN competitor_snapshots s ON s.competitor_id=c.id AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id ` +
+  `(SELECT ${projection("s.captured_at")} FROM competitors c JOIN competitor_snapshots s ON s.competitor_id=c.id ` +
   "STRAIGHT_JOIN normalized_records n FORCE INDEX (idx_normalized_evidence) ON n.raw_evidence_id=s.evidence_id " +
-  "AND n.organization_id=s.organization_id AND n.workspace_id=s.workspace_id AND n.status IN ('active','superseded') " +
+  "AND n.organization_id=c.organization_id AND n.workspace_id=c.workspace_id AND n.status IN ('active','superseded') " +
   "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' WHERE c.opportunity_id=o.id AND c.organization_id=o.organization_id AND c.workspace_id=o.workspace_id AND c.deleted_at IS NULL AND c.source_site='Amazon' " +
   `AND BINARY UPPER(c.external_id)=BINARY ${opportunityPrimaryAsinSql} ` +
   identity +

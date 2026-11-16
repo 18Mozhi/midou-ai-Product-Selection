@@ -1,4 +1,23 @@
 {
+  "accountSelectionScoringRuntime": {
+    "sourceFiles": [
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/api/src/opportunity-routes.ts",
+      "apps/api/src/mysql-scoring-repository.ts",
+      "apps/api/src/scoring-routes.ts",
+      "apps/web/src/components/ScoreRuleConsole.vue"
+    ],
+    "testFiles": [
+      "tests/m04-02/account-opportunity-list-rehearsal.test.mjs",
+      "tests/m04-03/account-score-rule-approval.test.mjs",
+      "tests/unit/opportunity-account-migration.test.mjs"
+    ],
+    "docs": [
+      "docs/openapi.yaml",
+      "docs/runbooks/account-selection-scoring-runtime.md"
+    ],
+    "contract": "Account-native selection preserves original opportunities, decisions, evidence links, filters and quality gates. Scoring-rule replay checks live ownership; activation and rollback lock the full active set and reject conflicting ownership without changing history."
+  },
   "accountCompetitorOriginalHistory": {
     "sourceFiles": ["apps/api/src/mysql-competitor-repository.ts", "apps/api/src/competitor-routes.ts", "apps/api/src/amazon-public-signals.ts", "apps/web/src/components/AccountCompetitorRules.vue"],
     "testFiles": ["tests/m04-05/account-competitor-read-rehearsal.test.mjs", "tests/m04-05/account-competitor-status-rehearsal.test.mjs", "tests/unit/competitor-account-migration.test.mjs"],

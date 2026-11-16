@@ -1,4 +1,16 @@
-import { homeCandidateSql, homeQualityGateSql } from "./home-selection-sql.js";
+import { notificationScopeRelation } from "@scoutops/database";
+import { accountCompetitorClassificationScopeProof } from "@scoutops/database";
+import { appendAccountOpportunityEvent } from "@scoutops/database";
+import { nativeBusinessTaskScope } from "./business-task-storage.js";
+import { opportunityEventReadRelation } from "@scoutops/database";
+import { appendOpportunityEvent } from "@scoutops/database";
+import { appendOpportunityOutbox } from "@scoutops/database";
+import {
+  homeCandidateSql,
+  homeCompetitorUpperBoundSql,
+  homeQualityGateSql,
+} from "./home-selection-sql.js";
+import { MINIMUM_SELECTION_COMPETITORS } from "@scoutops/contracts";
 import { optimizeSelectionReadSql } from "./selection-read-query-plan.js";
 import {
   opportunityRecommendedListSourceSql,
@@ -7,6 +19,8 @@ import {
 import {
   opportunityAnalysisCompletedAtSql,
   opportunityCompletedFilterSql,
+  accountOpportunityAnalysisCompletedAtSql,
+  accountOpportunityCompletedFilterSql,
 } from "./opportunity-completed-filter.js";
 import {
   opportunityListPrimaryAsinSql,
@@ -19,12 +33,15 @@ import {
   readOpportunityPrimaryProduct,
 } from "./opportunity-primary-product.js";
 import { readOpportunityPurchasePrices } from "./opportunity-purchase-price.js";
-import { opportunitySourceTopicFilterSql } from "./opportunity-source-topic-filter.js";
+import {
+  opportunitySourceTopicFilterSql,
+  accountOpportunitySourceTopicFilterSql,
+} from "./opportunity-source-topic-filter.js";
 import { randomUUID } from "node:crypto";
-import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
+import { rehearsalOwns, requireAccountReadRehearsal } from "./account-read-rehearsal.js";
 import {
   OpportunityServiceError,
-  type DecisionAction,
   type OpportunityCreateInput,
   type OpportunityDecision,
   type OpportunityDetail,
@@ -39,8 +56,9 @@ import {
   evaluateOpportunitySelection,
   opportunityQualityGateSql,
   opportunityRecommendedSql,
-  opportunityCandidateSql,
+  opportunityRecommendationFactsSql,
   opportunitySelectionProjectionSql,
+  opportunityCandidateSql,
   opportunityPrimaryAsinSql,
 } from "./opportunity-selection-policy.js";
 
@@ -65,11 +83,310 @@ const opportunityCountsSql = sqlText(
   "WHERE ss.input_type='opportunity' AND ss.input_ref=o.id AND ss.deleted_at IS NULL)",
   "supplier_candidate_count,",
   "(SELECT COUNT(*) FROM opportunity_rule_matches orm",
-  "WHERE orm.opportunity_id=o.id AND orm.organization_id=o.organization_id",
-  "AND orm.workspace_id=o.workspace_id) matched_rule_count",
+  "WHERE orm.opportunity_id=o.id) matched_rule_count",
 );
 const opportunityLifecycleSql =
   "GREATEST(0,TIMESTAMPDIFF(SECOND,o.lifecycle_entered_at,UTC_TIMESTAMP(3))) lifecycle_dwell_seconds";
+const ownOpportunityChild = (table: string, id: string) =>
+  rehearsalOwns(table, id, "o.account_owner");
+const nativeOwnerParameter = "/* native evidence owner */?";
+type ReadParameter = string | number | null | undefined;
+const bindNativeOwner = (
+  sql: string,
+  values: Array<ReadParameter | Date>,
+  account: string | null | undefined,
+) => {
+  let index = 0;
+  const bound: Array<string | number | null | Date> = [];
+  const query = sql.replace(/'(?:''|[^'])*'|\/\* native evidence owner \*\/\?|\?/g, (token) => {
+    if (token === nativeOwnerParameter) {
+      if (!account) throw new Error("native_evidence_owner_missing");
+      bound.push(account);
+      return "?";
+    }
+    if (token === "?") {
+      const value = values[index++];
+      if (value === undefined) throw new Error("opportunity_read_parameter_missing");
+      bound.push(value);
+    }
+    return token;
+  });
+  if (index !== values.length) throw new Error("opportunity_read_bind_count_invalid");
+  return [query, bound] as const;
+};
+const primaryVersionOriginJoins = (seed: string, active: string) =>
+  `STRAIGHT_JOIN raw_evidence seed_e ON seed_e.id=${seed}.raw_evidence_id AND seed_e.provider_id=${seed}.provider_id
+    STRAIGHT_JOIN collection_tasks seed_t ON seed_t.id=seed_e.collection_task_id
+    STRAIGHT_JOIN raw_evidence active_e ON active_e.id=${active}.raw_evidence_id AND active_e.provider_id=${active}.provider_id
+    STRAIGHT_JOIN collection_tasks active_t ON active_t.id=active_e.collection_task_id
+      AND active_t.organization_id=seed_t.organization_id AND active_t.workspace_id=seed_t.workspace_id `;
+const primaryVersionOriginOwner = (account: string) =>
+  `seed_e.account_id=${account} AND active_e.account_id=${account}
+      AND ${rehearsalOwns("collection_tasks", "seed_t.id", account)}
+      AND ${rehearsalOwns("collection_tasks", "active_t.id", account)}`;
+// The ledger is unique on (source_table, source_id); these point lookups cannot
+// multiply matches. Avoid independent semi-join materialization of the ledger.
+const primaryIdentityLedgerJoins = (account: string) =>
+  (
+    [
+      ["opportunity_evidence_links", "l_primary.id"],
+      ["raw_evidence", "l_primary.raw_evidence_id"],
+      ["raw_evidence", "n_primary_current.raw_evidence_id"],
+      ["normalized_records", "n_primary.id"],
+      ["normalized_records", "n_primary_current.id"],
+      ["collection_tasks", "seed_t.id"],
+      ["collection_tasks", "active_t.id"],
+    ] as const
+  )
+    .map(
+      ([table, id], index) =>
+        `STRAIGHT_JOIN account_owned_records lp_owner_${index} FORCE INDEX (PRIMARY) ON lp_owner_${index}.source_table='${table}' AND lp_owner_${index}.source_id=${id} AND lp_owner_${index}.account_id=${account} `,
+    )
+    .join("");
+// These exact shared proofs also appear inside the list's recommendation gates.
+// Keep their task/range and payload requirements; obtain evidence provenance from its parent.
+const nativeCompetitorEvidence = (sql: string, account: string) => {
+  for (const [suffix, provider, predicate] of [
+    [
+      "detail",
+      "n_detail.provider_id",
+      /WHERE LEFT\(s(?:_sample)?\.source_ref_id,11\)='collection:'/g,
+    ],
+    [
+      "relation",
+      "q_relation.provider_id",
+      "WHERE e_relation.organization_id=t_relation.organization_id",
+    ],
+  ] as const) {
+    const n = `n_${suffix}`,
+      t = `t_${suffix}`,
+      l = `l_${suffix}`;
+    sql = sql
+      .replaceAll(
+        `AND ${n}.organization_id=${t}.organization_id AND ${n}.workspace_id=${t}.workspace_id `,
+        "",
+      )
+      .replaceAll(
+        predicate,
+        (
+          match,
+        ) => `WHERE ${n}.account_id=${account} AND ${rehearsalOwns("normalized_records", `${n}.id`, account)}
+      AND ${rehearsalOwns("collection_tasks", `${t}.id`, account)}
+      AND ${rehearsalOwns("collection_subqueries", `q_${suffix}.id`, account)}
+      AND ${rehearsalOwns("collection_task_evidence_links", `${l}.id`, account)}
+      AND ${rehearsalOwns("raw_evidence", `${l}.raw_evidence_id`, account)}
+      AND EXISTS (SELECT 1 FROM raw_evidence proof_e STRAIGHT_JOIN collection_tasks proof_t ON proof_t.id=proof_e.collection_task_id
+        WHERE proof_e.id=${l}.raw_evidence_id AND proof_e.account_id=${account} AND proof_e.provider_id=${provider}
+          AND proof_t.organization_id=${t}.organization_id AND proof_t.workspace_id=${t}.workspace_id
+          AND ${rehearsalOwns("collection_tasks", "proof_t.id", account)}) AND ${match.slice(6)}`,
+      );
+  }
+  return sql
+    .replaceAll(
+      "FROM collection_subqueries q_detail JOIN collection_task_evidence_links l_detail",
+      "FROM collection_subqueries q_detail STRAIGHT_JOIN collection_task_evidence_links l_detail",
+    )
+    .replaceAll("JOIN collection_tasks t_detail ON", "STRAIGHT_JOIN collection_tasks t_detail ON")
+    .replaceAll(
+      "JOIN normalized_records n_detail ON",
+      "STRAIGHT_JOIN normalized_records n_detail ON",
+    )
+    .replaceAll("JOIN competitors c_detail ON", "STRAIGHT_JOIN competitors c_detail ON");
+};
+const ownedPrimaryIdentity = (
+  sql: string,
+  legacyAccount: "oo.account_id" | "o.account_owner",
+  native: boolean,
+) => {
+  const account = native ? nativeOwnerParameter : legacyAccount;
+  const scoped = sql
+    .replaceAll(
+      "l_primary.opportunity_id=o.id AND n_primary.organization_id=o.organization_id AND n_primary.workspace_id=o.workspace_id",
+      "l_primary.opportunity_id=o.id",
+    )
+    .replaceAll(
+      "WHERE l_primary.opportunity_id=o.id",
+      native
+        ? `${primaryVersionOriginJoins("n_primary", "n_primary_current")}${primaryIdentityLedgerJoins(account)}WHERE n_primary.account_id=${account} AND seed_e.account_id=${account} AND active_e.account_id=${account} AND l_primary.opportunity_id=o.id`
+        : `WHERE ${rehearsalOwns("opportunity_evidence_links", "l_primary.id", account)} AND ${rehearsalOwns("raw_evidence", "l_primary.raw_evidence_id", account)} AND ${rehearsalOwns("normalized_records", "n_primary.id", account)} AND ${rehearsalOwns("normalized_records", "n_primary_current.id", account)} AND l_primary.opportunity_id=o.id`,
+    )
+    .replaceAll(
+      "n_primary_current.organization_id=n_primary.organization_id AND n_primary_current.workspace_id=n_primary.workspace_id",
+      native
+        ? "n_primary_current.account_id=n_primary.account_id"
+        : "n_primary_current.organization_id=n_primary.organization_id AND n_primary_current.workspace_id=n_primary.workspace_id",
+    );
+  return native
+    ? scoped
+        .replaceAll(
+          "FROM opportunity_evidence_links l_primary JOIN normalized_records n_primary ON",
+          "FROM opportunity_evidence_links l_primary FORCE INDEX (uq_opportunity_evidence) STRAIGHT_JOIN normalized_records n_primary FORCE INDEX (idx_normalized_evidence) ON",
+        )
+        .replaceAll(
+          "JOIN normalized_records n_primary_current ON",
+          "STRAIGHT_JOIN normalized_records n_primary_current FORCE INDEX (uq_normalized_account_record_version) ON",
+        )
+        .replaceAll("JOIN providers p_primary ON", "STRAIGHT_JOIN providers p_primary ON")
+    : scoped;
+};
+const accountPrimaryRecordsSql = opportunityPrimaryRecordsSql
+  .replace(
+    "WHERE l.opportunity_id=o.id AND n_seed.organization_id=o.organization_id AND n_seed.workspace_id=o.workspace_id",
+    `WHERE ${ownOpportunityChild("opportunity_evidence_links", "l.id")} AND ${ownOpportunityChild("normalized_records", "n_seed.id")} AND ${ownOpportunityChild("normalized_records", "n.id")} AND ${ownOpportunityChild("raw_evidence", "l.raw_evidence_id")} AND ${ownOpportunityChild("raw_evidence", "n.raw_evidence_id")} AND l.opportunity_id=o.id`,
+  )
+  .replace(
+    "WHERE c.opportunity_id=o.id",
+    `WHERE ${ownOpportunityChild("competitors", "c.id")} AND ${ownOpportunityChild("competitor_snapshots", "s.id")} AND ${ownOpportunityChild("normalized_records", "n.id")} AND ${ownOpportunityChild("raw_evidence", "s.evidence_id")} AND c.opportunity_id=o.id`,
+  );
+const nativeAccountPrimaryRecordsSql = accountPrimaryRecordsSql
+  .replace(
+    "FORCE INDEX (uq_normalized_scope_record_version) ON n.organization_id=n_seed.organization_id AND n.workspace_id=n_seed.workspace_id",
+    "FORCE INDEX (uq_normalized_account_record_version) ON n.account_id=n_seed.account_id",
+  )
+  .replace("AND n.organization_id=c.organization_id AND n.workspace_id=c.workspace_id ", "")
+  .replace(
+    "AND c.opportunity_id=o.id",
+    `AND n.account_id=${nativeOwnerParameter} AND c.opportunity_id=o.id`,
+  )
+  .replace(
+    "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' WHERE",
+    `STRAIGHT_JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' ${primaryVersionOriginJoins("n_seed", "n")}WHERE`,
+  )
+  .replace(
+    "AND l.opportunity_id=o.id",
+    `AND n_seed.account_id=${nativeOwnerParameter} AND ${primaryVersionOriginOwner(nativeOwnerParameter)} AND l.opportunity_id=o.id`,
+  );
+const accountPrimaryProjection = (native: boolean, sql: string) =>
+  native ? nativeCompetitorEvidence(optimizeSelectionReadSql(sql), nativeOwnerParameter) : sql;
+const accountCountsSql = opportunityCountsSql
+  .replace(
+    "WHERE c.opportunity_id=o.id",
+    `WHERE ${ownOpportunityChild("competitors", "c.id")} AND c.opportunity_id=o.id`,
+  )
+  .replace(
+    "WHERE ss.input_type='opportunity'",
+    `WHERE ${ownOpportunityChild("sourcing_searches", "ss.id")} AND ${ownOpportunityChild("sourcing_candidates", "sc.id")}
+      AND ${ownOpportunityChild("collection_tasks", "ss.collection_task_id")} AND ${ownOpportunityChild("raw_evidence", "sc.raw_evidence_id")}
+      AND ss.input_type='opportunity'`,
+  )
+  .replace(
+    "WHERE orm.opportunity_id=o.id",
+    `WHERE ${ownOpportunityChild("opportunity_rule_matches", "orm.id")} AND orm.opportunity_id=o.id`,
+  );
+// The currently rehearsed ownership batch assigns one account per historical scope. Keep the
+// sealed scope as provenance for legacy quality proofs; never use a session's old workspace.
+const accountOpportunitySource = `opportunities o JOIN account_owned_records oo
+  ON oo.source_table='opportunities' AND oo.source_id=o.id
+  JOIN account_ownership_cutover receipt ON receipt.slot='current' AND receipt.contract_version=25
+    AND (oo.reason='exclusive_owner' OR
+         (oo.reason IN ('shared','unassigned') AND oo.account_id=receipt.primary_account_id))`;
+// The old coordinates are retained only inside the immutable classification
+// fingerprint. Read them from the exact sealed original, not a session scope.
+export function bindNativeOpportunityCandidate(
+  sql: string,
+  preceding: Array<string | Date>,
+  account: string,
+) {
+  const candidate = nativeOpportunityProof(opportunityCandidateSql, "oo.account_id");
+  if (/\b\w+\.(organization_id|workspace_id)\b/.test(candidate))
+    throw new Error("native_opportunity_candidate_projection_invalid");
+  return bindNativeOwner(sql + candidate, preceding, account);
+}
+
+function nativeOpportunityProof(sql: string, ownerAlias: "oo.account_id" | "o.account_owner") {
+  // MySQL 5.7 cannot resolve the outer account alias in nested JOIN ... ON.
+  // The root is already fenced to this request account; bind the same ID in proofs.
+  const account = nativeOwnerParameter;
+  const rawProof = (kind: "detail" | "relation") =>
+    `EXISTS (SELECT 1 FROM raw_evidence decision_raw JOIN collection_tasks decision_origin ON decision_origin.id=decision_raw.collection_task_id
+      WHERE decision_raw.id=l_${kind}.raw_evidence_id AND decision_raw.provider_id=n_${kind}.provider_id
+      AND decision_raw.account_id=${account} AND decision_origin.account_id=${account}
+      AND ${rehearsalOwns("raw_evidence", "decision_raw.id", account)}
+      AND ${rehearsalOwns("collection_tasks", "decision_origin.id", account)})`;
+  const sourceRun = ownerAlias === "oo.account_id" ? "receipt.source_run_id" : "o.sealed_run_id";
+  const sealedRecord = `scope_record.run_id=${sourceRun} AND scope_record.source_table='opportunities' AND scope_record.source_id=o.id`;
+  const coordinate = (field: "org" | "workspace") =>
+    `(SELECT scope_record.legacy_${field}_id FROM account_retirement_records scope_record WHERE ${sealedRecord})`;
+  return accountCompetitorClassificationScopeProof(ownedPrimaryIdentity(sql, ownerAlias, true), {
+    account,
+    legacyOrg: coordinate("org"),
+    legacyWorkspace: coordinate("workspace"),
+    fresh: `EXISTS (SELECT 1 FROM account_ownership_cutover scope_cut WHERE scope_cut.slot='current'
+      AND scope_cut.contract_version=25 AND scope_cut.source_run_id=${sourceRun} AND o.created_at>scope_cut.created_at)
+      AND NOT EXISTS (SELECT 1 FROM account_retirement_records scope_record WHERE ${sealedRecord})`,
+  })
+    .replaceAll(opportunityEventReadRelation, "opportunity_events")
+    .replaceAll(
+      "active_t.organization_id=seed_t.organization_id AND active_t.workspace_id=seed_t.workspace_id",
+      `active_t.account_id=${account} AND seed_t.account_id=${account}`,
+    )
+    .replaceAll(
+      "n_detail.organization_id=t_detail.organization_id AND n_detail.workspace_id=t_detail.workspace_id",
+      `n_detail.account_id=${account} AND t_detail.account_id=${account} AND ${rehearsalOwns("normalized_records", "n_detail.id", account)} AND ${rawProof("detail")} AND ${rehearsalOwns("collection_tasks", "t_detail.id", account)} AND ${rehearsalOwns("collection_subqueries", "q_detail.id", account)} AND ${rehearsalOwns("collection_task_evidence_links", "l_detail.id", account)}`,
+    )
+    .replaceAll(
+      "c_detail.organization_id=t_detail.organization_id AND c_detail.workspace_id=t_detail.workspace_id",
+      `c_detail.account_id=${account} AND ${rehearsalOwns("competitors", "c_detail.id", account)}`,
+    )
+    .replaceAll(
+      "n_relation.organization_id=t_relation.organization_id AND n_relation.workspace_id=t_relation.workspace_id",
+      `n_relation.account_id=${account} AND ${rehearsalOwns("normalized_records", "n_relation.id", account)} AND ${rawProof("relation")} AND ${rehearsalOwns("collection_subqueries", "q_relation.id", account)} AND ${rehearsalOwns("collection_task_evidence_links", "l_relation.id", account)}`,
+    )
+    .replaceAll(
+      "e_relation.organization_id=t_relation.organization_id AND e_relation.workspace_id=t_relation.workspace_id",
+      rehearsalOwns("opportunity_events", "e_relation.id", account),
+    )
+    .replaceAll(
+      "t_relation.organization_id=o.organization_id AND t_relation.workspace_id=o.workspace_id",
+      `t_relation.account_id=${account} AND ${rehearsalOwns("collection_tasks", "t_relation.id", account)}`,
+    )
+    .replaceAll(
+      "latest_relation.organization_id=e_relation.organization_id AND latest_relation.workspace_id=e_relation.workspace_id",
+      rehearsalOwns("opportunity_events", "latest_relation.id", account),
+    )
+    .replaceAll(
+      "newer_relation.organization_id=e_relation.organization_id AND newer_relation.workspace_id=e_relation.workspace_id",
+      rehearsalOwns("opportunity_events", "newer_relation.id", account),
+    )
+    .replaceAll(
+      "c_sample.organization_id=o.organization_id AND c_sample.workspace_id=o.workspace_id",
+      `c_sample.account_id=${account} AND ${rehearsalOwns("competitors", "c_sample.id", account)} AND ${rehearsalOwns("competitor_snapshots", "s_sample.id", account)}`,
+    )
+    .replaceAll(
+      "c_bound.organization_id=o.organization_id AND c_bound.workspace_id=o.workspace_id",
+      `c_bound.account_id=${account} AND ${rehearsalOwns("competitors", "c_bound.id", account)} AND ${rehearsalOwns("competitor_snapshots", "s_bound.id", account)}`,
+    )
+    .replaceAll(
+      "c.organization_id=o.organization_id AND c.workspace_id=o.workspace_id",
+      `c.account_id=${account}`,
+    )
+    .replaceAll("'organizationId',o.organization_id", `'organizationId',${coordinate("org")}`)
+    .replaceAll("'workspaceId',o.workspace_id", `'workspaceId',${coordinate("workspace")}`)
+    .replaceAll(
+      "AND sc_gate.dimension_code='risk'",
+      `AND ${rehearsalOwns("opportunity_score_runs", "sr_gate.id", account)} AND ${rehearsalOwns("opportunity_score_components", "sc_gate.id", account)} AND sc_gate.dimension_code='risk'`,
+    );
+}
+// The full recommendation gate still runs on each candidate. Materialize its cheap
+// prerequisites first and resolve the costly identity once in MySQL 5.7.
+const nativeRecommendedSource = sqlText(
+  `(SELECT o.*,${ownedPrimaryIdentity(opportunityPrimaryAsinSql, "o.account_owner", true)} filter_primary_asin FROM`,
+  `(SELECT o.*,oo.account_id account_owner FROM ${accountOpportunitySource}`,
+  `WHERE oo.account_id=${nativeOwnerParameter} AND o.decision_status='pending' AND ${opportunityRecommendationFactsSql}`,
+  `AND ${homeCompetitorUpperBoundSql}>=${MINIMUM_SELECTION_COMPETITORS}`,
+  "LIMIT 18446744073709551615) o LIMIT 18446744073709551615) o",
+);
+const nativeRecommendedSelectionProjection =
+  "1 candidate_ready,1 risk_gate_passed,1 competition_gate_passed,o.primary_fact_asin main_asin";
+function detailOwnership(accountId?: string) {
+  return (entries: Array<[source: string, idSql: string]>) => ({
+    sql:
+      accountId === undefined
+        ? ""
+        : entries.map(([source, id]) => ` AND ${rehearsalOwns(source, id, "?")}`).join(""),
+    values: accountId === undefined ? [] : entries.map(() => accountId),
+  });
+}
 const summary = (row: RowDataPacket): OpportunitySummary => {
   const primary = readOpportunityPrimaryProduct(
     row.primary_linked_record,
@@ -119,46 +436,89 @@ const summary = (row: RowDataPacket): OpportunitySummary => {
 
 export class MySqlOpportunityRepository implements OpportunityRepository {
   constructor(private readonly pool: Pool) {}
-  async list(input: {
-    organizationId: string;
-    workspaceId: string;
-    actorId: string;
-    page: number;
-    pageSize: number;
-    query?: string;
-    market?: string;
-    decisionStatus?: "pending" | "adopted" | "observing" | "rejected";
-    coverageStatus?: "insufficient" | "partial" | "complete";
-    blockingReason?: "evidence_insufficient" | "recommendation_insufficient";
-    lifecycleStatus?:
-      "candidate" | "validating" | "ready" | "adopted" | "observing" | "rejected" | "archived";
-    ownerId?: string;
-    sourceTopicId?: string;
-    scope?: "product" | "all";
-    selectionView?: "recommended" | "rule_candidates" | "evidence_pending" | "completed" | "all";
-  }) {
-    const where = ["o.organization_id=?", "o.workspace_id=?"],
-      values: unknown[] = [input.organizationId, input.workspaceId];
+  private async nativeOpportunityScope(db: Pick<PoolConnection, "query">) {
+    const [columns] = await db.query<RowDataPacket[]>(
+      "SHOW COLUMNS FROM opportunities WHERE Field IN ('account_id','organization_id','workspace_id')",
+    );
+    const shape = columns
+      .map((row) => row.Field)
+      .sort()
+      .join(",");
+    if (shape !== "account_id" && shape !== "organization_id,workspace_id")
+      throw new Error("opportunity_scope_schema_invalid");
+    return shape === "account_id";
+  }
+  private async nativeEvidenceScope() {
+    const [columns] = await this.pool.query<RowDataPacket[]>(
+      "SHOW COLUMNS FROM normalized_records WHERE Field IN ('account_id','organization_id','workspace_id')",
+    );
+    const shape = columns
+      .map((row) => row.Field)
+      .sort()
+      .join(",");
+    if (shape !== "account_id" && shape !== "organization_id,workspace_id")
+      throw new Error("normalized_record_scope_schema_invalid");
+    return shape === "account_id";
+  }
+  async list(input: Parameters<OpportunityRepository["list"]>[0]) {
+    const legacy = "organizationId" in input ? input : null;
+    const accountId = "accountId" in input ? input.accountId : null;
+    if (!legacy) await requireAccountReadRehearsal(this.pool);
+    const native = !legacy && (await this.nativeEvidenceScope());
+    const nativeOpportunity = !legacy && (await this.nativeOpportunityScope(this.pool));
+    if (nativeOpportunity && !native)
+      throw new Error("native_opportunity_requires_account_evidence");
+    const legacyValues = legacy ? [legacy.organizationId, legacy.workspaceId] : [];
+    const where = legacy
+        ? ["o.organization_id=?", "o.workspace_id=?"]
+        : ["oo.account_id=?", ...(nativeOpportunity ? ["o.account_id=oo.account_id"] : [])],
+      values: ReadParameter[] = legacy ? [...legacyValues] : [accountId];
     if (input.sourceTopicId) {
-      where.push(opportunitySourceTopicFilterSql);
+      where.push(
+        legacy
+          ? opportunitySourceTopicFilterSql
+          : nativeOpportunity
+            ? accountOpportunitySourceTopicFilterSql
+                .replace("WHERE tt.id=? ", "WHERE tt.id=? AND tt.account_id=oo.account_id ")
+                .replace(
+                  "AND r.provider_id=l.provider_id ",
+                  "AND r.provider_id=l.provider_id AND r.account_id=oo.account_id ",
+                )
+            : accountOpportunitySourceTopicFilterSql,
+      );
       values.push(input.sourceTopicId);
     }
     if (input.selectionView === "completed") {
-      where.push(opportunityCompletedFilterSql);
+      where.push(legacy ? opportunityCompletedFilterSql : accountOpportunityCompletedFilterSql);
     } else if (input.selectionView === "recommended") {
       where.push("o.decision_status='pending'", opportunityRecommendedSql);
     } else if (input.selectionView === "rule_candidates") {
-      where.push("o.decision_status='pending'", homeCandidateSql, `NOT ${homeQualityGateSql}`);
+      where.push(
+        "o.decision_status='pending'",
+        nativeOpportunity ? opportunityCandidateSql : homeCandidateSql,
+        `NOT ${homeQualityGateSql}`,
+      );
     } else if (input.selectionView === "evidence_pending") {
-      where.push("o.decision_status='pending'", `NOT ${homeCandidateSql}`);
+      where.push(
+        "o.decision_status='pending'",
+        `NOT ${nativeOpportunity ? opportunityCandidateSql : homeCandidateSql}`,
+      );
     } else if (input.selectionView !== "all" && input.scope !== "all")
       where.push(
         sqlText(
           "(o.source_type='manual' OR o.category LIKE 'ERP%'",
           "OR EXISTS (SELECT 1 FROM competitors c0",
-          "WHERE c0.opportunity_id=o.id AND c0.deleted_at IS NULL)",
+          "WHERE c0.opportunity_id=o.id AND c0.deleted_at IS NULL" +
+            (legacy
+              ? ""
+              : ` AND ${nativeOpportunity ? "c0.account_id=oo.account_id" : "c0.organization_id=o.organization_id AND c0.workspace_id=o.workspace_id"} AND ${rehearsalOwns("competitors", "c0.id", "oo.account_id")}`) +
+            ")",
           "OR EXISTS (SELECT 1 FROM sourcing_searches ss0",
-          "WHERE ss0.input_type='opportunity' AND ss0.input_ref=o.id AND ss0.deleted_at IS NULL))",
+          "WHERE ss0.input_type='opportunity' AND ss0.input_ref=o.id AND ss0.deleted_at IS NULL" +
+            (legacy
+              ? ""
+              : ` AND ${rehearsalOwns("sourcing_searches", "ss0.id", "oo.account_id")} AND ${rehearsalOwns("collection_tasks", "ss0.collection_task_id", "oo.account_id")}`) +
+            "))",
         ),
       );
     if (input.query) {
@@ -189,52 +549,143 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       where.push("o.owner_id=?");
       values.push(input.ownerId);
     }
-    const recommended = input.selectionView === "recommended",
+    if (nativeOpportunity) {
+      const filter = nativeOpportunityProof(where.join(" AND "), "oo.account_id");
+      const records = nativeOpportunityProof(
+        reuseListPrimaryIdentitySql(nativeAccountPrimaryRecordsSql),
+        "o.account_owner",
+      );
+      const counts = nativeOpportunityProof(
+        reuseListPrimaryIdentitySql(accountCountsSql),
+        "o.account_owner",
+      );
+      const projection = nativeOpportunityProof(
+        opportunityListSelectionProjectionSql,
+        "o.account_owner",
+      );
+      const primary = nativeOpportunityProof(opportunityPrimaryAsinSql, "o.account_owner");
+      const countSql = `SELECT COUNT(*) total FROM ${accountOpportunitySource} WHERE ${filter}`;
+      const rowsSql = `SELECT o.*,${records},${counts},${opportunityLifecycleSql},${projection}
+        FROM (SELECT o.*,${primary} primary_fact_asin FROM (
+          SELECT o.*,oo.account_id account_owner,receipt.source_run_id sealed_run_id FROM ${accountOpportunitySource}
+          WHERE ${filter} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?
+        ) o LIMIT 18446744073709551615) o ORDER BY o.updated_at DESC,o.id DESC`;
+      if (/\b\w+\.(organization_id|workspace_id)\b/.test(countSql + rowsSql))
+        throw new Error("native_opportunity_list_projection_invalid");
+      const [[count], [rows]] = await Promise.all([
+        this.pool.execute<RowDataPacket[]>(...bindNativeOwner(countSql, values, accountId)),
+        this.pool.execute<RowDataPacket[]>(
+          ...bindNativeOwner(
+            rowsSql,
+            [...values, input.pageSize, (input.page - 1) * input.pageSize],
+            accountId,
+          ),
+        ),
+      ]);
+      const prices = await readOpportunityPurchasePrices(
+        this.pool,
+        { accountId: accountId! },
+        rows.map((row) => String(row.id)),
+      );
+      return {
+        total: Number(count[0]?.total ?? 0),
+        items: rows.map((row) => ({
+          ...summary(row),
+          automatic_purchase_price: prices.get(String(row.id)) ?? null,
+        })),
+      };
+    }
+    if (native && input.selectionView === "recommended") {
+      const filter = nativeCompetitorEvidence(
+        reuseRecommendedFilterIdentitySql(
+          optimizeSelectionReadSql(
+            where.join(" AND ").replaceAll("oo.account_id", "o.account_owner"),
+          ),
+        ),
+        nativeOwnerParameter,
+      );
+      const result = await this.readNativeRecommended(
+        filter,
+        values,
+        accountId!,
+        input.pageSize,
+        (input.page - 1) * input.pageSize,
+      );
+      const prices = await readOpportunityPurchasePrices(
+        this.pool,
+        { accountId: accountId! },
+        result.rows.map((row) => String(row.id)),
+      );
+      return {
+        total: result.total,
+        items: result.rows.map((row) => ({
+          ...summary(row),
+          automatic_purchase_price: prices.get(String(row.id)) ?? null,
+        })),
+      };
+    }
+    const recommended = Boolean(legacy && input.selectionView === "recommended"),
       // Presence filtering needs no sorted scalar identity for every scoped product.
       // Only the recommended view materializes its identity before filtering.
       pendingIdentity = recommended,
-      source = recommended ? opportunityRecommendedListSourceSql : "opportunities o",
+      source = legacy
+        ? recommended
+          ? opportunityRecommendedListSourceSql
+          : "opportunities o"
+        : accountOpportunitySource,
       sql = pendingIdentity
         ? reuseRecommendedFilterIdentitySql(where.join(" AND "))
-        : where.join(" AND "),
-      filterValues = pendingIdentity
-        ? [
-            input.organizationId,
-            input.workspaceId,
-            input.organizationId,
-            input.workspaceId,
-            ...values,
-          ]
-        : values,
-      countRead = this.pool.query<RowDataPacket[]>(
-        optimizeSelectionReadSql(`SELECT COUNT(*) total FROM ${source} WHERE ${sql}`),
-        filterValues,
+        : legacy
+          ? where.join(" AND ")
+          : ownedPrimaryIdentity(
+              optimizeSelectionReadSql(where.join(" AND ")),
+              "oo.account_id",
+              native,
+            ),
+      accountFilter = native ? nativeCompetitorEvidence(sql, nativeOwnerParameter) : sql,
+      records = legacy
+        ? opportunityListPrimaryRecordsSql
+        : native
+          ? nativeAccountPrimaryRecordsSql
+          : accountPrimaryRecordsSql,
+      filterValues = recommended ? [...legacyValues, ...legacyValues, ...values] : values,
+      countSql = optimizeSelectionReadSql(
+        `SELECT COUNT(*) total FROM ${source} WHERE ${accountFilter}`,
       ),
+      countRead = native
+        ? this.pool.execute<RowDataPacket[]>(...bindNativeOwner(countSql, filterValues, accountId))
+        : this.pool.query<RowDataPacket[]>(countSql, filterValues),
       // LIMIT prevents MySQL 5.7 derived merging: resolve identity once per paged row,
       // rather than once per candidate evidence record. The outer sort preserves paging order.
-      rowsRead = this.pool.query<RowDataPacket[]>(
-        optimizeSelectionReadSql(
-          sqlText(
-            `SELECT o.*,${reuseListPrimaryIdentitySql(opportunityListPrimaryRecordsSql)},${reuseListPrimaryIdentitySql(opportunityCountsSql)},${opportunityLifecycleSql},${opportunityListSelectionProjectionSql}`,
-            `FROM (SELECT o.*,${pendingIdentity ? "o.filter_primary_asin" : opportunityListPrimaryAsinSql} primary_fact_asin FROM (SELECT o.* FROM ${source} WHERE ${sql} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
-            "ORDER BY o.updated_at DESC,o.id DESC",
-          ),
+      rowsSql = optimizeSelectionReadSql(
+        sqlText(
+          `SELECT o.*,${accountPrimaryProjection(native, reuseListPrimaryIdentitySql(records))},${reuseListPrimaryIdentitySql(legacy ? opportunityCountsSql : accountCountsSql)},${opportunityLifecycleSql},${accountPrimaryProjection(native, opportunityListSelectionProjectionSql)}`,
+          `FROM (SELECT o.*,${pendingIdentity ? "o.filter_primary_asin" : legacy ? opportunityListPrimaryAsinSql : ownedPrimaryIdentity(opportunityPrimaryAsinSql, "o.account_owner", native)} primary_fact_asin FROM (SELECT o.*${legacy ? "" : ",oo.account_id account_owner"} FROM ${source} WHERE ${accountFilter} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
+          "ORDER BY o.updated_at DESC,o.id DESC",
         ),
-        [
-          input.organizationId,
-          input.workspaceId,
-          ...(pendingIdentity ? [] : [input.organizationId, input.workspaceId]),
-          ...filterValues,
-          input.pageSize,
-          (input.page - 1) * input.pageSize,
-        ],
-      );
+      ),
+      rowsValues = [
+        ...legacyValues,
+        ...(pendingIdentity ? [] : legacyValues),
+        ...filterValues,
+        input.pageSize,
+        (input.page - 1) * input.pageSize,
+      ],
+      rowsRead = native
+        ? this.pool.execute<RowDataPacket[]>(...bindNativeOwner(rowsSql, rowsValues, accountId))
+        : this.pool.query<RowDataPacket[]>(rowsSql, rowsValues);
     const [[count], [rows]] = await Promise.all([countRead, rowsRead]);
-    const prices = await readOpportunityPurchasePrices(
-      this.pool,
-      input,
-      rows.map((row) => String(row.id)),
-    );
+    const prices = legacy
+      ? await readOpportunityPurchasePrices(
+          this.pool,
+          legacy,
+          rows.map((row) => String(row.id)),
+        )
+      : await readOpportunityPurchasePrices(
+          this.pool,
+          { accountId: accountId! },
+          rows.map((row) => String(row.id)),
+        );
     return {
       items: rows.map((row) => ({
         ...summary(row),
@@ -242,6 +693,63 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       })),
       total: Number(count[0]?.total ?? 0),
     };
+  }
+  private async readNativeRecommended(
+    filter: string,
+    values: ReadParameter[],
+    account: string,
+    size: number,
+    offset: number,
+  ) {
+    const conn = await this.pool.getConnection();
+    try {
+      // Keep qualification and hydration on the same MVCC snapshot without
+      // nesting the expensive filter under display-only correlated subqueries.
+      await conn.query("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
+      await conn.query("START TRANSACTION WITH CONSISTENT SNAPSHOT, READ ONLY");
+      const selection = `FROM ${nativeRecommendedSource} WHERE ${filter}`;
+      // MySQL 5.7 can flatten these evidence EXISTS clauses and enumerate a
+      // considerably larger join. Keep the already-scoped candidate relation first.
+      const [counts] = await conn.execute<RowDataPacket[]>(
+        ...bindNativeOwner(`SELECT STRAIGHT_JOIN COUNT(*) total ${selection}`, values, account),
+      );
+      const total = Number(counts[0]?.total ?? 0);
+      if (total <= offset) return { total, rows: [] };
+      const [hits] = await conn.execute<RowDataPacket[]>(
+        ...bindNativeOwner(
+          `SELECT STRAIGHT_JOIN o.id,o.filter_primary_asin ${selection} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?`,
+          [...values, size, offset],
+          account,
+        ),
+      );
+      if (!hits.length) return { total, rows: [] };
+      const pairs = hits
+        .map(
+          () =>
+            "SELECT CAST(? AS CHAR(36) CHARACTER SET ascii) id,CAST(? AS CHAR(10) CHARACTER SET ascii) primary_fact_asin",
+        )
+        .join(" UNION ALL ");
+      const [rows] = await conn.execute<RowDataPacket[]>(
+        ...bindNativeOwner(
+          sqlText(
+            `SELECT o.*,${accountPrimaryProjection(true, nativeAccountPrimaryRecordsSql)},${reuseListPrimaryIdentitySql(accountCountsSql)},${opportunityLifecycleSql},${nativeRecommendedSelectionProjection}`,
+            `FROM (SELECT o.*,oo.account_id account_owner,hit.primary_fact_asin FROM ${accountOpportunitySource} JOIN (${pairs}) hit ON hit.id=o.id WHERE oo.account_id=? LIMIT 18446744073709551615) o`,
+            "ORDER BY o.updated_at DESC,o.id DESC",
+          ),
+          [...hits.flatMap((row) => [String(row.id), String(row.filter_primary_asin)]), account],
+          account,
+        ),
+      );
+      return { total, rows };
+    } finally {
+      try {
+        await conn.rollback();
+      } catch (error) {
+        conn.destroy();
+        throw error;
+      }
+      conn.release();
+    }
   }
   async memberOptions(input: { organizationId: string; workspaceId: string }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
@@ -258,8 +766,45 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     organizationId: string;
     workspaceId: string;
     opportunityId: string;
+    accountId?: string;
+    nativeOpportunity?: boolean;
   }): Promise<OpportunityDetail["lineage"]> {
+    const own = detailOwnership(input.accountId);
+    const account = input.accountId !== undefined;
+    const sourceOwned = own([
+      ["opportunities", "op.id"],
+      ["opportunity_evidence_links", "l.id"],
+      ["raw_evidence", "re.id"],
+      ["collection_tasks", "ct.id"],
+    ]);
+    const attemptOwned = own([
+      ["opportunities", "op.id"],
+      ["opportunity_evidence_links", "l.id"],
+      ["raw_evidence", "re.id"],
+      ["collection_tasks", "a.task_id"],
+    ]);
+    const qualityOwned = own([
+      ["opportunities", "op.id"],
+      ["opportunity_evidence_links", "l.id"],
+      ["raw_evidence", "l.raw_evidence_id"],
+      ["data_quality_issues", "q.id"],
+    ]);
+    const trendOwned = own([
+      ["opportunities", "o.id"],
+      ["trend_topics", "t.id"],
+    ]);
+    const signalOwned = own([["trend_signals", "s.id"]]);
+    const eventOwned = own([["opportunity_events", "e.id"]]);
+    const scoreOwned = own([["opportunity_score_runs", "opportunity_score_runs.id"]]);
+    const profitOwned = own([["opportunity_profit_runs", "opportunity_profit_runs.id"]]);
+    const taskOwned = own([["tasks", "t.id"]]);
+    const taskEventOwned = own([["task_events", "e2.id"]]);
+    const taskDecisionOwned = own([["opportunity_decisions", "d.id"]]);
+    const taskOpportunityOwned = own([["opportunities", "parent.id"]]);
+    const notificationEventOwned = own([["outbox_events", "delivery.id"]]);
+    const nativeParent = "p.account_id=?";
     const scope = [input.opportunityId, input.organizationId, input.workspaceId],
+      lineageScope = account ? [input.opportunityId] : scope,
       [
         sourceRows = [],
         attemptRows = [],
@@ -279,92 +824,157 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
             "re.id evidence_id,re.status evidence_status,re.captured_at,re.request_id,re.trace_id,",
             "ct.id collection_task_id,ct.status collection_status,ct.last_error_code,",
             "ct.created_at task_created_at,ct.request_id task_request_id,ct.trace_id task_trace_id",
-            "FROM opportunity_evidence_links l JOIN raw_evidence re ON re.id=l.raw_evidence_id",
+            "FROM opportunity_evidence_links l JOIN raw_evidence re ON re.id=l.raw_evidence_id JOIN opportunities op ON op.id=l.opportunity_id",
             "JOIN providers p ON p.id=re.provider_id LEFT JOIN provider_adapter_health h ON h.provider_id=p.id",
             "JOIN collection_tasks ct ON ct.id=re.collection_task_id",
-            "WHERE l.opportunity_id=? AND l.organization_id=? AND l.workspace_id=?",
+            account
+              ? `WHERE l.opportunity_id=? AND l.provider_id=re.provider_id${sourceOwned.sql}`
+              : "WHERE l.opportunity_id=? AND op.organization_id=? AND op.workspace_id=?",
             "ORDER BY re.captured_at DESC LIMIT 20",
           ),
-          scope,
+          [...lineageScope, ...sourceOwned.values],
         ),
         this.pool.query<RowDataPacket[]>(
           sqlText(
             "SELECT DISTINCT a.id,a.task_id,a.status,a.error_code,a.created_at,a.request_id,a.trace_id",
             "FROM collection_task_attempts a JOIN raw_evidence re ON re.collection_task_id=a.task_id",
-            "JOIN opportunity_evidence_links l ON l.raw_evidence_id=re.id",
-            "WHERE l.opportunity_id=? AND l.organization_id=? AND l.workspace_id=?",
+            "JOIN opportunity_evidence_links l ON l.raw_evidence_id=re.id JOIN opportunities op ON op.id=l.opportunity_id",
+            account
+              ? `WHERE l.opportunity_id=? AND l.provider_id=re.provider_id${attemptOwned.sql}`
+              : "WHERE l.opportunity_id=? AND op.organization_id=? AND op.workspace_id=?",
             "ORDER BY a.created_at DESC LIMIT 20",
           ),
-          scope,
+          [...lineageScope, ...attemptOwned.values],
         ),
         this.pool.query<RowDataPacket[]>(
           sqlText(
             "SELECT DISTINCT q.id,q.metric_code,q.severity,q.status,q.updated_at,q.request_id,q.trace_id",
-            "FROM data_quality_issues q JOIN opportunity_evidence_links l ON l.raw_evidence_id=q.raw_evidence_id",
-            "WHERE l.opportunity_id=? AND q.organization_id=? AND q.workspace_id=?",
+            "FROM data_quality_issues q JOIN opportunity_evidence_links l ON l.raw_evidence_id=q.raw_evidence_id JOIN opportunities op ON op.id=l.opportunity_id",
+            account
+              ? "JOIN raw_evidence re ON re.id=l.raw_evidence_id AND re.provider_id=l.provider_id"
+              : "",
+            account
+              ? `WHERE l.opportunity_id=?${qualityOwned.sql}`
+              : "WHERE l.opportunity_id=? AND q.organization_id=? AND q.workspace_id=?",
             "ORDER BY q.updated_at DESC LIMIT 20",
           ),
-          scope,
+          [...lineageScope, ...qualityOwned.values],
         ),
         this.pool.query<RowDataPacket[]>(
           sqlText(
             "SELECT DISTINCT t.id,t.title,t.status,t.source_fresh_at,s.observed_at,s.request_id,s.trace_id",
             "FROM opportunities o JOIN trend_topics t ON t.id=o.source_ref_id AND o.source_type='trend_topic'",
-            "LEFT JOIN trend_signals s ON s.topic_id=t.id",
-            "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=?",
+            `LEFT JOIN trend_signals s ON s.topic_id=t.id${signalOwned.sql}`,
+            account
+              ? `WHERE o.id=?${trendOwned.sql}`
+              : "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=?",
             "ORDER BY s.observed_at DESC LIMIT 1",
           ),
-          scope,
+          [...signalOwned.values, ...lineageScope, ...trendOwned.values],
         ),
         this.pool.query<RowDataPacket[]>(
           sqlText(
             "SELECT o.id,o.name,o.decision_status,o.updated_at,e.request_id,e.trace_id",
-            "FROM opportunities o LEFT JOIN opportunity_events e ON e.resource_type='opportunity'",
-            "AND e.resource_id=o.id AND e.organization_id=o.organization_id AND e.workspace_id=o.workspace_id",
-            "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=?",
+            "FROM opportunities o LEFT JOIN " +
+              (input.nativeOpportunity ? "opportunity_events" : opportunityEventReadRelation) +
+              " e ON e.resource_type='opportunity'",
+            `AND e.resource_id=o.id${input.nativeOpportunity ? "" : " AND e.organization_id=o.organization_id AND e.workspace_id=o.workspace_id"}${eventOwned.sql}`,
+            input.nativeOpportunity
+              ? "WHERE o.id=? AND o.account_id=?"
+              : "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=?",
             "ORDER BY e.occurred_at DESC LIMIT 1",
           ),
-          scope,
+          [
+            ...eventOwned.values,
+            ...(input.nativeOpportunity ? [input.opportunityId, input.accountId] : scope),
+          ],
         ),
         this.pool.query<RowDataPacket[]>(
           "SELECT id,status,scored_at,request_id,trace_id FROM opportunity_score_runs " +
-            "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? " +
+            "WHERE opportunity_id=? AND EXISTS (SELECT 1 FROM opportunities p " +
+            `WHERE p.id=opportunity_score_runs.opportunity_id AND ${input.nativeOpportunity ? nativeParent : "p.organization_id=? AND p.workspace_id=?"})${scoreOwned.sql} ` +
             "ORDER BY scored_at DESC LIMIT 10",
-          scope,
+          [
+            ...(input.nativeOpportunity ? [input.opportunityId, input.accountId] : scope),
+            ...scoreOwned.values,
+          ],
         ),
         this.pool.query<RowDataPacket[]>(
           "SELECT id,status,calculated_at,request_id,trace_id FROM opportunity_profit_runs " +
-            "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? " +
+            "WHERE opportunity_id=? AND EXISTS (SELECT 1 FROM opportunities p " +
+            `WHERE p.id=opportunity_profit_runs.opportunity_id AND ${input.nativeOpportunity ? nativeParent : "p.organization_id=? AND p.workspace_id=?"})${profitOwned.sql} ` +
             "ORDER BY calculated_at DESC LIMIT 10",
-          scope,
+          [
+            ...(input.nativeOpportunity ? [input.opportunityId, input.accountId] : scope),
+            ...profitOwned.values,
+          ],
         ),
         this.pool.query<RowDataPacket[]>(
           sqlText(
             "SELECT t.id,t.title,t.status,t.updated_at,e.request_id,e.trace_id",
             "FROM tasks t LEFT JOIN task_events e ON e.id=(SELECT e2.id FROM task_events e2",
-            "WHERE e2.task_id=t.id ORDER BY e2.created_at DESC,e2.id DESC LIMIT 1)",
-            "WHERE t.organization_id=? AND t.workspace_id=? AND t.source_ref_id=? AND t.deleted_at IS NULL",
+            `WHERE e2.task_id=t.id${taskEventOwned.sql} ORDER BY e2.created_at DESC,e2.id DESC LIMIT 1)`,
+            account
+              ? `WHERE EXISTS (SELECT 1 FROM opportunities parent WHERE parent.id=?${taskOpportunityOwned.sql} AND (` +
+                  "(t.source_type IN ('evidence_completion','selection_verification') AND t.source_ref_id=parent.id) OR " +
+                  "(t.source_type='selection_verification' AND EXISTS (SELECT 1 FROM opportunity_decisions d " +
+                  `WHERE d.id=t.source_ref_id AND d.opportunity_id=parent.id${taskDecisionOwned.sql})))) ` +
+                  `AND t.deleted_at IS NULL${taskOwned.sql}`
+              : "WHERE t.organization_id=? AND t.workspace_id=? AND t.source_ref_id=? AND t.deleted_at IS NULL",
             "ORDER BY t.updated_at DESC LIMIT 20",
           ),
-          [input.organizationId, input.workspaceId, input.opportunityId],
+          account
+            ? [
+                ...taskEventOwned.values,
+                input.opportunityId,
+                ...taskOpportunityOwned.values,
+                ...taskDecisionOwned.values,
+                ...taskOwned.values,
+              ]
+            : [input.organizationId, input.workspaceId, input.opportunityId],
         ),
-        this.pool.query<RowDataPacket[]>(
-          sqlText(
-            "SELECT n.id,n.title,n.severity,n.created_at,o.request_id,o.trace_id",
-            "FROM notifications n JOIN outbox_events o ON o.id=n.source_event_id",
-            "WHERE n.organization_id=? AND n.workspace_id=? AND (n.resource_id=? OR n.resource_id IN",
-            "(SELECT t.id FROM tasks t WHERE t.organization_id=? AND t.workspace_id=? AND",
-            "t.source_ref_id=? AND t.deleted_at IS NULL)) ORDER BY n.created_at DESC LIMIT 20",
-          ),
-          [
-            input.organizationId,
-            input.workspaceId,
-            input.opportunityId,
-            input.organizationId,
-            input.workspaceId,
-            input.opportunityId,
-          ],
-        ),
+        input.nativeOpportunity
+          ? this.pool.query<RowDataPacket[]>(
+              sqlText(
+                "SELECT n.id,n.title,n.severity,n.created_at,delivery.request_id,delivery.trace_id",
+                "FROM notifications n JOIN outbox_events delivery ON delivery.id=n.source_event_id",
+                `WHERE n.recipient_id=?${notificationEventOwned.sql} AND ((n.resource_type='opportunity' AND n.resource_id=?)`,
+                "OR (n.resource_type='task' AND EXISTS (SELECT 1 FROM tasks t WHERE t.id=n.resource_id",
+                `AND t.account_id=? AND t.deleted_at IS NULL${taskOwned.sql} AND ((t.source_type IN ('evidence_completion','selection_verification') AND t.source_ref_id=?)`,
+                "OR (t.source_type='selection_verification' AND EXISTS (SELECT 1 FROM opportunity_decisions d",
+                `WHERE d.id=t.source_ref_id AND d.opportunity_id=?${taskDecisionOwned.sql}))))))`,
+                "ORDER BY n.created_at DESC LIMIT 20",
+              ),
+              [
+                input.accountId,
+                ...notificationEventOwned.values,
+                input.opportunityId,
+                input.accountId,
+                ...taskOwned.values,
+                input.opportunityId,
+                input.opportunityId,
+                ...taskDecisionOwned.values,
+              ],
+            )
+          : this.pool.query<RowDataPacket[]>(
+              sqlText(
+                "SELECT n.id,n.title,n.severity,n.created_at,o.request_id,o.trace_id",
+                `FROM ${await notificationScopeRelation(this.pool)} n JOIN outbox_events o ON o.id=n.source_event_id`,
+                "WHERE n.organization_id=? AND n.workspace_id=? AND (n.resource_id=? OR n.resource_id IN",
+                "(SELECT t.id FROM tasks t WHERE t.organization_id=? AND t.workspace_id=? AND",
+                `t.source_ref_id=? AND t.deleted_at IS NULL${taskOwned.sql}))${account ? " AND n.recipient_id=? AND o.organization_id=n.organization_id AND o.workspace_id=n.workspace_id" : ""} ORDER BY n.created_at DESC LIMIT 20`,
+              ),
+              [
+                input.organizationId,
+                input.workspaceId,
+                input.opportunityId,
+                input.organizationId,
+                input.workspaceId,
+                input.opportunityId,
+                ...taskOwned.values,
+                ...(account ? [input.accountId] : []),
+              ],
+            ),
       ]).then((results) => results.map(([rows]) => rows));
     const nodes: OpportunityDetail["lineage"]["nodes"] = [],
       seen = new Set<string>(),
@@ -559,13 +1169,27 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     };
   }
   private async operatingFeedback(
-    input: { organizationId: string; workspaceId: string; opportunityId: string },
+    input: {
+      organizationId: string;
+      workspaceId: string;
+      opportunityId: string;
+      accountId?: string;
+      nativeOpportunity?: boolean;
+    },
     database: Pool | PoolConnection = this.pool,
   ): Promise<OpportunityOperatingFeedback> {
+    const owned = detailOwnership(input.accountId)([["opportunity_operating_facts", "f.id"]]);
     const [rows] = await database.query<RowDataPacket[]>(
-      "SELECT * FROM opportunity_operating_facts WHERE opportunity_id=? AND organization_id=? " +
-        "AND workspace_id=? ORDER BY period_end DESC,created_at DESC,id DESC LIMIT 20",
-      [input.opportunityId, input.organizationId, input.workspaceId],
+      "SELECT f.* FROM opportunity_operating_facts f JOIN opportunities o ON o.id=f.opportunity_id " +
+        `WHERE o.id=? AND ${input.nativeOpportunity ? "o.account_id=?" : "o.organization_id=? AND o.workspace_id=?"}${owned.sql} ` +
+        "ORDER BY f.period_end DESC,f.created_at DESC,f.id DESC LIMIT 20",
+      [
+        input.opportunityId,
+        ...(input.nativeOpportunity
+          ? [input.accountId]
+          : [input.organizationId, input.workspaceId]),
+        ...owned.values,
+      ],
     );
     const facts: OpportunityOperatingFact[] = rows.map((row) => ({
         id: String(row.id),
@@ -630,21 +1254,71 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       },
     };
   }
-  async get(input: {
-    organizationId: string;
-    workspaceId: string;
-    actorId: string;
-    opportunityId: string;
-  }) {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
-      sqlText(
-        `SELECT o.*,${opportunityPrimaryRecordsSql},${opportunityCountsSql},${opportunityLifecycleSql},${opportunitySelectionProjectionSql}`,
-        `FROM (SELECT o.*,${opportunityPrimaryAsinSql} primary_fact_asin FROM opportunities o WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1) o`,
-      ),
-      [input.opportunityId, input.organizationId, input.workspaceId],
-    );
+  async get(request: Parameters<OpportunityRepository["get"]>[0]) {
+    const accountId = "accountId" in request ? request.accountId : undefined;
+    if (accountId !== undefined) await requireAccountReadRehearsal(this.pool);
+    const native = accountId !== undefined && (await this.nativeEvidenceScope());
+    const nativeOpportunity =
+      accountId !== undefined && (await this.nativeOpportunityScope(this.pool));
+    if (nativeOpportunity && !native)
+      throw new Error("native_opportunity_requires_native_evidence");
+    const inner = `WHERE o.id=? AND oo.account_id=?${nativeOpportunity ? " AND o.account_id=oo.account_id" : ""} LIMIT 1) o`;
+    const accountDetailSql = nativeOpportunity
+      ? sqlText(
+          `SELECT o.*,${nativeOpportunityProof(reuseListPrimaryIdentitySql(nativeAccountPrimaryRecordsSql), "o.account_owner")},${nativeOpportunityProof(reuseListPrimaryIdentitySql(accountCountsSql), "o.account_owner")},${opportunityLifecycleSql},${nativeOpportunityProof(opportunityListSelectionProjectionSql, "o.account_owner")}`,
+          `FROM (SELECT o.*,oo.account_id account_owner,receipt.source_run_id sealed_run_id,${nativeOpportunityProof(opportunityPrimaryAsinSql, "oo.account_id")} primary_fact_asin FROM ${accountOpportunitySource} ${inner}`,
+        )
+      : sqlText(
+          `SELECT o.*,${accountPrimaryProjection(native, native ? nativeAccountPrimaryRecordsSql : accountPrimaryRecordsSql)},${reuseListPrimaryIdentitySql(accountCountsSql)},${opportunityLifecycleSql},${accountPrimaryProjection(native, opportunityListSelectionProjectionSql)}`,
+          `FROM (SELECT o.*,oo.account_id account_owner,${ownedPrimaryIdentity(opportunityPrimaryAsinSql, "oo.account_id", native)} primary_fact_asin FROM ${accountOpportunitySource} ${inner}`,
+        );
+    const accountDetailValues = [request.opportunityId, accountId];
+    const [rows] =
+      "organizationId" in request
+        ? await this.pool.query<RowDataPacket[]>(
+            sqlText(
+              `SELECT o.*,${opportunityPrimaryRecordsSql},${opportunityCountsSql},${opportunityLifecycleSql},${opportunitySelectionProjectionSql}`,
+              `FROM (SELECT o.*,${opportunityPrimaryAsinSql} primary_fact_asin FROM opportunities o WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1) o`,
+            ),
+            [request.opportunityId, request.organizationId, request.workspaceId],
+          )
+        : native
+          ? await this.pool.execute<RowDataPacket[]>(
+              ...bindNativeOwner(accountDetailSql, accountDetailValues, accountId),
+            )
+          : await this.pool.query<RowDataPacket[]>(accountDetailSql, accountDetailValues);
     const row = rows[0];
     if (!row) return null;
+    const input =
+      "organizationId" in request
+        ? request
+        : {
+            organizationId: nativeOpportunity ? "" : String(row.organization_id),
+            workspaceId: nativeOpportunity ? "" : String(row.workspace_id),
+            opportunityId: request.opportunityId,
+            accountId: request.accountId,
+            nativeOpportunity,
+          };
+    const own = detailOwnership(accountId);
+    const evidenceOwner = own([
+      ["opportunities", "op.id"],
+      ["opportunity_evidence_links", "l.id"],
+      ["trend_signals", "s.id"],
+      ["raw_evidence", "l.raw_evidence_id"],
+    ]);
+    const decisionOwner = own([["opportunity_decisions", "opportunity_decisions.id"]]);
+    const taskOwner = own([["tasks", "tasks.id"]]);
+    const taskParentOwner = own([["opportunities", "tasks.source_ref_id"]]);
+    const scoreJobOwner = own([["opportunity_score_jobs", "j.id"]]);
+    const scoreRunOwner = own([["opportunity_score_runs", "opportunity_score_runs.id"]]);
+    const scoreComponentOwner = own([
+      ["opportunity_score_components", "opportunity_score_components.id"],
+    ]);
+    const parentScope = nativeOpportunity ? [accountId] : [input.organizationId, input.workspaceId];
+    const qualifyParent = (alias: "o" | "op" | "p") =>
+      nativeOpportunity
+        ? `${alias}.account_id=?`
+        : `${alias}.organization_id=? AND ${alias}.workspace_id=?`;
     const [lineage, operatingFeedback] = await Promise.all([
       this.lineage(input),
       this.operatingFeedback(input),
@@ -652,56 +1326,75 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     const [evidence] = await this.pool.query<RowDataPacket[]>(
       sqlText(
         "SELECT l.id,s.title,s.publisher,s.canonical_url,l.provider_id,",
-        "l.raw_evidence_id,l.observed_at FROM opportunity_evidence_links l",
+        "l.raw_evidence_id,l.observed_at FROM opportunity_evidence_links l JOIN opportunities op ON op.id=l.opportunity_id",
         "JOIN trend_signals s ON s.id=l.evidence_id AND l.evidence_type='trend_signal'",
-        "WHERE l.opportunity_id=? AND l.organization_id=? AND l.workspace_id=?",
+        accountId === undefined
+          ? "WHERE l.opportunity_id=? AND op.organization_id=? AND op.workspace_id=?"
+          : "JOIN raw_evidence r ON r.id=l.raw_evidence_id AND r.id=s.raw_evidence_id " +
+              "AND r.provider_id=l.provider_id AND s.provider_id=l.provider_id " +
+              `WHERE l.opportunity_id=?${evidenceOwner.sql}`,
         "ORDER BY l.observed_at DESC,l.id DESC",
       ),
-      [input.opportunityId, input.organizationId, input.workspaceId],
+      accountId === undefined
+        ? [input.opportunityId, input.organizationId, input.workspaceId]
+        : [input.opportunityId, ...evidenceOwner.values],
     );
     const [decisions] = await this.pool.query<RowDataPacket[]>(
       sqlText(
         "SELECT id,action,reason,actor_id,created_at,opportunity_version",
         "FROM opportunity_decisions",
-        "WHERE opportunity_id=? AND organization_id=? AND workspace_id=?",
+        `WHERE opportunity_id=?${decisionOwner.sql}`,
         "ORDER BY created_at DESC,id DESC",
       ),
-      [input.opportunityId, input.organizationId, input.workspaceId],
+      [input.opportunityId, ...decisionOwner.values],
     );
     const [[evidenceTasks], [scoreJobs], [automaticEvaluations], [analysisCompletions]] =
       await Promise.all([
         this.pool.query<RowDataPacket[]>(
           "SELECT id,status,progress_percent,assignee_id,due_at,completed_at,created_at,updated_at " +
-            "FROM tasks WHERE organization_id=? AND workspace_id=? AND " +
-            "source_type='evidence_completion' AND source_ref_id=? AND deleted_at IS NULL " +
+            "FROM tasks WHERE " +
+            (accountId === undefined ? "organization_id=? AND workspace_id=? AND " : "") +
+            `source_type='evidence_completion' AND source_ref_id=? AND deleted_at IS NULL${taskOwner.sql}${taskParentOwner.sql} ` +
             "ORDER BY created_at DESC,id DESC LIMIT 1",
-          [input.organizationId, input.workspaceId, input.opportunityId],
+          accountId === undefined
+            ? [input.organizationId, input.workspaceId, input.opportunityId]
+            : [input.opportunityId, ...taskOwner.values, ...taskParentOwner.values],
         ),
         this.pool.query<RowDataPacket[]>(
-          "SELECT id,status,trigger_task_id,last_error_code,created_at,updated_at FROM opportunity_score_jobs " +
-            "WHERE organization_id=? AND workspace_id=? AND opportunity_id=? " +
-            "ORDER BY created_at DESC,id DESC LIMIT 1",
-          [input.organizationId, input.workspaceId, input.opportunityId],
+          "SELECT j.id,j.status,j.trigger_task_id,j.last_error_code,j.created_at,j.updated_at FROM opportunity_score_jobs j " +
+            "JOIN opportunities o ON o.id=j.opportunity_id " +
+            `WHERE ${qualifyParent("o")} AND j.opportunity_id=?${scoreJobOwner.sql} ` +
+            "ORDER BY j.created_at DESC,j.id DESC LIMIT 1",
+          [...parentScope, input.opportunityId, ...scoreJobOwner.values],
         ),
         this.pool.query<RowDataPacket[]>(
-          "SELECT status,last_error_code,result_json,evaluated_at FROM automatic_selection_evaluations " +
-            "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? LIMIT 1",
-          [input.opportunityId, input.organizationId, input.workspaceId],
+          "SELECT e.status,e.last_error_code,e.result_json,e.evaluated_at FROM automatic_selection_evaluations e " +
+            "JOIN opportunities op ON op.id=e.opportunity_id WHERE e.opportunity_id=? " +
+            `AND ${qualifyParent("op")} LIMIT 1`,
+          [input.opportunityId, ...parentScope],
         ),
-        this.pool.query<RowDataPacket[]>(opportunityAnalysisCompletedAtSql, [
-          input.organizationId,
-          input.workspaceId,
-          input.opportunityId,
-          row.main_asin ?? "",
-        ]),
+        this.pool.query<RowDataPacket[]>(
+          accountId === undefined
+            ? opportunityAnalysisCompletedAtSql
+            : nativeOpportunity
+              ? accountOpportunityAnalysisCompletedAtSql.replaceAll(
+                  opportunityEventReadRelation,
+                  "opportunity_events",
+                )
+              : accountOpportunityAnalysisCompletedAtSql,
+          accountId === undefined
+            ? [input.organizationId, input.workspaceId, input.opportunityId, row.main_asin ?? ""]
+            : [accountId, input.opportunityId, row.main_asin ?? ""],
+        ),
       ]);
     let scoreRun: RowDataPacket | undefined,
       components: RowDataPacket[] = [];
     try {
       const [scoreRuns] = await this.pool.query<RowDataPacket[]>(
-        "SELECT * FROM opportunity_score_runs WHERE opportunity_id=? AND organization_id=? AND " +
-          "workspace_id=? ORDER BY scored_at DESC,id DESC LIMIT 1",
-        [input.opportunityId, input.organizationId, input.workspaceId],
+        "SELECT * FROM opportunity_score_runs WHERE opportunity_id=? AND EXISTS (SELECT 1 FROM opportunities p " +
+          `WHERE p.id=opportunity_score_runs.opportunity_id AND ${qualifyParent("p")})${scoreRunOwner.sql} ` +
+          "ORDER BY scored_at DESC,id DESC LIMIT 1",
+        [input.opportunityId, ...parentScope, ...scoreRunOwner.values],
       );
       scoreRun = scoreRuns[0];
       if (scoreRun) {
@@ -709,9 +1402,9 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           sqlText(
             "SELECT dimension_code,weight_percent,input_score,weighted_score,",
             "evidence_ids_json,missing_fields_json FROM opportunity_score_components",
-            "WHERE score_run_id=? ORDER BY dimension_code",
+            `WHERE score_run_id=?${scoreComponentOwner.sql} ORDER BY dimension_code`,
           ),
-          [scoreRun.id],
+          [scoreRun.id, ...scoreComponentOwner.values],
         );
         components = result;
       }
@@ -935,21 +1628,11 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       await connection.query(
         sqlText(
           "INSERT INTO opportunity_refresh_jobs",
-          "(id,organization_id,workspace_id,opportunity_id,status,attempt_count,available_at,",
+          "(id,opportunity_id,status,attempt_count,available_at,",
           "lease_owner,lease_expires_at,last_error_code,request_id,trace_id,created_at,updated_at)",
-          "VALUES (?,?,?,?,'queued',0,?,NULL,NULL,NULL,?,?,?,?)",
+          "VALUES (?,?,'queued',0,?,NULL,NULL,NULL,?,?,?,?)",
         ),
-        [
-          randomUUID(),
-          input.organizationId,
-          input.workspaceId,
-          input.opportunityId,
-          now,
-          input.requestId,
-          input.traceId,
-          now,
-          now,
-        ],
+        [randomUUID(), input.opportunityId, now, input.requestId, input.traceId, now, now],
       );
       const result = (await this.getIn(
         connection,
@@ -993,37 +1676,53 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       connection.release();
     }
   }
-  async decide(
-    input: OpportunityWriteContext & {
-      opportunityId: string;
-      action: DecisionAction;
-      reason: string;
-      expectedVersion: number;
-      route: string;
-    },
-  ) {
-    const previous = await this.operation<{
+  async decide(command: Parameters<OpportunityRepository["decide"]>[0]) {
+    type DecisionResult = {
       opportunity_id: string;
       decision_status: "adopted" | "observing" | "rejected";
       version: number;
       decision_id: string;
       verification_task_id: string;
-    }>(input);
-    if (previous) return previous;
+    };
+    const accountMode = "accountOwnedDecision" in command;
+    if (!accountMode) {
+      const previous = await this.operation<DecisionResult>(command);
+      if (previous) return previous;
+    }
     const connection = await this.pool.getConnection(),
       now = new Date();
     try {
       await connection.beginTransaction();
-      const [rows] = await connection.query<RowDataPacket[]>(
-        sqlText(
-          `SELECT o.name,o.decision_status,o.version,o.recommendation_status,o.evidence_count,` +
-            `o.coverage_status,o.overall_score,o.score_rule_version,o.trend_score,` +
-            `o.competition_score,o.profit_status,${opportunitySelectionProjectionSql}`,
-          "FROM opportunities o",
-          "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1 FOR UPDATE",
-        ),
-        [input.opportunityId, input.organizationId, input.workspaceId],
+      if (accountMode) await requireAccountReadRehearsal(connection, { lockForTransaction: true });
+      const nativeOpportunity = accountMode && (await this.nativeOpportunityScope(connection));
+      const projection = nativeOpportunity
+        ? nativeOpportunityProof(opportunitySelectionProjectionSql, "oo.account_id")
+        : opportunitySelectionProjectionSql;
+      if (nativeOpportunity && /\b\w+\.(organization_id|workspace_id)\b/.test(projection))
+        throw new Error("native_opportunity_decision_projection_invalid");
+      const scopeQuery = sqlText(
+        `SELECT o.name,o.decision_status,o.version,o.recommendation_status,o.evidence_count,` +
+          `o.coverage_status,o.overall_score,o.score_rule_version,o.trend_score,` +
+          `o.competition_score,o.profit_status,${projection}` +
+          (accountMode
+            ? (nativeOpportunity ? "" : ",o.organization_id,o.workspace_id") +
+              ",oo.reason ownership_reason"
+            : ""),
+        accountMode ? `FROM ${accountOpportunitySource}` : "FROM opportunities o",
+        accountMode
+          ? "WHERE o.id=? AND oo.account_id=? " +
+              (nativeOpportunity ? "AND o.account_id=oo.account_id " : "") +
+              "LIMIT 1 FOR UPDATE"
+          : "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1 FOR UPDATE",
       );
+      const scopeArgs = accountMode
+        ? [command.opportunityId, command.actorId]
+        : [command.opportunityId, command.organizationId, command.workspaceId];
+      const [rows] = nativeOpportunity
+        ? await connection.query<RowDataPacket[]>(
+            ...bindNativeOwner(scopeQuery, scopeArgs, command.actorId),
+          )
+        : await connection.query<RowDataPacket[]>(scopeQuery, scopeArgs);
       const row = rows[0];
       if (!row)
         throw new OpportunityServiceError(
@@ -1031,6 +1730,50 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           404,
           "刷新机会列表；该机会可能不在当前工作区。",
         );
+      const input = accountMode
+        ? {
+            ...command,
+            organizationId: String(row.organization_id),
+            workspaceId: String(row.workspace_id),
+          }
+        : command;
+      const nativeTask = accountMode && (await nativeBusinessTaskScope(connection));
+      if (nativeOpportunity && !nativeTask)
+        throw new Error("native_opportunity_requires_account_tasks");
+      if (accountMode) {
+        const previous = await this.operation<DecisionResult>(input, connection);
+        if (previous) {
+          const [ownedReplay] =
+            previous.opportunity_id === input.opportunityId &&
+            typeof previous.decision_id === "string" &&
+            typeof previous.verification_task_id === "string"
+              ? await connection.query<RowDataPacket[]>(
+                  "SELECT d.id FROM opportunity_decisions d JOIN tasks t ON t.source_ref_id=d.id " +
+                    "AND t.source_type='selection_verification' " +
+                    "WHERE d.id=? AND t.id=? AND d.opportunity_id=? " +
+                    `AND ${rehearsalOwns("opportunity_decisions", "d.id", "?")} AND ${rehearsalOwns("tasks", "t.id", "?")}` +
+                    (nativeTask ? " AND t.account_id=?" : "") +
+                    " LIMIT 1 LOCK IN SHARE MODE",
+                  [
+                    previous.decision_id,
+                    previous.verification_task_id,
+                    input.opportunityId,
+                    input.actorId,
+                    input.actorId,
+                    ...(nativeTask ? [input.actorId] : []),
+                  ],
+                )
+              : [[]];
+          if (!ownedReplay.length)
+            throw new OpportunityServiceError(
+              "opportunity_decision_replay_not_available",
+              409,
+              "原决策或复核任务已无法按当前账号回读，请刷新选品详情。",
+            );
+          await connection.commit();
+          return previous;
+        }
+      }
       if (Number(row.version) !== input.expectedVersion)
         throw new OpportunityServiceError(
           "opportunity_version_conflict",
@@ -1057,14 +1800,12 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
       await connection.query(
         sqlText(
           "INSERT INTO opportunity_decisions",
-          "(id,organization_id,workspace_id,opportunity_id,action,reason,previous_status,",
+          "(id,opportunity_id,action,reason,previous_status,",
           "resulting_status,opportunity_version,actor_id,request_id,trace_id,created_at)",
-          "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+          "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
         ),
         [
           decisionId,
-          input.organizationId,
-          input.workspaceId,
           input.opportunityId,
           input.action,
           input.reason,
@@ -1077,10 +1818,14 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           now,
         ],
       );
-      await connection.query(
+      const [updated] = await connection.query<ResultSetHeader>(
         "UPDATE opportunities SET decision_status=?," +
           "lifecycle_entered_at=IF(lifecycle_status<>?,?,lifecycle_entered_at)," +
-          "lifecycle_status=?,version=?,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+          "lifecycle_status=?,version=?,updated_at=? WHERE id=?" +
+          (accountMode
+            ? ` AND version=? AND ${rehearsalOwns("opportunities", "opportunities.id", "?")}` +
+              (nativeOpportunity ? " AND account_id=?" : "")
+            : " AND organization_id=? AND workspace_id=?"),
         [
           status,
           status,
@@ -1089,24 +1834,30 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           version,
           now,
           input.opportunityId,
-          input.organizationId,
-          input.workspaceId,
+          ...(accountMode
+            ? [input.expectedVersion, input.actorId, ...(nativeOpportunity ? [input.actorId] : [])]
+            : [input.organizationId, input.workspaceId]),
         ],
       );
+      if (accountMode && updated.affectedRows !== 1)
+        throw new OpportunityServiceError(
+          "opportunity_version_conflict",
+          409,
+          "刷新机会详情并使用最新 version 重试。",
+        );
       const verificationTaskId = randomUUID(),
         dueAt = new Date(now.getTime() + 48 * 60 * 60 * 1000);
       await connection.query(
         sqlText(
           "INSERT INTO tasks",
-          "(id,organization_id,workspace_id,title,description,status,priority,assignee_id,",
+          `(id,${nativeTask ? "account_id" : "organization_id,workspace_id"},title,description,status,priority,assignee_id,`,
           "source_type,source_ref_id,collection_task_id,due_at,completed_at,created_by,",
           "version,created_at,updated_at)",
-          "VALUES (?,?,?,?,?,'todo','high',?,'selection_verification',?,NULL,?,NULL,?,1,?,?)",
+          `VALUES (${nativeTask ? "?,?,?,?" : "?,?,?,?,?"},'todo','high',?,'selection_verification',?,NULL,?,NULL,?,1,?,?)`,
         ),
         [
           verificationTaskId,
-          input.organizationId,
-          input.workspaceId,
+          ...(nativeTask ? [input.actorId] : [input.organizationId, input.workspaceId]),
           `验证机会决策 · ${String(row.name).slice(0, 160)}`,
           `复核决策 ${decisionId} 的结论、证据、利润与风险；决策原因：${input.reason}`.slice(
             0,
@@ -1120,16 +1871,15 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           now,
         ],
       );
+      const taskEventId = randomUUID();
       await connection.query(
         sqlText(
           "INSERT INTO task_events",
-          "(id,organization_id,workspace_id,task_id,event_type,actor_id,payload_json,",
-          "request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+          "(id,task_id,event_type,actor_id,payload_json,",
+          "request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?)",
         ),
         [
-          randomUUID(),
-          input.organizationId,
-          input.workspaceId,
+          taskEventId,
           verificationTaskId,
           "task.created",
           input.actorId,
@@ -1150,7 +1900,7 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         decision_id: decisionId,
         verification_task_id: verificationTaskId,
       };
-      await this.record(
+      const { eventId, outboxId } = await this.record(
         connection,
         input,
         "opportunity.decision.changed",
@@ -1164,7 +1914,18 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           verification_task_id: verificationTaskId,
         },
         now,
+        nativeOpportunity,
       );
+      if (accountMode)
+        await connection.query(
+          "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES " +
+            "('opportunity_decisions',?,?,?),('tasks',?,?,?),('task_events',?,?,?),('opportunity_events',?,?,?),('opportunity_outbox',?,?,?)",
+          [decisionId, verificationTaskId, taskEventId, eventId, outboxId].flatMap((id) => [
+            id,
+            input.actorId,
+            row.ownership_reason,
+          ]),
+        );
       await connection.query(
         "INSERT INTO opportunity_operations (id,actor_id,route,idempotency_key,resource_id," +
           "result_json,created_at) VALUES (?,?,?,?,?,?,?)",
@@ -1371,12 +2132,10 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           ],
         );
         await connection.query(
-          "INSERT INTO task_events (id,organization_id,workspace_id,task_id,event_type,actor_id," +
-            "payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+          "INSERT INTO task_events (id,task_id,event_type,actor_id," +
+            "payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?)",
           [
             randomUUID(),
-            input.organizationId,
-            input.workspaceId,
             taskId,
             "task.created",
             input.actorId,
@@ -1440,7 +2199,8 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
           ),
           connection.query<RowDataPacket[]>(
             "SELECT rule_version_code,net_profit,currency FROM opportunity_profit_runs " +
-              "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? " +
+              "WHERE opportunity_id=? AND EXISTS (SELECT 1 FROM opportunities p " +
+              "WHERE p.id=opportunity_profit_runs.opportunity_id AND p.organization_id=? AND p.workspace_id=?) " +
               "ORDER BY calculated_at DESC,id DESC LIMIT 1",
             [input.opportunityId, input.organizationId, input.workspaceId],
           ),
@@ -1467,16 +2227,14 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         );
       await connection.query(
         "INSERT INTO opportunity_operating_facts " +
-          "(id,organization_id,workspace_id,opportunity_id,period_start,period_end,sales_units," +
+          "(id,opportunity_id,period_start,period_end,sales_units," +
           "revenue_amount,ad_spend_amount,returned_units,purchase_lead_time_days," +
           "actual_profit_amount,currency,source_ref,notes,score_rule_version_snapshot," +
           "profit_rule_version_snapshot,decision_status_snapshot,predicted_profit_amount," +
           "predicted_currency,quoted_lead_time_days,observed_at,request_id,trace_id,created_by," +
-          "created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+          "created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [
           factId,
-          input.organizationId,
-          input.workspaceId,
           input.opportunityId,
           input.value.period_start,
           input.value.period_end,
@@ -1557,9 +2315,13 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         "选择可访问当前工作区的活动成员。",
       );
   }
-  private async operation<T>(input: OpportunityWriteContext & { route: string }) {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT result_json FROM opportunity_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",
+  private async operation<T>(
+    input: Pick<OpportunityWriteContext, "actorId" | "idempotencyKey"> & { route: string },
+    connection: Pick<Pool, "query"> = this.pool,
+  ) {
+    const [rows] = await connection.query<RowDataPacket[]>(
+      "SELECT result_json FROM opportunity_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1" +
+        (connection === this.pool ? "" : " FOR UPDATE"),
       [input.actorId, input.route, input.idempotencyKey],
     );
     return rows[0] ? parse<T>(rows[0].result_json) : null;
@@ -1583,50 +2345,52 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
     resourceId: string,
     payload: unknown,
     now: Date,
+    native = false,
   ) {
-    const values = [
-      randomUUID(),
-      input.organizationId,
-      input.workspaceId,
-      eventType,
-      "opportunity",
-      resourceId,
-      input.actorId,
-      input.requestId,
-      input.traceId,
-      JSON.stringify(payload),
-      now,
-    ];
-    await connection.query(
-      sqlText(
-        "INSERT INTO opportunity_events",
-        "(id,organization_id,workspace_id,event_type,resource_type,resource_id,actor_type,",
-        "actor_id,request_id,trace_id,payload_json,occurred_at)",
-        "VALUES (?,?,?,?,?,?,'user',?,?,?,?,?)",
-      ),
-      values,
-    );
-    await connection.query(
-      sqlText(
-        "INSERT INTO opportunity_outbox",
-        "(id,organization_id,workspace_id,event_type,resource_type,resource_id,payload_json,",
-        "status,attempt_count,available_at,request_id,trace_id,created_at,updated_at)",
-        "VALUES (?,?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
-      ),
-      [
-        randomUUID(),
-        input.organizationId,
-        input.workspaceId,
+    const eventId = randomUUID(),
+      outboxId = randomUUID();
+    if (native) {
+      await appendAccountOpportunityEvent(connection, {
+        id: eventId,
+        outboxId,
+        opportunityId: resourceId,
+        actorType: "user",
+        actorId: input.actorId,
         eventType,
-        "opportunity",
-        resourceId,
-        JSON.stringify(payload),
+        requestId: input.requestId,
+        traceId: input.traceId,
+        payloadJson: JSON.stringify(payload),
         now,
-        input.requestId,
-        input.traceId,
-        now,
-        now,
-      ],
-    );
+      });
+      return { eventId, outboxId };
+    }
+    await appendOpportunityEvent(connection, {
+      id: eventId,
+      organizationId: input.organizationId,
+      workspaceId: input.workspaceId,
+      eventType,
+      resourceType: "opportunity",
+      resourceId,
+      actorType: "user",
+      actorId: input.actorId,
+      requestId: input.requestId,
+      traceId: input.traceId,
+      payloadJson: JSON.stringify(payload),
+      occurredAt: now,
+    });
+    await appendOpportunityOutbox(connection, {
+      id: outboxId,
+      eventId,
+      organizationId: input.organizationId,
+      workspaceId: input.workspaceId,
+      eventType,
+      resourceType: "opportunity",
+      resourceId,
+      payloadJson: JSON.stringify(payload),
+      createdAt: now,
+      requestId: input.requestId,
+      traceId: input.traceId,
+    });
+    return { eventId, outboxId };
   }
 }

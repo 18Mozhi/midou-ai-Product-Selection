@@ -298,7 +298,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(service, /OpportunitySelectionView[\s\S]*evidence_pending/);
   assert.match(
     repository,
-    /selectionView === "recommended"[\s\S]*opportunityRecommendedSql[\s\S]*selectionView === "rule_candidates"[\s\S]*opportunityCandidateSql/,
+    /selectionView === "recommended"[\s\S]*?opportunityRecommendedSql[\s\S]*?selectionView === "rule_candidates"\) \{\s*where\.push\(\s*"o\.decision_status='pending'",\s*nativeOpportunity \? opportunityCandidateSql : homeCandidateSql,\s*`NOT \$\{homeQualityGateSql\}`/,
   );
   assert.match(routes, /coverage_status[\s\S]*blocking_reason/);
   assert.match(routes, /selection_view/);

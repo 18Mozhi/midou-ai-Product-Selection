@@ -1,7 +1,8 @@
-import type { FastifyInstance, FastifyRequest } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
+import { authenticatedRehearsalAccount } from "./account-read-rehearsal.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 import type {
   DecisionAction,
@@ -10,6 +11,7 @@ import type {
   OpportunityLifecycle,
   OpportunityCreateInput,
   OpportunityDecision,
+  OpportunityDecisionContext,
   OpportunityOperatingFeedbackInput,
   OpportunitySelectionView,
   OpportunityService,
@@ -21,6 +23,7 @@ export interface OpportunityRouteOptions {
   auth: LocalAuthService;
   secureCookie: boolean;
   webOrigin: string;
+  accountReadRehearsal?: boolean;
 }
 const ids = (request: FastifyRequest) => ({
   requestId: request.headers["x-request-id"]!.toString(),
@@ -67,12 +70,37 @@ export function registerOpportunityRoutes(app: FastifyInstance, options: Opportu
       idempotencyKey: requireIdempotencyKey(request),
     };
   };
-  app.get("/api/v1/opportunities", async (request) => {
+  const readScope = (request: FastifyRequest, reply: FastifyReply) => {
+    if (!options.accountReadRehearsal) return scope(request, "opportunity:read");
+    reply.header("cache-control", "private, no-store");
+    return authenticatedRehearsalAccount(request, options.auth, options.secureCookie);
+  };
+  const decisionScope = async (
+    request: FastifyRequest,
+    reply: FastifyReply,
+  ): Promise<OpportunityDecisionContext> => {
+    if (!options.accountReadRehearsal) return write(request);
+    if (request.headers.origin !== options.webOrigin)
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
+    const { accountId } = await authenticatedRehearsalAccount(
+      request,
+      options.auth,
+      options.secureCookie,
+    );
+    reply.header("cache-control", "private, no-store");
+    return {
+      actorId: accountId,
+      accountOwnedDecision: true,
+      ...ids(request),
+      idempotencyKey: requireIdempotencyKey(request),
+    };
+  };
+  app.get("/api/v1/opportunities", async (request, reply) => {
     const query = request.query as Record<string, string | undefined>,
       page = Number(query.page ?? 1),
       pageSize = Number(query.page_size ?? 20);
     const result = await options.service.list({
-      ...(await scope(request, "opportunity:read")),
+      ...(await readScope(request, reply)),
       page,
       pageSize,
       scope: query.scope === "all" ? "all" : "product",
@@ -98,36 +126,16 @@ export function registerOpportunityRoutes(app: FastifyInstance, options: Opportu
     });
     return envelope(result.items, request, { page, page_size: pageSize, total: result.total });
   });
-  app.post("/api/v1/opportunities", async (request, reply) => {
-    const result = await options.service.create({
-      ...(await write(request)),
-      value: request.body as OpportunityCreateInput,
-    });
-    reply.code(201);
-    return envelope(result, request);
-  });
-  app.get("/api/v1/opportunities/member-options", async (request) =>
-    envelope(
-      await options.service.memberOptions(await scope(request, "opportunity:read")),
-      request,
-    ),
-  );
-  app.post("/api/v1/opportunities/batch", async (request) =>
-    envelope(
-      await options.service.batch({ ...(await write(request)), value: request.body }),
-      request,
-    ),
-  );
-  app.get("/api/v1/opportunities/:id", async (request) =>
+  app.get("/api/v1/opportunities/:id", async (request, reply) =>
     envelope(
       await options.service.get({
-        ...(await scope(request, "opportunity:read")),
+        ...(await readScope(request, reply)),
         opportunityId: (request.params as { id: string }).id,
       }),
       request,
     ),
   );
-  app.post("/api/v1/opportunities/:id/decisions", async (request) => {
+  app.post("/api/v1/opportunities/:id/decisions", async (request, reply) => {
     const body = request.body as {
       action: DecisionAction;
       reason: string;
@@ -135,29 +143,51 @@ export function registerOpportunityRoutes(app: FastifyInstance, options: Opportu
     };
     return envelope(
       await options.service.decide({
-        ...(await write(request)),
+        ...(await decisionScope(request, reply)),
         opportunityId: (request.params as { id: string }).id,
         value: body,
       }),
       request,
     );
   });
-  app.post("/api/v1/opportunities/:id/evidence-completion-tasks", async (request, reply) => {
-    const result = await options.service.createEvidenceTask({
-      ...(await write(request)),
-      opportunityId: (request.params as { id: string }).id,
-      value: request.body,
+  if (!options.accountReadRehearsal) {
+    app.post("/api/v1/opportunities", async (request, reply) => {
+      const result = await options.service.create({
+        ...(await write(request)),
+        value: request.body as OpportunityCreateInput,
+      });
+      reply.code(201);
+      return envelope(result, request);
     });
-    reply.code(result.created ? 201 : 200);
-    return envelope(result, request);
-  });
-  app.post("/api/v1/opportunities/:id/operating-feedback", async (request, reply) => {
-    const result = await options.service.createOperatingFeedback({
-      ...(await write(request)),
-      opportunityId: (request.params as { id: string }).id,
-      value: request.body as OpportunityOperatingFeedbackInput,
+    app.get("/api/v1/opportunities/member-options", async (request) =>
+      envelope(
+        await options.service.memberOptions(await scope(request, "opportunity:read")),
+        request,
+      ),
+    );
+    app.post("/api/v1/opportunities/batch", async (request) =>
+      envelope(
+        await options.service.batch({ ...(await write(request)), value: request.body }),
+        request,
+      ),
+    );
+    app.post("/api/v1/opportunities/:id/evidence-completion-tasks", async (request, reply) => {
+      const result = await options.service.createEvidenceTask({
+        ...(await write(request)),
+        opportunityId: (request.params as { id: string }).id,
+        value: request.body,
+      });
+      reply.code(result.created ? 201 : 200);
+      return envelope(result, request);
     });
-    reply.code(201);
-    return envelope(result, request);
-  });
+    app.post("/api/v1/opportunities/:id/operating-feedback", async (request, reply) => {
+      const result = await options.service.createOperatingFeedback({
+        ...(await write(request)),
+        opportunityId: (request.params as { id: string }).id,
+        value: request.body as OpportunityOperatingFeedbackInput,
+      });
+      reply.code(201);
+      return envelope(result, request);
+    });
+  }
 }

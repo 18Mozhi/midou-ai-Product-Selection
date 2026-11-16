@@ -76,12 +76,16 @@ interface RulePreview {
   };
   read_only: true;
 }
-const props = withDefaults(defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(), {
-    capabilities: () => [],
-  }),
+const props = withDefaults(
+    defineProps<{ apiBaseUrl: string; capabilities?: string[]; accountRehearsal?: boolean }>(),
+    {
+      capabilities: () => [],
+    },
+  ),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   rules = ref<Rule[]>([]),
+  accountPrimaryApprover = ref(false),
   requestId = ref(""),
   message = ref(""),
   busy = ref(false),
@@ -138,8 +142,17 @@ let listReadController: AbortController | null = null,
   resumeListRead = false;
 let pendingPreviewRead: { rule: Rule; page: number; generation: number } | null = null;
 const capabilities = computed(() => new Set(props.capabilities)),
-  canDecide = computed(() => capabilities.value.has("opportunity:decide")),
-  canApprove = computed(() => capabilities.value.has("opportunity:approve")),
+  canDecide = computed(() =>
+    props.accountRehearsal
+      ? accountPrimaryApprover.value
+      : capabilities.value.has("opportunity:decide"),
+  ),
+  canApprove = computed(
+    () => !props.accountRehearsal && capabilities.value.has("opportunity:approve"),
+  ),
+  canDecideApproval = computed(() =>
+    props.accountRehearsal ? accountPrimaryApprover.value : canApprove.value,
+  ),
   activeRule = computed(() => rules.value.find((rule) => rule.status === "active") ?? null),
   activeEvidenceGroups = computed(
     () =>
@@ -310,6 +323,7 @@ async function load() {
   const controller = new AbortController();
   listReadController = controller;
   state.value = "loading";
+  accountPrimaryApprover.value = false;
   try {
     const response = await request<Rule[]>("/opportunity-score-rules", {
       signal: controller.signal,
@@ -317,6 +331,9 @@ async function load() {
     if (!pageActive || controller !== listReadController) return;
     requestId.value = response.request_id;
     rules.value = response.data;
+    accountPrimaryApprover.value =
+      (response.meta as { is_primary_approver?: unknown } | undefined)?.is_primary_approver ===
+      true;
     state.value = rules.value.length ? "ready" : "empty";
   } catch (error) {
     if (!pageActive || controller !== listReadController) return;
@@ -340,7 +357,6 @@ const scoreRuleErrorLabels: Record<string, string> = {
     score_rule_version_conflict: "版本代码已存在。",
     score_rule_revision_conflict: "规则已被其他操作更新。",
     score_rule_transition_invalid: "当前规则状态不允许此操作。",
-    score_rule_not_found: "规则不存在或不属于当前工作区。",
     score_rule_weight_invalid: "维度权重合计必须为 100。",
     score_rule_threshold_invalid: "推荐与观察阈值无效。",
     score_rule_action_invalid: "规则动作无效。",
@@ -350,7 +366,13 @@ const scoreRuleErrorLabels: Record<string, string> = {
     score_rule_preview_pagination_invalid: "预览页码或每页数量无效。",
   },
   apiErrorText = (error: ApiClientError) =>
-    `${scoreRuleErrorLabels[error.code] ?? error.userMessage} ${error.actionHint}`.trim();
+    `${
+      error.code === "score_rule_not_found"
+        ? props.accountRehearsal
+          ? "规则不存在或当前账号不可查看。"
+          : "规则不存在或不属于当前工作区。"
+        : (scoreRuleErrorLabels[error.code] ?? error.userMessage)
+    } ${error.actionHint}`.trim();
 async function post(
   path: string,
   body: unknown,
@@ -447,7 +469,7 @@ async function create() {
   }
 }
 function begin(rule: Rule, value: Action) {
-  if ((value === "submit" && !canDecide.value) || (value !== "submit" && !canApprove.value)) return;
+  if (!canPerformAction(value)) return;
   actionDialogGeneration += 1;
   selected.value = rule;
   action.value = value;
@@ -455,6 +477,9 @@ function begin(rule: Rule, value: Action) {
   targetRuleId.value = "";
   actionError.value = "";
   showAction.value = true;
+}
+function canPerformAction(value: Action) {
+  return value === "submit" ? canDecide.value : canDecideApproval.value;
 }
 async function runPreviewRead(rule: Rule, page: number, generation: number) {
   previewing.value = true;
@@ -495,7 +520,7 @@ async function runPreviewRead(rule: Rule, page: number, generation: number) {
   }
 }
 function loadPreview(rule: Rule, page = 1) {
-  if (!canApprove.value) return;
+  if (!canDecideApproval.value) return;
   const generation = ++previewReadGeneration;
   previewRule.value = rule;
   showPreview.value = true;
@@ -514,6 +539,7 @@ const scoreText = (value: number | null) => (value == null ? "数据不足" : va
   deltaText = (value: number | null) =>
     value == null ? "不可比较" : `${value > 0 ? "+" : ""}${value.toFixed(2)}`;
 async function runAction() {
+  if (!canPerformAction(action.value)) return;
   const selectedRule = selected.value;
   if (!selectedRule) return;
   const submittedAction = action.value,
@@ -558,15 +584,28 @@ onActivated(() => {
     <header class="score-rules-toolbar">
       <div>
         <h2>评分规则</h2>
-        <p>查看版本、权重、阈值与评分预览</p>
+        <p>
+          {{
+            accountRehearsal
+              ? "查看归属当前账号的历史版本、权重与阈值"
+              : "查看版本、权重、阈值与评分预览"
+          }}
+        </p>
       </div>
       <button v-if="canDecide" type="button" @click="openCreate">新建规则版本</button>
-      <span v-else-if="!canDecide" class="score-rule-readonly-note">当前身份仅可查看规则。</span>
+      <span v-else class="score-rule-readonly-note">
+        {{ canDecideApproval ? "可审批、启用或回滚本账号规则。" : "当前身份仅可查看规则。" }}
+      </span>
     </header>
     <details class="opportunity-insight-support">
       <summary>规则适用范围与竞争计算方式</summary>
       <p class="opportunity-insight-support">
-        适用范围：当前组织与工作区的已启用规则，不按规则名称推断类目。竞争维度自 crawler-evidence-v3
+        {{
+          accountRehearsal
+            ? "当前列表仅显示本账号的规则，不改变既有规则的适用范围。"
+            : "适用范围：当前组织与工作区的已启用规则，不按规则名称推断类目。"
+        }}
+        竞争维度自 crawler-evidence-v3
         使用5–10个真实有效相关竞品的评价门槛分中位数；不足5个则未知。原有权重与推荐阈值不变，类目成本仍单独校验。
       </p>
     </details>
@@ -581,12 +620,15 @@ onActivated(() => {
       @primary="load"
     />
     <section v-else-if="state === 'empty'" class="score-empty">
-      <strong>尚无评分规则</strong><span>请创建、审批并启用首个规则。</span
-      ><span v-if="!canDecide" class="score-rule-readonly-note"
+      <strong>尚无评分规则</strong
+      ><span>{{
+        accountRehearsal ? "当前账号暂无已归属的评分规则。" : "请创建、审批并启用首个规则。"
+      }}</span
+      ><span v-if="!canDecide && !accountRehearsal" class="score-rule-readonly-note"
         >请联系具备规则提交权限的成员创建首个草稿。</span
       >
     </section>
-    <p v-else class="score-setup-status" :data-ready="scoringSetupReady">
+    <p v-else-if="!accountRehearsal" class="score-setup-status" :data-ready="scoringSetupReady">
       {{ scoringSetupReady ? "评分配置已覆盖" : "评分配置未就绪" }}
     </p>
     <section v-if="state === 'ready'" class="score-rule-list">
@@ -614,7 +656,9 @@ onActivated(() => {
         </div>
         <nav>
           <button
-            v-if="canApprove && ['draft', 'pending_approval', 'approved'].includes(rule.status)"
+            v-if="
+              canDecideApproval && ['draft', 'pending_approval', 'approved'].includes(rule.status)
+            "
             type="button"
             @click="loadPreview(rule)"
           >
@@ -623,29 +667,46 @@ onActivated(() => {
           <button v-if="canDecide && rule.status === 'draft'" @click="begin(rule, 'submit')">
             提交</button
           ><button
-            v-if="canApprove && rule.status === 'pending_approval'"
+            v-if="canDecideApproval && rule.status === 'pending_approval'"
             @click="begin(rule, 'approve')"
           >
             批准</button
           ><button
-            v-if="canApprove && rule.status === 'pending_approval'"
+            v-if="canDecideApproval && rule.status === 'pending_approval'"
             @click="begin(rule, 'reject')"
           >
             拒绝</button
-          ><button v-if="canApprove && rule.status === 'approved'" @click="begin(rule, 'activate')">
+          ><button
+            v-if="canDecideApproval && rule.status === 'approved'"
+            @click="begin(rule, 'activate')"
+          >
             启用</button
-          ><button v-if="canApprove && rule.status === 'active'" @click="begin(rule, 'rollback')">
+          ><button
+            v-if="canDecideApproval && rule.status === 'active'"
+            @click="begin(rule, 'rollback')"
+          >
             回滚
           </button>
           <small
-            v-if="rule.status === 'pending_approval' && !canApprove"
+            v-if="
+              accountRehearsal &&
+              !(
+                canDecideApproval &&
+                ['draft', 'pending_approval', 'approved', 'active'].includes(rule.status)
+              )
+            "
+            class="score-rule-readonly-note"
+            >仅查看</small
+          >
+          <small
+            v-else-if="rule.status === 'pending_approval' && !canApprove"
             class="score-rule-readonly-note"
             >等待有审批权限的成员处理</small
           >
         </nav>
       </article>
     </section>
-    <details v-if="state === 'ready'" class="score-setup-check">
+    <details v-if="state === 'ready' && !accountRehearsal" class="score-setup-check">
       <summary>
         配置检查
         <span
@@ -927,7 +988,9 @@ onActivated(() => {
                 <small>覆盖</small><b>{{ item.projected_coverage_percent }}%</b>
               </div>
             </article>
-            <p v-if="!preview.items.length">当前工作区尚无机会可预览。</p>
+            <p v-if="!preview.items.length">
+              {{ accountRehearsal ? "本账号尚无选品可预览。" : "当前工作区尚无机会可预览。" }}
+            </p>
           </div>
           <footer>
             <button

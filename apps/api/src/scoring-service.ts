@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import type { AccountReadScope } from "./account-read-rehearsal.js";
 
 export const SCORE_DIMENSIONS = [
   "market_demand",
@@ -47,6 +48,20 @@ export interface ScoreWriteContext {
   traceId: string;
   idempotencyKey: string;
 }
+export type AccountScoreDecision = Omit<ScoreWriteContext, "organizationId" | "workspaceId"> & {
+  ruleId: string;
+  action: ScoreRuleAction;
+  reason: string;
+  expectedRevision: number;
+  targetRuleId?: string;
+};
+export type AccountScoreCreate = Pick<
+  ScoreWriteContext,
+  "actorId" | "requestId" | "traceId" | "idempotencyKey"
+> & {
+  id: string;
+  value: ReturnType<typeof validateScoreRule>;
+};
 export interface ScoreInput {
   dimension_code: ScoreDimension;
   evidence_group: EvidenceGroup;
@@ -235,14 +250,18 @@ export function validateScoreInput(value: ScoreInput) {
   };
 }
 export interface ScoringRepository {
-  list(input: { organizationId: string; workspaceId: string }): Promise<ScoreRule[]>;
-  preview(input: {
-    organizationId: string;
-    workspaceId: string;
-    ruleId: string;
-    page: number;
-    pageSize: number;
-  }): Promise<ScoreRulePreview>;
+  accountCreate(input: AccountScoreCreate): Promise<ScoreRule>;
+  accountDecision(input: AccountScoreDecision): Promise<ScoreRule>;
+  list(
+    input: { organizationId: string; workspaceId: string } | AccountReadScope,
+  ): Promise<ScoreRule[]>;
+  preview(
+    input: ({ organizationId: string; workspaceId: string } | AccountReadScope) & {
+      ruleId: string;
+      page: number;
+      pageSize: number;
+    },
+  ): Promise<ScoreRulePreview>;
   create(
     input: ScoreWriteContext & {
       id: string;
@@ -278,16 +297,16 @@ export interface ScoringRepository {
 }
 export class ScoringService {
   constructor(private readonly repository: ScoringRepository) {}
-  list(input: { organizationId: string; workspaceId: string }) {
+  list(input: Parameters<ScoringRepository["list"]>[0]) {
     return this.repository.list(input);
   }
-  preview(input: {
-    organizationId: string;
-    workspaceId: string;
-    ruleId: string;
-    page?: number;
-    pageSize?: number;
-  }) {
+  preview(
+    input: ({ organizationId: string; workspaceId: string } | AccountReadScope) & {
+      ruleId: string;
+      page?: number;
+      pageSize?: number;
+    },
+  ) {
     const page = input.page ?? 1,
       pageSize = input.pageSize ?? 20;
     if (
@@ -303,8 +322,9 @@ export class ScoringService {
         "使用 page>=1 且 page_size 为 1–100 后重试。",
       );
     return this.repository.preview({
-      organizationId: input.organizationId,
-      workspaceId: input.workspaceId,
+      ...("accountId" in input
+        ? { accountId: input.accountId }
+        : { organizationId: input.organizationId, workspaceId: input.workspaceId }),
       ruleId: uuid(input.ruleId, "score_rule_id"),
       page,
       pageSize,
@@ -316,6 +336,17 @@ export class ScoringService {
       id: randomUUID(),
       value: validateScoreRule(input.value),
       route: "POST:/api/v1/opportunity-score-rules",
+    });
+  }
+  accountCreate(
+    input: Omit<AccountScoreCreate, "id" | "value"> & {
+      value: Parameters<typeof validateScoreRule>[0];
+    },
+  ) {
+    return this.repository.accountCreate({
+      ...input,
+      id: randomUUID(),
+      value: validateScoreRule(input.value),
     });
   }
   action(
@@ -358,6 +389,43 @@ export class ScoringService {
       expectedRevision: input.value.expected_revision,
       ...(targetRuleId ? { targetRuleId } : {}),
       route: `POST:/api/v1/opportunity-score-rules/${ruleId}/actions`,
+    });
+  }
+  accountDecision(
+    input: Omit<AccountScoreDecision, "action" | "reason" | "expectedRevision"> & {
+      value: {
+        action?: ScoreRuleAction;
+        reason: string;
+        expected_revision: number;
+        target_rule_id?: string;
+      };
+    },
+  ) {
+    const { value, ...context } = input;
+    if (
+      !value ||
+      !["submit", "approve", "reject", "activate", "rollback"].includes(value.action ?? "")
+    )
+      throw new ScoringServiceError("score_rule_action_invalid", 400, "提交有效的规则动作。");
+    const targetRuleId =
+      value.target_rule_id == null ? undefined : uuid(value.target_rule_id, "target_rule_id");
+    if (
+      !Number.isSafeInteger(value.expected_revision) ||
+      value.expected_revision < 1 ||
+      (value.action === "rollback") !== Boolean(targetRuleId)
+    )
+      throw new ScoringServiceError(
+        "score_rule_action_invalid",
+        400,
+        "提交有效动作和当前 revision。",
+      );
+    return this.repository.accountDecision({
+      ...context,
+      ruleId: uuid(input.ruleId, "score_rule_id"),
+      action: value.action!,
+      reason: bounded(value.reason, "reason", 1000),
+      expectedRevision: value.expected_revision,
+      ...(targetRuleId ? { targetRuleId } : {}),
     });
   }
   recordInput(input: ScoreWriteContext & { opportunityId: string; value: ScoreInput }) {

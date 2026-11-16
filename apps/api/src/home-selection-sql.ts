@@ -9,7 +9,6 @@ export const homeCandidateSql = `(${selectionCandidateExistsSql})`;
 export const homeCompetitorUpperBoundSql =
   "(SELECT COUNT(DISTINCT UPPER(c_bound.external_id)) FROM competitors c_bound " +
   "JOIN competitor_snapshots s_bound ON s_bound.competitor_id=c_bound.id " +
-  "AND s_bound.organization_id=c_bound.organization_id AND s_bound.workspace_id=c_bound.workspace_id " +
   "WHERE c_bound.opportunity_id=o.id AND c_bound.organization_id=o.organization_id " +
   "AND c_bound.workspace_id=o.workspace_id AND c_bound.source_site='Amazon' " +
   "AND c_bound.status='active' AND c_bound.deleted_at IS NULL " +

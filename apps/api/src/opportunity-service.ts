@@ -16,11 +16,17 @@ export interface OpportunityScope {
   workspaceId: string;
   actorId: string;
 }
+export type OpportunityListScope = OpportunityScope | { accountId: string };
 export interface OpportunityWriteContext extends OpportunityScope {
   requestId: string;
   traceId: string;
   idempotencyKey: string;
 }
+export type OpportunityDecisionContext =
+  | OpportunityWriteContext
+  | (Omit<OpportunityWriteContext, "organizationId" | "workspaceId"> & {
+      accountOwnedDecision: true;
+    });
 export interface OpportunityCreateInput {
   name: string;
   market: string;
@@ -377,7 +383,7 @@ export function validateDecisionInput(value: {
 }
 export interface OpportunityRepository {
   list(
-    input: OpportunityScope & {
+    input: OpportunityListScope & {
       page: number;
       pageSize: number;
       query?: string;
@@ -392,7 +398,7 @@ export interface OpportunityRepository {
       selectionView?: OpportunitySelectionView;
     },
   ): Promise<{ items: OpportunitySummary[]; total: number }>;
-  get(input: OpportunityScope & { opportunityId: string }): Promise<OpportunityDetail | null>;
+  get(input: OpportunityListScope & { opportunityId: string }): Promise<OpportunityDetail | null>;
   memberOptions(input: OpportunityScope): Promise<Array<{ id: string; label: string }>>;
   create(
     input: OpportunityWriteContext & {
@@ -402,7 +408,7 @@ export interface OpportunityRepository {
     },
   ): Promise<OpportunitySummary>;
   decide(
-    input: OpportunityWriteContext & {
+    input: OpportunityDecisionContext & {
       opportunityId: string;
       action: DecisionAction;
       reason: string;
@@ -434,7 +440,7 @@ export interface OpportunityRepository {
 export class OpportunityService {
   constructor(private readonly repository: OpportunityRepository) {}
   list(
-    input: OpportunityScope & {
+    input: OpportunityListScope & {
       page?: number;
       pageSize?: number;
       query?: string;
@@ -535,7 +541,7 @@ export class OpportunityService {
   memberOptions(input: OpportunityScope) {
     return this.repository.memberOptions(input);
   }
-  async get(input: OpportunityScope & { opportunityId: string }) {
+  async get(input: OpportunityListScope & { opportunityId: string }) {
     const result = await this.repository.get({
       ...input,
       opportunityId: uuid(input.opportunityId, "opportunity_id"),
@@ -544,7 +550,9 @@ export class OpportunityService {
       throw new OpportunityServiceError(
         "opportunity_not_found",
         404,
-        "刷新机会列表；该机会可能不在当前工作区。",
+        "accountId" in input
+          ? "刷新选品列表；该商品可能不属于当前账号。"
+          : "刷新机会列表；该机会可能不在当前工作区。",
       );
     return result;
   }
@@ -557,12 +565,14 @@ export class OpportunityService {
     });
   }
   decide(
-    input: OpportunityWriteContext & {
+    input: OpportunityDecisionContext & {
       opportunityId: string;
       value: { action: DecisionAction; reason: string; expected_version: number };
     },
   ) {
-    const opportunityId = uuid(input.opportunityId, "opportunity_id"),
+    const account = "accountOwnedDecision" in input,
+      parsedId = uuid(input.opportunityId, "opportunity_id"),
+      opportunityId = account ? parsedId.toLowerCase() : parsedId,
       value = validateDecisionInput(input.value);
     return this.repository.decide({
       ...input,
@@ -570,7 +580,7 @@ export class OpportunityService {
       action: value.action,
       reason: value.reason,
       expectedVersion: value.expected_version,
-      route: `POST:/api/v1/opportunities/${opportunityId}/decisions`,
+      route: `POST:/api/v1/opportunities/${opportunityId}/decisions${account ? ":account" : ""}`,
     });
   }
   batch(input: OpportunityWriteContext & { value: any }) {

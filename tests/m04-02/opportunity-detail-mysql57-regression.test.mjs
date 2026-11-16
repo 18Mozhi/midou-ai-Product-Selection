@@ -6,6 +6,8 @@ test("opportunity lineage trend query is valid under MySQL 5.7 DISTINCT ordering
   let trendQuery = "";
   const pool = {
     async query(sql) {
+      if (sql.startsWith("SHOW COLUMNS FROM notifications"))
+        return [["organization_id", "workspace_id", "source_event_id", "recipient_id"].map(Field => ({ Field }))];
       if (sql.includes("JOIN trend_topics")) {
         trendQuery = sql;
         const selectList = sql.match(/^SELECT DISTINCT (.*?) FROM /)?.[1] ?? "";

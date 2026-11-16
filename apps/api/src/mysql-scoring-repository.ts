@@ -1,6 +1,11 @@
+import { appendOpportunityEvent } from "@scoutops/database";
+import { appendOpportunityOutbox } from "@scoutops/database";
+import { PRIMARY_COST_APPROVER_EMAIL } from "@scoutops/auth";
 import { randomUUID } from "node:crypto";
 import { selectionCandidateSql, automaticEvaluationEnqueueUpdateSql } from "@scoutops/database";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { rehearsalOwns, requireAccountReadRehearsal } from "./account-read-rehearsal.js";
+import { bindNativeOpportunityCandidate } from "./mysql-opportunity-repository.js";
 import {
   calculateScoreProjection,
   type ScoreProjectionDimension,
@@ -8,6 +13,8 @@ import {
 } from "@scoutops/contracts";
 import {
   ScoringServiceError,
+  type AccountScoreCreate,
+  type AccountScoreDecision,
   type ScoreRule,
   type ScoreRuleAction,
   type ScoreRulePreview,
@@ -37,24 +44,451 @@ const dto = (row: RowDataPacket): ScoreRule => ({
 });
 export class MySqlScoringRepository implements ScoringRepository {
   constructor(private readonly pool: Pool) {}
-  async list(input: { organizationId: string; workspaceId: string }) {
+  async accountCreate(input: AccountScoreCreate): Promise<ScoreRule> {
+    const c = await this.pool.getConnection(),
+      now = new Date();
+    const route = "POST:/api/v1/opportunity-score-rules:account";
+    const fingerprint = JSON.stringify(input.value);
+    try {
+      await c.beginTransaction();
+      await this.requirePrimaryScoreAccount(c, input.actorId, true);
+      const [operations] = await c.query<RowDataPacket[]>(
+        "SELECT result_json FROM score_rule_operations WHERE actor_id=? AND route=? AND idempotency_key=?",
+        [input.actorId, route, input.idempotencyKey],
+      );
+      if (operations[0]) {
+        const previous = parse<{ fingerprint: string; result: ScoreRule }>(
+          operations[0].result_json,
+        );
+        if (
+          previous.fingerprint !== fingerprint ||
+          !(await this.ownsScoreReplay(c, input.actorId, previous.result?.id))
+        )
+          throw new ScoringServiceError(
+            "score_rule_idempotency_conflict",
+            409,
+            "本次操作需要新的幂等键。",
+          );
+        await c.commit();
+        return previous.result;
+      }
+      await c.query(
+        "INSERT INTO score_rules (id,account_id,version_code,name,status,dimensions_json,thresholds_json,revision,created_by,created_at,updated_at) " +
+          "VALUES (?,?,?,?,'draft',?,?,1,?,?,?)",
+        [
+          input.id,
+          input.actorId,
+          input.value.version_code,
+          input.value.name,
+          JSON.stringify(input.value.dimensions),
+          JSON.stringify(input.value.thresholds),
+          input.actorId,
+          now,
+          now,
+        ],
+      );
+      const eventId = await this.recordAccountScoreEvent(
+        c,
+        { ...input, ruleId: input.id },
+        "score_rule.created",
+        JSON.stringify({ version_code: input.value.version_code, status: "draft" }),
+        now,
+      );
+      await c.query(
+        "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ?",
+        [
+          [
+            ["score_rules", input.id, input.actorId, "exclusive_owner"],
+            ["opportunity_events", eventId, input.actorId, "exclusive_owner"],
+            ["opportunity_outbox", eventId, input.actorId, "exclusive_owner"],
+          ],
+        ],
+      );
+      const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT * FROM score_rules WHERE id=? AND account_id=?",
+        [input.id, input.actorId],
+      );
+      if (!rows[0]) throw new Error("score_rule_create_readback_missing");
+      const result = dto(rows[0]);
+      await this.saveOperation(c, { ...input, route }, input.id, { fingerprint, result }, now);
+      await c.commit();
+      return result;
+    } catch (error) {
+      await c.rollback();
+      if (
+        (error as { code?: string; message?: string }).code === "ER_DUP_ENTRY" &&
+        (error as Error).message.includes("uq_score_rule_account_version")
+      )
+        throw new ScoringServiceError(
+          "score_rule_version_conflict",
+          409,
+          "使用本账号尚未使用的版本号。",
+        );
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  private async ownsScoreReplay(c: PoolConnection, accountId: string, ruleId?: string) {
+    if (!ruleId) return false;
+    const [rule] = await c.query<RowDataPacket[]>(
+      "SELECT r.id FROM score_rules r JOIN account_owned_records o " +
+        "ON o.source_table='score_rules' AND o.source_id=r.id AND o.account_id=r.account_id " +
+        "WHERE r.id=? AND r.account_id=? LOCK IN SHARE MODE",
+      [ruleId, accountId],
+    );
+    return rule.length === 1;
+  }
+  private async requirePrimaryScoreAccount(c: PoolConnection, actorId: string, lock: boolean) {
+    const [primary] = await c.query<RowDataPacket[]>(
+      "SELECT cut.primary_account_id FROM account_ownership_cutover cut JOIN users u ON u.id=cut.primary_account_id " +
+        "WHERE cut.slot='current' AND cut.contract_version=25 AND u.id=? AND u.status='active' " +
+        "AND u.email_verified_at IS NOT NULL AND BINARY u.email_normalized=BINARY ?" +
+        (lock ? " FOR UPDATE" : " LOCK IN SHARE MODE"),
+      [actorId, PRIMARY_COST_APPROVER_EMAIL],
+    );
+    if (!primary[0])
+      throw new ScoringServiceError("score_rule_approval_forbidden", 403, "由主账号管理评分规则。");
+  }
+  async accountDecision(input: AccountScoreDecision): Promise<ScoreRule> {
+    if (!["submit", "approve", "reject", "activate", "rollback"].includes(input.action))
+      throw new ScoringServiceError(
+        "score_rule_action_not_available_in_account_mode",
+        403,
+        "账号模式不支持此动作。",
+      );
+    const c = await this.pool.getConnection(),
+      now = new Date();
+    const switchesRule = input.action === "activate" || input.action === "rollback";
+    const route = `POST:/api/v1/opportunity-score-rules/${input.ruleId}/actions:account`;
+    const fingerprint = JSON.stringify([
+      input.action,
+      input.reason,
+      input.expectedRevision,
+      ...(input.targetRuleId ? [input.targetRuleId] : []),
+    ]);
+    try {
+      await c.beginTransaction();
+      await this.requirePrimaryScoreAccount(c, input.actorId, switchesRule);
+      const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT r.*,o.reason ownership_reason FROM score_rules r JOIN account_owned_records o " +
+          "ON o.source_table='score_rules' AND o.source_id=r.id AND o.account_id=r.account_id " +
+          "WHERE r.id=? AND r.account_id=? FOR UPDATE",
+        [input.ruleId, input.actorId],
+      );
+      const row = rows[0];
+      if (!row) throw new ScoringServiceError("score_rule_not_found", 404, "刷新规则列表。");
+      const [operations] = await c.query<RowDataPacket[]>(
+        "SELECT result_json FROM score_rule_operations WHERE actor_id=? AND route=? AND idempotency_key=?",
+        [input.actorId, route, input.idempotencyKey],
+      );
+      if (operations[0]) {
+        const previous = parse<{ fingerprint: string; result: ScoreRule }>(
+          operations[0].result_json,
+        );
+        const resultId = input.action === "rollback" ? input.targetRuleId : input.ruleId;
+        if (
+          previous.fingerprint !== fingerprint ||
+          previous.result?.id !== resultId ||
+          (input.action === "rollback" && !(await this.ownsScoreReplay(c, input.actorId, resultId)))
+        )
+          throw new ScoringServiceError(
+            "score_rule_idempotency_conflict",
+            409,
+            "本次操作需要新的幂等键。",
+          );
+        await c.commit();
+        return previous.result;
+      }
+      if (Number(row.revision) !== input.expectedRevision)
+        throw new ScoringServiceError(
+          "score_rule_revision_conflict",
+          409,
+          "刷新规则并使用最新 revision 重试。",
+        );
+      const expectedStatus =
+        input.action === "submit"
+          ? "draft"
+          : input.action === "activate"
+            ? "approved"
+            : input.action === "rollback"
+              ? "active"
+              : "pending_approval";
+      if (row.status !== expectedStatus)
+        throw new ScoringServiceError(
+          "score_rule_transition_invalid",
+          409,
+          "当前规则状态不允许此操作。",
+        );
+      let resultId = input.ruleId;
+      const approved = input.action === "approve",
+        status =
+          input.action === "submit"
+            ? "pending_approval"
+            : switchesRule
+              ? "active"
+              : approved
+                ? "approved"
+                : "rejected";
+      if (switchesRule) {
+        const [active] = await c.query<RowDataPacket[]>(
+          "SELECT r.id,own.account_id sealed_owner FROM score_rules r LEFT JOIN account_owned_records own " +
+            "ON own.source_table='score_rules' AND own.source_id=r.id AND own.account_id=r.account_id " +
+            "WHERE r.account_id=? AND r.status='active' ORDER BY r.id FOR UPDATE",
+          [input.actorId],
+        );
+        if (
+          active.length > 1 ||
+          active.some((rule) => rule.sealed_owner !== input.actorId) ||
+          (input.action === "rollback" && active[0]?.id !== input.ruleId)
+        )
+          throw new ScoringServiceError(
+            "score_rule_active_ownership_conflict",
+            409,
+            "先核对生效规则及其封存归属。",
+          );
+        if (input.action === "rollback") {
+          const [target] = await c.query<RowDataPacket[]>(
+            "SELECT r.id FROM score_rules r JOIN account_owned_records o " +
+              "ON o.source_table='score_rules' AND o.source_id=r.id AND o.account_id=r.account_id " +
+              "WHERE r.id=? AND r.account_id=? AND r.status IN ('approved','retired') FOR UPDATE",
+            [input.targetRuleId ?? null, input.actorId],
+          );
+          if (!target[0])
+            throw new ScoringServiceError(
+              "score_rule_rollback_target_invalid",
+              409,
+              "目标必须是本账号已批准或已停用的版本。",
+            );
+          resultId = String(target[0].id);
+          await c.query(
+            "UPDATE score_rules SET status='rolled_back',rollback_target_id=?,rolled_back_at=?,revision=revision+1,updated_at=? WHERE id=?",
+            [resultId, now, now, input.ruleId],
+          );
+        } else {
+          await c.query(
+            "UPDATE score_rules SET status='retired',revision=revision+1,updated_at=? WHERE account_id=? AND status='active'",
+            [now, input.actorId],
+          );
+        }
+        await c.query(
+          "UPDATE score_rules SET status='active',activated_at=?,revision=revision+1,updated_at=? WHERE id=? AND account_id=?",
+          [now, now, resultId, input.actorId],
+        );
+        await this.queueAccountRecalculation(c, input, resultId, now);
+      } else if (input.action === "submit") {
+        await c.query(
+          "UPDATE score_rules SET status='pending_approval',submitted_by=?,submitted_at=?,revision=revision+1,updated_at=? WHERE id=?",
+          [input.actorId, now, now, input.ruleId],
+        );
+      } else {
+        await c.query(
+          approved
+            ? "UPDATE score_rules SET status='approved',approved_by=?,approved_at=?,revision=revision+1,updated_at=? WHERE id=?"
+            : "UPDATE score_rules SET status='rejected',revision=revision+1,updated_at=? WHERE id=?",
+          approved ? [input.actorId, now, now, input.ruleId] : [now, input.ruleId],
+        );
+      }
+      const actionId = randomUUID(),
+        eventType = `score_rule.${input.action}`;
+      const payload = JSON.stringify({
+        reason: input.reason,
+        previous_status: row.status,
+        resulting_status: status,
+        target_rule_id: input.targetRuleId ?? null,
+      });
+      await c.query(
+        "INSERT INTO score_rule_actions (id,score_rule_id,action,reason,previous_status,resulting_status,actor_id,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+        [
+          actionId,
+          input.ruleId,
+          input.action,
+          input.reason,
+          row.status,
+          status,
+          input.actorId,
+          input.requestId,
+          input.traceId,
+          now,
+        ],
+      );
+      const eventId = await this.recordAccountScoreEvent(c, input, eventType, payload, now);
+      await c.query(
+        "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ?",
+        [
+          [
+            ["score_rule_actions", actionId, input.actorId, row.ownership_reason],
+            ["opportunity_events", eventId, input.actorId, row.ownership_reason],
+            ["opportunity_outbox", eventId, input.actorId, row.ownership_reason],
+          ],
+        ],
+      );
+      const [updated] = await c.query<RowDataPacket[]>(
+        "SELECT * FROM score_rules WHERE id=? AND account_id=?",
+        [resultId, input.actorId],
+      );
+      if (!updated[0]) throw new Error("score_rule_decision_readback_missing");
+      const result = dto(updated[0]);
+      await this.saveOperation(c, { ...input, route }, input.ruleId, { fingerprint, result }, now);
+      await c.commit();
+      return result;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  private async recordAccountScoreEvent(
+    c: PoolConnection,
+    input: Pick<AccountScoreDecision, "ruleId" | "actorId" | "requestId" | "traceId">,
+    eventType: string,
+    payload: string,
+    now: Date,
+  ) {
+    const id = randomUUID();
+    await c.query(
+      "INSERT INTO opportunity_events (id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES (?,?,'score_rule',?,'user',?,?,?,?,?)",
+      [id, eventType, input.ruleId, input.actorId, input.requestId, input.traceId, payload, now],
+    );
+    await c.query(
+      "INSERT INTO opportunity_outbox (id,event_id,event_type,resource_type,resource_id,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,'score_rule',?,?,'queued',0,?,?,?,?,?)",
+      [id, id, eventType, input.ruleId, payload, now, input.requestId, input.traceId, now, now],
+    );
+    return id;
+  }
+  private async queueAccountRecalculation(
+    c: PoolConnection,
+    input: AccountScoreDecision,
+    ruleId: string,
+    now: Date,
+  ) {
+    const [columns] = await c.query<RowDataPacket[]>(
+      "SHOW COLUMNS FROM opportunities WHERE Field IN ('account_id','organization_id','workspace_id')",
+    );
+    const shape = columns
+      .map((row) => row.Field)
+      .sort()
+      .join(",");
+    const native = shape === "account_id";
+    if (!native && shape !== "organization_id,workspace_id")
+      throw new Error("opportunity_scope_schema_invalid");
+    const [items] = await c.query<RowDataPacket[]>(
+      "SELECT o.id,ow.reason FROM opportunities o JOIN account_owned_records ow " +
+        "ON ow.source_table='opportunities' AND ow.source_id=o.id WHERE ow.account_id=? " +
+        (native ? "AND o.account_id=ow.account_id " : "") +
+        "AND o.lifecycle_status NOT IN ('archived','deleted') ORDER BY o.id",
+      [input.actorId],
+    );
+    for (let offset = 0; offset < items.length; offset += 250) {
+      const jobs = items
+        .slice(offset, offset + 250)
+        .map((row) => ({ id: row.id, reason: row.reason, jobId: randomUUID() }));
+      await c.query(
+        "INSERT INTO opportunity_score_jobs (id,opportunity_id,score_rule_id,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES ?",
+        [
+          jobs.map((row) => [
+            row.jobId,
+            row.id,
+            ruleId,
+            "queued",
+            0,
+            now,
+            input.requestId,
+            input.traceId,
+            now,
+            now,
+          ]),
+        ],
+      );
+      await c.query(
+        "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ?",
+        [jobs.map((row) => ["opportunity_score_jobs", row.jobId, input.actorId, row.reason])],
+      );
+    }
+    const enqueue =
+      "INSERT INTO automatic_selection_evaluations (opportunity_id,status,attempt_count,available_at,created_at,updated_at) " +
+      "SELECT o.id,'queued',0,?,?,? FROM opportunities o WHERE " +
+      rehearsalOwns("opportunities", "o.id", "?") +
+      (native ? " AND o.account_id=?" : "") +
+      " AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted') AND ";
+    const values = [now, now, now, input.actorId];
+    if (native) {
+      const [sql, bound] = bindNativeOpportunityCandidate(
+        enqueue,
+        [...values, input.actorId],
+        input.actorId,
+      );
+      await c.query(sql + " " + automaticEvaluationEnqueueUpdateSql, bound);
+    } else {
+      await c.query(
+        enqueue + selectionCandidateSql + " " + automaticEvaluationEnqueueUpdateSql,
+        values,
+      );
+    }
+  }
+  async list(input: Parameters<ScoringRepository["list"]>[0]) {
+    if ("accountId" in input) {
+      await requireAccountReadRehearsal(this.pool);
+      const [rows] = await this.pool.query<RowDataPacket[]>(
+        `SELECT r.* FROM score_rules r
+         WHERE ${rehearsalOwns("score_rules", "r.id", "?")}
+         ORDER BY r.updated_at DESC,r.id DESC`,
+        [input.accountId],
+      );
+      return rows.map(dto);
+    }
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT * FROM score_rules WHERE organization_id=? AND workspace_id=? ORDER BY updated_at DESC,id DESC",
       [input.organizationId, input.workspaceId],
     );
     return rows.map(dto);
   }
-  async preview(input: {
-    organizationId: string;
-    workspaceId: string;
-    ruleId: string;
-    page: number;
-    pageSize: number;
-  }): Promise<ScoreRulePreview> {
-    const [rules] = await this.pool.query<RowDataPacket[]>(
-      "SELECT id,version_code,status,dimensions_json,thresholds_json FROM score_rules " +
-        "WHERE id=? AND organization_id=? AND workspace_id=?",
-      [input.ruleId, input.organizationId, input.workspaceId],
+  async preview(input: Parameters<ScoringRepository["preview"]>[0]): Promise<ScoreRulePreview> {
+    if (!("accountId" in input)) return this.readPreview(this.pool, input);
+    const c = await this.pool.getConnection();
+    try {
+      await c.query("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
+      await c.query("START TRANSACTION WITH CONSISTENT SNAPSHOT, READ ONLY");
+      return await this.readPreview(c, input);
+    } finally {
+      try {
+        await c.rollback();
+      } finally {
+        c.release();
+      }
+    }
+  }
+  private async readPreview(
+    db: Pick<PoolConnection, "query">,
+    input: Parameters<ScoringRepository["preview"]>[0],
+  ): Promise<ScoreRulePreview> {
+    const accountId = "accountId" in input ? input.accountId : undefined;
+    const scopeArgs =
+      "accountId" in input ? [input.accountId] : [input.organizationId, input.workspaceId];
+    const scope = (table: string, alias: string) =>
+      accountId
+        ? rehearsalOwns(table, `${alias}.id`, "?")
+        : `${alias}.organization_id=? AND ${alias}.workspace_id=?`;
+    if (accountId) {
+      const [primary] = await db.query<RowDataPacket[]>(
+        "SELECT cut.primary_account_id FROM account_ownership_cutover cut JOIN users u ON u.id=cut.primary_account_id " +
+          "WHERE cut.slot='current' AND cut.contract_version=25 AND u.id=? AND u.status='active' " +
+          "AND u.email_verified_at IS NOT NULL AND BINARY u.email_normalized=BINARY ?",
+        [accountId, PRIMARY_COST_APPROVER_EMAIL],
+      );
+      if (!primary[0])
+        throw new ScoringServiceError(
+          "score_rule_approval_forbidden",
+          403,
+          "由主账号预览评分规则。",
+        );
+    }
+    const [rules] = await db.query<RowDataPacket[]>(
+      "SELECT r.id,r.version_code,r.status,r.dimensions_json,r.thresholds_json FROM score_rules r WHERE r.id=? AND " +
+        scope("score_rules", "r") +
+        (accountId ? " AND r.account_id=?" : ""),
+      [input.ruleId, ...scopeArgs, ...(accountId ? [accountId] : [])],
     );
     const rule = rules[0];
     if (!rule) throw new ScoringServiceError("score_rule_not_found", 404, "刷新规则列表。");
@@ -64,29 +498,50 @@ export class MySqlScoringRepository implements ScoringRepository {
         409,
         "仅草稿、待审批或已批准但未启用的规则可做发布前预览。",
       );
-    const [counts] = await this.pool.query<RowDataPacket[]>(
-        "SELECT COUNT(*) total FROM opportunities WHERE organization_id=? AND workspace_id=?",
-        [input.organizationId, input.workspaceId],
+    const opportunityScope =
+      scope("opportunities", "o") +
+      (accountId ? " AND o.lifecycle_status NOT IN ('archived','deleted')" : "");
+    const [counts] = await db.query<RowDataPacket[]>(
+        "SELECT COUNT(*) total FROM opportunities o WHERE " + opportunityScope,
+        scopeArgs,
       ),
       total = Number(counts[0]?.total ?? 0),
-      [opportunities] = await this.pool.query<RowDataPacket[]>(
+      [opportunities] = await db.query<RowDataPacket[]>(
         "SELECT id,name,lifecycle_status,overall_score,recommendation_status,score_rule_version " +
-          "FROM opportunities WHERE organization_id=? AND workspace_id=? " +
+          "FROM opportunities o WHERE " +
+          opportunityScope +
+          " " +
           "ORDER BY updated_at DESC,id DESC LIMIT ? OFFSET ?",
-        [
-          input.organizationId,
-          input.workspaceId,
-          input.pageSize,
-          (input.page - 1) * input.pageSize,
-        ],
+        [...scopeArgs, input.pageSize, (input.page - 1) * input.pageSize],
       );
     const opportunityIds = opportunities.map((item) => String(item.id));
     let inputRows: RowDataPacket[] = [];
     if (opportunityIds.length) {
       const placeholders = opportunityIds.map(() => "?").join(",");
-      [inputRows] = await this.pool.query<RowDataPacket[]>(
-        `SELECT opportunity_id,id,input_version,dimension_code,evidence_group,score_value,evidence_ids_json,missing_fields_json FROM opportunity_score_inputs WHERE organization_id=? AND workspace_id=? AND is_current=1 AND opportunity_id IN (${placeholders})`,
-        [input.organizationId, input.workspaceId, ...opportunityIds],
+      [inputRows] = await db.query<RowDataPacket[]>(
+        `SELECT i.opportunity_id,i.id,i.input_version,i.dimension_code,i.evidence_group,i.score_value,i.evidence_ids_json,i.missing_fields_json FROM opportunity_score_inputs i ` +
+          (accountId
+            ? "WHERE " + rehearsalOwns("opportunity_score_inputs", "i.id", "?")
+            : "JOIN opportunities o ON o.id=i.opportunity_id WHERE " + opportunityScope) +
+          ` AND i.is_current=1 AND i.opportunity_id IN (${placeholders})`,
+        // In account mode these IDs were admitted by the same consistent snapshot.
+        [...scopeArgs, ...opportunityIds],
+      );
+    }
+    if (accountId && inputRows.length) {
+      const ids = [...new Set(inputRows.flatMap((row) => parse<string[]>(row.evidence_ids_json)))];
+      const owned = new Set<string>();
+      for (let i = 0; i < ids.length; i += 250) {
+        const batch = ids.slice(i, i + 250);
+        const [rows] = await db.query<RowDataPacket[]>(
+          `SELECT e.id FROM raw_evidence e WHERE e.id IN (${batch.map(() => "?").join(",")}) AND ` +
+            rehearsalOwns("raw_evidence", "e.id", "?"),
+          [...batch, accountId],
+        );
+        for (const row of rows) owned.add(String(row.id));
+      }
+      inputRows = inputRows.filter((row) =>
+        parse<string[]>(row.evidence_ids_json).every((id) => owned.has(id)),
       );
     }
     const inputsByOpportunity = new Map<string, ScoreProjectionInput[]>();
@@ -310,13 +765,11 @@ export class MySqlScoringRepository implements ScoringRepository {
         resulting = "active";
       }
       await c.query(
-        "INSERT INTO score_rule_actions (id,organization_id,workspace_id,score_rule_id," +
+        "INSERT INTO score_rule_actions (id,score_rule_id," +
           "action,reason,previous_status,resulting_status,actor_id,request_id,trace_id," +
-          "created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+          "created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
         [
           randomUUID(),
-          input.organizationId,
-          input.workspaceId,
           input.ruleId,
           input.action,
           input.reason,
@@ -386,14 +839,12 @@ export class MySqlScoringRepository implements ScoringRepository {
         [input.opportunityId, input.value.dimension_code],
       );
       await c.query(
-        "INSERT INTO opportunity_score_inputs (id,organization_id,workspace_id,opportunity_id," +
+        "INSERT INTO opportunity_score_inputs (id,opportunity_id," +
           "dimension_code,evidence_group,score_value,source_type,source_ref_id,evidence_ids_json," +
           "missing_fields_json,observed_at,input_version,is_current,created_by,request_id," +
-          "trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)",
+          "trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)",
         [
           inputId,
-          input.organizationId,
-          input.workspaceId,
           input.opportunityId,
           input.value.dimension_code,
           input.value.evidence_group,
@@ -527,21 +978,10 @@ export class MySqlScoringRepository implements ScoringRepository {
   ) {
     const id = randomUUID();
     await c.query(
-      "INSERT INTO opportunity_score_jobs (id,organization_id,workspace_id,opportunity_id," +
+      "INSERT INTO opportunity_score_jobs (id,opportunity_id," +
         "score_rule_id,status,attempt_count,available_at,request_id,trace_id,created_at," +
-        "updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
-      [
-        id,
-        input.organizationId,
-        input.workspaceId,
-        opportunityId,
-        ruleId,
-        now,
-        input.requestId,
-        input.traceId,
-        now,
-        now,
-      ],
+        "updated_at) VALUES (?,?,?,'queued',0,?,?,?,?,?)",
+      [id, opportunityId, ruleId, now, input.requestId, input.traceId, now, now],
     );
     return id;
   }
@@ -553,8 +993,8 @@ export class MySqlScoringRepository implements ScoringRepository {
     for (const item of items) await this.queueOne(c, input, String(item.id), ruleId, now);
     await c.query(
       "INSERT INTO automatic_selection_evaluations " +
-        "(opportunity_id,organization_id,workspace_id,status,attempt_count,available_at,created_at,updated_at) " +
-        "SELECT o.id,o.organization_id,o.workspace_id,'queued',0,?,?,? FROM opportunities o WHERE " +
+        "(opportunity_id,status,attempt_count,available_at,created_at,updated_at) " +
+        "SELECT o.id,'queued',0,?,?,? FROM opportunities o WHERE " +
         "o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending' " +
         `AND ${selectionCandidateSql} ` +
         automaticEvaluationEnqueueUpdateSql,
@@ -570,7 +1010,7 @@ export class MySqlScoringRepository implements ScoringRepository {
   }
   private async saveOperation(
     c: PoolConnection,
-    input: ScoreWriteContext & { route: string },
+    input: Pick<ScoreWriteContext, "actorId" | "idempotencyKey"> & { route: string },
     resourceId: string,
     result: unknown,
     now: Date,
@@ -598,43 +1038,32 @@ export class MySqlScoringRepository implements ScoringRepository {
     now: Date,
   ) {
     const eventId = randomUUID();
-    await c.query(
-      "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type," +
-        "resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json," +
-        "occurred_at) VALUES (?,?,?,?,?,?,'user',?,?,?,?,?)",
-      [
-        eventId,
-        input.organizationId,
-        input.workspaceId,
-        eventType,
-        eventType.startsWith("score_rule.") ? "score_rule" : "opportunity",
-        resourceId,
-        input.actorId,
-        input.requestId,
-        input.traceId,
-        JSON.stringify(payload),
-        now,
-      ],
-    );
-    await c.query(
-      "INSERT INTO opportunity_outbox (id,organization_id,workspace_id,event_type," +
-        "resource_type,resource_id,payload_json,status,attempt_count,available_at," +
-        "request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,?,'queued'," +
-        "0,?,?,?,?,?)",
-      [
-        eventId,
-        input.organizationId,
-        input.workspaceId,
-        eventType,
-        eventType.startsWith("score_rule.") ? "score_rule" : "opportunity",
-        resourceId,
-        JSON.stringify(payload),
-        now,
-        input.requestId,
-        input.traceId,
-        now,
-        now,
-      ],
-    );
+    await appendOpportunityEvent(c, {
+      id: eventId,
+      organizationId: input.organizationId,
+      workspaceId: input.workspaceId,
+      eventType,
+      resourceType: eventType.startsWith("score_rule.") ? "score_rule" : "opportunity",
+      resourceId,
+      actorType: "user",
+      actorId: input.actorId,
+      requestId: input.requestId,
+      traceId: input.traceId,
+      payloadJson: JSON.stringify(payload),
+      occurredAt: now,
+    });
+    await appendOpportunityOutbox(c, {
+      id: eventId,
+      eventId,
+      organizationId: input.organizationId,
+      workspaceId: input.workspaceId,
+      eventType,
+      resourceType: eventType.startsWith("score_rule.") ? "score_rule" : "opportunity",
+      resourceId,
+      payloadJson: JSON.stringify(payload),
+      createdAt: now,
+      requestId: input.requestId,
+      traceId: input.traceId,
+    });
   }
 }

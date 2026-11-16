@@ -1,0 +1,9 @@
+# Account-scoped selection and scoring
+
+The verified session is the source of account identity. After cutover, selection list and detail require the opportunity's native account to agree with the sealed owner. Source and purchase-price evidence must match the original linked records. Preserve IDs, evidence and historical decisions; count and page with the same filter. Recommended, candidate and completed views retain their existing quality gates. Candidates with a confirmed product do not become recommendations until those gates pass.
+
+An opportunity decision preserves the original human actor. A replay cannot return a conflicting decision or verification task. A scoring-rule draft or action replay rechecks the cached result's exact identity and live ownership before returning it. Only the verified primary account may operate its rule lifecycle; activation and rollback reject overlapping or inconsistent active ownership with HTTP 409 before updating any rule. Rescoring queues eligible owned opportunities and does not rewrite historical score runs or change thresholds. Preview is read-only.
+
+This slice adds no environment setting. It activates with the verified account runtime, not by turning on the historical rehearsal endpoint. Manual opportunity creation, member options, batch actions, and the legacy manual scoring routes are not account write surfaces in this slice. For deployment use the approved account cutover coordinator; do not independently restart the service into account mode.
+
+Verification: build database and API, run `tests/m04-02/*.test.mjs`, `tests/m04-03/*.test.mjs`, and `tests/unit/opportunity-account-migration.test.mjs` using the Node test runner, then run `npm run typecheck:web`. Pre-cutover production readback found 2,022 opportunities, 3,926 score runs, one active score rule, and zero missing raw evidence rows among direct opportunity evidence links. That inventory is not post-cutover acceptance.
