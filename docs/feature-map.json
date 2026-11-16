@@ -235,15 +235,18 @@
       "apps/api/src/mysql-competitor-repository.ts",
       "apps/api/src/competitor-routes.ts",
       "apps/api/src/amazon-public-signals.ts",
-      "apps/web/src/components/AccountCompetitorRules.vue"
+      "apps/web/src/components/AccountCompetitorRules.vue",
+      "apps/worker/src/competitor-monitor-worker.ts"
     ],
     "testFiles": [
       "tests/m04-05/account-competitor-read-rehearsal.test.mjs",
       "tests/m04-05/account-competitor-status-rehearsal.test.mjs",
-      "tests/unit/competitor-account-migration.test.mjs"
+      "tests/unit/competitor-account-migration.test.mjs",
+      "tests/unit/competitor-monitor-account-owner.test.mjs",
+      "tests/unit/competitor-snapshot-order.test.mjs"
     ],
     "docs": ["docs/openapi.yaml", "docs/runbooks/account-competitor-original-history.md"],
-    "contract": "Keep original competitor IDs, latest and historical snapshots, evidence, and rule ownership. Only the sealed primary account can see shared or unassigned rows. Rule replay rechecks the exact originally submitted fields and persisted owner; conflicting requests create no extra rule or delivery."
+    "contract": "Keep original competitor IDs, latest and historical snapshots, evidence, and rule ownership. Only the sealed primary account can see shared or unassigned rows. Rule replay rechecks the exact originally submitted fields and persisted owner; conflicting requests create no extra rule or delivery. Snapshot comparison requires the original owned job, previous and current evidence, and a valid lease; old snapshots cannot move the latest pointer backwards."
   },
   "accountIntelligenceTopicPresentation": {
     "sourceFiles": [

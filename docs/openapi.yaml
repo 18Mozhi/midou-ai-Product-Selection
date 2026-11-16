@@ -2728,6 +2728,7 @@ paths:
   /competitors/{competitorId}:
     get:
       summary: Read competitor snapshots and change-linked evidence alert and task delivery state
+      x-account-monitor-comparison: In account mode persisted comparisons use the original same-account snapshot, raw evidence and enabled monitor rule under a current lease. Older snapshots do not replace the latest reference.
       description: Each alert includes change_id and rule_id so clients can place the persisted impact conclusion, notification state and downstream task state on one factual timeline without inferring an alert for unmatched changes. The detail also returns the latest public-page collection attempt so the page can distinguish queued, running, retrying, blocked and terminal failure states without guessing from a missing snapshot. Retired account mode filters child rows by ownership and returns 404 for a foreign competitor.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: competitor:read

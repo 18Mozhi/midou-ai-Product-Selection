@@ -1,10 +1,17 @@
 import { randomUUID } from "node:crypto";
-import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { appendCompetitorEvent, appendCompetitorOutbox, hasLegacyCompetitorRuleScope } from "@scoutops/database";
+import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
+import { queueOwnedSelectionEvaluation } from "./account-evaluation-enqueue.js";
 import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
-type Job = {
+import { nativeCompetitorStorage } from "./competitor-storage.js";
+import { nativeOpportunityStorage } from "./opportunity-storage.js";
+import {
+  calculationOwnersMatch, registerCalculationOwners, resolveCalculationOwnership,
+  type CalculationOwnerRef,
+} from "./opportunity-calculation-ownership.js";
+type JobScope = { accountId: string } | { organizationId: string; workspaceId: string };
+type Job = JobScope & {
   id: string;
-  organizationId: string;
-  workspaceId: string;
   competitorId: string;
   snapshotId: string;
   requestId: string;
@@ -61,6 +68,12 @@ export class MySqlCompetitorMonitorWorker {
         await c.commit();
         return null;
       }
+      const native = await nativeCompetitorStorage(c);
+      const [[parent]] = await c.query<RowDataPacket[]>(
+        `SELECT ${native ? "account_id" : "organization_id,workspace_id"} FROM competitors WHERE id=?`,
+        [r.competitor_id],
+      );
+      if (!parent) throw new Error("competitor_snapshot_jobs_parent_missing");
       await c.query(
         "UPDATE competitor_snapshot_jobs SET status='leased',attempt_count=attempt_count+1,lease_owner=?,lease_expires_at=?,updated_at=? WHERE id=?",
         [this.workerId, expires, now, r.id],
@@ -68,8 +81,8 @@ export class MySqlCompetitorMonitorWorker {
       await c.commit();
       return {
         id: String(r.id),
-        organizationId: String(r.organization_id),
-        workspaceId: String(r.workspace_id),
+        ...(native ? { accountId: String(parent.account_id) } :
+          { organizationId: String(parent.organization_id), workspaceId: String(parent.workspace_id) }),
         competitorId: String(r.competitor_id),
         snapshotId: String(r.snapshot_id),
         requestId: String(r.request_id),
@@ -88,19 +101,45 @@ export class MySqlCompetitorMonitorWorker {
       now = this.now();
     try {
       await c.beginTransaction();
+      const legacyCoordinates = "organizationId" in job
+        ? { organizationId: job.organizationId, workspaceId: job.workspaceId } : {};
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT c.latest_snapshot_id,c.opportunity_id,s.* FROM competitors c JOIN competitor_snapshots s ON s.id=? AND s.competitor_id=c.id AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id WHERE c.id=? AND c.organization_id=? AND c.workspace_id=? FOR UPDATE",
-        [job.snapshotId, job.competitorId, job.organizationId, job.workspaceId],
+        "SELECT c.latest_snapshot_id,c.opportunity_id,s.* FROM competitors c JOIN competitor_snapshots s ON s.id=? AND s.competitor_id=c.id WHERE c.id=? AND " +
+          ("accountId" in job ? "c.account_id=?" : "c.organization_id=? AND c.workspace_id=?") + " FOR UPDATE",
+        [job.snapshotId, job.competitorId, ...("accountId" in job ? [job.accountId] : [job.organizationId, job.workspaceId])],
       );
       const current = rows[0];
       if (!current) throw new CompetitorMonitorError("competitor_snapshot_missing", false);
+      const ownership = await resolveCalculationOwnership(c, job.competitorId, "competitors");
+      if ("accountId" in job && ownership?.owner?.account_id !== job.accountId)
+        throw new CompetitorMonitorError("competitor_snapshot_owner_mismatch", false);
+      const [lease] = await c.query<RowDataPacket[]>(
+        "SELECT id FROM competitor_snapshot_jobs WHERE id=? AND competitor_id=? AND snapshot_id=? " +
+          "AND status='leased' AND lease_owner=? AND attempt_count=? AND lease_expires_at>? FOR UPDATE",
+        [job.id, job.competitorId, job.snapshotId, this.workerId, job.attemptCount, now],
+      );
+      if (!lease[0]) throw new CompetitorMonitorError("competitor_snapshot_lease_lost", true);
+      if (ownership) {
+        if (!(await calculationOwnersMatch(c,ownership,[
+            ["competitor_snapshot_jobs",job.id],
+            ["competitor_snapshots",job.snapshotId],["raw_evidence",String(current.evidence_id)],
+            ...(current.opportunity_id ? [["opportunities",String(current.opportunity_id)] as const] : []),
+          ]))) throw new CompetitorMonitorError("competitor_snapshot_owner_mismatch", false);
+      }
+      if ("accountId" in job && !await this.snapshotEvidenceMatches(c, current, job.accountId))
+        throw new CompetitorMonitorError("competitor_snapshot_owner_mismatch", false);
       let previous: RowDataPacket | undefined;
       if (current.latest_snapshot_id && String(current.latest_snapshot_id) !== job.snapshotId) {
         const [p] = await c.query<RowDataPacket[]>(
-          "SELECT * FROM competitor_snapshots WHERE id=? AND competitor_id=? AND organization_id=? AND workspace_id=?",
-          [current.latest_snapshot_id, job.competitorId, job.organizationId, job.workspaceId],
+          "SELECT * FROM competitor_snapshots WHERE id=? AND competitor_id=? LOCK IN SHARE MODE",
+          [current.latest_snapshot_id, job.competitorId],
         );
         previous = p[0];
+        if (ownership && (!previous || !(await calculationOwnersMatch(c,ownership,[
+          ["competitor_snapshots",String(previous.id)],["raw_evidence",String(previous.evidence_id)],
+        ])))) throw new CompetitorMonitorError("competitor_previous_snapshot_owner_mismatch", false);
+        if ("accountId" in job && previous && !await this.snapshotEvidenceMatches(c, previous, job.accountId))
+          throw new CompetitorMonitorError("competitor_previous_snapshot_owner_mismatch", false);
       }
       const capturedAt = new Date(current.captured_at).getTime(),
         previousAt = previous ? new Date(previous.captured_at).getTime() : null;
@@ -113,14 +152,24 @@ export class MySqlCompetitorMonitorWorker {
           (capturedAt < previousAt ||
             (capturedAt === previousAt && job.snapshotId <= String(previous.id))))
       ) {
-        await c.query(
-          "UPDATE competitor_snapshot_jobs SET status='succeeded',lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? WHERE id=? AND lease_owner=?",
-          [now, job.id, this.workerId],
-        );
+        await this.completeLeasedJob(c, job);
         await c.commit();
         return { change_count: 0 };
       }
       const changes: Record<string, { old: string; now: string }> = {};
+      const owned: CalculationOwnerRef[] = [];
+      const owner = ownership?.owner;
+      const nativeOpportunity = !!owner && !!current.opportunity_id && await nativeOpportunityStorage(c);
+      if (owner && nativeOpportunity) {
+        const [[linked]] = await c.query<RowDataPacket[]>(
+          "SELECT id FROM opportunities WHERE id=? AND account_id=? LOCK IN SHARE MODE",
+          [current.opportunity_id, owner.account_id],
+        );
+        if (!linked) throw new CompetitorMonitorError("competitor_snapshot_owner_mismatch", false);
+      }
+      const legacyRuleScope = owner || await hasLegacyCompetitorRuleScope(c);
+      if (!legacyRuleScope && !ownership)
+        throw new CompetitorMonitorError("competitor_rule_ownership_not_ready", false);
       if (previous) {
         for (const field of [
           "current_price",
@@ -138,11 +187,9 @@ export class MySqlCompetitorMonitorWorker {
         const changeId = randomUUID(),
           impact = this.impact(field, value.old, value.now);
         await c.query(
-          "INSERT INTO competitor_changes (id,organization_id,workspace_id,competitor_id,snapshot_id,field_name,previous_value,current_value,changed_at,evidence_id,impact_explanation,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+          "INSERT INTO competitor_changes (id,competitor_id,snapshot_id,field_name,previous_value,current_value,changed_at,evidence_id,impact_explanation,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
           [
             changeId,
-            job.organizationId,
-            job.workspaceId,
             job.competitorId,
             job.snapshotId,
             field,
@@ -154,9 +201,17 @@ export class MySqlCompetitorMonitorWorker {
             now,
           ],
         );
-        const [rules] = await c.query<RowDataPacket[]>(
-          "SELECT * FROM competitor_monitor_rules WHERE organization_id=? AND workspace_id=? AND status='enabled' AND (competitor_id IS NULL OR competitor_id=?) AND metric=?",
-          [job.organizationId, job.workspaceId, job.competitorId, this.metric(field)],
+        owned.push(["competitor_changes",changeId]);
+        const [rules] = !legacyRuleScope ? [[]] : await c.query<RowDataPacket[]>(
+          owner
+            ? "SELECT r.* FROM competitor_monitor_rules r JOIN account_owned_records ao " +
+              "ON ao.source_table='competitor_monitor_rules' AND ao.source_id=r.id " +
+              "WHERE ao.account_id=? AND r.status='enabled' AND (r.competitor_id IS NULL OR r.competitor_id=?) AND r.metric=? LOCK IN SHARE MODE"
+            : "SELECT * FROM competitor_monitor_rules WHERE organization_id=? AND workspace_id=? AND status='enabled' AND (competitor_id IS NULL OR competitor_id=?) AND metric=?" +
+              (ownership ? " AND NOT EXISTS (SELECT 1 FROM account_owned_records ao WHERE ao.source_table='competitor_monitor_rules' AND ao.source_id=competitor_monitor_rules.id)" : ""),
+          owner
+            ? [owner.account_id, job.competitorId, this.metric(field)]
+            : [legacyCoordinates.organizationId, legacyCoordinates.workspaceId, job.competitorId, this.metric(field)],
         );
         for (const rule of rules)
           if (this.trigger(rule, value.old, value.now)) {
@@ -171,13 +226,12 @@ export class MySqlCompetitorMonitorWorker {
                 changed_at: iso(current.captured_at),
                 evidence_id: String(current.evidence_id),
                 impact_explanation: impact,
+                ...(owner ? { account_projection_contract: 25 } : {}),
               };
             await c.query(
-              "INSERT INTO competitor_alerts (id,organization_id,workspace_id,competitor_id,change_id,rule_id,notification_status,task_status,payload_json,created_at,updated_at) VALUES (?,?,?,?,?,?,'queued','queued',?,?,?)",
+              "INSERT INTO competitor_alerts (id,competitor_id,change_id,rule_id,notification_status,task_status,payload_json,created_at,updated_at) VALUES (?,?,?,?,'queued','queued',?,?,?)",
               [
                 alertId,
-                job.organizationId,
-                job.workspaceId,
                 job.competitorId,
                 changeId,
                 rule.id,
@@ -186,19 +240,12 @@ export class MySqlCompetitorMonitorWorker {
                 now,
               ],
             );
-            await c.query(
-              "INSERT INTO competitor_outbox (id,organization_id,workspace_id,aggregate_id,event_type,payload_json,status,available_at,created_at) VALUES (?,?,?,?,?,?,'pending',?,?)",
-              [
-                alertId,
-                job.organizationId,
-                job.workspaceId,
-                job.competitorId,
-                "competitor.threshold.triggered",
-                JSON.stringify(payload),
-                now,
-                now,
-              ],
-            );
+            await appendCompetitorOutbox(c, {
+              id: alertId, ...legacyCoordinates,
+              parentId: job.competitorId, eventType: "competitor.threshold.triggered",
+              payloadJson: JSON.stringify(payload), createdAt: now,
+            });
+            owned.push(["competitor_alerts",alertId],["competitor_outbox",alertId]);
           }
       }
       await c.query("UPDATE competitors SET latest_snapshot_id=?,updated_at=? WHERE id=?", [
@@ -206,35 +253,28 @@ export class MySqlCompetitorMonitorWorker {
         now,
         job.competitorId,
       ]);
-      if (current.opportunity_id)
-        await queueAutomaticSelectionEvaluation(c, {
-          organizationId: job.organizationId,
-          workspaceId: job.workspaceId,
-          opportunityId: String(current.opportunity_id),
-          now,
-        });
-      await c.query(
-        "UPDATE competitor_snapshot_jobs SET status='succeeded',lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? WHERE id=? AND lease_owner=?",
-        [now, job.id, this.workerId],
-      );
-      await c.query(
-        "INSERT INTO competitor_events (id,organization_id,workspace_id,competitor_id,event_type,actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
-        [
-          randomUUID(),
-          job.organizationId,
-          job.workspaceId,
-          job.competitorId,
-          "competitor.snapshot.compared",
-          this.workerId,
-          JSON.stringify({
+      if (current.opportunity_id) {
+        if (owner)
+          await queueOwnedSelectionEvaluation(c, String(current.opportunity_id), owner.account_id, nativeOpportunity, now);
+        else if ("organizationId" in job)
+          await queueAutomaticSelectionEvaluation(c, {
+            organizationId: job.organizationId, workspaceId: job.workspaceId,
+            opportunityId: String(current.opportunity_id), now,
+          });
+      }
+      const eventId = randomUUID();
+      await appendCompetitorEvent(c, {
+        id: eventId, ...legacyCoordinates,
+        parentId: job.competitorId, eventType: "competitor.snapshot.compared", actorId: this.workerId,
+        payloadJson: JSON.stringify({
             snapshot_id: job.snapshotId,
             change_count: Object.keys(changes).length,
           }),
-          job.requestId,
-          job.traceId,
-          now,
-        ],
-      );
+        requestId: job.requestId, traceId: job.traceId, createdAt: now,
+      });
+      owned.push(["competitor_events",eventId]);
+      await registerCalculationOwners(c,ownership,owned);
+      await this.completeLeasedJob(c, job);
       await c.commit();
       return { change_count: Object.keys(changes).length };
     } catch (e) {
@@ -243,6 +283,22 @@ export class MySqlCompetitorMonitorWorker {
     } finally {
       c.release();
     }
+  }
+  private async snapshotEvidenceMatches(c: PoolConnection, snapshot: RowDataPacket, accountId: string) {
+    const [[raw]] = await c.query<RowDataPacket[]>(
+      "SELECT id FROM raw_evidence WHERE id=? AND provider_id=? AND account_id=? LOCK IN SHARE MODE",
+      [snapshot.evidence_id, snapshot.provider_id, accountId],
+    );
+    return Boolean(raw);
+  }
+  private async completeLeasedJob(c: PoolConnection, job: Job) {
+    const now = this.now();
+    const [result] = await c.query<ResultSetHeader>(
+      "UPDATE competitor_snapshot_jobs SET status='succeeded',lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? " +
+        "WHERE id=? AND status='leased' AND lease_owner=? AND attempt_count=? AND lease_expires_at>?",
+      [now, job.id, this.workerId, job.attemptCount, now],
+    );
+    if (result.affectedRows !== 1) throw new CompetitorMonitorError("competitor_snapshot_lease_lost", true);
   }
   private metric(field: string) {
     return field === "current_price" ? "price" : field === "rank_value" ? "rank" : field;
@@ -278,8 +334,9 @@ export class MySqlCompetitorMonitorWorker {
       delay = [60000, 300000, 900000][Math.min(job.attemptCount - 1, 2)]!,
       available = status === "scheduled" ? new Date(now.getTime() + delay) : now;
     await this.pool.query(
-      "UPDATE competitor_snapshot_jobs SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=?,updated_at=? WHERE id=? AND lease_owner=?",
-      [stored, available, code, now, job.id, this.workerId],
+      "UPDATE competitor_snapshot_jobs SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=?,updated_at=? " +
+        "WHERE id=? AND status='leased' AND lease_owner=? AND attempt_count=? AND lease_expires_at>?",
+      [stored, available, code, now, job.id, this.workerId, job.attemptCount, now],
     );
   }
 }

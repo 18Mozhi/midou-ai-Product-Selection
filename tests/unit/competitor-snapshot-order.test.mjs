@@ -25,7 +25,11 @@ function fixture({
     rollback: async () => calls.push(["rollback"]),
     release: () => calls.push(["release"]),
     query: async (sql, params) => {
+      if (sql.startsWith("SHOW COLUMNS FROM competitor_monitor_rules"))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       calls.push([sql, params]);
+      if (sql.startsWith("SELECT cut.primary_account_id") || sql.startsWith("SHOW COLUMNS")) return [[]];
+      if (sql.startsWith("SELECT id FROM competitor_snapshot_jobs")) return [[{id:"job"}]];
       if (sql.startsWith("SELECT c.latest_snapshot_id"))
         return [
           [
@@ -94,7 +98,8 @@ for (const previousAt of ["2026-10-17T00:00:00Z", "2026-10-17T01:00:00Z"]) {
     ]);
     assert.ok(calls.some(([sql]) => sql.startsWith("INSERT INTO automatic_selection_evaluations")));
     const previous = calls.find(([sql]) => sql.startsWith("SELECT * FROM competitor_snapshots"));
-    assert.deepEqual(previous[1], ["a", "product", "org", "workspace"]);
+    assert.deepEqual(previous[1], ["a", "product"]);
+    assert.match(previous[0], /WHERE id=\? AND competitor_id=\?/);
     assert.deepEqual(calls.slice(-2), [["commit"], ["release"]]);
   });
 }
