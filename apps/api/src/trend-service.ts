@@ -9,6 +9,7 @@ export interface TrendTopicSummary {
   image_url?: string | null;
   source_url?: string | null;
   source_name?: string | null;
+  topic_variants?: Array<Pick<TrendTopicSummary, "id" | "title" | "status" | "last_seen_at">>;
   id: string;
   title: string;
   category: string | null;
@@ -55,6 +56,7 @@ export interface TrendTopicDetail extends TrendTopicSummary {
     points: Array<{ at: string; signal_count: number }>;
   }>;
   evidence: TrendSignal[];
+  evidence_pagination?: { page: number; has_more: boolean };
   data_quality: {
     coverage_status: "covered" | "insufficient_data";
     evidence_count: number;
@@ -122,6 +124,12 @@ export interface TrendWriteContext extends TrendScope {
   traceId: string;
   idempotencyKey: string;
 }
+export type TrendTopicWriteContext =
+  | TrendWriteContext
+  | (Omit<TrendWriteContext, "organizationId" | "workspaceId"> & { accountOwnedTopic: true });
+export type TrendRuleUpdateContext =
+  | TrendWriteContext
+  | (Omit<TrendWriteContext, "organizationId" | "workspaceId"> & { accountOwnedRule: true });
 export interface MonitoringRuleInput {
   name: string;
   include_keywords: string[];
@@ -227,9 +235,11 @@ export function validateMonitoringRuleInput(value: MonitoringRuleInput): Monitor
   };
 }
 
+export type TrendListScope = TrendScope | { accountId: string };
+
 export interface TrendRepository {
   list(
-    input: TrendScope & {
+    input: TrendListScope & {
       page: number;
       pageSize: number;
       query?: string;
@@ -239,8 +249,10 @@ export interface TrendRepository {
       followed?: boolean;
     },
   ): Promise<{ items: TrendTopicSummary[]; total: number }>;
-  get(input: TrendScope & { topicId: string }): Promise<TrendTopicDetail | null>;
-  listRules(input: TrendScope): Promise<TrendMonitoringRule[]>;
+  get(
+    input: TrendListScope & { topicId: string; evidencePage?: number },
+  ): Promise<TrendTopicDetail | null>;
+  listRules(input: TrendListScope): Promise<TrendMonitoringRule[]>;
   listChangeRequests(
     input: TrendScope & { status?: TrendTopicChangeStatus },
   ): Promise<TrendTopicChangeRequest[]>;
@@ -269,14 +281,14 @@ export interface TrendRepository {
     },
   ): Promise<TrendTopicChangeRequest>;
   setFollow(
-    input: TrendWriteContext & {
+    input: TrendTopicWriteContext & {
       topicId: string;
       followed: boolean;
       route: string;
     },
   ): Promise<{ topic_id: string; followed: boolean }>;
   setRelevance(
-    input: TrendWriteContext & {
+    input: TrendTopicWriteContext & {
       topicId: string;
       status: "active" | "irrelevant";
       reason: string;
@@ -296,11 +308,11 @@ export interface TrendRepository {
     },
   ): Promise<TrendMonitoringRule>;
   updateRule(
-    input: TrendWriteContext & {
+    input: TrendRuleUpdateContext & {
       ruleId: string;
       status: MonitoringRuleStatus;
-      collectionIntervalMinutes: number;
-      recommendationMinSourceCount: number;
+      collectionIntervalMinutes?: number;
+      recommendationMinSourceCount?: number;
       expectedVersion: number;
       route: string;
     },
@@ -328,7 +340,7 @@ export class TrendService {
   constructor(private readonly repository: TrendRepository) {}
 
   list(
-    input: TrendScope & {
+    input: TrendListScope & {
       page?: number;
       pageSize?: number;
       query?: string;
@@ -360,21 +372,35 @@ export class TrendService {
     });
   }
 
-  async get(input: TrendScope & { topicId: string }) {
+  async get(input: TrendListScope & { topicId: string; evidencePage?: unknown }) {
+    const { evidencePage, ...scope } = input;
+    const page =
+      typeof evidencePage === "string" && /^\d{1,6}$/.test(evidencePage)
+        ? Number(evidencePage)
+        : evidencePage;
+    if (
+      "accountId" in scope &&
+      page !== undefined &&
+      (typeof page !== "number" || !Number.isInteger(page) || page < 1 || page > 100000)
+    )
+      throw new TrendServiceError("trend_evidence_page_invalid", 400, "选择有效的来源证据页码。");
     const result = await this.repository.get({
-      ...input,
+      ...scope,
       topicId: uuid(input.topicId, "topic_id"),
+      ...("accountId" in scope && typeof page === "number" ? { evidencePage: page } : {}),
     });
     if (!result)
       throw new TrendServiceError(
         "trend_topic_not_found",
         404,
-        "刷新趋势列表；该主题可能不在当前工作区。",
+        "accountId" in input
+          ? "刷新情报列表；该主题可能不属于当前账号。"
+          : "刷新趋势列表；该主题可能不在当前工作区。",
       );
     return result;
   }
 
-  listRules(input: TrendScope) {
+  listRules(input: TrendListScope) {
     return this.repository.listRules(input);
   }
   listChangeRequests(input: TrendScope & { status?: TrendTopicChangeStatus }) {
@@ -489,24 +515,28 @@ export class TrendService {
       route: `POST:/api/v1/trends/change-requests/${changeRequestId}/decisions`,
     });
   }
-  follow(input: TrendWriteContext & { topicId: string; followed: boolean }) {
-    const topicId = uuid(input.topicId, "topic_id");
+  follow(input: TrendTopicWriteContext & { topicId: string; followed: boolean }) {
+    const parsedId = uuid(input.topicId, "topic_id");
+    const account = "accountOwnedTopic" in input;
+    const topicId = account ? parsedId.toLowerCase() : parsedId;
     return this.repository.setFollow({
       ...input,
       topicId,
-      route: `${input.followed ? "PUT" : "DELETE"}:/api/v1/trends/${topicId}/follow`,
+      route: `${input.followed ? "PUT" : "DELETE"}:/api/v1/trends/${topicId}/follow${account ? ":account" : ""}`,
     });
   }
 
   relevance(
-    input: TrendWriteContext & {
+    input: TrendTopicWriteContext & {
       topicId: string;
       status: "active" | "irrelevant";
       reason: string;
       expectedVersion: number;
     },
   ) {
-    const topicId = uuid(input.topicId, "topic_id");
+    const parsedId = uuid(input.topicId, "topic_id");
+    const account = "accountOwnedTopic" in input;
+    const topicId = account ? parsedId.toLowerCase() : parsedId;
     if (
       !["active", "irrelevant"].includes(input.status) ||
       !Number.isSafeInteger(input.expectedVersion) ||
@@ -521,7 +551,7 @@ export class TrendService {
       ...input,
       topicId,
       reason: boundedText(input.reason, "reason", 500),
-      route: `POST:/api/v1/trends/${topicId}/relevance`,
+      route: `POST:/api/v1/trends/${topicId}/relevance${account ? ":account" : ""}`,
     });
   }
 
@@ -535,7 +565,7 @@ export class TrendService {
   }
 
   updateRule(
-    input: TrendWriteContext & {
+    input: TrendRuleUpdateContext & {
       ruleId: string;
       status: MonitoringRuleStatus;
       collectionIntervalMinutes?: number;
@@ -543,9 +573,16 @@ export class TrendService {
       expectedVersion: number;
     },
   ) {
+    const account = "accountOwnedRule" in input;
     const ruleId = uuid(input.ruleId, "rule_id"),
-      collectionIntervalMinutes = Number(input.collectionIntervalMinutes ?? 60),
-      recommendationMinSourceCount = Number(input.recommendationMinSourceCount ?? 1);
+      collectionIntervalMinutes =
+        account && input.collectionIntervalMinutes === undefined
+          ? undefined
+          : Number(input.collectionIntervalMinutes ?? (account ? 0 : 60)),
+      recommendationMinSourceCount =
+        account && input.recommendationMinSourceCount === undefined
+          ? undefined
+          : Number(input.recommendationMinSourceCount ?? (account ? 0 : 1));
     if (
       !["enabled", "paused"].includes(input.status) ||
       !Number.isSafeInteger(input.expectedVersion) ||
@@ -557,9 +594,10 @@ export class TrendService {
         "提交 enabled/paused 和当前 version。",
       );
     if (
-      !Number.isSafeInteger(recommendationMinSourceCount) ||
-      recommendationMinSourceCount < 1 ||
-      recommendationMinSourceCount > 10
+      recommendationMinSourceCount !== undefined &&
+      (!Number.isSafeInteger(recommendationMinSourceCount) ||
+        recommendationMinSourceCount < 1 ||
+        recommendationMinSourceCount > 10)
     )
       throw new TrendServiceError(
         "trend_rule_source_threshold_invalid",
@@ -567,9 +605,10 @@ export class TrendService {
         "自动推荐所需独立来源数必须为 1–10。",
       );
     if (
-      !Number.isSafeInteger(collectionIntervalMinutes) ||
-      collectionIntervalMinutes < 15 ||
-      collectionIntervalMinutes > 10080
+      collectionIntervalMinutes !== undefined &&
+      (!Number.isSafeInteger(collectionIntervalMinutes) ||
+        collectionIntervalMinutes < 15 ||
+        collectionIntervalMinutes > 10080)
     )
       throw new TrendServiceError(
         "trend_rule_interval_invalid",
@@ -579,8 +618,8 @@ export class TrendService {
     return this.repository.updateRule({
       ...input,
       ruleId,
-      collectionIntervalMinutes,
-      recommendationMinSourceCount,
+      ...(collectionIntervalMinutes !== undefined ? { collectionIntervalMinutes } : {}),
+      ...(recommendationMinSourceCount !== undefined ? { recommendationMinSourceCount } : {}),
       route: `PATCH:/api/v1/trends/monitoring-rules/${ruleId}`,
     });
   }

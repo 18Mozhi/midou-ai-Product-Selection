@@ -5,6 +5,7 @@ export interface TrendTopic {
   image_url?: string | null;
   source_url?: string | null;
   source_name?: string | null;
+  topic_variants?: Array<Pick<TrendTopic, "id" | "title" | "status" | "last_seen_at">>;
   id: string;
   title: string;
   category: string | null;
@@ -24,6 +25,7 @@ export interface TrendTopic {
 }
 
 export interface TrendDetail extends TrendTopic {
+  evidence_pagination?: { page: number; has_more: boolean };
   keywords: Array<{ keyword: string; type: string; language: string; market: string }>;
   timeline: Array<{ at: string; signal_count: number; source_count: number }>;
   timeline_sources: Array<{

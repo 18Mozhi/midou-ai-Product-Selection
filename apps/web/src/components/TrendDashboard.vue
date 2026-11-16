@@ -45,6 +45,8 @@ const props = defineProps<{
   requestId = ref(""),
   message = ref(""),
   busy = ref(""),
+  evidencePageBusy = ref(false),
+  evidencePageError = ref(""),
   total = ref(0),
   page = ref(1),
   sort = ref<TrendSort>("impact"),
@@ -53,6 +55,7 @@ let listReadGeneration = 0,
   topicDetailReadGeneration = 0,
   listReadController: AbortController | null = null,
   topicDetailReadController: AbortController | null = null,
+  evidencePageController: AbortController | null = null,
   pageActive = true,
   wasDeactivated = false,
   activeListReadKey: string | null = null,
@@ -213,7 +216,7 @@ function queueLoad() {
     if (pageActive) void load();
   });
 }
-async function selectTopic(topic: Topic) {
+async function selectTopic(topic: Pick<Topic, "id">) {
   if (selected.value?.id !== topic.id) busy.value = "detail";
   mobileDetailOpen.value = true;
   await router.push({ query: { ...route.query, topic: topic.id, section: undefined } });
@@ -293,9 +296,57 @@ watch(
     queueLoad();
   },
 );
+function cancelEvidencePage() {
+  evidencePageController?.abort();
+  evidencePageController = null;
+  evidencePageBusy.value = false;
+  evidencePageError.value = "";
+}
+async function loadEvidencePage(next: number) {
+  const current = selected.value;
+  if (
+    !pageActive ||
+    !current?.evidence_pagination ||
+    evidencePageBusy.value ||
+    busy.value === "detail"
+  )
+    return;
+  const controller = new AbortController();
+  const generation = topicDetailReadGeneration;
+  const isCurrent = () =>
+    pageActive &&
+    generation === topicDetailReadGeneration &&
+    selected.value?.id === current.id &&
+    evidencePageController === controller;
+  evidencePageController = controller;
+  evidencePageBusy.value = true;
+  evidencePageError.value = "";
+  try {
+    const { data } = await request<Detail>(`/trends/${current.id}?evidence_page=${next}`, {
+      signal: controller.signal,
+    });
+    if (!isCurrent()) return;
+    if (data.id !== current.id || data.evidence_pagination?.page !== next)
+      throw new Error("trend_evidence_page_mismatch");
+    const visible = selected.value!;
+    selected.value = {
+      ...visible,
+      evidence: data.evidence,
+      evidence_pagination: data.evidence_pagination,
+    };
+  } catch {
+    if (isCurrent()) evidencePageError.value = "未能加载这页来源证据，当前页已保留。请重试。";
+  } finally {
+    if (evidencePageController === controller) {
+      evidencePageController = null;
+      evidencePageBusy.value = false;
+    }
+  }
+}
 watch(
   () => route.query.topic,
   async (topicId) => {
+    cancelEvidencePage();
     mobileDetailOpen.value = typeof topicId === "string";
     if (!mobileDetailOpen.value) selected.value = null;
     const generation = ++topicDetailReadGeneration;
@@ -349,6 +400,7 @@ onMounted(() => {
   void load();
 });
 onDeactivated(() => {
+  cancelEvidencePage();
   pageActive = false;
   wasDeactivated = true;
   queuedLoadKey = null;
@@ -369,6 +421,7 @@ onActivated(() => {
   queueLoad();
 });
 onBeforeUnmount(() => {
+  cancelEvidencePage();
   pageActive = false;
   listReadGeneration += 1;
   topicDetailReadGeneration += 1;
@@ -442,39 +495,56 @@ onBeforeUnmount(() => {
           <div>
             <strong>情报列表</strong><span>共 {{ total }} 个主题</span>
           </div>
-          <small>{{ sort === "impact" ? "按影响程度排序" : "按所选视图排序" }}</small>
+          <small class="trend-list-sort-summary">{{
+            sort === "impact"
+              ? "按影响程度排序"
+              : sort === "latest"
+                ? "按最新时间排序"
+                : "按热度变化排序"
+          }}</small>
         </header>
-        <button
-          v-for="(topic, index) in sortedTopics"
-          class="trend-topic-row"
-          :key="topic.id"
-          type="button"
-          :aria-pressed="selected?.id === topic.id"
-          @click="selectTopic(topic)"
-        >
-          <ResearchThumbnail
-            :src="topic.image_url"
-            :source-url="topic.source_url"
-            :alt="topic.title"
-          />
-          <span class="topic-index" aria-hidden="true">{{ (page - 1) * 20 + index + 1 }}</span
-          ><span class="topic-copy"
-            ><strong>{{ topic.title }}</strong
-            ><small
-              >{{ topic.market }} · {{ topic.category || "未分类" }} ·
-              {{ statusLabel(topic.status) }}</small
-            ><small
-              >{{ topic.source_count }} 个来源 · 新鲜度
-              {{ freshness(topic.source_fresh_at) }}</small
-            ><small
-              >{{ confidenceLabel(topic) }} · {{ topic.language }} ·
-              {{ topic.source_name || "来源未提供" }}</small
-            ></span
-          ><span class="topic-heat"
-            ><b>{{ topic.heat.value }}</b
-            ><small>条信号</small></span
-          ><em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
-        </button>
+        <template v-for="(topic, index) in sortedTopics" :key="topic.id">
+          <button
+            class="trend-topic-row"
+            type="button"
+            :aria-pressed="selected?.id === topic.id"
+            @click="selectTopic(topic)"
+          >
+            <ResearchThumbnail
+              :src="topic.image_url"
+              :source-url="topic.source_url"
+              :alt="topic.title"
+            />
+            <span class="topic-index" aria-hidden="true">{{ (page - 1) * 20 + index + 1 }}</span
+            ><span class="topic-copy"
+              ><strong>{{ topic.title }}</strong
+              ><small
+                >{{ topic.market }} · {{ topic.category || "未分类" }} ·
+                {{ statusLabel(topic.status) }}</small
+              ><small
+                >{{ topic.source_count }} 个来源 · 新鲜度
+                {{ freshness(topic.source_fresh_at) }}</small
+              ><small class="topic-extra"
+                >{{ confidenceLabel(topic) }} · {{ topic.language }} ·
+                {{ topic.source_name || "来源未提供" }}</small
+              ></span
+            ><span class="topic-heat"
+              ><b>{{ topic.heat.value }}</b
+              ><small>条信号</small></span
+            ><em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
+          </button>
+          <details v-if="topic.topic_variants?.length" class="trend-topic-variants">
+            <summary>查看 {{ topic.topic_variants.length }} 条原始情报</summary>
+            <ul>
+              <li v-for="variant in topic.topic_variants" :key="variant.id">
+                <button type="button" @click="selectTopic(variant)">
+                  {{ variant.title }} · {{ statusLabel(variant.status) }} ·
+                  {{ freshness(variant.last_seen_at) }}
+                </button>
+              </li>
+            </ul>
+          </details>
+        </template>
         <footer v-if="pageCount > 1" class="trend-pagination" aria-label="趋势分页">
           <button type="button" :disabled="page <= 1" @click="goPage(page - 1)">上一页</button>
           <span>第 {{ page }} / {{ pageCount }} 页</span>
@@ -488,8 +558,11 @@ onBeforeUnmount(() => {
         ref="detailPanel"
         :detail="selected"
         :busy="busy"
+        :evidence-page-busy="evidencePageBusy"
+        :evidence-page-error="evidencePageError"
         :can-read-related="capabilities.includes('opportunity:read')"
         @back="returnToTopicList"
+        @evidence-page="loadEvidencePage"
       >
         <template #related-products>
           <TrendRelatedProducts

@@ -10,10 +10,24 @@ const props = defineProps<{
   detail: TrendDetail | null;
   busy: string;
   canReadRelated: boolean;
+  evidencePageBusy?: boolean;
+  evidencePageError?: string;
 }>();
 const emit = defineEmits<{
   back: [];
+  evidencePage: [page: number];
 }>();
+const leadEvidenceTitle = ref("");
+watch(
+  () => props.detail,
+  (detail, previous) => {
+    if (detail?.id !== previous?.id) leadEvidenceTitle.value = "";
+    if (!detail || (detail.evidence_pagination?.page ?? 1) !== 1) return;
+    const title = detail.evidence[0]?.title.trim();
+    leadEvidenceTitle.value = title && title !== detail.title.trim() ? title : "";
+  },
+  { immediate: true },
+);
 const tabs = [
   { key: "overview", label: "情报概览" },
   { key: "evidence", label: "来源证据" },
@@ -62,8 +76,13 @@ const freshness = (value: string) =>
   <article class="trend-detail" :aria-busy="busy === 'detail'">
     <header>
       <div>
-        <button class="trend-detail-back so-action-quiet" type="button" @click="emit('back')">
-          关闭详情 · 返回情报列表
+        <button
+          class="trend-detail-back so-action-quiet"
+          type="button"
+          aria-label="关闭详情 · 返回情报列表"
+          @click="emit('back')"
+        >
+          关闭详情<span class="trend-detail-back-context"> · 返回情报列表</span>
         </button>
         <div v-if="detail && busy !== 'detail'" class="trend-detail-badges">
           <span><AppIcon name="map-pin" :size="16" />{{ detail.market }}</span
@@ -71,6 +90,12 @@ const freshness = (value: string) =>
           ><span :data-status="detail.status">{{ statusLabel(detail.status) }}</span>
         </div>
         <h3 v-if="detail && busy !== 'detail'">{{ detail.title }}</h3>
+        <p
+          v-if="leadEvidenceTitle && busy !== 'detail' && activeTab !== 'evidence'"
+          class="trend-detail-source-title"
+        >
+          <span>来源标题</span> {{ leadEvidenceTitle }}
+        </p>
         <span v-if="detail && busy !== 'detail'" class="trend-detail-freshness"
           >首次 {{ freshness(detail.first_seen_at) }} · 最近来源
           {{ freshness(detail.source_fresh_at) }}</span
@@ -171,6 +196,31 @@ const freshness = (value: string) =>
         tabindex="0"
       >
         <TrendEvidenceTimeline :detail="detail" />
+        <nav
+          v-if="
+            detail.evidence_pagination &&
+            (detail.evidence_pagination.page > 1 || detail.evidence_pagination.has_more)
+          "
+          aria-label="来源证据分页"
+          :aria-busy="evidencePageBusy"
+        >
+          <button
+            type="button"
+            :disabled="evidencePageBusy || detail.evidence_pagination.page === 1"
+            @click="emit('evidencePage', detail.evidence_pagination.page - 1)"
+          >
+            上一页
+          </button>
+          <span aria-live="polite">第 {{ detail.evidence_pagination.page }} 页</span>
+          <button
+            type="button"
+            :disabled="evidencePageBusy || !detail.evidence_pagination.has_more"
+            @click="emit('evidencePage', detail.evidence_pagination.page + 1)"
+          >
+            下一页
+          </button>
+        </nav>
+        <p v-if="evidencePageError" role="status">{{ evidencePageError }}</p>
       </div>
     </template>
   </article>

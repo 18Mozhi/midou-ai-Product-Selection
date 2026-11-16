@@ -1701,7 +1701,8 @@ paths:
         "403": { $ref: "#/components/responses/Error" }
   /trends:
     get:
-      summary: List current-workspace trend topics
+      summary: List scoped trend topics and their original variants
+      description: Retired account mode paginates visible topic keys and returns matching original variants under the representative row. Scope and filters apply before grouping. The native topic account must match its sealed owner. Shared and unassigned records must belong to the sealed primary account, and exclusive records stay with their owner. Legacy mode retains workspace authorization. No topic, signal or reference is merged or deleted.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - $ref: "#/components/parameters/Page"
@@ -1724,7 +1725,7 @@ paths:
       responses:
         "200":
           {
-            description: Organization/workspace-scoped trend page,
+            description: Scoped trend page,
             content:
               {
                 application/json:
@@ -1733,10 +1734,11 @@ paths:
           }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /trends/change-requests:
     get:
       summary: List scoped topic merge and split confirmation requests
-      description: Requires trend:manage. Archived merge sources remain auditable and are hidden from the default topic list.
+      description: Legacy tenant mode only; not registered in retired account mode. Requires trend:manage. Archived merge sources remain auditable and are hidden from the default topic list.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - {
@@ -1750,7 +1752,7 @@ paths:
         "403": { $ref: "#/components/responses/Error" }
     post:
       summary: Propose a version-locked topic merge or exact-signal split
-      description: Requires trend:manage, same-origin Origin and Idempotency-Key. A split requires an explicit new title; a merge retains the target topic and archives its sources only after a different active manager confirms it.
+      description: Legacy tenant mode only; not registered in retired account mode. Requires trend:manage, same-origin Origin and Idempotency-Key. A split requires an explicit new title; a merge retains the target topic and archives its sources only after a different active manager confirms it.
       security: [{ HttpOnlySession: [] }]
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       requestBody:
@@ -1767,6 +1769,7 @@ paths:
   /trends/change-requests/{requestId}/decisions:
     post:
       summary: Confirm or reject a topic merge or split as a different manager
+      description: Legacy tenant mode only; not registered in retired account mode.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: requestId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -1790,7 +1793,8 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /trends/monitoring-rules:
     get:
-      summary: List current-workspace trend monitoring rules
+      summary: List trend monitoring rules visible to the current session
+      description: Normal mode uses the current workspace and trend read permission. Isolated account rehearsal uses the verified account and its sealed ownership receipt; related collection task and failed-source details are shown only when the account owns the original linked records. No scheduling or rule values are changed.
       security: [{ HttpOnlySession: [] }]
       responses:
         "200":
@@ -1804,8 +1808,10 @@ paths:
           }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     post:
       summary: Create and enable a current-workspace monitoring rule
+      description: Legacy tenant mode only; not registered in retired account mode.
       security: [{ HttpOnlySession: [] }]
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       requestBody:
@@ -1833,6 +1839,7 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /trends/monitoring-rules/{ruleId}:
     patch:
+      x-account-retirement-note: In the isolated 0179 candidate, updates are authorized by the verified rule owner instead of organization session scope. Omit the interval or threshold to preserve its stored value in account mode. Legacy requests should continue sending both settings.
       summary: Pause or enable a monitoring rule with version lock
       security: [{ HttpOnlySession: [] }]
       parameters:
@@ -1852,8 +1859,6 @@ paths:
                         [
                           status,
                           expected_version,
-                          collection_interval_minutes,
-                          recommendation_min_source_count,
                         ],
                       properties:
                         {
@@ -1885,9 +1890,14 @@ paths:
   /trends/{topicId}:
     get:
       summary: Get trend conclusion timeline keywords evidence and data quality
+      description: Retired account mode reads the exact original topic ID and original evidence references of its sealed owner. A missing, foreign or incorrectly assigned topic returns 404. Missing current ownership backfill returns 503. Legacy mode retains workspace authorization.
       security: [{ HttpOnlySession: [] }]
       parameters:
-        [{ name: topicId, in: path, required: true, schema: { type: string, format: uuid } }]
+        - { name: topicId, in: path, required: true, schema: { type: string, format: uuid } }
+        - name: evidence_page
+          in: query
+          description: Retired account mode. One-based page of up to 100 original evidence references, ordered by publication time and original signal ID descending. Omission returns page 1; invalid values return 400.
+          schema: { type: integer, minimum: 1, maximum: 100000, default: 1 }
       responses:
         "200":
           {
@@ -1898,12 +1908,15 @@ paths:
                   { schema: { $ref: "#/components/schemas/TrendTopicDetailEnvelope" } },
               },
           }
+        "400": { $ref: "#/components/responses/Error" }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /trends/{topicId}/follow:
     put:
       summary: Follow a trend topic
+      description: Retired account mode checks topic ownership before write or replay and records only the verified session account's personal follow. The 0107 candidate uses the native account relation exclusively and retires the legacy duplicate after an exact reconciliation. No topic, evidence or original reference is rewritten.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: topicId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -1918,8 +1931,11 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     delete:
       summary: Unfollow a trend topic without deleting evidence
+      description: Retired account mode checks topic ownership before write or replay and removes only the verified session account's follow. Production authorization is unchanged.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: topicId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -1934,9 +1950,11 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /trends/{topicId}/relevance:
     post:
       summary: Mark a trend active or irrelevant while preserving evidence
+      description: Retired account mode checks topic ownership before write or replay and records the versioned change with account-owned history. Production authorization is unchanged.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: topicId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -1973,10 +1991,11 @@ paths:
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /trends/{topicId}/evidence/{evidenceId}/quality-issues:
     post:
       summary: Create or return the open quality issue for anomalous trend evidence
-      description: "Requires trend:manage. The server derives tenant scope and the provider, raw evidence, normalized record and parser version from the selected trend signal; an existing open issue for the same raw evidence is returned instead of creating a duplicate."
+      description: "Requires trend:manage. The server validates scope from the original parent topic and derives the provider, raw evidence, normalized record and parser version from the selected signal and its original references; an existing open issue for the same raw evidence is returned instead of creating a duplicate."
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: topicId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -10712,6 +10731,17 @@ components:
           version,
         ]
       properties:
+        topic_variants:
+          type: array
+          description: Only grouped account rehearsal list items with multiple matching original records. Each ID opens its own authorized detail; no records or evidence are merged.
+          items:
+            type: object
+            required: [id, title, status, last_seen_at]
+            properties:
+              id: { type: string, format: uuid }
+              title: { type: string }
+              status: { type: string, enum: [active, irrelevant, stale, archived] }
+              last_seen_at: { type: string, format: date-time }
         image_url:
           {
             type: string,
@@ -10798,6 +10828,13 @@ components:
               required:
                 [keywords, timeline, timeline_sources, evidence, data_quality, relevance_history]
               properties:
+                evidence_pagination:
+                  description: Returned on the account candidate. Evidence coverage counts all authorized references, not only the current page.
+                  type: object
+                  required: [page, has_more]
+                  properties:
+                    page: { type: integer, minimum: 1 }
+                    has_more: { type: boolean }
                 keywords:
                   {
                     type: array,

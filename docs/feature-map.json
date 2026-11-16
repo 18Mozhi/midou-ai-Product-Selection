@@ -1,4 +1,10 @@
 {
+  "accountIntelligenceTopicPresentation": {
+    "sourceFiles": ["apps/api/src/mysql-trend-repository.ts", "apps/api/src/trend-routes.ts", "apps/web/src/components/TrendDashboard.vue", "apps/web/src/components/TrendDetailPanel.vue"],
+    "testFiles": ["tests/m04-01/account-trend-list-rehearsal.test.mjs", "tests/unit/account-trend-preservation.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-intelligence-topic-presentation.md"],
+    "contract": "Filter owned topics before display-only grouping and count groups before pagination. A wrong shared owner is not visible in the grouped list or by original ID. Preserve each displayed variant, evidence reference and follow without merge or deletion."
+  },
   "accountSourcingQuoteRuntime": {
     "sourceFiles": ["apps/api/src/mysql-sourcing-repository.ts", "apps/api/src/sourcing-routes.ts", "apps/worker/src/sourcing-projection-worker.ts", "apps/web/src/composables/useSourcingWorkspace.ts"],
     "testFiles": ["tests/m04-06/account-sourcing-search-mutations.test.mjs", "tests/m04-06/account-sourcing-quote-rehearsal.test.mjs", "tests/m04-06/account-sourcing-purchase-rehearsal.test.mjs"],

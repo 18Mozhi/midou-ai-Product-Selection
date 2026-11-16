@@ -130,6 +130,16 @@
 .trend-list > button + button {
   margin-top: 5px;
 }
+.trend-topic-variants {
+  padding: 0.35rem 1rem;
+}
+.trend-topic-variants summary {
+  cursor: pointer;
+}
+.trend-topic-variants ul {
+  margin-block: 0.35rem;
+  padding-inline-start: 1.25rem;
+}
 .trend-list > button[aria-pressed="true"] {
   border-color: var(--so-primary);
   background: color-mix(in srgb, var(--so-primary) 10%, var(--so-panel-soft));
