@@ -14,6 +14,25 @@ SOURCE = dict(local_sha=BUILD, remote_sha=BUILD, remote_branch="main", repositor
 
 
 class AccountReleasePackageTest(unittest.TestCase):
+    def test_compiled_dist_only_packages_current_outputs(self):
+        with tempfile.TemporaryDirectory(prefix="scoutops-package-unit-") as scratch:
+            dist = pathlib.Path(scratch) / "dist"
+            dist.mkdir()
+            for name in ("current.js", "deleted-organization.js"):
+                (dist / name).write_text("export {};", encoding="utf-8")
+            selected = {}
+
+            def add(source, dest):
+                selected[dest] = source.read_text(encoding="utf-8")
+
+            PACKAGE["add_compiled_dist"](add, dist, "apps/api", ["current.js"])
+            self.assertEqual(selected, {"backend/apps/api/dist/current.js": "export {};"})
+            self.assertTrue((dist / "deleted-organization.js").is_file())
+            with self.assertRaises(FileNotFoundError):
+                PACKAGE["add_compiled_dist"](add, dist, "apps/api", ["missing.js"])
+            with self.assertRaisesRegex(RuntimeError, "dist_manifest_invalid"):
+                PACKAGE["add_compiled_dist"](add, dist, "apps/api", ["../other.js"])
+
     def test_only_approved_release_identity_selects_retired_runtime_mode(self):
         release = PACKAGE["release_metadata"](SOURCE, "1.2.3", PLAN)
         self.assertEqual(release["ACCOUNT_SCOPE_MODE"], "retired")

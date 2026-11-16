@@ -57,9 +57,30 @@ def script_closure(repo):
     return sorted(result)
 
 
-def payload_members(repo):
+def compiled_dist_files(repo, node):
+    raw = subprocess.check_output([node, "scripts/account-release-dist-files.mjs"], cwd=repo)
+    return json.loads(raw)
+
+
+def add_compiled_dist(add, dist, workspace, emitted):
+    if not emitted or not dist.is_dir() or dist.is_symlink():
+        raise RuntimeError(f"account_release_dist_manifest_missing:{workspace}")
+    for name in emitted:
+        path = pathlib.PurePosixPath(name)
+        if path.is_absolute() or ".." in path.parts or ":" in name or "\\" in name:
+            raise RuntimeError(f"account_release_dist_manifest_invalid:{workspace}")
+        source = dist.joinpath(*path.parts)
+        if not source.resolve().is_relative_to(dist.resolve()) or any(
+            parent.is_symlink() for parent in (source, *source.parents) if parent.is_relative_to(dist)
+        ):
+            raise RuntimeError(f"account_release_symlink_in_payload:{workspace}")
+        add(source, f"backend/{workspace}/dist/{name}")
+
+
+def payload_members(repo, node):
     repo = repo.resolve(strict=True)
     result = {}
+    dist_files = compiled_dist_files(repo, node)
 
     def add(source, dest):
         if not source.is_file() or source.is_symlink() or not source.resolve().is_relative_to(repo):
@@ -91,9 +112,9 @@ def payload_members(repo):
             add(manifest, f"backend/{rel}/package.json")
             if rel == "apps/web":
                 continue
-            dist = manifest.parent / "dist"
-            if dist.is_dir():
-                tree(dist, f"backend/{rel}/dist")
+            add_compiled_dist(add, manifest.parent / "dist", rel, dist_files.pop(rel, None))
+    if dist_files:
+        raise RuntimeError("account_release_dist_manifest_has_unknown_workspace")
     for script in script_closure(repo):
         name = f"backend/{script.relative_to(repo).as_posix()}"
         if script.is_relative_to(repo / "scripts"):
@@ -144,7 +165,7 @@ def build_account_archive(repo, expected_plan_sha, output):
     plan_sha = compiled_plan_sha(repo, deploy)
     if plan_sha != expected_plan_sha:
         raise RuntimeError("account_release_package_plan_digest_mismatch")
-    return write_account_archive(repo, identity, plan_sha, output)
+    return write_account_archive(repo, identity, plan_sha, output, deploy["local_node_executable"]())
 
 
 def verify_account_archive(path, expected_build_sha, expected_plan_sha, *, fileobj=None, visit=None):
@@ -201,10 +222,10 @@ def verify_account_archive(path, expected_build_sha, expected_plan_sha, *, fileo
     return {"build_sha": expected_build_sha, "plan_sha256": expected_plan_sha, "files": len(hashes)}
 
 
-def write_account_archive(repo, identity, plan_sha, output):
+def write_account_archive(repo, identity, plan_sha, output, node):
     version = json.loads((repo / "package.json").read_text(encoding="utf-8"))["version"]
     metadata = release_metadata(identity, version, plan_sha)
-    members = payload_members(repo)
+    members = payload_members(repo, node)
     hashes = {}
 
     def append(archive, name, data):
@@ -248,7 +269,7 @@ def main():
     repo = pathlib.Path(__file__).resolve().parent.parent
     deploy = runpy.run_path(str(repo / "scripts/deploy-baota.py"))
     plan_sha = compiled_plan_sha(repo, deploy)
-    members = payload_members(repo)
+    members = payload_members(repo, deploy["local_node_executable"]())
     print(json.dumps({"status": "local_payload_inputs_verified", "deployable": False,
                       "files": len(members), "script_files": sum(name.startswith("backend/scripts/") for name in members),
                       "plan_sha256": plan_sha, "target_migration": MIGRATION}))
