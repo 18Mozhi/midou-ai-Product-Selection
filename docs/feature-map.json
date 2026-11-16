@@ -1,4 +1,18 @@
 {
+  "accountImportAnalysisHistory": {
+    "sourceFiles": [
+      "apps/api/src/erp-product-import-service.ts",
+      "apps/api/src/mysql-ai-analysis-repository.ts",
+      "apps/api/src/ai-analysis-routes.ts",
+      "apps/worker/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/erp-product-import.test.mjs",
+      "tests/m04-07/ai-analysis-history-parent-scope.test.mjs"
+    ],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-import-analysis-history.md"],
+    "contract": "Preserve legacy ERP receipts and AI history without new writes. ERP requires the original caller and exact native and sealed task; AI reads through the exact owned opportunity and original child links. No legacy AI poller in retired mode."
+  },
   "accountSelectionJourneyHistory": {
     "sourceFiles": [
       "apps/api/src/mysql-selection-journey-repository.ts",

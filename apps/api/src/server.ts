@@ -433,6 +433,7 @@ const app = buildApp({
     webOrigin: config.app.webOrigin,
   },
   erpProductImport: {
+    accountReadRehearsal,
     service: new ErpProductImportService(
       pool,
       config.storage.evidenceRoot,
@@ -487,6 +488,7 @@ const app = buildApp({
     webOrigin: config.app.webOrigin,
   },
   aiAnalysis: {
+    accountReadRehearsal,
     service: new AiAnalysisService(new MySqlAiAnalysisRepository(pool)),
     authorization,
     auth: localAuth,

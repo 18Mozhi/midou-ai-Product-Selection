@@ -2038,6 +2038,7 @@ paths:
   /imports/erp-products:
     post:
       summary: Import the current user's existing Midou ERP product list as evidence-backed opportunities
+      x-account-runtime: Retired account mode only replays an existing receipt for the original caller when the sealed and native task owner match. No new import is created.
       description: The browser helper reads the ERP Authorization token locally, calls the confirmed ERP product-list endpoint, and sends only product rows to this API. The token is never accepted or persisted by this route.
       security: [{ HttpOnlySession: [] }]
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
@@ -2864,6 +2865,7 @@ paths:
   /opportunities/{opportunityId}/ai-analyses:
     get:
       summary: List immutable AI-assisted analysis requests, results and human reviews
+      x-account-runtime: Account mode exposes only preserved history through a verified owned opportunity. Legacy creation is not registered.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: opportunity:read
       parameters:
@@ -2894,6 +2896,7 @@ paths:
   /ai-analyses/{resultId}/reviews:
     post:
       summary: Record a human sampling review without rewriting the AI output
+      x-account-runtime: Retired account mode does not register this legacy mutation route. The original reviewer and signature remain readable through history.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: opportunity:decide
       parameters:

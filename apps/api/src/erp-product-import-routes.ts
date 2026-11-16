@@ -4,6 +4,7 @@ import type { AuthorizationService } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 import type { ErpProductImportService } from "./erp-product-import-service.js";
+import { authenticatedRehearsalAccount } from "./account-read-rehearsal.js";
 
 export interface ErpProductImportRouteOptions {
   service: ErpProductImportService;
@@ -11,6 +12,7 @@ export interface ErpProductImportRouteOptions {
   auth: LocalAuthService;
   secureCookie: boolean;
   webOrigin: string;
+  accountReadRehearsal?: boolean;
 }
 
 export function registerErpProductImportRoutes(
@@ -29,29 +31,24 @@ export function registerErpProductImportRoutes(
         "请求来源不允许。",
         "从 ai选品 的选品机会页面重试。",
       );
-    const authenticated = await options.auth.authenticate(
-      sessionToken(request, options.secureCookie),
-    );
-    const resolved = await options.authorization.resolveSession(
-      authenticated.user.id,
-      authenticated.session.id,
-    );
-    await options.authorization.authorize({
-      actorId: authenticated.user.id,
-      organizationId: resolved.context.organization_id,
-      workspaceId: resolved.context.workspace_id,
-      capability: "opportunity:decide",
-      surface: "api",
-      ...ids(request),
-    });
-    try {
-      const data = await options.service.import(request.body as any, {
+    const run = async () => {
+      if (options.accountReadRehearsal) {
+        const { accountId } = await authenticatedRehearsalAccount(request, options.auth, options.secureCookie);
+        return options.service.replayAccountImport({actorId: accountId, idempotencyKey: requireIdempotencyKey(request)});
+      }
+      const authenticated = await options.auth.authenticate(sessionToken(request, options.secureCookie));
+      const resolved = await options.authorization.resolveSession(authenticated.user.id, authenticated.session.id);
+      const context = {
+        actorId: authenticated.user.id,
         organizationId: resolved.context.organization_id,
         workspaceId: resolved.context.workspace_id,
-        actorId: authenticated.user.id,
-        idempotencyKey: requireIdempotencyKey(request),
         ...ids(request),
-      });
+      };
+      await options.authorization.authorize({ ...context, capability: "opportunity:decide", surface: "api" });
+      return options.service.import(request.body as any, { ...context, idempotencyKey: requireIdempotencyKey(request) });
+    };
+    try {
+      const data = await run();
       reply.code(201).header("cache-control", "private, no-store");
       return {
         data,
@@ -59,7 +56,10 @@ export function registerErpProductImportRoutes(
         trace_id: ids(request).traceId,
       };
     } catch (error) {
+      if (error instanceof ApiError) throw error;
       const code = error instanceof Error ? error.message : "erp_product_import_failed";
+      if (code === "erp_product_import_idempotency_conflict")
+        throw new ApiError(409, code, "无法重放该导入请求。", "为新导入生成新的幂等键。");
       const hints: Record<string, string> = {
         erp_product_source_invalid: "只允许从已确认的米豆 ERP 商品列表导入。",
         erp_product_import_invalid: "ERP 商品列表需包含 1–500 条有效商品。",

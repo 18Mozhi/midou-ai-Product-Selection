@@ -1,9 +1,13 @@
+import { appendPlatformAudit } from "@scoutops/database";
+import { appendCollectionSubquery, collectionTaskScope, fileAssetAccountStorage, sourcingSearchHasLegacyScope } from "@scoutops/database";
 import { createHash, randomUUID } from "node:crypto";
 import { relative, resolve, sep } from "node:path";
 import { rm } from "node:fs/promises";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type { OrganizationId, WorkspaceId } from "@scoutops/contracts";
 import { buildScopedFilePath, writeScopedFile } from "@scoutops/storage";
+import { requireAccountReadRehearsal } from "./account-read-rehearsal.js";
+import { ApiError } from "./api-foundation.js";
 
 export interface ErpImportContext {
   organizationId: string;
@@ -23,6 +27,16 @@ export interface ErpProductImportResult {
   sourcing_search_count: number;
   status: "succeeded" | "succeeded_empty";
 }
+
+export const accountErpImportReplaySql = (native: boolean) =>
+  "SELECT o.result_json,o.task_id,own.account_id IS NOT NULL AS owned " +
+  "FROM erp_product_import_operations o JOIN collection_tasks t ON t.id=o.task_id " +
+  "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+  "LEFT JOIN account_owned_records own ON own.source_table='collection_tasks' AND own.source_id=t.id " +
+  "AND own.account_id=o.actor_id AND (own.reason='exclusive_owner' OR " +
+  "(own.reason IN ('shared','unassigned') AND own.account_id=cut.primary_account_id)) " +
+  (native ? "AND t.account_id=own.account_id " : "") +
+  "WHERE o.actor_id=? AND o.idempotency_key=? LIMIT 1 LOCK IN SHARE MODE";
 interface ErpRow {
   id: string;
   spu: string;
@@ -199,6 +213,15 @@ export class ErpProductImportService {
         await connection.commit();
         return replay;
       }
+      // This retired org-scoped importer cannot assign newly created tasks/evidence to accounts.
+      if (await fileAssetAccountStorage(connection)) throw new Error("legacy_erp_import_retired_for_account_storage");
+      const [operationColumns] = await connection.query<RowDataPacket[]>(
+        "SHOW COLUMNS FROM erp_product_import_operations WHERE Field IN ('organization_id','workspace_id')",
+      );
+      if (operationColumns.length !== 0 && operationColumns.length !== 2)
+        throw new Error("partial_inherited_scope_schema:erp_product_import_operations");
+      const legacyOperation = operationColumns.length === 2;
+      const legacySearchScope = await sourcingSearchHasLegacyScope(connection);
       const [providers] = await connection.query<RowDataPacket[]>(
         "SELECT id,retention_days FROM providers WHERE code='erp_product_catalog' AND status='enabled' LIMIT 1 FOR UPDATE",
       );
@@ -246,6 +269,7 @@ export class ErpProductImportService {
         else imported += 1;
         const projected = await this.projectProduct(connection, {
           ...persisted,
+          legacySearchScope,
           providerId,
           taskId,
           value: current.normalized,
@@ -283,11 +307,10 @@ export class ErpProductImportService {
         status,
       };
       await connection.query(
-        "INSERT INTO erp_product_import_operations (id,organization_id,workspace_id,actor_id,idempotency_key,task_id,result_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+        `INSERT INTO erp_product_import_operations (id,${legacyOperation ? "organization_id,workspace_id," : ""}actor_id,idempotency_key,task_id,result_json,request_id,trace_id,created_at) VALUES (${legacyOperation ? "?,?," : ""}?,?,?,?,?,?,?,?)`,
         [
           randomUUID(),
-          context.organizationId,
-          context.workspaceId,
+          ...(legacyOperation ? [context.organizationId, context.workspaceId] : []),
           context.actorId,
           context.idempotencyKey,
           taskId,
@@ -297,7 +320,7 @@ export class ErpProductImportService {
           now,
         ],
       );
-      await connection.query(
+      await appendPlatformAudit(connection,
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,?,?,?, 'erp.products.imported','collection_task',?,'succeeded',?,?,?,?,1)",
         [
           randomUUID(),
@@ -322,17 +345,48 @@ export class ErpProductImportService {
     }
   }
 
+  async replayAccountImport(context: Pick<ErpImportContext, "actorId" | "idempotencyKey">) {
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      await requireAccountReadRehearsal(c, { lockForTransaction: true });
+      const native = await collectionTaskScope(c) === "account";
+      const [[row]] = await c.query<RowDataPacket[]>(accountErpImportReplaySql(native), [
+        context.actorId, context.idempotencyKey,
+      ]);
+      if (!row)
+        throw new ApiError(503, "erp_account_import_not_ready", "账号模式暂不接收新的 ERP 导入。", "已有导入可从原采集任务查看。");
+      if (Number(row.owned) !== 1) throw new Error("erp_product_import_idempotency_conflict");
+      const result = this.readReplayResult(row);
+      await c.commit();
+      return result;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+
   private async replay(c: PoolConnection, context: ErpImportContext) {
     const [rows] = await c.query<RowDataPacket[]>(
-      "SELECT result_json FROM erp_product_import_operations WHERE actor_id=? AND idempotency_key=? LIMIT 1",
+      "SELECT o.result_json,o.task_id,t.organization_id,t.workspace_id FROM erp_product_import_operations o " +
+        "JOIN collection_tasks t ON t.id=o.task_id WHERE o.actor_id=? AND o.idempotency_key=? LIMIT 1",
       [context.actorId, context.idempotencyKey],
     );
     if (!rows[0]) return null;
-    return (
-      typeof rows[0].result_json === "string"
-        ? JSON.parse(rows[0].result_json)
-        : rows[0].result_json
+    const row = rows[0];
+    if (row.organization_id !== context.organizationId || row.workspace_id !== context.workspaceId)
+      throw new Error("erp_product_import_idempotency_conflict");
+    return this.readReplayResult(row);
+  }
+
+  private readReplayResult(row: RowDataPacket) {
+    const result = (
+      typeof row.result_json === "string" ? JSON.parse(row.result_json) : row.result_json
     ) as ErpProductImportResult;
+    if (result?.task_id !== row.task_id) throw new Error("erp_product_import_idempotency_conflict");
+    return result;
   }
 
   private async createTask(
@@ -360,23 +414,10 @@ export class ErpProductImportService {
         now,
       ],
     );
-    await c.query(
-      "INSERT INTO collection_subqueries (id,task_id,organization_id,workspace_id,provider_id,ordinal,target_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,started_at,version,created_at,updated_at) VALUES (?,?,?,?,?,1,?,1,'running',0,'[]',NULL,0,?,1,?,?)",
-      [
-        subqueryId,
-        taskId,
-        context.organizationId,
-        context.workspaceId,
-        providerId,
-        JSON.stringify({
-          source: "erp_product_catalog",
-          received_count: count,
-        }),
-        now,
-        now,
-        now,
-      ],
-    );
+    await appendCollectionSubquery(c, {
+      id: subqueryId, taskId, providerId, ordinal: 1, required: true, status: "running", startedAt: now, now,
+      targetJson: JSON.stringify({ source: "erp_product_catalog", received_count: count }),
+    });
   }
 
   private async persistEvidence(c: PoolConnection, input: PersistInput, writtenFiles: string[]) {
@@ -516,11 +557,9 @@ export class ErpProductImportService {
     ]) {
       const source = JSON.stringify(input.value[field as keyof NormalizedErpProduct]);
       await c.query(
-        "INSERT INTO field_provenance (id,organization_id,workspace_id,normalized_record_id,raw_evidence_id,field_path,source_path,transform_version,source_value_sha256,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO field_provenance (id,normalized_record_id,raw_evidence_id,field_path,source_path,transform_version,source_value_sha256,created_at) VALUES (?,?,?,?,?,?,?,?)",
         [
           randomUUID(),
-          input.context.organizationId,
-          input.context.workspaceId,
           recordId,
           evidenceId,
           field,
@@ -548,11 +587,9 @@ export class ErpProductImportService {
     linkType: "captured" | "deduplicated",
   ) {
     await c.query(
-      "INSERT IGNORE INTO collection_task_evidence_links (id,organization_id,workspace_id,collection_task_id,collection_subquery_id,provider_id,raw_evidence_id,normalized_record_id,link_type,request_id,trace_id,created_by,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "INSERT IGNORE INTO collection_task_evidence_links (id,collection_task_id,collection_subquery_id,provider_id,raw_evidence_id,normalized_record_id,link_type,request_id,trace_id,created_by,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
       [
         randomUUID(),
-        input.context.organizationId,
-        input.context.workspaceId,
         input.taskId,
         input.subqueryId,
         input.providerId,
@@ -570,6 +607,7 @@ export class ErpProductImportService {
   private async projectProduct(
     c: PoolConnection,
     input: {
+      legacySearchScope: boolean;
       evidenceId: string;
       recordId: string;
       providerId: string;
@@ -606,11 +644,9 @@ export class ErpProductImportService {
       );
     const signalId = randomUUID();
     await c.query(
-      "INSERT IGNORE INTO trend_signals (id,organization_id,workspace_id,topic_id,normalized_record_id,raw_evidence_id,provider_id,title,publisher,canonical_url,published_at,observed_at,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "INSERT IGNORE INTO trend_signals (id,topic_id,normalized_record_id,raw_evidence_id,provider_id,title,publisher,canonical_url,published_at,observed_at,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
       [
         signalId,
-        input.context.organizationId,
-        input.context.workspaceId,
         topicId,
         input.recordId,
         input.evidenceId,
@@ -655,11 +691,9 @@ export class ErpProductImportService {
       [input.recordId],
     );
     await c.query(
-      "INSERT IGNORE INTO opportunity_evidence_links (id,organization_id,workspace_id,opportunity_id,evidence_type,evidence_id,provider_id,raw_evidence_id,observed_at,created_at) VALUES (?,?,?,?,'trend_signal',?,?,?,?,?)",
+      "INSERT IGNORE INTO opportunity_evidence_links (id,opportunity_id,evidence_type,evidence_id,provider_id,raw_evidence_id,observed_at,created_at) VALUES (?,?,'trend_signal',?,?,?,?,?)",
       [
         randomUUID(),
-        input.context.organizationId,
-        input.context.workspaceId,
         opportunityId,
         String(signal[0]?.id ?? signalId),
         input.providerId,
@@ -694,18 +728,21 @@ export class ErpProductImportService {
       competitorsCreated += Number(result.affectedRows ?? 0);
     }
     const [searches] = await c.query<RowDataPacket[]>(
-      "SELECT id FROM sourcing_searches WHERE organization_id=? AND workspace_id=? AND input_type='opportunity' AND input_ref=? LIMIT 1",
+      input.legacySearchScope
+        ? "SELECT id FROM sourcing_searches WHERE organization_id=? AND workspace_id=? AND input_type='opportunity' AND input_ref=? LIMIT 1"
+        : `SELECT s.id FROM sourcing_searches s JOIN collection_tasks t ON t.id=s.collection_task_id
+           WHERE t.organization_id=? AND t.workspace_id=? AND s.input_type='opportunity' AND s.input_ref=?
+           ORDER BY s.created_at DESC,s.id DESC LIMIT 1`,
       [input.context.organizationId, input.context.workspaceId, opportunityId],
     );
     const searchId = searches[0] ? String(searches[0].id) : randomUUID();
     let sourcingCreated = 0;
     if (!searches[0]) {
       await c.query(
-        "INSERT INTO sourcing_searches (id,organization_id,workspace_id,collection_task_id,input_type,input_ref,status,candidate_count,missing_fields_json,request_id,trace_id,created_by,created_at,updated_at) VALUES (?,?,?,?,'opportunity',?,'succeeded_empty',0,?,?,?,?,?,?)",
+        `INSERT INTO sourcing_searches (id,${input.legacySearchScope ? "organization_id,workspace_id," : ""}collection_task_id,input_type,input_ref,status,candidate_count,missing_fields_json,request_id,trace_id,created_by,created_at,updated_at) VALUES (?,${input.legacySearchScope ? "?,?," : ""}?, 'opportunity',?,'succeeded_empty',0,?,?,?,?,?,?)`,
         [
           searchId,
-          input.context.organizationId,
-          input.context.workspaceId,
+          ...(input.legacySearchScope ? [input.context.organizationId, input.context.workspaceId] : []),
           input.taskId,
           opportunityId,
           JSON.stringify([
@@ -727,11 +764,9 @@ export class ErpProductImportService {
     const referenceCost = input.value.cost_cny ?? input.value.cost_usd;
     if (input.value.supplier_code && referenceCost != null) {
       await c.query(
-        "INSERT IGNORE INTO sourcing_candidates (id,organization_id,workspace_id,search_id,provider_id,normalized_record_id,raw_evidence_id,external_id,supplier_name,product_title,specification,moq,quoted_price,currency,lead_time_days,location,original_url,observed_at,confidence_value,status,missing_fields_json,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,NULL,NULL,?,?,NULL,NULL,?,?,NULL,'incomplete',?,?)",
+        "INSERT IGNORE INTO sourcing_candidates (id,search_id,provider_id,normalized_record_id,raw_evidence_id,external_id,supplier_name,product_title,specification,moq,quoted_price,currency,lead_time_days,location,original_url,observed_at,confidence_value,status,missing_fields_json,created_at) VALUES (?,?,?,?,?,?,?,?,NULL,NULL,?,?,NULL,NULL,?,?,NULL,'incomplete',?,?)",
         [
           randomUUID(),
-          input.context.organizationId,
-          input.context.workspaceId,
           searchId,
           input.providerId,
           input.recordId,

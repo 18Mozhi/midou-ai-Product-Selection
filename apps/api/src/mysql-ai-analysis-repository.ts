@@ -1,25 +1,61 @@
 import { createHash, randomUUID } from "node:crypto";
+import { aiAnalysisHistoryHasLegacyScope, appendAiAnalysisDelivery } from "@scoutops/database";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { requireAccountReadRehearsal } from "./account-read-rehearsal.js";
 import { AiAnalysisServiceError, type AiAnalysisRepository } from "./ai-analysis-service.js";
 const parse = (v: any) => (typeof v === "string" ? JSON.parse(v) : v),
   iso = (v: any) => new Date(v).toISOString();
 export class MySqlAiAnalysisRepository implements AiAnalysisRepository {
   constructor(private readonly pool: Pool) {}
   async list(i: any) {
+    const account = typeof i.accountId === "string" && i.accountId.length > 0;
+    if (account) await requireAccountReadRehearsal(this.pool);
+    const legacy = await aiAnalysisHistoryHasLegacyScope(this.pool, "ai_analysis_requests");
+    const [columns] = account
+      ? await this.pool.query<RowDataPacket[]>(
+          "SHOW COLUMNS FROM opportunities WHERE Field IN ('account_id','organization_id','workspace_id')",
+        )
+      : [[]];
+    const shape = columns
+      .map((column) => column.Field)
+      .sort()
+      .join(",");
+    if (
+      account &&
+      ((shape !== "account_id" && shape !== "organization_id,workspace_id") ||
+        (shape === "account_id" && legacy))
+    )
+      throw new Error("ai_analysis_parent_scope_schema_invalid");
+    const ownership = account
+      ? "JOIN account_owned_records owned ON owned.source_table='opportunities' AND owned.source_id=o.id " +
+        "JOIN account_ownership_cutover seal ON seal.slot='current' AND seal.contract_version=25 " +
+        "AND (owned.reason='exclusive_owner' OR (owned.reason IN ('shared','unassigned') AND owned.account_id=seal.primary_account_id)) "
+      : "";
+    const scoped = account
+      ? "owned.account_id=? " + (shape === "account_id" ? "AND o.account_id=owned.account_id " : "")
+      : "o.organization_id=? AND o.workspace_id=? ";
+    const scopeArgs = account ? [i.accountId] : [i.organizationId, i.workspaceId];
     const [o] = await this.pool.query<RowDataPacket[]>(
-      "SELECT id FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=?",
-      [i.opportunityId, i.organizationId, i.workspaceId],
+      "SELECT o.id FROM opportunities o " + ownership + "WHERE o.id=? AND " + scoped,
+      [i.opportunityId, ...scopeArgs],
     );
     if (!o[0]) throw new AiAnalysisServiceError("opportunity_not_found", 404, "刷新机会列表。");
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT q.id,q.status,q.attempt_count,q.last_error_code,q.input_sha256,q.prompt_contract_version," +
         "q.created_at,r.id result_id,r.result_json,r.ai_generated,r.model_name,r.provider_request_id," +
         "r.review_status,rv.outcome review_outcome,rv.notes review_notes,rv.reviewed_by," +
-        "rv.created_at reviewed_at FROM ai_analysis_requests q LEFT JOIN ai_analysis_results " +
-        "r ON r.request_id_fk=q.id LEFT JOIN ai_analysis_reviews rv ON rv.result_id=r.id WHERE " +
-        "q.organization_id=? AND q.workspace_id=? AND q.opportunity_id=? ORDER BY q.created_at " +
+        "rv.created_at reviewed_at FROM ai_analysis_requests q JOIN opportunities o ON o.id=q.opportunity_id " +
+        ownership +
+        "LEFT JOIN ai_analysis_results " +
+        "r ON r.request_id_fk=q.id AND r.opportunity_id=q.opportunity_id LEFT JOIN ai_analysis_reviews rv ON rv.result_id=r.id WHERE " +
+        scoped +
+        "AND q.opportunity_id=? " +
+        (legacy
+          ? "AND q.organization_id=o.organization_id AND q.workspace_id=o.workspace_id "
+          : "") +
+        "ORDER BY q.created_at " +
         "DESC",
-      [i.organizationId, i.workspaceId, i.opportunityId],
+      [...scopeArgs, i.opportunityId],
     );
     return rows.map((r) => ({
       id: String(r.id),
@@ -50,8 +86,6 @@ export class MySqlAiAnalysisRepository implements AiAnalysisRepository {
     }));
   }
   async queue(i: any) {
-    const old = await this.operation(i);
-    if (old) return old;
     const c = await this.pool.getConnection(),
       now = new Date();
     try {
@@ -65,6 +99,17 @@ export class MySqlAiAnalysisRepository implements AiAnalysisRepository {
       );
       const o = opps[0];
       if (!o) throw new AiAnalysisServiceError("opportunity_not_found", 404, "刷新机会列表。");
+      const old = await this.operation(i, c);
+      if (old) {
+        if (old.opportunity_id !== i.opportunityId)
+          throw new AiAnalysisServiceError(
+            "ai_analysis_idempotency_conflict",
+            409,
+            "请使用新的幂等键。",
+          );
+        await c.commit();
+        return old;
+      }
       if (Number(o.version) !== i.value.expected_version)
         throw new AiAnalysisServiceError("ai_analysis_version_conflict", 409, "刷新机会后重试。");
       const [evidence] = await c.query<RowDataPacket[]>(
@@ -136,16 +181,16 @@ export class MySqlAiAnalysisRepository implements AiAnalysisRepository {
       };
       const encoded = JSON.stringify(snapshot),
         sha = createHash("sha256").update(encoded).digest("hex");
+      const legacy = await aiAnalysisHistoryHasLegacyScope(c, "ai_analysis_requests");
       await c.query(
-        "INSERT INTO ai_analysis_requests (id,organization_id,workspace_id,opportunity_id," +
+        `INSERT INTO ai_analysis_requests (id,${legacy ? "organization_id,workspace_id," : ""}opportunity_id,` +
           "opportunity_version,status,attempt_count,available_at,input_snapshot_json," +
           "input_sha256,prompt_contract_version,request_id,trace_id,created_by,created_at," +
-          "updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,'opportunity-assist-v1',?," +
+          `updated_at) VALUES (?,${legacy ? "?,?," : ""}?,?,'queued',0,?,?,?,'opportunity-assist-v1',?,` +
           "?,?,?,?)",
         [
           i.id,
-          i.organizationId,
-          i.workspaceId,
+          ...(legacy ? [i.organizationId, i.workspaceId] : []),
           i.opportunityId,
           o.version,
           now,
@@ -177,28 +222,36 @@ export class MySqlAiAnalysisRepository implements AiAnalysisRepository {
     }
   }
   async review(i: any) {
-    const old = await this.operation(i);
-    if (old) return old;
     const c = await this.pool.getConnection(),
       now = new Date();
     try {
       await c.beginTransaction();
+      const requestLegacy = await aiAnalysisHistoryHasLegacyScope(c, "ai_analysis_requests");
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT id,review_status FROM ai_analysis_results WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
+        "SELECT r.id,r.review_status FROM ai_analysis_results r JOIN ai_analysis_requests q " +
+          "ON q.id=r.request_id_fk AND q.opportunity_id=r.opportunity_id JOIN opportunities o ON o.id=q.opportunity_id " +
+          (requestLegacy
+            ? "AND q.organization_id=o.organization_id AND q.workspace_id=o.workspace_id "
+            : "") +
+          "WHERE r.id=? AND o.organization_id=? AND o.workspace_id=? FOR UPDATE",
         [i.resultId, i.organizationId, i.workspaceId],
       );
       if (!rows[0])
         throw new AiAnalysisServiceError("ai_analysis_result_not_found", 404, "刷新 AI 分析记录。");
+      const old = await this.operation(i, c, i.resultId);
+      if (old) {
+        await c.commit();
+        return old;
+      }
       if (rows[0].review_status !== "pending")
         throw new AiAnalysisServiceError("ai_analysis_review_conflict", 409, "该结果已经抽检。");
+      const legacy = await aiAnalysisHistoryHasLegacyScope(c, "ai_analysis_reviews");
       await c.query(
-        "INSERT INTO ai_analysis_reviews (id,organization_id,workspace_id,result_id," +
-          "outcome,notes,reviewed_by,request_id,trace_id,created_at) VALUES (?,?,?," +
-          "?,?,?,?,?,?,?)",
+        `INSERT INTO ai_analysis_reviews (id,${legacy ? "organization_id,workspace_id," : ""}result_id,` +
+          `outcome,notes,reviewed_by,request_id,trace_id,created_at) VALUES (?,${legacy ? "?,?," : ""}?,?,?,?,?,?,?)`,
         [
           i.id,
-          i.organizationId,
-          i.workspaceId,
+          ...(legacy ? [i.organizationId, i.workspaceId] : []),
           i.resultId,
           i.value.outcome,
           i.value.notes,
@@ -231,10 +284,11 @@ export class MySqlAiAnalysisRepository implements AiAnalysisRepository {
       c.release();
     }
   }
-  private async operation(i: any) {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT result_json FROM ai_analysis_operations WHERE actor_id=? AND route_key=? AND idempotency_key=?",
-      [i.actorId, i.route, i.idempotencyKey],
+  private async operation(i: any, db: Pool | PoolConnection = this.pool, resource?: string) {
+    const [rows] = await db.query<RowDataPacket[]>(
+      "SELECT result_json FROM ai_analysis_operations WHERE actor_id=? AND route_key=? AND idempotency_key=?" +
+        (resource === undefined ? "" : " AND resource_id=?"),
+      [i.actorId, i.route, i.idempotencyKey, ...(resource === undefined ? [] : [resource])],
     );
     return rows[0] ? parse(rows[0].result_json) : null;
   }
@@ -248,34 +302,22 @@ export class MySqlAiAnalysisRepository implements AiAnalysisRepository {
   private async record(
     c: PoolConnection,
     i: any,
-    type: string,
+    type: "ai.analysis.queued" | "ai.analysis.reviewed",
     resource: string,
-    payload: any,
+    payload: unknown,
     now: Date,
   ) {
-    const id = randomUUID();
-    await c.query(
-      "INSERT INTO ai_analysis_events (id,organization_id,workspace_id,event_type," +
-        "resource_id,actor_id,payload_json,request_id,trace_id,created_at) VALUES (?," +
-        "?,?,?,?,?,?,?,?,?)",
-      [
-        id,
-        i.organizationId,
-        i.workspaceId,
-        type,
-        resource,
-        i.actorId,
-        JSON.stringify(payload),
-        i.requestId,
-        i.traceId,
-        now,
-      ],
-    );
-    await c.query(
-      "INSERT INTO ai_analysis_outbox (id,organization_id,workspace_id,event_type," +
-        "resource_id,payload_json,status,available_at,created_at) VALUES (?,?,?,?," +
-        "?,?,'queued',?,?)",
-      [id, i.organizationId, i.workspaceId, type, resource, JSON.stringify(payload), now, now],
-    );
+    await appendAiAnalysisDelivery(c, {
+      id: randomUUID(),
+      type,
+      resourceId: resource,
+      actorId: i.actorId,
+      payload,
+      now,
+      requestId: i.requestId,
+      traceId: i.traceId,
+      organizationId: i.organizationId,
+      workspaceId: i.workspaceId,
+    });
   }
 }

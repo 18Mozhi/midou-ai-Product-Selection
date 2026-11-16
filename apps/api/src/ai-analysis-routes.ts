@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService, Capability } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
+import { authenticatedRehearsalAccount } from "./account-read-rehearsal.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 import type { AiAnalysisService } from "./ai-analysis-service.js";
 export interface AiAnalysisRouteOptions {
@@ -10,6 +11,7 @@ export interface AiAnalysisRouteOptions {
   auth: LocalAuthService;
   secureCookie: boolean;
   webOrigin: string;
+  accountReadRehearsal?: boolean;
 }
 const ids = (r: FastifyRequest) => ({
     requestId: String(r.headers["x-request-id"]),
@@ -47,15 +49,20 @@ export function registerAiAnalysisRoutes(app: FastifyInstance, o: AiAnalysisRout
         idempotencyKey: requireIdempotencyKey(r),
       };
     };
-  app.get("/api/v1/opportunities/:id/ai-analyses", async (r) =>
-    env(
+  app.get("/api/v1/opportunities/:id/ai-analyses", async (r, reply) => {
+    const requester = o.accountReadRehearsal
+      ? await authenticatedRehearsalAccount(r, o.auth, o.secureCookie)
+      : await scope(r, "opportunity:read");
+    reply.header("cache-control", "private, no-store");
+    return env(
       await o.service.list({
-        ...(await scope(r, "opportunity:read")),
+        ...requester,
         opportunityId: (r.params as any).id,
       }),
       r,
-    ),
-  );
+    );
+  });
+  if (o.accountReadRehearsal) return;
   app.post("/api/v1/opportunities/:id/ai-analyses", async (r, reply) => {
     const x = await o.service.queue({
       ...(await write(r)),

@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   ErpProductImportService,
+  accountErpImportReplaySql,
   normalizeErpProductRow,
 } from "../../apps/api/dist/erp-product-import-service.js";
 import { buildApp } from "../../apps/api/dist/app.js";
@@ -11,6 +12,193 @@ const ids = {
   workspace: "00000000-0000-4000-8000-000000004202",
   actor: "00000000-0000-4000-8000-000000004203",
 };
+
+const fixtureInput = {
+  source_url: "https://medou.medouai.com/#/ProductList",
+  items: [{ id: "fixture", last_sync_time: "2026-08-19T08:00:00Z",
+    product: { productMultiNameList: [{ productName: "Fixture" }] } }],
+};
+const fixtureContext = { organizationId: ids.organization, workspaceId: ids.workspace, actorId: ids.actor,
+  idempotencyKey: "fixture-key", requestId: "fixture-request", traceId: "fixture-trace" };
+
+test("account ERP replay verifies the sealed original task and never starts a new import", async () => {
+  const calls = [];
+  let owned = 1, sealed = true, task = "original-task", operation = true;
+  const service = new ErpProductImportService({ async getConnection() { return {
+    async beginTransaction() {}, async commit() { calls.push("commit"); }, async rollback() { calls.push("rollback"); }, release() {},
+    async query(sql, args) {
+      if (sql.startsWith("SELECT slot")) return [sealed ? [{ slot: "current" }] : []];
+      if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [[{Field:"account_id"}]];
+      assert.equal(sql, accountErpImportReplaySql(true));
+      assert.doesNotMatch(sql, /organization_id|workspace_id|INSERT|UPDATE/);
+      assert.match(sql, /own\.source_id=t\.id AND own\.account_id=o\.actor_id/);
+      assert.match(sql, /own\.account_id=cut\.primary_account_id/);
+      assert.match(sql, /t\.account_id=own\.account_id/);
+      assert.deepEqual(args, [ids.actor, fixtureContext.idempotencyKey]);
+      return [operation ? [{ owned, task_id: "original-task", result_json: { task_id: task } }] : []];
+    },
+  }; } }, "unused", 2_000_000);
+  const run = () => service.replayAccountImport(fixtureContext);
+  assert.deepEqual(await run(), { task_id: "original-task" });
+  owned = 0;
+  await assert.rejects(run, /erp_product_import_idempotency_conflict/);
+  owned = 1;
+  task = "wrong-task";
+  await assert.rejects(run, /erp_product_import_idempotency_conflict/);
+  operation = false;
+  await assert.rejects(run, { code: "erp_account_import_not_ready" });
+  sealed = false;
+  await assert.rejects(run, { code: "account_ownership_not_ready" });
+  assert.deepEqual(calls, ["commit", "rollback", "rollback", "rollback", "rollback"]);
+});
+
+test("account ERP route uses the verified session, ignores payload scope and never enters legacy import", async () => {
+  let verified = true, calls = 0;
+  const app = buildApp({ erpProductImport: {
+    accountReadRehearsal: true,
+    auth: { authenticate: async () => ({ user: { id: ids.actor, email_verified_at: verified ? new Date() : null } }) },
+    authorization: { resolveSession: () => assert.fail("legacy session"), authorize: () => assert.fail("legacy authorize") },
+    service: {
+      replayAccountImport: async (context) => {
+        assert.deepEqual(context, { actorId: ids.actor, idempotencyKey: "fixture-key" });
+        calls++;
+        return { task_id: "original-task" };
+      },
+      import: () => assert.fail("new import"),
+    },
+    secureCookie: false, webOrigin: "http://127.0.0.1:5173",
+  } });
+  try {
+    const run = () => app.inject({ method: "POST", url: "/api/v1/imports/erp-products",
+      headers: { origin: "http://127.0.0.1:5173", cookie: "scoutops_session=test", "idempotency-key": "fixture-key" },
+      payload: { organization_id: "foreign", workspace_id: "foreign", actor_id: "foreign" },
+    });
+    const allowed = await run();
+    assert.equal(allowed.statusCode, 201, allowed.body);
+    assert.deepEqual(allowed.json().data, { task_id: "original-task" });
+    verified = false;
+    const denied = await run();
+    assert.equal(denied.statusCode, 403, denied.body);
+    assert.equal(calls, 1);
+  } finally {
+    await app.close();
+  }
+});
+
+test("ERP exact replay binds the original task scope and does not return a cross-scope result", async () => {
+  let scope = ids.workspace;
+  let resultTaskId = "original-task";
+  const queries = [];
+  let commits = 0;
+  let rollbacks = 0;
+  const service = new ErpProductImportService({ async getConnection() { return {
+    async beginTransaction() {}, async commit() { commits++; }, async rollback() { rollbacks++; }, release() {},
+    async query(sql, args) {
+        if (sql.startsWith("SHOW COLUMNS FROM file_assets")) return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
+      queries.push(sql);
+      assert.match(sql, /JOIN collection_tasks t ON t.id=o.task_id WHERE o.actor_id=\? AND o.idempotency_key=\?/);
+      assert.deepEqual(args, [ids.actor, fixtureContext.idempotencyKey]);
+      return [[{ task_id: "original-task", result_json: JSON.stringify({ task_id: resultTaskId }),
+        organization_id: ids.organization, workspace_id: scope }]];
+    },
+  }; } }, "unused", 2_000_000);
+  assert.deepEqual(await service.import(fixtureInput, fixtureContext), { task_id: "original-task" });
+  scope = "different-space";
+  await assert.rejects(service.import(fixtureInput, fixtureContext), /erp_product_import_idempotency_conflict/);
+  scope = ids.workspace;
+  resultTaskId = "different-task";
+  await assert.rejects(service.import(fixtureInput, fixtureContext), /erp_product_import_idempotency_conflict/);
+  assert.deepEqual({ commits, rollbacks, reads: queries.length }, { commits: 1, rollbacks: 2, reads: 3 });
+});
+
+test("ERP new receipt preserves task, actor and request on either complete schema", async () => {
+  for (const fields of [[], ["organization_id", "workspace_id"]]) {
+    const queries = [];
+    const service = new ErpProductImportService({ async getConnection() { return {
+      async beginTransaction() {}, async commit() {}, async rollback() { assert.fail("unexpected rollback"); }, release() {},
+      async query(sql, args) {
+        if (sql.startsWith("SHOW COLUMNS FROM file_assets")) return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
+        queries.push({ sql, args });
+        if (sql.startsWith("SELECT o.result_json")) return [[]];
+        if (sql.startsWith("SHOW COLUMNS")) return [fields.map((Field) => ({ Field }))];
+        if (sql.startsWith("SELECT id,retention_days")) return [[{ id: "provider", retention_days: 30 }]];
+        return [{ affectedRows: 1 }];
+      },
+    }; } }, "unused", 2_000_000);
+    service.createTask = async () => {};
+    service.persistEvidence = async () => ({ deduplicated: false });
+    service.projectProduct = async () => ({ opportunityCreated: 0, competitorsCreated: 0, sourcingCreated: 0 });
+    const result = await service.import(fixtureInput, fixtureContext);
+    const { sql, args } = queries.find(({ sql }) => sql.startsWith("INSERT INTO erp_product_import_operations"));
+    assert.equal((sql.match(/\?/g) ?? []).length, args.length);
+    assert.equal(sql.includes("organization_id,workspace_id,"), fields.length > 0);
+    assert.deepEqual(args.slice(1 + fields.length, 4 + fields.length),
+      [ids.actor, fixtureContext.idempotencyKey, result.task_id]);
+    assert.deepEqual(JSON.parse(args[4 + fields.length]), result);
+    assert.deepEqual(args.slice(5 + fields.length, 7 + fields.length), ["fixture-request", "fixture-trace"]);
+  }
+});
+
+test("ERP rejects a half-migrated sourcing schema before writing any data", async () => {
+  let rolledBack = false;
+  const service = new ErpProductImportService({ async getConnection() { return {
+    async beginTransaction() {}, async commit() { assert.fail("unexpected commit"); },
+    async rollback() { rolledBack = true; }, release() {},
+    async query(sql) {
+      if (sql.startsWith("SELECT o.result_json")) return [[]];
+      if (sql.startsWith("SHOW COLUMNS FROM file_assets")) return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
+      if (sql.startsWith("SHOW COLUMNS FROM erp_product_import_operations")) return [[]];
+      if (sql.startsWith("SHOW COLUMNS FROM sourcing_searches")) return [[{ Field: "workspace_id" }]];
+      assert.fail(sql);
+    },
+  }; } }, "unused", 2_000_000);
+  await assert.rejects(service.import(fixtureInput, fixtureContext), /partial_inherited_scope_schema:sourcing_searches/);
+  assert.equal(rolledBack, true);
+});
+
+test("ERP sourcing projection preserves parent task and reference cost with or without search scope columns", async () => {
+  for (const legacySearchScope of [true, false]) {
+    for (const existing of [false, true]) {
+      const queries = [];
+      const service = new ErpProductImportService({}, "unused", 2_000_000);
+      const c = { async query(sql, args) {
+        queries.push({ sql, args });
+        if (sql.startsWith("SELECT id FROM trend_topics")) return [[{ id: "topic" }]];
+        if (sql.startsWith("SELECT id FROM opportunities")) return [[{ id: "opportunity" }]];
+        if (sql.startsWith("SELECT id FROM trend_signals")) return [[{ id: "signal" }]];
+        if (sql.startsWith("SELECT") && sql.includes("FROM sourcing_searches")) return [existing ? [{ id: "search" }] : []];
+        return [{ affectedRows: 1 }];
+      } };
+      const now = new Date("2026-08-19T08:00:00Z");
+      const result = await service.projectProduct(c, {
+        legacySearchScope, context: fixtureContext, now, evidenceId: "evidence", recordId: "record",
+        providerId: "provider", taskId: "original-task", value: {
+          asin_list: [], external_id: "product", observed_at: now.toISOString(),
+          source_url: fixtureInput.source_url, title: "Fixture", supplier_code: "supplier", cost_cny: 17,
+        },
+      });
+      const find = queries.find(({ sql }) => sql.startsWith("SELECT") && sql.includes("FROM sourcing_searches"));
+      assert.deepEqual(find.args, [ids.organization, ids.workspace, "opportunity"]);
+      if (!legacySearchScope) {
+        assert.match(find.sql, /JOIN collection_tasks t ON t\.id=s\.collection_task_id/);
+        assert.doesNotMatch(find.sql, /s\.(?:organization_id|workspace_id)/);
+      }
+      const insert = queries.find(({ sql }) => sql.startsWith("INSERT INTO sourcing_searches"));
+      assert.equal(result.sourcingCreated, existing ? 0 : 1);
+      if (existing) assert.equal(insert, undefined);
+      else {
+        assert.equal(insert.sql.includes("organization_id,workspace_id,"), legacySearchScope);
+        assert.equal((insert.sql.match(/\?/g) ?? []).length, insert.args.length);
+        assert.deepEqual(insert.args.slice(1, legacySearchScope ? 5 : 3),
+          [...(legacySearchScope ? [ids.organization, ids.workspace] : []), "original-task", "opportunity"]);
+      }
+      const candidate = queries.find(({ sql }) => sql.startsWith("INSERT IGNORE INTO sourcing_candidates"));
+      assert.equal(candidate.args[1], existing ? "search" : insert.args[0]);
+      assert.deepEqual(candidate.args.slice(8, 10), [17, "CNY"]);
+      assert.equal(candidate.args[4], "evidence");
+    }
+  }
+});
 
 test("ERP product row maps the confirmed title image ASIN supplier and cost contract", () => {
   const result = normalizeErpProductRow(
@@ -65,6 +253,7 @@ test("ERP A-B-A import reuses immutable evidence and creates a new active normal
   const queries = [];
   const connection = {
     async query(sql, values = []) {
+        if (sql.startsWith("SHOW COLUMNS FROM file_assets")) return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       queries.push({ sql, values });
       if (sql.startsWith("SELECT e.id evidence_id")) return [[{ evidence_id: "evidence-a" }], []];
       if (sql.startsWith("SELECT id,raw_evidence_id,record_version"))
@@ -275,6 +464,13 @@ test("ERP product import API sanitizes known errors and keeps unknown failures i
   assert.equal(known.statusCode, 400);
   assert.equal(known.json().error.code, "erp_product_row_invalid");
   await knownApp.close();
+
+  const conflictApp = makeApp("erp_product_import_idempotency_conflict");
+  const conflict = await conflictApp.inject({ method: "POST", url: "/api/v1/imports/erp-products", headers, payload: {} });
+  assert.equal(conflict.statusCode, 409);
+  assert.equal(conflict.json().error.code, "erp_product_import_idempotency_conflict");
+  assert.equal(conflict.json().data, undefined);
+  await conflictApp.close();
 
   const unknownApp = makeApp("database-secret-detail");
   const unknown = await unknownApp.inject({

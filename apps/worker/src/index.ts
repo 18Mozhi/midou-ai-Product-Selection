@@ -385,7 +385,11 @@ scheduler = new QueueScheduler({
       }),
     ),
 });
-for (const queue of queues) scheduler.register(queue);
+for (const queue of queues) {
+  // Historical analyses remain readable, but the legacy generation job needs retired scope columns.
+  if (config.app.accountScopeMode === "retired" && queue.name === "ai_analysis") continue;
+  scheduler.register(queue);
+}
 scheduler.start();
 heartbeat();
 const heartbeatTimer = setInterval(heartbeat, config.runtime.workerHeartbeatMs);

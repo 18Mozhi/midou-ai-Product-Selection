@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { aiAnalysisHistoryHasLegacyScope, appendAiAnalysisDelivery } from "@scoutops/database";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 export type AiAssistOutput = {
   summary: string;
@@ -198,8 +199,13 @@ export class MySqlAiAnalysisWorker {
       expires = new Date(now.getTime() + this.leaseSeconds * 1000);
     try {
       await c.beginTransaction();
+      const legacy = await aiAnalysisHistoryHasLegacyScope(c, "ai_analysis_requests");
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT * FROM ai_analysis_requests WHERE status IN ('queued','retry_scheduled','leased') AND available_at<=? AND (lease_expires_at IS NULL OR lease_expires_at<=?) ORDER BY created_at,id LIMIT 1 FOR UPDATE",
+        "SELECT q.*,o.organization_id parent_org,o.workspace_id parent_workspace FROM ai_analysis_requests q " +
+          "JOIN opportunities o ON o.id=q.opportunity_id WHERE q.status IN ('queued','retry_scheduled','leased') " +
+          "AND q.available_at<=? AND (q.lease_expires_at IS NULL OR q.lease_expires_at<=?) " +
+          (legacy ? "AND q.organization_id=o.organization_id AND q.workspace_id=o.workspace_id " : "") +
+          "ORDER BY q.created_at,q.id LIMIT 1 FOR UPDATE",
         [now, now],
       );
       const r = rows[0];
@@ -214,8 +220,8 @@ export class MySqlAiAnalysisWorker {
       await c.commit();
       return {
         id: String(r.id),
-        org: String(r.organization_id),
-        ws: String(r.workspace_id),
+        org: String(r.parent_org),
+        ws: String(r.parent_workspace),
         opportunity: String(r.opportunity_id),
         snapshot:
           typeof r.input_snapshot_json === "string"
@@ -239,12 +245,12 @@ export class MySqlAiAnalysisWorker {
       event = randomUUID();
     try {
       await c.beginTransaction();
+      const legacy = await aiAnalysisHistoryHasLegacyScope(c, "ai_analysis_results");
       await c.query(
-        "INSERT INTO ai_analysis_results (id,organization_id,workspace_id,request_id_fk,opportunity_id,result_json,ai_generated,model_name,provider_request_id,review_status,created_at) VALUES (?,?,?,?,?,?,1,?,?,'pending',?)",
+        `INSERT INTO ai_analysis_results (id,${legacy ? "organization_id,workspace_id," : ""}request_id_fk,opportunity_id,result_json,ai_generated,model_name,provider_request_id,review_status,created_at) VALUES (?,${legacy ? "?,?," : ""}?,?,?,1,?,?,'pending',?)`,
         [
           resultId,
-          j.org,
-          j.ws,
+          ...(legacy ? [j.org, j.ws] : []),
           j.id,
           j.opportunity,
           JSON.stringify(g.output),
@@ -264,25 +270,11 @@ export class MySqlAiAnalysisWorker {
         ai_generated: true,
         review_status: "pending",
       };
-      await c.query(
-        "INSERT INTO ai_analysis_events (id,organization_id,workspace_id,event_type,resource_id,actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
-        [
-          event,
-          j.org,
-          j.ws,
-          "ai.analysis.completed",
-          resultId,
-          this.workerId,
-          JSON.stringify(payload),
-          j.request,
-          j.trace,
-          now,
-        ],
-      );
-      await c.query(
-        "INSERT INTO ai_analysis_outbox (id,organization_id,workspace_id,event_type,resource_id,payload_json,status,available_at,created_at) VALUES (?,?,?,?,?,?,'queued',?,?)",
-        [event, j.org, j.ws, "ai.analysis.completed", resultId, JSON.stringify(payload), now, now],
-      );
+      await appendAiAnalysisDelivery(c, {
+        id: event, type: "ai.analysis.completed", resourceId: resultId,
+        actorId: this.workerId, payload, requestId: j.request, traceId: j.trace,
+        organizationId: j.org, workspaceId: j.ws, now,
+      });
       await c.commit();
       return { result_id: resultId, review_status: "pending" };
     } catch (e) {
