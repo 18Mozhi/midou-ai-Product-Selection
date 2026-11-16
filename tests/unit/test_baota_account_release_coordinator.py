@@ -12,6 +12,7 @@ from unittest.mock import patch
 SCRIPTS = pathlib.Path(__file__).parents[2] / "scripts"
 COORD = runpy.run_path(str(SCRIPTS / "baota-account-release-coordinator.py"))
 LOCAL = runpy.run_path(str(SCRIPTS / "deploy-account-baota.py"))
+DRAIN = runpy.run_path(str(SCRIPTS / "baota-account-claim-drain.py"))
 
 
 class Steps:
@@ -62,6 +63,64 @@ class Steps:
 
 
 class CoordinatorTest(unittest.TestCase):
+    def test_worker_drain_restarts_zero_window_after_activity_and_fails_closed(self):
+        empty = dict.fromkeys(DRAIN["DRAIN_KEYS"], 0)
+        busy = dict(empty, intelligence_active=1, worker_active=1)
+        samples = iter([empty, empty, busy, empty, empty, empty, empty])
+        DRAIN["verify_collection_drained"](lambda: next(samples), attempts=7, sleep=lambda _: None)
+        with self.assertRaisesRegex(RuntimeError, "worker_drain_timeout"):
+            DRAIN["verify_collection_drained"](lambda: busy, attempts=4, sleep=lambda _: None)
+        with self.assertRaisesRegex(RuntimeError, "drain_sample_invalid"):
+            DRAIN["verify_collection_drained"](lambda: dict(empty, worker_active=False))
+
+    def test_only_the_owned_pause_can_be_restored_after_an_uncertain_response(self):
+        drain = DRAIN["BaselineClaimDrain"](pathlib.Path("/example"), "/node")
+        calls = []
+        paused_by = None
+
+        def action(verb):
+            nonlocal paused_by
+            calls.append(verb)
+            if verb == "pause":
+                paused_by = drain.owner
+                raise RuntimeError("response_lost")
+            if verb == "resume":
+                paused_by = None
+                return {"paused": False, "maintenanceId": drain.owner}
+            return {"paused": paused_by is not None, "maintenanceId": paused_by}
+
+        drain.claim_action = action
+        with self.assertRaisesRegex(RuntimeError, "response_lost"):
+            drain.pause()
+        drain.resume_owned()
+        self.assertEqual(calls, ["status", "pause", "status", "resume"])
+        self.assertFalse(drain.pause_attempted)
+        drain.pause_attempted = True
+        paused_by = "operator-other"
+        with self.assertRaisesRegex(RuntimeError, "owner_changed"):
+            drain.resume_owned()
+        self.assertEqual(calls[-1], "status")
+        self.assertEqual(paused_by, "operator-other")
+
+    def test_quiesce_verifies_final_drain_and_stopped_processes_before_resuming_claims(self):
+        calls = []
+        def event(name):
+            return lambda: calls.append(name)
+        def panel(action, final):
+            self.assertEqual(action, "quiesce")
+            calls.append("python_stop")
+            final()
+            calls.append("node_stop")
+        steps = types.SimpleNamespace(
+            _panel=panel, assert_stopped=event("stopped"),
+            claim_drain=types.SimpleNamespace(
+                pause=event("pause"), drain=event("drain"), verify_final=event("final"),
+                resume_owned=event("resume"),
+            ),
+        )
+        COORD["BaoTaRelease"].quiesce(steps)
+        self.assertEqual(calls, ["pause", "drain", "python_stop", "final", "node_stop", "stopped", "resume"])
+
     def test_public_verification_requires_exact_404_without_redirect(self):
         function = LOCAL["verify_public_retired_pages"]
         for status in (404, 200, 302, 403):

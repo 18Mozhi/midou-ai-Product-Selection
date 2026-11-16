@@ -126,15 +126,16 @@ class BaoTaRelease:
         self.inc = ROOT / "config/nginx-spa-routes.conf"
         self.site = pathlib.Path("/www/server/panel/vhost/nginx/midouai.medouai.com.conf")
         self.phase = "before_stage"
+        self.claim_drain = self.parts["drain"]["BaselineClaimDrain"](ROOT, NODE)
 
-    def _panel(self, action):
+    def _panel(self, action, final_drain=None):
         namespace = self.parts["control"]
         sha = self.build_sha if action == "activate" else self.previous if action == "resume_baseline" else None
         source = namespace["writer_control_source"](action, sha,
                                                     self.baseline if action == "resume_baseline" else None)
         std = io.StringIO()
         with contextlib.redirect_stdout(std):
-            exec(source, {})
+            exec(source, {"verify_final_drain": final_drain})
         result = next((line.split("=", 1)[1] for line in reversed(std.getvalue().splitlines())
                        if line.startswith("SCOUTOPS_RESULT=")), None)
         if not result:
@@ -195,7 +196,13 @@ class BaoTaRelease:
             raise RuntimeError("account_release_nginx_check_failed")
 
     def quiesce(self):
-        self._panel("quiesce")
+        self.claim_drain.pause()
+        self.claim_drain.drain()
+        self._panel("quiesce", self.claim_drain.verify_final)
+        self.assert_stopped()
+        # Release only our own pause once the original writers are confirmed
+        # stopped, while the original maintenance CLI still exists.
+        self.claim_drain.resume_owned()
 
     def restore_unchanged_baseline(self):
         proof = r'''
@@ -218,6 +225,7 @@ try {
         if result.returncode:
             raise RuntimeError("account_release_legacy_resume_schema_not_verified")
         self._panel("resume_baseline")
+        self.claim_drain.resume_owned()
 
     def assert_stopped(self):
         current = self._panel("inspect")

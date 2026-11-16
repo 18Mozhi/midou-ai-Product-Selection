@@ -19,6 +19,7 @@ SOURCES = {
     "install": "baota-account-runtime-install.py",
     "stage": "baota-account-release-stage.py",
     "control": "baota-account-cutover-control.py",
+    "drain": "baota-account-claim-drain.py",
     "coordinator": "baota-account-release-coordinator.py",
 }
 

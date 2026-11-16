@@ -101,9 +101,11 @@ methods = {
 before = observe()
 after = before
 if action == 'quiesce':
-    if any(backup_task_status.values()) or not (methods['node_stop'] and methods['python_stop']):
+    if (any(backup_task_status.values()) or not (methods['node_stop'] and methods['python_stop'])
+            or not callable(globals().get('verify_final_drain'))):
         raise RuntimeError('account_release_writer_shutdown_preflight_failed')
     panel_action(PythonModel(), 'StopProject', 'python')
+    verify_final_drain()
     panel_action(NodeModel(), 'stop_project', 'node')
     deadline = time.monotonic() + 45
     after = observe()
