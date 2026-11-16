@@ -1,4 +1,10 @@
 {
+  "accountProductionMigrationSourceClosure": {
+    "sourceFiles": ["scripts/run-account-production-cutover.mjs", "scripts/plan-account-retirement-production.mjs", "scripts/apply-account-production-forward.mjs", "database/migrations/0197_retire_tenancy_roots.up.sql"],
+    "testFiles": ["tests/unit/account-production-cutover.test.mjs", "tests/unit/account-retirement-production-plan.test.mjs", "tests/unit/account-retirement-ownership.test.mjs"],
+    "docs": ["docs/runbooks/account-production-migration-source.md"],
+    "contract": "Version the exact 0076 live baseline bytes, 0077–0197 reversible migration source, and direct session import closure independently from unrelated worktree changes. Compiling and verifying these files does not authorize database writes, make a release package, or replace business readback."
+  },
   "accountProductionCoordinatedRelease": {
     "sourceFiles": ["scripts/deploy-account-baota.py", "scripts/baota-account-release-coordinator.py"],
     "testFiles": ["tests/unit/test_baota_account_release_coordinator.py"],

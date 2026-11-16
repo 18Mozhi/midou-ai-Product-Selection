@@ -1,0 +1,1 @@
+DROP TABLE account_trend_topic_follows;
