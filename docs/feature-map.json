@@ -1,4 +1,13 @@
 {
+  "accountWebhookDeliveryReceipts": {
+    "sourceFiles": [
+      "apps/worker/src/webhook-delivery-worker.ts",
+      "packages/database/src/webhook-delivery-event-storage.ts"
+    ],
+    "testFiles": ["tests/unit/webhook-delivery-receipt.test.mjs"],
+    "docs": ["docs/runbooks/account-webhook-delivery-receipts.md"],
+    "contract": "Delivery receipts retain original endpoint and attempt. Finishing an active lease and adding the event are atomic, without retired organization columns in account mode."
+  },
   "accountIntelligenceRecoveryRuntime": {
     "sourceFiles": [
       "apps/worker/src/intelligence-source-recovery.ts",

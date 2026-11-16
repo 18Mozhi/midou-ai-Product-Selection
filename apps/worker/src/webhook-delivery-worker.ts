@@ -2,8 +2,9 @@ import { createHmac, randomUUID } from "node:crypto";
 import { lookup as dnsLookup } from "node:dns/promises";
 import { isIP } from "node:net";
 import { request as httpsRequest } from "node:https";
-import type { Pool, RowDataPacket } from "mysql2/promise";
+import type { Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { openCredential } from "@scoutops/credentials";
+import { appendWebhookDeliveryEvent } from "@scoutops/database";
 
 const deniedIp = (ip: string) => {
   if (!isIP(ip)) return true;
@@ -120,20 +121,10 @@ export class WebhookDeliveryWorker {
         [id],
       );
       const current = full[0]!;
-      await c.query(
-        "INSERT INTO webhook_delivery_events(id,delivery_id,endpoint_id,organization_id,from_status,to_status,attempt_count,reason,actor_id,request_id,trace_id,occurred_at) VALUES(?,?,?,?,?,'leased',?,NULL,NULL,?,?,?)",
-        [
-          randomUUID(),
-          id,
-          current.endpoint_id,
-          current.organization_id,
-          fromStatus,
-          current.attempt_count,
-          current.request_id,
-          current.trace_id,
-          this.now(),
-        ],
-      );
+      await appendWebhookDeliveryEvent(c, {
+        id: randomUUID(), deliveryId: id, fromStatus, toStatus: "leased", attempts: current.attempt_count,
+        reason: null, actorId: null, requestId: current.request_id, traceId: current.trace_id, occurredAt: this.now(),
+      });
       await c.commit();
       return current;
     } catch (e) {
@@ -144,45 +135,45 @@ export class WebhookDeliveryWorker {
     }
   }
   async finish(
-    row: any,
+    row: RowDataPacket,
     status: "succeeded" | "retry_scheduled" | "dead_letter",
     responseStatus: number | null,
     errorCode: string | null,
     signatureTimestamp: number | null,
   ) {
+    const now = this.now();
     const delay =
         this.o.retrySeconds[Math.max(0, Number(row.attempt_count) - 1)] ??
         this.o.retrySeconds.at(-1) ??
         900,
-      available = new Date(this.now().getTime() + delay * 1000);
-    await this.pool.query(
-      "UPDATE webhook_deliveries SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,response_status=?,last_error_code=?,signature_timestamp=?,updated_at=? WHERE id=? AND lease_owner=?",
-      [
-        status,
-        available,
-        responseStatus,
-        errorCode,
-        signatureTimestamp,
-        this.now(),
-        row.id,
-        this.o.workerId,
-      ],
-    );
-    await this.pool.query(
-      "INSERT INTO webhook_delivery_events(id,delivery_id,endpoint_id,organization_id,from_status,to_status,attempt_count,reason,actor_id,request_id,trace_id,occurred_at) VALUES(?,?,?,?,'leased',?,?,?,NULL,?,?,?)",
-      [
-        randomUUID(),
-        row.id,
-        row.endpoint_id,
-        row.organization_id,
-        status,
-        row.attempt_count,
-        errorCode,
-        row.request_id,
-        row.trace_id,
-        this.now(),
-      ],
-    );
+      available = new Date(now.getTime() + delay * 1000);
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      const [updated] = await c.query<ResultSetHeader>(
+        "UPDATE webhook_deliveries SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL," +
+          "response_status=?,last_error_code=?,signature_timestamp=?,updated_at=? " +
+          "WHERE id=? AND endpoint_id=? AND status='leased' AND lease_owner=? AND attempt_count=? AND lease_expires_at>?",
+        [status, available, responseStatus, errorCode, signatureTimestamp, now,
+          row.id, row.endpoint_id, this.o.workerId, row.attempt_count, now],
+      );
+      if (updated.affectedRows === 0) {
+        await c.commit();
+        return false;
+      }
+      if (updated.affectedRows !== 1) throw new Error("webhook_delivery_finish_scope_invalid");
+      await appendWebhookDeliveryEvent(c, {
+        id: randomUUID(), deliveryId: row.id, fromStatus: "leased", toStatus: status, attempts: row.attempt_count,
+        reason: errorCode, actorId: null, requestId: row.request_id, traceId: row.trace_id, occurredAt: now,
+      });
+      await c.commit();
+      return true;
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
   }
   async runOnce() {
     const row = await this.lease();
@@ -218,17 +209,13 @@ export class WebhookDeliveryWorker {
         secret,
         timeoutMs: this.o.timeoutMs,
       });
-      if (response >= 200 && response < 300) {
-        await this.finish(row, "succeeded", response, null, signatureTimestamp);
-        return true;
-      }
-      error = `http_${response}`;
+      if (response < 200 || response >= 300) error = `http_${response}`;
     } catch (e: any) {
       error = String(e?.message ?? "webhook_delivery_failed").slice(0, 80);
     }
     await this.finish(
       row,
-      Number(row.attempt_count) >= 4 ? "dead_letter" : "retry_scheduled",
+      error === null && response !== null ? "succeeded" : Number(row.attempt_count) >= 4 ? "dead_letter" : "retry_scheduled",
       response,
       error,
       signatureTimestamp,
