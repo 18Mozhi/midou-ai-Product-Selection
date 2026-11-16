@@ -1,3 +1,4 @@
+import { appendPlatformAudit } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type {
@@ -206,7 +207,7 @@ export class MySqlProviderSourceVersionRepository {
           input.now,
         ],
       );
-      await c.query(
+      await appendPlatformAudit(c,
         [
           "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,reso",
           "urce_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) ",
@@ -399,7 +400,7 @@ export class MySqlProviderSourceVersionRepository {
           input.now,
         ],
       );
-      await c.query(
+      await appendPlatformAudit(c,
         [
           "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,reso",
           "urce_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) ",

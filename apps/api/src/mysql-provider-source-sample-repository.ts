@@ -1,3 +1,4 @@
+import { appendPlatformAudit, collectionTaskScope } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
@@ -12,8 +13,10 @@ import type {
   Provider1688Acceptance,
   ProviderSourceRepository,
 } from "./provider-source-service.js";
-import { ProviderSourceServiceError } from "./provider-source-service.js";
+import { ProviderSourceServiceError, providerSampleEvidenceHash } from "./provider-source-service.js";
 import { iso } from "./mysql-provider-source-repository-shared.js";
+
+import { lockNativeParserSampleEvidence, sampleAccountJoins, sampleArtifactJoins, sampleArtifactProof } from "./mysql-provider-source-sample-lineage.js";
 
 const parserSample = (row: RowDataPacket, actorId = ""): ParserSample => ({
   id: String(row.id),
@@ -330,6 +333,8 @@ export class MySqlProviderSourceSampleRepository {
     };
   }
   async parserSampleOverview(providerId: string, actorId: string) {
+    const native = await collectionTaskScope(this.pool) === "account";
+    const scope = native ? "job_task.account_id" : "job_task.organization_id,job_task.workspace_id";
     const [samples] = await this.pool.query<RowDataPacket[]>(
         [
           "SELECT id,provider_id,browser_job_id,name,baseline_parser_version,last_replay_status,last_replay_at,",
@@ -339,12 +344,16 @@ export class MySqlProviderSourceSampleRepository {
       ),
       [candidates] = await this.pool.query<RowDataPacket[]>(
         [
-          "SELECT j.id browser_job_id,j.organization_id,j.workspace_id,MIN(a.captured_at) captured_at,",
-          "r.item_count,MIN(a.parser_version) parser_version FROM browser_collection_jobs j JOIN ",
+          `SELECT j.id browser_job_id,${scope},MIN(a.captured_at) captured_at,`,
+          "r.item_count,MIN(a.parser_version) parser_version FROM browser_collection_jobs j JOIN collection_tasks job_task ON job_task.id=j.collection_task_id ",
+          native ? sampleAccountJoins : "",
+          "JOIN ",
           "crawler_browser_runs r ON r.id=j.crawler_run_id JOIN browser_evidence_artifacts a ON ",
-          "a.browser_job_id=j.id AND a.status='active' LEFT JOIN provider_parser_samples s ON ",
+          "a.browser_job_id=j.id AND a.status='active' ",
+          native ? "AND " + sampleArtifactProof + sampleArtifactJoins : "",
+          "LEFT JOIN provider_parser_samples s ON ",
           "s.browser_job_id=j.id WHERE j.provider_id=? AND j.status='succeeded' AND s.id IS NULL AND ",
-          "JSON_EXTRACT(j.result_json,'$.snapshots') IS NOT NULL GROUP BY j.id,j.organization_id,j.workspace_id,",
+          `JSON_EXTRACT(j.result_json,'$.snapshots') IS NOT NULL GROUP BY j.id,${scope},`,
           "r.item_count HAVING COUNT(DISTINCT a.kind)=2 AND COUNT(DISTINCT a.parser_version)=1 ",
           "ORDER BY captured_at DESC LIMIT 20",
         ].join(""),
@@ -354,8 +363,8 @@ export class MySqlProviderSourceSampleRepository {
       samples: samples.map((row) => parserSample(row, actorId)),
       candidates: candidates.map((row) => ({
         browser_job_id: String(row.browser_job_id),
-        organization_id: String(row.organization_id),
-        workspace_id: String(row.workspace_id),
+        ...(native ? { account_id: String(row.account_id) } :
+          { organization_id: String(row.organization_id), workspace_id: String(row.workspace_id) }),
         captured_at: iso(row.captured_at),
         item_count: Number(row.item_count),
         parser_version: String(row.parser_version),
@@ -383,14 +392,20 @@ export class MySqlProviderSourceSampleRepository {
     return rows[0] ? parserReplay(rows[0]) : null;
   }
   async parserSampleCandidate(providerId: string, browserJobId: string) {
+    const native = await collectionTaskScope(this.pool) === "account";
+    const scope = native ? "job_task.account_id" : "job_task.organization_id,job_task.workspace_id";
     const [rows] = await this.pool.query<RowDataPacket[]>(
       [
-        "SELECT j.id browser_job_id,j.organization_id,j.workspace_id,j.result_json,MIN(a.captured_at) captured_at,",
-        "r.item_count,MIN(a.parser_version) parser_version FROM browser_collection_jobs j JOIN ",
+        `SELECT j.id browser_job_id,${scope},j.result_json,MIN(a.captured_at) captured_at,`,
+        "r.item_count,MIN(a.parser_version) parser_version FROM browser_collection_jobs j JOIN collection_tasks job_task ON job_task.id=j.collection_task_id ",
+        native ? sampleAccountJoins : "",
+        "JOIN ",
         "crawler_browser_runs r ON r.id=j.crawler_run_id JOIN browser_evidence_artifacts a ON ",
-        "a.browser_job_id=j.id AND a.status='active' LEFT JOIN provider_parser_samples s ON ",
+        "a.browser_job_id=j.id AND a.status='active' ",
+        native ? "AND " + sampleArtifactProof + sampleArtifactJoins : "",
+        "LEFT JOIN provider_parser_samples s ON ",
         "s.browser_job_id=j.id WHERE j.provider_id=? AND j.id=? AND j.status='succeeded' AND s.id IS NULL AND ",
-        "JSON_EXTRACT(j.result_json,'$.snapshots') IS NOT NULL GROUP BY j.id,j.organization_id,j.workspace_id,",
+        `JSON_EXTRACT(j.result_json,'$.snapshots') IS NOT NULL GROUP BY j.id,${scope},`,
         "j.result_json,r.item_count HAVING COUNT(DISTINCT a.kind)=2 AND ",
         "COUNT(DISTINCT a.parser_version)=1 LIMIT 1",
       ].join(""),
@@ -401,8 +416,8 @@ export class MySqlProviderSourceSampleRepository {
     const result = json(row.result_json) as Record<string, unknown>;
     return {
       browser_job_id: String(row.browser_job_id),
-      organization_id: String(row.organization_id),
-      workspace_id: String(row.workspace_id),
+      ...(native ? { account_id: String(row.account_id) } :
+        { organization_id: String(row.organization_id), workspace_id: String(row.workspace_id) }),
       captured_at: iso(row.captured_at),
       item_count: Number(row.item_count),
       parser_version: String(row.parser_version),
@@ -421,13 +436,20 @@ export class MySqlProviderSourceSampleRepository {
         [input.actorId, input.route, input.idempotencyKey],
       );
       if (operations[0]) {
+        if (operations[0].browser_job_id !== input.browserJobId || operations[0].provider_id !== input.providerId ||
+          operations[0].name !== input.name)
+          throw new ProviderSourceServiceError("parser_sample_replay_conflict", 409, "为不同样本生成新的幂等键。");
         await c.commit();
         return parserSample(operations[0], input.actorId);
       }
+      const native = await collectionTaskScope(c) === "account";
+      if (native && !input.accountId)
+        throw new ProviderSourceServiceError("parser_sample_candidate_changed", 409, "重新选择当前账号证据。");
       const [jobs] = await c.query<RowDataPacket[]>(
+        native ? lockNativeParserSampleEvidence :
         [
-          "SELECT j.id FROM browser_collection_jobs j WHERE j.id=? AND j.provider_id=? AND ",
-          "j.organization_id=? AND j.workspace_id=? AND j.status='succeeded' AND ",
+          "SELECT j.id FROM browser_collection_jobs j JOIN collection_tasks job_task ON job_task.id=j.collection_task_id WHERE j.id=? AND j.provider_id=? AND ",
+          "job_task.organization_id=? AND job_task.workspace_id=? AND j.status='succeeded' AND ",
           "JSON_EXTRACT(j.result_json,'$.snapshots') IS NOT NULL AND ",
           "(SELECT COUNT(DISTINCT a.kind) FROM browser_evidence_artifacts a WHERE ",
           "a.browser_job_id=j.id AND a.status='active')=2 AND ",
@@ -436,7 +458,7 @@ export class MySqlProviderSourceSampleRepository {
           "(SELECT MIN(a.parser_version) FROM browser_evidence_artifacts a WHERE ",
           "a.browser_job_id=j.id AND a.status='active')=? FOR UPDATE",
         ].join(""),
-        [
+        native ? [input.browserJobId,input.providerId,input.accountId,input.parserVersion] : [
           input.browserJobId,
           input.providerId,
           input.organizationId,
@@ -444,23 +466,30 @@ export class MySqlProviderSourceSampleRepository {
           input.parserVersion,
         ],
       );
-      if (!jobs[0])
+      if (!jobs[0] || (native && providerSampleEvidenceHash(
+        (json(jobs[0].result_json) as Record<string, unknown>).snapshots,
+      ) !== input.inputSha256))
         throw new ProviderSourceServiceError(
           "parser_sample_candidate_changed",
           409,
           "候选采集已变化，刷新后重新选择。",
         );
+      const [scopeFields] = await c.query<RowDataPacket[]>(
+        "SHOW COLUMNS FROM provider_parser_samples WHERE Field IN ('organization_id','workspace_id')",
+      );
+      if (scopeFields.length === 1) throw new Error("partial_inherited_scope_schema:provider_parser_samples");
+      const legacyScope = scopeFields.length === 2;
+      if (native && legacyScope) throw new Error("parser_sample_account_schema_not_ready");
       await c.query(
         [
-          "INSERT INTO provider_parser_samples (id,organization_id,workspace_id,provider_id,browser_job_id,name,",
+          `INSERT INTO provider_parser_samples (id,${legacyScope ? "organization_id,workspace_id," : ""}provider_id,browser_job_id,name,`,
           "input_sha256,snapshots_json,baseline_output_json,baseline_output_sha256,baseline_parser_version,",
           "last_replay_status,last_replay_at,status,created_by,created_at,updated_at) VALUES ",
-          "(?,?,?,?,?,?,?,?,?,?,?,'never',NULL,'active',?,?,?)",
+          `(?,${legacyScope ? "?,?," : ""}?,?,?,?,?,?,?,?,'never',NULL,'active',?,?,?)`,
         ].join(""),
         [
           input.sampleId,
-          input.organizationId,
-          input.workspaceId,
+          ...(legacyScope ? [input.organizationId, input.workspaceId] : []),
           input.providerId,
           input.browserJobId,
           input.name,
@@ -646,8 +675,8 @@ export class MySqlProviderSourceSampleRepository {
     resourceId: string,
     metadata: Record<string, unknown>,
   ) {
-    return c.query(
-      [
+    return appendPlatformAudit(c,
+        [
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,",
         "resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) ",
         "VALUES(?,NULL,NULL,?,?,'provider_parser_sample',?,'succeeded',?,?,?,?,1)",

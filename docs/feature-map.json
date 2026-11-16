@@ -1,4 +1,18 @@
 {
+  "accountProviderSampleLineage": {
+    "sourceFiles": [
+      "apps/api/src/mysql-provider-source-sample-lineage.ts",
+      "apps/api/src/mysql-provider-source-sample-repository.ts",
+      "apps/api/src/mysql-provider-source-repository.ts",
+      "apps/api/src/provider-source-service.ts"
+    ],
+    "testFiles": [
+      "tests/m03-07/parser-sample-parent-scope.test.mjs",
+      "tests/unit/provider-source-replay-parent-scope.test.mjs"
+    ],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-provider-sample-lineage.md"],
+    "contract": "Account parser samples preserve original browser evidence and check sealed owner lineage and snapshot digest; retired scope enqueue fails closed."
+  },
   "accountCollectionOverview": {
     "sourceFiles": [
       "apps/api/src/collection-console-routes.ts",

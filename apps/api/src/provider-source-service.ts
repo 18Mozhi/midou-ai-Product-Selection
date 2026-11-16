@@ -106,8 +106,9 @@ export interface ProviderConfigurationHistory {
 }
 export interface ParserSampleCandidate {
   browser_job_id: string;
-  organization_id: string;
-  workspace_id: string;
+  organization_id?: string;
+  workspace_id?: string;
+  account_id?: string;
   captured_at: string;
   item_count: number;
   parser_version: string;
@@ -238,8 +239,9 @@ export interface ProviderSourceRepository {
     sampleId: string;
     providerId: string;
     browserJobId: string;
-    organizationId: string;
-    workspaceId: string;
+    organizationId?: string;
+    workspaceId?: string;
+    accountId?: string;
     name: string;
     inputSha256: string;
     snapshots: unknown;
@@ -325,6 +327,7 @@ const stable = (value: unknown): string => {
     .join(",")}}`;
 };
 const hash = (value: unknown) => createHash("sha256").update(stable(value)).digest("hex");
+export const providerSampleEvidenceHash = hash;
 const projection = (records: ProviderRawRecord[]) =>
   records.map((record) => {
     const payload = record.payload as Record<string, unknown>;
@@ -642,7 +645,11 @@ export class ProviderSourceService {
       route,
       context.idempotencyKey,
     );
-    if (previous) return previous;
+    if (previous) {
+      if (previous.browser_job_id !== browserJobId || previous.provider_id !== providerId || previous.name !== name)
+        throw new ProviderSourceServiceError("parser_sample_replay_conflict", 409, "为不同样本生成新的幂等键。");
+      return previous;
+    }
     if (name.length < 2 || name.length > 120)
       throw new ProviderSourceServiceError(
         "parser_sample_name_invalid",
@@ -684,8 +691,8 @@ export class ProviderSourceService {
       sampleId: randomUUID(),
       providerId,
       browserJobId,
-      organizationId: candidate.organization_id,
-      workspaceId: candidate.workspace_id,
+      ...(candidate.account_id ? { accountId: candidate.account_id } :
+        { organizationId: candidate.organization_id!, workspaceId: candidate.workspace_id! }),
       name,
       inputSha256: hash(candidate.snapshots),
       snapshots: candidate.snapshots,

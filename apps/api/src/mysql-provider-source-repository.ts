@@ -1,4 +1,6 @@
+import { appendCollectionSubquery, collectionTaskScope } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
+import { appendProviderSourceReplayRun } from "@scoutops/database";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type { ProviderSourceReplay, ProviderSourceRepository } from "./provider-source-service.js";
 import { ProviderSourceServiceError } from "./provider-source-service.js";
@@ -73,12 +75,9 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
     const c = await this.pool.getConnection();
     try {
       await c.beginTransaction();
-      const replayed = await this.operationReplay(
-        c,
-        input.actorId,
-        input.route,
-        input.idempotencyKey,
-      );
+      if (await collectionTaskScope(c) === "account")
+        throw new ProviderSourceServiceError("provider_source_legacy_scope_retired", 409, "使用账号的采集任务入口。");
+      const replayed = await this.operationReplay(c, input);
       if (replayed) {
         await c.commit();
         return replayed;
@@ -169,56 +168,20 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
           input.now,
         ],
       );
+      await appendCollectionSubquery(c, {
+        id: input.subqueryId, taskId: input.taskId, providerId: input.providerId, ordinal: 1,
+        targetJson: JSON.stringify(input.target), required: true, status: "pending", now: input.now,
+      });
+      await appendProviderSourceReplayRun(c, { ...input, sourceCode: String(provider.code) });
       await c.query(
         [
-          "INSERT INTO collection_subqueries (id,task_id,organization_id,workspace_id,provider_id,ordinal,targe",
-          "t_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,started_at",
-          ",finished_at,version,created_at,updated_at) VALUES ",
-          "(?,?,?,?,?,1,?,1,'pending',0,'[]',NULL,0,NULL,NULL,1,?,?)",
-        ].join(""),
-        [
-          input.subqueryId,
-          input.taskId,
-          input.organizationId,
-          input.workspaceId,
-          input.providerId,
-          JSON.stringify(input.target),
-          input.now,
-          input.now,
-        ],
-      );
-      await c.query(
-        [
-          "INSERT INTO provider_source_replay_runs (id,organization_id,workspace_id,provider_id,source_code,tas",
-          "k_id,input_sha256,status,item_count,error_code,request_id,trace_id,created_by,created_at,updated_at) ",
-          "VALUES (?,?,?,?,?,?,?,'scheduled',0,NULL,?,?,?,?,?)",
-        ].join(""),
-        [
-          input.runId,
-          input.organizationId,
-          input.workspaceId,
-          input.providerId,
-          provider.code,
-          input.taskId,
-          input.inputSha256,
-          input.requestId,
-          input.traceId,
-          input.actorId,
-          input.now,
-          input.now,
-        ],
-      );
-      await c.query(
-        [
-          "INSERT INTO collection_task_events (id,task_id,organization_id,workspace_id,event_type,from_status,t",
-          "o_status,actor_type,actor_id,request_id,trace_id,metadata_json,occurred_at) VALUES (?,?,?,?,? ",
+          "INSERT INTO collection_task_events (id,task_id,event_type,from_status,t",
+          "o_status,actor_type,actor_id,request_id,trace_id,metadata_json,occurred_at) VALUES (?,?,? ",
           ",NULL,'scheduled','user',?,?,?,?,?)",
         ].join(""),
         [
           randomUUID(),
           input.taskId,
-          input.organizationId,
-          input.workspaceId,
           "collection.task.scheduled",
           input.actorId,
           input.requestId,
@@ -229,15 +192,13 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
       );
       await c.query(
         [
-          "INSERT INTO collection_task_outbox (id,task_id,organization_id,workspace_id,event_type,payload_json,",
+          "INSERT INTO collection_task_outbox (id,task_id,event_type,payload_json,",
           "status,attempt_count,available_at,lease_owner,lease_expires_at,request_id,trace_id,created_at,update",
-          "d_at) VALUES (?,?,?,?,?,?,'queued',0,?,NULL,NULL,?,?,?,?)",
+          "d_at) VALUES (?,?,?,?,'queued',0,?,NULL,NULL,?,?,?,?)",
         ].join(""),
         [
           randomUUID(),
           input.taskId,
-          input.organizationId,
-          input.workspaceId,
           "collection.task.scheduled",
           JSON.stringify({ task_id: input.taskId, source_code: provider.code }),
           input.now,
@@ -295,6 +256,8 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
     const c = await this.pool.getConnection();
     try {
       await c.beginTransaction();
+      if (await collectionTaskScope(c) === "account")
+        throw new ProviderSourceServiceError("provider_source_legacy_scope_retired", 409, "使用账号的采集任务入口。");
       const [previous] = await c.query<RowDataPacket[]>(
         "SELECT task_id,source_count FROM provider_refresh_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",
         [input.actorId, input.route, input.idempotencyKey],
@@ -357,36 +320,20 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
       );
       for (let index = 0; index < providers.length; index++) {
         const provider = providers[index]!;
-        await c.query(
-          [
-            "INSERT INTO collection_subqueries (id,task_id,organization_id,workspace_id,provider_id,ordinal,targe",
-            "t_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,version,cr",
-            "eated_at,updated_at) VALUES (?,?,?,?,?,?,?,0,'pending',0,'[]',NULL,0,1,?,?)",
-          ].join(""),
-          [
-            randomUUID(),
-            taskId,
-            input.organizationId,
-            input.workspaceId,
-            provider.id,
-            index + 1,
-            "{}",
-            input.now,
-            input.now,
-          ],
-        );
+        await appendCollectionSubquery(c, {
+          id: randomUUID(), taskId, providerId: String(provider.id), ordinal: index + 1,
+          targetJson: "{}", required: false, status: "pending", now: input.now,
+        });
       }
       await c.query(
         [
-          "INSERT INTO collection_task_events (id,task_id,organization_id,workspace_id,event_type,from_status,t",
+          "INSERT INTO collection_task_events (id,task_id,event_type,from_status,t",
           "o_status,actor_type,actor_id,request_id,trace_id,metadata_json,occurred_at) VALUES ",
-          "(?,?,?,?,?,NULL,'scheduled','user',?,?,?,?,?)",
+          "(?,?,?,NULL,'scheduled','user',?,?,?,?,?)",
         ].join(""),
         [
           randomUUID(),
           taskId,
-          input.organizationId,
-          input.workspaceId,
           "hotspot.refresh.scheduled",
           input.actorId,
           input.requestId,
@@ -397,15 +344,13 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
       );
       await c.query(
         [
-          "INSERT INTO collection_task_outbox (id,task_id,organization_id,workspace_id,event_type,payload_json,",
+          "INSERT INTO collection_task_outbox (id,task_id,event_type,payload_json,",
           "status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES ",
-          "(?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
+          "(?,?,?,?,'queued',0,?,?,?,?,?)",
         ].join(""),
         [
           randomUUID(),
           taskId,
-          input.organizationId,
-          input.workspaceId,
           "hotspot.refresh.scheduled",
           JSON.stringify({ task_id: taskId, source_count: providers.length }),
           input.now,
@@ -446,14 +391,20 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
       c.release();
     }
   }
-  private async operationReplay(c: PoolConnection, actorId: string, route: string, key: string) {
+  private async operationReplay(c: PoolConnection, input: Parameters<ProviderSourceRepository["replay"]>[0]) {
     const [rows] = await c.query<RowDataPacket[]>(
       [
-        "SELECT r.* FROM provider_source_operations o JOIN provider_source_replay_runs r ON ",
-        "r.id=o.replay_run_id WHERE o.actor_id=? AND o.route=? AND o.idempotency_key=? LIMIT 1",
+        "SELECT r.*,t.organization_id AS task_organization_id,t.workspace_id AS task_workspace_id ",
+        "FROM provider_source_operations o JOIN provider_source_replay_runs r ON r.id=o.replay_run_id ",
+        "JOIN collection_tasks t ON t.id=r.task_id WHERE o.actor_id=? AND o.route=? AND o.idempotency_key=? LIMIT 1",
       ].join(""),
-      [actorId, route, key],
+      [input.actorId, input.route, input.idempotencyKey],
     );
-    return rows[0] ? providerSourceReplayFromRow(rows[0]) : null;
+    const row = rows[0];
+    if (!row) return null;
+    if (row.task_organization_id !== input.organizationId || row.task_workspace_id !== input.workspaceId ||
+      row.provider_id !== input.providerId || row.input_sha256 !== input.inputSha256)
+      throw new ProviderSourceServiceError("provider_source_replay_scope_conflict", 409, "为新重放生成新的幂等键。");
+    return providerSourceReplayFromRow(row);
   }
 }

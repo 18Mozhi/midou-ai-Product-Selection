@@ -4252,7 +4252,7 @@ paths:
   /platform/provider-sources/{providerId}/parser-samples:
     get:
       summary: List fixed parser samples and eligible real browser jobs
-      description: Requires provider:configure. Candidates exist only for succeeded browser jobs that contain structured snapshots plus active screenshot and DOM evidence from one parser version.
+      description: Requires provider:configure. Candidates exist only for succeeded browser jobs that contain structured snapshots plus active screenshot and DOM evidence from one parser version. In account mode the original job, task, subquery, provider and evidence must match sealed account ownership.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -4264,7 +4264,7 @@ paths:
         "503": { $ref: "#/components/responses/Error" }
     post:
       summary: Fix a real logged-in browser result as a parser sample
-      description: Requires provider:configure, same-origin Origin and Idempotency-Key. The server derives snapshots and baseline output from the selected completed browser job; arbitrary client JSON cannot become a production sample.
+      description: Requires provider:configure, same-origin Origin and Idempotency-Key. The server derives snapshots and baseline output from the selected completed browser job; arbitrary client JSON cannot become a production sample. In account mode the server rechecks linked evidence and the snapshot digest in the write transaction.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -4362,7 +4362,7 @@ paths:
   /provider-sources/refresh:
     post:
       summary: Manually request an immediate organization hotspot refresh
-      description: Requires trend:read, an active organization/workspace context, same-origin Origin and Idempotency-Key. Schedules only currently enabled automatic public-feed channels; setup-required sources never fabricate results.
+      description: Requires trend:read, an active organization/workspace context, same-origin Origin and Idempotency-Key. Schedules only currently enabled automatic public-feed channels; setup-required sources never fabricate results. The legacy scope enqueue returns 409 in account mode if the request reaches storage.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { $ref: "#/components/parameters/IdempotencyKey" }
@@ -4391,7 +4391,7 @@ paths:
   /platform/provider-sources/{providerId}/replays:
     post:
       summary: Schedule a bounded built-in source replay or an explicit 1688 acceptance run
-      description: Requires collection:replay, same-origin Origin and Idempotency-Key. Query and CSV are mutually exclusive; each task reads at most 20 records. Disabled sources are rejected except when acceptance_run is literal true for the 1688 authenticated-browser source; that manual path does not enable the source or admit it to automatic scheduling.
+      description: Requires collection:replay, same-origin Origin and Idempotency-Key. Query and CSV are mutually exclusive; each task reads at most 20 records. Disabled sources are rejected except when acceptance_run is literal true for the 1688 authenticated-browser source; that manual path does not enable the source or admit it to automatic scheduling. The legacy scope enqueue returns 409 in account mode.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: providerId, in: path, required: true, schema: { type: string, format: uuid } }
