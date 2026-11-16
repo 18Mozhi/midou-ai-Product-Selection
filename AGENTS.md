@@ -17,10 +17,17 @@
 
 ## 宝塔部署与密钥
 
-- 生产服务必须全部由宝塔面板创建、展示、启动、停止、重启、查看日志和配置：网站、Node API、Node Worker、Python Crawler、MySQL、Redis、计划任务、文件备份均不例外。
+- 生产服务必须全部由宝塔面板创建、展示、启动、停止、重启、查看日志和配置：网站、Node API、Node Worker、Python Crawler、MySQL、Redis 和获准的业务计划任务均不例外。
 - 禁止通过 systemd、独立 PM2、宿主机 crontab、屏外 Docker Compose 或外部托管服务创建生产运行能力。若需要 Docker 服务，必须由宝塔面板的 Docker 管理能力创建和操作。
 - 部署凭证、数据库密码、GitHub Deploy Key、Cookie、Token、私钥和 `.env` 均不得提交、打印或写入文档。只在宝塔受限配置或受限环境变量中维护。
-- 生产主机房在惠州；按 2026-08-08 当前范围，备份与恢复只使用现有主机内由宝塔管理的独立加密目录和隔离恢复库，不配置备用服务器，也不得宣称整机、磁盘、机房或异地灾备能力。真实客户数据、数据库、主文件存储不得离开中国境内。
+- 生产主机房在惠州。真实客户数据、数据库、主文件存储不得离开中国境内。
+
+## 正式发布与备份禁令
+
+- 只向本项目指定正式节点发布最新版。不再创建或使用隔离环境、演练库、隔离恢复目录或独立测试节点；本地代码检查与不连接业务库的单元测试仍可执行。
+- 不再创建项目数据库、证据或文件备份，也不创建部署回退副本。不得启动、重跑、恢复或新建本项目的备份任务；宝塔 #5（`product_scout` 数据库备份）和 #12（项目备份恢复任务）必须保持停用。历史运维文档中的备份与隔离恢复流程只供查证，不再是执行指引。
+- 清理本项目现有的隔离环境、已确认归属的数据库及文件备份、非运行发布残留。通过 SSH 逐项核对对象、真实路径、归属和是否正在使用，只删除确认项；禁止按模糊路径或库名前缀批量删除。不得删除正式业务库、在线证据、正式运行配置、其他项目数据、Git 历史或业务审计原记录。
+- 不复制业务库到其他环境。直接发布前仍须核对新版本、正式节点、旧结构依赖和停写边界；发布后校验业务数据、归属、审批权限和服务健康。运行器明确拒绝或发现数据不能保全时，修正发布路径后再执行，不绕过保护。
 
 ## 固定生产目录与重复部署命令
 
@@ -30,12 +37,11 @@
   - `/www/wwwroot/ai选品/python`：Python 3.12 采集运行包，也是宝塔 Python 项目 `ai选品-python` 的项目目录。
   - `/www/wwwroot/ai选品/config`：宝塔受限环境文件；不得提交、上传到其他目录或在输出中展示秘密。
   - `/www/wwwroot/ai选品/runtime`：`evidence`、`exports`、`credential-tmp`、`tmp`、`verification` 等运行数据。
-  - `/www/wwwroot/ai选品/backups`：仅本项目的数据库和文件恢复材料。
 - 服务器不得执行 Git clone、pull、checkout 或 build。代码只在本地构建并用 `python scripts/deploy-baota.py` 上传运行包；该命令会排除 `tests`、截图、文档、计划、源码缓存和本地临时文件，上传完成后删除临时包。
 - 宝塔网站对象：`ai选品网站` / 域名 `midouai.medouai.com` / 目录 `/www/wwwroot/ai选品/frontend`。
 - 宝塔 Node 对象：`ai选品` / 目录 `/www/wwwroot/ai选品/backend` / Node `v20.19.6` / 启动命令 `node --env-file=/www/wwwroot/ai选品/config/product_scout.env --env-file=/www/wwwroot/ai选品/config/release.env apps/backend/dist/server.js`。这是宝塔面板中的直接 Node 命令，不得配置项目自带 Bash 启动器。
 - 宝塔 Python 对象：`ai选品-python` / 目录 `/www/wwwroot/ai选品/python` / Python `3.12.13` / 命令模式 / 启动命令 `python -m scoutops_crawler --env-file=/www/wwwroot/ai选品/config/product_scout.env`。由 Python 直接解析受限 `KEY=VALUE` 文件，不使用 Bash；Python 项目只允许由宝塔创建、启动、停止、重启和查看日志。
-- 创建或首次整理：在本地仓库根目录运行 `python scripts/deploy-baota.py --initialize-layout`。更新最新版：提交并确认工作树干净后运行 `python scripts/deploy-baota.py`。
+- 只允许从本地经过验证且可追溯的干净提交打包，再经宝塔发布正式端。旧 `scripts/deploy-baota.py` 的备份、隔离演练或依赖回退副本的发布路径不适用；必须使用经验证的不生成备份的协调发布路径。
 - 宝塔命令行重启 Node：`/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py nodejs ai选品`。
 - 宝塔命令行重启 Python：`/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py python ai选品-python`。
 - 启动和停止必须在宝塔“网站/Node 项目/Python 项目”界面操作；创建服务使用上述本地部署命令调用宝塔项目模型。禁止手工用 `nohup`、`screen`、systemd、独立 PM2、宿主 crontab 或 Docker Compose 代替宝塔。
