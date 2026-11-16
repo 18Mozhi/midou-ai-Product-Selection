@@ -1,4 +1,10 @@
 {
+  "accountBaotaWriterControl": {
+    "sourceFiles": ["scripts/baota-account-cutover-control.py"],
+    "testFiles": ["tests/unit/test_baota_account_cutover_control.py"],
+    "docs": ["docs/runbooks/account-baota-writer-control.md"],
+    "contract": "Inspect the fixed production website, Node, Python and disabled backup tasks over host-key-verified SSH. The internal quiesce adapter validates identity, stops only these writers through BaoTa, and checks processes and the Node listener; the CLI is read-only."
+  },
   "accountCrawlerCompletionSpoolAudit": {
     "sourceFiles": ["scripts/verify-orphan-crawler-completion-spool.mjs"],
     "testFiles": ["tests/unit/orphan-crawler-completion-spool.test.mjs"],
