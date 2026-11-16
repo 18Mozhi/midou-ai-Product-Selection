@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService, Capability } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
+import { authenticatedRehearsalAccount } from "./account-read-rehearsal.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 import type { AutomationService } from "./automation-service.js";
 export interface AutomationRouteOptions {
@@ -10,6 +11,7 @@ export interface AutomationRouteOptions {
   auth: LocalAuthService;
   secureCookie: boolean;
   webOrigin: string;
+  accountReadRehearsal?: boolean;
 }
 const ids = (r: FastifyRequest) => ({
     requestId: String(r.headers["x-request-id"]),
@@ -38,51 +40,63 @@ export function registerAutomationRoutes(app: FastifyInstance, o: AutomationRout
         actorId: a.user.id,
       };
     },
-    write = async (r: FastifyRequest) => {
+    write = async (r: FastifyRequest, accountStatus = false) => {
       if (r.headers.origin !== o.webOrigin)
         throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
       return {
-        ...(await scope(r, "team:manage")),
+        ...(accountStatus && o.accountReadRehearsal
+          ? await authenticatedRehearsalAccount(r, o.auth, o.secureCookie)
+          : await scope(r, "team:manage")),
         ...ids(r),
         idempotencyKey: requireIdempotencyKey(r),
       };
     };
-  app.get("/api/v1/automations", async (r) =>
-    env(await o.service.list(await scope(r, "team:manage")), r),
-  );
-  app.post("/api/v1/automations", async (r, reply) => {
-    const x = await o.service.create({ ...(await write(r)), value: r.body });
-    reply.code(201);
-    return env(x, r);
+  app.get("/api/v1/automations", async (r, reply) => {
+    if (o.accountReadRehearsal) reply.header("cache-control", "private, no-store");
+    const current = o.accountReadRehearsal
+      ? await authenticatedRehearsalAccount(r, o.auth, o.secureCookie)
+      : await scope(r, "team:manage");
+    return env(await o.service.list(current), r);
   });
-  app.post("/api/v1/automations/preview", async (r) => {
-    if (r.headers.origin !== o.webOrigin)
-      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
-    return env(await o.service.preview({ ...(await scope(r, "team:manage")), value: r.body }), r);
-  });
-  app.patch("/api/v1/automations/:id", async (r) =>
-    env(
-      await o.service.update({
-        ...(await write(r)),
-        ruleId: (r.params as any).id,
-        value: r.body,
-      }),
-      r,
-    ),
-  );
-  app.get("/api/v1/automations/:id", async (r) =>
-    env(
+  if (!o.accountReadRehearsal) {
+    app.post("/api/v1/automations", async (r, reply) => {
+      const x = await o.service.create({ ...(await write(r)), value: r.body });
+      reply.code(201);
+      return env(x, r);
+    });
+    app.post("/api/v1/automations/preview", async (r) => {
+      if (r.headers.origin !== o.webOrigin)
+        throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
+      return env(await o.service.preview({ ...(await scope(r, "team:manage")), value: r.body }), r);
+    });
+    app.patch("/api/v1/automations/:id", async (r) =>
+      env(
+        await o.service.update({
+          ...(await write(r)),
+          ruleId: (r.params as any).id,
+          value: r.body,
+        }),
+        r,
+      ),
+    );
+  }
+  app.get("/api/v1/automations/:id", async (r, reply) => {
+    if (o.accountReadRehearsal) reply.header("cache-control", "private, no-store");
+    const current = o.accountReadRehearsal
+      ? await authenticatedRehearsalAccount(r, o.auth, o.secureCookie)
+      : await scope(r, "team:manage");
+    return env(
       await o.service.detail({
-        ...(await scope(r, "team:manage")),
+        ...current,
         ruleId: (r.params as any).id,
       }),
       r,
-    ),
-  );
+    );
+  });
   app.post("/api/v1/automations/:id/actions", async (r) =>
     env(
       await o.service.changeStatus({
-        ...(await write(r)),
+        ...(await write(r, true)),
         ruleId: (r.params as any).id,
         value: r.body,
       }),

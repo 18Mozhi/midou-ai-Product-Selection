@@ -58,6 +58,7 @@ export function registerWorkflowDomainRoutes(context: ApiDomainContext) {
     maxConnections: context.config.realtime.maxConnections,
   });
   registerAutomationRoutes(context.app, {
+    accountReadRehearsal: context.accountReadRehearsal,
     service: new AutomationService(
       new MySqlAutomationRepository(context.pool),
       context.config.automations.defaultRateLimit,

@@ -3690,6 +3690,7 @@ paths:
   /automations:
     get:
       summary: List automation rules in the active organization and workspace
+      x-account-runtime: After cutover list only rules owned by the verified account under the current ownership seal. Legacy create, preview and edit are not registered.
       description: Each rule includes the latest scoped execution status, update time and sanitized failure code when an execution exists.
       x-required-capability: team:manage
       responses:
@@ -3738,6 +3739,7 @@ paths:
   /automations/{automationRuleId}:
     get:
       summary: Get a scoped rule and its latest execution history
+      x-account-runtime: Account mode preserves the original owned rule and its execution history. It does not expose a linked record belonging to another account.
       x-required-capability: team:manage
       parameters:
         [
@@ -3785,6 +3787,7 @@ paths:
   /automations/{automationRuleId}/actions:
     post:
       summary: Manually pause or resume a versioned automation rule
+      x-account-runtime: Account-mode pause and resume require exact native and sealed ownership. The same receipt replays only for the original rule, action, revision and reason.
       x-required-capability: team:manage
       parameters:
         [

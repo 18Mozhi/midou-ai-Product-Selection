@@ -1,4 +1,17 @@
 {
+  "accountAutomationRuleRuntime": {
+    "sourceFiles": [
+      "apps/api/src/automation-routes.ts",
+      "apps/api/src/mysql-automation-repository.ts",
+      "apps/worker/src/automation-worker.ts"
+    ],
+    "testFiles": [
+      "tests/m05-05/automation-account-scope.test.mjs",
+      "tests/m05-05/account-automation-read-rehearsal.test.mjs"
+    ],
+    "docs": ["docs/openapi.yaml", "docs/architecture/m05-05-automation-rules.md"],
+    "contract": "Retain existing rule, assignee, execution and limit. Shared or unassigned rules require the sealed primary owner. Only post-cutover delivered owned triggers may execute; recheck the exact rule and execution ownership under lock before producing a task or notice."
+  },
   "accountApprovalNotificationRuntime": {
     "sourceFiles": [
       "apps/api/src/mysql-notification-repository.ts",

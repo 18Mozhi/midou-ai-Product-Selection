@@ -67,7 +67,7 @@ test("M05-05 backend delivery and archived member UI evidence remain available",
   assert.match(v[4], /触发通知[\s\S]*人工任务/);
   assert.match(v[2], /\/api\/v1\/automations\/preview/);
   assert.match(v[1], /matched_30d[\s\S]*projected_action_count/);
-  assert.match(v[1], /notifications n JOIN outbox_events e[\s\S]*LIMIT 5/);
+  assert.match(v[1], /notificationScopeRelation\(this\.pool\)} n JOIN outbox_events e ON e\.id=n\.source_event_id[\s\S]*LIMIT 5/);
   assert.match(v[4], /试运行并预览影响/);
   assert.match(v[4], /只读，不会创建通知或任务/);
   assert.match(v[4], /tasks\/member-options/);
