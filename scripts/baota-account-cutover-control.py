@@ -115,7 +115,7 @@ if action == 'quiesce':
 
 if action == 'activate':
     # Internal use only, after DB and runtime install evidence from the same release.
-    from urllib.request import urlopen
+    from http.client import HTTPConnection, HTTPException
     release = root / 'config/release.env'
     if release.is_symlink() or not release.is_file():
         raise RuntimeError('account_release_installed_identity_missing')
@@ -128,23 +128,44 @@ if action == 'activate':
             any(before['writers'].values()) or before['node_listener']):
         raise RuntimeError('account_release_activation_not_quiesced')
     panel_action(NodeModel(), 'start_project', 'node')
+    def api_get(route):
+        connection = HTTPConnection('127.0.0.1', 4101, timeout=2)
+        try:
+            connection.request('GET', '/api/v1' + route, headers={'Accept': 'application/json'})
+            response = connection.getresponse()
+            return response.status, json.loads(response.read(65536))
+        finally:
+            connection.close()
+
     deadline = time.monotonic() + 60
     healthy = False
     while time.monotonic() < deadline:
         try:
-            with urlopen('http://127.0.0.1:4101/api/v1/health/version', timeout=2) as response:
-                current = json.load(response).get('data', {}).get('build_sha')
-            with urlopen('http://127.0.0.1:4101/api/v1/health/ready', timeout=2) as response:
-                body = json.load(response)
-                readiness = body.get('data', {}).get('status') or body.get('status')
-            healthy = current == build_sha and readiness in ('ready', 'healthy')
+            version_code, version = api_get('/health/version')
+            ready_code, body = api_get('/health/ready')
+            current = version.get('data', {}).get('build_sha')
+            readiness = body.get('data', {}).get('status') or body.get('status')
+            healthy = version_code == ready_code == 200 and current == build_sha and readiness in ('ready', 'healthy')
             if healthy:
                 break
-        except (OSError, ValueError):
+        except (OSError, ValueError, AttributeError, HTTPException):
             pass
         time.sleep(1)
     if not healthy:
         raise RuntimeError('account_release_new_node_not_ready')
+    # A healthy process with the expected SHA can still be wired in legacy mode.
+    # Check only read endpoints on the fixed Node listener before starting a writer.
+    try:
+        code, session = api_get('/auth/session-status')
+        status = session.get('data', {})
+        if code != 200 or status.get('authenticated') is not False or status.get('account_rehearsal') is not True:
+            raise RuntimeError('account_release_node_scope_unverified')
+        for route in ('/org/memberships', '/org/admin/summary'):
+            code, body = api_get(route)
+            if code != 404 or body.get('error', {}).get('code') != 'route_not_found':
+                raise RuntimeError('account_release_legacy_route_still_registered')
+    except (OSError, ValueError, AttributeError, HTTPException):
+        raise RuntimeError('account_release_node_scope_unverified') from None
     panel_action(PythonModel(), 'StartProject', 'python')
     deadline = time.monotonic() + 30
     after = observe()
@@ -178,7 +199,8 @@ if action == 'resume_baseline':
         after = observe()
 
 print('SCOUTOPS_RESULT=' + json.dumps({'status': True, 'action': action, 'before': before, 'after': after,
-    'backup_tasks': backup_task_status, 'panel_methods': methods}, sort_keys=True))
+    'backup_tasks': backup_task_status, 'panel_methods': methods,
+    **({'account_routes_verified': True} if action == 'activate' else {})}, sort_keys=True))
 '''
 
 

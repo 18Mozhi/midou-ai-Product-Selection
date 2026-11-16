@@ -87,6 +87,22 @@ class CoordinatorTest(unittest.TestCase):
             self.assertNotIn("restore_unchanged_baseline", steps.calls)
             self.assertNotIn("activate", steps.calls)
 
+    def test_failed_account_activation_does_not_record_runtime_ready_or_cleanup(self):
+        steps = Steps(fail="activate")
+        with self.assertRaisesRegex(RuntimeError, "activate"):
+            COORD["coordinate_account_release"](steps)
+        self.assertIn("runtime_installed", steps.calls)
+        self.assertNotIn("runtime_ready", steps.calls)
+        self.assertNotIn("cleanup", steps.calls)
+        self.assertNotIn("restore_unchanged_baseline", steps.calls)
+
+    def test_real_activation_requires_panel_route_proof(self):
+        activate = COORD["BaoTaRelease"].activate
+        for value in ({}, {"account_routes_verified": 1}, {"account_routes_verified": False}):
+            with self.assertRaisesRegex(RuntimeError, "node_scope_proof_missing"):
+                activate(type("Fixture", (), {"_panel": lambda _, action: value})())
+        self.assertIsNone(activate(type("Fixture", (), {"_panel": lambda _, action: {"account_routes_verified": True}})()))
+
     def test_remote_payload_is_python37_parseable_without_executing(self):
         rendered = LOCAL["remote_source"](SCRIPTS, {})
         ast.parse(rendered, feature_version=(3, 7))

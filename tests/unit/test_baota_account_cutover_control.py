@@ -13,7 +13,8 @@ from unittest.mock import patch
 CONTROL = runpy.run_path(str(pathlib.Path(__file__).parents[2] / "scripts/baota-account-cutover-control.py"))
 
 
-def run_panel(action, *, active_backup=False, valid_site=True, installed_sha=None):
+def run_panel(action, *, active_backup=False, valid_site=True, installed_sha=None, scope_flag=True,
+              legacy_code=404, legacy_error='route_not_found', session_code=200):
     root = '/www/wwwroot/ai选品'
     calls = []
     running = {'node': action != 'activate', 'python': action != 'activate'}
@@ -74,10 +75,29 @@ def run_panel(action, *, active_backup=False, valid_site=True, installed_sha=Non
             running['python'] = True
             return {'status': True}
 
-    @contextlib.contextmanager
-    def http(url, timeout):
-        calls.append(url.rsplit('/', 1)[-1])
-        yield io.StringIO(json.dumps({'data': {'build_sha': build, 'status': 'ready'}}))
+    class HTTPConnection:
+        def __init__(self, host, port, timeout):
+            assert (host, port, timeout) == ('127.0.0.1', 4101, 2)
+
+        def request(self, method, path, headers):
+            assert method == 'GET' and headers == {'Accept': 'application/json'}
+            self.path = path
+            calls.append(path.rsplit('/', 1)[-1])
+
+        def getresponse(self):
+            code = 200
+            if self.path.endswith('/session-status'):
+                code = session_code
+                body = {'data': {'authenticated': False, 'account_rehearsal': scope_flag}}
+            elif '/org/' in self.path:
+                code = legacy_code
+                body = {'error': {'code': legacy_error}}
+            else:
+                body = {'data': {'build_sha': build, 'status': 'ready'}}
+            return types.SimpleNamespace(status=code, read=lambda limit: json.dumps(body).encode()[:limit])
+
+        def close(self):
+            pass
 
     @contextlib.contextmanager
     def socket():
@@ -92,7 +112,7 @@ def run_panel(action, *, active_backup=False, valid_site=True, installed_sha=Non
         'socket': types.SimpleNamespace(socket=socket),
         'projectModel.nodejsModel': types.SimpleNamespace(main=Node),
         'projectModel.pythonModel': types.SimpleNamespace(main=Crawler),
-        'urllib.request': types.SimpleNamespace(urlopen=http),
+        'http.client': types.SimpleNamespace(HTTPConnection=HTTPConnection, HTTPException=OSError),
     }
     output = io.StringIO()
     with patch.dict(sys.modules, modules), patch.object(sys, 'path', sys.path.copy()), \
@@ -125,8 +145,23 @@ class PanelControlTest(unittest.TestCase):
     def test_activation_binds_installed_version_and_starts_python_after_node_is_ready(self):
         self.assertEqual(run_panel('activate', installed_sha='b' * 40), ([], 'account_release_installed_identity_mismatch'))
         calls, result = run_panel('activate')
-        self.assertEqual(calls, ['ai选品', 'version', 'ready', 'ai选品-python'])
+        self.assertEqual(calls, ['ai选品', 'version', 'ready', 'session-status', 'memberships', 'summary', 'ai选品-python'])
+        self.assertIs(result['account_routes_verified'], True)
         self.assertEqual(result['after']['writers'], {'node': 1, 'python': 1})
+
+    def test_healthy_runtime_without_positive_scope_proof_does_not_start_python(self):
+        for options in ({'scope_flag': False}, {'scope_flag': 1}, {'session_code': 302}):
+            with self.subTest(options=options):
+                calls, result = run_panel('activate', **options)
+                self.assertEqual(calls, ['ai选品', 'version', 'ready', 'session-status'])
+                self.assertEqual(result, 'account_release_node_scope_unverified')
+
+    def test_healthy_account_runtime_with_live_legacy_route_does_not_start_python(self):
+        for options in ({'legacy_code': 401}, {'legacy_code': 200}, {'legacy_error': 'not_found'}):
+            with self.subTest(options=options):
+                calls, result = run_panel('activate', **options)
+                self.assertEqual(calls, ['ai选品', 'version', 'ready', 'session-status', 'memberships'])
+                self.assertEqual(result, 'account_release_legacy_route_still_registered')
 
 
 if __name__ == '__main__':

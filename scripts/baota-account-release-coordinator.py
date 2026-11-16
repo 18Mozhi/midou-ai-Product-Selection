@@ -268,7 +268,9 @@ try {
             raise
 
     def activate(self):
-        self._panel("activate")
+        result = self._panel("activate")
+        if result.get("account_routes_verified") is not True:
+            raise RuntimeError("account_release_node_scope_proof_missing")
 
     def cleanup(self):
         (self.stage_path / "manifest.json").unlink()
