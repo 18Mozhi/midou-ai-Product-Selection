@@ -130,9 +130,9 @@ for (const [kind,Worker,ruleTable] of [
           const name=/^INSERT INTO (\w+)/.exec(sql)?.[1];
           if(name) writes.push([name,v[0]]);
           if(name==="automatic_selection_evaluations" && native) {
-            assert.match(sql,/a\.account_id=o\.account_id WHERE o\.id=\? AND o\.account_id=\?/);
+            assert.match(sql,/a\.account_id=\? WHERE o\.id=\? AND o\.account_id=a\.account_id/);
             assert.doesNotMatch(sql,/organization_id|workspace_id/);
-            assert.deepEqual(v,[now,now,now,"opportunity",owner]);
+            assert.deepEqual(v,[now,now,now,owner,"opportunity"]);
             nativeRequeues.push(v);
           }
           if(name==="outbox_events" && sql.includes("task.evidence_completion.redecision_ready")) {

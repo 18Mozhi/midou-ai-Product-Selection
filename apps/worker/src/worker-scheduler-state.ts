@@ -2,6 +2,25 @@ import { mkdir, rename, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import type { QueueSchedulerSnapshot } from "./queue-scheduler.js";
 
+export function logWorkerHeartbeat(
+  stopping: boolean,
+  workerId: string,
+  registeredSources: string[],
+  snapshot: QueueSchedulerSnapshot | null,
+  configFingerprint: string,
+) {
+  console.log(JSON.stringify({
+    service: "product-scout-worker",
+    status: stopping ? "stopping" : "idle",
+    worker_id: workerId,
+    registered_sources: registeredSources,
+    registered_queues: snapshot?.queues.map((queue) => queue.name) ?? [],
+    scheduler: snapshot,
+    config_fingerprint: configFingerprint,
+    observed_at: new Date().toISOString(),
+  }));
+}
+
 export class WorkerSchedulerStateWriter {
   private writeChain: Promise<void> = Promise.resolve();
 

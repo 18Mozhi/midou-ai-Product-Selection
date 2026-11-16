@@ -1,5 +1,9 @@
+import { appendAccountOpportunityRecommendationEvent, appendOpportunityEvent, trendRuleScopeRelation } from "@scoutops/database";
+import { appendOpportunityOutbox } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { PoolConnection, RowDataPacket } from "mysql2/promise";
+import { registerCalculationOwners, type CalculationOwnership } from "./opportunity-calculation-ownership.js";
+import { nativeOpportunityStorage } from "./opportunity-storage.js";
 
 interface RuleRecommendationInput {
   organizationId: string;
@@ -10,22 +14,42 @@ interface RuleRecommendationInput {
   requestId: string;
   traceId: string;
   now: Date;
+  ownership?: CalculationOwnership;
 }
 
 export async function refreshRuleRecommendation(
   connection: PoolConnection,
   input: RuleRecommendationInput,
 ) {
+  const owner = input.ownership?.owner;
+  if (!owner && await trendRuleScopeRelation(connection) !== "trend_monitoring_rules") return { changed: false } as const;
+  const nativeOpportunity = owner && await nativeOpportunityStorage(connection);
+  const [nativeOwnerColumns] = owner
+    ? await connection.query<RowDataPacket[]>("SHOW COLUMNS FROM trend_monitoring_rules WHERE Field='account_id'")
+    : [[]];
+  const owned = (source: string, column: string) => input.ownership
+    ? " AND " + (owner ? "" : "NOT ") +
+      `EXISTS (SELECT 1 FROM account_owned_records a WHERE a.source_table='${source}' AND a.source_id=${column}` +
+      (owner ? " AND a.account_id=?" : "") +
+      (source === "opportunities" && nativeOpportunity ? " AND o.account_id=a.account_id" : "") +
+      (source === "trend_monitoring_rules" && nativeOwnerColumns.length ? " AND r.account_id=a.account_id" : "") +
+      ")" : "";
+  const parentScope = owned("opportunities", "o.id") +
+    (owner ? "" : " AND o.organization_id=? AND o.workspace_id=?");
   const [rows] = await connection.query<RowDataPacket[]>(
     "SELECT o.recommendation_status,o.score_rule_version,o.decision_status,o.source_count," +
       "(SELECT MIN(r.recommendation_min_source_count) FROM opportunity_rule_matches m " +
       "JOIN trend_monitoring_rules r ON r.id=m.monitoring_rule_id AND " +
-      "r.organization_id=m.organization_id AND r.workspace_id=m.workspace_id WHERE " +
-      "m.opportunity_id=o.id AND m.organization_id=o.organization_id AND " +
-      "m.workspace_id=o.workspace_id AND r.status='enabled' AND " +
-      "o.source_count>=r.recommendation_min_source_count) matched_threshold " +
-      "FROM opportunities o WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? FOR UPDATE",
-    [input.opportunityId, input.organizationId, input.workspaceId],
+      "r.status='enabled' WHERE m.opportunity_id=o.id AND " +
+      (owner ? "" : "r.organization_id=o.organization_id AND r.workspace_id=o.workspace_id AND ") +
+      "o.source_count>=r.recommendation_min_source_count" +
+      owned("opportunity_rule_matches", "m.id") + owned("trend_monitoring_rules", "r.id") + ") matched_threshold " +
+      "FROM opportunities o WHERE o.id=?" +
+      parentScope +
+      " FOR UPDATE",
+    owner
+      ? [owner.account_id, owner.account_id, input.opportunityId, owner.account_id]
+      : [input.opportunityId, input.organizationId, input.workspaceId],
   );
   const opportunity = rows[0];
   if (
@@ -36,10 +60,16 @@ export async function refreshRuleRecommendation(
     return { changed: false } as const;
   const next = "insufficient_data";
   if (String(opportunity.recommendation_status) === next) return { changed: false } as const;
+  const { organizationId, workspaceId } = input;
   await connection.query(
-    "UPDATE opportunities SET recommendation_status=?,version=version+1,updated_at=? " +
-      "WHERE id=? AND organization_id=? AND workspace_id=?",
-    [next, input.now, input.opportunityId, input.organizationId, input.workspaceId],
+    owner
+      ? "UPDATE opportunities o SET recommendation_status=?,version=version+1,updated_at=? WHERE o.id=?" +
+        parentScope
+      : "UPDATE opportunities SET recommendation_status=?,version=version+1,updated_at=? WHERE id=?" +
+        owned("opportunities", "opportunities.id") + " AND organization_id=? AND workspace_id=?",
+    owner
+      ? [next, input.now, input.opportunityId, owner.account_id]
+      : [next, input.now, input.opportunityId, organizationId, workspaceId],
   );
   const eventId = randomUUID();
   const payload = {
@@ -50,43 +80,40 @@ export async function refreshRuleRecommendation(
       opportunity.matched_threshold == null ? null : Number(opportunity.matched_threshold),
     basis: "monitoring_rule_candidate_threshold",
   };
-  await connection.query(
-    "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type,resource_type," +
-      "resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES " +
-      "(?,?,?,?,?,?,?,?,?,?,?,?)",
-    [
-      eventId,
-      input.organizationId,
-      input.workspaceId,
-      "opportunity.rule_recommendation.changed",
-      "opportunity",
-      input.opportunityId,
-      input.actorType,
-      input.actorId,
-      input.requestId,
-      input.traceId,
-      JSON.stringify(payload),
-      input.now,
-    ],
-  );
-  await connection.query(
-    "INSERT INTO opportunity_outbox (id,organization_id,workspace_id,event_type,resource_type," +
-      "resource_id,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at," +
-      "updated_at) VALUES (?,?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
-    [
-      eventId,
-      input.organizationId,
-      input.workspaceId,
-      "opportunity.rule_recommendation.changed",
-      "opportunity",
-      input.opportunityId,
-      JSON.stringify(payload),
-      input.now,
-      input.requestId,
-      input.traceId,
-      input.now,
-      input.now,
-    ],
-  );
+  if (owner) {
+    await appendAccountOpportunityRecommendationEvent(connection, {
+      id: eventId, opportunityId: input.opportunityId, actorType: input.actorType, actorId: input.actorId,
+      requestId: input.requestId, traceId: input.traceId, payloadJson: JSON.stringify(payload), now: input.now,
+    });
+    await registerCalculationOwners(connection, input.ownership ?? null, [["opportunity_events", eventId], ["opportunity_outbox", eventId]]);
+    return { changed: true, recommendationStatus: next } as const;
+  }
+  await appendOpportunityEvent(connection, {
+    id: eventId,
+    organizationId,
+    workspaceId,
+    eventType: "opportunity.rule_recommendation.changed",
+    resourceType: "opportunity",
+    resourceId: input.opportunityId,
+    actorType: input.actorType,
+    actorId: input.actorId,
+    requestId: input.requestId,
+    traceId: input.traceId,
+    payloadJson: JSON.stringify(payload),
+    occurredAt: input.now,
+  });
+  await appendOpportunityOutbox(connection, {
+    id: eventId,
+    eventId,
+    organizationId,
+    workspaceId,
+    eventType: "opportunity.rule_recommendation.changed",
+    resourceType: "opportunity",
+    resourceId: input.opportunityId,
+    payloadJson: JSON.stringify(payload),
+    createdAt: input.now,
+    requestId: input.requestId,
+    traceId: input.traceId,
+  });
   return { changed: true, recommendationStatus: next } as const;
 }

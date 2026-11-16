@@ -44,7 +44,7 @@ import { MySqlTrendProjectionWorker } from "./trend-projection-worker.js";
 import { WebhookDeliveryWorker } from "./webhook-delivery-worker.js";
 import { assertWorkerDatabaseIsNotRehearsal, WorkerPollers } from "./worker-pollers.js";
 import { workerQueues } from "./worker-queue-registry.js";
-import { WorkerSchedulerStateWriter } from "./worker-scheduler-state.js";
+import { logWorkerHeartbeat, WorkerSchedulerStateWriter } from "./worker-scheduler-state.js";
 
 const config = loadRuntimeConfig(process.env, "worker");
 assertWorkerDatabaseIsNotRehearsal(config.database.name);
@@ -222,23 +222,12 @@ const schedulerStateWriter = new WorkerSchedulerStateWriter(
 );
 let scheduler: QueueScheduler | null = null;
 
-const persistSchedulerState = async () => {
-  if (scheduler) await schedulerStateWriter.writeBestEffort(scheduler.snapshot());
-};
+const persistSchedulerState = () =>
+  scheduler ? schedulerStateWriter.writeBestEffort(scheduler.snapshot()) : Promise.resolve();
 
 const heartbeat = () => {
-  console.log(
-    JSON.stringify({
-      service: "product-scout-worker",
-      status: pollers.isStopping ? "stopping" : "idle",
-      worker_id: config.identity.workerId,
-      registered_sources: registry.describe().map((item) => item.key),
-      registered_queues: scheduler?.snapshot().queues.map((queue) => queue.name) ?? [],
-      scheduler: scheduler?.snapshot() ?? null,
-      config_fingerprint: config.configFingerprint,
-      observed_at: new Date().toISOString(),
-    }),
-  );
+  logWorkerHeartbeat(pollers.isStopping, config.identity.workerId, registry.describe().map((item) => item.key),
+    scheduler?.snapshot() ?? null, config.configFingerprint);
   void persistSchedulerState();
 };
 

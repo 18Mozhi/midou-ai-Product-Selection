@@ -1,4 +1,18 @@
 {
+  "accountOpportunityRefreshOwnership": {
+    "sourceFiles": [
+      "apps/worker/src/opportunity-refresh-worker.ts",
+      "apps/worker/src/rule-recommendation.ts",
+      "apps/worker/src/account-evaluation-enqueue.ts"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-refresh-account-owner.test.mjs",
+      "tests/unit/rule-recommendation.test.mjs",
+      "tests/unit/calculation-result-account-owner.test.mjs"
+    ],
+    "docs": ["docs/runbooks/account-selection-scoring-runtime.md"],
+    "contract": "Refresh keeps existing evidence links and accepts only original source IDs with matching account and native ownership. Link ownership, audit and delivery commit together; a lost lease prevents writes and monitoring rules do not replace versioned scores."
+  },
   "accountCalculationWorkerOwnership": {
     "sourceFiles": [
       "apps/worker/src/opportunity-scoring-worker.ts",

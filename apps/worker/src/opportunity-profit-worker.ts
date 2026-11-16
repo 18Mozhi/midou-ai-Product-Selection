@@ -1,6 +1,6 @@
 import { appendOpportunityEvent } from "@scoutops/database";
 import { appendOpportunityOutbox } from "@scoutops/database";
-import { automaticEvaluationEnqueueUpdateSql } from "@scoutops/database";
+import { queueOwnedSelectionEvaluation } from "./account-evaluation-enqueue.js";
 import { hasLegacyScoreRuleScope } from "./score-rule-scope.js";
 import { nativeOpportunityStorage } from "./opportunity-storage.js";
 import { randomUUID } from "node:crypto";
@@ -202,7 +202,7 @@ export class MySqlOpportunityProfitWorker {
         throw new OpportunityProfitError("cost_rule_unavailable", false);
       const ruleScope = owner ? (legacyRule ? "" : "AND account_id=? ") : "AND organization_id=? AND workspace_id=? ";
       const ruleArgs = owner ? (legacyRule ? [] : [owner.account_id]) : originalScope;
-      const nativeOpportunity = owner && await nativeOpportunityStorage(connection);
+      const nativeOpportunity = !!owner && await nativeOpportunityStorage(connection);
       const [rules] = await connection.query<RowDataPacket[]>(
         "SELECT * FROM cost_rules WHERE id=? " +
           ruleScope +
@@ -418,15 +418,8 @@ export class MySqlOpportunityProfitWorker {
           (owner ? "" : " AND organization_id=? AND workspace_id=?"),
         [status, now, job.opportunityId, ...(owner ? [] : originalScope)],
       );
-      if (owner && nativeOpportunity) {
-        await connection.query(
-          "INSERT INTO automatic_selection_evaluations " +
-            "(opportunity_id,status,attempt_count,available_at,created_at,updated_at) " +
-            "SELECT o.id,'queued',0,?,?,? FROM opportunities o JOIN account_owned_records a " +
-            "ON a.source_table='opportunities' AND a.source_id=o.id AND a.account_id=o.account_id " +
-            "WHERE o.id=? AND o.account_id=? " + automaticEvaluationEnqueueUpdateSql,
-          [now, now, now, job.opportunityId, owner.account_id],
-        );
+      if (owner) {
+        await queueOwnedSelectionEvaluation(connection, job.opportunityId, owner.account_id, nativeOpportunity, now);
       } else {
         await queueAutomaticSelectionEvaluation(connection, {
           organizationId: job.organizationId,
