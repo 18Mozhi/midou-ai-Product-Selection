@@ -42,9 +42,12 @@ export async function automaticSupplyCompletionQuoteValid(
   )
     return true;
   const [opportunityId, organizationId, workspaceId] = parameters;
-  const { linked, detail } = await readAutomaticPrimaryEvidence(connection,
-    { opportunityId: opportunityId!, organizationId: organizationId!, workspaceId: workspaceId!,
-      ...(ownership?.owner ? { accountId: ownership.owner.account_id } : {}) });
+  const { linked, detail } = await readAutomaticPrimaryEvidence(connection, {
+    opportunityId: opportunityId!,
+    organizationId: organizationId!,
+    workspaceId: workspaceId!,
+    ...(ownership?.owner ? { accountId: ownership.owner.account_id } : {}),
+  });
   const primary = primaryProductEvidence(linked, detail);
   const parse = (value: unknown) => (typeof value === "string" ? JSON.parse(value) : value);
   if (!primary) return false;

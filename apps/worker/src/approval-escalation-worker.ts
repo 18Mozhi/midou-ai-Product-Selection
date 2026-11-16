@@ -2,7 +2,11 @@ import { approvalTemplateScopeRelation } from "@scoutops/database";
 import { appendBusinessAudit, appendPlatformAudit } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";
-import { calculationOwnersMatch, registerCalculationOwners, resolveCalculationOwnership } from "./opportunity-calculation-ownership.js";
+import {
+  calculationOwnersMatch,
+  registerCalculationOwners,
+  resolveCalculationOwnership,
+} from "./opportunity-calculation-ownership.js";
 import { readApprovalResourceOwners } from "./approval-resource-lineage.js";
 
 const refusalCodes = new Set([
@@ -50,7 +54,8 @@ export class ApprovalEscalationWorker {
     }
     const x = await this.pool.getConnection();
     const attempt = Number(job.attempt_count) + 1;
-    const finishSql = "UPDATE approval_escalation_jobs SET status='succeeded',lease_owner=NULL,lease_expires_at=NULL,updated_at=? WHERE id=? AND status='leased' AND lease_owner=? AND attempt_count=?";
+    const finishSql =
+      "UPDATE approval_escalation_jobs SET status='succeeded',lease_owner=NULL,lease_expires_at=NULL,updated_at=? WHERE id=? AND status='leased' AND lease_owner=? AND attempt_count=?";
     try {
       await x.beginTransaction();
       const [runs] = await x.query<RowDataPacket[]>(
@@ -71,8 +76,13 @@ export class ApprovalEscalationWorker {
         run.escalated_at
       ) {
         const checkedAt = this.now();
-        const [finished] = await x.query<ResultSetHeader>(finishSql + " AND lease_expires_at>?",
-          [checkedAt, job.id, this.workerId, attempt, checkedAt]);
+        const [finished] = await x.query<ResultSetHeader>(finishSql + " AND lease_expires_at>?", [
+          checkedAt,
+          job.id,
+          this.workerId,
+          attempt,
+          checkedAt,
+        ]);
         if (finished.affectedRows !== 1) throw new Error("approval_escalation_lease_lost");
         await x.commit();
         return {
@@ -81,13 +91,27 @@ export class ApprovalEscalationWorker {
           escalated: false,
         };
       }
-      const ownership = await resolveCalculationOwnership(x, String(job.approval_request_id), "approval_requests");
-      const lineage = ownership?.owner ? await readApprovalResourceOwners(x, run, ownership.owner.account_id) : null;
-      if (ownership && (!ownership.owner || !lineage || !(await calculationOwnersMatch(x, ownership, [
-        ["approval_escalation_jobs", String(job.id)], ["approval_node_runs", String(run.id)],
-        ["approval_templates", String(run.template_id)], ["approval_template_versions", String(run.template_version_id)],
-        ...lineage,
-      ])))) throw new Error("approval_escalation_owner_mismatch");
+      const ownership = await resolveCalculationOwnership(
+        x,
+        String(job.approval_request_id),
+        "approval_requests",
+      );
+      const lineage = ownership?.owner
+        ? await readApprovalResourceOwners(x, run, ownership.owner.account_id)
+        : null;
+      if (
+        ownership &&
+        (!ownership.owner ||
+          !lineage ||
+          !(await calculationOwnersMatch(x, ownership, [
+            ["approval_escalation_jobs", String(job.id)],
+            ["approval_node_runs", String(run.id)],
+            ["approval_templates", String(run.template_id)],
+            ["approval_template_versions", String(run.template_version_id)],
+            ...lineage,
+          ])))
+      )
+        throw new Error("approval_escalation_owner_mismatch");
       const account = Boolean(ownership?.owner);
       let organizationId: string | undefined;
       let workspaceId: string | undefined;
@@ -95,13 +119,17 @@ export class ApprovalEscalationWorker {
         const [columns] = await x.query<RowDataPacket[]>(
           "SHOW COLUMNS FROM outbox_events WHERE Field IN ('organization_id','workspace_id')",
         );
-        const legacyNullable = columns.length === 2 && ["organization_id", "workspace_id"].every(field =>
-          columns.some(column => column.Field === field && column.Null === "YES"));
+        const legacyNullable =
+          columns.length === 2 &&
+          ["organization_id", "workspace_id"].every((field) =>
+            columns.some((column) => column.Field === field && column.Null === "YES"),
+          );
         if (columns.length !== 0 && !legacyNullable)
           throw new Error("approval_account_schema_not_ready");
       } else {
         const templateSource = await approvalTemplateScopeRelation(x);
-        if (templateSource !== "approval_templates") throw new Error("approval_escalation_owner_mismatch");
+        if (templateSource !== "approval_templates")
+          throw new Error("approval_escalation_owner_mismatch");
         const [[scope]] = await x.query<RowDataPacket[]>(
           "SELECT t.organization_id,t.workspace_id FROM approval_requests q JOIN approval_templates t ON t.id=q.template_id WHERE q.id=? FOR UPDATE",
           [job.approval_request_id],
@@ -110,7 +138,8 @@ export class ApprovalEscalationWorker {
         workspaceId = scope?.workspace_id;
         if (!organizationId || !workspaceId) throw new Error("approval_escalation_scope_missing");
       }
-      const actionId = randomUUID(), outboxId = randomUUID();
+      const actionId = randomUUID(),
+        outboxId = randomUUID();
       const [assigned] = await x.query<ResultSetHeader>(
         "UPDATE approval_node_runs SET active_approver_id=escalation_assignee_id,escalated_at=?,version=version+1,updated_at=? " +
           "WHERE id=? AND approval_request_id=? AND status='pending' AND escalated_at IS NULL AND escalation_assignee_id=?",
@@ -134,26 +163,40 @@ export class ApprovalEscalationWorker {
         node_run_id: String(run.id),
         active_approver_id: String(run.escalation_assignee_id),
         reason: "node_sla_overdue",
-        ...(ownership?.owner ? { account_projection_contract: 25, approval_action_id: actionId } : {}),
+        ...(ownership?.owner
+          ? { account_projection_contract: 25, approval_action_id: actionId }
+          : {}),
       };
-      if (account) await appendPlatformAudit(x,
-        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,?,'approval.node.escalated','approval_request',?,'succeeded',?,?,?,?,1)",
-        [randomUUID(), run.escalation_assignee_id, job.approval_request_id, job.request_id, job.trace_id, JSON.stringify(payload), now],
-      );
-      else await appendBusinessAudit(x,
-        "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,'approval.node.escalated','approval_request',?,?,?,?,?,1)",
-        [
-          randomUUID(),
-          organizationId,
-          workspaceId,
-          run.escalation_assignee_id,
-          job.approval_request_id,
-          job.request_id,
-          job.trace_id,
-          JSON.stringify(payload),
-          now,
-        ],
-      );
+      if (account)
+        await appendPlatformAudit(
+          x,
+          "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,?,'approval.node.escalated','approval_request',?,'succeeded',?,?,?,?,1)",
+          [
+            randomUUID(),
+            run.escalation_assignee_id,
+            job.approval_request_id,
+            job.request_id,
+            job.trace_id,
+            JSON.stringify(payload),
+            now,
+          ],
+        );
+      else
+        await appendBusinessAudit(
+          x,
+          "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,'approval.node.escalated','approval_request',?,?,?,?,?,1)",
+          [
+            randomUUID(),
+            organizationId,
+            workspaceId,
+            run.escalation_assignee_id,
+            job.approval_request_id,
+            job.request_id,
+            job.trace_id,
+            JSON.stringify(payload),
+            now,
+          ],
+        );
       await x.query(
         `INSERT INTO outbox_events (id,${account ? "" : "organization_id,workspace_id,"}event_type,schema_version,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at,version) VALUES (?,${account ? "" : "?,?,"}'approval.overdue',1,?,'pending',0,?,?,?,?,?,1)`,
         [
@@ -167,10 +210,18 @@ export class ApprovalEscalationWorker {
           now,
         ],
       );
-      await registerCalculationOwners(x, ownership, [["approval_actions", actionId], ["outbox_events", outboxId]]);
+      await registerCalculationOwners(x, ownership, [
+        ["approval_actions", actionId],
+        ["outbox_events", outboxId],
+      ]);
       const finishedAt = this.now();
-      const [finished] = await x.query<ResultSetHeader>(finishSql + " AND lease_expires_at>?",
-        [finishedAt, job.id, this.workerId, attempt, finishedAt]);
+      const [finished] = await x.query<ResultSetHeader>(finishSql + " AND lease_expires_at>?", [
+        finishedAt,
+        job.id,
+        this.workerId,
+        attempt,
+        finishedAt,
+      ]);
       if (finished.affectedRows !== 1) throw new Error("approval_escalation_lease_lost");
       await x.commit();
       return {

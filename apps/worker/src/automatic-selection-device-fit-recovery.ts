@@ -1,5 +1,8 @@
 import type { Pool, RowDataPacket, ResultSetHeader } from "mysql2/promise";
-import { accountEvaluationRecoverySql, nativeEvaluationRecoverySql } from "./automatic-selection-recovery-evidence.js";
+import {
+  accountEvaluationRecoverySql,
+  nativeEvaluationRecoverySql,
+} from "./automatic-selection-recovery-evidence.js";
 import { selectionCandidateSql } from "@scoutops/database";
 
 export const SUPPLY_DEVICE_FIT_REVISION = "iphone-coupled-device-fit-v1";
@@ -29,30 +32,55 @@ export const deviceFitRecoveryUpdateSql =
   eligible;
 
 /** One revision-bound re-evaluation through ordinary leases; no crawler replay or price rewrite. */
-export async function recoverDeviceFitEvaluations(pool: Pool, now: Date, native = false, accountParent = false) {
-  const [rows] = await pool.query<RowDataPacket[]>(accountParent ? deviceFitAccountRecoverySql.candidates :
-    native ? deviceFitNativeRecoverySql.candidates : deviceFitRecoveryCandidatesSql, [
-    SUPPLY_DEVICE_FIT_REVISION,
-  ]);
+export async function recoverDeviceFitEvaluations(
+  pool: Pool,
+  now: Date,
+  native = false,
+  accountParent = false,
+) {
+  const [rows] = await pool.query<RowDataPacket[]>(
+    accountParent
+      ? deviceFitAccountRecoverySql.candidates
+      : native
+        ? deviceFitNativeRecoverySql.candidates
+        : deviceFitRecoveryCandidatesSql,
+    [SUPPLY_DEVICE_FIT_REVISION],
+  );
   let recovered = 0;
   for (const row of rows) {
-    const [result] = await pool.query<ResultSetHeader>(accountParent ? deviceFitAccountRecoverySql.update :
-      native ? deviceFitNativeRecoverySql.update : deviceFitRecoveryUpdateSql, [
-      SUPPLY_DEVICE_FIT_REVISION,
-      now,
-      now,
-      row.opportunity_id,
-      ...(accountParent ? [SUPPLY_DEVICE_FIT_REVISION, row.account_id] : [row.organization_id, row.workspace_id, SUPPLY_DEVICE_FIT_REVISION,
-        ...(native ? [row.account_id] : [])]),
-    ]);
+    const [result] = await pool.query<ResultSetHeader>(
+      accountParent
+        ? deviceFitAccountRecoverySql.update
+        : native
+          ? deviceFitNativeRecoverySql.update
+          : deviceFitRecoveryUpdateSql,
+      [
+        SUPPLY_DEVICE_FIT_REVISION,
+        now,
+        now,
+        row.opportunity_id,
+        ...(accountParent
+          ? [SUPPLY_DEVICE_FIT_REVISION, row.account_id]
+          : [
+              row.organization_id,
+              row.workspace_id,
+              SUPPLY_DEVICE_FIT_REVISION,
+              ...(native ? [row.account_id] : []),
+            ]),
+      ],
+    );
     recovered += result.affectedRows;
   }
   return recovered;
 }
 
 export const deviceFitNativeRecoverySql = nativeEvaluationRecoverySql(
-  deviceFitRecoveryCandidatesSql, deviceFitRecoveryUpdateSql, selectionCandidateSql,
+  deviceFitRecoveryCandidatesSql,
+  deviceFitRecoveryUpdateSql,
+  selectionCandidateSql,
 );
 export const deviceFitAccountRecoverySql = accountEvaluationRecoverySql(
-  deviceFitRecoveryCandidatesSql, deviceFitRecoveryUpdateSql, selectionCandidateSql,
+  deviceFitRecoveryCandidatesSql,
+  deviceFitRecoveryUpdateSql,
+  selectionCandidateSql,
 );

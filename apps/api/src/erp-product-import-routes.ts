@@ -33,19 +33,38 @@ export function registerErpProductImportRoutes(
       );
     const run = async () => {
       if (options.accountReadRehearsal) {
-        const { accountId } = await authenticatedRehearsalAccount(request, options.auth, options.secureCookie);
-        return options.service.replayAccountImport({actorId: accountId, idempotencyKey: requireIdempotencyKey(request)});
+        const { accountId } = await authenticatedRehearsalAccount(
+          request,
+          options.auth,
+          options.secureCookie,
+        );
+        return options.service.replayAccountImport({
+          actorId: accountId,
+          idempotencyKey: requireIdempotencyKey(request),
+        });
       }
-      const authenticated = await options.auth.authenticate(sessionToken(request, options.secureCookie));
-      const resolved = await options.authorization.resolveSession(authenticated.user.id, authenticated.session.id);
+      const authenticated = await options.auth.authenticate(
+        sessionToken(request, options.secureCookie),
+      );
+      const resolved = await options.authorization.resolveSession(
+        authenticated.user.id,
+        authenticated.session.id,
+      );
       const context = {
         actorId: authenticated.user.id,
         organizationId: resolved.context.organization_id,
         workspaceId: resolved.context.workspace_id,
         ...ids(request),
       };
-      await options.authorization.authorize({ ...context, capability: "opportunity:decide", surface: "api" });
-      return options.service.import(request.body as any, { ...context, idempotencyKey: requireIdempotencyKey(request) });
+      await options.authorization.authorize({
+        ...context,
+        capability: "opportunity:decide",
+        surface: "api",
+      });
+      return options.service.import(request.body as any, {
+        ...context,
+        idempotencyKey: requireIdempotencyKey(request),
+      });
     };
     try {
       const data = await run();

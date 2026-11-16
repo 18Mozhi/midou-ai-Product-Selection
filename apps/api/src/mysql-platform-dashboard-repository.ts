@@ -1,4 +1,12 @@
-import { appendPlatformAudit, appendScopedNotification, automationRuleScopeRelation, hasLegacyCompetitorRuleScope, notificationDeliveryScopeColumns, notificationScopeRelation, realtimeEventScopeColumns } from "@scoutops/database";
+import {
+  appendPlatformAudit,
+  appendScopedNotification,
+  automationRuleScopeRelation,
+  hasLegacyCompetitorRuleScope,
+  notificationDeliveryScopeColumns,
+  notificationScopeRelation,
+  realtimeEventScopeColumns,
+} from "@scoutops/database";
 import { createHash, randomUUID } from "node:crypto";
 import { resolve } from "node:path";
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
@@ -14,58 +22,101 @@ import { readApiCoverageDashboard } from "./api-coverage-dashboard.js";
 const n = (v: any) => Number(v ?? 0),
   iso = (v: any) => (v ? new Date(v).toISOString() : null);
 const platformOwns = (table: string, id: string, account: string) =>
-  "EXISTS (SELECT 1 FROM account_owned_records own WHERE own.source_table='" + table +
-  "' AND own.source_id=" + id + " AND own.account_id=" + account + ")";
+  "EXISTS (SELECT 1 FROM account_owned_records own WHERE own.source_table='" +
+  table +
+  "' AND own.source_id=" +
+  id +
+  " AND own.account_id=" +
+  account +
+  ")";
 
 function accountData(entity: string, filter: string, status: string) {
-  const queries: Record<string, {sql: string; params: string[]}> = {
+  const queries: Record<string, { sql: string; params: string[] }> = {
     trends: {
-      sql: "SELECT t.id,t.title,t.category,t.market,t.status,t.signal_count metric_primary," +
+      sql:
+        "SELECT t.id,t.title,t.category,t.market,t.status,t.signal_count metric_primary," +
         "t.source_count metric_secondary,t.last_seen_at updated_at FROM trend_topics t WHERE " +
-        platformOwns("trend_topics","t.id","t.account_id") +
-        " AND t.title LIKE ? AND t.status LIKE ? ORDER BY t.last_seen_at DESC LIMIT 100", params: [filter,status],
+        platformOwns("trend_topics", "t.id", "t.account_id") +
+        " AND t.title LIKE ? AND t.status LIKE ? ORDER BY t.last_seen_at DESC LIMIT 100",
+      params: [filter, status],
     },
     opportunities: {
-      sql: "SELECT p.id,p.name title,p.category,p.market,p.decision_status status,p.evidence_count " +
+      sql:
+        "SELECT p.id,p.name title,p.category,p.market,p.decision_status status,p.evidence_count " +
         "metric_primary,p.source_count metric_secondary,p.updated_at FROM opportunities p WHERE " +
-        platformOwns("opportunities","p.id","p.account_id") +
-        " AND p.name LIKE ? AND p.decision_status LIKE ? ORDER BY p.updated_at DESC LIMIT 100", params: [filter,status],
+        platformOwns("opportunities", "p.id", "p.account_id") +
+        " AND p.name LIKE ? AND p.decision_status LIKE ? ORDER BY p.updated_at DESC LIMIT 100",
+      params: [filter, status],
     },
     competitors: {
-      sql: "SELECT c.id,c.title,c.source_site category,c.market,c.status,c.revision metric_primary," +
+      sql:
+        "SELECT c.id,c.title,c.source_site category,c.market,c.status,c.revision metric_primary," +
         "COUNT(ch.id) metric_secondary,c.updated_at FROM competitors c LEFT JOIN competitor_changes ch " +
-        "ON ch.competitor_id=c.id AND " + platformOwns("competitor_changes","ch.id","c.account_id") +
-        " WHERE " + platformOwns("competitors","c.id","c.account_id") +
+        "ON ch.competitor_id=c.id AND " +
+        platformOwns("competitor_changes", "ch.id", "c.account_id") +
+        " WHERE " +
+        platformOwns("competitors", "c.id", "c.account_id") +
         " AND c.title LIKE ? AND c.status LIKE ? GROUP BY c.id,c.title,c.source_site,c.market,c.status,c.revision,c.updated_at " +
-        "ORDER BY c.updated_at DESC LIMIT 100", params: [filter,status],
+        "ORDER BY c.updated_at DESC LIMIT 100",
+      params: [filter, status],
     },
     suppliers: {
-      sql: "SELECT s.id,s.product_title title,s.supplier_name category,s.location market,s.status,s.moq metric_primary," +
+      sql:
+        "SELECT s.id,s.product_title title,s.supplier_name category,s.location market,s.status,s.moq metric_primary," +
         "s.quoted_price metric_secondary,s.observed_at updated_at FROM sourcing_candidates s " +
         "JOIN sourcing_searches q ON q.id=s.search_id JOIN collection_tasks task ON task.id=q.collection_task_id WHERE " +
-        platformOwns("sourcing_candidates","s.id","task.account_id") + " AND " +
-        platformOwns("sourcing_searches","q.id","task.account_id") + " AND " +
-        platformOwns("collection_tasks","task.id","task.account_id") +
+        platformOwns("sourcing_candidates", "s.id", "task.account_id") +
+        " AND " +
+        platformOwns("sourcing_searches", "q.id", "task.account_id") +
+        " AND " +
+        platformOwns("collection_tasks", "task.id", "task.account_id") +
         " AND (s.product_title LIKE ? OR s.supplier_name LIKE ?) AND s.status LIKE ? ORDER BY s.observed_at DESC LIMIT 100",
-      params: [filter,filter,status],
+      params: [filter, filter, status],
     },
   };
-  if (!Object.hasOwn(queries,entity)) throw new Error("invalid_platform_data_entity");
+  if (!Object.hasOwn(queries, entity)) throw new Error("invalid_platform_data_entity");
   return queries[entity]!;
 }
 
 function accountGovernance(section: string, filter: string, status: string) {
-  const shapes: Record<string, {fields: string; terms: string[]}> = {
-    score_rules: { fields:"r.id,r.name,r.version_code,r.status,r.revision,r.updated_at", terms:["name","version_code"] },
-    cost_rules: { fields:"r.id,r.name,r.version_code,r.market,r.platform,r.status,r.revision,r.updated_at", terms:["name","version_code","market","platform"] },
-    approval_templates: { fields:"r.id,r.name,r.resource_type,r.status,r.current_version,r.revision,r.updated_at", terms:["name","resource_type"] },
-    automation_rules: { fields:"r.id,r.name,r.trigger_event_type,r.condition_severity,r.action_type,r.owner_id,r.action_assignee_id,r.action_title,r.rate_limit_count,r.rate_limit_window_minutes,r.status,r.version,r.updated_at", terms:["name","trigger_event_type","action_title"] },
+  const shapes: Record<string, { fields: string; terms: string[] }> = {
+    score_rules: {
+      fields: "r.id,r.name,r.version_code,r.status,r.revision,r.updated_at",
+      terms: ["name", "version_code"],
+    },
+    cost_rules: {
+      fields: "r.id,r.name,r.version_code,r.market,r.platform,r.status,r.revision,r.updated_at",
+      terms: ["name", "version_code", "market", "platform"],
+    },
+    approval_templates: {
+      fields: "r.id,r.name,r.resource_type,r.status,r.current_version,r.revision,r.updated_at",
+      terms: ["name", "resource_type"],
+    },
+    automation_rules: {
+      fields:
+        "r.id,r.name,r.trigger_event_type,r.condition_severity,r.action_type,r.owner_id,r.action_assignee_id,r.action_title,r.rate_limit_count,r.rate_limit_window_minutes,r.status,r.version,r.updated_at",
+      terms: ["name", "trigger_event_type", "action_title"],
+    },
   };
-  if (!Object.hasOwn(shapes,section)) throw new Error("invalid_platform_governance_section");
+  if (!Object.hasOwn(shapes, section)) throw new Error("invalid_platform_governance_section");
   const shape = shapes[section]!;
-  const searchable = shape.terms.map(term => "CONVERT(r." + term + " USING utf8mb4) COLLATE utf8mb4_unicode_ci LIKE ?").join(" OR ");
-  const from = " FROM " + section + " r WHERE " + platformOwns(section,"r.id","r.account_id") + " AND (" + searchable + ") AND r.status LIKE ?";
-  return { count:"SELECT COUNT(*) total"+from, select:"SELECT "+shape.fields+from+" ORDER BY r.updated_at DESC,r.id DESC LIMIT ? OFFSET ?", parameters:[...shape.terms.map(()=>filter),status] };
+  const searchable = shape.terms
+    .map((term) => "CONVERT(r." + term + " USING utf8mb4) COLLATE utf8mb4_unicode_ci LIKE ?")
+    .join(" OR ");
+  const from =
+    " FROM " +
+    section +
+    " r WHERE " +
+    platformOwns(section, "r.id", "r.account_id") +
+    " AND (" +
+    searchable +
+    ") AND r.status LIKE ?";
+  return {
+    count: "SELECT COUNT(*) total" + from,
+    select:
+      "SELECT " + shape.fields + from + " ORDER BY r.updated_at DESC,r.id DESC LIMIT ? OFFSET ?",
+    parameters: [...shape.terms.map(() => filter), status],
+  };
 }
 
 export class MySqlPlatformDashboardRepository implements PlatformDashboardRepository {
@@ -177,7 +228,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         "INSERT INTO platform_dashboard_views(id,actor_id,window_code,request_id,trace_id,observed_at) VALUES(?,?,?,?,?,?)",
         [randomUUID(), i.actorId, i.window, i.requestId, i.traceId, now],
       );
-      const auditScopeColumns = this.accountOnly ? "historical_context" : "organization_id,workspace_id";
+      const auditScopeColumns = this.accountOnly
+        ? "historical_context"
+        : "organization_id,workspace_id";
       const auditScopeValues = this.accountOnly ? "NULL" : "NULL,NULL";
       await c.query(
         `INSERT INTO platform_audit_events(id,${auditScopeColumns},actor_id,` +
@@ -423,15 +476,26 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           parameters: [filter, filter, filter, status],
         },
       };
-      const sectionQuery = this.accountOnly && i.section !== "releases"
-        ? accountGovernance(i.section, filter, status)
-        : sectionQueries[i.section]!;
-      const ruleTotal = (table: string) => this.accountOnly
-        ? "(SELECT COUNT(*) FROM "+table+" r WHERE "+platformOwns(table,"r.id","r.account_id")+") "+table
-        : "(SELECT COUNT(*) FROM "+table+") "+table;
+      const sectionQuery =
+        this.accountOnly && i.section !== "releases"
+          ? accountGovernance(i.section, filter, status)
+          : sectionQueries[i.section]!;
+      const ruleTotal = (table: string) =>
+        this.accountOnly
+          ? "(SELECT COUNT(*) FROM " +
+            table +
+            " r WHERE " +
+            platformOwns(table, "r.id", "r.account_id") +
+            ") " +
+            table
+          : "(SELECT COUNT(*) FROM " + table + ") " + table;
       const [[summaryRows], [countRows]] = await Promise.all([
         this.pool.query<RowDataPacket[]>(
-          "SELECT " + ["score_rules","cost_rules","approval_templates","automation_rules"].map(ruleTotal).join(",") + "," +
+          "SELECT " +
+            ["score_rules", "cost_rules", "approval_templates", "automation_rules"]
+              .map(ruleTotal)
+              .join(",") +
+            "," +
             "(SELECT COUNT(*) FROM deployment_releases) releases," +
             "(SELECT COUNT(*) FROM provider_versions) provider_versions," +
             "(SELECT MAX(created_at) FROM provider_versions) provider_versions_latest_at",
@@ -471,12 +535,17 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       };
     }
     if (i.domain === "content") {
-      const topicSource = this.accountOnly ? "trend_topics t" : "trend_topics t JOIN organizations o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id";
+      const topicSource = this.accountOnly
+        ? "trend_topics t"
+        : "trend_topics t JOIN organizations o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id";
       const topicFields = this.accountOnly ? "" : ",o.name organization_name,w.name workspace_name";
-      const accountGuard = this.accountOnly ? " AND "+platformOwns("trend_topics","t.id","t.account_id") : "";
+      const accountGuard = this.accountOnly
+        ? " AND " + platformOwns("trend_topics", "t.id", "t.account_id")
+        : "";
       const searchPredicate =
           "(t.title LIKE ? OR COALESCE(t.category,'') LIKE ? OR " +
-          "CONVERT(t.market USING utf8mb4) COLLATE utf8mb4_unicode_ci LIKE ?)" + accountGuard,
+          "CONVERT(t.market USING utf8mb4) COLLATE utf8mb4_unicode_ci LIKE ?)" +
+          accountGuard,
         searchParameters = [filter, filter, filter],
         [[summaryRows], [filteredRows]] = await Promise.all([
           this.pool.query<RowDataPacket[]>(
@@ -499,7 +568,11 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         offset = (page - 1) * i.pageSize,
         [rows] = await this.pool.query<RowDataPacket[]>(
           "SELECT t.id,t.title,t.category,t.market,t.language,t.status,t.signal_count," +
-            "t.source_count,t.heat_value,t.confidence_status,t.version,t.last_seen_at" + topicFields + " FROM " + topicSource + " WHERE " +
+            "t.source_count,t.heat_value,t.confidence_status,t.version,t.last_seen_at" +
+            topicFields +
+            " FROM " +
+            topicSource +
+            " WHERE " +
             `${searchPredicate} AND t.status LIKE ? ORDER BY t.last_seen_at DESC,t.id LIMIT ? OFFSET ?`,
           [...searchParameters, status, i.pageSize, offset],
         );
@@ -526,13 +599,29 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       };
     }
     if (i.domain === "notifications") {
-      const scopeNames = this.accountOnly ? "NULL organization_name,NULL workspace_name" : "o.name organization_name,w.name workspace_name";
-      const scopeJoins = (alias: string) => this.accountOnly ? "" : " JOIN organizations o ON o.id="+alias+".organization_id JOIN workspaces w ON w.id="+alias+".workspace_id";
-      const notificationSource = this.accountOnly ? "notifications" : await notificationScopeRelation(this.pool);
-      const notificationOrg = this.accountOnly ? "" : " JOIN organizations o ON o.id=n.organization_id";
+      const scopeNames = this.accountOnly
+        ? "NULL organization_name,NULL workspace_name"
+        : "o.name organization_name,w.name workspace_name";
+      const scopeJoins = (alias: string) =>
+        this.accountOnly
+          ? ""
+          : " JOIN organizations o ON o.id=" +
+            alias +
+            ".organization_id JOIN workspaces w ON w.id=" +
+            alias +
+            ".workspace_id";
+      const notificationSource = this.accountOnly
+        ? "notifications"
+        : await notificationScopeRelation(this.pool);
+      const notificationOrg = this.accountOnly
+        ? ""
+        : " JOIN organizations o ON o.id=n.organization_id";
       const notificationWhere = `(n.title LIKE ? OR u.email LIKE ?${this.accountOnly ? "" : " OR o.name LIKE ?"}) AND n.category LIKE ?`;
-      const notificationArgs = this.accountOnly ? [filter, filter, status] : [filter, filter, filter, status];
-      const legacyCompetitorRules = !this.accountOnly && await hasLegacyCompetitorRuleScope(this.pool);
+      const notificationArgs = this.accountOnly
+        ? [filter, filter, status]
+        : [filter, filter, filter, status];
+      const legacyCompetitorRules =
+        !this.accountOnly && (await hasLegacyCompetitorRuleScope(this.pool));
       const [
         [summaryRows],
         [subscriptions],
@@ -854,30 +943,38 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     const [columns] = await db.query<RowDataPacket[]>(
       "SHOW COLUMNS FROM platform_messages WHERE Field IN ('organization_id','historical_context')",
     );
-    const shape = columns.map(row => row.Field).sort().join(",");
+    const shape = columns
+      .map((row) => row.Field)
+      .sort()
+      .join(",");
     if (shape === "historical_context") return true;
     if (shape === "organization_id") return false;
     throw new Error("platform_message_audience_schema_invalid");
   }
   private rejectOrganizationAudience(audience: string) {
-    if (audience === "organization") throw new PlatformDashboardError(
-      "platform_message_organization_audience_retired", 409, "组织受众已移除。历史草稿可取消；新消息请选择具体用户或全部用户。",
-    );
+    if (audience === "organization")
+      throw new PlatformDashboardError(
+        "platform_message_organization_audience_retired",
+        409,
+        "组织受众已移除。历史草稿可取消；新消息请选择具体用户或全部用户。",
+      );
   }
   private async messageManagement(
     kind: "notification" | "email",
     requestedPage = 1,
     pageSize = 100,
   ) {
-    const historical = this.accountOnly || await this.historicalMessageAudience(this.pool);
+    const historical = this.accountOnly || (await this.historicalMessageAudience(this.pool));
     const [[[count]], [organizations], [users]] = await Promise.all([
       this.pool.query<RowDataPacket[]>(
         "SELECT COUNT(*) total FROM platform_messages WHERE kind=?",
         [kind],
       ),
-      historical ? Promise.resolve([[]] as const) : this.pool.query<RowDataPacket[]>(
-        "SELECT id,name FROM organizations WHERE status='active' ORDER BY name LIMIT 200",
-      ),
+      historical
+        ? Promise.resolve([[]] as const)
+        : this.pool.query<RowDataPacket[]>(
+            "SELECT id,name FROM organizations WHERE status='active' ORDER BY name LIMIT 200",
+          ),
       this.pool.query<RowDataPacket[]>(
         "SELECT id,email FROM users WHERE status='active' ORDER BY email LIMIT 500",
       ),
@@ -889,11 +986,13 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       [messages] = await this.pool.query<RowDataPacket[]>(
         "SELECT m.id,m.kind,m.title,m.body,m.category,m.severity,m.audience_type,m.user_id,m.in_app_enabled," +
           "m.email_enabled,m.status,m.version,m.created_by,m.updated_by,m.published_at,m.created_at,m.updated_at," +
-          (historical ? "JSON_UNQUOTE(JSON_EXTRACT(m.historical_context,'$.organization_id')) organization_id," +
-            "JSON_UNQUOTE(JSON_EXTRACT(m.historical_context,'$.organization_name')) organization_name," :
-            "m.organization_id,o.name organization_name,") +
+          (historical
+            ? "JSON_UNQUOTE(JSON_EXTRACT(m.historical_context,'$.organization_id')) organization_id," +
+              "JSON_UNQUOTE(JSON_EXTRACT(m.historical_context,'$.organization_name')) organization_name,"
+            : "m.organization_id,o.name organization_name,") +
           "u.email user_email,creator.email created_by_email FROM platform_messages m " +
-          (historical ? "" : "LEFT JOIN organizations o ON o.id=m.organization_id ") + "LEFT JOIN " +
+          (historical ? "" : "LEFT JOIN organizations o ON o.id=m.organization_id ") +
+          "LEFT JOIN " +
           "users u ON u.id=m.user_id JOIN users creator ON creator.id=m.created_by WHERE m.kind=? " +
           "ORDER BY m.updated_at DESC,m.id DESC LIMIT ? OFFSET ?",
         [kind, pageSize, offset],
@@ -951,13 +1050,23 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     if (this.accountOnly) {
       await c.query(
         "INSERT INTO platform_audit_events(id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) " +
-        "VALUES (?,?,?,'platform_message',?,'succeeded',?,?,?,?,1)",
-        [randomUUID(), i.actorId, action, resourceId, i.requestId, i.traceId, JSON.stringify(metadata), i.now],
+          "VALUES (?,?,?,'platform_message',?,'succeeded',?,?,?,?,1)",
+        [
+          randomUUID(),
+          i.actorId,
+          action,
+          resourceId,
+          i.requestId,
+          i.traceId,
+          JSON.stringify(metadata),
+          i.now,
+        ],
       );
       return;
     }
-    await appendPlatformAudit(c,
-        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+    await appendPlatformAudit(
+      c,
+      "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
         "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
         "schema_version) VALUES(?,NULL,NULL,? ,?,'platform_message',?,'succeeded'," +
         "?,?,?,?,1)",
@@ -984,7 +1093,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       }
       const id = randomUUID(),
         v = i.value;
-      const historical = this.accountOnly || await this.historicalMessageAudience(c);
+      const historical = this.accountOnly || (await this.historicalMessageAudience(c));
       if (historical) this.rejectOrganizationAudience(v.audience_type);
       await c.query(
         "INSERT INTO platform_messages(id,kind,title,body,category,severity,audience_type," +
@@ -1059,7 +1168,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         );
       const v = i.value,
         version = i.expectedVersion + 1;
-      const historical = this.accountOnly || await this.historicalMessageAudience(c);
+      const historical = this.accountOnly || (await this.historicalMessageAudience(c));
       if (historical) {
         this.rejectOrganizationAudience(rows[0].audience_type);
         this.rejectOrganizationAudience(v.audience_type);
@@ -1153,12 +1262,23 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         await c.commit();
         return result;
       }
-      if (message.audience_type === "organization" && (this.accountOnly || await this.historicalMessageAudience(c)))
+      if (
+        message.audience_type === "organization" &&
+        (this.accountOnly || (await this.historicalMessageAudience(c)))
+      )
         this.rejectOrganizationAudience(message.audience_type);
       if (this.accountOnly && !["user", "all_users"].includes(message.audience_type))
-        throw new PlatformDashboardError("platform_message_audience_invalid", 400, "请选择具体用户或全部用户。");
+        throw new PlatformDashboardError(
+          "platform_message_audience_invalid",
+          400,
+          "请选择具体用户或全部用户。",
+        );
       if (this.accountOnly && !message.in_app_enabled)
-        throw new PlatformDashboardError("platform_message_channel_required", 400, "请选择站内通知。");
+        throw new PlatformDashboardError(
+          "platform_message_channel_required",
+          400,
+          "请选择站内通知。",
+        );
       const args: any[] = [];
       let target = "";
       let earlierScope = "";
@@ -1173,7 +1293,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       }
       const [recipients] = await c.query<RowDataPacket[]>(
         this.accountOnly
-          ? "SELECT u.id user_id FROM users u WHERE u.status='active' " + target + " ORDER BY u.email LOCK IN SHARE MODE"
+          ? "SELECT u.id user_id FROM users u WHERE u.status='active' " +
+              target +
+              " ORDER BY u.email LOCK IN SHARE MODE"
           : `SELECT u.id user_id,m.organization_id,o.default_workspace_id workspace_id
          FROM users u
          JOIN memberships m ON m.user_id=u.id AND m.status='active'
@@ -1197,9 +1319,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           409,
           "目标范围没有可接收消息的活动用户。",
         );
-      const legacyDelivery = !this.accountOnly && (message.in_app_enabled || message.email_enabled) &&
-        await notificationDeliveryScopeColumns(c);
-      const legacyRealtime = !this.accountOnly && message.in_app_enabled && await realtimeEventScopeColumns(c);
+      const legacyDelivery =
+        !this.accountOnly &&
+        (message.in_app_enabled || message.email_enabled) &&
+        (await notificationDeliveryScopeColumns(c));
+      const legacyRealtime =
+        !this.accountOnly && message.in_app_enabled && (await realtimeEventScopeColumns(c));
       let inAppCount = 0,
         emailCount = 0;
       for (const recipient of recipients) {
@@ -1227,35 +1352,49 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
             i.now,
           ],
         );
-        if (this.accountOnly) await c.query(
-          "INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES ('outbox_events',?,?,'exclusive_owner')",
-          [eventId, recipient.user_id],
-        );
-        if (this.accountOnly) await c.query(
-          "INSERT INTO notifications(id,recipient_id,source_event_id,category,severity,title,body,resource_type,resource_id,read_at,version,created_at,updated_at) " +
-          "VALUES(?,?,?,?,?,?,?,'platform_message',?,NULL,1,?,?)",
-          [notificationId, recipient.user_id, eventId, message.category, message.severity, message.title,
-            message.body, i.messageId, i.now, i.now],
-        );
-        else await appendScopedNotification(c,
-          "INSERT INTO notifications(id,organization_id,workspace_id,recipient_id,source_event_id," +
-            "category,severity,title,body,resource_type,resource_id,read_at,version,created_at," +
-            "updated_at) VALUES(?,?,?,?,?,?,?,?,?,'platform_message',?,NULL,1,?,?)",
-          [
-            notificationId,
-            recipient.organization_id,
-            recipient.workspace_id,
-            recipient.user_id,
-            eventId,
-            message.category,
-            message.severity,
-            message.title,
-            message.body,
-            i.messageId,
-            i.now,
-            i.now,
-          ],
-        );
+        if (this.accountOnly)
+          await c.query(
+            "INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES ('outbox_events',?,?,'exclusive_owner')",
+            [eventId, recipient.user_id],
+          );
+        if (this.accountOnly)
+          await c.query(
+            "INSERT INTO notifications(id,recipient_id,source_event_id,category,severity,title,body,resource_type,resource_id,read_at,version,created_at,updated_at) " +
+              "VALUES(?,?,?,?,?,?,?,'platform_message',?,NULL,1,?,?)",
+            [
+              notificationId,
+              recipient.user_id,
+              eventId,
+              message.category,
+              message.severity,
+              message.title,
+              message.body,
+              i.messageId,
+              i.now,
+              i.now,
+            ],
+          );
+        else
+          await appendScopedNotification(
+            c,
+            "INSERT INTO notifications(id,organization_id,workspace_id,recipient_id,source_event_id," +
+              "category,severity,title,body,resource_type,resource_id,read_at,version,created_at," +
+              "updated_at) VALUES(?,?,?,?,?,?,?,?,?,'platform_message',?,NULL,1,?,?)",
+            [
+              notificationId,
+              recipient.organization_id,
+              recipient.workspace_id,
+              recipient.user_id,
+              eventId,
+              message.category,
+              message.severity,
+              message.title,
+              message.body,
+              i.messageId,
+              i.now,
+              i.now,
+            ],
+          );
         if (message.in_app_enabled) {
           await c.query(
             `INSERT INTO notification_deliveries(id,${legacyDelivery ? "organization_id,workspace_id," : ""}notification_id,recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES(${legacyDelivery ? "?,?," : ""}?,?,?,'in_app','delivered',1,?,?)`,
@@ -1333,41 +1472,72 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       await c.beginTransaction();
       const [topics] = await c.query<RowDataPacket[]>(
         "SELECT t.id,t.status,t.version,t.account_id,o.reason FROM trend_topics t " +
-        "JOIN account_owned_records o ON o.source_table = 'trend_topics' AND o.source_id=t.id AND o.account_id=t.account_id " +
-        "WHERE t.id=? FOR UPDATE", [i.topicId],
+          "JOIN account_owned_records o ON o.source_table = 'trend_topics' AND o.source_id=t.id AND o.account_id=t.account_id " +
+          "WHERE t.id=? FOR UPDATE",
+        [i.topicId],
       );
       const topic = topics[0];
-      if (!topic) throw new PlatformDashboardError("trend_topic_not_found", 404, "刷新内容列表后重试。");
-      const signature = JSON.stringify([i.topicId,i.status,i.expectedVersion,i.reason]);
+      if (!topic)
+        throw new PlatformDashboardError("trend_topic_not_found", 404, "刷新内容列表后重试。");
+      const signature = JSON.stringify([i.topicId, i.status, i.expectedVersion, i.reason]);
       const [receipts] = await c.query<RowDataPacket[]>(
         "SELECT resource_id,result_json FROM platform_management_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",
-        [i.actorId,i.route,i.idempotencyKey],
+        [i.actorId, i.route, i.idempotencyKey],
       );
       const receipt = receipts[0];
       if (receipt) {
-        const saved = typeof receipt.result_json === "string" ? JSON.parse(receipt.result_json) : receipt.result_json;
-        if (receipt.resource_id !== i.topicId || saved?.id !== i.topicId || saved?.idempotency_signature !== signature)
-          throw new PlatformDashboardError("idempotency_key_reused",409,"此 Idempotency-Key 已用于不同的情报审核。");
+        const saved =
+          typeof receipt.result_json === "string"
+            ? JSON.parse(receipt.result_json)
+            : receipt.result_json;
+        if (
+          receipt.resource_id !== i.topicId ||
+          saved?.id !== i.topicId ||
+          saved?.idempotency_signature !== signature
+        )
+          throw new PlatformDashboardError(
+            "idempotency_key_reused",
+            409,
+            "此 Idempotency-Key 已用于不同的情报审核。",
+          );
         await c.commit();
-        return {id:saved.id,status:saved.status,version:saved.version};
+        return { id: saved.id, status: saved.status, version: saved.version };
       }
       if (Number(topic.version) !== i.expectedVersion)
-        throw new PlatformDashboardError("trend_topic_version_conflict",409,"内容已被其他管理员修改，刷新后重试。");
-      const version=Number(topic.version)+1, eventId=randomUUID();
-      const [update] = await c.query<ResultSetHeader>("UPDATE trend_topics SET status=?,version=?,updated_at=? WHERE id=? AND account_id=? AND version=?",
-        [i.status,version,i.now,i.topicId,topic.account_id,i.expectedVersion]);
-      if (update.affectedRows!==1) throw new Error("account_trend_update_not_applied");
-      const payload=JSON.stringify({from_status:topic.status,to_status:i.status,reason:i.reason,version});
-      await c.query("INSERT INTO trend_events(id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) " +
-        "VALUES (?,'trend.topic.moderated','trend_topic',?,'user',?,?,?,?,?)",
-        [eventId,i.topicId,i.actorId,i.requestId,i.traceId,payload,i.now]);
-      await c.query("INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES ('trend_events',?,?,?)",
-        [eventId,topic.account_id,topic.reason]);
-      const result={id:i.topicId,status:i.status,version};
-      await this.saveOperation(c,i,i.topicId,{...result,idempotency_signature:signature});
-      await c.query("INSERT INTO platform_audit_events(id,historical_context,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) " +
-        "VALUES(?,NULL,?,'trend.topic.moderated','trend_topic',?,'succeeded',?,?,?,?,1)",
-        [randomUUID(),i.actorId,i.topicId,i.requestId,i.traceId,payload,i.now]);
+        throw new PlatformDashboardError(
+          "trend_topic_version_conflict",
+          409,
+          "内容已被其他管理员修改，刷新后重试。",
+        );
+      const version = Number(topic.version) + 1,
+        eventId = randomUUID();
+      const [update] = await c.query<ResultSetHeader>(
+        "UPDATE trend_topics SET status=?,version=?,updated_at=? WHERE id=? AND account_id=? AND version=?",
+        [i.status, version, i.now, i.topicId, topic.account_id, i.expectedVersion],
+      );
+      if (update.affectedRows !== 1) throw new Error("account_trend_update_not_applied");
+      const payload = JSON.stringify({
+        from_status: topic.status,
+        to_status: i.status,
+        reason: i.reason,
+        version,
+      });
+      await c.query(
+        "INSERT INTO trend_events(id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) " +
+          "VALUES (?,'trend.topic.moderated','trend_topic',?,'user',?,?,?,?,?)",
+        [eventId, i.topicId, i.actorId, i.requestId, i.traceId, payload, i.now],
+      );
+      await c.query(
+        "INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES ('trend_events',?,?,?)",
+        [eventId, topic.account_id, topic.reason],
+      );
+      const result = { id: i.topicId, status: i.status, version };
+      await this.saveOperation(c, i, i.topicId, { ...result, idempotency_signature: signature });
+      await c.query(
+        "INSERT INTO platform_audit_events(id,historical_context,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) " +
+          "VALUES(?,NULL,?,'trend.topic.moderated','trend_topic',?,'succeeded',?,?,?,?,1)",
+        [randomUUID(), i.actorId, i.topicId, i.requestId, i.traceId, payload, i.now],
+      );
       await c.commit();
       return result;
     } catch (e) {
@@ -1615,9 +1785,13 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     const scopeCols = this.accountOnly ? "historical_context" : "organization_id,workspace_id";
     const scopeVals = this.accountOnly ? "NULL" : "NULL,NULL";
     await this.pool.query(
-      "INSERT INTO platform_audit_events(id," + scopeCols + ",actor_id," +
+      "INSERT INTO platform_audit_events(id," +
+        scopeCols +
+        ",actor_id," +
         "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
-        "schema_version) VALUES(?," + scopeVals + ",?,'platform.data.export','platform_data'," +
+        "schema_version) VALUES(?," +
+        scopeVals +
+        ",?,'platform.data.export','platform_data'," +
         "NULL,'succeeded',?,?,?,?,1)",
       [
         randomUUID(),

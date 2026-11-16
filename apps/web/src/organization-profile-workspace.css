@@ -196,7 +196,10 @@
   background: var(--so-panel);
   color: var(--so-text);
 }
-#app .organization-profile-fields .organization-profile-actions > button[type="reset"]:hover:not(:disabled) {
+#app
+  .organization-profile-fields
+  .organization-profile-actions
+  > button[type="reset"]:hover:not(:disabled) {
   background: var(--so-panel-soft);
 }
 .organization-profile-reason {
@@ -485,7 +488,10 @@
     row-gap: 15px;
     column-gap: 32px;
   }
-  html[data-design="commerce"] #app .organization-profile-editor .organization-profile-fields
+  html[data-design="commerce"]
+    #app
+    .organization-profile-editor
+    .organization-profile-fields
     :is(input, select, textarea):not(:focus):not(:user-invalid):not(:disabled) {
     border-color: color-mix(in srgb, var(--so-border-strong) 78%, var(--so-border));
   }
@@ -611,8 +617,11 @@
   #app .midou-governance-side > section:has(.midou-governance-status) {
     padding-block: 10px 18px;
   }
-  html[data-design="commerce"] #app .org-admin-center--profile-review
-    > header[data-profile-overview="true"] .org-admin-refresh {
+  html[data-design="commerce"]
+    #app
+    .org-admin-center--profile-review
+    > header[data-profile-overview="true"]
+    .org-admin-refresh {
     column-gap: 20px;
     position: relative;
     inset-block-start: -5px;
@@ -621,7 +630,10 @@
     position: relative;
     inset-block-start: -8px;
   }
-  #app .org-admin-center--profile-review > header[data-profile-overview="true"] .org-overview-description {
+  #app
+    .org-admin-center--profile-review
+    > header[data-profile-overview="true"]
+    .org-overview-description {
     position: relative;
     inset-block-start: -4px;
   }
@@ -644,7 +656,10 @@
 }
 
 @media (min-width: 1536px) {
-  html[data-design="commerce"] #app .org-admin-center--profile-review > header[data-profile-overview="true"] {
+  html[data-design="commerce"]
+    #app
+    .org-admin-center--profile-review
+    > header[data-profile-overview="true"] {
     padding-inline-end: 4px;
   }
   html[data-design="commerce"] #app .organization-profile-facts > dl {

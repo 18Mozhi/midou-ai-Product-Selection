@@ -32,12 +32,18 @@ export class ScopedRedisCollectionCoordinator implements CollectionQueueCoordina
     const payload = { task_id: task.id, request_id: task.requestId, trace_id: task.traceId };
     if (task.accountId !== undefined) {
       await this.store.writeAccountCollectionSignal(
-        { account_id: task.accountId, resource: "collection-ready", task_id: task.id }, payload,
+        { account_id: task.accountId, resource: "collection-ready", task_id: task.id },
+        payload,
       );
       return;
     }
     await this.store.writeJson(
-      { ...this.scope(task), purpose: "queue", resource: "collection-ready", identifiers: [task.id] },
+      {
+        ...this.scope(task),
+        purpose: "queue",
+        resource: "collection-ready",
+        identifiers: [task.id],
+      },
       payload,
     );
   }

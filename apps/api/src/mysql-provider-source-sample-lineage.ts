@@ -11,11 +11,13 @@ export const sampleArtifactProof =
 
 export const lockNativeParserSampleEvidence =
   "SELECT j.id,j.result_json FROM browser_collection_jobs j " +
-  "JOIN collection_tasks job_task ON job_task.id=j.collection_task_id " + sampleAccountJoins +
+  "JOIN collection_tasks job_task ON job_task.id=j.collection_task_id " +
+  sampleAccountJoins +
   "WHERE j.id=? AND j.provider_id=? AND job_task.account_id=? AND j.status='succeeded' " +
   "AND JSON_EXTRACT(j.result_json,'$.snapshots') IS NOT NULL " +
   "AND EXISTS (SELECT 1 FROM browser_evidence_artifacts a " +
   "JOIN account_owned_records oa ON oa.source_table='browser_evidence_artifacts' AND oa.source_id=a.id " +
   "WHERE a.browser_job_id=j.id AND a.status='active' AND oa.account_id=job_task.account_id AND " +
-  sampleArtifactProof + "GROUP BY a.browser_job_id HAVING COUNT(DISTINCT a.kind)=2 " +
+  sampleArtifactProof +
+  "GROUP BY a.browser_job_id HAVING COUNT(DISTINCT a.kind)=2 " +
   "AND COUNT(DISTINCT a.parser_version)=1 AND MIN(a.parser_version)=?) FOR UPDATE";

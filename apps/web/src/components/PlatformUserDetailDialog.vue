@@ -56,7 +56,9 @@ function scrollToSection(section: "memberships" | "roles" | "security") {
           <span class="user-detail-status">{{ statusText(detail.user.status) }}</span>
         </div>
         <nav aria-label="账号详情分区">
-          <button v-if="!accountRehearsal" type="button" @click="scrollToSection('memberships')">组织关系</button>
+          <button v-if="!accountRehearsal" type="button" @click="scrollToSection('memberships')">
+            组织关系
+          </button>
           <button type="button" @click="scrollToSection('roles')">平台权限</button>
           <button type="button" @click="scrollToSection('security')">登录安全</button>
         </nav>
@@ -131,7 +133,13 @@ function scrollToSection(section: "memberships" | "roles" | "security") {
             <header>
               <div>
                 <h4 id="user-detail-platform-roles-title">平台权限</h4>
-                <p>{{ accountRehearsal ? "以当前账号的平台角色记录为准。" : "平台角色与组织成员角色彼此独立，以当前账号记录为准。" }}</p>
+                <p>
+                  {{
+                    accountRehearsal
+                      ? "以当前账号的平台角色记录为准。"
+                      : "平台角色与组织成员角色彼此独立，以当前账号记录为准。"
+                  }}
+                </p>
               </div>
               <strong>{{ currentRoles().length }} 项</strong>
             </header>

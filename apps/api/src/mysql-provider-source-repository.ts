@@ -75,8 +75,12 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
     const c = await this.pool.getConnection();
     try {
       await c.beginTransaction();
-      if (await collectionTaskScope(c) === "account")
-        throw new ProviderSourceServiceError("provider_source_legacy_scope_retired", 409, "使用账号的采集任务入口。");
+      if ((await collectionTaskScope(c)) === "account")
+        throw new ProviderSourceServiceError(
+          "provider_source_legacy_scope_retired",
+          409,
+          "使用账号的采集任务入口。",
+        );
       const replayed = await this.operationReplay(c, input);
       if (replayed) {
         await c.commit();
@@ -169,8 +173,14 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
         ],
       );
       await appendCollectionSubquery(c, {
-        id: input.subqueryId, taskId: input.taskId, providerId: input.providerId, ordinal: 1,
-        targetJson: JSON.stringify(input.target), required: true, status: "pending", now: input.now,
+        id: input.subqueryId,
+        taskId: input.taskId,
+        providerId: input.providerId,
+        ordinal: 1,
+        targetJson: JSON.stringify(input.target),
+        required: true,
+        status: "pending",
+        now: input.now,
       });
       await appendProviderSourceReplayRun(c, { ...input, sourceCode: String(provider.code) });
       await c.query(
@@ -256,8 +266,12 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
     const c = await this.pool.getConnection();
     try {
       await c.beginTransaction();
-      if (await collectionTaskScope(c) === "account")
-        throw new ProviderSourceServiceError("provider_source_legacy_scope_retired", 409, "使用账号的采集任务入口。");
+      if ((await collectionTaskScope(c)) === "account")
+        throw new ProviderSourceServiceError(
+          "provider_source_legacy_scope_retired",
+          409,
+          "使用账号的采集任务入口。",
+        );
       const [previous] = await c.query<RowDataPacket[]>(
         "SELECT task_id,source_count FROM provider_refresh_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",
         [input.actorId, input.route, input.idempotencyKey],
@@ -321,8 +335,14 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
       for (let index = 0; index < providers.length; index++) {
         const provider = providers[index]!;
         await appendCollectionSubquery(c, {
-          id: randomUUID(), taskId, providerId: String(provider.id), ordinal: index + 1,
-          targetJson: "{}", required: false, status: "pending", now: input.now,
+          id: randomUUID(),
+          taskId,
+          providerId: String(provider.id),
+          ordinal: index + 1,
+          targetJson: "{}",
+          required: false,
+          status: "pending",
+          now: input.now,
         });
       }
       await c.query(
@@ -391,7 +411,10 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
       c.release();
     }
   }
-  private async operationReplay(c: PoolConnection, input: Parameters<ProviderSourceRepository["replay"]>[0]) {
+  private async operationReplay(
+    c: PoolConnection,
+    input: Parameters<ProviderSourceRepository["replay"]>[0],
+  ) {
     const [rows] = await c.query<RowDataPacket[]>(
       [
         "SELECT r.*,t.organization_id AS task_organization_id,t.workspace_id AS task_workspace_id ",
@@ -402,9 +425,17 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
     );
     const row = rows[0];
     if (!row) return null;
-    if (row.task_organization_id !== input.organizationId || row.task_workspace_id !== input.workspaceId ||
-      row.provider_id !== input.providerId || row.input_sha256 !== input.inputSha256)
-      throw new ProviderSourceServiceError("provider_source_replay_scope_conflict", 409, "为新重放生成新的幂等键。");
+    if (
+      row.task_organization_id !== input.organizationId ||
+      row.task_workspace_id !== input.workspaceId ||
+      row.provider_id !== input.providerId ||
+      row.input_sha256 !== input.inputSha256
+    )
+      throw new ProviderSourceServiceError(
+        "provider_source_replay_scope_conflict",
+        409,
+        "为新重放生成新的幂等键。",
+      );
     return providerSourceReplayFromRow(row);
   }
 }

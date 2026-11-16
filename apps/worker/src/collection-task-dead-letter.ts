@@ -43,11 +43,11 @@ export async function recoverExpiredCollectionTasks(
   actorId = "collection-scheduler",
   admission?: PoolConnection,
 ) {
-  const c = admission ?? await context.pool.getConnection();
+  const c = admission ?? (await context.pool.getConnection());
   let recovered = 0;
   try {
     await c.beginTransaction();
-    const account = await collectionTaskScope(c) === "account";
+    const account = (await collectionTaskScope(c)) === "account";
     const recoveryScope = account
       ? "account_id=? AND EXISTS (SELECT 1 FROM account_owned_records o " +
         "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
@@ -63,7 +63,8 @@ export async function recoverExpiredCollectionTasks(
       [rows] = await c.query<RowDataPacket[]>(sql, context.taskId ? [now, context.taskId] : [now]);
     for (const candidate of rows) {
       const [locked] = await c.query<RowDataPacket[]>(
-        "SELECT * FROM collection_tasks WHERE id=? AND " + recoveryScope +
+        "SELECT * FROM collection_tasks WHERE id=? AND " +
+          recoveryScope +
           "AND status IN ('leased','running') AND lease_expires_at<=? FOR UPDATE",
         [candidate.id, ...coordinates(candidate), now],
       );
@@ -125,7 +126,8 @@ export async function recoverExpiredCollectionTasks(
       );
     for (const candidate of overflowRows) {
       const [locked] = await c.query<RowDataPacket[]>(
-        "SELECT * FROM collection_tasks WHERE id=? AND " + recoveryScope +
+        "SELECT * FROM collection_tasks WHERE id=? AND " +
+          recoveryScope +
           "AND status='queued' AND attempt_count>=4 FOR UPDATE",
         [candidate.id, ...coordinates(candidate)],
       );

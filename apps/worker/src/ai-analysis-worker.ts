@@ -204,7 +204,9 @@ export class MySqlAiAnalysisWorker {
         "SELECT q.*,o.organization_id parent_org,o.workspace_id parent_workspace FROM ai_analysis_requests q " +
           "JOIN opportunities o ON o.id=q.opportunity_id WHERE q.status IN ('queued','retry_scheduled','leased') " +
           "AND q.available_at<=? AND (q.lease_expires_at IS NULL OR q.lease_expires_at<=?) " +
-          (legacy ? "AND q.organization_id=o.organization_id AND q.workspace_id=o.workspace_id " : "") +
+          (legacy
+            ? "AND q.organization_id=o.organization_id AND q.workspace_id=o.workspace_id "
+            : "") +
           "ORDER BY q.created_at,q.id LIMIT 1 FOR UPDATE",
         [now, now],
       );
@@ -271,9 +273,16 @@ export class MySqlAiAnalysisWorker {
         review_status: "pending",
       };
       await appendAiAnalysisDelivery(c, {
-        id: event, type: "ai.analysis.completed", resourceId: resultId,
-        actorId: this.workerId, payload, requestId: j.request, traceId: j.trace,
-        organizationId: j.org, workspaceId: j.ws, now,
+        id: event,
+        type: "ai.analysis.completed",
+        resourceId: resultId,
+        actorId: this.workerId,
+        payload,
+        requestId: j.request,
+        traceId: j.trace,
+        organizationId: j.org,
+        workspaceId: j.ws,
+        now,
       });
       await c.commit();
       return { result_id: resultId, review_status: "pending" };

@@ -1,5 +1,10 @@
 import { appendPlatformAudit } from "@scoutops/database";
-import { appendCollectionSubquery, collectionTaskScope, fileAssetAccountStorage, sourcingSearchHasLegacyScope } from "@scoutops/database";
+import {
+  appendCollectionSubquery,
+  collectionTaskScope,
+  fileAssetAccountStorage,
+  sourcingSearchHasLegacyScope,
+} from "@scoutops/database";
 import { createHash, randomUUID } from "node:crypto";
 import { relative, resolve, sep } from "node:path";
 import { rm } from "node:fs/promises";
@@ -214,7 +219,8 @@ export class ErpProductImportService {
         return replay;
       }
       // This retired org-scoped importer cannot assign newly created tasks/evidence to accounts.
-      if (await fileAssetAccountStorage(connection)) throw new Error("legacy_erp_import_retired_for_account_storage");
+      if (await fileAssetAccountStorage(connection))
+        throw new Error("legacy_erp_import_retired_for_account_storage");
       const [operationColumns] = await connection.query<RowDataPacket[]>(
         "SHOW COLUMNS FROM erp_product_import_operations WHERE Field IN ('organization_id','workspace_id')",
       );
@@ -320,7 +326,8 @@ export class ErpProductImportService {
           now,
         ],
       );
-      await appendPlatformAudit(connection,
+      await appendPlatformAudit(
+        connection,
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,?,?,?, 'erp.products.imported','collection_task',?,'succeeded',?,?,?,?,1)",
         [
           randomUUID(),
@@ -350,12 +357,18 @@ export class ErpProductImportService {
     try {
       await c.beginTransaction();
       await requireAccountReadRehearsal(c, { lockForTransaction: true });
-      const native = await collectionTaskScope(c) === "account";
+      const native = (await collectionTaskScope(c)) === "account";
       const [[row]] = await c.query<RowDataPacket[]>(accountErpImportReplaySql(native), [
-        context.actorId, context.idempotencyKey,
+        context.actorId,
+        context.idempotencyKey,
       ]);
       if (!row)
-        throw new ApiError(503, "erp_account_import_not_ready", "账号模式暂不接收新的 ERP 导入。", "已有导入可从原采集任务查看。");
+        throw new ApiError(
+          503,
+          "erp_account_import_not_ready",
+          "账号模式暂不接收新的 ERP 导入。",
+          "已有导入可从原采集任务查看。",
+        );
       if (Number(row.owned) !== 1) throw new Error("erp_product_import_idempotency_conflict");
       const result = this.readReplayResult(row);
       await c.commit();
@@ -415,7 +428,14 @@ export class ErpProductImportService {
       ],
     );
     await appendCollectionSubquery(c, {
-      id: subqueryId, taskId, providerId, ordinal: 1, required: true, status: "running", startedAt: now, now,
+      id: subqueryId,
+      taskId,
+      providerId,
+      ordinal: 1,
+      required: true,
+      status: "running",
+      startedAt: now,
+      now,
       targetJson: JSON.stringify({ source: "erp_product_catalog", received_count: count }),
     });
   }
@@ -742,7 +762,9 @@ export class ErpProductImportService {
         `INSERT INTO sourcing_searches (id,${input.legacySearchScope ? "organization_id,workspace_id," : ""}collection_task_id,input_type,input_ref,status,candidate_count,missing_fields_json,request_id,trace_id,created_by,created_at,updated_at) VALUES (?,${input.legacySearchScope ? "?,?," : ""}?, 'opportunity',?,'succeeded_empty',0,?,?,?,?,?,?)`,
         [
           searchId,
-          ...(input.legacySearchScope ? [input.context.organizationId, input.context.workspaceId] : []),
+          ...(input.legacySearchScope
+            ? [input.context.organizationId, input.context.workspaceId]
+            : []),
           input.taskId,
           opportunityId,
           JSON.stringify([

@@ -1,11 +1,30 @@
-import { accountCompletionReadySourcingTaskSql, accountSourcingCompletionRankTaskSql, completionReadySourcingTaskSql, nativeCompletionReadySourcingTaskSql } from "./completion-sourcing-policy.js";
-import { accountCompetitorCompletionRankTaskSql, completionReadyCompetitorTaskSql, nativeCompletionReadyCompetitorTaskSql } from "./completion-competitor-policy.js";
+import {
+  accountCompletionReadySourcingTaskSql,
+  accountSourcingCompletionRankTaskSql,
+  completionReadySourcingTaskSql,
+  nativeCompletionReadySourcingTaskSql,
+} from "./completion-sourcing-policy.js";
+import {
+  accountCompetitorCompletionRankTaskSql,
+  completionReadyCompetitorTaskSql,
+  nativeCompletionReadyCompetitorTaskSql,
+} from "./completion-competitor-policy.js";
 import { eligibleTaskOwnerFromSql } from "./collection-account-backlog.js";
 
 /** Archived or mismatched tenant scopes retain history but cannot consume collection capacity. */
 export const activeCollectionScopeSql = (
   alias:
-    "collection_tasks" | "ct" | "backlog" | "s" | "r" | "c" | "n" | "o" | "t" | "projection_scope_task" | "trend_projection_jobs",
+    | "collection_tasks"
+    | "ct"
+    | "backlog"
+    | "s"
+    | "r"
+    | "c"
+    | "n"
+    | "o"
+    | "t"
+    | "projection_scope_task"
+    | "trend_projection_jobs",
 ) =>
   "EXISTS (SELECT 1 FROM organizations collection_scope_org " +
   "JOIN workspaces collection_scope_workspace ON collection_scope_workspace.organization_id=collection_scope_org.id " +
@@ -31,7 +50,8 @@ export const collectionScopeFairnessJoinSql =
 
 /** Read only sealed task ownership; a creator or a historical scope is not an owner. */
 const taskOwnerForQueueSql =
-  "SELECT task_owner.account_id " + eligibleTaskOwnerFromSql +
+  "SELECT task_owner.account_id " +
+  eligibleTaskOwnerFromSql +
   " AND task_owner.source_id=collection_tasks.id";
 export const collectionAccountCandidateSql = "(" + taskOwnerForQueueSql + ")";
 export const collectionAccountLockSql = "(" + taskOwnerForQueueSql + " LOCK IN SHARE MODE)=?";
@@ -42,7 +62,8 @@ export const collectionAccountFairnessJoinSql =
   "ON claim_owner.source_table='collection_tasks' AND claim_owner.source_id=e.task_id " +
   "WHERE e.event_type='collection.task.leased' AND e.actor_type='worker' " +
   "GROUP BY claim_owner.account_id) collection_scope_turn " +
-  "ON collection_scope_turn.account_id=" + collectionAccountCandidateSql;
+  "ON collection_scope_turn.account_id=" +
+  collectionAccountCandidateSql;
 
 /** Durable producer provenance, never the caller-controlled request ID. */
 export const automaticIntelligenceTaskSql = (taskAlias: "ct" | "collection_tasks") =>
@@ -129,13 +150,29 @@ export const collectionReadyOrderSql = (
     : "ELSE 1 ") +
   "END," +
   (completionFirst && sourcingFirst
-    ? "CASE WHEN " + (rankShape ? accountSourcingCompletionRankTaskSql[rankShape === "account_parent" ? 2 : rankShape === "account_competitor" ? 1 : 0] :
-      nativeTask ? nativeCompletionReadySourcingTaskSql : accountSourcing ? accountCompletionReadySourcingTaskSql : completionReadySourcingTaskSql) + " THEN 0 ELSE 1 END,"
+    ? "CASE WHEN " +
+      (rankShape
+        ? accountSourcingCompletionRankTaskSql[
+            rankShape === "account_parent" ? 2 : rankShape === "account_competitor" ? 1 : 0
+          ]
+        : nativeTask
+          ? nativeCompletionReadySourcingTaskSql
+          : accountSourcing
+            ? accountCompletionReadySourcingTaskSql
+            : completionReadySourcingTaskSql) +
+      " THEN 0 ELSE 1 END,"
     : "") +
   (completionFirst ? "CASE WHEN " + pendingBrowserResultSql + " THEN 0 ELSE 1 END," : "") +
   (completionFirst && !productSearchFirst && competitorFirst
-    ? "CASE WHEN " + (rankShape ? accountCompetitorCompletionRankTaskSql[rankShape === "account_parent" ? 2 : rankShape === "account_competitor" ? 1 : 0] :
-      nativeTask ? nativeCompletionReadyCompetitorTaskSql : completionReadyCompetitorTaskSql) + " THEN 0 ELSE 1 END,"
+    ? "CASE WHEN " +
+      (rankShape
+        ? accountCompetitorCompletionRankTaskSql[
+            rankShape === "account_parent" ? 2 : rankShape === "account_competitor" ? 1 : 0
+          ]
+        : nativeTask
+          ? nativeCompletionReadyCompetitorTaskSql
+          : completionReadyCompetitorTaskSql) +
+      " THEN 0 ELSE 1 END,"
     : "") +
   "available_at,id LIMIT 1";
 
@@ -148,7 +185,8 @@ export const collectionBacklogQuerySql = (accountMode: boolean) =>
   (accountMode
     ? "EXISTS (SELECT 1 " + eligibleTaskOwnerFromSql + " AND task_owner.source_id=backlog.id)"
     : activeCollectionScopeSql("backlog")) +
-  " AND backlog.status IN " + activeCollectionTaskStatusesSql;
+  " AND backlog.status IN " +
+  activeCollectionTaskStatusesSql;
 
 export const automaticCollectionBacklogCountSql = "(" + collectionBacklogQuerySql(false) + ")";
 export const accountCollectionBacklogCountSql = "(" + collectionBacklogQuerySql(true) + ")";

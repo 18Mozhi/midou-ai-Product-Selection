@@ -203,11 +203,18 @@ test("current account keeps the captured section routing without legacy scope or
   const compact = (value) => value.replace(/\s+/g, "").replace(/,\]/g, "]");
   const captured = script(readPreSelectionRebuild(file));
   assert.match(captured, /import SessionLogout from/);
-  assert.equal(compact(priorLifecycle), compact(
-    captured.replace(/import SessionLogout from "\.\/SessionLogout.vue";\s*/, ""),
-  ));
-  assert.doesNotMatch(read(file), /organizationName|workspaceName|organization-name|workspace-name/);
+  assert.equal(
+    compact(priorLifecycle),
+    compact(captured.replace(/import SessionLogout from "\.\/SessionLogout.vue";\s*/, "")),
+  );
+  assert.doesNotMatch(
+    read(file),
+    /organizationName|workspaceName|organization-name|workspace-name/,
+  );
   const center = read("apps/web/src/components/PersonalCenter.vue");
   assert.doesNotMatch(center, /organizationName|workspaceName|midou-profile-context/);
-  assert.match(read("apps/web/src/components/NavigationShell.vue"), /<SessionLogout :api-base-url="apiBaseUrl"/);
+  assert.match(
+    read("apps/web/src/components/NavigationShell.vue"),
+    /<SessionLogout :api-base-url="apiBaseUrl"/,
+  );
 });

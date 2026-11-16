@@ -61,7 +61,11 @@ export function registerAuthorizationRoutes(
       requireVerifiedAccount(authenticated.user);
       await options.accountRehearsalReady();
       const reason = "landing_account_rehearsal";
-      await options.service.recordAccountRehearsalNavigation(authenticated.user.id, reason, ids(request));
+      await options.service.recordAccountRehearsalNavigation(
+        authenticated.user.id,
+        reason,
+        ids(request),
+      );
       return envelope({ shell: "member", route: "/opportunities", reason }, request);
     }
     await options.tenancy?.restoreLandingContext({
@@ -100,22 +104,40 @@ export function registerAuthorizationRoutes(
         requireVerifiedAccount(authenticated.user);
         if (shell === "organization_admin") {
           await options.service.recordAccountRehearsalNavigation(
-            authenticated.user.id, "navigation_organization_retired_in_rehearsal", ids(request),
+            authenticated.user.id,
+            "navigation_organization_retired_in_rehearsal",
+            ids(request),
           );
-          throw new AuthorizationError("navigation_shell_forbidden", 403, "账号演练不提供组织后台。");
+          throw new AuthorizationError(
+            "navigation_shell_forbidden",
+            403,
+            "账号演练不提供组织后台。",
+          );
         }
         await options.accountRehearsalReady();
         const reason = "navigation_account_rehearsal";
-        const {
-          roles, capabilities, platform_roles, platform_capabilities,
-        } = await options.service.describeAccount(authenticated.user.id);
-        await options.service.recordAccountRehearsalNavigation(authenticated.user.id, reason, ids(request));
-        return envelope({
-          shell,
-          organization_id: null, workspace_id: null, organization_name: null, workspace_name: null,
-          roles, capabilities, platform_roles, platform_capabilities,
-          guard_reason: reason,
-        }, request);
+        const { roles, capabilities, platform_roles, platform_capabilities } =
+          await options.service.describeAccount(authenticated.user.id);
+        await options.service.recordAccountRehearsalNavigation(
+          authenticated.user.id,
+          reason,
+          ids(request),
+        );
+        return envelope(
+          {
+            shell,
+            organization_id: null,
+            workspace_id: null,
+            organization_name: null,
+            workspace_name: null,
+            roles,
+            capabilities,
+            platform_roles,
+            platform_capabilities,
+            guard_reason: reason,
+          },
+          request,
+        );
       }
       const navigation = await options.service.guardNavigationShell(
         authenticated.user.id,

@@ -1,8 +1,14 @@
 import { collectionTaskScope, trendTopicEventReadRelation } from "@scoutops/database";
 import { automaticIntakeBacklogLimit } from "./automatic-intake-capacity-policy.js";
-import { collectedProductProjectionSql, nativeCollectedProductProjectionSql } from "./collected-product-projection-policy.js";
+import {
+  collectedProductProjectionSql,
+  nativeCollectedProductProjectionSql,
+} from "./collected-product-projection-policy.js";
 import { nativeCollectionBacklogCountSql } from "./collection-account-backlog.js";
-import { enqueueNativeTrendProjection, nativeTrendProjectionScopeSql } from "./trend-projection-account-queue.js";
+import {
+  enqueueNativeTrendProjection,
+  nativeTrendProjectionScopeSql,
+} from "./trend-projection-account-queue.js";
 import {
   activeCollectionScopeSql,
   automaticCollectionBacklogCountSql,
@@ -16,7 +22,10 @@ import {
   type TrendProjectionJob,
 } from "./trend-projection-calculation.js";
 import { TrendProjectionPersistence } from "./trend-projection-persistence.js";
-import { resolveTrendProjectionOwnership, verifyTrendModelInputs } from "./trend-projection-ownership.js";
+import {
+  resolveTrendProjectionOwnership,
+  verifyTrendModelInputs,
+} from "./trend-projection-ownership.js";
 import { IntelligenceSourceRecovery } from "./intelligence-source-recovery.js";
 import { amazonAsin } from "./competitor-discovery-policy.js";
 import {
@@ -63,7 +72,9 @@ export const intelligenceFirstOrderSql =
   "WHERE n_intelligence.id=trend_projection_jobs.normalized_record_id),2),available_at,id LIMIT 1";
 
 export const intelligenceProvenanceSql =
-  "SELECT n.id,n.payload_json FROM normalized_records n JOIN " + trendTopicEventReadRelation + " e ON e.organization_id=n.organization_id " +
+  "SELECT n.id,n.payload_json FROM normalized_records n JOIN " +
+  trendTopicEventReadRelation +
+  " e ON e.organization_id=n.organization_id " +
   "AND e.workspace_id=n.workspace_id AND e.event_type='trend.intelligence.associated' " +
   "WHERE n.id=? AND n.organization_id=? AND n.workspace_id=? AND n.status IN ('active','superseded') " +
   "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(e.payload_json,'$.normalized_record_id'))=BINARY n.id " +
@@ -223,7 +234,7 @@ export class MySqlTrendProjectionWorker {
 
   private async enqueueMissing() {
     const now = this.now();
-    if (await collectionTaskScope(this.pool) === "account") {
+    if ((await collectionTaskScope(this.pool)) === "account") {
       await enqueueNativeTrendProjection(this.pool, now);
       return;
     }
@@ -277,12 +288,15 @@ export class MySqlTrendProjectionWorker {
       const accountId = ownership?.owner?.account_id;
       const [sources] = await this.pool.query<RowDataPacket[]>(
         accountId ? intelligenceAccountProvenanceSql : intelligenceProvenanceSql,
-        accountId ? [accountId, job.intelligenceSourceRecordId, job.intelligenceQuery] : [
-        job.intelligenceSourceRecordId,
-        job.organizationId,
-        job.workspaceId,
-        job.intelligenceQuery,
-      ]);
+        accountId
+          ? [accountId, job.intelligenceSourceRecordId, job.intelligenceQuery]
+          : [
+              job.intelligenceSourceRecordId,
+              job.organizationId,
+              job.workspaceId,
+              job.intelligenceQuery,
+            ],
+      );
       if (!sources[0]) throw new TrendProjectionError("intelligence_provenance_invalid", false);
       const sourcePayload = sources[0].payload_json;
       const originatingIntelligence = intelligenceInput(
@@ -292,13 +306,17 @@ export class MySqlTrendProjectionWorker {
       if (!originatingIntelligence.title.trim() && !originatingIntelligence.summary.trim())
         return false;
       const [rows] = await this.pool.query<RowDataPacket[]>(
-        accountId ? intelligenceAccountCandidateSql : "SELECT n.id,n.provider_id,n.raw_evidence_id,n.payload_json FROM collection_task_evidence_links l " +
-          "JOIN collection_tasks link_task ON link_task.id=l.collection_task_id " +
-          "JOIN normalized_records n ON n.id=l.normalized_record_id AND n.raw_evidence_id=l.raw_evidence_id " +
-          "AND n.organization_id=link_task.organization_id AND n.workspace_id=link_task.workspace_id " +
-          "AND n.status IN ('active','superseded') JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
-          "WHERE l.collection_task_id=? AND link_task.organization_id=? AND link_task.workspace_id=? ORDER BY l.created_at,n.id LIMIT 30",
-        accountId ? [accountId, job.collectionTaskId] : [job.collectionTaskId, job.organizationId, job.workspaceId],
+        accountId
+          ? intelligenceAccountCandidateSql
+          : "SELECT n.id,n.provider_id,n.raw_evidence_id,n.payload_json FROM collection_task_evidence_links l " +
+              "JOIN collection_tasks link_task ON link_task.id=l.collection_task_id " +
+              "JOIN normalized_records n ON n.id=l.normalized_record_id AND n.raw_evidence_id=l.raw_evidence_id " +
+              "AND n.organization_id=link_task.organization_id AND n.workspace_id=link_task.workspace_id " +
+              "AND n.status IN ('active','superseded') JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
+              "WHERE l.collection_task_id=? AND link_task.organization_id=? AND link_task.workspace_id=? ORDER BY l.created_at,n.id LIMIT 30",
+        accountId
+          ? [accountId, job.collectionTaskId]
+          : [job.collectionTaskId, job.organizationId, job.workspaceId],
       );
       const candidates = rows.flatMap((row) => {
         const payload =
@@ -313,12 +331,15 @@ export class MySqlTrendProjectionWorker {
           : [];
       });
       if (!candidates.length) return false;
-      const candidateIds = new Set(candidates.map(item => item.source_ref));
+      const candidateIds = new Set(candidates.map((item) => item.source_ref));
       await verifyTrendModelInputs(this.pool, ownership, [
         ["normalized_records", job.intelligenceSourceRecordId],
-        ...rows.filter(row => candidateIds.has(String(row.id))).flatMap((row): [string, string][] => [
-          ["normalized_records", String(row.id)], ["raw_evidence", String(row.raw_evidence_id)],
-        ]),
+        ...rows
+          .filter((row) => candidateIds.has(String(row.id)))
+          .flatMap((row): [string, string][] => [
+            ["normalized_records", String(row.id)],
+            ["raw_evidence", String(row.raw_evidence_id)],
+          ]),
       ]);
       const selected = await this.intelligence.selectPrimary(
         job.intelligenceQuery!,
@@ -350,7 +371,7 @@ export class MySqlTrendProjectionWorker {
 
   private async hasReadyCollectedResult(): Promise<boolean> {
     const now = this.now();
-    const native = await collectionTaskScope(this.pool) === "account";
+    const native = (await collectionTaskScope(this.pool)) === "account";
     const [rows] = await this.pool.query<RowDataPacket[]>(
       `SELECT id FROM trend_projection_jobs WHERE ${native ? nativeTrendProjectionScopeSql : activeTrendProjectionScopeSql} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) AND ${native ? nativeCollectedProductProjectionSql : collectedProductProjectionSql} LIMIT 1`,
       [now, now],
@@ -367,10 +388,12 @@ export class MySqlTrendProjectionWorker {
         : automaticIntakeBacklogLimit(this.queueBacklogLimit);
     try {
       await c.beginTransaction();
-      const native = await collectionTaskScope(c) === "account";
+      const native = (await collectionTaskScope(c)) === "account";
       const scope = native ? nativeTrendProjectionScopeSql : activeTrendProjectionScopeSql;
       const backlog = native ? nativeCollectionBacklogCountSql : automaticCollectionBacklogCountSql;
-      const collectedGuard = collectedProductsOnly ? ` AND ${native ? nativeCollectedProductProjectionSql : collectedProductProjectionSql}` : "";
+      const collectedGuard = collectedProductsOnly
+        ? ` AND ${native ? nativeCollectedProductProjectionSql : collectedProductProjectionSql}`
+        : "";
       const [candidates] = await c.query<RowDataPacket[]>(
         `SELECT id,normalized_record_id FROM trend_projection_jobs WHERE ${scope} AND ((status='scheduled' AND available_at<=?) OR (status='leased' AND lease_expires_at<=?))${collectedGuard} AND ${backlog}<?` +
           intelligenceFirstOrderSql,
@@ -406,12 +429,16 @@ export class MySqlTrendProjectionWorker {
         [this.workerId, expires, now, row.id],
       );
       const [records] = await c.query<RowDataPacket[]>(
-        "SELECT " + (native ? "t.account_id" : "t.organization_id,t.workspace_id") + ",n.provider_id,n.raw_evidence_id,n.payload_json,n.created_by,n.request_id,n.trace_id,p.code provider_code,e.collection_task_id,cs.target_json " +
-        "FROM normalized_records n JOIN providers p ON p.id=n.provider_id " +
-        "JOIN raw_evidence e ON e.id=n.raw_evidence_id AND e.provider_id=n.provider_id " +
-        "JOIN collection_tasks t ON t.id=e.collection_task_id " +
-        "LEFT JOIN collection_subqueries cs ON cs.id=e.collection_subquery_id AND cs.task_id=t.id AND cs.provider_id=n.provider_id " +
-        "WHERE n.id=? " + (native ? "AND n.account_id=e.account_id AND t.account_id=e.account_id " : "") + "LIMIT 1",
+        "SELECT " +
+          (native ? "t.account_id" : "t.organization_id,t.workspace_id") +
+          ",n.provider_id,n.raw_evidence_id,n.payload_json,n.created_by,n.request_id,n.trace_id,p.code provider_code,e.collection_task_id,cs.target_json " +
+          "FROM normalized_records n JOIN providers p ON p.id=n.provider_id " +
+          "JOIN raw_evidence e ON e.id=n.raw_evidence_id AND e.provider_id=n.provider_id " +
+          "JOIN collection_tasks t ON t.id=e.collection_task_id " +
+          "LEFT JOIN collection_subqueries cs ON cs.id=e.collection_subquery_id AND cs.task_id=t.id AND cs.provider_id=n.provider_id " +
+          "WHERE n.id=? " +
+          (native ? "AND n.account_id=e.account_id AND t.account_id=e.account_id " : "") +
+          "LIMIT 1",
         [row.normalized_record_id],
       );
       if (!records[0]) throw new TrendProjectionError("trend_projection_record_missing", false);

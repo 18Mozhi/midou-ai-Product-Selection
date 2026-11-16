@@ -6,7 +6,10 @@ import { randomUUID } from "node:crypto";
 import { appendTrendOutbox } from "@scoutops/database";
 import type { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import type { TrendProjectionJob } from "./trend-projection-calculation.js";
-import { registerTrendProjectionOwners, type TrendProjectionOwnership } from "./trend-projection-ownership.js";
+import {
+  registerTrendProjectionOwners,
+  type TrendProjectionOwnership,
+} from "./trend-projection-ownership.js";
 
 export function matchesTrendMonitoringRule(
   rule: {
@@ -80,19 +83,24 @@ export class TrendProjectionAlerts {
     const owner = ownership?.owner;
     const relation = owner ? "trend_monitoring_rules" : await trendRuleScopeRelation(c);
     if (!owner && relation !== "trend_monitoring_rules") return [];
-    const base = "SELECT id,include_keywords_json,negative_keywords_json,market,language,category,created_by FROM trend_monitoring_rules WHERE organization_id=? AND workspace_id=? AND status='enabled'";
+    const base =
+      "SELECT id,include_keywords_json,negative_keywords_json,market,language,category,created_by FROM trend_monitoring_rules WHERE organization_id=? AND workspace_id=? AND status='enabled'";
     const [rows] = await c.query<RowDataPacket[]>(
       owner
         ? "SELECT r.* FROM trend_monitoring_rules r JOIN account_owned_records o " +
-          "ON o.source_table='trend_monitoring_rules' AND o.source_id=r.id " +
-          "WHERE o.account_id=? AND r.status='enabled' FOR UPDATE"
-        : base + (ownership
-          ? " AND NOT EXISTS (SELECT 1 FROM account_owned_records o WHERE o.source_table='trend_monitoring_rules' AND o.source_id=trend_monitoring_rules.id)"
-          : "") + " FOR UPDATE",
+            "ON o.source_table='trend_monitoring_rules' AND o.source_id=r.id " +
+            "WHERE o.account_id=? AND r.status='enabled' FOR UPDATE"
+        : base +
+            (ownership
+              ? " AND NOT EXISTS (SELECT 1 FROM account_owned_records o WHERE o.source_table='trend_monitoring_rules' AND o.source_id=trend_monitoring_rules.id)"
+              : "") +
+            " FOR UPDATE",
       owner ? [owner.account_id] : [job.organizationId, job.workspaceId],
     );
     const eligible = ownership
-      ? rows.filter(row => !Object.hasOwn(row, "account_id") || row.account_id === owner?.account_id)
+      ? rows.filter(
+          (row) => !Object.hasOwn(row, "account_id") || row.account_id === owner?.account_id,
+        )
       : rows;
     const matchedRuleIds: string[] = [];
     for (const row of eligible) {
@@ -136,7 +144,7 @@ export class TrendProjectionAlerts {
     if (eligible.length)
       await c.query(
         "UPDATE trend_monitoring_rules SET last_evaluated_at=?,updated_at=updated_at WHERE status='enabled' AND id IN (?)",
-        [now, eligible.map(row => row.id)],
+        [now, eligible.map((row) => row.id)],
       );
     return matchedRuleIds;
   }
@@ -150,15 +158,26 @@ export class TrendProjectionAlerts {
     ownership: TrendProjectionOwnership = null,
     native = false,
   ) {
-    const eventId = randomUUID(), outboxId = randomUUID();
+    const eventId = randomUUID(),
+      outboxId = randomUUID();
     if (native) {
       if (!ownership?.owner) throw new Error("opportunity_discovery_owner_missing");
       await appendAccountOpportunityEvent(c, {
-        id: eventId, outboxId, opportunityId, eventType: "opportunity.candidate.discovered",
-        actorType: "worker", actorId: this.workerId, requestId: job.requestId, traceId: job.traceId,
-        payloadJson: JSON.stringify(payload), now,
+        id: eventId,
+        outboxId,
+        opportunityId,
+        eventType: "opportunity.candidate.discovered",
+        actorType: "worker",
+        actorId: this.workerId,
+        requestId: job.requestId,
+        traceId: job.traceId,
+        payloadJson: JSON.stringify(payload),
+        now,
       });
-      await registerTrendProjectionOwners(c, ownership, [["opportunity_events", eventId], ["opportunity_outbox", outboxId]]);
+      await registerTrendProjectionOwners(c, ownership, [
+        ["opportunity_events", eventId],
+        ["opportunity_outbox", outboxId],
+      ]);
       return;
     }
     await appendOpportunityEvent(c, {
@@ -188,7 +207,10 @@ export class TrendProjectionAlerts {
       requestId: job.requestId,
       traceId: job.traceId,
     });
-    await registerTrendProjectionOwners(c, ownership, [["opportunity_events", eventId], ["opportunity_outbox", outboxId]]);
+    await registerTrendProjectionOwners(c, ownership, [
+      ["opportunity_events", eventId],
+      ["opportunity_outbox", outboxId],
+    ]);
   }
 
   async writeTrendEvent(
@@ -207,17 +229,41 @@ export class TrendProjectionAlerts {
       const payloadJson = JSON.stringify(payload);
       const [insert] = await c.query<ResultSetHeader>(
         "INSERT INTO trend_events (id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) " +
-        "SELECT ?,?,'trend_topic',t.id,'worker',?,?,?,?,? FROM trend_topics t JOIN account_owned_records a " +
-        "ON a.source_table='trend_topics' AND a.source_id=t.id WHERE t.id=? AND a.account_id=?",
-        [eventId, eventType, this.workerId, job.requestId, job.traceId, payloadJson, now, resourceId, owner.account_id],
+          "SELECT ?,?,'trend_topic',t.id,'worker',?,?,?,?,? FROM trend_topics t JOIN account_owned_records a " +
+          "ON a.source_table='trend_topics' AND a.source_id=t.id WHERE t.id=? AND a.account_id=?",
+        [
+          eventId,
+          eventType,
+          this.workerId,
+          job.requestId,
+          job.traceId,
+          payloadJson,
+          now,
+          resourceId,
+          owner.account_id,
+        ],
       );
       if (insert.affectedRows !== 1) throw new Error("trend_event_parent_owner_mismatch");
       await c.query(
         "INSERT INTO trend_outbox (id,event_type,resource_type,resource_id,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) " +
-        "VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
-        [eventId, eventType, resourceType, resourceId, payloadJson, now, job.requestId, job.traceId, now, now],
+          "VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
+        [
+          eventId,
+          eventType,
+          resourceType,
+          resourceId,
+          payloadJson,
+          now,
+          job.requestId,
+          job.traceId,
+          now,
+          now,
+        ],
       );
-      await registerTrendProjectionOwners(c, ownership, [["trend_events", eventId], ["trend_outbox", eventId]]);
+      await registerTrendProjectionOwners(c, ownership, [
+        ["trend_events", eventId],
+        ["trend_outbox", eventId],
+      ]);
       return;
     }
     await appendTrendEvent(c, {
@@ -235,10 +281,20 @@ export class TrendProjectionAlerts {
       occurredAt: now,
     });
     await appendTrendOutbox(c, {
-      id: eventId, organizationId: job.organizationId, workspaceId: job.workspaceId,
-      eventType, resourceType, resourceId, payloadJson: JSON.stringify(payload),
-      requestId: job.requestId, traceId: job.traceId, createdAt: now,
+      id: eventId,
+      organizationId: job.organizationId,
+      workspaceId: job.workspaceId,
+      eventType,
+      resourceType,
+      resourceId,
+      payloadJson: JSON.stringify(payload),
+      requestId: job.requestId,
+      traceId: job.traceId,
+      createdAt: now,
     });
-    await registerTrendProjectionOwners(c, ownership, [["trend_events", eventId], ["trend_outbox", eventId]]);
+    await registerTrendProjectionOwners(c, ownership, [
+      ["trend_events", eventId],
+      ["trend_outbox", eventId],
+    ]);
   }
 }

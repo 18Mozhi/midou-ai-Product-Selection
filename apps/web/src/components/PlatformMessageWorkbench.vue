@@ -121,7 +121,12 @@ function select(item: PlatformNotificationMessage) {
           实际接收人数以发布接口返回为准，不由候选列表或订阅统计估算。
         </p>
         <footer v-if="selected.status === 'draft'">
-          <button v-if="!historicalAudience(selected)" type="button" :disabled="busyId === selected.id" @click="emit('edit', selected)">
+          <button
+            v-if="!historicalAudience(selected)"
+            type="button"
+            :disabled="busyId === selected.id"
+            @click="emit('edit', selected)"
+          >
             编辑草稿
           </button>
           <button

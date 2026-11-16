@@ -463,7 +463,9 @@ export class DataQualityService {
       );
     }
     const path = resolve(this.options.evidenceRoot, file.relative_path);
-    const content = account ? await this.readAccountFile(path, file.size_bytes) : await readFile(path);
+    const content = account
+      ? await this.readAccountFile(path, file.size_bytes)
+      : await readFile(path);
     if (
       content.byteLength !== file.size_bytes ||
       createHash("sha256").update(content).digest("hex") !== file.content_sha256
@@ -487,16 +489,30 @@ export class DataQualityService {
     file: NonNullable<Awaited<ReturnType<DataQualityRepository["fileInfo"]>>>,
     account: { account_id: string; asset_id: string },
   ): EvidenceDownloadBinding {
-    return { accountId: account.account_id, assetId: account.asset_id, relativePath: file.relative_path,
-      sizeBytes: file.size_bytes, sha256: file.content_sha256 };
+    return {
+      accountId: account.account_id,
+      assetId: account.asset_id,
+      relativePath: file.relative_path,
+      sizeBytes: file.size_bytes,
+      sha256: file.content_sha256,
+    };
   }
   private async readAccountFile(path: string, size: number) {
-    const same = (a: Stats, b: Stats) => b.isFile() && b.nlink === 1 && b.size === size &&
-      a.dev === b.dev && a.ino === b.ino && a.mtimeMs === b.mtimeMs && a.ctimeMs === b.ctimeMs;
+    const same = (a: Stats, b: Stats) =>
+      b.isFile() &&
+      b.nlink === 1 &&
+      b.size === size &&
+      a.dev === b.dev &&
+      a.ino === b.ino &&
+      a.mtimeMs === b.mtimeMs &&
+      a.ctimeMs === b.ctimeMs;
     try {
       const initial = await lstat(path);
-      if (!same(initial, initial) || await realpath(path) !== path) throw new Error("wrong_file");
-      const handle = await open(path, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0) | (constants.O_NONBLOCK ?? 0));
+      if (!same(initial, initial) || (await realpath(path)) !== path) throw new Error("wrong_file");
+      const handle = await open(
+        path,
+        constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0) | (constants.O_NONBLOCK ?? 0),
+      );
       try {
         const opened = await handle.stat();
         if (!same(initial, opened)) throw new Error("file_changed");
@@ -507,14 +523,22 @@ export class DataQualityService {
           if (bytesRead === 0) throw new Error("file_truncated");
           offset += bytesRead;
         }
-        if (!same(opened, await handle.stat()) || !same(opened, await lstat(path)) || await realpath(path) !== path)
+        if (
+          !same(opened, await handle.stat()) ||
+          !same(opened, await lstat(path)) ||
+          (await realpath(path)) !== path
+        )
           throw new Error("file_changed");
         return content;
       } finally {
         await handle.close();
       }
     } catch {
-      throw new DataQualityServiceError("evidence_integrity_failed", 409, "隔离该证据并联系平台管理员。");
+      throw new DataQualityServiceError(
+        "evidence_integrity_failed",
+        409,
+        "隔离该证据并联系平台管理员。",
+      );
     }
   }
   private async accountEvidenceScope(
@@ -527,10 +551,19 @@ export class DataQualityService {
     if (!this.options.accountReadRehearsal || !file.asset_id) throw unavailable();
     const owner = await this.repository.accountEvidenceOwner?.(file.id, file.asset_id);
     if (!owner) throw unavailable();
-    const scope = { account_id: owner, asset_id: file.asset_id, evidence_id: file.id,
-      ...(!nativePath ? { historical: {
-        organization_id: file.organization_id, workspace_id: file.workspace_id,
-      } } : {}) };
+    const scope = {
+      account_id: owner,
+      asset_id: file.asset_id,
+      evidence_id: file.id,
+      ...(!nativePath
+        ? {
+            historical: {
+              organization_id: file.organization_id,
+              workspace_id: file.workspace_id,
+            },
+          }
+        : {}),
+    };
     try {
       if (accountEvidenceGrantPath(scope) !== file.relative_path) throw unavailable();
     } catch {

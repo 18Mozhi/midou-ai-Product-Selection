@@ -3,7 +3,11 @@ import type { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/prom
 import { selectionPrimaryAsinSql } from "@scoutops/database";
 import { automaticPrimaryEvidenceSql } from "./automatic-selection-evidence.js";
 import { amazonAsin } from "./competitor-discovery-policy.js";
-import { calculationOwnersMatch, registerCalculationOwners, resolveCalculationOwnership } from "./opportunity-calculation-ownership.js";
+import {
+  calculationOwnersMatch,
+  registerCalculationOwners,
+  resolveCalculationOwnership,
+} from "./opportunity-calculation-ownership.js";
 
 const eligibleOpportunitySql =
   "o.source_type='trend_topic' AND o.decision_status='pending' " +
@@ -60,8 +64,13 @@ export async function repairMissingPrimaryProduct(
   const [evidence] = await c.query<RowDataPacket[]>(automaticPrimaryEvidenceSql, scope);
   const current = evidence[0];
   if (!current || current.provider_status !== "enabled") return result;
-  const ownership = await resolveCalculationOwnership(c,String(candidate.id));
-  if (!(await calculationOwnersMatch(c,ownership,[["raw_evidence",String(current.raw_evidence_id)]]))) return result;
+  const ownership = await resolveCalculationOwnership(c, String(candidate.id));
+  if (
+    !(await calculationOwnersMatch(c, ownership, [
+      ["raw_evidence", String(current.raw_evidence_id)],
+    ]))
+  )
+    return result;
   let fields: Record<string, unknown>;
   try {
     fields =
@@ -110,7 +119,7 @@ export async function repairMissingPrimaryProduct(
     ],
   );
   if (Number(insert.affectedRows) === 1)
-    await registerCalculationOwners(c,ownership,[["competitors",competitorId]]);
+    await registerCalculationOwners(c, ownership, [["competitors", competitorId]]);
   // Preparation release is safe on the old global key: conflict waits for migration.
   return { ...result, repaired: Number(insert.affectedRows) === 1 };
 }

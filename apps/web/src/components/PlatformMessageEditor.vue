@@ -19,7 +19,11 @@ const props = withDefaults(
     form: PlatformNotificationForm;
     saving: boolean;
     error?: string;
-    audienceOptions?: { organizations?: any[]; users?: any[]; organization_audience_retired?: boolean };
+    audienceOptions?: {
+      organizations?: any[];
+      users?: any[];
+      organization_audience_retired?: boolean;
+    };
   }>(),
   { error: "" },
 );
@@ -112,7 +116,9 @@ useNotificationInitialFocus(
           ><span :id="`${fieldId}-audience-label`">接收范围</span
           ><select v-model="form.audience_type" v-bind="fieldAttributes('audience')">
             <option value="all_users">全部活动用户</option>
-            <option v-if="!audienceOptions?.organization_audience_retired" value="organization">指定组织</option>
+            <option v-if="!audienceOptions?.organization_audience_retired" value="organization">
+              指定组织
+            </option>
             <option value="user">指定用户</option></select
           ><small :id="`${fieldId}-audience-help`"
             >候选列表不是实时受众预检，实际人数以发布结果为准。</small

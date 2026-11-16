@@ -1,5 +1,8 @@
 import type { Pool, RowDataPacket, ResultSetHeader } from "mysql2/promise";
-import { accountEvaluationRecoverySql, nativeEvaluationRecoverySql } from "./automatic-selection-recovery-evidence.js";
+import {
+  accountEvaluationRecoverySql,
+  nativeEvaluationRecoverySql,
+} from "./automatic-selection-recovery-evidence.js";
 import { selectionCandidateSql } from "@scoutops/database";
 
 export const SUPPLY_TITLE_CLASSIFIER_REVISION = "supply-title-eligible-citations-v1";
@@ -28,30 +31,55 @@ export const supplyClassifierRecoveryUpdateSql =
   eligible;
 
 /** Consistent scan, then atomic scoped recheck; never take over a leased evaluation. */
-export async function recoverSupplyClassifierEvaluations(pool: Pool, now: Date, native = false, accountParent = false) {
-  const [rows] = await pool.query<RowDataPacket[]>(accountParent ? supplyClassifierAccountRecoverySql.candidates :
-    native ? supplyClassifierNativeRecoverySql.candidates : supplyClassifierRecoveryCandidatesSql, [
-    SUPPLY_TITLE_CLASSIFIER_REVISION,
-  ]);
+export async function recoverSupplyClassifierEvaluations(
+  pool: Pool,
+  now: Date,
+  native = false,
+  accountParent = false,
+) {
+  const [rows] = await pool.query<RowDataPacket[]>(
+    accountParent
+      ? supplyClassifierAccountRecoverySql.candidates
+      : native
+        ? supplyClassifierNativeRecoverySql.candidates
+        : supplyClassifierRecoveryCandidatesSql,
+    [SUPPLY_TITLE_CLASSIFIER_REVISION],
+  );
   let recovered = 0;
   for (const row of rows) {
-    const [result] = await pool.query<ResultSetHeader>(accountParent ? supplyClassifierAccountRecoverySql.update :
-      native ? supplyClassifierNativeRecoverySql.update : supplyClassifierRecoveryUpdateSql, [
-      SUPPLY_TITLE_CLASSIFIER_REVISION,
-      now,
-      now,
-      row.opportunity_id,
-      ...(accountParent ? [SUPPLY_TITLE_CLASSIFIER_REVISION, row.account_id] : [row.organization_id, row.workspace_id, SUPPLY_TITLE_CLASSIFIER_REVISION,
-        ...(native ? [row.account_id] : [])]),
-    ]);
+    const [result] = await pool.query<ResultSetHeader>(
+      accountParent
+        ? supplyClassifierAccountRecoverySql.update
+        : native
+          ? supplyClassifierNativeRecoverySql.update
+          : supplyClassifierRecoveryUpdateSql,
+      [
+        SUPPLY_TITLE_CLASSIFIER_REVISION,
+        now,
+        now,
+        row.opportunity_id,
+        ...(accountParent
+          ? [SUPPLY_TITLE_CLASSIFIER_REVISION, row.account_id]
+          : [
+              row.organization_id,
+              row.workspace_id,
+              SUPPLY_TITLE_CLASSIFIER_REVISION,
+              ...(native ? [row.account_id] : []),
+            ]),
+      ],
+    );
     recovered += result.affectedRows;
   }
   return recovered;
 }
 
 export const supplyClassifierNativeRecoverySql = nativeEvaluationRecoverySql(
-  supplyClassifierRecoveryCandidatesSql, supplyClassifierRecoveryUpdateSql, selectionCandidateSql,
+  supplyClassifierRecoveryCandidatesSql,
+  supplyClassifierRecoveryUpdateSql,
+  selectionCandidateSql,
 );
 export const supplyClassifierAccountRecoverySql = accountEvaluationRecoverySql(
-  supplyClassifierRecoveryCandidatesSql, supplyClassifierRecoveryUpdateSql, selectionCandidateSql,
+  supplyClassifierRecoveryCandidatesSql,
+  supplyClassifierRecoveryUpdateSql,
+  selectionCandidateSql,
 );

@@ -1,4 +1,8 @@
-import { appendCrawlerSchedulerLease, collectionTaskScope, crawlerSchedulerLeaseHasLegacyScope } from "@scoutops/database";
+import {
+  appendCrawlerSchedulerLease,
+  collectionTaskScope,
+  crawlerSchedulerLeaseHasLegacyScope,
+} from "@scoutops/database";
 import { createHash, randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
@@ -39,8 +43,10 @@ const nativeSubqueryOwnershipSql =
   " AND NOT EXISTS (SELECT 1 FROM collection_subqueries q " +
   "LEFT JOIN account_owned_records a ON a.source_table='collection_subqueries' AND a.source_id=q.id " +
   "WHERE q.task_id=collection_tasks.id AND NOT (a.account_id<=>collection_tasks.account_id))";
-const activeNativeLeaseSql = (task: ClaimedCollectionTask) => task.nativeAccountScope
-  ? " AND account_id=? AND attempt_count=? AND lease_expires_at>UTC_TIMESTAMP(3)" : "";
+const activeNativeLeaseSql = (task: ClaimedCollectionTask) =>
+  task.nativeAccountScope
+    ? " AND account_id=? AND attempt_count=? AND lease_expires_at>UTC_TIMESTAMP(3)"
+    : "";
 const activeNativeLeaseArgs = (task: ClaimedCollectionTask) => {
   if (!task.nativeAccountScope) return [];
   if (!task.accountId) throw new Error("collection_task_lease_invalid");
@@ -49,16 +55,25 @@ const activeNativeLeaseArgs = (task: ClaimedCollectionTask) => {
 
 export class MySqlCollectionTaskWorkerRepository {
   private successfulClaims = 0;
-  private async readyOrder(connection: PoolConnection, accountMode: boolean, competitorFirst: boolean, nativeTask: boolean) {
+  private async readyOrder(
+    connection: PoolConnection,
+    accountMode: boolean,
+    competitorFirst: boolean,
+    nativeTask: boolean,
+  ) {
     const completionFirst = this.successfulClaims % 21 !== 20;
     const sourcingFirst = this.successfulClaims % 4 === 0;
     const productSearchFirst = this.successfulClaims % 2 === 1;
-    const needsCompletionRank = completionFirst && (sourcingFirst || (competitorFirst && !productSearchFirst));
-    const rankShape = nativeTask && needsCompletionRank
-      ? await nativeCompetitorStorage(connection)
-        ? await nativeOpportunityStorage(connection) ? "account_parent" : "account_competitor"
-        : "account_task"
-      : undefined;
+    const needsCompletionRank =
+      completionFirst && (sourcingFirst || (competitorFirst && !productSearchFirst));
+    const rankShape =
+      nativeTask && needsCompletionRank
+        ? (await nativeCompetitorStorage(connection))
+          ? (await nativeOpportunityStorage(connection))
+            ? "account_parent"
+            : "account_competitor"
+          : "account_task"
+        : undefined;
     return collectionReadyOrderSql(
       completionFirst,
       productSearchFirst,
@@ -110,22 +125,27 @@ export class MySqlCollectionTaskWorkerRepository {
     return recoverExpiredCollectionTasks(this, now, actorId, admission);
   }
   async queueReady(now: Date, actorId = "collection-scheduler", admission?: PoolConnection) {
-    const c = admission ?? await this.pool.getConnection();
+    const c = admission ?? (await this.pool.getConnection());
     try {
       await c.beginTransaction();
       const accountMode = await hasCalculationAccountCutover(c);
-      const nativeTask = await collectionTaskScope(c) === "account";
+      const nativeTask = (await collectionTaskScope(c)) === "account";
       if (nativeTask && !accountMode) throw new Error("collection_task_account_cutover_required");
       const sql =
-          (accountMode ? "SELECT collection_tasks.*," + collectionAccountCandidateSql +
-            " queue_account_id FROM collection_tasks" + collectionAccountFairnessJoinSql :
-            "SELECT collection_tasks.* FROM collection_tasks" + collectionScopeFairnessJoinSql) +
+          (accountMode
+            ? "SELECT collection_tasks.*," +
+              collectionAccountCandidateSql +
+              " queue_account_id FROM collection_tasks" +
+              collectionAccountFairnessJoinSql
+            : "SELECT collection_tasks.* FROM collection_tasks" + collectionScopeFairnessJoinSql) +
           " WHERE status IN ('scheduled','retry_scheduled','rate_limited') AND available_at<=?" +
           (this.taskId ? " AND id=?" : "") +
           " AND " +
-          (accountMode ? collectionAccountCandidateSql + " IS NOT NULL" : activeCollectionScopeSql("collection_tasks")) +
+          (accountMode
+            ? collectionAccountCandidateSql + " IS NOT NULL"
+            : activeCollectionScopeSql("collection_tasks")) +
           (nativeTask ? " AND collection_tasks.account_id=" + collectionAccountCandidateSql : "") +
-          await this.readyOrder(c, accountMode, false, nativeTask),
+          (await this.readyOrder(c, accountMode, false, nativeTask)),
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [now, this.taskId] : [now]);
       const candidate = rows[0];
       if (!candidate) {
@@ -140,7 +160,14 @@ export class MySqlCollectionTaskWorkerRepository {
           (accountMode ? collectionAccountLockSql : activeCollectionScopeSql("collection_tasks")) +
           (nativeTask ? " AND account_id=?" : "") +
           " FOR UPDATE",
-        accountMode ? [candidate.id, now, candidate.queue_account_id, ...(nativeTask ? [candidate.queue_account_id] : [])] : [candidate.id, candidate.organization_id, candidate.workspace_id, now],
+        accountMode
+          ? [
+              candidate.id,
+              now,
+              candidate.queue_account_id,
+              ...(nativeTask ? [candidate.queue_account_id] : []),
+            ]
+          : [candidate.id, candidate.organization_id, candidate.workspace_id, now],
       );
       const row = locked[0];
       if (!row) {
@@ -176,7 +203,7 @@ export class MySqlCollectionTaskWorkerRepository {
     leaseSeconds: number,
     admission?: PoolConnection,
   ): Promise<ClaimedCollectionTask | null> {
-    const c = admission ?? await this.pool.getConnection(),
+    const c = admission ?? (await this.pool.getConnection()),
       leaseToken = token();
     try {
       await c.beginTransaction();
@@ -189,20 +216,25 @@ export class MySqlCollectionTaskWorkerRepository {
         return null;
       }
       const accountMode = await hasCalculationAccountCutover(c);
-      const nativeTask = await collectionTaskScope(c) === "account";
+      const nativeTask = (await collectionTaskScope(c)) === "account";
       if (nativeTask && !accountMode) throw new Error("collection_task_account_cutover_required");
       const sql =
-          (accountMode ? "SELECT collection_tasks.*," + collectionAccountCandidateSql +
-            " queue_account_id FROM collection_tasks" + collectionAccountFairnessJoinSql :
-            "SELECT collection_tasks.* FROM collection_tasks" + collectionScopeFairnessJoinSql) +
+          (accountMode
+            ? "SELECT collection_tasks.*," +
+              collectionAccountCandidateSql +
+              " queue_account_id FROM collection_tasks" +
+              collectionAccountFairnessJoinSql
+            : "SELECT collection_tasks.* FROM collection_tasks" + collectionScopeFairnessJoinSql) +
           " WHERE status='queued' AND attempt_count<4" +
           (this.taskId ? " AND id=?" : "") +
           " AND " +
-          (accountMode ? collectionAccountCandidateSql + " IS NOT NULL" : activeCollectionScopeSql("collection_tasks")) +
+          (accountMode
+            ? collectionAccountCandidateSql + " IS NOT NULL"
+            : activeCollectionScopeSql("collection_tasks")) +
           (nativeTask ? " AND collection_tasks.account_id=" + collectionAccountCandidateSql : "") +
           (nativeTask ? nativeSubqueryOwnershipSql : "") +
           collectionRequiredSourcesReadySql +
-          await this.readyOrder(c, accountMode, true, nativeTask),
+          (await this.readyOrder(c, accountMode, true, nativeTask)),
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [this.taskId] : []);
       const candidate = rows[0];
       if (!candidate) {
@@ -219,7 +251,13 @@ export class MySqlCollectionTaskWorkerRepository {
           (nativeTask ? nativeSubqueryOwnershipSql : "") +
           collectionRequiredSourcesReadySql +
           " FOR UPDATE",
-        accountMode ? [candidate.id, candidate.queue_account_id, ...(nativeTask ? [candidate.queue_account_id] : [])] : [candidate.id, candidate.organization_id, candidate.workspace_id],
+        accountMode
+          ? [
+              candidate.id,
+              candidate.queue_account_id,
+              ...(nativeTask ? [candidate.queue_account_id] : []),
+            ]
+          : [candidate.id, candidate.organization_id, candidate.workspace_id],
       );
       const row = locked[0];
       if (!row) {
@@ -229,12 +267,15 @@ export class MySqlCollectionTaskWorkerRepository {
       const [subqueries] = await c.query<RowDataPacket[]>(
         nativeTask
           ? "SELECT q.id,q.provider_id,q.ordinal,q.is_required,q.target_json,a.account_id subquery_owner " +
-            "FROM collection_subqueries q LEFT JOIN account_owned_records a " +
-            "ON a.source_table='collection_subqueries' AND a.source_id=q.id WHERE q.task_id=? ORDER BY q.ordinal FOR UPDATE"
+              "FROM collection_subqueries q LEFT JOIN account_owned_records a " +
+              "ON a.source_table='collection_subqueries' AND a.source_id=q.id WHERE q.task_id=? ORDER BY q.ordinal FOR UPDATE"
           : "SELECT id,provider_id,ordinal,is_required,target_json FROM collection_subqueries WHERE task_id=? ORDER BY ordinal",
         [row.id],
       );
-      if (nativeTask && (!subqueries.length || subqueries.some(q => q.subquery_owner !== row.account_id))) {
+      if (
+        nativeTask &&
+        (!subqueries.length || subqueries.some((q) => q.subquery_owner !== row.account_id))
+      ) {
         await c.commit();
         return null;
       }
@@ -277,15 +318,29 @@ export class MySqlCollectionTaskWorkerRepository {
         now,
       );
       const legacySchedulerLease = await crawlerSchedulerLeaseHasLegacyScope(c);
-      const leaseScope = nativeTask ? null : { organizationId: String(row.organization_id), workspaceId: String(row.workspace_id) };
-      const lease = { taskId: String(row.id), runId: null, owner: workerId, tokenHash: hash(leaseToken), now,
-        expiresAt: expires, requestId: String(row.request_id), traceId: String(row.trace_id) };
+      const leaseScope = nativeTask
+        ? null
+        : { organizationId: String(row.organization_id), workspaceId: String(row.workspace_id) };
+      const lease = {
+        taskId: String(row.id),
+        runId: null,
+        owner: workerId,
+        tokenHash: hash(leaseToken),
+        now,
+        expiresAt: expires,
+        requestId: String(row.request_id),
+        traceId: String(row.trace_id),
+      };
       await appendCrawlerSchedulerLease(c, legacySchedulerLease, leaseScope, {
-        ...lease, slotType: "worker", slotKey: "single-host",
+        ...lease,
+        slotType: "worker",
+        slotKey: "single-host",
       });
       for (const providerId of new Set(subqueries.map((item) => String(item.provider_id))))
         await appendCrawlerSchedulerLease(c, legacySchedulerLease, leaseScope, {
-          ...lease, slotType: "provider", slotKey: providerId,
+          ...lease,
+          slotType: "provider",
+          slotKey: providerId,
         });
       await c.commit();
       this.successfulClaims += 1;
@@ -337,7 +392,8 @@ export class MySqlCollectionTaskWorkerRepository {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
         "SELECT * FROM collection_tasks WHERE id=? AND status='leased' AND lease_token_hash=UNHEX(?)" +
-          activeNativeLeaseSql(task) + " FOR UPDATE",
+          activeNativeLeaseSql(task) +
+          " FOR UPDATE",
         [task.id, hash(task.leaseToken), ...activeNativeLeaseArgs(task)],
       );
       const row = rows[0];
@@ -425,7 +481,8 @@ export class MySqlCollectionTaskWorkerRepository {
   async lock(c: PoolConnection, task: ClaimedCollectionTask) {
     const [rows] = await c.query<RowDataPacket[]>(
       "SELECT * FROM collection_tasks WHERE id=? AND status='running' AND lease_token_hash=UNHEX(?)" +
-        activeNativeLeaseSql(task) + " FOR UPDATE",
+        activeNativeLeaseSql(task) +
+        " FOR UPDATE",
       [task.id, hash(task.leaseToken), ...activeNativeLeaseArgs(task)],
     );
     if (!rows[0]) throw new Error("collection_task_lease_invalid");
@@ -463,9 +520,21 @@ export class MySqlCollectionTaskWorkerRepository {
         now,
       ],
     );
-    await inheritCollectionHistoryOwner(c, "collection_task_events", id, String(row.id), row.account_id);
+    await inheritCollectionHistoryOwner(
+      c,
+      "collection_task_events",
+      id,
+      String(row.id),
+      row.account_id,
+    );
   }
-  async outbox(c: PoolConnection, row: RowDataPacket, eventType: string, payload: unknown, now: Date) {
+  async outbox(
+    c: PoolConnection,
+    row: RowDataPacket,
+    eventType: string,
+    payload: unknown,
+    now: Date,
+  ) {
     const id = randomUUID();
     await c.query(
       statement(
@@ -475,18 +544,14 @@ export class MySqlCollectionTaskWorkerRepository {
         "trace_id,created_at,updated_at) ",
         "VALUES (?,?,?,?,'queued',0,?,NULL,NULL,?,?,?,?)",
       ),
-      [
-        id,
-        row.id,
-        eventType,
-        JSON.stringify(payload),
-        now,
-        row.request_id,
-        row.trace_id,
-        now,
-        now,
-      ],
+      [id, row.id, eventType, JSON.stringify(payload), now, row.request_id, row.trace_id, now, now],
     );
-    await inheritCollectionHistoryOwner(c, "collection_task_outbox", id, String(row.id), row.account_id);
+    await inheritCollectionHistoryOwner(
+      c,
+      "collection_task_outbox",
+      id,
+      String(row.id),
+      row.account_id,
+    );
   }
 }

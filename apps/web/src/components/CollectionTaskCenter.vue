@@ -131,9 +131,13 @@ const filtered = computed(() =>
   tasks.value.filter(
     (item) =>
       !query.value ||
-      [item.id, item.account_id, item.organization_id, item.workspace_id, item.last_error_code].some((value) =>
-        value?.toLowerCase().includes(query.value.toLowerCase()),
-      ),
+      [
+        item.id,
+        item.account_id,
+        item.organization_id,
+        item.workspace_id,
+        item.last_error_code,
+      ].some((value) => value?.toLowerCase().includes(query.value.toLowerCase())),
   ),
 );
 const metrics = computed(() => ({

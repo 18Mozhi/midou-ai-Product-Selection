@@ -6,7 +6,12 @@ import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluat
 import { queueOwnedSelectionEvaluation } from "./account-evaluation-enqueue.js";
 import { refreshRuleRecommendation } from "./rule-recommendation.js";
 import { nativeOpportunityStorage } from "./opportunity-storage.js";
-import { calculationOwnersMatch, registerCalculationOwners, resolveCalculationOwnership, type CalculationOwnership } from "./opportunity-calculation-ownership.js";
+import {
+  calculationOwnersMatch,
+  registerCalculationOwners,
+  resolveCalculationOwnership,
+  type CalculationOwnership,
+} from "./opportunity-calculation-ownership.js";
 
 export type OpportunityRefreshResult =
   | { status: "idle" }
@@ -129,27 +134,41 @@ export class MySqlOpportunityRefreshWorker {
         [job.id, job.opportunityId, this.workerId, job.attemptCount, now],
       );
       const parent = parents[0];
-      if (!parent || parent.source_type !== job.sourceType || parent.source_ref_id !== job.sourceRefId)
+      if (
+        !parent ||
+        parent.source_type !== job.sourceType ||
+        parent.source_ref_id !== job.sourceRefId
+      )
         throw new OpportunityRefreshError("opportunity_refresh_parent_or_lease_changed", false);
       const ownership = await resolveCalculationOwnership(connection, job.opportunityId);
       const hasTopic = job.sourceType === "trend_topic" && !!job.sourceRefId;
-      if (ownership && (!ownership.owner || !(await calculationOwnersMatch(connection, ownership, [
-        ["opportunity_refresh_jobs", job.id], ...(hasTopic ? [["trend_topics", job.sourceRefId!] as const] : []),
-      ])))) throw new OpportunityRefreshError("opportunity_refresh_owner_mismatch", false);
+      if (
+        ownership &&
+        (!ownership.owner ||
+          !(await calculationOwnersMatch(connection, ownership, [
+            ["opportunity_refresh_jobs", job.id],
+            ...(hasTopic ? [["trend_topics", job.sourceRefId!] as const] : []),
+          ])))
+      )
+        throw new OpportunityRefreshError("opportunity_refresh_owner_mismatch", false);
       const native = await nativeOpportunityStorage(connection);
       if (native) {
-        if (!ownership?.owner) throw new OpportunityRefreshError("opportunity_refresh_owner_mismatch", false);
+        if (!ownership?.owner)
+          throw new OpportunityRefreshError("opportunity_refresh_owner_mismatch", false);
         const account = ownership.owner.account_id;
         const [[row]] = await connection.query<RowDataPacket[]>(
-          "SELECT account_id FROM opportunities WHERE id=? FOR UPDATE", [job.opportunityId],
+          "SELECT account_id FROM opportunities WHERE id=? FOR UPDATE",
+          [job.opportunityId],
         );
         if (row?.account_id !== account)
           throw new OpportunityRefreshError("opportunity_refresh_owner_mismatch", false);
         if (hasTopic) {
           const [[topic]] = await connection.query<RowDataPacket[]>(
-            "SELECT id FROM trend_topics WHERE id=? AND account_id=? LOCK IN SHARE MODE", [job.sourceRefId, account],
+            "SELECT id FROM trend_topics WHERE id=? AND account_id=? LOCK IN SHARE MODE",
+            [job.sourceRefId, account],
           );
-          if (!topic) throw new OpportunityRefreshError("opportunity_refresh_owner_mismatch", false);
+          if (!topic)
+            throw new OpportunityRefreshError("opportunity_refresh_owner_mismatch", false);
         }
       }
       if (!hasTopic) {
@@ -164,8 +183,13 @@ export class MySqlOpportunityRefreshWorker {
           "SELECT organization_id,workspace_id FROM opportunities WHERE id=?",
           [job.opportunityId],
         );
-        if (!scope) throw new OpportunityRefreshError("opportunity_refresh_parent_or_lease_changed", false);
-        job = { ...job, organizationId: String(scope.organization_id), workspaceId: String(scope.workspace_id) };
+        if (!scope)
+          throw new OpportunityRefreshError("opportunity_refresh_parent_or_lease_changed", false);
+        job = {
+          ...job,
+          organizationId: String(scope.organization_id),
+          workspaceId: String(scope.workspace_id),
+        };
         const [topics] = await connection.query<RowDataPacket[]>(
           "SELECT id FROM trend_topics WHERE id=? AND organization_id=? AND workspace_id=? LIMIT 1 FOR UPDATE",
           [job.sourceRefId, job.organizationId, job.workspaceId],
@@ -199,8 +223,11 @@ export class MySqlOpportunityRefreshWorker {
           evidenceCount ? "ready" : "candidate",
           now,
           job.opportunityId,
-          ...(ownership?.owner ? (native ? [ownership.owner.account_id, ownership.owner.account_id] : [ownership.owner.account_id]) :
-            [job.organizationId, job.workspaceId]),
+          ...(ownership?.owner
+            ? native
+              ? [ownership.owner.account_id, ownership.owner.account_id]
+              : [ownership.owner.account_id]
+            : [job.organizationId, job.workspaceId]),
         ],
       );
       await refreshRuleRecommendation(connection, {
@@ -215,9 +242,14 @@ export class MySqlOpportunityRefreshWorker {
         ownership,
       });
       if (ownership?.owner)
-        await queueOwnedSelectionEvaluation(connection, job.opportunityId, ownership.owner.account_id, native, now);
-      else
-        await queueAutomaticSelectionEvaluation(connection, { ...job, now });
+        await queueOwnedSelectionEvaluation(
+          connection,
+          job.opportunityId,
+          ownership.owner.account_id,
+          native,
+          now,
+        );
+      else await queueAutomaticSelectionEvaluation(connection, { ...job, now });
       const status = evidenceCount ? "succeeded" : "succeeded_empty";
       await this.completeLeasedJob(connection, job, status, now);
       await this.event(
@@ -241,7 +273,13 @@ export class MySqlOpportunityRefreshWorker {
       connection.release();
     }
   }
-  private async refreshOwnedEvidence(connection: PoolConnection, job: Job, ownership: NonNullable<CalculationOwnership>, now: Date, native: boolean) {
+  private async refreshOwnedEvidence(
+    connection: PoolConnection,
+    job: Job,
+    ownership: NonNullable<CalculationOwnership>,
+    now: Date,
+    native: boolean,
+  ) {
     const account = ownership.owner!.account_id;
     const ownerJoin = (alias: string, table: string, id: string) =>
       `JOIN account_owned_records ${alias} ON ${alias}.source_table='${table}' AND ${alias}.source_id=${id} AND ${alias}.account_id=? `;
@@ -249,9 +287,12 @@ export class MySqlOpportunityRefreshWorker {
       "SELECT s.id,s.provider_id,s.raw_evidence_id,s.observed_at,l.id link_id " +
         "FROM trend_topics t JOIN trend_signals s ON s.topic_id=t.id " +
         "JOIN raw_evidence r ON r.id=s.raw_evidence_id AND r.provider_id=s.provider_id " +
-        ownerJoin("so", "trend_signals", "s.id") + ownerJoin("ro", "raw_evidence", "r.id") +
+        ownerJoin("so", "trend_signals", "s.id") +
+        ownerJoin("ro", "raw_evidence", "r.id") +
         "LEFT JOIN opportunity_evidence_links l ON l.opportunity_id=? AND l.evidence_type='trend_signal' AND l.evidence_id=s.id " +
-        "WHERE t.id=?" + (native ? " AND r.account_id=ro.account_id" : "") + " LOCK IN SHARE MODE",
+        "WHERE t.id=?" +
+        (native ? " AND r.account_id=ro.account_id" : "") +
+        " LOCK IN SHARE MODE",
       [account, account, job.opportunityId, job.sourceRefId],
     );
     // A prior projection may legitimately have linked other topics. Preserve those
@@ -267,7 +308,10 @@ export class MySqlOpportunityRefreshWorker {
         "LEFT JOIN account_owned_records ro ON ro.source_table='raw_evidence' AND ro.source_id=r.id AND ro.account_id=? " +
         "LEFT JOIN account_owned_records ot ON ot.source_table='trend_topics' AND ot.source_id=t.id AND ot.account_id=? " +
         "WHERE l.opportunity_id=? AND (lo.source_id IS NULL OR so.source_id IS NULL OR ro.source_id IS NULL OR ot.source_id IS NULL" +
-        (native ? " OR NOT(r.account_id<=>ro.account_id) OR NOT(t.account_id<=>ot.account_id)" : "") + ") LIMIT 1 LOCK IN SHARE MODE",
+        (native
+          ? " OR NOT(r.account_id<=>ro.account_id) OR NOT(t.account_id<=>ot.account_id)"
+          : "") +
+        ") LIMIT 1 LOCK IN SHARE MODE",
       [account, account, account, account, job.opportunityId],
     );
     if (invalid.length)
@@ -279,14 +323,25 @@ export class MySqlOpportunityRefreshWorker {
       await connection.query(
         "INSERT INTO opportunity_evidence_links (id,opportunity_id,evidence_type,evidence_id,provider_id,raw_evidence_id,observed_at,created_at) " +
           "VALUES (?,?,'trend_signal',?,?,?,?,?)",
-        [id, job.opportunityId, signal.id, signal.provider_id, signal.raw_evidence_id, signal.observed_at, now],
+        [
+          id,
+          job.opportunityId,
+          signal.id,
+          signal.provider_id,
+          signal.raw_evidence_id,
+          signal.observed_at,
+          now,
+        ],
       );
       inserted.push(["opportunity_evidence_links", id]);
     }
     await registerCalculationOwners(connection, ownership, inserted);
   }
   private async completeLeasedJob(
-    connection: PoolConnection, job: Job, status: "succeeded" | "succeeded_empty", now: Date,
+    connection: PoolConnection,
+    job: Job,
+    status: "succeeded" | "succeeded_empty",
+    now: Date,
   ) {
     const [result] = await connection.query<import("mysql2/promise").ResultSetHeader>(
       "UPDATE opportunity_refresh_jobs SET status=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? " +
@@ -325,11 +380,20 @@ export class MySqlOpportunityRefreshWorker {
     const eventId = randomUUID();
     if (ownership?.owner) {
       await appendAccountOpportunityEvent(connection, {
-        id: eventId, opportunityId: job.opportunityId, eventType, actorType: "worker",
-        actorId: this.workerId, requestId: job.requestId, traceId: job.traceId,
-        payloadJson: JSON.stringify(payload), now,
+        id: eventId,
+        opportunityId: job.opportunityId,
+        eventType,
+        actorType: "worker",
+        actorId: this.workerId,
+        requestId: job.requestId,
+        traceId: job.traceId,
+        payloadJson: JSON.stringify(payload),
+        now,
       });
-      await registerCalculationOwners(connection, ownership, [["opportunity_events", eventId], ["opportunity_outbox", eventId]]);
+      await registerCalculationOwners(connection, ownership, [
+        ["opportunity_events", eventId],
+        ["opportunity_outbox", eventId],
+      ]);
       return;
     }
     await appendOpportunityEvent(connection, {
@@ -359,6 +423,9 @@ export class MySqlOpportunityRefreshWorker {
       requestId: job.requestId,
       traceId: job.traceId,
     });
-    await registerCalculationOwners(connection, ownership, [["opportunity_events", eventId], ["opportunity_outbox", eventId]]);
+    await registerCalculationOwners(connection, ownership, [
+      ["opportunity_events", eventId],
+      ["opportunity_outbox", eventId],
+    ]);
   }
 }

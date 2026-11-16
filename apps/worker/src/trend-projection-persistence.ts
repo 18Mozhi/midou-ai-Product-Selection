@@ -107,7 +107,13 @@ export class TrendProjectionPersistence {
       const [lease] = await c.query<RowDataPacket[]>(
         "SELECT id FROM trend_projection_jobs WHERE id=? AND normalized_record_id=? AND status='leased' AND lease_owner=? " +
           "AND attempt_count=? AND lease_expires_at>? FOR UPDATE",
-        [job.id, job.leasedNormalizedRecordId ?? job.normalizedRecordId, this.workerId, job.attemptCount, now],
+        [
+          job.id,
+          job.leasedNormalizedRecordId ?? job.normalizedRecordId,
+          this.workerId,
+          job.attemptCount,
+          now,
+        ],
       );
       if (!lease[0]) throw new TrendProjectionError("trend_projection_lease_lost", true);
       stage = "evidence_ownership";
@@ -346,7 +352,8 @@ export class TrendProjectionPersistence {
           "WHERE id=? AND status='leased' AND lease_owner=? AND attempt_count=? AND lease_expires_at>?",
         [finishedAt, job.id, this.workerId, job.attemptCount, finishedAt],
       );
-      if (finished.affectedRows !== 1) throw new TrendProjectionError("trend_projection_lease_lost", true);
+      if (finished.affectedRows !== 1)
+        throw new TrendProjectionError("trend_projection_lease_lost", true);
       await c.commit();
       return topicId;
     } catch (error) {
@@ -1230,8 +1237,10 @@ export class TrendProjectionPersistence {
       await queueOwnedSelectionEvaluation(c, persistedOpportunityId, owner.account_id, native, now);
     else
       await queueAutomaticSelectionEvaluation(c, {
-        organizationId: job.organizationId, workspaceId: job.workspaceId,
-        opportunityId: persistedOpportunityId, now,
+        organizationId: job.organizationId,
+        workspaceId: job.workspaceId,
+        opportunityId: persistedOpportunityId,
+        now,
       });
     if (created) {
       await this.alerts.writeOpportunityDiscovery(

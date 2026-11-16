@@ -115,7 +115,13 @@ const { dialogElement: createUserDialogElement, handleCancel: handleCreateUserCa
         <section :class="{ 'p44-admin-create-group': tab === 'admins' }">
           <header v-if="tab === 'admins'" class="p44-admin-create-group-head">
             <h4>权限与归属</h4>
-            <p>{{ accountRehearsal ? "可按需设置平台角色。" : "平台角色与组织角色分别设置；可暂不加入组织。" }}</p>
+            <p>
+              {{
+                accountRehearsal
+                  ? "可按需设置平台角色。"
+                  : "平台角色与组织角色分别设置；可暂不加入组织。"
+              }}
+            </p>
           </header>
           <label
             >平台角色<select

@@ -105,7 +105,9 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
       <span class="responsive-record-summary responsive-record-summary--content">
         <b :data-state="row.status">{{ stateName(row.status) }}</b>
         <strong>{{ row.title }}</strong>
-        <small v-if="!accountRehearsal">{{ row.organization_name }} / {{ row.workspace_name }}</small>
+        <small v-if="!accountRehearsal"
+          >{{ row.organization_name }} / {{ row.workspace_name }}</small
+        >
         <span class="content-mobile-facts">
           <span><small>信号 / 来源</small>{{ row.signal_count }} / {{ row.source_count }}</span>
           <span><small>热度</small>{{ row.heat_value }}</span>

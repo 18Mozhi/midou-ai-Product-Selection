@@ -82,10 +82,19 @@ export function registerPlatformAccountRoutes(
   }
   app.post("/api/v1/platform/accounts/users", async (r, reply) => {
     const actorId = await write(r);
-    const input = r.body as { organization_id?: unknown; organization_role_code?: unknown } | undefined;
-    if (o.accountReadRehearsal &&
-        (input?.organization_id || (input?.organization_role_code && input.organization_role_code !== "member")))
-      throw new ApiError(400, "platform_account_legacy_scope_invalid", "账号模式不能分配组织。", "移除组织字段后重试。");
+    const input = r.body as
+      { organization_id?: unknown; organization_role_code?: unknown } | undefined;
+    if (
+      o.accountReadRehearsal &&
+      (input?.organization_id ||
+        (input?.organization_role_code && input.organization_role_code !== "member"))
+    )
+      throw new ApiError(
+        400,
+        "platform_account_legacy_scope_invalid",
+        "账号模式不能分配组织。",
+        "移除组织字段后重试。",
+      );
     reply.code(201);
     return envelope(await o.service.createUser(r.body, context(r, actorId)), r);
   });

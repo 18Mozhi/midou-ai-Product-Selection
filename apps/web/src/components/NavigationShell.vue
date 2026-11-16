@@ -85,8 +85,12 @@ const state = ref<State>("loading"),
   actionHint = ref(""),
   menuOpen = ref(false),
   menuQuery = ref("");
-const accountRehearsal = computed(() => guard.value?.guard_reason === "navigation_account_rehearsal");
-const retiredScope = computed(() => accountRehearsal.value || guard.value?.account_rehearsal === true);
+const accountRehearsal = computed(
+  () => guard.value?.guard_reason === "navigation_account_rehearsal",
+);
+const retiredScope = computed(
+  () => accountRehearsal.value || guard.value?.account_rehearsal === true,
+);
 const { themeOpen, activeTheme, themeNotice, loadThemePreference, chooseTheme } =
   useNavigationShellTheme(request);
 const themeTrigger = ref<HTMLButtonElement | null>(null);
@@ -125,17 +129,26 @@ const items = computed(() =>
   // still performs its normal server navigation guard.
   accountRehearsal.value
     ? [
-        ...navigationItemsFor("member").filter((item) => canOpenAccountRehearsalRoute(item.path))
+        ...navigationItemsFor("member")
+          .filter((item) => canOpenAccountRehearsalRoute(item.path))
           .map((item) => ({ ...item, group: "选品" })),
-        { label: "任务与审批", path: "/tasks/approvals", icon: "task", group: "账号记录", capabilities: [] },
+        {
+          label: "任务与审批",
+          path: "/tasks/approvals",
+          icon: "task",
+          group: "账号记录",
+          capabilities: [],
+        },
       ]
     : props.account && !guard.value
       ? navigationItemsFor("member")
       : authorizedNavigation(props.shell, allCapabilities.value, guard.value?.roles ?? [])
           .filter((item) => !retiredScope.value || !legacyScopePaths.has(item.path))
-          .map((item) => retiredScope.value && item.path === "/platform-admin/accounts"
-            ? { ...item, label: "平台账号" }
-            : item),
+          .map((item) =>
+            retiredScope.value && item.path === "/platform-admin/accounts"
+              ? { ...item, label: "平台账号" }
+              : item,
+          ),
 );
 const navigationParentPath = computed(() => resolveNavigationParentPath(routePath.value));
 const activeItem = computed(
@@ -329,12 +342,9 @@ watch(
     void load();
   },
 );
-watch(
-  accountRehearsal,
-  (enabled) => {
-    if (enabled && props.shell === "platform_admin") void loadThemePreference(false);
-  },
-);
+watch(accountRehearsal, (enabled) => {
+  if (enabled && props.shell === "platform_admin") void loadThemePreference(false);
+});
 watch(
   () => props.shell,
   (shell) => {
@@ -371,7 +381,9 @@ onUnmounted(() => {
         aria-label="米兜智能选品"
         :to="
           shell === 'member'
-            ? (accountRehearsal ? '/opportunities' : '/home')
+            ? accountRehearsal
+              ? '/opportunities'
+              : '/home'
             : shell === 'organization_admin'
               ? '/org-admin'
               : '/platform-admin'
@@ -416,17 +428,29 @@ onUnmounted(() => {
       </div>
       <div class="role-top-actions">
         <RouterLink
-          v-if="!retiredScope && shell === 'platform_admin' && routePath !== '/platform-admin' && allCapabilities.includes('platform:superadmin')"
+          v-if="
+            !retiredScope &&
+            shell === 'platform_admin' &&
+            routePath !== '/platform-admin' &&
+            allCapabilities.includes('platform:superadmin')
+          "
           class="role-quick-action"
           to="/platform-admin/organizations/new"
           aria-label="新建组织"
-        ><AppIcon name="plus" /> <span>新建组织</span></RouterLink>
+          ><AppIcon name="plus" /> <span>新建组织</span></RouterLink
+        >
         <RouterLink
-          v-else-if="!retiredScope && shell === 'organization_admin' && routePath !== '/org-admin' && guard?.roles?.includes('organization_admin')"
+          v-else-if="
+            !retiredScope &&
+            shell === 'organization_admin' &&
+            routePath !== '/org-admin' &&
+            guard?.roles?.includes('organization_admin')
+          "
           class="role-quick-action"
           to="/org-admin/members"
           aria-label="邀请成员"
-        ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink>
+          ><AppIcon name="plus" /> <span>邀请成员</span></RouterLink
+        >
         <button
           v-if="!retiredScope && (shell === 'member' || state === 'ready')"
           type="button"
@@ -436,7 +460,7 @@ onUnmounted(() => {
           @click="openDiscovery('search')"
         >
           <AppIcon name="search" />
-          <span>{{ shell === 'member' ? '搜索功能、商品、ASIN等' : '搜索后台功能' }}</span>
+          <span>{{ shell === "member" ? "搜索功能、商品、ASIN等" : "搜索后台功能" }}</span>
           <kbd>Ctrl K</kbd>
         </button>
         <span
@@ -491,7 +515,8 @@ onUnmounted(() => {
             >
             <RouterLink
               v-if="
-                !retiredScope && shell === 'platform_admin' &&
+                !retiredScope &&
+                shell === 'platform_admin' &&
                 routePath !== '/platform-admin' &&
                 allCapabilities.includes('platform:superadmin')
               "
@@ -621,7 +646,10 @@ onUnmounted(() => {
           <RouterLink v-if="compactNavigation" to="/me" aria-label="个人中心"
             ><AppIcon name="person" />个人中心</RouterLink
           >
-          <div v-if="!retiredScope && shell === 'member' && compactNavigation" class="role-discovery-actions">
+          <div
+            v-if="!retiredScope && shell === 'member' && compactNavigation"
+            class="role-discovery-actions"
+          >
             <button type="button" @click="openDiscovery('search')">
               <AppIcon name="search" /><span>全局搜索</span>
             </button>

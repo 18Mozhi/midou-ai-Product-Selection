@@ -17,9 +17,13 @@ export const router = createRouter({
   },
 });
 
-const verifySessionRoute = createSessionRouteGuard(router, legacyScopeRouteNames, async () => (
-  await apiRequest<{ authenticated: boolean; account_rehearsal?: true }>("/auth/session-status")
-).data);
+const verifySessionRoute = createSessionRouteGuard(
+  router,
+  legacyScopeRouteNames,
+  async () =>
+    (await apiRequest<{ authenticated: boolean; account_rehearsal?: true }>("/auth/session-status"))
+      .data,
+);
 
 router.beforeEach((to) => {
   if (to.path === "/settings/theme")

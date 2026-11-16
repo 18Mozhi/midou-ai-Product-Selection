@@ -11,10 +11,16 @@ export const activeAccountCollectionTaskStatusesSql =
 
 export const sealedAccountCollectionBacklogCountSql =
   "(SELECT COUNT(*) FROM collection_tasks backlog WHERE EXISTS (SELECT 1 " +
-  eligibleTaskOwnerFromSql + " AND task_owner.source_id=backlog.id)" +
-  " AND backlog.status IN " + activeAccountCollectionTaskStatusesSql + ")";
+  eligibleTaskOwnerFromSql +
+  " AND task_owner.source_id=backlog.id)" +
+  " AND backlog.status IN " +
+  activeAccountCollectionTaskStatusesSql +
+  ")";
 
 export const nativeCollectionBacklogCountSql =
   "(SELECT COUNT(*) FROM collection_tasks backlog WHERE EXISTS (SELECT 1 " +
-  eligibleTaskOwnerFromSql + " AND task_owner.source_id=backlog.id AND task_owner.account_id=backlog.account_id)" +
-  " AND backlog.status IN " + activeAccountCollectionTaskStatusesSql + ")";
+  eligibleTaskOwnerFromSql +
+  " AND task_owner.source_id=backlog.id AND task_owner.account_id=backlog.account_id)" +
+  " AND backlog.status IN " +
+  activeAccountCollectionTaskStatusesSql +
+  ")";

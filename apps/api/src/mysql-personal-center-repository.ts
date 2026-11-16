@@ -121,7 +121,8 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
         version,
         updated_at: input.now.toISOString(),
       };
-      await appendPlatformAudit(connection,
+      await appendPlatformAudit(
+        connection,
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action," +
           "resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
           "schema_version) VALUES (?,NULL,NULL,?,'user.profile.updated','user_profile',?," +
@@ -175,7 +176,9 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
 
   async assets(input: PersonalAssetsScope) {
     const scoped = "organizationId" in input;
-    let nativeTrend = "", nativeOpportunity = "", nativeTask = "";
+    let nativeTrend = "",
+      nativeOpportunity = "",
+      nativeTask = "";
     if (!scoped) {
       await requireAccountReadRehearsal(this.pool);
       const [columns] = await this.pool.query<RowDataPacket[]>(
@@ -184,58 +187,75 @@ export class MySqlPersonalCenterRepository implements PersonalCenterRepository {
           "AND COLUMN_NAME IN ('account_id','organization_id','workspace_id')",
       );
       const native = (table: string, alias: string, recipient: string) => {
-        const shape = columns.filter(c => c.table_name === table).map(c => c.column_name).sort().join(",");
+        const shape = columns
+          .filter((c) => c.table_name === table)
+          .map((c) => c.column_name)
+          .sort()
+          .join(",");
         if (shape === "account_id") return ` AND ${alias}.account_id=${recipient}`;
         if (shape === "organization_id,workspace_id") return "";
-        throw new PersonalCenterError("personal_asset_scope_schema_invalid", 503, "账号资产尚未就绪。");
+        throw new PersonalCenterError(
+          "personal_asset_scope_schema_invalid",
+          503,
+          "账号资产尚未就绪。",
+        );
       };
       nativeTrend = native("trend_topics", "t", "f.account_id");
       nativeOpportunity = native("opportunities", "o", "d.actor_id");
       nativeTask = native("tasks", "t", "t.assignee_id");
     }
-    const [followed, decisions, tasks] = await Promise.all(scoped ? [
-      this.pool.query<RowDataPacket[]>(
-        "SELECT t.id,t.title,t.market,t.category,t.status,f.created_at FROM account_trend_topic_follows " +
-          "f JOIN trend_topics t ON t.id=f.topic_id WHERE f.account_id=? AND t.organization_id=? AND " +
-          "t.workspace_id=? ORDER BY f.created_at DESC LIMIT 20",
-        [input.userId, input.organizationId, input.workspaceId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT d.id,d.action,d.reason,d.resulting_status,d.created_at,o.id opportunity_id," +
-          "o.name opportunity_name FROM opportunity_decisions d JOIN opportunities o ON o.id=d.opportunity_id " +
-          "WHERE d.actor_id=? AND o.organization_id=? AND o.workspace_id=? ORDER BY d.created_at " +
-          "DESC LIMIT 20",
-        [input.userId, input.organizationId, input.workspaceId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT id,title,status,priority,due_at,updated_at FROM tasks WHERE assignee_id=? AND " +
-          "organization_id=? AND workspace_id=? AND deleted_at IS NULL ORDER BY updated_at DESC " +
-          "LIMIT 20",
-        [input.userId, input.organizationId, input.workspaceId],
-      ),
-    ] : [
-      this.pool.query<RowDataPacket[]>(
-        "SELECT t.id,t.title,t.market,t.category,t.status,f.created_at FROM account_trend_topic_follows " +
-          "f JOIN trend_topics t ON t.id=f.topic_id WHERE f.account_id=? AND " +
-          ownsPersonalAsset("trend_topics", "t.id", "f.account_id") + nativeTrend +
-          " ORDER BY f.created_at DESC LIMIT 20",
-        [input.userId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT d.id,d.action,d.reason,d.resulting_status,d.created_at,o.id opportunity_id," +
-          "o.name opportunity_name FROM opportunity_decisions d JOIN opportunities o ON o.id=d.opportunity_id " +
-          "WHERE d.actor_id=? AND " + ownsPersonalAsset("opportunities", "o.id", "d.actor_id") +
-          " AND " + ownsPersonalAsset("opportunity_decisions", "d.id", "d.actor_id") + nativeOpportunity +
-          " ORDER BY d.created_at DESC LIMIT 20",
-        [input.userId],
-      ),
-      this.pool.query<RowDataPacket[]>(
-        "SELECT id,title,status,priority,due_at,updated_at FROM tasks t WHERE t.assignee_id=? AND " +
-          ownsPersonalAsset("tasks", "t.id", "t.assignee_id") + nativeTask +
-          " AND t.deleted_at IS NULL ORDER BY t.updated_at DESC LIMIT 20",
-        [input.userId],
-      ),
-    ]);
+    const [followed, decisions, tasks] = await Promise.all(
+      scoped
+        ? [
+            this.pool.query<RowDataPacket[]>(
+              "SELECT t.id,t.title,t.market,t.category,t.status,f.created_at FROM account_trend_topic_follows " +
+                "f JOIN trend_topics t ON t.id=f.topic_id WHERE f.account_id=? AND t.organization_id=? AND " +
+                "t.workspace_id=? ORDER BY f.created_at DESC LIMIT 20",
+              [input.userId, input.organizationId, input.workspaceId],
+            ),
+            this.pool.query<RowDataPacket[]>(
+              "SELECT d.id,d.action,d.reason,d.resulting_status,d.created_at,o.id opportunity_id," +
+                "o.name opportunity_name FROM opportunity_decisions d JOIN opportunities o ON o.id=d.opportunity_id " +
+                "WHERE d.actor_id=? AND o.organization_id=? AND o.workspace_id=? ORDER BY d.created_at " +
+                "DESC LIMIT 20",
+              [input.userId, input.organizationId, input.workspaceId],
+            ),
+            this.pool.query<RowDataPacket[]>(
+              "SELECT id,title,status,priority,due_at,updated_at FROM tasks WHERE assignee_id=? AND " +
+                "organization_id=? AND workspace_id=? AND deleted_at IS NULL ORDER BY updated_at DESC " +
+                "LIMIT 20",
+              [input.userId, input.organizationId, input.workspaceId],
+            ),
+          ]
+        : [
+            this.pool.query<RowDataPacket[]>(
+              "SELECT t.id,t.title,t.market,t.category,t.status,f.created_at FROM account_trend_topic_follows " +
+                "f JOIN trend_topics t ON t.id=f.topic_id WHERE f.account_id=? AND " +
+                ownsPersonalAsset("trend_topics", "t.id", "f.account_id") +
+                nativeTrend +
+                " ORDER BY f.created_at DESC LIMIT 20",
+              [input.userId],
+            ),
+            this.pool.query<RowDataPacket[]>(
+              "SELECT d.id,d.action,d.reason,d.resulting_status,d.created_at,o.id opportunity_id," +
+                "o.name opportunity_name FROM opportunity_decisions d JOIN opportunities o ON o.id=d.opportunity_id " +
+                "WHERE d.actor_id=? AND " +
+                ownsPersonalAsset("opportunities", "o.id", "d.actor_id") +
+                " AND " +
+                ownsPersonalAsset("opportunity_decisions", "d.id", "d.actor_id") +
+                nativeOpportunity +
+                " ORDER BY d.created_at DESC LIMIT 20",
+              [input.userId],
+            ),
+            this.pool.query<RowDataPacket[]>(
+              "SELECT id,title,status,priority,due_at,updated_at FROM tasks t WHERE t.assignee_id=? AND " +
+                ownsPersonalAsset("tasks", "t.id", "t.assignee_id") +
+                nativeTask +
+                " AND t.deleted_at IS NULL ORDER BY t.updated_at DESC LIMIT 20",
+              [input.userId],
+            ),
+          ],
+    );
     return {
       followed_trends: followed[0].map((row) => ({
         ...row,

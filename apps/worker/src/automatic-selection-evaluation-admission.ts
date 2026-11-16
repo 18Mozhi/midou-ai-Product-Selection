@@ -35,12 +35,18 @@ const ownedJoin = (table: string, id: string, alias: string) =>
   `STRAIGHT_JOIN account_owned_records ${alias} FORCE INDEX (PRIMARY) ON ${alias}.source_table='${table}'
     AND ${alias}.source_id=${id} AND ${alias}.account_id=seed_e.account_id `;
 export const nativeAutomaticEvaluationCandidatePresenceSql = automaticEvaluationCandidatePresenceSql
-  .replace("FROM opportunity_evidence_links l_primary ", "FROM opportunity_evidence_links l_primary FORCE INDEX (uq_opportunity_evidence) ")
+  .replace(
+    "FROM opportunity_evidence_links l_primary ",
+    "FROM opportunity_evidence_links l_primary FORCE INDEX (uq_opportunity_evidence) ",
+  )
   .replace("uq_normalized_scope_record_version", "uq_normalized_account_record_version")
-  .replace("n_primary_current.organization_id=n_primary.organization_id AND n_primary_current.workspace_id=n_primary.workspace_id",
-    "n_primary_current.account_id=n_primary.account_id")
+  .replace(
+    "n_primary_current.organization_id=n_primary.organization_id AND n_primary_current.workspace_id=n_primary.workspace_id",
+    "n_primary_current.account_id=n_primary.account_id",
+  )
   .replace("JOIN providers p_primary", "STRAIGHT_JOIN providers p_primary")
-  .replace("WHERE l_primary.opportunity_id=o.id AND n_primary.organization_id=o.organization_id AND n_primary.workspace_id=o.workspace_id",
+  .replace(
+    "WHERE l_primary.opportunity_id=o.id AND n_primary.organization_id=o.organization_id AND n_primary.workspace_id=o.workspace_id",
     `STRAIGHT_JOIN raw_evidence seed_e ON seed_e.id=l_primary.raw_evidence_id
       AND seed_e.provider_id=n_primary.provider_id AND seed_e.account_id=n_primary.account_id
     STRAIGHT_JOIN raw_evidence active_e ON active_e.id=n_primary_current.raw_evidence_id
@@ -56,29 +62,49 @@ export const nativeAutomaticEvaluationCandidatePresenceSql = automaticEvaluation
     ${ownedJoin("collection_tasks", "seed_t.id", "seed_task_owner")}
     ${ownedJoin("collection_tasks", "active_t.id", "active_task_owner")}
     WHERE l_primary.opportunity_id=o.id AND seed_t.organization_id=o.organization_id
-      AND seed_t.workspace_id=o.workspace_id AND seed_e.account_id=ao.account_id`);
-export const nativeAutomaticEvaluationParentSql = "opportunities o JOIN account_owned_records ao ON ao.source_table='opportunities' AND ao.source_id=o.id " +
+      AND seed_t.workspace_id=o.workspace_id AND seed_e.account_id=ao.account_id`,
+  );
+export const nativeAutomaticEvaluationParentSql =
+  "opportunities o JOIN account_owned_records ao ON ao.source_table='opportunities' AND ao.source_id=o.id " +
   "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
   "AND (ao.reason='exclusive_owner' OR (ao.reason IN ('shared','unassigned') AND ao.account_id=cut.primary_account_id)) ";
 const nativeParent = nativeAutomaticEvaluationParentSql;
-const nativeEligible = eligible.replace(automaticEvaluationCandidatePresenceSql, () => nativeAutomaticEvaluationCandidatePresenceSql);
-export const nativeAutomaticEvaluationAdmissionCandidatesSql = automaticEvaluationAdmissionCandidatesSql
-  .replace("o.workspace_id FROM opportunities o ", `o.workspace_id,ao.account_id FROM ${nativeParent}`)
-  .replace(eligible, () => nativeEligible);
+const nativeEligible = eligible.replace(
+  automaticEvaluationCandidatePresenceSql,
+  () => nativeAutomaticEvaluationCandidatePresenceSql,
+);
+export const nativeAutomaticEvaluationAdmissionCandidatesSql =
+  automaticEvaluationAdmissionCandidatesSql
+    .replace(
+      "o.workspace_id FROM opportunities o ",
+      `o.workspace_id,ao.account_id FROM ${nativeParent}`,
+    )
+    .replace(eligible, () => nativeEligible);
 export const nativeAutomaticEvaluationAdmissionInsertSql = automaticEvaluationAdmissionInsertSql
   .replace("FROM opportunities o ", `FROM ${nativeParent}`)
   .replace(eligible, () => `ao.account_id=? AND ${nativeEligible}`);
-export const nativeAutomaticEvaluationLockSql =
-  `SELECT o.* FROM ${nativeParent}WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? AND ${nativeEligible} FOR UPDATE`;
+export const nativeAutomaticEvaluationLockSql = `SELECT o.* FROM ${nativeParent}WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? AND ${nativeEligible} FOR UPDATE`;
 
 export const accountAutomaticEvaluationPresenceSql = nativeAutomaticEvaluationCandidatePresenceSql
-  .replace("seed_t.id=seed_e.collection_task_id", "seed_t.id=seed_e.collection_task_id AND seed_t.account_id=seed_e.account_id")
-  .replace("active_t.organization_id=seed_t.organization_id AND active_t.workspace_id=seed_t.workspace_id",
-    "active_t.account_id=seed_e.account_id")
-  .replace(/ AND seed_t\.organization_id=o\.organization_id\s+AND seed_t\.workspace_id=o\.workspace_id/, "");
-export const accountAutomaticEvaluationParentSql = nativeParent +
+  .replace(
+    "seed_t.id=seed_e.collection_task_id",
+    "seed_t.id=seed_e.collection_task_id AND seed_t.account_id=seed_e.account_id",
+  )
+  .replace(
+    "active_t.organization_id=seed_t.organization_id AND active_t.workspace_id=seed_t.workspace_id",
+    "active_t.account_id=seed_e.account_id",
+  )
+  .replace(
+    / AND seed_t\.organization_id=o\.organization_id\s+AND seed_t\.workspace_id=o\.workspace_id/,
+    "",
+  );
+export const accountAutomaticEvaluationParentSql =
+  nativeParent +
   "JOIN users active_owner_account ON active_owner_account.id=ao.account_id AND active_owner_account.status='active' ";
-const accountEligible = eligible.replace(automaticEvaluationCandidatePresenceSql, () => accountAutomaticEvaluationPresenceSql);
+const accountEligible = eligible.replace(
+  automaticEvaluationCandidatePresenceSql,
+  () => accountAutomaticEvaluationPresenceSql,
+);
 const accountBinding = "o.account_id=ao.account_id";
 export const accountAutomaticEvaluationQueries = {
   candidates: `SELECT o.id,ao.account_id FROM ${accountAutomaticEvaluationParentSql}
@@ -93,21 +119,38 @@ export const accountAutomaticEvaluationQueries = {
 };
 
 /** Consistent candidate read, then per-resource atomic eligibility check; duplicate queue rows remain untouched. */
-export async function enqueueMissingSelectionEvaluations(pool: Pool, now: Date, nativeEvidence?: boolean, accountParent = false) {
-  const native = nativeEvidence ?? await hasNativeNormalizedAccountScope(pool);
-  const [rows] = await pool.query<RowDataPacket[]>(accountParent ? accountAutomaticEvaluationQueries.candidates : native
-    ? nativeAutomaticEvaluationAdmissionCandidatesSql : automaticEvaluationAdmissionCandidatesSql);
+export async function enqueueMissingSelectionEvaluations(
+  pool: Pool,
+  now: Date,
+  nativeEvidence?: boolean,
+  accountParent = false,
+) {
+  const native = nativeEvidence ?? (await hasNativeNormalizedAccountScope(pool));
+  const [rows] = await pool.query<RowDataPacket[]>(
+    accountParent
+      ? accountAutomaticEvaluationQueries.candidates
+      : native
+        ? nativeAutomaticEvaluationAdmissionCandidatesSql
+        : automaticEvaluationAdmissionCandidatesSql,
+  );
   let admitted = 0;
   for (const row of rows) {
-    const [result] = await pool.query<ResultSetHeader>(accountParent ? accountAutomaticEvaluationQueries.insert : native
-      ? nativeAutomaticEvaluationAdmissionInsertSql : automaticEvaluationAdmissionInsertSql, [
-      now,
-      now,
-      now,
-      row.id,
-      ...(accountParent ? [row.account_id] :
-        [row.organization_id, row.workspace_id, ...(native ? [row.account_id] : [])]),
-    ]);
+    const [result] = await pool.query<ResultSetHeader>(
+      accountParent
+        ? accountAutomaticEvaluationQueries.insert
+        : native
+          ? nativeAutomaticEvaluationAdmissionInsertSql
+          : automaticEvaluationAdmissionInsertSql,
+      [
+        now,
+        now,
+        now,
+        row.id,
+        ...(accountParent
+          ? [row.account_id]
+          : [row.organization_id, row.workspace_id, ...(native ? [row.account_id] : [])]),
+      ],
+    );
     admitted += result.affectedRows;
   }
   return admitted;

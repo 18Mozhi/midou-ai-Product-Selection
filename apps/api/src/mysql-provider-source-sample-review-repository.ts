@@ -76,7 +76,8 @@ export class MySqlProviderSourceSampleReviewRepository {
           "sample_id,replay_run_id,created_at) VALUES (?,?,?,?,?,NULL,?)",
         [randomUUID(), input.actorId, input.route, input.idempotencyKey, input.sampleId, input.now],
       );
-      await appendPlatformAudit(c,
+      await appendPlatformAudit(
+        c,
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type," +
           "resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) " +
           "VALUES(?,NULL,NULL,?,?,'provider_parser_sample',?,'succeeded',?,?,?,?,1)",

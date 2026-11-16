@@ -556,7 +556,9 @@ async function createUser() {
       "/platform/accounts/users",
       {
         ...accountFields,
-        ...(props.accountRehearsal ? {} : { organization_id: organization_id || null, organization_role_code }),
+        ...(props.accountRehearsal
+          ? {}
+          : { organization_id: organization_id || null, organization_role_code }),
         platform_role_code: userForm.platform_role_code || null,
       },
       "POST",
@@ -646,7 +648,9 @@ onMounted(load);
     <PlatformPageHeader
       :title="
         accountOverviewRoute
-          ? (accountRehearsal ? '平台账号' : '组织与用户')
+          ? accountRehearsal
+            ? '平台账号'
+            : '组织与用户'
           : permissionsRoute
             ? '角色权限'
             : props.routePath === '/platform-admin/organizations/new'

@@ -1,5 +1,9 @@
 import { collectionTaskScope, fileAssetAccountStorage } from "@scoutops/database";
-import { appendEvidenceDataEvent, appendEvidenceDataOutbox, dataQualityIssueScope } from "@scoutops/database";
+import {
+  appendEvidenceDataEvent,
+  appendEvidenceDataOutbox,
+  dataQualityIssueScope,
+} from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type {
@@ -58,30 +62,38 @@ const issue = (row: RowDataPacket): QualityIssueSummary => ({
   updated_at: iso(row.updated_at),
 });
 export class MySqlDataQualityRepository implements DataQualityRepository {
-  constructor(private readonly pool: Pool, private readonly accountMode = false) {}
+  constructor(
+    private readonly pool: Pool,
+    private readonly accountMode = false,
+  ) {}
   private async assigneeShape(db: Pick<Pool, "query">) {
     if (!this.accountMode) return false;
     const [fields] = await db.query<RowDataPacket[]>(
       "SHOW COLUMNS FROM data_quality_issues WHERE Field IN ('assigned_membership_id','historical_assignee_membership_id','assigned_account_id')",
     );
-    const shape = fields.map(row => row.Field).sort().join(",");
+    const shape = fields
+      .map((row) => row.Field)
+      .sort()
+      .join(",");
     if (shape === "assigned_membership_id") return false;
     if (shape === "assigned_account_id,historical_assignee_membership_id") return true;
     throw new Error("data_quality_assignee_schema_incomplete");
   }
   private assigneeJoin(account: boolean) {
-    return account ? "LEFT JOIN users u ON u.id=i.assigned_account_id" :
-      "LEFT JOIN memberships am ON am.id=i.assigned_membership_id LEFT JOIN users u ON u.id=am.user_id";
+    return account
+      ? "LEFT JOIN users u ON u.id=i.assigned_account_id"
+      : "LEFT JOIN memberships am ON am.id=i.assigned_membership_id LEFT JOIN users u ON u.id=am.user_id";
   }
   private assigneeProjection(account: boolean) {
     return account ? "i.historical_assignee_membership_id assigned_membership_id," : "";
   }
   private async evidenceScope(db: Pick<Pool, "query">) {
-    const native = this.accountMode && await collectionTaskScope(db) === "account";
+    const native = this.accountMode && (await collectionTaskScope(db)) === "account";
     const alias = this.accountMode ? "et" : "e";
     const org = native ? "sealed_task.legacy_org_id" : `${alias}.organization_id`;
     const workspace = native ? "sealed_task.legacy_workspace_id" : `${alias}.workspace_id`;
-    const join = native ? `JOIN collection_tasks et ON et.id=e.collection_task_id AND et.account_id=e.account_id
+    const join = native
+      ? `JOIN collection_tasks et ON et.id=e.collection_task_id AND et.account_id=e.account_id
       JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25
       JOIN account_owned_records evidence_owner ON evidence_owner.source_table='raw_evidence'
         AND evidence_owner.source_id=e.id AND evidence_owner.account_id=e.account_id
@@ -92,8 +104,12 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         AND (task_owner.reason='exclusive_owner' OR (task_owner.reason IN ('shared','unassigned') AND e.account_id=cut.primary_account_id))
       LEFT JOIN account_retirement_records sealed_task ON sealed_task.run_id=cut.source_run_id
         AND sealed_task.source_table='collection_tasks' AND sealed_task.source_id=et.id`
-      : this.accountMode ? "JOIN collection_tasks et ON et.id=e.collection_task_id" : "";
-    const coordinates = native ? `${org} organization_id,${workspace} workspace_id` : `${org},${workspace}`;
+      : this.accountMode
+        ? "JOIN collection_tasks et ON et.id=e.collection_task_id"
+        : "";
+    const coordinates = native
+      ? `${org} organization_id,${workspace} workspace_id`
+      : `${org},${workspace}`;
     return { native, join, org, workspace, coordinates };
   }
   private evidenceProjection(coordinates: string) {
@@ -114,26 +130,41 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
     }
     const clause = where.length ? `WHERE ${where.join(" AND ")}` : "";
     const scope = await this.evidenceScope(this.pool);
-    const evidenceClause = clause.replaceAll("e.organization_id", scope.org).replaceAll("e.workspace_id", scope.workspace);
+    const evidenceClause = clause
+      .replaceAll("e.organization_id", scope.org)
+      .replaceAll("e.workspace_id", scope.workspace);
     const issueScope = await dataQualityIssueScope(this.pool, this.accountMode);
     const accountAssignee = await this.assigneeShape(this.pool);
-    const issueWhere = where.map(value => issueScope.scopeFilter(value.replaceAll("e.", "i."), "i"));
+    const issueWhere = where.map((value) =>
+      issueScope.scopeFilter(value.replaceAll("e.", "i."), "i"),
+    );
     if (input.status) {
       issueWhere.push("i.status=?");
     }
     const issueValues = input.status ? [...values, input.status] : values;
     const issueClause = issueWhere.length ? `WHERE ${issueWhere.join(" AND ")}` : "";
     const offset = (input.page - 1) * input.pageSize;
-    const [runColumns] = this.accountMode ? await this.pool.query<RowDataPacket[]>(
-      "SHOW COLUMNS FROM reconciliation_runs WHERE Field IN ('organization_id','workspace_id','historical_context')",
-    ) : [[]];
-    const runShape = runColumns.map(row => row.Field).sort().join(",");
-    if (this.accountMode && runShape !== "historical_context" && runShape !== "organization_id,workspace_id")
+    const [runColumns] = this.accountMode
+      ? await this.pool.query<RowDataPacket[]>(
+          "SHOW COLUMNS FROM reconciliation_runs WHERE Field IN ('organization_id','workspace_id','historical_context')",
+        )
+      : [[]];
+    const runShape = runColumns
+      .map((row) => row.Field)
+      .sort()
+      .join(",");
+    if (
+      this.accountMode &&
+      runShape !== "historical_context" &&
+      runShape !== "organization_id,workspace_id"
+    )
       throw new Error("reconciliation_scope_schema_incomplete");
-    const coordinate = (name: "organization_id" | "workspace_id") => runShape === "historical_context"
-      ? `CONVERT(JSON_UNQUOTE(JSON_EXTRACT(r.historical_context,'$.${name}')) USING ascii)`
-      : `r.${name}`;
-    const runClause = clause.replaceAll("e.organization_id", coordinate("organization_id"))
+    const coordinate = (name: "organization_id" | "workspace_id") =>
+      runShape === "historical_context"
+        ? `CONVERT(JSON_UNQUOTE(JSON_EXTRACT(r.historical_context,'$.${name}')) USING ascii)`
+        : `r.${name}`;
+    const runClause = clause
+      .replaceAll("e.organization_id", coordinate("organization_id"))
       .replaceAll("e.workspace_id", coordinate("workspace_id"));
     const [[evRows], [issueRows], [runRows], [memberRows], [evCount], [issueCount]] =
       await Promise.all([
@@ -165,14 +196,16 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
          ORDER BY r.created_at DESC,r.id DESC LIMIT 20`,
           values,
         ),
-        accountAssignee ? Promise.resolve([[] as RowDataPacket[]]) : this.pool.query<RowDataPacket[]>(
-          `SELECT m.id,m.organization_id,u.email label FROM memberships m
+        accountAssignee
+          ? Promise.resolve([[] as RowDataPacket[]])
+          : this.pool.query<RowDataPacket[]>(
+              `SELECT m.id,m.organization_id,u.email label FROM memberships m
          JOIN users u ON u.id=m.user_id
          WHERE m.status='active' AND u.status='active'
          ${input.organizationId ? "AND m.organization_id=?" : ""}
          ORDER BY u.email,m.id LIMIT 1000`,
-          input.organizationId ? [input.organizationId] : [],
-        ),
+              input.organizationId ? [input.organizationId] : [],
+            ),
         this.pool.query<RowDataPacket[]>(
           `SELECT COUNT(*) total FROM raw_evidence e ${scope.join} ${evidenceClause}`,
           values,
@@ -222,23 +255,28 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         ON cut.slot='current' AND cut.contract_version=25 WHERE child.source_table='${table}'
         AND child.source_id=${sourceId} AND child.account_id=n.account_id
         AND (child.reason='exclusive_owner' OR (child.reason IN ('shared','unassigned') AND child.account_id=cut.primary_account_id)))`;
-    const normalizedFence = scope.native ? ` AND n.account_id=? AND
+    const normalizedFence = scope.native
+      ? ` AND n.account_id=? AND
       EXISTS (SELECT 1 FROM raw_evidence x WHERE x.id=n.raw_evidence_id AND x.account_id=n.account_id AND x.provider_id=n.provider_id)
-      AND ${owned("normalized_records", "n.id")}` : "";
+      AND ${owned("normalized_records", "n.id")}`
+      : "";
     const childArgs = scope.native ? [id, parent.account_id] : [id];
     const [[records], [provenance], [issues]] = await Promise.all([
       this.pool.query<RowDataPacket[]>(
         "SELECT id,record_key,schema_version,record_version,supersedes_record_id," +
           "correction_reason,status,request_id,trace_id,created_at FROM normalized_records n WHERE n.raw_evidence_id=?" +
-          normalizedFence + " ORDER BY record_version DESC",
+          normalizedFence +
+          " ORDER BY record_version DESC",
         childArgs,
       ),
       this.pool.query<RowDataPacket[]>(
         "SELECT f.id,f.normalized_record_id,f.field_path,f.source_path,f.transform_version," +
           "f.source_value_sha256,f.created_at FROM field_provenance f " +
           "JOIN normalized_records n ON n.id=f.normalized_record_id AND n.raw_evidence_id=f.raw_evidence_id " +
-          "WHERE f.raw_evidence_id=?" + normalizedFence +
-          (scope.native ? ` AND ${owned("field_provenance", "f.id")}` : "") + " ORDER BY f.field_path",
+          "WHERE f.raw_evidence_id=?" +
+          normalizedFence +
+          (scope.native ? ` AND ${owned("field_provenance", "f.id")}` : "") +
+          " ORDER BY f.field_path",
         childArgs,
       ),
       this.pool.query<RowDataPacket[]>(
@@ -246,7 +284,8 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
           "FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id " +
           "LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id " +
           "LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id " +
-          this.assigneeJoin(accountAssignee) + " " +
+          this.assigneeJoin(accountAssignee) +
+          " " +
           "WHERE i.raw_evidence_id=? ORDER BY i.created_at DESC",
         [id],
       ),
@@ -441,7 +480,11 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
       const issueScope = await dataQualityIssueScope(c, this.accountMode);
       const accountAssignee = await this.assigneeShape(c);
       if (accountAssignee && input.action === "assign")
-        throw new DataQualityServiceError("quality_issue_assignee_scope_retired", 409, "账号模式不再接受组织成员指派。");
+        throw new DataQualityServiceError(
+          "quality_issue_assignee_scope_retired",
+          409,
+          "账号模式不再接受组织成员指派。",
+        );
       const placeholders = ids.map(() => "?").join(","),
         [rows] = await c.query<RowDataPacket[]>(
           `SELECT ${issueScope.select},p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,
@@ -592,7 +635,8 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
           "FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id " +
           "LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id " +
           "LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id " +
-          this.assigneeJoin(accountAssignee) + " " +
+          this.assigneeJoin(accountAssignee) +
+          " " +
           "WHERE i.id=? FOR UPDATE",
         [input.id],
       );
@@ -694,9 +738,11 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
     const evidence = await this.evidenceScope(this.pool);
     const accountFiles = await fileAssetAccountStorage(this.pool);
     const coord = this.accountMode ? "et" : "e";
-    const scope = evidence.native ? "" : accountFiles
-      ? `AND (f.historical_context IS NULL OR (BINARY JSON_UNQUOTE(JSON_EXTRACT(f.historical_context,'$.organization_id'))=BINARY ${coord}.organization_id AND BINARY JSON_UNQUOTE(JSON_EXTRACT(f.historical_context,'$.workspace_id'))=BINARY ${coord}.workspace_id))`
-      : `AND f.organization_id=${coord}.organization_id AND f.workspace_id=${coord}.workspace_id`;
+    const scope = evidence.native
+      ? ""
+      : accountFiles
+        ? `AND (f.historical_context IS NULL OR (BINARY JSON_UNQUOTE(JSON_EXTRACT(f.historical_context,'$.organization_id'))=BINARY ${coord}.organization_id AND BINARY JSON_UNQUOTE(JSON_EXTRACT(f.historical_context,'$.workspace_id'))=BINARY ${coord}.workspace_id))`
+        : `AND f.organization_id=${coord}.organization_id AND f.workspace_id=${coord}.workspace_id`;
     const [rows] = await this.pool.query<RowDataPacket[]>(
       `SELECT fo.account_id FROM raw_evidence e ${evidence.join}
       JOIN file_assets f ON f.id=e.file_asset_id ${scope}
@@ -704,9 +750,9 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         AND f.size_bytes=e.size_bytes AND f.content_sha256=e.content_sha256
       ${evidence.native ? "" : "JOIN account_ownership_cutover c ON c.slot='current' AND c.contract_version=25"}
       JOIN account_owned_records eo ON eo.source_table='raw_evidence' AND eo.source_id=e.id
-        ${evidence.native ? 'AND eo.account_id=e.account_id' : ''}
+        ${evidence.native ? "AND eo.account_id=e.account_id" : ""}
       JOIN account_owned_records fo ON fo.source_table='file_assets' AND fo.source_id=f.id AND fo.account_id=eo.account_id
-        ${accountFiles ? 'AND f.account_id=fo.account_id' : ''}
+        ${accountFiles ? "AND f.account_id=fo.account_id" : ""}
         ${evidence.native ? "AND (fo.reason='exclusive_owner' OR (fo.reason IN ('shared','unassigned') AND f.account_id=cut.primary_account_id))" : ""}
       WHERE e.id=? AND f.id=? AND e.status='active'`,
       [evidenceId, assetId],
@@ -714,52 +760,94 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
     return rows[0] ? String(rows[0].account_id) : null;
   }
   private nativeDownloadFileJoin(native: boolean) {
-    return native ? `AND e.status='active' AND f.category='evidence' AND f.status='active'
+    return native
+      ? `AND e.status='active' AND f.category='evidence' AND f.status='active'
       AND e.account_id=f.account_id AND f.size_bytes=e.size_bytes AND f.content_sha256=e.content_sha256
       JOIN account_owned_records file_owner ON file_owner.source_table='file_assets'
         AND file_owner.source_id=f.id AND file_owner.account_id=e.account_id
-        AND (file_owner.reason='exclusive_owner' OR (file_owner.reason IN ('shared','unassigned') AND e.account_id=cut.primary_account_id))` : "";
+        AND (file_owner.reason='exclusive_owner' OR (file_owner.reason IN ('shared','unassigned') AND e.account_id=cut.primary_account_id))`
+      : "";
   }
-  private async downloadAuditParent(db: Pick<PoolConnection, "query">, id: string, lock = false, binding?: EvidenceDownloadBinding) {
+  private async downloadAuditParent(
+    db: Pick<PoolConnection, "query">,
+    id: string,
+    lock = false,
+    binding?: EvidenceDownloadBinding,
+  ) {
     const scope = await this.evidenceScope(db);
     if (this.accountMode && !binding)
       throw new DataQualityServiceError("evidence_not_found", 404, "刷新证据列表。");
-    const file = scope.native ? "JOIN file_assets f ON f.id=e.file_asset_id " + this.nativeDownloadFileJoin(true) : binding
-      ? `JOIN file_assets f ON f.id=e.file_asset_id AND e.status='active' AND f.category='evidence' AND f.status='active'
+    const file = scope.native
+      ? "JOIN file_assets f ON f.id=e.file_asset_id " + this.nativeDownloadFileJoin(true)
+      : binding
+        ? `JOIN file_assets f ON f.id=e.file_asset_id AND e.status='active' AND f.category='evidence' AND f.status='active'
          AND f.content_sha256=e.content_sha256 AND f.size_bytes=e.size_bytes
          JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25
          JOIN account_owned_records evidence_owner ON evidence_owner.source_table='raw_evidence' AND evidence_owner.source_id=e.id
            AND (evidence_owner.reason='exclusive_owner' OR (evidence_owner.reason IN ('shared','unassigned') AND evidence_owner.account_id=cut.primary_account_id))
          JOIN account_owned_records file_owner ON file_owner.source_table='file_assets' AND file_owner.source_id=f.id
            AND file_owner.account_id=evidence_owner.account_id
-           ${await fileAssetAccountStorage(db) ? "AND f.account_id=evidence_owner.account_id" : ""}` : "";
-    const exact = binding ? ` AND f.id=? AND BINARY f.relative_path=BINARY ? AND f.size_bytes=? AND f.content_sha256=?
-      AND ${scope.native ? "e.account_id" : "evidence_owner.account_id"}=?` : "";
+           ${(await fileAssetAccountStorage(db)) ? "AND f.account_id=evidence_owner.account_id" : ""}`
+        : "";
+    const exact = binding
+      ? ` AND f.id=? AND BINARY f.relative_path=BINARY ? AND f.size_bytes=? AND f.content_sha256=?
+      AND ${scope.native ? "e.account_id" : "evidence_owner.account_id"}=?`
+      : "";
     const [rows] = await db.query<RowDataPacket[]>(
       `SELECT ${scope.coordinates}${scope.native ? ",e.account_id,evidence_owner.reason" : ""}
        FROM raw_evidence e ${scope.join} ${file}
        WHERE e.id=?${exact}${lock ? " FOR UPDATE" : ""}`,
-      [id, ...(binding ? [binding.assetId, binding.relativePath, binding.sizeBytes, binding.sha256, binding.accountId] : [])],
+      [
+        id,
+        ...(binding
+          ? [
+              binding.assetId,
+              binding.relativePath,
+              binding.sizeBytes,
+              binding.sha256,
+              binding.accountId,
+            ]
+          : []),
+      ],
     );
     if (!rows[0]) throw new DataQualityServiceError("evidence_not_found", 404, "刷新证据列表。");
     return { row: rows[0], native: scope.native };
   }
-  private async recordNativeDownloadEvent(c: PoolConnection, row: RowDataPacket, input: Parameters<DataQualityRepository["recordDownload"]>[0], eventType: string) {
+  private async recordNativeDownloadEvent(
+    c: PoolConnection,
+    row: RowDataPacket,
+    input: Parameters<DataQualityRepository["recordDownload"]>[0],
+    eventType: string,
+  ) {
     const id = randomUUID();
     await appendEvidenceDataEvent(c, {
-      id, organizationId: "", workspaceId: "", requireInheritedScope: true,
-      actorType: "user", actorId: input.actorId, resourceId: input.evidenceId, resourceType: "raw_evidence",
-      eventType, requestId: input.requestId, traceId: input.traceId, payloadJson: "{}", occurredAt: input.now,
+      id,
+      organizationId: "",
+      workspaceId: "",
+      requireInheritedScope: true,
+      actorType: "user",
+      actorId: input.actorId,
+      resourceId: input.evidenceId,
+      resourceType: "raw_evidence",
+      eventType,
+      requestId: input.requestId,
+      traceId: input.traceId,
+      payloadJson: "{}",
+      occurredAt: input.now,
     });
-    await c.query("INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ('evidence_data_events',?,?,?)",
-      [id, row.account_id, row.reason]);
+    await c.query(
+      "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ('evidence_data_events',?,?,?)",
+      [id, row.account_id, row.reason],
+    );
   }
   async saveDownloadGrant(input: Parameters<DataQualityRepository["saveDownloadGrant"]>[0]) {
     const c = await this.pool.getConnection(),
       route = `/platform/data/evidence/${input.evidenceId}/download-grant`;
     try {
       await c.beginTransaction();
-      const parent = this.accountMode ? await this.downloadAuditParent(c, input.evidenceId, true, input.binding) : null;
+      const parent = this.accountMode
+        ? await this.downloadAuditParent(c, input.evidenceId, true, input.binding)
+        : null;
       const [ops] = await c.query<RowDataPacket[]>(
         "SELECT result_json FROM evidence_data_operations WHERE actor_id=? AND route=? AND idempotency_key=? FOR UPDATE",
         [input.actorId, route, input.idempotencyKey],
@@ -768,20 +856,22 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         await c.commit();
         return json(ops[0].result_json) as { grant: string; expires_at: string };
       }
-      const current = parent ?? await this.downloadAuditParent(c, input.evidenceId, true);
-      if (current.native) await this.recordNativeDownloadEvent(c, current.row, input, "evidence.download.granted");
-      else await this.event(
-        c,
-        current.row,
-        "evidence.download.granted",
-        "raw_evidence",
-        input.evidenceId,
-        input.actorId,
-        input.requestId,
-        input.traceId,
-        {},
-        input.now,
-      );
+      const current = parent ?? (await this.downloadAuditParent(c, input.evidenceId, true));
+      if (current.native)
+        await this.recordNativeDownloadEvent(c, current.row, input, "evidence.download.granted");
+      else
+        await this.event(
+          c,
+          current.row,
+          "evidence.download.granted",
+          "raw_evidence",
+          input.evidenceId,
+          input.actorId,
+          input.requestId,
+          input.traceId,
+          {},
+          input.now,
+        );
       await c.query(
         "INSERT INTO evidence_data_operations (id,actor_id,route,idempotency_key," +
           "resource_id,result_json,created_at) VALUES (?,?,?,?,?,?,?)",
@@ -805,11 +895,21 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
     }
   }
   async recordDownload(input: Parameters<DataQualityRepository["recordDownload"]>[0]) {
-    if (!this.accountMode) return this.appendLegacyDownload(this.pool, (await this.downloadAuditParent(this.pool, input.evidenceId)).row, input);
+    if (!this.accountMode)
+      return this.appendLegacyDownload(
+        this.pool,
+        (await this.downloadAuditParent(this.pool, input.evidenceId)).row,
+        input,
+      );
     const c = await this.pool.getConnection();
     try {
       await c.beginTransaction();
-      const { native, row } = await this.downloadAuditParent(c, input.evidenceId, true, input.binding);
+      const { native, row } = await this.downloadAuditParent(
+        c,
+        input.evidenceId,
+        true,
+        input.binding,
+      );
       if (native) await this.recordNativeDownloadEvent(c, row, input, "evidence.download.accessed");
       else await this.appendLegacyDownload(c, row, input);
       await c.commit();
@@ -820,7 +920,11 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
       c.release();
     }
   }
-  private async appendLegacyDownload(db: Pick<PoolConnection, "query">, row: RowDataPacket, input: Parameters<DataQualityRepository["recordDownload"]>[0]) {
+  private async appendLegacyDownload(
+    db: Pick<PoolConnection, "query">,
+    row: RowDataPacket,
+    input: Parameters<DataQualityRepository["recordDownload"]>[0],
+  ) {
     await appendEvidenceDataEvent(db, {
       id: randomUUID(),
       organizationId: row.organization_id,
@@ -878,7 +982,9 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
       id: randomUUID(),
       organizationId: row.organization_id,
       workspaceId: row.workspace_id,
-      eventType, resourceType, resourceId,
+      eventType,
+      resourceType,
+      resourceId,
       payloadJson: JSON.stringify(payload),
       requestId: requestId,
       traceId: traceId,

@@ -1,4 +1,9 @@
-import { appendPlatformAudit, businessAuditHistorical, platformAuditCoordinate, platformAuditHistorical } from "@scoutops/database";
+import {
+  appendPlatformAudit,
+  businessAuditHistorical,
+  platformAuditCoordinate,
+  platformAuditHistorical,
+} from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type { AuditEvent, AuditFilter, AuditRepository, SeedAdminInput } from "@scoutops/audit";
@@ -88,8 +93,9 @@ export class MySqlAuditRepository implements AuditRepository {
     });
   }
   private async insert(connection: Pool | PoolConnection, event: AuditEvent) {
-    await appendPlatformAudit(connection,
-        "INSERT INTO platform_audit_events (id,organization_id,workspace_id,actor_id," +
+    await appendPlatformAudit(
+      connection,
+      "INSERT INTO platform_audit_events (id,organization_id,workspace_id,actor_id," +
         "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
         "schema_version) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
       [
@@ -116,12 +122,23 @@ export class MySqlAuditRepository implements AuditRepository {
     const historical = await platformAuditHistorical(this.pool);
     const org = historical ? platformAuditCoordinate("organization_id") : "organization_id";
     const workspace = historical ? platformAuditCoordinate("workspace_id") : "workspace_id";
-    const platformColumns = historical ? eventColumns.replace("organization_id,workspace_id",
-      `${org} organization_id,${workspace} workspace_id`) : eventColumns;
-    const businessHistorical = filter.organizationId !== undefined && await businessAuditHistorical(this.pool);
-    const logOrg = businessHistorical ? platformAuditCoordinate("organization_id") : "organization_id";
-    const logWorkspace = businessHistorical ? platformAuditCoordinate("workspace_id") : "workspace_id";
-    const logScopeColumns = businessHistorical ? `${logOrg} organization_id,${logWorkspace} workspace_id` : "organization_id,workspace_id";
+    const platformColumns = historical
+      ? eventColumns.replace(
+          "organization_id,workspace_id",
+          `${org} organization_id,${workspace} workspace_id`,
+        )
+      : eventColumns;
+    const businessHistorical =
+      filter.organizationId !== undefined && (await businessAuditHistorical(this.pool));
+    const logOrg = businessHistorical
+      ? platformAuditCoordinate("organization_id")
+      : "organization_id";
+    const logWorkspace = businessHistorical
+      ? platformAuditCoordinate("workspace_id")
+      : "workspace_id";
+    const logScopeColumns = businessHistorical
+      ? `${logOrg} organization_id,${logWorkspace} workspace_id`
+      : "organization_id,workspace_id";
     const scopedSource =
         filter.organizationId === undefined
           ? `(SELECT ${platformColumns} FROM platform_audit_events WHERE ${org} IS NULL) scoped_audit`
@@ -132,9 +149,7 @@ export class MySqlAuditRepository implements AuditRepository {
              FROM audit_logs WHERE ${logOrg}=?) scoped_audit`,
       scopeParams =
         filter.organizationId === undefined ? [] : [filter.organizationId, filter.organizationId];
-    const platformClauses = [
-        filter.organizationId === undefined ? `${org} IS NULL` : `${org}=?`,
-      ],
+    const platformClauses = [filter.organizationId === undefined ? `${org} IS NULL` : `${org}=?`],
       platformParams: unknown[] =
         filter.organizationId === undefined ? [] : [filter.organizationId],
       logClauses = filter.organizationId === undefined ? [] : [`${logOrg}=?`],

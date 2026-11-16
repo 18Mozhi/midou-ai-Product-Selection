@@ -1,5 +1,8 @@
 import type { Pool, RowDataPacket, ResultSetHeader } from "mysql2/promise";
-import { accountEvaluationRecoverySql, nativeEvaluationRecoverySql } from "./automatic-selection-recovery-evidence.js";
+import {
+  accountEvaluationRecoverySql,
+  nativeEvaluationRecoverySql,
+} from "./automatic-selection-recovery-evidence.js";
 import { automaticEvaluationCandidatePresenceSql } from "./automatic-selection-evaluation-admission.js";
 import { PRIMARY_SOURCE_SUPPORT_REVISION } from "./primary-source-support.js";
 
@@ -24,30 +27,55 @@ export const primarySourceRecoveryUpdateSql =
   eligible;
 
 /** Once per revision, through ordinary evaluation leases, never crawler replay. */
-export async function recoverPrimarySourceEvaluations(pool: Pool, now: Date, native = false, accountParent = false) {
-  const [rows] = await pool.query<RowDataPacket[]>(accountParent ? primarySourceAccountRecoverySql.candidates :
-    native ? primarySourceNativeRecoverySql.candidates : primarySourceRecoveryCandidatesSql, [
-    PRIMARY_SOURCE_SUPPORT_REVISION,
-  ]);
+export async function recoverPrimarySourceEvaluations(
+  pool: Pool,
+  now: Date,
+  native = false,
+  accountParent = false,
+) {
+  const [rows] = await pool.query<RowDataPacket[]>(
+    accountParent
+      ? primarySourceAccountRecoverySql.candidates
+      : native
+        ? primarySourceNativeRecoverySql.candidates
+        : primarySourceRecoveryCandidatesSql,
+    [PRIMARY_SOURCE_SUPPORT_REVISION],
+  );
   let recovered = 0;
   for (const row of rows) {
-    const [result] = await pool.query<ResultSetHeader>(accountParent ? primarySourceAccountRecoverySql.update :
-      native ? primarySourceNativeRecoverySql.update : primarySourceRecoveryUpdateSql, [
-      PRIMARY_SOURCE_SUPPORT_REVISION,
-      now,
-      now,
-      row.opportunity_id,
-      ...(accountParent ? [PRIMARY_SOURCE_SUPPORT_REVISION, row.account_id] : [row.organization_id, row.workspace_id, PRIMARY_SOURCE_SUPPORT_REVISION,
-        ...(native ? [row.account_id] : [])]),
-    ]);
+    const [result] = await pool.query<ResultSetHeader>(
+      accountParent
+        ? primarySourceAccountRecoverySql.update
+        : native
+          ? primarySourceNativeRecoverySql.update
+          : primarySourceRecoveryUpdateSql,
+      [
+        PRIMARY_SOURCE_SUPPORT_REVISION,
+        now,
+        now,
+        row.opportunity_id,
+        ...(accountParent
+          ? [PRIMARY_SOURCE_SUPPORT_REVISION, row.account_id]
+          : [
+              row.organization_id,
+              row.workspace_id,
+              PRIMARY_SOURCE_SUPPORT_REVISION,
+              ...(native ? [row.account_id] : []),
+            ]),
+      ],
+    );
     recovered += result.affectedRows;
   }
   return recovered;
 }
 
 export const primarySourceNativeRecoverySql = nativeEvaluationRecoverySql(
-  primarySourceRecoveryCandidatesSql, primarySourceRecoveryUpdateSql, automaticEvaluationCandidatePresenceSql,
+  primarySourceRecoveryCandidatesSql,
+  primarySourceRecoveryUpdateSql,
+  automaticEvaluationCandidatePresenceSql,
 );
 export const primarySourceAccountRecoverySql = accountEvaluationRecoverySql(
-  primarySourceRecoveryCandidatesSql, primarySourceRecoveryUpdateSql, automaticEvaluationCandidatePresenceSql,
+  primarySourceRecoveryCandidatesSql,
+  primarySourceRecoveryUpdateSql,
+  automaticEvaluationCandidatePresenceSql,
 );

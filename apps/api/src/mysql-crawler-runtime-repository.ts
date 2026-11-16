@@ -1,6 +1,17 @@
-import { registerReplayOwnership, resolveCollectionReplayOwner } from "./collection-replay-ownership.js";
-import { insertCrawlerRun, readCrawlerRunAccount, readCrawlerRunCoordinates } from "./crawler-run-storage.js";
-import { appendCrawlerSchedulerLease, collectionTaskScope, crawlerSchedulerLeaseHasLegacyScope } from "@scoutops/database";
+import {
+  registerReplayOwnership,
+  resolveCollectionReplayOwner,
+} from "./collection-replay-ownership.js";
+import {
+  insertCrawlerRun,
+  readCrawlerRunAccount,
+  readCrawlerRunCoordinates,
+} from "./crawler-run-storage.js";
+import {
+  appendCrawlerSchedulerLease,
+  collectionTaskScope,
+  crawlerSchedulerLeaseHasLegacyScope,
+} from "@scoutops/database";
 import { nativeBusinessTaskScope } from "./business-task-storage.js";
 import { anonymousAmazonFingerprint } from "@scoutops/provider-sources";
 import { appendCrawlerLeaseEvent } from "@scoutops/database";
@@ -25,8 +36,11 @@ async function hasSealedCrawlerOwnership(c: PoolConnection) {
     throw new CrawlerRuntimeError("crawler_runtime_conflict", 409, "采集账号归属版本不匹配。");
   } catch (error) {
     const mysql = error as { code?: string; sqlMessage?: string };
-    if (mysql.code === "ER_NO_SUCH_TABLE" &&
-      /\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")) return false;
+    if (
+      mysql.code === "ER_NO_SUCH_TABLE" &&
+      /\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")
+    )
+      return false;
     throw error;
   }
 }
@@ -37,10 +51,12 @@ const sealedCrawlerParentSql = (native: boolean) =>
   "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
   "WHERE own.source_table='collection_tasks' AND own.source_id=j.collection_task_id " +
   "AND (own.reason='exclusive_owner' OR (own.reason IN ('shared','unassigned') AND own.account_id=cut.primary_account_id)) " +
-  (native ? "AND own.account_id=job_task.account_id AND EXISTS (SELECT 1 FROM account_owned_records query_owner " +
-    "WHERE query_owner.source_table='collection_subqueries' AND query_owner.source_id=q.id " +
-    "AND query_owner.account_id=own.account_id AND (query_owner.reason='exclusive_owner' OR " +
-    "(query_owner.reason IN ('shared','unassigned') AND query_owner.account_id=cut.primary_account_id)) LOCK IN SHARE MODE) " : "") +
+  (native
+    ? "AND own.account_id=job_task.account_id AND EXISTS (SELECT 1 FROM account_owned_records query_owner " +
+      "WHERE query_owner.source_table='collection_subqueries' AND query_owner.source_id=q.id " +
+      "AND query_owner.account_id=own.account_id AND (query_owner.reason='exclusive_owner' OR " +
+      "(query_owner.reason IN ('shared','unassigned') AND query_owner.account_id=cut.primary_account_id)) LOCK IN SHARE MODE) "
+    : "") +
   "LOCK IN SHARE MODE) ";
 
 const pausedBrowserParentSql =
@@ -61,7 +77,9 @@ const run = (row: RowDataPacket): CrawlerRunSummary => {
   const scope = accountId ? null : readCrawlerRunCoordinates(row);
   return {
     id: String(row.id),
-    ...(scope ? { organization_id: scope.organizationId, workspace_id: scope.workspaceId } : { account_id: accountId! }),
+    ...(scope
+      ? { organization_id: scope.organizationId, workspace_id: scope.workspaceId }
+      : { account_id: accountId! }),
     provider_id: String(row.provider_id),
     crawler_profile_id: String(row.crawler_profile_id),
     status: row.status,
@@ -83,11 +101,13 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     private readonly amazonHealthProfileId = "",
     private readonly claimPausePath?: string,
   ) {}
-  private async claimConnection<T>(work: (connection: PoolConnection, paused: boolean) => Promise<T>) {
+  private async claimConnection<T>(
+    work: (connection: PoolConnection, paused: boolean) => Promise<T>,
+  ) {
     const c = await this.pool.getConnection();
     try {
       return this.claimPausePath
-        ? await withCollectionClaimFence(c, this.claimPausePath, paused => work(c, paused))
+        ? await withCollectionClaimFence(c, this.claimPausePath, (paused) => work(c, paused))
         : await work(c, false);
     } finally {
       c.release();
@@ -203,7 +223,9 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
   async acquire(input: Parameters<CrawlerRuntimeRepository["acquire"]>[0]) {
     for (let attempt = 0; ; attempt++) {
       try {
-        const result = await this.claimConnection((c, paused) => this.acquireOnce(input, c, paused));
+        const result = await this.claimConnection((c, paused) =>
+          this.acquireOnce(input, c, paused),
+        );
         if (result.replayed) return result;
         const [rows] = await this.pool.query<RowDataPacket[]>(
           "SELECT * FROM crawler_browser_runs WHERE id=?",
@@ -218,7 +240,9 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     }
   }
   private async acquireOnce(
-    input: Parameters<CrawlerRuntimeRepository["acquire"]>[0], c: PoolConnection, paused: boolean,
+    input: Parameters<CrawlerRuntimeRepository["acquire"]>[0],
+    c: PoolConnection,
+    paused: boolean,
   ) {
     const route = "/internal/crawler-runtime/acquire";
     let committed = false;
@@ -237,7 +261,9 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       }
       if (paused)
         throw new CrawlerRuntimeError(
-          "crawler_claims_paused", 409, "采集领取处于维护暂停；已有作业可以继续心跳和回写。",
+          "crawler_claims_paused",
+          409,
+          "采集领取处于维护暂停；已有作业可以继续心跳和回写。",
         );
       await c.query(
         "DELETE FROM crawler_scheduler_leases WHERE slot_type='crawler' AND expires_at<=?",
@@ -331,9 +357,15 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         ]);
       }
       await insertCrawlerRun(c, {
-        id: input.runId, organizationId: input.organizationId, workspaceId: input.workspaceId,
-        providerId: String(scope[0].provider_id), profileId: input.profileId, actorId: input.actorId,
-        requestId: input.requestId, traceId: input.traceId, now: input.now,
+        id: input.runId,
+        organizationId: input.organizationId,
+        workspaceId: input.workspaceId,
+        providerId: String(scope[0].provider_id),
+        profileId: input.profileId,
+        actorId: input.actorId,
+        requestId: input.requestId,
+        traceId: input.traceId,
+        now: input.now,
       });
       await c.query(
         [
@@ -355,9 +387,16 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       );
       const legacySchedulerLease = await crawlerSchedulerLeaseHasLegacyScope(c);
       await appendCrawlerSchedulerLease(c, legacySchedulerLease, input, {
-        slotType: "crawler", slotKey: "single-host", taskId: null, runId: input.runId,
-        owner: input.leaseOwner, tokenHash: input.leaseTokenHash, now: input.now,
-        expiresAt: input.expiresAt, requestId: input.requestId, traceId: input.traceId,
+        slotType: "crawler",
+        slotKey: "single-host",
+        taskId: null,
+        runId: input.runId,
+        owner: input.leaseOwner,
+        tokenHash: input.leaseTokenHash,
+        now: input.now,
+        expiresAt: input.expiresAt,
+        requestId: input.requestId,
+        traceId: input.traceId,
       });
       await this.event(c, input, "acquired", input.runId);
       await c.query(
@@ -573,7 +612,9 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     return this.claimConnection((c, paused) => this.acquireJobOnce(input, c, paused));
   }
   private async acquireJobOnce(
-    input: Parameters<CrawlerRuntimeRepository["acquireJob"]>[0], c: PoolConnection, paused: boolean,
+    input: Parameters<CrawlerRuntimeRepository["acquireJob"]>[0],
+    c: PoolConnection,
+    paused: boolean,
   ) {
     const parentFilter = paused ? " AND " + pausedBrowserParentSql : "";
     try {
@@ -619,7 +660,8 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         [
           `UPDATE browser_collection_jobs${paused ? " j" : ""} SET status='queued',crawler_profile_id=NULL,crawler_run_id=NULL,lease`,
           "_owner=NULL,lease_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL,error_code=",
-          "'lease_expired',updated_at=? WHERE status='leased' AND lease_expires_at<=?" + parentFilter,
+          "'lease_expired',updated_at=? WHERE status='leased' AND lease_expires_at<=?" +
+            parentFilter,
         ].join(""),
         [input.now, input.now],
       );
@@ -636,17 +678,20 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         return null;
       }
       const sealed = await hasSealedCrawlerOwnership(c);
-      const nativeTask = sealed && await collectionTaskScope(c) === "account";
+      const nativeTask = sealed && (await collectionTaskScope(c)) === "account";
       const [rows] = await c.query<RowDataPacket[]>(
         [
           "SELECT j.*," +
-            (sealed ? "sealed_owner.account_id," :
-              "job_task.organization_id AS organization_id,job_task.workspace_id AS workspace_id,") +
+            (sealed
+              ? "sealed_owner.account_id,"
+              : "job_task.organization_id AS organization_id,job_task.workspace_id AS workspace_id,") +
             "v.code provider_code,p.id profile_id,p.locale,p.timezone,p.updated_by,a.id ",
           "asset_id,a.version asset_version,a.kind,a.key_version,a.payload_ciphertext,a.payload_nonce,a.payload",
           "_auth_tag,a.expires_at FROM browser_collection_jobs j JOIN collection_tasks job_task ON job_task.id=j.collection_task_id " +
             "JOIN collection_subqueries q ON q.id=j.collection_subquery_id AND q.task_id=job_task.id AND q.provider_id=j.provider_id " +
-            (sealed ? "JOIN account_owned_records sealed_owner ON sealed_owner.source_table='collection_tasks' AND sealed_owner.source_id=job_task.id " : "") +
+            (sealed
+              ? "JOIN account_owned_records sealed_owner ON sealed_owner.source_table='collection_tasks' AND sealed_owner.source_id=job_task.id "
+              : "") +
             "JOIN providers v ON v.id=j.provider_id AND ",
           (this.amazonPublicProfileId
             ? "(v.access_mode='authenticated_browser' OR (v.code='amazon_product' AND v.access_mode='public_page')) "
@@ -656,7 +701,10 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           "p.provider_id=j.provider_id AND p.status='active' JOIN credential_assets a ON ",
           "a.id=p.credential_asset_id AND a.status='active' AND a.kind IN ('browser_profile','cookie_bundle') ",
           "WHERE j.status='queued' " +
-            (sealed ? "AND job_task.status='running' AND job_task.lease_expires_at>? AND " + sealedCrawlerParentSql(nativeTask) : "") +
+            (sealed
+              ? "AND job_task.status='running' AND job_task.lease_expires_at>? AND " +
+                sealedCrawlerParentSql(nativeTask)
+              : "") +
             parentFilter +
             (this.amazonPublicProfileId
               ? "AND (v.access_mode='authenticated_browser' OR (v.code='amazon_product' AND p.id=? AND a.kind='browser_profile' AND a.fingerprint=? AND JSON_UNQUOTE(JSON_EXTRACT(j.execution_request_json,'$.purpose'))='amazon_public')) "
@@ -665,8 +713,15 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           "LIMIT 1 FOR UPDATE",
         ].join(""),
         this.amazonPublicProfileId
-          ? [...(sealed ? [input.now] : []), this.amazonPublicProfileId, anonymousAmazonFingerprint(), input.now]
-          : (sealed ? [input.now, input.now] : [input.now]),
+          ? [
+              ...(sealed ? [input.now] : []),
+              this.amazonPublicProfileId,
+              anonymousAmazonFingerprint(),
+              input.now,
+            ]
+          : sealed
+            ? [input.now, input.now]
+            : [input.now],
       );
       const row = rows[0];
       if (!row) {
@@ -681,19 +736,24 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           ].join(""),
           [row.profile_id, input.now, input.now, row.id],
         );
-        const coordinates = sealed ? {}
+        const coordinates = sealed
+          ? {}
           : { organizationId: String(row.organization_id), workspaceId: String(row.workspace_id) };
-        await this.renewalTask(c, {
-          ...coordinates,
-          profileId: String(row.profile_id),
-          actorId: input.actorId,
-          assigneeId: String(row.updated_by),
-          requestId: String(row.request_id),
-          traceId: String(row.trace_id),
-          now: input.now,
-          reason: "credential_expired",
-          collectionTaskId: String(row.collection_task_id),
-        }, sealed);
+        await this.renewalTask(
+          c,
+          {
+            ...coordinates,
+            profileId: String(row.profile_id),
+            actorId: input.actorId,
+            assigneeId: String(row.updated_by),
+            requestId: String(row.request_id),
+            traceId: String(row.trace_id),
+            now: input.now,
+            reason: "credential_expired",
+            collectionTaskId: String(row.collection_task_id),
+          },
+          sealed,
+        );
         await c.commit();
         return null;
       }
@@ -705,14 +765,20 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         await c.commit();
         return null;
       }
-      const legacyScope = sealed ? null
+      const legacyScope = sealed
+        ? null
         : { organizationId: String(row.organization_id), workspaceId: String(row.workspace_id) };
       if (sealed && (typeof row.account_id !== "string" || !row.account_id))
         throw new CrawlerRuntimeError("crawler_runtime_conflict", 409, "采集任务缺少封存账号。");
       await insertCrawlerRun(c, {
-        id: input.runId, ...(legacyScope ?? { accountId: row.account_id }),
-        providerId: String(row.provider_id), profileId: String(row.profile_id), actorId: input.actorId,
-        requestId: String(row.request_id), traceId: String(row.trace_id), now: input.now,
+        id: input.runId,
+        ...(legacyScope ?? { accountId: row.account_id }),
+        providerId: String(row.provider_id),
+        profileId: String(row.profile_id),
+        actorId: input.actorId,
+        requestId: String(row.request_id),
+        traceId: String(row.trace_id),
+        now: input.now,
       });
       await c.query(
         [
@@ -734,9 +800,16 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       );
       const legacySchedulerLease = await crawlerSchedulerLeaseHasLegacyScope(c);
       await appendCrawlerSchedulerLease(c, legacySchedulerLease, legacyScope, {
-        slotType: "crawler", slotKey: "single-host", taskId: String(row.collection_task_id), runId: input.runId,
-        owner: input.leaseOwner, tokenHash: input.leaseTokenHash, now: input.now,
-        expiresAt: input.expiresAt, requestId: String(row.request_id), traceId: String(row.trace_id),
+        slotType: "crawler",
+        slotKey: "single-host",
+        taskId: String(row.collection_task_id),
+        runId: input.runId,
+        owner: input.leaseOwner,
+        tokenHash: input.leaseTokenHash,
+        now: input.now,
+        expiresAt: input.expiresAt,
+        requestId: String(row.request_id),
+        traceId: String(row.trace_id),
       });
       await c.query(
         [
@@ -783,7 +856,8 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         },
         run: {
           id: input.runId,
-          ...(legacyScope ? { organization_id: legacyScope.organizationId, workspace_id: legacyScope.workspaceId }
+          ...(legacyScope
+            ? { organization_id: legacyScope.organizationId, workspace_id: legacyScope.workspaceId }
             : { account_id: row.account_id }),
           provider_id: String(row.provider_id),
           crawler_profile_id: String(row.profile_id),
@@ -882,12 +956,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           409,
           "浏览器档案或调度租约已失效，停止执行。",
         );
-      await this.event(
-        c,
-        input,
-        "heartbeat",
-        input.runId,
-      );
+      await this.event(c, input, "heartbeat", input.runId);
       await c.commit();
     } catch (error) {
       await c.rollback();
@@ -901,7 +970,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     try {
       await c.beginTransaction();
       const sealed = await hasSealedCrawlerOwnership(c);
-      const nativeTask = sealed && await collectionTaskScope(c) === "account";
+      const nativeTask = sealed && (await collectionTaskScope(c)) === "account";
       const [rows] = await c.query<RowDataPacket[]>(
         [
           "SELECT j.collection_task_id,j.status,p.updated_by FROM ",
@@ -962,23 +1031,22 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         input.status === "blocked" &&
         ["blocked_login", "session_expired", "login_required"].includes(input.errorCode ?? "")
       ) {
-        await this.renewalTask(c, {
-          profileId: input.profileId,
-          actorId: input.actorId,
-          assigneeId: String(row.updated_by),
-          requestId: input.requestId,
-          traceId: input.traceId,
-          now: input.now,
-          reason: input.errorCode ?? "blocked_login",
-          collectionTaskId: String(row.collection_task_id),
-        }, await hasSealedCrawlerOwnership(c));
+        await this.renewalTask(
+          c,
+          {
+            profileId: input.profileId,
+            actorId: input.actorId,
+            assigneeId: String(row.updated_by),
+            requestId: input.requestId,
+            traceId: input.traceId,
+            now: input.now,
+            reason: input.errorCode ?? "blocked_login",
+            collectionTaskId: String(row.collection_task_id),
+          },
+          await hasSealedCrawlerOwnership(c),
+        );
       }
-      await this.event(
-        c,
-        input,
-        "released",
-        input.runId,
-      );
+      await this.event(c, input, "released", input.runId);
       await c.query("DELETE FROM crawler_profile_leases WHERE crawler_profile_id=? AND run_id=?", [
         input.profileId,
         input.runId,
@@ -1002,23 +1070,36 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     runId: string,
   ) {
     await appendCrawlerLeaseEvent(c, {
-      id: randomUUID(), runId, profileId: input.profileId, action, actorId: input.actorId,
-      requestId: input.requestId, traceId: input.traceId, now: input.now,
+      id: randomUUID(),
+      runId,
+      profileId: input.profileId,
+      action,
+      actorId: input.actorId,
+      requestId: input.requestId,
+      traceId: input.traceId,
+      now: input.now,
     });
   }
-  private async legacyRenewalCoordinates(c: PoolConnection, taskId: string, nativeCollection: boolean) {
+  private async legacyRenewalCoordinates(
+    c: PoolConnection,
+    taskId: string,
+    nativeCollection: boolean,
+  ) {
     const [parent] = await c.query<RowDataPacket[]>(
       nativeCollection
         ? "SELECT r.legacy_org_id organization_id,r.legacy_workspace_id workspace_id FROM collection_tasks t " +
-          "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
-          "JOIN account_retirement_records r ON r.run_id=cut.source_run_id AND r.source_table='collection_tasks' AND r.source_id=t.id " +
-          "JOIN workspaces w ON w.id=r.legacy_workspace_id AND w.organization_id=r.legacy_org_id WHERE t.id=? FOR UPDATE"
+            "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+            "JOIN account_retirement_records r ON r.run_id=cut.source_run_id AND r.source_table='collection_tasks' AND r.source_id=t.id " +
+            "JOIN workspaces w ON w.id=r.legacy_workspace_id AND w.organization_id=r.legacy_org_id WHERE t.id=? FOR UPDATE"
         : "SELECT organization_id,workspace_id FROM collection_tasks WHERE id=? FOR UPDATE",
       [taskId],
     );
     if (!parent[0])
       throw new CrawlerRuntimeError("crawler_lease_invalid", 409, "找不到续期作业的原采集任务。");
-    return { organizationId: String(parent[0].organization_id), workspaceId: String(parent[0].workspace_id) };
+    return {
+      organizationId: String(parent[0].organization_id),
+      workspaceId: String(parent[0].workspace_id),
+    };
   }
 
   private async renewalTask(
@@ -1037,18 +1118,18 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     },
     sealed = false,
   ) {
-    const mismatch = () => new CrawlerRuntimeError(
-      "crawler_runtime_conflict", 409, "凭证续期任务的账号归属不匹配。",
-    );
+    const mismatch = () =>
+      new CrawlerRuntimeError("crawler_runtime_conflict", 409, "凭证续期任务的账号归属不匹配。");
     const owner = input.collectionTaskId
       ? await resolveCollectionReplayOwner(c, input.collectionTaskId, mismatch)
       : null;
-    const nativeTask = sealed && await nativeBusinessTaskScope(c);
-    const nativeCollection = sealed && await collectionTaskScope(c) === "account";
+    const nativeTask = sealed && (await nativeBusinessTaskScope(c));
+    const nativeCollection = sealed && (await collectionTaskScope(c)) === "account";
     if (nativeTask && !nativeCollection) throw mismatch();
     if (nativeCollection) {
       const [[task]] = await c.query<RowDataPacket[]>(
-        "SELECT account_id FROM collection_tasks WHERE id=? FOR UPDATE", [input.collectionTaskId],
+        "SELECT account_id FROM collection_tasks WHERE id=? FOR UPDATE",
+        [input.collectionTaskId],
       );
       if (!task || !owner || task.account_id !== owner.account_id) throw mismatch();
     }
@@ -1057,15 +1138,18 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       if (!owner) throw mismatch();
       scope = [owner.account_id];
     } else {
-      const coordinates = input.organizationId && input.workspaceId ? input :
-        await this.legacyRenewalCoordinates(c, input.collectionTaskId!, nativeCollection);
+      const coordinates =
+        input.organizationId && input.workspaceId
+          ? input
+          : await this.legacyRenewalCoordinates(c, input.collectionTaskId!, nativeCollection);
       scope = [coordinates.organizationId!, coordinates.workspaceId!];
     }
     // The legacy source uniqueness key still requires this location for new rows.
     // A task in that slot can only be reused if the sealed parent owns it.
     const [existing] = await c.query<RowDataPacket[]>(
       [
-        "SELECT id,status FROM tasks WHERE " + (nativeTask ? "account_id=? AND " : "organization_id=? AND workspace_id=? AND "),
+        "SELECT id,status FROM tasks WHERE " +
+          (nativeTask ? "account_id=? AND " : "organization_id=? AND workspace_id=? AND "),
         "source_type='collection_followup' AND source_ref_id=? LIMIT 1 FOR UPDATE",
       ].join(""),
       [...scope, input.profileId],

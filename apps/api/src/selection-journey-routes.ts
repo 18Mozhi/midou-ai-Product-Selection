@@ -30,7 +30,10 @@ export function registerSelectionJourneyRoutes(
     app.get("/api/v1/selection-journeys/:id", async (r, reply) => {
       reply.header("cache-control", "private, no-store");
       const scope = await authenticatedRehearsalAccount(r, o.auth, o.secureCookie);
-      return envelope(await o.service.getAccountHistory({ ...scope, journeyId: (r.params as { id: string }).id }), r);
+      return envelope(
+        await o.service.getAccountHistory({ ...scope, journeyId: (r.params as { id: string }).id }),
+        r,
+      );
     });
     return;
   }

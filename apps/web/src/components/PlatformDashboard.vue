@@ -7,7 +7,11 @@ import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import TechnicalDetails from "./TechnicalDetails.vue";
 import "../styles/platform-dashboard.css";
-const props = defineProps<{ apiBaseUrl: string; capabilities?: string[]; accountRehearsal?: boolean }>();
+const props = defineProps<{
+  apiBaseUrl: string;
+  capabilities?: string[];
+  accountRehearsal?: boolean;
+}>();
 const request = createApiClient(props.apiBaseUrl);
 type State = "loading" | "ready" | "empty" | "expired" | "forbidden" | "rate_limited" | "blocked";
 type WindowCode = "15m" | "24h" | "7d" | "30d";
@@ -85,8 +89,18 @@ const stateText = computed(
   () =>
     (
       ({
-        loading: ["正在准备管理首页", props.accountRehearsal ? "正在核对用户、热点来源和采集进度。" : "正在核对组织、用户、热点来源和采集进度。"],
-        empty: ["平台还没有可展示的业务事实", props.accountRehearsal ? "先检查来源配置与采集任务。" : "先检查来源配置与采集任务，或创建组织。"],
+        loading: [
+          "正在准备管理首页",
+          props.accountRehearsal
+            ? "正在核对用户、热点来源和采集进度。"
+            : "正在核对组织、用户、热点来源和采集进度。",
+        ],
+        empty: [
+          "平台还没有可展示的业务事实",
+          props.accountRehearsal
+            ? "先检查来源配置与采集任务。"
+            : "先检查来源配置与采集任务，或创建组织。",
+        ],
         expired: ["登录已失效", "重新登录后会回到管理首页。"],
         forbidden: ["当前账号不能进入平台管理后台", "请联系超级管理员分配平台管理权限。"],
         rate_limited: ["刷新太频繁了", "稍等片刻再刷新，不会影响后台自动采集。"],
@@ -609,7 +623,10 @@ onUnmounted(() => {
               <i :data-health="a.severity"></i>
               <div>
                 <b>{{ alertText(a.kind, a.code) }}</b
-                ><small><template v-if="!accountRehearsal">已关联组织与工作区 · </template>{{ new Date(a.observed_at).toLocaleString() }}</small>
+                ><small
+                  ><template v-if="!accountRehearsal">已关联组织与工作区 · </template
+                  >{{ new Date(a.observed_at).toLocaleString() }}</small
+                >
                 <details v-if="!accountRehearsal">
                   <summary>技术详情</summary>
                   <small>组织 ID {{ a.organization_id }} · 工作区 ID {{ a.workspace_id }}</small>
@@ -630,7 +647,9 @@ onUnmounted(() => {
             v-if="capabilities?.includes('platform:superadmin')"
             :to="accountRehearsal ? '/platform-admin/users' : '/platform-admin/organizations'"
             ><b>{{ accountRehearsal ? "管理平台用户" : "管理组织和用户" }}</b>
-            <span>{{ accountRehearsal ? "查看账号、停用账号、分配管理员" : "新建组织、停用账号、分配管理员" }}</span></RouterLink
+            <span>{{
+              accountRehearsal ? "查看账号、停用账号、分配管理员" : "新建组织、停用账号、分配管理员"
+            }}</span></RouterLink
           ><RouterLink to="/platform-admin/providers/sources"
             ><b>查看热点来源</b><span>确认自动来源、待配置来源和手动来源</span></RouterLink
           ><RouterLink to="/platform-admin/collection/overview"

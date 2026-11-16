@@ -2,8 +2,7 @@ import { ApiError } from "./api-foundation.js";
 import { normalizeUsername } from "@scoutops/auth";
 
 export type PersonalAssetsScope =
-  | { userId: string }
-  | { userId: string; organizationId: string; workspaceId: string };
+  { userId: string } | { userId: string; organizationId: string; workspaceId: string };
 
 export interface PersonalCenterRepository {
   profile(input: { userId: string }): Promise<unknown>;

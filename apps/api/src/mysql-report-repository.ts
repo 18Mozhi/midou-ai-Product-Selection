@@ -1,4 +1,9 @@
-import { accountReportScope, appendBusinessAudit, recordAccountReportExport, reportExportAccountStorage } from "@scoutops/database";
+import {
+  accountReportScope,
+  appendBusinessAudit,
+  recordAccountReportExport,
+  reportExportAccountStorage,
+} from "@scoutops/database";
 import { requireAccountReadRehearsal } from "./account-read-rehearsal.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
@@ -14,19 +19,26 @@ export class MySqlReportRepository implements ReportRepository {
   async report(i: any) {
     if (i.accountOwned) await requireAccountReadRehearsal(this.pool);
     if (i.accountOwned && i.reportType === "team")
-      throw new ReportServiceError("report_type_retired", 410, "团队报表不再生成，历史导出仍可查询。");
+      throw new ReportServiceError(
+        "report_type_retired",
+        410,
+        "团队报表不再生成，历史导出仍可查询。",
+      );
     if (i.reportType === "opportunity") return this.opportunities(i);
     if (i.reportType === "trend") return this.trends(i);
     return this.team(i);
   }
   private async opportunities(i: any) {
-    const scope = i.accountOwned ? await accountReportScope(this.pool, "opportunities") : "organization_id=? AND workspace_id=?";
+    const scope = i.accountOwned
+      ? await accountReportScope(this.pool, "opportunities")
+      : "organization_id=? AND workspace_id=?";
     const args = i.accountOwned ? [i.actorId] : [i.organizationId, i.workspaceId];
     const [summary] = await this.pool.query<RowDataPacket[]>(
         "SELECT COUNT(*) total,SUM(decision_status='adopted') adopted,SUM(decision_status='observing') " +
           "observing,SUM(decision_status='rejected') rejected,SUM(coverage_status='complete') complete_coverage," +
           "ROUND(AVG(overall_score),2) average_score,MAX(updated_at) observed_at FROM opportunities " +
-          "WHERE " + scope,
+          "WHERE " +
+          scope,
         args,
       ),
       [groups] = await this.pool.query<RowDataPacket[]>(
@@ -51,12 +63,15 @@ export class MySqlReportRepository implements ReportRepository {
     };
   }
   private async trends(i: any) {
-    const scope = i.accountOwned ? await accountReportScope(this.pool, "trend_topics") : "organization_id=? AND workspace_id=?";
+    const scope = i.accountOwned
+      ? await accountReportScope(this.pool, "trend_topics")
+      : "organization_id=? AND workspace_id=?";
     const args = i.accountOwned ? [i.actorId] : [i.organizationId, i.workspaceId];
     const [summary] = await this.pool.query<RowDataPacket[]>(
         "SELECT COUNT(*) total,COALESCE(SUM(signal_count),0) signals,COALESCE(SUM(source_count)," +
           "0) sources,ROUND(AVG(momentum_percent),2) average_momentum,ROUND(AVG(confidence_score)," +
-          "2) average_confidence,MAX(last_seen_at) observed_at FROM trend_topics WHERE " + scope,
+          "2) average_confidence,MAX(last_seen_at) observed_at FROM trend_topics WHERE " +
+          scope,
         args,
       ),
       [groups] = await this.pool.query<RowDataPacket[]>(
@@ -164,7 +179,8 @@ export class MySqlReportRepository implements ReportRepository {
           "SELECT id FROM users WHERE id=? AND status='active' AND email_verified_at IS NOT NULL FOR UPDATE",
           [i.actorId],
         );
-        if (!actor) throw new ReportServiceError("report_export_actor_forbidden", 403, "请使用已验证账号。");
+        if (!actor)
+          throw new ReportServiceError("report_export_actor_forbidden", 403, "请使用已验证账号。");
         const replay = await this.accountReceipt(c, i);
         if (replay) {
           await c.commit();
@@ -337,11 +353,20 @@ export class MySqlReportRepository implements ReportRepository {
     );
     if (!row) return null;
     const saved = parse(row.result_json);
-    if (row.account_id !== i.actorId || row.report_type !== i.value.report_type ||
-        row.format !== i.value.format || saved?.id !== row.export_id ||
-        saved?.report_type !== i.value.report_type || saved?.format !== i.value.format ||
-        (saved?.regenerated_from_export_id ?? null) !== (i.regeneratedFromExportId ?? null))
-      throw new ReportServiceError("report_export_idempotency_conflict", 409, "请为不同导出请求使用新的幂等键。");
+    if (
+      row.account_id !== i.actorId ||
+      row.report_type !== i.value.report_type ||
+      row.format !== i.value.format ||
+      saved?.id !== row.export_id ||
+      saved?.report_type !== i.value.report_type ||
+      saved?.format !== i.value.format ||
+      (saved?.regenerated_from_export_id ?? null) !== (i.regeneratedFromExportId ?? null)
+    )
+      throw new ReportServiceError(
+        "report_export_idempotency_conflict",
+        409,
+        "请为不同导出请求使用新的幂等键。",
+      );
     return saved;
   }
   private async record(
@@ -352,11 +377,19 @@ export class MySqlReportRepository implements ReportRepository {
     payload: any,
     now: Date,
   ) {
-    if (i.accountOwned) return recordAccountReportExport(c, {
-      accountId: i.actorId, exportId: id, event, requestId: i.requestId, traceId: i.traceId, payload, now,
-    });
-    await appendBusinessAudit(c,
-        "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action," +
+    if (i.accountOwned)
+      return recordAccountReportExport(c, {
+        accountId: i.actorId,
+        exportId: id,
+        event,
+        requestId: i.requestId,
+        traceId: i.traceId,
+        payload,
+        now,
+      });
+    await appendBusinessAudit(
+      c,
+      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action," +
         "resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at," +
         "schema_version) VALUES (?,?,?,?,?,'report_export',?,?,?,?,?,1)",
       [

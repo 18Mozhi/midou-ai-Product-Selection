@@ -1,10 +1,20 @@
-import { appendEvidenceDataEvent, appendEvidenceDataOutbox, dataQualityIssueScope, fileAssetAccountStorage } from "@scoutops/database";
+import {
+  appendEvidenceDataEvent,
+  appendEvidenceDataOutbox,
+  dataQualityIssueScope,
+  fileAssetAccountStorage,
+} from "@scoutops/database";
 import { createHash, randomUUID } from "node:crypto";
 import { relative, resolve, sep } from "node:path";
 import { rm } from "node:fs/promises";
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import type { OrganizationId, WorkspaceId } from "@scoutops/contracts";
-import { accountEvidenceRelativePath, writeAccountEvidenceFile, buildScopedFilePath, writeScopedFile } from "@scoutops/storage";
+import {
+  accountEvidenceRelativePath,
+  writeAccountEvidenceFile,
+  buildScopedFilePath,
+  writeScopedFile,
+} from "@scoutops/storage";
 import {
   markEvidencePersistenceFailure,
   type EvidencePersistenceOperation,
@@ -17,7 +27,9 @@ import {
 } from "@scoutops/data-quality";
 
 type EvidenceTaskFence = { accountId: string; leaseToken: string };
-type ValidatedEvidence = ReturnType<typeof validateEvidenceInput> & { taskFence?: EvidenceTaskFence };
+type ValidatedEvidence = ReturnType<typeof validateEvidenceInput> & {
+  taskFence?: EvidenceTaskFence;
+};
 type ExistingEvidence = RowDataPacket & {
   evidence_id: string;
   file_asset_id: string;
@@ -98,8 +110,10 @@ export class MySqlEvidencePersistence {
   ) {}
 
   async persist(input: EvidencePersistInput & { taskFence?: EvidenceTaskFence }) {
-    const value: ValidatedEvidence = { ...validateEvidenceInput(input, this.maxRawBytes),
-      ...(input.taskFence ? { taskFence: input.taskFence } : {}) };
+    const value: ValidatedEvidence = {
+      ...validateEvidenceInput(input, this.maxRawBytes),
+      ...(input.taskFence ? { taskFence: input.taskFence } : {}),
+    };
     const connection = await this.pool.getConnection();
     let target: string | null = null;
     let operation: EvidencePersistenceOperation = "transaction_begin";
@@ -109,9 +123,12 @@ export class MySqlEvidencePersistence {
       const retentionDays = await this.validateScope(connection, value);
       const ownership = await this.taskOwnership(connection, value.taskId);
       const accountFiles = await fileAssetAccountStorage(connection);
-      if (accountFiles && !ownership?.owner) throw new EvidencePersistenceError("evidence_task_owner_missing");
-      const accountScope = accountFiles && await this.hasAccountEvidenceColumns(connection)
-        ? ownership!.owner!.account_id : null;
+      if (accountFiles && !ownership?.owner)
+        throw new EvidencePersistenceError("evidence_task_owner_missing");
+      const accountScope =
+        accountFiles && (await this.hasAccountEvidenceColumns(connection))
+          ? ownership!.owner!.account_id
+          : null;
       if (value.taskFence && accountScope !== value.taskFence.accountId)
         throw new EvidencePersistenceError("account_evidence_schema_or_owner_invalid");
       const scopeColumns = accountScope ? "account_id" : "organization_id,workspace_id";
@@ -121,7 +138,14 @@ export class MySqlEvidencePersistence {
       const existing = await this.findExisting(connection, value, accountFiles, accountScope);
       if (existing) {
         operation = "dedupe_link";
-        const result = await this.linkExisting(connection, value, existing, this.now(), ownership, accountFiles);
+        const result = await this.linkExisting(
+          connection,
+          value,
+          existing,
+          this.now(),
+          ownership,
+          accountFiles,
+        );
         operation = "transaction_commit";
         await connection.commit();
         return result;
@@ -131,11 +155,20 @@ export class MySqlEvidencePersistence {
       const fileAssetId = randomUUID();
       const recordId = randomUUID();
       operation = "record_version_lock";
-      const previousRecord = await this.findExistingRecord(connection, value, accountFiles, accountScope);
+      const previousRecord = await this.findExistingRecord(
+        connection,
+        value,
+        accountFiles,
+        accountScope,
+      );
       if (previousRecord)
-        await this.verifyEvidenceOwners(connection, ownership, [["normalized_records", previousRecord.record_id]]);
+        await this.verifyEvidenceOwners(connection, ownership, [
+          ["normalized_records", previousRecord.record_id],
+        ]);
       const owned: OwnershipRef[] = [
-        ["file_assets", fileAssetId], ["raw_evidence", evidenceId], ["normalized_records", recordId],
+        ["file_assets", fileAssetId],
+        ["raw_evidence", evidenceId],
+        ["normalized_records", recordId],
       ];
       const fileInput = {
         organization_id: value.organizationId as OrganizationId,
@@ -144,18 +177,32 @@ export class MySqlEvidencePersistence {
         resource_id: evidenceId,
         filename: `${evidenceId}.bin`,
       };
-      const accountPath = accountFiles ? accountEvidenceRelativePath({
-        account_id: ownership!.owner!.account_id, asset_id: fileAssetId, evidence_id: evidenceId,
-      }) : null;
-      target = accountPath ? resolve(this.evidenceRoot, accountPath) : buildScopedFilePath(this.evidenceRoot, fileInput);
+      const accountPath = accountFiles
+        ? accountEvidenceRelativePath({
+            account_id: ownership!.owner!.account_id,
+            asset_id: fileAssetId,
+            evidence_id: evidenceId,
+          })
+        : null;
+      target = accountPath
+        ? resolve(this.evidenceRoot, accountPath)
+        : buildScopedFilePath(this.evidenceRoot, fileInput);
       operation = "file_write";
-      if (accountPath) await writeAccountEvidenceFile(this.evidenceRoot, accountPath, value.content);
+      if (accountPath)
+        await writeAccountEvidenceFile(this.evidenceRoot, accountPath, value.content);
       else await writeScopedFile(this.evidenceRoot, fileInput, value.content);
       const now = this.now();
       const retentionUntil = new Date(value.capturedAt.getTime() + retentionDays * 86400000);
       const relativePath = relative(resolve(this.evidenceRoot), target).split(sep).join("/");
       operation = "file_asset_insert";
-      await this.insertEvidenceFile(connection, value, fileAssetId, relativePath, now, accountFiles ? ownership!.owner : null);
+      await this.insertEvidenceFile(
+        connection,
+        value,
+        fileAssetId,
+        relativePath,
+        now,
+        accountFiles ? ownership!.owner : null,
+      );
       operation = "raw_evidence_insert";
       await connection.query(
         [
@@ -272,8 +319,11 @@ export class MySqlEvidencePersistence {
           randomUUID(),
           value.actorId,
           "worker:evidence.persist",
-          value.taskFence ? "evidence-account-v1:" + createHash("sha256")
-            .update(stableJson([value.taskFence.accountId, value.providerId, value.dedupeKey])).digest("hex")
+          value.taskFence
+            ? "evidence-account-v1:" +
+              createHash("sha256")
+                .update(stableJson([value.taskFence.accountId, value.providerId, value.dedupeKey]))
+                .digest("hex")
             : evidenceOperationIdempotencyKey(value),
           evidenceId,
           JSON.stringify({ evidence_id: evidenceId, normalized_record_id: recordId }),
@@ -316,14 +366,17 @@ export class MySqlEvidencePersistence {
       const retentionDays = await this.validateScope(connection, value);
       const accountFiles = await fileAssetAccountStorage(connection);
       const ownership = accountFiles ? await this.taskOwnership(connection, value.taskId) : null;
-      if (accountFiles && !ownership?.owner) throw new EvidencePersistenceError("evidence_task_owner_missing");
+      if (accountFiles && !ownership?.owner)
+        throw new EvidencePersistenceError("evidence_task_owner_missing");
       if (value.taskFence && ownership?.owner?.account_id !== value.taskFence.accountId)
         throw new EvidencePersistenceError("account_evidence_schema_or_owner_invalid");
       const [artifactScope] = await connection.query<RowDataPacket[]>(
         "SHOW COLUMNS FROM browser_evidence_artifacts WHERE Field IN ('organization_id','workspace_id')",
       );
       if (artifactScope.length === 1)
-        throw new EvidencePersistenceError("partial_inherited_scope_schema:browser_evidence_artifacts");
+        throw new EvidencePersistenceError(
+          "partial_inherited_scope_schema:browser_evidence_artifacts",
+        );
       const legacyArtifactScope = artifactScope.length === 2;
       if (legacyArtifactScope && value.taskFence)
         throw new EvidencePersistenceError("account_evidence_schema_or_owner_invalid");
@@ -331,9 +384,15 @@ export class MySqlEvidencePersistence {
         const [jobs] = await connection.query<RowDataPacket[]>(
           "SELECT j.id FROM browser_collection_jobs j JOIN collection_tasks t ON t.id=j.collection_task_id WHERE j.id=? AND j.collection_task_id=? " +
             "AND j.collection_subquery_id=? AND j.provider_id=? " +
-            (value.taskFence ? "" : "AND t.organization_id=? AND t.workspace_id=? ") + "FOR UPDATE",
-          [value.browserJobId, value.taskId, value.subqueryId, value.providerId,
-            ...(value.taskFence ? [] : [value.organizationId, value.workspaceId])],
+            (value.taskFence ? "" : "AND t.organization_id=? AND t.workspace_id=? ") +
+            "FOR UPDATE",
+          [
+            value.browserJobId,
+            value.taskId,
+            value.subqueryId,
+            value.providerId,
+            ...(value.taskFence ? [] : [value.organizationId, value.workspaceId]),
+          ],
         );
         if (!jobs.length) throw new EvidencePersistenceError("browser_evidence_scope_mismatch");
       }
@@ -346,11 +405,17 @@ export class MySqlEvidencePersistence {
       if (existing[0]) {
         if (String(existing[0].content_sha256) !== value.contentHash)
           throw new EvidencePersistenceError("browser_evidence_conflict");
-        if (accountFiles) await this.verifyEvidenceOwners(connection, ownership, [
-          ["browser_evidence_artifacts", String(existing[0].id)],
-          ["file_assets", String(existing[0].file_asset_id)],
-        ]);
-        if (accountFiles) await this.requireOwnedFileAsset(connection, ownership!.owner!.account_id, String(existing[0].file_asset_id));
+        if (accountFiles)
+          await this.verifyEvidenceOwners(connection, ownership, [
+            ["browser_evidence_artifacts", String(existing[0].id)],
+            ["file_assets", String(existing[0].file_asset_id)],
+          ]);
+        if (accountFiles)
+          await this.requireOwnedFileAsset(
+            connection,
+            ownership!.owner!.account_id,
+            String(existing[0].file_asset_id),
+          );
         await connection.commit();
         return { artifact_id: String(existing[0].id), deduplicated: true };
       }
@@ -364,18 +429,33 @@ export class MySqlEvidencePersistence {
           resource_id: artifactId,
           filename: `${artifactId}.${extension}`,
         };
-      const accountPath = accountFiles ? accountEvidenceRelativePath({
-        account_id: ownership!.owner!.account_id, asset_id: fileAssetId, evidence_id: artifactId,
-      }) : null;
-      target = accountPath ? resolve(this.evidenceRoot, accountPath) : buildScopedFilePath(this.evidenceRoot, fileInput);
-      if (accountPath) await writeAccountEvidenceFile(this.evidenceRoot, accountPath, value.content);
+      const accountPath = accountFiles
+        ? accountEvidenceRelativePath({
+            account_id: ownership!.owner!.account_id,
+            asset_id: fileAssetId,
+            evidence_id: artifactId,
+          })
+        : null;
+      target = accountPath
+        ? resolve(this.evidenceRoot, accountPath)
+        : buildScopedFilePath(this.evidenceRoot, fileInput);
+      if (accountPath)
+        await writeAccountEvidenceFile(this.evidenceRoot, accountPath, value.content);
       else await writeScopedFile(this.evidenceRoot, fileInput, value.content);
       const now = this.now(),
         retentionUntil = new Date(value.capturedAt.getTime() + retentionDays * 86400000),
         relativePath = relative(resolve(this.evidenceRoot), target).split(sep).join("/");
-      await this.insertEvidenceFile(connection, value, fileAssetId, relativePath, now, ownership?.owner);
+      await this.insertEvidenceFile(
+        connection,
+        value,
+        fileAssetId,
+        relativePath,
+        now,
+        ownership?.owner,
+      );
       await this.registerEvidenceOwners(connection, ownership?.owner, [
-        ["file_assets",fileAssetId], ["browser_evidence_artifacts",artifactId],
+        ["file_assets", fileAssetId],
+        ["browser_evidence_artifacts", artifactId],
       ]);
       await connection.query(
         [
@@ -478,11 +558,20 @@ export class MySqlEvidencePersistence {
       connection = await this.pool.getConnection();
     try {
       await connection.beginTransaction();
-      const owner = await this.reconciliationOwner(connection, input.organizationId, input.workspaceId);
-      const [columns] = owner ? await connection.query<RowDataPacket[]>(
-        "SHOW COLUMNS FROM reconciliation_runs WHERE Field IN ('organization_id','workspace_id','historical_context')",
-      ) : [[]];
-      const shape = columns.map(row => row.Field).sort().join(",");
+      const owner = await this.reconciliationOwner(
+        connection,
+        input.organizationId,
+        input.workspaceId,
+      );
+      const [columns] = owner
+        ? await connection.query<RowDataPacket[]>(
+            "SHOW COLUMNS FROM reconciliation_runs WHERE Field IN ('organization_id','workspace_id','historical_context')",
+          )
+        : [[]];
+      const shape = columns
+        .map((row) => row.Field)
+        .sort()
+        .join(",");
       if (owner && shape !== "historical_context" && shape !== "organization_id,workspace_id")
         throw new EvidencePersistenceError("reconciliation_scope_schema_incomplete");
       const historical = shape === "historical_context";
@@ -490,14 +579,21 @@ export class MySqlEvidencePersistence {
       await connection.query(
         [
           "INSERT INTO reconciliation_runs (id," +
-            (historical ? "historical_context," : "organization_id,workspace_id,") + "provider_id,parser_version,market,",
+            (historical ? "historical_context," : "organization_id,workspace_id,") +
+            "provider_id,parser_version,market,",
           "window_started_at,window_ended_at,sample_count,metrics_json,status,request_id,trace_id,created_by,",
           "created_at) VALUES (" + (historical ? "" : "?,") + "?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         ].join(""),
         [
           runId,
-          ...(historical ? [JSON.stringify({ organization_id: input.organizationId, workspace_id: input.workspaceId })] :
-            [input.organizationId, input.workspaceId]),
+          ...(historical
+            ? [
+                JSON.stringify({
+                  organization_id: input.organizationId,
+                  workspace_id: input.workspaceId,
+                }),
+              ]
+            : [input.organizationId, input.workspaceId]),
           input.providerId,
           input.parserVersion,
           input.market,
@@ -513,7 +609,9 @@ export class MySqlEvidencePersistence {
         ],
       );
       const issues = metrics.filter((item) => item.status !== "passed");
-      const issueScope = issues.length ? await dataQualityIssueScope(connection, Boolean(owner)) : null;
+      const issueScope = issues.length
+        ? await dataQualityIssueScope(connection, Boolean(owner))
+        : null;
       for (const metric of issues) {
         if (!issueScope) throw new Error("data_quality_issue_scope_missing");
         const issueId = randomUUID();
@@ -563,7 +661,11 @@ export class MySqlEvidencePersistence {
           { issue_id: issueId, metric_code: metric.code },
           now,
         );
-        refs.push(["data_quality_issues", issueId], ["evidence_data_events", eventId], ["evidence_data_outbox", outboxId]);
+        refs.push(
+          ["data_quality_issues", issueId],
+          ["evidence_data_events", eventId],
+          ["evidence_data_outbox", outboxId],
+        );
       }
       const runEventId = await this.event(
         connection,
@@ -574,7 +676,10 @@ export class MySqlEvidencePersistence {
         { status, sample_count: sampleCount },
         now,
       );
-      await this.registerEvidenceOwners(connection, owner, [...refs, ["evidence_data_events", runEventId]]);
+      await this.registerEvidenceOwners(connection, owner, [
+        ...refs,
+        ["evidence_data_events", runEventId],
+      ]);
       await connection.commit();
       return { id: runId, status, sample_count: sampleCount, metrics };
     } catch (error) {
@@ -585,7 +690,11 @@ export class MySqlEvidencePersistence {
     }
   }
 
-  private async reconciliationOwner(connection: PoolConnection, organizationId: string, workspaceId: string) {
+  private async reconciliationOwner(
+    connection: PoolConnection,
+    organizationId: string,
+    workspaceId: string,
+  ) {
     let rows: RowDataPacket[];
     try {
       [rows] = await connection.query<RowDataPacket[]>(
@@ -597,15 +706,22 @@ export class MySqlEvidencePersistence {
       );
     } catch (error) {
       const mysql = error as { code?: string; sqlMessage?: string };
-      if (mysql.code === "ER_NO_SUCH_TABLE" &&
-        /\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")) return null;
+      if (
+        mysql.code === "ER_NO_SUCH_TABLE" &&
+        /\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")
+      )
+        return null;
       throw error;
     }
     const row = rows[0];
     if (!row) return null;
-    if (!row.account_id || (row.reason !== "exclusive_owner" && (
-      (row.reason !== "shared" && row.reason !== "unassigned") || row.account_id !== row.primary_account_id
-    ))) throw new EvidencePersistenceError("reconciliation_owner_mismatch");
+    if (
+      !row.account_id ||
+      (row.reason !== "exclusive_owner" &&
+        ((row.reason !== "shared" && row.reason !== "unassigned") ||
+          row.account_id !== row.primary_account_id))
+    )
+      throw new EvidencePersistenceError("reconciliation_owner_mismatch");
     return { account_id: row.account_id, reason: row.reason } as EvidenceOwner;
   }
 
@@ -627,21 +743,29 @@ export class MySqlEvidencePersistence {
       [
         "SELECT p.retention_days FROM collection_tasks t JOIN collection_subqueries q ON q.task_id=t.id ",
         "JOIN providers p ON p.id=q.provider_id WHERE t.id=? AND q.id=? AND ",
-        fence ? "EXISTS (SELECT 1 FROM account_owned_records eo JOIN users eu ON eu.id=eo.account_id AND eu.status='active' " +
-          "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
-          "JOIN account_owned_records qo ON qo.source_table='collection_subqueries' " +
-          "AND qo.account_id=eo.account_id AND (qo.reason='exclusive_owner' OR qo.account_id=cut.primary_account_id) " +
-          "WHERE qo.source_id=q.id AND eo.source_table='collection_tasks' AND eo.source_id=t.id AND eo.account_id=t.account_id AND t.account_id=? " +
-          "AND (eo.reason='exclusive_owner' OR eo.account_id=cut.primary_account_id) LOCK IN SHARE MODE) " +
-          "AND t.status='running' AND t.lease_token_hash=UNHEX(?) AND t.lease_expires_at>NOW(3) AND "
+        fence
+          ? "EXISTS (SELECT 1 FROM account_owned_records eo JOIN users eu ON eu.id=eo.account_id AND eu.status='active' " +
+            "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+            "JOIN account_owned_records qo ON qo.source_table='collection_subqueries' " +
+            "AND qo.account_id=eo.account_id AND (qo.reason='exclusive_owner' OR qo.account_id=cut.primary_account_id) " +
+            "WHERE qo.source_id=q.id AND eo.source_table='collection_tasks' AND eo.source_id=t.id AND eo.account_id=t.account_id AND t.account_id=? " +
+            "AND (eo.reason='exclusive_owner' OR eo.account_id=cut.primary_account_id) LOCK IN SHARE MODE) " +
+            "AND t.status='running' AND t.lease_token_hash=UNHEX(?) AND t.lease_expires_at>NOW(3) AND "
           : "t.organization_id=? AND t.workspace_id=? AND ",
         "q.provider_id=? FOR UPDATE",
       ].join(""),
       [
         value.taskId,
         value.subqueryId,
-        ...(fence ? [fence.accountId, createHash("sha256").update("scoutops:collection-task-lease:v1\0")
-          .update(fence.leaseToken).digest("hex")] : [value.organizationId, value.workspaceId]),
+        ...(fence
+          ? [
+              fence.accountId,
+              createHash("sha256")
+                .update("scoutops:collection-task-lease:v1\0")
+                .update(fence.leaseToken)
+                .digest("hex"),
+            ]
+          : [value.organizationId, value.workspaceId]),
         value.providerId,
       ],
     );
@@ -652,43 +776,81 @@ export class MySqlEvidencePersistence {
   private async hasAccountEvidenceColumns(connection: PoolConnection) {
     const [rows] = await connection.query<RowDataPacket[]>(
       "SELECT TABLE_NAME AS table_name,COLUMN_NAME AS column_name FROM information_schema.COLUMNS " +
-      "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN ('raw_evidence','normalized_records') " +
-      "AND COLUMN_NAME IN ('account_id','organization_id','workspace_id')",
+        "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN ('raw_evidence','normalized_records') " +
+        "AND COLUMN_NAME IN ('account_id','organization_id','workspace_id')",
     );
-    const shapes = ["raw_evidence", "normalized_records"].map(table =>
-      rows.filter(row => row.table_name === table).map(row => row.column_name).sort().join(","));
-    if (shapes.every(shape => shape === "account_id")) return true;
-    if (shapes.every(shape => shape === "organization_id,workspace_id")) return false;
+    const shapes = ["raw_evidence", "normalized_records"].map((table) =>
+      rows
+        .filter((row) => row.table_name === table)
+        .map((row) => row.column_name)
+        .sort()
+        .join(","),
+    );
+    if (shapes.every((shape) => shape === "account_id")) return true;
+    if (shapes.every((shape) => shape === "organization_id,workspace_id")) return false;
     throw new EvidencePersistenceError("evidence_scope_schema_invalid");
   }
 
-  private async findExisting(connection: PoolConnection, value: ValidatedEvidence, accountFiles: boolean, accountScope: string | null) {
+  private async findExisting(
+    connection: PoolConnection,
+    value: ValidatedEvidence,
+    accountFiles: boolean,
+    accountScope: string | null,
+  ) {
     const scope = accountFiles ? "t" : "e";
     const [rows] = await connection.query<ExistingEvidence[]>(
       [
         "SELECT e.id evidence_id,e.file_asset_id,e.content_sha256,e.canonical_url,e.parser_version,e.adapter_version,",
         "n.id record_id,n.schema_version,n.payload_json normalized_payload FROM raw_evidence e JOIN ",
         "normalized_records n ON n.raw_evidence_id=e.id AND n.status='active' ",
-        ...(accountFiles && !accountScope ? ["JOIN collection_tasks t ON t.id=e.collection_task_id AND n.provider_id=e.provider_id "] : []),
-        accountScope ? "WHERE e.account_id=? AND n.account_id=e.account_id AND n.provider_id=e.provider_id AND " :
-          `WHERE ${scope}.organization_id=? AND ${scope}.workspace_id=? AND `,
+        ...(accountFiles && !accountScope
+          ? [
+              "JOIN collection_tasks t ON t.id=e.collection_task_id AND n.provider_id=e.provider_id ",
+            ]
+          : []),
+        accountScope
+          ? "WHERE e.account_id=? AND n.account_id=e.account_id AND n.provider_id=e.provider_id AND "
+          : `WHERE ${scope}.organization_id=? AND ${scope}.workspace_id=? AND `,
         "e.provider_id=? AND e.dedupe_key=? ",
         "ORDER BY n.record_version DESC,n.created_at DESC,",
         "n.id DESC LIMIT 1 FOR UPDATE",
       ].join(""),
-      [...(accountScope ? [accountScope] : [value.organizationId, value.workspaceId]), value.providerId, value.dedupeKey],
+      [
+        ...(accountScope ? [accountScope] : [value.organizationId, value.workspaceId]),
+        value.providerId,
+        value.dedupeKey,
+      ],
     );
     return rows[0] ?? null;
   }
 
-  private async insertEvidenceFile(connection: PoolConnection, value: {
-    organizationId: string; workspaceId: string; actorId: string; contentHash: string; content: Uint8Array;
-  }, fileId: string, path: string, now: Date, owner?: EvidenceOwner | null) {
+  private async insertEvidenceFile(
+    connection: PoolConnection,
+    value: {
+      organizationId: string;
+      workspaceId: string;
+      actorId: string;
+      contentHash: string;
+      content: Uint8Array;
+    },
+    fileId: string,
+    path: string,
+    now: Date,
+    owner?: EvidenceOwner | null,
+  ) {
     const scope = owner ? "account_id" : "organization_id,workspace_id";
     await connection.query(
       `INSERT INTO file_assets (id,${scope},category,relative_path,content_sha256,size_bytes,status,created_by,created_at,updated_at) VALUES (?,${owner ? "?" : "?,?"},'evidence',?,?,?,'active',?,?,?)`,
-      [fileId, ...(owner ? [owner.account_id] : [value.organizationId,value.workspaceId]), path,
-        value.contentHash,value.content.byteLength,value.actorId,now,now],
+      [
+        fileId,
+        ...(owner ? [owner.account_id] : [value.organizationId, value.workspaceId]),
+        path,
+        value.contentHash,
+        value.content.byteLength,
+        value.actorId,
+        now,
+        now,
+      ],
     );
   }
 
@@ -703,16 +865,22 @@ export class MySqlEvidencePersistence {
       );
     } catch (error) {
       const mysql = error as { code?: string; sqlMessage?: string };
-      if (mysql.code === "ER_NO_SUCH_TABLE" &&
-        /\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")) return null;
+      if (
+        mysql.code === "ER_NO_SUCH_TABLE" &&
+        /\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")
+      )
+        return null;
       throw error;
     }
     const row = rows[0];
     if (!row) return null;
     if (!row.account_id) return { owner: null };
-    if (row.reason !== "exclusive_owner" && (
-      (row.reason !== "shared" && row.reason !== "unassigned") || row.account_id !== row.primary_account_id
-    )) throw new EvidencePersistenceError("evidence_task_owner_mismatch");
+    if (
+      row.reason !== "exclusive_owner" &&
+      ((row.reason !== "shared" && row.reason !== "unassigned") ||
+        row.account_id !== row.primary_account_id)
+    )
+      throw new EvidencePersistenceError("evidence_task_owner_mismatch");
     return { owner: { account_id: row.account_id, reason: row.reason } as EvidenceOwner };
   }
 
@@ -726,9 +894,12 @@ export class MySqlEvidencePersistence {
       "SELECT source_table,source_id,account_id FROM account_owned_records WHERE (source_table,source_id) IN (?) LOCK IN SHARE MODE",
       [refs],
     );
-    if (ownership.owner
-      ? rows.length !== refs.length || rows.some((row) => row.account_id !== ownership.owner?.account_id)
-      : rows.length > 0)
+    if (
+      ownership.owner
+        ? rows.length !== refs.length ||
+          rows.some((row) => row.account_id !== ownership.owner?.account_id)
+        : rows.length > 0
+    )
       throw new EvidencePersistenceError("evidence_reference_owner_mismatch");
   }
 
@@ -744,25 +915,38 @@ export class MySqlEvidencePersistence {
     );
   }
 
-  private async findExistingRecord(connection: PoolConnection, value: ValidatedEvidence, accountFiles: boolean, accountScope: string | null) {
+  private async findExistingRecord(
+    connection: PoolConnection,
+    value: ValidatedEvidence,
+    accountFiles: boolean,
+    accountScope: string | null,
+  ) {
     const [rows] = await connection.query<ExistingRecord[]>(
-      accountScope ? [
-        "SELECT n.id record_id,n.record_version FROM normalized_records n ",
-        "JOIN raw_evidence e ON e.id=n.raw_evidence_id AND e.provider_id=n.provider_id AND e.account_id=n.account_id ",
-        "WHERE n.account_id=? AND n.provider_id=? AND n.record_key=? AND n.status='active' ",
-        "ORDER BY n.record_version DESC,n.created_at DESC,n.id DESC LIMIT 1 FOR UPDATE",
-      ].join("") : accountFiles ? [
-        "SELECT n.id record_id,n.record_version FROM normalized_records n ",
-        "JOIN raw_evidence e ON e.id=n.raw_evidence_id AND e.provider_id=n.provider_id ",
-        "JOIN collection_tasks t ON t.id=e.collection_task_id WHERE t.organization_id=? AND t.workspace_id=? ",
-        "AND n.provider_id=? AND n.record_key=? AND n.status='active' ",
-        "ORDER BY n.record_version DESC,n.created_at DESC,n.id DESC LIMIT 1 FOR UPDATE",
-      ].join("") : [
-        "SELECT id record_id,record_version FROM normalized_records WHERE organization_id=? AND workspace_id=? ",
-        "AND provider_id=? AND record_key=? AND status='active' ORDER BY record_version DESC,created_at DESC,id DESC ",
-        "LIMIT 1 FOR UPDATE",
-      ].join(""),
-      [...(accountScope ? [accountScope] : [value.organizationId, value.workspaceId]), value.providerId, value.recordKey],
+      accountScope
+        ? [
+            "SELECT n.id record_id,n.record_version FROM normalized_records n ",
+            "JOIN raw_evidence e ON e.id=n.raw_evidence_id AND e.provider_id=n.provider_id AND e.account_id=n.account_id ",
+            "WHERE n.account_id=? AND n.provider_id=? AND n.record_key=? AND n.status='active' ",
+            "ORDER BY n.record_version DESC,n.created_at DESC,n.id DESC LIMIT 1 FOR UPDATE",
+          ].join("")
+        : accountFiles
+          ? [
+              "SELECT n.id record_id,n.record_version FROM normalized_records n ",
+              "JOIN raw_evidence e ON e.id=n.raw_evidence_id AND e.provider_id=n.provider_id ",
+              "JOIN collection_tasks t ON t.id=e.collection_task_id WHERE t.organization_id=? AND t.workspace_id=? ",
+              "AND n.provider_id=? AND n.record_key=? AND n.status='active' ",
+              "ORDER BY n.record_version DESC,n.created_at DESC,n.id DESC LIMIT 1 FOR UPDATE",
+            ].join("")
+          : [
+              "SELECT id record_id,record_version FROM normalized_records WHERE organization_id=? AND workspace_id=? ",
+              "AND provider_id=? AND record_key=? AND status='active' ORDER BY record_version DESC,created_at DESC,id DESC ",
+              "LIMIT 1 FOR UPDATE",
+            ].join(""),
+      [
+        ...(accountScope ? [accountScope] : [value.organizationId, value.workspaceId]),
+        value.providerId,
+        value.recordKey,
+      ],
     );
     return rows[0] ?? null;
   }
@@ -776,10 +960,16 @@ export class MySqlEvidencePersistence {
     accountFiles: boolean,
   ) {
     await this.verifyEvidenceOwners(connection, ownership, [
-      ["raw_evidence", existing.evidence_id], ["normalized_records", existing.record_id],
+      ["raw_evidence", existing.evidence_id],
+      ["normalized_records", existing.record_id],
       ...(accountFiles ? [["file_assets", existing.file_asset_id] as const] : []),
     ]);
-    if (accountFiles) await this.requireOwnedFileAsset(connection, ownership!.owner!.account_id, existing.file_asset_id);
+    if (accountFiles)
+      await this.requireOwnedFileAsset(
+        connection,
+        ownership!.owner!.account_id,
+        existing.file_asset_id,
+      );
     const contentChanged = String(existing.content_sha256) !== value.contentHash;
     if (
       contentChanged &&
@@ -821,14 +1011,24 @@ export class MySqlEvidencePersistence {
       await this.validateScope(connection, value);
       const ownership = await this.taskOwnership(connection, value.taskId);
       const accountFiles = await fileAssetAccountStorage(connection);
-      if (accountFiles && !ownership?.owner) throw new EvidencePersistenceError("evidence_task_owner_missing");
-      const accountScope = accountFiles && await this.hasAccountEvidenceColumns(connection)
-        ? ownership!.owner!.account_id : null;
+      if (accountFiles && !ownership?.owner)
+        throw new EvidencePersistenceError("evidence_task_owner_missing");
+      const accountScope =
+        accountFiles && (await this.hasAccountEvidenceColumns(connection))
+          ? ownership!.owner!.account_id
+          : null;
       if (value.taskFence && accountScope !== value.taskFence.accountId)
         throw new EvidencePersistenceError("account_evidence_schema_or_owner_invalid");
       const existing = await this.findExisting(connection, value, accountFiles, accountScope);
       if (!existing) throw originalError;
-      const result = await this.linkExisting(connection, value, existing, this.now(), ownership, accountFiles);
+      const result = await this.linkExisting(
+        connection,
+        value,
+        existing,
+        this.now(),
+        ownership,
+        accountFiles,
+      );
       await connection.commit();
       return result;
     } catch (error) {
@@ -839,7 +1039,11 @@ export class MySqlEvidencePersistence {
     }
   }
 
-  private async requireOwnedFileAsset(connection: PoolConnection, accountId: string, assetId: string) {
+  private async requireOwnedFileAsset(
+    connection: PoolConnection,
+    accountId: string,
+    assetId: string,
+  ) {
     if (!assetId) throw new EvidencePersistenceError("evidence_reference_owner_mismatch");
     const [rows] = await connection.query<RowDataPacket[]>(
       "SELECT id FROM file_assets WHERE id=? AND account_id=? AND category='evidence' LOCK IN SHARE MODE",
@@ -866,9 +1070,10 @@ export class MySqlEvidencePersistence {
         [value.taskId, evidenceId],
       );
       if (existing[0])
-        await this.verifyEvidenceOwners(connection, ownership, [["collection_task_evidence_links", String(existing[0].id)]]);
-      else
-        newOwnedLink = !!ownership.owner;
+        await this.verifyEvidenceOwners(connection, ownership, [
+          ["collection_task_evidence_links", String(existing[0].id)],
+        ]);
+      else newOwnedLink = !!ownership.owner;
     }
     const [result] = await connection.query<ResultSetHeader>(
       [
@@ -892,7 +1097,9 @@ export class MySqlEvidencePersistence {
       ],
     );
     if (newOwnedLink)
-      await this.registerEvidenceOwners(connection, ownership?.owner, [["collection_task_evidence_links", linkId]]);
+      await this.registerEvidenceOwners(connection, ownership?.owner, [
+        ["collection_task_evidence_links", linkId],
+      ]);
     if (linkType === "deduplicated" && result.affectedRows > 0) {
       const payload = {
         collection_task_id: value.taskId,
@@ -920,7 +1127,8 @@ export class MySqlEvidencePersistence {
         now,
       );
       await this.registerEvidenceOwners(connection, ownership?.owner, [
-        ["evidence_data_events", eventId], ["evidence_data_outbox", outboxId],
+        ["evidence_data_events", eventId],
+        ["evidence_data_outbox", outboxId],
       ]);
     }
   }
@@ -962,7 +1170,13 @@ export class MySqlEvidencePersistence {
 
   private async outbox(
     connection: PoolConnection,
-    input: { organizationId: string; workspaceId: string; requestId: string; traceId: string; taskFence?: EvidenceTaskFence },
+    input: {
+      organizationId: string;
+      workspaceId: string;
+      requestId: string;
+      traceId: string;
+      taskFence?: EvidenceTaskFence;
+    },
     eventType: string,
     resourceType: string,
     resourceId: string,
@@ -975,7 +1189,9 @@ export class MySqlEvidencePersistence {
       requireInheritedScope: Boolean(input.taskFence),
       organizationId: input.organizationId,
       workspaceId: input.workspaceId,
-      eventType, resourceType, resourceId,
+      eventType,
+      resourceType,
+      resourceId,
       payloadJson: JSON.stringify(payload),
       requestId: input.requestId,
       traceId: input.traceId,

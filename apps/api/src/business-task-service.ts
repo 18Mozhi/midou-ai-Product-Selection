@@ -51,7 +51,10 @@ export function validateTask(v: any, preserveOmittedAssignee = false) {
             throw new BusinessTaskError("task_input_invalid", 400, "修正 description。");
           })(),
     priority: v.priority,
-    assignee_id: preserveOmittedAssignee && v?.assignee_id == null ? null : uuid(v?.assignee_id, "assignee_id"),
+    assignee_id:
+      preserveOmittedAssignee && v?.assignee_id == null
+        ? null
+        : uuid(v?.assignee_id, "assignee_id"),
     due_at: date(v?.due_at),
   };
 }
@@ -89,7 +92,11 @@ export function validateUpdate(v: any, preserveOmittedAssignee = false) {
   const expected = Number(v?.expected_version);
   if (!Number.isSafeInteger(expected) || expected < 1)
     throw new BusinessTaskError("task_version_invalid", 400, "提交当前任务版本。");
-  return { ...validateTask(v, preserveOmittedAssignee), expected_version: expected, reason: text(v?.reason, "reason", 500) };
+  return {
+    ...validateTask(v, preserveOmittedAssignee),
+    expected_version: expected,
+    reason: text(v?.reason, "reason", 500),
+  };
 }
 export function validateDelete(v: any) {
   const expected = Number(v?.expected_version);
@@ -151,18 +158,21 @@ export class BusinessTaskService {
   }
   update(i: TaskMutationContext & { taskId: string; value: any }) {
     const account = "accountOwnedMutation" in i;
-    const parsed = uuid(i.taskId, "task_id"), taskId = account ? parsed.toLowerCase() : parsed;
+    const parsed = uuid(i.taskId, "task_id"),
+      taskId = account ? parsed.toLowerCase() : parsed;
     return this.repo.update({
       ...i,
       taskId,
-      value: account ? validateUpdate(i.value, true)
+      value: account
+        ? validateUpdate(i.value, true)
         : validateUpdate({ ...i.value, assignee_id: i.value?.assignee_id ?? i.actorId }),
       route: account ? `PATCH:/api/v1/tasks/${taskId}:account` : "PATCH:/api/v1/tasks/:id",
     });
   }
   remove(i: TaskMutationContext & { taskId: string; value: any }) {
     const account = "accountOwnedMutation" in i;
-    const parsed = uuid(i.taskId, "task_id"), taskId = account ? parsed.toLowerCase() : parsed;
+    const parsed = uuid(i.taskId, "task_id"),
+      taskId = account ? parsed.toLowerCase() : parsed;
     return this.repo.remove({
       ...i,
       taskId,
@@ -181,7 +191,9 @@ export class BusinessTaskService {
       ...i,
       taskId,
       value,
-      route: accountMode ? `POST:/api/v1/tasks/${taskId}/actions:account` : "POST:/api/v1/tasks/:id/actions",
+      route: accountMode
+        ? `POST:/api/v1/tasks/${taskId}/actions:account`
+        : "POST:/api/v1/tasks/:id/actions",
     });
   }
   comment(i: TaskMutationContext & { taskId: string; value: any }) {

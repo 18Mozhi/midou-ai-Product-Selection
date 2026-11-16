@@ -1,4 +1,8 @@
-import { notificationScopeRelation, automationRuleScopeRelation, nativeAutomationOutbox } from "@scoutops/database";
+import {
+  notificationScopeRelation,
+  automationRuleScopeRelation,
+  nativeAutomationOutbox,
+} from "@scoutops/database";
 import { appendBusinessAudit } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
@@ -32,22 +36,26 @@ export class AutomationWorker {
       const [columns] = await this.pool.query<RowDataPacket[]>(
         "SHOW COLUMNS FROM automation_executions WHERE Field IN ('organization_id','workspace_id')",
       );
-      if (columns.length === 1) throw new Error("partial_inherited_scope_schema:automation_executions");
+      if (columns.length === 1)
+        throw new Error("partial_inherited_scope_schema:automation_executions");
       this.legacyScope = columns.length === 2;
     }
     const rules = await automationRuleScopeRelation(this.pool);
     const accountMode = rules !== "automation_rules";
     if (accountMode && this.legacyScope) throw new Error("automation_account_schema_not_ready");
-    const nativeOutbox = accountMode && await nativeAutomationOutbox(this.pool);
+    const nativeOutbox = accountMode && (await nativeAutomationOutbox(this.pool));
     await this.discover(this.legacyScope, rules, accountMode, nativeOutbox);
     const job: any = await this.claim(this.legacyScope, rules, accountMode, nativeOutbox);
     if (!job) return { status: "idle" as const };
     const now = this.now();
     try {
       const [rows] = await this.pool.query<RowDataPacket[]>(
-          accountMode ? "SELECT * FROM automation_rules WHERE id=? AND account_id=?" :
-            `SELECT * FROM ${rules} r WHERE id=? AND organization_id=? AND workspace_id=?`,
-          accountMode ? [job.rule_id,job.account_id] : [job.rule_id, job.organization_id, job.workspace_id],
+          accountMode
+            ? "SELECT * FROM automation_rules WHERE id=? AND account_id=?"
+            : `SELECT * FROM ${rules} r WHERE id=? AND organization_id=? AND workspace_id=?`,
+          accountMode
+            ? [job.rule_id, job.account_id]
+            : [job.rule_id, job.organization_id, job.workspace_id],
         ),
         rule = rows[0];
       if (!rule || rule.status !== "active") {
@@ -77,32 +85,59 @@ export class AutomationWorker {
         if (accountMode) {
           const [held] = await actionConnection.query<RowDataPacket[]>(
             "SELECT x.id FROM automation_executions x JOIN automation_rules r ON r.id=x.rule_id " +
-            "JOIN account_owned_records ro ON ro.source_table='automation_rules' AND ro.source_id=r.id AND ro.account_id=r.account_id " +
-            "JOIN account_owned_records xo ON xo.source_table='automation_executions' AND xo.source_id=x.id AND xo.account_id=ro.account_id AND xo.reason=ro.reason " +
-            "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
-            "AND (ro.reason='exclusive_owner' OR (ro.reason IN ('shared','unassigned') AND ro.account_id=cut.primary_account_id)) " +
-            "WHERE x.id=? AND x.status='leased' AND x.leased_by=? AND x.attempt_count=? AND x.lease_expires_at>? " +
-            "AND r.id=? AND r.account_id=? AND r.version=? AND ro.reason=? AND r.status='active' FOR UPDATE",
-            [job.id,this.workerId,job.attempt_count,this.now(),rule.id,job.account_id,rule.version,job.ownership_reason]);
+              "JOIN account_owned_records ro ON ro.source_table='automation_rules' AND ro.source_id=r.id AND ro.account_id=r.account_id " +
+              "JOIN account_owned_records xo ON xo.source_table='automation_executions' AND xo.source_id=x.id AND xo.account_id=ro.account_id AND xo.reason=ro.reason " +
+              "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+              "AND (ro.reason='exclusive_owner' OR (ro.reason IN ('shared','unassigned') AND ro.account_id=cut.primary_account_id)) " +
+              "WHERE x.id=? AND x.status='leased' AND x.leased_by=? AND x.attempt_count=? AND x.lease_expires_at>? " +
+              "AND r.id=? AND r.account_id=? AND r.version=? AND ro.reason=? AND r.status='active' FOR UPDATE",
+            [
+              job.id,
+              this.workerId,
+              job.attempt_count,
+              this.now(),
+              rule.id,
+              job.account_id,
+              rule.version,
+              job.ownership_reason,
+            ],
+          );
           if (!held.length || Number(job.rule_version) !== Number(rule.version))
             throw new Error("automation_execution_lease_or_rule_changed");
           const [currentCounts] = await actionConnection.query<RowDataPacket[]>(
             "SELECT COUNT(*) total FROM automation_executions WHERE rule_id=? AND status='succeeded' AND updated_at>=?",
-            [rule.id,since]);
+            [rule.id, since],
+          );
           if (Number(currentCounts[0]?.total) >= Number(rule.rate_limit_count)) {
-            await this.finish(job,"rate_limited",null,null,"rate_limit_exceeded",actionConnection);
-            await this.event(job,rule,"automation.rate_limited",{
-              execution_id:String(job.id),rule_version:Number(job.rule_version),
-            },actionConnection,nativeOutbox);
+            await this.finish(
+              job,
+              "rate_limited",
+              null,
+              null,
+              "rate_limit_exceeded",
+              actionConnection,
+            );
+            await this.event(
+              job,
+              rule,
+              "automation.rate_limited",
+              {
+                execution_id: String(job.id),
+                rule_version: Number(job.rule_version),
+              },
+              actionConnection,
+              nativeOutbox,
+            );
             await actionConnection.commit();
-            return {status:"rate_limited" as const,execution_id:String(job.id)};
+            return { status: "rate_limited" as const, execution_id: String(job.id) };
           }
         }
         const register = async (source: string, resource: string) => {
-          if (accountMode) await actionConnection.query(
-            "INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES(?,?,?,?)",
-            [source,resource,job.account_id,job.ownership_reason],
-          );
+          if (accountMode)
+            await actionConnection.query(
+              "INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES(?,?,?,?)",
+              [source, resource, job.account_id, job.ownership_reason],
+            );
         };
         if (rule.action_type === "notify_owner") {
           type = "notification";
@@ -127,7 +162,7 @@ export class AutomationWorker {
               now,
             ],
           );
-          await register("outbox_events",id);
+          await register("outbox_events", id);
         } else {
           type = "task";
           id = randomUUID();
@@ -149,7 +184,8 @@ export class AutomationWorker {
               now,
             ],
           );
-          const eventId = randomUUID(), outboxId = nativeTask ? eventId : randomUUID();
+          const eventId = randomUUID(),
+            outboxId = nativeTask ? eventId : randomUUID();
           await actionConnection.query(
             "INSERT INTO task_events (id,task_id,event_type,actor_id,payload_json,request_id,trace_id,created_at) VALUES (?,?, 'task.created',?,?,?,?,?)",
             [
@@ -186,9 +222,9 @@ export class AutomationWorker {
               now,
             ],
           );
-          await register("tasks",id);
-          await register("task_events",eventId);
-          await register("outbox_events",outboxId);
+          await register("tasks", id);
+          await register("task_events", eventId);
+          await register("outbox_events", outboxId);
         }
         await this.finish(job, "succeeded", type, id, null, actionConnection);
         await this.event(
@@ -221,7 +257,13 @@ export class AutomationWorker {
       await this.pool.query(
         "UPDATE automation_executions SET status=?,available_at=DATE_ADD(?,INTERVAL 60 SECOND),lease_expires_at=NULL,last_error_code='action_failed',updated_at=? WHERE id=?" +
           (accountMode ? " AND status='leased' AND leased_by=? AND attempt_count=?" : ""),
-        [dead ? "dead_letter" : "retry_scheduled", now, now, job.id, ...(accountMode ? [this.workerId,job.attempt_count] : [])],
+        [
+          dead ? "dead_letter" : "retry_scheduled",
+          now,
+          now,
+          job.id,
+          ...(accountMode ? [this.workerId, job.attempt_count] : []),
+        ],
       );
       return {
         status: dead ? ("dead_letter" as const) : ("retry_scheduled" as const),
@@ -230,9 +272,16 @@ export class AutomationWorker {
       };
     }
   }
-  private async discover(legacy: boolean, rules: string, accountMode: boolean, nativeOutbox: boolean) {
+  private async discover(
+    legacy: boolean,
+    rules: string,
+    accountMode: boolean,
+    nativeOutbox: boolean,
+  ) {
     const now = this.now();
-    const notificationSource = nativeOutbox ? "notifications" : await notificationScopeRelation(this.pool);
+    const notificationSource = nativeOutbox
+      ? "notifications"
+      : await notificationScopeRelation(this.pool);
     if (accountMode) {
       const c = await this.pool.getConnection();
       try {
@@ -242,8 +291,11 @@ export class AutomationWorker {
            FROM ${rules} r JOIN account_owned_records o ON o.source_table='automation_rules' AND o.source_id=r.id AND o.account_id=r.account_id
            JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25
              AND (o.reason='exclusive_owner' OR (o.reason IN ('shared','unassigned') AND o.account_id=cut.primary_account_id))
-           JOIN ${notificationSource} n ON n.recipient_id=r.account_id${nativeOutbox ? nativeTriggerProofSql
-             : " AND n.organization_id=r.organization_id AND n.workspace_id=r.workspace_id JOIN outbox_events e ON e.id=n.source_event_id AND e.event_type=r.trigger_event_type"}
+           JOIN ${notificationSource} n ON n.recipient_id=r.account_id${
+             nativeOutbox
+               ? nativeTriggerProofSql
+               : " AND n.organization_id=r.organization_id AND n.workspace_id=r.workspace_id JOIN outbox_events e ON e.id=n.source_event_id AND e.event_type=r.trigger_event_type"
+           }
            WHERE r.status='active' AND (r.condition_severity='any' OR r.condition_severity=n.severity)
              AND n.created_at>=cut.created_at
              AND EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=n.id AND d.recipient_id=n.recipient_id AND d.channel='in_app' AND d.status='delivered')
@@ -256,18 +308,34 @@ export class AutomationWorker {
           try {
             await c.query(
               "INSERT INTO automation_executions(id,rule_id,rule_version,notification_id,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES(?,?,?,?,'queued',0,?,?,?,?,?)",
-              [id,row.rule_id,row.version,row.notification_id,now,row.request_id,row.trace_id,now,now],
+              [
+                id,
+                row.rule_id,
+                row.version,
+                row.notification_id,
+                now,
+                row.request_id,
+                row.trace_id,
+                now,
+                now,
+              ],
             );
           } catch (error) {
             if ((error as { code?: string }).code === "ER_DUP_ENTRY") continue;
             throw error;
           }
-          await c.query("INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES('automation_executions',?,?,?)",
-            [id,row.account_id,row.reason]);
+          await c.query(
+            "INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES('automation_executions',?,?,?)",
+            [id, row.account_id, row.reason],
+          );
         }
         await c.commit();
-      } catch (error) { await c.rollback(); throw error; }
-      finally { c.release(); }
+      } catch (error) {
+        await c.rollback();
+        throw error;
+      } finally {
+        c.release();
+      }
       return;
     }
     await this.pool.query(
@@ -291,12 +359,16 @@ export class AutomationWorker {
             : `SELECT x.*,r.organization_id,r.workspace_id${accountMode ? ",r.account_id,ro.reason ownership_reason" : ""} FROM automation_executions x
                JOIN ${rules} r ON r.id=x.rule_id
                JOIN ${nativeOutbox ? "notifications" : await notificationScopeRelation(c)} n ON n.id=x.notification_id${nativeOutbox ? "" : " AND n.organization_id=r.organization_id AND n.workspace_id=r.workspace_id"}
-               ${accountMode ? "AND n.recipient_id=r.account_id " +
-                "JOIN account_owned_records ro ON ro.source_table='automation_rules' AND ro.source_id=r.id AND ro.account_id=r.account_id " +
-                "JOIN account_owned_records xo ON xo.source_table='automation_executions' AND xo.source_id=x.id AND xo.account_id=r.account_id " +
-                "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 AND n.created_at>=cut.created_at " +
-                "AND (ro.reason='exclusive_owner' OR (ro.reason IN ('shared','unassigned') AND ro.account_id=cut.primary_account_id)) " +
-                "JOIN notification_deliveries d ON d.notification_id=n.id AND d.recipient_id=n.recipient_id AND d.channel='in_app' AND d.status='delivered'" : ""}
+               ${
+                 accountMode
+                   ? "AND n.recipient_id=r.account_id " +
+                     "JOIN account_owned_records ro ON ro.source_table='automation_rules' AND ro.source_id=r.id AND ro.account_id=r.account_id " +
+                     "JOIN account_owned_records xo ON xo.source_table='automation_executions' AND xo.source_id=x.id AND xo.account_id=r.account_id " +
+                     "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 AND n.created_at>=cut.created_at " +
+                     "AND (ro.reason='exclusive_owner' OR (ro.reason IN ('shared','unassigned') AND ro.account_id=cut.primary_account_id)) " +
+                     "JOIN notification_deliveries d ON d.notification_id=n.id AND d.recipient_id=n.recipient_id AND d.channel='in_app' AND d.status='delivered'"
+                   : ""
+               }
                ${nativeOutbox ? nativeTriggerProofSql : ""}
                WHERE ((x.status IN ('queued','retry_scheduled') AND x.available_at<=?) OR (x.status='leased' AND x.lease_expires_at<=?))
                ${nativeOutbox ? nativeTriggerHistorySql : ""}
@@ -345,8 +417,9 @@ export class AutomationWorker {
     nativeOutbox = false,
   ) {
     const now = this.now();
-    await appendBusinessAudit(queryable,
-        "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,?,'automation_rule',?,?,?,?,?,1)",
+    await appendBusinessAudit(
+      queryable,
+      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,?,'automation_rule',?,?,?,?,?,1)",
       [
         randomUUID(),
         job.organization_id,
@@ -379,9 +452,10 @@ export class AutomationWorker {
         now,
       ],
     );
-    if (job.account_id) await queryable.query(
-      "INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES('outbox_events',?,?,?)",
-      [eventId,job.account_id,job.ownership_reason],
-    );
+    if (job.account_id)
+      await queryable.query(
+        "INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES('outbox_events',?,?,?)",
+        [eventId, job.account_id, job.ownership_reason],
+      );
   }
 }

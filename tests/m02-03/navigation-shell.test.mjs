@@ -203,7 +203,10 @@ test("M02-03 route shell lazily imports only registered surfaces and page-owned 
     [...registry.matchAll(/lazy\("([^"]+)"\)/gu)].map((match) => `${match[1]}.vue`),
   );
   // The legacy appearance bookmark is redirected by the router before a shell mounts.
-  assert.match(router, /if \(to\.path === "\/settings\/theme"\)\s*return \{ path: "\/me", query: \{ section: "appearance" \}, replace: true \}/);
+  assert.match(
+    router,
+    /if \(to\.path === "\/settings\/theme"\)\s*return \{ path: "\/me", query: \{ section: "appearance" \}, replace: true \}/,
+  );
   const routeSurfaces = new Set(
     JSON.parse(catalogRaw)
       .routes.filter(
@@ -442,11 +445,23 @@ test("M02-03 admin shells keep their quick actions while member manual creation 
     read("apps/web/src/components/PlatformDashboard.vue"),
     read("apps/web/src/components/OrganizationAdminCenter.vue"),
   ]);
-  assert.match(component, /v-if="!retiredScope && shell === 'platform_admin'[^"]*"\s+class="role-quick-action"\s+to="\/platform-admin\/organizations\/new"/);
-  assert.match(component, /v-else-if="!retiredScope && shell === 'organization_admin'[^"]*"\s+class="role-quick-action"\s+to="\/org-admin\/members"/);
+  assert.match(
+    component,
+    /v-if="!retiredScope && shell === 'platform_admin'[^"]*"\s+class="role-quick-action"\s+to="\/platform-admin\/organizations\/new"/,
+  );
+  assert.match(
+    component,
+    /v-else-if="!retiredScope && shell === 'organization_admin'[^"]*"\s+class="role-quick-action"\s+to="\/org-admin\/members"/,
+  );
   assert.match(component, /<span>邀请成员<\/span>/);
-  assert.match(platform, /v-if="capabilities\?\.includes\('platform:superadmin'\)"\s+[^>]*to="\/platform-admin\/organizations\/new"/);
-  assert.match(organization, /v-if="view === 'summary' && roles\?\.includes\('organization_admin'\)"\s+class="org-overview-invite"\s+to="\/org-admin\/members"/);
+  assert.match(
+    platform,
+    /v-if="capabilities\?\.includes\('platform:superadmin'\)"\s+[^>]*to="\/platform-admin\/organizations\/new"/,
+  );
+  assert.match(
+    organization,
+    /v-if="view === 'summary' && roles\?\.includes\('organization_admin'\)"\s+class="org-overview-invite"\s+to="\/org-admin\/members"/,
+  );
   assert.doesNotMatch(
     component,
     /v-else-if="shell === 'member'"\s+type="button"\s+class="role-quick-action"[\s\S]*?创建选品/,
@@ -479,6 +494,9 @@ test("retired navigation no longer links to the removed scope selector", async (
   assert.match(shell, /:retired-scope="retiredScope"/);
   assert.match(shell, /!retiredScope && discovery.discoveryActivated.value/);
   assert.match(sidebar, /v-if="!retiredScope && guard[^"]*"\s+to="\/select-context"/);
-  assert.match(gate, /v-else-if="!retiredScope && state === 'context_required'" to="\/select-context"/);
+  assert.match(
+    gate,
+    /v-else-if="!retiredScope && state === 'context_required'" to="\/select-context"/,
+  );
   assert.match(gate, /:to="retiredScope \? '\/opportunities' : '\/home'"/);
 });

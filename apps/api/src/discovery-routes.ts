@@ -35,55 +35,56 @@ export function registerDiscoveryRoutes(app: FastifyInstance, options: Discovery
     });
     return resolved;
   };
-  if (!options.accountReadRehearsal) app.get(
-    "/api/v1/me/global-search",
-    {
-      schema: {
-        querystring: {
-          type: "object",
-          required: ["q"],
-          properties: {
-            q: { type: "string", minLength: 2, maxLength: 100 },
-            limit: { type: "integer", minimum: 1, maximum: 20 },
-            cursor: { type: "string", format: "uuid" },
-            resource_type: {
-              type: "string",
-              enum: ["task", "opportunity", "evidence", "collection_task"],
+  if (!options.accountReadRehearsal)
+    app.get(
+      "/api/v1/me/global-search",
+      {
+        schema: {
+          querystring: {
+            type: "object",
+            required: ["q"],
+            properties: {
+              q: { type: "string", minLength: 2, maxLength: 100 },
+              limit: { type: "integer", minimum: 1, maximum: 20 },
+              cursor: { type: "string", format: "uuid" },
+              resource_type: {
+                type: "string",
+                enum: ["task", "opportunity", "evidence", "collection_task"],
+              },
+              status: { type: "string", pattern: "^[a-z][a-z0-9_]{0,39}$" },
+              assignee: { type: "string", minLength: 1, maxLength: 120 },
             },
-            status: { type: "string", pattern: "^[a-z][a-z0-9_]{0,39}$" },
-            assignee: { type: "string", minLength: 1, maxLength: 120 },
+            additionalProperties: false,
           },
-          additionalProperties: false,
         },
       },
-    },
-    async (request, reply) => {
-      const resolved = await memberScope(request),
-        query = request.query as {
-          q: string;
-          limit?: number;
-          cursor?: string;
-          resource_type?: "task" | "opportunity" | "evidence" | "collection_task";
-          status?: string;
-          assignee?: string;
-        };
-      reply.header("cache-control", "private, no-store");
-      return envelope(
-        await options.service.search({
-          organizationId: resolved.context.organization_id,
-          workspaceId: resolved.context.workspace_id,
-          query: query.q,
-          capabilities: resolved.subject.capabilities,
-          ...(query.limit === undefined ? {} : { limit: query.limit }),
-          ...(query.cursor ? { cursor: query.cursor } : {}),
-          ...(query.resource_type ? { resourceType: query.resource_type } : {}),
-          ...(query.status ? { status: query.status } : {}),
-          ...(query.assignee ? { assignee: query.assignee } : {}),
-        }),
-        request,
-      );
-    },
-  );
+      async (request, reply) => {
+        const resolved = await memberScope(request),
+          query = request.query as {
+            q: string;
+            limit?: number;
+            cursor?: string;
+            resource_type?: "task" | "opportunity" | "evidence" | "collection_task";
+            status?: string;
+            assignee?: string;
+          };
+        reply.header("cache-control", "private, no-store");
+        return envelope(
+          await options.service.search({
+            organizationId: resolved.context.organization_id,
+            workspaceId: resolved.context.workspace_id,
+            query: query.q,
+            capabilities: resolved.subject.capabilities,
+            ...(query.limit === undefined ? {} : { limit: query.limit }),
+            ...(query.cursor ? { cursor: query.cursor } : {}),
+            ...(query.resource_type ? { resourceType: query.resource_type } : {}),
+            ...(query.status ? { status: query.status } : {}),
+            ...(query.assignee ? { assignee: query.assignee } : {}),
+          }),
+          request,
+        );
+      },
+    );
   app.get(
     "/api/v1/me/quick-actions",
     {

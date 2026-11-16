@@ -10,10 +10,16 @@ import {
   PRIMARY_SOURCE_SUPPORT_REVISION,
   PRIMARY_SOURCE_SUPPORT_EVENT,
 } from "./primary-source-support-contract.js";
-import { accountCompletionRankProof, nativeCompletionPrimaryAsin, nativeCompletionTaskProof } from "./native-completion-task-proof.js";
+import {
+  accountCompletionRankProof,
+  nativeCompletionPrimaryAsin,
+  nativeCompletionTaskProof,
+} from "./native-completion-task-proof.js";
 
 /** Scheduling proof only. Evaluation/completion still recheck the full current fingerprint. */
-const approvedSourceSql = (native: boolean) => `EXISTS (SELECT 1 FROM ${opportunityEventReadRelation} source_approval
+const approvedSourceSql = (
+  native: boolean,
+) => `EXISTS (SELECT 1 FROM ${opportunityEventReadRelation} source_approval
   JOIN ${trendTopicEventReadRelation} source_origin ON source_origin.id=CONVERT(JSON_UNQUOTE(JSON_EXTRACT(source_approval.payload_json,'$.origin_event_id')) USING ascii)
     AND BINARY source_origin.id=BINARY JSON_UNQUOTE(JSON_EXTRACT(source_approval.payload_json,'$.origin_event_id'))
     AND source_origin.organization_id=source_approval.organization_id AND source_origin.workspace_id=source_approval.workspace_id
@@ -51,7 +57,9 @@ export const completionCompetitorApprovedSourceSql = approvedSourceSql(false);
 const owner = (table: string, id: string, account: string) =>
   `EXISTS (SELECT 1 FROM account_owned_records rank_owner WHERE rank_owner.source_table='${table}'
     AND rank_owner.source_id=${id} AND rank_owner.account_id=${account})`;
-const pendingDetails = (native: boolean) => `SELECT STRAIGHT_JOIN t.id task_id,c.id competitor_id,c.opportunity_id,c.organization_id,c.workspace_id${native ? ",t.account_id" : ""}
+const pendingDetails = (
+  native: boolean,
+) => `SELECT STRAIGHT_JOIN t.id task_id,c.id competitor_id,c.opportunity_id,c.organization_id,c.workspace_id${native ? ",t.account_id" : ""}
   FROM collection_tasks t JOIN collection_subqueries q ON q.task_id=t.id
   JOIN competitors c ON c.id=CONVERT(JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id')) USING ascii)
     AND ${native ? owner("competitors", "c.id", "t.account_id") : "c.organization_id=t.organization_id AND c.workspace_id=t.workspace_id"}
@@ -70,7 +78,9 @@ const pendingDetails = (native: boolean) => `SELECT STRAIGHT_JOIN t.id task_id,c
       ${native ? `AND ${owner("collection_task_events", "e.id", "t.account_id")}` : ""})`;
 
 // Evaluate opportunity-wide evidence once per cohort, not once per queued competitor.
-const candidateOpportunities = (native: boolean) => `SELECT o.id,o.market,o.organization_id,o.workspace_id,o.source_ref_id,${native ? nativeCompletionPrimaryAsin("scopes.account_id") : selectionPrimaryAsinSql} primary_asin${native ? ",scopes.account_id" : ""}
+const candidateOpportunities = (
+  native: boolean,
+) => `SELECT o.id,o.market,o.organization_id,o.workspace_id,o.source_ref_id,${native ? nativeCompletionPrimaryAsin("scopes.account_id") : selectionPrimaryAsinSql} primary_asin${native ? ",scopes.account_id" : ""}
   FROM (SELECT DISTINCT pending.opportunity_id,pending.organization_id,pending.workspace_id${native ? ",pending.account_id" : ""}
     FROM (${pendingDetails(native)} LIMIT 18446744073709551615) pending) scopes
   JOIN opportunities o ON o.id=scopes.opportunity_id AND o.organization_id=scopes.organization_id AND o.workspace_id=scopes.workspace_id
@@ -79,7 +89,9 @@ const candidateOpportunities = (native: boolean) => `SELECT o.id,o.market,o.orga
   JOIN workspaces ws ON ws.id=o.workspace_id AND ws.organization_id=o.organization_id AND ws.status='active'
   WHERE o.source_type='trend_topic' AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted')`;
 
-const readyOpportunities = (native: boolean) => `SELECT o.* FROM (${candidateOpportunities(native)} LIMIT 18446744073709551615) o
+const readyOpportunities = (
+  native: boolean,
+) => `SELECT o.* FROM (${candidateOpportunities(native)} LIMIT 18446744073709551615) o
   WHERE ${approvedSourceSql(native)}
     AND NOT ${selectionCompetitionGateSql(5, "materialized")}
     AND EXISTS (SELECT 1 FROM competitors c JOIN competitor_snapshots s_main ON s_main.id=${latestCompetitorDetailSnapshotSql("c")}
@@ -91,7 +103,9 @@ const readyOpportunities = (native: boolean) => `SELECT o.* FROM (${candidateOpp
         AND s_main.review_count IS NOT NULL AND s_main.rating_value IS NOT NULL)`;
 
 /** Finish the original minimum cohort before spending the same completion turn on more primary discovery. */
-const completionReadyCompetitorRows = (native: boolean) => `SELECT pending.task_id,o.id opportunity_id,pending.competitor_id,o.primary_asin
+const completionReadyCompetitorRows = (
+  native: boolean,
+) => `SELECT pending.task_id,o.id opportunity_id,pending.competitor_id,o.primary_asin
   FROM (${readyOpportunities(native)} LIMIT 18446744073709551615) o
   JOIN (${pendingDetails(native)} LIMIT 18446744073709551615) pending
     ON pending.opportunity_id=o.id AND pending.organization_id=o.organization_id AND pending.workspace_id=o.workspace_id
@@ -105,11 +119,22 @@ const completionReadyCompetitorRows = (native: boolean) => `SELECT pending.task_
 
 /** Preference only: no task, source, snapshot, score or completion event is changed. */
 export const completionReadyCompetitorRowsSql = completionReadyCompetitorRows(false);
-export const nativeCompletionReadyCompetitorRowsSql = nativeCompletionTaskProof(completionReadyCompetitorRows(true), "o.account_id");
+export const nativeCompletionReadyCompetitorRowsSql = nativeCompletionTaskProof(
+  completionReadyCompetitorRows(true),
+  "o.account_id",
+);
 const preference = (rows: string) => `EXISTS (SELECT 1 FROM (${rows}
   LIMIT 18446744073709551615) close_competitor WHERE close_competitor.task_id=collection_tasks.id)`;
 export const completionReadyCompetitorTaskSql = preference(completionReadyCompetitorRowsSql);
-export const nativeCompletionReadyCompetitorTaskSql = preference(nativeCompletionReadyCompetitorRowsSql);
-export const accountCompetitorCompletionRankTaskSql = [0, 1, 2].map(shape => preference(
-  accountCompletionRankProof(nativeCompletionTaskProof(completionReadyCompetitorRows(true), "o.account_id", shape > 0), shape > 0, shape === 2),
-));
+export const nativeCompletionReadyCompetitorTaskSql = preference(
+  nativeCompletionReadyCompetitorRowsSql,
+);
+export const accountCompetitorCompletionRankTaskSql = [0, 1, 2].map((shape) =>
+  preference(
+    accountCompletionRankProof(
+      nativeCompletionTaskProof(completionReadyCompetitorRows(true), "o.account_id", shape > 0),
+      shape > 0,
+      shape === 2,
+    ),
+  ),
+);

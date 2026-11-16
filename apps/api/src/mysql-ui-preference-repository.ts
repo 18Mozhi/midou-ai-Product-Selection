@@ -22,7 +22,10 @@ const map = (row: RowDataPacket): UiPreference => ({
   updated_at: new Date(row.updated_at),
 });
 export class MySqlUiPreferenceRepository implements UiPreferenceRepository {
-  constructor(private readonly pool: Pool, private readonly accountOnly = false) {}
+  constructor(
+    private readonly pool: Pool,
+    private readonly accountOnly = false,
+  ) {}
   private get columns() {
     return this.accountOnly ? baseColumns : baseColumns + ",organization_id,workspace_id";
   }

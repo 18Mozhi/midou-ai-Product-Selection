@@ -10,7 +10,10 @@ import type {
 } from "@scoutops/authorization";
 
 export class MySqlAuthorizationRepository implements AuthorizationRepository {
-  constructor(private readonly pool: Pool, private readonly accountOnly = false) {}
+  constructor(
+    private readonly pool: Pool,
+    private readonly accountOnly = false,
+  ) {}
   async resourcesBelongToOrganization(
     organizationId: string | undefined,
     resources: { workspaceId?: string; teamId?: string },
@@ -105,13 +108,26 @@ export class MySqlAuthorizationRepository implements AuthorizationRepository {
     const legacy = ["organization_id", "workspace_id", "team_id"].every((name) => names.has(name));
     if (names.has("historical_context") && names.size === 1) {
       const { organization_id, workspace_id, team_id } = event;
-      const context = organization_id === null && workspace_id === null && team_id === null
-        ? null : JSON.stringify({ organization_id, workspace_id, team_id });
+      const context =
+        organization_id === null && workspace_id === null && team_id === null
+          ? null
+          : JSON.stringify({ organization_id, workspace_id, team_id });
       await this.pool.query(
         "INSERT INTO authorization_decisions (id,actor_id,historical_context,capability,surface,outcome," +
           "reason,request_id,trace_id,occurred_at,schema_version) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-        [event.id,event.actor_id,context,event.capability,event.surface,event.outcome,
-          event.reason,event.request_id,event.trace_id,event.occurred_at,event.schema_version],
+        [
+          event.id,
+          event.actor_id,
+          context,
+          event.capability,
+          event.surface,
+          event.outcome,
+          event.reason,
+          event.request_id,
+          event.trace_id,
+          event.occurred_at,
+          event.schema_version,
+        ],
       );
       return;
     }

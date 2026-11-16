@@ -74,7 +74,12 @@ const status = defineModel<string>("status", { required: true });
         />
       </section>
       <p class="notification-delivery-scope">当前快照：{{ snapshotScope }}。</p>
-      <PlatformNotificationOperations :account-rehearsal="accountRehearsal" :data="data" :state-name="stateName" :when="when" />
+      <PlatformNotificationOperations
+        :account-rehearsal="accountRehearsal"
+        :data="data"
+        :state-name="stateName"
+        :when="when"
+      />
       <PlatformNotificationPagination
         v-if="data.pagination"
         :pagination="data.pagination"

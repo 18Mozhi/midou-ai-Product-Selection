@@ -46,7 +46,8 @@ const stateCopy = computed(
     <RouterLink v-if="state === 'expired'" to="/login">重新登录</RouterLink
     ><RouterLink v-else-if="!retiredScope && state === 'context_required'" to="/select-context"
       >选择组织与工作区</RouterLink
-    ><RouterLink v-else-if="state === 'forbidden'" :to="retiredScope ? '/opportunities' : '/home'">返回成员工作台</RouterLink
+    ><RouterLink v-else-if="state === 'forbidden'" :to="retiredScope ? '/opportunities' : '/home'"
+      >返回成员工作台</RouterLink
     ><button v-else-if="state !== 'loading'" type="button" @click="emit('retry')">重新检查</button>
   </section>
 </template>

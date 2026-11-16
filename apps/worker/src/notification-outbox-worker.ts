@@ -2,7 +2,12 @@ import { approvalTemplateScopeRelation, approvalRequestCoordinates } from "@scou
 import { appendScopedNotification } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import { PRIMARY_COST_APPROVER_EMAIL } from "@scoutops/auth";
-import { notificationDeliveryScopeColumns, notificationPreferencesAccountSchema, readDeliveryNotificationPreferences, realtimeEventScopeColumns } from "@scoutops/database";
+import {
+  notificationDeliveryScopeColumns,
+  notificationPreferencesAccountSchema,
+  readDeliveryNotificationPreferences,
+  realtimeEventScopeColumns,
+} from "@scoutops/database";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { calculationOwnersMatch } from "./opportunity-calculation-ownership.js";
 import { readApprovalResourceOwners } from "./approval-resource-lineage.js";
@@ -11,12 +16,18 @@ const parse = (v: unknown) => (typeof v === "string" ? JSON.parse(v) : (v as any
 const isCostReviewReminder = (type: unknown) =>
   type === "approval.cost_input.review_due_soon" || type === "approval.cost_input.overdue";
 const isApprovalWorkflowDelivery = (type: unknown) =>
-  type === "approval.request.created" || type === "approval.node.approved" || type === "approval.node.rejected";
+  type === "approval.request.created" ||
+  type === "approval.node.approved" ||
+  type === "approval.node.rejected";
 const guardedDelivery = (type: unknown) =>
-  type === "task.evidence_completion.redecision_ready" || type === "approval.overdue" ||
-  isApprovalWorkflowDelivery(type) || isCostReviewReminder(type);
+  type === "task.evidence_completion.redecision_ready" ||
+  type === "approval.overdue" ||
+  isApprovalWorkflowDelivery(type) ||
+  isCostReviewReminder(type);
 const isNativeTaskDelivery = (type: unknown, payload: any) =>
-  typeof type === "string" && type.startsWith("task.") && payload?.task_account_contract !== undefined;
+  typeof type === "string" &&
+  type.startsWith("task.") &&
+  payload?.task_account_contract !== undefined;
 const isNativeCompetitorDelivery = (type: unknown, payload: any) =>
   type === "competitor.threshold.triggered" && payload?.competitor_account_contract !== undefined;
 const isNativeAutomationDelivery = (event: any, payload: any) =>
@@ -25,7 +36,9 @@ const isNativeAutomationDelivery = (event: any, payload: any) =>
     (!Object.hasOwn(event, "organization_id") && !Object.hasOwn(event, "workspace_id")));
 const isNativeRedecisionDelivery = (event: any, payload: any) =>
   event.event_type === "task.evidence_completion.redecision_ready" &&
-  payload?.account_projection_contract === 25 && event.organization_id == null && event.workspace_id == null;
+  payload?.account_projection_contract === 25 &&
+  event.organization_id == null &&
+  event.workspace_id == null;
 export const notificationBody = (category: string) =>
   ({
     approval: "审批状态已变化，请查看关联记录。",
@@ -68,8 +81,12 @@ export class NotificationOutboxWorker {
     }
     try {
       const marked = parse(event.payload_json);
-      if (guardedDelivery(event.event_type) || isNativeTaskDelivery(event.event_type, marked) ||
-          isNativeCompetitorDelivery(event.event_type, marked) || isNativeAutomationDelivery(event, marked))
+      if (
+        guardedDelivery(event.event_type) ||
+        isNativeTaskDelivery(event.event_type, marked) ||
+        isNativeCompetitorDelivery(event.event_type, marked) ||
+        isNativeAutomationDelivery(event, marked)
+      )
         return await this.publishGuarded(event);
       const payload = parse(event.payload_json),
         category = String(event.event_type).startsWith("approval.")
@@ -108,9 +125,16 @@ export class NotificationOutboxWorker {
     } catch (error) {
       const message = error instanceof Error ? error.message : "unknown";
       let marked: any;
-      try { marked = parse(event.payload_json); } catch { /* malformed payload uses the existing retry path */ }
-      const guarded = guardedDelivery(event.event_type) || isNativeTaskDelivery(event.event_type, marked) ||
-        isNativeCompetitorDelivery(event.event_type, marked) || isNativeAutomationDelivery(event, marked);
+      try {
+        marked = parse(event.payload_json);
+      } catch {
+        /* malformed payload uses the existing retry path */
+      }
+      const guarded =
+        guardedDelivery(event.event_type) ||
+        isNativeTaskDelivery(event.event_type, marked) ||
+        isNativeCompetitorDelivery(event.event_type, marked) ||
+        isNativeAutomationDelivery(event, marked);
       await this.pool.query(
         "UPDATE outbox_events SET status=IF(attempt_count>=?,'dead_letter','pending'),available_at=DATE_ADD(?,INTERVAL 60 SECOND),lease_expires_at=NULL,updated_at=? WHERE id=?" +
           (guarded ? " AND status='leased' AND version=?" : ""),
@@ -143,26 +167,52 @@ export class NotificationOutboxWorker {
       const nativeTask = isNativeTaskDelivery(event.event_type, payload);
       const nativeCompetitor = isNativeCompetitorDelivery(event.event_type, payload);
       const nativeAutomation = isNativeAutomationDelivery(event, payload);
-      const ownedWorkflowRecipients = workflow ? await this.accountApprovalRecipients(event, payload, c) : null;
+      const ownedWorkflowRecipients = workflow
+        ? await this.accountApprovalRecipients(event, payload, c)
+        : null;
       const recipients = overdue
         ? await this.approvalOverdueRecipients(c, event, payload)
         : workflow
-          ? ownedWorkflowRecipients ?? await this.legacyRecipients(event, payload, c)
-          : costReview ? await this.costReviewRecipients(c, event, payload)
-          : nativeTask ? await this.nativeTaskRecipients(c, event, payload)
-          : nativeCompetitor ? await this.nativeCompetitorRecipients(c, event, payload)
-          : nativeAutomation ? await this.nativeAutomationRecipients(c, event, payload)
-          : await this.isRedecisionActionable(event, payload, c) ? await this.recipients(event, payload) : [];
-      const notificationPayload = overdue || ownedWorkflowRecipients !== null
-        ? { resource_type: "approval", resource_id: payload.approval_request_id ?? payload.id }
-        : payload;
+          ? (ownedWorkflowRecipients ?? (await this.legacyRecipients(event, payload, c)))
+          : costReview
+            ? await this.costReviewRecipients(c, event, payload)
+            : nativeTask
+              ? await this.nativeTaskRecipients(c, event, payload)
+              : nativeCompetitor
+                ? await this.nativeCompetitorRecipients(c, event, payload)
+                : nativeAutomation
+                  ? await this.nativeAutomationRecipients(c, event, payload)
+                  : (await this.isRedecisionActionable(event, payload, c))
+                    ? await this.recipients(event, payload)
+                    : [];
+      const notificationPayload =
+        overdue || ownedWorkflowRecipients !== null
+          ? { resource_type: "approval", resource_id: payload.approval_request_id ?? payload.id }
+          : payload;
       let notifications = 0;
       for (const recipient of recipients)
-        if (await this.create(event, notificationPayload,
-          overdue || workflow || costReview ? "approval" : nativeCompetitor ? "competitor" : nativeAutomation ? "system" : "task", recipient, now, c)) notifications++;
+        if (
+          await this.create(
+            event,
+            notificationPayload,
+            overdue || workflow || costReview
+              ? "approval"
+              : nativeCompetitor
+                ? "competitor"
+                : nativeAutomation
+                  ? "system"
+                  : "task",
+            recipient,
+            now,
+            c,
+          )
+        )
+          notifications++;
       if (nativeCompetitor && recipients.length)
-        await c.query("UPDATE competitor_alerts SET notification_status=?,updated_at=? WHERE id=? AND competitor_id=?",
-          [notifications ? "delivered" : "failed", now, event.id, payload.competitor_id]);
+        await c.query(
+          "UPDATE competitor_alerts SET notification_status=?,updated_at=? WHERE id=? AND competitor_id=?",
+          [notifications ? "delivered" : "failed", now, event.id, payload.competitor_id],
+        );
       await c.query(
         "UPDATE outbox_events SET status='published',published_at=?,lease_expires_at=NULL,version=version+1,updated_at=? WHERE id=?",
         [now, now, event.id],
@@ -177,9 +227,16 @@ export class NotificationOutboxWorker {
     }
   }
   private async nativeAutomationRecipients(c: PoolConnection, event: RowDataPacket, p: any) {
-    if (p?.automation_account_contract !== 25 || Number(event.schema_version) !== 1 ||
-        event.organization_id != null || event.workspace_id != null || p.resource_type !== "automation_rule" ||
-        ![p.resource_id, p.automation_execution_id, p.recipient_id, p.title].every(s => typeof s === "string" && s.length > 0))
+    if (
+      p?.automation_account_contract !== 25 ||
+      Number(event.schema_version) !== 1 ||
+      event.organization_id != null ||
+      event.workspace_id != null ||
+      p.resource_type !== "automation_rule" ||
+      ![p.resource_id, p.automation_execution_id, p.recipient_id, p.title].every(
+        (s) => typeof s === "string" && s.length > 0,
+      )
+    )
       return [];
     const [rows] = await c.query<RowDataPacket[]>(
       `SELECT u.id recipient_id FROM automation_executions x
@@ -198,96 +255,161 @@ export class NotificationOutboxWorker {
          AND x.action_resource_type='notification' AND x.action_resource_id=?
          AND BINARY x.request_id=BINARY ? AND BINARY x.trace_id=BINARY ?
        LIMIT 1 LOCK IN SHARE MODE`,
-      [p.recipient_id, event.created_at, event.id, p.automation_execution_id, p.resource_id,
-        event.id, event.request_id, event.trace_id],
+      [
+        p.recipient_id,
+        event.created_at,
+        event.id,
+        p.automation_execution_id,
+        p.resource_id,
+        event.id,
+        event.request_id,
+        event.trace_id,
+      ],
     );
-    return rows.map(row => String(row.recipient_id));
+    return rows.map((row) => String(row.recipient_id));
   }
   private async nativeCompetitorRecipients(c: PoolConnection, event: RowDataPacket, p: any) {
-    if (p.competitor_account_contract !== 25 || Number(event.schema_version) !== 1 ||
-        event.organization_id != null || event.workspace_id != null ||
-        p.resource_type !== "competitor" || p.resource_id !== p.competitor_id ||
-        ![p.competitor_id,p.change_id,p.task_id,p.recipient_id,p.rule_id,p.evidence_id]
-          .every(id => typeof id === "string" && id.length > 0)) return [];
+    if (
+      p.competitor_account_contract !== 25 ||
+      Number(event.schema_version) !== 1 ||
+      event.organization_id != null ||
+      event.workspace_id != null ||
+      p.resource_type !== "competitor" ||
+      p.resource_id !== p.competitor_id ||
+      ![p.competitor_id, p.change_id, p.task_id, p.recipient_id, p.rule_id, p.evidence_id].every(
+        (id) => typeof id === "string" && id.length > 0,
+      )
+    )
+      return [];
     const owns = (alias: string, table: string, id: string) =>
       `JOIN account_owned_records ${alias} ON ${alias}.source_table='${table}' AND ${alias}.source_id=${id} AND ${alias}.account_id=c.account_id `;
     const [[row]] = await c.query<RowDataPacket[]>(
       "SELECT c.account_id FROM competitor_alerts a JOIN competitors c ON c.id=a.competitor_id " +
-      "JOIN competitor_changes ch ON ch.id=a.change_id AND ch.competitor_id=c.id " +
-      "JOIN competitor_snapshots s ON s.id=ch.snapshot_id AND s.competitor_id=c.id AND s.evidence_id=ch.evidence_id " +
-      "JOIN competitor_monitor_rules rule ON rule.id=a.rule_id AND (rule.competitor_id IS NULL OR rule.competitor_id=c.id) " +
-      "JOIN tasks t ON t.id=? AND t.account_id=c.account_id AND t.source_type='selection_verification' AND t.source_ref_id=ch.id AND t.deleted_at IS NULL " +
-      "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
-      owns("co","competitors","c.id") + owns("ao","competitor_alerts","a.id") +
-      owns("ho","competitor_changes","ch.id") + owns("so","competitor_snapshots","s.id") +
-      owns("ro","competitor_monitor_rules","rule.id") + owns("eo","raw_evidence","ch.evidence_id") +
-      owns("to1","tasks","t.id") + owns("oo","outbox_events","a.id") +
-      "WHERE a.id=? AND c.id=? AND ch.id=? AND a.rule_id=? AND ch.evidence_id=? AND c.account_id=? " +
-      "AND (co.reason='exclusive_owner' OR (co.reason IN ('shared','unassigned') AND c.account_id=cut.primary_account_id)) LOCK IN SHARE MODE",
-      [p.task_id,event.id,p.competitor_id,p.change_id,p.rule_id,p.evidence_id,p.recipient_id],
+        "JOIN competitor_changes ch ON ch.id=a.change_id AND ch.competitor_id=c.id " +
+        "JOIN competitor_snapshots s ON s.id=ch.snapshot_id AND s.competitor_id=c.id AND s.evidence_id=ch.evidence_id " +
+        "JOIN competitor_monitor_rules rule ON rule.id=a.rule_id AND (rule.competitor_id IS NULL OR rule.competitor_id=c.id) " +
+        "JOIN tasks t ON t.id=? AND t.account_id=c.account_id AND t.source_type='selection_verification' AND t.source_ref_id=ch.id AND t.deleted_at IS NULL " +
+        "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+        owns("co", "competitors", "c.id") +
+        owns("ao", "competitor_alerts", "a.id") +
+        owns("ho", "competitor_changes", "ch.id") +
+        owns("so", "competitor_snapshots", "s.id") +
+        owns("ro", "competitor_monitor_rules", "rule.id") +
+        owns("eo", "raw_evidence", "ch.evidence_id") +
+        owns("to1", "tasks", "t.id") +
+        owns("oo", "outbox_events", "a.id") +
+        "WHERE a.id=? AND c.id=? AND ch.id=? AND a.rule_id=? AND ch.evidence_id=? AND c.account_id=? " +
+        "AND (co.reason='exclusive_owner' OR (co.reason IN ('shared','unassigned') AND c.account_id=cut.primary_account_id)) LOCK IN SHARE MODE",
+      [p.task_id, event.id, p.competitor_id, p.change_id, p.rule_id, p.evidence_id, p.recipient_id],
     );
     return row ? [String(row.account_id)] : [];
   }
   private async nativeTaskRecipients(c: PoolConnection, event: RowDataPacket, payload: any) {
-    if (payload.task_account_contract !== 25 || Number(event.schema_version) !== 1 ||
-        event.organization_id != null || event.workspace_id != null ||
-        typeof payload.task_id !== "string" || typeof payload.assignee_id !== "string") return [];
+    if (
+      payload.task_account_contract !== 25 ||
+      Number(event.schema_version) !== 1 ||
+      event.organization_id != null ||
+      event.workspace_id != null ||
+      typeof payload.task_id !== "string" ||
+      typeof payload.assignee_id !== "string"
+    )
+      return [];
     const [[row]] = await c.query<RowDataPacket[]>(
       "SELECT t.account_id FROM tasks t JOIN task_events e ON e.id=? AND e.task_id=t.id " +
-      "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
-      "JOIN account_owned_records t_owner ON t_owner.source_table='tasks' AND t_owner.source_id=t.id AND t_owner.account_id=t.account_id " +
-      "JOIN account_owned_records e_owner ON e_owner.source_table='task_events' AND e_owner.source_id=e.id AND e_owner.account_id=t.account_id AND e_owner.reason=t_owner.reason " +
-      "JOIN account_owned_records o_owner ON o_owner.source_table='outbox_events' AND o_owner.source_id=e.id AND o_owner.account_id=t.account_id AND o_owner.reason=t_owner.reason " +
-      "WHERE t.id=? AND t.deleted_at IS NULL AND t.account_id=t.assignee_id AND t.assignee_id=? " +
-      "AND (t_owner.reason='exclusive_owner' OR (t_owner.reason IN ('shared','unassigned') AND t.account_id=cut.primary_account_id)) " +
-      "AND BINARY e.event_type=BINARY ? AND BINARY e.request_id=BINARY ? AND BINARY e.trace_id=BINARY ? LOCK IN SHARE MODE",
-      [event.id, payload.task_id, payload.assignee_id, event.event_type, event.request_id, event.trace_id],
+        "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+        "JOIN account_owned_records t_owner ON t_owner.source_table='tasks' AND t_owner.source_id=t.id AND t_owner.account_id=t.account_id " +
+        "JOIN account_owned_records e_owner ON e_owner.source_table='task_events' AND e_owner.source_id=e.id AND e_owner.account_id=t.account_id AND e_owner.reason=t_owner.reason " +
+        "JOIN account_owned_records o_owner ON o_owner.source_table='outbox_events' AND o_owner.source_id=e.id AND o_owner.account_id=t.account_id AND o_owner.reason=t_owner.reason " +
+        "WHERE t.id=? AND t.deleted_at IS NULL AND t.account_id=t.assignee_id AND t.assignee_id=? " +
+        "AND (t_owner.reason='exclusive_owner' OR (t_owner.reason IN ('shared','unassigned') AND t.account_id=cut.primary_account_id)) " +
+        "AND BINARY e.event_type=BINARY ? AND BINARY e.request_id=BINARY ? AND BINARY e.trace_id=BINARY ? LOCK IN SHARE MODE",
+      [
+        event.id,
+        payload.task_id,
+        payload.assignee_id,
+        event.event_type,
+        event.request_id,
+        event.trace_id,
+      ],
     );
     return row ? [String(row.account_id)] : [];
   }
-  private async approvalOverdueRecipients(c: PoolConnection, event: RowDataPacket, p: any): Promise<string[]> {
+  private async approvalOverdueRecipients(
+    c: PoolConnection,
+    event: RowDataPacket,
+    p: any,
+  ): Promise<string[]> {
     let receipt: RowDataPacket[];
     try {
       [receipt] = await c.query<RowDataPacket[]>(
         "SELECT contract_version,primary_account_id FROM account_ownership_cutover WHERE slot='current' LIMIT 1 LOCK IN SHARE MODE",
       );
     } catch (error) {
-      const mysql = error as {code?: string; sqlMessage?: string};
-      if (mysql.code !== "ER_NO_SUCH_TABLE" ||
-          !/\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")) throw error;
+      const mysql = error as { code?: string; sqlMessage?: string };
+      if (
+        mysql.code !== "ER_NO_SUCH_TABLE" ||
+        !/\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")
+      )
+        throw error;
       receipt = [];
     }
     const cutover = receipt[0];
-    if (!cutover) return p?.account_projection_contract === undefined ? this.recipients(event, p) : [];
-    const uuid = (v: unknown) => typeof v === "string" && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(v);
+    if (!cutover)
+      return p?.account_projection_contract === undefined ? this.recipients(event, p) : [];
+    const uuid = (v: unknown) =>
+      typeof v === "string" && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(v);
     const native = p?.account_projection_contract !== undefined;
-    if (Number(cutover.contract_version) !== 25 || !uuid(p?.approval_request_id) || !uuid(p?.node_run_id) ||
-        (native && (p.account_projection_contract !== 25 || !uuid(p.approval_action_id)))) return [];
+    if (
+      Number(cutover.contract_version) !== 25 ||
+      !uuid(p?.approval_request_id) ||
+      !uuid(p?.node_run_id) ||
+      (native && (p.account_projection_contract !== 25 || !uuid(p.approval_action_id)))
+    )
+      return [];
     const own = (alias: string, table: string, id: string) =>
       `JOIN account_owned_records ${alias} ON ${alias}.source_table='${table}' AND ${alias}.source_id=${id} AND ${alias}.account_id=eo.account_id `;
     const [rows] = await c.query<RowDataPacket[]>(
       "SELECT n.active_approver_id,n.id,r.template_id,r.template_version_id,r.resource_type,r.resource_id,eo.account_id,eo.reason FROM account_owned_records eo " +
-      "JOIN approval_requests r ON r.id=? AND r.status='pending' " +
-      "JOIN approval_node_runs n ON n.id=? AND n.approval_request_id=r.id AND n.ordinal=r.current_node_ordinal " +
-      "AND n.status='pending' AND n.escalated_at IS NOT NULL AND n.active_approver_id=n.escalation_assignee_id " +
-      "JOIN users u ON u.id=n.active_approver_id AND u.status='active' " +
-      "JOIN approval_actions a ON a.approval_request_id=r.id AND a.node_run_id=n.id " +
-      "AND a.action='escalated' AND a.actor_id=n.active_approver_id AND a.created_at=n.escalated_at " +
-      "AND BINARY a.request_id=BINARY ? AND BINARY a.trace_id=BINARY ? " +
-      own("ro", "approval_requests", "r.id") + own("no", "approval_node_runs", "n.id") +
-      own("ao", "approval_actions", "a.id") +
-      "WHERE eo.source_table='outbox_events' AND eo.source_id=? " +
-      "AND (eo.reason='exclusive_owner' OR (eo.reason IN ('shared','unassigned') AND eo.account_id=?)) " +
-      (native ? "AND a.id=? " : "") + "LIMIT 2 LOCK IN SHARE MODE",
-      [p.approval_request_id,p.node_run_id,event.request_id,event.trace_id,event.id,cutover.primary_account_id,
-        ...(native ? [p.approval_action_id] : [])],
+        "JOIN approval_requests r ON r.id=? AND r.status='pending' " +
+        "JOIN approval_node_runs n ON n.id=? AND n.approval_request_id=r.id AND n.ordinal=r.current_node_ordinal " +
+        "AND n.status='pending' AND n.escalated_at IS NOT NULL AND n.active_approver_id=n.escalation_assignee_id " +
+        "JOIN users u ON u.id=n.active_approver_id AND u.status='active' " +
+        "JOIN approval_actions a ON a.approval_request_id=r.id AND a.node_run_id=n.id " +
+        "AND a.action='escalated' AND a.actor_id=n.active_approver_id AND a.created_at=n.escalated_at " +
+        "AND BINARY a.request_id=BINARY ? AND BINARY a.trace_id=BINARY ? " +
+        own("ro", "approval_requests", "r.id") +
+        own("no", "approval_node_runs", "n.id") +
+        own("ao", "approval_actions", "a.id") +
+        "WHERE eo.source_table='outbox_events' AND eo.source_id=? " +
+        "AND (eo.reason='exclusive_owner' OR (eo.reason IN ('shared','unassigned') AND eo.account_id=?)) " +
+        (native ? "AND a.id=? " : "") +
+        "LIMIT 2 LOCK IN SHARE MODE",
+      [
+        p.approval_request_id,
+        p.node_run_id,
+        event.request_id,
+        event.trace_id,
+        event.id,
+        cutover.primary_account_id,
+        ...(native ? [p.approval_action_id] : []),
+      ],
     );
     const run = rows.length === 1 ? rows[0] : undefined;
     if (!run) return [];
     const lineage = await readApprovalResourceOwners(c, run, String(run.account_id));
-    if (!lineage || !(await calculationOwnersMatch(c, { owner: { account_id: run.account_id, reason: run.reason } }, [
-      ["approval_templates", String(run.template_id)], ["approval_template_versions", String(run.template_version_id)], ...lineage,
-    ]))) return [];
+    if (
+      !lineage ||
+      !(await calculationOwnersMatch(
+        c,
+        { owner: { account_id: run.account_id, reason: run.reason } },
+        [
+          ["approval_templates", String(run.template_id)],
+          ["approval_template_versions", String(run.template_version_id)],
+          ...lineage,
+        ],
+      ))
+    )
+      return [];
     return [String(run.active_approver_id)];
   }
   private async isStillActionable(event: any, payload: any) {
@@ -301,7 +423,8 @@ export class NotificationOutboxWorker {
   private async isLegacyCostReviewPending(event: any, payload: any, transaction?: PoolConnection) {
     if (!payload.review_id) return false;
     const [rows] = await (transaction ?? this.pool).query<RowDataPacket[]>(
-      "SELECT r.status FROM opportunity_cost_input_reviews r JOIN opportunities o ON o.id=r.opportunity_id JOIN opportunity_cost_inputs i ON i.id=r.cost_input_id AND i.opportunity_id=o.id WHERE r.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1" + (transaction ? " LOCK IN SHARE MODE" : ""),
+      "SELECT r.status FROM opportunity_cost_input_reviews r JOIN opportunities o ON o.id=r.opportunity_id JOIN opportunity_cost_inputs i ON i.id=r.cost_input_id AND i.opportunity_id=o.id WHERE r.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1" +
+        (transaction ? " LOCK IN SHARE MODE" : ""),
       [payload.review_id, event.organization_id, event.workspace_id],
     );
     return rows[0]?.status === "pending";
@@ -309,32 +432,44 @@ export class NotificationOutboxWorker {
   private async isRedecisionActionable(event: any, payload: any, transaction?: PoolConnection) {
     const db = transaction ?? this.pool;
     const lock = transaction ? " LOCK IN SHARE MODE" : "";
-    const legacyDelivery = payload?.account_projection_contract === undefined &&
+    const legacyDelivery =
+      payload?.account_projection_contract === undefined &&
       Boolean(event.organization_id && event.workspace_id);
     if (!event.organization_id || !event.workspace_id) {
       if (!isNativeRedecisionDelivery(event, payload)) return false;
-    } else if (payload?.account_projection_contract !== undefined && payload.account_projection_contract !== 25) {
+    } else if (
+      payload?.account_projection_contract !== undefined &&
+      payload.account_projection_contract !== 25
+    ) {
       return false;
     }
     let owners: RowDataPacket[];
     try {
       [owners] = await db.query<RowDataPacket[]>(
-        "SELECT account_id FROM account_owned_records WHERE source_table='outbox_events' AND source_id=?" + lock,
+        "SELECT account_id FROM account_owned_records WHERE source_table='outbox_events' AND source_id=?" +
+          lock,
         [event.id],
       );
     } catch (error) {
       const mysql = error as { code?: string; sqlMessage?: string };
-      if (mysql.code !== "ER_NO_SUCH_TABLE" ||
-          !/\.account_owned_records' doesn't exist$/i.test(mysql.sqlMessage ?? "")) throw error;
+      if (
+        mysql.code !== "ER_NO_SUCH_TABLE" ||
+        !/\.account_owned_records' doesn't exist$/i.test(mysql.sqlMessage ?? "")
+      )
+        throw error;
       return legacyDelivery;
     }
     const owner = owners[0]?.account_id;
     if (!owner) return legacyDelivery;
-    if (payload?.resource_type !== "opportunity" || payload.resource_id !== payload.opportunity_id ||
-        payload.recipient_id !== owner ||
-        ![payload.opportunity_id, payload.trigger_task_id, payload.score_run_id].every(
-          id => typeof id === "string" && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(id),
-        )) return false;
+    if (
+      payload?.resource_type !== "opportunity" ||
+      payload.resource_id !== payload.opportunity_id ||
+      payload.recipient_id !== owner ||
+      ![payload.opportunity_id, payload.trigger_task_id, payload.score_run_id].every(
+        (id) => typeof id === "string" && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(id),
+      )
+    )
+      return false;
     const [rows] = await db.query<RowDataPacket[]>(
       "SELECT 1 FROM opportunities p " +
         "JOIN account_owned_records po ON po.source_table='opportunities' AND po.source_id=p.id " +
@@ -342,8 +477,16 @@ export class NotificationOutboxWorker {
         "JOIN account_owned_records ro ON ro.source_table='opportunity_score_runs' AND ro.source_id=r.id AND ro.account_id=po.account_id " +
         "JOIN tasks t ON t.id=? AND t.source_ref_id=p.id AND t.source_type='evidence_completion' AND t.status='completed' AND t.deleted_at IS NULL " +
         "JOIN account_owned_records task_owner ON task_owner.source_table='tasks' AND task_owner.source_id=t.id AND task_owner.account_id=po.account_id " +
-        "WHERE p.id=? AND po.account_id=? AND BINARY r.request_id=BINARY ? AND BINARY r.trace_id=BINARY ? LIMIT 1" + lock,
-      [payload.score_run_id, payload.trigger_task_id, payload.opportunity_id, owner, event.request_id, event.trace_id],
+        "WHERE p.id=? AND po.account_id=? AND BINARY r.request_id=BINARY ? AND BINARY r.trace_id=BINARY ? LIMIT 1" +
+        lock,
+      [
+        payload.score_run_id,
+        payload.trigger_task_id,
+        payload.opportunity_id,
+        owner,
+        event.request_id,
+        event.trace_id,
+      ],
     );
     return rows.length === 1;
   }
@@ -360,7 +503,12 @@ export class NotificationOutboxWorker {
     const overdue = event.event_type === "approval.cost_input.overdue";
     const accountRecipients = await this.accountCostReviewRecipients(db, event, p, overdue);
     if (accountRecipients !== null) return accountRecipients;
-    if (!event.organization_id || !event.workspace_id || !await this.isLegacyCostReviewPending(event, p, db)) return [];
+    if (
+      !event.organization_id ||
+      !event.workspace_id ||
+      !(await this.isLegacyCostReviewPending(event, p, db))
+    )
+      return [];
     const direct = p.recipient_id ?? p.active_approver_id ?? p.assignee_id;
     if (!overdue) return direct ? [String(direct)] : [];
     const [rows] = await db.query<RowDataPacket[]>(
@@ -386,8 +534,14 @@ export class NotificationOutboxWorker {
       const requestId = p.approval_request_id ?? p.resource_id;
       if (requestId) {
         const templateSource = await approvalTemplateScopeRelation(db);
-        const org = templateSource === "approval_templates" ? "t.organization_id" : approvalRequestCoordinates("r","organization_id");
-        const ws = templateSource === "approval_templates" ? "t.workspace_id" : approvalRequestCoordinates("r","workspace_id");
+        const org =
+          templateSource === "approval_templates"
+            ? "t.organization_id"
+            : approvalRequestCoordinates("r", "organization_id");
+        const ws =
+          templateSource === "approval_templates"
+            ? "t.workspace_id"
+            : approvalRequestCoordinates("r", "workspace_id");
         const [rows] = await db.query<RowDataPacket[]>(
           `SELECT r.requested_by FROM approval_requests r JOIN ${templateSource} t ON t.id=r.template_id AND t.resource_type=r.resource_type ` +
             "JOIN approval_template_versions v ON v.id=r.template_version_id AND v.template_id=t.id " +
@@ -414,19 +568,33 @@ export class NotificationOutboxWorker {
     }
     return [];
   }
-  private async accountApprovalRecipients(event: any, p: any, db: PoolConnection): Promise<string[] | null> {
+  private async accountApprovalRecipients(
+    event: any,
+    p: any,
+    db: PoolConnection,
+  ): Promise<string[] | null> {
     const lock = " LOCK IN SHARE MODE";
     const native = p?.account_projection_contract !== undefined;
-    if (native && (p.account_projection_contract !== 25 || event.organization_id != null || event.workspace_id != null)) return [];
+    if (
+      native &&
+      (p.account_projection_contract !== 25 ||
+        event.organization_id != null ||
+        event.workspace_id != null)
+    )
+      return [];
     let receipt: RowDataPacket[];
     try {
       [receipt] = await db.query<RowDataPacket[]>(
-        "SELECT contract_version,primary_account_id FROM account_ownership_cutover WHERE slot='current' LIMIT 1" + lock,
+        "SELECT contract_version,primary_account_id FROM account_ownership_cutover WHERE slot='current' LIMIT 1" +
+          lock,
       );
     } catch (error) {
       const mysql = error as { code?: string; sqlMessage?: string };
-      if (mysql.code !== "ER_NO_SUCH_TABLE" ||
-          !/\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")) throw error;
+      if (
+        mysql.code !== "ER_NO_SUCH_TABLE" ||
+        !/\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")
+      )
+        throw error;
       return native ? [] : null;
     }
     const cutover = receipt[0];
@@ -434,43 +602,66 @@ export class NotificationOutboxWorker {
     const created = event.event_type === "approval.request.created";
     const id = p.approval_request_id ?? p.id;
     const nativeSourceId = created ? p.approval_escalation_job_id : p.approval_action_id;
-    if (Number(cutover.contract_version) !== 25 || Number(event.schema_version) !== 1 ||
-        typeof id !== "string" || !id || (p.id != null && p.id !== id) ||
-        (native && (typeof nativeSourceId !== "string" || !/^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/i.test(nativeSourceId))) ||
-        (!created && (typeof p.node_run_id !== "string" || !p.node_run_id))) return [];
+    if (
+      Number(cutover.contract_version) !== 25 ||
+      Number(event.schema_version) !== 1 ||
+      typeof id !== "string" ||
+      !id ||
+      (p.id != null && p.id !== id) ||
+      (native &&
+        (typeof nativeSourceId !== "string" ||
+          !/^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/i.test(nativeSourceId))) ||
+      (!created && (typeof p.node_run_id !== "string" || !p.node_run_id))
+    )
+      return [];
     const decision = event.event_type === "approval.node.approved" ? "approved" : "rejected";
     const [rows] = await db.query<RowDataPacket[]>(
       "SELECT r.requested_by requester,CASE WHEN no.account_id=eo.account_id THEN n.active_approver_id END approver," +
-      "n.id pending_node_id,r.template_id,r.template_version_id,r.resource_type,r.resource_id,eo.account_id,eo.reason" +
-      (created ? ",original_run.id first_node_id " : " ") +
-      "FROM account_owned_records eo " +
-      "JOIN approval_requests r ON r.id=? " +
-      "JOIN account_owned_records ro ON ro.source_table='approval_requests' AND ro.source_id=r.id AND ro.account_id=eo.account_id " +
-      "JOIN approval_templates t ON t.id=r.template_id AND t.resource_type=r.resource_type " +
-      "JOIN approval_template_versions v ON v.id=r.template_version_id AND v.template_id=t.id " +
-      "JOIN account_owned_records tor ON tor.source_table='approval_templates' AND tor.source_id=t.id AND tor.account_id=eo.account_id " +
-      "JOIN account_owned_records vo ON vo.source_table='approval_template_versions' AND vo.source_id=v.id AND vo.account_id=eo.account_id " +
-      (created ? "JOIN approval_node_runs original_run ON original_run.approval_request_id=r.id AND original_run.ordinal=1 " : "") +
-      "LEFT JOIN approval_node_runs n ON n.approval_request_id=r.id AND n.ordinal=r.current_node_ordinal AND n.status='pending' " +
-      "LEFT JOIN account_owned_records no ON no.source_table='approval_node_runs' AND no.source_id=n.id " +
-      "WHERE eo.source_table='outbox_events' AND eo.source_id=? " +
-      "AND (eo.reason='exclusive_owner' OR (eo.reason IN ('shared','unassigned') AND eo.account_id=?)) " +
-      (created ? "AND EXISTS (SELECT 1 FROM approval_escalation_jobs j " +
-        "JOIN account_owned_records jo ON jo.source_table='approval_escalation_jobs' AND jo.source_id=j.id " +
-        "JOIN account_owned_records fo ON fo.source_table='approval_node_runs' AND fo.source_id=j.node_run_id " +
-        "WHERE j.approval_request_id=r.id AND j.node_run_id=original_run.id AND jo.account_id=eo.account_id AND fo.account_id=eo.account_id " +
-        "AND BINARY j.request_id=BINARY ? AND BINARY j.trace_id=BINARY ?" +
-        (native ? " AND j.id=?" : "") + lock + ")" :
-        "AND EXISTS (SELECT 1 FROM approval_actions a " +
-        "JOIN approval_node_runs dn ON dn.id=a.node_run_id AND dn.approval_request_id=a.approval_request_id " +
-        "JOIN account_owned_records dno ON dno.source_table='approval_node_runs' AND dno.source_id=dn.id " +
-        "JOIN account_owned_records ao ON ao.source_table='approval_actions' AND ao.source_id=a.id " +
-        "WHERE a.approval_request_id=r.id AND a.node_run_id=? AND a.action=? " +
-        "AND dno.account_id=eo.account_id AND ao.account_id=eo.account_id " +
-        "AND BINARY a.request_id=BINARY ? AND BINARY a.trace_id=BINARY ?" +
-        (native ? " AND a.id=?" : "") + lock + ")") + lock,
-      [id, event.id, cutover.primary_account_id, ...(created ? [] : [p.node_run_id, decision]),
-        event.request_id, event.trace_id, ...(native ? [nativeSourceId] : [])],
+        "n.id pending_node_id,r.template_id,r.template_version_id,r.resource_type,r.resource_id,eo.account_id,eo.reason" +
+        (created ? ",original_run.id first_node_id " : " ") +
+        "FROM account_owned_records eo " +
+        "JOIN approval_requests r ON r.id=? " +
+        "JOIN account_owned_records ro ON ro.source_table='approval_requests' AND ro.source_id=r.id AND ro.account_id=eo.account_id " +
+        "JOIN approval_templates t ON t.id=r.template_id AND t.resource_type=r.resource_type " +
+        "JOIN approval_template_versions v ON v.id=r.template_version_id AND v.template_id=t.id " +
+        "JOIN account_owned_records tor ON tor.source_table='approval_templates' AND tor.source_id=t.id AND tor.account_id=eo.account_id " +
+        "JOIN account_owned_records vo ON vo.source_table='approval_template_versions' AND vo.source_id=v.id AND vo.account_id=eo.account_id " +
+        (created
+          ? "JOIN approval_node_runs original_run ON original_run.approval_request_id=r.id AND original_run.ordinal=1 "
+          : "") +
+        "LEFT JOIN approval_node_runs n ON n.approval_request_id=r.id AND n.ordinal=r.current_node_ordinal AND n.status='pending' " +
+        "LEFT JOIN account_owned_records no ON no.source_table='approval_node_runs' AND no.source_id=n.id " +
+        "WHERE eo.source_table='outbox_events' AND eo.source_id=? " +
+        "AND (eo.reason='exclusive_owner' OR (eo.reason IN ('shared','unassigned') AND eo.account_id=?)) " +
+        (created
+          ? "AND EXISTS (SELECT 1 FROM approval_escalation_jobs j " +
+            "JOIN account_owned_records jo ON jo.source_table='approval_escalation_jobs' AND jo.source_id=j.id " +
+            "JOIN account_owned_records fo ON fo.source_table='approval_node_runs' AND fo.source_id=j.node_run_id " +
+            "WHERE j.approval_request_id=r.id AND j.node_run_id=original_run.id AND jo.account_id=eo.account_id AND fo.account_id=eo.account_id " +
+            "AND BINARY j.request_id=BINARY ? AND BINARY j.trace_id=BINARY ?" +
+            (native ? " AND j.id=?" : "") +
+            lock +
+            ")"
+          : "AND EXISTS (SELECT 1 FROM approval_actions a " +
+            "JOIN approval_node_runs dn ON dn.id=a.node_run_id AND dn.approval_request_id=a.approval_request_id " +
+            "JOIN account_owned_records dno ON dno.source_table='approval_node_runs' AND dno.source_id=dn.id " +
+            "JOIN account_owned_records ao ON ao.source_table='approval_actions' AND ao.source_id=a.id " +
+            "WHERE a.approval_request_id=r.id AND a.node_run_id=? AND a.action=? " +
+            "AND dno.account_id=eo.account_id AND ao.account_id=eo.account_id " +
+            "AND BINARY a.request_id=BINARY ? AND BINARY a.trace_id=BINARY ?" +
+            (native ? " AND a.id=?" : "") +
+            lock +
+            ")") +
+        lock,
+      [
+        id,
+        event.id,
+        cutover.primary_account_id,
+        ...(created ? [] : [p.node_run_id, decision]),
+        event.request_id,
+        event.trace_id,
+        ...(native ? [nativeSourceId] : []),
+      ],
     );
     const row = rows.length === 1 ? rows[0] : undefined;
     if (!row) return [];
@@ -478,15 +669,24 @@ export class NotificationOutboxWorker {
     const ownership = { owner: { account_id: row.account_id, reason: row.reason } };
     const matchesLineage = async (id: string) => {
       const refs = await readApprovalResourceOwners(db, { ...row, id }, String(row.account_id));
-      return refs !== null && await calculationOwnersMatch(db, ownership, refs);
+      return refs !== null && (await calculationOwnersMatch(db, ownership, refs));
     };
-    if (!sourceNodeId || !await matchesLineage(sourceNodeId)) return [];
-    const approver = row.approver && row.pending_node_id &&
-      (row.pending_node_id === sourceNodeId || await matchesLineage(row.pending_node_id)) ? row.approver : null;
+    if (!sourceNodeId || !(await matchesLineage(sourceNodeId))) return [];
+    const approver =
+      row.approver &&
+      row.pending_node_id &&
+      (row.pending_node_id === sourceNodeId || (await matchesLineage(row.pending_node_id)))
+        ? row.approver
+        : null;
     return [...new Set([row.requester, approver].filter(Boolean).map(String))];
   }
   // A sealed cutover replaces the membership-based escalation, not the named reviewer.
-  private async accountCostReviewRecipients(db: PoolConnection, event: RowDataPacket, p: any, overdue: boolean): Promise<string[] | null> {
+  private async accountCostReviewRecipients(
+    db: PoolConnection,
+    event: RowDataPacket,
+    p: any,
+    overdue: boolean,
+  ): Promise<string[] | null> {
     let cutover: RowDataPacket[];
     try {
       [cutover] = await db.query<RowDataPacket[]>(
@@ -494,15 +694,29 @@ export class NotificationOutboxWorker {
       );
     } catch (error) {
       const mysql = error as { code?: string; sqlMessage?: string };
-      if (mysql.code !== "ER_NO_SUCH_TABLE" ||
-          !/\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")) throw error;
+      if (
+        mysql.code !== "ER_NO_SUCH_TABLE" ||
+        !/\.account_ownership_cutover' doesn't exist$/i.test(mysql.sqlMessage ?? "")
+      )
+        throw error;
       return null;
     }
     if (!cutover[0]) return null;
-    if (Number(cutover[0].contract_version) !== 25 || !p.review_id ||
-        p.resource_type !== "opportunity" || !p.opportunity_id || p.resource_id !== p.opportunity_id) return [];
+    if (
+      Number(cutover[0].contract_version) !== 25 ||
+      !p.review_id ||
+      p.resource_type !== "opportunity" ||
+      !p.opportunity_id ||
+      p.resource_id !== p.opportunity_id
+    )
+      return [];
     const coordinateFree = event.organization_id == null && event.workspace_id == null;
-    if (coordinateFree ? Number(event.schema_version) !== 1 : !event.organization_id || !event.workspace_id) return [];
+    if (
+      coordinateFree
+        ? Number(event.schema_version) !== 1
+        : !event.organization_id || !event.workspace_id
+    )
+      return [];
     const native = await nativeOpportunityStorage(db);
     const [rows] = await db.query<RowDataPacket[]>(
       "SELECT r.reviewer_id,CASE WHEN po.account_id=u.id AND u.status='active' " +
@@ -517,21 +731,60 @@ export class NotificationOutboxWorker {
         "JOIN users u ON u.id=cut.primary_account_id WHERE r.id=? AND p.id=? AND r.status='pending' " +
         "AND (po.reason='exclusive_owner' OR (po.reason IN ('shared','unassigned') AND po.account_id=cut.primary_account_id)) " +
         "AND BINARY LEFT(r.request_id,64)=BINARY ? AND BINARY LEFT(r.trace_id,64)=BINARY ? " +
-        (coordinateFree ? "AND EXISTS (SELECT 1 FROM account_owned_records eo WHERE eo.source_table='outbox_events' " +
-          "AND eo.source_id=? AND eo.account_id=po.account_id AND eo.reason=po.reason) " : "") +
+        (coordinateFree
+          ? "AND EXISTS (SELECT 1 FROM account_owned_records eo WHERE eo.source_table='outbox_events' " +
+            "AND eo.source_id=? AND eo.account_id=po.account_id AND eo.reason=po.reason) "
+          : "") +
         "LIMIT 1 LOCK IN SHARE MODE",
-      [PRIMARY_COST_APPROVER_EMAIL, cutover[0].primary_account_id, p.review_id, p.opportunity_id, event.request_id, event.trace_id, ...(coordinateFree ? [event.id] : [])],
+      [
+        PRIMARY_COST_APPROVER_EMAIL,
+        cutover[0].primary_account_id,
+        p.review_id,
+        p.opportunity_id,
+        event.request_id,
+        event.trace_id,
+        ...(coordinateFree ? [event.id] : []),
+      ],
     );
     const row = rows[0];
-    return row ? [...new Set([row.reviewer_id, overdue ? row.primary_recipient : null].filter(Boolean).map(String))] : [];
+    return row
+      ? [
+          ...new Set(
+            [row.reviewer_id, overdue ? row.primary_recipient : null].filter(Boolean).map(String),
+          ),
+        ]
+      : [];
   }
-  private async create(event: any, p: any, category: string, recipient: string, now: Date, db: Pick<Pool, "query"> = this.pool) {
-    const accountDelivery = (isApprovalWorkflowDelivery(event.event_type) || event.event_type === "approval.overdue" || isCostReviewReminder(event.event_type) || isNativeTaskDelivery(event.event_type, p) || isNativeCompetitorDelivery(event.event_type, p) || isNativeAutomationDelivery(event, p) || isNativeRedecisionDelivery(event, p)) &&
-      event.organization_id == null && event.workspace_id == null;
+  private async create(
+    event: any,
+    p: any,
+    category: string,
+    recipient: string,
+    now: Date,
+    db: Pick<Pool, "query"> = this.pool,
+  ) {
+    const accountDelivery =
+      (isApprovalWorkflowDelivery(event.event_type) ||
+        event.event_type === "approval.overdue" ||
+        isCostReviewReminder(event.event_type) ||
+        isNativeTaskDelivery(event.event_type, p) ||
+        isNativeCompetitorDelivery(event.event_type, p) ||
+        isNativeAutomationDelivery(event, p) ||
+        isNativeRedecisionDelivery(event, p)) &&
+      event.organization_id == null &&
+      event.workspace_id == null;
     if (accountDelivery) await notificationPreferencesAccountSchema(db);
     const [prefs] = accountDelivery
-      ? await db.query<RowDataPacket[]>("SELECT * FROM notification_preferences WHERE user_id=?", [recipient])
-      : await readDeliveryNotificationPreferences(db, event.organization_id, event.workspace_id, recipient),
+        ? await db.query<RowDataPacket[]>(
+            "SELECT * FROM notification_preferences WHERE user_id=?",
+            [recipient],
+          )
+        : await readDeliveryNotificationPreferences(
+            db,
+            event.organization_id,
+            event.workspace_id,
+            recipient,
+          ),
       pref = prefs[0],
       categoryEnabled = !pref || Boolean(pref[`${category}_enabled`]),
       inApp = !pref || Boolean(pref.in_app_enabled),
@@ -570,7 +823,8 @@ export class NotificationOutboxWorker {
       resourceType = p.resource_type ?? category,
       resourceId = p.resource_id ?? p.task_id ?? p.approval_request_id ?? null,
       notificationId = randomUUID();
-    await appendScopedNotification(db,
+    await appendScopedNotification(
+      db,
       "INSERT IGNORE INTO notifications (id,organization_id,workspace_id,recipient_id,source_event_id,category,severity,title,body,resource_type,resource_id,root_cause_key,read_at,workflow_status,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,NULL,'open',1,?,?)",
       [
         notificationId,
@@ -595,20 +849,21 @@ export class NotificationOutboxWorker {
       ),
       id = String(found[0]!.id);
     try {
-      if (legacyRealtime !== undefined) await db.query(
-        `INSERT IGNORE INTO realtime_events (${legacyRealtime ? "organization_id,workspace_id," : ""}recipient_id,notification_id,event_type,payload_json,created_at) VALUES (${legacyRealtime ? "?,?," : ""}?,?, 'notification.changed',?,?)`,
-        [
-          ...(legacyRealtime ? [event.organization_id, event.workspace_id] : []),
-          recipient,
-          id,
-          JSON.stringify({
-            notification_id: id,
-            category,
-            severity: event.event_type === "approval.overdue" || costOverdue ? "warning" : "info",
-          }),
-          now,
-        ],
-      );
+      if (legacyRealtime !== undefined)
+        await db.query(
+          `INSERT IGNORE INTO realtime_events (${legacyRealtime ? "organization_id,workspace_id," : ""}recipient_id,notification_id,event_type,payload_json,created_at) VALUES (${legacyRealtime ? "?,?," : ""}?,?, 'notification.changed',?,?)`,
+          [
+            ...(legacyRealtime ? [event.organization_id, event.workspace_id] : []),
+            recipient,
+            id,
+            JSON.stringify({
+              notification_id: id,
+              category,
+              severity: event.event_type === "approval.overdue" || costOverdue ? "warning" : "info",
+            }),
+            now,
+          ],
+        );
     } catch (error) {
       if ((error as { code?: string }).code !== "ER_NO_SUCH_TABLE") throw error;
     }

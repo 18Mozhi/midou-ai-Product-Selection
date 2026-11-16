@@ -5,8 +5,12 @@ import { primarySourceSupportStatus } from "./primary-source-support.js";
 import { hasLegacyScoreRuleScope } from "./score-rule-scope.js";
 import { nativeOpportunityStorage } from "./opportunity-storage.js";
 import {
-  calculationOwnersMatch, readCalculationOpportunityForClaim, registerCalculationOwners, resolveCalculationOwnership,
-  type CalculationOwnership, type CalculationOwnerRef,
+  calculationOwnersMatch,
+  readCalculationOpportunityForClaim,
+  registerCalculationOwners,
+  resolveCalculationOwnership,
+  type CalculationOwnership,
+  type CalculationOwnerRef,
 } from "./opportunity-calculation-ownership.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket, ResultSetHeader } from "mysql2/promise";
@@ -111,7 +115,9 @@ export class MySqlOpportunityScoringWorker {
         return null;
       }
       const { organizationId, workspaceId } = await readCalculationOpportunityForClaim(
-        c, String(row.opportunity_id), "calculation_job_opportunity_missing",
+        c,
+        String(row.opportunity_id),
+        "calculation_job_opportunity_missing",
       );
       await c.query(
         "UPDATE opportunity_score_jobs SET status='leased',attempt_count=attempt_count+1,lease_owner=?,lease_expires_at=?,updated_at=? WHERE id=?",
@@ -150,17 +156,19 @@ export class MySqlOpportunityScoringWorker {
         throw new OpportunityScoringError("score_rule_unavailable", false);
       const ruleScope = accountOwner && !legacyRule ? " AND account_id=?" : scopeFilter;
       const ruleArgs = accountOwner && !legacyRule ? [accountOwner.account_id] : scopeArgs;
-      const nativeOpportunity = accountOwner && await nativeOpportunityStorage(c);
+      const nativeOpportunity = accountOwner && (await nativeOpportunityStorage(c));
       const [rules] = await c.query<RowDataPacket[]>(
         "SELECT version_code,dimensions_json,thresholds_json FROM score_rules WHERE id=?" +
-          ruleScope + " AND status IN ('active','retired','rolled_back') FOR UPDATE",
+          ruleScope +
+          " AND status IN ('active','retired','rolled_back') FOR UPDATE",
         [job.ruleId, ...ruleArgs],
       );
       const rule = rules[0];
       if (!rule) throw new OpportunityScoringError("score_rule_unavailable", false);
       const [opportunities] = await c.query<RowDataPacket[]>(
         "SELECT id,owner_id FROM opportunities WHERE id=?" +
-          (nativeOpportunity ? " AND account_id=?" : scopeFilter) + " FOR UPDATE",
+          (nativeOpportunity ? " AND account_id=?" : scopeFilter) +
+          " FOR UPDATE",
         [job.opportunityId, ...(nativeOpportunity ? [accountOwner.account_id] : scopeArgs)],
       );
       if (!opportunities[0]) throw new OpportunityScoringError("opportunity_scope_missing", false);
@@ -168,17 +176,34 @@ export class MySqlOpportunityScoringWorker {
         const [lease] = await c.query<RowDataPacket[]>(
           "SELECT id FROM opportunity_score_jobs WHERE id=? AND opportunity_id=? AND score_rule_id=? " +
             "AND trigger_task_id <=> ? AND status='leased' AND lease_owner=? AND attempt_count=? AND lease_expires_at>UTC_TIMESTAMP(3) FOR UPDATE",
-          [job.id, job.opportunityId, job.ruleId, job.triggerTaskId, this.workerId, job.attemptCount],
+          [
+            job.id,
+            job.opportunityId,
+            job.ruleId,
+            job.triggerTaskId,
+            this.workerId,
+            job.attemptCount,
+          ],
         );
         if (!lease[0]) throw new OpportunityScoringError("opportunity_score_lease_lost", true);
-        if (!(await calculationOwnersMatch(c, ownership, [["opportunity_score_jobs",job.id]], true)) ||
+        if (
+          !(await calculationOwnersMatch(
+            c,
+            ownership,
+            [["opportunity_score_jobs", job.id]],
+            true,
+          )) ||
           !(await calculationOwnersMatch(c, ownership, [
-          ["score_rules",job.ruleId],
-          ...(job.triggerTaskId ? [["tasks",job.triggerTaskId] as const] : []),
-        ]))) throw new OpportunityScoringError("opportunity_score_owner_mismatch", false);
+            ["score_rules", job.ruleId],
+            ...(job.triggerTaskId ? [["tasks", job.triggerTaskId] as const] : []),
+          ]))
+        )
+          throw new OpportunityScoringError("opportunity_score_owner_mismatch", false);
       }
-      const sourceSupport = await primarySourceSupportStatus(c,
-        accountOwner ? { ...job, accountId: accountOwner.account_id } : job);
+      const sourceSupport = await primarySourceSupportStatus(
+        c,
+        accountOwner ? { ...job, accountId: accountOwner.account_id } : job,
+      );
       const [inputs] = await c.query<RowDataPacket[]>(
         "SELECT * FROM opportunity_score_inputs WHERE opportunity_id=? AND is_current=1",
         [job.opportunityId],
@@ -186,9 +211,19 @@ export class MySqlOpportunityScoringWorker {
       const evidenceIds = [
         ...new Set(inputs.flatMap((item) => parse<string[]>(item.evidence_ids_json ?? "[]"))),
       ];
-      if (!(await calculationOwnersMatch(c, ownership,
-        inputs.map(row => ["opportunity_score_inputs", String(row.id)]), true)) ||
-        !(await calculationOwnersMatch(c, ownership, evidenceIds.map(id => ["raw_evidence",id]))))
+      if (
+        !(await calculationOwnersMatch(
+          c,
+          ownership,
+          inputs.map((row) => ["opportunity_score_inputs", String(row.id)]),
+          true,
+        )) ||
+        !(await calculationOwnersMatch(
+          c,
+          ownership,
+          evidenceIds.map((id) => ["raw_evidence", id]),
+        ))
+      )
         throw new OpportunityScoringError("opportunity_score_input_owner_mismatch", false);
       if (evidenceIds.length) {
         const placeholders = evidenceIds.map(() => "?").join(","),
@@ -197,8 +232,9 @@ export class MySqlOpportunityScoringWorker {
               "AND ro.source_id=r.id AND ro.account_id=?)"
             : "r.organization_id=e.organization_id AND r.workspace_id=e.workspace_id",
           // A critical issue attached to this exact evidence must not be hidden by its old workspace.
-          issueScope = accountOwner ? "" :
-            "i.organization_id=e.organization_id AND i.workspace_id=e.workspace_id AND ",
+          issueScope = accountOwner
+            ? ""
+            : "i.organization_id=e.organization_id AND i.workspace_id=e.workspace_id AND ",
           [qualityRows] = await c.query<RowDataPacket[]>(
             `SELECT e.id evidence_id,
               (SELECT r.status FROM reconciliation_runs r
@@ -209,9 +245,14 @@ export class MySqlOpportunityScoringWorker {
                WHERE ${issueScope}i.raw_evidence_id=e.id AND i.status='open' AND i.severity='critical') critical_issue_count
              FROM raw_evidence e
              WHERE ${accountOwner ? "" : "e.organization_id=? AND e.workspace_id=? AND "}e.id IN (${placeholders})`,
-            accountOwner ? [accountOwner.account_id, ...evidenceIds] : [...scopeArgs, ...evidenceIds],
+            accountOwner
+              ? [accountOwner.account_id, ...evidenceIds]
+              : [...scopeArgs, ...evidenceIds],
           );
-        if ((accountOwner && qualityRows.length !== evidenceIds.length) || hasBlockingQualityRegression(qualityRows))
+        if (
+          (accountOwner && qualityRows.length !== evidenceIds.length) ||
+          hasBlockingQualityRegression(qualityRows)
+        )
           throw new OpportunityScoringError("score_blocked_by_data_quality_regression", false);
       }
       const dimensions = parse<ScoreProjectionDimension[]>(rule.dimensions_json),
@@ -266,7 +307,7 @@ export class MySqlOpportunityScoringWorker {
           now,
         ],
       );
-      const owned: CalculationOwnerRef[] = [["opportunity_score_runs",runId]];
+      const owned: CalculationOwnerRef[] = [["opportunity_score_runs", runId]];
       for (const item of projection.components) {
         const id = randomUUID();
         await c.query(
@@ -282,7 +323,7 @@ export class MySqlOpportunityScoringWorker {
             JSON.stringify(item.usable ? [] : item.missing_fields),
           ],
         );
-        owned.push(["opportunity_score_components",id]);
+        owned.push(["opportunity_score_components", id]);
       }
       await registerCalculationOwners(c, ownership, owned);
       const trend = available.find((item) => item.dimension_code === "market_demand"),
@@ -294,7 +335,8 @@ export class MySqlOpportunityScoringWorker {
           "score_rule_version=?,scored_at=?,lifecycle_entered_at=IF(lifecycle_status IN " +
           "('candidate','validating'),?,lifecycle_entered_at),lifecycle_status=IF(" +
           "lifecycle_status IN ('candidate','validating'),'ready',lifecycle_status)," +
-          "version=version+1,updated_at=? WHERE id=?" + scopeFilter,
+          "version=version+1,updated_at=? WHERE id=?" +
+          scopeFilter,
         [
           overall,
           trend?.input_score ?? null,
@@ -337,16 +379,17 @@ export class MySqlOpportunityScoringWorker {
         const [tasks] = await c.query<RowDataPacket[]>(
             accountId
               ? "SELECT t.assignee_id FROM tasks t JOIN account_owned_records o " +
-                "ON o.source_table='tasks' AND o.source_id=t.id WHERE t.id=? AND o.account_id=? " +
-                "AND t.source_ref_id=? AND t.source_type='evidence_completion' " +
-                "AND t.status='completed' AND t.deleted_at IS NULL LIMIT 1"
+                  "ON o.source_table='tasks' AND o.source_id=t.id WHERE t.id=? AND o.account_id=? " +
+                  "AND t.source_ref_id=? AND t.source_type='evidence_completion' " +
+                  "AND t.status='completed' AND t.deleted_at IS NULL LIMIT 1"
               : "SELECT assignee_id FROM tasks WHERE id=? AND organization_id=? AND workspace_id=? " +
-                "AND source_type='evidence_completion' AND status='completed' LIMIT 1",
+                  "AND source_type='evidence_completion' AND status='completed' LIMIT 1",
             accountId
               ? [job.triggerTaskId, accountId, job.opportunityId]
               : [job.triggerTaskId, job.organizationId, job.workspaceId],
           ),
-          recipientId = ownership?.owner?.account_id ?? opportunities[0]?.owner_id ?? tasks[0]?.assignee_id;
+          recipientId =
+            ownership?.owner?.account_id ?? opportunities[0]?.owner_id ?? tasks[0]?.assignee_id;
         if (tasks[0] && recipientId) {
           const id = randomUUID();
           const [columns] = await c.query<RowDataPacket[]>(
@@ -381,7 +424,7 @@ export class MySqlOpportunityScoringWorker {
               now,
             ],
           );
-          await registerCalculationOwners(c, ownership, [["outbox_events",id]]);
+          await registerCalculationOwners(c, ownership, [["outbox_events", id]]);
         }
       }
       await c.commit();
@@ -430,8 +473,14 @@ export class MySqlOpportunityScoringWorker {
       c.release();
     }
   }
-  private async event(c: PoolConnection, job: Job, eventType: string, payload: unknown, now: Date,
-    ownership: CalculationOwnership = null) {
+  private async event(
+    c: PoolConnection,
+    job: Job,
+    eventType: string,
+    payload: unknown,
+    now: Date,
+    ownership: CalculationOwnership = null,
+  ) {
     const eventId = randomUUID();
     await appendOpportunityEvent(c, {
       id: eventId,
@@ -460,6 +509,9 @@ export class MySqlOpportunityScoringWorker {
       requestId: job.requestId,
       traceId: job.traceId,
     });
-    await registerCalculationOwners(c, ownership, [["opportunity_events",eventId],["opportunity_outbox",eventId]]);
+    await registerCalculationOwners(c, ownership, [
+      ["opportunity_events", eventId],
+      ["opportunity_outbox", eventId],
+    ]);
   }
 }

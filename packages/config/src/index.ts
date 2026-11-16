@@ -374,7 +374,10 @@ export function loadRuntimeConfig(
   const production = nodeEnv === "production";
   const accountScopeMode = text(env, "ACCOUNT_SCOPE_MODE", "legacy");
   if (accountScopeMode !== "legacy" && (accountScopeMode !== "retired" || !production))
-    throw new ConfigError("ACCOUNT_SCOPE_MODE", "must be legacy, or retired in a coordinated production cutover");
+    throw new ConfigError(
+      "ACCOUNT_SCOPE_MODE",
+      "must be legacy, or retired in a coordinated production cutover",
+    );
   const evidenceRoot = resolve(cwd, text(env, "EVIDENCE_ROOT", "./runtime/evidence"));
   const exportRoot = resolve(cwd, text(env, "EXPORT_ROOT", "./runtime/exports"));
   const runtimeTempRoot = resolve(cwd, text(env, "RUNTIME_TMP_ROOT", "./runtime/tmp"));

@@ -83,12 +83,14 @@ export interface PreferenceContext extends PreferenceScope {
   idempotencyKey: string;
 }
 const hash = (value: string) => createHash("sha256").update(value).digest("hex");
-const coordinates = (scope: PreferenceCoordinates) => scope.organizationId && scope.workspaceId
-  ? { organization_id: scope.organizationId, workspace_id: scope.workspaceId }
-  : {};
-const viewCoordinates = (value: UiPreference) => value.organization_id && value.workspace_id
-  ? { organization_id: value.organization_id, workspace_id: value.workspace_id }
-  : {};
+const coordinates = (scope: PreferenceCoordinates) =>
+  scope.organizationId && scope.workspaceId
+    ? { organization_id: scope.organizationId, workspace_id: scope.workspaceId }
+    : {};
+const viewCoordinates = (value: UiPreference) =>
+  value.organization_id && value.workspace_id
+    ? { organization_id: value.organization_id, workspace_id: value.workspace_id }
+    : {};
 export function isThemeId(value: unknown): value is ThemeId {
   return typeof value === "string" && THEME_IDS.includes(value as ThemeId);
 }
@@ -246,7 +248,8 @@ export class InMemoryUiPreferenceRepository implements UiPreferenceRepository {
     const key = this.scopeKey({
         userId: preference.user_id,
         ...(preference.organization_id && preference.workspace_id
-          ? { organizationId: preference.organization_id, workspaceId: preference.workspace_id } : {}),
+          ? { organizationId: preference.organization_id, workspaceId: preference.workspace_id }
+          : {}),
       }),
       current = this.preferences.get(key);
     if ((current?.version ?? null) !== expectedVersion) return false;

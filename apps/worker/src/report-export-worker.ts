@@ -1,4 +1,9 @@
-import { accountReportScope, appendBusinessAudit, recordAccountReportExport, reportExportAccountStorage } from "@scoutops/database";
+import {
+  accountReportScope,
+  appendBusinessAudit,
+  recordAccountReportExport,
+  reportExportAccountStorage,
+} from "@scoutops/database";
 import { createHash, randomUUID } from "node:crypto";
 import { rm } from "node:fs/promises";
 import type { Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";
@@ -47,7 +52,7 @@ export class ReportExportWorker {
           const [[held]] = await connection.query<RowDataPacket[]>(
             "SELECT id FROM report_exports WHERE id=? AND account_id=? AND status='leased' AND leased_by=? " +
               "AND attempt_count=? AND lease_expires_at>? AND expires_at>? FOR UPDATE",
-            [job.id,job.account_id,this.workerId,job.attempt_count,heldAt,heldAt],
+            [job.id, job.account_id, this.workerId, job.attempt_count, heldAt, heldAt],
           );
           if (!held) {
             await connection.rollback();
@@ -86,8 +91,17 @@ export class ReportExportWorker {
         code = String((error as any)?.code ?? "export_failed").slice(0, 80);
       const [failed] = await this.pool.query<ResultSetHeader>(
         "UPDATE report_exports SET status=?,available_at=DATE_ADD(?,INTERVAL 60 SECOND),lease_expires_at=NULL,last_error_code=?,version=version+1,updated_at=? WHERE id=?" +
-          (account ? " AND account_id=? AND status='leased' AND leased_by=? AND attempt_count=?" : ""),
-        [dead ? "dead_letter" : "retry_scheduled", now, code, now, job.id, ...(account ? [job.account_id,this.workerId,job.attempt_count] : [])],
+          (account
+            ? " AND account_id=? AND status='leased' AND leased_by=? AND attempt_count=?"
+            : ""),
+        [
+          dead ? "dead_letter" : "retry_scheduled",
+          now,
+          code,
+          now,
+          job.id,
+          ...(account ? [job.account_id, this.workerId, job.attempt_count] : []),
+        ],
       );
       if (account && failed.affectedRows !== 1)
         return { status: "lease_lost" as const, export_id: String(job.id) };
@@ -99,9 +113,10 @@ export class ReportExportWorker {
     }
   }
   private async rows(job: any) {
-    const scope = (table: "opportunities" | "trend_topics") => job.account_id
-      ? accountReportScope(this.pool, table)
-      : "organization_id=? AND workspace_id=?";
+    const scope = (table: "opportunities" | "trend_topics") =>
+      job.account_id
+        ? accountReportScope(this.pool, table)
+        : "organization_id=? AND workspace_id=?";
     const args = job.account_id ? [job.account_id] : [job.organization_id, job.workspace_id];
     if (job.report_type === "opportunity") {
       const [rows] = await this.pool.query<RowDataPacket[]>(
@@ -117,7 +132,8 @@ export class ReportExportWorker {
       );
       return rows;
     }
-    if (job.account_id) throw Object.assign(new Error("retired team report"), { code: "report_type_retired" });
+    if (job.account_id)
+      throw Object.assign(new Error("retired team report"), { code: "report_type_retired" });
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT m.user_id,u.email,COUNT(t.id) task_total,SUM(t.status='todo') todo,SUM(t.status='in_progress') in_progress,SUM(t.status='completed') completed,SUM(t.status IN ('todo','in_progress') AND t.due_at IS NOT NULL AND t.due_at<?) overdue FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN tasks t ON t.organization_id=m.organization_id AND t.workspace_id=? AND t.assignee_id=m.user_id WHERE m.organization_id=? AND m.status='active' GROUP BY m.user_id,u.email ORDER BY completed DESC,u.email LIMIT ?",
       [this.now(), job.workspace_id, job.organization_id, this.maxRows + 1],
@@ -158,7 +174,9 @@ export class ReportExportWorker {
         [now],
       );
     for (const row of rows) {
-      await rm(buildReportExportPath(this.root, { ...row, id: row.id, filename: row.filename }), { force: true });
+      await rm(buildReportExportPath(this.root, { ...row, id: row.id, filename: row.filename }), {
+        force: true,
+      });
       await this.pool.query(
         "UPDATE report_exports SET status='expired',version=version+1,updated_at=? WHERE id=? AND status='succeeded'",
         [now, row.id],
@@ -167,12 +185,19 @@ export class ReportExportWorker {
   }
   private async record(job: any, event: string, payload: any, queryable: any = this.pool) {
     const now = this.now();
-    if (job.account_id) return recordAccountReportExport(queryable, {
-      accountId: job.account_id, exportId: job.id, event, requestId: job.request_id,
-      traceId: job.trace_id, payload, now,
-    });
-    await appendBusinessAudit(queryable,
-        "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,?,'report_export',?,?,?,?,?,1)",
+    if (job.account_id)
+      return recordAccountReportExport(queryable, {
+        accountId: job.account_id,
+        exportId: job.id,
+        event,
+        requestId: job.request_id,
+        traceId: job.trace_id,
+        payload,
+        now,
+      });
+    await appendBusinessAudit(
+      queryable,
+      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,?,'report_export',?,?,?,?,?,1)",
       [
         randomUUID(),
         job.organization_id,

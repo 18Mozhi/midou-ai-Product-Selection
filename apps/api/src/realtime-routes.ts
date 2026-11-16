@@ -36,25 +36,29 @@ export function registerRealtimeRoutes(app: FastifyInstance, o: RealtimeRouteOpt
         "稍后自动重连或刷新页面。",
       );
     const context = o.accountReadRehearsal
-      ? { actorId: (await authenticatedRehearsalAccount(r, o.auth, o.secureCookie)).accountId, accountOwned: true, ...ids(r) }
+      ? {
+          actorId: (await authenticatedRehearsalAccount(r, o.auth, o.secureCookie)).accountId,
+          accountOwned: true,
+          ...ids(r),
+        }
       : await (async () => {
-        const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
-          x = await o.authorization.resolveSession(a.user.id, a.session.id);
-        await o.authorization.authorize({
-          actorId: a.user.id,
-          organizationId: x.context.organization_id,
-          workspaceId: x.context.workspace_id,
-          capability: "notification:read",
-          surface: "api",
-          ...ids(r),
-        });
-        return {
-          organizationId: x.context.organization_id,
-          workspaceId: x.context.workspace_id,
-          actorId: a.user.id,
-          ...ids(r),
-        };
-      })();
+          const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
+            x = await o.authorization.resolveSession(a.user.id, a.session.id);
+          await o.authorization.authorize({
+            actorId: a.user.id,
+            organizationId: x.context.organization_id,
+            workspaceId: x.context.workspace_id,
+            capability: "notification:read",
+            surface: "api",
+            ...ids(r),
+          });
+          return {
+            organizationId: x.context.organization_id,
+            workspaceId: x.context.workspace_id,
+            actorId: a.user.id,
+            ...ids(r),
+          };
+        })();
     let cursor = parseLastEventId(r.headers["last-event-id"] ?? (r.query as any)?.last_event_id);
     const initial = await o.service.replay({ ...context, afterId: cursor });
     await o.service.auditConnect({ ...context, afterId: cursor });

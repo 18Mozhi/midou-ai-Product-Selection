@@ -122,8 +122,16 @@ export class WebhookDeliveryWorker {
       );
       const current = full[0]!;
       await appendWebhookDeliveryEvent(c, {
-        id: randomUUID(), deliveryId: id, fromStatus, toStatus: "leased", attempts: current.attempt_count,
-        reason: null, actorId: null, requestId: current.request_id, traceId: current.trace_id, occurredAt: this.now(),
+        id: randomUUID(),
+        deliveryId: id,
+        fromStatus,
+        toStatus: "leased",
+        attempts: current.attempt_count,
+        reason: null,
+        actorId: null,
+        requestId: current.request_id,
+        traceId: current.trace_id,
+        occurredAt: this.now(),
       });
       await c.commit();
       return current;
@@ -154,8 +162,19 @@ export class WebhookDeliveryWorker {
         "UPDATE webhook_deliveries SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL," +
           "response_status=?,last_error_code=?,signature_timestamp=?,updated_at=? " +
           "WHERE id=? AND endpoint_id=? AND status='leased' AND lease_owner=? AND attempt_count=? AND lease_expires_at>?",
-        [status, available, responseStatus, errorCode, signatureTimestamp, now,
-          row.id, row.endpoint_id, this.o.workerId, row.attempt_count, now],
+        [
+          status,
+          available,
+          responseStatus,
+          errorCode,
+          signatureTimestamp,
+          now,
+          row.id,
+          row.endpoint_id,
+          this.o.workerId,
+          row.attempt_count,
+          now,
+        ],
       );
       if (updated.affectedRows === 0) {
         await c.commit();
@@ -163,8 +182,16 @@ export class WebhookDeliveryWorker {
       }
       if (updated.affectedRows !== 1) throw new Error("webhook_delivery_finish_scope_invalid");
       await appendWebhookDeliveryEvent(c, {
-        id: randomUUID(), deliveryId: row.id, fromStatus: "leased", toStatus: status, attempts: row.attempt_count,
-        reason: errorCode, actorId: null, requestId: row.request_id, traceId: row.trace_id, occurredAt: now,
+        id: randomUUID(),
+        deliveryId: row.id,
+        fromStatus: "leased",
+        toStatus: status,
+        attempts: row.attempt_count,
+        reason: errorCode,
+        actorId: null,
+        requestId: row.request_id,
+        traceId: row.trace_id,
+        occurredAt: now,
       });
       await c.commit();
       return true;
@@ -215,7 +242,11 @@ export class WebhookDeliveryWorker {
     }
     await this.finish(
       row,
-      error === null && response !== null ? "succeeded" : Number(row.attempt_count) >= 4 ? "dead_letter" : "retry_scheduled",
+      error === null && response !== null
+        ? "succeeded"
+        : Number(row.attempt_count) >= 4
+          ? "dead_letter"
+          : "retry_scheduled",
       response,
       error,
       signatureTimestamp,

@@ -63,10 +63,18 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         "AND COLUMN_NAME IN ('account_id','organization_id','workspace_id')",
     );
     const native = (table: "collection_tasks" | "opportunities" | "raw_evidence") => {
-      const shape = columns.filter(row => row.table_name === table).map(row => row.column_name).sort().join(",");
+      const shape = columns
+        .filter((row) => row.table_name === table)
+        .map((row) => row.column_name)
+        .sort()
+        .join(",");
       if (shape === "account_id") return true;
       if (shape === "organization_id,workspace_id") return false;
-      throw new SelectionJourneyError("selection_journey_account_schema_invalid", 503, "账号历史结构尚未就绪。");
+      throw new SelectionJourneyError(
+        "selection_journey_account_schema_invalid",
+        503,
+        "账号历史结构尚未就绪。",
+      );
     };
     const taskScope = native("collection_tasks") ? " AND t.account_id=jo.account_id" : "";
     const opportunityScope = native("opportunities") ? " AND o.account_id=jo.account_id" : "";
@@ -92,14 +100,31 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
     const r = rows[0];
     if (!r) return null;
     return {
-      id: r.id, input_kind: r.input_kind, input_value: r.input_value, provider_code: r.provider_code,
-      task_id: r.task_id, task_status: r.task_status, state: r.state, opportunity_id: r.opportunity_id,
-      created_by: r.created_by, accepted_at: iso(r.created_at), decided_at: iso(r.decided_at),
-      request_id: r.request_id, trace_id: r.trace_id, read_only: true,
-      decision: r.decision_id == null ? null : {
-        id: r.decision_id, action: r.action, reason: r.reason, actor_id: r.actor_id,
-        created_at: iso(r.decision_at), selected_raw_evidence_id: r.selected_raw_evidence_id,
-      },
+      id: r.id,
+      input_kind: r.input_kind,
+      input_value: r.input_value,
+      provider_code: r.provider_code,
+      task_id: r.task_id,
+      task_status: r.task_status,
+      state: r.state,
+      opportunity_id: r.opportunity_id,
+      created_by: r.created_by,
+      accepted_at: iso(r.created_at),
+      decided_at: iso(r.decided_at),
+      request_id: r.request_id,
+      trace_id: r.trace_id,
+      read_only: true,
+      decision:
+        r.decision_id == null
+          ? null
+          : {
+              id: r.decision_id,
+              action: r.action,
+              reason: r.reason,
+              actor_id: r.actor_id,
+              created_at: iso(r.decision_at),
+              selected_raw_evidence_id: r.selected_raw_evidence_id,
+            },
     };
   }
   async create(i: Parameters<SelectionJourneyRepository["create"]>[0]) {
@@ -181,11 +206,20 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         ],
       );
       await appendCollectionSubquery(c, {
-        id: i.subqueryId, taskId: i.taskId, providerId: String(provider.id), ordinal: 1,
-        targetJson: JSON.stringify(target), required: true, status: "pending", now: i.now,
+        id: i.subqueryId,
+        taskId: i.taskId,
+        providerId: String(provider.id),
+        ordinal: 1,
+        targetJson: JSON.stringify(target),
+        required: true,
+        status: "pending",
+        now: i.now,
       });
       await appendProviderSourceReplayRun(c, {
-        ...i, runId: randomUUID(), providerId: String(provider.id), sourceCode: String(provider.code),
+        ...i,
+        runId: randomUUID(),
+        providerId: String(provider.id),
+        sourceCode: String(provider.code),
       });
       await c.query(
         "INSERT INTO collection_task_events (id,task_id," +
@@ -488,7 +522,11 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           actorId: i.actorId,
           requestId: i.requestId,
           traceId: i.traceId,
-          payloadJson: JSON.stringify({ action: i.action, selection_journey_id: i.journeyId, selected_raw_evidence_id: i.selectedRawEvidenceId }),
+          payloadJson: JSON.stringify({
+            action: i.action,
+            selection_journey_id: i.journeyId,
+            selected_raw_evidence_id: i.selectedRawEvidenceId,
+          }),
           occurredAt: i.now,
         });
       }
@@ -792,32 +830,13 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
       "INSERT INTO selection_journey_events (id,journey_id," +
         "event_type,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES " +
         "(?,?,?,'user',?,?,?,?,?)",
-      [
-        id,
-        i.journeyId,
-        eventType,
-        i.actorId,
-        i.requestId,
-        i.traceId,
-        JSON.stringify(payload),
-        now,
-      ],
+      [id, i.journeyId, eventType, i.actorId, i.requestId, i.traceId, JSON.stringify(payload), now],
     );
     await c.query(
       "INSERT INTO selection_journey_outbox (id,journey_id," +
         "event_type,payload_json,status,attempt_count,available_at,request_id,trace_id," +
         "created_at,updated_at) VALUES (?,?,?,?,'queued',0,?,?,?,?,?)",
-      [
-        id,
-        i.journeyId,
-        eventType,
-        JSON.stringify(payload),
-        now,
-        i.requestId,
-        i.traceId,
-        now,
-        now,
-      ],
+      [id, i.journeyId, eventType, JSON.stringify(payload), now, i.requestId, i.traceId, now, now],
     );
   }
 }

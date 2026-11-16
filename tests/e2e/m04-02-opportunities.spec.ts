@@ -427,8 +427,9 @@ test("candidate table shows five progress segments from the existing gate count"
   await expect(facts).toHaveCount(3);
   await expect(facts.first()).toHaveCSS("display", "grid");
   const valueOffsets = await facts.evaluateAll((rows) =>
-    rows.map((row) =>
-      row.querySelector("dd")!.getBoundingClientRect().left - row.getBoundingClientRect().left,
+    rows.map(
+      (row) =>
+        row.querySelector("dd")!.getBoundingClientRect().left - row.getBoundingClientRect().left,
     ),
   );
   expect(valueOffsets[0]).toBeGreaterThan(30);
@@ -4451,21 +4452,27 @@ for (const view of ["completed", "rule_candidates"]) {
         r.fulfill({
           json: {
             ...envelope(
-              view === "completed" ? [] : [
-                {
-                  ...base,
-                  image_url: "/fixtures/candidate-reference-product.svg",
-                  primary_product: {
-                    price: 21.95,
-                    currency: "USD",
-                    rating_value: 4.1,
-                    review_count: 28,
-                    captured_at: "2026-10-17T00:00:00Z",
-                    public_signals: null,
-                  },
-                },
-                { ...base, id: "00000000-0000-4000-8000-000000000489", name: "双层收纳盒 · 候选商品" },
-              ],
+              view === "completed"
+                ? []
+                : [
+                    {
+                      ...base,
+                      image_url: "/fixtures/candidate-reference-product.svg",
+                      primary_product: {
+                        price: 21.95,
+                        currency: "USD",
+                        rating_value: 4.1,
+                        review_count: 28,
+                        captured_at: "2026-10-17T00:00:00Z",
+                        public_signals: null,
+                      },
+                    },
+                    {
+                      ...base,
+                      id: "00000000-0000-4000-8000-000000000489",
+                      name: "双层收纳盒 · 候选商品",
+                    },
+                  ],
             ),
             meta: { page: 1, page_size: 20, total: view === "completed" ? 0 : 324 },
           },
@@ -4488,39 +4495,74 @@ for (const view of ["completed", "rule_candidates"]) {
           await expect(catalog.locator(".catalog-data-note")).toHaveCSS("font-size", "15px");
           const trigger = page.getByRole("button", { name: "高级筛选", exact: true });
           const search = page.getByRole("textbox", { name: "商品名称" });
-          const [filterBox, searchBox] = await Promise.all([trigger.boundingBox(), search.boundingBox()]);
+          const [filterBox, searchBox] = await Promise.all([
+            trigger.boundingBox(),
+            search.boundingBox(),
+          ]);
           expect(Math.abs(filterBox!.height - searchBox!.height)).toBeLessThanOrEqual(2);
-          expect(Math.abs(filterBox!.y + filterBox!.height / 2 - searchBox!.y - searchBox!.height / 2)).toBeLessThanOrEqual(2);
-          await expect(trigger.locator(".responsive-filter-drawer__icon")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
-          await expect(catalog.locator("tbody tr")).toHaveCount(2);
-          const headerPositions = await catalog.getByRole("columnheader").evaluateAll((cells) =>
-            cells.map((cell) => cell.getBoundingClientRect().x + parseFloat(getComputedStyle(cell).paddingLeft)),
+          expect(
+            Math.abs(filterBox!.y + filterBox!.height / 2 - searchBox!.y - searchBox!.height / 2),
+          ).toBeLessThanOrEqual(2);
+          await expect(trigger.locator(".responsive-filter-drawer__icon")).toHaveCSS(
+            "background-color",
+            "rgba(0, 0, 0, 0)",
           );
+          await expect(catalog.locator("tbody tr")).toHaveCount(2);
+          const headerPositions = await catalog
+            .getByRole("columnheader")
+            .evaluateAll((cells) =>
+              cells.map(
+                (cell) =>
+                  cell.getBoundingClientRect().x + parseFloat(getComputedStyle(cell).paddingLeft),
+              ),
+            );
           expect(Math.abs(headerPositions[0]! - 360)).toBeLessThanOrEqual(3);
           for (const [index, position] of [683, 834, 982, 1115, 1251, 1392].entries()) {
             expect(Math.abs(headerPositions[index + 1] - position)).toBeLessThanOrEqual(5);
           }
-          const rated = catalog.locator('tbody tr').first().locator('td[data-label="星级 / 评价"]');
+          const rated = catalog.locator("tbody tr").first().locator('td[data-label="星级 / 评价"]');
           await expect(rated.locator(".catalogue-number")).toHaveText(/4\.1.*28/);
           await expect(rated.locator(".catalogue-number")).toHaveCSS("font-size", "15px");
           await expect(rated.locator(".catalogue-cell-note")).toHaveCSS("font-size", "13px");
-          await expect(catalog.getByRole("img", { name: `${base.name} 商品图`, exact: true })).toBeVisible();
+          await expect(
+            catalog.getByRole("img", { name: `${base.name} 商品图`, exact: true }),
+          ).toBeVisible();
           const picture = await catalog.locator(".selection-product-picture").first().boundingBox();
           expect(Math.abs(picture!.x - 350)).toBeLessThanOrEqual(5);
           await expect(catalog.getByRole("img", { name: "商品主图待采集" })).toBeVisible();
           const next = catalog.getByRole("button", { name: "下一页", exact: true });
           const pagination = catalog.getByRole("navigation", { name: "选品分页" });
-          await expect(pagination.locator(".candidate-page-numbers")).toHaveCSS("column-gap", "7px");
-          await expect(catalog.locator(".selection-product-name strong a").first()).toHaveCSS("min-block-size", "36px");
-          await expect(pagination.getByRole("button", { name: "第 1 页" })).toHaveAttribute("aria-current", "page");
-          await expect(pagination.getByRole("button", { name: "第 2 页" })).toHaveCSS("background-color", "rgb(255, 255, 255)");
-          await expect(pagination.locator(".candidate-page-numbers > span")).toHaveCSS("min-inline-size", "30px");
+          await expect(pagination.locator(".candidate-page-numbers")).toHaveCSS(
+            "column-gap",
+            "7px",
+          );
+          await expect(catalog.locator(".selection-product-name strong a").first()).toHaveCSS(
+            "min-block-size",
+            "36px",
+          );
+          await expect(pagination.getByRole("button", { name: "第 1 页" })).toHaveAttribute(
+            "aria-current",
+            "page",
+          );
+          await expect(pagination.getByRole("button", { name: "第 2 页" })).toHaveCSS(
+            "background-color",
+            "rgb(255, 255, 255)",
+          );
+          await expect(pagination.locator(".candidate-page-numbers > span")).toHaveCSS(
+            "min-inline-size",
+            "30px",
+          );
           await expect(next).toHaveCSS("min-height", "36px");
-          const [nextBox, tableBox] = await Promise.all([next.boundingBox(), catalog.getByRole("table").boundingBox()]);
+          const [nextBox, tableBox] = await Promise.all([
+            next.boundingBox(),
+            catalog.getByRole("table").boundingBox(),
+          ]);
           expect(Math.abs(tableBox!.x - 291)).toBeLessThanOrEqual(2);
           expect(Math.abs(tableBox!.y - 558)).toBeLessThanOrEqual(3);
           expect(nextBox!.y - tableBox!.y - tableBox!.height).toBeLessThanOrEqual(27);
-          expect(Math.abs(nextBox!.x + nextBox!.width - tableBox!.x - tableBox!.width)).toBeLessThanOrEqual(2);
+          expect(
+            Math.abs(nextBox!.x + nextBox!.width - tableBox!.x - tableBox!.width),
+          ).toBeLessThanOrEqual(2);
           const title = (await catalog.locator("header h2").boundingBox())!;
           const note = (await catalog.locator(".catalog-data-note").boundingBox())!;
           expect(Math.abs(title.x - 300)).toBeLessThanOrEqual(2);
@@ -4534,8 +4576,7 @@ for (const view of ["completed", "rule_candidates"]) {
           expect(Math.abs(second.y + second.height - 810)).toBeLessThanOrEqual(4);
           await page.screenshot({ path: testInfo.outputPath("candidate-reference.png") });
         }
-      }
-      else
+      } else
         await expect(
           page.getByRole("heading", { name: "暂无已完成分析的商品", exact: true }),
         ).toBeVisible();

@@ -9,7 +9,9 @@ type PollResult = { status?: string } & Record<string, unknown>;
 export function assertWorkerDatabaseIsNotRehearsal(database: string) {
   // Restored snapshots can contain runnable collection, mail and webhook jobs.
   if (/^product_scout_[a-z0-9_]*rehearsal$/i.test(database)) {
-    throw new Error("account_rehearsal_worker_disabled: use the isolated one-shot purchase projector");
+    throw new Error(
+      "account_rehearsal_worker_disabled: use the isolated one-shot purchase projector",
+    );
   }
 }
 

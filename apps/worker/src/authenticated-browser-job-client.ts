@@ -64,21 +64,29 @@ const recordsFor = (
 /** A browser job inherits its live boundary from the exact collection task and subquery. */
 function browserTaskScope(input: BrowserJobInput, alias: "t" | "parent") {
   if (input.accountId === undefined) {
-    return { sql: `${alias}.organization_id=? AND ${alias}.workspace_id=?`,
-      values: [input.organizationId, input.workspaceId] };
+    return {
+      sql: `${alias}.organization_id=? AND ${alias}.workspace_id=?`,
+      values: [input.organizationId, input.workspaceId],
+    };
   }
   if (!input.leaseToken || !input.accountId.trim())
     throw new ProviderAdapterFailure("permission_denied", false);
   return {
-    sql: "EXISTS (SELECT 1 FROM account_owned_records browser_owner " +
+    sql:
+      "EXISTS (SELECT 1 FROM account_owned_records browser_owner " +
       "JOIN account_ownership_cutover browser_cut ON browser_cut.slot='current' AND browser_cut.contract_version=25 " +
       "JOIN users browser_account ON browser_account.id=browser_owner.account_id AND browser_account.status='active' " +
       "WHERE browser_owner.source_table='collection_tasks' " +
       `AND browser_owner.source_id=${alias}.id AND browser_owner.account_id=${alias}.account_id AND browser_owner.account_id=? ` +
       "AND (browser_owner.reason='exclusive_owner' OR browser_owner.account_id=browser_cut.primary_account_id)) " +
       `AND ${alias}.status='running' AND ${alias}.lease_token_hash=UNHEX(?) AND ${alias}.lease_expires_at>NOW(3)`,
-    values: [input.accountId, createHash("sha256")
-      .update("scoutops:collection-task-lease:v1\0").update(input.leaseToken).digest("hex")],
+    values: [
+      input.accountId,
+      createHash("sha256")
+        .update("scoutops:collection-task-lease:v1\0")
+        .update(input.leaseToken)
+        .digest("hex"),
+    ],
   };
 }
 
@@ -108,7 +116,8 @@ export class MySqlAuthenticatedBrowserJobClient {
     if (columns.length !== 0 && columns.length !== 2)
       throw new Error("partial_inherited_scope_schema:browser_collection_jobs");
     const legacy = columns.length === 2;
-    const taskScope = browserTaskScope(input, "t"), parentScope = browserTaskScope(input, "parent");
+    const taskScope = browserTaskScope(input, "t"),
+      parentScope = browserTaskScope(input, "parent");
     if (legacy && input.accountId !== undefined)
       throw new Error("account_browser_job_parent_schema_required");
     await this.pool.query<ResultSetHeader>(
@@ -215,8 +224,8 @@ export class MySqlAuthenticatedBrowserJobClient {
               "AND j.collection_task_id=? AND j.provider_id=? LIMIT 1",
             ].join("")
           : "SELECT j.id,j.status,j.result_json,j.error_code FROM browser_collection_jobs j " +
-            "JOIN collection_tasks parent ON parent.id=j.collection_task_id WHERE j.collection_subquery_id=? " +
-            `AND ${parentScope.sql} AND j.collection_task_id=? AND j.provider_id=? LIMIT 1`,
+              "JOIN collection_tasks parent ON parent.id=j.collection_task_id WHERE j.collection_subquery_id=? " +
+              `AND ${parentScope.sql} AND j.collection_task_id=? AND j.provider_id=? LIMIT 1`,
         inspectHistory
           ? [
               createHash("sha256")

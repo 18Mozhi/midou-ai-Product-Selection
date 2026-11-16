@@ -172,7 +172,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
     private readonly amazonBrowserEnabled = false,
   ) {}
   async execute(task: ClaimedCollectionTask, heartbeat: () => Promise<void>, signal?: AbortSignal) {
-    await this.updateReplay(task,
+    await this.updateReplay(
+      task,
       "UPDATE provider_source_replay_runs SET status='running',updated_at=NOW(3) WHERE task_id=? AND status='scheduled'",
       [task.id],
     );
@@ -225,7 +226,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         : available
           ? "succeeded"
           : "succeeded_empty";
-    await this.updateReplay(task,
+    await this.updateReplay(
+      task,
       "UPDATE provider_source_replay_runs SET status=?,item_count=?,error_code=?,updated_at=NOW(3) WHERE task_id=?",
       [status, available, failed?.errorCode ?? null, task.id],
     );
@@ -245,8 +247,10 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
   private async lockNativeTask(connection: PoolConnection, task: ClaimedCollectionTask) {
     if (!task.nativeAccountScope) return;
     if (!task.accountId || !task.leaseToken) throw new Error("collection_task_lease_invalid");
-    const tokenHash = createHash("sha256").update("scoutops:collection-task-lease:v1\0")
-      .update(task.leaseToken).digest("hex");
+    const tokenHash = createHash("sha256")
+      .update("scoutops:collection-task-lease:v1\0")
+      .update(task.leaseToken)
+      .digest("hex");
     const [[parent]] = await connection.query<RowDataPacket[]>(
       "SELECT t.id FROM collection_tasks t JOIN account_owned_records a " +
         "ON a.source_table='collection_tasks' AND a.source_id=t.id AND a.account_id=t.account_id " +
@@ -293,10 +297,11 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           "UPDATE collection_subqueries SET status=?,available_result_count=?,missing_fields_json=?,",
           "error_code=?,retryable=0,started_at=COALESCE(started_at,?),finished_at=?,version=version+1,",
           "updated_at=? WHERE id=? AND task_id=?",
-        ].join("") + (task.nativeAccountScope
-          ? " AND provider_id=? AND EXISTS (SELECT 1 FROM account_owned_records a " +
-            "WHERE a.source_table='collection_subqueries' AND a.source_id=collection_subqueries.id AND a.account_id=?)"
-          : ""),
+        ].join("") +
+          (task.nativeAccountScope
+            ? " AND provider_id=? AND EXISTS (SELECT 1 FROM account_owned_records a " +
+              "WHERE a.source_table='collection_subqueries' AND a.source_id=collection_subqueries.id AND a.account_id=?)"
+            : ""),
         [
           outcome.status,
           outcome.availableResultCount,
@@ -339,8 +344,13 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           now,
         ],
       );
-      await inheritCollectionHistoryOwner(connection, "collection_task_events", eventId, task.id,
-        task.nativeAccountScope ? task.accountId : undefined);
+      await inheritCollectionHistoryOwner(
+        connection,
+        "collection_task_events",
+        eventId,
+        task.id,
+        task.nativeAccountScope ? task.accountId : undefined,
+      );
       await connection.commit();
     } catch (error) {
       await connection.rollback();
@@ -475,7 +485,9 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           await this.evidence.persistBrowserArtifact({
             organizationId: task.organizationId,
             workspaceId: task.workspaceId,
-            ...(task.accountId === undefined ? {} : { taskFence: { accountId: task.accountId, leaseToken: task.leaseToken } }),
+            ...(task.accountId === undefined
+              ? {}
+              : { taskFence: { accountId: task.accountId, leaseToken: task.leaseToken } }),
             taskId: task.id,
             subqueryId: query.id,
             providerId: provider.id,
@@ -525,7 +537,9 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
             {
               organizationId: task.organizationId,
               workspaceId: task.workspaceId,
-              ...(task.accountId === undefined ? {} : { taskFence: { accountId: task.accountId, leaseToken: task.leaseToken } }),
+              ...(task.accountId === undefined
+                ? {}
+                : { taskFence: { accountId: task.accountId, leaseToken: task.leaseToken } }),
               taskId: task.id,
               subqueryId: query.id,
               providerId: provider.id,
@@ -847,8 +861,9 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         now,
       ],
     );
-    await appendPlatformAudit(connection,
-        [
+    await appendPlatformAudit(
+      connection,
+      [
         "INSERT INTO platform_audit_events (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,",
         "outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES ",
         "(?,?,?,?,'provider.parser_drift.auto_paused','provider',?,'succeeded',?,?,?,?,1)",
@@ -866,7 +881,9 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           parser_version: provider.parserVersion,
           error_code: failure.code,
           retryable: failure.retryable,
-          ...(task.nativeAccountScope ? { account_id: task.accountId, collection_task_id: task.id } : {}),
+          ...(task.nativeAccountScope
+            ? { account_id: task.accountId, collection_task_id: task.id }
+            : {}),
         }),
         now,
       ],

@@ -49,11 +49,14 @@ export async function readOpportunityPurchasePrices(
       "AND EXISTS (SELECT 1 FROM normalized_records n JOIN providers p ON p.id=n.provider_id " +
       "AND p.code='1688_search' JOIN collection_task_evidence_links l ON l.normalized_record_id=n.id " +
       "AND l.raw_evidence_id=n.raw_evidence_id JOIN collection_tasks link_task ON link_task.id=l.collection_task_id " +
-      (account ? "" : "AND link_task.organization_id=n.organization_id AND link_task.workspace_id=n.workspace_id ") +
-      (account ? "" :
-        "JOIN sourcing_searches ss ON ss.collection_task_id=l.collection_task_id " +
-        "AND ss.organization_id=n.organization_id AND ss.workspace_id=n.workspace_id " +
-        "AND ss.input_type='opportunity' AND ss.deleted_at IS NULL ") +
+      (account
+        ? ""
+        : "AND link_task.organization_id=n.organization_id AND link_task.workspace_id=n.workspace_id ") +
+      (account
+        ? ""
+        : "JOIN sourcing_searches ss ON ss.collection_task_id=l.collection_task_id " +
+          "AND ss.organization_id=n.organization_id AND ss.workspace_id=n.workspace_id " +
+          "AND ss.input_type='opportunity' AND ss.deleted_at IS NULL ") +
       "WHERE n.raw_evidence_id=ci.evidence_id AND n.status='active'" +
       (account
         ? ` AND ${priceOwns("normalized_records", "n.id")} AND ${priceOwns("collection_task_evidence_links", "l.id")} AND ${priceOwns("collection_tasks", "link_task.id")} AND ${ownedPriceSourceSql}`

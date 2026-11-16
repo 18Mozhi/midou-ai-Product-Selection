@@ -140,8 +140,11 @@ const pageSize = 20,
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize))),
   hasSourceRoute = computed(() => {
     const target = selected.value?.action_route ?? "";
-    return target.startsWith("/") && !target.startsWith("//") &&
-      (!props.accountRehearsal || canOpenAccountRehearsalRoute(target.split(/[?#]/,1)[0] ?? ""));
+    return (
+      target.startsWith("/") &&
+      !target.startsWith("//") &&
+      (!props.accountRehearsal || canOpenAccountRehearsalRoute(target.split(/[?#]/, 1)[0] ?? ""))
+    );
   }),
   sourceRoute = computed(() => {
     const target = selected.value?.action_route ?? "";
@@ -497,7 +500,9 @@ async function savePreferences() {
 }
 function connectRealtime() {
   if (disposed || suspended || stream) return;
-  const cursor = props.accountRehearsal ? "0" : (sessionStorage.getItem("scoutops:last-event-id") ?? "0");
+  const cursor = props.accountRehearsal
+    ? "0"
+    : (sessionStorage.getItem("scoutops:last-event-id") ?? "0");
   const connection = new EventSource(
     `${props.apiBaseUrl}/realtime/events?last_event_id=${cursor}`,
     {
@@ -520,7 +525,8 @@ function connectRealtime() {
   connection.addEventListener("notification.changed", (event) => {
     if (disposed || suspended || stream !== connection) return;
     const message = event as MessageEvent;
-    if (!props.accountRehearsal && message.lastEventId) sessionStorage.setItem("scoutops:last-event-id", message.lastEventId);
+    if (!props.accountRehearsal && message.lastEventId)
+      sessionStorage.setItem("scoutops:last-event-id", message.lastEventId);
     void load();
   });
 }

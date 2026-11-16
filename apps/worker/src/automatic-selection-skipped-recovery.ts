@@ -1,5 +1,8 @@
 import type { Pool, RowDataPacket, ResultSetHeader } from "mysql2/promise";
-import { accountEvaluationRecoverySql, nativeEvaluationRecoverySql } from "./automatic-selection-recovery-evidence.js";
+import {
+  accountEvaluationRecoverySql,
+  nativeEvaluationRecoverySql,
+} from "./automatic-selection-recovery-evidence.js";
 import { selectionCandidateSql } from "@scoutops/database";
 
 const eligible =
@@ -22,27 +25,48 @@ export const skippedSelectionRecoveryUpdateSql =
   eligible;
 
 /** Ordinary candidate read, then scoped atomic recheck; never revive a real success or take a lease. */
-export async function recoverSkippedSelectionEvaluations(pool: Pool, now: Date, native = false, accountParent = false) {
-  const [rows] = await pool.query<RowDataPacket[]>(accountParent ? skippedSelectionAccountRecoverySql.candidates :
-    native ? skippedSelectionNativeRecoverySql.candidates : skippedSelectionRecoveryCandidatesSql);
+export async function recoverSkippedSelectionEvaluations(
+  pool: Pool,
+  now: Date,
+  native = false,
+  accountParent = false,
+) {
+  const [rows] = await pool.query<RowDataPacket[]>(
+    accountParent
+      ? skippedSelectionAccountRecoverySql.candidates
+      : native
+        ? skippedSelectionNativeRecoverySql.candidates
+        : skippedSelectionRecoveryCandidatesSql,
+  );
   let recovered = 0;
   for (const row of rows) {
-    const [result] = await pool.query<ResultSetHeader>(accountParent ? skippedSelectionAccountRecoverySql.update :
-      native ? skippedSelectionNativeRecoverySql.update : skippedSelectionRecoveryUpdateSql, [
-      now,
-      now,
-      row.opportunity_id,
-      ...(accountParent ? [row.account_id] : [row.organization_id, row.workspace_id,
-        ...(native ? [row.account_id] : [])]),
-    ]);
+    const [result] = await pool.query<ResultSetHeader>(
+      accountParent
+        ? skippedSelectionAccountRecoverySql.update
+        : native
+          ? skippedSelectionNativeRecoverySql.update
+          : skippedSelectionRecoveryUpdateSql,
+      [
+        now,
+        now,
+        row.opportunity_id,
+        ...(accountParent
+          ? [row.account_id]
+          : [row.organization_id, row.workspace_id, ...(native ? [row.account_id] : [])]),
+      ],
+    );
     recovered += result.affectedRows;
   }
   return recovered;
 }
 
 export const skippedSelectionNativeRecoverySql = nativeEvaluationRecoverySql(
-  skippedSelectionRecoveryCandidatesSql, skippedSelectionRecoveryUpdateSql, selectionCandidateSql,
+  skippedSelectionRecoveryCandidatesSql,
+  skippedSelectionRecoveryUpdateSql,
+  selectionCandidateSql,
 );
 export const skippedSelectionAccountRecoverySql = accountEvaluationRecoverySql(
-  skippedSelectionRecoveryCandidatesSql, skippedSelectionRecoveryUpdateSql, selectionCandidateSql,
+  skippedSelectionRecoveryCandidatesSql,
+  skippedSelectionRecoveryUpdateSql,
+  selectionCandidateSql,
 );

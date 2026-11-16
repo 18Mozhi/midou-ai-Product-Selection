@@ -50,7 +50,10 @@ const emit = defineEmits<{ openUser: [item: any] }>();
       ><span class="responsive-record-summary"
         ><strong>{{ row.email }}</strong
         ><small
-          >{{ statusText(row.status) }}<template v-if="!accountRehearsal"> · {{ row.organization_names || "尚未加入组织" }}</template></small
+          >{{ statusText(row.status)
+          }}<template v-if="!accountRehearsal">
+            · {{ row.organization_names || "尚未加入组织" }}</template
+          ></small
         ></span
       ></template
     >

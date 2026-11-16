@@ -414,118 +414,318 @@ test("M06-02 audited log export preserves the active production filters", async 
   assert.match(web, /导出当前筛选[\s\S]*填写日志导出原因/);
 });
 
-const toPlain=x=>JSON.parse(JSON.stringify(x));
-for (const accountOnly of [true, false]) test(`platform overview preserves facts and audit in ${accountOnly ? 'retired' : 'legacy'} mode`, async()=>{
- const queries=[],writes=[],events=[];
- const connection={beginTransaction:async()=>events.push('begin'),commit:async()=>events.push('commit'),rollback:async()=>events.push('rollback'),release:()=>events.push('release'),query:async(sql,args)=>{writes.push([sql,args]);return [[]];}};
- const pool={getConnection:async()=>connection,query:async (sql)=>{
-   queries.push(sql);
-   if(accountOnly)assert.doesNotMatch(sql,/\b(?:organizations|workspaces|organization_id|workspace_id)\b/);
-   if(sql.includes("kind,severity,metric_code"))return [[{id:'issue-original',kind:'quality',severity:'warning',observed_at:'2026-11-17T00:00:00Z',...(!accountOnly?{organization_id:'old-org',workspace_id:'old-ws'}:{})}]];
-   if(sql.includes('FROM users'))return [[{total:3}]];
-   if(sql.includes('FROM organizations'))return [[{total:2}]];
-   return [[]];
- }};
- const payload=await new MySqlPlatformDashboardRepository(pool,1000,20,()=>new Date('2026-11-17T00:00:00Z'),undefined,accountOnly).read({actorId:'actor-original',requestId:'req-original',traceId:'trace-original',window:'24h',windowMinutes:1440});
- assert.deepEqual(events,['begin','commit','release']);assert.equal(payload.summary.active_users,3);assert.equal(payload.alerts[0].id,'issue-original');assert.equal(writes.length,2);
- assert.equal(Object.hasOwn(payload.summary,'active_organizations'),!accountOnly);assert.equal(Object.hasOwn(payload.alerts[0],'organization_id'),!accountOnly);
- if(accountOnly){assert.match(writes[1][0],/id,historical_context,actor_id/);assert.match(writes[1][0],/VALUES\(\?,NULL,\?,/);assert.doesNotMatch(writes[1][0],/organization_id|workspace_id/);}
- else{assert.match(writes[1][0],/id,organization_id,workspace_id,actor_id/);assert.equal(payload.summary.active_organizations,2);assert.equal(payload.alerts[0].workspace_id,'old-ws');}
- assert.deepEqual(toPlain(writes[1][1]).slice(1,4),['actor-original','req-original','trace-original']);
-});
+const toPlain = (x) => JSON.parse(JSON.stringify(x));
+for (const accountOnly of [true, false])
+  test(`platform overview preserves facts and audit in ${accountOnly ? "retired" : "legacy"} mode`, async () => {
+    const queries = [],
+      writes = [],
+      events = [];
+    const connection = {
+      beginTransaction: async () => events.push("begin"),
+      commit: async () => events.push("commit"),
+      rollback: async () => events.push("rollback"),
+      release: () => events.push("release"),
+      query: async (sql, args) => {
+        writes.push([sql, args]);
+        return [[]];
+      },
+    };
+    const pool = {
+      getConnection: async () => connection,
+      query: async (sql) => {
+        queries.push(sql);
+        if (accountOnly)
+          assert.doesNotMatch(sql, /\b(?:organizations|workspaces|organization_id|workspace_id)\b/);
+        if (sql.includes("kind,severity,metric_code"))
+          return [
+            [
+              {
+                id: "issue-original",
+                kind: "quality",
+                severity: "warning",
+                observed_at: "2026-11-17T00:00:00Z",
+                ...(!accountOnly ? { organization_id: "old-org", workspace_id: "old-ws" } : {}),
+              },
+            ],
+          ];
+        if (sql.includes("FROM users")) return [[{ total: 3 }]];
+        if (sql.includes("FROM organizations")) return [[{ total: 2 }]];
+        return [[]];
+      },
+    };
+    const payload = await new MySqlPlatformDashboardRepository(
+      pool,
+      1000,
+      20,
+      () => new Date("2026-11-17T00:00:00Z"),
+      undefined,
+      accountOnly,
+    ).read({
+      actorId: "actor-original",
+      requestId: "req-original",
+      traceId: "trace-original",
+      window: "24h",
+      windowMinutes: 1440,
+    });
+    assert.deepEqual(events, ["begin", "commit", "release"]);
+    assert.equal(payload.summary.active_users, 3);
+    assert.equal(payload.alerts[0].id, "issue-original");
+    assert.equal(writes.length, 2);
+    assert.equal(Object.hasOwn(payload.summary, "active_organizations"), !accountOnly);
+    assert.equal(Object.hasOwn(payload.alerts[0], "organization_id"), !accountOnly);
+    if (accountOnly) {
+      assert.match(writes[1][0], /id,historical_context,actor_id/);
+      assert.match(writes[1][0], /VALUES\(\?,NULL,\?,/);
+      assert.doesNotMatch(writes[1][0], /organization_id|workspace_id/);
+    } else {
+      assert.match(writes[1][0], /id,organization_id,workspace_id,actor_id/);
+      assert.equal(payload.summary.active_organizations, 2);
+      assert.equal(payload.alerts[0].workspace_id, "old-ws");
+    }
+    assert.deepEqual(toPlain(writes[1][1]).slice(1, 4), [
+      "actor-original",
+      "req-original",
+      "trace-original",
+    ]);
+  });
 
-async function verifyRetiredPlatformGovernance(Repository,assert) {
- const queries=[];
- const pool={query:async(sql,args=[])=>{
-  assert.doesNotMatch(sql,/\b(?:organizations|workspaces|organization_id|workspace_id)\b/);
-  queries.push({sql,args});
-  if(sql.startsWith('INSERT'))return [[]];
-  if(sql.startsWith('SELECT COUNT'))return [[{total:2}]];
-  return [[{id:'original',status:'active',updated_at:'2026-11-17T00:00:00Z'}]];
- }};
- const r=new Repository(pool,undefined,undefined,undefined,undefined,true);
- for(const entity of ['trends','opportunities','competitors','suppliers']){
-  const v=await r.readManagement({domain:'data',entity,query:'needle',status:'active'});
-  assert.equal(v.items[0].id,'original');assert.match(queries.at(-1).sql,/account_owned_records/);
-  assert.equal((queries.at(-1).sql.match(/\?/g)||[]).length,queries.at(-1).args.length);
- }
- for(const section of ['score_rules','cost_rules','approval_templates','automation_rules']){
-  const v=await r.readManagement({domain:'governance',section,page:1,pageSize:20,query:'needle',status:'active'});
-  assert.equal(v.items[0].id,'original');assert.equal(v.pagination.total,2);
-  assert(queries.slice(-3).every(x=>x.sql.includes('account_owned_records')));
-  assert.equal((queries.at(-1).sql.match(/\?/g)||[]).length,queries.at(-1).args.length);
- }
- const data=await r.exportData({entity:'suppliers',query:'needle',status:'active',requestId:'req',traceId:'trace',actorId:'actor',now:new Date()});
- assert.equal(data.retired_account_scope,true);assert.equal(data.items[0].id,'original');
- assert.match(queries.at(-1).sql,/historical_context/);assert.match(queries.at(-1).sql,/platform\.data\.export/);
- assert.equal((queries.at(-1).sql.match(/\?/g)||[]).length,queries.at(-1).args.length);
+async function verifyRetiredPlatformGovernance(Repository, assert) {
+  const queries = [];
+  const pool = {
+    query: async (sql, args = []) => {
+      assert.doesNotMatch(sql, /\b(?:organizations|workspaces|organization_id|workspace_id)\b/);
+      queries.push({ sql, args });
+      if (sql.startsWith("INSERT")) return [[]];
+      if (sql.startsWith("SELECT COUNT")) return [[{ total: 2 }]];
+      return [[{ id: "original", status: "active", updated_at: "2026-11-17T00:00:00Z" }]];
+    },
+  };
+  const r = new Repository(pool, undefined, undefined, undefined, undefined, true);
+  for (const entity of ["trends", "opportunities", "competitors", "suppliers"]) {
+    const v = await r.readManagement({ domain: "data", entity, query: "needle", status: "active" });
+    assert.equal(v.items[0].id, "original");
+    assert.match(queries.at(-1).sql, /account_owned_records/);
+    assert.equal((queries.at(-1).sql.match(/\?/g) || []).length, queries.at(-1).args.length);
+  }
+  for (const section of ["score_rules", "cost_rules", "approval_templates", "automation_rules"]) {
+    const v = await r.readManagement({
+      domain: "governance",
+      section,
+      page: 1,
+      pageSize: 20,
+      query: "needle",
+      status: "active",
+    });
+    assert.equal(v.items[0].id, "original");
+    assert.equal(v.pagination.total, 2);
+    assert(queries.slice(-3).every((x) => x.sql.includes("account_owned_records")));
+    assert.equal((queries.at(-1).sql.match(/\?/g) || []).length, queries.at(-1).args.length);
+  }
+  const data = await r.exportData({
+    entity: "suppliers",
+    query: "needle",
+    status: "active",
+    requestId: "req",
+    traceId: "trace",
+    actorId: "actor",
+    now: new Date(),
+  });
+  assert.equal(data.retired_account_scope, true);
+  assert.equal(data.items[0].id, "original");
+  assert.match(queries.at(-1).sql, /historical_context/);
+  assert.match(queries.at(-1).sql, /platform\.data\.export/);
+  assert.equal((queries.at(-1).sql.match(/\?/g) || []).length, queries.at(-1).args.length);
 }
 test("retired platform management retains original rows, matching ownership, pagination and export audit", () =>
   verifyRetiredPlatformGovernance(MySqlPlatformDashboardRepository, assert));
 
-async function testRetiredTrendModeration(Repo,assert){
- const calls=[],events=[], writes=[];
- let topic={id:'original-topic',account_id:'sealed-account',reason:'shared',status:'active',version:2},receipt=null, enforceOwnership=true;
- const query=async(sql,params=[])=>{
-  calls.push(sql);
-  assert.doesNotMatch(sql,/\b(?:organizations|workspaces|organization_id|workspace_id)\b/);
-  assert.equal((sql.match(/\?/g)||[]).length,params.length);
-  if(sql.includes('FOR UPDATE')) {
-    assert.match(sql,/o\.source_id=t\.id AND o\.account_id=t\.account_id/);
-    return [enforceOwnership?[topic]:[]];
-  }
-  if(sql.includes('SELECT resource_id,result_json'))return [receipt?[receipt]:[]];
-  if(sql.startsWith('SELECT COUNT'))return [[{total:1,active:1}]];
-  if(sql.startsWith('SELECT t.id,t.title'))return [[{id:'original-topic',last_seen_at:'2026-11-17T00:00:00Z'}]];
-  writes.push([sql,params]);
-  if(sql.startsWith('INSERT INTO platform_management_operations'))receipt={resource_id:params[4],result_json:params[5]};
-  return [{affectedRows:1}];
- };
- const pool={query,getConnection:async()=>({query,beginTransaction:async()=>events.push('begin'),commit:async()=>events.push('commit'),rollback:async()=>events.push('rollback'),release:()=>events.push('release')})};
- const repo=new Repo(pool,undefined,undefined,undefined,undefined,true);
- const list=await repo.readManagement({domain:'content',query:'needle',status:'active',page:1,pageSize:10});assert.equal(list.items[0].id,'original-topic');assert(calls.slice(-3).every(sql=>sql.includes('account_owned_records')));
- const input={topicId:'original-topic',status:'irrelevant',reason:'记录理由',actorId:'actor',route:'moderate',idempotencyKey:'key',requestId:'req',traceId:'trace',expectedVersion:2,now:new Date()};
- const result=await repo.moderateTrend(input);assert.equal(result.id,'original-topic');assert.equal(result.version,3);assert.equal(writes.length,5);
- assert.equal(writes[1][1][1],input.topicId);assert.equal(writes[2][1][0],writes[1][1][0]);assert.equal(writes[2][1][1],topic.account_id);assert.equal(writes[2][1][2],topic.reason);assert.equal(writes[4][1][2],input.topicId);
- assert.deepEqual(events,['begin','commit','release']);
- await repo.moderateTrend(input);assert.equal(writes.length,5);
- await assert.rejects(repo.moderateTrend({...input,reason:'不同理由'}),e=>e.code==='idempotency_key_reused');
- enforceOwnership=false;
- await assert.rejects(repo.moderateTrend(input),e=>e.code==='trend_topic_not_found');assert.equal(writes.length,5);assert.equal(events.at(-2),'rollback');
+async function testRetiredTrendModeration(Repo, assert) {
+  const calls = [],
+    events = [],
+    writes = [];
+  let topic = {
+      id: "original-topic",
+      account_id: "sealed-account",
+      reason: "shared",
+      status: "active",
+      version: 2,
+    },
+    receipt = null,
+    enforceOwnership = true;
+  const query = async (sql, params = []) => {
+    calls.push(sql);
+    assert.doesNotMatch(sql, /\b(?:organizations|workspaces|organization_id|workspace_id)\b/);
+    assert.equal((sql.match(/\?/g) || []).length, params.length);
+    if (sql.includes("FOR UPDATE")) {
+      assert.match(sql, /o\.source_id=t\.id AND o\.account_id=t\.account_id/);
+      return [enforceOwnership ? [topic] : []];
+    }
+    if (sql.includes("SELECT resource_id,result_json")) return [receipt ? [receipt] : []];
+    if (sql.startsWith("SELECT COUNT")) return [[{ total: 1, active: 1 }]];
+    if (sql.startsWith("SELECT t.id,t.title"))
+      return [[{ id: "original-topic", last_seen_at: "2026-11-17T00:00:00Z" }]];
+    writes.push([sql, params]);
+    if (sql.startsWith("INSERT INTO platform_management_operations"))
+      receipt = { resource_id: params[4], result_json: params[5] };
+    return [{ affectedRows: 1 }];
+  };
+  const pool = {
+    query,
+    getConnection: async () => ({
+      query,
+      beginTransaction: async () => events.push("begin"),
+      commit: async () => events.push("commit"),
+      rollback: async () => events.push("rollback"),
+      release: () => events.push("release"),
+    }),
+  };
+  const repo = new Repo(pool, undefined, undefined, undefined, undefined, true);
+  const list = await repo.readManagement({
+    domain: "content",
+    query: "needle",
+    status: "active",
+    page: 1,
+    pageSize: 10,
+  });
+  assert.equal(list.items[0].id, "original-topic");
+  assert(calls.slice(-3).every((sql) => sql.includes("account_owned_records")));
+  const input = {
+    topicId: "original-topic",
+    status: "irrelevant",
+    reason: "记录理由",
+    actorId: "actor",
+    route: "moderate",
+    idempotencyKey: "key",
+    requestId: "req",
+    traceId: "trace",
+    expectedVersion: 2,
+    now: new Date(),
+  };
+  const result = await repo.moderateTrend(input);
+  assert.equal(result.id, "original-topic");
+  assert.equal(result.version, 3);
+  assert.equal(writes.length, 5);
+  assert.equal(writes[1][1][1], input.topicId);
+  assert.equal(writes[2][1][0], writes[1][1][0]);
+  assert.equal(writes[2][1][1], topic.account_id);
+  assert.equal(writes[2][1][2], topic.reason);
+  assert.equal(writes[4][1][2], input.topicId);
+  assert.deepEqual(events, ["begin", "commit", "release"]);
+  await repo.moderateTrend(input);
+  assert.equal(writes.length, 5);
+  await assert.rejects(
+    repo.moderateTrend({ ...input, reason: "不同理由" }),
+    (e) => e.code === "idempotency_key_reused",
+  );
+  enforceOwnership = false;
+  await assert.rejects(repo.moderateTrend(input), (e) => e.code === "trend_topic_not_found");
+  assert.equal(writes.length, 5);
+  assert.equal(events.at(-2), "rollback");
 }
 test("retired platform trend moderation preserves original topic and sealed event and rejects mismatched replay", () =>
   testRetiredTrendModeration(MySqlPlatformDashboardRepository, assert));
 
-async function testRetiredPlatformMessages(Repo,assert){
- const calls=[],writes=[];let msg={id:'msg-original',title:'the historical title',body:'original',category:'system',severity:'info',audience_type:'organization',in_app_enabled:true,email_enabled:false,status:'draft',version:1};
- const query=async(sql,args=[])=>{
-  calls.push(sql);
-  assert.doesNotMatch(sql,/(?:JOIN|FROM)\s+(?:organizations|workspaces|memberships)\b/);
-  assert.equal((sql.match(/\?/g)||[]).length,args.length,sql);
-  if(sql.includes('FOR UPDATE')&&sql.includes('platform_messages'))return [[msg]];
-  if(sql.includes('SELECT m.id,m.kind'))return [[{...msg,organization_name:'original archived audience'}]];
-  if(sql.startsWith('SELECT COUNT(*)'))return [[{total:1}]];
-  if(sql.startsWith('SELECT u.id user_id'))return [[{user_id:'recipient'}]];
-  if(/^(?:UPDATE|INSERT)/.test(sql))writes.push([sql,args]);
-  return [[]];
- };
- const pool={query,getConnection:async()=>({query,beginTransaction:async()=>{},commit:async()=>{},rollback:async()=>{},release:()=>{}})};
- const repo=new Repo(pool,undefined,undefined,undefined,undefined,true);
- const list=await repo.readManagement({domain:'notifications',query:'',status:'',page:1,pageSize:20,messagePage:1,messagePageSize:20});
- assert.equal(list.messages[0].id,msg.id);assert.equal(list.messages[0].organization_name,'original archived audience');
- assert.equal(list.audience_options.organization_audience_retired,true);assert.equal(list.audience_options.organizations.length,0);assert.equal(writes.length,0);
- const i={messageId:msg.id,actorId:'actor',route:'test',idempotencyKey:'test',expectedVersion:1,now:new Date(),requestId:'req',traceId:'trace',reason:'reason'};
- await assert.rejects(repo.messageAction({...i,action:'publish'}),e=>e.code==='platform_message_organization_audience_retired');
- await assert.rejects(repo.createMessage({...i,value:{audience_type:'organization'}}),e=>e.code==='platform_message_organization_audience_retired');
- assert.equal(writes.length,0);
- const cancellation=await repo.messageAction({...i,action:'cancel'});assert.equal(cancellation.status,'cancelled');assert.equal(writes.length,3);assert.doesNotMatch(writes[0][0],/historical_context|audience_type/);
- const point=writes.length;msg={...msg,audience_type:'user',user_id:'recipient'};
- const published=await repo.messageAction({...i,action:'publish'});assert.equal(published.recipient_count,1);assert.equal(published.in_app_count,1);assert.equal(published.email_count,0);
- const exact=writes.slice(point), by=(name)=>exact.find(([sql])=>sql.startsWith('INSERT INTO '+name+'('));
- const event=by('outbox_events'),owner=by('account_owned_records'),notification=by('notifications'),delivery=by('notification_deliveries');
- assert.equal(owner[1][0],event[1][0]);assert.equal(owner[1][1],'recipient');assert.equal(notification[1][2],event[1][0]);assert.equal(notification[1][7],msg.id);assert.equal(delivery[1][1],notification[1][0]);assert.equal(delivery[1][2],'recipient');
- msg={...msg,email_enabled:true};const noEmail=writes.length;
- await assert.rejects(repo.messageAction({...i,action:'publish'}),e=>e.code==='mail_provider_pending');assert.equal(writes.length,noEmail);
+async function testRetiredPlatformMessages(Repo, assert) {
+  const calls = [],
+    writes = [];
+  let msg = {
+    id: "msg-original",
+    title: "the historical title",
+    body: "original",
+    category: "system",
+    severity: "info",
+    audience_type: "organization",
+    in_app_enabled: true,
+    email_enabled: false,
+    status: "draft",
+    version: 1,
+  };
+  const query = async (sql, args = []) => {
+    calls.push(sql);
+    assert.doesNotMatch(sql, /(?:JOIN|FROM)\s+(?:organizations|workspaces|memberships)\b/);
+    assert.equal((sql.match(/\?/g) || []).length, args.length, sql);
+    if (sql.includes("FOR UPDATE") && sql.includes("platform_messages")) return [[msg]];
+    if (sql.includes("SELECT m.id,m.kind"))
+      return [[{ ...msg, organization_name: "original archived audience" }]];
+    if (sql.startsWith("SELECT COUNT(*)")) return [[{ total: 1 }]];
+    if (sql.startsWith("SELECT u.id user_id")) return [[{ user_id: "recipient" }]];
+    if (/^(?:UPDATE|INSERT)/.test(sql)) writes.push([sql, args]);
+    return [[]];
+  };
+  const pool = {
+    query,
+    getConnection: async () => ({
+      query,
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release: () => {},
+    }),
+  };
+  const repo = new Repo(pool, undefined, undefined, undefined, undefined, true);
+  const list = await repo.readManagement({
+    domain: "notifications",
+    query: "",
+    status: "",
+    page: 1,
+    pageSize: 20,
+    messagePage: 1,
+    messagePageSize: 20,
+  });
+  assert.equal(list.messages[0].id, msg.id);
+  assert.equal(list.messages[0].organization_name, "original archived audience");
+  assert.equal(list.audience_options.organization_audience_retired, true);
+  assert.equal(list.audience_options.organizations.length, 0);
+  assert.equal(writes.length, 0);
+  const i = {
+    messageId: msg.id,
+    actorId: "actor",
+    route: "test",
+    idempotencyKey: "test",
+    expectedVersion: 1,
+    now: new Date(),
+    requestId: "req",
+    traceId: "trace",
+    reason: "reason",
+  };
+  await assert.rejects(
+    repo.messageAction({ ...i, action: "publish" }),
+    (e) => e.code === "platform_message_organization_audience_retired",
+  );
+  await assert.rejects(
+    repo.createMessage({ ...i, value: { audience_type: "organization" } }),
+    (e) => e.code === "platform_message_organization_audience_retired",
+  );
+  assert.equal(writes.length, 0);
+  const cancellation = await repo.messageAction({ ...i, action: "cancel" });
+  assert.equal(cancellation.status, "cancelled");
+  assert.equal(writes.length, 3);
+  assert.doesNotMatch(writes[0][0], /historical_context|audience_type/);
+  const point = writes.length;
+  msg = { ...msg, audience_type: "user", user_id: "recipient" };
+  const published = await repo.messageAction({ ...i, action: "publish" });
+  assert.equal(published.recipient_count, 1);
+  assert.equal(published.in_app_count, 1);
+  assert.equal(published.email_count, 0);
+  const exact = writes.slice(point),
+    by = (name) => exact.find(([sql]) => sql.startsWith("INSERT INTO " + name + "("));
+  const event = by("outbox_events"),
+    owner = by("account_owned_records"),
+    notification = by("notifications"),
+    delivery = by("notification_deliveries");
+  assert.equal(owner[1][0], event[1][0]);
+  assert.equal(owner[1][1], "recipient");
+  assert.equal(notification[1][2], event[1][0]);
+  assert.equal(notification[1][7], msg.id);
+  assert.equal(delivery[1][1], notification[1][0]);
+  assert.equal(delivery[1][2], "recipient");
+  msg = { ...msg, email_enabled: true };
+  const noEmail = writes.length;
+  await assert.rejects(
+    repo.messageAction({ ...i, action: "publish" }),
+    (e) => e.code === "mail_provider_pending",
+  );
+  assert.equal(writes.length, noEmail);
 }
 test("retired platform messaging preserves original audience history and attributes new in-app delivery", () =>
   testRetiredPlatformMessages(MySqlPlatformDashboardRepository, assert));

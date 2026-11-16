@@ -354,7 +354,8 @@ onBeforeUnmount(deactivate);
             v-if="capabilities.includes('opportunity:read')"
             to="/opportunities?view=rule_candidates"
             class="home-quick-candidates"
-            ><AppIcon name="layers" />查看候选 <b>{{ selection?.rule_candidate_count ?? "未读取" }}</b
+            ><AppIcon name="layers" />查看候选
+            <b>{{ selection?.rule_candidate_count ?? "未读取" }}</b
             ><AppIcon name="chevron"
           /></RouterLink>
           <RouterLink v-if="capabilities.includes('trend:read')" to="/trends"

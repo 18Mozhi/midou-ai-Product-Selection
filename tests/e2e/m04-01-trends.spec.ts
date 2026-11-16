@@ -97,15 +97,22 @@ const envelope = (data: unknown, meta?: unknown) => ({
   trace_id: "m04-01-e2e-trace",
 });
 const managerCapabilities = ["task:read", "trend:read", "trend:manage"];
-test("grouped intelligence returns focus to the original variant and preserves its reference", async ({ page }) => {
+test("grouped intelligence returns focus to the original variant and preserves its reference", async ({
+  page,
+}) => {
   const representative = { ...topic, topic_variants: [mergeTopic] };
   const canonical = "https://example.test/news/original-variant";
   await ready(page, [representative]);
   await page.route(`**/api/v1/trends/${mergeTopic.id}`, (route) =>
-    route.fulfill({ json: envelope({
-      ...detail, ...mergeTopic,
-      evidence: [{ ...detail.evidence[0], canonical_url: canonical, title: "Original variant source" }],
-    }) }),
+    route.fulfill({
+      json: envelope({
+        ...detail,
+        ...mergeTopic,
+        evidence: [
+          { ...detail.evidence[0], canonical_url: canonical, title: "Original variant source" },
+        ],
+      }),
+    }),
   );
   await page.goto("/trends");
   await page.getByText("查看 1 条原始情报", { exact: true }).click();
@@ -113,7 +120,10 @@ test("grouped intelligence returns focus to the original variant and preserves i
   await variant.click();
   await expect(page.locator(".trend-detail h3")).toHaveText(mergeTopic.title);
   await page.getByRole("tab", { name: "来源证据" }).click();
-  const evidence = page.locator("article").filter({ has: page.getByText("Original variant source", { exact: true }) }).last();
+  const evidence = page
+    .locator("article")
+    .filter({ has: page.getByText("Original variant source", { exact: true }) })
+    .last();
   await expect(evidence.getByRole("link", { name: /查看原文/ })).toHaveAttribute("href", canonical);
   await page.getByRole("button", { name: "关闭详情 · 返回情报列表" }).click();
   await expect(variant).toBeFocused();
@@ -506,8 +516,12 @@ test("trend view URL restores filters, sorting and direct topic navigation", asy
     await page.getByRole("button", { name: /筛选趋势/ }).click();
   await expect(page.getByRole("textbox", { name: "关键词", exact: true })).toHaveValue("skin");
   await expect(page.getByLabel("排序")).toHaveValue("latest");
-  await expect(page.getByRole("button", { name: "筛选", exact: true }).locator("svg")).toBeVisible();
-  await expect(page.getByRole("button", { name: "重置", exact: true }).locator("svg")).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "筛选", exact: true }).locator("svg"),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "重置", exact: true }).locator("svg"),
+  ).toBeVisible();
   await expect(page.getByRole("heading", { name: detail.title })).toBeVisible();
   await page.getByRole("textbox", { name: "分类", exact: true }).fill("beauty");
   await page.getByRole("button", { name: "筛选", exact: true }).click();
@@ -1133,13 +1147,18 @@ test("midou reference list defaults closed, opens and closes detail without list
   expect(lists).toBe(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
-test("desktop intelligence pagination stays fully visible beside an open detail", async ({ page }) => {
+test("desktop intelligence pagination stays fully visible beside an open detail", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 1717, height: 916 });
   await ready(page);
-  const topics = [topic, ...Array.from({ length: 19 }, (_, index) => ({
-    ...topic,
-    id: `00000000-0000-4000-8000-000000000${index + 700}`,
-  }))];
+  const topics = [
+    topic,
+    ...Array.from({ length: 19 }, (_, index) => ({
+      ...topic,
+      id: `00000000-0000-4000-8000-000000000${index + 700}`,
+    })),
+  ];
   await page.route(/\/api\/v1\/trends\?/, (route) => {
     const secondPage = new URL(route.request().url()).searchParams.get("page") === "2";
     return route.fulfill({ json: envelope(secondPage ? topics.slice(-1) : topics, { total: 21 }) });
@@ -1154,7 +1173,9 @@ test("desktop intelligence pagination stays fully visible beside an open detail"
   const footer = (await pager.boundingBox())!;
   expect(footer.y).toBeGreaterThan(bounds.y);
   expect(footer.y + footer.height).toBeLessThanOrEqual(bounds.y + bounds.height);
-  await list.evaluate((element) => { element.scrollTop = element.scrollHeight; });
+  await list.evaluate((element) => {
+    element.scrollTop = element.scrollHeight;
+  });
   const last = (await list.locator(".trend-topic-row").last().boundingBox())!;
   expect(last.y + last.height).toBeLessThanOrEqual((await pager.boundingBox())!.y + 1);
   await pager.getByRole("button", { name: "下一页" }).click();

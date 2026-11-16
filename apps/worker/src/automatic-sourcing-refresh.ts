@@ -1,9 +1,18 @@
 import { randomUUID } from "node:crypto";
 import {
-  calculationOwnersMatch, hasCalculationAccountCutover, registerCalculationOwners, resolveCalculationOwnership, type CalculationOwnership,
+  calculationOwnersMatch,
+  hasCalculationAccountCutover,
+  registerCalculationOwners,
+  resolveCalculationOwnership,
+  type CalculationOwnership,
 } from "./opportunity-calculation-ownership.js";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
-import { appendSourcingEvent, latestCompetitorDetailSnapshotSql, selectionPrimaryAsinSql, sourcingSearchHasLegacyScope } from "@scoutops/database";
+import {
+  appendSourcingEvent,
+  latestCompetitorDetailSnapshotSql,
+  selectionPrimaryAsinSql,
+  sourcingSearchHasLegacyScope,
+} from "@scoutops/database";
 import {
   automaticPrimaryImageSql,
   automaticPrimaryTitleSql,
@@ -89,8 +98,13 @@ export const automaticSourcingRefreshPrimarySql =
 
 const refreshAccountEligibility = automaticSourcingRefreshEligibilitySql
   .replace(automaticCollectionBacklogCountSql, accountCollectionBacklogCountSql)
-  .replace("ss.id search_id,ss.organization_id,ss.workspace_id","ss.id search_id,o.organization_id,o.workspace_id,so.account_id,q.id subquery_id")
-  .replace(/JOIN opportunities o ON o.id=ss.input_ref[\s\S]+?JOIN collection_subqueries q ON q.task_id=t.id/, `JOIN opportunities o ON o.id=ss.input_ref
+  .replace(
+    "ss.id search_id,ss.organization_id,ss.workspace_id",
+    "ss.id search_id,o.organization_id,o.workspace_id,so.account_id,q.id subquery_id",
+  )
+  .replace(
+    /JOIN opportunities o ON o.id=ss.input_ref[\s\S]+?JOIN collection_subqueries q ON q.task_id=t.id/,
+    `JOIN opportunities o ON o.id=ss.input_ref
   JOIN collection_tasks t ON t.id=ss.collection_task_id
   JOIN collection_subqueries q ON q.task_id=t.id
   JOIN account_owned_records so ON so.source_table='sourcing_searches' AND so.source_id=ss.id
@@ -98,33 +112,51 @@ const refreshAccountEligibility = automaticSourcingRefreshEligibilitySql
     AND (so.reason='exclusive_owner' OR (so.reason IN ('shared','unassigned') AND so.account_id=cut.primary_account_id))
   JOIN account_owned_records oo ON oo.source_table='opportunities' AND oo.source_id=o.id AND oo.account_id=so.account_id
   JOIN account_owned_records too ON too.source_table='collection_tasks' AND too.source_id=t.id AND too.account_id=so.account_id
-  JOIN account_owned_records qo ON qo.source_table='collection_subqueries' AND qo.source_id=q.id AND qo.account_id=so.account_id`)
-  .replace("newer.organization_id=ss.organization_id AND newer.workspace_id=ss.workspace_id",
-    "EXISTS (SELECT 1 FROM account_owned_records no WHERE no.source_table='sourcing_searches' AND no.source_id=newer.id AND no.account_id=so.account_id)")
-  .replace(" AND running_task.organization_id=running_search.organization_id\n      AND running_task.workspace_id=running_search.workspace_id","")
-  .replace("running_search.organization_id=o.organization_id\n      AND running_search.workspace_id=o.workspace_id",
+  JOIN account_owned_records qo ON qo.source_table='collection_subqueries' AND qo.source_id=q.id AND qo.account_id=so.account_id`,
+  )
+  .replace(
+    "newer.organization_id=ss.organization_id AND newer.workspace_id=ss.workspace_id",
+    "EXISTS (SELECT 1 FROM account_owned_records no WHERE no.source_table='sourcing_searches' AND no.source_id=newer.id AND no.account_id=so.account_id)",
+  )
+  .replace(
+    " AND running_task.organization_id=running_search.organization_id\n      AND running_task.workspace_id=running_search.workspace_id",
+    "",
+  )
+  .replace(
+    "running_search.organization_id=o.organization_id\n      AND running_search.workspace_id=o.workspace_id",
     "EXISTS (SELECT 1 FROM account_owned_records ro WHERE ro.source_table='sourcing_searches' AND ro.source_id=running_search.id AND ro.account_id=so.account_id) " +
-    "AND EXISTS (SELECT 1 FROM account_owned_records rt WHERE rt.source_table='collection_tasks' AND rt.source_id=running_task.id AND rt.account_id=so.account_id)");
-export const accountSourcingRefreshCandidateSql = refreshAccountEligibility + " ORDER BY ss.updated_at,ss.id";
-const accountSourcingRefreshPrimarySql = currentPrimarySql(" AND ss.id=? AND q.id=? AND so.account_id=?")
-  .replace(automaticSourcingRefreshEligibilitySql,refreshAccountEligibility) + " LIMIT 1";
-const nativeSourcingRefreshRecheckSql = refreshAccountEligibility + " AND ss.id=? AND q.id=? AND so.account_id=? LIMIT 1";
-const imageAllowed = (value: unknown): value is string => typeof value === "string" &&
+      "AND EXISTS (SELECT 1 FROM account_owned_records rt WHERE rt.source_table='collection_tasks' AND rt.source_id=running_task.id AND rt.account_id=so.account_id)",
+  );
+export const accountSourcingRefreshCandidateSql =
+  refreshAccountEligibility + " ORDER BY ss.updated_at,ss.id";
+const accountSourcingRefreshPrimarySql =
+  currentPrimarySql(" AND ss.id=? AND q.id=? AND so.account_id=?").replace(
+    automaticSourcingRefreshEligibilitySql,
+    refreshAccountEligibility,
+  ) + " LIMIT 1";
+const nativeSourcingRefreshRecheckSql =
+  refreshAccountEligibility + " AND ss.id=? AND q.id=? AND so.account_id=? LIMIT 1";
+const imageAllowed = (value: unknown): value is string =>
+  typeof value === "string" &&
   /^https:\/\/(m\.media-amazon\.com|images-na\.ssl-images-amazon\.com)\//.test(value);
 
 async function nativeRefreshFacts(db: Pick<Pool, "query">, row: RowDataPacket) {
-  const {linked, detail} = await readAutomaticPrimaryEvidence(db, {
-    opportunityId: String(row.opportunity_id), accountId: String(row.account_id),
-    organizationId: String(row.organization_id), workspaceId: String(row.workspace_id),
+  const { linked, detail } = await readAutomaticPrimaryEvidence(db, {
+    opportunityId: String(row.opportunity_id),
+    accountId: String(row.account_id),
+    organizationId: String(row.organization_id),
+    workspaceId: String(row.workspace_id),
   });
   if (!linked || !detail) return null;
-  const fields = [linked, detail].map(record => {
+  const fields = [linked, detail].map((record) => {
     const payload = record.payload_json;
     return normalizedProductFields(typeof payload === "string" ? JSON.parse(payload) : payload);
   });
-  const image_url = fields.map(field => field.image_url).find(imageAllowed);
-  const title = fields.map(field => field.title).find(value => typeof value === "string" && value.trim());
-  return image_url && title ? {image_url, title} : null;
+  const image_url = fields.map((field) => field.image_url).find(imageAllowed);
+  const title = fields
+    .map((field) => field.title)
+    .find((value) => typeof value === "string" && value.trim());
+  return image_url && title ? { image_url, title } : null;
 }
 
 type Schedule = (
@@ -145,11 +177,16 @@ export async function refreshStaleAutomaticSourcing(
 ) {
   const params = [now, now, backlogLimit];
   const accountMode = await hasCalculationAccountCutover(pool);
-  const native = accountMode && await hasNativeNormalizedAccountScope(pool);
-  const primarySql = native ? nativeSourcingRefreshRecheckSql
-    : accountMode ? accountSourcingRefreshPrimarySql : automaticSourcingRefreshPrimarySql;
-  const scopeOf = (r: RowDataPacket) => accountMode ? [r.search_id,r.subquery_id,r.account_id]
-    : [r.search_id,r.organization_id,r.workspace_id];
+  const native = accountMode && (await hasNativeNormalizedAccountScope(pool));
+  const primarySql = native
+    ? nativeSourcingRefreshRecheckSql
+    : accountMode
+      ? accountSourcingRefreshPrimarySql
+      : automaticSourcingRefreshPrimarySql;
+  const scopeOf = (r: RowDataPacket) =>
+    accountMode
+      ? [r.search_id, r.subquery_id, r.account_id]
+      : [r.search_id, r.organization_id, r.workspace_id];
   const [candidates] = await pool.query<RowDataPacket[]>(
     accountMode ? accountSourcingRefreshCandidateSql : automaticSourcingRefreshCandidateSql,
     params,
@@ -158,11 +195,8 @@ export async function refreshStaleAutomaticSourcing(
   // primary/detail expression over the whole history. Missing images do not hide later rows.
   let candidate: RowDataPacket | undefined;
   for (const item of candidates) {
-    const [ready] = await pool.query<RowDataPacket[]>(primarySql, [
-      ...params,
-      ...scopeOf(item),
-    ]);
-    if (ready[0] && (!native || await nativeRefreshFacts(pool, ready[0]))) {
+    const [ready] = await pool.query<RowDataPacket[]>(primarySql, [...params, ...scopeOf(item)]);
+    if (ready[0] && (!native || (await nativeRefreshFacts(pool, ready[0])))) {
       candidate = ready[0];
       break;
     }
@@ -174,7 +208,8 @@ export async function refreshStaleAutomaticSourcing(
     const scope = scopeOf(candidate);
     const [locked] = await c.query<RowDataPacket[]>(
       "SELECT collection_task_id FROM sourcing_searches WHERE id=? " +
-        (accountMode ? "" : "AND organization_id=? AND workspace_id=? ") + "AND deleted_at IS NULL FOR UPDATE",
+        (accountMode ? "" : "AND organization_id=? AND workspace_id=? ") +
+        "AND deleted_at IS NULL FOR UPDATE",
       accountMode ? [candidate.search_id] : scope,
     );
     if (locked[0]?.collection_task_id !== candidate.previous_task_id) {
@@ -186,42 +221,42 @@ export async function refreshStaleAutomaticSourcing(
       "SELECT id FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
       [candidate.opportunity_id, candidate.organization_id, candidate.workspace_id],
     );
-    const [rows] = await c.query<RowDataPacket[]>(primarySql, [
-      ...params,
-      ...scope,
-    ]);
+    const [rows] = await c.query<RowDataPacket[]>(primarySql, [...params, ...scope]);
     const row = rows[0];
     if (!row || row.previous_task_id !== candidate.previous_task_id) {
       await c.commit();
       return false;
     }
-    const ownership = await resolveCalculationOwnership(c,String(row.opportunity_id));
-    if ((!accountMode && ownership !== null) ||
-      (accountMode && (!ownership?.owner || ownership.owner.account_id !== row.account_id)) ||
-      !(await calculationOwnersMatch(c,ownership,[
-      ["sourcing_searches",String(row.search_id)],["collection_tasks",String(row.previous_task_id)],
-      ...(accountMode ? [["collection_subqueries",String(row.subquery_id)] as const] : []),
-    ]))) {
-      await c.commit();
-      return false;
-    }
-    const facts = native ? await nativeRefreshFacts(c, row) : (await c.query<RowDataPacket[]>(
-      `SELECT ${automaticPrimaryImageSql} image_url,
-      ${refreshTitleSql} title FROM (SELECT o.*,${selectionPrimaryAsinSql} primary_asin FROM opportunities o
-      WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1) o`,
-      [row.opportunity_id, row.organization_id, row.workspace_id],
-    ))[0][0];
-    const image = facts?.image_url,
-      title = facts?.title;
+    const ownership = await resolveCalculationOwnership(c, String(row.opportunity_id));
     if (
-      !imageAllowed(image) ||
-      typeof title !== "string" ||
-      !title.trim()
+      (!accountMode && ownership !== null) ||
+      (accountMode && (!ownership?.owner || ownership.owner.account_id !== row.account_id)) ||
+      !(await calculationOwnersMatch(c, ownership, [
+        ["sourcing_searches", String(row.search_id)],
+        ["collection_tasks", String(row.previous_task_id)],
+        ...(accountMode ? [["collection_subqueries", String(row.subquery_id)] as const] : []),
+      ]))
     ) {
       await c.commit();
       return false;
     }
-    const legacySearchScope = !accountMode || await sourcingSearchHasLegacyScope(c);
+    const facts = native
+      ? await nativeRefreshFacts(c, row)
+      : (
+          await c.query<RowDataPacket[]>(
+            `SELECT ${automaticPrimaryImageSql} image_url,
+      ${refreshTitleSql} title FROM (SELECT o.*,${selectionPrimaryAsinSql} primary_asin FROM opportunities o
+      WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1) o`,
+            [row.opportunity_id, row.organization_id, row.workspace_id],
+          )
+        )[0][0];
+    const image = facts?.image_url,
+      title = facts?.title;
+    if (!imageAllowed(image) || typeof title !== "string" || !title.trim()) {
+      await c.commit();
+      return false;
+    }
+    const legacySearchScope = !accountMode || (await sourcingSearchHasLegacyScope(c));
     const searchId = randomUUID(),
       taskId = randomUUID(),
       requestId = randomUUID(),
@@ -245,7 +280,7 @@ export async function refreshStaleAutomaticSourcing(
       `INSERT INTO sourcing_searches (id,${legacySearchScope ? "organization_id,workspace_id," : ""}collection_task_id,input_type,input_ref,status,candidate_count,missing_fields_json,request_id,trace_id,created_by,created_at,updated_at) VALUES (?,${legacySearchScope ? "?,?," : ""}?,'opportunity',?,'queued',0,'[]',?,?,?,?,?)`,
       [
         searchId,
-        ...(legacySearchScope ? [row.organization_id,row.workspace_id] : []),
+        ...(legacySearchScope ? [row.organization_id, row.workspace_id] : []),
         taskId,
         row.opportunity_id,
         requestId,
@@ -257,17 +292,27 @@ export async function refreshStaleAutomaticSourcing(
     );
     const eventId = randomUUID();
     await appendSourcingEvent(c, {
-      id: eventId, ...(accountMode ? {} : {organizationId:row.organization_id,workspaceId:row.workspace_id}),
-      eventType: "sourcing.search.seeded_from_opportunity", resourceId: searchId, actorId: "ai-selection-worker",
+      id: eventId,
+      ...(accountMode
+        ? {}
+        : { organizationId: row.organization_id, workspaceId: row.workspace_id }),
+      eventType: "sourcing.search.seeded_from_opportunity",
+      resourceId: searchId,
+      actorId: "ai-selection-worker",
       payloadJson: JSON.stringify({
-          opportunity_id: row.opportunity_id,
-          candidate_count: 0,
-          previous_search_id: row.search_id,
-          refresh_reason: "source_schedule_due",
-        }),
-      requestId, traceId, createdAt: now,
+        opportunity_id: row.opportunity_id,
+        candidate_count: 0,
+        previous_search_id: row.search_id,
+        refresh_reason: "source_schedule_due",
+      }),
+      requestId,
+      traceId,
+      createdAt: now,
     });
-    await registerCalculationOwners(c,ownership,[["sourcing_searches",searchId],["sourcing_events",eventId]]);
+    await registerCalculationOwners(c, ownership, [
+      ["sourcing_searches", searchId],
+      ["sourcing_events", eventId],
+    ]);
     await c.commit();
     return true;
   } catch (error) {

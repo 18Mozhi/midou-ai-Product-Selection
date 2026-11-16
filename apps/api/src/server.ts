@@ -395,7 +395,9 @@ const app = buildApp({
       : {}),
     service: new CrawlerRuntimeService(
       new MySqlCrawlerRuntimeRepository(
-        pool, config.providerAdapters.amazonBrowserProfileId, "",
+        pool,
+        config.providerAdapters.amazonBrowserProfileId,
+        "",
         config.nodeEnv === "production" ? COLLECTION_CLAIM_PAUSE_FILE : undefined,
       ),
     ),

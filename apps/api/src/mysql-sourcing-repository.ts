@@ -1,4 +1,8 @@
-import { appendCollectionSubquery, collectionTaskScope, selectionPrimaryAsinSql } from "@scoutops/database";
+import {
+  appendCollectionSubquery,
+  collectionTaskScope,
+  selectionPrimaryAsinSql,
+} from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import {
   appendSourcingEvent,
@@ -105,15 +109,20 @@ const sourcingPrimaryNative = sourcingPrimaryLegacy
       "JOIN collection_tasks source_seed_task ON source_seed_task.id=source_seed.collection_task_id AND source_seed_task.account_id=n_primary.account_id " +
       "JOIN collection_tasks source_current_task ON source_current_task.id=source_current.collection_task_id AND source_current_task.account_id=n_primary.account_id " +
       "WHERE l_primary.opportunity_id=op.id AND n_primary.account_id=op.account_id AND " +
-      ([
-        ["opportunity_evidence_links", "l_primary.id"],
-        ["normalized_records", "n_primary.id"],
-        ["normalized_records", "n_primary_current.id"],
-        ["raw_evidence", "source_seed.id"],
-        ["raw_evidence", "source_current.id"],
-        ["collection_tasks", "source_seed_task.id"],
-        ["collection_tasks", "source_current_task.id"],
-      ] as const).map(([table, id]) => rehearsalOwns(table, id, "n_primary.account_id")).join(" AND ") + " ",
+      (
+        [
+          ["opportunity_evidence_links", "l_primary.id"],
+          ["normalized_records", "n_primary.id"],
+          ["normalized_records", "n_primary_current.id"],
+          ["raw_evidence", "source_seed.id"],
+          ["raw_evidence", "source_current.id"],
+          ["collection_tasks", "source_seed_task.id"],
+          ["collection_tasks", "source_current_task.id"],
+        ] as const
+      )
+        .map(([table, id]) => rehearsalOwns(table, id, "n_primary.account_id"))
+        .join(" AND ") +
+      " ",
   );
 if (/\b\w+\.(?:organization_id|workspace_id)\b/.test(sourcingPrimaryNative))
   throw new Error("sourcing_primary_image_scope_projection_invalid");
@@ -157,9 +166,13 @@ const searchImageSql = (
     `l.opportunity_id=${opportunityId}` +
       (account
         ? ` AND ${rehearsalOwns("opportunities", "op.id", account)} AND ${rehearsalOwns("opportunity_evidence_links", "l.id", account)} AND ${rehearsalOwns("normalized_records", "n.id", account)} AND ${rehearsalOwns("raw_evidence", "l.raw_evidence_id", account)}
-            ${native ? `AND op.account_id=${account} AND n.account_id=${account} AND EXISTS
+            ${
+              native
+                ? `AND op.account_id=${account} AND n.account_id=${account} AND EXISTS
               (SELECT 1 FROM raw_evidence image_evidence WHERE image_evidence.id=l.raw_evidence_id
-                 AND image_evidence.provider_id=n.provider_id AND image_evidence.account_id=${account})` : ""}`
+                 AND image_evidence.provider_id=n.provider_id AND image_evidence.account_id=${account})`
+                : ""
+            }`
         : " AND op.organization_id=s.organization_id AND op.workspace_id=s.workspace_id"),
     Boolean(account),
     native ? "native" : "legacy",
@@ -176,9 +189,13 @@ const opportunityIdPattern = "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12
 const ownedSourcingSource = (search: "s" | "target", native: boolean) =>
   `(${search}.input_type<>'opportunity'
     OR (${rehearsalOwns("opportunities", `CONVERT(${search}.input_ref USING ascii)`, "so.account_id")}
-        ${native ? `AND EXISTS (SELECT 1 FROM opportunities original_opportunity
+        ${
+          native
+            ? `AND EXISTS (SELECT 1 FROM opportunities original_opportunity
           WHERE original_opportunity.id=CONVERT(${search}.input_ref USING ascii)
-            AND original_opportunity.account_id=so.account_id)` : ""})
+            AND original_opportunity.account_id=so.account_id)`
+            : ""
+        })
     OR (${search}.input_ref NOT REGEXP '${opportunityIdPattern}'
       AND EXISTS (SELECT 1 FROM collection_tasks history_task
         WHERE history_task.id=${search}.collection_task_id
@@ -187,8 +204,10 @@ const ownedSourcingSource = (search: "s" | "target", native: boolean) =>
       AND NOT EXISTS (SELECT 1 FROM sourcing_candidates history_candidate WHERE history_candidate.search_id=${search}.id)))`;
 const ownedSearchTask = (search: "s" | "target", native: boolean) =>
   rehearsalOwns("collection_tasks", `${search}.collection_task_id`, "so.account_id") +
-  (native ? ` AND EXISTS (SELECT 1 FROM collection_tasks original_task
-    WHERE original_task.id=${search}.collection_task_id AND original_task.account_id=so.account_id)` : "");
+  (native
+    ? ` AND EXISTS (SELECT 1 FROM collection_tasks original_task
+    WHERE original_task.id=${search}.collection_task_id AND original_task.account_id=so.account_id)`
+    : "");
 const ownedSearchScope = (native: boolean) =>
   `so.account_id=? AND s.deleted_at IS NULL AND ${ownedSearchTask("s", native)}
     AND ${ownedSourcingSource("s", native)}`;
@@ -197,7 +216,10 @@ const ownedOpportunityJoin = (native: boolean) =>
   "AND s.input_ref=CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_unicode_ci AND o.lifecycle_status<>'deleted' " +
   `AND ${rehearsalOwns("opportunities", "o.id", "so.account_id")} ${native ? "AND o.account_id=so.account_id " : ""}`;
 export class MySqlSourcingRepository implements SourcingRepository {
-  constructor(private readonly pool: Pool, private readonly nativeAccountScope = false) {}
+  constructor(
+    private readonly pool: Pool,
+    private readonly nativeAccountScope = false,
+  ) {}
   async list(i: SourcingReadScope) {
     if ("accountId" in i) {
       await requireAccountReadRehearsal(this.pool);
@@ -294,7 +316,11 @@ export class MySqlSourcingRepository implements SourcingRepository {
     const [rows] = total
       ? await this.pool.query<RowDataPacket[]>(
           "SELECT s.*," +
-            searchImageSql("s.image_opportunity_id", account ? "s.account_owner" : undefined, this.nativeAccountScope) +
+            searchImageSql(
+              "s.image_opportunity_id",
+              account ? "s.account_owner" : undefined,
+              this.nativeAccountScope,
+            ) +
             ` FROM (SELECT ${account ? ownedSearchFields : "s.*"},o.id image_opportunity_id,` +
             (account
               ? `so.account_id account_owner,${ownedCandidateCount} owned_candidate_count,`

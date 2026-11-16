@@ -165,7 +165,9 @@ onMounted(load);
       <div class="theme-c-context">
         <span>当前预览</span>
         <strong>{{ selectedTheme.name }}</strong>
-        <small v-if="saved">{{ saved.workspace_id ? `工作区 · ${saved.workspace_id.slice(0, 8)}` : "账号偏好" }}</small>
+        <small v-if="saved">{{
+          saved.workspace_id ? `工作区 · ${saved.workspace_id.slice(0, 8)}` : "账号偏好"
+        }}</small>
       </div>
     </section>
 

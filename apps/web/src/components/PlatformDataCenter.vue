@@ -685,7 +685,9 @@ onActivated(() => {
               <template #summary="{ row }">
                 <span class="responsive-record-summary">
                   <strong>{{ row.title }} · {{ statusName(row.status, current.value) }}</strong>
-                  <small v-if="!accountRehearsal">{{ row.organization_name }} · {{ row.workspace_name }}</small>
+                  <small v-if="!accountRehearsal"
+                    >{{ row.organization_name }} · {{ row.workspace_name }}</small
+                  >
                 </span>
               </template>
               <template #detail="{ row }">

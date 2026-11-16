@@ -73,12 +73,22 @@ export interface AccountCollectionRedisKeyInput {
 }
 
 export function buildAccountCollectionRedisKey(input: AccountCollectionRedisKeyInput): string {
-  return ["scoutops", "v1", "queue", "account", segment(input.account_id, "account_id"),
-    input.resource, segment(input.task_id, "task_id")].join(":");
+  return [
+    "scoutops",
+    "v1",
+    "queue",
+    "account",
+    segment(input.account_id, "account_id"),
+    input.resource,
+    segment(input.task_id, "task_id"),
+  ].join(":");
 }
 
-const collectionLeaseKey = (input: Omit<ScopedRedisKeyInput, "purpose"> | AccountCollectionRedisKeyInput) =>
-  "account_id" in input ? buildAccountCollectionRedisKey(input)
+const collectionLeaseKey = (
+  input: Omit<ScopedRedisKeyInput, "purpose"> | AccountCollectionRedisKeyInput,
+) =>
+  "account_id" in input
+    ? buildAccountCollectionRedisKey(input)
     : buildScopedRedisKey({ ...input, purpose: "queue" });
 
 export function resolveRedisTtl(purpose: RedisPurpose, requestedSeconds?: number): number {
@@ -276,8 +286,15 @@ function classifyScopedRedisKey(
   key: string,
 ): { purpose: RedisPurpose; resource: RedisKeyspaceHotspotResource } | null {
   const parts = key.split(":");
-  if (parts[0] === "scoutops" && parts[1] === "v1" && parts[2] === "queue" &&
-    parts[3] === "account" && parts.length === 7 && parts[4] && parts[6]) {
+  if (
+    parts[0] === "scoutops" &&
+    parts[1] === "v1" &&
+    parts[2] === "queue" &&
+    parts[3] === "account" &&
+    parts.length === 7 &&
+    parts[4] &&
+    parts[6]
+  ) {
     if (parts[5] === "collection-ready") return { purpose: "queue", resource: "collection_ready" };
     if (parts[5] === "collection-task") return { purpose: "queue", resource: "collection_task" };
     return null;
@@ -609,7 +626,9 @@ export class ScopedRedisStore {
   }
 
   async acquireLease(
-    input: Omit<ScopedRedisKeyInput, "purpose"> | (AccountCollectionRedisKeyInput & { resource: "collection-task" }),
+    input:
+      | Omit<ScopedRedisKeyInput, "purpose">
+      | (AccountCollectionRedisKeyInput & { resource: "collection-task" }),
     token: string,
     ttlSeconds?: number,
   ): Promise<boolean> {
@@ -622,7 +641,9 @@ export class ScopedRedisStore {
   }
 
   async releaseLease(
-    input: Omit<ScopedRedisKeyInput, "purpose"> | (AccountCollectionRedisKeyInput & { resource: "collection-task" }),
+    input:
+      | Omit<ScopedRedisKeyInput, "purpose">
+      | (AccountCollectionRedisKeyInput & { resource: "collection-task" }),
     token: string,
   ): Promise<boolean> {
     const key = collectionLeaseKey(input);

@@ -120,10 +120,20 @@ const sidebarContextTitle = computed(
           <AppIcon name="settings" :size="18" />设置
         </a>
       </RouterLink>
-      <RouterLink v-if="retiredScope && shell === 'platform_admin'" :to="memberReturnPath()" class="midou-platform-return" aria-label="返回用户工作台">
+      <RouterLink
+        v-if="retiredScope && shell === 'platform_admin'"
+        :to="memberReturnPath()"
+        class="midou-platform-return"
+        aria-label="返回用户工作台"
+      >
         <AppIcon name="arrow-right" :size="18" />返回选品工作台
       </RouterLink>
-      <button v-if="retiredScope" type="button" class="midou-sidebar-help" @click="emit('openHelp')">
+      <button
+        v-if="retiredScope"
+        type="button"
+        class="midou-sidebar-help"
+        @click="emit('openHelp')"
+      >
         <AppIcon name="help" :size="18" />帮助
       </button>
       <details

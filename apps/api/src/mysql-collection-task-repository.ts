@@ -1,5 +1,10 @@
 import { appendCollectionSubquery, collectionTaskScope } from "@scoutops/database";
-import { isNativeOwnedCollectionTask, registerReplayOwnership, resolveCollectionReplayOwner, verifyOwnedReplayQueries } from "./collection-replay-ownership.js";
+import {
+  isNativeOwnedCollectionTask,
+  registerReplayOwnership,
+  resolveCollectionReplayOwner,
+  verifyOwnedReplayQueries,
+} from "./collection-replay-ownership.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import { ROBOTS_DECISION_VERSION, type RobotsPolicyDecision } from "@scoutops/provider-sources";
@@ -41,10 +46,12 @@ const robotsDecision = (value: unknown): RobotsPolicyDecision | null => {
 };
 const task = (row: RowDataPacket): CollectionTaskSummary => ({
   id: String(row.id),
-  ...(typeof row.account_id === "string" ? { account_id: row.account_id } : {
-    organization_id: String(row.organization_id),
-    workspace_id: String(row.workspace_id),
-  }),
+  ...(typeof row.account_id === "string"
+    ? { account_id: row.account_id }
+    : {
+        organization_id: String(row.organization_id),
+        workspace_id: String(row.workspace_id),
+      }),
   status: row.status,
   coverage_status: row.coverage_status,
   priority: row.priority,
@@ -68,9 +75,13 @@ const task = (row: RowDataPacket): CollectionTaskSummary => ({
 export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
   constructor(private readonly pool: Pool) {}
   async list(input: Parameters<CollectionTaskRepository["list"]>[0]) {
-    const native = await collectionTaskScope(this.pool) === "account";
+    const native = (await collectionTaskScope(this.pool)) === "account";
     if ((input.organizationId || input.workspaceId) && native)
-      throw new CollectionTaskServiceError("collection_scope_invalid", 400, "移除历史组织和工作区筛选。");
+      throw new CollectionTaskServiceError(
+        "collection_scope_invalid",
+        400,
+        "移除历史组织和工作区筛选。",
+      );
     const where: string[] = [];
     const values: unknown[] = [];
     if (input.organizationId) {
@@ -86,16 +97,15 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
       values.push(input.status);
     }
     const clause = where.length ? `WHERE ${where.join(" AND ")}` : "";
-    const source = native ? `collection_tasks t
+    const source = native
+      ? `collection_tasks t
       JOIN account_owned_records own ON own.source_table='collection_tasks' AND own.source_id=t.id AND own.account_id=t.account_id
       JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25
         AND (own.reason='exclusive_owner' OR (own.reason IN ('shared','unassigned') AND own.account_id=cut.primary_account_id))
-      JOIN users owner_user ON owner_user.id=own.account_id` : "collection_tasks";
+      JOIN users owner_user ON owner_user.id=own.account_id`
+      : "collection_tasks";
     const [[count], [rows]] = await Promise.all([
-      this.pool.query<RowDataPacket[]>(
-        `SELECT COUNT(*) total FROM ${source} ${clause}`,
-        values,
-      ),
+      this.pool.query<RowDataPacket[]>(`SELECT COUNT(*) total FROM ${source} ${clause}`, values),
       this.pool.query<RowDataPacket[]>(
         `SELECT ${native ? "t.*" : "*"} FROM ${source} ${clause} ORDER BY FIELD(${native ? "t." : ""}priority,'critical','high','normal','low'),${native ? "t.updated_at DESC,t.id" : "updated_at DESC,id"} DESC LIMIT ? OFFSET ?`,
         [...values, input.pageSize, (input.page - 1) * input.pageSize],
@@ -116,7 +126,12 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
         [input.actorId, route, input.idempotencyKey, input.taskId],
       );
       if (ops[0]) {
-        await this.verifyReplayReceipt(c, input.taskId, String(ops[0].result_task_id), input.reason);
+        await this.verifyReplayReceipt(
+          c,
+          input.taskId,
+          String(ops[0].result_task_id),
+          input.reason,
+        );
         const result = await this.readDetail(c, String(ops[0].result_task_id));
         if (!result) throw this.replayOwnerMismatch();
         await c.commit();
@@ -139,7 +154,12 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
           [input.actorId, route, input.idempotencyKey, input.taskId],
         );
         if (committedOperations[0]) {
-          await this.verifyReplayReceipt(c, input.taskId, String(committedOperations[0].result_task_id), input.reason);
+          await this.verifyReplayReceipt(
+            c,
+            input.taskId,
+            String(committedOperations[0].result_task_id),
+            input.reason,
+          );
           const result = await this.readDetail(c, String(committedOperations[0].result_task_id));
           if (!result) throw this.replayOwnerMismatch();
           await c.commit();
@@ -151,11 +171,16 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
           "只有 dead_letter 任务可以人工重放。",
         );
       }
-      const owner = await resolveCollectionReplayOwner(c, input.taskId, () => this.replayOwnerMismatch());
-      const accountOnly = isNativeOwnedCollectionTask(source, owner, () => this.replayOwnerMismatch());
+      const owner = await resolveCollectionReplayOwner(c, input.taskId, () =>
+        this.replayOwnerMismatch(),
+      );
+      const accountOnly = isNativeOwnedCollectionTask(source, owner, () =>
+        this.replayOwnerMismatch(),
+      );
       const ownershipRefs: [string, string][] = [["collection_tasks", input.newTaskId]];
       const [subqueries] = await c.query<RowDataPacket[]>(
-        "SELECT * FROM collection_subqueries WHERE task_id=? ORDER BY ordinal" + (owner ? " LOCK IN SHARE MODE" : ""),
+        "SELECT * FROM collection_subqueries WHERE task_id=? ORDER BY ordinal" +
+          (owner ? " LOCK IN SHARE MODE" : ""),
         [input.taskId],
       );
       if (!subqueries.length)
@@ -166,28 +191,36 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
         );
       let deadLetterId: string | undefined;
       if (owner) {
-        await verifyOwnedReplayQueries(c, owner, subqueries.map(row => String(row.id)), () => this.replayOwnerMismatch());
+        await verifyOwnedReplayQueries(
+          c,
+          owner,
+          subqueries.map((row) => String(row.id)),
+          () => this.replayOwnerMismatch(),
+        );
         const [[dead]] = await c.query<RowDataPacket[]>(
           "SELECT d.id FROM collection_dead_letters d JOIN collection_task_attempts a ON a.id=d.attempt_id " +
-          "AND a.task_id=d.task_id WHERE d.task_id=? AND d.status='open' FOR UPDATE",
+            "AND a.task_id=d.task_id WHERE d.task_id=? AND d.status='open' FOR UPDATE",
           [input.taskId],
         );
         if (!dead) throw this.replayOwnerMismatch();
         deadLetterId = String(dead.id);
       }
       const [inserted] = await c.query<ResultSetHeader>(
-        "INSERT INTO collection_tasks (id," + (accountOnly ? "account_id," : "organization_id,workspace_id,") +
+        "INSERT INTO collection_tasks (id," +
+          (accountOnly ? "account_id," : "organization_id,workspace_id,") +
           "status,coverage_status," +
           "priority,scheduled_at,available_at,leased_at,lease_owner,lease_token_hash," +
           "lease_expires_at,started_at,finished_at,attempt_count,successful_subquery_count," +
           "failed_subquery_count,blocked_subquery_count,available_result_count,missing_fields_json," +
           "last_error_code,rate_limit_reset_at,replay_of_task_id,replay_reason,request_id," +
-          "trace_id,version,created_by,created_at,updated_at) VALUES (" + (accountOnly ? "?,?" : "?,?,?") + ",'scheduled'," +
+          "trace_id,version,created_by,created_at,updated_at) VALUES (" +
+          (accountOnly ? "?,?" : "?,?,?") +
+          ",'scheduled'," +
           "NULL,?,?,?,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'[]',NULL,NULL,?,?,?," +
           " ?,1,?,?,?)",
         [
           input.newTaskId,
-          ...(accountOnly ? [owner!.account_id] : [source.organization_id,source.workspace_id]),
+          ...(accountOnly ? [owner!.account_id] : [source.organization_id, source.workspace_id]),
           source.priority,
           input.now,
           input.now,
@@ -204,10 +237,20 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
       for (const row of subqueries) {
         const id = randomUUID();
         ownershipRefs.push(["collection_subqueries", id]);
-        await appendCollectionSubquery(c, {
-          id, taskId: input.newTaskId, providerId: String(row.provider_id), ordinal: Number(row.ordinal),
-          targetJson: JSON.stringify(json(row.target_json)), required: Number(row.is_required) === 1, status: "pending", now: input.now,
-        }, accountOnly);
+        await appendCollectionSubquery(
+          c,
+          {
+            id,
+            taskId: input.newTaskId,
+            providerId: String(row.provider_id),
+            ordinal: Number(row.ordinal),
+            targetJson: JSON.stringify(json(row.target_json)),
+            required: Number(row.is_required) === 1,
+            status: "pending",
+            now: input.now,
+          },
+          accountOnly,
+        );
       }
       const [updatedSource] = await c.query<ResultSetHeader>(
         "UPDATE collection_tasks SET status='manually_replayed',version=version+1,updated_at=? WHERE id=? AND status='dead_letter'",
@@ -215,33 +258,46 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
       );
       const [updatedDeadLetter] = await c.query<ResultSetHeader>(
         "UPDATE collection_dead_letters SET status='replayed',replayed_by=?,replay_reason=?," +
-          "replayed_at=? WHERE task_id=? AND status='open'" + (deadLetterId ? " AND id=?" : ""),
-        [input.actorId, input.reason, input.now, input.taskId, ...(deadLetterId ? [deadLetterId] : [])],
+          "replayed_at=? WHERE task_id=? AND status='open'" +
+          (deadLetterId ? " AND id=?" : ""),
+        [
+          input.actorId,
+          input.reason,
+          input.now,
+          input.taskId,
+          ...(deadLetterId ? [deadLetterId] : []),
+        ],
       );
       if (owner && (updatedSource.affectedRows !== 1 || updatedDeadLetter.affectedRows !== 1))
         throw this.replayOwnerMismatch();
-      ownershipRefs.push(["collection_task_events", await this.event(c, {
-        id: input.taskId,
-        from: "dead_letter",
-        to: "manually_replayed",
-        actorId: input.actorId,
-        actorType: "user",
-        requestId: input.requestId,
-        traceId: input.traceId,
-        metadata: { reason: input.reason },
-        now: input.now,
-      })]);
-      ownershipRefs.push(["collection_task_events", await this.event(c, {
-        id: input.newTaskId,
-        from: null,
-        to: "scheduled",
-        actorId: input.actorId,
-        actorType: "user",
-        requestId: input.requestId,
-        traceId: input.traceId,
-        metadata: { replay_of_task_id: input.taskId },
-        now: input.now,
-      })]);
+      ownershipRefs.push([
+        "collection_task_events",
+        await this.event(c, {
+          id: input.taskId,
+          from: "dead_letter",
+          to: "manually_replayed",
+          actorId: input.actorId,
+          actorType: "user",
+          requestId: input.requestId,
+          traceId: input.traceId,
+          metadata: { reason: input.reason },
+          now: input.now,
+        }),
+      ]);
+      ownershipRefs.push([
+        "collection_task_events",
+        await this.event(c, {
+          id: input.newTaskId,
+          from: null,
+          to: "scheduled",
+          actorId: input.actorId,
+          actorType: "user",
+          requestId: input.requestId,
+          traceId: input.traceId,
+          metadata: { replay_of_task_id: input.taskId },
+          now: input.now,
+        }),
+      ]);
       const outboxId = randomUUID();
       ownershipRefs.push(["collection_task_outbox", outboxId]);
       await c.query(
@@ -276,7 +332,8 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
         ],
       );
       const result = await this.readDetail(c, input.newTaskId);
-      if (!result || (accountOnly && result.task.account_id !== owner!.account_id)) throw this.replayOwnerMismatch();
+      if (!result || (accountOnly && result.task.account_id !== owner!.account_id))
+        throw this.replayOwnerMismatch();
       await c.commit();
       return result;
     } catch (error) {
@@ -294,30 +351,56 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
     }
   }
   private replayOwnerMismatch() {
-    return new CollectionTaskServiceError("collection_replay_conflict", 409, "原采集任务或重放记录的账号归属不一致。");
+    return new CollectionTaskServiceError(
+      "collection_replay_conflict",
+      409,
+      "原采集任务或重放记录的账号归属不一致。",
+    );
   }
-  private async verifyReplayReceipt(c: PoolConnection, sourceId: string, resultId: string, reason: string) {
+  private async verifyReplayReceipt(
+    c: PoolConnection,
+    sourceId: string,
+    resultId: string,
+    reason: string,
+  ) {
     if (sourceId === resultId) throw this.replayOwnerMismatch();
     const [children] = await c.query<RowDataPacket[]>(
-      "SELECT * FROM collection_tasks WHERE id=? AND replay_of_task_id=? LOCK IN SHARE MODE", [resultId, sourceId],
+      "SELECT * FROM collection_tasks WHERE id=? AND replay_of_task_id=? LOCK IN SHARE MODE",
+      [resultId, sourceId],
     );
     if (!children[0]) throw this.replayOwnerMismatch();
-    const source = await resolveCollectionReplayOwner(c, sourceId, () => this.replayOwnerMismatch());
+    const source = await resolveCollectionReplayOwner(c, sourceId, () =>
+      this.replayOwnerMismatch(),
+    );
     if (!source && !Object.hasOwn(children[0], "account_id")) return;
-    const result = await resolveCollectionReplayOwner(c, resultId, () => this.replayOwnerMismatch());
-    if (!source || !result || source.account_id !== result.account_id || source.reason !== result.reason ||
-        (Object.hasOwn(children[0], "account_id") && children[0].account_id !== result.account_id))
+    const result = await resolveCollectionReplayOwner(c, resultId, () =>
+      this.replayOwnerMismatch(),
+    );
+    if (
+      !source ||
+      !result ||
+      source.account_id !== result.account_id ||
+      source.reason !== result.reason ||
+      (Object.hasOwn(children[0], "account_id") && children[0].account_id !== result.account_id)
+    )
       throw this.replayOwnerMismatch();
     if (Object.hasOwn(children[0], "account_id")) {
       if (children[0].replay_reason !== reason) throw this.replayOwnerMismatch();
       const [[parent]] = await c.query<RowDataPacket[]>(
-        "SELECT account_id FROM collection_tasks WHERE id=? LOCK IN SHARE MODE", [sourceId],
+        "SELECT account_id FROM collection_tasks WHERE id=? LOCK IN SHARE MODE",
+        [sourceId],
       );
       if (parent?.account_id !== source.account_id) throw this.replayOwnerMismatch();
       const [queries] = await c.query<RowDataPacket[]>(
-        "SELECT id FROM collection_subqueries WHERE task_id=? LOCK IN SHARE MODE", [resultId],
+        "SELECT id FROM collection_subqueries WHERE task_id=? LOCK IN SHARE MODE",
+        [resultId],
       );
-      await verifyOwnedReplayQueries(c, result, queries.map(row => String(row.id)), () => this.replayOwnerMismatch());
+      await verifyOwnedReplayQueries(
+        c,
+        result,
+        queries.map((row) => String(row.id)),
+        () => this.replayOwnerMismatch(),
+      );
     }
   }
   private async readDetail(
@@ -327,44 +410,67 @@ export class MySqlCollectionTaskRepository implements CollectionTaskRepository {
     // A retry may have opened a snapshot before the first request committed.
     // The receipt and its returned graph must use the same current read.
     const lock = db !== this.pool ? " LOCK IN SHARE MODE" : "";
-    const [[row]] = await db.query<RowDataPacket[]>("SELECT * FROM collection_tasks WHERE id=?" + lock, [id]);
+    const [[row]] = await db.query<RowDataPacket[]>(
+      "SELECT * FROM collection_tasks WHERE id=?" + lock,
+      [id],
+    );
     if (!row) return null;
-    const native = Object.hasOwn(row,"account_id");
+    const native = Object.hasOwn(row, "account_id");
     if (native) {
       const mismatch = this.replayOwnerMismatch();
       try {
-        const owner = await resolveCollectionReplayOwner(db, id, () => mismatch, "collection_tasks", db !== this.pool);
+        const owner = await resolveCollectionReplayOwner(
+          db,
+          id,
+          () => mismatch,
+          "collection_tasks",
+          db !== this.pool,
+        );
         isNativeOwnedCollectionTask(row, owner, () => mismatch);
       } catch (error) {
         if (error === mismatch) return null;
         throw error;
       }
     }
-    const owned = (table: "collection_subqueries" | "collection_task_events", ref: "q.id" | "collection_task_events.id") => native
-      ? ` AND EXISTS (SELECT 1 FROM account_owned_records child WHERE child.source_table='${table}' AND child.source_id=${ref} AND child.account_id=?)` : "";
-    const childArgs = native ? [id,row.account_id] : [id];
+    const owned = (
+      table: "collection_subqueries" | "collection_task_events",
+      ref: "q.id" | "collection_task_events.id",
+    ) =>
+      native
+        ? ` AND EXISTS (SELECT 1 FROM account_owned_records child WHERE child.source_table='${table}' AND child.source_id=${ref} AND child.account_id=?)`
+        : "";
+    const childArgs = native ? [id, row.account_id] : [id];
     const [subqueries, attempts, events, dead] = await Promise.all([
       db.query<RowDataPacket[]>(
         "SELECT q.*,p.name provider_name FROM collection_subqueries q JOIN providers p ON p.id=q.provider_id " +
-          "WHERE q.task_id=?" + owned("collection_subqueries","q.id") + " ORDER BY q.ordinal" + lock,
+          "WHERE q.task_id=?" +
+          owned("collection_subqueries", "q.id") +
+          " ORDER BY q.ordinal" +
+          lock,
         childArgs,
       ),
       db.query<RowDataPacket[]>(
         "SELECT id,attempt_number,worker_id,status,error_code,leased_at,lease_expires_at," +
           "started_at,finished_at,request_id,trace_id FROM collection_task_attempts WHERE task_id=? " +
-          "ORDER BY attempt_number" + lock,
+          "ORDER BY attempt_number" +
+          lock,
         [id],
       ),
       db.query<RowDataPacket[]>(
         "SELECT id,event_type,from_status,to_status,actor_type,actor_id,request_id," +
-          "trace_id,metadata_json,occurred_at FROM collection_task_events WHERE task_id=?" + owned("collection_task_events","collection_task_events.id") + " ORDER " +
-          "BY occurred_at,id" + lock,
+          "trace_id,metadata_json,occurred_at FROM collection_task_events WHERE task_id=?" +
+          owned("collection_task_events", "collection_task_events.id") +
+          " ORDER " +
+          "BY occurred_at,id" +
+          lock,
         childArgs,
       ),
       db.query<RowDataPacket[]>(
-        (native ? "SELECT d.id,d.error_code,d.status,d.replay_reason,d.replayed_at,d.request_id,d.trace_id,d.created_at " +
-          "FROM collection_dead_letters d JOIN collection_task_attempts a ON a.id=d.attempt_id AND a.task_id=d.task_id WHERE d.task_id=? LIMIT 1" :
-          "SELECT id,error_code,status,replay_reason,replayed_at,request_id,trace_id,created_at FROM collection_dead_letters WHERE task_id=? LIMIT 1") + lock,
+        (native
+          ? "SELECT d.id,d.error_code,d.status,d.replay_reason,d.replayed_at,d.request_id,d.trace_id,d.created_at " +
+            "FROM collection_dead_letters d JOIN collection_task_attempts a ON a.id=d.attempt_id AND a.task_id=d.task_id WHERE d.task_id=? LIMIT 1"
+          : "SELECT id,error_code,status,replay_reason,replayed_at,request_id,trace_id,created_at FROM collection_dead_letters WHERE task_id=? LIMIT 1") +
+          lock,
         [id],
       ),
     ]);

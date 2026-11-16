@@ -2,7 +2,10 @@ import { loadRuntimeConfig } from "@scoutops/config";
 import { PRIMARY_COST_APPROVER_EMAIL } from "@scoutops/auth";
 import { Lan1688ImageSearch } from "./lan-1688-image-search.js";
 import {
-  assertAccountCutoverReady, COLLECTION_CLAIM_PAUSE_FILE, createCollectionClaimFence, createDatabasePool,
+  assertAccountCutoverReady,
+  COLLECTION_CLAIM_PAUSE_FILE,
+  createCollectionClaimFence,
+  createDatabasePool,
 } from "@scoutops/database";
 import { ProviderAdapterRegistry } from "@scoutops/provider-adapters";
 import {
@@ -52,10 +55,12 @@ const config = loadRuntimeConfig(process.env, "worker");
 assertWorkerDatabaseIsNotRehearsal(config.database.name);
 const pool = createDatabasePool(config);
 if (config.app.accountScopeMode === "retired") {
-  await assertAccountCutoverReady(config, pool, PRIMARY_COST_APPROVER_EMAIL).catch(async (error) => {
-    await pool.end().catch(() => undefined);
-    throw error;
-  });
+  await assertAccountCutoverReady(config, pool, PRIMARY_COST_APPROVER_EMAIL).catch(
+    async (error) => {
+      await pool.end().catch(() => undefined);
+      throw error;
+    },
+  );
 }
 const redisClient = createRedisConnection(config);
 const redisStore = new ScopedRedisStore(redisClient);
@@ -232,8 +237,13 @@ const persistSchedulerState = () =>
   scheduler ? schedulerStateWriter.writeBestEffort(scheduler.snapshot()) : Promise.resolve();
 
 const heartbeat = () => {
-  logWorkerHeartbeat(pollers.isStopping, config.identity.workerId, registry.describe().map((item) => item.key),
-    scheduler?.snapshot() ?? null, config.configFingerprint);
+  logWorkerHeartbeat(
+    pollers.isStopping,
+    config.identity.workerId,
+    registry.describe().map((item) => item.key),
+    scheduler?.snapshot() ?? null,
+    config.configFingerprint,
+  );
   void persistSchedulerState();
 };
 
@@ -275,7 +285,12 @@ const queues = workerQueues(
       "business_task_projection",
       config.businessTasks.pollMs,
       pollers.create("business_task_projection", () =>
-        projectBusinessTaskOnce(pool, config.identity.workerId, config.businessTasks.leaseSeconds, config),
+        projectBusinessTaskOnce(
+          pool,
+          config.identity.workerId,
+          config.businessTasks.leaseSeconds,
+          config,
+        ),
       ),
     ],
     [

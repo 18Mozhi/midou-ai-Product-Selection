@@ -36,8 +36,13 @@ const detailMessage = ref("");
 const listRetry = ref(0);
 const detailRetry = ref(0);
 const actionLabels = {
-  start: "开始", pause: "暂停", resume: "继续", complete: "完成",
-  cancel: "取消", delay: "延期", progress: "更新进度",
+  start: "开始",
+  pause: "暂停",
+  resume: "继续",
+  complete: "完成",
+  cancel: "取消",
+  delay: "延期",
+  progress: "更新进度",
 } as const;
 type TaskAction = keyof typeof actionLabels;
 const action = ref<TaskAction | "">("");
@@ -52,7 +57,13 @@ const writeNotice = ref("");
 const needsRefresh = ref(false);
 const attempt = ref<{ path: string; signature: string; key: string } | null>(null);
 const editor = ref<"" | "edit" | "remove">("");
-const edit = ref({ title: "", description: "", priority: "normal" as TaskDetail["priority"], due: "", reason: "" });
+const edit = ref({
+  title: "",
+  description: "",
+  priority: "normal" as TaskDetail["priority"],
+  due: "",
+  reason: "",
+});
 const deleteReason = ref("");
 const removed = ref(false);
 const localDue = (value: string | null) => {
@@ -63,12 +74,18 @@ const localDue = (value: string | null) => {
     : "";
 };
 let viewGeneration = 0;
-onBeforeUnmount(() => { viewGeneration++; });
+onBeforeUnmount(() => {
+  viewGeneration++;
+});
 const page = computed(() => {
   const value = Number(route.query.page);
-  return Number.isSafeInteger(value) && value > 0 && value <= Math.floor(Number.MAX_SAFE_INTEGER / pageSize) ? value : 1;
+  return Number.isSafeInteger(value) &&
+    value > 0 &&
+    value <= Math.floor(Number.MAX_SAFE_INTEGER / pageSize)
+    ? value
+    : 1;
 });
-const taskId = computed(() => typeof route.query.task === "string" ? route.query.task : "");
+const taskId = computed(() => (typeof route.query.task === "string" ? route.query.task : ""));
 const availableActions = computed<TaskAction[]>(() => {
   if (!detail.value) return [];
   const status = detail.value.status;
@@ -80,33 +97,57 @@ const availableActions = computed<TaskAction[]>(() => {
 const needsReason = computed(() => ["pause", "cancel", "delay"].includes(action.value));
 const taskPath = (n: number, task?: string) => ({
   path: "/tasks/approvals",
-  query: { view: "account-tasks", ...(n > 1 ? { page: String(n) } : {}), ...(task ? { task } : {}) },
+  query: {
+    view: "account-tasks",
+    ...(n > 1 ? { page: String(n) } : {}),
+    ...(task ? { task } : {}),
+  },
 });
 const statusText = (status: string) =>
-  ({ todo: "待处理", in_progress: "进行中", paused: "已暂停", completed: "已完成", cancelled: "已取消" })[status] ?? status;
-const timeText = (value: string | null) => value ? new Date(value).toLocaleString("zh-CN") : "未设置";
+  ({
+    todo: "待处理",
+    in_progress: "进行中",
+    paused: "已暂停",
+    completed: "已完成",
+    cancelled: "已取消",
+  })[status] ?? status;
+const timeText = (value: string | null) =>
+  value ? new Date(value).toLocaleString("zh-CN") : "未设置";
 
-watch(taskId, () => {
-  viewGeneration++;
-  action.value = "";
-  reason.value = "";
-  dueAt.value = "";
-  progress.value = "";
-  progressNote.value = "";
-  comment.value = "";
-  writing.value = false;
-  writeError.value = "";
-  writeNotice.value = "";
-  needsRefresh.value = false;
-  attempt.value = null;
-  editor.value = "";
-  deleteReason.value = "";
-  removed.value = false;
-}, { flush: "sync" });
+watch(
+  taskId,
+  () => {
+    viewGeneration++;
+    action.value = "";
+    reason.value = "";
+    dueAt.value = "";
+    progress.value = "";
+    progressNote.value = "";
+    comment.value = "";
+    writing.value = false;
+    writeError.value = "";
+    writeNotice.value = "";
+    needsRefresh.value = false;
+    attempt.value = null;
+    editor.value = "";
+    deleteReason.value = "";
+    removed.value = false;
+  },
+  { flush: "sync" },
+);
 
-async function submitMutation(kind: "actions" | "comments" | "edit" | "remove", body: Record<string, unknown>) {
+async function submitMutation(
+  kind: "actions" | "comments" | "edit" | "remove",
+  body: Record<string, unknown>,
+) {
   const current = detail.value;
-  if (!current || current.id.toLowerCase() !== taskId.value.toLowerCase() || writing.value || needsRefresh.value) return;
+  if (
+    !current ||
+    current.id.toLowerCase() !== taskId.value.toLowerCase() ||
+    writing.value ||
+    needsRefresh.value
+  )
+    return;
   const generation = viewGeneration;
   const method = kind === "edit" ? "PATCH" : kind === "remove" ? "DELETE" : "POST";
   const basePath = `/tasks/${encodeURIComponent(current.id)}`;
@@ -141,17 +182,22 @@ async function submitMutation(kind: "actions" | "comments" | "edit" | "remove", 
       progressNote.value = "";
       listRetry.value++;
     }
-    writeNotice.value = kind === "comments" ? "评论已追加。" : kind === "edit" ? "任务已保存。" : "任务动作已保存。";
+    writeNotice.value =
+      kind === "comments" ? "评论已追加。" : kind === "edit" ? "任务已保存。" : "任务动作已保存。";
     detailRetry.value++;
   } catch (error) {
     if (generation !== viewGeneration) return;
-    if (error instanceof ApiClientError && error.status >= 400 && error.status < 500 &&
-        ![408, 425, 429].includes(error.status)) {
+    if (
+      error instanceof ApiClientError &&
+      error.status >= 400 &&
+      error.status < 500 &&
+      ![408, 425, 429].includes(error.status)
+    ) {
       attempt.value = null;
       needsRefresh.value = error.code === "task_version_conflict" || error.status === 404;
       writeError.value = needsRefresh.value
         ? "任务已变化或不可访问。请刷新详情后重新确认。"
-        : (error.actionHint || error.userMessage);
+        : error.actionHint || error.userMessage;
     } else {
       writeError.value = "提交结果未确认。请保持输入不变并重试；系统会复用同一次提交。";
     }
@@ -163,44 +209,71 @@ async function submitMutation(kind: "actions" | "comments" | "edit" | "remove", 
 function openEditor(mode: "edit" | "remove") {
   const current = detail.value;
   if (!current || writing.value || needsRefresh.value || attempt.value) return;
-  edit.value = { title: current.title, description: current.description, priority: current.priority,
-    due: localDue(current.due_at), reason: "" };
+  edit.value = {
+    title: current.title,
+    description: current.description,
+    priority: current.priority,
+    due: localDue(current.due_at),
+    reason: "",
+  };
   deleteReason.value = "";
   editor.value = mode;
 }
 function submitEdit() {
-  const current = detail.value, draft = edit.value;
+  const current = detail.value,
+    draft = edit.value;
   if (!current || !draft.title.trim() || !draft.reason.trim()) return;
   const changedDue = draft.due ? new Date(draft.due) : null;
   if (changedDue && !Number.isFinite(changedDue.valueOf())) {
     writeError.value = "请选择有效截止时间。";
     return;
   }
-  void submitMutation("edit", { title: draft.title.trim(), description: draft.description,
-    priority: draft.priority, reason: draft.reason.trim(), expected_version: current.version,
-    due_at: draft.due === localDue(current.due_at) ? current.due_at : changedDue?.toISOString() ?? null });
+  void submitMutation("edit", {
+    title: draft.title.trim(),
+    description: draft.description,
+    priority: draft.priority,
+    reason: draft.reason.trim(),
+    expected_version: current.version,
+    due_at:
+      draft.due === localDue(current.due_at) ? current.due_at : (changedDue?.toISOString() ?? null),
+  });
 }
 function submitRemove() {
   if (detail.value && deleteReason.value.trim())
-    void submitMutation("remove", { reason: deleteReason.value.trim(), expected_version: detail.value.version });
+    void submitMutation("remove", {
+      reason: deleteReason.value.trim(),
+      expected_version: detail.value.version,
+    });
 }
 
 function submitAction() {
-  const selected = action.value, current = detail.value;
+  const selected = action.value,
+    current = detail.value;
   if (!selected || !current || !availableActions.value.includes(selected)) return;
   const body: Record<string, unknown> = { action: selected, expected_version: current.version };
   if (needsReason.value) {
-    if (!reason.value.trim()) { writeError.value = "请填写原因。"; return; }
+    if (!reason.value.trim()) {
+      writeError.value = "请填写原因。";
+      return;
+    }
     body.reason = reason.value.trim();
   }
   if (selected === "delay") {
     const date = new Date(dueAt.value);
-    if (!Number.isFinite(date.valueOf())) { writeError.value = "请选择有效截止时间。"; return; }
+    if (!Number.isFinite(date.valueOf())) {
+      writeError.value = "请选择有效截止时间。";
+      return;
+    }
     body.due_at = date.toISOString();
   }
   if (selected === "progress") {
-    if (typeof progress.value !== "number" || !Number.isInteger(progress.value) ||
-        progress.value < 0 || progress.value > 100 || !progressNote.value.trim()) {
+    if (
+      typeof progress.value !== "number" ||
+      !Number.isInteger(progress.value) ||
+      progress.value < 0 ||
+      progress.value > 100 ||
+      !progressNote.value.trim()
+    ) {
       writeError.value = "请填写 0–100 的整数进度及进展说明。";
       return;
     }
@@ -220,51 +293,68 @@ function reloadForReview() {
   detailRetry.value++;
 }
 
-watch([page, listRetry], async ([currentPage], _previous, cleanup) => {
-  const controller = new AbortController();
-  cleanup(() => controller.abort());
-  listState.value = "loading";
-  rows.value = [];
-  total.value = 0;
-  try {
-    const response = await request<TaskRow[]>(`/tasks?page=${currentPage}&page_size=${pageSize}`, {
-      signal: controller.signal,
-    });
-    if (controller.signal.aborted) return;
-    rows.value = response.data;
-    total.value = (response.meta as { total?: number } | undefined)?.total ?? 0;
-    listState.value = "ready";
-  } catch (error) {
-    if (controller.signal.aborted) return;
-    listMessage.value = error instanceof ApiClientError ? error.userMessage : "任务列表暂不可用。";
-    listState.value = "error";
-  }
-}, { immediate: true });
+watch(
+  [page, listRetry],
+  async ([currentPage], _previous, cleanup) => {
+    const controller = new AbortController();
+    cleanup(() => controller.abort());
+    listState.value = "loading";
+    rows.value = [];
+    total.value = 0;
+    try {
+      const response = await request<TaskRow[]>(
+        `/tasks?page=${currentPage}&page_size=${pageSize}`,
+        {
+          signal: controller.signal,
+        },
+      );
+      if (controller.signal.aborted) return;
+      rows.value = response.data;
+      total.value = (response.meta as { total?: number } | undefined)?.total ?? 0;
+      listState.value = "ready";
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      listMessage.value =
+        error instanceof ApiClientError ? error.userMessage : "任务列表暂不可用。";
+      listState.value = "error";
+    }
+  },
+  { immediate: true },
+);
 
-watch([taskId, detailRetry], async ([id], _previous, cleanup) => {
-  detail.value = null;
-  if (!id) return;
-  detailState.value = "loading";
-  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
-    detailMessage.value = "任务编号无效。";
-    detailState.value = "error";
-    return;
-  }
-  const controller = new AbortController();
-  cleanup(() => controller.abort());
-  try {
-    const response = await request<TaskDetail>(`/tasks/${encodeURIComponent(id)}`, { signal: controller.signal });
-    if (controller.signal.aborted) return;
-    detail.value = response.data;
-    detailState.value = "ready";
-  } catch (error) {
-    if (controller.signal.aborted) return;
-    detailMessage.value = error instanceof ApiClientError && error.status === 404
-      ? "任务不存在或不属于当前账号。"
-      : error instanceof ApiClientError ? error.userMessage : "任务详情暂不可用。";
-    detailState.value = "error";
-  }
-}, { immediate: true });
+watch(
+  [taskId, detailRetry],
+  async ([id], _previous, cleanup) => {
+    detail.value = null;
+    if (!id) return;
+    detailState.value = "loading";
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+      detailMessage.value = "任务编号无效。";
+      detailState.value = "error";
+      return;
+    }
+    const controller = new AbortController();
+    cleanup(() => controller.abort());
+    try {
+      const response = await request<TaskDetail>(`/tasks/${encodeURIComponent(id)}`, {
+        signal: controller.signal,
+      });
+      if (controller.signal.aborted) return;
+      detail.value = response.data;
+      detailState.value = "ready";
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      detailMessage.value =
+        error instanceof ApiClientError && error.status === 404
+          ? "任务不存在或不属于当前账号。"
+          : error instanceof ApiClientError
+            ? error.userMessage
+            : "任务详情暂不可用。";
+      detailState.value = "error";
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -279,7 +369,10 @@ watch([taskId, detailRetry], async ([id], _previous, cleanup) => {
     <template v-else>
       <ul v-if="rows.length">
         <li v-for="task in rows" :key="task.id">
-          <RouterLink :to="taskPath(page, task.id)" :aria-current="task.id === taskId ? 'true' : undefined">
+          <RouterLink
+            :to="taskPath(page, task.id)"
+            :aria-current="task.id === taskId ? 'true' : undefined"
+          >
             {{ task.title }}
           </RouterLink>
           <span> · {{ statusText(task.status) }} · {{ task.progress_percent }}%</span>
@@ -305,42 +398,71 @@ watch([taskId, detailRetry], async ([id], _previous, cleanup) => {
         <h3>{{ detail.title }}</h3>
         <p v-if="detail.description">{{ detail.description }}</p>
         <dl>
-          <dt>原负责人</dt><dd><code>{{ detail.assignee_id }}</code></dd>
-          <dt>截止时间</dt><dd>{{ timeText(detail.due_at) }}</dd>
-          <dt>状态</dt><dd>{{ statusText(detail.status) }} · {{ detail.progress_percent }}%</dd>
-          <dt v-if="detail.progress_note">进展说明</dt><dd v-if="detail.progress_note">{{ detail.progress_note }}</dd>
-          <dt>来源</dt><dd>{{ detail.source_type }} <code>{{ detail.source_ref_id }}</code></dd>
+          <dt>原负责人</dt>
+          <dd>
+            <code>{{ detail.assignee_id }}</code>
+          </dd>
+          <dt>截止时间</dt>
+          <dd>{{ timeText(detail.due_at) }}</dd>
+          <dt>状态</dt>
+          <dd>{{ statusText(detail.status) }} · {{ detail.progress_percent }}%</dd>
+          <dt v-if="detail.progress_note">进展说明</dt>
+          <dd v-if="detail.progress_note">{{ detail.progress_note }}</dd>
+          <dt>来源</dt>
+          <dd>
+            {{ detail.source_type }} <code>{{ detail.source_ref_id }}</code>
+          </dd>
           <dt v-if="detail.collection_task_id">关联采集任务</dt>
-          <dd v-if="detail.collection_task_id"><code>{{ detail.collection_task_id }}</code></dd>
+          <dd v-if="detail.collection_task_id">
+            <code>{{ detail.collection_task_id }}</code>
+          </dd>
         </dl>
         <h4>历史评论</h4>
         <ul v-if="detail.comments.length">
           <li v-for="comment in detail.comments" :key="comment.id">
             <p>{{ comment.body }}</p>
-            <small>{{ timeText(comment.created_at) }} · <code>{{ comment.created_by }}</code></small>
+            <small
+              >{{ timeText(comment.created_at) }} · <code>{{ comment.created_by }}</code></small
+            >
           </li>
         </ul>
         <p v-else>无历史评论。</p>
         <h4>操作记录</h4>
         <ul v-if="detail.events.length">
           <li v-for="event in detail.events" :key="event.id">
-            {{ event.event_type }} · {{ timeText(event.created_at) }} · <code>{{ event.actor_id }}</code>
+            {{ event.event_type }} · {{ timeText(event.created_at) }} ·
+            <code>{{ event.actor_id }}</code>
           </li>
         </ul>
         <p v-else>无操作记录。</p>
         <div v-if="!editor">
-          <button type="button" :disabled="writing || needsRefresh || !!attempt" @click="openEditor('edit')">编辑任务</button>
-          <button type="button" :disabled="writing || needsRefresh || !!attempt" @click="openEditor('remove')">删除任务</button>
+          <button
+            type="button"
+            :disabled="writing || needsRefresh || !!attempt"
+            @click="openEditor('edit')"
+          >
+            编辑任务
+          </button>
+          <button
+            type="button"
+            :disabled="writing || needsRefresh || !!attempt"
+            @click="openEditor('remove')"
+          >
+            删除任务
+          </button>
         </div>
         <form v-if="editor === 'edit'" @submit.prevent="submitEdit">
           <fieldset :disabled="writing || needsRefresh">
             <legend>编辑任务</legend>
             <label>任务标题 <input v-model="edit.title" required maxlength="200" /></label>
             <label>任务说明 <textarea v-model="edit.description" maxlength="5000" /></label>
-            <label>优先级
+            <label
+              >优先级
               <select v-model="edit.priority" required>
-                <option value="low">低</option><option value="normal">普通</option>
-                <option value="high">高</option><option value="critical">紧急</option>
+                <option value="low">低</option>
+                <option value="normal">普通</option>
+                <option value="high">高</option>
+                <option value="critical">紧急</option>
               </select>
             </label>
             <label>截止时间 <input v-model="edit.due" type="datetime-local" /></label>
@@ -361,7 +483,8 @@ watch([taskId, detailRetry], async ([id], _previous, cleanup) => {
         <form v-if="availableActions.length" @submit.prevent="submitAction">
           <fieldset :disabled="writing || needsRefresh">
             <legend>任务动作</legend>
-            <label>选择动作
+            <label
+              >选择动作
               <select v-model="action" required>
                 <option value="">请选择</option>
                 <option v-for="entry in availableActions" :key="entry" :value="entry">
@@ -369,10 +492,17 @@ watch([taskId, detailRetry], async ([id], _previous, cleanup) => {
                 </option>
               </select>
             </label>
-            <label v-if="needsReason">原因 <textarea v-model="reason" required maxlength="500" /></label>
-            <label v-if="action === 'delay'">新的截止时间 <input v-model="dueAt" type="datetime-local" required /></label>
+            <label v-if="needsReason"
+              >原因 <textarea v-model="reason" required maxlength="500" />
+            </label>
+            <label v-if="action === 'delay'"
+              >新的截止时间 <input v-model="dueAt" type="datetime-local" required
+            /></label>
             <template v-if="action === 'progress'">
-              <label>进度百分比 <input v-model.number="progress" type="number" min="0" max="100" step="1" required /></label>
+              <label
+                >进度百分比
+                <input v-model.number="progress" type="number" min="0" max="100" step="1" required
+              /></label>
               <label>进展说明 <textarea v-model="progressNote" required maxlength="500" /></label>
             </template>
             <button type="submit" :disabled="!action">确认任务动作</button>
@@ -395,11 +525,34 @@ watch([taskId, detailRetry], async ([id], _previous, cleanup) => {
 </template>
 
 <style scoped>
-.account-task-history { padding: 1rem; overflow-wrap: anywhere; }
-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
-section > section { margin-top: 1.5rem; border-top: 1px solid currentColor; padding-top: 1rem; }
-dd { margin: 0 0 0.5rem; }
-li { margin-block: 0.5rem; }
-fieldset { margin-block: 1rem; }
-label { display: grid; gap: 0.25rem; max-width: 28rem; margin-block: 0.5rem; }
+.account-task-history {
+  padding: 1rem;
+  overflow-wrap: anywhere;
+}
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+section > section {
+  margin-top: 1.5rem;
+  border-top: 1px solid currentColor;
+  padding-top: 1rem;
+}
+dd {
+  margin: 0 0 0.5rem;
+}
+li {
+  margin-block: 0.5rem;
+}
+fieldset {
+  margin-block: 1rem;
+}
+label {
+  display: grid;
+  gap: 0.25rem;
+  max-width: 28rem;
+  margin-block: 0.5rem;
+}
 </style>

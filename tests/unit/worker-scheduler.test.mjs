@@ -337,10 +337,15 @@ test("worker snapshot written during the topology read is fresh, not in the futu
   const service = new RuntimeTopologyService(
     {
       snapshot: async () => ({
-        nodes: [{
-          nodeId: "api-primary", hostId: "huizhou-single-host", role: "api",
-          status: "ready", lastHeartbeatAt: start,
-        }],
+        nodes: [
+          {
+            nodeId: "api-primary",
+            hostId: "huizhou-single-host",
+            role: "api",
+            status: "ready",
+            lastHeartbeatAt: start,
+          },
+        ],
       }),
     },
     {
@@ -350,7 +355,9 @@ test("worker snapshot written during the topology read is fresh, not in the futu
       workerSchedulerSnapshot: async () => {
         now = new Date(start.getTime() + 50);
         return {
-          status: "running", queues: [], active_runs: 0,
+          status: "running",
+          queues: [],
+          active_runs: 0,
           observed_at: new Date(now.getTime() + (future ? 1 : 0)).toISOString(),
         };
       },

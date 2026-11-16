@@ -69,11 +69,31 @@ export async function writeScopedFile(
   return writeAtomicFile(buildScopedFilePath(root, input), data);
 }
 
-export function buildReportExportPath(root: string, row: { id: string; filename: string; account_id?: string; organization_id?: string; workspace_id?: string; historical_context?: unknown }) {
-  const context = typeof row.historical_context === "string" ? JSON.parse(row.historical_context) : row.historical_context;
+export function buildReportExportPath(
+  root: string,
+  row: {
+    id: string;
+    filename: string;
+    account_id?: string;
+    organization_id?: string;
+    workspace_id?: string;
+    historical_context?: unknown;
+  },
+) {
+  const context =
+    typeof row.historical_context === "string"
+      ? JSON.parse(row.historical_context)
+      : row.historical_context;
   if (context == null && row.account_id != null) {
     const absoluteRoot = resolve(root);
-    const path = resolve(absoluteRoot, "accounts", safeSegment(row.account_id, "account_id"), "export", safeSegment(row.id, "id"), safeSegment(row.filename, "filename"));
+    const path = resolve(
+      absoluteRoot,
+      "accounts",
+      safeSegment(row.account_id, "account_id"),
+      "export",
+      safeSegment(row.id, "id"),
+      safeSegment(row.filename, "filename"),
+    );
     assertInside(absoluteRoot, path);
     return path;
   }
@@ -89,7 +109,11 @@ export function buildReportExportPath(root: string, row: { id: string; filename:
   });
 }
 
-export function writeReportExportFile(root: string, row: Parameters<typeof buildReportExportPath>[1], data: Uint8Array) {
+export function writeReportExportFile(
+  root: string,
+  row: Parameters<typeof buildReportExportPath>[1],
+  data: Uint8Array,
+) {
   return writeAtomicFile(buildReportExportPath(root, row), data);
 }
 
@@ -408,10 +432,21 @@ export function evaluateFileResilience(
 }
 export function writeAccountEvidenceFile(root: string, path: string, data: Uint8Array) {
   const [prefix, account, category, asset, file, ...rest] = path.split("/");
-  if (prefix !== "accounts" || category !== "evidence" || file !== "content.bin" ||
-      rest.length || !account || !asset || path !== accountEvidenceRelativePath({
-        account_id: account, asset_id: asset, evidence_id: asset,
-      })) throw new StorageBoundaryError("invalid_scope", "invalid account evidence path");
+  if (
+    prefix !== "accounts" ||
+    category !== "evidence" ||
+    file !== "content.bin" ||
+    rest.length ||
+    !account ||
+    !asset ||
+    path !==
+      accountEvidenceRelativePath({
+        account_id: account,
+        asset_id: asset,
+        evidence_id: asset,
+      })
+  )
+    throw new StorageBoundaryError("invalid_scope", "invalid account evidence path");
   const absoluteRoot = resolve(root);
   const target = resolve(absoluteRoot, path);
   assertInside(absoluteRoot, target);

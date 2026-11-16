@@ -51,13 +51,29 @@ test("SQL limits record rows before image hydration and retains global scoped su
   assert.match(rows.sql, /image_query.task_id=s.collection_task_id/);
   assert.match(rows.sql, /image_task.organization_id=s.organization_id/);
   assert.match(rows.sql, /image_task.workspace_id=s.workspace_id/);
-  assert.match(rows.sql, /CASE WHEN s.input_type='opportunity' THEN COALESCE\(\(SELECT[\s\S]+image_provider.code='1688_search'[\s\S]+LIMIT 1\),\(SELECT[\s\S]+p.code='amazon_product'/);
-  assert.match(rows.sql, /l.opportunity_id=s.image_opportunity_id AND op.organization_id=s.organization_id AND op.workspace_id=s.workspace_id/);
-  assert.match(rows.sql, /n.organization_id=op.organization_id AND n.workspace_id=op.workspace_id AND n.status='active'/);
+  assert.match(
+    rows.sql,
+    /CASE WHEN s.input_type='opportunity' THEN COALESCE\(\(SELECT[\s\S]+image_provider.code='1688_search'[\s\S]+LIMIT 1\),\(SELECT[\s\S]+p.code='amazon_product'/,
+  );
+  assert.match(
+    rows.sql,
+    /l.opportunity_id=s.image_opportunity_id AND op.organization_id=s.organization_id AND op.workspace_id=s.workspace_id/,
+  );
+  assert.match(
+    rows.sql,
+    /n.organization_id=op.organization_id AND n.workspace_id=op.workspace_id AND n.status='active'/,
+  );
   assert.match(rows.sql, /o.id image_opportunity_id/);
   assert.match(rows.sql, /l_primary.opportunity_id=op.id/);
-  assert.match(rows.sql, /BINARY UPPER\(JSON_UNQUOTE\(JSON_EXTRACT\(n.payload_json,'\$\.asin'\)\)\)=BINARY/);
-  assert.ok(rows.sql.includes("REGEXP '^https://(m[.]media-amazon[.]com|images-na[.]ssl-images-amazon[.]com)/'"));
+  assert.match(
+    rows.sql,
+    /BINARY UPPER\(JSON_UNQUOTE\(JSON_EXTRACT\(n.payload_json,'\$\.asin'\)\)\)=BINARY/,
+  );
+  assert.ok(
+    rows.sql.includes(
+      "REGEXP '^https://(m[.]media-amazon[.]com|images-na[.]ssl-images-amazon[.]com)/'",
+    ),
+  );
 });
 test("legacy list and detail use the same scoped snapshot-first Amazon image projection", async () => {
   const imageUrl = "https://m.media-amazon.com/images/I/fixture.jpg";
@@ -71,8 +87,14 @@ test("legacy list and detail use the same scoped snapshot-first Amazon image pro
   assert.equal((await repo.list(scope))[0].image_url, imageUrl);
   assert.equal((await repo.detail({ ...scope, searchId: id })).image_url, imageUrl);
   for (const sql of queries.filter((sql) => sql.startsWith("SELECT s.*"))) {
-    assert.match(sql, /image_provider.code='1688_search'[\s\S]+LIMIT 1\),\(SELECT[\s\S]+p.code='amazon_product'/);
-    assert.match(sql, /l.opportunity_id=o.id AND op.organization_id=s.organization_id AND op.workspace_id=s.workspace_id/);
+    assert.match(
+      sql,
+      /image_provider.code='1688_search'[\s\S]+LIMIT 1\),\(SELECT[\s\S]+p.code='amazon_product'/,
+    );
+    assert.match(
+      sql,
+      /l.opportunity_id=o.id AND op.organization_id=s.organization_id AND op.workspace_id=s.workspace_id/,
+    );
     assert.match(sql, /o.lifecycle_status<>'deleted'/);
     assert.match(sql, /ORDER BY n.created_at DESC,n.id DESC LIMIT 1/);
   }

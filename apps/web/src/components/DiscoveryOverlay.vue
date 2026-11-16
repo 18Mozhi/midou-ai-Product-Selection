@@ -238,7 +238,7 @@ watch(resourceType, () => {
       <section class="discovery-c-dialog">
         <header class="discovery-c-header">
           <div>
-            <h2>{{ shell === 'member' ? '搜索当前工作区' : '搜索后台功能' }}</h2>
+            <h2>{{ shell === "member" ? "搜索当前工作区" : "搜索后台功能" }}</h2>
           </div>
           <button type="button" aria-label="关闭" @click="emit('close')">
             关闭 <span aria-hidden="true">×</span>

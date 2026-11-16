@@ -25,7 +25,11 @@ const ids = (r: FastifyRequest) => ({
   });
 export function registerNotificationRoutes(app: FastifyInstance, o: NotificationRouteOptions) {
   const scope = async (r: FastifyRequest) => {
-      if (o.accountReadRehearsal) return { actorId: (await authenticatedRehearsalAccount(r, o.auth, o.secureCookie)).accountId, accountOwned: true };
+      if (o.accountReadRehearsal)
+        return {
+          actorId: (await authenticatedRehearsalAccount(r, o.auth, o.secureCookie)).accountId,
+          accountOwned: true,
+        };
       const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
         x = await o.authorization.resolveSession(a.user.id, a.session.id);
       await o.authorization.authorize({

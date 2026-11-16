@@ -1,4 +1,9 @@
-import { appendCollectionSubquery, collectionTaskScope, insertScheduledHighCollectionTask, trendRuleScopeRelation } from "@scoutops/database";
+import {
+  appendCollectionSubquery,
+  collectionTaskScope,
+  insertScheduledHighCollectionTask,
+  trendRuleScopeRelation,
+} from "@scoutops/database";
 import { automaticIntakeBacklogLimit } from "./automatic-intake-capacity-policy.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
@@ -27,11 +32,14 @@ interface AutomaticSourceSchedulerPolicy {
 }
 
 const activeTaskStatuses = activeCollectionTaskStatusesSql;
-const accountScheduleFrom = "FROM automatic_source_schedules s JOIN users u ON u.id=s.account_id AND u.status='active' ";
+const accountScheduleFrom =
+  "FROM automatic_source_schedules s JOIN users u ON u.id=s.account_id AND u.status='active' ";
 const accountScheduleDue = "WHERE s.is_enabled=1 AND s.next_scheduled_at<=? ";
-const accountFullSourceBudget = (native: boolean) => "(SELECT COUNT(*) FROM collection_tasks ct " +
+const accountFullSourceBudget = (native: boolean) =>
+  "(SELECT COUNT(*) FROM collection_tasks ct " +
   "JOIN account_owned_records a ON a.source_table='collection_tasks' AND a.source_id=ct.id AND a.account_id=s.account_id " +
-  `WHERE ${automaticIntelligenceTaskSql("ct")}` + (native ? " AND ct.account_id=a.account_id" : "") +
+  `WHERE ${automaticIntelligenceTaskSql("ct")}` +
+  (native ? " AND ct.account_id=a.account_id" : "") +
   ` AND ct.status IN ${activeTaskStatuses})`;
 type SourceOwner = { account_id: string; reason: "shared" | "unassigned" | "exclusive_owner" };
 
@@ -71,11 +79,13 @@ export class MySqlAutomaticSourceScheduler {
         const [cutover] = await c.query<RowDataPacket[]>(
           "SELECT primary_account_id FROM account_ownership_cutover WHERE slot='current' AND contract_version=25 FOR UPDATE",
         );
-        if (!cutover[0]?.primary_account_id) throw new Error("automatic_source_account_cutover_missing");
+        if (!cutover[0]?.primary_account_id)
+          throw new Error("automatic_source_account_cutover_missing");
         primaryAccountId = String(cutover[0].primary_account_id);
       }
-      const nativeTasks = await collectionTaskScope(c) === "account";
-      if (nativeTasks && !accountSchedules) throw new Error("automatic_source_schedule_account_scope_required");
+      const nativeTasks = (await collectionTaskScope(c)) === "account";
+      if (nativeTasks && !accountSchedules)
+        throw new Error("automatic_source_schedule_account_scope_required");
       const backlog = await this.backlog(c, accountSchedules, nativeTasks);
       if (backlog >= automaticIntakeBacklogLimit(this.policy.queueBacklogLimit)) {
         await c.commit();
@@ -92,46 +102,49 @@ export class MySqlAutomaticSourceScheduler {
         await c.commit();
         return { status: "idle" };
       }
-      if (!accountSchedules) await c.query(
-        statement(
-          "INSERT IGNORE INTO automatic_source_schedules ",
-          "(id,organization_id,workspace_id,last_task_id,provider_offset,last_scheduled_at,",
-          "next_scheduled_at,updated_at) SELECT UUID(),o.id,w.id,NULL,0,NULL,?,? ",
-          "FROM organizations o JOIN workspaces w ON w.id=o.default_workspace_id ",
-          "WHERE o.status='active' AND w.status='active'",
-        ),
-        [now, now],
-      );
+      if (!accountSchedules)
+        await c.query(
+          statement(
+            "INSERT IGNORE INTO automatic_source_schedules ",
+            "(id,organization_id,workspace_id,last_task_id,provider_offset,last_scheduled_at,",
+            "next_scheduled_at,updated_at) SELECT UUID(),o.id,w.id,NULL,0,NULL,?,? ",
+            "FROM organizations o JOIN workspaces w ON w.id=o.default_workspace_id ",
+            "WHERE o.status='active' AND w.status='active'",
+          ),
+          [now, now],
+        );
       const [schedules] = await c.query<RowDataPacket[]>(
         accountSchedules
           ? "SELECT s.id,s.account_id,s.ownership_reason,s.provider_offset,s.historical_context " +
-            accountScheduleFrom + accountScheduleDue +
-            `AND ${accountFullSourceBudget(nativeTasks)}<? ORDER BY s.next_scheduled_at,` +
-            "COALESCE(s.last_scheduled_at,'1000-01-01'),s.account_id,s.id LIMIT 1 FOR UPDATE"
+              accountScheduleFrom +
+              accountScheduleDue +
+              `AND ${accountFullSourceBudget(nativeTasks)}<? ORDER BY s.next_scheduled_at,` +
+              "COALESCE(s.last_scheduled_at,'1000-01-01'),s.account_id,s.id LIMIT 1 FOR UPDATE"
           : statement(
-          "SELECT s.* FROM automatic_source_schedules s WHERE s.next_scheduled_at<=? ",
-          "AND ",
-          activeCollectionScopeSql("s"),
-          " ",
-          "AND (SELECT COUNT(*) FROM collection_tasks ct ",
-          "WHERE ct.organization_id=s.organization_id AND ",
-          activeCollectionScopeSql("ct"),
-          " AND ",
-          automaticIntelligenceTaskSql("ct"),
-          " AND ct.status IN ",
-          "('scheduled','queued','leased','running','parsing','validating',",
-          "'retry_scheduled','rate_limited'))<? ",
-          "ORDER BY s.next_scheduled_at,COALESCE(s.last_scheduled_at,'1000-01-01'),",
-          "s.organization_id LIMIT 1 FOR UPDATE",
-        ),
+              "SELECT s.* FROM automatic_source_schedules s WHERE s.next_scheduled_at<=? ",
+              "AND ",
+              activeCollectionScopeSql("s"),
+              " ",
+              "AND (SELECT COUNT(*) FROM collection_tasks ct ",
+              "WHERE ct.organization_id=s.organization_id AND ",
+              activeCollectionScopeSql("ct"),
+              " AND ",
+              automaticIntelligenceTaskSql("ct"),
+              " AND ct.status IN ",
+              "('scheduled','queued','leased','running','parsing','validating',",
+              "'retry_scheduled','rate_limited'))<? ",
+              "ORDER BY s.next_scheduled_at,COALESCE(s.last_scheduled_at,'1000-01-01'),",
+              "s.organization_id LIMIT 1 FOR UPDATE",
+            ),
         [now, this.policy.tenantActiveTaskBudget],
       );
       const schedule = schedules[0];
       if (!schedule) {
         const [dueSchedules] = await c.query<RowDataPacket[]>(
-          accountSchedules ? "SELECT COUNT(*) count " + accountScheduleFrom + accountScheduleDue :
-          "SELECT COUNT(*) count FROM automatic_source_schedules s WHERE s.next_scheduled_at<=? AND " +
-            activeCollectionScopeSql("s"),
+          accountSchedules
+            ? "SELECT COUNT(*) count " + accountScheduleFrom + accountScheduleDue
+            : "SELECT COUNT(*) count FROM automatic_source_schedules s WHERE s.next_scheduled_at<=? AND " +
+                activeCollectionScopeSql("s"),
           [now],
         );
         await c.commit();
@@ -142,9 +155,14 @@ export class MySqlAutomaticSourceScheduler {
       const owner: SourceOwner | null = accountSchedules
         ? { account_id: String(schedule.account_id ?? ""), reason: schedule.ownership_reason }
         : null;
-      if (owner && (!owner.account_id || (owner.reason !== "exclusive_owner" && (
-        (owner.reason !== "shared" && owner.reason !== "unassigned") || owner.account_id !== primaryAccountId
-      )))) throw new Error("automatic_source_owner_mismatch");
+      if (
+        owner &&
+        (!owner.account_id ||
+          (owner.reason !== "exclusive_owner" &&
+            ((owner.reason !== "shared" && owner.reason !== "unassigned") ||
+              owner.account_id !== primaryAccountId)))
+      )
+        throw new Error("automatic_source_owner_mismatch");
       const [allProviders] = await c.query<RowDataPacket[]>(
         statement(
           "SELECT id,code FROM providers WHERE status='enabled' ",
@@ -163,13 +181,22 @@ export class MySqlAutomaticSourceScheduler {
         return { status: "idle" };
       }
       const accountOnly = Boolean(owner && nativeTasks);
-      const taskContext = accountOnly ? undefined : accountSchedules
-        ? (typeof schedule.historical_context === "string"
-          ? JSON.parse(schedule.historical_context) : schedule.historical_context)
-        : schedule;
-      if (owner && !accountOnly && (typeof taskContext?.organization_id !== "string" || typeof taskContext.workspace_id !== "string"))
+      const taskContext = accountOnly
+        ? undefined
+        : accountSchedules
+          ? typeof schedule.historical_context === "string"
+            ? JSON.parse(schedule.historical_context)
+            : schedule.historical_context
+          : schedule;
+      if (
+        owner &&
+        !accountOnly &&
+        (typeof taskContext?.organization_id !== "string" ||
+          typeof taskContext.workspace_id !== "string")
+      )
         throw new Error("automatic_source_task_context_invalid");
-      const taskEventId = randomUUID(), taskOutboxId = randomUUID();
+      const taskEventId = randomUUID(),
+        taskOutboxId = randomUUID();
       const offset = Math.min(
           Number(schedule.provider_offset) || 0,
           Math.max(0, allProviders.length - 1),
@@ -178,22 +205,45 @@ export class MySqlAutomaticSourceScheduler {
         taskId = randomUUID(),
         requestId = `auto-hotspot-${taskId}`,
         actorId = await this.actor(c);
-      const owned = owner ? [
-        ["collection_tasks", taskId], ["collection_task_events", taskEventId],
-        ["collection_task_outbox", taskOutboxId],
-      ] : [];
+      const owned = owner
+        ? [
+            ["collection_tasks", taskId],
+            ["collection_task_events", taskEventId],
+            ["collection_task_outbox", taskOutboxId],
+          ]
+        : [];
       await insertScheduledHighCollectionTask(c, {
-        id: taskId, now, actorId, requestId, traceId: requestId,
-        scope: accountOnly && owner ? { kind: "account", accountId: owner.account_id }
-          : { kind: "legacy", organizationId: taskContext?.organization_id, workspaceId: taskContext?.workspace_id },
+        id: taskId,
+        now,
+        actorId,
+        requestId,
+        traceId: requestId,
+        scope:
+          accountOnly && owner
+            ? { kind: "account", accountId: owner.account_id }
+            : {
+                kind: "legacy",
+                organizationId: taskContext?.organization_id,
+                workspaceId: taskContext?.workspace_id,
+              },
       });
       for (let i = 0; i < providers.length; i++) {
         const provider = providers[i]!;
         const subqueryId = randomUUID();
-        await appendCollectionSubquery(c, {
-          id: subqueryId, taskId, providerId: String(provider.id), ordinal: i + 1,
-          targetJson: "{}", required: false, status: "pending", now,
-        }, accountOnly);
+        await appendCollectionSubquery(
+          c,
+          {
+            id: subqueryId,
+            taskId,
+            providerId: String(provider.id),
+            ordinal: i + 1,
+            targetJson: "{}",
+            required: false,
+            status: "pending",
+            now,
+          },
+          accountOnly,
+        );
         if (owner) owned.push(["collection_subqueries", subqueryId]);
       }
       await c.query(
@@ -236,24 +286,39 @@ export class MySqlAutomaticSourceScheduler {
           now,
         ],
       );
-      if (owner) await c.query(
-        "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ?",
-        [owned.map(([table, id]) => [table, id, owner.account_id, owner.reason])],
-      );
+      if (owner)
+        await c.query(
+          "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ?",
+          [owned.map(([table, id]) => [table, id, owner.account_id, owner.reason])],
+        );
       const nextOffset =
           offset + providers.length >= allProviders.length ? 0 : offset + providers.length,
         nextAt = new Date(now.getTime() + (nextOffset === 0 ? 15 : 1) * 60_000);
       const [advanced] = await c.query<ResultSetHeader>(
         "UPDATE automatic_source_schedules SET last_task_id=?,provider_offset=?,last_scheduled_at=?,next_scheduled_at=?,updated_at=? WHERE id=?" +
           (accountOnly ? " AND account_id=? AND ownership_reason=? AND is_enabled=1" : ""),
-        [taskId, nextOffset, now, nextAt, now, schedule.id, ...(accountOnly ? [owner!.account_id, owner!.reason] : [])],
+        [
+          taskId,
+          nextOffset,
+          now,
+          nextAt,
+          now,
+          schedule.id,
+          ...(accountOnly ? [owner!.account_id, owner!.reason] : []),
+        ],
       );
-      if (accountOnly && advanced.affectedRows !== 1) throw new Error("automatic_source_cursor_changed");
+      if (accountOnly && advanced.affectedRows !== 1)
+        throw new Error("automatic_source_cursor_changed");
       await c.commit();
       return {
         status: "scheduled",
         taskId,
-        ...(!accountOnly ? { organizationId: String(taskContext.organization_id), workspaceId: String(taskContext.workspace_id) } : {}),
+        ...(!accountOnly
+          ? {
+              organizationId: String(taskContext.organization_id),
+              workspaceId: String(taskContext.workspace_id),
+            }
+          : {}),
         sourceCount: providers.length,
       };
     } catch (error) {
@@ -272,37 +337,45 @@ export class MySqlAutomaticSourceScheduler {
     const relation = accountSchedules ? await trendRuleScopeRelation(c) : "trend_monitoring_rules";
     const accountRules = relation !== "trend_monitoring_rules";
     if (nativeTasks && !accountRules) throw new Error("trend_rule_schedule_account_scope_required");
-    const due = " WHERE r.status='enabled' AND (r.next_collection_at IS NULL OR r.next_collection_at<=?)";
-    const accountFrom = " FROM trend_monitoring_rules r JOIN users u ON u.id=r.account_id AND u.status='active'";
+    const due =
+      " WHERE r.status='enabled' AND (r.next_collection_at IS NULL OR r.next_collection_at<=?)";
+    const accountFrom =
+      " FROM trend_monitoring_rules r JOIN users u ON u.id=r.account_id AND u.status='active'";
     const [rules] = await c.query<RowDataPacket[]>(
-      accountRules ? "SELECT r.*" + accountFrom + due +
-        " AND (SELECT COUNT(*) FROM collection_tasks ct JOIN account_owned_records ow ON ow.source_table='collection_tasks' AND ow.source_id=ct.id " +
-        "WHERE ow.account_id=r.account_id" + (nativeTasks ? " AND ct.account_id=ow.account_id" : "") +
-        " AND ct.status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'))<? " +
-        "ORDER BY COALESCE(r.next_collection_at,'1000-01-01'),COALESCE(r.last_collection_at,'1000-01-01'),r.account_id,r.id LIMIT 1 FOR UPDATE" :
-      statement(
-        "SELECT r.* FROM trend_monitoring_rules r WHERE r.status='enabled' ",
-        "AND ",
-        activeCollectionScopeSql("r"),
-        " ",
-        "AND (r.next_collection_at IS NULL OR r.next_collection_at<=?) ",
-        "AND (SELECT COUNT(*) FROM collection_tasks ct ",
-        "WHERE ct.organization_id=r.organization_id AND ",
-        activeCollectionScopeSql("ct"),
-        " AND ct.status IN ",
-        "('scheduled','queued','leased','running','parsing','validating',",
-        "'retry_scheduled','rate_limited'))<? ",
-        "ORDER BY COALESCE(r.next_collection_at,'1000-01-01'),",
-        "COALESCE(r.last_collection_at,'1000-01-01'),r.organization_id,r.id ",
-        "LIMIT 1 FOR UPDATE",
-      ),
+      accountRules
+        ? "SELECT r.*" +
+            accountFrom +
+            due +
+            " AND (SELECT COUNT(*) FROM collection_tasks ct JOIN account_owned_records ow ON ow.source_table='collection_tasks' AND ow.source_id=ct.id " +
+            "WHERE ow.account_id=r.account_id" +
+            (nativeTasks ? " AND ct.account_id=ow.account_id" : "") +
+            " AND ct.status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'))<? " +
+            "ORDER BY COALESCE(r.next_collection_at,'1000-01-01'),COALESCE(r.last_collection_at,'1000-01-01'),r.account_id,r.id LIMIT 1 FOR UPDATE"
+        : statement(
+            "SELECT r.* FROM trend_monitoring_rules r WHERE r.status='enabled' ",
+            "AND ",
+            activeCollectionScopeSql("r"),
+            " ",
+            "AND (r.next_collection_at IS NULL OR r.next_collection_at<=?) ",
+            "AND (SELECT COUNT(*) FROM collection_tasks ct ",
+            "WHERE ct.organization_id=r.organization_id AND ",
+            activeCollectionScopeSql("ct"),
+            " AND ct.status IN ",
+            "('scheduled','queued','leased','running','parsing','validating',",
+            "'retry_scheduled','rate_limited'))<? ",
+            "ORDER BY COALESCE(r.next_collection_at,'1000-01-01'),",
+            "COALESCE(r.last_collection_at,'1000-01-01'),r.organization_id,r.id ",
+            "LIMIT 1 FOR UPDATE",
+          ),
       [now, this.policy.tenantActiveTaskBudget],
     );
     const rule = rules[0];
     if (!rule) {
       const [dueRules] = await c.query<RowDataPacket[]>(
-        accountRules ? "SELECT COUNT(*) count" + accountFrom + due : "SELECT COUNT(*) count FROM trend_monitoring_rules r WHERE r.status='enabled' AND (r.next_collection_at IS NULL OR r.next_collection_at<=?) AND " +
-          activeCollectionScopeSql("r"),
+        accountRules
+          ? "SELECT COUNT(*) count" + accountFrom + due
+          : "SELECT COUNT(*) count FROM trend_monitoring_rules r WHERE r.status='enabled' AND (r.next_collection_at IS NULL OR r.next_collection_at<=?) AND " +
+              activeCollectionScopeSql("r"),
         [now],
       );
       return Number(dueRules[0]?.count ?? 0) > 0
@@ -325,17 +398,27 @@ export class MySqlAutomaticSourceScheduler {
       if (!owner) throw new Error("trend_rule_schedule_owner_mismatch");
     }
     const accountOnly = Boolean(owner && nativeTasks);
-    const taskContext = accountOnly ? undefined : accountRules
-      ? (typeof rule.historical_context === "string" ? JSON.parse(rule.historical_context) : rule.historical_context)
-      : rule;
-    if (accountRules && (!owner || (!accountOnly && (typeof taskContext?.organization_id !== "string" || typeof taskContext.workspace_id !== "string"))))
+    const taskContext = accountOnly
+      ? undefined
+      : accountRules
+        ? typeof rule.historical_context === "string"
+          ? JSON.parse(rule.historical_context)
+          : rule.historical_context
+        : rule;
+    if (
+      accountRules &&
+      (!owner ||
+        (!accountOnly &&
+          (typeof taskContext?.organization_id !== "string" ||
+            typeof taskContext.workspace_id !== "string")))
+    )
       throw new Error("trend_rule_task_context_invalid");
     if (accountRules && !accountOnly) {
       const [scopes] = await c.query<RowDataPacket[]>(
         "SELECT s.account_id FROM account_retirement_scopes s JOIN account_ownership_cutover cut " +
-        "ON cut.slot='current' AND cut.contract_version=25 AND cut.source_run_id=s.run_id " +
-        "JOIN workspaces w ON w.id=s.legacy_workspace_id AND w.organization_id=s.legacy_org_id " +
-        "WHERE s.legacy_org_id=? AND s.legacy_workspace_id=? AND s.account_id=? AND s.reason=? LOCK IN SHARE MODE",
+          "ON cut.slot='current' AND cut.contract_version=25 AND cut.source_run_id=s.run_id " +
+          "JOIN workspaces w ON w.id=s.legacy_workspace_id AND w.organization_id=s.legacy_org_id " +
+          "WHERE s.legacy_org_id=? AND s.legacy_workspace_id=? AND s.account_id=? AND s.reason=? LOCK IN SHARE MODE",
         [taskContext.organization_id, taskContext.workspace_id, owner!.account_id, owner!.reason],
       );
       if (scopes.length !== 1) throw new Error("trend_rule_task_context_owner_mismatch");
@@ -383,19 +466,41 @@ export class MySqlAutomaticSourceScheduler {
         language: String(rule.language),
       };
     await insertScheduledHighCollectionTask(c, {
-      id: taskId, now, actorId, requestId, traceId: requestId,
-      scope: accountOnly && owner ? { kind: "account", accountId: String(owner.account_id) }
-        : { kind: "legacy", organizationId: taskContext?.organization_id, workspaceId: taskContext?.workspace_id },
+      id: taskId,
+      now,
+      actorId,
+      requestId,
+      traceId: requestId,
+      scope:
+        accountOnly && owner
+          ? { kind: "account", accountId: String(owner.account_id) }
+          : {
+              kind: "legacy",
+              organizationId: taskContext?.organization_id,
+              workspaceId: taskContext?.workspace_id,
+            },
     });
     if (owner) owned.push(["collection_tasks", taskId]);
     for (let index = 0; index < providers.length; index += 1) {
       const subqueryId = randomUUID();
-      await appendCollectionSubquery(c, {
-        id: subqueryId, taskId, providerId: String(providers[index]!.id), ordinal: index + 1,
-        targetJson: JSON.stringify(String(providers[index]!.code) === "amazon_product"
-          ? { ...baseTarget, projection_type: "rule_product_discovery" } : baseTarget),
-        required: false, status: "pending", now,
-      }, accountOnly);
+      await appendCollectionSubquery(
+        c,
+        {
+          id: subqueryId,
+          taskId,
+          providerId: String(providers[index]!.id),
+          ordinal: index + 1,
+          targetJson: JSON.stringify(
+            String(providers[index]!.code) === "amazon_product"
+              ? { ...baseTarget, projection_type: "rule_product_discovery" }
+              : baseTarget,
+          ),
+          required: false,
+          status: "pending",
+          now,
+        },
+        accountOnly,
+      );
       if (owner) owned.push(["collection_subqueries", subqueryId]);
     }
     const payload = {
@@ -460,11 +565,17 @@ export class MySqlAutomaticSourceScheduler {
         (accountOnly ? " AND account_id=? AND status='enabled'" : ""),
       [nextOffset, now, nextAt, taskId, rule.id, ...(accountOnly ? [owner!.account_id] : [])],
     );
-    if (accountOnly && advanced.affectedRows !== 1) throw new Error("trend_rule_schedule_cursor_changed");
+    if (accountOnly && advanced.affectedRows !== 1)
+      throw new Error("trend_rule_schedule_cursor_changed");
     return {
       status: "scheduled",
       taskId,
-      ...(!accountOnly ? { organizationId: String(taskContext.organization_id), workspaceId: String(taskContext.workspace_id) } : {}),
+      ...(!accountOnly
+        ? {
+            organizationId: String(taskContext.organization_id),
+            workspaceId: String(taskContext.workspace_id),
+          }
+        : {}),
       sourceCount: providers.length,
       ruleId: String(rule.id),
     };
@@ -473,20 +584,27 @@ export class MySqlAutomaticSourceScheduler {
     const [rows] = await c.query<RowDataPacket[]>(
       "SHOW COLUMNS FROM automatic_source_schedules WHERE Field IN ('account_id','historical_context','is_enabled','organization_id','ownership_reason','workspace_id')",
     );
-    const shape = rows.map(row => row.Field).sort().join(",");
+    const shape = rows
+      .map((row) => row.Field)
+      .sort()
+      .join(",");
     if (shape === "account_id,historical_context,is_enabled,ownership_reason") return true;
     if (shape === "organization_id,workspace_id") return false;
     throw new Error("automatic_source_schedule_schema_incomplete");
   }
   private async backlog(c: PoolConnection, accountMode: boolean, nativeTasks: boolean) {
     const [rows] = await c.query<RowDataPacket[]>(
-      accountMode ? "SELECT " + (nativeTasks ? nativeCollectionBacklogCountSql : accountCollectionBacklogCountSql) + " count" : statement(
-        "SELECT COUNT(*) count FROM collection_tasks WHERE ",
-        activeCollectionScopeSql("collection_tasks"),
-        " AND status IN ",
-        "('scheduled','queued','leased','running','parsing','validating',",
-        "'retry_scheduled','rate_limited')",
-      ),
+      accountMode
+        ? "SELECT " +
+            (nativeTasks ? nativeCollectionBacklogCountSql : accountCollectionBacklogCountSql) +
+            " count"
+        : statement(
+            "SELECT COUNT(*) count FROM collection_tasks WHERE ",
+            activeCollectionScopeSql("collection_tasks"),
+            " AND status IN ",
+            "('scheduled','queued','leased','running','parsing','validating',",
+            "'retry_scheduled','rate_limited')",
+          ),
     );
     return Number(rows[0]?.count ?? 0);
   }

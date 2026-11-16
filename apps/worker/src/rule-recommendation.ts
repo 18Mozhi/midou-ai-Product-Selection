@@ -1,8 +1,15 @@
-import { appendAccountOpportunityRecommendationEvent, appendOpportunityEvent, trendRuleScopeRelation } from "@scoutops/database";
+import {
+  appendAccountOpportunityRecommendationEvent,
+  appendOpportunityEvent,
+  trendRuleScopeRelation,
+} from "@scoutops/database";
 import { appendOpportunityOutbox } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { PoolConnection, RowDataPacket } from "mysql2/promise";
-import { registerCalculationOwners, type CalculationOwnership } from "./opportunity-calculation-ownership.js";
+import {
+  registerCalculationOwners,
+  type CalculationOwnership,
+} from "./opportunity-calculation-ownership.js";
 import { nativeOpportunityStorage } from "./opportunity-storage.js";
 
 interface RuleRecommendationInput {
@@ -22,20 +29,28 @@ export async function refreshRuleRecommendation(
   input: RuleRecommendationInput,
 ) {
   const owner = input.ownership?.owner;
-  if (!owner && await trendRuleScopeRelation(connection) !== "trend_monitoring_rules") return { changed: false } as const;
-  const nativeOpportunity = owner && await nativeOpportunityStorage(connection);
+  if (!owner && (await trendRuleScopeRelation(connection)) !== "trend_monitoring_rules")
+    return { changed: false } as const;
+  const nativeOpportunity = owner && (await nativeOpportunityStorage(connection));
   const [nativeOwnerColumns] = owner
-    ? await connection.query<RowDataPacket[]>("SHOW COLUMNS FROM trend_monitoring_rules WHERE Field='account_id'")
+    ? await connection.query<RowDataPacket[]>(
+        "SHOW COLUMNS FROM trend_monitoring_rules WHERE Field='account_id'",
+      )
     : [[]];
-  const owned = (source: string, column: string) => input.ownership
-    ? " AND " + (owner ? "" : "NOT ") +
-      `EXISTS (SELECT 1 FROM account_owned_records a WHERE a.source_table='${source}' AND a.source_id=${column}` +
-      (owner ? " AND a.account_id=?" : "") +
-      (source === "opportunities" && nativeOpportunity ? " AND o.account_id=a.account_id" : "") +
-      (source === "trend_monitoring_rules" && nativeOwnerColumns.length ? " AND r.account_id=a.account_id" : "") +
-      ")" : "";
-  const parentScope = owned("opportunities", "o.id") +
-    (owner ? "" : " AND o.organization_id=? AND o.workspace_id=?");
+  const owned = (source: string, column: string) =>
+    input.ownership
+      ? " AND " +
+        (owner ? "" : "NOT ") +
+        `EXISTS (SELECT 1 FROM account_owned_records a WHERE a.source_table='${source}' AND a.source_id=${column}` +
+        (owner ? " AND a.account_id=?" : "") +
+        (source === "opportunities" && nativeOpportunity ? " AND o.account_id=a.account_id" : "") +
+        (source === "trend_monitoring_rules" && nativeOwnerColumns.length
+          ? " AND r.account_id=a.account_id"
+          : "") +
+        ")"
+      : "";
+  const parentScope =
+    owned("opportunities", "o.id") + (owner ? "" : " AND o.organization_id=? AND o.workspace_id=?");
   const [rows] = await connection.query<RowDataPacket[]>(
     "SELECT o.recommendation_status,o.score_rule_version,o.decision_status,o.source_count," +
       "(SELECT MIN(r.recommendation_min_source_count) FROM opportunity_rule_matches m " +
@@ -43,7 +58,9 @@ export async function refreshRuleRecommendation(
       "r.status='enabled' WHERE m.opportunity_id=o.id AND " +
       (owner ? "" : "r.organization_id=o.organization_id AND r.workspace_id=o.workspace_id AND ") +
       "o.source_count>=r.recommendation_min_source_count" +
-      owned("opportunity_rule_matches", "m.id") + owned("trend_monitoring_rules", "r.id") + ") matched_threshold " +
+      owned("opportunity_rule_matches", "m.id") +
+      owned("trend_monitoring_rules", "r.id") +
+      ") matched_threshold " +
       "FROM opportunities o WHERE o.id=?" +
       parentScope +
       " FOR UPDATE",
@@ -64,9 +81,10 @@ export async function refreshRuleRecommendation(
   await connection.query(
     owner
       ? "UPDATE opportunities o SET recommendation_status=?,version=version+1,updated_at=? WHERE o.id=?" +
-        parentScope
+          parentScope
       : "UPDATE opportunities SET recommendation_status=?,version=version+1,updated_at=? WHERE id=?" +
-        owned("opportunities", "opportunities.id") + " AND organization_id=? AND workspace_id=?",
+          owned("opportunities", "opportunities.id") +
+          " AND organization_id=? AND workspace_id=?",
     owner
       ? [next, input.now, input.opportunityId, owner.account_id]
       : [next, input.now, input.opportunityId, organizationId, workspaceId],
@@ -82,10 +100,19 @@ export async function refreshRuleRecommendation(
   };
   if (owner) {
     await appendAccountOpportunityRecommendationEvent(connection, {
-      id: eventId, opportunityId: input.opportunityId, actorType: input.actorType, actorId: input.actorId,
-      requestId: input.requestId, traceId: input.traceId, payloadJson: JSON.stringify(payload), now: input.now,
+      id: eventId,
+      opportunityId: input.opportunityId,
+      actorType: input.actorType,
+      actorId: input.actorId,
+      requestId: input.requestId,
+      traceId: input.traceId,
+      payloadJson: JSON.stringify(payload),
+      now: input.now,
     });
-    await registerCalculationOwners(connection, input.ownership ?? null, [["opportunity_events", eventId], ["opportunity_outbox", eventId]]);
+    await registerCalculationOwners(connection, input.ownership ?? null, [
+      ["opportunity_events", eventId],
+      ["opportunity_outbox", eventId],
+    ]);
     return { changed: true, recommendationStatus: next } as const;
   }
   await appendOpportunityEvent(connection, {

@@ -126,7 +126,11 @@ export function surfaceProps(input: {
     case "release-rollout-center":
       return { ...common, capabilities: input.capabilities };
     case "platform-management-center":
-      return { ...common, domain: input.path.split("/").pop() || "status", accountRehearsal: input.accountRehearsal };
+      return {
+        ...common,
+        domain: input.path.split("/").pop() || "status",
+        accountRehearsal: input.accountRehearsal,
+      };
     case "platform-data-center":
     case "platform-governance-center":
       return { ...common, accountRehearsal: input.accountRehearsal };

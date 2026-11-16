@@ -76,7 +76,11 @@ export class ReportService {
   private queueExport(i: any, route: string) {
     const type = reportType(i.value?.report_type);
     if (i.accountOwned && type === "team")
-      throw new ReportServiceError("report_type_retired", 410, "团队报表不再生成，历史导出仍可查询。");
+      throw new ReportServiceError(
+        "report_type_retired",
+        410,
+        "团队报表不再生成，历史导出仍可查询。",
+      );
     if (i.value?.format !== "csv")
       throw new ReportServiceError("report_format_invalid", 400, "当前只支持 CSV。");
     const id = randomUUID();
@@ -94,18 +98,27 @@ export class ReportService {
     });
   }
   async download(i: any) {
-    const record = i.accountOwned ? await this.repo.exportFile?.({ ...i, exportId: uuid(i.exportId) }) : null;
+    const record = i.accountOwned
+      ? await this.repo.exportFile?.({ ...i, exportId: uuid(i.exportId) })
+      : null;
     if (i.accountOwned && record?.account_id !== i.actorId)
       throw new ReportServiceError("report_export_not_found", 404, "刷新导出列表。");
-    const item = record ?? await this.detail(i);
+    const item = record ?? (await this.detail(i));
     if (item.status !== "succeeded")
       throw new ReportServiceError("report_export_not_ready", 409, "等待导出完成后重试。");
     if (new Date(item.expires_at).valueOf() <= this.now().valueOf())
       throw new ReportServiceError("report_export_expired", 410, "重新创建导出。");
     let content: Buffer;
     try {
-      const path = buildReportExportPath(this.exportRoot, record ??
-        { id: item.id, filename: item.filename, organization_id: i.organizationId, workspace_id: i.workspaceId });
+      const path = buildReportExportPath(
+        this.exportRoot,
+        record ?? {
+          id: item.id,
+          filename: item.filename,
+          organization_id: i.organizationId,
+          workspace_id: i.workspaceId,
+        },
+      );
       content = i.accountOwned ? await this.readAccountExport(path) : await readFile(path);
     } catch {
       throw new ReportServiceError(
@@ -114,25 +127,47 @@ export class ReportService {
         "在宝塔检查共享文件目录或重新导出。",
       );
     }
-    if (i.accountOwned && (Number(record.byte_size) !== content.byteLength ||
-        record.content_sha256 !== createHash("sha256").update(content).digest("hex")))
-      throw new ReportServiceError("report_export_integrity_failed", 409, "文件与导出回执不一致，请重新导出。");
+    if (
+      i.accountOwned &&
+      (Number(record.byte_size) !== content.byteLength ||
+        record.content_sha256 !== createHash("sha256").update(content).digest("hex"))
+    )
+      throw new ReportServiceError(
+        "report_export_integrity_failed",
+        409,
+        "文件与导出回执不一致，请重新导出。",
+      );
     return { item, content };
   }
   private async readAccountExport(path: string) {
-    const canonical = resolve(await realpath(this.exportRoot), relative(resolve(this.exportRoot), path));
+    const canonical = resolve(
+      await realpath(this.exportRoot),
+      relative(resolve(this.exportRoot), path),
+    );
     const initial = await lstat(path);
-    if (!initial.isFile() || initial.nlink !== 1 || await realpath(path) !== canonical)
+    if (!initial.isFile() || initial.nlink !== 1 || (await realpath(path)) !== canonical)
       throw new Error("report_export_path_invalid");
-    const handle = await open(path, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0) | (constants.O_NONBLOCK ?? 0));
+    const handle = await open(
+      path,
+      constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0) | (constants.O_NONBLOCK ?? 0),
+    );
     try {
-      const same = (other: typeof initial) => other.isFile() && other.nlink === 1 &&
-        other.dev === initial.dev && other.ino === initial.ino && other.size === initial.size &&
-        other.mtimeMs === initial.mtimeMs && other.ctimeMs === initial.ctimeMs;
+      const same = (other: typeof initial) =>
+        other.isFile() &&
+        other.nlink === 1 &&
+        other.dev === initial.dev &&
+        other.ino === initial.ino &&
+        other.size === initial.size &&
+        other.mtimeMs === initial.mtimeMs &&
+        other.ctimeMs === initial.ctimeMs;
       if (!same(await handle.stat())) throw new Error("report_export_file_changed");
       const content = await handle.readFile();
-      if (content.length !== initial.size || !same(await handle.stat()) || !same(await lstat(path)) ||
-          await realpath(path) !== canonical)
+      if (
+        content.length !== initial.size ||
+        !same(await handle.stat()) ||
+        !same(await lstat(path)) ||
+        (await realpath(path)) !== canonical
+      )
         throw new Error("report_export_file_changed");
       return content;
     } finally {

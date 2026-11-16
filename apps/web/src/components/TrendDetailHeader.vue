@@ -39,7 +39,11 @@ const freshness = (value: string) =>
         @click="emit('back')"
       >
         <AppIcon class="trend-detail-close-icon" name="x" :size="20" />
-        <span>关闭详情<span class="trend-detail-back-suffix trend-detail-back-context"> · 返回情报列表</span></span>
+        <span
+          >关闭详情<span class="trend-detail-back-suffix trend-detail-back-context">
+            · 返回情报列表</span
+          ></span
+        >
       </button>
       <div v-if="detail && busy !== 'detail'" class="trend-detail-badges">
         <ResearchThumbnail

@@ -65,7 +65,11 @@ export function registerPersonalCenterRoutes(
   app.get("/api/v1/me/assets", async (request, reply) => {
     reply.header("cache-control", "private, no-store");
     if (options.accountReadRehearsal) {
-      const { accountId } = await authenticatedRehearsalAccount(request, options.auth, options.secureCookie);
+      const { accountId } = await authenticatedRehearsalAccount(
+        request,
+        options.auth,
+        options.secureCookie,
+      );
       return envelope(await options.service.accountAssets(accountId), request);
     }
     const current = await scope(request);

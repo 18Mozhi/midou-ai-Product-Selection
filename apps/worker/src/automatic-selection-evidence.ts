@@ -132,20 +132,31 @@ const supplyOwns = (table: string, id: string) =>
 
 // For a point read, traverse the selected opportunity's exact evidence IDs,
 // not a materialized account-wide semi-join over the ownership ledger.
-const primaryLedgerJoins = (link: string, record: string) => [
-  [`${link}_own_link`, "opportunity_evidence_links", `${link}.id`],
-  [`${record}_own_seed`, "normalized_records", `${record}_seed.id`],
-  [`${record}_own_current`, "normalized_records", `${record}.id`],
-  [`${record}_own_seed_raw`, "raw_evidence", `${record}_origin.id`],
-  [`${record}_own_current_raw`, "raw_evidence", `${record}_current.id`],
-  [`${record}_own_seed_task`, "collection_tasks", `${record}_origin_task.id`],
-  [`${record}_own_current_task`, "collection_tasks", `${record}_current_task.id`],
-].map(([alias, table, id]) =>
-  `STRAIGHT_JOIN account_owned_records ${alias} FORCE INDEX (PRIMARY) ON ${alias}.source_table='${table}' AND ${alias}.source_id=${id} AND ${alias}.account_id=${record}_seed.account_id `,
-).join("");
+const primaryLedgerJoins = (link: string, record: string) =>
+  [
+    [`${link}_own_link`, "opportunity_evidence_links", `${link}.id`],
+    [`${record}_own_seed`, "normalized_records", `${record}_seed.id`],
+    [`${record}_own_current`, "normalized_records", `${record}.id`],
+    [`${record}_own_seed_raw`, "raw_evidence", `${record}_origin.id`],
+    [`${record}_own_current_raw`, "raw_evidence", `${record}_current.id`],
+    [`${record}_own_seed_task`, "collection_tasks", `${record}_origin_task.id`],
+    [`${record}_own_current_task`, "collection_tasks", `${record}_current_task.id`],
+  ]
+    .map(
+      ([alias, table, id]) =>
+        `STRAIGHT_JOIN account_owned_records ${alias} FORCE INDEX (PRIMARY) ON ${alias}.source_table='${table}' AND ${alias}.source_id=${id} AND ${alias}.account_id=${record}_seed.account_id `,
+    )
+    .join("");
 
 // Preserve the original record family until explicit version lineage replaces the old storage key.
-const ownedPrimaryFacts = (link: string, record: string, from: "FROM" | "JOIN" = "FROM", native = false, accountOnly = false, nativeTask = false) =>
+const ownedPrimaryFacts = (
+  link: string,
+  record: string,
+  from: "FROM" | "JOIN" = "FROM",
+  native = false,
+  accountOnly = false,
+  nativeTask = false,
+) =>
   `${from} opportunity_evidence_links ${link}${nativeTask ? " FORCE INDEX (uq_opportunity_evidence)" : ""}${from === "JOIN" ? ` ON ${link}.opportunity_id=o.id` : ""} ` +
   (native
     ? `JOIN normalized_records ${record}_seed${accountOnly ? " FORCE INDEX (idx_normalized_evidence)" : ""} ON ${record}_seed.raw_evidence_id=${link}.raw_evidence_id ` +
@@ -166,23 +177,39 @@ const ownedPrimaryFacts = (link: string, record: string, from: "FROM" | "JOIN" =
   (nativeTask ? primaryLedgerJoins(link, record) : "") +
   `WHERE ${link}.opportunity_id=o.id AND ` +
   (native
-    ? `${record}_seed.account_id=owner.account_id AND ` + (accountOnly
-      ? `${record}_origin.account_id=owner.account_id AND ${record}_current.account_id=owner.account_id AND ` +
-        (nativeTask ? `${record}_origin_task.account_id=owner.account_id AND ${record}_current_task.account_id=owner.account_id AND ` : "") +
-        (nativeTask ? "" :
-          [supplyOwns("collection_tasks", `${record}_origin_task.id`), supplyOwns("collection_tasks", `${record}_current_task.id`)].join(" AND ") + " AND ")
-      : `${record}_origin_task.organization_id=o.organization_id AND ${record}_origin_task.workspace_id=o.workspace_id AND `)
+    ? `${record}_seed.account_id=owner.account_id AND ` +
+      (accountOnly
+        ? `${record}_origin.account_id=owner.account_id AND ${record}_current.account_id=owner.account_id AND ` +
+          (nativeTask
+            ? `${record}_origin_task.account_id=owner.account_id AND ${record}_current_task.account_id=owner.account_id AND `
+            : "") +
+          (nativeTask
+            ? ""
+            : [
+                supplyOwns("collection_tasks", `${record}_origin_task.id`),
+                supplyOwns("collection_tasks", `${record}_current_task.id`),
+              ].join(" AND ") + " AND ")
+        : `${record}_origin_task.organization_id=o.organization_id AND ${record}_origin_task.workspace_id=o.workspace_id AND `)
     : `${record}_seed.organization_id=o.organization_id AND ${record}_seed.workspace_id=o.workspace_id AND `) +
-  (nativeTask ? "" : [supplyOwns("opportunity_evidence_links", `${link}.id`),
-    ...[record, `${record}_seed`].flatMap(alias => [
-      supplyOwns("normalized_records", `${alias}.id`), supplyOwns("raw_evidence", `${alias}.raw_evidence_id`),
-    ])].join(" AND ") + " AND ") +
-  [record, `${record}_seed`].map(alias =>
-    `JSON_UNQUOTE(JSON_EXTRACT(${alias}.payload_json,'$.canonical_url')) REGEXP ` +
-    `CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',JSON_UNQUOTE(JSON_EXTRACT(${alias}.payload_json,'$.asin')),'([/?#]|$)')`
-  ).join(" AND ");
+  (nativeTask
+    ? ""
+    : [
+        supplyOwns("opportunity_evidence_links", `${link}.id`),
+        ...[record, `${record}_seed`].flatMap((alias) => [
+          supplyOwns("normalized_records", `${alias}.id`),
+          supplyOwns("raw_evidence", `${alias}.raw_evidence_id`),
+        ]),
+      ].join(" AND ") + " AND ") +
+  [record, `${record}_seed`]
+    .map(
+      (alias) =>
+        `JSON_UNQUOTE(JSON_EXTRACT(${alias}.payload_json,'$.canonical_url')) REGEXP ` +
+        `CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',JSON_UNQUOTE(JSON_EXTRACT(${alias}.payload_json,'$.asin')),'([/?#]|$)')`,
+    )
+    .join(" AND ");
 const ownedPrimaryAsin = (native: boolean, accountOnly = false) =>
-  "(SELECT " + (accountOnly ? "STRAIGHT_JOIN " : "") +
+  "(SELECT " +
+  (accountOnly ? "STRAIGHT_JOIN " : "") +
   "UPPER(JSON_UNQUOTE(JSON_EXTRACT(n_first_seed.payload_json,'$.asin'))) " +
   ownedPrimaryFacts("l_first", "n_first", "FROM", native, accountOnly) +
   " AND JSON_UNQUOTE(JSON_EXTRACT(n_first_seed.payload_json,'$.asin')) REGEXP '^[A-Za-z0-9]{10}$' " +
@@ -193,8 +220,12 @@ const accountPrimarySql = (native: boolean) =>
   "FROM opportunities o JOIN account_owned_records owner ON owner.source_table='opportunities' " +
   "AND owner.source_id=o.id AND o.id=? AND owner.account_id=? " +
   ownedPrimaryFacts("l", "n", "JOIN", native) +
-  " AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY " + ownedPrimaryAsin(native) +
-  (native ? "" : " AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY " + selectionPrimaryAsinSql) +
+  " AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY " +
+  ownedPrimaryAsin(native) +
+  (native
+    ? ""
+    : " AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY " +
+      selectionPrimaryAsinSql) +
   " ORDER BY l.observed_at DESC,n.created_at DESC,n.id DESC LIMIT 1";
 export const accountAutomaticPrimaryEvidenceSql = accountPrimarySql(false);
 export const nativeAccountAutomaticPrimaryEvidenceSql = accountPrimarySql(true);
@@ -217,11 +248,16 @@ export const accountOnlyAutomaticPrimaryEvidenceSql =
   " AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY o.primary_asin " +
   "ORDER BY l.observed_at DESC,n.created_at DESC,n.id DESC LIMIT 1";
 
-export async function hasNativeNormalizedAccountScope(db: Pick<import("mysql2/promise").PoolConnection, "query">) {
+export async function hasNativeNormalizedAccountScope(
+  db: Pick<import("mysql2/promise").PoolConnection, "query">,
+) {
   const [columns] = await db.query<import("mysql2/promise").RowDataPacket[]>(
     "SHOW COLUMNS FROM normalized_records WHERE Field IN ('account_id','organization_id','workspace_id')",
   );
-  const shape = columns.map(row => row.Field).sort().join(",");
+  const shape = columns
+    .map((row) => row.Field)
+    .sort()
+    .join(",");
   if (shape !== "account_id" && shape !== "organization_id,workspace_id")
     throw new Error("normalized_record_scope_schema_invalid");
   return shape === "account_id";
@@ -241,11 +277,21 @@ export async function readAutomaticPrimaryEvidence(
     return { linked: linked[0], detail: detail[0] };
   }
   const native = await hasNativeNormalizedAccountScope(db);
-  const accountParent = native && await nativeOpportunityStorage(db);
-  const [[linked]] = await db.query<Row[]>(accountParent ? accountOnlyAutomaticPrimaryEvidenceSql :
-    native ? nativeAccountAutomaticPrimaryEvidenceSql : accountAutomaticPrimaryEvidenceSql,
-    [scope.opportunityId, scope.accountId]);
-  const detailQuery = accountPrimaryDetailQuery(scope.opportunityId, scope.accountId, linked?.payload_json, accountParent);
+  const accountParent = native && (await nativeOpportunityStorage(db));
+  const [[linked]] = await db.query<Row[]>(
+    accountParent
+      ? accountOnlyAutomaticPrimaryEvidenceSql
+      : native
+        ? nativeAccountAutomaticPrimaryEvidenceSql
+        : accountAutomaticPrimaryEvidenceSql,
+    [scope.opportunityId, scope.accountId],
+  );
+  const detailQuery = accountPrimaryDetailQuery(
+    scope.opportunityId,
+    scope.accountId,
+    linked?.payload_json,
+    accountParent,
+  );
   if (!detailQuery) return { linked, detail: undefined };
   const [[detail]] = await db.query<Row[]>(detailQuery.sql, detailQuery.params);
   return { linked, detail };
@@ -260,9 +306,13 @@ export const accountAutomaticSupplyEvidenceSql =
   "JOIN providers p ON p.id=n.provider_id " +
   "WHERE ss.input_type='opportunity' AND ss.input_ref=? AND owner.account_id=? " +
   "AND ss.deleted_at IS NULL AND n.status='active' AND p.code='1688_search' AND " +
-  [supplyOwns("sourcing_searches", "ss.id"), supplyOwns("collection_task_evidence_links", "l.id"),
-    supplyOwns("collection_tasks", "link_task.id"), supplyOwns("normalized_records", "n.id"),
-    supplyOwns("raw_evidence", "n.raw_evidence_id")].join(" AND ") +
+  [
+    supplyOwns("sourcing_searches", "ss.id"),
+    supplyOwns("collection_task_evidence_links", "l.id"),
+    supplyOwns("collection_tasks", "link_task.id"),
+    supplyOwns("normalized_records", "n.id"),
+    supplyOwns("raw_evidence", "n.raw_evidence_id"),
+  ].join(" AND ") +
   " ORDER BY n.created_at DESC,n.id DESC LIMIT 500 LOCK IN SHARE MODE";
 
 /** Same actual primary detail prerequisite for model preflight and the authoritative evaluation transaction. */
@@ -292,15 +342,22 @@ export const accountPrimarySnapshotProofSql =
   "AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY UPPER(c.external_id) " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='competitor_snapshot' " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.page_url')) REGEXP '^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/[A-Za-z0-9]{10}([/?#]|$)' AND " +
-  [supplyOwns("collection_tasks", "t.id"), supplyOwns("collection_subqueries", "q.id"),
-    supplyOwns("collection_task_evidence_links", "l.id"), supplyOwns("normalized_records", "n.id"),
-    supplyOwns("raw_evidence", "r.id")].join(" AND ") + ") ";
+  [
+    supplyOwns("collection_tasks", "t.id"),
+    supplyOwns("collection_subqueries", "q.id"),
+    supplyOwns("collection_task_evidence_links", "l.id"),
+    supplyOwns("normalized_records", "n.id"),
+    supplyOwns("raw_evidence", "r.id"),
+  ].join(" AND ") +
+  ") ";
 
 export const accountAutomaticPrimarySnapshotSql =
-  "SELECT s.* " + accountPrimarySnapshotParentSql +
+  "SELECT s.* " +
+  accountPrimarySnapshotParentSql +
   "WHERE c.opportunity_id=? AND owner.account_id=? AND c.status='active' " +
   "AND c.source_site='Amazon' AND c.external_id=? AND c.deleted_at IS NULL AND " +
-  accountPrimarySnapshotProofSql + "ORDER BY s.captured_at DESC,s.id DESC LIMIT 1";
+  accountPrimarySnapshotProofSql +
+  "ORDER BY s.captured_at DESC,s.id DESC LIMIT 1";
 
 /** Bind the ASIN already proved by linked primary evidence, not an editable label. */
 const accountAutomaticPrimaryDetailEvidenceSql =
@@ -312,22 +369,38 @@ const accountAutomaticPrimaryDetailEvidenceSql =
   "AND c.source_site='Amazon' AND c.deleted_at IS NULL AND BINARY UPPER(c.external_id)=BINARY ? " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.canonical_url')) REGEXP " +
   "CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')),'([/?#]|$)') AND " +
-  accountPrimarySnapshotProofSql + "ORDER BY s.captured_at DESC,s.id DESC,n.created_at DESC,n.id DESC LIMIT 1";
+  accountPrimarySnapshotProofSql +
+  "ORDER BY s.captured_at DESC,s.id DESC,n.created_at DESC,n.id DESC LIMIT 1";
 
 const accountOnlyAutomaticPrimaryDetailEvidenceSql = accountAutomaticPrimaryDetailEvidenceSql
-  .replace("JOIN competitor_snapshots s", "JOIN opportunities o ON o.id=c.opportunity_id AND o.account_id=owner.account_id " +
-    "AND c.account_id=owner.account_id JOIN competitor_snapshots s")
+  .replace(
+    "JOIN competitor_snapshots s",
+    "JOIN opportunities o ON o.id=c.opportunity_id AND o.account_id=owner.account_id " +
+      "AND c.account_id=owner.account_id JOIN competitor_snapshots s",
+  )
   .replace("WHERE c.opportunity_id=?", "WHERE n.account_id=owner.account_id AND c.opportunity_id=?")
-  .replace("WHERE LEFT(s.source_ref_id,11)", "WHERE t.account_id=owner.account_id AND n.account_id=owner.account_id " +
-    "AND r.account_id=owner.account_id AND LEFT(s.source_ref_id,11)");
+  .replace(
+    "WHERE LEFT(s.source_ref_id,11)",
+    "WHERE t.account_id=owner.account_id AND n.account_id=owner.account_id " +
+      "AND r.account_id=owner.account_id AND LEFT(s.source_ref_id,11)",
+  );
 
-export function accountPrimaryDetailQuery(opportunityId: string, accountId: string, linkedPayload: unknown, accountParent = false) {
+export function accountPrimaryDetailQuery(
+  opportunityId: string,
+  accountId: string,
+  linkedPayload: unknown,
+  accountParent = false,
+) {
   try {
     const value = typeof linkedPayload === "string" ? JSON.parse(linkedPayload) : linkedPayload;
     const asin = normalizedProductFields(value).asin;
     return typeof asin === "string" && /^[A-Za-z0-9]{10}$/.test(asin)
-      ? { sql: accountParent ? accountOnlyAutomaticPrimaryDetailEvidenceSql : accountAutomaticPrimaryDetailEvidenceSql,
-        params: [opportunityId, accountId, asin.toUpperCase()] }
+      ? {
+          sql: accountParent
+            ? accountOnlyAutomaticPrimaryDetailEvidenceSql
+            : accountAutomaticPrimaryDetailEvidenceSql,
+          params: [opportunityId, accountId, asin.toUpperCase()],
+        }
       : null;
   } catch {
     return null;

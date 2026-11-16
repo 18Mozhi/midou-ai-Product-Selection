@@ -25,15 +25,23 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
 
   async read(input: any) {
     await this.validateScope(input);
-    const native = this.accountMode && await collectionTaskScope(this.pool) === "account";
+    const native = this.accountMode && (await collectionTaskScope(this.pool)) === "account";
     if (this.accountMode && !native)
-      throw new CollectionConsoleError("collection_console_account_schema_required", 503, "请核对账号迁移状态后重试。");
+      throw new CollectionConsoleError(
+        "collection_console_account_schema_required",
+        503,
+        "请核对账号迁移状态后重试。",
+      );
     const taskOwnership = native
       ? `JOIN account_owned_records own ON own.source_table='collection_tasks' AND own.source_id=t.id AND own.account_id=t.account_id
          JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25
          AND (own.reason='exclusive_owner' OR (own.reason IN ('shared','unassigned') AND own.account_id=cut.primary_account_id))`
       : "";
-    const taskScope = native ? "t.account_id," : this.accountMode ? "" : "t.organization_id, t.workspace_id,";
+    const taskScope = native
+      ? "t.account_id,"
+      : this.accountMode
+        ? ""
+        : "t.organization_id, t.workspace_id,";
     const deadAttempt = native
       ? "JOIN collection_task_attempts original_attempt ON original_attempt.id=d.attempt_id AND original_attempt.task_id=t.id"
       : "";
@@ -43,8 +51,10 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
     const taskFilter = this.taskFilter(input, since);
     const deadFilter = this.deadFilter(input, since);
     const qualityFilter = this.qualityFilter(input, since);
-    const issueScope = input.organizationId || input.workspaceId
-      ? await dataQualityIssueScope(this.pool, this.accountMode) : null;
+    const issueScope =
+      input.organizationId || input.workspaceId
+        ? await dataQualityIssueScope(this.pool, this.accountMode)
+        : null;
     const attemptFilter = this.attemptFilter(input, since);
     const deadRootFilter = this.deadFilter({ ...input, errorCode: null }, since);
 
@@ -160,7 +170,9 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
     }));
     const result = {
       filters: {
-        ...(!this.accountMode ? { organization_id: input.organizationId, workspace_id: input.workspaceId } : {}),
+        ...(!this.accountMode
+          ? { organization_id: input.organizationId, workspace_id: input.workspaceId }
+          : {}),
         provider_id: input.providerId,
         window: input.window,
         error_code: input.errorCode,
@@ -220,7 +232,11 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
 
   private async validateScope(input: any) {
     if (this.accountMode && (input.organizationId != null || input.workspaceId != null))
-      throw new CollectionConsoleError("collection_console_scope_retired", 400, "移除旧组织和工作区筛选。");
+      throw new CollectionConsoleError(
+        "collection_console_scope_retired",
+        400,
+        "移除旧组织和工作区筛选。",
+      );
     if (input.organizationId) {
       const [rows] = await this.pool.query<RowDataPacket[]>(
         "SELECT id FROM organizations WHERE id = ?",
@@ -274,9 +290,7 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
       values.push(since);
     }
     if (input.providerId) {
-      conditions.push(
-        this.providerTaskFilter(),
-      );
+      conditions.push(this.providerTaskFilter());
       values.push(input.providerId);
     }
     return this.where(conditions, values);
@@ -291,9 +305,7 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
       values.push(since);
     }
     if (input.providerId) {
-      conditions.push(
-        this.providerTaskFilter(),
-      );
+      conditions.push(this.providerTaskFilter());
       values.push(input.providerId);
     }
     if (input.errorCode) {
@@ -327,9 +339,7 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
       values.push(since);
     }
     if (input.providerId) {
-      conditions.push(
-        this.providerTaskFilter(),
-      );
+      conditions.push(this.providerTaskFilter());
       values.push(input.providerId);
     }
     if (input.errorCode) {
@@ -342,13 +352,16 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
   }
 
   private providerTaskFilter() {
-    return "EXISTS (SELECT 1 FROM collection_subqueries source_scope " +
+    return (
+      "EXISTS (SELECT 1 FROM collection_subqueries source_scope " +
       (this.accountMode
         ? "JOIN account_owned_records sub_owner ON sub_owner.source_table='collection_subqueries' " +
           "AND sub_owner.source_id=source_scope.id "
         : "") +
       "WHERE source_scope.task_id = t.id AND source_scope.provider_id = ?" +
-      (this.accountMode ? " AND sub_owner.account_id=t.account_id" : "") + ")";
+      (this.accountMode ? " AND sub_owner.account_id=t.account_id" : "") +
+      ")"
+    );
   }
 
   private scopeConditions(conditions: string[], values: unknown[], alias: string, input: any) {
@@ -386,8 +399,8 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
         this.accountMode
           ? "INSERT INTO collection_console_views (id, actor_id, request_id, trace_id, observed_at) VALUES (?,?,?,?,?)"
           : "INSERT INTO collection_console_views\n          (id, actor_id, organization_filter_id," +
-          " workspace_filter_id,\n           request_id, trace_id, observed_at)\n         VALUES " +
-          "(?, ?, ?, ?, ?, ?, ?)",
+              " workspace_filter_id,\n           request_id, trace_id, observed_at)\n         VALUES " +
+              "(?, ?, ?, ?, ?, ?, ?)",
         [
           randomUUID(),
           input.actorId,
@@ -397,7 +410,8 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
           observedAt,
         ],
       );
-      await appendPlatformAudit(connection,
+      await appendPlatformAudit(
+        connection,
         "INSERT INTO platform_audit_events\n          (id, organization_id, workspace_id," +
           " actor_id, action, resource_type,\n           resource_id, outcome, request_id," +
           " trace_id, metadata, occurred_at,\n           schema_version)\n         VALUES (?," +
@@ -412,7 +426,12 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
           input.requestId,
           input.traceId,
           JSON.stringify({
-            ...(!this.accountMode ? { organization_filter_id: input.organizationId, workspace_filter_id: input.workspaceId } : {}),
+            ...(!this.accountMode
+              ? {
+                  organization_filter_id: input.organizationId,
+                  workspace_filter_id: input.workspaceId,
+                }
+              : {}),
             provider_filter_id: input.providerId,
             window: input.window,
             error_code: input.errorCode,

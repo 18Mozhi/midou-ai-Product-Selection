@@ -235,7 +235,9 @@ watch(imageFailureResetSources, (items) => {
     <button
       type="button"
       class="catalogue-refresh"
-      :class="selectionView === 'rule_candidates' ? 'catalogue-refresh--primary' : 'so-action-secondary'"
+      :class="
+        selectionView === 'rule_candidates' ? 'catalogue-refresh--primary' : 'so-action-secondary'
+      "
       @click="emit('apply')"
     >
       <AppIcon name="refresh" :size="17" />更新结果
@@ -422,7 +424,12 @@ watch(imageFailureResetSources, (items) => {
     "
     @secondary="state === 'empty' ? clearOrShowAll() : emit('reset')"
   />
-  <section v-else class="product-catalog" :class="{ 'product-catalog--candidates': selectionView === 'rule_candidates' }" :data-view="selectionView">
+  <section
+    v-else
+    class="product-catalog"
+    :class="{ 'product-catalog--candidates': selectionView === 'rule_candidates' }"
+    :data-view="selectionView"
+  >
     <header>
       <div>
         <h2>{{ viewCopy.title }}</h2>
@@ -430,11 +437,15 @@ watch(imageFailureResetSources, (items) => {
           viewCopy.description
         }}</small>
       </div>
-      <span v-if="selectionView !== 'rule_candidates'" class="catalogue-sort-note">最近更新优先 · 每页 {{ candidatePageSize }} 个</span>
+      <span v-if="selectionView !== 'rule_candidates'" class="catalogue-sort-note"
+        >最近更新优先 · 每页 {{ candidatePageSize }} 个</span
+      >
     </header>
     <p class="catalog-data-note">
       <AppIcon v-if="selectionView === 'rule_candidates'" name="info" :size="18" />
-      <span>购买提示为公开下限，不等于精确销量；进货价为已有采集记录，不含其他成本；候选数量不代表可用货源。</span>
+      <span
+        >购买提示为公开下限，不等于精确销量；进货价为已有采集记录，不含其他成本；候选数量不代表可用货源。</span
+      >
     </p>
     <p v-if="selectionView === 'rule_candidates'" class="catalogue-table-context">
       最近更新优先 · 每页 {{ candidatePageSize }} 个
@@ -547,7 +558,10 @@ watch(imageFailureResetSources, (items) => {
   background: var(--so-primary);
   border-color: var(--so-primary);
 }
-.catalogue-page-heading[data-view="rule_candidates"] + .catalogue-controls .catalogue-search > button {
+.catalogue-page-heading[data-view="rule_candidates"]
+  + .catalogue-controls
+  .catalogue-search
+  > button {
   color: var(--so-primary);
   background: var(--so-primary-soft);
   border-color: var(--so-border);

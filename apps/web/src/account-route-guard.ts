@@ -2,10 +2,18 @@ import type { RouteLocationNormalized, Router } from "vue-router";
 
 type SessionRouteStatus = { authenticated: boolean; account_rehearsal?: true };
 
-export function isLegacyScopeRoute(entry: { shell: string | null; view: string | null; path: string }) {
-  return entry.shell === "organization_admin" || entry.view === "tenancy" ||
-    entry.view === "resource-grants" || entry.path === "/platform-admin/organizations" ||
-    entry.path.startsWith("/platform-admin/organizations/");
+export function isLegacyScopeRoute(entry: {
+  shell: string | null;
+  view: string | null;
+  path: string;
+}) {
+  return (
+    entry.shell === "organization_admin" ||
+    entry.view === "tenancy" ||
+    entry.view === "resource-grants" ||
+    entry.path === "/platform-admin/organizations" ||
+    entry.path.startsWith("/platform-admin/organizations/")
+  );
 }
 
 export function createSessionRouteGuard(
@@ -27,12 +35,21 @@ export function createSessionRouteGuard(
     if (!protectedRoute && !retiredTarget && !oldHome) return true;
     try {
       const session = await readSession();
-      if (typeof session?.authenticated !== "boolean" ||
-          (Object.hasOwn(session, "account_rehearsal") && session.account_rehearsal !== true))
+      if (
+        typeof session?.authenticated !== "boolean" ||
+        (Object.hasOwn(session, "account_rehearsal") && session.account_rehearsal !== true)
+      )
         throw new Error("invalid_session_route_status");
       if (session.account_rehearsal === true) {
-        for (const name of legacyScopeRouteNames) if (router.hasRoute(name)) router.removeRoute(name);
-        if (retiredTarget) return { path: retiredTarget.path, query: retiredTarget.query, hash: retiredTarget.hash, replace: true };
+        for (const name of legacyScopeRouteNames)
+          if (router.hasRoute(name)) router.removeRoute(name);
+        if (retiredTarget)
+          return {
+            path: retiredTarget.path,
+            query: retiredTarget.query,
+            hash: retiredTarget.hash,
+            replace: true,
+          };
         if (oldHome) return { path: "/opportunities", replace: true };
       }
       if (session.authenticated || !protectedRoute) return true;

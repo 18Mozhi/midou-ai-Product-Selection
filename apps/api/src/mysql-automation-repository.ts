@@ -1,4 +1,8 @@
-import { notificationScopeRelation, automationRuleScopeRelation, nativeAutomationOutbox } from "@scoutops/database";
+import {
+  notificationScopeRelation,
+  automationRuleScopeRelation,
+  nativeAutomationOutbox,
+} from "@scoutops/database";
 import { appendBusinessAudit, appendPlatformAudit } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
@@ -48,8 +52,9 @@ export class MySqlAutomationRepository implements AutomationRepository {
     const accountMode = "accountId" in i;
     if (accountMode) await requireAccountReadRehearsal(this.pool);
     const rules = await automationRuleScopeRelation(this.pool);
-    const sameScope = await legacyExecutionScope(this.pool)
-      ? " AND e2.organization_id=r.organization_id AND e2.workspace_id=r.workspace_id" : "";
+    const sameScope = (await legacyExecutionScope(this.pool))
+      ? " AND e2.organization_id=r.organization_id AND e2.workspace_id=r.workspace_id"
+      : "";
     if (accountMode) {
       const [rows] = await this.pool.query<RowDataPacket[]>(
         `SELECT r.*,e.status latest_execution_status,e.updated_at latest_execution_at,
@@ -143,13 +148,16 @@ export class MySqlAutomationRepository implements AutomationRepository {
     const scope = legacy ? "e" : "r";
     const ruleJoin = legacy ? "" : `JOIN ${rules} r ON r.id=e.rule_id`;
     const accountRule = accountId !== null && rules !== "automation_rules";
-    const nativeOutbox = accountRule && await nativeAutomationOutbox(this.pool);
+    const nativeOutbox = accountRule && (await nativeAutomationOutbox(this.pool));
     let nativeTask = nativeOutbox;
     if (accountRule && !nativeOutbox) {
       const [columns] = await this.pool.query<RowDataPacket[]>(
         "SHOW COLUMNS FROM tasks WHERE Field IN ('account_id','organization_id','workspace_id')",
       );
-      const shape = columns.map(row => row.Field).sort().join(",");
+      const shape = columns
+        .map((row) => row.Field)
+        .sort()
+        .join(",");
       if (shape !== "account_id" && shape !== "organization_id,workspace_id")
         throw new Error("automation_task_scope_schema_invalid");
       nativeTask = shape === "account_id";
@@ -165,13 +173,17 @@ export class MySqlAutomationRepository implements AutomationRepository {
                 t.id action_resource_id,e.last_error_code,e.created_at,e.updated_at
          FROM automation_executions e ${ruleJoin}
          LEFT JOIN ${nativeOutbox ? "notifications" : await notificationScopeRelation(this.pool)} n ON n.id=e.notification_id AND n.recipient_id=?
-           ${nativeOutbox ? `AND (
+           ${
+             nativeOutbox
+               ? `AND (
              EXISTS (SELECT 1 FROM outbox_event_scope_history h WHERE h.event_id=n.source_event_id
                AND h.legacy_org_id=r.organization_id AND h.legacy_workspace_id=r.workspace_id)
              OR (NOT EXISTS (SELECT 1 FROM outbox_event_scope_history h WHERE h.event_id=n.source_event_id
                AND (h.legacy_org_id IS NOT NULL OR h.legacy_workspace_id IS NOT NULL))
                AND ${rehearsalOwns("outbox_events", "n.source_event_id", "r.account_id")})
-           )` : `AND n.organization_id=${scope}.organization_id AND n.workspace_id=${scope}.workspace_id`}
+           )`
+               : `AND n.organization_id=${scope}.organization_id AND n.workspace_id=${scope}.workspace_id`
+           }
          LEFT JOIN tasks t ON e.action_resource_type='task' AND t.id=e.action_resource_id
            ${nativeTask ? "AND t.account_id=r.account_id" : `AND t.organization_id=${scope}.organization_id AND t.workspace_id=${scope}.workspace_id`}
            AND t.deleted_at IS NULL AND ${rehearsalOwns("tasks", "t.id", "?")}
@@ -327,28 +339,45 @@ export class MySqlAutomationRepository implements AutomationRepository {
       await c.beginTransaction();
       if (account) {
         await requireAccountReadRehearsal(c, { lockForTransaction: true });
-        if (await automationRuleScopeRelation(c) === "automation_rules")
-          throw new AutomationServiceError("automation_account_schema_not_ready", 503, "先应用隔离规则迁移。");
+        if ((await automationRuleScopeRelation(c)) === "automation_rules")
+          throw new AutomationServiceError(
+            "automation_account_schema_not_ready",
+            503,
+            "先应用隔离规则迁移。",
+          );
         const [actors] = await c.query<RowDataPacket[]>(
-          "SELECT id FROM users WHERE id=? AND status='active' AND email_verified_at IS NOT NULL FOR UPDATE", [i.actorId]);
-        if (!actors.length) throw new AutomationServiceError("automation_actor_forbidden", 403, "请使用已验证账号。");
+          "SELECT id FROM users WHERE id=? AND status='active' AND email_verified_at IS NOT NULL FOR UPDATE",
+          [i.actorId],
+        );
+        if (!actors.length)
+          throw new AutomationServiceError("automation_actor_forbidden", 403, "请使用已验证账号。");
       }
       const [rows] = await c.query<RowDataPacket[]>(
-        account ? `SELECT r.* FROM automation_rules r ${ruleOwnerJoin} WHERE r.id=? AND r.account_id=? AND owner.account_id=r.account_id FOR UPDATE`
+        account
+          ? `SELECT r.* FROM automation_rules r ${ruleOwnerJoin} WHERE r.id=? AND r.account_id=? AND owner.account_id=r.account_id FOR UPDATE`
           : "SELECT * FROM automation_rules WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
-        account ? [i.ruleId,i.actorId] : [i.ruleId, i.organizationId, i.workspaceId],
+        account ? [i.ruleId, i.actorId] : [i.ruleId, i.organizationId, i.workspaceId],
       );
       const r = rows[0];
       if (!r) throw new AutomationServiceError("automation_rule_not_found", 404, "刷新规则列表。");
       if (account) {
         const [receipts] = await c.query<RowDataPacket[]>(
           "SELECT rule_id,result_json FROM automation_operations WHERE actor_id=? AND route_key=? AND idempotency_key=? FOR UPDATE",
-          [i.actorId,i.route,i.idempotencyKey]);
+          [i.actorId, i.route, i.idempotencyKey],
+        );
         if (receipts[0]) {
           const data = parse(receipts[0].result_json);
-          if (receipts[0].rule_id !== i.ruleId || data.action !== i.value.action ||
-              data.expected_version !== i.value.expected_version || data.reason !== i.value.reason)
-            throw new AutomationServiceError("automation_idempotency_conflict",409,"请为不同操作使用新的幂等键。");
+          if (
+            receipts[0].rule_id !== i.ruleId ||
+            data.action !== i.value.action ||
+            data.expected_version !== i.value.expected_version ||
+            data.reason !== i.value.reason
+          )
+            throw new AutomationServiceError(
+              "automation_idempotency_conflict",
+              409,
+              "请为不同操作使用新的幂等键。",
+            );
           await c.commit();
           return data.result;
         }
@@ -370,19 +399,31 @@ export class MySqlAutomationRepository implements AutomationRepository {
         i.ruleId,
       ]);
       const result = { id: i.ruleId, status: target, version };
-      if (account) await appendPlatformAudit(c,
-        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,?,?,'automation_rule',?,'succeeded',?,?,?,?,1)",
-        [randomUUID(),i.actorId,target === "paused" ? "automation.rule.paused" : "automation.rule.resumed",
-          i.ruleId,i.requestId,i.traceId,JSON.stringify({...result,reason:i.value.reason}),now]);
-      else await this.record(
-        c,
-        i,
-        target === "paused" ? "automation.rule.paused" : "automation.rule.resumed",
-        i.ruleId,
-        { ...result, reason: i.value.reason },
-        now,
-      );
-      await this.save(c, i, i.ruleId, account ? { ...i.value,result } : result, now);
+      if (account)
+        await appendPlatformAudit(
+          c,
+          "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,?,?,'automation_rule',?,'succeeded',?,?,?,?,1)",
+          [
+            randomUUID(),
+            i.actorId,
+            target === "paused" ? "automation.rule.paused" : "automation.rule.resumed",
+            i.ruleId,
+            i.requestId,
+            i.traceId,
+            JSON.stringify({ ...result, reason: i.value.reason }),
+            now,
+          ],
+        );
+      else
+        await this.record(
+          c,
+          i,
+          target === "paused" ? "automation.rule.paused" : "automation.rule.resumed",
+          i.ruleId,
+          { ...result, reason: i.value.reason },
+          now,
+        );
+      await this.save(c, i, i.ruleId, account ? { ...i.value, result } : result, now);
       await c.commit();
       return result;
     } catch (e) {
@@ -428,8 +469,9 @@ export class MySqlAutomationRepository implements AutomationRepository {
     payload: any,
     now: Date,
   ) {
-    await appendBusinessAudit(c,
-        "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action," +
+    await appendBusinessAudit(
+      c,
+      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action," +
         "resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at," +
         "schema_version) VALUES (?,?,?,?,?,'automation_rule',?,?,?,?,?,1)",
       [

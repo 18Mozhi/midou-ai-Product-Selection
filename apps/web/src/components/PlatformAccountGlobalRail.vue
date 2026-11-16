@@ -43,7 +43,10 @@ const props = defineProps<{
         ><span>拥有平台后台权限</span>
       </article>
     </div>
-    <nav class="account-tabs" :aria-label="props.accountRehearsal ? '平台账号二级导航' : '账号与组织二级导航'">
+    <nav
+      class="account-tabs"
+      :aria-label="props.accountRehearsal ? '平台账号二级导航' : '账号与组织二级导航'"
+    >
       <RouterLink
         v-if="!props.accountRehearsal"
         to="/platform-admin/organizations"

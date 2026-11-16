@@ -33,7 +33,11 @@ const statusOptions = [
   <section class="approval-queue-panel" aria-label="审批队列">
     <div class="approval-queue-toolbar">
       <nav class="approval-inbox-tabs" aria-label="审批范围">
-        <button v-if="accountRehearsal" :aria-pressed="queue === 'all'" @click="$emit('queue', 'all')">
+        <button
+          v-if="accountRehearsal"
+          :aria-pressed="queue === 'all'"
+          @click="$emit('queue', 'all')"
+        >
           全部记录
         </button>
         <button :aria-pressed="queue === 'decidable'" @click="$emit('queue', 'decidable')">

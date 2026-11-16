@@ -110,8 +110,8 @@ const selectedDeadLetters = computed(() =>
       roots = new Map<string, number>();
     for (const item of items) roots.set(item.error_code, (roots.get(item.error_code) ?? 0) + 1);
     const rootSummary = [...roots.entries()]
-        .map(([code, total]) => `${errorLabel(code)} ${total} 条`)
-        .join("、");
+      .map(([code, total]) => `${errorLabel(code)} ${total} 条`)
+      .join("、");
     if (props.accountRehearsal) return `${items.length} 条开放死信；根因：${rootSummary || "无"}。`;
     const organizationCount = new Set(items.map((item: any) => item.organization_id)).size,
       workspaceCount = new Set(items.map((item: any) => item.workspace_id)).size;
@@ -1065,8 +1065,9 @@ async function confirmBatchReplay() {
                 ><br />
                 <code>任务 {{ d.task_id }}</code>
                 <template v-if="!accountRehearsal">
-                  <br /><code>组织 {{ d.organization_id }}</code>
-                  <br /><code>工作区 {{ d.workspace_id }}</code>
+                  <br /><code>组织 {{ d.organization_id }}</code> <br /><code
+                    >工作区 {{ d.workspace_id }}</code
+                  >
                 </template>
                 <template v-else-if="d.account_id">
                   <br /><code>账号 {{ d.account_id }}</code>

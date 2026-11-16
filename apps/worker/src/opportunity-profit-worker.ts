@@ -7,8 +7,12 @@ import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
 import {
-  calculationOwnersMatch, readCalculationOpportunityForClaim, registerCalculationOwners, resolveCalculationOwnership,
-  type CalculationOwnership, type CalculationOwnerRef,
+  calculationOwnersMatch,
+  readCalculationOpportunityForClaim,
+  registerCalculationOwners,
+  resolveCalculationOwnership,
+  type CalculationOwnership,
+  type CalculationOwnerRef,
 } from "./opportunity-calculation-ownership.js";
 
 export async function findProfitExchangeQuote(
@@ -25,22 +29,32 @@ export async function findProfitExchangeQuote(
       "SHOW COLUMNS FROM exchange_rate_quotes WHERE Field IN ('organization_id','workspace_id')",
     );
     if (columns.length === 0) return undefined; // No legacy quote namespace after 0155.
-    if (columns.length !== 2) throw new Error("partial_inherited_scope_schema:exchange_rate_quotes");
+    if (columns.length !== 2)
+      throw new Error("partial_inherited_scope_schema:exchange_rate_quotes");
   }
   const [quotes] = await connection.query<RowDataPacket[]>(
     "SELECT q.* FROM exchange_rate_quotes q JOIN providers p ON p.id=q.provider_id AND p.status='enabled' WHERE " +
       (accountId === undefined ? "q.organization_id=? AND q.workspace_id=? AND " : "") +
       "q.base_currency=? AND q.quote_currency=? AND q.quote_date<=?" +
-      (accountId !== undefined || ownershipReady ? " AND " + (accountId !== undefined ? "" : "NOT ") +
-        "EXISTS (SELECT 1 FROM account_owned_records ao WHERE ao.source_table='exchange_rate_quotes' AND ao.source_id=q.id" +
-        (accountId !== undefined
-          ? " AND ao.account_id=? AND EXISTS (SELECT 1 FROM raw_evidence e JOIN account_owned_records eo" +
-            " ON eo.source_table='raw_evidence' AND eo.source_id=e.id" +
-            " WHERE eo.account_id=ao.account_id AND e.id=q.evidence_id AND e.provider_id=q.provider_id)"
-          : "") + ")" : "") +
+      (accountId !== undefined || ownershipReady
+        ? " AND " +
+          (accountId !== undefined ? "" : "NOT ") +
+          "EXISTS (SELECT 1 FROM account_owned_records ao WHERE ao.source_table='exchange_rate_quotes' AND ao.source_id=q.id" +
+          (accountId !== undefined
+            ? " AND ao.account_id=? AND EXISTS (SELECT 1 FROM raw_evidence e JOIN account_owned_records eo" +
+              " ON eo.source_table='raw_evidence' AND eo.source_id=e.id" +
+              " WHERE eo.account_id=ao.account_id AND e.id=q.evidence_id AND e.provider_id=q.provider_id)"
+            : "") +
+          ")"
+        : "") +
       " ORDER BY q.quote_date DESC,q.observed_at DESC LIMIT 1",
-    [...(accountId === undefined ? [scope.organizationId, scope.workspaceId] : []), source, target, today,
-      ...(accountId !== undefined ? [accountId] : [])],
+    [
+      ...(accountId === undefined ? [scope.organizationId, scope.workspaceId] : []),
+      source,
+      target,
+      today,
+      ...(accountId !== undefined ? [accountId] : []),
+    ],
   );
   return quotes[0];
 }
@@ -163,7 +177,9 @@ export class MySqlOpportunityProfitWorker {
         return null;
       }
       const { organizationId, workspaceId } = await readCalculationOpportunityForClaim(
-        connection, String(row.opportunity_id), "calculation_job_opportunity_missing",
+        connection,
+        String(row.opportunity_id),
+        "calculation_job_opportunity_missing",
       );
       await connection.query(
         "UPDATE opportunity_profit_jobs SET status='leased',attempt_count=attempt_count+1,lease_owner=?,lease_expires_at=?,updated_at=? WHERE id=?",
@@ -198,11 +214,14 @@ export class MySqlOpportunityProfitWorker {
       const owner = ownership?.owner;
       const originalScope = [job.organizationId, job.workspaceId];
       const legacyRule = await hasLegacyScoreRuleScope(connection, "cost_rules");
-      if (!owner && !legacyRule)
-        throw new OpportunityProfitError("cost_rule_unavailable", false);
-      const ruleScope = owner ? (legacyRule ? "" : "AND account_id=? ") : "AND organization_id=? AND workspace_id=? ";
+      if (!owner && !legacyRule) throw new OpportunityProfitError("cost_rule_unavailable", false);
+      const ruleScope = owner
+        ? legacyRule
+          ? ""
+          : "AND account_id=? "
+        : "AND organization_id=? AND workspace_id=? ";
       const ruleArgs = owner ? (legacyRule ? [] : [owner.account_id]) : originalScope;
-      const nativeOpportunity = !!owner && await nativeOpportunityStorage(connection);
+      const nativeOpportunity = !!owner && (await nativeOpportunityStorage(connection));
       const [rules] = await connection.query<RowDataPacket[]>(
         "SELECT * FROM cost_rules WHERE id=? " +
           ruleScope +
@@ -213,8 +232,16 @@ export class MySqlOpportunityProfitWorker {
       if (!rule) throw new OpportunityProfitError("cost_rule_unavailable", false);
       const [opportunities] = await connection.query<RowDataPacket[]>(
         "SELECT market FROM opportunities WHERE id=?" +
-          (nativeOpportunity ? " AND account_id=?" : owner ? "" : " AND organization_id=? AND workspace_id=?") + " FOR UPDATE",
-        [job.opportunityId, ...(nativeOpportunity ? [owner.account_id] : owner ? [] : originalScope)],
+          (nativeOpportunity
+            ? " AND account_id=?"
+            : owner
+              ? ""
+              : " AND organization_id=? AND workspace_id=?") +
+          " FOR UPDATE",
+        [
+          job.opportunityId,
+          ...(nativeOpportunity ? [owner.account_id] : owner ? [] : originalScope),
+        ],
       );
       if (!opportunities[0] || opportunities[0].market !== rule.market)
         throw new OpportunityProfitError("profit_scope_or_market_mismatch", false);
@@ -225,18 +252,33 @@ export class MySqlOpportunityProfitWorker {
           [job.id, job.opportunityId, job.ruleId, this.workerId, job.attemptCount],
         );
         if (!lease[0]) throw new OpportunityProfitError("opportunity_profit_lease_lost", true);
-        if (!(await calculationOwnersMatch(connection, ownership, [["opportunity_profit_jobs",job.id]], true)) ||
-          !(await calculationOwnersMatch(connection, ownership, [["cost_rules",job.ruleId]])))
+        if (
+          !(await calculationOwnersMatch(
+            connection,
+            ownership,
+            [["opportunity_profit_jobs", job.id]],
+            true,
+          )) ||
+          !(await calculationOwnersMatch(connection, ownership, [["cost_rules", job.ruleId]]))
+        )
           throw new OpportunityProfitError("opportunity_profit_owner_mismatch", false);
       }
       const [inputs] = await connection.query<RowDataPacket[]>(
         "SELECT * FROM opportunity_cost_inputs WHERE opportunity_id=? AND platform=? AND is_current=1",
         [job.opportunityId, rule.platform],
       );
-      if (!(await calculationOwnersMatch(connection, ownership, inputs.flatMap(row => [
-        ["opportunity_cost_inputs", String(row.id)] as const,
-        ...(row.evidence_id ? [["raw_evidence",String(row.evidence_id)] as const] : []),
-      ]), true))) throw new OpportunityProfitError("opportunity_profit_input_owner_mismatch", false);
+      if (
+        !(await calculationOwnersMatch(
+          connection,
+          ownership,
+          inputs.flatMap((row) => [
+            ["opportunity_cost_inputs", String(row.id)] as const,
+            ...(row.evidence_id ? [["raw_evidence", String(row.evidence_id)] as const] : []),
+          ]),
+          true,
+        ))
+      )
+        throw new OpportunityProfitError("opportunity_profit_input_owner_mismatch", false);
       const byType = new Map(inputs.map((row) => [String(row.input_type), row]));
       const sale = byType.get("sale_price"),
         target = sale ? String(sale.currency) : null,
@@ -273,7 +315,15 @@ export class MySqlOpportunityProfitWorker {
           });
           return value;
         }
-        const quote = await findProfitExchangeQuote(connection, job, source, target, today, Boolean(ownership), owner?.account_id);
+        const quote = await findProfitExchangeQuote(
+          connection,
+          job,
+          source,
+          target,
+          today,
+          Boolean(ownership),
+          owner?.account_id,
+        );
         const policyRate = conversionRates
           .filter(
             (item) =>
@@ -391,7 +441,7 @@ export class MySqlOpportunityProfitWorker {
           now,
         ],
       );
-      const owned: CalculationOwnerRef[] = [["opportunity_profit_runs",runId]];
+      const owned: CalculationOwnerRef[] = [["opportunity_profit_runs", runId]];
       for (const item of components) {
         const id = randomUUID();
         await connection.query(
@@ -410,7 +460,7 @@ export class MySqlOpportunityProfitWorker {
             item.missing,
           ],
         );
-        owned.push(["opportunity_profit_components",id]);
+        owned.push(["opportunity_profit_components", id]);
       }
       await registerCalculationOwners(connection, ownership, owned);
       await connection.query(
@@ -419,7 +469,13 @@ export class MySqlOpportunityProfitWorker {
         [status, now, job.opportunityId, ...(owner ? [] : originalScope)],
       );
       if (owner) {
-        await queueOwnedSelectionEvaluation(connection, job.opportunityId, owner.account_id, nativeOpportunity, now);
+        await queueOwnedSelectionEvaluation(
+          connection,
+          job.opportunityId,
+          owner.account_id,
+          nativeOpportunity,
+          now,
+        );
       } else {
         await queueAutomaticSelectionEvaluation(connection, {
           organizationId: job.organizationId,
@@ -518,6 +574,9 @@ export class MySqlOpportunityProfitWorker {
       requestId: job.requestId,
       traceId: job.traceId,
     });
-    await registerCalculationOwners(connection, ownership, [["opportunity_events",id],["opportunity_outbox",id]]);
+    await registerCalculationOwners(connection, ownership, [
+      ["opportunity_events", id],
+      ["opportunity_outbox", id],
+    ]);
   }
 }

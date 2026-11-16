@@ -245,8 +245,7 @@ function previewOrganizationLogo() {
   logoPreview.value = "";
   try {
     const url = new URL(form.value.logo_url?.trim() ?? "");
-    if (url.protocol === "https:" && !url.username && !url.password)
-      logoPreview.value = url.href;
+    if (url.protocol === "https:" && !url.username && !url.password) logoPreview.value = url.href;
   } catch {
     // Empty or incomplete draft: retain the organization initials.
   }
@@ -1505,39 +1504,56 @@ onMounted(() => void load());
           <h3>更新组织资料</h3>
           <fieldset :disabled="Boolean(profileSaveReadFailure)" class="organization-profile-fields">
             <label
-              ><span>名称<span class="organization-required-mark" aria-hidden="true"></span></span><input v-model="form.name" :placeholder="data?.name" required maxlength="120"
+              ><span>名称<span class="organization-required-mark" aria-hidden="true"></span></span
+              ><input v-model="form.name" :placeholder="data?.name" required maxlength="120"
             /></label>
             <label
-              ><span>时区<span class="organization-required-mark" aria-hidden="true"></span></span><input
-                v-model="form.timezone"
-                :placeholder="data?.timezone"
-                required
-                maxlength="64"
+              ><span>时区<span class="organization-required-mark" aria-hidden="true"></span></span
+              ><input v-model="form.timezone" :placeholder="data?.timezone" required maxlength="64"
             /></label>
             <div class="organization-logo-field">
               <label for="organization-logo-url">Logo HTTPS 地址</label>
               <div class="organization-logo-controls">
-              <input
-                id="organization-logo-url"
-                v-model="form.logo_url"
-                type="url"
-                pattern="https://.*"
-                maxlength="2048"
-                title="请输入以 https:// 开头的地址"
-                placeholder="https://…"
-                @invalid="validateHttps"
-                @input="clearFieldValidity"
-              />
-              <span class="organization-logo-preview">
-                <img v-if="logoPreview" :src="logoPreview" alt="组织 Logo 预览" referrerpolicy="no-referrer" @error="logoPreview = ''" />
-                <span v-else aria-hidden="true">{{ Array.from(form.name?.trim() ?? "")[0] || "?" }}</span>
-              </span>
-              <button type="button" :disabled="!form.logo_url?.trim()" @click="previewOrganizationLogo">预览</button>
+                <input
+                  id="organization-logo-url"
+                  v-model="form.logo_url"
+                  type="url"
+                  pattern="https://.*"
+                  maxlength="2048"
+                  title="请输入以 https:// 开头的地址"
+                  placeholder="https://…"
+                  @invalid="validateHttps"
+                  @input="clearFieldValidity"
+                />
+                <span class="organization-logo-preview">
+                  <img
+                    v-if="logoPreview"
+                    :src="logoPreview"
+                    alt="组织 Logo 预览"
+                    referrerpolicy="no-referrer"
+                    @error="logoPreview = ''"
+                  />
+                  <span v-else aria-hidden="true">{{
+                    Array.from(form.name?.trim() ?? "")[0] || "?"
+                  }}</span>
+                </span>
+                <button
+                  type="button"
+                  :disabled="!form.logo_url?.trim()"
+                  @click="previewOrganizationLogo"
+                >
+                  预览
+                </button>
               </div>
               <small>仅支持 HTTPS；留空表示暂不设置 Logo。</small>
             </div>
             <label
-              ><span>数据保留天数<span class="organization-required-mark" aria-hidden="true"></span></span><input
+              ><span
+                >数据保留天数<span
+                  class="organization-required-mark"
+                  aria-hidden="true"
+                ></span></span
+              ><input
                 v-model.number="form.data_retention_days"
                 type="number"
                 min="30"
@@ -1546,7 +1562,9 @@ onMounted(() => void load());
                 :placeholder="String(data?.data_retention_days)"
             /></label>
             <label
-              ><span>默认工作区<span class="organization-required-mark" aria-hidden="true"></span></span><select v-model="form.default_workspace_id" required>
+              ><span
+                >默认工作区<span class="organization-required-mark" aria-hidden="true"></span></span
+              ><select v-model="form.default_workspace_id" required>
                 <option disabled value="">请选择工作区</option>
                 <option
                   v-for="workspace in data?.workspace_options"
@@ -1558,7 +1576,10 @@ onMounted(() => void load());
               </select></label
             >
             <div class="organization-profile-reason">
-              <label for="organization-profile-change-reason"><span>变更原因<span class="organization-required-mark" aria-hidden="true"></span></span></label>
+              <label for="organization-profile-change-reason"
+                ><span
+                  >变更原因<span class="organization-required-mark" aria-hidden="true"></span></span
+              ></label>
               <div>
                 <textarea
                   id="organization-profile-change-reason"
@@ -1568,7 +1589,9 @@ onMounted(() => void load());
                   required
                   maxlength="500"
                 ></textarea>
-                <small id="organization-profile-reason-count">{{ form.reason?.length ?? 0 }} / 500</small>
+                <small id="organization-profile-reason-count"
+                  >{{ form.reason?.length ?? 0 }} / 500</small
+                >
               </div>
             </div>
             <div class="organization-profile-actions">

@@ -7,9 +7,13 @@ export async function readPlatformRiskMetrics(pool: Pool, errorLimit: number, ac
       "SELECT SUM(status='open') open_count,SUM(status='open' AND severity='critical') critical_count FROM data_quality_issues",
     ),
     pool.query<RowDataPacket[]>(
-      "SELECT id," + scopeColumns + "'quality' kind,severity,metric_code code," +
+      "SELECT id," +
+        scopeColumns +
+        "'quality' kind,severity,metric_code code," +
         "updated_at observed_at FROM data_quality_issues WHERE status='open' UNION ALL SELECT " +
-        "id," + scopeColumns + "'task' kind,IF(status='dead_letter','critical'," +
+        "id," +
+        scopeColumns +
+        "'task' kind,IF(status='dead_letter','critical'," +
         "'warning') severity,COALESCE(last_error_code,status) code,updated_at observed_at FROM " +
         "collection_tasks WHERE status IN ('failed_terminal','dead_letter') ORDER BY observed_at " +
         "DESC LIMIT ?",

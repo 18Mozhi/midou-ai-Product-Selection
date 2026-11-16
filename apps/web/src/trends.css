@@ -2450,7 +2450,11 @@
   html[data-design="commerce"] #app .trend-dashboard--review .trend-filters {
     padding-block: 6px 16px;
   }
-  html[data-design="commerce"] #app .trend-dashboard--review .trend-filters :is(input, select, button) {
+  html[data-design="commerce"]
+    #app
+    .trend-dashboard--review
+    .trend-filters
+    :is(input, select, button) {
     --so-control-height: 40px;
     box-sizing: border-box;
     block-size: 40px;
@@ -2470,7 +2474,10 @@
     padding-block: 8px;
     background: var(--trend-surface);
   }
-  #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-list:has(> .trend-pagination) {
+  #app
+    .trend-dashboard--review
+    .trend-workbench.is-detail-open
+    .trend-list:has(> .trend-pagination) {
     scroll-padding-block-end: 60px;
   }
   #app .trend-dashboard--review .trend-workbench.is-detail-open .trend-topic-row {
@@ -2592,7 +2599,10 @@
     border-radius: 7px;
     background: var(--so-panel);
   }
-  html[data-design="commerce"] #app .trend-market-actions .so-action-secondary:hover:not(:disabled) {
+  html[data-design="commerce"]
+    #app
+    .trend-market-actions
+    .so-action-secondary:hover:not(:disabled) {
     background: var(--so-panel-soft);
   }
   html[data-design="commerce"] #app .trend-market-heading h2 {

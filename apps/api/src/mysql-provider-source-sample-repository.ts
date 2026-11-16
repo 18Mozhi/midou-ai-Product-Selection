@@ -13,10 +13,18 @@ import type {
   Provider1688Acceptance,
   ProviderSourceRepository,
 } from "./provider-source-service.js";
-import { ProviderSourceServiceError, providerSampleEvidenceHash } from "./provider-source-service.js";
+import {
+  ProviderSourceServiceError,
+  providerSampleEvidenceHash,
+} from "./provider-source-service.js";
 import { iso } from "./mysql-provider-source-repository-shared.js";
 
-import { lockNativeParserSampleEvidence, sampleAccountJoins, sampleArtifactJoins, sampleArtifactProof } from "./mysql-provider-source-sample-lineage.js";
+import {
+  lockNativeParserSampleEvidence,
+  sampleAccountJoins,
+  sampleArtifactJoins,
+  sampleArtifactProof,
+} from "./mysql-provider-source-sample-lineage.js";
 
 const parserSample = (row: RowDataPacket, actorId = ""): ParserSample => ({
   id: String(row.id),
@@ -333,7 +341,7 @@ export class MySqlProviderSourceSampleRepository {
     };
   }
   async parserSampleOverview(providerId: string, actorId: string) {
-    const native = await collectionTaskScope(this.pool) === "account";
+    const native = (await collectionTaskScope(this.pool)) === "account";
     const scope = native ? "job_task.account_id" : "job_task.organization_id,job_task.workspace_id";
     const [samples] = await this.pool.query<RowDataPacket[]>(
         [
@@ -363,8 +371,12 @@ export class MySqlProviderSourceSampleRepository {
       samples: samples.map((row) => parserSample(row, actorId)),
       candidates: candidates.map((row) => ({
         browser_job_id: String(row.browser_job_id),
-        ...(native ? { account_id: String(row.account_id) } :
-          { organization_id: String(row.organization_id), workspace_id: String(row.workspace_id) }),
+        ...(native
+          ? { account_id: String(row.account_id) }
+          : {
+              organization_id: String(row.organization_id),
+              workspace_id: String(row.workspace_id),
+            }),
         captured_at: iso(row.captured_at),
         item_count: Number(row.item_count),
         parser_version: String(row.parser_version),
@@ -392,7 +404,7 @@ export class MySqlProviderSourceSampleRepository {
     return rows[0] ? parserReplay(rows[0]) : null;
   }
   async parserSampleCandidate(providerId: string, browserJobId: string) {
-    const native = await collectionTaskScope(this.pool) === "account";
+    const native = (await collectionTaskScope(this.pool)) === "account";
     const scope = native ? "job_task.account_id" : "job_task.organization_id,job_task.workspace_id";
     const [rows] = await this.pool.query<RowDataPacket[]>(
       [
@@ -416,8 +428,9 @@ export class MySqlProviderSourceSampleRepository {
     const result = json(row.result_json) as Record<string, unknown>;
     return {
       browser_job_id: String(row.browser_job_id),
-      ...(native ? { account_id: String(row.account_id) } :
-        { organization_id: String(row.organization_id), workspace_id: String(row.workspace_id) }),
+      ...(native
+        ? { account_id: String(row.account_id) }
+        : { organization_id: String(row.organization_id), workspace_id: String(row.workspace_id) }),
       captured_at: iso(row.captured_at),
       item_count: Number(row.item_count),
       parser_version: String(row.parser_version),
@@ -436,39 +449,57 @@ export class MySqlProviderSourceSampleRepository {
         [input.actorId, input.route, input.idempotencyKey],
       );
       if (operations[0]) {
-        if (operations[0].browser_job_id !== input.browserJobId || operations[0].provider_id !== input.providerId ||
-          operations[0].name !== input.name)
-          throw new ProviderSourceServiceError("parser_sample_replay_conflict", 409, "为不同样本生成新的幂等键。");
+        if (
+          operations[0].browser_job_id !== input.browserJobId ||
+          operations[0].provider_id !== input.providerId ||
+          operations[0].name !== input.name
+        )
+          throw new ProviderSourceServiceError(
+            "parser_sample_replay_conflict",
+            409,
+            "为不同样本生成新的幂等键。",
+          );
         await c.commit();
         return parserSample(operations[0], input.actorId);
       }
-      const native = await collectionTaskScope(c) === "account";
+      const native = (await collectionTaskScope(c)) === "account";
       if (native && !input.accountId)
-        throw new ProviderSourceServiceError("parser_sample_candidate_changed", 409, "重新选择当前账号证据。");
+        throw new ProviderSourceServiceError(
+          "parser_sample_candidate_changed",
+          409,
+          "重新选择当前账号证据。",
+        );
       const [jobs] = await c.query<RowDataPacket[]>(
-        native ? lockNativeParserSampleEvidence :
-        [
-          "SELECT j.id FROM browser_collection_jobs j JOIN collection_tasks job_task ON job_task.id=j.collection_task_id WHERE j.id=? AND j.provider_id=? AND ",
-          "job_task.organization_id=? AND job_task.workspace_id=? AND j.status='succeeded' AND ",
-          "JSON_EXTRACT(j.result_json,'$.snapshots') IS NOT NULL AND ",
-          "(SELECT COUNT(DISTINCT a.kind) FROM browser_evidence_artifacts a WHERE ",
-          "a.browser_job_id=j.id AND a.status='active')=2 AND ",
-          "(SELECT COUNT(DISTINCT a.parser_version) FROM browser_evidence_artifacts a WHERE ",
-          "a.browser_job_id=j.id AND a.status='active')=1 AND ",
-          "(SELECT MIN(a.parser_version) FROM browser_evidence_artifacts a WHERE ",
-          "a.browser_job_id=j.id AND a.status='active')=? FOR UPDATE",
-        ].join(""),
-        native ? [input.browserJobId,input.providerId,input.accountId,input.parserVersion] : [
-          input.browserJobId,
-          input.providerId,
-          input.organizationId,
-          input.workspaceId,
-          input.parserVersion,
-        ],
+        native
+          ? lockNativeParserSampleEvidence
+          : [
+              "SELECT j.id FROM browser_collection_jobs j JOIN collection_tasks job_task ON job_task.id=j.collection_task_id WHERE j.id=? AND j.provider_id=? AND ",
+              "job_task.organization_id=? AND job_task.workspace_id=? AND j.status='succeeded' AND ",
+              "JSON_EXTRACT(j.result_json,'$.snapshots') IS NOT NULL AND ",
+              "(SELECT COUNT(DISTINCT a.kind) FROM browser_evidence_artifacts a WHERE ",
+              "a.browser_job_id=j.id AND a.status='active')=2 AND ",
+              "(SELECT COUNT(DISTINCT a.parser_version) FROM browser_evidence_artifacts a WHERE ",
+              "a.browser_job_id=j.id AND a.status='active')=1 AND ",
+              "(SELECT MIN(a.parser_version) FROM browser_evidence_artifacts a WHERE ",
+              "a.browser_job_id=j.id AND a.status='active')=? FOR UPDATE",
+            ].join(""),
+        native
+          ? [input.browserJobId, input.providerId, input.accountId, input.parserVersion]
+          : [
+              input.browserJobId,
+              input.providerId,
+              input.organizationId,
+              input.workspaceId,
+              input.parserVersion,
+            ],
       );
-      if (!jobs[0] || (native && providerSampleEvidenceHash(
-        (json(jobs[0].result_json) as Record<string, unknown>).snapshots,
-      ) !== input.inputSha256))
+      if (
+        !jobs[0] ||
+        (native &&
+          providerSampleEvidenceHash(
+            (json(jobs[0].result_json) as Record<string, unknown>).snapshots,
+          ) !== input.inputSha256)
+      )
         throw new ProviderSourceServiceError(
           "parser_sample_candidate_changed",
           409,
@@ -477,7 +508,8 @@ export class MySqlProviderSourceSampleRepository {
       const [scopeFields] = await c.query<RowDataPacket[]>(
         "SHOW COLUMNS FROM provider_parser_samples WHERE Field IN ('organization_id','workspace_id')",
       );
-      if (scopeFields.length === 1) throw new Error("partial_inherited_scope_schema:provider_parser_samples");
+      if (scopeFields.length === 1)
+        throw new Error("partial_inherited_scope_schema:provider_parser_samples");
       const legacyScope = scopeFields.length === 2;
       if (native && legacyScope) throw new Error("parser_sample_account_schema_not_ready");
       await c.query(
@@ -675,8 +707,9 @@ export class MySqlProviderSourceSampleRepository {
     resourceId: string,
     metadata: Record<string, unknown>,
   ) {
-    return appendPlatformAudit(c,
-        [
+    return appendPlatformAudit(
+      c,
+      [
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,",
         "resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) ",
         "VALUES(?,NULL,NULL,?,?,'provider_parser_sample',?,'succeeded',?,?,?,?,1)",

@@ -21,7 +21,7 @@ test("retired sourcing lists and locates the original account records with both 
     async query(sql, args = []) {
       if (sql.startsWith("SELECT slot")) return [[{ slot: "current" }]];
       calls.push({ sql, args });
-      assert.equal((sql.replace(/'(?:''|[^'])*'/g, '').match(/\?/g) || []).length, args.length);
+      assert.equal((sql.replace(/'(?:''|[^'])*'/g, "").match(/\?/g) || []).length, args.length);
       assert.doesNotMatch(sql, /organization_id|workspace_id/);
       assert.match(
         sql,

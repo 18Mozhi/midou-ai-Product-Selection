@@ -370,7 +370,11 @@ onBeforeUnmount(() => {
       <button type="button" :disabled="refreshing" @click="load()">
         {{ refreshing ? "刷新中…" : "刷新事实" }}
       </button>
-      <RouterLink v-if="current.href && !(accountRehearsal && current.value === 'approval_templates')" class="is-primary" :to="current.href">
+      <RouterLink
+        v-if="current.href && !(accountRehearsal && current.value === 'approval_templates')"
+        class="is-primary"
+        :to="current.href"
+      >
         {{ current.action }}
       </RouterLink>
     </PlatformPageHeader>
@@ -544,8 +548,12 @@ onBeforeUnmount(() => {
                       <span class="governance-version">{{ versionText(item) }}</span>
                     </td>
                     <td>
-                      <strong v-if="!accountRehearsal">{{ item.organization_name || "平台全局" }}</strong>
-                      <small v-if="!accountRehearsal || item.stage">{{ item.workspace_name || item.stage || "—" }}</small>
+                      <strong v-if="!accountRehearsal">{{
+                        item.organization_name || "平台全局"
+                      }}</strong>
+                      <small v-if="!accountRehearsal || item.stage">{{
+                        item.workspace_name || item.stage || "—"
+                      }}</small>
                       <small>
                         {{
                           typeName(
@@ -570,7 +578,13 @@ onBeforeUnmount(() => {
                     <td>
                       <div class="governance-row-actions">
                         <button type="button" @click="selected = item">查看详情</button>
-                        <RouterLink v-if="recordSection !== 'automation_rules' && !(accountRehearsal && recordSection === 'approval_templates')" :to="editHref()">
+                        <RouterLink
+                          v-if="
+                            recordSection !== 'automation_rules' &&
+                            !(accountRehearsal && recordSection === 'approval_templates')
+                          "
+                          :to="editHref()"
+                        >
                           进入工作台
                         </RouterLink>
                       </div>
@@ -586,7 +600,12 @@ onBeforeUnmount(() => {
             <template #summary="{ row }">
               <span class="responsive-record-summary">
                 <strong>{{ row.name }} · {{ statusName(row.status) }}</strong>
-                <small>{{ versionText(row) }}<template v-if="!accountRehearsal"> · {{ row.organization_name || "平台全局" }}</template></small>
+                <small
+                  >{{ versionText(row)
+                  }}<template v-if="!accountRehearsal">
+                    · {{ row.organization_name || "平台全局" }}</template
+                  ></small
+                >
               </span>
             </template>
             <template #detail="{ row }">
@@ -660,7 +679,10 @@ onBeforeUnmount(() => {
                   </dl>
                 </details>
                 <RouterLink
-                  v-if="recordSection !== 'automation_rules' && !(accountRehearsal && recordSection === 'approval_templates')"
+                  v-if="
+                    recordSection !== 'automation_rules' &&
+                    !(accountRehearsal && recordSection === 'approval_templates')
+                  "
                   class="governance-detail-action"
                   :to="editHref()"
                 >
@@ -802,7 +824,10 @@ onBeforeUnmount(() => {
         <footer>
           <button @click="selected = null">关闭</button
           ><RouterLink
-            v-if="recordSection !== 'automation_rules' && !(accountRehearsal && recordSection === 'approval_templates')"
+            v-if="
+              recordSection !== 'automation_rules' &&
+              !(accountRehearsal && recordSection === 'approval_templates')
+            "
             class="governance-detail-action"
             :to="editHref()"
             >进入所属工作台</RouterLink

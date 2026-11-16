@@ -260,10 +260,15 @@ export class SelectionJourneyService {
   }
   async getAccountHistory(context: { journeyId: string; accountId: string }) {
     const result = await this.repository.getAccountHistory?.({
-      ...context, journeyId: journeyId(context.journeyId),
+      ...context,
+      journeyId: journeyId(context.journeyId),
     });
     if (!result)
-      throw new SelectionJourneyError("selection_journey_not_found", 404, "返回选品库查看账号历史。");
+      throw new SelectionJourneyError(
+        "selection_journey_not_found",
+        404,
+        "返回选品库查看账号历史。",
+      );
     return result;
   }
   decide(context: {

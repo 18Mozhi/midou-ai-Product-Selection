@@ -508,8 +508,10 @@ export class MySqlProfitRepository implements ProfitRepository {
       const ruleOwner = manager ? String(row.ownership_account_id) : input.actorId;
       // 0183 makes the rule's native account authoritative as well as the sealed
       // ledger. Check the locked rule before consulting an approval or a receipt.
-      if ((accountLifecycle || (accountOwned && this.nativeAccountScope)) &&
-          row.account_id !== ruleOwner)
+      if (
+        (accountLifecycle || (accountOwned && this.nativeAccountScope)) &&
+        row.account_id !== ruleOwner
+      )
         throw new ProfitServiceError("cost_rule_not_found", 404, "刷新费用规则。");
       if (
         "accountOwnedApproval" in input &&

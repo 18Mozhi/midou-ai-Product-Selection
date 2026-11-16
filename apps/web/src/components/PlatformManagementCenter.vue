@@ -441,7 +441,11 @@ onUnmounted(() => {
       @change-page="changeContentPage"
       @review="beginReview"
     />
-    <PlatformNotificationCenter v-else-if="domain === 'notifications'" :request="request" :account-rehearsal="accountRehearsal" />
+    <PlatformNotificationCenter
+      v-else-if="domain === 'notifications'"
+      :request="request"
+      :account-rehearsal="accountRehearsal"
+    />
     <PlatformPageHeader
       v-if="domain !== 'content' && domain !== 'notifications'"
       :title="titles[domain][0]"

@@ -313,11 +313,19 @@ html[data-design="commerce"] #app .notification-list .notification-record > b {
   background: var(--so-warning-soft);
   font-weight: 500;
 }
-html[data-design="commerce"] #app .notification-list .notification-record > b[data-workflow="in_progress"] {
+html[data-design="commerce"]
+  #app
+  .notification-list
+  .notification-record
+  > b[data-workflow="in_progress"] {
   color: var(--so-info);
   background: var(--so-info-soft);
 }
-html[data-design="commerce"] #app .notification-list .notification-record > b[data-workflow="closed"] {
+html[data-design="commerce"]
+  #app
+  .notification-list
+  .notification-record
+  > b[data-workflow="closed"] {
   color: var(--so-success);
   background: var(--so-success-soft);
 }
@@ -1018,7 +1026,10 @@ html[data-design="commerce"] #app .midou-notification-open {
   color: var(--so-primary);
   white-space: nowrap;
 }
-html[data-design="commerce"] #app .notification-record:is(:hover, :focus-visible) .midou-notification-open {
+html[data-design="commerce"]
+  #app
+  .notification-record:is(:hover, :focus-visible)
+  .midou-notification-open {
   background: var(--so-primary-soft);
 }
 @media (max-width: 1000px) {
@@ -1034,7 +1045,11 @@ html[data-design="commerce"] #app .notification-record:is(:hover, :focus-visible
   html[data-design="commerce"] #app .notification-list .notification-record {
     grid-template-columns: 42px minmax(0, 1fr) auto;
   }
-  html[data-design="commerce"] #app .notification-list .notification-record > span:not(.midou-notification-open) {
+  html[data-design="commerce"]
+    #app
+    .notification-list
+    .notification-record
+    > span:not(.midou-notification-open) {
     grid-column: 2 / -1;
   }
   html[data-design="commerce"] #app .notification-list .notification-record > b {
@@ -1590,8 +1605,12 @@ html[data-design="commerce"]
   margin-inline-start: auto;
   white-space: nowrap;
 }
-html[data-design="commerce"] #app .role-shell.role-shell--c
-  .role-top-actions .role-quick-action[data-navigation-search] > kbd {
+html[data-design="commerce"]
+  #app
+  .role-shell.role-shell--c
+  .role-top-actions
+  .role-quick-action[data-navigation-search]
+  > kbd {
   padding: 4px 5px;
   border-radius: 6px;
   background: var(--so-panel);
@@ -1694,7 +1713,11 @@ html[data-design="commerce"] #app .commerce-sidebar footer .commerce-workspace-s
   grid-column: 1 / -1;
   min-width: 0;
 }
-html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-footer .commerce-workspace-switch {
+html[data-design="commerce"]
+  #app
+  .commerce-sidebar
+  footer.midou-organization-footer
+  .commerce-workspace-switch {
   min-height: 42px;
   margin-bottom: 0;
   padding-inline: 14px;
@@ -1893,7 +1916,8 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     #app
     .role-shell.role-shell--c
     .role-top-actions
-    .role-theme-switcher > button {
+    .role-theme-switcher
+    > button {
     width: 44px;
     min-height: 44px;
     padding: 0;
@@ -1950,30 +1974,58 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     gap: 10px;
     padding-block: 21px 14px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar > section {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    > section {
     flex-shrink: 0;
     gap: 2px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar > section + section {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    > section
+    + section {
     padding-block-start: 9px;
     border-block-start: 1px solid var(--so-border);
   }
   html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar h2 {
     margin-block-end: 4px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar section a {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    section
+    a {
     min-height: 32px;
     padding-inline: 10px;
     border-radius: 6px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar footer {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer {
     gap: 2px;
     padding-block-start: 6px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar footer :is(a, button) {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer
+    :is(a, button) {
     min-height: 32px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar footer button {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer
+    button {
     min-height: 44px;
   }
   html[data-design="commerce"] #app .midou-area-tabs {
@@ -2004,7 +2056,13 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     font-size: 16px;
     color: var(--so-text);
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="member"] .commerce-sidebar section a > svg {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="member"]
+    .commerce-sidebar
+    section
+    a
+    > svg {
     width: 20px;
     height: 20px;
     flex-shrink: 0;
@@ -2034,7 +2092,9 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
   html[data-design="commerce"]
     #app
     .role-shell[data-shell="platform_admin"]
-    .commerce-sidebar footer .midou-platform-workspace-switch {
+    .commerce-sidebar
+    footer
+    .midou-platform-workspace-switch {
     min-height: 40px;
     margin-bottom: 2px;
   }
@@ -2049,7 +2109,12 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     gap: 5px;
     padding-block: 13px 8px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar > section + section {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    > section
+    + section {
     padding-block-start: 6px;
   }
 }
@@ -2058,19 +2123,35 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
   html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="organization_admin"] {
     grid-template-columns: calc(clamp(220px, 15.61vw, 261px) - 7px) minmax(0, 1fr);
   }
-  html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="organization_admin"] > .role-content {
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c[data-shell="organization_admin"]
+    > .role-content {
     padding-inline-start: 32px;
   }
   html[data-design="commerce"] #app .role-shell[data-shell="organization_admin"] .commerce-sidebar {
     padding: 26px 11px 16px 17px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="organization_admin"] .midou-area-tabs + section {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .midou-area-tabs
+    + section {
     margin-block-start: 11px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="organization_admin"] .commerce-sidebar section {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    section {
     gap: 0;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="organization_admin"] .commerce-sidebar section a {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="organization_admin"]
+    .commerce-sidebar
+    section
+    a {
     min-height: 38px;
     padding-inline: 19px 12px;
     gap: 18px;
@@ -2078,9 +2159,15 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
   }
   html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="platform_admin"] {
     --platform-rail-inset: 13px;
-    grid-template-columns: calc(clamp(220px, 15.61vw, 261px) - var(--platform-rail-inset)) minmax(0, 1fr);
+    grid-template-columns: calc(clamp(220px, 15.61vw, 261px) - var(--platform-rail-inset)) minmax(
+        0,
+        1fr
+      );
   }
-  html[data-design="commerce"] #app .role-shell.role-shell--c[data-shell="platform_admin"] > .role-content {
+  html[data-design="commerce"]
+    #app
+    .role-shell.role-shell--c[data-shell="platform_admin"]
+    > .role-content {
     padding-inline-start: calc(22px + var(--platform-rail-inset));
   }
   html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar {
@@ -2092,23 +2179,49 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
   html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar h2 {
     margin-inline-start: 8px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar section a {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    section
+    a {
     padding-inline: 17px 10px;
     gap: 14px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .midou-area-tabs + section {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .midou-area-tabs
+    + section {
     margin-block-start: 13px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar > section + section {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    > section
+    + section {
     padding-block-start: 6px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar footer {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .midou-platform-workspace-switch {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .midou-platform-workspace-switch {
     grid-column: 1 / -1;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .commerce-sidebar footer :is(.midou-sidebar-settings, .midou-sidebar-help) {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .commerce-sidebar
+    footer
+    :is(.midou-sidebar-settings, .midou-sidebar-help) {
     padding-inline: 8px;
   }
 }
@@ -2120,11 +2233,20 @@ html[data-design="commerce"] #app .commerce-sidebar footer.midou-organization-fo
     position: relative;
     inset-block-start: -3px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .midou-area-tabs + section {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .midou-area-tabs
+    + section {
     row-gap: 1px;
     margin-block-end: 6px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="platform_admin"] .midou-area-tabs + section h2 {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="platform_admin"]
+    .midou-area-tabs
+    + section
+    h2 {
     margin-block-end: 5px;
   }
 }
@@ -2241,14 +2363,26 @@ html[data-design="commerce"] #app .home-command-bar :is(a, button) {
 }
 
 @media (min-width: 1440px) {
-  html[data-design="commerce"] #app .role-shell[data-shell="member"] .role-top-actions > a[aria-label="通知中心"] {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="member"]
+    .role-top-actions
+    > a[aria-label="通知中心"] {
     padding-inline: 10px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="member"] .role-top-actions > a[aria-label="通知中心"] > svg {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="member"]
+    .role-top-actions
+    > a[aria-label="通知中心"]
+    > svg {
     width: 22px;
     height: 22px;
   }
-  html[data-design="commerce"] #app .role-shell[data-shell="member"] .midou-navigation-help::before {
+  html[data-design="commerce"]
+    #app
+    .role-shell[data-shell="member"]
+    .midou-navigation-help::before {
     inset-inline-start: -7px;
   }
   html[data-design="commerce"] #app .role-shell[data-shell="member"] .midou-account-menu::before {
@@ -2504,33 +2638,56 @@ html[data-design="commerce"] #app .catalogue-querybar .catalogue-search label > 
     padding-block: 10px 22px;
     row-gap: 26px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
-    + .catalogue-controls > nav {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls
+    > nav {
     margin-inline-start: -2px;
     column-gap: 0;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
-    + .catalogue-controls > nav > button {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls
+    > nav
+    > button {
     padding-inline: 23px;
     justify-content: flex-start;
     text-align: start;
     font-size: 18px;
     line-height: 26px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
-    + .catalogue-controls > nav > button:first-child {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls
+    > nav
+    > button:first-child {
     min-inline-size: 162px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
-    + .catalogue-controls > nav > button:nth-child(2) {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls
+    > nav
+    > button:nth-child(2) {
     min-inline-size: 134px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
-    + .catalogue-controls > nav > button:nth-child(3) {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls
+    > nav
+    > button:nth-child(3) {
     min-inline-size: 157px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"]
-    + .catalogue-controls > nav > button:nth-child(4) {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="completed"]
+    + .catalogue-controls
+    > nav
+    > button:nth-child(4) {
     min-inline-size: 101px;
   }
   html[data-design="commerce"]
@@ -2575,7 +2732,10 @@ html[data-design="commerce"] #app .product-catalog > .catalog-data-note {
   background: var(--so-warning-soft);
   color: var(--so-warning);
 }
-html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] > .catalog-data-note {
+html[data-design="commerce"]
+  #app
+  .product-catalog[data-view="rule_candidates"]
+  > .catalog-data-note {
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -2683,7 +2843,10 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
     position: relative;
     inset-block-start: -3px;
   }
-  html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] > .catalog-data-note {
+  html[data-design="commerce"]
+    #app
+    .product-catalog[data-view="rule_candidates"]
+    > .catalog-data-note {
     margin-inline-start: 5px;
     font-size: 15px;
     line-height: 22px;
@@ -2692,12 +2855,18 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
 }
 
 @media (min-width: 1440px) {
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"] > .catalogue-refresh {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="completed"]
+    > .catalogue-refresh {
     min-inline-size: 128px;
     justify-content: center;
     background: var(--so-panel);
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="completed"] > .catalogue-refresh:hover {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="completed"]
+    > .catalogue-refresh:hover {
     background: var(--so-panel-soft);
   }
   .midou-completed-illustration {
@@ -2711,35 +2880,58 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
   html[data-design="commerce"] #app .midou-completed-actions {
     margin-block-start: 20px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"] > .catalogue-refresh {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="rule_candidates"]
+    > .catalogue-refresh {
     min-inline-size: 134px;
     justify-content: center;
     translate: 0 -7px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
-    + .catalogue-controls .catalogue-search {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls
+    .catalogue-search {
     max-inline-size: 552px;
     gap: 10px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
-    + .catalogue-controls .catalogue-search > button {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls
+    .catalogue-search
+    > button {
     min-inline-size: 69px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
-    + .catalogue-controls .catalogue-market-filter > input {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls
+    .catalogue-market-filter
+    > input {
     inline-size: 138px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
-    + .catalogue-controls > nav {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls
+    > nav {
     padding-inline-start: 6px;
     column-gap: 17px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
-    + .catalogue-controls .catalogue-querybar {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls
+    .catalogue-querybar {
     column-gap: 22px;
   }
-  html[data-design="commerce"] #app .catalogue-page-heading[data-view="rule_candidates"]
-    + .catalogue-controls .catalogue-market-filter {
+  html[data-design="commerce"]
+    #app
+    .catalogue-page-heading[data-view="rule_candidates"]
+    + .catalogue-controls
+    .catalogue-market-filter {
     gap: 13px;
   }
   html[data-design="commerce"] #app .product-catalog .candidate-pagination {
@@ -2749,7 +2941,9 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
     padding-inline: 0;
     border-block-start: 0;
   }
-  html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"]
+  html[data-design="commerce"]
+    #app
+    .product-catalog[data-view="rule_candidates"]
     > :is(.selection-product-list, .candidate-pagination) {
     margin-inline: -4px;
   }
@@ -2759,7 +2953,10 @@ html[data-design="commerce"] #app .product-catalog[data-view="rule_candidates"] 
     min-height: 36px;
     border-radius: 6px;
   }
-  html[data-design="commerce"] #app .product-catalog .candidate-pagination
+  html[data-design="commerce"]
+    #app
+    .product-catalog
+    .candidate-pagination
     button:not(:disabled):not([aria-current="page"]):not(:hover) {
     color: var(--so-text);
     background: var(--so-panel);
@@ -2951,7 +3148,10 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
   html[data-design="commerce"] #app .notification-list .notification-record > span {
     padding-inline-start: 3px;
   }
-  html[data-design="commerce"] #app .notification-row:has(> .notification-mark-read) > .notification-record {
+  html[data-design="commerce"]
+    #app
+    .notification-row:has(> .notification-mark-read)
+    > .notification-record {
     padding-inline-end: 14px;
   }
   html[data-design="commerce"] #app .notification-list .notification-record.unread::before {
@@ -3025,7 +3225,12 @@ html[data-design="commerce"] #app .midou-notification-unread input:checked {
     font-size: 16px;
     line-height: 1.45;
   }
-  html[data-design="commerce"] #app .notification-list .notification-record > span > .notification-group-note {
+  html[data-design="commerce"]
+    #app
+    .notification-list
+    .notification-record
+    > span
+    > .notification-group-note {
     font-size: 13px;
   }
 }
@@ -3045,7 +3250,10 @@ html[data-design="commerce"] #app .notification-center .realtime-badge[data-stat
   background: var(--so-success-soft);
   border-color: transparent;
 }
-html[data-design="commerce"] #app .notification-center .realtime-badge[data-state="connected"]::before {
+html[data-design="commerce"]
+  #app
+  .notification-center
+  .realtime-badge[data-state="connected"]::before {
   content: "";
   display: inline-block;
   width: 7px;
@@ -3071,7 +3279,10 @@ html[data-design="commerce"] #app .notification-center .realtime-badge[data-stat
   html[data-design="commerce"] #app .notification-center > header button:not(.secondary) {
     min-inline-size: 110px;
   }
-  html[data-design="commerce"] #app .notification-center .realtime-badge[data-state="connected"]::before {
+  html[data-design="commerce"]
+    #app
+    .notification-center
+    .realtime-badge[data-state="connected"]::before {
     width: 9px;
     height: 9px;
     margin-inline-end: 8px;
@@ -3111,7 +3322,10 @@ html[data-design="commerce"] #app .notification-row > .notification-record {
   min-width: 0;
   border: 0;
 }
-html[data-design="commerce"] #app .notification-row:has(> .notification-mark-read) > .notification-record {
+html[data-design="commerce"]
+  #app
+  .notification-row:has(> .notification-mark-read)
+  > .notification-record {
   grid-column: 1;
 }
 html[data-design="commerce"] #app .notification-row > .notification-mark-read {
@@ -3145,7 +3359,11 @@ html[data-design="commerce"] #app .notification-row > .notification-mark-read {
     inset-block-start: -4px;
     margin-block-end: 22px;
   }
-  html[data-design="commerce"] #app .notification-center.notification-center--review > header button.secondary {
+  html[data-design="commerce"]
+    #app
+    .notification-center.notification-center--review
+    > header
+    button.secondary {
     border-color: var(--so-border);
   }
   html[data-design="commerce"] #app .notification-center > .notification-summary {
@@ -3208,7 +3426,11 @@ html[data-design="commerce"] #app .notification-row > .notification-mark-read {
   .midou-notification-unread input:not(:checked)::before {
     background: var(--so-panel);
   }
-  html[data-design="commerce"] #app .midou-notification-filters > nav > button[aria-pressed="true"] {
+  html[data-design="commerce"]
+    #app
+    .midou-notification-filters
+    > nav
+    > button[aria-pressed="true"] {
     font-weight: 650;
   }
 }
@@ -3311,7 +3533,12 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
     line-height: 24px;
     font-weight: 500;
   }
-  html[data-design="commerce"] #app .account-content-only .p11-directory a[aria-current="page"] > b {
+  html[data-design="commerce"]
+    #app
+    .account-content-only
+    .p11-directory
+    a[aria-current="page"]
+    > b {
     font-weight: 650;
   }
   .midou-profile-grid {

@@ -34,8 +34,9 @@ export const nativeCollectedProductProjectionSql = collectedProductProjectionSql
       "AND a.source_id=q_collected.id AND a.account_id=t_collected.account_id) " +
       "AND EXISTS (SELECT 1 FROM account_owned_records a WHERE a.source_table='collection_task_evidence_links' " +
       "AND a.source_id=l_collected.id AND a.account_id=t_collected.account_id) ",
-  ).replace(
+  )
+  .replace(
     "WHERE a_collected.task_id=t_collected.id ",
     "JOIN account_owned_records a ON a.source_table='collection_task_events' AND a.source_id=a_collected.id " +
-    "WHERE a_collected.task_id=t_collected.id AND a.account_id=t_collected.account_id ",
+      "WHERE a_collected.task_id=t_collected.id AND a.account_id=t_collected.account_id ",
   );

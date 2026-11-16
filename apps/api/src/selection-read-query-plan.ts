@@ -12,7 +12,9 @@ const whereIndex = selectionCompetitorRelevanceSql.indexOf("WHERE e_relation.res
 if (!selectionCompetitorRelevanceSql.startsWith(from) || eventIndex < 0 || whereIndex < 0)
   throw new Error("selection_read_query_shape_changed");
 export const selectionReadRelevanceSql =
-  "EXISTS (SELECT 1 FROM " + opportunityEventReadRelation + " e_relation STRAIGHT_JOIN collection_subqueries q_relation " +
+  "EXISTS (SELECT 1 FROM " +
+  opportunityEventReadRelation +
+  " e_relation STRAIGHT_JOIN collection_subqueries q_relation " +
   "ON q_relation.id=CONVERT(JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.subquery_id')) USING ascii) " +
   selectionCompetitorRelevanceSql
     .slice(from.length, eventIndex)

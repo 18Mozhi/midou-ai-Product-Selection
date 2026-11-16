@@ -3,18 +3,29 @@ import {
   selectionCompetitionGateSql,
   selectionPrimaryAsinSql,
 } from "@scoutops/database";
-import { accountCompletionRankProof, nativeCompletionPrimaryAsin, nativeCompletionTaskProof } from "./native-completion-task-proof.js";
+import {
+  accountCompletionRankProof,
+  nativeCompletionPrimaryAsin,
+  nativeCompletionTaskProof,
+} from "./native-completion-task-proof.js";
 
-const pendingSourceSql = (account: boolean, native: boolean) => `SELECT t.id task_id,ss.id search_id,${account ? "so.account_id" : "ss.organization_id,ss.workspace_id"},ss.input_ref opportunity_id
+const pendingSourceSql = (
+  account: boolean,
+  native: boolean,
+) => `SELECT t.id task_id,ss.id search_id,${account ? "so.account_id" : "ss.organization_id,ss.workspace_id"},ss.input_ref opportunity_id
   FROM sourcing_searches ss JOIN collection_tasks t ON t.id=ss.collection_task_id
     ${account ? "" : "AND t.organization_id=ss.organization_id AND t.workspace_id=ss.workspace_id"}
   JOIN collection_subqueries q ON q.task_id=t.id
   JOIN providers p ON p.id=q.provider_id
-  ${account ? `JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25
+  ${
+    account
+      ? `JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25
   JOIN account_owned_records so ON so.source_table='sourcing_searches' AND so.source_id=ss.id
     AND (so.reason='exclusive_owner' OR (so.reason IN ('shared','unassigned') AND so.account_id=cut.primary_account_id))
   JOIN account_owned_records tor ON tor.source_table='collection_tasks' AND tor.source_id=t.id AND tor.account_id=so.account_id
-  JOIN account_owned_records qo ON qo.source_table='collection_subqueries' AND qo.source_id=q.id AND qo.account_id=so.account_id` : ""}
+  JOIN account_owned_records qo ON qo.source_table='collection_subqueries' AND qo.source_id=q.id AND qo.account_id=so.account_id`
+      : ""
+  }
   WHERE ss.input_type='opportunity' AND ss.deleted_at IS NULL AND ss.status='queued'
     ${native ? "AND t.account_id=so.account_id" : ""}
     AND t.status IN ('queued','scheduled','retry_scheduled','rate_limited') AND t.available_at<=NOW(3)
@@ -30,18 +41,25 @@ const pendingSourceSql = (account: boolean, native: boolean) => `SELECT t.id tas
       AND a.actor_type='worker' AND a.event_type='sourcing.collection.auto_scheduled'
       ${account ? "AND EXISTS (SELECT 1 FROM account_owned_records ao WHERE ao.source_table='collection_task_events' AND ao.source_id=a.id AND ao.account_id=so.account_id)" : ""})
     AND NOT EXISTS (SELECT 1 FROM sourcing_searches newer WHERE newer.input_type='opportunity'
-      AND newer.input_ref=ss.input_ref ${account
-        ? "AND EXISTS (SELECT 1 FROM account_owned_records no WHERE no.source_table='sourcing_searches' AND no.source_id=newer.id AND no.account_id=so.account_id)"
-        : "AND newer.organization_id=ss.organization_id AND newer.workspace_id=ss.workspace_id"}
+      AND newer.input_ref=ss.input_ref ${
+        account
+          ? "AND EXISTS (SELECT 1 FROM account_owned_records no WHERE no.source_table='sourcing_searches' AND no.source_id=newer.id AND no.account_id=so.account_id)"
+          : "AND newer.organization_id=ss.organization_id AND newer.workspace_id=ss.workspace_id"
+      }
       AND newer.deleted_at IS NULL AND (newer.created_at>ss.created_at OR (newer.created_at=ss.created_at AND newer.id>ss.id)))`;
 
 /** Materialize the small pending-source set and primary identity before the existing formal evidence gates. */
-const completionRows = (account: boolean, native = false) => `SELECT o.task_id,o.search_id,o.id opportunity_id,o.organization_id,o.workspace_id,o.primary_asin
+const completionRows = (
+  account: boolean,
+  native = false,
+) => `SELECT o.task_id,o.search_id,o.id opportunity_id,o.organization_id,o.workspace_id,o.primary_asin
   FROM (SELECT candidate.task_id,candidate.search_id,o.id,o.market,o.organization_id,o.workspace_id,${native ? nativeCompletionPrimaryAsin("candidate.account_id") + " primary_asin,candidate.account_id" : selectionPrimaryAsinSql + " primary_asin"}
     FROM (${pendingSourceSql(account, native)} LIMIT 18446744073709551615) candidate
-    JOIN opportunities o ON o.id=candidate.opportunity_id ${account
-      ? "AND EXISTS (SELECT 1 FROM account_owned_records oo WHERE oo.source_table='opportunities' AND oo.source_id=o.id AND oo.account_id=candidate.account_id)"
-      : "AND o.organization_id=candidate.organization_id AND o.workspace_id=candidate.workspace_id"}
+    JOIN opportunities o ON o.id=candidate.opportunity_id ${
+      account
+        ? "AND EXISTS (SELECT 1 FROM account_owned_records oo WHERE oo.source_table='opportunities' AND oo.source_id=o.id AND oo.account_id=candidate.account_id)"
+        : "AND o.organization_id=candidate.organization_id AND o.workspace_id=candidate.workspace_id"
+    }
     JOIN organizations org ON org.id=o.organization_id AND org.status='active'
     JOIN workspaces ws ON ws.id=o.workspace_id AND ws.organization_id=o.organization_id AND ws.status='active'
     WHERE o.source_type='trend_topic' AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted')
@@ -68,8 +86,18 @@ export const accountCompletionReadySourcingRowsSql = completionRows(true);
 const taskPreference = (rows: string) => `EXISTS (SELECT 1 FROM (${rows}
   LIMIT 18446744073709551615) close_sourcing WHERE close_sourcing.task_id=collection_tasks.id)`;
 export const completionReadySourcingTaskSql = taskPreference(completionReadySourcingRowsSql);
-export const accountCompletionReadySourcingTaskSql = taskPreference(accountCompletionReadySourcingRowsSql);
-export const nativeCompletionReadySourcingTaskSql = taskPreference(nativeCompletionTaskProof(completionRows(true, true), "o.account_id"));
-export const accountSourcingCompletionRankTaskSql = [0, 1, 2].map(shape => taskPreference(
-  accountCompletionRankProof(nativeCompletionTaskProof(completionRows(true, true), "o.account_id", shape > 0), shape > 0, shape === 2),
-));
+export const accountCompletionReadySourcingTaskSql = taskPreference(
+  accountCompletionReadySourcingRowsSql,
+);
+export const nativeCompletionReadySourcingTaskSql = taskPreference(
+  nativeCompletionTaskProof(completionRows(true, true), "o.account_id"),
+);
+export const accountSourcingCompletionRankTaskSql = [0, 1, 2].map((shape) =>
+  taskPreference(
+    accountCompletionRankProof(
+      nativeCompletionTaskProof(completionRows(true, true), "o.account_id", shape > 0),
+      shape > 0,
+      shape === 2,
+    ),
+  ),
+);
