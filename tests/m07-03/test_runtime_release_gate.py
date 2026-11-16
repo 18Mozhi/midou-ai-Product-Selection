@@ -1,4 +1,5 @@
-import inspect
+import contextlib
+import io
 import json
 import os
 import runpy
@@ -180,43 +181,125 @@ class GateTests(unittest.TestCase):
                 crawler.terminate.assert_called_once_with()
                 crawler.kill.assert_not_called()
 
-    def test_wiring_compiles_both_remote_paths_without_native_restart(self):
-        deploy = runpy.run_path(str(ROOT / "scripts/deploy-baota.py"))
-        node = deploy["panel_node_action_source"]("stop", "fixture-owner")
-        python = deploy["panel_deploy_source"]("a"*40, False)
-        backup = deploy["backup_preflight_source"](deploy["PROJECT_ROOT"], "fixture-owner", False)
-        compile(node, "node_remote", "exec")
-        compile(python, "python_remote", "exec")
-        compile(backup, "backup_remote", "exec")
-        self.assertIn("install_node_term_only(model", node)
-        self.assertIn("release_final_worker_not_drained", node)
-        self.assertNotIn("archive_rollbacks", python)
-        self.assertIn("PythonModel.kill_pids=staticmethod(python_term_only)", python)
-        self.assertNotIn("script/restart_project.py", python)
-        self.assertNotIn(".kill()", node+python)
 
-    def test_full_deploy_orders_drain_stop_migrate_resume_and_acceptance(self):
-        deploy = runpy.run_path(str(ROOT / "scripts/deploy-baota.py"))
-        source = inspect.getsource(deploy["main"])
-        full = source[source.index('with tempfile.TemporaryDirectory(prefix="scoutops-deploy-")'):]
-        tokens = (
-            'backup_preflight_source(PROJECT_ROOT, lock_owner',
-            'verify_public_runtime_sample(production_identity["build_sha"])',
-            'release_claims(client, "pause", lock_owner)',
-            'verify_collection_drained(',
-            'panel_node_action_source("stop", lock_owner',
-            'ssh_exec(client, migrate',
-            'remote_python(client, panel_deploy_source',
-            'resume_owned_release_claims(client, lock_owner)',
-            'release_health = verify_public(build_sha)',
-            'post_resume = verify_resumed_runtime(client, build_sha)',
-            'remote_python(client, cleanup_source(build_sha',
+    def test_coordinator_compiles_current_remote_paths_without_backup_or_native_restart(self):
+        scripts = ROOT / "scripts"
+        local = runpy.run_path(str(scripts / "deploy-account-baota.py"))
+        control = runpy.run_path(str(scripts / "baota-account-cutover-control.py"))
+        for action in ("inspect", "quiesce", "activate", "resume_baseline"):
+            source = control["writer_control_source"](
+                action,
+                build_sha="a" * 40 if action in ("activate", "resume_baseline") else None,
+                baseline={"node": True, "python": True} if action == "resume_baseline" else None,
+            )
+            compile(source, action, "exec")
+            self.assertNotIn("script/restart_project.py", source)
+            self.assertNotIn(".kill()", source)
+            self.assertNotIn("archive_rollbacks(", source)
+        coordinated = local["remote_source"](
+            scripts, {"build": "a" * 40, "previous": "b" * 40, "plan": "c" * 64, "archive_sha": "d" * 64}
         )
-        indexes = [full.index(token) for token in tokens]
-        self.assertEqual(indexes, sorted(indexes))
-        readonly = source[source.index('    if args.verify_live:\n        client'):source.index('    verify_release_change_ownership(repo)')]
-        for forbidden in ('panel_node_action_source', 'panel_deploy_source', 'cleanup_source', 'release_claims('):
-            self.assertNotIn(forbidden, readonly)
+        compile(coordinated, "coordinated_release", "exec")
+        self.assertEqual(
+            set(local["SOURCES"]), {"package", "install", "stage", "control", "drain", "coordinator"}
+        )
+
+    def test_formal_entry_prefers_source_gate_then_identity_and_drained_crawler_before_upload(self):
+        scripts = ROOT / "scripts"
+        local = runpy.run_path(str(scripts / "deploy-account-baota.py"))
+        executable = local["execute"]
+        old, new, plan = "b" * 40, "a" * 40, "c" * 64
+        cases = [
+            ("source_rejected", ["build"]),
+            ("baseline_changed", ["build", "ssh", "identity"]),
+            ("crawler_running", ["build", "ssh", "identity", "history", "crawler"]),
+            ("success", [
+                "build", "ssh", "identity", "history", "crawler", "upload", "coordinator",
+                "channel_close", "public_health", "retired_pages",
+            ]),
+        ]
+        for scenario, expected in cases:
+            with self.subTest(scenario=scenario):
+                events = []
+
+                def build(repo, digest, archive):
+                    events.append("build")
+                    self.assertEqual((repo, digest), (ROOT, plan))
+                    if scenario == "source_rejected":
+                        raise RuntimeError("source_rejected_by_gate")
+                    archive.write_bytes(b"compiled immutable runtime archive")
+                    return {"build_sha": new}
+
+                def identify(client, source, timeout):
+                    events.append("identity")
+                    return {"build_sha": "e" * 40 if scenario == "baseline_changed" else old,
+                            "migration_version": "0076_collection_backlog_cancellation.up.sql"}
+
+                def lineage(repo, previous, candidate):
+                    events.append("history")
+                    self.assertEqual((repo, previous, candidate), (ROOT, old, new))
+
+                def crawler(client, config, runtime_scripts):
+                    events.append("crawler")
+                    return {"running": int(scenario == "crawler_running"), "leases": 0}
+
+                def transfer(client, archive, destination):
+                    events.append("upload")
+                    self.assertTrue(archive.is_file())
+                    self.assertEqual(destination, "/fixed/config/account-upload-" + new + ".tar.gz")
+
+                def execute_remote(command, timeout):
+                    events.append("coordinator")
+                    self.assertEqual((command, timeout), ("/panel/python -B -", None))
+                    self.assertEqual(events[-2], "upload")
+                    stdin = io.StringIO()
+                    stdin.channel = types.SimpleNamespace(
+                        shutdown_write=lambda: events.append("channel_close")
+                    )
+                    stdout = io.BytesIO(
+                        ("SCOUTOPS_RESULT=" + json.dumps({"status": True, "phase": "runtime_ready",
+                                                         "build_sha": new}) + "\n").encode()
+                    )
+                    stdout.channel = types.SimpleNamespace(recv_exit_status=lambda: 0)
+                    return stdin, stdout, io.BytesIO()
+
+                @contextlib.contextmanager
+                def ssh(config):
+                    events.append("ssh")
+                    yield types.SimpleNamespace(exec_command=execute_remote)
+
+                def public(build_sha):
+                    events.append("public_health")
+                    self.assertEqual(build_sha, new)
+                    return {"ready": True}
+
+                deploy = {
+                    "PROJECT_ROOT": "/fixed", "PANEL_PYTHON": "/panel/python",
+                    "DEPLOYMENT_MIGRATION_VERSION": "0076_collection_backlog_cancellation.up.sql",
+                    "production_identity_source": lambda: "read only",
+                    "remote_python": identify, "verify_production_sha_history": lineage,
+                    "verify_public": public,
+                }
+
+                def load_script(path):
+                    return {"build_account_archive": build} if path.endswith("account-release-package.py") else deploy
+
+                with patch.dict(executable.__globals__, {
+                    "runpy": types.SimpleNamespace(run_path=load_script), "project_ssh": ssh,
+                    "probe_standalone_crawler": crawler, "transfer_exclusive": transfer,
+                    "verify_public_retired_pages": lambda: events.append("retired_pages"),
+                }):
+                    if scenario == "success":
+                        result = executable(ROOT, old, plan)
+                        self.assertEqual(result["phase"], "runtime_ready")
+                        self.assertEqual(result["health"], {"ready": True, "retiredPages": True})
+                    else:
+                        errors = {"source_rejected": "source_rejected_by_gate",
+                                  "baseline_changed": "live_baseline_changed",
+                                  "crawler_running": "standalone_crawler_not_drained"}
+                        with self.assertRaisesRegex(RuntimeError, errors[scenario]):
+                            executable(ROOT, old, plan)
+                self.assertEqual(events, expected)
 
 
 if __name__ == "__main__":
