@@ -58,7 +58,7 @@ import { usePlatformContentList } from "./use-platform-content-list";
 import { usePlatformContentReview } from "./use-platform-content-review";
 import { usePlatformStatus } from "./use-platform-status";
 
-const props = defineProps<{ apiBaseUrl: string; domain: string }>();
+const props = defineProps<{ apiBaseUrl: string; domain: string; accountRehearsal?: boolean }>();
 const request = createApiClient(props.apiBaseUrl);
 const domain = computed<Domain>(
   () =>
@@ -418,6 +418,7 @@ onUnmounted(() => {
     :aria-busy="refreshing"
   >
     <PlatformContentCenter
+      :account-rehearsal="accountRehearsal"
       v-if="domain === 'content'"
       v-model:query="query"
       v-model:status="status"
@@ -549,6 +550,7 @@ onUnmounted(() => {
       </footer></template
     >
     <PlatformContentReviewDialog
+      :account-rehearsal="accountRehearsal"
       v-model:status="reviewStatus"
       v-model:reason="reviewReason"
       :open="Boolean(reviewItem)"

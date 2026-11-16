@@ -5292,7 +5292,7 @@ paths:
   /platform/management/content/{topicId}:
     patch:
       summary: Moderate a platform-visible trend topic
-      description: Requires platform:operate, same-origin Origin, a non-empty JSON body and Idempotency-Key. Changes only the topic display status with optimistic version control, a trend event, a platform audit event and a mandatory reason. Missing bodies return request_body_required instead of an internal error.
+      description: Requires platform:operate, same-origin Origin, a non-empty JSON body and Idempotency-Key. Changes only the topic display status with optimistic version control, a trend event, a platform audit event and a mandatory reason. In retired account mode the original topic and sealed owner must match before mutation or replay; the original intelligence records and references are not modified. Missing bodies return request_body_required instead of an internal error.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: topicId, in: path, required: true, schema: { type: string, format: uuid } }

@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import { resolve } from "node:path";
-import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import {
   PlatformDashboardError,
   type PlatformDashboardRepository,
@@ -470,9 +470,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       };
     }
     if (i.domain === "content") {
+      const topicSource = this.accountOnly ? "trend_topics t" : "trend_topics t JOIN organizations o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id";
+      const topicFields = this.accountOnly ? "" : ",o.name organization_name,w.name workspace_name";
+      const accountGuard = this.accountOnly ? " AND "+platformOwns("trend_topics","t.id","t.account_id") : "";
       const searchPredicate =
           "(t.title LIKE ? OR COALESCE(t.category,'') LIKE ? OR " +
-          "CONVERT(t.market USING utf8mb4) COLLATE utf8mb4_unicode_ci LIKE ?)",
+          "CONVERT(t.market USING utf8mb4) COLLATE utf8mb4_unicode_ci LIKE ?)" + accountGuard,
         searchParameters = [filter, filter, filter],
         [[summaryRows], [filteredRows]] = await Promise.all([
           this.pool.query<RowDataPacket[]>(
@@ -495,9 +498,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         offset = (page - 1) * i.pageSize,
         [rows] = await this.pool.query<RowDataPacket[]>(
           "SELECT t.id,t.title,t.category,t.market,t.language,t.status,t.signal_count," +
-            "t.source_count,t.heat_value,t.confidence_status,t.version,t.last_seen_at," +
-            "o.name organization_name,w.name workspace_name FROM trend_topics t JOIN organizations " +
-            "o ON o.id=t.organization_id JOIN workspaces w ON w.id=t.workspace_id WHERE " +
+            "t.source_count,t.heat_value,t.confidence_status,t.version,t.last_seen_at" + topicFields + " FROM " + topicSource + " WHERE " +
             `${searchPredicate} AND t.status LIKE ? ORDER BY t.last_seen_at DESC,t.id LIMIT ? OFFSET ?`,
           [...searchParameters, status, i.pageSize, offset],
         );
@@ -1271,7 +1272,58 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       c.release();
     }
   }
+  private async moderateAccountTrend(i: any) {
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      const [topics] = await c.query<RowDataPacket[]>(
+        "SELECT t.id,t.status,t.version,t.account_id,o.reason FROM trend_topics t " +
+        "JOIN account_owned_records o ON o.source_table = 'trend_topics' AND o.source_id=t.id AND o.account_id=t.account_id " +
+        "WHERE t.id=? FOR UPDATE", [i.topicId],
+      );
+      const topic = topics[0];
+      if (!topic) throw new PlatformDashboardError("trend_topic_not_found", 404, "刷新内容列表后重试。");
+      const signature = JSON.stringify([i.topicId,i.status,i.expectedVersion,i.reason]);
+      const [receipts] = await c.query<RowDataPacket[]>(
+        "SELECT resource_id,result_json FROM platform_management_operations WHERE actor_id=? AND route=? AND idempotency_key=? LIMIT 1",
+        [i.actorId,i.route,i.idempotencyKey],
+      );
+      const receipt = receipts[0];
+      if (receipt) {
+        const saved = typeof receipt.result_json === "string" ? JSON.parse(receipt.result_json) : receipt.result_json;
+        if (receipt.resource_id !== i.topicId || saved?.id !== i.topicId || saved?.idempotency_signature !== signature)
+          throw new PlatformDashboardError("idempotency_key_reused",409,"此 Idempotency-Key 已用于不同的情报审核。");
+        await c.commit();
+        return {id:saved.id,status:saved.status,version:saved.version};
+      }
+      if (Number(topic.version) !== i.expectedVersion)
+        throw new PlatformDashboardError("trend_topic_version_conflict",409,"内容已被其他管理员修改，刷新后重试。");
+      const version=Number(topic.version)+1, eventId=randomUUID();
+      const [update] = await c.query<ResultSetHeader>("UPDATE trend_topics SET status=?,version=?,updated_at=? WHERE id=? AND account_id=? AND version=?",
+        [i.status,version,i.now,i.topicId,topic.account_id,i.expectedVersion]);
+      if (update.affectedRows!==1) throw new Error("account_trend_update_not_applied");
+      const payload=JSON.stringify({from_status:topic.status,to_status:i.status,reason:i.reason,version});
+      await c.query("INSERT INTO trend_events(id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) " +
+        "VALUES (?,'trend.topic.moderated','trend_topic',?,'user',?,?,?,?,?)",
+        [eventId,i.topicId,i.actorId,i.requestId,i.traceId,payload,i.now]);
+      await c.query("INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES ('trend_events',?,?,?)",
+        [eventId,topic.account_id,topic.reason]);
+      const result={id:i.topicId,status:i.status,version};
+      await this.saveOperation(c,i,i.topicId,{...result,idempotency_signature:signature});
+      await c.query("INSERT INTO platform_audit_events(id,historical_context,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) " +
+        "VALUES(?,NULL,?,'trend.topic.moderated','trend_topic',?,'succeeded',?,?,?,?,1)",
+        [randomUUID(),i.actorId,i.topicId,i.requestId,i.traceId,payload,i.now]);
+      await c.commit();
+      return result;
+    } catch (e) {
+      await c.rollback();
+      throw e;
+    } finally {
+      c.release();
+    }
+  }
   async moderateTrend(i: any) {
+    if (this.accountOnly) return this.moderateAccountTrend(i);
     const c = await this.pool.getConnection();
     try {
       await c.beginTransaction();

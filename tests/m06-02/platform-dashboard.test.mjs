@@ -462,3 +462,36 @@ async function verifyRetiredPlatformGovernance(Repository,assert) {
 }
 test("retired platform management retains original rows, matching ownership, pagination and export audit", () =>
   verifyRetiredPlatformGovernance(MySqlPlatformDashboardRepository, assert));
+
+async function testRetiredTrendModeration(Repo,assert){
+ const calls=[],events=[], writes=[];
+ let topic={id:'original-topic',account_id:'sealed-account',reason:'shared',status:'active',version:2},receipt=null, enforceOwnership=true;
+ const query=async(sql,params=[])=>{
+  calls.push(sql);
+  assert.doesNotMatch(sql,/\b(?:organizations|workspaces|organization_id|workspace_id)\b/);
+  assert.equal((sql.match(/\?/g)||[]).length,params.length);
+  if(sql.includes('FOR UPDATE')) {
+    assert.match(sql,/o\.source_id=t\.id AND o\.account_id=t\.account_id/);
+    return [enforceOwnership?[topic]:[]];
+  }
+  if(sql.includes('SELECT resource_id,result_json'))return [receipt?[receipt]:[]];
+  if(sql.startsWith('SELECT COUNT'))return [[{total:1,active:1}]];
+  if(sql.startsWith('SELECT t.id,t.title'))return [[{id:'original-topic',last_seen_at:'2026-11-17T00:00:00Z'}]];
+  writes.push([sql,params]);
+  if(sql.startsWith('INSERT INTO platform_management_operations'))receipt={resource_id:params[4],result_json:params[5]};
+  return [{affectedRows:1}];
+ };
+ const pool={query,getConnection:async()=>({query,beginTransaction:async()=>events.push('begin'),commit:async()=>events.push('commit'),rollback:async()=>events.push('rollback'),release:()=>events.push('release')})};
+ const repo=new Repo(pool,undefined,undefined,undefined,undefined,true);
+ const list=await repo.readManagement({domain:'content',query:'needle',status:'active',page:1,pageSize:10});assert.equal(list.items[0].id,'original-topic');assert(calls.slice(-3).every(sql=>sql.includes('account_owned_records')));
+ const input={topicId:'original-topic',status:'irrelevant',reason:'记录理由',actorId:'actor',route:'moderate',idempotencyKey:'key',requestId:'req',traceId:'trace',expectedVersion:2,now:new Date()};
+ const result=await repo.moderateTrend(input);assert.equal(result.id,'original-topic');assert.equal(result.version,3);assert.equal(writes.length,5);
+ assert.equal(writes[1][1][1],input.topicId);assert.equal(writes[2][1][0],writes[1][1][0]);assert.equal(writes[2][1][1],topic.account_id);assert.equal(writes[2][1][2],topic.reason);assert.equal(writes[4][1][2],input.topicId);
+ assert.deepEqual(events,['begin','commit','release']);
+ await repo.moderateTrend(input);assert.equal(writes.length,5);
+ await assert.rejects(repo.moderateTrend({...input,reason:'不同理由'}),e=>e.code==='idempotency_key_reused');
+ enforceOwnership=false;
+ await assert.rejects(repo.moderateTrend(input),e=>e.code==='trend_topic_not_found');assert.equal(writes.length,5);assert.equal(events.at(-2),'rollback');
+}
+test("retired platform trend moderation preserves original topic and sealed event and rejects mismatched replay", () =>
+  testRetiredTrendModeration(MySqlPlatformDashboardRepository, assert));

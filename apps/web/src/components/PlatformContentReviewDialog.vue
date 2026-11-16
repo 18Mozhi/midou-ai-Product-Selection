@@ -7,6 +7,7 @@ type ReviewStatus = "active" | "irrelevant" | "stale";
 
 const props = defineProps<{
   open: boolean;
+  accountRehearsal?: boolean;
   item: PlatformContentReviewSnapshot | null;
   error: string;
   submitting: boolean;
@@ -59,8 +60,8 @@ function submit() {
       <section v-if="item" class="platform-content-review__subject">
         <strong>{{ item.title }}</strong>
         <span>
-          {{ item.organization_name || "组织未提供" }} /
-          {{ item.workspace_name || "工作区未提供" }} · 当前{{ statusName(item.status) }} · v{{
+          <template v-if="!accountRehearsal">{{ item.organization_name || "组织未提供" }} /
+          {{ item.workspace_name || "工作区未提供" }} · </template>当前{{ statusName(item.status) }} · v{{
             item.version
           }}
         </span>

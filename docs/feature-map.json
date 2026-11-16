@@ -1,4 +1,20 @@
 {
+  "accountPlatformTrendModeration": {
+    "sourceFiles": [
+      "apps/api/src/mysql-platform-dashboard-repository.ts",
+      "apps/web/src/components/PlatformManagementCenter.vue",
+      "apps/web/src/components/PlatformContentCenter.vue",
+      "apps/web/src/components/PlatformContentReviewDialog.vue",
+      "apps/web/src/components/PlatformManagementRecordList.vue"
+    ],
+    "testFiles": [
+      "tests/m06-02/platform-dashboard.test.mjs"
+    ],
+    "docs": [
+      "docs/runbooks/m06-02-platform-dashboard.md"
+    ],
+    "contract": "Retired platform intelligence review keeps original topic and event references with matching sealed owner and audited idempotent moderation."
+  },
   "accountPlatformDataGovernance": {
     "sourceFiles": [
       "apps/api/src/mysql-platform-dashboard-repository.ts",

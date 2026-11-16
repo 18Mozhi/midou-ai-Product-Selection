@@ -9,6 +9,7 @@ type PageState = "loading" | "ready" | "empty" | "error";
 type ReviewStatus = "active" | "irrelevant" | "stale";
 
 const props = defineProps<{
+  accountRehearsal?: boolean;
   state: PageState;
   data: any;
   message: string;
@@ -139,6 +140,7 @@ const scopeChanged = computed(
             v-if="items.length"
             domain="content"
             appearance="content"
+            :account-rehearsal="accountRehearsal"
             :items="items"
             :busy="busy"
             :state-name="stateName"

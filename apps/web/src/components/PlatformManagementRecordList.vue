@@ -7,6 +7,7 @@ const props = defineProps<{
   busy: string;
   stateName: (value: unknown) => string;
   when: (value: unknown) => string;
+  accountRehearsal?: boolean;
   appearance?: "default" | "content";
 }>();
 
@@ -48,7 +49,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
         <thead>
           <tr>
             <th>热点主题</th>
-            <th>组织 / 工作区</th>
+            <th v-if="!accountRehearsal">组织 / 工作区</th>
             <th>市场</th>
             <th>信号 / 来源</th>
             <th>热度 / 置信度</th>
@@ -64,7 +65,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
                 >{{ item.category || "未分类" }} · 最近观测 {{ when(item.last_seen_at) }}</small
               >
             </td>
-            <td>
+            <td v-if="!accountRehearsal">
               {{ item.organization_name }}<small>{{ item.workspace_name }}</small>
             </td>
             <td>{{ item.market }} · {{ item.language }}</td>
@@ -104,7 +105,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
       <span class="responsive-record-summary responsive-record-summary--content">
         <b :data-state="row.status">{{ stateName(row.status) }}</b>
         <strong>{{ row.title }}</strong>
-        <small>{{ row.organization_name }} / {{ row.workspace_name }}</small>
+        <small v-if="!accountRehearsal">{{ row.organization_name }} / {{ row.workspace_name }}</small>
         <span class="content-mobile-facts">
           <span><small>信号 / 来源</small>{{ row.signal_count }} / {{ row.source_count }}</span>
           <span><small>热度</small>{{ row.heat_value }}</span>
@@ -119,7 +120,7 @@ const emailTitle = (item: any) => item.title || emailKindText(item.kind);
           <dt>分类与热度</dt>
           <dd>{{ row.category || "未分类" }} · {{ row.heat_value }}</dd>
         </div>
-        <div>
+        <div v-if="!accountRehearsal">
           <dt>组织 / 工作区</dt>
           <dd>{{ row.organization_name }} / {{ row.workspace_name }}</dd>
         </div>
