@@ -282,6 +282,41 @@ test("业务可用性区分调度告警与过期心跳", async () => {
   assert.equal((await service.publicHealth()).state, "ready");
 });
 
+test("worker snapshot written during the topology read is fresh, not in the future", async () => {
+  const { RuntimeTopologyService } =
+    await import("../../apps/api/dist/runtime-topology-service.js");
+  const start = new Date("2026-08-19T10:00:00.000Z");
+  let now = start;
+  let future = false;
+  const service = new RuntimeTopologyService(
+    {
+      snapshot: async () => ({
+        nodes: [{
+          nodeId: "api-primary", hostId: "huizhou-single-host", role: "api",
+          status: "ready", lastHeartbeatAt: start,
+        }],
+      }),
+    },
+    {
+      expectedNodeId: "api-primary",
+      expectedHostId: "huizhou-single-host",
+      staleAfterMs: 90_000,
+      workerSchedulerSnapshot: async () => {
+        now = new Date(start.getTime() + 50);
+        return {
+          status: "running", queues: [], active_runs: 0,
+          observed_at: new Date(now.getTime() + (future ? 1 : 0)).toISOString(),
+        };
+      },
+    },
+    () => now,
+  );
+  assert.equal((await service.businessHealth()).status, "available");
+  now = start;
+  future = true;
+  assert.equal((await service.businessHealth()).status, "unavailable");
+});
+
 test("自动选品等待规则时不把后台业务可用性误报为降级", async () => {
   const { RuntimeTopologyService } =
     await import("../../apps/api/dist/runtime-topology-service.js");

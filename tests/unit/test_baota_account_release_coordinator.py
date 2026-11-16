@@ -202,7 +202,33 @@ class CoordinatorTest(unittest.TestCase):
         for value in ({}, {"account_routes_verified": 1}, {"account_routes_verified": False}):
             with self.assertRaisesRegex(RuntimeError, "node_scope_proof_missing"):
                 activate(type("Fixture", (), {"_panel": lambda _, action: value})())
-        self.assertIsNone(activate(type("Fixture", (), {"_panel": lambda _, action: {"account_routes_verified": True}})()))
+        confirmed = []
+        fixture = types.SimpleNamespace(
+            _panel=lambda action: {"account_routes_verified": True},
+            claim_drain=types.SimpleNamespace(verify_active=confirmed.append),
+            build_sha="a" * 40,
+        )
+        self.assertIsNone(activate(fixture))
+        self.assertEqual(confirmed, [fixture.build_sha])
+
+    def test_worker_activation_needs_two_advancing_samples_from_the_same_worker(self):
+        check = DRAIN["BaselineClaimDrain"](pathlib.Path("/example"), "/node")
+        original, replacement = (101, 3), (102, 4)
+        workers = iter([[original], [replacement], [replacement], [replacement]])
+        stamps = iter(["1", "2", "2", "3"])
+        observed = []
+        check.worker_identities = lambda: next(workers)
+        def sample(build, identity):
+            observed.append((build, identity))
+            return next(stamps)
+        check.active_sample = sample
+        check.verify_active("a" * 40, attempts=4, sleep=lambda _: None)
+        self.assertEqual(len(observed), 4)
+        self.assertEqual(observed[-2:], [("a" * 40, replacement)] * 2)
+        check.worker_identities = lambda: [replacement]
+        check.active_sample = lambda *args: "3"
+        with self.assertRaisesRegex(RuntimeError, "worker_activation_unverified"):
+            check.verify_active("a" * 40, attempts=2, sleep=lambda _: None)
 
     def test_remote_payload_is_python37_parseable_without_executing(self):
         rendered = LOCAL["remote_source"](SCRIPTS, {})

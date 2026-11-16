@@ -532,7 +532,7 @@
     ],
     "testFiles": ["tests/unit/test_baota_account_release_coordinator.py"],
     "docs": ["docs/runbooks/account-production-coordinated-release.md"],
-    "contract": "Fixed-host strict SSH, clean approved main, exclusive upload, private verified candidate, owner-bound pause and Worker drain before stopping writers, lock and migrate, install and validate before activation. The original runtime can resume only on a proven unchanged schema before the destructive phase. A journal blocks blind replay; no backups or isolation."
+    "contract": "Fixed-host strict SSH, clean approved main, exclusive upload, private verified candidate, owner-bound pause and Worker drain before stopping writers, lock and migrate, install and validate before activation. Runtime readiness additionally proves the retired Worker build and mode and two advancing fresh snapshots from that worker. The original runtime can resume only on a proven unchanged schema before the destructive phase. A journal blocks blind replay; no backups or isolation."
   },
   "accountReleaseStageAndActivation": {
     "sourceFiles": [

@@ -6,16 +6,10 @@ import time
 import uuid
 
 
-DRAIN_PROBE = r'''
-const fs=require("node:fs"), mysql=require("mysql2/promise"), e=process.env;
+WORKER_SNAPSHOT = r'''
+const fs=require("node:fs"), e=process.env;
 const path=require("node:path");
-const [root, owner, workerStartedMs] = process.argv.slice(1);
-if(e.DB_HOST!=="127.0.0.1" || e.DB_NAME!=="product_scout" || e.DB_USER!=="product_scout") throw Error("release_drain_identity_mismatch");
-function assertOwner() {
-  const file=root+"/runtime/verification/collection-claims.pause";
-  if(!fs.lstatSync(file).isFile() || JSON.parse(fs.readFileSync(file,"utf8")).maintenanceId!==owner) throw Error("release_drain_owner_mismatch");
-}
-function readWorkerActivity() {
+function readWorkerActivity(root, workerStartedMs) {
   const file=path.resolve(root+"/backend",e.WORKER_SCHEDULER_STATE_FILE || "./runtime/worker-scheduler.json");
   if(![path.resolve(root,"runtime"),path.resolve(root,"backend","runtime")].some(base=>file.startsWith(base+path.sep)) ||
       fs.realpathSync(file)!==file) throw Error("release_worker_snapshot_path_invalid");
@@ -38,9 +32,19 @@ function readWorkerActivity() {
        !data.queues.every(q=>typeof q.name==="string"&&count(q.active_runs)) ||
        !count(data.active_runs)||data.active_runs!==data.queues.reduce((n,q)=>n+q.active_runs,0))
       throw Error("release_worker_snapshot_invalid");
-    return { worker_active: data.active_runs,
+    return { observed_at: data.observed_at, worker_active: data.active_runs,
       intelligence_active: data.queues.find(q=>q.name==="trend_projection").active_runs };
   } finally {fs.closeSync(fd);}
+}
+'''
+
+DRAIN_PROBE = WORKER_SNAPSHOT + r'''
+const mysql=require("mysql2/promise");
+const [root, owner, workerStartedMs] = process.argv.slice(1);
+if(e.DB_HOST!=="127.0.0.1" || e.DB_NAME!=="product_scout" || e.DB_USER!=="product_scout") throw Error("release_drain_identity_mismatch");
+function assertOwner() {
+  const file=root+"/runtime/verification/collection-claims.pause";
+  if(!fs.lstatSync(file).isFile() || JSON.parse(fs.readFileSync(file,"utf8")).maintenanceId!==owner) throw Error("release_drain_owner_mismatch");
 }
 const leasedTables=[
   ["trend_projection_jobs","'leased'"],
@@ -65,9 +69,18 @@ const leasedTables=[
     const now=new Date();
     const [[d]]=await c.query({sql,timeout:4000},Array(2+leasedTables.length).fill(now));
     assertOwner();
-    console.log(JSON.stringify({...d,...readWorkerActivity()}));
+    const {worker_active, intelligence_active}=readWorkerActivity(root,workerStartedMs);
+    console.log(JSON.stringify({...d,worker_active,intelligence_active}));
   } finally {try {await c.rollback();} finally {await c.end();}}
 })().catch(error=>{console.error(/^release_[a-z_]+$/.test(error.message)?error.message:"release_drain_probe_failed");process.exitCode=1;});
+'''
+
+ACTIVE_PROBE = WORKER_SNAPSHOT + r'''
+const [root, build, workerStartedMs] = process.argv.slice(1);
+if (e.BUILD_SHA!==build || e.ACCOUNT_SCOPE_MODE!=="retired" ||
+    e.RELEASE_SOURCE_MIGRATION_VERSION!=="0197_retire_tenancy_roots.up.sql")
+  throw Error("account_release_worker_env_identity_mismatch");
+console.log(JSON.stringify(readWorkerActivity(root,workerStartedMs)));
 '''
 
 
@@ -179,3 +192,46 @@ class BaselineClaimDrain:
         sample = self.sample()
         if set(sample) != DRAIN_KEYS or any(type(value) is not int or value != 0 for value in sample.values()):
             raise RuntimeError("account_release_worker_not_drained_at_stop")
+
+    def active_sample(self, build, identity):
+        import psutil
+
+        proc = psutil.Process(identity[0])
+        env = proc.environ()
+        if env.get("BUILD_SHA") != build or env.get("ACCOUNT_SCOPE_MODE") != "retired":
+            raise RuntimeError("account_release_worker_process_scope_mismatch")
+        result = self.read_json(
+            ["-e", ACTIVE_PROBE, str(self.root), build, str(identity[1])],
+            "account_release_worker_snapshot_not_ready",
+        )
+        if self.worker_identities() != [identity]:
+            raise RuntimeError("account_release_worker_identity_changed")
+        stamp = result.get("observed_at")
+        if not isinstance(stamp, str) or not stamp:
+            raise RuntimeError("account_release_worker_snapshot_not_ready")
+        return stamp
+
+    def verify_active(self, build, *, attempts=20, sleep=time.sleep):
+        import psutil
+
+        first = None
+        for index in range(attempts):
+            workers = self.worker_identities()
+            if len(workers) == 1:
+                try:
+                    stamp = self.active_sample(build, workers[0])
+                except psutil.NoSuchProcess:
+                    first = None
+                except RuntimeError as error:
+                    if str(error) != "account_release_worker_snapshot_not_ready":
+                        raise
+                    first = None
+                else:
+                    if first and first[0] == workers[0] and stamp > first[1]:
+                        return
+                    first = (workers[0], stamp)
+            else:
+                first = None
+            if index + 1 < attempts:
+                sleep(2)
+        raise RuntimeError("account_release_worker_activation_unverified")
