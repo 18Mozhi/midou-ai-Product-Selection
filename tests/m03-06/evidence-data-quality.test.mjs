@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { link, mkdir, mkdtemp, readFile, realpath, rm, unlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
@@ -9,8 +9,13 @@ import {
   sha256,
   validateEvidenceInput,
 } from "../../packages/data-quality/dist/index.js";
-import { writeScopedFile } from "../../packages/storage/dist/index.js";
+import {
+  issueAccountEvidenceDownloadGrant,
+  verifyAccountEvidenceDownloadGrant,
+  writeScopedFile,
+} from "../../packages/storage/dist/index.js";
 import { DataQualityService } from "../../apps/api/dist/data-quality-service.js";
+import { MySqlDataQualityRepository } from "../../apps/api/dist/mysql-data-quality-repository.js";
 import { buildApp } from "../../apps/api/dist/app.js";
 const ids = {
   actor: "00000000-0000-4000-8000-000000000601",
@@ -21,6 +26,226 @@ const ids = {
   topic: "00000000-0000-4000-8000-000000000606",
   signal: "00000000-0000-4000-8000-000000000607",
 };
+test("platform reconciliation filters keep their contract after the legacy scope columns are removed", async () => {
+  const calls = [];
+  const pool = { async query(sql, args = []) {
+    calls.push([sql, args]);
+    if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [[{Field:"organization_id"},{Field:"workspace_id"}]];
+    return [sql.includes("historical_assignee_membership_id") && sql.startsWith("SHOW COLUMNS") ?
+      [{Field:"historical_assignee_membership_id"},{Field:"assigned_account_id"}] :
+      sql.startsWith("SHOW COLUMNS") ? [{ Field: "historical_context" }] : []];
+  } };
+  const repo = new MySqlDataQualityRepository(pool, true);
+  const result = await repo.dashboard({ organizationId: ids.org, workspaceId: ids.ws, page: 1, pageSize: 10 });
+  assert.equal(result.membershipAssignmentAvailable, false);
+  assert.deepEqual(result.memberOptions, []);
+  const [sql, args] = calls.find(([query]) => query.includes("FROM reconciliation_runs r JOIN providers"));
+  assert.doesNotMatch(sql, /r\.(organization_id|workspace_id)/);
+  assert.match(sql, /WHERE CONVERT\(JSON_UNQUOTE\(JSON_EXTRACT\(r.historical_context,'\$\.organization_id'\)\) USING ascii\)=\?/);
+  assert.deepEqual(args, [ids.org, ids.ws]);
+  const [issueQuery, issueArgs] = calls.find(([query]) => query.includes("FROM data_quality_issues i JOIN providers"));
+  assert.doesNotMatch(issueQuery, /i\.(organization_id|workspace_id)/);
+  assert.match(issueQuery, /JSON_EXTRACT\(i.historical_context/);
+  assert.deepEqual(issueArgs, [ids.org, ids.ws, 10, 0]);
+  assert.match(issueQuery,/LEFT JOIN users u ON u.id=i.assigned_account_id/);
+  for (const [sql, params] of calls.filter(([query]) => query.includes("FROM raw_evidence e"))) {
+    assert.match(sql, /JOIN collection_tasks et ON et\.id=e\.collection_task_id/);
+    assert.match(sql, /WHERE et\.organization_id=\? AND et\.workspace_id=\?/);
+    assert.doesNotMatch(sql, /e\.(organization_id|workspace_id)/);
+    assert.deepEqual(params.slice(0, 2), [ids.org, ids.ws]);
+  }
+  assert.ok(calls.every(([sql])=>! /FROM memberships|JOIN memberships/.test(sql)));
+});
+test("0192 evidence detail, download metadata, owner and audit do not read removed columns", async () => {
+  const calls = [];
+  const now = new Date("2026-10-15T12:00:00Z");
+  let allowNative = true, rollbacks = 0;
+  const row = { id: ids.evidence, organization_id: ids.org, workspace_id: ids.ws,
+    captured_at: now, retention_until: now, status: "active", account_id: ids.actor, reason: "shared" };
+  const db = {
+    async beginTransaction() {}, async commit() {}, async rollback() { rollbacks++; }, release() {},
+    async query(sql, args) {
+      calls.push([sql, args]);
+      if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [[{Field:"account_id"}]];
+      if (sql.startsWith("SHOW COLUMNS FROM file_assets")) return [[{Field:"account_id"},{Field:"historical_context"}]];
+      if (sql.startsWith("SHOW COLUMNS FROM data_quality_issues")) return [sql.includes("assigned_account_id")
+        ? [{Field:"assigned_account_id"},{Field:"historical_assignee_membership_id"}] : [{Field:"historical_context"}]];
+      if (sql.startsWith("SHOW COLUMNS")) return [[]];
+      if (sql.includes("FROM raw_evidence e")) {
+        assert.match(sql, /JOIN collection_tasks et ON et\.id=e\.collection_task_id AND et\.account_id=e\.account_id/);
+        assert.match(sql, /sealed_task\.run_id=cut\.source_run_id/);
+        assert.doesNotMatch(sql, /(?:e|et)\.(organization_id|workspace_id)/);
+        return [allowNative ? [row] : []];
+      }
+      if (sql.startsWith("INSERT INTO evidence_data_events")) {
+        assert.ok(args.includes(ids.evidence));
+        assert.ok(args.includes(ids.actor));
+      }
+      if (sql.startsWith("INSERT INTO account_owned_records")) {
+        assert.deepEqual(args.slice(1),[ids.actor,"shared"]);
+        assert.equal(calls.at(-2)[1][0],args[0]);
+      }
+      return [[]];
+    },
+  };
+  const repo = new MySqlDataQualityRepository({...db, getConnection: async () => db}, true);
+  assert.equal((await repo.evidenceDetail(ids.evidence)).evidence.workspace_id, ids.ws);
+  const [normalized] = calls.find(([sql]) => sql.includes("FROM normalized_records") && sql.includes("record_version DESC"));
+  const [field] = calls.find(([sql]) => sql.includes("FROM field_provenance f"));
+  for (const sql of [normalized, field]) {
+    assert.match(sql, /source_table='normalized_records'/);
+    assert.match(sql, /child\.account_id=n\.account_id/);
+    assert.match(sql, /child\.account_id=cut\.primary_account_id/);
+    assert.match(sql, /x\.account_id=n\.account_id AND x\.provider_id=n\.provider_id/);
+  }
+  assert.match(field, /source_table='field_provenance'/);
+  assert.equal((await repo.fileInfo(ids.evidence)).organization_id, ids.org);
+  assert.equal(await repo.accountEvidenceOwner(ids.evidence, ids.issue), ids.actor);
+  const binding={accountId:ids.actor,assetId:ids.issue,relativePath:"accounts/fixture/content.bin",sizeBytes:8,sha256:"f".repeat(64)};
+  const input = { evidenceId: ids.evidence, actorId: ids.actor, requestId:"r", traceId:"t", now, binding };
+  const result = {grant:"fixture", expires_at:now.toISOString()};
+  assert.deepEqual(await repo.saveDownloadGrant({...input, idempotencyKey:"key", result}), result);
+  await repo.recordDownload(input);
+  assert.equal(calls.filter(([sql]) => sql.startsWith("INSERT INTO evidence_data_events")).length, 2);
+  const [ownerSql] = calls.find(([sql]) => sql.startsWith("SELECT fo.account_id"));
+  assert.match(ownerSql, /f\.account_id=fo\.account_id/);
+  assert.match(ownerSql, /f\.size_bytes=e\.size_bytes AND f\.content_sha256=e\.content_sha256/);
+  assert.equal(calls.filter(([sql])=>sql.startsWith("INSERT INTO account_owned_records")).length,2);
+  allowNative=false;
+  const beforeRejectedDetail = calls.length;
+  assert.equal(await repo.evidenceDetail(ids.evidence), null);
+  assert.ok(calls.slice(beforeRejectedDetail).every(([sql]) => !/FROM (normalized_records|field_provenance|data_quality_issues i)/.test(sql)));
+  assert.equal(await repo.fileInfo(ids.evidence),null);
+  await assert.rejects(repo.saveDownloadGrant({...input,idempotencyKey:"key",result}),{code:"evidence_not_found"});
+  await assert.rejects(repo.recordDownload(input),{code:"evidence_not_found"});
+  assert.equal(rollbacks,2);
+  assert.equal(calls.filter(([sql])=>sql.startsWith("INSERT INTO evidence_data_events")).length,2);
+  allowNative=true;
+  await assert.rejects(repo.recordDownload({...input,binding:undefined}),{code:"evidence_not_found"});
+  const [locked, bound] = calls.find(([sql,args])=>sql.includes("FROM raw_evidence e")&&args?.includes(binding.relativePath));
+  assert.match(locked,/f\.id=\?.*BINARY f\.relative_path=BINARY \?.*f\.size_bytes=\?.*f\.content_sha256=\?.*e\.account_id=\?.*FOR UPDATE/s);
+  assert.deepEqual(bound,[ids.evidence,ids.issue,binding.relativePath,8,binding.sha256,ids.actor]);
+});
+
+test("migrated quality issues do not accept new legacy membership assignments", async () => {
+  const calls=[];
+  const c={ async beginTransaction(){}, async rollback(){calls.push("rollback");}, release(){},
+    async query(sql){
+      calls.push(sql);
+      if (sql.startsWith("SHOW COLUMNS")) return [sql.includes("assigned_account_id")
+        ? [{Field:"assigned_account_id"},{Field:"historical_assignee_membership_id"}]
+        : [{Field:"historical_context"}]];
+      return [[]];
+    } };
+  const repo=new MySqlDataQualityRepository({getConnection:async()=>c},true);
+  await assert.rejects(()=>repo.batchIssues({items:[{id:ids.issue,expectedVersion:1}],action:"assign",
+    actorId:ids.actor,assigneeMembershipId:ids.actor,idempotencyKey:"fixture",requestId:"r",traceId:"t"}),
+    {code:"quality_issue_assignee_scope_retired"});
+  assert.ok(calls.every(sql=>! /FROM memberships|JOIN memberships|^(UPDATE|INSERT)/.test(sql)));
+  assert.equal(calls.at(-1),"rollback");
+});
+test("trend quality issue writes historical coordinates and keeps raw evidence and outbox links", async () => {
+  const calls = [];
+  const now = new Date("2026-10-15T12:00:00Z");
+  const connection = {
+    beginTransaction: async () => calls.push(["BEGIN"]),
+    commit: async () => calls.push(["COMMIT"]),
+    rollback: async () => calls.push(["ROLLBACK"]),
+    release: () => calls.push(["RELEASE"]),
+    async query(sql, params = []) {
+      calls.push([sql, params]);
+      if (sql.startsWith("SHOW COLUMNS FROM data_quality_issues"))
+        return [[{ Field: sql.includes("assigned_account_id") ? "assigned_membership_id" : "historical_context" }]];
+      if (sql.startsWith("SHOW COLUMNS")) return [[]];
+      if (sql.includes("FROM trend_signals s")) return [[{
+        organization_id: ids.org, workspace_id: ids.ws, provider_id: ids.actor, provider_name: "fixture",
+        raw_evidence_id: ids.evidence, normalized_record_id: ids.signal, parser_version: "fixture-v1",
+      }]];
+      if (sql.trimStart().startsWith("INSERT")) assert.equal((sql.match(/\?/g) ?? []).length, params.length);
+      return [[]];
+    },
+  };
+  const repo = new MySqlDataQualityRepository({ getConnection: async () => connection }, true);
+  const result = await repo.createFromTrendEvidence({
+    organizationId: ids.org, workspaceId: ids.ws, topicId: ids.topic, evidenceId: ids.signal,
+    actorId: ids.actor, severity: "critical", reason: "fixture anomaly", idempotencyKey: "fixture",
+    requestId: "fixture-request", traceId: "fixture-trace", now,
+  });
+  assert.equal(result.created, true);
+  assert.equal(result.issue.raw_evidence_id, ids.evidence);
+  assert.equal(result.issue.organization_id, ids.org);
+  const [insert, params] = calls.find(([sql]) => sql.startsWith("INSERT INTO data_quality_issues"));
+  assert.match(insert, /\(id,historical_context,provider_id/);
+  assert.deepEqual(JSON.parse(params[1]), { organization_id: ids.org, workspace_id: ids.ws });
+  for (const table of ["evidence_data_events", "evidence_data_outbox"]) {
+    const [, args] = calls.find(([sql]) => sql.startsWith("INSERT INTO " + table));
+    assert.ok(args.includes(result.issue.id));
+  }
+  assert.deepEqual(calls.slice(-2).map(([sql]) => sql), ["COMMIT", "RELEASE"]);
+});
+
+test("account evidence grants require the original asset, owner, evidence and a strong key", () => {
+  const scope = { account_id: ids.actor, asset_id: ids.issue, evidence_id: ids.evidence };
+  const key = Buffer.alloc(32, 4);
+  const token = issueAccountEvidenceDownloadGrant(scope, key, 120, 500);
+  assert.doesNotThrow(() => verifyAccountEvidenceDownloadGrant(token, key, scope, 501));
+  for (const field of Object.keys(scope)) {
+    assert.throws(
+      () => verifyAccountEvidenceDownloadGrant(token, key, { ...scope, [field]: ids.topic }, 501),
+      { code: "invalid_grant" },
+    );
+  }
+  assert.throws(() => verifyAccountEvidenceDownloadGrant(token, key, scope, 621), {
+    code: "invalid_grant",
+  });
+  assert.throws(() => verifyAccountEvidenceDownloadGrant(token, Buffer.alloc(8), scope, 501), {
+    code: "invalid_grant",
+  });
+});
+for (const historical of [false,true]) test(`account evidence returns verified original bytes after audit (historical=${historical})`, async () => {
+  const root = await mkdtemp(join(tmpdir(), "scoutops-account-evidence-"));
+  try {
+    const evidenceRoot = await realpath(root);
+    const nativePath=`accounts/${ids.actor}/evidence/${ids.issue}/content.bin`;
+    const historicalPath=`organizations/${ids.org}/workspaces/${ids.ws}/evidence/${ids.evidence}/${ids.evidence}.bin`;
+    const file = { id:ids.evidence, asset_id:ids.issue, organization_id:ids.org, workspace_id:ids.ws,
+      relative_path:historical ? historicalPath : nativePath, content_type:"text/plain", status:"active" };
+    const content = Buffer.from("original");
+    file.size_bytes=content.length;
+    file.content_sha256=sha256(content);
+    const path=join(evidenceRoot,file.relative_path), other=join(evidenceRoot,"extra-link");
+    await mkdir(join(path,".."),{recursive:true});
+    await writeFile(path,content);
+    const records=[];
+    let conflict=false, owner=ids.actor;
+    const repo={async fileInfo(){return file},async accountEvidenceOwner(){return owner},
+      async saveDownloadGrant(input){ records.push(input.binding); return input.result; },
+      async recordDownload(input){ if(conflict) throw new Error("file_binding_changed"); records.push(input.binding); }};
+    const now=new Date("2026-10-15T00:00:00Z");
+    const service=new DataQualityService(repo,{evidenceRoot,accountReadRehearsal:true,downloadSigningKey:"k".repeat(32),downloadGrantSeconds:120},()=>now);
+    const context={actorId:ids.actor,requestId:"r",traceId:"t",idempotencyKey:"grant"};
+    const {grant}=await service.issueDownload(ids.evidence,context);
+    const actual=await service.download(ids.evidence,grant,context);
+    assert.deepEqual(actual.content,content);
+    assert.deepEqual(records,[{accountId:ids.actor,assetId:ids.issue,relativePath:file.relative_path,sizeBytes:8,sha256:file.content_sha256},records[0]]);
+    owner=null;
+    await assert.rejects(service.issueDownload(ids.evidence,context),{code:"evidence_not_found"});
+    await assert.rejects(service.download(ids.evidence,grant,context),{code:"evidence_not_found"});
+    owner=ids.actor;
+    file.relative_path=historical ? nativePath : historicalPath;
+    await assert.rejects(service.download(ids.evidence,grant,context),{code:"evidence_download_grant_invalid"});
+    file.relative_path=historical ? historicalPath : nativePath;
+    await link(path,other);
+    await assert.rejects(service.download(ids.evidence,grant,context),{code:"evidence_integrity_failed"});
+    await unlink(other);
+    await writeFile(path,"tampered");
+    await assert.rejects(service.download(ids.evidence,grant,context),{code:"evidence_integrity_failed"});
+    await writeFile(path,content);
+    conflict=true;
+    await assert.rejects(service.download(ids.evidence,grant,context),/file_binding_changed/);
+    assert.equal(records.length,2);
+  } finally { await rm(root,{recursive:true,force:true}); }
+});
 test("M03-06.A03 scopes evidence operation idempotency by tenant and provider", async () => {
   const { evidenceOperationIdempotencyKey } =
       await import("../../apps/worker/dist/evidence-persistence.js"),

@@ -106,14 +106,24 @@ function assertDownloadSettings(signingKey: Uint8Array, ttlSeconds: number) {
 }
 
 type AccountEvidenceScope = { account_id: string; asset_id: string; evidence_id: string };
+type AccountEvidenceGrantScope = AccountEvidenceScope & {
+  historical?: { organization_id: string; workspace_id: string };
+};
 const evidenceUuid = /^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/;
 export function accountEvidenceRelativePath(scope: AccountEvidenceScope) {
   if (![scope.account_id, scope.asset_id, scope.evidence_id].every((id) => evidenceUuid.test(id)))
     throw new StorageBoundaryError("invalid_scope", "account evidence scope is invalid");
   return `accounts/${scope.account_id}/evidence/${scope.asset_id}/content.bin`;
 }
+export function accountEvidenceGrantPath(scope: AccountEvidenceGrantScope) {
+  const native = accountEvidenceRelativePath(scope);
+  if (!scope.historical) return native;
+  const org = safeSegment(scope.historical.organization_id, "organization_id");
+  const workspace = safeSegment(scope.historical.workspace_id, "workspace_id");
+  return `organizations/${org}/workspaces/${workspace}/evidence/${scope.evidence_id}/${scope.evidence_id}.bin`;
+}
 export function issueAccountEvidenceDownloadGrant(
-  scope: AccountEvidenceScope,
+  scope: AccountEvidenceGrantScope,
   signingKey: Uint8Array,
   ttlSeconds: number,
   nowSeconds: number,
@@ -122,8 +132,10 @@ export function issueAccountEvidenceDownloadGrant(
   return signDownloadClaims(
     {
       type: "account_evidence",
-      ...scope,
-      relative_path: accountEvidenceRelativePath(scope),
+      account_id: scope.account_id,
+      asset_id: scope.asset_id,
+      evidence_id: scope.evidence_id,
+      relative_path: accountEvidenceGrantPath(scope),
       expires_at: nowSeconds + ttlSeconds,
       nonce: randomUUID(),
     },
@@ -133,7 +145,7 @@ export function issueAccountEvidenceDownloadGrant(
 export function verifyAccountEvidenceDownloadGrant(
   token: string,
   signingKey: Uint8Array,
-  scope: AccountEvidenceScope,
+  scope: AccountEvidenceGrantScope,
   nowSeconds: number,
 ) {
   if (signingKey.byteLength < 32)
@@ -148,7 +160,7 @@ export function verifyAccountEvidenceDownloadGrant(
     claims.account_id !== scope.account_id ||
     claims.asset_id !== scope.asset_id ||
     claims.evidence_id !== scope.evidence_id ||
-    claims.relative_path !== accountEvidenceRelativePath(scope) ||
+    claims.relative_path !== accountEvidenceGrantPath(scope) ||
     typeof claims.expires_at !== "number" ||
     !Number.isSafeInteger(claims.expires_at) ||
     claims.expires_at < nowSeconds

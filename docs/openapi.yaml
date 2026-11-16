@@ -4975,7 +4975,7 @@ paths:
   /platform/data/evidence/{evidenceId}/download-grant:
     post:
       summary: Issue a short-lived evidence download grant
-      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Grant issuance is audited and no file path is returned.
+      description: Requires platform:operate, same-origin Origin and Idempotency-Key. In account mode the original task, evidence and file asset must agree with the sealed ownership ledger. The grant binds the account, evidence, asset and exact physical path, including a verified retained historical path. Issuance is audited.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: evidenceId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -5003,7 +5003,7 @@ paths:
   /platform/data/evidence/{evidenceId}/download:
     get:
       summary: Download integrity-checked evidence using a scoped short-lived grant
-      description: Requires platform:operate. The grant is bound to organization, workspace, evidence and path; successful access is audited.
+      description: Requires platform:operate. In account mode the grant must match the current account, evidence, asset and physical path. The server checks size and SHA-256, then rechecks the same binding under lock and audits access before returning bytes. Legacy authorization is unchanged.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: evidenceId, in: path, required: true, schema: { type: string, format: uuid } }

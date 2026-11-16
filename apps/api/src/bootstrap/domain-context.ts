@@ -8,6 +8,7 @@ export interface ApiDomainContext {
   app: FastifyInstance;
   pool: Pool;
   config: RuntimeConfig;
+  accountReadRehearsal?: boolean;
   authorization: AuthorizationService;
   auth: LocalAuthService;
   secureCookie: boolean;

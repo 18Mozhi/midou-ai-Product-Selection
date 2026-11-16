@@ -1,7 +1,14 @@
 import { createHash, randomUUID } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { constants, type Stats } from "node:fs";
+import { lstat, open, readFile, realpath } from "node:fs/promises";
 import { resolve } from "node:path";
-import { issueDownloadGrant, verifyDownloadGrant } from "@scoutops/storage";
+import {
+  accountEvidenceGrantPath,
+  issueAccountEvidenceDownloadGrant,
+  issueDownloadGrant,
+  verifyAccountEvidenceDownloadGrant,
+  verifyDownloadGrant,
+} from "@scoutops/storage";
 import type { OrganizationId, WorkspaceId } from "@scoutops/contracts";
 
 export class DataQualityServiceError extends Error {
@@ -14,6 +21,14 @@ export class DataQualityServiceError extends Error {
     this.name = "DataQualityServiceError";
   }
 }
+export interface EvidenceDownloadBinding {
+  accountId: string;
+  assetId: string;
+  relativePath: string;
+  sizeBytes: number;
+  sha256: string;
+}
+
 export interface EvidenceMetadata {
   id: string;
   organization_id: string;
@@ -74,6 +89,7 @@ export interface DataQualityRepository {
     issues: QualityIssueSummary[];
     reconciliationRuns: Array<Record<string, unknown>>;
     memberOptions: QualityIssueMemberOption[];
+    membershipAssignmentAvailable?: boolean;
     totalEvidence: number;
     totalIssues: number;
     openIssues: number;
@@ -116,6 +132,7 @@ export interface DataQualityRepository {
   }): Promise<QualityIssueSummary[]>;
   fileInfo(id: string): Promise<{
     id: string;
+    asset_id?: string;
     organization_id: string;
     workspace_id: string;
     relative_path: string;
@@ -124,6 +141,7 @@ export interface DataQualityRepository {
     size_bytes: number;
     status: string;
   } | null>;
+  accountEvidenceOwner?(evidenceId: string, assetId: string): Promise<string | null>;
   saveDownloadGrant(input: {
     evidenceId: string;
     actorId: string;
@@ -131,6 +149,7 @@ export interface DataQualityRepository {
     requestId: string;
     traceId: string;
     result: { grant: string; expires_at: string };
+    binding?: EvidenceDownloadBinding;
     now: Date;
   }): Promise<{ grant: string; expires_at: string }>;
   recordDownload(input: {
@@ -138,6 +157,7 @@ export interface DataQualityRepository {
     actorId: string;
     requestId: string;
     traceId: string;
+    binding?: EvidenceDownloadBinding;
     now: Date;
   }): Promise<void>;
 }
@@ -155,6 +175,7 @@ export class DataQualityService {
       evidenceRoot: string;
       downloadSigningKey: string;
       downloadGrantSeconds: number;
+      accountReadRehearsal?: boolean;
     },
     private readonly now: () => Date = () => new Date(),
   ) {}
@@ -354,34 +375,60 @@ export class DataQualityService {
         "在宝塔受限环境配置证据下载签名密钥。",
       );
     const file = await this.file(id),
+      account = await this.accountEvidenceScope(file),
       now = this.now(),
       result = {
-        grant: issueDownloadGrant(
-          this.options.evidenceRoot,
-          {
-            organization_id: file.organization_id as OrganizationId,
-            workspace_id: file.workspace_id as WorkspaceId,
-            category: "evidence",
-            resource_id: id,
-            filename: `${id}.bin`,
-          },
-          Buffer.from(this.options.downloadSigningKey),
-          this.options.downloadGrantSeconds,
-          Math.floor(now.getTime() / 1000),
-        ),
+        grant: account
+          ? issueAccountEvidenceDownloadGrant(
+              account,
+              Buffer.from(this.options.downloadSigningKey),
+              this.options.downloadGrantSeconds,
+              Math.floor(now.getTime() / 1000),
+            )
+          : issueDownloadGrant(
+              this.options.evidenceRoot,
+              {
+                organization_id: file.organization_id as OrganizationId,
+                workspace_id: file.workspace_id as WorkspaceId,
+                category: "evidence",
+                resource_id: id,
+                filename: `${id}.bin`,
+              },
+              Buffer.from(this.options.downloadSigningKey),
+              this.options.downloadGrantSeconds,
+              Math.floor(now.getTime() / 1000),
+            ),
         expires_at: new Date(
           now.getTime() + this.options.downloadGrantSeconds * 1000,
         ).toISOString(),
       };
-    return this.repository.saveDownloadGrant({
+    const saved = await this.repository.saveDownloadGrant({
       evidenceId: id,
       actorId: context.actorId,
       idempotencyKey: context.idempotencyKey,
       requestId: context.requestId,
       traceId: context.traceId,
       result,
+      ...(account ? { binding: this.downloadBinding(file, account) } : {}),
       now,
     });
+    if (account) {
+      try {
+        verifyAccountEvidenceDownloadGrant(
+          saved.grant,
+          Buffer.from(this.options.downloadSigningKey),
+          account,
+          Math.floor(now.getTime() / 1000),
+        );
+      } catch {
+        throw new DataQualityServiceError(
+          "evidence_download_grant_invalid",
+          403,
+          "使用新的幂等键重新申请下载授权。",
+        );
+      }
+    }
+    return saved;
   }
   async download(
     id: string,
@@ -389,15 +436,25 @@ export class DataQualityService {
     context: { actorId: string; requestId: string; traceId: string },
   ) {
     const file = await this.file(id),
+      account = await this.accountEvidenceScope(file),
       now = this.now();
-    let claims;
     try {
-      claims = verifyDownloadGrant(
-        grant,
-        Buffer.from(this.options.downloadSigningKey),
-        { organization_id: file.organization_id, workspace_id: file.workspace_id },
-        Math.floor(now.getTime() / 1000),
-      );
+      if (account)
+        verifyAccountEvidenceDownloadGrant(
+          grant,
+          Buffer.from(this.options.downloadSigningKey),
+          account,
+          Math.floor(now.getTime() / 1000),
+        );
+      else if (
+        verifyDownloadGrant(
+          grant,
+          Buffer.from(this.options.downloadSigningKey),
+          { organization_id: file.organization_id, workspace_id: file.workspace_id },
+          Math.floor(now.getTime() / 1000),
+        ).relative_path !== file.relative_path
+      )
+        throw new Error("download_path_changed");
     } catch {
       throw new DataQualityServiceError(
         "evidence_download_grant_invalid",
@@ -405,13 +462,8 @@ export class DataQualityService {
         "重新申请短时下载授权。",
       );
     }
-    if (claims.relative_path !== file.relative_path)
-      throw new DataQualityServiceError(
-        "evidence_download_grant_invalid",
-        403,
-        "重新申请短时下载授权。",
-      );
-    const content = await readFile(resolve(this.options.evidenceRoot, file.relative_path));
+    const path = resolve(this.options.evidenceRoot, file.relative_path);
+    const content = account ? await this.readAccountFile(path, file.size_bytes) : await readFile(path);
     if (
       content.byteLength !== file.size_bytes ||
       createHash("sha256").update(content).digest("hex") !== file.content_sha256
@@ -426,9 +478,65 @@ export class DataQualityService {
       actorId: context.actorId,
       requestId: context.requestId,
       traceId: context.traceId,
+      ...(account ? { binding: this.downloadBinding(file, account) } : {}),
       now,
     });
     return { content, contentType: file.content_type, sha256: file.content_sha256 };
+  }
+  private downloadBinding(
+    file: NonNullable<Awaited<ReturnType<DataQualityRepository["fileInfo"]>>>,
+    account: { account_id: string; asset_id: string },
+  ): EvidenceDownloadBinding {
+    return { accountId: account.account_id, assetId: account.asset_id, relativePath: file.relative_path,
+      sizeBytes: file.size_bytes, sha256: file.content_sha256 };
+  }
+  private async readAccountFile(path: string, size: number) {
+    const same = (a: Stats, b: Stats) => b.isFile() && b.nlink === 1 && b.size === size &&
+      a.dev === b.dev && a.ino === b.ino && a.mtimeMs === b.mtimeMs && a.ctimeMs === b.ctimeMs;
+    try {
+      const initial = await lstat(path);
+      if (!same(initial, initial) || await realpath(path) !== path) throw new Error("wrong_file");
+      const handle = await open(path, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0) | (constants.O_NONBLOCK ?? 0));
+      try {
+        const opened = await handle.stat();
+        if (!same(initial, opened)) throw new Error("file_changed");
+        const content = Buffer.allocUnsafe(size);
+        let offset = 0;
+        while (offset < size) {
+          const { bytesRead } = await handle.read(content, offset, size - offset, offset);
+          if (bytesRead === 0) throw new Error("file_truncated");
+          offset += bytesRead;
+        }
+        if (!same(opened, await handle.stat()) || !same(opened, await lstat(path)) || await realpath(path) !== path)
+          throw new Error("file_changed");
+        return content;
+      } finally {
+        await handle.close();
+      }
+    } catch {
+      throw new DataQualityServiceError("evidence_integrity_failed", 409, "隔离该证据并联系平台管理员。");
+    }
+  }
+  private async accountEvidenceScope(
+    file: NonNullable<Awaited<ReturnType<DataQualityRepository["fileInfo"]>>>,
+  ) {
+    const nativePath = file.relative_path.startsWith("accounts/");
+    if (!this.options.accountReadRehearsal && !nativePath) return null;
+    const unavailable = () =>
+      new DataQualityServiceError("evidence_not_found", 404, "刷新证据列表。");
+    if (!this.options.accountReadRehearsal || !file.asset_id) throw unavailable();
+    const owner = await this.repository.accountEvidenceOwner?.(file.id, file.asset_id);
+    if (!owner) throw unavailable();
+    const scope = { account_id: owner, asset_id: file.asset_id, evidence_id: file.id,
+      ...(!nativePath ? { historical: {
+        organization_id: file.organization_id, workspace_id: file.workspace_id,
+      } } : {}) };
+    try {
+      if (accountEvidenceGrantPath(scope) !== file.relative_path) throw unavailable();
+    } catch {
+      throw unavailable();
+    }
+    return scope;
   }
   private async file(id: string) {
     if (!uuid.test(id))

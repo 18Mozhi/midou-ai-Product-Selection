@@ -1,7 +1,10 @@
+import { collectionTaskScope, fileAssetAccountStorage } from "@scoutops/database";
+import { appendEvidenceDataEvent, appendEvidenceDataOutbox, dataQualityIssueScope } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type {
   DataQualityRepository,
+  EvidenceDownloadBinding,
   EvidenceMetadata,
   QualityIssueSummary,
 } from "./data-quality-service.js";
@@ -10,8 +13,8 @@ const json = (value: unknown) => (typeof value === "string" ? JSON.parse(value) 
   iso = (value: unknown) => new Date(value as string | Date).toISOString();
 const evidence = (row: RowDataPacket): EvidenceMetadata => ({
   id: String(row.id),
-  organization_id: String(row.organization_id),
-  workspace_id: String(row.workspace_id),
+  organization_id: String(row.organization_id ?? ""),
+  workspace_id: String(row.workspace_id ?? ""),
   collection_task_id: String(row.collection_task_id),
   provider_id: String(row.provider_id),
   provider_name: String(row.provider_name),
@@ -55,7 +58,49 @@ const issue = (row: RowDataPacket): QualityIssueSummary => ({
   updated_at: iso(row.updated_at),
 });
 export class MySqlDataQualityRepository implements DataQualityRepository {
-  constructor(private readonly pool: Pool) {}
+  constructor(private readonly pool: Pool, private readonly accountMode = false) {}
+  private async assigneeShape(db: Pick<Pool, "query">) {
+    if (!this.accountMode) return false;
+    const [fields] = await db.query<RowDataPacket[]>(
+      "SHOW COLUMNS FROM data_quality_issues WHERE Field IN ('assigned_membership_id','historical_assignee_membership_id','assigned_account_id')",
+    );
+    const shape = fields.map(row => row.Field).sort().join(",");
+    if (shape === "assigned_membership_id") return false;
+    if (shape === "assigned_account_id,historical_assignee_membership_id") return true;
+    throw new Error("data_quality_assignee_schema_incomplete");
+  }
+  private assigneeJoin(account: boolean) {
+    return account ? "LEFT JOIN users u ON u.id=i.assigned_account_id" :
+      "LEFT JOIN memberships am ON am.id=i.assigned_membership_id LEFT JOIN users u ON u.id=am.user_id";
+  }
+  private assigneeProjection(account: boolean) {
+    return account ? "i.historical_assignee_membership_id assigned_membership_id," : "";
+  }
+  private async evidenceScope(db: Pick<Pool, "query">) {
+    const native = this.accountMode && await collectionTaskScope(db) === "account";
+    const alias = this.accountMode ? "et" : "e";
+    const org = native ? "sealed_task.legacy_org_id" : `${alias}.organization_id`;
+    const workspace = native ? "sealed_task.legacy_workspace_id" : `${alias}.workspace_id`;
+    const join = native ? `JOIN collection_tasks et ON et.id=e.collection_task_id AND et.account_id=e.account_id
+      JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25
+      JOIN account_owned_records evidence_owner ON evidence_owner.source_table='raw_evidence'
+        AND evidence_owner.source_id=e.id AND evidence_owner.account_id=e.account_id
+        AND (evidence_owner.reason='exclusive_owner' OR
+          (evidence_owner.reason IN ('shared','unassigned') AND e.account_id=cut.primary_account_id))
+      JOIN account_owned_records task_owner ON task_owner.source_table='collection_tasks'
+        AND task_owner.source_id=et.id AND task_owner.account_id=e.account_id
+        AND (task_owner.reason='exclusive_owner' OR (task_owner.reason IN ('shared','unassigned') AND e.account_id=cut.primary_account_id))
+      LEFT JOIN account_retirement_records sealed_task ON sealed_task.run_id=cut.source_run_id
+        AND sealed_task.source_table='collection_tasks' AND sealed_task.source_id=et.id`
+      : this.accountMode ? "JOIN collection_tasks et ON et.id=e.collection_task_id" : "";
+    const coordinates = native ? `${org} organization_id,${workspace} workspace_id` : `${org},${workspace}`;
+    return { native, join, org, workspace, coordinates };
+  }
+  private evidenceProjection(coordinates: string) {
+    return `e.id,${coordinates},e.collection_task_id,e.provider_id,p.name provider_name,
+      e.source_url,e.canonical_url,e.content_sha256,e.content_type,e.size_bytes,e.captured_at,
+      e.parser_version,e.adapter_version,e.retention_until,e.status,e.request_id,e.trace_id`;
+  }
   async dashboard(input: Parameters<DataQualityRepository["dashboard"]>[0]) {
     const where: string[] = [],
       values: unknown[] = [];
@@ -68,45 +113,59 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
       values.push(input.workspaceId);
     }
     const clause = where.length ? `WHERE ${where.join(" AND ")}` : "";
-    const issueWhere = where.map((value) => value.replaceAll("e.", "i."));
+    const scope = await this.evidenceScope(this.pool);
+    const evidenceClause = clause.replaceAll("e.organization_id", scope.org).replaceAll("e.workspace_id", scope.workspace);
+    const issueScope = await dataQualityIssueScope(this.pool, this.accountMode);
+    const accountAssignee = await this.assigneeShape(this.pool);
+    const issueWhere = where.map(value => issueScope.scopeFilter(value.replaceAll("e.", "i."), "i"));
     if (input.status) {
       issueWhere.push("i.status=?");
     }
     const issueValues = input.status ? [...values, input.status] : values;
     const issueClause = issueWhere.length ? `WHERE ${issueWhere.join(" AND ")}` : "";
     const offset = (input.page - 1) * input.pageSize;
+    const [runColumns] = this.accountMode ? await this.pool.query<RowDataPacket[]>(
+      "SHOW COLUMNS FROM reconciliation_runs WHERE Field IN ('organization_id','workspace_id','historical_context')",
+    ) : [[]];
+    const runShape = runColumns.map(row => row.Field).sort().join(",");
+    if (this.accountMode && runShape !== "historical_context" && runShape !== "organization_id,workspace_id")
+      throw new Error("reconciliation_scope_schema_incomplete");
+    const coordinate = (name: "organization_id" | "workspace_id") => runShape === "historical_context"
+      ? `CONVERT(JSON_UNQUOTE(JSON_EXTRACT(r.historical_context,'$.${name}')) USING ascii)`
+      : `r.${name}`;
+    const runClause = clause.replaceAll("e.organization_id", coordinate("organization_id"))
+      .replaceAll("e.workspace_id", coordinate("workspace_id"));
     const [[evRows], [issueRows], [runRows], [memberRows], [evCount], [issueCount]] =
       await Promise.all([
         this.pool.query<RowDataPacket[]>(
-          `SELECT e.*,p.name provider_name
+          `SELECT ${this.evidenceProjection(scope.coordinates)}
          FROM raw_evidence e JOIN providers p ON p.id=e.provider_id
-         ${clause}
+         ${scope.join} ${evidenceClause}
          ORDER BY e.captured_at DESC,e.id DESC LIMIT ? OFFSET ?`,
           [...values, input.pageSize, offset],
         ),
         this.pool.query<RowDataPacket[]>(
-          `SELECT i.*,p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,
-          u.email assigned_member_label
+          `SELECT ${issueScope.select},p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,
+          ${this.assigneeProjection(accountAssignee)} u.email assigned_member_label
          FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id
          LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id
          LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id
-         LEFT JOIN memberships am ON am.id=i.assigned_membership_id
-         LEFT JOIN users u ON u.id=am.user_id
+         ${this.assigneeJoin(accountAssignee)}
          ${issueClause}
          ORDER BY FIELD(i.severity,'critical','warning'),i.updated_at DESC,i.id DESC
          LIMIT ? OFFSET ?`,
           [...issueValues, input.pageSize, offset],
         ),
         this.pool.query<RowDataPacket[]>(
-          `SELECT r.id,r.organization_id,r.workspace_id,r.provider_id,p.name provider_name,
+          `SELECT r.id,${coordinate("organization_id")} organization_id,${coordinate("workspace_id")} workspace_id,r.provider_id,p.name provider_name,
           r.parser_version,r.market,r.window_started_at,r.window_ended_at,r.sample_count,
           r.metrics_json,r.status,r.request_id,r.trace_id,r.created_at
          FROM reconciliation_runs r JOIN providers p ON p.id=r.provider_id
-         ${clause.replaceAll("e.", "r.")}
+         ${runClause}
          ORDER BY r.created_at DESC,r.id DESC LIMIT 20`,
           values,
         ),
-        this.pool.query<RowDataPacket[]>(
+        accountAssignee ? Promise.resolve([[] as RowDataPacket[]]) : this.pool.query<RowDataPacket[]>(
           `SELECT m.id,m.organization_id,u.email label FROM memberships m
          JOIN users u ON u.id=m.user_id
          WHERE m.status='active' AND u.status='active'
@@ -115,7 +174,7 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
           input.organizationId ? [input.organizationId] : [],
         ),
         this.pool.query<RowDataPacket[]>(
-          `SELECT COUNT(*) total FROM raw_evidence e ${clause}`,
+          `SELECT COUNT(*) total FROM raw_evidence e ${scope.join} ${evidenceClause}`,
           values,
         ),
         this.pool.query<RowDataPacket[]>(
@@ -141,6 +200,7 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         organization_id: String(row.organization_id),
         label: String(row.label),
       })),
+      membershipAssignmentAvailable: !accountAssignee,
       totalEvidence: Number(evCount[0]?.total ?? 0),
       totalIssues: Number(issueCount[0]?.total ?? 0),
       openIssues: Number(issueCount[0]?.open_count ?? 0),
@@ -148,36 +208,51 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
     };
   }
   async evidenceDetail(id: string) {
-    const [[ev], [records], [provenance], [issues]] = await Promise.all([
-      this.pool.query<RowDataPacket[]>(
-        "SELECT e.*,p.name provider_name FROM raw_evidence e JOIN providers p ON p.id=e.provider_id WHERE e.id=?",
-        [id],
-      ),
+    const scope = await this.evidenceScope(this.pool);
+    const [[parent]] = await this.pool.query<RowDataPacket[]>(
+      `SELECT ${this.evidenceProjection(scope.coordinates)}${scope.native ? ",e.account_id" : ""}
+       FROM raw_evidence e JOIN providers p ON p.id=e.provider_id ${scope.join} WHERE e.id=?`,
+      [id],
+    );
+    if (!parent) return null;
+    const issueScope = await dataQualityIssueScope(this.pool, this.accountMode);
+    const accountAssignee = await this.assigneeShape(this.pool);
+    const owned = (table: "normalized_records" | "field_provenance", sourceId: "n.id" | "f.id") =>
+      `EXISTS (SELECT 1 FROM account_owned_records child JOIN account_ownership_cutover cut
+        ON cut.slot='current' AND cut.contract_version=25 WHERE child.source_table='${table}'
+        AND child.source_id=${sourceId} AND child.account_id=n.account_id
+        AND (child.reason='exclusive_owner' OR (child.reason IN ('shared','unassigned') AND child.account_id=cut.primary_account_id)))`;
+    const normalizedFence = scope.native ? ` AND n.account_id=? AND
+      EXISTS (SELECT 1 FROM raw_evidence x WHERE x.id=n.raw_evidence_id AND x.account_id=n.account_id AND x.provider_id=n.provider_id)
+      AND ${owned("normalized_records", "n.id")}` : "";
+    const childArgs = scope.native ? [id, parent.account_id] : [id];
+    const [[records], [provenance], [issues]] = await Promise.all([
       this.pool.query<RowDataPacket[]>(
         "SELECT id,record_key,schema_version,record_version,supersedes_record_id," +
-          "correction_reason,status,request_id,trace_id,created_at FROM normalized_records WHERE " +
-          "raw_evidence_id=? ORDER BY record_version DESC",
-        [id],
+          "correction_reason,status,request_id,trace_id,created_at FROM normalized_records n WHERE n.raw_evidence_id=?" +
+          normalizedFence + " ORDER BY record_version DESC",
+        childArgs,
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT id,normalized_record_id,field_path,source_path,transform_version," +
-          "source_value_sha256,created_at FROM field_provenance WHERE raw_evidence_id=? ORDER BY " +
-          "field_path",
-        [id],
+        "SELECT f.id,f.normalized_record_id,f.field_path,f.source_path,f.transform_version," +
+          "f.source_value_sha256,f.created_at FROM field_provenance f " +
+          "JOIN normalized_records n ON n.id=f.normalized_record_id AND n.raw_evidence_id=f.raw_evidence_id " +
+          "WHERE f.raw_evidence_id=?" + normalizedFence +
+          (scope.native ? ` AND ${owned("field_provenance", "f.id")}` : "") + " ORDER BY f.field_path",
+        childArgs,
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT i.*,p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,u.email assigned_member_label " +
+        `SELECT ${issueScope.select},p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,${this.assigneeProjection(accountAssignee)} u.email assigned_member_label ` +
           "FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id " +
           "LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id " +
           "LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id " +
-          "LEFT JOIN memberships am ON am.id=i.assigned_membership_id LEFT JOIN users u ON u.id=am.user_id " +
+          this.assigneeJoin(accountAssignee) + " " +
           "WHERE i.raw_evidence_id=? ORDER BY i.created_at DESC",
         [id],
       ),
     ]);
-    if (!ev[0]) return null;
     return {
-      evidence: evidence(ev[0]),
+      evidence: evidence(parent),
       normalized_records: records.map((row) => ({
         ...row,
         record_version: Number(row.record_version),
@@ -206,12 +281,12 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         };
       }
       const [signals] = await c.query<RowDataPacket[]>(
-        `SELECT s.id signal_id,s.topic_id,s.organization_id,s.workspace_id,s.provider_id,
+        `SELECT s.id signal_id,s.topic_id,t.organization_id,t.workspace_id,s.provider_id,
           s.raw_evidence_id,s.normalized_record_id,e.parser_version,p.name provider_name
-         FROM trend_signals s
+         FROM trend_signals s JOIN trend_topics t ON t.id=s.topic_id
          JOIN raw_evidence e ON e.id=s.raw_evidence_id
          JOIN providers p ON p.id=s.provider_id
-         WHERE s.id=? AND s.topic_id=? AND s.organization_id=? AND s.workspace_id=?
+         WHERE s.id=? AND s.topic_id=? AND t.organization_id=? AND t.workspace_id=?
          LIMIT 1 FOR UPDATE`,
         [input.evidenceId, input.topicId, input.organizationId, input.workspaceId],
       );
@@ -222,16 +297,17 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
           404,
           "刷新趋势详情后重新选择证据。",
         );
+      const issueScope = await dataQualityIssueScope(c, this.accountMode);
+      const accountAssignee = await this.assigneeShape(c);
       const [existing] = await c.query<RowDataPacket[]>(
-        `SELECT i.*,p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,
-          u.email assigned_member_label
+        `SELECT ${issueScope.select},p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,
+          ${this.assigneeProjection(accountAssignee)} u.email assigned_member_label
          FROM data_quality_issues i
          JOIN providers p ON p.id=i.provider_id
          LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id
          LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id
-         LEFT JOIN memberships am ON am.id=i.assigned_membership_id
-         LEFT JOIN users u ON u.id=am.user_id
-         WHERE i.organization_id=? AND i.workspace_id=? AND i.raw_evidence_id=?
+         ${this.assigneeJoin(accountAssignee)}
+         WHERE ${issueScope.coordinate("i", "organization_id")}=? AND ${issueScope.coordinate("i", "workspace_id")}=? AND i.raw_evidence_id=?
            AND i.metric_code='trend_evidence_anomaly' AND i.status='open'
          ORDER BY i.created_at DESC LIMIT 1 FOR UPDATE`,
         [input.organizationId, input.workspaceId, signal.raw_evidence_id],
@@ -267,15 +343,14 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
           } as RowDataPacket;
         await c.query(
           `INSERT INTO data_quality_issues
-           (id,organization_id,workspace_id,provider_id,reconciliation_run_id,raw_evidence_id,
+           (id,${issueScope.columns},provider_id,reconciliation_run_id,raw_evidence_id,
             normalized_record_id,metric_code,field_path,severity,status,actual_value,threshold_value,
-            details_json,assigned_membership_id,attribution_reason,attributed_by,attributed_at,
+            details_json,${accountAssignee ? "assigned_account_id" : "assigned_membership_id"},attribution_reason,attributed_by,attributed_at,
             resolved_by,resolution_reason,resolved_at,request_id,trace_id,version,created_at,updated_at)
-           VALUES (?,?,?,?,NULL,?,?,?,?,?,? ,NULL,NULL,?,NULL,?,?,?,NULL,NULL,NULL,?,?,1,?,?)`,
+           VALUES (?,${issueScope.placeholders},?,NULL,?,?,?,?,?,? ,NULL,NULL,?,NULL,?,?,?,NULL,NULL,NULL,?,?,1,?,?)`,
           [
             issueId,
-            signal.organization_id,
-            signal.workspace_id,
+            ...issueScope.values(signal.organization_id, signal.workspace_id),
             signal.provider_id,
             signal.raw_evidence_id,
             signal.normalized_record_id,
@@ -363,15 +438,18 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         await c.commit();
         return json(ops[0].result_json) as QualityIssueSummary[];
       }
+      const issueScope = await dataQualityIssueScope(c, this.accountMode);
+      const accountAssignee = await this.assigneeShape(c);
+      if (accountAssignee && input.action === "assign")
+        throw new DataQualityServiceError("quality_issue_assignee_scope_retired", 409, "账号模式不再接受组织成员指派。");
       const placeholders = ids.map(() => "?").join(","),
         [rows] = await c.query<RowDataPacket[]>(
-          `SELECT i.*,p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,
-           u.email assigned_member_label
+          `SELECT ${issueScope.select},p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,
+           ${this.assigneeProjection(accountAssignee)} u.email assigned_member_label
            FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id
            LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id
            LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id
-           LEFT JOIN memberships am ON am.id=i.assigned_membership_id
-           LEFT JOIN users u ON u.id=am.user_id
+           ${this.assigneeJoin(accountAssignee)}
            WHERE i.id IN (${placeholders}) ORDER BY i.id FOR UPDATE`,
           ids.map((item) => item.id),
         );
@@ -507,12 +585,14 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         await c.commit();
         return json(ops[0].result_json) as QualityIssueSummary;
       }
+      const issueScope = await dataQualityIssueScope(c, this.accountMode);
+      const accountAssignee = await this.assigneeShape(c);
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT i.*,p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,u.email assigned_member_label " +
+        `SELECT ${issueScope.select},p.name provider_name,COALESCE(r.parser_version,e.parser_version) parser_version,${this.assigneeProjection(accountAssignee)} u.email assigned_member_label ` +
           "FROM data_quality_issues i JOIN providers p ON p.id=i.provider_id " +
           "LEFT JOIN reconciliation_runs r ON r.id=i.reconciliation_run_id " +
           "LEFT JOIN raw_evidence e ON e.id=i.raw_evidence_id " +
-          "LEFT JOIN memberships am ON am.id=i.assigned_membership_id LEFT JOIN users u ON u.id=am.user_id " +
+          this.assigneeJoin(accountAssignee) + " " +
           "WHERE i.id=? FOR UPDATE",
         [input.id],
       );
@@ -589,18 +669,19 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
     }
   }
   async fileInfo(id: string) {
+    const scope = await this.evidenceScope(this.pool);
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT e.id,e.organization_id,e.workspace_id,f.relative_path,f.content_sha256," +
-        "e.content_type,e.size_bytes,f.status FROM raw_evidence e JOIN file_assets f ON f.id=e.file_asset_id " +
-        "WHERE e.id=?",
+      `SELECT e.id,${scope.coordinates},f.id asset_id,f.relative_path,f.content_sha256,` +
+        `e.content_type,e.size_bytes,f.status FROM raw_evidence e ${scope.join}
+        JOIN file_assets f ON f.id=e.file_asset_id ${this.nativeDownloadFileJoin(scope.native)} WHERE e.id=?`,
       [id],
     );
     return rows[0]
       ? {
           ...rows[0],
           id: String(rows[0].id),
-          organization_id: String(rows[0].organization_id),
-          workspace_id: String(rows[0].workspace_id),
+          organization_id: String(rows[0].organization_id ?? ""),
+          workspace_id: String(rows[0].workspace_id ?? ""),
           relative_path: String(rows[0].relative_path),
           content_sha256: String(rows[0].content_sha256),
           content_type: String(rows[0].content_type),
@@ -609,11 +690,76 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         }
       : null;
   }
+  async accountEvidenceOwner(evidenceId: string, assetId: string) {
+    const evidence = await this.evidenceScope(this.pool);
+    const accountFiles = await fileAssetAccountStorage(this.pool);
+    const coord = this.accountMode ? "et" : "e";
+    const scope = evidence.native ? "" : accountFiles
+      ? `AND (f.historical_context IS NULL OR (BINARY JSON_UNQUOTE(JSON_EXTRACT(f.historical_context,'$.organization_id'))=BINARY ${coord}.organization_id AND BINARY JSON_UNQUOTE(JSON_EXTRACT(f.historical_context,'$.workspace_id'))=BINARY ${coord}.workspace_id))`
+      : `AND f.organization_id=${coord}.organization_id AND f.workspace_id=${coord}.workspace_id`;
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      `SELECT fo.account_id FROM raw_evidence e ${evidence.join}
+      JOIN file_assets f ON f.id=e.file_asset_id ${scope}
+        AND f.category='evidence' AND f.status='active'
+        AND f.size_bytes=e.size_bytes AND f.content_sha256=e.content_sha256
+      ${evidence.native ? "" : "JOIN account_ownership_cutover c ON c.slot='current' AND c.contract_version=25"}
+      JOIN account_owned_records eo ON eo.source_table='raw_evidence' AND eo.source_id=e.id
+        ${evidence.native ? 'AND eo.account_id=e.account_id' : ''}
+      JOIN account_owned_records fo ON fo.source_table='file_assets' AND fo.source_id=f.id AND fo.account_id=eo.account_id
+        ${accountFiles ? 'AND f.account_id=fo.account_id' : ''}
+        ${evidence.native ? "AND (fo.reason='exclusive_owner' OR (fo.reason IN ('shared','unassigned') AND f.account_id=cut.primary_account_id))" : ""}
+      WHERE e.id=? AND f.id=? AND e.status='active'`,
+      [evidenceId, assetId],
+    );
+    return rows[0] ? String(rows[0].account_id) : null;
+  }
+  private nativeDownloadFileJoin(native: boolean) {
+    return native ? `AND e.status='active' AND f.category='evidence' AND f.status='active'
+      AND e.account_id=f.account_id AND f.size_bytes=e.size_bytes AND f.content_sha256=e.content_sha256
+      JOIN account_owned_records file_owner ON file_owner.source_table='file_assets'
+        AND file_owner.source_id=f.id AND file_owner.account_id=e.account_id
+        AND (file_owner.reason='exclusive_owner' OR (file_owner.reason IN ('shared','unassigned') AND e.account_id=cut.primary_account_id))` : "";
+  }
+  private async downloadAuditParent(db: Pick<PoolConnection, "query">, id: string, lock = false, binding?: EvidenceDownloadBinding) {
+    const scope = await this.evidenceScope(db);
+    if (this.accountMode && !binding)
+      throw new DataQualityServiceError("evidence_not_found", 404, "刷新证据列表。");
+    const file = scope.native ? "JOIN file_assets f ON f.id=e.file_asset_id " + this.nativeDownloadFileJoin(true) : binding
+      ? `JOIN file_assets f ON f.id=e.file_asset_id AND e.status='active' AND f.category='evidence' AND f.status='active'
+         AND f.content_sha256=e.content_sha256 AND f.size_bytes=e.size_bytes
+         JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25
+         JOIN account_owned_records evidence_owner ON evidence_owner.source_table='raw_evidence' AND evidence_owner.source_id=e.id
+           AND (evidence_owner.reason='exclusive_owner' OR (evidence_owner.reason IN ('shared','unassigned') AND evidence_owner.account_id=cut.primary_account_id))
+         JOIN account_owned_records file_owner ON file_owner.source_table='file_assets' AND file_owner.source_id=f.id
+           AND file_owner.account_id=evidence_owner.account_id
+           ${await fileAssetAccountStorage(db) ? "AND f.account_id=evidence_owner.account_id" : ""}` : "";
+    const exact = binding ? ` AND f.id=? AND BINARY f.relative_path=BINARY ? AND f.size_bytes=? AND f.content_sha256=?
+      AND ${scope.native ? "e.account_id" : "evidence_owner.account_id"}=?` : "";
+    const [rows] = await db.query<RowDataPacket[]>(
+      `SELECT ${scope.coordinates}${scope.native ? ",e.account_id,evidence_owner.reason" : ""}
+       FROM raw_evidence e ${scope.join} ${file}
+       WHERE e.id=?${exact}${lock ? " FOR UPDATE" : ""}`,
+      [id, ...(binding ? [binding.assetId, binding.relativePath, binding.sizeBytes, binding.sha256, binding.accountId] : [])],
+    );
+    if (!rows[0]) throw new DataQualityServiceError("evidence_not_found", 404, "刷新证据列表。");
+    return { row: rows[0], native: scope.native };
+  }
+  private async recordNativeDownloadEvent(c: PoolConnection, row: RowDataPacket, input: Parameters<DataQualityRepository["recordDownload"]>[0], eventType: string) {
+    const id = randomUUID();
+    await appendEvidenceDataEvent(c, {
+      id, organizationId: "", workspaceId: "", requireInheritedScope: true,
+      actorType: "user", actorId: input.actorId, resourceId: input.evidenceId, resourceType: "raw_evidence",
+      eventType, requestId: input.requestId, traceId: input.traceId, payloadJson: "{}", occurredAt: input.now,
+    });
+    await c.query("INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ('evidence_data_events',?,?,?)",
+      [id, row.account_id, row.reason]);
+  }
   async saveDownloadGrant(input: Parameters<DataQualityRepository["saveDownloadGrant"]>[0]) {
     const c = await this.pool.getConnection(),
       route = `/platform/data/evidence/${input.evidenceId}/download-grant`;
     try {
       await c.beginTransaction();
+      const parent = this.accountMode ? await this.downloadAuditParent(c, input.evidenceId, true, input.binding) : null;
       const [ops] = await c.query<RowDataPacket[]>(
         "SELECT result_json FROM evidence_data_operations WHERE actor_id=? AND route=? AND idempotency_key=? FOR UPDATE",
         [input.actorId, route, input.idempotencyKey],
@@ -622,14 +768,11 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
         await c.commit();
         return json(ops[0].result_json) as { grant: string; expires_at: string };
       }
-      const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT organization_id,workspace_id FROM raw_evidence WHERE id=? FOR UPDATE",
-        [input.evidenceId],
-      );
-      if (!rows[0]) throw new DataQualityServiceError("evidence_not_found", 404, "刷新证据列表。");
-      await this.event(
+      const current = parent ?? await this.downloadAuditParent(c, input.evidenceId, true);
+      if (current.native) await this.recordNativeDownloadEvent(c, current.row, input, "evidence.download.granted");
+      else await this.event(
         c,
-        rows[0],
+        current.row,
         "evidence.download.granted",
         "raw_evidence",
         input.evidenceId,
@@ -662,29 +805,36 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
     }
   }
   async recordDownload(input: Parameters<DataQualityRepository["recordDownload"]>[0]) {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT organization_id,workspace_id FROM raw_evidence WHERE id=?",
-      [input.evidenceId],
-    );
-    if (!rows[0]) throw new DataQualityServiceError("evidence_not_found", 404, "刷新证据列表。");
-    await this.pool.query(
-      "INSERT INTO evidence_data_events (id,organization_id,workspace_id,event_type," +
-        "resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json," +
-        "occurred_at) VALUES (?,?,?,?,?,?,'user',?,?,?,?,?)",
-      [
-        randomUUID(),
-        rows[0].organization_id,
-        rows[0].workspace_id,
-        "evidence.download.accessed",
-        "raw_evidence",
-        input.evidenceId,
-        input.actorId,
-        input.requestId,
-        input.traceId,
-        "{}",
-        input.now,
-      ],
-    );
+    if (!this.accountMode) return this.appendLegacyDownload(this.pool, (await this.downloadAuditParent(this.pool, input.evidenceId)).row, input);
+    const c = await this.pool.getConnection();
+    try {
+      await c.beginTransaction();
+      const { native, row } = await this.downloadAuditParent(c, input.evidenceId, true, input.binding);
+      if (native) await this.recordNativeDownloadEvent(c, row, input, "evidence.download.accessed");
+      else await this.appendLegacyDownload(c, row, input);
+      await c.commit();
+    } catch (error) {
+      await c.rollback();
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  private async appendLegacyDownload(db: Pick<PoolConnection, "query">, row: RowDataPacket, input: Parameters<DataQualityRepository["recordDownload"]>[0]) {
+    await appendEvidenceDataEvent(db, {
+      id: randomUUID(),
+      organizationId: row.organization_id,
+      workspaceId: row.workspace_id,
+      actorType: "user",
+      eventType: "evidence.download.accessed",
+      resourceType: "raw_evidence",
+      resourceId: input.evidenceId,
+      actorId: input.actorId,
+      requestId: input.requestId,
+      traceId: input.traceId,
+      payloadJson: "{}",
+      occurredAt: input.now,
+    });
   }
   private event(
     c: PoolConnection,
@@ -698,24 +848,20 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
     payload: unknown,
     now: Date,
   ) {
-    return c.query(
-      "INSERT INTO evidence_data_events (id,organization_id,workspace_id,event_type," +
-        "resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json," +
-        "occurred_at) VALUES (?,?,?,?,?,?,'user',?,?,?,?,?)",
-      [
-        randomUUID(),
-        row.organization_id,
-        row.workspace_id,
-        eventType,
-        resourceType,
-        resourceId,
-        actorId,
-        requestId,
-        traceId,
-        JSON.stringify(payload),
-        now,
-      ],
-    );
+    return appendEvidenceDataEvent(c, {
+      id: randomUUID(),
+      organizationId: row.organization_id,
+      workspaceId: row.workspace_id,
+      actorType: "user",
+      eventType,
+      resourceType,
+      resourceId,
+      actorId,
+      requestId,
+      traceId,
+      payloadJson: JSON.stringify(payload),
+      occurredAt: now,
+    });
   }
   private outbox(
     c: PoolConnection,
@@ -728,25 +874,15 @@ export class MySqlDataQualityRepository implements DataQualityRepository {
     traceId: string,
     now: Date,
   ) {
-    return c.query(
-      "INSERT INTO evidence_data_outbox (id,organization_id,workspace_id,event_type," +
-        "resource_type,resource_id,payload_json,status,attempt_count,available_at," +
-        "request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,?,'queued'," +
-        "0,?,?,?,?,?)",
-      [
-        randomUUID(),
-        row.organization_id,
-        row.workspace_id,
-        eventType,
-        resourceType,
-        resourceId,
-        JSON.stringify(payload),
-        now,
-        requestId,
-        traceId,
-        now,
-        now,
-      ],
-    );
+    return appendEvidenceDataOutbox(c, {
+      id: randomUUID(),
+      organizationId: row.organization_id,
+      workspaceId: row.workspace_id,
+      eventType, resourceType, resourceId,
+      payloadJson: JSON.stringify(payload),
+      requestId: requestId,
+      traceId: traceId,
+      createdAt: now,
+    });
   }
 }

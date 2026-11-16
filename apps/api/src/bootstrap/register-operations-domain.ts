@@ -93,10 +93,11 @@ export function registerOperationsDomainRoutes(context: OperationsDomainContext)
     ...common,
   });
   registerDataQualityRoutes(context.app, {
-    service: new DataQualityService(new MySqlDataQualityRepository(context.pool), {
+    service: new DataQualityService(new MySqlDataQualityRepository(context.pool, context.accountReadRehearsal), {
       evidenceRoot: context.config.storage.evidenceRoot,
       downloadSigningKey: context.config.security.evidenceDownloadSigningKey,
       downloadGrantSeconds: context.config.evidence.downloadGrantSeconds,
+      accountReadRehearsal: context.accountReadRehearsal,
     }),
     ...common,
   });

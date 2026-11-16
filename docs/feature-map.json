@@ -1,4 +1,19 @@
 {
+  "accountEvidenceDownload": {
+    "sourceFiles": [
+      "apps/api/src/data-quality-service.ts",
+      "apps/api/src/mysql-data-quality-repository.ts",
+      "packages/storage/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/m03-06/evidence-data-quality.test.mjs"
+    ],
+    "docs": [
+      "docs/openapi.yaml",
+      "docs/runbooks/account-evidence-download.md"
+    ],
+    "contract": "Authorize exact native and preserved historical file paths with the sealed account, evidence ID and asset ID. Check size and digest and write an audit event for the same locked binding before returning bytes; no file move or copy."
+  },
   "accountEvidenceWriteFence": {
     "sourceFiles": [
       "apps/worker/src/evidence-persistence.ts",
