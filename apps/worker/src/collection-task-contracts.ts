@@ -2,6 +2,7 @@ import type { CollectionErrorCode, SubqueryOutcome } from "@scoutops/collection-
 
 export interface ClaimedCollectionTask {
   id: string;
+  accountId?: string;
   organizationId: string;
   workspaceId: string;
   attemptCount: number;

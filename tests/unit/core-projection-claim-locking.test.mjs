@@ -19,6 +19,9 @@ function harness({
   queryGone = false,
   alreadyClaimed = false,
   failInsert = false,
+  native = false,
+  foreignOwner = false,
+  scopeColumns = ["organization_id", "workspace_id"],
 } = {}) {
   const calls = [];
   let commits = 0,
@@ -36,15 +39,21 @@ function harness({
       releases += 1;
     },
     query: async (sql, args = []) => {
+      if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [native
+        ? [{Field:"account_id"}] : [{Field:"organization_id"},{Field:"workspace_id"}]];
       calls.push({ sql, args });
-      if (sql.includes("FROM collection_tasks t")) return [empty ? [] : [candidate]];
-      if (sql.startsWith("SELECT id,organization_id"))
+      if (sql.includes("FROM collection_tasks t")) return [empty ? [] : [{...candidate, account_id:"owner"}]];
+      if (sql.startsWith("SELECT cut.primary_account_id"))
+        return [[{primary_account_id:"owner", account_id:foreignOwner ? "foreign" : "owner", reason:"exclusive_owner"}]];
+      if (sql.startsWith("SELECT account_id FROM account_owned_records")) return [[{account_id:"owner"}]];
+      if (sql.startsWith("SELECT id,organization_id") || sql.startsWith("SELECT id,account_id"))
         return [
           taskGone
             ? []
             : [
                 {
                   ...candidate,
+                  account_id:"owner",
                   request_id: "current-request",
                   trace_id: "current-trace",
                   created_by: "current-actor",
@@ -67,6 +76,8 @@ function harness({
         ];
       if (sql.startsWith("SELECT id FROM core_collection_projection_runs"))
         return [alreadyClaimed ? [{ id: "other-run" }] : []];
+      if (sql.startsWith("SHOW COLUMNS FROM core_collection_projection_runs"))
+        return [scopeColumns.map((Field) => ({ Field }))];
       if (sql.startsWith("INSERT INTO core_collection_projection_runs")) {
         if (failInsert) throw new Error("insert-failed");
         return [{ affectedRows: 1 }];
@@ -116,14 +127,45 @@ test("core claim locks task then scoped query then unique run and uses current f
   assert.deepEqual(h.calls[1].args, ["task", "org", "workspace"]);
   assert.match(
     h.calls[2].sql,
-    /WHERE id=\? AND task_id=\? AND organization_id=\? AND workspace_id=\?.*FOR UPDATE$/,
+    /WHERE id=\? AND task_id=\?.*FOR UPDATE$/,
   );
-  assert.deepEqual(h.calls[2].args, ["query", "task", "org", "workspace"]);
+  assert.deepEqual(h.calls[2].args, ["query", "task"]);
   assert.match(h.calls[3].sql, /WHERE collection_task_id=\? FOR UPDATE$/);
   assert.deepEqual(h.calls[3].args, ["task"]);
   assert.equal(h.calls.filter(({ sql }) => sql.startsWith("INSERT")).length, 1);
-  assert.equal(h.calls[4].args[4], "competitor_snapshot");
+  const insert = h.calls.find(({ sql }) => sql.startsWith("INSERT"));
+  assert.match(insert.sql, /id,organization_id,workspace_id,collection_task_id/);
+  assert.equal(insert.args[4], "competitor_snapshot");
   assert.deepEqual(h.counters(), { commits: 1, rollbacks: 0, releases: 1 });
+});
+test("normalized run stores the same task and resource without any old scope fields", async () => {
+  const h = harness({ scopeColumns: [] });
+  const job = await h.worker.claim();
+  const insert = h.calls.find(({ sql }) => sql.startsWith("INSERT"));
+  assert.doesNotMatch(insert.sql, /organization_id|workspace_id/);
+  assert.deepEqual(insert.args.slice(0, 4), [job.runId, job.taskId, "competitor_snapshot", resourceId]);
+  assert.deepEqual(h.counters(), { commits: 1, rollbacks: 0, releases: 1 });
+});
+test("0192 claim locks native ownership and creates only an inherited projection run", async () => {
+  const h = harness({ native:true, scopeColumns:[] });
+  const job = await h.worker.claim();
+  assert.equal(job.accountId, "owner");
+  assert.doesNotMatch(h.calls[0].sql, /\b(?:t|backlog)\.(?:organization_id|workspace_id)\b/);
+  assert.match(h.calls[0].sql, /ot.account_id=t.account_id/);
+  assert.match(h.calls[0].sql, /task_owner.account_id=backlog.account_id/);
+  assert.match(h.calls[1].sql, /WHERE id=\? AND account_id=\?.*FOR UPDATE/);
+  assert.deepEqual(h.calls[1].args, ["task","owner"]);
+  const insert = h.calls.find(({sql}) => sql.startsWith("INSERT"));
+  assert.doesNotMatch(insert.sql, /organization_id|workspace_id/);
+  const foreign = harness({native:true, foreignOwner:true, scopeColumns:[]});
+  assert.equal(await foreign.worker.claim(), null);
+  assert.ok(!foreign.calls.some(({sql}) => sql.startsWith("INSERT")));
+});
+test("partial projection-run migration never writes", async () => {
+  const h = harness({ scopeColumns: ["organization_id"] });
+  await assert.rejects(h.worker.claim(), /partial_inherited_scope_schema/);
+  assert.equal(h.calls.some(({ sql }) => sql.startsWith("INSERT")), false);
+  assert.deepEqual(h.counters(), { commits: 0, rollbacks: 1, releases: 1 });
 });
 test("core claim rolls back failed inserts and releases its connection", async () => {
   const h = harness({ failInsert: true });

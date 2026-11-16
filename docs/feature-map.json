@@ -1,4 +1,23 @@
 {
+  "accountCoreCollectionProjection": {
+    "sourceFiles": [
+      "apps/worker/src/core-collection-projection-worker.ts",
+      "apps/worker/src/competitor-title-classification.ts",
+      "apps/worker/src/collection-account-backlog.ts",
+      "apps/worker/src/native-completion-task-proof.ts"
+    ],
+    "testFiles": [
+      "tests/unit/core-projection-claim-locking.test.mjs",
+      "tests/unit/competitor-result-account-owner.test.mjs",
+      "tests/unit/competitor-title-classification.test.mjs",
+      "tests/unit/sourcing-projection-account-owner.test.mjs"
+    ],
+    "docs": [
+      "docs/runbooks/account-competitor-original-history.md",
+      "docs/runbooks/account-sourcing-quote-runtime.md"
+    ],
+    "contract": "Collection-derived account data pins the original task, subquery, source evidence and current target. It preserves the original competitor classification proof and refuses cross-account sourcing or competitor projection."
+  },
   "accountOpportunityRefreshOwnership": {
     "sourceFiles": [
       "apps/worker/src/opportunity-refresh-worker.ts",

@@ -6,4 +6,6 @@
 
 后台比较以原竞品和原快照作业为准，检查同账号的前后快照、原始证据与关联选品，再匹配同账号启用的规则。新变更、提醒、投递和归属一并提交；租约失效或依赖失败会回滚本次比较。旧快照重投不把最新指针倒退，也不改写历史。没有新增开关或重启方式；通过账号协调发布加载新版 Worker。本地可运行 `tests/unit/competitor-monitor-account-owner.test.mjs`、`tests/unit/competitor-snapshot-order.test.mjs` 和 M04-05 测试核对。
 
+竞品发现及首次快照入库还须锁定原任务子查询，核对原主品、分类指纹及原始证据。封存历史沿用原分类指纹；切换后创建的选品使用账号范围内的新指纹。不会跨账号借用分类凭证，也不把历史竞品快照升级为新证据。验证见 `tests/unit/competitor-result-account-owner.test.mjs` 和 `tests/unit/competitor-title-classification.test.mjs`。
+
 正式库只读核对得到 4,448 条竞品、7,875 条快照、1 条监控规则，最新快照引用不匹配数为 0。本地验证账号模式读取、状态操作、规则重试和竞品迁移。仍随正式协调发布启用，本轮未写库或停服。
