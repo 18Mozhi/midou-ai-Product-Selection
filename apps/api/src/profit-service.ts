@@ -4,7 +4,7 @@ export type FeeMode = "percentage_of_sale" | "fixed_amount";
 export type CostRuleStatus =
   "draft" | "pending_approval" | "approved" | "active" | "retired" | "rejected" | "rolled_back";
 export type CostRuleAction = "submit" | "approve" | "reject" | "publish" | "rollback";
-export type ApprovalRole = "selection_manager" | "organization_admin";
+export type ApprovalRole = "selection_manager" | "primary_account";
 export type CostInputType = "sale_price" | "purchase_price" | "logistics";
 export type CostInputReviewStatus = "pending" | "approved" | "rejected";
 export interface FeeLine {
@@ -36,6 +36,8 @@ export interface CostRule {
   effective_from: string;
   revision: number;
   approvals: ApprovalRole[];
+  owned_by_session?: boolean;
+  can_decide_as_manager?: boolean;
   published_at: string | null;
   updated_at: string;
 }
@@ -112,6 +114,15 @@ export interface ProfitWriteContext {
   traceId: string;
   idempotencyKey: string;
 }
+type CostRuleActionContext =
+  | ProfitWriteContext
+  | (Omit<ProfitWriteContext, "organizationId" | "workspaceId"> & {
+      accountOwnedApproval: true | "manager";
+    });
+export type AccountCostDraftContext = Pick<
+  ProfitWriteContext,
+  "actorId" | "idempotencyKey" | "requestId" | "traceId"
+>;
 export class ProfitServiceError extends Error {
   constructor(
     readonly code: string,
@@ -381,13 +392,9 @@ export function validateCostInput(value: {
   };
 }
 export interface ProfitRepository {
-  listRules(input: { organizationId: string; workspaceId: string }): Promise<CostRule[]>;
-  getAnalysis(input: {
-    organizationId: string;
-    workspaceId: string;
-    opportunityId: string;
-    actorId: string;
-  }): Promise<ProfitAnalysis>;
+  listRules(input: CostRuleReadScope): Promise<CostRule[]>;
+  isAccountPrimaryApprover(accountId: string): Promise<boolean>;
+  getAnalysis(input: ProfitAnalysisReadScope): Promise<ProfitAnalysis>;
   listCostReviewers(input: {
     organizationId: string;
     workspaceId: string;
@@ -400,14 +407,18 @@ export interface ProfitRepository {
       route: string;
     },
   ): Promise<CostRule>;
+  createAccountRule(
+    input: AccountCostDraftContext & { id: string; value: ReturnType<typeof validateCostRule> },
+  ): Promise<CostRule>;
   actRule(
-    input: ProfitWriteContext & {
+    input: CostRuleActionContext & {
       ruleId: string;
       action: CostRuleAction;
       reason: string;
       expectedRevision: number;
       approvalRole?: ApprovalRole;
       targetRuleId?: string;
+      selectionManagerId?: string;
       route: string;
     },
   ): Promise<CostRule>;
@@ -464,17 +475,20 @@ export interface ProfitRepository {
     },
   ): Promise<{ job_id: string; opportunity_id: string; version: number }>;
 }
+export type CostRuleReadScope =
+  { organizationId: string; workspaceId: string } | { accountId: string };
+export type ProfitAnalysisReadScope = (
+  { organizationId: string; workspaceId: string; actorId: string } | { accountId: string }
+) & { opportunityId: string };
 export class ProfitService {
   constructor(private readonly repository: ProfitRepository) {}
-  listRules(input: { organizationId: string; workspaceId: string }) {
+  listRules(input: CostRuleReadScope) {
     return this.repository.listRules(input);
   }
-  getAnalysis(input: {
-    organizationId: string;
-    workspaceId: string;
-    opportunityId: string;
-    actorId: string;
-  }) {
+  isAccountPrimaryApprover(accountId: string) {
+    return this.repository.isAccountPrimaryApprover(accountId);
+  }
+  getAnalysis(input: ProfitAnalysisReadScope) {
     return this.repository.getAnalysis({
       ...input,
       opportunityId: uuid(input.opportunityId, "opportunity_id"),
@@ -495,15 +509,26 @@ export class ProfitService {
       route: "POST:/api/v1/cost-rules",
     });
   }
+  createAccountRule(
+    input: AccountCostDraftContext & { value: Parameters<typeof validateCostRule>[0] },
+  ) {
+    return this.repository.createAccountRule({
+      ...input,
+      id: randomUUID(),
+      value: validateCostRule(input.value),
+    });
+  }
   actRule(
-    input: ProfitWriteContext & {
+    input: CostRuleActionContext & {
       ruleId: string;
+      isPrimaryApprover?: boolean;
       value: {
         action: CostRuleAction;
         reason: string;
         expected_revision: number;
         approval_role?: ApprovalRole;
         target_rule_id?: string;
+        selection_manager_id?: string;
       };
     },
   ) {
@@ -519,9 +544,37 @@ export class ProfitService {
         "提交有效动作和当前 revision。",
       );
     const approvalRole = input.value.approval_role;
+    const accountOwned = "accountOwnedApproval" in input;
+    const accountSwitch =
+      accountOwned &&
+      (action === "submit" || action === "publish" || action === "rollback") &&
+      input.accountOwnedApproval === true &&
+      input.isPrimaryApprover === true &&
+      approvalRole == null;
+    if (accountSwitch && action !== "rollback" && input.value.target_rule_id != null)
+      throw new ProfitServiceError("cost_rule_action_invalid", 400, "只有回滚可以指定目标版本。");
+    const managerId = input.value.selection_manager_id;
+    if (managerId !== undefined && (!accountSwitch || action !== "submit"))
+      throw new ProfitServiceError(
+        "cost_rule_action_invalid",
+        400,
+        "仅主账号送审时可以指定选品经理。",
+      );
+    // The primary approval slot is not a membership role.
+    const canDecide =
+      approvalRole === "primary_account"
+        ? input.isPrimaryApprover === true
+        : approvalRole === "selection_manager" &&
+          (accountOwned
+            ? input.accountOwnedApproval === "manager"
+            : input.roleCodes.includes(approvalRole));
     if (
-      (action === "approve" || action === "reject") &&
-      (!approvalRole || !input.roleCodes.includes(approvalRole))
+      ((action === "approve" || action === "reject") && !canDecide) ||
+      (accountOwned &&
+        !accountSwitch &&
+        (approvalRole !==
+          (input.accountOwnedApproval === "manager" ? "selection_manager" : "primary_account") ||
+          (action !== "approve" && action !== "reject")))
     )
       throw new ProfitServiceError(
         "cost_rule_approval_role_forbidden",
@@ -546,7 +599,10 @@ export class ProfitService {
       expectedRevision: input.value.expected_revision,
       ...(approvalRole ? { approvalRole } : {}),
       ...(targetRuleId ? { targetRuleId } : {}),
-      route: `POST:/api/v1/cost-rules/${ruleId}/actions`,
+      ...(managerId !== undefined
+        ? { selectionManagerId: uuid(managerId, "selection_manager_id") }
+        : {}),
+      route: `POST:/api/v1/cost-rules/${ruleId}/actions${accountOwned ? ":account" : ""}`,
     });
   }
   recordRate(

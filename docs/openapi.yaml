@@ -626,7 +626,7 @@ paths:
   /auth/session-status:
     get:
       summary: Resolve browser session presence without using an expected 401 response
-      description: Returns authenticated false with HTTP 200 when the HttpOnly session cookie is missing or invalid. The response is no-store and exposes no user, session or tenancy identifiers.
+      description: Returns authenticated false with HTTP 200 when the HttpOnly session cookie is missing or invalid. The response is no-store and exposes no identifiers. Retired account mode also sends account_rehearsal true as the existing compatibility flag so the frontend omits legacy routes.
       security: []
       responses:
         "200":
@@ -2379,7 +2379,8 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /cost-rules:
     get:
-      summary: List workspace-scoped versioned cost rules
+      summary: List versioned cost rules and pending assigned decisions
+      description: In retired account mode, the verified session sees its own rules and pending unsigned manager work only where both the exact rule grant and read permission exist. Other accounts' history is not exposed. In legacy mode the active workspace still scopes the list.
       security: [{ HttpOnlySession: [] }]
       responses:
         "200":
@@ -2396,6 +2397,19 @@ paths:
                         properties:
                           {
                             data: { type: array, items: { $ref: "#/components/schemas/CostRule" } },
+                            meta:
+                              {
+                                type: object,
+                                required: [is_primary_approver],
+                                properties:
+                                  {
+                                    is_primary_approver:
+                                      {
+                                        type: boolean,
+                                        description: Verified primary account identity. Rule ownership or the exact delegated permission is still checked for each action.,
+                                      },
+                                  },
+                              },
                             request_id: { type: string },
                             trace_id: { type: string },
                           },
@@ -2405,8 +2419,10 @@ paths:
           }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     post:
       summary: Create a cost rule draft with four explicit fee lines
+      description: In retired account mode the verified primary account may create a draft for itself; this does not grant manager access. In legacy mode the workspace and existing create permission apply.
       security: [{ HttpOnlySession: [] }]
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       requestBody:
@@ -2443,6 +2459,11 @@ paths:
   /cost-rules/{costRuleId}/actions:
     post:
       summary: Submit approve reject publish or roll back a cost rule
+      x-account-rehearsal-actions: [submit, approve, reject, publish, rollback]
+      x-account-cost-rule-submit: Submission by the primary account requires a readable grant for an independent active manager on that exact rule, otherwise it returns 409 without changing state.
+      x-account-cost-rule-distinct-signers: An account that already signed either slot cannot sign the other slot on the same rule; the API returns 409 without adding an approval.
+      x-account-cost-rule-switch: After 0183 the verified primary account may publish or roll back only its own rules. Both independently signed approvals must be present on the destination version even when replaying an existing switch receipt; missing or non-independent approval records return 409 without writes. Only owned, unarchived opportunities in the matching market with owned current inputs for the rule platform are queued for profit recalculation.
+      description: The primary_account slot is restricted to the verified primary account. In retired account mode the sealed owner is required; the independent selection_manager slot uses the exact active rule grant without a workspace session. Ownership is not a manager grant. Historical actors, decisions and reasons remain unchanged. Both signers must be different; conflicting replays or mismatched historical ownership return 409. In legacy mode the existing workspace and approval capability are still checked.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: costRuleId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -2479,6 +2500,7 @@ paths:
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /exchange-rates:
     post:
       summary: Record an approved Provider historical exchange-rate quote
@@ -2584,6 +2606,7 @@ paths:
   /opportunities/{opportunityId}/profit-analysis:
     get:
       summary: Read the latest immutable profit run and current cost inputs
+      description: Retains the original opportunity, rule and input snapshots. Retired account mode returns 404 for a foreign or incorrectly assigned opportunity before reading history. Inputs, runs, components and reviews must agree with the sealed account and ownership reason. Parent links and original reviewers are preserved.
       security: [{ HttpOnlySession: [] }]
       parameters:
         [{ name: opportunityId, in: path, required: true, schema: { type: string, format: uuid } }]
@@ -2600,6 +2623,7 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /opportunities/{opportunityId}/competitor-discovery:
     post:
       summary: Crawl public Amazon search results and project competitors with immutable evidence
@@ -3173,12 +3197,15 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /tasks/approval-templates:
     get:
+      x-account-retirement-note: Account rehearsal returns private meta.can_manage when the account schema is ready and the verified account is active. Legacy responses are unchanged.
       summary: List scoped versioned approval templates
+      description: Approval-template nodes retain their original version, named approver, escalation recipient and SLA after duplicated scope columns are removed. The account rehearsal does not enable template management.
       x-required-capability: task:read
       responses:
         "200": { $ref: "#/components/responses/Success" }
         "403": { $ref: "#/components/responses/Error" }
     post:
+      x-account-retirement-note: The isolated 0180 candidate lists and creates templates for the verified account.
       summary: Create an approval template draft with explicit ordered nodes
       x-required-capability: task:assign
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
@@ -3215,6 +3242,7 @@ paths:
         "409": { $ref: "#/components/responses/Error" }
   /tasks/approval-templates/{templateId}/actions:
     post:
+      x-account-retirement-note: The isolated 0180 candidate publishes only the verified account’s own template.
       summary: Publish a draft approval template version with revision lock
       x-required-capability: task:assign
       parameters:
@@ -3250,6 +3278,7 @@ paths:
   /tasks/approvals:
     get:
       summary: List scoped approval requests and current node truth
+      description: Legacy mode requires task read permission in the active workspace. In retired account mode visibility requires ownership or a current named assignment. The pinned template and target must match the sealed request owner. Only a pending node's named approver can decide. A partial account schema returns 503.
       x-required-capability: task:read
       parameters:
         [
@@ -3268,14 +3297,16 @@ paths:
           {
             name: involvement,
             in: query,
-            description: Restrict to requests the current user can decide or initiated.,
+            description: Filter before pagination. In account mode, omission returns all visible records; decidable returns requests assigned to the current decision maker, and requested returns those initiated by the current account.,
             schema: { type: string, enum: [decidable, requested] },
           },
         ]
       responses:
         "200": { $ref: "#/components/responses/PaginatedSuccess" }
         "403": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
     post:
+      x-account-retirement-note: Retired account mode starts approval only for an owned published template and resource. Replays revalidate the pinned version and original resource before returning the recorded result.
       summary: Create an approval request and lock its template evidence rule and decision context snapshot
       x-required-capability: task:assign
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
@@ -3309,6 +3340,7 @@ paths:
   /tasks/approvals/{approvalRequestId}:
     get:
       summary: Get scoped approval detail with captured-to-current evidence diff escalation path and immutable history
+      description: In retired account mode visibility requires ownership or a current named assignment. Original template version, target, nodes and signatures are kept and filtered by account ownership. The detail is private and not cached. Legacy mode still requires workspace task read permission.
       x-required-capability: task:read
       parameters:
         [
@@ -3323,9 +3355,12 @@ paths:
         "200": { $ref: "#/components/responses/Success" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /tasks/approvals/{approvalRequestId}/actions:
     post:
+      x-account-retirement-note: The isolated candidate verifies the logged-in account against the current named approver, without an organization session. Identical requests replay; changed decisions under the same idempotency key return 409. The owned decision and delivery remain atomic if both legacy outbox columns are nullable or both have been removed; a mixed layout is rejected.
       summary: Approve or reject the active node with a mandatory immutable reason
+      description: Retired account mode permits only the verified named approver of the active node to decide. Ownership does not replace a named approver. Scheduled escalations and historical signatures keep their original actor. Cost-rule primary-account approvals use their separate endpoint.
       x-required-capability: task:assign
       parameters:
         [
@@ -11275,8 +11310,12 @@ components:
         action: { type: string, enum: [submit, approve, reject, publish, rollback] }
         reason: { type: string, minLength: 1, maxLength: 1000 }
         expected_revision: { type: integer, minimum: 1 }
-        approval_role: { type: string, enum: [selection_manager, organization_admin] }
+        approval_role: { type: string, enum: [selection_manager, primary_account] }
         target_rule_id: { type: string, format: uuid }
+        selection_manager_id:
+          type: string
+          format: uuid
+          description: Optional only on account-mode submit by the verified primary account. For an unassigned native draft, grants the named active independent account read and selection-manager approval on this rule only. Omit to retain existing grants; historical grants cannot be replaced.
     CostRule:
       allOf:
         - { $ref: "#/components/schemas/CostRuleCreateInput" }
@@ -11284,6 +11323,10 @@ components:
           required: [id, status, revision, approvals, published_at, updated_at]
           properties:
             id: { type: string, format: uuid }
+            owned_by_session:
+              { type: boolean, description: "Account-rehearsal list only. The current account owns this rule." }
+            can_decide_as_manager:
+              { type: boolean, description: "Account-rehearsal list only. An exact readable manager grant still has a pending decision." }
             status:
               {
                 type: string,
@@ -11293,7 +11336,7 @@ components:
             approvals:
               {
                 type: array,
-                items: { type: string, enum: [selection_manager, organization_admin] },
+                items: { type: string, enum: [selection_manager, primary_account] },
               }
             published_at: { type: string, format: date-time, nullable: true }
             updated_at: { type: string, format: date-time }

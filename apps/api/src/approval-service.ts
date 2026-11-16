@@ -7,6 +7,9 @@ export type ApprovalContext = {
   traceId: string;
   idempotencyKey: string;
 };
+type ApprovalTemplateContext =
+  | ApprovalContext
+  | (Omit<ApprovalContext, "organizationId" | "workspaceId" | "actorId"> & { accountId: string });
 export class ApprovalServiceError extends Error {
   constructor(
     readonly code: string,
@@ -79,6 +82,9 @@ export function validateDecision(v: any) {
 }
 export interface ApprovalRepository {
   listTemplates(i: any): Promise<any>;
+  accountTemplateOptions?(i: {
+    accountId: string;
+  }): Promise<{ items: unknown[]; canManage: boolean }>;
   createTemplate(i: any): Promise<any>;
   publishTemplate(i: any): Promise<any>;
   listRequests(i: any): Promise<any>;
@@ -91,7 +97,11 @@ export class ApprovalService {
   listTemplates(i: any) {
     return this.repo.listTemplates(i);
   }
-  createTemplate(i: ApprovalContext & { value: any }) {
+  async accountTemplateOptions(i: { accountId: string }) {
+    if (this.repo.accountTemplateOptions) return this.repo.accountTemplateOptions(i);
+    return { items: await this.repo.listTemplates(i), canManage: false };
+  }
+  createTemplate(i: ApprovalTemplateContext & { value: any }) {
     return this.repo.createTemplate({
       ...i,
       id: randomUUID(),
@@ -100,7 +110,7 @@ export class ApprovalService {
       route: "POST:/api/v1/tasks/approval-templates",
     });
   }
-  publishTemplate(i: ApprovalContext & { templateId: string; value: any }) {
+  publishTemplate(i: ApprovalTemplateContext & { templateId: string; value: any }) {
     return this.repo.publishTemplate({
       ...i,
       templateId: uuid(i.templateId, "template_id"),
@@ -127,7 +137,7 @@ export class ApprovalService {
       requestIdValue: uuid(i.requestIdValue, "approval_request_id"),
     });
   }
-  createRequest(i: ApprovalContext & { value: any }) {
+  createRequest(i: ApprovalTemplateContext & { value: any }) {
     return this.repo.createRequest({
       ...i,
       id: randomUUID(),
@@ -135,7 +145,14 @@ export class ApprovalService {
       route: "POST:/api/v1/tasks/approvals",
     });
   }
-  decide(i: ApprovalContext & { requestIdValue: string; value: any }) {
+  decide(
+    i: (
+      | ApprovalContext
+      | (Omit<ApprovalContext, "organizationId" | "workspaceId" | "actorId"> & {
+          accountId: string;
+        })
+    ) & { requestIdValue: string; value: any },
+  ) {
     return this.repo.decide({
       ...i,
       requestIdValue: uuid(i.requestIdValue, "approval_request_id"),

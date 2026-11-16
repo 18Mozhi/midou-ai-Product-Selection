@@ -379,6 +379,31 @@ export class AuthorizationService {
       platform_capabilities: subject.platform_capabilities,
     };
   }
+  async recordAccountRehearsalNavigation(
+    actorId: string,
+    reason:
+      | "landing_account_rehearsal"
+      | "navigation_account_rehearsal"
+      | "navigation_organization_retired_in_rehearsal",
+    ids: { requestId: string; traceId: string },
+  ) {
+    const denied = reason === "navigation_organization_retired_in_rehearsal";
+    await this.repository.appendDecision({
+      id: randomUUID(),
+      actor_id: actorId,
+      organization_id: null,
+      workspace_id: null,
+      team_id: null,
+      capability: denied ? "organization:manage" : "opportunity:read",
+      surface: "api",
+      outcome: denied ? "denied" : "allowed",
+      reason,
+      request_id: ids.requestId,
+      trace_id: ids.traceId,
+      occurred_at: this.now(),
+      schema_version: 1,
+    });
+  }
   async resolveLanding(
     actorId: string,
     sessionId: string,
@@ -446,13 +471,16 @@ export class AuthorizationService {
     });
     return { shell: landing.shell, route: landing.route, reason: landing.reason };
   }
+  protected findNavigationContext(actorId: string, sessionId: string) {
+    return this.repository.findSessionContext(sessionId, actorId);
+  }
   async guardNavigationShell(
     actorId: string,
     sessionId: string,
     shell: NavigationShell,
     ids: { requestId: string; traceId: string },
   ) {
-    const context = await this.repository.findSessionContext(sessionId, actorId);
+    const context = await this.findNavigationContext(actorId, sessionId);
     const subject = await this.repository.loadSubject(actorId, context?.organization_id);
     const organizationAdministrator = subject.role_codes.includes("organization_admin"),
       organizationAuditor =

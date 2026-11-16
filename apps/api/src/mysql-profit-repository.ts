@@ -1,11 +1,15 @@
-import { randomUUID } from "node:crypto";
+import { appendOpportunityEvent } from "@scoutops/database";
+import { appendOpportunityOutbox } from "@scoutops/database";
+import { createHash, randomUUID } from "node:crypto";
+import { PRIMARY_COST_APPROVER_EMAIL } from "@scoutops/auth";
 import { selectionCandidateSql, automaticEvaluationEnqueueUpdateSql } from "@scoutops/database";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
+import { rehearsalOwns, requireAccountReadRehearsal } from "./account-read-rehearsal.js";
 import {
   ProfitServiceError,
+  type AccountCostDraftContext,
   type ApprovalRole,
   type CostRule,
-  type CostRuleAction,
   type ProfitAnalysis,
   type ProfitRepository,
   type ProfitWriteContext,
@@ -18,12 +22,71 @@ export const databaseDay = (v: unknown) =>
   v instanceof Date
     ? `${v.getFullYear()}-${pad(v.getMonth() + 1)}-${pad(v.getDate())}`
     : String(v).slice(0, 10);
+const sealedRuleOwner = (alias: "o" | "ro") =>
+  "JOIN account_ownership_cutover ownership_receipt ON ownership_receipt.slot='current' " +
+  "AND ownership_receipt.contract_version=25 " +
+  `AND (${alias}.reason='exclusive_owner' OR (${alias}.reason IN ('shared','unassigned') ` +
+  `AND ${alias}.account_id=ownership_receipt.primary_account_id)) `;
 export class MySqlProfitRepository implements ProfitRepository {
   constructor(
     private readonly pool: Pool,
     private readonly now: () => Date = () => new Date(),
   ) {}
-  async listRules(input: { organizationId: string; workspaceId: string }) {
+  async isAccountPrimaryApprover(accountId: string) {
+    return this.matchesPrimaryApprovalAccount(this.pool, accountId);
+  }
+  private async matchesPrimaryApprovalAccount(
+    db: Pick<Pool, "query">,
+    accountId: string,
+    lock: boolean | "exclusive" = false,
+  ) {
+    const [rows] = await db.query<RowDataPacket[]>(
+      "SELECT cut.primary_account_id FROM account_ownership_cutover cut " +
+        "JOIN users u ON u.id=cut.primary_account_id " +
+        "WHERE cut.slot='current' AND cut.contract_version=25 AND cut.primary_account_id=? " +
+        "AND u.status='active' AND u.email_verified_at IS NOT NULL AND BINARY u.email_normalized=BINARY ? " +
+        "LIMIT 1" +
+        (lock === "exclusive" ? " FOR UPDATE" : lock ? " LOCK IN SHARE MODE" : ""),
+      [accountId, PRIMARY_COST_APPROVER_EMAIL],
+    );
+    return rows.length === 1;
+  }
+  async listRules(input: Parameters<ProfitRepository["listRules"]>[0]) {
+    if ("accountId" in input) {
+      await requireAccountReadRehearsal(this.pool);
+      let rows: RowDataPacket[];
+      try {
+        [rows] = await this.pool.query<RowDataPacket[]>(
+          `SELECT r.*,GROUP_CONCAT(CASE WHEN a.decision='approved' THEN a.approval_role END) approvals,
+           MAX(ro.account_id=?) owned_by_session, MAX(g.manager_id IS NOT NULL) can_decide_as_manager
+         FROM cost_rules r JOIN account_owned_records ro ON ro.source_table='cost_rules' AND ro.source_id=r.id
+         ${sealedRuleOwner("ro")}
+         LEFT JOIN account_cost_rule_manager_grants g
+           ON g.cost_rule_id=r.id AND g.manager_id=? AND g.can_read=1 AND r.status='pending_approval'
+           AND EXISTS (SELECT 1 FROM users manager_user WHERE manager_user.id=g.manager_id AND manager_user.status='active')
+           AND NOT EXISTS (SELECT 1 FROM cost_rule_approvals signed
+             WHERE signed.cost_rule_id=r.id AND (signed.approval_role='selection_manager' OR signed.actor_id=g.manager_id))
+         LEFT JOIN cost_rule_approvals a ON a.cost_rule_id=r.id
+           AND EXISTS (SELECT 1 FROM account_owned_records ra WHERE ra.source_table='cost_rule_approvals'
+             AND ra.source_id=a.id AND ra.account_id=ro.account_id AND ra.reason=ro.reason)
+         WHERE ro.account_id=? OR g.manager_id IS NOT NULL GROUP BY r.id ORDER BY r.updated_at DESC,r.id DESC`,
+          [input.accountId, input.accountId, input.accountId],
+        );
+      } catch (error) {
+        if (
+          ["ER_NO_SUCH_TABLE", "ER_BAD_FIELD_ERROR"].includes(
+            (error as { code?: string }).code ?? "",
+          )
+        )
+          throw new ProfitServiceError(
+            "account_cost_rule_manager_list_not_ready",
+            503,
+            "先完成隔离库经理待办迁移。",
+          );
+        throw error;
+      }
+      return rows.map((row) => this.dto(row));
+    }
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT r.*,GROUP_CONCAT(CASE WHEN a.decision='approved' THEN a.approval_role END) approvals " +
         "FROM cost_rules r LEFT JOIN cost_rule_approvals a ON a.cost_rule_id=r.id WHERE r.organization_id=? " +
@@ -32,39 +95,68 @@ export class MySqlProfitRepository implements ProfitRepository {
     );
     return rows.map((row) => this.dto(row));
   }
-  async getAnalysis(input: {
-    organizationId: string;
-    workspaceId: string;
-    opportunityId: string;
-    actorId: string;
-  }): Promise<ProfitAnalysis> {
-    const [opportunities] = await this.pool.query<RowDataPacket[]>(
-      "SELECT id FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=? LIMIT 1",
-      [input.opportunityId, input.organizationId, input.workspaceId],
-    );
+  async getAnalysis(
+    input: Parameters<ProfitRepository["getAnalysis"]>[0],
+  ): Promise<ProfitAnalysis> {
+    const accountId = "accountId" in input ? input.accountId : undefined;
+    if (accountId !== undefined) await requireAccountReadRehearsal(this.pool);
+    const sealedOwner = (alias: string) =>
+      `JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 ` +
+      `AND (${alias}.reason='exclusive_owner' OR (${alias}.reason IN ('shared','unassigned') ` +
+      `AND ${alias}.account_id=cut.primary_account_id))`;
+    const [opportunities] =
+      "organizationId" in input
+        ? await this.pool.query<RowDataPacket[]>(
+            "SELECT id FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=? LIMIT 1",
+            [input.opportunityId, input.organizationId, input.workspaceId],
+          )
+        : await this.pool.query<RowDataPacket[]>(
+            `SELECT o.id FROM opportunities o
+        JOIN account_owned_records ao ON ao.source_table='opportunities' AND ao.source_id=o.id
+        ${sealedOwner("ao")}
+        WHERE o.id=? AND ao.account_id=? LIMIT 1`,
+            [input.opportunityId, accountId],
+          );
     if (!opportunities[0])
       throw new ProfitServiceError("opportunity_not_found", 404, "刷新机会列表。");
+    const owned = (table: string, id: string) =>
+      accountId === undefined
+        ? ""
+        : ` AND EXISTS (SELECT 1 FROM account_owned_records ra ${sealedOwner("ra")} ` +
+          `WHERE ra.source_table='${table}' AND ra.source_id=${id} AND ra.account_id=?)`;
+    const legacyParentScope = (ref: string) =>
+      "organizationId" in input
+        ? ` AND EXISTS (SELECT 1 FROM opportunities p WHERE p.id=${ref} AND p.organization_id=? AND p.workspace_id=?)`
+        : "";
+    const scope =
+      "organizationId" in input
+        ? [input.opportunityId, input.organizationId, input.workspaceId]
+        : [input.opportunityId, input.accountId];
     const [inputs] = await this.pool.query<RowDataPacket[]>(
       "SELECT input_type,amount_value,currency,source_type,source_ref_id,evidence_id," +
         "observed_at,input_version,platform,confirmation_mode FROM opportunity_cost_inputs WHERE opportunity_id=? " +
-        "AND organization_id=? AND workspace_id=? AND is_current=1 ORDER BY platform," +
+        `AND is_current=1${legacyParentScope("opportunity_cost_inputs.opportunity_id")}${owned("opportunity_cost_inputs", "opportunity_cost_inputs.id")} ORDER BY platform,` +
         "input_type",
-      [input.opportunityId, input.organizationId, input.workspaceId],
+      scope,
     );
     const [runs] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM opportunity_profit_runs WHERE opportunity_id=? AND organization_id=? AND " +
-        "workspace_id=? ORDER BY calculated_at DESC,id DESC LIMIT 1",
-      [input.opportunityId, input.organizationId, input.workspaceId],
+      "SELECT id,status,rule_version_code,platform,market,currency,sale_price,total_cost,net_profit," +
+        "net_margin_percent,missing_fields_json,calculated_at FROM opportunity_profit_runs WHERE opportunity_id=?" +
+        `${legacyParentScope("opportunity_profit_runs.opportunity_id")}${owned("opportunity_profit_runs", "opportunity_profit_runs.id")} ORDER BY calculated_at DESC,id DESC LIMIT 1`,
+      scope,
     );
     const [reviews] = await this.pool.query<RowDataPacket[]>(
-      "SELECT r.*,i.input_type,i.amount_value,i.currency,i.platform,i.source_type," +
+      "SELECT r.id,r.cost_input_id,r.submitter_id,r.reviewer_id,r.status,r.due_at," +
+        "r.decision_reason,r.reviewed_at,r.version,r.created_at,i.input_type,i.amount_value,i.currency,i.platform,i.source_type," +
         "i.source_ref_id,i.evidence_id,i.observed_at,i.input_version," +
         "submitter.email submitter_label,reviewer.email reviewer_label FROM " +
         "opportunity_cost_input_reviews r JOIN opportunity_cost_inputs i ON i.id=r.cost_input_id " +
+        "AND i.opportunity_id=r.opportunity_id " +
         "JOIN users submitter ON submitter.id=r.submitter_id JOIN users reviewer ON " +
-        "reviewer.id=r.reviewer_id WHERE r.opportunity_id=? AND r.organization_id=? AND " +
-        "r.workspace_id=? ORDER BY FIELD(r.status,'pending','rejected','approved'),r.created_at DESC LIMIT 50",
-      [input.opportunityId, input.organizationId, input.workspaceId],
+        "reviewer.id=r.reviewer_id WHERE r.opportunity_id=?" +
+        `${legacyParentScope("r.opportunity_id")}${owned("opportunity_cost_input_reviews", "r.id")}${owned("opportunity_cost_inputs", "i.id")}` +
+        " ORDER BY FIELD(r.status,'pending','rejected','approved'),r.created_at DESC LIMIT 50",
+      [...scope, ...(accountId === undefined ? [] : [accountId])],
     );
     const run = runs[0];
     let components: RowDataPacket[] = [];
@@ -72,9 +164,9 @@ export class MySqlProfitRepository implements ProfitRepository {
       [components] = await this.pool.query<RowDataPacket[]>(
         "SELECT component_type,source_amount,source_currency,converted_amount,target_currency," +
           "source_ref_id,evidence_id,exchange_quote_id,missing_reason FROM opportunity_profit_components " +
-          "WHERE profit_run_id=? ORDER BY FIELD(component_type,'sale_price','purchase_price'," +
+          `WHERE profit_run_id=?${owned("opportunity_profit_components", "opportunity_profit_components.id")} ORDER BY FIELD(component_type,'sale_price','purchase_price',` +
           "'logistics','platform_fee','payment_fee','tax','fulfillment')",
-        [run.id],
+        [run.id, ...(accountId === undefined ? [] : [accountId])],
       );
     }
     const numeric = (value: unknown) => (value == null ? null : Number(value));
@@ -142,7 +234,10 @@ export class MySqlProfitRepository implements ProfitRepository {
         reviewed_at: iso(item.reviewed_at),
         version: Number(item.version),
         created_at: iso(item.created_at)!,
-        can_review: item.status === "pending" && String(item.reviewer_id) === input.actorId,
+        can_review:
+          "actorId" in input &&
+          item.status === "pending" &&
+          String(item.reviewer_id) === input.actorId,
       })),
     };
   }
@@ -186,7 +281,7 @@ export class MySqlProfitRepository implements ProfitRepository {
           now,
         ],
       );
-      const result = (await this.get(c, input.id, input.organizationId, input.workspaceId))!;
+      const result = (await this.get(c, input.id, input))!;
       await this.record(
         c,
         input,
@@ -215,39 +310,447 @@ export class MySqlProfitRepository implements ProfitRepository {
       c.release();
     }
   }
-  async actRule(
-    input: ProfitWriteContext & {
-      ruleId: string;
-      action: CostRuleAction;
-      reason: string;
-      expectedRevision: number;
-      approvalRole?: ApprovalRole;
-      targetRuleId?: string;
-      route: string;
-    },
+  async createAccountRule(input: Parameters<ProfitRepository["createAccountRule"]>[0]) {
+    const c = await this.pool.getConnection(),
+      now = this.now();
+    const command = { ...input, route: "POST:/api/v1/cost-rules:account" };
+    const fingerprint = createHash("sha256").update(JSON.stringify(input.value)).digest("hex");
+    try {
+      await c.beginTransaction();
+      if (!(await this.matchesPrimaryApprovalAccount(c, input.actorId, "exclusive")))
+        throw new ProfitServiceError(
+          "cost_rule_approval_role_forbidden",
+          403,
+          "仅主账号可创建费用规则。",
+        );
+      const previous = await this.operation<{ fingerprint: string; result: CostRule }>(command, c);
+      if (previous) {
+        if (previous.fingerprint !== fingerprint)
+          throw new ProfitServiceError(
+            "cost_rule_approval_idempotency_conflict",
+            409,
+            "同一幂等键只能重放原草稿。",
+          );
+        const existing = await this.get(c, previous.result.id, {
+          accountId: input.actorId,
+          reason: "exclusive_owner",
+        });
+        if (!existing) throw new ProfitServiceError("cost_rule_not_found", 404, "刷新费用规则。");
+        await c.commit();
+        return previous.result;
+      }
+      const v = input.value;
+      await c.query(
+        "INSERT INTO cost_rules (id,account_id,market,platform,version_code,name,status,fee_lines_json,conversion_rates_json," +
+          "automatic_scope_json,effective_from,revision,created_by,created_at,updated_at) VALUES (?,?,?,?,?,?,'draft',?,?,?,?,1,?,?,?)",
+        [
+          input.id,
+          input.actorId,
+          v.market,
+          v.platform,
+          v.version_code,
+          v.name,
+          JSON.stringify(v.fee_lines),
+          JSON.stringify(v.conversion_rates),
+          v.automatic_scope ? JSON.stringify(v.automatic_scope) : null,
+          v.effective_from,
+          input.actorId,
+          now,
+          now,
+        ],
+      );
+      await c.query(
+        "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ('cost_rules',?,?,'exclusive_owner')",
+        [input.id, input.actorId],
+      );
+      await this.recordAccountCostRule(
+        c,
+        input,
+        "cost_rule.created",
+        input.id,
+        "exclusive_owner",
+        { market: v.market, platform: v.platform, version_code: v.version_code },
+        now,
+      );
+      const result = await this.get(c, input.id, {
+        accountId: input.actorId,
+        reason: "exclusive_owner",
+      });
+      if (!result) throw new Error("cost_rule_create_readback_missing");
+      await this.save(c, command, input.id, { fingerprint, result }, now);
+      await c.commit();
+      return result;
+    } catch (error) {
+      await c.rollback();
+      if (
+        (error as { code?: string }).code === "ER_DUP_ENTRY" &&
+        (error as Error).message.includes("uq_cost_rule_account_version")
+      )
+        throw new ProfitServiceError(
+          "cost_rule_version_conflict",
+          409,
+          "更换市场、平台或版本代码。",
+        );
+      throw error;
+    } finally {
+      c.release();
+    }
+  }
+  private async recordAccountCostRule(
+    c: PoolConnection,
+    input: AccountCostDraftContext,
+    eventType: string,
+    ruleId: string,
+    reason: string,
+    payload: unknown,
+    now: Date,
   ) {
-    const previous = await this.operation<CostRule>(input);
-    if (previous) return previous;
+    const id = randomUUID(),
+      json = JSON.stringify(payload);
+    await c.query(
+      "INSERT INTO opportunity_events (id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES (?,?,'cost_rule',?,'user',?,?,?,?,?)",
+      [id, eventType, ruleId, input.actorId, input.requestId, input.traceId, json, now],
+    );
+    await c.query(
+      "INSERT INTO opportunity_outbox (id,event_id,event_type,resource_type,resource_id,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,'cost_rule',?,?,'queued',0,?,?,?,?,?)",
+      [id, id, eventType, ruleId, json, now, input.requestId, input.traceId, now, now],
+    );
+    await c.query(
+      "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ?",
+      [
+        [
+          ["opportunity_events", id, input.actorId, reason],
+          ["opportunity_outbox", id, input.actorId, reason],
+        ],
+      ],
+    );
+  }
+  async actRule(command: Parameters<ProfitRepository["actRule"]>[0]) {
+    const accountOwned = "accountOwnedApproval" in command;
+    const manager = accountOwned && command.accountOwnedApproval === "manager";
+    const accountSwitch =
+      accountOwned && (command.action === "publish" || command.action === "rollback");
+    const accountSubmit = accountOwned && command.action === "submit";
+    const accountLifecycle = accountSwitch || accountSubmit;
+    if (command.selectionManagerId !== undefined && (!accountSubmit || manager))
+      throw new ProfitServiceError(
+        "cost_rule_approval_role_forbidden",
+        403,
+        "仅主账号送审时可以指定选品经理。",
+      );
+    if (
+      accountLifecycle &&
+      (manager || command.approvalRole || (command.action !== "rollback" && command.targetRuleId))
+    )
+      throw new ProfitServiceError(
+        "cost_rule_approval_role_forbidden",
+        403,
+        "仅主账号可切换费用规则。",
+      );
+    if (!accountOwned) {
+      const previous = await this.operation<CostRule>(command);
+      if (previous) return this.normalizeReplayedCostRule(previous);
+    }
     const c = await this.pool.getConnection(),
       now = new Date();
     try {
       await c.beginTransaction();
-      const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT * FROM cost_rules WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
-        [input.ruleId, input.organizationId, input.workspaceId],
-      );
+      if (accountOwned && !accountSwitch)
+        await requireAccountReadRehearsal(c, { lockForTransaction: true });
+      if (
+        accountOwned &&
+        !manager &&
+        !(await this.matchesPrimaryApprovalAccount(
+          c,
+          command.actorId,
+          accountSwitch ? "exclusive" : true,
+        ))
+      )
+        throw new ProfitServiceError(
+          "cost_rule_approval_role_forbidden",
+          403,
+          "当前账号与已确认的主账号归属不一致。",
+        );
+      let rows: RowDataPacket[];
+      try {
+        [rows] = await c.query<RowDataPacket[]>(
+          manager
+            ? "SELECT r.*, o.reason AS ownership_reason,o.account_id AS ownership_account_id " +
+                "FROM cost_rules r JOIN account_owned_records o ON o.source_table='cost_rules' AND o.source_id=r.id " +
+                sealedRuleOwner("o") +
+                "JOIN account_cost_rule_manager_grants g ON g.cost_rule_id=r.id " +
+                "JOIN users manager_user ON manager_user.id=g.manager_id AND manager_user.status='active' " +
+                "WHERE r.id=? AND g.manager_id=? FOR UPDATE"
+            : accountOwned
+              ? "SELECT r.*, o.reason AS ownership_reason FROM cost_rules r JOIN account_owned_records o " +
+                "ON o.source_table='cost_rules' AND o.source_id=r.id " +
+                sealedRuleOwner("o") +
+                "WHERE r.id=? AND o.account_id=? FOR UPDATE"
+              : "SELECT * FROM cost_rules WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
+          accountOwned
+            ? [command.ruleId, command.actorId]
+            : [command.ruleId, command.organizationId, command.workspaceId],
+        );
+      } catch (error) {
+        if (manager && (error as { code?: string }).code === "ER_NO_SUCH_TABLE")
+          throw new ProfitServiceError(
+            "account_cost_rule_manager_grants_not_ready",
+            503,
+            "先完成隔离库审批权限迁移。",
+          );
+        throw error;
+      }
       const row = rows[0];
       if (!row) throw new ProfitServiceError("cost_rule_not_found", 404, "刷新费用规则。");
+      const input = command;
+      const ruleOwner = manager ? String(row.ownership_account_id) : input.actorId;
+      if (accountLifecycle && row.account_id !== ruleOwner)
+        throw new ProfitServiceError("cost_rule_not_found", 404, "刷新费用规则。");
+      if (
+        "accountOwnedApproval" in input &&
+        !accountLifecycle &&
+        input.action !== "approve" &&
+        input.action !== "reject"
+      )
+        throw new ProfitServiceError(
+          "cost_rule_approval_role_forbidden",
+          403,
+          "只允许提交审批或驳回。",
+        );
+      const requireSwitchSignatures = async (targetId: string) => {
+        const [signatures] = await c.query<RowDataPacket[]>(
+          "SELECT a.approval_role,a.actor_id FROM cost_rule_approvals a " +
+            "JOIN account_owned_records ar ON ar.source_table='cost_rule_approvals' AND ar.source_id=a.id " +
+            "JOIN account_owned_records rr ON rr.source_table='cost_rules' AND rr.source_id=a.cost_rule_id " +
+            "AND rr.account_id=ar.account_id AND rr.reason=ar.reason " +
+            "WHERE a.cost_rule_id=? AND ar.account_id=? AND a.decision='approved' LOCK IN SHARE MODE",
+          [targetId, ruleOwner],
+        );
+        if (
+          signatures.length !== 2 ||
+          new Set(signatures.map((s) => s.actor_id)).size !== 2 ||
+          !["selection_manager", "primary_account"].every((role) =>
+            signatures.some((s) => s.approval_role === role),
+          )
+        )
+          throw new ProfitServiceError(
+            "cost_rule_approval_incomplete",
+            409,
+            "切换版本前须核对两位独立审批人的有效签署。",
+          );
+      };
+      const approvalFingerprint = (role: string | undefined) =>
+        createHash("sha256")
+          .update(
+            JSON.stringify([
+              String(row.id),
+              input.action,
+              role,
+              input.expectedRevision,
+              input.reason,
+              input.targetRuleId ?? null,
+              ...(input.selectionManagerId ? [input.selectionManagerId] : []),
+            ]),
+          )
+          .digest("hex");
+      const fingerprint = accountOwned ? approvalFingerprint(input.approvalRole) : null;
+      if (accountOwned) {
+        const [unowned] = await c.query<RowDataPacket[]>(
+          `SELECT a.id FROM cost_rule_approvals a LEFT JOIN account_owned_records ar
+           ON ar.source_table='cost_rule_approvals' AND ar.source_id=a.id AND ar.account_id=? AND ar.reason=?
+           WHERE a.cost_rule_id=? AND ar.source_id IS NULL
+           LIMIT 1 FOR UPDATE`,
+          [ruleOwner, row.ownership_reason, input.ruleId],
+        );
+        if (unowned.length)
+          throw new ProfitServiceError(
+            "cost_rule_approval_ownership_conflict",
+            409,
+            "先核对规则的历史审批归属。",
+          );
+        const previous = await this.operation<{ fingerprint?: string; result?: CostRule }>(
+          input,
+          c,
+        );
+        if (previous) {
+          // Already-issued replay receipts used the old enum in the digest. Match every
+          // original input before translating that cached response; never accept the old role on writes.
+          const sameFingerprint =
+            previous.fingerprint === fingerprint ||
+            (input.approvalRole === "primary_account" &&
+              previous.fingerprint === approvalFingerprint("organization_admin"));
+          if (
+            !sameFingerprint ||
+            !previous.result ||
+            previous.result.id !==
+              (accountSwitch && input.action === "rollback" ? input.targetRuleId : String(row.id))
+          )
+            throw new ProfitServiceError(
+              "cost_rule_approval_idempotency_conflict",
+              409,
+              "同一幂等键只能重放原审批。",
+            );
+          if (accountLifecycle) {
+            if (input.action === "rollback") {
+              const [ownedTarget] = await c.query<RowDataPacket[]>(
+                "SELECT r.id FROM cost_rules r JOIN account_owned_records o ON o.source_table='cost_rules' AND o.source_id=r.id AND o.account_id=r.account_id " +
+                  "WHERE r.id=? AND r.account_id=? AND r.market=? AND r.platform=? LOCK IN SHARE MODE",
+                [input.targetRuleId, ruleOwner, row.market, row.platform],
+              );
+              if (!ownedTarget[0])
+                throw new ProfitServiceError(
+                  "cost_rule_rollback_target_invalid",
+                  409,
+                  "无法核对回滚目标归属。",
+                );
+            }
+            if (accountSwitch) await requireSwitchSignatures(previous.result.id);
+            await c.commit();
+            return this.normalizeReplayedCostRule(previous.result);
+          }
+          const [signature] = await c.query<RowDataPacket[]>(
+            "SELECT a.id FROM cost_rule_approvals a JOIN account_owned_records signature_owner " +
+              "ON signature_owner.source_table='cost_rule_approvals' AND signature_owner.source_id=a.id " +
+              "WHERE a.cost_rule_id=? AND a.approval_role=? AND a.actor_id=? AND a.decision=? " +
+              "AND BINARY a.reason=BINARY ? AND signature_owner.account_id=? AND signature_owner.reason=? " +
+              "LIMIT 1 LOCK IN SHARE MODE",
+            [
+              input.ruleId,
+              input.approvalRole,
+              input.actorId,
+              input.action === "approve" ? "approved" : "rejected",
+              input.reason,
+              ruleOwner,
+              row.ownership_reason,
+            ],
+          );
+          if (!signature.length)
+            throw new ProfitServiceError(
+              "cost_rule_approval_idempotency_conflict",
+              409,
+              "原审批签名无法核对，请刷新费用规则。",
+            );
+          await c.commit();
+          return this.normalizeReplayedCostRule(previous.result);
+        }
+      }
       if (Number(row.revision) !== input.expectedRevision)
         throw new ProfitServiceError(
           "cost_rule_revision_conflict",
           409,
           "刷新规则并使用最新 revision。",
         );
+      if (accountOwned && !accountLifecycle && input.approvalRole) {
+        const [sameSigner] = await c.query<RowDataPacket[]>(
+          "SELECT id FROM cost_rule_approvals WHERE cost_rule_id=? AND actor_id=? AND approval_role<>? LIMIT 1 FOR UPDATE",
+          [input.ruleId, input.actorId, input.approvalRole],
+        );
+        if (sameSigner.length)
+          throw new ProfitServiceError(
+            "cost_rule_distinct_approver_required",
+            409,
+            "同一账号不能占用同一费用规则的两个审批位。",
+          );
+      }
       let resultId = input.ruleId;
-      if (input.action === "submit") {
+      let resultOwnerReason = String(row.ownership_reason);
+      let approvalId: string | undefined;
+      const mapApproval = async () => {
+        if (accountOwned && approvalId)
+          await c.query(
+            "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ('cost_rule_approvals',?,?,?)",
+            [approvalId, ruleOwner, row.ownership_reason],
+          );
+      };
+      if (accountSwitch) {
+        if (
+          input.action === "publish"
+            ? row.status !== "approved"
+            : row.status !== "active" || !input.targetRuleId
+        )
+          throw new ProfitServiceError(
+            "cost_rule_transition_invalid",
+            409,
+            "当前费用规则状态不允许切换。",
+          );
+        if (input.action === "rollback") {
+          const [target] = await c.query<RowDataPacket[]>(
+            "SELECT r.id,o.reason FROM cost_rules r JOIN account_owned_records o ON o.source_table='cost_rules' AND o.source_id=r.id AND o.account_id=r.account_id " +
+              "WHERE r.id=? AND r.account_id=? AND r.market=? AND r.platform=? AND r.status IN ('approved','retired') FOR UPDATE",
+            [input.targetRuleId, ruleOwner, row.market, row.platform],
+          );
+          if (!target[0])
+            throw new ProfitServiceError(
+              "cost_rule_rollback_target_invalid",
+              409,
+              "目标必须是本账号同市场同平台已批准或停用的版本。",
+            );
+          resultId = String(target[0].id);
+          resultOwnerReason = String(target[0].reason);
+        }
+        await requireSwitchSignatures(resultId);
+        if (input.action === "rollback") {
+          await c.query(
+            "UPDATE cost_rules SET status='rolled_back',rollback_target_id=?,rolled_back_at=?,revision=revision+1,updated_at=? WHERE id=? AND account_id=?",
+            [resultId, now, now, input.ruleId, ruleOwner],
+          );
+        } else {
+          await c.query(
+            "UPDATE cost_rules SET status='retired',revision=revision+1,updated_at=? WHERE account_id=? AND market=? AND platform=? AND status='active'",
+            [now, ruleOwner, row.market, row.platform],
+          );
+        }
+        await c.query(
+          "UPDATE cost_rules SET status='active',published_by=?,published_at=?,revision=revision+1,updated_at=? WHERE id=? AND account_id=?",
+          [input.actorId, now, now, resultId, ruleOwner],
+        );
+        await this.queueAccountProfit(c, input, resultId, row.market, row.platform, now);
+      } else if (input.action === "submit") {
         if (row.status !== "draft")
           throw new ProfitServiceError("cost_rule_transition_invalid", 409, "只有草稿可以提交。");
+        if (accountSubmit) {
+          if (input.selectionManagerId) {
+            const [existing] = await c.query<RowDataPacket[]>(
+              "SELECT manager_id FROM account_cost_rule_manager_grants WHERE cost_rule_id=? LIMIT 1 FOR UPDATE",
+              [input.ruleId],
+            );
+            if (
+              existing.length ||
+              row.ownership_reason !== "exclusive_owner" ||
+              row.historical_context != null
+            )
+              throw new ProfitServiceError(
+                "cost_rule_manager_already_configured",
+                409,
+                "已有授权或属于迁入的规则，请保留原具名授权并直接送审。",
+              );
+            const [candidate] = await c.query<RowDataPacket[]>(
+              "SELECT id FROM users WHERE id=? AND id<>? AND status='active' FOR UPDATE",
+              [input.selectionManagerId, ruleOwner],
+            );
+            if (!candidate.length)
+              throw new ProfitServiceError(
+                "cost_rule_manager_invalid",
+                409,
+                "请输入另一位有效账号的 ID。",
+              );
+            await c.query(
+              "INSERT INTO account_cost_rule_manager_grants (cost_rule_id,manager_id,can_read) VALUES (?,?,1)",
+              [input.ruleId, input.selectionManagerId],
+            );
+          }
+          const [eligible] = await c.query<RowDataPacket[]>(
+            "SELECT g.manager_id FROM account_cost_rule_manager_grants g JOIN users u ON u.id=g.manager_id " +
+              "WHERE g.cost_rule_id=? AND g.can_read=1 AND g.manager_id<>? AND u.status='active' LIMIT 1 FOR UPDATE",
+            [input.ruleId, ruleOwner],
+          );
+          if (!eligible[0])
+            throw new ProfitServiceError(
+              "cost_rule_manager_required",
+              409,
+              "规则必须先有独立的具名选品经理授权，才能提交审批。",
+            );
+        }
         await c.query(
           "UPDATE cost_rules SET status='pending_approval',submitted_by=?,submitted_at=?," +
             "revision=revision+1,updated_at=? WHERE id=?",
@@ -257,13 +760,10 @@ export class MySqlProfitRepository implements ProfitRepository {
         if (row.status !== "pending_approval" || !input.approvalRole)
           throw new ProfitServiceError("cost_rule_transition_invalid", 409, "当前规则不能审批。");
         await c.query(
-          "INSERT INTO cost_rule_approvals (id,organization_id,workspace_id,cost_rule_id," +
-            "approval_role,decision,reason,actor_id,request_id,trace_id,created_at) VALUES (?," +
-            "?,?,?,?,'approved',?,?,?,?,?)",
+          "INSERT INTO cost_rule_approvals (id,cost_rule_id," +
+            "approval_role,decision,reason,actor_id,request_id,trace_id,created_at) VALUES (?,?,?,'approved',?,?,?,?,?)",
           [
-            randomUUID(),
-            input.organizationId,
-            input.workspaceId,
+            (approvalId = randomUUID()),
             input.ruleId,
             input.approvalRole,
             input.reason,
@@ -273,9 +773,15 @@ export class MySqlProfitRepository implements ProfitRepository {
             now,
           ],
         );
+        await mapApproval();
         const [count] = await c.query<RowDataPacket[]>(
-          "SELECT COUNT(DISTINCT approval_role) count FROM cost_rule_approvals WHERE cost_rule_id=? AND decision='approved'",
-          [input.ruleId],
+          accountOwned
+            ? `SELECT LEAST(COUNT(DISTINCT a.approval_role),COUNT(DISTINCT a.actor_id)) count FROM cost_rule_approvals a
+               WHERE a.cost_rule_id=? AND a.decision='approved'
+               AND EXISTS (SELECT 1 FROM account_owned_records ar WHERE ar.source_table='cost_rule_approvals'
+                 AND ar.source_id=a.id AND ar.account_id=? AND ar.reason=?)`
+            : "SELECT COUNT(DISTINCT approval_role) count FROM cost_rule_approvals WHERE cost_rule_id=? AND decision='approved'",
+          accountOwned ? [input.ruleId, ruleOwner, row.ownership_reason] : [input.ruleId],
         );
         await c.query(
           "UPDATE cost_rules SET status=?,revision=revision+1,updated_at=? WHERE id=?",
@@ -289,13 +795,10 @@ export class MySqlProfitRepository implements ProfitRepository {
             "拒绝必须指定真实审批角色。",
           );
         await c.query(
-          "INSERT INTO cost_rule_approvals (id,organization_id,workspace_id,cost_rule_id," +
-            "approval_role,decision,reason,actor_id,request_id,trace_id,created_at) VALUES (?," +
-            "?,?,?,?,'rejected',?,?,?,?,?)",
+          "INSERT INTO cost_rule_approvals (id,cost_rule_id," +
+            "approval_role,decision,reason,actor_id,request_id,trace_id,created_at) VALUES (?,?,?,'rejected',?,?,?,?,?)",
           [
-            randomUUID(),
-            input.organizationId,
-            input.workspaceId,
+            (approvalId = randomUUID()),
             input.ruleId,
             input.approvalRole,
             input.reason,
@@ -305,11 +808,13 @@ export class MySqlProfitRepository implements ProfitRepository {
             now,
           ],
         );
+        await mapApproval();
         await c.query(
           "UPDATE cost_rules SET status='rejected',revision=revision+1,updated_at=? WHERE id=?",
           [now, input.ruleId],
         );
       } else if (input.action === "publish") {
+        if ("accountOwnedApproval" in input) throw new Error("unexpected_account_publish");
         if (row.status !== "approved")
           throw new ProfitServiceError(
             "cost_rule_transition_invalid",
@@ -327,6 +832,7 @@ export class MySqlProfitRepository implements ProfitRepository {
         );
         await this.queueAll(c, input, input.ruleId, row.market, row.platform, now);
       } else {
+        if ("accountOwnedApproval" in input) throw new Error("unexpected_account_rollback");
         if (row.status !== "active" || !input.targetRuleId)
           throw new ProfitServiceError(
             "cost_rule_transition_invalid",
@@ -356,21 +862,57 @@ export class MySqlProfitRepository implements ProfitRepository {
         await this.queueAll(c, input, input.targetRuleId, row.market, row.platform, now);
         resultId = input.targetRuleId;
       }
-      const result = (await this.get(c, resultId, input.organizationId, input.workspaceId))!;
-      await this.record(
+      const result = (await this.get(
         c,
-        input,
-        `cost_rule.${input.action}`,
-        input.ruleId,
-        {
-          reason: input.reason,
-          approval_role: input.approvalRole ?? null,
-          target_rule_id: input.targetRuleId ?? null,
-          resulting_status: result.status,
-        },
-        now,
-      );
-      await this.save(c, input, input.ruleId, result, now);
+        resultId,
+        "accountOwnedApproval" in input
+          ? { accountId: ruleOwner, reason: resultOwnerReason }
+          : input,
+      ))!;
+      const eventType = `cost_rule.${input.action}`;
+      const payload = {
+        reason: input.reason,
+        approval_role: input.approvalRole ?? null,
+        target_rule_id: input.targetRuleId ?? null,
+        ...(input.selectionManagerId ? { selection_manager_id: input.selectionManagerId } : {}),
+        resulting_status: result.status,
+      };
+      if (accountLifecycle) {
+        await this.recordAccountCostRule(
+          c,
+          input,
+          eventType,
+          input.ruleId,
+          String(row.ownership_reason),
+          payload,
+          now,
+        );
+      } else if ("accountOwnedApproval" in input) {
+        if (!approvalId) throw new Error("missing_account_cost_approval");
+        const eventId = randomUUID();
+        await c.query(
+          "INSERT INTO account_cost_approval_events (id,account_id,cost_rule_id,approval_id,event_type," +
+            "ownership_reason,request_id,trace_id,payload_json,occurred_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+          [
+            eventId,
+            ruleOwner,
+            input.ruleId,
+            approvalId,
+            eventType,
+            row.ownership_reason,
+            input.requestId,
+            input.traceId,
+            JSON.stringify(payload),
+            now,
+          ],
+        );
+        await c.query(
+          "INSERT INTO account_cost_approval_outbox (id,status,attempt_count,available_at,created_at,updated_at) " +
+            "VALUES (?,'queued',0,?,?,?)",
+          [eventId, now, now, now],
+        );
+      } else await this.record(c, input, eventType, input.ruleId, payload, now);
+      await this.save(c, input, input.ruleId, accountOwned ? { fingerprint, result } : result, now);
       await c.commit();
       return result;
     } catch (error) {
@@ -491,14 +1033,12 @@ export class MySqlProfitRepository implements ProfitRepository {
         ),
         inputVersion = Number(versions[0]?.next_version ?? 1);
       await c.query(
-        "INSERT INTO opportunity_cost_inputs (id,organization_id,workspace_id,opportunity_id," +
+        "INSERT INTO opportunity_cost_inputs (id,opportunity_id," +
           "platform,input_type,amount_value,currency,source_type,source_ref_id,evidence_id," +
           "observed_at,input_version,is_current,submitted_by,confirmed_by,request_id,trace_id,created_at) VALUES " +
-          "(?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,NULL,?,?,?)",
+          "(?,?,?,?,?,?,?,?,?,?,?,0,?,NULL,?,?,?)",
         [
           input.id,
-          input.organizationId,
-          input.workspaceId,
           input.opportunityId,
           input.value.platform,
           input.value.input_type,
@@ -519,14 +1059,12 @@ export class MySqlProfitRepository implements ProfitRepository {
         dueAt = new Date(now.getTime() + 24 * 60 * 60 * 1000),
         reminderAt = new Date(dueAt.getTime() - 4 * 60 * 60 * 1000);
       await c.query(
-        "INSERT INTO opportunity_cost_input_reviews (id,organization_id,workspace_id,opportunity_id," +
+        "INSERT INTO opportunity_cost_input_reviews (id,opportunity_id," +
           "cost_input_id,submitter_id,reviewer_id,status,due_at,decision_reason,reviewed_at," +
-          "request_id,trace_id,version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,'pending',?," +
+          "request_id,trace_id,version,created_at,updated_at) VALUES (?,?,?,?,?,'pending',?," +
           "NULL,NULL,?,?,1,?,?)",
         [
           reviewId,
-          input.organizationId,
-          input.workspaceId,
           input.opportunityId,
           input.id,
           input.actorId,
@@ -616,8 +1154,9 @@ export class MySqlProfitRepository implements ProfitRepository {
       const [rows] = await c.query<RowDataPacket[]>(
           "SELECT r.*,i.platform,i.input_type,i.input_version,o.market,o.version opportunity_version " +
             "FROM opportunity_cost_input_reviews r JOIN opportunity_cost_inputs i ON " +
-            "i.id=r.cost_input_id JOIN opportunities o ON o.id=r.opportunity_id WHERE r.id=? AND " +
-            "r.opportunity_id=? AND r.organization_id=? AND r.workspace_id=? FOR UPDATE",
+            "i.id=r.cost_input_id AND i.opportunity_id=r.opportunity_id JOIN opportunities o " +
+            "ON o.id=r.opportunity_id WHERE r.id=? AND r.opportunity_id=? " +
+            "AND o.organization_id=? AND o.workspace_id=? FOR UPDATE",
           [input.reviewId, input.opportunityId, input.organizationId, input.workspaceId],
         ),
         review = rows[0];
@@ -777,6 +1316,17 @@ export class MySqlProfitRepository implements ProfitRepository {
       c.release();
     }
   }
+  private normalizeReplayedCostRule(rule: CostRule): CostRule {
+    const approvals: readonly string[] = rule.approvals;
+    return approvals.includes("organization_admin")
+      ? {
+          ...rule,
+          approvals: approvals.map((role) =>
+            role === "organization_admin" ? "primary_account" : (role as ApprovalRole),
+          ),
+        }
+      : rule;
+  }
   private dto(row: RowDataPacket): CostRule {
     return {
       id: String(row.id),
@@ -791,24 +1341,45 @@ export class MySqlProfitRepository implements ProfitRepository {
       effective_from: databaseDay(row.effective_from),
       revision: Number(row.revision),
       approvals: row.approvals ? (String(row.approvals).split(",") as ApprovalRole[]) : [],
+      ...(row.owned_by_session === undefined
+        ? {}
+        : { owned_by_session: Number(row.owned_by_session) === 1 }),
+      ...(row.can_decide_as_manager === undefined
+        ? {}
+        : { can_decide_as_manager: Number(row.can_decide_as_manager) === 1 }),
       published_at: iso(row.published_at),
       updated_at: iso(row.updated_at)!,
     };
   }
-  private async get(c: PoolConnection, id: string, org: string, ws: string) {
+  private async get(
+    c: PoolConnection,
+    id: string,
+    scope:
+      | Pick<ProfitWriteContext, "organizationId" | "workspaceId">
+      | { accountId: string; reason: string },
+  ) {
+    const accountOwned = "accountId" in scope;
     const [rows] = await c.query<RowDataPacket[]>(
       "SELECT r.*,GROUP_CONCAT(CASE WHEN a.decision='approved' THEN a.approval_role END) approvals " +
-        "FROM cost_rules r LEFT JOIN cost_rule_approvals a ON a.cost_rule_id=r.id WHERE r.id=? " +
-        "AND r.organization_id=? AND r.workspace_id=? GROUP BY r.id",
-      [id, org, ws],
+        "FROM cost_rules r LEFT JOIN cost_rule_approvals a ON a.cost_rule_id=r.id " +
+        (accountOwned
+          ? "AND EXISTS (SELECT 1 FROM account_owned_records ra WHERE ra.source_table='cost_rule_approvals' " +
+            "AND ra.source_id=a.id AND ra.account_id=? AND ra.reason=?) "
+          : "") +
+        "WHERE r.id=? AND " +
+        (accountOwned
+          ? rehearsalOwns("cost_rules", "r.id", "?")
+          : "r.organization_id=? AND r.workspace_id=?") +
+        " GROUP BY r.id",
+      accountOwned
+        ? [scope.accountId, scope.reason, id, scope.accountId]
+        : [id, scope.organizationId, scope.workspaceId],
     );
     return rows[0] ? this.dto(rows[0]) : null;
   }
   private async queueOne(
     c: PoolConnection,
     input: {
-      organizationId: string;
-      workspaceId: string;
       requestId: string;
       traceId: string;
     },
@@ -818,23 +1389,48 @@ export class MySqlProfitRepository implements ProfitRepository {
   ) {
     const id = randomUUID();
     await c.query(
-      "INSERT INTO opportunity_profit_jobs (id,organization_id,workspace_id,opportunity_id," +
+      "INSERT INTO opportunity_profit_jobs (id,opportunity_id," +
         "cost_rule_id,status,attempt_count,available_at,request_id,trace_id,created_at," +
-        "updated_at) VALUES (?,?,?,?,?,'queued',0,?,?,?,?,?)",
-      [
-        id,
-        input.organizationId,
-        input.workspaceId,
-        opportunityId,
-        ruleId,
-        now,
-        input.requestId,
-        input.traceId,
-        now,
-        now,
-      ],
+        "updated_at) VALUES (?,?,?,'queued',0,?,?,?,?,?)",
+      [id, opportunityId, ruleId, now, input.requestId, input.traceId, now, now],
     );
     return id;
+  }
+  private async queueAccountProfit(
+    c: PoolConnection,
+    input: Pick<ProfitWriteContext, "actorId" | "requestId" | "traceId">,
+    ruleId: string,
+    market: string,
+    platform: string,
+    now: Date,
+  ) {
+    const [rows] = await c.query<RowDataPacket[]>(
+      "SELECT o.id,ow.reason FROM opportunities o JOIN account_owned_records ow " +
+        "ON ow.source_table='opportunities' AND ow.source_id=o.id AND ow.account_id=? " +
+        "WHERE o.market=? AND o.lifecycle_status NOT IN ('archived','deleted') " +
+        "AND EXISTS (SELECT 1 FROM opportunity_cost_inputs i WHERE i.opportunity_id=o.id AND i.platform=? AND i.is_current=1 AND " +
+        rehearsalOwns("opportunity_cost_inputs", "i.id", "ow.account_id") +
+        ") ORDER BY o.id",
+      [input.actorId, market, platform],
+    );
+    for (const row of rows) {
+      const jobId = await this.queueOne(c, input, String(row.id), ruleId, now);
+      await c.query(
+        "INSERT INTO account_owned_records (source_table,source_id,account_id,reason) VALUES ('opportunity_profit_jobs',?,?,?)",
+        [jobId, input.actorId, row.reason],
+      );
+    }
+    if (platform === "amazon")
+      await c.query(
+        "INSERT INTO automatic_selection_evaluations (opportunity_id,status,attempt_count,available_at,created_at,updated_at) " +
+          "SELECT o.id,'queued',0,?,?,? FROM opportunities o WHERE " +
+          rehearsalOwns("opportunities", "o.id", "?") +
+          " AND o.market=? AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted') AND " +
+          selectionCandidateSql +
+          " " +
+          automaticEvaluationEnqueueUpdateSql,
+        [now, now, now, input.actorId, market],
+      );
   }
   private async queueAll(
     c: PoolConnection,
@@ -853,24 +1449,28 @@ export class MySqlProfitRepository implements ProfitRepository {
     for (const row of rows) await this.queueOne(c, input, String(row.id), ruleId, now);
     await c.query(
       "INSERT INTO automatic_selection_evaluations " +
-        "(opportunity_id,organization_id,workspace_id,status,attempt_count,available_at,created_at,updated_at) " +
-        "SELECT o.id,o.organization_id,o.workspace_id,'queued',0,?,?,? FROM opportunities o WHERE " +
+        "(opportunity_id,status,attempt_count,available_at,created_at,updated_at) " +
+        "SELECT o.id,'queued',0,?,?,? FROM opportunities o WHERE " +
         "o.organization_id=? AND o.workspace_id=? AND o.market=? AND o.decision_status='pending' " +
         `AND ${selectionCandidateSql} ` +
         automaticEvaluationEnqueueUpdateSql,
       [now, now, now, input.organizationId, input.workspaceId, market],
     );
   }
-  private async operation<T>(input: ProfitWriteContext & { route: string }) {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT result_json FROM cost_operations WHERE actor_id=? AND route=? AND idempotency_key=?",
+  private async operation<T>(
+    input: Pick<ProfitWriteContext, "actorId" | "idempotencyKey"> & { route: string },
+    db: Pick<Pool, "query"> = this.pool,
+  ) {
+    const [rows] = await db.query<RowDataPacket[]>(
+      "SELECT result_json FROM cost_operations WHERE actor_id=? AND route=? AND idempotency_key=?" +
+        (db === this.pool ? "" : " FOR UPDATE"),
       [input.actorId, input.route, input.idempotencyKey],
     );
     return rows[0] ? parse<T>(rows[0].result_json) : null;
   }
   private async save(
     c: PoolConnection,
-    input: ProfitWriteContext & { route: string },
+    input: Pick<ProfitWriteContext, "actorId" | "idempotencyKey"> & { route: string },
     resourceId: string,
     result: unknown,
     now: Date,
@@ -903,43 +1503,33 @@ export class MySqlProfitRepository implements ProfitRepository {
         : eventType.startsWith("exchange_rate.")
           ? "exchange_rate"
           : "opportunity";
-    await c.query(
-      "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type," +
-        "resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json," +
-        "occurred_at) VALUES (?,?,?,?,?,?,'user',?,?,?,?,?)",
-      [
-        id,
-        input.organizationId,
-        input.workspaceId,
-        eventType,
-        type,
-        resourceId,
-        input.actorId,
-        input.requestId,
-        input.traceId,
-        JSON.stringify(payload),
-        now,
-      ],
-    );
-    await c.query(
-      "INSERT INTO opportunity_outbox (id,organization_id,workspace_id,event_type," +
-        "resource_type,resource_id,payload_json,status,attempt_count,available_at," +
-        "request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,?,'queued'," +
-        "0,?,?,?,?,?)",
-      [
-        id,
-        input.organizationId,
-        input.workspaceId,
-        eventType,
-        type,
-        resourceId,
-        JSON.stringify(payload),
-        now,
-        input.requestId,
-        input.traceId,
-        now,
-        now,
-      ],
-    );
+    await appendOpportunityEvent(c, {
+      id,
+      organizationId: input.organizationId,
+      workspaceId: input.workspaceId,
+      eventType,
+      resourceType: type,
+      resourceId,
+      actorType: "user",
+      actorId: input.actorId,
+      requestId: input.requestId,
+      traceId: input.traceId,
+      payloadJson: JSON.stringify(payload),
+      occurredAt: now,
+    });
+    await appendOpportunityOutbox(c, {
+      id,
+      eventId: id,
+      organizationId: input.organizationId,
+      workspaceId: input.workspaceId,
+      eventType,
+      resourceType: type,
+      resourceId,
+      payloadJson: JSON.stringify(payload),
+      createdAt: now,
+      requestId: input.requestId,
+      traceId: input.traceId,
+    });
+    return id;
   }
 }

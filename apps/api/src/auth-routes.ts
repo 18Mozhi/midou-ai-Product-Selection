@@ -45,6 +45,7 @@ export interface LocalAuthRouteOptions {
   secureCookie: boolean;
   sessionTtlMinutes?: number;
   mfa?: MfaService;
+  accountReadRehearsal?: boolean;
 }
 
 const cookieName = (secure: boolean) => (secure ? "__Host-scoutops_session" : "scoutops_session");
@@ -165,14 +166,21 @@ export function registerLocalAuthRoutes(app: FastifyInstance, options: LocalAuth
 
   app.get("/api/v1/auth/session-status", async (request, reply) => {
     reply.header("cache-control", "no-store");
+    const status = (authenticated: boolean) =>
+      envelope(
+        {
+          authenticated,
+          ...(options.accountReadRehearsal ? { account_rehearsal: true } : {}),
+        },
+        request,
+      );
     const token = cookieValue(request, cookieName(options.secureCookie));
-    if (!token) return envelope({ authenticated: false }, request);
+    if (!token) return status(false);
     try {
       await options.service.authenticate(token, { allowSecuritySetup: true });
-      return envelope({ authenticated: true }, request);
+      return status(true);
     } catch (error) {
-      if (error instanceof AuthError && error.statusCode === 401)
-        return envelope({ authenticated: false }, request);
+      if (error instanceof AuthError && error.statusCode === 401) return status(false);
       throw error;
     }
   });

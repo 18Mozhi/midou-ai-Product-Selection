@@ -8,7 +8,7 @@ import "../profit.css";
 
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type FeeType = "platform_fee" | "payment_fee" | "tax" | "fulfillment" | "logistics";
-type ApprovalRole = "selection_manager" | "organization_admin";
+type ApprovalRole = "selection_manager" | "primary_account";
 type Action = "submit" | "approve" | "reject" | "publish" | "rollback";
 interface Rule {
   id: string;
@@ -34,6 +34,8 @@ interface Rule {
   effective_from: string;
   revision: number;
   approvals: ApprovalRole[];
+  owned_by_session?: boolean;
+  can_decide_as_manager?: boolean;
   published_at: string | null;
   updated_at: string;
 }
@@ -43,7 +45,12 @@ interface PendingAction {
   target: Pick<Rule, "id" | "name" | "market" | "platform" | "version_code" | "revision">;
 }
 
-const props = defineProps<{ apiBaseUrl: string; roles: string[]; capabilities: string[] }>();
+const props = defineProps<{
+  apiBaseUrl: string;
+  roles: string[];
+  capabilities: string[];
+  accountRehearsal?: boolean;
+}>();
 const route = useRoute(),
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
@@ -52,6 +59,7 @@ const route = useRoute(),
   selected = ref<Rule | null>(null),
   requestId = ref(""),
   notice = ref(""),
+  isPrimaryApprover = ref(false),
   busy = ref(false),
   showCreate = ref(false),
   showAction = ref(false),
@@ -59,6 +67,7 @@ const route = useRoute(),
   actionError = ref(""),
   actionReason = ref(""),
   rollbackTargetId = ref(""),
+  selectionManagerId = ref(""),
   pendingAction = ref<PendingAction | null>(null),
   search = ref(""),
   statusFilter = ref("all"),
@@ -92,9 +101,28 @@ const initialForm = () => ({
   automatic_product_family: "",
 });
 const form = reactive(initialForm());
-const canManage = computed(() => props.capabilities.includes("opportunity:approve")),
-  canSelection = computed(() => canManage.value && props.roles.includes("selection_manager")),
-  canAdmin = computed(() => canManage.value && props.roles.includes("organization_admin")),
+const canManage = computed(
+    () => !props.accountRehearsal && props.capabilities.includes("opportunity:approve"),
+  ),
+  canSelection = computed(() =>
+    props.accountRehearsal
+      ? selected.value?.can_decide_as_manager === true
+      : canManage.value && props.roles.includes("selection_manager"),
+  ),
+  canPrimaryApprove = computed(
+    () =>
+      isPrimaryApprover.value &&
+      (props.accountRehearsal ? selected.value?.owned_by_session === true : canManage.value),
+  ),
+  canSwitchRule = computed(() =>
+    props.accountRehearsal ? canPrimaryApprove.value : canManage.value,
+  ),
+  canCreateRule = computed(() =>
+    props.accountRehearsal ? isPrimaryApprover.value : canManage.value,
+  ),
+  canSubmitRule = computed(() =>
+    props.accountRehearsal ? canPrimaryApprove.value : canManage.value,
+  ),
   activeCostRule = computed(() => rules.value.find((item) => item.status === "active") ?? null),
   nextCostRule = computed(
     () =>
@@ -109,7 +137,7 @@ const canManage = computed(() => props.capabilities.includes("opportunity:approv
     if (nextCostRule.value?.status === "approved")
       return "已有规则通过双角色审批，发布后成本质量门才会启用。";
     if (nextCostRule.value?.status === "pending_approval")
-      return "规则正在等待选品经理和组织管理员完成双角色审批。";
+      return "规则正在等待选品经理和主账号完成双角色审批。";
     if (nextCostRule.value?.status === "draft") return "已有草稿，提交并完成双角色审批后才能发布。";
     return "尚无费用规则；系统不使用默认费用。创建规则并完成双角色审批后才能计算利润。";
   }),
@@ -149,6 +177,7 @@ const canManage = computed(() => props.capabilities.includes("opportunity:approv
     return rules.value.filter(
       (item) =>
         item.id !== target.id &&
+        (!props.accountRehearsal || item.owned_by_session === true) &&
         item.market === target.market &&
         item.platform === target.platform &&
         ["approved", "retired"].includes(item.status),
@@ -230,14 +259,14 @@ const canManage = computed(() => props.capabilities.includes("opportunity:approv
     if (action === "approve")
       return pendingAction.value?.approvalRole === "selection_manager"
         ? "选品经理审批"
-        : "组织管理员审批";
+        : "主账号审批";
     if (action === "reject") return "拒绝费用规则";
     if (action === "publish") return "发布费用规则";
     if (action === "rollback") return "回滚费用规则";
     return "确认规则操作";
   }),
   statePrimaryLabel = computed(() =>
-    state.value === "empty" && canManage.value ? "新建第一条规则" : "刷新列表",
+    state.value === "empty" && canCreateRule.value ? "新建第一条规则" : "刷新列表",
   );
 
 const statusLabels: Record<string, string> = {
@@ -271,7 +300,6 @@ const statusLabels: Record<string, string> = {
     cost_rule_version_conflict: "同一市场和平台下的版本号已存在。",
     cost_rule_revision_conflict: "规则已被其他操作更新，请刷新后重试。",
     cost_rule_transition_invalid: "当前规则状态不允许此操作。",
-    cost_rule_not_found: "规则不存在或不属于当前工作区。",
     cost_rule_approval_conflict: "当前角色已经处理过该规则。",
     cost_rule_approval_role_forbidden: "当前账号不能代表该审批角色操作。",
     cost_rule_rollback_target_required: "请选择要恢复的历史规则。",
@@ -300,7 +328,13 @@ const stateFrom = (kind: ApiFailureKind): State =>
           ? "blocked"
           : "error",
   apiErrorText = (error: ApiClientError) =>
-    `${profitErrorLabels[error.code] ?? error.userMessage} ${error.actionHint}`.trim();
+    `${
+      error.code === "cost_rule_not_found"
+        ? props.accountRehearsal
+          ? "规则不存在或当前账号不可查看。"
+          : "规则不存在或不属于当前工作区。"
+        : (profitErrorLabels[error.code] ?? error.userMessage)
+    } ${error.actionHint}`.trim();
 
 const normalizeRule = (rule: Rule): Rule => ({
   ...rule,
@@ -312,11 +346,15 @@ const normalizeRule = (rule: Rule): Rule => ({
 async function load() {
   const sequence = ++loadSequence;
   state.value = "loading";
+  isPrimaryApprover.value = false;
   notice.value = "";
   try {
     const response = await request<Rule[]>("/cost-rules");
     if (sequence !== loadSequence) return;
     requestId.value = response.request_id;
+    isPrimaryApprover.value =
+      (response.meta as { is_primary_approver?: unknown } | undefined)?.is_primary_approver ===
+      true;
     rules.value = response.data.map(normalizeRule);
     const routeRuleId = typeof route.query.rule === "string" ? route.query.rule : "";
     selected.value =
@@ -360,7 +398,7 @@ async function post(path: string, body: unknown, setError: (value: string) => vo
   }
 }
 function openCreate() {
-  if (!canManage.value) return;
+  if (!canCreateRule.value) return;
   Object.assign(form, initialForm());
   createError.value = "";
   showCreate.value = true;
@@ -380,6 +418,7 @@ function closeCreate() {
   createError.value = "";
 }
 async function create() {
+  if (!canCreateRule.value) return;
   if (createValidation.value) {
     createError.value = createValidation.value;
     return;
@@ -451,8 +490,15 @@ async function create() {
     notice.value = "费用规则草稿已创建，发布前仍需双角色审批。";
   }
 }
+function canRunAction(action: Action, approvalRole?: ApprovalRole) {
+  if (action === "approve" || action === "reject")
+    return approvalRole === "primary_account"
+      ? canPrimaryApprove.value
+      : approvalRole === "selection_manager" && canSelection.value;
+  return action === "publish" || action === "rollback" ? canSwitchRule.value : canSubmitRule.value;
+}
 function beginAction(action: Action, approvalRole?: ApprovalRole) {
-  if (!selected.value || !canManage.value) return;
+  if (!selected.value || !canRunAction(action, approvalRole)) return;
   const { id, name, market, platform, version_code, revision } = selected.value;
   pendingAction.value = {
     action,
@@ -460,6 +506,7 @@ function beginAction(action: Action, approvalRole?: ApprovalRole) {
     target: { id, name, market, platform, version_code, revision },
   };
   actionReason.value = "";
+  selectionManagerId.value = "";
   actionError.value = "";
   rollbackTargetId.value = action === "rollback" ? (rollbackTargets.value[0]?.id ?? "") : "";
   showAction.value = true;
@@ -471,17 +518,32 @@ function closeAction() {
   actionError.value = "";
 }
 async function submitAction() {
-  if (!pendingAction.value) return;
+  const currentAction = pendingAction.value;
+  if (
+    !currentAction ||
+    selected.value?.id !== currentAction.target.id ||
+    !canRunAction(currentAction.action, currentAction.approvalRole)
+  )
+    return;
   const reason = actionReason.value.trim();
   if (reason.length < 2) {
     actionError.value = "请填写至少 2 个字的审计原因。";
     return;
   }
-  if (pendingAction.value.action === "rollback" && !rollbackTargetId.value) {
+  if (currentAction.action === "rollback" && !rollbackTargetId.value) {
     actionError.value = "请选择要恢复的历史规则。";
     return;
   }
-  const currentAction = pendingAction.value;
+  const managerId = selectionManagerId.value.trim();
+  if (
+    props.accountRehearsal &&
+    currentAction.action === "submit" &&
+    managerId &&
+    !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(managerId)
+  ) {
+    actionError.value = "请输入有效的选品经理账号 ID。";
+    return;
+  }
   const result = await post(
     `/cost-rules/${currentAction.target.id}/actions`,
     {
@@ -490,6 +552,9 @@ async function submitAction() {
       expected_revision: currentAction.target.revision,
       ...(currentAction.approvalRole ? { approval_role: currentAction.approvalRole } : {}),
       ...(currentAction.action === "rollback" ? { target_rule_id: rollbackTargetId.value } : {}),
+      ...(props.accountRehearsal && currentAction.action === "submit" && managerId
+        ? { selection_manager_id: managerId }
+        : {}),
     },
     (value) => (actionError.value = value),
   );
@@ -502,7 +567,7 @@ async function submitAction() {
   }
 }
 function handleStatePrimary() {
-  if (state.value === "empty" && canManage.value) openCreate();
+  if (state.value === "empty" && canCreateRule.value) openCreate();
   else void load();
 }
 function selectRuleById(value: string) {
@@ -566,7 +631,7 @@ onMounted(load);
       </div>
       <div class="cost-head-actions">
         <RouterLink :to="returnPath">返回当前找货记录</RouterLink>
-        <button v-if="canManage" type="button" @click="openCreate">
+        <button v-if="canCreateRule" type="button" @click="openCreate">
           {{
             state !== "ready" || activeCostRule
               ? "新建规则版本"
@@ -585,13 +650,19 @@ onMounted(load);
       :kind="state"
       :request-id="requestId"
       :title="
-        state === 'empty' ? (canManage ? '尚未创建费用规则' : '暂无可查看的费用规则') : undefined
+        state === 'empty'
+          ? canCreateRule
+            ? '尚未创建费用规则'
+            : '暂无可查看的费用规则'
+          : undefined
       "
       :description="
         state === 'empty'
-          ? canManage
+          ? canCreateRule
             ? '创建首个显式费用版本后，再提交双角色审批。'
-            : '当前工作区尚未发布费用规则，请联系有审批权限的成员创建。'
+            : accountRehearsal
+              ? '当前账号暂无可查看的费用规则。'
+              : '当前工作区尚未发布费用规则，请联系有审批权限的成员创建。'
           : undefined
       "
       :primary-label="statePrimaryLabel"
@@ -712,13 +783,13 @@ onMounted(load);
           <h4>审批链</h4>
           <p>
             <b :data-done="hasApproval('selection_manager')">选品经理</b
-            ><b :data-done="hasApproval('organization_admin')">组织管理员</b>
+            ><b :data-done="hasApproval('primary_account')">主账号</b>
           </p>
           <small>提交、审批、拒绝、发布和回滚均保留操作者、原因、事件与事务消息。</small>
         </section>
         <footer class="cost-rule-actions">
           <button
-            v-if="canManage && selected.status === 'draft'"
+            v-if="canSubmitRule && selected.status === 'draft'"
             :disabled="busy"
             @click="beginAction('submit')"
           >
@@ -741,43 +812,54 @@ onMounted(load);
               选品经理拒绝
             </button>
             <button
-              v-if="canAdmin && !hasApproval('organization_admin')"
+              v-if="canPrimaryApprove && !hasApproval('primary_account')"
               :disabled="busy"
-              @click="beginAction('approve', 'organization_admin')"
+              @click="beginAction('approve', 'primary_account')"
             >
-              组织管理员批准
+              主账号批准
             </button>
             <button
-              v-if="canAdmin && !hasApproval('organization_admin')"
+              v-if="canPrimaryApprove && !hasApproval('primary_account')"
               :disabled="busy"
               class="danger"
-              @click="beginAction('reject', 'organization_admin')"
+              @click="beginAction('reject', 'primary_account')"
             >
-              组织管理员拒绝
+              主账号拒绝
             </button>
           </template>
           <button
-            v-if="canManage && selected.status === 'approved'"
+            v-if="canSwitchRule && selected.status === 'approved'"
             :disabled="busy"
             @click="beginAction('publish')"
           >
             发布规则
           </button>
           <button
-            v-if="canManage && selected.status === 'active' && rollbackTargets.length"
+            v-if="canSwitchRule && selected.status === 'active' && rollbackTargets.length"
             :disabled="busy"
             class="danger"
             @click="beginAction('rollback')"
           >
             回滚到历史版本
           </button>
-          <small v-if="!canManage" class="cost-readonly-note"
+          <small
+            v-if="
+              !canManage &&
+              !(
+                selected.status === 'pending_approval' &&
+                ((canPrimaryApprove && !hasApproval('primary_account')) ||
+                  (canSelection && !hasApproval('selection_manager')))
+              )
+            "
+            class="cost-readonly-note"
             >当前账号仅可查看，不能变更规则。</small
           >
           <small
-            v-else-if="selected.status === 'pending_approval' && !canSelection && !canAdmin"
+            v-else-if="
+              selected.status === 'pending_approval' && !canSelection && !canPrimaryApprove
+            "
             class="cost-readonly-note"
-            >等待选品经理或组织管理员处理。</small
+            >等待选品经理或主账号处理。</small
           >
           <small
             v-else-if="selected.status === 'active' && !rollbackTargets.length"
@@ -1016,6 +1098,19 @@ onMounted(load);
           </div>
           <fieldset class="cost-dialog-input-lock" :disabled="busy">
             <legend class="cost-dialog-sr-only">操作内容</legend>
+            <label
+              v-if="accountRehearsal && pendingAction.action === 'submit'"
+              class="cost-dialog-field"
+            >
+              独立选品经理账号 ID（已有授权则留空）
+              <input
+                v-model="selectionManagerId"
+                maxlength="36"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <small>仅可为未授权的新规则指定；必须是主账号以外的有效账号。</small>
+            </label>
             <label v-if="pendingAction.action === 'rollback'" class="cost-dialog-field">
               恢复目标
               <select v-model="rollbackTargetId" required>
