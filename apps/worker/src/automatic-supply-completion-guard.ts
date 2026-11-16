@@ -1,8 +1,8 @@
 import type { PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
-  automaticPrimaryEvidenceSql,
-  automaticPrimaryDetailEvidenceSql,
+  readAutomaticPrimaryEvidence,
   automaticSupplyEvidenceSql,
+  accountAutomaticSupplyEvidenceSql,
   primaryProductEvidence,
 } from "./automatic-selection-evidence.js";
 import {
@@ -11,6 +11,7 @@ import {
   genericTitleFactsCompatible,
 } from "./automatic-selection-evaluation.js";
 import { supplyFacts } from "./supply-facts-from-records.js";
+import type { CalculationOwnership } from "./opportunity-calculation-ownership.js";
 import {
   supplyDetailText,
   supplyDetailEligible,
@@ -22,12 +23,14 @@ export async function automaticSupplyCompletionQuoteValid(
   connection: PoolConnection,
   parameters: string[],
   proof: RowDataPacket,
+  ownership: CalculationOwnership = null,
 ) {
   if (
     proof.purchase_source_type !== "automatic_crawler_evidence" ||
     proof.purchase_confirmation_mode !== "automatic_evidence"
   )
     return true;
+  if (ownership && !ownership.owner) return false;
   const skuRef = /^1688:(\d{1,40}):sku:(\d{1,40}):(classified-details:v1|p75:\d+)$/.exec(
     String(proof.purchase_source_ref_id),
   );
@@ -38,17 +41,19 @@ export async function automaticSupplyCompletionQuoteValid(
     (!skuRef && !/^1688:\d{1,40}:p75:\d+$/.test(String(proof.purchase_source_ref_id)))
   )
     return true;
-  const [linked] = await connection.query<RowDataPacket[]>(automaticPrimaryEvidenceSql, parameters);
-  const [detail] = await connection.query<RowDataPacket[]>(
-    automaticPrimaryDetailEvidenceSql,
-    parameters,
-  );
-  const primary = primaryProductEvidence(linked[0], detail[0]);
+  const [opportunityId, organizationId, workspaceId] = parameters;
+  const { linked, detail } = await readAutomaticPrimaryEvidence(connection,
+    { opportunityId: opportunityId!, organizationId: organizationId!, workspaceId: workspaceId!,
+      ...(ownership?.owner ? { accountId: ownership.owner.account_id } : {}) });
+  const primary = primaryProductEvidence(linked, detail);
   const parse = (value: unknown) => (typeof value === "string" ? JSON.parse(value) : value);
   if (!primary) return false;
   const title = normalizedProductFields(parse(primary.payload_json)).title;
   if (typeof title !== "string" || !title.trim()) return false;
-  const [rows] = await connection.query<RowDataPacket[]>(automaticSupplyEvidenceSql, parameters);
+  const [rows] = await connection.query<RowDataPacket[]>(
+    ownership?.owner ? accountAutomaticSupplyEvidenceSql : automaticSupplyEvidenceSql,
+    ownership?.owner ? [parameters[0], ownership.owner.account_id] : parameters,
+  );
   if (skuRef) {
     const row = rows.find((row) => row.raw_evidence_id === proof.supply_evidence_id);
     if (!row) return false;

@@ -16,6 +16,23 @@ import {
 } from "../../packages/database/dist/index.js";
 
 const now = new Date("2026-10-17T00:00:00Z");
+
+test("account evidence quality checks the exact evidence and collection owner without retired columns", async () => {
+  const worker = new MySqlAutomaticSelectionEvaluationWorker({}, "worker", "actor", 120);
+  for (const [matched, blocked, expected] of [[1, 0, false], [1, 1, true], [0, 0, true]]) {
+    const c = { async query(sql, args) {
+      if (sql.startsWith("SHOW COLUMNS")) return [[{ Field: "historical_context" }]];
+      assert.doesNotMatch(sql, /organization_id|workspace_id/);
+      assert.match(sql, /i\.raw_evidence_id=e\.id[\s\S]*i\.status='open' AND i\.severity='critical'/);
+      assert.match(sql, /source_table='collection_tasks'[\s\S]*source_id=et\.id[\s\S]*account_id=eo\.account_id/);
+      assert.deepEqual(args, ["acct", "original-evidence"]);
+      return [[{ matched, blocked }]];
+    } };
+    assert.equal(await worker.qualityBlocked(c, {
+      executionOwnership: { owner: { account_id: "acct" } },
+    }, ["original-evidence", "original-evidence"], true), expected);
+  }
+});
 const job = {
   opportunityId: "item",
   organizationId: "org",
@@ -63,6 +80,14 @@ function fixture(options = {}) {
     },
     release() {},
     async query(sql, params) {
+      if (sql.startsWith("SHOW COLUMNS FROM normalized_records")) return [[{Field:"organization_id"},{Field:"workspace_id"}]];
+      if (/^SHOW COLUMNS FROM (score_rules|cost_rules) WHERE Field IN/.test(sql))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
+      if (sql.startsWith("SELECT cut.primary_account_id")) return [[]];
+      if (sql.startsWith("SHOW COLUMNS FROM data_quality_issues"))
+        return [[{Field: "historical_context"}]];
+      if (/^SHOW COLUMNS FROM opportunity_(events|outbox)/.test(sql))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       calls.push({ sql, params });
       if (![automaticPrimaryEvidenceSql, automaticPrimaryDetailEvidenceSql].includes(sql)) {
         const source = primarySourceFixtureRead(sql, params, { asin: "B000000001" });
@@ -87,18 +112,31 @@ function fixture(options = {}) {
             evidence_id: `detail-${index}`,
           })),
         ];
-      if (sql.startsWith("SELECT id FROM opportunity_events")) return [[]];
+      if (sql.startsWith("SELECT id FROM (SELECT ev.id") && sql.includes("completion_prior")) return [[]];
       if (
         options.failSupplyAudit &&
         sql.startsWith("INSERT INTO opportunity_events") &&
         params[3] === "opportunity.supply_title_classified"
       )
         throw new Error("supply audit unavailable");
-      if (sql.startsWith("SELECT o.*")) return [[{ market: "US", score_rule_version: "v1" }]];
+      if (sql.startsWith("SELECT o.*"))
+        return [
+          [{ market: options.market ?? "US", score_rule_version: options.scoredVersion ?? "v1" }],
+        ];
       if (sql.startsWith("SELECT opportunity_id FROM automatic_selection_evaluations"))
         return [[{ opportunity_id: "item" }]];
       if (sql.startsWith("SELECT id,version_code,dimensions_json"))
-        return [options.noScoreRule ? [] : [{ id: "score-rule", dimensions_json: dimensions }]];
+        return [
+          options.noScoreRule
+            ? []
+            : [
+                {
+                  id: "score-rule",
+                  version_code: options.activeVersion ?? "v1",
+                  dimensions_json: dimensions,
+                },
+              ],
+        ];
       if (sql.startsWith("SELECT id,version_code,fee_lines_json"))
         return [
           options.noCostRule
@@ -169,20 +207,17 @@ function fixture(options = {}) {
       if (options.failPriceWrite && sql.startsWith("INSERT INTO opportunity_cost_inputs"))
         throw new Error("price write unavailable");
       if (sql.startsWith("INSERT INTO opportunity_cost_inputs")) {
+        const [id, opportunityId, platform, type, amount, currency, , source, evidence, , version, , , , created] = params;
+        assert.equal(opportunityId, job.opportunityId);
+        assert.equal(platform, "amazon");
         humanCosts.push({
-          id: params[0],
-          input_type: params[5],
-          amount_value: params[6],
-          currency: params[7],
-          evidence_id: params[10],
-          source_ref_id: params[9],
-          input_version: params[12],
-          confirmation_mode: "automatic_evidence",
-          created_at: params[16],
+          id, input_type: type, amount_value: amount, currency, evidence_id: evidence,
+          source_ref_id: source, input_version: version, confirmation_mode: "automatic_evidence",
+          created_at: created,
         });
       }
       if (sql.startsWith("SELECT * FROM opportunity_cost_inputs"))
-        return [[humanCosts.find((row) => row.input_type === params[4])]];
+        return [[humanCosts.find((row) => row.input_type === params[2])]];
       if (sql.startsWith("SELECT id,input_type,evidence_id,input_version")) return [humanCosts];
       if (sql.startsWith("SELECT * FROM opportunity_profit_runs"))
         return [
@@ -199,13 +234,18 @@ function fixture(options = {}) {
       if (sql.startsWith("SELECT id FROM opportunity_score_jobs")) return [[]];
       if (options.failScoreWrite && sql.startsWith("INSERT INTO opportunity_score_inputs"))
         throw new Error("score write unavailable");
-      if (sql.startsWith("INSERT INTO opportunity_score_inputs"))
-        inputs.set(params[4], {
-          score_value: params[6],
-          evidence_ids_json: params[9],
-          missing_fields_json: params[10],
-          source_ref_id: params[8],
+      if (sql.startsWith("INSERT INTO opportunity_score_inputs")) {
+        assert.match(sql, /\(id,opportunity_id,dimension_code,/);
+        const [id, opportunityId, dimension, , score, , source, evidence, missing] = params;
+        assert.ok(id);
+        assert.equal(opportunityId, job.opportunityId);
+        inputs.set(dimension, {
+          score_value: score,
+          evidence_ids_json: evidence,
+          missing_fields_json: missing,
+          source_ref_id: source,
         });
+      }
       if (sql.startsWith("SELECT")) throw new Error(`Unexpected read: ${sql}`);
       return [{ affectedRows: 1 }];
     },
@@ -220,6 +260,28 @@ function fixture(options = {}) {
   );
   return { worker, calls, inputs, prices: humanCosts, counts: () => ({ commits, rollbacks }) };
 }
+
+test("account quality gate blocks missing or foreign evidence after evidence scope columns are removed", async () => {
+  const {worker} = fixture();
+  const accountJob = {...job, executionOwnership:{owner:{account_id:"account"}}};
+  let aggregate = {matched:2, blocked:0};
+  const db = {async query(sql, params) {
+    if (sql.startsWith("SHOW COLUMNS")) return [[{Field:"historical_context"}]];
+    assert.doesNotMatch(sql, /e\.(organization_id|workspace_id)/);
+    assert.match(sql, /eo\.account_id=\?/);
+    assert.match(sql, /i\.status='open' AND i\.severity='critical'/);
+    assert.doesNotMatch(sql, /et\.(organization_id|workspace_id)/);
+    assert.match(sql, /eto\.account_id=eo\.account_id/);
+    assert.deepEqual(params, ["account", "evidence-1", "evidence-2"]);
+    return [[aggregate]];
+  }};
+  const run = () => worker.qualityBlocked(db, accountJob, ["evidence-1", "evidence-2", "evidence-2"], true);
+  assert.equal(await run(), false);
+  aggregate = {matched:1, blocked:0};
+  assert.equal(await run(), true);
+  aggregate = {matched:2, blocked:1};
+  assert.equal(await run(), true);
+});
 
 const bilingualOptions = {
   noHumanCosts: true,
@@ -336,7 +398,7 @@ test("classified source writes its exact original quote and evidence audit witho
       call.sql.startsWith("INSERT INTO opportunity_events") &&
       call.params[3] === "opportunity.supply_title_classified",
   );
-  const payload = JSON.parse(audit.params[8]);
+  const payload = JSON.parse(audit.params[10]);
   assert.equal(payload.purchase_evidence_id, "supply-1");
   assert.equal(payload.similarity_percent, null);
   assert.deepEqual(
@@ -453,8 +515,33 @@ test("an unchanged unknown-profit analysis can finish when the final competitor 
       call.params[3] === "opportunity.selection_pipeline_completed",
   );
   assert.ok(completion);
-  assert.equal(JSON.parse(completion.params[9]).profit_status, "unknown");
-  assert.equal(JSON.parse(completion.params[9]).overall_score, projection.overall_score);
+  assert.equal(JSON.parse(completion.params[10]).profit_status, "unknown");
+  assert.equal(JSON.parse(completion.params[10]).overall_score, projection.overall_score);
+  // The same evidence cannot use a receipt built against the prior scoring-rule version.
+  options.activeVersion = "v2";
+  f.calls.length = 0;
+  await f.worker.evaluate(job);
+  assert.equal(
+    f.calls.filter(({ sql }) => sql.startsWith("INSERT INTO opportunity_score_jobs")).length,
+    1,
+  );
+  assert.equal(
+    f.calls.some(({ params }) => params[3] === "opportunity.selection_pipeline_completed"),
+    false,
+  );
+});
+
+test("an unconfigured GLOBAL market retains its own scope and still gets factual non-profit scores", async () => {
+  const f = fixture({ market: "GLOBAL", noCostRule: true });
+  const result = await f.worker.evaluate(job);
+  assert.equal(result.payload.market, "GLOBAL");
+  assert.equal(result.payload.cost_rule, false);
+  assert.deepEqual(
+    f.calls.find(({ sql }) => sql.startsWith("SELECT id,version_code,fee_lines_json")).params,
+    ["org", "workspace", "GLOBAL"],
+  );
+  assert.equal(typeof f.inputs.get("market_demand").score_value, "number");
+  assert.equal(f.inputs.get("profit").score_value, null);
 });
 
 for (const noCostRule of [false, true]) {
@@ -497,7 +584,7 @@ for (const noCostRule of [false, true]) {
     ]);
     const audit = f.calls.find(({ sql }) => sql.startsWith("INSERT INTO opportunity_events"));
     assert.equal(audit.params[3], "opportunity.automatic_quality_evaluated");
-    assert.equal(JSON.parse(audit.params[8]).missing_profit_reason, reason);
+    assert.equal(JSON.parse(audit.params[10]).missing_profit_reason, reason);
     assert.deepEqual(f.counts(), { commits: 1, rollbacks: 0 });
   });
 }
@@ -658,12 +745,7 @@ for (const noCostRule of [false, true]) {
     for (const write of f.calls.filter((call) =>
       call.sql.startsWith("INSERT INTO opportunity_cost_inputs"),
     )) {
-      assert.deepEqual(write.params.slice(1, 5), [
-        job.organizationId,
-        job.workspaceId,
-        job.opportunityId,
-        "amazon",
-      ]);
+      assert.deepEqual(write.params.slice(1, 3), [job.opportunityId, "amazon"]);
     }
     assert.equal(f.inputs.get("profit").score_value, null);
     assert.equal(
@@ -734,6 +816,10 @@ test("profit API returns sourced prices even without a profit run or fee rule", 
   const reads = [];
   const repo = new MySqlProfitRepository({
     query: async (sql, params) => {
+      if (sql.startsWith("SHOW COLUMNS FROM data_quality_issues"))
+        return [[{Field: "historical_context"}]];
+      if (/^SHOW COLUMNS FROM opportunity_(events|outbox)/.test(sql))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       reads.push({ sql, params });
       if (sql.startsWith("SELECT id FROM opportunities")) return [[{ id: job.opportunityId }]];
       if (sql.includes("FROM opportunity_cost_inputs WHERE"))

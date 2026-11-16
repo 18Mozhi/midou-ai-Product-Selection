@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { format } from "mysql2";
 import {
   readPrimarySourceContext,
   readPrimarySourceVerdict,
@@ -8,6 +9,9 @@ import {
   primarySourceOriginSql,
   primarySourceNewsSql,
   primarySourceAuditSql,
+  accountPrimarySourceOriginSql,
+  accountPrimarySourceNewsSql,
+  accountPrimarySourceAuditSql,
   PRIMARY_SOURCE_SUPPORT_REVISION,
 } from "../../apps/worker/dist/primary-source-support.js";
 import {
@@ -17,12 +21,117 @@ import {
 } from "../../apps/worker/dist/primary-source-support-recovery.js";
 import {
   automaticPrimaryEvidenceSql,
+  accountAutomaticPrimaryEvidenceSql,
+  nativeAccountAutomaticPrimaryEvidenceSql,
+  accountOnlyAutomaticPrimaryEvidenceSql,
   automaticPrimaryDetailEvidenceSql,
+  readAutomaticPrimaryEvidence,
 } from "../../apps/worker/dist/automatic-selection-evidence.js";
 import { MySqlAutomaticSelectionEvaluationWorker } from "../../apps/worker/dist/automatic-selection-evaluation-worker.js";
 import { MySqlOpportunityScoringWorker } from "../../apps/worker/dist/opportunity-scoring-worker.js";
 
 const scope = { opportunityId: "op", organizationId: "org", workspaceId: "ws" };
+test("0195 primary proof binds parameters before URL regexes and locks identity to the original owned references", async () => {
+  const calls = [];
+  const proof = await readAutomaticPrimaryEvidence({ async query(sql, args) {
+    if (sql.startsWith("SHOW COLUMNS")) return [[{ Field: "account_id" }]];
+    calls.push(sql);
+    const rendered = format(sql, args);
+    assert.doesNotMatch(sql, /organization_id|workspace_id/);
+    assert.match(rendered, /\(\[\^\?#\]\*\/\)\?/);
+    if (calls.length === 1) {
+      assert.equal(sql, accountOnlyAutomaticPrimaryEvidenceSql);
+      assert.match(sql, /^SELECT STRAIGHT_JOIN n\.raw_evidence_id/);
+      assert.match(sql, /ORDER BY l_first\.created_at,n_first_seed\.created_at DESC LIMIT 1\) o JOIN account_owned_records owner/);
+      assert.match(sql, /\)=BINARY o\.primary_asin ORDER BY l\.observed_at/);
+      assert.doesNotMatch(sql, /\)=BINARY \(SELECT STRAIGHT_JOIN/);
+      assert.match(sql, /opportunity_evidence_links l FORCE INDEX \(uq_opportunity_evidence\) ON l\.opportunity_id=o\.id/);
+      assert.match(rendered, /o\.id='op' AND owner\.account_id='account'/);
+      assert.match(sql, /o\.account_id=owner\.account_id/);
+      assert.match(sql, /n_current_task\.account_id=owner\.account_id/);
+      assert.match(sql, /n_origin_task\.account_id=owner\.account_id/);
+      assert.match(sql, /STRAIGHT_JOIN account_owned_records l_own_link FORCE INDEX \(PRIMARY\) ON l_own_link\.source_table='opportunity_evidence_links' AND l_own_link\.source_id=l\.id AND l_own_link\.account_id=n_seed\.account_id/);
+      assert.match(sql, /STRAIGHT_JOIN account_owned_records n_own_seed_task FORCE INDEX \(PRIMARY\).*n_origin_task\.id/);
+      assert.doesNotMatch(sql, /EXISTS \(SELECT 1 FROM account_owned_records/);
+      return [[{ raw_evidence_id: "original-linked", payload_json: { asin: "B0COUNT000" } }]];
+    }
+    assert.match(sql, /c\.account_id=owner\.account_id/);
+    assert.match(sql, /t\.account_id=owner\.account_id/);
+    assert.match(sql, /l\.raw_evidence_id=s\.evidence_id/);
+    assert.match(rendered, /BINARY 'B0COUNT000'/);
+    return [[{ raw_evidence_id: "original-detail" }]];
+  } }, { ...scope, accountId: "account" });
+  assert.deepEqual([proof.linked.raw_evidence_id, proof.detail.raw_evidence_id], ["original-linked", "original-detail"]);
+});
+test("account primary prices require the owned linked identity and exact snapshot evidence", async () => {
+  const owned = { ...scope, accountId: "account" };
+  for (const native of [false, true]) for (const hasLinked of [false, true]) {
+    const calls = [];
+    const linked = { raw_evidence_id: "original-linked", payload_json: { asin: "B0COUNT000" } };
+    const detail = { raw_evidence_id: "original-detail" };
+    const result = await readAutomaticPrimaryEvidence({ async query(sql, params) {
+      if (sql.startsWith("SHOW COLUMNS FROM normalized_records")) return [(native
+        ? ["account_id"] : ["organization_id", "workspace_id"]).map(Field => ({Field}))];
+      if (sql.startsWith("SHOW COLUMNS FROM opportunities"))
+        return [[{Field: "organization_id"}, {Field: "workspace_id"}]];
+      calls.push(sql);
+      if (calls.length === 1) {
+        assert.equal(sql, native ? nativeAccountAutomaticPrimaryEvidenceSql : accountAutomaticPrimaryEvidenceSql);
+        assert.deepEqual(params, ["op", "account"]);
+        for (const ref of ["l.id", "n.id", "n_seed.id", "n.raw_evidence_id", "n_seed.raw_evidence_id"])
+          assert.ok(sql.includes(`a.source_id=${ref} AND a.account_id=owner.account_id`));
+        assert.match(sql, /l_first\.created_at/);
+        if (native) {
+          assert.match(sql, /n_current_task\.workspace_id=n_origin_task\.workspace_id/);
+          assert.doesNotMatch(sql, /(?:n|n_seed|n_first|n_first_seed)\.(?:organization_id|workspace_id)|uq_normalized_scope_record_version/);
+        } else assert.match(sql, /l_primary\.created_at/);
+        return [hasLinked ? [linked] : []];
+      }
+      assert.deepEqual(params, ["op", "account", "B0COUNT000"]);
+      assert.doesNotMatch(sql, /organization_id|workspace_id/);
+      assert.match(sql, /n\.id=CONVERT\(RIGHT\(s\.source_ref_id,36\) USING ascii\) AND n\.raw_evidence_id=s\.evidence_id/);
+      assert.match(sql, /n\.provider_id=l\.provider_id/);
+      assert.match(sql, /q\.task_id=CONVERT\(SUBSTRING\(s\.source_ref_id,12,36\) USING ascii\)/);
+      return [[detail]];
+    } }, owned);
+    assert.equal(calls.length, hasLinked ? 2 : 1);
+    assert.deepEqual(result, hasLinked ? { linked, detail } : { linked: undefined, detail: undefined });
+  }
+});
+test("sealed source proofs retain the historical fingerprint but never borrow another account's verdict", async () => {
+  const f = fixture();
+  const original = await readPrimarySourceContext(f.reader,scope);
+  f.state.audit = await classifyPrimarySource(f.reader,scope,f.classifier);
+  let foreign = false;
+  const reader = { async query(sql,args) {
+    if (sql === accountPrimarySourceOriginSql) {
+      assert.doesNotMatch(sql,/organization_id|workspace_id/);
+      assert.match(sql,/e.resource_id=o.source_ref_id/);
+      assert.match(sql,/a.source_table='trend_topics'.+a.account_id=owner.account_id/);
+      assert.deepEqual(args,["account","op"]);
+      return f.reader.query(primarySourceOriginSql,["org","ws","op"]);
+    }
+    if (sql === accountPrimarySourceNewsSql) {
+      assert.doesNotMatch(sql,/organization_id|workspace_id/);
+      assert.match(sql,/s.raw_evidence_id=n.raw_evidence_id AND s.provider_id=n.provider_id/);
+      assert.deepEqual(args,["original-news","account",f.state.query]);
+      return f.reader.query(primarySourceNewsSql,["original-news","org","ws",f.state.query]);
+    }
+    if (sql === accountPrimarySourceAuditSql) {
+      assert.doesNotMatch(sql,/organization_id|workspace_id/);
+      assert.match(sql,/owner.source_id=e.id.*owner.account_id=\?/);
+      assert.equal(args[0],"account");
+      return foreign ? [[]] : f.reader.query(primarySourceAuditSql,["org","ws",...args.slice(1)]);
+    }
+    return f.reader.query(sql,args);
+  }};
+  const owned = {...scope,accountId:"account"};
+  const context = await readPrimarySourceContext(reader,owned);
+  assert.equal(context.fingerprint,original.fingerprint);
+  assert.deepEqual(await readPrimarySourceVerdict(reader,owned,context),f.state.audit);
+  foreign = true;
+  assert.equal(await readPrimarySourceVerdict(reader,owned,context),null);
+});
 function fixture(options = {}) {
   const state = {
     origin: true,
@@ -76,10 +185,16 @@ function fixture(options = {}) {
             : [],
         ];
       }
-      if ([automaticPrimaryEvidenceSql, automaticPrimaryDetailEvidenceSql].includes(sql)) {
-        assert.deepEqual(parameters, ["op", "org", "ws"]);
+      if (sql.startsWith("SELECT n.raw_evidence_id,s.captured_at observed_at") && sql.includes("JOIN account_owned_records owner")) {
+        assert.deepEqual(parameters, ["op", "account", state.asin]);
+        return [[]];
+      }
+      if (sql.startsWith("SHOW COLUMNS FROM normalized_records"))
+        return [[{Field:"organization_id"},{Field:"workspace_id"}]];
+      if ([automaticPrimaryEvidenceSql, automaticPrimaryDetailEvidenceSql, accountAutomaticPrimaryEvidenceSql].includes(sql)) {
+        assert.deepEqual(parameters, sql === accountAutomaticPrimaryEvidenceSql ? ["op", "account"] : ["op", "org", "ws"]);
         return [
-          sql === automaticPrimaryEvidenceSql
+          sql !== automaticPrimaryDetailEvidenceSql
             ? [
                 {
                   payload_json: {
@@ -267,6 +382,11 @@ for (const supported of [false, true])
             ],
           ];
         if (sql.startsWith("SELECT id,owner_id")) return [[{ id: "op", owner_id: null }]];
+        if (sql.startsWith("SELECT cut.primary_account_id")) return [[]];
+        if (sql.startsWith("SHOW COLUMNS FROM score_rules"))
+          return [[{Field:"organization_id"},{Field:"workspace_id"}]];
+        if (sql.startsWith("SHOW COLUMNS FROM opportunity_outbox")) return [[{Field:"event_id"}]];
+        if (sql.startsWith("SHOW COLUMNS FROM opportunity_events")) return [[]];
         if (sql.startsWith("SELECT * FROM opportunity_score_inputs"))
           return [
             dimensions.map((d) => ({
@@ -313,8 +433,12 @@ for (const supported of [false, true])
     assert.equal(update.params[0], 95);
     assert.equal(update.params[3], supported ? "recommend" : "insufficient_data");
     const scoreRun = writes.find(({ sql }) => sql.startsWith("INSERT INTO opportunity_score_runs"));
-    assert.equal(scoreRun.params[7], 95);
-    assert.equal(scoreRun.params[10], supported ? "recommend" : "insufficient_data");
+    assert.match(scoreRun.sql, /\(id,opportunity_id,score_rule_id,rule_version_code,/);
+    const [, opportunityId, ruleId, , , overallScore, , , recommendation] = scoreRun.params;
+    assert.equal(opportunityId, scope.opportunityId);
+    assert.equal(ruleId, "score-rule");
+    assert.equal(overallScore, 95);
+    assert.equal(recommendation, supported ? "recommend" : "insufficient_data");
   });
 
 test("revision recovery is bounded, scope rechecked, and never takes a live lease or terminal failure", async () => {
@@ -344,7 +468,7 @@ test("revision recovery is bounded, scope rechecked, and never takes a live leas
   for (const sql of [primarySourceRecoveryCandidatesSql, primarySourceRecoveryUpdateSql]) {
     assert.match(sql, /status IN \('succeeded','waiting_evidence','waiting_profit'\)/);
     assert.match(sql, /o.decision_status='pending'/);
-    assert.match(sql, /workspace_id=e.workspace_id/);
+    assert.match(sql, /WHERE o.id=e.opportunity_id/);
     assert.doesNotMatch(sql, /FOR UPDATE|failed_terminal|dead_letter|lease_owner/);
   }
   assert.match(primarySourceRecoveryCandidatesSql, /LIMIT 100$/);
@@ -369,6 +493,8 @@ for (const stale of [false, true])
       release() {},
       async query(sql, params) {
         if (sql.startsWith("SELECT o.*")) return [[{ market: "US" }]];
+        if (sql.startsWith("SHOW COLUMNS FROM normalized_records")) return [[{Field:"organization_id"},{Field:"workspace_id"}]];
+        if (sql.startsWith("SELECT cut.primary_account_id")) return [[]];
         if (sql.startsWith("SELECT opportunity_id FROM automatic_selection_evaluations"))
           return [[{ opportunity_id: "op" }]];
         if (sql.startsWith("SELECT id,version_code,dimensions_json")) return [[{ id: "score" }]];
@@ -407,7 +533,8 @@ for (const stale of [false, true])
         false,
       );
       assert.equal(
-        writes.some(({ params }) => params[3] === "opportunity.primary_source_support_checked"),
+        writes.some(({ sql, params }) => sql.startsWith("INSERT INTO opportunity_events") &&
+          params?.includes("opportunity.primary_source_support_checked")),
         true,
       );
     }

@@ -1,4 +1,24 @@
 {
+  "accountCalculationWorkerOwnership": {
+    "sourceFiles": [
+      "apps/worker/src/opportunity-scoring-worker.ts",
+      "apps/worker/src/opportunity-profit-worker.ts",
+      "apps/worker/src/score-rule-scope.ts",
+      "apps/worker/src/selection-pipeline-completion.ts",
+      "apps/worker/src/primary-source-support.ts",
+      "apps/worker/src/automatic-selection-evidence.ts",
+      "apps/worker/src/automatic-supply-completion-guard.ts"
+    ],
+    "testFiles": [
+      "tests/unit/calculation-result-account-owner.test.mjs",
+      "tests/unit/profit-exchange-account-scope.test.mjs",
+      "tests/unit/selection-pipeline-completion.test.mjs",
+      "tests/unit/primary-source-support.test.mjs",
+      "tests/unit/automatic-evidence-scoring.test.mjs"
+    ],
+    "docs": ["docs/runbooks/account-selection-scoring-runtime.md"],
+    "contract": "Scoring and profit require native rule and opportunity ownership to agree with the sealed account before writes. Completion verifies the original owned source, quote and competitor evidence without modifying old results or thresholds."
+  },
   "accountBusinessNavigation": {
     "sourceFiles": [
       "apps/api/src/authorization-routes.ts",

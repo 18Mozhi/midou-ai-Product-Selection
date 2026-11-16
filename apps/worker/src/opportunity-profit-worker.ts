@@ -1,6 +1,49 @@
+import { appendOpportunityEvent } from "@scoutops/database";
+import { appendOpportunityOutbox } from "@scoutops/database";
+import { automaticEvaluationEnqueueUpdateSql } from "@scoutops/database";
+import { hasLegacyScoreRuleScope } from "./score-rule-scope.js";
+import { nativeOpportunityStorage } from "./opportunity-storage.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
+import {
+  calculationOwnersMatch, readCalculationOpportunityForClaim, registerCalculationOwners, resolveCalculationOwnership,
+  type CalculationOwnership, type CalculationOwnerRef,
+} from "./opportunity-calculation-ownership.js";
+
+export async function findProfitExchangeQuote(
+  connection: Pick<PoolConnection, "query">,
+  scope: { organizationId: string; workspaceId: string },
+  source: string,
+  target: string,
+  today: string,
+  ownershipReady: boolean,
+  accountId?: string,
+) {
+  if (accountId === undefined && ownershipReady) {
+    const [columns] = await connection.query<RowDataPacket[]>(
+      "SHOW COLUMNS FROM exchange_rate_quotes WHERE Field IN ('organization_id','workspace_id')",
+    );
+    if (columns.length === 0) return undefined; // No legacy quote namespace after 0155.
+    if (columns.length !== 2) throw new Error("partial_inherited_scope_schema:exchange_rate_quotes");
+  }
+  const [quotes] = await connection.query<RowDataPacket[]>(
+    "SELECT q.* FROM exchange_rate_quotes q JOIN providers p ON p.id=q.provider_id AND p.status='enabled' WHERE " +
+      (accountId === undefined ? "q.organization_id=? AND q.workspace_id=? AND " : "") +
+      "q.base_currency=? AND q.quote_currency=? AND q.quote_date<=?" +
+      (accountId !== undefined || ownershipReady ? " AND " + (accountId !== undefined ? "" : "NOT ") +
+        "EXISTS (SELECT 1 FROM account_owned_records ao WHERE ao.source_table='exchange_rate_quotes' AND ao.source_id=q.id" +
+        (accountId !== undefined
+          ? " AND ao.account_id=? AND EXISTS (SELECT 1 FROM raw_evidence e JOIN account_owned_records eo" +
+            " ON eo.source_table='raw_evidence' AND eo.source_id=e.id" +
+            " WHERE eo.account_id=ao.account_id AND e.id=q.evidence_id AND e.provider_id=q.provider_id)"
+          : "") + ")" : "") +
+      " ORDER BY q.quote_date DESC,q.observed_at DESC LIMIT 1",
+    [...(accountId === undefined ? [scope.organizationId, scope.workspaceId] : []), source, target, today,
+      ...(accountId !== undefined ? [accountId] : [])],
+  );
+  return quotes[0];
+}
 
 type Job = {
   id: string;
@@ -119,6 +162,9 @@ export class MySqlOpportunityProfitWorker {
         await connection.commit();
         return null;
       }
+      const { organizationId, workspaceId } = await readCalculationOpportunityForClaim(
+        connection, String(row.opportunity_id), "calculation_job_opportunity_missing",
+      );
       await connection.query(
         "UPDATE opportunity_profit_jobs SET status='leased',attempt_count=attempt_count+1,lease_owner=?,lease_expires_at=?,updated_at=? WHERE id=?",
         [this.workerId, expires, now, row.id],
@@ -126,8 +172,8 @@ export class MySqlOpportunityProfitWorker {
       await connection.commit();
       return {
         id: String(row.id),
-        organizationId: String(row.organization_id),
-        workspaceId: String(row.workspace_id),
+        organizationId,
+        workspaceId,
         opportunityId: String(row.opportunity_id),
         ruleId: String(row.cost_rule_id),
         requestId: String(row.request_id),
@@ -148,22 +194,49 @@ export class MySqlOpportunityProfitWorker {
       today = now.toISOString().slice(0, 10);
     try {
       await connection.beginTransaction();
+      const ownership = await resolveCalculationOwnership(connection, job.opportunityId);
+      const owner = ownership?.owner;
+      const originalScope = [job.organizationId, job.workspaceId];
+      const legacyRule = await hasLegacyScoreRuleScope(connection, "cost_rules");
+      if (!owner && !legacyRule)
+        throw new OpportunityProfitError("cost_rule_unavailable", false);
+      const ruleScope = owner ? (legacyRule ? "" : "AND account_id=? ") : "AND organization_id=? AND workspace_id=? ";
+      const ruleArgs = owner ? (legacyRule ? [] : [owner.account_id]) : originalScope;
+      const nativeOpportunity = owner && await nativeOpportunityStorage(connection);
       const [rules] = await connection.query<RowDataPacket[]>(
-        "SELECT * FROM cost_rules WHERE id=? AND organization_id=? AND workspace_id=? AND status IN ('active','retired','rolled_back') FOR UPDATE",
-        [job.ruleId, job.organizationId, job.workspaceId],
+        "SELECT * FROM cost_rules WHERE id=? " +
+          ruleScope +
+          "AND status IN ('active','retired','rolled_back') FOR UPDATE",
+        [job.ruleId, ...ruleArgs],
       );
       const rule = rules[0];
       if (!rule) throw new OpportunityProfitError("cost_rule_unavailable", false);
       const [opportunities] = await connection.query<RowDataPacket[]>(
-        "SELECT market FROM opportunities WHERE id=? AND organization_id=? AND workspace_id=? FOR UPDATE",
-        [job.opportunityId, job.organizationId, job.workspaceId],
+        "SELECT market FROM opportunities WHERE id=?" +
+          (nativeOpportunity ? " AND account_id=?" : owner ? "" : " AND organization_id=? AND workspace_id=?") + " FOR UPDATE",
+        [job.opportunityId, ...(nativeOpportunity ? [owner.account_id] : owner ? [] : originalScope)],
       );
       if (!opportunities[0] || opportunities[0].market !== rule.market)
         throw new OpportunityProfitError("profit_scope_or_market_mismatch", false);
+      if (ownership) {
+        const [lease] = await connection.query<RowDataPacket[]>(
+          "SELECT id FROM opportunity_profit_jobs WHERE id=? AND opportunity_id=? AND cost_rule_id=? " +
+            "AND status='leased' AND lease_owner=? AND attempt_count=? AND lease_expires_at>UTC_TIMESTAMP(3) FOR UPDATE",
+          [job.id, job.opportunityId, job.ruleId, this.workerId, job.attemptCount],
+        );
+        if (!lease[0]) throw new OpportunityProfitError("opportunity_profit_lease_lost", true);
+        if (!(await calculationOwnersMatch(connection, ownership, [["opportunity_profit_jobs",job.id]], true)) ||
+          !(await calculationOwnersMatch(connection, ownership, [["cost_rules",job.ruleId]])))
+          throw new OpportunityProfitError("opportunity_profit_owner_mismatch", false);
+      }
       const [inputs] = await connection.query<RowDataPacket[]>(
-        "SELECT * FROM opportunity_cost_inputs WHERE opportunity_id=? AND organization_id=? AND workspace_id=? AND platform=? AND is_current=1",
-        [job.opportunityId, job.organizationId, job.workspaceId, rule.platform],
+        "SELECT * FROM opportunity_cost_inputs WHERE opportunity_id=? AND platform=? AND is_current=1",
+        [job.opportunityId, rule.platform],
       );
+      if (!(await calculationOwnersMatch(connection, ownership, inputs.flatMap(row => [
+        ["opportunity_cost_inputs", String(row.id)] as const,
+        ...(row.evidence_id ? [["raw_evidence",String(row.evidence_id)] as const] : []),
+      ]), true))) throw new OpportunityProfitError("opportunity_profit_input_owner_mismatch", false);
       const byType = new Map(inputs.map((row) => [String(row.input_type), row]));
       const sale = byType.get("sale_price"),
         target = sale ? String(sale.currency) : null,
@@ -200,11 +273,7 @@ export class MySqlOpportunityProfitWorker {
           });
           return value;
         }
-        const [quotes] = await connection.query<RowDataPacket[]>(
-          "SELECT q.* FROM exchange_rate_quotes q JOIN providers p ON p.id=q.provider_id AND p.status='enabled' WHERE q.organization_id=? AND q.workspace_id=? AND q.base_currency=? AND q.quote_currency=? AND q.quote_date<=? ORDER BY q.quote_date DESC,q.observed_at DESC LIMIT 1",
-          [job.organizationId, job.workspaceId, source, target, today],
-        );
-        const quote = quotes[0];
+        const quote = await findProfitExchangeQuote(connection, job, source, target, today, Boolean(ownership), owner?.account_id);
         const policyRate = conversionRates
           .filter(
             (item) =>
@@ -290,11 +359,9 @@ export class MySqlOpportunityProfitWorker {
         margin = status === "calculated" ? round((net! / saleValue!) * 100) : null,
         runId = randomUUID();
       await connection.query(
-        "INSERT INTO opportunity_profit_runs (id,organization_id,workspace_id,opportunity_id,cost_rule_id,rule_version_code,platform,market,status,currency,sale_price,total_cost,net_profit,net_margin_percent,missing_fields_json,input_snapshot_json,exchange_snapshot_json,request_id,trace_id,calculated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO opportunity_profit_runs (id,opportunity_id,cost_rule_id,rule_version_code,platform,market,status,currency,sale_price,total_cost,net_profit,net_margin_percent,missing_fields_json,input_snapshot_json,exchange_snapshot_json,request_id,trace_id,calculated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [
           runId,
-          job.organizationId,
-          job.workspaceId,
           job.opportunityId,
           job.ruleId,
           rule.version_code,
@@ -324,11 +391,13 @@ export class MySqlOpportunityProfitWorker {
           now,
         ],
       );
-      for (const item of components)
+      const owned: CalculationOwnerRef[] = [["opportunity_profit_runs",runId]];
+      for (const item of components) {
+        const id = randomUUID();
         await connection.query(
           "INSERT INTO opportunity_profit_components (id,profit_run_id,component_type,source_amount,source_currency,converted_amount,target_currency,source_ref_id,evidence_id,exchange_quote_id,missing_reason) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
           [
-            randomUUID(),
+            id,
             runId,
             item.type,
             item.sourceAmount,
@@ -341,16 +410,31 @@ export class MySqlOpportunityProfitWorker {
             item.missing,
           ],
         );
+        owned.push(["opportunity_profit_components",id]);
+      }
+      await registerCalculationOwners(connection, ownership, owned);
       await connection.query(
-        "UPDATE opportunities SET profit_status=?,version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
-        [status, now, job.opportunityId, job.organizationId, job.workspaceId],
+        "UPDATE opportunities SET profit_status=?,version=version+1,updated_at=? WHERE id=?" +
+          (owner ? "" : " AND organization_id=? AND workspace_id=?"),
+        [status, now, job.opportunityId, ...(owner ? [] : originalScope)],
       );
-      await queueAutomaticSelectionEvaluation(connection, {
-        organizationId: job.organizationId,
-        workspaceId: job.workspaceId,
-        opportunityId: job.opportunityId,
-        now,
-      });
+      if (owner && nativeOpportunity) {
+        await connection.query(
+          "INSERT INTO automatic_selection_evaluations " +
+            "(opportunity_id,status,attempt_count,available_at,created_at,updated_at) " +
+            "SELECT o.id,'queued',0,?,?,? FROM opportunities o JOIN account_owned_records a " +
+            "ON a.source_table='opportunities' AND a.source_id=o.id AND a.account_id=o.account_id " +
+            "WHERE o.id=? AND o.account_id=? " + automaticEvaluationEnqueueUpdateSql,
+          [now, now, now, job.opportunityId, owner.account_id],
+        );
+      } else {
+        await queueAutomaticSelectionEvaluation(connection, {
+          organizationId: job.organizationId,
+          workspaceId: job.workspaceId,
+          opportunityId: job.opportunityId,
+          now,
+        });
+      }
       await connection.query(
         "UPDATE opportunity_profit_jobs SET status=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? WHERE id=? AND lease_owner=?",
         [
@@ -374,6 +458,7 @@ export class MySqlOpportunityProfitWorker {
           missing_fields: missing,
         },
         now,
+        ownership,
       );
       await connection.commit();
       return { status };
@@ -398,8 +483,9 @@ export class MySqlOpportunityProfitWorker {
           ? new Date(now.getTime() + delays[Math.min(job.attemptCount - 1, 2)]!)
           : now;
     await this.pool.query(
-      "UPDATE opportunity_profit_jobs SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=?,updated_at=? WHERE id=? AND lease_owner=?",
-      [stored, available, code, now, job.id, this.workerId],
+      "UPDATE opportunity_profit_jobs SET status=?,available_at=?,lease_owner=NULL,lease_expires_at=NULL,last_error_code=?,updated_at=? WHERE id=? AND lease_owner=? " +
+        "AND status='leased' AND attempt_count=? AND lease_expires_at>UTC_TIMESTAMP(3)",
+      [stored, available, code, now, job.id, this.workerId, job.attemptCount],
     );
   }
 
@@ -409,40 +495,36 @@ export class MySqlOpportunityProfitWorker {
     eventType: string,
     payload: unknown,
     now: Date,
+    ownership: CalculationOwnership,
   ) {
     const id = randomUUID();
-    await connection.query(
-      "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES (?,?,?,?,?,?,'worker',?,?,?,?,?)",
-      [
-        id,
-        job.organizationId,
-        job.workspaceId,
-        eventType,
-        "opportunity",
-        job.opportunityId,
-        this.workerId,
-        job.requestId,
-        job.traceId,
-        JSON.stringify(payload),
-        now,
-      ],
-    );
-    await connection.query(
-      "INSERT INTO opportunity_outbox (id,organization_id,workspace_id,event_type,resource_type,resource_id,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,?,?,?,?,'queued',0,?,?,?,?,?)",
-      [
-        id,
-        job.organizationId,
-        job.workspaceId,
-        eventType,
-        "opportunity",
-        job.opportunityId,
-        JSON.stringify(payload),
-        now,
-        job.requestId,
-        job.traceId,
-        now,
-        now,
-      ],
-    );
+    await appendOpportunityEvent(connection, {
+      id,
+      organizationId: job.organizationId,
+      workspaceId: job.workspaceId,
+      eventType,
+      resourceType: "opportunity",
+      resourceId: job.opportunityId,
+      actorType: "worker",
+      actorId: this.workerId,
+      requestId: job.requestId,
+      traceId: job.traceId,
+      payloadJson: JSON.stringify(payload),
+      occurredAt: now,
+    });
+    await appendOpportunityOutbox(connection, {
+      id,
+      eventId: id,
+      organizationId: job.organizationId,
+      workspaceId: job.workspaceId,
+      eventType,
+      resourceType: "opportunity",
+      resourceId: job.opportunityId,
+      payloadJson: JSON.stringify(payload),
+      createdAt: now,
+      requestId: job.requestId,
+      traceId: job.traceId,
+    });
+    await registerCalculationOwners(connection, ownership, [["opportunity_events",id],["opportunity_outbox",id]]);
   }
 }
