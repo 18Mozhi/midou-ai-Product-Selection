@@ -2,13 +2,14 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
-import type { CollectionConsoleService } from "./collection-console-service.js";
+import { CollectionConsoleError, type CollectionConsoleService } from "./collection-console-service.js";
 
 export interface CollectionConsoleRouteOptions {
   service: CollectionConsoleService;
   authorization: AuthorizationService;
   auth: LocalAuthService;
   secureCookie: boolean;
+  accountReadRehearsal?: boolean;
 }
 
 export function registerCollectionConsoleRoutes(
@@ -27,6 +28,8 @@ export function registerCollectionConsoleRoutes(
       traceId,
     });
     const query = request.query as Record<string, unknown>;
+    if (options.accountReadRehearsal && (Object.hasOwn(query, "organization_id") || Object.hasOwn(query, "workspace_id")))
+      throw new CollectionConsoleError("collection_console_scope_retired", 400, "移除旧组织和工作区筛选。");
     reply.header("cache-control", "private, no-store");
     return {
       data: await options.service.read({

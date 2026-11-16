@@ -7,7 +7,7 @@ const CollectionOperationsConsole = defineAsyncComponent(
 const CollectionRuntimeCenter = defineAsyncComponent(() => import("./CollectionRuntimeCenter.vue"));
 const CollectionTaskCenter = defineAsyncComponent(() => import("./CollectionTaskCenter.vue"));
 
-defineProps<{ apiBaseUrl: string; routePath: string }>();
+defineProps<{ apiBaseUrl: string; routePath: string; accountRehearsal?: boolean }>();
 </script>
 
 <template>
@@ -32,6 +32,7 @@ defineProps<{ apiBaseUrl: string; routePath: string }>();
     <CollectionOperationsConsole
       v-if="routePath === '/platform-admin/collection/overview'"
       :api-base-url="apiBaseUrl"
+      :account-rehearsal="accountRehearsal"
     />
     <CollectionRuntimeCenter
       v-else-if="routePath === '/platform-admin/collection/browser-runtime'"

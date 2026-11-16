@@ -52,8 +52,9 @@ export function registerPlatformDomainRoutes(context: PlatformDomainContext) {
     ...common,
   });
   registerCollectionConsoleRoutes(context.app, {
+    accountReadRehearsal: accountOnly,
     service: new CollectionConsoleService(
-      new MySqlCollectionConsoleRepository(context.pool),
+      new MySqlCollectionConsoleRepository(context.pool, undefined, accountOnly),
       context.config.collectionConsole.recentLimit,
     ),
     authorization: context.authorization,

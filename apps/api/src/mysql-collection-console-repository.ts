@@ -1,3 +1,5 @@
+import { appendPlatformAudit } from "@scoutops/database";
+import { collectionTaskScope, dataQualityIssueScope } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import {
@@ -18,16 +20,31 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
   constructor(
     private readonly pool: Pool,
     private readonly now = () => new Date(),
+    private readonly accountMode = false,
   ) {}
 
   async read(input: any) {
     await this.validateScope(input);
+    const native = this.accountMode && await collectionTaskScope(this.pool) === "account";
+    if (this.accountMode && !native)
+      throw new CollectionConsoleError("collection_console_account_schema_required", 503, "请核对账号迁移状态后重试。");
+    const taskOwnership = native
+      ? `JOIN account_owned_records own ON own.source_table='collection_tasks' AND own.source_id=t.id AND own.account_id=t.account_id
+         JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25
+         AND (own.reason='exclusive_owner' OR (own.reason IN ('shared','unassigned') AND own.account_id=cut.primary_account_id))`
+      : "";
+    const taskScope = native ? "t.account_id," : this.accountMode ? "" : "t.organization_id, t.workspace_id,";
+    const deadAttempt = native
+      ? "JOIN collection_task_attempts original_attempt ON original_attempt.id=d.attempt_id AND original_attempt.task_id=t.id"
+      : "";
     const observedAt = this.now();
     const windowMs = windowMilliseconds[input.window];
     const since = windowMs == null ? null : new Date(observedAt.getTime() - windowMs);
     const taskFilter = this.taskFilter(input, since);
     const deadFilter = this.deadFilter(input, since);
     const qualityFilter = this.qualityFilter(input, since);
+    const issueScope = input.organizationId || input.workspaceId
+      ? await dataQualityIssueScope(this.pool, this.accountMode) : null;
     const attemptFilter = this.attemptFilter(input, since);
     const deadRootFilter = this.deadFilter({ ...input, errorCode: null }, since);
 
@@ -57,15 +74,19 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
       this.pool.query<RowDataPacket[]>(
         `SELECT t.status, COUNT(*) total
              FROM collection_tasks t
+             ${taskOwnership}
              ${taskFilter.sql}
          GROUP BY t.status
          ORDER BY t.status`,
         taskFilter.values,
       ),
       this.pool.query<RowDataPacket[]>(
-        `SELECT d.id, d.task_id, d.organization_id, d.workspace_id,
+        `SELECT d.id, d.task_id, ${taskScope}
                   d.error_code, d.status, d.created_at
              FROM collection_dead_letters d
+             JOIN collection_tasks t ON t.id = d.task_id
+             ${deadAttempt}
+             ${taskOwnership}
              ${deadFilter.sql}
          ORDER BY d.created_at DESC
             LIMIT ? OFFSET ?`,
@@ -74,23 +95,27 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
       this.pool.query<RowDataPacket[]>(
         `SELECT COUNT(*) total
              FROM collection_dead_letters d
+             JOIN collection_tasks t ON t.id = d.task_id
+             ${deadAttempt}
+             ${taskOwnership}
              ${deadFilter.sql}`,
         deadFilter.values,
       ),
       this.pool.query<RowDataPacket[]>(
         `SELECT q.severity, q.status, COUNT(*) total
              FROM data_quality_issues q
-             ${qualityFilter.sql}
+             ${issueScope?.scopeFilter(qualityFilter.sql, "q") ?? qualityFilter.sql}
          GROUP BY q.severity, q.status
          ORDER BY q.status, q.severity`,
         qualityFilter.values,
       ),
       this.pool.query<RowDataPacket[]>(
-        `SELECT a.id, a.task_id, t.organization_id, t.workspace_id,
+        `SELECT a.id, a.task_id, ${taskScope}
                   a.attempt_number, a.worker_id, a.status, a.error_code,
                   a.started_at, a.finished_at, a.trace_id
              FROM collection_task_attempts a
              JOIN collection_tasks t ON t.id = a.task_id
+             ${taskOwnership}
              ${attemptFilter.sql}
          ORDER BY a.created_at DESC
             LIMIT ? OFFSET ?`,
@@ -100,12 +125,16 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
         `SELECT COUNT(*) total
              FROM collection_task_attempts a
              JOIN collection_tasks t ON t.id = a.task_id
+             ${taskOwnership}
              ${attemptFilter.sql}`,
         attemptFilter.values,
       ),
       this.pool.query<RowDataPacket[]>(
         `SELECT d.error_code, COUNT(*) total, MAX(d.created_at) latest_at
              FROM collection_dead_letters d
+             JOIN collection_tasks t ON t.id = d.task_id
+             ${deadAttempt}
+             ${taskOwnership}
              ${deadRootFilter.sql}
          GROUP BY d.error_code
          ORDER BY total DESC, latest_at DESC, d.error_code`,
@@ -131,8 +160,7 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
     }));
     const result = {
       filters: {
-        organization_id: input.organizationId,
-        workspace_id: input.workspaceId,
+        ...(!this.accountMode ? { organization_id: input.organizationId, workspace_id: input.workspaceId } : {}),
         provider_id: input.providerId,
         window: input.window,
         error_code: input.errorCode,
@@ -191,6 +219,8 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
   }
 
   private async validateScope(input: any) {
+    if (this.accountMode && (input.organizationId != null || input.workspaceId != null))
+      throw new CollectionConsoleError("collection_console_scope_retired", 400, "移除旧组织和工作区筛选。");
     if (input.organizationId) {
       const [rows] = await this.pool.query<RowDataPacket[]>(
         "SELECT id FROM organizations WHERE id = ?",
@@ -245,7 +275,7 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
     }
     if (input.providerId) {
       conditions.push(
-        "EXISTS (SELECT 1 FROM collection_subqueries source_scope WHERE source_scope.task_id = t.id AND source_scope.provider_id = ?)",
+        this.providerTaskFilter(),
       );
       values.push(input.providerId);
     }
@@ -255,14 +285,14 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
   private deadFilter(input: any, since: Date | null) {
     const conditions: string[] = [];
     const values: unknown[] = [];
-    this.scopeConditions(conditions, values, "d", input);
+    this.scopeConditions(conditions, values, "t", input);
     if (since) {
       conditions.push("d.created_at >= ?");
       values.push(since);
     }
     if (input.providerId) {
       conditions.push(
-        "EXISTS (SELECT 1 FROM collection_subqueries source_scope WHERE source_scope.task_id = d.task_id AND source_scope.provider_id = ?)",
+        this.providerTaskFilter(),
       );
       values.push(input.providerId);
     }
@@ -298,7 +328,7 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
     }
     if (input.providerId) {
       conditions.push(
-        "EXISTS (SELECT 1 FROM collection_subqueries source_scope WHERE source_scope.task_id = t.id AND source_scope.provider_id = ?)",
+        this.providerTaskFilter(),
       );
       values.push(input.providerId);
     }
@@ -309,6 +339,16 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
       conditions.push("a.error_code IS NOT NULL");
     }
     return this.where(conditions, values);
+  }
+
+  private providerTaskFilter() {
+    return "EXISTS (SELECT 1 FROM collection_subqueries source_scope " +
+      (this.accountMode
+        ? "JOIN account_owned_records sub_owner ON sub_owner.source_table='collection_subqueries' " +
+          "AND sub_owner.source_id=source_scope.id "
+        : "") +
+      "WHERE source_scope.task_id = t.id AND source_scope.provider_id = ?" +
+      (this.accountMode ? " AND sub_owner.account_id=t.account_id" : "") + ")";
   }
 
   private scopeConditions(conditions: string[], values: unknown[], alias: string, input: any) {
@@ -343,20 +383,21 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
     try {
       await connection.beginTransaction();
       await connection.query(
-        "INSERT INTO collection_console_views\n          (id, actor_id, organization_filter_id," +
+        this.accountMode
+          ? "INSERT INTO collection_console_views (id, actor_id, request_id, trace_id, observed_at) VALUES (?,?,?,?,?)"
+          : "INSERT INTO collection_console_views\n          (id, actor_id, organization_filter_id," +
           " workspace_filter_id,\n           request_id, trace_id, observed_at)\n         VALUES " +
           "(?, ?, ?, ?, ?, ?, ?)",
         [
           randomUUID(),
           input.actorId,
-          input.organizationId,
-          input.workspaceId,
+          ...(!this.accountMode ? [input.organizationId, input.workspaceId] : []),
           input.requestId,
           input.traceId,
           observedAt,
         ],
       );
-      await connection.query(
+      await appendPlatformAudit(connection,
         "INSERT INTO platform_audit_events\n          (id, organization_id, workspace_id," +
           " actor_id, action, resource_type,\n           resource_id, outcome, request_id," +
           " trace_id, metadata, occurred_at,\n           schema_version)\n         VALUES (?," +
@@ -364,15 +405,14 @@ export class MySqlCollectionConsoleRepository implements CollectionConsoleReposi
           " ?, ?, ?, 1)",
         [
           randomUUID(),
-          input.organizationId,
-          input.workspaceId,
+          this.accountMode ? null : input.organizationId,
+          this.accountMode ? null : input.workspaceId,
           input.actorId,
           "platform.collection.console.read",
           input.requestId,
           input.traceId,
           JSON.stringify({
-            organization_filter_id: input.organizationId,
-            workspace_filter_id: input.workspaceId,
+            ...(!this.accountMode ? { organization_filter_id: input.organizationId, workspace_filter_id: input.workspaceId } : {}),
             provider_filter_id: input.providerId,
             window: input.window,
             error_code: input.errorCode,

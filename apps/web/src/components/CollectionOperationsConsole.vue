@@ -21,8 +21,6 @@ import TechnicalDetails from "./TechnicalDetails.vue";
 interface BatchReplayItem {
   id: string;
   task_id: string;
-  organization_id: string;
-  workspace_id: string;
   error_code: string;
 }
 
@@ -46,7 +44,7 @@ interface BatchReplaySettlement {
   requestId: string;
 }
 
-const props = defineProps<{ apiBaseUrl: string }>();
+const props = defineProps<{ apiBaseUrl: string; accountRehearsal?: boolean }>();
 const request = createApiClient(props.apiBaseUrl);
 const route = useRoute(),
   router = useRouter(),
@@ -60,8 +58,8 @@ const route = useRoute(),
     return ["24h", "7d", "30d", "all"].includes(text) ? text : "24h";
   },
   routeScope = () => ({
-    organizationId: queryText(route.query.organization_id),
-    workspaceId: queryText(route.query.workspace_id),
+    organizationId: props.accountRehearsal ? "" : queryText(route.query.organization_id),
+    workspaceId: props.accountRehearsal ? "" : queryText(route.query.workspace_id),
     providerId: queryText(route.query.provider_id),
     window: queryWindow(route.query.window),
     errorCode: queryText(route.query.error_code),
@@ -113,8 +111,9 @@ const selectedDeadLetters = computed(() =>
     for (const item of items) roots.set(item.error_code, (roots.get(item.error_code) ?? 0) + 1);
     const rootSummary = [...roots.entries()]
         .map(([code, total]) => `${errorLabel(code)} ${total} 条`)
-        .join("、"),
-      organizationCount = new Set(items.map((item: any) => item.organization_id)).size,
+        .join("、");
+    if (props.accountRehearsal) return `${items.length} 条开放死信；根因：${rootSummary || "无"}。`;
+    const organizationCount = new Set(items.map((item: any) => item.organization_id)).size,
       workspaceCount = new Set(items.map((item: any) => item.workspace_id)).size;
     return `${items.length} 条开放死信；${organizationCount} 个组织；${workspaceCount} 个工作区；根因：${rootSummary || "无"}。`;
   }),
@@ -155,8 +154,8 @@ function scopeValidation() {
 }
 
 const readScope = () => ({
-  organizationId: org.value.trim(),
-  workspaceId: workspace.value.trim(),
+  organizationId: props.accountRehearsal ? "" : org.value.trim(),
+  workspaceId: props.accountRehearsal ? "" : workspace.value.trim(),
   providerId: provider.value,
   window: timeWindow.value,
   errorCode: errorCode.value,
@@ -488,8 +487,6 @@ function previewBatchReplay() {
     items: selectedDeadLetters.value.map((item: any) => ({
       id: item.id,
       task_id: item.task_id,
-      organization_id: item.organization_id,
-      workspace_id: item.workspace_id,
       error_code: item.error_code,
     })),
     reason: batchReason.value.trim(),
@@ -582,14 +579,14 @@ async function confirmBatchReplay() {
     <section class="collection-scope" aria-label="采集范围与时间">
       <ResponsiveFilterDrawer label="采集范围与时间" :active-count="scopeFilterCount">
         <form @submit.prevent="applyScope">
-          <label class="collection-filter-field"
+          <label v-if="!accountRehearsal" class="collection-filter-field"
             ><span>组织内部编号</span
             ><input
               v-model="org"
               aria-label="组织内部编号筛选"
               :disabled="batchBusy"
               placeholder="可选，输入组织内部编号" /></label
-          ><label class="collection-filter-field"
+          ><label v-if="!accountRehearsal" class="collection-filter-field"
             ><span>工作区内部编号</span
             ><input
               v-model="workspace"
@@ -1066,11 +1063,14 @@ async function confirmBatchReplay() {
                 <summary>技术详情</summary>
                 <code>错误 {{ d.error_code }}</code
                 ><br />
-                <code>任务 {{ d.task_id }}</code
-                ><br />
-                <code>组织 {{ d.organization_id }}</code
-                ><br />
-                <code>工作区 {{ d.workspace_id }}</code>
+                <code>任务 {{ d.task_id }}</code>
+                <template v-if="!accountRehearsal">
+                  <br /><code>组织 {{ d.organization_id }}</code>
+                  <br /><code>工作区 {{ d.workspace_id }}</code>
+                </template>
+                <template v-else-if="d.account_id">
+                  <br /><code>账号 {{ d.account_id }}</code>
+                </template>
               </details>
             </li>
           </ul>

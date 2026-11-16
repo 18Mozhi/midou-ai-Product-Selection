@@ -1,4 +1,20 @@
 {
+  "accountCollectionOverview": {
+    "sourceFiles": [
+      "apps/api/src/collection-console-routes.ts",
+      "apps/api/src/mysql-collection-console-repository.ts",
+      "apps/api/src/bootstrap/register-platform-domain.ts",
+      "apps/web/src/components/CollectionOperationsConsole.vue",
+      "apps/web/src/components/CollectionRuntimeSurface.vue"
+    ],
+    "testFiles": [
+      "tests/unit/account-collection-console.test.mjs",
+      "tests/m06-03/collection-console.test.mjs",
+      "tests/e2e/account-collection-console.spec.ts"
+    ],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/m06-03-collection-console.md"],
+    "contract": "Retired collection overview keeps original task, attempt and dead-letter IDs, uses sealed native ownership and rejects legacy filters. A legacy task schema never enables unscoped reads."
+  },
   "accountWebhookDeliveryReceipts": {
     "sourceFiles": [
       "apps/worker/src/webhook-delivery-worker.ts",

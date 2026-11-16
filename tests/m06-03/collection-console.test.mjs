@@ -200,6 +200,13 @@ test("M06-03 repository applies one source and time scope to task facts without 
       sql.includes("LEFT JOIN provider_runtime_circuits c ON c.provider_id=p.id"),
     ),
   );
+  const deadReads = calls.filter(([sql]) => sql.includes("FROM collection_dead_letters d"));
+  assert.equal(deadReads.length, 3);
+  for (const [sql] of deadReads) {
+    assert.match(sql, /JOIN collection_tasks t ON t.id = d.task_id/);
+    assert.match(sql, /t.organization_id = \?.*t.workspace_id = \?/s);
+    assert.doesNotMatch(sql, /d\.(organization_id|workspace_id)/);
+  }
   assert.equal(result.root_causes[0].error_code, "parser_failed");
   assert.equal(result.root_causes[0].total, 1);
   assert.equal(result.filters.provider_id, providerId);
