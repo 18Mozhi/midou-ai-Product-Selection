@@ -6,12 +6,18 @@ import {
   type NavigationShell,
 } from "@scoutops/authorization";
 import type { TenancyService } from "@scoutops/tenancy";
+import { ApiError } from "./api-foundation.js";
 export interface AuthorizationRouteOptions {
   tenancy?: TenancyService;
   service: AuthorizationService;
   auth: LocalAuthService;
   secureCookie: boolean;
+  accountRehearsalReady?: () => Promise<void>;
 }
+const requireVerifiedAccount = (user: { email_verified_at: unknown }) => {
+  if (!user.email_verified_at)
+    throw new ApiError(403, "account_verification_required", "账号未验证。", "先完成邮箱验证。");
+};
 const cookieName = (secure: boolean) => (secure ? "__Host-scoutops_session" : "scoutops_session");
 function sessionToken(request: FastifyRequest, secure: boolean) {
   for (const part of (request.headers.cookie ?? "").split(";")) {
@@ -37,7 +43,12 @@ export function registerAuthorizationRoutes(
     options.auth.authenticate(sessionToken(request, options.secureCookie));
   app.get("/api/v1/me/authorization", async (request, reply) => {
     const authenticated = await current(request);
-    reply.header("cache-control", "no-store");
+    reply.header("cache-control", options.accountRehearsalReady ? "private, no-store" : "no-store");
+    if (options.accountRehearsalReady) {
+      requireVerifiedAccount(authenticated.user);
+      await options.accountRehearsalReady();
+      return envelope(await options.service.describeAccount(authenticated.user.id), request);
+    }
     return envelope(
       await options.service.describeSession(authenticated.user.id, authenticated.session.id),
       request,
@@ -45,12 +56,19 @@ export function registerAuthorizationRoutes(
   });
   app.get("/api/v1/me/landing", async (request, reply) => {
     const authenticated = await current(request);
+    reply.header("cache-control", "private, no-store");
+    if (options.accountRehearsalReady) {
+      requireVerifiedAccount(authenticated.user);
+      await options.accountRehearsalReady();
+      const reason = "landing_account_rehearsal";
+      await options.service.recordAccountRehearsalNavigation(authenticated.user.id, reason, ids(request));
+      return envelope({ shell: "member", route: "/opportunities", reason }, request);
+    }
     await options.tenancy?.restoreLandingContext({
       actorId: authenticated.user.id,
       sessionId: authenticated.session.id,
       ...ids(request),
     });
-    reply.header("cache-control", "private, no-store");
     return envelope(
       await options.service.resolveLanding(
         authenticated.user.id,
@@ -78,17 +96,49 @@ export function registerAuthorizationRoutes(
       const authenticated = await current(request),
         { shell } = request.query as { shell: NavigationShell };
       reply.header("cache-control", "private, no-store");
-      return envelope(
-        await options.service.guardNavigationShell(
-          authenticated.user.id,
-          authenticated.session.id,
+      if (options.accountRehearsalReady && shell !== "platform_admin") {
+        requireVerifiedAccount(authenticated.user);
+        if (shell === "organization_admin") {
+          await options.service.recordAccountRehearsalNavigation(
+            authenticated.user.id, "navigation_organization_retired_in_rehearsal", ids(request),
+          );
+          throw new AuthorizationError("navigation_shell_forbidden", 403, "账号演练不提供组织后台。");
+        }
+        await options.accountRehearsalReady();
+        const reason = "navigation_account_rehearsal";
+        await options.service.recordAccountRehearsalNavigation(authenticated.user.id, reason, ids(request));
+        return envelope({
           shell,
-          ids(request),
-        ),
+          organization_id: null, workspace_id: null, organization_name: null, workspace_name: null,
+          roles: [], platform_roles: [], platform_capabilities: [],
+          capabilities: ["opportunity:read", "trend:read", "sourcing:read"],
+          guard_reason: reason,
+        }, request);
+      }
+      const navigation = await options.service.guardNavigationShell(
+        authenticated.user.id,
+        authenticated.session.id,
+        shell,
+        ids(request),
+      );
+      return envelope(
+        options.accountRehearsalReady ? { ...navigation, account_rehearsal: true } : navigation,
         request,
       );
     },
   );
+  app.get("/api/v1/platform/roles", async (request, reply) => {
+    const authenticated = await current(request);
+    await options.service.authorize({
+      actorId: authenticated.user.id,
+      capability: "platform:superadmin",
+      surface: "api",
+      ...ids(request),
+    });
+    reply.header("cache-control", "no-store");
+    return envelope(await options.service.listRoles("platform"), request);
+  });
+  if (options.accountRehearsalReady) return;
   app.get(
     "/api/v1/org/:organizationId/roles",
     {
@@ -121,15 +171,4 @@ export function registerAuthorizationRoutes(
       return envelope(await options.service.listRoles("organization"), request);
     },
   );
-  app.get("/api/v1/platform/roles", async (request, reply) => {
-    const authenticated = await current(request);
-    await options.service.authorize({
-      actorId: authenticated.user.id,
-      capability: "platform:superadmin",
-      surface: "api",
-      ...ids(request),
-    });
-    reply.header("cache-control", "no-store");
-    return envelope(await options.service.listRoles("platform"), request);
-  });
 }

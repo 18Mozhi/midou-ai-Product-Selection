@@ -37,6 +37,10 @@ async function load() {
   state.value = "loading";
   try {
     current.value = await request<CurrentAuthorizationSummary>("/me/authorization");
+    if (!current.value.organization_id) {
+      state.value = "forbidden";
+      return;
+    }
     roles.value = await request<RoleCapabilitySummary[]>(
       `/org/${current.value.organization_id}/roles`,
     );

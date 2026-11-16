@@ -1,4 +1,22 @@
 {
+  "accountAuthorizationSummary": {
+    "sourceFiles": [
+      "apps/api/src/authorization-routes.ts",
+      "apps/api/src/mysql-authorization-repository.ts",
+      "packages/authorization/src/index.ts",
+      "packages/contracts/src/index.ts",
+      "apps/web/src/components/AuditSecurityCenter.vue"
+    ],
+    "testFiles": [
+      "tests/m01-04/account-authorization-summary.test.mjs",
+      "tests/m01-04/authorization-decision-audit-context.test.mjs"
+    ],
+    "docs": [
+      "docs/openapi.yaml",
+      "docs/runbooks/account-authorization-summary.md"
+    ],
+    "contract": "Return a verified account authorization summary without retired tenancy, retain actual platform grants, and stop consumers from issuing organization requests without a real legacy organization."
+  },
   "accountCollectionTaskReplay": {
     "sourceFiles": [
       "apps/api/src/mysql-collection-task-repository.ts",

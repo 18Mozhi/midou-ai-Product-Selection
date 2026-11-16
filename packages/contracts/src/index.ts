@@ -258,8 +258,8 @@ export interface AuthorizationScopeSummary {
   team_id?: string | null;
 }
 export interface CurrentAuthorizationSummary {
-  organization_id: string;
-  workspace_id: string;
+  organization_id: string | null;
+  workspace_id: string | null;
   roles: string[];
   capabilities: string[];
   data_scopes: AuthorizationScopeSummary[];

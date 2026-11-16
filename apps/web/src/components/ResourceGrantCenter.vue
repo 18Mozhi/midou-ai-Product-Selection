@@ -71,6 +71,10 @@ async function load() {
   notice.value = "";
   try {
     current.value = (await request<CurrentAuthorizationSummary>("/me/authorization")).data;
+    if (!current.value.organization_id) {
+      state.value = "forbidden";
+      return;
+    }
     form.workspace_id = current.value.workspace_id ?? "";
     const path = canRead.value
       ? `/org/${current.value.organization_id}/resource-grants?page=1&limit=100`

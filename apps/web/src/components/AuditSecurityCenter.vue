@@ -20,7 +20,7 @@ interface AuditEvent {
   schema_version: 1;
 }
 interface Authorization {
-  organization_id: string;
+  organization_id: string | null;
   capabilities: string[];
   platform_capabilities?: string[];
 }
@@ -68,6 +68,10 @@ async function load(cursor?: string) {
   try {
     if (!auth.value) auth.value = (await request<Authorization>("/me/authorization")).data;
     if (scope.value === "platform" && !canPlatform.value) scope.value = "organization";
+    if (!isPlatform.value && !auth.value.organization_id) {
+      state.value = "forbidden";
+      return;
+    }
     const path = isPlatform.value
       ? `/platform/audit-events?${query(cursor)}`
       : `/organizations/${auth.value.organization_id}/audit-events?${query(cursor)}`;

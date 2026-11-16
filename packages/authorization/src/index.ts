@@ -379,6 +379,18 @@ export class AuthorizationService {
       platform_capabilities: subject.platform_capabilities,
     };
   }
+  async describeAccount(actorId: string) {
+    const subject = await this.repository.loadSubject(actorId);
+    return {
+      organization_id: null,
+      workspace_id: null,
+      roles: [],
+      capabilities: ["opportunity:read", "trend:read", "sourcing:read"],
+      data_scopes: [],
+      platform_roles: subject.platform_role_codes,
+      platform_capabilities: subject.platform_capabilities,
+    };
+  }
   async recordAccountRehearsalNavigation(
     actorId: string,
     reason:

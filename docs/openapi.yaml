@@ -930,6 +930,7 @@ paths:
   /me/authorization:
     get:
       summary: Read the authenticated user's effective roles, capabilities and data scopes for the selected session context
+      description: In account mode a verified account and current ownership receipt are required. The summary has no organization roles or scopes and returns null legacy coordinates. Platform grants are read from the active assignments and are not inferred from account ownership.
       security: [{ HttpOnlySession: [] }]
       responses:
         "200":
@@ -944,6 +945,8 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
+
   /me/navigation:
     get:
       summary: Guard and describe one authenticated navigation shell
@@ -8206,8 +8209,8 @@ components:
       additionalProperties: false
       required: [organization_id, workspace_id, roles, capabilities, data_scopes]
       properties:
-        organization_id: { type: string, format: uuid }
-        workspace_id: { type: string, format: uuid }
+        organization_id: { type: string, format: uuid, nullable: true }
+        workspace_id: { type: string, format: uuid, nullable: true }
         roles: { type: array, items: { type: string } }
         capabilities: { type: array, items: { type: string, pattern: "^[a-z_]+:[a-z_]+" } }
         data_scopes:

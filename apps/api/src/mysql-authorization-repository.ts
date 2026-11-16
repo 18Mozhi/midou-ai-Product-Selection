@@ -10,11 +10,12 @@ import type {
 } from "@scoutops/authorization";
 
 export class MySqlAuthorizationRepository implements AuthorizationRepository {
-  constructor(private readonly pool: Pool) {}
+  constructor(private readonly pool: Pool, private readonly accountOnly = false) {}
   async resourcesBelongToOrganization(
     organizationId: string | undefined,
     resources: { workspaceId?: string; teamId?: string },
   ) {
+    if (this.accountOnly) return !organizationId && !resources.workspaceId && !resources.teamId;
     if (!organizationId && (resources.workspaceId || resources.teamId)) return false;
     if (resources.workspaceId) {
       const [rows] = await this.pool.query<RowDataPacket[]>(
@@ -33,6 +34,7 @@ export class MySqlAuthorizationRepository implements AuthorizationRepository {
     return true;
   }
   async hasActiveMembership(actorId: string) {
+    if (this.accountOnly) return false;
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT 1 FROM memberships m JOIN organizations o ON o.id=m.organization_id " +
         "WHERE m.user_id=? AND m.status='active' AND o.status='active' LIMIT 1",
@@ -51,7 +53,7 @@ export class MySqlAuthorizationRepository implements AuthorizationRepository {
       membershipActive = false;
     let roleRows: RowDataPacket[] = [];
     let scopeRows: RowDataPacket[] = [];
-    if (organizationId) {
+    if (!this.accountOnly && organizationId) {
       const [memberships] = await this.pool.query<RowDataPacket[]>(
         "SELECT id,status FROM memberships WHERE user_id=? AND organization_id=? LIMIT 1",
         [actorId, organizationId],
@@ -94,6 +96,26 @@ export class MySqlAuthorizationRepository implements AuthorizationRepository {
     };
   }
   async appendDecision(event: AuthorizationDecisionEvent) {
+    const [schema] = await this.pool.query<RowDataPacket[]>(
+      "SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() " +
+        "AND TABLE_NAME='authorization_decisions' AND COLUMN_NAME IN " +
+        "('historical_context','organization_id','workspace_id','team_id')",
+    );
+    const names = new Set(schema.map((row) => row.COLUMN_NAME));
+    const legacy = ["organization_id", "workspace_id", "team_id"].every((name) => names.has(name));
+    if (names.has("historical_context") && names.size === 1) {
+      const { organization_id, workspace_id, team_id } = event;
+      const context = organization_id === null && workspace_id === null && team_id === null
+        ? null : JSON.stringify({ organization_id, workspace_id, team_id });
+      await this.pool.query(
+        "INSERT INTO authorization_decisions (id,actor_id,historical_context,capability,surface,outcome," +
+          "reason,request_id,trace_id,occurred_at,schema_version) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        [event.id,event.actor_id,context,event.capability,event.surface,event.outcome,
+          event.reason,event.request_id,event.trace_id,event.occurred_at,event.schema_version],
+      );
+      return;
+    }
+    if (!legacy || names.size !== 3) throw new Error("authorization_decision_schema_incomplete");
     await this.pool.query(
       "INSERT INTO authorization_decisions (id,actor_id,organization_id,workspace_id," +
         "team_id,capability,surface,outcome,reason,request_id,trace_id,occurred_at," +
@@ -141,6 +163,7 @@ export class MySqlAuthorizationRepository implements AuthorizationRepository {
     return [...roles.values()];
   }
   async findSessionContext(sessionId: string, userId: string) {
+    if (this.accountOnly) return null;
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT c.organization_id,c.workspace_id,o.name organization_name,w.name workspace_name " +
         "FROM user_session_contexts c JOIN organizations o ON o.id=c.organization_id JOIN workspaces " +
