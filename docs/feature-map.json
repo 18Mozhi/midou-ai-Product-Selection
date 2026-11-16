@@ -1,4 +1,18 @@
 {
+  "accountEvidenceWriteFence": {
+    "sourceFiles": [
+      "apps/worker/src/evidence-persistence.ts",
+      "packages/storage/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/collection-evidence-account-owner.test.mjs",
+      "tests/unit/browser-collection-chain.test.mjs"
+    ],
+    "docs": [
+      "docs/runbooks/account-evidence-write-fence.md"
+    ],
+    "contract": "Evidence capture requires matching native task and sealed task/subquery ownership with the active lease. Raw and browser replay recheck the exact original file asset and both owner sources; they fail before creating a link or replacing the file when ownership disagrees."
+  },
   "accountSelectionScoringRuntime": {
     "sourceFiles": [
       "apps/api/src/mysql-opportunity-repository.ts",

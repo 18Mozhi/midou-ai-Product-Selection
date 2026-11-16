@@ -66,7 +66,10 @@ export async function writeScopedFile(
   input: ScopedFileInput,
   data: Uint8Array,
 ): Promise<string> {
-  const target = buildScopedFilePath(root, input);
+  return writeAtomicFile(buildScopedFilePath(root, input), data);
+}
+
+async function writeAtomicFile(target: string, data: Uint8Array) {
   await mkdir(resolve(target, ".."), { recursive: true });
   const temporary = `${target}.${randomUUID()}.tmp`;
   try {
@@ -87,6 +90,71 @@ interface DownloadClaims {
   nonce: string;
 }
 const encode = (value: string) => Buffer.from(value).toString("base64url");
+function signDownloadClaims(claims: object, signingKey: Uint8Array) {
+  const payload = encode(JSON.stringify(claims));
+  const signature = createHmac("sha256", signingKey).update(payload).digest("base64url");
+  return `${payload}.${signature}`;
+}
+function assertDownloadSettings(signingKey: Uint8Array, ttlSeconds: number) {
+  if (
+    signingKey.byteLength < 32 ||
+    !Number.isSafeInteger(ttlSeconds) ||
+    ttlSeconds < 1 ||
+    ttlSeconds > 300
+  )
+    throw new StorageBoundaryError("invalid_grant", "download signing key or TTL is invalid");
+}
+
+type AccountEvidenceScope = { account_id: string; asset_id: string; evidence_id: string };
+const evidenceUuid = /^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/;
+export function accountEvidenceRelativePath(scope: AccountEvidenceScope) {
+  if (![scope.account_id, scope.asset_id, scope.evidence_id].every((id) => evidenceUuid.test(id)))
+    throw new StorageBoundaryError("invalid_scope", "account evidence scope is invalid");
+  return `accounts/${scope.account_id}/evidence/${scope.asset_id}/content.bin`;
+}
+export function issueAccountEvidenceDownloadGrant(
+  scope: AccountEvidenceScope,
+  signingKey: Uint8Array,
+  ttlSeconds: number,
+  nowSeconds: number,
+) {
+  assertDownloadSettings(signingKey, ttlSeconds);
+  return signDownloadClaims(
+    {
+      type: "account_evidence",
+      ...scope,
+      relative_path: accountEvidenceRelativePath(scope),
+      expires_at: nowSeconds + ttlSeconds,
+      nonce: randomUUID(),
+    },
+    signingKey,
+  );
+}
+export function verifyAccountEvidenceDownloadGrant(
+  token: string,
+  signingKey: Uint8Array,
+  scope: AccountEvidenceScope,
+  nowSeconds: number,
+) {
+  if (signingKey.byteLength < 32)
+    throw new StorageBoundaryError("invalid_grant", "download signing key is invalid");
+  const claims = readDownloadClaims(token, signingKey) as Partial<AccountEvidenceScope> & {
+    type?: string;
+    relative_path?: string;
+    expires_at?: number;
+  };
+  if (
+    claims?.type !== "account_evidence" ||
+    claims.account_id !== scope.account_id ||
+    claims.asset_id !== scope.asset_id ||
+    claims.evidence_id !== scope.evidence_id ||
+    claims.relative_path !== accountEvidenceRelativePath(scope) ||
+    typeof claims.expires_at !== "number" ||
+    !Number.isSafeInteger(claims.expires_at) ||
+    claims.expires_at < nowSeconds
+  )
+    throw new StorageBoundaryError("invalid_grant", "account evidence grant does not match");
+}
 export function issueDownloadGrant(
   root: string,
   input: ScopedFileInput,
@@ -109,16 +177,9 @@ export function issueDownloadGrant(
     expires_at: nowSeconds + ttlSeconds,
     nonce: randomUUID(),
   };
-  const payload = encode(JSON.stringify(claims));
-  const signature = createHmac("sha256", signingKey).update(payload).digest("base64url");
-  return `${payload}.${signature}`;
+  return signDownloadClaims(claims, signingKey);
 }
-export function verifyDownloadGrant(
-  token: string,
-  signingKey: Uint8Array,
-  scope: { organization_id: string; workspace_id: string },
-  nowSeconds = Math.floor(Date.now() / 1000),
-): DownloadClaims {
+function readDownloadClaims(token: string, signingKey: Uint8Array): unknown {
   const [payload, signature, ...extra] = token.split(".");
   if (!payload || !signature || extra.length)
     throw new StorageBoundaryError("invalid_grant", "download grant is malformed");
@@ -131,14 +192,21 @@ export function verifyDownloadGrant(
   }
   if (actual.length !== expected.length || !timingSafeEqual(actual, expected))
     throw new StorageBoundaryError("invalid_grant", "download grant signature is invalid");
-  let claims: DownloadClaims;
   try {
-    claims = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
+    return JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
   } catch {
     throw new StorageBoundaryError("invalid_grant", "download grant payload is invalid");
   }
+}
+export function verifyDownloadGrant(
+  token: string,
+  signingKey: Uint8Array,
+  scope: { organization_id: string; workspace_id: string },
+  nowSeconds = Math.floor(Date.now() / 1000),
+): DownloadClaims {
+  const claims = readDownloadClaims(token, signingKey) as DownloadClaims;
   if (
-    claims.organization_id !== scope.organization_id ||
+    claims?.organization_id !== scope.organization_id ||
     claims.workspace_id !== scope.workspace_id
   )
     throw new StorageBoundaryError("invalid_scope", "download grant scope does not match");
@@ -301,4 +369,15 @@ export function evaluateFileResilience(
     maximumUsageBasisPoints,
     findings,
   };
+}
+export function writeAccountEvidenceFile(root: string, path: string, data: Uint8Array) {
+  const [prefix, account, category, asset, file, ...rest] = path.split("/");
+  if (prefix !== "accounts" || category !== "evidence" || file !== "content.bin" ||
+      rest.length || !account || !asset || path !== accountEvidenceRelativePath({
+        account_id: account, asset_id: asset, evidence_id: asset,
+      })) throw new StorageBoundaryError("invalid_scope", "invalid account evidence path");
+  const absoluteRoot = resolve(root);
+  const target = resolve(absoluteRoot, path);
+  assertInside(absoluteRoot, target);
+  return writeAtomicFile(target, data);
 }
