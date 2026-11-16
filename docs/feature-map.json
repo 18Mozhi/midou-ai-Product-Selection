@@ -1,4 +1,27 @@
 {
+  "accountIntelligenceWorkerProjection": {
+    "sourceFiles": [
+      "apps/worker/src/trend-projection-account-queue.ts",
+      "apps/worker/src/trend-projection-worker.ts",
+      "apps/worker/src/trend-projection-ownership.ts",
+      "apps/worker/src/trend-projection-persistence.ts",
+      "apps/worker/src/trend-projection-alerts.ts",
+      "apps/worker/src/collected-product-projection-policy.ts",
+      "apps/worker/src/automatic-primary-detail-refresh.ts",
+      "apps/worker/src/automatic-sourcing-refresh.ts",
+      "apps/worker/src/automatic-sourcing-retry-policy.ts"
+    ],
+    "testFiles": [
+      "tests/unit/trend-projection-worker-scheduling.test.mjs",
+      "tests/unit/trend-projection-account-owner.test.mjs",
+      "tests/unit/collected-product-projection.test.mjs",
+      "tests/unit/automatic-primary-detail-refresh.test.mjs",
+      "tests/unit/automatic-sourcing-refresh.test.mjs",
+      "tests/unit/automatic-sourcing-recovery.test.mjs"
+    ],
+    "docs": ["docs/runbooks/account-intelligence-topic-presentation.md"],
+    "contract": "Account intelligence admission pins the original task, normalized record and evidence. Jobs and ownership are atomic; projection keeps the original topic signal and refuses stale leases or foreign record chains without changing admission limits."
+  },
   "accountCoreCollectionProjection": {
     "sourceFiles": [
       "apps/worker/src/core-collection-projection-worker.ts",

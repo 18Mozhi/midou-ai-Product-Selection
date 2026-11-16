@@ -24,6 +24,7 @@ function setup(
   discoveryRows = [],
   existingCompetitorTasks = [],
   identityPages = null,
+  account = null,
 ) {
   const calls = [],
     tasks = [];
@@ -34,6 +35,12 @@ function setup(
     release: () => calls.push(["release"]),
     query: async (sql, values) => {
       calls.push([sql, values]);
+      if (sql.startsWith("SELECT slot FROM account_ownership_cutover")) return [account ? [{slot:"current"}] : []];
+      if (sql.startsWith("SELECT cut.primary_account_id")) return [account ? [{primary_account_id:"primary",account_id:"primary",reason:"shared"}] : []];
+      if (sql.startsWith("SELECT account_id FROM account_owned_records"))
+        return [values[0].map(([table])=>({account_id:account.foreign && table==="collection_tasks" ? "other" : "primary"}))];
+      if (sql.startsWith("SHOW COLUMNS FROM sourcing_events"))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       if (sql.startsWith("SELECT id,code FROM providers")) return [providers];
       if (sql.startsWith("SELECT primary_repair.*")) return [[]];
       if (sql.startsWith("SELECT o.id,") && sql.includes("backlog_count"))
@@ -55,7 +62,7 @@ function setup(
       if (sql === automaticPrimaryRefreshCandidateSql) return [[]];
       if (sql.startsWith("SELECT c.id,c.organization_id")) return [refreshRows];
       if (sql.startsWith("SELECT o.id discovery_opportunity_id")) return [discoveryRows];
-      if (sql.startsWith("UPDATE sourcing_searches")) return [{ affectedRows: 1 }];
+      if (sql.startsWith("UPDATE sourcing_searches")) return [{ affectedRows: account?.stale ? 0 : 1 }];
       throw new Error(`unexpected query: ${sql}`);
     },
   };
@@ -160,6 +167,30 @@ test("historical sourcing repair uses the primary image and schedules a shared s
   assert.deepEqual(calls.at(-1), ["release"]);
 });
 
+test("sealed repair matches seed event and parents by account without rewriting original input",async()=>{
+  for (const options of [{},{foreign:true},{stale:true}]) {
+    const {worker,calls,tasks}=setup([{...row,previous_task_id:"original-task"}],undefined,[],[],[],null,options);
+    if(options.stale) await assert.rejects(worker.enqueueMissingAutomaticDownstream(),/sourcing_repair_link_changed/);
+    else assert.equal(await worker.enqueueMissingAutomaticDownstream(),!options.foreign);
+    const [select]=calls.find(([sql])=>sql.startsWith("SELECT o.id opportunity_id"));
+    assert.doesNotMatch(select,/\b(?:src|ss|se|sq)\.(organization_id|workspace_id)/);
+    assert.match(select,/eo.source_id=evt.id AND eo.account_id=so.account_id/);
+    assert.match(select,/query_owner.account_id=task_owner.account_id/);
+    assert.match(select,/ss.input_ref=o.id/);
+    assert.match(select,/NOT EXISTS \(SELECT 1 FROM sourcing_candidates prior_offer WHERE prior_offer.search_id=ss.id\)/);
+    const update=calls.find(([sql])=>sql.startsWith("UPDATE sourcing_searches"));
+    if(options.foreign) {
+      assert.equal(tasks.length,0);
+      assert.equal(update,undefined);
+    } else {
+      assert.equal(tasks.length,1);
+      assert.doesNotMatch(update[0],/input_ref|organization_id|workspace_id/);
+      assert.deepEqual(update[1].slice(-2),["search-1","original-task"]);
+      assert.deepEqual(calls.at(-2),[options.stale?"rollback":"commit"]);
+    }
+  }
+});
+
 test("missing image or disabled 1688 cannot silently fall back to unrelated supplier sources", async () => {
   for (const [rows, providers] of [
     [[{ ...row, primary_image_url: null }], [{ id: "lan", code: "1688_search" }]],
@@ -182,7 +213,7 @@ test("recovery scans are scoped, exclude retired searches and qualify actionable
   assert.deepEqual(params, [null, "lan", null, "lan"]);
   assert.match(sql, /ss\.workspace_id=o\.workspace_id[\s\S]*ss\.deleted_at IS NULL/);
   assert.match(sql, /p_supply\.code='1688_search'/);
-  assert.match(sql, /n_image_seed\.workspace_id=l_image\.workspace_id/);
+  assert.match(sql, /n_image_seed\.workspace_id=o\.workspace_id/);
   assert.match(sql, /n_image\.workspace_id=n_image_seed\.workspace_id/);
   assert.match(sql, /BINARY UPPER[\s\S]*n_primary\.payload_json/);
   assert.match(sql, /BINARY o\.primary_asin/);
@@ -190,11 +221,11 @@ test("recovery scans are scoped, exclude retired searches and qualify actionable
     sql,
     /COALESCE\(\(SELECT[\s\S]*FROM competitors c_detail JOIN competitor_snapshots s_detail/,
   );
-  assert.match(sql, /s_detail\.organization_id=c_detail\.organization_id/);
-  assert.match(sql, /s_detail\.workspace_id=c_detail\.workspace_id/);
+  assert.match(sql, /JOIN competitor_snapshots s_detail ON s_detail\.competitor_id=c_detail\.id/);
+  assert.doesNotMatch(sql, /s_detail\.(organization_id|workspace_id)/);
   assert.match(sql, /n_detail\.raw_evidence_id=s_detail\.evidence_id/);
-  assert.match(sql, /n_detail\.organization_id=s_detail\.organization_id/);
-  assert.match(sql, /n_detail\.workspace_id=s_detail\.workspace_id/);
+  assert.match(sql, /n_detail\.organization_id=c_detail\.organization_id/);
+  assert.match(sql, /n_detail\.workspace_id=c_detail\.workspace_id/);
   assert.match(sql, /c_detail\.opportunity_id=o\.id[\s\S]*c_detail\.deleted_at IS NULL/);
   assert.match(sql, /BINARY UPPER\(c_detail\.external_id\)=BINARY o\.primary_asin/);
   assert.match(
@@ -359,15 +390,15 @@ test("stale primary or competitor refresh uses the existing detail queue with sc
   ]);
   assert.match(
     read[0],
-    /s\.organization_id=c\.organization_id AND s\.workspace_id=c\.workspace_id/,
+    /JOIN competitor_snapshots s ON s\.id=c\.latest_snapshot_id AND s\.competitor_id=c\.id/,
   );
   assert.match(
     read[0],
-    /q_refresh\.organization_id=c\.organization_id AND q_refresh\.workspace_id=c\.workspace_id/,
+    /ct_refresh\.organization_id=c\.organization_id AND ct_refresh\.workspace_id=c\.workspace_id/,
   );
   assert.match(
     read[0],
-    /ct_refresh\.organization_id=q_refresh\.organization_id AND ct_refresh\.workspace_id=q_refresh\.workspace_id/,
+    /JOIN collection_tasks ct_refresh ON ct_refresh\.id=q_refresh\.task_id/,
   );
   assert.doesNotMatch(read[0], /busy\.active_count/);
   assert.match(
@@ -492,7 +523,7 @@ test("locked recent or active same-product discovery blocks stale candidate admi
   );
   assert.match(
     sql,
-    /active_task.organization_id=q.organization_id AND active_task.workspace_id=q.workspace_id/,
+    /JOIN collection_tasks active_task ON active_task\.id=q\.task_id WHERE q\.provider_id=\? AND active_task\.organization_id=\? AND active_task\.workspace_id=\?/,
   );
   assert.match(sql, /q.created_at>\? OR active_task.status IN/);
   assert.match(sql, /LIMIT 1 FOR UPDATE$/);

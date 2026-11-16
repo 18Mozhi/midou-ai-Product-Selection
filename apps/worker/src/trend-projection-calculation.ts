@@ -7,6 +7,7 @@ export interface TrendProjectionJob {
   organizationId: string;
   workspaceId: string;
   normalizedRecordId: string;
+  leasedNormalizedRecordId?: string;
   providerId: string;
   providerCode: string;
   rawEvidenceId: string;

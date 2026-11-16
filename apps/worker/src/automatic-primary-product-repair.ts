@@ -3,6 +3,7 @@ import type { PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/prom
 import { selectionPrimaryAsinSql } from "@scoutops/database";
 import { automaticPrimaryEvidenceSql } from "./automatic-selection-evidence.js";
 import { amazonAsin } from "./competitor-discovery-policy.js";
+import { calculationOwnersMatch, registerCalculationOwners, resolveCalculationOwnership } from "./opportunity-calculation-ownership.js";
 
 const eligibleOpportunitySql =
   "o.source_type='trend_topic' AND o.decision_status='pending' " +
@@ -27,8 +28,7 @@ export const missingPrimaryProductCandidateSql =
   " AND EXISTS (SELECT 1 FROM opportunity_evidence_links primary_link " +
   "JOIN providers primary_provider ON primary_provider.id=primary_link.provider_id " +
   "AND primary_provider.code='amazon_product' AND primary_provider.status='enabled' " +
-  "WHERE primary_link.opportunity_id=o.id AND primary_link.organization_id=o.organization_id " +
-  "AND primary_link.workspace_id=o.workspace_id) ORDER BY o.id LIMIT 20) o " +
+  "WHERE primary_link.opportunity_id=o.id) ORDER BY o.id LIMIT 20) o " +
   " LIMIT 18446744073709551615) primary_repair " +
   "ORDER BY primary_repair.id";
 
@@ -60,6 +60,8 @@ export async function repairMissingPrimaryProduct(
   const [evidence] = await c.query<RowDataPacket[]>(automaticPrimaryEvidenceSql, scope);
   const current = evidence[0];
   if (!current || current.provider_status !== "enabled") return result;
+  const ownership = await resolveCalculationOwnership(c,String(candidate.id));
+  if (!(await calculationOwnersMatch(c,ownership,[["raw_evidence",String(current.raw_evidence_id)]]))) return result;
   let fields: Record<string, unknown>;
   try {
     fields =
@@ -87,12 +89,13 @@ export async function repairMissingPrimaryProduct(
   );
   // Includes deleted records: a deliberate deletion is never undone by repair.
   if (existing[0]) return result;
+  const competitorId = randomUUID();
   const [insert] = await c.query<ResultSetHeader>(
     "INSERT IGNORE INTO competitors (id,organization_id,workspace_id,opportunity_id,provider_id,market," +
       "source_site,external_id,product_url,title,status,latest_snapshot_id,revision,created_by,created_at,updated_at) " +
       "VALUES (?,?,?,?,?,?,'Amazon',?,?,?,'active',NULL,1,?,?,?)",
     [
-      randomUUID(),
+      competitorId,
       candidate.organization_id,
       candidate.workspace_id,
       candidate.id,
@@ -106,6 +109,8 @@ export async function repairMissingPrimaryProduct(
       now,
     ],
   );
+  if (Number(insert.affectedRows) === 1)
+    await registerCalculationOwners(c,ownership,[["competitors",competitorId]]);
   // Preparation release is safe on the old global key: conflict waits for migration.
   return { ...result, repaired: Number(insert.affectedRows) === 1 };
 }

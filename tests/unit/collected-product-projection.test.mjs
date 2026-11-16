@@ -8,8 +8,6 @@ function fixture(options = {}) {
   const calls = [];
   const row = {
     id: "job",
-    organization_id: "org",
-    workspace_id: "ws",
     normalized_record_id: "record",
     attempt_count: 0,
   };
@@ -19,16 +17,21 @@ function fixture(options = {}) {
     rollback: async () => calls.push(["rollback"]),
     release: () => calls.push(["release"]),
     query: async (sql, params) => {
+      if (sql.startsWith("SHOW COLUMNS FROM collection_tasks"))
+        return [options.native?[{Field:"account_id"}]:[{Field:"organization_id"},{Field:"workspace_id"}]];
       calls.push([sql, params]);
       assert.equal((sql.match(/\?/g) ?? []).length, params.length);
-      if (sql.startsWith("SELECT id,organization_id")) return [[row]];
+      if (sql.startsWith("SELECT id,normalized_record_id")) return [[row]];
       if (sql.startsWith("SELECT * FROM trend_projection_jobs")) return [options.lost ? [] : [row]];
       if (sql.startsWith("UPDATE trend_projection_jobs")) return [{ affectedRows: 1 }];
-      if (sql.startsWith("SELECT n.organization_id"))
+      if (sql.startsWith("SELECT t.organization_id") || sql.startsWith("SELECT t.account_id"))
         return [
           [
             {
               ...row,
+              organization_id: "org",
+              workspace_id: "ws",
+              account_id: "original-account",
               provider_id: "provider",
               provider_code: "amazon_product",
               raw_evidence_id: "evidence",
@@ -55,9 +58,24 @@ function fixture(options = {}) {
     ),
   };
 }
+test("native claim rechecks owned job and original evidence without old tenant fields", async () => {
+  const f=fixture({native:true});
+  const claimed=await f.worker.claim(true);
+  assert.deepEqual([claimed.id,claimed.normalizedRecordId,claimed.rawEvidenceId,claimed.organizationId,claimed.workspaceId],
+    ["job","record","evidence","",""]);
+  const reads=f.calls.filter(([s])=>s.startsWith("SELECT")&&s.includes("FROM trend_projection_jobs"));
+  assert.equal(reads.length,2);
+  for(const [sql,params] of reads){
+    assert.doesNotMatch(sql,/organization_id|workspace_id/);
+    assert.match(sql,/a.source_table='trend_projection_jobs' AND a.source_id=trend_projection_jobs.id AND a.account_id=t.account_id/);
+    assert.match(sql,/n_collected.account_id=e_collected.account_id/);
+    assert.equal(params.at(-1),1000);
+  }
+});
 test("collected-result candidate and PK recheck both bind original completion1000 and exact evidence guard", async () => {
   const f = fixture();
-  assert.equal((await f.worker.claim(true)).id, "job");
+  const claimed = await f.worker.claim(true);
+  assert.deepEqual([claimed.id, claimed.organizationId, claimed.workspaceId], ["job", "org", "ws"]);
   const reads = f.calls.filter(
     ([sql]) => sql.startsWith("SELECT") && sql.includes("FROM trend_projection_jobs"),
   );
@@ -67,8 +85,9 @@ test("collected-result candidate and PK recheck both bind original completion100
     assert.equal(params.at(-1), 1000);
   }
   assert.doesNotMatch(reads[0][0], /FOR UPDATE/);
-  assert.match(reads[1][0], /WHERE id=\? AND organization_id=\? AND workspace_id=\?/);
-  assert.deepEqual(reads[1][1].slice(0, 3), ["job", "org", "ws"]);
+  assert.match(reads[1][0], /WHERE id=\? AND normalized_record_id=\?/);
+  assert.deepEqual(reads[1][1].slice(0, 2), ["job", "record"]);
+  assert.match(reads[1][0], /projection_scope_record.id=trend_projection_jobs.normalized_record_id/);
 });
 test("lost collected-result eligibility consumes no attempt", async () => {
   const f = fixture({ lost: true });
@@ -78,7 +97,7 @@ test("lost collected-result eligibility consumes no attempt", async () => {
 test("raw projection admission still binds997 without the collected predicate", async () => {
   const f = fixture();
   await f.worker.claim();
-  const read = f.calls.find(([sql]) => sql.startsWith("SELECT id,organization_id"));
+  const read = f.calls.find(([sql]) => sql.startsWith("SELECT id,normalized_record_id"));
   assert.equal(read[1].at(-1), 997);
   assert.ok(!read[0].includes(collectedProductProjectionSql));
 });
@@ -139,6 +158,7 @@ test("ready-collected debt uses the same proof and due/active guards without a c
   const w = new MySqlTrendProjectionWorker(
     {
       query: async (sql, params) => {
+        if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [[{Field:"organization_id"},{Field:"workspace_id"}]];
         calls.push([sql, params]);
         return [[{ id: "job" }]];
       },

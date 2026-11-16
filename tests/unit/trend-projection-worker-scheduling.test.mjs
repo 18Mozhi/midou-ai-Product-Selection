@@ -14,6 +14,44 @@ const jobScope = {
   normalized_record_id: "record-1",
 };
 
+for (const mode of ["owned", "raced", "owner-missing"]) {
+  test(`native trend enqueue preserves the job and owner transaction: ${mode}`, async () => {
+    const reads = [], writes = [], transitions = [];
+    const c = {
+      beginTransaction: async () => transitions.push("begin"),
+      commit: async () => transitions.push("commit"),
+      rollback: async () => transitions.push("rollback"),
+      release: () => transitions.push("release"),
+      query: async (sql, args) => {
+        writes.push([sql,args]);
+        assert.doesNotMatch(sql,/organization_id|workspace_id/);
+        if (sql.startsWith("INSERT IGNORE")) {
+          assert.match(sql,/n.id=\? AND n.account_id=\? LIMIT 1$/);
+          assert.deepEqual(args.slice(1),[now,now,now,"original-record","original-account"]);
+          return [{affectedRows:mode==="raced"?0:1}];
+        }
+        assert.match(sql,/SELECT 'trend_projection_jobs',\?,o.account_id,o.reason/);
+        assert.deepEqual(args,[writes[0][1][0],"original-record","original-account"]);
+        return [{affectedRows:mode==="owner-missing"?0:1}];
+      },
+    };
+    const worker = new MySqlTrendProjectionWorker({
+      query: async sql => {
+        if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [[{Field:"account_id"}]];
+        assert.doesNotMatch(sql,/organization_id|workspace_id|FOR UPDATE/);
+        assert.match(sql,/e.account_id=n.account_id/);
+        assert.match(sql,/ORDER BY n.created_at,n.id LIMIT 100$/);
+        return [reads.push(sql)===1?[{id:"original-record",account_id:"original-account"}]:[]];
+      },
+      getConnection: async () => c,
+    },"worker",120,()=>now);
+    if(mode==="owner-missing") await assert.rejects(worker.enqueueMissing(),/trend_projection_job_owner_mismatch/);
+    else await worker.enqueueMissing();
+    assert.equal(writes.length,mode==="raced"?1:2);
+    assert.deepEqual(transitions,["begin",mode==="owner-missing"?"rollback":"commit","release"]);
+  });
+}
+
 function createPool(job, loseCandidate = false) {
   const calls = [];
   const statements = [];
@@ -24,6 +62,8 @@ function createPool(job, loseCandidate = false) {
     rollback: async () => calls.push("rollback"),
     release: () => calls.push("release"),
     query: async (sql) => {
+      if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [[{Field:"organization_id"},{Field:"workspace_id"}]];
+        if (sql.startsWith("SHOW COLUMNS FROM trend_monitoring_rules") && sql.includes("historical_context")) return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       statements.push(sql);
       if (sql.startsWith("SELECT * FROM trend_projection_jobs")) {
         calls.push("claim");
@@ -31,7 +71,7 @@ function createPool(job, loseCandidate = false) {
         claimed = Array.isArray(job) ? job.shift() : job;
         return [claimed ? [claimed] : [], []];
       }
-      if (sql.startsWith("SELECT id,organization_id,workspace_id FROM trend_projection_jobs")) {
+      if (sql.startsWith("SELECT id,normalized_record_id FROM trend_projection_jobs")) {
         calls.push("candidate");
         const candidate = Array.isArray(job) ? job[0] : job;
         if (sql.includes("n_collected") && !candidate?.collected) return [[], []];
@@ -41,7 +81,7 @@ function createPool(job, loseCandidate = false) {
         calls.push("lease");
         return [[], []];
       }
-      if (sql.startsWith("SELECT n.organization_id")) {
+      if (sql.startsWith("SELECT t.organization_id")) {
         calls.push("record");
         return [
           [
@@ -74,13 +114,15 @@ function createPool(job, loseCandidate = false) {
     statements,
     pool: {
       query: async (sql) => {
+        if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [[{Field:"organization_id"},{Field:"workspace_id"}]];
+        if (sql.startsWith("SHOW COLUMNS FROM trend_monitoring_rules") && sql.includes("historical_context")) return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
         statements.push(sql);
         if (sql.startsWith("SELECT id FROM trend_projection_jobs")) return [[], []];
         if (sql.startsWith("UPDATE trend_projection_jobs SET status=?")) calls.push("finish");
         else {
           assert.match(
             sql,
-            /^SELECT n.id,n.organization_id,n.workspace_id FROM normalized_records n /,
+            /^SELECT n.id,t.organization_id,t.workspace_id FROM normalized_records n /,
           );
           calls.push("enqueue");
         }
@@ -97,7 +139,9 @@ test("projection admission scans without write locks and inserts only scoped rec
   const worker = new MySqlTrendProjectionWorker(
     {
       query: async (sql, params) => {
-        if (sql.startsWith("SELECT n.id,n.organization_id,n.workspace_id")) {
+        if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [[{Field:"organization_id"},{Field:"workspace_id"}]];
+        if (sql.startsWith("SHOW COLUMNS FROM trend_monitoring_rules") && sql.includes("historical_context")) return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
+        if (sql.startsWith("SELECT n.id,t.organization_id,t.workspace_id")) {
           reads.push(sql);
           return [[{ id: "record-1", organization_id: "org-1", workspace_id: "ws-1" }]];
         }
@@ -116,16 +160,17 @@ test("projection admission scans without write locks and inserts only scoped rec
     assert.doesNotMatch(reads[i], /FOR UPDATE|LOCK IN SHARE MODE|INSERT/);
     assert.match(reads[i], /ORDER BY n.created_at LIMIT 100$/);
     const source = reads[i]
-      .replace(/^SELECT n.id,n.organization_id,n.workspace_id /, "")
+      .replace(/^SELECT n.id,t.organization_id,t.workspace_id /, "")
       .replace(/ ORDER BY n.created_at LIMIT 100$/, "");
     assert.ok(
-      writes[i][0].includes(source + " AND n.id=? AND n.organization_id=? AND n.workspace_id=?"),
+      writes[i][0].includes(source + " AND n.id=? AND t.organization_id=? AND t.workspace_id=?"),
     );
     assert.match(writes[i][0], /^INSERT IGNORE INTO trend_projection_jobs/);
     assert.match(writes[i][0], /LIMIT 1$/);
     assert.deepEqual(writes[i][1], [now, now, now, "record-1", "org-1", "ws-1"]);
     assert.match(source, /n.status='active' AND j.id IS NULL/);
     assert.match(source, /collection_scope_workspace.status='active'/);
+    assert.doesNotMatch(source, /\b(?:n|e|n_first|e_first)\.(?:organization_id|workspace_id)/);
   }
   assert.match(reads[1], /t.status IN \('succeeded','completed_with_warnings'\)/);
   assert.match(reads[1], /MIN\(n_first.id\)/);
@@ -140,11 +185,14 @@ test("projection locks only the selected scoped ID and rechecks eligibility", as
   await worker.processOnce();
   const locks = statements.filter((sql) => sql.endsWith("FOR UPDATE"));
   assert.equal(locks.length, 1);
-  assert.match(locks[0], /WHERE id=\? AND organization_id=\? AND workspace_id=\?/);
+  assert.match(locks[0], /WHERE id=\? AND normalized_record_id=\?/);
   assert.match(locks[0], /status='scheduled'.*status='leased'/);
   assert.doesNotMatch(locks[0], /ORDER BY/);
-  const candidate = statements.find((sql) => sql.startsWith("SELECT id,organization_id"));
+  const candidate = statements.find((sql) => sql.startsWith("SELECT id,normalized_record_id"));
   assert.doesNotMatch(candidate, /FOR UPDATE/);
+  for (const sql of [candidate, locks[0], statements.find(sql => sql.startsWith("SELECT t.organization_id"))]) {
+    assert.doesNotMatch(sql, /\b(?:n|e|n_intelligence|e_intelligence|n_collected|e_collected|projection_scope_record)\.(?:organization_id|workspace_id)/);
+  }
   for (const sql of [
     candidate,
     locks[0],
@@ -154,8 +202,8 @@ test("projection locks only the selected scoped ID and rechecks eligibility", as
     assert.match(sql, /collection_scope_workspace.status='active'/);
     assert.match(sql, /collection_scope_workspace.organization_id=collection_scope_org.id/);
   }
-  assert.match(locks[0], /collection_scope_org.id=trend_projection_jobs.organization_id/);
-  assert.match(locks[0], /collection_scope_workspace.id=trend_projection_jobs.workspace_id/);
+  assert.match(locks[0], /collection_scope_org.id=projection_scope_task.organization_id/);
+  assert.match(locks[0], /collection_scope_workspace.id=projection_scope_task.workspace_id/);
   assert.match(
     candidate,
     /ORDER BY COALESCE\(\(SELECT CASE WHEN p_intelligence.code='amazon_product'/,
@@ -167,7 +215,7 @@ test("projection locks only the selected scoped ID and rechecks eligibility", as
   assert.match(candidate, /\),2\),available_at,id LIMIT 1$/);
   assert.match(candidate, /p_intelligence.access_mode='public_rss'/);
   assert.match(candidate, /projection_type.*intelligence_product_discovery/);
-  assert.match(candidate, /n_intelligence.organization_id=trend_projection_jobs.organization_id/);
+  assert.match(candidate, /n_intelligence.id=trend_projection_jobs.normalized_record_id/);
 });
 
 test("losing the candidate race never projects or overwrites another lease", async () => {
@@ -367,6 +415,7 @@ for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscov
     const statements = [];
     const connection = {
       query: async (sql, values) => {
+        if (sql.startsWith("SHOW COLUMNS FROM trend_monitoring_rules") && sql.includes("historical_context")) return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
         statements.push(sql);
         if (sql.includes("backlog_count")) {
           assert.deepEqual(values, [""]);
@@ -382,11 +431,12 @@ for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscov
     assert.ok(statements[0].includes(activeCollectionScopeSql("backlog")));
     if (method === "enqueueDueCompetitorRefresh") {
       assert.match(
-        statements[0],
-        /ct_refresh.organization_id=q_refresh.organization_id AND ct_refresh.workspace_id=q_refresh.workspace_id/,
+        statements[1],
+        /JOIN collection_tasks ct_refresh ON ct_refresh.id=q_refresh.task_id WHERE ct_refresh.organization_id=c.organization_id AND ct_refresh.workspace_id=c.workspace_id/,
       );
-      assert.doesNotMatch(statements[0], /busy.active_count/);
-      assert.ok(statements[0].includes(activeCollectionScopeSql("c")));
+      assert.doesNotMatch(statements[1], /busy.active_count/);
+      assert.ok(statements[1].includes(activeCollectionScopeSql("c")));
+      assert.ok(statements[1].includes(activeCollectionScopeSql("backlog")));
     } else {
       assert.match(statements[0], /o.id>\?[\s\S]*ORDER BY o.id LIMIT 20/);
       assert.ok(statements[0].includes(activeCollectionScopeSql("o")));
@@ -396,10 +446,98 @@ for (const method of ["enqueueDueCompetitorRefresh", "enqueueDueCompetitorDiscov
       );
       assert.match(statements[1], /busy.workspace_id=o.workspace_id/);
       assert.match(statements[1], /busy.opportunity_id=CONVERT\(o.id USING utf8mb4\)/);
-      assert.match(statements[1], /active_task.workspace_id=q.workspace_id/);
+      assert.match(statements[1], /FROM collection_subqueries q JOIN collection_tasks active_task ON active_task.id=q.task_id/);
+      assert.match(statements[1], /GROUP BY active_task.organization_id,active_task.workspace_id,opportunity_id/);
     }
   });
 }
+
+test("account-owned competitor dedupe verifies task and subquery owner and exact parent", async () => {
+  const { TrendProjectionPersistence } =
+    await import("../../apps/worker/dist/trend-projection-persistence.js");
+  const persistence = new TrendProjectionPersistence({}, "worker", () => now);
+  for (const [type, key] of [["competitor_snapshot", "competitor_id"], ["opportunity_competitors", "opportunity_id"]]) {
+    for (const existing of [true, false]) {
+      const c = { async query(sql, values) {
+        if (sql.startsWith("SHOW COLUMNS FROM trend_monitoring_rules") && sql.includes("historical_context")) return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
+        assert.match(sql, /ot.source_table='collection_tasks' AND ot.source_id=t.id/);
+        assert.match(sql, /oq.source_table='collection_subqueries' AND oq.source_id=q.id AND oq.account_id=ot.account_id/);
+        assert.ok(sql.includes(`'\$.${key}'`));
+        assert.doesNotMatch(sql, /organization_id|workspace_id/);
+        assert.match(sql, /LIMIT 1 FOR UPDATE$/);
+        assert.deepEqual(values, ["primary", type, "target", "amazon", now]);
+        return [existing ? [{ id: "previous-job" }] : []];
+      } };
+      assert.equal(await persistence.hasOwnedCompetitorWork(c, "primary", type, "target", now, "amazon"), existing);
+    }
+  }
+});
+
+test("0194 refresh schedules the original competitor as an account task without old coordinates", async () => {
+  const { TrendProjectionPersistence } = await import("../../apps/worker/dist/trend-projection-persistence.js");
+  const owner = "primary";
+  const target = {id:"competitor",opportunity_id:"opportunity",account_id:owner,created_by:"original",
+    external_id:"B000000001",product_url:"https://www.amazon.com/dp/B000000001"};
+  const writes=[];
+  let admission=0;
+  const c={async query(sql,args=[]) {
+    if (sql.startsWith("SHOW COLUMNS")) return [[{Field:"account_id"}]];
+    assert.doesNotMatch(sql,/organization_id|workspace_id/);
+    if (sql.startsWith("SELECT c.id")) {
+      assert.match(sql,/c.account_id=owner.account_id/); admission++; return [[target]];
+    }
+    if (sql.startsWith("SELECT cut.primary_account_id"))
+      return [[{account_id:owner,reason:"shared",primary_account_id:owner}]];
+    if (sql.startsWith("SELECT account_id FROM account_owned_records")) return [[{account_id:owner}]];
+    if (sql.includes("oq.account_id=ot.account_id")) return [[]];
+    assert.match(sql,/^INSERT/);
+    writes.push([sql,args]);
+    return [{affectedRows:1}];
+  }};
+  const persistence=new TrendProjectionPersistence({},"worker",()=>now);
+  assert.equal(await persistence.enqueueDueCompetitorRefresh(c,"amazon",now,true),true);
+  assert.equal(admission,3);
+  const [task,subquery,event,ledger]=writes;
+  assert.equal(task[1][1],owner);
+  assert.ok(subquery[1].some(value=>typeof value==="string"&&value.includes('"competitor_id":"competitor"')));
+  assert.equal(event[1][1],task[1][0]);
+  assert.ok(ledger[1][0].every(row=>row[2]===owner));
+});
+
+test("cross-workspace owned work blocks duplicate refresh and discovery before any write", async () => {
+  const { TrendProjectionPersistence } =
+    await import("../../apps/worker/dist/trend-projection-persistence.js");
+  const row = {
+    id: "competitor", opportunity_id: "opportunity", discovery_opportunity_id: "opportunity",
+    organization_id: "org", workspace_id: "current-workspace", external_id: "B000000001",
+    product_url: "https://www.amazon.com/dp/B000000001",
+    primary_asin: "B000000001", discovery_query: "candidate",
+  };
+  for (const [method, expected] of [
+    ["enqueueDueCompetitorRefresh", ["competitor_snapshot", "competitor"]],
+    ["enqueueDueCompetitorDiscovery", ["opportunity_competitors", "opportunity"]],
+  ]) {
+    let checked = 0;
+    const c = { async query(sql, values) {
+        if (sql.startsWith("SHOW COLUMNS FROM trend_monitoring_rules") && sql.includes("historical_context")) return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
+      assert.doesNotMatch(sql, /^(INSERT|UPDATE|DELETE)/);
+      if (sql.includes("backlog_count")) return [[{ id: "opportunity", backlog_count: 0 }]];
+      if (sql.includes("discovery_opportunity_id") || sql.includes("c.external_id,c.product_url,o.created_by,o.id opportunity_id"))
+        return [[row]];
+      if (sql.startsWith("SELECT cut.primary_account_id")) return [[{ account_id: "primary", reason: "shared", primary_account_id: "primary" }]];
+      if (sql.startsWith("SELECT account_id FROM account_owned_records")) return [[{ account_id: "primary" }]];
+      if (sql.includes("oq.account_id=ot.account_id")) {
+        assert.deepEqual(values.slice(0, 3), ["primary", ...expected]);
+        checked++;
+        return [[{ id: "prior-owned-subquery" }]];
+      }
+      return [[]];
+    } };
+    const persistence = new TrendProjectionPersistence({}, "worker", () => now);
+    assert.equal(await persistence[method](c, "amazon", now), false);
+    assert.equal(checked, 1);
+  }
+});
 
 test("scope becoming inactive between selection and locked recheck consumes no attempt", async () => {
   const { pool, calls, statements } = createPool(
@@ -415,5 +553,5 @@ test("scope becoming inactive between selection and locked recheck consumes no a
   assert.equal(calls.includes("record"), false);
   const locked = statements.find((sql) => sql.endsWith("FOR UPDATE"));
   assert.match(locked, /collection_scope_org.status='active'/);
-  assert.match(locked, /collection_scope_workspace.id=trend_projection_jobs.workspace_id/);
+  assert.match(locked, /collection_scope_workspace.id=projection_scope_task.workspace_id/);
 });

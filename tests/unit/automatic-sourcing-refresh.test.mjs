@@ -4,8 +4,10 @@ import {
   refreshStaleAutomaticSourcing,
   automaticSourcingRefreshCandidateSql,
   automaticSourcingRefreshPrimarySql,
+  accountSourcingRefreshCandidateSql,
 } from "../../apps/worker/dist/automatic-sourcing-refresh.js";
 import { TrendProjectionPersistence } from "../../apps/worker/dist/trend-projection-persistence.js";
+import { nativeAccountAutomaticPrimaryEvidenceSql } from "../../apps/worker/dist/automatic-selection-evidence.js";
 
 const row = {
   search_id: "old-search",
@@ -15,18 +17,38 @@ const row = {
   opportunity_id: "op",
   created_by: "actor",
   provider_id: "provider",
+  subquery_id: "sub",
+  account_id: "primary",
 };
 function fixture(options = {}) {
   const calls = [],
     scheduled = [];
   const query = async (sql, params) => {
     calls.push({ sql, params });
-    if (sql === automaticSourcingRefreshCandidateSql) return [options.empty ? [] : [row]];
-    if (sql === automaticSourcingRefreshPrimarySql)
+    if (sql.startsWith("SELECT slot FROM account_ownership_cutover")) return [options.owned ? [{slot:"current"}] : []];
+    if (sql.startsWith("SELECT cut.primary_account_id"))
+      return [options.owned ? [{primary_account_id:"primary",account_id:"primary",reason:"shared"}] : []];
+    if (sql.startsWith("SELECT account_id FROM account_owned_records"))
+      return [params[0].map(([table])=>({account_id:options.foreign&&table==="collection_tasks"?"foreign":"primary"}))];
+    if (sql.startsWith("SHOW COLUMNS FROM sourcing_events"))
+      return [options.owned ? [] : [{ Field: "organization_id" }, { Field: "workspace_id" }]];
+    if (sql.startsWith("SHOW COLUMNS FROM sourcing_searches"))
+      return [(options.columns ?? []).map(Field=>({Field}))];
+    if (sql.startsWith("SHOW COLUMNS FROM opportunities")) return [[{Field:"organization_id"},{Field:"workspace_id"}]];
+    if (sql.startsWith("SHOW COLUMNS FROM normalized_records"))
+      return [(options.native ? ["account_id"] : ["organization_id","workspace_id"]).map(Field=>({Field}))];
+    if (sql === automaticSourcingRefreshCandidateSql || sql === accountSourcingRefreshCandidateSql) return [options.empty ? [] : [row]];
+    if (sql === automaticSourcingRefreshPrimarySql || sql.includes("AND ss.id=? AND q.id=? AND so.account_id=?"))
       return [options.lost && calls.includes("begin") ? [] : [row]];
     if (sql.startsWith("SELECT collection_task_id"))
       return [[{ collection_task_id: options.changed ? "new" : "old-task" }]];
     if (sql.startsWith("SELECT id FROM opportunities")) return [[{ id: "op" }]];
+    if (sql === nativeAccountAutomaticPrimaryEvidenceSql)
+      return [[{payload_json:{asin:"B000000001",title:"Router cooling fan"}}]];
+    if (sql.startsWith("SELECT n.raw_evidence_id,s.captured_at"))
+      return [options.noDetail || (options.detailChanged && calls.includes("begin")) ? [] : [
+        {payload_json:{asin:"B000000001",image_url:options.badImage ? "https://example.test/a" : "https://m.media-amazon.com/images/I/primary.jpg"}},
+      ]];
     if (sql.startsWith("SELECT COALESCE"))
       return [
         [
@@ -64,6 +86,17 @@ function fixture(options = {}) {
     },
   };
 }
+test("account refresh selects only matching owned search, task and subquery",async()=>{
+  const f=fixture({owned:true});
+  assert.equal(await f.run(),true);
+  assert.doesNotMatch(accountSourcingRefreshCandidateSql,/(?:ss|newer|running_search)\.(organization_id|workspace_id)|JOIN organizations org |JOIN workspaces ws /);
+  assert.match(accountSourcingRefreshCandidateSql,/qo.source_id=q.id AND qo.account_id=so.account_id/);
+  assert.match(accountSourcingRefreshCandidateSql,/ro.source_id=running_search.id AND ro.account_id=so.account_id/);
+  const lock=f.calls.find(x=>x.sql?.startsWith("SELECT collection_task_id"));
+  assert.deepEqual(lock.params,[row.search_id]);
+  const recheck=f.calls.filter(x=>x.sql?.startsWith("SELECT o.*")).at(-1);
+  assert.deepEqual(recheck.params.slice(-3),[row.search_id,"sub","primary"]);
+});
 test("refresh creates a new automatic search and preserves original history", async () => {
   const f = fixture();
   assert.equal(await f.run(), true);
@@ -76,12 +109,52 @@ test("refresh creates a new automatic search and preserves original history", as
   assert.equal(inserts.length, 2);
   assert.equal(inserts[0].params[0], target.search_id);
   assert.equal(inserts[0].params[3], f.scheduled[0][2]);
-  assert.equal(JSON.parse(inserts[1].params[4]).previous_search_id, row.search_id);
+  assert.deepEqual(inserts[1].params.slice(3, 5), ["sourcing.search.seeded_from_opportunity", target.search_id]);
+  assert.equal(JSON.parse(inserts[1].params[6]).previous_search_id, row.search_id);
   assert.equal(
     f.calls.some((x) => /^UPDATE|^DELETE/.test(x.sql ?? "")),
     false,
   );
   assert.deepEqual(f.calls.slice(-2), ["commit", "release"]);
+});
+test("0190 refresh proves the account primary and exact detail twice without using old evidence indexes", async () => {
+  const f = fixture({owned:true,native:true});
+  assert.equal(await f.run(), true);
+  assert.equal(f.scheduled[0][3].image_url, "https://m.media-amazon.com/images/I/primary.jpg");
+  const reads = f.calls.filter(x=>x.sql === nativeAccountAutomaticPrimaryEvidenceSql || x.sql?.startsWith("SELECT n.raw_evidence_id,s.captured_at"));
+  assert.equal(reads.length,4);
+  assert.ok(reads.every(x=>!x.sql.includes("uq_normalized_scope_record_version") &&
+    !/\b(?:n|e|n_seed)\.(?:organization_id|workspace_id)/.test(x.sql)));
+  assert.match(reads[1].sql,/n\.id=CONVERT\(RIGHT\(s\.source_ref_id,36\) USING ascii\)/);
+  for (const option of ["noDetail", "detailChanged", "badImage"]) {
+    const g = fixture({owned:true,native:true,[option]:true});
+    assert.equal(await g.run(), false);
+    assert.equal(g.scheduled.length,0);
+  }
+});
+test("owned sourcing refresh keeps new search and audit under the parent owner",async()=>{
+  const f=fixture({owned:true});
+  assert.equal(await f.run(),true);
+  assert.deepEqual(f.scheduled[0][6],{owner:{account_id:"primary",reason:"shared"}});
+  const search=f.calls.find(x=>x.sql?.startsWith("INSERT INTO sourcing_searches"));
+  assert.doesNotMatch(search.sql,/organization_id|workspace_id/);
+  assert.deepEqual(search.params.slice(0,3),[f.scheduled[0][3].search_id,f.scheduled[0][2],row.opportunity_id]);
+  assert.equal(search.sql.match(/\?/g).length,search.params.length);
+  const ledger=f.calls.find(x=>x.sql?.startsWith("INSERT INTO account_owned_records"));
+  assert.deepEqual(ledger.params[0].map(([table,,owner,reason])=>[table,owner,reason]),
+    [["sourcing_searches","primary","shared"],["sourcing_events","primary","shared"]]);
+});
+test("partial search scope removal aborts refresh before scheduling",async()=>{
+  const f=fixture({owned:true,columns:["workspace_id"]});
+  await assert.rejects(f.run(),/partial_inherited_scope_schema:sourcing_searches/);
+  assert.deepEqual(f.scheduled,[]);
+  assert.deepEqual(f.calls.slice(-2),["rollback","release"]);
+});
+test("foreign old collection cannot be used for sourcing refresh",async()=>{
+  const f=fixture({owned:true,foreign:true});
+  assert.equal(await f.run(),false);
+  assert.equal(f.scheduled.length,0);
+  assert.ok(!f.calls.some(x=>x.sql?.startsWith("INSERT")));
 });
 for (const option of ["empty", "changed", "lost", "badImage"])
   test(`no refresh after ${option}`, async () => {
@@ -159,4 +232,12 @@ test("successful existing downstream and sourcing refresh turns alternate; faile
   };
   assert.equal(await p.enqueueMissingAutomaticDownstream(), true);
   assert.equal(calls.at(-1), "recovered-refresh");
+});
+
+test("account sourcing admission counts unfinished owned work instead of old scope", async () => {
+  const { accountSourcingRefreshCandidateSql } = await import("../../apps/worker/dist/automatic-sourcing-refresh.js");
+  const { accountCollectionBacklogCountSql } = await import("../../apps/worker/dist/collection-source-scheduling-policy.js");
+  assert.ok(accountSourcingRefreshCandidateSql.includes(accountCollectionBacklogCountSql + "<?"));
+  assert.doesNotMatch(accountCollectionBacklogCountSql,/organization_id|workspace_id/);
+  assert.match(accountCollectionBacklogCountSql,/backlog.status IN \('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'\)/);
 });
