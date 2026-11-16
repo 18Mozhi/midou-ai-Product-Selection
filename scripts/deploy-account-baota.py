@@ -14,6 +14,8 @@ import tempfile
 
 import paramiko
 
+ACCOUNT_RELEASE_BASELINE_MIGRATION = "0076_collection_backlog_cancellation.up.sql"
+
 SOURCES = {
     "package": "account-release-package.py",
     "install": "baota-account-runtime-install.py",
@@ -134,7 +136,7 @@ def execute(repo, previous, plan):
         digest = hashlib.sha256(archive.read_bytes()).hexdigest()
         with project_ssh(deploy) as ssh:
             actual = deploy["remote_python"](ssh, deploy["production_identity_source"](), timeout=20)
-            if actual["build_sha"] != previous or actual["migration_version"] != deploy["DEPLOYMENT_MIGRATION_VERSION"]:
+            if actual["build_sha"] != previous or actual["migration_version"] != ACCOUNT_RELEASE_BASELINE_MIGRATION:
                 raise RuntimeError("account_release_live_baseline_changed")
             deploy["verify_production_sha_history"](repo, previous, build)
             require_drained_crawler(probe_standalone_crawler(ssh, deploy, scripts))

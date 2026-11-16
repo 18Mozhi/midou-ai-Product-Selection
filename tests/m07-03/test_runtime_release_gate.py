@@ -212,6 +212,7 @@ class GateTests(unittest.TestCase):
         cases = [
             ("source_rejected", ["build"]),
             ("baseline_changed", ["build", "ssh", "identity"]),
+            ("migration_changed", ["build", "ssh", "identity"]),
             ("crawler_running", ["build", "ssh", "identity", "history", "crawler"]),
             ("success", [
                 "build", "ssh", "identity", "history", "crawler", "upload", "coordinator",
@@ -233,7 +234,9 @@ class GateTests(unittest.TestCase):
                 def identify(client, source, timeout):
                     events.append("identity")
                     return {"build_sha": "e" * 40 if scenario == "baseline_changed" else old,
-                            "migration_version": "0076_collection_backlog_cancellation.up.sql"}
+                            "migration_version": ("0075_competitor_opportunity_identity.up.sql"
+                                                  if scenario == "migration_changed"
+                                                  else "0076_collection_backlog_cancellation.up.sql")}
 
                 def lineage(repo, previous, candidate):
                     events.append("history")
@@ -275,7 +278,7 @@ class GateTests(unittest.TestCase):
 
                 deploy = {
                     "PROJECT_ROOT": "/fixed", "PANEL_PYTHON": "/panel/python",
-                    "DEPLOYMENT_MIGRATION_VERSION": "0076_collection_backlog_cancellation.up.sql",
+                    "DEPLOYMENT_MIGRATION_VERSION": "0075_competitor_opportunity_identity.up.sql",
                     "production_identity_source": lambda: "read only",
                     "remote_python": identify, "verify_production_sha_history": lineage,
                     "verify_public": public,
@@ -296,6 +299,7 @@ class GateTests(unittest.TestCase):
                     else:
                         errors = {"source_rejected": "source_rejected_by_gate",
                                   "baseline_changed": "live_baseline_changed",
+                                  "migration_changed": "live_baseline_changed",
                                   "crawler_running": "standalone_crawler_not_drained"}
                         with self.assertRaisesRegex(RuntimeError, errors[scenario]):
                             executable(ROOT, old, plan)
