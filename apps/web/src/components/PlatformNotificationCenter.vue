@@ -19,6 +19,7 @@ import { notificationWriteRequest } from "./platform-notification-request";
 import "../platform-notifications.css";
 
 const props = defineProps<{
+  accountRehearsal?: boolean;
   request: PlatformNotificationEnvelopeRequest;
 }>();
 const domain = shallowRef("notifications"),
@@ -174,6 +175,7 @@ onUnmounted(stop);
         </p>
         <p v-if="message" class="platform-notifications__message" role="status">{{ message }}</p>
         <PlatformNotificationManagement
+          :account-rehearsal="accountRehearsal"
           v-model:query="query"
           v-model:status="status"
           :section="section"

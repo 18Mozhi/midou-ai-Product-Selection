@@ -495,3 +495,37 @@ async function testRetiredTrendModeration(Repo,assert){
 }
 test("retired platform trend moderation preserves original topic and sealed event and rejects mismatched replay", () =>
   testRetiredTrendModeration(MySqlPlatformDashboardRepository, assert));
+
+async function testRetiredPlatformMessages(Repo,assert){
+ const calls=[],writes=[];let msg={id:'msg-original',title:'the historical title',body:'original',category:'system',severity:'info',audience_type:'organization',in_app_enabled:true,email_enabled:false,status:'draft',version:1};
+ const query=async(sql,args=[])=>{
+  calls.push(sql);
+  assert.doesNotMatch(sql,/(?:JOIN|FROM)\s+(?:organizations|workspaces|memberships)\b/);
+  assert.equal((sql.match(/\?/g)||[]).length,args.length,sql);
+  if(sql.includes('FOR UPDATE')&&sql.includes('platform_messages'))return [[msg]];
+  if(sql.includes('SELECT m.id,m.kind'))return [[{...msg,organization_name:'original archived audience'}]];
+  if(sql.startsWith('SELECT COUNT(*)'))return [[{total:1}]];
+  if(sql.startsWith('SELECT u.id user_id'))return [[{user_id:'recipient'}]];
+  if(/^(?:UPDATE|INSERT)/.test(sql))writes.push([sql,args]);
+  return [[]];
+ };
+ const pool={query,getConnection:async()=>({query,beginTransaction:async()=>{},commit:async()=>{},rollback:async()=>{},release:()=>{}})};
+ const repo=new Repo(pool,undefined,undefined,undefined,undefined,true);
+ const list=await repo.readManagement({domain:'notifications',query:'',status:'',page:1,pageSize:20,messagePage:1,messagePageSize:20});
+ assert.equal(list.messages[0].id,msg.id);assert.equal(list.messages[0].organization_name,'original archived audience');
+ assert.equal(list.audience_options.organization_audience_retired,true);assert.equal(list.audience_options.organizations.length,0);assert.equal(writes.length,0);
+ const i={messageId:msg.id,actorId:'actor',route:'test',idempotencyKey:'test',expectedVersion:1,now:new Date(),requestId:'req',traceId:'trace',reason:'reason'};
+ await assert.rejects(repo.messageAction({...i,action:'publish'}),e=>e.code==='platform_message_organization_audience_retired');
+ await assert.rejects(repo.createMessage({...i,value:{audience_type:'organization'}}),e=>e.code==='platform_message_organization_audience_retired');
+ assert.equal(writes.length,0);
+ const cancellation=await repo.messageAction({...i,action:'cancel'});assert.equal(cancellation.status,'cancelled');assert.equal(writes.length,3);assert.doesNotMatch(writes[0][0],/historical_context|audience_type/);
+ const point=writes.length;msg={...msg,audience_type:'user',user_id:'recipient'};
+ const published=await repo.messageAction({...i,action:'publish'});assert.equal(published.recipient_count,1);assert.equal(published.in_app_count,1);assert.equal(published.email_count,0);
+ const exact=writes.slice(point), by=(name)=>exact.find(([sql])=>sql.startsWith('INSERT INTO '+name+'('));
+ const event=by('outbox_events'),owner=by('account_owned_records'),notification=by('notifications'),delivery=by('notification_deliveries');
+ assert.equal(owner[1][0],event[1][0]);assert.equal(owner[1][1],'recipient');assert.equal(notification[1][2],event[1][0]);assert.equal(notification[1][7],msg.id);assert.equal(delivery[1][1],notification[1][0]);assert.equal(delivery[1][2],'recipient');
+ msg={...msg,email_enabled:true};const noEmail=writes.length;
+ await assert.rejects(repo.messageAction({...i,action:'publish'}),e=>e.code==='mail_provider_pending');assert.equal(writes.length,noEmail);
+}
+test("retired platform messaging preserves original audience history and attributes new in-app delivery", () =>
+  testRetiredPlatformMessages(MySqlPlatformDashboardRepository, assert));

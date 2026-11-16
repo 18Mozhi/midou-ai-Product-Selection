@@ -1,4 +1,14 @@
 {
+  "accountPlatformMessages": {
+    "sourceFiles": [
+      "apps/api/src/mysql-platform-dashboard-repository.ts",
+      "apps/web/src/components/PlatformNotificationCenter.vue",
+      "apps/web/src/components/PlatformMessageEditor.vue"
+    ],
+    "testFiles": ["tests/m06-02/platform-dashboard.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/m06-02-platform-dashboard.md"],
+    "contract": "Retired platform messages keep historical audiences immutable, preserve originals and establish direct accountable user delivery without email."
+  },
   "accountPlatformTrendModeration": {
     "sourceFiles": [
       "apps/api/src/mysql-platform-dashboard-repository.ts",
@@ -7,12 +17,8 @@
       "apps/web/src/components/PlatformContentReviewDialog.vue",
       "apps/web/src/components/PlatformManagementRecordList.vue"
     ],
-    "testFiles": [
-      "tests/m06-02/platform-dashboard.test.mjs"
-    ],
-    "docs": [
-      "docs/runbooks/m06-02-platform-dashboard.md"
-    ],
+    "testFiles": ["tests/m06-02/platform-dashboard.test.mjs"],
+    "docs": ["docs/runbooks/m06-02-platform-dashboard.md"],
     "contract": "Retired platform intelligence review keeps original topic and event references with matching sealed owner and audited idempotent moderation."
   },
   "accountPlatformDataGovernance": {
@@ -22,13 +28,8 @@
       "apps/web/src/components/PlatformDataCenter.vue",
       "apps/web/src/components/PlatformGovernanceCenter.vue"
     ],
-    "testFiles": [
-      "tests/m06-02/platform-dashboard.test.mjs"
-    ],
-    "docs": [
-      "docs/openapi.yaml",
-      "docs/runbooks/m06-02-platform-dashboard.md"
-    ],
+    "testFiles": ["tests/m06-02/platform-dashboard.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/m06-02-platform-dashboard.md"],
     "contract": "Retired platform data, exports and rule governance use original IDs and sealed account ownership without old scope joins."
   },
   "accountPlatformDashboard": {
@@ -39,13 +40,8 @@
       "apps/api/src/mysql-platform-dashboard-risk-metrics.ts",
       "apps/web/src/components/PlatformDashboard.vue"
     ],
-    "testFiles": [
-      "tests/m06-02/platform-dashboard.test.mjs"
-    ],
-    "docs": [
-      "docs/openapi.yaml",
-      "docs/runbooks/m06-02-platform-dashboard.md"
-    ],
+    "testFiles": ["tests/m06-02/platform-dashboard.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/m06-02-platform-dashboard.md"],
     "contract": "Retired account platform dashboard does not query removed scope tables or columns, retains original operational facts and writes request-correlated audits without historical coordinates."
   },
   "accountCollectionClaimMaintenance": {

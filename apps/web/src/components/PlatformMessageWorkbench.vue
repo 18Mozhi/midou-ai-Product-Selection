@@ -9,6 +9,7 @@ const props = withDefaults(
     domain: string;
     messages: PlatformNotificationMessage[];
     busyId?: string;
+    organizationAudienceRetired?: boolean;
     stateName: (value: unknown) => string;
     when: (value: unknown) => string;
   }>(),
@@ -38,6 +39,9 @@ function audience(item: PlatformNotificationMessage) {
     : item.audience_type === "organization"
       ? item.organization_name || "未返回组织名称"
       : item.user_email || "未返回用户邮箱";
+}
+function historicalAudience(item: PlatformNotificationMessage) {
+  return props.organizationAudienceRetired && item.audience_type === "organization";
 }
 function channel(item: PlatformNotificationMessage) {
   return (
@@ -117,11 +121,12 @@ function select(item: PlatformNotificationMessage) {
           实际接收人数以发布接口返回为准，不由候选列表或订阅统计估算。
         </p>
         <footer v-if="selected.status === 'draft'">
-          <button type="button" :disabled="busyId === selected.id" @click="emit('edit', selected)">
+          <button v-if="!historicalAudience(selected)" type="button" :disabled="busyId === selected.id" @click="emit('edit', selected)">
             编辑草稿
           </button>
           <button
             type="button"
+            v-if="!historicalAudience(selected)"
             class="is-primary"
             :disabled="busyId === selected.id"
             @click="emit('action', selected, 'publish')"
@@ -188,6 +193,7 @@ function select(item: PlatformNotificationMessage) {
         <p class="message-reader__boundary">完整正文只读；发布人数以接口返回为准。</p>
         <footer v-if="selected.status === 'draft'">
           <button
+            v-if="!historicalAudience(selected)"
             type="button"
             :disabled="busyId === selected.id"
             @click="
@@ -198,6 +204,7 @@ function select(item: PlatformNotificationMessage) {
             编辑草稿
           </button>
           <button
+            v-if="!historicalAudience(selected)"
             type="button"
             class="is-primary"
             :disabled="busyId === selected.id"

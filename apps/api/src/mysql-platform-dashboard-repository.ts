@@ -1,3 +1,4 @@
+import { appendPlatformAudit, appendScopedNotification, automationRuleScopeRelation, hasLegacyCompetitorRuleScope, notificationDeliveryScopeColumns, notificationScopeRelation, realtimeEventScopeColumns } from "@scoutops/database";
 import { createHash, randomUUID } from "node:crypto";
 import { resolve } from "node:path";
 import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql2/promise";
@@ -525,6 +526,13 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       };
     }
     if (i.domain === "notifications") {
+      const scopeNames = this.accountOnly ? "NULL organization_name,NULL workspace_name" : "o.name organization_name,w.name workspace_name";
+      const scopeJoins = (alias: string) => this.accountOnly ? "" : " JOIN organizations o ON o.id="+alias+".organization_id JOIN workspaces w ON w.id="+alias+".workspace_id";
+      const notificationSource = this.accountOnly ? "notifications" : await notificationScopeRelation(this.pool);
+      const notificationOrg = this.accountOnly ? "" : " JOIN organizations o ON o.id=n.organization_id";
+      const notificationWhere = `(n.title LIKE ? OR u.email LIKE ?${this.accountOnly ? "" : " OR o.name LIKE ?"}) AND n.category LIKE ?`;
+      const notificationArgs = this.accountOnly ? [filter, filter, status] : [filter, filter, filter, status];
+      const legacyCompetitorRules = !this.accountOnly && await hasLegacyCompetitorRuleScope(this.pool);
       const [
         [summaryRows],
         [subscriptions],
@@ -535,10 +543,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       ] = await Promise.all([
         this.pool.query<RowDataPacket[]>(
           "SELECT COUNT(*) total,SUM(n.read_at IS NULL) unread," +
-            "SUM(n.severity='critical') critical FROM notifications n JOIN users u ON " +
-            "u.id=n.recipient_id JOIN organizations o ON o.id=n.organization_id WHERE " +
-            "(n.title LIKE ? OR u.email LIKE ? OR o.name LIKE ?) AND n.category LIKE ?",
-          [filter, filter, filter, status],
+            `SUM(n.severity='critical') critical FROM ${notificationSource} n JOIN users u ON ` +
+            `u.id=n.recipient_id${notificationOrg} WHERE ${notificationWhere}`,
+          notificationArgs,
         ),
         this.pool.query<RowDataPacket[]>(
           "SELECT COUNT(*) total,SUM(in_app_enabled=1) in_app_enabled,SUM(email_enabled=1) email_enabled," +
@@ -550,16 +557,18 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         ),
         this.pool.query<RowDataPacket[]>(
           "SELECT a.id,a.name,a.trigger_event_type event_type,a.action_type action_type," +
-            "a.status,a.version,o.name organization_name,w.name workspace_name,a.updated_at FROM " +
-            "automation_rules a JOIN organizations o ON o.id=a.organization_id JOIN workspaces w " +
-            "ON w.id=a.workspace_id ORDER BY a.updated_at DESC LIMIT 30",
+            `a.status,a.version,${scopeNames},a.updated_at FROM ` +
+            `${this.accountOnly ? "automation_rules" : await automationRuleScopeRelation(this.pool)} a${scopeJoins("a")} ` +
+            "ORDER BY a.updated_at DESC LIMIT 30",
         ),
         this.pool.query<RowDataPacket[]>(
           "SELECT r.id,CONCAT('竞品 ',r.metric,' ',r.direction) name,CONCAT('competitor.'," +
             "r.metric,'.',r.direction) event_type,'notify_owner' action_type,r.status," +
-            "r.revision version,o.name organization_name,w.name workspace_name,r.updated_at FROM " +
-            "competitor_monitor_rules r JOIN organizations o ON o.id=r.organization_id JOIN workspaces " +
-            "w ON w.id=r.workspace_id ORDER BY r.updated_at DESC LIMIT 30",
+            (legacyCompetitorRules
+              ? "r.revision version,o.name organization_name,w.name workspace_name,r.updated_at FROM " +
+                "competitor_monitor_rules r JOIN organizations o ON o.id=r.organization_id JOIN workspaces w ON w.id=r.workspace_id "
+              : "r.revision version,NULL organization_name,NULL workspace_name,r.updated_at FROM competitor_monitor_rules r ") +
+            "ORDER BY r.updated_at DESC LIMIT 30",
         ),
         this.messageManagement("notification", i.messagePage, i.messagePageSize),
       ]);
@@ -570,13 +579,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         offset = (page - 1) * i.pageSize,
         [rows] = await this.pool.query<RowDataPacket[]>(
           "SELECT n.id,n.title,n.category,n.severity,n.read_at,n.created_at,u.email recipient_email," +
-            "o.name organization_name,GROUP_CONCAT(CONCAT(d.channel,':',d.status) ORDER BY d.channel " +
-            "SEPARATOR ',') delivery_status FROM notifications n JOIN users u ON u.id=n.recipient_id " +
-            "JOIN organizations o ON o.id=n.organization_id LEFT JOIN notification_deliveries d ON " +
-            "d.notification_id=n.id WHERE (n.title LIKE ? OR u.email LIKE ? OR o.name LIKE ?) AND " +
-            "n.category LIKE ? GROUP BY n.id,n.title,n.category,n.severity,n.read_at," +
-            "n.created_at,u.email,o.name ORDER BY n.created_at DESC,n.id DESC LIMIT ? OFFSET ?",
-          [filter, filter, filter, status, i.pageSize, offset],
+            `${this.accountOnly ? "NULL" : "o.name"} organization_name,GROUP_CONCAT(CONCAT(d.channel,':',d.status) ORDER BY d.channel ` +
+            `SEPARATOR ',') delivery_status FROM ${notificationSource} n JOIN users u ON u.id=n.recipient_id${notificationOrg} ` +
+            `LEFT JOIN notification_deliveries d ON d.notification_id=n.id WHERE ${notificationWhere} ` +
+            "GROUP BY n.id,n.title,n.category,n.severity,n.read_at," +
+            `n.created_at,u.email${this.accountOnly ? "" : ",o.name"} ORDER BY n.created_at DESC,n.id DESC LIMIT ? OFFSET ?`,
+          [...notificationArgs, i.pageSize, offset],
         );
       return {
         domain: i.domain,
@@ -842,17 +850,32 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       observed_at: this.now().toISOString(),
     };
   }
+  private async historicalMessageAudience(db: Pool | PoolConnection) {
+    const [columns] = await db.query<RowDataPacket[]>(
+      "SHOW COLUMNS FROM platform_messages WHERE Field IN ('organization_id','historical_context')",
+    );
+    const shape = columns.map(row => row.Field).sort().join(",");
+    if (shape === "historical_context") return true;
+    if (shape === "organization_id") return false;
+    throw new Error("platform_message_audience_schema_invalid");
+  }
+  private rejectOrganizationAudience(audience: string) {
+    if (audience === "organization") throw new PlatformDashboardError(
+      "platform_message_organization_audience_retired", 409, "组织受众已移除。历史草稿可取消；新消息请选择具体用户或全部用户。",
+    );
+  }
   private async messageManagement(
     kind: "notification" | "email",
     requestedPage = 1,
     pageSize = 100,
   ) {
+    const historical = this.accountOnly || await this.historicalMessageAudience(this.pool);
     const [[[count]], [organizations], [users]] = await Promise.all([
       this.pool.query<RowDataPacket[]>(
         "SELECT COUNT(*) total FROM platform_messages WHERE kind=?",
         [kind],
       ),
-      this.pool.query<RowDataPacket[]>(
+      historical ? Promise.resolve([[]] as const) : this.pool.query<RowDataPacket[]>(
         "SELECT id,name FROM organizations WHERE status='active' ORDER BY name LIMIT 200",
       ),
       this.pool.query<RowDataPacket[]>(
@@ -864,8 +887,13 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       page = Math.min(requestedPage, totalPages),
       offset = (page - 1) * pageSize,
       [messages] = await this.pool.query<RowDataPacket[]>(
-        "SELECT m.*,o.name organization_name,u.email user_email,creator.email created_by_email " +
-          "FROM platform_messages m LEFT JOIN organizations o ON o.id=m.organization_id LEFT JOIN " +
+        "SELECT m.id,m.kind,m.title,m.body,m.category,m.severity,m.audience_type,m.user_id,m.in_app_enabled," +
+          "m.email_enabled,m.status,m.version,m.created_by,m.updated_by,m.published_at,m.created_at,m.updated_at," +
+          (historical ? "JSON_UNQUOTE(JSON_EXTRACT(m.historical_context,'$.organization_id')) organization_id," +
+            "JSON_UNQUOTE(JSON_EXTRACT(m.historical_context,'$.organization_name')) organization_name," :
+            "m.organization_id,o.name organization_name,") +
+          "u.email user_email,creator.email created_by_email FROM platform_messages m " +
+          (historical ? "" : "LEFT JOIN organizations o ON o.id=m.organization_id ") + "LEFT JOIN " +
           "users u ON u.id=m.user_id JOIN users creator ON creator.id=m.created_by WHERE m.kind=? " +
           "ORDER BY m.updated_at DESC,m.id DESC LIMIT ? OFFSET ?",
         [kind, pageSize, offset],
@@ -887,6 +915,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         total_pages: totalPages,
       },
       audience_options: {
+        ...(historical ? { organization_audience_retired: true } : {}),
         organizations: organizations.map((row: any) => ({
           id: row.id,
           name: row.name,
@@ -919,8 +948,16 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
     );
   }
   private async auditMessage(c: any, i: any, action: string, resourceId: string, metadata: any) {
-    await c.query(
-      "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
+    if (this.accountOnly) {
+      await c.query(
+        "INSERT INTO platform_audit_events(id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) " +
+        "VALUES (?,?,?,'platform_message',?,'succeeded',?,?,?,?,1)",
+        [randomUUID(), i.actorId, action, resourceId, i.requestId, i.traceId, JSON.stringify(metadata), i.now],
+      );
+      return;
+    }
+    await appendPlatformAudit(c,
+        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id," +
         "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
         "schema_version) VALUES(?,NULL,NULL,? ,?,'platform_message',?,'succeeded'," +
         "?,?,?,?,1)",
@@ -947,10 +984,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
       }
       const id = randomUUID(),
         v = i.value;
+      const historical = this.accountOnly || await this.historicalMessageAudience(c);
+      if (historical) this.rejectOrganizationAudience(v.audience_type);
       await c.query(
         "INSERT INTO platform_messages(id,kind,title,body,category,severity,audience_type," +
-          "organization_id,user_id,in_app_enabled,email_enabled,status,version,created_by," +
-          "updated_by,published_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?," +
+          `${historical ? "" : "organization_id,"}user_id,in_app_enabled,email_enabled,status,version,created_by,` +
+          `updated_by,published_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,${historical ? "" : "?,"}?,` +
           "?,?,'draft',1,?,?,NULL,?,?)",
         [
           id,
@@ -960,7 +999,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           v.category,
           v.severity,
           v.audience_type,
-          v.organization_id,
+          ...(historical ? [] : [v.organization_id]),
           v.user_id,
           v.in_app_enabled,
           v.email_enabled,
@@ -1001,7 +1040,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         return replay;
       }
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT status,version FROM platform_messages WHERE id=? FOR UPDATE",
+        "SELECT status,version,audience_type FROM platform_messages WHERE id=? FOR UPDATE",
         [i.messageId],
       );
       if (!rows[0])
@@ -1020,9 +1059,14 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         );
       const v = i.value,
         version = i.expectedVersion + 1;
+      const historical = this.accountOnly || await this.historicalMessageAudience(c);
+      if (historical) {
+        this.rejectOrganizationAudience(rows[0].audience_type);
+        this.rejectOrganizationAudience(v.audience_type);
+      }
       await c.query(
         "UPDATE platform_messages SET kind=?,title=?,body=?,category=?,severity=?," +
-          "audience_type=?,organization_id=?,user_id=?,in_app_enabled=?,email_enabled=?," +
+          `audience_type=?,${historical ? "" : "organization_id=?,"}user_id=?,in_app_enabled=?,email_enabled=?,` +
           "version=?,updated_by=?,updated_at=? WHERE id=?",
         [
           v.kind,
@@ -1031,7 +1075,7 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           v.category,
           v.severity,
           v.audience_type,
-          v.organization_id,
+          ...(historical ? [] : [v.organization_id]),
           v.user_id,
           v.in_app_enabled,
           v.email_enabled,
@@ -1109,6 +1153,12 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         await c.commit();
         return result;
       }
+      if (message.audience_type === "organization" && (this.accountOnly || await this.historicalMessageAudience(c)))
+        this.rejectOrganizationAudience(message.audience_type);
+      if (this.accountOnly && !["user", "all_users"].includes(message.audience_type))
+        throw new PlatformDashboardError("platform_message_audience_invalid", 400, "请选择具体用户或全部用户。");
+      if (this.accountOnly && !message.in_app_enabled)
+        throw new PlatformDashboardError("platform_message_channel_required", 400, "请选择站内通知。");
       const args: any[] = [];
       let target = "";
       let earlierScope = "";
@@ -1122,7 +1172,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         args.push(message.user_id);
       }
       const [recipients] = await c.query<RowDataPacket[]>(
-        `SELECT u.id user_id,m.organization_id,o.default_workspace_id workspace_id
+        this.accountOnly
+          ? "SELECT u.id user_id FROM users u WHERE u.status='active' " + target + " ORDER BY u.email LOCK IN SHARE MODE"
+          : `SELECT u.id user_id,m.organization_id,o.default_workspace_id workspace_id
          FROM users u
          JOIN memberships m ON m.user_id=u.id AND m.status='active'
          JOIN organizations o ON o.id=m.organization_id AND o.status='active'
@@ -1145,6 +1197,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           409,
           "目标范围没有可接收消息的活动用户。",
         );
+      const legacyDelivery = !this.accountOnly && (message.in_app_enabled || message.email_enabled) &&
+        await notificationDeliveryScopeColumns(c);
+      const legacyRealtime = !this.accountOnly && message.in_app_enabled && await realtimeEventScopeColumns(c);
       let inAppCount = 0,
         emailCount = 0;
       for (const recipient of recipients) {
@@ -1156,14 +1211,13 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
           title: message.title,
         };
         await c.query(
-          "INSERT INTO outbox_events(id,organization_id,workspace_id,event_type,schema_version," +
+          `INSERT INTO outbox_events(id,${this.accountOnly ? "" : "organization_id,workspace_id,"}event_type,schema_version,` +
             "payload_json,status,attempt_count,available_at,published_at,request_id,trace_id," +
-            "created_at,updated_at,version) VALUES(?,?,?,'platform.message.published'," +
+            `created_at,updated_at,version) VALUES(?,${this.accountOnly ? "" : "?,?,"}'platform.message.published',` +
             "1,?,'published',0,?,?,?,?,?,?,1)",
           [
             eventId,
-            recipient.organization_id,
-            recipient.workspace_id,
+            ...(this.accountOnly ? [] : [recipient.organization_id, recipient.workspace_id]),
             JSON.stringify(payload),
             i.now,
             i.now,
@@ -1173,7 +1227,17 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
             i.now,
           ],
         );
-        await c.query(
+        if (this.accountOnly) await c.query(
+          "INSERT INTO account_owned_records(source_table,source_id,account_id,reason) VALUES ('outbox_events',?,?,'exclusive_owner')",
+          [eventId, recipient.user_id],
+        );
+        if (this.accountOnly) await c.query(
+          "INSERT INTO notifications(id,recipient_id,source_event_id,category,severity,title,body,resource_type,resource_id,read_at,version,created_at,updated_at) " +
+          "VALUES(?,?,?,?,?,?,?,'platform_message',?,NULL,1,?,?)",
+          [notificationId, recipient.user_id, eventId, message.category, message.severity, message.title,
+            message.body, i.messageId, i.now, i.now],
+        );
+        else await appendScopedNotification(c,
           "INSERT INTO notifications(id,organization_id,workspace_id,recipient_id,source_event_id," +
             "category,severity,title,body,resource_type,resource_id,read_at,version,created_at," +
             "updated_at) VALUES(?,?,?,?,?,?,?,?,?,'platform_message',?,NULL,1,?,?)",
@@ -1194,13 +1258,10 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         );
         if (message.in_app_enabled) {
           await c.query(
-            "INSERT INTO notification_deliveries(id,organization_id,workspace_id,notification_id," +
-              "recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES(?," +
-              "?,?,?,?,'in_app','delivered',1,?,?)",
+            `INSERT INTO notification_deliveries(id,${legacyDelivery ? "organization_id,workspace_id," : ""}notification_id,recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES(${legacyDelivery ? "?,?," : ""}?,?,?,'in_app','delivered',1,?,?)`,
             [
               randomUUID(),
-              recipient.organization_id,
-              recipient.workspace_id,
+              ...(legacyDelivery ? [recipient.organization_id, recipient.workspace_id] : []),
               notificationId,
               recipient.user_id,
               i.now,
@@ -1208,12 +1269,9 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
             ],
           );
           await c.query(
-            "INSERT INTO realtime_events(organization_id,workspace_id,recipient_id,notification_id," +
-              "event_type,payload_json,created_at) VALUES(?,?,?,?, 'notification.created'," +
-              "?,?)",
+            `INSERT INTO realtime_events(${legacyRealtime ? "organization_id,workspace_id," : ""}recipient_id,notification_id,event_type,payload_json,created_at) VALUES(${legacyRealtime ? "?,?," : ""}?,?, 'notification.created',?,?)`,
             [
-              recipient.organization_id,
-              recipient.workspace_id,
+              ...(legacyRealtime ? [recipient.organization_id, recipient.workspace_id] : []),
               recipient.user_id,
               notificationId,
               JSON.stringify({
@@ -1230,13 +1288,10 @@ export class MySqlPlatformDashboardRepository implements PlatformDashboardReposi
         }
         if (message.email_enabled) {
           await c.query(
-            "INSERT INTO notification_deliveries(id,organization_id,workspace_id,notification_id," +
-              "recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES(?," +
-              "?,?,?,?,'email','pending_placeholder',0,?,?)",
+            `INSERT INTO notification_deliveries(id,${legacyDelivery ? "organization_id,workspace_id," : ""}notification_id,recipient_id,channel,status,attempt_count,created_at,updated_at) VALUES(${legacyDelivery ? "?,?," : ""}?,?,?,'email','pending_placeholder',0,?,?)`,
             [
               randomUUID(),
-              recipient.organization_id,
-              recipient.workspace_id,
+              ...(legacyDelivery ? [recipient.organization_id, recipient.workspace_id] : []),
               notificationId,
               recipient.user_id,
               i.now,

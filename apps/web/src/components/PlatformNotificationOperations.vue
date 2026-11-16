@@ -4,6 +4,7 @@ import ResponsiveDataView from "./ResponsiveDataView.vue";
 
 const props = defineProps<{
   data: any;
+  accountRehearsal?: boolean;
   stateName: (value: unknown) => string;
   when: (value: unknown) => string;
 }>();
@@ -41,7 +42,7 @@ const deliverySummary = (value: unknown) =>
             <tr>
               <th>通知</th>
               <th>接收人</th>
-              <th>组织</th>
+              <th v-if="!accountRehearsal">组织</th>
               <th>类型 / 级别</th>
               <th>阅读</th>
               <th>投递</th>
@@ -54,7 +55,7 @@ const deliverySummary = (value: unknown) =>
                 ><small>{{ when(item.created_at) }}</small>
               </td>
               <td>{{ item.recipient_email }}</td>
-              <td>{{ item.organization_name }}</td>
+              <td v-if="!accountRehearsal">{{ item.organization_name }}</td>
               <td>{{ stateName(item.category) }} / {{ stateName(item.severity) }}</td>
               <td>
                 <i :data-read="item.read_at ? 'read' : 'unread'">{{
@@ -81,7 +82,7 @@ const deliverySummary = (value: unknown) =>
             <dt>接收人</dt>
             <dd>{{ row.recipient_email }}</dd>
           </div>
-          <div>
+          <div v-if="!accountRehearsal">
             <dt>组织</dt>
             <dd>{{ row.organization_name }}</dd>
           </div>

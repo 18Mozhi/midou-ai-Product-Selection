@@ -5319,7 +5319,7 @@ paths:
   /platform/management/messages:
     post:
       summary: Create a platform in-app notification draft
-      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Mail drafts and email_enabled are rejected with mail_provider_pending until a production mail provider is approved and connected.
+      description: Requires platform:operate, same-origin Origin and Idempotency-Key. Mail drafts and email_enabled are rejected with mail_provider_pending until a production mail provider is approved and connected. In retired account mode new drafts address active accounts; historical organization drafts remain readable and can only be cancelled.
       security: [{ HttpOnlySession: [] }]
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       requestBody:

@@ -10,6 +10,7 @@ import type {
 } from "./platform-notification-types";
 
 defineProps<{
+  accountRehearsal?: boolean;
   section: NotificationSection;
   data: any;
   refreshing: boolean;
@@ -35,6 +36,7 @@ const status = defineModel<string>("status", { required: true });
   <section class="platform-notification-workarea">
     <template v-if="section === 'messages'">
       <PlatformMessageWorkbench
+        :organization-audience-retired="data?.audience_options?.organization_audience_retired"
         domain="notifications"
         :messages="data.messages ?? []"
         :busy-id="busyId"
@@ -72,7 +74,7 @@ const status = defineModel<string>("status", { required: true });
         />
       </section>
       <p class="notification-delivery-scope">当前快照：{{ snapshotScope }}。</p>
-      <PlatformNotificationOperations :data="data" :state-name="stateName" :when="when" />
+      <PlatformNotificationOperations :account-rehearsal="accountRehearsal" :data="data" :state-name="stateName" :when="when" />
       <PlatformNotificationPagination
         v-if="data.pagination"
         :pagination="data.pagination"
