@@ -1,4 +1,10 @@
 {
+  "accountProductionRuntimePackage": {
+    "sourceFiles": ["scripts/account-release-package.py"],
+    "testFiles": ["tests/unit/test_account_release_package.py"],
+    "docs": ["docs/runbooks/account-production-runtime-package.md"],
+    "contract": "Build a fixed-directory 0197 runtime payload for an immutable approved source and migration plan. Enumerate the account cutover import closure, exclude backups and secrets, bind retired runtime mode in release metadata, and reopen the archive to verify member paths and SHA-256. The inspect CLI cannot upload or deploy."
+  },
   "accountBaotaWriterControl": {
     "sourceFiles": ["scripts/baota-account-cutover-control.py"],
     "testFiles": ["tests/unit/test_baota_account_cutover_control.py"],
