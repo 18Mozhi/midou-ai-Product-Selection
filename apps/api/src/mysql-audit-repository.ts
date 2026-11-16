@@ -1,3 +1,4 @@
+import { appendPlatformAudit, businessAuditHistorical, platformAuditCoordinate, platformAuditHistorical } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type { AuditEvent, AuditFilter, AuditRepository, SeedAdminInput } from "@scoutops/audit";
@@ -87,8 +88,8 @@ export class MySqlAuditRepository implements AuditRepository {
     });
   }
   private async insert(connection: Pool | PoolConnection, event: AuditEvent) {
-    await connection.query(
-      "INSERT INTO platform_audit_events (id,organization_id,workspace_id,actor_id," +
+    await appendPlatformAudit(connection,
+        "INSERT INTO platform_audit_events (id,organization_id,workspace_id,actor_id," +
         "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
         "schema_version) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
       [
@@ -112,22 +113,31 @@ export class MySqlAuditRepository implements AuditRepository {
     await this.insert(this.pool, event);
   }
   async list(filter: AuditFilter) {
+    const historical = await platformAuditHistorical(this.pool);
+    const org = historical ? platformAuditCoordinate("organization_id") : "organization_id";
+    const workspace = historical ? platformAuditCoordinate("workspace_id") : "workspace_id";
+    const platformColumns = historical ? eventColumns.replace("organization_id,workspace_id",
+      `${org} organization_id,${workspace} workspace_id`) : eventColumns;
+    const businessHistorical = filter.organizationId !== undefined && await businessAuditHistorical(this.pool);
+    const logOrg = businessHistorical ? platformAuditCoordinate("organization_id") : "organization_id";
+    const logWorkspace = businessHistorical ? platformAuditCoordinate("workspace_id") : "workspace_id";
+    const logScopeColumns = businessHistorical ? `${logOrg} organization_id,${logWorkspace} workspace_id` : "organization_id,workspace_id";
     const scopedSource =
         filter.organizationId === undefined
-          ? `(SELECT ${eventColumns} FROM platform_audit_events WHERE organization_id IS NULL) scoped_audit`
-          : `(SELECT ${eventColumns} FROM platform_audit_events WHERE organization_id=?
+          ? `(SELECT ${platformColumns} FROM platform_audit_events WHERE ${org} IS NULL) scoped_audit`
+          : `(SELECT ${platformColumns} FROM platform_audit_events WHERE ${org}=?
              UNION ALL
-             SELECT id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,
+             SELECT id,${logScopeColumns},actor_id,action,resource_type,resource_id,
                'succeeded' outcome,request_id,trace_id,metadata_json metadata,occurred_at,schema_version
-             FROM audit_logs WHERE organization_id=?) scoped_audit`,
+             FROM audit_logs WHERE ${logOrg}=?) scoped_audit`,
       scopeParams =
         filter.organizationId === undefined ? [] : [filter.organizationId, filter.organizationId];
     const platformClauses = [
-        filter.organizationId === undefined ? "organization_id IS NULL" : "organization_id=?",
+        filter.organizationId === undefined ? `${org} IS NULL` : `${org}=?`,
       ],
       platformParams: unknown[] =
         filter.organizationId === undefined ? [] : [filter.organizationId],
-      logClauses = filter.organizationId === undefined ? [] : ["organization_id=?"],
+      logClauses = filter.organizationId === undefined ? [] : [`${logOrg}=?`],
       logParams: unknown[] = filter.organizationId === undefined ? [] : [filter.organizationId],
       addBoth = (sql: string, value: unknown) => {
         platformClauses.push(sql);
@@ -166,10 +176,10 @@ export class MySqlAuditRepository implements AuditRepository {
     }
     const filteredSource =
         filter.organizationId === undefined
-          ? `(SELECT ${eventColumns} FROM platform_audit_events WHERE ${platformClauses.join(" AND ")}) scoped_audit`
-          : `(SELECT ${eventColumns} FROM platform_audit_events WHERE ${platformClauses.join(" AND ")}
+          ? `(SELECT ${platformColumns} FROM platform_audit_events WHERE ${platformClauses.join(" AND ")}) scoped_audit`
+          : `(SELECT ${platformColumns} FROM platform_audit_events WHERE ${platformClauses.join(" AND ")}
              UNION ALL
-             SELECT id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,
+             SELECT id,${logScopeColumns},actor_id,action,resource_type,resource_id,
                'succeeded' outcome,request_id,trace_id,metadata_json metadata,occurred_at,schema_version
              FROM audit_logs WHERE ${logClauses.join(" AND ")}) scoped_audit`,
       params = [...platformParams, ...logParams],

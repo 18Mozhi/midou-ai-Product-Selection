@@ -135,6 +135,8 @@ def build_account_archive(repo, expected_plan_sha, output):
     identity = deploy["release_source_identity"](repo)
     deploy["verify_local_source_preflight"](repo)
     subprocess.run([deploy["local_npm_executable"](), "run", "build"], cwd=repo, check=True)
+    subprocess.run(["node", "--test", "tests/unit/account-api-startup-entry.test.mjs",
+                    "tests/m01-04/account-authorization-summary.test.mjs"], cwd=repo, check=True)
     deploy["verify_local_build_preflight"](repo)
     if (subprocess.check_output(["git", "status", "--porcelain"], cwd=repo).strip() or
             subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo).decode().strip() != identity["local_sha"]):

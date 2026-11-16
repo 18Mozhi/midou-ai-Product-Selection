@@ -1,0 +1,61 @@
+import type { RuntimeConfig } from "@scoutops/config";
+import type { Pool } from "mysql2/promise";
+import {
+  createArgon2PasswordHasher,
+  EncryptedOutboxAuthDelivery,
+  LocalAuthService,
+  MfaService,
+  PendingAuthDelivery,
+} from "@scoutops/auth";
+import { MySqlAuthRepository } from "../mysql-auth-repository.js";
+import { MySqlAuthOutboxStore } from "../mysql-auth-outbox.js";
+import { MySqlAuthIdempotency } from "../mysql-auth-idempotency.js";
+import { MySqlMfaRepository } from "../mysql-mfa-repository.js";
+
+export function createAuthRuntime(pool: Pool, config: RuntimeConfig) {
+  const authRepository = new MySqlAuthRepository(pool);
+  const authOutbox = new MySqlAuthOutboxStore(pool);
+  const authDelivery = config.security.credentialsMasterKey
+    ? new EncryptedOutboxAuthDelivery(authOutbox, config.security.credentialsMasterKey)
+    : new PendingAuthDelivery();
+  const passwordHasher = createArgon2PasswordHasher({
+    memoryCost: config.auth.argon2MemoryKib,
+    timeCost: config.auth.argon2TimeCost,
+    parallelism: config.auth.argon2Parallelism,
+  });
+  const mfaRepository = new MySqlMfaRepository(pool);
+  let localAuth: LocalAuthService;
+  const mfa = new MfaService({
+    repository: mfaRepository,
+    authRepository,
+    passwordHasher,
+    masterKey: config.security.credentialsMasterKey,
+    policy: {
+      issuer: config.mfa.issuer,
+      periodSeconds: config.mfa.totpPeriodSeconds,
+      digits: config.mfa.totpDigits,
+      window: config.mfa.totpWindow,
+      challengeTtlMinutes: config.mfa.challengeTtlMinutes,
+      maxAttempts: config.mfa.maxAttempts,
+      recoveryCodeCount: config.mfa.recoveryCodeCount,
+    },
+    completeLogin: (userId, context) => localAuth.completeSecondFactorLogin(userId, context),
+    completeEnrollment: (userId) => localAuth.completeMfaEnrollment(userId),
+  });
+  localAuth = new LocalAuthService({
+    repository: authRepository,
+    delivery: authDelivery,
+    passwordHasher,
+    secondFactorGate: mfa,
+    policy: {
+      passwordMinLength: config.auth.passwordMinLength,
+      passwordMaxLength: config.auth.passwordMaxLength,
+      sessionTtlMinutes: config.auth.sessionTtlMinutes,
+      actionTokenTtlMinutes: config.auth.actionTokenTtlMinutes,
+      maxFailedAttempts: config.auth.maxFailedAttempts,
+      lockMinutes: config.auth.lockMinutes,
+    },
+  });
+  const idempotency = new MySqlAuthIdempotency(pool);
+  return { localAuth, mfa, idempotency, passwordHasher };
+}

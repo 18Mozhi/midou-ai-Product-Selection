@@ -5,6 +5,7 @@ import type { PlatformAccountService } from "./platform-account-service.js";
 import { sessionToken } from "./auth-routes.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 export interface PlatformAccountRouteOptions {
+  accountReadRehearsal?: boolean;
   service: PlatformAccountService;
   authorization: AuthorizationService;
   auth: LocalAuthService;
@@ -50,35 +51,41 @@ export function registerPlatformAccountRoutes(
     reply.header("cache-control", "private, no-store");
     return envelope(await o.service.overview(q?.query, q?.status), r);
   });
-  app.post("/api/v1/platform/accounts/organizations", async (r, reply) => {
-    const actorId = await write(r);
-    reply.code(201);
-    return envelope(await o.service.createOrganization(r.body, context(r, actorId)), r);
-  });
-  app.patch("/api/v1/platform/accounts/organizations/:organizationId", async (r) => {
-    const actorId = await write(r);
-    return envelope(
-      await o.service.updateOrganization(
-        (r.params as any).organizationId,
-        r.body,
-        context(r, actorId),
-      ),
-      r,
-    );
-  });
-  app.post("/api/v1/platform/accounts/organizations/:organizationId/status", async (r) => {
-    const actorId = await write(r);
-    return envelope(
-      await o.service.organizationStatus(
-        (r.params as any).organizationId,
-        r.body,
-        context(r, actorId),
-      ),
-      r,
-    );
-  });
+  if (!o.accountReadRehearsal) {
+    app.post("/api/v1/platform/accounts/organizations", async (r, reply) => {
+      const actorId = await write(r);
+      reply.code(201);
+      return envelope(await o.service.createOrganization(r.body, context(r, actorId)), r);
+    });
+    app.patch("/api/v1/platform/accounts/organizations/:organizationId", async (r) => {
+      const actorId = await write(r);
+      return envelope(
+        await o.service.updateOrganization(
+          (r.params as any).organizationId,
+          r.body,
+          context(r, actorId),
+        ),
+        r,
+      );
+    });
+    app.post("/api/v1/platform/accounts/organizations/:organizationId/status", async (r) => {
+      const actorId = await write(r);
+      return envelope(
+        await o.service.organizationStatus(
+          (r.params as any).organizationId,
+          r.body,
+          context(r, actorId),
+        ),
+        r,
+      );
+    });
+  }
   app.post("/api/v1/platform/accounts/users", async (r, reply) => {
     const actorId = await write(r);
+    const input = r.body as { organization_id?: unknown; organization_role_code?: unknown } | undefined;
+    if (o.accountReadRehearsal &&
+        (input?.organization_id || (input?.organization_role_code && input.organization_role_code !== "member")))
+      throw new ApiError(400, "platform_account_legacy_scope_invalid", "账号模式不能分配组织。", "移除组织字段后重试。");
     reply.code(201);
     return envelope(await o.service.createUser(r.body, context(r, actorId)), r);
   });
@@ -87,14 +94,15 @@ export function registerPlatformAccountRoutes(
     reply.header("cache-control", "private, no-store");
     return envelope(await o.service.userDetail((r.params as any).userId), r);
   });
-  app.post("/api/v1/platform/accounts/users/:userId/memberships", async (r, reply) => {
-    const actorId = await write(r);
-    reply.code(201);
-    return envelope(
-      await o.service.addUserMembership((r.params as any).userId, r.body, context(r, actorId)),
-      r,
-    );
-  });
+  if (!o.accountReadRehearsal)
+    app.post("/api/v1/platform/accounts/users/:userId/memberships", async (r, reply) => {
+      const actorId = await write(r);
+      reply.code(201);
+      return envelope(
+        await o.service.addUserMembership((r.params as any).userId, r.body, context(r, actorId)),
+        r,
+      );
+    });
   app.post("/api/v1/platform/accounts/users/:userId/status", async (r) => {
     const actorId = await write(r);
     return envelope(

@@ -9,6 +9,7 @@ import {
   type ResourceGrantType,
 } from "@scoutops/resource-grants";
 export interface ResourceGrantRouteOptions {
+  accountReadRehearsal?: boolean;
   service: ResourceGrantService;
   authorization: AuthorizationService;
   auth: LocalAuthService;
@@ -46,6 +47,7 @@ export function registerResourceGrantRoutes(
   app: FastifyInstance,
   options: ResourceGrantRouteOptions,
 ) {
+  if (options.accountReadRehearsal) return;
   const current = async (request: FastifyRequest) =>
     options.auth.authenticate(sessionToken(request, options.secureCookie));
   const selected = async (request: FastifyRequest) => {

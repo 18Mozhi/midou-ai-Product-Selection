@@ -1,3 +1,4 @@
+import { appendPlatformAudit } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import type { PlatformAccountRepository } from "./platform-account-service.js";
@@ -5,12 +6,12 @@ import { PlatformAccountError } from "./platform-account-service.js";
 const iso = (v: unknown) =>
   v === null || v === undefined ? null : new Date(v as string | Date).toISOString();
 export class MySqlPlatformAccountRepository implements PlatformAccountRepository {
-  constructor(private readonly pool: Pool) {}
+  constructor(private readonly pool: Pool, private readonly accountOnly = false) {}
   async overview(input: Parameters<PlatformAccountRepository["overview"]>[0]) {
     const like = `%${input.query.replace(/[\\%_]/g, "\\$&")}%`,
       status = input.status;
     const [organizations, users, admins, summary] = await Promise.all([
-      this.pool.query<RowDataPacket[]>(
+      this.accountOnly ? [[] as RowDataPacket[]] : this.pool.query<RowDataPacket[]>(
         "SELECT o.id,o.name,o.slug,o.status,o.timezone,o.data_retention_days,o.created_at," +
           "o.updated_at,COUNT(DISTINCT m.id) member_count,COUNT(DISTINCT w.id) workspace_count " +
           "FROM organizations o LEFT JOIN memberships m ON m.organization_id=o.id LEFT JOIN workspaces " +
@@ -21,13 +22,17 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
         [input.query, like, like, status, status, input.limit],
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT u.id,u.email,u.status,u.must_change_password,u.must_enroll_mfa,u.created_at," +
-          "u.updated_at,COUNT(DISTINCT m.organization_id) organization_count,GROUP_CONCAT(DISTINCT " +
-          "o.name ORDER BY o.name SEPARATOR '、') organization_names,GROUP_CONCAT(DISTINCT pra.role_code " +
+        "SELECT u.id,u.email,u.status,u.must_change_password,u.must_enroll_mfa,u.created_at,u.updated_at," +
+          (this.accountOnly ? "0 organization_count,NULL organization_names," :
+            "COUNT(DISTINCT m.organization_id) organization_count,GROUP_CONCAT(DISTINCT " +
+            "o.name ORDER BY o.name SEPARATOR '、') organization_names,") +
+          "GROUP_CONCAT(DISTINCT pra.role_code " +
           "ORDER BY pra.role_code SEPARATOR ',') platform_roles,(SELECT COUNT(*) FROM user_sessions " +
           "s WHERE s.user_id=u.id AND s.status='active' AND s.expires_at>UTC_TIMESTAMP(3)) active_session_count " +
-          "FROM users u LEFT JOIN memberships m ON m.user_id=u.id LEFT JOIN organizations o ON " +
-          "o.id=m.organization_id LEFT JOIN platform_role_assignments pra ON pra.user_id=u.id WHERE " +
+          "FROM users u " +
+          (this.accountOnly ? "" : "LEFT JOIN memberships m ON m.user_id=u.id LEFT JOIN organizations o ON " +
+            "o.id=m.organization_id ") +
+          "LEFT JOIN platform_role_assignments pra ON pra.user_id=u.id WHERE " +
           "(?='' OR u.email LIKE ? ESCAPE '\\\\') AND (?='' OR u.status=?) GROUP BY u.id ORDER BY " +
           "u.updated_at DESC LIMIT ?",
         [input.query, like, status, status, input.limit],
@@ -41,8 +46,11 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
         [input.query, like, status, status, input.limit],
       ),
       this.pool.query<RowDataPacket[]>(
-        "SELECT (SELECT COUNT(*) FROM organizations) organizations,(SELECT COUNT(*) FROM organizations " +
-          "WHERE status='active') active_organizations,(SELECT COUNT(*) FROM users) users," +
+        "SELECT " +
+          (this.accountOnly ? "0 organizations,0 active_organizations," :
+            "(SELECT COUNT(*) FROM organizations) organizations,(SELECT COUNT(*) FROM organizations " +
+            "WHERE status='active') active_organizations,") +
+          "(SELECT COUNT(*) FROM users) users," +
           "(SELECT COUNT(*) FROM users WHERE status='active') active_users,(SELECT COUNT(DISTINCT " +
           "user_id) FROM platform_role_assignments) platform_admins",
         [],
@@ -248,7 +256,7 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
           "created_at,updated_at FROM users WHERE id=? LIMIT 1",
         [input.userId],
       ),
-      this.pool.query<RowDataPacket[]>(
+      this.accountOnly ? [[] as RowDataPacket[]] : this.pool.query<RowDataPacket[]>(
         "SELECT m.id,m.organization_id,o.name organization_name,m.status,m.joined_at," +
           "m.version,GROUP_CONCAT(mra.role_code ORDER BY mra.role_code SEPARATOR ',') roles FROM " +
           "memberships m JOIN organizations o ON o.id=m.organization_id LEFT JOIN membership_role_assignments " +
@@ -624,8 +632,8 @@ export class MySqlPlatformAccountRepository implements PlatformAccountRepository
     id: string,
     metadata: unknown,
   ) {
-    return c.query(
-      "INSERT INTO platform_audit_events (id,organization_id,workspace_id,actor_id," +
+    return appendPlatformAudit(c,
+        "INSERT INTO platform_audit_events (id,organization_id,workspace_id,actor_id," +
         "action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at," +
         "schema_version) VALUES (?,NULL,NULL,?,?,?,?,'succeeded',?,?,?,?,1)",
       [

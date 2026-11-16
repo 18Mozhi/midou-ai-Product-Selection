@@ -626,7 +626,7 @@ paths:
   /auth/session-status:
     get:
       summary: Resolve browser session presence without using an expected 401 response
-      description: Returns authenticated false with HTTP 200 when the HttpOnly session cookie is missing or invalid. The response is no-store and exposes no identifiers. Retired account mode also sends account_rehearsal true as the existing compatibility flag so the frontend omits legacy routes.
+      description: Returns authenticated false when the HttpOnly session is absent or invalid. Verified account runtime includes account_rehearsal true as a compatibility mode marker even before sign-in; it does not grant permissions.
       security: []
       responses:
         "200":

@@ -10,6 +10,7 @@ export interface OrganizationAdminRouteOptions {
   auth: LocalAuthService;
   secureCookie: boolean;
   webOrigin: string;
+  accountReadRehearsal?: boolean;
 }
 const ids = (r: FastifyRequest) => ({
     requestId: String(r.headers["x-request-id"]),
@@ -24,6 +25,7 @@ export function registerOrganizationAdminRoutes(
   app: FastifyInstance,
   o: OrganizationAdminRouteOptions,
 ) {
+  if (o.accountReadRehearsal) return;
   const scope = async (r: FastifyRequest, capability: Capability) => {
     const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
       x = await o.authorization.resolveSession(a.user.id, a.session.id);

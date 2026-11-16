@@ -4,6 +4,7 @@ import type { AuthorizationService } from "@scoutops/authorization";
 import type { LocalAuthService } from "@scoutops/auth";
 import { sessionToken } from "./auth-routes.js";
 export interface AuditRouteOptions {
+  accountReadRehearsal?: boolean;
   service: AuditQueryService;
   authorization: AuthorizationService;
   auth: LocalAuthService;
@@ -50,7 +51,8 @@ export function registerAuditRoutes(app: FastifyInstance, options: AuditRouteOpt
     );
   };
   app.get("/api/v1/platform/audit-events", async (request) => read(request));
-  app.get("/api/v1/organizations/:organizationId/audit-events", async (request) =>
-    read(request, (request.params as { organizationId: string }).organizationId),
-  );
+  if (!options.accountReadRehearsal)
+    app.get("/api/v1/organizations/:organizationId/audit-events", async (request) =>
+      read(request, (request.params as { organizationId: string }).organizationId),
+    );
 }

@@ -10,6 +10,7 @@ export interface TenancyRouteOptions {
   idempotency: AuthIdempotency;
   webOrigin: string;
   secureCookie: boolean;
+  accountReadRehearsal?: boolean;
 }
 const cookieName = (secure: boolean) => (secure ? "__Host-scoutops_session" : "scoutops_session");
 const bodySchema = (required: string[], properties: Record<string, unknown>) => ({
@@ -52,10 +53,10 @@ const paramsSchema = {
 };
 
 export function registerTenancyRoutes(app: FastifyInstance, options: TenancyRouteOptions) {
+  if (options.accountReadRehearsal) return;
   const current = async (request: FastifyRequest) => {
     const token = sessionToken(request, options.secureCookie);
-    const authenticated = await options.auth.authenticate(token);
-    return { token, ...authenticated };
+    return { token, ...(await options.auth.authenticate(token)) };
   };
   app.get("/api/v1/org/memberships", async (request, reply) => {
     const authenticated = await current(request);

@@ -25,6 +25,7 @@ interface PlatformDomainContext extends ApiDomainContext {
 
 export function registerPlatformDomainRoutes(context: PlatformDomainContext) {
   const common = commonDomainOptions(context);
+  const accountOnly = context.accountReadRehearsal;
   registerPlatformDashboardRoutes(context.app, {
     service: new PlatformDashboardService(
       new MySqlPlatformDashboardRepository(
@@ -39,8 +40,9 @@ export function registerPlatformDomainRoutes(context: PlatformDomainContext) {
     ...common,
   });
   registerPlatformAccountRoutes(context.app, {
+    accountReadRehearsal: accountOnly,
     service: new PlatformAccountService(
-      new MySqlPlatformAccountRepository(context.pool),
+      new MySqlPlatformAccountRepository(context.pool, accountOnly),
       () => new Date(),
       context.passwordHasher,
       context.config.auth.passwordMinLength,

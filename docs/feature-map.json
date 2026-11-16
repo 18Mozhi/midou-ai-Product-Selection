@@ -1,4 +1,18 @@
 {
+  "accountApiStartupEntry": {
+    "sourceFiles": [
+      "apps/api/src/server.ts",
+      "apps/api/src/bootstrap/register-workflow-domain.ts",
+      "apps/api/src/bootstrap/register-platform-domain.ts",
+      "scripts/account-release-package.py"
+    ],
+    "testFiles": [
+      "tests/unit/account-api-startup-entry.test.mjs",
+      "tests/m01-03/account-landing-rehearsal.test.mjs"
+    ],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-api-startup-entry.md"],
+    "contract": "Bind core business and approval routes to the verified account startup mode before Redis or listening. Retire legacy organization and workspace registration, retain platform authorization, and reject a wrong target in the built API before release packaging."
+  },
   "accountRetiredEntryRoutes": {
     "sourceFiles": [
       "apps/web/src/account-route-guard.ts",

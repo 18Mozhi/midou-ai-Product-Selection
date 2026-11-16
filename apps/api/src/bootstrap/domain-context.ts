@@ -8,7 +8,8 @@ export interface ApiDomainContext {
   app: FastifyInstance;
   pool: Pool;
   config: RuntimeConfig;
-  accountReadRehearsal?: boolean;
+  // The startup-selected mode is shared by every route registrar.
+  accountReadRehearsal: boolean;
   authorization: AuthorizationService;
   auth: LocalAuthService;
   secureCookie: boolean;

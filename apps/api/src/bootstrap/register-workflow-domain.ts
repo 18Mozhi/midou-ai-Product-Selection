@@ -28,10 +28,12 @@ export function registerWorkflowDomainRoutes(context: ApiDomainContext) {
   const common = commonDomainOptions(context);
   registerBusinessTaskRoutes(context.app, {
     service: new BusinessTaskService(new MySqlBusinessTaskRepository(context.pool)),
+    accountReadRehearsal: context.accountReadRehearsal,
     ...common,
   });
   registerApprovalRoutes(context.app, {
     service: new ApprovalService(new MySqlApprovalRepository(context.pool)),
+    accountReadRehearsal: context.accountReadRehearsal,
     ...common,
   });
   registerNotificationRoutes(context.app, {
@@ -68,13 +70,14 @@ export function registerWorkflowDomainRoutes(context: ApiDomainContext) {
     ),
     ...common,
   });
-  registerOrganizationAdminRoutes(context.app, {
-    service: new OrganizationAdminService(
-      new MySqlOrganizationAdminRepository(context.pool),
-      context.config.organizationAdmin.invitationTtlHours,
-      context.config.organizationAdmin.tokenDefaultTtlDays,
-      context.config.organizationAdmin.tokenMaxActive,
-    ),
-    ...common,
-  });
+  if (!context.accountReadRehearsal)
+    registerOrganizationAdminRoutes(context.app, {
+      service: new OrganizationAdminService(
+        new MySqlOrganizationAdminRepository(context.pool),
+        context.config.organizationAdmin.invitationTtlHours,
+        context.config.organizationAdmin.tokenDefaultTtlDays,
+        context.config.organizationAdmin.tokenMaxActive,
+      ),
+      ...common,
+    });
 }
