@@ -39,6 +39,10 @@ function fixture(options = {}) {
         },
         release: () => events.push([attempt, "release"]),
         query: async (sql, values) => {
+          if (sql.startsWith("SHOW COLUMNS FROM crawler_browser_runs"))
+            return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
+          if (sql.startsWith("INSERT INTO crawler_profile_lease_events"))
+            return [{ affectedRows: 1 }];
           if (sql.startsWith("SELECT p.provider_id"))
             return [[{ updated_by: "actor", expires_at: null }]];
           if (sql.startsWith("SELECT slot_key") && options.conflict)

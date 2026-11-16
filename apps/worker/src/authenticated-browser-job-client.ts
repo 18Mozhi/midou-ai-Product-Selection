@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
-import type { Pool, RowDataPacket } from "mysql2/promise";
+import type { Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import {
   ProviderAdapterFailure,
   type ProviderRawRecord,
@@ -16,6 +16,7 @@ import {
 } from "@scoutops/provider-sources";
 
 interface BrowserJobInput {
+  accountId?: string;
   organizationId: string;
   workspaceId: string;
   taskId: string;
@@ -60,6 +61,27 @@ const recordsFor = (
   throw new ProviderAdapterFailure("adapter_not_registered", false);
 };
 
+/** A browser job inherits its live boundary from the exact collection task and subquery. */
+function browserTaskScope(input: BrowserJobInput, alias: "t" | "parent") {
+  if (input.accountId === undefined) {
+    return { sql: `${alias}.organization_id=? AND ${alias}.workspace_id=?`,
+      values: [input.organizationId, input.workspaceId] };
+  }
+  if (!input.leaseToken || !input.accountId.trim())
+    throw new ProviderAdapterFailure("permission_denied", false);
+  return {
+    sql: "EXISTS (SELECT 1 FROM account_owned_records browser_owner " +
+      "JOIN account_ownership_cutover browser_cut ON browser_cut.slot='current' AND browser_cut.contract_version=25 " +
+      "JOIN users browser_account ON browser_account.id=browser_owner.account_id AND browser_account.status='active' " +
+      "WHERE browser_owner.source_table='collection_tasks' " +
+      `AND browser_owner.source_id=${alias}.id AND browser_owner.account_id=${alias}.account_id AND browser_owner.account_id=? ` +
+      "AND (browser_owner.reason='exclusive_owner' OR browser_owner.account_id=browser_cut.primary_account_id)) " +
+      `AND ${alias}.status='running' AND ${alias}.lease_token_hash=UNHEX(?) AND ${alias}.lease_expires_at>NOW(3)`,
+    values: [input.accountId, createHash("sha256")
+      .update("scoutops:collection-task-lease:v1\0").update(input.leaseToken).digest("hex")],
+  };
+}
+
 export class MySqlAuthenticatedBrowserJobClient {
   constructor(
     private readonly pool: Pool,
@@ -80,26 +102,40 @@ export class MySqlAuthenticatedBrowserJobClient {
       started = Date.now(),
       deadline =
         started + Math.max(1_000, input.provider.timeoutMs + 10_000, this.runTimeoutMs + 10_000);
-    await this.pool.query(
+    const [columns] = await this.pool.query<RowDataPacket[]>(
+      "SHOW COLUMNS FROM browser_collection_jobs WHERE Field IN ('organization_id','workspace_id')",
+    );
+    if (columns.length !== 0 && columns.length !== 2)
+      throw new Error("partial_inherited_scope_schema:browser_collection_jobs");
+    const legacy = columns.length === 2;
+    const taskScope = browserTaskScope(input, "t"), parentScope = browserTaskScope(input, "parent");
+    if (legacy && input.accountId !== undefined)
+      throw new Error("account_browser_job_parent_schema_required");
+    await this.pool.query<ResultSetHeader>(
       [
-        "INSERT INTO browser_collection_jobs (id,organization_id,workspace_id,collection_task_id,collection_s",
+        `INSERT INTO browser_collection_jobs (id,${legacy ? "organization_id,workspace_id," : ""}collection_task_id,collection_s`,
         "ubquery_id,provider_id,crawler_profile_id,crawler_run_id,status,execution_request_json,result_json,e",
         "rror_code,lease_owner,lease_token_hash,leased_at,heartbeat_at,lease_expires_at,request_id,trace_id,c",
-        "reated_at,updated_at,finished_at) VALUES ",
-        "(?,?,?,?,?,?,NULL,NULL,'queued',?,NULL,NULL,NULL,NULL,NULL,NULL,NULL,?,?,NOW(3),NOW(3),NULL) ON ",
-        "DUPLICATE KEY UPDATE execution_request_json=IF(status='queued',VALUES(execution_request_json),execut",
-        "ion_request_json),updated_at=updated_at",
+        "reated_at,updated_at,finished_at) ",
+        `SELECT ?,${legacy ? "t.organization_id,t.workspace_id," : ""}t.id,s.id,s.provider_id,NULL,NULL,'queued',?,NULL,NULL,NULL,NULL,NULL,NULL,NULL,?,?,NOW(3),NOW(3),NULL `,
+        "FROM collection_tasks t JOIN collection_subqueries s ON s.task_id=t.id ",
+        `WHERE t.id=? AND s.id=? AND s.provider_id=? AND ${taskScope.sql} ON `,
+        "DUPLICATE KEY UPDATE execution_request_json=IF(status='queued'",
+        input.accountId === undefined
+          ? ""
+          : " AND browser_collection_jobs.collection_task_id=VALUES(collection_task_id) " +
+            "AND browser_collection_jobs.provider_id=VALUES(provider_id)",
+        ",VALUES(execution_request_json),execution_request_json),updated_at=updated_at",
       ].join(""),
       [
         jobId,
-        input.organizationId,
-        input.workspaceId,
-        input.taskId,
-        input.subqueryId,
-        input.provider.id,
         JSON.stringify(executionRequest),
         input.requestId,
         input.traceId,
+        input.taskId,
+        input.subqueryId,
+        input.provider.id,
+        ...taskScope.values,
       ],
     );
     if (
@@ -115,14 +151,13 @@ export class MySqlAuthenticatedBrowserJobClient {
       // Fence it to the current parent lease and a failure completed before this attempt.
       await this.pool.query(
         "UPDATE browser_collection_jobs j JOIN collection_tasks t ON t.id=j.collection_task_id " +
-          "AND t.organization_id=j.organization_id AND t.workspace_id=j.workspace_id " +
           "JOIN collection_task_attempts a ON a.task_id=t.id AND a.attempt_number=t.attempt_count " +
           "JOIN collection_task_attempts previous ON previous.task_id=t.id " +
           "AND previous.attempt_number=t.attempt_count-1 " +
           "SET j.execution_request_json=?,j.status='queued',j.crawler_profile_id=NULL,j.crawler_run_id=NULL,j.result_json=NULL," +
           "j.error_code=NULL,j.lease_owner=NULL,j.lease_token_hash=NULL,j.leased_at=NULL," +
           "j.heartbeat_at=NULL,j.lease_expires_at=NULL,j.finished_at=NULL,j.updated_at=NOW(3) " +
-          "WHERE j.organization_id=? AND j.workspace_id=? AND j.collection_task_id=? " +
+          `WHERE ${taskScope.sql} AND j.collection_task_id=? ` +
           "AND j.collection_subquery_id=? AND j.provider_id=? " +
           "AND ((j.status IN ('failed','timed_out') " +
           "AND j.error_code IN ('timeout','network_error','rate_limited','dependency_unavailable','worker_wait_timeout')) " +
@@ -133,8 +168,7 @@ export class MySqlAuthenticatedBrowserJobClient {
           "AND previous.error_code IN ('timeout','network_error','rate_limited')",
         [
           JSON.stringify(executionRequest),
-          input.organizationId,
-          input.workspaceId,
+          ...taskScope.values,
           input.taskId,
           input.subqueryId,
           input.provider.id,
@@ -150,11 +184,15 @@ export class MySqlAuthenticatedBrowserJobClient {
       if (signal?.aborted) {
         await this.pool.query(
           [
-            "UPDATE browser_collection_jobs SET status='cancelled',",
-            "error_code='worker_shutdown_cancelled',finished_at=NOW(3),updated_at=NOW(3) ",
-            "WHERE collection_subquery_id=? AND status IN ('queued','leased','running')",
+            "UPDATE browser_collection_jobs j JOIN collection_tasks t ON t.id=j.collection_task_id ",
+            "LEFT JOIN crawler_browser_runs r ON r.id=j.crawler_run_id AND r.crawler_profile_id=j.crawler_profile_id ",
+            "AND r.provider_id=j.provider_id AND r.status='running' ",
+            "SET j.status='cancelled',j.error_code='worker_shutdown_cancelled',j.finished_at=NOW(3),j.updated_at=NOW(3),",
+            "r.status='cancelled',r.error_code='worker_shutdown_cancelled',r.finished_at=NOW(3) ",
+            "WHERE j.collection_subquery_id=? AND j.collection_task_id=? AND j.provider_id=? ",
+            `AND ${taskScope.sql} AND j.status IN ('queued','leased','running')`,
           ].join(""),
-          [input.subqueryId],
+          [input.subqueryId, input.taskId, input.provider.id, ...taskScope.values],
         );
         throw new ProviderAdapterFailure("dependency_unavailable", true);
       }
@@ -167,16 +205,18 @@ export class MySqlAuthenticatedBrowserJobClient {
       const [rows] = await this.pool.query<RowDataPacket[]>(
         inspectHistory
           ? [
-              "SELECT id,status,result_json,error_code,EXISTS(SELECT 1 FROM collection_tasks t ",
+              "SELECT j.id,j.status,j.result_json,j.error_code,EXISTS(SELECT 1 FROM collection_tasks t ",
               "JOIN collection_task_attempts a ON a.task_id=t.id AND a.attempt_number=t.attempt_count ",
-              "WHERE t.id=j.collection_task_id AND t.organization_id=j.organization_id ",
-              "AND t.workspace_id=j.workspace_id AND t.status='running' ",
+              "WHERE t.id=j.collection_task_id AND t.status='running' ",
               "AND t.lease_token_hash=UNHEX(?) AND t.lease_expires_at>NOW(3) ",
               "AND t.attempt_count=? AND a.status='running' AND a.started_at>j.finished_at) historical_result ",
-              "FROM browser_collection_jobs j WHERE collection_subquery_id=? ",
-              "AND organization_id=? AND workspace_id=? AND collection_task_id=? AND provider_id=? LIMIT 1",
+              "FROM browser_collection_jobs j JOIN collection_tasks parent ON parent.id=j.collection_task_id ",
+              `WHERE j.collection_subquery_id=? AND ${parentScope.sql} `,
+              "AND j.collection_task_id=? AND j.provider_id=? LIMIT 1",
             ].join("")
-          : "SELECT id,status,result_json,error_code FROM browser_collection_jobs WHERE collection_subquery_id=? LIMIT 1",
+          : "SELECT j.id,j.status,j.result_json,j.error_code FROM browser_collection_jobs j " +
+            "JOIN collection_tasks parent ON parent.id=j.collection_task_id WHERE j.collection_subquery_id=? " +
+            `AND ${parentScope.sql} AND j.collection_task_id=? AND j.provider_id=? LIMIT 1`,
         inspectHistory
           ? [
               createHash("sha256")
@@ -184,12 +224,11 @@ export class MySqlAuthenticatedBrowserJobClient {
                 .digest("hex"),
               input.attemptCount,
               input.subqueryId,
-              input.organizationId,
-              input.workspaceId,
+              ...parentScope.values,
               input.taskId,
               input.provider.id,
             ]
-          : [input.subqueryId],
+          : [input.subqueryId, ...parentScope.values, input.taskId, input.provider.id],
       );
       const row = rows[0];
       if (!row) throw new ProviderAdapterFailure("dependency_unavailable", true);
@@ -248,10 +287,12 @@ export class MySqlAuthenticatedBrowserJobClient {
     }
     await this.pool.query(
       [
-        "UPDATE browser_collection_jobs SET status='timed_out',error_code='worker_wait_timeout',finished_at=N",
-        "OW(3),updated_at=NOW(3) WHERE collection_subquery_id=? AND status='queued'",
+        "UPDATE browser_collection_jobs j JOIN collection_tasks t ON t.id=j.collection_task_id ",
+        "SET j.status='timed_out',j.error_code='worker_wait_timeout',j.finished_at=NOW(3),j.updated_at=NOW(3) ",
+        "WHERE j.collection_subquery_id=? AND j.collection_task_id=? AND j.provider_id=? ",
+        `AND ${taskScope.sql} AND j.status='queued'`,
       ].join(""),
-      [input.subqueryId],
+      [input.subqueryId, input.taskId, input.provider.id, ...taskScope.values],
     );
     throw new ProviderAdapterFailure("timeout", true);
   }

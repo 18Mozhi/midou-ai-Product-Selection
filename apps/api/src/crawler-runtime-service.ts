@@ -5,8 +5,9 @@ export type CrawlerRuntimeStatus =
   "running" | "succeeded" | "succeeded_empty" | "blocked" | "failed" | "timed_out" | "cancelled";
 export interface CrawlerRunSummary {
   id: string;
-  organization_id: string;
-  workspace_id: string;
+  organization_id?: string;
+  workspace_id?: string;
+  account_id?: string;
   provider_id: string;
   crawler_profile_id: string;
   status: CrawlerRuntimeStatus;

@@ -4657,6 +4657,7 @@ paths:
   /internal/crawler-runtime/acquire:
     post:
       summary: Acquire a scoped crawler profile lease for the BaoTa Python consumer
+      x-account-runtime: Retired account mode does not register this standalone endpoint. Use the business-linked job interface.
       security: [{ CrawlerServiceBearer: [] }]
       parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
       requestBody:
@@ -4680,6 +4681,7 @@ paths:
   /internal/crawler-runtime/jobs/acquire:
     post:
       summary: Claim the next authenticated-browser business subquery
+      x-account-runtime: Account-native jobs require matching sealed task and subquery ownership and a live parent lease. The run reports account_id instead of legacy coordinates.
       description: The BaoTa Python Crawler first reports sanitized completion-spool counts, byte watermarks, retention policy and free-disk facts, then receives one business-linked browser job, the scoped execution plan, profile locale/timezone, encrypted credential record and a one-time lease token. The spool observation is persisted even when a 204 response means there is no runnable job. Paths, file names, receipt contents and plaintext credentials are never returned or stored by this contract.
       security: [{ CrawlerServiceBearer: [] }]
       requestBody:
@@ -4734,6 +4736,7 @@ paths:
   /internal/crawler-runtime/jobs/{jobId}/complete:
     post:
       summary: Write a bounded Playwright result back to its business subquery job
+      x-account-runtime: In account mode mismatched parent task or subquery ownership returns 409 and does not write the result.
       description: Correlates job, browser run, profile and lease token, stores at most 2 MB of structured result JSON, including hash-verified bounded screenshot and DOM-fragment artifacts with parser version when the source contract requests evidence, releases all crawler leases and creates a credential-renewal task for login expiry.
       security: [{ CrawlerServiceBearer: [] }]
       parameters:
@@ -4746,6 +4749,7 @@ paths:
   /internal/crawler-runtime/{runId}/heartbeat:
     post:
       summary: Renew a live Python crawler lease
+      x-account-runtime: Retired account mode does not register this standalone endpoint.
       security: [{ CrawlerServiceBearer: [] }]
       parameters:
         - { name: runId, in: path, required: true, schema: { type: string, format: uuid } }
@@ -4756,6 +4760,7 @@ paths:
   /internal/crawler-runtime/{runId}/complete:
     post:
       summary: Write the terminal Playwright result and release its crawler lease
+      x-account-runtime: Retired account mode does not register this standalone endpoint.
       security: [{ CrawlerServiceBearer: [] }]
       parameters:
         - { name: runId, in: path, required: true, schema: { type: string, format: uuid } }

@@ -95,6 +95,7 @@ const accountApiMode = await resolveAccountApiMode(config, pool).catch(async (er
   throw error;
 });
 const accountReadRehearsal = accountApiMode !== "legacy";
+const crawlerWritesIsolated = accountApiMode === "rehearsal";
 const redisClient = createRedisConnection(config);
 redisClient.on("error", () => {});
 const redisStore = new ScopedRedisStore(redisClient);
@@ -380,11 +381,17 @@ const app = buildApp({
     webOrigin: config.app.webOrigin,
   },
   crawlerRuntime: {
-    handoff: {
-      root: join(config.storage.runtimeTempRoot, "browser-handoffs"),
-      isLive: (runId) => browserHandoffRunLive(pool, runId),
-      audit: (event) => new MySqlAuditRepository(pool).append(event),
-    },
+    accountReadRehearsal: crawlerWritesIsolated,
+    retiredAccountMode: accountApiMode === "retired",
+    ...(!accountReadRehearsal
+      ? {
+          handoff: {
+            root: join(config.storage.runtimeTempRoot, "browser-handoffs"),
+            isLive: (runId) => browserHandoffRunLive(pool, runId),
+            audit: (event) => new MySqlAuditRepository(pool).append(event),
+          },
+        }
+      : {}),
     service: new CrawlerRuntimeService(
       new MySqlCrawlerRuntimeRepository(pool, config.providerAdapters.amazonBrowserProfileId),
     ),
@@ -499,6 +506,7 @@ registerWorkflowDomainRoutes(domainContext);
 registerPlatformDomainRoutes({ ...domainContext, passwordHasher });
 registerOperationsDomainRoutes({
   ...domainContext,
+  crawlerWritesIsolated,
   runtimeTopologyService,
   redisResilienceService,
   mysqlResilienceService,

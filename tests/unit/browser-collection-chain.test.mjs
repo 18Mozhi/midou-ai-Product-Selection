@@ -85,8 +85,9 @@ test("authenticated browser job client links a business subquery and parses the 
   const statements = [];
   const pool = {
     query: async (sql, values) => {
+      if (sql.startsWith("SHOW COLUMNS FROM browser_collection_jobs")) return [[]];
       statements.push({ sql, values });
-      if (sql.startsWith("SELECT id,status"))
+      if (sql.startsWith("SELECT j.id,j.status"))
         return [
           [
             {
@@ -138,9 +139,9 @@ test("authenticated browser job client links a business subquery and parses the 
   assert.equal(collection.artifacts[0].parser_version, ALIBABA_1688_BROWSER_PARSER_VERSION);
   assert.equal(heartbeats, 1);
   assert.match(statements[0].sql, /browser_collection_jobs/);
-  assert.equal(JSON.parse(statements[0].values[6]).purpose, "collection");
+  assert.equal(JSON.parse(statements[0].values[1]).purpose, "collection");
   assert.equal(
-    JSON.parse(statements[0].values[6]).plan.start_url,
+    JSON.parse(statements[0].values[1]).plan.start_url,
     create1688BrowserExecutionRequest({ query: "桌面灯" }).plan.start_url,
   );
 });
@@ -150,7 +151,8 @@ test("authenticated browser job client returns a succeeded-empty terminal job wi
   const emptySearchSnapshot = { ...searchSnapshot, items: [] };
   const pool = {
     query: async (sql) => {
-      if (sql.startsWith("SELECT id,status")) {
+      if (sql.startsWith("SHOW COLUMNS FROM browser_collection_jobs")) return [[]];
+      if (sql.startsWith("SELECT j.id,j.status")) {
         reads += 1;
         return [
           [
@@ -211,8 +213,11 @@ test("1688 acceptance replay is the only disabled-source path that can schedule 
     rollback: async () => {},
     release: () => {},
     query: async (sql, values) => {
+      if (sql.startsWith("SHOW COLUMNS FROM browser_collection_jobs")) return [[]];
       statements.push({ sql, values });
       if (sql.includes("FROM provider_source_operations")) return [[]];
+      if (sql.startsWith("SHOW COLUMNS FROM provider_source_replay_runs"))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       if (sql.includes("SELECT * FROM providers"))
         return [
           [
@@ -252,7 +257,8 @@ test("1688 acceptance replay is the only disabled-source path that can schedule 
   const subqueryInsert = statements.find((statement) =>
     statement.sql.includes("INSERT INTO collection_subqueries"),
   );
-  assert.deepEqual(JSON.parse(subqueryInsert.values[5]), {
+  const targetIndex = subqueryInsert.sql.includes("FROM collection_tasks t") ? 3 : 5;
+  assert.deepEqual(JSON.parse(subqueryInsert.values[targetIndex]), {
     query: "桌面灯",
     acceptance_run: true,
   });
@@ -309,10 +315,11 @@ test("acceptance replay input is explicit, query-only and preserved in the execu
   );
 });
 
-test("worker shutdown cancellation is persisted to the active browser job", async () => {
+test("worker shutdown atomically cancels the job and only its exact running browser record", async () => {
   const statements = [];
   const pool = {
     query: async (sql, values) => {
+      if (sql.startsWith("SHOW COLUMNS FROM browser_collection_jobs")) return [[]];
       statements.push({ sql, values });
       return [{ affectedRows: 1 }];
     },
@@ -350,9 +357,13 @@ test("worker shutdown cancellation is persisted to the active browser job", asyn
   );
   assert.ok(cancellation);
   assert.equal(cancellation.values[0], ids.subquery);
+  assert.match(cancellation.sql, /LEFT JOIN crawler_browser_runs r ON r.id=j.crawler_run_id AND r.crawler_profile_id=j.crawler_profile_id AND r.provider_id=j.provider_id AND r.status='running'/);
+  assert.match(cancellation.sql, /r.status='cancelled',r.error_code='worker_shutdown_cancelled',r.finished_at=NOW\(3\)/);
+  assert.doesNotMatch(cancellation.sql, /DELETE|lease_token_hash=NULL|crawler_run_id=NULL|result_json=/);
 });
 
-test("browser screenshot and DOM fragment are persisted with task, job and parser version", async () => {
+for (const [legacy, wrongJob] of [[true, false], [false, false], [false, true]]) test(
+  `browser evidence preserves exact task and job (legacy=${legacy}, mismatch=${wrongJob})`, async () => {
   const root = await mkdtemp(join(tmpdir(), "scoutops-browser-evidence-")),
     statements = [],
     connection = {
@@ -363,6 +374,14 @@ test("browser screenshot and DOM fragment are persisted with task, job and parse
       query: async (sql, values) => {
         statements.push({ sql, values });
         if (sql.startsWith("SELECT p.retention_days")) return [[{ retention_days: 7 }]];
+        if (sql.startsWith("SHOW COLUMNS FROM file_assets"))
+          return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
+        if (sql.startsWith("SHOW COLUMNS FROM browser_evidence_artifacts"))
+          return [(legacy ? ["organization_id", "workspace_id"] : []).map((Field) => ({ Field }))];
+        if (sql.startsWith("SELECT j.id FROM browser_collection_jobs")) {
+          assert.deepEqual(values, [ids.job, ids.task, ids.subquery, ids.provider, ids.org, ids.workspace]);
+          return [wrongJob ? [] : [{ id: ids.job }]];
+        }
         if (sql.startsWith("SELECT id,content_sha256")) return [[]];
         return [{ affectedRows: 1 }];
       },
@@ -370,7 +389,7 @@ test("browser screenshot and DOM fragment are persisted with task, job and parse
     pool = { getConnection: async () => connection },
     content = Buffer.from('<a href="/offer/123">桌面灯</a>');
   try {
-    const result = await new MySqlEvidencePersistence(pool, root, 1_000_000).persistBrowserArtifact(
+    const attempt = new MySqlEvidencePersistence(pool, root, 1_000_000).persistBrowserArtifact(
       {
         organizationId: ids.org,
         workspaceId: ids.workspace,
@@ -390,12 +409,20 @@ test("browser screenshot and DOM fragment are persisted with task, job and parse
         actorId: ids.actor,
       },
     );
+    if (wrongJob) {
+      await assert.rejects(attempt, { code: "browser_evidence_scope_mismatch" });
+      assert.ok(!statements.some(({ sql }) => sql.startsWith("INSERT")));
+      return;
+    }
+    const result = await attempt;
     assert.equal(result.deduplicated, false);
     const inserted = statements.find((item) =>
       item.sql.startsWith("INSERT INTO browser_evidence_artifacts"),
     );
-    assert.equal(inserted.values[6], ids.job);
-    assert.equal(inserted.values[14], ALIBABA_1688_BROWSER_PARSER_VERSION);
+    assert.equal(inserted.sql.includes("organization_id,workspace_id"), legacy);
+    assert.equal((inserted.sql.match(/\?/g) ?? []).length, inserted.values.length);
+    assert.equal(inserted.values[legacy ? 6 : 4], ids.job);
+    assert.equal(inserted.values[legacy ? 14 : 12], ALIBABA_1688_BROWSER_PARSER_VERSION);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -489,7 +516,7 @@ test("internal browser job API returns encrypted assignment only to the crawler 
   await app.close();
 });
 
-test("crawler completion spool status is persisted when no browser job is available", async () => {
+for (const sealed of [false, true]) test(`crawler completion spool is persisted without a job: sealed=${sealed}`, async () => {
   const statements = [],
     lifecycle = [],
     now = new Date("2026-08-21T00:00:00.000Z"),
@@ -501,7 +528,16 @@ test("crawler completion spool status is persisted when no browser job is availa
       query: async (sql, values) => {
         statements.push({ sql, values });
         if (sql.startsWith("SELECT slot_key")) return [[]];
-        if (sql.startsWith("SELECT j.*")) return [[]];
+        if (sql.startsWith("SELECT contract_version")) return [sealed ? [{contract_version:25}] : []];
+        if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [[{Field:"account_id"}]];
+        if (sql.startsWith("SELECT j.*")) {
+          assert.match(sql, /q.task_id=job_task.id AND q.provider_id=j.provider_id/);
+          if (sealed) {
+            assert.match(sql, /job_task.status='running'.*job_task.lease_expires_at>\?.*own.source_id=j.collection_task_id/);
+            assert.deepEqual(values,[now,now]);
+          } else assert.deepEqual(values,[now]);
+          return [[]];
+        }
         return [{ affectedRows: 1 }];
       },
     },
@@ -561,6 +597,7 @@ test("crawler completion replay with the original lease digest is idempotent", a
     release: () => calls.push("release"),
     query: async (sql) => {
       calls.push(sql);
+      if (sql.startsWith("SELECT contract_version")) return [[]];
       return [
         [
           {
@@ -786,4 +823,120 @@ test("parser sample creation rejects evidence produced by a different parser ver
       error instanceof ProviderSourceServiceError &&
       error.code === "parser_sample_parser_unavailable",
   );
+});
+
+for (const mode of ["receipt", "denied", "renewal", "foreign-renewal", "native-renewal", "native-denied"]) {
+  test(`sealed browser completion preserves the exact task account: ${mode}`, async () => {
+    const calls = [], lifecycle = [], now = new Date("2026-10-15T12:00:00Z");
+    const repo = new MySqlCrawlerRuntimeRepository({
+      getConnection: async () => ({
+        beginTransaction: async () => lifecycle.push("begin"),
+        commit: async () => lifecycle.push("commit"),
+        rollback: async () => lifecycle.push("rollback"),
+        release: () => lifecycle.push("release"),
+        query: async (sql, values) => {
+          calls.push([sql, values]);
+          if (sql.startsWith("SELECT contract_version")) return [[{contract_version:25}]];
+          if (sql.startsWith("SELECT j.collection_task_id")) {
+            assert.match(sql, /q.task_id=j.collection_task_id AND q.provider_id=j.provider_id/);
+            assert.match(sql, /own.source_id=j.collection_task_id.*own.account_id=cut.primary_account_id/);
+            assert.doesNotMatch(sql,/organization_id|workspace_id/);
+            if (mode.startsWith("native-")) {
+              assert.match(sql, /own.account_id=job_task.account_id/);
+              assert.match(sql, /query_owner.source_id=q.id.*query_owner.account_id=own.account_id/);
+            }
+            return [mode.endsWith("denied") ? [] : [{collection_task_id:ids.task,status:"leased",updated_by:ids.actor}]];
+          }
+          if (sql.startsWith("SELECT organization_id")) return [[{organization_id: ids.org,workspace_id:ids.workspace}]];
+          if (sql.startsWith("SELECT cut.contract_version")) {
+            const account = values[0] === "tasks" ? "foreign" : "owner";
+            return [[{contract_version:25,primary_account_id:"primary",account_id:account,reason:"exclusive_owner",owner_user_id:account}]];
+          }
+          if (sql.startsWith("SELECT id,status FROM tasks")) return [mode === "foreign-renewal" ? [{id:"foreign-task",status:"completed"}] : []];
+          if (/^SHOW COLUMNS FROM (tasks|collection_tasks) /.test(sql))
+            return [(mode.startsWith("native-") ? ["account_id"] : ["organization_id","workspace_id"]).map(Field => ({Field}))];
+          if (sql.startsWith("SELECT account_id FROM collection_tasks")) return [[{account_id:"owner"}]];
+          if (sql.startsWith("SHOW COLUMNS")) return [[]];
+          return [{affectedRows:1}];
+        },
+      }),
+    });
+    const renewal = mode.endsWith("renewal");
+    const result = repo.finishJob({
+      jobId:ids.job, runId:ids.run, profileId:ids.profile, leaseTokenHash:"a".repeat(64),
+      actorId:ids.actor, requestId:"request", traceId:"trace", now,
+      status:renewal ? "blocked" : "succeeded", pageCount:1, itemCount:0, detailCount:0,
+      durationMs:10, errorCode:renewal ? "blocked_login" : null, result:{},
+    });
+    if (mode.endsWith("denied") || mode === "foreign-renewal") {
+      await assert.rejects(result, {code:mode.endsWith("denied") ? "crawler_lease_invalid" : "crawler_runtime_conflict"});
+      assert.deepEqual(lifecycle,["begin","rollback","release"]);
+      assert.ok(!calls.some(([sql]) => /^(INSERT INTO tasks|UPDATE tasks|INSERT INTO task_events)/.test(sql)));
+    } else {
+      await result;
+      assert.deepEqual(lifecycle,["begin","commit","release"]);
+      const owners = calls.find(([sql]) => sql.startsWith("INSERT INTO account_owned_records"));
+      if (renewal) {
+        if (mode === "native-renewal")
+          assert.ok(!calls.some(([sql]) => !sql.startsWith("SHOW COLUMNS") && /organization_id|workspace_id/.test(sql)));
+        const ids = [calls.find(([sql]) => sql.startsWith("INSERT INTO tasks"))[1][0],
+          calls.find(([sql]) => sql.startsWith("INSERT INTO task_events"))[1][0]];
+        assert.deepEqual(owners[1][0], [["tasks",ids[0],"owner","exclusive_owner"],
+          ["task_events",ids[1],"owner","exclusive_owner"]]);
+      } else {
+        assert.equal(owners, undefined);
+        assert.ok(!calls.some(([sql]) => !sql.startsWith("SHOW COLUMNS") && /organization_id|workspace_id/.test(sql)));
+      }
+    }
+  });
+}
+
+for (const ownersMatch of [true, false]) test(`native Crawler assignment requires same task and subquery owner: ${ownersMatch}`, async () => {
+  const calls = [], now = new Date("2026-10-15T12:00:00Z");
+  const lifecycle = [];
+  const repo = new MySqlCrawlerRuntimeRepository({
+    getConnection: async () => ({
+      beginTransaction: async () => lifecycle.push("begin"),
+      commit: async () => lifecycle.push("commit"),
+      rollback: async () => lifecycle.push("rollback"),
+      release: () => lifecycle.push("release"),
+      query: async (sql, values) => {
+        calls.push([sql,values]);
+        if (sql.startsWith("SELECT contract_version")) return [[{contract_version:25}]];
+        if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [[{Field:"account_id"}]];
+        if (sql.startsWith("SELECT slot_key") || sql.startsWith("SELECT run_id FROM crawler_profile_leases")) return [[]];
+        if (sql.startsWith("SELECT j.*")) {
+          assert.doesNotMatch(sql,/organization_id|workspace_id/);
+          assert.match(sql,/sealed_owner.source_id=job_task.id/);
+          assert.match(sql,/own.account_id=job_task.account_id/);
+          assert.match(sql,/query_owner.source_id=q.id.*query_owner.account_id=own.account_id/);
+          assert.ok(values.includes(now));
+          if (!ownersMatch) return [[]];
+          return [[{id:ids.job,account_id:"orig-owner",collection_task_id:ids.task,collection_subquery_id:ids.subquery,
+            provider_id:ids.provider,provider_code:"1688_search",profile_id:ids.profile,
+            execution_request_json:"{}",request_id:"R",trace_id:"T",locale:"zh-CN",timezone:"Asia/Shanghai",
+            asset_id:"fixture-asset",asset_version:1,kind:"browser_profile",key_version:"fixture-key",
+            payload_ciphertext:Buffer.alloc(1),payload_nonce:Buffer.alloc(1),payload_auth_tag:Buffer.alloc(1)}]];
+        }
+        if (sql.startsWith("SHOW COLUMNS FROM crawler_browser_runs")) return [[{Field:"historical_context"}]];
+        if (sql.startsWith("SHOW COLUMNS")) return [[]];
+        return [{affectedRows:1}];
+      },
+    }),
+  });
+  const assignment = await repo.acquireJob({actorId:ids.actor,requestId:"request",traceId:"trace",
+    leaseOwner:"fixture",leaseSeconds:120,runId:ids.run,leaseId:"fixture-lease",leaseTokenHash:"a".repeat(64),
+    completionSpool:{},now,expiresAt:new Date(+now+120000)});
+  assert.deepEqual(lifecycle,["begin","commit","release"]);
+  if (!ownersMatch) {
+    assert.equal(assignment,null);
+    assert.ok(calls.every(([sql]) => !/^INSERT INTO crawler_browser_runs|^UPDATE browser_collection_jobs SET status='leased'/.test(sql)));
+    return;
+  }
+  assert.equal(assignment.run.account_id,"orig-owner");
+  assert.equal(assignment.run.request_id,"R");
+  assert.equal(assignment.run.trace_id,"T");
+  assert.ok(!("organization_id" in assignment.run) && !("workspace_id" in assignment.run));
+  assert.deepEqual(JSON.parse(calls.find(([sql]) => sql.startsWith("INSERT INTO crawler_browser_runs"))[1][1]),
+    {account_id:"orig-owner"});
 });

@@ -1,4 +1,18 @@
 {
+  "accountBrowserCrawlerOwnership": {
+    "sourceFiles": [
+      "apps/api/src/server.ts",
+      "apps/api/src/crawler-runtime-routes.ts",
+      "apps/api/src/mysql-crawler-runtime-repository.ts",
+      "apps/worker/src/authenticated-browser-job-client.ts"
+    ],
+    "testFiles": [
+      "tests/unit/browser-collection-chain.test.mjs",
+      "tests/unit/account-rehearsal-crawler-api.test.mjs"
+    ],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-browser-crawler.md"],
+    "contract": "Retired runtime accepts only business-linked browser jobs. Match the original native task account, sealed task ledger and exact subquery ledger before assignment and completion; keep identity, history and trace."
+  },
   "accountApiStartupEntry": {
     "sourceFiles": [
       "apps/api/src/server.ts",

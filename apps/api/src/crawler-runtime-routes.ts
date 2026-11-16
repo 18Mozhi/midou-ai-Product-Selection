@@ -4,6 +4,7 @@ import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService } from "@scoutops/authorization";
 import type { CrawlerRuntimeService } from "./crawler-runtime-service.js";
 import { sessionToken } from "./auth-routes.js";
+import { requireCrawlerWritesEnabled } from "./account-read-rehearsal.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 import {
   registerBrowserHandoffRoutes,
@@ -17,6 +18,8 @@ export interface CrawlerRuntimeRouteOptions {
   webOrigin: string;
   serviceToken: string;
   serviceActorId: string;
+  accountReadRehearsal?: boolean;
+  retiredAccountMode?: boolean;
   handoff?: Pick<BrowserHandoffRouteOptions, "root" | "isLive" | "audit">;
 }
 const ids = (r: FastifyRequest) => ({
@@ -54,7 +57,8 @@ const withDependencyBoundary = async <T>(operation: () => Promise<T>) => {
   }
 };
 export function registerCrawlerRuntimeRoutes(app: FastifyInstance, o: CrawlerRuntimeRouteOptions) {
-  if (o.handoff) registerBrowserHandoffRoutes(app, { ...o, ...o.handoff });
+  if (o.handoff && !o.accountReadRehearsal && !o.retiredAccountMode)
+    registerBrowserHandoffRoutes(app, { ...o, ...o.handoff });
   const actor = async (r: FastifyRequest) => {
     const a = await o.auth.authenticate(sessionToken(r, o.secureCookie));
     await o.authorization.authorize({
@@ -75,6 +79,7 @@ export function registerCrawlerRuntimeRoutes(app: FastifyInstance, o: CrawlerRun
         "Crawler 服务鉴权失败。",
         "检查 CRAWLER_SERVICE_TOKEN 后重试。",
       );
+    requireCrawlerWritesEnabled(o.accountReadRehearsal);
     return o.serviceActorId;
   };
   app.get("/api/v1/platform/crawler-runtime", async (r, reply) => {
@@ -89,6 +94,7 @@ export function registerCrawlerRuntimeRoutes(app: FastifyInstance, o: CrawlerRun
       if (r.headers.origin !== o.webOrigin)
         throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
       const actorId = await actor(r);
+      requireCrawlerWritesEnabled(o.accountReadRehearsal);
       return envelope(
         await o.service.recoverExpired({
           actorId,
@@ -99,56 +105,58 @@ export function registerCrawlerRuntimeRoutes(app: FastifyInstance, o: CrawlerRun
       );
     });
   });
-  app.post("/api/v1/internal/crawler-runtime/acquire", async (r) => {
-    const actorId = serviceActor(r),
-      body = r.body as Record<string, unknown>;
-    return envelope(
-      await o.service.acquire({
+  if (!o.retiredAccountMode) {
+    app.post("/api/v1/internal/crawler-runtime/acquire", async (r) => {
+      const actorId = serviceActor(r),
+        body = r.body as Record<string, unknown>;
+      return envelope(
+        await o.service.acquire({
+          actorId,
+          organizationId: String(body.organization_id ?? ""),
+          workspaceId: String(body.workspace_id ?? ""),
+          profileId: String(body.profile_id ?? ""),
+          leaseOwner: String(body.lease_owner ?? ""),
+          leaseSeconds: Number(body.lease_seconds ?? 0),
+          idempotencyKey: requireIdempotencyKey(r),
+          ...ids(r),
+        }),
+        r,
+      );
+    });
+    app.post("/api/v1/internal/crawler-runtime/:runId/heartbeat", async (r) => {
+      const actorId = serviceActor(r),
+        body = r.body as Record<string, unknown>,
+        params = r.params as { runId: string };
+      await o.service.heartbeat({
         actorId,
-        organizationId: String(body.organization_id ?? ""),
-        workspaceId: String(body.workspace_id ?? ""),
+        runId: params.runId,
         profileId: String(body.profile_id ?? ""),
-        leaseOwner: String(body.lease_owner ?? ""),
+        leaseToken: String(body.lease_token ?? ""),
         leaseSeconds: Number(body.lease_seconds ?? 0),
-        idempotencyKey: requireIdempotencyKey(r),
         ...ids(r),
-      }),
-      r,
-    );
-  });
-  app.post("/api/v1/internal/crawler-runtime/:runId/heartbeat", async (r) => {
-    const actorId = serviceActor(r),
-      body = r.body as Record<string, unknown>,
-      params = r.params as { runId: string };
-    await o.service.heartbeat({
-      actorId,
-      runId: params.runId,
-      profileId: String(body.profile_id ?? ""),
-      leaseToken: String(body.lease_token ?? ""),
-      leaseSeconds: Number(body.lease_seconds ?? 0),
-      ...ids(r),
+      });
+      return envelope({ accepted: true }, r);
     });
-    return envelope({ accepted: true }, r);
-  });
-  app.post("/api/v1/internal/crawler-runtime/:runId/complete", async (r) => {
-    const actorId = serviceActor(r),
-      body = r.body as Record<string, unknown>,
-      params = r.params as { runId: string };
-    await o.service.finish({
-      actorId,
-      runId: params.runId,
-      profileId: String(body.profile_id ?? ""),
-      leaseToken: String(body.lease_token ?? ""),
-      status: String(body.status ?? "") as "succeeded",
-      pageCount: Number(body.page_count ?? 0),
-      itemCount: Number(body.item_count ?? 0),
-      detailCount: Number(body.detail_count ?? 0),
-      durationMs: Number(body.duration_ms ?? 0),
-      errorCode: body.error_code == null ? null : String(body.error_code),
-      ...ids(r),
+    app.post("/api/v1/internal/crawler-runtime/:runId/complete", async (r) => {
+      const actorId = serviceActor(r),
+        body = r.body as Record<string, unknown>,
+        params = r.params as { runId: string };
+      await o.service.finish({
+        actorId,
+        runId: params.runId,
+        profileId: String(body.profile_id ?? ""),
+        leaseToken: String(body.lease_token ?? ""),
+        status: String(body.status ?? "") as "succeeded",
+        pageCount: Number(body.page_count ?? 0),
+        itemCount: Number(body.item_count ?? 0),
+        detailCount: Number(body.detail_count ?? 0),
+        durationMs: Number(body.duration_ms ?? 0),
+        errorCode: body.error_code == null ? null : String(body.error_code),
+        ...ids(r),
+      });
+      return envelope({ accepted: true }, r);
     });
-    return envelope({ accepted: true }, r);
-  });
+  }
   app.post("/api/v1/internal/crawler-runtime/jobs/acquire", async (r, reply) => {
     const actorId = serviceActor(r),
       body = r.body as Record<string, unknown>,

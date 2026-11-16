@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService } from "@scoutops/authorization";
 import { sessionToken } from "./auth-routes.js";
+import { requireCrawlerWritesEnabled } from "./account-read-rehearsal.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 import type { CrawlerSchedulerService } from "./crawler-scheduler-service.js";
 
@@ -12,6 +13,7 @@ export interface CrawlerSchedulerRouteOptions {
   secureCookie: boolean;
   webOrigin: string;
   readTimeoutMs?: number;
+  accountReadRehearsal?: boolean;
 }
 const dependencyFailure = (error: unknown) => {
   const code =
@@ -113,6 +115,7 @@ export function registerCrawlerSchedulerRoutes(
   app.post("/api/v1/platform/operations/crawler-scheduler/recover-expired", async (request) => {
     assertOrigin(request);
     const actorId = await actor(request);
+    requireCrawlerWritesEnabled(options.accountReadRehearsal);
     return {
       data: await options.service.recoverExpired({
         actorId,
@@ -128,6 +131,7 @@ export function registerCrawlerSchedulerRoutes(
     async (request) => {
       assertOrigin(request);
       const actorId = await actor(request);
+      requireCrawlerWritesEnabled(options.accountReadRehearsal);
       return {
         data: await options.service.recoverProvider({
           actorId,

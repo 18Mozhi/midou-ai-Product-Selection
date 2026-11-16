@@ -22,6 +22,7 @@ import type { RuntimeTopologyService } from "../runtime-topology-service.js";
 import { commonDomainOptions, type ApiDomainContext } from "./domain-context.js";
 
 interface OperationsDomainContext extends ApiDomainContext {
+  crawlerWritesIsolated: boolean;
   runtimeTopologyService: RuntimeTopologyService;
   redisResilienceService: RedisResilienceService;
   mysqlResilienceService: MySqlResilienceService;
@@ -86,6 +87,7 @@ export function registerOperationsDomainRoutes(context: OperationsDomainContext)
   });
   registerCrawlerSchedulerRoutes(context.app, {
     service: context.crawlerSchedulerService,
+    accountReadRehearsal: context.crawlerWritesIsolated,
     ...common,
   });
   registerCapacityBoundaryRoutes(context.app, {
