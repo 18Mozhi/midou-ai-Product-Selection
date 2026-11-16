@@ -295,14 +295,19 @@
       "apps/api/src/approval-routes.ts",
       "apps/api/src/mysql-profit-repository.ts",
       "apps/api/src/mysql-approval-repository.ts",
-      "apps/web/src/components/CostRuleConsole.vue"
+      "apps/web/src/components/CostRuleConsole.vue",
+      "apps/worker/src/approval-escalation-worker.ts",
+      "apps/worker/src/approval-resource-lineage.ts",
+      "apps/worker/src/notification-outbox-worker.ts"
     ],
     "testFiles": [
       "tests/m04-04/account-cost-rule-approval-rehearsal.test.mjs",
-      "tests/m05-02/account-approval-decision-rehearsal.test.mjs"
+      "tests/m05-02/account-approval-decision-rehearsal.test.mjs",
+      "tests/unit/approval-escalation-parent-scope.test.mjs",
+      "tests/unit/approval-overdue-notification.test.mjs"
     ],
     "docs": ["docs/openapi.yaml", "docs/runbooks/account-primary-approval-runtime.md"],
-    "contract": "The primary account takes only the former organization administrator cost-rule slot. The independent selection-manager grant and named workflow approvers are unchanged; ownership confers neither grant. Original actors, decisions and reasons are preserved, and replay cannot bypass scope or signing independence."
+    "contract": "The primary account takes only the former organization administrator cost-rule slot. The independent selection-manager grant and named workflow approvers are unchanged; ownership confers neither grant. Original actors, decisions and reasons are preserved, and replay cannot bypass scope or signing independence. Overdue approval uses the original named escalator and must commit the original workflow action, audit and delivery together under a current lease."
   },
   "accountRuntimeStorageFoundation": {
     "sourceFiles": [

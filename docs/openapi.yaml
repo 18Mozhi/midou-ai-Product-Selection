@@ -3418,6 +3418,7 @@ paths:
   /tasks/approvals/{approvalRequestId}:
     get:
       summary: Get scoped approval detail with captured-to-current evidence diff escalation path and immutable history
+      x-account-escalation: Overdue work remains with the originally named escalation assignee and requires a current lease and exact owned request, template version, node and resource. The action, audit and delivery commit together.
       description: In retired account mode visibility requires ownership or a current named assignment. Original template version, target, nodes and signatures are kept and filtered by account ownership. The detail is private and not cached. Legacy mode still requires workspace task read permission.
       x-required-capability: task:read
       parameters:
