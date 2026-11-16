@@ -36,6 +36,8 @@ trend_projection_jobs的两种缺失任务补入、候选选择和主键加锁�
 
 发布后由现有受限Node运行环境导入apps/worker/dist/intelligence-provenance-recovery.js，调用recoverSupersededIntelligenceProjections(pool,{organizationId:当前组织,workspaceId:当前工作区,projectionJobIds:已核查的ID数组})。每次返回request_id、inspected和requeued；仅对已确认误判的工作区执行。无需新环境项；普通新增和重试任务自然使用修正后的校验。历史版本的证据引用及完整流程仍须正常分析验收。
 
+0191 后的账号结构改用 `recoverSupersededIntelligenceProjections(pool, { accountId, projectionJobIds })`，仅供既有受限运维入口使用。先核对原始及规范化证据、查询、采集任务、原主题、信号及关联审计均属于同一账号，再在锁内复核；若旧字段已经迁移，拒绝传旧坐标，不接受混合结构。共有或未分配的投影只允许迁移账本中的主账号处理。调度状态和带账号归属的审计事件同事务提交；旧证据、主题、引用和尝试次数不改，也不启动新采集。无需新配置或数据库迁移；若后来获准更新候选，重建 Worker。历史隔离演练不运行常驻 Worker，也不调用此写入工具。
+
 生产只读复核：同一原情报旧校验接受0、新校验接受1，错误搜索词仍接受0；显式指定四个投影ID时恰好四条符合恢复条件。原UUID为ascii_general_ci，JSON字符串为utf8mb4_bin，恢复查询仅将JSON中的UUID表达式转换为既有ASCII排序规则，不修改数据库或字段字符集；MySQL5.7查询及EXPLAIN通过，四条范围复核约759ms，历史审计使用现有范围索引。
 
 恢复事务只通过主键锁定一个原投影，再作非锁定的完整证据复核；历史审计和事实关联查询不使用FOR UPDATE，避免在既有审计范围索引上扩大锁范围。领取端仍独立验证活动范围和证据；没有放宽隔离或修改数据库全局参数。

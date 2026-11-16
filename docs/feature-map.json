@@ -1,4 +1,17 @@
 {
+  "accountIntelligenceRecoveryRuntime": {
+    "sourceFiles": [
+      "apps/worker/src/intelligence-source-recovery.ts",
+      "apps/worker/src/intelligence-provenance-recovery.ts",
+      "apps/worker/src/trend-projection-account-queue.ts"
+    ],
+    "testFiles": [
+      "tests/unit/intelligence-source-recovery.test.mjs",
+      "tests/unit/intelligence-provenance-recovery.test.mjs"
+    ],
+    "docs": ["docs/intelligence-source-recovery.md", "docs/selection-active-scope-scheduling.md"],
+    "contract": "Source recovery verifies the original request, task, evidence and producer event under the same account. Targeted provenance recovery checks explicit original IDs and writes the audit only with the original job transition."
+  },
   "accountAutomaticSourceRuntime": {
     "sourceFiles": [
       "apps/worker/src/automatic-source-scheduler.ts",
