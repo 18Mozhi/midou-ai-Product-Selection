@@ -1,4 +1,18 @@
 {
+  "accountRetiredEntryRoutes": {
+    "sourceFiles": [
+      "apps/web/src/account-route-guard.ts",
+      "apps/web/src/router.ts",
+      "apps/web/src/route-catalog.ts",
+      "scripts/baota-account-release-coordinator.py"
+    ],
+    "testFiles": [
+      "tests/unit/account-route-guard.test.mjs",
+      "tests/unit/test_baota_account_release_coordinator.py"
+    ],
+    "docs": ["docs/runbooks/account-production-coordinated-release.md"],
+    "contract": "Retired account mode does not serve organization, workspace and resource-grant pages. Direct and client-side visits resolve not-found. An unavailable session response cannot reopen a legacy screen."
+  },
   "accountAuthorizationSummary": {
     "sourceFiles": [
       "apps/api/src/authorization-routes.ts",
@@ -11,10 +25,7 @@
       "tests/m01-04/account-authorization-summary.test.mjs",
       "tests/m01-04/authorization-decision-audit-context.test.mjs"
     ],
-    "docs": [
-      "docs/openapi.yaml",
-      "docs/runbooks/account-authorization-summary.md"
-    ],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-authorization-summary.md"],
     "contract": "Return a verified account authorization summary without retired tenancy, retain actual platform grants, and stop consumers from issuing organization requests without a real legacy organization."
   },
   "accountCollectionTaskReplay": {
@@ -23,13 +34,8 @@
       "apps/api/src/collection-replay-ownership.ts",
       "apps/web/src/components/CollectionTaskCenter.vue"
     ],
-    "testFiles": [
-      "tests/m03-05/account-collection-replay.test.mjs"
-    ],
-    "docs": [
-      "docs/openapi.yaml",
-      "docs/runbooks/account-collection-task-replay.md"
-    ],
+    "testFiles": ["tests/m03-05/account-collection-replay.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-collection-task-replay.md"],
     "contract": "Preserve task, attempt, subquery and event identity. Platform replay preserves the original sealed owner, updates the exact dead letter and validates the original reason and owned child graph on a current read before returning a prior receipt."
   },
   "accountEvidenceDownload": {
@@ -38,27 +44,17 @@
       "apps/api/src/mysql-data-quality-repository.ts",
       "packages/storage/src/index.ts"
     ],
-    "testFiles": [
-      "tests/m03-06/evidence-data-quality.test.mjs"
-    ],
-    "docs": [
-      "docs/openapi.yaml",
-      "docs/runbooks/account-evidence-download.md"
-    ],
+    "testFiles": ["tests/m03-06/evidence-data-quality.test.mjs"],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-evidence-download.md"],
     "contract": "Authorize exact native and preserved historical file paths with the sealed account, evidence ID and asset ID. Check size and digest and write an audit event for the same locked binding before returning bytes; no file move or copy."
   },
   "accountEvidenceWriteFence": {
-    "sourceFiles": [
-      "apps/worker/src/evidence-persistence.ts",
-      "packages/storage/src/index.ts"
-    ],
+    "sourceFiles": ["apps/worker/src/evidence-persistence.ts", "packages/storage/src/index.ts"],
     "testFiles": [
       "tests/unit/collection-evidence-account-owner.test.mjs",
       "tests/unit/browser-collection-chain.test.mjs"
     ],
-    "docs": [
-      "docs/runbooks/account-evidence-write-fence.md"
-    ],
+    "docs": ["docs/runbooks/account-evidence-write-fence.md"],
     "contract": "Evidence capture requires matching native task and sealed task/subquery ownership with the active lease. Raw and browser replay recheck the exact original file asset and both owner sources; they fail before creating a link or replacing the file when ownership disagrees."
   },
   "accountSelectionScoringRuntime": {
@@ -74,69 +70,142 @@
       "tests/m04-03/account-score-rule-approval.test.mjs",
       "tests/unit/opportunity-account-migration.test.mjs"
     ],
-    "docs": [
-      "docs/openapi.yaml",
-      "docs/runbooks/account-selection-scoring-runtime.md"
-    ],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-selection-scoring-runtime.md"],
     "contract": "Account-native selection preserves original opportunities, decisions, evidence links, filters and quality gates. Scoring-rule replay checks live ownership; activation and rollback lock the full active set and reject conflicting ownership without changing history."
   },
   "accountCompetitorOriginalHistory": {
-    "sourceFiles": ["apps/api/src/mysql-competitor-repository.ts", "apps/api/src/competitor-routes.ts", "apps/api/src/amazon-public-signals.ts", "apps/web/src/components/AccountCompetitorRules.vue"],
-    "testFiles": ["tests/m04-05/account-competitor-read-rehearsal.test.mjs", "tests/m04-05/account-competitor-status-rehearsal.test.mjs", "tests/unit/competitor-account-migration.test.mjs"],
+    "sourceFiles": [
+      "apps/api/src/mysql-competitor-repository.ts",
+      "apps/api/src/competitor-routes.ts",
+      "apps/api/src/amazon-public-signals.ts",
+      "apps/web/src/components/AccountCompetitorRules.vue"
+    ],
+    "testFiles": [
+      "tests/m04-05/account-competitor-read-rehearsal.test.mjs",
+      "tests/m04-05/account-competitor-status-rehearsal.test.mjs",
+      "tests/unit/competitor-account-migration.test.mjs"
+    ],
     "docs": ["docs/openapi.yaml", "docs/runbooks/account-competitor-original-history.md"],
     "contract": "Keep original competitor IDs, latest and historical snapshots, evidence, and rule ownership. Only the sealed primary account can see shared or unassigned rows. Rule replay rechecks the exact originally submitted fields and persisted owner; conflicting requests create no extra rule or delivery."
   },
   "accountIntelligenceTopicPresentation": {
-    "sourceFiles": ["apps/api/src/mysql-trend-repository.ts", "apps/api/src/trend-routes.ts", "apps/web/src/components/TrendDashboard.vue", "apps/web/src/components/TrendDetailPanel.vue"],
-    "testFiles": ["tests/m04-01/account-trend-list-rehearsal.test.mjs", "tests/unit/account-trend-preservation.test.mjs"],
+    "sourceFiles": [
+      "apps/api/src/mysql-trend-repository.ts",
+      "apps/api/src/trend-routes.ts",
+      "apps/web/src/components/TrendDashboard.vue",
+      "apps/web/src/components/TrendDetailPanel.vue"
+    ],
+    "testFiles": [
+      "tests/m04-01/account-trend-list-rehearsal.test.mjs",
+      "tests/unit/account-trend-preservation.test.mjs"
+    ],
     "docs": ["docs/openapi.yaml", "docs/runbooks/account-intelligence-topic-presentation.md"],
     "contract": "Filter owned topics before display-only grouping and count groups before pagination. A wrong shared owner is not visible in the grouped list or by original ID. Preserve each displayed variant, evidence reference and follow without merge or deletion."
   },
   "accountSourcingQuoteRuntime": {
-    "sourceFiles": ["apps/api/src/mysql-sourcing-repository.ts", "apps/api/src/sourcing-routes.ts", "apps/worker/src/sourcing-projection-worker.ts", "apps/web/src/composables/useSourcingWorkspace.ts"],
-    "testFiles": ["tests/m04-06/account-sourcing-search-mutations.test.mjs", "tests/m04-06/account-sourcing-quote-rehearsal.test.mjs", "tests/m04-06/account-sourcing-purchase-rehearsal.test.mjs"],
+    "sourceFiles": [
+      "apps/api/src/mysql-sourcing-repository.ts",
+      "apps/api/src/sourcing-routes.ts",
+      "apps/worker/src/sourcing-projection-worker.ts",
+      "apps/web/src/composables/useSourcingWorkspace.ts"
+    ],
+    "testFiles": [
+      "tests/m04-06/account-sourcing-search-mutations.test.mjs",
+      "tests/m04-06/account-sourcing-quote-rehearsal.test.mjs",
+      "tests/m04-06/account-sourcing-purchase-rehearsal.test.mjs"
+    ],
     "docs": ["docs/openapi.yaml", "docs/runbooks/account-sourcing-quote-runtime.md"],
     "contract": "Retain source search, collection, evidence, original quote versions and comparisons. Account search writes require agreement between native task owner and the sealed ledger; exact old references remain read-only if there is no real opportunity. Same-account sourcing deliveries preserve quote MOQ and do not perform external purchase."
   },
   "accountBusinessTaskRuntime": {
-    "sourceFiles": ["apps/api/src/business-task-routes.ts", "apps/api/src/mysql-business-task-repository.ts", "apps/worker/src/business-task-projection-worker.ts", "apps/web/src/components/AccountTaskHistory.vue"],
-    "testFiles": ["tests/m05-01/account-business-task-read-rehearsal.test.mjs", "tests/m05-01/account-business-task-write-rehearsal.test.mjs", "tests/unit/account-retired-task-projection.test.mjs"],
+    "sourceFiles": [
+      "apps/api/src/business-task-routes.ts",
+      "apps/api/src/mysql-business-task-repository.ts",
+      "apps/worker/src/business-task-projection-worker.ts",
+      "apps/web/src/components/AccountTaskHistory.vue"
+    ],
+    "testFiles": [
+      "tests/m05-01/account-business-task-read-rehearsal.test.mjs",
+      "tests/m05-01/account-business-task-write-rehearsal.test.mjs",
+      "tests/unit/account-retired-task-projection.test.mjs"
+    ],
     "docs": ["docs/openapi.yaml", "docs/runbooks/account-business-task-runtime.md"],
     "contract": "Expose preserved task IDs, comments, events and original assignees to the verified owner. Bind native purchase and competitor projections to the exact event and original parent ownership; the retired worker never falls back to legacy workspace projection. Replays retain one task."
   },
   "accountPrimaryApprovalRuntime": {
-    "sourceFiles": ["apps/api/src/profit-routes.ts", "apps/api/src/approval-routes.ts", "apps/api/src/mysql-profit-repository.ts", "apps/api/src/mysql-approval-repository.ts", "apps/web/src/components/CostRuleConsole.vue"],
-    "testFiles": ["tests/m04-04/account-cost-rule-approval-rehearsal.test.mjs", "tests/m05-02/account-approval-decision-rehearsal.test.mjs"],
+    "sourceFiles": [
+      "apps/api/src/profit-routes.ts",
+      "apps/api/src/approval-routes.ts",
+      "apps/api/src/mysql-profit-repository.ts",
+      "apps/api/src/mysql-approval-repository.ts",
+      "apps/web/src/components/CostRuleConsole.vue"
+    ],
+    "testFiles": [
+      "tests/m04-04/account-cost-rule-approval-rehearsal.test.mjs",
+      "tests/m05-02/account-approval-decision-rehearsal.test.mjs"
+    ],
     "docs": ["docs/openapi.yaml", "docs/runbooks/account-primary-approval-runtime.md"],
     "contract": "The primary account takes only the former organization administrator cost-rule slot. The independent selection-manager grant and named workflow approvers are unchanged; ownership confers neither grant. Original actors, decisions and reasons are preserved, and replay cannot bypass scope or signing independence."
   },
   "accountRuntimeStorageFoundation": {
-    "sourceFiles": ["packages/config/src/index.ts", "packages/database/src/account-cutover-startup.ts", "packages/database/src/account-release-receipts.ts", "packages/auth/src/index.ts"],
+    "sourceFiles": [
+      "packages/config/src/index.ts",
+      "packages/database/src/account-cutover-startup.ts",
+      "packages/database/src/account-release-receipts.ts",
+      "packages/auth/src/index.ts"
+    ],
     "testFiles": ["tests/unit/account-runtime-foundation.test.mjs"],
     "docs": ["docs/runbooks/account-runtime-storage-foundation.md"],
     "contract": "Keep legacy as the default. The explicit retired runtime starts only after all exact receipts, sealed primary ownership and retired physical tenancy are verified; account-native storage retains source identity and rejects mixed columns. This layer alone is not an application release."
   },
   "accountProductionMigrationSourceClosure": {
-    "sourceFiles": ["scripts/run-account-production-cutover.mjs", "scripts/plan-account-retirement-production.mjs", "scripts/apply-account-production-forward.mjs", "database/migrations/0197_retire_tenancy_roots.up.sql"],
-    "testFiles": ["tests/unit/account-production-cutover.test.mjs", "tests/unit/account-retirement-production-plan.test.mjs", "tests/unit/account-retirement-ownership.test.mjs"],
+    "sourceFiles": [
+      "scripts/run-account-production-cutover.mjs",
+      "scripts/plan-account-retirement-production.mjs",
+      "scripts/apply-account-production-forward.mjs",
+      "database/migrations/0197_retire_tenancy_roots.up.sql"
+    ],
+    "testFiles": [
+      "tests/unit/account-production-cutover.test.mjs",
+      "tests/unit/account-retirement-production-plan.test.mjs",
+      "tests/unit/account-retirement-ownership.test.mjs"
+    ],
     "docs": ["docs/runbooks/account-production-migration-source.md"],
     "contract": "Version the exact 0076 live baseline bytes, 0077–0197 reversible migration source, and direct session import closure independently from unrelated worktree changes. Compiling and verifying these files does not authorize database writes, make a release package, or replace business readback."
   },
   "accountCrawlerCutoverPreflight": {
-    "sourceFiles": ["scripts/lib/account-crawler-cutover-preflight.mjs", "scripts/run-account-production-cutover.mjs", "scripts/deploy-account-baota.py"],
-    "testFiles": ["tests/unit/account-production-cutover.test.mjs", "tests/unit/test_baota_account_release_coordinator.py"],
+    "sourceFiles": [
+      "scripts/lib/account-crawler-cutover-preflight.mjs",
+      "scripts/run-account-production-cutover.mjs",
+      "scripts/deploy-account-baota.py"
+    ],
+    "testFiles": [
+      "tests/unit/account-production-cutover.test.mjs",
+      "tests/unit/test_baota_account_release_coordinator.py"
+    ],
     "docs": ["docs/runbooks/account-production-coordinated-release.md"],
     "contract": "Evaluate retired runtime crawler startup conditions before upload and before any production prerequisite DDL or backfill. Read-only inspection reports standalone running rows and active profile leases separately; no historical state normalization or deletion."
   },
   "accountProductionCoordinatedRelease": {
-    "sourceFiles": ["scripts/deploy-account-baota.py", "scripts/baota-account-release-coordinator.py"],
+    "sourceFiles": [
+      "scripts/deploy-account-baota.py",
+      "scripts/baota-account-release-coordinator.py"
+    ],
     "testFiles": ["tests/unit/test_baota_account_release_coordinator.py"],
     "docs": ["docs/runbooks/account-production-coordinated-release.md"],
     "contract": "Fixed-host strict SSH, clean approved main, exclusive upload, private verified candidate, stop writers, lock and migrate, install and validate before activation. The original runtime can resume only on a proven unchanged schema before the destructive phase. A journal blocks blind replay; no backups or isolation."
   },
   "accountReleaseStageAndActivation": {
-    "sourceFiles": ["scripts/baota-account-release-stage.py", "scripts/serve-account-production-cutover.mjs", "scripts/baota-account-cutover-control.py"],
-    "testFiles": ["tests/unit/test_baota_account_release_stage.py", "tests/unit/account-production-session.test.mjs", "tests/unit/test_baota_account_cutover_control.py"],
+    "sourceFiles": [
+      "scripts/baota-account-release-stage.py",
+      "scripts/serve-account-production-cutover.mjs",
+      "scripts/baota-account-cutover-control.py"
+    ],
+    "testFiles": [
+      "tests/unit/test_baota_account_release_stage.py",
+      "tests/unit/account-production-session.test.mjs",
+      "tests/unit/test_baota_account_cutover_control.py"
+    ],
     "docs": ["docs/runbooks/account-release-stage-and-activation.md"],
     "contract": "Verify upload SHA and archive membership into an exact private temporary candidate, keep a single MySQL session locked across approved review, migration and install fencing, then start BaoTa Node and confirm candidate SHA, readiness, positive account-mode marker and route_not_found for both retired organization probes before starting Python. No backup copies or standalone deployment target."
   },
@@ -165,31 +234,49 @@
     "contract": "Read-only, fixed BaoTa host and loopback business schema. Correlate stranded crawler runs to pending or quarantined completion receipts by exact run ID. Report counts only; no inference of terminal outcome, replay, deletion, or production release."
   },
   "referenceOrganizationProfileCancel": {
-    "sourceFiles": ["apps/web/src/components/OrganizationAdminCenter.vue", "apps/web/src/organization-profile-workspace.css"],
+    "sourceFiles": [
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/organization-profile-workspace.css"
+    ],
     "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Cancel restores the last loaded organization profile locally, clears draft reason and preview, and does not issue a request."
   },
   "referenceOrganizationLogoPreview": {
-    "sourceFiles": ["apps/web/src/components/OrganizationAdminCenter.vue", "apps/web/src/organization-profile-workspace.css"],
+    "sourceFiles": [
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/organization-profile-workspace.css"
+    ],
     "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Logo draft loads an HTTPS image only on explicit preview and does not submit the organization profile."
   },
   "referenceProfileCancel": {
-    "sourceFiles": ["apps/web/src/components/PersonalCenter.vue", "apps/web/src/components/personal-center/PersonalProfilePanel.vue", "apps/web/src/components/personal-center/usePersonalCenter.ts"],
+    "sourceFiles": [
+      "apps/web/src/components/PersonalCenter.vue",
+      "apps/web/src/components/personal-center/PersonalProfilePanel.vue",
+      "apps/web/src/components/personal-center/usePersonalCenter.ts"
+    ],
     "testFiles": ["tests/e2e/ui-phase2-account-contracts.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Cancel restores the loaded profile draft locally without requests and is unavailable during save."
   },
   "referenceAdminNavigationSearch": {
-    "sourceFiles": ["apps/web/src/components/NavigationShell.vue", "apps/web/src/components/DiscoveryOverlay.vue", "apps/web/src/use-navigation-discovery.ts"],
+    "sourceFiles": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/DiscoveryOverlay.vue",
+      "apps/web/src/use-navigation-discovery.ts"
+    ],
     "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Ready admin shells search their permission-filtered menu labels and groups locally; no member search or entity API is used."
   },
   "referenceSourcingUnconfirmedCosts": {
-    "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/components/SourcingProfitSummary.vue", "apps/web/src/sourcing.css"],
+    "sourceFiles": [
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/SourcingProfitSummary.vue",
+      "apps/web/src/sourcing.css"
+    ],
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Empty sourcing offers retain the reference cost row structure using unconfirmed placeholders, without changing calculated values, inputs, or requests."
@@ -201,7 +288,10 @@
     "contract": "The ready desktop platform shell reuses its existing workspace selection destination in the top bar without assuming an organization context or exposing member search."
   },
   "referenceOrganizationSidebarFooter": {
-    "sourceFiles": ["apps/web/src/components/NavigationShell.vue", "apps/web/src/midou-workspace.css"],
+    "sourceFiles": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/midou-workspace.css"
+    ],
     "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Organization desktop sidebar mirrors the existing top context destination and groups settings and help above the unchanged member return link."
@@ -213,25 +303,40 @@
     "contract": "Wide sourcing toolbar uses a compact search control and four evenly distributed metrics without changing reads, filters or narrow-screen layout."
   },
   "referenceWorkbenchLibraryDensity": {
-    "sourceFiles": ["apps/web/src/components/HomeAutomationOverview.vue", "apps/web/src/midou-workspace.css"],
+    "sourceFiles": [
+      "apps/web/src/components/HomeAutomationOverview.vue",
+      "apps/web/src/midou-workspace.css"
+    ],
     "testFiles": ["tests/e2e/home-completed-results.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Wide workbench library summary uses compact metric spacing and inset separators without changing counts, routes, disclosures or narrow-screen layout."
   },
   "referenceBreadcrumbHierarchy": {
     "sourceFiles": ["apps/web/src/midou-workspace.css"],
-    "testFiles": ["tests/e2e/m02-03-navigation-shell.spec.ts", "tests/e2e/home-completed-results.spec.ts"],
+    "testFiles": [
+      "tests/e2e/m02-03-navigation-shell.spec.ts",
+      "tests/e2e/home-completed-results.spec.ts"
+    ],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "The single shared top breadcrumb uses neutral parent links and an emphasized current page, preserving keyboard navigation and responsive overflow."
   },
   "referenceOrganizationOverviewActions": {
-    "sourceFiles": ["apps/web/src/components/NavigationShell.vue", "apps/web/src/components/OrganizationAdminCenter.vue", "apps/web/src/navigation-shell-route-state.ts", "apps/web/src/organization-admin.css"],
+    "sourceFiles": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/OrganizationAdminCenter.vue",
+      "apps/web/src/navigation-shell-route-state.ts",
+      "apps/web/src/organization-admin.css"
+    ],
     "testFiles": ["tests/e2e/m06-01-organization-admin.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Organization overview displays its existing role-gated invite link beside refresh without duplicating the global action or changing its destination."
   },
   "referencePlatformOverviewActions": {
-    "sourceFiles": ["apps/web/src/components/NavigationShell.vue", "apps/web/src/components/PlatformDashboard.vue", "apps/web/src/styles/platform-dashboard.css"],
+    "sourceFiles": [
+      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/PlatformDashboard.vue",
+      "apps/web/src/styles/platform-dashboard.css"
+    ],
     "testFiles": ["tests/e2e/m06-02-platform-dashboard.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Platform overview places the existing superadmin create-organization link in its page actions, with no duplicate global action on that route. Permissions and target remain unchanged."
@@ -243,13 +348,21 @@
     "contract": "Candidate catalogue exposes direct numbered navigation on desktop with actual totals and preserves existing 20-row server pagination, filters and narrow-screen controls."
   },
   "referenceTrendSourceShortcut": {
-    "sourceFiles": ["apps/web/src/components/TrendDashboard.vue", "apps/web/src/components/TrendDetailPanel.vue", "apps/web/src/trends.css"],
+    "sourceFiles": [
+      "apps/web/src/components/TrendDashboard.vue",
+      "apps/web/src/components/TrendDetailPanel.vue",
+      "apps/web/src/trends.css"
+    ],
     "testFiles": ["tests/e2e/m04-01-trends.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "An open topic exposes a source shortcut that selects and focuses the existing evidence tab without new requests or default selection."
   },
   "referenceProfileAvatar": {
-    "sourceFiles": ["apps/web/src/components/PersonalCenter.vue", "apps/web/src/components/personal-center/PersonalProfilePanel.vue", "apps/web/src/components/personal-center/ProfileAvatar.vue"],
+    "sourceFiles": [
+      "apps/web/src/components/PersonalCenter.vue",
+      "apps/web/src/components/personal-center/PersonalProfilePanel.vue",
+      "apps/web/src/components/personal-center/ProfileAvatar.vue"
+    ],
     "testFiles": ["tests/e2e/ui-phase2-account-contracts.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Profile form and summary display the confirmed HTTPS avatar or initials. Editing an unsubmitted URL does not cause a network request; profile save contract is unchanged."
@@ -273,13 +386,22 @@
     "contract": "Related product cards use four metric columns in a wide detail panel and two in a narrow panel without changing facts, links, permissions or pagination."
   },
   "referenceWorkbenchFlowRhythm": {
-    "sourceFiles": ["apps/web/src/components/HomeDashboard.vue", "apps/web/src/midou-workspace.css"],
+    "sourceFiles": [
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/midou-workspace.css"
+    ],
     "testFiles": ["tests/e2e/home-completed-results.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Wide workbench flow connects existing steps visually and styles progress links without asserting execution state or changing destinations."
   },
   "referenceNotificationSearch": {
-    "sourceFiles": ["apps/web/src/components/NotificationCenter.vue", "apps/web/src/midou-workspace.css", "apps/api/src/notification-routes.ts", "apps/api/src/notification-service.ts", "apps/api/src/mysql-notification-repository.ts"],
+    "sourceFiles": [
+      "apps/web/src/components/NotificationCenter.vue",
+      "apps/web/src/midou-workspace.css",
+      "apps/api/src/notification-routes.ts",
+      "apps/api/src/notification-service.ts",
+      "apps/api/src/mysql-notification-repository.ts"
+    ],
     "testFiles": ["tests/e2e/m05-03-notifications.spec.ts", "tests/m05-03/notifications.test.mjs"],
     "docs": ["docs/openapi.yaml", "docs/reference-navigation-polish.md"],
     "contract": "Optional notifications q is a bounded literal title/body substring matched within the active recipient and workspace before grouping and paging. Existing filters compose and summary remains workspace-wide."
@@ -291,25 +413,38 @@
     "contract": "Platform administration desktop sidebar uses 32px navigation rows and compact group separators while preserving all authorized links, footer and narrower viewport scrolling."
   },
   "referenceNotificationRowRead": {
-    "sourceFiles": ["apps/web/src/components/NotificationCenter.vue", "apps/web/src/notification-center.css", "apps/web/src/midou-workspace.css"],
+    "sourceFiles": [
+      "apps/web/src/components/NotificationCenter.vue",
+      "apps/web/src/notification-center.css",
+      "apps/web/src/midou-workspace.css"
+    ],
     "testFiles": ["tests/e2e/m05-03-notifications.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Unread rows provide a separate mark-as-read action using the existing versioned endpoint, then refresh list and counts without opening detail. Workflow status is separate from the group count and the accessible read state."
   },
   "referenceNotificationPreferenceBadge": {
-    "sourceFiles": ["apps/web/src/components/NotificationCenter.vue", "apps/web/src/midou-workspace.css"],
+    "sourceFiles": [
+      "apps/web/src/components/NotificationCenter.vue",
+      "apps/web/src/midou-workspace.css"
+    ],
     "testFiles": ["tests/e2e/m05-03-notifications.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Preference shortcut badge reflects confirmed in-app notification preference, not its mutable draft. No new API calls or notification behavior."
   },
   "referenceWorkbenchCompletedEmpty": {
-    "sourceFiles": ["apps/web/src/components/HomeCompletedProducts.vue", "apps/web/src/home-selection-results.css"],
+    "sourceFiles": [
+      "apps/web/src/components/HomeCompletedProducts.vue",
+      "apps/web/src/home-selection-results.css"
+    ],
     "testFiles": ["tests/e2e/home-completed-results.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Successful workbench empty results use a compact illustrated state with the existing candidate link. Loading, failures, data requests and result semantics stay unchanged."
   },
   "referencePlatformFirstFold": {
-    "sourceFiles": ["apps/web/src/components/PlatformDashboard.vue", "apps/web/src/styles/platform-dashboard.css"],
+    "sourceFiles": [
+      "apps/web/src/components/PlatformDashboard.vue",
+      "apps/web/src/styles/platform-dashboard.css"
+    ],
     "testFiles": ["tests/e2e/m06-02-platform-dashboard.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "System checks retain all live health signals. The existing storage figures are disclosed under Background Tasks; desktop card spacing is tightened without limiting rows or adding requests."
@@ -327,13 +462,21 @@
     "contract": "Render list pagination only when there is more than one page; keep it visible in the desktop split-view list without changing the 20-row page size, filters or URL contract."
   },
   "referenceSourcingEmptyOffers": {
-    "sourceFiles": ["apps/web/src/components/SourcingWorkspace.vue", "apps/web/src/components/SourcingProfitSummary.vue", "apps/web/src/sourcing.css"],
+    "sourceFiles": [
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/SourcingProfitSummary.vue",
+      "apps/web/src/sourcing.css"
+    ],
     "testFiles": ["tests/e2e/m04-06-sourcing.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Empty opportunity-linked supplier offers place the existing read-only profit summary beside the empty state on desktop and below on narrow screens, with one full-row calculation disclosure. The same component and disclosure move back into the profit tab without a second request. Keyword records and nonempty supplier lists retain their existing behavior."
   },
   "referenceCandidateProgress": {
-    "sourceFiles": ["apps/web/src/components/OpportunityCatalogueList.vue", "apps/web/src/components/OpportunityListPanel.vue", "apps/web/src/midou-workspace.css"],
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityCatalogueList.vue",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/midou-workspace.css"
+    ],
     "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
     "docs": ["docs/reference-navigation-polish.md"],
     "contract": "Candidate view only: compact table, square thumbnail and five-segment display of the existing passed quality-gate count, with unchanged textual facts and list query."

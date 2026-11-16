@@ -1,8 +1,12 @@
 import ast
 import contextlib
+import json
 import pathlib
+import re
 import runpy
+import types
 import unittest
+from unittest.mock import patch
 
 
 SCRIPTS = pathlib.Path(__file__).parents[2] / "scripts"
@@ -58,6 +62,44 @@ class Steps:
 
 
 class CoordinatorTest(unittest.TestCase):
+    def test_public_verification_requires_exact_404_without_redirect(self):
+        function = LOCAL["verify_public_retired_pages"]
+        for status in (404, 200, 302, 403):
+            with self.subTest(status=status):
+                calls = []
+                class Connection:
+                    def __init__(self, host, timeout):
+                        self.assertion = (host, timeout)
+                    def request(self, method, path, headers):
+                        calls.append((self.assertion, method, path))
+                    def getresponse(self):
+                        return types.SimpleNamespace(status=status, read=lambda _: b"", close=lambda: None)
+                    def close(self):
+                        pass
+                with patch.dict(function.__globals__, {"HTTPSConnection": Connection}):
+                    if status == 404:
+                        function()
+                        self.assertEqual(len(calls), 3)
+                    else:
+                        with self.assertRaisesRegex(RuntimeError, "public_legacy_page_visible"):
+                            function()
+                        self.assertEqual(len(calls), 1)
+                self.assertEqual(calls[0], (("midouai.medouai.com", 10), "GET", "/select-context"))
+
+    def test_public_spa_route_include_never_serves_retired_scope(self):
+        catalog = SCRIPTS.parent / "config/route-catalog.json"
+        routes = json.loads(catalog.read_text(encoding="utf-8"))["routes"]
+        rule = COORD["render_account_spa_routes"](routes).splitlines()[0]
+        regex = re.compile(rule.removeprefix("location ~ ").removesuffix(" {"))
+        for path in ("/select-context", "/org-admin", "/org-admin/members/", "/platform-admin/organizations",
+                     "/platform-admin/organizations/new", "/platform-admin/organizations/sample", "/resource-grants"):
+            self.assertIsNone(regex.fullmatch(path), path)
+        for path in ("/login", "/opportunities", "/me", "/platform-admin/accounts"):
+            self.assertIsNotNone(regex.fullmatch(path), path)
+        for route in routes:
+            if route["acceptance"] == "internal":
+                self.assertIsNone(regex.fullmatch(route["path"]), route)
+
     def test_standalone_crawler_probe_gate_refuses_orphan_runs_and_live_leases(self):
         for counts in ({"running": 4, "leases": 0}, {"running": 0, "leases": 1}):
             with self.assertRaisesRegex(RuntimeError, "standalone_crawler_not_drained"):

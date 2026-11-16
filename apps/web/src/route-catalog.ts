@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from "vue-router";
 import generatedCatalog from "./route-catalog.generated.json";
+import { isLegacyScopeRoute } from "./account-route-guard";
 
 export type AppShell = "member" | "organization_admin" | "platform_admin" | "account";
 
@@ -53,6 +54,12 @@ const manifest = generatedCatalog as RouteCatalogManifest;
 const ApplicationSurface = () => import("./App.vue");
 const runtimeRoutes = manifest.routes.filter(
   (entry) => import.meta.env.DEV || entry.acceptance !== "internal",
+);
+export const legacyScopeRouteNames = new Set(
+  runtimeRoutes.filter(isLegacyScopeRoute).map((entry) => entry.name),
+);
+export const legacyScopePaths = new Set(
+  runtimeRoutes.filter((entry) => legacyScopeRouteNames.has(entry.name)).map((entry) => entry.path),
 );
 
 export const appRoutes: RouteRecordRaw[] = runtimeRoutes.map((entry) => ({

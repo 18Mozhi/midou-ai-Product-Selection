@@ -15,6 +15,27 @@ NGINX = "/www/server/nginx/sbin/nginx"
 MIGRATION = "0197_retire_tenancy_roots.up.sql"
 
 
+def render_account_spa_routes(routes):
+    patterns, fallback = [], 0
+    for route in routes:
+        path = route["path"]
+        if route.get("acceptance") == "fallback":
+            fallback += 1
+            continue
+        if not re.fullmatch(r"/(?:[a-zA-Z0-9_:/.-]+)?", path):
+            raise RuntimeError("account_release_invalid_route_pattern")
+        if (route.get("acceptance") == "internal" or route.get("shell") == "organization_admin" or
+                route.get("view") in ("tenancy", "resource-grants") or
+                path == "/platform-admin/organizations" or path.startswith("/platform-admin/organizations/")):
+            continue
+        pattern = "/".join("[^/]+" if item.startswith(":") else re.escape(item).replace(r"\-", "-")
+                           for item in path.split("/"))
+        patterns.append(pattern if path == "/" else pattern + "/?")
+    if fallback != 1 or not patterns or len(set(patterns)) != len(patterns):
+        raise RuntimeError("account_release_invalid_route_catalog")
+    return "location ~ ^(?:" + "|".join(sorted(patterns)) + ")$ {\n    try_files /index.html =404;\n}\n"
+
+
 def check_scope_review(review):
     counts = review.get("scope_counts", {})
     records = review.get("record_counts_by_table_and_reason", {})
@@ -165,20 +186,7 @@ class BaoTaRelease:
             raise RuntimeError("account_release_nginx_include_not_managed")
         route_file = self.stage_path / "backend/config/route-catalog.json"
         routes = json.loads(route_file.read_text(encoding="utf-8"))["routes"]
-        patterns, fallback = [], 0
-        for route in routes:
-            path = route["path"]
-            if route.get("acceptance") == "fallback":
-                fallback += 1
-                continue
-            if not re.fullmatch(r"/(?:[a-zA-Z0-9_:/.-]+)?", path):
-                raise RuntimeError("account_release_invalid_route_pattern")
-            pattern = "/".join("[^/]+" if item.startswith(":") else re.escape(item).replace(r"\-", "-")
-                               for item in path.split("/"))
-            patterns.append(pattern if path == "/" else pattern + "/?")
-        if fallback != 1 or not patterns or len(set(patterns)) != len(patterns):
-            raise RuntimeError("account_release_invalid_route_catalog")
-        self.routes = "location ~ ^(?:" + "|".join(sorted(patterns)) + ")$ {\n    try_files /index.html =404;\n}\n"
+        self.routes = render_account_spa_routes(routes)
         self.nginx("-t")
 
     def nginx(self, *args):

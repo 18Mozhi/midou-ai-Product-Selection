@@ -3,6 +3,7 @@
 import argparse
 import contextlib
 import hashlib
+from http.client import HTTPSConnection
 import json
 import pathlib
 import re
@@ -102,6 +103,21 @@ def require_drained_crawler(counts):
         raise RuntimeError("account_cutover_standalone_crawler_not_drained:" + json.dumps(counts))
 
 
+def verify_public_retired_pages():
+    for path in ("/select-context", "/org-admin/members", "/platform-admin/organizations"):
+        connection = HTTPSConnection("midouai.medouai.com", timeout=10)
+        try:
+            connection.request("GET", path, headers={"Accept": "text/html", "Cache-Control": "no-cache"})
+            response = connection.getresponse()
+            try:
+                if response.status != 404:
+                    raise RuntimeError("account_release_public_legacy_page_visible:" + path + ":" + str(response.status))
+            finally:
+                response.close()
+        finally:
+            connection.close()
+
+
 def execute(repo, previous, plan):
     if not re.fullmatch(r"[a-f0-9]{40}", previous) or not re.fullmatch(r"[a-f0-9]{64}", plan):
         raise RuntimeError("account_release_expected_sha_required")
@@ -131,6 +147,8 @@ def execute(repo, previous, plan):
             if stdout.channel.recv_exit_status() or not result["status"]:
                 raise RuntimeError("account_release_formal_failure:" + json.dumps(result))
         health = deploy["verify_public"](build)
+        verify_public_retired_pages()
+        health["retiredPages"] = True
         return dict(result, health=health)
 
 
