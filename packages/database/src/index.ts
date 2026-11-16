@@ -1,6 +1,20 @@
 import { createHash } from "node:crypto";
 import mysql, { type Pool, type PoolConnection } from "mysql2/promise";
 import type { RuntimeConfig } from "@scoutops/config";
+export { assertAccountCutoverReady } from "./account-cutover-startup.js";
+export { appendTrendOutbox } from "./trend-outbox-storage.js";
+export { appendTrendEvent, trendTopicEventReadRelation } from "./trend-event-storage.js";
+export { appendOpportunityOutbox } from "./opportunity-outbox-storage.js";
+export { appendAccountOpportunityEvent, appendAccountOpportunityRecommendationEvent } from "./account-opportunity-recommendation-event.js";
+export { appendOpportunityEvent, opportunityEventReadRelation } from "./opportunity-event-storage.js";
+export { appendEvidenceDataEvent, appendEvidenceDataOutbox } from "./evidence-event-storage.js";
+export {
+  appendSourcingEvent, hasLegacySourcingEventScope, appendSourcingOutbox, hasLegacySourcingOutboxScope,
+} from "./sourcing-outbox-storage.js";
+export {
+  appendCompetitorEvent, hasLegacyCompetitorEventScope,
+  appendCompetitorOutbox, hasLegacyCompetitorOutboxScope,
+} from "./competitor-event-storage.js";
 export { currentProductVersionJoinSql } from "./current-product-version-sql.js";
 export { selectionCompletionSourceNotRejectedSql } from "./selection-completion-source-policy.js";
 export {
@@ -250,3 +264,24 @@ export {
   automaticEvaluationFailureSql,
   automaticEvaluationEnqueueUpdateSql,
 } from "./automatic-evaluation-queue-sql.js";
+export { notificationDeliveryScopeColumns, realtimeEventScopeColumns } from "./notification-delivery-schema.js";
+export { appendProviderSourceReplayRun } from "./provider-source-replay-run.js";
+export { appendCollectionSubquery, type NewCollectionSubquery } from "./collection-subquery-storage.js";
+export { collectionTaskScope, insertScheduledHighCollectionTask, type CollectionTaskScope } from "./collection-task-storage.js";
+export { appendCrawlerLeaseEvent } from "./crawler-lease-event-storage.js";
+export { appendCrawlerSchedulerLease, crawlerSchedulerLeaseHasLegacyScope } from "./crawler-scheduler-lease-storage.js";
+export { aiAnalysisHistoryHasLegacyScope, appendAiAnalysisDelivery } from "./ai-analysis-history-storage.js";
+export { appendWebhookDeliveryEvent } from "./webhook-delivery-event-storage.js";
+export { hasLegacyCompetitorRuleScope } from "./competitor-rule-scope.js";
+export { dataQualityIssueScope } from "./data-quality-issue-scope.js";
+export { appendBusinessAudit, businessAuditHistorical, appendPlatformAudit, platformAuditCoordinate, platformAuditHistorical } from "./platform-audit-storage.js";
+export { notificationPreferencesAccountSchema, readDeliveryNotificationPreferences } from "./notification-preferences-storage.js";
+export { appendScopedNotification, notificationScopeRelation, notificationsHaveLegacyScope } from "./notification-scope-storage.js";
+export { reportExportAccountStorage, historicalExportOrganization } from "./report-export-scope.js";
+export { recordAccountReportExport } from "./report-export-event.js";
+export { accountReportScope } from "./account-report-scope.js";
+export { fileAssetAccountStorage } from "./file-asset-scope.js";
+export { trendRuleScopeRelation } from "./trend-rule-scope.js";
+export { approvalTemplateScopeRelation, approvalRequestCoordinates } from "./approval-template-scope.js";
+export { automationRuleScopeRelation, nativeAutomationOutbox } from "./automation-rule-scope.js";
+export { sourcingSearchHasLegacyScope } from "./sourcing-search-scope.js";

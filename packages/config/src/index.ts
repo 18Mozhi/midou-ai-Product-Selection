@@ -21,6 +21,7 @@ export interface RuntimeConfig {
     version: string;
     buildSha: string;
     webOrigin: string;
+    accountScopeMode?: "retired";
   };
   database: {
     host: string;
@@ -371,6 +372,9 @@ export function loadRuntimeConfig(
     throw new ConfigError("NODE_ENV", "must be development, test or production");
   const nodeEnv = rawNodeEnv as RuntimeConfig["nodeEnv"];
   const production = nodeEnv === "production";
+  const accountScopeMode = text(env, "ACCOUNT_SCOPE_MODE", "legacy");
+  if (accountScopeMode !== "legacy" && (accountScopeMode !== "retired" || !production))
+    throw new ConfigError("ACCOUNT_SCOPE_MODE", "must be legacy, or retired in a coordinated production cutover");
   const evidenceRoot = resolve(cwd, text(env, "EVIDENCE_ROOT", "./runtime/evidence"));
   const exportRoot = resolve(cwd, text(env, "EXPORT_ROOT", "./runtime/exports"));
   const runtimeTempRoot = resolve(cwd, text(env, "RUNTIME_TMP_ROOT", "./runtime/tmp"));
@@ -432,6 +436,7 @@ export function loadRuntimeConfig(
       version: text(env, "APP_VERSION", "0.1.0"),
       buildSha: text(env, "BUILD_SHA", "development"),
       webOrigin: httpUrl(env, "WEB_ORIGIN", "http://127.0.0.1:5173"),
+      ...(accountScopeMode === "retired" ? { accountScopeMode: "retired" as const } : {}),
     },
     database: {
       host: text(env, "DB_HOST", "127.0.0.1"),

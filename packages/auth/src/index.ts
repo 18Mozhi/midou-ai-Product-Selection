@@ -5,6 +5,8 @@ export type UserStatus = "pending_verification" | "active" | "locked" | "disable
 export type SessionStatus = "active" | "revoked" | "expired";
 export type ActionTokenPurpose = "email_verification" | "password_reset";
 
+export const PRIMARY_COST_APPROVER_EMAIL = "2313645627@qq.com";
+
 export interface AuthPolicy {
   passwordMinLength: number;
   passwordMaxLength: number;

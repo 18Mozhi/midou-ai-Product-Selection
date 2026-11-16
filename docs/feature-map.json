@@ -1,4 +1,10 @@
 {
+  "accountRuntimeStorageFoundation": {
+    "sourceFiles": ["packages/config/src/index.ts", "packages/database/src/account-cutover-startup.ts", "packages/database/src/account-release-receipts.ts", "packages/auth/src/index.ts"],
+    "testFiles": ["tests/unit/account-runtime-foundation.test.mjs"],
+    "docs": ["docs/runbooks/account-runtime-storage-foundation.md"],
+    "contract": "Keep legacy as the default. The explicit retired runtime starts only after all exact receipts, sealed primary ownership and retired physical tenancy are verified; account-native storage retains source identity and rejects mixed columns. This layer alone is not an application release."
+  },
   "accountProductionMigrationSourceClosure": {
     "sourceFiles": ["scripts/run-account-production-cutover.mjs", "scripts/plan-account-retirement-production.mjs", "scripts/apply-account-production-forward.mjs", "database/migrations/0197_retire_tenancy_roots.up.sql"],
     "testFiles": ["tests/unit/account-production-cutover.test.mjs", "tests/unit/account-retirement-production-plan.test.mjs", "tests/unit/account-retirement-ownership.test.mjs"],
