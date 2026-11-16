@@ -427,10 +427,11 @@
     "testFiles": [
       "tests/m04-06/account-sourcing-search-mutations.test.mjs",
       "tests/m04-06/account-sourcing-quote-rehearsal.test.mjs",
+      "tests/m04-06/account-sourcing-native-read.test.mjs",
       "tests/m04-06/account-sourcing-purchase-rehearsal.test.mjs"
     ],
     "docs": ["docs/openapi.yaml", "docs/runbooks/account-sourcing-quote-runtime.md"],
-    "contract": "Retain source search, collection, evidence, original quote versions and comparisons. Account search writes require agreement between native task owner and the sealed ledger; exact old references remain read-only if there is no real opportunity. Same-account sourcing deliveries preserve quote MOQ and do not perform external purchase."
+    "contract": "Retain source search, collection, evidence, original quote versions and comparisons. Account reads and writes require agreement between native task owner and the sealed ledger; exact old references remain read-only if there is no real opportunity. Same-account sourcing deliveries preserve quote MOQ and do not perform external purchase."
   },
   "accountBusinessTaskRuntime": {
     "sourceFiles": [

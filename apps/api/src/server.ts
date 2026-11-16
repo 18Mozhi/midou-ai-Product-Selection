@@ -482,7 +482,7 @@ const app = buildApp({
   },
   sourcing: {
     accountReadRehearsal,
-    service: new SourcingService(new MySqlSourcingRepository(pool)),
+    service: new SourcingService(new MySqlSourcingRepository(pool, accountApiMode === "retired")),
     authorization,
     auth: localAuth,
     secureCookie: config.nodeEnv === "production",

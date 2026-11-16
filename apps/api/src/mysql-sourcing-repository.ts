@@ -106,6 +106,7 @@ const amazonEvidenceImageSql = (where: string, accountScoped = false) =>
 const searchImageSql = (
   opportunityId: "o.id" | "s.image_opportunity_id",
   account?: "so.account_id" | "s.account_owner",
+  native = false,
 ) =>
   "CASE WHEN s.input_type='opportunity' THEN COALESCE(" +
   "(SELECT JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) FROM collection_subqueries image_query " +
@@ -113,14 +114,17 @@ const searchImageSql = (
   "JOIN collection_tasks image_task ON image_task.id=image_query.task_id " +
   "WHERE image_query.task_id=s.collection_task_id " +
   (account
-    ? `AND ${rehearsalOwns("collection_tasks", "image_task.id", account)} AND ${rehearsalOwns("collection_subqueries", "image_query.id", account)} `
+    ? `AND ${rehearsalOwns("collection_tasks", "image_task.id", account)} AND ${rehearsalOwns("collection_subqueries", "image_query.id", account)} ${native ? `AND image_task.account_id=${account} ` : ""}`
     : "AND image_task.organization_id=s.organization_id AND image_task.workspace_id=s.workspace_id ") +
   "AND JSON_UNQUOTE(JSON_EXTRACT(image_query.target_json,'$.image_url')) LIKE 'https://%' " +
   "ORDER BY image_query.ordinal LIMIT 1),(" +
   amazonEvidenceImageSql(
     `l.opportunity_id=${opportunityId}` +
       (account
-        ? ` AND ${rehearsalOwns("opportunities", "op.id", account)} AND ${rehearsalOwns("opportunity_evidence_links", "l.id", account)} AND ${rehearsalOwns("normalized_records", "n.id", account)} AND ${rehearsalOwns("raw_evidence", "l.raw_evidence_id", account)}`
+        ? ` AND ${rehearsalOwns("opportunities", "op.id", account)} AND ${rehearsalOwns("opportunity_evidence_links", "l.id", account)} AND ${rehearsalOwns("normalized_records", "n.id", account)} AND ${rehearsalOwns("raw_evidence", "l.raw_evidence_id", account)}
+            ${native ? `AND op.account_id=${account} AND n.account_id=${account} AND EXISTS
+              (SELECT 1 FROM raw_evidence image_evidence WHERE image_evidence.id=l.raw_evidence_id
+                 AND image_evidence.provider_id=n.provider_id AND image_evidence.account_id=${account})` : ""}`
         : " AND op.organization_id=s.organization_id AND op.workspace_id=s.workspace_id"),
     Boolean(account),
   ) +
@@ -133,30 +137,36 @@ const ownedCandidateCount = `(SELECT COUNT(*) FROM sourcing_candidates sc_count 
   AND ${rehearsalOwns("sourcing_candidates", "sc_count.id", "so.account_id")}
   AND ${rehearsalOwns("raw_evidence", "sc_count.raw_evidence_id", "so.account_id")})`;
 const opportunityIdPattern = "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$";
-const ownedSourcingSource = (search: "s" | "target") =>
+const ownedSourcingSource = (search: "s" | "target", native: boolean) =>
   `(${search}.input_type<>'opportunity'
-    OR ${rehearsalOwns("opportunities", `CONVERT(${search}.input_ref USING ascii)`, "so.account_id")}
+    OR (${rehearsalOwns("opportunities", `CONVERT(${search}.input_ref USING ascii)`, "so.account_id")}
+        ${native ? `AND EXISTS (SELECT 1 FROM opportunities original_opportunity
+          WHERE original_opportunity.id=CONVERT(${search}.input_ref USING ascii)
+            AND original_opportunity.account_id=so.account_id)` : ""})
     OR (${search}.input_ref NOT REGEXP '${opportunityIdPattern}'
       AND EXISTS (SELECT 1 FROM collection_tasks history_task
         WHERE history_task.id=${search}.collection_task_id
           AND BINARY history_task.request_id=BINARY ${search}.request_id
           AND BINARY history_task.trace_id=BINARY ${search}.trace_id)
       AND NOT EXISTS (SELECT 1 FROM sourcing_candidates history_candidate WHERE history_candidate.search_id=${search}.id)))`;
-const ownedSearchScope =
-  "so.account_id=? AND s.deleted_at IS NULL AND " +
-  rehearsalOwns("collection_tasks", "s.collection_task_id", "so.account_id") +
-  ` AND ${ownedSourcingSource("s")}`;
-const ownedOpportunityJoin =
+const ownedSearchTask = (search: "s" | "target", native: boolean) =>
+  rehearsalOwns("collection_tasks", `${search}.collection_task_id`, "so.account_id") +
+  (native ? ` AND EXISTS (SELECT 1 FROM collection_tasks original_task
+    WHERE original_task.id=${search}.collection_task_id AND original_task.account_id=so.account_id)` : "");
+const ownedSearchScope = (native: boolean) =>
+  `so.account_id=? AND s.deleted_at IS NULL AND ${ownedSearchTask("s", native)}
+    AND ${ownedSourcingSource("s", native)}`;
+const ownedOpportunityJoin = (native: boolean) =>
   " LEFT JOIN opportunities o ON s.input_type='opportunity' " +
   "AND s.input_ref=CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_unicode_ci AND o.lifecycle_status<>'deleted' " +
-  `AND ${rehearsalOwns("opportunities", "o.id", "so.account_id")} `;
+  `AND ${rehearsalOwns("opportunities", "o.id", "so.account_id")} ${native ? "AND o.account_id=so.account_id " : ""}`;
 export class MySqlSourcingRepository implements SourcingRepository {
-  constructor(private readonly pool: Pool) {}
+  constructor(private readonly pool: Pool, private readonly nativeAccountScope = false) {}
   async list(i: SourcingReadScope) {
     if ("accountId" in i) {
       await requireAccountReadRehearsal(this.pool);
       const [rows] = await this.pool.query<RowDataPacket[]>(
-        `SELECT ${ownedSearchFields},${ownedCandidateCount} owned_candidate_count,${searchImageSql("o.id", "so.account_id")},COALESCE(o.name,s.input_ref) display_name${ownedSearchSource}${ownedOpportunityJoin}WHERE ${ownedSearchScope} ORDER BY s.created_at DESC,s.id DESC`,
+        `SELECT ${ownedSearchFields},${ownedCandidateCount} owned_candidate_count,${searchImageSql("o.id", "so.account_id", this.nativeAccountScope)},COALESCE(o.name,s.input_ref) display_name${ownedSearchSource}${ownedOpportunityJoin(this.nativeAccountScope)}WHERE ${ownedSearchScope(this.nativeAccountScope)} ORDER BY s.created_at DESC,s.id DESC`,
         [i.accountId],
       );
       return rows.map((row) => this.search(row));
@@ -184,14 +194,14 @@ export class MySqlSourcingRepository implements SourcingRepository {
     const displayName =
       "CASE WHEN s.input_type='opportunity' THEN COALESCE(o.name,s.input_ref) ELSE s.input_ref END";
     const join = account
-      ? ownedSearchSource + ownedOpportunityJoin
+      ? ownedSearchSource + ownedOpportunityJoin(this.nativeAccountScope)
       : " FROM sourcing_searches s LEFT JOIN " +
         "(SELECT id,name,organization_id,workspace_id,lifecycle_status,CONVERT(id USING utf8mb4) COLLATE utf8mb4_unicode_ci lookup_ref " +
         "FROM opportunities WHERE organization_id=? AND workspace_id=? LIMIT 18446744073709551615) o " +
         "ON s.input_type='opportunity' AND s.input_ref=o.lookup_ref AND o.organization_id=s.organization_id " +
         "AND o.workspace_id=s.workspace_id AND o.lifecycle_status<>'deleted' ";
     const scope = account
-      ? ownedSearchScope
+      ? ownedSearchScope(this.nativeAccountScope)
       : "s.organization_id=? AND s.workspace_id=? AND s.deleted_at IS NULL";
     const pattern =
       "%" + i.query.toLowerCase().replace(/[=%_]/g, (value: string) => "=" + value) + "%";
@@ -233,7 +243,7 @@ export class MySqlSourcingRepository implements SourcingRepository {
           join +
           "JOIN sourcing_searches target ON target.id=? " +
           (account
-            ? `AND target.deleted_at IS NULL AND ${rehearsalOwns("sourcing_searches", "target.id", "so.account_id")} AND ${rehearsalOwns("collection_tasks", "target.collection_task_id", "so.account_id")} AND ${ownedSourcingSource("target")} `
+            ? `AND target.deleted_at IS NULL AND ${rehearsalOwns("sourcing_searches", "target.id", "so.account_id")} AND ${ownedSearchTask("target", this.nativeAccountScope)} AND ${ownedSourcingSource("target", this.nativeAccountScope)} `
             : "AND target.organization_id=s.organization_id AND target.workspace_id=s.workspace_id AND target.deleted_at IS NULL ") +
           "WHERE " +
           filter +
@@ -248,7 +258,7 @@ export class MySqlSourcingRepository implements SourcingRepository {
     const [rows] = total
       ? await this.pool.query<RowDataPacket[]>(
           "SELECT s.*," +
-            searchImageSql("s.image_opportunity_id", account ? "s.account_owner" : undefined) +
+            searchImageSql("s.image_opportunity_id", account ? "s.account_owner" : undefined, this.nativeAccountScope) +
             ` FROM (SELECT ${account ? ownedSearchFields : "s.*"},o.id image_opportunity_id,` +
             (account
               ? `so.account_id account_owner,${ownedCandidateCount} owned_candidate_count,`
@@ -283,7 +293,7 @@ export class MySqlSourcingRepository implements SourcingRepository {
     if (account) await requireAccountReadRehearsal(this.pool);
     const [searches] = account
       ? await this.pool.query<RowDataPacket[]>(
-          `SELECT ${ownedSearchFields},${ownedCandidateCount} owned_candidate_count,${searchImageSql("o.id", "so.account_id")},COALESCE(o.name,s.input_ref) display_name${ownedSearchSource}${ownedOpportunityJoin}WHERE s.id=? AND ${ownedSearchScope}`,
+          `SELECT ${ownedSearchFields},${ownedCandidateCount} owned_candidate_count,${searchImageSql("o.id", "so.account_id", this.nativeAccountScope)},COALESCE(o.name,s.input_ref) display_name${ownedSearchSource}${ownedOpportunityJoin(this.nativeAccountScope)}WHERE s.id=? AND ${ownedSearchScope(this.nativeAccountScope)}`,
           [i.searchId, i.accountId],
         )
       : await this.pool.query<RowDataPacket[]>(
