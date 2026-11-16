@@ -10,8 +10,6 @@ export async function runAutomaticPrimaryQueryFixtures(pool, sql) {
     opportunities: ["id", "organization_id", "workspace_id"],
     opportunity_evidence_links: [
       "opportunity_id",
-      "organization_id",
-      "workspace_id",
       "raw_evidence_id",
       "created_at",
       "observed_at",
@@ -41,8 +39,8 @@ export async function runAutomaticPrimaryQueryFixtures(pool, sql) {
   const base = () => ({
     opportunities: [["opp", "org", "ws"]],
     opportunity_evidence_links: [
-      ["opp", "org", "ws", "raw-a", "2026-10-17 10:00:00", "2026-10-17 10:00:00"],
-      ["opp", "org", "ws", "raw-b", "2026-10-17 11:00:00", "2026-10-17 11:00:00"],
+      ["opp", "raw-a", "2026-10-17 10:00:00", "2026-10-17 10:00:00"],
+      ["opp", "raw-b", "2026-10-17 11:00:00", "2026-10-17 11:00:00"],
     ],
     normalized_records: [
       [

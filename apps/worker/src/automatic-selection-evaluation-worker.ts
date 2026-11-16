@@ -1,4 +1,9 @@
-import { enqueueMissingSelectionEvaluations } from "./automatic-selection-evaluation-admission.js";
+import { appendOpportunityEvent } from "@scoutops/database";
+import { queueOwnedSelectionEvaluation } from "./account-evaluation-enqueue.js";
+import { hasLegacyScoreRuleScope } from "./score-rule-scope.js";
+import { calculationOwnersMatch, readCalculationOpportunityForClaim, registerCalculationOwners, resolveCalculationOwnership, type CalculationOwnership } from "./opportunity-calculation-ownership.js";
+import { accountAutomaticEvaluationQueries, enqueueMissingSelectionEvaluations, nativeAutomaticEvaluationLockSql } from "./automatic-selection-evaluation-admission.js";
+import { nativeOpportunityStorage } from "./opportunity-storage.js";
 import {
   classifyPrimarySource,
   readPrimarySourceContext,
@@ -15,7 +20,7 @@ import {
   SUPPLY_DEVICE_FIT_REVISION,
 } from "./automatic-selection-device-fit-recovery.js";
 import { retireUnmatchedAutomaticSupplyQuotes } from "./automatic-supply-quote-retirement.js";
-import { recordSelectionPipelineCompletion } from "./selection-pipeline-completion.js";
+import { completedCompetitorRead, recordSelectionPipelineCompletion } from "./selection-pipeline-completion.js";
 import {
   recoverSupplyClassifierEvaluations,
   SUPPLY_TITLE_CLASSIFIER_REVISION,
@@ -40,16 +45,17 @@ import {
 } from "./supply-detail-facts.js";
 import {
   selectionCandidateSql,
-  selectionCompletedCompetitorsSql,
   automaticEvaluationCompleteSql,
   automaticEvaluationFailureSql,
   automaticEvaluationEnqueueUpdateSql,
 } from "@scoutops/database";
 import {
-  automaticPrimaryEvidenceSql,
+  readAutomaticPrimaryEvidence,
+  hasNativeNormalizedAccountScope,
   automaticPrimarySnapshotSql,
-  automaticPrimaryDetailEvidenceSql,
+  accountAutomaticPrimarySnapshotSql,
   automaticSupplyEvidenceSql,
+  accountAutomaticSupplyEvidenceSql,
   primaryProductEvidence as primaryEvidence,
 } from "./automatic-selection-evidence.js";
 import {
@@ -77,13 +83,92 @@ type EvaluationJob = {
   organizationId: string;
   workspaceId: string;
   attemptCount: number;
+  executionOwnership?: CalculationOwnership;
+  nativeParent?: boolean;
 };
+function evaluationOwnerPredicate(job: EvaluationJob, parent: string) {
+  const owner = job.executionOwnership?.owner;
+  return owner
+    ? { sql: `EXISTS (SELECT 1 FROM account_owned_records a WHERE a.source_table='opportunities' AND a.source_id=${parent}.id AND a.account_id=?${job.nativeParent ? ` AND ${parent}.account_id=a.account_id` : ""})`,
+        args: [owner.account_id] }
+    : { sql: `${parent}.organization_id=? AND ${parent}.workspace_id=?`, args: [job.organizationId, job.workspaceId] };
+}
 type ScoreDimension = {
   code: string;
   weight: number;
   required: boolean;
   evidence_group: "market" | "competition" | "cost" | "other";
 };
+
+export async function readAutomaticCalculationRules(
+  connection: PoolConnection,
+  job: Pick<EvaluationJob, "opportunityId" | "organizationId" | "workspaceId">,
+  market: string,
+  ownership?: CalculationOwnership,
+) {
+  if (ownership === undefined) ownership = await resolveCalculationOwnership(connection, job.opportunityId);
+  const account = ownership?.owner?.account_id;
+  const ruleScope = (table: "score_rules" | "cost_rules", legacy: boolean) =>
+    (account ? "" : "r.organization_id=? AND r.workspace_id=? AND ") +
+    (ownership
+      ? `${account ? "" : "NOT "}EXISTS (SELECT 1 FROM account_owned_records a WHERE a.source_table='${table}' AND a.source_id=r.id${account ? " AND a.account_id=?" : ""}${account && !legacy ? " AND r.account_id=a.account_id" : ""}) AND `
+      : "");
+  const args = account ? [account] : [job.organizationId, job.workspaceId];
+  const legacyScore = await hasLegacyScoreRuleScope(connection);
+  const legacyCost = await hasLegacyScoreRuleScope(connection, "cost_rules");
+  const [scoreRules] = account || legacyScore ? await connection.query<RowDataPacket[]>(
+    "SELECT id,version_code,dimensions_json FROM score_rules r WHERE " + ruleScope("score_rules", legacyScore) +
+      "status='active' ORDER BY activated_at DESC,id DESC LIMIT 1 LOCK IN SHARE MODE",
+    args,
+  ) : [[]];
+  const [costRules] = account || legacyCost ? await connection.query<RowDataPacket[]>(
+    "SELECT id,version_code,fee_lines_json,conversion_rates_json,automatic_scope_json FROM cost_rules r WHERE " +
+      ruleScope("cost_rules", legacyCost) + "market=? AND platform='amazon' AND status='active' ORDER BY published_at DESC,id DESC LIMIT 1 LOCK IN SHARE MODE",
+    [...args, market],
+  ) : [[]];
+  return {scoreRules, costRules, ownership};
+}
+/** Called under the original opportunity lock and within the evaluation transaction. */
+export async function queueAutomaticCalculationJob(
+  connection: PoolConnection,
+  kind: "score" | "profit",
+  ownership: CalculationOwnership,
+  opportunityId: string,
+  ruleId: string,
+  requestId: string,
+  traceId: string,
+  now: Date,
+) {
+  const [table, ruleColumn, ruleTable] = kind === "score"
+    ? ["opportunity_score_jobs", "score_rule_id", "score_rules"] as const
+    : ["opportunity_profit_jobs", "cost_rule_id", "cost_rules"] as const;
+  if (!(await calculationOwnersMatch(connection, ownership, [[ruleTable, ruleId]])))
+    throw new AutomaticSelectionEvaluationError("automatic_calculation_rule_owner_mismatch", false);
+  if (ownership?.owner && !await hasLegacyScoreRuleScope(connection, ruleTable)) {
+    const [[rule]] = await connection.query<RowDataPacket[]>(
+      `SELECT id FROM ${ruleTable} WHERE id=? AND account_id=? LOCK IN SHARE MODE`,
+      [ruleId, ownership.owner.account_id],
+    );
+    if (!rule) throw new AutomaticSelectionEvaluationError("automatic_calculation_rule_owner_mismatch", false);
+  }
+  const [existing] = await connection.query<RowDataPacket[]>(
+    "SELECT id FROM " + table + " WHERE opportunity_id=? AND " + ruleColumn + "=? AND " +
+      "status IN ('queued','leased','retry_scheduled') LIMIT 1",
+    [opportunityId, ruleId],
+  );
+  if (existing[0]) {
+    if (!(await calculationOwnersMatch(connection, ownership, [[table, String(existing[0].id)]], true)))
+      throw new AutomaticSelectionEvaluationError("automatic_calculation_job_owner_mismatch", false);
+    return;
+  }
+  const id = randomUUID();
+  await connection.query(
+    "INSERT INTO " + table + " (id,opportunity_id," + ruleColumn + "," +
+      "status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES (?,?,?,'queued',0,?,?,?,?,?)",
+    [id, opportunityId, ruleId, now, requestId, traceId, now, now],
+  );
+  await registerCalculationOwners(connection, ownership, [[table, id]]);
+}
 type FeeLine = { type: string; mode: string; value: number; currency: string | null };
 type ConversionRate = {
   base_currency: string;
@@ -121,14 +206,20 @@ export class AutomaticSelectionEvaluationError extends Error {
 
 export async function queueAutomaticSelectionEvaluation(
   connection: PoolConnection,
-  input: { organizationId: string; workspaceId: string; opportunityId: string; now: Date },
+  input: { opportunityId: string; now: Date } & ({ accountId: string } | { organizationId: string; workspaceId: string }),
 ) {
+  if ("accountId" in input) {
+    await queueOwnedSelectionEvaluation(connection, input.opportunityId, input.accountId,
+      await nativeOpportunityStorage(connection), input.now);
+    return;
+  }
   await connection.query(
     "INSERT INTO automatic_selection_evaluations " +
-      "(opportunity_id,organization_id,workspace_id,status,attempt_count,available_at,created_at,updated_at) " +
-      "VALUES (?,?,?,'queued',0,?,?,?) " +
+      "(opportunity_id,status,attempt_count,available_at,created_at,updated_at) " +
+      "SELECT o.id,'queued',0,?,?,? FROM opportunities o " +
+      "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? " +
       automaticEvaluationEnqueueUpdateSql,
-    [input.opportunityId, input.organizationId, input.workspaceId, input.now, input.now, input.now],
+    [input.now, input.now, input.now, input.opportunityId, input.organizationId, input.workspaceId],
   );
 }
 
@@ -150,7 +241,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     try {
       const sourceVerdict = await classifyPrimarySource(
         this.pool,
-        job,
+        job.executionOwnership?.owner ? { ...job, accountId: job.executionOwnership.owner.account_id } : job,
         this.supplyClassifier?.selectPrimary
           ? { selectPrimary: this.supplyClassifier.selectPrimary.bind(this.supplyClassifier) }
           : undefined,
@@ -187,11 +278,13 @@ export class MySqlAutomaticSelectionEvaluationWorker {
 
   private async enqueueEligibleCandidates() {
     const now = this.now();
-    if (this.supplyClassifier) await recoverSupplyClassifierEvaluations(this.pool, now);
-    await enqueueMissingSelectionEvaluations(this.pool, now);
-    await recoverSkippedSelectionEvaluations(this.pool, now);
-    await recoverDeviceFitEvaluations(this.pool, now);
-    if (this.supplyClassifier?.selectPrimary) await recoverPrimarySourceEvaluations(this.pool, now);
+    const native = await hasNativeNormalizedAccountScope(this.pool);
+    const accountParent = native && await nativeOpportunityStorage(this.pool);
+    if (this.supplyClassifier) await recoverSupplyClassifierEvaluations(this.pool, now, native, accountParent);
+    await enqueueMissingSelectionEvaluations(this.pool, now, native, accountParent);
+    await recoverSkippedSelectionEvaluations(this.pool, now, native, accountParent);
+    await recoverDeviceFitEvaluations(this.pool, now, native, accountParent);
+    if (this.supplyClassifier?.selectPrimary) await recoverPrimarySourceEvaluations(this.pool, now, native, accountParent);
   }
 
   private async claim(): Promise<EvaluationJob | null> {
@@ -211,6 +304,10 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         await connection.commit();
         return null;
       }
+      const parent = await readCalculationOpportunityForClaim(
+        connection, String(row.opportunity_id), "automatic_selection_opportunity_missing",
+      );
+      const ownership = parent.ownership ?? await resolveCalculationOwnership(connection, String(row.opportunity_id));
       await connection.query(
         "UPDATE automatic_selection_evaluations SET status='leased',attempt_count=attempt_count+1," +
           "result_json=JSON_REMOVE(result_json,'$.requeue_requested')," +
@@ -220,9 +317,11 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       await connection.commit();
       return {
         opportunityId: String(row.opportunity_id),
-        organizationId: String(row.organization_id),
-        workspaceId: String(row.workspace_id),
+        organizationId: parent.organizationId,
+        workspaceId: parent.workspaceId,
         attemptCount: Number(row.attempt_count) + 1,
+        ...(ownership ? { executionOwnership: ownership } : {}),
+        ...(parent.ownership ? { nativeParent: true as const } : {}),
       };
     } catch (error) {
       await connection.rollback();
@@ -235,11 +334,10 @@ export class MySqlAutomaticSelectionEvaluationWorker {
   private async classifySupplyTitles(job: EvaluationJob): Promise<SupplyTitleContext | undefined> {
     if (!this.supplyClassifier) return undefined;
     const params = [job.opportunityId, job.organizationId, job.workspaceId];
-    const [[linked], [details]] = await Promise.all([
-      this.pool.query<RowDataPacket[]>(automaticPrimaryEvidenceSql, params),
-      this.pool.query<RowDataPacket[]>(automaticPrimaryDetailEvidenceSql, params),
-    ]);
-    const primary = primaryEvidence(linked[0], details[0]);
+    const account = job.executionOwnership?.owner?.account_id;
+    const { linked, detail } = await readAutomaticPrimaryEvidence(this.pool,
+      account ? { ...job, accountId: account } : job);
+    const primary = primaryEvidence(linked, detail);
     if (!primary) return undefined;
     const fields = normalizedProductFields(parse(primary.payload_json, {})),
       title = text(fields.title),
@@ -253,12 +351,15 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       isPhoneCase(title)
     )
       return undefined;
-    const [snapshots] = await this.pool.query<RowDataPacket[]>(automaticPrimarySnapshotSql, [
-      ...params,
+    const [snapshots] = await this.pool.query<RowDataPacket[]>(
+      account ? accountAutomaticPrimarySnapshotSql : automaticPrimarySnapshotSql, [
+      ...(account ? [job.opportunityId, account] : params),
       amazonAsin(fields, text(fields.canonical_url ?? fields.source_url)) ?? "",
     ]);
     if (!snapshots[0]) return undefined;
-    const [rows] = await this.pool.query<RowDataPacket[]>(automaticSupplyEvidenceSql, params),
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      account ? accountAutomaticSupplyEvidenceSql : automaticSupplyEvidenceSql,
+      account ? [job.opportunityId, account] : params),
       supplies = supplyFacts(rows);
     if (supplies.every((item) => !item.skuId) && selectConservativeSupplyMatch(title, supplies))
       return undefined;
@@ -326,11 +427,14 @@ export class MySqlAutomaticSelectionEvaluationWorker {
   private async renewClassificationLease(job: EvaluationJob) {
     const now = this.now(),
       expires = new Date(now.getTime() + this.leaseSeconds * 1000);
+    const scope = evaluationOwnerPredicate(job, "p");
+    const owned = Boolean(job.executionOwnership?.owner);
     const [result] = await this.pool.query<ResultSetHeader>(
       "UPDATE automatic_selection_evaluations SET lease_expires_at=?,updated_at=? " +
-        "WHERE opportunity_id=? AND organization_id=? AND workspace_id=? AND status='leased' " +
-        "AND lease_owner=? AND lease_expires_at>?",
-      [expires, now, job.opportunityId, job.organizationId, job.workspaceId, this.workerId, now],
+        "WHERE opportunity_id=? AND EXISTS (SELECT 1 FROM opportunities p " +
+        `WHERE p.id=automatic_selection_evaluations.opportunity_id AND ${scope.sql}) AND status='leased' ` +
+        "AND lease_owner=? AND lease_expires_at>?" + (owned ? " AND attempt_count=?" : ""),
+      [expires, now, job.opportunityId, ...scope.args, this.workerId, now, ...(owned ? [job.attemptCount] : [])],
     );
     if (result.affectedRows !== 1)
       throw new AutomaticSelectionEvaluationError("automatic_selection_lease_expired", true);
@@ -348,16 +452,32 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       traceId = randomUUID();
     try {
       await connection.beginTransaction();
+      const nativeEvidence = await hasNativeNormalizedAccountScope(connection);
+      const accountParent = nativeEvidence && await nativeOpportunityStorage(connection);
+      const leasedAccount = job.executionOwnership?.owner?.account_id;
+      if (accountParent && !leasedAccount)
+        throw new AutomaticSelectionEvaluationError("automatic_selection_owner_changed", true);
       const [opportunities] = await connection.query<RowDataPacket[]>(
-        "SELECT o.* FROM opportunities o WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? " +
+        accountParent ? accountAutomaticEvaluationQueries.lock : nativeEvidence ? nativeAutomaticEvaluationLockSql :
+          "SELECT o.* FROM opportunities o WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? " +
           `AND o.decision_status='pending' AND o.lifecycle_status NOT IN ('archived','deleted') AND ${selectionCandidateSql} FOR UPDATE`,
-        [job.opportunityId, job.organizationId, job.workspaceId],
+        accountParent ? [job.opportunityId, leasedAccount] : [job.opportunityId, job.organizationId, job.workspaceId],
       );
-      if (classification || this.supplyClassifier || sourceVerdict) {
+      const ownership = await resolveCalculationOwnership(connection, job.opportunityId);
+      if (job.executionOwnership?.owner &&
+          job.executionOwnership.owner.account_id !== ownership?.owner?.account_id)
+        throw new AutomaticSelectionEvaluationError("automatic_selection_owner_changed", true);
+      job = { ...job, executionOwnership: ownership, nativeParent: accountParent };
+      const ownerCheck = evaluationOwnerPredicate(job, "p");
+      const updateCheck = evaluationOwnerPredicate(job, "opportunities");
+      if (ownership?.owner || classification || this.supplyClassifier || sourceVerdict) {
         const [leases] = await connection.query<RowDataPacket[]>(
-          "SELECT opportunity_id FROM automatic_selection_evaluations WHERE opportunity_id=? AND organization_id=? AND workspace_id=? " +
-            "AND status='leased' AND lease_owner=? AND lease_expires_at>? FOR UPDATE",
-          [job.opportunityId, job.organizationId, job.workspaceId, this.workerId, now],
+          "SELECT opportunity_id FROM automatic_selection_evaluations WHERE opportunity_id=? AND EXISTS (SELECT 1 FROM opportunities p " +
+            `WHERE p.id=automatic_selection_evaluations.opportunity_id AND ${ownerCheck.sql}) ` +
+            "AND status='leased' AND lease_owner=? AND lease_expires_at>?" +
+            (ownership?.owner ? " AND attempt_count=?" : "") + " FOR UPDATE",
+          [job.opportunityId, ...ownerCheck.args, this.workerId, this.now(),
+            ...(ownership?.owner ? [job.attemptCount] : [])],
         );
         if (!leases[0])
           throw new AutomaticSelectionEvaluationError("automatic_selection_lease_expired", true);
@@ -378,16 +498,10 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           payload: { skipped: "primary_product_missing_or_not_pending" },
         };
       }
-      const [amazonRows] = await connection.query<RowDataPacket[]>(automaticPrimaryEvidenceSql, [
-        job.opportunityId,
-        job.organizationId,
-        job.workspaceId,
-      ]);
-      const [detailRows] = await connection.query<RowDataPacket[]>(
-        automaticPrimaryDetailEvidenceSql,
-        [job.opportunityId, job.organizationId, job.workspaceId],
-      );
-      const amazon = primaryEvidence(amazonRows[0], detailRows[0]);
+      const accountId = ownership?.owner?.account_id;
+      const sourceScope = accountId ? { ...job, accountId } : job;
+      const { linked, detail } = await readAutomaticPrimaryEvidence(connection, sourceScope);
+      const amazon = primaryEvidence(linked, detail);
       if (!amazon)
         return await this.waiting(connection, job, "amazon_product_evidence_missing", {}, now);
       const fields = normalizedProductFields(parse(amazon.payload_json, {})),
@@ -408,12 +522,12 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           },
           now,
         );
-      const sourceContext = await readPrimarySourceContext(connection, job);
+      const sourceContext = await readPrimarySourceContext(connection, sourceScope);
       let sourceSupportNew = false;
       if (sourceContext) {
         if (sourceVerdict && sourceVerdict.fingerprint !== sourceContext.fingerprint)
           throw new AutomaticSelectionEvaluationError("automatic_primary_source_changed", true);
-        const cached = await readPrimarySourceVerdict(connection, job, sourceContext);
+        const cached = await readPrimarySourceVerdict(connection, sourceScope, sourceContext);
         if (!cached && sourceVerdict) {
           await this.event(
             connection,
@@ -429,9 +543,9 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         if (!(cached ?? sourceVerdict)?.supported) {
           await connection.query(
             "UPDATE opportunities SET recommendation_status='insufficient_data',version=version+1,updated_at=? " +
-              "WHERE id=? AND organization_id=? AND workspace_id=? AND decision_status='pending' " +
+              `WHERE id=? AND ${updateCheck.sql} AND decision_status='pending' ` +
               "AND recommendation_status<>'insufficient_data'",
-            [now, job.opportunityId, job.organizationId, job.workspaceId],
+            [now, job.opportunityId, ...updateCheck.args],
           );
           return await this.waiting(
             connection,
@@ -444,46 +558,33 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           );
         }
       }
-      const [scoreRules] = await connection.query<RowDataPacket[]>(
-          "SELECT id,version_code,dimensions_json FROM score_rules WHERE organization_id=? AND " +
-            "workspace_id=? AND status='active' ORDER BY activated_at DESC,id DESC LIMIT 1",
-          [job.organizationId, job.workspaceId],
-        ),
-        [costRules] = await connection.query<RowDataPacket[]>(
-          "SELECT id,version_code,fee_lines_json,conversion_rates_json,automatic_scope_json FROM cost_rules WHERE " +
-            "organization_id=? AND workspace_id=? AND market=? AND platform='amazon' AND status='active' " +
-            "ORDER BY published_at DESC,id DESC LIMIT 1",
-          [job.organizationId, job.workspaceId, opportunity.market],
-        );
+      const {scoreRules, costRules} = await readAutomaticCalculationRules(connection, job, String(opportunity.market), ownership);
       const scoreRule = scoreRules[0];
       if (!scoreRule)
         return await this.waiting(
           connection,
           job,
           "automatic_rules_not_active",
-          { score_rule: Boolean(scoreRules[0]), cost_rule: Boolean(costRules[0]) },
+          { score_rule: false, cost_rule: Boolean(costRules[0]), market: opportunity.market },
           now,
         );
 
-      const [competitors] = await connection.query<RowDataPacket[]>(automaticPrimarySnapshotSql, [
-        job.opportunityId,
-        job.organizationId,
-        job.workspaceId,
+      const [competitors] = await connection.query<RowDataPacket[]>(
+        accountId ? accountAutomaticPrimarySnapshotSql : automaticPrimarySnapshotSql, [
+        ...(accountId ? [job.opportunityId, accountId] : [job.opportunityId, job.organizationId, job.workspaceId]),
         amazonAsin(fields, text(fields.canonical_url ?? fields.source_url)) ?? "",
       ]);
       const competitor = competitors[0];
       if (!competitor)
         return await this.waiting(connection, job, "amazon_competitor_snapshot_missing", {}, now);
 
-      const competitionSql = selectionCompletedCompetitorsSql.replace(
-        "s_sample.id snapshot_id,s_sample.evidence_id FROM",
-        "s_sample.id snapshot_id,s_sample.review_count,s_sample.evidence_id FROM",
+      const nativeCompetition = accountId && nativeEvidence;
+      const competition = completedCompetitorRead(
+        [job.opportunityId, job.organizationId, job.workspaceId],
+        nativeCompetition ? { account: accountId, accountParent, asin: amazonAsin(fields, text(fields.canonical_url ?? fields.source_url)) ?? "" } : undefined,
+        true,
       );
-      const [competitionRows] = await connection.query<RowDataPacket[]>(competitionSql, [
-        job.opportunityId,
-        job.organizationId,
-        job.workspaceId,
-      ]);
+      const [competitionRows] = await connection.query<RowDataPacket[]>(competition.sql, competition.args);
       const competitionFacts = calculateCompetitorMedian(
         competitionRows.map((row) => ({
           asin: String(row.asin),
@@ -506,7 +607,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
             ...competitionFacts.evidenceIds,
             String(competitor.evidence_id),
           ],
-          qualityBlocked = await this.qualityBlocked(connection, job, evidenceIds),
+          qualityBlocked = await this.qualityBlocked(connection, job, evidenceIds, Boolean(ownership?.owner)),
           product: ProductFacts = {
             title: amazonTitle,
             price: amazonPrice,
@@ -558,6 +659,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           scoreInputsChanged =
             (await this.upsertScoreInput(connection, {
               job,
+              ownership,
               dimension,
               score: supported && !qualityBlocked ? value : null,
               evidenceIds: scoreEvidence[dimension.code] ?? evidenceIds,
@@ -578,19 +680,22 @@ export class MySqlAutomaticSelectionEvaluationWorker {
               now,
             })) || scoreInputsChanged;
         }
-        if (scoreInputsChanged || sourceSupportNew || !opportunity.score_rule_version)
-          await this.queueScore(connection, job, String(scoreRule.id), requestId, traceId, now);
+        const needsScore =
+          scoreInputsChanged ||
+          sourceSupportNew ||
+          opportunity.score_rule_version !== scoreRule.version_code;
+        if (needsScore)
+          await queueAutomaticCalculationJob(connection, "score", ownership, job.opportunityId, String(scoreRule.id), requestId, traceId, now);
         await connection.query(
           "UPDATE opportunities SET risk_level=?,recommendation_status=IF(?,'insufficient_data'," +
-            "recommendation_status),profit_status=IF(?,'insufficient_data',profit_status),version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+            `recommendation_status),profit_status=IF(?,'insufficient_data',profit_status),version=version+1,updated_at=? WHERE id=? AND ${updateCheck.sql}`,
           [
             facts.riskLevel,
             qualityBlocked || Boolean(missingProfitReason),
             Boolean(missingProfitReason),
             now,
             job.opportunityId,
-            job.organizationId,
-            job.workspaceId,
+            ...updateCheck.args,
           ],
         );
         if (missingProfitReason && scoreInputsChanged)
@@ -620,7 +725,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
             traceId,
             now,
           );
-        return { scoreInputsChanged, qualityBlocked };
+        return { scoreInputsChanged, qualityBlocked, needsScore };
       };
       const waitForCost = async (code: string, payload: Record<string, unknown>) => {
         const result = await publishScores(
@@ -634,12 +739,13 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           }),
           code,
         );
-        if (!result.scoreInputsChanged)
+        if (!result.needsScore)
           await recordSelectionPipelineCompletion(
             connection,
             { ...job, requestId, traceId },
             this.workerId,
             now,
+            ownership,
           );
         return this.waiting(
           connection,
@@ -655,11 +761,10 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           now,
         );
       };
-      const [supplyRows] = await connection.query<RowDataPacket[]>(automaticSupplyEvidenceSql, [
-        job.opportunityId,
-        job.organizationId,
-        job.workspaceId,
-      ]);
+      const [supplyRows] = await connection.query<RowDataPacket[]>(
+        accountId ? accountAutomaticSupplyEvidenceSql : automaticSupplyEvidenceSql,
+        accountId ? [job.opportunityId, accountId] : [job.opportunityId, job.organizationId, job.workspaceId],
+      );
       const supplies = supplyFacts(supplyRows),
         supplyMatch =
           selectClassifiedSupplyQuote(
@@ -670,7 +775,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           ) ?? selectConservativeSupplyMatch(amazonTitle, supplies);
 
       if (!supplyMatch && isPhoneCase(amazonTitle)) {
-        const retired = await retireUnmatchedAutomaticSupplyQuotes(connection, job);
+        const retired = await retireUnmatchedAutomaticSupplyQuotes(connection, sourceScope);
         if (retired.length)
           await this.event(
             connection,
@@ -690,6 +795,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       // Product prices are source facts; category-specific fees only gate profit calculation.
       const saleChanged = await this.upsertCostInput(connection, {
           job,
+          ownership,
           platform: "amazon",
           type: "sale_price",
           amount: amazonPrice,
@@ -704,6 +810,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         purchaseChanged = supplyMatch
           ? await this.upsertCostInput(connection, {
               job,
+              ownership,
               platform: "amazon",
               type: "purchase_price",
               amount: supplyMatch.conservativePrice,
@@ -745,6 +852,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         return await waitForCost("automatic_rules_not_active", {
           score_rule: true,
           cost_rule: false,
+          market: opportunity.market,
         });
       const automaticScope = parse<{ product_family?: string }>(
         costRules[0].automatic_scope_json,
@@ -753,6 +861,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       if (automaticScope.product_family !== "phone_case" || !isPhoneCase(amazonTitle))
         return await waitForCost("automatic_cost_scope_mismatch", {
           configured_product_family: automaticScope.product_family ?? null,
+          market: opportunity.market,
         });
 
       if (!supplyMatch)
@@ -781,9 +890,9 @@ export class MySqlAutomaticSelectionEvaluationWorker {
 
       const [currentCostRows] = await connection.query<RowDataPacket[]>(
           "SELECT id,input_type,evidence_id,input_version,confirmation_mode,created_at FROM " +
-            "opportunity_cost_inputs WHERE opportunity_id=? AND organization_id=? AND workspace_id=? " +
+            "opportunity_cost_inputs WHERE opportunity_id=? " +
             "AND platform='amazon' AND input_type IN ('sale_price','purchase_price') AND is_current=1",
-          [job.opportunityId, job.organizationId, job.workspaceId],
+          [job.opportunityId],
         ),
         currentCosts = new Map(currentCostRows.map((row) => [String(row.input_type), row])),
         currentSale = currentCosts.get("sale_price"),
@@ -811,9 +920,9 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           date(currentPurchase.created_at).getTime(),
         ),
         [profitRuns] = await connection.query<RowDataPacket[]>(
-          "SELECT * FROM opportunity_profit_runs WHERE opportunity_id=? AND organization_id=? AND " +
-            "workspace_id=? AND cost_rule_id=? ORDER BY calculated_at DESC,id DESC LIMIT 1",
-          [job.opportunityId, job.organizationId, job.workspaceId, costRules[0].id],
+          "SELECT * FROM opportunity_profit_runs WHERE opportunity_id=? " +
+            "AND cost_rule_id=? ORDER BY calculated_at DESC,id DESC LIMIT 1",
+          [job.opportunityId, costRules[0].id],
         ),
         profitRun = profitRuns[0],
         inputsChanged = saleChanged || purchaseChanged;
@@ -822,7 +931,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         !profitRun ||
         date(profitRun.calculated_at).getTime() < newestCostInputAt
       ) {
-        await this.queueProfit(connection, job, String(costRules[0].id), requestId, traceId, now);
+        await queueAutomaticCalculationJob(connection, "profit", ownership, job.opportunityId, String(costRules[0].id), requestId, traceId, now);
         await publishScores(null, [], costFingerprint, "profit_calculation_pending");
         await this.complete(
           connection,
@@ -847,7 +956,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           missing_fields: parse(profitRun.missing_fields_json, []),
         });
 
-      const { scoreInputsChanged, qualityBlocked } = await publishScores(
+      const { scoreInputsChanged, qualityBlocked, needsScore } = await publishScores(
         number(profitRun.net_margin_percent),
         currentCostEvidenceIds,
         costFingerprint,
@@ -878,12 +987,13 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         traceId,
         now,
       );
-      if (!scoreInputsChanged)
+      if (!needsScore)
         await recordSelectionPipelineCompletion(
           connection,
           { ...job, requestId, traceId },
           this.workerId,
           now,
+          ownership,
         );
       await connection.commit();
       return {
@@ -905,15 +1015,16 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     payload: Record<string, unknown>,
     now: Date,
   ) {
+    const ownerCheck = evaluationOwnerPredicate(job, "o");
     if (code === "high_confidence_1688_match_missing")
       await connection.query(
         "UPDATE opportunities o SET o.recommendation_status='insufficient_data',o.version=o.version+1,o.updated_at=? " +
-          "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending' " +
+          `WHERE o.id=? AND ${ownerCheck.sql} AND o.decision_status='pending' ` +
           "AND o.recommendation_status='recommend' AND EXISTS (SELECT 1 FROM opportunity_cost_inputs ci " +
-          "WHERE ci.opportunity_id=o.id AND ci.organization_id=o.organization_id AND ci.workspace_id=o.workspace_id " +
+          "WHERE ci.opportunity_id=o.id " +
           "AND ci.platform='amazon' AND ci.input_type='purchase_price' AND ci.is_current=1 " +
           "AND ci.confirmation_mode='automatic_evidence')",
-        [now, job.opportunityId, job.organizationId, job.workspaceId],
+        [now, job.opportunityId, ...ownerCheck.args],
       );
     await this.complete(
       connection,
@@ -931,6 +1042,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     connection: PoolConnection,
     input: {
       job: EvaluationJob;
+      ownership: CalculationOwnership;
       platform: string;
       type: "sale_price" | "purchase_price";
       amount: number;
@@ -944,18 +1056,21 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     },
   ) {
     const [currentRows] = await connection.query<RowDataPacket[]>(
-      "SELECT * FROM opportunity_cost_inputs WHERE opportunity_id=? AND organization_id=? AND " +
-        "workspace_id=? AND platform=? AND input_type=? AND is_current=1 LIMIT 1 FOR UPDATE",
+      "SELECT * FROM opportunity_cost_inputs WHERE opportunity_id=? " +
+        "AND platform=? AND input_type=? AND is_current=1 FOR UPDATE",
       [
         input.job.opportunityId,
-        input.job.organizationId,
-        input.job.workspaceId,
         input.platform,
         input.type,
       ],
     );
     const current = currentRows[0];
+    if (input.ownership && !(await calculationOwnersMatch(connection, input.ownership,
+      currentRows.map(row => ["opportunity_cost_inputs", String(row.id)]), true)))
+      throw new AutomaticSelectionEvaluationError("automatic_cost_input_owner_mismatch", false);
     if (current?.confirmation_mode === "human_review") return false;
+    if (!(await calculationOwnersMatch(connection, input.ownership, [["raw_evidence", input.evidenceId]])))
+      throw new AutomaticSelectionEvaluationError("automatic_input_evidence_owner_mismatch", false);
     if (
       current &&
       Number(current.amount_value) === rounded(input.amount) &&
@@ -967,36 +1082,31 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       return false;
     const [versions] = await connection.query<RowDataPacket[]>(
         "SELECT COALESCE(MAX(input_version),0)+1 next_version FROM opportunity_cost_inputs WHERE " +
-          "opportunity_id=? AND organization_id=? AND workspace_id=? AND platform=? AND input_type=?",
+          "opportunity_id=? AND platform=? AND input_type=?",
         [
           input.job.opportunityId,
-          input.job.organizationId,
-          input.job.workspaceId,
           input.platform,
           input.type,
         ],
       ),
       version = Number(versions[0]?.next_version ?? 1);
     await connection.query(
-      "UPDATE opportunity_cost_inputs SET is_current=0 WHERE opportunity_id=? AND organization_id=? AND " +
-        "workspace_id=? AND platform=? AND input_type=? AND is_current=1",
+      "UPDATE opportunity_cost_inputs SET is_current=0 WHERE opportunity_id=? " +
+        "AND platform=? AND input_type=? AND is_current=1",
       [
         input.job.opportunityId,
-        input.job.organizationId,
-        input.job.workspaceId,
         input.platform,
         input.type,
       ],
     );
+    const id = randomUUID();
     await connection.query(
-      "INSERT INTO opportunity_cost_inputs (id,organization_id,workspace_id,opportunity_id,platform," +
+      "INSERT INTO opportunity_cost_inputs (id,opportunity_id,platform," +
         "input_type,amount_value,currency,source_type,source_ref_id,evidence_id,observed_at,input_version," +
         "is_current,confirmation_mode,submitted_by,confirmed_by,request_id,trace_id,created_at) VALUES " +
-        "(?,?,?,?,?,?,?,?,?,?,?,?,?,1,'automatic_evidence',?,NULL,?,?,?)",
+        "(?,?,?,?,?,?,?,?,?,?,?,1,'automatic_evidence',?,NULL,?,?,?)",
       [
-        randomUUID(),
-        input.job.organizationId,
-        input.job.workspaceId,
+        id,
         input.job.opportunityId,
         input.platform,
         input.type,
@@ -1013,6 +1123,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         input.now,
       ],
     );
+    await registerCalculationOwners(connection, input.ownership, [["opportunity_cost_inputs", id]]);
     return true;
   }
 
@@ -1020,6 +1131,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     connection: PoolConnection,
     input: {
       job: EvaluationJob;
+      ownership: CalculationOwnership;
       dimension: ScoreDimension;
       score: number | null;
       evidenceIds: string[];
@@ -1034,10 +1146,15 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     const evidenceJson = JSON.stringify([...new Set(input.evidenceIds)]),
       missingJson = JSON.stringify([...new Set(input.missingFields)]),
       [currentRows] = await connection.query<RowDataPacket[]>(
-        "SELECT * FROM opportunity_score_inputs WHERE opportunity_id=? AND dimension_code=? AND is_current=1 LIMIT 1 FOR UPDATE",
+        "SELECT * FROM opportunity_score_inputs WHERE opportunity_id=? AND dimension_code=? AND is_current=1 FOR UPDATE",
         [input.job.opportunityId, input.dimension.code],
       ),
       current = currentRows[0];
+    if (input.ownership && !(await calculationOwnersMatch(connection, input.ownership,
+      currentRows.map(row => ["opportunity_score_inputs", String(row.id)]), true)))
+      throw new AutomaticSelectionEvaluationError("automatic_score_input_owner_mismatch", false);
+    if (!(await calculationOwnersMatch(connection, input.ownership, input.evidenceIds.map(id => ["raw_evidence", id]))))
+      throw new AutomaticSelectionEvaluationError("automatic_input_evidence_owner_mismatch", false);
     if (
       current &&
       (current.score_value == null
@@ -1057,15 +1174,14 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       "UPDATE opportunity_score_inputs SET is_current=0 WHERE opportunity_id=? AND dimension_code=? AND is_current=1",
       [input.job.opportunityId, input.dimension.code],
     );
+    const id = randomUUID();
     await connection.query(
-      "INSERT INTO opportunity_score_inputs (id,organization_id,workspace_id,opportunity_id," +
+      "INSERT INTO opportunity_score_inputs (id,opportunity_id," +
         "dimension_code,evidence_group,score_value,source_type,source_ref_id,evidence_ids_json," +
         "missing_fields_json,observed_at,input_version,is_current,created_by,request_id,trace_id,created_at) " +
-        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)",
+        "VALUES (?,?,?,?,?,?,?,?,?,?,?,1,?,?,?,?)",
       [
-        randomUUID(),
-        input.job.organizationId,
-        input.job.workspaceId,
+        id,
         input.job.opportunityId,
         input.dimension.code,
         input.dimension.evidence_group,
@@ -1082,91 +1198,37 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         input.now,
       ],
     );
+    await registerCalculationOwners(connection, input.ownership, [["opportunity_score_inputs", id]]);
     return true;
-  }
-
-  private async queueProfit(
-    connection: PoolConnection,
-    job: EvaluationJob,
-    ruleId: string,
-    requestId: string,
-    traceId: string,
-    now: Date,
-  ) {
-    const [existing] = await connection.query<RowDataPacket[]>(
-      "SELECT id FROM opportunity_profit_jobs WHERE opportunity_id=? AND cost_rule_id=? AND " +
-        "status IN ('queued','leased','retry_scheduled') LIMIT 1",
-      [job.opportunityId, ruleId],
-    );
-    if (existing[0]) return;
-    await connection.query(
-      "INSERT INTO opportunity_profit_jobs (id,organization_id,workspace_id,opportunity_id,cost_rule_id," +
-        "status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES " +
-        "(?,?,?,?,?,'queued',0,?,?,?,?,?)",
-      [
-        randomUUID(),
-        job.organizationId,
-        job.workspaceId,
-        job.opportunityId,
-        ruleId,
-        now,
-        requestId,
-        traceId,
-        now,
-        now,
-      ],
-    );
-  }
-
-  private async queueScore(
-    connection: PoolConnection,
-    job: EvaluationJob,
-    ruleId: string,
-    requestId: string,
-    traceId: string,
-    now: Date,
-  ) {
-    const [existing] = await connection.query<RowDataPacket[]>(
-      "SELECT id FROM opportunity_score_jobs WHERE opportunity_id=? AND score_rule_id=? AND " +
-        "status IN ('queued','leased','retry_scheduled') LIMIT 1",
-      [job.opportunityId, ruleId],
-    );
-    if (existing[0]) return;
-    await connection.query(
-      "INSERT INTO opportunity_score_jobs (id,organization_id,workspace_id,opportunity_id,score_rule_id," +
-        "status,attempt_count,available_at,request_id,trace_id,created_at,updated_at) VALUES " +
-        "(?,?,?,?,?,'queued',0,?,?,?,?,?)",
-      [
-        randomUUID(),
-        job.organizationId,
-        job.workspaceId,
-        job.opportunityId,
-        ruleId,
-        now,
-        requestId,
-        traceId,
-        now,
-        now,
-      ],
-    );
   }
 
   private async qualityBlocked(
     connection: PoolConnection,
     job: EvaluationJob,
     evidenceIds: string[],
+    accountMode: boolean,
   ) {
     const unique = [...new Set(evidenceIds)];
     if (!unique.length) return true;
+    const account = accountMode ? job.executionOwnership?.owner?.account_id : null;
+    if (accountMode && !account) return true;
     const placeholders = unique.map(() => "?").join(","),
       [rows] = await connection.query<RowDataPacket[]>(
-        `SELECT COUNT(*) blocked FROM raw_evidence e WHERE e.organization_id=? AND e.workspace_id=? ` +
-          `AND e.id IN (${placeholders}) AND (e.status<>'active' OR EXISTS (SELECT 1 FROM ` +
-          `data_quality_issues i WHERE i.raw_evidence_id=e.id AND i.organization_id=e.organization_id ` +
-          `AND i.workspace_id=e.workspace_id AND i.status='open' AND i.severity='critical'))`,
-        [job.organizationId, job.workspaceId, ...unique],
+        account ? `SELECT COUNT(*) matched,COALESCE(SUM(eo.source_id IS NULL OR eto.source_id IS NULL OR e.status<>'active' OR EXISTS (
+            SELECT 1 FROM data_quality_issues i WHERE i.raw_evidence_id=e.id
+            AND i.status='open' AND i.severity='critical')),0) blocked FROM raw_evidence e
+          LEFT JOIN account_owned_records eo ON eo.source_table='raw_evidence' AND eo.source_id=e.id AND eo.account_id=?
+          LEFT JOIN collection_tasks et ON et.id=e.collection_task_id
+          LEFT JOIN account_owned_records eto ON eto.source_table='collection_tasks' AND eto.source_id=et.id AND eto.account_id=eo.account_id
+          WHERE e.id IN (${placeholders})`
+          : `SELECT COUNT(*) blocked FROM raw_evidence e WHERE e.organization_id=? AND e.workspace_id=? ` +
+            `AND e.id IN (${placeholders}) AND (e.status<>'active' OR EXISTS (SELECT 1 FROM ` +
+            "data_quality_issues i WHERE i.raw_evidence_id=e.id AND i.organization_id=e.organization_id " +
+            "AND i.workspace_id=e.workspace_id AND i.status='open' AND i.severity='critical'))",
+        account ? [account, ...unique] : [job.organizationId, job.workspaceId, ...unique],
       );
-    return Number(rows[0]?.blocked ?? 0) > 0;
+    return (Boolean(account) && Number(rows[0]?.matched ?? 0) !== unique.length) ||
+      Number(rows[0]?.blocked ?? 0) > 0;
   }
 
   private async complete(
@@ -1177,7 +1239,9 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     result: Record<string, unknown>,
     now: Date,
   ) {
-    await connection.query(automaticEvaluationCompleteSql, [
+    const owned = Boolean(job.executionOwnership?.owner);
+    const [write] = await connection.query<ResultSetHeader>(automaticEvaluationCompleteSql +
+      (owned ? " AND status='leased' AND attempt_count=? AND lease_expires_at>?" : ""), [
       status,
       now,
       typeof result.error_code === "string" ? result.error_code : null,
@@ -1194,7 +1258,10 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       now,
       job.opportunityId,
       this.workerId,
+      ...(owned ? [job.attemptCount, this.now()] : []),
     ]);
+    if (owned && write.affectedRows !== 1)
+      throw new AutomaticSelectionEvaluationError("automatic_selection_lease_expired", true);
   }
 
   private async finishFailure(job: EvaluationJob, status: EvaluationStatus, code: string) {
@@ -1205,7 +1272,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         status === "scheduled"
           ? new Date(now.getTime() + delays[Math.min(job.attemptCount - 1, 2)]!)
           : now;
-    await this.pool.query(automaticEvaluationFailureSql, [
+    await this.pool.query(automaticEvaluationFailureSql + " AND status='leased' AND attempt_count=? AND lease_expires_at>?", [
       stored,
       now,
       available,
@@ -1213,6 +1280,8 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       now,
       job.opportunityId,
       this.workerId,
+      job.attemptCount,
+      now,
     ]);
   }
 
@@ -1226,22 +1295,32 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     now: Date,
   ) {
     const id = randomUUID();
-    await connection.query(
-      "INSERT INTO opportunity_events (id,organization_id,workspace_id,event_type,resource_type," +
-        "resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES " +
-        "(?,?,?,?,'opportunity',?,'worker',?,?,?,?,?)",
-      [
-        id,
-        job.organizationId,
-        job.workspaceId,
-        eventType,
-        job.opportunityId,
-        this.workerId,
-        requestId,
-        traceId,
-        JSON.stringify(payload),
-        now,
-      ],
-    );
+    const ownership = job.executionOwnership;
+    if (ownership?.owner) {
+      const [insert] = await connection.query<ResultSetHeader>(
+        "INSERT INTO opportunity_events (id,event_type,resource_type,resource_id,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) " +
+          "SELECT ?,?,'opportunity',o.id,'worker',?,?,?,?,? FROM opportunities o JOIN account_owned_records a " +
+          "ON a.source_table='opportunities' AND a.source_id=o.id WHERE o.id=? AND a.account_id=?",
+        [id, eventType, this.workerId, requestId, traceId, JSON.stringify(payload), now, job.opportunityId, ownership.owner.account_id],
+      );
+      if (insert.affectedRows !== 1)
+        throw new AutomaticSelectionEvaluationError("automatic_selection_event_owner_mismatch", false);
+      await registerCalculationOwners(connection, ownership, [["opportunity_events", id]]);
+      return;
+    }
+    await appendOpportunityEvent(connection, {
+      id,
+      organizationId: job.organizationId,
+      workspaceId: job.workspaceId,
+      eventType,
+      resourceType: "opportunity",
+      resourceId: job.opportunityId,
+      actorType: "worker",
+      actorId: this.workerId,
+      requestId,
+      traceId,
+      payloadJson: JSON.stringify(payload),
+      occurredAt: now,
+    });
   }
 }

@@ -30,6 +30,12 @@ function fixture(row = null) {
     release() {},
     query: async (sql, params) => {
       calls.push({ sql, params });
+      if (sql.startsWith("SHOW COLUMNS FROM opportunities"))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
+      if (sql === "SELECT organization_id,workspace_id FROM opportunities WHERE id=?") {
+        assert.deepEqual(params, [job.opportunityId]);
+        return [[{ organization_id: job.organizationId, workspace_id: job.workspaceId }]];
+      }
       return [row && sql.startsWith("SELECT * FROM automatic_selection_evaluations") ? [row] : []];
     },
   };
@@ -58,7 +64,8 @@ test("evidence and both rule producers coalesce a leased wakeup with one shared 
     assert.match(call.sql, /attempt_count=IF\(status='leased',attempt_count,0\)/);
     assert.doesNotMatch(call.sql, /lease_owner=|lease_expires_at=/);
   }
-  assert.deepEqual(enqueues[0].params.slice(0, 3), [
+  assert.match(enqueues[0].sql, /FROM opportunities o WHERE o.id=\? AND o.organization_id=\? AND o.workspace_id=\?/);
+  assert.deepEqual(enqueues[0].params.slice(3, 6), [
     job.opportunityId,
     job.organizationId,
     job.workspaceId,
@@ -103,17 +110,16 @@ for (const status of ["scheduled", "failed_terminal", "dead_letter"]) {
     assert.match(sql, /result_json=JSON_REMOVE\(result_json,'\$\.requeue_requested'\)/);
     assert.equal(params[0], status === "scheduled" ? "retry_scheduled" : status);
     assert.equal(params[2].getTime() - now.getTime(), status === "scheduled" ? 300000 : 0);
-    assert.deepEqual(params.slice(-2), [job.opportunityId, "worker"]);
+    assert.match(sql, /AND status='leased' AND attempt_count=\? AND lease_expires_at>\?$/);
+    assert.deepEqual(params.slice(-4), [job.opportunityId, "worker", job.attemptCount, now]);
   });
 }
 test("claim consumes an older wakeup only when it actually leases the row", async () => {
   const f = fixture({
     opportunity_id: job.opportunityId,
-    organization_id: job.organizationId,
-    workspace_id: job.workspaceId,
     attempt_count: 0,
   });
-  assert.equal((await f.worker.claim()).opportunityId, job.opportunityId);
+  assert.deepEqual(await f.worker.claim(), { ...job, attemptCount: 1 });
   const claim = f.calls.find((call) =>
     call.sql.startsWith("UPDATE automatic_selection_evaluations"),
   );
@@ -139,15 +145,15 @@ test("terminal statements keep hostile-looking job values in bound parameters", 
   await f.worker.finishFailure(hostileJob, "scheduled", value);
   for (const [index, expected] of [
     automaticEvaluationCompleteSql,
-    automaticEvaluationFailureSql,
+    automaticEvaluationFailureSql + " AND status='leased' AND attempt_count=? AND lease_expires_at>?",
   ].entries()) {
     const { sql, params } = f.calls[index];
     assert.equal(sql, expected);
     assert.equal(sql.includes(value), false);
     assert.equal((sql.match(/\?/g) ?? []).length, params.length);
-    assert.equal(params.length, index === 0 ? 9 : 7);
-    assert.equal(params.at(-2), value);
-    assert.equal(params.at(-1), "worker");
+    assert.equal(params.length, 9);
+    assert.equal(params.at(index === 0 ? -2 : -4), value);
+    assert.equal(params.at(index === 0 ? -1 : -3), "worker");
     assert.equal(params[index === 0 ? 2 : 3], value);
   }
 });

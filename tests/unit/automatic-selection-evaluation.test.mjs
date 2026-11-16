@@ -9,9 +9,26 @@ import {
   automaticSupplyEvidenceSql,
   automaticPrimaryTitleSql,
   automaticPrimaryImageSql,
+  accountAutomaticPrimarySnapshotSql,
 } from "../../apps/worker/dist/automatic-selection-evidence.js";
 import { selectionPrimaryAsinSql } from "../../packages/database/dist/index.js";
 import { parseLan1688Result } from "../../apps/worker/dist/lan-1688-image-search.js";
+
+test("account primary snapshot binds the exact task, subquery, provider and evidence without legacy scope", () => {
+  const sql = accountAutomaticPrimarySnapshotSql;
+  assert.doesNotMatch(sql,/organization_id|workspace_id/);
+  assert.equal((sql.replace(/'[^']*'/g, "").match(/\?/g)??[]).length,3);
+  for (const fragment of [
+    "l.collection_subquery_id=q.id AND l.collection_task_id=t.id AND l.provider_id=q.provider_id",
+    "q.provider_id=c.provider_id", "l.raw_evidence_id=s.evidence_id",
+    "n.id=CONVERT(RIGHT(s.source_ref_id,36) USING ascii)",
+    "r.id=n.raw_evidence_id AND r.provider_id=n.provider_id",
+    "ORDER BY s.captured_at DESC,s.id DESC LIMIT 1",
+  ]) assert.ok(sql.includes(fragment),fragment);
+  for (const table of ["opportunities","competitors","competitor_snapshots","collection_tasks",
+    "collection_subqueries","collection_task_evidence_links","normalized_records","raw_evidence"])
+    assert.ok(sql.includes(`source_table='${table}'`),table);
+});
 
 test("primary refresh reads current scoped facts without losing the original linked identity", () => {
   for (const [sql, record] of [
@@ -56,6 +73,8 @@ test("historical repair admits only exact skipped successes with current primary
   const worker = new MySqlAutomaticSelectionEvaluationWorker(
     {
       query: async (sql, params) => {
+        if (sql.startsWith("SHOW COLUMNS FROM normalized_records "))
+          return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
         calls.push({ sql, params });
         return [[]];
       },
@@ -209,10 +228,14 @@ test("automatic evaluation binds primary identity and supply tasks to the curren
     rollback: async () => {},
     release() {},
     query: async (sql, params) => {
+      if (sql.startsWith("SHOW COLUMNS FROM normalized_records "))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       calls.push({ sql, params });
       if (sql.includes("s_sample.id snapshot_id,s_sample.review_count")) return [[]];
       if (sql === primarySourceOriginSql) return [[]];
       if (sql.startsWith("SELECT o.*")) return [[{ market: "US" }]];
+      if (/^SHOW COLUMNS FROM (score|cost)_rules/.test(sql))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       if (sql.startsWith("SELECT id,version_code,dimensions_json")) return [[{ id: "score" }]];
       if (sql.startsWith("SELECT id,version_code,fee_lines_json"))
         return [
@@ -299,11 +322,11 @@ test("automatic evaluation binds primary identity and supply tasks to the curren
   assert.ok(automaticPrimaryDetailEvidenceSql.includes(selectionPrimaryAsinSql));
   assert.match(
     automaticPrimaryDetailEvidenceSql,
-    /s\.organization_id=c\.organization_id AND s\.workspace_id=c\.workspace_id/,
+    /JOIN competitor_snapshots s ON s\.competitor_id=c\.id/,
   );
   assert.match(
     automaticPrimaryDetailEvidenceSql,
-    /n\.organization_id=s\.organization_id AND n\.workspace_id=s\.workspace_id AND n\.status IN \('active','superseded'\)/,
+    /n\.organization_id=c\.organization_id AND n\.workspace_id=c\.workspace_id AND n\.status IN \('active','superseded'\)/,
   );
   assert.match(
     automaticPrimaryDetailEvidenceSql,
@@ -315,10 +338,10 @@ test("automatic evaluation binds primary identity and supply tasks to the curren
     call.sql.startsWith("INSERT INTO opportunity_cost_inputs"),
   );
   assert.deepEqual(
-    priceWrites.map((call) => call.params[5]),
+    priceWrites.map((call) => call.params[3]),
     ["sale_price"],
   );
-  assert.equal(priceWrites[0].params[10], "main-evidence");
+  assert.equal(priceWrites[0].params[8], "main-evidence");
   const invalidation = calls.find((call) => call.sql.startsWith("UPDATE opportunities o"));
   assert.ok(invalidation);
   assert.match(invalidation.sql, /ci.confirmation_mode='automatic_evidence'/);

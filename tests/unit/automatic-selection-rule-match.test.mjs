@@ -147,6 +147,8 @@ test("projection alert evaluation forwards the persisted rule id to provenance m
   const writes = [];
   const connection = {
     query: async (sql, values = []) => {
+      if (sql.startsWith("SHOW COLUMNS FROM trend_monitoring_rules "))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       if (sql.startsWith("SELECT id,include_keywords_json"))
         return [
           [
@@ -163,6 +165,7 @@ test("projection alert evaluation forwards the persisted rule id to provenance m
           [],
         ];
       writes.push([sql, values]);
+      if (sql.startsWith("INSERT INTO trend_events")) return [{ affectedRows: 1 }, []];
       return [[], []];
     },
   };

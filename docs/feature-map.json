@@ -1,4 +1,25 @@
 {
+  "accountAutomaticSelectionRuntime": {
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/worker/src/automatic-selection-evaluation-admission.ts",
+      "apps/worker/src/automatic-selection-recovery-evidence.ts",
+      "apps/worker/src/automatic-selection-classifier-recovery.ts",
+      "apps/worker/src/automatic-selection-skipped-recovery.ts",
+      "apps/worker/src/automatic-selection-device-fit-recovery.ts",
+      "apps/worker/src/primary-source-support-recovery.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-calculation-rule-ownership.test.mjs",
+      "tests/unit/automatic-evaluation-admission.test.mjs",
+      "tests/unit/automatic-evaluation-queue.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/unit/automatic-evidence-scoring.test.mjs",
+      "tests/unit/native-evaluation-recovery.test.mjs"
+    ],
+    "docs": ["docs/runbooks/account-selection-scoring-runtime.md"],
+    "contract": "Native automatic evaluation proves account ownership of the parent, original evidence and active rules at admission and dispatch. It fences writes by the original attempt and preserves historical results and all existing thresholds."
+  },
   "accountCollectionWorkerRuntime": {
     "sourceFiles": [
       "apps/worker/src/collection-task-state-machine.ts",

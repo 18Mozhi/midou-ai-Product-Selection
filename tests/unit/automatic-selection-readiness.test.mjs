@@ -25,6 +25,7 @@ const activeScoreRule = {
 const activeCostRule = {
   status: "active",
   platform: "amazon",
+  market: "US",
   fee_lines: [{ type: "logistics", currency: "USD" }],
   conversion_rates: [{ base_currency: "CNY", quote_currency: "USD" }],
   automatic_scope: { product_family: "phone_case" },
@@ -58,6 +59,22 @@ test("automatic selection readiness requires score evidence dimensions and appli
   const complete = resolveAutomaticSelectionReadiness([activeScoreRule], [activeCostRule]);
   assert.equal(complete.readyCount, 5);
   assert.equal(complete.allReady, true);
+});
+
+test("readiness only reports markets whose own phone case fee policy is configured", () => {
+  const result = resolveAutomaticSelectionReadiness(
+    [activeScoreRule],
+    [
+      { ...activeCostRule, market: "GLOBAL", fee_lines: [] },
+      { ...activeCostRule, market: undefined },
+      activeCostRule,
+    ],
+  );
+  const cost = result.steps.find((step) => step.code === "cost");
+  assert.equal(cost.ready, true);
+  assert.match(cost.description, /仅覆盖 US 的 Amazon 手机壳/);
+  assert.match(cost.description, /范围外仍可按真实证据评分/);
+  assert.doesNotMatch(cost.description, /GLOBAL/);
 });
 
 test("automatic selection readiness reports an independent read failure", () => {

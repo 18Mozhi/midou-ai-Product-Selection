@@ -69,8 +69,7 @@ test("both recovery guards require exact skipped successes, active matching tena
       "g.status='active'",
       "w.status='active'",
       "w.organization_id=o.organization_id",
-      "o.organization_id=e.organization_id",
-      "o.workspace_id=e.workspace_id",
+      "WHERE o.id=e.opportunity_id",
       "o.decision_status='pending'",
       "o.lifecycle_status NOT IN ('archived','deleted')",
       selectionCandidateSql,
@@ -81,7 +80,7 @@ test("both recovery guards require exact skipped successes, active matching tena
   assert.match(skippedSelectionRecoveryCandidatesSql, /LIMIT 100$/);
   assert.match(
     skippedSelectionRecoveryUpdateSql,
-    /WHERE e.opportunity_id=\? AND e.organization_id=\? AND e.workspace_id=\?/,
+    /e.opportunity_id=\? AND EXISTS \(SELECT 1 FROM opportunities p WHERE p.id=e.opportunity_id AND p.organization_id=\? AND p.workspace_id=\?\)/,
   );
   assert.match(skippedSelectionRecoveryUpdateSql, /result_json=NULL,last_error_code=NULL/);
   assert.doesNotMatch(

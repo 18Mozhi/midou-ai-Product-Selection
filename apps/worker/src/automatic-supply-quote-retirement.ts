@@ -1,14 +1,21 @@
 import type { PoolConnection, RowDataPacket, ResultSetHeader } from "mysql2/promise";
 
-type Scope = { opportunityId: string; organizationId: string; workspaceId: string };
+type Scope = { opportunityId: string; organizationId: string; workspaceId: string; accountId?: string };
 /** Parent holds the scoped opportunity lock. Preserve facts/history and all human-confirmed costs. */
 export async function retireUnmatchedAutomaticSupplyQuotes(
   connection: PoolConnection,
   scope: Scope,
 ) {
-  const parameters = [scope.opportunityId, scope.organizationId, scope.workspaceId];
+  const parameters = scope.accountId ? [scope.opportunityId, scope.accountId] :
+    [scope.opportunityId, scope.organizationId, scope.workspaceId];
+  const parent = scope.accountId
+    ? "EXISTS (SELECT 1 FROM account_owned_records p JOIN account_owned_records a " +
+      "ON a.source_table='opportunity_cost_inputs' AND a.source_id=opportunity_cost_inputs.id AND a.account_id=p.account_id " +
+      "WHERE p.source_table='opportunities' AND p.source_id=opportunity_cost_inputs.opportunity_id AND p.account_id=?) "
+    : "EXISTS (SELECT 1 FROM opportunities p WHERE p.id=opportunity_cost_inputs.opportunity_id " +
+      "AND p.organization_id=? AND p.workspace_id=?) ";
   const predicate =
-    "opportunity_id=? AND organization_id=? AND workspace_id=? " +
+    "opportunity_id=? AND " + parent +
     "AND platform='amazon' AND input_type='purchase_price' AND is_current=1 " +
     "AND source_type='automatic_crawler_evidence' AND confirmation_mode='automatic_evidence' " +
     "AND source_ref_id REGEXP '^1688:[0-9]{1,40}:p75:[0-9]+$'";

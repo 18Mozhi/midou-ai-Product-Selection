@@ -64,7 +64,7 @@ test("classifier recovery scans consistently then atomically rechecks each origi
   assert.match(supplyClassifierRecoveryCandidatesSql, /LIMIT 100$/);
   assert.match(
     supplyClassifierRecoveryUpdateSql,
-    /WHERE e.opportunity_id=\? AND e.organization_id=\? AND e.workspace_id=\?/,
+    /e.opportunity_id=\? AND EXISTS \(SELECT 1 FROM opportunities p WHERE p.id=e.opportunity_id AND p.organization_id=\? AND p.workspace_id=\?\)/,
   );
   for (const sql of [supplyClassifierRecoveryCandidatesSql, supplyClassifierRecoveryUpdateSql]) {
     assert.ok(sql.includes(selectionCandidateSql));
@@ -76,8 +76,7 @@ test("classifier recovery scans consistently then atomically rechecks each origi
       "g.status='active'",
       "w.status='active'",
       "w.organization_id=o.organization_id",
-      "o.organization_id=e.organization_id",
-      "o.workspace_id=e.workspace_id",
+      "WHERE o.id=e.opportunity_id",
       "o.decision_status='pending'",
       "NOT IN ('archived','deleted')",
     ])
@@ -105,6 +104,7 @@ test("only a configured classifier enables recovery; enqueue never invokes the m
       {
         query: async (sql) => {
           queries.push(sql);
+          if (sql.startsWith("SHOW COLUMNS")) return [[{Field:"organization_id"},{Field:"workspace_id"}]];
           return [[]];
         },
       },
@@ -131,7 +131,7 @@ test("evaluation results stamp the executing classifier revision without replaci
     { classifySupplies: async () => [] },
   );
   await worker.complete(
-    { query: async (sql, params) => calls.push({ sql, params }) },
+    { query: async (sql, params) => { calls.push({ sql, params }); return [{affectedRows:1}]; } },
     { opportunityId: "item" },
     "waiting_evidence",
     null,
