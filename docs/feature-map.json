@@ -1,4 +1,19 @@
 {
+  "accountCollectionTaskReplay": {
+    "sourceFiles": [
+      "apps/api/src/mysql-collection-task-repository.ts",
+      "apps/api/src/collection-replay-ownership.ts",
+      "apps/web/src/components/CollectionTaskCenter.vue"
+    ],
+    "testFiles": [
+      "tests/m03-05/account-collection-replay.test.mjs"
+    ],
+    "docs": [
+      "docs/openapi.yaml",
+      "docs/runbooks/account-collection-task-replay.md"
+    ],
+    "contract": "Preserve task, attempt, subquery and event identity. Platform replay preserves the original sealed owner, updates the exact dead letter and validates the original reason and owned child graph on a current read before returning a prior receipt."
+  },
   "accountEvidenceDownload": {
     "sourceFiles": [
       "apps/api/src/data-quality-service.ts",

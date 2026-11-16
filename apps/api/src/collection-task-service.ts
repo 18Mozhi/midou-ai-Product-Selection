@@ -7,8 +7,9 @@ import {
 import type { RobotsPolicyDecision } from "@scoutops/provider-sources";
 export interface CollectionTaskSummary {
   id: string;
-  organization_id: string;
-  workspace_id: string;
+  organization_id?: string;
+  workspace_id?: string;
+  account_id?: string;
   status: CollectionTaskStatus;
   coverage_status: CoverageStatus | null;
   priority: "low" | "normal" | "high" | "critical";

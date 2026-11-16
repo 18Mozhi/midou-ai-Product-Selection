@@ -21,8 +21,9 @@ import "../collection-task-detail.css";
 type ViewState = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 interface Task {
   id: string;
-  organization_id: string;
-  workspace_id: string;
+  organization_id?: string;
+  workspace_id?: string;
+  account_id?: string;
   request_id: string;
   status: string;
   coverage_status: string | null;
@@ -129,7 +130,7 @@ const filtered = computed(() =>
   tasks.value.filter(
     (item) =>
       !query.value ||
-      [item.id, item.organization_id, item.workspace_id, item.last_error_code].some((value) =>
+      [item.id, item.account_id, item.organization_id, item.workspace_id, item.last_error_code].some((value) =>
         value?.toLowerCase().includes(query.value.toLowerCase()),
       ),
   ),
@@ -785,11 +786,15 @@ onActivated(() => {
                   <dt>任务 ID</dt>
                   <dd>{{ row.id }}</dd>
                 </div>
-                <div>
+                <div v-if="row.account_id">
+                  <dt>账号 ID</dt>
+                  <dd>{{ row.account_id }}</dd>
+                </div>
+                <div v-if="row.organization_id">
                   <dt>组织 ID</dt>
                   <dd>{{ row.organization_id }}</dd>
                 </div>
-                <div>
+                <div v-if="row.workspace_id">
                   <dt>工作区 ID</dt>
                   <dd>{{ row.workspace_id }}</dd>
                 </div>
@@ -997,11 +1002,15 @@ onActivated(() => {
                   <dt>任务 ID</dt>
                   <dd>{{ detail.task.id }}</dd>
                 </div>
-                <div>
+                <div v-if="detail.task.account_id">
+                  <dt>账号 ID</dt>
+                  <dd>{{ detail.task.account_id }}</dd>
+                </div>
+                <div v-if="detail.task.organization_id">
                   <dt>组织 ID</dt>
                   <dd>{{ detail.task.organization_id }}</dd>
                 </div>
-                <div>
+                <div v-if="detail.task.workspace_id">
                   <dt>工作区 ID</dt>
                   <dd>{{ detail.task.workspace_id }}</dd>
                 </div>

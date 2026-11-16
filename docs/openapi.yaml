@@ -4763,7 +4763,7 @@ paths:
   /platform/collection/tasks:
     get:
       summary: List scoped collection tasks for platform monitoring
-      description: Requires collection:replay. Internal target_json, lease tokens and credentials are never returned.
+      description: Requires collection:replay. Internal target_json, lease tokens and credentials are never returned. Once collection tasks are stored by account, the legacy organization and workspace filters return 400. The platform list and total only include tasks whose native account matches sealed ownership; summaries report account_id instead of legacy coordinates.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: organization_id, in: query, schema: { type: string, format: uuid } }
@@ -4788,6 +4788,7 @@ paths:
   /platform/collection/tasks/{taskId}:
     get:
       summary: Read task, subquery coverage, attempts, events and dead-letter detail
+      description: Collection history retains its original task, event IDs, actors and trace. In the native account layout the task and its sealed owner must match before reading child rows; subqueries and events must belong to that same account, and any dead-letter summary must reference an attempt of the original task.
       security: [{ HttpOnlySession: [] }]
       parameters:
         [{ name: taskId, in: path, required: true, schema: { type: string, format: uuid } }]
@@ -4808,7 +4809,7 @@ paths:
   /platform/collection/tasks/{taskId}/replay:
     post:
       summary: Manually replay one dead-letter task while retaining all history
-      description: Requires collection:replay, same-origin Origin, Idempotency-Key and a 2-500 character reason. Concurrent requests with the same actor, task route and Idempotency-Key return the same replay task after the task lock observes the committed operation; they do not create a second task or reject the duplicate as a state conflict. The operations console may compose at most 20 independently selected open dead letters as separate calls after an impact preview; every call remains independently authorized, idempotent and audited and retains its original task history.
+      description: Requires collection:replay, same-origin Origin, Idempotency-Key and a 2-500 character reason. Concurrent requests with the same actor, task route and Idempotency-Key return the same replay task after the task lock observes the committed operation; they do not create a second task or reject the duplicate as a state conflict. The operations console may compose at most 20 independently selected open dead letters as separate calls after an impact preview; every call remains independently authorized, idempotent and audited and retains its original task history. In account mode, an existing receipt is returned only for the same reason and owned child graph. It is read with current locks after a concurrent commit; a stale binding returns 409 without creating another task.
       security: [{ HttpOnlySession: [] }]
       parameters:
         - { name: taskId, in: path, required: true, schema: { type: string, format: uuid } }
