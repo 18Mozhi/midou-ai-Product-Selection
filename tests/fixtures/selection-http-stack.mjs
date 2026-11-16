@@ -3,6 +3,7 @@ import {
   CaptureAuthDelivery,
   InMemoryAuthRepository,
   LocalAuthService,
+  PRIMARY_COST_APPROVER_EMAIL,
   createArgon2PasswordHasher,
 } from "../../packages/auth/dist/index.js";
 import {
@@ -22,7 +23,7 @@ import { CollectionConsoleService } from "../../apps/api/dist/collection-console
 import { collectionConsoleHttpFacts } from "./collection-console-http.mjs";
 import { HomeDashboardService } from "../../apps/api/dist/home-dashboard-service.js";
 import { ScoringService } from "../../apps/api/dist/scoring-service.js";
-import { ProfitService } from "../../apps/api/dist/profit-service.js";
+import { ProfitService, ProfitServiceError } from "../../apps/api/dist/profit-service.js";
 import { CompetitorService } from "../../apps/api/dist/competitor-service.js";
 import { SourcingService, SourcingServiceError } from "../../apps/api/dist/sourcing-service.js";
 
@@ -33,6 +34,8 @@ export const selectionHttpAccounts = {
   foreign: "selection-foreign@example.test",
   operator: "selection-operator@example.test",
   quoteReader: "selection-quote-reader@example.test",
+  // The known production identifier is used only in this in-memory account-mode fixture.
+  primaryApprover: PRIMARY_COST_APPROVER_EMAIL,
   password: "Local-Selection-Only-42!",
 };
 export const selectionHttpIds = {
@@ -40,6 +43,8 @@ export const selectionHttpIds = {
   workspace: "00000000-0000-4000-8000-000000009102",
   product: "00000000-0000-4000-8000-000000009103",
   secondaryProduct: "00000000-0000-4000-8000-000000009104",
+  primaryRule: "00000000-0000-4000-8000-000000009134",
+  secondaryPrimaryRule: "00000000-0000-4000-8000-000000009135",
 };
 
 export async function createSelectionHttpStack(webOrigin, { accountRehearsal = false } = {}) {
@@ -70,7 +75,9 @@ export async function createSelectionHttpStack(webOrigin, { accountRehearsal = f
   const repository = new FixtureAuthRepository();
   const hasher = createArgon2PasswordHasher({ memoryCost: 19456, timeCost: 2, parallelism: 1 });
   const passwordHash = await hasher.hash(selectionHttpAccounts.password);
-  for (const role of ["member", "viewer", "foreign", "operator", "quoteReader"]) {
+  const roles = ["member", "viewer", "foreign", "operator", "quoteReader"];
+  if (accountRehearsal) roles.push("primaryApprover");
+  for (const role of roles) {
     const id = randomUUID(),
       foreign = role === "foreign";
     const organization = foreign ? randomUUID() : selectionHttpIds.organization;
@@ -384,6 +391,27 @@ export async function createSelectionHttpStack(webOrigin, { accountRehearsal = f
   const sourcingReadOnly = async () => {
     throw new SourcingServiceError("fixture_sourcing_read_only", 403, "只允许读取本地样例。");
   };
+  const isPrimaryApprover = (id) => users.get(id)?.role === "primaryApprover";
+  const approvalRules = [selectionHttpIds.primaryRule, selectionHttpIds.secondaryPrimaryRule].map(
+    (id, index) => ({
+      id,
+      name: `历史费用规则 HTTP ${index + 1}`,
+      market: "US",
+      platform: "amazon",
+      version_code: `account-http-${index + 1}`,
+      status: "pending_approval",
+      revision: 7,
+      approvals: ["selection_manager"],
+      owned_by_session: true,
+      can_decide_as_manager: false,
+      fee_lines: [],
+      conversion_rates: [],
+      automatic_scope: null,
+      effective_from: "2026-01-01",
+      updated_at: observed,
+      published_at: null,
+    }),
+  );
   return {
     collectionConsole: {
       ...scope,
@@ -451,8 +479,22 @@ export async function createSelectionHttpStack(webOrigin, { accountRehearsal = f
     scoring: { ...scope, service: new ScoringService({ list: async () => [] }) },
     profit: {
       ...scope,
+      accountReadRehearsal: accountRehearsal,
       service: new ProfitService({
-        listRules: async () => [],
+        listRules: async (input) =>
+          isPrimaryApprover(input.accountId) ? structuredClone(approvalRules) : [],
+        isAccountPrimaryApprover: async (id) => isPrimaryApprover(id),
+        async actRule(input) {
+          const rule = approvalRules.find(({ id }) => id === input.ruleId);
+          if (!rule || !isPrimaryApprover(input.actorId) || input.accountOwnedApproval !== true)
+            throw new ProfitServiceError("cost_rule_not_found", 404, "规则不可见。");
+          if (rule.revision !== input.expectedRevision)
+            throw new ProfitServiceError("cost_rule_revision_conflict", 409, "重新读取当前版本。");
+          rule.revision++;
+          rule.status = input.action === "approve" ? "approved" : "rejected";
+          if (input.action === "approve") rule.approvals.push(input.approvalRole);
+          return structuredClone(rule);
+        },
         getAnalysis: async () => ({ latest_run: null, current_inputs: [], cost_input_reviews: [] }),
       }),
     },

@@ -10,6 +10,66 @@ test.skip(
   "Requires the loopback account HTTP fixture.",
 );
 
+test("[real-api] verified primary takes the old approval slot without granting it to another account", async ({
+  page,
+  browser,
+}, testInfo) => {
+  const isMobile = testInfo.project.name === "mobile-390";
+  const ruleId = isMobile ? ids.secondaryPrimaryRule : ids.primaryRule;
+  const ruleName = `历史费用规则 HTTP ${isMobile ? 2 : 1}`;
+  const action = isMobile ? "reject" : "approve";
+  const label = isMobile ? "拒绝" : "批准";
+  const endpoint = `/api/v1/cost-rules/${ruleId}/actions`;
+  const send = (p: Page, role: string) =>
+    p.request.post(endpoint, {
+      headers: { origin: String(testInfo.project.use.baseURL), "idempotency-key": randomUUID() },
+      data: { action, approval_role: role, reason: "账号审批 HTTP 验收", expected_revision: 7 },
+    });
+  const other = await browser.newContext({ baseURL: testInfo.project.use.baseURL });
+  try {
+    const otherPage = await other.newPage();
+    await login(otherPage, accounts.member);
+    const denied = await send(otherPage, "primary_account");
+    expect(denied.status()).toBe(403);
+    expect((await denied.json()).error.code).toBe("cost_rule_approval_role_forbidden");
+  } finally {
+    await other.close();
+  }
+  await login(page, accounts.primaryApprover);
+  expect((await send(page, "organization_admin")).status()).toBe(403);
+  const getRules = () => page.request.get("/api/v1/cost-rules").then((r) => r.json());
+  const before = await getRules();
+  expect(before.meta.is_primary_approver).toBe(true);
+  expect(before.data.find((r: { id: string }) => r.id === ruleId)).toMatchObject({
+    revision: 7,
+    status: "pending_approval",
+    approvals: ["selection_manager"],
+  });
+  await page.goto("/sourcing/cost-rules");
+  if (isMobile) await page.getByLabel("当前费用规则版本").selectOption(ruleId);
+  else await page.getByRole("button", { name: new RegExp(ruleName) }).click();
+  await expect(page.getByRole("heading", { name: ruleName, exact: true })).toBeVisible();
+  const rule = page
+    .locator("article")
+    .filter({ has: page.getByRole("heading", { name: ruleName, exact: true }) });
+  await rule.getByRole("button", { name: `主账号${label}`, exact: true }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByLabel("操作原因（至少 2 个字）").fill("账号审批 HTTP 验收");
+  const done = page.waitForResponse(
+    (r) => new URL(r.url()).pathname === endpoint && r.request().method() === "POST",
+  );
+  await dialog.getByRole("button", { name: `确认${label}` }).click();
+  const response = await done;
+  expect(response.status()).toBe(200);
+  expect(response.request().postDataJSON().approval_role).toBe("primary_account");
+  const saved = (await getRules()).data.find((r: { id: string }) => r.id === ruleId);
+  expect(saved).toMatchObject({
+    revision: 8,
+    status: isMobile ? "rejected" : "approved",
+    approvals: isMobile ? ["selection_manager"] : ["selection_manager", "primary_account"],
+  });
+});
+
 async function login(page: Page, email: string) {
   const response = await page.request.post("/api/v1/auth/login", {
     headers: { origin: String(test.info().project.use.baseURL), "idempotency-key": randomUUID() },
