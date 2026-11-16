@@ -14,6 +14,8 @@ for (const limit of [1, 7, 1000]) {
       const c = {
         beginTransaction: async () => {},
         query: async (sql, params) => {
+          if (sql.startsWith("SHOW COLUMNS FROM collection_tasks"))
+            return [[{Field:"organization_id"},{Field:"workspace_id"}]];
           calls.push({ sql, params });
           return [[]];
         },

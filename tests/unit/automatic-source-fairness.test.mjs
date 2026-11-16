@@ -18,6 +18,8 @@ function connectionFor(statements) {
     rollback: async () => {},
     release() {},
     async query(sql) {
+      if (/^SHOW COLUMNS FROM (automatic_source_schedules|collection_tasks)\b/.test(sql))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       statements.push(sql);
       return sql.startsWith("SELECT COUNT(*)") ? [[{ count: 0 }], []] : [[], []];
     },
@@ -66,7 +68,12 @@ for (const method of ["queueReady", "claim"]) {
     assert.match(selection, /source_event\.actor_type='system'/);
     assert.match(selection, /THEN 0 WHEN EXISTS/);
     assert.match(selection, /completion_event\.actor_type='worker'/);
-    assert.match(selection, /completion_query\.organization_id=completion_event\.organization_id/);
+    // 0133 removed duplicated scope columns from the child. The FK to the
+    // exact task is now the scope boundary, not a separate scope comparison.
+    assert.match(selection, /completion_query.task_id=completion_event.task_id/);
+    assert.match(selection, /completion_event.task_id=collection_tasks.id/);
+    assert.doesNotMatch(selection, /completion_query\.(organization_id|workspace_id)/);
+    assert.doesNotMatch(selection, /completion_event\.(organization_id|workspace_id)/);
     assert.ok(
       selection.endsWith(
         `ELSE 3 END,CASE WHEN ${completionReadySourcingTaskSql} THEN 0 ELSE 1 END,CASE WHEN ${pendingBrowserResultSql} THEN 0 ELSE 1 END,${method === "claim" ? `CASE WHEN ${completionReadyCompetitorTaskSql} THEN 0 ELSE 1 END,` : ""}available_at,id LIMIT 1`,

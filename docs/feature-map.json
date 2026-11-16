@@ -1,4 +1,17 @@
 {
+  "accountAutomaticSourceRuntime": {
+    "sourceFiles": [
+      "apps/worker/src/automatic-source-scheduler.ts",
+      "apps/worker/src/collection-account-backlog.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-source-schedule-account.test.mjs",
+      "tests/unit/automatic-source-fairness.test.mjs",
+      "tests/unit/trend-rule-scheduler.test.mjs"
+    ],
+    "docs": ["docs/runbooks/account-intelligence-topic-presentation.md"],
+    "contract": "Automatic sources and monitoring rules preserve original schedules and limits. Account budget checks require native and sealed task ownership, and cursor progression commits with the exact owned task and receipts."
+  },
   "accountAutomaticSelectionRuntime": {
     "sourceFiles": [
       "apps/worker/src/automatic-selection-evaluation-worker.ts",

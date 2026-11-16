@@ -6,4 +6,6 @@
 
 账号版 Worker 扫描并领取情报时同时核对采集任务、原始证据、标准化记录和投影作业归属。新作业与归属记录同事务写入；发现已有作业时不重复生成。投影校验领取次数与有效租约，再写入同账号主题与原证据关联；既有信号优先沿用原主题，历史重复主题不合并。刷新、找货及补采保留原判定规则及阈值。没有新增配置，由正式协调发布启动新版 Worker。验证见 `tests/unit/trend-projection-worker-scheduling.test.mjs`、`tests/unit/trend-projection-account-owner.test.mjs` 与 `tests/unit/collected-product-projection.test.mjs`。
 
+自动来源和监控规则保留原游标、间隔、来源配置和预算数值。账号模式用任务原生归属与封存归属一致的活动任务计算预算；已有的 `AUTOMATIC_SOURCE_TENANT_ACTIVE_TASK_BUDGET` 配置名不变，切换后预算按账号计算。新任务、子查询、回执和原游标必须同时提交；共享游标归到其他账号或更新不到原游标时整批拒绝。测试见 `tests/unit/automatic-source-schedule-account.test.mjs`、`tests/unit/automatic-source-fairness.test.mjs` 与 `tests/unit/trend-rule-scheduler.test.mjs`。不重跑现有任务，无新增开关或手工重启步骤。
+
 正式库只读计数：9,809 条主题记录、6,375 个全库不同主题键、67,961 条信号。全库键数不代表迁移后的个人可见分组数。本地验证覆盖分组分页、跨账号拒绝、证据引用和历史摘要；未停机、写库或创建备份。
