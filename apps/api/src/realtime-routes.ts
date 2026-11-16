@@ -1,3 +1,4 @@
+import { authenticatedRehearsalAccount } from "./account-read-rehearsal.js";
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService } from "@scoutops/authorization";
@@ -10,6 +11,7 @@ export interface RealtimeRouteOptions {
   auth: LocalAuthService;
   secureCookie: boolean;
   webOrigin: string;
+  accountReadRehearsal?: boolean;
   pollMs: number;
   heartbeatMs: number;
   maxConnectionSeconds: number;
@@ -33,23 +35,27 @@ export function registerRealtimeRoutes(app: FastifyInstance, o: RealtimeRouteOpt
         "实时连接暂时繁忙。",
         "稍后自动重连或刷新页面。",
       );
-    const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
-      x = await o.authorization.resolveSession(a.user.id, a.session.id);
-    await o.authorization.authorize({
-      actorId: a.user.id,
-      organizationId: x.context.organization_id,
-      workspaceId: x.context.workspace_id,
-      capability: "notification:read",
-      surface: "api",
-      ...ids(r),
-    });
+    const context = o.accountReadRehearsal
+      ? { actorId: (await authenticatedRehearsalAccount(r, o.auth, o.secureCookie)).accountId, accountOwned: true, ...ids(r) }
+      : await (async () => {
+        const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
+          x = await o.authorization.resolveSession(a.user.id, a.session.id);
+        await o.authorization.authorize({
+          actorId: a.user.id,
+          organizationId: x.context.organization_id,
+          workspaceId: x.context.workspace_id,
+          capability: "notification:read",
+          surface: "api",
+          ...ids(r),
+        });
+        return {
+          organizationId: x.context.organization_id,
+          workspaceId: x.context.workspace_id,
+          actorId: a.user.id,
+          ...ids(r),
+        };
+      })();
     let cursor = parseLastEventId(r.headers["last-event-id"] ?? (r.query as any)?.last_event_id);
-    const context = {
-      organizationId: x.context.organization_id,
-      workspaceId: x.context.workspace_id,
-      actorId: a.user.id,
-      ...ids(r),
-    };
     const initial = await o.service.replay({ ...context, afterId: cursor });
     await o.service.auditConnect({ ...context, afterId: cursor });
     reply.hijack();

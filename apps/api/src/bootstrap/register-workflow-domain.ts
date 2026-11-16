@@ -37,6 +37,7 @@ export function registerWorkflowDomainRoutes(context: ApiDomainContext) {
     ...common,
   });
   registerNotificationRoutes(context.app, {
+    accountReadRehearsal: context.accountReadRehearsal,
     service: new NotificationService(new MySqlNotificationRepository(context.pool)),
     ...common,
   });
@@ -45,6 +46,7 @@ export function registerWorkflowDomainRoutes(context: ApiDomainContext) {
     ...common,
   });
   registerRealtimeRoutes(context.app, {
+    accountReadRehearsal: context.accountReadRehearsal,
     service: new RealtimeService(
       new MySqlRealtimeRepository(context.pool),
       context.config.realtime.replayLimit,

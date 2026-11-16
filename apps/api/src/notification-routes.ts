@@ -1,3 +1,4 @@
+import { authenticatedRehearsalAccount } from "./account-read-rehearsal.js";
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService } from "@scoutops/authorization";
@@ -10,6 +11,7 @@ export interface NotificationRouteOptions {
   auth: LocalAuthService;
   secureCookie: boolean;
   webOrigin: string;
+  accountReadRehearsal?: boolean;
 }
 const ids = (r: FastifyRequest) => ({
     requestId: String(r.headers["x-request-id"]),
@@ -23,6 +25,7 @@ const ids = (r: FastifyRequest) => ({
   });
 export function registerNotificationRoutes(app: FastifyInstance, o: NotificationRouteOptions) {
   const scope = async (r: FastifyRequest) => {
+      if (o.accountReadRehearsal) return { actorId: (await authenticatedRehearsalAccount(r, o.auth, o.secureCookie)).accountId, accountOwned: true };
       const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
         x = await o.authorization.resolveSession(a.user.id, a.session.id);
       await o.authorization.authorize({
@@ -97,13 +100,19 @@ export function registerNotificationRoutes(app: FastifyInstance, o: Notification
       r,
     ),
   );
+  const preferenceScope = scope;
+  const preferenceWrite = async (r: FastifyRequest) => {
+    if (r.headers.origin !== o.webOrigin)
+      throw new ApiError(403, "origin_forbidden", "请求来源不允许。", "从 ScoutOps 页面重试。");
+    return { ...(await preferenceScope(r)), ...ids(r), idempotencyKey: requireIdempotencyKey(r) };
+  };
   app.get("/api/v1/me/notification-preferences", async (r) =>
-    env(await o.service.preferences(await scope(r)), r),
+    env(await o.service.preferences(await preferenceScope(r)), r),
   );
   app.put("/api/v1/me/notification-preferences", async (r) =>
     env(
       await o.service.updatePreferences({
-        ...(await write(r)),
+        ...(await preferenceWrite(r)),
         value: r.body,
         route: "PUT:/api/v1/me/notification-preferences",
       }),

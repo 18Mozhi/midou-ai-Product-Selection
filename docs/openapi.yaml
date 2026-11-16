@@ -3474,6 +3474,7 @@ paths:
   /notifications:
     get:
       summary: List root-cause-grouped current recipient notifications with workflow filtering and literal title or body search
+      x-account-runtime: Account-mode inbox reads require a verified session and delivered in-app notification for that recipient.
       x-required-capability: notification:read
       parameters:
         [
@@ -3523,6 +3524,7 @@ paths:
   /notifications/{notificationId}/actions:
     post:
       summary: Update the read or handling state of a versioned current-recipient notification
+      x-account-runtime: An account-mode receipt is replayed only for the same delivered notification, action and expected version. A mismatched receipt returns 409 without updating the item.
       x-required-capability: notification:read
       parameters:
         [
@@ -3569,6 +3571,7 @@ paths:
   /me/notification-preferences:
     get:
       summary: Get current-user notification preferences
+      x-account-runtime: After cutover preferences are scoped to the verified account rather than an organization and workspace.
       x-required-capability: notification:read
       responses:
         "200": { $ref: "#/components/responses/Success" }
@@ -3662,6 +3665,7 @@ paths:
   /realtime/events:
     get:
       summary: Stream current-recipient notification invalidations with replay
+      x-account-runtime: Account-mode notification events require matching recipient and a delivered in-app notice.
       description: S0 single-host SSE. Supports Last-Event-ID and emits monotonic notification.changed events plus heartbeats; this is not a multi-node capacity claim.
       x-required-capability: notification:read
       parameters:

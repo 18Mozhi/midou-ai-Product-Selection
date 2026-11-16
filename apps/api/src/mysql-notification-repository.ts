@@ -1,3 +1,4 @@
+import { appendBusinessAudit, appendPlatformAudit, notificationPreferencesAccountSchema, notificationsHaveLegacyScope } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { NotificationServiceError, type NotificationRepository } from "./notification-service.js";
@@ -18,13 +19,13 @@ export class MySqlNotificationRepository implements NotificationRepository {
     private readonly now = () => new Date(),
   ) {}
   async list(i: any) {
+    if (i.accountOwned && await notificationsHaveLegacyScope(this.pool)) throw new Error("notification_account_schema_not_ready");
     const where = [
-        "organization_id=?",
-        "workspace_id=?",
+        ...(i.accountOwned ? [] : ["organization_id=?", "workspace_id=?"]),
         "recipient_id=?",
-        "EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id AND d.channel='in_app' AND d.status='delivered')",
+        "EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id AND d.recipient_id=notifications.recipient_id AND d.channel='in_app' AND d.status='delivered')",
       ],
-      args: any[] = [i.organizationId, i.workspaceId, i.actorId];
+      args: any[] = (i.accountOwned ? [i.actorId] : [i.organizationId, i.workspaceId, i.actorId]);
     if (i.unread) where.push("read_at IS NULL");
     if (i.workflowStatus) {
       where.push("workflow_status=?");
@@ -76,7 +77,7 @@ export class MySqlNotificationRepository implements NotificationRepository {
       representatives = new Map<string, ReturnType<MySqlNotificationRepository["dto"]>>();
     for (const row of rows) {
       const key = notificationGroupKey(row);
-      if (!representatives.has(key)) representatives.set(key, this.dto(row));
+      if (!representatives.has(key)) representatives.set(key, this.dto(row, i.accountOwned === true));
     }
     return {
       items: groups.flatMap((group) => {
@@ -89,15 +90,16 @@ export class MySqlNotificationRepository implements NotificationRepository {
     };
   }
   async summary(i: any) {
+    if (i.accountOwned && await notificationsHaveLegacyScope(this.pool)) throw new Error("notification_account_schema_not_ready");
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT category,\n              COUNT(*) total,\n              SUM(read_at IS NULL) unread," +
         "\n              SUM(workflow_status='open') open_count,\n              SUM(workflow_status='in_progress') " +
         "in_progress_count,\n              SUM(workflow_status='closed') closed_count\n       FROM " +
-        "notifications\n       WHERE organization_id=?\n         AND workspace_id=?\n         AND " +
+        `notifications WHERE ${i.accountOwned ? "" : "organization_id=? AND workspace_id=? AND "}` +
         "recipient_id=?\n         AND EXISTS(\n           SELECT 1 FROM notification_deliveries " +
-        "d\n           WHERE d.notification_id=notifications.id\n             AND d.channel='in_app'\n" +
+        "d\n           WHERE d.notification_id=notifications.id AND d.recipient_id=notifications.recipient_id\n             AND d.channel='in_app'\n" +
         "             AND d.status='delivered'\n         )\n       GROUP BY category",
-      [i.organizationId, i.workspaceId, i.actorId],
+      (i.accountOwned ? [i.actorId] : [i.organizationId, i.workspaceId, i.actorId]),
     );
     const result = {
       total: 0,
@@ -121,47 +123,65 @@ export class MySqlNotificationRepository implements NotificationRepository {
     return result;
   }
   async detail(i: any) {
+    if (i.accountOwned && await notificationsHaveLegacyScope(this.pool)) throw new Error("notification_account_schema_not_ready");
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM notifications WHERE id=? AND organization_id=? AND workspace_id=? AND " +
-        "recipient_id=? AND EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id " +
+      `SELECT * FROM notifications WHERE id=? AND ${i.accountOwned ? "" : "organization_id=? AND workspace_id=? AND "}` +
+        "recipient_id=? AND EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id AND d.recipient_id=notifications.recipient_id " +
         "AND d.channel='in_app' AND d.status='delivered')",
-      [i.notificationId, i.organizationId, i.workspaceId, i.actorId],
+      [i.notificationId, ...(i.accountOwned ? [] : [i.organizationId, i.workspaceId]), i.actorId],
     );
     if (!rows[0])
       throw new NotificationServiceError("notification_not_found", 404, "刷新通知列表。");
-    const item = this.dto(rows[0]),
+    const item = this.dto(rows[0], i.accountOwned === true),
       [counts] = await this.pool.query<RowDataPacket[]>(
         `SELECT COUNT(*) group_count
          FROM notifications
-         WHERE organization_id=?
-           AND workspace_id=?
-           AND recipient_id=?
+         WHERE ${i.accountOwned ? "" : "organization_id=? AND workspace_id=? AND "}recipient_id=?
            AND ${notificationGroupKeySql}=?
            AND EXISTS(
              SELECT 1 FROM notification_deliveries d
-             WHERE d.notification_id=notifications.id
+             WHERE d.notification_id=notifications.id AND d.recipient_id=notifications.recipient_id
                AND d.channel='in_app'
                AND d.status='delivered'
            )`,
-        [i.organizationId, i.workspaceId, i.actorId, notificationGroupKey(rows[0])],
+        [...(i.accountOwned ? [] : [i.organizationId, i.workspaceId]), i.actorId, notificationGroupKey(rows[0])],
       );
     return { ...item, group_count: Number(counts[0]?.group_count ?? 1) };
   }
   async action(i: any) {
-    const old = await this.operation(i);
+    if (i.accountOwned) i = { ...i, route: i.route + "#account-v1" };
+    const old = i.accountOwned ? null : await this.operation(i);
     if (old) return old;
     const c = await this.pool.getConnection(),
       now = this.now();
     try {
       await c.beginTransaction();
+      if (i.accountOwned) {
+        if (await notificationsHaveLegacyScope(c)) throw new Error("notification_account_schema_not_ready");
+        const [actor] = await c.query<RowDataPacket[]>("SELECT id FROM users WHERE id=? AND status='active' FOR UPDATE", [i.actorId]);
+        if (!actor[0]) throw new NotificationServiceError("notification_account_inactive", 403, "账号不可用。");
+      }
       const [rows] = await c.query<RowDataPacket[]>(
-          "SELECT * FROM notifications WHERE id=? AND organization_id=? AND workspace_id=? AND " +
-            "recipient_id=? AND EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id " +
+          `SELECT * FROM notifications WHERE id=? AND ${i.accountOwned ? "" : "organization_id=? AND workspace_id=? AND "}` +
+            "recipient_id=? AND EXISTS(SELECT 1 FROM notification_deliveries d WHERE d.notification_id=notifications.id AND d.recipient_id=notifications.recipient_id " +
             "AND d.channel='in_app' AND d.status='delivered') FOR UPDATE",
-          [i.notificationId, i.organizationId, i.workspaceId, i.actorId],
+          [i.notificationId, ...(i.accountOwned ? [] : [i.organizationId, i.workspaceId]), i.actorId],
         ),
         row = rows[0];
       if (!row) throw new NotificationServiceError("notification_not_found", 404, "刷新通知列表。");
+      if (i.accountOwned) {
+        const replay = await this.operation<{
+          request?: { action: string; version: number };
+          result?: { id: string; read_at: string | null; workflow_status: string; version: number };
+        }>(i, c);
+        if (replay) {
+          if (replay.result?.id !== i.notificationId || replay.request?.action !== i.value.action ||
+              replay.request?.version !== i.value.expected_version)
+            throw new NotificationServiceError("notification_idempotency_conflict", 409, "通知、操作或版本与原请求不一致。");
+          await c.commit();
+          return replay.result;
+        }
+      }
       if (Number(row.version) !== i.value.expected_version)
         throw new NotificationServiceError(
           "notification_version_conflict",
@@ -189,7 +209,9 @@ export class MySqlNotificationRepository implements NotificationRepository {
         version: next,
       };
       await this.audit(c, i, `notification.${i.value.action}`, i.notificationId, result, now);
-      await this.save(c, i, i.notificationId, result, now);
+      await this.save(c, i, i.notificationId, i.accountOwned
+        ? { request: { action: i.value.action, version: i.value.expected_version }, result }
+        : result, now);
       await c.commit();
       return result;
     } catch (e) {
@@ -200,17 +222,25 @@ export class MySqlNotificationRepository implements NotificationRepository {
     }
   }
   async markAll(i: any) {
-    const old = await this.operation(i);
+    if (i.accountOwned) i = { ...i, route: i.route + "#account-v1" };
+    const old = i.accountOwned ? null : await this.operation(i);
     if (old) return old;
     const c = await this.pool.getConnection(),
       now = this.now();
     try {
       await c.beginTransaction();
+      if (i.accountOwned) {
+        if (await notificationsHaveLegacyScope(c)) throw new Error("notification_account_schema_not_ready");
+        const [actor] = await c.query<RowDataPacket[]>("SELECT id FROM users WHERE id=? AND status='active' FOR UPDATE", [i.actorId]);
+        if (!actor[0]) throw new NotificationServiceError("notification_account_inactive", 403, "账号不可用。");
+        const replay = await this.operation(i, c);
+        if (replay) { await c.commit(); return replay; }
+      }
       const [result]: any = await c.query(
-        "UPDATE notifications SET read_at=?,version=version+1,updated_at=? WHERE organization_id=? " +
-          "AND workspace_id=? AND recipient_id=? AND read_at IS NULL AND EXISTS(SELECT 1 FROM notification_deliveries " +
-          "d WHERE d.notification_id=notifications.id AND d.channel='in_app' AND d.status='delivered')",
-        [now, now, i.organizationId, i.workspaceId, i.actorId],
+        `UPDATE notifications SET read_at=?,version=version+1,updated_at=? WHERE ${i.accountOwned ? "" : "organization_id=? AND workspace_id=? AND "}` +
+          "recipient_id=? AND read_at IS NULL AND EXISTS(SELECT 1 FROM notification_deliveries " +
+          "d WHERE d.notification_id=notifications.id AND d.recipient_id=notifications.recipient_id AND d.channel='in_app' AND d.status='delivered')",
+        [now, now, ...(i.accountOwned ? [] : [i.organizationId, i.workspaceId]), i.actorId],
       );
       const value = {
         updated: Number(result.affectedRows),
@@ -228,9 +258,11 @@ export class MySqlNotificationRepository implements NotificationRepository {
     }
   }
   async preferences(i: any) {
+    if (i.accountOwned) await notificationPreferencesAccountSchema(this.pool);
     const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT * FROM notification_preferences WHERE organization_id=? AND workspace_id=? AND user_id=?",
-      [i.organizationId, i.workspaceId, i.actorId],
+      i.accountOwned ? "SELECT * FROM notification_preferences WHERE user_id=?" :
+        "SELECT * FROM notification_preferences WHERE organization_id=? AND workspace_id=? AND user_id=?",
+      i.accountOwned ? [i.actorId] : [i.organizationId, i.workspaceId, i.actorId],
     );
     return rows[0]
       ? this.pref(rows[0])
@@ -244,15 +276,25 @@ export class MySqlNotificationRepository implements NotificationRepository {
         };
   }
   async updatePreferences(i: any) {
-    const old = await this.operation(i);
+    if (i.accountOwned) i = { ...i, route: i.route + "#account-v1" };
+    const old = i.accountOwned ? null : await this.operation(i);
     if (old) return old;
     const c = await this.pool.getConnection(),
       now = this.now();
     try {
       await c.beginTransaction();
+      if (i.accountOwned) {
+        await notificationPreferencesAccountSchema(c);
+        // Serialize both first creation and competing idempotency keys per account.
+        const [users] = await c.query<RowDataPacket[]>("SELECT id FROM users WHERE id=? AND status='active' FOR UPDATE", [i.actorId]);
+        if (!users[0]) throw new NotificationServiceError("notification_account_inactive", 403, "账号不可用。");
+        const replay = await this.operation(i, c);
+        if (replay) { await c.commit(); return replay; }
+      }
       const [rows] = await c.query<RowDataPacket[]>(
-          "SELECT * FROM notification_preferences WHERE organization_id=? AND workspace_id=? AND user_id=? FOR UPDATE",
-          [i.organizationId, i.workspaceId, i.actorId],
+          i.accountOwned ? "SELECT * FROM notification_preferences WHERE user_id=? FOR UPDATE" :
+            "SELECT * FROM notification_preferences WHERE organization_id=? AND workspace_id=? AND user_id=? FOR UPDATE",
+          i.accountOwned ? [i.actorId] : [i.organizationId, i.workspaceId, i.actorId],
         ),
         row = rows[0];
       if (row && Number(row.version) !== i.value.expected_version)
@@ -285,13 +327,12 @@ export class MySqlNotificationRepository implements NotificationRepository {
         );
       else
         await c.query(
-          "INSERT INTO notification_preferences (id,organization_id,workspace_id,user_id," +
+          `INSERT INTO notification_preferences (id,${i.accountOwned ? "" : "organization_id,workspace_id,"}user_id,` +
             "in_app_enabled,email_enabled,task_enabled,approval_enabled,competitor_enabled," +
-            "version,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+            `version,created_at,updated_at) VALUES (${i.accountOwned ? "" : "?,?,"}?,?,?,?,?,?,?,?,?,?)`,
           [
             randomUUID(),
-            i.organizationId,
-            i.workspaceId,
+            ...(i.accountOwned ? [] : [i.organizationId, i.workspaceId]),
             i.actorId,
             i.value.in_app_enabled,
             i.value.email_enabled,
@@ -305,7 +346,12 @@ export class MySqlNotificationRepository implements NotificationRepository {
         );
       const result = { ...i.value, version: next };
       delete result.expected_version;
-      await this.audit(c, i, "notification.preferences.updated", i.actorId, result, now);
+      if (i.accountOwned) await appendPlatformAudit(c,
+        "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) " +
+        "VALUES(?,NULL,NULL,?,'notification.preferences.updated','notification_preference',?,'succeeded',?,?,?,?,1)",
+        [randomUUID(), i.actorId, i.actorId, i.requestId, i.traceId, JSON.stringify(result), now],
+      );
+      else await this.audit(c, i, "notification.preferences.updated", i.actorId, result, now);
       await this.save(c, i, i.actorId, result, now);
       await c.commit();
       return result;
@@ -316,10 +362,13 @@ export class MySqlNotificationRepository implements NotificationRepository {
       c.release();
     }
   }
-  private dto(r: RowDataPacket) {
+  private dto(r: RowDataPacket, accountOwned: boolean) {
+    const taskId = String(r.resource_id ?? "");
+    const accountTaskRoute = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(taskId)
+      ? `/tasks/approvals?view=account-tasks&task=${taskId}` : "";
     const actionRoute = r.resource_id
       ? r.resource_type === "task"
-        ? `/tasks/${r.resource_id}`
+        ? (accountOwned ? accountTaskRoute : `/tasks/${r.resource_id}`)
         : ["approval", "approval_request"].includes(String(r.resource_type))
           ? `/tasks/approvals?approval=${r.resource_id}`
           : r.resource_type === "competitor"
@@ -356,12 +405,12 @@ export class MySqlNotificationRepository implements NotificationRepository {
       version: Number(r.version),
     };
   }
-  private async operation(i: any) {
-    const [rows] = await this.pool.query<RowDataPacket[]>(
-      "SELECT result_json FROM notification_operations WHERE actor_id=? AND route_key=? AND idempotency_key=?",
+  private async operation<T = unknown>(i: any, db: Pool | PoolConnection = this.pool) {
+    const [rows] = await db.query<RowDataPacket[]>(
+      "SELECT result_json FROM notification_operations WHERE actor_id=? AND route_key=? AND idempotency_key=?" + (db === this.pool ? "" : " FOR UPDATE"),
       [i.actorId, i.route, i.idempotencyKey],
     );
-    return rows[0] ? parse(rows[0].result_json) : null;
+    return rows[0] ? parse<T>(rows[0].result_json) : null;
   }
   private save(c: PoolConnection, i: any, id: string, result: unknown, now: Date) {
     return c.query(
@@ -378,8 +427,13 @@ export class MySqlNotificationRepository implements NotificationRepository {
     payload: unknown,
     now: Date,
   ) {
-    return c.query(
-      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action," +
+    if (i.accountOwned) return appendPlatformAudit(c,
+      "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) " +
+      "VALUES(?,NULL,NULL,?,?,'notification',?,'succeeded',?,?,?,?,1)",
+      [randomUUID(), i.actorId, action, id, i.requestId, i.traceId, JSON.stringify(payload), now],
+    );
+    return appendBusinessAudit(c,
+        "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action," +
         "resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at," +
         "schema_version) VALUES (?,?,?,?,?,'notification',?,?,?,?,?,1)",
       [

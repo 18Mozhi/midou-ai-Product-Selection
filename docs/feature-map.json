@@ -1,4 +1,18 @@
 {
+  "accountApprovalNotificationRuntime": {
+    "sourceFiles": [
+      "apps/api/src/mysql-notification-repository.ts",
+      "apps/api/src/mysql-realtime-repository.ts",
+      "apps/worker/src/notification-outbox-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/account-notification-inbox.test.mjs",
+      "tests/unit/approval-overdue-notification.test.mjs",
+      "tests/unit/primary-cost-overdue-notification.test.mjs"
+    ],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-approval-notifications.md"],
+    "contract": "Keep original notice and delivery history for the verified recipient. Replay requires the same currently delivered notification and original action; approval delivery checks the original lineage and replaces only the former organization-admin escalation slot."
+  },
   "accountBrowserCrawlerOwnership": {
     "sourceFiles": [
       "apps/api/src/server.ts",
