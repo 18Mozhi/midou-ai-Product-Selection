@@ -69,6 +69,30 @@ export async function writeScopedFile(
   return writeAtomicFile(buildScopedFilePath(root, input), data);
 }
 
+export function buildReportExportPath(root: string, row: { id: string; filename: string; account_id?: string; organization_id?: string; workspace_id?: string; historical_context?: unknown }) {
+  const context = typeof row.historical_context === "string" ? JSON.parse(row.historical_context) : row.historical_context;
+  if (context == null && row.account_id != null) {
+    const absoluteRoot = resolve(root);
+    const path = resolve(absoluteRoot, "accounts", safeSegment(row.account_id, "account_id"), "export", safeSegment(row.id, "id"), safeSegment(row.filename, "filename"));
+    assertInside(absoluteRoot, path);
+    return path;
+  }
+  const scope = context ?? row;
+  if (typeof scope.organization_id !== "string" || typeof scope.workspace_id !== "string")
+    throw new StorageBoundaryError("invalid_scope", "invalid historical export coordinates");
+  return buildScopedFilePath(root, {
+    organization_id: scope.organization_id,
+    workspace_id: scope.workspace_id,
+    category: "export",
+    resource_id: row.id,
+    filename: row.filename,
+  });
+}
+
+export function writeReportExportFile(root: string, row: Parameters<typeof buildReportExportPath>[1], data: Uint8Array) {
+  return writeAtomicFile(buildReportExportPath(root, row), data);
+}
+
 async function writeAtomicFile(target: string, data: Uint8Array) {
   await mkdir(resolve(target, ".."), { recursive: true });
   const temporary = `${target}.${randomUUID()}.tmp`;

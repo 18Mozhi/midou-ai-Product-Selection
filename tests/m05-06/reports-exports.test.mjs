@@ -139,6 +139,8 @@ test("M05-06 derives global queue position and ETA only from successful export h
     now = new Date("2026-08-19T10:00:00.000Z"),
     pool = {
       query: async (sql) => {
+        if (sql.startsWith("SHOW COLUMNS FROM report_exports"))
+          return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
         if (sql.startsWith("SELECT * FROM report_exports WHERE organization_id="))
           return [
             [
@@ -235,6 +237,8 @@ test("M05-06 concurrent idempotency-key collision replays the committed export",
     pool = {
       getConnection: async () => connection,
       query: async (sql) => {
+        if (sql.startsWith("SHOW COLUMNS FROM report_exports"))
+          return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
         if (!sql.startsWith("SELECT result_json FROM report_export_operations"))
           throw new Error(`unexpected query: ${sql}`);
         operationReads += 1;

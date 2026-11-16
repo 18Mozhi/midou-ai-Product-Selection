@@ -1,7 +1,8 @@
+import { accountReportScope, appendBusinessAudit, recordAccountReportExport, reportExportAccountStorage } from "@scoutops/database";
 import { createHash, randomUUID } from "node:crypto";
 import { rm } from "node:fs/promises";
-import type { Pool, RowDataPacket } from "mysql2/promise";
-import { buildScopedFilePath, writeScopedFile } from "@scoutops/storage";
+import type { Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";
+import { buildReportExportPath, writeReportExportFile } from "@scoutops/storage";
 export const csvCell = (value: unknown) => {
   let text = value == null ? "" : value instanceof Date ? value.toISOString() : String(value);
   if (/^[=+\-@]/.test(text)) text = `'${text}`;
@@ -25,7 +26,8 @@ export class ReportExportWorker {
     private readonly now = () => new Date(),
   ) {}
   async processOnce() {
-    await this.expire();
+    const account = await reportExportAccountStorage(this.pool);
+    await this.expire(account);
     const job: any = await this.claim();
     if (!job) return { status: "idle" as const };
     const now = this.now();
@@ -37,20 +39,22 @@ export class ReportExportWorker {
         });
       const content = csvBuffer(rows);
       const contentSha256 = createHash("sha256").update(content).digest("hex");
-      await writeScopedFile(
-        this.root,
-        {
-          organization_id: String(job.organization_id) as any,
-          workspace_id: String(job.workspace_id) as any,
-          category: "export",
-          resource_id: String(job.id),
-          filename: String(job.filename),
-        },
-        content,
-      );
       const connection = await this.pool.getConnection();
       try {
         await connection.beginTransaction();
+        if (account) {
+          const heldAt = this.now();
+          const [[held]] = await connection.query<RowDataPacket[]>(
+            "SELECT id FROM report_exports WHERE id=? AND account_id=? AND status='leased' AND leased_by=? " +
+              "AND attempt_count=? AND lease_expires_at>? AND expires_at>? FOR UPDATE",
+            [job.id,job.account_id,this.workerId,job.attempt_count,heldAt,heldAt],
+          );
+          if (!held) {
+            await connection.rollback();
+            return { status: "lease_lost" as const, export_id: String(job.id) };
+          }
+        }
+        await writeReportExportFile(this.root, job, content);
         await connection.query(
           "UPDATE report_exports SET status='succeeded',row_count=?,byte_size=?,content_sha256=?,lease_expires_at=NULL,last_error_code=NULL,version=version+1,updated_at=? WHERE id=?",
           [rows.length, content.byteLength, contentSha256, now, job.id],
@@ -80,10 +84,13 @@ export class ReportExportWorker {
     } catch (error) {
       const dead = Number(job.attempt_count) >= this.retryLimit,
         code = String((error as any)?.code ?? "export_failed").slice(0, 80);
-      await this.pool.query(
-        "UPDATE report_exports SET status=?,available_at=DATE_ADD(?,INTERVAL 60 SECOND),lease_expires_at=NULL,last_error_code=?,version=version+1,updated_at=? WHERE id=?",
-        [dead ? "dead_letter" : "retry_scheduled", now, code, now, job.id],
+      const [failed] = await this.pool.query<ResultSetHeader>(
+        "UPDATE report_exports SET status=?,available_at=DATE_ADD(?,INTERVAL 60 SECOND),lease_expires_at=NULL,last_error_code=?,version=version+1,updated_at=? WHERE id=?" +
+          (account ? " AND account_id=? AND status='leased' AND leased_by=? AND attempt_count=?" : ""),
+        [dead ? "dead_letter" : "retry_scheduled", now, code, now, job.id, ...(account ? [job.account_id,this.workerId,job.attempt_count] : [])],
       );
+      if (account && failed.affectedRows !== 1)
+        return { status: "lease_lost" as const, export_id: String(job.id) };
       return {
         status: dead ? ("dead_letter" as const) : ("retry_scheduled" as const),
         export_id: String(job.id),
@@ -92,20 +99,25 @@ export class ReportExportWorker {
     }
   }
   private async rows(job: any) {
+    const scope = (table: "opportunities" | "trend_topics") => job.account_id
+      ? accountReportScope(this.pool, table)
+      : "organization_id=? AND workspace_id=?";
+    const args = job.account_id ? [job.account_id] : [job.organization_id, job.workspace_id];
     if (job.report_type === "opportunity") {
       const [rows] = await this.pool.query<RowDataPacket[]>(
-        "SELECT id,name,market,category,lifecycle_status,recommendation_status,overall_score,coverage_status,decision_status,evidence_count,source_count,updated_at FROM opportunities WHERE organization_id=? AND workspace_id=? ORDER BY updated_at DESC,id LIMIT ?",
-        [job.organization_id, job.workspace_id, this.maxRows + 1],
+        `SELECT id,name,market,category,lifecycle_status,recommendation_status,overall_score,coverage_status,decision_status,evidence_count,source_count,updated_at FROM opportunities WHERE ${await scope("opportunities")} ORDER BY updated_at DESC,id LIMIT ?`,
+        [...args, this.maxRows + 1],
       );
       return rows;
     }
     if (job.report_type === "trend") {
       const [rows] = await this.pool.query<RowDataPacket[]>(
-        "SELECT id,title,market,category,status,signal_count,source_count,heat_value,momentum_percent,confidence_status,last_seen_at FROM trend_topics WHERE organization_id=? AND workspace_id=? ORDER BY last_seen_at DESC,id LIMIT ?",
-        [job.organization_id, job.workspace_id, this.maxRows + 1],
+        `SELECT id,title,market,category,status,signal_count,source_count,heat_value,momentum_percent,confidence_status,last_seen_at FROM trend_topics WHERE ${await scope("trend_topics")} ORDER BY last_seen_at DESC,id LIMIT ?`,
+        [...args, this.maxRows + 1],
       );
       return rows;
     }
+    if (job.account_id) throw Object.assign(new Error("retired team report"), { code: "report_type_retired" });
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT m.user_id,u.email,COUNT(t.id) task_total,SUM(t.status='todo') todo,SUM(t.status='in_progress') in_progress,SUM(t.status='completed') completed,SUM(t.status IN ('todo','in_progress') AND t.due_at IS NOT NULL AND t.due_at<?) overdue FROM memberships m JOIN users u ON u.id=m.user_id LEFT JOIN tasks t ON t.organization_id=m.organization_id AND t.workspace_id=? AND t.assignee_id=m.user_id WHERE m.organization_id=? AND m.status='active' GROUP BY m.user_id,u.email ORDER BY completed DESC,u.email LIMIT ?",
       [this.now(), job.workspace_id, job.organization_id, this.maxRows + 1],
@@ -139,21 +151,14 @@ export class ReportExportWorker {
       c.release();
     }
   }
-  private async expire() {
+  private async expire(account: boolean) {
     const now = this.now(),
       [rows] = await this.pool.query<RowDataPacket[]>(
-        "SELECT id,organization_id,workspace_id,filename FROM report_exports WHERE status='succeeded' AND expires_at<=? LIMIT 100",
+        `SELECT id,filename,${account ? "account_id,historical_context" : "organization_id,workspace_id"} FROM report_exports WHERE status='succeeded' AND expires_at<=?${account ? " AND historical_context IS NULL" : ""} LIMIT 100`,
         [now],
       );
     for (const row of rows) {
-      const path = buildScopedFilePath(this.root, {
-        organization_id: String(row.organization_id) as any,
-        workspace_id: String(row.workspace_id) as any,
-        category: "export",
-        resource_id: String(row.id),
-        filename: String(row.filename),
-      });
-      await rm(path, { force: true });
+      await rm(buildReportExportPath(this.root, { ...row, id: row.id, filename: row.filename }), { force: true });
       await this.pool.query(
         "UPDATE report_exports SET status='expired',version=version+1,updated_at=? WHERE id=? AND status='succeeded'",
         [now, row.id],
@@ -162,8 +167,12 @@ export class ReportExportWorker {
   }
   private async record(job: any, event: string, payload: any, queryable: any = this.pool) {
     const now = this.now();
-    await queryable.query(
-      "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,?,'report_export',?,?,?,?,?,1)",
+    if (job.account_id) return recordAccountReportExport(queryable, {
+      accountId: job.account_id, exportId: job.id, event, requestId: job.request_id,
+      traceId: job.trace_id, payload, now,
+    });
+    await appendBusinessAudit(queryable,
+        "INSERT INTO audit_logs (id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,request_id,trace_id,metadata_json,occurred_at,schema_version) VALUES (?,?,?,?,?,'report_export',?,?,?,?,?,1)",
       [
         randomUUID(),
         job.organization_id,

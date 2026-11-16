@@ -1,4 +1,18 @@
 {
+  "accountReportExportRuntime": {
+    "sourceFiles": [
+      "apps/api/src/mysql-report-repository.ts",
+      "apps/api/src/report-service.ts",
+      "apps/worker/src/report-export-worker.ts",
+      "packages/storage/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/account-report-exports.test.mjs",
+      "tests/m05-06/reports-exports.test.mjs"
+    ],
+    "docs": ["docs/openapi.yaml", "docs/runbooks/account-report-exports.md"],
+    "contract": "Reports read exact account-owned facts. Keep historical CSV paths and bind stored receipts to the current owner. A stale lease cannot write the CSV; downloads verify byte size and SHA-256."
+  },
   "accountAutomationRuleRuntime": {
     "sourceFiles": [
       "apps/api/src/automation-routes.ts",

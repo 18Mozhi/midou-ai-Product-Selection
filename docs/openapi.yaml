@@ -3848,6 +3848,7 @@ paths:
   /reports/{reportType}:
     get:
       summary: Aggregate current scoped opportunity trend or team facts
+      x-account-runtime: Account mode reads only verified account facts; no new team report is produced.
       description: Aggregates all persisted records in the active workspace and returns the latest factual observed_at; no selectable time window or inferred value is applied. Retained scoped backend compatibility endpoint. The standalone member frontend report page is retired and its old browser URL redirects to the selection library; this API and historical export records are not deleted.
       x-required-capability: report:read
       parameters:
@@ -3866,6 +3867,7 @@ paths:
   /report-exports:
     get:
       summary: List current scoped report exports with global queue position and history-based nullable ETA
+      x-account-runtime: Account receipts replay only the same type, format and source under the current original account. Conflicts return 409.
       x-required-capability: report:read
       responses:
         "200": { $ref: "#/components/responses/Success" }
@@ -3928,6 +3930,7 @@ paths:
   /report-exports/{reportExportId}/download:
     get:
       summary: Download one succeeded unexpired scoped CSV export
+      x-account-runtime: Account download keeps the original path and validates the current owner, immutable file identity, size and stored SHA-256 before returning bytes.
       x-required-capability: report:read
       parameters:
         [{ name: reportExportId, in: path, required: true, schema: { type: string, format: uuid } }]

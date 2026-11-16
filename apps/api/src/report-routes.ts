@@ -1,3 +1,4 @@
+import { authenticatedRehearsalAccount } from "./account-read-rehearsal.js";
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { LocalAuthService } from "@scoutops/auth";
 import type { AuthorizationService } from "@scoutops/authorization";
@@ -10,6 +11,7 @@ export interface ReportRouteOptions {
   auth: LocalAuthService;
   secureCookie: boolean;
   webOrigin: string;
+  accountReadRehearsal?: boolean;
 }
 const ids = (r: FastifyRequest) => ({
     requestId: String(r.headers["x-request-id"]),
@@ -22,6 +24,10 @@ const ids = (r: FastifyRequest) => ({
   });
 export function registerReportRoutes(app: FastifyInstance, o: ReportRouteOptions) {
   const scope = async (r: FastifyRequest) => {
+      if (o.accountReadRehearsal) {
+        const { accountId } = await authenticatedRehearsalAccount(r, o.auth, o.secureCookie);
+        return { actorId: accountId, accountOwned: true };
+      }
       const a = await o.auth.authenticate(sessionToken(r, o.secureCookie)),
         x = await o.authorization.resolveSession(a.user.id, a.session.id);
       await o.authorization.authorize({

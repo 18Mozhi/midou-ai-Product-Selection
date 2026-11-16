@@ -66,6 +66,7 @@ export function registerWorkflowDomainRoutes(context: ApiDomainContext) {
     ...common,
   });
   registerReportRoutes(context.app, {
+    accountReadRehearsal: context.accountReadRehearsal,
     service: new ReportService(
       new MySqlReportRepository(context.pool),
       context.config.reports.exportRoot,
