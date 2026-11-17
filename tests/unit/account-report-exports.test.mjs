@@ -201,6 +201,7 @@ for (const validLease of [true,false]) test(`0177 Worker verifies the account le
   const job = {
     id,
     account_id: "login",
+    version: 1,
     report_type: "trend",
     filename: "safe.csv",
     attempt_count: 0,
@@ -219,7 +220,11 @@ for (const validLease of [true,false]) test(`0177 Worker verifies the account le
     },
     release() {},
     async query(sql, args) {
-      if (sql.startsWith("SELECT * FROM report_exports")) return [[...(claim ? [job] : [])]];
+      if (sql.startsWith("SELECT * FROM report_exports")) {
+        assert.match(sql, /WHERE id=\? AND version=\? AND account_id=\?.*FOR UPDATE/);
+        assert.deepEqual(args, [id, job.version, "login", now, now, now]);
+        return [[...(claim ? [job] : [])]];
+      }
       if (sql.startsWith("SELECT id FROM report_exports")) {
         assert.match(sql,/account_id=\?.*leased_by=\?.*attempt_count=\?.*lease_expires_at>\?.*FOR UPDATE/);
         assert.deepEqual(args,[id,"login","worker",1,now,now]);
@@ -246,6 +251,11 @@ for (const validLease of [true,false]) test(`0177 Worker verifies the account le
         if (sql.startsWith("SHOW COLUMNS FROM trend_topics")) return [[{ Field: "account_id" }]];
         if (sql.startsWith("SHOW COLUMNS")) return layout;
         if (sql.startsWith("SELECT id,filename,account_id,historical_context")) return [[]];
+        if (sql.startsWith("SELECT id,version,account_id FROM report_exports")) {
+          assert.match(sql, /ORDER BY available_at,id LIMIT 1$/);
+          assert.deepEqual(args, [now, now, now]);
+          return [claim ? [{ id, version: job.version, account_id: "login" }] : []];
+        }
         assert.match(sql, /source_table='trend_topics'[\s\S]*o\.account_id=\?/);
         assert.match(sql, /o.account_id=trend_topics.account_id/);
         assert.deepEqual(args, ["login", 11]);

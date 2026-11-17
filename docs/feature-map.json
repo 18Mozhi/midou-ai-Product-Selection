@@ -6160,6 +6160,7 @@
     },
     "reportsExports": {
       "module": "M05-06",
+      "workerClaim": "The report Worker scans eligible exports without a row lock in available_at/id order and opens no claim transaction when idle. The selected primary key, version, account (when present) and fresh eligibility are checked together under a row lock. A changed candidate is not leased or charged an attempt. No API, schema or settings change.",
       "uiPhase2ReportActualReview": "2026-09-20 P28 actual Vue C review at design-plans/ui-phase-2-2026-09-07/P28-PAGE-COMPOSITION-BATCH99.md mounts ReportCenter at /reports with isolated blue-white review CSS only. The reviewed page preserves existing aggregate reads, URL report type, export detail and the exact CSV creation body. node --test tests/unit/report-page-preview.test.mjs and scripts/verify-report-page-preview.mjs --capture-review r1 pass 36 checks at 1440/390 with reduced and no-preference motion, producing 4 permanent images and 5 source hashes. Production Vue/API/OpenAPI/DB/permission/Worker/deployment unchanged; real session/RBAC, other report types, download/regeneration, polling, empty/errors, full dialog keyboard behavior and production validation remain pending.",
       "entrypoints": [
         "../apps/api/src/report-service.ts",

@@ -20,6 +20,10 @@ export const csvBuffer = (rows: Record<string, unknown>[]) => {
     "utf8",
   );
 };
+const exportClaimEligible =
+  "((status IN ('queued','retry_scheduled') AND available_at<=?) OR " +
+  "(status='leased' AND lease_expires_at<=?)) AND expires_at>?";
+
 export class ReportExportWorker {
   constructor(
     private readonly pool: Pool,
@@ -33,7 +37,7 @@ export class ReportExportWorker {
   async processOnce() {
     const account = await reportExportAccountStorage(this.pool);
     await this.expire(account);
-    const job: any = await this.claim();
+    const job: any = await this.claim(account);
     if (!job) return { status: "idle" as const };
     const now = this.now();
     try {
@@ -140,14 +144,22 @@ export class ReportExportWorker {
     );
     return rows;
   }
-  private async claim() {
-    const c = await this.pool.getConnection(),
-      now = this.now();
+  private async claim(account: boolean) {
+    const scanAt = this.now();
+    const [[candidate]] = await this.pool.query<RowDataPacket[]>(
+      `SELECT id,version${account ? ",account_id" : ""} FROM report_exports WHERE ${exportClaimEligible} ORDER BY available_at,id LIMIT 1`,
+      [scanAt, scanAt, scanAt],
+    );
+    if (!candidate) return null;
+    const c = await this.pool.getConnection();
     try {
       await c.beginTransaction();
+      // Do not lock the sorted eligibility scan. Use a current read by primary
+      // key and recheck the version, scope and lease conditions under the lock.
+      const now = this.now();
       const [rows] = await c.query<RowDataPacket[]>(
-          "SELECT * FROM report_exports WHERE ((status IN ('queued','retry_scheduled') AND available_at<=?) OR (status='leased' AND lease_expires_at<=?)) AND expires_at>? ORDER BY available_at,id LIMIT 1 FOR UPDATE",
-          [now, now, now],
+          `SELECT * FROM report_exports WHERE id=? AND version=?${account ? " AND account_id=?" : ""} AND ${exportClaimEligible} FOR UPDATE`,
+          [candidate.id, candidate.version, ...(account ? [candidate.account_id] : []), now, now, now],
         ),
         row = rows[0];
       if (!row) {
