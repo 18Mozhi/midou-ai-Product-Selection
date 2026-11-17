@@ -13,6 +13,7 @@ PRE_STAGGER_SHA256 = {
     "queue-scheduler.js": "189741ab72172b40773d501bfa24c13be157fc751b2f127ca9de007980b8562d",
     "worker-queue-registry.js": "81a51e4891a38f0d040fe44ba64a393f16f467244e16921b4b16d98759178785",
 }
+STAGGER_RELEASE_SHA = "53e3ee64a65dd4aeaf7f83c2142cc6a7a901f54e"
 RESTART = "/www/server/panel/script/restart_project.py"
 MODULE_PHASE = "not_installed"
 
@@ -222,13 +223,19 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
         return receipt
 
 
-def validate_changes(changed, scheduler=False):
+def validate_changes(changed, scheduler=False, rollback=False):
     exact = {SOURCE, "scripts/baota-account-trend-release.py", "scripts/deploy-account-baota.py",
              "scripts/baota-account-static-release.py"}
     required = {SOURCE}
     if scheduler:
         required = {"apps/worker/src/" + name[:-3] + ".ts" for name in SCHEDULER_FILES}
         exact.update(required)
+    if rollback:
+        if not scheduler:
+            raise RuntimeError("trend_scheduler_manifest_invalid")
+        # Restored files may be identical to the base runtime. The caller
+        # separately requires a change to both files relative to the stagger release.
+        required = set()
     if not required.issubset(changed) or any(
         p not in exact and not p.startswith(("apps/web/src/", "docs/", "tests/")) for p in changed
     ):
@@ -256,7 +263,10 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             or git("ls-remote", "--exit-code", "origin", "refs/heads/main") != sha + "\trefs/heads/main"):
         raise RuntimeError("trend_release_requires_clean_approved_main")
     deploy["verify_production_sha_history"](repo, previous, sha)
-    validate_changes(git("diff", "--name-only", previous, sha).splitlines(), scheduler_expected is not None)
+    validate_changes(git("diff", "--name-only", previous, sha).splitlines(), scheduler_expected is not None, rollback)
+    if rollback:
+        deploy["verify_production_sha_history"](repo, STAGGER_RELEASE_SHA, sha)
+        validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
     subprocess.run([deploy["local_npm_executable"](), "run", "build:worker"], cwd=repo, check=True)
     if git("rev-parse", "HEAD") != sha or git("status", "--porcelain"):
         raise RuntimeError("trend_release_source_changed_during_build")

@@ -36,6 +36,9 @@ class TrendReleaseScopeTest(unittest.TestCase):
         first = "apps/worker/src/queue-scheduler.ts"
         second = "apps/worker/src/worker-queue-registry.ts"
         trend["validate_changes"]([first, second, trend["SOURCE"]], scheduler=True)
+        trend["validate_changes"]([trend["SOURCE"]], scheduler=True, rollback=True)
+        with self.assertRaisesRegex(RuntimeError, "trend_release_contains_other_runtime_changes"):
+            trend["validate_changes"]([trend["SOURCE"], "apps/api/src/server.ts"], scheduler=True, rollback=True)
         for paths in ([first], [first, second, "apps/api/src/server.ts"]):
             with self.assertRaisesRegex(RuntimeError, "trend_release_contains_other_runtime_changes"):
                 trend["validate_changes"](paths, scheduler=True)
