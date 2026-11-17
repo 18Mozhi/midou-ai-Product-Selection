@@ -208,7 +208,9 @@ def main():
     action.add_argument("--continue-evidence-suffix", action="store_true")
     action.add_argument("--recover-retired-runtime", action="store_true")
     action.add_argument("--frontend-only", action="store_true")
+    action.add_argument("--trend-projection-only", action="store_true")
     parser.add_argument("--expected-previous-sha")
+    parser.add_argument("--expected-module-sha256")
     parser.add_argument("--plan-sha256")
     parser.add_argument("--interrupted-build-sha")
     parser.add_argument("--interrupted-plan-sha256")
@@ -218,7 +220,16 @@ def main():
     suffix_args = (args.interrupted_build_sha, args.interrupted_plan_sha256, args.sealed_records)
     if not (args.continue_evidence_suffix or args.recover_retired_runtime) and any(suffix_args):
         parser.error("interruption arguments require a cutover recovery action")
-    if args.frontend_only:
+    if args.expected_module_sha256 and not args.trend_projection_only:
+        parser.error("--expected-module-sha256 requires --trend-projection-only")
+    if args.trend_projection_only:
+        if args.plan_sha256 or not args.expected_previous_sha or not args.expected_module_sha256:
+            parser.error("--trend-projection-only requires both expected hashes and does not execute migrations")
+        deploy = runpy.run_path(str(scripts / "deploy-baota.py"))
+        trend = runpy.run_path(str(scripts / "baota-account-trend-release.py"))
+        print(json.dumps(trend["publish"](scripts.parent, args.expected_previous_sha, args.expected_module_sha256,
+                                         deploy, project_ssh)))
+    elif args.frontend_only:
         if args.plan_sha256:
             parser.error("--frontend-only does not execute migrations")
         deploy = runpy.run_path(str(scripts / "deploy-baota.py"))

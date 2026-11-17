@@ -2,6 +2,10 @@
 
 # M04-01 热点与监控运行、故障与回滚
 
+> 账号模式 Amazon 情报补入队按成功任务和账号聚合首条有效证据，再排除已入队记录；首条已经入队时不改选下一条。所有权检查、写前事务复核、入队顺序及轮询配置保持不变。无需执行数据库迁移；获准发布 Worker 运行包时，通过宝塔重启既有 Node 项目 `ai选品` 生效，无需重启 Python。发布后对比 `trend_projection` 单次耗时及 `worker_scheduler_backpressure`，同时核对实际趋势入队及投影。
+
+> 已批准单模块发布时，在等于远端 `main` 的干净提交运行 `python -B scripts/deploy-account-baota.py --trend-projection-only --expected-previous-sha <正式后端完整SHA> --expected-module-sha256 <正式趋势模块SHA256>`。入口只替换该 Worker 模块，通过宝塔重启 `ai选品`，不覆盖前端、Python、配置或迁移日志。回执包含补丁提交和模块 SHA256；健康接口仍标识后端基底版本。若回执报模块已安装但重启未验证，应先核对当前模块哈希和进程，不应重复启动发布入口。
+
 > 2026-10-18 1688是找货报价而非趋势来源，不再生成趋势投影；旧无效任务按原租约空完成，每轮最多20个，不删除历史数据。无需手工清队列。发布后由宝塔重启唯一Node项目ai选品，见 `docs/selection-supply-intelligence-separation.md`。
 
 > 新情报候选先无锁选择，再按主键及组织/工作区加锁并复查租约；RSS及有原始目标证明的Amazon情报关联任务优先。观察Worker队列结果、死锁与真实情报事件，不把空任务消化数当作完成商品。不要通过清锁、清熔断或提高并发绕过故障。

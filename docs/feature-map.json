@@ -5527,6 +5527,7 @@
     },
     "trendDomain": {
       "module": "M04-01",
+      "accountProjectionCandidateScan": "账号模式 Amazon 情报补入队先按成功任务、账号和 Provider 聚合首条有效证据，再排除已入队记录；保持首条已投影时不递补、稳定顺序、账号归属及写前事务复核。无迁移或调度配置变更。",
       "referenceIntelligenceLayout": "List-first, compact topic rows, explicit close, separate evidence metric card, bounded desktop split scroll, and accessible overview/evidence/related-product tabs with a shared read-only related-product preview. No filter, evidence, image or permission contract changes.",
       "uiPhase2TopicReadOwnership": "TrendDashboard 路由主题详情读取使用独立 AbortController 与代次归属；新主题选择、工作区刷新、KeepAlive 离页和卸载会中止旧详情 GET，迟到响应仍由代次校验兜底，不覆盖当前详情、错误提示、追踪编号或忙碌态。UI2-TR10 tests/e2e/ui-phase2-trend-contracts.spec.ts 桌面/390px覆盖过期请求取消；完整组织工作区端到端与真实服务验收仍待。无 API、权限、数据、依赖或运行配置变化。",
       "uiPhase2SharedReadOwnership": "P14 筛选列表、监控规则与治理队列 GET 共用可中止的当前工作区读取控制器；主题详情使用独立控制器。刷新/筛选、主题切换、KeepAlive 离页及卸载中止所属请求，并保留代次检查作为迟到回执兜底；离页恢复后同范围路由监听与 activated 刷新合并为单次读取。UI2-TR10 tests/e2e/ui-phase2-trend-contracts.spec.ts 真实 Vue 桌面/390px覆盖筛选、主题、规则/治理旧请求取消，P14 deactivation 覆盖离页取消及恢复单次读取。完整组织工作区切换端到端、其他动作/无障碍与真实服务验收仍待。",
@@ -5542,6 +5543,7 @@
         "../apps/api/src/mysql-data-quality-repository.ts",
         "../apps/api/src/data-quality-routes.ts",
         "../apps/worker/src/trend-projection-worker.ts",
+        "../apps/worker/src/trend-projection-account-queue.ts",
         "../apps/worker/src/trend-projection-calculation.ts",
         "../apps/worker/src/trend-projection-persistence.ts",
         "../apps/worker/src/trend-projection-alerts.ts",

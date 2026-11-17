@@ -30,13 +30,14 @@ const targetType = (alias: string) =>
 const originalSubquery =
   "cs.id=e.collection_subquery_id AND cs.task_id=t.id AND cs.provider_id=n.provider_id";
 const subqueryOwned = own("collection_subqueries", "cs.id", "t.account_id");
-const source =
-  "FROM normalized_records n JOIN providers p ON p.id=n.provider_id " +
+const sourceTail =
+  " JOIN providers p ON p.id=n.provider_id " +
   sourceJoins +
   "LEFT JOIN trend_projection_jobs j ON j.normalized_record_id=n.id " +
   "WHERE n.status='active' AND j.id IS NULL AND " +
   sourceOwner +
   " AND ";
+const source = "FROM normalized_records n" + sourceTail;
 
 const ordinarySource =
   source +
@@ -49,8 +50,7 @@ const ordinarySource =
   targetType("cs") +
   "='rule_product_discovery')))";
 
-const discoveredSource =
-  source +
+const discoveredEligibility =
   "p.code='amazon_product' AND t.status IN ('succeeded','completed_with_warnings') " +
   "AND EXISTS (SELECT 1 FROM collection_subqueries cs WHERE " +
   originalSubquery +
@@ -58,30 +58,66 @@ const discoveredSource =
   subqueryOwned +
   " AND " +
   targetType("cs") +
-  "='intelligence_product_discovery'" +
-  " AND n.id=(SELECT MIN(n_first.id) FROM collection_task_evidence_links l_first " +
+  "='intelligence_product_discovery')";
+const firstEvidenceJoins =
   "JOIN normalized_records n_first ON n_first.id=l_first.normalized_record_id " +
   "AND n_first.raw_evidence_id=l_first.raw_evidence_id AND n_first.provider_id=l_first.provider_id " +
   "AND n_first.status='active' " +
   "JOIN raw_evidence e_first ON e_first.id=n_first.raw_evidence_id AND e_first.provider_id=n_first.provider_id " +
   "AND e_first.account_id=n_first.account_id " +
-  "JOIN collection_tasks t_first ON t_first.id=e_first.collection_task_id AND t_first.account_id=e_first.account_id " +
-  "WHERE l_first.collection_task_id=t.id AND n_first.provider_id=n.provider_id AND n_first.account_id=n.account_id AND " +
+  "JOIN collection_tasks t_first ON t_first.id=e_first.collection_task_id AND t_first.account_id=e_first.account_id ";
+const firstEvidenceOwner =
   own("collection_task_evidence_links", "l_first.id", "t_first.account_id") +
   " AND " +
   own("collection_tasks", "t_first.id", "t_first.account_id") +
   " AND " +
   own("normalized_records", "n_first.id", "t_first.account_id") +
   " AND " +
-  own("raw_evidence", "e_first.id", "t_first.account_id") +
-  "))";
+  own("raw_evidence", "e_first.id", "t_first.account_id");
+
+const discoveredSource =
+  source +
+  discoveredEligibility +
+  " AND n.id=(SELECT MIN(n_first.id) FROM collection_task_evidence_links l_first " +
+  firstEvidenceJoins +
+  "WHERE l_first.collection_task_id=t.id AND n_first.provider_id=n.provider_id AND n_first.account_id=n.account_id AND " +
+  firstEvidenceOwner +
+  ")";
+
+const discoveredTasks =
+  "SELECT DISTINCT origin.id task_id,p_seed.id provider_id,origin.account_id " +
+  "FROM providers p_seed STRAIGHT_JOIN collection_subqueries cs_seed ON cs_seed.provider_id=p_seed.id " +
+  "JOIN collection_tasks origin ON origin.id=cs_seed.task_id " +
+  "WHERE p_seed.code='amazon_product' AND origin.status IN ('succeeded','completed_with_warnings') AND " +
+  targetType("cs_seed") +
+  "='intelligence_product_discovery' AND " +
+  own("collection_subqueries", "cs_seed.id", "origin.account_id");
+
+// Aggregate the same owned evidence set once per originating task, then do
+// point reads for the winners. Do not filter out already projected records
+// inside MIN: doing so would promote a second record for a completed task.
+export const nativeTrendDiscoveredCandidatesSql =
+  "SELECT STRAIGHT_JOIN n.id,n.account_id FROM (" +
+  "SELECT STRAIGHT_JOIN seed.task_id,seed.provider_id,seed.account_id,MIN(n_first.id) normalized_record_id FROM (" +
+  discoveredTasks +
+  ") seed STRAIGHT_JOIN collection_task_evidence_links l_first ON l_first.collection_task_id=seed.task_id " +
+  firstEvidenceJoins +
+  "WHERE n_first.provider_id=seed.provider_id AND n_first.account_id=seed.account_id AND " +
+  firstEvidenceOwner +
+  " GROUP BY seed.task_id,seed.provider_id,seed.account_id) winner " +
+  "JOIN normalized_records n ON n.id=winner.normalized_record_id AND n.provider_id=winner.provider_id AND n.account_id=winner.account_id" +
+  sourceTail +
+  "t.id=winner.task_id AND " +
+  discoveredEligibility +
+  " ORDER BY n.created_at,n.id LIMIT 100";
 
 /** Bound scans stay lock-free; every insert rechecks the current exact source. */
 export async function enqueueNativeTrendProjection(pool: Pool, now: Date) {
-  for (const sql of [ordinarySource, discoveredSource]) {
-    const [rows] = await pool.query<RowDataPacket[]>(
-      "SELECT n.id,n.account_id " + sql + " ORDER BY n.created_at,n.id LIMIT 100",
-    );
+  for (const [sql, candidates] of [
+    [ordinarySource, "SELECT n.id,n.account_id " + ordinarySource + " ORDER BY n.created_at,n.id LIMIT 100"],
+    [discoveredSource, nativeTrendDiscoveredCandidatesSql],
+  ] as const) {
+    const [rows] = await pool.query<RowDataPacket[]>(candidates);
     for (const row of rows) {
       const c = await pool.getConnection();
       try {
