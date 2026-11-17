@@ -115,6 +115,7 @@ def install(root, uploaded, digest, build, previous, panel, check_public):
 
 
 def remote_check(expected, index=None, assets=None):
+    import time
     import urllib.error
     import urllib.request
     base = "https://midouai.medouai.com"
@@ -122,11 +123,20 @@ def remote_check(expected, index=None, assets=None):
     def get(path):
         return urllib.request.urlopen(base + path, timeout=12)
 
-    for name, field, value in (("version", "build_sha", expected), ("ready", "status", "ready"),
-                               ("available", "status", "available")):
+    for name, field, value in (("version", "build_sha", expected), ("ready", "status", "ready")):
         with get("/api/v1/health/" + name) as reply:
             if json.load(reply)["data"].get(field) != value:
                 raise RuntimeError("frontend_runtime_health_failed:" + name)
+    for attempt in range(5):
+        with get("/api/v1/health/available") as reply:
+            availability = json.load(reply)["data"]
+        if availability.get("status") == "available":
+            break
+        services = availability.get("services", {})
+        if (attempt == 4 or availability.get("status") != "degraded" or
+                any(services.get(name) != "available" for name in ("api", "worker"))):
+            raise RuntimeError("frontend_runtime_health_failed:available")
+        time.sleep(2)
     if index is not None:
         query = "?ui_check=" + hashlib.sha256(index).hexdigest()[:20]
         for path in ("/login", "/home", "/opportunities"):
@@ -213,6 +223,7 @@ print('SCOUTOPS_RESULT='+json.dumps(result))
             finally:
                 if owned:
                     cleanup = "from pathlib import Path\nimport json\np=Path(" + repr(upload) + ")\n" \
-                        "assert p.parent.resolve(strict=True)==p.parent and not p.is_symlink()\np.unlink(missing_ok=True)\n" \
+                        "assert p.parent.resolve(strict=True)==p.parent and not p.is_symlink()\n" \
+                        "try: p.unlink()\nexcept FileNotFoundError: pass\n" \
                         "print('SCOUTOPS_RESULT='+json.dumps({'status':not p.exists()}))"
                     deploy["remote_python"](ssh, cleanup, timeout=20)
