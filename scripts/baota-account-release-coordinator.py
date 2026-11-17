@@ -108,6 +108,37 @@ def coordinate_evidence_suffix(steps, interrupted, old_plan):
             "migration_receipts": database["forward"]["receipt"]["applied"]}
 
 
+def coordinate_installed_runtime_recovery(steps, interrupted, old_plan):
+    steps.verify_evidence_suffix_journal(interrupted, old_plan, runtime_recovery=True)
+    steps.stage_path, _ = steps.parts["stage"]["stage_verified_account_runtime"](
+        steps.upload, steps.build_sha, steps.plan, steps.archive_sha,
+        steps.parts["package"]["verify_account_archive"],
+    )
+    steps.prepare_dependencies_and_routes()
+    steps._panel("stop_failed_runtime")
+    steps.assert_stopped()
+    with steps.database_session(runtime_recovery=True) as session:
+        session.command("verify_runtime_recovery")
+        proof = session.receive("runtime_recovery_verified", None)
+        # The prior trusted journal completed its full preservation and ownership
+        # check before installing. This path proves the same sealed schema and
+        # unchanged plan under the live fence; it never claims to replay DDL.
+        database = {"status": "database_verified", "forward": {
+            "receipt": proof["receipt"],
+            "preservation": {"status": "matched", "scope": "verified_prior_journal"},
+            "ownership": {"tenancy_schema": proof["tenancy"]},
+        }}
+        steps.journal("runtime_recovery_applying")
+        steps.install(database, session.fence)
+        steps.journal("runtime_installed")
+    steps.reload_routes()
+    steps.activate()
+    steps.journal("runtime_ready")
+    steps.cleanup()
+    return {"status": True, "phase": "runtime_ready", "build_sha": steps.build_sha,
+            "migration_receipts": proof["receipt"]["applied"], "migration_statements_run": 0}
+
+
 class CutoverProcess:
     def __init__(self, process, plan_sha):
         self.process = process
@@ -158,7 +189,9 @@ class BaoTaRelease:
 
     def _panel(self, action, final_drain=None):
         namespace = self.parts["control"]
-        sha = self.build_sha if action == "activate" else self.previous if action == "resume_baseline" else None
+        sha = self.build_sha if action == "activate" else self.previous if action in {
+            "resume_baseline", "stop_failed_runtime"
+        } else None
         source = namespace["writer_control_source"](action, sha,
                                                     self.baseline if action == "resume_baseline" else None)
         std = io.StringIO()
@@ -186,7 +219,7 @@ class BaoTaRelease:
                 raise RuntimeError("account_release_existing_state_requires_reconciliation")
             yield
 
-    def verify_evidence_suffix_journal(self, interrupted, old_plan):
+    def verify_evidence_suffix_journal(self, interrupted, old_plan, runtime_recovery=False):
         import stat
         fd = os.open(self.log, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
         with os.fdopen(fd, "rb") as file:
@@ -196,14 +229,16 @@ class BaoTaRelease:
                     not 0 < info.st_size < 65536):
                 raise RuntimeError("account_release_evidence_suffix_untrusted_journal")
             raw = file.read(65536)
-        if (len(raw) != info.st_size or not raw.endswith(b"\n") or
-                [json.loads(line) for line in raw.splitlines()] != [
-                    dict(phase=phase, build_sha=interrupted, plan_sha=old_plan)
+        expected = [dict(phase=phase, build_sha=interrupted, plan_sha=old_plan)
                     for phase in ("prepared", "writers_stopped", "applying_database",
-                                  "resuming_database", "resuming_after_prewrites")
-                ]):
+                                  "resuming_database", "resuming_after_prewrites")]
+        if runtime_recovery:
+            expected += [dict(phase=phase, build_sha=self.previous, plan_sha=self.plan)
+                         for phase in ("evidence_suffix_applying", "database_verified", "runtime_installed")]
+        if (len(raw) != info.st_size or not raw.endswith(b"\n") or
+                [json.loads(line) for line in raw.splitlines()] != expected):
             raise RuntimeError("account_release_evidence_suffix_journal_changed")
-        self.phase = "resuming_after_prewrites"
+        self.phase = expected[-1]["phase"]
 
     def journal(self, phase):
         with self.log.open("xb" if self.phase == "before_stage" else "ab") as file:
@@ -281,7 +316,7 @@ try {
             raise RuntimeError("account_release_runtime_writers_reappeared")
 
     @contextlib.contextmanager
-    def database_session(self, evidence_suffix=False):
+    def database_session(self, evidence_suffix=False, runtime_recovery=False):
         self.assert_stopped()
         backend = self.stage_path / "backend"
         modules = backend / "node_modules"
@@ -290,9 +325,11 @@ try {
         modules.symlink_to(ROOT / "backend/node_modules", target_is_directory=True)
         import tempfile
         process = None
-        errors = tempfile.TemporaryFile() if evidence_suffix else None
-        entry = "serve-account-production-evidence-suffix.mjs" if evidence_suffix else "serve-account-production-cutover.mjs"
-        cli = ["--fenced-evidence-suffix", self.plan, self.sealed_records] if evidence_suffix else ["--fenced-stdio"]
+        specialized = evidence_suffix or runtime_recovery
+        errors = tempfile.TemporaryFile() if specialized else None
+        entry = "serve-account-production-evidence-suffix.mjs" if specialized else "serve-account-production-cutover.mjs"
+        cli = (["--fenced-runtime-recovery" if runtime_recovery else "--fenced-evidence-suffix",
+                self.plan, self.sealed_records] if specialized else ["--fenced-stdio"])
         try:
             process = subprocess.Popen([NODE, "--env-file=" + str(ROOT / "config/product_scout.env"),
                 str(backend / "scripts" / entry), *cli],

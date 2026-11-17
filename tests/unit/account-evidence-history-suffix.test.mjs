@@ -12,6 +12,7 @@ import {
 } from "../../scripts/plan-account-retirement-production.mjs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { verifyInstalledAccountRuntime } from "../../scripts/serve-account-production-evidence-suffix.mjs";
 
 const old = "a4c7b0128bc59aad0601271b473c01b6ce8decee";
 const plan = await planAccountRetirementProduction();
@@ -23,6 +24,56 @@ const allReceipts = [...plan.prerequisites, ...plan.forward].map(({ name, candid
   checksum: candidate_sha256,
 }));
 const file = (name) => readFile(new URL("../../" + name, import.meta.url), "utf8");
+
+test("post-install recovery checks all receipts, retired roots and the seal with reads only", async () => {
+  const verify = (receipts, records) =>
+    verifyInstalledAccountRuntime(
+      {
+        async query(sql) {
+          assert.match(sql, /^SELECT /);
+          if (sql.startsWith("SELECT name,checksum")) return [receipts];
+          if (sql.startsWith("SELECT COUNT(*) applied")) return [[{ applied: 1 }]];
+          if (sql.includes("information_schema.TABLES"))
+            return [
+              ["historical_organizations", "historical_workspaces"].map((table_name) => ({
+                table_name,
+                table_type: "BASE TABLE",
+              })),
+            ];
+          if (sql.includes("information_schema.COLUMNS"))
+            return [[{ table_name: "historical_workspaces", column_name: "organization_id" }]];
+          if (sql.includes("information_schema.KEY_COLUMN_USAGE"))
+            return [
+              [
+                {
+                  local_schema: 1,
+                  table_name: "historical_organizations",
+                  constraint_name: "fk_organizations_default_workspace",
+                  column_name: "default_workspace_id",
+                  target_table: "historical_workspaces",
+                  target_column: "id",
+                },
+                {
+                  local_schema: 1,
+                  table_name: "historical_workspaces",
+                  constraint_name: "fk_workspaces_org",
+                  column_name: "organization_id",
+                  target_table: "historical_organizations",
+                  target_column: "id",
+                },
+              ],
+            ];
+          assert.match(sql, /FROM account_ownership_cutover/);
+          return [[{ n: 1, records }]];
+        },
+      },
+      plan,
+      "5685779",
+    );
+  assert.equal((await verify(allReceipts, "5685779")).tenancy.status, "retired");
+  await assert.rejects(verify(allReceipts.slice(0, 120), "5685779"), /recovery_receipts_changed/);
+  await assert.rejects(verify(allReceipts, "5685778"), /recovery_seal_changed/);
+});
 
 test("the acknowledged prefix remains byte-exact and suffix starts at 0190", () => {
   for (const entry of prefix) {

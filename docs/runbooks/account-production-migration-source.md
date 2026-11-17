@@ -17,3 +17,13 @@
 python -B scripts/deploy-account-baota.py --continue-evidence-suffix --expected-previous-sha <仍在磁盘的旧SHA> --plan-sha256 <修正版计划SHA256> --interrupted-build-sha <中断候选SHA> --interrupted-plan-sha256 <中断计划SHA256> --sealed-records <已复核的封存行数>
 ```
 新包只允许在迁移目录内修改原候选尚未执行的 0190 正/逆向两份文件。旧日志按原样保留，新候选取得其自身准确的库验证与运行回执。若 `evidence_suffix_applying` 之后再中断，必须重新查明实际持久结构和前缀，本入口不会自动接管。
+
+### 121 条回执已齐、运行包已安装但 Node 未就绪
+
+先通过 SSH 核对正式发布日志止于 `runtime_installed`、实际构建与独占门禁。修复包从干净且等于受审 `origin/main` 的源码构建，迁移文件和回执定义必须完全不变。仍无监听、无 Worker、无 Python 且备份任务停用时，以下命令只通过宝塔停止失败的 Node，再在同一数据库停写锁下只读检查 121 条回执、封存总数及退役结构，安装修复包并重新执行健康、Worker 和旧路由验证：
+
+```powershell
+python -B scripts/deploy-account-baota.py --recover-retired-runtime --expected-previous-sha <已安装的失败构建SHA> --plan-sha256 <已完成迁移的计划SHA256> --interrupted-build-sha <首次中断的候选SHA> --interrupted-plan-sha256 <首次中断的计划SHA256> --sealed-records <已核验封存数>
+```
+
+本入口不运行任何迁移，也不会启动旧版。若监听或任一 Worker / Python 已运行，拒绝按启动失败路径停机；不得用此命令代替正常健康发布。退役模式的拓扑心跳和平台审计不再引用已移除的组织／工作区列；事件身份、节点配置、心跳周期、权限和 HTTP 契约不变。

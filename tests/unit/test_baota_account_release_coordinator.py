@@ -63,6 +63,41 @@ class Steps:
 
 
 class CoordinatorTest(unittest.TestCase):
+    def test_retired_runtime_recovery_never_calls_migration_or_starts_baseline(self):
+        class Recovery(Steps):
+            upload = "verified-upload"
+            plan = "same-plan"
+            archive_sha = "sha"
+            parts = {"stage": {"stage_verified_account_runtime": lambda *args: ("stage", None)},
+                     "package": {"verify_account_archive": object()}}
+            def verify_evidence_suffix_journal(self, interrupted, old_plan, runtime_recovery=False):
+                assert runtime_recovery
+                self.event("journal_verified")
+            def assert_stopped(self): self.event("assert_stopped")
+            def _panel(self, action): self.event(action)
+            def command(self, action): self.event(action)
+            def receive(self, expected, timeout):
+                self.event(expected)
+                return {"receipt": {"applied": 121}, "tenancy": {"status": "retired"}}
+            @contextlib.contextmanager
+            def database_session(self, runtime_recovery=False):
+                assert runtime_recovery
+                with super().database_session() as session:
+                    yield session
+
+        recover = lambda steps: COORD["coordinate_installed_runtime_recovery"](steps, "old", "plan")
+        bad = Recovery("runtime_recovery_verified")
+        with self.assertRaisesRegex(RuntimeError, "runtime_recovery_verified"):
+            recover(bad)
+        self.assertNotIn("install", bad.calls)
+        self.assertNotIn("activate", bad.calls)
+        good = Recovery()
+        self.assertEqual(recover(good)["migration_statements_run"], 0)
+        self.assertEqual(good.calls, ["journal_verified", "dependencies", "stop_failed_runtime",
+            "assert_stopped", "lock", "verify_runtime_recovery", "runtime_recovery_verified",
+            "runtime_recovery_applying", "fence", "install", "runtime_installed", "unlock",
+            "routes", "activate", "runtime_ready", "cleanup"])
+
     def test_suffix_only_runs_after_strict_read_gate_under_same_fence(self):
         class SuffixSteps(Steps):
             upload = "verified-upload"

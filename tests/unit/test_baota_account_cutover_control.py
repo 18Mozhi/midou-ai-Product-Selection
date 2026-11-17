@@ -14,10 +14,13 @@ CONTROL = runpy.run_path(str(pathlib.Path(__file__).parents[2] / "scripts/baota-
 
 
 def run_panel(action, *, active_backup=False, valid_site=True, installed_sha=None, scope_flag=True,
-              legacy_code=404, legacy_error='route_not_found', session_code=200):
+              legacy_code=404, legacy_error='route_not_found', session_code=200,
+              live_worker=False, live_listener=False):
     root = '/www/wwwroot/ai选品'
     calls = []
     running = {'node': action != 'activate', 'python': action != 'activate'}
+    if action == 'stop_failed_runtime':
+        running['python'] = False
     build = 'a' * 40
     rows = {
         ('sites', 29): dict(name='midouai.medouai.com', project_type='PHP', path=root + ('/frontend' if valid_site else '/wrong')),
@@ -47,7 +50,8 @@ def run_panel(action, *, active_backup=False, valid_site=True, installed_sha=Non
             return [Path('/proc/' + pid) for pid, mode in [('1', 'node'), ('2', 'python')] if running[mode]]
 
         def read_bytes(self):
-            return (b'/bin/node\0apps/backend/dist/server.js\0' if self.parent.name == '1'
+            marker = b'apps/worker/dist/index.js' if live_worker else b'apps/backend/dist/server.js'
+            return (b'/bin/node\0' + marker + b'\0' if self.parent.name == '1'
                     else b'/bin/python\0-m\0scoutops_crawler\0')
 
     def stop(mode, request):
@@ -101,7 +105,8 @@ def run_panel(action, *, active_backup=False, valid_site=True, installed_sha=Non
 
     @contextlib.contextmanager
     def socket():
-        yield types.SimpleNamespace(settimeout=lambda _: None, connect_ex=lambda _: 0 if running['node'] else 111)
+        yield types.SimpleNamespace(settimeout=lambda _: None, connect_ex=lambda _: 0 if
+                                    running['node'] and (action != 'stop_failed_runtime' or live_listener) else 111)
 
     modules = {
         'pathlib': types.SimpleNamespace(Path=Path),
@@ -119,8 +124,9 @@ def run_panel(action, *, active_backup=False, valid_site=True, installed_sha=Non
             patch.object(os, 'chdir'), patch.object(os, 'readlink', return_value=root + '/backend'), \
             contextlib.redirect_stdout(output):
         try:
-            sha = build if action == 'activate' else None
-            exec(compile(CONTROL['writer_control_source'](action, sha), '<test-panel>', 'exec'), {})
+            sha = build if action in {'activate', 'stop_failed_runtime'} else None
+            exec(compile(CONTROL['writer_control_source'](action, sha), '<test-panel>', 'exec'),
+                 {'verify_final_drain': lambda: None})
         except RuntimeError as error:
             return calls, str(error)
     return calls, json.loads(output.getvalue().removeprefix('SCOUTOPS_RESULT='))
@@ -140,7 +146,18 @@ class PanelControlTest(unittest.TestCase):
     def test_quiesce_requires_both_writers_and_listener_to_be_down(self):
         calls, result = run_panel('quiesce')
         self.assertEqual(calls, ['ai选品-python', 'ai选品'])
-        self.assertEqual(result['after'], {'writers': {'node': 0, 'python': 0}, 'node_listener': False})
+        self.assertEqual(result['after'], {'writers': {'node': 0, 'python': 0}, 'node_listener': False,
+                                          'worker_processes': 0})
+
+    def test_failed_retired_runtime_stop_cannot_interrupt_live_listener_or_worker(self):
+        for options in ({'live_listener': True}, {'live_worker': True}, {'active_backup': True}):
+            self.assertEqual(run_panel('stop_failed_runtime', **options),
+                             ([], 'account_release_failed_runtime_stop_not_safe'))
+        self.assertEqual(run_panel('stop_failed_runtime', installed_sha='b' * 40),
+                         ([], 'account_release_installed_identity_mismatch'))
+        calls, result = run_panel('stop_failed_runtime')
+        self.assertEqual(calls, ['ai选品'])
+        self.assertEqual(result['after']['writers'], {'node': 0, 'python': 0})
 
     def test_activation_binds_installed_version_and_starts_python_after_node_is_ready(self):
         self.assertEqual(run_panel('activate', installed_sha='b' * 40), ([], 'account_release_installed_identity_mismatch'))

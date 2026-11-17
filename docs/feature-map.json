@@ -7103,6 +7103,7 @@
       }
     },
     "runtimeTopology": {
+      "retiredRuntimeHeartbeat": "In verified retired API mode, platform node and heartbeat writes match migration 0140 and topology audit matches migration 0171 without removed organization/workspace columns; legacy mode keeps its existing schema. Installed-runtime recovery verifies the exact completed 121 receipts, unchanged migration bytes, stopped writer boundary and sealed ownership before replacing the BaoTa runtime; runs no migrations. See docs/runbooks/account-production-migration-source.md and tests/unit/runtime-topology-retired-startup.test.mjs.",
       "heartbeatReadClock": "Compare Worker snapshot time with the API clock after reading it; preserve future, expiry and non-running rejection, real backpressure and business-result alerts.",
       "fullBaoTaReleaseGate": {
         "entry": "scripts/deploy-baota.py",

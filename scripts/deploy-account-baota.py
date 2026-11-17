@@ -40,7 +40,9 @@ steps=c["BaoTaRelease"](args,namespaces)
 try:
     suffix=bool(args.get("interrupted"))
     with steps.lock(allow_existing=suffix):
-        if suffix:
+        if args.get("runtime_recovery"):
+            result=c["coordinate_installed_runtime_recovery"](steps,args["interrupted"],args["interrupted_plan"])
+        elif suffix:
             result=c["coordinate_evidence_suffix"](steps,args["interrupted"],args["interrupted_plan"])
         else:
             result=c["coordinate_account_release"](steps)
@@ -144,6 +146,23 @@ def evidence_suffix_identity(repo, previous, plan, interrupted, interrupted_plan
     return dict(interrupted=interrupted, interrupted_plan=interrupted_plan, sealed_records=records)
 
 
+def runtime_recovery_identity(repo, previous, plan, interrupted, interrupted_plan, records):
+    import subprocess
+    if (not re.fullmatch(r"[a-f0-9]{40}", previous or "") or
+            not re.fullmatch(r"[a-f0-9]{40}", interrupted or "") or interrupted == previous or
+            not re.fullmatch(r"[a-f0-9]{64}", interrupted_plan or "") or interrupted_plan == plan or
+            not re.fullmatch(r"[1-9][0-9]{0,19}", records or "")):
+        raise RuntimeError("account_release_runtime_recovery_identity_invalid")
+    if (subprocess.run(["git", "merge-base", "--is-ancestor", previous, "HEAD"], cwd=repo,
+                       capture_output=True).returncode or
+            subprocess.check_output(["git", "diff", "--name-only", previous, "HEAD", "--",
+                                     "database/migrations", "packages/database/src/account-release-receipts.ts"],
+                                    cwd=repo).strip()):
+        raise RuntimeError("account_release_runtime_recovery_migration_drift")
+    return dict(interrupted=interrupted, interrupted_plan=interrupted_plan, sealed_records=records,
+                runtime_recovery=True)
+
+
 def execute(repo, previous, plan, suffix=None):
     if not re.fullmatch(r"[a-f0-9]{40}", previous) or not re.fullmatch(r"[a-f0-9]{64}", plan):
         raise RuntimeError("account_release_expected_sha_required")
@@ -159,7 +178,8 @@ def execute(repo, previous, plan, suffix=None):
         digest = hashlib.sha256(archive.read_bytes()).hexdigest()
         with project_ssh(deploy) as ssh:
             actual = deploy["remote_python"](ssh, deploy["production_identity_source"](), timeout=20)
-            if actual["build_sha"] != previous or actual["migration_version"] != ACCOUNT_RELEASE_BASELINE_MIGRATION:
+            migration = package["MIGRATION"] if (suffix or {}).get("runtime_recovery") else ACCOUNT_RELEASE_BASELINE_MIGRATION
+            if actual["build_sha"] != previous or actual["migration_version"] != migration:
                 raise RuntimeError("account_release_live_baseline_changed")
             deploy["verify_production_sha_history"](repo, previous, build)
             require_drained_crawler(probe_standalone_crawler(ssh, deploy, scripts))
@@ -185,6 +205,7 @@ def main():
     action.add_argument("--execute", action="store_true")
     action.add_argument("--inspect-crawler", action="store_true")
     action.add_argument("--continue-evidence-suffix", action="store_true")
+    action.add_argument("--recover-retired-runtime", action="store_true")
     parser.add_argument("--expected-previous-sha")
     parser.add_argument("--plan-sha256")
     parser.add_argument("--interrupted-build-sha")
@@ -193,8 +214,8 @@ def main():
     args = parser.parse_args()
     scripts = pathlib.Path(__file__).resolve().parent
     suffix_args = (args.interrupted_build_sha, args.interrupted_plan_sha256, args.sealed_records)
-    if not args.continue_evidence_suffix and any(suffix_args):
-        parser.error("interruption arguments require --continue-evidence-suffix")
+    if not (args.continue_evidence_suffix or args.recover_retired_runtime) and any(suffix_args):
+        parser.error("interruption arguments require a cutover recovery action")
     if args.inspect_crawler:
         if args.expected_previous_sha or args.plan_sha256:
             parser.error("--inspect-crawler does not accept release SHA arguments")
@@ -204,8 +225,10 @@ def main():
     else:
         if not args.expected_previous_sha or not args.plan_sha256:
             parser.error("--execute requires both expected SHA arguments")
-        suffix = evidence_suffix_identity(scripts.parent, args.expected_previous_sha, args.plan_sha256,
-                                          *suffix_args) if args.continue_evidence_suffix else None
+        identity = (runtime_recovery_identity if args.recover_retired_runtime
+                    else evidence_suffix_identity if args.continue_evidence_suffix else None)
+        suffix = identity(scripts.parent, args.expected_previous_sha, args.plan_sha256,
+                          *suffix_args) if identity else None
         print(json.dumps(execute(scripts.parent, args.expected_previous_sha, args.plan_sha256, suffix)))
 
 

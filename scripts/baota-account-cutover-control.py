@@ -10,8 +10,8 @@ import paramiko
 
 def writer_control_source(action: str, build_sha=None, baseline=None) -> str:
     import re
-    start = action in {"activate", "resume_baseline"}
-    if (action not in {"inspect", "quiesce", "activate", "resume_baseline"} or
+    start = action in {"activate", "resume_baseline", "stop_failed_runtime"}
+    if (action not in {"inspect", "quiesce", "activate", "resume_baseline", "stop_failed_runtime"} or
             (start and (not isinstance(build_sha, str) or not re.fullmatch(r"[0-9a-f]{40}", build_sha))) or
             (not start and build_sha is not None) or
             (action == "resume_baseline" and (not isinstance(baseline, dict) or set(baseline) != {"node", "python"}
@@ -55,6 +55,7 @@ for task_id in (5, 12):
 
 def observe():
     counts = {'node': 0, 'python': 0}
+    worker_processes = 0
     node_markers = (b'apps/backend/dist/server.js', b'apps/api/dist/server.js', b'apps/worker/dist/index.js')
     for proc in Path('/proc').iterdir():
         if not proc.name.isdecimal():
@@ -74,12 +75,14 @@ def observe():
             continue
         if any(any(arg == marker or arg.endswith(b'/' + marker) for marker in node_markers) for arg in args):
             counts['node'] += 1
+        if any(arg == node_markers[-1] or arg.endswith(b'/' + node_markers[-1]) for arg in args):
+            worker_processes += 1
         if any(arg == b'scoutops_crawler' or arg.endswith(b'/scoutops_crawler/__main__.py') for arg in args):
             counts['python'] += 1
     with socket.socket() as sock:
         sock.settimeout(1)
         node_listener = sock.connect_ex(('127.0.0.1', 4101)) == 0
-    return {'writers': counts, 'node_listener': node_listener}
+    return {'writers': counts, 'node_listener': node_listener, 'worker_processes': worker_processes}
 
 def panel_action(model, method, key):
     name = projects[key][0]
@@ -115,9 +118,7 @@ if action == 'quiesce':
         time.sleep(1)
         after = observe()
 
-if action == 'activate':
-    # Internal use only, after DB and runtime install evidence from the same release.
-    from http.client import HTTPConnection, HTTPException
+def verify_installed_retired_identity():
     release = root / 'config/release.env'
     if release.is_symlink() or not release.is_file():
         raise RuntimeError('account_release_installed_identity_missing')
@@ -126,6 +127,26 @@ if action == 'activate':
                           ('RELEASE_SOURCE_MIGRATION_VERSION', '0197_retire_tenancy_roots.up.sql')]:
         if [line for line in lines if line.startswith(key + '=')] != [key + '=' + expected]:
             raise RuntimeError('account_release_installed_identity_mismatch')
+
+if action == 'stop_failed_runtime':
+    verify_installed_retired_identity()
+    if (any(backup_task_status.values()) or not methods['node_stop'] or
+            before['writers']['python'] or before['worker_processes'] or before['node_listener']):
+        raise RuntimeError('account_release_failed_runtime_stop_not_safe')
+    if before['writers']['node']:
+        panel_action(NodeModel(), 'stop_project', 'node')
+    deadline = time.monotonic() + 45
+    after = observe()
+    while any(after['writers'].values()) or after['node_listener']:
+        if time.monotonic() >= deadline:
+            raise RuntimeError('account_release_writers_still_active')
+        time.sleep(1)
+        after = observe()
+
+if action == 'activate':
+    # Internal use only, after DB and runtime install evidence from the same release.
+    from http.client import HTTPConnection, HTTPException
+    verify_installed_retired_identity()
     if (any(backup_task_status.values()) or not all(methods.values()) or
             any(before['writers'].values()) or before['node_listener']):
         raise RuntimeError('account_release_activation_not_quiesced')

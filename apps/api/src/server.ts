@@ -99,7 +99,10 @@ const crawlerWritesIsolated = accountApiMode === "rehearsal";
 const redisClient = createRedisConnection(config);
 redisClient.on("error", () => {});
 const redisStore = new ScopedRedisStore(redisClient);
-const runtimeTopologyRepository = new MySqlRuntimeTopologyRepository(pool);
+const runtimeTopologyRepository = new MySqlRuntimeTopologyRepository(
+  pool,
+  accountApiMode === "retired",
+);
 const runtimeHealthProbePolicy = {
   intervalMs: config.runtimeTopology.healthProbeIntervalMs,
   timeoutMs: config.runtimeTopology.healthProbeTimeoutMs,
