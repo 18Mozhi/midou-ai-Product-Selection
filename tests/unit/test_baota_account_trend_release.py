@@ -3,6 +3,7 @@ import hashlib
 import runpy
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 trend = runpy.run_path(
@@ -59,6 +60,30 @@ class TrendReleaseScopeTest(unittest.TestCase):
         existing[target.with_name(names[1])] = b"foreign registry"
         with self.assertRaisesRegex(RuntimeError, "trend_module_baseline_changed"):
             trend["prepare_modules"](*args, entries, read)
+
+    def test_rollback_accepts_only_the_verified_pre_stagger_pair(self):
+        sha = lambda b: hashlib.sha256(b).hexdigest()
+        target = Path(trend["TARGET"])
+        names = trend["SCHEDULER_FILES"]
+        old = {target: b"trend optimization"}
+        entries = {}
+        accepted = {}
+        for name in names:
+            old[target.with_name(name)] = ("staggered " + name).encode()
+            restored = ("unstaggered " + name).encode()
+            accepted[name] = sha(restored)
+            entries[name] = (sha(old[target.with_name(name)]), base64.b64encode(restored).decode(), sha(restored))
+        args = (target, sha(old[target]), "", "")
+        read = lambda p, _: old[p]
+        prepare = trend["prepare_modules"]
+        with self.assertRaisesRegex(RuntimeError, "trend_candidate_invalid"):
+            prepare(*args, entries, read, rollback=True)
+        with patch.dict(prepare.__globals__["PRE_STAGGER_SHA256"], accepted):
+            replacements, protected = prepare(*args, entries, read, rollback=True)
+            self.assertEqual([p.name for p in replacements], list(names))
+            self.assertEqual(protected, {target: old[target]})
+            with self.assertRaisesRegex(RuntimeError, "trend_candidate_invalid"):
+                prepare(*args, entries, read)
 
 
 if __name__ == "__main__":

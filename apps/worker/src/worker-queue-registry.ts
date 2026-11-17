@@ -33,7 +33,6 @@ type QueuePolicy = Pick<
   | "agingIntervalMs"
   | "maximumAgingBoost"
   | "stuckAfterMs"
-  | "pollStaggerSlot"
 >;
 
 const policy = (
@@ -69,14 +68,12 @@ export const WORKER_QUEUE_POLICIES: Readonly<Record<WorkerQueueName, QueuePolicy
   opportunity_refresh: policy(70, 120_000, 0, 4),
   opportunity_scoring: policy(65, 120_000, 0, 4),
   opportunity_profit: policy(65, 120_000, 0, 4),
-  competitor_monitor: { ...policy(60, 120_000, 0, 4), pollStaggerSlot: 7 },
-  sourcing_projection: { ...policy(60, 120_000, 0, 4), pollStaggerSlot: 1 },
+  competitor_monitor: policy(60, 120_000, 0, 4),
+  sourcing_projection: policy(60, 120_000, 0, 4),
   trend_projection: policy(55, 120_000, 0, 4),
   ai_analysis: policy(50, 300_000, 0, 3),
-  // Keep the lowest-priority short queue off the last phase; leave that phase
-  // to the higher-priority competitor poll. Dispatch priorities are unchanged.
-  report_exports: { ...policy(45, 300_000, 0, 3), pollStaggerSlot: 3 },
-  automation_rules: { ...policy(40, 120_000, 1, 4), pollStaggerSlot: 5 },
+  report_exports: policy(45, 300_000, 0, 3),
+  automation_rules: policy(40, 120_000, 1, 4),
   // Give collected facts precedence over new refresh/scoring polls.
   core_collection_projection: policy(88, 120_000, 1, 4),
   automatic_rule_sources: policy(32, 60_000, 1, 3),

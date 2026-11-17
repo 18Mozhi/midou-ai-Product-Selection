@@ -6,7 +6,7 @@ import { workerQueue } from "../../apps/worker/dist/worker-queue-registry.js";
 const cohort = ["competitor_monitor", "sourcing_projection", "report_exports", "automation_rules"];
 const settle = () => new Promise(setImmediate);
 
-test("only the observed short-poll cohort gets staggered; first polls occupy separate ticks", async () => {
+test("scheduler rollback restores unstaggered first polls for the four queues", async () => {
   for (const tickMs of [250, 500]) {
     let now = 0;
     const starts = new Map();
@@ -27,7 +27,7 @@ test("only the observed short-poll cohort gets staggered; first polls occupy sep
       }
       assert.equal(starts.get("collection_tasks"), 0);
       assert.equal(starts.get("trend_projection"), 0);
-      assert.deepEqual(cohort.map((name) => starts.get(name)), tickMs === 250 ? [1750, 250, 750, 1250] : [0, 0, 0, 0]);
+      assert.deepEqual(cohort.map((name) => starts.get(name)), [0, 0, 0, 0]);
     } finally { await scheduler.stop(); }
   }
 });
@@ -109,23 +109,13 @@ async function replay(stagger, cadence, offset) {
   }
 }
 
-test("local replay compares simultaneous due polls and real pressure without increasing slots", async (t) => {
-  const comparisons = [];
-  for (const [cadence, offset] of [[5, 0], [3, 2]]) {
-    const before = await replay(false, cadence, offset);
-    const after = await replay(true, cadence, offset);
-    t.diagnostic(JSON.stringify({ cadence, offset, before, after }));
-    comparisons.push([before, after]);
-  }
-  for (const [before, after] of comparisons) {
-    assert.equal(before.failed, 0);
-    assert.equal(after.failed, 0);
-    assert.equal(after.maxActive, 4);
-    assert.ok(after.collisions <= before.collisions);
-    assert.ok(after.pressure < before.pressure);
-    assert.ok(after.gapP95Ms <= before.gapP95Ms);
-    assert.ok(after.maxGapMs <= before.maxGapMs, `worst wait regressed: ${before.maxGapMs} -> ${after.maxGapMs} ms`);
-    for (const name of ["collection_tasks", "automatic_selection_evaluation", "core_collection_projection", "trend_projection", ...cohort])
-      assert.ok(after.completed[name] >= 0.9 * before.completed[name], `${name} throughput regressed`);
+test("local rollback restores both no-stagger replay baselines at four slots", async (t) => {
+  for (const [cadence, offset, pressure, maxGapMs] of [[5, 0, 642, 8500], [3, 2, 625, 8250]]) {
+    const actual = await replay(true, cadence, offset);
+    t.diagnostic(JSON.stringify({ cadence, offset, actual }));
+    assert.equal(actual.failed, 0);
+    assert.equal(actual.maxActive, 4);
+    assert.equal(actual.pressure, pressure);
+    assert.equal(actual.maxGapMs, maxGapMs);
   }
 });

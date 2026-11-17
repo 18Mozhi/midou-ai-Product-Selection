@@ -9,11 +9,17 @@ TARGET = "backend/apps/worker/dist/trend-projection-account-queue.js"
 SOURCE = "apps/worker/src/trend-projection-account-queue.ts"
 SCHEDULER_FILES = ("queue-scheduler.js", "worker-queue-registry.js")
 SCHEDULER_MARKERS = (b"this.nextPollAt", b"pollStaggerSlot")
+PRE_STAGGER_SHA256 = {
+    "queue-scheduler.js": "189741ab72172b40773d501bfa24c13be157fc751b2f127ca9de007980b8562d",
+    "worker-queue-registry.js": "81a51e4891a38f0d040fe44ba64a393f16f467244e16921b4b16d98759178785",
+}
 RESTART = "/www/server/panel/script/restart_project.py"
 MODULE_PHASE = "not_installed"
 
 
-def prepare_modules(target, expected_module, encoded, digest, scheduler, read_file):
+def prepare_modules(target, expected_module, encoded, digest, scheduler, read_file, rollback=False):
+    if rollback and scheduler is None:
+        raise RuntimeError("trend_scheduler_manifest_invalid")
     old = read_file(target, 65536)
     if hashlib.sha256(old).hexdigest() != expected_module:
         raise RuntimeError("trend_module_baseline_changed")
@@ -34,14 +40,18 @@ def prepare_modules(target, expected_module, encoded, digest, scheduler, read_fi
         if hashlib.sha256(prior).hexdigest() != before:
             raise RuntimeError("trend_module_baseline_changed")
         data = base64.b64decode(payload, validate=True)
+        expected_payload = (
+            after == PRE_STAGGER_SHA256.get(path.name) and marker not in data
+            if rollback else marker in data
+        )
         if (not 0 < len(data) < 65536 or hashlib.sha256(data).hexdigest() != after
-                or marker not in data or data == prior):
+                or not expected_payload or data == prior):
             raise RuntimeError("trend_candidate_invalid")
         replacements[path] = (data, before, after)
     return replacements, protected
 
 
-def install(root, expected_runtime, expected_module, build, encoded, digest, scheduler=None):
+def install(root, expected_runtime, expected_module, build, encoded, digest, scheduler=None, rollback=False):
     root = Path(root)
     if root != Path("/www/wwwroot/ai选品"):
         raise RuntimeError("trend_project_mismatch")
@@ -142,7 +152,7 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
             return result
 
         replacements, protected_modules = prepare_modules(
-            target, expected_module, encoded, digest, scheduler, read_file
+            target, expected_module, encoded, digest, scheduler, read_file, rollback
         )
         protected.update(protected_modules)
         local = "http://127.0.0.1:4101"
@@ -207,7 +217,7 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
             receipt.update(
                 modules={path.name: {"previous": item[1], "installed": item[2]}
                          for path, item in replacements.items()},
-                preserved_trend_sha256=expected_module,
+                preserved_trend_sha256=expected_module, scheduler_rollback=rollback,
             )
         return receipt
 
@@ -225,9 +235,11 @@ def validate_changes(changed, scheduler=False):
         raise RuntimeError("trend_release_contains_other_runtime_changes")
 
 
-def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_expected=None):
+def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_expected=None, rollback=False):
     if not re.fullmatch(r"[a-f0-9]{40}", previous or "") or not re.fullmatch(r"[a-f0-9]{64}", expected_module or ""):
         raise RuntimeError("trend_release_requires_expected_sha256_and_base_sha")
+    if rollback and scheduler_expected is None:
+        raise RuntimeError("trend_scheduler_manifest_invalid")
     if scheduler_expected is not None and (
         tuple(scheduler_expected) != SCHEDULER_FILES or any(
             not re.fullmatch(r"[a-f0-9]{64}", sha or "") for sha in scheduler_expected.values()
@@ -257,10 +269,13 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         scheduler = {}
         for name, before in scheduler_expected.items():
             payload = module_path.with_name(name).read_bytes()
-            scheduler[name] = (before, base64.b64encode(payload).decode(), hashlib.sha256(payload).hexdigest())
+            after = hashlib.sha256(payload).hexdigest()
+            if rollback and after != PRE_STAGGER_SHA256[name]:
+                raise RuntimeError("trend_rollback_build_differs")
+            scheduler[name] = (before, base64.b64encode(payload).decode(), after)
         module = b""
     args = (deploy["PROJECT_ROOT"], previous, expected_module, sha, base64.b64encode(module).decode(),
-            hashlib.sha256(module).hexdigest(), scheduler)
+            hashlib.sha256(module).hexdigest(), scheduler, rollback)
     code = Path(__file__).read_text(encoding="utf-8")
     source = "code=" + repr(code) + "\nargs=" + repr(args) + r'''
 import json,re

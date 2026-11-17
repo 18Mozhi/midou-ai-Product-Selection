@@ -35,7 +35,6 @@ export interface QueueSchedulerJob {
   agingIntervalMs?: number;
   maximumAgingBoost?: number;
   stuckAfterMs?: number;
-  pollStaggerSlot?: 1 | 3 | 5 | 7;
   run(signal: AbortSignal, context: QueueSchedulerRunContext): Promise<unknown>;
 }
 
@@ -56,7 +55,6 @@ interface QueueSchedulerJobState extends QueueSchedulerJob {
   maximumAgingBoost: number;
   stuckAfterMs: number;
   nextRunAt: number;
-  pollPhaseAt: number | null;
   activeRuns: Map<number, ActiveRun>;
   startedTotal: number;
   completedTotal: number;
@@ -243,7 +241,6 @@ export class QueueScheduler {
       maximumAgingBoost: positive(job.maximumAgingBoost, 100),
       stuckAfterMs: positive(job.stuckAfterMs, Math.max(120_000, (job.timeoutMs ?? 60_000) * 2)),
       nextRunAt: now,
-      pollPhaseAt: null,
       activeRuns: new Map(),
       startedTotal: 0,
       completedTotal: 0,
@@ -267,17 +264,6 @@ export class QueueScheduler {
 
   start(): void {
     if (this.status !== "stopped") return;
-    const startedAt = this.now().getTime();
-    const step = this.options.tickMs;
-    for (const job of this.jobs) {
-      if (
-        job.pollStaggerSlot !== undefined && job.startedTotal === 0 &&
-        Number.isSafeInteger(step) && step > 0 && step <= 250 && 8 * step <= job.intervalMs
-      ) {
-        job.pollPhaseAt = startedAt + job.pollStaggerSlot * step;
-        job.nextRunAt = job.pollPhaseAt;
-      }
-    }
     this.status = "running";
     void this.tick();
     this.timer = setInterval(() => void this.tick(), this.options.tickMs);
@@ -427,16 +413,6 @@ export class QueueScheduler {
     }
   }
 
-  private nextPollAt(job: QueueSchedulerJobState, startedAtMs: number): number {
-    const earliest = startedAtMs + job.intervalMs;
-    if (job.pollPhaseAt === null) return earliest;
-    const phase = job.pollPhaseAt;
-    const aligned = phase + Math.ceil((earliest - phase) / job.intervalMs) * job.intervalMs;
-    // Rejoin the phase only if close enough. Never catch up, shorten a cooldown,
-    // or wait a whole extra period to realign after congestion.
-    return aligned - earliest <= this.options.tickMs ? aligned : earliest;
-  }
-
   private launch(job: QueueSchedulerJobState, startedAtMs: number): void {
     const run: ActiveRun = {
       id: this.nextRunId++,
@@ -447,7 +423,7 @@ export class QueueScheduler {
     job.startedTotal += 1;
     job.lastQueueDelayMs = Math.max(0, startedAtMs - job.nextRunAt);
     job.lastStartedAt = new Date(startedAtMs).toISOString();
-    job.nextRunAt = this.nextPollAt(job, startedAtMs);
+    job.nextRunAt = startedAtMs + job.intervalMs;
     this.activeRuns += 1;
     void this.execute(job, run).then((outcome) => this.complete(job, run, outcome));
   }

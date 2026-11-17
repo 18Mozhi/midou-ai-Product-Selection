@@ -210,6 +210,7 @@ def main():
     action.add_argument("--frontend-only", action="store_true")
     action.add_argument("--trend-projection-only", action="store_true")
     action.add_argument("--scheduler-stagger-only", action="store_true")
+    action.add_argument("--scheduler-rollback-only", action="store_true")
     parser.add_argument("--expected-previous-sha")
     parser.add_argument("--expected-module-sha256")
     parser.add_argument("--expected-scheduler-sha256")
@@ -223,22 +224,23 @@ def main():
     suffix_args = (args.interrupted_build_sha, args.interrupted_plan_sha256, args.sealed_records)
     if not (args.continue_evidence_suffix or args.recover_retired_runtime) and any(suffix_args):
         parser.error("interruption arguments require a cutover recovery action")
-    worker_only = args.trend_projection_only or args.scheduler_stagger_only
+    scheduler_only = args.scheduler_stagger_only or args.scheduler_rollback_only
+    worker_only = args.trend_projection_only or scheduler_only
     if args.expected_module_sha256 and not worker_only:
         parser.error("--expected-module-sha256 requires a Worker module release")
     scheduler_hashes = (args.expected_scheduler_sha256, args.expected_registry_sha256)
-    if args.scheduler_stagger_only != bool(all(scheduler_hashes)) or (
-        not args.scheduler_stagger_only and any(scheduler_hashes)
+    if scheduler_only != bool(all(scheduler_hashes)) or (
+        not scheduler_only and any(scheduler_hashes)
     ):
-        parser.error("--scheduler-stagger-only requires both expected scheduler and registry hashes")
+        parser.error("Scheduler releases require both expected scheduler and registry hashes")
     if worker_only:
         if args.plan_sha256 or not args.expected_previous_sha or not args.expected_module_sha256:
             parser.error("Worker module releases require expected base and module hashes and do not execute migrations")
         deploy = runpy.run_path(str(scripts / "deploy-baota.py"))
         trend = runpy.run_path(str(scripts / "baota-account-trend-release.py"))
-        scheduler = dict(zip(trend["SCHEDULER_FILES"], scheduler_hashes)) if args.scheduler_stagger_only else None
+        scheduler = dict(zip(trend["SCHEDULER_FILES"], scheduler_hashes)) if scheduler_only else None
         print(json.dumps(trend["publish"](scripts.parent, args.expected_previous_sha, args.expected_module_sha256,
-                                         deploy, project_ssh, scheduler)))
+                                         deploy, project_ssh, scheduler, args.scheduler_rollback_only)))
     elif args.frontend_only:
         if args.plan_sha256:
             parser.error("--frontend-only does not execute migrations")
