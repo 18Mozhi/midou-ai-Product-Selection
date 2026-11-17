@@ -3662,3 +3662,72 @@ html[data-design="commerce"] #app .midou-profile-form-verification[data-verified
     padding-block: 3px;
   }
 }
+
+/* Account rail: the menu scrolls within the available height, not over the footer. */
+html[data-design="commerce"] #app .role-shell .commerce-sidebar--account {
+  min-inline-size: 0;
+  gap: 8px;
+  padding-block: 10px max(10px, env(safe-area-inset-bottom));
+  overflow: hidden;
+}
+.commerce-sidebar--account .commerce-sidebar-menu {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+  padding: 3px;
+  scroll-padding-block: 4px;
+}
+html[data-design="commerce"] #app .commerce-sidebar--account .commerce-sidebar-menu > section {
+  gap: 2px;
+  margin: 0;
+}
+html[data-design="commerce"]
+  #app
+  .commerce-sidebar--account
+  .commerce-sidebar-menu
+  > section
+  + section {
+  padding-block-start: 10px;
+  margin-block-start: 10px;
+  border-block-start: 1px solid var(--so-border);
+}
+html[data-design="commerce"] #app .role-shell .commerce-sidebar--account .commerce-sidebar-menu a {
+  min-inline-size: 0;
+  min-block-size: 36px;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  line-height: 1.35;
+}
+.commerce-sidebar--account .commerce-sidebar-menu a > span {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.commerce-sidebar--account :is(a, button) > svg {
+  flex-shrink: 0;
+}
+html[data-design="commerce"] #app .role-shell .commerce-sidebar--account footer {
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 6px 3px 3px;
+  border-block-start: 1px solid var(--so-border);
+}
+.commerce-sidebar--account footer > :is(.midou-platform-entry, .midou-platform-return) {
+  grid-column: 1 / -1;
+}
+html[data-design="commerce"] #app .role-shell .commerce-sidebar--account footer :is(a, button) {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  min-block-size: 36px;
+  padding-inline: 8px;
+  gap: 6px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.commerce-sidebar--account :is(a, button):focus-visible {
+  outline: 2px solid var(--so-primary);
+  outline-offset: -2px;
+}

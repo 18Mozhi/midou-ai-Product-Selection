@@ -31,7 +31,11 @@ const sidebarContextTitle = computed(
 </script>
 
 <template>
-  <aside class="commerce-sidebar" :aria-label="retiredScope ? '账号导航' : '工作区导航'">
+  <aside
+    class="commerce-sidebar"
+    :class="{ 'commerce-sidebar--account': retiredScope }"
+    :aria-label="retiredScope ? '账号导航' : '工作区导航'"
+  >
     <nav v-if="!retiredScope" class="midou-area-tabs" aria-label="工作台类型">
       <RouterLink v-if="shell === 'member'" to="/home" aria-current="page">选品</RouterLink>
       <RouterLink v-else :to="memberReturnPath()">选品</RouterLink>
@@ -66,10 +70,10 @@ const sidebarContextTitle = computed(
         <RouterLink
           to="/notifications"
           :aria-current="routePath === '/notifications' ? 'page' : undefined"
-          ><AppIcon name="bell" :size="18" />通知中心</RouterLink
+          ><AppIcon name="bell" :size="18" /><span>通知中心</span></RouterLink
         >
         <RouterLink to="/me" :aria-current="account ? 'page' : undefined"
-          ><AppIcon name="person" :size="18" />个人中心</RouterLink
+          ><AppIcon name="person" :size="18" /><span>个人中心</span></RouterLink
         >
       </section>
     </div>
@@ -98,6 +102,7 @@ const sidebarContextTitle = computed(
       <RouterLink
         v-if="shell === 'member' && guard?.platform_roles?.length"
         to="/platform-admin"
+        class="midou-platform-entry"
         aria-label="进入管理后台"
         >平台后台</RouterLink
       >
@@ -115,11 +120,6 @@ const sidebarContextTitle = computed(
         }}</span>
         <AppIcon name="chevron" :size="14"
       /></RouterLink>
-      <RouterLink v-slot="{ href, navigate }" to="/me?section=appearance" custom>
-        <a :href="href" class="midou-sidebar-settings" @click="navigate">
-          <AppIcon name="settings" :size="18" />设置
-        </a>
-      </RouterLink>
       <RouterLink
         v-if="retiredScope && shell === 'platform_admin'"
         :to="memberReturnPath()"
@@ -127,6 +127,11 @@ const sidebarContextTitle = computed(
         aria-label="返回用户工作台"
       >
         <AppIcon name="arrow-right" :size="18" />返回选品工作台
+      </RouterLink>
+      <RouterLink v-slot="{ href, navigate }" to="/me?section=appearance" custom>
+        <a :href="href" class="midou-sidebar-settings" @click="navigate">
+          <AppIcon name="settings" :size="18" />设置
+        </a>
       </RouterLink>
       <button
         v-if="retiredScope"
