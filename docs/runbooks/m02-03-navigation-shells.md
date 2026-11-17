@@ -121,6 +121,8 @@ P57 的 `PlatformNotificationFacts`、`PlatformNotificationActionDialog`、
 
 本次 P0 视觉壳层只改变 Vue 静态资源，不新增 API、数据库迁移、环境变量或运行依赖；更新 `frontend` 即可，Node、Python、MySQL 和 Redis 均无需因该视觉改动重启。账号级落地/个人资料逻辑变更仍必须同时发布 `frontend` 与 `backend` 并在宝塔重启 Node 项目“ai选品”。若宝塔网站启用了静态缓存，按现有网站配置刷新静态缓存。
 
+账号退役模式下，从与正式远端 `main` 同提交的干净源码运行 `python -B scripts/deploy-account-baota.py --frontend-only --expected-previous-sha <当前正式后端完整SHA>`。只增加内容哈希资源，读回通过后原子更新 `index.html`；保留旧哈希资源供已打开的页面使用，不覆盖公开固定文件，不做备份、重启或数据库迁移。刷新页面加载新资源，后端版本号保持不变。
+
 ## 故障定位
 
 共享详情当前交互可运行 `node scripts/verify-responsive-data-view-current.mjs`（无参数）。

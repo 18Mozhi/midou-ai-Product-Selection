@@ -61,9 +61,10 @@ def extract_result(output):
     return json.loads(lines[0])
 
 
-def transfer_exclusive(ssh, archive, destination):
+def transfer_exclusive(ssh, archive, destination, on_open=lambda: None):
     with ssh.open_sftp() as sftp:
-        with sftp.open(destination, "wxb") as remote, archive.open("rb") as local:
+        with archive.open("rb") as local, sftp.open(destination, "wxb") as remote:
+            on_open()
             remote.chmod(0o600)
             shutil.copyfileobj(local, remote, length=1024 * 1024)
             remote.flush()
@@ -206,6 +207,7 @@ def main():
     action.add_argument("--inspect-crawler", action="store_true")
     action.add_argument("--continue-evidence-suffix", action="store_true")
     action.add_argument("--recover-retired-runtime", action="store_true")
+    action.add_argument("--frontend-only", action="store_true")
     parser.add_argument("--expected-previous-sha")
     parser.add_argument("--plan-sha256")
     parser.add_argument("--interrupted-build-sha")
@@ -216,7 +218,14 @@ def main():
     suffix_args = (args.interrupted_build_sha, args.interrupted_plan_sha256, args.sealed_records)
     if not (args.continue_evidence_suffix or args.recover_retired_runtime) and any(suffix_args):
         parser.error("interruption arguments require a cutover recovery action")
-    if args.inspect_crawler:
+    if args.frontend_only:
+        if args.plan_sha256:
+            parser.error("--frontend-only does not execute migrations")
+        deploy = runpy.run_path(str(scripts / "deploy-baota.py"))
+        static = runpy.run_path(str(scripts / "baota-account-static-release.py"))
+        print(json.dumps(static["deploy_static"](scripts.parent, args.expected_previous_sha,
+                                                deploy, project_ssh, transfer_exclusive)))
+    elif args.inspect_crawler:
         if args.expected_previous_sha or args.plan_sha256:
             parser.error("--inspect-crawler does not accept release SHA arguments")
         deploy = runpy.run_path(str(scripts / "deploy-baota.py"))
