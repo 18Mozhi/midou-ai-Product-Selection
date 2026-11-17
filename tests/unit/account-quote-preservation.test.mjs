@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import test from "node:test";
 import {
   compareAccountQuoteSnapshots,
+  readAccountProductionQuoteSnapshot,
   readAccountQuoteSnapshot,
 } from "../../scripts/verify-account-quote-preservation.mjs";
 
@@ -16,6 +17,7 @@ function fixture({
   reverse = false,
   invalidAnchor = false,
   empty = false,
+  fences = [1, 1],
 } = {}) {
   let readOnly = false,
     rolledBack = false;
@@ -24,7 +26,9 @@ function fixture({
       return rolledBack;
     },
     async query(sql) {
-      if (sql.includes("VERSION()")) return [[{ db, version: "5.7.44" }]];
+      if (sql.includes("VERSION()"))
+        return [[{ db, version: "5.7.44", authenticated_as: "product_scout@localhost" }]];
+      if (sql.includes("IS_USED_LOCK")) return [[{ locked: fences.shift(), other_sessions: 0 }]];
       if (sql.startsWith("SET TRANSACTION")) return [[]];
       if (sql.includes("READ ONLY")) {
         readOnly = true;
@@ -77,6 +81,23 @@ test("binary-ordered original quote content matches after scope conversion, not 
     "supplier_quotes",
     "sourcing_comparisons",
   ]);
+});
+
+test("production quote preservation retains exact digests and rejects a missing or lost fence", async () => {
+  const baseline = await readAccountProductionQuoteSnapshot(fixture({ db: "product_scout" }));
+  const migrated = await readAccountProductionQuoteSnapshot(
+    fixture({ db: "product_scout", anchor: true }),
+  );
+  assert.equal(compareAccountQuoteSnapshots(baseline, migrated).status, "matched");
+  await assert.rejects(
+    readAccountProductionQuoteSnapshot(fixture()),
+    /legacy_schema_target_invalid/,
+  );
+  for (const fences of [[0], [1, 0]])
+    await assert.rejects(
+      readAccountProductionQuoteSnapshot(fixture({ db: "product_scout", fences })),
+      /account_quote_snapshot_requires_fence/,
+    );
 });
 
 test("empty historical tables remain labeled empty; wrong batches, invalid anchors and production are refused", async () => {

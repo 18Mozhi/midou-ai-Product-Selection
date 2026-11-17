@@ -55,7 +55,7 @@ ALTER TABLE raw_evidence MODIFY COLUMN organization_id CHAR(36) CHARACTER SET as
   ADD CONSTRAINT fk_raw_evidence_organization FOREIGN KEY (organization_id) REFERENCES organizations(id),
   ADD CONSTRAINT fk_raw_evidence_workspace FOREIGN KEY (workspace_id) REFERENCES workspaces(id),
   DROP FOREIGN KEY fk_raw_evidence_account, DROP INDEX uq_raw_evidence_account_dedupe, DROP INDEX idx_raw_evidence_account_time,
-  DROP COLUMN account_id;
+  DROP COLUMN account_id, DROP COLUMN history_chain;
 ALTER TABLE normalized_records MODIFY COLUMN organization_id CHAR(36) CHARACTER SET ascii NOT NULL,
   MODIFY COLUMN workspace_id CHAR(36) CHARACTER SET ascii NOT NULL,
   ADD UNIQUE KEY uq_normalized_scope_record_version (organization_id,workspace_id,provider_id,record_key,record_version),
@@ -64,4 +64,4 @@ ALTER TABLE normalized_records MODIFY COLUMN organization_id CHAR(36) CHARACTER 
   ADD CONSTRAINT fk_normalized_organization FOREIGN KEY (organization_id) REFERENCES organizations(id),
   ADD CONSTRAINT fk_normalized_workspace FOREIGN KEY (workspace_id) REFERENCES workspaces(id),
   DROP FOREIGN KEY fk_normalized_account, DROP INDEX uq_normalized_account_record_version, DROP INDEX idx_normalized_account_status,
-  DROP COLUMN account_id;
+  DROP COLUMN account_id, DROP COLUMN history_chain;

@@ -38,12 +38,16 @@ for name, content in contents.items():
 c=namespaces["coordinator"]
 steps=c["BaoTaRelease"](args,namespaces)
 try:
-    with steps.lock():
-        result=c["coordinate_account_release"](steps)
+    suffix=bool(args.get("interrupted"))
+    with steps.lock(allow_existing=suffix):
+        if suffix:
+            result=c["coordinate_evidence_suffix"](steps,args["interrupted"],args["interrupted_plan"])
+        else:
+            result=c["coordinate_account_release"](steps)
 except Exception as exc:
     import re
     reason=str(exc)
-    result={"status":False,"phase":steps.phase,"reason":reason if re.fullmatch(r"account_[a-z0-9_]+",reason) else type(exc).__name__}
+    result={"status":False,"phase":steps.phase,"reason":reason if re.fullmatch(r"account_[A-Za-z0-9_]+",reason) else type(exc).__name__}
 print("SCOUTOPS_RESULT="+json.dumps(result),flush=True)
 '''
 
@@ -121,7 +125,26 @@ def verify_public_retired_pages():
             connection.close()
 
 
-def execute(repo, previous, plan):
+def evidence_suffix_identity(repo, previous, plan, interrupted, interrupted_plan, records):
+    import subprocess
+    if (not re.fullmatch(r"[a-f0-9]{40}", interrupted or "") or interrupted == previous
+            or not re.fullmatch(r"[a-f0-9]{64}", interrupted_plan or "") or interrupted_plan == plan
+            or not re.fullmatch(r"[1-9][0-9]{0,19}", records or "")):
+        raise RuntimeError("account_release_evidence_suffix_identity_invalid")
+    names = subprocess.check_output(["git", "diff", "--name-only", interrupted, "HEAD", "--",
+                                     "database/migrations"], cwd=repo, text=True).splitlines()
+    expected = ["database/migrations/0190_evidence_account_scope." + direction + ".sql"
+                for direction in ("down", "up")]
+    # Never change an acknowledged receipt or any other pending script in this recovery.
+    if names != expected or subprocess.run(
+        ["git", "merge-base", "--is-ancestor", interrupted, "HEAD"], cwd=repo,
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    ).returncode:
+        raise RuntimeError("account_release_evidence_suffix_migration_drift")
+    return dict(interrupted=interrupted, interrupted_plan=interrupted_plan, sealed_records=records)
+
+
+def execute(repo, previous, plan, suffix=None):
     if not re.fullmatch(r"[a-f0-9]{40}", previous) or not re.fullmatch(r"[a-f0-9]{64}", plan):
         raise RuntimeError("account_release_expected_sha_required")
     scripts = repo / "scripts"
@@ -142,7 +165,8 @@ def execute(repo, previous, plan):
             require_drained_crawler(probe_standalone_crawler(ssh, deploy, scripts))
             destination = deploy["PROJECT_ROOT"] + "/config/account-upload-" + build + ".tar.gz"
             transfer_exclusive(ssh, archive, destination)
-            source = remote_source(scripts, dict(build=build, previous=previous, plan=plan, archive_sha=digest))
+            source = remote_source(scripts, dict(build=build, previous=previous, plan=plan, archive_sha=digest,
+                                                  **(suffix or {})))
             stdin, stdout, stderr = ssh.exec_command(deploy["PANEL_PYTHON"] + " -B -", timeout=None)
             stdin.write(source)
             stdin.channel.shutdown_write()
@@ -160,10 +184,17 @@ def main():
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--execute", action="store_true")
     action.add_argument("--inspect-crawler", action="store_true")
+    action.add_argument("--continue-evidence-suffix", action="store_true")
     parser.add_argument("--expected-previous-sha")
     parser.add_argument("--plan-sha256")
+    parser.add_argument("--interrupted-build-sha")
+    parser.add_argument("--interrupted-plan-sha256")
+    parser.add_argument("--sealed-records")
     args = parser.parse_args()
     scripts = pathlib.Path(__file__).resolve().parent
+    suffix_args = (args.interrupted_build_sha, args.interrupted_plan_sha256, args.sealed_records)
+    if not args.continue_evidence_suffix and any(suffix_args):
+        parser.error("interruption arguments require --continue-evidence-suffix")
     if args.inspect_crawler:
         if args.expected_previous_sha or args.plan_sha256:
             parser.error("--inspect-crawler does not accept release SHA arguments")
@@ -173,7 +204,9 @@ def main():
     else:
         if not args.expected_previous_sha or not args.plan_sha256:
             parser.error("--execute requires both expected SHA arguments")
-        print(json.dumps(execute(scripts.parent, args.expected_previous_sha, args.plan_sha256)))
+        suffix = evidence_suffix_identity(scripts.parent, args.expected_previous_sha, args.plan_sha256,
+                                          *suffix_args) if args.continue_evidence_suffix else None
+        print(json.dumps(execute(scripts.parent, args.expected_previous_sha, args.plan_sha256, suffix)))
 
 
 if __name__ == "__main__":

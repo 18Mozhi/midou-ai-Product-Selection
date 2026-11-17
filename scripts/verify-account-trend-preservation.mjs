@@ -1,6 +1,10 @@
 import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import {
+  assertAccountProductionFence,
+  assertAccountProductionTarget,
+} from "./lib/account-production-fence.mjs";
+import {
   assertAccountRehearsalTarget,
   connectLocalAccountRehearsal,
 } from "./stage-account-scope-retirement.mjs";
@@ -13,6 +17,19 @@ const sha = (rows) => {
 
 export async function snapshotAccountTrendPreservation(db) {
   await assertAccountRehearsalTarget(db);
+  return readTrendSnapshot(db);
+}
+
+export async function snapshotAccountProductionTrendPreservation(db) {
+  await assertAccountProductionTarget(db);
+  const fence = () => assertAccountProductionFence(db, "account_trend_snapshot_requires_fence");
+  await fence();
+  const snapshot = await readTrendSnapshot(db);
+  await fence();
+  return snapshot;
+}
+
+async function readTrendSnapshot(db) {
   await db.query("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
   await db.query("START TRANSACTION WITH CONSISTENT SNAPSHOT, READ ONLY");
   try {

@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+  opportunityEventReadRelation,
   selectionCompetitorRelevanceSql,
   selectionPrimaryAsinSql,
 } from "../../packages/database/dist/index.js";
@@ -12,9 +13,10 @@ import { MySqlHomeDashboardRepository } from "../../apps/api/dist/mysql-home-das
 
 test("receipt-first plan retains every old join and WHERE proof in all three identity modes", () => {
   const from = "EXISTS (SELECT 1 FROM collection_subqueries q_relation ";
-  const event = "JOIN opportunity_events e_relation ON ";
+  const event = "JOIN " + opportunityEventReadRelation + " e_relation ON ";
   const eventAt = selectionCompetitorRelevanceSql.indexOf(event);
   const whereAt = selectionCompetitorRelevanceSql.indexOf("WHERE e_relation.resource_id");
+  assert.ok(eventAt >= from.length && whereAt > eventAt);
   assert.ok(
     selectionReadRelevanceSql.includes(
       selectionCompetitorRelevanceSql

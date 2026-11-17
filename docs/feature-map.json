@@ -547,10 +547,16 @@
       "scripts/run-account-production-cutover.mjs",
       "scripts/plan-account-retirement-production.mjs",
       "scripts/apply-account-production-forward.mjs",
-      "database/migrations/0197_retire_tenancy_roots.up.sql"
+      "scripts/serve-account-production-evidence-suffix.mjs",
+      "database/migrations/0197_retire_tenancy_roots.up.sql",
+      "database/migrations/0190_evidence_account_scope.up.sql",
+      "apps/worker/src/evidence-persistence.ts",
+      "apps/worker/src/automatic-selection-evidence.ts",
+      "apps/api/src/mysql-opportunity-repository.ts"
     ],
     "testFiles": [
       "tests/unit/account-production-cutover.test.mjs",
+      "tests/unit/account-evidence-history-suffix.test.mjs",
       "tests/unit/account-retirement-production-plan.test.mjs",
       "tests/unit/account-retirement-ownership.test.mjs"
     ],

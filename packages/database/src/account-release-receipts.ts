@@ -455,7 +455,7 @@ export const accountReleaseReceipts = [
   ],
   [
     "0190_evidence_account_scope.up.sql",
-    "6bb52457e6140f2f64734a918766d1e1114e6fda1aa51d596088fa1ec489f509",
+    "fb931f7a971b0167fd8096c5a100de94e88a6bb8aea6ffd1f49dcdcc90c63d5d",
   ],
   [
     "0191_trend_topic_account_scope.up.sql",

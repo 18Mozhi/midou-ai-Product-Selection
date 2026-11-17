@@ -148,7 +148,7 @@ const primaryLedgerJoins = (link: string, record: string) =>
     )
     .join("");
 
-// Preserve the original record family until explicit version lineage replaces the old storage key.
+// Follow the seed's original version chain, never another chain with the same business key.
 const ownedPrimaryFacts = (
   link: string,
   record: string,
@@ -163,6 +163,7 @@ const ownedPrimaryFacts = (
       `AND ${record}_seed.status IN ('active','superseded') ` +
       `JOIN normalized_records ${record}${accountOnly ? " FORCE INDEX (uq_normalized_account_record_version)" : ""} ON ${record}.account_id=${record}_seed.account_id ` +
       `AND ${record}.provider_id=${record}_seed.provider_id AND ${record}.record_key=${record}_seed.record_key ` +
+      `AND ${record}.history_chain=${record}_seed.history_chain ` +
       `AND ${record}.status='active' AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(${record}.payload_json,'$.asin')))=` +
       `BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(${record}_seed.payload_json,'$.asin'))) ` +
       `JOIN raw_evidence ${record}_origin${accountOnly ? " FORCE INDEX (PRIMARY)" : ""} ON ${record}_origin.id=${record}_seed.raw_evidence_id AND ${record}_origin.provider_id=${record}_seed.provider_id ` +

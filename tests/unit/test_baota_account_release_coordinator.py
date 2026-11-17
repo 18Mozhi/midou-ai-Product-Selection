@@ -63,6 +63,50 @@ class Steps:
 
 
 class CoordinatorTest(unittest.TestCase):
+    def test_suffix_only_runs_after_strict_read_gate_under_same_fence(self):
+        class SuffixSteps(Steps):
+            upload = "verified-upload"
+            plan = "new-plan"
+            archive_sha = "archive-hash"
+            def __init__(self, fail=None):
+                super().__init__(fail)
+                def stage(*args):
+                    self.event("stage_verified_successor")
+                    return "candidate-stage", None
+                self.parts = {"stage": {"stage_verified_account_runtime": stage},
+                              "package": {"verify_account_archive": object()}}
+            def verify_evidence_suffix_journal(self, interrupted, old_plan):
+                assert (interrupted, old_plan) == ("prior-candidate", "prior-plan")
+                self.event("journal_verified")
+            def assert_stopped(self): self.event("assert_stopped")
+            def command(self, action): self.event(action)
+            def receive(self, expected, timeout):
+                self.event(expected)
+                return {"forward": {"receipt": {"applied": 121}}}
+            @contextlib.contextmanager
+            def database_session(self, evidence_suffix=False):
+                assert evidence_suffix
+                with super().database_session() as session:
+                    yield session
+
+        invoke = lambda steps: COORD["coordinate_evidence_suffix"](steps, "prior-candidate", "prior-plan")
+        refused = SuffixSteps("suffix_verified")
+        with self.assertRaisesRegex(RuntimeError, "suffix_verified"):
+            invoke(refused)
+        self.assertNotIn("evidence_suffix_applying", refused.calls)
+        self.assertNotIn("apply_suffix", refused.calls)
+        self.assertNotIn("restore_unchanged_baseline", refused.calls)
+        self.assertNotIn("activate", refused.calls)
+
+        steps = SuffixSteps()
+        self.assertEqual(invoke(steps)["migration_receipts"], 121)
+        self.assertEqual(steps.calls, [
+            "journal_verified", "assert_stopped", "stage_verified_successor", "dependencies", "lock",
+            "verify_suffix", "suffix_verified", "assert_stopped", "evidence_suffix_applying",
+            "apply_suffix", "database_verified", "database_verified", "fence", "install",
+            "runtime_installed", "unlock", "routes", "activate", "runtime_ready", "cleanup",
+        ])
+
     def test_old_release_cli_cannot_start_backup_or_runtime_operations(self):
         legacy = runpy.run_path(str(SCRIPTS / "deploy-baota.py"))
         for options in ([], ["--backup-tools-only", "apply"], ["--initialize-layout"], ["--rollback-drill"]):

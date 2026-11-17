@@ -3,7 +3,10 @@ import { readAccountCostApprovalAudit } from "./lib/account-cost-approval-audit.
 import { evidenceAccountScopeRelations } from "./lib/evidence-event-scope.mjs";
 import { trendTopicHistoricalScopeRelation } from "./lib/trend-event-scope.mjs";
 import { accountRehearsalTaskScope } from "./lib/account-rehearsal-task-scope.mjs";
-import { assertAccountProductionFence, assertAccountProductionTarget } from "./lib/account-production-fence.mjs";
+import {
+  assertAccountProductionFence,
+  assertAccountProductionTarget,
+} from "./lib/account-production-fence.mjs";
 import {
   assertAccountRehearsalTarget,
   accountScopeSourceNames,
@@ -207,7 +210,7 @@ export async function verifyNativeEvidenceOwnership(connection, runId, task) {
     ],
     [
       "normalized_records",
-      `LEFT JOIN raw_evidence p ON p.id=x.raw_evidence_id AND p.provider_id=x.provider_id AND p.account_id=x.account_id
+      `LEFT JOIN raw_evidence p ON p.id=x.raw_evidence_id AND p.provider_id=x.provider_id AND p.account_id=x.account_id AND p.history_chain=x.history_chain
       LEFT JOIN ${task.relation} t ON t.id=p.collection_task_id${sourceTaskAccount("t")}
       LEFT JOIN account_owned_records po ON po.source_table='raw_evidence' AND po.source_id=p.id AND po.account_id=x.account_id`,
     ],
@@ -219,6 +222,7 @@ export async function verifyNativeEvidenceOwnership(connection, runId, task) {
       `SELECT COUNT(*) checked,
       COUNT(CASE WHEN o.source_id IS NULL OR r.source_id IS NULL OR po.source_id IS NULL OR ${invalidParent}
         OR NOT (${coordinate}.organization_id <=> r.legacy_org_id AND ${coordinate}.workspace_id <=> r.legacy_workspace_id)
+        OR NOT (x.history_chain <=> UNHEX(SHA2(CONCAT('scoutops:evidence-history:v1:',r.legacy_org_id,':',r.legacy_workspace_id),256)))
         THEN 1 END) invalid
       FROM ${table} x
       LEFT JOIN account_owned_records o ON o.source_table='${table}' AND o.source_id=x.id AND o.account_id=x.account_id
@@ -421,9 +425,15 @@ export async function verifyAccountProductionOwnership(connection, expectedRunId
   if (!/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(expectedRunId ?? ""))
     throw new Error("account_release_expected_run_required");
   await assertAccountProductionTarget(connection);
-  await assertAccountProductionFence(connection, "account_release_ownership_requires_stopped_writers");
+  await assertAccountProductionFence(
+    connection,
+    "account_release_ownership_requires_stopped_writers",
+  );
   const result = await readOwnershipOnBoundTarget(connection, expectedRunId);
-  await assertAccountProductionFence(connection, "account_release_ownership_requires_stopped_writers");
+  await assertAccountProductionFence(
+    connection,
+    "account_release_ownership_requires_stopped_writers",
+  );
   return result;
 }
 

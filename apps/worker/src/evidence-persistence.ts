@@ -809,7 +809,8 @@ export class MySqlEvidencePersistence {
             ]
           : []),
         accountScope
-          ? "WHERE e.account_id=? AND n.account_id=e.account_id AND n.provider_id=e.provider_id AND "
+          ? "WHERE e.account_id=? AND n.account_id=e.account_id AND n.provider_id=e.provider_id AND " +
+            "e.history_chain=0x0000000000000000000000000000000000000000000000000000000000000000 AND n.history_chain=e.history_chain AND "
           : `WHERE ${scope}.organization_id=? AND ${scope}.workspace_id=? AND `,
         "e.provider_id=? AND e.dedupe_key=? ",
         "ORDER BY n.record_version DESC,n.created_at DESC,",
@@ -926,7 +927,8 @@ export class MySqlEvidencePersistence {
         ? [
             "SELECT n.id record_id,n.record_version FROM normalized_records n ",
             "JOIN raw_evidence e ON e.id=n.raw_evidence_id AND e.provider_id=n.provider_id AND e.account_id=n.account_id ",
-            "WHERE n.account_id=? AND n.provider_id=? AND n.record_key=? AND n.status='active' ",
+            "WHERE n.account_id=? AND n.provider_id=? AND n.record_key=? AND n.status='active' " +
+              "AND n.history_chain=0x0000000000000000000000000000000000000000000000000000000000000000 AND e.history_chain=n.history_chain ",
             "ORDER BY n.record_version DESC,n.created_at DESC,n.id DESC LIMIT 1 FOR UPDATE",
           ].join("")
         : accountFiles

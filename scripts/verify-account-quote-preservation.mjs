@@ -1,6 +1,10 @@
 import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import {
+  assertAccountProductionFence,
+  assertAccountProductionTarget,
+} from "./lib/account-production-fence.mjs";
+import {
   assertAccountRehearsalTarget,
   connectLocalAccountRehearsal,
 } from "./stage-account-scope-retirement.mjs";
@@ -22,6 +26,20 @@ const digestPattern = /^[a-f0-9]{64}$/;
 
 export async function readAccountQuoteSnapshot(connection) {
   await assertAccountRehearsalTarget(connection);
+  return readQuoteSnapshot(connection);
+}
+
+export async function readAccountProductionQuoteSnapshot(connection) {
+  await assertAccountProductionTarget(connection);
+  const fence = () =>
+    assertAccountProductionFence(connection, "account_quote_snapshot_requires_fence");
+  await fence();
+  const snapshot = await readQuoteSnapshot(connection);
+  await fence();
+  return snapshot;
+}
+
+async function readQuoteSnapshot(connection) {
   await connection.query("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
   await connection.query("START TRANSACTION WITH CONSISTENT SNAPSHOT, READ ONLY");
   try {

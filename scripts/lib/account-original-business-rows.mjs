@@ -7,6 +7,7 @@ export const originalBusinessTables = Object.freeze([
   "competitor_changes",
   "competitor_alerts",
   "raw_evidence",
+  "normalized_records",
   "browser_evidence_artifacts",
   "collection_tasks",
   "tasks",
@@ -23,6 +24,7 @@ export const originalBusinessTables = Object.freeze([
 const identifier = /^[a-z][a-z0-9_]*$/;
 const sha256 = /^[a-f0-9]{64}$/;
 const scopeColumns = new Set(["organization_id", "workspace_id", "account_id"]);
+const historyChainTables = new Set(["raw_evidence", "normalized_records"]);
 const historicalScopeTables = new Set([
   "score_rules",
   "cost_rules",
@@ -58,6 +60,7 @@ export async function captureOriginalBusinessRows(db) {
         .filter(
           (field) =>
             !scopeColumns.has(field) &&
+            !(field === "history_chain" && historyChainTables.has(table)) &&
             !(field === "historical_context" && historicalScopeTables.has(table)),
         )
         .sort();

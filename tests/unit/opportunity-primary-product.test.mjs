@@ -109,18 +109,17 @@ test("only known Amazon image hosts can supply the selected primary image", () =
 test("record SQL binds evidence, snapshots, primary identity and tenants", () => {
   const sql = opportunityPrimaryRecordsSql;
   for (const fragment of [
-    "n_seed.organization_id=l.organization_id",
-    "n_seed.workspace_id=l.workspace_id",
+    "n_seed.raw_evidence_id=l.raw_evidence_id",
+    "n_seed.organization_id=o.organization_id",
+    "n_seed.workspace_id=o.workspace_id",
     "n.organization_id=n_seed.organization_id",
     "n.workspace_id=n_seed.workspace_id",
     "n.provider_id=n_seed.provider_id",
     "n.record_key=n_seed.record_key",
     "n.status='active'",
     "n_seed.status IN ('active','superseded')",
-    "l.organization_id=o.organization_id",
-    "l.workspace_id=o.workspace_id",
-    "s.organization_id=c.organization_id",
-    "s.workspace_id=c.workspace_id",
+    "l.opportunity_id=o.id",
+    "JOIN competitor_snapshots s ON s.competitor_id=c.id",
     "n.raw_evidence_id=s.evidence_id",
     "c.organization_id=o.organization_id",
     "c.workspace_id=o.workspace_id",

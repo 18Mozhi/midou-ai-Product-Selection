@@ -1,8 +1,16 @@
 import {
   compareAccountQuoteSnapshots,
+  readAccountProductionQuoteSnapshot,
   readAccountQuoteSnapshot,
 } from "../verify-account-quote-preservation.mjs";
-import { snapshotAccountTrendPreservation } from "../verify-account-trend-preservation.mjs";
+import {
+  snapshotAccountProductionTrendPreservation,
+  snapshotAccountTrendPreservation,
+} from "../verify-account-trend-preservation.mjs";
+import {
+  assertAccountProductionFence,
+  assertAccountProductionTarget,
+} from "./account-production-fence.mjs";
 import {
   captureOriginalBusinessRows,
   compareOriginalBusinessRows,
@@ -15,6 +23,17 @@ export async function captureAccountMigrationPreservation(db) {
     trends: await snapshotAccountTrendPreservation(db),
     business: await captureOriginalBusinessRows(db),
   };
+}
+
+export async function captureAccountProductionMigrationPreservation(db) {
+  await assertAccountProductionTarget(db);
+  const fence = () => assertAccountProductionFence(db, "account_preservation_requires_fence");
+  await fence();
+  const quotes = await readAccountProductionQuoteSnapshot(db);
+  const trends = await snapshotAccountProductionTrendPreservation(db);
+  const business = await captureOriginalBusinessRows(db);
+  await fence();
+  return { quotes, trends, business };
 }
 
 export function compareAccountMigrationPreservation(before, after) {

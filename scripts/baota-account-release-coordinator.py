@@ -81,6 +81,33 @@ def coordinate_account_release(steps):
             "migration_receipts": database["forward"]["receipt"]["applied"]}
 
 
+def coordinate_evidence_suffix(steps, interrupted, old_plan):
+    """Accept only the stopped, still-unmodified 0190 boundary."""
+    steps.verify_evidence_suffix_journal(interrupted, old_plan)
+    steps.assert_stopped()
+    steps.stage_path, _ = steps.parts["stage"]["stage_verified_account_runtime"](
+        steps.upload, steps.build_sha, steps.plan, steps.archive_sha,
+        steps.parts["package"]["verify_account_archive"],
+    )
+    steps.prepare_dependencies_and_routes()
+    with steps.database_session(evidence_suffix=True) as session:
+        session.command("verify_suffix")
+        session.receive("suffix_verified", None)
+        steps.assert_stopped()
+        steps.journal("evidence_suffix_applying")
+        session.command("apply_suffix")
+        database = session.receive("database_verified", None)
+        steps.journal("database_verified")
+        steps.install(database, session.fence)
+        steps.journal("runtime_installed")
+    steps.reload_routes()
+    steps.activate()
+    steps.journal("runtime_ready")
+    steps.cleanup()
+    return {"status": True, "phase": "runtime_ready", "build_sha": steps.build_sha,
+            "migration_receipts": database["forward"]["receipt"]["applied"]}
+
+
 class CutoverProcess:
     def __init__(self, process, plan_sha):
         self.process = process
@@ -121,6 +148,7 @@ class BaoTaRelease:
         self.previous = args["previous"]
         self.plan = args["plan"]
         self.archive_sha = args["archive_sha"]
+        self.sealed_records = args.get("sealed_records")
         self.upload = ROOT / "config" / ("account-upload-" + self.build_sha + ".tar.gz")
         self.log = ROOT / "config/account-release-state.json"
         self.inc = ROOT / "config/nginx-spa-routes.conf"
@@ -143,7 +171,7 @@ class BaoTaRelease:
         return json.loads(result)
 
     @contextlib.contextmanager
-    def lock(self):
+    def lock(self, allow_existing=False):
         import fcntl
 
         path = ROOT / "config/account-release.lock"
@@ -154,9 +182,28 @@ class BaoTaRelease:
         fd = os.open(str(path), os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
         with os.fdopen(fd, "r+b") as lock:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            if self.log.exists() or self.log.is_symlink():
+            if self.log.is_symlink() or (self.log.exists() and not allow_existing):
                 raise RuntimeError("account_release_existing_state_requires_reconciliation")
             yield
+
+    def verify_evidence_suffix_journal(self, interrupted, old_plan):
+        import stat
+        fd = os.open(self.log, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        with os.fdopen(fd, "rb") as file:
+            info = os.fstat(file.fileno())
+            if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.geteuid() or
+                    stat.S_IMODE(info.st_mode) != 0o600 or info.st_nlink != 1 or
+                    not 0 < info.st_size < 65536):
+                raise RuntimeError("account_release_evidence_suffix_untrusted_journal")
+            raw = file.read(65536)
+        if (len(raw) != info.st_size or not raw.endswith(b"\n") or
+                [json.loads(line) for line in raw.splitlines()] != [
+                    dict(phase=phase, build_sha=interrupted, plan_sha=old_plan)
+                    for phase in ("prepared", "writers_stopped", "applying_database",
+                                  "resuming_database", "resuming_after_prewrites")
+                ]):
+            raise RuntimeError("account_release_evidence_suffix_journal_changed")
+        self.phase = "resuming_after_prewrites"
 
     def journal(self, phase):
         with self.log.open("xb" if self.phase == "before_stage" else "ab") as file:
@@ -234,18 +281,23 @@ try {
             raise RuntimeError("account_release_runtime_writers_reappeared")
 
     @contextlib.contextmanager
-    def database_session(self):
+    def database_session(self, evidence_suffix=False):
         self.assert_stopped()
         backend = self.stage_path / "backend"
         modules = backend / "node_modules"
         if modules.exists() or modules.is_symlink():
             raise RuntimeError("account_release_candidate_node_modules_collision")
         modules.symlink_to(ROOT / "backend/node_modules", target_is_directory=True)
+        import tempfile
         process = None
+        errors = tempfile.TemporaryFile() if evidence_suffix else None
+        entry = "serve-account-production-evidence-suffix.mjs" if evidence_suffix else "serve-account-production-cutover.mjs"
+        cli = ["--fenced-evidence-suffix", self.plan, self.sealed_records] if evidence_suffix else ["--fenced-stdio"]
         try:
             process = subprocess.Popen([NODE, "--env-file=" + str(ROOT / "config/product_scout.env"),
-                str(backend / "scripts/serve-account-production-cutover.mjs"), "--fenced-stdio"],
-                cwd=str(backend), stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+                str(backend / "scripts" / entry), *cli],
+                cwd=str(backend), stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                stderr=errors if errors is not None else subprocess.DEVNULL)
             session = CutoverProcess(process, self.plan)
             session.receive("fenced", 30)
             modules.unlink()  # mysql2 is loaded; do not leave this link for installation.
@@ -253,7 +305,16 @@ try {
             session.command("release")
             if process.wait(timeout=30):
                 raise RuntimeError("account_release_database_session_exit_failed")
+        except Exception as exc:
+            if errors is not None and process is not None and process.poll() is not None:
+                errors.seek(0)
+                reason = errors.read(8192).decode("utf8", "replace").strip()
+                if re.fullmatch(r"(?:(?:account_|mysql57_|quote_|trend_|competitor_|migration_)[a-z0-9_]+|ER_[A-Z0-9_]+|ERR_[A-Z0-9_]+)", reason):
+                    raise RuntimeError("account_release_evidence_suffix_child_" + reason) from exc
+            raise
         finally:
+            if errors is not None:
+                errors.close()
             if modules.is_symlink():
                 modules.unlink()
             if process is not None:

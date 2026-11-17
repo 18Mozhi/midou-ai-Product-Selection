@@ -213,7 +213,7 @@ const ownedPrimaryIdentity = (
     .replaceAll(
       "n_primary_current.organization_id=n_primary.organization_id AND n_primary_current.workspace_id=n_primary.workspace_id",
       native
-        ? "n_primary_current.account_id=n_primary.account_id"
+        ? "n_primary_current.account_id=n_primary.account_id AND n_primary_current.history_chain=n_primary.history_chain"
         : "n_primary_current.organization_id=n_primary.organization_id AND n_primary_current.workspace_id=n_primary.workspace_id",
     );
   return native
@@ -241,7 +241,7 @@ const accountPrimaryRecordsSql = opportunityPrimaryRecordsSql
 const nativeAccountPrimaryRecordsSql = accountPrimaryRecordsSql
   .replace(
     "FORCE INDEX (uq_normalized_scope_record_version) ON n.organization_id=n_seed.organization_id AND n.workspace_id=n_seed.workspace_id",
-    "FORCE INDEX (uq_normalized_account_record_version) ON n.account_id=n_seed.account_id",
+    "FORCE INDEX (uq_normalized_account_record_version) ON n.account_id=n_seed.account_id AND n.history_chain=n_seed.history_chain",
   )
   .replace("AND n.organization_id=c.organization_id AND n.workspace_id=c.workspace_id ", "")
   .replace(

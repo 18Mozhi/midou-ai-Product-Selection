@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { snapshotAccountTrendPreservation } from "../../scripts/verify-account-trend-preservation.mjs";
+import {
+  snapshotAccountProductionTrendPreservation,
+  snapshotAccountTrendPreservation,
+} from "../../scripts/verify-account-trend-preservation.mjs";
 
 function fixture({
   scope = 2,
@@ -10,6 +13,7 @@ function fixture({
   native = false,
   ownershipInvalid = false,
   mixed = false,
+  fences = [1, 1],
 } = {}) {
   const calls = [];
   let rolledBack = false;
@@ -22,9 +26,12 @@ function fixture({
             {
               db: production ? "product_scout" : "product_scout_scope_rehearsal",
               version: "5.7.44",
+              authenticated_as: "product_scout@localhost",
             },
           ],
         ];
+      if (sql.startsWith("SELECT IS_USED_LOCK"))
+        return [[{ locked: fences.shift(), other_sessions: 0 }]];
       if (sql.startsWith("SHOW COLUMNS FROM trend_signals"))
         return [Array.from({ length: scope }, () => ({}))];
       if (sql.startsWith("SHOW COLUMNS FROM trend_topics"))
@@ -70,6 +77,20 @@ function fixture({
   };
   return { db, calls, rolledBack: () => rolledBack };
 }
+
+test("production trend snapshot uses the same read proof under the confirmed write fence", async () => {
+  const { db } = fixture({ production: true });
+  assert.deepEqual(
+    await snapshotAccountProductionTrendPreservation(db),
+    await snapshotAccountTrendPreservation(fixture().db),
+  );
+  for (const fences of [[0], [1, 0]]) {
+    await assert.rejects(
+      snapshotAccountProductionTrendPreservation(fixture({ production: true, fences }).db),
+      /account_trend_snapshot_requires_fence/,
+    );
+  }
+});
 
 test("trend preservation hashes original records regardless of the scope layout and detects content edits", async () => {
   const baseline = fixture(),
