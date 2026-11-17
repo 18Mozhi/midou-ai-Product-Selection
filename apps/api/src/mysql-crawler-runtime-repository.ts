@@ -13,6 +13,7 @@ import {
   crawlerSchedulerLeaseHasLegacyScope,
 } from "@scoutops/database";
 import { nativeBusinessTaskScope } from "./business-task-storage.js";
+import { accountAmazonRecoveryScopeSql } from "./pending-source-recovery-policy.js";
 import { anonymousAmazonFingerprint } from "@scoutops/provider-sources";
 import { appendCrawlerLeaseEvent } from "@scoutops/database";
 import { withCollectionClaimFence } from "@scoutops/database";
@@ -100,6 +101,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     private readonly amazonPublicProfileId = "",
     private readonly amazonHealthProfileId = "",
     private readonly claimPausePath?: string,
+    private readonly accountAmazonHealth?: { actorId: string; profileId: string },
   ) {}
   private async claimConnection<T>(
     work: (connection: PoolConnection, paused: boolean) => Promise<T>,
@@ -221,6 +223,11 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     };
   }
   async acquire(input: Parameters<CrawlerRuntimeRepository["acquire"]>[0]) {
+    if (input.accountId !== undefined && (
+      input.leaseOwner !== "amazon-public-health" ||
+      this.accountAmazonHealth?.actorId !== input.actorId ||
+      this.accountAmazonHealth.profileId !== input.profileId
+    )) throw new CrawlerRuntimeError("automatic_recovery_scope_unavailable", 409, "来源探针的系统身份或档案不可用。");
     for (let attempt = 0; ; attempt++) {
       try {
         const result = await this.claimConnection((c, paused) =>
@@ -244,7 +251,8 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     c: PoolConnection,
     paused: boolean,
   ) {
-    const route = "/internal/crawler-runtime/acquire";
+    const accountHealth = input.accountId !== undefined;
+    const route = accountHealth ? "/internal/crawler-runtime/account-amazon-health" : "/internal/crawler-runtime/acquire";
     let committed = false;
     try {
       await c.beginTransaction();
@@ -265,6 +273,13 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           409,
           "采集领取处于维护暂停；已有作业可以继续心跳和回写。",
         );
+      if (input.accountId !== undefined) {
+        const [work] = await c.query<RowDataPacket[]>(
+          accountAmazonRecoveryScopeSql + " AND t.account_id=? LIMIT 1 LOCK IN SHARE MODE",
+          [input.automaticTaskId, input.actorId, input.accountId],
+        );
+        if (!work[0]) throw new CrawlerRuntimeError("automatic_recovery_scope_unavailable", 409, "待采集任务的账号归属已变化。");
+      }
       await c.query(
         "DELETE FROM crawler_scheduler_leases WHERE slot_type='crawler' AND expires_at<=?",
         [input.now],
@@ -283,6 +298,13 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         input.profileId === this.amazonHealthProfileId &&
         input.leaseOwner === "amazon-public-health";
       const [scope] = await c.query<RowDataPacket[]>(
+        accountHealth
+          ? "SELECT p.provider_id,p.updated_by,a.expires_at FROM crawler_profiles p JOIN credential_assets a ON " +
+            "a.id=p.credential_asset_id JOIN providers v ON v.id=p.provider_id WHERE p.id=? AND p.status='active' " +
+            "AND a.status='active' AND a.kind='browser_profile' AND a.fingerprint=? AND v.code='amazon_product' " +
+            "AND v.access_mode='public_page' AND v.status='enabled' AND v.terms_review_status='approved' " +
+            "AND CHAR_LENGTH(v.terms_version)>0 AND (v.terms_permanent=1 OR v.terms_expires_at>?) LIMIT 1 FOR UPDATE"
+          :
         [
           "SELECT p.provider_id,p.updated_by,a.expires_at FROM crawler_profiles p JOIN credential_assets a ON ",
           "a.id=p.credential_asset_id JOIN providers v ON v.id=p.provider_id JOIN workspaces w ON w.id=? AND ",
@@ -293,7 +315,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
             : "",
           ") LIMIT 1 FOR UPDATE",
         ].join(""),
-        [
+        accountHealth ? [input.profileId, anonymousAmazonFingerprint(), input.now] : [
           input.workspaceId,
           input.organizationId,
           input.profileId,
@@ -309,13 +331,15 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           "确认工作区、Provider、凭证与档案均为启用状态。",
         );
       if (scope[0].expires_at != null && new Date(scope[0].expires_at) <= input.now) {
-        await this.renewalTask(c, {
-          ...input,
-          assigneeId: String(scope[0].updated_by),
-          reason: "credential_expired",
-        });
-        await c.commit();
-        committed = true;
+        if (input.accountId === undefined) {
+          await this.renewalTask(c, {
+            ...input,
+            assigneeId: String(scope[0].updated_by),
+            reason: "credential_expired",
+          });
+          await c.commit();
+          committed = true;
+        }
         throw new CrawlerRuntimeError(
           "crawler_profile_login_expired",
           409,
@@ -358,8 +382,8 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       }
       await insertCrawlerRun(c, {
         id: input.runId,
-        organizationId: input.organizationId,
-        workspaceId: input.workspaceId,
+        ...(input.accountId !== undefined ? { accountId: input.accountId }
+          : { organizationId: input.organizationId, workspaceId: input.workspaceId }),
         providerId: String(scope[0].provider_id),
         profileId: input.profileId,
         actorId: input.actorId,
@@ -386,7 +410,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         ],
       );
       const legacySchedulerLease = await crawlerSchedulerLeaseHasLegacyScope(c);
-      await appendCrawlerSchedulerLease(c, legacySchedulerLease, input, {
+      await appendCrawlerSchedulerLease(c, legacySchedulerLease, input.accountId !== undefined ? null : input, {
         slotType: "crawler",
         slotKey: "single-host",
         taskId: null,
@@ -508,6 +532,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
       await this.event(c, input, "released", input.runId);
       if (
         input.status === "blocked" &&
+        readCrawlerRunAccount(lease[0]) === null &&
         ["blocked_login", "session_expired", "login_required"].includes(input.errorCode ?? "")
       )
         await this.renewalTask(c, {

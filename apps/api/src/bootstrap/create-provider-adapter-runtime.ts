@@ -13,6 +13,7 @@ import { CrawlerSchedulerRepository } from "../crawler-scheduler-repository.js";
 import {
   amazonPublicRecoveryTarget,
   amazonPublicHandoffRecoveryTarget,
+  amazonAccountRecoveryTarget,
   resolveAmazonPublicRecoveryScope,
 } from "../amazon-public-recovery.js";
 import { lan1688RecoveryTarget } from "../lan-1688-recovery.js";
@@ -24,6 +25,9 @@ export function createProviderAdapterRuntime(
   providerAdapterRegistry: ProviderAdapterRegistry,
   authorization: AuthorizationService,
 ) {
+  const retired = config.app.accountScopeMode === "retired";
+  const captchaHandoff = config.providerAdapters.amazonHandoffRecoveryEnabled &&
+    config.playwright.runTimeoutSeconds >= 600;
   const service = new ProviderAdapterService(
     new MySqlProviderAdapterRepository(pool),
     providerAdapterRegistry,
@@ -44,6 +48,7 @@ export function createProviderAdapterRuntime(
                   pool,
                   config.automaticSources.systemActorId,
                   c,
+                  retired,
                 );
               const resolved = await authorization.resolveSession(c.actorId, c.sessionId);
               return {
@@ -100,10 +105,8 @@ export function createProviderAdapterRuntime(
           ...result,
         }),
       ),
-    config.providerAdapters.amazonHandoffRecoveryEnabled &&
-      config.playwright.runTimeoutSeconds >= 600
-      ? amazonPublicHandoffRecoveryTarget
-      : amazonPublicRecoveryTarget,
+    retired ? amazonAccountRecoveryTarget(captchaHandoff)
+      : captchaHandoff ? amazonPublicHandoffRecoveryTarget : amazonPublicRecoveryTarget,
   );
   const publicLan1688Recovery = new PublicRssRecovery(
     pool,

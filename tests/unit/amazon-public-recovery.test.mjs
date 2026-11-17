@@ -6,8 +6,11 @@ import {
   amazonPublicRecoveryTarget,
   amazonPublicHandoffRecoveryTarget,
   amazonPublicRecoveryCandidatesSql,
+  amazonAccountRecoveryTarget,
   resolveAmazonPublicRecoveryScope,
 } from "../../apps/api/dist/amazon-public-recovery.js";
+import { MySqlCrawlerRuntimeRepository } from "../../apps/api/dist/mysql-crawler-runtime-repository.js";
+import { anonymousAmazonFingerprint } from "../../packages/provider-sources/dist/index.js";
 import { registerProviderAdapterRoutes } from "../../apps/api/dist/provider-adapter-routes.js";
 import { loadRuntimeConfig } from "../../packages/config/dist/index.js";
 
@@ -114,6 +117,71 @@ test("automatic health scope rechecks owned pending work and active tenant, with
     /scope_unavailable/,
   );
 });
+test("retired Amazon recovery selects sealed same-account work without legacy coordinates", async () => {
+  for (const handoff of [false, true]) {
+    const target = amazonAccountRecoveryTarget(handoff);
+    const f = fixture("ready", undefined, target);
+    assert.equal((await f.worker.processOnce()).status, "recovered");
+    assert.doesNotMatch(target.candidatesSql, /organizations|workspaces|organization_id|workspace_id/);
+    for (const gate of [
+      "t.created_by=recovery_actor.id", "recovery_owner.status='active'",
+      "task_owner.account_id=t.account_id", "query_owner.account_id=t.account_id",
+      "recovery_cut.contract_version=25", "t.account_id=recovery_cut.primary_account_id",
+      "p.terms_review_status='approved'", "h.health_status='blocked'",
+    ]) assert.ok(target.candidatesSql.includes(gate), gate);
+    assert.equal((target.candidatesSql.match(/\?/g) ?? []).length, f.calls[0].params.length);
+    if (handoff) assert.match(target.candidatesSql, /h\.last_error_code IN \('network_error','timeout','rate_limited','captcha','blocked_captcha','dependency_unavailable'\)/);
+  }
+  const context = { actorId: actor, automaticCollectionTaskId: task };
+  assert.deepEqual(await resolveAmazonPublicRecoveryScope({ query: async (sql, args) => {
+    assert.doesNotMatch(sql, /organizations|workspaces|organization_id|workspace_id/);
+    assert.match(sql, /query_owner\.account_id=t\.account_id/);
+    assert.deepEqual(args, [task, actor]);
+    return [[{account_id: actor}]];
+  } }, actor, context, true), {accountId: actor, automaticTaskId: task});
+});
+test("retired Amazon lease requires private identity and rechecks task ownership before writing", async () => {
+  const input = {accountId: "account", automaticTaskId: task, actorId: actor, profileId: "profile",
+    leaseOwner: "amazon-public-health", idempotencyKey: "key", runId: "run", leaseId: "lease",
+    leaseTokenHash: "hash", requestId: "req", traceId: "trace", now, expiresAt: new Date(now.getTime()+60000)};
+  const calls = [];
+  for (const owned of [false,true]) {
+    calls.length=0;
+    const c = {
+      async beginTransaction(){}, async commit(){ calls.push({sql:"commit"}); },
+      async rollback(){ calls.push({sql:"rollback"}); }, release(){},
+      async query(sql,args){
+        calls.push({sql,args});
+        if(sql.startsWith("SELECT t.account_id"))return [owned?[{account_id:"account"}]:[]];
+        if(sql.startsWith("SELECT p.provider_id"))return [[{provider_id:"provider",expires_at:null}]];
+        if(sql.startsWith("SHOW COLUMNS FROM crawler_browser_runs"))return [[{Field:"historical_context"}]];
+        if(sql.startsWith("INSERT INTO crawler_profile_lease_events"))return [{affectedRows:1}];
+        return [[]];
+      },
+    };
+    const pool = {getConnection: async()=>c,query:async()=>[[{historical_context:{account_id:"account"},started_at:now}]]};
+    const repo = new MySqlCrawlerRuntimeRepository(pool, "", "", undefined, {actorId:actor,profileId:"profile"});
+    await assert.rejects(repo.acquire({...input,profileId:"wrong"}), {code:"automatic_recovery_scope_unavailable"});
+    assert.deepEqual(calls,[]);
+    if (!owned) {
+      await assert.rejects(repo.acquire(input), {code:"automatic_recovery_scope_unavailable"});
+      assert.ok(!calls.some(({sql})=>/^(INSERT|UPDATE|DELETE)/.test(sql)));
+    } else {
+      const observed = await repo.acquire(input);
+      assert.equal(observed.run.account_id,"account");
+      const taskGuard = calls.find(({sql})=>sql.startsWith("SELECT t.account_id"));
+      assert.match(taskGuard.sql,/LOCK IN SHARE MODE$/);
+      assert.deepEqual(taskGuard.args,[task,actor,"account"]);
+      const profileGuard = calls.find(({sql})=>sql.startsWith("SELECT p.provider_id"));
+      assert.match(profileGuard.sql,/v.status='enabled'.*v.terms_review_status='approved'/);
+      assert.deepEqual(profileGuard.args,["profile",anonymousAmazonFingerprint(),now]);
+      const run = calls.find(({sql})=>sql.startsWith("INSERT INTO crawler_browser_runs "));
+      assert.match(run.sql,/historical_context/);
+      assert.deepEqual(JSON.parse(run.args[1]),{account_id:"account"});
+      assert.ok(calls.some(({sql})=>sql==="commit"));
+    }
+  }
+});
 test("HTTP health input cannot inject the internal task or override authenticated identity", async () => {
   const app = Fastify(),
     calls = [];
@@ -140,10 +208,11 @@ test("HTTP health input cannot inject the internal task or override authenticate
         "x-request-id": "request",
         "x-trace-id": "trace",
       },
-      payload: { automaticCollectionTaskId: task, actorId: "forged", organizationId: "foreign" },
+      payload: { automaticCollectionTaskId: task, automaticTaskId: task, accountId: "foreign", actorId: "forged", organizationId: "foreign" },
     });
     assert.equal(response.statusCode, 200);
     assert.equal(calls[0].automaticCollectionTaskId, undefined);
+    assert.equal(calls[0].accountId, undefined);
     assert.equal(calls[0].organizationId, undefined);
     assert.equal(calls[0].actorId, actor);
     assert.equal(calls[0].sessionId, "session");

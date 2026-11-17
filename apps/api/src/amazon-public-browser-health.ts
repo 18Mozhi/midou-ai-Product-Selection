@@ -13,7 +13,7 @@ import {
 } from "@scoutops/provider-sources";
 import { MySqlCredentialAssetRepository } from "./mysql-credential-asset-repository.js";
 import { MySqlCrawlerRuntimeRepository } from "./mysql-crawler-runtime-repository.js";
-import { CrawlerRuntimeError, CrawlerRuntimeService } from "./crawler-runtime-service.js";
+import { CrawlerRuntimeError, CrawlerRuntimeService, type CrawlerAcquireScope } from "./crawler-runtime-service.js";
 import type { AdapterProviderRecord, ProviderProbeContext } from "./provider-adapter-service.js";
 
 export class AmazonPublicBrowserHealth {
@@ -23,7 +23,7 @@ export class AmazonPublicBrowserHealth {
     private readonly fetcher: typeof fetch,
     private readonly resolveScope: (
       context: ProviderProbeContext,
-    ) => Promise<{ organizationId: string; workspaceId: string }>,
+    ) => Promise<CrawlerAcquireScope>,
   ) {}
   async probe(
     provider: AdapterProviderRecord,
@@ -67,6 +67,12 @@ export class AmazonPublicBrowserHealth {
             ? ""
             : this.config.providerAdapters.amazonBrowserProfileId,
           this.config.nodeEnv === "production" ? COLLECTION_CLAIM_PAUSE_FILE : undefined,
+          scope.accountId
+            ? {
+                actorId: this.config.automaticSources.systemActorId,
+                profileId: this.config.providerAdapters.amazonBrowserProfileId,
+              }
+            : undefined,
         ),
       );
       const record = await new MySqlCredentialAssetRepository(this.pool).getCipherRecord(
@@ -86,7 +92,9 @@ export class AmazonPublicBrowserHealth {
         });
         controller.signal.throwIfAborted();
         const lease = await runtime.acquire({
-          ...context,
+          actorId: context.actorId,
+          requestId: context.requestId,
+          traceId: context.traceId,
           idempotencyKey: randomUUID(),
           ...scope,
           profileId: String(profile.id),

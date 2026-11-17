@@ -214,6 +214,8 @@ test("1688 acceptance replay is the only disabled-source path that can schedule 
     release: () => {},
     query: async (sql, values) => {
       if (sql.startsWith("SHOW COLUMNS FROM browser_collection_jobs")) return [[]];
+      if (sql.startsWith("SHOW COLUMNS FROM collection_tasks"))
+        return [[{ Field: "organization_id" }, { Field: "workspace_id" }]];
       statements.push({ sql, values });
       if (sql.includes("FROM provider_source_operations")) return [[]];
       if (sql.startsWith("SHOW COLUMNS FROM provider_source_replay_runs"))

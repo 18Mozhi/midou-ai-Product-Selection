@@ -1,6 +1,6 @@
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { ProviderProbeContext } from "./provider-adapter-service.js";
-import { pendingTaskRecoveryCandidatesSql } from "./pending-source-recovery-policy.js";
+import { accountAmazonRecoveryScopeSql, pendingTaskRecoveryCandidatesSql } from "./pending-source-recovery-policy.js";
 import type { PublicSourceRecoveryTarget } from "./public-rss-recovery.js";
 
 /** Only the configured system actor's actual pending Amazon work supplies probe scope. */
@@ -19,6 +19,13 @@ export const amazonPublicHandoffRecoveryTarget: PublicSourceRecoveryTarget = {
   captchaHandoffRecovery: true,
 };
 
+export function amazonAccountRecoveryTarget(captchaHandoff: boolean): PublicSourceRecoveryTarget {
+  return {
+    ...(captchaHandoff ? amazonPublicHandoffRecoveryTarget : amazonPublicRecoveryTarget),
+    candidatesSql: pendingTaskRecoveryCandidatesSql("amazon_product", { accountScope: true, captchaHandoff }),
+  };
+}
+
 /** Recheck before creating any health lease; no user login or tenant guess is needed. */
 export const amazonPublicRecoveryScopeSql =
   "SELECT t.organization_id,t.workspace_id FROM collection_tasks t " +
@@ -33,6 +40,7 @@ export async function resolveAmazonPublicRecoveryScope(
   pool: Pool,
   systemActorId: string,
   context: ProviderProbeContext,
+  accountScope = false,
 ) {
   if (
     !systemActorId ||
@@ -40,11 +48,16 @@ export async function resolveAmazonPublicRecoveryScope(
     !/^[0-9a-f-]{36}$/i.test(context.automaticCollectionTaskId ?? "")
   )
     throw new Error("selected_scope_required");
-  const [rows] = await pool.query<RowDataPacket[]>(amazonPublicRecoveryScopeSql, [
+  const [rows] = await pool.query<RowDataPacket[]>(accountScope ? accountAmazonRecoveryScopeSql + " LIMIT 1" : amazonPublicRecoveryScopeSql, [
     context.automaticCollectionTaskId,
     systemActorId,
   ]);
   if (!rows[0]) throw new Error("automatic_recovery_scope_unavailable");
+  if (accountScope) {
+    const accountId = rows[0].account_id;
+    if (typeof accountId !== "string" || !accountId) throw new Error("automatic_recovery_scope_unavailable");
+    return { accountId, automaticTaskId: context.automaticCollectionTaskId! };
+  }
   return {
     organizationId: String(rows[0].organization_id),
     workspaceId: String(rows[0].workspace_id),

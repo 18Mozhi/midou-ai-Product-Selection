@@ -103,14 +103,15 @@ export interface CrawlerCompletionSpoolStatus {
   minimumFreeDiskMb: number;
   freeDiskMb: number;
 }
-export interface AcquireInput extends RuntimeContext {
-  organizationId: string;
-  workspaceId: string;
+export type CrawlerAcquireScope =
+  | { organizationId: string; workspaceId: string; accountId?: never; automaticTaskId?: never }
+  | { accountId: string; automaticTaskId: string; organizationId?: never; workspaceId?: never };
+export type AcquireInput = RuntimeContext & CrawlerAcquireScope & {
   profileId: string;
   leaseOwner: string;
   idempotencyKey: string;
   leaseSeconds: number;
-}
+};
 export interface CrawlerRuntimeRepository {
   list(
     input: CrawlerRuntimeQuery,
@@ -323,8 +324,9 @@ export class CrawlerRuntimeService {
   }
   async acquire(input: AcquireInput) {
     if (
-      !uuid.test(input.organizationId) ||
-      !uuid.test(input.workspaceId) ||
+      (input.accountId !== undefined
+        ? !uuid.test(input.accountId) || !uuid.test(input.automaticTaskId) || input.leaseOwner !== "amazon-public-health"
+        : !uuid.test(input.organizationId) || !uuid.test(input.workspaceId)) ||
       !uuid.test(input.profileId)
     )
       throw new CrawlerRuntimeError("crawler_scope_invalid", 400, "刷新组织、工作区与档案后重试。");
