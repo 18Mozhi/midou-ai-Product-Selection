@@ -1,3 +1,5 @@
+import base64
+import hashlib
 import runpy
 import unittest
 from pathlib import Path
@@ -28,6 +30,35 @@ class TrendReleaseScopeTest(unittest.TestCase):
 
         with self.assertRaisesRegex(RuntimeError, "trend_release_requires_expected_sha256_and_base_sha"):
             trend["publish"](None, "a" * 40, "bad-digest", {}, None)
+
+    def test_scheduler_requires_both_sources_and_refuses_other_runtime_changes(self):
+        first = "apps/worker/src/queue-scheduler.ts"
+        second = "apps/worker/src/worker-queue-registry.ts"
+        trend["validate_changes"]([first, second, trend["SOURCE"]], scheduler=True)
+        for paths in ([first], [first, second, "apps/api/src/server.ts"]):
+            with self.assertRaisesRegex(RuntimeError, "trend_release_contains_other_runtime_changes"):
+                trend["validate_changes"](paths, scheduler=True)
+
+    def test_scheduler_manifest_preflights_both_hashes_and_preserves_trend_module(self):
+        sha = lambda b: hashlib.sha256(b).hexdigest()
+        target = Path(trend["TARGET"])
+        names = trend["SCHEDULER_FILES"]
+        existing = {target: b"installed trend overlaid module"}
+        entries = {}
+        for i, name in enumerate(names):
+            existing[target.with_name(name)] = ("old " + name).encode()
+            new = b"new " + trend["SCHEDULER_MARKERS"][i]
+            entries[name] = (sha(existing[target.with_name(name)]), base64.b64encode(new).decode(), sha(new))
+        args = (target, sha(existing[target]), "", "")
+        read = lambda p, _: existing[p]
+        replacements, protected = trend["prepare_modules"](*args, entries, read)
+        self.assertEqual([p.name for p in replacements], list(names))
+        self.assertEqual(protected, {target: existing[target]})
+        with self.assertRaisesRegex(RuntimeError, "trend_scheduler_manifest_invalid"):
+            trend["prepare_modules"](*args, {**entries, "unexpected.js": entries[names[0]]}, read)
+        existing[target.with_name(names[1])] = b"foreign registry"
+        with self.assertRaisesRegex(RuntimeError, "trend_module_baseline_changed"):
+            trend["prepare_modules"](*args, entries, read)
 
 
 if __name__ == "__main__":
