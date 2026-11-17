@@ -14,8 +14,43 @@ PRE_STAGGER_SHA256 = {
     "worker-queue-registry.js": "81a51e4891a38f0d040fe44ba64a393f16f467244e16921b4b16d98759178785",
 }
 STAGGER_RELEASE_SHA = "53e3ee64a65dd4aeaf7f83c2142cc6a7a901f54e"
+REPORT_TARGET = "backend/apps/worker/dist/report-export-worker.js"
+REPORT_SOURCE = "apps/worker/src/report-export-worker.ts"
+REPORT_RUNTIME_BASE = "1b622274a6871d9d1ac3986223359b539a82aa76"
+REPORT_SOURCE_BASE = "df30fd5b272fe1a495f9623635df8fd475b2d3c0"
+REPORT_OLD = "a376c666b9566b2466c6b741dddd4d74e7c74a8c6c7ed949caa4a04eb9e5d3b6"
+REPORT_NEW = "bd7c4f53af7b092776923084d6a551fb49e2e87fcf737a7d58debd42f6ef42f1"
+REPORT_PROTECTED = {
+    **PRE_STAGGER_SHA256,
+    "trend-projection-account-queue.js": "5d46cfb0a50aac48b7c5893d64fa7ce3dc6a4ecc4d3c14694653d12dd0f0cbea",
+}
 RESTART = "/www/server/panel/script/restart_project.py"
 MODULE_PHASE = "not_installed"
+
+
+def report_hashes(action):
+    if action == "apply":
+        return REPORT_OLD, REPORT_NEW
+    if action == "restore":
+        return REPORT_NEW, REPORT_OLD
+    raise RuntimeError("trend_report_action_invalid")
+
+
+def prepare_report(target, expected, encoded, digest, read_file, action):
+    before, after = report_hashes(action)
+    if (expected, digest) != (before, after):
+        raise RuntimeError("trend_report_hash_pair_invalid")
+    if hashlib.sha256(read_file(target, 65536)).hexdigest() != before:
+        raise RuntimeError("trend_report_baseline_changed")
+    data = base64.b64decode(encoded, validate=True)
+    if not 0 < len(data) < 65536 or hashlib.sha256(data).hexdigest() != after:
+        raise RuntimeError("trend_report_payload_invalid")
+    protected = {target.with_name(name): read_file(target.with_name(name), 65536)
+                 for name in REPORT_PROTECTED}
+    if any(hashlib.sha256(value).hexdigest() != REPORT_PROTECTED[path.name]
+           for path, value in protected.items()):
+        raise RuntimeError("trend_report_protected_module_changed")
+    return {target: (data, before, after)}, protected
 
 
 def prepare_modules(target, expected_module, encoded, digest, scheduler, read_file, rollback=False):
@@ -52,7 +87,8 @@ def prepare_modules(target, expected_module, encoded, digest, scheduler, read_fi
     return replacements, protected
 
 
-def install(root, expected_runtime, expected_module, build, encoded, digest, scheduler=None, rollback=False):
+def install(root, expected_runtime, expected_module, build, encoded, digest, scheduler=None, rollback=False,
+            report_action=None):
     root = Path(root)
     if root != Path("/www/wwwroot/ai选品"):
         raise RuntimeError("trend_project_mismatch")
@@ -67,7 +103,9 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
     import urllib.request
 
     global MODULE_PHASE
-    target = root / TARGET
+    if report_action is not None and (expected_runtime != REPORT_RUNTIME_BASE or scheduler is not None or rollback):
+        raise RuntimeError("trend_report_manifest_invalid")
+    target = root / (REPORT_TARGET if report_action is not None else TARGET)
     for path in (root, root / "config", root / "runtime", root / "backend", target.parent):
         if not path.is_dir() or path.resolve(strict=True) != path:
             raise RuntimeError("trend_unsafe_directory")
@@ -152,9 +190,14 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
             result["python"] = sorted(result.get("python", []))
             return result
 
-        replacements, protected_modules = prepare_modules(
-            target, expected_module, encoded, digest, scheduler, read_file, rollback
-        )
+        if report_action is not None:
+            replacements, protected_modules = prepare_report(
+                target, expected_module, encoded, digest, read_file, report_action
+            )
+        else:
+            replacements, protected_modules = prepare_modules(
+                target, expected_module, encoded, digest, scheduler, read_file, rollback
+            )
         protected.update(protected_modules)
         local = "http://127.0.0.1:4101"
         domain = "https://midouai.medouai.com"
@@ -212,7 +255,10 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
             raise RuntimeError("trend_unexpected_runtime_change")
         receipt = {"status": True, "overlay_sha": build, "runtime_base_sha": expected_runtime,
                    "restarted": "ai选品", "node_before": pids, "node_after": after}
-        if scheduler is None:
+        if report_action is not None:
+            receipt.update(report_action=report_action, module=target.name, module_sha256=digest,
+                           previous_module_sha256=expected_module, preserved_modules=REPORT_PROTECTED)
+        elif scheduler is None:
             receipt.update(module_sha256=digest, previous_module_sha256=expected_module)
         else:
             receipt.update(
@@ -242,11 +288,31 @@ def validate_changes(changed, scheduler=False, rollback=False):
         raise RuntimeError("trend_release_contains_other_runtime_changes")
 
 
-def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_expected=None, rollback=False):
+def validate_report_changes(changed):
+    exact = {REPORT_SOURCE, "scripts/baota-account-trend-release.py", "scripts/deploy-account-baota.py"}
+    if REPORT_SOURCE not in changed or any(p not in exact and not p.startswith(("docs/", "tests/")) for p in changed):
+        raise RuntimeError("trend_report_contains_other_runtime_changes")
+
+
+def build_report_restore(repo):
+    return subprocess.check_output(["node", "--input-type=module", "-e", r"""
+import ts from 'typescript';
+import {execFileSync} from 'node:child_process';
+const source=execFileSync('git',['show',process.argv[1]+':'+process.argv[2]],{encoding:'utf8'});
+process.stdout.write(ts.transpileModule(source,{fileName:'report-export-worker.ts',
+ compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022,sourceMap:true}}).outputText);
+""", REPORT_RUNTIME_BASE, REPORT_SOURCE], cwd=repo)
+
+
+def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_expected=None, rollback=False,
+            report_action=None):
     if not re.fullmatch(r"[a-f0-9]{40}", previous or "") or not re.fullmatch(r"[a-f0-9]{64}", expected_module or ""):
         raise RuntimeError("trend_release_requires_expected_sha256_and_base_sha")
     if rollback and scheduler_expected is None:
         raise RuntimeError("trend_scheduler_manifest_invalid")
+    if report_action is not None and (previous != REPORT_RUNTIME_BASE or scheduler_expected is not None
+                                     or rollback or expected_module != report_hashes(report_action)[0]):
+        raise RuntimeError("trend_report_manifest_invalid")
     if scheduler_expected is not None and (
         tuple(scheduler_expected) != SCHEDULER_FILES or any(
             not re.fullmatch(r"[a-f0-9]{64}", sha or "") for sha in scheduler_expected.values()
@@ -263,15 +329,21 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             or git("ls-remote", "--exit-code", "origin", "refs/heads/main") != sha + "\trefs/heads/main"):
         raise RuntimeError("trend_release_requires_clean_approved_main")
     deploy["verify_production_sha_history"](repo, previous, sha)
-    validate_changes(git("diff", "--name-only", previous, sha).splitlines(), scheduler_expected is not None, rollback)
+    if report_action is not None:
+        deploy["verify_production_sha_history"](repo, REPORT_SOURCE_BASE, sha)
+        validate_report_changes(git("diff", "--name-only", REPORT_SOURCE_BASE, sha).splitlines())
+    else:
+        validate_changes(git("diff", "--name-only", previous, sha).splitlines(), scheduler_expected is not None, rollback)
     if rollback:
         deploy["verify_production_sha_history"](repo, STAGGER_RELEASE_SHA, sha)
         validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
     subprocess.run([deploy["local_npm_executable"](), "run", "build:worker"], cwd=repo, check=True)
     if git("rev-parse", "HEAD") != sha or git("status", "--porcelain"):
         raise RuntimeError("trend_release_source_changed_during_build")
-    module_path = repo / TARGET.removeprefix("backend/")
-    module = module_path.read_bytes()
+    module_path = repo / (REPORT_TARGET if report_action is not None else TARGET).removeprefix("backend/")
+    module = build_report_restore(repo) if report_action == "restore" else module_path.read_bytes()
+    if report_action is not None and hashlib.sha256(module).hexdigest() != report_hashes(report_action)[1]:
+        raise RuntimeError("trend_report_build_differs")
     scheduler = None
     if scheduler_expected is not None:
         if hashlib.sha256(module).hexdigest() != expected_module:
@@ -285,7 +357,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             scheduler[name] = (before, base64.b64encode(payload).decode(), after)
         module = b""
     args = (deploy["PROJECT_ROOT"], previous, expected_module, sha, base64.b64encode(module).decode(),
-            hashlib.sha256(module).hexdigest(), scheduler, rollback)
+            hashlib.sha256(module).hexdigest(), scheduler, rollback, report_action)
     code = Path(__file__).read_text(encoding="utf-8")
     source = "code=" + repr(code) + "\nargs=" + repr(args) + r'''
 import json,re

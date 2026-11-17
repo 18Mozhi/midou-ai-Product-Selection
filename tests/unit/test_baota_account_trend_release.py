@@ -12,6 +12,38 @@ trend = runpy.run_path(
 
 
 class TrendReleaseScopeTest(unittest.TestCase):
+    def test_report_overlay_replaces_only_report_and_rejects_drift(self):
+        sha = lambda b: hashlib.sha256(b).hexdigest()
+        target = Path(trend["REPORT_TARGET"])
+        prepare = trend["prepare_report"]
+        siblings = {target.with_name(name): name.encode() for name in trend["REPORT_PROTECTED"]}
+        settings = {"REPORT_OLD": sha(b"old"), "REPORT_NEW": sha(b"new"),
+                    "REPORT_PROTECTED": {p.name: sha(v) for p, v in siblings.items()}}
+        with patch.dict(prepare.__globals__, settings):
+            for action, old, new in (("apply", b"old", b"new"), ("restore", b"new", b"old")):
+                files = {**siblings, target: old}
+                read = lambda path, _: files[path]
+                args = (target, sha(old), base64.b64encode(new).decode(), sha(new), read, action)
+                self.assertEqual(prepare(*args), ({target: (new, sha(old), sha(new))}, siblings))
+                with self.assertRaisesRegex(RuntimeError, "trend_report_hash_pair_invalid"):
+                    prepare(*args[:-1], "restore" if action == "apply" else "apply")
+                files[target] = b"drift"
+                with self.assertRaisesRegex(RuntimeError, "trend_report_baseline_changed"):
+                    prepare(*args)
+                files[target] = old
+                files[next(iter(siblings))] = b"drift"
+                with self.assertRaisesRegex(RuntimeError, "trend_report_protected_module_changed"):
+                    prepare(*args)
+
+    def test_report_overlay_allowlist_and_exact_rollback_bytes(self):
+        source = trend["REPORT_SOURCE"]
+        trend["validate_report_changes"]([source, "docs/runbooks/account-report-exports.md"])
+        for other in (trend["SOURCE"], "apps/worker/src/queue-scheduler.ts", "db/migrations/0200.sql"):
+            with self.assertRaisesRegex(RuntimeError, "trend_report_contains_other_runtime_changes"):
+                trend["validate_report_changes"]([source, other])
+        old = trend["build_report_restore"](Path(__file__).resolve().parents[2])
+        self.assertEqual(hashlib.sha256(old).hexdigest(), trend["REPORT_OLD"])
+
     def test_allowlist_requires_the_trend_worker_source(self):
         trend["validate_changes"]([trend["SOURCE"], "apps/web/src/main.ts", "docs/update.md"])
         with self.assertRaisesRegex(RuntimeError, "trend_release_contains_other_runtime_changes"):
