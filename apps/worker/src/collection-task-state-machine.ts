@@ -45,12 +45,14 @@ const nativeSubqueryOwnershipSql =
   "WHERE q.task_id=collection_tasks.id AND NOT (a.account_id<=>collection_tasks.account_id))";
 const activeNativeLeaseSql = (task: ClaimedCollectionTask) =>
   task.nativeAccountScope
-    ? " AND account_id=? AND attempt_count=? AND lease_expires_at>UTC_TIMESTAMP(3)"
+    ? " AND account_id=? AND attempt_count=? AND lease_expires_at>?"
     : "";
-const activeNativeLeaseArgs = (task: ClaimedCollectionTask) => {
+const activeNativeLeaseArgs = (task: ClaimedCollectionTask, clock: () => Date) => {
   if (!task.nativeAccountScope) return [];
   if (!task.accountId) throw new Error("collection_task_lease_invalid");
-  return [task.accountId, task.attemptCount];
+  // Match the driver-bound DATETIME used by claim and expiry recovery. Use
+  // fresh time at the check, not the earlier poll/claim event timestamp.
+  return [task.accountId, task.attemptCount, clock()];
 };
 
 export class MySqlCollectionTaskWorkerRepository {
@@ -88,6 +90,7 @@ export class MySqlCollectionTaskWorkerRepository {
     readonly pool: Pool,
     readonly random: () => number = Math.random,
     readonly taskId: string | undefined = undefined,
+    private readonly leaseClock: () => Date = () => new Date(),
   ) {}
   async recordSchedulerResource(input: {
     workerId: string;
@@ -378,7 +381,7 @@ export class MySqlCollectionTaskWorkerRepository {
         "version=version+1,updated_at=? WHERE id=? AND status='leased' ",
         "AND lease_token_hash=UNHEX(?)",
       ) + activeNativeLeaseSql(task),
-      [now, now, task.id, hash(task.leaseToken), ...activeNativeLeaseArgs(task)],
+      [now, now, task.id, hash(task.leaseToken), ...activeNativeLeaseArgs(task, this.leaseClock)],
     );
     if (result.affectedRows !== 1) throw new Error("collection_task_lease_invalid");
     await this.pool.query(
@@ -394,7 +397,7 @@ export class MySqlCollectionTaskWorkerRepository {
         "SELECT * FROM collection_tasks WHERE id=? AND status='leased' AND lease_token_hash=UNHEX(?)" +
           activeNativeLeaseSql(task) +
           " FOR UPDATE",
-        [task.id, hash(task.leaseToken), ...activeNativeLeaseArgs(task)],
+        [task.id, hash(task.leaseToken), ...activeNativeLeaseArgs(task, this.leaseClock)],
       );
       const row = rows[0];
       if (!row) throw new Error("collection_task_lease_invalid");
@@ -460,7 +463,7 @@ export class MySqlCollectionTaskWorkerRepository {
           "AND status IN ('leased','running','parsing','validating') ",
           "AND lease_token_hash=UNHEX(?)",
         ) + activeNativeLeaseSql(task),
-        [expires, now, task.id, hash(task.leaseToken), ...activeNativeLeaseArgs(task)],
+        [expires, now, task.id, hash(task.leaseToken), ...activeNativeLeaseArgs(task, this.leaseClock)],
       );
     if (result.affectedRows !== 1) throw new Error("collection_task_lease_invalid");
     await this.pool.query(
@@ -483,7 +486,7 @@ export class MySqlCollectionTaskWorkerRepository {
       "SELECT * FROM collection_tasks WHERE id=? AND status='running' AND lease_token_hash=UNHEX(?)" +
         activeNativeLeaseSql(task) +
         " FOR UPDATE",
-      [task.id, hash(task.leaseToken), ...activeNativeLeaseArgs(task)],
+      [task.id, hash(task.leaseToken), ...activeNativeLeaseArgs(task, this.leaseClock)],
     );
     if (!rows[0]) throw new Error("collection_task_lease_invalid");
     return rows[0];
