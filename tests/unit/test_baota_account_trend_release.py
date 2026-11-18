@@ -130,6 +130,15 @@ class TrendReleaseScopeTest(unittest.TestCase):
                                                        trend["COLLECTION_LAN_HEALTH_SOURCE"])
             self.assertEqual(hashlib.sha256(actual).hexdigest(), digest)
 
+    def test_model_hold_replaces_only_claim_state_machine_and_rolls_back_exactly(self):
+        before, after = trend["collection_hashes"]("model_hold")
+        self.assertEqual(set(before), {trend["COLLECTION_RANK_STATE"]})
+        self.assertEqual(trend["collection_hashes"]("model_hold_restore"), (after, before))
+        for n, digest in before.items():
+            actual = trend["build_collection_restore"](Path(__file__).resolve().parents[2], n,
+                                                       trend["COLLECTION_MODEL_HOLD_SOURCE"])
+            self.assertEqual(hashlib.sha256(actual).hexdigest(), digest)
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

@@ -72,3 +72,5 @@
 `--collection-lan-rate-only --expected-previous-sha <运行基线> --expected-module-sha256 <1688客户端当前哈希>` 只发布 1688 客户端及调用 Worker。真实上游限流仍记一次失败；已有本地冷却窗口拦下的任务仍推迟，但不重复记进来源熔断；任务恢复时间不早于现有五分钟下限和真实 Retry-After。无熔断门槛、并发或配置变更，仅重启 `ai选品` Node；`--collection-lan-rate-rollback` 恢复两份已固定的前序模块。
 
 `--collection-lan-health-only --expected-previous-sha <运行基线> --expected-module-sha256 <1688健康适配器当前哈希>` 只发布配套的 1688 健康适配器和 LAN 客户端，保留 Worker 限流修复及其他发布覆盖层。`--collection-lan-health-rollback` 按同一参数形式使用已安装健康适配器哈希，回到前序两份已固定模块。仅重启 `ai选品` Node。发布后在来源后台点「健康检查」：图搜及同节点的同一 offer 详情均通过才显示健康；限流等待冷却，登录或验证码按后台提示在原节点处理；不改现有期限或并发，不把探针样本计入货源。
+
+`--collection-model-hold-only --expected-previous-sha <运行基线> --expected-module-sha256 <任务状态机当前哈希>` 只发布采集任务状态机，仅重启 `ai选品` Node；`--collection-model-hold-rollback` 用已安装哈希重建并恢复上一个精确模块。正式 Worker 对现有 `AI_BASE_URL` 的地址和端口做异步 TCP 检查，每分钟最多一次，单次 1.5 秒，不发送 HTTP、凭据或业务数据，也不阻塞数据库锁。启动未确认、检查失败或状态过期时，只在排队和领取前暂缓包含 Amazon `opportunity_competitors` 子查询的任务；等待不扣次数、不改证据，独立搜索和详情照常，已进入执行或已死信的任务不重新写入。端口可达后原任务依旧要通过原 AI 分类、归属和证据校验；端口可达不代表分类成功。无新配置参数、迁移、前端 API 或 Python 变化。

@@ -4,6 +4,8 @@ import {
   crawlerSchedulerLeaseHasLegacyScope,
 } from "@scoutops/database";
 import { createHash, randomUUID } from "node:crypto";
+import { createConnection } from "node:net";
+import { loadRuntimeConfig } from "@scoutops/config";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
   assertTaskTransition,
@@ -40,6 +42,47 @@ const hash = (token: string) =>
   createHash("sha256").update("scoutops:collection-task-lease:v1\0").update(token).digest("hex");
 const token = () => randomUUID() + randomUUID();
 const statement = (...parts: string[]) => parts.join("");
+const withoutCompetitorModelSql =
+  " AND NOT EXISTS (SELECT 1 FROM collection_subqueries model_query " +
+  "JOIN providers model_provider ON model_provider.id=model_query.provider_id " +
+  "WHERE model_query.task_id=collection_tasks.id AND model_provider.code='amazon_product' " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(model_query.target_json,'$.projection_type'))='opportunity_competitors')";
+
+/** Connectivity only: does not send HTTP, a model request, credentials, or business data. */
+export function modelConnectivityAdmission(
+  probe: () => Promise<boolean>,
+  clock: () => number = Date.now,
+) {
+  let reachable = false, pending = false, nextCheck = -Infinity;
+  return () => {
+    const now = clock();
+    if (!pending && now >= nextCheck) {
+      pending = true;
+      reachable = false;
+      nextCheck = now + 60_000;
+      // Do not wait for networking inside the collection transaction or claim fence.
+      void Promise.resolve().then(probe).then(
+        (ok) => { reachable = ok === true; },
+        () => { reachable = false; },
+      ).finally(() => { pending = false; });
+    }
+    return reachable;
+  };
+}
+
+function productionModelAdmission(): () => boolean {
+  if (process.env.NODE_ENV !== "production") return () => true;
+  const endpoint = new URL(loadRuntimeConfig().ai.baseUrl);
+  const host = endpoint.hostname.replace(/^\[|\]$/g, "");
+  const port = Number(endpoint.port) || (endpoint.protocol === "https:" ? 443 : 80);
+  return modelConnectivityAdmission(() => new Promise<boolean>((resolve) => {
+    const socket = createConnection({ host, port });
+    const finish = (ok: boolean) => { clearTimeout(deadline); socket.destroy(); resolve(ok); };
+    const deadline = setTimeout(() => finish(false), 1500);
+    socket.once("error", () => finish(false));
+    socket.once("connect", () => finish(true));
+  }));
+}
 const nativeSubqueryOwnershipSql =
   " AND NOT EXISTS (SELECT 1 FROM collection_subqueries q " +
   "LEFT JOIN account_owned_records a ON a.source_table='collection_subqueries' AND a.source_id=q.id " +
@@ -93,6 +136,7 @@ export class MySqlCollectionTaskWorkerRepository {
     readonly random: () => number = Math.random,
     readonly taskId: string | undefined = undefined,
     private readonly leaseClock: () => Date = () => new Date(),
+    private readonly modelConnected: () => boolean = productionModelAdmission(),
   ) {}
   async recordSchedulerResource(input: {
     workerId: string;
@@ -130,6 +174,7 @@ export class MySqlCollectionTaskWorkerRepository {
     return recoverExpiredCollectionTasks(this, now, actorId, admission);
   }
   async queueReady(now: Date, actorId = "collection-scheduler", admission?: PoolConnection) {
+    const modelGate = this.modelConnected() ? "" : withoutCompetitorModelSql;
     const c = admission ?? (await this.pool.getConnection());
     try {
       await c.beginTransaction();
@@ -152,6 +197,7 @@ export class MySqlCollectionTaskWorkerRepository {
             ? collectionAccountCandidateSql + " IS NOT NULL"
             : activeCollectionScopeSql("collection_tasks")) +
           (nativeTask ? " AND collection_tasks.account_id=" + collectionAccountCandidateSql : "") +
+          modelGate +
           ranking.orderSql,
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [now, this.taskId] : [now]);
       const candidate = rows[0];
@@ -166,6 +212,7 @@ export class MySqlCollectionTaskWorkerRepository {
           " AND " +
           (accountMode ? collectionAccountLockSql : activeCollectionScopeSql("collection_tasks")) +
           (nativeTask ? " AND account_id=?" : "") +
+          modelGate +
           " FOR UPDATE",
         accountMode
           ? [
@@ -210,6 +257,7 @@ export class MySqlCollectionTaskWorkerRepository {
     leaseSeconds: number,
     admission?: PoolConnection,
   ): Promise<ClaimedCollectionTask | null> {
+    const modelGate = this.modelConnected() ? "" : withoutCompetitorModelSql;
     const c = admission ?? (await this.pool.getConnection()),
       leaseToken = token();
     try {
@@ -243,6 +291,7 @@ export class MySqlCollectionTaskWorkerRepository {
           (nativeTask ? " AND collection_tasks.account_id=" + collectionAccountCandidateSql : "") +
           (nativeTask ? nativeSubqueryOwnershipSql : "") +
           collectionRequiredSourcesReadySql +
+          modelGate +
           ranking.orderSql,
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [this.taskId] : []);
       const candidate = rows[0];
@@ -259,6 +308,7 @@ export class MySqlCollectionTaskWorkerRepository {
           (nativeTask ? " AND account_id=?" : "") +
           (nativeTask ? nativeSubqueryOwnershipSql : "") +
           collectionRequiredSourcesReadySql +
+          modelGate +
           " FOR UPDATE",
         accountMode
           ? [

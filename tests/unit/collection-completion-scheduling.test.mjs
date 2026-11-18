@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { accountCompletionReadySourcingTaskSql, completionReadySourcingTaskSql } from "../../apps/worker/dist/completion-sourcing-policy.js";
 import { completionReadyCompetitorTaskSql } from "../../apps/worker/dist/completion-competitor-policy.js";
-import { MySqlCollectionTaskWorkerRepository } from "../../apps/worker/dist/collection-task-state-machine.js";
+import { modelConnectivityAdmission, MySqlCollectionTaskWorkerRepository } from "../../apps/worker/dist/collection-task-state-machine.js";
 import {
   activeCollectionScopeSql,
   automaticCompletionTaskSql,
@@ -90,6 +90,7 @@ function setup(options = {}) {
       if (isTaskRead(sql))
         return [
           options.noCandidate ||
+          (options.requiresModel && sql.includes("model_provider.code='amazon_product'")) ||
           (sql.includes(activeCollectionScopeSql("collection_tasks")) && options.scopeInactive) ||
           (sql.includes(collectionAccountCandidateSql) && options.noAccountOwner) ||
           (sql.includes(collectionRequiredSourcesReadySql) &&
@@ -126,10 +127,56 @@ function setup(options = {}) {
       { getConnection: async () => connection },
       () => 0,
       options.taskId,
+      undefined,
+      options.modelConnected,
     ),
     calls,
   };
 }
+
+test("unreachable AI holds competitor work without an attempt and leaves independent work eligible", async () => {
+  for (const method of ["queueReady", "claim"]) {
+    const run = (repo) => method === "queueReady" ? repo.queueReady(now) : repo.claim("worker", now, 120);
+    const held = setup({ sealed: true, native: true, modelConnected: () => false, requiresModel: true });
+    assert.equal(await run(held.repository), null);
+    assert.ok(!held.calls.some(([sql]) => /^UPDATE collection_tasks|^INSERT INTO collection_task/.test(sql)));
+    const independent = setup({ sealed: true, native: true, modelConnected: () => false });
+    assert.equal((await run(independent.repository)).id, "task");
+    const reads = independent.calls.filter(([sql]) => isTaskRead(sql));
+    assert.equal(reads.length, 2);
+    for (const [sql] of reads) assert.match(sql, /model_provider\.code='amazon_product'.*projection_type.*='opportunity_competitors'/);
+    const recovered = setup({ sealed: true, native: true, modelConnected: () => true, requiresModel: true });
+    assert.equal((await run(recovered.repository)).id, "task");
+    assert.ok(recovered.calls.filter(([sql]) => isTaskRead(sql)).every(([sql]) => !sql.includes("model_provider")));
+  }
+});
+
+test("model transport checks are bounded to one in flight and admission updates on recovery", async () => {
+  let at = 0, probes = 0, complete;
+  const available = modelConnectivityAdmission(() => new Promise((resolve) => { probes++; complete = resolve; }), () => at);
+  const tick = () => new Promise(setImmediate);
+  assert.equal(available(), false);
+  assert.equal(available(), false);
+  await tick();
+  assert.equal(probes, 1);
+  complete(false);
+  await tick();
+  at = 59_999;
+  assert.equal(available(), false);
+  at = 60_000;
+  assert.equal(available(), false);
+  await tick();
+  assert.equal(probes, 2);
+  complete(true);
+  await tick();
+  assert.equal(available(), true);
+  at = 120_000;
+  assert.equal(available(), false, "a stale positive never admits a fresh retry during recheck");
+  await tick();
+  complete(false);
+  await tick();
+  assert.equal(available(), false);
+});
 
 test("foreign subquery cannot consume an account attempt or write a lease", async () => {
   const {repository,calls}=setup({native:true,sealed:true,foreignSubquery:true});

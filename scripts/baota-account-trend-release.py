@@ -86,6 +86,11 @@ COLLECTION_RANK_CANDIDATE = dict(zip(COLLECTION_RANK_BASE, (
     "f8d6cd8ea70109c72f16d19d3d737b1ce2d24c0b51f2cae2f236d0148bd43671",
     "1bbb56c686fc360e31daa4b7b631d34d0896910a9dbc654cfdab3622ae7b70d4",
 )))
+COLLECTION_MODEL_HOLD_SOURCE = "debf38ba40b20a34de219ecc8afcf00782ffe5f9"
+COLLECTION_MODEL_HOLD_BASE = {COLLECTION_RANK_STATE: COLLECTION_RANK_CANDIDATE[COLLECTION_RANK_STATE]}
+COLLECTION_MODEL_HOLD_CANDIDATE = {
+    COLLECTION_RANK_STATE: "36f63c33c699cdd9e05a87ae254acb81966d6ca37133811a8bb8854530ca5f21",
+}
 COLLECTION_DETAIL = "packages/playwright-crawler/dist/index.js"
 COLLECTION_DETAIL_BASE = "d43c8e490d995fb130128eaccf3512c43189fd71486fcd8add5ebae67fb445f0"
 COLLECTION_DETAIL_CANDIDATE = "9219b8c880abc628012bc3b452ee885234b87162e0113bfad9d8a48eaad236a7"
@@ -254,6 +259,14 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             if collection in ("lan_health", "lan_health_restore"):
                 prerequisites.pop(COLLECTION_LAN_HEALTH)
                 prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
+        if collection in ("model_hold", "model_hold_restore"):
+            prerequisites.update(COLLECTION_RANK_CANDIDATE)
+            prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
+            prerequisites.update(COLLECTION_LAN_HEALTH_CANDIDATE)
+            prerequisites.pop(COLLECTION_RANK_STATE)
+            prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
+            prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
+            prerequisites[COLLECTION_DETAIL] = COLLECTION_DETAIL_CANONICAL
         for name, digest in prerequisites.items():
             path = root / "backend" / name
             data = read_file(path, 131072)
@@ -307,6 +320,10 @@ def collection_hashes(action):
         return COLLECTION_LAN_HEALTH_BASE, COLLECTION_LAN_HEALTH_CANDIDATE
     if action == "lan_health_restore":
         return COLLECTION_LAN_HEALTH_CANDIDATE, COLLECTION_LAN_HEALTH_BASE
+    if action == "model_hold":
+        return COLLECTION_MODEL_HOLD_BASE, COLLECTION_MODEL_HOLD_CANDIDATE
+    if action == "model_hold_restore":
+        return COLLECTION_MODEL_HOLD_CANDIDATE, COLLECTION_MODEL_HOLD_BASE
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
@@ -673,15 +690,18 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             canonical_followup = collection in ("detail_canonical", "detail_canonical_restore")
             lan_followup = collection in ("lan_rate", "lan_rate_restore")
             lan_health_followup = collection in ("lan_health", "lan_health_restore")
+            model_hold_followup = collection in ("model_hold", "model_hold_restore")
             source = (COLLECTION_EXECUTOR_CLOCK_SHA if lock_followup else
                       COLLECTION_RANK_SOURCE_BASE if rank_followup else
                       COLLECTION_LAN_SOURCE[name] if lan_followup else
                       COLLECTION_LAN_HEALTH_SOURCE if lan_health_followup else
+                      COLLECTION_MODEL_HOLD_SOURCE if model_hold_followup else
                       COLLECTION_DETAIL_DIAG_SOURCE if canonical_followup else COLLECTION_SOURCE_BASE)
             restored = build_collection_restore(repo, name, source)
             original = (COLLECTION_RANK_BASE[name] if rank_followup else
                         COLLECTION_LAN_BASE[name] if lan_followup else
                         COLLECTION_LAN_HEALTH_BASE[name] if lan_health_followup else
+                        COLLECTION_MODEL_HOLD_BASE[name] if model_hold_followup else
                         COLLECTION_DETAIL_CANDIDATE if canonical_followup else
                         COLLECTION_EXECUTOR_CANDIDATE if lock_followup else
                         {**COLLECTION_BASE, COLLECTION_EXECUTOR: COLLECTION_EXECUTOR_BASE,
