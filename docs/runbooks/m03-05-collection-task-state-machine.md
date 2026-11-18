@@ -70,3 +70,5 @@
 `--collection-detail-canonical-only --expected-previous-sha <运行基线> --expected-module-sha256 <详情诊断版本哈希>` 只改正式 Amazon 浏览器导航：观测到的无查询 slug + `ref=` 商品详情链接，首次访问和配送设置后的回读使用同一 ASIN 的标准详情 URL，与既有健康检查相同。原任务目标、商品身份、变体查询、验证码、配送地、标题和证据门槛都保持不变。仅重启 `ai选品` Node；Python 下个作业动态读取共享模块。`--collection-detail-canonical-rollback` 恢复已有诊断的固定版本，并不回滚其他模块。外部正式探测和真实业务证据仍需分别验收。
 
 `--collection-lan-rate-only --expected-previous-sha <运行基线> --expected-module-sha256 <1688客户端当前哈希>` 只发布 1688 客户端及调用 Worker。真实上游限流仍记一次失败；已有本地冷却窗口拦下的任务仍推迟，但不重复记进来源熔断；任务恢复时间不早于现有五分钟下限和真实 Retry-After。无熔断门槛、并发或配置变更，仅重启 `ai选品` Node；`--collection-lan-rate-rollback` 恢复两份已固定的前序模块。
+
+`--collection-lan-health-only --expected-previous-sha <运行基线> --expected-module-sha256 <1688健康适配器当前哈希>` 只发布配套的 1688 健康适配器和 LAN 客户端，保留 Worker 限流修复及其他发布覆盖层。`--collection-lan-health-rollback` 按同一参数形式使用已安装健康适配器哈希，回到前序两份已固定模块。仅重启 `ai选品` Node。发布后在来源后台点「健康检查」：图搜及同节点的同一 offer 详情均通过才显示健康；限流等待冷却，登录或验证码按后台提示在原节点处理；不改现有期限或并发，不把探针样本计入货源。

@@ -8,7 +8,7 @@ import {
 } from "@scoutops/provider-adapters";
 import { Lan1688ImageSearch } from "./lan-1688-image-search.js";
 
-// User-supplied fixed image; a health probe validates transport/schema, never persists offers.
+// User-supplied fixed image; the image and detail probe never persists offers.
 export const LAN_1688_HEALTH_IMAGE =
   "https://m.media-amazon.com/images/I/71AsB3+OA-L._AC_SY300_SX300_QL70_FMwebp_.jpg";
 
@@ -38,7 +38,7 @@ export class Lan1688HealthAdapter implements ProviderAdapter {
         status: "ready" as const,
         latencyMs: Date.now() - started,
         errorCode: null,
-        message: "1688 节点池至少一个节点通过真实响应与数据格式检查；样本不计为选品货源。",
+        message: "1688 已通过真实图搜与同一货源的详情检查；样本不计为选品货源。",
       };
     } catch (error) {
       if (signal.aborted) throw signal.reason;
@@ -52,7 +52,9 @@ export class Lan1688HealthAdapter implements ProviderAdapter {
             ? "1688 节点要求人工验证；请在原管理后台完成验证后重新健康检查，保留来源保护。"
             : failure.code === "login_required"
               ? "1688 节点会话已失效；请在节点管理后台重新登录后重新健康检查。"
-            : "1688 局域网图搜暂未通过健康检查，保留来源保护。",
+              : failure.code === "rate_limited"
+                ? "1688 图搜或详情仍被限流；请等待冷却后再检查，不需要登录或验证。"
+                : "1688 图搜与同一货源的详情未全部通过，保留来源保护。",
       };
     }
   }

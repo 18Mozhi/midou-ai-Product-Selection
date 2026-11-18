@@ -92,6 +92,7 @@ COLLECTION_DETAIL_CANDIDATE = "9219b8c880abc628012bc3b452ee885234b87162e0113bfad
 COLLECTION_DETAIL_CANONICAL = "b9fbe24085ea376a2015a51d3e2679bfa81a964dd8a6862facd1bee793568fa6"
 COLLECTION_DETAIL_DIAG_SOURCE = "b4ee048b514ad2a13314a14136f903b5762e5d9f"
 COLLECTION_LAN_CLIENT = "packages/provider-sources/dist/lan-1688-image-search.js"
+COLLECTION_LAN_HEALTH = "packages/provider-sources/dist/lan-1688-health-adapter.js"
 COLLECTION_LAN_BASE = {
     COLLECTION_EXECUTOR: COLLECTION_EXECUTOR_LOCK_CANDIDATE,
     COLLECTION_LAN_CLIENT: COLLECTION_CANDIDATE[COLLECTION_LAN_CLIENT],
@@ -99,6 +100,15 @@ COLLECTION_LAN_BASE = {
 COLLECTION_LAN_CANDIDATE = {
     COLLECTION_EXECUTOR: "efa7c806c70c334383b7d241401824a054555d95c40bfae98d2f60ef2a70e19a",
     COLLECTION_LAN_CLIENT: "8652e8041e3e90c21d94ebed32bd4a019096256e0fcbd26ab17b19c99b3966be",
+}
+COLLECTION_LAN_HEALTH_SOURCE = "617c461c3a0bcfd10e9db9a07edcc18a74026fcd"
+COLLECTION_LAN_HEALTH_BASE = {
+    COLLECTION_LAN_CLIENT: COLLECTION_LAN_CANDIDATE[COLLECTION_LAN_CLIENT],
+    COLLECTION_LAN_HEALTH: COLLECTION_CANDIDATE[COLLECTION_LAN_HEALTH],
+}
+COLLECTION_LAN_HEALTH_CANDIDATE = {
+    COLLECTION_LAN_CLIENT: "8c71099413a9d7702adf7fdceaadcb3b64f70d62312be8dd06a2d65c1a12f082",
+    COLLECTION_LAN_HEALTH: "1b1aca9b5cc5cc9bc313fafc409f1f9c0246300be5ef506546191374615e171e",
 }
 COLLECTION_LAN_SOURCE = {
     COLLECTION_EXECUTOR: "1a85c9eb613387b48294e358d0b1b43f1118a28c",
@@ -221,13 +231,17 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites.update(COLLECTION_RANK_CANDIDATE)
             prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
-            prerequisites.pop(COLLECTION_LAN_CLIENT)
-            lan_pair = {name: read_file(root / "backend" / name, 131072) for name in COLLECTION_LAN_BASE}
-            if {name: hashlib.sha256(data).hexdigest() for name, data in lan_pair.items()} not in (
-                    COLLECTION_LAN_BASE, COLLECTION_LAN_CANDIDATE):
+            for name in COLLECTION_LAN_HEALTH_BASE:
+                prerequisites.pop(name)
+            lan_modules = {name: read_file(root / "backend" / name, 131072) for name in
+                           {*COLLECTION_LAN_HEALTH_BASE, COLLECTION_EXECUTOR}}
+            if {name: hashlib.sha256(data).hexdigest() for name, data in lan_modules.items()} not in (
+                    {**COLLECTION_LAN_BASE, COLLECTION_LAN_HEALTH: COLLECTION_CANDIDATE[COLLECTION_LAN_HEALTH]},
+                    {**COLLECTION_LAN_CANDIDATE, **COLLECTION_LAN_HEALTH_BASE},
+                    {**COLLECTION_LAN_CANDIDATE, **COLLECTION_LAN_HEALTH_CANDIDATE}):
                 raise RuntimeError("trend_collection_prerequisite_changed")
-            protected.update({root / "backend" / name: data for name, data in lan_pair.items()})
-        if collection in ("lan_rate", "lan_rate_restore"):
+            protected.update({root / "backend" / name: data for name, data in lan_modules.items()})
+        if collection in ("lan_rate", "lan_rate_restore", "lan_health", "lan_health_restore"):
             prerequisites.update(COLLECTION_RANK_CANDIDATE)
             prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
@@ -237,6 +251,9 @@ def prepare_amazon(root, manifest, read_file, collection=None):
                 raise RuntimeError("trend_collection_prerequisite_changed")
             protected[path] = engine
             prerequisites.pop(COLLECTION_LAN_CLIENT)
+            if collection in ("lan_health", "lan_health_restore"):
+                prerequisites.pop(COLLECTION_LAN_HEALTH)
+                prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
         for name, digest in prerequisites.items():
             path = root / "backend" / name
             data = read_file(path, 131072)
@@ -286,6 +303,10 @@ def collection_hashes(action):
         return COLLECTION_LAN_BASE, COLLECTION_LAN_CANDIDATE
     if action == "lan_rate_restore":
         return COLLECTION_LAN_CANDIDATE, COLLECTION_LAN_BASE
+    if action == "lan_health":
+        return COLLECTION_LAN_HEALTH_BASE, COLLECTION_LAN_HEALTH_CANDIDATE
+    if action == "lan_health_restore":
+        return COLLECTION_LAN_HEALTH_CANDIDATE, COLLECTION_LAN_HEALTH_BASE
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
@@ -588,6 +609,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
                COLLECTION_EVIDENCE if collection in ("evidence", "evidence_restore") else
                COLLECTION_DETAIL if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore") else
                COLLECTION_LAN_CLIENT if collection in ("lan_rate", "lan_rate_restore") else
+               COLLECTION_LAN_HEALTH if collection in ("lan_health", "lan_health_restore") else
                "apps/worker/dist/collection-task-state-machine.js")
         if (previous != REPORT_RUNTIME_BASE or expected_module != route[key]
                 or amazon or amazon_audit or scheduler_expected is not None or rollback or report_action is not None):
@@ -650,13 +672,16 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             rank_followup = collection in ("rank", "rank_restore")
             canonical_followup = collection in ("detail_canonical", "detail_canonical_restore")
             lan_followup = collection in ("lan_rate", "lan_rate_restore")
+            lan_health_followup = collection in ("lan_health", "lan_health_restore")
             source = (COLLECTION_EXECUTOR_CLOCK_SHA if lock_followup else
                       COLLECTION_RANK_SOURCE_BASE if rank_followup else
                       COLLECTION_LAN_SOURCE[name] if lan_followup else
+                      COLLECTION_LAN_HEALTH_SOURCE if lan_health_followup else
                       COLLECTION_DETAIL_DIAG_SOURCE if canonical_followup else COLLECTION_SOURCE_BASE)
             restored = build_collection_restore(repo, name, source)
             original = (COLLECTION_RANK_BASE[name] if rank_followup else
                         COLLECTION_LAN_BASE[name] if lan_followup else
+                        COLLECTION_LAN_HEALTH_BASE[name] if lan_health_followup else
                         COLLECTION_DETAIL_CANDIDATE if canonical_followup else
                         COLLECTION_EXECUTOR_CANDIDATE if lock_followup else
                         {**COLLECTION_BASE, COLLECTION_EXECUTOR: COLLECTION_EXECUTOR_BASE,

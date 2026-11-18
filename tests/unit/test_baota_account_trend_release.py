@@ -121,6 +121,15 @@ class TrendReleaseScopeTest(unittest.TestCase):
                                                        trend["COLLECTION_LAN_SOURCE"][n])
             self.assertEqual(hashlib.sha256(actual).hexdigest(), digest)
 
+    def test_lan_health_replaces_only_client_and_adapter_and_rolls_back_exactly(self):
+        before, after = trend["collection_hashes"]("lan_health")
+        self.assertEqual(set(before), {trend["COLLECTION_LAN_CLIENT"], trend["COLLECTION_LAN_HEALTH"]})
+        self.assertEqual(trend["collection_hashes"]("lan_health_restore"), (after, before))
+        for n, digest in before.items():
+            actual = trend["build_collection_restore"](Path(__file__).resolve().parents[2], n,
+                                                       trend["COLLECTION_LAN_HEALTH_SOURCE"])
+            self.assertEqual(hashlib.sha256(actual).hexdigest(), digest)
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

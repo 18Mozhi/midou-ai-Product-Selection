@@ -111,10 +111,11 @@ test("page-two authorization failure never returns page-one facts or tries anoth
 test("health checks retain one page per appliance even when more pages exist", async () => {
   const pages = [];
   const client = new Lan1688ImageSearch("test-only", 1000, async (_url, options) => {
+    if (String(_url).endsWith("/item-detail")) return new Response(null, { status: 429 });
     pages.push(JSON.parse(options.body).begin_page);
     return Response.json(pageResult(1));
   });
-  await client.checkPoolHealth(image, new AbortController().signal);
+  await assert.rejects(client.checkPoolHealth(image, new AbortController().signal), { code: "rate_limited" });
   assert.equal(pages.length, 6);
   assert.ok(pages.every((page) => page === 1));
 });

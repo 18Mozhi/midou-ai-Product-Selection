@@ -226,6 +226,8 @@ def main():
     action.add_argument("--collection-detail-canonical-rollback", action="store_true")
     action.add_argument("--collection-lan-rate-only", action="store_true")
     action.add_argument("--collection-lan-rate-rollback", action="store_true")
+    action.add_argument("--collection-lan-health-only", action="store_true")
+    action.add_argument("--collection-lan-health-rollback", action="store_true")
     action.add_argument("--collection-controls-frontend", action="store_true")
     action.add_argument("--trend-projection-only", action="store_true")
     action.add_argument("--scheduler-stagger-only", action="store_true")
@@ -266,6 +268,8 @@ def main():
         collection = "detail_canonical" if args.collection_detail_canonical_only else "detail_canonical_restore"
     if args.collection_lan_rate_only or args.collection_lan_rate_rollback:
         collection = "lan_rate" if args.collection_lan_rate_only else "lan_rate_restore"
+    if args.collection_lan_health_only or args.collection_lan_health_rollback:
+        collection = "lan_health" if args.collection_lan_health_only else "lan_health_restore"
     worker_only = (args.trend_projection_only or scheduler_only or report_action is not None
                    or args.amazon_health_api_only or args.amazon_health_audit_only or collection is not None)
     if args.expected_module_sha256 and not worker_only:

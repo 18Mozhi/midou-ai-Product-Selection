@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { ProviderAdapterRegistry } from "../../packages/provider-adapters/dist/index.js";
 import {
   PUBLIC_CRAWLER_USER_AGENT,
@@ -9,6 +10,11 @@ import {
   parseLan1688Result,
 } from "../../packages/provider-sources/dist/index.js";
 import * as workerLan from "../../apps/worker/dist/lan-1688-image-search.js";
+
+const detailFixture = JSON.parse(await readFile(new URL("../fixtures/lan-1688-item-detail.json", import.meta.url), "utf8"));
+const sampleDetail = detailFixture.items[0];
+const sampleSearch = () => Response.json({ success: true, items: [{ ...offer, offerId: sampleDetail.offer_id }] });
+const sampleItem = () => Response.json({ ...detailFixture, total: 1, succeeded: 1, items: [sampleDetail] });
 
 const offer = {
   offerId: "123456789",
@@ -72,7 +78,7 @@ test("configured LAN health validates the real request and preserves normalize p
       timeoutMs: 1000,
       fetcher: async (url, options) => {
         requests.push({ url, options });
-        return Response.json({ success: true, items: [offer] });
+        return String(url).endsWith("/item-detail") ? sampleItem() : sampleSearch();
       },
     },
   });
@@ -96,6 +102,10 @@ test("configured LAN health validates the real request and preserves normalize p
   assert.equal(body.page_size, 60);
   assert.equal(body.result_limit, 60);
   assert.equal(new URL(body.image_url).hostname, "m.media-amazon.com");
+  const [detail] = requests.filter(({ url }) => String(url).endsWith("/item-detail"));
+  assert.equal(requests.length, 7);
+  assert.equal(new URL(detail.url).host, new URL(requests[0].url).host);
+  assert.deepEqual(JSON.parse(detail.options.body), { offer_ids: [sampleDetail.offer_id] });
   assert.ok(
     !JSON.stringify({ health, adapters: registry.describe() }).includes("synthetic-secret"),
   );
@@ -214,7 +224,7 @@ test("LAN pool health reaches a healthy sixth node inside a tighter overall dead
       fetcher: async (url, options) => {
         calls.push(String(url));
         if (new URL(url).hostname === "192.168.1.226")
-          return Response.json({ success: true, items: [offer] });
+          return String(url).endsWith("/item-detail") ? sampleItem() : sampleSearch();
         return new Promise((_, reject) =>
           options.signal.addEventListener(
             "abort",
@@ -235,10 +245,39 @@ test("LAN pool health reaches a healthy sixth node inside a tighter overall dead
     traceId: "six-node",
   });
   assert.equal(health.status, "ready");
-  assert.equal(new Set(calls).size, 6);
+  assert.equal(new Set(calls).size, 7);
   assert.equal(cancelled, 5);
   assert.equal("records" in health, false);
   assert.doesNotMatch(JSON.stringify(health), /synthetic-secret|123456789/);
+});
+
+test("image-only ready cannot conceal detail limits, CAPTCHA, login or a mismatched offer", async () => {
+  for (const [status, body, code] of [
+    [429, null, "rate_limited"],
+    [409, { error_code: "verification_required" }, "captcha"],
+    [409, { error_code: "session_expired" }, "login_required"],
+    [200, { ...detailFixture, items: [detailFixture.items[1]] }, "invalid_payload"],
+  ]) {
+    const details = [];
+    const client = new Lan1688ImageSearch("synthetic-secret", 1000, async (url) => {
+      if (!String(url).endsWith("/item-detail")) return sampleSearch();
+      details.push(String(url));
+      return body === null ? new Response(null, { status }) : Response.json(body, { status });
+    });
+    await assert.rejects(client.checkPoolHealth("https://m.media-amazon.com/images/I/fixture.jpg", AbortSignal.timeout(1000)), { code });
+    assert.equal(details.length, 1);
+  }
+});
+
+test("an empty image result does not open the recovery gate or send a detail request", async () => {
+  const calls = [];
+  const client = new Lan1688ImageSearch("synthetic-secret", 1000, async (url) => {
+    calls.push(String(url));
+    return Response.json({ success: true, items: [] });
+  });
+  await assert.rejects(client.checkPoolHealth("https://m.media-amazon.com/images/I/fixture.jpg", AbortSignal.timeout(1000)), { code: "dependency_unavailable" });
+  assert.equal(calls.length, 6);
+  assert.ok(calls.every((url) => url.endsWith("/image-search")));
 });
 
 test("pool cancellation releases all node slots and overlapping collections never duplicate a node", async () => {

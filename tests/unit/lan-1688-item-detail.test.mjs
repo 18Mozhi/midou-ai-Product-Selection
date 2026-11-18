@@ -431,6 +431,9 @@ test("SKU projection retains the selected quote and specification without duplic
     release() {},
     async query(sql, args) {
       calls.push({ sql, args });
+      if (sql.includes("FROM account_ownership_cutover cut")) return [[]];
+      if (sql.startsWith("SELECT organization_id,workspace_id FROM sourcing_searches"))
+        return [[{ organization_id: "org", workspace_id: "workspace" }]];
       if (sql.startsWith("SELECT * FROM sourcing_projection_jobs"))
         return [
           [
@@ -478,12 +481,12 @@ test("SKU projection retains the selected quote and specification without duplic
     sql.startsWith("INSERT IGNORE INTO sourcing_candidates"),
   );
   assert.equal(inserts.length, 1);
-  assert.equal(inserts[0].args[5], "sku");
-  assert.equal(inserts[0].args[6], "sku-evidence");
-  assert.equal(inserts[0].args[10], selected.specification);
-  assert.equal(inserts[0].args[12], 7.8);
-  assert.equal(inserts[0].args[14], selected.location);
-  assert.ok(!JSON.parse(inserts[0].args[17]).includes("specification"));
+  assert.equal(inserts[0].args[3], "sku");
+  assert.equal(inserts[0].args[4], "sku-evidence");
+  assert.equal(inserts[0].args[8], selected.specification);
+  assert.equal(inserts[0].args[10], 7.8);
+  assert.equal(inserts[0].args[12], selected.location);
+  assert.ok(!JSON.parse(inserts[0].args[15]).includes("specification"));
 });
 
 test("detail 409/429 Retry-After stops fanout and prevents requests during the declared cooldown", async () => {

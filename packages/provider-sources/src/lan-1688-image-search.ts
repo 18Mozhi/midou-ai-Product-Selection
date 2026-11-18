@@ -197,17 +197,23 @@ export class Lan1688ImageSearch {
     throw lastError;
   }
 
-  /** Pool availability only: validate any approved node, discard sample offers and cancel siblings. */
+  /** Verify a real image result and its detail on the same node, without saving either. */
   async checkPoolHealth(imageUrl: unknown, signal: AbortSignal): Promise<void> {
     const url = this.imageUrl(imageUrl);
     signal.throwIfAborted();
     const controller = new AbortController();
     const combined = AbortSignal.any([signal, controller.signal]);
-    const checks = LAN_1688_ENDPOINTS.map((endpoint) =>
-      this.requestEndpoint(url, endpoint, async () => {}, combined),
-    );
+    const checks = LAN_1688_ENDPOINTS.map(async (endpoint) => {
+      const { records } = await this.requestEndpoint(url, endpoint, async () => {}, combined);
+      const first = records[0];
+      const offerId = first && object(object(first.payload).fields).external_id;
+      if (typeof offerId !== "string" || !/^\d{1,40}$/.test(offerId))
+        throw new ProviderAdapterFailure("dependency_unavailable", true);
+      return { endpoint, offerId };
+    });
+    let sample: Awaited<(typeof checks)[number]>;
     try {
-      await Promise.any(checks);
+      sample = await Promise.any(checks);
       signal.throwIfAborted();
     } catch (error) {
       if (signal.aborted) throw signal.reason;
@@ -227,6 +233,19 @@ export class Lan1688ImageSearch {
       controller.abort();
       await Promise.allSettled(checks);
     }
+    // One detail request only. In particular, never try a different node after a
+    // detail-side CAPTCHA, login failure or rate-limit response.
+    if (Date.now() < this.detailCooldownUntil)
+      throw new Lan1688RateLimitError(new Date(this.detailCooldownUntil), true);
+    const ids = [sample.offerId];
+    const payload = await this.requestPayload(
+      sample.endpoint.replace("/image-search", "/item-detail"),
+      { offer_ids: ids },
+      async () => {},
+      signal,
+    );
+    if (!parseLan1688ItemDetails(payload, ids, new Date().toISOString()).length)
+      throw new ProviderAdapterFailure("dependency_unavailable", true);
   }
 
   private async requestEndpoint(
