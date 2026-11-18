@@ -62,6 +62,8 @@ COLLECTION_CANDIDATE = dict(zip(COLLECTION_BASE, (
 COLLECTION_EXECUTOR = "apps/worker/dist/provider-source-executor.js"
 COLLECTION_EXECUTOR_BASE = "afc757df47e827503d9150fb07a1ec6756519a3295009cd36e9cb186fc6ec04a"
 COLLECTION_EXECUTOR_CANDIDATE = "9b539a3f68ad77017bba88b1bed479482ad2dad21d8ffd66507ba569abdcae45"
+COLLECTION_EXECUTOR_LOCK_CANDIDATE = "b6ace579381bc29adef6f61af65bb162067d9a3716fe072d5a67c92e777fa4c8"
+COLLECTION_EXECUTOR_CLOCK_SHA = "09595c3be89ec5f90b5ddb6593f1921360ad996f"
 COLLECTION_BROWSER = "apps/worker/dist/authenticated-browser-job-client.js"
 COLLECTION_BROWSER_BASE = "203e391fe9cd23ac76040d4cc20ea059ea5754150b54448363852301dfb6a316"
 COLLECTION_BROWSER_CANDIDATE = "2f08a7c1029f9705d5f1114a54c1080a687331968c2ab54ed43108bb9200af0e"
@@ -164,10 +166,12 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             if hashlib.sha256(data).hexdigest() != digest:
                 raise RuntimeError("trend_amazon_protected_module_changed")
             protected[path] = data
-    if collection in ("executor", "executor_restore", "browser", "browser_restore"):
+    if collection in ("executor", "executor_restore", "browser", "browser_restore", "executor_lock", "executor_lock_restore"):
         prerequisites = dict(COLLECTION_CANDIDATE)
         if collection in ("browser", "browser_restore"):
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_EXECUTOR_CANDIDATE
+        if collection in ("executor_lock", "executor_lock_restore"):
+            prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
         for name, digest in prerequisites.items():
             path = root / "backend" / name
             data = read_file(path, 131072)
@@ -192,6 +196,11 @@ def collection_hashes(action):
         if action == "browser_restore":
             before, after = after, before
         return {COLLECTION_BROWSER: before}, {COLLECTION_BROWSER: after}
+    if action in ("executor_lock", "executor_lock_restore"):
+        before, after = COLLECTION_EXECUTOR_CANDIDATE, COLLECTION_EXECUTOR_LOCK_CANDIDATE
+        if action == "executor_lock_restore":
+            before, after = after, before
+        return {COLLECTION_EXECUTOR: before}, {COLLECTION_EXECUTOR: after}
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
@@ -471,7 +480,7 @@ def validate_collection_changes(changed):
         raise RuntimeError("trend_collection_contains_other_runtime_changes")
 
 
-def build_collection_restore(repo, name):
+def build_collection_restore(repo, name, source_sha=COLLECTION_SOURCE_BASE):
     source = name.replace("/dist/", "/src/").removesuffix(".js") + ".ts"
     return subprocess.check_output(["node", "--input-type=module", "-e", r"""
 import ts from 'typescript';
@@ -480,7 +489,7 @@ const file=process.argv[2];
 const data=execFileSync('git',['show',process.argv[1]+':'+file],{encoding:'utf8'});
 process.stdout.write(ts.transpileModule(data,{fileName:file.split('/').at(-1),compilerOptions:{
  module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022,sourceMap:true}}).outputText);
-""", COLLECTION_SOURCE_BASE, source], cwd=repo)
+""", source_sha, source], cwd=repo)
 
 
 def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_expected=None, rollback=False,
@@ -489,7 +498,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         raise RuntimeError("trend_release_requires_expected_sha256_and_base_sha")
     if collection is not None:
         route, _ = collection_hashes(collection)
-        key = (COLLECTION_EXECUTOR if collection in ("executor", "executor_restore") else
+        key = (COLLECTION_EXECUTOR if collection in ("executor", "executor_restore", "executor_lock", "executor_lock_restore") else
                COLLECTION_BROWSER if collection in ("browser", "browser_restore") else
                "apps/worker/dist/collection-task-state-machine.js")
         if (previous != REPORT_RUNTIME_BASE or expected_module != route[key]
@@ -547,12 +556,15 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         amazon_modules = {}
         before_hashes, after_hashes = collection_hashes(collection)
         for name, before in before_hashes.items():
-            restored = build_collection_restore(repo, name)
+            lock_followup = collection in ("executor_lock", "executor_lock_restore")
+            restored = build_collection_restore(repo, name, COLLECTION_EXECUTOR_CLOCK_SHA if lock_followup else COLLECTION_SOURCE_BASE)
             original = {**COLLECTION_BASE, COLLECTION_EXECUTOR: COLLECTION_EXECUTOR_BASE,
                         COLLECTION_BROWSER: COLLECTION_BROWSER_BASE}[name]
+            if lock_followup:
+                original = COLLECTION_EXECUTOR_CANDIDATE
             if hashlib.sha256(restored).hexdigest() != original:
                 raise RuntimeError("trend_collection_restore_build_differs")
-            data = restored if collection in ("restore", "executor_restore", "browser_restore") else (repo / name).read_bytes()
+            data = restored if collection in ("restore", "executor_restore", "browser_restore", "executor_lock_restore") else (repo / name).read_bytes()
             after = hashlib.sha256(data).hexdigest()
             if after != after_hashes[name]:
                 raise RuntimeError("trend_collection_build_differs")

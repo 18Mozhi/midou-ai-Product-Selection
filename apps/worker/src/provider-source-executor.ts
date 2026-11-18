@@ -135,6 +135,15 @@ const rawErrorCode = (error: unknown) =>
 const isEvidenceValidationError = (error: unknown) =>
   error instanceof EvidencePersistenceError ||
   (error instanceof Error && error.name === "DataQualityError");
+const amazonEvidenceDiagnosticCodes = new Set([
+  "account_evidence_schema_or_owner_invalid", "browser_evidence_conflict",
+  "browser_evidence_invalid", "browser_evidence_scope_mismatch",
+  "evidence_dedupe_conflict", "evidence_reference_owner_mismatch",
+  "evidence_scope_or_task_invalid", "evidence_scope_schema_invalid",
+  "evidence_task_owner_mismatch", "evidence_task_owner_missing",
+  "competitor_classification_invalid", "competitor_classification_persist_failed",
+  "competitor_model_unavailable", "invalid_payload", "source_changed",
+]);
 const code = (value: string): CollectionErrorCode =>
   codes.has(value as CollectionErrorCode)
     ? (value as CollectionErrorCode)
@@ -252,12 +261,14 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       .update(task.leaseToken)
       .digest("hex");
     const [[parent]] = await connection.query<RowDataPacket[]>(
-      "SELECT t.id FROM collection_tasks t JOIN account_owned_records a " +
-        "ON a.source_table='collection_tasks' AND a.source_id=t.id AND a.account_id=t.account_id " +
-        "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+      "SELECT t.id FROM collection_tasks t " +
         "WHERE t.id=? AND t.account_id=? AND t.attempt_count=? AND t.status='running' " +
         "AND t.lease_token_hash=UNHEX(?) AND t.lease_expires_at>? " +
-        "AND (a.reason='exclusive_owner' OR (a.reason IN ('shared','unassigned') AND a.account_id=cut.primary_account_id)) FOR UPDATE",
+        "AND EXISTS (SELECT 1 FROM account_owned_records a " +
+        "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
+        "WHERE a.source_table='collection_tasks' AND a.source_id=t.id AND a.account_id=t.account_id " +
+        "AND (a.reason='exclusive_owner' OR (a.reason IN ('shared','unassigned') AND a.account_id=cut.primary_account_id)) " +
+        "LOCK IN SHARE MODE) FOR UPDATE",
       // Lease timestamps are written as driver-bound DATETIME values by the task repository.
       [task.id, task.accountId, task.attemptCount, tokenHash, new Date()],
     );
@@ -593,6 +604,10 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         }
       }
       if (hasDedupeConflict && query.required) {
+        if (provider.code === "amazon_product")
+          console.error(JSON.stringify({ ...collectionFailureDiagnostic(null, {
+            taskId: task.id, providerId: provider.id, stage: "evidence_persist",
+          }), validation_code: "evidence_dedupe_conflict" }));
         if (!historicalBrowserResult)
           await this.recordProviderRuntimeResult(
             provider.id,
@@ -651,19 +666,24 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         ...(robotsDecision ? { robotsDecision } : {}),
       };
     } catch (error) {
+      const amazonValidation = provider.code === "amazon_product" &&
+        (error instanceof ProviderAdapterFailure || error instanceof CompetitorClassificationError ||
+          isEvidenceValidationError(error)) ? (error as {code?: unknown}).code : undefined;
+      const safeValidation = typeof amazonValidation === "string" &&
+        amazonEvidenceDiagnosticCodes.has(amazonValidation) ? amazonValidation : undefined;
       if (
-        !(error instanceof ProviderAdapterFailure) &&
+        safeValidation || (!(error instanceof ProviderAdapterFailure) &&
         !(error instanceof CompetitorClassificationError) &&
-        !isEvidenceValidationError(error)
+        !isEvidenceValidationError(error))
       )
         console.error(
           JSON.stringify(
-            collectionFailureDiagnostic(error, {
+            { ...collectionFailureDiagnostic(error, {
               taskId: task.id,
               providerId: provider.id,
               stage: failureStage,
               ...(recordOrdinal ? { recordOrdinal } : {}),
-            }),
+            }), ...(safeValidation ? { validation_code: safeValidation } : {}) },
           ),
         );
       if (error instanceof CompetitorClassificationError)

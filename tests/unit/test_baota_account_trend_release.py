@@ -67,6 +67,16 @@ class TrendReleaseScopeTest(unittest.TestCase):
             restored = trend["build_collection_restore"](Path(__file__).resolve().parents[2], n)
             self.assertEqual(hashlib.sha256(restored).hexdigest(), digest)
 
+    def test_executor_lock_followup_restores_bound_clock_not_original_utc(self):
+        before, after = trend["collection_hashes"]("executor_lock")
+        self.assertEqual(list(before), [trend["COLLECTION_EXECUTOR"]])
+        self.assertEqual(trend["collection_hashes"]("executor_lock_restore"), (after, before))
+        n = trend["COLLECTION_EXECUTOR"]
+        self.assertEqual(before[n], trend["COLLECTION_EXECUTOR_CANDIDATE"])
+        actual = trend["build_collection_restore"](Path(__file__).resolve().parents[2], n,
+                                                    trend["COLLECTION_EXECUTOR_CLOCK_SHA"])
+        self.assertEqual(hashlib.sha256(actual).hexdigest(), before[n])
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

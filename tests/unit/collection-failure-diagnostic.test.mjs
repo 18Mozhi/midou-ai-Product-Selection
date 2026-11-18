@@ -32,6 +32,8 @@ test("provider execution locks the native lease with a fresh driver-bound date b
   assert.equal(writes, 2);
   for (const [sql, args] of locks) {
     assert.match(sql, /t\.lease_token_hash=UNHEX\(\?\) AND t\.lease_expires_at>\?/);
+    assert.match(sql, /^SELECT t.id FROM collection_tasks t WHERE/);
+    assert.match(sql, /EXISTS \(SELECT 1 FROM account_owned_records a .*account_ownership_cutover.*LOCK IN SHARE MODE\) FOR UPDATE$/);
     assert.deepEqual(args.slice(0, 3), ["task", "account", 2]);
     assert.match(args[3], /^[0-9a-f]{64}$/);
   }
