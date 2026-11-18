@@ -598,12 +598,10 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             source = (COLLECTION_EXECUTOR_CLOCK_SHA if lock_followup else
                       COLLECTION_RANK_SOURCE_BASE if rank_followup else COLLECTION_SOURCE_BASE)
             restored = build_collection_restore(repo, name, source)
-            original = {**COLLECTION_BASE, COLLECTION_EXECUTOR: COLLECTION_EXECUTOR_BASE,
-                        COLLECTION_BROWSER: COLLECTION_BROWSER_BASE, **COLLECTION_EVIDENCE_BASE}[name]
-            if lock_followup:
-                original = COLLECTION_EXECUTOR_CANDIDATE
-            if rank_followup:
-                original = COLLECTION_RANK_BASE[name]
+            original = (COLLECTION_RANK_BASE[name] if rank_followup else
+                        COLLECTION_EXECUTOR_CANDIDATE if lock_followup else
+                        {**COLLECTION_BASE, COLLECTION_EXECUTOR: COLLECTION_EXECUTOR_BASE,
+                         COLLECTION_BROWSER: COLLECTION_BROWSER_BASE, **COLLECTION_EVIDENCE_BASE}[name])
             if hashlib.sha256(restored).hexdigest() != original:
                 raise RuntimeError("trend_collection_restore_build_differs")
             data = restored if collection == "restore" or collection.endswith("_restore") else (repo / name).read_bytes()
