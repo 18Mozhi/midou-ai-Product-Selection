@@ -12,6 +12,7 @@ import {
   assertPublicCollectionPolicy,
   publicCollectionPolicyDecision,
   sourceEvidencePayload,
+  Lan1688RateLimitError,
   GOOGLE_TRENDS_RSS_PARSER_VERSION,
   AmazonTargetPageParseFailure,
   type RobotsPolicyDecision,
@@ -722,7 +723,10 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         ["evidence_persist", "evidence_artifact", "provider_runtime"].includes(failureStage) &&
         !isEvidenceValidationError(error) &&
         TRANSIENT_EVIDENCE_ERROR_CODES.has(rawErrorCode(error));
-      if (!historicalBrowserResult && !internalPersistenceFailure)
+      const lanRateLimit = provider.code === "1688_search" && error instanceof Lan1688RateLimitError
+        ? error
+        : null;
+      if (!historicalBrowserResult && !internalPersistenceFailure && !lanRateLimit?.cachedCooldown)
         await this.recordProviderRuntimeResult(
           provider.id,
           Number(row.circuit_failure_threshold),
@@ -736,7 +740,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         if (mapped === "rate_limited")
           throw new ProviderCollectionExecutionError(
             mapped,
-            new Date(Date.now() + 300000),
+            new Date(Math.max(Date.now() + 300000, lanRateLimit?.retryAt?.getTime() ?? 0)),
             policyDecision,
           );
         throw new ProviderCollectionExecutionError(mapped, undefined, policyDecision);

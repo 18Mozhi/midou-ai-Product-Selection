@@ -128,6 +128,13 @@ export function parseLan1688Result(payload: unknown, observedAt: string): Provid
 }
 
 /** One in-flight request per appliance; failover remains within the six approved hosts. */
+/** Distinguish a provider response from the local reuse of its cooldown. */
+export class Lan1688RateLimitError extends ProviderAdapterFailure {
+  constructor(readonly retryAt: Date | null, readonly cachedCooldown: boolean) {
+    super("rate_limited", true);
+  }
+}
+
 export class Lan1688ImageSearch {
   private next = 0;
   private detailCooldownUntil = 0;
@@ -256,7 +263,7 @@ export class Lan1688ImageSearch {
   ) {
     if (!this.token) throw new ProviderAdapterFailure("permission_denied", false);
     if (Date.now() < this.detailCooldownUntil)
-      throw new ProviderAdapterFailure("rate_limited", true);
+      throw new Lan1688RateLimitError(new Date(this.detailCooldownUntil), true);
     if (
       offerIds.length > LAN_1688_COLLECTION_LIMIT ||
       offerIds.some((id) => !/^\d{1,40}$/.test(id))
@@ -336,7 +343,7 @@ export class Lan1688ImageSearch {
 
   async collectEnriched(imageUrl: unknown, heartbeat: () => Promise<void>, signal?: AbortSignal) {
     if (Date.now() < this.detailCooldownUntil)
-      throw new ProviderAdapterFailure("rate_limited", true);
+      throw new Lan1688RateLimitError(new Date(this.detailCooldownUntil), true);
     const image = await this.collect(imageUrl, heartbeat, signal);
     const ids = image.records.map((record) =>
       String((record.payload as { fields: { external_id: string } }).fields.external_id),
@@ -481,12 +488,13 @@ export class Lan1688ImageSearch {
           : retryAfter
             ? Date.parse(retryAfter)
             : NaN;
-      const cooling = Number.isFinite(retryAt) && retryAt > Date.now();
+      const retryDate = new Date(retryAt);
+      const cooling = Number.isFinite(retryDate.getTime()) && retryAt > Date.now();
       if (response.status === 429 || (detailRequest && response.status === 409 && cooling)) {
         if (detailRequest && cooling)
           this.detailCooldownUntil = Math.max(this.detailCooldownUntil, retryAt);
         await response.body?.cancel();
-        throw new ProviderAdapterFailure("rate_limited", true);
+        throw new Lan1688RateLimitError(cooling ? retryDate : null, false);
       }
       if (response.status === 409) {
         const action = await lanOperatorAction(response);

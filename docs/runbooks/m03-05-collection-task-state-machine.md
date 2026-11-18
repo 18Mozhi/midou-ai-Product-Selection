@@ -68,3 +68,5 @@
 `--collection-detail-only --expected-previous-sha <运行基线> --expected-module-sha256 <浏览器引擎哈希>` 仅发布共享浏览器引擎的超时诊断。Amazon 详情等待超时时只记录同商品路径、DOM 就绪、标题和配送匹配布尔值，不保留页面文本、链接或会话，最长等 750 ms；不改变结果校验、权限、重试和熔断。Node 只重启 `ai选品`；在宝塔 Python 下次新建浏览器子进程时，既有后端运行器动态使用同一个已发布模块，无需重启 Python。`--collection-detail-rollback` 用当前模块哈希恢复固定 Git 基线。
 
 `--collection-detail-canonical-only --expected-previous-sha <运行基线> --expected-module-sha256 <详情诊断版本哈希>` 只改正式 Amazon 浏览器导航：观测到的无查询 slug + `ref=` 商品详情链接，首次访问和配送设置后的回读使用同一 ASIN 的标准详情 URL，与既有健康检查相同。原任务目标、商品身份、变体查询、验证码、配送地、标题和证据门槛都保持不变。仅重启 `ai选品` Node；Python 下个作业动态读取共享模块。`--collection-detail-canonical-rollback` 恢复已有诊断的固定版本，并不回滚其他模块。外部正式探测和真实业务证据仍需分别验收。
+
+`--collection-lan-rate-only --expected-previous-sha <运行基线> --expected-module-sha256 <1688客户端当前哈希>` 只发布 1688 客户端及调用 Worker。真实上游限流仍记一次失败；已有本地冷却窗口拦下的任务仍推迟，但不重复记进来源熔断；任务恢复时间不早于现有五分钟下限和真实 Retry-After。无熔断门槛、并发或配置变更，仅重启 `ai选品` Node；`--collection-lan-rate-rollback` 恢复两份已固定的前序模块。

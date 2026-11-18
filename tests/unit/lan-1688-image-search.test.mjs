@@ -162,6 +162,49 @@ test("LAN 429 reaches the Worker rate-limit cooldown without persisting supplier
   assert.equal(persisted, 0);
 });
 
+test("one upstream 1688 cooldown schedules both tasks without counting the local skip as a new failure", async () => {
+  const provider = {
+    id:"source",code:"1688_search",access_mode:"authenticated_browser",
+    target_url:"https://s.1688.com/selloffer/offer_search.htm",parser_version:"1688-browser-contract-v3",
+    timeout_ms:20_000,fields_json:["title"],status:"enabled",runtime_circuit_state:"closed",
+    created_by:"actor",circuit_failure_threshold:5,
+  };
+  let requests=0, circuitWrites=0;
+  const client = new Lan1688ImageSearch("fixture",1000,async(url)=>{
+    requests++;
+    return String(url).endsWith("/item-detail")
+      ? new Response(null,{status:429,headers:{"Retry-After":"900"}})
+      : Response.json(result);
+  });
+  const query=async(sql)=>{
+    if(sql.includes("FROM providers p")) return [[provider]];
+    if(sql.includes("INSERT INTO provider_runtime_circuits")) circuitWrites++;
+    return sql.startsWith("SELECT") ? [[]] : [{affectedRows:1}];
+  };
+  const storage={query,getConnection:async()=>({
+    query,beginTransaction:async()=>{},commit:async()=>{},rollback:async()=>{},release(){},
+  })};
+  const executor=new ProviderSourceExecutor(storage,{},{
+    persist:async()=>assert.fail("supplier fact must not persist during cooldown"),
+  },"worker",undefined,undefined,client);
+  const task={id:"task",organizationId:"org",workspaceId:"workspace",requestId:"request",traceId:"trace",
+    subqueries:[{id:"query",providerId:"source",required:true,target:{image_url:image}}]};
+  const start=Date.now();
+  let deadline;
+  for(let i=0;i<2;i++){
+    await assert.rejects(executor.execute(task,async()=>{}), error=>{
+      assert.equal(error.code,"rate_limited");
+      const retryAt=error.rateLimitResetAt.getTime();
+      assert.ok(retryAt>=start+900_000);
+      if(deadline===undefined) deadline=retryAt;
+      else assert.equal(retryAt,deadline);
+      return true;
+    });
+    assert.equal(requests,2);
+    assert.equal(circuitWrites,1);
+  }
+});
+
 test("1688 retains a full verified page and rejects an over-limit response", async () => {
   const client = new Lan1688ImageSearch("test-only", 1000, async (_url, options) => {
     assert.equal(JSON.parse(options.body).result_limit, 60);

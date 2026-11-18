@@ -220,7 +220,8 @@ def deploy_static(repo, previous, deploy, ssh_connection, transfer, collection=N
         required_node = {**collection["COLLECTION_CANDIDATE"],
                          collection["COLLECTION_EXECUTOR"]: collection["COLLECTION_EXECUTOR_LOCK_CANDIDATE"],
                          collection["COLLECTION_BROWSER"]: collection["COLLECTION_BROWSER_CANDIDATE"],
-                         **collection["COLLECTION_EVIDENCE_CANDIDATE"], **collection["COLLECTION_RANK_CANDIDATE"]}
+                         **collection["COLLECTION_EVIDENCE_CANDIDATE"], **collection["COLLECTION_RANK_CANDIDATE"],
+                         **collection["COLLECTION_LAN_CANDIDATE"]}
     else:
         changed = git("diff", "--name-only", previous, build).splitlines()
         tooling = {"scripts/deploy-account-baota.py", "scripts/baota-account-static-release.py"}
