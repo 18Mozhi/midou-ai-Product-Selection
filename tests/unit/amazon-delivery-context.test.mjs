@@ -547,6 +547,48 @@ test("Amazon failure diagnostics omit private errors and preserve the result con
   }
 });
 
+test("detail readiness timeouts record only bounded DOM facts and remain timeouts", async (t) => {
+  const { chromium } = await import("playwright");
+  const target = "https://www.amazon.com/dp/B012345678?tag=private-tag";
+  const f = fixture({location:"Deliver to 94404"});
+  const { locator } = f.page;
+  Object.assign(f.page,{
+    locator:(selector)=>({...locator(selector),count:async()=>0}),
+    url:()=>target,
+    goto:async()=>({status:()=>200}),
+    waitForFunction:async()=>{throw new errors.TimeoutError("private browser state");},
+    evaluate:async(fn,args)=>{
+      assert.deepEqual(Object.keys(args).sort(),["initialPath","postal","selector"]);
+      // Execute the actual projection over a fixture without exporting DOM text.
+      const oldDocument=globalThis.document, oldLocation=globalThis.location;
+      try{
+        globalThis.location={pathname:"/dp/B012345678"};
+        globalThis.document={readyState:"complete",querySelector:(key)=>
+          key==="#glow-ingress-block"?{textContent:"private 94404"}:
+          key==="#productTitle"?{textContent:"private product title"}:null};
+        return fn(args);
+      }finally{globalThis.document=oldDocument;globalThis.location=oldLocation;}
+    },
+  });
+  t.mock.method(chromium,"launchPersistentContext",async()=>({
+    pages:()=>[f.page],setDefaultTimeout(){},setDefaultNavigationTimeout(){},on(){},close:async()=>{},
+  }));
+  const warnings=[];
+  t.mock.method(console,"warn",(entry)=>warnings.push(JSON.parse(entry)));
+  const {plan}=createAmazonBrowserExecutionRequest({page_url:target});
+  const result=await new PlaywrightCrawlerEngine(limits).run(plan,"not-created",{
+    requestId:"fixture",traceId:"fixture",
+  });
+  assert.equal(result.status,"timeout");
+  assert.equal(result.item_count,0);
+  assert.equal(warnings[0].stage,"amazon_detail_ready");
+  assert.deepEqual(warnings[0].detail_state,{
+    document_state:"complete",expected_product_path:true,item_present:false,title_present:true,
+    title_nonempty:true,delivery_matches:true,
+  });
+  assert.doesNotMatch(JSON.stringify(warnings),/private|94404|B012345678/);
+});
+
 test("main document diagnostics retain bounded real statuses without URLs or subframe noise", async () => {
   const { chromium } = await import("playwright");
   const original = chromium.launchPersistentContext;

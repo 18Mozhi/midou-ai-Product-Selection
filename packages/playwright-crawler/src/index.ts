@@ -1002,6 +1002,37 @@ export class PlaywrightCrawlerEngine {
         networkCode =
           error instanceof Error ? /net::(ERR_[A-Z0-9_]+)/.exec(error.message)?.[1] : undefined;
       let deliveryState: Record<string, unknown> | null = null;
+      let detailState: Record<string, unknown> | null = null;
+      if (plan.amazon_delivery && stage === "amazon_detail_ready" && failure.code === "timeout") {
+        const current = context?.pages()[0];
+        if (current && current.url().startsWith("https://www.amazon.com/")) {
+          let timer: ReturnType<typeof setTimeout> | undefined;
+          try {
+            // Operational evidence only: never retain page text, cookies, or a URL.
+            detailState = await Promise.race([
+              current.evaluate(({selector, initialPath, postal}) => {
+                const asin = (path: string) =>
+                  /\/(?:dp|gp\/product)\/([A-Za-z0-9]{10})(?:\/|$)/.exec(path)?.[1]?.toUpperCase();
+                const expected = asin(initialPath), actual = asin(location.pathname);
+                const title = document.querySelector("#productTitle");
+                return {
+                  document_state: document.readyState,
+                  expected_product_path: Boolean(expected && actual === expected),
+                  item_present: Boolean(document.querySelector(selector)),
+                  title_present: Boolean(title),
+                  title_nonempty: Boolean(title?.textContent?.trim()),
+                  delivery_matches: Boolean(document.querySelector("#glow-ingress-block")
+                    ?.textContent?.match(new RegExp(`\\b${postal}\\b`))),
+                };
+              }, {selector: plan.item_selector, initialPath: new URL(plan.start_url).pathname,
+                postal: plan.amazon_delivery.postal_code}).catch(() => null),
+              new Promise<null>((resolve) => { timer = setTimeout(() => resolve(null), 750); }),
+            ]);
+          } finally {
+            clearTimeout(timer);
+          }
+        }
+      }
       if (
         plan.amazon_delivery &&
         ["amazon_delivery.fill_postal", "amazon_delivery.fill_postal_retry"].includes(stage)
@@ -1037,6 +1068,7 @@ export class PlaywrightCrawlerEngine {
               : {}),
             ...(networkCode ? { network_code: networkCode } : {}),
             ...(deliveryState ? { delivery_state: deliveryState } : {}),
+            ...(detailState ? { detail_state: detailState } : {}),
             ...(resourceFailures.length ? { resource_failures: resourceFailures } : {}),
             ...(handoffObservations.length ? { handoff_observations: handoffObservations } : {}),
             ...(documentResponses.length ? { main_document_responses: documentResponses } : {}),
