@@ -39,3 +39,13 @@ test("a new 1688 circuit event supersedes the pre-circuit probe, including a rea
   assert.match(current.title,/重新登录/);
   assert.match(current.instruction,/本次熔断的采集任务/);
 });
+test("a fresh failed dual probe stays visible even when 1688 can still be scheduled",()=>{
+  const source={...row,runtime_circuit_state:"closed",runtime_circuit_opened_at:null,
+    runtime_last_error_code:"rate_limited",health_status:"degraded",last_error_code:"dependency_unavailable"};
+  const action=source1688OperatorAction(source);
+  assert.equal(action.title,"1688 图搜或详情检查未通过");
+  assert.equal(action.link,null);
+  assert.match(action.instruction,/不要重置登录/);
+  assert.match(source1688OperatorAction({...source,last_error_code:"rate_limited"}).title,/限流/);
+  assert.equal(source1688OperatorAction({...source,health_status:"ready",last_error_code:null}),null);
+});
