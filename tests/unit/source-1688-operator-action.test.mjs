@@ -17,7 +17,12 @@ test("1688 distinguishes CAPTCHA, expired login and network, and reveals recover
   assert.match(source1688OperatorAction({...row,last_error_code:"login_required"}).title,/重新登录/);
   const unknown=source1688OperatorAction({...row,last_error_code:"network_error"});
   assert.equal(unknown.link,null);
+  assert.match(unknown.title,/未能连接/);
   assert.doesNotMatch(unknown.title,/需要重新登录|需要人工过验证码/);
+  const limited=source1688OperatorAction({...row,last_error_code:"rate_limited",runtime_last_error_code:"captcha"});
+  assert.match(limited.title,/限流/);
+  assert.match(limited.instruction,/先不要继续点检查或重登/);
+  assert.equal(limited.link,null);
   assert.equal(source1688OperatorAction({...row,health_status:"ready",last_error_code:null,
     runtime_recovery_gate_met:true}).link,"/platform-admin/crawler-scheduler");
   assert.equal(source1688OperatorAction({...row,code:"amazon_product"}),null);

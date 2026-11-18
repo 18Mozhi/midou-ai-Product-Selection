@@ -22,6 +22,13 @@ export function source1688OperatorAction(source: {
   if (error && login.has(error))
     return { title: "需要重新登录", instruction: "最近一次检查确认节点的 1688 登录会话已失效。进入共享采集节点的「Cookie 维护 → 人工验证 / 登录状态」重新登录，再回本页重跑健康检查。",
       link: nodeConsole, label: "打开星星采集节点管理", external: true };
+  if (source.runtime_circuit_state === "open" && error === "rate_limited")
+    return { title: "最近检查遇到限流", instruction: "此次检查未提示验证码或登录失效。先不要继续点检查或重登；等待限流解除后，在本页重跑健康检查。",
+      link: null, label: null, external: false };
+  if (source.runtime_circuit_state === "open" && source.last_error_code &&
+      ["network_error", "timeout", "dependency_unavailable"].includes(source.last_error_code))
+    return { title: "最近检查未能连接采集服务", instruction: "此次检查未确认验证码或登录状态。先确认共享节点和采集服务可用，再在本页重跑健康检查；不要据此重置登录。",
+      link: null, label: null, external: false };
   if (source.runtime_circuit_state === "open")
     return { title: "暂不能判断是否需要登录或验证", instruction: "先执行健康检查。网络、限流和接口权限错误不等于验证码，不要因此重置登录状态。",
       link: null, label: null, external: false };
