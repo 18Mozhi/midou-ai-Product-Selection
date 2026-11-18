@@ -2324,6 +2324,7 @@
     "status": "implemented",
     "requirements": "docs/amazon-public-auto-recovery.md",
     "manualAccountProbe": "The existing health action uses the authenticated provider:configure operator account in retired mode; the private lease rechecks active account, sealed cutover and configured anonymous profile. Health must pass real Amazon search and same-product detail before the existing audited circuit recovery. The amazon-health-api-only coordinator validates the pinned six API modules and restarts only the ai selection Node project; no new settings, migration or LAN1688 change.",
+    "manualAccountRecoveryAudit": "The scheduler read and source-circuit recovery reuse the canonical schema-aware audit writer; a failed audit rolls back the recovery. amazon-health-audit-only publishes just the scheduler repository module on the pinned health overlay.",
     "accountRuntime": "In retired mode Amazon automatic recovery selects real pending system-created work by active account and sealed task/subquery ownership, then rechecks it under the existing crawler lease transaction using the private configured anonymous profile. No legacy coordinates, no permissions changes, no new route, setting or migration. Handoff denial and fresh real dual-probe requirements remain.",
     "sourceFiles": [
       "apps/api/src/amazon-public-recovery.ts",

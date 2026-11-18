@@ -1,3 +1,4 @@
+import { appendPlatformAudit } from "@scoutops/database";
 import { randomUUID } from "node:crypto";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import {
@@ -245,7 +246,8 @@ export class CrawlerSchedulerRepository implements Contract {
         ],
       );
       input.signal?.throwIfAborted();
-      await c.query(
+      await appendPlatformAudit(
+        c,
         "INSERT INTO platform_audit_events(\n          id,organization_id,workspace_id," +
           "actor_id,action,resource_type,resource_id,\n          outcome,request_id," +
           "trace_id,metadata,occurred_at,schema_version\n        ) VALUES(?,NULL,NULL," +
@@ -454,7 +456,8 @@ export class CrawlerSchedulerRepository implements Contract {
           input.now,
         ],
       );
-      await c.query(
+      await appendPlatformAudit(
+        c,
         "INSERT INTO platform_audit_events(id,organization_id,workspace_id,actor_id,action,resource_type,resource_id,outcome,request_id,trace_id,metadata,occurred_at,schema_version) VALUES(?,NULL,NULL,?,'platform.crawler_scheduler.provider_recover','provider',?,'succeeded',?,?,?,?,1)",
         [
           randomUUID(),

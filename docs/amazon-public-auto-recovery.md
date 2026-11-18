@@ -20,6 +20,8 @@
 
 从验证过且与远端 main 一致的干净提交运行 `python -B scripts/deploy-account-baota.py --amazon-health-api-only --expected-previous-sha <正式运行基线> --expected-module-sha256 <现有 Amazon 探针模块 SHA256>`。入口固定验证六个 API 模块及运行基线，保持报表、调度器、趋势、配置和 Python 不变，仅重启 `ai选品` Node；不迁移或备份。发布失败须先按回执和文件哈希核对，不得盲重启。真实探针未通过时保持熔断。
 
+账号模式的调度页观测和来源恢复复用现有审计字段适配：恢复状态、幂等操作和审计在同一事务内提交；审计失败时一起回滚。部署这项兼容补丁使用同一协调入口的 `--amazon-health-audit-only`，以当前正式运行基线和 `crawler-scheduler-repository.js` 的旧 SHA256 锁定发布，仅替换一个 API 模块并重启 `ai选品` Node。
+
 ## 使用和配置
 
 后端新参数AMAZON_PUBLIC_AUTO_RECOVERY_ENABLED默认true；AMAZON_PUBLIC_AUTO_RECOVERY_POLL_MS默认60000；AMAZON_PUBLIC_AUTO_RECOVERY_COOLDOWN_MS默认300000。分别允许1000–3600000ms轮询、1000–86400000ms冷却，越界启动失败。生产还必须已有匿名档案和有效专用系统用户。只在宝塔本项目受限环境调整，修改后重启Node API；Worker、Python不读取新参数，前端没有新入口或字段。发布仍用本地deploy-baota.py和宝塔固定目录，不增加服务。

@@ -1012,3 +1012,46 @@ test("M08-05 recovers only one provider after a newer ready health check", async
   assert.deepEqual(update.values, [now, now, "00000000-0000-4000-8000-000000000855"]);
   assert.equal(calls.filter((item) => item === "commit").length, 1);
 });
+
+test("M08-05 account mode recovery commits only after the historical-context audit", async () => {
+  const { CrawlerSchedulerRepository } =
+    await import("../../apps/api/dist/crawler-scheduler-repository.js");
+  const now = new Date("2026-08-15T08:00:00.000Z");
+  const calls = [];
+  for (const denyAudit of [false, true]) {
+    calls.length = 0;
+    const c = {
+      async beginTransaction() { calls.push("begin"); },
+      async commit() { calls.push("commit"); },
+      async rollback() { calls.push("rollback"); },
+      release() {},
+      async query(sql, args) {
+        if (sql.startsWith("SELECT result_json")) return [[]];
+        if (sql.startsWith("SELECT id,status")) return [[{status:"enabled"}]];
+        if (sql.startsWith("SELECT state,opened_at")) return [[{state:"open",opened_at:new Date(now-60000)}]];
+        if (sql.startsWith("SELECT health_status")) return [[{health_status:"ready",last_checked_at:new Date(now-10)}]];
+        if (sql.startsWith("SHOW COLUMNS FROM platform_audit_events")) return [[{Field:"historical_context"}]];
+        if (sql.includes("organization_id,workspace_id")) throw Object.assign(new Error("legacy"), {
+          code:"ER_BAD_FIELD_ERROR", sqlMessage:"Unknown column 'organization_id' in 'field list'",
+        });
+        if (sql.startsWith("INSERT INTO platform_audit_events")) {
+          assert.match(sql,/historical_context.*provider_recover/);
+          assert.equal(args[1],null);
+          assert.deepEqual(args.slice(2,6),["actor","provider","request","trace"]);
+          calls.push("audit");
+          if (denyAudit) throw new Error("audit failed");
+        }
+        if (sql.startsWith("UPDATE provider_runtime_circuits")) calls.push("update");
+        if (sql.startsWith("INSERT INTO crawler_scheduler_operations")) calls.push("receipt");
+        return [{affectedRows:1}];
+      },
+    };
+    const repo = new CrawlerSchedulerRepository({getConnection:async()=>c});
+    const operation = repo.recoverProvider({
+      actorId:"actor",providerId:"provider",requestId:"request",traceId:"trace",idempotencyKey:"key",now,
+    });
+    if (denyAudit) await assert.rejects(operation,/audit failed/);
+    else assert.equal((await operation).recovered,true);
+    assert.deepEqual(calls,["begin","update","receipt","audit",denyAudit?"rollback":"commit"]);
+  }
+});

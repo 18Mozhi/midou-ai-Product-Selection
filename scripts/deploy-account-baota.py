@@ -213,6 +213,7 @@ def main():
     action.add_argument("--scheduler-rollback-only", action="store_true")
     action.add_argument("--report-worker-only", action="store_true")
     action.add_argument("--amazon-health-api-only", action="store_true")
+    action.add_argument("--amazon-health-audit-only", action="store_true")
     action.add_argument("--report-worker-rollback-only", action="store_true")
     parser.add_argument("--expected-previous-sha")
     parser.add_argument("--expected-module-sha256")
@@ -229,7 +230,7 @@ def main():
         parser.error("interruption arguments require a cutover recovery action")
     scheduler_only = args.scheduler_stagger_only or args.scheduler_rollback_only
     report_action = "apply" if args.report_worker_only else "restore" if args.report_worker_rollback_only else None
-    worker_only = args.trend_projection_only or scheduler_only or report_action is not None or args.amazon_health_api_only
+    worker_only = args.trend_projection_only or scheduler_only or report_action is not None or args.amazon_health_api_only or args.amazon_health_audit_only
     if args.expected_module_sha256 and not worker_only:
         parser.error("--expected-module-sha256 requires a Worker module release")
     scheduler_hashes = (args.expected_scheduler_sha256, args.expected_registry_sha256)
@@ -244,7 +245,7 @@ def main():
         trend = runpy.run_path(str(scripts / "baota-account-trend-release.py"))
         scheduler = dict(zip(trend["SCHEDULER_FILES"], scheduler_hashes)) if scheduler_only else None
         print(json.dumps(trend["publish"](scripts.parent, args.expected_previous_sha, args.expected_module_sha256,
-                                         deploy, project_ssh, scheduler, args.scheduler_rollback_only, report_action, args.amazon_health_api_only)))
+                                         deploy, project_ssh, scheduler, args.scheduler_rollback_only, report_action, args.amazon_health_api_only, args.amazon_health_audit_only)))
     elif args.frontend_only:
         if args.plan_sha256:
             parser.error("--frontend-only does not execute migrations")

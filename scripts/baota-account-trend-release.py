@@ -35,6 +35,17 @@ AMAZON_BASE_HASHES = {
     "mysql-crawler-runtime-repository.js": "39134e949194e07874ade1972dfe58230a39948069be63afe736c9044b1ddcb7",
     "pending-source-recovery-policy.js": "13c39242228fe1b140f66c52b539465fa2519ef246ed757229df7d539d0da4aa",
 }
+AMAZON_AUDIT_SOURCE_BASE = "9a9cb91cf2c30d662c74ab8bbace42fb7dd807b1"
+AMAZON_AUDIT_MODULE = "crawler-scheduler-repository.js"
+AMAZON_AUDIT_BASE = {AMAZON_AUDIT_MODULE: "af5a234c3f4100c30e9e241c0d277d0013eae810860dd6a061cbaab34f1ed4d8"}
+AMAZON_INSTALLED = {
+    "amazon-public-browser-health.js": "c86f7b72c16ec20b8d454004906bdcbc4c0c11574ff1cafd5f3ce7f5c74989f1",
+    "amazon-public-recovery.js": "4d27d9ace276c75024eb2d3b3467a9cf2f2bedaa6e36ced00f6345747a6d613b",
+    "bootstrap/create-provider-adapter-runtime.js": "eeafaf4ab4ee17ef86d5fc696cbcea0040edf98f076f5fa903f60b457af7e934",
+    "crawler-runtime-service.js": "2bed639ee4fba8b43de26039341271a142d41a1f6ce14ce68d09f0abca627e20",
+    "mysql-crawler-runtime-repository.js": "6fa5c6ce9b931ec0e60d1d7b72902c15e603d39064163ac073eb8804d0370e12",
+    "pending-source-recovery-policy.js": "a7f611afa0b7284a3cce385fc515435bb974ba7381d748b99a02fc06d13d8762",
+}
 RESTART = "/www/server/panel/script/restart_project.py"
 MODULE_PHASE = "not_installed"
 
@@ -99,11 +110,13 @@ def prepare_modules(target, expected_module, encoded, digest, scheduler, read_fi
 
 
 def prepare_amazon(root, manifest, read_file):
-    if tuple(manifest) != tuple(AMAZON_BASE_HASHES):
+    audit = tuple(manifest) == tuple(AMAZON_AUDIT_BASE)
+    frozen = AMAZON_AUDIT_BASE if audit else AMAZON_BASE_HASHES
+    if tuple(manifest) != tuple(frozen):
         raise RuntimeError("trend_amazon_manifest_invalid")
     replacements = {}
     for name, (before, encoded, after) in manifest.items():
-        if before != AMAZON_BASE_HASHES[name] or not re.fullmatch(r"[a-f0-9]{64}", after):
+        if before != frozen[name] or not re.fullmatch(r"[a-f0-9]{64}", after):
             raise RuntimeError("trend_amazon_manifest_invalid")
         path = root / AMAZON_DIR / name
         if hashlib.sha256(read_file(path, 131072)).hexdigest() != before:
@@ -117,6 +130,13 @@ def prepare_amazon(root, manifest, read_file):
     protected = {worker_dir / key: read_file(worker_dir / key, 65536) for key in protect_hashes}
     if any(hashlib.sha256(value).hexdigest() != protect_hashes[path.name] for path, value in protected.items()):
         raise RuntimeError("trend_amazon_protected_module_changed")
+    if audit:
+        for name, digest in AMAZON_INSTALLED.items():
+            path = root / AMAZON_DIR / name
+            data = read_file(path, 131072)
+            if hashlib.sha256(data).hexdigest() != digest:
+                raise RuntimeError("trend_amazon_protected_module_changed")
+            protected[path] = data
     return replacements, protected
 
 
@@ -367,18 +387,21 @@ process.stdout.write(ts.transpileModule(source,{fileName:'report-export-worker.t
 """, REPORT_RUNTIME_BASE, REPORT_SOURCE], cwd=repo)
 
 
-def validate_amazon_changes(changed):
-    modules = {"apps/api/src/" + name.removesuffix(".js") + ".ts" for name in AMAZON_BASE_HASHES}
+def validate_amazon_changes(changed, audit=False):
+    frozen = AMAZON_AUDIT_BASE if audit else AMAZON_BASE_HASHES
+    modules = {"apps/api/src/" + name.removesuffix(".js") + ".ts" for name in frozen}
     exact = modules | {"scripts/baota-account-trend-release.py", "scripts/deploy-account-baota.py"}
     if not modules.issubset(changed) or any(p not in exact and not p.startswith(("docs/", "tests/")) for p in changed):
         raise RuntimeError("trend_amazon_contains_other_runtime_changes")
 
 
 def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_expected=None, rollback=False,
-            report_action=None, amazon=False):
+            report_action=None, amazon=False, amazon_audit=False):
     if not re.fullmatch(r"[a-f0-9]{40}", previous or "") or not re.fullmatch(r"[a-f0-9]{64}", expected_module or ""):
         raise RuntimeError("trend_release_requires_expected_sha256_and_base_sha")
-    if amazon and (previous != REPORT_RUNTIME_BASE or expected_module != AMAZON_BASE_HASHES["amazon-public-browser-health.js"]
+    amazon = amazon or amazon_audit
+    amazon_expected = AMAZON_AUDIT_BASE[AMAZON_AUDIT_MODULE] if amazon_audit else AMAZON_BASE_HASHES["amazon-public-browser-health.js"]
+    if amazon and (previous != REPORT_RUNTIME_BASE or expected_module != amazon_expected
                    or scheduler_expected is not None or rollback or report_action is not None):
         raise RuntimeError("trend_amazon_manifest_invalid")
     if rollback and scheduler_expected is None:
@@ -403,8 +426,9 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         raise RuntimeError("trend_release_requires_clean_approved_main")
     deploy["verify_production_sha_history"](repo, previous, sha)
     if amazon:
-        deploy["verify_production_sha_history"](repo, AMAZON_SOURCE_BASE, sha)
-        validate_amazon_changes(git("diff", "--name-only", AMAZON_SOURCE_BASE, sha).splitlines())
+        source_base = AMAZON_AUDIT_SOURCE_BASE if amazon_audit else AMAZON_SOURCE_BASE
+        deploy["verify_production_sha_history"](repo, source_base, sha)
+        validate_amazon_changes(git("diff", "--name-only", source_base, sha).splitlines(), amazon_audit)
     elif report_action is not None:
         deploy["verify_production_sha_history"](repo, REPORT_SOURCE_BASE, sha)
         validate_report_changes(git("diff", "--name-only", REPORT_SOURCE_BASE, sha).splitlines())
@@ -420,7 +444,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
     amazon_modules = None
     if amazon:
         amazon_modules = {}
-        for name, before in AMAZON_BASE_HASHES.items():
+        for name, before in (AMAZON_AUDIT_BASE if amazon_audit else AMAZON_BASE_HASHES).items():
             data = (repo / "apps/api/dist" / name).read_bytes()
             after = hashlib.sha256(data).hexdigest()
             if before == after or not 0 < len(data) <= 131072:
