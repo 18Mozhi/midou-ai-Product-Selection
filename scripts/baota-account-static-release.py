@@ -75,7 +75,12 @@ def install(root, uploaded, digest, build, previous, panel, check_public, requir
                 if (path.resolve(strict=True) != path or not path.is_file() or path.stat().st_size > 131072
                         or hashlib.sha256(path.read_bytes()).hexdigest() != expected):
                     raise RuntimeError("frontend_required_node_overlay_missing")
-        check_public(previous)
+        def check_release(index=None, assets=None):
+            if required_node is None:
+                return check_public(previous, index, assets)
+            return check_public(previous, index, assets, scheduler=root / "runtime/worker-scheduler.json")
+
+        check_release()
         if uploaded.parent != root / "runtime/tmp" or uploaded.is_symlink() or not uploaded.is_file():
             raise RuntimeError("frontend_wrong_upload")
         if not 0 < uploaded.stat().st_size < 32 * 1024 * 1024:
@@ -113,14 +118,41 @@ def install(root, uploaded, digest, build, previous, panel, check_public, requir
             raise RuntimeError("frontend_asset_readback_failed")
         index = files["index.html"]
         publish(front / "index.html", index)
-        check_public(previous, index, {n: files[n] for n in refs})
+        check_release(index, {n: files[n] for n in refs})
         if hashlib.sha256(live_env.read_bytes()).hexdigest() != before:
             raise RuntimeError("frontend_runtime_changed")
         return {"status": True, "frontend_sha": build, "runtime_sha": previous,
                 "index_sha256": hashlib.sha256(index).hexdigest(), "verified_assets": len(files) - 1}
 
 
-def remote_check(expected, index=None, assets=None):
+def expected_scheduler_backpressure(path, now):
+    from datetime import datetime
+
+    try:
+        if path.resolve(strict=True) != path or not path.is_file() or path.stat().st_size > 262144:
+            return False
+        snap = json.loads(path.read_bytes())
+        observed = datetime.fromisoformat(snap["observed_at"].replace("Z", "+00:00"))
+        if not 0 <= (now - observed).total_seconds() <= 20:
+            return False
+        if not (snap["status"] == "running" and snap["backpressure"] is True
+                and snap["suspected_stuck_runs"] == 0 and snap["failed_last_minute"] == 0
+                and snap["snapshot_publish_failed_total"] == 0):
+            return False
+        for q in snap["queues"]:
+            if q.get("circuit_state") == "open":
+                return False
+            if q.get("last_result_error_code") and q.get("last_result_status") not in ("waiting_evidence", "waiting_profit"):
+                result_at = datetime.fromisoformat(q["last_result_at"].replace("Z", "+00:00"))
+                if 0 <= (now - result_at).total_seconds() <= 60:
+                    return False
+        return True
+    except (OSError, KeyError, TypeError, ValueError, AttributeError):
+        return False
+
+
+def remote_check(expected, index=None, assets=None, scheduler=None):
+    from datetime import datetime, timezone
     import time
     import urllib.error
     import urllib.request
@@ -139,8 +171,12 @@ def remote_check(expected, index=None, assets=None):
         if availability.get("status") == "available":
             break
         services = availability.get("services", {})
-        if (attempt == 4 or availability.get("status") != "degraded" or
+        if (availability.get("status") != "degraded" or
                 any(services.get(name) != "available" for name in ("api", "worker"))):
+            raise RuntimeError("frontend_runtime_health_failed:available")
+        if scheduler is not None and expected_scheduler_backpressure(scheduler, datetime.now(timezone.utc)):
+            break
+        if attempt == 4:
             raise RuntimeError("frontend_runtime_health_failed:available")
         time.sleep(2)
     if index is not None:
@@ -181,7 +217,9 @@ def deploy_static(repo, previous, deploy, ssh_connection, transfer, collection=N
         source_base = collection["COLLECTION_SOURCE_BASE"]
         deploy["verify_production_sha_history"](repo, source_base, build)
         collection["validate_collection_changes"](git("diff", "--name-only", source_base, build).splitlines())
-        required_node = collection["COLLECTION_CANDIDATE"]
+        required_node = {**collection["COLLECTION_CANDIDATE"],
+                         collection["COLLECTION_EXECUTOR"]: collection["COLLECTION_EXECUTOR_CANDIDATE"],
+                         collection["COLLECTION_BROWSER"]: collection["COLLECTION_BROWSER_CANDIDATE"]}
     else:
         changed = git("diff", "--name-only", previous, build).splitlines()
         tooling = {"scripts/deploy-account-baota.py", "scripts/baota-account-static-release.py"}

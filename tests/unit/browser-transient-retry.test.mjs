@@ -21,6 +21,7 @@ test("a new authorized parent attempt must request fresh browser work after an o
   const statements = [];
   const pool = {
     query: async (sql, values) => {
+      if (sql.startsWith("SHOW COLUMNS")) return [[]];
       statements.push({ sql, values });
       if (sql.startsWith("UPDATE browser_collection_jobs j")) {
         row = { id: "job", status: "queued", error_code: null };
@@ -45,8 +46,8 @@ test("a new authorized parent attempt must request fresh browser work after an o
   const retry = statements.find(({ sql }) => sql.startsWith("UPDATE browser_collection_jobs j"));
   assert.ok(retry);
   for (const guard of [
-    "t.organization_id=j.organization_id",
-    "t.workspace_id=j.workspace_id",
+    "t.organization_id=?",
+    "t.workspace_id=?",
     "t.status='running'",
     "t.lease_token_hash=UNHEX(?)",
     "t.lease_expires_at>NOW(3)",
@@ -73,6 +74,7 @@ test("first attempts and calls without a parent lease never reset terminal brows
     const writes = [];
     const client = new MySqlAuthenticatedBrowserJobClient({
       query: async (sql) => {
+        if (sql.startsWith("SHOW COLUMNS")) return [[]];
         if (!sql.startsWith("SELECT")) writes.push(sql);
         return sql.startsWith("SELECT")
           ? [[{ id: "job", status: "blocked", error_code: "blocked_captcha" }]]
@@ -100,6 +102,7 @@ test("a denied retry fence keeps blocked, parsing and stale-parent failures term
     const client = new MySqlAuthenticatedBrowserJobClient(
       {
         query: async (sql) => {
+          if (sql.startsWith("SHOW COLUMNS")) return [[]];
           if (sql.startsWith("UPDATE browser_collection_jobs j")) {
             fencedWrites++;
             return [{ affectedRows: 0 }];
@@ -135,6 +138,7 @@ test("lost parent heartbeat prevents a terminal job from being requeued", async 
   const writes = [];
   const client = new MySqlAuthenticatedBrowserJobClient({
     query: async (sql) => {
+      if (sql.startsWith("SHOW COLUMNS")) return [[]];
       writes.push(sql);
       return [{ affectedRows: 0 }];
     },
@@ -157,7 +161,8 @@ test("worker wait and shutdown retain their original retryable classification an
   ]) {
     const row = { id: "job", status, error_code: raw };
     const client = new MySqlAuthenticatedBrowserJobClient({
-      query: async (sql) => (sql.startsWith("SELECT") ? [[row]] : [{ affectedRows: 0 }]),
+      query: async (sql) => (sql.startsWith("SHOW COLUMNS") ? [[]] :
+        sql.startsWith("SELECT") ? [[row]] : [{ affectedRows: 0 }]),
     });
     await assert.rejects(
       () => client.collect({ ...input, attemptCount: 1 }, async () => {}),

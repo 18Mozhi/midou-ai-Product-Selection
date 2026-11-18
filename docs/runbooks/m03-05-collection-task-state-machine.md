@@ -55,3 +55,5 @@
 
 在宝塔停止统一 Node 后端与 Python Crawler，确认没有有效租约并备份，先执行 0049 down，再按需执行 M03-05 down。回退代码/config 后由宝塔恢复旧版本。不得单独删除任务表、Redis 宽泛 key 前缀或历史审计；验收产生的探针数据由验证脚本按精确 ID 在 finally 清理。
 如果任务已开始但浏览器作业仍未创建，执行器的账号模式租约锁也必须与状态机使用同一驱动 DATETIME 时钟。已有四个覆盖模块时，用 `--collection-executor-only --expected-previous-sha <运行基线> --expected-module-sha256 <旧执行器哈希>` 独立替换执行器并仅重启 Node；`--collection-executor-rollback` 接收当前执行器哈希并由同一 Git 基线恢复。两条路径均保留原四个覆盖模块，不改库或配置。
+
+如果正式日志显示 MySQL 1052，先只用 `EXPLAIN INSERT … SELECT … ON DUPLICATE KEY UPDATE` 验证歧义，不发送实际写入。用 `--collection-browser-only --expected-previous-sha <运行基线> --expected-module-sha256 <旧浏览器作业客户端哈希>` 单独发布，`--collection-browser-rollback` 用当前模块哈希精确回退。正式前端发布同时核对四个原覆盖模块、执行器及浏览器作业客户端。它不改变可用性状态；只在双服务可用且新鲜调度快照仅显示背压、没有其他故障迹象时，允许静态维护入口发布和验收。

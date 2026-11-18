@@ -4,6 +4,8 @@ from pathlib import Path
 import runpy
 import tarfile
 import unittest
+from datetime import datetime, timedelta, timezone
+from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 
@@ -52,6 +54,24 @@ class StaticReleaseTest(unittest.TestCase):
                     with self.assertRaisesRegex(RuntimeError, "frontend_runtime_health_failed:available"):
                         static["remote_check"]("abc")
                 self.assertEqual(get.call_count, expected_calls)
+
+    def test_scoped_degradation_gate_checks_fresh_backpressure_not_failures(self):
+        now = datetime.now(timezone.utc)
+        snap = dict(observed_at=now.isoformat(), status="running", backpressure=True,
+                    suspected_stuck_runs=0, failed_last_minute=0, snapshot_publish_failed_total=0,
+                    queues=[{"name": "collection_tasks", "circuit_state": "closed"}])
+        with TemporaryDirectory() as tmp:
+            file = Path(tmp).resolve() / "worker-scheduler.json"
+            file.write_text(json.dumps(snap))
+            self.assertTrue(static["expected_scheduler_backpressure"](file, now))
+            self.assertFalse(static["expected_scheduler_backpressure"](file, now + timedelta(seconds=21)))
+            file.write_text(json.dumps(dict(snap, failed_last_minute=1)))
+            self.assertFalse(static["expected_scheduler_backpressure"](file, now))
+            file.write_text(json.dumps(dict(snap, queues=[{"circuit_state": "open"}])))
+            self.assertFalse(static["expected_scheduler_backpressure"](file, now))
+            file.write_text(json.dumps(dict(snap, queues=[dict(last_result_at=now.isoformat(),
+                last_result_error_code="network_error", last_result_status="retry_scheduled")])))
+            self.assertFalse(static["expected_scheduler_backpressure"](file, now))
 
 
 if __name__ == "__main__":

@@ -212,6 +212,8 @@ def main():
     action.add_argument("--collection-controls-node-rollback", action="store_true")
     action.add_argument("--collection-executor-only", action="store_true")
     action.add_argument("--collection-executor-rollback", action="store_true")
+    action.add_argument("--collection-browser-only", action="store_true")
+    action.add_argument("--collection-browser-rollback", action="store_true")
     action.add_argument("--collection-controls-frontend", action="store_true")
     action.add_argument("--trend-projection-only", action="store_true")
     action.add_argument("--scheduler-stagger-only", action="store_true")
@@ -238,6 +240,8 @@ def main():
     collection = "apply" if args.collection_controls_node else "restore" if args.collection_controls_node_rollback else None
     if args.collection_executor_only or args.collection_executor_rollback:
         collection = "executor" if args.collection_executor_only else "executor_restore"
+    if args.collection_browser_only or args.collection_browser_rollback:
+        collection = "browser" if args.collection_browser_only else "browser_restore"
     worker_only = (args.trend_projection_only or scheduler_only or report_action is not None
                    or args.amazon_health_api_only or args.amazon_health_audit_only or collection is not None)
     if args.expected_module_sha256 and not worker_only:

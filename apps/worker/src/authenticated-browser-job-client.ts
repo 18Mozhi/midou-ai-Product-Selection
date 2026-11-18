@@ -129,12 +129,13 @@ export class MySqlAuthenticatedBrowserJobClient {
         `SELECT ?,${legacy ? "t.organization_id,t.workspace_id," : ""}t.id,s.id,s.provider_id,NULL,NULL,'queued',?,NULL,NULL,NULL,NULL,NULL,NULL,NULL,?,?,NOW(3),NOW(3),NULL `,
         "FROM collection_tasks t JOIN collection_subqueries s ON s.task_id=t.id ",
         `WHERE t.id=? AND s.id=? AND s.provider_id=? AND ${taskScope.sql} ON `,
-        "DUPLICATE KEY UPDATE execution_request_json=IF(status='queued'",
+        "DUPLICATE KEY UPDATE execution_request_json=IF(browser_collection_jobs.status='queued'",
         input.accountId === undefined
           ? ""
           : " AND browser_collection_jobs.collection_task_id=VALUES(collection_task_id) " +
             "AND browser_collection_jobs.provider_id=VALUES(provider_id)",
-        ",VALUES(execution_request_json),execution_request_json),updated_at=updated_at",
+        ",VALUES(execution_request_json),browser_collection_jobs.execution_request_json)," +
+          "updated_at=browser_collection_jobs.updated_at",
       ].join(""),
       [
         jobId,

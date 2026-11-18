@@ -612,6 +612,22 @@ test("historical browser classification uses the scoped live attempt, including 
   }
 });
 
+test("account browser upsert qualifies target columns that also exist on its SELECT input", async () => {
+  const stop = new Error("captured before any write");
+  const client = new MySqlAuthenticatedBrowserJobClient({ query: async (sql) => {
+    if (sql.startsWith("SHOW COLUMNS")) return [[]];
+    assert.match(sql, /INSERT INTO browser_collection_jobs.*FROM collection_tasks t JOIN collection_subqueries s/);
+    assert.match(sql, /IF\(browser_collection_jobs\.status='queued'/);
+    assert.match(sql, /VALUES\(execution_request_json\),browser_collection_jobs\.execution_request_json\),updated_at=browser_collection_jobs\.updated_at/);
+    throw stop;
+  } });
+  await assert.rejects(client.collect({
+    accountId: "account", leaseToken: "lease", taskId: "task", subqueryId: "query",
+    provider: { id: "provider", code: "amazon_product", timeoutMs: 1000 },
+    target: { page_url: url }, requestId: "request", traceId: "trace",
+  }, async () => {}), (e) => e === stop);
+});
+
 test("crawler claim only permits the configured canonical empty Amazon profile and retains legacy default", async () => {
   for (const profileId of ["", "00000000-0000-4000-8000-000000000481"]) {
     const calls = [];
