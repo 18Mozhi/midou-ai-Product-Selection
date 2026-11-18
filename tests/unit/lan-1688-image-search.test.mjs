@@ -297,6 +297,9 @@ test("1688 evidence projects to supplier candidates through the scoped current t
             },
           ],
         ];
+      if (sql.startsWith("SELECT cut.primary_account_id")) return [[]];
+      if (sql.startsWith("SELECT organization_id,workspace_id FROM sourcing_searches"))
+        return [[{ organization_id: "org", workspace_id: "workspace" }]];
       if (sql.startsWith("SELECT collection_task_id")) return [[{ collection_task_id: "task" }]];
       if (sql.startsWith("SELECT n.*"))
         return [
@@ -322,11 +325,11 @@ test("1688 evidence projects to supplier candidates through the scoped current t
   assert.equal(projected.candidate_count, 1);
   const query = calls.find((c) => c.sql.startsWith("SELECT n.*"));
   assert.match(query.sql, /p.code='1688_search'/);
-  assert.match(query.sql, /n.organization_id=l.organization_id AND n.workspace_id=l.workspace_id/);
+  assert.match(query.sql, /n.organization_id=link_task.organization_id AND n.workspace_id=link_task.workspace_id/);
   assert.deepEqual(query.args, ["task", "org", "workspace"]);
   const insert = calls.find((c) => c.sql.startsWith("INSERT IGNORE INTO sourcing_candidates"));
-  assert.equal(insert.args[11], 3.8);
-  assert.equal(insert.args[12], "CNY");
+  assert.equal(insert.args[9], 3.8);
+  assert.equal(insert.args[10], "CNY");
 });
 test("LAN JSON evidence is never labelled as a browser DOM capture", async () => {
   for (const pages of [1, 2]) {

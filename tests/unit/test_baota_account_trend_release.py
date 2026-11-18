@@ -51,6 +51,14 @@ class TrendReleaseScopeTest(unittest.TestCase):
         for n,v in trend["COLLECTION_BASE"].items():
             self.assertEqual(sha(trend["build_collection_restore"](Path(__file__).resolve().parents[2],n)),v)
 
+    def test_executor_followup_only_replaces_executor_and_has_exact_restore(self):
+        before, after = trend["collection_hashes"]("executor")
+        self.assertEqual(list(before), [trend["COLLECTION_EXECUTOR"]])
+        self.assertEqual(trend["collection_hashes"]("executor_restore"), (after, before))
+        for n, digest in before.items():
+            restored = trend["build_collection_restore"](Path(__file__).resolve().parents[2], n)
+            self.assertEqual(hashlib.sha256(restored).hexdigest(), digest)
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

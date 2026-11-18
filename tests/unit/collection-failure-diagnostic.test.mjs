@@ -2,6 +2,44 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { collectionFailureDiagnostic } from "../../apps/worker/dist/collection-failure-diagnostic.js";
+
+test("provider execution locks the native lease with a fresh driver-bound date before replay writes", async () => {
+  const locks = [];
+  let writes = 0, rollbacks = 0, expired = false;
+  const executor = new ProviderSourceExecutor(
+    { getConnection: async () => ({
+      beginTransaction: async () => {},
+      query: async (sql, args) => {
+        if (!sql.startsWith("SELECT t.id")) {
+          writes++;
+          return [{ affectedRows: 0 }];
+        }
+        locks.push([sql, args]);
+        // A server UTC clock five hours ahead of the driver's DATETIME would reject an active lease.
+        const offset = 5 * 60 * 60 * 1000;
+        const now = args[4] instanceof Date ? args[4].getTime() - offset : Date.now();
+        const expires = Date.now() - offset + (expired ? -60_000 : 60_000);
+        return [now < expires ? [{id: "task"}] : []];
+      },
+      commit: async () => {},
+      rollback: async () => { rollbacks++; },
+      release() {},
+    }) }, {}, {}, "worker",
+  );
+  const task = {id: "task", nativeAccountScope: true, accountId: "account",
+    attemptCount: 2, leaseToken: "lease", subqueries: []};
+  assert.deepEqual(await executor.execute(task, async () => {}), []);
+  assert.equal(writes, 2);
+  for (const [sql, args] of locks) {
+    assert.match(sql, /t\.lease_token_hash=UNHEX\(\?\) AND t\.lease_expires_at>\?/);
+    assert.deepEqual(args.slice(0, 3), ["task", "account", 2]);
+    assert.match(args[3], /^[0-9a-f]{64}$/);
+  }
+  expired = true;
+  await assert.rejects(executor.execute(task, async () => {}), {message: "collection_task_lease_invalid"});
+  assert.equal(writes, 2);
+  assert.equal(rollbacks, 1);
+});
 import { ProviderSourceExecutor } from "../../apps/worker/dist/provider-source-executor.js";
 import { ProviderAdapterRegistry } from "../../packages/provider-adapters/dist/index.js";
 import { MySqlEvidencePersistence } from "../../apps/worker/dist/evidence-persistence.js";

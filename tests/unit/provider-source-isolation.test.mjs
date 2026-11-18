@@ -475,9 +475,10 @@ for (const mode of ["valid","stale_lease","foreign_subquery","missing_owner"]) {
         assert.doesNotMatch(sql,/organization_id|workspace_id/);
         if(sql.startsWith("SELECT t.id FROM collection_tasks")) {
           assert.match(sql,/t.attempt_count=\? AND t.status='running'/);
-          assert.match(sql,/t.lease_expires_at>UTC_TIMESTAMP\(3\)/);
+          assert.match(sql,/t.lease_expires_at>\?/);
           assert.deepEqual(params.slice(0,3),["original-task","original-account",2]);
           assert.match(params[3],/^[a-f0-9]{64}$/);
+          assert.ok(params[4] instanceof Date);
           return [mode==="stale_lease"?[]:[{id:"original-task"}]];
         }
         if(sql.startsWith("UPDATE collection_subqueries")) {

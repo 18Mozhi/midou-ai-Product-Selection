@@ -59,6 +59,9 @@ COLLECTION_CANDIDATE = dict(zip(COLLECTION_BASE, (
     "ac86d6707cba01d6b059cf20264a5574591649a86b750a277840ce1d369b4c32",
     "8219222c7e4dcc0f398efdc712fd254711cadeee3936085741483313f7e9604f",
 )))
+COLLECTION_EXECUTOR = "apps/worker/dist/provider-source-executor.js"
+COLLECTION_EXECUTOR_BASE = "afc757df47e827503d9150fb07a1ec6756519a3295009cd36e9cb186fc6ec04a"
+COLLECTION_EXECUTOR_CANDIDATE = "9b539a3f68ad77017bba88b1bed479482ad2dad21d8ffd66507ba569abdcae45"
 RESTART = "/www/server/panel/script/restart_project.py"
 MODULE_PHASE = "not_installed"
 
@@ -158,6 +161,13 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             if hashlib.sha256(data).hexdigest() != digest:
                 raise RuntimeError("trend_amazon_protected_module_changed")
             protected[path] = data
+    if collection in ("executor", "executor_restore"):
+        for name, digest in COLLECTION_CANDIDATE.items():
+            path = root / "backend" / name
+            data = read_file(path, 131072)
+            if hashlib.sha256(data).hexdigest() != digest:
+                raise RuntimeError("trend_collection_prerequisite_changed")
+            protected[path] = data
     return replacements, protected
 
 
@@ -166,6 +176,11 @@ def collection_hashes(action):
         return COLLECTION_BASE, COLLECTION_CANDIDATE
     if action == "restore":
         return COLLECTION_CANDIDATE, COLLECTION_BASE
+    if action in ("executor", "executor_restore"):
+        before, after = COLLECTION_EXECUTOR_BASE, COLLECTION_EXECUTOR_CANDIDATE
+        if action == "executor_restore":
+            before, after = after, before
+        return {COLLECTION_EXECUTOR: before}, {COLLECTION_EXECUTOR: after}
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
@@ -434,7 +449,8 @@ def collection_sources():
 def validate_collection_changes(changed):
     source = collection_sources()
     web = {"apps/web/src/components/ProviderAdapterCenter.vue", "apps/web/src/source-1688-operator-action.ts"}
-    exact = source | web | {"scripts/deploy-account-baota.py", "scripts/baota-account-trend-release.py",
+    executor = COLLECTION_EXECUTOR.replace("/dist/", "/src/").removesuffix(".js") + ".ts"
+    exact = source | web | {executor, "scripts/deploy-account-baota.py", "scripts/baota-account-trend-release.py",
                             "scripts/baota-account-static-release.py"}
     if not (source | web).issubset(changed) or any(
         n not in exact and not n.startswith(("docs/", "tests/")) for n in changed
@@ -460,7 +476,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         raise RuntimeError("trend_release_requires_expected_sha256_and_base_sha")
     if collection is not None:
         route, _ = collection_hashes(collection)
-        if (previous != REPORT_RUNTIME_BASE or expected_module != route["apps/worker/dist/collection-task-state-machine.js"]
+        key = COLLECTION_EXECUTOR if collection in ("executor", "executor_restore") else "apps/worker/dist/collection-task-state-machine.js"
+        if (previous != REPORT_RUNTIME_BASE or expected_module != route[key]
                 or amazon or amazon_audit or scheduler_expected is not None or rollback or report_action is not None):
             raise RuntimeError("trend_collection_manifest_invalid")
     amazon = amazon or amazon_audit
@@ -516,9 +533,10 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         before_hashes, after_hashes = collection_hashes(collection)
         for name, before in before_hashes.items():
             restored = build_collection_restore(repo, name)
-            if hashlib.sha256(restored).hexdigest() != COLLECTION_BASE[name]:
+            original = COLLECTION_EXECUTOR_BASE if name == COLLECTION_EXECUTOR else COLLECTION_BASE[name]
+            if hashlib.sha256(restored).hexdigest() != original:
                 raise RuntimeError("trend_collection_restore_build_differs")
-            data = restored if collection == "restore" else (repo / name).read_bytes()
+            data = restored if collection in ("restore", "executor_restore") else (repo / name).read_bytes()
             after = hashlib.sha256(data).hexdigest()
             if after != after_hashes[name]:
                 raise RuntimeError("trend_collection_build_differs")

@@ -256,9 +256,10 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         "ON a.source_table='collection_tasks' AND a.source_id=t.id AND a.account_id=t.account_id " +
         "JOIN account_ownership_cutover cut ON cut.slot='current' AND cut.contract_version=25 " +
         "WHERE t.id=? AND t.account_id=? AND t.attempt_count=? AND t.status='running' " +
-        "AND t.lease_token_hash=UNHEX(?) AND t.lease_expires_at>UTC_TIMESTAMP(3) " +
+        "AND t.lease_token_hash=UNHEX(?) AND t.lease_expires_at>? " +
         "AND (a.reason='exclusive_owner' OR (a.reason IN ('shared','unassigned') AND a.account_id=cut.primary_account_id)) FOR UPDATE",
-      [task.id, task.accountId, task.attemptCount, tokenHash],
+      // Lease timestamps are written as driver-bound DATETIME values by the task repository.
+      [task.id, task.accountId, task.attemptCount, tokenHash, new Date()],
     );
     if (!parent) throw new Error("collection_task_lease_invalid");
   }
