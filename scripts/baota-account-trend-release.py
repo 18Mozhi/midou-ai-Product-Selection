@@ -89,6 +89,8 @@ COLLECTION_RANK_CANDIDATE = dict(zip(COLLECTION_RANK_BASE, (
 COLLECTION_DETAIL = "packages/playwright-crawler/dist/index.js"
 COLLECTION_DETAIL_BASE = "d43c8e490d995fb130128eaccf3512c43189fd71486fcd8add5ebae67fb445f0"
 COLLECTION_DETAIL_CANDIDATE = "9219b8c880abc628012bc3b452ee885234b87162e0113bfad9d8a48eaad236a7"
+COLLECTION_DETAIL_CANONICAL = "b9fbe24085ea376a2015a51d3e2679bfa81a964dd8a6862facd1bee793568fa6"
+COLLECTION_DETAIL_DIAG_SOURCE = "b4ee048b514ad2a13314a14136f903b5762e5d9f"
 RESTART = "/www/server/panel/script/restart_project.py"
 MODULE_PHASE = "not_installed"
 
@@ -202,7 +204,7 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_EXECUTOR_LOCK_CANDIDATE
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
-        if collection in ("detail", "detail_restore"):
+        if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore"):
             prerequisites.update(COLLECTION_RANK_CANDIDATE)
             prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_EXECUTOR_LOCK_CANDIDATE
@@ -248,6 +250,10 @@ def collection_hashes(action):
         return {COLLECTION_DETAIL: COLLECTION_DETAIL_BASE}, {COLLECTION_DETAIL: COLLECTION_DETAIL_CANDIDATE}
     if action == "detail_restore":
         return {COLLECTION_DETAIL: COLLECTION_DETAIL_CANDIDATE}, {COLLECTION_DETAIL: COLLECTION_DETAIL_BASE}
+    if action == "detail_canonical":
+        return {COLLECTION_DETAIL: COLLECTION_DETAIL_CANDIDATE}, {COLLECTION_DETAIL: COLLECTION_DETAIL_CANONICAL}
+    if action == "detail_canonical_restore":
+        return {COLLECTION_DETAIL: COLLECTION_DETAIL_CANONICAL}, {COLLECTION_DETAIL: COLLECTION_DETAIL_CANDIDATE}
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
@@ -548,7 +554,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         key = (COLLECTION_EXECUTOR if collection in ("executor", "executor_restore", "executor_lock", "executor_lock_restore") else
                COLLECTION_BROWSER if collection in ("browser", "browser_restore") else
                COLLECTION_EVIDENCE if collection in ("evidence", "evidence_restore") else
-               COLLECTION_DETAIL if collection in ("detail", "detail_restore") else
+               COLLECTION_DETAIL if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore") else
                "apps/worker/dist/collection-task-state-machine.js")
         if (previous != REPORT_RUNTIME_BASE or expected_module != route[key]
                 or amazon or amazon_audit or scheduler_expected is not None or rollback or report_action is not None):
@@ -594,7 +600,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
     if rollback:
         deploy["verify_production_sha_history"](repo, STAGGER_RELEASE_SHA, sha)
         validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
-    for job in (("build:playwright-crawler",) if collection in ("detail", "detail_restore") else
+    for job in (("build:playwright-crawler",) if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore") else
                 ("build:data-quality", "build:worker") if collection in ("evidence", "evidence_restore") else
                 ("build:worker", "build:provider-sources") if collection is not None else
                 ("build:api" if amazon else "build:worker",)):
@@ -609,10 +615,13 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         for name, before in before_hashes.items():
             lock_followup = collection in ("executor_lock", "executor_lock_restore")
             rank_followup = collection in ("rank", "rank_restore")
+            canonical_followup = collection in ("detail_canonical", "detail_canonical_restore")
             source = (COLLECTION_EXECUTOR_CLOCK_SHA if lock_followup else
-                      COLLECTION_RANK_SOURCE_BASE if rank_followup else COLLECTION_SOURCE_BASE)
+                      COLLECTION_RANK_SOURCE_BASE if rank_followup else
+                      COLLECTION_DETAIL_DIAG_SOURCE if canonical_followup else COLLECTION_SOURCE_BASE)
             restored = build_collection_restore(repo, name, source)
             original = (COLLECTION_RANK_BASE[name] if rank_followup else
+                        COLLECTION_DETAIL_CANDIDATE if canonical_followup else
                         COLLECTION_EXECUTOR_CANDIDATE if lock_followup else
                         {**COLLECTION_BASE, COLLECTION_EXECUTOR: COLLECTION_EXECUTOR_BASE,
                          COLLECTION_BROWSER: COLLECTION_BROWSER_BASE, COLLECTION_DETAIL: COLLECTION_DETAIL_BASE,

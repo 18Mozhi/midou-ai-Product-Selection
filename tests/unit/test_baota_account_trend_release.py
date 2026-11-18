@@ -103,6 +103,15 @@ class TrendReleaseScopeTest(unittest.TestCase):
             actual = trend["build_collection_restore"](Path(__file__).resolve().parents[2], n)
             self.assertEqual(hashlib.sha256(actual).hexdigest(), digest)
 
+    def test_detail_canonical_rollback_restores_last_formal_diagnostic_engine(self):
+        before, after = trend["collection_hashes"]("detail_canonical")
+        self.assertEqual(list(before), ["packages/playwright-crawler/dist/index.js"])
+        self.assertEqual(trend["collection_hashes"]("detail_canonical_restore"), (after, before))
+        for n, digest in before.items():
+            actual = trend["build_collection_restore"](Path(__file__).resolve().parents[2], n,
+                                                       trend["COLLECTION_DETAIL_DIAG_SOURCE"])
+            self.assertEqual(hashlib.sha256(actual).hexdigest(), digest)
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

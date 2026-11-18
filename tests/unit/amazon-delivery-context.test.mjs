@@ -547,6 +547,46 @@ test("Amazon failure diagnostics omit private errors and preserve the result con
   }
 });
 
+test("referral detail navigation and delivery reread use the exact ASIN without dropping variant queries", async (t) => {
+  const { chromium } = await import("playwright");
+  const canonical = "https://www.amazon.com/dp/B012345678";
+  const referral = "https://www.amazon.com/Observed-Example/dp/B012345678/ref=cm_cr_arp_d_product_top";
+  const variant = referral + "?th=1&psc=1";
+  const paths = [
+    [referral,canonical], [variant,variant], [canonical,canonical],
+  ];
+  let page;
+  t.mock.method(chromium,"launchPersistentContext",async()=>({
+    pages:()=>[page],setDefaultTimeout(){},setDefaultNavigationTimeout(){},on(){},close:async()=>{},
+  }));
+  t.mock.method(console,"warn",()=>{});
+  for(const [requested,expected] of paths){
+    const f = fixture({doneWrongPostal:true,locationAfterReread:"Deliver to 94404"});
+    const navigations=[], {locator}=f.page;
+    let active;
+    page=Object.assign(f.page,{
+      locator:(selector)=>({...locator(selector),count:async()=>0}),
+      url:()=>active,
+      goto:async(url)=>{
+        active=url;
+        navigations.push(url);
+        if(navigations.length===2) await f.reread();
+        return {status:()=>200};
+      },
+      waitForFunction:async()=>{throw new errors.TimeoutError("title absent in fixture");},
+      evaluate:async()=>null,
+    });
+    const {plan}=createAmazonBrowserExecutionRequest({page_url:requested});
+    const result=await new PlaywrightCrawlerEngine(limits).run(plan,"not-created",{
+      requestId:"fixture",traceId:"fixture",
+    });
+    assert.deepEqual(navigations,[expected,expected]);
+    assert.equal(plan.start_url,requested);
+    assert.equal(result.status,"timeout");
+    assert.equal(result.item_count,0);
+  }
+});
+
 test("detail readiness timeouts record only bounded DOM facts and remain timeouts", async (t) => {
   const { chromium } = await import("playwright");
   const target = "https://www.amazon.com/dp/B012345678?tag=private-tag";

@@ -66,3 +66,5 @@
 `--collection-rank-only --expected-previous-sha <运行基线> --expected-module-sha256 <当前任务状态机哈希>` 发布账号候选排名：同一条 SQL 预先计算并去重补齐任务集合，再按原优先级、账号公平、阶段、现有结果与 FIFO 顺序领取。锁内仍复核任务归属、状态和租约，不改领取数或并发。仅重启 Node；`--collection-rank-rollback` 使用当前状态机哈希恢复先前查询，但保留时钟与证据修复。用同一只读快照比较所选任务、查询时间和声明锁持有，不仅凭全库计数判断项目效果。
 
 `--collection-detail-only --expected-previous-sha <运行基线> --expected-module-sha256 <浏览器引擎哈希>` 仅发布共享浏览器引擎的超时诊断。Amazon 详情等待超时时只记录同商品路径、DOM 就绪、标题和配送匹配布尔值，不保留页面文本、链接或会话，最长等 750 ms；不改变结果校验、权限、重试和熔断。Node 只重启 `ai选品`；在宝塔 Python 下次新建浏览器子进程时，既有后端运行器动态使用同一个已发布模块，无需重启 Python。`--collection-detail-rollback` 用当前模块哈希恢复固定 Git 基线。
+
+`--collection-detail-canonical-only --expected-previous-sha <运行基线> --expected-module-sha256 <详情诊断版本哈希>` 只改正式 Amazon 浏览器导航：观测到的无查询 slug + `ref=` 商品详情链接，首次访问和配送设置后的回读使用同一 ASIN 的标准详情 URL，与既有健康检查相同。原任务目标、商品身份、变体查询、验证码、配送地、标题和证据门槛都保持不变。仅重启 `ai选品` Node；Python 下个作业动态读取共享模块。`--collection-detail-canonical-rollback` 恢复已有诊断的固定版本，并不回滚其他模块。外部正式探测和真实业务证据仍需分别验收。

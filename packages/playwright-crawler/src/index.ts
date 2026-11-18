@@ -808,8 +808,21 @@ export class PlaywrightCrawlerEngine {
           });
       });
       const page = context.pages()[0] ?? (await context.newPage());
+      // An imported discovery link can carry Amazon's presentation slug and
+      // referral suffix. Use the same exact-ASIN route as the health check,
+      // without changing stored targets or any query that may select a variant.
+      const originalTarget = new URL(plan.start_url);
+      const referralAsin = plan.amazon_delivery &&
+        originalTarget.origin === "https://www.amazon.com" &&
+        !originalTarget.username && !originalTarget.password &&
+        !originalTarget.search && !originalTarget.hash
+        ? /^\/(?:[^/]+\/)?dp\/([A-Za-z0-9]{10})\/ref=[A-Za-z0-9_-]+\/?$/.exec(originalTarget.pathname)?.[1]
+        : undefined;
+      const navigationTarget = referralAsin
+        ? `https://www.amazon.com/dp/${referralAsin.toUpperCase()}`
+        : plan.start_url;
       stage = "initial_navigation";
-      await this.goto(page, plan.start_url, plan.allowed_origins, plan.fail_on_http_error, guard);
+      await this.goto(page, navigationTarget, plan.allowed_origins, plan.fail_on_http_error, guard);
       stage = "initial_guard";
       await guard(page);
       if (plan.amazon_delivery) {
@@ -828,7 +841,7 @@ export class PlaywrightCrawlerEngine {
           async () => {
             await this.goto(
               page,
-              plan.start_url,
+              navigationTarget,
               plan.allowed_origins,
               plan.fail_on_http_error,
               guard,
