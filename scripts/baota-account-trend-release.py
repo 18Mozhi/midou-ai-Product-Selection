@@ -76,6 +76,16 @@ COLLECTION_EVIDENCE_CANDIDATE = dict(zip(COLLECTION_EVIDENCE_BASE, (
     "64030326ff5108a52a9aab3111fdcdab1b432889d9c94d1af50a28c0a33259bb",
     "f3573a98927f2d1b183a7eede6085538abdd14492a82723e405c6799bb2f8461",
 )))
+COLLECTION_RANK_STATE = "apps/worker/dist/collection-task-state-machine.js"
+COLLECTION_RANK_SOURCE_BASE = "681f91521961b3700e7d7f2f3d131755e8c9f04c"
+COLLECTION_RANK_BASE = {
+    COLLECTION_RANK_STATE: COLLECTION_CANDIDATE[COLLECTION_RANK_STATE],
+    "apps/worker/dist/collection-source-scheduling-policy.js": "a31c26c6e638f21b91628ceb9f6daba6d8992be56b01c2afd0ee6d6844c10d27",
+}
+COLLECTION_RANK_CANDIDATE = dict(zip(COLLECTION_RANK_BASE, (
+    "f8d6cd8ea70109c72f16d19d3d737b1ce2d24c0b51f2cae2f236d0148bd43671",
+    "1bbb56c686fc360e31daa4b7b631d34d0896910a9dbc654cfdab3622ae7b70d4",
+)))
 RESTART = "/www/server/panel/script/restart_project.py"
 MODULE_PHASE = "not_installed"
 
@@ -184,6 +194,11 @@ def prepare_amazon(root, manifest, read_file, collection=None):
         if collection in ("evidence", "evidence_restore"):
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_EXECUTOR_LOCK_CANDIDATE
+        if collection in ("rank", "rank_restore"):
+            prerequisites.pop(COLLECTION_RANK_STATE)
+            prerequisites[COLLECTION_EXECUTOR] = COLLECTION_EXECUTOR_LOCK_CANDIDATE
+            prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
+            prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
         for name, digest in prerequisites.items():
             path = root / "backend" / name
             data = read_file(path, 131072)
@@ -217,6 +232,10 @@ def collection_hashes(action):
         return COLLECTION_EVIDENCE_BASE, COLLECTION_EVIDENCE_CANDIDATE
     if action == "evidence_restore":
         return COLLECTION_EVIDENCE_CANDIDATE, COLLECTION_EVIDENCE_BASE
+    if action == "rank":
+        return COLLECTION_RANK_BASE, COLLECTION_RANK_CANDIDATE
+    if action == "rank_restore":
+        return COLLECTION_RANK_CANDIDATE, COLLECTION_RANK_BASE
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
@@ -487,7 +506,7 @@ def validate_collection_changes(changed):
     source = collection_sources()
     web = {"apps/web/src/components/ProviderAdapterCenter.vue", "apps/web/src/source-1688-operator-action.ts"}
     followups = {n.replace("/dist/", "/src/").removesuffix(".js") + ".ts"
-                 for n in (COLLECTION_EXECUTOR, COLLECTION_BROWSER, *COLLECTION_EVIDENCE_BASE)}
+                 for n in (COLLECTION_EXECUTOR, COLLECTION_BROWSER, *COLLECTION_EVIDENCE_BASE, *COLLECTION_RANK_BASE)}
     exact = source | web | followups | {"scripts/deploy-account-baota.py", "scripts/baota-account-trend-release.py",
                             "scripts/baota-account-static-release.py"}
     if not (source | web).issubset(changed) or any(
@@ -575,11 +594,16 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         before_hashes, after_hashes = collection_hashes(collection)
         for name, before in before_hashes.items():
             lock_followup = collection in ("executor_lock", "executor_lock_restore")
-            restored = build_collection_restore(repo, name, COLLECTION_EXECUTOR_CLOCK_SHA if lock_followup else COLLECTION_SOURCE_BASE)
+            rank_followup = collection in ("rank", "rank_restore")
+            source = (COLLECTION_EXECUTOR_CLOCK_SHA if lock_followup else
+                      COLLECTION_RANK_SOURCE_BASE if rank_followup else COLLECTION_SOURCE_BASE)
+            restored = build_collection_restore(repo, name, source)
             original = {**COLLECTION_BASE, COLLECTION_EXECUTOR: COLLECTION_EXECUTOR_BASE,
                         COLLECTION_BROWSER: COLLECTION_BROWSER_BASE, **COLLECTION_EVIDENCE_BASE}[name]
             if lock_followup:
                 original = COLLECTION_EXECUTOR_CANDIDATE
+            if rank_followup:
+                original = COLLECTION_RANK_BASE[name]
             if hashlib.sha256(restored).hexdigest() != original:
                 raise RuntimeError("trend_collection_restore_build_differs")
             data = restored if collection == "restore" or collection.endswith("_restore") else (repo / name).read_bytes()

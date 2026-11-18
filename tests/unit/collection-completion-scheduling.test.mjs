@@ -14,7 +14,26 @@ import {
   collectionAccountLockSql,
   collectionRequiredSourcesReadySql,
   pendingBrowserResultSql,
+  materializeNativeCollectionRanks,
 } from "../../apps/worker/dist/collection-source-scheduling-policy.js";
+
+test("native rank membership is computed once with no duplicate candidates or order change", () => {
+  for (const shape of ["account_task", "account_competitor", "account_parent"]) {
+    const original = collectionReadyOrderSql(true, false, true, true, true, true, shape);
+    const plan = materializeNativeCollectionRanks(original);
+    assert.equal((plan.joins.match(/LEFT JOIN \(SELECT DISTINCT task_id/g) ?? []).length, 2);
+    assert.match(plan.joins, /rank_sourcing\.task_id=collection_tasks\.id/);
+    assert.match(plan.joins, /rank_competitor\.task_id=collection_tasks\.id/);
+    assert.doesNotMatch(plan.orderSql, /close_sourcing|close_competitor/);
+    assert.ok(plan.orderSql.indexOf("collection_scope_turn.last_claim_at") <
+      plan.orderSql.indexOf("rank_sourcing.task_id IS NOT NULL"));
+    assert.ok(plan.orderSql.indexOf(pendingBrowserResultSql) <
+      plan.orderSql.indexOf("rank_competitor.task_id IS NOT NULL"));
+    assert.match(plan.orderSql, /available_at,id LIMIT 1$/);
+  }
+  const fifo = collectionReadyOrderSql(false, false, true, true, true, true);
+  assert.deepEqual(materializeNativeCollectionRanks(fifo), {joins:"", orderSql:fifo});
+});
 
 test("projected competitor detail tasks use their actual Worker producer in the completion lane", () => {
   assert.ok(
@@ -129,8 +148,8 @@ test("queue and claim retain completion ranks after competitor and opportunity s
       if (method === "claim") await repository.claim("worker", now, 60);
       else await repository.queueReady(now);
       const [sql] = calls.find(([query]) => isTaskRead(query));
-      assert.match(sql, /close_sourcing/);
-      if (method === "claim") assert.match(sql, /close_competitor/);
+      assert.match(sql, /rank_sourcing\.task_id IS NOT NULL/);
+      if (method === "claim") assert.match(sql, /rank_competitor\.task_id IS NOT NULL/);
       assert.match(sql, /COUNT\(DISTINCT UPPER\(c_sample.external_id\)\)/);
       assert.match(sql, /c_sample\.account_id=o\.account_id/);
       assert.doesNotMatch(sql, /\b(?:c|c_sample|c_detail|source_news)\.(?:organization_id|workspace_id)\b/);

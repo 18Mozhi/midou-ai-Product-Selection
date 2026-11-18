@@ -85,6 +85,16 @@ class TrendReleaseScopeTest(unittest.TestCase):
             actual = trend["build_collection_restore"](Path(__file__).resolve().parents[2], n)
             self.assertEqual(hashlib.sha256(actual).hexdigest(), expected)
 
+    def test_rank_followup_preserves_existing_lease_clock_when_restoring(self):
+        before, after = trend["collection_hashes"]("rank")
+        self.assertEqual(list(before), ["apps/worker/dist/collection-task-state-machine.js",
+                                       "apps/worker/dist/collection-source-scheduling-policy.js"])
+        self.assertEqual(trend["collection_hashes"]("rank_restore"), (after, before))
+        for n, expected in before.items():
+            actual = trend["build_collection_restore"](Path(__file__).resolve().parents[2], n,
+                                                        trend["COLLECTION_RANK_SOURCE_BASE"])
+            self.assertEqual(hashlib.sha256(actual).hexdigest(), expected)
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

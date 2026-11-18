@@ -176,6 +176,31 @@ export const collectionReadyOrderSql = (
     : "") +
   "available_at,id LIMIT 1";
 
+/** Materialize each native completion membership once for all candidates.
+ * DISTINCT retains EXISTS cardinality when several proof rows name one task.
+ */
+export function materializeNativeCollectionRanks(orderSql: string) {
+  let joins = "";
+  for (const [kind, preferences] of [
+    ["sourcing", accountSourcingCompletionRankTaskSql],
+    ["competitor", accountCompetitorCompletionRankTaskSql],
+  ] as const) {
+    for (const preference of preferences) {
+      if (!orderSql.includes(preference)) continue;
+      const start = "EXISTS (SELECT 1 FROM (";
+      const end = `) close_${kind} WHERE close_${kind}.task_id=collection_tasks.id)`;
+      if (!preference.startsWith(start) || !preference.endsWith(end))
+        throw new Error("collection_native_rank_shape_invalid");
+      const proofRows = preference.slice(start.length, -end.length);
+      joins += ` LEFT JOIN (SELECT DISTINCT task_id FROM (${proofRows}) ranks_${kind}) ` +
+        `rank_${kind} ON rank_${kind}.task_id=collection_tasks.id`;
+      orderSql = orderSql.replace(preference, `rank_${kind}.task_id IS NOT NULL`);
+      break;
+    }
+  }
+  return { joins, orderSql };
+}
+
 /** Shared admission threshold; the set of runnable tasks follows the selected admission boundary. */
 export const activeCollectionTaskStatusesSql =
   "('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')";

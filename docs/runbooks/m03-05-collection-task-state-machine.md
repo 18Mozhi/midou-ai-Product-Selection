@@ -62,3 +62,5 @@
 
 `--collection-executor-lock-only --expected-previous-sha <运行基线> --expected-module-sha256 <时钟修复版执行器哈希>` 保留任务排他锁，把账号归属及切换行改为共享锁，避免不同任务仅因同一切换记录相互排队；不改变归属、租约或结果契约。仅重启 Node。内部 Worker 日志 `internal_failure_diagnostic` 显示 Amazon 已知校验类型及阶段，不记录凭证、原始异常、SQL 或采集内容。`--collection-executor-lock-rollback` 使用当前模块哈希，对照时钟修复版本取回原件，保留已通过的时钟与浏览器作业修复。
 `--collection-evidence-only --expected-previous-sha <运行基线> --expected-module-sha256 <旧证据持久化哈希>` 只发布证据校验和其 Worker 调用方。账号采集用已声明的账号身份做格式校验，仍须通过数据库中的现行任务租约、子任务和封存归属校验；无账号上下文的旧调用仍校验组织和工作区，禁止写入占位归属。仅重启 Node，`--collection-evidence-rollback` 使用当前持久化哈希从固定 Git 基线恢复这两个模块。
+
+`--collection-rank-only --expected-previous-sha <运行基线> --expected-module-sha256 <当前任务状态机哈希>` 发布账号候选排名：同一条 SQL 预先计算并去重补齐任务集合，再按原优先级、账号公平、阶段、现有结果与 FIFO 顺序领取。锁内仍复核任务归属、状态和租约，不改领取数或并发。仅重启 Node；`--collection-rank-rollback` 使用当前状态机哈希恢复先前查询，但保留时钟与证据修复。用同一只读快照比较所选任务、查询时间和声明锁持有，不仅凭全库计数判断项目效果。

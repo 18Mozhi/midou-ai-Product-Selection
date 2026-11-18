@@ -28,6 +28,7 @@ import {
   collectionAccountLockSql,
   collectionScopeFairnessJoinSql,
   collectionRequiredSourcesReadySql,
+  materializeNativeCollectionRanks,
 } from "./collection-source-scheduling-policy.js";
 import {
   failCollectionTask,
@@ -76,7 +77,7 @@ export class MySqlCollectionTaskWorkerRepository {
             : "account_competitor"
           : "account_task"
         : undefined;
-    return collectionReadyOrderSql(
+    const orderSql = collectionReadyOrderSql(
       completionFirst,
       productSearchFirst,
       sourcingFirst,
@@ -85,6 +86,7 @@ export class MySqlCollectionTaskWorkerRepository {
       nativeTask,
       rankShape,
     );
+    return nativeTask ? materializeNativeCollectionRanks(orderSql) : { joins: "", orderSql };
   }
   constructor(
     readonly pool: Pool,
@@ -134,6 +136,7 @@ export class MySqlCollectionTaskWorkerRepository {
       const accountMode = await hasCalculationAccountCutover(c);
       const nativeTask = (await collectionTaskScope(c)) === "account";
       if (nativeTask && !accountMode) throw new Error("collection_task_account_cutover_required");
+      const ranking = await this.readyOrder(c, accountMode, false, nativeTask);
       const sql =
           (accountMode
             ? "SELECT collection_tasks.*," +
@@ -141,6 +144,7 @@ export class MySqlCollectionTaskWorkerRepository {
               " queue_account_id FROM collection_tasks" +
               collectionAccountFairnessJoinSql
             : "SELECT collection_tasks.* FROM collection_tasks" + collectionScopeFairnessJoinSql) +
+          ranking.joins +
           " WHERE status IN ('scheduled','retry_scheduled','rate_limited') AND available_at<=?" +
           (this.taskId ? " AND id=?" : "") +
           " AND " +
@@ -148,7 +152,7 @@ export class MySqlCollectionTaskWorkerRepository {
             ? collectionAccountCandidateSql + " IS NOT NULL"
             : activeCollectionScopeSql("collection_tasks")) +
           (nativeTask ? " AND collection_tasks.account_id=" + collectionAccountCandidateSql : "") +
-          (await this.readyOrder(c, accountMode, false, nativeTask)),
+          ranking.orderSql,
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [now, this.taskId] : [now]);
       const candidate = rows[0];
       if (!candidate) {
@@ -221,6 +225,7 @@ export class MySqlCollectionTaskWorkerRepository {
       const accountMode = await hasCalculationAccountCutover(c);
       const nativeTask = (await collectionTaskScope(c)) === "account";
       if (nativeTask && !accountMode) throw new Error("collection_task_account_cutover_required");
+      const ranking = await this.readyOrder(c, accountMode, true, nativeTask);
       const sql =
           (accountMode
             ? "SELECT collection_tasks.*," +
@@ -228,6 +233,7 @@ export class MySqlCollectionTaskWorkerRepository {
               " queue_account_id FROM collection_tasks" +
               collectionAccountFairnessJoinSql
             : "SELECT collection_tasks.* FROM collection_tasks" + collectionScopeFairnessJoinSql) +
+          ranking.joins +
           " WHERE status='queued' AND attempt_count<4" +
           (this.taskId ? " AND id=?" : "") +
           " AND " +
@@ -237,7 +243,7 @@ export class MySqlCollectionTaskWorkerRepository {
           (nativeTask ? " AND collection_tasks.account_id=" + collectionAccountCandidateSql : "") +
           (nativeTask ? nativeSubqueryOwnershipSql : "") +
           collectionRequiredSourcesReadySql +
-          (await this.readyOrder(c, accountMode, true, nativeTask)),
+          ranking.orderSql,
         [rows] = await c.query<RowDataPacket[]>(sql, this.taskId ? [this.taskId] : []);
       const candidate = rows[0];
       if (!candidate) {
