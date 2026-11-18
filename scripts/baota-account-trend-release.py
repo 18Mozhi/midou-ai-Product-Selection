@@ -46,6 +46,19 @@ AMAZON_INSTALLED = {
     "mysql-crawler-runtime-repository.js": "6fa5c6ce9b931ec0e60d1d7b72902c15e603d39064163ac073eb8804d0370e12",
     "pending-source-recovery-policy.js": "a7f611afa0b7284a3cce385fc515435bb974ba7381d748b99a02fc06d13d8762",
 }
+COLLECTION_SOURCE_BASE = "ed1b21ce60642ea52d103be7dd9cd18acb5a4c7f"
+COLLECTION_BASE = {
+    "apps/worker/dist/automatic-source-scheduler.js": "3ea9f8f2381c073e2402b4a26db8696c9287b48108976f4383a878dbc30da802",
+    "apps/worker/dist/collection-task-state-machine.js": "1f64059b4c4baa5a5a823e3b8f1b3274b072aec97a4e05ff94d486c6a65edf72",
+    "packages/provider-sources/dist/lan-1688-health-adapter.js": "0a5e81e502a1d46fe983c08b347acd3e9b848fad159758408041d9d5233eeda6",
+    "packages/provider-sources/dist/lan-1688-image-search.js": "47b1cd820456e6cf5468a21f8998a031dba8333aa928975e81d7e3884e093750",
+}
+COLLECTION_CANDIDATE = dict(zip(COLLECTION_BASE, (
+    "478d1abf0c4a7d796063a69570772167fddba22f1a49fcc6dec46884fa1e7f2b",
+    "259dfb16a3ff87a60fdcbffc3e236e6cb6c571a024b64bd4123b058ba4defb3f",
+    "ac86d6707cba01d6b059cf20264a5574591649a86b750a277840ce1d369b4c32",
+    "8219222c7e4dcc0f398efdc712fd254711cadeee3936085741483313f7e9604f",
+)))
 RESTART = "/www/server/panel/script/restart_project.py"
 MODULE_PHASE = "not_installed"
 
@@ -109,16 +122,21 @@ def prepare_modules(target, expected_module, encoded, digest, scheduler, read_fi
     return replacements, protected
 
 
-def prepare_amazon(root, manifest, read_file):
+def prepare_amazon(root, manifest, read_file, collection=None):
     audit = tuple(manifest) == tuple(AMAZON_AUDIT_BASE)
     frozen = AMAZON_AUDIT_BASE if audit else AMAZON_BASE_HASHES
+    install_hashes = None
+    if collection is not None:
+        frozen, install_hashes = collection_hashes(collection)
     if tuple(manifest) != tuple(frozen):
         raise RuntimeError("trend_amazon_manifest_invalid")
     replacements = {}
     for name, (before, encoded, after) in manifest.items():
         if before != frozen[name] or not re.fullmatch(r"[a-f0-9]{64}", after):
             raise RuntimeError("trend_amazon_manifest_invalid")
-        path = root / AMAZON_DIR / name
+        if install_hashes is not None and after != install_hashes[name]:
+            raise RuntimeError("trend_collection_payload_hash_changed")
+        path = root / ("backend" if collection is not None else AMAZON_DIR) / name
         if hashlib.sha256(read_file(path, 131072)).hexdigest() != before:
             raise RuntimeError("trend_amazon_baseline_changed")
         data = zlib.decompress(base64.b64decode(encoded, validate=True))
@@ -130,8 +148,11 @@ def prepare_amazon(root, manifest, read_file):
     protected = {worker_dir / key: read_file(worker_dir / key, 65536) for key in protect_hashes}
     if any(hashlib.sha256(value).hexdigest() != protect_hashes[path.name] for path, value in protected.items()):
         raise RuntimeError("trend_amazon_protected_module_changed")
-    if audit:
-        for name, digest in AMAZON_INSTALLED.items():
+    if audit or collection is not None:
+        api_hashes = dict(AMAZON_INSTALLED)
+        if collection is not None:
+            api_hashes[AMAZON_AUDIT_MODULE] = "425611f474a67f26a7a3138a456def5652fa77872099337a89535dbb6fb40e33"
+        for name, digest in api_hashes.items():
             path = root / AMAZON_DIR / name
             data = read_file(path, 131072)
             if hashlib.sha256(data).hexdigest() != digest:
@@ -140,8 +161,16 @@ def prepare_amazon(root, manifest, read_file):
     return replacements, protected
 
 
+def collection_hashes(action):
+    if action == "apply":
+        return COLLECTION_BASE, COLLECTION_CANDIDATE
+    if action == "restore":
+        return COLLECTION_CANDIDATE, COLLECTION_BASE
+    raise RuntimeError("trend_collection_manifest_invalid")
+
+
 def install(root, expected_runtime, expected_module, build, encoded, digest, scheduler=None, rollback=False,
-            report_action=None, amazon_modules=None):
+            report_action=None, amazon_modules=None, collection=None):
     root = Path(root)
     if root != Path("/www/wwwroot/ai选品"):
         raise RuntimeError("trend_project_mismatch")
@@ -247,10 +276,13 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
             return result
 
         if amazon_modules is not None:
-            for folder in (root / AMAZON_DIR, root / AMAZON_DIR / "bootstrap"):
+            folders = [root / AMAZON_DIR, root / AMAZON_DIR / "bootstrap"]
+            if collection is not None:
+                folders += [(root / "backend" / n).parent for n in COLLECTION_BASE]
+            for folder in folders:
                 if not folder.is_dir() or folder.resolve(strict=True) != folder:
                     raise RuntimeError("trend_unsafe_directory")
-            replacements, protected_modules = prepare_amazon(root, amazon_modules, read_file)
+            replacements, protected_modules = prepare_amazon(root, amazon_modules, read_file, collection)
         elif report_action is not None:
             replacements, protected_modules = prepare_report(
                 target, expected_module, encoded, digest, read_file, report_action
@@ -335,7 +367,7 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
         receipt = {"status": True, "overlay_sha": build, "runtime_base_sha": expected_runtime,
                    "restarted": "ai选品", "node_before": pids, "node_after": after}
         if amazon_modules is not None:
-            receipt.update(modules={str(path.relative_to(root / AMAZON_DIR)): {"previous": item[1], "installed": item[2]}
+            receipt.update(modules={str(path.relative_to(root / ("backend" if collection is not None else AMAZON_DIR))): {"previous": item[1], "installed": item[2]}
                                     for path, item in replacements.items()},
                            preserved_modules={p.name: hashlib.sha256(b).hexdigest() for p,b in protected_modules.items()})
         elif report_action is not None:
@@ -395,10 +427,42 @@ def validate_amazon_changes(changed, audit=False):
         raise RuntimeError("trend_amazon_contains_other_runtime_changes")
 
 
+def collection_sources():
+    return {n.replace("/dist/", "/src/").removesuffix(".js") + ".ts" for n in COLLECTION_BASE}
+
+
+def validate_collection_changes(changed):
+    source = collection_sources()
+    web = {"apps/web/src/components/ProviderAdapterCenter.vue", "apps/web/src/source-1688-operator-action.ts"}
+    exact = source | web | {"scripts/deploy-account-baota.py", "scripts/baota-account-trend-release.py",
+                            "scripts/baota-account-static-release.py"}
+    if not (source | web).issubset(changed) or any(
+        n not in exact and not n.startswith(("docs/", "tests/")) for n in changed
+    ):
+        raise RuntimeError("trend_collection_contains_other_runtime_changes")
+
+
+def build_collection_restore(repo, name):
+    source = name.replace("/dist/", "/src/").removesuffix(".js") + ".ts"
+    return subprocess.check_output(["node", "--input-type=module", "-e", r"""
+import ts from 'typescript';
+import {execFileSync} from 'node:child_process';
+const file=process.argv[2];
+const data=execFileSync('git',['show',process.argv[1]+':'+file],{encoding:'utf8'});
+process.stdout.write(ts.transpileModule(data,{fileName:file.split('/').at(-1),compilerOptions:{
+ module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022,sourceMap:true}}).outputText);
+""", COLLECTION_SOURCE_BASE, source], cwd=repo)
+
+
 def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_expected=None, rollback=False,
-            report_action=None, amazon=False, amazon_audit=False):
+            report_action=None, amazon=False, amazon_audit=False, collection=None):
     if not re.fullmatch(r"[a-f0-9]{40}", previous or "") or not re.fullmatch(r"[a-f0-9]{64}", expected_module or ""):
         raise RuntimeError("trend_release_requires_expected_sha256_and_base_sha")
+    if collection is not None:
+        route, _ = collection_hashes(collection)
+        if (previous != REPORT_RUNTIME_BASE or expected_module != route["apps/worker/dist/collection-task-state-machine.js"]
+                or amazon or amazon_audit or scheduler_expected is not None or rollback or report_action is not None):
+            raise RuntimeError("trend_collection_manifest_invalid")
     amazon = amazon or amazon_audit
     amazon_expected = AMAZON_AUDIT_BASE[AMAZON_AUDIT_MODULE] if amazon_audit else AMAZON_BASE_HASHES["amazon-public-browser-health.js"]
     if amazon and (previous != REPORT_RUNTIME_BASE or expected_module != amazon_expected
@@ -425,7 +489,10 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             or git("ls-remote", "--exit-code", "origin", "refs/heads/main") != sha + "\trefs/heads/main"):
         raise RuntimeError("trend_release_requires_clean_approved_main")
     deploy["verify_production_sha_history"](repo, previous, sha)
-    if amazon:
+    if collection is not None:
+        deploy["verify_production_sha_history"](repo, COLLECTION_SOURCE_BASE, sha)
+        validate_collection_changes(git("diff", "--name-only", COLLECTION_SOURCE_BASE, sha).splitlines())
+    elif amazon:
         source_base = AMAZON_AUDIT_SOURCE_BASE if amazon_audit else AMAZON_SOURCE_BASE
         deploy["verify_production_sha_history"](repo, source_base, sha)
         validate_amazon_changes(git("diff", "--name-only", source_base, sha).splitlines(), amazon_audit)
@@ -437,12 +504,26 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
     if rollback:
         deploy["verify_production_sha_history"](repo, STAGGER_RELEASE_SHA, sha)
         validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
-    subprocess.run([deploy["local_npm_executable"](), "run", "build:api" if amazon else "build:worker"], cwd=repo, check=True)
+    for job in (("build:worker", "build:provider-sources") if collection is not None else
+                ("build:api" if amazon else "build:worker",)):
+        subprocess.run([deploy["local_npm_executable"](), "run", job], cwd=repo, check=True)
     if git("rev-parse", "HEAD") != sha or git("status", "--porcelain"):
         raise RuntimeError("trend_release_source_changed_during_build")
     module_path = repo / (REPORT_TARGET if report_action is not None else TARGET).removeprefix("backend/")
     amazon_modules = None
-    if amazon:
+    if collection is not None:
+        amazon_modules = {}
+        before_hashes, after_hashes = collection_hashes(collection)
+        for name, before in before_hashes.items():
+            restored = build_collection_restore(repo, name)
+            if hashlib.sha256(restored).hexdigest() != COLLECTION_BASE[name]:
+                raise RuntimeError("trend_collection_restore_build_differs")
+            data = restored if collection == "restore" else (repo / name).read_bytes()
+            after = hashlib.sha256(data).hexdigest()
+            if after != after_hashes[name]:
+                raise RuntimeError("trend_collection_build_differs")
+            amazon_modules[name] = (before, base64.b64encode(zlib.compress(data)).decode(), after)
+    elif amazon:
         amazon_modules = {}
         for name, before in (AMAZON_AUDIT_BASE if amazon_audit else AMAZON_BASE_HASHES).items():
             data = (repo / "apps/api/dist" / name).read_bytes()
@@ -450,7 +531,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             if before == after or not 0 < len(data) <= 131072:
                 raise RuntimeError("trend_amazon_payload_invalid")
             amazon_modules[name] = (before, base64.b64encode(zlib.compress(data)).decode(), after)
-    module = b"" if amazon else build_report_restore(repo) if report_action == "restore" else module_path.read_bytes()
+    module = b"" if amazon_modules is not None else build_report_restore(repo) if report_action == "restore" else module_path.read_bytes()
     if report_action is not None and hashlib.sha256(module).hexdigest() != report_hashes(report_action)[1]:
         raise RuntimeError("trend_report_build_differs")
     scheduler = None
@@ -466,7 +547,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             scheduler[name] = (before, base64.b64encode(payload).decode(), after)
         module = b""
     args = (deploy["PROJECT_ROOT"], previous, expected_module, sha, base64.b64encode(module).decode(),
-            hashlib.sha256(module).hexdigest(), scheduler, rollback, report_action, amazon_modules)
+            hashlib.sha256(module).hexdigest(), scheduler, rollback, report_action, amazon_modules, collection)
     code = Path(__file__).read_text(encoding="utf-8")
     source = "code=" + repr(code) + "\nargs=" + repr(args) + r'''
 import json,re

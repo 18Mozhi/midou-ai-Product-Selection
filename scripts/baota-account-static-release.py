@@ -35,7 +35,7 @@ def read_bundle(data):
     return files, [ref.decode() for ref in refs]
 
 
-def install(root, uploaded, digest, build, previous, panel, check_public):
+def install(root, uploaded, digest, build, previous, panel, check_public, required_node=None):
     import fcntl
     import os
     import stat
@@ -69,6 +69,12 @@ def install(root, uploaded, digest, build, previous, panel, check_public):
         if not all(x in lines for x in ("BUILD_SHA=" + previous, "ACCOUNT_SCOPE_MODE=retired",
                                          "RELEASE_SOURCE_MIGRATION_VERSION=0197_retire_tenancy_roots.up.sql")):
             raise RuntimeError("frontend_runtime_identity_changed")
+        if required_node is not None:
+            for name, expected in required_node.items():
+                path = root / "backend" / name
+                if (path.resolve(strict=True) != path or not path.is_file() or path.stat().st_size > 131072
+                        or hashlib.sha256(path.read_bytes()).hexdigest() != expected):
+                    raise RuntimeError("frontend_required_node_overlay_missing")
         check_public(previous)
         if uploaded.parent != root / "runtime/tmp" or uploaded.is_symlink() or not uploaded.is_file():
             raise RuntimeError("frontend_wrong_upload")
@@ -157,7 +163,7 @@ def remote_check(expected, index=None, assets=None):
             raise RuntimeError("frontend_retired_page_visible:" + path)
 
 
-def deploy_static(repo, previous, deploy, ssh_connection, transfer):
+def deploy_static(repo, previous, deploy, ssh_connection, transfer, collection=None):
     if not re.fullmatch(r"[a-f0-9]{40}", previous or ""):
         raise RuntimeError("frontend_expected_runtime_sha_required")
 
@@ -170,11 +176,18 @@ def deploy_static(repo, previous, deploy, ssh_connection, transfer):
             git("ls-remote", "--exit-code", "origin", "refs/heads/main") != build + "\trefs/heads/main"):
         raise RuntimeError("frontend_requires_clean_approved_main_sha")
     deploy["verify_production_sha_history"](repo, previous, build)
-    changed = git("diff", "--name-only", previous, build).splitlines()
-    tooling = {"scripts/deploy-account-baota.py", "scripts/baota-account-static-release.py"}
-    if (not any(p.startswith("apps/web/src/") for p in changed) or
-            any(not p.startswith(("apps/web/src/", "docs/", "tests/")) and p not in tooling for p in changed)):
-        raise RuntimeError("frontend_contains_non_static_changes")
+    required_node = None
+    if collection is not None:
+        source_base = collection["COLLECTION_SOURCE_BASE"]
+        deploy["verify_production_sha_history"](repo, source_base, build)
+        collection["validate_collection_changes"](git("diff", "--name-only", source_base, build).splitlines())
+        required_node = collection["COLLECTION_CANDIDATE"]
+    else:
+        changed = git("diff", "--name-only", previous, build).splitlines()
+        tooling = {"scripts/deploy-account-baota.py", "scripts/baota-account-static-release.py"}
+        if (not any(p.startswith("apps/web/src/") for p in changed) or
+                any(not p.startswith(("apps/web/src/", "docs/", "tests/")) and p not in tooling for p in changed)):
+            raise RuntimeError("frontend_contains_non_static_changes")
     subprocess.run([deploy["local_npm_executable"](), "run", "build:web"], cwd=repo, check=True)
     if git("rev-parse", "HEAD") != build or git("status", "--porcelain"):
         raise RuntimeError("frontend_source_changed_during_build")
@@ -208,15 +221,15 @@ def deploy_static(repo, previous, deploy, ssh_connection, transfer):
             try:
                 transfer(ssh, archive, upload, own_upload)
                 text = Path(__file__).read_text(encoding="utf-8")
-                source = "code=" + repr(text) + "\nargs=" + repr((root, upload, digest, build, previous)) + r'''
+                source = "code=" + repr(text) + "\nargs=" + repr((root, upload, digest, build, previous, required_node)) + r'''
 import json,sys
 from pathlib import Path
 sys.path[:0]=['/www/server/panel','/www/server/panel/class']
 import public
 module={'__name__':'scoutops_static'}
 exec(compile(code,'scoutops_static','exec'),module)
-root,upload,digest,build,previous=args
-result=module['install'](Path(root),Path(upload),digest,build,previous,public,module['remote_check'])
+root,upload,digest,build,previous,required_node=args
+result=module['install'](Path(root),Path(upload),digest,build,previous,public,module['remote_check'],required_node)
 print('SCOUTOPS_RESULT='+json.dumps(result))
 '''
                 return deploy["remote_python"](ssh, source, timeout=120)

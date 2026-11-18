@@ -13,6 +13,44 @@ trend = runpy.run_path(
 
 
 class TrendReleaseScopeTest(unittest.TestCase):
+    def test_collection_scope_release_and_restore(self):
+        prepare = trend["prepare_amazon"]
+        root = Path("project")
+        sha = lambda b: hashlib.sha256(b).hexdigest()
+        names = list(trend["COLLECTION_BASE"])
+        old = {n: n.encode() for n in names}
+        new = {n: n.encode()+b" new" for n in names}
+        workers = {n: n.encode() for n in trend["REPORT_PROTECTED"]}
+        worker_dir = (root / trend["REPORT_TARGET"]).parent
+        api_dir = root / trend["AMAZON_DIR"]
+        with patch.dict(prepare.__globals__, {
+            "COLLECTION_BASE": {n: sha(b) for n,b in old.items()},
+            "COLLECTION_CANDIDATE": {n: sha(b) for n,b in new.items()},
+            "REPORT_PROTECTED": {n: sha(b) for n,b in workers.items()},
+            "AMAZON_INSTALLED": {},
+            "REPORT_NEW": sha(b"report"),
+        }):
+            for action, before, after in (("apply",old,new),("restore",new,old)):
+                manifest = {n:(sha(before[n]),base64.b64encode(zlib.compress(after[n])).decode(),sha(after[n]))
+                            for n in names}
+                live = {root/"backend"/n:b for n,b in before.items()}
+                live.update({worker_dir/n:b for n,b in workers.items()})
+                live[root/trend["REPORT_TARGET"]] = b"report"
+                live[api_dir/trend["AMAZON_AUDIT_MODULE"]] = b"unexpected"
+                with self.assertRaisesRegex(RuntimeError,"protected_module_changed"):
+                    prepare(root,manifest,lambda p,_:live[p],action)
+                with self.assertRaisesRegex(RuntimeError,"manifest_invalid"):
+                    prepare(root,{**manifest,"foreign.js":next(iter(manifest.values()))},lambda p,_:live[p],action)
+                with self.assertRaisesRegex(RuntimeError,"baseline_changed|manifest_invalid"):
+                    prepare(root,manifest,lambda p,_:live[p],"restore" if action=="apply" else "apply")
+        source = list(trend["collection_sources"]())
+        web = ["apps/web/src/components/ProviderAdapterCenter.vue","apps/web/src/source-1688-operator-action.ts"]
+        trend["validate_collection_changes"](source+web)
+        with self.assertRaisesRegex(RuntimeError,"contains_other_runtime_changes"):
+            trend["validate_collection_changes"](source+web+["apps/api/src/unrelated.ts"])
+        for n,v in trend["COLLECTION_BASE"].items():
+            self.assertEqual(sha(trend["build_collection_restore"](Path(__file__).resolve().parents[2],n)),v)
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")
