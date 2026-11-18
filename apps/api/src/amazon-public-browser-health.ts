@@ -69,8 +69,9 @@ export class AmazonPublicBrowserHealth {
           this.config.nodeEnv === "production" ? COLLECTION_CLAIM_PAUSE_FILE : undefined,
           scope.accountId
             ? {
-                actorId: this.config.automaticSources.systemActorId,
+                actorId: scope.automaticTaskId ? this.config.automaticSources.systemActorId : context.actorId,
                 profileId: this.config.providerAdapters.amazonBrowserProfileId,
+                ...(scope.automaticTaskId ? {} : { manual: true as const }),
               }
             : undefined,
         ),

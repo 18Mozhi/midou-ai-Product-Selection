@@ -2,6 +2,7 @@ import base64
 import hashlib
 import runpy
 import unittest
+import zlib
 from pathlib import Path
 from unittest.mock import patch
 
@@ -12,6 +13,34 @@ trend = runpy.run_path(
 
 
 class TrendReleaseScopeTest(unittest.TestCase):
+    def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
+        prepare = trend["prepare_amazon"]
+        root = Path("project")
+        sha = lambda b: hashlib.sha256(b).hexdigest()
+        baseline = {name: name.encode() for name in trend["AMAZON_BASE_HASHES"]}
+        worker_bytes = {name: name.encode() for name in trend["REPORT_PROTECTED"]}
+        manifest = {name: (sha(data), base64.b64encode(zlib.compress(data+b" new")).decode(), sha(data+b" new"))
+                    for name, data in baseline.items()}
+        live = {root / trend["AMAZON_DIR"] / name: data for name, data in baseline.items()}
+        worker = (root / trend["REPORT_TARGET"]).parent
+        live.update({worker / name: data for name, data in worker_bytes.items()})
+        live[root / trend["REPORT_TARGET"]] = b"installed report"
+        with patch.dict(prepare.__globals__, {"AMAZON_BASE_HASHES": {n: sha(b) for n,b in baseline.items()},
+                                             "REPORT_PROTECTED": {n: sha(b) for n,b in worker_bytes.items()},
+                                             "REPORT_NEW": sha(b"installed report")}):
+            replacements, protected = prepare(root, manifest, lambda p, _: live[p])
+            self.assertEqual(set(replacements), {root / trend["AMAZON_DIR"] / n for n in baseline})
+            self.assertEqual(protected[root / trend["REPORT_TARGET"]], b"installed report")
+            with self.assertRaisesRegex(RuntimeError, "trend_amazon_manifest_invalid"):
+                prepare(root, {**manifest, "foreign.js": next(iter(manifest.values()))}, lambda p, _: live[p])
+            live[root / trend["REPORT_TARGET"]] = b"unexpected report"
+            with self.assertRaisesRegex(RuntimeError, "trend_amazon_protected_module_changed"):
+                prepare(root, manifest, lambda p, _: live[p])
+        allowed = ["apps/api/src/" + n.removesuffix(".js") + ".ts" for n in baseline]
+        trend["validate_amazon_changes"](allowed)
+        with self.assertRaisesRegex(RuntimeError, "trend_amazon_contains_other_runtime_changes"):
+            trend["validate_amazon_changes"](allowed + ["apps/api/src/lan-1688-recovery.ts"])
+
     def test_report_overlay_replaces_only_report_and_rejects_drift(self):
         sha = lambda b: hashlib.sha256(b).hexdigest()
         target = Path(trend["REPORT_TARGET"])

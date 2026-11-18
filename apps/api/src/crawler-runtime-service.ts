@@ -105,7 +105,7 @@ export interface CrawlerCompletionSpoolStatus {
 }
 export type CrawlerAcquireScope =
   | { organizationId: string; workspaceId: string; accountId?: never; automaticTaskId?: never }
-  | { accountId: string; automaticTaskId: string; organizationId?: never; workspaceId?: never };
+  | { accountId: string; automaticTaskId?: string; organizationId?: never; workspaceId?: never };
 export type AcquireInput = RuntimeContext & CrawlerAcquireScope & {
   profileId: string;
   leaseOwner: string;
@@ -325,7 +325,9 @@ export class CrawlerRuntimeService {
   async acquire(input: AcquireInput) {
     if (
       (input.accountId !== undefined
-        ? !uuid.test(input.accountId) || !uuid.test(input.automaticTaskId) || input.leaseOwner !== "amazon-public-health"
+        ? !uuid.test(input.accountId) ||
+          (input.automaticTaskId !== undefined && !uuid.test(input.automaticTaskId)) ||
+          input.leaseOwner !== "amazon-public-health"
         : !uuid.test(input.organizationId) || !uuid.test(input.workspaceId)) ||
       !uuid.test(input.profileId)
     )

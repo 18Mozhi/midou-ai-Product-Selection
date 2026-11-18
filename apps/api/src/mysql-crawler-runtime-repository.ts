@@ -101,7 +101,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     private readonly amazonPublicProfileId = "",
     private readonly amazonHealthProfileId = "",
     private readonly claimPausePath?: string,
-    private readonly accountAmazonHealth?: { actorId: string; profileId: string },
+    private readonly accountAmazonHealth?: { actorId: string; profileId: string; manual?: true },
   ) {}
   private async claimConnection<T>(
     work: (connection: PoolConnection, paused: boolean) => Promise<T>,
@@ -226,7 +226,10 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     if (input.accountId !== undefined && (
       input.leaseOwner !== "amazon-public-health" ||
       this.accountAmazonHealth?.actorId !== input.actorId ||
-      this.accountAmazonHealth.profileId !== input.profileId
+      this.accountAmazonHealth.profileId !== input.profileId ||
+      (input.automaticTaskId === undefined
+        ? !this.accountAmazonHealth.manual || input.accountId !== input.actorId
+        : Boolean(this.accountAmazonHealth.manual))
     )) throw new CrawlerRuntimeError("automatic_recovery_scope_unavailable", 409, "来源探针的系统身份或档案不可用。");
     for (let attempt = 0; ; attempt++) {
       try {
@@ -252,7 +255,9 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
     paused: boolean,
   ) {
     const accountHealth = input.accountId !== undefined;
-    const route = accountHealth ? "/internal/crawler-runtime/account-amazon-health" : "/internal/crawler-runtime/acquire";
+    const route = !accountHealth ? "/internal/crawler-runtime/acquire"
+      : input.automaticTaskId ? "/internal/crawler-runtime/account-amazon-health"
+        : "/internal/crawler-runtime/account-amazon-manual-health";
     let committed = false;
     try {
       await c.beginTransaction();
@@ -275,8 +280,11 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         );
       if (input.accountId !== undefined) {
         const [work] = await c.query<RowDataPacket[]>(
-          accountAmazonRecoveryScopeSql + " AND t.account_id=? LIMIT 1 LOCK IN SHARE MODE",
-          [input.automaticTaskId, input.actorId, input.accountId],
+          input.automaticTaskId
+            ? accountAmazonRecoveryScopeSql + " AND t.account_id=? LIMIT 1 LOCK IN SHARE MODE"
+            : "SELECT u.id FROM users u JOIN account_ownership_cutover cut " +
+              "ON cut.slot='current' AND cut.contract_version=25 WHERE u.id=? AND u.status='active' LIMIT 1 LOCK IN SHARE MODE",
+          input.automaticTaskId ? [input.automaticTaskId, input.actorId, input.accountId] : [input.actorId],
         );
         if (!work[0]) throw new CrawlerRuntimeError("automatic_recovery_scope_unavailable", 409, "待采集任务的账号归属已变化。");
       }

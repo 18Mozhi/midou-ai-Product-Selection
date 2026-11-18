@@ -3,6 +3,7 @@ import base64
 import hashlib
 import re
 import subprocess
+import zlib
 from pathlib import Path
 
 TARGET = "backend/apps/worker/dist/trend-projection-account-queue.js"
@@ -23,6 +24,16 @@ REPORT_NEW = "bd7c4f53af7b092776923084d6a551fb49e2e87fcf737a7d58debd42f6ef42f1"
 REPORT_PROTECTED = {
     **PRE_STAGGER_SHA256,
     "trend-projection-account-queue.js": "5d46cfb0a50aac48b7c5893d64fa7ce3dc6a4ecc4d3c14694653d12dd0f0cbea",
+}
+AMAZON_SOURCE_BASE = "3a7b2dd0433e4e3b9bb602f3d5d60001540c83df"
+AMAZON_DIR = "backend/apps/api/dist"
+AMAZON_BASE_HASHES = {
+    "amazon-public-browser-health.js": "5ed95d9c8f2f2e30971cb18efb1e9f6d8c4c00138a082f83a4168f0bf43446ca",
+    "amazon-public-recovery.js": "5965405fb97cc177b6df2ee7c8bce6fa1bd7ae9873982eda07e4ba1a3e1313fa",
+    "bootstrap/create-provider-adapter-runtime.js": "aa13d5591cd0b36894be95e863fd1302fd99756d7f2c992ba52b960ced7c5006",
+    "crawler-runtime-service.js": "910295ac8493df30ee52a21c1ab5ed41a85c659f75fff3ec9aaae6a0966838f0",
+    "mysql-crawler-runtime-repository.js": "39134e949194e07874ade1972dfe58230a39948069be63afe736c9044b1ddcb7",
+    "pending-source-recovery-policy.js": "13c39242228fe1b140f66c52b539465fa2519ef246ed757229df7d539d0da4aa",
 }
 RESTART = "/www/server/panel/script/restart_project.py"
 MODULE_PHASE = "not_installed"
@@ -87,8 +98,30 @@ def prepare_modules(target, expected_module, encoded, digest, scheduler, read_fi
     return replacements, protected
 
 
+def prepare_amazon(root, manifest, read_file):
+    if tuple(manifest) != tuple(AMAZON_BASE_HASHES):
+        raise RuntimeError("trend_amazon_manifest_invalid")
+    replacements = {}
+    for name, (before, encoded, after) in manifest.items():
+        if before != AMAZON_BASE_HASHES[name] or not re.fullmatch(r"[a-f0-9]{64}", after):
+            raise RuntimeError("trend_amazon_manifest_invalid")
+        path = root / AMAZON_DIR / name
+        if hashlib.sha256(read_file(path, 131072)).hexdigest() != before:
+            raise RuntimeError("trend_amazon_baseline_changed")
+        data = zlib.decompress(base64.b64decode(encoded, validate=True))
+        if before == after or not 0 < len(data) <= 131072 or hashlib.sha256(data).hexdigest() != after:
+            raise RuntimeError("trend_amazon_payload_invalid")
+        replacements[path] = (data, before, after)
+    worker_dir = (root / REPORT_TARGET).parent
+    protect_hashes = {**REPORT_PROTECTED, Path(REPORT_TARGET).name: REPORT_NEW}
+    protected = {worker_dir / key: read_file(worker_dir / key, 65536) for key in protect_hashes}
+    if any(hashlib.sha256(value).hexdigest() != protect_hashes[path.name] for path, value in protected.items()):
+        raise RuntimeError("trend_amazon_protected_module_changed")
+    return replacements, protected
+
+
 def install(root, expected_runtime, expected_module, build, encoded, digest, scheduler=None, rollback=False,
-            report_action=None):
+            report_action=None, amazon_modules=None):
     root = Path(root)
     if root != Path("/www/wwwroot/ai选品"):
         raise RuntimeError("trend_project_mismatch")
@@ -105,6 +138,9 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
     global MODULE_PHASE
     if report_action is not None and (expected_runtime != REPORT_RUNTIME_BASE or scheduler is not None or rollback):
         raise RuntimeError("trend_report_manifest_invalid")
+    if amazon_modules is not None and (expected_runtime != REPORT_RUNTIME_BASE or scheduler is not None
+                                       or rollback or report_action is not None):
+        raise RuntimeError("trend_amazon_manifest_invalid")
     target = root / (REPORT_TARGET if report_action is not None else TARGET)
     for path in (root, root / "config", root / "runtime", root / "backend", target.parent):
         if not path.is_dir() or path.resolve(strict=True) != path:
@@ -190,7 +226,12 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
             result["python"] = sorted(result.get("python", []))
             return result
 
-        if report_action is not None:
+        if amazon_modules is not None:
+            for folder in (root / AMAZON_DIR, root / AMAZON_DIR / "bootstrap"):
+                if not folder.is_dir() or folder.resolve(strict=True) != folder:
+                    raise RuntimeError("trend_unsafe_directory")
+            replacements, protected_modules = prepare_amazon(root, amazon_modules, read_file)
+        elif report_action is not None:
             replacements, protected_modules = prepare_report(
                 target, expected_module, encoded, digest, read_file, report_action
             )
@@ -204,7 +245,9 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
         pids = processes()
         if not pids.get("api") or not pids.get("worker") or not ready(local):
             raise RuntimeError("trend_baseline_not_ready")
-        staged = {}
+        staged, replaced = {}, []
+        # Keep original bytes only in memory, to unwind a partial write before restart.
+        originals = {path: read_file(path, 131072) for path in replacements} if amazon_modules is not None else {}
         try:
             for path, (incoming, _, _) in replacements.items():
                 metadata = path.stat()
@@ -220,15 +263,31 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
             # restart on a partial install; either version accepts either input.
             for path, scratch in staged.items():
                 os.replace(scratch, path)
+                replaced.append(path)
                 MODULE_PHASE = "installing"
             MODULE_PHASE = "installed"
+        except Exception:
+            for path in reversed(replaced) if amazon_modules is not None else ():
+                metadata = path.stat()
+                fd, scratch = tempfile.mkstemp(prefix=".trend-release-", dir=str(path.parent))
+                staged[path] = scratch
+                with os.fdopen(fd, "wb") as stream:
+                    stream.write(originals[path])
+                    stream.flush()
+                    os.fchown(stream.fileno(), metadata.st_uid, metadata.st_gid)
+                    os.fchmod(stream.fileno(), metadata.st_mode & 0o777)
+                    os.fsync(stream.fileno())
+                os.replace(scratch, path)
+            if amazon_modules is not None:
+                MODULE_PHASE = "not_installed"
+            raise
         finally:
             for scratch in staged.values():
                 if os.path.exists(scratch):
                     os.unlink(scratch)
 
         def modules_match():
-            return all(read_file(path, 65536) == item[0] for path, item in replacements.items())
+            return all(read_file(path, 131072 if amazon_modules is not None else 65536) == item[0] for path, item in replacements.items())
 
         if not modules_match():
             raise RuntimeError("trend_module_readback_failed")
@@ -255,7 +314,11 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
             raise RuntimeError("trend_unexpected_runtime_change")
         receipt = {"status": True, "overlay_sha": build, "runtime_base_sha": expected_runtime,
                    "restarted": "ai选品", "node_before": pids, "node_after": after}
-        if report_action is not None:
+        if amazon_modules is not None:
+            receipt.update(modules={str(path.relative_to(root / AMAZON_DIR)): {"previous": item[1], "installed": item[2]}
+                                    for path, item in replacements.items()},
+                           preserved_modules={p.name: hashlib.sha256(b).hexdigest() for p,b in protected_modules.items()})
+        elif report_action is not None:
             receipt.update(report_action=report_action, module=target.name, module_sha256=digest,
                            previous_module_sha256=expected_module, preserved_modules=REPORT_PROTECTED)
         elif scheduler is None:
@@ -304,10 +367,20 @@ process.stdout.write(ts.transpileModule(source,{fileName:'report-export-worker.t
 """, REPORT_RUNTIME_BASE, REPORT_SOURCE], cwd=repo)
 
 
+def validate_amazon_changes(changed):
+    modules = {"apps/api/src/" + name.removesuffix(".js") + ".ts" for name in AMAZON_BASE_HASHES}
+    exact = modules | {"scripts/baota-account-trend-release.py", "scripts/deploy-account-baota.py"}
+    if not modules.issubset(changed) or any(p not in exact and not p.startswith(("docs/", "tests/")) for p in changed):
+        raise RuntimeError("trend_amazon_contains_other_runtime_changes")
+
+
 def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_expected=None, rollback=False,
-            report_action=None):
+            report_action=None, amazon=False):
     if not re.fullmatch(r"[a-f0-9]{40}", previous or "") or not re.fullmatch(r"[a-f0-9]{64}", expected_module or ""):
         raise RuntimeError("trend_release_requires_expected_sha256_and_base_sha")
+    if amazon and (previous != REPORT_RUNTIME_BASE or expected_module != AMAZON_BASE_HASHES["amazon-public-browser-health.js"]
+                   or scheduler_expected is not None or rollback or report_action is not None):
+        raise RuntimeError("trend_amazon_manifest_invalid")
     if rollback and scheduler_expected is None:
         raise RuntimeError("trend_scheduler_manifest_invalid")
     if report_action is not None and (previous != REPORT_RUNTIME_BASE or scheduler_expected is not None
@@ -329,7 +402,10 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             or git("ls-remote", "--exit-code", "origin", "refs/heads/main") != sha + "\trefs/heads/main"):
         raise RuntimeError("trend_release_requires_clean_approved_main")
     deploy["verify_production_sha_history"](repo, previous, sha)
-    if report_action is not None:
+    if amazon:
+        deploy["verify_production_sha_history"](repo, AMAZON_SOURCE_BASE, sha)
+        validate_amazon_changes(git("diff", "--name-only", AMAZON_SOURCE_BASE, sha).splitlines())
+    elif report_action is not None:
         deploy["verify_production_sha_history"](repo, REPORT_SOURCE_BASE, sha)
         validate_report_changes(git("diff", "--name-only", REPORT_SOURCE_BASE, sha).splitlines())
     else:
@@ -337,11 +413,20 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
     if rollback:
         deploy["verify_production_sha_history"](repo, STAGGER_RELEASE_SHA, sha)
         validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
-    subprocess.run([deploy["local_npm_executable"](), "run", "build:worker"], cwd=repo, check=True)
+    subprocess.run([deploy["local_npm_executable"](), "run", "build:api" if amazon else "build:worker"], cwd=repo, check=True)
     if git("rev-parse", "HEAD") != sha or git("status", "--porcelain"):
         raise RuntimeError("trend_release_source_changed_during_build")
     module_path = repo / (REPORT_TARGET if report_action is not None else TARGET).removeprefix("backend/")
-    module = build_report_restore(repo) if report_action == "restore" else module_path.read_bytes()
+    amazon_modules = None
+    if amazon:
+        amazon_modules = {}
+        for name, before in AMAZON_BASE_HASHES.items():
+            data = (repo / "apps/api/dist" / name).read_bytes()
+            after = hashlib.sha256(data).hexdigest()
+            if before == after or not 0 < len(data) <= 131072:
+                raise RuntimeError("trend_amazon_payload_invalid")
+            amazon_modules[name] = (before, base64.b64encode(zlib.compress(data)).decode(), after)
+    module = b"" if amazon else build_report_restore(repo) if report_action == "restore" else module_path.read_bytes()
     if report_action is not None and hashlib.sha256(module).hexdigest() != report_hashes(report_action)[1]:
         raise RuntimeError("trend_report_build_differs")
     scheduler = None
@@ -357,7 +442,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             scheduler[name] = (before, base64.b64encode(payload).decode(), after)
         module = b""
     args = (deploy["PROJECT_ROOT"], previous, expected_module, sha, base64.b64encode(module).decode(),
-            hashlib.sha256(module).hexdigest(), scheduler, rollback, report_action)
+            hashlib.sha256(module).hexdigest(), scheduler, rollback, report_action, amazon_modules)
     code = Path(__file__).read_text(encoding="utf-8")
     source = "code=" + repr(code) + "\nargs=" + repr(args) + r'''
 import json,re

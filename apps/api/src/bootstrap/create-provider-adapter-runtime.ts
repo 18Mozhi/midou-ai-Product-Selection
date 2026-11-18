@@ -7,7 +7,7 @@ import {
   createProviderSourceFetch,
 } from "@scoutops/provider-sources";
 import { AmazonPublicBrowserHealth } from "../amazon-public-browser-health.js";
-import { ProviderAdapterService } from "../provider-adapter-service.js";
+import { ProviderAdapterService, type ProviderProbeContext } from "../provider-adapter-service.js";
 import { MySqlProviderAdapterRepository } from "../mysql-provider-adapter-repository.js";
 import { CrawlerSchedulerRepository } from "../crawler-scheduler-repository.js";
 import {
@@ -18,6 +18,25 @@ import {
 } from "../amazon-public-recovery.js";
 import { lan1688RecoveryTarget } from "../lan-1688-recovery.js";
 import { PublicRssRecovery } from "../public-rss-recovery.js";
+
+export async function resolveAmazonProbeScope(
+  pool: Pool,
+  authorization: Pick<AuthorizationService, "resolveSession">,
+  context: ProviderProbeContext,
+  systemActorId: string,
+  retired: boolean,
+) {
+  if (!context.sessionId)
+    return resolveAmazonPublicRecoveryScope(pool, systemActorId, context, retired);
+  // The platform route already authenticated this actor and checked
+  // provider:configure. Never take the account from request data.
+  if (retired) return { accountId: context.actorId };
+  const resolved = await authorization.resolveSession(context.actorId, context.sessionId);
+  return {
+    organizationId: resolved.context.organization_id,
+    workspaceId: resolved.context.workspace_id,
+  };
+}
 
 export function createProviderAdapterRuntime(
   pool: Pool,
@@ -42,20 +61,7 @@ export function createProviderAdapterRuntime(
               {},
               AUTOMATIC_PROVIDER_SOURCE_HOSTS,
             ),
-            async (c) => {
-              if (!c.sessionId)
-                return resolveAmazonPublicRecoveryScope(
-                  pool,
-                  config.automaticSources.systemActorId,
-                  c,
-                  retired,
-                );
-              const resolved = await authorization.resolveSession(c.actorId, c.sessionId);
-              return {
-                organizationId: resolved.context.organization_id,
-                workspaceId: resolved.context.workspace_id,
-              };
-            },
+            (c) => resolveAmazonProbeScope(pool, authorization, c, config.automaticSources.systemActorId, retired),
           ).probe(provider, context)
       : undefined,
   );

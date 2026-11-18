@@ -14,6 +14,12 @@
 
 在已有 `ACCOUNT_SCOPE_MODE=retired` 环境，Amazon 自动探针使用任务账号、活跃账号和封存的任务/子查询归属账本；领取租约时在事务内再次核对。只接受既有系统用户及指定匿名档案，浏览器运行按真实账号记录，不重建旧组织或工作区。原冷却、拒绝/验证码交接、公共访问门禁、成功恢复审计全部保留。不新增参数、路由或迁移。正式发布需加载新 API 模块并重启宝塔 `ai选品` Node，不需重启 Python；真实搜索与同品详情、恢复审计及积压下降另验。1688 的独立开关和保护不受此改动影响。
 
+## 账号模式下的手动健康检查
+
+原来源健康入口继续要求已登录和 `provider:configure`。账号模式使用已认证的操作者账号，不接受请求体指定账号或任务；领取原单机浏览器租约时核对活跃账号、封存回执和已配置的匿名档案。旧模式保持原会话范围。真实搜索、同一商品详情、访问保护和人工解除熔断的权限及审计均不改变；1688 不在此次发布范围。
+
+从验证过且与远端 main 一致的干净提交运行 `python -B scripts/deploy-account-baota.py --amazon-health-api-only --expected-previous-sha <正式运行基线> --expected-module-sha256 <现有 Amazon 探针模块 SHA256>`。入口固定验证六个 API 模块及运行基线，保持报表、调度器、趋势、配置和 Python 不变，仅重启 `ai选品` Node；不迁移或备份。发布失败须先按回执和文件哈希核对，不得盲重启。真实探针未通过时保持熔断。
+
 ## 使用和配置
 
 后端新参数AMAZON_PUBLIC_AUTO_RECOVERY_ENABLED默认true；AMAZON_PUBLIC_AUTO_RECOVERY_POLL_MS默认60000；AMAZON_PUBLIC_AUTO_RECOVERY_COOLDOWN_MS默认300000。分别允许1000–3600000ms轮询、1000–86400000ms冷却，越界启动失败。生产还必须已有匿名档案和有效专用系统用户。只在宝塔本项目受限环境调整，修改后重启Node API；Worker、Python不读取新参数，前端没有新入口或字段。发布仍用本地deploy-baota.py和宝塔固定目录，不增加服务。
