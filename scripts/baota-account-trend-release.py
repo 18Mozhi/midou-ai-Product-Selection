@@ -67,6 +67,15 @@ COLLECTION_EXECUTOR_CLOCK_SHA = "09595c3be89ec5f90b5ddb6593f1921360ad996f"
 COLLECTION_BROWSER = "apps/worker/dist/authenticated-browser-job-client.js"
 COLLECTION_BROWSER_BASE = "203e391fe9cd23ac76040d4cc20ea059ea5754150b54448363852301dfb6a316"
 COLLECTION_BROWSER_CANDIDATE = "2f08a7c1029f9705d5f1114a54c1080a687331968c2ab54ed43108bb9200af0e"
+COLLECTION_EVIDENCE = "apps/worker/dist/evidence-persistence.js"
+COLLECTION_EVIDENCE_BASE = {
+    COLLECTION_EVIDENCE: "74a5ddcc60f1952415734c6bd0a9e51f8018f2fd9cfa56c6c7a8a80c6cdf3818",
+    "packages/data-quality/dist/index.js": "3b2317602bd0d03bcb885dad945912e5bb0f4b5780398adf9c5e240ca169f71a",
+}
+COLLECTION_EVIDENCE_CANDIDATE = dict(zip(COLLECTION_EVIDENCE_BASE, (
+    "64030326ff5108a52a9aab3111fdcdab1b432889d9c94d1af50a28c0a33259bb",
+    "f3573a98927f2d1b183a7eede6085538abdd14492a82723e405c6799bb2f8461",
+)))
 RESTART = "/www/server/panel/script/restart_project.py"
 MODULE_PHASE = "not_installed"
 
@@ -166,12 +175,15 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             if hashlib.sha256(data).hexdigest() != digest:
                 raise RuntimeError("trend_amazon_protected_module_changed")
             protected[path] = data
-    if collection in ("executor", "executor_restore", "browser", "browser_restore", "executor_lock", "executor_lock_restore"):
+    if collection not in (None, "apply", "restore"):
         prerequisites = dict(COLLECTION_CANDIDATE)
         if collection in ("browser", "browser_restore"):
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_EXECUTOR_CANDIDATE
         if collection in ("executor_lock", "executor_lock_restore"):
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
+        if collection in ("evidence", "evidence_restore"):
+            prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
+            prerequisites[COLLECTION_EXECUTOR] = COLLECTION_EXECUTOR_LOCK_CANDIDATE
         for name, digest in prerequisites.items():
             path = root / "backend" / name
             data = read_file(path, 131072)
@@ -201,6 +213,10 @@ def collection_hashes(action):
         if action == "executor_lock_restore":
             before, after = after, before
         return {COLLECTION_EXECUTOR: before}, {COLLECTION_EXECUTOR: after}
+    if action == "evidence":
+        return COLLECTION_EVIDENCE_BASE, COLLECTION_EVIDENCE_CANDIDATE
+    if action == "evidence_restore":
+        return COLLECTION_EVIDENCE_CANDIDATE, COLLECTION_EVIDENCE_BASE
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
@@ -313,7 +329,7 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
         if amazon_modules is not None:
             folders = [root / AMAZON_DIR, root / AMAZON_DIR / "bootstrap"]
             if collection is not None:
-                folders += [(root / "backend" / n).parent for n in COLLECTION_BASE]
+                folders += [(root / "backend" / n).parent for n in (*COLLECTION_BASE, *amazon_modules)]
             for folder in folders:
                 if not folder.is_dir() or folder.resolve(strict=True) != folder:
                     raise RuntimeError("trend_unsafe_directory")
@@ -471,7 +487,7 @@ def validate_collection_changes(changed):
     source = collection_sources()
     web = {"apps/web/src/components/ProviderAdapterCenter.vue", "apps/web/src/source-1688-operator-action.ts"}
     followups = {n.replace("/dist/", "/src/").removesuffix(".js") + ".ts"
-                 for n in (COLLECTION_EXECUTOR, COLLECTION_BROWSER)}
+                 for n in (COLLECTION_EXECUTOR, COLLECTION_BROWSER, *COLLECTION_EVIDENCE_BASE)}
     exact = source | web | followups | {"scripts/deploy-account-baota.py", "scripts/baota-account-trend-release.py",
                             "scripts/baota-account-static-release.py"}
     if not (source | web).issubset(changed) or any(
@@ -500,6 +516,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         route, _ = collection_hashes(collection)
         key = (COLLECTION_EXECUTOR if collection in ("executor", "executor_restore", "executor_lock", "executor_lock_restore") else
                COLLECTION_BROWSER if collection in ("browser", "browser_restore") else
+               COLLECTION_EVIDENCE if collection in ("evidence", "evidence_restore") else
                "apps/worker/dist/collection-task-state-machine.js")
         if (previous != REPORT_RUNTIME_BASE or expected_module != route[key]
                 or amazon or amazon_audit or scheduler_expected is not None or rollback or report_action is not None):
@@ -545,7 +562,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
     if rollback:
         deploy["verify_production_sha_history"](repo, STAGGER_RELEASE_SHA, sha)
         validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
-    for job in (("build:worker", "build:provider-sources") if collection is not None else
+    for job in (("build:data-quality", "build:worker") if collection in ("evidence", "evidence_restore") else
+                ("build:worker", "build:provider-sources") if collection is not None else
                 ("build:api" if amazon else "build:worker",)):
         subprocess.run([deploy["local_npm_executable"](), "run", job], cwd=repo, check=True)
     if git("rev-parse", "HEAD") != sha or git("status", "--porcelain"):
@@ -559,12 +577,12 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             lock_followup = collection in ("executor_lock", "executor_lock_restore")
             restored = build_collection_restore(repo, name, COLLECTION_EXECUTOR_CLOCK_SHA if lock_followup else COLLECTION_SOURCE_BASE)
             original = {**COLLECTION_BASE, COLLECTION_EXECUTOR: COLLECTION_EXECUTOR_BASE,
-                        COLLECTION_BROWSER: COLLECTION_BROWSER_BASE}[name]
+                        COLLECTION_BROWSER: COLLECTION_BROWSER_BASE, **COLLECTION_EVIDENCE_BASE}[name]
             if lock_followup:
                 original = COLLECTION_EXECUTOR_CANDIDATE
             if hashlib.sha256(restored).hexdigest() != original:
                 raise RuntimeError("trend_collection_restore_build_differs")
-            data = restored if collection in ("restore", "executor_restore", "browser_restore", "executor_lock_restore") else (repo / name).read_bytes()
+            data = restored if collection == "restore" or collection.endswith("_restore") else (repo / name).read_bytes()
             after = hashlib.sha256(data).hexdigest()
             if after != after_hashes[name]:
                 raise RuntimeError("trend_collection_build_differs")

@@ -77,6 +77,14 @@ class TrendReleaseScopeTest(unittest.TestCase):
                                                     trend["COLLECTION_EXECUTOR_CLOCK_SHA"])
         self.assertEqual(hashlib.sha256(actual).hexdigest(), before[n])
 
+    def test_native_evidence_followup_restores_only_validator_and_consumer(self):
+        before, after = trend["collection_hashes"]("evidence")
+        self.assertEqual(list(before), ["apps/worker/dist/evidence-persistence.js", "packages/data-quality/dist/index.js"])
+        self.assertEqual(trend["collection_hashes"]("evidence_restore"), (after, before))
+        for n, expected in before.items():
+            actual = trend["build_collection_restore"](Path(__file__).resolve().parents[2], n)
+            self.assertEqual(hashlib.sha256(actual).hexdigest(), expected)
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

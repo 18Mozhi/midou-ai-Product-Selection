@@ -61,3 +61,4 @@
 1688 来源健康以最近一次实际探测为准：验证码、登录失效进入星星的共享节点操作；限流等待后重检，网络故障先检查连通性。后两种都不提示重登或操作验证码，也不解除熔断。
 
 `--collection-executor-lock-only --expected-previous-sha <运行基线> --expected-module-sha256 <时钟修复版执行器哈希>` 保留任务排他锁，把账号归属及切换行改为共享锁，避免不同任务仅因同一切换记录相互排队；不改变归属、租约或结果契约。仅重启 Node。内部 Worker 日志 `internal_failure_diagnostic` 显示 Amazon 已知校验类型及阶段，不记录凭证、原始异常、SQL 或采集内容。`--collection-executor-lock-rollback` 使用当前模块哈希，对照时钟修复版本取回原件，保留已通过的时钟与浏览器作业修复。
+`--collection-evidence-only --expected-previous-sha <运行基线> --expected-module-sha256 <旧证据持久化哈希>` 只发布证据校验和其 Worker 调用方。账号采集用已声明的账号身份做格式校验，仍须通过数据库中的现行任务租约、子任务和封存归属校验；无账号上下文的旧调用仍校验组织和工作区，禁止写入占位归属。仅重启 Node，`--collection-evidence-rollback` 使用当前持久化哈希从固定 Git 基线恢复这两个模块。

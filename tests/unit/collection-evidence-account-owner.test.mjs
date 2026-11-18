@@ -19,6 +19,30 @@ const input = {
   }], requestId:"fixture-request", traceId:"fixture-trace",
 };
 
+test("native evidence accepts absent retired ids only with a valid account and live lease fence", async () => {
+  const native = {...input, organizationId:"", workspaceId:""};
+  const calls = [];
+  const owner = id(8);
+  const c = {beginTransaction:async()=>{}, rollback:async()=>{}, release(){},
+    async query(sql, args) {
+      calls.push(sql);
+      assert.match(sql, /t.account_id=\?.*lease_token_hash=UNHEX\(\?\).*FOR UPDATE/);
+      assert.deepEqual(args.slice(0, 3), [input.taskId,input.subqueryId,owner]);
+      return [[]];
+    }};
+  const storage = new MySqlEvidencePersistence({getConnection:async()=>c}, "unused", 1024);
+  await assert.rejects(storage.persist(native), {code:"evidence_identifier_invalid"});
+  await assert.rejects(storage.persist({...native,taskFence:{accountId:"",leaseToken:"fixture"}}),
+    {code:"evidence_identifier_invalid"});
+  assert.equal(calls.length, 0);
+  await assert.rejects(storage.persist({...native,taskFence:{accountId:owner,leaseToken:""}}),
+    {code:"evidence_scope_or_task_invalid"});
+  assert.equal(calls.length, 0);
+  await assert.rejects(storage.persist({...native,taskFence:{accountId:owner,leaseToken:"fixture"}}),
+    {code:"evidence_scope_or_task_invalid"});
+  assert.equal(calls.length, 1);
+});
+
 for (const nativeOwnerMatches of [true, false]) {
   test(`browser capture replay requires the original asset's native owner: ${nativeOwnerMatches}`, async () => {
     const owner = id(8), assetId = id(12), artifactId = id(13), jobId = id(14);

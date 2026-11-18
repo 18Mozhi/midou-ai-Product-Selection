@@ -111,7 +111,7 @@ export class MySqlEvidencePersistence {
 
   async persist(input: EvidencePersistInput & { taskFence?: EvidenceTaskFence }) {
     const value: ValidatedEvidence = {
-      ...validateEvidenceInput(input, this.maxRawBytes),
+      ...validateEvidenceInput(input, this.maxRawBytes, input.taskFence),
       ...(input.taskFence ? { taskFence: input.taskFence } : {}),
     };
     const connection = await this.pool.getConnection();

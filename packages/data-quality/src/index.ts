@@ -80,10 +80,18 @@ export function normalizeCanonicalUrl(value: string) {
 export function sha256(value: Uint8Array | string) {
   return createHash("sha256").update(value).digest("hex");
 }
-export function validateEvidenceInput(input: EvidencePersistInput, maxBytes: number) {
+export function validateEvidenceInput(
+  input: EvidencePersistInput,
+  maxBytes: number,
+  accountScope?: { accountId: string },
+) {
+  // Native collection callers have no legacy organization/workspace; the caller
+  // must still validate the live task lease and sealed owner before persistence.
+  const validScope = accountScope !== undefined
+    ? typeof accountScope.accountId === "string" && safe.test(accountScope.accountId)
+    : safe.test(input.organizationId) && safe.test(input.workspaceId);
   if (
-    !safe.test(input.organizationId) ||
-    !safe.test(input.workspaceId) ||
+    !validScope ||
     !safe.test(input.taskId) ||
     !safe.test(input.subqueryId) ||
     !safe.test(input.providerId) ||
