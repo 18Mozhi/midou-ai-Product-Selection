@@ -13,9 +13,9 @@ export const LAN_1688_MAX_PAGES = 2;
 export const LAN_1688_COLLECTION_LIMIT = LAN_1688_RESULT_LIMIT * LAN_1688_MAX_PAGES;
 // Observed 409 contract: a manual verification gate is not a network failure.
 // Never retain its message/body, and never read an unbounded error payload.
-async function lanVerificationRequired(response: Response): Promise<boolean> {
+async function lanOperatorAction(response: Response): Promise<"captcha" | "login_required" | null> {
   const reader = response.body?.getReader();
-  if (!reader) return false;
+  if (!reader) return null;
   const chunks: Uint8Array[] = [];
   let bytes = 0;
   try {
@@ -23,18 +23,16 @@ async function lanVerificationRequired(response: Response): Promise<boolean> {
       const part = await reader.read();
       if (part.done) break;
       bytes += part.value.length;
-      if (bytes > 4096) return false;
+      if (bytes > 4096) return null;
       chunks.push(part.value);
     }
     const value: unknown = JSON.parse(Buffer.concat(chunks).toString("utf8"));
-    return Boolean(
-      value &&
-      typeof value === "object" &&
-      !Array.isArray(value) &&
-      (value as Record<string, unknown>).error_code === "verification_required",
-    );
+    if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+    const code = (value as Record<string, unknown>).error_code;
+    return code === "verification_required" ? "captcha"
+      : code === "session_expired" ? "login_required" : null;
   } catch {
-    return false;
+    return null;
   } finally {
     await reader.cancel().catch(() => {});
     reader.releaseLock();
@@ -490,8 +488,10 @@ export class Lan1688ImageSearch {
         await response.body?.cancel();
         throw new ProviderAdapterFailure("rate_limited", true);
       }
-      if (response.status === 409 && (await lanVerificationRequired(response)))
-        throw new ProviderAdapterFailure("captcha", false);
+      if (response.status === 409) {
+        const action = await lanOperatorAction(response);
+        if (action) throw new ProviderAdapterFailure(action, false);
+      }
       if (!response.ok) {
         await response.body?.cancel();
         throw new ProviderAdapterFailure("dependency_unavailable", true);

@@ -39,6 +39,21 @@ test("pool verification reports blocked health and does not expose records or cr
   assert.equal(calls, 6, "existing health pool size is unchanged");
   assert.doesNotMatch(JSON.stringify(result), /fixture-only|records|自动重试已暂停/);
 });
+test("documented 409 session_expired requests login, not captcha or node retry", async () => {
+  let calls=0;
+  const fetcher=async()=>{
+    calls++;
+    return new Response(JSON.stringify({success:false,error_code:"session_expired"}),{status:409});
+  };
+  const client=new Lan1688ImageSearch("fixture-only",1000,fetcher);
+  await assert.rejects(client.collect(image,async()=>{}),{code:"login_required",retryable:false});
+  assert.equal(calls,1);
+  const adapter=new Lan1688HealthAdapter({}, {token:"fixture-only",timeoutMs:1000,fetcher});
+  const health=await adapter.healthCheck({},new AbortController().signal);
+  assert.equal(health.status,"blocked");
+  assert.equal(health.errorCode,"login_required");
+  assert.match(health.message,/重新登录/);
+});
 for (const [name, body] of [
   ["unknown", JSON.stringify({ error_code: "conflict", message: "verification_required" })],
   ["malformed", "not json"],

@@ -45,6 +45,9 @@ type SourceOwner = { account_id: string; reason: "shared" | "unassigned" | "excl
 
 type AutomaticSourceMode = "all" | "rules" | "full";
 const statement = (...parts: string[]) => parts.join("");
+export const pendingSourceWaveSql =
+  "SELECT 1 FROM collection_tasks WHERE status IN " + activeTaskStatuses + " LIMIT 1";
+const outstandingCollection = { status: "backpressure", reason: "queue_backlog_limit" } as const;
 
 export class MySqlAutomaticSourceScheduler {
   constructor(
@@ -68,10 +71,18 @@ export class MySqlAutomaticSourceScheduler {
   }
   private async process(mode: AutomaticSourceMode): Promise<AutomaticSourceScheduleResult> {
     const c = await this.pool.getConnection();
+    let transaction = false;
     try {
-      await c.beginTransaction();
-      const now = this.now();
       const accountSchedules = await this.hasAccountSchedules(c);
+      const nativeTasks = (await collectionTaskScope(c)) === "account";
+      if (nativeTasks && !accountSchedules)
+        throw new Error("automatic_source_schedule_account_scope_required");
+      // In the account runtime, an unfinished wave means no newly scheduled
+      // source/rule work. Reject before taking the shared cutover-row lock.
+      if (nativeTasks && await this.hasPendingWave(c)) return outstandingCollection;
+      await c.beginTransaction();
+      transaction = true;
+      const now = this.now();
       let primaryAccountId: string | undefined;
       if (accountSchedules) {
         // Serialize account-wide budget checks across the multiple preserved cursors.
@@ -83,13 +94,12 @@ export class MySqlAutomaticSourceScheduler {
           throw new Error("automatic_source_account_cutover_missing");
         primaryAccountId = String(cutover[0].primary_account_id);
       }
-      const nativeTasks = (await collectionTaskScope(c)) === "account";
-      if (nativeTasks && !accountSchedules)
-        throw new Error("automatic_source_schedule_account_scope_required");
-      const backlog = await this.backlog(c, accountSchedules, nativeTasks);
-      if (backlog >= automaticIntakeBacklogLimit(this.policy.queueBacklogLimit)) {
+      // Repeat after taking the existing account producer lock. The first
+      // non-locking read in this transaction sees the earlier wave's commit.
+      if (nativeTasks ? await this.hasPendingWave(c)
+        : (await this.backlog(c, accountSchedules, nativeTasks)) >= automaticIntakeBacklogLimit(this.policy.queueBacklogLimit)) {
         await c.commit();
-        return { status: "backpressure", reason: "queue_backlog_limit" };
+        return outstandingCollection;
       }
       if (mode !== "full") {
         const ruleResult = await this.scheduleDueRule(c, now, accountSchedules, nativeTasks);
@@ -322,7 +332,7 @@ export class MySqlAutomaticSourceScheduler {
         sourceCount: providers.length,
       };
     } catch (error) {
-      await c.rollback();
+      if (transaction) await c.rollback();
       throw error;
     } finally {
       c.release();
@@ -591,6 +601,10 @@ export class MySqlAutomaticSourceScheduler {
     if (shape === "account_id,historical_context,is_enabled,ownership_reason") return true;
     if (shape === "organization_id,workspace_id") return false;
     throw new Error("automatic_source_schedule_schema_incomplete");
+  }
+  private async hasPendingWave(c: PoolConnection) {
+    const [rows] = await c.query<RowDataPacket[]>(pendingSourceWaveSql);
+    return rows.length > 0;
   }
   private async backlog(c: PoolConnection, accountMode: boolean, nativeTasks: boolean) {
     const [rows] = await c.query<RowDataPacket[]>(

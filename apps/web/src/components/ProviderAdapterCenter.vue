@@ -5,6 +5,7 @@ import { useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
+import { source1688OperatorAction } from "../source-1688-operator-action";
 import "../provider-adapters.css";
 import "../provider-adapters-contrast.css";
 import "../provider-adapters-c-page.css";
@@ -118,13 +119,13 @@ const accessModeText = (value: string) =>
   circuitText = (item: AdapterSummary) =>
     item.runtime_circuit_state === "open" ? "来源已暂停" : "来源可调度",
   recoveryText = (item: AdapterSummary) =>
-    item.runtime_circuit_state === "closed"
+    source1688OperatorAction(item)?.title ?? (item.runtime_circuit_state === "closed"
       ? item.runtime_last_recovered_at
         ? `最近恢复 ${item.runtime_last_recovered_at.slice(0, 19).replace("T", " ")}`
         : "当前无需恢复"
       : item.runtime_recovery_gate_met
         ? "健康检查已通过，可前往采集调度解除暂停"
-        : "需要执行晚于暂停时间的真实健康检查",
+        : "需要执行晚于暂停时间的真实健康检查"),
   percentText = (value: number | null) =>
     value === null ? "暂无样本" : `${(value / 100).toFixed(1)}%`;
 const healthPriority: Record<AdapterSummary["health_status"], number> = {
@@ -629,6 +630,20 @@ onMounted(load);
             </section>
             <section class="p47-detail-section">
               <h3>健康探针</h3>
+              <div v-if="source1688OperatorAction(row)" class="adapter-detail-feedback">
+                <strong>{{ source1688OperatorAction(row)?.title }}</strong>
+                <p>{{ source1688OperatorAction(row)?.instruction }}</p>
+                <a
+                  v-if="source1688OperatorAction(row)?.external"
+                  :href="source1688OperatorAction(row)?.link ?? undefined"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >{{ source1688OperatorAction(row)?.label }}</a>
+                <RouterLink
+                  v-else-if="source1688OperatorAction(row)?.link"
+                  :to="source1688OperatorAction(row)?.link ?? '/platform-admin/crawler-scheduler'"
+                >{{ source1688OperatorAction(row)?.label }}</RouterLink>
+              </div>
               <dl>
                 <div>
                   <dt>健康状态</dt>

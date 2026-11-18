@@ -24,6 +24,7 @@ for (const mode of ["shared", "unassigned", "exclusive_owner", "missing", "ledge
         if (sql.startsWith("SHOW COLUMNS FROM collection_tasks "))
           return [(mode==="native_task"?["account_id"]:["organization_id","workspace_id"]).map(Field=>({Field}))];
         if (sql.startsWith("SELECT primary_account_id FROM account_ownership_cutover")) return [[{primary_account_id:rule.account_id}]];
+        if (sql.startsWith("SELECT 1 FROM collection_tasks WHERE status IN")) return [[]];
         if (sql.startsWith("SELECT s.account_id FROM account_retirement_scopes")) {
           assert.deepEqual(values,["org","workspace",rule.account_id,mode]);
           return [mode==="account_scope_mismatch"?[]:[{account_id:rule.account_id}]];

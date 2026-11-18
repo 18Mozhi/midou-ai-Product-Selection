@@ -44,12 +44,14 @@ export class Lan1688HealthAdapter implements ProviderAdapter {
       if (signal.aborted) throw signal.reason;
       const failure = classifyProviderAdapterFailure(error);
       return {
-        status: failure.code === "captcha" ? ("blocked" as const) : failure.status,
+        status: ["captcha","login_required"].includes(failure.code) ? ("blocked" as const) : failure.status,
         latencyMs: Date.now() - started,
         errorCode: failure.code,
         message:
           failure.code === "captcha"
             ? "1688 节点要求人工验证；请在原管理后台完成验证后重新健康检查，保留来源保护。"
+            : failure.code === "login_required"
+              ? "1688 节点会话已失效；请在节点管理后台重新登录后重新健康检查。"
             : "1688 局域网图搜暂未通过健康检查，保留来源保护。",
       };
     }

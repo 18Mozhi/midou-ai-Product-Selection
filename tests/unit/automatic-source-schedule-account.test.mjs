@@ -6,8 +6,9 @@ const now = new Date("2026-10-15T12:00:00Z");
 const scope = { organization_id: "old-org", workspace_id: "old-workspace" };
 
 function fixture({ reason = "shared", count = 0, backlog = 0, brokenLedger = false, incomplete = false,
-  accountOnly = false, cursorChanged = false, foreignSharedOwner = false } = {}) {
+  accountOnly = false, cursorChanged = false, foreignSharedOwner = false, waveArrives = false } = {}) {
   const statements = [], steps = [];
+  let waveReads = 0;
   const owner = reason === "exclusive_owner" || foreignSharedOwner ? "private-account" : "primary-account";
   const c = {
     beginTransaction: async () => steps.push("begin"),
@@ -22,6 +23,11 @@ function fixture({ reason = "shared", count = 0, backlog = 0, brokenLedger = fal
         ? ["account_id"] : ["account_id", "ownership_reason", "is_enabled", "historical_context"]
       ).map(Field => ({ Field }))]];
       if (sql.startsWith("SELECT primary_account_id")) return [[{ primary_account_id: "primary-account" }]];
+      if (sql.startsWith("SELECT 1 FROM collection_tasks WHERE status IN")) {
+        assert.match(sql,/LIMIT 1$/);
+        assert.doesNotMatch(sql,/FOR UPDATE|COUNT\(/);
+        return [backlog > 0 || (++waveReads > 1 && waveArrives) ? [{present:1}] : []];
+      }
       if (sql.startsWith("SELECT (SELECT COUNT(*) FROM collection_tasks backlog")) {
         assert.doesNotMatch(sql, /organization_id|workspace_id/);
         assert.match(sql, /task_account.status='active'.*contract_version=25.*source_table='collection_tasks'.*task_owner.account_id=task_cut.primary_account_id.*task_owner.source_id=backlog.id/);
@@ -51,7 +57,7 @@ function fixture({ reason = "shared", count = 0, backlog = 0, brokenLedger = fal
   };
   const scheduler = new MySqlAutomaticSourceScheduler({ getConnection: async () => c }, 16, () => now,
     { systemActorId: "system", tenantActiveTaskBudget: 2, queueBacklogLimit: 1000 });
-  return { owner, scheduler, steps, statements };
+  return { owner, scheduler, steps, statements, setBacklog: value => { backlog=value; } };
 }
 
 for (const reason of ["shared", "unassigned", "exclusive_owner"]) {
@@ -67,7 +73,7 @@ for (const reason of ["shared", "unassigned", "exclusive_owner"]) {
     assert.match(pick[0], /source_event.event_type='hotspot.automatic.scheduled'/);
     assert.doesNotMatch(pick[0], /organization_id|workspace_id|JOIN organizations|JOIN workspaces/);
     assert.deepEqual(pick[1], [now, 2]);
-    assert.match(f.statements[1][0], /FOR UPDATE$/);
+    assert.match(f.statements.find(([sql])=>sql.startsWith("SELECT primary_account_id"))[0], /FOR UPDATE$/);
     const [, task] = f.statements.find(([sql]) => sql.startsWith("INSERT INTO collection_tasks"));
     assert.deepEqual(task.slice(0, 3), [r.taskId, scope.organization_id, scope.workspace_id]);
     const [, [ledger]] = f.statements.find(([sql]) => sql.startsWith("INSERT INTO account_owned_records"));
@@ -103,7 +109,7 @@ test("an incomplete schedule schema fails closed", async () => {
   const f = fixture({ incomplete: true });
   await assert.rejects(f.scheduler.processFullOnce(), /automatic_source_schedule_schema_incomplete/);
   assert.equal(f.statements.length, 1);
-  assert.deepEqual(f.steps, ["begin", "rollback", "release"]);
+  assert.deepEqual(f.steps, ["release"]);
 });
 
 test("ownership failure rolls back all task writes and does not advance the schedule", async () => {
@@ -117,6 +123,31 @@ test("sealed global backlog retains the existing completion reserve before any w
   const f = fixture({ backlog: 997 });
   assert.deepEqual(await f.scheduler.processFullOnce(), {status:"backpressure", reason:"queue_backlog_limit"});
   assert.ok(f.statements.every(([sql]) => !/^(INSERT|UPDATE)/.test(sql)));
+});
+
+for (const method of ["processRuleOnce","processFullOnce"]) {
+  test(`native ${method} waits for a single outstanding task without opening a transaction`, async () => {
+    const f=fixture({accountOnly:true,backlog:1});
+    assert.deepEqual(await f.scheduler[method](),{status:"backpressure",reason:"queue_backlog_limit"});
+    assert.deepEqual(f.steps,["release"]);
+    assert.ok(f.statements.every(([sql])=>!/FOR UPDATE|^(INSERT|UPDATE)/.test(sql)));
+  });
+  test(`native ${method} rechecks for a competing wave after taking the producer lock`, async () => {
+    const f=fixture({accountOnly:true,waveArrives:true});
+    assert.deepEqual(await f.scheduler[method](),{status:"backpressure",reason:"queue_backlog_limit"});
+    assert.deepEqual(f.steps,["begin","commit","release"]);
+    assert.equal(f.statements.filter(([sql])=>sql.startsWith("SELECT 1 FROM collection_tasks")).length,2);
+    assert.ok(f.statements.every(([sql])=>!/^(INSERT|UPDATE)/.test(sql)));
+  });
+}
+test("a full wave resumes on the next poll only after the previous backlog is gone", async () => {
+  const f=fixture({accountOnly:true,backlog:1});
+  for(let i=0;i<2;i++) assert.equal((await f.scheduler.processFullOnce()).status,"backpressure");
+  assert.ok(f.statements.every(([sql]) => !/^(INSERT|UPDATE)/.test(sql)));
+  f.setBacklog(0);
+  assert.equal((await f.scheduler.processFullOnce()).status,"scheduled");
+  assert.equal(f.statements.filter(([sql])=>sql.startsWith("INSERT INTO collection_tasks")).length,1);
+  assert.equal(f.statements.filter(([sql])=>sql.startsWith("UPDATE automatic_source_schedules")).length,1);
 });
 
 test("native source task and ledger roll back when the original cursor no longer matches", async () => {

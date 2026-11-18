@@ -17,6 +17,7 @@ for (const method of ["processFullOnce", "processRuleOnce"]) {
         rollback: async () => {},
         query: async (sql) => {
           statements.push(sql);
+          if (sql.startsWith("SHOW COLUMNS")) return [[{Field:"organization_id"},{Field:"workspace_id"}]];
           return sql.startsWith("SELECT COUNT(*) count FROM collection_tasks")
             ? [[{ count: backlog }]]
             : [[]];
@@ -30,7 +31,7 @@ for (const method of ["processFullOnce", "processRuleOnce"]) {
       );
       const result = await scheduler[method]();
       assert.equal(result.status, backlog >= 997 ? "backpressure" : "idle");
-      if (backlog >= 997) assert.equal(statements.length, 1);
+      if (backlog >= 997) assert.equal(statements.filter(sql=>!sql.startsWith("SHOW COLUMNS")).length, 1);
       else
         assert.ok(
           statements.some((sql) =>
@@ -53,6 +54,7 @@ test("fresh projection uses 997 while periodic completion still binds the origin
     release: () => {},
     rollback: async () => {},
     query: async (sql, params) => {
+      if (sql.startsWith("SHOW COLUMNS FROM collection_tasks")) return [[{Field:"organization_id"},{Field:"workspace_id"}]];
       reads.push({ sql, params });
       return [[]];
     },
