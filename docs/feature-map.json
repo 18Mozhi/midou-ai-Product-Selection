@@ -2302,7 +2302,7 @@
   "lan1688AutoRecovery20261018": {
     "status": "implemented",
     "requirements": "docs/lan-1688-auto-recovery.md",
-    "manualOperatorAction": "1688 LAN HTTP 409 verification_required and session_expired are distinguished as captcha and login_required. Source health links to existing shared-node management for those two conditions. Fresh rate-limit and network failures instead show specific wait or connectivity guidance, without asking the operator to log in or solve a CAPTCHA. Health/recovery gates remain intact. No automatic solver, switch change or server-side cross-project credential access.",
+    "manualOperatorAction": "1688 LAN HTTP 409 verification_required and session_expired are distinguished as captcha and login_required. Source health links to existing shared-node management for those two conditions. The current circuit reason takes precedence over older probes. Rate-limit and network failures instead show specific wait or connectivity guidance, without asking the operator to log in or solve a CAPTCHA. Health/recovery gates remain intact. No automatic solver, switch change or server-side cross-project credential access.",
     "sourceFiles": [
       "apps/api/src/lan-1688-recovery.ts",
       "apps/api/src/pending-source-recovery-policy.ts",
