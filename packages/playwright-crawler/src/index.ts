@@ -1,4 +1,9 @@
-import { prepareAmazonDeliveryContext } from "./amazon-delivery-context.js";
+import {
+  prepareAmazonDeliveryContext,
+  assertAmazonDelivery,
+  withDailyAmazonDelivery,
+  type DailyAmazonDelivery,
+} from "./amazon-delivery-context.js";
 import { AmazonDeliveryRequestError } from "./amazon-delivery-request.js";
 import { installPublicHttpTransport } from "./public-http-transport.js";
 import { recordResourceFailure as retainResourceFailure } from "./resource-failures.js";
@@ -642,6 +647,7 @@ export class PlaywrightCrawlerEngine {
       handoff?: { root: string; runId: string };
       navigationTransport?: "browser" | "request";
       publicHttpRuntime?: { executable: string; script: string };
+      dailyDelivery?: DailyAmazonDelivery;
     } = {},
   ): Promise<BrowserRunResult> {
     const plan = validateBrowserPlan(planInput, this.limits),
@@ -749,6 +755,11 @@ export class PlaywrightCrawlerEngine {
       options.signal?.addEventListener("abort", onAbort, { once: true });
       options.signal?.throwIfAborted();
       if (options.cookies?.length) await context.addCookies(options.cookies);
+      if (options.dailyDelivery?.cookies.length) {
+        if (!plan.amazon_delivery)
+          throw new PlaywrightCrawlerError("public_http_scope_invalid", "dependency_failed", false);
+        await context.addCookies(options.dailyDelivery.cookies);
+      }
       context.setDefaultTimeout(this.limits.actionTimeoutMs);
       context.setDefaultNavigationTimeout(this.limits.navigationTimeoutMs);
       if (options.publicHttpRuntime && !plan.amazon_delivery)
@@ -808,16 +819,41 @@ export class PlaywrightCrawlerEngine {
           });
       });
       const page = context.pages()[0] ?? (await context.newPage());
+      if (plan.amazon_delivery && options.dailyDelivery && !options.dailyDelivery.cached) {
+        stage = "amazon_delivery.daily_home";
+        const home = "https://www.amazon.com/";
+        await this.goto(page, home, plan.allowed_origins, true, guard);
+        const check = async () => {
+          await guard(page);
+        };
+        await prepareAmazonDeliveryContext(
+          page,
+          plan.amazon_delivery.postal_code,
+          check,
+          (step) => {
+            stage = `amazon_delivery.${step}`;
+          },
+          () => this.goto(page, home, plan.allowed_origins, true, guard),
+          this.limits.navigationTimeoutMs,
+        );
+        await assertAmazonDelivery(page, plan.amazon_delivery.postal_code, check);
+        await options.dailyDelivery.save(context);
+      }
       // An imported discovery link can carry Amazon's presentation slug and
       // referral suffix. Use the same exact-ASIN route as the health check,
       // without changing stored targets or any query that may select a variant.
       const originalTarget = new URL(plan.start_url);
-      const referralAsin = plan.amazon_delivery &&
+      const referralAsin =
+        plan.amazon_delivery &&
         originalTarget.origin === "https://www.amazon.com" &&
-        !originalTarget.username && !originalTarget.password &&
-        !originalTarget.search && !originalTarget.hash
-        ? /^\/(?:[^/]+\/)?dp\/([A-Za-z0-9]{10})\/ref=[A-Za-z0-9_-]+\/?$/.exec(originalTarget.pathname)?.[1]
-        : undefined;
+        !originalTarget.username &&
+        !originalTarget.password &&
+        !originalTarget.search &&
+        !originalTarget.hash
+          ? /^\/(?:[^/]+\/)?dp\/([A-Za-z0-9]{10})\/ref=[A-Za-z0-9_-]+\/?$/.exec(
+              originalTarget.pathname,
+            )?.[1]
+          : undefined;
       const navigationTarget = referralAsin
         ? `https://www.amazon.com/dp/${referralAsin.toUpperCase()}`
         : plan.start_url;
@@ -831,24 +867,29 @@ export class PlaywrightCrawlerEngine {
             throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
           await guard(page);
         };
-        await prepareAmazonDeliveryContext(
-          page,
-          plan.amazon_delivery.postal_code,
-          assertSafe,
-          (step) => {
-            stage = `amazon_delivery.${step}`;
-          },
-          async () => {
-            await this.goto(
-              page,
-              navigationTarget,
-              plan.allowed_origins,
-              plan.fail_on_http_error,
-              guard,
-            );
-          },
-          this.limits.navigationTimeoutMs,
-        );
+        if (options.dailyDelivery) {
+          // The daily homepage is the only place allowed to change location.
+          // Every product/search response still proves its own anonymous ZIP.
+          await assertAmazonDelivery(page, plan.amazon_delivery.postal_code, assertSafe);
+        } else
+          await prepareAmazonDeliveryContext(
+            page,
+            plan.amazon_delivery.postal_code,
+            assertSafe,
+            (step) => {
+              stage = `amazon_delivery.${step}`;
+            },
+            async () => {
+              await this.goto(
+                page,
+                navigationTarget,
+                plan.allowed_origins,
+                plan.fail_on_http_error,
+                guard,
+              );
+            },
+            this.limits.navigationTimeoutMs,
+          );
         stage = "delivery_final_header";
         await assertSafe();
         await page
@@ -1023,23 +1064,39 @@ export class PlaywrightCrawlerEngine {
           try {
             // Operational evidence only: never retain page text, cookies, or a URL.
             detailState = await Promise.race([
-              current.evaluate(({selector, initialPath, postal}) => {
-                const asin = (path: string) =>
-                  /\/(?:dp|gp\/product)\/([A-Za-z0-9]{10})(?:\/|$)/.exec(path)?.[1]?.toUpperCase();
-                const expected = asin(initialPath), actual = asin(location.pathname);
-                const title = document.querySelector("#productTitle");
-                return {
-                  document_state: document.readyState,
-                  expected_product_path: Boolean(expected && actual === expected),
-                  item_present: Boolean(document.querySelector(selector)),
-                  title_present: Boolean(title),
-                  title_nonempty: Boolean(title?.textContent?.trim()),
-                  delivery_matches: Boolean(document.querySelector("#glow-ingress-block")
-                    ?.textContent?.match(new RegExp(`\\b${postal}\\b`))),
-                };
-              }, {selector: plan.item_selector, initialPath: new URL(plan.start_url).pathname,
-                postal: plan.amazon_delivery.postal_code}).catch(() => null),
-              new Promise<null>((resolve) => { timer = setTimeout(() => resolve(null), 750); }),
+              current
+                .evaluate(
+                  ({ selector, initialPath, postal }) => {
+                    const asin = (path: string) =>
+                      /\/(?:dp|gp\/product)\/([A-Za-z0-9]{10})(?:\/|$)/
+                        .exec(path)?.[1]
+                        ?.toUpperCase();
+                    const expected = asin(initialPath),
+                      actual = asin(location.pathname);
+                    const title = document.querySelector("#productTitle");
+                    return {
+                      document_state: document.readyState,
+                      expected_product_path: Boolean(expected && actual === expected),
+                      item_present: Boolean(document.querySelector(selector)),
+                      title_present: Boolean(title),
+                      title_nonempty: Boolean(title?.textContent?.trim()),
+                      delivery_matches: Boolean(
+                        document
+                          .querySelector("#glow-ingress-block")
+                          ?.textContent?.match(new RegExp(`\\b${postal}\\b`)),
+                      ),
+                    };
+                  },
+                  {
+                    selector: plan.item_selector,
+                    initialPath: new URL(plan.start_url).pathname,
+                    postal: plan.amazon_delivery.postal_code,
+                  },
+                )
+                .catch(() => null),
+              new Promise<null>((resolve) => {
+                timer = setTimeout(() => resolve(null), 750);
+              }),
             ]);
           } finally {
             clearTimeout(timer);
@@ -1301,13 +1358,28 @@ export async function runWithEncryptedProfile(
     publicHttpRuntime?: { executable: string; script: string };
   } = {},
 ) {
+  const run = (userDataDir: string) => {
+    if (
+      !plan.amazon_delivery ||
+      record.kind !== "browser_profile" ||
+      process.env.NODE_ENV !== "production"
+    )
+      return engine.run(plan, userDataDir, ids, options);
+    return withDailyAmazonDelivery(
+      join(dirname(resolve(tempRoot)), "tmp", "amazon-delivery-context"),
+      `${record.assetId}:${record.assetVersion}:${options.proxy?.server ?? "direct"}`,
+      plan.amazon_delivery.postal_code,
+      (dailyDelivery) => engine.run(plan, userDataDir, ids, { ...options, dailyDelivery }),
+      options.signal,
+    );
+  };
   return withMaterializedCredential(record, masterKey, tempRoot, (archivePath) =>
     record.kind === "cookie_bundle"
       ? withCookieProfileFile(archivePath, tempRoot, (userDataDir, cookies) =>
           engine.run(plan, userDataDir, ids, { ...options, cookies }),
         )
       : withExtractedProfileArchive(archivePath, tempRoot, archiveLimits, (userDataDir) =>
-          engine.run(plan, userDataDir, ids, options),
+          run(userDataDir),
         ),
   );
 }

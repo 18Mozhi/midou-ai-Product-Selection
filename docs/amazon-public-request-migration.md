@@ -14,6 +14,16 @@
 
 ## 配置、兼容与运行
 
+### 2026-11-19：地区按日准备，商品详情保持独立请求
+
+同一超时商品 B0FR7TKH1X 的正式端只读对照显示：首份文档含商品标题，地区变更后的重读却可能只含页面外壳；在同一项目匿名会话中重新请求该 ASIN 可读到完整商品。`#title` / `#productTitle` 没有放宽，HTTP 200 外壳仍不计详情成功。星星源码直接请求 `/dp/ASIN/`，地区维护与任务解耦；这不证明它当前所有节点或这个商品均采集成功。
+
+正式 `runWithEncryptedProfile` 仅对原有匿名 Amazon 浏览器档案生效：先在首页完成当日地区准备，核验匿名链接和精确邮编后保存本项目匿名会话，随后独立请求商品。API 健康及 Python 启动的 Node 共用同一档案版本、出口与邮编的按日状态；每日以北京时间零点为界重新准备。缓存命中也要在每份商品/搜索文档核验匿名身份、同源与邮编；不把缓存、空外壳或星星 Cookie 当商品证据。不在商品页反复提交地区、不改变价格、变体查询参数、标题解析、超时、并发或熔断。独立详情并不调用 AI，分类继续原等待门，死信不自动重放。
+
+状态文件位于 `CREDENTIAL_TMP_ROOT` 同级的 `tmp/amazon-delivery-context`，按档案 ID/版本、出口和邮编散列命名；目录 0700、文件 0600，包含仅由本项目严格匿名页面产生的 Amazon 会话 Cookie，禁止打印、下载或提交。认证 Cookie、外域、损坏状态和符号链接均拒绝。跨进程锁只串行首次准备，存活进程的锁不按超时抢占；仅确证原 PID 已退出才释放遗留锁。成功保存即释放锁，不占用整个商品采集过程。不新增配置键、依赖、服务、数据库或公开接口。已有邮编配置变化自动分开状态，档案版本或出口变化也不复用旧状态。
+
+`--collection-delivery-daily-only` 配合原运行基线和当前引擎 SHA，仅发布引擎及地区模块；本地构建和固定哈希门通过后由宝塔只重启 `ai选品` Node。Python 在每次作业启动 Node 时重新加载，不需重启。`--collection-delivery-daily-rollback` 用相同协调入口和已安装引擎哈希恢复这两份精确前序模块，不修改其他覆盖层或数据库；旧版不再读取按日状态。正式任务与同商品真实验收另行记录，不以本地协议用例替代。
+
 仅新增用户已允许的Python依赖curl-cffi==0.7.4；不新增环境变量、公开API字段、权限、数据库结构或前端控件，OpenAPI与.env示例不涉及。继续使用既有AMAZON_PUBLIC_DELIVERY_POSTAL_CODE、navigationTimeoutMs和代理/会话配置；来源原配置不改，不把星星10001覆盖本项目邮编。请求均有界超时，maxRedirects=0/maxRetries=0；不读取或记录令牌/HTML/账号Cookie。不涉及AI节点、账号/组织或原项目生产运维。
 
 地区协议可被Node健康检查及Python启动的Node子进程使用。Python PlaywrightBridge对amazon_public自行绑定当前解释器和同包public_http.py，经私有stdin字段传入Node；Node只对Amazon主文档用有界子进程curl传输，保留响应状态、挑战正文及多条Set-Cookie，继续在原BrowserContext解析和接管。其他来源/子资源不变，配置代理保持同一出口，无隐式环境代理或失败直连回退。Node API独立健康检查仍是原浏览器检查，不代表curl传输已验收。正式发布需既有官方宝塔运行包，不能用frontend-only/scoring-only伪装。官方部署在停止服务前，仅向当前stage/python/.runtime-deps安装并验证依赖，helper只从该项目目录加载；不写共享解释器。Node子进程加载新模块；常驻Python循环已导入PlaywrightBridge，因此正式激活还需宝塔Python项目重启，Node常驻健康检查加载新模块需宝塔Node项目重启。不得为此中断仍存活人工会话，部署前核对它和当前生产任务。此文不表示已部署或已完成503/验证码循环验收。

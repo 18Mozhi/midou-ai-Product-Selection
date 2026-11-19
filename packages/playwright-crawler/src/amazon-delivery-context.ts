@@ -1,5 +1,164 @@
-import { errors, type Page, type Frame } from "playwright";
+import { errors, type Page, type Frame, type BrowserContext } from "playwright";
+import { createHash, randomUUID } from "node:crypto";
+import { mkdir, lstat, readFile, writeFile, rename, unlink, realpath } from "node:fs/promises";
+import { isAbsolute, join, resolve } from "node:path";
 import { requestAmazonDeliveryContext } from "./amazon-delivery-request.js";
+
+type DeliveryCookies = Awaited<ReturnType<BrowserContext["cookies"]>>;
+export interface DailyAmazonDelivery {
+  cookies: DeliveryCookies;
+  cached: boolean;
+  save(context: BrowserContext): Promise<void>;
+}
+
+export async function assertAmazonDelivery(page: Page, postal: string, guard: () => Promise<void>) {
+  await guard();
+  if (
+    new URL(page.url()).origin !== "https://www.amazon.com" ||
+    !(await page
+      .getByRole("link", { name: "Hello, sign in Account & Lists", exact: true })
+      .isVisible())
+  )
+    throw new Error("amazon_delivery_requires_anonymous_page");
+  await page
+    .locator("#glow-ingress-block")
+    .filter({ hasText: new RegExp(`\\b${postal}\\b`) })
+    .waitFor({ state: "visible" });
+}
+
+/** Project-owned anonymous state, never an imported user/Star profile. One daily
+ * homepage preparation is serialized across API and Python-launched runners. */
+export async function withDailyAmazonDelivery<T>(
+  root: string,
+  identity: string,
+  postal: string,
+  work: (delivery: DailyAmazonDelivery) => Promise<T>,
+  signal?: AbortSignal,
+  clock: () => Date = () => new Date(),
+): Promise<T> {
+  if (!isAbsolute(root) || !identity || !/^\d{5}$/.test(postal))
+    throw new Error("amazon_delivery_cache_invalid");
+  root = resolve(root);
+  await mkdir(root, { recursive: true, mode: 0o700 });
+  if ((await realpath(root)) !== root) throw new Error("amazon_delivery_cache_invalid");
+  // UTC+8 matches the project's operational day, not the OS/SQL timezone.
+  const day = new Date(clock().getTime() + 8 * 3600_000).toISOString().slice(0, 10);
+  const key = createHash("sha256")
+    .update(identity)
+    .update("\0" + postal)
+    .digest("hex");
+  const file = join(root, key + ".json"),
+    lock = join(root, key + ".lock");
+  const owner = JSON.stringify({ id: randomUUID(), pid: process.pid });
+  let locked = false,
+    scratch: string | undefined;
+  const release = async () => {
+    if (!locked) return;
+    if ((await lstat(lock)).isSymbolicLink() || (await readFile(lock, "utf8")) !== owner)
+      throw new Error("amazon_delivery_cache_lock_changed");
+    await unlink(lock);
+    locked = false;
+  };
+  const validCookies = (value: unknown): value is DeliveryCookies =>
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.length <= 200 &&
+    value.every(
+      (c) =>
+        c &&
+        typeof c === "object" &&
+        typeof c.name === "string" &&
+        typeof c.value === "string" &&
+        !/[\r\n\0]/.test(c.name + c.value) &&
+        c.name.length <= 128 &&
+        c.value.length <= 8192 &&
+        !["at-main", "sess-at-main"].includes(c.name) &&
+        [".amazon.com", "www.amazon.com", "amazon.com"].includes(c.domain) &&
+        typeof c.path === "string" &&
+        c.path.startsWith("/") &&
+        c.path.length <= 1024 &&
+        typeof c.httpOnly === "boolean" &&
+        typeof c.secure === "boolean" &&
+        Number.isFinite(c.expires) &&
+        ["Strict", "Lax", "None"].includes(c.sameSite),
+    );
+  try {
+    const until = Date.now() + 30_000;
+    while (!locked) {
+      signal?.throwIfAborted();
+      try {
+        await writeFile(lock, owner, { flag: "wx", mode: 0o600 });
+        locked = true;
+      } catch (e) {
+        if ((e as NodeJS.ErrnoException).code !== "EEXIST") throw e;
+        const st = await lstat(lock).catch((e) => {
+          if (e.code === "ENOENT") return null;
+          throw e;
+        });
+        if (!st) continue;
+        if (!st.isFile() || st.isSymbolicLink() || st.size > 256)
+          throw new Error("amazon_delivery_cache_invalid");
+        const raw = await readFile(lock, "utf8");
+        const prior = JSON.parse(raw);
+        if (!Number.isSafeInteger(prior.pid) || prior.pid < 1)
+          throw new Error("amazon_delivery_cache_invalid");
+        let dead = false;
+        try {
+          process.kill(prior.pid, 0);
+        } catch (e) {
+          dead = (e as NodeJS.ErrnoException).code === "ESRCH";
+        }
+        if (dead && (await readFile(lock, "utf8")) === raw) {
+          await unlink(lock);
+          continue;
+        }
+        // Never steal from a possibly live process, or infer death from a timeout.
+        if (Date.now() >= until) throw new Error("amazon_delivery_cache_busy");
+        await new Promise((r) => setTimeout(r, 100));
+      }
+    }
+    let cookies: DeliveryCookies = [];
+    try {
+      const st = await lstat(file);
+      if (!st.isFile() || st.isSymbolicLink() || st.size > 131072)
+        throw new Error("amazon_delivery_cache_invalid");
+      const state = JSON.parse(await readFile(file, "utf8"));
+      if (
+        state.version !== 1 ||
+        state.key !== key ||
+        typeof state.day !== "string" ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(state.day) ||
+        state.day > day ||
+        !validCookies(state.cookies)
+      )
+        throw new Error("amazon_delivery_cache_invalid");
+      if (state.day === day) cookies = state.cookies;
+    } catch (e) {
+      if ((e as NodeJS.ErrnoException).code !== "ENOENT") throw e;
+    }
+    const cached = cookies.length > 0;
+    if (cached) await release();
+    return await work({
+      cookies,
+      cached,
+      async save(context) {
+        if (cached || !locked) throw new Error("amazon_delivery_cache_invalid");
+        const current = await context.cookies("https://www.amazon.com/");
+        if (!validCookies(current)) throw new Error("amazon_delivery_cache_invalid");
+        const data = JSON.stringify({ version: 1, key, day, cookies: current });
+        if (Buffer.byteLength(data) > 131072) throw new Error("amazon_delivery_cache_invalid");
+        scratch = file + "." + JSON.parse(owner).id + ".tmp";
+        await writeFile(scratch, data, { flag: "wx", mode: 0o600 });
+        await rename(scratch, file);
+        scratch = undefined;
+        await release();
+      },
+    });
+  } finally {
+    if (scratch) await unlink(scratch).catch(() => {});
+    await release();
+  }
+}
 
 /** Public observation context only. Never operates a signed-in address book. */
 export async function prepareAmazonDeliveryContext(

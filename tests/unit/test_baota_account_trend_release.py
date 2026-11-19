@@ -139,6 +139,15 @@ class TrendReleaseScopeTest(unittest.TestCase):
                                                        trend["COLLECTION_MODEL_HOLD_SOURCE"])
             self.assertEqual(hashlib.sha256(actual).hexdigest(), digest)
 
+    def test_daily_delivery_pair_has_exact_original_rebuild_and_rollback(self):
+        before, after = trend["collection_hashes"]("delivery_daily")
+        self.assertEqual(set(before), {trend["COLLECTION_DETAIL"], trend["COLLECTION_DAILY_CONTEXT"]})
+        self.assertEqual(trend["collection_hashes"]("delivery_daily_restore"), (after, before))
+        for name, digest in before.items():
+            restored = trend["build_collection_restore"](Path(__file__).resolve().parents[2], name,
+                                                         trend["COLLECTION_DAILY_SOURCE"])
+            self.assertEqual(hashlib.sha256(restored).hexdigest(), digest)
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

@@ -587,6 +587,34 @@ test("referral detail navigation and delivery reread use the exact ASIN without 
   }
 });
 
+test("daily delivery prepares home once, then reads the product; cached jobs never post or reread region", async (t) => {
+  const { chromium } = await import("playwright");
+  t.mock.method(console, "warn", () => {});
+  for (const cached of [false, true]) {
+    const f = fixture(cached ? { location: "Deliver to 94404" } : { locationAfterReread: "Deliver to 94404" });
+    const navigations = [], added = []; let active;
+    const locator = f.page.locator;
+    const page = Object.assign(f.page, {
+      locator: selector => ({ ...locator(selector), count: async () => 0 }),
+      url: () => active,
+      goto: async url => { active = url; navigations.push(url); if (!cached && navigations.length === 2) await f.reread(); return { status: () => 200 }; },
+      waitForFunction: async () => { throw new errors.TimeoutError("fixture missing title"); }, evaluate: async () => null,
+    });
+    const context = { pages: () => [page], setDefaultTimeout() {}, setDefaultNavigationTimeout() {}, on() {}, close: async () => {}, addCookies: async c => added.push(c) };
+    t.mock.method(chromium, "launchPersistentContext", async () => context);
+    let saves = 0;
+    const { plan } = createAmazonBrowserExecutionRequest({ page_url: "https://www.amazon.com/dp/B012345678" }, "94404");
+    const result = await new PlaywrightCrawlerEngine(limits).run(plan, "not-created", { requestId: "fixture", traceId: "fixture" }, {
+      dailyDelivery: { cached, cookies: cached ? [{ name: "session-id", value: "fixture" }] : [], save: async c => { assert.equal(c, context); saves++; } },
+    });
+    assert.equal(result.status, "timeout", "daily state cannot replace product evidence");
+    assert.equal(saves, cached ? 0 : 1);
+    assert.deepEqual(navigations, cached ? [plan.start_url] : ["https://www.amazon.com/", "https://www.amazon.com/", plan.start_url]);
+    assert.equal(added.length, cached ? 1 : 0);
+    if (cached) assert.deepEqual(f.actions, [["wait", "#glow-ingress-block"], ["wait", "#glow-ingress-block"]]);
+  }
+});
+
 test("detail readiness timeouts record only bounded DOM facts and remain timeouts", async (t) => {
   const { chromium } = await import("playwright");
   const target = "https://www.amazon.com/dp/B012345678?tag=private-tag";

@@ -95,6 +95,16 @@ COLLECTION_DETAIL = "packages/playwright-crawler/dist/index.js"
 COLLECTION_DETAIL_BASE = "d43c8e490d995fb130128eaccf3512c43189fd71486fcd8add5ebae67fb445f0"
 COLLECTION_DETAIL_CANDIDATE = "9219b8c880abc628012bc3b452ee885234b87162e0113bfad9d8a48eaad236a7"
 COLLECTION_DETAIL_CANONICAL = "b9fbe24085ea376a2015a51d3e2679bfa81a964dd8a6862facd1bee793568fa6"
+COLLECTION_DAILY_CONTEXT = "packages/playwright-crawler/dist/amazon-delivery-context.js"
+COLLECTION_DAILY_SOURCE = "d327ca26f95e1c27b72d9cbac7f82110c269461a"
+COLLECTION_DAILY_BASE = {
+    COLLECTION_DETAIL: COLLECTION_DETAIL_CANONICAL,
+    COLLECTION_DAILY_CONTEXT: "2e5de903f0308d5ac1aabc669153b5326a68ac5b286ed770f52736cd6a349f45",
+}
+COLLECTION_DAILY_CANDIDATE = {
+    COLLECTION_DETAIL: "91b73eeaa02d07a2c432ad12c368f27d5b12fb762c4be419ab681019f552b9b5",
+    COLLECTION_DAILY_CONTEXT: "23265e1942bda82342bade4fdff972b1dbe2988e7d7a4510a6c6e5ffdf8ef589",
+}
 COLLECTION_DETAIL_DIAG_SOURCE = "b4ee048b514ad2a13314a14136f903b5762e5d9f"
 COLLECTION_LAN_CLIENT = "packages/provider-sources/dist/lan-1688-image-search.js"
 COLLECTION_LAN_HEALTH = "packages/provider-sources/dist/lan-1688-health-adapter.js"
@@ -267,6 +277,13 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
             prerequisites[COLLECTION_DETAIL] = COLLECTION_DETAIL_CANONICAL
+        if collection in ("delivery_daily", "delivery_daily_restore"):
+            prerequisites.update(COLLECTION_RANK_CANDIDATE)
+            prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
+            prerequisites.update(COLLECTION_LAN_HEALTH_CANDIDATE)
+            prerequisites.update(COLLECTION_MODEL_HOLD_CANDIDATE)
+            prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
+            prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
         for name, digest in prerequisites.items():
             path = root / "backend" / name
             data = read_file(path, 131072)
@@ -324,6 +341,10 @@ def collection_hashes(action):
         return COLLECTION_MODEL_HOLD_BASE, COLLECTION_MODEL_HOLD_CANDIDATE
     if action == "model_hold_restore":
         return COLLECTION_MODEL_HOLD_CANDIDATE, COLLECTION_MODEL_HOLD_BASE
+    if action == "delivery_daily":
+        return COLLECTION_DAILY_BASE, COLLECTION_DAILY_CANDIDATE
+    if action == "delivery_daily_restore":
+        return COLLECTION_DAILY_CANDIDATE, COLLECTION_DAILY_BASE
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
@@ -594,8 +615,8 @@ def validate_collection_changes(changed):
     source = collection_sources()
     web = {"apps/web/src/components/ProviderAdapterCenter.vue", "apps/web/src/source-1688-operator-action.ts"}
     followups = {n.replace("/dist/", "/src/").removesuffix(".js") + ".ts"
-                 for n in (COLLECTION_EXECUTOR, COLLECTION_BROWSER, COLLECTION_DETAIL, *COLLECTION_EVIDENCE_BASE, *COLLECTION_RANK_BASE)}
-    exact = source | web | followups | {"scripts/deploy-account-baota.py", "scripts/baota-account-trend-release.py",
+                 for n in (COLLECTION_EXECUTOR, COLLECTION_BROWSER, COLLECTION_DETAIL, COLLECTION_DAILY_CONTEXT, *COLLECTION_EVIDENCE_BASE, *COLLECTION_RANK_BASE)}
+    exact = source | web | followups | {"config/env.example", "scripts/deploy-account-baota.py", "scripts/baota-account-trend-release.py",
                             "scripts/baota-account-static-release.py"}
     if not (source | web).issubset(changed) or any(
         n not in exact and not n.startswith(("docs/", "tests/")) for n in changed
@@ -624,7 +645,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         key = (COLLECTION_EXECUTOR if collection in ("executor", "executor_restore", "executor_lock", "executor_lock_restore") else
                COLLECTION_BROWSER if collection in ("browser", "browser_restore") else
                COLLECTION_EVIDENCE if collection in ("evidence", "evidence_restore") else
-               COLLECTION_DETAIL if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore") else
+               COLLECTION_DETAIL if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore", "delivery_daily", "delivery_daily_restore") else
                COLLECTION_LAN_CLIENT if collection in ("lan_rate", "lan_rate_restore") else
                COLLECTION_LAN_HEALTH if collection in ("lan_health", "lan_health_restore") else
                "apps/worker/dist/collection-task-state-machine.js")
@@ -672,7 +693,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
     if rollback:
         deploy["verify_production_sha_history"](repo, STAGGER_RELEASE_SHA, sha)
         validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
-    for job in (("build:playwright-crawler",) if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore") else
+    for job in (("build:playwright-crawler",) if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore", "delivery_daily", "delivery_daily_restore") else
                 ("build:data-quality", "build:worker") if collection in ("evidence", "evidence_restore") else
                 ("build:worker", "build:provider-sources") if collection is not None else
                 ("build:api" if amazon else "build:worker",)):
@@ -691,17 +712,20 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             lan_followup = collection in ("lan_rate", "lan_rate_restore")
             lan_health_followup = collection in ("lan_health", "lan_health_restore")
             model_hold_followup = collection in ("model_hold", "model_hold_restore")
+            daily_followup = collection in ("delivery_daily", "delivery_daily_restore")
             source = (COLLECTION_EXECUTOR_CLOCK_SHA if lock_followup else
                       COLLECTION_RANK_SOURCE_BASE if rank_followup else
                       COLLECTION_LAN_SOURCE[name] if lan_followup else
                       COLLECTION_LAN_HEALTH_SOURCE if lan_health_followup else
                       COLLECTION_MODEL_HOLD_SOURCE if model_hold_followup else
+                      COLLECTION_DAILY_SOURCE if daily_followup else
                       COLLECTION_DETAIL_DIAG_SOURCE if canonical_followup else COLLECTION_SOURCE_BASE)
             restored = build_collection_restore(repo, name, source)
             original = (COLLECTION_RANK_BASE[name] if rank_followup else
                         COLLECTION_LAN_BASE[name] if lan_followup else
                         COLLECTION_LAN_HEALTH_BASE[name] if lan_health_followup else
                         COLLECTION_MODEL_HOLD_BASE[name] if model_hold_followup else
+                        COLLECTION_DAILY_BASE[name] if daily_followup else
                         COLLECTION_DETAIL_CANDIDATE if canonical_followup else
                         COLLECTION_EXECUTOR_CANDIDATE if lock_followup else
                         {**COLLECTION_BASE, COLLECTION_EXECUTOR: COLLECTION_EXECUTOR_BASE,
