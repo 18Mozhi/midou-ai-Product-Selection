@@ -145,3 +145,18 @@ rehearsal 仍不注册；不恢复独立旧版 acquire/heartbeat/complete 入口
 均需基线提交和当前模块SHA，哈希不符失败关闭。保留既有账号接管路由、每日地区准备、AI等待、背压及趋势优化。
 只重启宝塔 ai选品 Node；Python运行器后续调用现有共享Node包，无Python代码/负载或独立重启变化。
 管理员通过现有“验证码人工接管→接管验证码”使用，无新调节项。来源仍停用，搜索和同一商品详情真实通过后才另走审计恢复。
+
+## 地区重读的受限诊断（2026-11-19）
+
+真实run bbe37789-a044-45ca-90cd-dbd4d6914fc5在人工接管后出现ready及200，但
+request_delivery_reread仍失败。不能凭该阶段名推断邮编或匿名身份哪一个失败。
+所有amazon_delivery失败阶段现复用既有delivery_state诊断：准确匿名链接数量/可见性及aria-hidden可见性、
+邮编头存在/可见/与配置匹配、账号链接存在/可见/精确已知匿名文字、密码框存在、原弹窗状态。
+只输出布尔值、数量及固定枚举，不输出页面文字、真实邮编、Cookie、URL或属性值。
+仅既有anonymous错误精确字面量可标anonymous_missing，超时为readiness_timeout，其他为other；
+观察最多750毫秒，失败返回null，不能改变原错误码、校验、来源状态或重试。
+这是为查因的中间诊断，不是修复已通过或采集恢复。
+
+官方 --collection-delivery-observe-only / --collection-delivery-observe-rollback仅替换共享index.js，
+需原基线和模块SHA。只重启ai选品 Node，不改Python、数据库、并发、白名单、HTTP/API/env或依赖。
+后续需依据真实诊断修复，再通过搜索及同商品详情后按原审计恢复。

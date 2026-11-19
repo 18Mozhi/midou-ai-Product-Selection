@@ -323,6 +323,66 @@ export function classifyBrowserFailure(error: unknown): {
   };
 }
 
+/** Safe operational facts only; never emits a URL, text, cookie or attribute value. */
+export async function inspectAmazonDeliveryReadiness(page: Page, postal: string) {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      Promise.all([
+        page.evaluate((postal) => {
+          const input = document.querySelector("#GLUXZipUpdateInput"),
+            location = document.querySelector("#nav-global-location-popover-link"),
+            header = document.querySelector("#glow-ingress-block"),
+            account = document.querySelector("#nav-link-accountList"),
+            href = location?.getAttribute("href");
+          const visible = (node: Element | null) =>
+            node instanceof HTMLElement && node.getClientRects().length > 0;
+          return {
+            document_state: document.readyState,
+            postal_input_present: Boolean(input),
+            postal_input_visible: visible(input),
+            location_link_present: Boolean(location),
+            location_href_kind:
+              href === "" ? "empty" : href?.startsWith("#") ? "fragment" : "other",
+            postal_header_present: Boolean(header),
+            postal_header_visible: visible(header),
+            postal_matches: new RegExp(`\\b${postal}\\b`).test(header?.textContent ?? ""),
+            account_link_present: Boolean(account),
+            account_link_visible: visible(account),
+            account_has_expected_text:
+              account?.textContent?.replace(/\s+/g, " ").trim() ===
+              "Hello, sign in Account & Lists",
+            password_input_present: Boolean(document.querySelector('input[type="password"]')),
+          };
+        }, postal),
+        page.getByRole("link", { name: "Hello, sign in Account & Lists", exact: true }).count(),
+        page.getByRole("link", { name: "Hello, sign in Account & Lists", exact: true }).isVisible(),
+        page
+          .getByRole("link", {
+            name: "Hello, sign in Account & Lists",
+            exact: true,
+            includeHidden: true,
+          })
+          .isVisible(),
+      ])
+        .then(([dom, count, visible, hiddenVisible]) => ({
+          ...dom,
+          anonymous_exact_count: count,
+          anonymous_exact_visible: visible,
+          anonymous_aria_hidden_visible: hiddenVisible,
+        }))
+        .catch(() => null),
+      new Promise<null>((resolve) => {
+        timer = setTimeout(() => resolve(null), 750);
+      }),
+    ]);
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function blocked(
   page: Page,
   signals: BrowserBlockSignals | undefined,
@@ -1157,28 +1217,20 @@ export class PlaywrightCrawlerEngine {
           }
         }
       }
-      if (
-        plan.amazon_delivery &&
-        ["amazon_delivery.fill_postal", "amazon_delivery.fill_postal_retry"].includes(stage)
-      ) {
+      if (plan.amazon_delivery && stage.startsWith("amazon_delivery.")) {
         const current = context?.pages()[0];
         if (current && current.url().startsWith("https://www.amazon.com/")) {
-          deliveryState = await current
-            .evaluate(() => {
-              const input = document.querySelector("#GLUXZipUpdateInput"),
-                location = document.querySelector("#nav-global-location-popover-link"),
-                href = location?.getAttribute("href");
-              return {
-                document_state: document.readyState,
-                postal_input_present: Boolean(input),
-                postal_input_visible:
-                  input instanceof HTMLElement && input.getClientRects().length > 0,
-                location_link_present: Boolean(location),
-                location_href_kind:
-                  href === "" ? "empty" : href?.startsWith("#") ? "fragment" : "other",
-              };
-            })
-            .catch(() => null);
+          deliveryState = await inspectAmazonDeliveryReadiness(
+            current,
+            plan.amazon_delivery.postal_code,
+          );
+          if (deliveryState)
+            deliveryState.failure_reason =
+              error instanceof Error && error.message === "amazon_delivery_requires_anonymous_page"
+                ? "anonymous_missing"
+                : failure.code === "timeout"
+                  ? "readiness_timeout"
+                  : "other";
         }
       }
       if (plan.amazon_delivery)

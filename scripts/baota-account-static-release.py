@@ -222,7 +222,7 @@ def deploy_static(repo, previous, deploy, ssh_connection, transfer, collection=N
                          collection["COLLECTION_BROWSER"]: collection["COLLECTION_BROWSER_CANDIDATE"],
                          **collection["COLLECTION_EVIDENCE_CANDIDATE"], **collection["COLLECTION_RANK_CANDIDATE"],
                          **collection["COLLECTION_LAN_CANDIDATE"], **collection["COLLECTION_LAN_HEALTH_CANDIDATE"],
-                         **collection["COLLECTION_MODEL_HOLD_CANDIDATE"], **collection["COLLECTION_DAILY_CANDIDATE"], **collection["COLLECTION_HANDOFF_CANDIDATE"], **collection["COLLECTION_HANDOFF_ROUTES_CANDIDATE"], **collection["COLLECTION_MANUAL_WAF_CANDIDATE"]}
+                         **collection["COLLECTION_MODEL_HOLD_CANDIDATE"], **collection["COLLECTION_DAILY_CANDIDATE"], **collection["COLLECTION_HANDOFF_CANDIDATE"], **collection["COLLECTION_HANDOFF_ROUTES_CANDIDATE"], **collection["COLLECTION_MANUAL_WAF_CANDIDATE"], **collection["COLLECTION_DELIVERY_OBSERVE_CANDIDATE"]}
     else:
         changed = git("diff", "--name-only", previous, build).splitlines()
         tooling = {"scripts/deploy-account-baota.py", "scripts/baota-account-static-release.py"}
