@@ -57,7 +57,7 @@ const withDependencyBoundary = async <T>(operation: () => Promise<T>) => {
   }
 };
 export function registerCrawlerRuntimeRoutes(app: FastifyInstance, o: CrawlerRuntimeRouteOptions) {
-  if (o.handoff && !o.accountReadRehearsal && !o.retiredAccountMode)
+  if (o.handoff && !o.accountReadRehearsal)
     registerBrowserHandoffRoutes(app, { ...o, ...o.handoff });
   const actor = async (r: FastifyRequest) => {
     const a = await o.auth.authenticate(sessionToken(r, o.secureCookie));

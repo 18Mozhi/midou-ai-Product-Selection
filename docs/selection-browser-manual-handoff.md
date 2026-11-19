@@ -113,3 +113,11 @@ apps/api/dist/mysql-crawler-runtime-repository.js，保留每日地区准备、�
 --expected-previous-sha 和 --expected-module-sha256，哈希不符失败关闭。本地重建上一提交原模块，不在服务器创建回退副本。
 发布只重启宝塔 ai选品 Node；不重启Python、不调并发、不直接修改数据库或配置。
 无新增环境变量、HTTP字段、依赖或服务；前端现有 /platform-admin/collection/browser-runtime 接管区继续使用。
+
+后续真实接管暴露账号 retired 模式的双重路由屏蔽（列表HTTP404）。正式账号模式现复用原接管接口，
+rehearsal 仍不注册；不恢复独立旧版 acquire/heartbeat/complete 入口。原超级管理员、同源、有效租约、
+独占登录会话与审计均不变。该配套仅发布 server.js 和 crawler-runtime-routes.js，使用
+--collection-handoff-routes-only / --collection-handoff-routes-rollback，基线哈希不符拒绝，
+保留前述引擎/账号人工探针模块。只重启 ai选品 Node，须等现有接管自然结束后发布。
+此前只读诊断由root创建的空 amazon-delivery-context 目录已归还正式uid/gid1001，仍保留2700权限；
+未放宽到其他用户，也不改配置、数据库、并发或Python进程。

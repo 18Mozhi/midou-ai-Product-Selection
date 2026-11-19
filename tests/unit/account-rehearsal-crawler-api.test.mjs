@@ -82,7 +82,7 @@ test("crawler preserves historical reads and removes standalone legacy leases in
       if (accountReadRehearsal || retiredAccountMode) {
         assert.equal(
           app.hasRoute({ method: "GET", url: "/api/v1/platform/crawler-handoffs" }),
-          false,
+          retiredAccountMode,
         );
       }
       if (accountReadRehearsal) assert.deepEqual(touched, []);
@@ -104,5 +104,28 @@ test("crawler preserves historical reads and removes standalone legacy leases in
     } finally {
       await app.close();
     }
+  }
+});
+
+
+test("retired mode wires original handoff while rehearsal stays isolated", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const source = await readFile(new URL("../../apps/api/src/server.ts", import.meta.url),"utf8");
+  assert.match(source,/crawlerRuntime: \{[\s\S]*?\.\.\.\(!crawlerWritesIsolated[\s\S]*?handoff:/);
+  for (const retiredAccountMode of [false,true]) {
+    let capability;
+    const app = buildApp({crawlerRuntime:{
+      auth:{authenticate:async()=>({user:{id:"fixture"},session:{id:"fixture-session"}})},
+      authorization:{authorize:async input=>{capability=input.capability;}},
+      service:{},secureCookie:false,webOrigin:"http://localhost",serviceToken:"",serviceActorId:"",
+      retiredAccountMode,accountReadRehearsal:false,
+      handoff:{root:"nonexistent-local-handoff-fixture",isLive:assert.fail,audit:assert.fail},
+    }});
+    try {
+      const response=await app.inject({url:"/api/v1/platform/crawler-handoffs",headers:{cookie:"scoutops_session=fixture"}});
+      assert.equal(response.statusCode,200,response.body);
+      assert.equal(capability,"platform:superadmin");
+      assert.deepEqual(response.json().data.items,[]);
+    }finally {await app.close();}
   }
 });

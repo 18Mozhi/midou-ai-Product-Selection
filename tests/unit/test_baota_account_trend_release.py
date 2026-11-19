@@ -157,6 +157,15 @@ class TrendReleaseScopeTest(unittest.TestCase):
                                                          trend["COLLECTION_HANDOFF_SOURCE"])
             self.assertEqual(hashlib.sha256(restored).hexdigest(), digest)
 
+    def test_handoff_routes_rebuilds_exact_previous_server_and_routes(self):
+        before, after = trend["collection_hashes"]("handoff_routes")
+        self.assertEqual(set(before), {"apps/api/dist/server.js", "apps/api/dist/crawler-runtime-routes.js"})
+        self.assertEqual(trend["collection_hashes"]("handoff_routes_restore"), (after, before))
+        for name, digest in before.items():
+            restored = trend["build_collection_restore"](Path(__file__).resolve().parents[2], name,
+                                                         trend["COLLECTION_HANDOFF_ROUTES_SOURCE"])
+            self.assertEqual(hashlib.sha256(restored).hexdigest(), digest)
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

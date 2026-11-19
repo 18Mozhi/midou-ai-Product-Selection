@@ -387,7 +387,7 @@ const app = buildApp({
   crawlerRuntime: {
     accountReadRehearsal: crawlerWritesIsolated,
     retiredAccountMode: accountApiMode === "retired",
-    ...(!accountReadRehearsal
+    ...(!crawlerWritesIsolated
       ? {
           handoff: {
             root: join(config.storage.runtimeTempRoot, "browser-handoffs"),
