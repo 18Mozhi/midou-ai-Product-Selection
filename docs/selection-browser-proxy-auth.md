@@ -62,3 +62,12 @@ AMAZON_PUBLIC_BROWSER_NAVIGATION_TRANSPORT设为browser核验原生路径，requ
 真实Chromium测试只连接自有上游fixture并验证TLS边界，不访问实际CDN或解验证码。
 这修复已证实的资源拦截；它尚不足以证明先前未知脚本就是该主机，更不代表验证码循环
 和每日100个整链结果已经通过。无新API/配置/数据库/依赖，需正式重启既有Node/Python。
+
+## 已接管会话的临时精确WAF许可（2026-11-19）
+
+仅用户明确批准的1c5c1ecf7303.eb59107c.us-west-1.token.awswaf.com可在已领取的现有人工接管期间使用443。
+默认拒绝，不加入suffixes或永久exactHosts；许可由可信内部回调开启，到原会话截止即撤销并断开该主机既有隧道。
+普通域名连接、两跳鉴权、TLS不透明、最多64连接及原超时均保留。范围及操作见selection-browser-manual-handoff.md。
+本地TCP和Chromium夹具覆盖默认/未接管拒绝、精确主机与端口、伪装域拒绝、撤销/到期断开、
+普通Amazon隧道保留、同页单次重载、正常200集成脚本非挑战及429保留；夹具不代表真实验证完成。
+无新环境变量、API或依赖；本项仅共享Node三模块定向发布并重启现有Node，Python不重启。

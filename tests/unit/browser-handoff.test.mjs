@@ -294,6 +294,7 @@ test(
       await ctx.route("**/*", (route) =>
         route.fulfill({
           status: 202,
+          headers: { "x-amzn-waf-action": "challenge" },
           contentType: "text/html",
           body: challenge
             ? `<html><body><script type="text/plain" src="https://fixture.token.awswaf.com/local/challenge.js"></script><button onclick='document.body.innerHTML=${JSON.stringify(ready)}'>Local operator confirmation</button></body></html>`
@@ -368,3 +369,148 @@ test(
     }
   },
 );
+
+test(
+  "claim hook waits for original valid claim, runs once and retains original deadline",
+  { timeout: 10000 },
+  async () => {
+    const root = await mkdtemp(join(tmpdir(), "scoutops-claim-hook-")),
+      store = new BrowserHandoffStore(root),
+      controller = new AbortController();
+    let ready = false,
+      calls = 0;
+    const page = {
+      url: () => "https://www.amazon.com/",
+      locator: (s) => ({ count: async () => (s.includes("password") ? 0 : Number(!ready)) }),
+      setViewportSize: async () => {},
+      screenshot: async () => Buffer.from("frame"),
+      waitForLoadState: async () => {},
+    };
+    const deadline = setTimeout(() => controller.abort(new Error("local fixture deadline")), 3000);
+    const running = waitForManualCaptcha({
+      root,
+      runId: randomUUID(),
+      requestId: randomUUID(),
+      page,
+      captchaSelector: "#captcha",
+      allowedOrigins: ["https://www.amazon.com"],
+      signal: controller.signal,
+      isReady: async () => ready,
+      onClaim: async (expires) => {
+        calls++;
+        assert.ok(expires > Date.now() && expires <= Date.now() + 300000);
+        ready = true;
+      },
+    });
+    try {
+      let list = [];
+      for (let i = 0; i < 100 && !list.length; i++) {
+        await new Promise((r) => setTimeout(r, 10));
+        list = await store.list();
+      }
+      assert.equal(list.length, 1);
+      assert.equal(calls, 0);
+      const claim = store.path(list[0].id, "claim.json");
+      await writeFile(claim, JSON.stringify({ actorId: "forged", session: "a".repeat(64) }));
+      await new Promise((r) => setTimeout(r, 600));
+      assert.equal(calls, 0);
+      await writeFile(claim, JSON.stringify({ actorId: randomUUID(), session: "a".repeat(64) }));
+      await running;
+      assert.equal(calls, 1);
+      assert.deepEqual(await store.list(), []);
+    } finally {
+      clearTimeout(deadline);
+      controller.abort();
+      await running.catch(() => {});
+      await rm(root, { recursive: true, force: true });
+    }
+  },
+);
+
+for (const finalStatus of [200, 429])
+  test(
+    `real Chromium: exact WAF reload requires claimed handoff and preserves result ${finalStatus}`,
+    { timeout: 20000 },
+    async () => {
+      const { chromium } = await import("playwright"),
+        { createAmazonBrowserExecutionRequest } =
+          await import("../../packages/provider-sources/dist/index.js");
+      const root = await mkdtemp(join(tmpdir(), "scoutops-claimed-waf-")),
+        original = chromium.launchPersistentContext.bind(chromium),
+        store = new BrowserHandoffStore(join(root, "handoffs")),
+        controller = new AbortController();
+      let documents = 0;
+      chromium.launchPersistentContext = async (...args) => {
+        const ctx = await original(...args);
+        await ctx.route("**/*", (route) => {
+          if (new URL(route.request().url()).origin !== "https://www.amazon.com")
+            return route.abort();
+          documents++;
+          return route.fulfill({
+            status: documents === 1 ? 202 : finalStatus,
+            headers: documents === 1 ? { "x-amzn-waf-action": "challenge" } : {},
+            contentType: "text/html",
+            body:
+              documents === 1
+                ? '<html><body><script type="text/plain" src="https://1c5c1ecf7303.eb59107c.us-west-1.token.awswaf.com/fixture/challenge.js"></script></body></html>'
+                : finalStatus === 429
+                  ? "<html><body>local rate limit fixture</body></html>"
+                  : '<html><body><a href="/ap/signin">Hello, sign in Account &amp; Lists</a><div id="glow-ingress-block">Deliver to 94404</div><div id="title"><h1 id="productTitle">Local brush fixture</h1></div><script type="text/plain" src="https://1c5c1ecf7303.eb59107c.us-west-1.token.awswaf.com/fixture/challenge.js"></script></body></html>',
+          });
+        });
+        return ctx;
+      };
+      const { plan } = createAmazonBrowserExecutionRequest(
+        { page_url: "https://www.amazon.com/dp/B0FR7TKH1X" },
+        "94404",
+      );
+      const deadline = setTimeout(
+        () => controller.abort(new Error("local fixture deadline")),
+        6000,
+      );
+      const running = new PlaywrightCrawlerEngine({
+        headless: true,
+        navigationTimeoutMs: 1000,
+        actionTimeoutMs: 300,
+        maxPages: 1,
+        maxScrolls: 0,
+        maxDetails: 0,
+      }).run(
+        { ...plan, max_scrolls: 0 },
+        join(root, "profile"),
+        { requestId: randomUUID(), traceId: randomUUID() },
+        {
+          signal: controller.signal,
+          handoff: { root: store.root, runId: randomUUID() },
+          proxy: { server: "http://127.0.0.1:9", username: "fixture", password: "fixture" },
+          dailyDelivery: { cached: true, cookies: [], save: async () => assert.fail() },
+        },
+      );
+      try {
+        let list = [];
+        for (let i = 0; i < 200 && !list.length; i++) {
+          await new Promise((r) => setTimeout(r, 10));
+          list = await store.list();
+        }
+        assert.equal(list.length, 1);
+        assert.equal(documents, 1);
+        await new Promise((r) => setTimeout(r, 600));
+        assert.equal(documents, 1);
+        await writeFile(
+          store.path(list[0].id, "claim.json"),
+          JSON.stringify({ actorId: randomUUID(), session: "a".repeat(64) }),
+        );
+        const result = await running;
+        assert.equal(documents, 2);
+        assert.equal(result.status, finalStatus === 200 ? "succeeded" : "rate_limited");
+        assert.equal(result.item_count, finalStatus === 200 ? 1 : 0);
+        assert.deepEqual(await store.list(), []);
+      } finally {
+        clearTimeout(deadline);
+        controller.abort();
+        await running.catch(() => {});
+        chromium.launchPersistentContext = original;
+        await rm(root, { recursive: true, force: true });
+      }
+    },
+  );

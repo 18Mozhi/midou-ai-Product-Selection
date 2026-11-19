@@ -665,10 +665,11 @@ test("main document diagnostics retain bounded real statuses without URLs or sub
   const messages = [];
   const response = (status, main = true) => ({
     status: () => status,
+    headers: () => ({}),
     url: () => "https://www.amazon.com/errors/validateCaptcha?private-token=secret",
     request: () => ({
       isNavigationRequest: () => true,
-      frame: () => ({ parentFrame: () => (main ? null : {}) }),
+      frame: () => ({ parentFrame: () => (main ? null : {}), page: () => page }),
       method: () => "POST",
       resourceType: () => "document",
     }),

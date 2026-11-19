@@ -230,6 +230,8 @@ def main():
     action.add_argument("--collection-lan-health-rollback", action="store_true")
     action.add_argument("--collection-model-hold-only", action="store_true")
     action.add_argument("--collection-model-hold-rollback", action="store_true")
+    action.add_argument("--collection-manual-waf-only", action="store_true")
+    action.add_argument("--collection-manual-waf-rollback", action="store_true")
     action.add_argument("--collection-handoff-routes-only", action="store_true")
     action.add_argument("--collection-handoff-routes-rollback", action="store_true")
     action.add_argument("--collection-handoff-only", action="store_true")
@@ -286,6 +288,8 @@ def main():
         collection = "handoff" if args.collection_handoff_only else "handoff_restore"
     if args.collection_handoff_routes_only or args.collection_handoff_routes_rollback:
         collection = "handoff_routes" if args.collection_handoff_routes_only else "handoff_routes_restore"
+    if args.collection_manual_waf_only or args.collection_manual_waf_rollback:
+        collection = "manual_waf" if args.collection_manual_waf_only else "manual_waf_restore"
     worker_only = (args.trend_projection_only or scheduler_only or report_action is not None
                    or args.amazon_health_api_only or args.amazon_health_audit_only or collection is not None)
     if args.expected_module_sha256 and not worker_only:

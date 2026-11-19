@@ -9,7 +9,11 @@ import { installPublicHttpTransport } from "./public-http-transport.js";
 import { recordResourceFailure as retainResourceFailure } from "./resource-failures.js";
 import { waitForManualCaptcha } from "./manual-handoff.js";
 import { installNavigationRequestTransport } from "./navigation-transport.js";
-import { createAuthenticatedBrowserProxy, browserResourceHostname } from "./authenticated-proxy.js";
+import {
+  createAuthenticatedBrowserProxy,
+  AMAZON_MANUAL_WAF_HOST,
+  browserResourceHostname,
+} from "./authenticated-proxy.js";
 export {
   BrowserHandoffStore,
   validHandoffCommand,
@@ -323,6 +327,7 @@ async function blocked(
   page: Page,
   signals: BrowserBlockSignals | undefined,
   onCaptcha?: (page: Page, selector: string) => Promise<void>,
+  refreshSignals?: () => BrowserBlockSignals | undefined,
 ) {
   for (const [key, status] of [
     ["login", "blocked_login"],
@@ -333,7 +338,7 @@ async function blocked(
     if (css && (await page.locator(css).count())) {
       if (key === "captcha" && onCaptcha) {
         await onCaptcha(page, css);
-        await blocked(page, signals);
+        await blocked(page, refreshSignals ? refreshSignals() : signals);
         return true;
       }
       throw new PlaywrightCrawlerError(status, status, false);
@@ -654,24 +659,29 @@ export class PlaywrightCrawlerEngine {
       started = Date.now();
     const handoffObservations: Record<string, unknown>[] = [];
     const documentResponses: Record<string, unknown>[] = [];
+    const wafChallenges = new WeakSet<Page>();
+    const wafSelector = 'script[src^="https://"][src*=".token.awswaf.com/"][src$="/challenge.js"]';
+    const challengePresent = async (page: Page) =>
+      Boolean(
+        (plan.block_signals?.captcha && (await page.locator(plan.block_signals.captcha).count())) ||
+        (wafChallenges.has(page) && (await page.locator(wafSelector).count())),
+      );
+    const signalsFor = (page: Page) =>
+      plan.amazon_delivery && wafChallenges.has(page)
+        ? {
+            ...plan.block_signals,
+            // This is a blocked-page marker, not permission to fetch or solve
+            // WAF scripts. Keep the same bounded human-only handoff and guards.
+            captcha: [plan.block_signals?.captcha, wafSelector].filter(Boolean).join(","),
+          }
+        : plan.block_signals;
     const guard = (page: Page) =>
       blocked(
         page,
-        plan.amazon_delivery
-          ? {
-              ...plan.block_signals,
-              // This is a blocked-page marker, not permission to fetch or solve
-              // WAF scripts. Keep the same bounded human-only handoff and guards.
-              captcha: [
-                plan.block_signals?.captcha,
-                'script[src^="https://"][src*=".token.awswaf.com/"][src$="/challenge.js"]',
-              ]
-                .filter(Boolean)
-                .join(","),
-            }
-          : plan.block_signals,
+        signalsFor(page),
         options.handoff && plan.amazon_delivery
           ? async (page, selector) => {
+              let revokeManualChallenge: (() => void) | undefined;
               try {
                 await waitForManualCaptcha({
                   root: options.handoff!.root,
@@ -680,25 +690,53 @@ export class PlaywrightCrawlerEngine {
                   page,
                   captchaSelector: selector,
                   allowedOrigins: plan.allowed_origins,
+                  isChallengePresent: () => challengePresent(page),
+                  onClaim: async (expiresAt) => {
+                    if (
+                      !localProxy ||
+                      !wafChallenges.has(page) ||
+                      new URL(page.url()).origin !== "https://www.amazon.com" ||
+                      !(await page
+                        .locator(
+                          `script[src^="https://${AMAZON_MANUAL_WAF_HOST}/"][src$="/challenge.js"]`,
+                        )
+                        .count())
+                    )
+                      return;
+                    revokeManualChallenge = localProxy.allowManualChallengeUntil(expiresAt);
+                    // One normal same-page reload after the operator claims the
+                    // session. No solver, token injection, new URL or proxy change.
+                    const response = await page.reload({ waitUntil: "domcontentloaded" });
+                    if (response?.status() === 429)
+                      throw new PlaywrightCrawlerError("rate_limited", "rate_limited", true);
+                  },
                   report: (observation) => {
                     if (handoffObservations.length === 10) handoffObservations.shift();
                     handoffObservations.push({ ...observation, elapsed_ms: Date.now() - started });
                   },
-                  isReady: () =>
-                    page
+                  isReady: async () => {
+                    if (rateLimited)
+                      throw new PlaywrightCrawlerError("rate_limited", "rate_limited", true);
+                    return page
                       .getByRole("link", {
                         name: "Hello, sign in Account & Lists",
                         exact: true,
                         includeHidden: true,
                       })
-                      .isVisible(),
+                      .isVisible();
+                  },
                   ...(options.signal ? { signal: options.signal } : {}),
                 });
-              } catch {
+              } catch (error) {
+                if (error instanceof PlaywrightCrawlerError && error.code === "rate_limited")
+                  throw error;
                 throw new PlaywrightCrawlerError("blocked_captcha", "blocked_captcha", false);
+              } finally {
+                revokeManualChallenge?.();
               }
             }
           : undefined,
+        () => signalsFor(page),
       );
     let context: BrowserContext | undefined,
       rateLimited = false,
@@ -798,6 +836,10 @@ export class PlaywrightCrawlerEngine {
           request.isNavigationRequest?.() &&
           request.frame().parentFrame() === null
         ) {
+          const currentPage = request.frame().page();
+          if (response.status() === 202 && response.headers()["x-amzn-waf-action"] === "challenge")
+            wafChallenges.add(currentPage);
+          else wafChallenges.delete(currentPage);
           if (documentResponses.length === 10) documentResponses.shift();
           documentResponses.push({
             http_status: response.status(),

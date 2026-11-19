@@ -201,3 +201,90 @@ test("real Chromium negotiates local proxy authentication and reaches the opaque
     await new Promise((r) => upstream.close(r));
   }
 });
+
+test("manual WAF allowance is exact, bounded and revokes existing tunnels without touching ordinary Amazon", async () => {
+  const host = "1c5c1ecf7303.eb59107c.us-west-1.token.awswaf.com",
+    peers = new Set();
+  const upstream = createServer((socket) => {
+    peers.add(socket);
+    socket.on("error", () => {});
+    socket.once("close", () => peers.delete(socket));
+    let header = "";
+    const read = (data) => {
+      header += data.toString("latin1");
+      if (!header.includes("\r\n\r\n")) return;
+      socket.off("data", read);
+      socket.write("HTTP/1.1 200 Connection Established\r\n\r\n");
+    };
+    socket.on("data", read);
+  });
+  await new Promise((r) => upstream.listen(0, "127.0.0.1", r));
+  const relay = await createAuthenticatedBrowserProxy({
+    server: `http://127.0.0.1:${upstream.address().port}`,
+    username: "fixture",
+    password: "fixture",
+  });
+  const auth =
+      "Basic " + Buffer.from(relay.proxy.username + ":" + relay.proxy.password).toString("base64"),
+    port = Number(new URL(relay.proxy.server).port);
+  const tunnel = (target) =>
+    new Promise((resolve, reject) => {
+      const socket = connect({ host: "127.0.0.1", port });
+      socket.on("error", reject);
+      const timer = setTimeout(() => {
+        socket.destroy();
+        reject(Error("local fixture timeout"));
+      }, 2000);
+      let data = "";
+      socket.once("connect", () =>
+        socket.write(`CONNECT ${target} HTTP/1.1\r\nProxy-Authorization: ${auth}\r\n\r\n`),
+      );
+      const read = (b) => {
+        data += b.toString("latin1");
+        if (!data.includes("\r\n\r\n")) return;
+        clearTimeout(timer);
+        socket.off("data", read);
+        resolve({ socket, status: Number(/^HTTP\/1.1 (\d{3})/.exec(data)?.[1]) });
+      };
+      socket.on("data", read);
+    });
+  const deny = async (target) => {
+    const t = await tunnel(target);
+    assert.equal(t.status, 403);
+    t.socket.destroy();
+  };
+  try {
+    await deny(host + ":443");
+    for (const invalid of [NaN, Infinity, Date.now() - 1, Date.now() + 400000])
+      assert.throws(() => relay.allowManualChallengeUntil(invalid), /expiry_invalid/);
+    const ordinary = await tunnel("www.amazon.com:443");
+    assert.equal(ordinary.status, 200);
+    const revoke = relay.allowManualChallengeUntil(Date.now() + 2000);
+    const manual = await tunnel(host + ":443");
+    assert.equal(manual.status, 200);
+    for (const bad of [
+      host + ":80",
+      "other.token.awswaf.com:443",
+      "token.awswaf.com:443",
+      "x." + host + ":443",
+      host + ".evil.test:443",
+      "127.0.0.1:443",
+    ])
+      await deny(bad);
+    const closed = new Promise((r) => manual.socket.once("close", r));
+    revoke();
+    await closed;
+    assert.equal(ordinary.socket.destroyed, false);
+    await deny(host + ":443");
+    ordinary.socket.destroy();
+    relay.allowManualChallengeUntil(Date.now() + 200);
+    const expiring = await tunnel(host + ":443");
+    assert.equal(expiring.status, 200);
+    await new Promise((r) => expiring.socket.once("close", r));
+    await deny(host + ":443");
+  } finally {
+    await relay.close();
+    for (const p of peers) p.destroy();
+    await new Promise((r) => upstream.close(r));
+  }
+});

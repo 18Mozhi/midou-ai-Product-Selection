@@ -166,6 +166,17 @@ class TrendReleaseScopeTest(unittest.TestCase):
                                                          trend["COLLECTION_HANDOFF_ROUTES_SOURCE"])
             self.assertEqual(hashlib.sha256(restored).hexdigest(), digest)
 
+    def test_manual_waf_rebuilds_only_three_original_crawler_modules(self):
+        before, after = trend["collection_hashes"]("manual_waf")
+        self.assertEqual(set(before), {"packages/playwright-crawler/dist/index.js",
+                                      "packages/playwright-crawler/dist/authenticated-proxy.js",
+                                      "packages/playwright-crawler/dist/manual-handoff.js"})
+        self.assertEqual(trend["collection_hashes"]("manual_waf_restore"), (after, before))
+        for name, digest in before.items():
+            restored = trend["build_collection_restore"](Path(__file__).resolve().parents[2], name,
+                                                         trend["COLLECTION_MANUAL_WAF_SOURCE"])
+            self.assertEqual(hashlib.sha256(restored).hexdigest(), digest)
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

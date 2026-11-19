@@ -11,6 +11,7 @@ const suffixes = [
 ];
 // Observed in the real Amazon product HTML; do not permit arbitrary CloudFront tenants.
 const exactHosts = new Set(["d2lbyuknrhysf9.cloudfront.net"]);
+export const AMAZON_MANUAL_WAF_HOST = "1c5c1ecf7303.eb59107c.us-west-1.token.awswaf.com";
 const digest = (s: string) => createHash("sha256").update(s).digest();
 const publicDnsName = (host: string) =>
   host.length <= 253 && /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(host);
@@ -62,6 +63,16 @@ export async function createAuthenticatedBrowserProxy(
     timeout = input.connectTimeoutMs ?? 5000;
   if (!Number.isInteger(timeout) || timeout < 100 || timeout > 10000)
     throw new Error("browser_proxy_timeout_invalid");
+  let manualUntil = 0;
+  let manualTimer: ReturnType<typeof setTimeout> | undefined;
+  const manualSockets = new Set<{ destroy(): unknown }>();
+  const revokeManual = () => {
+    manualUntil = 0;
+    clearTimeout(manualTimer);
+    manualTimer = undefined;
+    for (const socket of manualSockets) socket.destroy();
+    manualSockets.clear();
+  };
   const server = createServer((_request, response) => {
     response.writeHead(405);
     response.end();
@@ -90,10 +101,13 @@ export async function createAuthenticatedBrowserProxy(
       return;
     }
     const match = /^([a-z0-9.-]{1,253}):443$/i.exec(request.url ?? ""),
-      host = match?.[1]?.toLowerCase();
+      host = match?.[1]?.toLowerCase(),
+      manual = host === AMAZON_MANUAL_WAF_HOST && Date.now() < manualUntil;
     if (
       !host ||
-      (!exactHosts.has(host) && !suffixes.some((s) => host === s || host.endsWith("." + s)))
+      (!manual &&
+        !exactHosts.has(host) &&
+        !suffixes.some((s) => host === s || host.endsWith("." + s)))
     ) {
       report(
         403,
@@ -104,6 +118,12 @@ export async function createAuthenticatedBrowserProxy(
     }
     const peer = connect({ host: upstream.hostname, port: Number(upstream.port || 80) });
     sockets.add(peer);
+    if (manual) {
+      for (const socket of [client, peer]) {
+        manualSockets.add(socket);
+        socket.once("close", () => manualSockets.delete(socket));
+      }
+    }
     peer.once("close", () => sockets.delete(peer));
     let pending = Buffer.alloc(0),
       established = false,
@@ -125,11 +145,15 @@ export async function createAuthenticatedBrowserProxy(
       if (!established) fail(502);
       else client.destroy();
     });
-    peer.once("connect", () =>
+    peer.once("connect", () => {
+      if (manual && Date.now() >= manualUntil) {
+        fail(403);
+        return;
+      }
       peer.write(
         `CONNECT ${host}:443 HTTP/1.1\r\nHost: ${host}:443\r\nProxy-Authorization: ${upstreamAuthorization}\r\nProxy-Connection: Keep-Alive\r\n\r\n`,
-      ),
-    );
+      );
+    });
     const onData = (chunk: Buffer) => {
       pending = Buffer.concat([pending, chunk]);
       if (pending.length > 16384) {
@@ -174,8 +198,23 @@ export async function createAuthenticatedBrowserProxy(
   let closed = false;
   return {
     proxy: { server: `http://127.0.0.1:${address.port}`, username, password },
+    allowManualChallengeUntil: (expiresAt: number) => {
+      revokeManual();
+      if (
+        closed ||
+        !Number.isFinite(expiresAt) ||
+        expiresAt <= Date.now() ||
+        expiresAt > Date.now() + 300_000
+      )
+        throw new Error("browser_manual_challenge_expiry_invalid");
+      manualUntil = expiresAt;
+      manualTimer = setTimeout(revokeManual, Math.max(1, expiresAt - Date.now()));
+      manualTimer.unref();
+      return revokeManual;
+    },
     close: async () => {
       if (closed) return;
+      revokeManual();
       closed = true;
       for (const socket of clients) socket.destroy();
       for (const socket of sockets) socket.destroy();

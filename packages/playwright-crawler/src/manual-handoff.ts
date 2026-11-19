@@ -156,6 +156,9 @@ export async function waitForManualCaptcha(input: {
   captchaSelector: string;
   allowedOrigins: string[];
   isReady?: () => Promise<boolean>;
+  // Called once only after the existing superadmin claim is persisted.
+  onClaim?: (expiresAt: number) => Promise<void>;
+  isChallengePresent?: () => Promise<boolean>;
   report?: (observation: {
     event: "opened" | "command_applied" | "ready" | "expired";
     command_kind?: HandoffCommand["kind"];
@@ -168,6 +171,9 @@ export async function waitForManualCaptcha(input: {
     store = new BrowserHandoffStore(input.root),
     expires = Date.now() + HANDOFF_TTL_MS,
     processed = new Set<string>();
+  let claimHandled = false;
+  const challengePresent =
+    input.isChallengePresent ?? (() => page.locator(input.captchaSelector).count().then(Boolean));
   await mkdir(directory, { recursive: true, mode: 0o700 });
   const safe = async () => {
     input.signal?.throwIfAborted();
@@ -191,13 +197,31 @@ export async function waitForManualCaptcha(input: {
     await page.setViewportSize({ width: 1280, height: 720 });
     while (Date.now() < expires) {
       await safe();
-      if (!(await page.locator(input.captchaSelector).count())) {
+      if (input.onClaim && !claimHandled) {
+        const path = store.path(id, "claim.json"),
+          entry = await lstat(path).catch(() => null);
+        if (entry?.isFile() && !entry.isSymbolicLink() && entry.size <= 4096) {
+          const claim = await readFile(path, "utf8")
+            .then((text) => JSON.parse(text))
+            .catch(() => null);
+          if (
+            claim &&
+            Object.keys(claim).length === 2 &&
+            typeof claim.actorId === "string" &&
+            handoffIdValid(claim.actorId) &&
+            typeof claim.session === "string" &&
+            /^[a-f0-9]{64}$/.test(claim.session)
+          ) {
+            claimHandled = true;
+            await input.onClaim(expires);
+            await safe();
+          }
+        }
+      }
+      if (!(await challengePresent())) {
         await page.waitForLoadState("domcontentloaded");
         await safe();
-        if (
-          !(await page.locator(input.captchaSelector).count()) &&
-          (!input.isReady || (await input.isReady()))
-        ) {
+        if (!(await challengePresent()) && (!input.isReady || (await input.isReady()))) {
           report({ event: "ready" });
           return;
         }
@@ -232,11 +256,7 @@ export async function waitForManualCaptcha(input: {
           await rm(commandPath + ".lock", { force: true });
         }
         const command = packet.command;
-        if (
-          !(await page.locator(input.captchaSelector).count()) &&
-          (!input.isReady || (await input.isReady()))
-        )
-          continue;
+        if (!(await challengePresent()) && (!input.isReady || (await input.isReady()))) continue;
         if (
           packet.id &&
           handoffIdValid(packet.id) &&
