@@ -94,3 +94,22 @@ Worker 的 collection_tasks 调度时限由既有 PLAYWRIGHT_RUN_TIMEOUT_SECONDS
 原180秒浏览器配置仍使用原300秒外层预算；其他队列、并发、重试、租约心跳、证据门均不改变。
 不增加环境变量或HTTP字段；更新需重启既有宝塔Node Worker，Python预算仍使用同一既有配置。
 该修复避免人工验证等待期间外层队列提前abort，不能解决Amazon验证本身拒绝或反复出现。
+
+## 账号模式下已停用来源的人工诊断（2026-11-19）
+
+正式端真实人工检查曾在创建浏览器前返回 crawler_profile_unavailable：账号路径错误地只接受 enabled 来源。
+仅现有内部 manual=true 且没有 automaticTaskId 的 Amazon 健康检查可诊断 disabled 来源；仍锁定操作员自己的有效账号、
+规范匿名档案、有效条款、原全局租约和权限。自动健康检查、普通采集、其他来源仍要求 enabled，探针不修改来源启停。
+
+Amazon 页面发现 HTTPS AWS WAF token 域 challenge.js 节点时，按验证受阻进入原有最多300秒人工接管；
+没有 handoff 时返回 blocked_captcha，不再误报普通超时。普通202无该标记不会制造会话。
+这是识别并展示原页面，不是绕过验证：不执行求解、不增加外域访问许可、不修改脚本、不换出口或导入Cookie。
+若原页面只显示空白/错误而无可操作控件，应记录真实受阻，不能以空白页当作验证通过。
+原同源、禁止登录、严格匿名链接、投递地及搜索加同商品详情验收全部保留；只在真实通过后走既有审计恢复。
+
+定向发布仅替换 Node 包中 packages/playwright-crawler/dist/index.js 和
+apps/api/dist/mysql-crawler-runtime-repository.js，保留每日地区准备、趋势投影、AI等待、背压等全部既有模块。
+使用官方协调入口 --collection-handoff-only；精确代码回退为 --collection-handoff-rollback，二者均需
+--expected-previous-sha 和 --expected-module-sha256，哈希不符失败关闭。本地重建上一提交原模块，不在服务器创建回退副本。
+发布只重启宝塔 ai选品 Node；不重启Python、不调并发、不直接修改数据库或配置。
+无新增环境变量、HTTP字段、依赖或服务；前端现有 /platform-admin/collection/browser-runtime 接管区继续使用。

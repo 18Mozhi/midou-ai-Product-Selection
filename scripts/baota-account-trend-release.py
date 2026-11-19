@@ -105,6 +105,16 @@ COLLECTION_DAILY_CANDIDATE = {
     COLLECTION_DETAIL: "91b73eeaa02d07a2c432ad12c368f27d5b12fb762c4be419ab681019f552b9b5",
     COLLECTION_DAILY_CONTEXT: "23265e1942bda82342bade4fdff972b1dbe2988e7d7a4510a6c6e5ffdf8ef589",
 }
+COLLECTION_HANDOFF_REPO = "apps/api/dist/mysql-crawler-runtime-repository.js"
+COLLECTION_HANDOFF_SOURCE = "aa51db05c714ec2a259f5086cb3a57d5ef5b0646"
+COLLECTION_HANDOFF_BASE = {
+    COLLECTION_DETAIL: COLLECTION_DAILY_CANDIDATE[COLLECTION_DETAIL],
+    COLLECTION_HANDOFF_REPO: AMAZON_INSTALLED["mysql-crawler-runtime-repository.js"],
+}
+COLLECTION_HANDOFF_CANDIDATE = {
+    'packages/playwright-crawler/dist/index.js': 'e86b64d50126d8de9fef3d3fd8fd8291364f07b42220717e3ec0a21bed234021',
+    'apps/api/dist/mysql-crawler-runtime-repository.js': 'd21ed7dccb7b8b989359473f280530b5f644e431ffec259b8d9aae12a3dc78aa',
+}
 COLLECTION_DETAIL_DIAG_SOURCE = "b4ee048b514ad2a13314a14136f903b5762e5d9f"
 COLLECTION_LAN_CLIENT = "packages/provider-sources/dist/lan-1688-image-search.js"
 COLLECTION_LAN_HEALTH = "packages/provider-sources/dist/lan-1688-health-adapter.js"
@@ -224,6 +234,8 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             api_hashes[AMAZON_AUDIT_MODULE] = "425611f474a67f26a7a3138a456def5652fa77872099337a89535dbb6fb40e33"
         for name, digest in api_hashes.items():
             path = root / AMAZON_DIR / name
+            if path in replacements:
+                continue  # A pinned replacement cannot also be an unchanged protected file.
             data = read_file(path, 131072)
             if hashlib.sha256(data).hexdigest() != digest:
                 raise RuntimeError("trend_amazon_protected_module_changed")
@@ -277,13 +289,15 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
             prerequisites[COLLECTION_DETAIL] = COLLECTION_DETAIL_CANONICAL
-        if collection in ("delivery_daily", "delivery_daily_restore"):
+        if collection in ("delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore"):
             prerequisites.update(COLLECTION_RANK_CANDIDATE)
             prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
             prerequisites.update(COLLECTION_LAN_HEALTH_CANDIDATE)
             prerequisites.update(COLLECTION_MODEL_HOLD_CANDIDATE)
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
+        if collection in ("handoff", "handoff_restore"):
+            prerequisites[COLLECTION_DAILY_CONTEXT] = COLLECTION_DAILY_CANDIDATE[COLLECTION_DAILY_CONTEXT]
         for name, digest in prerequisites.items():
             path = root / "backend" / name
             data = read_file(path, 131072)
@@ -345,6 +359,10 @@ def collection_hashes(action):
         return COLLECTION_DAILY_BASE, COLLECTION_DAILY_CANDIDATE
     if action == "delivery_daily_restore":
         return COLLECTION_DAILY_CANDIDATE, COLLECTION_DAILY_BASE
+    if action == "handoff":
+        return COLLECTION_HANDOFF_BASE, COLLECTION_HANDOFF_CANDIDATE
+    if action == "handoff_restore":
+        return COLLECTION_HANDOFF_CANDIDATE, COLLECTION_HANDOFF_BASE
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
@@ -615,7 +633,7 @@ def validate_collection_changes(changed):
     source = collection_sources()
     web = {"apps/web/src/components/ProviderAdapterCenter.vue", "apps/web/src/source-1688-operator-action.ts"}
     followups = {n.replace("/dist/", "/src/").removesuffix(".js") + ".ts"
-                 for n in (COLLECTION_EXECUTOR, COLLECTION_BROWSER, COLLECTION_DETAIL, COLLECTION_DAILY_CONTEXT, *COLLECTION_EVIDENCE_BASE, *COLLECTION_RANK_BASE)}
+                 for n in (COLLECTION_EXECUTOR, COLLECTION_BROWSER, COLLECTION_DETAIL, COLLECTION_DAILY_CONTEXT, COLLECTION_HANDOFF_REPO, *COLLECTION_EVIDENCE_BASE, *COLLECTION_RANK_BASE)}
     exact = source | web | followups | {"config/env.example", "scripts/deploy-account-baota.py", "scripts/baota-account-trend-release.py",
                             "scripts/baota-account-static-release.py"}
     if not (source | web).issubset(changed) or any(
@@ -645,7 +663,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         key = (COLLECTION_EXECUTOR if collection in ("executor", "executor_restore", "executor_lock", "executor_lock_restore") else
                COLLECTION_BROWSER if collection in ("browser", "browser_restore") else
                COLLECTION_EVIDENCE if collection in ("evidence", "evidence_restore") else
-               COLLECTION_DETAIL if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore", "delivery_daily", "delivery_daily_restore") else
+               COLLECTION_DETAIL if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore", "delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore") else
                COLLECTION_LAN_CLIENT if collection in ("lan_rate", "lan_rate_restore") else
                COLLECTION_LAN_HEALTH if collection in ("lan_health", "lan_health_restore") else
                "apps/worker/dist/collection-task-state-machine.js")
@@ -693,7 +711,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
     if rollback:
         deploy["verify_production_sha_history"](repo, STAGGER_RELEASE_SHA, sha)
         validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
-    for job in (("build:playwright-crawler",) if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore", "delivery_daily", "delivery_daily_restore") else
+    for job in (("build:api", "build:playwright-crawler") if collection in ("handoff", "handoff_restore") else
+                ("build:playwright-crawler",) if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore", "delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore") else
                 ("build:data-quality", "build:worker") if collection in ("evidence", "evidence_restore") else
                 ("build:worker", "build:provider-sources") if collection is not None else
                 ("build:api" if amazon else "build:worker",)):
@@ -713,7 +732,9 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             lan_health_followup = collection in ("lan_health", "lan_health_restore")
             model_hold_followup = collection in ("model_hold", "model_hold_restore")
             daily_followup = collection in ("delivery_daily", "delivery_daily_restore")
-            source = (COLLECTION_EXECUTOR_CLOCK_SHA if lock_followup else
+            handoff_followup = collection in ("handoff", "handoff_restore")
+            source = (COLLECTION_HANDOFF_SOURCE if handoff_followup else
+                      COLLECTION_EXECUTOR_CLOCK_SHA if lock_followup else
                       COLLECTION_RANK_SOURCE_BASE if rank_followup else
                       COLLECTION_LAN_SOURCE[name] if lan_followup else
                       COLLECTION_LAN_HEALTH_SOURCE if lan_health_followup else
@@ -721,7 +742,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
                       COLLECTION_DAILY_SOURCE if daily_followup else
                       COLLECTION_DETAIL_DIAG_SOURCE if canonical_followup else COLLECTION_SOURCE_BASE)
             restored = build_collection_restore(repo, name, source)
-            original = (COLLECTION_RANK_BASE[name] if rank_followup else
+            original = (COLLECTION_HANDOFF_BASE[name] if handoff_followup else
+                        COLLECTION_RANK_BASE[name] if rank_followup else
                         COLLECTION_LAN_BASE[name] if lan_followup else
                         COLLECTION_LAN_HEALTH_BASE[name] if lan_health_followup else
                         COLLECTION_MODEL_HOLD_BASE[name] if model_hold_followup else

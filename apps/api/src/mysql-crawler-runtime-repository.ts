@@ -310,7 +310,10 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           ? "SELECT p.provider_id,p.updated_by,a.expires_at FROM crawler_profiles p JOIN credential_assets a ON " +
             "a.id=p.credential_asset_id JOIN providers v ON v.id=p.provider_id WHERE p.id=? AND p.status='active' " +
             "AND a.status='active' AND a.kind='browser_profile' AND a.fingerprint=? AND v.code='amazon_product' " +
-            "AND v.access_mode='public_page' AND v.status='enabled' AND v.terms_review_status='approved' " +
+            "AND v.access_mode='public_page' AND (v.status='enabled'" +
+            (this.accountAmazonHealth?.manual && input.automaticTaskId === undefined
+              ? " OR v.status='disabled'" : "") +
+            ") AND v.terms_review_status='approved' " +
             "AND CHAR_LENGTH(v.terms_version)>0 AND (v.terms_permanent=1 OR v.terms_expires_at>?) LIMIT 1 FOR UPDATE"
           :
         [

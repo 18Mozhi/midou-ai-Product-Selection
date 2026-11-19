@@ -274,3 +274,97 @@ test("operator routes require superadmin, origin, live lease, exclusive session 
     await rm(root, { recursive: true, force: true });
   }
 });
+
+test(
+  "real Chromium: Amazon WAF marker enters only existing human handoff; ordinary 202 stays failure",
+  { timeout: 25000 },
+  async () => {
+    const { chromium } = await import("playwright");
+    const { createAmazonBrowserExecutionRequest } =
+      await import("../../packages/provider-sources/dist/index.js");
+    const root = await mkdtemp(join(tmpdir(), "scoutops-waf-handoff-"));
+    const original = chromium.launchPersistentContext.bind(chromium);
+    let challenge = true,
+      contexts = 0;
+    const ready =
+      '<a href="/ap/signin">Hello, sign in Account &amp; Lists</a><div id="glow-ingress-block">Deliver to 94404</div><div id="title"><h1 id="productTitle">Local fixture brush</h1></div>';
+    chromium.launchPersistentContext = async (...args) => {
+      const ctx = await original(...args);
+      contexts++;
+      await ctx.route("**/*", (route) =>
+        route.fulfill({
+          status: 202,
+          contentType: "text/html",
+          body: challenge
+            ? `<html><body><script type="text/plain" src="https://fixture.token.awswaf.com/local/challenge.js"></script><button onclick='document.body.innerHTML=${JSON.stringify(ready)}'>Local operator confirmation</button></body></html>`
+            : "<html><body>ordinary unavailable fixture</body></html>",
+        }),
+      );
+      return ctx;
+    };
+    const limits = {
+      navigationTimeoutMs: 1000,
+      actionTimeoutMs: 300,
+      maxPages: 1,
+      maxScrolls: 0,
+      maxDetails: 0,
+      headless: true,
+    };
+    const { plan } = createAmazonBrowserExecutionRequest(
+      { page_url: "https://www.amazon.com/dp/B0FR7TKH1X" },
+      "94404",
+    );
+    const handoffs = join(root, "handoffs"),
+      store = new BrowserHandoffStore(handoffs);
+    const run = (options) =>
+      new PlaywrightCrawlerEngine(limits).run(
+        { ...plan, max_scrolls: 0 },
+        join(root, "profile-" + contexts),
+        { requestId: randomUUID(), traceId: randomUUID() },
+        {
+          ...options,
+          dailyDelivery: {
+            cookies: [],
+            cached: true,
+            save: async () => assert.fail("cached fixture must not save"),
+          },
+        },
+      );
+    try {
+      const blocked = await run({});
+      assert.equal(blocked.status, "blocked_captcha");
+      assert.equal(blocked.item_count, 0);
+      const controller = new AbortController();
+      const running = run({
+        handoff: { root: handoffs, runId: randomUUID() },
+        signal: controller.signal,
+      });
+      try {
+        let live = [];
+        for (let i = 0; i < 200 && !live.length; i++) {
+          await new Promise((r) => setTimeout(r, 10));
+          live = await store.list();
+        }
+        assert.equal(live.length, 1);
+        assert.ok((await store.frame(live[0].id)).length > 0);
+        // Only this self-owned local fixture is clicked. No third-party challenge is solved.
+        await store.command(live[0].id, { kind: "click", x: 90, y: 18 }, randomUUID());
+        const result = await running;
+        assert.equal(result.status, "succeeded");
+        assert.equal(result.item_count, 1);
+        assert.deepEqual(await store.list(), []);
+      } finally {
+        controller.abort();
+        await running.catch(() => {});
+      }
+      challenge = false;
+      const ordinary = await run({ handoff: { root: handoffs, runId: randomUUID() } });
+      assert.notEqual(ordinary.status, "succeeded");
+      assert.equal(ordinary.item_count, 0);
+      assert.deepEqual(await store.list(), []);
+    } finally {
+      chromium.launchPersistentContext = original;
+      await rm(root, { recursive: true, force: true });
+    }
+  },
+);

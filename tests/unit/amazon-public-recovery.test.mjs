@@ -187,6 +187,9 @@ for (const manual of [false,true]) test(`retired Amazon lease requires private i
       assert.deepEqual(taskGuard.args,manual?[actor]:[task,actor,"account"]);
       const profileGuard = calls.find(({sql})=>sql.startsWith("SELECT p.provider_id"));
       assert.match(profileGuard.sql,/v.status='enabled'.*v.terms_review_status='approved'/);
+      if (manual) assert.match(profileGuard.sql,/OR v.status='disabled'/);
+      else assert.doesNotMatch(profileGuard.sql,/v.status='disabled'/);
+      assert.match(profileGuard.sql,/a.fingerprint=\?.*v.code='amazon_product'.*v.access_mode='public_page'/);
       assert.deepEqual(profileGuard.args,["profile",anonymousAmazonFingerprint(),now]);
       const run = calls.find(({sql})=>sql.startsWith("INSERT INTO crawler_browser_runs "));
       assert.match(run.sql,/historical_context/);

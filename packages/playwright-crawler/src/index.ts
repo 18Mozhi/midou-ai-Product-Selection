@@ -657,7 +657,19 @@ export class PlaywrightCrawlerEngine {
     const guard = (page: Page) =>
       blocked(
         page,
-        plan.block_signals,
+        plan.amazon_delivery
+          ? {
+              ...plan.block_signals,
+              // This is a blocked-page marker, not permission to fetch or solve
+              // WAF scripts. Keep the same bounded human-only handoff and guards.
+              captcha: [
+                plan.block_signals?.captcha,
+                'script[src^="https://"][src*=".token.awswaf.com/"][src$="/challenge.js"]',
+              ]
+                .filter(Boolean)
+                .join(","),
+            }
+          : plan.block_signals,
         options.handoff && plan.amazon_delivery
           ? async (page, selector) => {
               try {
