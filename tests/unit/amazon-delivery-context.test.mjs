@@ -799,3 +799,35 @@ test("real Chromium delivery diagnostics distinguish anonymous, postal and hidde
     }
   }finally{await browser.close();}
 });
+
+
+test("real Chromium: post-region reread waits for exact anonymous rendering without weakening ZIP or identity", {timeout:15000}, async()=>{
+  const {chromium}=await import("playwright");const browser=await chromium.launch({headless:true});
+  const anonymous='<a id="nav-link-accountList" href="/ap/signin">Hello, sign in Account &amp; Lists</a>';
+  try {
+    for(const mode of ["delayed_anonymous","missing_anonymous","wrong_postal","wrong_identity"]){
+      const ctx=await browser.newContext();ctx.setDefaultTimeout(800);let navigations=0;
+      await ctx.route("**/*",route=>{
+        assert.equal(new URL(route.request().url()).origin,"https://www.amazon.com");navigations++;
+        const modal=JSON.stringify({url:"/fixture-modal?pageType=Gateway&storeContext=generic"});
+        return route.fulfill({status:200,contentType:"text/html",body:navigations===1?
+          `<html><body>${anonymous}<div id="glow-ingress-block">Deliver to China</div><i id="nav-global-location-data-modal-action" data-a-modal='${modal}'></i></body></html>`:
+          `<html><body><div id="account-slot"></div><div id="glow-ingress-block">Deliver to ${mode==="wrong_postal"?"10001":"94404"}</div><script>setTimeout(()=>{document.querySelector('#account-slot').innerHTML=${JSON.stringify(mode==="missing_anonymous"?"":mode==="wrong_identity"?'<a id="nav-link-accountList">Hello, fixture Account &amp; Lists</a>':anonymous)}},300)</script></body></html>`});
+      });
+      const page=await ctx.newPage();
+      // Only the local fixture's provider-issued modal chain is mocked; no external request.
+      const response=(url,body)=>({url:()=>url,status:()=>200,text:async()=>body,dispose:async()=>{}});
+      ctx.request.get=async url=>response(url,'CSRF_TOKEN: "fixture-issued-token"');
+      ctx.request.post=async(url,options)=>{assert.equal(options.data.zipCode,"94404");return response(url,'{}');};
+      await page.goto("https://www.amazon.com/",{waitUntil:"domcontentloaded"});
+      const safe=async()=>{assert.equal(new URL(page.url()).origin,"https://www.amazon.com");assert.equal(await page.locator('input[type="password"]').count(),0);};
+      const reread=async()=>{await page.goto("https://www.amazon.com/",{waitUntil:"domcontentloaded"});assert.equal(await page.getByRole("link",{name:"Hello, sign in Account & Lists",exact:true}).isVisible(),false);};
+      try {
+        const running=prepareAmazonDeliveryContext(page,"94404",safe,()=>{},reread,800);
+        if(mode==="delayed_anonymous")assert.equal(await running,true);
+        else await assert.rejects(running,mode==="wrong_postal"?/Timeout/:/requires_anonymous/);
+        assert.equal(navigations,2);
+      }finally{await ctx.close();}
+    }
+  }finally{await browser.close();}
+});

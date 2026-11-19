@@ -138,6 +138,9 @@ COLLECTION_MANUAL_WAF_CANDIDATE = {
 COLLECTION_DELIVERY_OBSERVE_SOURCE = "1c74971058439357ad7f3106cdacb0abdcc5da9b"
 COLLECTION_DELIVERY_OBSERVE_BASE = {COLLECTION_DETAIL: COLLECTION_MANUAL_WAF_CANDIDATE[COLLECTION_DETAIL]}
 COLLECTION_DELIVERY_OBSERVE_CANDIDATE = {COLLECTION_DETAIL: "d38ec9a4da12da0b67b0b415e09e577d335dc849e31b2a2ba8224c7550747581"}
+COLLECTION_DELIVERY_READY_SOURCE = "2aa8a35a734b1cd375909bae6f8d586b4bff96a1"
+COLLECTION_DELIVERY_READY_BASE = {COLLECTION_DAILY_CONTEXT: COLLECTION_DAILY_CANDIDATE[COLLECTION_DAILY_CONTEXT]}
+COLLECTION_DELIVERY_READY_CANDIDATE = {COLLECTION_DAILY_CONTEXT: "47ca6d42231640ae6a070d30389584b7b5fa2b1a7ffe154e9ed4ac4834a4785d"}
 COLLECTION_DETAIL_DIAG_SOURCE = "b4ee048b514ad2a13314a14136f903b5762e5d9f"
 COLLECTION_LAN_CLIENT = "packages/provider-sources/dist/lan-1688-image-search.js"
 COLLECTION_LAN_HEALTH = "packages/provider-sources/dist/lan-1688-health-adapter.js"
@@ -255,7 +258,7 @@ def prepare_amazon(root, manifest, read_file, collection=None):
         api_hashes = dict(AMAZON_INSTALLED)
         if collection is not None:
             api_hashes[AMAZON_AUDIT_MODULE] = "425611f474a67f26a7a3138a456def5652fa77872099337a89535dbb6fb40e33"
-        if collection in ("handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore"):
+        if collection in ("handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore"):
             api_hashes["mysql-crawler-runtime-repository.js"] = COLLECTION_HANDOFF_CANDIDATE[COLLECTION_HANDOFF_REPO]
         for name, digest in api_hashes.items():
             path = root / AMAZON_DIR / name
@@ -314,14 +317,14 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
             prerequisites[COLLECTION_DETAIL] = COLLECTION_DETAIL_CANONICAL
-        if collection in ("delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore"):
+        if collection in ("delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore"):
             prerequisites.update(COLLECTION_RANK_CANDIDATE)
             prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
             prerequisites.update(COLLECTION_LAN_HEALTH_CANDIDATE)
             prerequisites.update(COLLECTION_MODEL_HOLD_CANDIDATE)
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
-        if collection in ("handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore"):
+        if collection in ("handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore"):
             prerequisites[COLLECTION_DAILY_CONTEXT] = COLLECTION_DAILY_CANDIDATE[COLLECTION_DAILY_CONTEXT]
         if collection in ("handoff_routes", "handoff_routes_restore"):
             prerequisites.update(COLLECTION_HANDOFF_CANDIDATE)
@@ -332,6 +335,12 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites[COLLECTION_HANDOFF_REPO] = COLLECTION_HANDOFF_CANDIDATE[COLLECTION_HANDOFF_REPO]
             prerequisites.update(COLLECTION_HANDOFF_ROUTES_CANDIDATE)
             prerequisites.update({n: h for n, h in COLLECTION_MANUAL_WAF_CANDIDATE.items() if n != COLLECTION_DETAIL})
+        if collection in ("delivery_ready", "delivery_ready_restore"):
+            prerequisites.pop(COLLECTION_DAILY_CONTEXT, None)
+            prerequisites[COLLECTION_HANDOFF_REPO] = COLLECTION_HANDOFF_CANDIDATE[COLLECTION_HANDOFF_REPO]
+            prerequisites.update(COLLECTION_HANDOFF_ROUTES_CANDIDATE)
+            prerequisites.update(COLLECTION_MANUAL_WAF_CANDIDATE)
+            prerequisites.update(COLLECTION_DELIVERY_OBSERVE_CANDIDATE)
         for name, digest in prerequisites.items():
             path = root / "backend" / name
             data = read_file(path, 131072)
@@ -409,6 +418,10 @@ def collection_hashes(action):
         return COLLECTION_DELIVERY_OBSERVE_BASE, COLLECTION_DELIVERY_OBSERVE_CANDIDATE
     if action == "delivery_observe_restore":
         return COLLECTION_DELIVERY_OBSERVE_CANDIDATE, COLLECTION_DELIVERY_OBSERVE_BASE
+    if action == "delivery_ready":
+        return COLLECTION_DELIVERY_READY_BASE, COLLECTION_DELIVERY_READY_CANDIDATE
+    if action == "delivery_ready_restore":
+        return COLLECTION_DELIVERY_READY_CANDIDATE, COLLECTION_DELIVERY_READY_BASE
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
@@ -706,11 +719,12 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         raise RuntimeError("trend_release_requires_expected_sha256_and_base_sha")
     if collection is not None:
         route, _ = collection_hashes(collection)
-        key = ("apps/api/dist/server.js" if collection in ("handoff_routes", "handoff_routes_restore") else
+        key = (COLLECTION_DAILY_CONTEXT if collection in ("delivery_ready", "delivery_ready_restore") else
+               "apps/api/dist/server.js" if collection in ("handoff_routes", "handoff_routes_restore") else
                COLLECTION_EXECUTOR if collection in ("executor", "executor_restore", "executor_lock", "executor_lock_restore") else
                COLLECTION_BROWSER if collection in ("browser", "browser_restore") else
                COLLECTION_EVIDENCE if collection in ("evidence", "evidence_restore") else
-               COLLECTION_DETAIL if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore", "delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore") else
+               COLLECTION_DETAIL if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore", "delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore") else
                COLLECTION_LAN_CLIENT if collection in ("lan_rate", "lan_rate_restore") else
                COLLECTION_LAN_HEALTH if collection in ("lan_health", "lan_health_restore") else
                "apps/worker/dist/collection-task-state-machine.js")
@@ -760,7 +774,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
     for job in (("build:api",) if collection in ("handoff_routes", "handoff_routes_restore") else
                 ("build:api", "build:playwright-crawler") if collection in ("handoff", "handoff_restore") else
-                ("build:playwright-crawler",) if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore", "delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore") else
+                ("build:playwright-crawler",) if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore", "delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore") else
                 ("build:data-quality", "build:worker") if collection in ("evidence", "evidence_restore") else
                 ("build:worker", "build:provider-sources") if collection is not None else
                 ("build:api" if amazon else "build:worker",)):
@@ -784,7 +798,9 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             handoff_routes_followup = collection in ("handoff_routes", "handoff_routes_restore")
             manual_waf_followup = collection in ("manual_waf", "manual_waf_restore")
             delivery_observe_followup = collection in ("delivery_observe", "delivery_observe_restore")
-            source = (COLLECTION_DELIVERY_OBSERVE_SOURCE if delivery_observe_followup else
+            delivery_ready_followup = collection in ("delivery_ready", "delivery_ready_restore")
+            source = (COLLECTION_DELIVERY_READY_SOURCE if delivery_ready_followup else
+                      COLLECTION_DELIVERY_OBSERVE_SOURCE if delivery_observe_followup else
                       COLLECTION_MANUAL_WAF_SOURCE if manual_waf_followup else
                       COLLECTION_HANDOFF_ROUTES_SOURCE if handoff_routes_followup else
                       COLLECTION_HANDOFF_SOURCE if handoff_followup else
@@ -796,7 +812,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
                       COLLECTION_DAILY_SOURCE if daily_followup else
                       COLLECTION_DETAIL_DIAG_SOURCE if canonical_followup else COLLECTION_SOURCE_BASE)
             restored = build_collection_restore(repo, name, source)
-            original = (COLLECTION_DELIVERY_OBSERVE_BASE[name] if delivery_observe_followup else
+            original = (COLLECTION_DELIVERY_READY_BASE[name] if delivery_ready_followup else
+                        COLLECTION_DELIVERY_OBSERVE_BASE[name] if delivery_observe_followup else
                         COLLECTION_MANUAL_WAF_BASE[name] if manual_waf_followup else
                         COLLECTION_HANDOFF_ROUTES_BASE[name] if handoff_routes_followup else
                         COLLECTION_HANDOFF_BASE[name] if handoff_followup else

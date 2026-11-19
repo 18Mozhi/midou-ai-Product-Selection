@@ -186,6 +186,15 @@ class TrendReleaseScopeTest(unittest.TestCase):
                                                          trend["COLLECTION_DELIVERY_OBSERVE_SOURCE"])
             self.assertEqual(hashlib.sha256(restored).hexdigest(), digest)
 
+    def test_delivery_readiness_rebuilds_only_original_context(self):
+        before, after = trend["collection_hashes"]("delivery_ready")
+        self.assertEqual(set(before), {trend["COLLECTION_DAILY_CONTEXT"]})
+        self.assertEqual(trend["collection_hashes"]("delivery_ready_restore"), (after, before))
+        for name, digest in before.items():
+            restored = trend["build_collection_restore"](Path(__file__).resolve().parents[2], name,
+                                                         trend["COLLECTION_DELIVERY_READY_SOURCE"])
+            self.assertEqual(hashlib.sha256(restored).hexdigest(), digest)
+
     def test_amazon_release_is_pinned_and_preserves_worker_overlays(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

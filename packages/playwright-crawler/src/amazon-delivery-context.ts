@@ -171,18 +171,25 @@ export async function prepareAmazonDeliveryContext(
 ) {
   if (typeof postalCode !== "string" || !/^\d{5}$/.test(postalCode))
     throw new Error("amazon_delivery_postal_invalid");
-  const assertAnonymous = async (includeAriaHidden = false) => {
+  const assertAnonymous = async (includeAriaHidden = false, afterReread = false) => {
     await assertSafe();
-    if (
-      !(await page
-        .getByRole("link", {
-          name: "Hello, sign in Account & Lists",
-          exact: true,
-          includeHidden: includeAriaHidden,
-        })
-        .isVisible())
-    )
-      throw new Error("amazon_delivery_requires_anonymous_page");
+    const link = page.getByRole("link", {
+      name: "Hello, sign in Account & Lists",
+      exact: true,
+      includeHidden: includeAriaHidden,
+    });
+    if (afterReread && !(await link.isVisible())) {
+      try {
+        // DOMContentLoaded is not proof that the exact account link has rendered.
+        // Reuse the existing action budget, never accept an alternate identity.
+        await link.waitFor({ state: "visible" });
+      } catch (error) {
+        if (!(error instanceof errors.TimeoutError)) throw error;
+        await assertSafe();
+      }
+    }
+    if (!(await link.isVisible())) throw new Error("amazon_delivery_requires_anonymous_page");
+    if (afterReread) await assertSafe();
   };
   reportStep("initial_guard");
   await assertAnonymous();
@@ -196,7 +203,9 @@ export async function prepareAmazonDeliveryContext(
       await assertAnonymous();
       reportStep("request_delivery_reread");
       await reread();
-      await assertAnonymous();
+      reportStep("request_delivery_anonymous");
+      await assertAnonymous(false, true);
+      reportStep("request_delivery_postal");
       await header.filter({ hasText: postal }).waitFor({ state: "visible" });
       await assertSafe();
       return true;
@@ -333,7 +342,8 @@ export async function prepareAmazonDeliveryContext(
       reportStep("reread_retry");
       await reread();
     }
-    await assertAnonymous();
+    reportStep("reread_anonymous");
+    await assertAnonymous(false, true);
   } else {
     reportStep("location_navigation");
     const headerReady = header.filter({ hasText: postal }).waitFor({ state: "visible" });

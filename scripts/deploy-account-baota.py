@@ -230,6 +230,8 @@ def main():
     action.add_argument("--collection-lan-health-rollback", action="store_true")
     action.add_argument("--collection-model-hold-only", action="store_true")
     action.add_argument("--collection-model-hold-rollback", action="store_true")
+    action.add_argument("--collection-delivery-ready-only", action="store_true")
+    action.add_argument("--collection-delivery-ready-rollback", action="store_true")
     action.add_argument("--collection-delivery-observe-only", action="store_true")
     action.add_argument("--collection-delivery-observe-rollback", action="store_true")
     action.add_argument("--collection-manual-waf-only", action="store_true")
@@ -294,6 +296,8 @@ def main():
         collection = "manual_waf" if args.collection_manual_waf_only else "manual_waf_restore"
     if args.collection_delivery_observe_only or args.collection_delivery_observe_rollback:
         collection = "delivery_observe" if args.collection_delivery_observe_only else "delivery_observe_restore"
+    if args.collection_delivery_ready_only or args.collection_delivery_ready_rollback:
+        collection = "delivery_ready" if args.collection_delivery_ready_only else "delivery_ready_restore"
     worker_only = (args.trend_projection_only or scheduler_only or report_action is not None
                    or args.amazon_health_api_only or args.amazon_health_audit_only or collection is not None)
     if args.expected_module_sha256 and not worker_only:
