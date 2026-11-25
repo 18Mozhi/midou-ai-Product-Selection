@@ -1166,21 +1166,34 @@
     "status": "implemented",
     "requirements": "docs/selection-browser-manual-handoff.md",
     "sourceFiles": ["packages/playwright-crawler/src/amazon-delivery-context.ts"],
-    "testFiles": ["tests/unit/amazon-daily-delivery.test.mjs", "tests/unit/test_baota_account_trend_release.py"],
+    "testFiles": [
+      "tests/unit/amazon-daily-delivery.test.mjs",
+      "tests/unit/test_baota_account_trend_release.py"
+    ],
     "contract": "Actual live run0623bff2 has nine cookies, one exact dotted-www representation and no authentication or other reported shape faults; failure occurs at cache save after strict anonymous and postal proof. Only canonicalize exact .www.amazon.com live snapshot to already accepted www.amazon.com before unchanged strict cache validation. Chromium intercepted request headers prove scope narrowed: original reaches child.www.amazon.com, cached copy does not, both reach www.amazon.com. Never mutate live state, drop cookies, change values/attributes, add domains or normalize persisted input. Authentication/foreign/similar-suffix/malformed inputs still reject. Same daily serialization and proof gates. Context-only pinned delivery-ready release, Node restart only; true search plus matching detail and audit before enablement."
   },
   "selectionDirectSearchReadiness20261125": {
     "status": "implemented",
     "requirements": "docs/selection-browser-manual-handoff.md",
     "sourceFiles": ["packages/playwright-crawler/src/index.ts"],
-    "testFiles": ["tests/integration/amazon-detail-readiness.test.mjs", "tests/unit/amazon-delivery-context.test.mjs", "tests/unit/test_baota_account_trend_release.py"],
+    "testFiles": [
+      "tests/integration/amazon-detail-readiness.test.mjs",
+      "tests/unit/amazon-delivery-context.test.mjs",
+      "tests/unit/test_baota_account_trend_release.py"
+    ],
     "contract": "Direct Amazon /s plans without plan.search await their original item selector within unchanged actionTimeoutMs before counting. Existing empty-result contract and all blocked/detail/identity/postal guards stay unchanged; no retry, navigation or new config. Safe delivery diagnostics count all/matching/visible postal headers and label only explicit strict mode violations as selector_ambiguous; fixed navigation-context/page-closed/runtime-member kinds, operation/error-type enums and at most four fixed JS filenames with numeric line/column reveal no raw messages or stack paths. Local delayed-search race proven; current production postal failure with anonymous and ZIP true is not yet uniquely explained. Actual 023c6872 stack pins the later daily-cookie-cache validation, not anonymous or postal checks. Explicit daily_cache_save stage and bounded750ms cookie shape counts expose no cookie content and do not alter acceptance. One pinned index.js overlay via search-ready coordinator; Node restart only. No source restore before real search plus matching detail and audit."
   },
   "selectionDeliveryRereadReadiness20261119": {
     "status": "implemented",
     "requirements": "docs/selection-browser-manual-handoff.md",
-    "sourceFiles": ["packages/playwright-crawler/src/amazon-delivery-context.ts", "packages/playwright-crawler/src/index.ts"],
-    "testFiles": ["tests/unit/amazon-delivery-context.test.mjs", "tests/unit/test_baota_account_trend_release.py"],
+    "sourceFiles": [
+      "packages/playwright-crawler/src/amazon-delivery-context.ts",
+      "packages/playwright-crawler/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-delivery-context.test.mjs",
+      "tests/unit/test_baota_account_trend_release.py"
+    ],
     "contract": "After actual reread only, wait for original exact anonymous link to become visible within unchanged action budget, then recheck original protections and strict postal. Missing/wrong identity and wrong postal remain rejected. No new timeout/retry/reload/identity/API/env/schema/concurrency/whitelist/Python changes. Local Chromium reproduces async anonymous rendering; older production failure lacks full DOM proof and is not claimed uniquely explained. One context module via delivery-ready coordinator, only Node restart. Do not invalidate successful daily cache; true search and matching detail plus audit still required."
   },
   "selectionBrowserManualHandoff20261020": {
@@ -5140,6 +5153,20 @@
       "statusDetail": "credential_assets_live_mysql_api_worker_crawler_deep_link_refresh_timeout_preserve_data_encrypted_upload_rotation_revocation_idempotency_permission_validation_download_service_responsive_and_accessibility_verification_completed"
     },
     "providerAdapters": {
+      "amazonScreenshotWait20261125": {
+        "status": "diagnostic-local-verified-pending-live-wait-phase",
+        "requirements": "docs/amazon-screenshot-wait.md",
+        "sourceFiles": [
+          "packages/playwright-crawler/src/index.ts",
+          "scripts/baota-account-trend-release.py",
+          "scripts/deploy-account-baota.py"
+        ],
+        "testFiles": [
+          "tests/integration/amazon-screenshot-wait.test.mjs",
+          "tests/unit/test_baota_screenshot_wait_release.py"
+        ],
+        "behavior": "Fixed privacy-safe screenshot_wait_phase only; no screenshot/timeout/evidence or recovery gate changes. Exact one-engine overlay after four full zero samples,Node only."
+      },
       "amazonEvidenceCaptureTrace20261125": {
         "status": "diagnostic-implemented-pending-live-cause",
         "requirements": "docs/amazon-evidence-capture-trace.md",
@@ -5181,9 +5208,7 @@
           "tests/e2e/provider-operator-detail-entry.spec.ts",
           "tests/unit/source-1688-operator-action.test.mjs"
         ],
-        "docs": [
-          "docs/provider-operator-detail-entry.md"
-        ],
+        "docs": ["docs/provider-operator-detail-entry.md"],
         "contract": "Existing desktop slot show opens the same diagnostic drawer, exposing unchanged 1688 CAPTCHA/login/rate/network instructions. No probe POST, new API, permission, collection, enable/recover or external request from opening details."
       },
       "uiPhase2CurrentStateReview": "P47-CURRENT-STATE-REVIEW.md: fixes two legacy preview import-anchor conflicts and replaces two stale-current evidence claims with independent raw-current captures. New SHA-limited composer retains actual empty-reset function/binding and one nextTick import; original access/filter drivers, helpers, CSS, manifests and96PNG remain immutable. Current access30 runs/411 checks/60PNG and filter6 runs/162 checks/36PNG,178 raw sources each; six new browser checks retain empty-reset search focus. Original safe GET attempts/no writes preserved;500 neighbor comparisons five0 and390 action27pixels/maxdelta2 within original64/2. Baseline access/page focus defects remain visible; review fixes are not production implementation or approval. Local --state=access or --state=filter-pagination with --capture only. No production/API/env/DB/dependency/deploy change; wider failed gates and73-page delivery remain open.",
@@ -9838,9 +9863,7 @@
       "tests/unit/competitor-relation-key-probe.test.mjs",
       "tests/unit/test_baota_account_trend_release.py"
     ],
-    "contracts": [
-      "docs/openapi.yaml"
-    ]
+    "contracts": ["docs/openapi.yaml"]
   },
   "crawlerRuntimeDisconnect20261125": {
     "status": "implemented",
@@ -9854,9 +9877,7 @@
       "apps/crawler/tests/test_runtime_disconnect.py",
       "apps/crawler/tests/test_main_loop.py"
     ],
-    "contracts": [
-      "docs/openapi.yaml"
-    ]
+    "contracts": ["docs/openapi.yaml"]
   },
   "amazonSponsoredEmptySearch20261125": {
     "status": "implemented",
@@ -9874,9 +9895,7 @@
       "tests/unit/amazon-delivery-context.test.mjs",
       "tests/unit/test_baota_account_trend_release.py"
     ],
-    "contracts": [
-      "docs/openapi.yaml"
-    ]
+    "contracts": ["docs/openapi.yaml"]
   },
   "amazonDualTransportHealth20261125": {
     "status": "implemented",
@@ -9893,9 +9912,7 @@
       "tests/unit/test_baota_account_trend_release.py",
       "tests/unit/test_baota_amazon_dual_health_release.py"
     ],
-    "contracts": [
-      "docs/openapi.yaml"
-    ],
+    "contracts": ["docs/openapi.yaml"],
     "contract": "Both configured Node and existing production Python curl paths must search the same query and prove details for one shared product. No HTTP executable choice, new dependency, proxy, whitelist, concurrency, model or database change. Existing health consumers remain unchanged; deployment and actual dual-route acceptance pending.",
     "releaseContract": "Exact two Node modules, pinned baseline/candidate plus existing transport helper protection; both forward and restore require unchanged strict four-zero claim drain. Controlled maintenance bootstrap approved; execution and live four-zero evidence pending."
   }

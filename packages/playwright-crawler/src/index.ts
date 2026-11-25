@@ -516,6 +516,24 @@ export function projectBrowserEvidenceNodes(
 type EvidenceCaptureOperation =
   "dom_fragment" | "body_fallback" | "delivery_header" | "screenshot" | "screenshot_recompress";
 
+// Only fixed Playwright call-log milestones may leave this boundary. Never log
+// the error text, URLs, page content, request IDs or user-provided strings.
+function screenshotWaitPhase(error: unknown) {
+  if (!(error instanceof Error) || error.name !== "TimeoutError") return "unavailable";
+  const marker = error.message.indexOf("Call log:");
+  if (marker < 0) return "unavailable";
+  const steps = error.message
+    .slice(marker + "Call log:".length)
+    .replace(/\u001b\[[0-9;]*m/g, "")
+    .split("\n")
+    .map((line) => line.replace(/^\s*-\s*/, "").trim());
+  const waiting = steps.lastIndexOf("waiting for fonts to load...");
+  const ready = steps.lastIndexOf("fonts loaded");
+  if (waiting >= 0 && ready < waiting) return "font_wait";
+  if (ready >= 0) return "after_font_ready";
+  return steps.includes("taking page screenshot") ? "before_font_wait" : "unavailable";
+}
+
 async function captureEvidence(
   page: Page,
   plan: BrowserCollectionPlan,
@@ -1382,6 +1400,9 @@ export class PlaywrightCrawlerEngine {
             event: "amazon_browser_step_failed",
             stage,
             ...(evidenceOperation ? { evidence_operation: evidenceOperation } : {}),
+            ...(evidenceOperation === "screenshot" || evidenceOperation === "screenshot_recompress"
+              ? { screenshot_wait_phase: screenshotWaitPhase(error) }
+              : {}),
             error_code: failure.code,
             ...(typeof httpStatus === "number" && httpStatus >= 100 && httpStatus <= 599
               ? { http_status: httpStatus }
