@@ -113,6 +113,10 @@ class MaintenanceBootstrapTest(unittest.TestCase):
         def ssh(_): yield "mock-only"
         def remote(connection, source, timeout):
             self.assertEqual(connection, "mock-only"); self.assertEqual(timeout, 900)
+            self.assertLessEqual(len(base64.b64encode(source.encode("utf-8"))), 120000)
+            packed = next(n.value for n in ast.walk(ast.parse(source))
+                          if isinstance(n, ast.Constant) and isinstance(n.value, str))
+            source = zlib.decompress(base64.b64decode(packed)).decode("utf-8")
             assignments = {n.targets[0].id: ast.literal_eval(n.value) for n in ast.parse(source).body[:5]}
             first, second = assignments["args"], assignments["followup_args"]
             for args, action, expected in [(first, "maintenance_bootstrap", TREND["COLLECTION_MAINTENANCE_BASE"]),
@@ -137,6 +141,18 @@ class MaintenanceBootstrapTest(unittest.TestCase):
             self.assertTrue(result["mock_only"])
             self.assertEqual([c.args[0][-1] for c in builds.call_args_list],
                              ["build:worker", "build:api", "build:playwright-crawler"])
+
+    def test_compact_runner_roundtrips_exact_unicode_source_and_bounds_shell_argument(self):
+        original = "print('智能选品')\n" * 15000
+        wrapped = TREND["compact_release_source"](original)
+        packed = next(n.value for n in ast.walk(ast.parse(wrapped))
+                      if isinstance(n, ast.Constant) and isinstance(n.value, str))
+        self.assertEqual(zlib.decompress(base64.b64decode(packed)).decode("utf-8"), original)
+        self.assertLess(len(base64.b64encode(wrapped.encode("utf-8"))), 120000)
+        import random
+        noisy = random.Random(0).randbytes(200000).hex()
+        with self.assertRaisesRegex(RuntimeError, "transport_too_large"):
+            TREND["compact_release_source"](noisy)
 
 if __name__ == "__main__":
     unittest.main()

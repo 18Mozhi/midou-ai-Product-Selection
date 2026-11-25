@@ -612,6 +612,16 @@ def install_maintenance_bootstrap(install_fn, args, followup_args, drain):
             drain.resume_owned()
 
 
+def compact_release_source(source):
+    # The existing remote runner base64-encodes its source into one shell argument.
+    # Compact only this two-stage bundle and preflight the final encoded argument.
+    packed = base64.b64encode(zlib.compress(source.encode("utf-8"), 9)).decode("ascii")
+    wrapper = "import base64,zlib\nexec(zlib.decompress(base64.b64decode(" + repr(packed) + ")))\n"
+    if len(base64.b64encode(wrapper.encode("utf-8"))) > 120000:
+        raise RuntimeError("trend_bootstrap_transport_too_large")
+    return wrapper
+
+
 def release_error_code(error):
     message = str(error)
     return (message if re.fullmatch(r"(?:trend|account_release)_[a-z_]+", message)
@@ -1129,5 +1139,7 @@ except Exception as exc:
   result.update(maintenance_owner=drain.owner,claim_pause_attempted=drain.pause_attempted,drain_samples=drain.samples)
 print("SCOUTOPS_RESULT="+json.dumps(result))
 '''
+    if collection == "maintenance_bootstrap":
+        source = compact_release_source(source)
     with ssh_connection(deploy) as ssh:
         return deploy["remote_python"](ssh, source, timeout=900 if collection == "maintenance_bootstrap" else 400 if drain_code is not None else 205)
