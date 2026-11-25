@@ -193,6 +193,11 @@ Amazon直接 `/s?k=...` 任务没有 `plan.search`，旧版在DOM就绪后立即
 诊断仍限750ms和布尔/数量/固定枚举，不保存文字、URL、ZIP、Cookie或原始异常消息，不改变验收或错误码；尚未确认真实失败为重复头部。
 
 官方入口 `--collection-search-ready-only` / `--collection-search-ready-rollback` 只替换共享index.js；
-固定4dfe4a72e基线、输入/输出SHA并保护地区上下文、精确WAF许可、接管、AI等待、背压和趋势模块。
+固定88b1062e7基线、输入/输出SHA并保护地区上下文、精确WAF许可、接管、AI等待、背压和趋势模块。
 只重启宝塔ai选品 Node，不改Python、1688、数据库、并发、白名单、API字段、环境配置或依赖。
 使用现有健康检查和人工接管入口，无新增调节项；真实搜索与同商品详情未通过之前，来源保持停用。
+
+同日发布后真实run3708c499-fd37-49ee-87d9-3aa1be6eef58仍在request_delivery_postal失败，
+头部总数/匹配数/可见匹配数均为1、匿名精确可见和ZIP匹配均为true，排除了当次重复头部歧义。
+因此不改选择器或降低标准。补充固定navigation_context_lost/page_closed等错误类别与固定Playwright操作名，
+只识别既知异常片段；未知仍other，原消息/URL/正文/凭证不记录，错误状态和验收完全不变。

@@ -803,6 +803,20 @@ test("real Chromium delivery diagnostics distinguish anonymous, postal and hidde
   }finally{await browser.close();}
 });
 
+test("delivery failure kind exposes only fixed classifications, never error content",async()=>{
+  const {amazonDeliveryFailureKind}=await import("../../packages/playwright-crawler/dist/index.js");
+  for(const [message,expected] of [
+    ["amazon_delivery_requires_anonymous_page","anonymous_missing"],
+    ["locator.waitFor: strict mode violation: private","selector_ambiguous"],
+    ["locator.count: Execution context was destroyed, most likely because of a navigation","navigation_context_lost"],
+    ["locator.count: Cannot find context with specified id","navigation_context_lost"],
+    ["locator.waitFor: Target page, context or browser has been closed","page_closed"],
+    ["Timeout private payload","readiness_timeout"],
+    ["private https://example.test/?token=secret","other"],
+  ])assert.equal(amazonDeliveryFailureKind(new Error(message)),expected);
+  assert.equal(amazonDeliveryFailureKind(null),"other");
+});
+
 
 test("real Chromium: post-region reread waits for exact anonymous rendering without weakening ZIP or identity", {timeout:15000}, async()=>{
   const {chromium}=await import("playwright");const browser=await chromium.launch({headless:true});

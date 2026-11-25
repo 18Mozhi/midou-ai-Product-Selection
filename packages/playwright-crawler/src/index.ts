@@ -324,6 +324,18 @@ export function classifyBrowserFailure(error: unknown): {
 }
 
 /** Safe operational facts only; never emits a URL, text, cookie or attribute value. */
+export function amazonDeliveryFailureKind(error: unknown) {
+  if (!(error instanceof Error)) return "other";
+  if (error.message === "amazon_delivery_requires_anonymous_page") return "anonymous_missing";
+  if (error.message.includes("strict mode violation:")) return "selector_ambiguous";
+  if (/Execution context was destroyed|Cannot find context with specified id/i.test(error.message))
+    return "navigation_context_lost";
+  if (/Target (?:page, context or browser|closed)|has been closed/i.test(error.message))
+    return "page_closed";
+  if (/Timeout/i.test(error.name + error.message)) return "readiness_timeout";
+  return "other";
+}
+
 export async function inspectAmazonDeliveryReadiness(page: Page, postal: string) {
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
@@ -1241,15 +1253,14 @@ export class PlaywrightCrawlerEngine {
             current,
             plan.amazon_delivery.postal_code,
           );
-          if (deliveryState)
-            deliveryState.failure_reason =
-              error instanceof Error && error.message === "amazon_delivery_requires_anonymous_page"
-                ? "anonymous_missing"
-                : error instanceof Error && error.message.includes("strict mode violation:")
-                  ? "selector_ambiguous"
-                : failure.code === "timeout"
-                  ? "readiness_timeout"
-                  : "other";
+          if (deliveryState) {
+            deliveryState.failure_reason = amazonDeliveryFailureKind(error);
+            deliveryState.failure_operation =
+              error instanceof Error
+                ? ["locator.waitFor", "locator.count", "locator.isVisible", "locator.textContent", "page.evaluate"]
+                    .find((operation) => error.message.startsWith(`${operation}:`)) ?? "other"
+                : "other";
+          }
         }
       }
       if (plan.amazon_delivery)
