@@ -235,6 +235,8 @@ def main():
     action.add_argument("--collection-maintenance-bootstrap", action="store_true")
     action.add_argument("--collection-dual-health-only", action="store_true")
     action.add_argument("--collection-dual-health-rollback", action="store_true")
+    action.add_argument("--collection-capture-trace-only", action="store_true")
+    action.add_argument("--collection-capture-trace-rollback", action="store_true")
     action.add_argument("--collection-checkpoint-only", action="store_true")
     action.add_argument("--collection-checkpoint-rollback", action="store_true")
     action.add_argument("--collection-sponsored-empty-only", action="store_true")
@@ -325,6 +327,8 @@ def main():
         collection = "dual_health" if args.collection_dual_health_only else "dual_health_restore"
     if args.collection_maintenance_bootstrap:
         collection = "maintenance_bootstrap"
+    if args.collection_capture_trace_only or args.collection_capture_trace_rollback:
+        collection = "capture_trace" if args.collection_capture_trace_only else "capture_trace_restore"
     worker_only = (args.trend_projection_only or scheduler_only or report_action is not None
                    or args.amazon_health_api_only or args.amazon_health_audit_only or collection is not None)
     if args.expected_module_sha256 and not worker_only:

@@ -343,17 +343,24 @@ export function amazonDeliveryFailureKind(error: unknown) {
 }
 
 /** Shape counts only. Mirrors the unchanged daily cache contract, not admission. */
-export function inspectAnonymousDeliveryCookieShape(cookies: Awaited<ReturnType<BrowserContext["cookies"]>>) {
+export function inspectAnonymousDeliveryCookieShape(
+  cookies: Awaited<ReturnType<BrowserContext["cookies"]>>,
+) {
   return {
     cookie_count: cookies.length,
     auth_cookie_count: cookies.filter((c) => ["at-main", "sess-at-main"].includes(c.name)).length,
-    unaccepted_domain_count: cookies.filter((c) => ![".amazon.com", "www.amazon.com", "amazon.com"].includes(c.domain)).length,
+    unaccepted_domain_count: cookies.filter(
+      (c) => ![".amazon.com", "www.amazon.com", "amazon.com"].includes(c.domain),
+    ).length,
     dotted_www_domain_count: cookies.filter((c) => c.domain === ".www.amazon.com").length,
     invalid_expiry_count: cookies.filter((c) => !Number.isFinite(c.expires)).length,
-    invalid_same_site_count: cookies.filter((c) => !["Strict", "Lax", "None"].includes(c.sameSite)).length,
+    invalid_same_site_count: cookies.filter((c) => !["Strict", "Lax", "None"].includes(c.sameSite))
+      .length,
     unsafe_value_count: cookies.filter((c) => /[\r\n\0]/.test(c.name + c.value)).length,
-    oversized_value_count: cookies.filter((c) => c.name.length > 128 || c.value.length > 8192).length,
-    invalid_path_count: cookies.filter((c) => !c.path.startsWith("/") || c.path.length > 1024).length,
+    oversized_value_count: cookies.filter((c) => c.name.length > 128 || c.value.length > 8192)
+      .length,
+    invalid_path_count: cookies.filter((c) => !c.path.startsWith("/") || c.path.length > 1024)
+      .length,
   };
 }
 
@@ -506,11 +513,16 @@ export function projectBrowserEvidenceNodes(
   return output.map((node) => node.outerHTML).join("\n");
 }
 
+type EvidenceCaptureOperation =
+  "dom_fragment" | "body_fallback" | "delivery_header" | "screenshot" | "screenshot_recompress";
+
 async function captureEvidence(
   page: Page,
   plan: BrowserCollectionPlan,
+  onOperation?: (operation: EvidenceCaptureOperation) => void,
 ): Promise<BrowserEvidenceArtifact[]> {
   if (!plan.evidence) return [];
+  onOperation?.("dom_fragment");
   const capturedAt = new Date().toISOString(),
     sourceUrl = httpUrl(page.url()).toString(),
     itemHtml = await page
@@ -518,17 +530,26 @@ async function captureEvidence(
       .evaluateAll(projectBrowserEvidenceNodes, {
         ancestorIds: plan.evidence.ancestor_ids ?? [],
         strip: plan.evidence.strip_non_content === true,
-      }),
-    pageHtml = itemHtml || (await page.locator("body").evaluate((node) => node.outerHTML)),
-    deliveryHtml = plan.amazon_delivery
-      ? await page.locator("#glow-ingress-block").evaluate((node) => node.outerHTML)
-      : "",
-    html = boundedUtf8(deliveryHtml ? deliveryHtml + "\n" + pageHtml : pageHtml, 250_000);
+      });
+  let pageHtml = itemHtml;
+  if (!pageHtml) {
+    onOperation?.("body_fallback");
+    pageHtml = await page.locator("body").evaluate((node) => node.outerHTML);
+  }
+  let deliveryHtml = "";
+  if (plan.amazon_delivery) {
+    onOperation?.("delivery_header");
+    deliveryHtml = await page.locator("#glow-ingress-block").evaluate((node) => node.outerHTML);
+  }
+  const html = boundedUtf8(deliveryHtml ? deliveryHtml + "\n" + pageHtml : pageHtml, 250_000);
   if (!html.byteLength)
     throw new PlaywrightCrawlerError("crawler_dom_fragment_invalid", "parser_changed", false);
+  onOperation?.("screenshot");
   let screenshot = await page.screenshot({ type: "jpeg", quality: 35, fullPage: false });
-  if (screenshot.byteLength > 800_000)
+  if (screenshot.byteLength > 800_000) {
+    onOperation?.("screenshot_recompress");
     screenshot = await page.screenshot({ type: "jpeg", quality: 15, fullPage: false });
+  }
   if (!screenshot.byteLength || screenshot.byteLength > 800_000)
     throw new PlaywrightCrawlerError("crawler_screenshot_too_large", "dependency_failed", true);
   return [
@@ -860,6 +881,7 @@ export class PlaywrightCrawlerEngine {
       void context?.close().catch(() => {});
     };
     let stage = "browser_launch";
+    let evidenceOperation: EvidenceCaptureOperation | undefined;
     const resourceFailures: Record<string, unknown>[] = [];
     const recordResourceFailure = (failure: Record<string, unknown>) => {
       retainResourceFailure(resourceFailures, failure);
@@ -1135,7 +1157,12 @@ export class PlaywrightCrawlerEngine {
           }
         }
         itemCount += await page.locator(plan.item_selector).count();
-        if (!artifacts.length) artifacts = await captureEvidence(page, plan);
+        if (!artifacts.length) {
+          artifacts = await captureEvidence(page, plan, (operation) => {
+            evidenceOperation = operation;
+          });
+          evidenceOperation = undefined;
+        }
         const currentSearchSnapshot = await captureSearchSnapshot(page, plan);
         if (currentSearchSnapshot) {
           if (!searchSnapshot) searchSnapshot = currentSearchSnapshot;
@@ -1302,25 +1329,49 @@ export class PlaywrightCrawlerEngine {
             deliveryState.failure_reason = amazonDeliveryFailureKind(error);
             deliveryState.failure_operation =
               error instanceof Error
-                ? ["locator.waitFor", "locator.count", "locator.isVisible", "locator.textContent", "page.evaluate"]
-                    .find((operation) => error.message.startsWith(`${operation}:`)) ?? "other"
+                ? ([
+                    "locator.waitFor",
+                    "locator.count",
+                    "locator.isVisible",
+                    "locator.textContent",
+                    "page.evaluate",
+                  ].find((operation) => error.message.startsWith(`${operation}:`)) ?? "other")
                 : "other";
             deliveryState.failure_type =
-              error instanceof Error && ["Error", "TypeError", "ReferenceError", "TimeoutError", "SyntaxError"].includes(error.name)
-                ? error.name : "other";
-            deliveryState.failure_sites = error instanceof Error
-              ? [...(error.stack ?? "").matchAll(/\b(amazon-delivery-context|index|locator|connection|channelOwner)\.js:(\d+):(\d+)/g)]
-                  .slice(0, 4).map((match) => `${match[1]}.js:${match[2]}:${match[3]}`)
-              : [];
-            if (error instanceof Error && error.message === "amazon_delivery_cache_invalid" && context) {
+              error instanceof Error &&
+              ["Error", "TypeError", "ReferenceError", "TimeoutError", "SyntaxError"].includes(
+                error.name,
+              )
+                ? error.name
+                : "other";
+            deliveryState.failure_sites =
+              error instanceof Error
+                ? [
+                    ...(error.stack ?? "").matchAll(
+                      /\b(amazon-delivery-context|index|locator|connection|channelOwner)\.js:(\d+):(\d+)/g,
+                    ),
+                  ]
+                    .slice(0, 4)
+                    .map((match) => `${match[1]}.js:${match[2]}:${match[3]}`)
+                : [];
+            if (
+              error instanceof Error &&
+              error.message === "amazon_delivery_cache_invalid" &&
+              context
+            ) {
               let timer: ReturnType<typeof setTimeout> | undefined;
               try {
                 const cookies = await Promise.race([
                   context.cookies("https://www.amazon.com/"),
-                  new Promise<null>((resolve) => { timer = setTimeout(() => resolve(null), 750); }),
+                  new Promise<null>((resolve) => {
+                    timer = setTimeout(() => resolve(null), 750);
+                  }),
                 ]);
-                if (cookies) deliveryState.daily_cache_shape = inspectAnonymousDeliveryCookieShape(cookies);
-              } finally { clearTimeout(timer); }
+                if (cookies)
+                  deliveryState.daily_cache_shape = inspectAnonymousDeliveryCookieShape(cookies);
+              } finally {
+                clearTimeout(timer);
+              }
             }
           }
         }
@@ -1330,6 +1381,7 @@ export class PlaywrightCrawlerEngine {
           JSON.stringify({
             event: "amazon_browser_step_failed",
             stage,
+            ...(evidenceOperation ? { evidence_operation: evidenceOperation } : {}),
             error_code: failure.code,
             ...(typeof httpStatus === "number" && httpStatus >= 100 && httpStatus <= 599
               ? { http_status: httpStatus }

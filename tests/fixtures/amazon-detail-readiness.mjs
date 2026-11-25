@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { createAmazonBrowserExecutionRequest } from "../../packages/provider-sources/dist/index.js";
 
 // Owned, intercepted HTML only. Never connects to Amazon or imports account state.
-export async function runAmazonDetailFixture(Engine, mode) {
+export async function runAmazonDetailFixture(Engine, mode, decorateContext) {
   const root = await mkdtemp(join(tmpdir(), "scoutops-detail-readiness-"));
   const launch = chromium.launchPersistentContext;
   const requests = [];
@@ -19,12 +19,12 @@ export async function runAmazonDetailFixture(Engine, mode) {
         mode === "delayed_search_captcha"
           ? "setTimeout(()=>document.body.insertAdjacentHTML('beforeend','<input id=\"captchacharacters\">'),100)"
           : mode === "delayed_search"
-          ? `setTimeout(()=>document.body.insertAdjacentHTML('beforeend','<div data-component-type="s-search-result" data-asin="B000000001">Fixture result</div>'),300)`
-          : mode === "delayed"
-          ? `setTimeout(()=>document.body.insertAdjacentHTML('beforeend',${JSON.stringify(title)}),1000)`
-          : mode === "captcha"
-            ? "setTimeout(()=>document.body.insertAdjacentHTML('beforeend','<input id=\"captchacharacters\">'),100)"
-            : "";
+            ? `setTimeout(()=>document.body.insertAdjacentHTML('beforeend','<div data-component-type="s-search-result" data-asin="B000000001">Fixture result</div>'),300)`
+            : mode === "delayed"
+              ? `setTimeout(()=>document.body.insertAdjacentHTML('beforeend',${JSON.stringify(title)}),1000)`
+              : mode === "captcha"
+                ? "setTimeout(()=>document.body.insertAdjacentHTML('beforeend','<input id=\"captchacharacters\">'),100)"
+                : "";
       await route.fulfill({
         contentType: "text/html",
         body:
@@ -38,6 +38,7 @@ export async function runAmazonDetailFixture(Engine, mode) {
           `<script>${script}</script>`,
       });
     });
+    if (decorateContext) await decorateContext(context);
     return context;
   };
   try {

@@ -5140,6 +5140,20 @@
       "statusDetail": "credential_assets_live_mysql_api_worker_crawler_deep_link_refresh_timeout_preserve_data_encrypted_upload_rotation_revocation_idempotency_permission_validation_download_service_responsive_and_accessibility_verification_completed"
     },
     "providerAdapters": {
+      "amazonEvidenceCaptureTrace20261125": {
+        "status": "diagnostic-implemented-pending-live-cause",
+        "requirements": "docs/amazon-evidence-capture-trace.md",
+        "sourceFiles": [
+          "packages/playwright-crawler/src/index.ts",
+          "scripts/baota-account-trend-release.py",
+          "scripts/deploy-account-baota.py"
+        ],
+        "testFiles": [
+          "tests/integration/amazon-evidence-operation.test.mjs",
+          "tests/unit/test_baota_capture_trace_release.py"
+        ],
+        "contract": "Existing mandatory evidence capture reports only a fixed failure-step enum; original correlation privacy boundary retained; failure/partial-result policy, raw evidence, limits, identity and transport unchanged. Exact one-engine follow-up uses already-loaded full maintenance drain,Node only."
+      },
       "maintenanceBootstrap20261125": {
         "status": "implemented-pending-production-proof",
         "requirements": "docs/runbooks/account-production-coordinated-release.md",

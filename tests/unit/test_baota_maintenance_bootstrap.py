@@ -95,8 +95,9 @@ class MaintenanceBootstrapTest(unittest.TestCase):
             payloads[old, name] = TREND["build_collection_restore"](REPO, name, old)
             source = name.replace("/dist/", "/src/").removesuffix(".js") + ".ts"
             script = "import ts from 'typescript';let d='';for await(const c of process.stdin)d+=c;process.stdout.write(ts.transpileModule(d,{fileName:" + repr(Path(source).name) + ",compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022,sourceMap:true}}).outputText)"
-            payloads[sha, name] = subprocess.run(["node", "--input-type=module", "-e", script],
-                input=(REPO/source).read_bytes().replace(b"\r\n",b"\n"),capture_output=True,check=True).stdout
+            # Freeze the already-approved first-load candidate, not a later engine overlay.
+            payloads[sha, name] = TREND["build_collection_restore"](
+                REPO, name, "d3652768328dc62f7f5c4fee2eec5c1918260cdd")
         changed = list(TREND["collection_sources"]()) + [
             "apps/web/src/components/ProviderAdapterCenter.vue", "apps/web/src/source-1688-operator-action.ts",
             "apps/api/src/amazon-public-browser-health.ts", "apps/worker/src/index.ts",
