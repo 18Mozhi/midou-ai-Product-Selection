@@ -212,3 +212,23 @@ run7f727e0b-37b4-4756-9daf-275def63a916仍为同阶段、单个可见匹配头�
 避免沿用上一步request_delivery_postal标签。仅对精确cache_invalid增加受限750ms Cookie形状计数：
 数量、认证标记数、不接受的域数、精确.www.amazon.com变体数、过期值/SameSite/字符/长度/path异常数；
 不记录名称/值/域/path内容，也不改变原缓存读写或任何接受/拒绝规则。新类别daily_cache_invalid仍失败。
+
+## 每日地区缓存的精确主机收紧（2026-11-25）
+
+真实run0623bff2-e2d6-40fd-bbc9-edf9eb854a8b证明：匿名与ZIP均通过，9条实时Cookie中
+只有1条使用精确.www.amazon.com表示，认证标记为0，其余字符/长度/过期值/SameSite/path均无异常。
+旧save把该表示整体拒绝，真实失败是daily_cache_invalid，而非地区重读不成功。
+
+仅在已通过原匿名与可见邮编证明的实时浏览器context.cookies快照写入前，将精确.www.amazon.com
+复制为已接受的www.amazon.com主机表示；不修改实时浏览器Cookie、不丢弃任何Cookie、不改名称/值/path/属性，
+不扩大允许域集合，不接受其他域、不规范化不可信持久化输入。旧缓存读取仍严格拒绝.www.amazon.com。
+认证at-main/sess-at-main、外域、相似后缀和非法数据均保留原拒绝。每天一次与跨进程串行约束不变。
+
+真实Chromium本地拦截页观察请求头证明：原域Cookie会发给child.www.amazon.com，规范化缓存不会，
+但仍发送到www.amazon.com；没有真实源站请求。BrowserContext.cookies(url)仅按域后缀筛选，不能作为主机范围证明。
+原版同输入cache_invalid，修复成功，回退再次cache_invalid；其他旧负例继续拒绝。
+
+官方 --collection-delivery-ready-only / --collection-delivery-ready-rollback现在固定67eed207c基线与新旧context SHA，
+仅替换amazon-delivery-context.js并保护当前index诊断和既有所有采集/接管/背压/AI等待/趋势模块。
+只重启宝塔ai选品 Node，无Python/1688/数据库/并发/请求白名单/配置或依赖变化；无需调节参数。
+不清除每日缓存、不强行启用来源；发布后原健康入口的真实搜索与同商品详情通过，才允许按现有审计恢复。

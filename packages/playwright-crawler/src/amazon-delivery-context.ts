@@ -143,7 +143,12 @@ export async function withDailyAmazonDelivery<T>(
       cached,
       async save(context) {
         if (cached || !locked) throw new Error("amazon_delivery_cache_invalid");
-        const current = await context.cookies("https://www.amazon.com/");
+        // Narrow this exact live first-party Domain cookie to the already
+        // accepted host-only representation. Never widen the cache allowlist,
+        // import domains, discard cookies, or normalize persisted input.
+        const current = (await context.cookies("https://www.amazon.com/")).map((cookie) =>
+          cookie.domain === ".www.amazon.com" ? { ...cookie, domain: "www.amazon.com" } : cookie,
+        );
         if (!validCookies(current)) throw new Error("amazon_delivery_cache_invalid");
         const data = JSON.stringify({ version: 1, key, day, cookies: current });
         if (Buffer.byteLength(data) > 131072) throw new Error("amazon_delivery_cache_invalid");

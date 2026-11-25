@@ -29,6 +29,41 @@ const fixture = async (work) => {
   }
 };
 
+test("verified live dotted-www cookie is cached with narrower exact-host scope, never a wider allowlist", () =>
+  fixture(async (root) => {
+    const original={...cookie,domain:".www.amazon.com"};
+    await withDailyAmazonDelivery(root,"asset","94404",state=>state.save({cookies:async()=>[original]}),undefined,day);
+    let cached;
+    await withDailyAmazonDelivery(root,"asset","94404",async state=>{
+      assert.equal(state.cached,true);cached=state.cookies;
+    },undefined,day);
+    assert.deepEqual(cached,[{...original,domain:"www.amazon.com"}]);
+    assert.equal(original.domain,".www.amazon.com","live context snapshot is not mutated");
+    const {chromium}=await import("playwright");const browser=await chromium.launch({headless:true});
+    try{
+      const broad=await browser.newContext(),narrow=await browser.newContext();
+      await broad.addCookies([original]);await narrow.addCookies(cached);
+      // BrowserContext.cookies(url) filters by suffix, not host-only semantics.
+      // Observe actual Chromium request headers on intercepted owned pages instead.
+      const sendsCookie=async(context,url)=>{
+        const page=await context.newPage();let sent=false;
+        await page.route("**/*",async route=>{
+          const headers=await route.request().allHeaders();
+          sent=(headers.cookie??"").includes("session-id=anonymous-fixture");
+          await route.fulfill({contentType:"text/html",body:"Fixture"});
+        });
+        await page.goto(url);await page.close();return sent;
+      };
+      assert.equal(await sendsCookie(broad,"https://child.www.amazon.com/"),true);
+      assert.equal(await sendsCookie(narrow,"https://child.www.amazon.com/"),false);
+      assert.equal(await sendsCookie(narrow,"https://www.amazon.com/"),true);
+    }finally{await browser.close();}
+    const [name]=await readdir(root);const path=join(root,name);
+    const state=JSON.parse(await readFile(path,"utf8"));state.cookies=[original];
+    await writeFile(path,JSON.stringify(state));
+    await assert.rejects(withDailyAmazonDelivery(root,"asset","94404",()=>assert.fail("untrusted dotted domain cannot load"),undefined,day),/cache_invalid/);
+  }));
+
 test("same project identity and day reuse verified anonymous state; different day/postal/asset do not", () =>
   fixture(async (root) => {
     let preparations = 0;
@@ -103,6 +138,9 @@ test("failed guards and authenticated/foreign cookies cannot seed a daily proof"
     for (const bad of [
       { ...cookie, name: "at-main" },
       { ...cookie, domain: "evil.test" },
+      { ...cookie, domain: ".www.amazon.com.evil.test" },
+      { ...cookie, name: "at-main", domain: ".www.amazon.com" },
+      { ...cookie, name: "sess-at-main", domain: ".www.amazon.com" },
       { ...cookie, value: "bad\r\nheader" },
     ]) {
       await assert.rejects(
