@@ -812,6 +812,9 @@ test("delivery failure kind exposes only fixed classifications, never error cont
     ["locator.count: Cannot find context with specified id","navigation_context_lost"],
     ["locator.waitFor: Target page, context or browser has been closed","page_closed"],
     ["Timeout private payload","readiness_timeout"],
+    ["header.filter is not a function","runtime_method_missing"],
+    ["private is not defined","runtime_reference_missing"],
+    ["Cannot read properties of undefined","runtime_property_missing"],
     ["private https://example.test/?token=secret","other"],
   ])assert.equal(amazonDeliveryFailureKind(new Error(message)),expected);
   assert.equal(amazonDeliveryFailureKind(null),"other");

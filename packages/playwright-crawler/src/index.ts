@@ -332,6 +332,11 @@ export function amazonDeliveryFailureKind(error: unknown) {
     return "navigation_context_lost";
   if (/Target (?:page, context or browser|closed)|has been closed/i.test(error.message))
     return "page_closed";
+  if (/is not a function/.test(error.message)) return "runtime_method_missing";
+  if (/is not defined/.test(error.message)) return "runtime_reference_missing";
+  if (/Cannot read properties/.test(error.message)) return "runtime_property_missing";
+  if (/Frame was detached|Execution context is not available/i.test(error.message))
+    return "navigation_context_lost";
   if (/Timeout/i.test(error.name + error.message)) return "readiness_timeout";
   return "other";
 }
@@ -1260,6 +1265,13 @@ export class PlaywrightCrawlerEngine {
                 ? ["locator.waitFor", "locator.count", "locator.isVisible", "locator.textContent", "page.evaluate"]
                     .find((operation) => error.message.startsWith(`${operation}:`)) ?? "other"
                 : "other";
+            deliveryState.failure_type =
+              error instanceof Error && ["Error", "TypeError", "ReferenceError", "TimeoutError", "SyntaxError"].includes(error.name)
+                ? error.name : "other";
+            deliveryState.failure_sites = error instanceof Error
+              ? [...(error.stack ?? "").matchAll(/\b(amazon-delivery-context|index|locator|connection|channelOwner)\.js:(\d+):(\d+)/g)]
+                  .slice(0, 4).map((match) => `${match[1]}.js:${match[2]}:${match[3]}`)
+              : [];
           }
         }
       }
