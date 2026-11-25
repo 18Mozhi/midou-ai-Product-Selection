@@ -337,6 +337,10 @@ export async function inspectAmazonDeliveryReadiness(page: Page, postal: string)
             href = location?.getAttribute("href");
           const visible = (node: Element | null) =>
             node instanceof HTMLElement && node.getClientRects().length > 0;
+          const headers = [...document.querySelectorAll("#glow-ingress-block")];
+          const matchingHeaders = headers.filter((node) =>
+            new RegExp(`\\b${postal}\\b`).test(node.textContent ?? ""),
+          );
           return {
             document_state: document.readyState,
             postal_input_present: Boolean(input),
@@ -346,6 +350,9 @@ export async function inspectAmazonDeliveryReadiness(page: Page, postal: string)
               href === "" ? "empty" : href?.startsWith("#") ? "fragment" : "other",
             postal_header_present: Boolean(header),
             postal_header_visible: visible(header),
+            postal_header_count: headers.length,
+            postal_matching_header_count: matchingHeaders.length,
+            postal_matching_visible_header_count: matchingHeaders.filter(visible).length,
             postal_matches: new RegExp(`\\b${postal}\\b`).test(header?.textContent ?? ""),
             account_link_present: Boolean(account),
             account_link_visible: visible(account),
@@ -1025,6 +1032,16 @@ export class PlaywrightCrawlerEngine {
           .first()
           .waitFor({ state: "attached", timeout: this.limits.actionTimeoutMs })
           .catch(() => {});
+      } else if (plan.amazon_delivery && originalTarget.pathname === "/s") {
+        // Direct /s?k= plans do not have plan.search. Give their original result
+        // selector the same bounded readiness wait before counting an empty page.
+        await page
+          .locator(plan.item_selector)
+          .first()
+          .waitFor({ state: "attached", timeout: this.limits.actionTimeoutMs })
+          .catch(async () => {
+            await guard(page);
+          });
       }
       // A detail page has no legitimate empty-success state. Wait for its actual
       // title before counting/capturing; images alone are not product evidence.
@@ -1228,6 +1245,8 @@ export class PlaywrightCrawlerEngine {
             deliveryState.failure_reason =
               error instanceof Error && error.message === "amazon_delivery_requires_anonymous_page"
                 ? "anonymous_missing"
+                : error instanceof Error && error.message.includes("strict mode violation:")
+                  ? "selector_ambiguous"
                 : failure.code === "timeout"
                   ? "readiness_timeout"
                   : "other";

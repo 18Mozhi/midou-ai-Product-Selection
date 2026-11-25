@@ -792,6 +792,9 @@ test("real Chromium delivery diagnostics distinguish anonymous, postal and hidde
       await page.setContent(`<html><body><div ${mode==="hidden"?'aria-hidden="true"':""}>${mode==="missing_anonymous"?"":'<a id="nav-link-accountList" href="/ap/signin">Hello, sign in Account &amp; Lists</a>'}</div><div id="glow-ingress-block">Deliver to ${mode==="wrong_postal"?"10001":"94404"}</div><a id="nav-global-location-popover-link" href="">private-content-that-must-not-be-logged</a></body></html>`);
       const result=await inspectAmazonDeliveryReadiness(page,"94404");
       assert.equal(result.postal_matches,mode!=="wrong_postal");
+      assert.equal(result.postal_header_count,1);
+      assert.equal(result.postal_matching_header_count,mode==="wrong_postal"?0:1);
+      assert.equal(result.postal_matching_visible_header_count,mode==="wrong_postal"?0:1);
       assert.equal(result.anonymous_exact_visible,!["missing_anonymous","hidden"].includes(mode));
       assert.equal(result.anonymous_aria_hidden_visible,mode!=="missing_anonymous");
       assert.equal(result.account_link_present,mode!=="missing_anonymous");

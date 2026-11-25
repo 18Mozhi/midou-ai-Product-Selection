@@ -16,7 +16,11 @@ export async function runAmazonDetailFixture(Engine, mode) {
       requests.push(route.request().url());
       const content = mode === "ready" ? title : "";
       const script =
-        mode === "delayed"
+        mode === "delayed_search_captcha"
+          ? "setTimeout(()=>document.body.insertAdjacentHTML('beforeend','<input id=\"captchacharacters\">'),100)"
+          : mode === "delayed_search"
+          ? `setTimeout(()=>document.body.insertAdjacentHTML('beforeend','<div data-component-type="s-search-result" data-asin="B000000001">Fixture result</div>'),300)`
+          : mode === "delayed"
           ? `setTimeout(()=>document.body.insertAdjacentHTML('beforeend',${JSON.stringify(title)}),1000)`
           : mode === "captcha"
             ? "setTimeout(()=>document.body.insertAdjacentHTML('beforeend','<input id=\"captchacharacters\">'),100)"
@@ -26,6 +30,9 @@ export async function runAmazonDetailFixture(Engine, mode) {
         body:
           '<a href="/ap/signin">Hello, sign in Account &amp; Lists</a>' +
           '<div id="glow-ingress-block">Deliver to San Mateo 94404</div>' +
+          (mode === "duplicate_postal"
+            ? '<div hidden id="glow-ingress-block">Deliver to San Mateo 94404</div>'
+            : "") +
           '<div id="leftCol"><img id="landingImage" alt="Fixture image"></div>' +
           content +
           `<script>${script}</script>`,
@@ -35,7 +42,7 @@ export async function runAmazonDetailFixture(Engine, mode) {
   };
   try {
     const target =
-      mode === "search"
+      mode === "search" || mode.startsWith("delayed_search")
         ? { query: "fixture missing" }
         : {
             page_url: "https://www.amazon.com/dp/B000000001",

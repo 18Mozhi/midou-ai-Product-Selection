@@ -9,6 +9,9 @@ for (const [mode, status, error] of [
   ["ready", "succeeded", null],
   ["captcha", "blocked_captcha", "blocked_captcha"],
   ["search", "succeeded_empty", null],
+  ["delayed_search", "succeeded", null],
+  ["delayed_search_captcha", "blocked_captcha", "blocked_captcha"],
+  ["duplicate_postal", "dependency_failed", "dependency_unavailable"],
 ]) {
   test(`Amazon ${mode} fixture retains bounded readiness and original guards`, async () => {
     const { result, requests } = await runAmazonDetailFixture(PlaywrightCrawlerEngine, mode);
@@ -18,7 +21,7 @@ for (const [mode, status, error] of [
     if (status === "succeeded") {
       assert.equal(result.item_count, 1);
       const dom = result.artifacts.find((a) => a.kind === "dom_fragment");
-      assert.match(Buffer.from(dom.content_base64, "base64").toString(), /Fixture product/);
+      assert.match(Buffer.from(dom.content_base64, "base64").toString(), /Fixture (?:product|result)/);
     } else if (mode !== "search") {
       assert.equal(result.item_count, 0);
       assert.equal(result.artifacts, undefined, "incomplete detail is not successful evidence");
