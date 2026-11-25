@@ -517,6 +517,12 @@ def install_with_claim_drain(install_fn, args, drain):
         drain.resume_owned()
 
 
+def release_error_code(error):
+    message = str(error)
+    return (message if re.fullmatch(r"(?:trend|account_release)_[a-z_]+", message)
+            else type(error).__name__)
+
+
 def restart_identity_valid(before, after, python_transport=False):
     if not after.get("api") or not after.get("worker"):
         return False
@@ -1005,9 +1011,7 @@ try:
  else:
   result=ns["install"](*args)
 except Exception as exc:
- message=str(exc)
- result={"status":False,"message":ns["MODULE_PHASE"]+":"+(
-     message if re.fullmatch(r"trend_[a-z_]+",message) else type(exc).__name__)}
+ result={"status":False,"message":ns["MODULE_PHASE"]+":"+ns["release_error_code"](exc)}
 print("SCOUTOPS_RESULT="+json.dumps(result))
 '''
     with ssh_connection(deploy) as ssh:

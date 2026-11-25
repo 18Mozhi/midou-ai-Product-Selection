@@ -4,7 +4,11 @@ import type { RuntimeConfig } from "@scoutops/config";
 import { COLLECTION_CLAIM_PAUSE_FILE } from "@scoutops/database";
 import { PlaywrightCrawlerEngine, runWithEncryptedProfile } from "@scoutops/playwright-crawler";
 import { join } from "node:path";
-import { ProviderAdapterFailure, type AdapterHealthSignal } from "@scoutops/provider-adapters";
+import {
+  ProviderAdapterFailure,
+  type AdapterHealthSignal,
+  type ProviderRawRecord,
+} from "@scoutops/provider-adapters";
 import {
   anonymousAmazonFingerprint,
   createAmazonBrowserExecutionRequest,
@@ -13,17 +17,54 @@ import {
 } from "@scoutops/provider-sources";
 import { MySqlCredentialAssetRepository } from "./mysql-credential-asset-repository.js";
 import { MySqlCrawlerRuntimeRepository } from "./mysql-crawler-runtime-repository.js";
-import { CrawlerRuntimeError, CrawlerRuntimeService, type CrawlerAcquireScope } from "./crawler-runtime-service.js";
+import {
+  CrawlerRuntimeError,
+  CrawlerRuntimeService,
+  type CrawlerAcquireScope,
+} from "./crawler-runtime-service.js";
 import type { AdapterProviderRecord, ProviderProbeContext } from "./provider-adapter-service.js";
+
+// Exact existing BaoTa Python runtime and project helper, not caller-controlled executables.
+export const AMAZON_HEALTH_PYTHON_TRANSPORT = Object.freeze({
+  executable: "/www/server/pyporject_evn/versions/3.12.13/bin/python3.12",
+  script: "/www/wwwroot/ai选品/python/scoutops_crawler/public_http.py",
+});
+
+type HealthTransport = "browser" | "python";
+export async function verifyAmazonHealthTransportParity(
+  collect: (
+    target: Record<string, unknown>,
+    transport: HealthTransport,
+  ) => Promise<ProviderRawRecord[]>,
+  signal: AbortSignal,
+) {
+  signal.throwIfAborted();
+  const browser = await collect({ query: "storage box" }, "browser");
+  signal.throwIfAborted();
+  if (!browser.length) throw new ProviderAdapterFailure("invalid_payload", false);
+  const python = await collect({ query: "storage box" }, "python");
+  signal.throwIfAborted();
+  const pythonIds = new Set(python.map((record) => record.externalId));
+  const shared = browser.find((record) => pythonIds.has(record.externalId));
+  if (!shared) throw new ProviderAdapterFailure("invalid_payload", false);
+  for (const transport of ["browser", "python"] as const) {
+    signal.throwIfAborted();
+    const [detail] = await collect(
+      { page_url: "https://www.amazon.com/dp/" + shared.externalId },
+      transport,
+    );
+    signal.throwIfAborted();
+    if (!detail || detail.externalId !== shared.externalId)
+      throw new ProviderAdapterFailure("invalid_payload", false);
+  }
+}
 
 export class AmazonPublicBrowserHealth {
   constructor(
     private readonly pool: Pool,
     private readonly config: RuntimeConfig,
     private readonly fetcher: typeof fetch,
-    private readonly resolveScope: (
-      context: ProviderProbeContext,
-    ) => Promise<CrawlerAcquireScope>,
+    private readonly resolveScope: (context: ProviderProbeContext) => Promise<CrawlerAcquireScope>,
   ) {}
   async probe(
     provider: AdapterProviderRecord,
@@ -69,7 +110,9 @@ export class AmazonPublicBrowserHealth {
           this.config.nodeEnv === "production" ? COLLECTION_CLAIM_PAUSE_FILE : undefined,
           scope.accountId
             ? {
-                actorId: scope.automaticTaskId ? this.config.automaticSources.systemActorId : context.actorId,
+                actorId: scope.automaticTaskId
+                  ? this.config.automaticSources.systemActorId
+                  : context.actorId,
                 profileId: this.config.providerAdapters.amazonBrowserProfileId,
                 ...(scope.automaticTaskId ? {} : { manual: true as const }),
               }
@@ -79,7 +122,7 @@ export class AmazonPublicBrowserHealth {
       const record = await new MySqlCredentialAssetRepository(this.pool).getCipherRecord(
         String(profile.credential_asset_id),
       );
-      const collect = async (target: Record<string, unknown>) => {
+      const collect = async (target: Record<string, unknown>, transport: HealthTransport) => {
         const request = createAmazonBrowserExecutionRequest(
           target,
           this.config.providerAdapters.amazonPublicDeliveryPostalCode,
@@ -127,6 +170,9 @@ export class AmazonPublicBrowserHealth {
               timezoneId: String(profile.timezone),
               signal: controller.signal,
               navigationTransport: this.config.providerAdapters.amazonBrowserNavigationTransport,
+              ...(transport === "python"
+                ? { publicHttpRuntime: AMAZON_HEALTH_PYTHON_TRANSPORT }
+                : {}),
               handoff: {
                 root: join(this.config.storage.runtimeTempRoot, "browser-handoffs"),
                 runId: lease.run.id,
@@ -185,20 +231,29 @@ export class AmazonPublicBrowserHealth {
                 result?.error_code ??
                 (result ? null : "dependency_unavailable")),
           });
+          console.info(
+            JSON.stringify({
+              event: "amazon_health_transport_result",
+              transport,
+              operation: target.page_url ? "detail" : "search",
+              run_id: lease.run.id,
+              request_id: context.requestId,
+              trace_id: context.traceId,
+              status: statusValue,
+              item_count: result?.item_count ?? 0,
+              error_code: controller.signal.aborted
+                ? "timeout"
+                : (parseFailure?.code ?? result?.error_code ?? null),
+            }),
+          );
         }
       };
-      const [product] = await collect({ query: "storage box" });
-      if (!product) throw new ProviderAdapterFailure("invalid_payload", false);
-      const [detail] = await collect({
-        page_url: "https://www.amazon.com/dp/" + product.externalId,
-      });
-      if (!detail || detail.externalId !== product.externalId)
-        throw new ProviderAdapterFailure("invalid_payload", false);
+      await verifyAmazonHealthTransportParity(collect, controller.signal);
       return {
         status: "ready",
         latencyMs: Date.now() - started,
         errorCode: null,
-        message: "匿名浏览器搜索与同一商品详情均已实际解析。",
+        message: "Node浏览器与生产Python传输两条支路的搜索及同一商品详情均已实际解析。",
       };
     } catch (error) {
       if (error instanceof CrawlerRuntimeError && error.code === "crawler_claims_paused")

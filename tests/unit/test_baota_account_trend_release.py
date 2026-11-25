@@ -13,6 +13,15 @@ trend = runpy.run_path(
 
 
 class TrendReleaseScopeTest(unittest.TestCase):
+    def test_release_drain_errors_preserve_only_safe_typed_codes(self):
+        safe = trend["release_error_code"]
+        for code in ("account_release_worker_drain_timeout", "account_release_worker_identity_changed",
+                     "account_release_collection_pause_owner_changed", "trend_base_runtime_changed"):
+            self.assertEqual(safe(RuntimeError(code)), code)
+        for text in ("DB password=private-value", "account_release_secret=private-value",
+                     "account_release_failed\nprivate-value", "foreign_error"):
+            self.assertEqual(safe(RuntimeError(text)), "RuntimeError")
+
     def test_checkpoint_release_is_one_engine_and_restores_original_bytes(self):
         before, after = trend["collection_hashes"]("checkpoint")
         self.assertEqual(set(before), {"packages/playwright-crawler/dist/index.js"})
