@@ -5140,6 +5140,22 @@
       "statusDetail": "credential_assets_live_mysql_api_worker_crawler_deep_link_refresh_timeout_preserve_data_encrypted_upload_rotation_revocation_idempotency_permission_validation_download_service_responsive_and_accessibility_verification_completed"
     },
     "providerAdapters": {
+      "maintenanceBootstrap20261125": {
+        "status": "implemented-pending-production-proof",
+        "requirements": "docs/runbooks/account-production-coordinated-release.md",
+        "sourceFiles": [
+          "apps/worker/src/index.ts",
+          "apps/worker/src/queue-scheduler.ts",
+          "scripts/baota-account-claim-drain.py",
+          "scripts/baota-account-trend-release.py",
+          "scripts/deploy-account-baota.py"
+        ],
+        "testFiles": [
+          "tests/unit/worker-maintenance-pause.test.mjs",
+          "tests/unit/test_baota_maintenance_bootstrap.py"
+        ],
+        "contract": "User-approved Node-only first load. Owned claim pause, four business-zero samples before bootstrap, four full-zero samples after bootstrap before dual-health release and again after release. Keep pause on uncertain install; no Python restart,1688 request,concurrency or DB change. Existing due queues and actual active runs remain truthful."
+      },
       "desktopOperatorDetailEntry20261125": {
         "status": "local-verified-not-published",
         "sourceFiles": [
@@ -9867,6 +9883,6 @@
       "docs/openapi.yaml"
     ],
     "contract": "Both configured Node and existing production Python curl paths must search the same query and prove details for one shared product. No HTTP executable choice, new dependency, proxy, whitelist, concurrency, model or database change. Existing health consumers remain unchanged; deployment and actual dual-route acceptance pending.",
-    "releaseContract": "Exact two Node modules, pinned baseline/candidate plus existing transport helper protection; both forward and restore require unchanged strict four-zero claim drain. No production execution pending maintenance bootstrap approval."
+    "releaseContract": "Exact two Node modules, pinned baseline/candidate plus existing transport helper protection; both forward and restore require unchanged strict four-zero claim drain. Controlled maintenance bootstrap approved; execution and live four-zero evidence pending."
   }
 }

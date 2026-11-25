@@ -31,7 +31,7 @@ Python支路复用已有Playwright publicHttpRuntime适配器，而不是新服�
 本地测试覆盖共同商品选择、Python空结果/不同商品、任一路详情缺失或错商品、验证码、取消、
 真实加密空档案物化与清理、四次租约完成，以及生产Python传输选项确实进入原引擎。
 合成测试不是正式双路验收。Node健康模块上线须仅通过正式协调器重启Node；Python无需重启或安装依赖。
-当前首次加载维护暂停能力的方案仍待确认，不绕过原四次连续全零排空标准。
+首次加载维护暂停能力已获用户维护窗口确认，使用协调器专用首次加载入口；不绕过加载后的四次连续全零排空标准。
 上线后必须重新执行健康检查并核对同一请求的四条运行/传输记录，旧单支路健康记录不得作为新的恢复证据。
 
 现有发布包装器还修复了诊断丢失：只允许原trend_和account_release_内部错误码通过，
@@ -56,7 +56,7 @@ Node/Python传输适配器和Python helper只核对哈希并保护，不上传�
 以下是门禁通过后的操作入口，不是已经执行的发布。源码须为干净、已验证且与origin/main一致的提交；
 现有正式模块必须匹配8df4389996d0ad16c3ff478ddcc2d0eb64295eef对应的两项哈希。
 任何漂移、缺文件、四次连续全零失败或非本项目身份均拒绝安装。
-首次加载维护暂停能力尚未批准，不能使用这些入口绕过原排空标准。
+首次加载维护暂停能力已获批准，先使用专用bootstrap入口加载并通过四次完整全零，再安装双路门禁；普通入口不能替代首次加载。
 
 ```powershell
 python -B scripts/deploy-account-baota.py --collection-dual-health-only --expected-previous-sha 1b622274a6871d9d1ac3986223359b539a82aa76 --expected-module-sha256 c86f7b72c16ec20b8d454004906bdcbc4c0c11574ff1cafd5f3ce7f5c74989f1

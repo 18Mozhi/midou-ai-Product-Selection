@@ -102,6 +102,24 @@ def verify_collection_drained(probe, *, attempts=65, sleep=time.sleep):
     raise RuntimeError("account_release_worker_drain_timeout")
 
 
+BUSINESS_DRAIN_KEYS = DRAIN_KEYS - {"worker_active", "intelligence_active"}
+
+
+def verify_bootstrap_business_drained(probe, *, attempts=65, sleep=time.sleep):
+    # Authorized first-load only: the old dispatcher cannot yet honor the pause file.
+    consecutive = 0
+    for index in range(attempts):
+        state = probe()
+        if set(state) != DRAIN_KEYS or any(type(v) is not int or v < 0 for v in state.values()):
+            raise RuntimeError("account_release_drain_sample_invalid")
+        consecutive = consecutive + 1 if all(state[k] == 0 for k in BUSINESS_DRAIN_KEYS) else 0
+        if consecutive == 4:
+            return
+        if index + 1 < attempts:
+            sleep(2)
+    raise RuntimeError("account_release_bootstrap_business_drain_timeout")
+
+
 class BaselineClaimDrain:
     def __init__(self, root, node):
         self.root = root
@@ -110,6 +128,7 @@ class BaselineClaimDrain:
                         "--env-file=" + str(root / "config/release.env")]
         self.owner = str(uuid.uuid4())
         self.pause_attempted = False
+        self.samples = []
 
     def read_json(self, arguments, failure):
         result = subprocess.run([*self.command, *arguments], cwd=str(self.backend),
@@ -180,7 +199,19 @@ class BaselineClaimDrain:
         )
         if self.worker_identities() != self.worker_baseline:
             raise RuntimeError("account_release_worker_identity_changed")
+        self.samples.append({"phase": getattr(self, "phase", "full"),
+                             "observed_at_unix": time.time(),
+                             "worker": self.worker_baseline, "counts": sample})
         return sample
+
+    def bootstrap_business_drain(self):
+        self.worker_baseline = self.worker_identities()
+        if len(self.worker_baseline) != 1:
+            raise RuntimeError("account_release_worker_identity_unverified")
+        verify_bootstrap_business_drained(self.sample)
+        sample = self.sample()
+        if any(sample[k] != 0 for k in BUSINESS_DRAIN_KEYS):
+            raise RuntimeError("account_release_bootstrap_business_not_drained_at_stop")
 
     def drain(self):
         self.worker_baseline = self.worker_identities()

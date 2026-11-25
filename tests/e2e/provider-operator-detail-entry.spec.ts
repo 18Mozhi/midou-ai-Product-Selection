@@ -126,7 +126,6 @@ for (const scene of cases) {
         : page.locator(".adapter-table-wrap tbody tr");
     await expect(record).toBeVisible();
     await expect(record).toContainText("1688 图搜");
-    await page.screenshot({ path: testInfo.outputPath("before-entry.png"), fullPage: true });
     const entry =
       testInfo.project.name === "mobile-390"
         ? page.getByRole("button", { name: /1688 图搜.*查看详情/ })
@@ -151,7 +150,6 @@ for (const scene of cases) {
     await expect(dialog.getByRole("button", { name: "关闭详情", exact: true })).toBeFocused();
     await page.keyboard.press("Tab");
     expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
-    await page.screenshot({ path: testInfo.outputPath("operator-detail.png"), fullPage: true });
     await page.keyboard.press("Escape");
     await expect(dialog).toHaveCount(0);
     await expect(entry).toBeFocused();

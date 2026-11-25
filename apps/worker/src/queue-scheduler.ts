@@ -1,3 +1,5 @@
+import { lstatSync } from "node:fs";
+
 export interface QueueSchedulerRunContext {
   attempt: number;
   max_attempts: number;
@@ -203,6 +205,20 @@ const abortableDelay = (delayMs: number, signal: AbortSignal) =>
     );
   });
 
+export function createWorkerMaintenancePause(
+  path: string,
+  inspect: (path: string) => unknown = lstatSync,
+) {
+  return () => {
+    try {
+      inspect(path);
+      return true;
+    } catch (error) {
+      return (error as NodeJS.ErrnoException).code !== "ENOENT";
+    }
+  };
+}
+
 export class QueueScheduler {
   private readonly jobs: QueueSchedulerJobState[] = [];
   private readonly completions: CompletionEvent[] = [];
@@ -219,6 +235,7 @@ export class QueueScheduler {
       maxConcurrency: number;
       tickMs: number;
       now?: () => Date;
+      dispatchPaused?: () => boolean;
       onSnapshot?: (snapshot: QueueSchedulerSnapshot) => void | Promise<void>;
       onSnapshotError?: (error: unknown) => void | Promise<void>;
     },
@@ -397,6 +414,11 @@ export class QueueScheduler {
     if (this.status !== "running" || this.ticking) return;
     this.ticking = true;
     try {
+      if (this.options.dispatchPaused?.()) {
+        // Publish real active runs while existing work settles; do not abort or consume poll slots.
+        await this.publish();
+        return;
+      }
       const nowMs = this.now().getTime();
       const due = this.dueJobs(nowMs).sort(
         (left, right) =>

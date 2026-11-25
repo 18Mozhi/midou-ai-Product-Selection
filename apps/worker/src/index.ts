@@ -41,7 +41,7 @@ import { MySqlOpportunityProfitWorker } from "./opportunity-profit-worker.js";
 import { MySqlOpportunityRefreshWorker } from "./opportunity-refresh-worker.js";
 import { MySqlOpportunityScoringWorker } from "./opportunity-scoring-worker.js";
 import { ProviderSourceExecutor } from "./provider-source-executor.js";
-import { QueueScheduler } from "./queue-scheduler.js";
+import { QueueScheduler, createWorkerMaintenancePause } from "./queue-scheduler.js";
 import { ReportExportWorker } from "./report-export-worker.js";
 import { SingleHostResourceProbe } from "./single-host-resource-probe.js";
 import { MySqlSourcingProjectionWorker } from "./sourcing-projection-worker.js";
@@ -383,6 +383,9 @@ const queues = workerQueues(
 );
 
 scheduler = new QueueScheduler({
+  ...(config.nodeEnv === "production"
+    ? { dispatchPaused: createWorkerMaintenancePause(COLLECTION_CLAIM_PAUSE_FILE) }
+    : {}),
   maxConcurrency: config.runtime.workerMaxConcurrency,
   tickMs: config.runtime.workerSchedulerTickMs,
   onSnapshot: (snapshot) => schedulerStateWriter.write(snapshot),
