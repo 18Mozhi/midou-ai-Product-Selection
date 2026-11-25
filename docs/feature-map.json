@@ -5153,6 +5153,22 @@
       "statusDetail": "credential_assets_live_mysql_api_worker_crawler_deep_link_refresh_timeout_preserve_data_encrypted_upload_rotation_revocation_idempotency_permission_validation_download_service_responsive_and_accessibility_verification_completed"
     },
     "providerAdapters": {
+      "amazonViewportEvidence20261125": {
+        "status": "implemented-local-proof-pending-production",
+        "requirements": "docs/amazon-viewport-evidence.md",
+        "sourceFiles": [
+          "packages/playwright-crawler/src/index.ts",
+          "scripts/baota-account-trend-release.py",
+          "scripts/deploy-account-baota.py"
+        ],
+        "testFiles": [
+          "tests/integration/amazon-screenshot-wait.test.mjs",
+          "tests/integration/amazon-viewport-evidence.test.mjs",
+          "tests/integration/amazon-evidence-operation.test.mjs",
+          "tests/unit/test_baota_viewport_evidence_release.py"
+        ],
+        "behavior": "Amazon-only real Chromium viewport JPEG avoids waiting for remote fonts; no page mutation or resource abort. Existing action budget, DOM/image limits and all identity/anonymous/ZIP/CAPTCHA/transport gates preserved. Non-Amazon unchanged."
+      },
       "amazonScreenshotWait20261125": {
         "status": "diagnostic-local-verified-pending-live-wait-phase",
         "requirements": "docs/amazon-screenshot-wait.md",

@@ -49,6 +49,19 @@ for (const operation of [
             });
           }
         };
+        if (operation.startsWith("screenshot")) {
+          let calls = 0;
+          t.mock.method(context, "newCDPSession", async () => {
+            return {
+              send: async () => {
+                if (operation === "screenshot_recompress" && calls++ === 0)
+                  return { data: Buffer.alloc(800001).toString("base64") };
+                return fail();
+              },
+              detach: async () => {},
+            };
+          });
+        }
         context.pages().forEach(patchPage);
         context.on("page", patchPage);
       },

@@ -255,7 +255,7 @@ def prepare_amazon(root, manifest, read_file, collection=None):
         replacements[path] = (data, before, after)
     worker_dir = (root / REPORT_TARGET).parent
     protect_hashes = {**REPORT_PROTECTED, Path(REPORT_TARGET).name: REPORT_NEW}
-    if collection in ("dual_health", "dual_health_restore", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore"):
+    if collection in ("dual_health", "dual_health_restore", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore"):
         protect_hashes["queue-scheduler.js"] = COLLECTION_MAINTENANCE_CANDIDATE[COLLECTION_MAINTENANCE_PRIMARY]
         protect_hashes["index.js"] = COLLECTION_MAINTENANCE_CANDIDATE["apps/worker/dist/index.js"]
     protected = {worker_dir / key: read_file(worker_dir / key, 65536)
@@ -264,11 +264,11 @@ def prepare_amazon(root, manifest, read_file, collection=None):
         raise RuntimeError("trend_amazon_protected_module_changed")
     if audit or collection is not None:
         api_hashes = dict(AMAZON_INSTALLED)
-        if collection in ("capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore"):
+        if collection in ("capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore"):
             api_hashes["amazon-public-browser-health.js"] = COLLECTION_DUAL_HEALTH_CANDIDATE[COLLECTION_DUAL_HEALTH]
         if collection is not None:
             api_hashes[AMAZON_AUDIT_MODULE] = "425611f474a67f26a7a3138a456def5652fa77872099337a89535dbb6fb40e33"
-        if collection in ("handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore"):
+        if collection in ("handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore"):
             api_hashes["mysql-crawler-runtime-repository.js"] = COLLECTION_HANDOFF_CANDIDATE[COLLECTION_HANDOFF_REPO]
         for name, digest in api_hashes.items():
             path = root / AMAZON_DIR / name
@@ -327,14 +327,14 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
             prerequisites[COLLECTION_DETAIL] = COLLECTION_DETAIL_CANONICAL
-        if collection in ("delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore"):
+        if collection in ("delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore"):
             prerequisites.update(COLLECTION_RANK_CANDIDATE)
             prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
             prerequisites.update(COLLECTION_LAN_HEALTH_CANDIDATE)
             prerequisites.update(COLLECTION_MODEL_HOLD_CANDIDATE)
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
-        if collection in ("handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore"):
+        if collection in ("handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore"):
             prerequisites[COLLECTION_DAILY_CONTEXT] = COLLECTION_DAILY_CANDIDATE[COLLECTION_DAILY_CONTEXT]
         if collection in ("handoff_routes", "handoff_routes_restore"):
             prerequisites.update(COLLECTION_HANDOFF_CANDIDATE)
@@ -357,7 +357,7 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites.update(COLLECTION_HANDOFF_ROUTES_CANDIDATE)
             prerequisites.update({n: h for n, h in COLLECTION_MANUAL_WAF_CANDIDATE.items() if n != COLLECTION_DETAIL})
             prerequisites.update(COLLECTION_DELIVERY_READY_CANDIDATE)
-        if collection in ("relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore"):
+        if collection in ("relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore"):
             prerequisites[COLLECTION_HANDOFF_REPO] = COLLECTION_HANDOFF_CANDIDATE[COLLECTION_HANDOFF_REPO]
             prerequisites.update(COLLECTION_HANDOFF_ROUTES_CANDIDATE)
             prerequisites.update(COLLECTION_MANUAL_WAF_CANDIDATE)
@@ -369,16 +369,16 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             for name in ("main_loop.py", "runtime_client.py", "lease_client.py", "completion_receipts.py", "config.py"):
                 path = root / "python/scoutops_crawler" / name
                 protected[path] = read_file(path, 131072)
-        if collection in ("sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore"):
+        if collection in ("sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore"):
             prerequisites.update(COLLECTION_RELATION_KEY_CANDIDATE)
             path = root / "python" / COLLECTION_PYTHON_TRANSPORT
             data = read_file(path, 131072)
             if hashlib.sha256(data).hexdigest() != COLLECTION_PYTHON_TRANSPORT_CANDIDATE[COLLECTION_PYTHON_TRANSPORT]:
                 raise RuntimeError("trend_collection_prerequisite_changed")
             protected[path] = data
-        if collection in ("checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore"):
+        if collection in ("checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore"):
             prerequisites.update(COLLECTION_SPONSORED_EMPTY_CANDIDATE)
-        if collection in ("dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore"):
+        if collection in ("dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore"):
             protected.update(dual_health_transport_files(root, read_file))
         for name, digest in prerequisites.items():
             path = root / "backend" / name
@@ -456,6 +456,10 @@ COLLECTION_SCREENSHOT_WAIT_SOURCE = "0c72858d6b7f2a02d1b2512ac3a847e265a7a216"
 COLLECTION_SCREENSHOT_WAIT_BASE = dict(COLLECTION_CAPTURE_TRACE_CANDIDATE)
 COLLECTION_SCREENSHOT_WAIT_CANDIDATE = {COLLECTION_DETAIL: "5d16516ed7f8019c15d9cfb81ffe6e1271e49c9e39fcd3d250ffa475ccde64f3"}
 
+COLLECTION_VIEWPORT_EVIDENCE_SOURCE = "4788a8249b86290d3fca7fddc9042ba26e16b750"
+COLLECTION_VIEWPORT_EVIDENCE_BASE = dict(COLLECTION_SCREENSHOT_WAIT_CANDIDATE)
+COLLECTION_VIEWPORT_EVIDENCE_CANDIDATE = {COLLECTION_DETAIL: "2cf245a14bd71ea04e215f08987eebee9ed5c832b4395022374752beb7ede0ac"}
+
 
 def dual_health_transport_files(root, read_file):
     protected = {}
@@ -469,6 +473,10 @@ def dual_health_transport_files(root, read_file):
 
 
 def collection_hashes(action):
+    if action == "viewport_evidence":
+        return COLLECTION_VIEWPORT_EVIDENCE_BASE, COLLECTION_VIEWPORT_EVIDENCE_CANDIDATE
+    if action == "viewport_evidence_restore":
+        return COLLECTION_VIEWPORT_EVIDENCE_CANDIDATE, COLLECTION_VIEWPORT_EVIDENCE_BASE
     if action == "screenshot_wait":
         return COLLECTION_SCREENSHOT_WAIT_BASE, COLLECTION_SCREENSHOT_WAIT_CANDIDATE
     if action == "screenshot_wait_restore":
@@ -955,7 +963,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         raise RuntimeError("trend_release_requires_expected_sha256_and_base_sha")
     if collection is not None:
         route, _ = collection_hashes(collection)
-        key = (COLLECTION_DETAIL if collection in ("capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore") else
+        key = (COLLECTION_DETAIL if collection in ("capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore") else
                COLLECTION_MAINTENANCE_PRIMARY if collection == "maintenance_bootstrap" else
                COLLECTION_DUAL_HEALTH if collection in ("dual_health", "dual_health_restore") else
                COLLECTION_DETAIL if collection in ("checkpoint", "checkpoint_restore") else
@@ -1015,7 +1023,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
     if rollback:
         deploy["verify_production_sha_history"](repo, STAGGER_RELEASE_SHA, sha)
         validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
-    for job in (("build:playwright-crawler",) if collection in ("capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore") else
+    for job in (("build:playwright-crawler",) if collection in ("capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore") else
                 ("build:worker", "build:api", "build:playwright-crawler") if collection == "maintenance_bootstrap" else
                 ("build:api", "build:playwright-crawler") if collection in ("dual_health", "dual_health_restore") else
                 ("build:playwright-crawler",) if collection in ("checkpoint", "checkpoint_restore") else
@@ -1053,12 +1061,14 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             relation_key_followup = collection in ("relation_key", "relation_key_restore")
             python_transport_followup = collection in ("python_transport", "python_transport_restore")
             sponsored_empty_followup = collection in ("sponsored_empty", "sponsored_empty_restore")
-            checkpoint_followup = collection in ("checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore")
-            dual_health_followup = collection in ("dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore")
+            checkpoint_followup = collection in ("checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore")
+            dual_health_followup = collection in ("dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore")
             maintenance_followup = collection == "maintenance_bootstrap"
-            capture_trace_followup = collection in ("capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore")
-            screenshot_wait_followup = collection in ("screenshot_wait", "screenshot_wait_restore")
-            source = (COLLECTION_SCREENSHOT_WAIT_SOURCE if screenshot_wait_followup else
+            capture_trace_followup = collection in ("capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore")
+            screenshot_wait_followup = collection in ("screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore")
+            viewport_evidence_followup = collection in ("viewport_evidence", "viewport_evidence_restore")
+            source = (COLLECTION_VIEWPORT_EVIDENCE_SOURCE if viewport_evidence_followup else
+                      COLLECTION_SCREENSHOT_WAIT_SOURCE if screenshot_wait_followup else
                       COLLECTION_CAPTURE_TRACE_SOURCE if capture_trace_followup else
                       COLLECTION_MAINTENANCE_SOURCE if maintenance_followup else
                       COLLECTION_DUAL_HEALTH_SOURCE if dual_health_followup else
@@ -1080,7 +1090,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
                       COLLECTION_DAILY_SOURCE if daily_followup else
                       COLLECTION_DETAIL_DIAG_SOURCE if canonical_followup else COLLECTION_SOURCE_BASE)
             restored = build_collection_restore(repo, name, source)
-            original = (COLLECTION_SCREENSHOT_WAIT_BASE[name] if screenshot_wait_followup else
+            original = (COLLECTION_VIEWPORT_EVIDENCE_BASE[name] if viewport_evidence_followup else
+                        COLLECTION_SCREENSHOT_WAIT_BASE[name] if screenshot_wait_followup else
                         COLLECTION_CAPTURE_TRACE_BASE[name] if capture_trace_followup else
                         COLLECTION_MAINTENANCE_BASE[name] if maintenance_followup else
                         COLLECTION_DUAL_HEALTH_BASE[name] if dual_health_followup else
@@ -1146,7 +1157,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         followup_args = tuple(followup_args)
     code = Path(__file__).read_text(encoding="utf-8")
     drain_code = ((repo / "scripts/baota-account-claim-drain.py").read_text(encoding="utf-8")
-                  if collection in ("python_transport", "python_transport_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore") else None)
+                  if collection in ("python_transport", "python_transport_restore", "checkpoint", "checkpoint_restore", "dual_health", "dual_health_restore", "maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore") else None)
     source = ("drain_code=" + repr(drain_code) + "\nnode=" + repr(deploy["NODE_BIN"]) +
               "\ncode=" + repr(code) + "\nargs=" + repr(args) + "\nfollowup_args=" + repr(followup_args)) + r'''
 import json,re
@@ -1166,7 +1177,7 @@ except Exception as exc:
   result.update(maintenance_owner=drain.owner,claim_pause_attempted=drain.pause_attempted,drain_samples=drain.samples)
 print("SCOUTOPS_RESULT="+json.dumps(result))
 '''
-    if collection in ("maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore"):
+    if collection in ("maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore"):
         source = compact_release_source(source)
     with ssh_connection(deploy) as ssh:
         return deploy["remote_python"](ssh, source, timeout=900 if collection == "maintenance_bootstrap" else 400 if drain_code is not None else 205)

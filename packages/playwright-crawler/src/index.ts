@@ -534,9 +534,43 @@ function screenshotWaitPhase(error: unknown) {
   return steps.includes("taking page screenshot") ? "before_font_wait" : "unavailable";
 }
 
+async function captureAmazonViewport(page: Page, quality: number, timeoutMs: number) {
+  // Evidence is the browser's actual current pixels, not a fully-loaded-font
+  // presentation. Do not edit styles, abort resources or bypass page guards.
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const capture = async () => {
+    const session = await page.context().newCDPSession(page);
+    try {
+      const result = await session.send("Page.captureScreenshot", {
+        format: "jpeg",
+        quality,
+        fromSurface: true,
+        captureBeyondViewport: false,
+      });
+      return Buffer.from(result.data, "base64");
+    } finally {
+      await session.detach().catch(() => {});
+    }
+  };
+  try {
+    return await Promise.race([
+      capture(),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(
+          () => reject(new PlaywrightCrawlerError("timeout", "timeout", true)),
+          timeoutMs,
+        );
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function captureEvidence(
   page: Page,
   plan: BrowserCollectionPlan,
+  screenshotTimeoutMs: number,
   onOperation?: (operation: EvidenceCaptureOperation) => void,
 ): Promise<BrowserEvidenceArtifact[]> {
   if (!plan.evidence) return [];
@@ -563,10 +597,14 @@ async function captureEvidence(
   if (!html.byteLength)
     throw new PlaywrightCrawlerError("crawler_dom_fragment_invalid", "parser_changed", false);
   onOperation?.("screenshot");
-  let screenshot = await page.screenshot({ type: "jpeg", quality: 35, fullPage: false });
+  const takeScreenshot = (quality: number) =>
+    plan.amazon_delivery
+      ? captureAmazonViewport(page, quality, screenshotTimeoutMs)
+      : page.screenshot({ type: "jpeg", quality, fullPage: false });
+  let screenshot = await takeScreenshot(35);
   if (screenshot.byteLength > 800_000) {
     onOperation?.("screenshot_recompress");
-    screenshot = await page.screenshot({ type: "jpeg", quality: 15, fullPage: false });
+    screenshot = await takeScreenshot(15);
   }
   if (!screenshot.byteLength || screenshot.byteLength > 800_000)
     throw new PlaywrightCrawlerError("crawler_screenshot_too_large", "dependency_failed", true);
@@ -1176,9 +1214,14 @@ export class PlaywrightCrawlerEngine {
         }
         itemCount += await page.locator(plan.item_selector).count();
         if (!artifacts.length) {
-          artifacts = await captureEvidence(page, plan, (operation) => {
-            evidenceOperation = operation;
-          });
+          artifacts = await captureEvidence(
+            page,
+            plan,
+            this.limits.actionTimeoutMs,
+            (operation) => {
+              evidenceOperation = operation;
+            },
+          );
           evidenceOperation = undefined;
         }
         const currentSearchSnapshot = await captureSearchSnapshot(page, plan);
