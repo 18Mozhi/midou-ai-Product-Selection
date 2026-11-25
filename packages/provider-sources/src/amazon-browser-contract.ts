@@ -3,6 +3,7 @@ import { gzipSync } from "node:zlib";
 import { ProviderAdapterFailure, type ProviderRawRecord } from "@scoutops/provider-adapters";
 import type { BrowserEvidenceArtifactContract } from "./1688-browser-contract.js";
 import { parseAmazonProductPage } from "./parsers/index.js";
+import { amazonDivContent } from "./parsers/amazon-public-signals.js";
 
 export const AMAZON_BROWSER_PARSER_VERSION = "amazon-public-browser-v1";
 export const anonymousAmazonArchive = () => gzipSync(Buffer.alloc(1024));
@@ -186,6 +187,55 @@ export function parseAmazonBrowserEvidenceArtifacts(
   return output;
 }
 
+/** Stored 2026-11-25 empty search: one native sponsored-video widget before messaging slot2. */
+function observedSponsoredEmptySearch(html: string) {
+  const body = html.replace(/<!--[\s\S]*?-->|<(script|style)\b[^>]*>[\s\S]*?(?:<\/\1>|$)/gi, "");
+  if (
+    /captcha|verify you are human|bm-verify|id=["']productTitle["']|data-component-type=["']s-search-result["']/i.test(
+      body,
+    )
+  )
+    return false;
+  const main = /<div\b[^>]*class=["'][^"']*\bs-main-slot\b[^"']*["'][^>]*>/i.exec(body);
+  if (!main) return false;
+  const message =
+    /<div\b(?=[^>]*\scel_widget_id=["']MAIN-MESSAGING-2["'])(?=[^>]*\sdata-csa-c-content-id=["']messaging-messages-no-results["'])[^>]*>/i.exec(
+      body.slice(main.index),
+    );
+  if (!message) return false;
+  const messageStart = main.index + message.index;
+  const content = amazonDivContent(body, messageStart + message[0].length);
+  if (content === null) return false;
+  const heading = /<h2\b[^>]*>([\s\S]*?)<\/h2>/i.exec(content)?.[1];
+  if (
+    heading?.replace(/<[^>]+>/g, "").trim() !== "No results for your search query." ||
+    !/<span\b[^>]*>Try checking your spelling or use more general terms<\/span>/i.test(content)
+  )
+    return false;
+  const opening = /<div\b(?=[^>]*\scel_widget_id=["']MAIN-VIDEO_MULTI_PRODUCT-1["'])[^>]*>/gi;
+  const widgets = [...body.matchAll(opening)];
+  if (widgets.length !== 1) return false;
+  const widget = widgets[0]!;
+  if (widget.index < main.index || widget.index >= messageStart) return false;
+  const start = widget.index + widget[0].length;
+  const video = amazonDivContent(body, start);
+  if (
+    video === null ||
+    start + video.length >= messageStart ||
+    !/<span\b[^>]*\sdata-component-type=["']sbv-video-multi-product["']/i.test(video)
+  )
+    return false;
+  const label = /<div\b[^>]*class=["'][^"']*\bsbv-sponsored-label\b[^"']*["'][^>]*>/i.exec(video);
+  const labelContent = label ? amazonDivContent(video, label.index + label[0].length) : null;
+  if (labelContent?.replace(/<[^>]+>/g, "").trim() !== "Sponsored") return false;
+  const closing = /^<\/div\s*>/i.exec(body.slice(start + video.length));
+  if (!closing) return false;
+  // Only this closed, explicitly labelled ad is excluded. Any ASIN elsewhere still rejects.
+  const outside =
+    body.slice(0, widget.index) + body.slice(start + video.length + closing[0].length);
+  return !/data-asin=["'][A-Z0-9]{10}["']/i.test(outside);
+}
+
 function observedEmptySearch(html: string) {
   const body = html.replace(/<!--[\s\S]*?-->|<(script|style)\b[^>]*>[\s\S]*?(?:<\/\1>|$)/gi, "");
   // Observed empty searches can append an unrelated featured-ASIN carousel.
@@ -272,8 +322,18 @@ export function parseAmazonBrowserRunResult(
   const html = dom.content.toString("utf8");
   if (observedTemporaryServerFailure(html))
     throw new ProviderAdapterFailure("dependency_unavailable", true);
-  if (expected.pathname !== "/s" && observedEmptySearch(html))
+  if (
+    expected.pathname !== "/s" &&
+    (observedEmptySearch(html) || observedSponsoredEmptySearch(html))
+  )
     throw new ProviderAdapterFailure("source_changed", false);
+  if (
+    input.status === "succeeded_empty" &&
+    input.item_count === 0 &&
+    expected.pathname === "/s" &&
+    observedSponsoredEmptySearch(html)
+  )
+    return [];
   let records: ProviderRawRecord[];
   try {
     records = parseAmazonProductPage("<html><body>" + html + "</body></html>", dom.source_url, 20);

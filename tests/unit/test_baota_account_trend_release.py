@@ -13,6 +13,18 @@ trend = runpy.run_path(
 
 
 class TrendReleaseScopeTest(unittest.TestCase):
+    def test_sponsored_empty_release_pins_only_contract_and_safe_crawler_diagnostics(self):
+        before, after = trend["collection_hashes"]("sponsored_empty")
+        self.assertEqual(set(before), {"packages/provider-sources/dist/amazon-browser-contract.js",
+                                       "packages/playwright-crawler/dist/index.js"})
+        self.assertEqual(trend["collection_hashes"]("sponsored_empty_restore"), (after, before))
+        for name, digest in before.items():
+            data = trend["build_collection_restore"](Path(__file__).resolve().parents[2], name,
+                                                    trend["COLLECTION_SPONSORED_EMPTY_SOURCE"])
+            self.assertEqual(hashlib.sha256(data).hexdigest(), digest)
+        with self.assertRaisesRegex(RuntimeError, "manifest_invalid"):
+            trend["prepare_amazon"](Path("project"), {}, lambda *_: self.fail("unexpected read"), "sponsored_empty")
+
     def test_python_install_drains_before_change_and_always_resumes_only_owned_pause(self):
         from unittest.mock import Mock
         for failure in (None, "pause", "drain", "verify_final", "install"):

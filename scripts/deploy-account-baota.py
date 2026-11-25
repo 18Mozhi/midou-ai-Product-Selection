@@ -232,6 +232,8 @@ def main():
     action.add_argument("--collection-model-hold-rollback", action="store_true")
     action.add_argument("--collection-search-ready-only", action="store_true")
     action.add_argument("--collection-search-ready-rollback", action="store_true")
+    action.add_argument("--collection-sponsored-empty-only", action="store_true")
+    action.add_argument("--collection-sponsored-empty-rollback", action="store_true")
     action.add_argument("--collection-python-transport-only", action="store_true")
     action.add_argument("--collection-python-transport-rollback", action="store_true")
     action.add_argument("--collection-relation-key-only", action="store_true")
@@ -310,6 +312,8 @@ def main():
         collection = "relation_key" if args.collection_relation_key_only else "relation_key_restore"
     if args.collection_python_transport_only or args.collection_python_transport_rollback:
         collection = "python_transport" if args.collection_python_transport_only else "python_transport_restore"
+    if args.collection_sponsored_empty_only or args.collection_sponsored_empty_rollback:
+        collection = "sponsored_empty" if args.collection_sponsored_empty_only else "sponsored_empty_restore"
     worker_only = (args.trend_projection_only or scheduler_only or report_action is not None
                    or args.amazon_health_api_only or args.amazon_health_audit_only or collection is not None)
     if args.expected_module_sha256 and not worker_only:

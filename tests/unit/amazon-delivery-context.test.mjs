@@ -618,6 +618,7 @@ test("daily delivery prepares home once, then reads the product; cached jobs nev
 test("detail readiness timeouts record only bounded DOM facts and remain timeouts", async (t) => {
   const { chromium } = await import("playwright");
   const target = "https://www.amazon.com/dp/B012345678?tag=private-tag";
+  let documentPath = "/dp/B012345678";
   const f = fixture({location:"Deliver to 94404"});
   const { locator } = f.page;
   Object.assign(f.page,{
@@ -630,7 +631,7 @@ test("detail readiness timeouts record only bounded DOM facts and remain timeout
       // Execute the actual projection over a fixture without exporting DOM text.
       const oldDocument=globalThis.document, oldLocation=globalThis.location;
       try{
-        globalThis.location={pathname:"/dp/B012345678"};
+        globalThis.location={pathname:documentPath};
         globalThis.document={readyState:"complete",querySelector:(key)=>
           key==="#glow-ingress-block"?{textContent:"private 94404"}:
           key==="#productTitle"?{textContent:"private product title"}:null};
@@ -644,6 +645,8 @@ test("detail readiness timeouts record only bounded DOM facts and remain timeout
   const warnings=[];
   t.mock.method(console,"warn",(entry)=>warnings.push(JSON.parse(entry)));
   const {plan}=createAmazonBrowserExecutionRequest({page_url:target});
+  for (const [path, kind, matches] of [["/dp/B012345678", "product", true], ["/dp/B087654321", "product", false], ["/s", "search", false], ["/", "home", false], ["/ap/signin", "login", false], ["/checkpoint/test", "checkpoint", false], ["/unknown-private", "other", false]]) {
+  documentPath=path;warnings.length=0;
   const result=await new PlaywrightCrawlerEngine(limits).run(plan,"not-created",{
     requestId:"fixture",traceId:"fixture",
   });
@@ -651,10 +654,11 @@ test("detail readiness timeouts record only bounded DOM facts and remain timeout
   assert.equal(result.item_count,0);
   assert.equal(warnings[0].stage,"amazon_detail_ready");
   assert.deepEqual(warnings[0].detail_state,{
-    document_state:"complete",expected_product_path:true,item_present:false,title_present:true,
+    document_state:"complete",document_path_kind:kind,expected_product_path:matches,item_present:false,title_present:true,
     title_nonempty:true,delivery_matches:true,
   });
-  assert.doesNotMatch(JSON.stringify(warnings),/private|94404|B012345678/);
+  assert.doesNotMatch(JSON.stringify(warnings),/private|94404|B012345678|B087654321|unknown-private/);
+  }
 });
 
 test("main document diagnostics retain bounded real statuses without URLs or subframe noise", async () => {

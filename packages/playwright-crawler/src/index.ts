@@ -1241,6 +1241,17 @@ export class PlaywrightCrawlerEngine {
                     const title = document.querySelector("#productTitle");
                     return {
                       document_state: document.readyState,
+                      document_path_kind: actual
+                        ? "product"
+                        : location.pathname === "/s"
+                          ? "search"
+                          : location.pathname === "/"
+                            ? "home"
+                            : location.pathname.startsWith("/ap/")
+                              ? "login"
+                              : location.pathname.startsWith("/checkpoint/")
+                                ? "checkpoint"
+                                : "other",
                       expected_product_path: Boolean(expected && actual === expected),
                       item_present: Boolean(document.querySelector(selector)),
                       title_present: Boolean(title),

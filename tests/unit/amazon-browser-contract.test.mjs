@@ -48,6 +48,73 @@ const result = (body = html, source = url) => ({
 
 const emptySearch =
   '<div class="s-main-slot s-result-list s-search-results sg-row"><div data-cel-widget="MAIN-MESSAGING-0"><div class="a-section a-spacing-none"><div class="s-no-outline"><div class="a-row"><h2><span class="a-size-medium a-color-base a-text-normal">No results for your search query.</span></h2></div><div class="a-row a-size-base a-color-base"><span>Try checking your spelling or use more general terms</span></div></div></div></div></div>';
+const sponsoredEmpty =
+  '<div class="s-main-slot s-result-list"><div cel_widget_id="MAIN-VIDEO_MULTI_PRODUCT-1">' +
+  '<span data-component-type="sbv-video-multi-product"><div data-asin="B000000001"></div>' +
+  '<div data-asin="B000000002"></div><div data-asin="B000000003"></div></span>' +
+  '<div class="a-section sbv-sponsored-label aok-hidden"><span>Sponsored</span></div></div>' +
+  '<div cel_widget_id="MAIN-MESSAGING-2" data-csa-c-content-id="messaging-messages-no-results">' +
+  '<div class="s-no-outline"><h2><span>No results for your search query.</span></h2>' +
+  "<span>Try checking your spelling or use more general terms</span></div></div></div>";
+
+test("observed sponsored-video slot1 and no-results slot2 return no search or advertising facts", () => {
+  const source = "https://www.amazon.com/s?k=fixture+unavailable+item";
+  const input = { ...result(sponsoredEmpty, source), status: "succeeded_empty", item_count: 0 };
+  assert.deepEqual(parseAmazonBrowserRunResult(input, { query: "fixture unavailable item" }), []);
+});
+
+test("sponsored empty proof rejects organic products, unknown widgets, partial evidence and identity drift", () => {
+  const source = "https://www.amazon.com/s?k=fixture+unavailable+item";
+  const target = { query: "fixture unavailable item" };
+  const input = (body) => ({ ...result(body, source), status: "succeeded_empty", item_count: 0 });
+  for (const [index, body] of [
+    sponsoredEmpty.replace("MAIN-MESSAGING-2", "MAIN-MESSAGING-3"),
+    sponsoredEmpty.replace("MAIN-VIDEO_MULTI_PRODUCT-1", "MAIN-VIDEO_MULTI_PRODUCT-2"),
+    sponsoredEmpty.replace("messaging-messages-no-results", "unknown-message"),
+    sponsoredEmpty.replace("sbv-video-multi-product", "unknown-component"),
+    sponsoredEmpty.replace("sbv-sponsored-label", "unknown-label"),
+    sponsoredEmpty.replace("Sponsored", "Unknown"),
+    sponsoredEmpty.replace("s-main-slot", "unknown-main"),
+    sponsoredEmpty.replace("Try checking your spelling or use more general terms", "Unknown"),
+    sponsoredEmpty.replace("No results for your search query.", "Unknown"),
+    sponsoredEmpty.replace(
+      '<div cel_widget_id="MAIN-MESSAGING-2"',
+      '<div data-asin="B000000004"></div><div cel_widget_id="MAIN-MESSAGING-2"',
+    ),
+    sponsoredEmpty + '<div data-component-type="s-search-result"></div>',
+    sponsoredEmpty + '<div data-asin="B000000004"></div>',
+    sponsoredEmpty + "<form>Verify you are human</form>",
+    sponsoredEmpty + '<h1 id="productTitle">Unknown product</h1>',
+    sponsoredEmpty.replace(
+      '</span></div></div><div cel_widget_id="MAIN-MESSAGING-2"',
+      '</span></div><div cel_widget_id="MAIN-MESSAGING-2"',
+    ),
+    sponsoredEmpty.slice(0, -18),
+    `<script>${sponsoredEmpty}</script>`,
+  ].entries())
+    assert.throws(
+      () => parseAmazonBrowserRunResult(input(body), target),
+      undefined,
+      `counterexample ${index}`,
+    );
+  for (const extra of [{ status: "succeeded" }, { item_count: 1 }, { item_count: "0" }])
+    assert.throws(() =>
+      parseAmazonBrowserRunResult({ ...input(sponsoredEmpty), ...extra }, target),
+    );
+  assert.throws(() => parseAmazonBrowserRunResult(input(sponsoredEmpty), { query: "different" }));
+  assert.throws(() =>
+    parseAmazonBrowserRunResult(
+      {
+        ...input(sponsoredEmpty),
+        artifacts: input(sponsoredEmpty).artifacts.map((a) => ({ ...a, source_url: url })),
+      },
+      { page_url: url },
+    ),
+  );
+  const corrupt = input(sponsoredEmpty);
+  corrupt.artifacts[0].content_sha256 = "0".repeat(64);
+  assert.throws(() => parseAmazonBrowserRunResult(corrupt, target));
+});
 test("observed ordinary Amazon empty search returns no facts without disabling the source", () => {
   const source = "https://www.amazon.com/s?k=luxury%20aircraft%20cabin%20door%20safety%20upgrade";
   const target = { query: "luxury aircraft cabin door safety upgrade" };

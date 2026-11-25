@@ -9809,5 +9809,24 @@
     "contracts": [
       "docs/openapi.yaml"
     ]
+  },
+  "amazonSponsoredEmptySearch20261125": {
+    "status": "implemented",
+    "requirements": "docs/amazon-sponsored-empty-search.md",
+    "sourceFiles": [
+      "packages/provider-sources/src/amazon-browser-contract.ts",
+      "packages/playwright-crawler/src/index.ts",
+      "scripts/deploy-account-baota.py",
+      "scripts/baota-account-trend-release.py",
+      "scripts/baota-account-static-release.py"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-browser-contract.test.mjs",
+      "tests/unit/amazon-delivery-context.test.mjs",
+      "tests/unit/test_baota_account_trend_release.py"
+    ],
+    "contracts": [
+      "docs/openapi.yaml"
+    ]
   }
 }
