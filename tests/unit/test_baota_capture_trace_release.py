@@ -23,7 +23,7 @@ class CaptureTraceReleaseTest(unittest.TestCase):
         self.assertEqual(hashlib.sha256(b).hexdigest(),T["COLLECTION_CAPTURE_TRACE_CANDIDATE"][T["COLLECTION_DETAIL"]])
         text=(REPO/"scripts/baota-account-trend-release.py").read_text(encoding="utf-8")
         self.assertIn('api_hashes["amazon-public-browser-health.js"] = COLLECTION_DUAL_HEALTH_CANDIDATE',text)
-        self.assertIn('if collection in ("maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore"):',text)
+        self.assertIn('if collection in ("maintenance_bootstrap", "capture_trace", "capture_trace_restore", "screenshot_wait", "screenshot_wait_restore", "viewport_evidence", "viewport_evidence_restore", "manual_frame", "manual_frame_restore"):',text)
         self.assertIn('source = compact_release_source(source)',text)
 
 if __name__=="__main__":unittest.main()

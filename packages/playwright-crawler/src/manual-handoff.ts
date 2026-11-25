@@ -156,6 +156,9 @@ export async function waitForManualCaptcha(input: {
   captchaSelector: string;
   allowedOrigins: string[];
   isReady?: () => Promise<boolean>;
+  // Internal renderer supplied by the Amazon engine; other sources keep the
+  // original screenshot path. It cannot claim, solve or mark the page ready.
+  captureFrame?: () => Promise<Buffer>;
   // Called once only after the existing superadmin claim is persisted.
   onClaim?: (expiresAt: number) => Promise<void>;
   isChallengePresent?: () => Promise<boolean>;
@@ -226,7 +229,9 @@ export async function waitForManualCaptcha(input: {
           return;
         }
       }
-      const frame = await page.screenshot({ type: "jpeg", quality: 75, timeout: 5000 });
+      const frame = input.captureFrame
+        ? await input.captureFrame()
+        : await page.screenshot({ type: "jpeg", quality: 75, timeout: 5000 });
       const info: HandoffInfo = {
         id,
         run_id: input.runId,

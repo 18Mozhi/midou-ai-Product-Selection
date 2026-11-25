@@ -5153,6 +5153,24 @@
       "statusDetail": "credential_assets_live_mysql_api_worker_crawler_deep_link_refresh_timeout_preserve_data_encrypted_upload_rotation_revocation_idempotency_permission_validation_download_service_responsive_and_accessibility_verification_completed"
     },
     "providerAdapters": {
+      "amazonManualFrame20261125": {
+        "status": "implemented-local-font-replay-pending-production",
+        "requirements": "docs/amazon-manual-frame.md",
+        "sourceFiles": [
+          "packages/playwright-crawler/src/index.ts",
+          "packages/playwright-crawler/src/manual-handoff.ts",
+          "scripts/baota-account-trend-release.py",
+          "scripts/deploy-account-baota.py"
+        ],
+        "testFiles": [
+          "tests/integration/amazon-handoff-font.test.mjs",
+          "tests/integration/browser-handoff.test.mjs",
+          "tests/unit/browser-handoff.test.mjs",
+          "tests/unit/amazon-delivery-context.test.mjs",
+          "tests/unit/test_baota_manual_frame_release.py"
+        ],
+        "behavior": "Amazon-only internal captureFrame supplies genuine native viewport JPEG within original5000ms and1280x720. No automatic claim,solve or readiness. Human and all transport/recovery gates remain;non-Amazon unchanged. Exact two-module release under normal four full zero drain,Node only."
+      },
       "amazonViewportEvidence20261125": {
         "status": "implemented-local-proof-pending-production",
         "requirements": "docs/amazon-viewport-evidence.md",

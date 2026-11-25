@@ -235,6 +235,8 @@ def main():
     action.add_argument("--collection-maintenance-bootstrap", action="store_true")
     action.add_argument("--collection-dual-health-only", action="store_true")
     action.add_argument("--collection-dual-health-rollback", action="store_true")
+    action.add_argument("--collection-manual-frame-only", action="store_true")
+    action.add_argument("--collection-manual-frame-rollback", action="store_true")
     action.add_argument("--collection-viewport-evidence-only", action="store_true")
     action.add_argument("--collection-viewport-evidence-rollback", action="store_true")
     action.add_argument("--collection-screenshot-wait-only", action="store_true")
@@ -337,6 +339,8 @@ def main():
         collection = "screenshot_wait" if args.collection_screenshot_wait_only else "screenshot_wait_restore"
     if args.collection_viewport_evidence_only or args.collection_viewport_evidence_rollback:
         collection = "viewport_evidence" if args.collection_viewport_evidence_only else "viewport_evidence_restore"
+    if args.collection_manual_frame_only or args.collection_manual_frame_rollback:
+        collection = "manual_frame" if args.collection_manual_frame_only else "manual_frame_restore"
     worker_only = (args.trend_projection_only or scheduler_only or report_action is not None
                    or args.amazon_health_api_only or args.amazon_health_audit_only or collection is not None)
     if args.expected_module_sha256 and not worker_only:

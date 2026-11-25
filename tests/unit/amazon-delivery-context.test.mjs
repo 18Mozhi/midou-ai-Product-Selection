@@ -654,6 +654,7 @@ test("checkpoint can open the existing human handoff but never claims or solves 
     url:()=>"https://www.amazon.com/checkpoint/private-route?token=private-token",
     goto:async()=>({status:()=>200}),
     screenshot:async()=>Buffer.from([255,216,255,217]),
+    context:()=>({newCDPSession:async()=>({send:async()=>({data:Buffer.from([255,216,255,217]).toString("base64")}),detach:async()=>{}})}),
     setViewportSize:async size=>assert.deepEqual(size,{width:1280,height:720}),
   });
   t.mock.method(chromium,"launchPersistentContext",async()=>({

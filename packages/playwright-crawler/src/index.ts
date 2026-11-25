@@ -879,6 +879,7 @@ export class PlaywrightCrawlerEngine {
                   page,
                   captchaSelector: selector,
                   allowedOrigins: plan.allowed_origins,
+                  captureFrame: () => captureAmazonViewport(page, 75, 5000),
                   isChallengePresent: () => challengePresent(page),
                   onClaim: async (expiresAt) => {
                     if (
