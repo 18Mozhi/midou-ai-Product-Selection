@@ -13,6 +13,23 @@ trend = runpy.run_path(
 
 
 class TrendReleaseScopeTest(unittest.TestCase):
+    def test_relation_key_release_is_one_database_leaf_with_exact_git_restore(self):
+        before, after = trend["collection_hashes"]("relation_key")
+        self.assertEqual(set(before), {"packages/database/dist/selection-completion-policy.js"})
+        self.assertEqual(trend["collection_hashes"]("relation_key_restore"), (after, before))
+        self.assertNotEqual(before, after)
+        for name, digest in before.items():
+            restored = trend["build_collection_restore"](Path(__file__).resolve().parents[2], name,
+                                                         trend["COLLECTION_RELATION_KEY_SOURCE"])
+            self.assertEqual(hashlib.sha256(restored).hexdigest(), digest)
+        with self.assertRaisesRegex(RuntimeError, "manifest_invalid"):
+            trend["prepare_amazon"](Path("project"), {}, lambda *_: self.fail("unexpected read"), "relation_key")
+        required = list(trend["collection_sources"]()) + [
+            "apps/web/src/components/ProviderAdapterCenter.vue", "apps/web/src/source-1688-operator-action.ts"]
+        trend["validate_collection_changes"](required + ["packages/database/src/selection-completion-policy.ts"])
+        with self.assertRaisesRegex(RuntimeError, "contains_other_runtime_changes"):
+            trend["validate_collection_changes"](required + ["packages/database/src/mysql.ts"])
+
     def test_collection_scope_release_and_restore(self):
         prepare = trend["prepare_amazon"]
         root = Path("project")

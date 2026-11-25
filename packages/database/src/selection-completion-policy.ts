@@ -107,6 +107,8 @@ export const selectionCompetitorRelevanceSql =
   "AND JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.model_fingerprint')) REGEXP '^[a-f0-9]{64}$' " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.input_fingerprint')) REGEXP '^[a-f0-9]{64}$' " +
   "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.task_id'))=BINARY q_relation.task_id " +
+  // Probe the ASCII primary key first; the BINARY residual below still proves exact identity.
+  "AND q_relation.id=CONVERT(JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.subquery_id')) USING ascii) " +
   "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.subquery_id'))=BINARY q_relation.id " +
   `AND ${legacyClassificationScope} ` +
   "AND BINARY JSON_UNQUOTE(JSON_EXTRACT(e_relation.payload_json,'$.input.primary.asin'))=" +
