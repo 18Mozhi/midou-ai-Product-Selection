@@ -5232,7 +5232,8 @@
         "contract": "User-approved Node-only first load. Owned claim pause, four business-zero samples before bootstrap, four full-zero samples after bootstrap before dual-health release and again after release. Keep pause on uncertain install; no Python restart,1688 request,concurrency or DB change. Existing due queues and actual active runs remain truthful."
       },
       "operatorStaticOverlayPrerequisites20261125": {
-        "status": "local-verified-pending-static-publication",
+        "status": "production-static-verified",
+        "frontendSourceCommit": "4ca7f984b12cf9628c3bade79fb03f938e64b73a",
         "requirements": "docs/provider-operator-detail-entry.md",
         "sourceFiles": ["scripts/baota-account-static-release.py"],
         "testFiles": [
@@ -5242,7 +5243,8 @@
         "behavior": "Pin the exact already-installed dual health,Worker pause and manual frame modules for static-only publication; all other manifest leaves unchanged, no restart,reload,source action or recovery bypass."
       },
       "desktopOperatorDetailEntry20261125": {
-        "status": "local-verified-not-published",
+        "status": "production-static-verified",
+        "frontendSourceCommit": "4ca7f984b12cf9628c3bade79fb03f938e64b73a",
         "sourceFiles": [
           "apps/web/src/components/ProviderAdapterCenter.vue",
           "apps/web/src/components/ResponsiveDataView.vue",
