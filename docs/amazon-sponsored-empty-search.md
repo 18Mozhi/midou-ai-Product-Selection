@@ -42,3 +42,22 @@ expected-module-sha256 为fb13c6635537fe69e6a4a30e07396a71f6b47c657a70c8855f89d6
 不创建生产备份或回退副本。无新增配置、依赖或用户调参项。
 
 来源仍须保持停用，直至真实搜索有商品、同一商品详情通过后按原审计流程恢复；旧v29健康不能用于恢复v30。
+
+
+## checkpoint 验证页不是商品超时
+
+v31恢复后自然详情的安全路径枚举连续显示checkpoint，页头地区仍匹配，但没有商品标题；
+这与之前只检查DOM验证码标记导致的timeout归类相符，不是邮编错误的证据，也不能据此放宽详情选择器。
+引擎仅对原Amazon计划、精确https://www.amazon.com来源下的/checkpoint/路径增加验证阻断信号。
+没有人工接管上下文时立即返回既有blocked_captcha/零事实，不消耗详情等待预算；
+已有健康检查人工上下文时复用原超时、权限、匿名及固定主机限制，让操作者看到现场。
+不自动认领、点击、解题、登录、导入Cookie、换出口、放行新主机或绕过原站验证。
+
+--collection-checkpoint-only 只发布 packages/playwright-crawler/dist/index.js，
+expected-previous-sha 仍为1b622274a6871d9d1ac3986223359b539a82aa76，
+expected-module-sha256 为d206cdd51447eaee72db5e279de770bb4f39dc1b7f4838067ed14498640d6b4b。
+沿用原领取暂停/四次连续排空/持有者恢复门禁；未排空不得重启，不修改租约。
+只重启Node并要求Python身份不变；源/模型/1688/并发不变。
+--collection-checkpoint-rollback 的预期哈希为906716a733d1ff03dcc497a22a49b3aa337e91c55923abe66b4c7c461c58e7e2，
+从8df438999原Git源重建，不回退刚修好的空搜索、SQL或Python模块。
+此修复只纠正阻断归类、接入既有人工作业，不等于已通过真实验证或所有详情已恢复。

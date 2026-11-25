@@ -761,18 +761,30 @@ export class PlaywrightCrawlerEngine {
     const documentResponses: Record<string, unknown>[] = [];
     const wafChallenges = new WeakSet<Page>();
     const wafSelector = 'script[src^="https://"][src*=".token.awswaf.com/"][src$="/challenge.js"]';
+    const checkpointPresent = (page: Page) => {
+      if (!plan.amazon_delivery) return false;
+      const url = new URL(page.url());
+      return url.origin === "https://www.amazon.com" && url.pathname.startsWith("/checkpoint/");
+    };
     const challengePresent = async (page: Page) =>
       Boolean(
+        checkpointPresent(page) ||
         (plan.block_signals?.captcha && (await page.locator(plan.block_signals.captcha).count())) ||
         (wafChallenges.has(page) && (await page.locator(wafSelector).count())),
       );
     const signalsFor = (page: Page) =>
-      plan.amazon_delivery && wafChallenges.has(page)
+      plan.amazon_delivery && (wafChallenges.has(page) || checkpointPresent(page))
         ? {
             ...plan.block_signals,
-            // This is a blocked-page marker, not permission to fetch or solve
-            // WAF scripts. Keep the same bounded human-only handoff and guards.
-            captcha: [plan.block_signals?.captcha, wafSelector].filter(Boolean).join(","),
+            // Known verification paths and observed WAF responses are block signals,
+            // not permission to fetch or solve scripts. Keep the human-only handoff.
+            captcha: [
+              plan.block_signals?.captcha,
+              ...(wafChallenges.has(page) ? [wafSelector] : []),
+              ...(checkpointPresent(page) ? ["html"] : []),
+            ]
+              .filter(Boolean)
+              .join(","),
           }
         : plan.block_signals;
     const guard = (page: Page) =>

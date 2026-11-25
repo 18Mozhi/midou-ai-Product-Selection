@@ -262,7 +262,7 @@ def prepare_amazon(root, manifest, read_file, collection=None):
         api_hashes = dict(AMAZON_INSTALLED)
         if collection is not None:
             api_hashes[AMAZON_AUDIT_MODULE] = "425611f474a67f26a7a3138a456def5652fa77872099337a89535dbb6fb40e33"
-        if collection in ("handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore"):
+        if collection in ("handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore"):
             api_hashes["mysql-crawler-runtime-repository.js"] = COLLECTION_HANDOFF_CANDIDATE[COLLECTION_HANDOFF_REPO]
         for name, digest in api_hashes.items():
             path = root / AMAZON_DIR / name
@@ -321,14 +321,14 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
             prerequisites[COLLECTION_DETAIL] = COLLECTION_DETAIL_CANONICAL
-        if collection in ("delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore"):
+        if collection in ("delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore"):
             prerequisites.update(COLLECTION_RANK_CANDIDATE)
             prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
             prerequisites.update(COLLECTION_LAN_HEALTH_CANDIDATE)
             prerequisites.update(COLLECTION_MODEL_HOLD_CANDIDATE)
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
-        if collection in ("handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore"):
+        if collection in ("handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore"):
             prerequisites[COLLECTION_DAILY_CONTEXT] = COLLECTION_DAILY_CANDIDATE[COLLECTION_DAILY_CONTEXT]
         if collection in ("handoff_routes", "handoff_routes_restore"):
             prerequisites.update(COLLECTION_HANDOFF_CANDIDATE)
@@ -351,7 +351,7 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites.update(COLLECTION_HANDOFF_ROUTES_CANDIDATE)
             prerequisites.update({n: h for n, h in COLLECTION_MANUAL_WAF_CANDIDATE.items() if n != COLLECTION_DETAIL})
             prerequisites.update(COLLECTION_DELIVERY_READY_CANDIDATE)
-        if collection in ("relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore"):
+        if collection in ("relation_key", "relation_key_restore", "python_transport", "python_transport_restore", "sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore"):
             prerequisites[COLLECTION_HANDOFF_REPO] = COLLECTION_HANDOFF_CANDIDATE[COLLECTION_HANDOFF_REPO]
             prerequisites.update(COLLECTION_HANDOFF_ROUTES_CANDIDATE)
             prerequisites.update(COLLECTION_MANUAL_WAF_CANDIDATE)
@@ -363,13 +363,15 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             for name in ("main_loop.py", "runtime_client.py", "lease_client.py", "completion_receipts.py", "config.py"):
                 path = root / "python/scoutops_crawler" / name
                 protected[path] = read_file(path, 131072)
-        if collection in ("sponsored_empty", "sponsored_empty_restore"):
+        if collection in ("sponsored_empty", "sponsored_empty_restore", "checkpoint", "checkpoint_restore"):
             prerequisites.update(COLLECTION_RELATION_KEY_CANDIDATE)
             path = root / "python" / COLLECTION_PYTHON_TRANSPORT
             data = read_file(path, 131072)
             if hashlib.sha256(data).hexdigest() != COLLECTION_PYTHON_TRANSPORT_CANDIDATE[COLLECTION_PYTHON_TRANSPORT]:
                 raise RuntimeError("trend_collection_prerequisite_changed")
             protected[path] = data
+        if collection in ("checkpoint", "checkpoint_restore"):
+            prerequisites.update(COLLECTION_SPONSORED_EMPTY_CANDIDATE)
         for name, digest in prerequisites.items():
             path = root / "backend" / name
             if path in replacements:
@@ -405,7 +407,16 @@ COLLECTION_SPONSORED_EMPTY_CANDIDATE = {
 }
 
 
+COLLECTION_CHECKPOINT_SOURCE = "8df4389996d0ad16c3ff478ddcc2d0eb64295eef"
+COLLECTION_CHECKPOINT_BASE = {COLLECTION_DETAIL: "d206cdd51447eaee72db5e279de770bb4f39dc1b7f4838067ed14498640d6b4b"}
+COLLECTION_CHECKPOINT_CANDIDATE = {COLLECTION_DETAIL: "906716a733d1ff03dcc497a22a49b3aa337e91c55923abe66b4c7c461c58e7e2"}
+
+
 def collection_hashes(action):
+    if action == "checkpoint":
+        return COLLECTION_CHECKPOINT_BASE, COLLECTION_CHECKPOINT_CANDIDATE
+    if action == "checkpoint_restore":
+        return COLLECTION_CHECKPOINT_CANDIDATE, COLLECTION_CHECKPOINT_BASE
     if action == "sponsored_empty":
         return COLLECTION_SPONSORED_EMPTY_BASE, COLLECTION_SPONSORED_EMPTY_CANDIDATE
     if action == "sponsored_empty_restore":
@@ -814,7 +825,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         raise RuntimeError("trend_release_requires_expected_sha256_and_base_sha")
     if collection is not None:
         route, _ = collection_hashes(collection)
-        key = (COLLECTION_SPONSORED_EMPTY if collection in ("sponsored_empty", "sponsored_empty_restore") else
+        key = (COLLECTION_DETAIL if collection in ("checkpoint", "checkpoint_restore") else
+               COLLECTION_SPONSORED_EMPTY if collection in ("sponsored_empty", "sponsored_empty_restore") else
                COLLECTION_PYTHON_TRANSPORT if collection in ("python_transport", "python_transport_restore") else
                COLLECTION_RELATION_KEY if collection in ("relation_key", "relation_key_restore") else
                COLLECTION_DAILY_CONTEXT if collection in ("delivery_ready", "delivery_ready_restore") else
@@ -870,7 +882,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
     if rollback:
         deploy["verify_production_sha_history"](repo, STAGGER_RELEASE_SHA, sha)
         validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
-    for job in (("build:provider-sources", "build:playwright-crawler") if collection in ("sponsored_empty", "sponsored_empty_restore") else
+    for job in (("build:playwright-crawler",) if collection in ("checkpoint", "checkpoint_restore") else
+                ("build:provider-sources", "build:playwright-crawler") if collection in ("sponsored_empty", "sponsored_empty_restore") else
                 () if collection in ("python_transport", "python_transport_restore") else
                 ("build:database",) if collection in ("relation_key", "relation_key_restore") else
                 ("build:api",) if collection in ("handoff_routes", "handoff_routes_restore") else
@@ -904,7 +917,9 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             relation_key_followup = collection in ("relation_key", "relation_key_restore")
             python_transport_followup = collection in ("python_transport", "python_transport_restore")
             sponsored_empty_followup = collection in ("sponsored_empty", "sponsored_empty_restore")
-            source = (COLLECTION_SPONSORED_EMPTY_SOURCE if sponsored_empty_followup else
+            checkpoint_followup = collection in ("checkpoint", "checkpoint_restore")
+            source = (COLLECTION_CHECKPOINT_SOURCE if checkpoint_followup else
+                      COLLECTION_SPONSORED_EMPTY_SOURCE if sponsored_empty_followup else
                       COLLECTION_PYTHON_TRANSPORT_SOURCE if python_transport_followup else
                       COLLECTION_RELATION_KEY_SOURCE if relation_key_followup else
                       COLLECTION_SEARCH_READY_SOURCE if search_ready_followup else
@@ -921,7 +936,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
                       COLLECTION_DAILY_SOURCE if daily_followup else
                       COLLECTION_DETAIL_DIAG_SOURCE if canonical_followup else COLLECTION_SOURCE_BASE)
             restored = build_collection_restore(repo, name, source)
-            original = (COLLECTION_SPONSORED_EMPTY_BASE[name] if sponsored_empty_followup else
+            original = (COLLECTION_CHECKPOINT_BASE[name] if checkpoint_followup else
+                        COLLECTION_SPONSORED_EMPTY_BASE[name] if sponsored_empty_followup else
                         COLLECTION_PYTHON_TRANSPORT_BASE[name] if python_transport_followup else
                         COLLECTION_RELATION_KEY_BASE[name] if relation_key_followup else
                         COLLECTION_SEARCH_READY_BASE[name] if search_ready_followup else
@@ -943,7 +959,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             if hashlib.sha256(restored).hexdigest() != original:
                 raise RuntimeError("trend_collection_restore_build_differs")
             data = (restored if collection == "restore" or collection.endswith("_restore") else
-                    build_collection_restore(repo, name, sha) if relation_key_followup or python_transport_followup or sponsored_empty_followup else (repo / name).read_bytes())
+                    build_collection_restore(repo, name, sha) if relation_key_followup or python_transport_followup or sponsored_empty_followup or checkpoint_followup else (repo / name).read_bytes())
             after = hashlib.sha256(data).hexdigest()
             if after != after_hashes[name]:
                 raise RuntimeError("trend_collection_build_differs")
@@ -975,7 +991,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             hashlib.sha256(module).hexdigest(), scheduler, rollback, report_action, amazon_modules, collection)
     code = Path(__file__).read_text(encoding="utf-8")
     drain_code = ((repo / "scripts/baota-account-claim-drain.py").read_text(encoding="utf-8")
-                  if collection in ("python_transport", "python_transport_restore") else None)
+                  if collection in ("python_transport", "python_transport_restore", "checkpoint", "checkpoint_restore") else None)
     source = ("drain_code=" + repr(drain_code) + "\nnode=" + repr(deploy["NODE_BIN"]) +
               "\ncode=" + repr(code) + "\nargs=" + repr(args)) + r'''
 import json,re

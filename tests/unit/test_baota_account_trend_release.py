@@ -13,6 +13,15 @@ trend = runpy.run_path(
 
 
 class TrendReleaseScopeTest(unittest.TestCase):
+    def test_checkpoint_release_is_one_engine_and_restores_original_bytes(self):
+        before, after = trend["collection_hashes"]("checkpoint")
+        self.assertEqual(set(before), {"packages/playwright-crawler/dist/index.js"})
+        self.assertEqual(trend["collection_hashes"]("checkpoint_restore"), (after, before))
+        for name, digest in before.items():
+            data = trend["build_collection_restore"](Path(__file__).resolve().parents[2], name,
+                                                    trend["COLLECTION_CHECKPOINT_SOURCE"])
+            self.assertEqual(hashlib.sha256(data).hexdigest(), digest)
+
     def test_sponsored_empty_release_pins_only_contract_and_safe_crawler_diagnostics(self):
         before, after = trend["collection_hashes"]("sponsored_empty")
         self.assertEqual(set(before), {"packages/provider-sources/dist/amazon-browser-contract.js",

@@ -9812,6 +9812,7 @@
   },
   "amazonSponsoredEmptySearch20261125": {
     "status": "implemented",
+    "contract": "Strict observed sponsored-empty proof and fixed route-kind diagnostics; exact Amazon checkpoint redirects fail through existing verification guards and human-only handoff, never automatic solving. Single-engine checkpoint release uses existing pause/drain gate and protects all prior modules.",
     "requirements": "docs/amazon-sponsored-empty-search.md",
     "sourceFiles": [
       "packages/provider-sources/src/amazon-browser-contract.ts",

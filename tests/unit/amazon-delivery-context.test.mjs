@@ -615,6 +615,80 @@ test("daily delivery prepares home once, then reads the product; cached jobs nev
   }
 });
 
+test("Amazon checkpoint redirects fail as verification before detail waits without exporting the URL", async (t) => {
+  const { chromium } = await import("playwright");
+  const f = fixture({location:"Deliver to 94404"});
+  const { locator } = f.page;
+  let waits=0;
+  Object.assign(f.page,{
+    locator:(selector)=>({...locator(selector),count:async()=>selector.split(",").includes("html")?1:0}),
+    url:()=>"https://www.amazon.com/checkpoint/private-route?token=private-token",
+    goto:async()=>({status:()=>200}),
+    waitForFunction:async()=>{waits++;throw new errors.TimeoutError("unexpected wait");},
+  });
+  t.mock.method(chromium,"launchPersistentContext",async()=>({
+    pages:()=>[f.page],setDefaultTimeout(){},setDefaultNavigationTimeout(){},on(){},close:async()=>{},
+  }));
+  const warnings=[];
+  t.mock.method(console,"warn",entry=>warnings.push(JSON.parse(entry)));
+  const {plan}=createAmazonBrowserExecutionRequest({page_url:"https://www.amazon.com/dp/B012345678"});
+  const result=await new PlaywrightCrawlerEngine(limits).run(plan,"not-created",{requestId:"fixture",traceId:"fixture"});
+  assert.equal(result.status,"blocked_captcha");
+  assert.equal(result.error_code,"blocked_captcha");
+  assert.equal(result.item_count,0);
+  assert.equal(result.artifacts,undefined);
+  assert.equal(waits,0);
+  assert.doesNotMatch(JSON.stringify({result,warnings}),/private-route|private-token|checkpoint\/|B012345678/);
+});
+
+test("checkpoint can open the existing human handoff but never claims or solves it automatically", async (t) => {
+  const { chromium } = await import("playwright");
+  const {mkdtemp,readdir,readFile,rm}=await import("node:fs/promises");
+  const {tmpdir}=await import("node:os");
+  const {join}=await import("node:path");
+  const root=await mkdtemp(join(tmpdir(),"scoutops-checkpoint-"));
+  const f=fixture({location:"Deliver to 94404"});
+  const {locator}=f.page;
+  Object.assign(f.page,{
+    locator:selector=>({...locator(selector),count:async()=>selector.split(",").includes("html")?1:0}),
+    url:()=>"https://www.amazon.com/checkpoint/private-route?token=private-token",
+    goto:async()=>({status:()=>200}),
+    screenshot:async()=>Buffer.from([255,216,255,217]),
+    setViewportSize:async size=>assert.deepEqual(size,{width:1280,height:720}),
+  });
+  t.mock.method(chromium,"launchPersistentContext",async()=>({
+    pages:()=>[f.page],setDefaultTimeout(){},setDefaultNavigationTimeout(){},on(){},close:async()=>{},
+  }));
+  const warnings=[];t.mock.method(console,"warn",entry=>warnings.push(JSON.parse(entry)));
+  const controller=new AbortController();
+  const {plan}=createAmazonBrowserExecutionRequest({page_url:"https://www.amazon.com/dp/B012345678"});
+  const running=new PlaywrightCrawlerEngine(limits).run(plan,"not-created",{
+    requestId:"fixture",traceId:"fixture"},{signal:controller.signal,
+    handoff:{root,runId:"00000000-0000-4000-8000-000000000001"},
+  });
+  try {
+    let info;
+    for(let i=0;i<100&&!info;i++){
+      for(const name of await readdir(root)){
+        try{info=JSON.parse(await readFile(join(root,name,"info.json"),"utf8"));}catch{}
+      }
+      if(!info)await new Promise(resolve=>setTimeout(resolve,20));
+    }
+    assert.equal(info?.hostname,"www.amazon.com",JSON.stringify(warnings));
+    const files=await readdir(join(root,info.id));
+    assert.ok(files.includes("frame.jpg"));
+    assert.ok(!files.includes("claim.json")&&!files.includes("command.json"));
+    assert.deepEqual(f.actions,[]);
+    controller.abort();
+    const result=await running;
+    assert.equal(result.status,"blocked_captcha");
+    assert.equal(result.artifacts,undefined);
+    assert.deepEqual(await readdir(root),[]);
+  } finally {
+    controller.abort();await running;await rm(root,{recursive:true,force:true});
+  }
+});
+
 test("detail readiness timeouts record only bounded DOM facts and remain timeouts", async (t) => {
   const { chromium } = await import("playwright");
   const target = "https://www.amazon.com/dp/B012345678?tag=private-tag";
