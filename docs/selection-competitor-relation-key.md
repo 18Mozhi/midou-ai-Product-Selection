@@ -46,3 +46,16 @@ Python 日志显示领取租约的 urllib 调用发生 RemoteDisconnected，未�
 本地将该已证实异常映射到现有 crawler_api_unavailable，复用原最多四次传输重试和退避；
 心跳仍最多一次，退出/停止、幂等键、租约及完成回执格式不变，不捕获任意业务异常。
 该 Python 修复先本地验证；生产应用仍须获得明确 Python 发布/恢复授权。
+
+## 已授权的 Python 单模块恢复
+
+用户已明确允许修复并通过宝塔恢复 ai选品-python。协调器新增
+`--collection-python-transport-only` / `--collection-python-transport-rollback`，
+沿用相同 expected-previous-sha；发布时 expected-module-sha256 为
+8b229dcb7477ca4fca69a68bd8f0f12d6a597798486e9dd5a53e0901ddd6d7b5，回退时为
+396d2e9cd3fa944fb8f469998bd00598c5861e0bb64d7f68a3b5905335a4cad0。
+从干净提交的 Git 原字节仅替换 python/scoutops_crawler/runtime_transport.py，
+原模块从 a62ef7b95 Git 源恢复，无生产副本。
+仅调用宝塔 Python ai选品-python 重启命令，要求 Python 新身份且 Node API/Worker 身份保持；
+同时保护已安装的竞品主键定位、趋势投影、全部采集修复和其他 Python 核心模块。
+没有新增调参项，API 短暂断连仍采用原有最大四次传输重试与主循环退避。

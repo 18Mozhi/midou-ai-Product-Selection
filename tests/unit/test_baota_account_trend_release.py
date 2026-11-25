@@ -13,6 +13,27 @@ trend = runpy.run_path(
 
 
 class TrendReleaseScopeTest(unittest.TestCase):
+    def test_python_transport_release_preserves_node_identity_and_requires_new_python(self):
+        before = {"api": 1, "worker": 2, "python": [3]}
+        valid = trend["restart_identity_valid"]
+        self.assertTrue(valid(before, {**before, "python": [4]}, True))
+        for after in (before, {**before, "python": []}, {"api": 5, "worker": 2, "python": [4]}):
+            self.assertFalse(valid(before, after, True))
+        self.assertTrue(valid(before, {"api": 5, "worker": 6, "python": [3]}))
+        self.assertFalse(valid(before, {**before, "python": [4]}))
+
+    def test_python_transport_release_and_restore_have_exact_source_bytes(self):
+        before, after = trend["collection_hashes"]("python_transport")
+        self.assertEqual(set(before), {"scoutops_crawler/runtime_transport.py"})
+        self.assertEqual(trend["collection_hashes"]("python_transport_restore"), (after, before))
+        for source, expected in ((trend["COLLECTION_PYTHON_TRANSPORT_SOURCE"], before),
+                                 ("574f84ecb8a4d5b0de3cdb9cf5d9c281d0217e87", after)):
+            for name, digest in expected.items():
+                data = trend["build_collection_restore"](Path(__file__).resolve().parents[2], name, source)
+                self.assertEqual(hashlib.sha256(data).hexdigest(), digest)
+        with self.assertRaisesRegex(RuntimeError, "manifest_invalid"):
+            trend["prepare_amazon"](Path("project"), {}, lambda *_: self.fail("unexpected read"), "python_transport")
+
     def test_relation_key_release_is_one_database_leaf_with_exact_git_restore(self):
         before, after = trend["collection_hashes"]("relation_key")
         self.assertEqual(set(before), {"packages/database/dist/selection-completion-policy.js"})

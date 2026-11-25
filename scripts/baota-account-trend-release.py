@@ -232,6 +232,7 @@ def prepare_modules(target, expected_module, encoded, digest, scheduler, read_fi
 
 
 def prepare_amazon(root, manifest, read_file, collection=None):
+    python_transport = collection in ("python_transport", "python_transport_restore")
     audit = tuple(manifest) == tuple(AMAZON_AUDIT_BASE)
     frozen = AMAZON_AUDIT_BASE if audit else AMAZON_BASE_HASHES
     install_hashes = None
@@ -245,7 +246,7 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             raise RuntimeError("trend_amazon_manifest_invalid")
         if install_hashes is not None and after != install_hashes[name]:
             raise RuntimeError("trend_collection_payload_hash_changed")
-        path = root / ("backend" if collection is not None else AMAZON_DIR) / name
+        path = root / ("python" if python_transport else "backend" if collection is not None else AMAZON_DIR) / name
         if hashlib.sha256(read_file(path, 131072)).hexdigest() != before:
             raise RuntimeError("trend_amazon_baseline_changed")
         data = zlib.decompress(base64.b64decode(encoded, validate=True))
@@ -261,7 +262,7 @@ def prepare_amazon(root, manifest, read_file, collection=None):
         api_hashes = dict(AMAZON_INSTALLED)
         if collection is not None:
             api_hashes[AMAZON_AUDIT_MODULE] = "425611f474a67f26a7a3138a456def5652fa77872099337a89535dbb6fb40e33"
-        if collection in ("handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore"):
+        if collection in ("handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore"):
             api_hashes["mysql-crawler-runtime-repository.js"] = COLLECTION_HANDOFF_CANDIDATE[COLLECTION_HANDOFF_REPO]
         for name, digest in api_hashes.items():
             path = root / AMAZON_DIR / name
@@ -320,14 +321,14 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
             prerequisites[COLLECTION_DETAIL] = COLLECTION_DETAIL_CANONICAL
-        if collection in ("delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore"):
+        if collection in ("delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore"):
             prerequisites.update(COLLECTION_RANK_CANDIDATE)
             prerequisites.update(COLLECTION_EVIDENCE_CANDIDATE)
             prerequisites.update(COLLECTION_LAN_HEALTH_CANDIDATE)
             prerequisites.update(COLLECTION_MODEL_HOLD_CANDIDATE)
             prerequisites[COLLECTION_BROWSER] = COLLECTION_BROWSER_CANDIDATE
             prerequisites[COLLECTION_EXECUTOR] = COLLECTION_LAN_CANDIDATE[COLLECTION_EXECUTOR]
-        if collection in ("handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore"):
+        if collection in ("handoff", "handoff_restore", "handoff_routes", "handoff_routes_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore", "relation_key", "relation_key_restore", "python_transport", "python_transport_restore"):
             prerequisites[COLLECTION_DAILY_CONTEXT] = COLLECTION_DAILY_CANDIDATE[COLLECTION_DAILY_CONTEXT]
         if collection in ("handoff_routes", "handoff_routes_restore"):
             prerequisites.update(COLLECTION_HANDOFF_CANDIDATE)
@@ -350,13 +351,18 @@ def prepare_amazon(root, manifest, read_file, collection=None):
             prerequisites.update(COLLECTION_HANDOFF_ROUTES_CANDIDATE)
             prerequisites.update({n: h for n, h in COLLECTION_MANUAL_WAF_CANDIDATE.items() if n != COLLECTION_DETAIL})
             prerequisites.update(COLLECTION_DELIVERY_READY_CANDIDATE)
-        if collection in ("relation_key", "relation_key_restore"):
+        if collection in ("relation_key", "relation_key_restore", "python_transport", "python_transport_restore"):
             prerequisites[COLLECTION_HANDOFF_REPO] = COLLECTION_HANDOFF_CANDIDATE[COLLECTION_HANDOFF_REPO]
             prerequisites.update(COLLECTION_HANDOFF_ROUTES_CANDIDATE)
             prerequisites.update(COLLECTION_MANUAL_WAF_CANDIDATE)
             prerequisites.update(COLLECTION_DELIVERY_OBSERVE_CANDIDATE)
             prerequisites.update(COLLECTION_DELIVERY_READY_CANDIDATE)
             prerequisites.update(COLLECTION_SEARCH_READY_CANDIDATE)
+        if python_transport:
+            prerequisites.update(COLLECTION_RELATION_KEY_CANDIDATE)
+            for name in ("main_loop.py", "runtime_client.py", "lease_client.py", "completion_receipts.py", "config.py"):
+                path = root / "python/scoutops_crawler" / name
+                protected[path] = read_file(path, 131072)
         for name, digest in prerequisites.items():
             path = root / "backend" / name
             data = read_file(path, 131072)
@@ -372,7 +378,17 @@ COLLECTION_RELATION_KEY_BASE = {COLLECTION_RELATION_KEY: "91c303c724e6b2acfc9237
 COLLECTION_RELATION_KEY_CANDIDATE = {COLLECTION_RELATION_KEY: "4319719331111246d1c3bc29853d78e711768b52d1b8c2c47a1b7bc2143cfd48"}
 
 
+COLLECTION_PYTHON_TRANSPORT = "scoutops_crawler/runtime_transport.py"
+COLLECTION_PYTHON_TRANSPORT_SOURCE = "a62ef7b95c19d40f58ecee1f117f6df9744a589d"
+COLLECTION_PYTHON_TRANSPORT_BASE = {COLLECTION_PYTHON_TRANSPORT: "8b229dcb7477ca4fca69a68bd8f0f12d6a597798486e9dd5a53e0901ddd6d7b5"}
+COLLECTION_PYTHON_TRANSPORT_CANDIDATE = {COLLECTION_PYTHON_TRANSPORT: "396d2e9cd3fa944fb8f469998bd00598c5861e0bb64d7f68a3b5905335a4cad0"}
+
+
 def collection_hashes(action):
+    if action == "python_transport":
+        return COLLECTION_PYTHON_TRANSPORT_BASE, COLLECTION_PYTHON_TRANSPORT_CANDIDATE
+    if action == "python_transport_restore":
+        return COLLECTION_PYTHON_TRANSPORT_CANDIDATE, COLLECTION_PYTHON_TRANSPORT_BASE
     if action == "relation_key":
         return COLLECTION_RELATION_KEY_BASE, COLLECTION_RELATION_KEY_CANDIDATE
     if action == "relation_key_restore":
@@ -455,6 +471,15 @@ def collection_hashes(action):
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
+def restart_identity_valid(before, after, python_transport=False):
+    if not after.get("api") or not after.get("worker"):
+        return False
+    if python_transport:
+        return (bool(after.get("python")) and after["python"] != before.get("python")
+                and all(after[key] == before.get(key) for key in ("api", "worker")))
+    return all(after[key] != before.get(key) for key in ("api", "worker"))
+
+
 def install(root, expected_runtime, expected_module, build, encoded, digest, scheduler=None, rollback=False,
             report_action=None, amazon_modules=None, collection=None):
     root = Path(root)
@@ -476,6 +501,7 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
     if amazon_modules is not None and (expected_runtime != REPORT_RUNTIME_BASE or scheduler is not None
                                        or rollback or report_action is not None):
         raise RuntimeError("trend_amazon_manifest_invalid")
+    python_transport = collection in ("python_transport", "python_transport_restore")
     target = root / (REPORT_TARGET if report_action is not None else TARGET)
     for path in (root, root / "config", root / "runtime", root / "backend", target.parent):
         if not path.is_dir() or path.resolve(strict=True) != path:
@@ -564,7 +590,8 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
         if amazon_modules is not None:
             folders = [root / AMAZON_DIR, root / AMAZON_DIR / "bootstrap"]
             if collection is not None:
-                folders += [(root / "backend" / n).parent for n in (*COLLECTION_BASE, *amazon_modules)]
+                folders += [(root / "backend" / n).parent for n in COLLECTION_BASE]
+                folders += [(root / ("python" if python_transport else "backend") / n).parent for n in amazon_modules]
             for folder in folders:
                 if not folder.is_dir() or folder.resolve(strict=True) != folder:
                     raise RuntimeError("trend_unsafe_directory")
@@ -581,7 +608,8 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
         local = "http://127.0.0.1:4101"
         domain = "https://midouai.medouai.com"
         pids = processes()
-        if not pids.get("api") or not pids.get("worker") or not ready(local):
+        if (not pids.get("api") or not pids.get("worker") or not ready(local)
+                or python_transport and not pids.get("python")):
             raise RuntimeError("trend_baseline_not_ready")
         staged, replaced = {}, []
         # Keep original bytes only in memory, to unwind a partial write before restart.
@@ -630,31 +658,31 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
         if not modules_match():
             raise RuntimeError("trend_module_readback_failed")
 
-        restart = subprocess.run([sys.executable, RESTART, "nodejs", "ai选品"],
+        restart = subprocess.run([sys.executable, RESTART, "python" if python_transport else "nodejs",
+                                  "ai选品-python" if python_transport else "ai选品"],
                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=95)
         if restart.returncode:
             raise RuntimeError("trend_baota_restart_failed")
-        MODULE_PHASE = "node_restart_returned"
+        MODULE_PHASE = "python_restart_returned" if python_transport else "node_restart_returned"
         until = time.monotonic() + 75
         while time.monotonic() < until:
             try:
                 after = processes()
-                if (after.get("api") and after.get("worker") and after["api"] != pids["api"]
-                        and after["worker"] != pids["worker"] and ready(local) and ready(domain)):
+                if (restart_identity_valid(pids, after, python_transport) and ready(local) and ready(domain)):
                     break
             except (OSError, KeyError, ValueError):
                 pass
             time.sleep(2)
         else:
-            raise RuntimeError("trend_node_not_ready_after_restart")
-        if after["python"] != pids["python"]:
+            raise RuntimeError("trend_python_not_ready_after_restart" if python_transport else "trend_node_not_ready_after_restart")
+        if not python_transport and after["python"] != pids["python"]:
             raise RuntimeError("trend_unexpected_python_identity_change")
         if (not modules_match() or any(read_file(p, 262144) != b for p, b in protected.items())):
             raise RuntimeError("trend_unexpected_runtime_change")
         receipt = {"status": True, "overlay_sha": build, "runtime_base_sha": expected_runtime,
-                   "restarted": "ai选品", "node_before": pids, "node_after": after}
+                   "restarted": "ai选品-python" if python_transport else "ai选品", "node_before": pids, "node_after": after}
         if amazon_modules is not None:
-            receipt.update(modules={str(path.relative_to(root / ("backend" if collection is not None else AMAZON_DIR))): {"previous": item[1], "installed": item[2]}
+            receipt.update(modules={str(path.relative_to(root / ("python" if python_transport else "backend" if collection is not None else AMAZON_DIR))): {"previous": item[1], "installed": item[2]}
                                     for path, item in replacements.items()},
                            preserved_modules={p.name: hashlib.sha256(b).hexdigest() for p,b in protected_modules.items()})
         elif report_action is not None:
@@ -723,7 +751,7 @@ def validate_collection_changes(changed):
     web = {"apps/web/src/components/ProviderAdapterCenter.vue", "apps/web/src/source-1688-operator-action.ts"}
     followups = {n.replace("/dist/", "/src/").removesuffix(".js") + ".ts"
                  for n in (COLLECTION_EXECUTOR, COLLECTION_BROWSER, COLLECTION_DETAIL, COLLECTION_DAILY_CONTEXT, COLLECTION_HANDOFF_REPO, *COLLECTION_HANDOFF_ROUTES_BASE, *COLLECTION_MANUAL_WAF_BASE, *COLLECTION_EVIDENCE_BASE, *COLLECTION_RANK_BASE)}
-    exact = source | web | followups | {"packages/database/src/selection-completion-policy.ts", "config/env.example", "scripts/deploy-account-baota.py", "scripts/baota-account-trend-release.py",
+    exact = source | web | followups | {"apps/crawler/tests/test_runtime_disconnect.py", "apps/crawler/scoutops_crawler/runtime_transport.py", "packages/database/src/selection-completion-policy.ts", "config/env.example", "scripts/deploy-account-baota.py", "scripts/baota-account-trend-release.py",
                             "scripts/baota-account-static-release.py"}
     if not (source | web).issubset(changed) or any(
         n not in exact and not n.startswith(("docs/", "tests/")) for n in changed
@@ -732,6 +760,8 @@ def validate_collection_changes(changed):
 
 
 def build_collection_restore(repo, name, source_sha=COLLECTION_SOURCE_BASE):
+    if name == COLLECTION_PYTHON_TRANSPORT:
+        return subprocess.check_output(["git", "show", source_sha + ":apps/crawler/" + name], cwd=repo)
     source = name.replace("/dist/", "/src/").removesuffix(".js") + ".ts"
     return subprocess.check_output(["node", "--input-type=module", "-e", r"""
 import ts from 'typescript';
@@ -749,7 +779,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
         raise RuntimeError("trend_release_requires_expected_sha256_and_base_sha")
     if collection is not None:
         route, _ = collection_hashes(collection)
-        key = (COLLECTION_RELATION_KEY if collection in ("relation_key", "relation_key_restore") else
+        key = (COLLECTION_PYTHON_TRANSPORT if collection in ("python_transport", "python_transport_restore") else
+               COLLECTION_RELATION_KEY if collection in ("relation_key", "relation_key_restore") else
                COLLECTION_DAILY_CONTEXT if collection in ("delivery_ready", "delivery_ready_restore") else
                "apps/api/dist/server.js" if collection in ("handoff_routes", "handoff_routes_restore") else
                COLLECTION_EXECUTOR if collection in ("executor", "executor_restore", "executor_lock", "executor_lock_restore") else
@@ -803,7 +834,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
     if rollback:
         deploy["verify_production_sha_history"](repo, STAGGER_RELEASE_SHA, sha)
         validate_changes(git("diff", "--name-only", STAGGER_RELEASE_SHA, sha).splitlines(), scheduler=True)
-    for job in (("build:database",) if collection in ("relation_key", "relation_key_restore") else
+    for job in (() if collection in ("python_transport", "python_transport_restore") else
+                ("build:database",) if collection in ("relation_key", "relation_key_restore") else
                 ("build:api",) if collection in ("handoff_routes", "handoff_routes_restore") else
                 ("build:api", "build:playwright-crawler") if collection in ("handoff", "handoff_restore") else
                 ("build:playwright-crawler",) if collection in ("detail", "detail_restore", "detail_canonical", "detail_canonical_restore", "delivery_daily", "delivery_daily_restore", "handoff", "handoff_restore", "manual_waf", "manual_waf_restore", "delivery_observe", "delivery_observe_restore", "delivery_ready", "delivery_ready_restore", "search_ready", "search_ready_restore") else
@@ -833,7 +865,9 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             search_ready_followup = collection in ("search_ready", "search_ready_restore")
             delivery_ready_followup = collection in ("delivery_ready", "delivery_ready_restore")
             relation_key_followup = collection in ("relation_key", "relation_key_restore")
-            source = (COLLECTION_RELATION_KEY_SOURCE if relation_key_followup else
+            python_transport_followup = collection in ("python_transport", "python_transport_restore")
+            source = (COLLECTION_PYTHON_TRANSPORT_SOURCE if python_transport_followup else
+                      COLLECTION_RELATION_KEY_SOURCE if relation_key_followup else
                       COLLECTION_SEARCH_READY_SOURCE if search_ready_followup else
                       COLLECTION_DELIVERY_READY_SOURCE if delivery_ready_followup else
                       COLLECTION_DELIVERY_OBSERVE_SOURCE if delivery_observe_followup else
@@ -848,7 +882,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
                       COLLECTION_DAILY_SOURCE if daily_followup else
                       COLLECTION_DETAIL_DIAG_SOURCE if canonical_followup else COLLECTION_SOURCE_BASE)
             restored = build_collection_restore(repo, name, source)
-            original = (COLLECTION_RELATION_KEY_BASE[name] if relation_key_followup else
+            original = (COLLECTION_PYTHON_TRANSPORT_BASE[name] if python_transport_followup else
+                        COLLECTION_RELATION_KEY_BASE[name] if relation_key_followup else
                         COLLECTION_SEARCH_READY_BASE[name] if search_ready_followup else
                         COLLECTION_DELIVERY_READY_BASE[name] if delivery_ready_followup else
                         COLLECTION_DELIVERY_OBSERVE_BASE[name] if delivery_observe_followup else
@@ -868,7 +903,7 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
             if hashlib.sha256(restored).hexdigest() != original:
                 raise RuntimeError("trend_collection_restore_build_differs")
             data = (restored if collection == "restore" or collection.endswith("_restore") else
-                    build_collection_restore(repo, name, sha) if relation_key_followup else (repo / name).read_bytes())
+                    build_collection_restore(repo, name, sha) if relation_key_followup or python_transport_followup else (repo / name).read_bytes())
             after = hashlib.sha256(data).hexdigest()
             if after != after_hashes[name]:
                 raise RuntimeError("trend_collection_build_differs")

@@ -9798,7 +9798,9 @@
     "status": "implemented",
     "requirements": "docs/selection-competitor-relation-key.md",
     "sourceFiles": [
-      "apps/crawler/scoutops_crawler/runtime_transport.py"
+      "apps/crawler/scoutops_crawler/runtime_transport.py",
+      "scripts/deploy-account-baota.py",
+      "scripts/baota-account-trend-release.py"
     ],
     "testFiles": [
       "apps/crawler/tests/test_runtime_disconnect.py",
