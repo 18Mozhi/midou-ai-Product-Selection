@@ -193,7 +193,7 @@ Amazon直接 `/s?k=...` 任务没有 `plan.search`，旧版在DOM就绪后立即
 诊断仍限750ms和布尔/数量/固定枚举，不保存文字、URL、ZIP、Cookie或原始异常消息，不改变验收或错误码；尚未确认真实失败为重复头部。
 
 官方入口 `--collection-search-ready-only` / `--collection-search-ready-rollback` 只替换共享index.js；
-固定20743687a基线、输入/输出SHA并保护地区上下文、精确WAF许可、接管、AI等待、背压和趋势模块。
+固定80ed59fce基线、输入/输出SHA并保护地区上下文、精确WAF许可、接管、AI等待、背压和趋势模块。
 只重启宝塔ai选品 Node，不改Python、1688、数据库、并发、白名单、API字段、环境配置或依赖。
 使用现有健康检查和人工接管入口，无新增调节项；真实搜索与同商品详情未通过之前，来源保持停用。
 
@@ -206,3 +206,9 @@ run7f727e0b-37b4-4756-9daf-275def63a916仍为同阶段、单个可见匹配头�
 既知导航/关闭/选择器歧义类别与操作前缀均未匹配。继续保留失败，不据此自动重试或启用。
 诊断仅增固定运行方法/引用/属性缺失类别、白名单Error类型、至多4条固定项目/Playwright JS文件名及数字行列，
 不输出绝对栈路径或消息内容；据真实错误代码位置定位，禁止凭假设修改校验。
+
+真实run023c6872-df1c-4e81-b2ce-68343df4a8e5的受限栈定位到amazon-delivery-context.js:135，
+即save内匿名Cookie集合验证失败，而非邮编或匿名DOM未通过。引擎在save前现在报告daily_cache_save，
+避免沿用上一步request_delivery_postal标签。仅对精确cache_invalid增加受限750ms Cookie形状计数：
+数量、认证标记数、不接受的域数、精确.www.amazon.com变体数、过期值/SameSite/字符/长度/path异常数；
+不记录名称/值/域/path内容，也不改变原缓存读写或任何接受/拒绝规则。新类别daily_cache_invalid仍失败。

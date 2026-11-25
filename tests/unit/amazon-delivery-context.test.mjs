@@ -807,6 +807,7 @@ test("delivery failure kind exposes only fixed classifications, never error cont
   const {amazonDeliveryFailureKind}=await import("../../packages/playwright-crawler/dist/index.js");
   for(const [message,expected] of [
     ["amazon_delivery_requires_anonymous_page","anonymous_missing"],
+    ["amazon_delivery_cache_invalid","daily_cache_invalid"],
     ["locator.waitFor: strict mode violation: private","selector_ambiguous"],
     ["locator.count: Execution context was destroyed, most likely because of a navigation","navigation_context_lost"],
     ["locator.count: Cannot find context with specified id","navigation_context_lost"],
@@ -818,6 +819,16 @@ test("delivery failure kind exposes only fixed classifications, never error cont
     ["private https://example.test/?token=secret","other"],
   ])assert.equal(amazonDeliveryFailureKind(new Error(message)),expected);
   assert.equal(amazonDeliveryFailureKind(null),"other");
+});
+
+test("daily cache shape diagnostics expose only counts without admitting rejected cookies",async()=>{
+  const {inspectAnonymousDeliveryCookieShape}=await import("../../packages/playwright-crawler/dist/index.js");
+  const cookie={name:"session-id",value:"private-token",domain:".amazon.com",path:"/",expires:-1,httpOnly:true,secure:true,sameSite:"Lax"};
+  const result=inspectAnonymousDeliveryCookieShape([cookie,{...cookie,name:"at-main",domain:".www.amazon.com"},{...cookie,domain:"evil.test"}]);
+  assert.equal(result.cookie_count,3);assert.equal(result.auth_cookie_count,1);
+  assert.equal(result.unaccepted_domain_count,2);assert.equal(result.dotted_www_domain_count,1);
+  assert.doesNotMatch(JSON.stringify(result),/private-token|session-id|at-main|amazon\.com|evil\.test/);
+  assert.ok(Object.values(result).every(Number.isInteger));
 });
 
 

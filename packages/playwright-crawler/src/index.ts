@@ -327,6 +327,7 @@ export function classifyBrowserFailure(error: unknown): {
 export function amazonDeliveryFailureKind(error: unknown) {
   if (!(error instanceof Error)) return "other";
   if (error.message === "amazon_delivery_requires_anonymous_page") return "anonymous_missing";
+  if (error.message === "amazon_delivery_cache_invalid") return "daily_cache_invalid";
   if (error.message.includes("strict mode violation:")) return "selector_ambiguous";
   if (/Execution context was destroyed|Cannot find context with specified id/i.test(error.message))
     return "navigation_context_lost";
@@ -339,6 +340,21 @@ export function amazonDeliveryFailureKind(error: unknown) {
     return "navigation_context_lost";
   if (/Timeout/i.test(error.name + error.message)) return "readiness_timeout";
   return "other";
+}
+
+/** Shape counts only. Mirrors the unchanged daily cache contract, not admission. */
+export function inspectAnonymousDeliveryCookieShape(cookies: Awaited<ReturnType<BrowserContext["cookies"]>>) {
+  return {
+    cookie_count: cookies.length,
+    auth_cookie_count: cookies.filter((c) => ["at-main", "sess-at-main"].includes(c.name)).length,
+    unaccepted_domain_count: cookies.filter((c) => ![".amazon.com", "www.amazon.com", "amazon.com"].includes(c.domain)).length,
+    dotted_www_domain_count: cookies.filter((c) => c.domain === ".www.amazon.com").length,
+    invalid_expiry_count: cookies.filter((c) => !Number.isFinite(c.expires)).length,
+    invalid_same_site_count: cookies.filter((c) => !["Strict", "Lax", "None"].includes(c.sameSite)).length,
+    unsafe_value_count: cookies.filter((c) => /[\r\n\0]/.test(c.name + c.value)).length,
+    oversized_value_count: cookies.filter((c) => c.name.length > 128 || c.value.length > 8192).length,
+    invalid_path_count: cookies.filter((c) => !c.path.startsWith("/") || c.path.length > 1024).length,
+  };
 }
 
 export async function inspectAmazonDeliveryReadiness(page: Page, postal: string) {
@@ -975,6 +991,7 @@ export class PlaywrightCrawlerEngine {
           this.limits.navigationTimeoutMs,
         );
         await assertAmazonDelivery(page, plan.amazon_delivery.postal_code, check);
+        stage = "amazon_delivery.daily_cache_save";
         await options.dailyDelivery.save(context);
       }
       // An imported discovery link can carry Amazon's presentation slug and
@@ -1272,6 +1289,16 @@ export class PlaywrightCrawlerEngine {
               ? [...(error.stack ?? "").matchAll(/\b(amazon-delivery-context|index|locator|connection|channelOwner)\.js:(\d+):(\d+)/g)]
                   .slice(0, 4).map((match) => `${match[1]}.js:${match[2]}:${match[3]}`)
               : [];
+            if (error instanceof Error && error.message === "amazon_delivery_cache_invalid" && context) {
+              let timer: ReturnType<typeof setTimeout> | undefined;
+              try {
+                const cookies = await Promise.race([
+                  context.cookies("https://www.amazon.com/"),
+                  new Promise<null>((resolve) => { timer = setTimeout(() => resolve(null), 750); }),
+                ]);
+                if (cookies) deliveryState.daily_cache_shape = inspectAnonymousDeliveryCookieShape(cookies);
+              } finally { clearTimeout(timer); }
+            }
           }
         }
       }
