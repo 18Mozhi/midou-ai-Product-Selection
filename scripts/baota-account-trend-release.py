@@ -471,6 +471,16 @@ def collection_hashes(action):
     raise RuntimeError("trend_collection_manifest_invalid")
 
 
+def install_with_claim_drain(install_fn, args, drain):
+    try:
+        drain.pause()
+        drain.drain()
+        drain.verify_final()
+        return install_fn(*args)
+    finally:
+        drain.resume_owned()
+
+
 def restart_identity_valid(before, after, python_transport=False):
     if not after.get("api") or not after.get("worker"):
         return False
@@ -934,12 +944,20 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
     args = (deploy["PROJECT_ROOT"], previous, expected_module, sha, base64.b64encode(module).decode(),
             hashlib.sha256(module).hexdigest(), scheduler, rollback, report_action, amazon_modules, collection)
     code = Path(__file__).read_text(encoding="utf-8")
-    source = "code=" + repr(code) + "\nargs=" + repr(args) + r'''
+    drain_code = ((repo / "scripts/baota-account-claim-drain.py").read_text(encoding="utf-8")
+                  if collection in ("python_transport", "python_transport_restore") else None)
+    source = ("drain_code=" + repr(drain_code) + "\nnode=" + repr(deploy["NODE_BIN"]) +
+              "\ncode=" + repr(code) + "\nargs=" + repr(args)) + r'''
 import json,re
 ns={"__name__":"trend_release"}
 exec(compile(code,"trend_release","exec"),ns)
 try:
- result=ns["install"](*args)
+ if drain_code is not None:
+  drain_ns={"__name__":"claim_drain"};exec(compile(drain_code,"claim_drain","exec"),drain_ns)
+  drain=drain_ns["BaselineClaimDrain"](ns["Path"](args[0]),node)
+  result=ns["install_with_claim_drain"](ns["install"],args,drain)
+ else:
+  result=ns["install"](*args)
 except Exception as exc:
  message=str(exc)
  result={"status":False,"message":ns["MODULE_PHASE"]+":"+(
@@ -947,4 +965,4 @@ except Exception as exc:
 print("SCOUTOPS_RESULT="+json.dumps(result))
 '''
     with ssh_connection(deploy) as ssh:
-        return deploy["remote_python"](ssh, source, timeout=205)
+        return deploy["remote_python"](ssh, source, timeout=400 if drain_code is not None else 205)

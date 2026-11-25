@@ -13,6 +13,32 @@ trend = runpy.run_path(
 
 
 class TrendReleaseScopeTest(unittest.TestCase):
+    def test_python_install_drains_before_change_and_always_resumes_only_owned_pause(self):
+        from unittest.mock import Mock
+        for failure in (None, "pause", "drain", "verify_final", "install"):
+            calls = []
+            drain = Mock()
+            def action(name):
+                def call(*args):
+                    calls.append(name)
+                    if name == failure:
+                        raise RuntimeError("expected_failure")
+                    return "installed"
+                return call
+            for name in ("pause", "drain", "verify_final", "resume_owned"):
+                getattr(drain, name).side_effect = action(name)
+            install = action("install")
+            if failure:
+                with self.assertRaisesRegex(RuntimeError, "expected_failure"):
+                    trend["install_with_claim_drain"](install, (), drain)
+            else:
+                self.assertEqual(trend["install_with_claim_drain"](install, (), drain), "installed")
+            self.assertEqual(calls[-1], "resume_owned")
+            if failure in ("pause", "drain", "verify_final"):
+                self.assertNotIn("install", calls)
+            else:
+                self.assertEqual(calls, ["pause", "drain", "verify_final", "install", "resume_owned"])
+
     def test_python_transport_release_preserves_node_identity_and_requires_new_python(self):
         before = {"api": 1, "worker": 2, "python": [3]}
         valid = trend["restart_identity_valid"]
