@@ -1,4 +1,5 @@
 openapi: 3.0.3
+# Crawler RemoteDisconnected maps to existing crawler_api_unavailable and existing bounded retry; HTTP fields and lease/receipt contracts unchanged.
 # Competitor relevance uses an ASCII primary-key probe plus unchanged BINARY identity proof; public schemas and permissions unchanged.
 # Private per-run authenticated loopback CONNECT relay fixes upstream proxy-auth delivery without changing TLS/source content or public HTTP fields.
 # Private Amazon navigation transport may relay the same original request/response; no public HTTP field, credential or success-gate change.

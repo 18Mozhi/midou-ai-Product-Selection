@@ -3,6 +3,7 @@ import random
 import time
 import urllib.error
 import urllib.request
+from http.client import RemoteDisconnected
 from typing import Any
 
 from .config import CrawlerConfig
@@ -68,7 +69,7 @@ class CrawlerRuntimeTransport:
                 except (json.JSONDecodeError, AttributeError):
                     code = f"crawler_api_http_{error.code}"
                 failure = RuntimeClientError(code, error.code >= 500)
-            except (urllib.error.URLError, TimeoutError):
+            except (urllib.error.URLError, TimeoutError, RemoteDisconnected):
                 failure = RuntimeClientError("crawler_api_unavailable")
             if not failure.retryable or attempt + 1 >= max_attempts:
                 raise failure

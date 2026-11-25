@@ -37,3 +37,12 @@ python -B scripts/deploy-account-baota.py --collection-relation-key-only --expec
 若需回退，使用同一协调器 `--collection-relation-key-rollback`，expected-module-sha256 为候选模块哈希
 4319719331111246d1c3bc29853d78e711768b52d1b8c2c47a1b7bc2143cfd48；从944d0c7d原 Git 源本地重建原模块，
 不创建生产回退副本，不回退其他模块。
+
+## 发布后异常（不能视为完整发布成功）
+
+模块已安装并由 Node 加载，但协调器在 Node 重启返回后检测到 Python 身份变化而拒绝验收。
+Python 日志显示领取租约的 urllib 调用发生 RemoteDisconnected，未被现有 URLError/TimeoutError 分支捕获；
+既有守护机制随后自动恢复进程。没有执行额外 Python 重启，不绕过身份保护或重复发布。
+本地将该已证实异常映射到现有 crawler_api_unavailable，复用原最多四次传输重试和退避；
+心跳仍最多一次，退出/停止、幂等键、租约及完成回执格式不变，不捕获任意业务异常。
+该 Python 修复先本地验证；生产应用仍须获得明确 Python 发布/恢复授权。
