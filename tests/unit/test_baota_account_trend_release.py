@@ -22,6 +22,9 @@ class TrendReleaseScopeTest(unittest.TestCase):
             restored = trend["build_collection_restore"](Path(__file__).resolve().parents[2], name,
                                                          trend["COLLECTION_RELATION_KEY_SOURCE"])
             self.assertEqual(hashlib.sha256(restored).hexdigest(), digest)
+            candidate = trend["build_collection_restore"](Path(__file__).resolve().parents[2], name,
+                                                          "64f3397f7")
+            self.assertEqual(hashlib.sha256(candidate).hexdigest(), after[name])
         with self.assertRaisesRegex(RuntimeError, "manifest_invalid"):
             trend["prepare_amazon"](Path("project"), {}, lambda *_: self.fail("unexpected read"), "relation_key")
         required = list(trend["collection_sources"]()) + [

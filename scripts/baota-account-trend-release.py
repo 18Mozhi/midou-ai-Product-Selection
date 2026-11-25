@@ -369,7 +369,7 @@ def prepare_amazon(root, manifest, read_file, collection=None):
 COLLECTION_RELATION_KEY = "packages/database/dist/selection-completion-policy.js"
 COLLECTION_RELATION_KEY_SOURCE = "944d0c7d503d16ba44950207202f3e4e2a03d651"
 COLLECTION_RELATION_KEY_BASE = {COLLECTION_RELATION_KEY: "91c303c724e6b2acfc92370c8cd1ab9edf797e8566e7439292085ef8ab823a87"}
-COLLECTION_RELATION_KEY_CANDIDATE = {COLLECTION_RELATION_KEY: "4c7a721b0529e4a17a76810e6845c00e6f0060916442dfa3646c47c534ae1e01"}
+COLLECTION_RELATION_KEY_CANDIDATE = {COLLECTION_RELATION_KEY: "4319719331111246d1c3bc29853d78e711768b52d1b8c2c47a1b7bc2143cfd48"}
 
 
 def collection_hashes(action):
@@ -867,7 +867,8 @@ def publish(repo, previous, expected_module, deploy, ssh_connection, scheduler_e
                          **COLLECTION_EVIDENCE_BASE}[name])
             if hashlib.sha256(restored).hexdigest() != original:
                 raise RuntimeError("trend_collection_restore_build_differs")
-            data = restored if collection == "restore" or collection.endswith("_restore") else (repo / name).read_bytes()
+            data = (restored if collection == "restore" or collection.endswith("_restore") else
+                    build_collection_restore(repo, name, sha) if relation_key_followup else (repo / name).read_bytes())
             after = hashlib.sha256(data).hexdigest()
             if after != after_hashes[name]:
                 raise RuntimeError("trend_collection_build_differs")

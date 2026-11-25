@@ -35,5 +35,5 @@ python -B scripts/deploy-account-baota.py --collection-relation-key-only --expec
 只通过宝塔重启 Node ai选品；不重启 Python、不修改 AI 节点、1688、数据库或备份任务。
 无需用户调参。发布后回读模块哈希、服务健康及自然任务，不手动领取或重放死信。
 若需回退，使用同一协调器 `--collection-relation-key-rollback`，expected-module-sha256 为候选模块哈希
-4c7a721b0529e4a17a76810e6845c00e6f0060916442dfa3646c47c534ae1e01；从944d0c7d原 Git 源本地重建原模块，
+4319719331111246d1c3bc29853d78e711768b52d1b8c2c47a1b7bc2143cfd48；从944d0c7d原 Git 源本地重建原模块，
 不创建生产回退副本，不回退其他模块。
