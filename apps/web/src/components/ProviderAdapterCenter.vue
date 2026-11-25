@@ -119,7 +119,8 @@ const accessModeText = (value: string) =>
   circuitText = (item: AdapterSummary) =>
     item.runtime_circuit_state === "open" ? "来源已暂停" : "来源可调度",
   recoveryText = (item: AdapterSummary) =>
-    source1688OperatorAction(item)?.title ?? (item.runtime_circuit_state === "closed"
+    source1688OperatorAction(item)?.title ??
+    (item.runtime_circuit_state === "closed"
       ? item.runtime_last_recovered_at
         ? `最近恢复 ${item.runtime_last_recovered_at.slice(0, 19).replace("T", " ")}`
         : "当前无需恢复"
@@ -511,7 +512,7 @@ onMounted(load);
         title="来源适配器"
         :detail-title="(item) => item.name"
       >
-        <template #desktop>
+        <template #desktop="{ show }">
           <div class="adapter-table-wrap" role="region" aria-label="来源适配器诊断表" tabindex="0">
             <table>
               <thead>
@@ -589,6 +590,15 @@ onMounted(load);
                     <button type="button" :disabled="probing !== null" @click="probe(item)">
                       {{ probing === item.id ? "检查中…" : "健康检查" }}
                     </button>
+                    <button
+                      type="button"
+                      class="adapter-detail-trigger"
+                      :aria-label="`${item.name}查看详情`"
+                      aria-haspopup="dialog"
+                      @click="show(item, $event)"
+                    >
+                      查看详情
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -638,11 +648,13 @@ onMounted(load);
                   :href="source1688OperatorAction(row)?.link ?? undefined"
                   target="_blank"
                   rel="noopener noreferrer"
-                >{{ source1688OperatorAction(row)?.label }}</a>
+                  >{{ source1688OperatorAction(row)?.label }}</a
+                >
                 <RouterLink
                   v-else-if="source1688OperatorAction(row)?.link"
                   :to="source1688OperatorAction(row)?.link ?? '/platform-admin/crawler-scheduler'"
-                >{{ source1688OperatorAction(row)?.label }}</RouterLink>
+                  >{{ source1688OperatorAction(row)?.label }}</RouterLink
+                >
               </div>
               <dl>
                 <div>
@@ -795,6 +807,10 @@ onMounted(load);
 </template>
 
 <style scoped>
+.adapter-detail-trigger {
+  margin-top: 8px;
+}
+
 .adapter-detail-feedback {
   color: var(--so-text);
   overflow-wrap: anywhere;

@@ -5140,6 +5140,22 @@
       "statusDetail": "credential_assets_live_mysql_api_worker_crawler_deep_link_refresh_timeout_preserve_data_encrypted_upload_rotation_revocation_idempotency_permission_validation_download_service_responsive_and_accessibility_verification_completed"
     },
     "providerAdapters": {
+      "desktopOperatorDetailEntry20261125": {
+        "status": "local-verified-not-published",
+        "sourceFiles": [
+          "apps/web/src/components/ProviderAdapterCenter.vue",
+          "apps/web/src/components/ResponsiveDataView.vue",
+          "apps/web/src/source-1688-operator-action.ts"
+        ],
+        "testFiles": [
+          "tests/e2e/provider-operator-detail-entry.spec.ts",
+          "tests/unit/source-1688-operator-action.test.mjs"
+        ],
+        "docs": [
+          "docs/provider-operator-detail-entry.md"
+        ],
+        "contract": "Existing desktop slot show opens the same diagnostic drawer, exposing unchanged 1688 CAPTCHA/login/rate/network instructions. No probe POST, new API, permission, collection, enable/recover or external request from opening details."
+      },
       "uiPhase2CurrentStateReview": "P47-CURRENT-STATE-REVIEW.md: fixes two legacy preview import-anchor conflicts and replaces two stale-current evidence claims with independent raw-current captures. New SHA-limited composer retains actual empty-reset function/binding and one nextTick import; original access/filter drivers, helpers, CSS, manifests and96PNG remain immutable. Current access30 runs/411 checks/60PNG and filter6 runs/162 checks/36PNG,178 raw sources each; six new browser checks retain empty-reset search focus. Original safe GET attempts/no writes preserved;500 neighbor comparisons five0 and390 action27pixels/maxdelta2 within original64/2. Baseline access/page focus defects remain visible; review fixes are not production implementation or approval. Local --state=access or --state=filter-pagination with --capture only. No production/API/env/DB/dependency/deploy change; wider failed gates and73-page delivery remain open.",
       "uiPhase2TableToolsReview": "P47-TABLE-TOOLS-REVIEW.md: actual App and untransformed ProviderAdapterCenter/ResponsiveDataView/TableViewControls; review-only P47 CSS composes the desktop toolbar and table, styles the five source-derived column checkboxes, aria-pressed freeze control and native standard/compact density. Baseline/review390/1024/1440:6 runs/90 checks/18PNG/169 current source hashes. Keyboard open,hide/restore,min-one-column guard,freeze off/on,density focus and44px review targets verified. Each run one adapters GET,no extra GET/POST/body/unknown network. Mobile baseline/review is0 changed pixels. Production/shared component/API/permissions/env/dependencies unchanged,no deployment. Four desktop visual combinations await review;not shared-consumer/full-page/a11y/real API/probe/production acceptance. Earlier P47 reviews,cross-page lock and all73 remain open.",
       "uiPhase2FilterPaginationReview": "P47-FILTER-PAGINATION-REVIEW.md: actual App and AST-extracted authoritative45-row catalog; isolated filter/page CSS plus result/page polite status, single-page nav hide and nextTick boundary focus wrapper. Baseline/review390/760/1440:6 runs/156 checks/36PNG/170 raw sources; exact20/20/5,details keyboard open,5 labeled selects,six-model clear,page reset and query focus. Baseline last/first disabled button drops focus to BODY; review focuses persistent same-nav page status only at boundary. One-result nav hidden only in review. Each run one initial GET,no extra GET/POST/body/unknown network. Production six models,sorting,pageSize20,watch/API/permissions/env/dependencies unchanged,no deployment. Mobile filter/page visuals await review,not focus/full-page/real data acceptance; other pending P47 reviews/cross-page lock/all73 remain open.",
@@ -5168,6 +5184,8 @@
         "../apps/api/src/mysql-provider-adapter-repository.ts",
         "../apps/api/src/provider-adapter-routes.ts",
         "../apps/web/src/components/ProviderAdapterCenter.vue",
+        "../apps/web/src/components/ResponsiveDataView.vue",
+        "../apps/web/src/source-1688-operator-action.ts",
         "../apps/web/src/components/ProviderCompatibilityMatrixDialog.vue"
       ],
       "routes": [
