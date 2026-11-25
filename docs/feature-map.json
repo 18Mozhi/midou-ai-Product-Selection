@@ -5231,6 +5231,16 @@
         ],
         "contract": "User-approved Node-only first load. Owned claim pause, four business-zero samples before bootstrap, four full-zero samples after bootstrap before dual-health release and again after release. Keep pause on uncertain install; no Python restart,1688 request,concurrency or DB change. Existing due queues and actual active runs remain truthful."
       },
+      "operatorStaticOverlayPrerequisites20261125": {
+        "status": "local-verified-pending-static-publication",
+        "requirements": "docs/provider-operator-detail-entry.md",
+        "sourceFiles": ["scripts/baota-account-static-release.py"],
+        "testFiles": [
+          "tests/unit/test_baota_account_static_overlay.py",
+          "tests/unit/test_baota_account_static_release.py"
+        ],
+        "behavior": "Pin the exact already-installed dual health,Worker pause and manual frame modules for static-only publication; all other manifest leaves unchanged, no restart,reload,source action or recovery bypass."
+      },
       "desktopOperatorDetailEntry20261125": {
         "status": "local-verified-not-published",
         "sourceFiles": [

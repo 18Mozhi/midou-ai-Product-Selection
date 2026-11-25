@@ -199,6 +199,16 @@ def remote_check(expected, index=None, assets=None, scheduler=None):
             raise RuntimeError("frontend_retired_page_visible:" + path)
 
 
+
+def required_collection_modules(collection):
+    # Exact installed chain only; an older engine or any module drift fails closed.
+    return {**collection["COLLECTION_CANDIDATE"],
+            collection["COLLECTION_EXECUTOR"]: collection["COLLECTION_EXECUTOR_LOCK_CANDIDATE"],
+            collection["COLLECTION_BROWSER"]: collection["COLLECTION_BROWSER_CANDIDATE"],
+            **collection["COLLECTION_EVIDENCE_CANDIDATE"], **collection["COLLECTION_RANK_CANDIDATE"],
+            **collection["COLLECTION_LAN_CANDIDATE"], **collection["COLLECTION_LAN_HEALTH_CANDIDATE"],
+            **collection["COLLECTION_MODEL_HOLD_CANDIDATE"], **collection["COLLECTION_DAILY_CANDIDATE"], **collection["COLLECTION_HANDOFF_CANDIDATE"], **collection["COLLECTION_HANDOFF_ROUTES_CANDIDATE"], **collection["COLLECTION_MANUAL_WAF_CANDIDATE"], **collection["COLLECTION_DELIVERY_OBSERVE_CANDIDATE"], **collection["COLLECTION_DELIVERY_READY_CANDIDATE"], **collection["COLLECTION_SEARCH_READY_CANDIDATE"], **collection["COLLECTION_RELATION_KEY_CANDIDATE"], **collection["COLLECTION_SPONSORED_EMPTY_CANDIDATE"], **collection["COLLECTION_CHECKPOINT_CANDIDATE"], **collection["COLLECTION_DUAL_HEALTH_CANDIDATE"], **collection["COLLECTION_MAINTENANCE_CANDIDATE"], **collection["COLLECTION_MANUAL_FRAME_CANDIDATE"]}
+
 def deploy_static(repo, previous, deploy, ssh_connection, transfer, collection=None):
     if not re.fullmatch(r"[a-f0-9]{40}", previous or ""):
         raise RuntimeError("frontend_expected_runtime_sha_required")
@@ -217,12 +227,7 @@ def deploy_static(repo, previous, deploy, ssh_connection, transfer, collection=N
         source_base = collection["COLLECTION_SOURCE_BASE"]
         deploy["verify_production_sha_history"](repo, source_base, build)
         collection["validate_collection_changes"](git("diff", "--name-only", source_base, build).splitlines())
-        required_node = {**collection["COLLECTION_CANDIDATE"],
-                         collection["COLLECTION_EXECUTOR"]: collection["COLLECTION_EXECUTOR_LOCK_CANDIDATE"],
-                         collection["COLLECTION_BROWSER"]: collection["COLLECTION_BROWSER_CANDIDATE"],
-                         **collection["COLLECTION_EVIDENCE_CANDIDATE"], **collection["COLLECTION_RANK_CANDIDATE"],
-                         **collection["COLLECTION_LAN_CANDIDATE"], **collection["COLLECTION_LAN_HEALTH_CANDIDATE"],
-                         **collection["COLLECTION_MODEL_HOLD_CANDIDATE"], **collection["COLLECTION_DAILY_CANDIDATE"], **collection["COLLECTION_HANDOFF_CANDIDATE"], **collection["COLLECTION_HANDOFF_ROUTES_CANDIDATE"], **collection["COLLECTION_MANUAL_WAF_CANDIDATE"], **collection["COLLECTION_DELIVERY_OBSERVE_CANDIDATE"], **collection["COLLECTION_DELIVERY_READY_CANDIDATE"], **collection["COLLECTION_SEARCH_READY_CANDIDATE"], **collection["COLLECTION_RELATION_KEY_CANDIDATE"], **collection["COLLECTION_SPONSORED_EMPTY_CANDIDATE"], **collection["COLLECTION_CHECKPOINT_CANDIDATE"]}
+        required_node = required_collection_modules(collection)
     else:
         changed = git("diff", "--name-only", previous, build).splitlines()
         tooling = {"scripts/deploy-account-baota.py", "scripts/baota-account-static-release.py"}
