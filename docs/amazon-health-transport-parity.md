@@ -45,3 +45,36 @@ Python支路复用已有Playwright publicHttpRuntime适配器，而不是新服�
 - Amazon定向单测180项：179通过，1项历史失败；用HEAD旧健康模块与新模块分别执行amazon-observation-lineage.test.mjs，均仅同一条旧organization/workspace断言失败，没有新增失败。不是全库单测通过。
 - 浏览器集成8项、账号发布工具67项全部通过；运行文档、发布矩阵和本次代码格式检查通过。
 - 本轮未发布、未重启；正式双支路真实搜索/同商品详情和审计恢复仍待上线后完成。不得用这些合成回放替代正式验收。
+
+## 精确两模块发布与恢复入口
+
+仅允许协调器替换 `apps/api/dist/amazon-public-browser-health.js` 与
+`packages/playwright-crawler/dist/index.js`；后者同时带入已本地验证的checkpoint人工接管识别。
+Node/Python传输适配器和Python helper只核对哈希并保护，不上传，不安装依赖，不重启Python。
+趋势投影、报表、调度器、SQL优化及已有1688模块保持原哈希。
+
+以下是门禁通过后的操作入口，不是已经执行的发布。源码须为干净、已验证且与origin/main一致的提交；
+现有正式模块必须匹配8df4389996d0ad16c3ff478ddcc2d0eb64295eef对应的两项哈希。
+任何漂移、缺文件、四次连续全零失败或非本项目身份均拒绝安装。
+首次加载维护暂停能力尚未批准，不能使用这些入口绕过原排空标准。
+
+```powershell
+python -B scripts/deploy-account-baota.py --collection-dual-health-only --expected-previous-sha 1b622274a6871d9d1ac3986223359b539a82aa76 --expected-module-sha256 c86f7b72c16ec20b8d454004906bdcbc4c0c11574ff1cafd5f3ce7f5c74989f1
+```
+
+成功安装后只经宝塔重启 `ai选品` Node；接口、Worker均须换成新进程且Python进程身份不变。
+正式验收须使用同一健康请求的四条 `amazon_health_transport_result`，确认browser/python各有search/detail，
+并核对实际同商品事实及全部运行回执。验证页不得ready，继续原人工流程；不会自动解除来源熔断。
+
+需要明确回退时，仍要求同样排空和精确候选哈希，只从Git重建旧的两模块，不创建部署备份：
+
+```powershell
+python -B scripts/deploy-account-baota.py --collection-dual-health-rollback --expected-previous-sha 1b622274a6871d9d1ac3986223359b539a82aa76 --expected-module-sha256 7969cb57ac7b6c978fc42eaa11b3c1a04839b67b1d121e0b5dafc10d5b3a16fd
+```
+
+回退恢复的是旧单支路健康实现，不满足新的双支路恢复标准；不能拿其ready审计恢复Amazon。
+操作仍需符合当时维护窗口授权；本轮只验证本地发布计划，不执行以上命令。
+
+本轮发布路径定向6项通过；与原账号发布工具合跑73项全部通过。运行文档与发布矩阵检查通过。
+旧协调器拒绝dual_health；新协调器给出精确两模块正反清单；独立副本回退后恢复旧拒绝行为，回退哈希一致。
+这些是本地计划与字节证明，不代表已经连接、安装或通过正式采集验收。

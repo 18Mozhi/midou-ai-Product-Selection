@@ -9837,15 +9837,18 @@
       "apps/api/src/amazon-public-browser-health.ts",
       "packages/playwright-crawler/src/public-http-transport.ts",
       "apps/crawler/scoutops_crawler/public_http.py",
-      "scripts/baota-account-trend-release.py"
+      "scripts/baota-account-trend-release.py",
+      "scripts/deploy-account-baota.py"
     ],
     "testFiles": [
       "tests/unit/amazon-health-transport-parity.test.mjs",
-      "tests/unit/test_baota_account_trend_release.py"
+      "tests/unit/test_baota_account_trend_release.py",
+      "tests/unit/test_baota_amazon_dual_health_release.py"
     ],
     "contracts": [
       "docs/openapi.yaml"
     ],
-    "contract": "Both configured Node and existing production Python curl paths must search the same query and prove details for one shared product. No HTTP executable choice, new dependency, proxy, whitelist, concurrency, model or database change. Existing health consumers remain unchanged; deployment and actual dual-route acceptance pending."
+    "contract": "Both configured Node and existing production Python curl paths must search the same query and prove details for one shared product. No HTTP executable choice, new dependency, proxy, whitelist, concurrency, model or database change. Existing health consumers remain unchanged; deployment and actual dual-route acceptance pending.",
+    "releaseContract": "Exact two Node modules, pinned baseline/candidate plus existing transport helper protection; both forward and restore require unchanged strict four-zero claim drain. No production execution pending maintenance bootstrap approval."
   }
 }
