@@ -9,6 +9,7 @@ export interface DailyAmazonDelivery {
   cookies: DeliveryCookies;
   cached: boolean;
   save(context: BrowserContext): Promise<void>;
+  refresh?(context: BrowserContext): Promise<boolean>;
 }
 
 export async function assertAmazonDelivery(page: Page, postal: string, guard: () => Promise<void>) {
@@ -118,11 +119,13 @@ export async function withDailyAmazonDelivery<T>(
       }
     }
     let cookies: DeliveryCookies = [];
+    let expectedData: string | undefined;
     try {
       const st = await lstat(file);
       if (!st.isFile() || st.isSymbolicLink() || st.size > 131072)
         throw new Error("amazon_delivery_cache_invalid");
-      const state = JSON.parse(await readFile(file, "utf8"));
+      const raw = await readFile(file, "utf8");
+      const state = JSON.parse(raw);
       if (
         state.version !== 1 ||
         state.key !== key ||
@@ -132,7 +135,10 @@ export async function withDailyAmazonDelivery<T>(
         !validCookies(state.cookies)
       )
         throw new Error("amazon_delivery_cache_invalid");
-      if (state.day === day) cookies = state.cookies;
+      if (state.day === day) {
+        cookies = state.cookies;
+        expectedData = raw;
+      }
     } catch (e) {
       if ((e as NodeJS.ErrnoException).code !== "ENOENT") throw e;
     }
@@ -156,7 +162,50 @@ export async function withDailyAmazonDelivery<T>(
         await writeFile(scratch, data, { flag: "wx", mode: 0o600 });
         await rename(scratch, file);
         scratch = undefined;
+        expectedData = data;
         await release();
+      },
+      async refresh(context) {
+        // A daily postal proof is not a frozen session jar. Only the owning
+        // engine's verified detail may refresh it; never rerun HOME/GLUX here.
+        if (
+          !expectedData ||
+          new Date(clock().getTime() + 8 * 3600_000).toISOString().slice(0, 10) !== day
+        )
+          return false;
+        const current = (await context.cookies("https://www.amazon.com/")).map((cookie) =>
+          cookie.domain === ".www.amazon.com" ? { ...cookie, domain: "www.amazon.com" } : cookie,
+        );
+        if (!validCookies(current)) return false;
+        const data = JSON.stringify({ version: 1, key, day, cookies: current });
+        if (Buffer.byteLength(data) > 131072) return false;
+        // Do not wait behind another owner or overwrite a newer session. The
+        // original daily preparation retains its own existing locking policy.
+        try {
+          await writeFile(lock, owner, { flag: "wx", mode: 0o600 });
+          locked = true;
+        } catch (error) {
+          if ((error as NodeJS.ErrnoException).code === "EEXIST") return false;
+          throw error;
+        }
+        try {
+          const st = await lstat(file);
+          if (!st.isFile() || st.isSymbolicLink() || st.size > 131072)
+            throw new Error("amazon_delivery_cache_invalid");
+          if ((await readFile(file, "utf8")) !== expectedData) return false;
+          scratch = file + "." + JSON.parse(owner).id + ".tmp";
+          await writeFile(scratch, data, { flag: "wx", mode: 0o600 });
+          await rename(scratch, file);
+          scratch = undefined;
+          expectedData = data;
+          return true;
+        } finally {
+          if (scratch) {
+            await unlink(scratch).catch(() => {});
+            scratch = undefined;
+          }
+          await release();
+        }
       },
     });
   } finally {

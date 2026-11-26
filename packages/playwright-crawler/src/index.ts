@@ -1297,6 +1297,44 @@ export class PlaywrightCrawlerEngine {
         if (!plan.allowed_origins.includes(httpUrl(page.url()).origin))
           throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
       }
+      if (itemCount && plan.amazon_delivery && options.dailyDelivery?.refresh) {
+        const expected = /\/(?:dp|gp\/product)\/([A-Za-z0-9]{10})(?:\/|$)/
+          .exec(originalTarget.pathname)?.[1]
+          ?.toUpperCase();
+        if (
+          expected &&
+          (await page.evaluate((asin) => {
+            const current = /\/(?:dp|gp\/product)\/([A-Za-z0-9]{10})(?:\/|$)/
+              .exec(location.pathname)?.[1]
+              ?.toUpperCase();
+            return (
+              location.origin === "https://www.amazon.com" &&
+              current === asin &&
+              document.querySelectorAll("input#ASIN").length === 1 &&
+              (
+                document.querySelector("input#ASIN") as HTMLInputElement | null
+              )?.value?.toUpperCase() === asin &&
+              Boolean(document.querySelector("#productTitle")?.textContent?.trim())
+            );
+          }, expected))
+        ) {
+          stage = "amazon_delivery.session_refresh_guard";
+          await assertAmazonDelivery(page, plan.amazon_delivery.postal_code, async () => {
+            await guard(page);
+          });
+          try {
+            await options.dailyDelivery.refresh(context);
+          } catch {
+            // An ancillary cache write must not discard proven detail evidence.
+            console.warn(
+              JSON.stringify({
+                event: "amazon_delivery_session_refresh_failed",
+                reason: "cache_unavailable",
+              }),
+            );
+          }
+        }
+      }
       return {
         status: itemCount ? "succeeded" : "succeeded_empty",
         page_count: pageCount,

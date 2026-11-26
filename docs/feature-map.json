@@ -9973,5 +9973,17 @@
     ],
     "docs": ["docs/amazon-python-browser-local-replay.md"],
     "contract": "Local-only real curl_cffi0.7.4/Python helper/stdio/route.fulfill/Chromium regression covers identity, gzip, delayed chunking, gzip chunking, UTF16, complete200 shell and interrupted chunk stream. Raw decoded bytes verified at fulfill; CDP text reencoding checked separately. No runtime change, external source request, dependency installation, production DB, configuration, restart or deployment. Passing fixtures narrow transport hypotheses but do not prove real timeout cause or source acceptance."
+  },
+  "amazonDailySessionRefresh20261126": {
+    "sourceFiles": [
+      "packages/playwright-crawler/src/index.ts",
+      "packages/playwright-crawler/src/amazon-delivery-context.ts"
+    ],
+    "testFiles": [
+      "tests/unit/amazon-daily-session-refresh.test.mjs",
+      "tests/integration/amazon-daily-session-refresh.test.mjs"
+    ],
+    "docs": ["docs/amazon-daily-session-refresh.md"],
+    "contract": "Keep daily postal preparation once per Beijing day, but preserve same-project anonymous session changes after fully captured detail with exact URL/unique input ASIN/nonempty title and original anonymous/postal/challenge guards. Optional internal refresh uses original version1 cache and cookie/domain/size policy, immediate lock-or-skip and byte-CAS so stale owners never replace newer state; midnight skips. No search/failed/challenge/identity-inconclusive update. Ancillary write failures log fixed reason without discarding proven evidence. No imported Xingxing identity, TLS weakening, retries, concurrency, DB, publicAPI/env/Python/dependency change. Local rotation regression red-to-green; actual historical failure cause and production acceptance not proven; no deployment/restart."
   }
 }
