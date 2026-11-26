@@ -9961,5 +9961,17 @@
     "contracts": ["docs/openapi.yaml"],
     "contract": "Both configured Node and existing production Python curl paths must search the same query and prove details for one shared product. No HTTP executable choice, new dependency, proxy, whitelist, concurrency, model or database change. Existing health consumers remain unchanged; deployment and actual dual-route acceptance pending.",
     "releaseContract": "Exact two Node modules, pinned baseline/candidate plus existing transport helper protection; both forward and restore require unchanged strict four-zero claim drain. Controlled maintenance bootstrap approved; execution and live four-zero evidence pending."
+  },
+  "amazonPythonBrowserLocalReplay20261126": {
+    "sourceFiles": [
+      "apps/crawler/scoutops_crawler/public_http.py",
+      "packages/playwright-crawler/src/public-http-transport.ts"
+    ],
+    "testFiles": [
+      "tests/integration/amazon-curl-browser-byte-parity.test.mjs",
+      "tests/fixtures/curl-document/scoutops_crawler/public_http.py"
+    ],
+    "docs": ["docs/amazon-python-browser-local-replay.md"],
+    "contract": "Local-only real curl_cffi0.7.4/Python helper/stdio/route.fulfill/Chromium regression covers identity, gzip, delayed chunking, gzip chunking, UTF16, complete200 shell and interrupted chunk stream. Raw decoded bytes verified at fulfill; CDP text reencoding checked separately. No runtime change, external source request, dependency installation, production DB, configuration, restart or deployment. Passing fixtures narrow transport hypotheses but do not prove real timeout cause or source acceptance."
   }
 }
