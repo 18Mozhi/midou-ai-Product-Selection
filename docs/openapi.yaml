@@ -4440,6 +4440,48 @@ paths:
           }
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
+  /platform/amazon-session:
+    get:
+      summary: Read the explicitly configured Amazon collection session metadata
+      description: Requires key_rotation:manage. Returns no Cookie, ciphertext or account name. Availability is credential metadata, not proof of successful login or collection.
+      security: [{ HttpOnlySession: [] }]
+      responses:
+        "200":
+          description: Masked configured session
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AmazonSessionEnvelope" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+    post:
+      summary: Explicitly bind an existing Amazon Cookie or original anonymous asset
+      description: Requires key_rotation:manage, same Origin, Idempotency-Key and exact asset/profile versions. Binds only existing AMAZON_PUBLIC_BROWSER_PROFILE_ID with a same-provider asset. Rejects active leases, revoked/expired/foreign or invalid Cookie bundles. Does not replay tasks, enable sources, clear circuits, change addresses or restart services. Profile versions and operations record actor and request/trace metadata without secrets.
+      security: [{ HttpOnlySession: [] }]
+      parameters: [{ $ref: "#/components/parameters/IdempotencyKey" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [asset_id, expected_asset_version, expected_profile_version]
+              additionalProperties: false
+              properties:
+                asset_id: { type: string, format: uuid }
+                expected_asset_version: { type: integer, minimum: 1 }
+                expected_profile_version: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: Current explicitly selected session metadata
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AmazonSessionEnvelope" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /platform/credential-assets:
     get:
       summary: List masked platform credential asset metadata
@@ -9421,6 +9463,37 @@ components:
             browser cookie JSON,
             or Netscape cookies.txt and is normalized before encryption. The value is never returned or logged,
           }
+    AmazonSessionEnvelope:
+      type: object
+      required: [data, request_id, trace_id]
+      properties:
+        request_id: { type: string }
+        trace_id: { type: string }
+        data:
+          type: object
+          additionalProperties: false
+          required:
+            [
+              profile_id,
+              profile_version,
+              provider_id,
+              asset_id,
+              asset_version,
+              asset_name,
+              mode,
+              available,
+              expires_at,
+            ]
+          properties:
+            profile_id: { type: string, format: uuid }
+            profile_version: { type: integer, minimum: 1 }
+            provider_id: { type: string, format: uuid }
+            asset_id: { type: string, format: uuid }
+            asset_version: { type: integer, minimum: 1 }
+            asset_name: { type: string }
+            mode: { type: string, enum: [anonymous, administrator_cookie] }
+            available: { type: boolean }
+            expires_at: { type: string, format: date-time, nullable: true }
     CredentialAssetCreateInput:
       type: object
       additionalProperties: false

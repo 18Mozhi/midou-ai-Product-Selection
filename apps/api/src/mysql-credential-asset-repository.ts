@@ -487,7 +487,7 @@ export class MySqlCredentialAssetRepository implements CredentialAssetRepository
           "credential_asset_id,result_version,created_at) VALUES (?,?,?,?,?,?,?)",
         [randomUUID(), input.actorId, route, input.idempotencyKey, input.id, next, input.now],
       );
-      await this.replayRenewedProfiles(c, input);
+      if (!input.skipAutomaticReplay) await this.replayRenewedProfiles(c, input);
       await c.commit();
       return asset({
         ...rows[0],

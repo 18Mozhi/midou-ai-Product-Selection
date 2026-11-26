@@ -695,7 +695,7 @@ test("account browser upsert qualifies target columns that also exist on its SEL
   }, async () => {}), (e) => e === stop);
 });
 
-test("crawler claim only permits the configured canonical empty Amazon profile and retains legacy default", async () => {
+test("crawler claim permits only the fixed Amazon profile with original anonymous or same-provider Cookie asset and retains legacy default", async () => {
   for (const profileId of ["", "00000000-0000-4000-8000-000000000481"]) {
     const calls = [];
     const connection = {
@@ -734,7 +734,7 @@ test("crawler claim only permits the configured canonical empty Amazon profile a
     const query = calls.find((c) => c.sql.startsWith("SELECT j.*"));
     assert.match(query.sql, /p.status='active'/);
     if (profileId) {
-      assert.match(query.sql, /p.id=\? AND a.kind='browser_profile' AND a.fingerprint=\?/);
+      assert.match(query.sql, /p.id=\? AND \(\(a.kind='cookie_bundle' AND a.provider_id=p.provider_id\) OR \(a.kind='browser_profile' AND a.fingerprint=\?\)\)/);
       assert.match(query.sql, /execution_request_json,'\$\.purpose'\)\)='amazon_public'/);
       assert.equal(query.values[0], profileId);
       assert.equal(query.values[1], anonymousAmazonFingerprint());
@@ -840,7 +840,7 @@ test("registered Amazon health persists the browser result instead of independen
   assert.equal(stored.adapterVersion, "test-v13");
 });
 
-test("Node runner rejects nonempty and cookie profiles before loading a public browser", () => {
+test("Node runner rejects nonempty profiles and unmarked Cookie assets before loading a public browser", () => {
   const master = "test-amazon-runner-integration-master-key";
   for (const kind of ["browser_profile", "cookie_bundle"]) {
     const context = { assetId: "test-asset", assetVersion: 1, kind, keyVersion: "v1" };

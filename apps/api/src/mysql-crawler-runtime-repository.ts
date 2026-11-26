@@ -309,7 +309,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         accountHealth
           ? "SELECT p.provider_id,p.updated_by,a.expires_at FROM crawler_profiles p JOIN credential_assets a ON " +
             "a.id=p.credential_asset_id JOIN providers v ON v.id=p.provider_id WHERE p.id=? AND p.status='active' " +
-            "AND a.status='active' AND a.kind='browser_profile' AND a.fingerprint=? AND v.code='amazon_product' " +
+            "AND a.status='active' AND ((a.kind='cookie_bundle' AND a.provider_id=p.provider_id) OR (a.kind='browser_profile' AND a.fingerprint=?)) AND v.code='amazon_product' " +
             "AND v.access_mode='public_page' AND (v.status='enabled'" +
             (this.accountAmazonHealth?.manual && input.automaticTaskId === undefined
               ? " OR v.status='disabled'" : "") +
@@ -322,7 +322,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
           "w.organization_id=? AND w.status='active' WHERE p.id=? AND p.status='active' AND a.status='active' ",
           "AND a.kind IN ('browser_profile','cookie_bundle') AND (v.status='enabled'",
           publicHealth
-            ? " OR (v.status='disabled' AND v.code='amazon_product' AND v.access_mode='public_page' AND p.id=? AND a.kind='browser_profile' AND a.fingerprint=? AND v.terms_review_status='approved' AND CHAR_LENGTH(v.terms_version)>0 AND (v.terms_permanent=1 OR v.terms_expires_at>?))"
+            ? " OR (v.status='disabled' AND v.code='amazon_product' AND v.access_mode='public_page' AND p.id=? AND ((a.kind='cookie_bundle' AND a.provider_id=p.provider_id) OR (a.kind='browser_profile' AND a.fingerprint=?)) AND v.terms_review_status='approved' AND CHAR_LENGTH(v.terms_version)>0 AND (v.terms_permanent=1 OR v.terms_expires_at>?))"
             : "",
           ") LIMIT 1 FOR UPDATE",
         ].join(""),
@@ -743,7 +743,7 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
               : "") +
             parentFilter +
             (this.amazonPublicProfileId
-              ? "AND (v.access_mode='authenticated_browser' OR (v.code='amazon_product' AND p.id=? AND a.kind='browser_profile' AND a.fingerprint=? AND JSON_UNQUOTE(JSON_EXTRACT(j.execution_request_json,'$.purpose'))='amazon_public')) "
+              ? "AND (v.access_mode='authenticated_browser' OR (v.code='amazon_product' AND p.id=? AND ((a.kind='cookie_bundle' AND a.provider_id=p.provider_id) OR (a.kind='browser_profile' AND a.fingerprint=?)) AND JSON_UNQUOTE(JSON_EXTRACT(j.execution_request_json,'$.purpose'))='amazon_public')) "
               : "") +
             "ORDER BY (a.expires_at IS NULL OR a.expires_at>?) DESC,j.created_at,j.id ",
           "LIMIT 1 FOR UPDATE",
@@ -881,6 +881,17 @@ export class MySqlCrawlerRuntimeRepository implements CrawlerRuntimeRepository {
         typeof row.execution_request_json === "string"
           ? JSON.parse(row.execution_request_json)
           : row.execution_request_json;
+      if (row.provider_code === "amazon_product" && executionRequest.purpose === "amazon_public") {
+        if (row.kind === "cookie_bundle") {
+          executionRequest.amazon_session_mode = "administrator_cookie";
+          if (executionRequest.plan?.amazon_delivery)
+            executionRequest.plan.amazon_delivery.session_mode = "administrator_cookie";
+        } else {
+          delete executionRequest.amazon_session_mode;
+          if (executionRequest.plan?.amazon_delivery)
+            delete executionRequest.plan.amazon_delivery.session_mode;
+        }
+      }
       const assignment: BrowserCollectionAssignment = {
         job: {
           id: String(row.id),

@@ -5,6 +5,11 @@ import {
   type DailyAmazonDelivery,
 } from "./amazon-delivery-context.js";
 import { AmazonDeliveryRequestError } from "./amazon-delivery-request.js";
+import {
+  validAmazonAdministratorCookies,
+  assertAmazonAdministratorDelivery,
+} from "./amazon-administrator-session.js";
+export { validAmazonAdministratorCookies } from "./amazon-administrator-session.js";
 import { installPublicHttpTransport } from "./public-http-transport.js";
 import { recordResourceFailure as retainResourceFailure } from "./resource-failures.js";
 import { waitForManualCaptcha } from "./manual-handoff.js";
@@ -45,7 +50,11 @@ export interface BrowserBlockSignals {
 }
 export interface BrowserCollectionPlan {
   start_url: string;
-  amazon_delivery?: { country: "US"; postal_code: string };
+  amazon_delivery?: {
+    country: "US";
+    postal_code: string;
+    session_mode?: "anonymous" | "administrator_cookie";
+  };
   fail_on_http_error?: boolean;
   allowed_origins: string[];
   search?: { input_selector: string; query: string; submit_selector?: string };
@@ -234,7 +243,9 @@ export function validateBrowserPlan(
       origins.length !== 1 ||
       input.amazon_delivery.country !== "US" ||
       typeof input.amazon_delivery.postal_code !== "string" ||
-      !/^\d{5}$/.test(input.amazon_delivery.postal_code))
+      !/^\d{5}$/.test(input.amazon_delivery.postal_code) ||
+      (input.amazon_delivery.session_mode !== undefined &&
+        !["anonymous", "administrator_cookie"].includes(input.amazon_delivery.session_mode)))
   )
     throw new PlaywrightCrawlerError("crawler_amazon_delivery_invalid", "parser_changed", false);
   if (input.search_snapshot) {
@@ -308,6 +319,8 @@ export function classifyBrowserFailure(error: unknown): {
   code: string;
   retryable: boolean;
 } {
+  if (error instanceof Error && error.message === "amazon_administrator_session_expired")
+    return { status: "blocked_login", code: "credential_expired", retryable: false };
   if (error instanceof PlaywrightCrawlerError || error instanceof AmazonDeliveryRequestError)
     return {
       status: error.status,
@@ -534,11 +547,31 @@ function screenshotWaitPhase(error: unknown) {
   return steps.includes("taking page screenshot") ? "before_font_wait" : "unavailable";
 }
 
-async function captureAmazonViewport(page: Page, quality: number, timeoutMs: number) {
+async function captureAmazonViewport(
+  page: Page,
+  quality: number,
+  timeoutMs: number,
+  privateRegion?: string,
+) {
   // Evidence is the browser's actual current pixels, not a fully-loaded-font
   // presentation. Do not edit styles, abort resources or bypass page guards.
   let timer: ReturnType<typeof setTimeout> | undefined;
   const capture = async () => {
+    const clip = privateRegion
+      ? await page
+          .locator(privateRegion)
+          .first()
+          .evaluate((node) => {
+            const box = node.getBoundingClientRect();
+            const x = Math.max(0, box.left),
+              y = Math.max(0, box.top);
+            const width = Math.min(innerWidth, box.right) - x,
+              height = Math.min(innerHeight, box.bottom) - y;
+            if (width <= 0 || height <= 0)
+              throw new Error("amazon_cookie_evidence_region_unavailable");
+            return { x: x + scrollX, y: y + scrollY, width, height, scale: 1 };
+          })
+      : undefined;
     const session = await page.context().newCDPSession(page);
     try {
       const result = await session.send("Page.captureScreenshot", {
@@ -546,6 +579,7 @@ async function captureAmazonViewport(page: Page, quality: number, timeoutMs: num
         quality,
         fromSurface: true,
         captureBeyondViewport: false,
+        ...(clip ? { clip } : {}),
       });
       return Buffer.from(result.data, "base64");
     } finally {
@@ -575,21 +609,26 @@ async function captureEvidence(
 ): Promise<BrowserEvidenceArtifact[]> {
   if (!plan.evidence) return [];
   onOperation?.("dom_fragment");
+  const administratorCookie = plan.amazon_delivery?.session_mode === "administrator_cookie";
+  const contentSelector =
+    administratorCookie && new URL(plan.start_url).pathname === "/s"
+      ? "#search"
+      : (plan.evidence.dom_selectors?.join(",") ?? plan.item_selector);
   const capturedAt = new Date().toISOString(),
     sourceUrl = httpUrl(page.url()).toString(),
-    itemHtml = await page
-      .locator(plan.evidence.dom_selectors?.join(",") ?? plan.item_selector)
-      .evaluateAll(projectBrowserEvidenceNodes, {
-        ancestorIds: plan.evidence.ancestor_ids ?? [],
-        strip: plan.evidence.strip_non_content === true,
-      });
+    itemHtml = await page.locator(contentSelector).evaluateAll(projectBrowserEvidenceNodes, {
+      ancestorIds: plan.evidence.ancestor_ids ?? [],
+      strip: plan.evidence.strip_non_content === true,
+    });
   let pageHtml = itemHtml;
+  if (!pageHtml && administratorCookie)
+    throw new PlaywrightCrawlerError("crawler_dom_fragment_invalid", "parser_changed", false);
   if (!pageHtml) {
     onOperation?.("body_fallback");
     pageHtml = await page.locator("body").evaluate((node) => node.outerHTML);
   }
   let deliveryHtml = "";
-  if (plan.amazon_delivery) {
+  if (plan.amazon_delivery && !administratorCookie) {
     onOperation?.("delivery_header");
     deliveryHtml = await page.locator("#glow-ingress-block").evaluate((node) => node.outerHTML);
   }
@@ -599,7 +638,12 @@ async function captureEvidence(
   onOperation?.("screenshot");
   const takeScreenshot = (quality: number) =>
     plan.amazon_delivery
-      ? captureAmazonViewport(page, quality, screenshotTimeoutMs)
+      ? captureAmazonViewport(
+          page,
+          quality,
+          screenshotTimeoutMs,
+          administratorCookie ? contentSelector : undefined,
+        )
       : page.screenshot({ type: "jpeg", quality, fullPage: false });
   let screenshot = await takeScreenshot(35);
   if (screenshot.byteLength > 800_000) {
@@ -952,7 +996,13 @@ export class PlaywrightCrawlerEngine {
         throw new PlaywrightCrawlerError("crawler_proxy_scope_invalid", "parser_changed", false);
       if (options.navigationTransport === "request" && !plan.amazon_delivery)
         throw new PlaywrightCrawlerError("crawler_proxy_scope_invalid", "parser_changed", false);
-      if (plan.amazon_delivery && options.cookies?.length)
+      const administratorCookie = plan.amazon_delivery?.session_mode === "administrator_cookie";
+      if (
+        administratorCookie &&
+        (!validAmazonAdministratorCookies(options.cookies) || options.dailyDelivery)
+      )
+        throw new PlaywrightCrawlerError("credential_expired", "blocked_login", false);
+      if (plan.amazon_delivery && !administratorCookie && options.cookies?.length)
         throw new PlaywrightCrawlerError("permission_denied", "blocked_login", false);
       if (options.proxy?.username && options.proxy.password)
         localProxy = await createAuthenticatedBrowserProxy(
@@ -1113,7 +1163,13 @@ export class PlaywrightCrawlerEngine {
             throw new PlaywrightCrawlerError("crawler_origin_forbidden", "parser_changed", false);
           await guard(page);
         };
-        if (options.dailyDelivery) {
+        if (administratorCookie) {
+          await assertAmazonAdministratorDelivery(
+            page,
+            plan.amazon_delivery.postal_code,
+            assertSafe,
+          );
+        } else if (options.dailyDelivery) {
           // The daily homepage is the only place allowed to change location.
           // Every product/search response still proves its own anonymous ZIP.
           await assertAmazonDelivery(page, plan.amazon_delivery.postal_code, assertSafe);
@@ -1193,6 +1249,14 @@ export class PlaywrightCrawlerEngine {
       for (let index = 0; index < plan.max_pages; index += 1) {
         if (rateLimited) throw new PlaywrightCrawlerError("rate_limited", "rate_limited", true);
         await guard(page);
+        if (administratorCookie)
+          await assertAmazonAdministratorDelivery(
+            page,
+            plan.amazon_delivery!.postal_code,
+            async () => {
+              await guard(page);
+            },
+          );
         pageCount += 1;
         for (let scroll = 0; scroll < plan.max_scrolls; scroll += 1) {
           await page.evaluate(() => window.scrollBy(0, Math.max(window.innerHeight, 600)));
@@ -1711,6 +1775,12 @@ export async function runWithEncryptedProfile(
     publicHttpRuntime?: { executable: string; script: string };
   } = {},
 ) {
+  if (
+    plan.amazon_delivery &&
+    (plan.amazon_delivery.session_mode === "administrator_cookie") !==
+      (record.kind === "cookie_bundle")
+  )
+    throw new PlaywrightCrawlerError("permission_denied", "blocked_login", false);
   const run = (userDataDir: string) => {
     if (
       !plan.amazon_delivery ||

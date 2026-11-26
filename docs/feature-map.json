@@ -4526,7 +4526,12 @@
       "liveGateCredentialBoundary": "Fixed BaoTa SSH execution; Redis credentials remain in the server restricted environment file.",
       "purposes": ["cache", "queue", "rate", "sse"],
       "keyScope": "scoutops:v1:<purpose>:org:<organization_id>:ws:<workspace_id>:...",
-      "ttlPolicy": { "cache": 300, "queue": 86400, "rate": 60, "sse": 86400 },
+      "ttlPolicy": {
+        "cache": 300,
+        "queue": 86400,
+        "rate": 60,
+        "sse": 86400
+      },
       "runtimeEndpoint": "/api/v1/platform/operations/redis",
       "status": "verified",
       "statusDetail": "module_verified"
@@ -7941,7 +7946,12 @@
       "loading": "profile is loaded and rendered first from the valid account session even without organization context; authorization, sessions, notifications and assets settle independently in the background with explicit partial-failure feedback, and tenant-owned sections remain unavailable until a real organization and workspace are selected",
       "status": "implemented"
     },
-    { "path": "/home", "view": "HomeDashboard", "domain": "work", "status": "implemented" },
+    {
+      "path": "/home",
+      "view": "HomeDashboard",
+      "domain": "work",
+      "status": "implemented"
+    },
     {
       "path": "/work",
       "view": "Redirect",
@@ -9985,5 +9995,32 @@
     ],
     "docs": ["docs/amazon-daily-session-refresh.md"],
     "contract": "Keep daily postal preparation once per Beijing day, but preserve same-project anonymous session changes after fully captured detail with exact URL/unique input ASIN/nonempty title and original anonymous/postal/challenge guards. Optional internal refresh uses original version1 cache and cookie/domain/size policy, immediate lock-or-skip and byte-CAS so stale owners never replace newer state; midnight skips. No search/failed/challenge/identity-inconclusive update. Ancillary write failures log fixed reason without discarding proven evidence. No imported Xingxing identity, TLS weakening, retries, concurrency, DB, publicAPI/env/Python/dependency change. Local rotation regression red-to-green; actual historical failure cause and production acceptance not proven; no deployment/restart."
+  },
+  "amazonAdministratorCookie20261126": {
+    "sourceFiles": [
+      "apps/api/src/amazon-cookie-session-service.ts",
+      "apps/api/src/credential-asset-routes.ts",
+      "apps/api/src/credential-asset-service.ts",
+      "apps/api/src/mysql-credential-asset-repository.ts",
+      "apps/api/src/mysql-crawler-runtime-repository.ts",
+      "apps/api/src/amazon-public-browser-health.ts",
+      "apps/api/src/server.ts",
+      "packages/playwright-crawler/src/amazon-administrator-session.ts",
+      "packages/playwright-crawler/src/index.ts",
+      "scripts/run-playwright-crawler.mjs",
+      "apps/web/src/components/AmazonCookieSessionControl.vue",
+      "apps/web/src/components/CredentialAssetCenter.vue"
+    ],
+    "apiRoutes": ["GET /api/v1/platform/amazon-session", "POST /api/v1/platform/amazon-session"],
+    "pageRoutes": ["/platform-admin/credentials"],
+    "testFiles": [
+      "tests/unit/amazon-cookie-session-service.test.mjs",
+      "tests/unit/amazon-cookie-transport-binding.test.mjs",
+      "tests/integration/amazon-administrator-cookie.test.mjs",
+      "tests/integration/amazon-cookie-session-ui.test.mjs",
+      "tests/unit/amazon-browser-contract.test.mjs"
+    ],
+    "docs": ["docs/amazon-administrator-cookie.md", "docs/openapi.yaml", "config/env.example"],
+    "contract": "User-authorized administrator login-cookie mode is explicit and isolated from the original anonymous profile. Existing encrypted assets, fixed configured Amazon profile, key_rotation:manage, Origin, idempotency, versions and lease guards govern binding; no profile discovery/fallback, circuit restore or task replay. Source/owner/terms guards retained. Claimed credential kind derives trusted private session mode for both Python and browser health/collection; old queued requests remain compatible. Login/expired/captcha/ZIP guards retained, no signed-in address mutation. Cookie evidence excludes account navigation/delivery PII and crops genuine content pixels. No DB migration, production mutation, new dependency/env, TLS/whitelist/concurrency change or AI management. Local tests are not real source acceptance; no release/restart."
   }
 }

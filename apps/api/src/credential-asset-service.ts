@@ -60,6 +60,7 @@ export interface CredentialAssetRepository {
     sealed: Sealed;
     keyVersion: string;
     expiresAt: string | null;
+    skipAutomaticReplay?: boolean;
     actorId: string;
     idempotencyKey: string;
     requestId: string;
@@ -309,6 +310,7 @@ async function validateProviderDomains(
       400,
       `Cookie 域名 ${invalid} 与来源站点 ${hostname} 不匹配。`,
     );
+  return provider.code;
 }
 function expected(value: number) {
   if (!Number.isInteger(value) || value < 1)
@@ -420,8 +422,14 @@ export class CredentialAssetService {
     const now = this.now(),
       normalizedSecret = secret(value.secret_payload, record.summary.kind),
       expiresAt = expiry(value.expires_at ?? record.summary.expires_at, now);
-    if (record.summary.kind === "cookie_bundle")
-      await validateProviderDomains(this.repository, record.summary.provider_id, normalizedSecret);
+    const cookieProviderCode =
+      record.summary.kind === "cookie_bundle"
+        ? await validateProviderDomains(
+            this.repository,
+            record.summary.provider_id,
+            normalizedSecret,
+          )
+        : undefined;
     const next = expected(value.expected_version) + 1,
       sealed = sealCredential(normalizedSecret, this.masterKey, {
         assetId: id,
@@ -435,6 +443,7 @@ export class CredentialAssetService {
       sealed,
       keyVersion: this.keyVersion,
       expiresAt,
+      ...(cookieProviderCode === "amazon_product" ? { skipAutomaticReplay: true } : {}),
       ...context,
       now,
     });

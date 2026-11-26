@@ -23,6 +23,7 @@ import {
 } from "../credential-write-coordinator";
 import UiStatePanel from "./UiStatePanel.vue";
 import ConfirmDialog from "./ConfirmDialog.vue";
+import AmazonCookieSessionControl from "./AmazonCookieSessionControl.vue";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import "../credential-assets.css";
 import "../credential-login.css";
@@ -1051,6 +1052,12 @@ onActivated(() => {
           <small>明文回显</small><strong>0</strong><span>页面无法读取原始密码或登录状态</span>
         </article>
       </div>
+      <AmazonCookieSessionControl
+        :api-base-url="apiBaseUrl"
+        :assets="assets"
+        :busy="writeBusy"
+        @changed="load"
+      />
       <section v-if="!assets.length" class="credential-empty">
         <h3>还没有平台凭证资产</h3>
         <p>

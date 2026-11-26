@@ -80,16 +80,24 @@ try {
   };
   if (input.purpose === "amazon_public") {
     if (
-      record.kind !== "browser_profile" ||
+      !["browser_profile", "cookie_bundle"].includes(record.kind) ||
       input.plan?.evidence?.parser_version !== AMAZON_BROWSER_PARSER_VERSION
     )
       throw new Error("crawler_anonymous_profile_invalid");
     const payload = openCredential(record, input.master_key),
       bytes = Buffer.from(payload.value, payload.encoding === "base64" ? "base64" : "utf8");
     try {
-      if (
+      if (record.kind === "cookie_bundle") {
+        if (
+          (input.amazon_session_mode ?? input.plan?.amazon_delivery?.session_mode) !==
+          "administrator_cookie"
+        )
+          throw new Error("crawler_anonymous_profile_invalid");
+      } else if (
+        (input.amazon_session_mode ?? input.plan?.amazon_delivery?.session_mode) ===
+          "administrator_cookie" ||
         createHash("sha256").update(bytes).digest("hex").slice(0, 16) !==
-        anonymousAmazonFingerprint()
+          anonymousAmazonFingerprint()
       )
         throw new Error("crawler_anonymous_profile_invalid");
     } finally {
@@ -101,9 +109,13 @@ try {
     input.purpose === "amazon_public"
       ? {
           ...input.plan,
-          amazon_delivery: input.plan?.amazon_delivery ?? {
-            country: "US",
-            postal_code: config.providerAdapters.amazonPublicDeliveryPostalCode,
+          amazon_delivery: {
+            ...(input.plan?.amazon_delivery ?? {
+              country: "US",
+              postal_code: config.providerAdapters.amazonPublicDeliveryPostalCode,
+            }),
+            session_mode:
+              input.amazon_session_mode ?? input.plan?.amazon_delivery?.session_mode ?? "anonymous",
           },
         }
       : input.plan;

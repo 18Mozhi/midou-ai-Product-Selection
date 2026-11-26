@@ -28,6 +28,7 @@ import { MySqlHomeDashboardRepository } from "./mysql-home-dashboard-repository.
 import { ProviderRegistryService } from "./provider-registry-service.js";
 import { MySqlProviderRegistryRepository } from "./mysql-provider-registry-repository.js";
 import { CredentialAssetService } from "./credential-asset-service.js";
+import { AmazonCookieSessionService } from "./amazon-cookie-session-service.js";
 import { MySqlCredentialAssetRepository } from "./mysql-credential-asset-repository.js";
 import { ProviderAdapterRegistry } from "@scoutops/provider-adapters";
 import { CrawlerRuntimeService } from "./crawler-runtime-service.js";
@@ -367,6 +368,11 @@ const app = buildApp({
     webOrigin: config.app.webOrigin,
   },
   credentialAssets: {
+    amazonSessions: new AmazonCookieSessionService(
+      pool,
+      config.providerAdapters.amazonBrowserProfileId,
+      config.security.credentialsMasterKey,
+    ),
     service: new CredentialAssetService(
       new MySqlCredentialAssetRepository(pool),
       config.security.credentialsMasterKey,

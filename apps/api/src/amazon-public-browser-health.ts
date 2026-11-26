@@ -79,7 +79,7 @@ export class AmazonPublicBrowserHealth {
     try {
       const scope = await this.resolveScope(context);
       const [rows] = await this.pool.query<RowDataPacket[]>(
-        "SELECT p.*,a.fingerprint,a.status asset_status,a.kind FROM crawler_profiles p JOIN credential_assets a ON a.id=p.credential_asset_id WHERE p.id=? AND p.provider_id=? AND p.status='active' AND a.status='active' AND a.kind='browser_profile' AND a.fingerprint=?",
+        "SELECT p.*,a.fingerprint,a.status asset_status,a.kind FROM crawler_profiles p JOIN credential_assets a ON a.id=p.credential_asset_id WHERE p.id=? AND p.provider_id=? AND p.status='active' AND a.status='active' AND ((a.kind='cookie_bundle' AND a.provider_id=p.provider_id) OR (a.kind='browser_profile' AND a.fingerprint=?))",
         [
           this.config.providerAdapters.amazonBrowserProfileId,
           provider.id,
@@ -127,6 +127,9 @@ export class AmazonPublicBrowserHealth {
           target,
           this.config.providerAdapters.amazonPublicDeliveryPostalCode,
         );
+        if (profile.kind === "cookie_bundle") {
+          Object.assign(request.plan.amazon_delivery, { session_mode: "administrator_cookie" });
+        }
         controller.signal.throwIfAborted();
         await assertPublicCollectionPolicy({
           providerTargetUrl: provider.targetUrl,

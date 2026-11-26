@@ -7,6 +7,7 @@ import type {
   CredentialSecretInput,
 } from "@scoutops/contracts";
 import type { CredentialAssetService } from "./credential-asset-service.js";
+import type { AmazonCookieSessionService } from "./amazon-cookie-session-service.js";
 import { sessionToken } from "./auth-routes.js";
 import { ApiError, requireIdempotencyKey } from "./api-foundation.js";
 export interface CredentialAssetRouteOptions {
@@ -15,6 +16,7 @@ export interface CredentialAssetRouteOptions {
   auth: LocalAuthService;
   secureCookie: boolean;
   webOrigin: string;
+  amazonSessions?: Pick<AmazonCookieSessionService, "get" | "activate">;
 }
 const ids = (r: FastifyRequest) => ({
     requestId: r.headers["x-request-id"]!.toString(),
@@ -49,6 +51,36 @@ export function registerCredentialAssetRoutes(
       idempotencyKey: requireIdempotencyKey(r),
       ...ids(r),
     });
+  app.get("/api/v1/platform/amazon-session", async (r, reply) => {
+    await actor(r);
+    if (!o.amazonSessions)
+      throw new ApiError(
+        409,
+        "amazon_session_unconfigured",
+        "Amazon 会话管理未配置。",
+        "联系管理员检查现有档案配置。",
+      );
+    reply.header("cache-control", "private, no-store");
+    return envelope(await o.amazonSessions.get(), r);
+  });
+  app.post("/api/v1/platform/amazon-session", async (r, reply) => {
+    const actorId = await write(r);
+    if (!o.amazonSessions)
+      throw new ApiError(
+        409,
+        "amazon_session_unconfigured",
+        "Amazon 会话管理未配置。",
+        "联系管理员检查现有档案配置。",
+      );
+    reply.header("cache-control", "private, no-store");
+    return envelope(
+      await o.amazonSessions.activate(
+        r.body as Parameters<AmazonCookieSessionService["activate"]>[0],
+        context(r, actorId),
+      ),
+      r,
+    );
+  });
   app.get("/api/v1/platform/credential-provider-options", async (r, reply) => {
     await actor(r);
     reply.header("cache-control", "private, no-store");
