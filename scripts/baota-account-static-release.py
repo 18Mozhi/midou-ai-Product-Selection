@@ -223,7 +223,10 @@ def deploy_static(repo, previous, deploy, ssh_connection, transfer, collection=N
         raise RuntimeError("frontend_requires_clean_approved_main_sha")
     deploy["verify_production_sha_history"](repo, previous, build)
     required_node = None
-    if collection is not None:
+    if collection is not None and "administrator_cookie" in collection:
+        collection["validate"](git("diff", "--name-only", collection["source_base"], build).splitlines())
+        required_node = collection["administrator_cookie"]
+    elif collection is not None:
         source_base = collection["COLLECTION_SOURCE_BASE"]
         deploy["verify_production_sha_history"](repo, source_base, build)
         collection["validate_collection_changes"](git("diff", "--name-only", source_base, build).splitlines())

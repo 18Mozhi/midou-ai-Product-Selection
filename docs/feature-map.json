@@ -10009,8 +10009,13 @@
       "packages/playwright-crawler/src/index.ts",
       "scripts/run-playwright-crawler.mjs",
       "apps/web/src/components/AmazonCookieSessionControl.vue",
-      "apps/web/src/components/CredentialAssetCenter.vue"
+      "apps/web/src/components/CredentialAssetCenter.vue",
+      "scripts/deploy-account-baota.py",
+      "scripts/baota-account-trend-release.py",
+      "scripts/baota-account-static-release.py",
+      "scripts/baota-amazon-cookie-release.py"
     ],
+    "releaseEntry": "scripts/deploy-account-baota.py --amazon-cookie-session; exact Cookie-only engine recipe plus 9 other Node/Runner modules and committed frontend; unchanged four-zero drain, no DB migration/Python restart/1688/config/concurrency/dead-letter replay; real dual transport acceptance remains mandatory",
     "runtimeInputValidation": "Reject non-string asset_id before transaction/SQL; do not coerce a single-element JSON array into a UUID. Existing OpenAPI string contract, encryption, fixed profile, lease, version and replay gates unchanged.",
     "apiRoutes": ["GET /api/v1/platform/amazon-session", "POST /api/v1/platform/amazon-session"],
     "pageRoutes": ["/platform-admin/credentials"],
@@ -10019,7 +10024,8 @@
       "tests/unit/amazon-cookie-transport-binding.test.mjs",
       "tests/integration/amazon-administrator-cookie.test.mjs",
       "tests/integration/amazon-cookie-session-ui.test.mjs",
-      "tests/unit/amazon-browser-contract.test.mjs"
+      "tests/unit/amazon-browser-contract.test.mjs",
+      "tests/unit/test_baota_amazon_cookie_release.py"
     ],
     "docs": ["docs/amazon-administrator-cookie.md", "docs/openapi.yaml", "config/env.example"],
     "contract": "User-authorized administrator login-cookie mode is explicit and isolated from the original anonymous profile. Existing encrypted assets, fixed configured Amazon profile, key_rotation:manage, Origin, idempotency, versions and lease guards govern binding; no profile discovery/fallback, circuit restore or task replay. Source/owner/terms guards retained. Claimed credential kind derives trusted private session mode for both Python and browser health/collection; old queued requests remain compatible. Login/expired/captcha/ZIP guards retained, no signed-in address mutation. Cookie evidence excludes account navigation/delivery PII and crops genuine content pixels. No DB migration, production mutation, new dependency/env, TLS/whitelist/concurrency change or AI management. Local tests are not real source acceptance; no release/restart."

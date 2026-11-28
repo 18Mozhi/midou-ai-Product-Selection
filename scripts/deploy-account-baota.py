@@ -204,6 +204,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--execute", action="store_true")
+    action.add_argument("--amazon-cookie-session", action="store_true")
     action.add_argument("--inspect-crawler", action="store_true")
     action.add_argument("--continue-evidence-suffix", action="store_true")
     action.add_argument("--recover-retired-runtime", action="store_true")
@@ -284,6 +285,14 @@ def main():
     suffix_args = (args.interrupted_build_sha, args.interrupted_plan_sha256, args.sealed_records)
     if not (args.continue_evidence_suffix or args.recover_retired_runtime) and any(suffix_args):
         parser.error("interruption arguments require a cutover recovery action")
+    if args.amazon_cookie_session:
+        cookie = runpy.run_path(str(scripts / "baota-amazon-cookie-release.py"))
+        if (args.expected_previous_sha != cookie["RUNTIME_BASE"] or
+                args.expected_module_sha256 != cookie["BASE_HASHES"][cookie["ENGINE"]] or args.plan_sha256):
+            parser.error("Cookie release requires exact runtime/engine baseline; no migrations")
+        print(json.dumps(cookie["publish"](scripts.parent, deploy=runpy.run_path(str(scripts / "deploy-baota.py")),
+              ssh_connection=project_ssh, transfer=transfer_exclusive)))
+        return
     scheduler_only = args.scheduler_stagger_only or args.scheduler_rollback_only
     report_action = "apply" if args.report_worker_only else "restore" if args.report_worker_rollback_only else None
     collection = "apply" if args.collection_controls_node else "restore" if args.collection_controls_node_rollback else None

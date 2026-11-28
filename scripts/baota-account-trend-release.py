@@ -232,6 +232,8 @@ def prepare_modules(target, expected_module, encoded, digest, scheduler, read_fi
 
 
 def prepare_amazon(root, manifest, read_file, collection=None):
+    if collection == "administrator_cookie":
+        return prepare_administrator_cookie(root, manifest, read_file)
     python_transport = collection in ("python_transport", "python_transport_restore")
     audit = tuple(manifest) == tuple(AMAZON_AUDIT_BASE)
     frozen = AMAZON_AUDIT_BASE if audit else AMAZON_BASE_HASHES
@@ -806,17 +808,18 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
             raise RuntimeError("trend_baseline_not_ready")
         staged, replaced = {}, []
         # Keep original bytes only in memory, to unwind a partial write before restart.
-        originals = {path: read_file(path, 131072) for path in replacements} if amazon_modules is not None else {}
+        originals = {path: (None if collection == "administrator_cookie" and not path.exists() else read_file(path, 131072)) for path in replacements} if amazon_modules is not None else {}
         try:
             for path, (incoming, _, _) in replacements.items():
-                metadata = path.stat()
+                is_new = collection == "administrator_cookie" and not path.exists()
+                metadata = path.parent.stat() if is_new else path.stat()
                 fd, scratch = tempfile.mkstemp(prefix=".trend-release-", dir=str(path.parent))
                 staged[path] = scratch
                 with os.fdopen(fd, "wb") as stream:
                     stream.write(incoming)
                     stream.flush()
                     os.fchown(stream.fileno(), metadata.st_uid, metadata.st_gid)
-                    os.fchmod(stream.fileno(), metadata.st_mode & 0o777)
+                    os.fchmod(stream.fileno(), 0o644 if is_new else metadata.st_mode & 0o777)
                     os.fsync(stream.fileno())
             # Install the scheduler before the registry that opts in. Do not
             # restart on a partial install; either version accepts either input.
@@ -827,6 +830,9 @@ def install(root, expected_runtime, expected_module, build, encoded, digest, sch
             MODULE_PHASE = "installed"
         except Exception:
             for path in reversed(replaced) if amazon_modules is not None else ():
+                if originals[path] is None:
+                    path.unlink()
+                    continue
                 metadata = path.stat()
                 fd, scratch = tempfile.mkstemp(prefix=".trend-release-", dir=str(path.parent))
                 staged[path] = scratch
