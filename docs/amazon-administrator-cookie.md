@@ -33,7 +33,8 @@
 - `GET /api/v1/platform/amazon-session`：仅返回当前档案和凭证的 ID、版本、名称、
   模式、元数据可用性与期限，不返回 Cookie、密文、认证标签或源站账户姓名。
 - `POST /api/v1/platform/amazon-session`：只接受 `asset_id`、
-  `expected_asset_version`、`expected_profile_version`；使用原
+  `expected_asset_version`、`expected_profile_version`；`asset_id` 必须是字符串 UUID，
+  数组等非字符串类型在开启事务前拒绝为 400；使用原
   `key_rotation:manage`、HttpOnly会话、同源写入与幂等键，不给普通账号加权限。
 - 使用已有 `crawler_profiles`、`crawler_profile_versions` 和
   `crawler_profile_operations` 做事务、版本冲突检查和操作留痕；不新建表或改结构。

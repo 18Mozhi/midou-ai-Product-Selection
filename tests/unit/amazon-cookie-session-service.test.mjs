@@ -62,7 +62,8 @@ function fixture(change = {}) {
   };
   const writes = [],
     operations = [];
-  let rolledBack = false;
+  let rolledBack = false,
+    connectionCalls = 0;
   const c = {
     beginTransaction: async () => {},
     commit: async () => {},
@@ -88,7 +89,10 @@ function fixture(change = {}) {
     },
   };
   const pool = {
-    getConnection: async () => c,
+    getConnection: async () => {
+      connectionCalls += 1;
+      return c;
+    },
     query: async () => [
       [
         {
@@ -111,6 +115,9 @@ function fixture(change = {}) {
     writes,
     p,
     a,
+    get connectionCalls() {
+      return connectionCalls;
+    },
     get rolledBack() {
       return rolledBack;
     },
@@ -123,6 +130,18 @@ const input = { asset_id: assetId, expected_asset_version: 1, expected_profile_v
     requestId: "owned-request",
     traceId: "owned-trace",
   };
+test("binding rejects non-string asset IDs before mutating the profile", async () => {
+  for (const asset_id of [[assetId], { value: assetId }, 123, null, true]) {
+    const f = fixture();
+    await assert.rejects(
+      f.service.activate({ ...input, asset_id }, context),
+      (error) => error.code === "amazon_session_invalid" && error.statusCode === 400,
+    );
+    assert.equal(f.writes.length, 0);
+    assert.equal(f.connectionCalls, 0);
+  }
+});
+
 test("explicit binding is versioned, idempotent, metadata-only and never replays or enables source", async () => {
   const f = fixture(),
     summary = await f.service.activate(input, context);
@@ -170,7 +189,8 @@ for (const [name, change, override] of [
 }
 test("session routes retain permission, origin and idempotency enforcement", async () => {
   const calls = [],
-    service = fixture().service;
+    f = fixture(),
+    service = f.service;
   const app = buildApp({
     credentialAssets: {
       service: {},
@@ -200,6 +220,16 @@ test("session routes retain permission, origin and idempotency enforcement", asy
       payload: input,
     });
     assert.equal(r.statusCode, 400);
+    r = await inject(app, {
+      method: "POST",
+      url: "/api/v1/platform/amazon-session",
+      headers: { origin: "http://owned.test", "idempotency-key": "owned-invalid" },
+      payload: { ...input, asset_id: [assetId] },
+    });
+    assert.equal(r.statusCode, 400);
+    assert.equal(r.json().error.code, "amazon_session_invalid");
+    assert.equal(f.connectionCalls, 0);
+    assert.equal(f.writes.length, 0);
     r = await inject(app, {
       method: "POST",
       url: "/api/v1/platform/amazon-session",

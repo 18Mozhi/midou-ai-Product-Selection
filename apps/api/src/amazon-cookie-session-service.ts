@@ -68,6 +68,7 @@ export class AmazonCookieSessionService {
     if (
       !uuid.test(this.profileId) ||
       !value ||
+      typeof value.asset_id !== "string" ||
       !uuid.test(value.asset_id) ||
       Object.keys(value).some(
         (key) => !["asset_id", "expected_asset_version", "expected_profile_version"].includes(key),

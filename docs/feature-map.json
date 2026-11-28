@@ -10011,6 +10011,7 @@
       "apps/web/src/components/AmazonCookieSessionControl.vue",
       "apps/web/src/components/CredentialAssetCenter.vue"
     ],
+    "runtimeInputValidation": "Reject non-string asset_id before transaction/SQL; do not coerce a single-element JSON array into a UUID. Existing OpenAPI string contract, encryption, fixed profile, lease, version and replay gates unchanged.",
     "apiRoutes": ["GET /api/v1/platform/amazon-session", "POST /api/v1/platform/amazon-session"],
     "pageRoutes": ["/platform-admin/credentials"],
     "testFiles": [
