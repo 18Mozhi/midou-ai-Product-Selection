@@ -1329,6 +1329,7 @@ onActivated(() => {
                     'browser_profile',
                   ]"
                   :key="v"
+                  :value="v"
                 >
                   {{ kindText(v) }}
                 </option>

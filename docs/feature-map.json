@@ -10025,9 +10025,11 @@
       "tests/integration/amazon-administrator-cookie.test.mjs",
       "tests/integration/amazon-cookie-session-ui.test.mjs",
       "tests/unit/amazon-browser-contract.test.mjs",
-      "tests/unit/test_baota_amazon_cookie_release.py"
+      "tests/unit/test_baota_amazon_cookie_release.py",
+      "tests/integration/credential-cookie-kind.test.mjs"
     ],
     "docs": ["docs/amazon-administrator-cookie.md", "docs/openapi.yaml", "config/env.example"],
-    "contract": "User-authorized administrator login-cookie mode is explicit and isolated from the original anonymous profile. Existing encrypted assets, fixed configured Amazon profile, key_rotation:manage, Origin, idempotency, versions and lease guards govern binding; no profile discovery/fallback, circuit restore or task replay. Source/owner/terms guards retained. Claimed credential kind derives trusted private session mode for both Python and browser health/collection; old queued requests remain compatible. Login/expired/captcha/ZIP guards retained, no signed-in address mutation. Cookie evidence excludes account navigation/delivery PII and crops genuine content pixels. No DB migration, production mutation, new dependency/env, TLS/whitelist/concurrency change or AI management. Local tests are not real source acceptance; no release/restart."
+    "contract": "User-authorized administrator login-cookie mode is explicit and isolated from the original anonymous profile. Existing encrypted assets, fixed configured Amazon profile, key_rotation:manage, Origin, idempotency, versions and lease guards govern binding; no profile discovery/fallback, circuit restore or task replay. Source/owner/terms guards retained. Claimed credential kind derives trusted private session mode for both Python and browser health/collection; old queued requests remain compatible. Login/expired/captcha/ZIP guards retained, no signed-in address mutation. Cookie evidence excludes account navigation/delivery PII and crops genuine content pixels. No DB migration, production mutation, new dependency/env, TLS/whitelist/concurrency change or AI management. Local tests are not real source acceptance; no release/restart.",
+    "credentialKindValueFix": "Generic credential type options bind their internal enum; Cookie display label never becomes wire kind. Frontend-only coordinator skips Node installation/claims/restart, verifies installed Cookie module hashes, then publishes static assets only."
   }
 }

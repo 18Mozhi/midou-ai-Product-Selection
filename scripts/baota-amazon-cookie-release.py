@@ -110,7 +110,7 @@ def execute_remote(ssh, deploy, source):
         raise RuntimeError("account_release_cookie_remote_response_unverified")
     return result
 
-def publish(repo, deploy, ssh_connection, transfer):
+def publish(repo, deploy, ssh_connection, transfer, frontend_only=False):
     def git(*args):
         return subprocess.check_output(["git", *args], cwd=repo).decode().strip()
     sha = git("rev-parse", "HEAD")
@@ -143,10 +143,12 @@ except Exception as error:
  result={"status":False,"phase":ns["MODULE_PHASE"],"message":ns["MODULE_PHASE"]+":"+ns["release_error_code"](error),"drain_samples":drain.samples}
 print("SCOUTOPS_RESULT="+json.dumps(result))
 '''
-    with ssh_connection(deploy) as ssh:
-        installed = execute_remote(ssh, deploy, source)
-    if not installed.get("status"):
-        return {"status": False, "node": installed}
+    installed = {"status": True, "restarted": False, "skipped": "frontend_only"}
+    if not frontend_only:
+        with ssh_connection(deploy) as ssh:
+            installed = execute_remote(ssh, deploy, source)
+        if not installed.get("status"):
+            return {"status": False, "node": installed}
     static = runpy.run_path(str(scripts / "baota-account-static-release.py"))
     front = static["deploy_static"](repo, RUNTIME_BASE, deploy, ssh_connection, transfer,
         {"administrator_cookie": {n: v[2] for n,v in manifest.items()},

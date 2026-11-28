@@ -113,6 +113,35 @@ class CookieReleaseTest(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, "response_unverified"):
                     C["execute_remote"](ssh, config, "owned source")
 
+    def test_frontend_only_never_installs_or_restarts_node(self):
+        sha = "a" * 40
+        def git(args, **kwargs):
+            command = args[1:]
+            if command == ["rev-parse", "HEAD"]: return sha.encode()
+            if command == ["status", "--porcelain"]: return b""
+            if command[:2] == ["remote", "get-url"]: return b"https://github.com/18Mozhi/midou-ai-Product-Selection.git"
+            if command[0] == "ls-remote": return (sha + "\trefs/heads/main").encode()
+            if command[:2] == ["diff", "--name-only"]: return b"apps/web/src/components/CredentialAssetCenter.vue"
+            self.fail("unexpected git command")
+        manifest = {n: (v, "owned", "f" * 64) for n,v in C["BASE_HASHES"].items()}
+        calls = []
+        def static(*args):
+            calls.append(args)
+            self.assertEqual(set(args[-1]["administrator_cookie"]), set(manifest))
+            return {"status": True}
+        config = {"normalize_github_repository": lambda value: "18Mozhi/midou-ai-Product-Selection",
+                  "EXPECTED_GITHUB_REPOSITORY": "18Mozhi/midou-ai-Product-Selection",
+                  "verify_production_sha_history": lambda *args: None,
+                  "PROJECT_ROOT": "/www/wwwroot/ai选品", "NODE_BIN": "/owned/node"}
+        def forbidden(*args, **kwargs): self.fail("frontend-only must not invoke Node installer/SSH")
+        with patch.dict(C["publish"].__globals__, {"manifest_for": lambda *args: manifest, "execute_remote": forbidden}), \
+             patch.object(subprocess, "check_output", side_effect=git), \
+             patch.object(runpy, "run_path", return_value={"deploy_static": static}):
+            result = C["publish"](ROOT, config, forbidden, forbidden, frontend_only=True)
+        self.assertTrue(result["status"])
+        self.assertFalse(result["node"]["restarted"])
+        self.assertEqual(len(calls), 1)
+
     def test_cli_invalid_identity_fails_before_connection(self):
         p = subprocess.run(["python", "-B", "scripts/deploy-account-baota.py", "--amazon-cookie-session",
             "--expected-previous-sha", "0"*40, "--expected-module-sha256", "0"*64], cwd=ROOT, capture_output=True)
