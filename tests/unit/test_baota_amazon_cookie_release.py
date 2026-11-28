@@ -84,6 +84,35 @@ class CookieReleaseTest(unittest.TestCase):
         name = next(iter(C["prepare"].__globals__["PROTECTED_HASHES"]))
         self.check(lambda r,m: (r / name).write_bytes(b"drift"), "protected_module_drift")
 
+    def test_stdin_transport_is_bounded_before_ssh(self):
+        for config, text in [({"PANEL_PYTHON": "/other/python"}, "owned"),
+                             ({"PANEL_PYTHON": "/www/server/panel/pyenv/bin/python"}, "x" * (2 * 1024 * 1024 + 1))]:
+            with self.assertRaisesRegex(RuntimeError, "transport_size_or_identity"):
+                C["execute_remote"](None, config, text)
+
+    def test_stdin_requires_one_authoritative_result(self):
+        import io
+        from types import SimpleNamespace
+        config = {"PANEL_PYTHON": "/www/server/panel/pyenv/bin/python"}
+        for data, valid in [(b'SCOUTOPS_RESULT={"status":true}\n', True),
+                            (b'no result\n', False),
+                            (b'SCOUTOPS_RESULT={"status":true}\n' * 2, False)]:
+            channel = SimpleNamespace(shutdown_write=lambda: None, recv_exit_status=lambda: 0)
+            stdin, stdout = io.StringIO(), io.BytesIO(data)
+            stdin.channel = stdout.channel = channel
+            class SSH:
+                def exec_command(self, command, timeout):
+                    self.command = command
+                    return stdin, stdout, io.BytesIO()
+            ssh = SSH()
+            if valid:
+                self.assertTrue(C["execute_remote"](ssh, config, "owned source")["status"])
+                self.assertEqual(stdin.getvalue(), "owned source")
+                self.assertEqual(ssh.command, config["PANEL_PYTHON"] + " -B -")
+            else:
+                with self.assertRaisesRegex(RuntimeError, "response_unverified"):
+                    C["execute_remote"](ssh, config, "owned source")
+
     def test_cli_invalid_identity_fails_before_connection(self):
         p = subprocess.run(["python", "-B", "scripts/deploy-account-baota.py", "--amazon-cookie-session",
             "--expected-previous-sha", "0"*40, "--expected-module-sha256", "0"*64], cwd=ROOT, capture_output=True)

@@ -90,6 +90,26 @@ def manifest_for(repo, sha):
         output[name] = (before, base64.b64encode(zlib.compress(value)).decode(), hashlib.sha256(value).hexdigest())
     return output
 
+def execute_remote(ssh, deploy, source):
+    # Same fixed SSH host/identity and authoritative sentinel; avoid argv size
+    # limits without weakening any runtime/path/hash/drain gate.
+    if deploy["PANEL_PYTHON"] != "/www/server/panel/pyenv/bin/python" or len(source.encode("utf-8")) > 2 * 1024 * 1024:
+        raise RuntimeError("account_release_cookie_transport_size_or_identity")
+    stdin, stdout, stderr = ssh.exec_command(deploy["PANEL_PYTHON"] + " -B -", timeout=400)
+    stdin.write(source)
+    stdin.channel.shutdown_write()
+    output = stdout.read().decode("utf-8")
+    error = stderr.read()
+    status = stdout.channel.recv_exit_status()
+    lines = [line[len("SCOUTOPS_RESULT="):] for line in output.splitlines() if line.startswith("SCOUTOPS_RESULT=")]
+    if status or error or len(lines) != 1:
+        raise RuntimeError("account_release_cookie_remote_response_unverified")
+    import json
+    result = json.loads(lines[0])
+    if not isinstance(result, dict) or type(result.get("status")) is not bool:
+        raise RuntimeError("account_release_cookie_remote_response_unverified")
+    return result
+
 def publish(repo, deploy, ssh_connection, transfer):
     def git(*args):
         return subprocess.check_output(["git", *args], cwd=repo).decode().strip()
@@ -123,10 +143,8 @@ except Exception as error:
  result={"status":False,"phase":ns["MODULE_PHASE"],"message":ns["MODULE_PHASE"]+":"+ns["release_error_code"](error),"drain_samples":drain.samples}
 print("SCOUTOPS_RESULT="+json.dumps(result))
 '''
-    trend_module = runpy.run_path(str(scripts / "baota-account-trend-release.py"))
-    source = trend_module["compact_release_source"](source)
     with ssh_connection(deploy) as ssh:
-        installed = deploy["remote_python"](ssh, source, timeout=400)
+        installed = execute_remote(ssh, deploy, source)
     if not installed.get("status"):
         return {"status": False, "node": installed}
     static = runpy.run_path(str(scripts / "baota-account-static-release.py"))
